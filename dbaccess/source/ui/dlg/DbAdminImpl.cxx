@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/task/XInteractionRequest.hpp>
+#include <com/sun/star/task/XInteractionRequest.hpp> 
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
 /** === end UNO includes === **/
@@ -76,7 +76,6 @@
 #include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
-#include <osl/diagnose.h>
 #include <typelib/typedescription.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
@@ -86,8 +85,6 @@
 
 #include <algorithm>
 #include <functional>
-#include <o3tl/compat_functional.hxx>
-
 //.........................................................................
 namespace dbaui
 {
@@ -108,12 +105,12 @@ using namespace com::sun::star::frame;
 //-------------------------------------------------------------------------
 namespace
 {
-    sal_Bool implCheckItemType( SfxItemSet& _rSet, const sal_uInt16 _nId, const TypeId _nExpectedItemType )
+    sal_Bool implCheckItemType( SfxItemSet& _rSet, const USHORT _nId, const TypeId _nExpectedItemType )
     {
         sal_Bool bCorrectType = sal_False;
 
         SfxItemPool* pPool = _rSet.GetPool();
-        OSL_ENSURE( pPool, "implCheckItemType: invalid item pool!" );
+        DBG_ASSERT( pPool, "implCheckItemType: invalid item pool!" );
         if ( pPool )
         {
             const SfxPoolItem& rDefItem = pPool->GetDefaultItem( _nId );
@@ -131,11 +128,11 @@ namespace
         }
         catch(Exception&)
         {
-    #if OSL_DEBUG_LEVEL > 0
+    #ifdef DBG_UTIL
             ::rtl::OString sMessage("ODbAdminDialog::implTranslateProperty: could not set the property ");
             sMessage += ::rtl::OString(_rName.getStr(), _rName.getLength(), RTL_TEXTENCODING_ASCII_US);
             sMessage += ::rtl::OString("!");
-            OSL_FAIL(sMessage.getStr());
+            DBG_ERROR(sMessage.getStr());
     #endif
         }
 
@@ -144,7 +141,7 @@ namespace
     String lcl_createHostWithPort(const SfxStringItem* _pHostName,const SfxInt32Item* _pPortNumber)
     {
         String sNewUrl;
-
+                
         if ( _pHostName && _pHostName->GetValue().Len() )
             sNewUrl = _pHostName->GetValue();
 
@@ -210,18 +207,18 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_NAMED_PIPE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NamedPipe" ) ) ) );
 
     // special settings for adabas
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SHUTSERVICE, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShutdownDatabase"))));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_DATAINC, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataCacheSizeIncrement"))));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CACHESIZE, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataCacheSize"))));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLUSER, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlUser"))));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLPWD, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlPassword"))));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SHUTSERVICE, ::rtl::OUString::createFromAscii("ShutdownDatabase")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_DATAINC, ::rtl::OUString::createFromAscii("DataCacheSizeIncrement")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CACHESIZE, ::rtl::OUString::createFromAscii("DataCacheSize")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLUSER, ::rtl::OUString::createFromAscii("ControlUser")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLPWD, ::rtl::OUString::createFromAscii("ControlPassword")));
 
     // extra settings for odbc
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_USECATALOG, INFO_USECATALOG));
     // extra settings for a ldap address book
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_BASEDN, INFO_CONN_LDAP_BASEDN));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_ROWCOUNT, INFO_CONN_LDAP_ROWCOUNT));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_USESSL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSSL"))));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_USESSL, ::rtl::OUString::createFromAscii("UseSSL")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_DOCUMENT_URL, PROPERTY_URL));
 
     // oracle
@@ -241,12 +238,12 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
         ShowServiceNotAvailableError(_pParent->GetParent(), String(SERVICE_SDB_DATABASECONTEXT), sal_True);
     }
 
-    OSL_ENSURE(m_xDynamicContext.is(), "ODbAdminDialog::ODbAdminDialog : no XNamingService interface !");
+    DBG_ASSERT(m_xDynamicContext.is(), "ODbAdminDialog::ODbAdminDialog : no XNamingService interface !");
 }
     //-------------------------------------------------------------------------
 sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyValue >& _rDriverParam)
 {
-    OSL_ENSURE(m_pItemSetHelper->getOutputSet(), "ODbDataSourceAdministrationHelper::getCurrentSettings : not to be called without an example set!");
+    DBG_ASSERT(m_pItemSetHelper->getOutputSet(), "ODbDataSourceAdministrationHelper::getCurrentSettings : not to be called without an example set!");
     if (!m_pItemSetHelper->getOutputSet())
         return sal_False;
 
@@ -257,7 +254,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
     SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pUser, SfxStringItem, DSID_USER, sal_True);
     if (pUser && pUser->GetValue().Len())
         aReturn.push_back(
-            PropertyValue(  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")), 0,
+            PropertyValue(	::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")), 0,
                             makeAny(::rtl::OUString(pUser->GetValue())), PropertyState_DIRECT_VALUE));
 
     // check if the connection type requires a password
@@ -283,7 +280,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
                 if ( !xHandler.is() )
                     ShowServiceNotAvailableError(m_pParent->GetParent(), String(SERVICE_TASK_INTERACTION_HANDLER), sal_True);
             }
-
+            
             String sName = pName ? pName->GetValue() : String();
             String sLoginRequest(ModuleRes(STR_ENTER_CONNECTION_PASSWORD));
             ::rtl::OUString sTemp = sName;
@@ -336,7 +333,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
             }
             if (!pAuthenticate->wasSelected())
                 return sal_False;
-
+            
             sPassword = pAuthenticate->getPassword();
             if (pAuthenticate->getRememberPassword())
                 m_pItemSetHelper->getWriteOutputSet()->Put(SfxStringItem(DSID_PASSWORD, sPassword));
@@ -344,7 +341,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
 
         if (sPassword.Len())
             aReturn.push_back(
-                PropertyValue(  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("password")), 0,
+                PropertyValue(	::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("password")), 0,
                                 makeAny(::rtl::OUString(sPassword)), PropertyState_DIRECT_VALUE));
     }
 
@@ -359,7 +356,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
 //-------------------------------------------------------------------------
 void ODbDataSourceAdministrationHelper::successfullyConnected()
 {
-    OSL_ENSURE(m_pItemSetHelper->getOutputSet(), "ODbDataSourceAdministrationHelper::successfullyConnected: not to be called without an example set!");
+    DBG_ASSERT(m_pItemSetHelper->getOutputSet(), "ODbDataSourceAdministrationHelper::successfullyConnected: not to be called without an example set!");
     if (!m_pItemSetHelper->getOutputSet())
         return;
 
@@ -425,7 +422,7 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const ::rtl::O
     try
     {
         xDriverManager = Reference< XDriverAccess >(getORB()->createInstance(SERVICE_SDBC_CONNECTIONPOOL), UNO_QUERY);
-        OSL_ENSURE(xDriverManager.is(), "ODbDataSourceAdministrationHelper::getDriver: could not instantiate the driver manager, or it does not provide the necessary interface!");
+        DBG_ASSERT(xDriverManager.is(), "ODbDataSourceAdministrationHelper::getDriver: could not instantiate the driver manager, or it does not provide the necessary interface!");
     }
     catch (Exception& e)
     {
@@ -479,17 +476,17 @@ Reference< XPropertySet > ODbDataSourceAdministrationHelper::getCurrentDataSourc
         }
     }
 
-
-    OSL_ENSURE(m_xDatasource.is(), "ODbDataSourceAdministrationHelper::getCurrentDataSource: no data source!");
+    
+    DBG_ASSERT(m_xDatasource.is(), "ODbDataSourceAdministrationHelper::getCurrentDataSource: no data source!");
     return m_xDatasource;
 }
 //-------------------------------------------------------------------------
 ::rtl::OUString ODbDataSourceAdministrationHelper::getDatasourceType( const SfxItemSet& _rSet )
 {
     SFX_ITEMSET_GET( _rSet, pConnectURL, SfxStringItem, DSID_CONNECTURL, sal_True );
-    OSL_ENSURE( pConnectURL , "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!" );
+    DBG_ASSERT( pConnectURL , "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!" );
     SFX_ITEMSET_GET(_rSet, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
-    OSL_ENSURE(pTypeCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!");
+    DBG_ASSERT(pTypeCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!");
     ::dbaccess::ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
     return pCollection->getType(pConnectURL->GetValue());
 }
@@ -510,9 +507,9 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
     SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
 
     OSL_ENSURE(pUrlItem,"Connection URL is NULL. -> GPF!");
-    OSL_ENSURE(pTypeCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!");
+    DBG_ASSERT(pTypeCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!");
     ::dbaccess::ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
-    OSL_ENSURE(pCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid type collection!");
+    DBG_ASSERT(pCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid type collection!");
 
     switch( pCollection->determineType(eType) )
     {
@@ -589,6 +586,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
             break;
         case  ::dbaccess::DST_LDAP:
             {
+                //	SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_CONN_LDAP_PORTNUMBER, sal_True);
                 sNewUrl = pCollection->cutPrefix(pUrlItem->GetValue());
                 sNewUrl += lcl_createHostWithPort(NULL,pPortNumber);
@@ -614,7 +612,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
 struct PropertyValueLess
 {
     bool operator() (const PropertyValue& x, const PropertyValue& y) const
-        { return x.Name < y.Name ? true : false; }      // construct prevents a MSVC6 warning
+        { return x.Name < y.Name ? true : false; }		// construct prevents a MSVC6 warning
 };
 DECLARE_STL_SET( PropertyValue, PropertyValueLess, PropertyValueSet);
 
@@ -626,7 +624,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
 
     if (_rxSource.is())
     {
-        for (   ConstMapInt2StringIterator aDirect = m_aDirectPropTranslator.begin();
+        for	(	ConstMapInt2StringIterator aDirect = m_aDirectPropTranslator.begin();
                 aDirect != m_aDirectPropTranslator.end();
                 ++aDirect
             )
@@ -639,11 +637,11 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
             }
             catch(Exception&)
             {
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
                 ::rtl::OString aMessage("ODbDataSourceAdministrationHelper::translateProperties: could not extract the property ");
                 aMessage += ::rtl::OString(aDirect->second.getStr(), aDirect->second.getLength(), RTL_TEXTENCODING_ASCII_US);
                 aMessage += ::rtl::OString("!");
-                OSL_FAIL(aMessage.getStr());
+                DBG_ERROR(aMessage.getStr());
 #endif
             }
             // transfer it into an item
@@ -664,9 +662,9 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
         for (sal_Int32 i=0; i<aAdditionalInfo.getLength(); ++i, ++pAdditionalInfo)
         {
             if (0 == pAdditionalInfo->Name.compareToAscii("JDBCDRV"))
-            {   // compatibility
+            {	// compatibility
                 PropertyValue aCompatibility(*pAdditionalInfo);
-                aCompatibility.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"));
+                aCompatibility.Name = ::rtl::OUString::createFromAscii("JavaDriverClass");
                 aInfos.insert(aCompatibility);
             }
             else
@@ -678,7 +676,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
         {
             PropertyValue aSearchFor;
             ConstMapInt2StringIterator aEnd = m_aIndirectPropTranslator.end();
-            for (   ConstMapInt2StringIterator aIndirect = m_aIndirectPropTranslator.begin();
+            for	(	ConstMapInt2StringIterator aIndirect = m_aIndirectPropTranslator.begin();
                     aIndirect != aEnd;
                     ++aIndirect)
             {
@@ -702,14 +700,14 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
     }
     catch(Exception&)
     {
-        OSL_FAIL("IsReadOnly throws an exception!");
+        OSL_ENSURE(0,"IsReadOnly throws an exception!");
     }
 }
 
 //-------------------------------------------------------------------------
 void ODbDataSourceAdministrationHelper::translateProperties(const SfxItemSet& _rSource, const Reference< XPropertySet >& _rxDest)
 {
-    OSL_ENSURE(_rxDest.is(), "ODbDataSourceAdministrationHelper::translateProperties: invalid property set!");
+    DBG_ASSERT(_rxDest.is(), "ODbDataSourceAdministrationHelper::translateProperties: invalid property set!");
     if (!_rxDest.is())
         return;
 
@@ -717,16 +715,16 @@ void ODbDataSourceAdministrationHelper::translateProperties(const SfxItemSet& _r
     Reference< XPropertySetInfo > xInfo;
     try { xInfo = _rxDest->getPropertySetInfo(); }
     catch(Exception&) { }
-
+    
     const ::rtl::OUString sUrlProp(RTL_CONSTASCII_USTRINGPARAM("URL"));
     // -----------------------------
     // transfer the direct properties
-    for (   ConstMapInt2StringIterator aDirect = m_aDirectPropTranslator.begin();
+    for	(	ConstMapInt2StringIterator aDirect = m_aDirectPropTranslator.begin();
             aDirect != m_aDirectPropTranslator.end();
             ++aDirect
         )
     {
-        const SfxPoolItem* pCurrentItem = _rSource.GetItem((sal_uInt16)aDirect->first);
+        const SfxPoolItem* pCurrentItem = _rSource.GetItem((USHORT)aDirect->first);
         if (pCurrentItem)
         {
             sal_Int16 nAttributes = PropertyAttribute::READONLY;
@@ -740,7 +738,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const SfxItemSet& _r
                 if ( sUrlProp == aDirect->second )
                 {
                     Any aValue(makeAny(::rtl::OUString(getConnectionURL())));
-                    //  aValue <<= ::rtl::OUString();
+                    //	aValue <<= ::rtl::OUString();
                     lcl_putProperty(_rxDest, aDirect->second,aValue);
                 }
                 else
@@ -785,7 +783,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     ::std::vector< sal_Int32>::iterator aDetailsEnd = aDetailIds.end();
     for (::std::vector< sal_Int32>::iterator aIter = aDetailIds.begin();aIter != aDetailsEnd ; ++aIter)
     {
-        const SfxPoolItem* pCurrent = _rSource.GetItem((sal_uInt16)*aIter);
+        const SfxPoolItem* pCurrent = _rSource.GetItem((USHORT)*aIter);
         aTranslation = m_aIndirectPropTranslator.find(*aIter);
         if ( pCurrent && (m_aIndirectPropTranslator.end() != aTranslation) )
         {
@@ -802,7 +800,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     }
 
     // settings to preserve
-    MapInt2String   aPreservedSettings;
+    MapInt2String	aPreservedSettings;
 
     // now aRelevantSettings contains all the property values relevant for the current data source type,
     // check the original sequence if it already contains any of these values (which have to be overwritten, then)
@@ -815,13 +813,13 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
         aSearchFor.Name = pInfo->Name;
         PropertyValueSetIterator aOverwrittenSetting = aRelevantSettings.find(aSearchFor);
         if (aRelevantSettings.end() != aOverwrittenSetting)
-        {   // the setting was present in the original sequence, and it is to be overwritten -> replace it
+        {	// the setting was present in the original sequence, and it is to be overwritten -> replace it
             if ( !::comphelper::compare(pInfo->Value,aOverwrittenSetting->Value) )
                 *pInfo = *aOverwrittenSetting;
             aRelevantSettings.erase(aOverwrittenSetting);
         }
         else if (0 == pInfo->Name.compareToAscii("JDBCDRV"))
-        {   // this is a compatibility setting, remove it from the sequence (it's replaced by JavaDriverClass)
+        {	// this is a compatibility setting, remove it from the sequence (it's replaced by JavaDriverClass)
             nObsoleteSetting = i;
         }
         else
@@ -831,30 +829,31 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
         ::comphelper::removeElementAt(_rInfo, nObsoleteSetting);
 
     if ( !aPreservedSettings.empty() )
-    {   // check if there are settings which
+    {	// check if there are settings which
         // * are known as indirect properties
         // * but not relevant for the current data source type
         // These settings have to be removed: If they're not relevant, we have no UI for changing them.
+        // 25.06.2001 - 88004/87182 - frank.schoenheit@sun.com
 
         // for this, we need a string-controlled quick access to m_aIndirectPropTranslator
         StringSet aIndirectProps;
         ::std::transform(m_aIndirectPropTranslator.begin(),
                          m_aIndirectPropTranslator.end(),
                          ::std::insert_iterator<StringSet>(aIndirectProps,aIndirectProps.begin()),
-                         ::o3tl::select2nd<MapInt2String::value_type>());
+                         ::std::select2nd<MapInt2String::value_type>());
 
         // now check the to-be-preserved props
         ::std::vector< sal_Int32 > aRemoveIndexes;
         sal_Int32 nPositionCorrector = 0;
         ConstMapInt2StringIterator aPreservedEnd = aPreservedSettings.end();
-        for (   ConstMapInt2StringIterator aPreserved = aPreservedSettings.begin();
+        for	(	ConstMapInt2StringIterator aPreserved = aPreservedSettings.begin();
                 aPreserved != aPreservedEnd;
                 ++aPreserved
             )
         {
             if (aIndirectProps.end() != aIndirectProps.find(aPreserved->second))
             {
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
                 const ::rtl::OUString sName = aPreserved->second;
 #endif
                 aRemoveIndexes.push_back(aPreserved->first - nPositionCorrector);
@@ -863,12 +862,12 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
         }
         // now finally remove all such props
         ::std::vector< sal_Int32 >::const_iterator aRemoveEnd = aRemoveIndexes.end();
-        for (   ::std::vector< sal_Int32 >::const_iterator aRemoveIndex = aRemoveIndexes.begin();
+        for (	::std::vector< sal_Int32 >::const_iterator aRemoveIndex = aRemoveIndexes.begin();
                 aRemoveIndex != aRemoveEnd;
                 ++aRemoveIndex
             )
             ::comphelper::removeElementAt(_rInfo, *aRemoveIndex);
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
         const PropertyValue* pWhatsLeft = _rInfo.getConstArray();
         const PropertyValue* pWhatsLeftEnd = pWhatsLeft + _rInfo.getLength();
         for (; pWhatsLeft != pWhatsLeftEnd; ++pWhatsLeft)
@@ -895,7 +894,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
         _rInfo.realloc(nOldLength + aRelevantSettings.size());
         PropertyValue* pAppendValues = _rInfo.getArray() + nOldLength;
         ConstPropertyValueSetIterator aRelevantEnd = aRelevantSettings.end();
-        for (   ConstPropertyValueSetIterator aLoop = aRelevantSettings.begin();
+        for	(	ConstPropertyValueSetIterator aLoop = aRelevantSettings.begin();
                 aLoop != aRelevantEnd;
                 ++aLoop, ++pAppendValues
             )
@@ -949,7 +948,7 @@ Any ODbDataSourceAdministrationHelper::implTranslateProperty(const SfxPoolItem* 
     }
     else
     {
-        OSL_FAIL("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported item type!");
+        DBG_ERROR("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported item type!");
         return aValue;
     }
 
@@ -961,8 +960,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty(const Reference< X
     Any aValue = implTranslateProperty(_pItem);
     lcl_putProperty(_rxSet, _rName,aValue);
 }
-
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
 //-------------------------------------------------------------------------
 ::rtl::OString ODbDataSourceAdministrationHelper::translatePropertyId( sal_Int32 _nId )
 {
@@ -998,10 +996,10 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 _rSet.Put(SfxStringItem(_nId, sValue.getStr()));
             }
             else {
-                OSL_FAIL(
-                    (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
-                    +=  ::rtl::OString( translatePropertyId( _nId ) )
-                    +=  ::rtl::OString( " should be no string)!" )
+                DBG_ERROR(
+                    (	::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
+                    +=	::rtl::OString( translatePropertyId( _nId ) )
+                    +=	::rtl::OString( " should be no string)!" )
                     ).getStr()
                 );
             }
@@ -1028,10 +1026,10 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 _rSet.Put( aItem );
             }
             else {
-                OSL_FAIL(
-                    (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
-                    +=  ::rtl::OString( translatePropertyId( _nId ) )
-                    +=  ::rtl::OString( " should be no boolean)!" )
+                DBG_ERROR(
+                    (	::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
+                    +=	::rtl::OString( translatePropertyId( _nId ) )
+                    +=	::rtl::OString( " should be no boolean)!" )
                     ).getStr()
                 );
             }
@@ -1045,10 +1043,10 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 _rSet.Put( SfxInt32Item( _nId, nValue ) );
             }
             else {
-                OSL_FAIL(
-                    (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
-                    +=  ::rtl::OString( translatePropertyId( _nId ) )
-                    +=  ::rtl::OString( " should be no int)!" )
+                DBG_ERROR(
+                    (	::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
+                    +=	::rtl::OString( translatePropertyId( _nId ) )
+                    +=	::rtl::OString( " should be no int)!" )
                     ).getStr()
                 );
             }
@@ -1061,7 +1059,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 TypeDescription aTD(_rValue.getValueType());
                 typelib_IndirectTypeDescription* pSequenceTD =
                     reinterpret_cast< typelib_IndirectTypeDescription* >(aTD.get());
-                OSL_ENSURE(pSequenceTD && pSequenceTD->pType, "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid sequence type!");
+                DBG_ASSERT(pSequenceTD && pSequenceTD->pType, "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid sequence type!");
 
                 Type aElementType(pSequenceTD->pType);
                 switch (aElementType.getTypeClass())
@@ -1074,14 +1072,14 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                     }
                     break;
                     default:
-                        OSL_FAIL("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported property value type!");
+                        DBG_ERROR("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported property value type!");
                 }
             }
             else {
-                OSL_FAIL(
-                    (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
-                    +=  ::rtl::OString( translatePropertyId( _nId ) )
-                    +=  ::rtl::OString( " should be no string sequence)!" )
+                DBG_ERROR(
+                    (	::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
+                    +=	::rtl::OString( translatePropertyId( _nId ) )
+                    +=	::rtl::OString( " should be no string sequence)!" )
                     ).getStr()
                 );
             }
@@ -1092,7 +1090,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             break;
 
         default:
-            OSL_FAIL("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported property value type!");
+            DBG_ERROR("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported property value type!");
     }
 }
 
@@ -1114,13 +1112,14 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
     SFX_ITEMSET_GET(_rDest, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
 
     OSL_ENSURE(pUrlItem,"Connection URL is NULL. -> GPF!");
-    OSL_ENSURE(pTypeCollection, "ODbAdminDialog::getDatasourceType: invalid items in the source set!");
+    DBG_ASSERT(pTypeCollection, "ODbAdminDialog::getDatasourceType: invalid items in the source set!");
     ::dbaccess::ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
-    OSL_ENSURE(pCollection, "ODbAdminDialog::getDatasourceType: invalid type collection!");
+    DBG_ASSERT(pCollection, "ODbAdminDialog::getDatasourceType: invalid type collection!");
 
-    sal_uInt16 nPortNumberId    = 0;
-    sal_Int32 nPortNumber   = -1;
+    USHORT nPortNumberId	= 0;
+    sal_Int32 nPortNumber	= -1;
     String sNewHostName;
+    //String sUrl = pCollection->cutPrefix(pUrlItem->GetValue());
     String sUrlPart;
 
     pCollection->extractHostNamePort(pUrlItem->GetValue(),sUrlPart,sNewHostName,nPortNumber);
@@ -1176,9 +1175,9 @@ sal_Bool ODbDataSourceAdministrationHelper::saveChanges(const SfxItemSet& _rSour
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-void ODbDataSourceAdministrationHelper::setDataSourceOrName( const Any& _rDataSourceOrName )
-{
-    OSL_ENSURE( !m_aDataSourceOrName.hasValue(), "ODbDataSourceAdministrationHelper::setDataSourceOrName: already have one!" );
+void ODbDataSourceAdministrationHelper::setDataSourceOrName( const Any& _rDataSourceOrName ) 
+{ 
+    DBG_ASSERT( !m_aDataSourceOrName.hasValue(), "ODbDataSourceAdministrationHelper::setDataSourceOrName: already have one!" );
         // hmm. We could reset m_xDatasource/m_xModel, probably, and continue working
     m_aDataSourceOrName = _rDataSourceOrName;
 }
@@ -1214,7 +1213,7 @@ SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* /*_pPool*/) const
 }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 

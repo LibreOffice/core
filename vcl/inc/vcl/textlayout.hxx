@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,7 +118,7 @@ namespace vcl
         virtual ~ControlTextRenderer();
 
         Rectangle   DrawText( const Rectangle& _rRect,
-                              const XubString& _rText, sal_uInt16 _nStyle = 0,
+                              const XubString& _rText, USHORT _nStyle = 0,
                               MetricVector* _pVector = NULL, String* _pDisplayText = NULL );
 
     private:

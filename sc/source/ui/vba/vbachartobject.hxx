@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 typedef InheritedHelperInterfaceImpl1<ov::excel::XChartObject > ChartObjectImpl_BASE;
 
 class ScVbaChartObject : public ChartObjectImpl_BASE
-{
+{		
 
     css::uno::Reference< css::table::XTableChart  > xTableChart;
     css::uno::Reference< css::document::XEmbeddedObjectSupplier > xEmbeddedObjectSupplier;
@@ -59,11 +59,23 @@ public:
     virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setName( const ::rtl::OUString& sName ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XChart > SAL_CALL getChart() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL Delete() throw ( css::script::BasicErrorException );
-    virtual void Activate() throw ( css::script::BasicErrorException );
+    virtual void SAL_CALL Delete() throw ( css::script::BasicErrorException );	
+    virtual void Activate() throw ( css::script::BasicErrorException );	
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    // non interface methods
+    double getHeight();
+    void setHeight( double _fheight ) throw ( css::script::BasicErrorException );
+    double getWidth();
+    void setWidth( double _fwidth ) throw ( css::script::BasicErrorException );
+    double getLeft();
+    void setLeft( double _fleft );
+    double getTop();
+    void setTop( double _ftop );
+    // should make this part of the XHelperInterface with a default
+    // implementation returning NULL
+    css::uno::Reference< css::uno::XInterface > getUnoObject() throw ( css::script::BasicErrorException );
 };
 
 #endif //SC_VBA_WINDOW_HXX

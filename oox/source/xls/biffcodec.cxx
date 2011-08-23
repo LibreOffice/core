@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,24 +27,18 @@
  ************************************************************************/
 
 #include "oox/xls/biffcodec.hxx"
-
 #include <osl/thread.h>
 #include <string.h>
 #include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
 
-namespace oox {
-namespace xls {
-
-// ============================================================================
-
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
-
-using ::oox::core::FilterBase;
 using ::rtl::OString;
 using ::rtl::OUString;
 using ::rtl::OStringToOUString;
+using ::oox::core::FilterBase;
+
+namespace oox {
+namespace xls {
 
 // ============================================================================
 
@@ -57,16 +51,9 @@ BiffDecoderBase::~BiffDecoderBase()
 {
 }
 
-::comphelper::DocPasswordVerifierResult BiffDecoderBase::verifyPassword( const OUString& rPassword, Sequence< NamedValue >& o_rEncryptionData )
+::comphelper::DocPasswordVerifierResult BiffDecoderBase::verifyPassword( const OUString& rPassword )
 {
-    o_rEncryptionData = implVerifyPassword( rPassword );
-    mbValid = o_rEncryptionData.hasElements();
-    return mbValid ? ::comphelper::DocPasswordVerifierResult_OK : ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
-}
-
-::comphelper::DocPasswordVerifierResult BiffDecoderBase::verifyEncryptionData( const Sequence< NamedValue >& rEncryptionData )
-{
-    mbValid = implVerifyEncryptionData( rEncryptionData );
+    mbValid = implVerify( rPassword );
     return mbValid ? ::comphelper::DocPasswordVerifierResult_OK : ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
 }
 
@@ -85,6 +72,7 @@ void BiffDecoderBase::decode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData,
 
 BiffDecoder_XOR::BiffDecoder_XOR( sal_uInt16 nKey, sal_uInt16 nHash ) :
     maCodec( ::oox::core::BinaryCodec_XOR::CODEC_EXCEL ),
+    maPassword( 16 ),
     mnKey( nKey ),
     mnHash( nHash )
 {
@@ -93,12 +81,12 @@ BiffDecoder_XOR::BiffDecoder_XOR( sal_uInt16 nKey, sal_uInt16 nHash ) :
 BiffDecoder_XOR::BiffDecoder_XOR( const BiffDecoder_XOR& rDecoder ) :
     BiffDecoderBase(),  // must be called to prevent compiler warning
     maCodec( ::oox::core::BinaryCodec_XOR::CODEC_EXCEL ),
-    maEncryptionData( rDecoder.maEncryptionData ),
+    maPassword( rDecoder.maPassword ),
     mnKey( rDecoder.mnKey ),
     mnHash( rDecoder.mnHash )
 {
     if( isValid() )
-        maCodec.initCodec( maEncryptionData );
+        maCodec.initKey( &maPassword.front() );
 }
 
 BiffDecoder_XOR* BiffDecoder_XOR::implClone()
@@ -106,40 +94,24 @@ BiffDecoder_XOR* BiffDecoder_XOR::implClone()
     return new BiffDecoder_XOR( *this );
 }
 
-Sequence< NamedValue > BiffDecoder_XOR::implVerifyPassword( const OUString& rPassword )
+bool BiffDecoder_XOR::implVerify( const OUString& rPassword )
 {
-    maEncryptionData.realloc( 0 );
-
     /*  Convert password to a byte string. TODO: this needs some finetuning
         according to the spec... */
     OString aBytePassword = OUStringToOString( rPassword, osl_getThreadTextEncoding() );
     sal_Int32 nLen = aBytePassword.getLength();
     if( (0 < nLen) && (nLen < 16) )
     {
+        // copy byte string to sal_uInt8 array
+        maPassword.clear();
+        maPassword.resize( 16, 0 );
+        memcpy( &maPassword.front(), aBytePassword.getStr(), static_cast< size_t >( nLen ) );
+
         // init codec
-        maCodec.initKey( reinterpret_cast< const sal_uInt8* >( aBytePassword.getStr() ) );
-
-        if( maCodec.verifyKey( mnKey, mnHash ) )
-            maEncryptionData = maCodec.getEncryptionData();
+        maCodec.initKey( &maPassword.front() );
+        return maCodec.verifyKey( mnKey, mnHash );
     }
-
-    return maEncryptionData;
-}
-
-bool BiffDecoder_XOR::implVerifyEncryptionData( const Sequence< NamedValue >& rEncryptionData )
-{
-    maEncryptionData.realloc( 0 );
-
-    if( rEncryptionData.hasElements() )
-    {
-        // init codec
-        maCodec.initCodec( rEncryptionData );
-
-        if( maCodec.verifyKey( mnKey, mnHash ) )
-            maEncryptionData = rEncryptionData;
-    }
-
-    return maEncryptionData.hasElements();
+    return false;
 }
 
 void BiffDecoder_XOR::implDecode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData, sal_Int64 nStreamPos, sal_uInt16 nBytes )
@@ -170,6 +142,7 @@ sal_Int32 lclGetRcfOffset( sal_Int64 nStreamPos )
 // ----------------------------------------------------------------------------
 
 BiffDecoder_RCF::BiffDecoder_RCF( sal_uInt8 pnSalt[ 16 ], sal_uInt8 pnVerifier[ 16 ], sal_uInt8 pnVerifierHash[ 16 ] ) :
+    maPassword( 16, 0 ),
     maSalt( pnSalt, pnSalt + 16 ),
     maVerifier( pnVerifier, pnVerifier + 16 ),
     maVerifierHash( pnVerifierHash, pnVerifierHash + 16 )
@@ -178,13 +151,13 @@ BiffDecoder_RCF::BiffDecoder_RCF( sal_uInt8 pnSalt[ 16 ], sal_uInt8 pnVerifier[ 
 
 BiffDecoder_RCF::BiffDecoder_RCF( const BiffDecoder_RCF& rDecoder ) :
     BiffDecoderBase(),  // must be called to prevent compiler warning
-    maEncryptionData( rDecoder.maEncryptionData ),
+    maPassword( rDecoder.maPassword ),
     maSalt( rDecoder.maSalt ),
     maVerifier( rDecoder.maVerifier ),
     maVerifierHash( rDecoder.maVerifierHash )
 {
     if( isValid() )
-        maCodec.initCodec( maEncryptionData );
+        maCodec.initKey( &maPassword.front(), &maSalt.front() );
 }
 
 BiffDecoder_RCF* BiffDecoder_RCF::implClone()
@@ -192,44 +165,25 @@ BiffDecoder_RCF* BiffDecoder_RCF::implClone()
     return new BiffDecoder_RCF( *this );
 }
 
-Sequence< NamedValue > BiffDecoder_RCF::implVerifyPassword( const OUString& rPassword )
+bool BiffDecoder_RCF::implVerify( const OUString& rPassword )
 {
-    maEncryptionData.realloc( 0 );
-
     sal_Int32 nLen = rPassword.getLength();
     if( (0 < nLen) && (nLen < 16) )
     {
         // copy string to sal_uInt16 array
-        ::std::vector< sal_uInt16 > aPassVect( 16 );
+        maPassword.clear();
+        maPassword.resize( 16, 0 );
         const sal_Unicode* pcChar = rPassword.getStr();
         const sal_Unicode* pcCharEnd = pcChar + nLen;
-        ::std::vector< sal_uInt16 >::iterator aIt = aPassVect.begin();
+        ::std::vector< sal_uInt16 >::iterator aIt = maPassword.begin();
         for( ; pcChar < pcCharEnd; ++pcChar, ++aIt )
             *aIt = static_cast< sal_uInt16 >( *pcChar );
 
         // init codec
-        maCodec.initKey( &aPassVect.front(), &maSalt.front() );
-        if( maCodec.verifyKey( &maVerifier.front(), &maVerifierHash.front() ) )
-            maEncryptionData = maCodec.getEncryptionData();
+        maCodec.initKey( &maPassword.front(), &maSalt.front() );
+        return maCodec.verifyKey( &maVerifier.front(), &maVerifierHash.front() );
     }
-
-    return maEncryptionData;
-}
-
-bool BiffDecoder_RCF::implVerifyEncryptionData( const Sequence< NamedValue >& rEncryptionData )
-{
-    maEncryptionData.realloc( 0 );
-
-    if( rEncryptionData.hasElements() )
-    {
-        // init codec
-        maCodec.initCodec( rEncryptionData );
-
-        if( maCodec.verifyKey( &maVerifier.front(), &maVerifierHash.front() ) )
-            maEncryptionData = rEncryptionData;
-    }
-
-    return maEncryptionData.hasElements();
+    return false;
 }
 
 void BiffDecoder_RCF::implDecode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData, sal_Int64 nStreamPos, sal_uInt16 nBytes )
@@ -329,13 +283,13 @@ BiffDecoderRef lclReadFilePassBiff8( BiffInputStream& rStrm )
                     xDecoder = lclReadFilePass_CryptoApi( rStrm );
                 break;
                 default:
-                    OSL_FAIL( "lclReadFilePassBiff8 - unknown BIFF8 encryption sub mode" );
+                    OSL_ENSURE( false, "lclReadFilePassBiff8 - unknown BIFF8 encryption sub mode" );
             }
         }
         break;
 
         default:
-            OSL_FAIL( "lclReadFilePassBiff8 - unknown encryption mode" );
+            OSL_ENSURE( false, "lclReadFilePassBiff8 - unknown encryption mode" );
     }
     return xDecoder;
 }
@@ -363,7 +317,7 @@ bool BiffCodecHelper::importFilePass( BiffInputStream& rStrm )
     mxDecoder = implReadFilePass( rStrm, getBiff() );
     // request and verify a password (decoder implements IDocPasswordVerifier)
     if( mxDecoder.get() )
-        getBaseFilter().requestEncryptionData( *mxDecoder );
+        getBaseFilter().requestPassword( *mxDecoder );
     // correct password is indicated by isValid() function of decoder
     return mxDecoder.get() && mxDecoder->isValid();
 }

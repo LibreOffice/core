@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __SCRIPTING_STORAGE_SCRIPTSTORAGE_HXX_
 
 #include <vector>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase5.hxx> // helper for component factory
@@ -57,27 +57,27 @@ namespace scripting_impl
 //=============================================================================
 typedef ::std::vector< ScriptData > Datas_vec;
 //-----------------------------------------------------------------------------
-// function name -> ScriptData
-typedef ::boost::unordered_map < ::rtl::OUString, ScriptData, ::rtl::OUStringHash,
+// function name -> ScriptData 
+typedef ::std::hash_map < ::rtl::OUString, ScriptData, ::rtl::OUStringHash,
             ::std::equal_to< ::rtl::OUString > > ScriptFunction_hash;
 //-----------------------------------------------------------------------------
-// language -> hash of function name -> ScriptData
-typedef ::boost::unordered_map < ::rtl::OUString, ScriptFunction_hash,
-            ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
+// language -> hash of function name -> ScriptData 
+typedef ::std::hash_map < ::rtl::OUString, ScriptFunction_hash,
+            ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > 
 ScriptData_hash;
 //-----------------------------------------------------------------------------
-typedef ::boost::unordered_map < ::rtl::OUString,
+typedef ::std::hash_map < ::rtl::OUString,
 css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >,
 ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
 ScriptOutput_hash;
 //-----------------------------------------------------------------------------
-typedef ::boost::unordered_map < ::rtl::OUString,
+typedef ::std::hash_map < ::rtl::OUString,
 ::rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
 ScriptLanguages_hash;
 
 //=============================================================================
 
-class ScriptStorage : public
+class ScriptStorage : public 
     ::cppu::WeakImplHelper5<
         css::lang::XServiceInfo,
         css::lang::XInitialization,
@@ -88,7 +88,7 @@ class ScriptStorage : public
 public:
     //Constructors and Destructors
     //=========================================================================
-    explicit ScriptStorage(
+    explicit ScriptStorage( 
         const css::uno::Reference< css::uno::XComponentContext > & xContext )
         throw ( css::uno::RuntimeException );
     //-------------------------------------------------------------------------
@@ -106,13 +106,13 @@ public:
     virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
         throw ( css::uno::RuntimeException );
     //-------------------------------------------------------------------------
-    static css::uno::Sequence< ::rtl::OUString > SAL_CALL
+    static css::uno::Sequence< ::rtl::OUString > SAL_CALL 
         getSupportedServiceNames_Static();
     //=========================================================================
 
     // XInitialization impl
     //=========================================================================
-    virtual void SAL_CALL
+    virtual void SAL_CALL 
         initialize( css::uno::Sequence< css::uno::Any > const & args )
         throw ( css::uno::RuntimeException, css::uno::Exception );
     //=========================================================================
@@ -140,7 +140,7 @@ public:
      *      The URIs of the implementations
      */
     virtual css::uno::Sequence< css::uno::Reference< dcsssf::storage::XScriptInfo > >
-        SAL_CALL getImplementations(
+        SAL_CALL getImplementations( 
             const ::rtl::OUString& queryURI )
         throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
@@ -152,7 +152,7 @@ public:
      * @return sequence < XScriptInfo >
      *      script implementations
      */
-    virtual css::uno::Sequence< css::uno::Reference< dcsssf::storage::XScriptInfo > >
+    virtual css::uno::Sequence< css::uno::Reference< dcsssf::storage::XScriptInfo > > 
         SAL_CALL getAllImplementations()
         throw ( css::uno::RuntimeException );
 
@@ -162,19 +162,19 @@ public:
      * Save the scripts stored in the ScriptStorage into the corresponding
      * area (document or application)
      */
-    void SAL_CALL save()
+    void SAL_CALL save() 
         throw ( css::uno::RuntimeException );
     //=========================================================================
 
     /**
      * Refresh the ScriptStorage from the data stored in the corresponding area
      * (document or application).
-     */
+     */ 
     void SAL_CALL refresh()
         throw ( css::uno::RuntimeException );
     //=========================================================================
 
-private:
+private: 
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::ucb::XSimpleFileAccess > m_xSimpleFileAccess;
@@ -193,9 +193,9 @@ private:
     void updateMaps( const Datas_vec & vScriptDatas );
     void writeMetadataHeader(
         css::uno::Reference < css::xml::sax::XExtendedDocumentHandler > & xExDocHandler );
-    void create ()
+    void create () 
     throw (css::uno::RuntimeException, css::uno::Exception);
-    void createForFilesystem ( const ::rtl::OUString & scriptLanguage )
+    void createForFilesystem ( const ::rtl::OUString & scriptLanguage ) 
     throw (css::uno::RuntimeException, css::uno::Exception);
     ::rtl::OUString getFileExtension ( const ::rtl::OUString & stringUri );
 

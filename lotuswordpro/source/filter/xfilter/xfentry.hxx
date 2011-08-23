@@ -57,10 +57,14 @@
  * @file
  * index entry object.
  ************************************************************************/
-#ifndef     _XFENTRY_HXX
-#define     _XFENTRY_HXX
+/*************************************************************************
+ * Change History
+ * 2005-04-26 create this file.
+ ************************************************************************/
+#ifndef		_XFENTRY_HXX
+#define		_XFENTRY_HXX
 
-#include    "xfcontent.hxx"
+#include	"xfcontent.hxx"
 
 /**
  * @brief
@@ -73,54 +77,54 @@ public:
 
 public:
     /**
-     * @descr   Set entry type.
+     * @descr	Set entry type.
      */
-    void    SetEntryType(enumXFEntry type);
+    void	SetEntryType(enumXFEntry type);
 
     /**
-     * @descr   Set entry string value.
+     * @descr	Set entry string value.
      */
-    void    SetStringValue(const rtl::OUString& value);
+    void	SetStringValue(const rtl::OUString& value);
 
     /**
-     * @descr   Set display string.
+     * @descr	Set display string.
      */
-    void    SetStringDisplay(const rtl::OUString& display);
+    void	SetStringDisplay(const rtl::OUString& display);
 
     /**
-     * @descr   Set entry name.
+     * @descr	Set entry name.
      */
-    void    SetEntryName(const rtl::OUString& name);
+    void	SetEntryName(const rtl::OUString& name);
 
     /**
-     * @descr   Set entry key. The keys is available only for enumXFEntryAlphabetical.
+     * @descr	Set entry key. The keys is available only for enumXFEntryAlphabetical.
      */
-    void    SetKey(const rtl::OUString& key1, const rtl::OUString& key2=A2OUSTR(""));
+    void	SetKey(const rtl::OUString& key1, const rtl::OUString& key2=A2OUSTR(""));
 
     /**
-     * @descr   Set whether it's a main entry. This is available only for enumXFEntryAlphabetical.
+     * @descr	Set whether it's a main entry. This is available only for enumXFEntryAlphabetical.
      */
-    void    SetMainEntry(sal_Bool main);
+    void	SetMainEntry(sal_Bool main);
 
     /**
-     * @descr   Set outline level. This is available for enumXFEntryTOC and enumXFEntryUserIndex.
+     * @descr	Set outline level. This is available for enumXFEntryTOC and enumXFEntryUserIndex.
      */
-    void    SetOutlineLevel(sal_Int32 level);
+    void	SetOutlineLevel(sal_Int32 level);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    enumXFEntry     m_eType;
-    rtl::OUString   m_strValue;
-    rtl::OUString   m_strDisplay;
-    rtl::OUString   m_strKey1;
-    rtl::OUString   m_strKey2;
-    rtl::OUString   m_strName;
-    sal_Bool        m_bMainEntry;
-    sal_Int32       m_nOutlineLevel;
+    enumXFEntry		m_eType;
+    rtl::OUString	m_strValue;
+    rtl::OUString	m_strDisplay;
+    rtl::OUString	m_strKey1;
+    rtl::OUString	m_strKey2;
+    rtl::OUString	m_strName;
+    sal_Bool		m_bMainEntry;
+    sal_Int32		m_nOutlineLevel;
 };
 
-inline void XFEntry::SetEntryType(enumXFEntry type)
+inline void	XFEntry::SetEntryType(enumXFEntry type)
 {
     m_eType = type;
 }
@@ -140,13 +144,13 @@ inline void XFEntry::SetEntryName(const rtl::OUString& name)
     m_strName = name;
 }
 
-inline void XFEntry::SetKey(const rtl::OUString& key1, const rtl::OUString& key2/* =A2OUSTR */)
+inline void	XFEntry::SetKey(const rtl::OUString& key1, const rtl::OUString& key2/* =A2OUSTR */)
 {
     m_strKey1 = key1;
     m_strKey2 = key2;
 }
 
-inline void XFEntry::SetMainEntry(sal_Bool main)
+inline void	XFEntry::SetMainEntry(sal_Bool main)
 {
     m_bMainEntry = main;
 }

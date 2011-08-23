@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include "SchemaRestrictionContext.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmlnmspe.hxx>
+#include <xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmluconv.hxx>
 
@@ -69,8 +69,8 @@ static SvXMLTokenMapEntry aChildren[] =
 
 
 SchemaSimpleTypeContext::SchemaSimpleTypeContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
+    SvXMLImport& rImport, 
+    USHORT nPrefix,
     const OUString& rLocalName,
     const Reference<XDataTypeRepository>& rRepository ) :
         TokenContext( rImport, nPrefix, rLocalName, aAttributes, aChildren ),
@@ -82,17 +82,17 @@ SchemaSimpleTypeContext::~SchemaSimpleTypeContext()
 {
 }
 
-void SchemaSimpleTypeContext::HandleAttribute(
-    sal_uInt16 nToken,
+void SchemaSimpleTypeContext::HandleAttribute( 
+    sal_uInt16 nToken, 
     const OUString& rValue )
 {
     if( nToken == XML_NAME )
     {
         msTypeName = rValue;
     }
-}
+}        
 
-SvXMLImportContext* SchemaSimpleTypeContext::HandleChild(
+SvXMLImportContext* SchemaSimpleTypeContext::HandleChild( 
     sal_uInt16 nToken,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -102,16 +102,16 @@ SvXMLImportContext* SchemaSimpleTypeContext::HandleChild(
     switch( nToken )
     {
     case XML_RESTRICTION:
-        pContext = new SchemaRestrictionContext( GetImport(),
-                                                 nPrefix, rLocalName,
+        pContext = new SchemaRestrictionContext( GetImport(), 
+                                                 nPrefix, rLocalName, 
                                                  mxRepository, msTypeName );
         break;
     default:
-        OSL_FAIL( "Booo!" );
+        DBG_ERROR( "Booo!" );
     }
 
-    return ( pContext != NULL )
-        ? pContext
+    return ( pContext != NULL ) 
+        ? pContext 
         : new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
 

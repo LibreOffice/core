@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,30 +35,30 @@
 // - GIFLZWCompressor -
 // --------------------
 
-class   GIFImageDataOutputStream;
-struct  GIFLZWCTreeNode;
+class	GIFImageDataOutputStream;
+struct	GIFLZWCTreeNode;
 
 class GIFLZWCompressor
 {
 private:
 
-    GIFImageDataOutputStream*   pIDOS;
-    GIFLZWCTreeNode*            pTable;
-    GIFLZWCTreeNode*            pPrefix;
-    sal_uInt16                      nDataSize;
-    sal_uInt16                      nClearCode;
-    sal_uInt16                      nEOICode;
-    sal_uInt16                      nTableSize;
-    sal_uInt16                      nCodeSize;
+    GIFImageDataOutputStream*	pIDOS;
+    GIFLZWCTreeNode*			pTable;
+    GIFLZWCTreeNode*			pPrefix;
+    USHORT						nDataSize;
+    USHORT						nClearCode;
+    USHORT						nEOICode;
+    USHORT						nTableSize;
+    USHORT						nCodeSize;
 
 public:
 
                                 GIFLZWCompressor();
                                 ~GIFLZWCompressor();
 
-    void                        StartCompression( SvStream& rGIF, sal_uInt16 nPixelSize );
-    void                        Compress( HPBYTE pSrc, sal_uLong nSize );
-    void                        EndCompression();
+    void						StartCompression( SvStream& rGIF, USHORT nPixelSize );
+    void						Compress( HPBYTE pSrc, ULONG nSize );
+    void						EndCompression();
 };
 
 #endif // _GIFLZWC_HXX

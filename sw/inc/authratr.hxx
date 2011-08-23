@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,20 +33,20 @@
 #include <tools/color.hxx>
 #include "swdllapi.h"
 
-#define COL_NONE        TRGB_COLORDATA( 0x80, 0xFF, 0xFF, 0xFF )
+#define COL_NONE		TRGB_COLORDATA( 0x80, 0xFF, 0xFF, 0xFF )
 
 class SW_DLLPUBLIC AuthorCharAttr
 {
 public:
-    sal_uInt16  nItemId;
-    sal_uInt16  nAttr;
+    USHORT	nItemId;
+    USHORT	nAttr;
     ColorData nColor;
 
     AuthorCharAttr();
 
-    inline sal_Bool operator == ( const AuthorCharAttr& rAttr ) const
+    inline BOOL operator == ( const AuthorCharAttr& rAttr ) const
     {
-        return  nItemId == rAttr.nItemId && nAttr == rAttr.nAttr &&
+        return	nItemId == rAttr.nItemId && nAttr == rAttr.nAttr &&
                 nColor == rAttr.nColor;
     }
 };

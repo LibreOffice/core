@@ -38,6 +38,8 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
+#include "oox/core/namespaces.hxx"
+#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace oox::core;
@@ -67,7 +69,7 @@ Reference< XFastContextHandler > ShapeGroupContext::createFastChildContext( sal_
 {
     Reference< XFastContextHandler > xRet;
 
-    switch( getBaseToken( aElementToken ) )
+    switch( getToken( aElementToken ) )
     {
     case XML_cNvPr:
     {
@@ -95,20 +97,20 @@ Reference< XFastContextHandler > ShapeGroupContext::createFastChildContext( sal_
         xRet = new ShapeStyleContext( getParser() );
         break;
 */
-    case XML_cxnSp:         // connector shape
+    case XML_cxnSp:			// connector shape
         xRet.set( new ConnectorShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.ConnectorShape" ) ) ) );
         break;
-    case XML_grpSp:         // group shape
+    case XML_grpSp:			// group shape
         xRet.set( new ShapeGroupContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GroupShape" ) ) ) );
         break;
-    case XML_sp:            // shape
+    case XML_sp:			// shape
         xRet.set( new ShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.CustomShape" ) ) ) );
         break;
-    case XML_pic:           // CT_Picture
+    case XML_pic:			// CT_Picture
         xRet.set( new GraphicShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ) ) );
         break;
-    case XML_graphicFrame:  // CT_GraphicalObjectFrame
-        xRet.set( new GraphicalObjectFrameContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ), true ) );
+    case XML_graphicFrame:	// CT_GraphicalObjectFrame
+        xRet.set( new GraphicalObjectFrameContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.OLE2Shape" ) ), true ) );
         break;
     }
     if( !xRet.is() )

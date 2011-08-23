@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ import java.util.Enumeration;
  *  Loads a properties file so that registry knows which plug-ins
  *  it needs to load.
  *
- *  @author Martin Maher
+ *  @author: Martin Maher
  */
 public class ConverterInfoList {
 
@@ -87,7 +87,7 @@ public class ConverterInfoList {
 
 
    /**
-    *  Returns a <code>Vector</code> containing a list of
+    *  Returns a <code>Vector</code> containing a list of 
     *  <code>String</code> objects.  Each <code>String</code>
     *  describes a plug-in to be loaded into the registry.
     *

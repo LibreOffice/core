@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ Any PluginModel::queryAggregation( const Type& type ) throw( RuntimeException )
 Sequence< ::rtl::OUString > PluginModel::getSupportedServiceNames_Static(void) throw()
 {
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginModel"));
+    aSNS.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.plugin.PluginModel" );
     return aSNS;
 }
 
@@ -115,13 +115,13 @@ Reference< ::com::sun::star::beans::XPropertySetInfo >  PluginModel::getProperty
 }
 
 sal_Bool PluginModel::convertFastPropertyValue( Any & rConvertedValue,
-                                                Any & rOldValue,
+                                                Any & rOldValue, 
                                                 sal_Int32 nHandle,
                                                 const Any& rValue ) throw()
 {
     if( nHandle == 1 || nHandle == 2 )
     {
-        if( rValue.getValueTypeClass() == TypeClass_STRING )
+        if( rValue.getValueTypeClass() == TypeClass_STRING )   
         {
             rConvertedValue = rValue;
             if( nHandle == 2 )
@@ -182,7 +182,7 @@ void PluginModel::dispose(void) throw()
         (*it)->disposing( aEvt );
 
     m_aDisposeListeners.clear();
-
+    
     disposing();
 }
 
@@ -190,7 +190,7 @@ void PluginModel::dispose(void) throw()
 // ::com::sun::star::io::XPersistObject
 ::rtl::OUString PluginModel::getServiceName() throw()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginModel"));
+    return ::rtl::OUString::createFromAscii( "com.sun.star.plugin.PluginModel" );
 }
 
 void PluginModel::write(const Reference< ::com::sun::star::io::XObjectOutputStream > & OutStream) throw()

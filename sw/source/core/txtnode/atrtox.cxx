@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <ndtxt.hxx>
 
 SwTxtTOXMark::SwTxtTOXMark( SwTOXMark& rAttr,
-            xub_StrLen const nStartPos, xub_StrLen const*const pEnd)
+                    xub_StrLen nStartPos, xub_StrLen* pEnd )
     : SwTxtAttrEnd( rAttr, nStartPos, nStartPos )
     , m_pTxtNode( 0 )
     , m_pEnd( 0 )
@@ -69,13 +69,13 @@ void SwTxtTOXMark::CopyTOXMark( SwDoc* pDoc )
 {
     SwTOXMark& rTOX = (SwTOXMark&)GetTOXMark();
     TOXTypes    eType   = rTOX.GetTOXType()->GetType();
-    sal_uInt16      nCount  = pDoc->GetTOXTypeCount( eType );
+    USHORT      nCount  = pDoc->GetTOXTypeCount( eType );
     const SwTOXType* pType = 0;
     const XubString& rNm = rTOX.GetTOXType()->GetTypeName();
 
     // kein entsprechender Verzeichnistyp vorhanden -> anlegen
     // sonst verwenden
-    for(sal_uInt16 i=0; i < nCount; ++i)
+    for(USHORT i=0; i < nCount; ++i)
     {
         const SwTOXType* pSrcType = pDoc->GetTOXType(eType, i);
         if(pSrcType->GetTypeName() == rNm )

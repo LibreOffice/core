@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ class ConfigurationAccess
 {
 public:
     enum WriteMode { READ_WRITE, READ_ONLY };
-
+                    
     /** Create a new object to access the configuration entries below the
         given root.
         @param rsRootName
@@ -106,7 +106,7 @@ public:
         const ::rtl::OUString&,
         const std::vector<css::uno::Any>&) > Functor;
 
-    /** Execute a functor for all elements of the given container.
+    /** Execute a functor for all elements of the given container. 
         @param rxContainer
             The container is a XNameAccess to a list of the configuration.
             This can be a node returned by GetConfigurationNode().

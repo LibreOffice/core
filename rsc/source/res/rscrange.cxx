@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,11 @@
 /****************** R s c R a n g e **************************************/
 /*************************************************************************
 |*
-|*    RscRange::RscRange()
+|*	  RscRange::RscRange()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 03.04.91
+|*	  Letzte Aenderung	MM 03.04.91
 |*
 *************************************************************************/
 RscRange::RscRange( Atom nId, sal_uInt32 nTypeId )
@@ -58,7 +62,11 @@ RscRange::RscRange( Atom nId, sal_uInt32 nTypeId )
 
 /*************************************************************************
 |*
-|*    RscRange::GetClassType()
+|*	  RscRange::GetClassType()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 03.04.91
+|*	  Letzte Aenderung	MM 03.04.91
 |*
 *************************************************************************/
 RSCCLASS_TYPE RscRange::GetClassType() const
@@ -68,10 +76,14 @@ RSCCLASS_TYPE RscRange::GetClassType() const
 
 /*************************************************************************
 |*
-|*    RscRange::SetRange()
+|*	  RscRange::SetRange()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 03.04.91
+|*	  Letzte Aenderung	MM 03.04.91
 |*
 *************************************************************************/
-ERRTYPE RscRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
+ERRTYPE RscRange::SetRange( INT32 nMinimum, INT32 nMaximum )
 {
     if( nMinimum > nMaximum )
     {
@@ -89,43 +101,55 @@ ERRTYPE RscRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
 
 /*************************************************************************
 |*
-|*    RscRange::IsValueDefault()
+|*	  RscRange::IsValueDefault()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 15.02.92
+|*	  Letzte Aenderung	MM 15.02.92
 |*
 *************************************************************************/
-sal_Bool RscRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
+BOOL RscRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
     if( pDef )
     {
         if( ((RscRangeInst*)rInst.pData)->nValue ==
           ((RscRangeInst*)pDef)->nValue )
         {
-            return sal_True;
+            return TRUE;
         }
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 /*************************************************************************
 |*
-|*    RscRange::SetNumber()
+|*	  RscRange::SetNumber()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 03.04.91
+|*	  Letzte Aenderung	MM 03.04.91
 |*
 *************************************************************************/
-ERRTYPE RscRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
+ERRTYPE RscRange::SetNumber( const RSCINST & rInst, INT32 nValue )
 {
     if( nMax < nValue || nMin > nValue )
         return( ERR_RSCRANGE_OUTDEFSET );
     ((RscRangeInst *)rInst.pData)->nValue = (sal_uInt16)( nValue - nMin );
-    ((RscRangeInst *)rInst.pData)->bDflt = sal_False;
+    ((RscRangeInst *)rInst.pData)->bDflt = FALSE;
     return( ERR_OK );
 }
 
 /*************************************************************************
 |*
-|*    RscRange::GetNumber()
+|*	  RscRange::GetNumber()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 22.04.91
+|*	  Letzte Aenderung	MM 22.04.91
 |*
 *************************************************************************/
-ERRTYPE RscRange::GetNumber( const RSCINST & rInst, sal_Int32 * pN )
+ERRTYPE RscRange::GetNumber( const RSCINST & rInst, INT32 * pN )
 {
     *pN = ((RscRangeInst *)rInst.pData)->nValue + nMin;
     return( ERR_OK );
@@ -133,11 +157,15 @@ ERRTYPE RscRange::GetNumber( const RSCINST & rInst, sal_Int32 * pN )
 
 /*************************************************************************
 |*
-|*    RscRange::Create()
+|*	  RscRange::Create()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 03.04.91
+|*	  Letzte Aenderung	MM 03.04.91
 |*
 *************************************************************************/
 RSCINST RscRange::Create( RSCINST * pInst, const RSCINST & rDflt,
-                            sal_Bool bOwnClass )
+                            BOOL bOwnClass )
 {
     RSCINST aInst;
 
@@ -160,7 +188,7 @@ RSCINST RscRange::Create( RSCINST * pInst, const RSCINST & rDflt,
             ((RscRangeInst *)aInst.pData)->nValue = (sal_uInt16)(0L - nMin);
         else
             ((RscRangeInst *)aInst.pData)->nValue = 0;
-        ((RscRangeInst *)aInst.pData)->bDflt = sal_True;
+        ((RscRangeInst *)aInst.pData)->bDflt = TRUE;
     }
 
     return( aInst );
@@ -168,7 +196,11 @@ RSCINST RscRange::Create( RSCINST * pInst, const RSCINST & rDflt,
 
 /*************************************************************************
 |*
-|*    RscRange::WriteSrc()
+|*	  RscRange::WriteSrc()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 08.04.91
+|*	  Letzte Aenderung	MM 08.04.91
 |*
 *************************************************************************/
 void RscRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
@@ -179,11 +211,15 @@ void RscRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 
 /*************************************************************************
 |*
-|*    RscRange::WriteRc()
+|*	  RscRange::WriteRc()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 15.04.91
+|*	  Letzte Aenderung	MM 15.04.91
 |*
 *************************************************************************/
 ERRTYPE RscRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                           RscTypCont *, sal_uInt32, sal_Bool )
+                           RscTypCont *, sal_uInt32, BOOL )
 {
     if( nMin >= 0 )
     {
@@ -220,7 +256,11 @@ void RscRange::WriteRcAccess
 /****************** R s c L o n g R a n g e ******************************/
 /*************************************************************************
 |*
-|*    RscLongRange::RscLongRange()
+|*	  RscLongRange::RscLongRange()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 18.07.94
+|*	  Letzte Aenderung	MM 18.07.94
 |*
 *************************************************************************/
 RscLongRange::RscLongRange( Atom nId, sal_uInt32 nTypeId )
@@ -232,7 +272,11 @@ RscLongRange::RscLongRange( Atom nId, sal_uInt32 nTypeId )
 
 /*************************************************************************
 |*
-|*    RscLongRange::GetClassType()
+|*	  RscLongRange::GetClassType()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 18.07.94
+|*	  Letzte Aenderung	MM 18.07.94
 |*
 *************************************************************************/
 RSCCLASS_TYPE RscLongRange::GetClassType() const
@@ -242,10 +286,14 @@ RSCCLASS_TYPE RscLongRange::GetClassType() const
 
 /*************************************************************************
 |*
-|*    RscLongRange::SetRange()
+|*	  RscLongRange::SetRange()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 18.07.94
+|*	  Letzte Aenderung	MM 18.07.94
 |*
 *************************************************************************/
-ERRTYPE RscLongRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
+ERRTYPE RscLongRange::SetRange( INT32 nMinimum, INT32 nMaximum )
 {
     if( nMinimum > nMaximum )
     {
@@ -263,53 +311,69 @@ ERRTYPE RscLongRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
 
 /*************************************************************************
 |*
-|*    RscLongRange::IsValueDefault()
+|*	  RscLongRange::IsValueDefault()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 15.02.92
+|*	  Letzte Aenderung	MM 15.02.92
 |*
 *************************************************************************/
-sal_Bool RscLongRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
+BOOL RscLongRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
     if( pDef )
         return 0 == memcmp( &((RscLongRangeInst*)rInst.pData)->nValue,
                             &((RscLongRangeInst*)pDef)->nValue,
-                            sizeof( sal_Int32 ) );
+                            sizeof( INT32 ) );
 
-    return sal_False;
+    return FALSE;
 }
 
 /*************************************************************************
 |*
-|*    RscLongRange::SetNumber()
+|*	  RscLongRange::SetNumber()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 18.07.94
+|*	  Letzte Aenderung	MM 18.07.94
 |*
 *************************************************************************/
-ERRTYPE RscLongRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
+ERRTYPE RscLongRange::SetNumber( const RSCINST & rInst, INT32 nValue )
 {
     if( nMax < nValue || nMin > nValue )
         return( ERR_RSCRANGE_OUTDEFSET );
     void * pData = &((RscLongRangeInst*)rInst.pData)->nValue;
-    memmove( pData, &nValue, sizeof( sal_Int32 ) );
-    ((RscLongRangeInst *)rInst.pData)->bDflt = sal_False;
+    memmove( pData, &nValue, sizeof( INT32 ) );
+    ((RscLongRangeInst *)rInst.pData)->bDflt = FALSE;
     return( ERR_OK );
 }
 
 /*************************************************************************
 |*
-|*    RscLongRange::GetNumber()
+|*	  RscLongRange::GetNumber()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 22.04.91
+|*	  Letzte Aenderung	MM 22.04.91
 |*
 *************************************************************************/
-ERRTYPE RscLongRange::GetNumber( const RSCINST & rInst, sal_Int32 * pN )
+ERRTYPE RscLongRange::GetNumber( const RSCINST & rInst, INT32 * pN )
 {
     memmove( pN, &((RscLongRangeInst*)rInst.pData)->nValue,
-             sizeof( sal_Int32 ) );
+             sizeof( INT32 ) );
     return( ERR_OK );
 }
 
 /*************************************************************************
 |*
-|*    RscLongRange::Create()
+|*	  RscLongRange::Create()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 18.07.94
+|*	  Letzte Aenderung	MM 18.07.94
 |*
 *************************************************************************/
 RSCINST RscLongRange::Create( RSCINST * pInst, const RSCINST & rDflt,
-                              sal_Bool bOwnClass )
+                              BOOL bOwnClass )
 {
     RSCINST aInst;
 
@@ -328,14 +392,14 @@ RSCINST RscLongRange::Create( RSCINST * pInst, const RSCINST & rDflt,
         memmove( aInst.pData, rDflt.pData, sizeof( RscLongRangeInst ) );
     else
     {
-        sal_Int32   lDflt;
+        INT32	lDflt;
         if( 0L >= nMin && 0L <= nMax )
             lDflt = 0;
         else
             lDflt = nMin;
         void * pData = &((RscLongRangeInst*)aInst.pData)->nValue;
-        memmove( pData, &lDflt, sizeof( sal_Int32 ) );
-        ((RscLongRangeInst *)aInst.pData)->bDflt = sal_True;
+        memmove( pData, &lDflt, sizeof( INT32 ) );
+        ((RscLongRangeInst *)aInst.pData)->bDflt = TRUE;
     }
 
     return( aInst );
@@ -343,29 +407,37 @@ RSCINST RscLongRange::Create( RSCINST * pInst, const RSCINST & rDflt,
 
 /*************************************************************************
 |*
-|*    RscLongRange::WriteSrc()
+|*	  RscLongRange::WriteSrc()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 18.07.94
+|*	  Letzte Aenderung	MM 18.07.94
 |*
 *************************************************************************/
 void RscLongRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                          RscTypCont *, sal_uInt32, const char * )
 {
-    sal_Int32 lVal;
+    INT32 lVal;
     GetNumber( rInst, &lVal );
     fprintf( fOutput, "%d", static_cast<int>(lVal) );
 }
 
 /*************************************************************************
 |*
-|*    RscLongRange::WriteRc()
+|*	  RscLongRange::WriteRc()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 18.07.94
+|*	  Letzte Aenderung	MM 18.04.94
 |*
 *************************************************************************/
 ERRTYPE RscLongRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                               RscTypCont *, sal_uInt32, sal_Bool )
+                               RscTypCont *, sal_uInt32, BOOL )
 {
-    sal_Int32 lVal;
+    INT32 lVal;
 
     GetNumber( rInst, &lVal );
-    aMem.Put( (sal_Int32)lVal );
+    aMem.Put( (INT32)lVal );
 
     return( ERR_OK );
 }
@@ -380,14 +452,14 @@ void RscLongRange::WriteRcAccess
 {
     fprintf( fOutput, "\t\tSet%s( ", pName );
     fprintf( fOutput, "GetLong( pResData+nOffset ) );\n" );
-    fprintf( fOutput, "\t\tnOffset += sizeof( sal_Int32 );\n" );
+    fprintf( fOutput, "\t\tnOffset += sizeof( INT32 );\n" );
 }
 
 /****************** R s c L o n g E n u m R a n g e *********************/
 /*************************************************************************
-|*    RscLongEnumRange::RscLongEnumRange()
+|*	  RscLongEnumRange::RscLongEnumRange()
 |*
-|*    Beschreibung
+|*	  Beschreibung
 *************************************************************************/
 RscLongEnumRange::RscLongEnumRange( Atom nId, sal_uInt32 nTypeId )
                         : RscLongRange( nId, nTypeId )
@@ -395,12 +467,12 @@ RscLongEnumRange::RscLongEnumRange( Atom nId, sal_uInt32 nTypeId )
 }
 
 /*************************************************************************
-|*    RscLongEnumRange::SetConst()
+|*	  RscLongEnumRange::SetConst()
 |*
-|*    Beschreibung
+|*	  Beschreibung
 *************************************************************************/
 ERRTYPE RscLongEnumRange::SetConst( const RSCINST & rInst, Atom /*nConst*/,
-                                    sal_Int32 nValue )
+                                    INT32 nValue )
 {
     return SetNumber( rInst, nValue );
 }
@@ -408,7 +480,11 @@ ERRTYPE RscLongEnumRange::SetConst( const RSCINST & rInst, Atom /*nConst*/,
 /****************** R s c I d R a n g e **********************************/
 /*************************************************************************
 |*
-|*    RscIdRange::RscIdRange()
+|*	  RscIdRange::RscIdRange()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 03.04.91
+|*	  Letzte Aenderung	MM 03.04.91
 |*
 *************************************************************************/
 RscIdRange::RscIdRange( Atom nId, sal_uInt32 nTypeId )
@@ -420,7 +496,11 @@ RscIdRange::RscIdRange( Atom nId, sal_uInt32 nTypeId )
 
 /*************************************************************************
 |*
-|*    RscIdRange::RscIdRange()
+|*	  RscIdRange::RscIdRange()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 03.04.91
+|*	  Letzte Aenderung	MM 03.04.91
 |*
 *************************************************************************/
 RSCCLASS_TYPE RscIdRange::GetClassType() const
@@ -430,10 +510,14 @@ RSCCLASS_TYPE RscIdRange::GetClassType() const
 
 /*************************************************************************
 |*
-|*    RscIdRange::Create()
+|*	  RscIdRange::Create()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 03.04.91
+|*	  Letzte Aenderung	MM 03.04.91
 |*
 *************************************************************************/
-RSCINST RscIdRange::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnClass ){
+RSCINST RscIdRange::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass ){
     RSCINST aInst;
     RscId * pClassData;
 
@@ -456,11 +540,11 @@ RSCINST RscIdRange::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOw
     else{
             *pClassData = RscId();
         if( 0 >= nMin && 0 <= nMax )
-            *pClassData = RscId( (sal_Int32)0 );
+            *pClassData = RscId( (INT32)0 );
         else
             *pClassData = RscId( nMin );
         //cUnused wird fuer Defaultkennung verwendet
-        ((RscId *)aInst.pData)->aExp.cUnused = sal_True;
+        ((RscId *)aInst.pData)->aExp.cUnused = TRUE;
     }
 
     return( aInst );
@@ -468,7 +552,11 @@ RSCINST RscIdRange::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOw
 
 /*************************************************************************
 |*
-|*    RscIdRange::Destroy()
+|*	  RscIdRange::Destroy()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 22.11.91
+|*	  Letzte Aenderung	MM 22.11.91
 |*
 *************************************************************************/
 void RscIdRange :: Destroy( const RSCINST & rInst ){
@@ -477,10 +565,14 @@ void RscIdRange :: Destroy( const RSCINST & rInst ){
 
 /*************************************************************************
 |*
-|*    RscIdRange::IsValueDefault()
+|*	  RscIdRange::IsValueDefault()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 15.01.92
+|*	  Letzte Aenderung	MM 15.01.92
 |*
 *************************************************************************/
-sal_Bool RscIdRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
+BOOL RscIdRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
     if( pDef ){
         if( ((RscId*)rInst.pData)->aExp.IsNumber()
           && ((RscId*)pDef)->aExp.IsNumber() )
@@ -488,42 +580,54 @@ sal_Bool RscIdRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
             if( ((RscId*)rInst.pData)->GetNumber() ==
               ((RscId*)pDef)->GetNumber() )
             {
-                return sal_True;
+                return TRUE;
             }
         }
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 /*************************************************************************
 |*
-|*    RscIdRange::SetNumber()
+|*	  RscIdRange::SetNumber()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 25.11.91
+|*	  Letzte Aenderung	MM 25.11.91
 |*
 *************************************************************************/
-ERRTYPE RscIdRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
+ERRTYPE RscIdRange::SetNumber( const RSCINST & rInst, INT32 nValue )
 {
     if( nMax < nValue || nMin > nValue )
         return( ERR_RSCRANGE_OUTDEFSET );
 
     *(RscId *)rInst.pData = RscId( nValue );
-    ((RscId *)rInst.pData)->aExp.cUnused = sal_False;
+    ((RscId *)rInst.pData)->aExp.cUnused = FALSE;
     return( ERR_OK );
 }
 
 /*************************************************************************
 |*
-|*    RscIdRange::GetNumber()
+|*	  RscIdRange::GetNumber()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 25.11.91
+|*	  Letzte Aenderung	MM 25.11.91
 |*
 *************************************************************************/
-ERRTYPE RscIdRange::GetNumber( const RSCINST & rInst, sal_Int32 * plValue ){
+ERRTYPE RscIdRange::GetNumber( const RSCINST & rInst, INT32 * plValue ){
     *plValue = ((RscId *)rInst.pData)->GetNumber();
     return( ERR_OK );
 }
 
 /*************************************************************************
 |*
-|*    RscIdRange::SetRef()
+|*	  RscIdRange::SetRef()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 22.11.91
+|*	  Letzte Aenderung	MM 22.11.91
 |*
 *************************************************************************/
 ERRTYPE RscIdRange::SetRef( const RSCINST & rInst, const RscId & rRscId ){
@@ -532,7 +636,7 @@ ERRTYPE RscIdRange::SetRef( const RSCINST & rInst, const RscId & rRscId ){
         aError = SetNumber( rInst, rRscId );
         if( aError.IsOk() ){
             *(RscId *)rInst.pData = rRscId;
-            ((RscId *)rInst.pData)->aExp.cUnused = sal_False;
+            ((RscId *)rInst.pData)->aExp.cUnused = FALSE;
         }
     }
     else
@@ -543,7 +647,11 @@ ERRTYPE RscIdRange::SetRef( const RSCINST & rInst, const RscId & rRscId ){
 
 /*************************************************************************
 |*
-|*    RscIdRange::GetRef()
+|*	  RscIdRange::GetRef()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 22.11.91
+|*	  Letzte Aenderung	MM 22.11.91
 |*
 *************************************************************************/
 ERRTYPE RscIdRange::GetRef( const RSCINST & rInst, RscId * pRscId ){
@@ -554,7 +662,11 @@ ERRTYPE RscIdRange::GetRef( const RSCINST & rInst, RscId * pRscId ){
 
 /*************************************************************************
 |*
-|*    RscIdRange::WriteSrc()
+|*	  RscIdRange::WriteSrc()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 22.11.91
+|*	  Letzte Aenderung	MM 25.11.91
 |*
 *************************************************************************/
 void RscIdRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
@@ -565,15 +677,19 @@ void RscIdRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 
 /*************************************************************************
 |*
-|*    RscIdRange::WriteRc()
+|*	  RscIdRange::WriteRc()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 25.11.91
+|*	  Letzte Aenderung	MM 25.11.91
 |*
 *************************************************************************/
 ERRTYPE RscIdRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont *, sal_uInt32, sal_Bool )
+                             RscTypCont *, sal_uInt32, BOOL )
 {
-    sal_Int32 lVal = ((RscId*)rInst.pData)->GetNumber();
+    INT32 lVal = ((RscId*)rInst.pData)->GetNumber();
 
-    aMem.Put( (sal_Int32)lVal );
+    aMem.Put( (INT32)lVal );
 
     return( ERR_OK );
 }
@@ -588,28 +704,39 @@ void RscIdRange::WriteRcAccess
 {
     fprintf( fOutput, "\t\tSet%s( ", pName );
     fprintf( fOutput, "GetLong( pResData+nOffset ) );\n" );
-    fprintf( fOutput, "\t\tnOffset += sizeof( sal_Int32 );\n" );
+    fprintf( fOutput, "\t\tnOffset += sizeof( INT32 );\n" );
 }
 
 /*************************************************************************
 |*
-|*    RscIdRange::IsConsistent()
+|*	  RscIdRange::IsConsistent()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 22.11.91
+|*	  Letzte Aenderung	MM 22.11.91
 |*
 *************************************************************************/
-sal_Bool RscIdRange::IsConsistent( const RSCINST & rInst )
+BOOL RscIdRange::IsConsistent( const RSCINST & rInst, RscInconsList * pList )
 {
     long nValue = ((RscId *)rInst.pData)->GetNumber();
     if( (nMax >= nValue) && (nMin <= nValue) )
-        return sal_True;
+        return TRUE;
     else {
-        return sal_False;
+        if( pList )
+            pList->Insert( new RscInconsistent(
+                *(RscId *)rInst.pData, *(RscId *)rInst.pData ) );
+        return FALSE;
     }
 }
 
 /****************** R s c B o o l ****************************************/
 /*************************************************************************
 |*
-|*    RscBool::RscBool()
+|*	  RscBool::RscBool()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 29.04.91
+|*	  Letzte Aenderung	MM 29.04.91
 |*
 *************************************************************************/
 RscBool::RscBool( Atom nId, sal_uInt32 nTypeId )
@@ -620,7 +747,11 @@ RscBool::RscBool( Atom nId, sal_uInt32 nTypeId )
 
 /*************************************************************************
 |*
-|*    RscBool::GetClassType()
+|*	  RscBool::GetClassType()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 29.04.91
+|*	  Letzte Aenderung	MM 29.04.91
 |*
 *************************************************************************/
 RSCCLASS_TYPE  RscBool::GetClassType() const
@@ -630,13 +761,17 @@ RSCCLASS_TYPE  RscBool::GetClassType() const
 
 /*************************************************************************
 |*
-|*    RscBool::WriteSrc()
+|*	  RscBool::WriteSrc()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 29.04.91
+|*	  Letzte Aenderung	MM 29.04.91
 |*
 *************************************************************************/
 void RscBool::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                         RscTypCont *, sal_uInt32, const char * )
 {
-    sal_Int32 l;
+    INT32 l;
 
     GetNumber( rInst, &l );
     if( l )
@@ -654,14 +789,18 @@ void RscBool::WriteRcAccess
 )
 {
     fprintf( fOutput, "\t\tSet%s( ", pName );
-    fprintf( fOutput, "(sal_Bool)*(short *)(pResData+nOffset) );\n" );
+    fprintf( fOutput, "(BOOL)*(short *)(pResData+nOffset) );\n" );
     fprintf( fOutput, "\t\tnOffset += sizeof( short );\n" );
 }
 
 /****************** R s c B r e a k R a n g e ****************************/
 /*************************************************************************
 |*
-|*    RscBreakRange::SetNumber()
+|*	  RscBreakRange::SetNumber()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 24.06.91
+|*	  Letzte Aenderung	MM 24.06.91
 |*
 *************************************************************************/
 RscBreakRange :: RscBreakRange( Atom nId, sal_uInt32 nTypeId )
@@ -672,10 +811,14 @@ RscBreakRange :: RscBreakRange( Atom nId, sal_uInt32 nTypeId )
 
 /*************************************************************************
 |*
-|*    RscBreakRange::SetNumber()
+|*	  RscBreakRange::SetNumber()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 24.06.91
+|*	  Letzte Aenderung	MM 24.06.91
 |*
 *************************************************************************/
-ERRTYPE RscBreakRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue ){
+ERRTYPE RscBreakRange::SetNumber( const RSCINST & rInst, INT32 nValue ){
     if( nValue == nOutRange )
         return( ERR_RSCRANGE_OUTDEFSET );
     else
@@ -684,14 +827,18 @@ ERRTYPE RscBreakRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue ){
 
 /*************************************************************************
 |*
-|*    RscBreakRange::Create()
+|*	  RscBreakRange::Create()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 24.06.91
+|*	  Letzte Aenderung	MM 24.06.91
 |*
 *************************************************************************/
 RSCINST RscBreakRange::Create( RSCINST * pInst, const RSCINST & rDflt,
-                               sal_Bool bOwnClass )
+                               BOOL bOwnClass )
 {
     RSCINST aInst;
-    sal_Int32   l;
+    INT32	l;
 
     aInst = RscRange::Create( pInst, rDflt, bOwnClass );
 

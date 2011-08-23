@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,14 +38,14 @@ namespace dbaui
 {
     //==================================================================
     // Ableitung von TabPage ist ein Trick von TH,
-    // um Aenderungen der Systemfarben zu bemerken
+    // um Aenderungen der Systemfarben zu bemerken (Bug #53905)
     class OTableDesignHelpBar : public TabPage
                                 ,public IClipboardTest
     {
     private:
-        String          m_sHelpText;
-        MultiLineEdit*  m_pTextWin;
-        sal_uInt16          m_nDummy;
+        String			m_sHelpText;
+        MultiLineEdit*	m_pTextWin;
+        USHORT			m_nDummy;
 
     protected:
         virtual void Resize();

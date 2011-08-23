@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,8 +94,8 @@ const StringSequence& getColumnTypes()
 //------------------------------------------------------------------------------
 sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
 {
-    const ::rtl::OUString aModelPrefix (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.") );
-    const ::rtl::OUString aCompatibleModelPrefix (RTL_CONSTASCII_USTRINGPARAM("stardiv.one.form.component.") );
+    const ::rtl::OUString aModelPrefix = ::rtl::OUString::createFromAscii("com.sun.star.form.component.");
+    const ::rtl::OUString aCompatibleModelPrefix = ::rtl::OUString::createFromAscii("stardiv.one.form.component.");
 
     sal_Int32 nTypeId = -1;
     if (aModelName == FRM_COMPONENT_EDIT)
@@ -259,7 +259,7 @@ OGridColumn::OGridColumn( const OGridColumn* _pOriginal )
         }
 
         if ( m_xAggregate.is() )
-        {   // don't omit this brackets - they ensure that the following temporary is properly deleted
+        {	// don't omit this brackets - they ensure that the following temporary is properly deleted
             m_xAggregate->setDelegator( static_cast< ::cppu::OWeakObject* >( this ) );
         }
     }

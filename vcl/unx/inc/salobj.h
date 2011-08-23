@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,26 +42,26 @@ public:
                 SalClipRegion();
                ~SalClipRegion();
 
-    void        BeginSetClipRegion( sal_uIntPtr nRects );
-    void        UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    void      	BeginSetClipRegion( ULONG nRects );
+    void      	UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
 
-    XRectangle *EndSetClipRegion()  {
-        return ClipRectangleList;   }
-    void        ResetClipRegion()   {
-        numClipRectangles = 0;      }
-    sal_uInt16      GetClipRegionType() {
-        return nClipRegionType;     }
-    void        SetClipRegionType( sal_uInt16 nType ) {
-        nClipRegionType = nType;    }
-    int         GetRectangleCount() {
-        return numClipRectangles;   }
+    XRectangle *EndSetClipRegion()	{
+        return ClipRectangleList; 	}
+    void      	ResetClipRegion() 	{
+        numClipRectangles = 0; 		}
+    USHORT    	GetClipRegionType()	{
+        return nClipRegionType;		}
+    void 		SetClipRegionType( USHORT nType ) { 
+        nClipRegionType = nType;	}
+    int			GetRectangleCount() {
+        return numClipRectangles;	}
 
 private:
 
     XRectangle* ClipRectangleList;
     int         numClipRectangles;
     int         maxClipRectangles;
-    sal_uInt16      nClipRegionType;
+    USHORT		nClipRegionType;
 };
 
 
@@ -70,36 +70,35 @@ class X11SalObject : public SalObject
 public:
     SystemChildData maSystemChildData;
     SalFrame*       mpParent;
-    XLIB_Window     maPrimary;
-    XLIB_Window     maSecondary;
+    XLIB_Window		maPrimary;
+    XLIB_Window		maSecondary;
     Colormap        maColormap;
-    SalClipRegion   maClipRegion;
-    sal_Bool            mbVisible;
+    SalClipRegion	maClipRegion;
+    BOOL			mbVisible;
 
     static VCL_DLLPUBLIC long Dispatch( XEvent* pEvent );
-    static VCL_DLLPUBLIC X11SalObject* CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True );
+    static VCL_DLLPUBLIC X11SalObject* CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow = TRUE );
 
     X11SalObject();
     virtual ~X11SalObject();
 
     // overload all pure virtual methods
-     virtual void                   ResetClipRegion();
-    virtual sal_uInt16                  GetClipRegionType();
-    virtual void                    BeginSetClipRegion( sal_uIntPtr nRects );
-    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
-    virtual void                    EndSetClipRegion();
+     virtual void					ResetClipRegion();
+    virtual USHORT					GetClipRegionType();
+    virtual void					BeginSetClipRegion( ULONG nRects );
+    virtual void					UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual void					EndSetClipRegion();
 
-    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
-    virtual void                    Show( sal_Bool bVisible );
-    virtual void                    Enable( sal_Bool nEnable );
-    virtual void                    GrabFocus();
+    virtual void					SetPosSize( long nX, long nY, long nWidth, long nHeight );
+    virtual void					Show( BOOL bVisible );
+    virtual void					Enable( BOOL nEnable );
+    virtual void					GrabFocus();
 
-    virtual void                    SetBackground();
-    virtual void                    SetBackground( SalColor nSalColor );
+    virtual void					SetBackground();
+    virtual void					SetBackground( SalColor nSalColor );
 
-    virtual const SystemEnvData*    GetSystemData() const;
-
-    virtual void InterceptChildWindowKeyDown( sal_Bool bIntercept );
+    virtual const SystemEnvData*	GetSystemData() const;
+   
 };
 
 #endif // _SV_SALOBJ_H

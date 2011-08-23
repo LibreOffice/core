@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,11 +66,11 @@ TYPEINIT1( FuConstructUnoControl, FuConstruct );
 \************************************************************************/
 
 FuConstructUnoControl::FuConstructUnoControl (
-    ViewShell*  pViewSh,
-    ::sd::Window*       pWin,
-    ::sd::View*         pView,
-    SdDrawDocument* pDoc,
-    SfxRequest&     rReq)
+    ViewShell* 	pViewSh,
+    ::sd::Window*		pWin,
+    ::sd::View*			pView,
+    SdDrawDocument*	pDoc,
+    SfxRequest&		rReq)
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
 {
 }
@@ -88,8 +88,8 @@ void FuConstructUnoControl::DoExecute( SfxRequest& rReq )
 {
     FuConstruct::DoExecute( rReq );
 
-    SFX_REQUEST_ARG( rReq, pInventorItem, SfxUInt32Item, SID_FM_CONTROL_INVENTOR, sal_False );
-    SFX_REQUEST_ARG( rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER, sal_False );
+    SFX_REQUEST_ARG( rReq, pInventorItem, SfxUInt32Item, SID_FM_CONTROL_INVENTOR, FALSE );
+    SFX_REQUEST_ARG( rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER, FALSE );
     if( pInventorItem )
         nInventor = pInventorItem->GetValue();
     if( pIdentifierItem )
@@ -105,17 +105,17 @@ void FuConstructUnoControl::DoExecute( SfxRequest& rReq )
 |* MouseButtonDown-event
 |*
 \************************************************************************/
-sal_Bool FuConstructUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuConstructUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
         Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         mpWindow->CaptureMouse();
-        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
         mpView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
-        bReturn = sal_True;
+        bReturn = TRUE;
     }
     return bReturn;
 }
@@ -125,7 +125,7 @@ sal_Bool FuConstructUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 |* MouseMove-event
 |*
 \************************************************************************/
-sal_Bool FuConstructUnoControl::MouseMove(const MouseEvent& rMEvt)
+BOOL FuConstructUnoControl::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -135,15 +135,15 @@ sal_Bool FuConstructUnoControl::MouseMove(const MouseEvent& rMEvt)
 |* MouseButtonUp-event
 |*
 \************************************************************************/
-sal_Bool FuConstructUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuConstructUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
+    BOOL bReturn = FALSE;
 
     if ( mpView->IsCreateObj() && rMEvt.IsLeft() )
     {
         Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         mpView->EndCreateObj(SDRCREATE_FORCEEND);
-        bReturn = sal_True;
+        bReturn = TRUE;
     }
 
     bReturn = (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
@@ -158,13 +158,13 @@ sal_Bool FuConstructUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* FALSE.
 |*
 \************************************************************************/
-sal_Bool FuConstructUnoControl::KeyInput(const KeyEvent& rKEvt)
+BOOL FuConstructUnoControl::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
+    BOOL bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
@@ -200,10 +200,11 @@ void FuConstructUnoControl::Deactivate()
     mpWindow->SetPointer( aOldPointer );
 }
 
+// #97016#
 SdrObject* FuConstructUnoControl::CreateDefaultObject(const sal_uInt16, const Rectangle& rRectangle)
 {
     // case SID_FM_CREATE_CONTROL:
-
+    
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
         0L, mpDoc);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,8 +85,8 @@ public class TableDsc extends InstDescr {
 
         XTextTable TT = (XTextTable)UnoRuntime.queryInterface(
                                                         ifcClass, SrvObj );
-
-        if ( rows > 0 && columns > 0 )  {
+                                            
+        if ( rows > 0 && columns > 0 )	{
             TT.initialize( rows, columns );
         }
 

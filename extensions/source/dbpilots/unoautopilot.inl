@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,9 +28,14 @@
 // no include protecttion
 // this file is included from unoautopilot.hxx directly
 
+//using namespace ::com::sun::star::uno;
+//using namespace ::com::sun::star::lang;
+//using namespace ::com::sun::star::beans;
+//
 //=====================================================================
 //= OUnoAutoPilot
 //=====================================================================
+//---------------------------------------------------------------------
 template <class TYPE, class SERVICEINFO>
 OUnoAutoPilot<TYPE, SERVICEINFO>::OUnoAutoPilot(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
     :OUnoAutoPilot_Base(_rxORB)
@@ -106,7 +111,7 @@ template <class TYPE, class SERVICEINFO>
 
 //--------------------------------------------------------------------------
 template <class TYPE, class SERVICEINFO>
-Dialog* OUnoAutoPilot<TYPE, SERVICEINFO>::createDialog(Window* _pParent)
+Dialog*	OUnoAutoPilot<TYPE, SERVICEINFO>::createDialog(Window* _pParent)
 {
     return new TYPE(_pParent, m_xObjectModel, m_aContext.getLegacyServiceFactory());
 }

@@ -47,7 +47,6 @@ SLOFILES=	$(SLO)$/pdfuno.obj			\
             $(SLO)$/pdfdialog.obj		\
             $(SLO)$/impdialog.obj		\
             $(SLO)$/pdffilter.obj		\
-            $(SLO)$/pdfinteract.obj		\
             $(SLO)$/pdfexport.obj		
 
 # --- Library -----------------------------------
@@ -82,11 +81,3 @@ DEF1NAME=$(SHL1TARGET)
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
-
-ALLTAR : $(MISC)/pdffilter.component
-
-$(MISC)/pdffilter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        pdffilter.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt pdffilter.component

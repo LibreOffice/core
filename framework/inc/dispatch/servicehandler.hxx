@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_DISPATCH_SERVICEHANDLER_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <macros/generic.hxx>
@@ -43,7 +43,7 @@
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
@@ -54,28 +54,28 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  exported const
+//	exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  exported definitions
+//	exported definitions
 //_________________________________________________________________________________________________________________
 
 /**
     @short          protocol handler for "service:*" URLs
     @descr          It's a special dispatch/provider object which is registered for such URL pattern and will
-                    be automaticly used by the framework dispatch mechanism if such URL occurred.
+                    be automaticly used by the framework dispatch mechanism if such URL occured.
                     His job is to create any registered uno components which must be coded inside
                     dispatched URL (may with some optional given parameters). After that such created
                     service must be hold his self alive. Such mechanism can be usefull for UI components
@@ -86,7 +86,7 @@ namespace framework{
     @base           OWeakObject
                         provides XWeak and ref count mechanism
 
-    @devstatus      ready to use
+    @devstatus		ready to use
 
     @modified       02.05.2002 08:13, as96863
 */
@@ -145,7 +145,7 @@ class ServiceHandler : // interfaces
 
 };      //  class ServiceHandler
 
-}       //  namespace framework
+}		//	namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_DISPATCH_SERVICEHANDLER_HXX_
 

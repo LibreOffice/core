@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <drawinglayer/processor2d/vclprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/contact/objectcontacttools.hxx>
-#include <svx/unoapi.hxx>
+#include <unoapi.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -76,10 +76,10 @@ namespace sdr
         }
 
         ObjectContactOfObjListPainter::ObjectContactOfObjListPainter(
-            OutputDevice& rTargetDevice,
+            OutputDevice& rTargetDevice, 
             const SdrObjectVector& rObjects,
             const SdrPage* pProcessedPage)
-        :   ObjectContactPainter(),
+        :	ObjectContactPainter(),
             mrTargetOutputDevice(rTargetDevice),
             maStartObjects(rObjects),
             mpProcessedPage(pProcessedPage)
@@ -117,12 +117,12 @@ namespace sdr
 
                     // upate local ViewInformation2D
                     const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D(
-                        basegfx::B2DHomMatrix(),
-                        pTargetDevice->GetViewTransformation(),
-                        aViewRange,
+                        basegfx::B2DHomMatrix(), 
+                        pTargetDevice->GetViewTransformation(), 
+                        aViewRange, 
                         GetXDrawPageForSdrPage(const_cast< SdrPage* >(mpProcessedPage)),
-                        0.0,
-                        com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>());
+                        0.0, 
+                        0);
                     updateViewInformation2D(aNewViewInformation2D);
 
                     // collect primitive data in a sequence; this will already use the updated ViewInformation2D
@@ -152,25 +152,6 @@ namespace sdr
             }
         }
 
-        // VirtualDevice?
-        bool ObjectContactOfObjListPainter::isOutputToVirtualDevice() const
-        {
-            return (OUTDEV_VIRDEV == mrTargetOutputDevice.GetOutDevType());
-        }
-
-        // recording MetaFile?
-        bool ObjectContactOfObjListPainter::isOutputToRecordingMetaFile() const
-        {
-            GDIMetaFile* pMetaFile = mrTargetOutputDevice.GetConnectMetaFile();
-            return (pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
-        }
-
-        // pdf export?
-        bool ObjectContactOfObjListPainter::isOutputToPDFFile() const
-        {
-            return (0 != mrTargetOutputDevice.GetPDFWriter());
-        }
-
         OutputDevice* ObjectContactOfObjListPainter::TryToGetOutputDevice() const
         {
             return &mrTargetOutputDevice;
@@ -198,7 +179,7 @@ namespace sdr
         ObjectContactOfPagePainter::ObjectContactOfPagePainter(
             const SdrPage* pPage,
             ObjectContact& rOriginalObjectContact)
-        :   ObjectContactPainter(),
+        :	ObjectContactPainter(),
             mrOriginalObjectContact(rOriginalObjectContact),
             mxStartPage(const_cast< SdrPage* >(pPage)) // no SdrPageWeakRef available to hold a const SdrPage*
         {

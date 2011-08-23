@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,9 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "svx/svxgrahicitem.hxx"
+#include "svxgrahicitem.hxx"
 TYPEINIT1(SvxGraphicItem,SfxPoolItem);
-SvxGraphicItem::SvxGraphicItem( sal_uInt16 _nWhich, const Graphic& rGraphic )
+SvxGraphicItem::SvxGraphicItem( USHORT _nWhich, const Graphic& rGraphic )
     : SfxPoolItem( _nWhich ), aGraphic( rGraphic )
 {
 
@@ -40,7 +40,7 @@ SvxGraphicItem::SvxGraphicItem( const SvxGraphicItem& rItem)
 {
 }
 
-int SvxGraphicItem::operator==( const SfxPoolItem& rItem) const
+int	SvxGraphicItem::operator==( const SfxPoolItem& rItem) const
 {
     return ((SvxGraphicItem&)rItem).aGraphic == aGraphic;
 }

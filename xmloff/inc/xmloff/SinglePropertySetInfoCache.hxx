@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,10 +31,10 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <xmloff/PropertySetInfoHash.hxx>
 
-typedef boost::unordered_map
+typedef std::hash_map
 <
     PropertySetInfoKey,
     sal_Bool,
@@ -52,27 +52,27 @@ public:
     inline SinglePropertySetInfoCache( const ::rtl::OUString& rName );
     ~SinglePropertySetInfoCache() {};
 
-    sal_Bool hasProperty(
-            const ::com::sun::star::uno::Reference<
+    sal_Bool hasProperty( 
+            const ::com::sun::star::uno::Reference< 
                 ::com::sun::star::beans::XPropertySet >& rPropSet,
-            ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::Reference< 
                 ::com::sun::star::beans::XPropertySetInfo >& rPropSetInfo );
-    inline sal_Bool hasProperty(
-            const ::com::sun::star::uno::Reference<
+    inline sal_Bool hasProperty( 
+            const ::com::sun::star::uno::Reference< 
                 ::com::sun::star::beans::XPropertySet>& rPropSet );
 };
 
-inline SinglePropertySetInfoCache::SinglePropertySetInfoCache(
+inline SinglePropertySetInfoCache::SinglePropertySetInfoCache( 
         const ::rtl::OUString& rName ) :
     sName( rName )
 {
 }
 
-inline sal_Bool SinglePropertySetInfoCache::hasProperty(
-        const ::com::sun::star::uno::Reference<
+inline sal_Bool SinglePropertySetInfoCache::hasProperty( 
+        const ::com::sun::star::uno::Reference< 
             ::com::sun::star::beans::XPropertySet>& rPropSet )
 {
-    ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::Reference< 
         ::com::sun::star::beans::XPropertySetInfo > xInfo;
     return hasProperty( rPropSet, xInfo );
 }

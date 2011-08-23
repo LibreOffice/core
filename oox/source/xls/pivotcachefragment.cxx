@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,31 +27,29 @@
  ************************************************************************/
 
 #include "oox/xls/pivotcachefragment.hxx"
-
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/pivotcachebuffer.hxx"
+
+using ::rtl::OUString;
+using ::com::sun::star::uno::Any;
+using ::oox::core::ContextHandlerRef;
+using ::oox::core::RecordInfo;
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
-using namespace ::com::sun::star::uno;
-using namespace ::oox::core;
-
-using ::rtl::OUString;
-
-// ============================================================================
-
-PivotCacheFieldContext::PivotCacheFieldContext( WorkbookFragmentBase& rFragment, PivotCacheField& rCacheField ) :
-    WorkbookContextBase( rFragment ),
+OoxPivotCacheFieldContext::OoxPivotCacheFieldContext( OoxWorkbookFragmentBase& rFragment, PivotCacheField& rCacheField ) :
+    OoxWorkbookContextBase( rFragment ),
     mrCacheField( rCacheField )
 {
 }
 
-ContextHandlerRef PivotCacheFieldContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef OoxPivotCacheFieldContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -76,41 +74,41 @@ ContextHandlerRef PivotCacheFieldContext::onCreateContext( sal_Int32 nElement, c
     return 0;
 }
 
-void PivotCacheFieldContext::onStartElement( const AttributeList& rAttribs )
+void OoxPivotCacheFieldContext::onStartElement( const AttributeList& rAttribs )
 {
     if( isRootElement() )
         mrCacheField.importCacheField( rAttribs );
 }
 
-ContextHandlerRef PivotCacheFieldContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
+ContextHandlerRef OoxPivotCacheFieldContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
-        case BIFF12_ID_PCDFIELD:
+        case OOBIN_ID_PCDFIELD:
             switch( nRecId )
             {
-                case BIFF12_ID_PCDFSHAREDITEMS: mrCacheField.importPCDFSharedItems( rStrm );  return this;
-                case BIFF12_ID_PCDFIELDGROUP:   mrCacheField.importPCDFieldGroup( rStrm );    return this;
+                case OOBIN_ID_PCDFSHAREDITEMS:  mrCacheField.importPCDFSharedItems( rStrm );  return this;
+                case OOBIN_ID_PCDFIELDGROUP:    mrCacheField.importPCDFieldGroup( rStrm );    return this;
             }
         break;
 
-        case BIFF12_ID_PCDFIELDGROUP:
+        case OOBIN_ID_PCDFIELDGROUP:
             switch( nRecId )
             {
-                case BIFF12_ID_PCDFRANGEPR:     mrCacheField.importPCDFRangePr( rStrm );    break;
-                case BIFF12_ID_PCDFDISCRETEPR:  return this;
-                case BIFF12_ID_PCDFGROUPITEMS:  return this;
+                case OOBIN_ID_PCDFRANGEPR:      mrCacheField.importPCDFRangePr( rStrm );    break;
+                case OOBIN_ID_PCDFDISCRETEPR:   return this;
+                case OOBIN_ID_PCDFGROUPITEMS:   return this;
             }
         break;
 
-        case BIFF12_ID_PCDFSHAREDITEMS: mrCacheField.importPCDFSharedItem( nRecId, rStrm );     break;
-        case BIFF12_ID_PCDFDISCRETEPR:  mrCacheField.importPCDFDiscretePrItem( nRecId, rStrm ); break;
-        case BIFF12_ID_PCDFGROUPITEMS:  mrCacheField.importPCDFGroupItem( nRecId, rStrm );      break;
+        case OOBIN_ID_PCDFSHAREDITEMS:  mrCacheField.importPCDFSharedItem( nRecId, rStrm );     break;
+        case OOBIN_ID_PCDFDISCRETEPR:   mrCacheField.importPCDFDiscretePrItem( nRecId, rStrm ); break;
+        case OOBIN_ID_PCDFGROUPITEMS:   mrCacheField.importPCDFGroupItem( nRecId, rStrm );      break;
     }
     return 0;
 }
 
-void PivotCacheFieldContext::onStartRecord( SequenceInputStream& rStrm )
+void OoxPivotCacheFieldContext::onStartRecord( RecordInputStream& rStrm )
 {
     if( isRootElement() )
         mrCacheField.importPCDField( rStrm );
@@ -118,14 +116,14 @@ void PivotCacheFieldContext::onStartRecord( SequenceInputStream& rStrm )
 
 // ============================================================================
 
-PivotCacheDefinitionFragment::PivotCacheDefinitionFragment(
+OoxPivotCacheDefinitionFragment::OoxPivotCacheDefinitionFragment(
         const WorkbookHelper& rHelper, const OUString& rFragmentPath, PivotCache& rPivotCache ) :
-    WorkbookFragmentBase( rHelper, rFragmentPath ),
+    OoxWorkbookFragmentBase( rHelper, rFragmentPath ),
     mrPivotCache( rPivotCache )
 {
 }
 
-ContextHandlerRef PivotCacheDefinitionFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef OoxPivotCacheDefinitionFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -146,60 +144,60 @@ ContextHandlerRef PivotCacheDefinitionFragment::onCreateContext( sal_Int32 nElem
         break;
 
         case XLS_TOKEN( cacheFields ):
-            if( nElement == XLS_TOKEN( cacheField ) ) return new PivotCacheFieldContext( *this, mrPivotCache.createCacheField() );
+            if( nElement == XLS_TOKEN( cacheField ) ) return new OoxPivotCacheFieldContext( *this, mrPivotCache.createCacheField() );
         break;
     }
     return 0;
 }
 
-ContextHandlerRef PivotCacheDefinitionFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
+ContextHandlerRef OoxPivotCacheDefinitionFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            if( nRecId == BIFF12_ID_PCDEFINITION ) { mrPivotCache.importPCDefinition( rStrm ); return this; }
+            if( nRecId == OOBIN_ID_PCDEFINITION ) { mrPivotCache.importPCDefinition( rStrm ); return this; }
         break;
 
-        case BIFF12_ID_PCDEFINITION:
+        case OOBIN_ID_PCDEFINITION:
             switch( nRecId )
             {
-                case BIFF12_ID_PCDSOURCE: mrPivotCache.importPCDSource( rStrm ); return this;
-                case BIFF12_ID_PCDFIELDS: return this;
+                case OOBIN_ID_PCDSOURCE: mrPivotCache.importPCDSource( rStrm ); return this;
+                case OOBIN_ID_PCDFIELDS: return this;
             }
         break;
 
-        case BIFF12_ID_PCDSOURCE:
-            if( nRecId == BIFF12_ID_PCDSHEETSOURCE ) mrPivotCache.importPCDSheetSource( rStrm, getRelations() );
+        case OOBIN_ID_PCDSOURCE:
+            if( nRecId == OOBIN_ID_PCDSHEETSOURCE ) mrPivotCache.importPCDSheetSource( rStrm, getRelations() );
         break;
 
-        case BIFF12_ID_PCDFIELDS:
-            if( nRecId == BIFF12_ID_PCDFIELD ) return new PivotCacheFieldContext( *this, mrPivotCache.createCacheField() );
+        case OOBIN_ID_PCDFIELDS:
+            if( nRecId == OOBIN_ID_PCDFIELD ) return new OoxPivotCacheFieldContext( *this, mrPivotCache.createCacheField() );
         break;
     }
     return 0;
 }
 
-const RecordInfo* PivotCacheDefinitionFragment::getRecordInfos() const
+const RecordInfo* OoxPivotCacheDefinitionFragment::getRecordInfos() const
 {
     static const RecordInfo spRecInfos[] =
     {
-        { BIFF12_ID_PCDEFINITION,       BIFF12_ID_PCDEFINITION + 1      },
-        { BIFF12_ID_PCDFDISCRETEPR,     BIFF12_ID_PCDFDISCRETEPR + 1    },
-        { BIFF12_ID_PCDFGROUPITEMS,     BIFF12_ID_PCDFGROUPITEMS + 1    },
-        { BIFF12_ID_PCDFIELD,           BIFF12_ID_PCDFIELD + 1          },
-        { BIFF12_ID_PCDFIELDGROUP,      BIFF12_ID_PCDFIELDGROUP + 1     },
-        { BIFF12_ID_PCDFIELDS,          BIFF12_ID_PCDFIELDS + 1         },
-        { BIFF12_ID_PCDFRANGEPR,        BIFF12_ID_PCDFRANGEPR + 1       },
-        { BIFF12_ID_PCDFSHAREDITEMS,    BIFF12_ID_PCDFSHAREDITEMS + 1   },
-        { BIFF12_ID_PCITEM_ARRAY,       BIFF12_ID_PCITEM_ARRAY + 1      },
-        { BIFF12_ID_PCDSHEETSOURCE,     BIFF12_ID_PCDSHEETSOURCE + 1    },
-        { BIFF12_ID_PCDSOURCE,          BIFF12_ID_PCDSOURCE + 1         },
-        { -1,                           -1                              }
+        { OOBIN_ID_PCDEFINITION,    OOBIN_ID_PCDEFINITION + 1       },
+        { OOBIN_ID_PCDFDISCRETEPR,  OOBIN_ID_PCDFDISCRETEPR + 1     },
+        { OOBIN_ID_PCDFGROUPITEMS,  OOBIN_ID_PCDFGROUPITEMS + 1     },
+        { OOBIN_ID_PCDFIELD,        OOBIN_ID_PCDFIELD + 1           },
+        { OOBIN_ID_PCDFIELDGROUP,   OOBIN_ID_PCDFIELDGROUP + 1      },
+        { OOBIN_ID_PCDFIELDS,       OOBIN_ID_PCDFIELDS + 1          },
+        { OOBIN_ID_PCDFRANGEPR,     OOBIN_ID_PCDFRANGEPR + 1        },
+        { OOBIN_ID_PCDFSHAREDITEMS, OOBIN_ID_PCDFSHAREDITEMS + 1    },
+        { OOBIN_ID_PCITEM_ARRAY,    OOBIN_ID_PCITEM_ARRAY + 1       },
+        { OOBIN_ID_PCDSHEETSOURCE,  OOBIN_ID_PCDSHEETSOURCE + 1     },
+        { OOBIN_ID_PCDSOURCE,       OOBIN_ID_PCDSOURCE + 1          },
+        { -1,                       -1                              }
     };
     return spRecInfos;
 }
 
-void PivotCacheDefinitionFragment::finalizeImport()
+void OoxPivotCacheDefinitionFragment::finalizeImport()
 {
     // finalize the cache (check source range etc.)
     mrPivotCache.finalizeImport();
@@ -209,15 +207,15 @@ void PivotCacheDefinitionFragment::finalizeImport()
     {
         OUString aRecFragmentPath = getRelations().getFragmentPathFromRelId( mrPivotCache.getRecordsRelId() );
         if( aRecFragmentPath.getLength() > 0 )
-            importOoxFragment( new PivotCacheRecordsFragment( *this, aRecFragmentPath, mrPivotCache ) );
+            importOoxFragment( new OoxPivotCacheRecordsFragment( *this, aRecFragmentPath, mrPivotCache ) );
     }
 }
 
 // ============================================================================
 
-PivotCacheRecordsFragment::PivotCacheRecordsFragment( const WorkbookHelper& rHelper,
+OoxPivotCacheRecordsFragment::OoxPivotCacheRecordsFragment( const WorkbookHelper& rHelper,
         const OUString& rFragmentPath, const PivotCache& rPivotCache ) :
-    WorksheetFragmentBase( rHelper, rFragmentPath, ISegmentProgressBarRef(), SHEETTYPE_WORKSHEET, rPivotCache.getSourceRange().Sheet ),
+    OoxWorksheetFragmentBase( rHelper, rFragmentPath, ISegmentProgressBarRef(), SHEETTYPE_WORKSHEET, rPivotCache.getSourceRange().Sheet ),
     mrPivotCache( rPivotCache ),
     mnCol( 0 ),
     mnRow( 0 ),
@@ -227,7 +225,7 @@ PivotCacheRecordsFragment::PivotCacheRecordsFragment( const WorkbookHelper& rHel
     rPivotCache.writeSourceHeaderCells( *this );
 }
 
-ContextHandlerRef PivotCacheRecordsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef OoxPivotCacheRecordsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -251,7 +249,7 @@ ContextHandlerRef PivotCacheRecordsFragment::onCreateContext( sal_Int32 nElement
                 case XLS_TOKEN( b ):    aItem.readBool( rAttribs );                         break;
                 case XLS_TOKEN( e ):    aItem.readError( rAttribs, getUnitConverter() );    break;
                 case XLS_TOKEN( x ):    aItem.readIndex( rAttribs );                        break;
-                default:    OSL_FAIL( "OoxPivotCacheRecordsFragment::onCreateContext - unexpected element" );
+                default:    OSL_ENSURE( false, "OoxPivotCacheRecordsFragment::onCreateContext - unexpected element" );
             }
             mrPivotCache.writeSourceDataCell( *this, mnCol, mnRow, aItem );
             ++mnCol;
@@ -261,19 +259,19 @@ ContextHandlerRef PivotCacheRecordsFragment::onCreateContext( sal_Int32 nElement
     return 0;
 }
 
-ContextHandlerRef PivotCacheRecordsFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
+ContextHandlerRef OoxPivotCacheRecordsFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            if( nRecId == BIFF12_ID_PCRECORDS ) return this;
+            if( nRecId == OOBIN_ID_PCRECORDS ) return this;
         break;
 
-        case BIFF12_ID_PCRECORDS:
+        case OOBIN_ID_PCRECORDS:
             switch( nRecId )
             {
-                case BIFF12_ID_PCRECORD:    importPCRecord( rStrm );                break;
-                case BIFF12_ID_PCRECORDDT:  startCacheRecord();                     break;
+                case OOBIN_ID_PCRECORD:     importPCRecord( rStrm );                break;
+                case OOBIN_ID_PCRECORDDT:   startCacheRecord();                     break;
                 default:                    importPCRecordItem( nRecId, rStrm );    break;
             }
         break;
@@ -281,11 +279,11 @@ ContextHandlerRef PivotCacheRecordsFragment::onCreateRecordContext( sal_Int32 nR
     return 0;
 }
 
-const RecordInfo* PivotCacheRecordsFragment::getRecordInfos() const
+const RecordInfo* OoxPivotCacheRecordsFragment::getRecordInfos() const
 {
     static const RecordInfo spRecInfos[] =
     {
-        { BIFF12_ID_PCRECORDS,  BIFF12_ID_PCRECORDS + 1 },
+        { OOBIN_ID_PCRECORDS,   OOBIN_ID_PCRECORDS + 1  },
         { -1,                   -1                      }
     };
     return spRecInfos;
@@ -293,35 +291,35 @@ const RecordInfo* PivotCacheRecordsFragment::getRecordInfos() const
 
 // private --------------------------------------------------------------------
 
-void PivotCacheRecordsFragment::startCacheRecord()
+void OoxPivotCacheRecordsFragment::startCacheRecord()
 {
     mnCol = 0;
     ++mnRow;
     mbInRecord = true;
 }
 
-void PivotCacheRecordsFragment::importPCRecord( SequenceInputStream& rStrm )
+void OoxPivotCacheRecordsFragment::importPCRecord( RecordInputStream& rStrm )
 {
     startCacheRecord();
     mrPivotCache.importPCRecord( rStrm, *this, mnRow );
     mbInRecord = false;
 }
 
-void PivotCacheRecordsFragment::importPCRecordItem( sal_Int32 nRecId, SequenceInputStream& rStrm )
+void OoxPivotCacheRecordsFragment::importPCRecordItem( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     if( mbInRecord )
     {
         PivotCacheItem aItem;
         switch( nRecId )
         {
-            case BIFF12_ID_PCITEM_MISSING:                              break;
-            case BIFF12_ID_PCITEM_STRING:   aItem.readString( rStrm );  break;
-            case BIFF12_ID_PCITEM_DOUBLE:   aItem.readDouble( rStrm );  break;
-            case BIFF12_ID_PCITEM_DATE:     aItem.readDate( rStrm );    break;
-            case BIFF12_ID_PCITEM_BOOL:     aItem.readBool( rStrm );    break;
-            case BIFF12_ID_PCITEM_ERROR:    aItem.readError( rStrm );   break;
-            case BIFF12_ID_PCITEM_INDEX:    aItem.readIndex( rStrm );   break;
-            default:    OSL_FAIL( "OoxPivotCacheRecordsFragment::importPCRecordItem - unexpected record" );
+            case OOBIN_ID_PCITEM_MISSING:                               break;
+            case OOBIN_ID_PCITEM_STRING:    aItem.readString( rStrm );  break;
+            case OOBIN_ID_PCITEM_DOUBLE:    aItem.readDouble( rStrm );  break;
+            case OOBIN_ID_PCITEM_DATE:      aItem.readDate( rStrm );    break;
+            case OOBIN_ID_PCITEM_BOOL:      aItem.readBool( rStrm );    break;
+            case OOBIN_ID_PCITEM_ERROR:     aItem.readError( rStrm );   break;
+            case OOBIN_ID_PCITEM_INDEX:     aItem.readIndex( rStrm );   break;
+            default:    OSL_ENSURE( false, "OoxPivotCacheRecordsFragment::importPCRecordItem - unexpected record" );
         }
         mrPivotCache.writeSourceDataCell( *this, mnCol, mnRow, aItem );
         ++mnCol;
@@ -348,7 +346,7 @@ bool lclSeekToPCDField( BiffInputStream& rStrm )
 // ----------------------------------------------------------------------------
 
 BiffPivotCacheFragment::BiffPivotCacheFragment(
-        const WorkbookHelper& rHelper, const OUString& rStrmName, PivotCache& rPivotCache ) :
+        const WorkbookHelper& rHelper, const ::rtl::OUString& rStrmName, PivotCache& rPivotCache ) :
     BiffWorkbookFragmentBase( rHelper, rStrmName, true ),
     mrPivotCache( rPivotCache )
 {
@@ -356,15 +354,14 @@ BiffPivotCacheFragment::BiffPivotCacheFragment(
 
 bool BiffPivotCacheFragment::importFragment()
 {
-    BiffInputStream& rStrm = getInputStream();
-    if( rStrm.startNextRecord() && (rStrm.getRecId() == BIFF_ID_PCDEFINITION) )
+    if( mrStrm.startNextRecord() && (mrStrm.getRecId() == BIFF_ID_PCDEFINITION) )
     {
         // read PCDEFINITION and optional PCDEFINITION2 records
-        mrPivotCache.importPCDefinition( rStrm );
+        mrPivotCache.importPCDefinition( mrStrm );
 
         // read cache fields as long as another PCDFIELD record can be found
-        while( lclSeekToPCDField( rStrm ) )
-            mrPivotCache.createCacheField( true ).importPCDField( rStrm );
+        while( lclSeekToPCDField( mrStrm ) )
+            mrPivotCache.createCacheField( true ).importPCDField( mrStrm );
 
         // finalize the cache (check source range etc.)
         mrPivotCache.finalizeImport();
@@ -376,18 +373,19 @@ bool BiffPivotCacheFragment::importFragment()
                 unchanged. Stream should point to source data table now. */
             BiffPivotCacheRecordsContext aContext( *this, mrPivotCache );
             if( aContext.isValidSheet() )
-                while( rStrm.startNextRecord() && (rStrm.getRecId() != BIFF_ID_EOF) )
-                    aContext.importRecord( rStrm );
+                while( mrStrm.startNextRecord() && (mrStrm.getRecId() != BIFF_ID_EOF) )
+                    aContext.importRecord();
         }
     }
 
-    return rStrm.getRecId() == BIFF_ID_EOF;
+    return mrStrm.getRecId() == BIFF_ID_EOF;
 }
 
 // ============================================================================
 
-BiffPivotCacheRecordsContext::BiffPivotCacheRecordsContext( const WorkbookHelper& rHelper, const PivotCache& rPivotCache ) :
-    BiffWorksheetContextBase( rHelper, ISegmentProgressBarRef(), SHEETTYPE_WORKSHEET, rPivotCache.getSourceRange().Sheet ),
+BiffPivotCacheRecordsContext::BiffPivotCacheRecordsContext(
+        const BiffWorkbookFragmentBase& rFragment, const PivotCache& rPivotCache ) :
+    BiffWorksheetContextBase( rFragment, ISegmentProgressBarRef(), SHEETTYPE_WORKSHEET, rPivotCache.getSourceRange().Sheet ),
     mrPivotCache( rPivotCache ),
     mnColIdx( 0 ),
     mnRow( 0 ),
@@ -412,28 +410,28 @@ BiffPivotCacheRecordsContext::BiffPivotCacheRecordsContext( const WorkbookHelper
     }
 }
 
-void BiffPivotCacheRecordsContext::importRecord( BiffInputStream& rStrm )
+void BiffPivotCacheRecordsContext::importRecord()
 {
-    if( rStrm.getRecId() == BIFF_ID_PCITEM_INDEXLIST )
+    if( mrStrm.getRecId() == BIFF_ID_PCITEM_INDEXLIST )
     {
         OSL_ENSURE( mbHasShared, "BiffPivotCacheRecordsContext::importRecord - unexpected PCITEM_INDEXLIST record" );
         // PCITEM_INDEXLIST record always in front of a new data row
         startNextRow();
-        mrPivotCache.importPCItemIndexList( rStrm, *this, mnRow );
+        mrPivotCache.importPCItemIndexList( mrStrm, *this, mnRow );
         mbInRow = !maUnsharedCols.empty();  // mbInRow remains true, if unshared items are expected
         return;
     }
 
     PivotCacheItem aItem;
-    switch( rStrm.getRecId() )
+    switch( mrStrm.getRecId() )
     {
         case BIFF_ID_PCITEM_MISSING:                                        break;
-        case BIFF_ID_PCITEM_STRING:     aItem.readString( rStrm, *this );   break;
-        case BIFF_ID_PCITEM_DOUBLE:     aItem.readDouble( rStrm );          break;
-        case BIFF_ID_PCITEM_INTEGER:    aItem.readInteger( rStrm );         break;
-        case BIFF_ID_PCITEM_DATE:       aItem.readDate( rStrm );            break;
-        case BIFF_ID_PCITEM_BOOL:       aItem.readBool( rStrm );            break;
-        case BIFF_ID_PCITEM_ERROR:      aItem.readError( rStrm );           break;
+        case BIFF_ID_PCITEM_STRING:     aItem.readString( mrStrm, *this );  break;
+        case BIFF_ID_PCITEM_DOUBLE:     aItem.readDouble( mrStrm );         break;
+        case BIFF_ID_PCITEM_INTEGER:    aItem.readInteger( mrStrm );        break;
+        case BIFF_ID_PCITEM_DATE:       aItem.readDate( mrStrm );           break;
+        case BIFF_ID_PCITEM_BOOL:       aItem.readBool( mrStrm );           break;
+        case BIFF_ID_PCITEM_ERROR:      aItem.readError( mrStrm );          break;
         default:                        return; // unknown record, ignore
     }
 

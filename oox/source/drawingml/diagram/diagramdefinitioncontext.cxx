@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,9 +27,11 @@
  ************************************************************************/
 
 #include "diagramdefinitioncontext.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/helper/helper.hxx"
 #include "layoutnodecontext.hxx"
 #include "oox/drawingml/diagram/datamodelcontext.hxx"
+#include "tokens.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -79,29 +81,29 @@ DiagramDefinitionContext::createFastChildContext( ::sal_Int32 aElement,
 
     switch( aElement )
     {
-    case DGM_TOKEN( title ):
+    case NMSP_DIAGRAM|XML_title:
         mpLayout->setTitle( xAttribs->getOptionalValue( XML_val ) );
         break;
-    case DGM_TOKEN( desc ):
+    case NMSP_DIAGRAM|XML_desc:
         mpLayout->setDesc( xAttribs->getOptionalValue( XML_val ) );
         break;
-    case DGM_TOKEN( layoutNode ):
+    case NMSP_DIAGRAM|XML_layoutNode:
         mpLayout->getNode().reset( new LayoutNode() );
         xRet.set( new LayoutNodeContext( *this, xAttribs, mpLayout->getNode() ) );
         break;
-     case DGM_TOKEN( clrData ):
+     case NMSP_DIAGRAM|XML_clrData:
         // TODO, does not matter for the UI. skip.
         return xRet;
-    case DGM_TOKEN( sampData ):
+    case NMSP_DIAGRAM|XML_sampData:
         mpLayout->getSampData().reset( new DiagramData );
         xRet.set( new DataModelContext( *this, mpLayout->getSampData() ) );
         break;
-    case DGM_TOKEN( styleData ):
+    case NMSP_DIAGRAM|XML_styleData:
         mpLayout->getStyleData().reset( new DiagramData );
         xRet.set( new DataModelContext( *this, mpLayout->getStyleData() ) );
         break;
-    case DGM_TOKEN( cat ):
-    case DGM_TOKEN( catLst ):
+    case NMSP_DIAGRAM|XML_cat:
+    case NMSP_DIAGRAM|XML_catLst:
         // TODO, does not matter for the UI
     default:
         break;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,12 +120,12 @@ OButtonModel::~OButtonModel()
 void OButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 6, OClickableImageBaseModel )
-        DECL_PROP1( BUTTONTYPE,             FormButtonType,             BOUND );
+        DECL_PROP1( BUTTONTYPE,		        FormButtonType,				BOUND );
         DECL_PROP1( DEFAULT_STATE,          sal_Int16,                  BOUND );
-        DECL_PROP1( DISPATCHURLINTERNAL,    sal_Bool,                   BOUND );
-        DECL_PROP1( TARGET_URL,             ::rtl::OUString,            BOUND );
-        DECL_PROP1( TARGET_FRAME,           ::rtl::OUString,            BOUND );
-        DECL_PROP1( TABINDEX,               sal_Int16,                  BOUND );
+        DECL_PROP1( DISPATCHURLINTERNAL,	sal_Bool,				    BOUND );
+        DECL_PROP1( TARGET_URL,		        ::rtl::OUString,			BOUND );
+        DECL_PROP1( TARGET_FRAME,	        ::rtl::OUString,			BOUND );
+        DECL_PROP1( TABINDEX,		        sal_Int16,					BOUND );
     END_DESCRIBE_PROPERTIES();
 }
 
@@ -134,7 +134,7 @@ IMPLEMENT_DEFAULT_CLONING( OButtonModel )
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-StringSequence  OButtonModel::getSupportedServiceNames() throw()
+StringSequence	OButtonModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OClickableImageBaseModel::getSupportedServiceNames();
     aSupported.realloc( aSupported.getLength() + 1 );
@@ -148,7 +148,7 @@ StringSequence  OButtonModel::getSupportedServiceNames() throw()
 //------------------------------------------------------------------------------
 ::rtl::OUString OButtonModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return FRM_COMPONENT_COMMANDBUTTON; // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_COMMANDBUTTON;	// old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
@@ -156,7 +156,7 @@ void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) thr
 {
     OClickableImageBaseModel::write(_rxOutStream);
 
-    _rxOutStream->writeShort(0x0003);   // Version
+    _rxOutStream->writeShort(0x0003); 	// Version
 
     {
         OStreamSection aSection( _rxOutStream.get() );
@@ -177,7 +177,7 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
 {
     OClickableImageBaseModel::read(_rxInStream);
 
-    sal_uInt16 nVersion = _rxInStream->readShort();     // Version
+    sal_uInt16 nVersion = _rxInStream->readShort(); 	// Version
     switch (nVersion)
     {
         case 0x0001:
@@ -224,7 +224,7 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
         break;
 
         default:
-            OSL_FAIL("OButtonModel::read : unknown version !");
+            DBG_ERROR("OButtonModel::read : unknown version !");
             m_eButtonType = FormButtonType_PUSH;
             m_sTargetURL = ::rtl::OUString();
             m_sTargetFrame = ::rtl::OUString();
@@ -364,7 +364,7 @@ Sequence<Type> OButtonControl::_getTypes()
 }
 
 //------------------------------------------------------------------------------
-StringSequence  OButtonControl::getSupportedServiceNames() throw()
+StringSequence	OButtonControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OClickableImageBaseControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -440,7 +440,7 @@ void SAL_CALL OButtonControl::disposing( const EventObject& _rSource ) throw( Ru
 void OButtonControl::actionPerformed(const ActionEvent& /*rEvent*/) throw ( ::com::sun::star::uno::RuntimeException)
 {
     // Asynchron fuer starutil::URL-Button
-    sal_uLong n = Application::PostUserEvent( LINK(this, OButtonControl,OnClick) );
+    ULONG n = Application::PostUserEvent( LINK(this, OButtonControl,OnClick) );
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_nClickEvent = n;
@@ -480,6 +480,7 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
                 // catch exceptions
                 // and catch them on a per-listener basis - if one listener fails, the others still need
                 // to get notified
+                // 97676 - 21.02.2002 - fs@openoffice.org
                 try
                 {
                     static_cast< XActionListener* >( aIter.next() )->actionPerformed(aEvt);
@@ -492,7 +493,7 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
 #endif
                 catch( const Exception& )
                 {
-                    OSL_FAIL( "OButtonControl::OnClick: caught a exception other than RuntimeException!" );
+                    DBG_ERROR( "OButtonControl::OnClick: caught a exception other than RuntimeException!" );
                 }
             }
         }
@@ -775,7 +776,7 @@ void SAL_CALL OButtonControl::releaseDispatchProviderInterceptor( const Referenc
 }
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

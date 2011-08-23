@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-
+    
     _Module.Init( ObjectMap, GetModuleHandle( NULL));
 
     if( FAILED(hr=doTest()))
@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
     _Module.Term();
     CoUninitialize();
 
-
+    
     return 0;
 }
 
@@ -78,7 +78,7 @@ HRESULT doTest()
     CComDispatchDriver manager( spUnk);
     CComVariant param( L"oletest.OleTest");
     CComVariant retVal;
-    hr= manager.Invoke1((LPCOLESTR)L"createInstance", &param, &retVal );
+    hr=	manager.Invoke1((LPCOLESTR)L"createInstance", &param, &retVal );
 
     CComDispatchDriver oletest( retVal.punkVal);
 
@@ -92,7 +92,7 @@ HRESULT doTest()
 
 
     //######################################################################
-    //  out parameters
+    //	out parameters
     //######################################################################
     CComVariant param1( paramDisp);
     CComVariant param2(1);
@@ -149,13 +149,13 @@ HRESULT doTest()
     hr= oletest.Invoke2(L"testInterface", &param1, &param2);
 
     // XCallback::outSeqByte
-    // Does not work currently because Sequences are always converted to
+    // Does not work currently because Sequences are always converted to 
     // SAFEARRAY( VARIANT)
-    //  param2= 32;
-    //  hr= oletest.Invoke2(L"testInterface", &param1, &param2);
-
+    //	param2= 32;
+    //	hr= oletest.Invoke2(L"testInterface", &param1, &param2);
+    
     //######################################################################
-    //  in / out parameters
+    //	in / out parameters
     //######################################################################
     // XCallback::inoutInterface
     param2= 100;
@@ -200,7 +200,7 @@ HRESULT doTest()
     param2=120;
     hr= oletest.Invoke2(L"testInterface", &param1, &param2);
     //######################################################################
-    //  in  parameters
+    //	in  parameters
     //######################################################################
     // XCallback::inValues
     param2= 200;
@@ -213,7 +213,7 @@ HRESULT doTest()
     param2= 202;
     hr= oletest.Invoke2(L"testInterface", &param1, &param2);
     //######################################################################
-    //  The UNO test component OleTest calls on XCallback_Impl.Callback directly
+    //	The UNO test component OleTest calls on XCallback_Impl.Callback directly
     // that is the COM object has not been past a parameter but rather OleTest
     // creates the COM object itself
     //######################################################################
@@ -244,6 +244,6 @@ HRESULT doTest()
     return hr;
 }
 // VARIANT CComVariant VT_UNKNOWN VT_DISPATCH V_UI1 CComDispatchDriver WINAPI
-
+ 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

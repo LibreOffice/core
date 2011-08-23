@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,6 @@
 #include "precompiled_chart2.hxx"
 #include "ChartController.hxx"
 
-#include "ResId.hxx"
-#include "UndoGuard.hxx"
 #include "DrawViewWrapper.hxx"
 #include "ChartWindow.hxx"
 #include "TitleHelper.hxx"
@@ -39,7 +37,6 @@
 #include "macros.hxx"
 #include "ControllerLockGuard.hxx"
 #include "AccessibleTextHelper.hxx"
-#include "Strings.hrc"
 #include "chartview/DrawModelWrapper.hxx"
 
 #include <svx/svdotext.hxx>
@@ -61,6 +58,7 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
+//using namespace ::com::sun::star::chart2;
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -77,15 +75,16 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
 {
     //the first marked object will be edited
 
-    SolarMutexGuard aGuard;
     SdrObject* pTextObj = m_pDrawViewWrapper->getTextEditObject();
     if(!pTextObj)
         return;
 
-    OSL_PRECOND( !m_pTextActionUndoGuard.get(), "ChartController::StartTextEdit: already have a TextUndoGuard!?" );
-    m_pTextActionUndoGuard.reset( new UndoGuard(
-        String( SchResId( STR_ACTION_EDIT_TEXT ) ), m_xUndoManager ) );
+    m_xUndoManager->preAction( getModel());
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
+    //pOutliner->SetRefDevice(m_pChartWindow);
+    //pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pStyleSheetPool);
+    //pOutliner->SetDefaultLanguage( eLang );
+    //pOutliner->SetHyphenator( xHyphenator );
 
     //#i77362 change notification for changes on additional shapes are missing
     uno::Reference< beans::XPropertySet > xChartViewProps( m_xChartView, uno::UNO_QUERY );
@@ -103,6 +102,12 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
                     );
     if(bEdit)
     {
+        // set undo manager at topmost shell ( SdDrawTextObjectBar )
+        /*
+        if( pViewSh )
+            pViewSh->GetViewFrame()->GetDispatcher()->GetShell( 0 )->
+                SetUndoManager(&pOutliner->GetUndoManager());
+        */
         m_pDrawViewWrapper->SetEditMode();
 
         // #i12587# support for shapes in chart
@@ -158,11 +163,26 @@ bool ChartController::EndTextEdit()
             TitleHelper::setCompleteString( aString, uno::Reference<
                 ::com::sun::star::chart2::XTitle >::query( xPropSet ), m_xCC );
 
-            OSL_ENSURE( m_pTextActionUndoGuard.get(), "ChartController::EndTextEdit: no TextUndoGuard!" );
-            if ( m_pTextActionUndoGuard.get() )
-                m_pTextActionUndoGuard->commit();
+            try
+            {
+                m_xUndoManager->postAction( C2U("Edit Text") );
+            }
+            catch( uno::RuntimeException& e)
+            {
+                ASSERT_EXCEPTION( e );
+            }
         }
-        m_pTextActionUndoGuard.reset();
+        else
+        {
+            try
+            {
+                m_xUndoManager->cancelAction();
+            }
+            catch ( uno::RuntimeException& e )
+            {
+                ASSERT_EXCEPTION( e );
+            }
+        }
     }
     return true;
 }
@@ -181,11 +201,11 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
     DBG_ASSERT( pFact, "No dialog factory" );
 
     SfxAllItemSet aSet( m_pDrawModelWrapper->GetItemPool() );
-    aSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
+    aSet.Put( SfxBoolItem( FN_PARAM_1, FALSE ) );
 
     //set fixed current font
-    aSet.Put( SfxBoolItem( FN_PARAM_2, sal_True ) ); //maybe not necessary in future
-
+    aSet.Put( SfxBoolItem( FN_PARAM_2, TRUE ) ); //maybe not necessary in future
+    
     Font aCurFont = m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont();
     aSet.Put( SvxFontItem( aCurFont.GetFamily(), aCurFont.GetName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );
 
@@ -196,7 +216,7 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
         const SfxItemSet* pSet = pDlg->GetOutputItemSet();
         const SfxPoolItem* pItem=0;
         String aString;
-        if ( pSet && pSet->GetItemState( SID_CHARMAP, sal_True, &pItem) == SFX_ITEM_SET &&
+        if ( pSet && pSet->GetItemState( SID_CHARMAP, TRUE, &pItem) == SFX_ITEM_SET &&
              pItem->ISA(SfxStringItem) )
                 aString = dynamic_cast<const SfxStringItem*>(pItem)->GetValue();
 
@@ -210,21 +230,25 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
 
         // prevent flicker
         pOutlinerView->HideCursor();
-        pOutliner->SetUpdateMode(sal_False);
+        pOutliner->SetUpdateMode(FALSE);
 
         // delete current selection by inserting empty String, so current
         // attributes become unique (sel. has to be erased anyway)
         pOutlinerView->InsertText(String());
 
-        pOutlinerView->InsertText(aString, true);
+        //SfxUndoManager& rUndoMgr =  pOutliner->GetUndoManager();
+        //rUndoMgr.EnterListAction( String( SchResId( STR_UNDO_INSERT_SPECCHAR )), String( SchResId( STR_UNDO_INSERT_SPECCHAR )));
+        pOutlinerView->InsertText(aString, TRUE);
 
         ESelection aSel = pOutlinerView->GetSelection();
         aSel.nStartPara = aSel.nEndPara;
         aSel.nStartPos = aSel.nEndPos;
         pOutlinerView->SetSelection(aSel);
 
+        //rUndoMgr.LeaveListAction();
+
         // show changes
-        pOutliner->SetUpdateMode(sal_True);
+        pOutliner->SetUpdateMode(TRUE);
         pOutlinerView->ShowCursor();
     }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,41 +26,28 @@
  *
  ************************************************************************/
 
-#include <domimplementation.hxx>
-
-#include <rtl/instance.hxx>
-
+#include "domimplementation.hxx"
 
 namespace DOM
 {
-    // why the heck is this thing static?
-    // perhaps it would be helpful to know what the implementation should
-    // do to answer this question...
-    namespace {
-        struct DOMImplementation
-            : public ::rtl::Static<CDOMImplementation, DOMImplementation> {};
-    }
-
+    CDOMImplementation* CDOMImplementation::aDOMImplementation = new CDOMImplementation();
     CDOMImplementation* CDOMImplementation::get()
     {
-        return & DOMImplementation::get();
+        return CDOMImplementation::aDOMImplementation;
     }
-
-    // there is just 1 static instance, so these must not delete it!
-    void SAL_CALL CDOMImplementation::acquire() throw () { }
-    void SAL_CALL CDOMImplementation::release() throw () { }
 
     /**
     Creates a DOM Document object of the specified type with its document element.
     */
     Reference <XDocument > SAL_CALL CDOMImplementation::createDocument(
-           OUString const& /*rNamespaceURI*/,
-           OUString const& /*rQualifiedName*/,
-           Reference< XDocumentType > const& /*xDoctype*/)
+           const OUString& namespaceURI, 
+           const OUString& qualifiedName, 
+           const Reference< XDocumentType >& doctype)
         throw (RuntimeException)
     {
-        OSL_ENSURE(false,
-            "CDOMImplementation::createDocument: not implemented (#i113683#)");
+      OUString aNamespaceURI = namespaceURI;
+      OUString aQName = qualifiedName;
+      Reference< XDocumentType > aType = doctype;
         return Reference<XDocument>();
     }
 
@@ -68,24 +55,22 @@ namespace DOM
     Creates an empty DocumentType node.
     */
     Reference< XDocumentType > SAL_CALL CDOMImplementation::createDocumentType(
-            OUString const& /*rQualifiedName*/,
-            OUString const& /*rPublicId*/, OUString const& /*rSystemId*/)
+            const OUString& qualifiedName, const OUString& publicId, const OUString& systemId)
         throw (RuntimeException)
     {
-        OSL_ENSURE(false, "CDOMImplementation::createDocumentType: "
-                "not implemented (#i113683#)");
+      OUString qName = qualifiedName;
+      OUString aPublicId = publicId;
+      OUString aSystemId = systemId;
         return Reference<XDocumentType>();
     }
-
     /**
     Test if the DOM implementation implements a specific feature.
     */
-    sal_Bool SAL_CALL
-    CDOMImplementation::hasFeature(OUString const& /*feature*/, OUString const& /*ver*/)
+    sal_Bool SAL_CALL CDOMImplementation::hasFeature(const OUString& feature, const OUString& ver)
         throw (RuntimeException)
     {
-        OSL_ENSURE(false,
-            "CDOMImplementation::hasFeature: not implemented (#i113683#)");
+      OUString aFeature = feature;
+      OUString aVersion = ver;
         return sal_False;
     }
 }

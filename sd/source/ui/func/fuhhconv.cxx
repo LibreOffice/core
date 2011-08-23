@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,16 +80,16 @@ FuHangulHanjaConversion::FuHangulHanjaConversion (
     SfxRequest& rReq )
        : FuPoor(pViewSh, pWin, pView, pDocument, rReq),
     pSdOutliner(NULL),
-    bOwnOutliner(sal_False)
+    bOwnOutliner(FALSE)
 {
     if ( mpViewShell->ISA(DrawViewShell) )
     {
-        bOwnOutliner = sal_True;
+        bOwnOutliner = TRUE;
         pSdOutliner = new Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
     }
     else if ( mpViewShell->ISA(OutlineViewShell) )
     {
-        bOwnOutliner = sal_False;
+        bOwnOutliner = FALSE;
         pSdOutliner = mpDoc->GetOutliner();
     }
 
@@ -126,8 +126,8 @@ FunctionReference FuHangulHanjaConversion::Create( ViewShell* pViewSh, ::sd::Win
 |*
 \************************************************************************/
 
-void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_Int16 nTargetLanguage,
-        const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive )
+void FuHangulHanjaConversion::StartConversion( INT16 nSourceLanguage, INT16 nTargetLanguage,
+        const Font *pTargetFont, INT32 nOptions, BOOL bIsInteractive )
 {
 
     String aString( SdResId(STR_UNDO_HANGULHANJACONVERSION) );
@@ -143,7 +143,7 @@ void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_In
         {
             pSdOutliner->EndConversion();
 
-            bOwnOutliner = sal_True;
+            bOwnOutliner = TRUE;
             pSdOutliner = new Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
             pSdOutliner->BeginConversion();
         }
@@ -152,7 +152,7 @@ void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_In
             pSdOutliner->EndConversion();
             delete pSdOutliner;
 
-            bOwnOutliner = sal_False;
+            bOwnOutliner = FALSE;
             pSdOutliner = mpDoc->GetOutliner();
             pSdOutliner->BeginConversion();
         }
@@ -180,7 +180,7 @@ void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_In
 }
 
 
-void FuHangulHanjaConversion::ConvertStyles( sal_Int16 nTargetLanguage, const Font *pTargetFont )
+void FuHangulHanjaConversion::ConvertStyles( INT16 nTargetLanguage, const Font *pTargetFont )
 {
     if( !mpDoc )
         return;
@@ -196,19 +196,19 @@ void FuHangulHanjaConversion::ConvertStyles( sal_Int16 nTargetLanguage, const Fo
 
         const bool bHasParent = pStyle->GetParent().Len() != 0;
 
-        if( !bHasParent || rSet.GetItemState( EE_CHAR_LANGUAGE_CJK, sal_False ) == SFX_ITEM_SET )
+        if( !bHasParent || rSet.GetItemState( EE_CHAR_LANGUAGE_CJK, FALSE ) == SFX_ITEM_SET )
             rSet.Put( SvxLanguageItem( nTargetLanguage, EE_CHAR_LANGUAGE_CJK ) );
 
         if( pTargetFont &&
-            ( !bHasParent || rSet.GetItemState( EE_CHAR_FONTINFO_CJK, sal_False ) == SFX_ITEM_SET ) )
+            ( !bHasParent || rSet.GetItemState( EE_CHAR_FONTINFO_CJK, FALSE ) == SFX_ITEM_SET ) )
         {
             // set new font attribute
             SvxFontItem aFontItem( (SvxFontItem&) rSet.Get( EE_CHAR_FONTINFO_CJK ) );
-            aFontItem.SetFamilyName(   pTargetFont->GetName());
-            aFontItem.SetFamily(       pTargetFont->GetFamily());
-            aFontItem.SetStyleName(    pTargetFont->GetStyleName());
-            aFontItem.SetPitch(        pTargetFont->GetPitch());
-            aFontItem.SetCharSet(      pTargetFont->GetCharSet());
+            aFontItem.GetFamilyName()   = pTargetFont->GetName();
+            aFontItem.GetFamily()       = pTargetFont->GetFamily();
+            aFontItem.GetStyleName()    = pTargetFont->GetStyleName();
+            aFontItem.GetPitch()        = pTargetFont->GetPitch();
+            aFontItem.GetCharSet()      = pTargetFont->GetCharSet();
             rSet.Put( aFontItem );
         }
 
@@ -230,7 +230,7 @@ void FuHangulHanjaConversion::StartChineseConversion()
         {
             Reference< ui::dialogs::XExecutableDialog > xDialog(
                     xMCF->createInstanceWithContext(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ChineseTranslationDialog"))
+                        rtl::OUString::createFromAscii("com.sun.star.linguistic2.ChineseTranslationDialog")
                         , xContext), UNO_QUERY);
             Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
             if( xInit.is() )
@@ -240,7 +240,7 @@ void FuHangulHanjaConversion::StartChineseConversion()
                 Sequence<Any> aSeq(1);
                 Any* pArray = aSeq.getArray();
                 PropertyValue aParam;
-                aParam.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
+                aParam.Name = rtl::OUString::createFromAscii("ParentWindow");
                 aParam.Value <<= makeAny(xDialogParentWindow);
                 pArray[0] <<= makeAny(aParam);
                 xInit->initialize( aSeq );

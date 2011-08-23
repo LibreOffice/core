@@ -59,11 +59,16 @@
  * Styles for paragraph may include many style,include font,indent,margin,
  * shadow,line height,and so on.
  ************************************************************************/
-#include    "xfparastyle.hxx"
-#include    "xffont.hxx"
-#include    "xfborders.hxx"
-#include    "xftabstyle.hxx"
-#include    "xfbgimage.hxx"
+/*************************************************************************
+ * Change History
+ * 2005-01-10 create this file.
+ * 2005-01-20 move some structure out of this file.
+ ************************************************************************/
+#include	"xfparastyle.hxx"
+#include	"xffont.hxx"
+#include	"xfborders.hxx"
+#include	"xftabstyle.hxx"
+#include	"xfbgimage.hxx"
 
 XFParaStyle::XFParaStyle()
 {
@@ -116,7 +121,7 @@ XFParaStyle::XFParaStyle(XFParaStyle& other)
     m_aLineHeight = other.m_aLineHeight;
     m_aPadding = other.m_aPadding;
     m_aBreaks = other.m_aBreaks;
-//  m_aTabs = other.m_aTabs;
+//	m_aTabs = other.m_aTabs;
     for (size_t i=0; i<other.m_aTabs.GetCount(); ++i)
     {
         IXFStyle *pStyle = other.m_aTabs.Item(i);
@@ -163,7 +168,7 @@ XFParaStyle& XFParaStyle::operator=(XFParaStyle& other)
     m_aLineHeight = other.m_aLineHeight;
     m_aPadding = other.m_aPadding;
     m_aBreaks = other.m_aBreaks;
-    //  m_aTabs = other.m_aTabs;
+    //	m_aTabs = other.m_aTabs;
     for (size_t i=0; i<other.m_aTabs.GetCount(); ++i)
     {
         IXFStyle *pStyle = other.m_aTabs.Item(i);
@@ -189,22 +194,22 @@ XFParaStyle::~XFParaStyle()
         delete m_pBGImage;
 }
 
-enumXFStyle XFParaStyle::GetStyleFamily()
+enumXFStyle	XFParaStyle::GetStyleFamily()
 {
     return enumXFStylePara;
 }
 
-void    XFParaStyle::SetFont(XFFont *pFont)
+void	XFParaStyle::SetFont(XFFont *pFont)
 {
     m_pFont = pFont;
 }
 
-void    XFParaStyle::SetIndent(double indent )
+void	XFParaStyle::SetIndent(double indent )
 {
     m_fTextIndent = indent;
 }
 
-void    XFParaStyle::SetMargins(double left, double right, double top, double bottom)
+void	XFParaStyle::SetMargins(double left, double right, double top, double bottom)
 {
     if( left != -1 )
         m_aMargin.SetLeft(left);
@@ -216,34 +221,34 @@ void    XFParaStyle::SetMargins(double left, double right, double top, double bo
         m_aMargin.SetBottom( bottom );
 }
 
-void    XFParaStyle::SetShadow(enumXFShadowPos pos, double offset, XFColor& color)
+void	XFParaStyle::SetShadow(enumXFShadowPos pos, double offset, XFColor& color)
 {
     m_aShadow.SetPosition(pos);
     m_aShadow.SetOffset(offset);
     m_aShadow.SetColor(color);
 }
 
-void    XFParaStyle::SetBackColor(XFColor& color)
+void	XFParaStyle::SetBackColor(XFColor& color)
 {
     m_aBackColor = color;
     m_nFlag |= XFPARA_FLAG_BACKCOLOR;
 }
 
-void    XFParaStyle::SetBackImage(XFBGImage *image)
+void	XFParaStyle::SetBackImage(XFBGImage *image)
 {
     if( m_pBGImage )
         delete m_pBGImage;
     m_pBGImage = image;
 }
 
-void    XFParaStyle::SetBorders(XFBorders *pBorders)
+void	XFParaStyle::SetBorders(XFBorders *pBorders)
 {
     if( m_pBorders )
         delete m_pBorders;
     m_pBorders = pBorders;
 }
 
-void    XFParaStyle::SetDropCap(sal_Int16 nLength,
+void	XFParaStyle::SetDropCap(sal_Int16 nLength,
                        sal_Int16 nLines,
                        double fDistance
                        )
@@ -257,7 +262,7 @@ void    XFParaStyle::SetDropCap(sal_Int16 nLength,
     m_aDropcap.SetDistance(fDistance);
 }
 
-void    XFParaStyle::SetLineHeight(enumLHType type, double value)
+void	XFParaStyle::SetLineHeight(enumLHType type, double value)
 {
     if( type == enumLHNone )
     {
@@ -266,25 +271,25 @@ void    XFParaStyle::SetLineHeight(enumLHType type, double value)
     switch(type)
     {
     case enumLHHeight:
-        m_aLineHeight.SetHeight(value)  ;
+        m_aLineHeight.SetHeight(value)	;
         break;
     case enumLHLeast:
         m_aLineHeight.SetLeastHeight(value);
         break;
-    case enumLHPercent: //perhaps i should redesign the interface here,ohm..
+    case enumLHPercent:	//perhaps i should redesign the interface here,ohm..
         m_aLineHeight.SetPercent((sal_Int32)value);
         break;
     case enumLHSpace:
-        m_aLineHeight.SetSpace(value*0.5666);   //don't known why,just suspect.
+        m_aLineHeight.SetSpace(value*0.5666);	//don't known why,just suspect.
         break;
     default:
         break;
     }
 }
 
-void    XFParaStyle::AddTabStyle(enumXFTab type, double len, sal_Unicode leader, sal_Unicode delimiter)
+void	XFParaStyle::AddTabStyle(enumXFTab type, double len, sal_Unicode leader, sal_Unicode delimiter)
 {
-    XFTabStyle  *tab = new XFTabStyle();
+    XFTabStyle	*tab = new XFTabStyle();
     tab->SetTabType(type);
     tab->SetLength(len);
     tab->SetLeaderChar(leader);
@@ -295,14 +300,14 @@ void    XFParaStyle::AddTabStyle(enumXFTab type, double len, sal_Unicode leader,
 /**
  *Affirm whether two XFParaStyle objects are equal.
  */
-sal_Bool    XFParaStyle::Equal(IXFStyle *pStyle)
+sal_Bool	XFParaStyle::Equal(IXFStyle *pStyle)
 {
     if( this == pStyle )
         return sal_True;
     if( !pStyle || pStyle->GetStyleFamily() != enumXFStylePara )
         return sal_False;
 
-    XFParaStyle *pOther = (XFParaStyle*)(pStyle);
+    XFParaStyle	*pOther = (XFParaStyle*)(pStyle);
     if( !pOther )
         return sal_False;
 
@@ -387,15 +392,15 @@ sal_Bool    XFParaStyle::Equal(IXFStyle *pStyle)
         return sal_False;//add end
 
     //number right
-    if (    m_bNumberRight  != pOther->m_bNumberRight)
+    if (	m_bNumberRight  != pOther->m_bNumberRight)
         return sal_False;
 
     return sal_True;
 }
 
-void    XFParaStyle::ToXml(IXFStream *pStrm)
+void	XFParaStyle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     rtl::OUString style = GetStyleName();
 
     pAttrList->Clear();
@@ -501,7 +506,7 @@ XFDefaultParaStyle::XFDefaultParaStyle()
     m_fTabDistance = 1.28;
 }
 
-enumXFStyle XFDefaultParaStyle::GetStyleFamily()
+enumXFStyle	XFDefaultParaStyle::GetStyleFamily()
 {
     return enumXFStyleDefaultPara;
 }
@@ -509,7 +514,7 @@ enumXFStyle XFDefaultParaStyle::GetStyleFamily()
 
 void XFDefaultParaStyle::ToXml(IXFStream * pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
     pAttrList->AddAttribute(A2OUSTR("style:family"), A2OUSTR("paragraph"));
     pStrm->StartElement(A2OUSTR("style:default-style"));

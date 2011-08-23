@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,8 @@
 
 struct ImpUniqueId
 {
-    sal_uIntPtr    nId;
-    sal_uInt16   nRefCount;
+    ULONG    nId;
+    USHORT   nRefCount;
     void     Release()
              {
                 nRefCount--;
@@ -72,7 +72,7 @@ public:
                             pId = rId.pId;
                             return *this;
                         }
-    sal_uIntPtr           GetId() const { return pId ? pId->nId : 0; }
+    ULONG           GetId() const { return pId ? pId->nId : 0; }
 };
 
 // ---------------------
@@ -81,30 +81,30 @@ public:
 
 class TOOLS_DLLPUBLIC UniqueIdContainer : private UniqueIndex
 {
-    sal_uInt16              nCollectCount;
+    USHORT              nCollectCount;
 
 public: // Irgend etwas mit protected falsch
-    void                Clear( sal_Bool bAll );
-    UniqueItemId        CreateIdProt( sal_uIntPtr nId );
+    void                Clear( BOOL bAll );
+    UniqueItemId        CreateIdProt( ULONG nId );
 
 public:
-                        UniqueIdContainer( sal_uIntPtr _nStartIndex,
-                                           sal_uIntPtr _nInitSize = 16,
-                                           sal_uIntPtr _nReSize = 16 )
+                        UniqueIdContainer( ULONG _nStartIndex,
+                                           ULONG _nInitSize = 16,
+                                           ULONG _nReSize = 16 )
                             : UniqueIndex( _nStartIndex, _nInitSize, _nReSize )
                             , nCollectCount( 0 )
                             {}
                         UniqueIdContainer( const UniqueIdContainer& );
 
                         ~UniqueIdContainer()
-                            { Clear( sal_True ); }
+                            { Clear( TRUE ); }
     UniqueIdContainer&  operator = ( const UniqueIdContainer & );
 
-    sal_Bool                IsIndexValid( sal_uIntPtr nIndex ) const
+    BOOL                IsIndexValid( ULONG nIndex ) const
                             { return UniqueIndex::IsIndexValid( nIndex ); }
 
     UniqueItemId        CreateId();
-    static UniqueItemId CreateFreeId( sal_uIntPtr nId ); // freies Id
+    static UniqueItemId CreateFreeId( ULONG nId ); // freies Id
 };
 
 #endif // _UNQID_HXX

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,21 +34,21 @@
 //////////////////////////////////////////////////////////////////////////////
 class SvStream;
 
-class old_SdrDownCompat
+class old_SdrDownCompat 
 {
 protected:
-    SvStream&                   rStream;
-    sal_uInt32                      nSubRecSiz;
-    sal_uInt32                      nSubRecPos;
-    sal_uInt16                      nMode;
-    sal_Bool                        bOpen;
+    SvStream&					rStream;
+    UINT32						nSubRecSiz;
+    UINT32						nSubRecPos;
+    UINT16						nMode;
+    BOOL						bOpen;
 
 protected:
     void Read();
     void Write();
 
 public:
-    old_SdrDownCompat(SvStream& rNewStream, sal_uInt16 nNewMode);
+    old_SdrDownCompat(SvStream& rNewStream, UINT16 nNewMode);
     ~old_SdrDownCompat();
     void  OpenSubRecord();
     void  CloseSubRecord();
@@ -56,23 +56,23 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 #include "sddllapi.h"
 
-#define SDIOCOMPAT_VERSIONDONTKNOW (sal_uInt16)0xffff
+#define SDIOCOMPAT_VERSIONDONTKNOW (UINT16)0xffff
 
 class SD_DLLPUBLIC SdIOCompat : public old_SdrDownCompat
 {
 private:
-    sal_uInt16 nVersion;
+    UINT16 nVersion;
 
 public:
                 // nNewMode: STREAM_READ oder STREAM_WRITE
-                // nVer:     nur beim Schreiben angeben
-            SdIOCompat(SvStream& rNewStream, sal_uInt16 nNewMode,
-                       sal_uInt16 nVer = SDIOCOMPAT_VERSIONDONTKNOW);
+                // nVer:	 nur beim Schreiben angeben
+            SdIOCompat(SvStream& rNewStream, USHORT nNewMode,
+                       UINT16 nVer = SDIOCOMPAT_VERSIONDONTKNOW);
             ~SdIOCompat();
-    sal_uInt16  GetVersion() const { return nVersion; }
+    UINT16	GetVersion() const { return nVersion; }
 };
 
-#endif      // _SD_SDIOCMPT_HXX
+#endif		// _SD_SDIOCMPT_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

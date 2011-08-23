@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,32 @@
 #include "FilterConfigCache.hxx"
 #include <unotools/ucbstreamhelper.hxx>
 
-#define DATA_SIZE           640
+#define DATA_SIZE			640
 
-sal_uInt8* ImplSearchEntry( sal_uInt8* , sal_uInt8* , sal_uLong , sal_uLong  );
+BYTE* ImplSearchEntry( BYTE* , BYTE* , ULONG , ULONG  );
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+GraphicDescriptor::GraphicDescriptor( const String* pPath ) :
+    pFileStm		( NULL )
+{
+    ImpConstruct();
+
+    if ( pPath )
+    {
+        INetURLObject aURL( *pPath, INET_PROT_FILE );
+        aPathExt = aURL.GetFileExtension().toAsciiLowerCase();
+    }
+    bLinked = TRUE;
+    bLinkChanged = FALSE;
+    bWideSearch = FALSE;
+}
+
 
 /*************************************************************************
 |*
@@ -51,10 +74,19 @@ sal_uInt8* ImplSearchEntry( sal_uInt8* , sal_uInt8* , sal_uLong , sal_uLong  );
 
 GraphicDescriptor::GraphicDescriptor( const INetURLObject& rPath ) :
     pFileStm( ::utl::UcbStreamHelper::CreateStream( rPath.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ) ),
-    aPathExt( rPath.GetFileExtension().toAsciiLowerCase() ),
-    bOwnStream( sal_True )
+    aPathExt( rPath.GetFileExtension().toAsciiLowerCase() )
 {
+    if ( pFileStm )
+    {
+        nStmPos = 0;
+        pFileStm->Seek( nStmPos );
+        bDataReady = TRUE;
+    }
+
     ImpConstruct();
+
+    if ( pFileStm && !pFileStm->GetError() )
+        bDataReady = TRUE;
 }
 
 /*************************************************************************
@@ -64,8 +96,7 @@ GraphicDescriptor::GraphicDescriptor( const INetURLObject& rPath ) :
 \************************************************************************/
 
 GraphicDescriptor::GraphicDescriptor( SvStream& rInStream, const String* pPath) :
-    pFileStm    ( &rInStream ),
-    bOwnStream  ( sal_False )
+    pFileStm	( NULL )
 {
     ImpConstruct();
 
@@ -74,7 +105,14 @@ GraphicDescriptor::GraphicDescriptor( SvStream& rInStream, const String* pPath) 
         INetURLObject aURL( *pPath );
         aPathExt = aURL.GetFileExtension().toAsciiLowerCase();
     }
+    nStmPos = rInStream.Tell();
+    pBaseStm = &rInStream;
+    bBaseStm = TRUE;
+
+    if ( !pBaseStm->GetError() )
+        bDataReady = TRUE;
 }
+
 
 /*************************************************************************
 |*
@@ -84,9 +122,9 @@ GraphicDescriptor::GraphicDescriptor( SvStream& rInStream, const String* pPath) 
 
 GraphicDescriptor::~GraphicDescriptor()
 {
-    if ( bOwnStream )
-        delete pFileStm;
+    delete pFileStm;
 }
+
 
 /*************************************************************************
 |*
@@ -94,43 +132,139 @@ GraphicDescriptor::~GraphicDescriptor()
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::Detect( sal_Bool bExtendedInfo )
+BOOL GraphicDescriptor::Detect( BOOL bExtendedInfo )
 {
-    sal_Bool bRet = sal_False;
-    if ( pFileStm && !pFileStm->GetError() )
-    {
-        SvStream&   rStm = *pFileStm;
-        sal_uInt16      nOldFormat = rStm.GetNumberFormatInt();
+    BOOL bRet = FALSE;
 
-        if      ( ImpDetectGIF( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectJPG( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectBMP( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectPNG( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectTIF( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectPCX( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectDXF( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectMET( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectSGF( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectSGV( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectSVM( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectWMF( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectEMF( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectPCT( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectXBM( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectXPM( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectPBM( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectPGM( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectPPM( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectRAS( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectTGA( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectPSD( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectEPS( rStm, bExtendedInfo ) ) bRet = sal_True;
-        else if ( ImpDetectPCD( rStm, bExtendedInfo ) ) bRet = sal_True;
+    // Link-Status ueberpruefen
+    if ( bLinked && bLinkChanged )
+    {
+        DBG_ASSERT( aReqLink.IsSet(), "Wo ist der RequestHandler???" );
+        pMemStm = (SvStream*) aReqLink.Call( this );
+        if ( pMemStm )
+        {
+            nStmPos = pMemStm->Tell();
+            bDataReady = TRUE;
+        }
+    }
+
+    if ( bDataReady )
+    {
+        SvStream&	rStm = GetSearchStream();
+        UINT16		nOldFormat = rStm.GetNumberFormatInt();
+
+        if		( ImpDetectGIF( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectJPG( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if	( ImpDetectBMP( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectPNG( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectTIF( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectPCX( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectDXF( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectMET( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectSGF( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectSGV( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectSVM( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectWMF( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectEMF( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectPCT( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectXBM( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectXPM( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectPBM( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectPGM( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectPPM( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectRAS( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectTGA( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectPSD( rStm, bExtendedInfo ) )	bRet = TRUE;
+        else if ( ImpDetectEPS( rStm, bExtendedInfo ) )	bRet = TRUE;
+
+        // diese Formate lassen sich nur bei WideSearch im gesamten
+        // Stream ermitteln
+        else if ( bWideSearch )
+        {
+            if ( ImpDetectPCD( rStm, bExtendedInfo ) )
+                bRet = TRUE;
+        }
 
         rStm.SetNumberFormatInt( nOldFormat );
+        rStm.Seek( nStmPos );
     }
+
     return bRet;
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+BOOL GraphicDescriptor::IsDataReady() const
+{
+    return bDataReady;
+}
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+BOOL GraphicDescriptor::IsWideSearch() const
+{
+    return bWideSearch;
+}
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+SvStream& GraphicDescriptor::GetSearchStream() const
+{
+    DBG_ASSERT( bDataReady, "Was laeuft hier falsch???" );
+
+    if ( bLinked )
+        return *pMemStm;
+    else if ( bBaseStm )
+        return *pBaseStm;
+    else
+        return *pFileStm;
+}
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+void GraphicDescriptor::SetRequestHdl( const Link& rRequestLink )
+{
+    aReqLink = rRequestLink;
+    bLinkChanged = TRUE;
+}
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+ULONG GraphicDescriptor::GetRequestedByteCount() const
+{
+    return DATA_SIZE;
+}
+
+
+/******************************************************************************/
+/*								 IMP-Methoden								  */
+/*																			  */
+
 
 /*************************************************************************
 |*
@@ -140,10 +274,17 @@ sal_Bool GraphicDescriptor::Detect( sal_Bool bExtendedInfo )
 
 void GraphicDescriptor::ImpConstruct()
 {
+    if ( !pFileStm )
+        pFileStm = new SvStream();
     nFormat = GFF_NOT;
     nBitsPerPixel = 0;
     nPlanes = 0;
-    bCompressed = sal_False;
+    bCompressed = FALSE;
+    bDataReady = FALSE;
+    bLinked = FALSE;
+    bWideSearch = TRUE;
+    bBaseStm = FALSE;
+    pMemStm = NULL;
 }
 
 
@@ -153,13 +294,14 @@ void GraphicDescriptor::ImpConstruct()
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, sal_Bool bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectBMP( SvStream& rStm, BOOL bExtendedInfo )
 {
-    sal_uInt16  nTemp16;
-    sal_Bool    bRet = sal_False;
-    sal_Int32 nStmPos = rStm.Tell();
+    UINT16	nTemp16;
+    BOOL	bRet = FALSE;
 
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    rStm.Seek( nStmPos );
+
     rStm >> nTemp16;
 
     // OS/2-BitmapArray
@@ -173,12 +315,12 @@ sal_Bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, sal_Bool bExtendedInfo
     if ( nTemp16 == 0x4d42 )
     {
         nFormat = GFF_BMP;
-        bRet = sal_True;
+        bRet = TRUE;
 
         if ( bExtendedInfo )
         {
-            sal_uInt32  nTemp32;
-            sal_uInt32  nCompression;
+            UINT32	nTemp32;
+            UINT32	nCompression;
 
             // bis zur ersten Information
             rStm.SeekRel( 0x10 );
@@ -219,11 +361,11 @@ sal_Bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, sal_Bool bExtendedInfo
             if ( ( nBitsPerPixel > 24 ) || ( nCompression > 3 ) )
             {
                 nFormat = GFF_NOT;
-                bRet = sal_False;
+                bRet = FALSE;
             }
         }
     }
-    rStm.Seek( nStmPos );
+
     return bRet;
 }
 
@@ -234,28 +376,28 @@ sal_Bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, sal_Bool bExtendedInfo
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, sal_Bool bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectGIF( SvStream& rStm, BOOL bExtendedInfo )
 {
-    sal_uInt32  n32;
-    sal_uInt16  n16;
-    sal_Bool    bRet = sal_False;
-    sal_uInt8   cByte;
+    UINT32	n32;
+    UINT16	n16;
+    BOOL	bRet = FALSE;
+    BYTE	cByte;
 
-    sal_Int32 nStmPos = rStm.Tell();
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-    rStm >> n32;
+    rStm.Seek( nStmPos );
 
+    rStm >> n32;
     if ( n32 == 0x38464947 )
     {
         rStm >> n16;
         if ( ( n16 == 0x6137 ) || ( n16 == 0x6139 ) )
         {
             nFormat = GFF_GIF;
-            bRet = sal_True;
+            bRet = TRUE;
 
             if ( bExtendedInfo )
             {
-                sal_uInt16 nTemp16;
+                UINT16 nTemp16;
 
                 // PixelBreite auslesen
                 rStm >> nTemp16;
@@ -271,7 +413,7 @@ sal_Bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, sal_Bool bExtendedInfo
             }
         }
     }
-    rStm.Seek( nStmPos );
+
     return bRet;
 }
 
@@ -282,186 +424,125 @@ sal_Bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, sal_Bool bExtendedInfo
 |*
 \************************************************************************/
 
-// returns the next jpeg marker, a return value of 0 represents an error
-sal_uInt8 ImpDetectJPG_GetNextMarker( SvStream& rStm )
+BOOL GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  BOOL bExtendedInfo )
 {
-    sal_uInt8 nByte;
-    do
-    {
-        do
-        {
-            rStm >> nByte;
-            if ( rStm.IsEof() || rStm.GetError() )  // as 0 is not allowed as marker,
-                return 0;                           // we can use it as errorcode
-        }
-        while ( nByte != 0xff );
-        do
-        {
-            rStm >> nByte;
-            if ( rStm.IsEof() || rStm.GetError() )
-                return 0;
-        }
-        while( nByte == 0xff );
-    }
-    while( nByte == 0 );        // 0xff00 represents 0xff and not a marker,
-                                // the marker detection has to be restartet.
-    return nByte;
-}
-
-sal_Bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  sal_Bool bExtendedInfo )
-{
-    sal_uInt32  nTemp32;
-    sal_Bool    bRet = sal_False;
-
-    sal_Int32 nStmPos = rStm.Tell();
+    UINT32	nTemp32;
+    BOOL	bRet = FALSE;
+    BYTE	cByte = 0;
+    BOOL	bM_COM;
 
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    rStm.Seek( nStmPos );
+
     rStm >> nTemp32;
 
-    // compare upper 24 bits
+    // compare upper 28 bits
     if( 0xffd8ff00 == ( nTemp32 & 0xffffff00 ) )
     {
         nFormat = GFF_JPG;
-        bRet = sal_True;
+        return TRUE;
+    }
 
-        if ( bExtendedInfo )
+    bM_COM = ( nTemp32 == 0xffd8fffe );
+    if ( ( nTemp32 == 0xffd8ffe0 ) || bM_COM )
+    {
+        if( !bM_COM )
         {
-            rStm.SeekRel( -2 );
+            rStm.SeekRel( 2 );
+            rStm >> nTemp32;
+        }
 
-            sal_uInt32 nError( rStm.GetError() );
+        if( bM_COM || ( nTemp32 == 0x4a464946 ) )
+        {
+            nFormat = GFF_JPG;
+            bRet = TRUE;
 
-            sal_Bool bScanFailure = sal_False;
-            sal_Bool bScanFinished = sal_False;
-
-            while( !bScanFailure && !bScanFinished && !rStm.IsEof() && !rStm.GetError() )
+            if( bExtendedInfo )
             {
-                sal_uInt8 nMarker = ImpDetectJPG_GetNextMarker( rStm );
-                switch( nMarker )
+                MapMode aMap;
+                UINT16	nTemp16;
+                ULONG	nCount = 9;
+                ULONG	nMax;
+                ULONG	nResX;
+                ULONG	nResY;
+                BYTE	cUnit;
+
+                // Groesse des verbleibenden Puffers ermitteln
+                if ( bLinked )
+                    nMax = static_cast< SvMemoryStream& >(rStm).GetEndOfData()
+                                - 16;
+                else
+                    nMax = DATA_SIZE - 16;
+
+                // max. 8K
+                nMax = Min( nMax, (ULONG) 8192 );
+
+                // Res-Unit ermitteln
+                rStm.SeekRel( 3 );
+                rStm >> cUnit;
+
+                // ResX ermitteln
+                rStm >> nTemp16;
+                nResX = nTemp16;
+
+                // ResY ermitteln
+                rStm >> nTemp16;
+                nResY = nTemp16;
+
+                // SOF0/1-Marker finden, aber dabei
+                // nicht mehr als DATA_SIZE Pixel lesen, falls
+                // kein WideSearch
+                do
                 {
-                    // fixed size marker, not having a two byte length parameter
-                    case 0xd0 :     // RST0
-                    case 0xd1 :
-                    case 0xd2 :
-                    case 0xd3 :
-                    case 0xd4 :
-                    case 0xd5 :
-                    case 0xd6 :
-                    case 0xd7 :     // RST7
-                    case 0x01 :     // TEM
-                    break;
-
-                    case 0xd8 :     // SOI (has already been checked, there should not be a second one)
-                    case 0x00 :     // marker is invalid, we should stop now
-                        bScanFailure = sal_True;
-                    break;
-
-                    case 0xd9 :     // EOI
-                        bScanFinished = sal_True;
-                    break;
-
-                    // per default we assume marker segments conaining a length parameter
-                    default :
+                    while ( ( cByte != 0xff ) &&
+                            ( bWideSearch || ( nCount++ < nMax ) ) )
                     {
-                        sal_uInt16 nLength;
-                        rStm >> nLength;
-
-                        if ( nLength < 2 )
-                            bScanFailure = sal_True;
-                        else
-                        {
-                            sal_uInt32 nNextMarkerPos = rStm.Tell() + nLength - 2;
-                            switch( nMarker )
-                            {
-                                case 0xe0 : // APP0 Marker
-                                {
-                                    if ( nLength == 16 )
-                                    {
-                                        sal_Int32 nIdentifier;
-                                        rStm >> nIdentifier;
-                                        if ( nIdentifier == 0x4a464946 )    // JFIF Identifier
-                                        {
-                                            sal_uInt8   nStringTerminator;
-                                            sal_uInt8   nMajorRevision;
-                                            sal_uInt8   nMinorRevision;
-                                            sal_uInt8   nUnits;
-                                            sal_uInt16  nHorizontalResolution;
-                                            sal_uInt16  nVerticalResolution;
-                                            sal_uInt8   nHorzThumbnailPixelCount;
-                                            sal_uInt8   nVertThumbnailPixelCount;
-
-                                            rStm >> nStringTerminator
-                                                 >> nMajorRevision
-                                                 >> nMinorRevision
-                                                 >> nUnits
-                                                 >> nHorizontalResolution
-                                                 >> nVerticalResolution
-                                                 >> nHorzThumbnailPixelCount
-                                                 >> nVertThumbnailPixelCount;
-
-                                            // setting the logical size
-                                            if ( nUnits && nHorizontalResolution && nVerticalResolution )
-                                            {
-                                                MapMode aMap;
-                                                aMap.SetMapUnit( nUnits == 1 ? MAP_INCH : MAP_CM );
-                                                aMap.SetScaleX( Fraction( 1, nHorizontalResolution ) );
-                                                aMap.SetScaleY( Fraction( 1, nVerticalResolution ) );
-                                                aLogSize = OutputDevice::LogicToLogic( aPixSize, aMap, MapMode( MAP_100TH_MM ) );
-                                            }
-                                        }
-                                    }
-                                }
-                                break;
-
-                                // Start of Frame Markers
-                                case 0xc0 : // SOF0
-                                case 0xc1 : // SOF1
-                                case 0xc2 : // SOF2
-                                case 0xc3 : // SOF3
-                                case 0xc5 : // SOF5
-                                case 0xc6 : // SOF6
-                                case 0xc7 : // SOF7
-                                case 0xc9 : // SOF9
-                                case 0xca : // SOF10
-                                case 0xcb : // SOF11
-                                case 0xcd : // SOF13
-                                case 0xce : // SOF14
-                                case 0xcf : // SOF15
-                                {
-                                    sal_uInt8   nSamplePrecision;
-                                    sal_uInt16  nNumberOfLines;
-                                    sal_uInt16  nSamplesPerLine;
-                                    sal_uInt8   nNumberOfImageComponents;
-                                    sal_uInt8   nComponentsIdentifier;
-                                    sal_uInt8   nHorizontalSamplingFactor;
-                                    sal_uInt8   nQuantizationTableDestinationSelector;
-                                    rStm >> nSamplePrecision
-                                         >> nNumberOfLines
-                                         >> nSamplesPerLine
-                                         >> nNumberOfImageComponents
-                                         >> nComponentsIdentifier
-                                         >> nHorizontalSamplingFactor
-                                         >> nQuantizationTableDestinationSelector;
-                                    nHorizontalSamplingFactor >>= 4;
-
-                                    aPixSize.Height() = nNumberOfLines;
-                                    aPixSize.Width() = nSamplesPerLine;
-                                    nBitsPerPixel = ( nNumberOfImageComponents == 3 ? 24 : nNumberOfImageComponents == 1 ? 8 : 0 );
-                                    nPlanes = 1;
-
-                                    bScanFinished = sal_True;
-                                }
-                                break;
-                            }
-                            rStm.Seek( nNextMarkerPos );
-                        }
+                        rStm >> cByte;
                     }
-                    break;
+
+                    while ( ( cByte == 0xff ) &&
+                            ( bWideSearch || ( nCount++ < nMax ) ) )
+                    {
+                        rStm >> cByte;
+                    }
+                }
+                while ( ( cByte != 0xc0 ) &&
+                        ( cByte != 0xc1 ) &&
+                        ( bWideSearch || ( nCount < nMax ) ) );
+
+                // wir haben den SOF0/1-Marker
+                if ( ( cByte == 0xc0 ) || ( cByte == 0xc1 ) )
+                {
+                    // Hoehe einlesen
+                    rStm.SeekRel( 3 );
+                    rStm >> nTemp16;
+                    aPixSize.Height() = nTemp16;
+
+                    // Breite einlesen
+                    rStm >> nTemp16;
+                    aPixSize.Width() = nTemp16;
+
+                    // Bit/Pixel einlesen
+                    rStm >> cByte;
+                    nBitsPerPixel = ( cByte == 3 ? 24 : cByte == 1 ? 8 : 0 );
+
+                    // logische Groesse setzen
+                    if ( cUnit && nResX && nResY )
+                    {
+                        aMap.SetMapUnit( cUnit == 1 ? MAP_INCH : MAP_CM );
+                        aMap.SetScaleX( Fraction( 1, nResX ) );
+                        aMap.SetScaleY( Fraction( 1, nResY ) );
+                        aLogSize = OutputDevice::LogicToLogic( aPixSize, aMap,
+                                                               MapMode( MAP_100TH_MM ) );
+                    }
+
+                    // Planes immer 1
+                    nPlanes = 1;
                 }
             }
-            rStm.SetError( nError );
         }
     }
-    rStm.Seek( nStmPos );
+
     return bRet;
 }
 
@@ -472,30 +553,41 @@ sal_Bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  sal_Bool bExtendedInf
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectPCD( SvStream& rStm, sal_Bool )
+BOOL GraphicDescriptor::ImpDetectPCD( SvStream& rStm, BOOL )
 {
-    sal_Bool    bRet = sal_False;
+    BOOL	bRet = FALSE;
 
-    sal_Int32 nStmPos = rStm.Tell();
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-
-    sal_uInt32  nTemp32;
-    sal_uInt16  nTemp16;
-    sal_uInt8   cByte;
-
-    rStm.SeekRel( 2048 );
-    rStm >> nTemp32;
-    rStm >> nTemp16;
-    rStm >> cByte;
-
-    if ( ( nTemp32 == 0x5f444350 ) &&
-         ( nTemp16 == 0x5049 ) &&
-         ( cByte == 0x49 ) )
-    {
-        nFormat = GFF_PCD;
-        bRet = sal_True;
-    }
     rStm.Seek( nStmPos );
+
+    if ( bWideSearch )
+    {
+        UINT32	nTemp32;
+        UINT16	nTemp16;
+        BYTE	cByte;
+
+        rStm.SeekRel( 2048 );
+        rStm >> nTemp32;
+        rStm >> nTemp16;
+        rStm >> cByte;
+
+        if ( ( nTemp32 == 0x5f444350 ) &&
+             ( nTemp16 == 0x5049 ) &&
+             ( cByte == 0x49 ) )
+        {
+            nFormat = GFF_PCD;
+            bRet = TRUE;
+        }
+    }
+    else
+    {
+        bRet = aPathExt.CompareToAscii( "pcd", 3 ) == COMPARE_EQUAL;
+        if ( bRet )
+        {
+            nFormat = GFF_PCD;
+        }
+    }
+
     return bRet;
 }
 
@@ -506,35 +598,35 @@ sal_Bool GraphicDescriptor::ImpDetectPCD( SvStream& rStm, sal_Bool )
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, sal_Bool bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectPCX( SvStream& rStm, BOOL bExtendedInfo )
 {
     // ! Because 0x0a can be interpreted as LF too ...
     // we cant be shure that this special sign represent a PCX file only.
     // Every Ascii file is possible here :-(
     // We must detect the whole header.
-    bExtendedInfo = sal_True;
+    bExtendedInfo = TRUE;
 
-    sal_Bool    bRet = sal_False;
-    sal_uInt8   cByte;
+    BOOL	bRet = FALSE;
+    BYTE	cByte;
 
-    sal_Int32 nStmPos = rStm.Tell();
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-    rStm >> cByte;
+    rStm.Seek( nStmPos );
 
+    rStm >> cByte;
     if ( cByte == 0x0a )
     {
         nFormat = GFF_PCX;
-        bRet = sal_True;
+        bRet = TRUE;
 
         if ( bExtendedInfo )
         {
-            sal_uInt16  nTemp16;
-            sal_uInt16  nXmin;
-            sal_uInt16  nXmax;
-            sal_uInt16  nYmin;
-            sal_uInt16  nYmax;
-            sal_uInt16  nDPIx;
-            sal_uInt16  nDPIy;
+            UINT16	nTemp16;
+            USHORT	nXmin;
+            USHORT	nXmax;
+            USHORT	nYmin;
+            USHORT	nYmax;
+            USHORT	nDPIx;
+            USHORT	nDPIy;
 
 
             rStm.SeekRel( 1 );
@@ -569,7 +661,7 @@ sal_Bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, sal_Bool bExtendedInfo
             nDPIy = nTemp16;
 
             // logische Groesse setzen
-            MapMode aMap( MAP_INCH, Point(),
+            MapMode	aMap( MAP_INCH, Point(),
                           Fraction( 1, nDPIx ), Fraction( 1, nDPIy ) );
             aLogSize = OutputDevice::LogicToLogic( aPixSize, aMap,
                                                    MapMode( MAP_100TH_MM ) );
@@ -584,7 +676,6 @@ sal_Bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, sal_Bool bExtendedInfo
         }
     }
 
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
@@ -595,26 +686,26 @@ sal_Bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, sal_Bool bExtendedInfo
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, sal_Bool bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectPNG( SvStream& rStm, BOOL bExtendedInfo )
 {
-    sal_uInt32  nTemp32;
-    sal_Bool    bRet = sal_False;
+    UINT32	nTemp32;
+    BOOL	bRet = FALSE;
 
-    sal_Int32 nStmPos = rStm.Tell();
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-    rStm >> nTemp32;
+    rStm.Seek( nStmPos );
 
+    rStm >> nTemp32;
     if ( nTemp32 == 0x89504e47 )
     {
         rStm >> nTemp32;
         if ( nTemp32 == 0x0d0a1a0a )
         {
             nFormat = GFF_PNG;
-            bRet = sal_True;
+            bRet = TRUE;
 
             if ( bExtendedInfo )
             {
-                sal_uInt8 cByte;
+                BYTE cByte;
 
                 // IHDR-Chunk
                 rStm.SeekRel( 8 );
@@ -634,54 +725,57 @@ sal_Bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, sal_Bool bExtendedInfo
                 // Planes immer 1;
                 // Kompression immer
                 nPlanes = 1;
-                bCompressed = sal_True;
+                bCompressed = TRUE;
 
-                sal_uInt32  nLen32;
-
-                rStm.SeekRel( 8 );
-
-                // so lange ueberlesen, bis wir den pHYs-Chunk haben oder
-                // den Anfang der Bilddaten
-                rStm >> nLen32;
-                rStm >> nTemp32;
-                while( ( nTemp32 != 0x70485973 ) && ( nTemp32 != 0x49444154 ) )
+                if ( bWideSearch )
                 {
-                    rStm.SeekRel( 4 + nLen32 );
+                    UINT32	nLen32;
+
+                    rStm.SeekRel( 8 );
+
+                    // so lange ueberlesen, bis wir den pHYs-Chunk haben oder
+                    // den Anfang der Bilddaten
                     rStm >> nLen32;
                     rStm >> nTemp32;
-                }
-
-                if ( nTemp32 == 0x70485973 )
-                {
-                    sal_uLong   nXRes;
-                    sal_uLong   nYRes;
-
-                    // horizontale Aufloesung
-                    rStm >> nTemp32;
-                    nXRes = nTemp32;
-
-                    // vertikale Aufloesung
-                    rStm >> nTemp32;
-                    nYRes = nTemp32;
-
-                    // Unit einlesen
-                    rStm >> cByte;
-
-                    if ( cByte )
+                    while( ( nTemp32 != 0x70485973 ) && ( nTemp32 != 0x49444154 ) )
                     {
-                        if ( nXRes )
-                            aLogSize.Width() = ( aPixSize.Width() * 100000 ) /
-                                               nTemp32;
+                        rStm.SeekRel( 4 + nLen32 );
+                        rStm >> nLen32;
+                        rStm >> nTemp32;
+                    }
 
-                        if ( nYRes )
-                            aLogSize.Height() = ( aPixSize.Height() * 100000 ) /
-                                                nTemp32;
+                    if ( nTemp32 == 0x70485973 )
+                    {
+                        ULONG	nXRes;
+                        ULONG	nYRes;
+
+                        // horizontale Aufloesung
+                        rStm >> nTemp32;
+                        nXRes = nTemp32;
+
+                        // vertikale Aufloesung
+                        rStm >> nTemp32;
+                        nYRes = nTemp32;
+
+                        // Unit einlesen
+                        rStm >> cByte;
+
+                        if ( cByte )
+                        {
+                            if ( nXRes )
+                                aLogSize.Width() = ( aPixSize.Width() * 100000 ) /
+                                                   nTemp32;
+
+                            if ( nYRes )
+                                aLogSize.Height() = ( aPixSize.Height() * 100000 ) /
+                                                    nTemp32;
+                        }
                     }
                 }
             }
         }
     }
-    rStm.Seek( nStmPos );
+
     return bRet;
 }
 
@@ -692,14 +786,14 @@ sal_Bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, sal_Bool bExtendedInfo
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectTIF( SvStream& rStm, BOOL bExtendedInfo )
 {
-    sal_Bool    bDetectOk = sal_False;
-    sal_Bool    bRet = sal_False;
-    sal_uInt8   cByte1;
-    sal_uInt8   cByte2;
+    BOOL	bDetectOk = FALSE;
+    BOOL	bRet = FALSE;
+    BYTE	cByte1;
+    BYTE	cByte2;
 
-    sal_Int32 nStmPos = rStm.Tell();
+    rStm.Seek( nStmPos );
     rStm >> cByte1;
     rStm >> cByte2;
     if ( cByte1 == cByte2 )
@@ -707,43 +801,43 @@ sal_Bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo
         if ( cByte1 == 0x49 )
         {
             rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-            bDetectOk = sal_True;
+            bDetectOk = TRUE;
         }
         else if ( cByte1 == 0x4d )
         {
             rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-            bDetectOk = sal_True;
+            bDetectOk = TRUE;
         }
 
         if ( bDetectOk )
         {
-            sal_uInt16  nTemp16;
+            UINT16	nTemp16;
 
             rStm >> nTemp16;
             if ( nTemp16 == 0x2a )
             {
                 nFormat = GFF_TIF;
-                bRet = sal_True;
+                bRet = TRUE;
 
                 if ( bExtendedInfo )
                 {
-                    sal_uLong   nCount;
-                    sal_uLong   nMax = DATA_SIZE - 48;
-                    sal_uInt32  nTemp32;
-                    sal_Bool    bOk = sal_False;
+                    ULONG	nCount;
+                    ULONG	nMax = DATA_SIZE - 48;
+                    UINT32	nTemp32;
+                    BOOL	bOk = FALSE;
 
                     // Offset des ersten IFD einlesen
                     rStm >> nTemp32;
                     rStm.SeekRel( ( nCount = ( nTemp32 + 2 ) ) - 0x08 );
 
-                    if ( nCount < nMax )
+                    if ( bWideSearch || ( nCount < nMax ) )
                     {
                         // Tag's lesen, bis wir auf Tag256 ( Width ) treffen
                         // nicht mehr Bytes als DATA_SIZE lesen
                         rStm >> nTemp16;
                         while ( nTemp16 != 256 )
                         {
-                            bOk = nCount < nMax;
+                            bOk = bWideSearch || ( nCount < nMax );
                             if ( !bOk )
                             {
                                 break;
@@ -819,7 +913,7 @@ sal_Bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo
             }
         }
     }
-    rStm.Seek( nStmPos );
+
     return bRet;
 }
 
@@ -830,9 +924,9 @@ sal_Bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectXBM( SvStream&, sal_Bool )
+BOOL GraphicDescriptor::ImpDetectXBM( SvStream&, BOOL )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "xbm", 3 ) == COMPARE_EQUAL;
+    BOOL bRet = aPathExt.CompareToAscii( "xbm", 3 ) == COMPARE_EQUAL;
     if (bRet)
         nFormat = GFF_XBM;
 
@@ -846,9 +940,9 @@ sal_Bool GraphicDescriptor::ImpDetectXBM( SvStream&, sal_Bool )
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectXPM( SvStream&, sal_Bool )
+BOOL GraphicDescriptor::ImpDetectXPM( SvStream&, BOOL )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "xpm", 3 ) == COMPARE_EQUAL;
+    BOOL bRet = aPathExt.CompareToAscii( "xpm", 3 ) == COMPARE_EQUAL;
     if (bRet)
         nFormat = GFF_XPM;
 
@@ -861,23 +955,22 @@ sal_Bool GraphicDescriptor::ImpDetectXPM( SvStream&, sal_Bool )
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectPBM( SvStream& rStm, sal_Bool )
+BOOL GraphicDescriptor::ImpDetectPBM( SvStream& rStm, BOOL )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     // erst auf Datei Extension pruefen, da diese aussagekraeftiger ist
     // als die 2 ID Bytes
 
     if ( aPathExt.CompareToAscii( "pbm", 3 ) == COMPARE_EQUAL )
-        bRet = sal_True;
+        bRet = TRUE;
     else
     {
-        sal_Int32 nStmPos = rStm.Tell();
-        sal_uInt8   nFirst, nSecond;
+        BYTE	nFirst, nSecond;
+        rStm.Seek( nStmPos );
         rStm >> nFirst >> nSecond;
         if ( nFirst == 'P' && ( ( nSecond == '1' ) || ( nSecond == '4' ) ) )
-            bRet = sal_True;
-        rStm.Seek( nStmPos );
+            bRet = TRUE;
     }
 
     if ( bRet )
@@ -892,20 +985,19 @@ sal_Bool GraphicDescriptor::ImpDetectPBM( SvStream& rStm, sal_Bool )
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectPGM( SvStream& rStm, sal_Bool )
+BOOL GraphicDescriptor::ImpDetectPGM( SvStream& rStm, BOOL )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     if ( aPathExt.CompareToAscii( "pgm", 3 ) == COMPARE_EQUAL )
-        bRet = sal_True;
+        bRet = TRUE;
     else
     {
-        sal_uInt8 nFirst, nSecond;
-        sal_Int32 nStmPos = rStm.Tell();
+        BYTE	nFirst, nSecond;
+        rStm.Seek( nStmPos );
         rStm >> nFirst >> nSecond;
         if ( nFirst == 'P' && ( ( nSecond == '2' ) || ( nSecond == '5' ) ) )
-            bRet = sal_True;
-        rStm.Seek( nStmPos );
+            bRet = TRUE;
     }
 
     if ( bRet )
@@ -920,20 +1012,19 @@ sal_Bool GraphicDescriptor::ImpDetectPGM( SvStream& rStm, sal_Bool )
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectPPM( SvStream& rStm, sal_Bool )
+BOOL GraphicDescriptor::ImpDetectPPM( SvStream& rStm, BOOL )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     if ( aPathExt.CompareToAscii( "ppm", 3 ) == COMPARE_EQUAL )
-        bRet = sal_True;
+        bRet = TRUE;
     else
     {
-        sal_uInt8   nFirst, nSecond;
-        sal_Int32 nStmPos = rStm.Tell();
+        BYTE	nFirst, nSecond;
+        rStm.Seek( nStmPos );
         rStm >> nFirst >> nSecond;
         if ( nFirst == 'P' && ( ( nSecond == '3' ) || ( nSecond == '6' ) ) )
-            bRet = sal_True;
-        rStm.Seek( nStmPos );
+            bRet = TRUE;
     }
 
     if ( bRet )
@@ -948,20 +1039,19 @@ sal_Bool GraphicDescriptor::ImpDetectPPM( SvStream& rStm, sal_Bool )
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectRAS( SvStream& rStm, sal_Bool )
+BOOL GraphicDescriptor::ImpDetectRAS( SvStream& rStm, BOOL )
 {
-    sal_uInt32 nMagicNumber;
-    sal_Bool bRet = sal_False;
-    sal_Int32 nStmPos = rStm.Tell();
+    UINT32 nMagicNumber;
+    rStm.Seek( nStmPos );
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
     rStm >> nMagicNumber;
     if ( nMagicNumber == 0x59a66a95 )
     {
         nFormat = GFF_RAS;
-        bRet = sal_True;
+        return TRUE;
     }
-    rStm.Seek( nStmPos );
-    return bRet;
+    else
+        return FALSE;
 }
 
 /*************************************************************************
@@ -970,9 +1060,9 @@ sal_Bool GraphicDescriptor::ImpDetectRAS( SvStream& rStm, sal_Bool )
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectTGA( SvStream&, sal_Bool )
+BOOL GraphicDescriptor::ImpDetectTGA( SvStream&, BOOL )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "tga", 3 ) == COMPARE_EQUAL;
+    BOOL bRet = aPathExt.CompareToAscii( "tga", 3 ) == COMPARE_EQUAL;
     if (bRet)
         nFormat = GFF_TGA;
 
@@ -985,29 +1075,29 @@ sal_Bool GraphicDescriptor::ImpDetectTGA( SvStream&, sal_Bool )
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, sal_Bool bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectPSD( SvStream& rStm, BOOL bExtendedInfo )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
-    sal_uInt32  nMagicNumber;
-    sal_Int32 nStmPos = rStm.Tell();
+    UINT32	nMagicNumber;
+    rStm.Seek( nStmPos );
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
     rStm >> nMagicNumber;
     if ( nMagicNumber == 0x38425053 )
     {
-        sal_uInt16 nVersion;
+        UINT16 nVersion;
         rStm >> nVersion;
         if ( nVersion == 1 )
         {
-            bRet = sal_True;
+            bRet = TRUE;
             if ( bExtendedInfo )
             {
-                sal_uInt16 nChannels;
-                sal_uInt32 nRows;
-                sal_uInt32 nColumns;
-                sal_uInt16 nDepth;
-                sal_uInt16 nMode;
-                rStm.SeekRel( 6 );  // Pad
+                UINT16 nChannels;
+                UINT32 nRows;
+                UINT32 nColumns;
+                UINT16 nDepth;
+                UINT16 nMode;
+                rStm.SeekRel( 6 );	// Pad
                 rStm >> nChannels >> nRows >> nColumns >> nDepth >> nMode;
                 if ( ( nDepth == 1 ) || ( nDepth == 8 ) || ( nDepth == 16 ) )
                 {
@@ -1023,18 +1113,17 @@ sal_Bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, sal_Bool bExtendedInfo
                             aPixSize.Height() = nRows;
                         break;
                         default:
-                            bRet = sal_False;
+                            bRet = FALSE;
                     }
                 }
                 else
-                    bRet = sal_False;
+                    bRet = FALSE;
             }
         }
     }
 
     if ( bRet )
         nFormat = GFF_PSD;
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
@@ -1044,16 +1133,15 @@ sal_Bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, sal_Bool bExtendedInfo
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, sal_Bool )
+BOOL GraphicDescriptor::ImpDetectEPS( SvStream& rStm, BOOL )
 {
     // es wird die EPS mit Vorschaubild Variante und die Extensionuebereinstimmung
     // geprueft
 
-    sal_uInt32  nFirstLong;
-    sal_uInt8   nFirstBytes[20];
-    sal_Bool        bRet = sal_False;
+    sal_uInt32	nFirstLong;
+    sal_uInt8	nFirstBytes[20];
 
-    sal_Int32 nStmPos = rStm.Tell();
+    rStm.Seek( nStmPos );
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
     rStm >> nFirstLong;
     rStm.SeekRel( -4 );
@@ -1064,10 +1152,10 @@ sal_Bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, sal_Bool )
             && ImplSearchEntry( &nFirstBytes[15], (sal_uInt8*)"EPS", 3, 3 ) ) )
     {
         nFormat = GFF_EPS;
-        bRet = sal_True;
+        return TRUE;
     }
-    rStm.Seek( nStmPos );
-    return bRet;
+    else
+        return FALSE;
 }
 
 /*************************************************************************
@@ -1076,9 +1164,9 @@ sal_Bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, sal_Bool )
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectDXF( SvStream&, sal_Bool )
+BOOL GraphicDescriptor::ImpDetectDXF( SvStream&, BOOL )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "dxf", 3 ) == COMPARE_EQUAL;
+    BOOL bRet = aPathExt.CompareToAscii( "dxf", 3 ) == COMPARE_EQUAL;
     if (bRet)
         nFormat = GFF_DXF;
 
@@ -1091,9 +1179,9 @@ sal_Bool GraphicDescriptor::ImpDetectDXF( SvStream&, sal_Bool )
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectMET( SvStream&, sal_Bool )
+BOOL GraphicDescriptor::ImpDetectMET( SvStream&, BOOL )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "met", 3 ) == COMPARE_EQUAL;
+    BOOL bRet = aPathExt.CompareToAscii( "met", 3 ) == COMPARE_EQUAL;
     if (bRet)
         nFormat = GFF_MET;
 
@@ -1107,18 +1195,16 @@ sal_Bool GraphicDescriptor::ImpDetectMET( SvStream&, sal_Bool )
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, sal_Bool )
+BOOL GraphicDescriptor::ImpDetectPCT( SvStream& rStm, BOOL )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "pct", 3 ) == COMPARE_EQUAL;
+    BOOL bRet = aPathExt.CompareToAscii( "pct", 3 ) == COMPARE_EQUAL;
     if (bRet)
         nFormat = GFF_PCT;
     else
     {
-        sal_Int32 nStmPos = rStm.Tell();
+        BYTE sBuf[3]={0};
 
-        sal_uInt8 sBuf[4];
-
-        rStm.SeekRel( 522 );
+        rStm.Seek( nStmPos + 522 );
         rStm.Read( sBuf, 3 );
 
         if( !rStm.GetError() )
@@ -1126,11 +1212,10 @@ sal_Bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, sal_Bool )
             if ( ( sBuf[0] == 0x00 ) && ( sBuf[1] == 0x11 ) &&
                  ( ( sBuf[2] == 0x01 ) || ( sBuf[2] == 0x02 ) ) )
             {
-                bRet = sal_True;
+                bRet = TRUE;
                 nFormat = GFF_PCT;
             }
         }
-        rStm.Seek( nStmPos );
     }
 
     return bRet;
@@ -1143,23 +1228,21 @@ sal_Bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, sal_Bool )
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectSGF( SvStream& rStm, sal_Bool )
+BOOL GraphicDescriptor::ImpDetectSGF( SvStream& rStm, BOOL )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
+
     if( aPathExt.CompareToAscii( "sgf", 3 ) == COMPARE_EQUAL )
-        bRet = sal_True;
+        bRet = TRUE;
     else
     {
-        sal_Int32 nStmPos = rStm.Tell();
+        BYTE nFirst, nSecond;
 
-        sal_uInt8 nFirst, nSecond;
-
+        rStm.Seek( nStmPos );
         rStm >> nFirst >> nSecond;
 
         if( nFirst == 'J' && nSecond == 'J' )
-            bRet = sal_True;
-
-        rStm.Seek( nStmPos );
+            bRet = TRUE;
     }
 
     if( bRet )
@@ -1175,9 +1258,9 @@ sal_Bool GraphicDescriptor::ImpDetectSGF( SvStream& rStm, sal_Bool )
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectSGV( SvStream&, sal_Bool )
+BOOL GraphicDescriptor::ImpDetectSGV( SvStream&, BOOL )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "sgv", 3 ) == COMPARE_EQUAL;
+    BOOL bRet = aPathExt.CompareToAscii( "sgv", 3 ) == COMPARE_EQUAL;
     if (bRet)
         nFormat = GFF_SGV;
 
@@ -1191,14 +1274,15 @@ sal_Bool GraphicDescriptor::ImpDetectSGV( SvStream&, sal_Bool )
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, sal_Bool bExtendedInfo )
+BOOL GraphicDescriptor::ImpDetectSVM( SvStream& rStm, BOOL bExtendedInfo )
 {
-    sal_uInt32  n32;
-    sal_Bool    bRet = sal_False;
-    sal_uInt8   cByte;
+    UINT32	n32;
+    BOOL	bRet = FALSE;
+    BYTE	cByte;
 
-    sal_Int32 nStmPos = rStm.Tell();
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    rStm.Seek( nStmPos );
+
     rStm >> n32;
     if ( n32 == 0x44475653 )
     {
@@ -1206,12 +1290,12 @@ sal_Bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, sal_Bool bExtendedInfo
         if ( cByte == 0x49 )
         {
             nFormat = GFF_SVM;
-            bRet = sal_True;
+            bRet = TRUE;
 
             if ( bExtendedInfo )
             {
-                sal_uInt32  nTemp32;
-                sal_uInt16  nTemp16;
+                UINT32	nTemp32;
+                UINT16	nTemp16;
 
                 rStm.SeekRel( 0x04 );
 
@@ -1238,14 +1322,14 @@ sal_Bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, sal_Bool bExtendedInfo
 
         if( n32 == 0x4D4C4356 )
         {
-            sal_uInt16 nTmp16;
+            UINT16 nTmp16;
 
             rStm >> nTmp16;
 
             if( nTmp16 == 0x4654 )
             {
                 nFormat = GFF_SVM;
-                bRet = sal_True;
+                bRet = TRUE;
 
                 if( bExtendedInfo )
                 {
@@ -1259,7 +1343,7 @@ sal_Bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, sal_Bool bExtendedInfo
             }
         }
     }
-    rStm.Seek( nStmPos );
+
     return bRet;
 }
 
@@ -1270,9 +1354,9 @@ sal_Bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, sal_Bool bExtendedInfo
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectWMF( SvStream&, sal_Bool )
+BOOL GraphicDescriptor::ImpDetectWMF( SvStream&, BOOL )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "wmf",3 ) == COMPARE_EQUAL;
+    BOOL bRet = aPathExt.CompareToAscii( "wmf",3 ) == COMPARE_EQUAL;
     if (bRet)
         nFormat = GFF_WMF;
 
@@ -1285,9 +1369,9 @@ sal_Bool GraphicDescriptor::ImpDetectWMF( SvStream&, sal_Bool )
 |*
 \************************************************************************/
 
-sal_Bool GraphicDescriptor::ImpDetectEMF( SvStream&, sal_Bool )
+BOOL GraphicDescriptor::ImpDetectEMF( SvStream&, BOOL )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "emf", 3 ) == COMPARE_EQUAL;
+    BOOL bRet = aPathExt.CompareToAscii( "emf", 3 ) == COMPARE_EQUAL;
     if (bRet)
         nFormat = GFF_EMF;
 
@@ -1302,34 +1386,34 @@ sal_Bool GraphicDescriptor::ImpDetectEMF( SvStream&, sal_Bool )
 
 String GraphicDescriptor::GetImportFormatShortName( sal_uInt16 nFormat )
 {
-    ByteString          aKeyName;
+    ByteString			aKeyName;
 
     switch( nFormat )
     {
-        case( GFF_BMP ) :   aKeyName = "bmp";   break;
-        case( GFF_GIF ) :   aKeyName = "gif";   break;
-        case( GFF_JPG ) :   aKeyName = "jpg";   break;
-        case( GFF_PCD ) :   aKeyName = "pcd";   break;
-        case( GFF_PCX ) :   aKeyName = "pcx";   break;
-        case( GFF_PNG ) :   aKeyName = "png";   break;
-        case( GFF_XBM ) :   aKeyName = "xbm";   break;
-        case( GFF_XPM ) :   aKeyName = "xpm";   break;
-        case( GFF_PBM ) :   aKeyName = "pbm";   break;
-        case( GFF_PGM ) :   aKeyName = "pgm";   break;
-        case( GFF_PPM ) :   aKeyName = "ppm";   break;
-        case( GFF_RAS ) :   aKeyName = "ras";   break;
-        case( GFF_TGA ) :   aKeyName = "tga";   break;
-        case( GFF_PSD ) :   aKeyName = "psd";   break;
-        case( GFF_EPS ) :   aKeyName = "eps";   break;
-        case( GFF_TIF ) :   aKeyName = "tif";   break;
-        case( GFF_DXF ) :   aKeyName = "dxf";   break;
-        case( GFF_MET ) :   aKeyName = "met";   break;
-        case( GFF_PCT ) :   aKeyName = "pct";   break;
-        case( GFF_SGF ) :   aKeyName = "sgf";   break;
-        case( GFF_SGV ) :   aKeyName = "sgv";   break;
-        case( GFF_SVM ) :   aKeyName = "svm";   break;
-        case( GFF_WMF ) :   aKeyName = "wmf";   break;
-        case( GFF_EMF ) :   aKeyName = "emf";   break;
+        case( GFF_BMP ) :	aKeyName = "bmp";	break;
+        case( GFF_GIF ) :	aKeyName = "gif";	break;
+        case( GFF_JPG ) :	aKeyName = "jpg";	break;
+        case( GFF_PCD ) :	aKeyName = "pcd";	break;
+        case( GFF_PCX ) :	aKeyName = "pcx";	break;
+        case( GFF_PNG ) :	aKeyName = "png";	break;
+        case( GFF_XBM ) :	aKeyName = "xbm";	break;
+        case( GFF_XPM ) :	aKeyName = "xpm";	break;
+        case( GFF_PBM ) :	aKeyName = "pbm";	break;
+        case( GFF_PGM ) :	aKeyName = "pgm";	break;
+        case( GFF_PPM ) :	aKeyName = "ppm";	break;
+        case( GFF_RAS ) :	aKeyName = "ras";	break;
+        case( GFF_TGA ) :	aKeyName = "tga";	break;
+        case( GFF_PSD ) :	aKeyName = "psd";	break;
+        case( GFF_EPS ) :	aKeyName = "eps";	break;
+        case( GFF_TIF ) :	aKeyName = "tif";	break;
+        case( GFF_DXF ) :	aKeyName = "dxf";	break;
+        case( GFF_MET ) :	aKeyName = "met";	break;
+        case( GFF_PCT ) :	aKeyName = "pct";	break;
+        case( GFF_SGF ) :	aKeyName = "sgf";	break;
+        case( GFF_SGV ) :	aKeyName = "sgv";	break;
+        case( GFF_SVM ) :	aKeyName = "svm";	break;
+        case( GFF_WMF ) :	aKeyName = "wmf";	break;
+        case( GFF_EMF ) :	aKeyName = "emf";	break;
     }
 
     return String( aKeyName, RTL_TEXTENCODING_ASCII_US );

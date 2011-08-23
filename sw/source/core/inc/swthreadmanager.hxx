@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,10 @@ class ThreadManager;
 
 /** class to manage threads in Writer using a <ThreadManager> instance
 
-    #i73788#
+    OD 2007-04-13 #i73788#
     Conforms the singleton pattern
+
+    @author OD
 */
 class SwThreadManager
     : private ::boost::noncopyable
@@ -66,10 +68,14 @@ class SwThreadManager
 
             Suspending the starting of further threads is sensible during the
             destruction of a Writer document.
+
+            @author OD
         */
         void SuspendStartingOfThreads();
 
         /** continues the starting of threads after it has been suspended
+
+            @author OD
         */
         void ResumeStartingOfThreads();
 

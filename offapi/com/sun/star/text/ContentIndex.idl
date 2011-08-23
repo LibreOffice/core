@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,51 +24,51 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
-#ifndef __com_sun_star_text_ContentIndex_idl__
-#define __com_sun_star_text_ContentIndex_idl__
-
-#include <com/sun/star/text/BaseIndex.idl>
-
-//=============================================================================
-
-module com {  module sun {  module star {  module text {
-
-//=============================================================================
-
+ 
+ 
+#ifndef __com_sun_star_text_ContentIndex_idl__ 
+#define __com_sun_star_text_ContentIndex_idl__ 
+ 
+#include <com/sun/star/text/BaseIndex.idl> 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module text { 
+ 
+//============================================================================= 
+ 
 /** specifies service of content indexes within a document.@see com::sun::star::text::BaseIndex
  */
 published service ContentIndex
-{
+{ 
     // DocMerge: empty anyway
-    service  com::sun::star::text::BaseIndex;
-
-    /** determines the depth of outline levels that are included into the content index.*/
-
+    service  com::sun::star::text::BaseIndex; 
+ 
+    /** determins the depth of outline levels that are included into the content index.*/ 
+    
     /// @missing
-    [optional, property] short Level;
+    [optional, property] short Level; 
 
-    /** determines if the document index is created from outlines.
-    */
-    [optional, property] boolean CreateFromOutline;
+    /** determins if the document index is created from outlines. 
+    */ 
+    [optional, property] boolean CreateFromOutline; 
+ 
+    /** contains the interface to access the paragraph style names that are included 
+     in this index. 
+     @see DocumentIndexParagraphStyles 
+     */ 
+    [optional, property] com::sun::star::container::XIndexReplace LevelParagraphStyles; 
 
-    /** contains the interface to access the paragraph style names that are included
-     in this index.
-     @see DocumentIndexParagraphStyles
-     */
-    [optional, property] com::sun::star::container::XIndexReplace LevelParagraphStyles;
-
-    /** contains <TRUE/> if the document index marks are included in this index.
-    */
-    [optional, property] boolean CreateFromMarks;
-
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
-
+    /** contains <TRUE/> if the document index marks are included in this index. 
+    */ 
+    [optional, property] boolean CreateFromMarks; 
+ 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+#endif 
+ 

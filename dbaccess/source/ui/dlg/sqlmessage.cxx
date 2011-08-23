@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,6 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <vcl/fixed.hxx>
-#include <osl/diagnose.h>
 #include <svtools/svtreebx.hxx>
 #include <svtools/svmedit.hxx>
 #include <connectivity/dbexception.hxx>
@@ -47,9 +46,7 @@
 #include "UITools.hxx"
 #include "moduledbu.hxx"
 
-#include <tools/urlobj.hxx>
-
-#define BUTTONID_MORE   BUTTONID_RETRY + 1
+#define BUTTONID_MORE	BUTTONID_RETRY + 1
 
 #define DIALOG_WIDTH    220
 #define OUTER_MARGIN    6
@@ -73,7 +70,7 @@ namespace
     class IImageProvider
     {
     public:
-        virtual Image   getImage() const = 0;
+        virtual Image   getImage( bool _highContrast ) const = 0;
 
         virtual ~IImageProvider() { }
     };
@@ -91,18 +88,28 @@ namespace
     class ImageProvider : public IImageProvider
     {
     private:
-        sal_uInt16  m_defaultImageID;
+        USHORT  m_defaultImageID;
+        USHORT  m_highContrastImageID;
 
         mutable Image   m_defaultImage;
+        mutable Image   m_highContrastImage;
 
     public:
-        ImageProvider( sal_uInt16 _defaultImageID )
+        ImageProvider( USHORT _defaultImageID, USHORT _highContrastImageID )
             :m_defaultImageID( _defaultImageID )
+            ,m_highContrastImageID( _highContrastImageID )
         {
         }
 
-        virtual Image getImage() const
+        virtual Image getImage( bool _highContrast ) const
         {
+            if ( _highContrast )
+            {
+                if ( !m_highContrastImage )
+                    m_highContrastImage = Image( ModuleRes( m_highContrastImageID ) );
+                return m_highContrastImage;
+            }
+
             if ( !m_defaultImage )
                 m_defaultImage = Image( ModuleRes( m_defaultImageID ) );
             return m_defaultImage;
@@ -115,11 +122,11 @@ namespace
     private:
         String  m_label;
     public:
-        LabelProvider( sal_uInt16 _labelResourceID )
+        LabelProvider( USHORT _labelResourceID )
             :m_label( ModuleRes( _labelResourceID ) )
         {
         }
-
+    
         virtual String  getLabel() const
         {
             return m_label;
@@ -145,18 +152,21 @@ namespace
         ::boost::shared_ptr< IImageProvider >   getImageProvider( SQLExceptionInfo::TYPE _eType ) const
         {
             ::boost::shared_ptr< IImageProvider >* ppProvider( &m_pErrorImage );
-            sal_uInt16 nNormalImageID( BMP_EXCEPTION_ERROR );
+            USHORT nNormalImageID( BMP_EXCEPTION_ERROR );
+            USHORT nHCImageID( BMP_EXCEPTION_ERROR_SCH );
 
             switch ( _eType )
             {
             case SQLExceptionInfo::SQL_WARNING:
                 ppProvider = &m_pWarningsImage;
                 nNormalImageID = BMP_EXCEPTION_WARNING;
+                nHCImageID = BMP_EXCEPTION_WARNING_SCH;
                 break;
 
             case SQLExceptionInfo::SQL_CONTEXT:
                 ppProvider = &m_pInfoImage;
                 nNormalImageID = BMP_EXCEPTION_INFO;
+                nHCImageID = BMP_EXCEPTION_INFO_SCH;
                 break;
 
             default:
@@ -164,14 +174,14 @@ namespace
             }
 
             if ( !ppProvider->get() )
-                ppProvider->reset( new ImageProvider( nNormalImageID ) );
+                ppProvider->reset( new ImageProvider( nNormalImageID, nHCImageID ) );
             return *ppProvider;
         }
 
         ::boost::shared_ptr< ILabelProvider >   getLabelProvider( SQLExceptionInfo::TYPE _eType, bool _bSubLabel ) const
         {
             ::boost::shared_ptr< ILabelProvider >* ppProvider( &m_pErrorLabel );
-            sal_uInt16 nLabelID( STR_EXCEPTION_ERROR );
+            USHORT nLabelID( STR_EXCEPTION_ERROR );
 
             switch ( _eType )
             {
@@ -262,7 +272,7 @@ namespace
             iter.next( aCurrentElement );
 
             const SQLException* pCurrentError = (const SQLException*)aCurrentElement;
-            OSL_ENSURE( pCurrentError, "lcl_buildExceptionChain: iterator failure!" );
+            DBG_ASSERT( pCurrentError, "lcl_buildExceptionChain: iterator failure!" );
                 // hasMoreElements should not have returned <TRUE/> in this case
 
             ExceptionDisplayInfo aDisplayInfo( aCurrentElement.getType() );
@@ -276,7 +286,7 @@ namespace
                 &&  !lcl_hasDetails( aDisplayInfo )
                 )
             {
-                OSL_FAIL( "lcl_buildExceptionChain: useles exception: no state, no error code, no message!" );
+                OSL_ENSURE( false, "lcl_buildExceptionChain: useles exception: no state, no error code, no message!" );
                 continue;
             }
 
@@ -304,9 +314,9 @@ namespace
     }
 
     //------------------------------------------------------------------------------
-    void lcl_insertExceptionEntry( SvTreeListBox& _rList, size_t _nElementPos, const ExceptionDisplayInfo& _rEntry )
+    void lcl_insertExceptionEntry( SvTreeListBox& _rList, bool _bHiContrast, size_t _nElementPos, const ExceptionDisplayInfo& _rEntry )
     {
-        Image aEntryImage( _rEntry.pImageProvider->getImage() );
+        Image aEntryImage( _rEntry.pImageProvider->getImage( _bHiContrast ) );
         SvLBoxEntry* pListEntry =
             _rList.InsertEntry( _rEntry.pLabelProvider->getLabel(), aEntryImage, aEntryImage );
         pListEntry->SetUserData( reinterpret_cast< void* >( _nElementPos ) );
@@ -317,11 +327,11 @@ namespace
 class OExceptionChainDialog : public ModalDialog
 {
     FixedLine       m_aFrame;
-    FixedText       m_aListLabel;
-    SvTreeListBox   m_aExceptionList;
-    FixedText       m_aDescLabel;
-    MultiLineEdit   m_aExceptionText;
-    OKButton        m_aOK;
+    FixedText		m_aListLabel;
+    SvTreeListBox	m_aExceptionList;
+    FixedText		m_aDescLabel;
+    MultiLineEdit	m_aExceptionText;
+    OKButton		m_aOK;
 
     String          m_sStatusLabel;
     String          m_sErrorCodeLabel;
@@ -340,12 +350,12 @@ DBG_NAME(OExceptionChainDialog)
 //------------------------------------------------------------------------------
 OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDisplayChain& _rExceptions )
     :ModalDialog(pParent, ModuleRes(DLG_SQLEXCEPTIONCHAIN))
-    ,m_aFrame           (this, ModuleRes(FL_DETAILS))
-    ,m_aListLabel       (this, ModuleRes(FT_ERRORLIST))
-    ,m_aExceptionList   (this, ModuleRes(CTL_ERRORLIST))
-    ,m_aDescLabel       (this, ModuleRes(FT_DESCRIPTION))
-    ,m_aExceptionText   (this, ModuleRes(ME_DESCRIPTION))
-    ,m_aOK              (this, ModuleRes(PB_OK))
+    ,m_aFrame			(this, ModuleRes(FL_DETAILS))
+    ,m_aListLabel		(this, ModuleRes(FT_ERRORLIST))
+    ,m_aExceptionList	(this, ModuleRes(CTL_ERRORLIST))
+    ,m_aDescLabel		(this, ModuleRes(FT_DESCRIPTION))
+    ,m_aExceptionText	(this, ModuleRes(ME_DESCRIPTION))
+    ,m_aOK				(this, ModuleRes(PB_OK))
     ,m_aExceptions( _rExceptions )
 {
     DBG_CTOR(OExceptionChainDialog,NULL);
@@ -358,13 +368,14 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
     m_aExceptionList.SetSelectionMode(SINGLE_SELECTION);
     m_aExceptionList.SetDragDropMode(0);
     m_aExceptionList.EnableInplaceEditing(sal_False);
-    m_aExceptionList.SetStyle(m_aExceptionList.GetStyle() | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
+    m_aExceptionList.SetWindowBits(WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
 
     m_aExceptionList.SetSelectHdl(LINK(this, OExceptionChainDialog, OnExceptionSelected));
     m_aExceptionList.SetNodeDefaultImages( );
     m_aExceptionText.SetReadOnly(sal_True);
 
     bool bHave22018 = false;
+    bool bHiContrast = isHiContrast( this );
     size_t elementPos = 0;
 
     for (   ExceptionDisplayChain::const_iterator loop = m_aExceptions.begin();
@@ -372,12 +383,12 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
             ++loop, ++elementPos
         )
     {
-        lcl_insertExceptionEntry( m_aExceptionList, elementPos, *loop );
+        lcl_insertExceptionEntry( m_aExceptionList, bHiContrast, elementPos, *loop );
         bHave22018 = loop->sSQLState.EqualsAscii( "22018" );
     }
 
     // if the error has the code 22018, then add an additional explanation
-    // #i24021#
+    // #i24021# / 2004-10-14 / frank.schoenheit@sun.com
     if ( bHave22018 )
     {
         ProviderFactory aProviderFactory;
@@ -388,7 +399,7 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
         aInfo22018.pImageProvider = aProviderFactory.getImageProvider( SQLExceptionInfo::SQL_CONTEXT );
         m_aExceptions.push_back( aInfo22018 );
 
-        lcl_insertExceptionEntry( m_aExceptionList, m_aExceptions.size() - 1, aInfo22018 );
+        lcl_insertExceptionEntry( m_aExceptionList, bHiContrast, m_aExceptions.size() - 1, aInfo22018 );
     }
 }
 
@@ -402,7 +413,7 @@ OExceptionChainDialog::~OExceptionChainDialog()
 IMPL_LINK(OExceptionChainDialog, OnExceptionSelected, void*, EMPTYARG)
 {
     SvLBoxEntry* pSelected = m_aExceptionList.FirstSelected();
-    OSL_ENSURE(!pSelected || !m_aExceptionList.NextSelected(pSelected), "OExceptionChainDialog::OnExceptionSelected : multi selection ?");
+    DBG_ASSERT(!pSelected || !m_aExceptionList.NextSelected(pSelected), "OExceptionChainDialog::OnExceptionSelected : multi selection ?");
 
     String sText;
 
@@ -472,7 +483,7 @@ namespace
 
     void lcl_addButton( ButtonDialog& _rDialog, StandardButtonType _eType, bool _bDefault )
     {
-        sal_uInt16 nButtonID = 0;
+        USHORT nButtonID = 0;
         switch ( _eType )
         {
         case BUTTON_YES:    nButtonID = BUTTONID_YES; break;
@@ -482,7 +493,7 @@ namespace
         case BUTTON_RETRY:  nButtonID = BUTTONID_RETRY; break;
         case BUTTON_HELP:   nButtonID = BUTTONID_HELP; break;
         default:
-            OSL_FAIL( "lcl_addButton: invalid button id!" );
+            OSL_ENSURE( false, "lcl_addButton: invalid button id!" );
             break;
         }
         _rDialog.AddButton( _eType, nButtonID, _bDefault ? BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON : 0 );
@@ -494,11 +505,11 @@ void OSQLMessageBox::impl_positionControls()
 {
     OSL_PRECOND( !m_pImpl->aDisplayInfo.empty(), "OSQLMessageBox::impl_positionControls: nothing to display at all?" );
 
-
+    
     if ( m_pImpl->aDisplayInfo.empty() )
         return;
     const ExceptionDisplayInfo* pSecondInfo = NULL;
-
+    
     const ExceptionDisplayInfo& rFirstInfo = *m_pImpl->aDisplayInfo.begin();
     if ( m_pImpl->aDisplayInfo.size() > 1 )
         pSecondInfo = &m_pImpl->aDisplayInfo[1];
@@ -596,7 +607,7 @@ void OSQLMessageBox::impl_initImage( MessageType _eImage )
     switch (_eImage)
     {
         default:
-            OSL_FAIL( "OSQLMessageBox::impl_initImage: unsupported image type!" );
+            DBG_ERROR( "OSQLMessageBox::impl_initImage: unsupported image type!" );
 
         case Info:
             m_aInfoImage.SetImage(InfoBox::GetStandardImage());
@@ -647,14 +658,11 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
     {
         lcl_addButton( *this, BUTTON_HELP, false );
 
-        rtl::OUString aTmp;
-        INetURLObject aHID( m_sHelpURL );
-        if ( aHID.GetProtocol() == INET_PROT_HID )
-              aTmp = aHID.GetURLPath();
-        else
-            aTmp = m_sHelpURL;
+        SmartId aHelpId( m_sHelpURL );
+        if ( m_sHelpURL.indexOfAsciiL( "HID:", 4 ) == 0 )
+            aHelpId = SmartId( m_sHelpURL.copy( 4 ).toInt32() );
 
-        SetHelpId( rtl::OUStringToOString( aTmp, RTL_TEXTENCODING_UTF8 ) );
+        SetSmartHelpId( aHelpId );
     }
 }
 
@@ -710,7 +718,7 @@ void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
         case SQLExceptionInfo::SQL_EXCEPTION: eType = Error;    break;
         case SQLExceptionInfo::SQL_WARNING:   eType = Warning;  break;
         case SQLExceptionInfo::SQL_CONTEXT:   eType = Info;     break;
-        default: OSL_FAIL( "OSQLMessageBox::Construct: invalid type!" );
+        default: OSL_ENSURE( false, "OSQLMessageBox::Construct: invalid type!" );
         }
     }
     impl_initImage( eType );
@@ -773,7 +781,7 @@ OSQLWarningBox::OSQLWarningBox( Window* _pParent, const UniString& _rMessage, Wi
 }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

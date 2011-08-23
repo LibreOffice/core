@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,10 +60,10 @@
 
 #ifdef DEBUG_OSL_FILE
 #   define OSL_FILE_TRACE 0 ? (void)(0) : osl_trace
-#   define PERROR( a, b ) perror( a ); fprintf( stderr, b )
+#	define PERROR( a, b ) perror( a ); fprintf( stderr, b )
 #else
 #   define OSL_FILE_TRACE 1 ? (void)(0) : osl_trace
-#   define PERROR( a, b )
+#	define PERROR( a, b )
 #endif
 
 /*******************************************************************
@@ -216,8 +216,7 @@ FileHandle_Impl::Allocator::~Allocator()
 void FileHandle_Impl::Allocator::allocate (sal_uInt8 ** ppBuffer, size_t * pnSize)
 {
     OSL_PRECOND((0 != ppBuffer) && (0 != pnSize), "FileHandle_Impl::Allocator::allocate(): contract violation");
-    if ((0 != ppBuffer) && (0 != pnSize))
-        *ppBuffer = static_cast< sal_uInt8* >(rtl_cache_alloc(m_cache)), *pnSize = m_bufsiz;
+    *ppBuffer = static_cast< sal_uInt8* >(rtl_cache_alloc(m_cache)), *pnSize = m_bufsiz;
 }
 void FileHandle_Impl::Allocator::deallocate (sal_uInt8 * pBuffer)
 {
@@ -274,7 +273,7 @@ void FileHandle_Impl::operator delete (void * p, size_t)
 size_t FileHandle_Impl::getpagesize()
 {
 #if defined(FREEBSD) || defined(NETBSD) || defined(MACOSX) || \
-    defined(OPENBSD) || defined(DRAGONFLY)
+	defined(OPENBSD)
     return sal::static_int_cast< size_t >(::getpagesize());
 #else /* POSIX */
     return sal::static_int_cast< size_t >(::sysconf(_SC_PAGESIZE));
@@ -731,7 +730,7 @@ oslFileError FileHandle_Impl::syncFile()
 }
 
 /****************************************************************************
- *  osl_createFileHandleFromFD
+ *	osl_createFileHandleFromFD
  ***************************************************************************/
 extern "C" oslFileHandle osl_createFileHandleFromFD( int fd )
 {
@@ -771,7 +770,7 @@ static int osl_file_adjustLockFlags (const char * path, int flags)
 {
 #ifdef MACOSX
     /*
-     * The AFP implementation of MacOS X 10.4 treats O_EXLOCK in a way
+     * The AFP implementation of MacOS X 10.4 treats O_EXLOCK in a way 
      * that makes it impossible for OOo to create a backup copy of the
      * file it keeps opened. OTOH O_SHLOCK for AFP behaves as desired by
      * the OOo file handling, so we need to check the path of the file
@@ -784,7 +783,7 @@ static int osl_file_adjustLockFlags (const char * path, int flags)
         {
             flags &= ~O_EXLOCK;
             flags |=  O_SHLOCK;
-        }
+        }    
         else
         {
             /* Needed flags to allow opening a webdav file */
@@ -798,7 +797,7 @@ static int osl_file_adjustLockFlags (const char * path, int flags)
 }
 
 /****************************************************************************
- *  osl_file_queryLocking
+ *	osl_file_queryLocking
  ***************************************************************************/
 struct Locking_Impl
 {
@@ -824,7 +823,7 @@ static int osl_file_queryLocking (sal_uInt32 uFlags)
 }
 
 /****************************************************************************
- *  osl_openFile
+ *	osl_openFile
  ***************************************************************************/
 #ifdef HAVE_O_EXLOCK
 #define OPEN_WRITE_FLAGS ( O_RDWR | O_EXLOCK | O_NONBLOCK )
@@ -847,7 +846,7 @@ SAL_CALL osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uIn
     eRet = FileURLToPath (buffer, sizeof(buffer), ustrFileURL);
     if (eRet != osl_File_E_None)
         return eRet;
-#ifdef MACOSX
+#ifdef MACOSX 
     if (macxp_resolveAlias (buffer, sizeof(buffer)) != 0)
         return oslTranslateFileError (OSL_FET_ERROR, errno);
 #endif /* MACOSX */
@@ -967,7 +966,7 @@ SAL_CALL osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uIn
 }
 
 /****************************************************************************/
-/*  osl_closeFile */
+/*	osl_closeFile */
 /****************************************************************************/
 oslFileError
 SAL_CALL osl_closeFile( oslFileHandle Handle )
@@ -1005,7 +1004,7 @@ oslFileError
 SAL_CALL osl_syncFile(oslFileHandle Handle)
 {
     FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
-
+    
     if ((0 == pImpl) || (-1 == pImpl->m_fd))
         return osl_File_E_INVAL;
 
@@ -1017,7 +1016,7 @@ SAL_CALL osl_syncFile(oslFileHandle Handle)
         return (result);
     if (-1 == fsync (pImpl->m_fd))
         return oslTranslateFileError (OSL_FET_ERROR, errno);
-
+    
     return osl_File_E_None;
 }
 
@@ -1165,7 +1164,7 @@ SAL_CALL osl_readFile (
 
     if ((0 == pImpl) || (-1 == pImpl->m_fd) || (0 == pBuffer) || (0 == pBytesRead))
         return osl_File_E_INVAL;
-
+    
     static sal_uInt64 const g_limit_ssize_t = std::numeric_limits< ssize_t >::max();
     if (g_limit_ssize_t < uBytesRequested)
         return osl_File_E_OVERFLOW;
@@ -1280,7 +1279,7 @@ SAL_CALL osl_writeFileAt (
 }
 
 /****************************************************************************/
-/*  osl_isEndOfFile */
+/*	osl_isEndOfFile */
 /****************************************************************************/
 oslFileError
 SAL_CALL osl_isEndOfFile( oslFileHandle Handle, sal_Bool *pIsEOF )
@@ -1359,11 +1358,11 @@ SAL_CALL osl_setFilePos (oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uOffse
 }
 
 /****************************************************************************
- *  osl_getFileSize
+ *	osl_getFileSize
  ****************************************************************************/
 oslFileError
 SAL_CALL osl_getFileSize( oslFileHandle Handle, sal_uInt64* pSize )
-{
+{	
     FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
 
     if ((0 == pImpl) || (-1 == pImpl->m_fd) || (0 == pSize))

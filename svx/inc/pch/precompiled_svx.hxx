@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,6 +56,7 @@
 #include "boost/scoped_ptr.hpp"
 #include "boost/shared_ptr.hpp"
 #include "boost/spirit/include/classic_core.hpp"
+#include "bootstrp/sstring.hxx"
 #include "com/sun/star/accessibility/AccessibleEventId.hpp"
 #include "com/sun/star/accessibility/AccessibleEventObject.hpp"
 #include "com/sun/star/accessibility/AccessibleRelationType.hpp"
@@ -749,7 +750,7 @@
 #include "sot/formats.hxx"
 #include <map>
 #include <set>
-#include <list>
+#include <slist>
 #include <vector>
 #include "svtools/FilterConfigItem.hxx"
 #include "svtools/accessibilityoptions.hxx"
@@ -808,6 +809,7 @@
 #include "svtools/parhtml.hxx"
 #include "svtools/parrtf.hxx"
 #include "unotools/pathoptions.hxx"
+#include "svl/pickerhelper.hxx"
 #include "svl/poolitem.hxx"
 #include "unotools/printwarningoptions.hxx"
 #include "svl/ptitem.hxx"
@@ -865,6 +867,7 @@
 #include "tools/inetdef.hxx"
 #include "tools/line.hxx"
 #include "tools/link.hxx"
+#include "tools/list.hxx"
 #include "tools/multisel.hxx"
 #include "tools/poly.hxx"
 #include "tools/rc.h"
@@ -922,7 +925,7 @@
 #include "vcl/cursor.hxx"
 #include "vcl/decoview.hxx"
 #include "vcl/dndhelp.hxx"
-#include "tools/fldunit.hxx"
+#include "vcl/fldunit.hxx"
 #include "vcl/fntstyle.hxx"
 #include "unotools/fontcvt.hxx"
 #include "vcl/gdimtf.hxx"
@@ -941,7 +944,7 @@
 #include "vcl/unohelp.hxx"
 #include "vcl/unohelp2.hxx"
 #include "vcl/wall.hxx"
-#include "tools/wintypes.hxx"
+#include "vcl/wintypes.hxx"
 #include "osl/mutex.hxx"
 #include "xmloff/DashStyle.hxx"
 #include "xmloff/GradientStyle.hxx"

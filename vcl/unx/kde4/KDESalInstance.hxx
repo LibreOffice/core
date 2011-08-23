@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ class KDESalInstance : public X11SalInstance
     public:
         KDESalInstance( SalYieldMutex* pMutex ) : X11SalInstance( pMutex ) {}
         virtual ~KDESalInstance() {}
-        virtual SalFrame* CreateFrame( SalFrame* pParent, sal_uLong nStyle );
+        virtual SalFrame* CreateFrame( SalFrame* pParent, ULONG nStyle );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

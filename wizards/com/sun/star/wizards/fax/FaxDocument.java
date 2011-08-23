@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -166,7 +166,7 @@ public class FaxDocument extends TextDocument
             myFieldHandler.changeUserFieldContent("Company", (String) Helper.getUnoObjectbyName(oUserDataAccess, "o"));
             myFieldHandler.changeUserFieldContent("Street", (String) Helper.getUnoObjectbyName(oUserDataAccess, "street"));
             myFieldHandler.changeUserFieldContent("PostCode", (String) Helper.getUnoObjectbyName(oUserDataAccess, "postalcode"));
-            myFieldHandler.changeUserFieldContent(PropertyNames.PROPERTY_STATE, (String) Helper.getUnoObjectbyName(oUserDataAccess, "st"));
+            myFieldHandler.changeUserFieldContent("State", (String) Helper.getUnoObjectbyName(oUserDataAccess, "st"));
             myFieldHandler.changeUserFieldContent("City", (String) Helper.getUnoObjectbyName(oUserDataAccess, "l"));
             myFieldHandler.changeUserFieldContent("Fax", (String) Helper.getUnoObjectbyName(oUserDataAccess, "facsimiletelephonenumber"));
         }

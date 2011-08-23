@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 
 #include <svx/dialogs.hrc>
 
-#include "svx/zoomctrl.hxx"
+#include "zoomctrl.hxx"
 #include <svx/zoomitem.hxx>
 #include "stbctrls.h"
 #include <svx/dialmgr.hxx>
@@ -48,40 +48,40 @@ SFX_IMPL_STATUSBAR_CONTROL(SvxZoomStatusBarControl,SvxZoomItem);
 class ZoomPopup_Impl : public PopupMenu
 {
 public:
-    ZoomPopup_Impl( sal_uInt16 nZ, sal_uInt16 nValueSet );
+    ZoomPopup_Impl( USHORT nZ, USHORT nValueSet );
 
-    sal_uInt16          GetZoom() const { return nZoom; }
-    sal_uInt16          GetCurId() const { return nCurId; }
+    USHORT			GetZoom() const { return nZoom; }
+    USHORT			GetCurId() const { return nCurId; }
 
 private:
-    sal_uInt16          nZoom;
-    sal_uInt16          nCurId;
+    USHORT			nZoom;
+    USHORT			nCurId;
 
-    virtual void    Select();
+    virtual void	Select();
 };
 
 // -----------------------------------------------------------------------
 
-ZoomPopup_Impl::ZoomPopup_Impl( sal_uInt16 nZ, sal_uInt16 nValueSet )
+ZoomPopup_Impl::ZoomPopup_Impl( USHORT nZ, USHORT nValueSet )
 
-:   PopupMenu( ResId( RID_SVXMNU_ZOOM, DIALOG_MGR() ) ),
+:	PopupMenu( ResId( RID_SVXMNU_ZOOM, DIALOG_MGR() ) ),
 
     nZoom( nZ )
 {
-    static sal_uInt16 aTable[] =
+    static USHORT aTable[] =
     {
-        SVX_ZOOM_ENABLE_50,         ZOOM_50,
-        SVX_ZOOM_ENABLE_100,        ZOOM_100,
-        SVX_ZOOM_ENABLE_150,        ZOOM_150,
-        SVX_ZOOM_ENABLE_200,        ZOOM_200,
-        SVX_ZOOM_ENABLE_OPTIMAL,    ZOOM_OPTIMAL,
-        SVX_ZOOM_ENABLE_WHOLEPAGE,  ZOOM_WHOLE_PAGE,
-        SVX_ZOOM_ENABLE_PAGEWIDTH,  ZOOM_PAGE_WIDTH
+        SVX_ZOOM_ENABLE_50, 		ZOOM_50,
+        SVX_ZOOM_ENABLE_100,		ZOOM_100,
+        SVX_ZOOM_ENABLE_150,		ZOOM_150,
+        SVX_ZOOM_ENABLE_200,		ZOOM_200,
+        SVX_ZOOM_ENABLE_OPTIMAL,	ZOOM_OPTIMAL,
+        SVX_ZOOM_ENABLE_WHOLEPAGE,	ZOOM_WHOLE_PAGE,
+        SVX_ZOOM_ENABLE_PAGEWIDTH,	ZOOM_PAGE_WIDTH
     };
 
-    for ( sal_uInt16 nPos = 0; nPos < SAL_N_ELEMENTS(aTable); nPos += 2 )
+    for ( USHORT nPos = 0; nPos < sizeof(aTable) / sizeof(USHORT); nPos += 2 )
         if ( ( aTable[nPos] != ( aTable[nPos] & nValueSet ) ) )
-            EnableItem( aTable[nPos+1], sal_False );
+            EnableItem( aTable[nPos+1], FALSE );
 }
 
 // -----------------------------------------------------------------------
@@ -92,23 +92,23 @@ void ZoomPopup_Impl::Select()
 
     switch ( nCurId )
     {
-        case ZOOM_200:          nZoom = 200; break;
-        case ZOOM_150:          nZoom = 150; break;
-        case ZOOM_100:          nZoom = 100; break;
-        case ZOOM_75:           nZoom =  75; break;
-        case ZOOM_50:           nZoom =  50; break;
+        case ZOOM_200:			nZoom = 200; break;
+        case ZOOM_150:			nZoom = 150; break;
+        case ZOOM_100:			nZoom = 100; break;
+        case ZOOM_75:			nZoom =  75; break;
+        case ZOOM_50:			nZoom =  50; break;
 
         case ZOOM_OPTIMAL:
         case ZOOM_PAGE_WIDTH:
-        case ZOOM_WHOLE_PAGE:   nZoom = 0; break;
+        case ZOOM_WHOLE_PAGE:	nZoom = 0; break;
 
     }
 }
 
 // class SvxZoomStatusBarControl ------------------------------------------
 
-SvxZoomStatusBarControl::SvxZoomStatusBarControl( sal_uInt16 _nSlotId,
-                                                  sal_uInt16 _nId,
+SvxZoomStatusBarControl::SvxZoomStatusBarControl( USHORT _nSlotId,
+                                                  USHORT _nId,
                                                   StatusBar& rStb ) :
 
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
@@ -119,7 +119,7 @@ SvxZoomStatusBarControl::SvxZoomStatusBarControl( sal_uInt16 _nSlotId,
 
 // -----------------------------------------------------------------------
 
-void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
+void SvxZoomStatusBarControl::StateChanged( USHORT, SfxItemState eState,
                                             const SfxPoolItem* pState )
 {
     if( SFX_ITEM_AVAILABLE != eState )
@@ -189,19 +189,19 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
 
             switch( aPop.GetCurId() )
             {
-            case ZOOM_OPTIMAL:      aZoom.SetType( SVX_ZOOM_OPTIMAL ); break;
-            case ZOOM_PAGE_WIDTH:   aZoom.SetType( SVX_ZOOM_PAGEWIDTH ); break;
-            case ZOOM_WHOLE_PAGE:   aZoom.SetType( SVX_ZOOM_WHOLEPAGE ); break;
+            case ZOOM_OPTIMAL:		aZoom.SetType( SVX_ZOOM_OPTIMAL ); break;
+            case ZOOM_PAGE_WIDTH:	aZoom.SetType( SVX_ZOOM_PAGEWIDTH ); break;
+            case ZOOM_WHOLE_PAGE:	aZoom.SetType( SVX_ZOOM_WHOLEPAGE ); break;
             }
 
             ::com::sun::star::uno::Any a;
             INetURLObject aObj( m_aCommandURL );
-
+            
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
             aArgs[0].Name  = aObj.GetURLPath();
             aZoom.QueryValue( a );
             aArgs[0].Value = a;
-
+            
             execute( aArgs );
         }
         ReleaseMouse();
@@ -210,7 +210,7 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
         SfxStatusBarControl::Command( rCEvt );
 }
 
-sal_uIntPtr SvxZoomStatusBarControl::GetDefItemWidth(const StatusBar& rStb)
+ULONG SvxZoomStatusBarControl::GetDefItemWidth(const StatusBar& rStb)
 {
     long nWidth1 =  rStb.GetTextWidth(String::CreateFromAscii("XXXXX%"));
     return nWidth1;

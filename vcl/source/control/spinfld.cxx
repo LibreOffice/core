@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@
 
 void ImplGetSpinbuttonValue( Window *pWin, const Rectangle& rUpperRect,
                             const Rectangle& rLowerRect,
-                            sal_Bool bUpperIn, sal_Bool bLowerIn,
-                            sal_Bool bUpperEnabled, sal_Bool bLowerEnabled, sal_Bool bHorz,
+                            BOOL bUpperIn, BOOL bLowerIn,
+                            BOOL bUpperEnabled, BOOL bLowerEnabled, BOOL bHorz,
                             SpinbuttonValue& rValue )
 {
     // convert spinbutton data to a SpinbuttonValue structure for native painting
@@ -81,15 +81,15 @@ void ImplGetSpinbuttonValue( Window *pWin, const Rectangle& rUpperRect,
 }
 
 
-sal_Bool ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbuttonValue )
+BOOL ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbuttonValue )
 {
-    sal_Bool bNativeOK = sal_False;
+    BOOL bNativeOK = FALSE;
 
     if( pWin->IsNativeControlSupported(CTRL_SPINBOX, PART_ENTIRE_CONTROL) &&
         // there is just no useful native support for spinfields with dropdown
         !(pWin->GetStyle() & WB_DROPDOWN) )
     {
-        if( pWin->IsNativeControlSupported(CTRL_SPINBOX, rSpinbuttonValue.mnUpperPart) &&
+        if( pWin->IsNativeControlSupported(CTRL_SPINBOX, rSpinbuttonValue.mnUpperPart) && 
             pWin->IsNativeControlSupported(CTRL_SPINBOX, rSpinbuttonValue.mnLowerPart) )
         {
             // only paint the embedded spin buttons, all buttons are painted at once
@@ -121,7 +121,7 @@ sal_Bool ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbutt
             {
                 aSize = aContent.GetSize();
             }
-
+            
             Rectangle aRgn( aPt, aSize );
             bNativeOK = pBorder->DrawNativeControl( CTRL_SPINBOX, PART_ENTIRE_CONTROL, aRgn, CTRL_STATE_ENABLED,
                         rSpinbuttonValue, rtl::OUString() );
@@ -132,9 +132,9 @@ sal_Bool ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbutt
     return bNativeOK;
 }
 
-sal_Bool ImplDrawNativeSpinbuttons( Window *pWin, const SpinbuttonValue& rSpinbuttonValue )
+BOOL ImplDrawNativeSpinbuttons( Window *pWin, const SpinbuttonValue& rSpinbuttonValue )
 {
-    sal_Bool bNativeOK = sal_False;
+    BOOL bNativeOK = FALSE;
 
     if( pWin->IsNativeControlSupported(CTRL_SPINBUTTONS, PART_ENTIRE_CONTROL) )
     {
@@ -148,13 +148,13 @@ sal_Bool ImplDrawNativeSpinbuttons( Window *pWin, const SpinbuttonValue& rSpinbu
 void ImplDrawSpinButton( OutputDevice* pOutDev,
                          const Rectangle& rUpperRect,
                          const Rectangle& rLowerRect,
-                         sal_Bool bUpperIn, sal_Bool bLowerIn,
-                         sal_Bool bUpperEnabled, sal_Bool bLowerEnabled, sal_Bool bHorz, sal_Bool bMirrorHorz )
+                         BOOL bUpperIn, BOOL bLowerIn,
+                         BOOL bUpperEnabled, BOOL bLowerEnabled, BOOL bHorz, BOOL bMirrorHorz )
 {
     DecorationView aDecoView( pOutDev );
 
-    sal_uInt16 nStyle = BUTTON_DRAW_NOLEFTLIGHTBORDER;
-    sal_uInt16 nSymStyle = 0;
+    USHORT nStyle = BUTTON_DRAW_NOLEFTLIGHTBORDER;
+    USHORT nSymStyle = 0;
 
     SymbolType eType1, eType2;
 
@@ -188,11 +188,11 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
     }
 
     // Oberen/linken Button malen
-    sal_uInt16 nTempStyle = nStyle;
+    USHORT nTempStyle = nStyle;
     if ( bUpperIn )
         nTempStyle |= BUTTON_DRAW_PRESSED;
 
-    sal_Bool bNativeOK = sal_False;
+    BOOL bNativeOK = FALSE;
     Rectangle aUpRect;
 
     if( pOutDev->GetOutDevType() == OUTDEV_WINDOW )
@@ -297,15 +297,15 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
 
 void SpinField::ImplInitSpinFieldData()
 {
-    mpEdit          = NULL;
-    mbSpin          = sal_False;
-    mbRepeat        = sal_False;
-    mbUpperIn       = sal_False;
-    mbLowerIn       = sal_False;
-    mbInitialUp     = sal_False;
-    mbInitialDown   = sal_False;
-    mbNoSelect      = sal_False;
-    mbInDropDown    = sal_False;
+    mpEdit			= NULL;
+    mbSpin			= FALSE;
+    mbRepeat		= FALSE;
+    mbUpperIn		= FALSE;
+    mbLowerIn		= FALSE;
+    mbInitialUp 	= FALSE;
+    mbInitialDown	= FALSE;
+    mbNoSelect		= FALSE;
+    mbInDropDown	= FALSE;
 }
 
 // --------------------------------------------------------------------
@@ -316,12 +316,12 @@ void SpinField::ImplInit( Window* pParent, WinBits nWinStyle )
 
     if ( nWinStyle & (WB_SPIN|WB_DROPDOWN) )
     {
-        mbSpin = sal_True;
-
+        mbSpin = TRUE;
+        
         // Some themes want external spin buttons, therefore the main
         // spinfield should not overdraw the border between its encapsulated
         // edit field and the spin buttons
-        if ( (nWinStyle & WB_SPIN) && ImplUseNativeBorder( nWinStyle ) )
+        if ( (nWinStyle & WB_SPIN) && ImplUseNativeBorder( nWinStyle ) ) 
         {
             SetBackground();
             mpEdit = new Edit( this, WB_NOBORDER );
@@ -330,7 +330,7 @@ void SpinField::ImplInit( Window* pParent, WinBits nWinStyle )
         else
             mpEdit = new Edit( this, WB_NOBORDER );
 
-        mpEdit->EnableRTL( sal_False );
+        mpEdit->EnableRTL( FALSE );
         mpEdit->SetPosPixel( Point() );
         mpEdit->Show();
         SetSubEdit( mpEdit );
@@ -338,9 +338,9 @@ void SpinField::ImplInit( Window* pParent, WinBits nWinStyle )
         maRepeatTimer.SetTimeoutHdl( LINK( this, SpinField, ImplTimeout ) );
         maRepeatTimer.SetTimeout( GetSettings().GetMouseSettings().GetButtonStartRepeat() );
         if ( nWinStyle & WB_REPEAT )
-            mbRepeat = sal_True;
+            mbRepeat = TRUE;
 
-        SetCompoundControl( sal_True );
+        SetCompoundControl( TRUE );
     }
 }
 
@@ -417,7 +417,7 @@ void SpinField::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( !HasFocus() && ( !mpEdit || !mpEdit->HasFocus() ) )
     {
-        mbNoSelect = sal_True;
+        mbNoSelect = TRUE;
         GrabFocus();
     }
 
@@ -425,20 +425,20 @@ void SpinField::MouseButtonDown( const MouseEvent& rMEvt )
     {
         if ( maUpperRect.IsInside( rMEvt.GetPosPixel() ) )
         {
-            mbUpperIn   = sal_True;
-            mbInitialUp = sal_True;
+            mbUpperIn	= TRUE;
+            mbInitialUp = TRUE;
             Invalidate( maUpperRect );
         }
         else if ( maLowerRect.IsInside( rMEvt.GetPosPixel() ) )
         {
-            mbLowerIn    = sal_True;
-            mbInitialDown = sal_True;
+            mbLowerIn	 = TRUE;
+            mbInitialDown = TRUE;
             Invalidate( maLowerRect );
         }
         else if ( maDropDownRect.IsInside( rMEvt.GetPosPixel() ) )
         {
             // Rechts daneben liegt der DropDownButton:
-            mbInDropDown = ShowDropDown( mbInDropDown ? sal_False : sal_True );
+            mbInDropDown = ShowDropDown( mbInDropDown ? FALSE : TRUE );
             Paint( Rectangle( Point(), GetOutputSizePixel() ) );
         }
 
@@ -460,20 +460,20 @@ void SpinField::MouseButtonDown( const MouseEvent& rMEvt )
 void SpinField::MouseButtonUp( const MouseEvent& rMEvt )
 {
     ReleaseMouse();
-    mbInitialUp = mbInitialDown = sal_False;
+    mbInitialUp = mbInitialDown = FALSE;
     maRepeatTimer.Stop();
     maRepeatTimer.SetTimeout( GetSettings().GetMouseSettings().GetButtonStartRepeat() );
 
     if ( mbUpperIn )
     {
-        mbUpperIn = sal_False;
+        mbUpperIn = FALSE;
         Invalidate( maUpperRect );
         Update();
         Up();
     }
     else if ( mbLowerIn )
     {
-        mbLowerIn = sal_False;
+        mbLowerIn = FALSE;
         Invalidate( maLowerRect );
         Update();
         Down();
@@ -490,7 +490,7 @@ void SpinField::MouseMove( const MouseEvent& rMEvt )
     {
         if ( mbInitialUp )
         {
-            sal_Bool bNewUpperIn = maUpperRect.IsInside( rMEvt.GetPosPixel() );
+            BOOL bNewUpperIn = maUpperRect.IsInside( rMEvt.GetPosPixel() );
             if ( bNewUpperIn != mbUpperIn )
             {
                 if ( bNewUpperIn )
@@ -508,7 +508,7 @@ void SpinField::MouseMove( const MouseEvent& rMEvt )
         }
         else if ( mbInitialDown )
         {
-            sal_Bool bNewLowerIn = maLowerRect.IsInside( rMEvt.GetPosPixel() );
+            BOOL bNewLowerIn = maLowerRect.IsInside( rMEvt.GetPosPixel() );
             if ( bNewLowerIn != mbLowerIn )
             {
                 if ( bNewLowerIn )
@@ -539,7 +539,7 @@ long SpinField::Notify( NotifyEvent& rNEvt )
         const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
         if ( !IsReadOnly() )
         {
-            sal_uInt16 nMod = rKEvt.GetKeyCode().GetModifier();
+            USHORT nMod = rKEvt.GetKeyCode().GetModifier();
             switch ( rKEvt.GetKeyCode().GetCode() )
             {
                 case KEY_UP:
@@ -560,7 +560,7 @@ long SpinField::Notify( NotifyEvent& rNEvt )
                     }
                     else if ( ( nMod == KEY_MOD2 ) && !mbInDropDown && ( GetStyle() & WB_DROPDOWN ) )
                     {
-                        mbInDropDown = ShowDropDown( sal_True );
+                        mbInDropDown = ShowDropDown( TRUE );
                         Paint( Rectangle( Point(), GetOutputSizePixel() ) );
                         nDone = 1;
                     }
@@ -592,7 +592,7 @@ long SpinField::Notify( NotifyEvent& rNEvt )
     {
         if ( ( rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL ) && !IsReadOnly() )
         {
-            sal_uInt16 nWheelBehavior( GetSettings().GetMouseSettings().GetWheelBehavior() );
+            USHORT nWheelBehavior( GetSettings().GetMouseSettings().GetWheelBehavior() );
             if  (   ( nWheelBehavior == MOUSE_WHEEL_ALWAYS )
                 ||  (   ( nWheelBehavior == MOUSE_WHEEL_FOCUS_ONLY )
                     &&  HasChildPathFocus()
@@ -644,7 +644,7 @@ void SpinField::Paint( const Rectangle& rRect )
 {
     if ( mbSpin )
     {
-        sal_Bool    bEnable = IsEnabled();
+        BOOL	bEnable = IsEnabled();
         ImplDrawSpinButton( this, maUpperRect, maLowerRect,
                             mbUpperIn, mbLowerIn, bEnable, bEnable );
     }
@@ -653,7 +653,7 @@ void SpinField::Paint( const Rectangle& rRect )
     {
         DecorationView aView( this );
 
-        sal_uInt16 nStyle = BUTTON_DRAW_NOLIGHTBORDER;
+        USHORT nStyle = BUTTON_DRAW_NOLIGHTBORDER;
         if ( mbInDropDown )
             nStyle |= BUTTON_DRAW_PRESSED;
         Rectangle aInnerRect = aView.DrawButton( maDropDownRect, nStyle );
@@ -696,10 +696,11 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
         long nBottom1 = aSize.Height()/2;
         long nBottom2 = aSize.Height()-1;
         long nTop2 = nBottom1;
+        long nTop1 = 0;
         if ( !(aSize.Height() & 0x01) )
             nBottom1--;
 
-        sal_Bool bNativeRegionOK = sal_False;
+        BOOL bNativeRegionOK = FALSE;
         Rectangle aContentUp, aContentDown;
 
         if ( (pDev->GetOutDevType() == OUTDEV_WINDOW) &&
@@ -718,12 +719,12 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
             // use the full extent of the control
             Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
-            bNativeRegionOK =
+            bNativeRegionOK = 
                 pWin->GetNativeControlRegion(CTRL_SPINBOX, PART_BUTTON_UP,
                     aArea, 0, aControlValue, rtl::OUString(), aBound, aContentUp) &&
                 pWin->GetNativeControlRegion(CTRL_SPINBOX, PART_BUTTON_DOWN,
                     aArea, 0, aControlValue, rtl::OUString(), aBound, aContentDown);
-
+                    
             if( bNativeRegionOK )
             {
                 // convert back from border space to local coordinates
@@ -740,7 +741,6 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
         }
         else
         {
-            long nTop1 = 0;
             aSize.Width() -= CalcZoom( GetDrawPixel( pDev, rStyleSettings.GetSpinSize() ) );
 
             rSpinUpArea = Rectangle( aSize.Width(), nTop1, rOutSz.Width()-aDropDownSize.Width()-1, nBottom1 );
@@ -771,7 +771,7 @@ void SpinField::Resize()
             ImplControlValue aControlValue;
             Point aPoint;
             Rectangle aContent, aBound;
-
+    
             // use the full extent of the control
             Window *pBorder = GetWindow( WINDOW_BORDER );
             Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
@@ -839,9 +839,9 @@ void SpinField::StateChanged( StateChangedType nType )
     else if ( nType == STATE_CHANGE_STYLE )
     {
         if ( GetStyle() & WB_REPEAT )
-            mbRepeat = sal_True;
+            mbRepeat = TRUE;
         else
-            mbRepeat = sal_False;
+            mbRepeat = FALSE;
     }
     else if ( nType == STATE_CHANGE_ZOOM )
     {
@@ -854,21 +854,21 @@ void SpinField::StateChanged( StateChangedType nType )
     {
         if ( mpEdit )
             mpEdit->SetControlFont( GetControlFont() );
-        ImplInitSettings( sal_True, sal_False, sal_False );
+        ImplInitSettings( TRUE, FALSE, FALSE );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
         if ( mpEdit )
             mpEdit->SetControlForeground( GetControlForeground() );
-        ImplInitSettings( sal_False, sal_True, sal_False );
+        ImplInitSettings( FALSE, TRUE, FALSE );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
         if ( mpEdit )
             mpEdit->SetControlBackground( GetControlBackground() );
-        ImplInitSettings( sal_False, sal_False, sal_True );
+        ImplInitSettings( FALSE, FALSE, TRUE );
         Invalidate();
     }
     else if( nType == STATE_CHANGE_MIRRORING )
@@ -959,15 +959,15 @@ long SpinField::PreNotify( NotifyEvent& rNEvt )
 
 void SpinField::EndDropDown()
 {
-    mbInDropDown = sal_False;
+    mbInDropDown = FALSE;
     Paint( Rectangle( Point(), GetOutputSizePixel() ) );
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SpinField::ShowDropDown( sal_Bool )
+BOOL SpinField::ShowDropDown( BOOL )
 {
-    return sal_False;
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -998,7 +998,7 @@ Size SpinField::GetOptimalSize(WindowSizeType eType) const
 
 // -----------------------------------------------------------------------
 
-Size SpinField::CalcSize( sal_uInt16 nChars ) const
+Size SpinField::CalcSize( USHORT nChars ) const
 {
     Size aSz = Edit::CalcSize( nChars );
 
@@ -1031,7 +1031,7 @@ IMPL_LINK( SpinField, ImplTimeout, Timer*, pTimer )
 
 // -----------------------------------------------------------------------
 
-void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
+void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags )
 {
     Edit::Draw( pDev, rPos, rSize, nFlags );
 
@@ -1072,7 +1072,7 @@ void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
         if ( GetStyle() & WB_DROPDOWN )
         {
             DecorationView aView( pDev );
-            sal_uInt16 nStyle = BUTTON_DRAW_NOLIGHTBORDER;
+            USHORT nStyle = BUTTON_DRAW_NOLIGHTBORDER;
             Rectangle aInnerRect = aView.DrawButton( aDD, nStyle );
             SymbolType eSymbol = SYMBOL_SPIN_DOWN;
             if ( GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_SPINUPDOWN )
@@ -1084,7 +1084,7 @@ void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
 
         if ( GetStyle() & WB_SPIN )
         {
-            ImplDrawSpinButton( pDev, aUp, aDown, sal_False, sal_False, sal_True, sal_True );
+            ImplDrawSpinButton( pDev, aUp, aDown, FALSE, FALSE, TRUE, TRUE );
         }
 
         pDev->Pop();

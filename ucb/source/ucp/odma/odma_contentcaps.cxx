@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
+/**************************************************************************
+                                TODO
+ **************************************************************************
+
+ *************************************************************************/
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -38,9 +43,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
-#ifdef WNT
-#include <windows.h>
-#endif
 #include "odma_content.hxx"
 
 using namespace com::sun::star;
@@ -73,7 +75,7 @@ uno::Sequence< beans::Property > Content::getProperties(
     //           is preferred! In fact you should return a table conatining
     //           even that dynamicly added properties.
 
-//  osl::Guard< osl::Mutex > aGuard( m_aMutex );
+//	osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     //=================================================================
     //
@@ -166,7 +168,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 {
     // @@@ Add additional commands...
 
-//  osl::Guard< osl::Mutex > aGuard( m_aMutex );
+//	osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     //=================================================================
     //

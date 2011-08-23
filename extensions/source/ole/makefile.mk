@@ -47,9 +47,9 @@ INCPRE+= $(foreach,i,$(ATL_INCLUDE) -I$(i))
 
 .IF "$(GUI)" == "WNT" && "$(DISABLE_ATL)"==""
 
-.IF "$(USE_DEBUG_RUNTIME)"!=""
+.IF "$(USE_STLP_DEBUG)"!=""
 CDEFS+=-D_DEBUG
-.ENDIF # "$(USE_DEBUG_RUNTIME)"!=""
+.ENDIF # "$(USE_STLP_DEBUG)"!=""
 
 SLOFILES= \
             $(SLO)$/servreg.obj		\
@@ -80,7 +80,7 @@ SHL1STDLIBS=\
 
 .IF "$(COM)"=="MSC"
 .IF "$(WINDOWS_VISTA_PSDK)"!="" || "$(CCNUMVER)"<="001399999999"
-.IF "$(USE_DEBUG_RUNTIME)" != ""
+.IF "$(USE_STLP_DEBUG)" != ""
     SHL1STDLIBS+= $(ATL_LIB)$/atlsd.lib
 .ELSE
     SHL1STDLIBS+= $(ATL_LIB)$/atls.lib
@@ -107,7 +107,7 @@ SHL2STDLIBS=\
 
 .IF "$(COM)"=="MSC"
 .IF "$(WINDOWS_VISTA_PSDK)"!="" || "$(CCNUMVER)"<="001399999999"
-.IF "$(USE_DEBUG_RUNTIME)" != ""
+.IF "$(USE_STLP_DEBUG)" != ""
     SHL2STDLIBS+= $(ATL_LIB)$/atlsd.lib
 .ELSE
     SHL2STDLIBS+= $(ATL_LIB)$/atls.lib
@@ -121,16 +121,9 @@ SHL2OBJS=$(REAL_OWNGUID_SLOFILES)
 DEF2NAME=$(SHL2TARGET)
 DEF2EXPORTFILE=$(TARGET).dxp
 
-.ENDIF # "$(GUI)" == "WNT" && "$(DISABLE_ATL)"==""
+.ENDIF
 
 #----------------------------------------------------------------
 
 .INCLUDE :  target.mk
 
-ALLTAR : $(MISC)/oleautobridge.component
-
-$(MISC)/oleautobridge.component .ERRREMOVE : \
-        $(SOLARENV)/bin/createcomponent.xslt oleautobridge.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt oleautobridge.component

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,28 +37,28 @@ namespace dbaui
     //========================================================================
     class OTableListBoxControl;
     class OTableConnectionData;
-    class ORelationTableConnectionData;
-    class IRelationControlInterface;
+    class ORelationTableConnectionData;	
+    class IRelationControlInterface;	
     class ORelationControl;
 
-    class OTableListBoxControl  : public Window
+    class OTableListBoxControl	: public Window
     {
-        FixedLine                               m_aFL_InvolvedTables;
-        ListBox                                 m_lmbLeftTable,
+        FixedLine								m_aFL_InvolvedTables;
+        ListBox									m_lmbLeftTable,
                                                 m_lmbRightTable;
-        FixedLine                               m_aFL_InvolvedFields;
+        FixedLine								m_aFL_InvolvedFields;
 
-        ORelationControl*                       m_pRC_Tables;
-        const OJoinTableView::OTableWindowMap*  m_pTableMap;
-        IRelationControlInterface*              m_pParentDialog;
-        String                                  m_strCurrentLeft;
-        String                                  m_strCurrentRight;
+        ORelationControl*						m_pRC_Tables;
+        const OJoinTableView::OTableWindowMap*	m_pTableMap;
+        IRelationControlInterface*				m_pParentDialog;
+        String									m_strCurrentLeft;
+        String									m_strCurrentRight;
     private:
         DECL_LINK( OnTableChanged, ListBox* );
     public:
         OTableListBoxControl(Window* _pParent,
                              const ResId& _rResId,
-                             const OJoinTableView::OTableWindowMap* _pTableMap,
+                             const OJoinTableView::OTableWindowMap*	_pTableMap,
                              IRelationControlInterface* _pParentDialog);
         virtual ~OTableListBoxControl();
 
@@ -67,14 +67,14 @@ namespace dbaui
         void fillListBoxes();
 
         /** fillAndDisable fill the listboxes only with one entry and then disable them
-            @param  _pConnectionData
+            @param	_pConnectionData 
                     contains the data which should be filled into the listboxes
         */
         void fillAndDisable(const TTableConnectionData::value_type& _pConnectionData);
 
         /** enables the relation control
         *
-        * \param _bEnable when sal_True enables it, otherwise disable it.
+        * \param _bEnable when TRUE enables it, otherwise disable it.
         */
         void enableRelation(bool _bEnable);
 
@@ -83,16 +83,16 @@ namespace dbaui
         void NotifyCellChange();
 
         /** Init is a call through to the control inside this one
-            @param  _pConnData
+            @param	_pConnData	
                     the connection data which is used to init the control
         */
         void Init(const TTableConnectionData::value_type& _pConnData);
         void lateUIInit(Window* _pTableSeparator = NULL);
         void lateInit();
 
-        sal_Bool SaveModified();
+        BOOL SaveModified();
 
-        TTableWindowData::value_type getReferencingTable()  const;
+        TTableWindowData::value_type getReferencingTable()	const;
 
         /** getContainer returns the container interface
             @return the interface of the container

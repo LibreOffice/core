@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,12 +60,15 @@
 #include <svx/svdoashp.hxx>
 #include <svx/sdtagitm.hxx>
 
+// #88751#
 #include <svx/svdocapt.hxx>
 
+// #97016#
 #include <svx/svdomeas.hxx>
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
 #include "ToolBarManager.hxx"
+// #109583#
 #include <editeng/writingmodeitem.hxx>
 #include <svx/gallery.hxx>
 #include <svl/itempool.hxx>
@@ -91,11 +94,11 @@ TYPEINIT1( FuConstructCustomShape, FuConstruct );
 \************************************************************************/
 
 FuConstructCustomShape::FuConstructCustomShape (
-        ViewShell*          pViewSh,
-        ::sd::Window*       pWin,
-        ::sd::View*         pView,
-        SdDrawDocument*     pDoc,
-        SfxRequest&         rReq ) :
+        ViewShell* 			pViewSh,
+        ::sd::Window*		pWin,
+        ::sd::View*			pView,
+        SdDrawDocument*		pDoc,
+        SfxRequest&			rReq ) :
     FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
 {
 }
@@ -131,16 +134,16 @@ void FuConstructCustomShape::DoExecute( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-sal_Bool FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
         Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
         mpWindow->CaptureMouse();
-        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
         mpView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
 
@@ -170,7 +173,7 @@ sal_Bool FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstructCustomShape::MouseMove(const MouseEvent& rMEvt)
+BOOL FuConstructCustomShape::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -181,7 +184,7 @@ sal_Bool FuConstructCustomShape::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn(sal_False);
 
@@ -205,14 +208,14 @@ sal_Bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* FALSE.
 |*
 \************************************************************************/
 
-sal_Bool FuConstructCustomShape::KeyInput(const KeyEvent& rKEvt)
+BOOL FuConstructCustomShape::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
+    BOOL bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
@@ -260,7 +263,7 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
                             if( pSourceObj )
                             {
                                 const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
-                                SfxItemSet aDest( pObj->GetModel()->GetItemPool(),              // ranges from SdrAttrObj
+                                SfxItemSet aDest( pObj->GetModel()->GetItemPool(), 				// ranges from SdrAttrObj
                                 SDRATTR_START, SDRATTR_SHADOW_LAST,
                                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
@@ -312,6 +315,7 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
     }
 }
 
+// #97016#
 SdrObject* FuConstructCustomShape::CreateDefaultObject(const sal_uInt16, const Rectangle& rRectangle)
 {
     SdrObject* pObj = SdrObjFactory::MakeNewObject(

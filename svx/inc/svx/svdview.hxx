@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,45 +111,45 @@ enum SdrEventKind  {SDREVENT_NONE,
 
 struct SVX_DLLPUBLIC SdrViewEvent
 {
-    SdrHdl*                     pHdl;
-    SdrObject*                  pObj;
-    SdrObject*                  pRootObj;        // Dieses Markieren bei SdrBeginTextEdit
-    SdrPageView*                pPV;
-    const SvxURLField*          pURLField;
+    SdrHdl*						pHdl;
+    SdrObject*					pObj;
+    SdrObject*					pRootObj;        // Dieses Markieren bei SdrBeginTextEdit
+    SdrPageView*				pPV;
+    const SvxURLField*			pURLField;
 
-    Point                       aLogicPos;
-    SdrHitKind                  eHit;
-    SdrEventKind                eEvent;
-    SdrHdlKind                  eHdlKind;
-    SdrCreateCmd                eEndCreateCmd;   // auch fuer EndInsPoint
+    Point						aLogicPos;
+    SdrHitKind					eHit;
+    SdrEventKind				eEvent;
+    SdrHdlKind					eHdlKind;
+    SdrCreateCmd				eEndCreateCmd;   // auch fuer EndInsPoint
 
-    sal_uInt16                      nMouseClicks;
-    sal_uInt16                      nMouseMode;
-    sal_uInt16                      nMouseCode;
-    sal_uInt16                      nHlplIdx;
-    sal_uInt16                      nGlueId;
+    UINT16						nMouseClicks;
+    UINT16						nMouseMode;
+    UINT16						nMouseCode;
+    UINT16						nHlplIdx;
+    UINT16						nGlueId;
 
-    unsigned                    bMouseDown : 1;
-    unsigned                    bMouseUp : 1;
-    unsigned                    bDoubleHdlSize : 1;  // Doppelte Handlegroesse wg. TextEdit
-    unsigned                    bIsAction : 1;       // Action ist aktiv
-    unsigned                    bIsTextEdit : 1;     // TextEdit laeuft zur Zeit
-    unsigned                    bTextEditHit : 1;    // offene OutlinerView getroffen
-    unsigned                    bAddMark : 1;
-    unsigned                    bUnmark : 1;
-    unsigned                    bPrevNextMark : 1;
-    unsigned                    bMarkPrev : 1;
-    unsigned                    bInsPointNewObj : 1;
-    unsigned                    bDragWithCopy : 1;
-    unsigned                    bCaptureMouse : 1;
-    unsigned                    bReleaseMouse : 1;
+    unsigned					bMouseDown : 1;
+    unsigned					bMouseUp : 1;
+    unsigned					bDoubleHdlSize : 1;  // Doppelte Handlegroesse wg. TextEdit
+    unsigned					bIsAction : 1;       // Action ist aktiv
+    unsigned					bIsTextEdit : 1;     // TextEdit laeuft zur Zeit
+    unsigned					bTextEditHit : 1;    // offene OutlinerView getroffen
+    unsigned					bAddMark : 1;
+    unsigned					bUnmark : 1;
+    unsigned					bPrevNextMark : 1;
+    unsigned					bMarkPrev : 1;
+    unsigned					bInsPointNewObj : 1;
+    unsigned					bDragWithCopy : 1;
+    unsigned					bCaptureMouse : 1;
+    unsigned					bReleaseMouse : 1;
 
 public:
     SdrViewEvent();
     ~SdrViewEvent();
 
     // nEventKind ist SDRMOUSEBUTTONDOWN, SDRMOUSEMOVE oder SDRMOUSEBUTTONUP
-    void SetMouseEvent(const MouseEvent& rMEvt, sal_uInt16 nEventKind);
+    void SetMouseEvent(const MouseEvent& rMEvt, USHORT nEventKind);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,7 +158,7 @@ public:
 class SVX_DLLPUBLIC SdrDropMarkerOverlay
 {
     // The OverlayObjects
-    ::sdr::overlay::OverlayObjectList               maObjects;
+    ::sdr::overlay::OverlayObjectList				maObjects;
 
     void ImplCreateOverlays(const SdrView& rView, const basegfx::B2DPolyPolygon& rPolyPolygon);
 
@@ -185,16 +185,16 @@ public:
 
 class SVX_DLLPUBLIC SdrView: public SdrCreateView, public tools::WeakBase< SdrView >
 {
-    friend class                SdrPageView;
+    friend class				SdrPageView;
 
-    unsigned                    bNoExtendedMouseDispatcher : 1;
-    unsigned                    bNoExtendedKeyDispatcher : 1;
-    unsigned                    bNoExtendedCommandDispatcher : 1;
-    unsigned                    bTextEditOnObjectsWithoutTextIfTextTool : 1;
-    unsigned                    mbMasterPagePaintCaching : 1;
+    unsigned					bNoExtendedMouseDispatcher : 1;
+    unsigned					bNoExtendedKeyDispatcher : 1;
+    unsigned					bNoExtendedCommandDispatcher : 1;
+    unsigned					bTextEditOnObjectsWithoutTextIfTextTool : 1;
+    unsigned					mbMasterPagePaintCaching : 1;
 
 protected:
-    SvtAccessibilityOptions maAccessibilityOptions;
+    SvtAccessibilityOptions	maAccessibilityOptions;
 
 public:
     TYPEINFO();
@@ -211,44 +211,44 @@ public:
     //      pSdrView->DoMouseEvent(aVEvt);
     //      SetPointer(GetPreferedPointer(...))
     //      CaptureMouse(...)
-    void EnableExtendedMouseEventDispatcher(sal_Bool bOn) { bNoExtendedMouseDispatcher = !bOn; }
-    sal_Bool IsExtendedMouseEventDispatcherEnabled() const { return bNoExtendedMouseDispatcher; }
+    void EnableExtendedMouseEventDispatcher(BOOL bOn) { bNoExtendedMouseDispatcher = !bOn; }
+    BOOL IsExtendedMouseEventDispatcherEnabled() const { return bNoExtendedMouseDispatcher; }
 
-    void EnableExtendedKeyInputDispatcher(sal_Bool bOn) { bNoExtendedKeyDispatcher=!bOn; }
-    sal_Bool IsExtendedKeyInputDispatcherEnabled() const { return bNoExtendedKeyDispatcher; }
+    void EnableExtendedKeyInputDispatcher(BOOL bOn) { bNoExtendedKeyDispatcher=!bOn; }
+    BOOL IsExtendedKeyInputDispatcherEnabled() const { return bNoExtendedKeyDispatcher; }
 
-    void EnableExtendedCommandEventDispatcher(sal_Bool bOn) { bNoExtendedCommandDispatcher=!bOn; }
-    sal_Bool IsExtendedCommandEventDispatcherEnabled() const { return bNoExtendedCommandDispatcher; }
+    void EnableExtendedCommandEventDispatcher(BOOL bOn) { bNoExtendedCommandDispatcher=!bOn; }
+    BOOL IsExtendedCommandEventDispatcherEnabled() const { return bNoExtendedCommandDispatcher; }
 
-    void EnableTextEditOnObjectsWithoutTextIfTextTool(sal_Bool bOn) { bTextEditOnObjectsWithoutTextIfTextTool=bOn; }
-    sal_Bool IsEnableTextEditOnObjectsWithoutTextIfTextToolEnabled() const { return bTextEditOnObjectsWithoutTextIfTextTool; }
+    void EnableTextEditOnObjectsWithoutTextIfTextTool(BOOL bOn) { bTextEditOnObjectsWithoutTextIfTextTool=bOn; }
+    BOOL IsEnableTextEditOnObjectsWithoutTextIfTextToolEnabled() const { return bTextEditOnObjectsWithoutTextIfTextTool; }
 
     void SetMasterPagePaintCaching(sal_Bool bOn);
     sal_Bool IsMasterPagePaintCaching() const { return mbMasterPagePaintCaching; }
 
-    sal_Bool KeyInput(const KeyEvent& rKEvt, Window* pWin);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin);
-    virtual sal_Bool Command(const CommandEvent& rCEvt, Window* pWin);
+    BOOL KeyInput(const KeyEvent& rKEvt, Window* pWin);
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt, Window* pWin);
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
+    virtual BOOL MouseMove(const MouseEvent& rMEvt, Window* pWin);
+    virtual BOOL Command(const CommandEvent& rCEvt, Window* pWin);
 
     virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
-    sal_Bool SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll=sal_False) { return SdrCreateView::SetAttributes(rSet,bReplaceAll); }
-    sal_Bool SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr=sal_False) { return SdrCreateView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr); }
+    BOOL SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll=FALSE) { return SdrCreateView::SetAttributes(rSet,bReplaceAll); }
+    BOOL SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr=FALSE) { return SdrCreateView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr); }
 
     /* new interface src537 */
-    sal_Bool GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False) const;
+    BOOL GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr=FALSE) const;
 
     SfxStyleSheet* GetStyleSheet() const;
 
     // unvollstaendige Implementation:
     // Das OutputDevice ist notwendig, damit ich die HandleSize ermitteln kann.
     // Bei NULL wird das 1. angemeldete Win verwendet.
-    Pointer GetPreferedPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nModifier=0, sal_Bool bLeftDown=sal_False) const;
-    SdrHitKind PickAnything(const MouseEvent& rMEvt, sal_uInt16 nMouseDownOrMoveOrUp, SdrViewEvent& rVEvt) const;
+    Pointer GetPreferedPointer(const Point& rMousePos, const OutputDevice* pOut, USHORT nModifier=0, BOOL bLeftDown=FALSE) const;
+    SdrHitKind PickAnything(const MouseEvent& rMEvt, USHORT nMouseDownOrMoveOrUp, SdrViewEvent& rVEvt) const;
     SdrHitKind PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) const;
-    sal_Bool DoMouseEvent(const SdrViewEvent& rVEvt);
+    BOOL DoMouseEvent(const SdrViewEvent& rVEvt);
     virtual SdrViewContext GetContext() const;
 
     // Die Methoden beruecksichtigen den jeweiligen Kontex:
@@ -257,27 +257,27 @@ public:
     // - Klebepunkt-Editmode
     // - TextEdit
     // - ... to be continued
-    sal_Bool IsMarkPossible() const;
+    BOOL IsMarkPossible() const;
     void MarkAll();
     void UnmarkAll();
-    sal_Bool IsAllMarked() const;
-    sal_Bool IsAllMarkPrevNextPossible() const; // das geht naemlich nicht bei TextEdit!
-    sal_Bool MarkNext(sal_Bool bPrev=sal_False);
-    sal_Bool MarkNext(const Point& rPnt, sal_Bool bPrev=sal_False);
+    BOOL IsAllMarked() const;
+    BOOL IsAllMarkPrevNextPossible() const; // das geht naemlich nicht bei TextEdit!
+    BOOL MarkNext(BOOL bPrev=FALSE);
+    BOOL MarkNext(const Point& rPnt, BOOL bPrev=FALSE);
 
     const Rectangle& GetMarkedRect() const;
     void SetMarkedRect(const Rectangle& rRect);
 
     virtual void DeleteMarked();
-    sal_Bool IsDeleteMarkedPossible() const;
-    sal_Bool IsDeletePossible() const { return IsDeleteMarkedPossible(); }
+    BOOL IsDeleteMarkedPossible() const;
+    BOOL IsDeletePossible() const { return IsDeleteMarkedPossible(); }
 
     // Markieren von Objekten, Polygonpunkten oder Klebepunkten (je nach View-
     // Kontext) durch Aufziehen eines Selektionsrahmens.
     //   bAddMark=TRUE: zur bestehenden Selektion hinzumarkieren (->Shift)
     //   bUnmark=TRUE: Bereits selektierte Objekte/Punkte/Klebepunkte die innerhalb
     //                 des aufgezogenen Rahmens liegen werden deselektiert.
-    sal_Bool BegMark(const Point& rPnt, sal_Bool bAddMark=sal_False, sal_Bool bUnmark=sal_False);
+    BOOL BegMark(const Point& rPnt, BOOL bAddMark=FALSE, BOOL bUnmark=FALSE);
 
     // Folgende Actions sind moeglich:
     //   - ObjectCreating
@@ -312,28 +312,28 @@ public:
 // ~~~~~~~~~~~~~~~~~~~~
 //   Einfache Events:
 //   ~~~~~~~~~~~~~~~~
-//     sal_Bool KeyInput(const KeyEvent& rKEvt, Window* pWin);
-//     sal_Bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin);
-//     sal_Bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
-//     sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin);
-//     sal_Bool Command(const CommandEvent& rCEvt, Window* pWin);
+//     BOOL KeyInput(const KeyEvent& rKEvt, Window* pWin);
+//     BOOL MouseButtonDown(const MouseEvent& rMEvt, Window* pWin);
+//     BOOL MouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
+//     BOOL MouseMove(const MouseEvent& rMEvt, Window* pWin);
+//     BOOL Command(const CommandEvent& rCEvt, Window* pWin);
 //
 //   Exchange (Clipboard derzeit noch ohne SdrPrivateData):
 //   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//     sal_Bool Cut(sal_uIntPtr nFormat=SDR_ANYFORMAT);
-//     sal_Bool Yank(sal_uIntPtr nFormat=SDR_ANYFORMAT);
-//     sal_Bool Paste(Window* pWin=NULL, sal_uIntPtr nFormat=SDR_ANYFORMAT);
+//     BOOL Cut(ULONG nFormat=SDR_ANYFORMAT);
+//     BOOL Yank(ULONG nFormat=SDR_ANYFORMAT);
+//     BOOL Paste(Window* pWin=NULL, ULONG nFormat=SDR_ANYFORMAT);
 //
 //   SfxItems:
 //   ~~~~~~~~~
-//     sal_Bool GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False) const;
-//     sal_Bool SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll);
+//     BOOL GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr=FALSE) const;
+//     BOOL SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll);
 //     SfxStyleSheet* GetStyleSheet() const;
-//     sal_Bool SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr);
+//     BOOL SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr);
 //
 //   Sonstiges:
 //   ~~~~~~~~~~
-//     Pointer GetPreferedPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nTol=0) const;
+//     Pointer GetPreferedPointer(const Point& rMousePos, const OutputDevice* pOut, USHORT nTol=0) const;
 //     String  GetStatusText();
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////// */

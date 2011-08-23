@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ namespace ucbhelper {
 /**
   * This class implements a simple name clash resolve interaction request.
   * Instances can be passed directly to XInteractionHandler::handle(...). Each
-  * instance contains a NameClashResolveRequest and two interaction
+  * instance contains an NameClashResolveRequest and two interaction
   * continuations: "Abort" and "SupplyName". Another continuation
   * ("ReplaceExistingData") may be supplied optionally.
   *
@@ -57,11 +57,11 @@ public:
       *
       * @param rTargetFolderURL contains the URL of the folder that contains
       *        the clashing resource.
-      * @param rClashingName contains the clashing name.
+      * @param rClashingName contains the clashing name,
       * @param rProposedNewName contains a proposal for the new name or is
       *        empty.
-      * @param bSupportsOverwriteData indicates whether an
-      *        InteractionReplaceExistingData continuation shall be supplied
+      * @param bSupportsOverwriteData indictes whether an
+      *        InteractioneplaceExistingData continuation shall be supplied
       *        with the interaction request.
       */
     SimpleNameClashResolveRequest( const rtl::OUString & rTargetFolderURL,

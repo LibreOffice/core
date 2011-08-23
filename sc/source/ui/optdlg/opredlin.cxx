@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,16 +61,16 @@
 ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
     : SfxTabPage(pParent, ScResId(RID_SCPAGE_OPREDLINE), rSet),
-    aContentFT      ( this, ScResId(FT_CONTENT  )),
-    aContentColorLB ( this, ScResId(CLB_CONTENT )),
-    aRemoveFT       ( this, ScResId(FT_REMOVE   )),
-    aRemoveColorLB  ( this, ScResId(CLB_REMOVE  )),
-    aInsertFT       ( this, ScResId(FT_INSERT   )),
-    aInsertColorLB  ( this, ScResId(CLB_INSERT  )),
-    aMoveFT         ( this, ScResId(FT_MOVE     )),
-    aMoveColorLB    ( this, ScResId(CLB_MOVE    )),
-    aChangedGB      ( this, ScResId(GB_COLORCHGS)),
-    aAuthorStr      (ScResId(STR_AUTHOR))
+    aContentFT      ( this, ScResId(FT_CONTENT	)),
+    aContentColorLB ( this, ScResId(CLB_CONTENT	)),
+    aRemoveFT       ( this, ScResId(FT_REMOVE	)),
+    aRemoveColorLB	( this, ScResId(CLB_REMOVE	)),
+    aInsertFT       ( this, ScResId(FT_INSERT	)),
+    aInsertColorLB  ( this, ScResId(CLB_INSERT	)),
+    aMoveFT         ( this, ScResId(FT_MOVE		)),
+    aMoveColorLB    ( this, ScResId(CLB_MOVE	)),
+    aChangedGB		( this, ScResId(GB_COLORCHGS)),
+    aAuthorStr		(ScResId(STR_AUTHOR))
 {
     FreeResource();
 
@@ -81,21 +81,33 @@ ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( Window* pParent,
     aRemoveColorLB.SetSelectHdl( aLk );
 }
 
-ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
+/*-----------------------------------------------------------------------
+    Beschreibung:
+ -----------------------------------------------------------------------*/
+
+__EXPORT ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
 {
 }
 
-SfxTabPage* ScRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet )
+/*-----------------------------------------------------------------------
+    Beschreibung:
+ -----------------------------------------------------------------------*/
+
+SfxTabPage*	__EXPORT ScRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new ScRedlineOptionsTabPage( pParent, rSet );
 }
 
-sal_Bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
+/*-----------------------------------------------------------------------
+    Beschreibung:
+ -----------------------------------------------------------------------*/
+
+BOOL __EXPORT ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
 {
     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
 
-    sal_uLong nNew=0;
-    sal_uInt16 nPos=0;
+    ULONG nNew=0;
+    USHORT nPos=0;
 
     nPos = aContentColorLB.GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
@@ -148,16 +160,20 @@ sal_Bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
 
     SC_MOD()->SetAppOptions(aAppOptions);
 
-    //  Repaint (wenn alles ueber Items laufen wuerde, wie es sich gehoert,
-    //  waere das nicht noetig...)
+    //	Repaint (wenn alles ueber Items laufen wuerde, wie es sich gehoert,
+    //	waere das nicht noetig...)
     ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
     if (pDocSh)
         pDocSh->PostPaintGridAll();
 
-    return false;
+    return FALSE;
 }
 
-void ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
+/*-----------------------------------------------------------------------
+    Beschreibung:
+ -----------------------------------------------------------------------*/
+
+void __EXPORT ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
 {
 
     XColorTable* pColorTbl = XColorTable::GetStdColorTable();
@@ -166,12 +182,12 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
     aInsertColorLB.InsertEntry(aAuthorStr);
     aRemoveColorLB.InsertEntry(aAuthorStr);
 
-    aContentColorLB.SetUpdateMode( false);
-    aMoveColorLB.SetUpdateMode( false);
-    aInsertColorLB.SetUpdateMode( false);
-    aRemoveColorLB.SetUpdateMode( false);
+    aContentColorLB.SetUpdateMode( FALSE);
+    aMoveColorLB.SetUpdateMode( FALSE);
+    aInsertColorLB.SetUpdateMode( FALSE);
+    aRemoveColorLB.SetUpdateMode( FALSE);
 
-    for( sal_uInt16 i = 0; i < pColorTbl->Count(); ++i )
+    for( USHORT i = 0; i < pColorTbl->Count(); ++i )
     {
         XColorEntry* pEntry = pColorTbl->GetColor( i );
         Color aColor = pEntry->GetColor();
@@ -182,15 +198,15 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
         aInsertColorLB.InsertEntry( aColor, sName );
         aRemoveColorLB.InsertEntry( aColor, sName );
     }
-    aContentColorLB.SetUpdateMode( sal_True );
-    aMoveColorLB.SetUpdateMode( sal_True );
-    aInsertColorLB.SetUpdateMode( sal_True );
-    aRemoveColorLB.SetUpdateMode( sal_True );
+    aContentColorLB.SetUpdateMode( TRUE );
+    aMoveColorLB.SetUpdateMode( TRUE );
+    aInsertColorLB.SetUpdateMode( TRUE );
+    aRemoveColorLB.SetUpdateMode( TRUE );
 
 
     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
 
-    sal_uLong nColor = aAppOptions.GetTrackContentColor();
+    ULONG nColor = aAppOptions.GetTrackContentColor();
     if (nColor == COL_TRANSPARENT)
         aContentColorLB.SelectEntryPos(0);
     else
@@ -221,6 +237,54 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
 
 IMPL_LINK( ScRedlineOptionsTabPage, ColorHdl, ColorListBox *, EMPTYARG )
 {
+/*
+    SvxFontPrevWindow *pPrev;
+    ListBox *pLB;
+
+    if (pColorLB == &aInsertColorLB)
+    {
+        pPrev = &aInsertPreviewWN;
+        pLB = &aInsertLB;
+    }
+    else
+    {
+        pPrev = &aDeletedPreviewWN;
+        pLB = &aDeletedLB;
+    }
+
+    SvxFont& rFont = pPrev->GetFont();
+    USHORT nPos = pLB->GetSelectEntryPos();
+    if (nPos == LISTBOX_ENTRY_NOTFOUND)
+        nPos = 0;
+
+    CharAttr *pAttr = (CharAttr *)pLB->GetEntryData(nPos);
+
+    if (pAttr->nItemId == SID_ATTR_BRUSH)
+    {
+        rFont.SetColor(Color(COL_BLACK));
+        nPos = pColorLB->GetSelectEntryPos();
+        if (nPos && nPos != LISTBOX_ENTRY_NOTFOUND)
+        {
+            Brush aBrush(Color(pColorLB->GetSelectEntryColor()));
+            pPrev->SetBrush(aBrush);
+        }
+        else
+        {
+            Brush aBrush(Color(COL_LIGHTGRAY));
+            pPrev->SetBrush(aBrush);
+        }
+    }
+    else
+    {
+        nPos = pColorLB->GetSelectEntryPos();
+        if (nPos && nPos != LISTBOX_ENTRY_NOTFOUND)
+            rFont.SetColor(pColorLB->GetEntryColor(nPos));
+        else
+            rFont.SetColor(Color(COL_RED));
+    }
+
+    pPrev->Invalidate();
+*/
     return 0;
 }
 

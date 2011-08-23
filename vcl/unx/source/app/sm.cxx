@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,6 @@ SalSession* X11SalInstance::CreateSalSession()
 {
     if( ! pOneInstance )
         pOneInstance = new IceSalSession();
-    SessionManagerClient::open();
     return pOneInstance;
 }
 
@@ -141,7 +140,7 @@ void IceSalSession::handleOldX11SaveYourself( SalFrame* pFrame )
         if( pOneInstance )
         {
             SalSessionSaveRequestEvent aEvent( true, false );
-            pOneInstance->CallCallback( &aEvent );
+            pOneInstance->CallCallback( &aEvent );        
         }
     }
 }
@@ -151,7 +150,7 @@ extern "C" void SAL_CALL ICEConnectionWorker( void* );
 class ICEConnectionObserver
 {
     friend void SAL_CALL ICEConnectionWorker(void*);
-    static sal_Bool bIsWatching;
+    static BOOL bIsWatching;
     static void ICEWatchProc( IceConn connection, IcePointer client_data,
                               Bool opening, IcePointer* watch_data );
 
@@ -175,15 +174,15 @@ public:
 };
 
 
-SmcConn             SessionManagerClient::aSmcConnection            = NULL;
-ByteString          SessionManagerClient::aClientID;
-sal_Bool                ICEConnectionObserver::bIsWatching              = sal_False;
-struct pollfd*  ICEConnectionObserver::pFilehandles             = NULL;
-IceConn*            ICEConnectionObserver::pConnections             = NULL;
-int                 ICEConnectionObserver::nConnections             = 0;
-oslMutex            ICEConnectionObserver::ICEMutex                 = NULL;
-oslThread           ICEConnectionObserver::ICEThread                = NULL;
-int                 ICEConnectionObserver::nWakeupFiles[2]          = { 0, 0 };
+SmcConn				SessionManagerClient::aSmcConnection			= NULL;
+ByteString			SessionManagerClient::aClientID;
+BOOL				ICEConnectionObserver::bIsWatching				= FALSE;
+struct pollfd* 	ICEConnectionObserver::pFilehandles				= NULL;
+IceConn*			ICEConnectionObserver::pConnections				= NULL;
+int					ICEConnectionObserver::nConnections				= 0;
+oslMutex			ICEConnectionObserver::ICEMutex					= NULL;
+oslThread			ICEConnectionObserver::ICEThread				= NULL;
+int					ICEConnectionObserver::nWakeupFiles[2]			= { 0, 0 };
 
 #ifdef USE_SM_EXTENSION
 IceIOErrorHandler ICEConnectionObserver::origIOErrorHandler = NULL;
@@ -202,9 +201,9 @@ static void IgnoreIceIOErrors(IceConn)
 bool SessionManagerClient::bDocSaveDone = false;
 
 
-static SmProp*  pSmProps = NULL;
-static SmProp** ppSmProps = NULL;
-static int      nSmProps = 0;
+static SmProp*	pSmProps = NULL;
+static SmProp**	ppSmProps = NULL;
+static int		nSmProps = 0;
 static unsigned char   *pSmRestartHint = NULL;
 
 
@@ -212,38 +211,38 @@ static void BuildSmPropertyList()
 {
     if( ! pSmProps )
     {
-        rtl::OString aExec(rtl::OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
+        ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
 
         nSmProps = 5;
         pSmProps = new SmProp[ nSmProps ];
 
-        pSmProps[ 0 ].name      = const_cast<char*>(SmCloneCommand);
-        pSmProps[ 0 ].type      = const_cast<char*>(SmLISTofARRAY8);
-        pSmProps[ 0 ].num_vals  = 1;
-        pSmProps[ 0 ].vals      = new SmPropValue;
-        pSmProps[ 0 ].vals->length  = aExec.getLength()+1;
-        pSmProps[ 0 ].vals->value   = strdup( aExec.getStr() );
+        pSmProps[ 0 ].name		= const_cast<char*>(SmCloneCommand);
+        pSmProps[ 0 ].type		= const_cast<char*>(SmLISTofARRAY8);
+        pSmProps[ 0 ].num_vals	= 1;
+        pSmProps[ 0 ].vals		= new SmPropValue;
+        pSmProps[ 0 ].vals->length	= aExec.Len()+1;
+        pSmProps[ 0 ].vals->value	= strdup( aExec.GetBuffer() );
 
-        pSmProps[ 1 ].name      = const_cast<char*>(SmProgram);
-        pSmProps[ 1 ].type      = const_cast<char*>(SmARRAY8);
-        pSmProps[ 1 ].num_vals  = 1;
-        pSmProps[ 1 ].vals      = new SmPropValue;
-        pSmProps[ 1 ].vals->length  = aExec.getLength()+1;
-        pSmProps[ 1 ].vals->value   = strdup( aExec.getStr() );
+        pSmProps[ 1 ].name		= const_cast<char*>(SmProgram);
+        pSmProps[ 1 ].type		= const_cast<char*>(SmARRAY8);
+        pSmProps[ 1 ].num_vals	= 1;
+        pSmProps[ 1 ].vals		= new SmPropValue;
+        pSmProps[ 1 ].vals->length	= aExec.Len()+1;
+        pSmProps[ 1 ].vals->value	= strdup( aExec.GetBuffer() );
 
-        pSmProps[ 2 ].name      = const_cast<char*>(SmRestartCommand);
-        pSmProps[ 2 ].type      = const_cast<char*>(SmLISTofARRAY8);
-        pSmProps[ 2 ].num_vals  = 3;
-        pSmProps[ 2 ].vals      = new SmPropValue[3];
-        pSmProps[ 2 ].vals[0].length    = aExec.getLength()+1;
-        pSmProps[ 2 ].vals[0].value = strdup( aExec.getStr() );
+        pSmProps[ 2 ].name		= const_cast<char*>(SmRestartCommand);
+        pSmProps[ 2 ].type		= const_cast<char*>(SmLISTofARRAY8);
+        pSmProps[ 2 ].num_vals	= 3;
+        pSmProps[ 2 ].vals		= new SmPropValue[3];
+        pSmProps[ 2 ].vals[0].length	= aExec.Len()+1;
+        pSmProps[ 2 ].vals[0].value	= strdup( aExec.GetBuffer() );
             ByteString aRestartOption( "-session=" );
         aRestartOption.Append( SessionManagerClient::getSessionID() );
-        pSmProps[ 2 ].vals[1].length    = aRestartOption.Len()+1;
-        pSmProps[ 2 ].vals[1].value = strdup( aRestartOption.GetBuffer() );
+        pSmProps[ 2 ].vals[1].length	= aRestartOption.Len()+1;
+        pSmProps[ 2 ].vals[1].value	= strdup( aRestartOption.GetBuffer() );
             ByteString aRestartOptionNoLogo( "-nologo" );
-        pSmProps[ 2 ].vals[2].length    = aRestartOptionNoLogo.Len()+1;
-        pSmProps[ 2 ].vals[2].value = strdup( aRestartOptionNoLogo.GetBuffer() );
+        pSmProps[ 2 ].vals[2].length	= aRestartOptionNoLogo.Len()+1;
+        pSmProps[ 2 ].vals[2].value	= strdup( aRestartOptionNoLogo.GetBuffer() );
 
         rtl::OUString aUserName;
         rtl::OString aUser;
@@ -255,21 +254,21 @@ static void BuildSmPropertyList()
             osl_freeSecurityHandle( aSec );
         }
 
-        pSmProps[ 3 ].name      = const_cast<char*>(SmUserID);
-        pSmProps[ 3 ].type      = const_cast<char*>(SmARRAY8);
-        pSmProps[ 3 ].num_vals  = 1;
-        pSmProps[ 3 ].vals      = new SmPropValue;
-        pSmProps[ 3 ].vals->value   = strdup( aUser.getStr() );
-        pSmProps[ 3 ].vals->length  = strlen( (char *)pSmProps[ 3 ].vals->value )+1;
+        pSmProps[ 3 ].name		= const_cast<char*>(SmUserID);
+        pSmProps[ 3 ].type		= const_cast<char*>(SmARRAY8);
+        pSmProps[ 3 ].num_vals	= 1;
+        pSmProps[ 3 ].vals		= new SmPropValue;
+        pSmProps[ 3 ].vals->value	= strdup( aUser.getStr() );
+        pSmProps[ 3 ].vals->length	= strlen( (char *)pSmProps[ 3 ].vals->value )+1;
 
-        pSmProps[ 4 ].name      = const_cast<char*>(SmRestartStyleHint);
-        pSmProps[ 4 ].type      = const_cast<char*>(SmCARD8);
-        pSmProps[ 4 ].num_vals  = 1;
-        pSmProps[ 4 ].vals      = new SmPropValue;
-        pSmProps[ 4 ].vals->value   = malloc(1);
+        pSmProps[ 4 ].name		= const_cast<char*>(SmRestartStyleHint);
+        pSmProps[ 4 ].type		= const_cast<char*>(SmCARD8);
+        pSmProps[ 4 ].num_vals	= 1;
+        pSmProps[ 4 ].vals		= new SmPropValue;
+        pSmProps[ 4 ].vals->value	= malloc(1);
         pSmRestartHint = (unsigned char *)pSmProps[ 4 ].vals->value;
         *pSmRestartHint = SmRestartIfRunning;
-        pSmProps[ 4 ].vals->length  = 1;
+        pSmProps[ 4 ].vals->length	= 1;
 
         ppSmProps = new SmProp*[ nSmProps ];
         for( int i = 0; i < nSmProps; i++ )
@@ -293,8 +292,8 @@ IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, EMPTYARG )
         /*
           If we have no actual frames open, e.g. we launched a quickstarter,
           and then shutdown all our frames leaving just a quickstarter running,
-          then we don't want to launch an empty toplevel frame on the next
-          start. (The job of scheduling the restart of the quick-starter is a
+          then we don't want to launch an empty toplevel frame on the next 
+          start. (The job of scheduling the restart of the quick-starter is a 
           task of the quick-starter)
         */
         *pSmRestartHint = SmRestartNever;
@@ -313,7 +312,7 @@ IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, EMPTYARG )
     if( pOneInstance )
     {
         SalSessionSaveRequestEvent aEvent( pThis != 0, false );
-        pOneInstance->CallCallback( &aEvent );
+        pOneInstance->CallCallback( &aEvent );        
     }
     else
         saveDone();
@@ -329,7 +328,7 @@ IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, InteractionHdl, void*, EMPTYA
         SalSessionInteractionEvent aEvent( true );
         pOneInstance->CallCallback( &aEvent );
     }
-
+    
     return 0;
 }
 
@@ -341,7 +340,7 @@ IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, ShutDownCancelHdl, void*, EMP
         SalSessionShutdownCancelEvent aEvent;
         pOneInstance->CallCallback( &aEvent );
     }
-
+    
     return 0;
 }
 
@@ -378,8 +377,7 @@ void SessionManagerClient::SaveYourselfProc(
         SessionManagerClient::saveDone();
         return;
     }
-    sal_uIntPtr nStateVal = shutdown ? 0xffffffff : 0x0;
-    Application::PostUserEvent( STATIC_LINK( (void*)nStateVal, SessionManagerClient, SaveYourselfHdl ) );
+    Application::PostUserEvent( STATIC_LINK( (void*)(shutdown ? 0xffffffff : 0x0), SessionManagerClient, SaveYourselfHdl ) );
     SMprintf( "waiting for save yourself event to be processed\n" );
 #endif
 }
@@ -467,22 +465,22 @@ void SessionManagerClient::open()
         char* pClientID = NULL;
         const ByteString& rPrevId( getPreviousSessionID() );
 
-        aCallbacks.save_yourself.callback           = SaveYourselfProc;
-        aCallbacks.save_yourself.client_data        = NULL;
-        aCallbacks.die.callback                     = DieProc;
-        aCallbacks.die.client_data                  = NULL;
-        aCallbacks.save_complete.callback           = SaveCompleteProc;
-        aCallbacks.save_complete.client_data        = NULL;
-        aCallbacks.shutdown_cancelled.callback      = ShutdownCanceledProc;
-        aCallbacks.shutdown_cancelled.client_data   = NULL;
+        aCallbacks.save_yourself.callback			= SaveYourselfProc;
+        aCallbacks.save_yourself.client_data		= NULL;
+        aCallbacks.die.callback						= DieProc;
+        aCallbacks.die.client_data					= NULL;
+        aCallbacks.save_complete.callback			= SaveCompleteProc;
+        aCallbacks.save_complete.client_data		= NULL;
+        aCallbacks.shutdown_cancelled.callback		= ShutdownCanceledProc;
+        aCallbacks.shutdown_cancelled.client_data	= NULL;
         aSmcConnection = SmcOpenConnection( NULL,
                                             NULL,
                                             SmProtoMajor,
                                             SmProtoMinor,
-                                            SmcSaveYourselfProcMask         |
-                                            SmcDieProcMask                  |
-                                            SmcSaveCompleteProcMask         |
-                                            SmcShutdownCancelledProcMask    ,
+                                            SmcSaveYourselfProcMask			|
+                                            SmcDieProcMask					|
+                                            SmcSaveCompleteProcMask			|
+                                            SmcShutdownCancelledProcMask	,
                                             &aCallbacks,
                                             rPrevId.Len() ? const_cast<char*>(rPrevId.GetBuffer()) : NULL,
                                             &pClientID,
@@ -561,12 +559,12 @@ void SessionManagerClient::interactionDone( bool bCancelShutdown )
 }
 
 
-rtl::OUString SessionManagerClient::getExecName()
+String SessionManagerClient::getExecName()
 {
     rtl::OUString aExec, aSysExec;
     osl_getExecutableFile( &aExec.pData );
     osl_getSystemPathFromFileURL( aExec.pData, &aSysExec.pData );
-
+    
     int nPos = aSysExec.indexOf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".bin")) );
     if( nPos != -1 )
         aSysExec = aSysExec.copy( 0, nPos );
@@ -609,7 +607,7 @@ void ICEConnectionObserver::activate()
     {
         nWakeupFiles[0] = nWakeupFiles[1] = 0;
         ICEMutex = osl_createMutex();
-        bIsWatching = sal_True;
+        bIsWatching = TRUE;
 #ifdef USE_SM_EXTENSION
         /*
          * Default handlers call exit, we don't care that strongly if something
@@ -627,7 +625,7 @@ void ICEConnectionObserver::deactivate()
     if( bIsWatching )
     {
         lock();
-        bIsWatching = sal_False;
+        bIsWatching = FALSE;
 #ifdef USE_SM_EXTENSION
         IceRemoveConnectionWatch( ICEWatchProc, NULL );
         IceSetErrorHandler( origErrorHandler );
@@ -727,16 +725,16 @@ void ICEConnectionObserver::ICEWatchProc(
         nConnections++;
         pConnections = (IceConn*)rtl_reallocateMemory( pConnections, sizeof( IceConn )*nConnections );
         pFilehandles = (struct pollfd*)rtl_reallocateMemory( pFilehandles, sizeof( struct pollfd )*(nConnections+1) );
-        pConnections[ nConnections-1 ]      = connection;
-        pFilehandles[ nConnections ].fd     = fd;
-        pFilehandles[ nConnections ].events = POLLIN;
+        pConnections[ nConnections-1 ]		= connection;
+        pFilehandles[ nConnections ].fd		= fd;
+        pFilehandles[ nConnections ].events	= POLLIN;
         if( nConnections == 1 )
         {
             if( ! pipe( nWakeupFiles ) )
             {
                 int flags;
-                pFilehandles[0].fd      = nWakeupFiles[0];
-                pFilehandles[0].events  = POLLIN;
+                pFilehandles[0].fd		= nWakeupFiles[0];
+                pFilehandles[0].events	= POLLIN;
                 // set close-on-exec and nonblock descriptor flag.
                 if ((flags = fcntl (nWakeupFiles[0], F_GETFD)) != -1)
                 {

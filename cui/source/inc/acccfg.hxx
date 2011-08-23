@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,9 +31,11 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -71,12 +73,12 @@ class SfxAcceleratorConfigPage;
 
 class SfxAccCfgTabListBox_Impl : public SvTabListBox
 {
-    SfxAcceleratorConfigPage*   m_pAccelConfigPage;
+    SfxAcceleratorConfigPage*	m_pAccelConfigPage;
 
-    void                        KeyInput( const KeyEvent &rKEvt );
+    void 						KeyInput( const KeyEvent &rKEvt );
 
 protected:
-    virtual void                InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
+    virtual void				InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
 
 public:
                                 SfxAccCfgTabListBox_Impl(
@@ -87,7 +89,7 @@ public:
                                     m_pAccelConfigPage( pAccelConfigPage )
                                 {}
 
-    void                        ReplaceEntry( sal_uInt16 nPos, const String &rStr );
+    void 						ReplaceEntry( USHORT nPos, const String &rStr );
 };
 
 // class SfxAcceleratorConfigPage ----------------------------------------
@@ -104,7 +106,7 @@ struct TAccInfo
             , m_bIsConfigurable(sal_True )
             , m_sCommand       (         )
             , m_aKey           (aKey     )
-            // its important to set sal_True as default -
+            // its important to set TRUE as default -
             // because only fix entries will be disabled later ...
         {}
 
@@ -129,31 +131,31 @@ class SfxAcceleratorConfigPage : public SfxTabPage
 {
     friend class SfxAccCfgTabListBox_Impl;
 private:
-    const SfxMacroInfoItem*         m_pMacroInfoItem;
-    const SfxStringItem*            m_pStringItem;
-    const SfxStringItem*            m_pFontItem;
+    const SfxMacroInfoItem*			m_pMacroInfoItem;
+    const SfxStringItem*			m_pStringItem;
+    const SfxStringItem*			m_pFontItem;
     sfx2::FileDialogHelper*         m_pFileDlg;
 
-    SfxAccCfgTabListBox_Impl        aEntriesBox;
+    SfxAccCfgTabListBox_Impl		aEntriesBox;
     FixedLine                       aKeyboardGroup;
-     RadioButton                        aOfficeButton;
-    RadioButton                     aModuleButton;
-    PushButton                      aChangeButton;
-    PushButton                      aRemoveButton;
-    FixedText                       aGroupText;
+     RadioButton						aOfficeButton;
+    RadioButton						aModuleButton;
+    PushButton         				aChangeButton;
+    PushButton         				aRemoveButton;
+    FixedText          				aGroupText;
     SfxConfigGroupListBox_Impl*     pGroupLBox;
-    FixedText                       aFunctionText;
-    SfxConfigFunctionListBox_Impl*  pFunctionBox;
-    FixedText                       aKeyText;
-    SvTreeListBox                   aKeyBox;
+    FixedText          				aFunctionText;
+    SfxConfigFunctionListBox_Impl*	pFunctionBox;
+    FixedText          				aKeyText;
+    SvTreeListBox     				aKeyBox;
     FixedLine                       aFunctionsGroup;
-    PushButton                      aLoadButton;
-    PushButton                      aSaveButton;
-    PushButton                      aResetButton;
-    String              aLoadAccelConfigStr;
-    String              aSaveAccelConfigStr;
-    String              aFilterAllStr;
-    String              aFilterCfgStr;
+    PushButton						aLoadButton;
+    PushButton						aSaveButton;
+    PushButton		   				aResetButton;
+    String				aLoadAccelConfigStr;
+    String				aSaveAccelConfigStr;
+    String				aFilterAllStr;
+    String				aFilterCfgStr;
     SfxStylesInfo_Impl              m_aStylesInfo;
     sal_Bool                        m_bStylesInfoInitialized;
 
@@ -168,37 +170,42 @@ private:
     ::rtl::OUString m_sModuleShortName;
     ::rtl::OUString m_sModuleUIName;
 
-    DECL_LINK(                  ChangeHdl, Button * );
-    DECL_LINK(                  RemoveHdl, Button * );
-    DECL_LINK(                  SelectHdl, Control * );
-    DECL_LINK(                  Save, Button * );
-    DECL_LINK(                  Load, Button * );
-    DECL_LINK(                  Default, PushButton * );
-    DECL_LINK(                  RadioHdl, RadioButton* );
+    DECL_LINK( 					ChangeHdl, Button * );
+    DECL_LINK( 					RemoveHdl, Button * );
+    DECL_LINK( 					SelectHdl, Control * );
+    DECL_LINK( 					Save, Button * );
+    DECL_LINK( 					Load, Button * );
+    DECL_LINK( 					Default, PushButton * );
+    DECL_LINK(					RadioHdl, RadioButton* );
 
     DECL_LINK(                  LoadHdl, sfx2::FileDialogHelper* );
     DECL_LINK(                  SaveHdl, sfx2::FileDialogHelper* );
 
     String                      GetLabel4Command(const String& sCommand);
     void                        InitAccCfg();
-    sal_uInt16                      MapKeyCodeToPos( const KeyCode &rCode ) const;
+    KeyCode 					MapPosToKeyCode( USHORT nPos ) const;
+    USHORT  					MapKeyCodeToPos( const KeyCode &rCode ) const;
+    String  					GetFunctionName( KeyFuncType eType ) const;
     css::uno::Reference< css::frame::XModel > SearchForAlreadyLoadedDoc(const String& sName);
     void                        StartFileDialog( WinBits nBits, const String& rTitle );
 
-    void                        Init(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
-    void                        ResetConfig();
+    void 						Init(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
+    void 						ResetConfig();
 
-    void                        CreateCustomItems( SvLBoxEntry* pEntry, const String& aCol1, const String& aCol2 );
+    void						CreateCustomItems( SvLBoxEntry* pEntry, const String& aCol1, const String& aCol2 );
 
 public:
                                 SfxAcceleratorConfigPage( Window *pParent, const SfxItemSet& rItemSet );
-    virtual                     ~SfxAcceleratorConfigPage();
+    virtual 					~SfxAcceleratorConfigPage();
 
-    virtual sal_Bool                FillItemSet( SfxItemSet& );
-    virtual void                Reset( const SfxItemSet& );
+    virtual BOOL				FillItemSet( SfxItemSet& );
+    virtual void				Reset( const SfxItemSet& );
 
+    void						SelectMacro(const SfxMacroInfoItem*);
     void                        Apply(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
-    static SfxTabPage*          Create( Window* pParent, const SfxItemSet& rAttrSet );
+    void                        CopySource2Target(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xSourceAccMgr,
+                                                  const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xTargetAccMgr);
+    static SfxTabPage*			Create( Window* pParent, const SfxItemSet& rAttrSet );
 };
 
 
@@ -211,9 +218,53 @@ public:
     SfxAcceleratorConfigListBox( Window *pParent, ResId &rResId ) :
         ListBox( pParent, rResId ) {}
 
-    void ReplaceEntry( sal_uInt16 nPos, const String &rStr );
-    void ExpandEntry ( sal_uInt16 nPos, const String &rStr );
+    void ReplaceEntry( USHORT nPos, const String &rStr );
+    void ExpandEntry ( USHORT nPos, const String &rStr );
 };
+
+/*
+// class USHORTArr **********************************************************
+
+DECL_2BYTEARRAY(USHORTArr, USHORT, 10, 10)
+
+// class SfxAcceleratorConfigDialog **************************************************
+
+class SfxAcceleratorConfigDialog : public ModalDialog
+{
+    OKButton           aOKButton;
+    CancelButton       aCancelButton;
+    PushButton         aChangeButton;
+    PushButton         aRemoveButton;
+    SfxAcceleratorConfigListBox aEntriesBox;
+    FixedText          aDescriptionTextText;
+    FixedText		   aDescriptionInfoText;
+    FixedLine          aKeyboardGroup;
+    FixedText          aGroupText;
+    ListBox            aGroupLBox;
+    FixedText          aFunctionText;
+    ListBox            aFunctionBox;
+    FixedText          aKeyText;
+    ListBox            aKeyBox;
+    FixedLine          aFunctionsGroup;
+
+    USHORTArr     aAccelArr;
+    USHORTArr     aFunctionArr;
+    USHORTArr     aKeyArr;
+
+    void OKHdl    ( Button  * );
+    void ChangeHdl( Button  * );
+    void RemoveHdl( Button  * );
+    void SelectHdl( ListBox *pListBox );
+
+    KeyCode PosToKeyCode   ( USHORT nPos )          const;
+    USHORT  KeyCodeToPos   ( const KeyCode &rCode ) const;
+    String  GetFunctionName( KeyFuncType eType )    const;
+
+public:
+
+    SfxAcceleratorConfigDialog( Window *pParent );
+};
+*/
 
 class SvxShortcutAssignDlg : public SfxSingleTabDialog
 {
@@ -222,7 +273,7 @@ public:
         Window* pParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame,
         const SfxItemSet& rSet );
-    virtual ~SvxShortcutAssignDlg();
+    virtual	~SvxShortcutAssignDlg();
 };
 
 

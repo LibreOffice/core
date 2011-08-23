@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ java_io_InputStream::~java_io_InputStream()
 
 jclass java_io_InputStream::getMyClass() const
 {
-    // the class must be fetched only once, therefore static
+    // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
         theClass = findMyClass("java/io/InputStream");
     return theClass;
@@ -87,12 +87,12 @@ sal_Int32 SAL_CALL java_io_InputStream::readBytes( ::com::sun::star::uno::Sequen
 
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-
+    
     {
         jbyteArray pByteArray = t.pEnv->NewByteArray(nBytesToRead);
         static const char * cSignature = "([BII)I";
         static const char * cMethodName = "read";
-        // execute Java-Call
+        // Java-Call absetzen
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallIntMethod( object, mID, pByteArray, 0, nBytesToRead );

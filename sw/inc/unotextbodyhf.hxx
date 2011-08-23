@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,6 +120,9 @@ public:
 };
 
 
+/* -----------------25.08.98 11:02-------------------
+ *
+ * --------------------------------------------------*/
 typedef ::cppu::WeakImplHelper2
 <   ::com::sun::star::lang::XServiceInfo
 ,   ::com::sun::star::container::XEnumerationAccess

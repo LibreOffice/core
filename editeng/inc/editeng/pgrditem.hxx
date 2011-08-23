@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,8 @@
 // class SvxParaGridItem -------------------------------------------------
 
 
-/*  [Description]
-
+/*
+    [Beschreibung]
     Paragraph snap to grid
 */
 
@@ -46,13 +46,13 @@ class EDITENG_DLLPUBLIC SvxParaGridItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxParaGridItem( const sal_Bool bSnapToGrid /*= sal_True*/,
-                     const sal_uInt16 nId  );
+    SvxParaGridItem( const BOOL bSnapToGrid /*= TRUE*/,
+                     const USHORT nId  );
 
-    // "pure virtual Methods" from SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
-    virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const;
+    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
+    virtual USHORT			GetVersion( USHORT nFileVersion ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

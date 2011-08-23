@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,13 +43,13 @@ class TabControl;
 class VCL_DLLPUBLIC TabDialog : public Dialog
 {
 private:
-    FixedLine*          mpFixedLine;
-    Window*             mpViewWindow;
-    WindowAlign         meViewAlign;
-    sal_Bool                mbPosControls;
+    FixedLine*			mpFixedLine;
+    Window* 			mpViewWindow;
+    WindowAlign 		meViewAlign;
+    BOOL				mbPosControls;
 
-    SAL_DLLPRIVATE void ImplInitTabDialogData();
-    SAL_DLLPRIVATE void ImplPosControls();
+    SAL_DLLPRIVATE void	ImplInitTabDialogData();
+    SAL_DLLPRIVATE void	ImplPosControls();
 
 public:
                         TabDialog( Window* pParent,
@@ -57,17 +57,17 @@ public:
                         TabDialog( Window* pParent, const ResId& rResId );
                         ~TabDialog();
 
-    virtual void        Resize();
-    virtual void        StateChanged( StateChangedType nStateChange );
+    virtual void		Resize();
+    virtual void		StateChanged( StateChangedType nStateChange );
+    
+    void				AdjustLayout();
 
-    void                AdjustLayout();
-
-    void                SetViewWindow( Window* pWindow ) { mpViewWindow = pWindow; }
-    Window*             GetViewWindow() const { return mpViewWindow; }
-    void                SetViewAlign( WindowAlign eAlign ) { meViewAlign = eAlign; }
-    WindowAlign         GetViewAlign() const { return meViewAlign; }
+    void				SetViewWindow( Window* pWindow ) { mpViewWindow = pWindow; }
+    Window* 			GetViewWindow() const { return mpViewWindow; }
+    void				SetViewAlign( WindowAlign eAlign ) { meViewAlign = eAlign; }
+    WindowAlign 		GetViewAlign() const { return meViewAlign; }
 };
 
-#endif  // _SV_TABDLG_HXX
+#endif	// _SV_TABDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

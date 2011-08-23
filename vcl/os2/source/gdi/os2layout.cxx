@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include <tools/svwin.h>
+
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
 #include <salgdi.h>
@@ -47,10 +49,12 @@
 // for GetMirroredChar
 #include <vcl/svapp.hxx>
 
-#include <boost/unordered_map.hpp>
-typedef boost::unordered_map<int,int> IntMap;
+#include <hash_map>
+typedef std::hash_map<int,int> IntMap;
 
 #define DROPPED_OUTGLYPH 0xFFFF
+
+using namespace rtl;
 
 // =======================================================================
 
@@ -70,7 +74,7 @@ public:
     void                    SetKernData( int, const KERNINGPAIRS* );
     int                     GetKerning( sal_Unicode, sal_Unicode ) const;
 private:
-    KERNINGPAIRS*           mpKerningPairs;
+    KERNINGPAIRS*        	mpKerningPairs;
     int                     mnKerningPairs;
 #endif // GCP_KERN_HACK
 
@@ -107,8 +111,8 @@ public:
     float               GetFontScale() const    { return mfFontScale; }
 
 protected:
-    HPS                 mhPS;               // OS2 device handle
-    FATTRS              mhFont;
+    HPS					mhPS;				// OS2 device handle
+    FATTRS   			mhFont;
     int                 mnBaseAdv;          // x-offset relative to Layout origin
     float               mfFontScale;        // allows metrics emulation of huge font sizes
 
@@ -330,7 +334,7 @@ bool Os2SalLayout::LayoutText( ImplLayoutArgs& rArgs )
         nGcpOption |= GCP_USEKERNING;
 #endif // GCP_KERN_HACK
 
-    LONG    lLcid = Ft2QueryCharSet( mhPS);
+    LONG	lLcid = Ft2QueryCharSet( mhPS);
 
     for( i = 0; i < mnGlyphCount; ++i )
         mpOutGlyphs[i] = pBidiStr[ i ];
@@ -368,7 +372,7 @@ bool Os2SalLayout::LayoutText( ImplLayoutArgs& rArgs )
         if (Ft2FontSupportsUnicodeChar( mhPS, lLcid, TRUE, nCharCode))
             continue;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL>0
         debug_printf("Os2SalLayout::LayoutText font does not support unicode char\n");
 #endif
         // request glyph fallback at this position in the string
@@ -566,9 +570,9 @@ void Os2SalLayout::DrawText( SalGraphics& rGraphics ) const
     if( mnGlyphCount <= 0 )
         return;
 
-    Point   aPos = GetDrawPosition( Point( mnBaseAdv, 0 ) );
-    POINTL  aPt;
-    APIRET  rc;
+    Point 	aPos = GetDrawPosition( Point( mnBaseAdv, 0 ) );
+    POINTL	aPt;
+    APIRET	rc;
 
     aPt.x = aPos.X();
     aPt.y = static_cast<Os2SalGraphics&>(rGraphics).mnHeight - aPos.Y();
@@ -579,23 +583,23 @@ void Os2SalLayout::DrawText( SalGraphics& rGraphics ) const
         // convert to codepage
         ByteString str( mpOutGlyphs, gsl_getSystemTextEncoding() );
         // gliph size is not recalculated, so it could be wrong!
-        rc = Ft2CharStringPosAtA( static_cast<Os2SalGraphics&>(rGraphics).mhPS,
-                    &aPt, NULL, CHS_VECTOR, mnGlyphCount, (PSZ)str.GetBuffer(),
+        rc = Ft2CharStringPosAtA( static_cast<Os2SalGraphics&>(rGraphics).mhPS, 
+                    &aPt, NULL, CHS_VECTOR, mnGlyphCount, (PSZ)str.GetBuffer(), 
                     (LONG*)mpGlyphAdvances, 0);
     } else {
         // try unicode rendering to screen
-        rc = Ft2CharStringPosAtW( static_cast<Os2SalGraphics&>(rGraphics).mhPS,
-                    &aPt, NULL, CHS_VECTOR, mnGlyphCount, (LPWSTR)mpOutGlyphs,
+        rc = Ft2CharStringPosAtW( static_cast<Os2SalGraphics&>(rGraphics).mhPS, 
+                    &aPt, NULL, CHS_VECTOR, mnGlyphCount, (LPWSTR)mpOutGlyphs, 
                     (LONG*)mpGlyphAdvances, 0);
         if (rc == GPI_ERROR) {
             // if *W fails, convert to codepage and use *A (fallback to GPI into ft2)
             ByteString str( mpOutGlyphs, gsl_getSystemTextEncoding() );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL>10
             debug_printf("Os2SalLayout::DrawText HPS %08x PosAtW failed '%s'!\n",static_cast<Os2SalGraphics&>(rGraphics).mhPS,str.GetBuffer());
 #endif
             // gliph size is not recalculated, so it could be wrong!
-            rc = Ft2CharStringPosAtA( static_cast<Os2SalGraphics&>(rGraphics).mhPS,
-                        &aPt, NULL, CHS_VECTOR, mnGlyphCount, (PSZ)str.GetBuffer(),
+            rc = Ft2CharStringPosAtA( static_cast<Os2SalGraphics&>(rGraphics).mhPS, 
+                        &aPt, NULL, CHS_VECTOR, mnGlyphCount, (PSZ)str.GetBuffer(), 
                         (LONG*)mpGlyphAdvances, 0);
         }
     }
@@ -949,6 +953,9 @@ SalLayout* Os2SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
         }
 #endif // GCP_KERN_HACK
 
+        //BYTE eCharSet = ANSI_CHARSET;
+        //if( mpLogFont )
+        //    eCharSet = mpLogFont->lfCharSet;
         pLayout = new Os2SalLayout( mhPS, 0, rFontFace, rFontInstance );
     }
 
@@ -1032,6 +1039,7 @@ ImplFontData* ImplOs2FontData::Clone() const
 
 ImplFontEntry* ImplOs2FontData::CreateFontInstance( ImplFontSelectData& rFSD ) const
 {
+    //debug_printf("ImplOs2FontData::CreateFontInstance\n");
     ImplFontEntry* pEntry = new ImplOs2FontEntry( rFSD );
     return pEntry;
 }

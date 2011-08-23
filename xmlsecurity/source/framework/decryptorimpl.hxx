@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include "encryptionengine.hxx"
 
 class DecryptorImpl : public cppu::ImplInheritanceHelper3
-<
+< 
     EncryptionEngine,
     com::sun::star::xml::crypto::sax::XDecryptionResultBroadcaster,
     com::sun::star::lang::XInitialization,
@@ -48,15 +48,19 @@ class DecryptorImpl : public cppu::ImplInheritanceHelper3
 /****** DecryptorImpl.hxx/CLASS DecryptorImpl *********************************
  *
  *   NAME
- *  DecryptorImpl -- decrypts an encryption
+ *	DecryptorImpl -- decrypts an encryption
  *
  *   FUNCTION
- *  Collects all resources for decrypting an encryption, then decrypts the
- *  encryption by invoking a xmlsec-based encryption bridge component.
+ *	Collects all resources for decrypting an encryption, then decrypts the
+ *	encryption by invoking a xmlsec-based encryption bridge component.
+ *
+ *   HISTORY
+ *	05.01.2004 -	Interface supported: XDecryptionResultBroadcaster,
+ *	            	XInitialization, XServiceInfo
  *
  *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
+ *	Michael Mi
+ *	Email: michael.mi@sun.com
  ******************************************************************************/
 {
 private:
@@ -64,7 +68,7 @@ private:
      * the Id of the encryption, which is used for the result listener to
      * identify the encryption.
      */
-    sal_Int32 m_nEncryptionId;
+    sal_Int32 m_nEncryptionId;  
 
     /*
      * the decryption result,
@@ -72,59 +76,59 @@ private:
      */
     bool      m_bDecryptionSucceed;
 
-    com::sun::star::uno::Reference<
+    com::sun::star::uno::Reference< 
         com::sun::star::xml::crypto::XXMLSecurityContext > m_xXMLSecurityContext;
-
+    
     virtual void notifyResultListener() const
         throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
     virtual bool checkReady() const;
-    virtual void startEngine( const com::sun::star::uno::Reference<
+    virtual void startEngine( const com::sun::star::uno::Reference< 
         com::sun::star::xml::crypto::XXMLEncryptionTemplate >&
         xEncryptionTemplate)
         throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
-
+    
 public:
-    explicit DecryptorImpl( const com::sun::star::uno::Reference<
+    explicit DecryptorImpl( const com::sun::star::uno::Reference< 
         com::sun::star::lang::XMultiServiceFactory >& rxMSF);
     virtual ~DecryptorImpl();
 
     /* XDecryptionResultBroadcaster */
     virtual void SAL_CALL addDecryptionResultListener(
-        const com::sun::star::uno::Reference<
+        const com::sun::star::uno::Reference< 
             com::sun::star::xml::crypto::sax::XDecryptionResultListener >&
             listener )
             throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeDecryptionResultListener(
-            const com::sun::star::uno::Reference<
-                com::sun::star::xml::crypto::sax::XDecryptionResultListener >&
+        virtual void SAL_CALL removeDecryptionResultListener( 
+            const com::sun::star::uno::Reference< 
+                com::sun::star::xml::crypto::sax::XDecryptionResultListener >& 
                 listener )
             throw (com::sun::star::uno::RuntimeException);
-
+    
     /* XInitialization */
-    virtual void SAL_CALL initialize(
-        const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
+    virtual void SAL_CALL initialize( 
+        const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments ) 
         throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
 
     /* XServiceInfo */
-    virtual rtl::OUString SAL_CALL getImplementationName(  )
+    virtual rtl::OUString SAL_CALL getImplementationName(  ) 
         throw (com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& ServiceName ) 
         throw (com::sun::star::uno::RuntimeException);
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
         throw (com::sun::star::uno::RuntimeException);
 };
 
 rtl::OUString DecryptorImpl_getImplementationName()
     throw ( com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL DecryptorImpl_supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL DecryptorImpl_supportsService( const rtl::OUString& ServiceName ) 
     throw ( com::sun::star::uno::RuntimeException );
 
-com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL DecryptorImpl_getSupportedServiceNames(  )
+com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL DecryptorImpl_getSupportedServiceNames(  ) 
     throw ( com::sun::star::uno::RuntimeException );
 
 com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-SAL_CALL DecryptorImpl_createInstance(
+SAL_CALL DecryptorImpl_createInstance( 
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >&
         rSMgr)
     throw ( com::sun::star::uno::Exception );

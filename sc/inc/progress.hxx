@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,54 +48,54 @@ class ScDocument;
 class SC_DLLPUBLIC ScProgress
 {
 private:
-    static  SfxProgress*    pGlobalProgress;
-    static  sal_uLong           nGlobalRange;
-    static  sal_uLong           nGlobalPercent;
-    static  sal_Bool            bGlobalNoUserBreak;
-    static  ScProgress*     pInterpretProgress;
-    static  ScProgress*     pOldInterpretProgress;
-    static  sal_uLong           nInterpretProgress;
-    static  sal_Bool            bAllowInterpretProgress;
-    static  ScDocument*     pInterpretDoc;
-    static  sal_Bool            bIdleWasDisabled;
+    static	SfxProgress*	pGlobalProgress;
+    static	ULONG			nGlobalRange;
+    static	ULONG			nGlobalPercent;
+    static	BOOL			bGlobalNoUserBreak;
+    static	ScProgress*		pInterpretProgress;
+    static	ScProgress*		pOldInterpretProgress;
+    static	ULONG			nInterpretProgress;
+    static	BOOL			bAllowInterpretProgress;
+    static	ScDocument*		pInterpretDoc;
+    static	BOOL			bIdleWasDisabled;
 
-            SfxProgress*    pProgress;
+            SfxProgress*	pProgress;
 
                             // not implemented
                             ScProgress( const ScProgress& );
-            ScProgress&     operator=( const ScProgress& );
+            ScProgress&		operator=( const ScProgress& );
 
-    static  void            CalcGlobalPercent( sal_uLong nVal )
+    static	void			CalcGlobalPercent( ULONG nVal )
                                 {
                                     nGlobalPercent = nGlobalRange ?
                                         nVal * 100 / nGlobalRange : 0;
                                 }
 
 public:
-    static  SfxProgress*    GetGlobalSfxProgress() { return pGlobalProgress; }
-    static  sal_Bool            IsUserBreak() { return !bGlobalNoUserBreak; }
-    static  void            CreateInterpretProgress( ScDocument* pDoc,
-                                                    sal_Bool bWait = sal_True );
-    static  ScProgress*     GetInterpretProgress() { return pInterpretProgress; }
-    static  void            DeleteInterpretProgress();
-    static  sal_uLong           GetInterpretCount() { return nInterpretProgress; }
-    static  sal_uLong           GetGlobalRange()    { return nGlobalRange; }
-    static  sal_uLong           GetGlobalPercent()  { return nGlobalPercent; }
+    static	SfxProgress*	GetGlobalSfxProgress() { return pGlobalProgress; }
+    static	BOOL			IsUserBreak() { return !bGlobalNoUserBreak; }
+    static	void			CreateInterpretProgress( ScDocument* pDoc,
+                                                    BOOL bWait = TRUE );
+    static	ScProgress*		GetInterpretProgress() { return pInterpretProgress; }
+    static	void			DeleteInterpretProgress();
+    static	ULONG			GetInterpretCount() { return nInterpretProgress; }
+    static	ULONG			GetGlobalRange()	{ return nGlobalRange; }
+    static	ULONG			GetGlobalPercent()	{ return nGlobalPercent; }
 
                             ScProgress( SfxObjectShell* pObjSh,
                                          const String& rText,
-                                         sal_uLong nRange, sal_Bool bAllDocs = false,
-                                         sal_Bool bWait = sal_True );
+                                         ULONG nRange, BOOL bAllDocs = FALSE,
+                                         BOOL bWait = TRUE );
                             ~ScProgress();
 
 #ifdef SC_PROGRESS_CXX
-                            // for DummyInterpret only, never use otherwise!!!
+                            // nur fuer DummyInterpret, sonst nie benutzen!!!
                             ScProgress();
 #endif
-                            // might be NULL!
-            SfxProgress*    GetSfxProgress() const { return pProgress; }
+                            // kann NULL sein!
+            SfxProgress*	GetSfxProgress() const { return pProgress; }
 
-            sal_Bool            SetStateText( sal_uLong nVal, const String &rVal, sal_uLong nNewRange = 0 )
+            BOOL			SetStateText( ULONG nVal, const String &rVal, ULONG nNewRange = 0 )
                                 {
                                     if ( pProgress )
                                     {
@@ -103,12 +103,12 @@ public:
                                             nGlobalRange = nNewRange;
                                         CalcGlobalPercent( nVal );
                                         if ( !pProgress->SetStateText( nVal, rVal, nNewRange ) )
-                                            bGlobalNoUserBreak = false;
+                                            bGlobalNoUserBreak = FALSE;
                                         return bGlobalNoUserBreak;
                                     }
-                                    return sal_True;
+                                    return TRUE;
                                 }
-            sal_Bool            SetState( sal_uLong nVal, sal_uLong nNewRange = 0 )
+            BOOL			SetState( ULONG nVal, ULONG nNewRange = 0 )
                                 {
                                     if ( pProgress )
                                     {
@@ -116,38 +116,38 @@ public:
                                             nGlobalRange = nNewRange;
                                         CalcGlobalPercent( nVal );
                                         if ( !pProgress->SetState( nVal, nNewRange ) )
-                                            bGlobalNoUserBreak = false;
+                                            bGlobalNoUserBreak = FALSE;
                                         return bGlobalNoUserBreak;
                                     }
-                                    return sal_True;
+                                    return TRUE;
                                 }
-            sal_Bool            SetStateCountDown( sal_uLong nVal )
+            BOOL			SetStateCountDown( ULONG nVal )
                                 {
                                     if ( pProgress )
                                     {
                                         CalcGlobalPercent( nGlobalRange - nVal );
                                         if ( !pProgress->SetState( nGlobalRange - nVal ) )
-                                            bGlobalNoUserBreak = false;
+                                            bGlobalNoUserBreak = FALSE;
                                         return bGlobalNoUserBreak;
                                     }
-                                    return sal_True;
+                                    return TRUE;
                                 }
-            sal_Bool            SetStateOnPercent( sal_uLong nVal )
-                                {   // only if percentage increased
+            BOOL			SetStateOnPercent( ULONG nVal )
+                                {	// nur wenn Prozent mehr als vorher
                                     if ( nGlobalRange && (nVal * 100 /
                                             nGlobalRange) > nGlobalPercent )
                                         return SetState( nVal );
-                                    return sal_True;
+                                    return TRUE;
                                 }
-            sal_Bool            SetStateCountDownOnPercent( sal_uLong nVal )
-                                {   // only if percentage increased
+            BOOL			SetStateCountDownOnPercent( ULONG nVal )
+                                {	// nur wenn Prozent mehr als vorher
                                     if ( nGlobalRange &&
                                             ((nGlobalRange - nVal) * 100 /
                                             nGlobalRange) > nGlobalPercent )
                                         return SetStateCountDown( nVal );
-                                    return sal_True;
+                                    return TRUE;
                                 }
-            sal_uLong           GetState()
+            ULONG			GetState()
                                 {
                                     if ( pProgress )
                                         return pProgress->GetState();

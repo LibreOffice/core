@@ -29,8 +29,6 @@ TARGET = smoketest
 
 ENABLE_EXCEPTIONS = TRUE
 
-ABORT_ON_ASSERTION = TRUE
-
 .INCLUDE: settings.mk
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
@@ -58,13 +56,17 @@ ALLTAR : cpptest
 
 cpptest : $(SHL1TARGETN)
 
-TEST_ARGUMENTS = smoketest.doc=$(OUTDIR)/bin$(UPDMINOREXT)/smoketestdoc.sxw
-CPPTEST_LIBRARY = $(SHL1TARGETN)
+OOO_CPPTEST_ARGS = $(SHL1TARGETN) -env:arg-doc=$(BIN)/smoketestdoc.sxw
 
 .IF "$(OS)" != "WNT"
-localinstall :
+$(installationtest_instpath).flag : $(shell ls \
+        $(installationtest_instset)/LibO_*_install-arc_$(defaultlangiso).tar.gz)
     $(RM) -r $(installationtest_instpath)
     $(MKDIRHIER) $(installationtest_instpath)
-    ooinstall $(installationtest_instpath)/opt
-cpptest : localinstall
+    cd $(installationtest_instpath) && $(GNUTAR) xfz \
+        $(installationtest_instset)/LibO_*_install-arc_$(defaultlangiso).tar.gz
+    $(MV) $(installationtest_instpath)/LibO_*_install-arc_$(defaultlangiso) \
+        $(installationtest_instpath)/opt
+    $(TOUCH) $@
+cpptest : $(installationtest_instpath).flag
 .END

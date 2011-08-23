@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,16 +36,23 @@
 
 TYPEINIT1_FACTORY(SvxCharHiddenItem, SfxBoolItem, new SvxCharHiddenItem(sal_False, 0));
 
-SvxCharHiddenItem::SvxCharHiddenItem( const sal_Bool bHidden, const sal_uInt16 nId ) :
+/*-- 16.12.2003 15:24:25---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SvxCharHiddenItem::SvxCharHiddenItem( const sal_Bool bHidden, const USHORT nId ) :
     SfxBoolItem( nId, bHidden )
 {
 }
+/*-- 16.12.2003 15:24:25---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 SfxPoolItem* SvxCharHiddenItem::Clone( SfxItemPool * ) const
 {
     return new SvxCharHiddenItem( *this );
 }
+/*-- 16.12.2003 15:24:25---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 SfxItemPresentation SvxCharHiddenItem::GetPresentation
 (
     SfxItemPresentation ePres,
@@ -62,7 +69,7 @@ SfxItemPresentation SvxCharHiddenItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            sal_uInt16 nId = RID_SVXITEMS_CHARHIDDEN_FALSE;
+            USHORT nId = RID_SVXITEMS_CHARHIDDEN_FALSE;
 
             if ( GetValue() )
                 nId = RID_SVXITEMS_CHARHIDDEN_TRUE;

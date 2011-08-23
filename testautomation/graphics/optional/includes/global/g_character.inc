@@ -42,46 +42,44 @@ testcase tFormatCharacter
    dim sTemp as string
    dim iTemp as integer
 
-   printlog "open application "
+   '/// open application ///'
    Call hNewDocument
    sleep 1
 
-   printlog "create a textframe with content "
+   '/// create a textframe with content ///'
    hTextrahmenErstellen ("This is a check, a check, a check.",10,10,60,30)
-   printlog "type with keys [strg]+[home] [shift]+[end] to select the inserted text "
+   '/// type with keys [strg]+[home] [shift]+[end] to select the inserted text ///'
    hTypeKeys "<MOD1 HOME><shift end>"
    sleep 1
 
-   printlog "Format->Character "
+   '/// Format->Character ///'
    FormatCharacter
-    sleep 1
-    printlog "switch to tabpage 'Font' "
-    Kontext
-    Messagebox.SetPage TabFont
-    Kontext "TabFont"
-    sleep 1
+      sleep 1
+      '/// switch to tabpage 'Font' ///'
+      Kontext
+      Messagebox.SetPage TabFont
+      Kontext "TabFont"
+      sleep 1
 
-    printlog "switch to tabpage 'Font Effects' "
-    Kontext
-    Messagebox.SetPage TabFontEffects
-    kontext "TabFontEffects"
-    sleep 1
+      '/// switch to tabpage 'Font Effects' ///'
+      Kontext
+      Messagebox.SetPage TabFontEffects
+      kontext "TabFontEffects"
+      sleep 1
 
-    printlog "switch to tabpage 'Position' "
-    Kontext
-    Messagebox.SetPage TabFontPosition
-    Kontext "TabFontPosition"
-    sleep 1
+      '/// switch to tabpage 'Position' ///'
+      Kontext
+      Messagebox.SetPage TabFontPosition
+      Kontext "TabFontPosition"
+      sleep 1
 
-    printlog "close dialog 'Character' with 'OK' "
-    TabFontPosition.OK
-    printlog "close application "
+      '/// close dialog 'Character' with 'OK' ///'
+      TabFontPosition.OK
+   '/// close application ///'
    Call hCloseDocument
    
 endcase 'tFormatCharacter
-
 '---------------------------------------------------------
-
 testcase tDialogCharacter
 
     Dim i as integer
@@ -103,13 +101,11 @@ testcase tDialogCharacter
     ToolsOptions
     hToolsOptions ( "LanguageSettings", "Languages" )
 
-    printlog "Check in what state Asian support is "
-    if Aktivieren.IsChecked then                                  
+    if Aktivieren.IsChecked then                                  '/// Check in what state Asian support is ///'
        Asiansupportsetting = TRUE
     else
-        printlog "Activate if not already activated "
        Asiansupportsetting = FALSE
-       Aktivieren.Check                                           
+       Aktivieren.Check                                           '/// Activate if not already activated ///'
     end if
 
     Kontext "ExtrasOptionenDlg"
@@ -122,8 +118,8 @@ testcase tDialogCharacter
 
     FormatCharacter
     sleep 1
-    Kontext '"Active"                 
-    Active.SetPage TabFont           
+    Kontext '"Active"                  ' insert this, perhaps another
+    Active.SetPage TabFont            ' tabpage is active at open
     Kontext "TabFont"
     CountOfThem = FontWest.GetItemCount
     for y = 1 to CountOfThem
@@ -279,14 +275,12 @@ testcase tDialogCharacter
     next y
 
     Kontext
-    printlog "Changes the active tab to Position"
-    Active.SetPage TabFontPosition        
+    Active.SetPage TabFontPosition        '/// Changes the active tab to "Position"
     Kontext "TabFontPosition"
     printlog "TabFontPosition"
     SuperScript.Check
     Super.Check
-    printlog "Testing the Relative Font Size-Listbox"
-    RelativeFontSize.ToMin         
+    RelativeFontSize.ToMin         '/// Testing the "Relative Font Size"-Listbox
     ThisIsMyTextFromControl = RelativeFontSize.GetText
 '    printlog "The Relative Font Size minimum is: " & ThisIsMyTextFromControl
     for y = 1 to 99
@@ -296,8 +290,7 @@ testcase tDialogCharacter
     next y
 
     Automatic.Check
-    printlog "Testing the Scale With-Listbox"
-    ScaleWith.ToMin          
+    ScaleWith.ToMin          '/// Testing the "Scale With"-Listbox
     ThisIsMyTextFromControl = ScaleWith.GetText
     printlog "ScaleWith minimum is:" & ThisIsMyTextFromControl
     ' ScaleWith.TypeKeys "<TAB>"
@@ -310,10 +303,8 @@ testcase tDialogCharacter
     Normal.Check
     Subscript.Check
 
-    printlog "Testing the Reliative Font Size-Listbox again but this time"
-    RelativeFontSize.ToMin
-    printlog "with Subscript and Normal Checked"
-    ThisIsMyTextFromControl = RelativeFontSize.GetText      
+    RelativeFontSize.ToMin         '/// Testing the "Reliative Font Size"-Listbox again but this time
+    ThisIsMyTextFromControl = RelativeFontSize.GetText      '/// with "Subscript" and "Normal" Checked
     printlog "The Relative Font Size minimum is: " & ThisIsMyTextFromControl
     for y = 1 to 99
         RelativeFontSize.TypeKeys "<UP>"
@@ -323,8 +314,7 @@ testcase tDialogCharacter
 
     Automatic.Check
 
-    printlog "Testing the ScaleWith-Listbox"
-    ScaleWith.ToMin          
+    ScaleWith.ToMin          '/// Testing the "ScaleWith"-Listbox
     ThisIsMyTextFromControl = ScaleWith.GetText
     printlog "The ScaleWith Size is: " & ThisIsMyTextFromControl
     for y = 1 to 100
@@ -333,15 +323,13 @@ testcase tDialogCharacter
 '        printlog "The ScaleWith Size is: " & ThisIsMyTextFromControl
     next y
 
-    printlog "Testing the Spacing-ListBox"
-    ThisIsMyTextFromControl = Spacing.GetSelText      
+    ThisIsMyTextFromControl = Spacing.GetSelText      '/// Testing the "Spacing"-ListBox
     printlog "The Spacing is first: " & ThisIsMyTextFromControl
     for y = 2 to 3
         Spacing.Select y
         ThisIsMyTextFromControl = Spacing.GetSelText
         printlog "The Spacing is: " & ThisIsMyTextFromControl
-        printlog "Testing the Spacing By-Scrollbox"
-        ThisIsMyTextFromControl = SpacingBy.GetText      
+        ThisIsMyTextFromControl = SpacingBy.GetText      '/// Testing the "Spacing By"-Scrollbox
 '        printlog "The SpacingBy Size minimum is: " & ThisIsMyTextFromControl
         SpacingBy.ToMin
         for z = 1 to 4
@@ -359,8 +347,7 @@ testcase tDialogCharacter
        kontext
        ToolsOptions
        hToolsOptions ( "LanguageSettings", "Languages" )
-       printlog "Deactivate if not already deactivated "
-       Aktivieren.UnCheck                                    
+       Aktivieren.UnCheck                                    '/// Deactivate if not already deactivated ///'
        Printlog "Reseted the Asiansupport-value to it's original state"
 
        Kontext "ExtrasOptionenDlg"
@@ -398,41 +385,41 @@ testcase tSetFormatCharacter
    end if
 
     sFile = convertPath(gTesttoolpath + "graphics\required\input\spellb_" + iSprache + "."+ExtensionString)
-    printlog "create document, if it doesn't exist, else skip this case :-) "
+    '/// create document, if it doesn't exist, else skip this case :-) ///'
     if (dir(sFile)="") then
-        printlog "open application "
+        '/// open application ///'
         Call  hNewDocument
 
-        printlog "activate all languages in options "
-        printlog " Tools->Options "
+        '/// activate all languages in options ///'
+        '///+ Tools->Options ///'
         ToolsOptions
-        printlog " select tabpage 'Languages' from set 'Language Settings' "
+        '///+ select tabpage 'Languages' from set 'Language Settings' ///'
         hToolsOptions("LANGUAGESETTINGS","Languages")
         kontext "TabSprachen"
-        printlog " save state and check checkbox 'Asian languages support' "
-        printlog "if the language is Asian, skip this part "
+        '///+ save state and check checkbox 'Asian languages support' ///'
+        '/// if the language is Asian, skip this part ///'
         printlog "iSprache = " + iSprache
         if bAsianLan = FALSE then
            bAsian = Aktivieren.isEnabled
            Aktivieren.check
         endif
-        printlog " save state and  check checkbox 'Complex text layout (CTL) support' "
+        '///+ save state and  check checkbox 'Complex text layout (CTL) support' ///'
         bComplex = ComplexScriptEnabled.isEnabled
         ComplexScriptEnabled.check
-        printlog "close dialog 'Options' with OK "
+        '///+ close dialog 'Options' with OK ///'
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK
 
-        printlog "get count of languages "
-        printlog " Format->Character "
+        '/// get count of languages ///'
+        '///+ Format->Character ///'
         FormatCharacter
         sleep 1
         Kontext
-        printlog "switch to tabpage 'Font' "
+        '///+ switch to tabpage 'Font' ///'
         Messagebox.SetPage TabFont
         kontext "TabFont"
         sleep 1
-        printlog " get count of languages for Western/Asian/CTL fonts "
+        '///+ get count of languages for Western/Asian/CTL fonts ///'
         iWest    = LanguageWest.getItemCount
         iAsian   = LanguageEast.getItemCount
         iComplex = LanguageCTL.getItemCount
@@ -469,39 +456,39 @@ testcase tSetFormatCharacter
               Printlog "CTL font languages count         : " + iComplex
            endif
         endif
-	printlog "close dialog 'Character' with OK "
+	'///+ close dialog 'Character' with OK ///'
         TabFont.Ok
 
         WL_SD_TextEinfuegenDraw
         gMouseMove ( 1, 1, 100, 100 )
 
-        printlog "print the language counts into the first line of the document "
+        '///+ print the language counts into the first line of the document ///'
         hTypeKeys(" "+iWest+" "+iAsian+" "+iComplex+"<return>")
 
 
-        printlog "set all languages to '[None]' "
-        printlog "Format->Character "
+        '/// set all languages to '[None]' ///'
+        '///+ Format->Character ///'
         FormatCharacter
         kontext "TabFont"
-        printlog "select '[None]' (should be the first entry in every listbox) "
+        '///+ select '[None]' (should be the first entry in every listbox) ///'
         LanguageWest.select 1
         LanguageEast.select 1
         LanguageCTL.select 1
-        printlog "close dialog 'Character' with OK "
+        '///+ close dialog 'Character' with OK ///'
         TabFont.Ok
 
-        printlog "print one line with language formated text for every language "
+        '/// print one line with language formated text for every language ///'
         for i = 1 to iWest
-            printlog "Format->Character "
+            '///+ Format->Character ///'
             FormatCharacter
                 kontext "TabFont"
-                printlog "select the next language "
+                '///+ select the next language ///'
                 LanguageWest.select i
                 sTemp = LanguageWest.getItemText (i)
                 ListAppend(sLanguage(), sTemp)
-                printlog "close dialog 'Character' with OK "
+                '///+ close dialog 'Character' with OK ///'
             TabFont.Ok
-            printlog "type [return][number of language in list][Tab][Language name][Tab] "
+            '///+ type [return][number of language in list][Tab][Language name][Tab] ///'
             hTypeKeys(""+i+"<tab>"+sTemp+"<tab><return>")
         next i
 
@@ -541,7 +528,7 @@ testcase tSetFormatCharacter
             hTypeKeys(""+i+"<tab>"+sTemp+"<tab><return>")
         next i
 
-        printlog "save the created document & the languages list if they don't exists "
+        '/// save the created document & the languages list if they don't exists ///'
         hFileSaveAs (sFile)
         qaErrorLog "Created file. Please check it and then commit it! " + sTemp
         sTemp = convertPath(gTesttoolpath + "graphics\required\input\spellb_" + iSprache + ".txt")
@@ -549,29 +536,29 @@ testcase tSetFormatCharacter
             ListWrite(sLanguage(), sTemp,"utf8")
         endif
 
-        printlog "restore the options "
-        printlog "Tools->Options "
+        '/// restore the options ///'
+        '///+ Tools->Options ///'
         ToolsOptions
-        printlog "select tabpage 'Languages' from set 'Language Settings' "
+        '///+ select tabpage 'Languages' from set 'Language Settings' ///'
         hToolsOptions("LANGUAGESETTINGS","Languages")
         kontext "TabSprachen"
 
-        printlog "restore state of checkbox 'Asian languages support' "
-        printlog "if the language is Asian, skip this part "
+        '///+ restore state of checkbox 'Asian languages support' ///'
+        '/// if the language is Asian, skip this part ///'
         if bAsianLan = FALSE then
            if (bAsian <> TRUE) then
                Aktivieren.UNcheck
            endif
         endif
-        printlog "restore state of checkbox 'Complex text layout (CTL) support' "
+        '///+ restore state of checkbox 'Complex text layout (CTL) support' ///'
         if (bComplex <> TRUE) then
             ComplexScriptEnabled.UNcheck
         endif
-        printlog "close dialog 'Options' with OK "
+        '///+ close dialog 'Options' with OK ///'
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK
 
-        printlog "close application "
+        '/// close application ///'
         Call hCloseDocument
     endif
     
@@ -599,29 +586,29 @@ testcase tGetFormatCharacter
        ExtensionString = "odg"
     end if
     
-    printlog "open the english document with all languages "
+    '/// open the english document with all languages ///'
     hDateiOeffnen (convertPath(gTesttoolpath + "graphics\required\input\spellb_" + iSprache + "."+ExtensionString)
     ListRead(sLanguageR(), convertPath(gTesttoolpath + "graphics\required\input\spellb_1.txt"),"utf8")
 
-    printlog "activate all languages in options "
-    printlog " Tools->Options "
+    '/// activate all languages in options ///'
+    '///+ Tools->Options ///'
     ToolsOptions
-    printlog "select tabpage 'Languages' from set 'Language Settings' "
+    '///+ select tabpage 'Languages' from set 'Language Settings' ///'
     hToolsOptions("LANGUAGESETTINGS","Languages")
     kontext "TabSprachen"
-    printlog "save state and check checkbox 'Asian languages support' "
+    '///+ save state and check checkbox 'Asian languages support' ///'
     bAsian = Aktivieren.isEnabled
     Aktivieren.check
-    printlog "save state and  check checkbox 'Complex text layout (CTL) support' "
+    '///+ save state and  check checkbox 'Complex text layout (CTL) support' ///'
     bComplex = ComplexScriptEnabled.isEnabled
     ComplexScriptEnabled.check
-    printlog "close dialog 'Options' with OK "
+    '///+ close dialog 'Options' with OK ///'
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     sleep (1)
-    printlog "get count of languages "
+    '/// get count of languages ///'
     hTypeKeys("<tab><f2>")
-    printlog "first how many are in the reference document (printed in the first line)"
+    '///+ first how many are in the reference document (printed in the first line)///'
     hTypeKeys("<mod1 home><shift end>")
     sleep (1)
     editcopy
@@ -632,15 +619,15 @@ testcase tGetFormatCharacter
     iAsian(1) = mid(sTemp, iTemp+1, iTemp-i)
     iComplex(1) = right(sTemp, Len(sTemp) - i)
     sleep (1)
-    printlog "Format->Character "
+    '///+ Format->Character ///'
     FormatCharacter
     sleep 1
     Kontext
-    printlog "switch to tabpage 'Font' "
+    '///+ switch to tabpage 'Font' ///'
     Messagebox.SetPage TabFont
     kontext "TabFont"
     sleep 1
-    printlog "get count of languages for Western/Asian/CTL fonts "
+    '///+ get count of languages for Western/Asian/CTL fonts ///'
     iWest(2)    = LanguageWest.getItemCount
     iAsian(2)   = LanguageEast.getItemCount
     iComplex(2) = LanguageCTL.getItemCount
@@ -659,10 +646,10 @@ testcase tGetFormatCharacter
     else
         Printlog "CTL font languages count         : " + iComplex(2)
     endif
-    printlog "close dialog 'Character' with OK "
+    '///+ close dialog 'Character' with OK ///'
     TabFont.Ok
 
-    printlog "write the language for every line in the current language "
+    '/// write the language for every line in the current language ///'
     hTypeKeys("<mod1 home><down><home>")
     for i = 1 to iWest(2)
         FormatCharacter
@@ -672,7 +659,7 @@ testcase tGetFormatCharacter
             sTemp = LanguageWest.getSelText
             ListAppend(sLanguage(), sTemp)
         TabFont.Ok
-        printlog "type [end][number of language in list][Tab][Language name][down][home] "
+        '///+ type [end][number of language in list][Tab][Language name][down][home] ///'
         hTypeKeys("<end>"+iTemp+"<tab>"+sTemp+"<down><home>")
     next i
 
@@ -698,7 +685,7 @@ testcase tGetFormatCharacter
         hTypeKeys("<end>"+iTemp+"<tab>"+sTemp+"<down><home>")
     next i
 
-    printlog "save the created document & the languages list "
+    '/// save the created document & the languages list ///'
     sTemp = convertPath(gOfficePath + "user\work\spellb_" + iSprache)
     hFileSaveAsKill (sTemp)
     sTemp = convertPath(gOfficePath + "user\work\spellb_" + iSprache + ".txt")
@@ -722,6 +709,6 @@ testcase tGetFormatCharacter
         endif
     next i
 
-    printlog "close application "
+    '/// close application ///'
     Call hCloseDocument
 endcase 'tGetFormatCharacter

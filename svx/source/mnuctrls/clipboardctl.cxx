@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,8 @@
 #include <sot/exchange.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/toolbox.hxx>
-#include <svx/clipboardctl.hxx>
-#include <svx/clipfmtitem.hxx>
+#include <clipboardctl.hxx>
+#include <clipfmtitem.hxx>
 
 #include <svtools/insdlg.hxx>
 #include <svx/svxids.hrc>
@@ -52,13 +52,13 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxClipBoardControl, SfxVoidItem /*SfxUInt16Item*/ );
 
 
 SvxClipBoardControl::SvxClipBoardControl(
-        sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+        USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     pClipboardFmtItem( 0 ),
-     pPopup     (0),
+     pPopup		(0),
     nItemId     (nId),
-    bDisabled( sal_False )
+    bDisabled( FALSE )
 {
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ClipboardFormatItems" )));
     ToolBox& rBox = GetToolBox();
@@ -84,25 +84,25 @@ SfxPopupWindow* SvxClipBoardControl::CreatePopupWindow()
         else
             pPopup = new PopupMenu;
 
-        sal_uInt16 nCount = pFmtItem->Count();
-        for (sal_uInt16 i = 0;  i < nCount;  ++i)
+        USHORT nCount = pFmtItem->Count();
+        for (USHORT i = 0;  i < nCount;  ++i)
         {
-            sal_uIntPtr nFmtID =  pFmtItem->GetClipbrdFormatId( i );
+            ULONG nFmtID =  pFmtItem->GetClipbrdFormatId( i );
             String aFmtStr( pFmtItem->GetClipbrdFormatName( i ) );
             if (!aFmtStr.Len())
               aFmtStr = SvPasteObjectHelper::GetSotFormatUIName( nFmtID );
-            pPopup->InsertItem( (sal_uInt16)nFmtID, aFmtStr );
+            pPopup->InsertItem( (USHORT)nFmtID, aFmtStr );
         }
 
         ToolBox& rBox = GetToolBox();
-        sal_uInt16 nId = GetId();
-        rBox.SetItemDown( nId, sal_True );
+        USHORT nId = GetId();
+        rBox.SetItemDown( nId, TRUE );
 
-        pPopup->Execute( &rBox, rBox.GetItemRect( nId ),
-            (rBox.GetAlign() == WINDOWALIGN_TOP || rBox.GetAlign() == WINDOWALIGN_BOTTOM) ?
+        pPopup->Execute( &rBox, rBox.GetItemRect( nId ), 
+            (rBox.GetAlign() == WINDOWALIGN_TOP || rBox.GetAlign() == WINDOWALIGN_BOTTOM) ? 
                 POPUPMENU_EXECUTE_DOWN : POPUPMENU_EXECUTE_RIGHT );
 
-        rBox.SetItemDown( nId, sal_False );
+        rBox.SetItemDown( nId, FALSE );
 
         SfxUInt32Item aItem( SID_CLIPBOARD_FORMAT_ITEMS, pPopup->GetCurItemId() );
 
@@ -127,7 +127,7 @@ SfxPopupWindowType SvxClipBoardControl::GetPopupWindowType() const
 }
 
 
-void SvxClipBoardControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxClipBoardControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     if ( SID_CLIPBOARD_FORMAT_ITEMS == nSID )
     {

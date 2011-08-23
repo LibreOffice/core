@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,15 +39,15 @@ class SwRowFrm: public SwLayoutFrm
 {
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
         //Aendern nur die Framesize, nicht die PrtArea-SSize
-    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+    virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
 
     const SwTableLine *pTabLine;
     SwRowFrm* pFollowRow;
     // --> collapsing borders FME 2005-05-27 #i29550#
-    sal_uInt16 mnTopMarginForLowers;
-    sal_uInt16 mnBottomMarginForLowers;
-    sal_uInt16 mnBottomLineSize;
+    USHORT mnTopMarginForLowers;
+    USHORT mnBottomMarginForLowers;
+    USHORT mnBottomLineSize;
     // <-- collapsing
     bool bIsFollowFlowRow;
     bool bIsRepeatedHeadline;
@@ -55,13 +55,13 @@ class SwRowFrm: public SwLayoutFrm
 
 protected:
     virtual void MakeAll();
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
-    SwRowFrm( const SwTableLine &, SwFrm*, bool bInsertContent = true );
+    SwRowFrm( const SwTableLine &, bool bInsertContent = true );
     ~SwRowFrm();
 
     virtual void Cut();
+    virtual	void  Modify( SfxPoolItem*, SfxPoolItem* );
 
     //Zum Anmelden der Flys nachdem eine Zeile erzeugt _und_ eingefuegt wurde.
     //Muss vom Erzeuger gerufen werden, denn erst nach dem Konstruieren wird
@@ -73,7 +73,7 @@ public:
 
     //Passt die Zellen auf die aktuelle Hoehe an, invalidiert die Zellen
     //wenn die Direction nicht der Hoehe entspricht.
-    void AdjustCells( const SwTwips nHeight, const sal_Bool bHeight );
+    void AdjustCells( const SwTwips nHeight, const BOOL bHeight );
 
     //
     //
@@ -81,12 +81,12 @@ public:
     void SetFollowRow( SwRowFrm* pNew ) { pFollowRow = pNew; }
 
     // --> collapsing borders FME 2005-05-27 #i29550#
-    sal_uInt16 GetTopMarginForLowers() const { return mnTopMarginForLowers; }
-    void   SetTopMarginForLowers( sal_uInt16 nNew ) { mnTopMarginForLowers = nNew; }
-    sal_uInt16 GetBottomMarginForLowers() const { return mnBottomMarginForLowers; }
-    void   SetBottomMarginForLowers( sal_uInt16 nNew ) { mnBottomMarginForLowers = nNew; }
-    sal_uInt16 GetBottomLineSize() const { return mnBottomLineSize; }
-    void   SetBottomLineSize( sal_uInt16 nNew ) { mnBottomLineSize = nNew; }
+    USHORT GetTopMarginForLowers() const { return mnTopMarginForLowers; }
+    void   SetTopMarginForLowers( USHORT nNew ) { mnTopMarginForLowers = nNew; }
+    USHORT GetBottomMarginForLowers() const { return mnBottomMarginForLowers; }
+    void   SetBottomMarginForLowers( USHORT nNew ) { mnBottomMarginForLowers = nNew; }
+    USHORT GetBottomLineSize() const { return mnBottomLineSize; }
+    void   SetBottomLineSize( USHORT nNew ) { mnBottomLineSize = nNew; }
     // <-- collapsing
 
     bool IsRepeatedHeadline() const { return bIsRepeatedHeadline; }

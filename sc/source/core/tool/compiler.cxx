@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -202,6 +202,93 @@ void ScCompiler::fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap )
     }
 }
 
+
+#ifdef erGENERATEMAPPING
+// Run in en-US UI by calling from within gdb, edit pODFF entries afterwards.
+void dbg_call_generateMappingODFF()
+{
+    // static ScCompiler members
+    fprintf( stdout, "%s", "static struct AddInMap\n{\n    const char* pODFF;\n    const char* pEnglish;\n    bool        bMapDupToInternal;\n    const char* pOriginal;\n    const char* pUpper;\n} maAddInMap[];\n");
+    fprintf( stdout, "%s", "static const AddInMap* GetAddInMap();\n");
+    fprintf( stdout, "%s", "static size_t GetAddInMapCount();\n");
+    fprintf( stdout, "addinfuncdata___:%s", "ScCompiler::AddInMap ScCompiler::maAddInMap[] =\n{\n");
+    ScUnoAddInCollection* pColl = ScGlobal::GetAddInCollection();
+    long nCount = pColl->GetFuncCount();
+    for (long i=0; i < nCount; ++i)
+    {
+        const ScUnoAddInFuncData* pFuncData = pColl->GetFuncData(i);
+        if (pFuncData)
+        {
+#define out(rStr) (ByteString( rStr, RTL_TEXTENCODING_UTF8).GetBuffer())
+            String aL = pFuncData->GetUpperLocal();
+            String aP = pFuncData->GetOriginalName();
+            String aU = pFuncData->GetUpperName();
+            fprintf( stdout, "addinfuncdata%3ld:    { \"%s\", \"%s\", false, \"%s\", \"%s\" },\n",
+                    i, out(aL), out(aL), out(aP), out(aU));
+#undef out
+        }
+    }
+    fprintf( stdout, "addinfuncdata___:%s", "};\n");
+    fprintf( stdout, "%s", "\n// static\nconst ScCompiler::AddInMap* ScCompiler::GetAddInMap()\n{\n    return maAddInMap;\n}\n");
+    fprintf( stdout, "%s", "\n// static\nsize_t ScCompiler::GetAddInMapCount()\n{\n    return sizeof(maAddInMap)/sizeof(maAddInMap[0]);\n}\n");
+    fflush( stdout);
+}
+#endif  // erGENERATEMAPPING
+
+#ifdef erGENERATEMAPPINGDIFF
+// Run in en-US UI by calling from within gdb.
+void dbg_call_generateMappingDiff()
+{
+    using namespace ::com::sun::star::sheet;
+    ScCompiler::OpCodeMapPtr xPODF = ScCompiler::GetOpCodeMap(
+            FormulaLanguage::ODF_11);
+    ScCompiler::OpCodeMapPtr xODFF = ScCompiler::GetOpCodeMap(
+            FormulaLanguage::ODFF);
+    ScCompiler::OpCodeMapPtr xENUS = ScCompiler::GetOpCodeMap(
+            FormulaLanguage::ENGLISH);
+    USHORT nPODF = xPODF->getSymbolCount();
+    USHORT nODFF = xODFF->getSymbolCount();
+    USHORT nENUS = xENUS->getSymbolCount();
+    printf( "%s\n", "This is a semicolon separated file, you may import it as such to Calc.");
+    printf( "%s\n", "Spreadsheet functions name differences between PODF (ODF < 1.2) and ODFF (ODF >= 1.2), plus English UI names.");
+    printf( "\nInternal OpCodes; PODF: %d; ODFF: %d; ENUS: %d\n",
+            (int)nPODF, (int)nODFF, (int)nENUS);
+    USHORT nMax = ::std::max( ::std::max( nPODF, nODFF), nENUS);
+#define out(rStr) (ByteString( rStr, RTL_TEXTENCODING_UTF8).GetBuffer())
+    for (USHORT i=0; i < nMax; ++i)
+    {
+        const String& rPODF = xPODF->getSymbol(static_cast<OpCode>(i));
+        const String& rODFF = xODFF->getSymbol(static_cast<OpCode>(i));
+        const String& rENUS = xENUS->getSymbol(static_cast<OpCode>(i));
+        if (rPODF != rODFF)
+            printf( "%d;%s;%s;%s\n", (int)i, out(rPODF), out(rODFF), out(rENUS));
+    }
+    // Actually they should all differ, so we could simply list them all, but
+    // this is correct and we would find odd things, if any.
+    const ExternalHashMap* pPODF = xPODF->getReverseExternalHashMap();
+    const ExternalHashMap* pODFF = xODFF->getReverseExternalHashMap();
+    const ExternalHashMap* pENUS = xENUS->getReverseExternalHashMap();
+    printf( "\n%s\n", "Add-In mapping");
+    for (ExternalHashMap::const_iterator it = pPODF->begin(); it != pPODF->end(); ++it)
+    {
+        ExternalHashMap::const_iterator iLookODFF = pODFF->find( (*it).first);
+        ExternalHashMap::const_iterator iLookENUS = pENUS->find( (*it).first);
+        String aNative( iLookENUS == pENUS->end() ?
+                String::CreateFromAscii( "ENGLISH_SYMBOL_NOT_FOUND") :
+                (*iLookENUS).second);
+        if (iLookODFF == pODFF->end())
+            printf( "NOT FOUND;%s;;%s\n", out((*it).first), out(aNative));
+        else if((*it).second == (*iLookODFF).second)    // upper equal
+            printf( "EQUAL;%s;%s;%s\n", out((*it).first), out((*iLookODFF).second), out(aNative));
+        else
+            printf( ";%s;%s;%s\n", out((*it).first), out((*iLookODFF).second), out(aNative));
+    }
+#undef out
+    fflush( stdout);
+}
+#endif  // erGENERATEMAPPINGDIFF
+
+// static
 void ScCompiler::DeInit()
 {
     if (pCharClassEnglish)
@@ -223,21 +310,22 @@ bool ScCompiler::IsEnglishSymbol( const String& rName )
         return true;
     }
     // 2. old add in functions
-    sal_uInt16 nIndex;
+    USHORT nIndex;
     if ( ScGlobal::GetFuncCollection()->SearchFunc( aUpper, nIndex ) )
     {
         return true;
     }
 
     // 3. new (uno) add in functions
-    String aIntName(ScGlobal::GetAddInCollection()->FindFunction( aUpper, false ));
+    String aIntName(ScGlobal::GetAddInCollection()->FindFunction( aUpper, FALSE ));
     if (aIntName.Len())
     {
         return true;
     }
-    return false;       // no valid function name
+    return false;		// no valid function name
 }
 
+// static
 void ScCompiler::InitCharClassEnglish()
 {
     ::com::sun::star::lang::Locale aLocale(
@@ -283,6 +371,11 @@ void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
     }
 }
 
+void ScCompiler::SetEncodeUrlMode( EncodeUrlMode eMode )
+{
+    meEncodeUrlMode = eMode;
+}
+
 ScCompiler::EncodeUrlMode ScCompiler::GetEncodeUrlMode() const
 {
     return meEncodeUrlMode;
@@ -322,11 +415,20 @@ void ScCompiler::SetGrammarAndRefConvention(
         SetRefConvention( eConv );
 }
 
-String ScCompiler::FindAddInFunction( const String& rUpperName, sal_Bool bLocalFirst ) const
+String ScCompiler::FindAddInFunction( const String& rUpperName, BOOL bLocalFirst ) const
 {
-    return ScGlobal::GetAddInCollection()->FindFunction(rUpperName, bLocalFirst);    // bLocalFirst=sal_False for english
+    return ScGlobal::GetAddInCollection()->FindFunction(rUpperName, bLocalFirst);    // bLocalFirst=FALSE for english
 }
 
+
+#ifdef erDEBUG
+void dbg_call_testcreatemapping()
+{
+    using namespace ::com::sun::star::sheet;
+    ScCompiler::OpCodeMapPtr xMap = ScCompiler::GetOpCodeMap( FormulaLanguage::ODFF);
+    xMap->createSequenceOfAvailableMappings( FormulaMapGroup::FUNCTIONS);
+}
+#endif
 
 //-----------------------------------------------------------------------------
 
@@ -341,7 +443,7 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
     meConv( eConv )
 {
     int i;
-    sal_uLong *t= new sal_uLong [128];
+    ULONG *t= new ULONG [128];
 
     ScCompiler::pConventions[ meConv ] = this;
     mpCharTable = t;
@@ -512,7 +614,7 @@ static bool lcl_parseExternalName(
         // indexed external document names.
         ScRange aRange;
         String aStartTabName, aEndTabName;
-        sal_uInt16 nFlags = 0;
+        USHORT nFlags = 0;
         p = aRange.Parse_XL_Header( p, pDoc, aTmpFile, aStartTabName,
                 aEndTabName, nFlags, true, pExternalLinks );
         if (!p || p == pStart)
@@ -695,15 +797,15 @@ static String lcl_makeExternalNameStr( const String& rFile, const String& rName,
     return String( aBuf.makeStringAndClear());
 }
 
-static bool lcl_getLastTabName( OUString& rTabName2, const OUString& rTabName1,
-                                const vector<OUString>& rTabNames, const ScComplexRefData& rRef )
+static bool lcl_getLastTabName( String& rTabName2, const String& rTabName1,
+                                const vector<String>& rTabNames, const ScComplexRefData& rRef )
 {
     SCsTAB nTabSpan = rRef.Ref2.nTab - rRef.Ref1.nTab;
     if (nTabSpan > 0)
     {
         size_t nCount = rTabNames.size();
-        vector<OUString>::const_iterator itrBeg = rTabNames.begin(), itrEnd = rTabNames.end();
-        vector<OUString>::const_iterator itr = ::std::find(itrBeg, itrEnd, rTabName1);
+        vector<String>::const_iterator itrBeg = rTabNames.begin(), itrEnd = rTabNames.end();
+        vector<String>::const_iterator itr = ::std::find(itrBeg, itrEnd, rTabName1);
         if (itr == rTabNames.end())
         {
             rTabName2 = ScGlobal::GetRscString(STR_NO_REF_TABLE);
@@ -748,7 +850,7 @@ struct Convention_A1 : public ScCompiler::Convention
                 nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
     }
 
-    virtual sal_uLong getCharTableFlags( sal_Unicode c, sal_Unicode /*cLast*/ ) const
+    virtual ULONG getCharTableFlags( sal_Unicode c, sal_Unicode /*cLast*/ ) const
     {
         return mpCharTable[static_cast<sal_uInt8>(c)];
     }
@@ -815,6 +917,9 @@ struct ConventionOOO_A1 : public Convention_A1
         ScComplexRefData aRef( rRef );
         // In case absolute/relative positions weren't separately available:
         // transform relative to absolute!
+        //  AdjustReference( aRef.Ref1 );
+        //  if( !bSingleRef )
+        //      AdjustReference( aRef.Ref2 );
         aRef.Ref1.CalcAbsIfRel( rComp.GetPos() );
         if( !bSingleRef )
             aRef.Ref2.CalcAbsIfRel( rComp.GetPos() );
@@ -893,7 +998,7 @@ struct ConventionOOO_A1 : public Convention_A1
     void MakeRefStr( rtl::OUStringBuffer&   rBuffer,
                      const ScCompiler&      rComp,
                      const ScComplexRefData& rRef,
-                     sal_Bool bSingleRef ) const
+                     BOOL bSingleRef ) const
     {
         MakeRefStrImpl( rBuffer, rComp, rRef, bSingleRef, false);
     }
@@ -1033,21 +1138,21 @@ struct ConventionOOO_A1 : public Convention_A1
 
             rBuffer.append(sal_Unicode(':'));
 
-            OUString aLastTabName;
+            String aLastTabName;
             bool bDisplayTabName = (aRef.Ref1.nTab != aRef.Ref2.nTab);
             if (bDisplayTabName)
             {
                 // Get the name of the last table.
-                vector<OUString> aTabNames;
+                vector<String> aTabNames;
                 pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
                 if (aTabNames.empty())
                 {
-                    OSL_TRACE( "ConventionOOO_A1::makeExternalRefStrImpl: no sheet names for document ID %s", nFileId);
+                    DBG_ERROR1( "ConventionOOO_A1::makeExternalRefStrImpl: no sheet names for document ID %s", nFileId);
                 }
 
                 if (!lcl_getLastTabName(aLastTabName, rTabName, aTabNames, aRef))
                 {
-                    OSL_FAIL( "ConventionOOO_A1::makeExternalRefStrImpl: sheet name not found");
+                    DBG_ERROR( "ConventionOOO_A1::makeExternalRefStrImpl: sheet name not found");
                     // aLastTabName contains #REF!, proceed.
                 }
             }
@@ -1080,7 +1185,7 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
     void MakeRefStr( rtl::OUStringBuffer&   rBuffer,
                      const ScCompiler&      rComp,
                      const ScComplexRefData& rRef,
-                     sal_Bool bSingleRef ) const
+                     BOOL bSingleRef ) const
     {
         MakeRefStrImpl( rBuffer, rComp, rRef, bSingleRef, true);
     }
@@ -1246,11 +1351,11 @@ struct ConventionXL
         rBuffer.append(sal_Unicode(']'));
     }
 
-    static void makeExternalTabNameRange( ::rtl::OUStringBuffer& rBuf, const OUString& rTabName,
-                                          const vector<OUString>& rTabNames,
+    static void makeExternalTabNameRange( ::rtl::OUStringBuffer& rBuf, const String& rTabName,
+                                          const vector<String>& rTabNames,
                                           const ScComplexRefData& rRef )
     {
-        OUString aLastTabName;
+        String aLastTabName;
         if (!lcl_getLastTabName(aLastTabName, rTabName, rTabNames, rRef))
         {
             ScRangeStringConverter::AppendTableName(rBuf, aLastTabName);
@@ -1337,7 +1442,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
     void MakeRefStr( rtl::OUStringBuffer&   rBuf,
                      const ScCompiler&      rComp,
                      const ScComplexRefData& rRef,
-                     sal_Bool bSingleRef ) const
+                     BOOL bSingleRef ) const
     {
         ScComplexRefData aRef( rRef );
 
@@ -1463,7 +1568,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         if (!pFullName)
             return;
 
-        vector<OUString> aTabNames;
+        vector<String> aTabNames;
         pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
         if (aTabNames.empty())
             return;
@@ -1539,7 +1644,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
     void MakeRefStr( rtl::OUStringBuffer&   rBuf,
                      const ScCompiler&      rComp,
                      const ScComplexRefData& rRef,
-                     sal_Bool bSingleRef ) const
+                     BOOL bSingleRef ) const
     {
         ScComplexRefData aRef( rRef );
 
@@ -1670,7 +1775,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         if (!pFullName)
             return;
 
-        vector<OUString> aTabNames;
+        vector<String> aTabNames;
         pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
         if (aTabNames.empty())
             return;
@@ -1718,9 +1823,9 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         r1c1_add_col(rBuffer, aRef.Ref2);
     }
 
-    virtual sal_uLong getCharTableFlags( sal_Unicode c, sal_Unicode cLast ) const
+    virtual ULONG getCharTableFlags( sal_Unicode c, sal_Unicode cLast ) const
     {
-        sal_uLong nFlags = mpCharTable[static_cast<sal_uInt8>(c)];
+        ULONG nFlags = mpCharTable[static_cast<sal_uInt8>(c)];
         if (c == '-' && cLast == '[')
             // '-' can occur within a reference string only after '[' e.g. R[-1]C.
             nFlags |= SC_COMPILER_C_IDENT;
@@ -1830,7 +1935,7 @@ void ScCompiler::SetRefConvention( const ScCompiler::Convention *pConvP )
             "ScCompiler::SetRefConvention: unsupported grammar resulting");
 }
 
-void ScCompiler::SetError(sal_uInt16 nError)
+void ScCompiler::SetError(USHORT nError)
 {
     if( !pArr->GetCodeError() )
         pArr->SetCodeError( nError);
@@ -1916,7 +2021,7 @@ xub_StrLen ScCompiler::NextSymbol(bool bInArray)
     while ((c != 0) && (eState != ssStop) )
     {
         pSrc++;
-        sal_uLong nMask = GetCharTableFlags( c, cLast );
+        ULONG nMask = GetCharTableFlags( c, cLast );
 
         // The parameter separator and the array column and row separators end
         // things unconditionally if not in string or reference.
@@ -2352,7 +2457,7 @@ Label_MaskStateMachine:
         nSrcPos = sal::static_int_cast<xub_StrLen>( nSrcPos + nSpaces );
         String aSymbol;
         mnRangeOpPosInSymbol = -1;
-        sal_uInt16 nErr = 0;
+        USHORT nErr = 0;
         do
         {
             bi18n = false;
@@ -2396,7 +2501,6 @@ Label_MaskStateMachine:
             nLen = MAXSTRLEN-1;
         }
         lcl_UnicodeStrNCpy( cSymbol, aSymbol.GetBuffer(), nLen );
-        pSym = &cSymbol[nLen];
     }
     else
     {
@@ -2405,7 +2509,7 @@ Label_MaskStateMachine:
     }
     if (mnRangeOpPosInSymbol >= 0 && mnRangeOpPosInSymbol == (pSym-1) - &cSymbol[0])
     {
-        // This is a trailing range operator, which is nonsense. Will be caught
+        // This is a trailing range operator, which is nonsense. Will be caught 
         // in next round.
         mnRangeOpPosInSymbol = -1;
         *--pSym = 0;
@@ -2422,10 +2526,10 @@ Label_MaskStateMachine:
 // Convert symbol to token
 //---------------------------------------------------------------------------
 
-sal_Bool ScCompiler::IsOpCode( const String& rName, bool bInArray )
+BOOL ScCompiler::IsOpCode( const String& rName, bool bInArray )
 {
     OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap()->find( rName));
-    sal_Bool bFound = (iLook != mxSymbols->getHashMap()->end());
+    BOOL bFound = (iLook != mxSymbols->getHashMap()->end());
     if (bFound)
     {
         ScRawToken aToken;
@@ -2442,10 +2546,10 @@ sal_Bool ScCompiler::IsOpCode( const String& rName, bool bInArray )
     }
     else if (mxSymbols->isODFF())
     {
-        // ODFF names that are not written in the current mapping but to be
-        // recognized. New names will be written in a future relase, then
-        // exchange (!) with the names in
-        // formula/source/core/resource/core_resource.src to be able to still
+        // ODFF names that are not written in the current mapping but to be 
+        // recognized. New names will be written in a future relase, then 
+        // exchange (!) with the names in 
+        // formula/source/core/resource/core_resource.src to be able to still 
         // read the old names as well.
         struct FunctionName
         {
@@ -2468,7 +2572,7 @@ sal_Bool ScCompiler::IsOpCode( const String& rName, bool bInArray )
                 ScRawToken aToken;
                 aToken.SetOpCode( aOdffAliases[i].eOp);
                 pRawToken = aToken.Clone();
-                bFound = sal_True;
+                bFound = TRUE;
                 break;  // for
             }
         }
@@ -2492,13 +2596,13 @@ sal_Bool ScCompiler::IsOpCode( const String& rName, bool bInArray )
                 // last resort by just falling through to FindFunction(), but
                 // it shouldn't happen if the map was setup correctly. Don't
                 // waste time and bail out.
-                return false;
+                return FALSE;
             }
         }
         if (!aIntName.Len())
         {
             // Old (deprecated) addins first for legacy.
-            sal_uInt16 nIndex;
+            USHORT nIndex;
             bFound = ScGlobal::GetFuncCollection()->SearchFunc( cSymbol, nIndex);
             if (bFound)
             {
@@ -2507,7 +2611,7 @@ sal_Bool ScCompiler::IsOpCode( const String& rName, bool bInArray )
                 pRawToken = aToken.Clone();
             }
             else
-                // bLocalFirst=sal_False for (English) upper full original name
+                // bLocalFirst=FALSE for (English) upper full original name
                 // (service.function)
                 aIntName = ScGlobal::GetAddInCollection()->FindFunction(
                         rName, !mxSymbols->isEnglish());
@@ -2517,7 +2621,7 @@ sal_Bool ScCompiler::IsOpCode( const String& rName, bool bInArray )
             ScRawToken aToken;
             aToken.SetExternal( aIntName.GetBuffer() );     // international name
             pRawToken = aToken.Clone();
-            bFound = sal_True;
+            bFound = TRUE;
         }
     }
     OpCode eOp;
@@ -2537,10 +2641,10 @@ sal_Bool ScCompiler::IsOpCode( const String& rName, bool bInArray )
     return bFound;
 }
 
-sal_Bool ScCompiler::IsOpCode2( const String& rName )
+BOOL ScCompiler::IsOpCode2( const String& rName )
 {
-    sal_Bool bFound = false;
-    sal_uInt16 i;
+    BOOL bFound = FALSE;
+    USHORT i;
 
     for( i = ocInternalBegin; i <= ocInternalEnd && !bFound; i++ )
         bFound = rName.EqualsAscii( pInternal[ i-ocInternalBegin ] );
@@ -2554,7 +2658,7 @@ sal_Bool ScCompiler::IsOpCode2( const String& rName )
     return bFound;
 }
 
-sal_Bool ScCompiler::IsValue( const String& rSym )
+BOOL ScCompiler::IsValue( const String& rSym )
 {
     double fVal;
     sal_uInt32 nIndex = ( mxSymbols->isEnglish() ?
@@ -2562,7 +2666,7 @@ sal_Bool ScCompiler::IsValue( const String& rSym )
 
     if (pDoc->GetFormatTable()->IsNumberFormat( rSym, nIndex, fVal ) )
     {
-        sal_uInt16 nType = pDoc->GetFormatTable()->GetType(nIndex);
+        USHORT nType = pDoc->GetFormatTable()->GetType(nIndex);
 
         // Don't accept 3:3 as time, it is a reference to entire row 3 instead.
         // Dates should never be entered directly and automatically converted
@@ -2570,7 +2674,7 @@ sal_Bool ScCompiler::IsValue( const String& rSym )
         // Usually it wouldn't be accepted anyway because the date separator
         // clashed with other separators or operators.
         if (nType & (NUMBERFORMAT_TIME | NUMBERFORMAT_DATE))
-            return false;
+            return FALSE;
 
         if (nType == NUMBERFORMAT_LOGICAL)
         {
@@ -2578,7 +2682,7 @@ sal_Bool ScCompiler::IsValue( const String& rSym )
             while( *p == ' ' )
                 p++;
             if (*p == '(')
-                return false;   // Boolean function instead.
+                return FALSE;   // Boolean function instead.
         }
 
         if( nType == NUMBERFORMAT_TEXT )
@@ -2587,23 +2691,23 @@ sal_Bool ScCompiler::IsValue( const String& rSym )
         ScRawToken aToken;
         aToken.SetDouble( fVal );
         pRawToken = aToken.Clone();
-        return sal_True;
+        return TRUE;
     }
     else
-        return false;
+        return FALSE;
 }
 
-sal_Bool ScCompiler::IsString()
+BOOL ScCompiler::IsString()
 {
     register const sal_Unicode* p = cSymbol;
     while ( *p )
         p++;
     xub_StrLen nLen = sal::static_int_cast<xub_StrLen>( p - cSymbol - 1 );
-    sal_Bool bQuote = ((cSymbol[0] == '"') && (cSymbol[nLen] == '"'));
+    BOOL bQuote = ((cSymbol[0] == '"') && (cSymbol[nLen] == '"'));
     if ((bQuote ? nLen-2 : nLen) > MAXSTRLEN-1)
     {
         SetError(errStringOverflow);
-        return false;
+        return FALSE;
     }
     if ( bQuote )
     {
@@ -2611,13 +2715,13 @@ sal_Bool ScCompiler::IsString()
         ScRawToken aToken;
         aToken.SetString( cSymbol+1 );
         pRawToken = aToken.Clone();
-        return sal_True;
+        return TRUE;
     }
-    return false;
+    return FALSE;
 }
 
 
-sal_Bool ScCompiler::IsPredetectedReference( const String& rName )
+BOOL ScCompiler::IsPredetectedReference( const String& rName )
 {
     // Speedup documents with lots of broken references, e.g. sheet deleted.
     xub_StrLen nPos = rName.SearchAscii( "#REF!");
@@ -2669,12 +2773,12 @@ sal_Bool ScCompiler::IsPredetectedReference( const String& rName )
 }
 
 
-sal_Bool ScCompiler::IsDoubleReference( const String& rName )
+BOOL ScCompiler::IsDoubleReference( const String& rName )
 {
     ScRange aRange( aPos, aPos );
     const ScAddress::Details aDetails( pConv->meConv, aPos );
     ScAddress::ExternalInfo aExtInfo;
-    sal_uInt16 nFlags = aRange.Parse( rName, pDoc, aDetails, &aExtInfo, &maExternalLinks );
+    USHORT nFlags = aRange.Parse( rName, pDoc, aDetails, &aExtInfo, &maExternalLinks );
     if( nFlags & SCA_VALID )
     {
         ScRawToken aToken;
@@ -2684,13 +2788,13 @@ sal_Bool ScCompiler::IsDoubleReference( const String& rName )
         aRef.Ref1.SetRowRel( (nFlags & SCA_ROW_ABSOLUTE) == 0 );
         aRef.Ref1.SetTabRel( (nFlags & SCA_TAB_ABSOLUTE) == 0 );
         if ( !(nFlags & SCA_VALID_TAB) )
-            aRef.Ref1.SetTabDeleted( sal_True );        // #REF!
+            aRef.Ref1.SetTabDeleted( TRUE );        // #REF!
         aRef.Ref1.SetFlag3D( ( nFlags & SCA_TAB_3D ) != 0 );
         aRef.Ref2.SetColRel( (nFlags & SCA_COL2_ABSOLUTE) == 0 );
         aRef.Ref2.SetRowRel( (nFlags & SCA_ROW2_ABSOLUTE) == 0 );
         aRef.Ref2.SetTabRel( (nFlags & SCA_TAB2_ABSOLUTE) == 0 );
         if ( !(nFlags & SCA_VALID_TAB2) )
-            aRef.Ref2.SetTabDeleted( sal_True );        // #REF!
+            aRef.Ref2.SetTabDeleted( TRUE );        // #REF!
         aRef.Ref2.SetFlag3D( ( nFlags & SCA_TAB2_3D ) != 0 );
         aRef.CalcRelFromAbs( aPos );
         if (aExtInfo.mbExternal)
@@ -2711,12 +2815,12 @@ sal_Bool ScCompiler::IsDoubleReference( const String& rName )
 }
 
 
-sal_Bool ScCompiler::IsSingleReference( const String& rName )
+BOOL ScCompiler::IsSingleReference( const String& rName )
 {
     ScAddress aAddr( aPos );
     const ScAddress::Details aDetails( pConv->meConv, aPos );
     ScAddress::ExternalInfo aExtInfo;
-    sal_uInt16 nFlags = aAddr.Parse( rName, pDoc, aDetails, &aExtInfo, &maExternalLinks );
+    USHORT nFlags = aAddr.Parse( rName, pDoc, aDetails, &aExtInfo, &maExternalLinks );
     // Something must be valid in order to recognize Sheet1.blah or blah.a1
     // as a (wrong) reference.
     if( nFlags & ( SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB ) )
@@ -2757,14 +2861,14 @@ sal_Bool ScCompiler::IsSingleReference( const String& rName )
 }
 
 
-sal_Bool ScCompiler::IsReference( const String& rName )
+BOOL ScCompiler::IsReference( const String& rName )
 {
     // Has to be called before IsValue
     sal_Unicode ch1 = rName.GetChar(0);
     sal_Unicode cDecSep = ( mxSymbols->isEnglish() ? '.' :
         ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0) );
     if ( ch1 == cDecSep )
-        return false;
+        return FALSE;
     // Who was that imbecile introducing '.' as the sheet name separator!?!
     if ( CharClass::isAsciiNumeric( ch1 ) )
     {
@@ -2779,12 +2883,12 @@ sal_Bool ScCompiler::IsReference( const String& rName )
             {
                 if (ScGlobal::FindUnquoted( rName, ':') != STRING_NOTFOUND)
                     break;      // may be 3:3, continue as usual
-                return false;
+                return FALSE;
             }
             sal_Unicode const * const pTabSep = rName.GetBuffer() + nPos;
             sal_Unicode ch2 = pTabSep[1];   // maybe a column identifier
             if ( !(ch2 == '$' || CharClass::isAsciiAlpha( ch2 )) )
-                return false;
+                return FALSE;
             if ( cDecSep == '.' && (ch2 == 'E' || ch2 == 'e')   // E + - digit
                     && (GetCharTableFlags( pTabSep[2], pTabSep[1] ) & SC_COMPILER_C_VALUE_EXP) )
             {   // #91053#
@@ -2801,7 +2905,7 @@ sal_Bool ScCompiler::IsReference( const String& rName )
                 String aTabName( rName.Copy( 0, nPos ) );
                 SCTAB nTab;
                 if ( !pDoc->GetTable( aTabName, nTab ) )
-                    return false;
+                    return FALSE;
                 // If sheet "1" exists and the expression is 1.E+2 continue as
                 // usual, the ScRange/ScAddress parser will take care of it.
             }
@@ -2818,7 +2922,7 @@ sal_Bool ScCompiler::IsReference( const String& rName )
     {
         if (IsDoubleReference( rName))
             return true;
-        // Now try with a symbol up to the range operator, rewind source
+        // Now try with a symbol up to the range operator, rewind source 
         // position.
         sal_Int32 nLen = mnRangeOpPosInSymbol;
         while (cSymbol[++nLen])
@@ -2831,8 +2935,8 @@ sal_Bool ScCompiler::IsReference( const String& rName )
     }
     else
     {
-        // Special treatment for the 'E:\[doc]Sheet1:Sheet3'!D5 Excel sickness,
-        // mnRangeOpPosInSymbol did not catch the range operator as it is
+        // Special treatment for the 'E:\[doc]Sheet1:Sheet3'!D5 Excel sickness, 
+        // mnRangeOpPosInSymbol did not catch the range operator as it is 
         // within a quoted name.
         switch (pConv->meConv)
         {
@@ -2849,22 +2953,23 @@ sal_Bool ScCompiler::IsReference( const String& rName )
     return false;
 }
 
-sal_Bool ScCompiler::IsMacro( const String& rName )
+BOOL ScCompiler::IsMacro( const String& rName )
 {
     String aName( rName);
     StarBASIC* pObj = 0;
     SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
 
     SfxApplication* pSfxApp = SFX_APP();
+    pSfxApp->EnterBasicCall();              // initialize document's BASIC
 
     if( pDocSh )//XXX
         pObj = pDocSh->GetBasic();
     else
         pObj = pSfxApp->GetBasic();
 
-    // ODFF recommends to store user-defined functions prefixed with "USER.",
-    // use only unprefixed name if encountered. BASIC doesn't allow '.' in a
-    // function name so a function "USER.FOO" could not exist, and macro check
+    // ODFF recommends to store user-defined functions prefixed with "USER.", 
+    // use only unprefixed name if encountered. BASIC doesn't allow '.' in a 
+    // function name so a function "USER.FOO" could not exist, and macro check 
     // is assigned the lowest priority in function name check.
     if (FormulaGrammar::isODFF( GetGrammar()) && aName.EqualsIgnoreCaseAscii( "USER.", 0, 5))
         aName.Erase( 0, 5);
@@ -2872,49 +2977,41 @@ sal_Bool ScCompiler::IsMacro( const String& rName )
     SbxMethod* pMeth = (SbxMethod*) pObj->Find( aName, SbxCLASS_METHOD );
     if( !pMeth )
     {
-        return false;
+        pSfxApp->LeaveBasicCall();
+        return FALSE;
     }
     // It really should be a BASIC function!
     if( pMeth->GetType() == SbxVOID
      || ( pMeth->IsFixed() && pMeth->GetType() == SbxEMPTY )
      || !pMeth->ISA(SbMethod) )
     {
-        return false;
+        pSfxApp->LeaveBasicCall();
+        return FALSE;
     }
     ScRawToken aToken;
     aToken.SetExternal( aName.GetBuffer() );
     aToken.eOp = ocMacro;
     pRawToken = aToken.Clone();
-    return sal_True;
+    pSfxApp->LeaveBasicCall();
+    return TRUE;
 }
 
-sal_Bool ScCompiler::IsNamedRange( const String& rUpperName )
+BOOL ScCompiler::IsNamedRange( const String& rUpperName )
 {
     // IsNamedRange is called only from NextNewToken, with an upper-case string
 
-    // Try global named ranges first, then sheet local next.  BTW does this
-    // order matter?
-    bool bGlobal = true;
+    USHORT n;
     ScRangeName* pRangeName = pDoc->GetRangeName();
-    const ScRangeData* pData = pRangeName->findByUpperName(rUpperName);
-    if (!pData)
+    if (pRangeName->SearchNameUpper( rUpperName, n ) )
     {
-        pRangeName = pDoc->GetRangeName(aPos.Tab());
-        if (pRangeName)
-            pData = pRangeName->findByUpperName(rUpperName);
-        if (pData)
-            bGlobal = false;
-    }
-
-    if (pData)
-    {
+        ScRangeData* pData = (*pRangeName)[n];
         ScRawToken aToken;
-        aToken.SetName(bGlobal, pData->GetIndex());
+        aToken.SetName( pData->GetIndex() );
         pRawToken = aToken.Clone();
-        return true;
+        return TRUE;
     }
     else
-        return false;
+        return FALSE;
 }
 
 bool ScCompiler::IsExternalNamedRange( const String& rSymbol )
@@ -2925,6 +3022,7 @@ bool ScCompiler::IsExternalNamedRange( const String& rSymbol )
      * spec first. Until then don't pretend to support external names that
      * wouldn't survive a save and reload cycle, return false instead. */
 
+#if 1
     if (!pConv)
         return false;
 
@@ -2947,35 +3045,39 @@ bool ScCompiler::IsExternalNamedRange( const String& rSymbol )
     aToken.SetExternalName(nFileId, pRealName ? *pRealName : aName);
     pRawToken = aToken.Clone();
     return true;
+#else
+    (void)rSymbol;
+    return false;
+#endif
 }
 
-sal_Bool ScCompiler::IsDBRange( const String& rName )
+BOOL ScCompiler::IsDBRange( const String& rName )
 {
-    sal_uInt16 n;
+    USHORT n;
     ScDBCollection* pDBColl = pDoc->GetDBCollection();
     if (pDBColl->SearchName( rName, n ) )
     {
         ScDBData* pData = (*pDBColl)[n];
         ScRawToken aToken;
-        aToken.SetName(true, pData->GetIndex()); // DB range is always global.
+        aToken.SetName( pData->GetIndex() );
         aToken.eOp = ocDBArea;
         pRawToken = aToken.Clone();
-        return sal_True;
+        return TRUE;
     }
     else
-        return false;
+        return FALSE;
 }
 
-sal_Bool ScCompiler::IsColRowName( const String& rName )
+BOOL ScCompiler::IsColRowName( const String& rName )
 {
-    sal_Bool bInList = false;
-    sal_Bool bFound = false;
+    BOOL bInList = FALSE;
+    BOOL bFound = FALSE;
     ScSingleRefData aRef;
     String aName( rName );
     DeQuote( aName );
     SCTAB nThisTab = aPos.Tab();
     for ( short jThisTab = 1; jThisTab >= 0 && !bInList; jThisTab-- )
-    {   // first check ranges on this sheet, in case of duplicated names
+    {   // #50300# first check ranges on this sheet, in case of duplicated names
         for ( short jRow=0; jRow<2 && !bInList; jRow++ )
         {
             ScRangePairList* pRL;
@@ -2983,9 +3085,8 @@ sal_Bool ScCompiler::IsColRowName( const String& rName )
                 pRL = pDoc->GetColNameRanges();
             else
                 pRL = pDoc->GetRowNameRanges();
-            for ( size_t iPair = 0, nPairs = pRL->size(); iPair < nPairs && !bInList; ++iPair )
+            for ( ScRangePair* pR = pRL->First(); pR && !bInList; pR = pRL->Next() )
             {
-                ScRangePair* pR = (*pRL)[iPair];
                 const ScRange& rNameRange = pR->GetRange(0);
                 if ( jThisTab && !(rNameRange.aStart.Tab() <= nThisTab &&
                         nThisTab <= rNameRange.aEnd.Tab()) )
@@ -3000,10 +3101,10 @@ sal_Bool ScCompiler::IsColRowName( const String& rName )
                     // recursive..
                     // Furthermore, *this* cell won't be touched, since no RPN exists yet.
                     CellType eType = pCell->GetCellType();
-                    sal_Bool bOk = sal::static_int_cast<sal_Bool>( (eType == CELLTYPE_FORMULA ?
+                    BOOL bOk = sal::static_int_cast<BOOL>( (eType == CELLTYPE_FORMULA ?
                         ((ScFormulaCell*)pCell)->GetCode()->GetCodeLen() > 0
                         && ((ScFormulaCell*)pCell)->aPos != aPos    // noIter
-                        : sal_True ) );
+                        : TRUE ) );
                     if ( bOk && pCell->HasStringData() )
                     {
                         String aStr;
@@ -3035,11 +3136,11 @@ sal_Bool ScCompiler::IsColRowName( const String& rName )
                             aRef.nRow = aIter.GetRow();
                             aRef.nTab = aIter.GetTab();
                             if ( !jRow )
-                                aRef.SetColRel( sal_True );     // ColName
+                                aRef.SetColRel( TRUE );     // ColName
                             else
-                                aRef.SetRowRel( sal_True );     // RowName
+                                aRef.SetRowRel( TRUE );     // RowName
                             aRef.CalcRelFromAbs( aPos );
-                            bInList = bFound = sal_True;
+                            bInList = bFound = TRUE;
                         }
                     }
                 }
@@ -3051,17 +3152,17 @@ sal_Bool ScCompiler::IsColRowName( const String& rName )
         long nDistance = 0, nMax = 0;
         long nMyCol = (long) aPos.Col();
         long nMyRow = (long) aPos.Row();
-        sal_Bool bTwo = false;
+        BOOL bTwo = FALSE;
         ScAddress aOne( 0, 0, aPos.Tab() );
         ScAddress aTwo( MAXCOL, MAXROW, aPos.Tab() );
 
         ScAutoNameCache* pNameCache = pDoc->GetAutoNameCache();
         if ( pNameCache )
         {
-            //  use GetNameOccurrences to collect all positions of aName on the sheet
+            //  #b6355215# use GetNameOccurences to collect all positions of aName on the sheet
             //  (only once), similar to the outer part of the loop in the "else" branch.
 
-            const ScAutoNameAddresses& rAddresses = pNameCache->GetNameOccurrences( aName, aPos.Tab() );
+            const ScAutoNameAddresses& rAddresses = pNameCache->GetNameOccurences( aName, aPos.Tab() );
 
             //  Loop through the found positions, similar to the inner part of the loop in the "else" branch.
             //  The order of addresses in the vector is the same as from ScCellIterator.
@@ -3091,7 +3192,7 @@ sal_Bool ScCompiler::IsColRowName( const String& rName )
                         {
                             if ( nC < 0 || nR < 0 )
                             {   // right or below
-                                bTwo = sal_True;
+                                bTwo = TRUE;
                                 aTwo.Set( nCol, nRow, aAddress.Tab() );
                                 nMax = Max( nMyCol + Abs( nC ), nMyRow + Abs( nR ) );
                                 nDistance = nD;
@@ -3101,7 +3202,7 @@ sal_Bool ScCompiler::IsColRowName( const String& rName )
                                 // upper left, only if not further up than the
                                 // current entry and nMyRow is below (CellIter
                                 // runs column-wise)
-                                bTwo = false;
+                                bTwo = FALSE;
                                 aOne.Set( nCol, nRow, aAddress.Tab() );
                                 nMax = Max( nMyCol + nC, nMyRow + nR );
                                 nDistance = nD;
@@ -3114,7 +3215,7 @@ sal_Bool ScCompiler::IsColRowName( const String& rName )
                         nDistance = nC * nC + nR * nR;
                         nMax = Max( nMyCol + Abs( nC ), nMyRow + Abs( nR ) );
                     }
-                    bFound = sal_True;
+                    bFound = TRUE;
                 }
             }
         }
@@ -3129,10 +3230,10 @@ sal_Bool ScCompiler::IsColRowName( const String& rName )
                         break;      // aIter
                 }
                 CellType eType = pCell->GetCellType();
-                sal_Bool bOk = sal::static_int_cast<sal_Bool>( (eType == CELLTYPE_FORMULA ?
+                BOOL bOk = sal::static_int_cast<BOOL>( (eType == CELLTYPE_FORMULA ?
                     ((ScFormulaCell*)pCell)->GetCode()->GetCodeLen() > 0
                     && ((ScFormulaCell*)pCell)->aPos != aPos    // noIter
-                    : sal_True ) );
+                    : TRUE ) );
                 if ( bOk && pCell->HasStringData() )
                 {
                     String aStr;
@@ -3170,7 +3271,7 @@ sal_Bool ScCompiler::IsColRowName( const String& rName )
                             {
                                 if ( nC < 0 || nR < 0 )
                                 {   // right or below
-                                    bTwo = sal_True;
+                                    bTwo = TRUE;
                                     aTwo.Set( nCol, nRow, aIter.GetTab() );
                                     nMax = Max( nMyCol + Abs( nC ), nMyRow + Abs( nR ) );
                                     nDistance = nD;
@@ -3180,7 +3281,7 @@ sal_Bool ScCompiler::IsColRowName( const String& rName )
                                     // upper left, only if not further up than the
                                     // current entry and nMyRow is below (CellIter
                                     // runs column-wise)
-                                    bTwo = false;
+                                    bTwo = FALSE;
                                     aOne.Set( nCol, nRow, aIter.GetTab() );
                                     nMax = Max( nMyCol + nC, nMyRow + nR );
                                     nDistance = nD;
@@ -3193,7 +3294,7 @@ sal_Bool ScCompiler::IsColRowName( const String& rName )
                             nDistance = nC * nC + nR * nR;
                             nMax = Max( nMyCol + Abs( nC ), nMyRow + Abs( nR ) );
                         }
-                        bFound = sal_True;
+                        bFound = TRUE;
                     }
                 }
             }
@@ -3235,9 +3336,9 @@ sal_Bool ScCompiler::IsColRowName( const String& rName )
                     aRef.nCol, aRef.nRow + 1, aRef.nTab ))
               || (aRef.nRow != 0 && pDoc->HasStringData(
                     aRef.nCol, aRef.nRow - 1, aRef.nTab )) )
-                aRef.SetRowRel( sal_True );     // RowName
+                aRef.SetRowRel( TRUE );     // RowName
             else
-                aRef.SetColRel( sal_True );     // ColName
+                aRef.SetColRel( TRUE );     // ColName
             aRef.CalcRelFromAbs( aPos );
         }
     }
@@ -3247,13 +3348,13 @@ sal_Bool ScCompiler::IsColRowName( const String& rName )
         aToken.SetSingleReference( aRef );
         aToken.eOp = ocColRowName;
         pRawToken = aToken.Clone();
-        return sal_True;
+        return TRUE;
     }
     else
-        return false;
+        return FALSE;
 }
 
-sal_Bool ScCompiler::IsBoolean( const String& rName )
+BOOL ScCompiler::IsBoolean( const String& rName )
 {
     OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap()->find( rName ) );
     if( iLook != mxSymbols->getHashMap()->end() &&
@@ -3263,10 +3364,10 @@ sal_Bool ScCompiler::IsBoolean( const String& rName )
         ScRawToken aToken;
         aToken.SetOpCode( (*iLook).second );
         pRawToken = aToken.Clone();
-        return sal_True;
+        return TRUE;
     }
     else
-        return false;
+        return FALSE;
 }
 
 //---------------------------------------------------------------------------
@@ -3295,17 +3396,17 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 aCorrectedSymbol.SetChar( nPos, cQuote );   // '"' the 255th character
             else
                 aCorrectedSymbol.Insert( cQuote, nPos + 1 );
-            bCorrected = sal_True;
+            bCorrected = TRUE;
         }
         else if ( c1 != cQuote && c2 == cQuote )
         {   // ..."
             aCorrectedSymbol.Insert( cQuote, 0 );
-            bCorrected = sal_True;
+            bCorrected = TRUE;
         }
         else if ( nPos == 0 && (c1 == cx || c1 == cX) )
         {   // x => *
             aCorrectedSymbol = mxSymbols->getSymbol(ocMul);
-            bCorrected = sal_True;
+            bCorrected = TRUE;
         }
         else if ( (GetCharTableFlags( c1, 0 ) & SC_COMPILER_C_CHAR_VALUE)
                && (GetCharTableFlags( c2, c2p ) & SC_COMPILER_C_CHAR_VALUE) )
@@ -3318,7 +3419,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 while ( (nIndex = aCorrectedSymbol.SearchAndReplace(
                         cx, c, nIndex )) != STRING_NOTFOUND )
                     nIndex++;
-                bCorrected = sal_True;
+                bCorrected = TRUE;
             }
             if ( (nXcount = aCorrectedSymbol.GetTokenCount( cX )) > 1 )
             {   // X => *
@@ -3327,7 +3428,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 while ( (nIndex = aCorrectedSymbol.SearchAndReplace(
                         cX, c, nIndex )) != STRING_NOTFOUND )
                     nIndex++;
-                bCorrected = sal_True;
+                bCorrected = TRUE;
             }
         }
         else
@@ -3342,16 +3443,16 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 aSymbol.Erase( 0, nPosition + 2 );
             }
             xub_StrLen nRefs = aSymbol.GetTokenCount( ':' );
-            sal_Bool bColons;
+            BOOL bColons;
             if ( nRefs > 2 )
             {   // duplicated or too many ':'? B:2::C10 => B2:C10
-                bColons = sal_True;
+                bColons = TRUE;
                 xub_StrLen nIndex = 0;
                 String aTmp1( aSymbol.GetToken( 0, ':', nIndex ) );
                 xub_StrLen nLen1 = aTmp1.Len();
                 String aSym, aTmp2;
-                sal_Bool bLastAlp, bNextNum;
-                bLastAlp = bNextNum = sal_True;
+                BOOL bLastAlp, bNextNum;
+                bLastAlp = bNextNum = TRUE;
                 xub_StrLen nStrip = 0;
                 xub_StrLen nCount = nRefs;
                 for ( xub_StrLen j=1; j<nCount; j++ )
@@ -3405,7 +3506,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 aSymbol += aTmp1;
             }
             else
-                bColons = false;
+                bColons = FALSE;
             if ( nRefs && nRefs <= 2 )
             {   // reference twisted? 4A => A4 etc.
                 String aTab[2], aRef[2];
@@ -3418,9 +3519,9 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 else
                     aRef[0] = aSymbol;
 
-                sal_Bool bChanged = false;
-                sal_Bool bOk = sal_True;
-                sal_uInt16 nMask = SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW;
+                BOOL bChanged = FALSE;
+                BOOL bOk = TRUE;
+                USHORT nMask = SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW;
                 for ( int j=0; j<nRefs; j++ )
                 {
                     xub_StrLen nTmp = 0;
@@ -3441,7 +3542,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                     aRef[j] += aStr2;
                     if ( bColons || aRef[j] != aOld )
                     {
-                        bChanged = sal_True;
+                        bChanged = TRUE;
                         ScAddress aAdr;
                         bOk &= ((aAdr.Parse( aRef[j], pDoc, aDetails ) & nMask) == nMask);
                     }
@@ -3457,7 +3558,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                         aCorrectedSymbol += aTab[1];
                         aCorrectedSymbol += aRef[1];
                     }
-                    bCorrected = sal_True;
+                    bCorrected = TRUE;
                 }
             }
         }
@@ -3468,7 +3569,7 @@ inline bool lcl_UpperAsciiOrI18n( String& rUpper, const String& rOrg, FormulaGra
 {
     if (FormulaGrammar::isODFF( eGrammar ))
     {
-        // ODFF has a defined set of English function names, avoid i18n
+        // ODFF has a defined set of English function names, avoid i18n 
         // overhead.
         rUpper = rOrg;
         rUpper.ToUpperAscii();
@@ -3481,7 +3582,7 @@ inline bool lcl_UpperAsciiOrI18n( String& rUpper, const String& rOrg, FormulaGra
     }
 }
 
-sal_Bool ScCompiler::NextNewToken( bool bInArray )
+BOOL ScCompiler::NextNewToken( bool bInArray )
 {
     bool bAllowBooleans = bInArray;
     xub_StrLen nSpaces = NextSymbol(bInArray);
@@ -3493,7 +3594,7 @@ sal_Bool ScCompiler::NextNewToken( bool bInArray )
     {
         ScRawToken aToken;
         aToken.SetOpCode( ocSpaces );
-        aToken.sbyte.cByte = (sal_uInt8) ( nSpaces > 255 ? 255 : nSpaces );
+        aToken.sbyte.cByte = (BYTE) ( nSpaces > 255 ? 255 : nSpaces );
         if( !static_cast<ScTokenArray*>(pArr)->AddRawToken( aToken ) )
         {
             SetError(errCodeOverflow);
@@ -3522,7 +3623,7 @@ sal_Bool ScCompiler::NextNewToken( bool bInArray )
 
     if ( (cSymbol[0] == '#' || cSymbol[0] == '$') && cSymbol[1] == 0 &&
             !bAutoCorrect )
-    {   // special case to speed up broken [$]#REF documents
+    {   // #101100# special case to speed up broken [$]#REF documents
         /* FIXME: ISERROR(#REF!) would be valid and TRUE and the formula to
          * be processed as usual. That would need some special treatment,
          * also in NextSymbol() because of possible combinations of
@@ -3559,7 +3660,7 @@ sal_Bool ScCompiler::NextNewToken( bool bInArray )
         bMayBeFuncName = ( *p == '(' );
     }
 
-    // Italian ARCTAN.2 resulted in #REF! => IsOpcode() before
+    // #42016# Italian ARCTAN.2 resulted in #REF! => IsOpcode() before
     // IsReference().
 
     String aUpper;
@@ -3629,8 +3730,8 @@ sal_Bool ScCompiler::NextNewToken( bool bInArray )
         return false;
     }
 
-    // Provide single token information and continue. Do not set an error, that
-    // would prematurely end compilation. Simple unknown names are handled by
+    // Provide single token information and continue. Do not set an error, that 
+    // would prematurely end compilation. Simple unknown names are handled by 
     // the interpreter.
     ScGlobal::pCharClass->toLower( aUpper );
     ScRawToken aToken;
@@ -3645,7 +3746,7 @@ sal_Bool ScCompiler::NextNewToken( bool bInArray )
 void ScCompiler::CreateStringFromXMLTokenArray( String& rFormula, String& rFormulaNmsp )
 {
     bool bExternal = GetGrammar() == FormulaGrammar::GRAM_EXTERNAL;
-    sal_uInt16 nExpectedCount = bExternal ? 2 : 1;
+    USHORT nExpectedCount = bExternal ? 2 : 1;
     DBG_ASSERT( pArr->GetLen() == nExpectedCount, "ScCompiler::CreateStringFromXMLTokenArray - wrong number of tokens" );
     if( pArr->GetLen() == nExpectedCount )
     {
@@ -3670,13 +3771,13 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
     aFormula.EraseLeadingChars();
     aFormula.EraseTrailingChars();
     nSrcPos = 0;
-    bCorrected = false;
+    bCorrected = FALSE;
     if ( bAutoCorrect )
     {
         aCorrectedFormula.Erase();
         aCorrectedSymbol.Erase();
     }
-    sal_uInt8 nForced = 0;   // ==formula forces recalc even if cell is not visible
+    BYTE nForced = 0;   // ==formula forces recalc even if cell is not visible
     if( aFormula.GetChar(nSrcPos) == '=' )
     {
         nSrcPos++;
@@ -3731,7 +3832,7 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
                     SetError( errPairExpected );
                     if ( bAutoCorrect )
                     {
-                        bCorrected = sal_True;
+                        bCorrected = TRUE;
                         aCorrectedSymbol.Erase();
                     }
                 }
@@ -3773,7 +3874,7 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
                     SetError( errPairExpected );
                     if ( bAutoCorrect )
                     {
-                        bCorrected = sal_True;
+                        bCorrected = TRUE;
                         aCorrectedSymbol.Erase();
                     }
                 }
@@ -3893,32 +3994,19 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula, const String& r
 }
 
 
-sal_Bool ScCompiler::HandleRange()
+BOOL ScCompiler::HandleRange()
 {
-    ScRangeData* pRangeData = NULL;
-
-    bool bGlobal = pToken->GetByte();
-    if (bGlobal)
-        // global named range.
-        pRangeData = pDoc->GetRangeName()->findByIndex( pToken->GetIndex() );
-    else
-    {
-        // sheet local named range.
-        ScRangeName* pRN = pDoc->GetRangeName(aPos.Tab());
-        if (pRN)
-            pRangeData = pRN->findByIndex( pToken->GetIndex() );
-    }
-
+    ScRangeData* pRangeData = pDoc->GetRangeName()->FindIndex( pToken->GetIndex() );
     if (pRangeData)
     {
-        sal_uInt16 nErr = pRangeData->GetErrCode();
+        USHORT nErr = pRangeData->GetErrCode();
         if( nErr )
             SetError( errNoName );
         else if ( !bCompileForFAP )
         {
             ScTokenArray* pNew;
-            // put named formula into parentheses.
-            // But only if there aren't any yet, parenthetical
+            // #35168# put named formula into parentheses.
+            // #37680# But only if there aren't any yet, parenthetical
             // ocSep doesn't work, e.g. SUM((...;...))
             // or if not directly between ocSep/parenthesis,
             // e.g. SUM(...;(...;...)) no, SUM(...;(...)*3) yes,
@@ -3927,18 +4015,18 @@ sal_Bool ScCompiler::HandleRange()
             FormulaToken* p2 = pArr->PeekNextNoSpaces();
             OpCode eOp1 = (p1 ? p1->GetOpCode() : static_cast<OpCode>( ocSep ) );
             OpCode eOp2 = (p2 ? p2->GetOpCode() : static_cast<OpCode>( ocSep ) );
-            sal_Bool bBorder1 = (eOp1 == ocSep || eOp1 == ocOpen);
-            sal_Bool bBorder2 = (eOp2 == ocSep || eOp2 == ocClose);
-            sal_Bool bAddPair = !(bBorder1 && bBorder2);
+            BOOL bBorder1 = (eOp1 == ocSep || eOp1 == ocOpen);
+            BOOL bBorder2 = (eOp2 == ocSep || eOp2 == ocClose);
+            BOOL bAddPair = !(bBorder1 && bBorder2);
             if ( bAddPair )
             {
                 pNew = new ScTokenArray();
                 pNew->AddOpCode( ocClose );
-                PushTokenArray( pNew, sal_True );
+                PushTokenArray( pNew, TRUE );
                 pNew->Reset();
             }
             pNew = pRangeData->GetCode()->Clone();
-            PushTokenArray( pNew, sal_True );
+            PushTokenArray( pNew, TRUE );
             if( pRangeData->HasReferences() )
             {
                 SetRelNameReference();
@@ -3949,7 +4037,7 @@ sal_Bool ScCompiler::HandleRange()
             {
                 pNew = new ScTokenArray();
                 pNew->AddOpCode( ocOpen );
-                PushTokenArray( pNew, sal_True );
+                PushTokenArray( pNew, TRUE );
                 pNew->Reset();
             }
             return GetToken();
@@ -3957,10 +4045,10 @@ sal_Bool ScCompiler::HandleRange()
     }
     else
         SetError(errNoName);
-    return sal_True;
+    return TRUE;
 }
 // -----------------------------------------------------------------------------
-sal_Bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
+BOOL ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
 {
     // Handle external range names.
     switch (_aToken.GetType())
@@ -4000,10 +4088,10 @@ sal_Bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
             return GetToken();
         }
         default:
-            OSL_FAIL("Wrong type for external reference!");
-            return false;
+            DBG_ERROR("Wrong type for external reference!");
+            return FALSE;
     }
-    return sal_True;
+    return TRUE;
 }
 
 
@@ -4025,7 +4113,7 @@ sal_Bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
 
 //-----------------------------------------------------------------------------
 
-sal_Bool ScCompiler::HasModifiedRange()
+BOOL ScCompiler::HasModifiedRange()
 {
     pArr->Reset();
     for ( FormulaToken* t = pArr->Next(); t; t = pArr->Next() )
@@ -4033,27 +4121,27 @@ sal_Bool ScCompiler::HasModifiedRange()
         OpCode eOpCode = t->GetOpCode();
         if ( eOpCode == ocName )
         {
-             ScRangeData* pRangeData = pDoc->GetRangeName()->findByIndex(t->GetIndex());
+             ScRangeData* pRangeData = pDoc->GetRangeName()->FindIndex(t->GetIndex());
 
             if (pRangeData && pRangeData->IsModified())
-                return sal_True;
+                return TRUE;
         }
         else if ( eOpCode == ocDBArea )
         {
             ScDBData* pDBData = pDoc->GetDBCollection()->FindIndex(t->GetIndex());
 
             if (pDBData && pDBData->IsModified())
-                return sal_True;
+                return TRUE;
         }
     }
-    return false;
+    return FALSE;
 }
 
 
 //---------------------------------------------------------------------------
 
 template< typename T, typename S >
-S lcl_adjval( S& n, T pos, T max, sal_Bool bRel )
+S lcl_adjval( S& n, T pos, T max, BOOL bRel )
 {
     max++;
     if( bRel )
@@ -4077,12 +4165,12 @@ void ScCompiler::SetRelNameReference()
     {
         ScSingleRefData& rRef1 = t->GetSingleRef();
         if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
-            rRef1.SetRelName( sal_True );
+            rRef1.SetRelName( TRUE );
         if ( t->GetType() == svDoubleRef )
         {
             ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
             if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
-                rRef2.SetRelName( sal_True );
+                rRef2.SetRelName( TRUE );
         }
     }
 }
@@ -4102,6 +4190,7 @@ void ScCompiler::MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow )
     }
 }
 
+// static
 // Wrap-adjust relative references of a RangeName to current position,
 // don't call for other token arrays!
 void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
@@ -4121,14 +4210,14 @@ void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddr
 ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                  const ScAddress& rOldPos, const ScRange& r,
                                  SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                 bool& rChanged, bool& rRefSizeChanged )
+                                 BOOL& rChanged, BOOL& rRefSizeChanged )
 {
-    rChanged = rRefSizeChanged = false;
+    rChanged = rRefSizeChanged = FALSE;
     if ( eUpdateRefMode == URM_COPY )
     {   // Normally nothing has to be done here since RelRefs are used, also
         // SharedFormulas don't need any special handling, except if they
         // wrapped around sheet borders.
-        // But ColRowName tokens pointing to a ColRow header which was
+        // #67383# But ColRowName tokens pointing to a ColRow header which was
         // copied along with this formula need to be updated to point to the
         // copied header instead of the old position's new intersection.
         ScToken* t;
@@ -4145,7 +4234,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                         SingleDoubleRefModifier( rRef ).Ref() )
                         != UR_NOTHING
                     )
-                    rChanged = true;
+                    rChanged = TRUE;
             }
         }
         // Check for SharedFormulas.
@@ -4156,7 +4245,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
         {
             if( j->GetOpCode() == ocName )
             {
-                ScRangeData* pName = pDoc->GetRangeName()->findByIndex( j->GetIndex() );
+                ScRangeData* pName = pDoc->GetRangeName()->FindIndex( j->GetIndex() );
                 if (pName && pName->HasType(RT_SHARED))
                     pRangeData = pName;
             }
@@ -4170,14 +4259,14 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
             for( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()); t && !pRangeData;
                  t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) )
             {
-                sal_Bool bRelName = (t->GetType() == svSingleRef ?
+                BOOL bRelName = (t->GetType() == svSingleRef ?
                         t->GetSingleRef().IsRelName() :
                         (t->GetDoubleRef().Ref1.IsRelName() ||
                          t->GetDoubleRef().Ref2.IsRelName()));
                 if (bRelName)
                 {
                     t->CalcAbsIfRel( rOldPos);
-                    sal_Bool bValid = (t->GetType() == svSingleRef ?
+                    BOOL bValid = (t->GetType() == svSingleRef ?
                             t->GetSingleRef().Valid() :
                             t->GetDoubleRef().Valid());
                     // If the reference isn't valid, copying the formula
@@ -4185,7 +4274,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                     if (!bValid)
                     {
                         pRangeData = pName;
-                        rChanged = true;
+                        rChanged = TRUE;
                     }
                 }
             }
@@ -4209,12 +4298,12 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
         {
             if( t->GetOpCode() == ocName )
             {
-                ScRangeData* pName = pDoc->GetRangeName()->findByIndex( t->GetIndex() );
+                ScRangeData* pName = pDoc->GetRangeName()->FindIndex( t->GetIndex() );
                 if (pName && pName->HasType(RT_SHAREDMOD))
                 {
                     pRangeData = pName;     // maybe need a replacement of shared with own code
 #if ! SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
-                    rChanged = true;
+                    rChanged = TRUE;
 #endif
                 }
             }
@@ -4239,7 +4328,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                         SingleDoubleRefModifier(
                                             t->GetSingleRef()).Ref())
                                     != UR_NOTHING)
-                                rChanged = true;
+                                rChanged = TRUE;
                         }
                         break;
                     default:
@@ -4252,23 +4341,23 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                         aPos, r, nDx, nDy, nDz,
                                         t->GetDoubleRef()) != UR_NOTHING)
                             {
-                                rChanged = true;
+                                rChanged = TRUE;
                                 if (rRef.Ref2.nCol - rRef.Ref1.nCol != nCols ||
                                         rRef.Ref2.nRow - rRef.Ref1.nRow != nRows ||
                                         rRef.Ref2.nTab - rRef.Ref1.nTab != nTabs)
-                                    rRefSizeChanged = true;
+                                    rRefSizeChanged = TRUE;
                             }
                         }
                 }
             }
         }
 #if SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
-        sal_Bool bEasyShared, bPosInRange;
+        BOOL bEasyShared, bPosInRange;
         if ( !pRangeData )
-            bEasyShared = bPosInRange = false;
+            bEasyShared = bPosInRange = FALSE;
         else
         {
-            bEasyShared = sal_True;
+            bEasyShared = TRUE;
             bPosInRange = r.In( eUpdateRefMode == URM_MOVE ? aPos : rOldPos );
         }
 #endif
@@ -4278,7 +4367,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
             if ( t->GetRef() != 1 )
             {
 #if SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
-                bEasyShared = false;
+                bEasyShared = FALSE;
 #endif
             }
             else
@@ -4290,7 +4379,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                     if ( rRef.IsRelName() )
                     {
                         ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, aMod.Ref() );
-                        rChanged = true;
+                        rChanged = TRUE;
                     }
                     else
                     {
@@ -4299,7 +4388,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                     r, nDx, nDy, nDz, aMod.Ref() )
                                 != UR_NOTHING
                             )
-                            rChanged = true;
+                            rChanged = TRUE;
                     }
 #if SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
                     if ( bEasyShared )
@@ -4307,7 +4396,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                         const ScSingleRefData& rSRD = aMod.Ref().Ref1;
                         ScAddress aRef( rSRD.nCol, rSRD.nRow, rSRD.nTab );
                         if ( r.In( aRef ) != bPosInRange )
-                            bEasyShared = false;
+                            bEasyShared = FALSE;
                     }
 #endif
                 }
@@ -4320,7 +4409,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                     if ( rRef.Ref1.IsRelName() || rRef.Ref2.IsRelName() )
                     {
                         ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, rRef );
-                        rChanged = true;
+                        rChanged = TRUE;
                     }
                     else
                     {
@@ -4329,14 +4418,14 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                 != UR_NOTHING
                             )
                         {
-                            rChanged = true;
+                            rChanged = TRUE;
                             if (rRef.Ref2.nCol - rRef.Ref1.nCol != nCols ||
                                     rRef.Ref2.nRow - rRef.Ref1.nRow != nRows ||
                                     rRef.Ref2.nTab - rRef.Ref1.nTab != nTabs)
                             {
-                                rRefSizeChanged = true;
+                                rRefSizeChanged = TRUE;
 #if SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
-                                bEasyShared = false;
+                                bEasyShared = FALSE;
 #endif
                             }
                         }
@@ -4348,7 +4437,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                                 rRef.Ref1.nTab, rRef.Ref2.nCol, rRef.Ref2.nRow,
                                 rRef.Ref2.nTab );
                         if ( r.In( aRef ) != bPosInRange )
-                            bEasyShared = false;
+                            bEasyShared = FALSE;
                     }
 #endif
                 }
@@ -4360,7 +4449,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
             if ( bEasyShared )
                 pRangeData = 0;
             else
-                rChanged = true;
+                rChanged = TRUE;
         }
 #endif
 #undef SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
@@ -4368,13 +4457,13 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
     }
 }
 
-sal_Bool ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
+BOOL ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
                                      const ScRange& r,
                                      SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                     sal_Bool& rChanged, sal_Bool bSharedFormula)
+                                     BOOL& rChanged, BOOL bSharedFormula)
 {
-    sal_Bool bRelRef = false;   // set if relative reference
-    rChanged = false;
+    BOOL bRelRef = FALSE;   // set if relative reference
+    rChanged = FALSE;
     pArr->Reset();
     ScToken* t;
     while ( (t = static_cast<ScToken*>(pArr->GetNextReference())) != NULL )
@@ -4408,7 +4497,7 @@ sal_Bool ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
             if (ScRefUpdate::Update( pDoc, eUpdateRefMode, aPos, r,
                         nDx, nDy, nDz, rRef, ScRefUpdate::ABSOLUTE)
                     != UR_NOTHING )
-                rChanged = sal_True;
+                rChanged = TRUE;
         }
     }
     return bRelRef;
@@ -4484,12 +4573,12 @@ void ScCompiler::UpdateSharedFormulaReference( UpdateRefMode eUpdateRefMode,
 }
 
 
-ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, sal_Bool bIsName )
+ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
 {
     ScRangeData* pRangeData = NULL;
     SCTAB nPosTab = aPos.Tab();     // _after_ incremented!
     SCTAB nOldPosTab = ((nPosTab > nTable) ? (nPosTab - 1) : nPosTab);
-    sal_Bool bIsRel = false;
+    BOOL bIsRel = FALSE;
     ScToken* t;
     pArr->Reset();
     if (bIsName)
@@ -4502,7 +4591,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, sal_Bool bIsName )
         {
             if (!bIsName)
             {
-                ScRangeData* pName = pDoc->GetRangeName()->findByIndex(t->GetIndex());
+                ScRangeData* pName = pDoc->GetRangeName()->FindIndex(t->GetIndex());
                 if (pName && pName->HasType(RT_SHAREDMOD))
                     pRangeData = pName;
             }
@@ -4523,7 +4612,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, sal_Bool bIsName )
                 rRef.nRelTab = rRef.nTab - nPosTab;
             }
             else
-                bIsRel = sal_True;
+                bIsRel = TRUE;
             if ( t->GetType() == svDoubleRef )
             {
                 if ( !(bIsName && t->GetDoubleRef().Ref2.IsTabRel()) )
@@ -4540,7 +4629,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, sal_Bool bIsName )
                     rRef.nRelTab = rRef.nTab - nPosTab;
                 }
                 else
-                    bIsRel = sal_True;
+                    bIsRel = TRUE;
             }
             if ( bIsName && bIsRel )
                 pRangeData = (ScRangeData*) this;   // not dereferenced in rangenam
@@ -4592,15 +4681,15 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, sal_Bool bIsName )
     return pRangeData;
 }
 
-ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, sal_Bool bIsName,
-                                 sal_Bool& rChanged)
+ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, BOOL /* bIsMove */, BOOL bIsName,
+                                 BOOL& rChanged)
 {
     ScRangeData* pRangeData = NULL;
     SCTAB nTab, nTab2;
     SCTAB nPosTab = aPos.Tab();          // _after_ decremented!
     SCTAB nOldPosTab = ((nPosTab >= nTable) ? (nPosTab + 1) : nPosTab);
-    rChanged = false;
-    sal_Bool bIsRel = false;
+    rChanged = FALSE;
+    BOOL bIsRel = FALSE;
     ScToken* t;
     pArr->Reset();
     if (bIsName)
@@ -4613,11 +4702,11 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
         {
             if (!bIsName)
             {
-                ScRangeData* pName = pDoc->GetRangeName()->findByIndex(t->GetIndex());
+                ScRangeData* pName = pDoc->GetRangeName()->FindIndex(t->GetIndex());
                 if (pName && pName->HasType(RT_SHAREDMOD))
                     pRangeData = pName;
             }
-            rChanged = sal_True;
+            rChanged = TRUE;
         }
         else if( t->GetType() != svIndex )  // it may be a DB area!!!
         {
@@ -4631,7 +4720,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
                 if ( nTable < nTab )
                 {
                     rRef.nTab = nTab - 1;
-                    rChanged = sal_True;
+                    rChanged = TRUE;
                 }
                 else if ( nTable == nTab )
                 {
@@ -4646,7 +4735,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
                           || (nTab+1) >= pDoc->GetTableCount() )
                         {
                             rRef.nTab = MAXTAB+1;
-                            rRef.SetTabDeleted( sal_True );
+                            rRef.SetTabDeleted( TRUE );
                         }
                         // else: nTab later points to what's nTable+1 now
                         // => area shrunk
@@ -4654,14 +4743,14 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
                     else
                     {
                         rRef.nTab = MAXTAB+1;
-                        rRef.SetTabDeleted( sal_True );
+                        rRef.SetTabDeleted( TRUE );
                     }
-                    rChanged = sal_True;
+                    rChanged = TRUE;
                 }
                 rRef.nRelTab = rRef.nTab - nPosTab;
             }
             else
-                bIsRel = sal_True;
+                bIsRel = TRUE;
             if ( t->GetType() == svDoubleRef )
             {
                 if ( !(bIsName && t->GetDoubleRef().Ref2.IsTabRel()) )
@@ -4674,7 +4763,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
                     if ( nTable < nTab )
                     {
                         rRef.nTab = nTab - 1;
-                        rChanged = sal_True;
+                        rChanged = TRUE;
                     }
                     else if ( nTable == nTab )
                     {
@@ -4683,14 +4772,14 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
                         else
                         {
                             rRef.nTab = MAXTAB+1;
-                            rRef.SetTabDeleted( sal_True );
+                            rRef.SetTabDeleted( TRUE );
                         }
-                        rChanged = sal_True;
+                        rChanged = TRUE;
                     }
                     rRef.nRelTab = rRef.nTab - nPosTab;
                 }
                 else
-                    bIsRel = sal_True;
+                    bIsRel = TRUE;
             }
             if ( bIsName && bIsRel )
                 pRangeData = (ScRangeData*) this;   // not dereferenced in rangenam
@@ -4717,7 +4806,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
                     if ( nTable < nTab )
                     {
                         rRef1.nTab = nTab - 1;
-                        rChanged = sal_True;
+                        rChanged = TRUE;
                     }
                     else if ( nTable == nTab )
                     {
@@ -4732,7 +4821,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
                               || (nTab+1) >= pDoc->GetTableCount() )
                             {
                                 rRef1.nTab = MAXTAB+1;
-                                rRef1.SetTabDeleted( sal_True );
+                                rRef1.SetTabDeleted( TRUE );
                             }
                             // else: nTab later points to what's nTable+1 now
                             // => area shrunk
@@ -4740,9 +4829,9 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
                         else
                         {
                             rRef1.nTab = MAXTAB+1;
-                            rRef1.SetTabDeleted( sal_True );
+                            rRef1.SetTabDeleted( TRUE );
                         }
-                        rChanged = sal_True;
+                        rChanged = TRUE;
                     }
                     rRef1.nRelTab = rRef1.nTab - nPosTab;
                 }
@@ -4758,7 +4847,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
                         if ( nTable < nTab )
                         {
                             rRef2.nTab = nTab - 1;
-                            rChanged = sal_True;
+                            rChanged = TRUE;
                         }
                         else if ( nTable == nTab )
                         {
@@ -4767,9 +4856,9 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
                             else
                             {
                                 rRef2.nTab = MAXTAB+1;
-                                rRef2.SetTabDeleted( sal_True );
+                                rRef2.SetTabDeleted( TRUE );
                             }
-                            rChanged = sal_True;
+                            rChanged = TRUE;
                         }
                         rRef2.nRelTab = rRef2.nTab - nPosTab;
                     }
@@ -4782,7 +4871,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
 
 // aPos.Tab() must be already adjusted!
 ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
-        sal_Bool bIsName )
+        BOOL bIsName )
 {
     ScRangeData* pRangeData = NULL;
     SCsTAB nTab;
@@ -4810,7 +4899,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
     else
         nOldPosTab = nPosTab - nDir;    // moved by one
 
-    sal_Bool bIsRel = false;
+    BOOL bIsRel = FALSE;
     ScToken* t;
     pArr->Reset();
     if (bIsName)
@@ -4823,7 +4912,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
         {
             if (!bIsName)
             {
-                ScRangeData* pName = pDoc->GetRangeName()->findByIndex(t->GetIndex());
+                ScRangeData* pName = pDoc->GetRangeName()->FindIndex(t->GetIndex());
                 if (pName && pName->HasType(RT_SHAREDMOD))
                     pRangeData = pName;
             }
@@ -4844,7 +4933,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
                 rRef1.nRelTab = rRef1.nTab - nPosTab;
             }
             else
-                bIsRel = sal_True;
+                bIsRel = TRUE;
             if ( t->GetType() == svDoubleRef )
             {
                 ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
@@ -4861,7 +4950,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
                     rRef2.nRelTab = rRef2.nTab - nPosTab;
                 }
                 else
-                    bIsRel = sal_True;
+                    bIsRel = TRUE;
                 SCsTAB nTab1, nTab2;
                 if ( rRef1.IsTabRel() )
                     nTab1 = rRef1.nRelTab + nPosTab;
@@ -5018,15 +5107,18 @@ void ScCompiler::CreateStringFromMatrix( rtl::OUStringBuffer& rBuffer,
 
             if( pMatrix->IsValue( nC, nR ) )
             {
-                if (pMatrix->IsBoolean(nC, nR))
-                    AppendBoolean(rBuffer, pMatrix->GetDouble(nC, nR) != 0.0);
+                ScMatValType nType;
+                const ScMatrixValue* pVal = pMatrix->Get( nC, nR, nType);
+
+                if( nType == SC_MATVAL_BOOLEAN )
+                    AppendBoolean( rBuffer, pVal->GetBoolean() );
                 else
                 {
-                    sal_uInt16 nErr = pMatrix->GetError(nC, nR);
-                    if (nErr)
-                        rBuffer.append(ScGlobal::GetErrorString(nErr));
+                    USHORT nErr = pVal->GetError();
+                    if( nErr )
+                        rBuffer.append( ScGlobal::GetErrorString( nErr ) );
                     else
-                        AppendDouble(rBuffer, pMatrix->GetDouble(nC, nR));
+                        AppendDouble( rBuffer, pVal->fVal );
                 }
             }
             else if( pMatrix->IsEmpty( nC, nR ) )
@@ -5057,16 +5149,16 @@ void ScCompiler::CreateStringFromSingleRef(rtl::OUStringBuffer& rBuffer,FormulaT
         else
         {
             rBuffer.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
-            pConv->MakeRefStr (rBuffer, *this, aRef, sal_True );
+            pConv->MakeRefStr (rBuffer, *this, aRef, TRUE );
         }
     }
     else
-        pConv->MakeRefStr( rBuffer, *this, aRef, sal_True );
+        pConv->MakeRefStr( rBuffer, *this, aRef, TRUE );
 }
 // -----------------------------------------------------------------------------
 void ScCompiler::CreateStringFromDoubleRef(rtl::OUStringBuffer& rBuffer,FormulaToken* _pTokenP)
 {
-    pConv->MakeRefStr( rBuffer, *this, static_cast<ScToken*>(_pTokenP)->GetDoubleRef(), false );
+    pConv->MakeRefStr( rBuffer, *this, static_cast<ScToken*>(_pTokenP)->GetDoubleRef(), FALSE );
 }
 // -----------------------------------------------------------------------------
 void ScCompiler::CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken* _pTokenP)
@@ -5077,19 +5169,7 @@ void ScCompiler::CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken
     {
         case ocName:
         {
-            bool bGlobal = _pTokenP->GetByte();
-            ScRangeData* pData = NULL;
-            if (bGlobal)
-                // global named range.
-                pData = pDoc->GetRangeName()->findByIndex(_pTokenP->GetIndex());
-            else
-            {
-                // sheet local named range.
-                ScRangeName* pRN = pDoc->GetRangeName(aPos.Tab());
-                if (pRN)
-                    pData = pRN->findByIndex(_pTokenP->GetIndex());
-            }
-
+            ScRangeData* pData = pDoc->GetRangeName()->FindIndex(_pTokenP->GetIndex());
             if (pData)
             {
                 if (pData->HasType(RT_SHARED))
@@ -5120,19 +5200,19 @@ void ScCompiler::LocalizeString( String& rName )
     ScGlobal::GetAddInCollection()->LocalizeString( rName );
 }
 // -----------------------------------------------------------------------------
-sal_Bool ScCompiler::IsImportingXML() const
+BOOL ScCompiler::IsImportingXML() const
 {
     return pDoc->IsImportingXML();
 }
 
 // Put quotes around string if non-alphanumeric characters are contained,
 // quote characters contained within are escaped by '\\'.
-sal_Bool ScCompiler::EnQuote( String& rStr )
+BOOL ScCompiler::EnQuote( String& rStr )
 {
     sal_Int32 nType = ScGlobal::pCharClass->getStringType( rStr, 0, rStr.Len() );
     if ( !CharClass::isNumericType( nType )
             && CharClass::isAlphaNumericType( nType ) )
-        return false;
+        return FALSE;
 
     xub_StrLen nPos = 0;
     while ( (nPos = rStr.Search( '\'', nPos)) != STRING_NOTFOUND )
@@ -5142,7 +5222,7 @@ sal_Bool ScCompiler::EnQuote( String& rStr )
     }
     rStr.Insert( '\'', 0 );
     rStr += '\'';
-    return sal_True;
+    return TRUE;
 }
 
 sal_Unicode ScCompiler::GetNativeAddressSymbol( Convention::SpecialSymbolType eType ) const
@@ -5180,33 +5260,32 @@ void ScCompiler::fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaO
     // FIXME: what about those old non-UNO AddIns?
 }
 // -----------------------------------------------------------------------------
-sal_Bool ScCompiler::HandleSingleRef()
+BOOL ScCompiler::HandleSingleRef()
 {
-    ScSingleRefData& rRef = static_cast<ScToken*>(pToken.get())->GetSingleRef();
+    ScSingleRefData& rRef = static_cast<ScToken*>((FormulaToken*)pToken)->GetSingleRef();
     rRef.CalcAbsIfRel( aPos );
     if ( !rRef.Valid() )
     {
         SetError( errNoRef );
-        return sal_True;
+        return TRUE;
     }
     SCCOL nCol = rRef.nCol;
     SCROW nRow = rRef.nRow;
     SCTAB nTab = rRef.nTab;
     ScAddress aLook( nCol, nRow, nTab );
-    sal_Bool bColName = rRef.IsColRel();
+    BOOL bColName = rRef.IsColRel();
     SCCOL nMyCol = aPos.Col();
     SCROW nMyRow = aPos.Row();
-    sal_Bool bInList = false;
-    sal_Bool bValidName = false;
+    BOOL bInList = FALSE;
+    BOOL bValidName = FALSE;
     ScRangePairList* pRL = (bColName ?
         pDoc->GetColNameRanges() : pDoc->GetRowNameRanges());
     ScRange aRange;
-    for ( size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i )
+    for ( ScRangePair* pR = pRL->First(); pR; pR = pRL->Next() )
     {
-        ScRangePair* pR = (*pRL)[i];
         if ( pR->GetRange(0).In( aLook ) )
         {
-            bInList = bValidName = sal_True;
+            bInList = bValidName = TRUE;
             aRange = pR->GetRange(1);
             if ( bColName )
             {
@@ -5223,12 +5302,12 @@ sal_Bool ScCompiler::HandleSingleRef()
     }
     if ( !bInList && pDoc->GetDocOptions().IsLookUpColRowNames() )
     {   // automagically or created by copying and NamePos isn't in list
-        sal_Bool bString = pDoc->HasStringData( nCol, nRow, nTab );
+        BOOL bString = pDoc->HasStringData( nCol, nRow, nTab );
         if ( !bString && !pDoc->GetCell( aLook ) )
-            bString = sal_True;     // empty cell is ok
+            bString = TRUE;     // empty cell is ok
         if ( bString )
         {   //! coresponds with ScInterpreter::ScColRowNameAuto()
-            bValidName = sal_True;
+            bValidName = TRUE;
             if ( bColName )
             {   // ColName
                 SCROW nStartRow = nRow + 1;
@@ -5248,9 +5327,8 @@ sal_Bool ScCompiler::HandleSingleRef()
                         nMaxRow = nMyRow - 1;
                     }
                 }
-                for ( size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i )
+                for ( ScRangePair* pR = pRL->First(); pR; pR = pRL->Next() )
                 {   // next defined ColNameRange below limits row
-                    ScRangePair* pR = (*pRL)[i];
                     const ScRange& rRange = pR->GetRange(1);
                     if ( rRange.aStart.Col() <= nCol && nCol <= rRange.aEnd.Col() )
                     {   // identical column range
@@ -5281,9 +5359,8 @@ sal_Bool ScCompiler::HandleSingleRef()
                         nMaxCol = nMyCol - 1;
                     }
                 }
-                for ( size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i )
+                for ( ScRangePair* pR = pRL->First(); pR; pR = pRL->Next() )
                 {   // next defined RowNameRange to the right limits column
-                    ScRangePair* pR = (*pRL)[i];
                     const ScRange& rRange = pR->GetRange(1);
                     if ( rRange.aStart.Row() <= nRow && nRow <= rRange.aEnd.Row() )
                     {   // identical row range
@@ -5306,10 +5383,10 @@ sal_Bool ScCompiler::HandleSingleRef()
         // generated. A ocColRowName or ocIntersect as a neighbor results
         // in a range. Special case: if label is valid for a single cell, a
         // position independent SingleRef is generated.
-        sal_Bool bSingle = (aRange.aStart == aRange.aEnd);
-        sal_Bool bFound;
+        BOOL bSingle = (aRange.aStart == aRange.aEnd);
+        BOOL bFound;
         if ( bSingle )
-            bFound = sal_True;
+            bFound = TRUE;
         else
         {
             FormulaToken* p1 = pArr->PeekPrevNoSpaces();
@@ -5322,7 +5399,7 @@ sal_Bool ScCompiler::HandleSingleRef()
             {
                 if (    (SC_OPCODE_START_BIN_OP <= eOp1 && eOp1 < SC_OPCODE_STOP_BIN_OP) ||
                         (SC_OPCODE_START_BIN_OP <= eOp2 && eOp2 < SC_OPCODE_STOP_BIN_OP))
-                    bSingle = sal_True;
+                    bSingle = TRUE;
             }
             if ( bSingle )
             {   // column and/or row must match range
@@ -5342,7 +5419,7 @@ sal_Bool ScCompiler::HandleSingleRef()
                 }
             }
             else
-                bFound = sal_True;
+                bFound = TRUE;
         }
         if ( !bFound )
             SetError(errNoRef);
@@ -5354,9 +5431,9 @@ sal_Bool ScCompiler::HandleSingleRef()
                 ScSingleRefData aRefData;
                 aRefData.InitAddress( aRange.aStart );
                 if ( bColName )
-                    aRefData.SetColRel( sal_True );
+                    aRefData.SetColRel( TRUE );
                 else
-                    aRefData.SetRowRel( sal_True );
+                    aRefData.SetRowRel( TRUE );
                 aRefData.CalcRelFromAbs( aPos );
                 pNew->AddSingleReference( aRefData );
             }
@@ -5366,13 +5443,13 @@ sal_Bool ScCompiler::HandleSingleRef()
                 aRefData.InitRange( aRange );
                 if ( bColName )
                 {
-                    aRefData.Ref1.SetColRel( sal_True );
-                    aRefData.Ref2.SetColRel( sal_True );
+                    aRefData.Ref1.SetColRel( TRUE );
+                    aRefData.Ref2.SetColRel( TRUE );
                 }
                 else
                 {
-                    aRefData.Ref1.SetRowRel( sal_True );
-                    aRefData.Ref2.SetRowRel( sal_True );
+                    aRefData.Ref1.SetRowRel( TRUE );
+                    aRefData.Ref2.SetRowRel( TRUE );
                 }
                 aRefData.CalcRelFromAbs( aPos );
                 if ( bInList )
@@ -5382,17 +5459,17 @@ sal_Bool ScCompiler::HandleSingleRef()
                     pNew->Add( new ScDoubleRefToken( aRefData, ocColRowNameAuto ) );
                 }
             }
-            PushTokenArray( pNew, sal_True );
+            PushTokenArray( pNew, TRUE );
             pNew->Reset();
             return GetToken();
         }
     }
     else
         SetError(errNoName);
-    return sal_True;
+    return TRUE;
 }
 // -----------------------------------------------------------------------------
-sal_Bool ScCompiler::HandleDbData()
+BOOL ScCompiler::HandleDbData()
 {
     ScDBData* pDBData = pDoc->GetDBCollection()->FindIndex( pToken->GetIndex() );
     if ( !pDBData )
@@ -5410,13 +5487,17 @@ sal_Bool ScCompiler::HandleDbData()
         aRefData.CalcRelFromAbs( aPos );
         ScTokenArray* pNew = new ScTokenArray();
         pNew->AddDoubleReference( aRefData );
-        PushTokenArray( pNew, sal_True );
+        PushTokenArray( pNew, TRUE );
         pNew->Reset();
         return GetToken();
     }
-    return sal_True;
+    return TRUE;
 }
 
+String GetScCompilerNativeSymbol( OpCode eOp )
+{
+    return ScCompiler::GetNativeSymbol( eOp );
+}
 // -----------------------------------------------------------------------------
 FormulaTokenRef ScCompiler::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2, bool bReuseDoubleRef )
 {

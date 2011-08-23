@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,9 +101,6 @@ class JobDispatch : public  css::lang::XTypeProvider
 
         /** reference to the frame, inside which this dispatch is used */
         css::uno::Reference< css::frame::XFrame > m_xFrame;
-
-        /** name of module (writer, impress etc.) the frame is for */
-        ::rtl::OUString m_sModuleIdentifier;
 
     //___________________________________
     // native interface methods

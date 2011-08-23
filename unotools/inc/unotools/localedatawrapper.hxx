@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ enum MeasurementSystem {
 
 class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
 {
-    static  sal_uInt8                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
+    static  BYTE                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    xSMgr;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData2 >            xLD;
@@ -74,52 +74,52 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     ::com::sun::star::uno::Sequence< ::rtl::OUString >                                  aReservedWordSeq;
     ::com::sun::star::uno::Sequence< sal_Int32 >                                        aGrouping;
     // cached items
-    String                      aLocaleItem[::com::sun::star::i18n::LocaleItem::COUNT];
-    String                      aReservedWord[::com::sun::star::i18n::reservedWords::COUNT];
-    String                      aCurrSymbol;
-    String                      aCurrBankSymbol;
-    int                         nDateFormat;
-    int                         nLongDateFormat;
-    sal_uInt16                      nCurrPositiveFormat;
-    sal_uInt16                      nCurrNegativeFormat;
-    sal_uInt16                      nCurrDigits;
-    sal_Bool                        bLocaleDataItemValid;
-    sal_Bool                        bReservedWordValid;
+    String						aLocaleItem[::com::sun::star::i18n::LocaleItem::COUNT];
+    String						aReservedWord[::com::sun::star::i18n::reservedWords::COUNT];
+    String						aCurrSymbol;
+    String						aCurrBankSymbol;
+    int							nDateFormat;
+    int							nLongDateFormat;
+    USHORT						nCurrPositiveFormat;
+    USHORT						nCurrNegativeFormat;
+    USHORT						nCurrDigits;
+    BOOL						bLocaleDataItemValid;
+    BOOL						bReservedWordValid;
     mutable ::utl::ReadWriteMutex   aMutex;
 
     // dummies, to be implemented or provided by XML locale data
-    sal_Unicode                 cCurrZeroChar;
+    sal_Unicode					cCurrZeroChar;
 
 
                                 // not implemented, prevent usage
                                 LocaleDataWrapper( const LocaleDataWrapper& );
-            LocaleDataWrapper&  operator=( const LocaleDataWrapper& );
+            LocaleDataWrapper&	operator=( const LocaleDataWrapper& );
 
                                 // whenever Locale changes
-            void                invalidateData();
+            void				invalidateData();
 
-            void                getOneLocaleItemImpl( sal_Int16 nItem );
-            const String&       getOneLocaleItem( sal_Int16 nItem ) const;
+            void				getOneLocaleItemImpl( sal_Int16 nItem );
+            const String&		getOneLocaleItem( sal_Int16 nItem ) const;
 
-            void                getOneReservedWordImpl( sal_Int16 nWord );
-            const String&       getOneReservedWord( sal_Int16 nWord ) const;
+            void				getOneReservedWordImpl( sal_Int16 nWord );
+            const String&		getOneReservedWord( sal_Int16 nWord ) const;
 
-            void                getCurrSymbolsImpl();
-            void                getCurrFormatsImpl();
+            void				getCurrSymbolsImpl();
+            void				getCurrFormatsImpl();
 
             void                scanCurrFormatImpl( const String& rCode,
                                     xub_StrLen nStart, xub_StrLen& nSign,
                                     xub_StrLen& nPar, xub_StrLen& nNum,
                                     xub_StrLen& nBlank, xub_StrLen& nSym );
 
-            void                getDateFormatsImpl();
+            void				getDateFormatsImpl();
             DateFormat          scanDateFormatImpl( const String& rCode );
 
             void                getDefaultCalendarImpl();
 
-            sal_Unicode*        ImplAddFormatNum( sal_Unicode* pBuf,
-                                    sal_Int64 nNumber, sal_uInt16 nDecimals,
-                                    sal_Bool bUseThousandSep, sal_Bool bTrailingZeros ) const;
+            sal_Unicode*		ImplAddFormatNum( sal_Unicode* pBuf,
+                                    sal_Int64 nNumber, USHORT nDecimals,
+                                    BOOL bUseThousandSep, BOOL bTrailingZeros ) const;
 
             void                getDigitGroupingImpl();
 
@@ -140,7 +140,7 @@ public:
         const { return xSMgr; }
 
     /// set a new Locale to request
-            void                setLocale( const ::com::sun::star::lang::Locale& rLocale );
+            void				setLocale( const ::com::sun::star::lang::Locale& rLocale );
 
     /// get current requested Locale
     const ::com::sun::star::lang::Locale& getLocale() const;
@@ -176,7 +176,7 @@ public:
     static ::com::sun::star::uno::Sequence< sal_uInt16 > getInstalledLanguageTypes();
 
     /// maps the LocaleData string to the International enum
-            MeasurementSystem   mapMeasurementStringToEnum( const String& rMS ) const;
+            MeasurementSystem	mapMeasurementStringToEnum( const String& rMS ) const;
 
     /// Convenience method to obtain the default calendar.
     const ::boost::shared_ptr< ::com::sun::star::i18n::Calendar > getDefaultCalendar() const;
@@ -201,59 +201,59 @@ public:
 
     // Functionality of class International methods, LocaleItem
 
-    inline  const String&       getDateSep() const
+    inline	const String&		getDateSep() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DATE_SEPARATOR ); }
-    inline  const String&       getNumThousandSep() const
+    inline	const String&		getNumThousandSep() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::THOUSAND_SEPARATOR ); }
-    inline  const String&       getNumDecimalSep() const
+    inline	const String&		getNumDecimalSep() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DECIMAL_SEPARATOR ); }
-    inline  const String&       getTimeSep() const
+    inline	const String&		getTimeSep() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_SEPARATOR ); }
-    inline  const String&       getTime100SecSep() const
+    inline	const String&		getTime100SecSep() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_100SEC_SEPARATOR ); }
-    inline  const String&       getListSep() const
+    inline	const String&		getListSep() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LIST_SEPARATOR ); }
-    inline  const String&       getQuotationMarkStart() const
+    inline	const String&		getQuotationMarkStart() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::SINGLE_QUOTATION_START ); }
-    inline  const String&       getQuotationMarkEnd() const
+    inline	const String&		getQuotationMarkEnd() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::SINGLE_QUOTATION_END ); }
-    inline  const String&       getDoubleQuotationMarkStart() const
+    inline	const String&		getDoubleQuotationMarkStart() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DOUBLE_QUOTATION_START ); }
-    inline  const String&       getDoubleQuotationMarkEnd() const
+    inline	const String&		getDoubleQuotationMarkEnd() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DOUBLE_QUOTATION_END ); }
-    inline  const String&       getMeasurementSystem() const
+    inline	const String&		getMeasurementSystem() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::MEASUREMENT_SYSTEM ); }
-    inline  MeasurementSystem   getMeasurementSystemEnum() const
+    inline	MeasurementSystem	getMeasurementSystemEnum() const
                                     { return mapMeasurementStringToEnum( getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::MEASUREMENT_SYSTEM ) ); }
-    inline  const String&       getTimeAM() const
+    inline	const String&		getTimeAM() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_AM ); }
-    inline  const String&       getTimePM() const
+    inline	const String&		getTimePM() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_PM ); }
-    inline  const String&       getLongDateDayOfWeekSep() const
+    inline	const String&		getLongDateDayOfWeekSep() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LONG_DATE_DAY_OF_WEEK_SEPARATOR ); }
-    inline  const String&       getLongDateDaySep() const
+    inline	const String&		getLongDateDaySep() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LONG_DATE_DAY_SEPARATOR ); }
-    inline  const String&       getLongDateMonthSep() const
+    inline	const String&		getLongDateMonthSep() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LONG_DATE_MONTH_SEPARATOR ); }
-    inline  const String&       getLongDateYearSep() const
+    inline	const String&		getLongDateYearSep() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LONG_DATE_YEAR_SEPARATOR ); }
 
     // currency
-            const String&       getCurrSymbol() const;
-            const String&       getCurrBankSymbol() const;
-            sal_uInt16              getCurrPositiveFormat() const;
-            sal_uInt16              getCurrNegativeFormat() const;
-            sal_uInt16              getCurrDigits() const;
+            const String&		getCurrSymbol() const;
+            const String&		getCurrBankSymbol() const;
+            USHORT				getCurrPositiveFormat() const;
+            USHORT				getCurrNegativeFormat() const;
+            USHORT				getCurrDigits() const;
 
     // simple date and time formatting
-            DateFormat          getDateFormat() const;
-            DateFormat          getLongDateFormat() const;
+            DateFormat			getDateFormat() const;
+            DateFormat			getLongDateFormat() const;
                                 /// only numerical values of Gregorian calendar
-            String              getDate( const Date& rDate ) const;
-            String              getTime( const Time& rTime, sal_Bool bSec = sal_True,
-                                    sal_Bool b100Sec = sal_False ) const;
+            String				getDate( const Date& rDate ) const;
+            String				getTime( const Time& rTime, BOOL bSec = TRUE,
+                                    BOOL b100Sec = FALSE ) const;
             String              getDuration( const Time& rTime,
-                                    sal_Bool bSec = sal_True, sal_Bool b100Sec = sal_False ) const;
+                                    BOOL bSec = TRUE, BOOL b100Sec = FALSE ) const;
 
                                 /** The CalendarWrapper already <b>MUST</b>
                                     have loaded a calendar.
@@ -282,51 +282,51 @@ public:
                                     @param nNumber
                                         value * 10**nDecimals
                                     @param bTrailingZeros
-                                    </sal_True>  := always display trailing zeros in
+                                    </TRUE>  := always display trailing zeros in
                                         decimal places, even if integer value.
-                                    </sal_False> := trailing zeros are only displayed
+                                    </FALSE> := trailing zeros are only displayed
                                         if the value is not an integer value.
                                  */
-            String              getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
-                                    sal_Bool bUseThousandSep = sal_True,
-                                    sal_Bool bTrailingZeros = sal_True ) const;
+            String              getNum( sal_Int64 nNumber, USHORT nDecimals,
+                                    BOOL bUseThousandSep = TRUE,
+                                    BOOL bTrailingZeros = TRUE ) const;
 
                                 /// "Secure" currency formatted string.
-            String              getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
+            String              getCurr( sal_Int64 nNumber, USHORT nDecimals,
                                     const String& rCurrencySymbol,
-                                    sal_Bool bUseThousandSep = sal_True ) const;
+                                    BOOL bUseThousandSep = TRUE ) const;
                                 /** Default currency formatted string, use with
                                     care as default currency may change in any
                                     locale, for example, DEM -> EUR */
-            String              getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
-                                        sal_Bool bUseThousandSep = sal_True ) const
+            String              getCurr( sal_Int64 nNumber, USHORT nDecimals,
+                                        BOOL bUseThousandSep = TRUE ) const
                                     { return getCurr( nNumber, nDecimals,
                                         getCurrSymbol(), bUseThousandSep ); }
 
     // dummy returns, to be implemented
-    inline  sal_Unicode         getCurrZeroChar() const
+    inline	sal_Unicode			getCurrZeroChar() const
                                     { return cCurrZeroChar; }
-    inline  sal_Bool                isNumLeadingZero() const
-                                    { return sal_True; }
+    inline  BOOL                isNumLeadingZero() const
+                                    { return TRUE; }
                                 /// standard decimal places
-    inline  sal_uInt16              getNumDigits() const
+    inline  USHORT              getNumDigits() const
                                     { return 2; }
-    inline  sal_Bool                isNumTrailingZeros() const
-                                    { return sal_True; }
+    inline  BOOL                isNumTrailingZeros() const
+                                    { return TRUE; }
 
 
     // reserved words
 
-    inline  const String&       getTrueWord() const
+    inline	const String&		getTrueWord() const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::TRUE_WORD ); }
-    inline  const String&       getFalseWord() const
+    inline	const String&		getFalseWord() const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::FALSE_WORD ); }
     /// return a quarter string matching nQuarter (0..3) => "1st quarter" .. "4th quarter"
     inline  const String&       getQuarterWord( sal_Int16 nQuarter ) const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::QUARTER1_WORD + nQuarter ); }
-    inline  const String&       getAboveWord() const
+    inline	const String&		getAboveWord() const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::ABOVE_WORD ); }
-    inline  const String&       getBelowWord() const
+    inline	const String&		getBelowWord() const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::BELOW_WORD ); }
     /// return a quarter abbreviation string matching nQuarter (0..3) => "Q1" .. "Q2"
     inline  const String&       getQuarterAbbreviation( sal_Int16 nQuarter ) const
@@ -346,7 +346,7 @@ public:
 
     /** Append locale info to string, used with locale data checking.
         A string similar to "de_DE requested\n en_US loaded" is appended. */
-            String&             appendLocaleInfo( String& rDebugMsg ) const;
+            String&			    appendLocaleInfo( String& rDebugMsg ) const;
 
     /** Ouput a message during locale data checking. The (UTF-8) string is
         written to stderr and in a non-product build or if DBG_UTIL is enabled

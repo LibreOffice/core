@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,11 +38,12 @@
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+//	using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 // -------------------------------------------------------------------------
-OAdabasIndex::OAdabasIndex( OAdabasTable* _pTable,
+OAdabasIndex::OAdabasIndex(	OAdabasTable* _pTable,
                 const ::rtl::OUString& _Name,
                 const ::rtl::OUString& _Catalog,
                 sal_Bool _isUnique,
@@ -59,8 +60,8 @@ OAdabasIndex::OAdabasIndex( OAdabasTable* _pTable,
     refreshColumns();
 }
 // -------------------------------------------------------------------------
-OAdabasIndex::OAdabasIndex(OAdabasTable* _pTable)
-    : connectivity::sdbcx::OIndex(sal_True)
+OAdabasIndex::OAdabasIndex(OAdabasTable* _pTable) 
+    : connectivity::sdbcx::OIndex(sal_True) 
     ,m_pTable(_pTable)
 {
     construct();
@@ -97,7 +98,7 @@ void OAdabasIndex::refreshColumns()
     if(m_pColumns)
         m_pColumns->reFill(aVector);
     else
-        m_pColumns  = new OIndexColumns(this,m_aMutex,aVector);
+        m_pColumns	= new OIndexColumns(this,m_aMutex,aVector);
 }
 // -----------------------------------------------------------------------------
 

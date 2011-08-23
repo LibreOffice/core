@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace sdr
         {
         protected:
             // the sequence of primitives to show
-            const drawinglayer::primitive2d::Primitive2DSequence    maSequence;
+            const drawinglayer::primitive2d::Primitive2DSequence	maSequence;
 
             // geometry creation for OverlayObject
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();

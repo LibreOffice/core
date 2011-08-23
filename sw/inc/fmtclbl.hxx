@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,18 +37,18 @@
 class SW_DLLPUBLIC SwFmtNoBalancedColumns : public SfxBoolItem
 {
 public:
-    SwFmtNoBalancedColumns( sal_Bool bFlag = sal_False )
+    SwFmtNoBalancedColumns( BOOL bFlag = FALSE )
         : SfxBoolItem( RES_COLUMNBALANCE, bFlag ) {}
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 };
 
 
-inline const SwFmtNoBalancedColumns &SwAttrSet::GetBalancedColumns(sal_Bool bInP) const
+inline const SwFmtNoBalancedColumns &SwAttrSet::GetBalancedColumns(BOOL bInP) const
     { return (const SwFmtNoBalancedColumns&)Get( RES_COLUMNBALANCE, bInP ); }
 
-inline const SwFmtNoBalancedColumns &SwFmt::GetBalancedColumns(sal_Bool bInP) const
+inline const SwFmtNoBalancedColumns &SwFmt::GetBalancedColumns(BOOL bInP) const
     { return aSet.GetBalancedColumns( bInP ); }
 
 #endif

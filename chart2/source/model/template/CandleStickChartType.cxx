@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,67 +96,39 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-struct StaticCandleStickChartTypeDefaults_Initializer
+void lcl_AddDefaultsToMap(
+    ::chart::tPropertyValueMap & rOutMap,
+    ::osl::Mutex & rMutex )
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        // must match default in CTOR!
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CANDLESTICKCHARTTYPE_JAPANESE, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CANDLESTICKCHARTTYPE_SHOW_FIRST, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CANDLESTICKCHARTTYPE_SHOW_HIGH_LOW, true );
-    }
-};
+    ::osl::MutexGuard aGuard( rMutex );
+    // must match default in CTOR!
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CANDLESTICKCHARTTYPE_JAPANESE, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CANDLESTICKCHARTTYPE_SHOW_FIRST, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CANDLESTICKCHARTTYPE_SHOW_HIGH_LOW, true );
+}
 
-struct StaticCandleStickChartTypeDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticCandleStickChartTypeDefaults_Initializer >
+const Sequence< Property > & lcl_GetPropertySequence()
 {
-};
+    static Sequence< Property > aPropSeq;
 
-struct StaticCandleStickChartTypeInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
     {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    Sequence< Property > lcl_GetPropertySequence()
-    {
+        // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
 
+        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        // transfer result to static Sequence
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
-};
-
-struct StaticCandleStickChartTypeInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticCandleStickChartTypeInfoHelper_Initializer >
-{
-};
-
-struct StaticCandleStickChartTypeInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticCandleStickChartTypeInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticCandleStickChartTypeInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticCandleStickChartTypeInfo_Initializer >
-{
-};
+    return aPropSeq;
+}
 
 } // anonymous namespace
 
@@ -290,24 +262,53 @@ OUString SAL_CALL CandleStickChartType::getRoleOfSequenceForSeriesLabel()
 uno::Any CandleStickChartType::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticCandleStickChartTypeDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
+    static tPropertyValueMap aStaticDefaults;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aStaticDefaults.size() )
+    {
+        // initialize defaults
+        lcl_AddDefaultsToMap( aStaticDefaults, GetMutex() );
+    }
+
+    tPropertyValueMap::const_iterator aFound(
+        aStaticDefaults.find( nHandle ));
+
+    if( aFound == aStaticDefaults.end())
         return uno::Any();
+
     return (*aFound).second;
+    // \--
 }
 
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL CandleStickChartType::getInfoHelper()
 {
-    return *StaticCandleStickChartTypeInfoHelper::get();
+    static ::cppu::OPropertyArrayHelper aArrayHelper( lcl_GetPropertySequence(),
+                                                      /* bSorted = */ sal_True );
+
+    return aArrayHelper;
 }
 
+
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL CandleStickChartType::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > SAL_CALL
+    CandleStickChartType::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    return *StaticCandleStickChartTypeInfo::get();
+    static Reference< beans::XPropertySetInfo > xInfo;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( !xInfo.is())
+    {
+        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
+            getInfoHelper());
+    }
+
+    return xInfo;
+    // \--
 }
 
 void SAL_CALL CandleStickChartType::setFastPropertyValue_NoBroadcast(

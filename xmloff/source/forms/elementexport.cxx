@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,13 +31,12 @@
 
 #include "elementexport.hxx"
 #include "strings.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include "eventexport.hxx"
 #include "formenums.hxx"
 #include "formcellbinding.hxx"
 #include "formcellbinding.hxx"
-#include "xmloff/xformsexport.hxx"
-#include "property_meta_data.hxx"
+#include "xformsexport.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/text/XText.hpp>
@@ -57,7 +56,7 @@
 #include <com/sun/star/awt/ImagePosition.hpp>
 /** === end UNO includes === **/
 
-#include <tools/wintypes.hxx>       // for check states
+#include <tools/wintypes.hxx>		// for check states
 #include <xmloff/txtprmap.hxx>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
@@ -181,7 +180,7 @@ namespace xmloff
         Reference< XPersistObject > xPersistence(m_xProps, UNO_QUERY);
         if (!xPersistence.is())
         {
-            OSL_FAIL("OElementExport::exportServiceNameAttribute: no XPersistObject!");
+            OSL_ENSURE(sal_False, "OElementExport::exportServiceNameAttribute: no XPersistObject!");
             return;
         }
 
@@ -192,8 +191,8 @@ namespace xmloff
         // So we translate the old persistence service name into new ones, if possible
 
         ::rtl::OUString sToWriteServiceName = sServiceName;
-#define CHECK_N_TRANSLATE( name )   \
-        else if (0 == sServiceName.compareToAscii(SERVICE_PERSISTENT_COMPONENT_##name)) \
+#define CHECK_N_TRANSLATE( name )	\
+        else if (0 == sServiceName.compareToAscii(SERVICE_PERSISTENT_COMPONENT_##name))	\
             sToWriteServiceName = SERVICE_##name
 
         if (sal_False)
@@ -219,7 +218,7 @@ namespace xmloff
         CHECK_N_TRANSLATE( IMAGECONTROL );
         CHECK_N_TRANSLATE( FORMATTEDFIELD );
         else if (0 == sServiceName.compareToAscii(SERVICE_PERSISTENT_COMPONENT_EDIT))
-        {   // special handling for the edit field: we have two controls using this as persistence service name
+        {	// special handling for the edit field: we have two controls using this as persistence service name
             sToWriteServiceName = SERVICE_EDIT;
             Reference< XServiceInfo > xSI(m_xProps, UNO_QUERY);
             if (xSI.is() && xSI->supportsService(SERVICE_FORMATTEDFIELD))
@@ -324,9 +323,6 @@ namespace xmloff
         #endif
         }
 
-        // "new-style" properties ...
-        exportGenericHandlerAttributes();
-
         // common control attributes
         exportCommonControlAttributes();
 
@@ -389,7 +385,7 @@ namespace xmloff
             // (the strikeout type), the latter hasn't. But, when the CharCrossedOut is exported and
             // later on imported, it overwrites anything which has previously been imported for
             // CharStrikeout.
-            // #i27729#
+            // 2004-04-14 - #i27729# - fs@openoffice.org
             exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharCrossedOut" ) ) );
         }
 
@@ -418,12 +414,12 @@ namespace xmloff
             case LISTBOX:
                 // don't export the list entries if the are not provided by the user, but obtained implicitly
                 // from other sources
-                // #i26944#
+                // #i26944# - 2004-05-17 - fs@openoffice.org
                 if ( controlHasUserSuppliedListEntries() )
                     exportListSourceAsElements();
                 break;
             case GRID:
-            {   // a grid control requires us to store all columns as sub elements
+            {	// a grid control requires us to store all columns as sub elements
                 Reference< XIndexAccess > xColumnContainer(m_xProps, UNO_QUERY);
                 OSL_ENSURE(xColumnContainer.is(), "OControlExport::exportSubTags: a grid control which is no IndexAccess?!!");
                 if (xColumnContainer.is())
@@ -431,12 +427,12 @@ namespace xmloff
             }
             break;
             case COMBOBOX:
-            {   // a combox box description has sub elements: the items
+            {	// a combox box description has sub elements: the items
                 DBG_CHECK_PROPERTY( PROPERTY_STRING_ITEM_LIST, Sequence< ::rtl::OUString > );
 
                 // don't export the list entries if the are not provided by the user, but obtained implicitly
                 // from other sources
-                // #i26944#
+                // #i26944# - 2004-05-17 - fs@openoffice.org
                 if ( controlHasUserSuppliedListEntries() )
                 {
                     // get the item list
@@ -480,84 +476,6 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OControlExport::exportGenericHandlerAttributes()
-    {
-        const Sequence< Property > aProperties = m_xPropertyInfo->getProperties();
-        for (   const Property* prop = aProperties.getConstArray();
-                prop != aProperties.getConstArray() + aProperties.getLength();
-                ++prop
-            )
-        {
-            try
-            {
-                // see if this property can already be handled with an IPropertyHandler (which, on the long
-                // term, should be the case for most, if not all, properties)
-                const PropertyDescription* propDescription = metadata::getPropertyDescription( prop->Name );
-                if ( propDescription == NULL )
-                    continue;
-
-                // let the factory provide the concrete handler. Note that caching, if desired, is the task
-                // of the factory
-                PPropertyHandler handler = (*propDescription->factory)( propDescription->propertyId );
-                ENSURE_OR_CONTINUE( handler.get() != NULL,
-                    "OControlExport::exportGenericHandlerAttributes: invalid property handler provided by the factory!" );
-
-                ::rtl::OUString attributeValue;
-                if ( propDescription->propertyGroup == NO_GROUP )
-                {
-                    // that's a property which has a direct mapping to an attribute
-                    if ( !shouldExportProperty( prop->Name ) )
-                        // TODO: in the future, we surely need a more sophisticated approach to this, involving the property
-                        // handler, or the property description
-                    {
-                        exportedProperty( prop->Name );
-                        continue;
-                    }
-
-                    const Any propValue = m_xProps->getPropertyValue( prop->Name );
-                    attributeValue = handler->getAttributeValue( propValue );
-                }
-                else
-                {
-                    // that's a property which is part of a group of properties, whose values, in their entity, comprise
-                    // a single attribute value
-
-                    // retrieve the descriptions of all other properties which add to the attribute value
-                    PropertyDescriptionList descriptions;
-                    metadata::getPropertyGroup( propDescription->propertyGroup, descriptions );
-
-                    // retrieve the values for all those properties
-                    PropertyValues aValues;
-                    for (   PropertyDescriptionList::iterator desc = descriptions.begin();
-                            desc != descriptions.end();
-                            ++desc
-                        )
-                    {
-                        // TODO: XMultiPropertySet?
-                        const Any propValue = m_xProps->getPropertyValue( (*desc)->propertyName );
-                        aValues[ (*desc)->propertyId ] = propValue;
-                    }
-
-                    // let the handler translate into an XML attribute value
-                    attributeValue = handler->getAttributeValue( aValues );
-                }
-
-                AddAttribute(
-                    propDescription->attribute.namespacePrefix,
-                    token::GetXMLToken( propDescription->attribute.attributeToken ),
-                    attributeValue
-                );
-
-                exportedProperty( prop->Name );
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
-        }
-    }
-
-    //---------------------------------------------------------------------
     void OControlExport::exportCommonControlAttributes()
     {
         size_t i=0;
@@ -583,7 +501,7 @@ namespace xmloff
             {
                 PROPERTY_LABEL, PROPERTY_TITLE
             };
-            OSL_ENSURE( SAL_N_ELEMENTS(aStringPropertyNames) == SAL_N_ELEMENTS(nStringPropertyAttributeIds),
+            OSL_ENSURE(	SAL_N_ELEMENTS(aStringPropertyNames) == SAL_N_ELEMENTS(nStringPropertyAttributeIds),
                         "OControlExport::exportCommonControlAttributes: somebody tampered with the maps (1)!");
 
             for (i=0; i < SAL_N_ELEMENTS(nStringPropertyAttributeIds); ++i)
@@ -605,15 +523,15 @@ namespace xmloff
         // some boolean properties
         {
             static sal_Int32 nBooleanPropertyAttributeIds[] =
-            {   // attribute flags
+            {	// attribute flags
                 CCA_CURRENT_SELECTED, CCA_DISABLED, CCA_DROPDOWN, CCA_PRINTABLE, CCA_READONLY, CCA_SELECTED, CCA_TAB_STOP, CCA_ENABLEVISIBLE
             };
             static const ::rtl::OUString* pBooleanPropertyNames[] =
-            {   // property names
+            {	// property names
                 &PROPERTY_STATE, &PROPERTY_ENABLED, &PROPERTY_DROPDOWN, &PROPERTY_PRINTABLE, &PROPERTY_READONLY, &PROPERTY_DEFAULT_STATE, &PROPERTY_TABSTOP, &PROPERTY_ENABLEVISIBLE
             };
             static sal_Bool nBooleanPropertyAttrFlags[] =
-            {   // attribute defaults
+            {	// attribute defaults
                 BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE | BOOLATTR_INVERSE_SEMANTICS, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_VOID, BOOLATTR_DEFAULT_FALSE
             };
         #if OSL_DEBUG_LEVEL > 0
@@ -644,15 +562,15 @@ namespace xmloff
         {
             // now the common handling
             static sal_Int32 nIntegerPropertyAttributeIds[] =
-            {   // attribute flags
+            {	// attribute flags
                 CCA_SIZE, CCA_TAB_INDEX
             };
             static const ::rtl::OUString* pIntegerPropertyNames[] =
-            {   // property names
+            {	// property names
                 &PROPERTY_LINECOUNT, &PROPERTY_TABINDEX
             };
             static const sal_Int16 nIntegerPropertyAttrDefaults[] =
-            {   // attribute defaults
+            {	// attribute defaults
                 5, 0
             };
 
@@ -796,7 +714,7 @@ namespace xmloff
         if (m_nIncludeCommon & CCA_FOR)
         {
             if (m_sReferringControls.getLength())
-            {   // there is at least one control referring to the one we're handling currently
+            {	// there is at least one control referring to the one we're handling currently
                 AddAttribute(
                     OAttributeMetaData::getCommonControlAttributeNamespace(CCA_FOR),
                     OAttributeMetaData::getCommonControlAttributeName(CCA_FOR),
@@ -825,7 +743,7 @@ namespace xmloff
             if (pCurrentValuePropertyName && (CCA_CURRENT_VALUE & m_nIncludeCommon))
             {
                 // don't export the current-value if this value originates from a data binding
-                // #i26944#
+                // #i26944# - 2004-05-17 - fs@openoffice.org
                 if ( controlHasActiveDataBinding() )
                     exportedProperty( ::rtl::OUString::createFromAscii( pCurrentValuePropertyName ) );
                 else
@@ -1006,12 +924,12 @@ namespace xmloff
         // the boolean properties
         {
             static const sal_Int32 nBooleanPropertyAttributeIds[] =
-            {   // attribute flags
+            {	// attribute flags
                 SCA_VALIDATION, SCA_MULTI_LINE, SCA_AUTOMATIC_COMPLETION, SCA_MULTIPLE, SCA_DEFAULT_BUTTON, SCA_IS_TRISTATE,
                 SCA_TOGGLE, SCA_FOCUS_ON_CLICK
             };
             static const ::rtl::OUString* pBooleanPropertyNames[] =
-            {   // property names
+            {	// property names
                 &PROPERTY_STRICTFORMAT, &PROPERTY_MULTILINE, &PROPERTY_AUTOCOMPLETE, &PROPERTY_MULTISELECTION, &PROPERTY_DEFAULTBUTTON, &PROPERTY_TRISTATE,
                 &PROPERTY_TOGGLE, &PROPERTY_FOCUS_ON_CLICK
             };
@@ -1045,15 +963,15 @@ namespace xmloff
         // the integer properties
         {
             static sal_Int32 nIntegerPropertyAttributeIds[] =
-            {   // attribute flags
+            {	// attribute flags
                 SCA_PAGE_STEP_SIZE
             };
             static const ::rtl::OUString* pIntegerPropertyNames[] =
-            {   // property names
+            {	// property names
                 &PROPERTY_BLOCK_INCREMENT
             };
             static const sal_Int32 nIntegerPropertyAttrDefaults[] =
-            {   // attribute defaults (XML defaults, not runtime defaults!)
+            {	// attribute defaults (XML defaults, not runtime defaults!)
                 10
             };
 
@@ -1089,7 +1007,7 @@ namespace xmloff
                 else if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_SPIN_INCREMENT ) )
                     sPropertyName = PROPERTY_SPIN_INCREMENT;
                 else
-                    OSL_FAIL( "OControlExport::exportSpecialAttributes: not property which can be mapped to step-size attribute!" );
+                    OSL_ENSURE( sal_False, "OControlExport::exportSpecialAttributes: not property which can be mapped to step-size attribute!" );
 
                 if ( sPropertyName.getLength() )
                     exportInt32PropertyAttribute(
@@ -1193,11 +1111,11 @@ namespace xmloff
         // the string properties
         {
             static sal_Int32 nStringPropertyAttributeIds[] =
-            {   // attribute flags
+            {	// attribute flags
                 SCA_GROUP_NAME
             };
             static const ::rtl::OUString* pStringPropertyNames[] =
-            {   // property names
+            {	// property names
                 &PROPERTY_GROUP_NAME
             };
 
@@ -1296,7 +1214,7 @@ namespace xmloff
 
         ::rtl::OUString sListSource = getScalarListSourceValue();
         if ( sListSource.getLength() )
-        {   // the ListSource property needs to be exported as attribute, and it is not empty
+        {	// the ListSource property needs to be exported as attribute, and it is not empty
             AddAttribute(
                 OAttributeMetaData::getDatabaseAttributeNamespace(DA_LIST_SOURCE),
                 OAttributeMetaData::getDatabaseAttributeName(DA_LIST_SOURCE),
@@ -1351,7 +1269,7 @@ namespace xmloff
 
         sal_Int16 nMaxLen = (sal_Int16)std::max(nItems, nValues);
 
-        for (sal_Int16 i=0; i<nMaxLen; ++i )
+        for	(sal_Int16 i=0; i<nMaxLen; ++i )
         {
             m_rContext.getGlobalContext().ClearAttrList();
             if (i < nItems)
@@ -1375,7 +1293,7 @@ namespace xmloff
 
             Int16SetIterator aSelectedPos = aSelection.find(i);
             if (aSelection.end() != aSelectedPos)
-            {   // the item at this position is selected
+            {	// the item at this position is selected
                 AddAttribute(
                     OAttributeMetaData::getCommonControlAttributeNamespace(CCA_CURRENT_SELECTED),
                     OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_SELECTED),
@@ -1386,7 +1304,7 @@ namespace xmloff
 
             Int16SetIterator aDefaultSelectedPos = aDefaultSelection.find(i);
             if (aDefaultSelection.end() != aDefaultSelectedPos)
-            {   // the item at this position is selected as default
+            {	// the item at this position is selected as default
                 AddAttribute(
                     OAttributeMetaData::getCommonControlAttributeNamespace(CCA_SELECTED),
                     OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED),
@@ -1421,7 +1339,7 @@ namespace xmloff
             for (sal_Int16 i=nMaxLen; i<=nLastReferredEntry; ++i)
             {
                 if (aSelection.end() != aSelection.find(i))
-                {   // the (not existent) item at this position is selected
+                {	// the (not existent) item at this position is selected
                     AddAttribute(
                         OAttributeMetaData::getCommonControlAttributeNamespace(CCA_CURRENT_SELECTED),
                         OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_SELECTED),
@@ -1430,7 +1348,7 @@ namespace xmloff
                 }
 
                 if (aDefaultSelection.end() != aDefaultSelection.find(i))
-                {   // the (not existent) item at this position is selected as default
+                {	// the (not existent) item at this position is selected as default
                     AddAttribute(
                         OAttributeMetaData::getCommonControlAttributeNamespace(CCA_SELECTED),
                         OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED),
@@ -1496,35 +1414,21 @@ namespace xmloff
         m_nClassId = FormComponentType::CONTROL;
         DBG_CHECK_PROPERTY( PROPERTY_CLASSID, sal_Int16 );
         m_xProps->getPropertyValue(PROPERTY_CLASSID) >>= m_nClassId;
-        bool knownType = false;
         switch (m_nClassId)
         {
             case FormComponentType::DATEFIELD:
-                m_eType = DATE;
-                knownType = true;
-                // NO BREAK
             case FormComponentType::TIMEFIELD:
-                if ( !knownType )
-                {
-                    m_eType = TIME;
-                    knownType = true;
-                }
-                m_nIncludeSpecial |= SCA_VALIDATION;
-                // NO BREAK
             case FormComponentType::NUMERICFIELD:
             case FormComponentType::CURRENCYFIELD:
             case FormComponentType::PATTERNFIELD:
-                if ( !knownType )
-                {
-                    m_eType = FORMATTED_TEXT;
-                    knownType = true;
-                }
+                m_eType = FORMATTED_TEXT;
                 // NO BREAK
             case FormComponentType::TEXTFIELD:
-            {   // it's some kind of edit. To know which type we need further investigation
+            {	// it's some kind of edit. To know which type we need further investigation
 
-                if ( !knownType )
-                {
+                if (FORMATTED_TEXT != m_eType)
+                {	// not coming from the previous cases which had a class id .ne. TEXTFIELD
+
                     // check if it's a formatted field
                     if (m_xPropertyInfo->hasPropertyByName(PROPERTY_FORMATKEY))
                     {
@@ -1560,20 +1464,13 @@ namespace xmloff
                                 m_eType = TEXT;
                         }
                     }
-                    knownType = true;
                 }
 
-                // attributes which are common to all the types:
+                // attributes which are common to all the four types:
                 // common attributes
                 m_nIncludeCommon =
-                    CCA_NAME | CCA_SERVICE_NAME | CCA_DISABLED |
+                    CCA_NAME | CCA_SERVICE_NAME | CCA_DISABLED | CCA_VALUE |
                     CCA_PRINTABLE | CCA_TAB_INDEX | CCA_TAB_STOP | CCA_TITLE;
-
-                if  (   ( m_nClassId != FormComponentType::DATEFIELD )
-                    &&  ( m_nClassId != FormComponentType::TIMEFIELD )
-                    )
-                    // date and time field values are handled differently nowadays
-                    m_nIncludeCommon |= CCA_VALUE;
 
                 // database attributes
                 m_nIncludeDatabase = DA_DATA_FIELD | DA_INPUT_REQUIRED;
@@ -1597,8 +1494,9 @@ namespace xmloff
 
                 // max and min values and validation:
                 if (FORMATTED_TEXT == m_eType)
-                {   // in general all controls represented as formatted-text have these props
-                    if  ( FormComponentType::PATTERNFIELD != m_nClassId )   // except the PatternField
+                {	// in general all controls represented as formatted-text have these props
+                    if (FormComponentType::PATTERNFIELD != m_nClassId)
+                        // but the PatternField does not have value limits
                         m_nIncludeSpecial |= SCA_MAX_VALUE | SCA_MIN_VALUE;
 
                     if (FormComponentType::TEXTFIELD != m_nClassId)
@@ -1607,13 +1505,8 @@ namespace xmloff
                 }
 
                 // if it's not a password field or rich text control, the CurrentValue needs to be stored, too
-                if  (   ( PASSWORD != m_eType )
-                    &&  ( DATE != m_eType )
-                    &&  ( TIME != m_eType )
-                    )
-                {
+                if ( PASSWORD != m_eType )
                     m_nIncludeCommon |= CCA_CURRENT_VALUE;
-                }
             }
             break;
 
@@ -1687,7 +1580,7 @@ namespace xmloff
                     CCA_NAME | CCA_SERVICE_NAME | CCA_BUTTON_TYPE | CCA_DISABLED |
                     CCA_IMAGE_DATA | CCA_PRINTABLE | CCA_TAB_INDEX | CCA_TARGET_FRAME |
                     CCA_TARGET_LOCATION | CCA_TITLE;
-                m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CLICK  | EA_ON_DBLCLICK;
+                m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CLICK	| EA_ON_DBLCLICK;
                 break;
 
             case FormComponentType::CHECKBOX:
@@ -1699,7 +1592,7 @@ namespace xmloff
                     CCA_NAME | CCA_SERVICE_NAME | CCA_DISABLED | CCA_LABEL | CCA_PRINTABLE |
                     CCA_TAB_INDEX | CCA_TAB_STOP | CCA_TITLE | CCA_VALUE | CCA_VISUAL_EFFECT;
                 if (CHECKBOX != m_eType)
-                {   // not coming from the previous case
+                {	// not coming from the previous case
                     m_eType = RADIO;
                     m_nIncludeCommon |= CCA_CURRENT_SELECTED | CCA_SELECTED;
                 }
@@ -1757,7 +1650,7 @@ namespace xmloff
                 break;
 
             default:
-                OSL_FAIL("OControlExport::examineControl: unknown control type (class id)!");
+                OSL_ENSURE(sal_False, "OControlExport::examineControl: unknown control type (class id)!");
                 // NO break!
 
             case FormComponentType::NAVIGATIONBAR:
@@ -1858,7 +1751,7 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OControlExport::exportCellBindingAttributes: caught an exception!" );
+            OSL_ENSURE( sal_False, "OControlExport::exportCellBindingAttributes: caught an exception!" );
         }
     }
 
@@ -1903,7 +1796,7 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OControlExport::exportCellListSourceRange: caught an exception!" );
+            OSL_ENSURE( sal_False, "OControlExport::exportCellListSourceRange: caught an exception!" );
         }
     }
 
@@ -1977,7 +1870,7 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OColumnExport::controlHasActiveDataBinding: caught an exception!" );
+            OSL_ENSURE( sal_False, "OColumnExport::controlHasActiveDataBinding: caught an exception!" );
         }
 
         return false;
@@ -2008,10 +1901,10 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OControlExport::controlHasUserSuppliedListEntries: caught an exception!" );
+            OSL_ENSURE( sal_False, "OControlExport::controlHasUserSuppliedListEntries: caught an exception!" );
         }
 
-        OSL_FAIL( "OControlExport::controlHasUserSuppliedListEntries: unreachable code!" );
+        OSL_ENSURE( sal_False, "OControlExport::controlHasUserSuppliedListEntries: unreachable code!" );
             // this method should be called for list and combo boxes only
         return true;
     }
@@ -2178,7 +2071,7 @@ namespace xmloff
                     aStringPropertyNames[i]);
 
             // #i112082# xlink:type is added as part of exportTargetLocationAttribute
-
+            
             // now export the data source name or databaselocation or connection resource
             ::rtl::OUString sPropValue;
             m_xProps->getPropertyValue( PROPERTY_DATASOURCENAME ) >>= sPropValue;
@@ -2292,7 +2185,7 @@ namespace xmloff
             PROPERTY_DETAILFIELDS);
     }
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

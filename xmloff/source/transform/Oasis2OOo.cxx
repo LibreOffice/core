@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <rtl/uuid.h>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "DeepTContext.hxx"
 #include "MetaTContext.hxx"
@@ -176,7 +176,7 @@ static XMLTransformerActionInit aActionTable[] =
 
     // rename <style:page-layout> to <style:page-master>
     // ENTRY1Q( STYLE, PAGE_LAYOUT, RENAME_ELEM,
-    //                      XML_NAMESPACE_STYLE, XML_PAGE_MASTER ),
+    //						XML_NAMESPACE_STYLE, XML_PAGE_MASTER ),
     ENTRY1( STYLE, MASTER_PAGE, XML_ETACTION_PROC_ATTRS,
                         OASIS_MASTER_PAGE_ACTIONS ),
 
@@ -205,7 +205,7 @@ static XMLTransformerActionInit aActionTable[] =
                  XML_FAMILY_TYPE_DATA ),
     ENTRY1( TEXT, LIST_STYLE, XML_ETACTION_STYLE,
                  XML_FAMILY_TYPE_LIST ),
-//  ENTRY0( TEXT, OUTLINE_STYLE, STYLE ),
+//	ENTRY0( TEXT, OUTLINE_STYLE, STYLE ),
 
     ENTRY1( STYLE, HEADER_STYLE, XML_ETACTION_STYLE,
                  XML_FAMILY_TYPE_HEADER_FOOTER ),
@@ -288,7 +288,7 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( DRAW, CONTROL, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
     ENTRY1( DRAW, PAGE_THUMBNAIL, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
     ENTRY1( DRAW, G, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
-//  ENTRY1( DRAW, FRAME, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
+//	ENTRY1( DRAW, FRAME, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
     ENTRY1( DRAW, TEXT_BOX, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
     ENTRY1( PRESENTATION, PLACEHOLDER, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
     ENTRY1( DRAW, CONTOUR_POLYGON, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
@@ -384,13 +384,14 @@ static XMLTransformerActionInit aActionTable[] =
                 OASIS_TEXT_STYLE_REF_ACTIONS ), /* generated entry */
     ENTRY1( DRAW, PAGE, XML_ETACTION_PROC_ATTRS,
                 OASIS_MASTER_PAGE_REF_ACTIONS ), /* generated entry */
-    /* Conversion of attribute <table:style-name> for <table:table-row> and
-       <table:table-column> (#i40011#, #i40015#)
-    */
+    // --> OD 2005-01-10 #i40011#, #i40015#
+    // - conversion of attribute <table:style-name> for <table:table-row> and
+    //   <table:table-column>
     ENTRY1( TABLE, TABLE_ROW, XML_ETACTION_PROC_ATTRS,
                 OASIS_TABLE_STYLE_REF_ACTIONS ),
     ENTRY1( TABLE, TABLE_COLUMN, XML_ETACTION_PROC_ATTRS,
                 OASIS_TABLE_STYLE_REF_ACTIONS ),
+    // <--
 
     // rename office:value-* to *:value-*
     ENTRY1( TEXT, VARIABLE_DECL, XML_ETACTION_PROC_ATTRS,
@@ -411,10 +412,10 @@ static XMLTransformerActionInit aActionTable[] =
             OASIS_TABLE_VALUE_TYPE_ACTIONS), /* generated entry */
     ENTRY1( TABLE, CHANGE_TRACK_TABLE_CELL, XML_ETACTION_PROC_ATTRS,
             OASIS_TABLE_VALUE_TYPE_ACTIONS), /* generated entry */
-//  ENTRY1( FORM, PROPERTY, XML_ETACTION_PROC_ATTRS,
-//          OASIS_VALUE_TYPE_ACTIONS), /* TODO: generated entry */
-//  ENTRY1( FORM, LIST_PROPERTY, XML_ETACTION_PROC_ATTRS,
-//          OASIS_VALUE_TYPE_ACTIONS), /* generated entry */
+//	ENTRY1( FORM, PROPERTY, XML_ETACTION_PROC_ATTRS,
+//			OASIS_VALUE_TYPE_ACTIONS), /* TODO: generated entry */
+//	ENTRY1( FORM, LIST_PROPERTY, XML_ETACTION_PROC_ATTRS,
+//			OASIS_VALUE_TYPE_ACTIONS), /* generated entry */
 
     ENTRY1( OFFICE, ANNOTATION, XML_ETACTION_MOVE_ELEMS_TO_ATTRS,
             OASIS_ANNOTATION_ACTIONS ), /* generated entry */
@@ -470,19 +471,19 @@ static XMLTransformerActionInit aActionTable[] =
         OASIS_XLINK_ACTIONS ), /* generated entry */
     ENTRY1( FORM, FORM, XML_ETACTION_PROC_ATTRS,
         OASIS_FORM_ACTIONS ), /* generated entry */
-//  ENTRY1( SVG, FONT_FACE_URI, XML_ETACTION_PROC_ATTRS,
-//      OASIS_XLINK_ACTIONS ), /* generated entry */
-//  ENTRY1( SVG, DEFINITION_SRC, XML_ETACTION_PROC_ATTRS,
-//      OASIS_XLINK_ACTIONS ), /* generated entry */
+//	ENTRY1( SVG, FONT_FACE_URI, XML_ETACTION_PROC_ATTRS,
+//		OASIS_XLINK_ACTIONS ), /* generated entry */
+//	ENTRY1( SVG, DEFINITION_SRC, XML_ETACTION_PROC_ATTRS,
+//		OASIS_XLINK_ACTIONS ), /* generated entry */
     ENTRY2QN( CHART, SYMBOL_IMAGE, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
               XML_NAMESPACE_STYLE, XML_SYMBOL_IMAGE,
               OASIS_BACKGROUND_IMAGE_ACTIONS ),
-//      OASIS_XLINK_ACTIONS ), /* generated entry */
+//		OASIS_XLINK_ACTIONS ), /* generated entry */
 //  events don't have real URIs
-//  ENTRY1( PRESENTATION, EVENT_LISTENER, XML_ETACTION_PROC_ATTRS,
-//      OASIS_XLINK_ACTIONS ), /* generated entry */
-//  ENTRY1( SCRIPT, EVENT_LISTENER, XML_ETACTION_PROC_ATTRS,
-//      OASIS_XLINK_ACTIONS ), /* generated entry */
+//	ENTRY1( PRESENTATION, EVENT_LISTENER, XML_ETACTION_PROC_ATTRS,
+//		OASIS_XLINK_ACTIONS ), /* generated entry */
+//	ENTRY1( SCRIPT, EVENT_LISTENER, XML_ETACTION_PROC_ATTRS,
+//		OASIS_XLINK_ACTIONS ), /* generated entry */
 
     // add namespace prefix to name
     ENTRY1( CONFIG, CONFIG_ITEM_SET, XML_ETACTION_PROC_ATTRS,
@@ -592,7 +593,7 @@ static XMLTransformerActionInit aStyleActionTable[] =
                  XML_FAMILY_TYPE_MASTER_PAGE ),
     ENTRY0( STYLE, DEFAULT_OUTLINE_LEVEL, XML_ATACTION_REMOVE ),
     ENTRY1( TEXT, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
-                 XML_FAMILY_TYPE_TEXT ),    // list level styles
+                 XML_FAMILY_TYPE_TEXT ),	// list level styles
     ENTRY1( DRAW, NAME, XML_ATACTION_DECODE_STYLE_NAME,
                  XML_FAMILY_TYPE_END ),
     ENTRY1( DRAW, DISPLAY_NAME, XML_ATACTION_STYLE_DISPLAY_NAME,
@@ -696,13 +697,16 @@ static XMLTransformerActionInit aMapStyleRefActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// action table for OASIS_TABLE_STYLE_REF_ACTIONS (#i40011#, #i40015#)
+// --> OD 2005-01-10 #i40011#, #i40015#
+// action table for OASIS_TABLE_STYLE_REF_ACTIONS
 static XMLTransformerActionInit aTableStyleRefActionTable[] =
 {
     ENTRY1( TABLE, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
                 XML_FAMILY_TYPE_END ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
+// <--
+
 
 static XMLTransformerActionInit aFontFaceActionTable[] =
 {
@@ -1228,7 +1232,8 @@ void XMLTableTransformerContext_Impl::StartElement(
                 }
                 // OD 2005-07-05 #i50521# - no break here for savety reason.
             }
-            // Convert attribute table:style-name for <table:table> (#i40011#, #i40015#)
+            // --> OD 2005-01-10 #i40011#, #i40015#
+            // - convert attribute table:style-name for <table:table>
             else if ( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
             {
                 const OUString& rValue = xAttrList->getValueByIndex( i );
@@ -1244,6 +1249,7 @@ void XMLTableTransformerContext_Impl::StartElement(
                     pMutableAttrList->SetValueByIndex( i, aAttrValue );
                 }
             }
+            // <--
             else if( IsXMLToken( aLocalName, XML_PRINT ) )
             {
                 if ( !pMutableAttrList )
@@ -1593,7 +1599,7 @@ public:
     XMLTrackedChangesOASISTContext_Impl( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                                sal_uInt16 nPrefix,
-                            XMLTokenEnum eToken );
+                            XMLTokenEnum eToken	);
 
     virtual ~XMLTrackedChangesOASISTContext_Impl();
 
@@ -1606,7 +1612,7 @@ XMLTrackedChangesOASISTContext_Impl::XMLTrackedChangesOASISTContext_Impl(
         XMLTransformerBase& rImp,
         const OUString& rQName,
         sal_uInt16 nPrefix,
-        XMLTokenEnum eToken ) :
+        XMLTokenEnum eToken	) :
     XMLTransformerContext( rImp, rQName ),
     m_aAttrQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix,
                                                         GetXMLToken(eToken)) )
@@ -1906,11 +1912,12 @@ XMLTransformerActions *Oasis2OOoTransformer::GetUserDefinedActions(
                 m_aActions[OASIS_DATETIME_ACTIONS] =
                     new XMLTransformerActions( aDateTimeActionTable );
                 break;
-            // Bugdoc with table won't load correctly (#i40011#, #i40015#)
+            // --> OD 2005-01-10 #i40011#, #i40015#
             case OASIS_TABLE_STYLE_REF_ACTIONS:
                 m_aActions[OASIS_TABLE_STYLE_REF_ACTIONS] =
                     new XMLTransformerActions( aTableStyleRefActionTable );
                 break;
+            // <--
             case OASIS_ANIMATION_ACTIONS:
                 m_aActions[OASIS_ANIMATION_ACTIONS] =
                     new XMLTransformerActions( aAnimationActionTable );
@@ -1937,7 +1944,7 @@ OUString Oasis2OOoTransformer::GetEventName( const OUString& rName,
         GetNamespaceMap().GetKeyByAttrName( rName, &aMacroName );
     return XMLEventOASISTransformerContext::GetEventName(
                 nPrefix, aMacroName, *m_pEventMap,
-                   bForm ? m_pFormEventMap : 0  );
+                   bForm ? m_pFormEventMap : 0	);
 }
 
 Oasis2OOoTransformer::Oasis2OOoTransformer() throw() :
@@ -2011,7 +2018,7 @@ Oasis2OOoTransformer::~Oasis2OOoTransformer() throw()
     static osl::Mutex aCreateMutex;
     Guard<osl::Mutex> aGuard( aCreateMutex );
     Sequence< sal_Int8 > aSeq( 16 );
-    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0,	sal_True );
     return aSeq;
 }
 

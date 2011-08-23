@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@ HelpDispatch_Impl::HelpDispatch_Impl( HelpInterceptor_Impl& _rInterceptor,
                                       const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::frame::XDispatch >& _xDisp ) :
 
-    m_rInterceptor  ( _rInterceptor ),
-    m_xRealDispatch ( _xDisp )
+    m_rInterceptor	( _rInterceptor ),
+    m_xRealDispatch	( _xDisp )
 
 {
 }
@@ -73,7 +73,7 @@ void SAL_CALL HelpDispatch_Impl::dispatch(
     sal_Bool bHasKeyword = sal_False;
     String sKeyword;
     const PropertyValue* pBegin = aArgs.getConstArray();
-    const PropertyValue* pEnd   = pBegin + aArgs.getLength();
+    const PropertyValue* pEnd	= pBegin + aArgs.getLength();
     for ( ; pBegin != pEnd; ++pBegin )
     {
         if ( 0 == ( *pBegin ).Name.compareToAscii( "HelpKeyword" ) )

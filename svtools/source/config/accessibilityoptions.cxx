@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,8 +52,8 @@
 #include <itemholder2.hxx>
 
 using namespace utl;
+using namespace rtl;
 using namespace com::sun::star::uno;
-
 namespace css = com::sun::star;
 
 #define HELP_TIP_TIMEOUT 0xffff     // max. timeout setting to pretend a non-timeout
@@ -65,40 +65,40 @@ class SvtAccessibilityOptions_Impl
 {
 private:
     css::uno::Reference< css::container::XNameAccess > m_xCfg;
-    sal_Bool                                           bIsModified;
+    sal_Bool										   bIsModified;
 
 public:
     SvtAccessibilityOptions_Impl();
     ~SvtAccessibilityOptions_Impl();
 
-    void        SetVCLSettings();
-    sal_Bool    GetAutoDetectSystemHC();
-    sal_Bool    GetIsForPagePreviews() const;
-    sal_Bool    GetIsHelpTipsDisappear() const;
-    sal_Bool    GetIsAllowAnimatedGraphics() const;
-    sal_Bool    GetIsAllowAnimatedText() const;
-    sal_Bool    GetIsAutomaticFontColor() const;
-    sal_Bool    GetIsSystemFont() const;
-    sal_Int16   GetHelpTipSeconds() const;
-    sal_Bool    IsSelectionInReadonly() const;
+    void		SetVCLSettings();
+    sal_Bool	GetAutoDetectSystemHC();
+    sal_Bool	GetIsForPagePreviews() const;
+    sal_Bool	GetIsHelpTipsDisappear() const;
+    sal_Bool	GetIsAllowAnimatedGraphics() const;
+    sal_Bool	GetIsAllowAnimatedText() const;
+    sal_Bool	GetIsAutomaticFontColor() const;
+    sal_Bool	GetIsSystemFont() const;
+    sal_Int16	GetHelpTipSeconds() const;
+    sal_Bool	IsSelectionInReadonly() const;
 
-    void        SetAutoDetectSystemHC(sal_Bool bSet);
-    void        SetIsForPagePreviews(sal_Bool bSet);
-    void        SetIsHelpTipsDisappear(sal_Bool bSet);
-    void        SetIsAllowAnimatedGraphics(sal_Bool bSet);
-    void        SetIsAllowAnimatedText(sal_Bool bSet);
-    void        SetIsAutomaticFontColor(sal_Bool bSet);
-    void        SetIsSystemFont(sal_Bool bSet);
-    void        SetHelpTipSeconds(sal_Int16 nSet);
-    void        SetSelectionInReadonly(sal_Bool bSet);
+    void		SetAutoDetectSystemHC(sal_Bool bSet);
+    void		SetIsForPagePreviews(sal_Bool bSet);
+    void		SetIsHelpTipsDisappear(sal_Bool bSet);
+    void		SetIsAllowAnimatedGraphics(sal_Bool bSet);
+    void		SetIsAllowAnimatedText(sal_Bool bSet);
+    void		SetIsAutomaticFontColor(sal_Bool bSet);
+    void		SetIsSystemFont(sal_Bool bSet);
+    void		SetHelpTipSeconds(sal_Int16 nSet);
+    void		SetSelectionInReadonly(sal_Bool bSet);
 
-    sal_Bool    IsModified() const { return bIsModified; };
+    sal_Bool	IsModified() const { return bIsModified; };
 };
 
 // initialization of static members --------------------------------------
 
-SvtAccessibilityOptions_Impl* volatile  SvtAccessibilityOptions::sm_pSingleImplConfig =NULL;
-sal_Int32                     volatile  SvtAccessibilityOptions::sm_nAccessibilityRefCount(0);
+SvtAccessibilityOptions_Impl* volatile 	SvtAccessibilityOptions::sm_pSingleImplConfig =NULL;
+sal_Int32					  volatile 	SvtAccessibilityOptions::sm_nAccessibilityRefCount(0);
 
 namespace
 {
@@ -137,7 +137,7 @@ SvtAccessibilityOptions_Impl::~SvtAccessibilityOptions_Impl()
 sal_Bool SvtAccessibilityOptions_Impl::GetAutoDetectSystemHC()
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Bool                                        bRet = sal_True;
+    sal_Bool										bRet = sal_True;
 
     try
     {
@@ -155,7 +155,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetAutoDetectSystemHC()
 sal_Bool SvtAccessibilityOptions_Impl::GetIsForPagePreviews() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Bool                                        bRet = sal_True;
+    sal_Bool										bRet = sal_True;
 
     try
     {
@@ -172,7 +172,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetIsForPagePreviews() const
 sal_Bool SvtAccessibilityOptions_Impl::GetIsHelpTipsDisappear() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Bool                                        bRet = sal_True;
+    sal_Bool										bRet = sal_True;
 
     try
     {
@@ -190,7 +190,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetIsHelpTipsDisappear() const
 sal_Bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedGraphics() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Bool                                        bRet = sal_True;
+    sal_Bool										bRet = sal_True;
 
     try
     {
@@ -208,7 +208,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedGraphics() const
 sal_Bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedText() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Bool                                        bRet = sal_True;
+    sal_Bool										bRet = sal_True;
 
     try
     {
@@ -226,7 +226,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedText() const
 sal_Bool SvtAccessibilityOptions_Impl::GetIsAutomaticFontColor() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Bool                                        bRet = sal_False;
+    sal_Bool										bRet = sal_False;
 
     try
     {
@@ -244,7 +244,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetIsAutomaticFontColor() const
 sal_Bool SvtAccessibilityOptions_Impl::GetIsSystemFont() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Bool                                        bRet = sal_True;
+    sal_Bool										bRet = sal_True;
 
     try
     {
@@ -262,7 +262,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetIsSystemFont() const
 sal_Int16 SvtAccessibilityOptions_Impl::GetHelpTipSeconds() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Int16                                       nRet = 4;
+    sal_Int16										nRet = 4;
 
     try
     {
@@ -280,7 +280,7 @@ sal_Int16 SvtAccessibilityOptions_Impl::GetHelpTipSeconds() const
 sal_Bool SvtAccessibilityOptions_Impl::IsSelectionInReadonly() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    sal_Bool                                        bRet = sal_False;
+    sal_Bool										bRet = sal_False;
 
     try
     {
@@ -506,19 +506,19 @@ SvtAccessibilityOptions::SvtAccessibilityOptions()
         }
         ++sm_nAccessibilityRefCount;
     }
-    //StartListening( *sm_pSingleImplConfig, sal_True );
+    //StartListening( *sm_pSingleImplConfig, TRUE );
 }
 
 // -----------------------------------------------------------------------
 
 SvtAccessibilityOptions::~SvtAccessibilityOptions()
 {
-    //EndListening( *sm_pSingleImplConfig, sal_True );
+    //EndListening( *sm_pSingleImplConfig, TRUE );
     ::osl::MutexGuard aGuard( SingletonMutex::get() );
     if( !--sm_nAccessibilityRefCount )
     {
         //if( sm_pSingleImplConfig->IsModified() )
-        //  sm_pSingleImplConfig->Commit();
+        //	sm_pSingleImplConfig->Commit();
         DELETEZ( sm_pSingleImplConfig );
     }
 }
@@ -550,12 +550,12 @@ void SvtAccessibilityOptions::Commit()
 
 sal_Bool SvtAccessibilityOptions::GetIsForDrawings() const
 {
-    OSL_FAIL( "SvtAccessibilityOptions::GetIsForDrawings: is obsolete!" );
+    DBG_ERROR( "SvtAccessibilityOptions::GetIsForDrawings: is obsolete!" );
     return sal_False;
 }
 sal_Bool SvtAccessibilityOptions::GetIsForBorders() const
 {
-    OSL_FAIL( "SvtAccessibilityOptions::GetIsForBorders: is obsolete!" );
+    DBG_ERROR( "SvtAccessibilityOptions::GetIsForBorders: is obsolete!" );
     return sal_False;
 }
 sal_Bool SvtAccessibilityOptions::GetAutoDetectSystemHC() const

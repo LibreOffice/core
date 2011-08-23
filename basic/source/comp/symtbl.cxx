@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ SV_IMPL_PTRARR(SbiSymbols,SbiSymDef*)
 
 /***************************************************************************
 |*
-|*  SbiStringPool
+|*	SbiStringPool
 |*
 ***************************************************************************/
 
@@ -59,7 +59,7 @@ SbiStringPool::~SbiStringPool()
 
 // Suchen
 
-const String& SbiStringPool::Find( sal_uInt16 n ) const
+const String& SbiStringPool::Find( USHORT n ) const
 {
     if( !n || n > aData.Count() )
         return aEmpty;
@@ -70,10 +70,10 @@ const String& SbiStringPool::Find( sal_uInt16 n ) const
 // Hinzufuegen eines Strings. Der String wird Case-Insensitiv
 // verglichen.
 
-short SbiStringPool::Add( const String& rVal, sal_Bool bNoCase )
+short SbiStringPool::Add( const String& rVal, BOOL bNoCase )
 {
-    sal_uInt16 n = aData.Count();
-    for( sal_uInt16 i = 0; i < n; i++ )
+    USHORT n = aData.Count();
+    for( USHORT i = 0; i < n; i++ )
     {
         String* p = aData.GetObject( i );
         if( (  bNoCase && p->Equals( rVal ) )
@@ -101,16 +101,16 @@ short SbiStringPool::Add( double n, SbxDataType t )
 
 /***************************************************************************
 |*
-|*  SbiSymPool
+|*	SbiSymPool
 |*
 ***************************************************************************/
 
 SbiSymPool::SbiSymPool( SbiStringPool& r, SbiSymScope s ) : rStrings( r )
 {
-    pParser  = r.GetParser();
+    pParser	 = r.GetParser();
     eScope   = s;
     pParent  = NULL;
-    nCur     =
+    nCur	 =
     nProcId  = 0;
 }
 
@@ -126,7 +126,7 @@ void SbiSymPool::Clear()
 
 SbiSymDef* SbiSymPool::First()
 {
-    nCur = (sal_uInt16) -1;
+    nCur = (USHORT) -1;
     return Next();
 }
 
@@ -144,9 +144,9 @@ SbiSymDef* SbiSymPool::AddSym( const String& rName )
 {
     SbiSymDef* p = new SbiSymDef( rName );
     p->nPos    = aData.Count();
-    p->nId     = rStrings.Add( rName );
+    p->nId	   = rStrings.Add( rName );
     p->nProcId = nProcId;
-    p->pIn     = this;
+    p->pIn	   = this;
     const SbiSymDef* q = p;
     aData.Insert( q, q->nPos );
     return p;
@@ -156,10 +156,10 @@ SbiProcDef* SbiSymPool::AddProc( const String& rName )
 {
     SbiProcDef* p = new SbiProcDef( pParser, rName );
     p->nPos    = aData.Count();
-    p->nId     = rStrings.Add( rName );
+    p->nId	   = rStrings.Add( rName );
     // Procs sind immer global
     p->nProcId = 0;
-    p->pIn     = this;
+    p->pIn	   = this;
     const SbiSymDef* q = p;
     aData.Insert( q, q->nPos );
     return p;
@@ -207,10 +207,9 @@ void SbiSymPool::Add( SbiSymDef* pDef )
 
 SbiSymDef* SbiSymPool::Find( const String& rName ) const
 {
-    sal_uInt16 nCount = aData.Count();
-    for( sal_uInt16 i = 0; i < nCount; i++ )
+    for( USHORT i = 0; i < aData.Count(); i++ )
     {
-        SbiSymDef* p = aData.GetObject( nCount - i - 1 );
+        SbiSymDef* p = aData.GetObject( i );
         if( ( !p->nProcId || ( p->nProcId == nProcId ) )
          && ( p->aName.EqualsIgnoreCaseAscii( rName ) ) )
             return p;
@@ -223,9 +222,9 @@ SbiSymDef* SbiSymPool::Find( const String& rName ) const
 
 // Suchen ueber ID-Nummer
 
-SbiSymDef* SbiSymPool::FindId( sal_uInt16 n ) const
+SbiSymDef* SbiSymPool::FindId( USHORT n ) const
 {
-    for( sal_uInt16 i = 0; i < aData.Count(); i++ )
+    for( USHORT i = 0; i < aData.Count(); i++ )
     {
         SbiSymDef* p = aData.GetObject( i );
         if( p->nId == n && ( !p->nProcId || ( p->nProcId == nProcId ) ) )
@@ -239,7 +238,7 @@ SbiSymDef* SbiSymPool::FindId( sal_uInt16 n ) const
 
 // Suchen ueber Position (ab 0)
 
-SbiSymDef* SbiSymPool::Get( sal_uInt16 n ) const
+SbiSymDef* SbiSymPool::Get( USHORT n ) const
 {
     if( n >= aData.Count() )
         return NULL;
@@ -247,11 +246,11 @@ SbiSymDef* SbiSymPool::Get( sal_uInt16 n ) const
         return aData.GetObject( n );
 }
 
-sal_uInt32 SbiSymPool::Define( const String& rName )
+UINT32 SbiSymPool::Define( const String& rName )
 {
     SbiSymDef* p = Find( rName );
     if( p )
-    {   if( p->IsDefined() )
+    {	if( p->IsDefined() )
             pParser->Error( SbERR_LABEL_DEFINED, rName );
     }
     else
@@ -259,7 +258,7 @@ sal_uInt32 SbiSymPool::Define( const String& rName )
     return p->Define();
 }
 
-sal_uInt32 SbiSymPool::Reference( const String& rName )
+UINT32 SbiSymPool::Reference( const String& rName )
 {
     SbiSymDef* p = Find( rName );
     if( !p )
@@ -273,7 +272,7 @@ sal_uInt32 SbiSymPool::Reference( const String& rName )
 
 void SbiSymPool::CheckRefs()
 {
-    for( sal_uInt16 i = 0; i < aData.Count(); i++ )
+    for( USHORT i = 0; i < aData.Count(); i++ )
     {
         SbiSymDef* p = aData.GetObject( i );
         if( !p->IsDefined() )
@@ -283,31 +282,31 @@ void SbiSymPool::CheckRefs()
 
 /***************************************************************************
 |*
-|*  Symbol-Definitionen
+|*	Symbol-Definitionen
 |*
 ***************************************************************************/
 
 SbiSymDef::SbiSymDef( const String& rName ) : aName( rName )
 {
-    eType    = SbxEMPTY;
-    nDims    = 0;
+    eType	 = SbxEMPTY;
+    nDims	 = 0;
     nTypeId  = 0;
     nProcId  = 0;
-    nId      = 0;
-    nPos     = 0;
-    nLen     = 0;
-    nChain   = 0;
-    bAs      =
-    bNew     =
-    bStatic  =
-    bOpt     =
+    nId 	 = 0;
+    nPos	 = 0;
+    nLen	 = 0;
+    nChain	 = 0;
+    bAs		 =
+    bNew	 =
+    bStatic	 =
+    bOpt	 =
     bParamArray =
     bWithEvents =
-    bByVal   =
+    bByVal	 =
     bChained =
-    bGlobal  = sal_False;
-    pIn      =
-    pPool    = NULL;
+    bGlobal  = FALSE;
+    pIn		 =
+    pPool	 = NULL;
     nDefaultId = 0;
     nFixedStringLength = -1;
 }
@@ -361,11 +360,11 @@ void SbiSymDef::SetType( SbxDataType t )
 // Es wird der Wert zurueckgeliefert, der als Operand gespeichert
 // werden soll.
 
-sal_uInt32 SbiSymDef::Reference()
+UINT32 SbiSymDef::Reference()
 {
     if( !bChained )
     {
-        sal_uInt32 n = nChain;
+        UINT32 n = nChain;
         nChain = pIn->pParser->aGen.GetOffset();
         return n;
     }
@@ -375,13 +374,13 @@ sal_uInt32 SbiSymDef::Reference()
 // Definition eines Symbols.
 // Hier wird der Backchain aufgeloest, falls vorhanden
 
-sal_uInt32 SbiSymDef::Define()
+UINT32 SbiSymDef::Define()
 {
-    sal_uInt32 n = pIn->pParser->aGen.GetPC();
+    UINT32 n = pIn->pParser->aGen.GetPC();
     pIn->pParser->aGen.GenStmnt();
     if( nChain ) pIn->pParser->aGen.BackChain( nChain );
     nChain = n;
-    bChained = sal_True;
+    bChained = TRUE;
     return nChain;
 }
 
@@ -391,7 +390,7 @@ sal_uInt32 SbiSymDef::Define()
 SbiSymPool& SbiSymDef::GetPool()
 {
     if( !pPool )
-        pPool = new SbiSymPool( pIn->pParser->aGblStrings, SbLOCAL );   // wird gedumpt
+        pPool = new SbiSymPool( pIn->pParser->aGblStrings, SbLOCAL );	// wird gedumpt
     return *pPool;
 }
 
@@ -400,30 +399,31 @@ SbiSymScope SbiSymDef::GetScope() const
     return pIn ? pIn->GetScope() : SbLOCAL;
 }
 
+////////////////////////////////////////////////////////////////////////////
 
 // Die Prozedur-Definition hat drei Pools:
 // 1) aParams: wird durch die Definition gefuellt. Enthaelt die Namen
-//    der Parameter, wie sie innerhalb des Rumpfes verwendet werden.
-//    Das erste Element ist der Returnwert.
+//	  der Parameter, wie sie innerhalb des Rumpfes verwendet werden.
+//	  Das erste Element ist der Returnwert.
 // 2) pPool: saemtliche lokale Variable
 // 3) aLabels: Labels
 
 SbiProcDef::SbiProcDef( SbiParser* pParser, const String& rName,
-                        sal_Bool bProcDecl )
+                        BOOL bProcDecl )
          : SbiSymDef( rName )
          , aParams( pParser->aGblStrings, SbPARAM )  // wird gedumpt
-         , aLabels( pParser->aLclStrings, SbLOCAL )  // wird nicht gedumpt
+         , aLabels( pParser->aLclStrings, SbLOCAL )	 // wird nicht gedumpt
          , mbProcDecl( bProcDecl )
 {
     aParams.SetParent( &pParser->aPublics );
     pPool = new SbiSymPool( pParser->aGblStrings, SbLOCAL ); // Locals
     pPool->SetParent( &aParams );
-    nLine1  =
-    nLine2  = 0;
+    nLine1	=
+    nLine2	= 0;
     mePropMode = PROPERTY_MODE_NONE;
-    bPublic = sal_True;
-    bCdecl  = sal_False;
-    bStatic = sal_False;
+    bPublic = TRUE;
+    bCdecl	= FALSE;
+    bStatic = FALSE;
     // Fuer Returnwerte ist das erste Element der Parameterliste
     // immer mit dem Namen und dem Typ der Proc definiert
     aParams.AddSym( aName );
@@ -451,7 +451,7 @@ void SbiProcDef::Match( SbiProcDef* pOld )
 {
     SbiSymDef* po, *pn=NULL;
     // Parameter 0 ist der Funktionsname
-    sal_uInt16 i;
+    USHORT i;
     for( i = 1; i < aParams.GetSize(); i++ )
     {
         po = pOld->aParams.Get( i );
@@ -483,24 +483,24 @@ void SbiProcDef::Match( SbiProcDef* pOld )
 }
 
 void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
-{
+{ 
     mePropMode = ePropMode;
     if( mePropMode != PROPERTY_MODE_NONE )
     {
         // Prop name = original scanned procedure name
         maPropName = aName;
 
-        // CompleteProcName includes "Property xxx "
+        // CompleteProcName includes "Property xxx " 
         // to avoid conflicts with other symbols
         String aCompleteProcName;
         aCompleteProcName.AppendAscii( "Property " );
         switch( mePropMode )
         {
-            case PROPERTY_MODE_GET:     aCompleteProcName.AppendAscii( "Get " ); break;
-            case PROPERTY_MODE_LET:     aCompleteProcName.AppendAscii( "Let " ); break;
-            case PROPERTY_MODE_SET:     aCompleteProcName.AppendAscii( "Set " ); break;
-            case PROPERTY_MODE_NONE:
-                OSL_FAIL( "Illegal PropertyMode PROPERTY_MODE_NONE" );
+            case PROPERTY_MODE_GET:		aCompleteProcName.AppendAscii( "Get " ); break;
+            case PROPERTY_MODE_LET:		aCompleteProcName.AppendAscii( "Let " ); break;
+            case PROPERTY_MODE_SET:		aCompleteProcName.AppendAscii( "Set " ); break;
+            case PROPERTY_MODE_NONE:	
+                DBG_ERROR( "Illegal PropertyMode PROPERTY_MODE_NONE" );
                 break;
         }
         aCompleteProcName += aName;
@@ -509,6 +509,7 @@ void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
 }
 
 
+//////////////////////////////////////////////////////////////////////////
 
 SbiConstDef::SbiConstDef( const String& rName )
            : SbiSymDef( rName )

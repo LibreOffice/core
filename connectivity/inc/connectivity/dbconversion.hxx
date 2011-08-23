@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,29 +99,28 @@ namespace dbtools
                              const double& rValue,
                              sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException);
 
-        static double getValue( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& xVariant, const ::com::sun::star::util::Date& rNullDate );
+        static double getValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& xVariant, const ::com::sun::star::util::Date& rNullDate,
+                                    sal_Int16 nKeyType);
 
         // get the columnvalue as string with a default format given by the column or a default format
         // for the type
-        static ::rtl::OUString getFormattedValue(
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,
+        static ::rtl::OUString getValue(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& xFormatter,
                                         const ::com::sun::star::lang::Locale& _rLocale,
                                         const ::com::sun::star::util::Date& rNullDate);
 
-        static ::rtl::OUString getFormattedValue(
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& _xColumn,
+        static ::rtl::OUString getValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& _xColumn,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& xFormatter,
                                         const ::com::sun::star::util::Date& rNullDate,
                                         sal_Int32 nKey,
                                         sal_Int16 nKeyType);
 
-        static ::com::sun::star::util::Date     toDate(double dVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
-        static ::com::sun::star::util::Date     toDate(const ::rtl::OUString& _sSQLDate);
-        static ::com::sun::star::util::Time     toTime(double dVal);
-        static ::com::sun::star::util::Time     toTime(const ::rtl::OUString& _sSQLDate);
-        static ::com::sun::star::util::DateTime toDateTime(double dVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
-        static ::com::sun::star::util::DateTime toDateTime(const ::rtl::OUString& _sSQLDate);
+        static ::com::sun::star::util::Date		toDate(double dVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
+        static ::com::sun::star::util::Date		toDate(const ::rtl::OUString& _sSQLDate);
+        static ::com::sun::star::util::Time		toTime(double dVal);
+        static ::com::sun::star::util::Time		toTime(const ::rtl::OUString& _sSQLDate);
+        static ::com::sun::star::util::DateTime	toDateTime(double dVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
+        static ::com::sun::star::util::DateTime	toDateTime(const ::rtl::OUString& _sSQLDate);
 
 
         /** return the given DateTime as JDBC compliant 64 bit value
@@ -131,15 +130,15 @@ namespace dbtools
 
         static sal_Int32 toDays(const ::com::sun::star::util::Date& _rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
 
-        static double   toDouble(const ::com::sun::star::util::Date& rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
-        static double   toDouble(const ::com::sun::star::util::Time& rVal);
-        static double   toDouble(const ::com::sun::star::util::DateTime& rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
+        static double	toDouble(const ::com::sun::star::util::Date& rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
+        static double	toDouble(const ::com::sun::star::util::Time& rVal);
+        static double	toDouble(const ::com::sun::star::util::DateTime& rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
 
-        static sal_Int32    toINT32(const ::com::sun::star::util::Date& rVal);
-        static sal_Int32    toINT32(const ::com::sun::star::util::Time& rVal);
+        static sal_Int32	toINT32(const ::com::sun::star::util::Date& rVal);
+        static sal_Int32	toINT32(const ::com::sun::star::util::Time& rVal);
 
-        static ::com::sun::star::util::Date toDate(sal_Int32 _nVal);
-        static ::com::sun::star::util::Time toTime(sal_Int32 _nVal);
+        static ::com::sun::star::util::Date	toDate(sal_Int32 _nVal);
+        static ::com::sun::star::util::Time	toTime(sal_Int32 _nVal);
 
         /** convert a double which is a date value relative to a given fixed date into a date value relative
             to the standard db null date.
@@ -219,7 +218,7 @@ namespace dbtools
     };
 
 //.........................................................................
-}   // namespace dbtools
+}	// namespace dbtools
 //.........................................................................
 
 #endif // _DBHELPER_DBCONVERSION_HXX_

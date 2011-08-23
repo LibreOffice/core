@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@
 #include <osl/thread.h>
 #include <connectivity/dbexception.hxx>
 
-#define FILEDIALOG_DEF_IMAGEBORDER  10
+#define FILEDIALOG_DEF_IMAGEBORDER	10
 //.........................................................................
 namespace dbaui
 {
@@ -79,17 +79,17 @@ OCollectionView::OCollectionView( Window * pParent
                                  ,const ::rtl::OUString& _sDefaultName
                                  ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB)
     : ModalDialog( pParent, ModuleRes(DLG_COLLECTION_VIEW))
-    , m_aFTCurrentPath( this, ModuleRes( FT_EXPLORERFILE_CURRENTPATH ) )
-    , m_aNewFolder(     this, ModuleRes( BTN_EXPLORERFILE_NEWFOLDER ) )
-    , m_aUp(            this, ModuleRes( BTN_EXPLORERFILE_UP ) )
-    , m_aView(          this, ModuleRes( CTRL_VIEW ) ,FILEVIEW_SHOW_TITLE )
-    , m_aFTName(        this, ModuleRes( FT_EXPLORERFILE_FILENAME ) )
-    , m_aName(          this, ModuleRes( ED_EXPLORERFILE_FILENAME ) )
-    , m_aFL(            this, ModuleRes( FL_1 ) )
-    , m_aPB_OK(         this, ModuleRes( BTN_EXPLORERFILE_SAVE ) )
-    , m_aPB_CANCEL(     this, ModuleRes( PB_CANCEL ) )
-    , m_aPB_HELP(       this, ModuleRes( PB_HELP ) )
-    , m_sPath(          ModuleRes( STR_PATHNAME ) )
+    , m_aFTCurrentPath(	this, ModuleRes( FT_EXPLORERFILE_CURRENTPATH ) )
+    , m_aNewFolder(		this, ModuleRes( BTN_EXPLORERFILE_NEWFOLDER ) )
+    , m_aUp(			this, ModuleRes( BTN_EXPLORERFILE_UP ) )
+    , m_aView(			this, ModuleRes( CTRL_VIEW ) ,FILEVIEW_SHOW_TITLE )
+    , m_aFTName(		this, ModuleRes( FT_EXPLORERFILE_FILENAME ) )
+    , m_aName(			this, ModuleRes( ED_EXPLORERFILE_FILENAME ) )
+    , m_aFL(			this, ModuleRes( FL_1 ) )
+    , m_aPB_OK(			this, ModuleRes( BTN_EXPLORERFILE_SAVE ) )
+    , m_aPB_CANCEL(		this, ModuleRes( PB_CANCEL ) )
+    , m_aPB_HELP(		this, ModuleRes( PB_HELP ) )
+    , m_sPath(			ModuleRes( STR_PATHNAME ) )
     , m_xContent(_xContent)
     , m_xORB(_xORB)
     , m_bCreateForm(sal_True)
@@ -107,7 +107,9 @@ OCollectionView::OCollectionView( Window * pParent
 
     m_aNewFolder.SetStyle( m_aNewFolder.GetStyle() | WB_NOPOINTERFOCUS );
     m_aUp.SetModeImage(ModuleRes(IMG_NAVIGATION_BTN_UP_SC));
+    m_aUp.SetModeImage(ModuleRes(IMG_NAVIGATION_BTN_UP_SCH),BMP_COLOR_HIGHCONTRAST);
     m_aNewFolder.SetModeImage(ModuleRes(IMG_NAVIGATION_CREATEFOLDER_SC));
+    m_aNewFolder.SetModeImage(ModuleRes(IMG_NAVIGATION_CREATEFOLDER_SCH),BMP_COLOR_HIGHCONTRAST);
 
     m_aView.SetDoubleClickHdl( LINK( this, OCollectionView, Dbl_Click_FileView ) );
     m_aView.EnableAutoResize();
@@ -211,9 +213,10 @@ IMPL_LINK( OCollectionView, Save_Click, PushButton*, EMPTYARG )
                 QueryBox aBox( this, WB_YES_NO, ModuleRes( STR_ALREADYEXISTOVERWRITE ) );
                 if ( aBox.Execute() != RET_YES )
                     return 0;
+                // xNameContainer->removeByName(sName);
             }
             m_aName.SetText(sName);
-            EndDialog( sal_True );
+            EndDialog( TRUE );
         }
     }
     catch( const Exception& )
@@ -300,7 +303,7 @@ IMPL_LINK( OCollectionView, Dbl_Click_FileView, SvtFileView*, EMPTYARG )
 // -----------------------------------------------------------------------------
 void OCollectionView::initCurrentPath()
 {
-    sal_Bool bEnable = sal_False;
+    BOOL bEnable = FALSE;
     try
     {
         if ( m_xContent.is() )
@@ -333,7 +336,7 @@ void OCollectionView::initCurrentPath()
 }
 // -----------------------------------------------------------------------------
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 

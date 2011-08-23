@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@
 
 #include <memory>
 #include <queue>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 class TextEngine;
 class TextView;
@@ -170,7 +170,7 @@ public:
 
 protected:
     // OCommonAccessibleText
-    virtual void implGetParagraphBoundary( ::css::i18n::Boundary& rBoundary,
+    virtual void implGetParagraphBoundary( ::css::i18n::Boundary& rBoundary, 
                                            ::sal_Int32 nIndex );
     virtual void implGetLineBoundary( ::css::i18n::Boundary& rBoundary,
                                       ::sal_Int32 nIndex );
@@ -347,18 +347,18 @@ private:
         throw (::css::lang::IndexOutOfBoundsException,
                ::css::uno::RuntimeException);
 
-    virtual ::sal_Int32 SAL_CALL getLineNumberAtIndex( ::sal_Int32 nIndex )
+    virtual ::sal_Int32 SAL_CALL getLineNumberAtIndex( ::sal_Int32 nIndex ) 
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, 
+               ::com::sun::star::uno::RuntimeException);
+    
+    virtual ::com::sun::star::accessibility::TextSegment SAL_CALL getTextAtLineNumber( ::sal_Int32 nLineNo ) 
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
                ::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::accessibility::TextSegment SAL_CALL getTextAtLineNumber( ::sal_Int32 nLineNo )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-               ::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::accessibility::TextSegment SAL_CALL getTextAtLineWithCaret(  )
+    
+    virtual ::com::sun::star::accessibility::TextSegment SAL_CALL getTextAtLineWithCaret(  ) 
         throw (::com::sun::star::uno::RuntimeException);
-
-    virtual ::sal_Int32 SAL_CALL getNumberOfLineWithCaret(  )
+    
+    virtual ::sal_Int32 SAL_CALL getNumberOfLineWithCaret(  ) 
         throw (::com::sun::star::uno::RuntimeException);
 
     using cppu::WeakAggComponentImplHelperBase::addEventListener;
@@ -396,7 +396,7 @@ private:
 };
 
 
-typedef ::boost::unordered_map< ::rtl::OUString,
+typedef ::std::hash_map< ::rtl::OUString,
                          ::css::beans::PropertyValue,
                          ::rtl::OUStringHash,
                          ::std::equal_to< ::rtl::OUString > > tPropValMap;
@@ -552,15 +552,15 @@ public:
                                   ::sal_Int32 nBegin, ::sal_Int32 nEnd);
 
     ::css::i18n::Boundary
-    retrieveParagraphLineBoundary( ParagraphImpl const * pParagraph,
+    retrieveParagraphLineBoundary( ParagraphImpl const * pParagraph, 
                                    ::sal_Int32 nIndex, ::sal_Int32 *pLineNo = NULL);
 
     ::css::i18n::Boundary
-    retrieveParagraphBoundaryOfLine( ParagraphImpl const * pParagraph,
+    retrieveParagraphBoundaryOfLine( ParagraphImpl const * pParagraph, 
                                      ::sal_Int32 nIndex );
 
     sal_Int32 retrieveParagraphLineWithCursor( ParagraphImpl const * pParagraph );
-
+                                   
     ::css::uno::Reference< ::css::accessibility::XAccessibleRelationSet >
     retrieveParagraphRelationSet( ParagraphImpl const * pParagraph );
 
@@ -625,7 +625,7 @@ private:
 
     // Must be called with both the external (Solar) and internal mutex
     // locked, and after init has been called:
-    void changeParagraphText(::sal_uLong nNumber, ::sal_uInt16 nBegin, ::sal_uInt16 nEnd,
+    void changeParagraphText(::ULONG nNumber, ::USHORT nBegin, ::USHORT nEnd,
                              bool bCut, bool bPaste,
                              ::rtl::OUString const & rText);
 

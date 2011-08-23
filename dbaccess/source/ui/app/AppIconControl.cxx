@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ using namespace ::dbaui;
 // class OApplicationIconControl
 DBG_NAME(OApplicationIconControl)
 //==================================================================
-OApplicationIconControl::OApplicationIconControl(Window* _pParent)
+OApplicationIconControl::OApplicationIconControl(Window* _pParent) 
     : SvtIconChoiceCtrl(_pParent,WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | /*!WB_NOSELECTION |*/
                                 WB_TABSTOP | WB_CLIPCHILDREN | WB_NOVSCROLL | WB_SMART_ARRANGE | WB_NOHSCROLL | WB_CENTER)
     ,DropTargetHelper(this)
@@ -53,32 +53,34 @@ OApplicationIconControl::OApplicationIconControl(Window* _pParent)
 
     struct CategoryDescriptor
     {
-        sal_uInt16      nLabelResId;
+        USHORT      nLabelResId;
         ElementType eType;
-        sal_uInt16      nImageResId;
+        USHORT      nImageResId;
+        USHORT      nImageResIdHC;
     }   aCategories[] = {
-        { RID_STR_TABLES_CONTAINER,     E_TABLE,    IMG_TABLEFOLDER_TREE_L  },
-        { RID_STR_QUERIES_CONTAINER,    E_QUERY,    IMG_QUERYFOLDER_TREE_L  },
-        { RID_STR_FORMS_CONTAINER,      E_FORM,     IMG_FORMFOLDER_TREE_L   },
-        { RID_STR_REPORTS_CONTAINER,    E_REPORT,   IMG_REPORTFOLDER_TREE_L }
+        { RID_STR_TABLES_CONTAINER,     E_TABLE,    IMG_TABLEFOLDER_TREE_L, IMG_TABLEFOLDER_TREE_LHC    },
+        { RID_STR_QUERIES_CONTAINER,    E_QUERY,    IMG_QUERYFOLDER_TREE_L, IMG_QUERYFOLDER_TREE_LHC    },
+        { RID_STR_FORMS_CONTAINER,      E_FORM,     IMG_FORMFOLDER_TREE_L,  IMG_FORMFOLDER_TREE_LHC     },
+        { RID_STR_REPORTS_CONTAINER,    E_REPORT,   IMG_REPORTFOLDER_TREE_L,IMG_REPORTFOLDER_TREE_LHC   }
     };
     for ( size_t i=0; i < SAL_N_ELEMENTS(aCategories); ++i)
     {
         SvxIconChoiceCtrlEntry* pEntry = InsertEntry(
-            String( ModuleRes( aCategories[i].nLabelResId ) ) ,
-            Image(  ModuleRes( aCategories[i].nImageResId ) ) );
-        if ( pEntry )
+            String( ModuleRes( aCategories[i].nLabelResId ) ),
+            Image( ModuleRes( aCategories[i].nImageResId ) ),
+            Image( ModuleRes( aCategories[i].nImageResIdHC ) ) );
+        if ( pEntry ) 
             pEntry->SetUserData( new ElementType( aCategories[i].eType ) );
     }
 
-    SetChoiceWithCursor( sal_True );
+    SetChoiceWithCursor( TRUE );
     SetSelectionMode(SINGLE_SELECTION);
 }
 // -----------------------------------------------------------------------------
 OApplicationIconControl::~OApplicationIconControl()
 {
-    sal_uLong nCount = GetEntryCount();
-    for ( sal_uLong i = 0; i < nCount; ++i )
+    ULONG nCount = GetEntryCount();
+    for ( ULONG i = 0; i < nCount; ++i )
     {
         SvxIconChoiceCtrlEntry* pEntry = GetEntry( i );
         if ( pEntry )
@@ -96,8 +98,8 @@ sal_Int8 OApplicationIconControl::AcceptDrop( const AcceptDropEvent& _rEvt )
     sal_Int8 nDropOption = DND_ACTION_NONE;
     if ( m_pActionListener )
     {
-
-        SvxIconChoiceCtrlEntry* pEntry = GetEntry(_rEvt.maPosPixel);
+        
+        SvxIconChoiceCtrlEntry*	pEntry = GetEntry(_rEvt.maPosPixel);
         if ( pEntry )
         {
             SetCursor(pEntry);

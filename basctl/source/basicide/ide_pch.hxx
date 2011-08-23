@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,8 +27,8 @@
  ************************************************************************/
 #include <svheader.hxx>
 
-#define ITEMID_SEARCH           0
-#define ITEMID_SIZE             0
+#define ITEMID_SEARCH			0
+#define ITEMID_SIZE				0
 
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
@@ -58,6 +58,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/genlink.hxx>
 #include <sfx2/dispatch.hxx>

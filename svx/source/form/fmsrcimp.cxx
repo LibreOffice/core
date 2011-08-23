@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svx/fmresids.hrc"
+#include "fmresids.hrc"
 #include "svx/fmtools.hxx"
-#include "svx/fmsrccfg.hxx"
+#include "fmsrccfg.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/wldcrd.hxx>
@@ -58,7 +58,7 @@
 
 #include "fmprop.hrc"
 #include "fmservs.hxx"
-#include "svx/fmsrcimp.hxx"
+#include "fmsrcimp.hxx"
 #include <svx/fmsearch.hxx>
 
 #include <comphelper/numbers.hxx>
@@ -77,6 +77,11 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::beans;
 using namespace ::svxform;
 
+// ***************************************************************************************************
+
+// ***************************************************************************************************
+
+SV_IMPL_OBJARR(SvInt32Array, sal_Int32);
 
 //========================================================================
 // = FmSearchThread
@@ -159,7 +164,7 @@ void FmRecordCountListener::NotifyCurrentCount()
     if (m_lnkWhoWantsToKnow.IsSet())
     {
         DBG_ASSERT(m_xListening.is(), "FmRecordCountListener::NotifyCurrentCount : I have no propset ... !?");
-        void* pTheCount = (void*)(sal_IntPtr)::comphelper::getINT32(m_xListening->getPropertyValue(FM_PROP_ROWCOUNT));
+        void* pTheCount = (void*)::comphelper::getINT32(m_xListening->getPropertyValue(FM_PROP_ROWCOUNT));
         m_lnkWhoWantsToKnow.Call(pTheCount);
     }
 }
@@ -213,8 +218,8 @@ CheckBoxWrapper::CheckBoxWrapper(const Reference< ::com::sun::star::awt::XCheckB
 {
     switch ((TriState)m_xBox->getState())
     {
-        case STATE_NOCHECK: return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
-        case STATE_CHECK: return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
+        case STATE_NOCHECK: return rtl::OUString::createFromAscii("0");
+        case STATE_CHECK: return rtl::OUString::createFromAscii("1");
         default: break;
     }
     return rtl::OUString();
@@ -248,31 +253,31 @@ sal_Bool FmSearchEngine::MoveCursor()
             else
                 m_xSearchCursor.previous();
     }
-    catch(::com::sun::star::sdbc::SQLException const& e)
+    catch(::com::sun::star::sdbc::SQLException  e)
     {
 #if OSL_DEBUG_LEVEL > 0
         String sDebugMessage;
         sDebugMessage.AssignAscii("FmSearchEngine::MoveCursor : catched a DatabaseException (");
         sDebugMessage += (const sal_Unicode*)e.SQLState;
         sDebugMessage.AppendAscii(") !");
-        OSL_FAIL(ByteString(sDebugMessage, RTL_TEXTENCODING_ASCII_US).GetBuffer());
+        DBG_ERROR(ByteString(sDebugMessage, RTL_TEXTENCODING_ASCII_US).GetBuffer());
 #endif
         bSuccess = sal_False;
     }
-    catch(Exception const& e)
+    catch(Exception  e)
     {
 #if OSL_DEBUG_LEVEL > 0
         UniString sDebugMessage;
         sDebugMessage.AssignAscii("FmSearchEngine::MoveCursor : catched an Exception (");
         sDebugMessage += (const sal_Unicode*)e.Message;
         sDebugMessage.AppendAscii(") !");
-        OSL_FAIL(ByteString(sDebugMessage, RTL_TEXTENCODING_ASCII_US).GetBuffer());
+        DBG_ERROR(ByteString(sDebugMessage, RTL_TEXTENCODING_ASCII_US).GetBuffer());
 #endif
         bSuccess = sal_False;
     }
     catch(...)
     {
-        OSL_FAIL("FmSearchEngine::MoveCursor : catched an unknown Exception !");
+        DBG_ERROR("FmSearchEngine::MoveCursor : catched an unknown Exception !");
         bSuccess = sal_False;
     }
 
@@ -571,7 +576,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const ::rtl::O
     aParam.searchFlag = 0;
     aParam.transliterateFlags = GetTransliterationFlags();
     if ( !GetTransliteration() )
-    {   // if transliteration is not enabled, the only flags which matter are IGNORE_CASE and IGNORE_WIDTH
+    {	// if transliteration is not enabled, the only flags which matter are IGNORE_CASE and IGNORE_WIDTH
         aParam.transliterateFlags &= TransliterationModules_IGNORE_CASE | TransliterationModules_IGNORE_WIDTH;
     }
     if (m_bLevenshtein)
@@ -839,7 +844,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
     // analyze the fields
     // additionally, create the mapping: because the list of used columns can be shorter than the list
     // of columns of the cursor, we need a mapping: "used column numer n" -> "cursor column m"
-    m_arrFieldMapping.clear();
+    m_arrFieldMapping.Remove(0, m_arrFieldMapping.Count());
 
     // important: The case of the columns does not need to be exact - for instance:
     // - a user created a form which works on a table, for which the driver returns a column name "COLUMN"
@@ -847,7 +852,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
     // - a control in the form is bound to "column" - not the different case
     // In such a scenario, the form and the field would work okay, but we here need to case for the different case
     // explicitly
-    // #i8755#
+    // 2003-01-09 - #i8755# - fs@openoffice.org
 
     // so first of all, check if the database handles identifiers case sensitive
     Reference< XConnection > xConn;
@@ -865,7 +870,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
         xMeta = xConn->getMetaData();
     OSL_ENSURE( xMeta.is(), "FmSearchEngine::Init: very strange cursor (could not derive connection meta data from it)!" );
 
-    sal_Bool bCaseSensitiveIdentifiers = sal_True;  // assume case sensivity
+    sal_Bool bCaseSensitiveIdentifiers = sal_True;	// assume case sensivity
     if ( xMeta.is() )
         bCaseSensitiveIdentifiers = xMeta->supportsMixedCaseQuotedIdentifiers();
 
@@ -902,13 +907,13 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
             }
             // set the field selection back to the first
             pFieldNames = seqFieldNames.getArray();;
-            DBG_ASSERT(nFoundIndex != -1, "FmSearchEngine::Init : Invalid field name were given !");
-            m_arrFieldMapping.push_back(nFoundIndex);
+            DBG_ASSERT(nFoundIndex != -1, "FmSearchEngine::Init : Es wurden ungueltige Feldnamen angegeben !");
+            m_arrFieldMapping.Insert(nFoundIndex, m_arrFieldMapping.Count());
         }
     }
     catch(Exception&)
     {
-        OSL_FAIL("Exception occurred!");
+        DBG_ERROR("Exception occured!");
     }
 
 }
@@ -1006,19 +1011,19 @@ void FmSearchEngine::SearchNextImpl()
             switch (m_nPosition)
             {
                 case MATCHING_ANYWHERE :
-                    strSearchExpression = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) + strSearchExpression
-                    + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+                    strSearchExpression = ::rtl::OUString::createFromAscii("*") + strSearchExpression
+                    + ::rtl::OUString::createFromAscii("*");
                     break;
                 case MATCHING_BEGINNING :
-                    strSearchExpression = strSearchExpression + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+                    strSearchExpression = strSearchExpression + ::rtl::OUString::createFromAscii("*");
                     break;
                 case MATCHING_END :
-                    strSearchExpression = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) + strSearchExpression;
+                    strSearchExpression = ::rtl::OUString::createFromAscii("*") + strSearchExpression;
                     break;
                 case MATCHING_WHOLETEXT :
                     break;
                 default :
-                    OSL_FAIL("FmSearchEngine::SearchNextImpl() : die Methoden-Listbox duerfte nur 4 Eintraege enthalten ...");
+                    DBG_ERROR("FmSearchEngine::SearchNextImpl() : die Methoden-Listbox duerfte nur 4 Eintraege enthalten ...");
             }
         }
     }
@@ -1264,21 +1269,18 @@ void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce)
         return;
     // (da ich keinen Wechsel des Iterators von aussen zulasse, heisst selber ::com::sun::star::sdbcx::Index auch immer selbe Spalte, also habe ich nix zu tun)
 
-    DBG_ASSERT((nFieldIndex == -1) ||
-               ((nFieldIndex >= 0) &&
-                (static_cast<size_t>(nFieldIndex) < m_arrFieldMapping.size())),
-            "FmSearchEngine::RebuildUsedFields : nFieldIndex is invalid!");
+    DBG_ASSERT((nFieldIndex >= -1) && (nFieldIndex<m_arrFieldMapping.Count()), "FmSearchEngine::RebuildUsedFields : nFieldIndex ist ungueltig !");
     // alle Felder, die ich durchsuchen muss, einsammeln
     m_arrUsedFields.clear();
     if (nFieldIndex == -1)
     {
         Reference< ::com::sun::star::container::XIndexAccess >  xFields;
-        for (size_t i=0; i<m_arrFieldMapping.size(); ++i)
+        for (sal_uInt16 i=0; i<m_arrFieldMapping.Count(); ++i)
         {
             Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), UNO_QUERY);
             DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::RebuildUsedFields : invalid cursor (no columns supplier) !");
             xFields = Reference< ::com::sun::star::container::XIndexAccess > (xSupplyCols->getColumns(), UNO_QUERY);
-            BuildAndInsertFieldInfo(xFields, m_arrFieldMapping[i]);
+            BuildAndInsertFieldInfo(xFields, m_arrFieldMapping.GetObject(i));
         }
     }
     else
@@ -1287,7 +1289,7 @@ void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce)
         Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), UNO_QUERY);
         DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::RebuildUsedFields : invalid cursor (no columns supplier) !");
         xFields = Reference< ::com::sun::star::container::XIndexAccess > (xSupplyCols->getColumns(), UNO_QUERY);
-        BuildAndInsertFieldInfo(xFields, m_arrFieldMapping[static_cast< size_t >(nFieldIndex)]);
+        BuildAndInsertFieldInfo(xFields, m_arrFieldMapping.GetObject((sal_uInt16)nFieldIndex));
     }
 
     m_nCurrentFieldIndex = nFieldIndex;

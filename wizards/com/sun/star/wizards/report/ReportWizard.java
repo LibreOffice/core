@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,6 +28,7 @@
 package com.sun.star.wizards.report;
 
 // import java.util.Vector;
+
 import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XTextListener;
@@ -50,10 +51,8 @@ import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.common.SystemDialog;
-import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.DBMetaData;
 import com.sun.star.wizards.db.DatabaseObjectWizard;
-import com.sun.star.wizards.db.RecordParser;
 import com.sun.star.wizards.db.SQLQueryComposer;
 import com.sun.star.wizards.ui.CommandFieldSelection;
 import com.sun.star.wizards.ui.FieldSelection;
@@ -70,7 +69,6 @@ import java.util.Map;
 
 public class ReportWizard extends DatabaseObjectWizard implements XTextListener, XCompletion
 {
-
     protected FieldSelection CurGroupFieldSelection;
     private SortingComponent CurSortingComponent;
     private TitlesComponent CurTitlesComponent;
@@ -87,6 +85,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
     private static final int SOSORTPAGE = 4;
     protected static final int SOTEMPLATEPAGE = 5;
     protected static final int SOSTOREPAGE = 6;
+
     private IReportDocument m_reportDocument;
     private static String sMsgWizardName;
     private static String slblFields;
@@ -99,24 +98,24 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
     protected static boolean bCloseDocument;
     private boolean bHasEscapeProcessing = true;
 
-    public ReportWizard(XMultiServiceFactory i_serviceFactory, final PropertyValue[] i_wizardContext)
+    public ReportWizard( XMultiServiceFactory i_serviceFactory, final PropertyValue[] i_wizardContext )
     {
-        super(i_serviceFactory, 34320, i_wizardContext);
+        super(i_serviceFactory, 34320, i_wizardContext );
         super.addResourceHandler("Report Wizard", "dbw");
         if (getReportResources(false) == true)
         {
             Helper.setUnoPropertyValues(xDialogModel,
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT,
+                        "Height",
                         "Moveable",
-                        PropertyNames.PROPERTY_NAME,
-                        PropertyNames.PROPERTY_POSITION_X,
-                        PropertyNames.PROPERTY_POSITION_Y,
-                        PropertyNames.PROPERTY_STEP,
-                        PropertyNames.PROPERTY_TABINDEX,
+                        "Name",
+                        "PositionX",
+                        "PositionY",
+                        "Step",
+                        "TabIndex",
                         "Title",
-                        PropertyNames.PROPERTY_WIDTH
+                        "Width"
                     },
                     new Object[]
                     {
@@ -194,9 +193,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
                 {
                     // cleanup document
                     m_reportDocument.clearDocument();
-                    m_reportDocument.getRecordParser().setGroupFieldNames(new String[]
-                            {
-                            });
+                    m_reportDocument.getRecordParser().setGroupFieldNames(new String[]{});
                     CurGroupFieldHandler.removeGroupFieldNames();
                 }
                 break;
@@ -251,30 +248,30 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
             return;
         }
 
-        if ((nReportMode == ReportFinalizer.SOCREATETEMPLATE)
-                || (nReportMode == ReportFinalizer.SOUSETEMPLATE))
+        if  (   ( nReportMode == ReportFinalizer.SOCREATETEMPLATE )
+            ||  ( nReportMode == ReportFinalizer.SOUSETEMPLATE )
+            )
         {
             m_reportDocument.addReportToDBView();
             boolean bOpenInDesign = (nReportMode == ReportFinalizer.SOCREATETEMPLATE);
-            m_reportDocument.createAndOpenReportDocument(m_sReportName, true, bOpenInDesign);
+            m_reportDocument.createAndOpenReportDocument( m_sReportName, true, bOpenInDesign);
         }
         else
         {
             m_reportDocument.importReportData(this);
-            m_reportDocument.createAndOpenReportDocument(m_sReportName, false, false);
+            m_reportDocument.createAndOpenReportDocument( m_sReportName, false, false );
         }
     }
 
     private boolean executeQuery()
     {
         boolean bQueryCreated = false;
-        final RecordParser recordParser = m_reportDocument.getRecordParser();
-        final SQLQueryComposer sqlQueryComposer = recordParser.getSQLQueryComposer();
         if (this.CurDBCommandFieldSelection.getSelectedCommandType() == CommandType.TABLE)
         {
-            bQueryCreated = sqlQueryComposer.setQueryCommand(this.xWindow, false, false);
+            bQueryCreated = m_reportDocument.getRecordParser().getSQLQueryComposer().setQueryCommand(this.xWindow, false, false);
+
             m_reportDocument.setCommandType(CommandType.COMMAND);
-            String sQuery = sqlQueryComposer.getQuery();
+            String sQuery = m_reportDocument.getRecordParser().getSQLQueryComposer().getQuery();
             m_reportDocument.setCommand(sQuery);
         }
         else
@@ -282,18 +279,18 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
             try
             {
                 String sQueryName = CurDBCommandFieldSelection.getSelectedCommandName();
-                DBMetaData.CommandObject oCommand = recordParser.getQueryByName(sQueryName);
-                bHasEscapeProcessing = recordParser.hasEscapeProcessing(oCommand.getPropertySet());
+                DBMetaData.CommandObject oCommand = m_reportDocument.getRecordParser().getQueryByName(sQueryName);
+                bHasEscapeProcessing = m_reportDocument.getRecordParser().hasEscapeProcessing(oCommand.getPropertySet());
                 String sCommand = (String) oCommand.getPropertySet().getPropertyValue("Command");
                 if (bHasEscapeProcessing)
                 {
                     // String sCommand = (String) oCommand.xPropertySet.getPropertyValue("Command");
                     bQueryCreated = (!sCommand.equals(""));
-                    sqlQueryComposer.m_xQueryAnalyzer.setQuery(sCommand);
-                    sqlQueryComposer.prependSortingCriteria();
+                    m_reportDocument.getRecordParser().getSQLQueryComposer().m_xQueryAnalyzer.setQuery(sCommand);
+                    m_reportDocument.getRecordParser().getSQLQueryComposer().prependSortingCriteria();
 // TODO: check with query
                     m_reportDocument.setCommandType(CommandType.COMMAND);
-                    m_reportDocument.setCommand(sqlQueryComposer.getQuery());
+                    m_reportDocument.setCommand(m_reportDocument.getRecordParser().getSQLQueryComposer().getQuery());
                     bQueryCreated = true;
                 }
                 else
@@ -314,18 +311,17 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
         }
         return bQueryCreated;
     }
-
     public void buildSteps()
     {
         // CurReportDocument.getDoc().xProgressBar.setValue(30);
         CurDBCommandFieldSelection = new CommandFieldSelection(this, m_reportDocument.getRecordParser(), 100, slblFields, slblSelFields, slblTables, true, 34330);
         CurDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
-        if (!isReportBuilderInstalled())
+        if ( !isReportBuilderInstalled() )
         {
             insertLabel("lblBinaryFields",
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                        "Height", "Label", "PositionX", "PositionY", "Step", "Width"
                     },
                     new Object[]
                     {
@@ -392,7 +388,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
     private boolean isReportBuilderInstalled()
     {
         //! Check if the new Report Builder Extension is available
-        XContentEnumerationAccess a = com.sun.star.uno.UnoRuntime.queryInterface(XContentEnumerationAccess.class, xMSF);
+        XContentEnumerationAccess a = com.sun.star.uno.UnoRuntime.queryInterface( XContentEnumerationAccess.class, xMSF );
         com.sun.star.container.XEnumeration e = a.createContentEnumeration("com.sun.star.report.pentaho.SOReportJobFactory");
         if (e == null)
         {
@@ -415,41 +411,42 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
         // Get the path to the extension and try to add the path to the class loader
         final XComponentContext xComponentContext = Helper.getComponentContext(_xMSF);
         final Object aSingleton = xComponentContext.getValueByName("/singletons/com.sun.star.deployment.PackageInformationProvider");
-        XPackageInformationProvider xProvider = UnoRuntime.queryInterface(XPackageInformationProvider.class, aSingleton);
+        XPackageInformationProvider xProvider = UnoRuntime.queryInterface( XPackageInformationProvider.class, aSingleton );
         final String sLocation = xProvider.getPackageLocation("com.sun.reportdesigner");
         return sLocation;
     }
-    private static XLogger m_xLogger;
 
-    private static void initializeLogger(XMultiServiceFactory _xMSF)
+private static XLogger m_xLogger;
+
+private static void initializeLogger(XMultiServiceFactory _xMSF)
+{
+    XComponentContext xContext = Helper.getComponentContext(_xMSF);
+
+    final Object aLoggerPool = xContext.getValueByName("/singletons/com.sun.star.logging.LoggerPool");
+    if (aLoggerPool == null)
     {
-        XComponentContext xContext = Helper.getComponentContext(_xMSF);
-
-        final Object aLoggerPool = xContext.getValueByName("/singletons/com.sun.star.logging.LoggerPool");
-        if (aLoggerPool == null)
-        {
-            System.out.println("Can't get singleton from logging");
-        }
-        final XLoggerPool xLoggerPool = UnoRuntime.queryInterface(XLoggerPool.class, aLoggerPool);
-        m_xLogger = xLoggerPool.getNamedLogger("com.sun.star.wizards.ReportBuilder");
+        System.out.println("Can't get singleton from logging");
     }
+    final XLoggerPool xLoggerPool = UnoRuntime.queryInterface( XLoggerPool.class, aLoggerPool );
+    m_xLogger = xLoggerPool.getNamedLogger("com.sun.star.wizards.ReportBuilder");    
+}
 
-    public static XLogger getLogger()
-    {
-        return m_xLogger;
-    }
+public static XLogger getLogger()
+{
+    return m_xLogger;
+}
 
     public void startReportWizard()
     {
         initializeLogger(xMSF);
         getLogger().log(LogLevel.SEVERE, "Start Report Wizard");
 
-        if (isReportBuilderInstalled())
+        if ( isReportBuilderInstalled() )
         {
             // Get the path to the extension and try to add the path to the class loader
             String sLocation = getPathToExtension(xMSF);
             // TODO: Umlaut in filename!
-            if (sLocation.length() > 0)
+            if ( sLocation.length() > 0 )
             {
                 try
                 {
@@ -459,14 +456,8 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
                     aURLs[0] = aLocationURI.toURL();
                     URLClassLoader aClassLoader = new URLClassLoader(aURLs, this.getClass().getClassLoader());
                     Class a = aClassLoader.loadClass("com.sun.star.wizards.reportbuilder.ReportBuilderImplementation");
-                    Method aMethod = a.getMethod("create", new Class[]
-                            {
-                                XMultiServiceFactory.class
-                            });
-                    m_reportDocument = (IReportDocument) aMethod.invoke(a, new Object[]
-                            {
-                                xMSF
-                            });
+                    Method aMethod = a.getMethod("create", new Class[] { XMultiServiceFactory.class });
+                    m_reportDocument = (IReportDocument) aMethod.invoke(a, new Object[] { xMSF });
                 }
                 catch (Exception e)
                 {
@@ -475,34 +466,32 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
                 }
             }
         }
-
+        
         try
         {
             if (m_reportDocument == null)
             {
                 // Fallback, if there is no reportbuilder wizard implementation, we use the old wizard
-                m_reportDocument = new ReportTextImplementation(xMSF);
+                m_reportDocument = new ReportTextImplementation( xMSF );
             }
 
-            m_reportDocument.initialize(m_docUI, m_oResource);
+            m_reportDocument.initialize( m_docUI, m_oResource );
 
-            if (m_reportDocument.getRecordParser().getConnection(m_wizardContext))
+            if ( m_reportDocument.getRecordParser().getConnection( m_wizardContext ) )
             {
                 buildSteps();
 
                 m_reportDocument.checkInvariants();
 
-                this.CurDBCommandFieldSelection.preselectCommand(m_wizardContext, false);
+                this.CurDBCommandFieldSelection.preselectCommand( m_wizardContext, false );
 
                 createWindowPeer(m_reportDocument.getWizardParent());
 
                 m_reportDocument.getRecordParser().setWindowPeer(this.xControl.getPeer());
                 insertQueryRelatedSteps();
                 short RetValue = executeDialog(m_reportDocument.getFrame().getComponentWindow().getPosSize());
-                if (RetValue == 0)
-                {
+                if ( RetValue == 0 )
                     dialogFinish();
-                }
             }
             m_reportDocument.getRecordParser().dispose();
         }
@@ -603,7 +592,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
         try
         {
             Object oRoadmapItem = null;
-            int CurStep = AnyConverter.toInt(Helper.getUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP));
+            int CurStep = AnyConverter.toInt(Helper.getUnoPropertyValue(xDialogModel, "Step"));
             boolean bEnabled = false;
             int CurItemID;
             for (int i = 0; i < getRMItemCount(); i++)
@@ -619,7 +608,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
                     bEnabled = true;
                 }
 
-                Helper.setUnoPropertyValue(oRoadmapItem, PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
+                Helper.setUnoPropertyValue(oRoadmapItem, "Enabled", new Boolean(bEnabled));
             }
         }
         catch (com.sun.star.uno.Exception exception)
@@ -631,8 +620,8 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
     private void enableWizardSteps(String[] NewItems)
     {
         boolean bEnabled = NewItems.length > 0;
-        setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
-        setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
+        setControlProperty("btnWizardNext", "Enabled", new Boolean(bEnabled));
+        setControlProperty("btnWizardFinish", "Enabled", new Boolean(bEnabled));
         enableRoadmapItems(bEnabled);   // Note: Performancewise this could be improved
     }
 
@@ -679,8 +668,8 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
         }
         super.setStepEnabled(SOSORTPAGE, bdoenable);
 
-        // int nCommandType = this.CurDBCommandFieldSelection.getSelectedCommandType();
-        // super.setStepEnabled(SOSORTPAGE, (nCommandType == CommandType.TABLE));
+    // int nCommandType = this.CurDBCommandFieldSelection.getSelectedCommandType();
+    // super.setStepEnabled(SOSORTPAGE, (nCommandType == CommandType.TABLE));
     }
 
     public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
@@ -717,7 +706,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
             else
             {
                 boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
-                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
+                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), "Enabled", new Boolean(bEnabled));
             }
         }
 
@@ -732,7 +721,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
             else
             {
                 boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
-                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
+                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), "Enabled", new Boolean(bEnabled));
             }
         }
 
@@ -761,7 +750,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
 //        long nTime = aDate.getTime();
 //        Long aLong = new Long(nTime);
 //        String aStr = aLong.toString();
-//
+//        
 //        Date aNewDate = new Date(1202382900000L);
 ////         aNewDate.
 //        String aDateStr = aNewDate.toString();

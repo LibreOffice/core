@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,9 @@
 
 #include <com/sun/star/text/NotePrintMode.hpp>
 
+#if STLPORT_VERSION>=321
 #include <cstdarg>
+#endif
 
 #include <cmdid.h>
 
@@ -43,8 +45,10 @@
 
 #include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
+#include <svl/flagitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/oldprintadaptor.hxx>
+#include <svtools/printdlg.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/prnmon.hxx>
 #include <editeng/paperinf.hxx>
@@ -65,6 +69,7 @@
 #include <docsh.hxx>
 #include <viewopt.hxx>
 #include <prtopt.hxx>
+#include <swprtopt.hxx>
 #include <fontcfg.hxx>
 #include <cfgitems.hxx>
 #include <dbmgr.hxx>
@@ -78,6 +83,7 @@
 #include <globals.hrc>
 #include <view.hrc>
 #include <app.hrc>
+#include <svl/eitem.hxx>
 #include <swwrtshitem.hxx>
 #include "swabstdlg.hxx"
 #include <svl/slstitm.hxx>
@@ -87,25 +93,25 @@
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Drucker an Sfx uebergeben
+    Beschreibung:	Drucker an Sfx uebergeben
  --------------------------------------------------------------------*/
-SfxPrinter* SwView::GetPrinter( sal_Bool bCreate )
+SfxPrinter* __EXPORT SwView::GetPrinter( BOOL bCreate )
 {
     const IDocumentDeviceAccess* pIDDA = GetWrtShell().getIDocumentDeviceAccess();
     SfxPrinter *pOld = pIDDA->getPrinter( false );
     SfxPrinter *pPrt = pIDDA->getPrinter( bCreate );
     if ( pOld != pPrt )
     {
-        sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+        BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
         ::SetAppPrintOptions( &GetWrtShell(), bWeb );
     }
     return pPrt;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Druckerwechsel weitermelden
+    Beschreibung:	Druckerwechsel weitermelden
  --------------------------------------------------------------------*/
-void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, sal_Bool bWeb )
+void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, BOOL bWeb )
 {
     SwPrintOptions* pOpt = SW_MOD()->GetPrtOptions(bWeb);
     if( !pOpt)
@@ -115,7 +121,7 @@ void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, sal_Bool bWeb )
     const SfxItemSet& rSet = pNew->GetOptions();
 
     const SwAddPrinterItem* pAddPrinterAttr;
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_ADDPRINTER, sal_False,
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_ADDPRINTER, FALSE,
         (const SfxPoolItem**)&pAddPrinterAttr ) )
     {
         if( pIDDA )
@@ -125,7 +131,7 @@ void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, sal_Bool bWeb )
     }
 }
 
-sal_uInt16 SwView::SetPrinter(SfxPrinter* pNew, sal_uInt16 nDiffFlags, bool  )
+USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool  )
 {
     SwWrtShell &rSh = GetWrtShell();
     SfxPrinter* pOld = rSh.getIDocumentDeviceAccess()->getPrinter( false );
@@ -138,17 +144,17 @@ sal_uInt16 SwView::SetPrinter(SfxPrinter* pNew, sal_uInt16 nDiffFlags, bool  )
         if ( nDiffFlags & SFX_PRINTER_PRINTER )
             rSh.SetModified();
     }
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
     if ( nDiffFlags & SFX_PRINTER_OPTIONS )
         ::SetPrinter( rSh.getIDocumentDeviceAccess(), pNew, bWeb );
 
-    const sal_Bool bChgOri = nDiffFlags & SFX_PRINTER_CHG_ORIENTATION ? sal_True : sal_False;
-    const sal_Bool bChgSize= nDiffFlags & SFX_PRINTER_CHG_SIZE ? sal_True : sal_False;
+    const BOOL bChgOri = nDiffFlags & SFX_PRINTER_CHG_ORIENTATION ? TRUE : FALSE;
+    const BOOL bChgSize= nDiffFlags & SFX_PRINTER_CHG_SIZE ? TRUE : FALSE;
     if ( bChgOri || bChgSize )
     {
         rSh.StartAllAction();
         if ( bChgOri )
-            rSh.ChgAllPageOrientation( sal_uInt16(pNew->GetOrientation()) );
+            rSh.ChgAllPageOrientation( USHORT(pNew->GetOrientation()) );
         if ( bChgSize )
         {
             Size aSz( SvxPaperInfo::GetPaperSize( pNew ) );
@@ -162,20 +168,51 @@ sal_uInt16 SwView::SetPrinter(SfxPrinter* pNew, sal_uInt16 nDiffFlags, bool  )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   TabPage fuer applikationsspezifische Druckoptionen
+    Beschreibung:	TabPage fuer applikationsspezifische Druckoptionen
  --------------------------------------------------------------------*/
-SfxTabPage* SwView::CreatePrintOptionsPage(Window* pParent,
+SfxTabPage* __EXPORT SwView::CreatePrintOptionsPage(Window* pParent,
                                                     const SfxItemSet& rSet)
 {
-    return ::CreatePrintOptionsPage( pParent, rSet, sal_False );
+    return ::CreatePrintOptionsPage( pParent, rSet, FALSE );
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Print-Dispatcher
+    Beschreibung:	Druckerdialog
  --------------------------------------------------------------------*/
-void SwView::ExecutePrint(SfxRequest& rReq)
+PrintDialog* CreatePrintDialog( Window* pParent, USHORT nPg, SwWrtShell* pSh )
 {
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    PrintDialog *pDlg = new PrintDialog( pParent, false );
+//	pDlg->ChangeFirstPage( 1 );
+
+    if ( !nPg )
+        nPg = 1;
+//	pDlg->ChangeLastPage( nPg );
+//	pDlg->ChangeMaxPage( 9999 );
+    pDlg->EnableRange( PRINTDIALOG_FROMTO );
+
+    if (pSh && (pSh->IsSelection() || pSh->IsFrmSelected() || pSh->IsObjSelected()))
+        pDlg->EnableRange( PRINTDIALOG_SELECTION );
+
+    pDlg->SetRangeText( String::CreateFromInt32(nPg) );
+    pDlg->EnableRange( PRINTDIALOG_RANGE );
+    pDlg->EnableCollate();
+    return pDlg;
+}
+
+PrintDialog* __EXPORT SwView::CreatePrintDialog( Window* pParent )
+{
+    // AMA: Hier sollte vielleicht die virtuelle Seitennummer angezeigt werden,
+    // 		aber nur, wenn das Drucken virtuelle Seitennummern und nicht wie
+    //		bisher (auch beim SWG 2.0) physikalische beachtet werden.
+    return ::CreatePrintDialog( pParent, GetWrtShell().GetPhyPageNum(), &GetWrtShell() );
+}
+
+/*--------------------------------------------------------------------
+    Beschreibung:	Print-Dispatcher
+ --------------------------------------------------------------------*/
+void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
+{
+    BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
     ::SetAppPrintOptions( &GetWrtShell(), bWeb );
     switch (rReq.GetSlot())
     {
@@ -186,7 +223,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             if (sFaxName.Len())
             {
                 SfxStringItem aPrinterName(SID_PRINTER_NAME, sFaxName);
-                SfxBoolItem aSilent( SID_SILENT, sal_True );
+                SfxBoolItem aSilent( SID_SILENT, TRUE );
                 GetViewFrame()->GetDispatcher()->Execute( SID_PRINTDOC,
                             SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD,
                             &aPrinterName, &aSilent, 0L );
@@ -195,7 +232,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             {
                 InfoBox aInfoBox(&GetEditWin(), SW_RES(MSG_ERR_NO_FAX));
                 String sMsg = aInfoBox.GetMessText();
-                sal_uInt16 nResNo = bWeb ? STR_WEBOPTIONS : STR_TEXTOPTIONS;
+                USHORT nResNo = bWeb ? STR_WEBOPTIONS : STR_TEXTOPTIONS;
                 sMsg.SearchAndReplace(String::CreateFromAscii("%1"), String(SW_RES(nResNo)));
                 aInfoBox.SetMessText(sMsg);
                 aInfoBox.Execute();
@@ -210,12 +247,12 @@ void SwView::ExecutePrint(SfxRequest& rReq)
         case SID_PRINTDOCDIRECT:
         {
             SwWrtShell* pSh = &GetWrtShell();
-            SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
-            sal_Bool bSilent = pSilentItem ? pSilentItem->GetValue() : sal_False;
-            SFX_REQUEST_ARG(rReq, pPrintFromMergeItem, SfxBoolItem, FN_QRY_MERGE, sal_False);
+            SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, FALSE);
+            BOOL bSilent = pSilentItem ? pSilentItem->GetValue() : FALSE;
+            SFX_REQUEST_ARG(rReq, pPrintFromMergeItem, SfxBoolItem, FN_QRY_MERGE, FALSE);
             if(pPrintFromMergeItem)
                 rReq.RemoveItem(FN_QRY_MERGE);
-            sal_Bool bFromMerge = pPrintFromMergeItem ? pPrintFromMergeItem->GetValue() : sal_False;
+            BOOL bFromMerge = pPrintFromMergeItem ? pPrintFromMergeItem->GetValue() : FALSE;
             SwMiscConfig aMiscConfig;
             bool bPrintSelection = false;
             if(!bSilent && !bFromMerge &&
@@ -225,7 +262,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
                 short nRet = aBox.Execute();
                 if(RET_YES == nRet)
                 {
-                    SfxBoolItem aBool(FN_QRY_MERGE, sal_True);
+                    SfxBoolItem aBool(FN_QRY_MERGE, TRUE);
                     GetViewFrame()->GetDispatcher()->Execute(
                                 FN_QRY_MERGE, SFX_CALLMODE_ASYNCHRON, &aBool, 0L);
                     rReq.Ignore();
@@ -234,12 +271,13 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             }
             else if( rReq.GetSlot() == SID_PRINTDOCDIRECT && ! bSilent )
             {
-                if( ( pSh->IsSelection() || pSh->IsFrmSelected() || pSh->IsObjSelected() ) )
+                if( /*!bIsAPI && */
+                   ( pSh->IsSelection() || pSh->IsFrmSelected() || pSh->IsObjSelected() ) )
                 {
                     short nBtn = SvxPrtQryBox(&GetEditWin()).Execute();
                     if( RET_CANCEL == nBtn )
                         return;;
-
+                    
                     if( RET_OK == nBtn )
                         bPrintSelection = true;
                 }
@@ -263,11 +301,11 @@ void SwView::ExecutePrint(SfxRequest& rReq)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Page Drucker/Zusaetze erzeugen fuer SwView und
+    Beschreibung:	Page Drucker/Zusaetze erzeugen fuer SwView und
                     SwPagePreview
  --------------------------------------------------------------------*/
 SfxTabPage* CreatePrintOptionsPage( Window *pParent,
-                                const SfxItemSet &rOptions, sal_Bool bPreview )
+                                const SfxItemSet &rOptions, BOOL bPreview )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "No Print Dialog");
@@ -291,20 +329,24 @@ SfxTabPage* CreatePrintOptionsPage( Window *pParent,
     return pPage;
 }
 
-void SetAppPrintOptions( ViewShell* pSh, sal_Bool bWeb )
+void SetAppPrintOptions( ViewShell* pSh, BOOL bWeb )
 {
+    SwPrintData aPrtData = *SW_MOD()->GetPrtOptions(bWeb);
     const IDocumentDeviceAccess* pIDDA = pSh->getIDocumentDeviceAccess();
-    SwPrintData aPrtData = pIDDA->getPrintData();
+    SwPrintData* pShellPrintData = pIDDA->getPrintData();
+
+    if(pShellPrintData)
+        aPrtData = *pShellPrintData;
 
     if( pIDDA->getPrinter( false ) )
     {
         // Applikationseigene Druckoptionen in SfxPrinter schiessen
         SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, aPrtData);
         SfxItemSet aSet( pSh->GetAttrPool(),
-                    FN_PARAM_ADDPRINTER,        FN_PARAM_ADDPRINTER,
-                    SID_HTML_MODE,              SID_HTML_MODE,
-                    SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
-                    SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
+                    FN_PARAM_ADDPRINTER, 		FN_PARAM_ADDPRINTER,
+                    SID_HTML_MODE,				SID_HTML_MODE,
+                    SID_PRINTER_NOTFOUND_WARN, 	SID_PRINTER_NOTFOUND_WARN,
+                    SID_PRINTER_CHANGESTODOC, 	SID_PRINTER_CHANGESTODOC,
                     0 );
 
         utl::MiscCfg aMisc;

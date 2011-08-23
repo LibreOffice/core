@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 //------------------------------------------------------------------------
 
-ScTemplateDlg::ScTemplateDlg(Window * pParent, sal_uInt16 nAppResource) :
+ScTemplateDlg::ScTemplateDlg(Window * pParent, USHORT nAppResource) :
 //  SfxTemplateDlg( pParent, nAppResource )
     SfxTemplateDialog( pParent )
 {
@@ -43,15 +43,15 @@ ScTemplateDlg::ScTemplateDlg(Window * pParent, sal_uInt16 nAppResource) :
 
 //------------------------------------------------------------------------
 
-ScTemplateDlg::~ScTemplateDlg()
+__EXPORT ScTemplateDlg::~ScTemplateDlg()
 {
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool ScTemplateDlg::New(String &rNewName)
+BOOL ScTemplateDlg::New(String &rNewName)
 {
-    return sal_True;
+    return TRUE;
 }
 
 
@@ -60,9 +60,9 @@ void ScTemplateDlg::Edit(const String &)
 }
 
 
-sal_Bool ScTemplateDlg::Delete(const String &)
+BOOL ScTemplateDlg::Delete(const String &)
 {
-    return sal_True;
+    return TRUE;
 }
 
 

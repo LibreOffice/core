@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,16 +44,22 @@ TYPEINIT1(OutlineViewShellBase, ViewShellBase);
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new OutlineViewShellBase object has been constructed.
 
+/*
+SFX_IMPL_VIEWFACTORY(OutlineViewShellBase, SdResId(STR_DEFAULTVIEW))
+{
+    SFX_VIEW_REGISTRATION(DrawDocShell);
+}
+*/
 SfxViewFactory* OutlineViewShellBase::pFactory;
-SfxViewShell* OutlineViewShellBase::CreateInstance (
+SfxViewShell* __EXPORT OutlineViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     OutlineViewShellBase* pBase = new OutlineViewShellBase(pFrame, pOldView);
     pBase->LateInit(framework::FrameworkHelper::msOutlineViewURL);
     return pBase;
 }
-void OutlineViewShellBase::RegisterFactory( sal_uInt16 nPrio )
-{
+void OutlineViewShellBase::RegisterFactory( USHORT nPrio )
+{ 
     pFactory = new SfxViewFactory(
         &CreateInstance,&InitFactory,nPrio,"Outline");
     InitFactory();
@@ -67,7 +73,7 @@ void OutlineViewShellBase::InitFactory()
 
 
 OutlineViewShellBase::OutlineViewShellBase (
-    SfxViewFrame* _pFrame,
+    SfxViewFrame* _pFrame, 
     SfxViewShell* pOldShell)
     : ImpressViewShellBase (_pFrame, pOldShell)
 {

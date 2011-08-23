@@ -57,11 +57,15 @@
  * @file
  * Line object.
  ************************************************************************/
-#ifndef     _XFDRAWLINE_HXX
-#define     _XFDRAWLINE_HXX
+/*************************************************************************
+ * Change History
+ * 2004-2-17 create this file.
+ ************************************************************************/
+#ifndef		_XFDRAWLINE_HXX
+#define		_XFDRAWLINE_HXX
 
-#include    "xfdrawobj.hxx"
-#include    "xfpoint.hxx"
+#include	"xfdrawobj.hxx"
+#include	"xfpoint.hxx"
 
 /**
  * @brief
@@ -74,26 +78,26 @@ public:
 
 public:
     /**
-     * @descr   Set line start point.
+     * @descr	Set line start point.
      */
-    void    SetStartPoint(double x, double y);
+    void	SetStartPoint(double x, double y);
 
     /**
-     * @descr   Set line end point.
+     * @descr	Set line end point.
      */
-    void    SetEndPoint(double x, double y);
+    void	SetEndPoint(double x, double y);
 
     /**
-     * @descr   Output line object.
+     * @descr	Output line object.
      */
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    XFPoint m_aPoint1;
-    XFPoint m_aPoint2;
+    XFPoint	m_aPoint1;
+    XFPoint	m_aPoint2;
 };
 
-inline void XFDrawLine::SetStartPoint(double x, double y)
+inline void	XFDrawLine::SetStartPoint(double x, double y)
 {
     m_aPoint1.SetX(x);
     m_aPoint1.SetY(y);

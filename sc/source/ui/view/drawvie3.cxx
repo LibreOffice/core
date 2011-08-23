@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,8 @@
 #include "docsh.hxx"
 
 void ScIMapDlgSet( const Graphic& rGraphic, const ImageMap* pImageMap,
-                    const TargetList* pTargetList, void* pEditingObj );     // imapwrap
-sal_uInt16 ScIMapChildWindowId();
+                    const TargetList* pTargetList, void* pEditingObj );		// imapwrap
+USHORT ScIMapChildWindowId();
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -61,7 +61,8 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
     nTab( pData->GetTabNo() ),
     pDropMarker( NULL ),
     pDropMarkObj( NULL ),
-    bInConstruct( true )
+    bInConstruct( TRUE )
+    //HMHbDisableHdl( FALSE )
 {
     // #i73602# Use default from the configuration
     SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Calc());
@@ -74,17 +75,17 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
 
 // Verankerung setzen
 
-void ScDrawView::SetPageAnchored()
+void ScDrawView::SetAnchor( ScAnchorType eType )
 {
     SdrObject* pObj = NULL;
     if( AreObjectsMarked() )
     {
         const SdrMarkList* pMark = &GetMarkedObjectList();
-        sal_uLong nCount = pMark->GetMarkCount();
-        for( sal_uLong i=0; i<nCount; i++ )
+        ULONG nCount = pMark->GetMarkCount();
+        for( ULONG i=0; i<nCount; i++ )
         {
             pObj = pMark->GetMark(i)->GetMarkedSdrObj();
-            ScDrawLayer::SetPageAnchored( *pObj );
+            ScDrawLayer::SetAnchor( pObj, eType );
         }
 
         if ( pViewData )
@@ -92,44 +93,23 @@ void ScDrawView::SetPageAnchored()
     }
 }
 
-void ScDrawView::SetCellAnchored()
+ScAnchorType ScDrawView::GetAnchor() const
 {
-    if (!pDoc)
-        return;
-
-    SdrObject* pObj = NULL;
-    if( AreObjectsMarked() )
-    {
-        const SdrMarkList* pMark = &GetMarkedObjectList();
-        sal_uLong nCount = pMark->GetMarkCount();
-        for( sal_uLong i=0; i<nCount; i++ )
-        {
-            pObj = pMark->GetMark(i)->GetMarkedSdrObj();
-            ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, nTab);
-        }
-
-        if ( pViewData )
-            pViewData->GetDocShell()->SetDrawModified();
-    }
-}
-
-ScAnchorType ScDrawView::GetAnchorType() const
-{
-    sal_Bool bPage = false;
-    sal_Bool bCell = false;
+    BOOL bPage = FALSE;
+    BOOL bCell = FALSE;
     const SdrObject* pObj = NULL;
     if( AreObjectsMarked() )
     {
         const SdrMarkList* pMark = &GetMarkedObjectList();
-        sal_uLong nCount = pMark->GetMarkCount();
+        ULONG nCount = pMark->GetMarkCount();
         Point p0;
-        for( sal_uLong i=0; i<nCount; i++ )
+        for( ULONG i=0; i<nCount; i++ )
         {
             pObj = pMark->GetMark(i)->GetMarkedSdrObj();
-            if( ScDrawLayer::GetAnchorType( *pObj ) == SCA_CELL )
-                bCell =true;
+            if( ScDrawLayer::GetAnchor( pObj ) == SCA_CELL )
+                bCell =TRUE;
             else
-                bPage = sal_True;
+                bPage = TRUE;
         }
     }
     if( bPage && !bCell )
@@ -139,9 +119,9 @@ ScAnchorType ScDrawView::GetAnchorType() const
     return SCA_DONTKNOW;
 }
 
-void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void __EXPORT ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA(ScTabDeletedHint))                        // Tabelle geloescht
+    if (rHint.ISA(ScTabDeletedHint))						// Tabelle geloescht
     {
         SCTAB nDelTab = ((ScTabDeletedHint&)rHint).GetTab();
         if (ValidTab(nDelTab))
@@ -151,24 +131,10 @@ void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 HideSdrPage();
         }
     }
-    else if (rHint.ISA(ScTabSizeChangedHint))               // Groesse geaendert
+    else if (rHint.ISA(ScTabSizeChangedHint))				// Groesse geaendert
     {
         if ( nTab == ((ScTabSizeChangedHint&)rHint).GetTab() )
             UpdateWorkArea();
-    }
-    else if ( rHint.ISA( SdrHint ) )
-    {
-        if (const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint ))
-        {
-            //Update the anchors of any non note object that is cell anchored which has
-            //been moved since the last anchors for its position was calculated
-            if (pSdrHint->GetKind() == HINT_OBJCHG || pSdrHint->GetKind() == HINT_OBJINSERTED)
-                if (SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject()))
-                    if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjData(pObj))
-                        if (!pAnchor->mbNote && pAnchor->maLastRect != pObj->GetLogicRect())
-                            ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, nTab);
-        }
-        FmFormView::Notify( rBC,rHint );
     }
     else
         FmFormView::Notify( rBC,rHint );
@@ -180,8 +146,8 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
          pViewData->GetViewShell()->GetViewFrame()->HasChildWindow( ScIMapChildWindowId() ) &&
          pObj && ( pObj->ISA(SdrGrafObj) || pObj->ISA(SdrOle2Obj) ) )
     {
-        Graphic     aGraphic;
-        TargetList  aTargetList;
+        Graphic		aGraphic;
+        TargetList	aTargetList;
         ScIMapInfo* pIMapInfo = ScDrawLayer::GetIMapInfo( pObj );
         const ImageMap* pImageMap = NULL;
         if ( pIMapInfo )
@@ -200,11 +166,15 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
                 aGraphic = *pGraphic;
         }
 
-        ScIMapDlgSet( aGraphic, pImageMap, &aTargetList, pObj );    // aus imapwrap
+        ScIMapDlgSet( aGraphic, pImageMap, &aTargetList, pObj );	// aus imapwrap
 
         // TargetListe kann von uns wieder geloescht werden
-        for ( size_t i = 0, n = aTargetList.size(); i < n; ++i )
-            delete aTargetList[ i ];
+        String* pEntry = aTargetList.First();
+        while( pEntry )
+        {
+            delete pEntry;
+            pEntry = aTargetList.Next();
+        }
     }
 }
 

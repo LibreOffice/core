@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@ namespace rtl
 
 // class SvxWordLineModeItem ---------------------------------------------
 
-/*  [Description]
+/*	[Beschreibung]
 
-    This item describes, whether underlined and strikethrough is limited
-    to word boundaries.
+    Dieses Item beschreibt, ob Unterstrichen und Durchgestrichen auf
+    Wortgrenzen beschraenkt ist.
 */
 
 class EDITENG_DLLPUBLIC SvxWordLineModeItem : public SfxBoolItem
@@ -52,13 +52,13 @@ class EDITENG_DLLPUBLIC SvxWordLineModeItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxWordLineModeItem( const sal_Bool bWordLineMode /*= sal_False*/,
-                     const sal_uInt16 nId  );
+    SvxWordLineModeItem( const BOOL bWordLineMode /*= FALSE*/,
+                     const USHORT nId  );
 
-    // "pure virtual Methods" from SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
+    virtual SvStream&		Store(SvStream &, USHORT nItemVersion) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

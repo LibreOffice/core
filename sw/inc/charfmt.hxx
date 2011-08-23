@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #include <format.hxx>
 
-class SW_DLLPUBLIC SwCharFmt : public SwFmt
+class SwCharFmt : public SwFmt
 {
     friend class SwDoc;
     friend class SwTxtFmtColl;
@@ -46,14 +46,14 @@ class SW_DLLPUBLIC SwCharFmt : public SwFmt
 
 
 public:
-    TYPEINFO();    // already in base class Client
+    TYPEINFO();    //Bereits in Basisklasse Client drin.
 };
 
 namespace CharFmt
 {
     extern const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr );
-    extern const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, sal_uInt16 nWhich );
-    extern sal_Bool IsItemIncluded( const sal_uInt16 nWhich, const SwTxtAttr *pAttr );
+    extern const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, USHORT nWhich );
+    extern BOOL IsItemIncluded( const USHORT nWhich, const SwTxtAttr *pAttr );
 }
 
 #endif

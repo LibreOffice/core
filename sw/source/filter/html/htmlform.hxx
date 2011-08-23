@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,18 +32,18 @@
 
 enum HTMLEventType
 {
-    HTML_ET_ONSUBMITFORM,   HTML_ET_ONRESETFORM,
-    HTML_ET_ONGETFOCUS,     HTML_ET_ONLOSEFOCUS,
-    HTML_ET_ONCLICK,        HTML_ET_ONCLICK_ITEM,
-    HTML_ET_ONCHANGE,       HTML_ET_ONSELECT,
+    HTML_ET_ONSUBMITFORM,	HTML_ET_ONRESETFORM,
+    HTML_ET_ONGETFOCUS,		HTML_ET_ONLOSEFOCUS,
+    HTML_ET_ONCLICK,		HTML_ET_ONCLICK_ITEM,
+    HTML_ET_ONCHANGE,		HTML_ET_ONSELECT,
     HTML_ET_END
 };
 
-extern HTMLEventType aEventTypeTable[];
-extern const sal_Char * aEventListenerTable[];
-extern const sal_Char * aEventMethodTable[];
-extern const sal_Char * aEventSDOptionTable[];
-extern const sal_Char * aEventOptionTable[];
+extern HTMLEventType __FAR_DATA aEventTypeTable[];
+extern const sal_Char * __FAR_DATA aEventListenerTable[];
+extern const sal_Char * __FAR_DATA aEventMethodTable[];
+extern const sal_Char * __FAR_DATA aEventSDOptionTable[];
+extern const sal_Char * __FAR_DATA aEventOptionTable[];
 
 
 

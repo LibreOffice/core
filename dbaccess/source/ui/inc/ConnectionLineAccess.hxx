@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,17 +41,17 @@ namespace dbaui
     /** the class OConnectionLineAccess represents the accessible object for the connection between two table windows
         like they are used in the QueryDesign and the RelationDesign
     */
-    class OConnectionLineAccess     :   public VCLXAccessibleComponent
-                                    ,   public OConnectionLineAccess_BASE
+    class OConnectionLineAccess		:	public VCLXAccessibleComponent
+                                    ,	public OConnectionLineAccess_BASE
     {
-        const OTableConnection*             m_pLine; // the window which I should give accessibility to
+        const OTableConnection*				m_pLine; // the window which I should give accessibility to
     protected:
         /** this function is called upon disposing the component
         */
         virtual void SAL_CALL disposing();
 
         /** isEditable returns the current editable state
-            @return true if it is editable otherwise false
+            @return	true if it is editable otherwise false				
         */
         virtual sal_Bool isEditable() const;
     public:
@@ -75,7 +75,7 @@ namespace dbaui
         static ::rtl::OUString getImplementationName_Static(void) throw( com::sun::star::uno::RuntimeException );
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException);
-
+        
         // XAccessible
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
 

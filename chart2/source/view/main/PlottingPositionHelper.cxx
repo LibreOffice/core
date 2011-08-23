@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,14 +33,12 @@
 #include "ViewDefines.hxx"
 #include "Linear3DTransformation.hxx"
 #include "VPolarTransformation.hxx"
+
 #include "ShapeFactory.hxx"
 #include "PropertyMapper.hxx"
-#include "DateHelper.hxx"
-
-#include <com/sun/star/chart/TimeUnit.hpp>
-#include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
+#include <com/sun/star/chart2/AxisType.hpp>
 
 #include <rtl/math.hxx>
 
@@ -60,12 +58,6 @@ PlottingPositionHelper::PlottingPositionHelper()
         , m_nYResolution( 1000 )
         , m_nZResolution( 1000 )
         , m_bMaySkipPointsInRegressionCalculation( true )
-        , m_bDateAxis(false)
-        , m_nTimeResolution( ::com::sun::star::chart::TimeUnit::DAY )
-        , m_aNullDate(30,12,1899)
-        , m_fScaledCategoryWidth(1.0)
-        , m_bAllowShiftXAxisPos(false)
-        , m_bAllowShiftZAxisPos(false)
 {
 }
 PlottingPositionHelper::PlottingPositionHelper( const PlottingPositionHelper& rSource )
@@ -77,12 +69,6 @@ PlottingPositionHelper::PlottingPositionHelper( const PlottingPositionHelper& rS
         , m_nYResolution( rSource.m_nYResolution )
         , m_nZResolution( rSource.m_nZResolution )
         , m_bMaySkipPointsInRegressionCalculation( rSource.m_bMaySkipPointsInRegressionCalculation )
-        , m_bDateAxis( rSource.m_bDateAxis )
-        , m_nTimeResolution( rSource.m_nTimeResolution )
-        , m_aNullDate( rSource.m_aNullDate )
-        , m_fScaledCategoryWidth( rSource.m_fScaledCategoryWidth )
-        , m_bAllowShiftXAxisPos( rSource.m_bAllowShiftXAxisPos )
-        , m_bAllowShiftZAxisPos( rSource.m_bAllowShiftZAxisPos )
 {
 }
 
@@ -110,13 +96,13 @@ void PlottingPositionHelper::setTransformationSceneToScreen( const drawing::Homo
     m_xTransformationLogicToScene = NULL;
 }
 
-void PlottingPositionHelper::setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis )
+void PlottingPositionHelper::setScales( const uno::Sequence< ExplicitScaleData >& rScales, sal_Bool bSwapXAndYAxis )
 {
     m_aScales = rScales;
     m_bSwapXAndY = bSwapXAndYAxis;
     m_xTransformationLogicToScene = NULL;
 }
-const std::vector< ExplicitScaleData >& PlottingPositionHelper::getScales() const
+const uno::Sequence< ExplicitScaleData >& PlottingPositionHelper::getScales() const
 {
     return m_aScales;
 }
@@ -144,8 +130,8 @@ uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScale
         AxisOrientation nZAxisOrientation = m_aScales[2].Orientation;
 
         //apply scaling
-        doUnshiftedLogicScaling( &MinX, &MinY, &MinZ );
-        doUnshiftedLogicScaling( &MaxX, &MaxY, &MaxZ);
+        doLogicScaling( &MinX, &MinY, &MinZ );
+        doLogicScaling( &MaxX, &MaxY, &MaxZ);
 
         if(m_bSwapXAndY)
         {
@@ -191,9 +177,9 @@ uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScale
 drawing::Position3D PlottingPositionHelper::transformLogicToScene(
     double fX, double fY, double fZ, bool bClip ) const
 {
-    this->doLogicScaling( &fX,&fY,&fZ );
     if(bClip)
-        this->clipScaledLogicValues( &fX,&fY,&fZ );
+        this->clipLogicValues( &fX,&fY,&fZ );
+    this->doLogicScaling( &fX,&fY,&fZ );
 
     return this->transformScaledLogicToScene( fX, fY, fZ, false );
 }
@@ -213,6 +199,7 @@ drawing::Position3D PlottingPositionHelper::transformScaledLogicToScene(
     return SequenceToPosition3D(aSeq);
 }
 
+//static
 awt::Point PlottingPositionHelper::transformSceneToScreenPosition( const drawing::Position3D& rScenePosition3D
                 , const uno::Reference< drawing::XShapes >& xSceneTarget
                 , ShapeFactory* pShapeFactory
@@ -269,8 +256,8 @@ void PlottingPositionHelper::clipScaledLogicValues( double* pX, double* pY, doub
     double MaxZ = getLogicMaxZ();
 
     //apply scaling
-    doUnshiftedLogicScaling( &MinX, &MinY, &MinZ );
-    doUnshiftedLogicScaling( &MaxX, &MaxY, &MaxZ);
+    doLogicScaling( &MinX, &MinY, &MinZ );
+    doLogicScaling( &MaxX, &MaxY, &MaxZ);
 
     if(pX)
     {
@@ -306,8 +293,8 @@ basegfx::B2DRectangle PlottingPositionHelper::getScaledLogicClipDoubleRect() con
     double MaxZ = getLogicMaxZ();
 
     //apply scaling
-    doUnshiftedLogicScaling( &MinX, &MinY, &MinZ );
-    doUnshiftedLogicScaling( &MaxX, &MaxY, &MaxZ);
+    doLogicScaling( &MinX, &MinY, &MinZ );
+    doLogicScaling( &MaxX, &MaxY, &MaxZ);
 
     basegfx::B2DRectangle aRet( MinX, MaxY, MaxX, MinY );
     return aRet;
@@ -370,7 +357,7 @@ void PolarPlottingPositionHelper::setTransformationSceneToScreen( const drawing:
     PlottingPositionHelper::setTransformationSceneToScreen( rMatrix);
     m_aUnitCartesianToScene =impl_calculateMatrixUnitCartesianToScene( m_aMatrixScreenToScene );
 }
-void PolarPlottingPositionHelper::setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis )
+void PolarPlottingPositionHelper::setScales( const uno::Sequence< ExplicitScaleData >& rScales, sal_Bool bSwapXAndYAxis )
 {
     PlottingPositionHelper::setScales( rScales, bSwapXAndYAxis );
     m_aUnitCartesianToScene =impl_calculateMatrixUnitCartesianToScene( m_aMatrixScreenToScene );
@@ -380,7 +367,7 @@ void PolarPlottingPositionHelper::setScales( const std::vector< ExplicitScaleDat
 {
     ::basegfx::B3DHomMatrix aRet;
 
-    if( m_aScales.empty() )
+    if( !m_aScales.getLength() )
         return aRet;
 
     double fTranslate =1.0;
@@ -407,7 +394,7 @@ void PolarPlottingPositionHelper::setScales( const std::vector< ExplicitScaleDat
     double fTranslateY = fTranslate;
     double fTranslateZ = fTranslate;
 
-    double fScaleX = fScale;
+    double fScaleX = fScale;     
     double fScaleY = fScale;
     double fScaleZ = fScale;
 
@@ -435,7 +422,7 @@ void PolarPlottingPositionHelper::setScales( const std::vector< ExplicitScaleDat
 
     aRet.translate(fTranslateX, fTranslateY, fTranslateZ);//x first
     aRet.scale(fScaleX, fScaleY, fScaleZ);//x first
-
+    
     aRet = rMatrixScreenToScene * aRet;
     return aRet;
 }
@@ -465,11 +452,11 @@ double PolarPlottingPositionHelper::getWidthAngleDegree( double& fStartLogicValu
     double fStartAngleDegree = this->transformToAngleDegree( fStartLogicValueOnAngleAxis );
     double fEndAngleDegree   = this->transformToAngleDegree( fEndLogicValueOnAngleAxis );
     double fWidthAngleDegree = fEndAngleDegree - fStartAngleDegree;
-
+    
     if( ::rtl::math::approxEqual( fStartAngleDegree, fEndAngleDegree )
         && !::rtl::math::approxEqual( fStartLogicValueOnAngleAxis, fEndLogicValueOnAngleAxis ) )
         fWidthAngleDegree = 360.0;
-
+    
     while(fWidthAngleDegree<0.0)
         fWidthAngleDegree+=360.0;
     while(fWidthAngleDegree>360.0)
@@ -538,7 +525,7 @@ double PolarPlottingPositionHelper::transformToRadius( double fLogicValueOnRadiu
         double fY = m_bSwapXAndY ? getLogicMaxY() : fLogicValueOnRadiusAxis;
         if(bDoScaling)
             doLogicScaling( &fX, &fY, 0 );
-
+        
         fScaledLogicRadiusValue = m_bSwapXAndY ? fX : fY;
 
         bool bMinIsInnerRadius = true;
@@ -558,7 +545,7 @@ double PolarPlottingPositionHelper::transformToRadius( double fLogicValueOnRadiu
 
             double fMin = m_bSwapXAndY ? MinX : MinY;
             double fMax = m_bSwapXAndY ? MaxX : MaxY;
-
+            
             fInnerScaledLogicRadius = bMinIsInnerRadius ? fMin : fMax;
             fOuterScaledLogicRadius = bMinIsInnerRadius ? fMax : fMin;
         }
@@ -610,7 +597,7 @@ drawing::Position3D PolarPlottingPositionHelper::transformUnitCircleToScene( dou
         default: //NormalAxis_Z
             break;
     }
-
+    
     //!! applying matrix to vector does ignore translation, so it is important to use a B3DPoint here instead of B3DVector
     ::basegfx::B3DPoint aPoint(fX,fY,fZ);
     ::basegfx::B3DPoint aRet = m_aUnitCartesianToScene * aPoint;
@@ -620,10 +607,21 @@ drawing::Position3D PolarPlottingPositionHelper::transformUnitCircleToScene( dou
 drawing::Position3D PolarPlottingPositionHelper::transformAngleRadiusToScene( double fLogicValueOnAngleAxis, double fLogicValueOnRadiusAxis, double fLogicZ, bool bDoScaling ) const
 {
     double fUnitAngleDegree = this->transformToAngleDegree(fLogicValueOnAngleAxis,bDoScaling);
-    double fUnitRadius      = this->transformToRadius(fLogicValueOnRadiusAxis,bDoScaling);
+    double fUnitRadius      = this->transformToRadius(fLogicValueOnRadiusAxis,bDoScaling); 
 
     return transformUnitCircleToScene( fUnitAngleDegree, fUnitRadius, fLogicZ, bDoScaling );
 }
+
+#ifdef NOTYET
+double PolarPlottingPositionHelper::getInnerLogicRadius() const
+{
+    const ExplicitScaleData& rScale = m_bSwapXAndY ? m_aScales[0] : m_aScales[1];
+    if( AxisOrientation_MATHEMATICAL==rScale.Orientation )
+        return rScale.Minimum;
+    else
+        return rScale.Maximum;
+}
+#endif
 
 double PolarPlottingPositionHelper::getOuterLogicRadius() const
 {
@@ -644,41 +642,29 @@ double PlottingPositionHelper::getBaseValueY() const
     return m_aScales[1].Origin;
 }
 
-void PlottingPositionHelper::setTimeResolution( long nTimeResolution, const Date& rNullDate )
+/*
+// ____ XTransformation ____
+uno::Sequence< double > SAL_CALL PolarPlottingPositionHelper::transform(
+                        const uno::Sequence< double >& rSourceValues )
+            throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
-    m_nTimeResolution = nTimeResolution;
-    m_aNullDate = rNullDate;
-
-    //adapt category width
-    double fCategoryWidth = 1.0;
-    if( !m_aScales.empty() )
-    {
-        if( m_aScales[0].AxisType == ::com::sun::star::chart2::AxisType::DATE )
-        {
-            m_bDateAxis = true;
-            if( nTimeResolution == ::com::sun::star::chart::TimeUnit::YEAR )
-            {
-                const double fMonthCount = 12.0;//todo: this depends on the DateScaling and must be adjusted in case we use more generic calendars in future
-                fCategoryWidth = fMonthCount;
-            }
-        }
-    }
-    setScaledCategoryWidth(fCategoryWidth);
+    uno::Sequence< double > aSourceValues(3);
+    return aSourceValues;
 }
 
-void PlottingPositionHelper::setScaledCategoryWidth( double fScaledCategoryWidth )
+sal_Int32 SAL_CALL PolarPlottingPositionHelper::getSourceDimension() throw (uno::RuntimeException)
 {
-    m_fScaledCategoryWidth = fScaledCategoryWidth;
-}
-void PlottingPositionHelper::AllowShiftXAxisPos( bool bAllowShift )
-{
-    m_bAllowShiftXAxisPos = bAllowShift;
-}
-void PlottingPositionHelper::AllowShiftZAxisPos( bool bAllowShift )
-{
-    m_bAllowShiftZAxisPos = bAllowShift;
+    return 3;
 }
 
+sal_Int32 SAL_CALL PolarPlottingPositionHelper::getTargetDimension() throw (uno::RuntimeException)
+{
+    return 3;
 }
+*/
+
+//.............................................................................
+} //namespace chart
+//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

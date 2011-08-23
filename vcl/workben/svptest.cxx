@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,11 +47,9 @@
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
+using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 // -----------------------------------------------------------------------
 
 // Forward declaration
@@ -64,7 +62,7 @@ SAL_IMPLEMENT_MAIN()
     tools::extendApplicationEnvironment();
 
     Reference< XMultiServiceFactory > xMS;
-    xMS = cppu::createRegistryServiceFactory( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "types.rdb" ) ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
+    xMS = cppu::createRegistryServiceFactory( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
 
     InitVCL( xMS );
     ::Main();
@@ -81,13 +79,13 @@ class MyWin : public WorkWindow
 public:
                 MyWin( Window* pParent, WinBits nWinStyle );
 
-    void        MouseMove( const MouseEvent& rMEvt );
-    void        MouseButtonDown( const MouseEvent& rMEvt );
-    void        MouseButtonUp( const MouseEvent& rMEvt );
-    void        KeyInput( const KeyEvent& rKEvt );
-    void        KeyUp( const KeyEvent& rKEvt );
-    void        Paint( const Rectangle& rRect );
-    void        Resize();
+    void		MouseMove( const MouseEvent& rMEvt );
+    void		MouseButtonDown( const MouseEvent& rMEvt );
+    void		MouseButtonUp( const MouseEvent& rMEvt );
+    void		KeyInput( const KeyEvent& rKEvt );
+    void		KeyUp( const KeyEvent& rKEvt );
+    void		Paint( const Rectangle& rRect );
+    void		Resize();
 };
 
 // -----------------------------------------------------------------------
@@ -191,7 +189,7 @@ static Point project( const Point& rPoint )
 static Color approachColor( const Color& rFrom, const Color& rTo )
 {
     Color aColor;
-    sal_uInt8 nDiff;
+    UINT8 nDiff;
     // approach red
     if( rFrom.GetRed() < rTo.GetRed() )
     {

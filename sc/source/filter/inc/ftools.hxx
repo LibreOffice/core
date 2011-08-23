@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,18 +34,18 @@
 #include <limits>
 #include <memory>
 #include <tools/string.hxx>
+#include <tools/list.hxx>
 #include <tools/debug.hxx>
-#include <sal/macros.h>
 #include <oox/helper/helper.hxx>
-#include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 #include "filter.hxx"
 #include "scdllapi.h"
 
 // Common macros ==============================================================
 
+/** Expands to the size of a STATIC data array. */
+#define STATIC_TABLE_SIZE( array )  (sizeof(array)/sizeof(*(array)))
 /** Expands to a pointer behind the last element of a STATIC data array (like STL end()). */
-#define STATIC_TABLE_END( array )   ((array)+SAL_N_ELEMENTS(array))
+#define STATIC_TABLE_END( array )   ((array)+STATIC_TABLE_SIZE(array))
 
 /** Expands to a temporary String, created from an ASCII character array. */
 #define CREATE_STRING( ascii )      String( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
@@ -138,6 +138,126 @@ void insert_value( Type& rnBitField, InsertType nValue, sal_uInt8 nStartBit, sal
 
 // ============================================================================
 
+/** Deriving from this class prevents copy construction. */
+class ScfNoCopy
+{
+private:
+                        ScfNoCopy( const ScfNoCopy& );
+    ScfNoCopy&          operator=( const ScfNoCopy& );
+protected:
+    inline              ScfNoCopy() {}
+};
+
+// ----------------------------------------------------------------------------
+
+/** Deriving from this class prevents construction in general. */
+class ScfNoInstance : private ScfNoCopy {};
+
+// ============================================================================
+
+/** Simple shared pointer (NOT thread-save, but faster than boost::shared_ptr). */
+template< typename Type >
+class ScfRef
+{
+    template< typename > friend class ScfRef;
+
+public:
+    typedef Type        element_type;
+    typedef ScfRef      this_type;
+
+    inline explicit     ScfRef( element_type* pObj = 0 ) { eat( pObj ); }
+    inline /*implicit*/ ScfRef( const this_type& rRef ) { eat( rRef.mpObj, rRef.mpnCount ); }
+    template< typename Type2 >
+    inline /*implicit*/ ScfRef( const ScfRef< Type2 >& rRef ) { eat( rRef.mpObj, rRef.mpnCount ); }
+    inline              ~ScfRef() { rel(); }
+
+    inline void         reset( element_type* pObj = 0 ) { rel(); eat( pObj ); }
+    inline this_type&   operator=( const this_type& rRef ) { if( this != &rRef ) { rel(); eat( rRef.mpObj, rRef.mpnCount ); } return *this; }
+    template< typename Type2 >
+    inline this_type&   operator=( const ScfRef< Type2 >& rRef ) { rel(); eat( rRef.mpObj, rRef.mpnCount ); return *this; }
+
+    inline element_type* get() const { return mpObj; }
+    inline bool         is() const { return mpObj != 0; }
+
+    inline element_type* operator->() const { return mpObj; }
+    inline element_type& operator*() const { return *mpObj; }
+
+    inline bool         operator!() const { return mpObj == 0; }
+
+private:
+    inline void         eat( element_type* pObj, size_t* pnCount = 0 ) { mpObj = pObj; mpnCount = mpObj ? (pnCount ? pnCount : new size_t( 0 )) : 0; if( mpnCount ) ++*mpnCount; }
+    inline void         rel() { if( mpnCount && !--*mpnCount ) { DELETEZ( mpObj ); DELETEZ( mpnCount ); } }
+
+private:
+    Type*               mpObj;
+    size_t*             mpnCount;
+};
+
+template< typename Type >
+inline bool operator==( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
+{
+    return rxRef1.get() == rxRef2.get();
+}
+
+template< typename Type >
+inline bool operator!=( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
+{
+    return rxRef1.get() != rxRef2.get();
+}
+
+template< typename Type >
+inline bool operator<( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
+{
+    return rxRef1.get() < rxRef2.get();
+}
+
+template< typename Type >
+inline bool operator>( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
+{
+    return rxRef1.get() > rxRef2.get();
+}
+
+template< typename Type >
+inline bool operator<=( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
+{
+    return rxRef1.get() <= rxRef2.get();
+}
+
+template< typename Type >
+inline bool operator>=( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
+{
+    return rxRef1.get() >= rxRef2.get();
+}
+
+// ----------------------------------------------------------------------------
+
+/** Template for a map of ref-counted objects with additional accessor functions. */
+template< typename KeyType, typename ObjType >
+class ScfRefMap : public ::std::map< KeyType, ScfRef< ObjType > >
+{
+public:
+    typedef KeyType                             key_type;
+    typedef ScfRef< ObjType >                   ref_type;
+    typedef ::std::map< key_type, ref_type >    map_type;
+
+    /** Returns true, if the object accossiated to the passed key exists. */
+    inline bool         has( key_type nKey ) const
+                        {
+                            typename map_type::const_iterator aIt = find( nKey );
+                            return (aIt != this->end()) && aIt->second.is();
+                        }
+
+    /** Returns a reference to the object accossiated to the passed key, or 0 on error. */
+    inline ref_type     get( key_type nKey ) const
+                        {
+                            typename map_type::const_iterator aIt = find( nKey );
+                            if( aIt != this->end() ) return aIt->second;
+                            return ref_type();
+                        }
+};
+
+// ============================================================================
+
 class Color;
 class SfxPoolItem;
 class SfxItemSet;
@@ -149,7 +269,7 @@ class SotStorageStreamRef;
 class SvStream;
 
 /** Contains static methods used anywhere in the filters. */
-class ScfTools : boost::noncopyable
+class ScfTools : ScfNoInstance
 {
 public:
 
@@ -193,11 +313,11 @@ public:
 
     /** Returns true, if the passed item set contains the item.
         @param bDeep  true = Searches in parent item sets too. */
-    static bool         CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId, bool bDeep );
+    static bool         CheckItem( const SfxItemSet& rItemSet, USHORT nWhichId, bool bDeep );
     /** Returns true, if the passed item set contains at least one of the items.
         @param pnWhichIds  Zero-terminated array of Which-IDs.
         @param bDeep  true = Searches in parent item sets too. */
-    static bool         CheckItems( const SfxItemSet& rItemSet, const sal_uInt16* pnWhichIds, bool bDeep );
+    static bool         CheckItems( const SfxItemSet& rItemSet, const USHORT* pnWhichIds, bool bDeep );
 
     /** Puts the item into the passed item set.
         @descr  The item will be put into the item set, if bSkipPoolDef is false,
@@ -208,7 +328,7 @@ public:
         @param bSkipPoolDef  true = Do not put item if it is equal to pool default; false = Always put the item. */
     static void         PutItem(
                             SfxItemSet& rItemSet, const SfxPoolItem& rItem,
-                            sal_uInt16 nWhichId, bool bSkipPoolDef );
+                            USHORT nWhichId, bool bSkipPoolDef );
 
     /** Puts the item into the passed item set.
         @descr  The item will be put into the item set, if bSkipPoolDef is false,
@@ -280,10 +400,6 @@ private:
     static const String& GetHTMLIndexPrefix();
     /** Returns the prefix for table names. */
     static const String& GetHTMLNamePrefix();
-    /** We don't want anybody to instantiate this class, since it is just a
-        collection of static items. To enforce this, the default constructor
-        is made private */
-    ScfTools();
 };
 
 // Containers =================================================================
@@ -293,10 +409,100 @@ typedef ::std::vector< sal_Int16 >                  ScfInt16Vec;
 typedef ::std::vector< sal_uInt16 >                 ScfUInt16Vec;
 typedef ::std::vector< sal_Int32 >                  ScfInt32Vec;
 typedef ::std::vector< sal_uInt32 >                 ScfUInt32Vec;
-typedef ::std::vector< ::rtl::OUString >            ScfStringVec;
+typedef ::std::vector< sal_Int64 >                  ScfInt64Vec;
+typedef ::std::vector< sal_uInt64 >                 ScfUInt64Vec;
+typedef ::std::vector< String >                     ScfStringVec;
 
 // ----------------------------------------------------------------------------
 
+/** Template for a list that owns the contained objects.
+    @descr  This list stores pointers to objects and deletes the objects itself
+    on destruction. The Clear() method deletes all objects too. */
+template< typename Type > class ScfDelList
+{
+public:
+    inline explicit     ScfDelList( USHORT nInitSize = 16, USHORT nResize = 16 ) :
+                            maList( nInitSize, nResize ) {}
+    /** Creates a deep copy of the passed list (copy-constructs all contained objects). */
+    inline explicit     ScfDelList( const ScfDelList& rSrc ) { *this = rSrc; }
+    virtual             ~ScfDelList();
+
+    /** Creates a deep copy of the passed list (copy-constructs all contained objects). */
+    ScfDelList&         operator=( const ScfDelList& rSrc );
+
+    inline void         Insert( Type* pObj, ULONG nIndex )      { if( pObj ) maList.Insert( pObj, nIndex ); }
+    inline void         Append( Type* pObj )                    { if( pObj ) maList.Insert( pObj, LIST_APPEND ); }
+    /** Removes the object without deletion. */
+    inline Type*        Remove( ULONG nIndex )                  { return static_cast< Type* >( maList.Remove( nIndex ) ); }
+    /** Removes and deletes the object. */
+    inline void         Delete( ULONG nIndex )                  { delete Remove( nIndex ); }
+    /** Exchanges the contained object with the passed, returns the old. */
+    inline Type*        Exchange( Type* pObj, ULONG nIndex )    { return static_cast< Type* >( maList.Replace( pObj, nIndex ) ); }
+    /** Replaces (deletes) the contained object. */
+    inline void         Replace( Type* pObj, ULONG nIndex )     { delete Exchange( pObj, nIndex ); }
+
+    void                Clear();
+    inline ULONG        Count() const                           { return maList.Count(); }
+    inline bool         Empty() const                           { return maList.Count() == 0; }
+
+    inline Type*        GetCurObject() const                    { return static_cast< Type* >( maList.GetCurObject() ); }
+    inline ULONG        GetCurPos() const                       { return maList.GetCurPos(); }
+    inline Type*        GetObject( sal_uInt32 nIndex ) const    { return static_cast< Type* >( maList.GetObject( nIndex ) ); }
+
+    inline Type*        First() const                           { return static_cast< Type* >( maList.First() ); }
+    inline Type*        Last() const                            { return static_cast< Type* >( maList.Last() ); }
+    inline Type*        Next() const                            { return static_cast< Type* >( maList.Next() ); }
+    inline Type*        Prev() const                            { return static_cast< Type* >( maList.Prev() ); }
+
+private:
+    mutable List        maList;     /// The base container object.
+};
+
+template< typename Type > ScfDelList< Type >& ScfDelList< Type >::operator=( const ScfDelList& rSrc )
+{
+    Clear();
+    for( const Type* pObj = rSrc.First(); pObj; pObj = rSrc.Next() )
+        Append( new Type( *pObj ) );
+    return *this;
+}
+
+template< typename Type > ScfDelList< Type >::~ScfDelList()
+{
+    Clear();
+}
+
+template< typename Type > void ScfDelList< Type >::Clear()
+{
+    for( Type* pObj = First(); pObj; pObj = Next() )
+        delete pObj;
+    maList.Clear();
+}
+
+// ----------------------------------------------------------------------------
+
+/** Template for a stack that owns the contained objects.
+    @descr  This stack stores pointers to objects and deletes the objects
+    itself on destruction. The Clear() method deletes all objects too.
+    The Pop() method removes the top object from stack without deletion. */
+template< typename Type >
+class ScfDelStack : private ScfDelList< Type >
+{
+public:
+    inline              ScfDelStack( USHORT nInitSize = 16, USHORT nResize = 16 ) :
+                            ScfDelList< Type >( nInitSize, nResize ) {}
+
+    inline void         Push( Type* pObj )      { Append( pObj ); }
+    /** Removes the top object without deletion. */
+    inline Type*        Pop()                   { return Remove( Count() - 1 ); }
+
+    inline Type*        Top() const             { return GetObject( Count() - 1 ); }
+
+    using               ScfDelList< Type >::Clear;
+    using               ScfDelList< Type >::Count;
+    using               ScfDelList< Type >::Empty;
+};
+
+// ----------------------------------------------------------------------------
 class ScFormatFilterPluginImpl : public ScFormatFilterPlugin {
   public:
     ScFormatFilterPluginImpl();
@@ -304,20 +510,20 @@ class ScFormatFilterPluginImpl : public ScFormatFilterPlugin {
     virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, CharSet eSrc = RTL_TEXTENCODING_DONTKNOW );
     virtual FltError ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc );
     virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT );
-        // eFormat == EIF_AUTO  -> passender Filter wird automatisch verwendet
-        // eFormat == EIF_BIFF5 -> nur Biff5-Stream fuehrt zum Erfolg (auch wenn in einem Excel97-Doc)
-        // eFormat == EIF_BIFF8 -> nur Biff8-Stream fuehrt zum Erfolg (nur in Excel97-Docs)
+        // eFormat == EIF_AUTO	-> passender Filter wird automatisch verwendet
+        // eFormat == EIF_BIFF5	-> nur Biff5-Stream fuehrt zum Erfolg (auch wenn in einem Excel97-Doc)
+        // eFormat == EIF_BIFF8	-> nur Biff8-Stream fuehrt zum Erfolg (nur in Excel97-Docs)
         // eFormat == EIF_BIFF_LE4 -> nur Nicht-Storage-Dateien _koennen_ zum Erfolg fuehren
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* );
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
-                 const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
+                 const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, UINT32 nDifOption = SC_DIFOPT_EXCEL );
     virtual FltError ScImportRTF( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange );
-    virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange,
-                                   double nOutputFactor = 1.0, sal_Bool bCalcWidthHeight = true,
+    virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange, 
+                                   double nOutputFactor = 1.0, BOOL bCalcWidthHeight = TRUE, 
                                    SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true );
 
     virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange );
-    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, sal_Bool bCalcWidthHeight );
+    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight );
     virtual String         GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName );
 
     // various export filters
@@ -326,10 +532,10 @@ class ScFormatFilterPluginImpl : public ScFormatFilterPlugin {
 #endif
     virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, CharSet eDest );
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const CharSet eDest,
-                                 sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
+                                 UINT32 nDifOption = SC_DIFOPT_EXCEL );
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest,
-                 sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
-    virtual FltError ScExportHTML( SvStream&, const String& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, sal_Bool bAll,
+                 UINT32 nDifOption = SC_DIFOPT_EXCEL );
+    virtual FltError ScExportHTML( SvStream&, const String& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, BOOL bAll,
                   const String& rStreamPath, String& rNonConvertibleChars );
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest );
 };

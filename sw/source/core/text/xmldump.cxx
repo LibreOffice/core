@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -33,14 +32,15 @@
 #include "porlin.hxx"
 #include "porlay.hxx"
 #include "portxt.hxx"
-#include <libxml/xmlwriter.h>
 #include <SwPortionHandler.hxx>
+
+
 
 class XmlPortionDumper:public SwPortionHandler
 {
   private:
     xmlTextWriterPtr writer;
-    sal_uInt16 ofs;
+    USHORT ofs;
   public:
 
     XmlPortionDumper( xmlTextWriterPtr some_writer ):writer( some_writer ), ofs( 0 )
@@ -57,8 +57,8 @@ class XmlPortionDumper:public SwPortionHandler
         @param rText
                 text which is painted on-screen
       */
-    virtual void Text( sal_uInt16 nLength,
-                       sal_uInt16 nType )
+    virtual void Text( USHORT nLength,
+                       USHORT nType )
     {
         ofs += nLength;
         xmlTextWriterStartElement( writer, BAD_CAST( "Text" ) );
@@ -79,9 +79,9 @@ class XmlPortionDumper:public SwPortionHandler
         @param nType
                 type of this portion
       */
-    virtual void Special( sal_uInt16 nLength,
+    virtual void Special( USHORT nLength,
                           const String & rText,
-                          sal_uInt16 nType )
+                          USHORT nType )
     {
         xmlTextWriterStartElement( writer, BAD_CAST( "Special" ) );
         xmlTextWriterWriteFormatAttribute( writer,
@@ -110,7 +110,7 @@ class XmlPortionDumper:public SwPortionHandler
       * @param nLength
       *         number of 'model string' characters to be skipped
       */
-    virtual void Skip( sal_uInt16 nLength )
+    virtual void Skip( USHORT nLength )
     {
         xmlTextWriterStartElement( writer, BAD_CAST( "Skip" ) );
         xmlTextWriterWriteFormatAttribute( writer,
@@ -128,7 +128,6 @@ class XmlPortionDumper:public SwPortionHandler
 
 };
 
-#if OSL_DEBUG_LEVEL > 1
 
 void SwTxtPortion::dumpPortionAsXml( xub_StrLen ofs, XubString & /*aText */,
                                      xmlTextWriterPtr writer )
@@ -312,7 +311,3 @@ void SwTxtFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
     if ( HasFollow() )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%p", GetFollow() );
 }
-
-#endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

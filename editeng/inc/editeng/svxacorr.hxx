@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,81 +50,82 @@ class SotStorageRef;
 class SotStorage;
 class Window;
 
-// Auto correct flags
-const long CptlSttSntnc     = 0x00000001;   // Capital letters at the beginning of a sentence
-const long CptlSttWrd       = 0x00000002;   // not two Capital letters at the beginning of a word
-const long AddNonBrkSpace   = 0x00000004;   // Add non breaking space before :;?!
-const long ChgOrdinalNumber = 0x00000008;   // Ordinal-Number 1st, 2nd,..
-const long ChgToEnEmDash    = 0x00000010;   // - -> Endash/Emdash
-const long ChgWeightUnderl  = 0x00000020;   // * -> Bold, _ -> Underscore
-const long SetINetAttr      = 0x00000040;   // Set INetAttribut
-const long Autocorrect      = 0x00000080;   // Call AutoCorrect
-const long ChgQuotes        = 0x00000100;   // replace double quotes
-const long SaveWordCplSttLst= 0x00000200;   // Save Auto correction of Capital letter at beginning of sentence.
-const long SaveWordWrdSttLst= 0x00000400;   // Save Auto correction of 2 Capital letter at beginning of word.
-const long IgnoreDoubleSpace= 0x00000800;   // Ignore 2 Spaces
-const long ChgSglQuotes     = 0x00001000;   // Replace simple quotes
+// Flags fuer die AutoKorrekt-Flags
+const long CptlSttSntnc		= 0x00000001;	// Gross-Buchstaben am SatzAnfang
+const long CptlSttWrd		= 0x00000002;	// keine 2 Gr.-Buchst. am WordAnfang
+const long AddNonBrkSpace   = 0x00000004;	// Add non breaking space before :;?!
+const long ChgOrdinalNumber = 0x00000008;	// Ordinal-Number 1st, 2nd,..
+const long ChgToEnEmDash    = 0x00000010;	// - -> Endash/Emdash
+const long ChgWeightUnderl  = 0x00000020;	// * -> Fett, _ -> unterstreichen
+const long SetINetAttr      = 0x00000040;	// INetAttribut setzen
+const long Autocorrect 		= 0x00000080;	// Autokorrektur aufrufen
+const long ChgQuotes		= 0x00000100;	// doppelte Quotes ersetzen
+const long SaveWordCplSttLst= 0x00000200;	// GrB. am SatzAnf. auto. aufnehmen
+const long SaveWordWrdSttLst= 0x00000400;	// 2 GrB. am WortAnf. auto. aufnehmen
+const long IgnoreDoubleSpace= 0x00000800;	// 2 Spaces ignorieren
+const long ChgSglQuotes		= 0x00001000;	// einfache Quotes ersetzen
 const long CorrectCapsLock  = 0x00002000;   // Correct accidental use of cAPS LOCK key
 
-const long ChgWordLstLoad   = 0x20000000;   // Replacement list loaded
-const long CplSttLstLoad    = 0x40000000;   // Exception list for Capital letters Start loaded
-const long WrdSttLstLoad    = 0x80000000;   // Exception list for Word Start loaded
+const long ChgWordLstLoad	= 0x20000000;	// Ersetzungsliste geladen
+const long CplSttLstLoad	= 0x40000000;	// Exceptionlist fuer CplStart geladen
+const long WrdSttLstLoad	= 0x80000000;	// Exceptionlist fuer WordStart geladen
 
 // TODO: handle unicodes > U+FFFF and check users of this class
 
-// only a mapping class
+// nur eine Mappingklasse
 class EDITENG_DLLPUBLIC SvxAutoCorrDoc
 {
 public:
     SvxAutoCorrDoc() {}
     virtual ~SvxAutoCorrDoc();
 
-    virtual sal_Bool Delete( xub_StrLen nStt, xub_StrLen nEnd ) = 0;
-    virtual sal_Bool Insert( xub_StrLen nPos, const String& rTxt ) = 0;
-    virtual sal_Bool Replace( xub_StrLen nPos, const String& rTxt ) = 0;
-    virtual sal_Bool ReplaceRange( xub_StrLen nPos, xub_StrLen nLen, const String& rTxt ) = 0;
+    virtual BOOL Delete( xub_StrLen nStt, xub_StrLen nEnd ) = 0;
+    virtual BOOL Insert( xub_StrLen nPos, const String& rTxt ) = 0;
+    virtual BOOL Replace( xub_StrLen nPos, const String& rTxt ) = 0;
 
-    virtual sal_Bool SetAttr( xub_StrLen nStt, xub_StrLen nEnd, sal_uInt16 nSlotId,
+    virtual BOOL SetAttr( xub_StrLen nStt, xub_StrLen nEnd, USHORT nSlotId,
                             SfxPoolItem& ) = 0;
 
-    virtual sal_Bool SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const String& rURL ) = 0;
+    virtual BOOL SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const String& rURL ) = 0;
 
-    // Return the text of a previous paragraph. This must not be empty!
-    // If no paragraph exits or just an empty one, then return 0.
-    // The flag indicates:
-    //      TRUE: before the normal insertion position (TRUE)
-    //      FALSE: in which the corrected word was inserted.
-    //             (Does not to have to be the same paragraph !!!!)
-    virtual const String* GetPrevPara( sal_Bool bAtNormalPos ) = 0;
+    // returne den Text eines vorherigen Absatzes.
+    // Dieser darf nicht leer sein!
+    // Gibt es diesen nicht oder gibt es davor nur Leere, dann returne 0
+    // Das Flag gibt an:
+    //		TRUE: den, vor der normalen Einfuegeposition (TRUE)
+    // 		FALSE: den, in den das korrigierte Wort eingfuegt wurde.
+    //				(Muss nicht der gleiche Absatz sein!!!!)
+    virtual const String* GetPrevPara( BOOL bAtNormalPos ) = 0;
 
-    virtual sal_Bool ChgAutoCorrWord( xub_StrLen& rSttPos, xub_StrLen nEndPos,
+    virtual BOOL ChgAutoCorrWord( xub_StrLen& rSttPos, xub_StrLen nEndPos,
                                   SvxAutoCorrect& rACorrect,
                                   const String** ppPara ) = 0;
-    // Is called after the change of the signs by the functions
-    //  - FnCptlSttWrd
-    //  - FnCptlSttSntnc
-    // As an option, the words can then be inserted into the exception lists.
-    virtual void SaveCpltSttWord( sal_uLong nFlag, xub_StrLen nPos,
+    // wird nach dem austauschen der Zeichen von den Funktionen
+    //	- FnCptlSttWrd
+    // 	- FnCptlSttSntnc
+    // gerufen. Dann koennen die Worte ggfs. in die Ausnahmelisten
+    // aufgenommen werden.
+    virtual void SaveCpltSttWord( ULONG nFlag, xub_StrLen nPos,
                                     const String& rExceptWord,
                                     sal_Unicode cChar );
 
-    // which language at the position?
-    virtual LanguageType GetLanguage( xub_StrLen nPos, sal_Bool bPrevPara = sal_False ) const;
+    // welche Sprache gilt an der Position?
+    virtual LanguageType GetLanguage( xub_StrLen nPos, BOOL bPrevPara = FALSE ) const;
 };
 
 
 class EDITENG_DLLPUBLIC SvxAutocorrWord
 {
     String sShort, sLong;
-    sal_Bool bIsTxtOnly;                // Is pure ASCII - Text
+    BOOL bIsTxtOnly;				// ist reiner ASCII - Text
 public:
-    SvxAutocorrWord( const String& rS, const String& rL, sal_Bool bFlag = sal_True )
+    SvxAutocorrWord( const String& rS, const String& rL, BOOL bFlag = TRUE )
         : sShort( rS ), sLong( rL ), bIsTxtOnly( bFlag )
     {}
 
-    const String& GetShort() const                  { return sShort; }
-    const String& GetLong() const                   { return sLong; }
-    sal_Bool IsTextOnly() const                         { return bIsTxtOnly; }
+    const String& GetShort() const					{ return sShort; }
+    const String& GetLong() const					{ return sLong; }
+    BOOL IsTextOnly() const							{ return bIsTxtOnly; }
 };
 
 typedef SvxAutocorrWord* SvxAutocorrWordPtr;
@@ -133,28 +134,28 @@ SV_DECL_PTRARR_SORT_DEL_VISIBILITY( SvxAutocorrWordList, SvxAutocorrWordPtr, 10,
 class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
 {
     String sShareAutoCorrFile, sUserAutoCorrFile;
-    // If the AutoCorr file is newer
+    // falls die AutoCorr Datei neuer ist
     Date aModifiedDate;
     Time aModifiedTime, aLastCheckTime;
 
-    LanguageType            eLanguage; //LANGUAGE_DONTKNOW use for all languages
-    SvStringsISortDtor*     pCplStt_ExcptLst;
-    SvStringsISortDtor*     pWrdStt_ExcptLst;
-    SvxAutocorrWordList*    pAutocorr_List;
-    SvxAutoCorrect&         rAutoCorrect;
+    LanguageType 			eLanguage; //LANGUAGE_DONTKNOW fuer alle Sprachen verwenden
+    SvStringsISortDtor* 	pCplStt_ExcptLst;
+    SvStringsISortDtor* 	pWrdStt_ExcptLst;
+    SvxAutocorrWordList* 	pAutocorr_List;
+    SvxAutoCorrect&			rAutoCorrect;
 
     long nFlags;
 
-    sal_Bool IsFileChanged_Imp();
+    BOOL IsFileChanged_Imp();
     void LoadXMLExceptList_Imp( SvStringsISortDtor*& rpLst,
                                 const sal_Char* pStrmName,
                                 SotStorageRef& rStg);
     void SaveExceptList_Imp( const SvStringsISortDtor& rLst,
                                 const sal_Char* pStrmName,
                                 SotStorageRef& rStg,
-                                sal_Bool bConvert = sal_False);
+                                BOOL bConvert = FALSE);
 
-    sal_Bool MakeBlocklist_Imp( SotStorage& rStg );
+    BOOL MakeBlocklist_Imp( SotStorage& rStg );
     void RemoveStream_Imp( const String& rName );
     void MakeUserStorage_Impl();
 
@@ -165,36 +166,36 @@ public:
             LanguageType eLang);
     ~SvxAutoCorrectLanguageLists();
 
-    // Load, Set, Get - the replacement list
+    // Lade, Setze, Gebe - die Ersetzungsliste
     SvxAutocorrWordList* LoadAutocorrWordList();
     void SetAutocorrWordList( SvxAutocorrWordList* pList );
     const SvxAutocorrWordList* GetAutocorrWordList();
 
-    // Load, Set, Get - the exception list for Capital letter at the
-    // beginning of a sentence
+    // Lade, Setze, Gebe - die Ausnahmeliste fuer Grossbuchstabe am
+    // Satzanfang
     SvStringsISortDtor* LoadCplSttExceptList();
     void SaveCplSttExceptList();
     void SetCplSttExceptList( SvStringsISortDtor* pList );
     SvStringsISortDtor* GetCplSttExceptList();
-    sal_Bool AddToCplSttExceptList(const String& rNew);
+    BOOL AddToCplSttExceptList(const String& rNew);
 
-    // Load, Set, Get the exception list for 2 Capital letters at the
-    // begining of a word.
+    // Lade, Setze, Gebe die Ausnahmeliste fuer 2 Grossbuchstaben am
+    // Wortanfang
     SvStringsISortDtor* LoadWrdSttExceptList();
     void SaveWrdSttExceptList();
     void SetWrdSttExceptList( SvStringsISortDtor* pList );
     SvStringsISortDtor* GetWrdSttExceptList();
-    sal_Bool AddToWrdSttExceptList(const String& rNew);
+    BOOL AddToWrdSttExceptList(const String& rNew);
 
-    // Save word substitutions:
-    //      Store these directly in the storage. The word list is updated
-    //      accordingly!
-    //  - pure Text
-    sal_Bool PutText( const String& rShort, const String& rLong );
-    //  - Text with attribution (only the SWG - SWG format!)
-    sal_Bool PutText( const String& rShort, SfxObjectShell& );
-    //  - Deleting an entry
-    sal_Bool DeleteText( const String& rShort );
+    // Speichern von Wortersetzungen:
+    //		Diese speichern direkt im Storage. Die Wortliste wird
+    //		entsprechend aktualisiert!
+    //	- purer Text
+    BOOL PutText( const String& rShort, const String& rLong );
+    //	- Text mit Attributierung (kann nur der SWG - SWG-Format!)
+    BOOL PutText( const String& rShort, SfxObjectShell& );
+    //	- loesche einen Eintrag
+    BOOL DeleteText( const String& rShort );
 };
 
 
@@ -204,9 +205,9 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
 
     String sShareAutoCorrFile, sUserAutoCorrFile;
 
-    SvxSwAutoFmtFlags aSwFlags;     // StarWriter AutoFormat Flags
+    SvxSwAutoFmtFlags aSwFlags;		// StarWriter AutoFormat-Flags
 
-    // all languages in a table
+    // alle Sprachen in einer Tabelle
     SvxAutoCorrLanguageTable_Impl* pLangTable;
     SvxAutoCorrLastFileAskTable_Impl* pLastFileTable;
     CharClass* pCharClass;
@@ -226,21 +227,21 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
     void _GetCharClass( LanguageType eLang );
 
 protected:
-    //  - Text with attribution (only the SWG - SWG format!)
-    //      rShort is the stream name - encrypted!
-    virtual sal_Bool PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String& rFileName, const String& rShort, SfxObjectShell& ,
+    //	- Text mit Attributierung (kann nur der SWG - SWG-Format!)
+    //		rShort ist der Stream-Name - gecryptet!
+    virtual BOOL PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String& rFileName, const String& rShort, SfxObjectShell& ,
                             String& );
 
-    // required language in the table add if possible only when the file exists
-    sal_Bool    CreateLanguageFile(LanguageType eLang, sal_Bool bNewFile = sal_True);
-    //  - Return the replacement text (only for SWG format, all others can be
-    //      taken from the word list!)
-    //      rShort is the stream name - encrypted!
+    // geforderte Sprache in die Tabelle eintragen gfs. nur wenn das file existiert
+    BOOL 	CreateLanguageFile(LanguageType eLang, BOOL bNewFile = TRUE);
+    //	- return den Ersetzungstext (nur fuer SWG-Format, alle anderen
+    //		koennen aus der Wortliste herausgeholt werden!)
+    //		rShort ist der Stream-Name - gecryptet!
 public:
 
-    sal_Unicode GetQuote( sal_Unicode cInsChar, sal_Bool bSttQuote,
+    sal_Unicode GetQuote( sal_Unicode cInsChar, BOOL bSttQuote,
                             LanguageType eLang ) const;
-    virtual sal_Bool GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String& rFileName, const String& rShort, String& rLong );
+    virtual BOOL GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String& rFileName, const String& rShort, String& rLong );
 
     TYPEINFO();
 
@@ -249,59 +250,59 @@ public:
     SvxAutoCorrect( const SvxAutoCorrect& );
     virtual ~SvxAutoCorrect();
 
-    // Execute an AutoCorrect.
-    // Returns what has been executed, according to the above flags
-    sal_uLong AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
-                           xub_StrLen nPos, sal_Unicode cInsChar, sal_Bool bInsert, Window* pFrameWin = NULL );
+    // fuehre eine AutoKorrektur aus.
+    // returnt was ausgefuehrt wurde; entsprechend den obigen Flags
+    ULONG AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
+                        xub_StrLen nPos, sal_Unicode cInsChar, BOOL bInsert, Window* pFrameWin = NULL );
 
-    // Return for the autotext expansion the previous word,
-    // AutoCorrect - corresponding algorithm
-    sal_Bool GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc, const String& rTxt,
+    // return fuer die Autotext Expandierung das vorherige Wort, was dem
+    // AutoCorrect - Algorythmus entspricht.
+    BOOL GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc, const String& rTxt,
                                 xub_StrLen nPos, String& rWord ) const;
 
-    // Search for or or the words in the replacement table.
-    // rText - check in this text the words of the list
-    // rStt - the detected starting position
-    // nEnd - to check position - as of this item forward
-    // rLang - Input: in which language is searched
-    //         Output: in which "language list" was it found
+    // suche das oder die Worte in der ErsetzungsTabelle.
+    // rText - ueberpruefe in diesem Text die Worte der Liste
+    // rStt - die gefundene Startposition
+    // nEnd - zu ueberpruefende Position - ab dieser Pos nach vorne
+    // rLang - Input: in welcher Sprache wird gesucht
+    //			Output: in welcher "Sprach-Liste" wurde es gefunden
     const SvxAutocorrWord* SearchWordsInList( const String& rTxt,
                                     xub_StrLen& rStt, xub_StrLen nEndPos,
                                     SvxAutoCorrDoc& rDoc,
                                     LanguageType& rLang );
 
-    // Query/Set the Character for the Quote substitution
-    sal_Unicode GetStartSingleQuote() const         { return cStartSQuote; }
-    sal_Unicode GetEndSingleQuote() const           { return cEndSQuote; }
-    sal_Unicode GetStartDoubleQuote() const         { return cStartDQuote; }
-    sal_Unicode GetEndDoubleQuote() const           { return cEndDQuote; }
+    // erfrage / setze die Zeichen fuer die Quote-Ersetzung
+    sal_Unicode GetStartSingleQuote() const 		{ return cStartSQuote; }
+    sal_Unicode GetEndSingleQuote() const			{ return cEndSQuote; }
+    sal_Unicode GetStartDoubleQuote() const 		{ return cStartDQuote; }
+    sal_Unicode GetEndDoubleQuote() const			{ return cEndDQuote; }
 
-    void SetStartSingleQuote( const sal_Unicode cStart )    { cStartSQuote = cStart; }
-    void SetEndSingleQuote( const sal_Unicode cEnd )        { cEndSQuote = cEnd; }
-    void SetStartDoubleQuote( const sal_Unicode cStart )    { cStartDQuote = cStart; }
-    void SetEndDoubleQuote( const sal_Unicode cEnd )        { cEndDQuote = cEnd; }
+    void SetStartSingleQuote( const sal_Unicode cStart ) 	{ cStartSQuote = cStart; }
+    void SetEndSingleQuote( const sal_Unicode cEnd ) 		{ cEndSQuote = cEnd; }
+    void SetStartDoubleQuote( const sal_Unicode cStart ) 	{ cStartDQuote = cStart; }
+    void SetEndDoubleQuote( const sal_Unicode cEnd ) 		{ cEndDQuote = cEnd; }
 
     String GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
-                    sal_Unicode cInsChar, sal_Bool bSttQuote );
+                    sal_Unicode cInsChar, BOOL bSttQuote );
     void InsertQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
-                    sal_Unicode cInsChar, sal_Bool bSttQuote, sal_Bool bIns );
+                    sal_Unicode cInsChar, BOOL bSttQuote, BOOL bIns );
 
-    // Query/Set the name of the AutoCorrect file
-    // the default is "autocorr.dat"
+    // erfrage / setze den Namen der AutoKorrektur-Datei
+    // defaultet auf "autocorr.dat"
     String GetAutoCorrFileName( LanguageType eLang = LANGUAGE_SYSTEM,
-                                sal_Bool bNewFile = sal_False,
-                                sal_Bool bTstUserExist = sal_False ) const;
+                                BOOL bNewFile = FALSE,
+                                BOOL bTstUserExist = FALSE ) const;
     void SetUserAutoCorrFileName( const String& rNew );
     void SetShareAutoCorrFileName( const String& rNew );
 
-    // Query/Set the current settings of AutoCorrect
-    long GetFlags() const                       { return nFlags; }
-    inline SvxSwAutoFmtFlags&   GetSwFlags()    { return aSwFlags;}
-    sal_Bool IsAutoCorrFlag( long nFlag ) const
-                                { return nFlags & nFlag ? sal_True : sal_False; }
-    void SetAutoCorrFlag( long nFlag, sal_Bool bOn = sal_True );
+    // erfrage / setze die aktuellen Einstellungen der AutoKorrektur
+    long GetFlags() const						{ return nFlags; }
+    inline SvxSwAutoFmtFlags&	GetSwFlags()	{ return aSwFlags;}
+    BOOL IsAutoCorrFlag( long nFlag ) const
+                                { return nFlags & nFlag ? TRUE : FALSE; }
+    void SetAutoCorrFlag( long nFlag, BOOL bOn = TRUE );
 
-    // Load, Set, Get - the replacement list
+    // Lade, Setze, Gebe - die Ersetzungsliste
     SvxAutocorrWordList* LoadAutocorrWordList(
                                     LanguageType eLang = LANGUAGE_SYSTEM )
         { return _GetLanguageList( eLang ).LoadAutocorrWordList(); }
@@ -309,70 +310,72 @@ public:
                                     LanguageType eLang = LANGUAGE_SYSTEM )
         { return _GetLanguageList( eLang ).GetAutocorrWordList(); }
 
-    // Save word substitutions:
-    //      Save these directly in the storage. The word list is updated
-    //      accordingly!
-    //  - pure Text
-    sal_Bool PutText( const String& rShort, const String& rLong, LanguageType eLang = LANGUAGE_SYSTEM );
-    //  - Text with attribution (only in the SWG - SWG format!)
-    sal_Bool PutText( const String& rShort, SfxObjectShell& rShell,
+    // Speichern von Wortersetzungen:
+    //		Diese speichern direkt im Storage. Die Wortliste wird
+    //		entsprechend aktualisiert!
+    //	- purer Text
+    BOOL PutText( const String& rShort, const String& rLong, LanguageType eLang = LANGUAGE_SYSTEM );
+    //	- Text mit Attributierung (kann nur der SWG - SWG-Format!)
+    BOOL PutText( const String& rShort, SfxObjectShell& rShell,
                  LanguageType eLang = LANGUAGE_SYSTEM )
         { return _GetLanguageList( eLang ).PutText(rShort, rShell ); }
 
-    //  - Delete a entry
-    sal_Bool DeleteText( const String& rShort, LanguageType eLang = LANGUAGE_SYSTEM);
+    //	- loesche einen Eintrag
+    BOOL DeleteText( const String& rShort, LanguageType eLang = LANGUAGE_SYSTEM);
 
-    // Load, Set, Get - the exception list for capital letters at the
-    // beginning of a sentence
+    // Lade, Setze, Gebe - die Ausnahmeliste fuer Grossbuchstabe am
+    // Satzanfang
     void SaveCplSttExceptList( LanguageType eLang = LANGUAGE_SYSTEM );
     SvStringsISortDtor* LoadCplSttExceptList(
                                     LanguageType eLang = LANGUAGE_SYSTEM)
-        {   return _GetLanguageList( eLang ).LoadCplSttExceptList(); }
+        {	return _GetLanguageList( eLang ).LoadCplSttExceptList(); }
     const SvStringsISortDtor* GetCplSttExceptList(
                                     LanguageType eLang = LANGUAGE_SYSTEM )
-        {   return _GetLanguageList( eLang ).GetCplSttExceptList(); }
+        {	return _GetLanguageList( eLang ).GetCplSttExceptList(); }
 
-    // Adds a single word. The list will be immediately written to the file!
-    sal_Bool AddCplSttException( const String& rNew,
+    // fuegt ein einzelnes Wort hinzu. Die Liste wird sofort
+    // in die Datei geschrieben!
+    BOOL AddCplSttException( const String& rNew,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
 
-    // Load, Set, Get the exception list for 2 Capital letters at the
-    // beginning of a word.
+    // Lade, Setze, Gebe die Ausnahmeliste fuer 2 Grossbuchstaben am
+    // Wortanfang
     void SaveWrdSttExceptList( LanguageType eLang = LANGUAGE_SYSTEM );
     SvStringsISortDtor* LoadWrdSttExceptList(
                                     LanguageType eLang = LANGUAGE_SYSTEM )
-        {   return _GetLanguageList( eLang ).LoadWrdSttExceptList(); }
+        {	return _GetLanguageList( eLang ).LoadWrdSttExceptList(); }
     const SvStringsISortDtor* GetWrdSttExceptList(
                                     LanguageType eLang = LANGUAGE_SYSTEM )
-        {   return _GetLanguageList( eLang ).GetWrdSttExceptList(); }
-    // Adds a single word. The list will be immediately written to the file!
-    sal_Bool AddWrtSttException( const String& rNew, LanguageType eLang = LANGUAGE_SYSTEM);
+        {	return _GetLanguageList( eLang ).GetWrdSttExceptList(); }
+    // fuegt ein einzelnes Wort hinzu. Die Liste wird sofort
+    // in die Datei geschrieben!
+    BOOL AddWrtSttException( const String& rNew, LanguageType eLang = LANGUAGE_SYSTEM);
 
-    // Search through the Languages for the entry
-    sal_Bool FindInWrdSttExceptList( LanguageType eLang, const String& sWord );
-    sal_Bool FindInCplSttExceptList( LanguageType eLang, const String& sWord,
-                                    sal_Bool bAbbreviation = sal_False);
+    //ueber die Sprachen nach dem Eintrag suchen
+    BOOL FindInWrdSttExceptList( LanguageType eLang, const String& sWord );
+    BOOL FindInCplSttExceptList( LanguageType eLang, const String& sWord,
+                                    BOOL bAbbreviation = FALSE);
 
-    // Methods for the auto-correction
-    sal_Bool FnCptlSttWrd( SvxAutoCorrDoc&, const String&,
+    // die einzelnen Methoden fuer die Autokorrektur
+    BOOL FnCptlSttWrd( SvxAutoCorrDoc&, const String&,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
-    sal_Bool FnChgOrdinalNumber( SvxAutoCorrDoc&, const String&,
+    BOOL FnChgOrdinalNumber( SvxAutoCorrDoc&, const String&,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
-    sal_Bool FnChgToEnEmDash( SvxAutoCorrDoc&, const String&,
+    BOOL FnChgToEnEmDash( SvxAutoCorrDoc&, const String&,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
-    sal_Bool FnAddNonBrkSpace( SvxAutoCorrDoc&, const String&,
+    BOOL FnAddNonBrkSpace( SvxAutoCorrDoc&, const String&,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
-    sal_Bool FnSetINetAttr( SvxAutoCorrDoc&, const String&,
+    BOOL FnSetINetAttr( SvxAutoCorrDoc&, const String&,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
-    sal_Bool FnChgWeightUnderl( SvxAutoCorrDoc&, const String&,
+    BOOL FnChgWeightUnderl( SvxAutoCorrDoc&, const String&,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
-    sal_Bool FnCptlSttSntnc( SvxAutoCorrDoc&, const String&, sal_Bool bNormalPos,
+    BOOL FnCptlSttSntnc( SvxAutoCorrDoc&, const String&, BOOL bNormalPos,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang  = LANGUAGE_SYSTEM);
     bool FnCorrectCapsLock( SvxAutoCorrDoc&, const String&,
@@ -381,12 +384,12 @@ public:
 
     bool                HasRunNext() { return bRunNext; }
 
-    static long         GetDefaultFlags();
+    static long			GetDefaultFlags();
 
-// returns sal_True for charcters where the function
+// returns TRUE for charcters where the function
 // 'SvxAutoCorrect::AutoCorrect' should be called.
 // (used to avoid occasional 'collisions' with (Thai) input-sequence-checking)
-    static sal_Bool     IsAutoCorrectChar( sal_Unicode cChar );
+    static sal_Bool		IsAutoCorrectChar( sal_Unicode cChar );
 
     sal_Bool NeedsHardspaceAutocorr( sal_Unicode cChar );
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace cppu;
-
-using ::rtl::OUString;
+using namespace rtl;
 
 //=========================================================================
 
@@ -80,21 +79,21 @@ SortedDynamicResultSet::SortedDynamicResultSet(
                         const Reference < XMultiServiceFactory > &xSMgr )
 {
     mpDisposeEventListeners = NULL;
-    mpOwnListener           = new SortedDynamicResultSetListener( this );
+    mpOwnListener			= new SortedDynamicResultSetListener( this );
 
     mxOwnListener = Reference< XDynamicResultSetListener >( mpOwnListener );
 
-    mxOriginal  = xOriginal;
-    maOptions   = aOptions;
-    mxCompFac   = xCompFac;
-    mxSMgr      = xSMgr;
+    mxOriginal	= xOriginal;
+    maOptions	= aOptions;
+    mxCompFac	= xCompFac;
+    mxSMgr		= xSMgr;
 
     mpOne = NULL;
     mpTwo = NULL;
 
-    mbGotWelcome    = sal_False;
-    mbUseOne        = sal_True;
-    mbStatic        = sal_False;
+    mbGotWelcome	= sal_False;
+    mbUseOne		= sal_True;
+    mbStatic		= sal_False;
 }
 
 //--------------------------------------------------------------------------
@@ -120,7 +119,7 @@ SortedDynamicResultSet::~SortedDynamicResultSet()
 XINTERFACE_IMPL_4( SortedDynamicResultSet,
                    XTypeProvider,
                    XServiceInfo,
-                   XComponent,      /* base class of XDynamicResultSet */
+                   XComponent,		/* base class of XDynamicResultSet */
                    XDynamicResultSet );
 
 //--------------------------------------------------------------------------
@@ -137,10 +136,10 @@ XTYPEPROVIDER_IMPL_3( SortedDynamicResultSet,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( SortedDynamicResultSet,
-                                   OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                   "com.sun.star.comp.ucb.SortedDynamicResultSet" )),
-                                   OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                   DYNAMIC_RESULTSET_SERVICE_NAME )) );
+                                   OUString::createFromAscii(
+                                   "com.sun.star.comp.ucb.SortedDynamicResultSet" ),
+                                   OUString::createFromAscii(
+                                   DYNAMIC_RESULTSET_SERVICE_NAME ) );
 
 //--------------------------------------------------------------------------
 // XComponent methods.
@@ -256,8 +255,8 @@ SortedDynamicResultSet::connectToCache(
         {
             xStubFactory = Reference< XCachedDynamicResultSetStubFactory >(
                 mxSMgr->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" )) ),
+                    OUString::createFromAscii(
+                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
                 UNO_QUERY );
         }
         catch ( Exception const & )
@@ -319,10 +318,10 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     sal_Bool bHasNew = sal_False;
     sal_Bool bHasModified = sal_False;
 
-    SortedResultSet *pCurSet = NULL;
+    SortedResultSet	*pCurSet = NULL;
 
-    // exchange mxNew and mxOld and immediately afterwards copy the tables
-    // from Old to New
+    // mxNew und mxOld vertauschen und anschliessend die Tabellen von Old
+    // nach New kopieren
     if ( mbGotWelcome )
     {
         if ( mbUseOne )
@@ -339,10 +338,10 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
         }
     }
 
-    Any  aRet;
+    Any	 aRet;
 
     try {
-        aRet = pCurSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) );
+        aRet = pCurSet->getPropertyValue( OUString::createFromAscii( "IsRowCountFinal" ) );
     }
     catch ( UnknownPropertyException ) {}
     catch ( WrappedTargetException ) {}
@@ -513,10 +512,10 @@ XTYPEPROVIDER_IMPL_3( SortedDynamicResultSetFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( SortedDynamicResultSetFactory,
-                         OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.comp.ucb.SortedDynamicResultSetFactory" )),
-                         OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         DYNAMIC_RESULTSET_FACTORY_NAME )) );
+                         OUString::createFromAscii(
+                        "com.sun.star.comp.ucb.SortedDynamicResultSetFactory" ),
+                         OUString::createFromAscii(
+                         DYNAMIC_RESULTSET_FACTORY_NAME ) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.
@@ -589,7 +588,7 @@ SortedDynamicResultSetListener::~SortedDynamicResultSetListener()
 //-----------------------------------------------------------------
 
 XINTERFACE_IMPL_2( SortedDynamicResultSetListener,
-                   XEventListener,  /* base class of XDynamicResultSetListener */
+                   XEventListener,	/* base class of XDynamicResultSetListener */
                    XDynamicResultSetListener );
 
 //-----------------------------------------------------------------

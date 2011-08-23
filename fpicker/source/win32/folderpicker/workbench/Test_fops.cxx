@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,14 +31,14 @@
 
 
 //-----------------------------------------------------------
-//  interface includes
+//	interface includes
 //-----------------------------------------------------------
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <osl/file.hxx>
 
 //--------------------------------------------------------------
-//  other includes
+//	other includes
 //--------------------------------------------------------------
 #include <cppuhelper/servicefactory.hxx>
 
@@ -64,34 +64,55 @@
 #include <windows.h>
 
 //--------------------------------------------------------------
-//  namesapces
+//	namesapces
 //--------------------------------------------------------------
 
-using namespace ::rtl                   ;
-using namespace ::cppu                  ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::lang  ;
+using namespace	::rtl					;
+using namespace	::cppu					;
+using namespace	::com::sun::star::uno	;
+using namespace	::com::sun::star::lang	;
 using namespace ::com::sun::star::ui::dialogs;
-using namespace std                     ;
+using namespace std						;
 
 //--------------------------------------------------------------
-//  defines
+//	defines
 //--------------------------------------------------------------
 
 #define RDB_SYSPATH "D:\\Projects\\gsl\\sysui\\wntmsci7\\bin\\applicat.rdb"
 
 //--------------------------------------------------------------
-//  global variables
+//	global variables
 //--------------------------------------------------------------
 
-Reference< XMultiServiceFactory >   g_xFactory;
+Reference< XMultiServiceFactory >	g_xFactory;
+
+/*
+void CreateDeepDirectory( )
+{
+    // create a deep directory
+
+    OUString aPathURL( L"file:///d|/Deep" );
+    OUString normalizedPath;
+
+    OSL_ASSERT( ::osl::FileBase::E_None == \
+        ::osl::FileBase::getNormalizedPathFromFileURL( aPathURL, normalizedPath ) );
+
+    while( ::osl::FileBase::E_None == osl::Directory::create( normalizedPath ) )
+    {
+        aPathURL += L"/Deep";
+        OSL_ASSERT( ::osl::FileBase::E_None == \
+            ::osl::FileBase::getNormalizedPathFromFileURL( aPathURL, normalizedPath ) );
+    }
+    
+}
+*/
 
 //--------------------------------------------------------------
-//  main
+//	main
 //--------------------------------------------------------------
 
 
-int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
+int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/	)
 {
     CoInitializeEx( NULL, COINIT_MULTITHREADED );
 
@@ -107,10 +128,10 @@ int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
     OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
-    // Print a message if an error occurred.
+    // Print a message if an error occured.
     if ( g_xFactory.is() == sal_False )
     {
-        OSL_FAIL("Can't create RegistryServiceFactory");
+        OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");
         return(-1);
     }
 
@@ -122,14 +143,14 @@ int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
 
     Reference< XFolderPicker > xFolderPicker;
 
-    xFolderPicker = Reference< XFolderPicker >(
+    xFolderPicker = Reference< XFolderPicker >( 
         g_xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM ( FOLDER_PICKER_SERVICE_NAME ) ) ), UNO_QUERY );
-
+    
     if ( xFolderPicker.is() == sal_False )
     {
-        OSL_FAIL( "Error creating FolderPicker Service" );
+        OSL_ENSURE( sal_False, "Error creating FolderPicker Service" );
         return(-1);
-    }
+    }	
 
     try
     {
@@ -158,10 +179,10 @@ int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
     // Cast factory to XComponent
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );
 
-    // Print a message if an error occurred.
+    // Print a message if an error occured.
     if ( xComponent.is() == sal_False )
     {
-        OSL_FAIL("Error shuting down");
+        OSL_ENSURE(sal_False, "Error shuting down");
     }
 
     // Dispose and clear factory

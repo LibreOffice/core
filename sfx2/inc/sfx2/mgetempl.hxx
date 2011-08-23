@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,12 +36,9 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#include <svtools/svmedit2.hxx>
-#include <svtools/svmedit.hxx>
-
 /* erwartet:
-    SID_TEMPLATE_NAME   :   In: StringItem, Name der Vorlage
-    SID_TEMPLATE_FAMILY :   In: Familie der Vorlage
+    SID_TEMPLATE_NAME   : 	In: StringItem, Name der Vorlage
+    SID_TEMPLATE_FAMILY :	In: Familie der Vorlage
 */
 
 class SfxStyleFamilies;
@@ -56,9 +53,7 @@ class SfxManageStyleSheetPage : public SfxTabPage
 {
     FixedText aNameFt;
     Edit aNameEd;
-    ExtMultiLineEdit aNameMLE;
-
-    CheckBox    aAutoCB;
+    CheckBox	aAutoCB;
 
     FixedText aFollowFt;
     ListBox aFollowLb;
@@ -69,21 +64,21 @@ class SfxManageStyleSheetPage : public SfxTabPage
     FixedText aFilterFt;
     ListBox aFilterLb;
 
-    FixedLine aDescGb;
     FixedInfo aDescFt;
     MultiLineEdit aDescED;
+    FixedLine aDescGb;
 
     SfxStyleSheetBase *pStyle;
     SfxStyleFamilies *pFamilies;
     const SfxStyleFamilyItem *pItem;
     String aBuf;
-    sal_Bool bModified;
+    BOOL bModified;
 
         // initiale Daten des Styles
     String aName;
     String aFollow;
     String aParent;
-    sal_uInt16 nFlags;
+    USHORT nFlags;
 
 private:
 friend class SfxStyleDialog;
@@ -91,22 +86,22 @@ friend class SfxStyleDialog;
     DECL_LINK( GetFocusHdl, Edit * );
     DECL_LINK( LoseFocusHdl, Edit * );
 
-    void    UpdateName_Impl(ListBox *, const String &rNew);
-    void    SetDescriptionText_Impl();
+    void	UpdateName_Impl(ListBox *, const String &rNew);
+    void	SetDescriptionText_Impl();
 
     SfxManageStyleSheetPage(Window *pParent, const SfxItemSet &rAttrSet );
     ~SfxManageStyleSheetPage();
 
-    static SfxTabPage*  Create(Window *pParent, const SfxItemSet &rAttrSet );
+    static SfxTabPage*	Create(Window *pParent, const SfxItemSet &rAttrSet );
 
 protected:
-    virtual sal_Bool        FillItemSet(SfxItemSet &);
-    virtual void        Reset(const SfxItemSet &);
+    virtual BOOL		FillItemSet(SfxItemSet &);
+    virtual void		Reset(const SfxItemSet &);
 
     using TabPage::ActivatePage;
-        virtual void        ActivatePage(const SfxItemSet &);
+        virtual void		ActivatePage(const SfxItemSet &);
         using TabPage::DeactivatePage;
-    virtual int     DeactivatePage(SfxItemSet * = 0);
+    virtual int		DeactivatePage(SfxItemSet * = 0);
 };
 
 #ifdef FixedInfo

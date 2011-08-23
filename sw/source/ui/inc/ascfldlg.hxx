@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,19 +42,19 @@ class SwDocShell;
 class SwAsciiFilterDlg : public SfxModalDialog
 {
     FixedLine           aFL;
-    FixedText           aCharSetFT;
-    SvxTextEncodingBox  aCharSetLB;
-    FixedText           aFontFT;
-    ListBox             aFontLB;
-    FixedText           aLanguageFT;
-    SvxLanguageBox      aLanguageLB;
-    FixedText           aCRLF_FT;
-    RadioButton         aCRLF_RB, aCR_RB, aLF_RB;
-    OKButton            aOkPB;
-    CancelButton        aCancelPB;
-    HelpButton          aHelpPB;
-    String              sSystemCharSet;
-    sal_Bool                bSaveLineStatus;
+    FixedText			aCharSetFT;
+    SvxTextEncodingBox	aCharSetLB;
+    FixedText			aFontFT;
+    ListBox				aFontLB;
+    FixedText			aLanguageFT;
+    SvxLanguageBox		aLanguageLB;
+    FixedText			aCRLF_FT;
+    RadioButton			aCRLF_RB, aCR_RB, aLF_RB;
+    OKButton			aOkPB;
+    CancelButton		aCancelPB;
+    HelpButton			aHelpPB;
+    String				sSystemCharSet;
+    BOOL 				bSaveLineStatus;
 
     DECL_LINK( CharSetSelHdl, SvxTextEncodingBox* );
     DECL_LINK( LineEndHdl, RadioButton* );
@@ -62,8 +62,8 @@ class SwAsciiFilterDlg : public SfxModalDialog
     LineEnd GetCRLF() const;
 
 public:
-    // CTOR:    for import - pStream is the inputstream
-    //          for export - pStream must be 0
+    // CTOR: 	for import - pStream is the inputstream
+    // 			for export - pStream must be 0
     SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                         SvStream* pStream );
     virtual ~SwAsciiFilterDlg();

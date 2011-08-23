@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,20 @@
 #ifndef _INPROCSERV_SMARTPOINTER_HXX_
 #define _INPROCSERV_SMARTPOINTER_HXX_
 
+// #define OWNDEBUG
+
+#ifdef OWNDEBUG
+#define WRITEDEBUGINFOINTERN( x ) WriteDebugInfo( (DWORD)this, x, sizeof( x ) )
+#define WRITEDEBUGINFO( x ) WRITEDEBUGINFOINTERN( x ":" MY_STRING_LINE "\n" )
+#define TO_STRING( x ) #x
+#define MACRO_VALUE_TO_STRING( x ) TO_STRING( x )
+#define MY_STRING_LINE MACRO_VALUE_TO_STRING( __LINE__ )
+#else
+#define WRITEDEBUGINFO( x ) void()
+#define MY_STRING_LINE
+#endif
+
+
 namespace inprocserv{
 
 void WriteDebugInfo( DWORD pThis, char* pString, DWORD nToWrite );
@@ -46,7 +60,7 @@ template< class T > class ComSmart
             pInterface->Release();
         }
     }
-
+    
 public:
     ComSmart()
     : m_pInterface( NULL )
@@ -65,7 +79,7 @@ public:
          if ( m_pInterface != NULL )
             m_pInterface->AddRef();
     }
-
+ 
     ~ComSmart()
     {
         OwnRelease();
@@ -82,7 +96,7 @@ public:
 
         return *this;
     }
-
+ 
     ComSmart<T>& operator=( T* pInterface )
     {
         OwnRelease();
@@ -104,7 +118,7 @@ public:
     {
         return *m_pInterface;
     }
-
+     
     T** operator&()
     {
         OwnRelease();

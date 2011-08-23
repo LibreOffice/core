@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,16 +38,16 @@ class SwFldDlg: public SfxTabDialog
 {
     SwChildWinWrapper*  m_pChildWin;
     SfxBindings*        m_pBindings;
-    sal_Bool                m_bHtmlMode;
-    sal_Bool                m_bDataBaseMode;
+    BOOL                m_bHtmlMode;
+    BOOL                m_bDataBaseMode;
 
-    virtual sal_Bool        Close();
-    virtual SfxItemSet* CreateInputItemSet( sal_uInt16 nId );
-    virtual void        Activate();
-    virtual void        PageCreated(sal_uInt16 nId, SfxTabPage& rPage);
+    virtual BOOL		Close();
+    virtual SfxItemSet*	CreateInputItemSet( USHORT nId );
+    virtual void		Activate();
+    virtual void        PageCreated(USHORT nId, SfxTabPage& rPage);
 
-    void                ReInitTabPage( sal_uInt16 nPageId,
-                                        sal_Bool bOnlyActivate = sal_False );
+    void				ReInitTabPage( USHORT nPageId,
+                                        BOOL bOnlyActivate = FALSE );
 
 public:
     SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent);
@@ -55,10 +55,10 @@ public:
 
     DECL_LINK( OKHdl, Button * );
 
-    void                Initialize(SfxChildWinInfo *pInfo);
-    void                ReInitDlg();
-    void                EnableInsert(sal_Bool bEnable);
-    void                InsertHdl();
+    void				Initialize(SfxChildWinInfo *pInfo);
+    void				ReInitDlg();
+    void 				EnableInsert(BOOL bEnable);
+    void 				InsertHdl();
     void                ActivateDatabasePage();
 };
 

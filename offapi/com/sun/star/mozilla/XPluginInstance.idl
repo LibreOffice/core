@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 
 
 // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::start
-/** Allows to control an office side plugin instance and to communicate with it.
+/** Allows to controll an office side plugin instance and to communicate with it.
     This interface is oriented for communication with browsers plugins.
  */
 published interface XPluginInstance: com::sun::star::uno::XInterface
@@ -83,8 +83,8 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::createWindow
     /** Creates a new window for plugin operation.
 
-        @param PlatformParentData   [in]:   platform dependent window data
-        @param embedded             [in]:   selects embedded or full page plugin mode
+        @param PlatformParentData	[in]:	platform dependent window data
+        @param embedded				[in]:	selects embedded or full page plugin mode
 
      */
     [oneway] void createWindow( [in] any PlatformParentData, [in] boolean embedded );
@@ -95,11 +95,11 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::newStream
     /** Notifies the plugin of a new stream to display.
 
-        @param MIMEDesc     [in]:   the MIMEtype of the data stream
-        @param theURL       [in]:   the URL that denotes the stream
-        @param filter       [in]:   a filter string to suggest a component that should handle the document
-        @param stream       [in]:   the data stream
-        @param sessiondata  [in]:   the data specifying the current session
+        @param MIMEDesc		[in]:	the MIMEtype of the data stream
+        @param theURL		[in]:	the URL that denotes the stream
+        @param filter		[in]:	a filter string to suggest a component that should handle the document
+        @param stream		[in]:	the data stream
+        @param sessiondata	[in]:	the data specifying the current session
 
      */
     [oneway] void newStream(
@@ -116,10 +116,10 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::newURL
     /** Notifies the plugin of a new url to open as document.
 
-        @param MIMEDesc     [in]:   the MIMEtype of the data stream
-        @param theURL       [in]:   the URL to be opened
-        @param filter       [in]:   a filter string to suggest a component that should handle the document
-        @param sessiondata  [in]:   the data specifying the current session
+        @param MIMEDesc		[in]:	the MIMEtype of the data stream
+        @param theURL		[in]:	the URL to be openend
+        @param filter		[in]:	a filter string to suggest a component that should handle the document
+        @param sessiondata	[in]:	the data specifying the current session
 
      */
     [oneway] void newURL( [in] string MIMEDesc, [in] string theURL, [in] string filter, [in] any sessionData );
@@ -128,11 +128,11 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
 
 
     // DocMerge from idl: method com::sun::star::mozilla::XPluginInstance::getHttpServerURL
-    /** Retrieves the URL of the HTTP Load balancing Slave.
+    /** Retrieves the URL of the HTTP Loadbalancing Slave.
 
-        @param aURL     [out]:  the full qualified host name of the LBS
-        @param aPort    [out]:  the port number
-        @param aPrefix  [out]:  the url prefix to the portal
+        @param aURL		[out]:	the full qualified host name of the LBS
+        @param aPort	[out]:	the port number
+        @param aPrefix	[out]:	the url prefix to the portal
 
      */
     void getHttpServerURL( [out] string aHost, [out] unsigned short aPort,
@@ -143,4 +143,4 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-#endif
+#endif 

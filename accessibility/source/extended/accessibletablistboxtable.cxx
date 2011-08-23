@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ namespace accessibility
 
         AccessibleBrowseBoxTable( rxParent, rBox ),
 
-        m_pTabListBox   ( &rBox )
+        m_pTabListBox	( &rBox )
 
     {
         DBG_CTOR( AccessibleTabListBoxTable, NULL );
@@ -82,7 +82,7 @@ namespace accessibility
     {
         if ( isAlive() )
         {
-            sal_uLong nEventId = rVclWindowEvent.GetId();
+            ULONG nEventId = rVclWindowEvent.GetId();
             switch ( nEventId )
             {
                 case  VCLEVENT_OBJECT_DYING :
@@ -117,7 +117,7 @@ namespace accessibility
                         if ( pEntry )
                         {
                             sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
-                            sal_uInt16 nCol = m_pTabListBox->GetCurrColumn();
+                            USHORT nCol = m_pTabListBox->GetCurrColumn();
                             Reference< XAccessible > xChild =
                                 m_pTabListBox->CreateAccessibleCell( nRow, nCol );
                             uno::Any aOldValue, aNewValue;
@@ -157,7 +157,7 @@ namespace accessibility
                         if ( pEntry )
                         {
                             sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
-                            sal_uInt16 nCol = m_pTabListBox->GetCurrColumn();
+                            USHORT nCol = m_pTabListBox->GetCurrColumn();
                             TriState eState = STATE_DONTKNOW;
                             if ( m_pTabListBox->IsCellCheckBox( nRow, nCol, eState ) )
                             {
@@ -182,7 +182,7 @@ namespace accessibility
                         if ( pEntry )
                         {
                             sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
-                            sal_uInt16 nCol = pData->m_nColumn;
+                            USHORT nCol = pData->m_nColumn;
                             Reference< XAccessible > xChild =
                                 m_pTabListBox->CreateAccessibleCell( nRow, nCol );
                             uno::Any aOldValue, aNewValue;
@@ -283,7 +283,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     ::rtl::OUString AccessibleTabListBoxTable::getImplementationName (void) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.AccessibleTabListBoxTable" ));
+        return ::rtl::OUString::createFromAscii("com.sun.star.comp.svtools.AccessibleTabListBoxTable");
     }
     // -----------------------------------------------------------------------------
     // XAccessibleSelection

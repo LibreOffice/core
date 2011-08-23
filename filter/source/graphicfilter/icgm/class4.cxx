@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,8 +87,8 @@ void CGM::ImplGetVector( double* pVector )
 // ---------------------------------------------------------------
 sal_Bool CGM::ImplGetEllipse( FloatPoint& rCenter, FloatPoint& rRadius, double& rAngle )
 {
-    FloatPoint  aPoint1, aPoint2;
-    double      fRot1, fRot2;
+    FloatPoint	aPoint1, aPoint2;
+    double		fRot1, fRot2;
     ImplGetPoint( rCenter, sal_True );
     ImplGetPoint( aPoint1, sal_True );
     ImplGetPoint( aPoint2, sal_True );
@@ -120,8 +120,8 @@ void CGM::ImplDoClass4()
     if ( mbFirstOutPut )
         mpOutAct->FirstOutPut();
 
-    if ( mpBitmapInUse && ( mnElementID != 9 ) )    // vorhandene grafik verarbeiten,
-    {                                               // da jetzt nicht bitmap actions anstehen
+    if ( mpBitmapInUse && ( mnElementID != 9 ) )	// vorhandene grafik verarbeiten,
+    {												// da jetzt nicht bitmap actions anstehen
         CGMBitmapDescriptor* pBmpDesc = mpBitmapInUse->GetBitmap();
         // irgendetwas mit der Bitmap anfangen
         mpOutAct->DrawBitmap( pBmpDesc );
@@ -139,7 +139,7 @@ void CGM::ImplDoClass4()
                 Polygon aPolygon( (sal_uInt16)nPoints );
                 for ( sal_uInt16 i = 0; i < nPoints; i++)
                 {
-                    FloatPoint  aFloatPoint;
+                    FloatPoint	aFloatPoint;
                     ImplGetPoint( aFloatPoint, sal_True );
                     aPolygon.SetPoint( Point( (long)aFloatPoint.X, (long)aFloatPoint.Y ), i );
                 }
@@ -152,12 +152,12 @@ void CGM::ImplDoClass4()
 
             case 0x02 : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Disjoint PolyLine" )
             {
-                sal_uInt16 nPoints = sal::static_int_cast< sal_uInt16 >(
+                USHORT nPoints = sal::static_int_cast< USHORT >(
                     mnElementSize / ImplGetPointSize());
                 if ( ! ( nPoints & 1 ) )
                 {
                     nPoints >>= 1;
-                    FloatPoint  aFloatPoint;
+                    FloatPoint	aFloatPoint;
                     if ( mbFigure )
                     {
                         Polygon aPolygon( nPoints );
@@ -189,8 +189,8 @@ void CGM::ImplDoClass4()
             case 0x03 : ComOut( CGM_LEVEL1, "PolyMarker" ) break;
             case 0x04 : ComOut( CGM_LEVEL1, "Text" )
             {
-                FloatPoint  aFloatPoint;
-                sal_uInt32      nType, nSize;
+                FloatPoint	aFloatPoint;
+                sal_uInt32		nType, nSize;
 
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
@@ -206,16 +206,16 @@ void CGM::ImplDoClass4()
                 awt::Point aPoint( (long)aFloatPoint.X, (long)aFloatPoint.Y );
                 mpOutAct->DrawText( aPoint, aSize,
                                 (char*)mpSource + mnParaSize, nSize, (FinalFlag)nType );
-//              mnParaSize += nSize;
+//				mnParaSize += nSize;
                 mnParaSize = mnElementSize;
             }
             break;
 
             case 0x05 : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Restricted Text" )
             {
-                double      dx, dy;
-                FloatPoint  aFloatPoint;
-                sal_uInt32      nType, nSize;
+                double		dx, dy;
+                FloatPoint	aFloatPoint;
+                sal_uInt32		nType, nSize;
 
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
@@ -245,7 +245,7 @@ void CGM::ImplDoClass4()
                 awt::Size aSize((long)dx, (long)dy);
                 mpOutAct->DrawText( aPoint, aSize ,
                                 (char*)mpSource + mnParaSize, nSize, (FinalFlag)nType );
-//              mnParaSize += nSize;
+//				mnParaSize += nSize;
                 mnParaSize = mnElementSize;
             }
             break;
@@ -261,7 +261,7 @@ void CGM::ImplDoClass4()
                 ComOut( CGM_DESCRIPTION, (char*)mpSource + mnParaSize );
 
                 mpOutAct->AppendText( (char*)mpSource + mnParaSize, nSize, (FinalFlag)nType );
-//              mnParaSize += nSize;
+//				mnParaSize += nSize;
                 mnParaSize = mnElementSize;
             }
             break;
@@ -271,12 +271,12 @@ void CGM::ImplDoClass4()
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
 
-                sal_uInt16 nPoints = sal::static_int_cast< sal_uInt16 >(
+                USHORT nPoints = sal::static_int_cast< USHORT >(
                     mnElementSize / ImplGetPointSize());
                 Polygon aPolygon( nPoints );
-                for ( sal_uInt16 i = 0; i < nPoints; i++)
+                for ( USHORT i = 0; i < nPoints; i++)
                 {
-                    FloatPoint  aFloatPoint;
+                    FloatPoint	aFloatPoint;
                     ImplGetPoint( aFloatPoint, sal_True );
                     aPolygon.SetPoint( Point ( (long)( aFloatPoint.X ), (long)( aFloatPoint.Y ) ), i );
                 }
@@ -289,12 +289,12 @@ void CGM::ImplDoClass4()
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
 
-                sal_uInt16      nPoints = 0;
-                Point*      pPoints = new Point[ 0x4000 ];
+                USHORT		nPoints = 0;
+                Point*		pPoints = new Point[ 0x4000 ];
 
                 PolyPolygon aPolyPolygon;
-                FloatPoint  aFloatPoint;
-                sal_uInt32      nEdgeFlag;
+                FloatPoint	aFloatPoint;
+                sal_uInt32		nEdgeFlag;
                 while ( mnParaSize < mnElementSize )
                 {
                     ImplGetPoint( aFloatPoint, sal_True );
@@ -303,7 +303,7 @@ void CGM::ImplDoClass4()
                     if ( ( nEdgeFlag & 2 ) || ( mnParaSize == mnElementSize ) )
                     {
                         Polygon aPolygon( nPoints );
-                        for ( sal_uInt16 i = 0; i < nPoints; i++ )
+                        for ( USHORT i = 0; i < nPoints; i++ )
                         {
                             aPolygon.SetPoint( pPoints[ i ], i );
                         }
@@ -324,8 +324,8 @@ void CGM::ImplDoClass4()
                 if ( mpBitmapInUse )
                 {
                     CGMBitmap* pBmpDesc = mpBitmapInUse->GetNext();
-                    if ( pBmpDesc ) // eventuell bekommen wir eine bitmap zurück, die nicht
-                    {               // zur vorherigen paßt -> diese müssen wir dann auch löschen
+                    if ( pBmpDesc )	// eventuell bekommen wir eine bitmap zurück, die nicht
+                    {				// zur vorherigen paßt -> diese müssen wir dann auch löschen
                         mpOutAct->DrawBitmap( pBmpDesc->GetBitmap() );
                         delete pBmpDesc;
                     }
@@ -350,7 +350,7 @@ void CGM::ImplDoClass4()
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
 
-                FloatRect   aFloatRect;
+                FloatRect	aFloatRect;
                 ImplGetRectangle( aFloatRect, sal_True );
                 mpOutAct->DrawRectangle( aFloatRect );
             }
@@ -376,6 +376,8 @@ void CGM::ImplDoClass4()
 
             case 0x0d : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Circular Arc 3 Point" )
             {
+                int		nSwitch = 0;
+
                 FloatPoint aStartingPoint, aIntermediatePoint, aEndingPoint, aCenterPoint;
                 ImplGetPoint( aStartingPoint, sal_True );
                 ImplGetPoint( aIntermediatePoint, sal_True );
@@ -399,8 +401,6 @@ void CGM::ImplDoClass4()
                     double fStartAngle = ImplGetOrientation( aCenterPoint, aStartingPoint );
                     double fInterAngle = ImplGetOrientation( aCenterPoint, aIntermediatePoint );
                     double fEndAngle = ImplGetOrientation( aCenterPoint, aEndingPoint );
-
-                    int nSwitch = 0;
 
                     if ( fStartAngle > fEndAngle )
                     {
@@ -447,6 +447,8 @@ void CGM::ImplDoClass4()
 
             case 0x0e : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Circular Arc 3 Point Close" )
             {
+                int nSwitch = 0;
+
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
 
@@ -474,8 +476,6 @@ void CGM::ImplDoClass4()
                     double fInterAngle = ImplGetOrientation( aCenterPoint, aIntermediatePoint );
                     double fEndAngle = ImplGetOrientation( aCenterPoint, aEndingPoint );
 
-                    int nSwitch = 0;
-
                     if ( fStartAngle > fEndAngle )
                     {
                         nSwitch ^=1;
@@ -501,9 +501,9 @@ void CGM::ImplDoClass4()
 
                     sal_uInt32 nType = ImplGetUI16();
                     if ( nType == 0 )
-                        nType = 0;          // is PIE
+                        nType =	0;			// is PIE
                     else
-                        nType = 1;          // is CHORD
+                        nType =	1;			// is CHORD
 
                     double fOrientation = 0;
                     mpOutAct->DrawEllipticalArc( aCenterPoint, fRadius, fOrientation, nType, fStartAngle, fEndAngle );
@@ -513,7 +513,7 @@ void CGM::ImplDoClass4()
 
             case 0x0f : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Circular Arc Centre" )
             {
-                double fStartAngle, fEndAngle, vector[ 4 ];
+                double fOrientation, fStartAngle, fEndAngle, vector[ 4 ];
                 FloatPoint aCenter, aRadius;
 
                 if ( mbFigure )
@@ -557,7 +557,7 @@ void CGM::ImplDoClass4()
                 }
                 else
                 {
-                    double fOrientation = 0;
+                    fOrientation = 0;
                     mpOutAct->DrawEllipticalArc( aCenter, aRadius, fOrientation, 2, fStartAngle, fEndAngle );
                 }
                 mnParaSize = mnElementSize;
@@ -599,9 +599,9 @@ void CGM::ImplDoClass4()
 
                 sal_uInt32 nType = ImplGetUI16();
                 if ( nType == 0 )
-                    nType = 0;          // is PIE
+                    nType =	0;			// is PIE
                 else
-                    nType = 1;          // is CHORD
+                    nType =	1;			// is CHORD
                 fOrientation = 0;
 
                 mpOutAct->DrawEllipticalArc( aCenter, aRadius, fOrientation,
@@ -675,9 +675,9 @@ void CGM::ImplDoClass4()
 
                 sal_uInt32 nType = ImplGetUI16();
                 if ( nType == 0 )
-                    nType = 0;          // is PIE
+                    nType =	0;			// is PIE
                 else
-                    nType = 1;          // is CHORD
+                    nType =	1;			// is CHORD
 
                 if ( bDirection )
                     mpOutAct->DrawEllipticalArc( aCenter, aRadius, fOrientation,
@@ -693,31 +693,31 @@ void CGM::ImplDoClass4()
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x15 : ComOut( CGM_LEVEL2, "Connection Edge" )                         // NS
+            case 0x15 : ComOut( CGM_LEVEL2, "Connection Edge" )							// NS
             {
-//              if ( mbFigure )
-//                  mpOutAct->CloseRegion();
+//				if ( mbFigure )
+//					mpOutAct->CloseRegion();
             }
             break;
-            case 0x16 : ComOut( CGM_LEVEL3, "Hyperbolic Arc" )                          // NS
-            {
-                if ( mbFigure )
-                    mpOutAct->CloseRegion();
-            }
-            break;
-            case 0x17 : ComOut( CGM_LEVEL3, "Parabolic Arc" )                           // NS
+            case 0x16 : ComOut( CGM_LEVEL3, "Hyperbolic Arc" )							// NS
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x18 : ComOut( CGM_LEVEL3, "Non Uniform B-Spline" )                    // NS
+            case 0x17 : ComOut( CGM_LEVEL3, "Parabolic Arc" )							// NS
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x19 : ComOut( CGM_LEVEL3, "Non Uniform Rational B-Spline" )           // NS
+            case 0x18 : ComOut( CGM_LEVEL3, "Non Uniform B-Spline" )					// NS
+            {
+                if ( mbFigure )
+                    mpOutAct->CloseRegion();
+            }
+            break;
+            case 0x19 : ComOut( CGM_LEVEL3, "Non Uniform Rational B-Spline" )			// NS
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
@@ -727,19 +727,19 @@ void CGM::ImplDoClass4()
             {
                 sal_uInt32 nOrder = ImplGetI( pElement->nIntegerPrecision );
 
-                sal_uInt16 nNumberOfPoints = sal::static_int_cast< sal_uInt16 >(( mnElementSize - pElement->nIntegerPrecision ) / ImplGetPointSize());
+                USHORT nNumberOfPoints = sal::static_int_cast< USHORT >(( mnElementSize - pElement->nIntegerPrecision ) / ImplGetPointSize());
 
                 Polygon aPolygon( nNumberOfPoints );
 
-                for ( sal_uInt16 i = 0; i < nNumberOfPoints; i++)
+                for ( USHORT i = 0; i < nNumberOfPoints; i++)
                 {
-                    FloatPoint  aFloatPoint;
+                    FloatPoint	aFloatPoint;
                     ImplGetPoint( aFloatPoint, sal_True );
                     aPolygon.SetPoint( Point ( (long)( aFloatPoint.X ), (long)( aFloatPoint.Y ) ), i );
                 }
                 if ( nOrder & 4 )
                 {
-                    for ( sal_uInt16 i = 0; i < nNumberOfPoints; i++ )
+                    for ( USHORT i = 0; i < nNumberOfPoints; i++ )
                     {
                         if ( ( i % 3 ) == 0 )
                             aPolygon.SetFlags( i, POLY_NORMAL );
@@ -749,7 +749,7 @@ void CGM::ImplDoClass4()
                 }
                 else
                 {
-                    for ( sal_uInt16 i = 0; i < nNumberOfPoints; i++ )
+                    for ( USHORT i = 0; i < nNumberOfPoints; i++ )
                     {
                         switch ( i & 3 )
                         {
@@ -767,19 +767,19 @@ void CGM::ImplDoClass4()
             }
             break;
 
-            case 0x1b : ComOut( CGM_LEVEL3, "Polysymbol" )                              // NS
+            case 0x1b : ComOut( CGM_LEVEL3, "Polysymbol" )								// NS
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x1c : ComOut( CGM_LEVEL3, "Bitonal Tile" )                            // NS
+            case 0x1c : ComOut( CGM_LEVEL3, "Bitonal Tile" )							// NS
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x1d : ComOut( CGM_LEVEL3, "Tile" )                                    // NS
+            case 0x1d : ComOut( CGM_LEVEL3, "Tile" )									// NS
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
@@ -851,7 +851,7 @@ void CGM::ImplDoClass4()
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0xf1 : ComOut( CGM_GDSF_ONLY, "Hyperlink Definition" ) break;
+            case 0xf1 : ComOut( CGM_GDSF_ONLY, "Hyperlink Definition" )	break;
             default: ComOut( CGM_UNKNOWN_COMMAND, "" ) break;
         }
     }

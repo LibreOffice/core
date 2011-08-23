@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 //    Name      der Name
 //    Value     ein double-Wert, beide bereits als Default drin
 // 2) Methoden:
-//    Create    Erzeugen eines neuen Unterelements
+//    Create	Erzeugen eines neuen Unterelements
 //    Display   Ausgabe eines Textes
 //    Square    Argument * Argument
 //    Event     Aufruf eines Basic-Eventhandlers
@@ -59,6 +59,10 @@
 // Das Sample-Objekt wird in ..\app\mybasic.cxx wie folgt in StarBASIC
 // eingebaut:
 
+// MyBasic::MyBasic() : StarBASIC()
+// {
+//		AddFactory( new SampleObjectFac() );
+// }
 
 // Das nArgs-Feld eines Tabelleneintrags ist wie folgt verschluesselt:
 
@@ -70,7 +74,7 @@
 #define _BWRITE     0x0200  // kann as Lvalue verwendet werden
 #define _LVALUE     _BWRITE  // kann as Lvalue verwendet werden
 #define _READWRITE  0x0300  // beides
-#define _OPT        0x0400  // sal_True: optionaler Parameter
+#define	_OPT		0x0400	// TRUE: optionaler Parameter
 #define _METHOD     0x1000  // Masken-Bit fuer eine Methode
 #define _PROPERTY   0x2000  // Masken-Bit fuer eine Property
 #define _COLL       0x4000  // Masken-Bit fuer eine Collection
@@ -107,7 +111,7 @@ SampleObject::Methods SampleObject::aMethods[] = {
 SampleObject::SampleObject( const String& rClass ) : SbxObject( rClass )
 {
     SetName( String( RTL_CONSTASCII_USTRINGPARAM("Sample") ) );
-    PutDouble( 1.0 );   // Startwert fuer Value
+    PutDouble( 1.0 );	// Startwert fuer Value
 }
 
 // Suche nach einem Element:
@@ -126,12 +130,12 @@ SbxVariable* SampleObject::Find( const String& rName, SbxClassType t )
         // sonst suchen
         Methods* p = aMethods;
         short nIndex = 0;
-        sal_Bool bFound = sal_False;
+        BOOL bFound = FALSE;
         while( p->nArgs != -1 )
         {
             if( rName.EqualsIgnoreCaseAscii( p->pName ) )
             {
-                bFound = sal_True; break;
+                bFound = TRUE; break;
             }
             nIndex += ( p->nArgs & _ARGSMASK ) + 1;
             p = aMethods + nIndex;
@@ -168,22 +172,22 @@ void SampleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
     {
         SbxVariable* pVar = pHint->GetVar();
         SbxArray* pPar_ = pVar->GetParameters();
-        sal_uInt16 nIndex = (sal_uInt16) pVar->GetUserData();
+        USHORT nIndex = (USHORT) pVar->GetUserData();
         // kein Index: weiterreichen!
         if( nIndex )
         {
-            sal_uIntPtr t = pHint->GetId();
+            ULONG t = pHint->GetId();
             if( t == SBX_HINT_INFOWANTED )
                 pVar->SetInfo( GetInfo( (short) pVar->GetUserData() ) );
             else
             {
-                sal_Bool bWrite = sal_False;
+                BOOL bWrite = FALSE;
                 if( t == SBX_HINT_DATACHANGED )
-                    bWrite = sal_True;
+                    bWrite = TRUE;
                 if( t == SBX_HINT_DATAWANTED || bWrite )
                 {
                     // Parameter-Test fuer Methoden:
-                    sal_uInt16 nPar = aMethods[ --nIndex ].nArgs & 0x00FF;
+                    USHORT nPar = aMethods[ --nIndex ].nArgs & 0x00FF;
                     // Element 0 ist der Returnwert
                     if( ( !pPar_ && nPar )
                      || ( pPar_->Count() != nPar+1 ) )
@@ -205,13 +209,15 @@ void SampleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
 SbxInfo* SampleObject::GetInfo( short nIdx )
 {
     Methods* p = &aMethods[ nIdx ];
+    // Wenn mal eine Hilfedatei zur Verfuegung steht:
+    // SbxInfo* pInfo_ = new SbxInfo( Hilfedateiname, p->nHelpId );
     SbxInfo* pInfo_ = new SbxInfo;
     short nPar = p->nArgs & _ARGSMASK;
     for( short i = 0; i < nPar; i++ )
     {
         p++;
         String aName_ = String::CreateFromAscii( p->pName );
-        sal_uInt16 nFlags_ = ( p->nArgs >> 8 ) & 0x03;
+        USHORT nFlags_ = ( p->nArgs >> 8 ) & 0x03;
         if( p->nArgs & _OPT )
             nFlags_ |= SBX_OPTIONAL;
         pInfo_->AddParam( aName_, p->eType, nFlags_ );
@@ -219,14 +225,15 @@ SbxInfo* SampleObject::GetInfo( short nIdx )
     return pInfo_;
 }
 
+////////////////////////////////////////////////////////////////////////////
 
-// Properties und Methoden legen beim Get (bPut = sal_False) den Returnwert
-// im Element 0 des Argv ab; beim Put (bPut = sal_True) wird der Wert aus
+// Properties und Methoden legen beim Get (bPut = FALSE) den Returnwert
+// im Element 0 des Argv ab; beim Put (bPut = TRUE) wird der Wert aus
 // Element 0 gespeichert.
 
 // Die Methoden:
 
-void SampleObject::Display( SbxVariable*, SbxArray* pPar_, sal_Bool )
+void SampleObject::Display( SbxVariable*, SbxArray* pPar_, BOOL )
 {
     // GetString() loest u.U. auch einen Error aus!
     String s( pPar_->Get( 1 )->GetString() );
@@ -234,7 +241,7 @@ void SampleObject::Display( SbxVariable*, SbxArray* pPar_, sal_Bool )
         InfoBox( NULL, s ).Execute();
 }
 
-void SampleObject::Square( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
+void SampleObject::Square( SbxVariable* pVar, SbxArray* pPar_, BOOL )
 {
     double n = pPar_->Get( 1 )->GetDouble();
     pVar->PutDouble( n * n );
@@ -242,14 +249,14 @@ void SampleObject::Square( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
 
 // Callback nach BASIC:
 
-void SampleObject::Event( SbxVariable*, SbxArray* pPar_, sal_Bool )
+void SampleObject::Event( SbxVariable*, SbxArray* pPar_, BOOL )
 {
     Call( pPar_->Get( 1 )->GetString(), NULL );
 }
 
 // Neues Element anlegen
 
-void SampleObject::Create( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
+void SampleObject::Create( SbxVariable* pVar, SbxArray* pPar_, BOOL )
 {
     pVar->PutObject(
         MakeObject( pPar_->Get( 1 )->GetString(), String( RTL_CONSTASCII_USTRINGPARAM("SampleElement") ) ) );

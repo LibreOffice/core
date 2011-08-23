@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
 #include "connpooloptions.hxx"
 #include "dbregisterednamesconfig.hxx"
 #include "dbregistersettings.hxx"
@@ -98,7 +100,7 @@ namespace svx
                 aContext.createComponent( "com.sun.star.sdb.DatabaseContext" ), UNO_QUERY_THROW );
 
             const DatabaseRegistrations& rNewRegistrations = pRegistrations->getRegistrations();
-            for (   DatabaseRegistrations::const_iterator reg = rNewRegistrations.begin();
+            for (	DatabaseRegistrations::const_iterator reg = rNewRegistrations.begin();
                     reg != rNewRegistrations.end();
                     ++reg
                 )
@@ -137,7 +139,7 @@ namespace svx
     }
 
 //........................................................................
-}   // namespace svx
+}	// namespace svx
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

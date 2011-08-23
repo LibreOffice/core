@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,72 +55,72 @@ SV_DECL_REF(SfxDocTemplate_Impl)
 class SFX2_DLLPUBLIC SfxDocumentTemplates
 {
 private:
-    SfxDocTemplate_ImplRef  pImp;
+    SfxDocTemplate_ImplRef	pImp;
 
-    SAL_DLLPRIVATE sal_Bool CopyOrMove( sal_uInt16 nTargetRegion, sal_uInt16 nTargetIdx,
-                                    sal_uInt16 nSourceRegion, sal_uInt16 nSourceIdx, sal_Bool bMove );
+    SAL_DLLPRIVATE BOOL CopyOrMove( USHORT nTargetRegion, USHORT nTargetIdx,
+                                    USHORT nSourceRegion, USHORT nSourceIdx, BOOL bMove );
 public:
                         SfxDocumentTemplates();
                         SfxDocumentTemplates(const SfxDocumentTemplates &);
                         ~SfxDocumentTemplates();
 
-    sal_Bool                IsConstructed() { return pImp != NULL; }
-    void                Construct();
+    BOOL				IsConstructed() { return pImp != NULL; }
+    void				Construct();
 
-    static sal_Bool         SaveDir( /*SfxTemplateDir &rEntry */ ) ;
+    static BOOL			SaveDir( /*SfxTemplateDir &rEntry */ ) ;
     const SfxDocumentTemplates &operator=(const SfxDocumentTemplates &);
 
-    sal_Bool                Rescan( );      // Aktualisieren
+    BOOL				Rescan( );		// Aktualisieren
     void                ReInitFromComponent();
 
-    sal_Bool                IsRegionLoaded( sal_uInt16 nIdx ) const;
-    sal_uInt16              GetRegionCount() const;
-    const String&       GetRegionName(sal_uInt16 nIdx) const;                   //dv!
-    String              GetFullRegionName(sal_uInt16 nIdx) const;
-    sal_uInt16              GetRegionNo( const String &rRegionName ) const;
+    BOOL                IsRegionLoaded( USHORT nIdx ) const;
+    USHORT				GetRegionCount() const;
+    const String&		GetRegionName(USHORT nIdx) const;					//dv!
+    String 				GetFullRegionName(USHORT nIdx) const;
+    USHORT				GetRegionNo( const String &rRegionName ) const;
 
-    sal_uInt16              GetCount(sal_uInt16 nRegion) const;
-    sal_uInt16              GetCount( const String &rName) const;
-    const String&       GetName(sal_uInt16 nRegion, sal_uInt16 nIdx) const;         //dv!
-    String              GetFileName(sal_uInt16 nRegion, sal_uInt16 nIdx) const;
-    String              GetPath(sal_uInt16 nRegion, sal_uInt16 nIdx) const;
+    USHORT				GetCount(USHORT nRegion) const;
+    USHORT				GetCount( const String &rName) const;
+    const String&		GetName(USHORT nRegion, USHORT nIdx) const;			//dv!
+    String				GetFileName(USHORT nRegion, USHORT nIdx) const;
+    String				GetPath(USHORT nRegion, USHORT nIdx) const;
 
-    String              GetDefaultTemplatePath(const String &rLongName);
+    String				GetDefaultTemplatePath(const String &rLongName);
 
     // Pfad zur Vorlage geben lassen; logischer Name muss angegeben
     // werden, damit beim Ueberschreiben einer Vorlage der
     // richtige Dateiname gefunden werden kann
-    String              GetTemplatePath(sal_uInt16 nRegion, const String &rLongName) const;
+    String				GetTemplatePath(USHORT nRegion, const String &rLongName) const;
 
     // Allows to retrieve the target template URL from the UCB
-    ::rtl::OUString     GetTemplateTargetURLFromComponent( const ::rtl::OUString& aGroupName,
+    ::rtl::OUString		GetTemplateTargetURLFromComponent( const ::rtl::OUString& aGroupName,
                                                          const ::rtl::OUString& aTitle );
 
     // Speichern als Vorlage hat geklappt -> Aktualisieren
-    void            NewTemplate(sal_uInt16 nRegion,
+    void			NewTemplate(USHORT nRegion,
                                 const String &rLongName,
                                 const String &rFileName);
 
-    sal_Bool            Copy(sal_uInt16 nTargetRegion,
-                         sal_uInt16 nTargetIdx,
-                         sal_uInt16 nSourceRegion,
-                         sal_uInt16 nSourceIdx);
-    sal_Bool            Move(sal_uInt16 nTargetRegion,
-                         sal_uInt16 nTargetIdx,
-                         sal_uInt16 nSourceRegion,
-                         sal_uInt16 nSourceIdx);
-    sal_Bool            Delete(sal_uInt16 nRegion, sal_uInt16 nIdx);
-    sal_Bool            InsertDir(const String &rText, sal_uInt16 nRegion);
-    sal_Bool            SetName(const String &rName, sal_uInt16 nRegion, sal_uInt16 nIdx);
+    BOOL			Copy(USHORT nTargetRegion,
+                         USHORT nTargetIdx,
+                         USHORT nSourceRegion,
+                         USHORT nSourceIdx);
+    BOOL			Move(USHORT nTargetRegion,
+                         USHORT nTargetIdx,
+                         USHORT nSourceRegion,
+                         USHORT nSourceIdx);
+    BOOL			Delete(USHORT nRegion, USHORT nIdx);
+    BOOL			InsertDir(const String &rText, USHORT nRegion);
+    BOOL			SetName(const String &rName, USHORT nRegion, USHORT nIdx);
 
-    sal_Bool            CopyTo(sal_uInt16 nRegion, sal_uInt16 nIdx, const String &rName) const;
-    sal_Bool            CopyFrom(sal_uInt16 nRegion, sal_uInt16 nIdx, String &rName);
+    BOOL			CopyTo(USHORT nRegion, USHORT nIdx, const String &rName) const;
+    BOOL			CopyFrom(USHORT nRegion, USHORT nIdx, String &rName);
 
-    SfxObjectShellRef CreateObjectShell(sal_uInt16 nRegion, sal_uInt16 nIdx);
-    sal_Bool            DeleteObjectShell(sal_uInt16, sal_uInt16);
+    SfxObjectShellRef CreateObjectShell(USHORT nRegion, USHORT nIdx);
+    BOOL 			DeleteObjectShell(USHORT, USHORT);
 
-    sal_Bool            GetFull( const String& rRegion, const String& rName, String& rPath );
-    sal_Bool            GetLogicNames( const String& rPath, String& rRegion, String& rName ) const;
+    BOOL 			GetFull( const String& rRegion, const String& rName, String& rPath );
+    BOOL 			GetLogicNames( const String& rPath, String& rRegion, String& rName ) const;
 
     /** updates the configuration where the document templates structure is stored.
 
@@ -137,11 +137,11 @@ public:
         <br/>
         So set <arg>_bSmart</arg> to <TRUE/> to do a check for necessity first.
     */
-    void            Update( sal_Bool _bSmart = sal_True );
+    void			Update( sal_Bool _bSmart = sal_True );
 
     // allows to detect whether it is allowed to delete ( at least partially )
     // a group or a template, or to edit a template
-    sal_Bool        HasUserContents( sal_uInt16 nRegion, sal_uInt16 nIdx ) const;
+    sal_Bool		HasUserContents( sal_uInt16 nRegion, sal_uInt16 nIdx ) const;
 };
 
 #endif // #ifndef _SFXDOCTEMPL_HXX

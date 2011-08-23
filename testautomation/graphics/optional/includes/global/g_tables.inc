@@ -40,19 +40,14 @@ dim iItemIndex AS integer           'Counter for/next
 
 testcase tiInsertTableUsingMenu
 
-qaerrorlog "#i116013# No table toolbar when inserting table via insert/table"
-goto endsub
-
     printlog "Inserting table into doc using the menu."
     Call hNewDocument
     printlog "Switching between Draw/Impress"
     if ( gApplication = "IMPRESS" ) then
-        Kontext "Document Impress"
         DocumentImpress.UseMenu
         hMenuSelectNr(4)
         hMenuSelectNr(14)
     else
-        Kontext "Document Draw"
         DocumentDraw.UseMenu
         hMenuSelectNr(4)
         hMenuSelectNr(11)
@@ -63,7 +58,6 @@ goto endsub
     Kontext "InsertTableImpress"
     if InsertTableImpress.Exists then
         printlog "InsertTable Dialog is up."
-        InsertTableImpress.OK
     else
         warnlog "InsertTableDialog did not come up!"
     endif
@@ -128,9 +122,6 @@ endcase 'tiInsertTableUsingMenu
 '-------------------------------------------------------------------------------
 
 testcase tiInsertTableUsingButton
-
-qaerrorlog "#i116013# No table toolbar when inserting table via insert/table"
-goto endsub
 
     printlog " Inserting table using the button in standard toolbar."
     Call hNewDocument
@@ -211,20 +202,15 @@ endcase 'tiInsertTableUsingToolbarbutton
 '-------------------------------------------------------------------------------
 testcase tiTableObjectBar
 
-qaerrorlog "#i116013# No table toolbar when inserting table via insert/table"
-goto endsub
-
     printlog "Testing TableObjectBar."
     printlog "Inserting table into doc using the menu."
     Call hNewDocument
     printlog "Switching between Draw/Impress"
     if ( gApplication = "IMPRESS" ) then
         DocumentImpress.UseMenu
-        Kontext "Document Impress"
         hMenuSelectNr(4)
         hMenuSelectNr(14)
     else
-        Kontext "Document Draw"
         DocumentDraw.UseMenu
         hMenuSelectNr(4)
         hMenuSelectNr(11)
@@ -254,7 +240,6 @@ goto endsub
         printlog "Table bar visible."
     else
         warnlog "Table bar is not up!"
-        ViewToolbarsTable
     endif
 
     printlog "Checking LinienStil."

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -212,7 +212,7 @@ ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper()
     sIDPrefix(RTL_CONSTASCII_USTRINGPARAM(SC_CHANGE_ID_PREFIX)),
     nMultiSpanned(0),
     nMultiSpannedSlaveCount(0),
-    bChangeTrack(false)
+    bChangeTrack(sal_False)
 {
     nPrefixLength = sIDPrefix.getLength();
 }
@@ -278,7 +278,7 @@ sal_uInt32 ScXMLChangeTrackingImportHelper::GetIDFromString(const rtl::OUString&
         }
         else
         {
-            OSL_FAIL("wrong change action ID");
+            DBG_ERROR("wrong change action ID");
         }
     }
     return nResult;
@@ -373,7 +373,7 @@ void ScXMLChangeTrackingImportHelper::SetInsertionCutOff(const sal_uInt32 nID, c
     }
     else
     {
-        OSL_FAIL("wrong action type");
+        DBG_ERROR("wrong action type");
     }
 }
 
@@ -386,7 +386,7 @@ void ScXMLChangeTrackingImportHelper::AddMoveCutOff(const sal_uInt32 nID, const 
     }
     else
     {
-        OSL_FAIL("wrong action type");
+        DBG_ERROR("wrong action type");
     }
 }
 
@@ -398,7 +398,7 @@ void ScXMLChangeTrackingImportHelper::SetMoveRanges(const ScBigRange& aSourceRan
     }
     else
     {
-        OSL_FAIL("wrong action type");
+        DBG_ERROR("wrong action type");
     }
 }
 
@@ -420,7 +420,7 @@ void ScXMLChangeTrackingImportHelper::GetMultiSpannedRange()
     }
     else
     {
-        OSL_FAIL("wrong action type");
+        DBG_ERROR("wrong action type");
     }
 }
 
@@ -438,7 +438,7 @@ void ScXMLChangeTrackingImportHelper::AddGenerated(ScMyCellInfo* pCellInfo, cons
     }
     else
     {
-        OSL_FAIL("try to insert a generated action to a wrong action");
+        DBG_ERROR("try to insert a generated action to a wrong action");
     }
 }
 
@@ -451,7 +451,7 @@ void ScXMLChangeTrackingImportHelper::EndChangeAction()
         aActions.push_back(pCurrentAction);
     else
     {
-        OSL_FAIL("no current action");
+        DBG_ERROR("no current action");
     }
     pCurrentAction = NULL;
 }
@@ -463,12 +463,12 @@ void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, S
     aDateTime.SetDate( aDate.GetDate() );
     aDateTime.SetTime( aTime.GetTime() );
 
-    // old files didn't store 100th seconds, enable again
+    // #97286# old files didn't store 100th seconds, enable again
     if ( aInfo.aDateTime.HundredthSeconds )
-        pTrack->SetTime100thSeconds( sal_True );
+        pTrack->SetTime100thSeconds( TRUE );
 
     StrData aStrData( aInfo.sUser );
-    sal_uInt16 nPos;
+    USHORT nPos;
     if ( pTrack->GetUserCollection().Search( &aStrData, nPos ) )
     {
         const StrData* pUser = static_cast<const StrData*>( pTrack->GetUserCollection().At( nPos ) );
@@ -481,7 +481,7 @@ void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, S
         rUser = aInfo.sUser;    // shouldn't happen
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsAction* pAction)
+ScChangeAction*	ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsAction* pAction)
 {
     DateTime aDateTime( Date(0), Time(0) );
     String aUser;
@@ -494,7 +494,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsActio
     return pNewAction;
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateDeleteAction(ScMyDelAction* pAction)
+ScChangeAction*	ScXMLChangeTrackingImportHelper::CreateDeleteAction(ScMyDelAction* pAction)
 {
     DateTime aDateTime( Date(0), Time(0) );
     String aUser;
@@ -507,7 +507,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateDeleteAction(ScMyDelActio
     return pNewAction;
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction* pAction)
+ScChangeAction*	ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction* pAction)
 {
     DBG_ASSERT(pAction->pMoveRanges, "no move ranges");
     if (pAction->pMoveRanges)
@@ -525,7 +525,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction
     return NULL;
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyRejAction* pAction)
+ScChangeAction*	ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyRejAction* pAction)
 {
     DateTime aDateTime( Date(0), Time(0) );
     String aUser;
@@ -538,7 +538,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyRejAc
     return pNewAction;
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyContentAction* pAction)
+ScChangeAction*	ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyContentAction* pAction)
 {
     ScBaseCell* pCell = NULL;
     if (pAction->pCellInfo)
@@ -615,7 +615,7 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
         }
         else
         {
-            OSL_FAIL("no cut off insert action");
+            DBG_ERROR("no cut off insert action");
         }
     }
     if (!pAction->aMoveCutOffs.empty())
@@ -637,7 +637,7 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
             }
             else
             {
-                OSL_FAIL("no cut off move action");
+                DBG_ERROR("no cut off move action");
             }
             aItr = pAction->aMoveCutOffs.erase(aItr);
         }
@@ -747,7 +747,7 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
     }
     else
     {
-        OSL_FAIL("could not find the action");
+        DBG_ERROR("could not find the action");
     }
 }
 
@@ -822,7 +822,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                 }
                 else
                 {
-                    OSL_FAIL("wrong cell position");
+                    DBG_ERROR("wrong cell position");
                 }
             }
         }
@@ -835,8 +835,8 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
     if (pDoc)
     {
         pTrack = new ScChangeTrack(pDoc, aUsers);
-        // old files didn't store 100th seconds, disable until encountered
-        pTrack->SetTime100thSeconds( false );
+        // #97286# old files didn't store 100th seconds, disable until encountered
+        pTrack->SetTime100thSeconds( FALSE );
 
         ScMyActions::iterator aItr(aActions.begin());
         ScMyActions::iterator aEndItr(aActions.end());
@@ -889,7 +889,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
                 pTrack->AppendLoaded(pAction);
             else
             {
-                OSL_FAIL("no action");
+                DBG_ERROR("no action");
             }
 
             ++aItr;

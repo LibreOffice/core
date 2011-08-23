@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 #include "svl/inettype.hxx"
 #include "unotools/pathoptions.hxx"
 
-#include <l10ntools/compilehelp.hxx>
+#include <l10ntools/compilehelp.hxx> 
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
@@ -67,6 +67,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     {
         BackendImpl * getMyBackend() const;
 
+//        HelpBackendDb::Data m_dbData;
+        
         // Package
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
@@ -79,15 +81,13 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<XCommandEnvironment> const & xCmdEnv );
 
-
+        bool extensionContainsCompiledHelp();
     public:
         PackageImpl(
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
             OUString const & url, OUString const & name,
             Reference<deployment::XPackageTypeInfo> const & xPackageType,
             bool bRemoved, OUString const & identifier);
-
-        bool extensionContainsCompiledHelp();
 
         //XPackage
         virtual css::beans::Optional< ::rtl::OUString > SAL_CALL getRegistrationDataURL()
@@ -101,35 +101,29 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         sal_Bool bRemoved, OUString const & identifier,
         Reference<XCommandEnvironment> const & xCmdEnv );
 
-    void implProcessHelp( PackageImpl * package, bool doRegisterPackage,
-                          Reference<ucb::XCommandEnvironment> const & xCmdEnv);
+    void implProcessHelp( Reference< deployment::XPackage > xPackage, bool doRegisterPackage,
+                          bool compiledHelp, Reference<ucb::XCommandEnvironment> const & xCmdEnv);
     void implCollectXhpFiles( const rtl::OUString& aDir,
         std::vector< rtl::OUString >& o_rXhpFileVector );
 
     void addDataToDb(OUString const & url, HelpBackendDb::Data const & data);
     ::boost::optional<HelpBackendDb::Data> readDataFromDb(OUString const & url);
-    bool hasActiveEntry(OUString const & url);
-    void revokeEntryFromDb(OUString const & url);
-    bool activateEntry(OUString const & url);
+    void deleteDataFromDb(OUString const & url);
 
     Reference< ucb::XSimpleFileAccess > getFileAccess( void );
     Reference< ucb::XSimpleFileAccess > m_xSFA;
-
+    
     const Reference<deployment::XPackageTypeInfo> m_xHelpTypeInfo;
     Sequence< Reference<deployment::XPackageTypeInfo> > m_typeInfos;
     std::auto_ptr<HelpBackendDb> m_backendDb;
-
+    
 public:
     BackendImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
-
+    
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
         getSupportedPackageTypes() throw (RuntimeException);
-    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
-        throw (deployment::DeploymentException,
-               uno::RuntimeException);
-
 };
 
 //______________________________________________________________________________
@@ -141,7 +135,7 @@ BackendImpl::BackendImpl(
                                OUSTR("application/vnd.sun.star.help"),
                                rtl::OUString(),
                                getResourceString(RID_STR_HELP),
-                               RID_IMG_HELP ) ),
+                               RID_IMG_HELP, RID_IMG_HELP_HC ) ),
       m_typeInfos( 1 )
 {
     m_typeInfos[ 0 ] = m_xHelpTypeInfo;
@@ -169,14 +163,6 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
     return m_typeInfos;
 }
 
-void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaType*/)
-        throw (deployment::DeploymentException,
-               uno::RuntimeException)
-{
-    if (m_backendDb.get())
-        m_backendDb->removeEntry(url);
-}
-
 // PackageRegistryBackend
 //______________________________________________________________________________
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
@@ -189,7 +175,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         throw lang::IllegalArgumentException(
             StrCannotDetectMediaType::get() + url,
             static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
-
+    
     String type, subType;
     INetContentTypeParameterList params;
     if (INetContentTypes::parse( mediaType_, type, subType, &params ))
@@ -208,7 +194,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     "vnd.sun.star.help"))
             {
                 return new PackageImpl(
-                    this, url, name, m_xHelpTypeInfo, bRemoved,
+                    this, url, name, m_xHelpTypeInfo, bRemoved, 
                     identifier);
             }
         }
@@ -235,27 +221,13 @@ void BackendImpl::addDataToDb(
     return data;
 }
 
-bool BackendImpl::hasActiveEntry(OUString const & url)
+void BackendImpl::deleteDataFromDb(OUString const & url)
 {
     if (m_backendDb.get())
-        return m_backendDb->hasActiveEntry(url);
-    return false;
+        m_backendDb->removeEntry(url);
 }
 
-void BackendImpl::revokeEntryFromDb(OUString const & url)
-{
-    if (m_backendDb.get())
-        m_backendDb->revokeEntry(url);
-}
-
-bool BackendImpl::activateEntry(OUString const & url)
-{
-    if (m_backendDb.get())
-        return m_backendDb->activateEntry(url);
-    return false;
-}
-
-
+//##############################################################################
 BackendImpl::PackageImpl::PackageImpl(
     ::rtl::Reference<PackageRegistryBackend> const & myBackend,
     OUString const & url, OUString const & name,
@@ -264,6 +236,13 @@ BackendImpl::PackageImpl::PackageImpl(
     : Package( myBackend, url, name, name, xPackageType, bRemoved,
                identifier)
 {
+//         if (bRemoved)
+//         {
+//             ::boost::optional<HelpBackendDb::Data> opt = 
+//                 getMyBackend()->readDataFromDb(url);
+//             if (opt)
+//                 m_dbData = *opt;
+//         }
 }
 
 // Package
@@ -271,22 +250,23 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
 {
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
     if (NULL == pBackend)
-    {
+    {    
         //May throw a DisposedException
         check();
         //We should never get here...
         throw RuntimeException(
-            OUSTR("Failed to get the BackendImpl"),
+            OUSTR("Failed to get the BackendImpl"), 
             static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
     }
     return pBackend;
 }
 
-bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
+
+bool BackendImpl::PackageImpl::extensionContainsCompiledHelp() 
 {
     bool bCompiled = true;
     rtl::OUString aExpandedHelpURL = dp_misc::expandUnoRcUrl(getURL());
-
+    
     ::osl::Directory helpFolder(aExpandedHelpURL);
     if ( helpFolder.open() == ::osl::File::E_None)
     {
@@ -304,7 +284,7 @@ bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
             {
                 if (stat.getFileType() != ::osl::FileStatus::Directory)
                     continue;
-
+                
                 //look if there is the folder help.idxl in the language folder
                 OUString compUrl(stat.getFileURL() + OUSTR("/help.idxl"));
                 ::osl::Directory compiledFolder(compUrl);
@@ -327,12 +307,11 @@ bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
         {
             //Error
             OSL_ASSERT(0);
-            bCompiled = false;
+            bCompiled = false;    
         }
     }
     return bCompiled;
 }
-
 //______________________________________________________________________________
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::PackageImpl::isRegistered_(
@@ -343,7 +322,7 @@ BackendImpl::PackageImpl::isRegistered_(
     BackendImpl * that = getMyBackend();
 
     bool bReg = false;
-    if (that->hasActiveEntry(getURL()))
+    if (that->readDataFromDb(getURL()))
         bReg = true;
 
     return beans::Optional< beans::Ambiguous<sal_Bool> >( true, beans::Ambiguous<sal_Bool>( bReg, false ) );
@@ -362,7 +341,9 @@ void BackendImpl::PackageImpl::processPackage_(
     (void)xCmdEnv;
 
     BackendImpl* that = getMyBackend();
-    that->implProcessHelp( this, doRegisterPackage, xCmdEnv);
+    Reference< deployment::XPackage > xThisPackage( this );
+    that->implProcessHelp( xThisPackage, doRegisterPackage,
+                           extensionContainsCompiledHelp(), xCmdEnv);
 }
 
 beans::Optional< OUString > BackendImpl::PackageImpl::getRegistrationDataURL()
@@ -374,238 +355,241 @@ beans::Optional< OUString > BackendImpl::PackageImpl::getRegistrationDataURL()
 
     ::boost::optional<HelpBackendDb::Data> data =
           getMyBackend()->readDataFromDb(getURL());
-
-    if (data && getMyBackend()->hasActiveEntry(getURL()))
+    
+    if (data)
         return beans::Optional<OUString>(true, data->dataUrl);
 
-    return beans::Optional<OUString>(true, OUString());
+    return beans::Optional<OUString>(true, OUString());    
 }
 
-static rtl::OUString aSlash(RTL_CONSTASCII_USTRINGPARAM("/"));
-static rtl::OUString aHelpStr(RTL_CONSTASCII_USTRINGPARAM("help"));
 
-void BackendImpl::implProcessHelp(
-    PackageImpl * package, bool doRegisterPackage,
-    Reference<ucb::XCommandEnvironment> const & xCmdEnv)
+//##############################################################################
+
+static rtl::OUString aSlash( rtl::OUString::createFromAscii( "/" ) );
+static rtl::OUString aHelpStr( rtl::OUString::createFromAscii( "help" ) );
+
+
+void BackendImpl::implProcessHelp
+( Reference< deployment::XPackage > xPackage, bool doRegisterPackage, bool compiledHelp,
+  Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 {
-    Reference< deployment::XPackage > xPackage(package);
     OSL_ASSERT(xPackage.is());
     if (doRegisterPackage)
     {
-        //revive already processed help if possible
-        if ( !activateEntry(xPackage->getURL()))
+        HelpBackendDb::Data data;
+
+        if (compiledHelp)
         {
-            HelpBackendDb::Data data;
             data.dataUrl = xPackage->getURL();
-            if (!package->extensionContainsCompiledHelp())
+        }
+        else
+        {
+            const OUString sHelpFolder = createFolder(OUString(), xCmdEnv);
+            data.dataUrl = sHelpFolder;
+
+            Reference< ucb::XSimpleFileAccess > xSFA = getFileAccess();
+            rtl::OUString aHelpURL = xPackage->getURL();
+            rtl::OUString aExpandedHelpURL = dp_misc::expandUnoRcUrl( aHelpURL );
+            rtl::OUString aName = xPackage->getName();
+            if( !xSFA->isFolder( aExpandedHelpURL ) )
             {
-                const OUString sHelpFolder = createFolder(OUString(), xCmdEnv);
-                data.dataUrl = sHelpFolder;
+                rtl::OUString aErrStr = getResourceString( RID_STR_HELPPROCESSING_GENERAL_ERROR );
+                aErrStr += rtl::OUString::createFromAscii( "No help folder" );
+                OWeakObject* oWeakThis = static_cast<OWeakObject *>(this);
+                throw deployment::DeploymentException( rtl::OUString(), oWeakThis,
+                                                       makeAny( uno::Exception( aErrStr, oWeakThis ) ) );
+            }
 
-                Reference< ucb::XSimpleFileAccess > xSFA = getFileAccess();
-                rtl::OUString aHelpURL = xPackage->getURL();
-                rtl::OUString aExpandedHelpURL = dp_misc::expandUnoRcUrl( aHelpURL );
-                rtl::OUString aName = xPackage->getName();
-                if( !xSFA->isFolder( aExpandedHelpURL ) )
+            Reference<XComponentContext> const & xContext = getComponentContext();
+            Reference< script::XInvocation > xInvocation;
+            if( xContext.is() )
+            {
+                try
                 {
-                    rtl::OUString aErrStr = getResourceString( RID_STR_HELPPROCESSING_GENERAL_ERROR );
-                    aErrStr += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "No help folder" ));
-                    OWeakObject* oWeakThis = static_cast<OWeakObject *>(this);
-                    throw deployment::DeploymentException( rtl::OUString(), oWeakThis,
-                                                           makeAny( uno::Exception( aErrStr, oWeakThis ) ) );
+                    xInvocation = Reference< script::XInvocation >( 
+                        xContext->getServiceManager()->createInstanceWithContext( rtl::OUString::createFromAscii(
+                                                                                      "com.sun.star.help.HelpIndexer" ), xContext ) , UNO_QUERY );
                 }
-
-                Reference<XComponentContext> const & xContext = getComponentContext();
-                Reference< script::XInvocation > xInvocation;
-                if( xContext.is() )
+                catch (Exception &)
                 {
-                    try
-                    {
-                        xInvocation = Reference< script::XInvocation >(
-                            xContext->getServiceManager()->createInstanceWithContext(
-                                rtl::OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM("com.sun.star.help.HelpIndexer" )), xContext ) , UNO_QUERY );
-                    }
-                    catch (Exception &)
-                    {
-                        // i98680: Survive missing lucene
-                    }
+                    // i98680: Survive missing lucene
                 }
+            }
 
-                // Scan languages
-                Sequence< rtl::OUString > aLanguageFolderSeq = xSFA->getFolderContents( aExpandedHelpURL, true );
-                sal_Int32 nLangCount = aLanguageFolderSeq.getLength();
-                const rtl::OUString* pSeq = aLanguageFolderSeq.getConstArray();
-                for( sal_Int32 iLang = 0 ; iLang < nLangCount ; ++iLang )
+            // Scan languages
+            Sequence< rtl::OUString > aLanguageFolderSeq = xSFA->getFolderContents( aExpandedHelpURL, true );
+            sal_Int32 nLangCount = aLanguageFolderSeq.getLength();
+            const rtl::OUString* pSeq = aLanguageFolderSeq.getConstArray();
+            for( sal_Int32 iLang = 0 ; iLang < nLangCount ; ++iLang )
+            {
+                rtl::OUString aLangURL = pSeq[iLang];
+                if( xSFA->isFolder( aLangURL ) )
                 {
-                    rtl::OUString aLangURL = pSeq[iLang];
-                    if( xSFA->isFolder( aLangURL ) )
+                    std::vector< rtl::OUString > aXhpFileVector;
+
+                    // calculate jar file URL
+                    sal_Int32 indexStartSegment = aLangURL.lastIndexOf('/');
+                    // for example "/en"
+                    OUString langFolderURLSegment(
+                        aLangURL.copy(
+                            indexStartSegment + 1, aLangURL.getLength() - indexStartSegment - 1));
+
+                    //create the folder in the "temporary folder"
+                    ::ucbhelper::Content langFolderContent;
+                    const OUString langFolderDest = makeURL(sHelpFolder, langFolderURLSegment);
+                    const OUString langFolderDestExpanded = ::dp_misc::expandUnoRcUrl(langFolderDest);
+                    ::dp_misc::create_folder(
+                        &langFolderContent,
+                        langFolderDest, xCmdEnv);
+                
+                    rtl::OUString aJarFile(
+                        makeURL(sHelpFolder, langFolderURLSegment + aSlash + aHelpStr +
+                                OUSTR(".jar")));
+                    aJarFile = ::dp_misc::expandUnoRcUrl(aJarFile);
+                
+                    rtl::OUString aEncodedJarFilePath = rtl::Uri::encode(
+                        aJarFile, rtl_UriCharClassPchar,
+                        rtl_UriEncodeIgnoreEscapes,
+                        RTL_TEXTENCODING_UTF8 );
+                    rtl::OUString aDestBasePath = rtl::OUString::createFromAscii( "vnd.sun.star.pkg://" );
+                    aDestBasePath += aEncodedJarFilePath;
+                    aDestBasePath += rtl::OUString::createFromAscii( "/" );
+
+                    sal_Int32 nLenLangFolderURL = aLangURL.getLength() + 1;
+
+                    Sequence< rtl::OUString > aSubLangSeq = xSFA->getFolderContents( aLangURL, true );
+                    sal_Int32 nSubLangCount = aSubLangSeq.getLength();
+                    const rtl::OUString* pSubLangSeq = aSubLangSeq.getConstArray();
+                    for( sal_Int32 iSubLang = 0 ; iSubLang < nSubLangCount ; ++iSubLang )
                     {
-                        std::vector< rtl::OUString > aXhpFileVector;
+                        rtl::OUString aSubFolderURL = pSubLangSeq[iSubLang];
+                        if( !xSFA->isFolder( aSubFolderURL ) )
+                            continue;
 
-                        // calculate jar file URL
-                        sal_Int32 indexStartSegment = aLangURL.lastIndexOf('/');
-                        // for example "/en"
-                        OUString langFolderURLSegment(
-                            aLangURL.copy(
-                                indexStartSegment + 1, aLangURL.getLength() - indexStartSegment - 1));
+                        implCollectXhpFiles( aSubFolderURL, aXhpFileVector );
 
-                        //create the folder in the "temporary folder"
-                        ::ucbhelper::Content langFolderContent;
-                        const OUString langFolderDest = makeURL(sHelpFolder, langFolderURLSegment);
-                        const OUString langFolderDestExpanded = ::dp_misc::expandUnoRcUrl(langFolderDest);
-                        ::dp_misc::create_folder(
-                            &langFolderContent,
-                            langFolderDest, xCmdEnv);
+                        // Copy to package (later: move?)
+                        rtl::OUString aDestPath = aDestBasePath;
+                        rtl::OUString aPureFolderName = aSubFolderURL.copy( nLenLangFolderURL );
+                        aDestPath += aPureFolderName;
+                        xSFA->copy( aSubFolderURL, aDestPath );
+                    }
 
-                        rtl::OUString aJarFile(
-                            makeURL(sHelpFolder, langFolderURLSegment + aSlash + aHelpStr +
-                                    OUSTR(".jar")));
-                        aJarFile = ::dp_misc::expandUnoRcUrl(aJarFile);
+                    // Call compiler
+                    sal_Int32 nXhpFileCount = aXhpFileVector.size();
+                    rtl::OUString* pXhpFiles = new rtl::OUString[nXhpFileCount];
+                    for( sal_Int32 iXhp = 0 ; iXhp < nXhpFileCount ; ++iXhp )
+                    {
+                        rtl::OUString aXhpFile = aXhpFileVector[iXhp];
+                        rtl::OUString aXhpRelFile = aXhpFile.copy( nLenLangFolderURL );
+                        pXhpFiles[iXhp] = aXhpRelFile;
+                    }
 
-                        rtl::OUString aEncodedJarFilePath = rtl::Uri::encode(
-                            aJarFile, rtl_UriCharClassPchar,
-                            rtl_UriEncodeIgnoreEscapes,
-                            RTL_TEXTENCODING_UTF8 );
-                        rtl::OUString aDestBasePath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.zip://" ));
-                        aDestBasePath += aEncodedJarFilePath;
-                        aDestBasePath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ));
+                    rtl::OUString aOfficeHelpPath( SvtPathOptions().GetHelpPath() );
+                    rtl::OUString aOfficeHelpPathFileURL;
+                    ::osl::File::getFileURLFromSystemPath( aOfficeHelpPath, aOfficeHelpPathFileURL ); 
 
-                        sal_Int32 nLenLangFolderURL = aLangURL.getLength() + 1;
+                    HelpProcessingErrorInfo aErrorInfo;
+                    bool bSuccess = compileExtensionHelp(
+                        aOfficeHelpPathFileURL, aHelpStr, aLangURL,
+                        nXhpFileCount, pXhpFiles,
+                        langFolderDestExpanded, aErrorInfo );
 
-                        Sequence< rtl::OUString > aSubLangSeq = xSFA->getFolderContents( aLangURL, true );
-                        sal_Int32 nSubLangCount = aSubLangSeq.getLength();
-                        const rtl::OUString* pSubLangSeq = aSubLangSeq.getConstArray();
-                        for( sal_Int32 iSubLang = 0 ; iSubLang < nSubLangCount ; ++iSubLang )
+                    if( bSuccess && xInvocation.is() )
+                    {
+                        Sequence<uno::Any> aParamsSeq( 6 );
+
+                        aParamsSeq[0] = uno::makeAny( rtl::OUString::createFromAscii( "-lang" ) );
+
+                        rtl::OUString aLang;
+                        sal_Int32 nLastSlash = aLangURL.lastIndexOf( '/' );
+                        if( nLastSlash != -1 )
+                            aLang = aLangURL.copy( nLastSlash + 1 );
+                        else
+                            aLang = rtl::OUString::createFromAscii( "en" );
+                        aParamsSeq[1] = uno::makeAny( aLang );
+
+                        aParamsSeq[2] = uno::makeAny( rtl::OUString::createFromAscii( "-mod" ) );
+                        aParamsSeq[3] = uno::makeAny( rtl::OUString::createFromAscii( "help" ) );
+
+                        aParamsSeq[4] = uno::makeAny( rtl::OUString::createFromAscii( "-zipdir" ) );
+                        rtl::OUString aSystemPath;
+                        osl::FileBase::getSystemPathFromFileURL(
+                            langFolderDestExpanded, aSystemPath );
+                        aParamsSeq[5] = uno::makeAny( aSystemPath );
+
+                        Sequence< sal_Int16 > aOutParamIndex;
+                        Sequence< uno::Any > aOutParam;
+                        uno::Any aRet = xInvocation->invoke( rtl::OUString::createFromAscii( "createIndex" ),
+                                                             aParamsSeq, aOutParamIndex, aOutParam );
+                    }
+
+                    if( !bSuccess )
+                    {
+                        USHORT nErrStrId = 0;
+                        switch( aErrorInfo.m_eErrorClass )
                         {
-                            rtl::OUString aSubFolderURL = pSubLangSeq[iSubLang];
-                            if( !xSFA->isFolder( aSubFolderURL ) )
-                                continue;
+                        case HELPPROCESSING_GENERAL_ERROR:
+                        case HELPPROCESSING_INTERNAL_ERROR:		nErrStrId = RID_STR_HELPPROCESSING_GENERAL_ERROR; break;
+                        case HELPPROCESSING_XMLPARSING_ERROR:	nErrStrId = RID_STR_HELPPROCESSING_XMLPARSING_ERROR; break;
+                        default: ;
+                        };
 
-                            implCollectXhpFiles( aSubFolderURL, aXhpFileVector );
-
-                            // Copy to package (later: move?)
-                            rtl::OUString aDestPath = aDestBasePath;
-                            rtl::OUString aPureFolderName = aSubFolderURL.copy( nLenLangFolderURL );
-                            aDestPath += aPureFolderName;
-                            xSFA->copy( aSubFolderURL, aDestPath );
-                        }
-
-                        // Call compiler
-                        sal_Int32 nXhpFileCount = aXhpFileVector.size();
-                        rtl::OUString* pXhpFiles = new rtl::OUString[nXhpFileCount];
-                        for( sal_Int32 iXhp = 0 ; iXhp < nXhpFileCount ; ++iXhp )
+                        rtl::OUString aErrStr;
+                        if( nErrStrId != 0 )
                         {
-                            rtl::OUString aXhpFile = aXhpFileVector[iXhp];
-                            rtl::OUString aXhpRelFile = aXhpFile.copy( nLenLangFolderURL );
-                            pXhpFiles[iXhp] = aXhpRelFile;
-                        }
+                            aErrStr = getResourceString( nErrStrId );
 
-                        rtl::OUString aOfficeHelpPath( SvtPathOptions().GetHelpPath() );
-                        rtl::OUString aOfficeHelpPathFileURL;
-                        ::osl::File::getFileURLFromSystemPath( aOfficeHelpPath, aOfficeHelpPathFileURL );
-
-                        HelpProcessingErrorInfo aErrorInfo;
-                        bool bSuccess = compileExtensionHelp(
-                            aOfficeHelpPathFileURL, aHelpStr, aLangURL,
-                            nXhpFileCount, pXhpFiles,
-                            langFolderDestExpanded, aErrorInfo );
-
-                        if( bSuccess && xInvocation.is() )
-                        {
-                            Sequence<uno::Any> aParamsSeq( 6 );
-
-                            aParamsSeq[0] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-lang" ) ));
-
-                            rtl::OUString aLang;
-                            sal_Int32 nLastSlash = aLangURL.lastIndexOf( '/' );
-                            if( nLastSlash != -1 )
-                                aLang = aLangURL.copy( nLastSlash + 1 );
-                            else
-                                aLang = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "en" ));
-                            aParamsSeq[1] = uno::makeAny( aLang );
-
-                            aParamsSeq[2] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-mod" ) ));
-                            aParamsSeq[3] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "help" ) ));
-
-                            aParamsSeq[4] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-zipdir" ) ));
-                            rtl::OUString aSystemPath;
-                            osl::FileBase::getSystemPathFromFileURL(
-                                langFolderDestExpanded, aSystemPath );
-                            aParamsSeq[5] = uno::makeAny( aSystemPath );
-
-                            Sequence< sal_Int16 > aOutParamIndex;
-                            Sequence< uno::Any > aOutParam;
-                            uno::Any aRet = xInvocation->invoke( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "createIndex" )),
-                                                                 aParamsSeq, aOutParamIndex, aOutParam );
-                        }
-
-                        if( !bSuccess )
-                        {
-                            sal_uInt16 nErrStrId = 0;
-                            switch( aErrorInfo.m_eErrorClass )
+                            // Remoce CR/LF
+                            rtl::OUString aErrMsg( aErrorInfo.m_aErrorMsg );
+                            sal_Unicode nCR = 13, nLF = 10;
+                            sal_Int32 nSearchCR = aErrMsg.indexOf( nCR );
+                            sal_Int32 nSearchLF = aErrMsg.indexOf( nLF );
+                            sal_Int32 nCopy;
+                            if( nSearchCR != -1 || nSearchLF != -1 )
                             {
-                            case HELPPROCESSING_GENERAL_ERROR:
-                            case HELPPROCESSING_INTERNAL_ERROR:     nErrStrId = RID_STR_HELPPROCESSING_GENERAL_ERROR; break;
-                            case HELPPROCESSING_XMLPARSING_ERROR:   nErrStrId = RID_STR_HELPPROCESSING_XMLPARSING_ERROR; break;
-                            default: ;
-                            };
+                                if( nSearchCR == -1 )
+                                    nCopy = nSearchLF;
+                                else if( nSearchLF == -1 )
+                                    nCopy = nSearchCR;
+                                else
+                                    nCopy = ( nSearchCR < nSearchLF ) ? nSearchCR : nSearchLF;
 
-                            rtl::OUString aErrStr;
-                            if( nErrStrId != 0 )
+                                aErrMsg = aErrMsg.copy( 0, nCopy );
+                            }
+                            aErrStr += aErrMsg;
+                            if( nErrStrId == RID_STR_HELPPROCESSING_XMLPARSING_ERROR && aErrorInfo.m_aXMLParsingFile.getLength() )
                             {
-                                aErrStr = getResourceString( nErrStrId );
+                                aErrStr += rtl::OUString::createFromAscii( " in " );
 
-                                // Remoce CR/LF
-                                rtl::OUString aErrMsg( aErrorInfo.m_aErrorMsg );
-                                sal_Unicode nCR = 13, nLF = 10;
-                                sal_Int32 nSearchCR = aErrMsg.indexOf( nCR );
-                                sal_Int32 nSearchLF = aErrMsg.indexOf( nLF );
-                                sal_Int32 nCopy;
-                                if( nSearchCR != -1 || nSearchLF != -1 )
+                                rtl::OUString aDecodedFile = rtl::Uri::decode( aErrorInfo.m_aXMLParsingFile,
+                                                                               rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+                                aErrStr += aDecodedFile;
+                                if( aErrorInfo.m_nXMLParsingLine != -1 )
                                 {
-                                    if( nSearchCR == -1 )
-                                        nCopy = nSearchLF;
-                                    else if( nSearchLF == -1 )
-                                        nCopy = nSearchCR;
-                                    else
-                                        nCopy = ( nSearchCR < nSearchLF ) ? nSearchCR : nSearchLF;
-
-                                    aErrMsg = aErrMsg.copy( 0, nCopy );
-                                }
-                                aErrStr += aErrMsg;
-                                if( nErrStrId == RID_STR_HELPPROCESSING_XMLPARSING_ERROR && aErrorInfo.m_aXMLParsingFile.getLength() )
-                                {
-                                    aErrStr += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " in " ));
-
-                                    rtl::OUString aDecodedFile = rtl::Uri::decode( aErrorInfo.m_aXMLParsingFile,
-                                                                                   rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-                                    aErrStr += aDecodedFile;
-                                    if( aErrorInfo.m_nXMLParsingLine != -1 )
-                                    {
-                                        aErrStr += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ", line " ));
-                                        aErrStr += ::rtl::OUString::valueOf( aErrorInfo.m_nXMLParsingLine );
-                                    }
+                                    aErrStr += rtl::OUString::createFromAscii( ", line " );
+                                    aErrStr += ::rtl::OUString::valueOf( aErrorInfo.m_nXMLParsingLine );
                                 }
                             }
-
-                            OWeakObject* oWeakThis = static_cast<OWeakObject *>(this);
-                            throw deployment::DeploymentException( rtl::OUString(), oWeakThis,
-                                                                   makeAny( uno::Exception( aErrStr, oWeakThis ) ) );
                         }
+
+                        OWeakObject* oWeakThis = static_cast<OWeakObject *>(this);
+                        throw deployment::DeploymentException( rtl::OUString(), oWeakThis,
+                                                               makeAny( uno::Exception( aErrStr, oWeakThis ) ) );
                     }
                 }
             }
-                //Writing the data entry replaces writing the flag file. If we got to this
-                //point the registration was successful.
-            addDataToDb(xPackage->getURL(), data);
         }
+        //Writing the data entry replaces writing the flag file. If we got to this
+        //point the registration was successful.
+        addDataToDb(xPackage->getURL(), data);
     } //if (doRegisterPackage)
     else
     {
-        revokeEntryFromDb(xPackage->getURL());
+        deleteDataFromDb(xPackage->getURL());
     }
 }
+
 
 void BackendImpl::implCollectXhpFiles( const rtl::OUString& aDir,
     std::vector< rtl::OUString >& o_rXhpFileVector )
@@ -629,7 +613,7 @@ void BackendImpl::implCollectXhpFiles( const rtl::OUString& aDir,
             if( nLastDot != -1 )
             {
                 rtl::OUString aExt = aURL.copy( nLastDot + 1 );
-                if( aExt.equalsIgnoreAsciiCase( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "xhp" )) ) )
+                if( aExt.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "xhp" ) ) )
                     o_rXhpFileVector.push_back( aURL );
             }
         }
@@ -643,17 +627,17 @@ Reference< ucb::XSimpleFileAccess > BackendImpl::getFileAccess( void )
         Reference<XComponentContext> const & xContext = getComponentContext();
         if( xContext.is() )
         {
-            m_xSFA = Reference< ucb::XSimpleFileAccess >(
+            m_xSFA = Reference< ucb::XSimpleFileAccess >( 
                 xContext->getServiceManager()->createInstanceWithContext(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )),
+                    rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ),
                     xContext ), UNO_QUERY );
         }
         if( !m_xSFA.is() )
         {
             throw RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                ::rtl::OUString::createFromAscii( 
                 "dp_registry::backend::help::BackendImpl::getFileAccess(), "
-                "could not instatiate SimpleFileAccess." )),
+                "could not instatiate SimpleFileAccess." ),
                 Reference< XInterface >() );
         }
     }

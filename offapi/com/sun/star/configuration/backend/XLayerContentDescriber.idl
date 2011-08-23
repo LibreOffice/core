@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,51 +27,51 @@
 #ifndef __com_sun_star_configuration_backend_XLayerContentDescriber_idl__
 #define __com_sun_star_configuration_backend_XLayerContentDescriber_idl__
 
-#ifndef __com_sun_star_configuration_backend_PropertyInfo_idl__
+#ifndef __com_sun_star_configuration_backend_PropertyInfo_idl__ 
 #include <com/sun/star/configuration/backend/PropertyInfo.idl>
 #endif
 
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_configuration_backend_XLayerHandler_idl__
 #include <com/sun/star/configuration/backend/XLayerHandler.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_lang_NullPointerException_idl__
 #include <com/sun/star/lang/NullPointerException.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_configuration_backend_MalformedDataException_idl__
 #include <com/sun/star/configuration/backend/MalformedDataException.idl>
 #endif
 
-//=============================================================================
+//============================================================================= 
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
+//============================================================================= 
 
-/**
-   describe the contents of a layer to an XLayerHandler object. The contents of
+/** 
+   describe the contents of a layer to an XLayerHander object. The contents of
    the layer is contained in the sequence of PropertyInfo structures
    @see PropertyInfo
-
+     
 */
-interface XLayerContentDescriber : ::com::sun::star::uno::XInterface
+interface XLayerContentDescriber : ::com::sun::star::uno::XInterface 
 {
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
-    /**
+    /** 
       describes the contents of the layer to an <type>XLayerHandler</type>.
 
-      @param aHandler
-            Handler object that will receive calls
+      @param aHandler   
+            Handler object that will receive calls 
             describing the contents of the layer
 
       @param aPropertyInfos
-             sequence of PropertyInfo structs contained
+             sequence of PropertyInfo structs contained 
              all required property information
 
       @throws com::sun::star::lang::NullPointerException
@@ -81,15 +81,15 @@ interface XLayerContentDescriber : ::com::sun::star::uno::XInterface
               <type>XLayerHandler</type>.
     */
     void describeLayer([in] XLayerHandler aHandler,
-                       [in] sequence<PropertyInfo> aPropertyInfos)
+                       [in] sequence<PropertyInfo> aPropertyInfos) 
         raises (com::sun::star::lang::NullPointerException,
                 com::sun::star::lang::WrappedTargetException,
                 MalformedDataException) ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 } ;
 
-//=============================================================================
+//============================================================================= 
 
-} ; } ; } ; } ; } ;
+} ; } ; } ; } ; } ; 
 #endif

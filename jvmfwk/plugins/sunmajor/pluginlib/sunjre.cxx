@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,8 @@
 #include "sunversion.hxx"
 #include "diagnostics.h"
 
+using namespace rtl;
 using namespace std;
-
-using ::rtl::OUString;
-using ::rtl::Reference;
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 namespace jfw_plugin
@@ -71,9 +69,7 @@ char const* const* SunInfo::getRuntimePaths(int * size)
 #if defined(WNT)
         "/bin/client/jvm.dll",
         "/bin/hotspot/jvm.dll",
-        "/bin/classic/jvm.dll",
-        // The 64-bit JRE has the jvm in bin/server
-        "/bin/server/jvm.dll"
+        "/bin/classic/jvm.dll"
 #elif defined(OS2)
         "/bin/classic/jvm.dll",
 #elif UNX
@@ -89,12 +85,14 @@ char const* const* SunInfo::getRuntimePaths(int * size)
 
 char const* const* SunInfo::getLibraryPaths(int* size)
 {
-#ifdef UNX
+#ifdef UNX        
     static char const * ar[] = {
 
         "/lib/" JFW_PLUGIN_ARCH "/client",
+#if defined(OPENBSD)
         "/lib/" JFW_PLUGIN_ARCH "/server",
-        "/lib/" JFW_PLUGIN_ARCH "/native_threads",
+#endif
+        "/lib/" JFW_PLUGIN_ARCH "/native_threads", 
         "/lib/" JFW_PLUGIN_ARCH
 
     };
@@ -109,7 +107,7 @@ char const* const* SunInfo::getLibraryPaths(int* size)
 int SunInfo::compareVersions(const rtl::OUString& sSecond) const
 {
     OUString sFirst = getVersion();
-
+    
     SunVersion version1(sFirst);
     JFW_ENSURE(version1, OUSTR("[Java framework] sunjavaplugin"SAL_DLLEXTENSION
                                " does not know the version: ")

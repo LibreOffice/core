@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,23 +49,23 @@ class Window;
 |*
 \************************************************************************/
 
-class FuOutline
+class FuOutline 
     : public FuPoor
 {
 public:
     TYPEINFO();
 
-    virtual sal_Bool Command(const CommandEvent& rCEvt);
+    virtual BOOL Command(const CommandEvent& rCEvt);
 
     virtual void ScrollStart();
     virtual void ScrollEnd();
 
 protected:
     FuOutline (
-        ViewShell* pViewShell,
-        ::sd::Window* pWindow,
+        ViewShell* pViewShell, 
+        ::sd::Window* pWindow, 
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument* pDoc, 
         SfxRequest& rReq);
 
     OutlineViewShell* pOutlineViewShell;

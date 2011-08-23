@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ namespace accessibility
     ::rtl::OUString AccessibleBrowseBoxTableCell::implGetText()
     {
         ensureIsAlive();
-        return mpBrowseBox->GetAccessibleCellText( getRowPos(), static_cast< sal_uInt16 >( getColumnPos() ) );
+        return mpBrowseBox->GetAccessibleCellText( getRowPos(), static_cast< USHORT >( getColumnPos() ) );
     }
 
     ::com::sun::star::lang::Locale AccessibleBrowseBoxTableCell::implGetLocale()

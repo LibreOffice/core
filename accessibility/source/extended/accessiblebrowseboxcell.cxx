@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,17 +77,17 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     ::Rectangle AccessibleBrowseBoxCell::implGetBoundingBox()
     {
-        return mpBrowseBox->GetFieldRectPixelAbs( m_nRowPos, m_nColPos, sal_False, sal_False );
+        return mpBrowseBox->GetFieldRectPixelAbs( m_nRowPos, m_nColPos, FALSE, FALSE );
     }
 
     // -----------------------------------------------------------------------------
     ::Rectangle AccessibleBrowseBoxCell::implGetBoundingBoxOnScreen()
     {
-        return mpBrowseBox->GetFieldRectPixelAbs( m_nRowPos, m_nColPos, sal_False );
+        return mpBrowseBox->GetFieldRectPixelAbs( m_nRowPos, m_nColPos, FALSE );
     }
 
 // .................................................................................
-}   // namespace accessibility
+}	// namespace accessibility
 // .................................................................................
 
 

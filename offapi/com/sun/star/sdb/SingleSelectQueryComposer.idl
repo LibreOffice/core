@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,21 +24,21 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdb_SingleSelectQueryComposer_idl__
-#define __com_sun_star_sdb_SingleSelectQueryComposer_idl__
+#ifndef __com_sun_star_sdb_SingleSelectQueryComposer_idl__ 
+#define __com_sun_star_sdb_SingleSelectQueryComposer_idl__ 
+ 
+#ifndef __com_sun_star_sdb_SingleSelectQueryAnalyzer_idl__ 
+#include <com/sun/star/sdb/SingleSelectQueryAnalyzer.idl> 
+#endif 
+#ifndef __com_sun_star_beans_XPropertySet_idl__ 
+#include <com/sun/star/beans/XPropertySet.idl> 
+#endif 
 
-#ifndef __com_sun_star_sdb_SingleSelectQueryAnalyzer_idl__
-#include <com/sun/star/sdb/SingleSelectQueryAnalyzer.idl>
-#endif
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-module com {  module sun {  module star {  module sdb {
-
+module com {  module sun {  module star {  module sdb { 
+ 
 interface XSingleSelectQueryComposer;
 /** represents a service for composing a single select statement.
-
+    
     <p>
     It hides the complexity of parsing and evaluating a single select statement and provides
     sophisticated methods for expanding a statement with filter, group by, having and order
@@ -49,25 +49,25 @@ interface XSingleSelectQueryComposer;
     using the <type scope="com::sun::star::lang">XMultiServiceFactory</type> interface.</p>
  */
 service SingleSelectQueryComposer
-{
+{ 
     // gives access to the properties.
-    interface com::sun::star::beans::XPropertySet;
+    interface com::sun::star::beans::XPropertySet; 
 
     /** access to the analyzer service.
      */
-    service SingleSelectQueryAnalyzer;
+    service SingleSelectQueryAnalyzer; 
 
     interface XSingleSelectQueryComposer;
 
-    /** is the original SQL statement set with the interface <type scope="com::sun::star::sdb">XSingleSelectQueryAnalyzer</type>.
+    /** is the orignal SQL statement set with the interface <type scope="com::sun::star::sdb">XSingleSelectQueryAnalyzer</type>.
     */
-    [readonly, property] string Original;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*===========================================================================
-===========================================================================*/
-#endif
+    [readonly, property] string Original;  
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*=========================================================================== 
+===========================================================================*/ 
+#endif 

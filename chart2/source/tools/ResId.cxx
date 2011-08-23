@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ SchResId::SchResId( sal_Int16 nId )
 
 ::rtl::OUString SchResId::getResString( sal_Int16 nId )
 {
-    return String( SchResId( nId ));
+    return ::rtl::OUString( String( SchResId( nId )));
 }
 
 } //  namespace chart

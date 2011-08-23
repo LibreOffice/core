@@ -57,7 +57,11 @@
  * @file
  * Tab style for paragraph.include tab offset and tab char properties.
  ************************************************************************/
-#include    "xftabstyle.hxx"
+/*************************************************************************
+ * Change History
+ * 2005-01-27 create this file.
+ ************************************************************************/
+#include	"xftabstyle.hxx"
 
 XFTabStyle::XFTabStyle()
 {
@@ -65,10 +69,10 @@ XFTabStyle::XFTabStyle()
     m_fLength = 0;
 }
 
-void    XFTabStyle::ToXml(IXFStream *pStrm)
+void	XFTabStyle::ToXml(IXFStream *pStrm)
 {
     assert(m_fLength>0);
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
     pAttrList->AddAttribute( A2OUSTR("style:position"), DoubleToOUString(m_fLength) + A2OUSTR("cm") );

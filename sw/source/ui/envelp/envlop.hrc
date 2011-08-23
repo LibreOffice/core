@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #include "envelp.hrc"
 
-// local resources *********************************************************
+// Lokale Resourcen *********************************************************
 
 #define TXT_ADDR      1
 #define EDT_ADDR      2
@@ -44,13 +44,13 @@
 #define BOX_SEND     10
 #define EDT_SEND     11
 #define WIN_PREVIEW  12
-#define ST_INSERT   13
-#define ST_CHANGE   14
-// global resources ********************************************************
+#define ST_INSERT	13
+#define ST_CHANGE	14
+// Globale Resourcen ********************************************************
 
 #define STR_DOC_TITLE  (RC_ENVLOP_BEGIN)
 
-// overflow check ********************************************************
+// Ueberlaufpruefung ********************************************************
 
 #define ENVLOP_ACT_END  STR_DOC_TITLE
 

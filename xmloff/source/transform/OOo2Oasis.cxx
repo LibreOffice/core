@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "MutableAttrList.hxx"
 #include "DeepTContext.hxx"
@@ -163,7 +163,7 @@ static XMLTransformerActionInit aActionTable[] =
     // rename <style:page-master> to <style:page-layout>
     ENTRY2QN( STYLE, PAGE_MASTER, XML_ETACTION_STYLE_RENAME,
                         XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT,
-                           XML_FAMILY_TYPE_PAGE_LAYOUT  ),
+                           XML_FAMILY_TYPE_PAGE_LAYOUT	),
     ENTRY1( STYLE, MASTER_PAGE, XML_ETACTION_PROC_ATTRS,
                         OOO_MASTER_PAGE_ACTIONS ),
 
@@ -179,7 +179,7 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( NUMBER, BOOLEAN_STYLE, XML_ETACTION_STYLE, XML_FAMILY_TYPE_DATA ),
     ENTRY1( NUMBER, TEXT_STYLE, XML_ETACTION_STYLE, XML_FAMILY_TYPE_DATA ),
     ENTRY1( TEXT, LIST_STYLE, XML_ETACTION_STYLE, XML_FAMILY_TYPE_LIST ),
-//  ENTRY0( TEXT, OUTLINE_STYLE, STYLE ),
+//	ENTRY0( TEXT, OUTLINE_STYLE, STYLE ),
     ENTRY1( STYLE, HEADER_STYLE, XML_ETACTION_STYLE, XML_FAMILY_TYPE_HEADER_FOOTER ),
     ENTRY1( STYLE, FOOTER_STYLE, XML_ETACTION_STYLE, XML_FAMILY_TYPE_HEADER_FOOTER ),
     ENTRY1( TEXT, LIST_LEVEL_STYLE_NUMBER, XML_ETACTION_STYLE, XML_FAMILY_TYPE_LIST ),
@@ -359,12 +359,15 @@ static XMLTransformerActionInit aActionTable[] =
         OOO_STYLE_REF_ACTIONS ), /* generated entry */
     ENTRY1( STYLE, PRESENTATION_PAGE_LAYOUT, XML_ETACTION_PROC_ATTRS,
                         OOO_MASTER_PAGE_ACTIONS ),
-    /* Consider also attribute table:style-name for <table:table>,
-       <table:table-row> and <table:table-column>. (#i40011#, #i40015#)
-    */
+    // --> OD 2005-01-10 #i40011#, #i40015#
+    // - consider also attribute table:style-name for <table:table>,
+    //   <table:table-row> and <table:table-column>.
+//    ENTRY1( TABLE, TABLE, XML_ETACTION_PROC_ATTRS, OOO_STYLE_REF_ACTIONS ),
     ENTRY0( TABLE, TABLE, XML_ETACTION_TABLE ),
+
     ENTRY1( TABLE, TABLE_ROW, XML_ETACTION_PROC_ATTRS, OOO_STYLE_REF_ACTIONS ),
     ENTRY1( TABLE, TABLE_COLUMN, XML_ETACTION_PROC_ATTRS, OOO_STYLE_REF_ACTIONS ),
+    // <--
 
     // split frame elements
     ENTRY0( DRAW, TEXT_BOX, XML_ETACTION_FRAME ),
@@ -396,7 +399,7 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( DRAW, PAGE_THUMBNAIL, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DRAW, MEASURE, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DRAW, G, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
-//  ENTRY1( DRAW, TEXT_BOX, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
+//	ENTRY1( DRAW, TEXT_BOX, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( PRESENTATION, PLACEHOLDER, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DRAW, CONTOUR_POLYGON, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DRAW, CONTOUR_PATH, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
@@ -458,18 +461,18 @@ static XMLTransformerActionInit aActionTable[] =
             OOO_TEXT_VALUE_TYPE_ACTIONS), /* generated entry */
     ENTRY1( TEXT, EXPRESSION, XML_ETACTION_PROC_ATTRS,
             OOO_TEXT_VALUE_TYPE_ACTIONS), /* generated entry */
-//  ENTRY1( TEXT, USER_DEFINED, XML_ETACTION_PROC_ATTRS,
-//          OOO_TEXT_VALUE_TYPE_ACTIONS), /* text:user-defined has no attrs so far */
+//	ENTRY1( TEXT, USER_DEFINED, XML_ETACTION_PROC_ATTRS,
+//			OOO_TEXT_VALUE_TYPE_ACTIONS), /* text:user-defined has no attrs so far */
     ENTRY1( TABLE, TABLE_CELL, XML_ETACTION_PROC_ATTRS,
             OOO_TABLE_VALUE_TYPE_ACTIONS), /* generated entry */
     ENTRY1( TABLE, COVERED_TABLE_CELL, XML_ETACTION_PROC_ATTRS,
             OOO_TABLE_VALUE_TYPE_ACTIONS), /* generated entry */
     ENTRY1( TABLE, CHANGE_TRACK_TABLE_CELL, XML_ETACTION_PROC_ATTRS,
             OOO_TABLE_VALUE_TYPE_ACTIONS), /* generated entry */
-//  ENTRY1( FORM, PROPERTY, XML_ETACTION_PROC_ATTRS,
-//          OOO_VALUE_TYPE_ACTIONS), /* TODO: generated entry */
-//  ENTRY1( FORM, LIST_PROPERTY, XML_ETACTION_PROC_ATTRS,
-//          OOO_VALUE_TYPE_ACTIONS), /* generated entry */
+//	ENTRY1( FORM, PROPERTY, XML_ETACTION_PROC_ATTRS,
+//			OOO_VALUE_TYPE_ACTIONS), /* TODO: generated entry */
+//	ENTRY1( FORM, LIST_PROPERTY, XML_ETACTION_PROC_ATTRS,
+//			OOO_VALUE_TYPE_ACTIONS), /* generated entry */
 
     ENTRY1( OFFICE, ANNOTATION, XML_ETACTION_MOVE_ATTRS_TO_ELEMS,
             OOO_ANNOTATION_ACTIONS ), /* generated entry */
@@ -675,7 +678,7 @@ static XMLTransformerActionInit aParaActionTable[] =
 {
     ENTRY0( TEXT, STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
     ENTRY0( TEXT, COND_STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
-//  ENTRY0( TEXT, CLASS_NAMES, XML_ATACTION_REMOVE ),
+//	ENTRY0( TEXT, CLASS_NAMES, XML_ATACTION_REMOVE ),
     ENTRY1Q( TEXT, LEVEL, XML_ATACTION_RENAME,
                         XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
@@ -823,8 +826,8 @@ static XMLTransformerActionInit aDropCapActionTable[] =
 static XMLTransformerActionInit aColumnsActionTable[] =
 {
     ENTRY0( STYLE, COLUMN_GAP, XML_ATACTION_INCH2IN ),
-//  ENTRY0( STYLE, SPACE_BEFORE, XML_ATACTION_INCH2IN ),
-//  ENTRY0( STYLE, SPACE_AFTER, XML_ATACTION_INCH2IN ),
+//	ENTRY0( STYLE, SPACE_BEFORE, XML_ATACTION_INCH2IN ),
+//	ENTRY0( STYLE, SPACE_AFTER, XML_ATACTION_INCH2IN ),
     ENTRY1Q( FO, MARGIN_LEFT, XML_ATACTION_RENAME_INCH2IN,
            XML_NAMESPACE_FO, XML_START_INDENT ),
     ENTRY1Q( FO, MARGIN_RIGHT, XML_ATACTION_RENAME_INCH2IN,
@@ -912,16 +915,17 @@ static XMLTransformerActionInit aBackgroundImageActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-/* OOO_BACKGROUND_IMAGE_ACTIONS for OpenOffice.org text documents
-   OpenOffice.org text documents, written by OpenOffice.org, contain
-   wrong value for the transparency of the background graphic (#i50322#)
-*/
+// --> OD 2005-06-10 #i50322#
+// OOO_BACKGROUND_IMAGE_ACTIONS for OpenOffice.org text documents
+// OpenOffice.org text documents, written by OpenOffice.org, contain
+// wrong value for the transparency of the background graphic
 static XMLTransformerActionInit aWriterBackgroundImageActionTable[] =
 {
     ENTRY1Q( DRAW, TRANSPARENCY, XML_ATACTION_WRITER_BACK_GRAPHIC_TRANSPARENCY, XML_NAMESPACE_DRAW, XML_OPACITY ),
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_True ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
+// <--
 
 // OOO_DDE_CONNECTION_DECL
 static XMLTransformerActionInit aDDEConnectionDeclActionTable[] =
@@ -1092,7 +1096,7 @@ public:
     XMLDocumentTransformerContext_Impl( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nPrefix,
-                              ::xmloff::token::XMLTokenEnum eToken  );
+                              ::xmloff::token::XMLTokenEnum eToken	);
 
     virtual ~XMLDocumentTransformerContext_Impl();
 
@@ -1408,7 +1412,7 @@ public:
     XMLTrackedChangesOOoTContext_Impl( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                                sal_uInt16 nPrefix,
-                            XMLTokenEnum eToken );
+                            XMLTokenEnum eToken	);
 
     virtual ~XMLTrackedChangesOOoTContext_Impl();
 
@@ -1421,7 +1425,7 @@ XMLTrackedChangesOOoTContext_Impl::XMLTrackedChangesOOoTContext_Impl(
         XMLTransformerBase& rImp,
         const OUString& rQName,
         sal_uInt16 nPrefix,
-        XMLTokenEnum eToken ) :
+        XMLTokenEnum eToken	) :
     XMLTransformerContext( rImp, rQName ),
     m_nPrefix( nPrefix ),
     m_eToken( eToken )
@@ -1509,10 +1513,11 @@ XMLTableOOoTransformerContext_Impl::~XMLTableOOoTransformerContext_Impl()
 void XMLTableOOoTransformerContext_Impl::StartElement(
         const Reference< XAttributeList >& rAttrList )
 {
-    // Perform OOO_STYLE_REF_ACTIONS for all applications (#i50521#)
+    // --> OD 2005-07-05 #i50521# - perform OOO_STYLE_REF_ACTIONS for all applications
     Reference< XAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList* pMutableAttrList =
         GetTransformer().ProcessAttrList( xAttrList, OOO_STYLE_REF_ACTIONS, sal_False );
+    // <--
     if( rAttrList->getLength() && IsXMLToken( GetTransformer().GetClass(), XML_SPREADSHEET  ) )
     {
         sal_Bool bPrintRanges(sal_False);
@@ -1554,7 +1559,7 @@ void XMLTableOOoTransformerContext_Impl::EndElement()
 XMLTransformerContext *OOo2OasisTransformer::CreateUserDefinedContext(
                               const TransformerAction_Impl& rAction,
                               const OUString& rQName,
-                                 sal_Bool bPersistent   )
+                                 sal_Bool bPersistent	)
 {
     switch( rAction.m_nActionType )
     {
@@ -1569,13 +1574,13 @@ XMLTransformerContext *OOo2OasisTransformer::CreateUserDefinedContext(
     case XML_ETACTION_STYLE:
         return new XMLStyleOOoTContext( *this, rQName,
                                static_cast< XMLFamilyType >( rAction.m_nParam1 ),
-                               bPersistent  );
+                               bPersistent	);
     case XML_ETACTION_STYLE_RENAME:
         return new XMLStyleOOoTContext( *this, rQName,
                     static_cast< XMLFamilyType >( rAction.m_nParam2 ),
                     rAction.GetQNamePrefixFromParam1(),
                     rAction.GetQNameTokenFromParam1(),
-                    bPersistent );
+                    bPersistent	);
     case XML_ETACTION_FRAME:
         return new XMLFrameOOoTransformerContext( *this, rQName );
     case XML_ETACTION_EVENT:
@@ -1696,11 +1701,13 @@ XMLTransformerActions *OOo2OasisTransformer::GetUserDefinedActions(
                         new XMLTransformerActions( aFrameAttrActionTable );
                     break;
                 case OOO_BACKGROUND_IMAGE_ACTIONS:
-                    // Use special actions for Writer documents. (#i50322#)
+                    // --> OD 2005-06-10 #i50322#
+                    // use special actions for Writer documents.
                     m_aActions[OOO_BACKGROUND_IMAGE_ACTIONS] =
                         isWriter()
                         ? new XMLTransformerActions( aWriterBackgroundImageActionTable )
                         : new XMLTransformerActions( aBackgroundImageActionTable );
+                    // <--
                     break;
                 case OOO_DDE_CONNECTION_DECL_ACTIONS:
                     m_aActions[OOO_DDE_CONNECTION_DECL_ACTIONS] =
@@ -2002,7 +2009,7 @@ Sequence< sal_Int8 >  static CreateUnoTunnelId()
     static osl::Mutex aCreateMutex;
     ::osl::Guard<osl::Mutex> aGuard( aCreateMutex );
     Sequence< sal_Int8 > aSeq( 16 );
-    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0,	sal_True );
     return aSeq;
 }
 
@@ -2087,25 +2094,25 @@ Reference< XInterface > SAL_CALL OOo2OasisTransformer_createInstance(
     return (cppu::OWeakObject*)new OOo2OasisTransformer();
 }
 
-#define OOO_IMPORTER( className, implName, subServiceName )             \
-OUString SAL_CALL className##_getImplementationName() throw()           \
-{                                                                       \
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( implName ) );         \
-}                                                                       \
+#define OOO_IMPORTER( className, implName, subServiceName ) 			\
+OUString SAL_CALL className##_getImplementationName() throw()			\
+{																		\
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( implName ) );			\
+}																		\
                                                                         \
 Sequence< OUString > SAL_CALL className##_getSupportedServiceNames() throw()\
-{                                                                       \
-    const OUString aServiceName( className##_getImplementationName() ); \
-    const Sequence< OUString > aSeq( &aServiceName, 1 );                \
-    return aSeq;                                                        \
-}                                                                       \
+{																		\
+    const OUString aServiceName( className##_getImplementationName() );	\
+    const Sequence< OUString > aSeq( &aServiceName, 1 );				\
+    return aSeq;														\
+}																		\
                                                                         \
-Reference< XInterface > SAL_CALL className##_createInstance(            \
-        const Reference< XMultiServiceFactory > & )                     \
-    throw( Exception )                                                  \
-{                                                                       \
-    return (cppu::OWeakObject*)new OOo2OasisTransformer( implName,      \
-                                         subServiceName );              \
+Reference< XInterface > SAL_CALL className##_createInstance(			\
+        const Reference< XMultiServiceFactory > & )      				\
+    throw( Exception )													\
+{																		\
+    return (cppu::OWeakObject*)new OOo2OasisTransformer( implName,		\
+                                         subServiceName );				\
 }
 
 OOO_IMPORTER( XMLWriterImportOOO,

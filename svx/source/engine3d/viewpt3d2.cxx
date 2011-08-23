@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,10 +67,10 @@ void Viewport3D::SetViewWindow(double fX, double fY, double fW, double fH)
 {
     aViewWin.X = fX;
     aViewWin.Y = fY;
-    if ( fW > 0 )   aViewWin.W = fW;
-    else            aViewWin.W = 1.0;
-    if ( fH > 0 )   aViewWin.H = fH;
-    else            aViewWin.H = 1.0;
+    if ( fW > 0 )	aViewWin.W = fW;
+    else			aViewWin.W = 1.0;
+    if ( fH > 0 )	aViewWin.H = fH;
+    else			aViewWin.H = 1.0;
 
     fWRatio = aDeviceRect.GetWidth() / aViewWin.W;
     fHRatio = aDeviceRect.GetHeight() / aViewWin.H;
@@ -173,7 +173,7 @@ void Viewport3D::MakeTransform(void)
         fXupVp = aViewTf.get(0, 0) * aVUV.getX() + aViewTf.get(0, 1) * aVUV.getY() + aViewTf.get(0, 2) * aVUV.getZ();
         fYupVp = aViewTf.get(1, 0) * aVUV.getX() + aViewTf.get(1, 1) * aVUV.getY() + aViewTf.get(1, 2) * aVUV.getZ();
         fV = sqrt(fXupVp * fXupVp + fYupVp * fYupVp);
-
+        
         if ( fV != 0 )
         {
             basegfx::B3DHomMatrix aTemp;
@@ -186,7 +186,7 @@ void Viewport3D::MakeTransform(void)
             aViewTf *= aTemp;
         }
 
-        bTfValid = sal_True;
+        bTfValid = TRUE;
     }
 }
 
@@ -205,7 +205,7 @@ void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
 
     switch ( eAspectMapping )
     {
-        double  fRatio, fTmp;
+        double	fRatio, fTmp;
 
         // Mapping, ohne die reale Groesse der Objekte im Device-Window
         // zu aendern
@@ -314,7 +314,7 @@ basegfx::B3DPoint Viewport3D::MapToDevice(const basegfx::B3DPoint& rVec) const
 void Viewport3D::SetVRP(const basegfx::B3DPoint& rNewVRP)
 {
     aVRP = rNewVRP;
-    bTfValid = sal_False;
+    bTfValid = FALSE;
 }
 
 /*************************************************************************
@@ -327,7 +327,7 @@ void Viewport3D::SetVPN(const basegfx::B3DVector& rNewVPN)
 {
     aVPN = rNewVPN;
     aVPN.normalize();
-    bTfValid = sal_False;
+    bTfValid = FALSE;
 }
 
 /*************************************************************************
@@ -339,7 +339,7 @@ void Viewport3D::SetVPN(const basegfx::B3DVector& rNewVPN)
 void Viewport3D::SetVUV(const basegfx::B3DVector& rNewVUV)
 {
     aVUV = rNewVUV;
-    bTfValid = sal_False;
+    bTfValid = FALSE;
 }
 
 /*************************************************************************
@@ -353,7 +353,7 @@ void Viewport3D::SetPRP(const basegfx::B3DPoint& rNewPRP)
     aPRP = rNewPRP;
     aPRP.setX(0.0);
     aPRP.setY(0.0);
-    bTfValid = sal_False;
+    bTfValid = FALSE;
 }
 
 /*************************************************************************
@@ -365,7 +365,7 @@ void Viewport3D::SetPRP(const basegfx::B3DPoint& rNewPRP)
 void Viewport3D::SetVPD(double fNewVPD)
 {
     fVPD = fNewVPD;
-    bTfValid = sal_False;
+    bTfValid = FALSE;
 }
 
 /*************************************************************************
@@ -377,7 +377,7 @@ void Viewport3D::SetVPD(double fNewVPD)
 void Viewport3D::SetNearClipDist(double fNewNCD)
 {
     fNearClipDist = fNewNCD;
-    bTfValid = sal_False;
+    bTfValid = FALSE;
 }
 
 /*************************************************************************
@@ -389,7 +389,7 @@ void Viewport3D::SetNearClipDist(double fNewNCD)
 void Viewport3D::SetFarClipDist(double fNewFCD)
 {
     fFarClipDist = fNewFCD;
-    bTfValid = sal_False;
+    bTfValid = FALSE;
 }
 
 // eof

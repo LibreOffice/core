@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -130,15 +130,15 @@ public class ScAreaLinksObj extends TestCase {
         tEnv = new TestEnvironment(oObj);
 
       } catch (com.sun.star.beans.UnknownPropertyException e) {
-        log.println ("Exception occurred while creating test Object.") ;
+        log.println ("Exception occured while creating test Object.") ;
         e.printStackTrace(log) ;
         throw new StatusException("Couldn't create test object", e);
       } catch (com.sun.star.lang.WrappedTargetException e) {
-        log.println ("Exception occurred while creating test Object.") ;
+        log.println ("Exception occured while creating test Object.") ;
         e.printStackTrace(log) ;
         throw new StatusException("Couldn't create test object", e);
       } catch (com.sun.star.lang.IllegalArgumentException e) {
-        log.println ("Exception occurred while creating test Object.") ;
+        log.println ("Exception occured while creating test Object.") ;
         e.printStackTrace(log) ;
         throw new StatusException("Couldn't create test object", e);
       }

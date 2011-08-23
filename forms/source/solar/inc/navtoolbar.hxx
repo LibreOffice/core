@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -142,25 +142,25 @@ namespace frm
         void    implUpdateImages();
 
         /// enables or disables an item, plus possible dependent items
-        void implEnableItem( sal_uInt16 _nItemId, bool _bEnabled );
+        void implEnableItem( USHORT _nItemId, bool _bEnabled );
 
         /** update the states of all features, using the callback
         */
         void updateFeatureStates( );
 
         // iterating through item windows
-        typedef void (NavigationToolBar::*ItemWindowHandler) (sal_uInt16, Window*, const void*) const;
+        typedef void (NavigationToolBar::*ItemWindowHandler) (USHORT, Window*, const void*) const;
         void    forEachItemWindow( ItemWindowHandler _handler, const void* _pParam );
 
-        void setItemBackground( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const;
-        void setTextLineColor( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const;
+        void setItemBackground( USHORT /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const;
+        void setTextLineColor( USHORT /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const;
 #if 0
-        void setItemWindowZoom( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const;
+        void setItemWindowZoom( USHORT /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const;
 #endif
-        void setItemControlFont( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const;
-        void setItemControlForeground( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const;
-        void adjustItemWindowWidth( sal_uInt16 _nItemId, Window* _pItemWindow, const void* /* _pParam */ ) const;
-        void enableItemRTL( sal_uInt16 /*_nItemId*/, Window* _pItemWindow, const void* _pIsRTLEnabled ) const;
+        void setItemControlFont( USHORT /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const;
+        void setItemControlForeground( USHORT /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const;
+        void adjustItemWindowWidth( USHORT _nItemId, Window* _pItemWindow, const void* /* _pParam */ ) const;
+        void enableItemRTL( USHORT /*_nItemId*/, Window* _pItemWindow, const void* _pIsRTLEnabled ) const;
     };
 
     //=====================================================================

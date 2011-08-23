@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include <string>
+#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
 #include <tools/ref.hxx>
 #include <tools/shl.hxx>
@@ -43,9 +43,9 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
-#include "svx/tbxctl.hxx"
-#include "svx/tbxdraw.hxx"
-#include "svx/tbxcolor.hxx"
+#include "tbxctl.hxx"
+#include "tbxdraw.hxx"
+#include "tbxcolor.hxx"
 #include "tbxdraw.hrc"
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
@@ -56,7 +56,7 @@ using namespace ::com::sun::star::frame;
 
 // -----------------------------------------------------------------------
 
-SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SvxTbxCtlDraw::SvxTbxCtlDraw( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
 
@@ -69,7 +69,7 @@ SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx 
 
 // -----------------------------------------------------------------------
 
-void SvxTbxCtlDraw::StateChanged( sal_uInt16 nSID, SfxItemState eState,
+void SvxTbxCtlDraw::StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
 {
     GetToolBox().EnableItem( GetId(), ( eState != SFX_ITEM_DISABLED ) );
@@ -95,7 +95,7 @@ void SvxTbxCtlDraw::toggleToolbox()
     Reference< XLayoutManager > xLayoutMgr = getLayoutManager();
     if ( xLayoutMgr.is() )
     {
-        sal_Bool bCheck = sal_False;
+        BOOL bCheck = FALSE;
         if ( xLayoutMgr->isElementVisible( m_sToolboxName ) )
         {
             xLayoutMgr->hideElement( m_sToolboxName );
@@ -103,7 +103,7 @@ void SvxTbxCtlDraw::toggleToolbox()
         }
         else
         {
-            bCheck = sal_True;
+            bCheck = TRUE;
             xLayoutMgr->createElement( m_sToolboxName );
             xLayoutMgr->showElement( m_sToolboxName );
         }
@@ -114,7 +114,7 @@ void SvxTbxCtlDraw::toggleToolbox()
 
 // -----------------------------------------------------------------------
 
-void SvxTbxCtlDraw::Select( sal_Bool )
+void SvxTbxCtlDraw::Select( BOOL )
 {
     toggleToolbox();
 }

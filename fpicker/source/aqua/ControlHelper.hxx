@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,7 @@
 #include "AquaFilePickerDelegate.hxx"
 
 using namespace com::sun::star;
-
-using ::rtl::OUString;
+using namespace rtl;
 
 class ControlHelper {
 
@@ -116,7 +115,7 @@ public:
             m_bUserPaneNeeded = true;
         }
     }
-
+    
     inline void    setFilterHelper(FilterHelper* pFilterHelper) {
         m_pFilterHelper = pFilterHelper;
     }
@@ -124,7 +123,7 @@ public:
     inline void    setFilePickerDelegate(AquaFilePickerDelegate* pDelegate) {
         m_pDelegate = pDelegate;
     }
-
+    
     inline bool    isAutoExtensionEnabled() {
         return ([((NSButton*) m_pToggles[AUTOEXTENSION]) state] == NSOnState);
     }
@@ -133,13 +132,13 @@ private:
     //------------------------------------------------------------------------------------
     // private member variables
     //------------------------------------------------------------------------------------
-
+    
     /** the native view object */
     NSView*    m_pUserPane;
 
     /** the checkbox controls */
     NSControl* m_pToggles[ TOGGLE_LAST ];
-
+    
     /** the visibility flags for the checkboxes */
     bool m_bToggleVisibility[TOGGLE_LAST];
 
@@ -148,13 +147,13 @@ private:
 
     /** the popup menu controls (except for the filter control) */
     NSControl* m_pListControls[ LIST_LAST ];
-
+    
     /** a map to store a control's label text */
     ::std::map<NSControl *, NSString *> m_aMapListLabels;
-
+    
     /** a map to store a popup menu's label text field */
     ::std::map<NSPopUpButton *, NSTextField *> m_aMapListLabelFields;
-
+    
     /** the visibility flags for the popup menus */
     bool m_bListVisibility[ LIST_LAST ];
 
@@ -163,16 +162,16 @@ private:
 
     /** indicates if the user pane was laid out already */
     bool m_bIsUserPaneLaidOut;
-
+    
     /** indicates if a filter control is needed */
     bool m_bIsFilterControlNeeded;
-
+    
     /** a list with all actively used controls */
     ::std::list<NSControl*> m_aActiveControls;
-
+    
     /** the filter helper */
     FilterHelper *m_pFilterHelper;
-
+    
     /** the save or open panel's delegate */
     AquaFilePickerDelegate *m_pDelegate;
 
@@ -186,7 +185,7 @@ private:
     void         createFilterControl();
     void         createUserPane();
     NSTextField* createLabelWithString(const NSString* label);
-
+    
     int          getControlElementName(const Class clazz, const int nControlId) const;
     NSControl*   getControl( const sal_Int16 nControlId ) const;
     static int   getVerticalDistance(const NSControl* first, const NSControl* second);

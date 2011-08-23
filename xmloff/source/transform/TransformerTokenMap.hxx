@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,14 +31,14 @@
 
 #include <rtl/ustring.hxx>
 #include <comphelper/stl_types.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <xmloff/xmltoken.hxx>
 #include "TransformerTokenMap.hxx"
 
 
 
 class XMLTransformerTokenMap :
-    public ::boost::unordered_map< ::rtl::OUString, ::xmloff::token::XMLTokenEnum,
+    public ::std::hash_map< ::rtl::OUString, ::xmloff::token::XMLTokenEnum, 
                             ::rtl::OUStringHash, ::comphelper::UStringEqual >
 {
 public:
@@ -46,6 +46,6 @@ public:
     ~XMLTransformerTokenMap();
 };
 
-#endif  //  _XMLOFF_TRANSFORMERTOKENMAPS_HXX
+#endif	//  _XMLOFF_TRANSFORMERTOKENMAPS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

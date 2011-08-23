@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@
 namespace sd { namespace toolpanel {
 
 const int TitleBar::snIndentationWidth = 16;
-
+ 
 TitleBar::TitleBar ( ::Window* pParent, const String& rsTitle, TitleBarType eType, bool bIsExpandable)
 : ::Window (pParent, WB_TABSTOP)
 , TreeNode(this)
@@ -70,7 +70,7 @@ TitleBar::TitleBar ( ::Window* pParent, const String& rsTitle, TitleBarType eTyp
 , mpDevice(new VirtualDevice (*this))
 , mbIsExpandable (bIsExpandable)
 {
-    EnableMapMode (sal_False);
+    EnableMapMode (FALSE);
 
     SetBackground (Wallpaper());
 
@@ -252,16 +252,23 @@ bool TitleBar::HasExpansionIndicator (void) const
 Image TitleBar::GetExpansionIndicator (void) const
 {
     Image aIndicator;
+    bool bHighContrastMode (GetSettings().GetStyleSettings().GetHighContrastMode() != 0);
     if (mbIsExpandable)
     {
-        sal_uInt16 nResourceId = 0;
+        USHORT nResourceId = 0;
         switch (meType)
         {
             case TBT_SUB_CONTROL_HEADLINE:
                 if (mbExpanded)
-                    nResourceId = BMP_COLLAPSE;
+                    if (bHighContrastMode)
+                        nResourceId = BMP_COLLAPSE_H;
+                    else
+                        nResourceId = BMP_COLLAPSE;
                 else
-                    nResourceId = BMP_EXPAND;
+                    if (bHighContrastMode)
+                        nResourceId = BMP_EXPAND_H;
+                    else
+                        nResourceId = BMP_EXPAND;
 
                 aIndicator = IconCache::Instance().GetIcon(nResourceId);
                 break;
@@ -280,7 +287,7 @@ void TitleBar::PaintSubPanelHeadLineBar (void)
     Rectangle aTextBox (CalculateTextBoundingBox (nWidth, true));
 
     Rectangle aTitleBarBox (CalculateTitleBarBox(aTextBox, nWidth));
-    int nVerticalOffset = -aTitleBarBox.Top();
+    int nVerticalOffset = -aTitleBarBox.Top(); 
     aTitleBarBox.Top() += nVerticalOffset;
     aTitleBarBox.Bottom() += nVerticalOffset;
     aTextBox.Top() += nVerticalOffset;
@@ -304,7 +311,7 @@ void TitleBar::PaintFocusIndicator (const Rectangle& rTextBox)
     if (mbFocused)
     {
         Rectangle aTextPixelBox (mpDevice->LogicToPixel (rTextBox));
-        mpDevice->EnableMapMode (sal_False);
+        mpDevice->EnableMapMode (FALSE);
         Rectangle aBox (rTextBox);
         aBox.Top() -= 1;
         aBox.Bottom() += 1;
@@ -321,7 +328,7 @@ void TitleBar::PaintFocusIndicator (const Rectangle& rTextBox)
 
         mpDevice->SetLineColor (COL_BLACK);
         mpDevice->DrawPolyLine (Polygon(aTextPixelBox), aDottedStyle);
-        mpDevice->EnableMapMode (sal_False);
+        mpDevice->EnableMapMode (FALSE);
     }
     else
         HideFocus ();
@@ -346,7 +353,7 @@ Rectangle TitleBar::PaintExpansionIndicator (const Rectangle& rTextBox)
             if (meType == TBT_SUB_CONTROL_HEADLINE)
                 aPosition.X() += 3;
             mpDevice->DrawImage (aPosition, aImage);
-
+            
             aExpansionIndicatorArea = Rectangle (
                 aPosition, aImage.GetSizePixel());
         }
@@ -366,13 +373,13 @@ void TitleBar::PaintText (const Rectangle& rTextBox)
 
 
 
-sal_uInt16 TitleBar::GetTextStyle (void)
+USHORT TitleBar::GetTextStyle (void)
 {
      if(IsEnabled())
      {
-         return TEXT_DRAW_LEFT
+         return TEXT_DRAW_LEFT 
              | TEXT_DRAW_TOP
-             | TEXT_DRAW_MULTILINE
+             | TEXT_DRAW_MULTILINE 
              | TEXT_DRAW_WORDBREAK;
      }
      else
@@ -397,9 +404,9 @@ void TitleBar::PaintBackground (const Rectangle& rTitleBarBox)
             if (mbExpanded)
             {
                 // Make the color a little bit darker.
-                aColor.SetRed(sal_uInt8(((sal_uInt16)aColor.GetRed()) * 8 / 10));
-                aColor.SetGreen(sal_uInt8(((sal_uInt16)aColor.GetGreen()) * 8 / 10));
-                aColor.SetBlue(sal_uInt8(((sal_uInt16)aColor.GetBlue()) * 8 / 10));
+                aColor.SetRed(UINT8(((UINT16)aColor.GetRed()) * 8 / 10));
+                aColor.SetGreen(UINT8(((UINT16)aColor.GetGreen()) * 8 / 10));
+                aColor.SetBlue(UINT8(((UINT16)aColor.GetBlue()) * 8 / 10));
             }
 
             mpDevice->SetFillColor (aColor);
@@ -445,7 +452,7 @@ Rectangle TitleBar::CalculateTextBoundingBox (
 
     Rectangle aTextBox (
         Point(0,0),
-        Size (nAvailableWidth,
+        Size (nAvailableWidth, 
             GetSettings().GetStyleSettings().GetTitleHeight()));
     aTextBox.Top() += (aTextBox.GetHeight() - GetTextHeight()) / 2;
     if (HasExpansionIndicator())
@@ -524,7 +531,7 @@ void TitleBar::DataChanged (const DataChangedEvent& rEvent)
             mpDevice.reset(new VirtualDevice (*this));
 
             // fall through.
-
+            
         case DATACHANGED_FONTS:
         case DATACHANGED_FONTSUBSTITUTION:
         {
@@ -535,7 +542,7 @@ void TitleBar::DataChanged (const DataChangedEvent& rEvent)
             if (IsControlFont())
                 aFont.Merge(GetControlFont());
             SetZoomedPointFont(aFont);
-
+            
             // Color.
             Color aColor;
             if (IsControlForeground())

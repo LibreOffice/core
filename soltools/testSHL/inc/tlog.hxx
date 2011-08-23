@@ -37,8 +37,10 @@
 
 using namespace std;
 
+// <namespace_tstutl>
 namespace tstutl {
 
+// <class_tLog>
 class tLog {
 
     // <private_members>

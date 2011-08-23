@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,12 +37,12 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 
 #include <vector>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 namespace pdfi
 {
     struct EmitContext;
-
+    
     class ImageContainer
     {
     private:
@@ -51,11 +51,11 @@ namespace pdfi
 
     public:
         ImageContainer();
-
+        
         ImageId addImage( const ::com::sun::star::uno::Sequence<
                                 ::com::sun::star::beans::PropertyValue>& xBitmap );
         void writeBase64EncodedStream( ImageId nImageId, EmitContext& rContext );
-    };
+    };    
 }
 
 #endif

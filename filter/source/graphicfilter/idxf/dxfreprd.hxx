@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 
 class DXFBoundingBox {
 public:
-    sal_Bool bEmpty;
+    BOOL bEmpty;
     double fMinX;
     double fMinY;
     double fMinZ;
@@ -49,7 +49,7 @@ public:
     double fMaxY;
     double fMaxZ;
 
-    DXFBoundingBox() { bEmpty=sal_True; }
+    DXFBoundingBox() { bEmpty=TRUE; }
     void Union(const DXFVector & rVector);
 };
 
@@ -63,15 +63,15 @@ public:
     DXFPalette();
     ~DXFPalette();
 
-    sal_uInt8 GetRed(sal_uInt8 nIndex) const;
-    sal_uInt8 GetGreen(sal_uInt8 nIndex) const;
-    sal_uInt8 GetBlue(sal_uInt8 nIndex) const;
+    BYTE GetRed(BYTE nIndex) const;
+    BYTE GetGreen(BYTE nIndex) const;
+    BYTE GetBlue(BYTE nIndex) const;
 
 private:
-    sal_uInt8 * pRed;
-    sal_uInt8 * pGreen;
-    sal_uInt8 * pBlue;
-    void SetColor(sal_uInt8 nIndex, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue);
+    BYTE * pRed;
+    BYTE * pGreen;
+    BYTE * pBlue;
+    void SetColor(BYTE nIndex, BYTE nRed, BYTE nGreen, BYTE nBlue);
 };
 
 
@@ -99,7 +99,7 @@ public:
     DXFEntities aEntities;
         // Die Entities (aus der Entities-Section) der DXF-Datei
 
-    rtl_TextEncoding mEnc;  // $DWGCODEPAGE
+    rtl_TextEncoding mEnc;	// $DWGCODEPAGE
 
     double mfGlobalLineTypeScale; // $LTSCALE
 
@@ -112,7 +112,7 @@ public:
         double getGlobalLineTypeScale() const;
         void setGlobalLineTypeScale(double fGlobalLineTypeScale);
 
-    sal_Bool Read( SvStream & rIStream, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent);
+    BOOL Read( SvStream & rIStream, USHORT nMinPercent, USHORT nMaxPercent);
         // Liesst die komplette DXF-Datei ein.
 
 private:
@@ -126,9 +126,9 @@ private:
 //-------------------inlines--------------------------------------------------
 //----------------------------------------------------------------------------
 
-inline sal_uInt8 DXFPalette::GetRed(sal_uInt8 nIndex) const { return pRed[nIndex]; }
-inline sal_uInt8 DXFPalette::GetGreen(sal_uInt8 nIndex) const { return pGreen[nIndex]; }
-inline sal_uInt8 DXFPalette::GetBlue(sal_uInt8 nIndex) const { return pBlue[nIndex]; }
+inline BYTE DXFPalette::GetRed(BYTE nIndex) const { return pRed[nIndex]; }
+inline BYTE DXFPalette::GetGreen(BYTE nIndex) const { return pGreen[nIndex]; }
+inline BYTE DXFPalette::GetBlue(BYTE nIndex) const { return pBlue[nIndex]; }
 inline rtl_TextEncoding DXFRepresentation::getTextEncoding() const { return mEnc; }
 inline void DXFRepresentation::setTextEncoding(rtl_TextEncoding aEnc) { mEnc = aEnc; }
 inline double DXFRepresentation::getGlobalLineTypeScale() const { return mfGlobalLineTypeScale; }

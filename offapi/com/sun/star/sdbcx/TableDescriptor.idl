@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,22 +24,22 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbcx_TableDescriptor_idl__
-#define __com_sun_star_sdbcx_TableDescriptor_idl__
-
-#ifndef __com_sun_star_sdbcx_Descriptor_idl__
-#include <com/sun/star/sdbcx/Descriptor.idl>
-#endif
-
- module com {  module sun {  module star {  module sdbcx {
-
- published interface XColumnsSupplier;
- published interface XKeysSupplier;
-
-
+#ifndef __com_sun_star_sdbcx_TableDescriptor_idl__ 
+#define __com_sun_star_sdbcx_TableDescriptor_idl__ 
+ 
+#ifndef __com_sun_star_sdbcx_Descriptor_idl__ 
+#include <com/sun/star/sdbcx/Descriptor.idl> 
+#endif 
+ 
+ module com {  module sun {  module star {  module sdbcx { 
+ 
+ published interface XColumnsSupplier; 
+ published interface XKeysSupplier; 
+ 
+ 
 /** is used to define a table of a database. A table is described by its
     name and one or more columns and the keys for semantic rules.
-
+    
     <p>
     In addition, it may contain keys, and to define semantic rules for the table.
     <b>
@@ -50,39 +50,39 @@
     @see com::sun::star::sdbcx::Table
  */
 published service TableDescriptor
-{
-
+{ 
+     
     /** access to the contained table columns.
      */
-    interface XColumnsSupplier;
-
-
+    interface XColumnsSupplier; 
+ 
+     
     /** optional, provides the access to the table keys.
      */
-    [optional] interface XKeysSupplier;
-
-    service Descriptor;
-
+    [optional] interface XKeysSupplier;	 
+ 
+    service Descriptor; 
+     
     /** is the name of the table catalog.
      */
-    [property] string CatalogName;
-
-
+    [property] string CatalogName; 
+ 
+     
     /** is the name of the table schema.
      */
-    [property] string SchemaName;
-
-
-    /** supplies a comment on the table, Could be empty if not supported by
+    [property] string SchemaName; 
+ 
+     
+    /** supplies a comment on the table, Could be emtpy if not supported by
         the driver.
      */
-    [property] string Description;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*===========================================================================
-===========================================================================*/
-#endif
+    [property] string Description;	 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*=========================================================================== 
+===========================================================================*/ 
+#endif 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,6 +71,11 @@
 #include <shells.hrc>
 
 #define SwWebView
+#define SearchAttributes
+#define ReplaceAttributes
+#define SearchSettings
+#define _ExecSearch ExecSearch
+#define _StateSearch StateSearch
 #define Frames
 #define Graphics
 #define OLEObjects
@@ -85,6 +90,7 @@
 #define ListInText
 #define ListInTable
 #define Page
+#include <svx/svxslots.hxx>
 #include <swslots.hxx>
 
 
@@ -93,34 +99,50 @@ SFX_IMPL_NAMED_VIEWFACTORY(SwWebView, "Default")
     SFX_VIEW_REGISTRATION(SwWebDocShell);
 }
 
+
 SFX_IMPL_INTERFACE( SwWebView, SwView, SW_RES(RID_WEBTOOLS_TOOLBOX) )
 {
     SFX_CHILDWINDOW_REGISTRATION(SfxTemplateDialogWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(SvxSearchDialogWrapper::GetChildWindowId());
-    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS|
+    SFX_OBJECTBAR_REGISTRATION(	SFX_OBJECTBAR_TOOLS|
                                 SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                 SW_RES(RID_WEBTOOLS_TOOLBOX) );
 }
 
 TYPEINIT1(SwWebView,SwView)
 
+/*-----------------22.01.97 14.27-------------------
+
+--------------------------------------------------*/
+
+
 SwWebView::SwWebView(SfxViewFrame* _pFrame, SfxViewShell* _pShell) :
     SwView(_pFrame, _pShell)
 {
 }
 
+/*-----------------22.01.97 14.27-------------------
+
+--------------------------------------------------*/
+
+
 SwWebView::~SwWebView()
 {
 }
 
+/*-----------------23.01.97 09.01-------------------
+
+--------------------------------------------------*/
+
+
 void SwWebView::SelectShell()
 {
     // Entscheidung, ob UpdateTable gerufen werden muss
-    sal_Bool bUpdateTable = sal_False;
+    BOOL bUpdateTable = FALSE;
     const SwFrmFmt* pCurTableFmt = GetWrtShell().GetTableFmt();
     if(pCurTableFmt && pCurTableFmt != GetLastTblFrmFmt())
     {
-        bUpdateTable = sal_True; // kann erst spaeter ausgefuehrt werden
+        bUpdateTable = TRUE; // kann erst spaeter ausgefuehrt werden
     }
     SetLastTblFrmFmt(pCurTableFmt);
     //SEL_TBL und SEL_TBL_CELLS koennen verodert sein!
@@ -130,7 +152,7 @@ void SwWebView::SelectShell()
     int _nSelectionType = GetSelectionType();
     if ( nNewSelectionType == _nSelectionType )
     {
-        GetViewFrame()->GetBindings().InvalidateAll( sal_False );
+        GetViewFrame()->GetBindings().InvalidateAll( FALSE );
         if ( _nSelectionType & nsSelectionType::SEL_OLE ||
              _nSelectionType & nsSelectionType::SEL_GRF )
             //Fuer Grafiken und OLE kann sich natuerlich das Verb aendern!
@@ -138,12 +160,14 @@ void SwWebView::SelectShell()
     }
     else
     {
+
+    //	DELETEZ(pxSelectionObj); //Selektionsobjekt loeschen
         SfxDispatcher &rDispatcher = *GetViewFrame()->GetDispatcher();
         SwToolbarConfigItem *pBarCfg = SW_MOD()->GetWebToolbarConfig();
 
         if( GetCurShell() )
         {
-            rDispatcher.Flush();        // alle gecachten Shells wirklich loeschen
+            rDispatcher.Flush();		// alle gecachten Shells wirklich loeschen
 
             //Zur alten Selektion merken welche Toolbar sichtbar war
             sal_Int32 nId = rDispatcher.GetObjectBarId( SFX_OBJECTBAR_OBJECT );
@@ -151,8 +175,8 @@ void SwWebView::SelectShell()
                 pBarCfg->SetTopToolbar( _nSelectionType, nId );
 
             SfxShell *pSfxShell;
-            sal_uInt16 i;
-            for ( i = 0; sal_True; ++i )
+            USHORT i;
+            for ( i = 0; TRUE; ++i )
             {
                 pSfxShell = rDispatcher.GetShell( i );
                 if ( !( pSfxShell->ISA( SwBaseShell ) ||
@@ -164,15 +188,15 @@ void SwWebView::SelectShell()
             rDispatcher.Pop( *pSfxShell, SFX_SHELL_POP_UNTIL | SFX_SHELL_POP_DELETE);
         }
 
-        sal_Bool bInitFormShell = sal_False;
+        BOOL bInitFormShell = FALSE;
         if( !GetFormShell() )
         {
-            bInitFormShell = sal_True;
+            bInitFormShell = TRUE;
             SetFormShell( new FmFormShell( this ) );
             rDispatcher.Push( *GetFormShell() );
         }
 
-        sal_Bool bSetExtInpCntxt = sal_False;
+        BOOL bSetExtInpCntxt = FALSE;
         _nSelectionType = nNewSelectionType;
         SetSelectionType( _nSelectionType );
         ShellModes eShellMode;
@@ -244,7 +268,7 @@ void SwWebView::SelectShell()
         }
         else
         {
-            bSetExtInpCntxt = sal_True;
+            bSetExtInpCntxt = TRUE;
             eShellMode = SHELL_MODE_TEXT;
             if ( _nSelectionType & nsSelectionType::SEL_NUM )
             {
@@ -268,7 +292,7 @@ void SwWebView::SelectShell()
         if( !GetDocShell()->IsReadOnly() )
         {
             if( bSetExtInpCntxt && GetWrtShell().HasReadonlySel() )
-                bSetExtInpCntxt = sal_False;
+                bSetExtInpCntxt = FALSE;
 
             InputContext aCntxt( GetEditWin().GetInputContext() );
             aCntxt.SetOptions( bSetExtInpCntxt
@@ -302,7 +326,7 @@ void SwWebView::SelectShell()
 
     //Guenstiger Zeitpunkt fuer die Kommunikation mit OLE-Objekten?
     if ( GetDocShell()->GetDoc()->IsOLEPrtNotifyPending() )
-        GetDocShell()->GetDoc()->PrtOLENotify( sal_False );
+        GetDocShell()->GetDoc()->PrtOLENotify( FALSE );
 
     //jetzt das Tabellen-Update
     if(bUpdateTable)

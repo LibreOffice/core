@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 #include "QTableConnection.hxx"
-#include <osl/diagnose.h>
+#include <tools/debug.hxx>
 #include "QueryTableView.hxx"
 #include "ConnectionLine.hxx"
 using namespace dbaui;
@@ -45,6 +45,7 @@ OQueryTableConnection::OQueryTableConnection(OQueryTableView* pContainer, const 
 {
     DBG_CTOR(OQueryTableConnection,NULL);
 }
+
 
 //------------------------------------------------------------------------
 OQueryTableConnection::OQueryTableConnection(const OQueryTableConnection& rConn)
@@ -73,7 +74,7 @@ OQueryTableConnection& OQueryTableConnection::operator=(const OQueryTableConnect
 //------------------------------------------------------------------------
 sal_Bool OQueryTableConnection::operator==(const OQueryTableConnection& rCompare)
 {
-    OSL_ENSURE(GetData() && rCompare.GetData(), "OQueryTableConnection::operator== : einer der beiden Teilnehmer hat keine Daten !");
+    DBG_ASSERT(GetData() && rCompare.GetData(), "OQueryTableConnection::operator== : einer der beiden Teilnehmer hat keine Daten !");
 
     // allzuviel brauche ich nicht vergleichen (schon gar nicht alle Member) : lediglich die Fenster, an denen wir haengen, und
     // die Indizies in der entsprechenden Tabelle muessen uebereinstimmen
@@ -81,13 +82,13 @@ sal_Bool OQueryTableConnection::operator==(const OQueryTableConnection& rCompare
     OQueryTableConnectionData* pCompData = static_cast<OQueryTableConnectionData*>(rCompare.GetData().get());
 
     // Connections werden als gleich angesehen, wenn sie in Source-/Dest-Fenstername und Source-/Dest-FieldIndex uebereinstimmen ...
-    return  (   (   (pMyData->getReferencedTable() == pCompData->getReferencedTable()) &&
+    return	(	(	(pMyData->getReferencedTable() == pCompData->getReferencedTable()) &&
                     (pMyData->getReferencingTable() == pCompData->getReferencingTable()) &&
                     (pMyData->GetFieldIndex(JTCS_TO) == pCompData->GetFieldIndex(JTCS_TO)) &&
                     (pMyData->GetFieldIndex(JTCS_FROM) == pCompData->GetFieldIndex(JTCS_FROM))
                 )
-                ||  // ... oder diese Uebereinstimmung ueber Kreuz besteht
-                (   (pMyData->getReferencingTable() == pCompData->getReferencedTable()) &&
+                ||	// ... oder diese Uebereinstimmung ueber Kreuz besteht
+                (	(pMyData->getReferencingTable() == pCompData->getReferencedTable()) &&
                     (pMyData->getReferencedTable() == pCompData->getReferencingTable()) &&
                     (pMyData->GetFieldIndex(JTCS_TO) == pCompData->GetFieldIndex(JTCS_FROM)) &&
                     (pMyData->GetFieldIndex(JTCS_FROM) == pCompData->GetFieldIndex(JTCS_TO))
@@ -95,5 +96,10 @@ sal_Bool OQueryTableConnection::operator==(const OQueryTableConnection& rCompare
             );
 }
 // -----------------------------------------------------------------------------
+
+
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 using namespace ftp;
 using namespace com::sun::star;
 
-ResultSetBase::ResultSetBase(
+ResultSetBase::ResultSetBase( 
     const uno::Reference< lang::XMultiServiceFactory >&  xMSF,
     const uno::Reference< ucb::XContentProvider >&  xProvider,
     sal_Int32 nOpenMode,
@@ -116,11 +116,11 @@ ResultSetBase::addEventListener(
     throw( uno::RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
-
+    
     if ( ! m_pDisposeEventListeners )
         m_pDisposeEventListeners =
             new cppu::OInterfaceContainerHelper( m_aMutex );
-
+    
     m_pDisposeEventListeners->addInterface( Listener );
 }
 
@@ -291,7 +291,7 @@ sal_Bool SAL_CALL ResultSetBase::absolute( sal_Int32 row )
         if( m_nRow < -1 )
             m_nRow = -1;
     }
-
+    
     return 0<= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size());
 }
 
@@ -306,14 +306,14 @@ ResultSetBase::relative(
 {
     if( isAfterLast() || isBeforeFirst() )
         throw sdbc::SQLException();
-
+    
     if( row > 0 )
         while( row-- )
             next();
     else if( row < 0 )
         while( row++ && m_nRow > - 1 )
             previous();
-
+    
     return 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size());
 }
 
@@ -406,7 +406,7 @@ ResultSetBase::queryContentIdentifierString(
 
 uno::Reference< ucb::XContentIdentifier > SAL_CALL
 ResultSetBase::queryContentIdentifier(
-    void
+    void 
 )
     throw(
         uno::RuntimeException
@@ -417,13 +417,13 @@ ResultSetBase::queryContentIdentifier(
         if(!m_aIdents[m_nRow].is()) {
             rtl::OUString url = queryContentIdentifierString();
             if(url.getLength() )
-                m_aIdents[m_nRow] =
-                    uno::Reference< ucb::XContentIdentifier >(
+                m_aIdents[m_nRow] = 
+                    uno::Reference< ucb::XContentIdentifier >( 
                         new ::ucbhelper::ContentIdentifier(m_xMSF,url) );
         }
         return m_aIdents[m_nRow];
     }
-
+    
     return uno::Reference<ucb::XContentIdentifier>();
 }
 
@@ -446,40 +446,40 @@ class XPropertySetInfoImpl
       public beans::XPropertySetInfo
 {
 public:
-
+    
     XPropertySetInfoImpl( const uno::Sequence< beans::Property >& aSeq )
         : m_aSeq( aSeq )
     {
     }
-
+    
     void SAL_CALL acquire( void )
         throw()
     {
         OWeakObject::acquire();
     }
 
-
+    
     void SAL_CALL release( void )
         throw()
     {
         OWeakObject::release();
     }
-
+    
     uno::Any SAL_CALL queryInterface( const uno::Type& rType )
         throw( uno::RuntimeException )
     {
-        uno::Any aRet = cppu::queryInterface(
+        uno::Any aRet = cppu::queryInterface( 
             rType,
             SAL_STATIC_CAST( beans::XPropertySetInfo*, this ) );
         return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-    }
-
+    }    
+    
     uno::Sequence< beans::Property > SAL_CALL getProperties()
         throw( uno::RuntimeException )
     {
         return m_aSeq;
     }
-
+    
     beans::Property SAL_CALL getPropertyByName( const ::rtl::OUString& aName )
         throw( beans::UnknownPropertyException,
                uno::RuntimeException)
@@ -489,7 +489,7 @@ public:
                 return m_aSeq[i];
         throw beans::UnknownPropertyException();
     }
-
+    
     sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& Name )
         throw( uno::RuntimeException )
     {
@@ -500,7 +500,7 @@ public:
     }
 
 private:
-
+    
     uno::Sequence< beans::Property > m_aSeq;
 };
 
@@ -512,12 +512,12 @@ ResultSetBase::getPropertySetInfo()
     throw( uno::RuntimeException)
 {
     uno::Sequence< beans::Property > seq(2);
-    seq[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount"));
+    seq[0].Name = rtl::OUString::createFromAscii( "RowCount" );
     seq[0].Handle = -1;
     seq[0].Type = getCppuType( static_cast< sal_Int32* >(0) );
     seq[0].Attributes = beans::PropertyAttribute::READONLY;
-
-    seq[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal"));
+    
+    seq[1].Name = rtl::OUString::createFromAscii( "IsRowCountFinal" );
     seq[1].Handle = -1;
     seq[1].Type = getCppuType( static_cast< sal_Bool* >(0) );
     seq[1].Attributes = beans::PropertyAttribute::READONLY;
@@ -537,10 +537,10 @@ void SAL_CALL ResultSetBase::setPropertyValue(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) ||
-        aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) )
+    if( aPropertyName == rtl::OUString::createFromAscii( "IsRowCountFinal" ) ||
+        aPropertyName == rtl::OUString::createFromAscii( "RowCount" ) )
         return;
-
+    
     throw beans::UnknownPropertyException();
 }
 
@@ -551,13 +551,13 @@ uno::Any SAL_CALL ResultSetBase::getPropertyValue(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( PropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) )
+    if( PropertyName == rtl::OUString::createFromAscii( "IsRowCountFinal" ) )
     {
         uno::Any aAny;
         aAny <<= m_bRowCountFinal;
         return aAny;
     }
-    else if ( PropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) )
+    else if ( PropertyName == rtl::OUString::createFromAscii( "RowCount" ) )
     {
         uno::Any aAny;
         sal_Int32 count = m_aItems.size();
@@ -576,7 +576,7 @@ void SAL_CALL ResultSetBase::addPropertyChangeListener(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) )
+    if( aPropertyName == rtl::OUString::createFromAscii( "IsRowCountFinal" ) )
     {
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pIsFinalListeners )
@@ -585,7 +585,7 @@ void SAL_CALL ResultSetBase::addPropertyChangeListener(
 
         m_pIsFinalListeners->addInterface( xListener );
     }
-    else if ( aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) )
+    else if ( aPropertyName == rtl::OUString::createFromAscii( "RowCount" ) )
     {
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pRowCountListeners )
@@ -605,13 +605,13 @@ void SAL_CALL ResultSetBase::removePropertyChangeListener(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) &&
+    if( aPropertyName == rtl::OUString::createFromAscii( "IsRowCountFinal" ) &&
         m_pIsFinalListeners )
     {
         osl::MutexGuard aGuard( m_aMutex );
         m_pIsFinalListeners->removeInterface( aListener );
     }
-    else if ( aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) &&
+    else if ( aPropertyName == rtl::OUString::createFromAscii( "RowCount" ) &&
               m_pRowCountListeners )
     {
         osl::MutexGuard aGuard( m_aMutex );

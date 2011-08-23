@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,11 +47,11 @@ namespace vclcanvas
                                 bool                           bAlphaBitmap,
                                 rendering::XGraphicDevice&     rDevice,
                                 const OutDevProviderSharedPtr& rOutDevProvider )
-    {
+    { 
         // create bitmap for given reference device
         // ========================================
-        const sal_uInt16 nBitCount( (sal_uInt16)24U );
-        const BitmapPalette*    pPalette = NULL;
+        const USHORT nBitCount( (USHORT)24U );
+        const BitmapPalette*	pPalette = NULL;
 
         Bitmap aBitmap( rSize, nBitCount, pPalette );
 
@@ -61,8 +61,8 @@ namespace vclcanvas
         // use alpha VDev, then).
         if( bAlphaBitmap )
         {
-            AlphaMask   aAlpha ( rSize );
-
+            AlphaMask 	aAlpha ( rSize );
+            
             maCanvasHelper.init( BitmapEx( aBitmap, aAlpha ),
                                  rDevice,
                                  rOutDevProvider );
@@ -105,7 +105,7 @@ namespace vclcanvas
     {
         uno::Sequence< ::rtl::OUString > aRet(1);
         aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
-
+        
         return aRet;
     }
 
@@ -121,7 +121,7 @@ namespace vclcanvas
     bool CanvasBitmap::repaint( const GraphicObjectSharedPtr& rGrf,
                                 const rendering::ViewState&   viewState,
                                 const rendering::RenderState& renderState,
-                                const ::Point&                rPt,
+                                const ::Point&                rPt, 
                                 const ::Size&                 rSz,
                                 const GraphicAttr&            rAttr ) const
     {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,33 +39,33 @@
 class OfaHtmlTabPage : public SfxTabPage
 {
     FixedLine       aFontSizeGB;
-    FixedText       aSize1FT;
+    FixedText		aSize1FT;
     NumericField    aSize1NF;
-    FixedText       aSize2FT;
+    FixedText		aSize2FT;
     NumericField    aSize2NF;
-    FixedText       aSize3FT;
+    FixedText		aSize3FT;
     NumericField    aSize3NF;
-    FixedText       aSize4FT;
+    FixedText		aSize4FT;
     NumericField    aSize4NF;
-    FixedText       aSize5FT;
+    FixedText		aSize5FT;
     NumericField    aSize5NF;
-    FixedText       aSize6FT;
+    FixedText		aSize6FT;
     NumericField    aSize6NF;
-    FixedText       aSize7FT;
+    FixedText		aSize7FT;
     NumericField    aSize7NF;
 
     FixedLine       aImportGB;
     CheckBox        aNumbersEnglishUSCB;
-    CheckBox        aUnknownTagCB;
-    CheckBox        aIgnoreFontNamesCB;
+    CheckBox		aUnknownTagCB;
+    CheckBox		aIgnoreFontNamesCB;
 
     FixedLine       aExportGB;
-    ListBox         aExportLB;
-    CheckBox        aStarBasicCB;
-    CheckBox        aStarBasicWarningCB;
-    CheckBox        aPrintExtensionCB;
-    CheckBox        aSaveGrfLocalCB;
-    FixedText       aCharSetFT;
+    ListBox			aExportLB;
+    CheckBox		aStarBasicCB;
+    CheckBox		aStarBasicWarningCB;
+    CheckBox		aPrintExtensionCB;
+    CheckBox		aSaveGrfLocalCB;
+    FixedText		aCharSetFT;
     SvxTextEncodingBox aCharSetLB;
 
     DECL_LINK(ExportHdl_Impl, ListBox*);
@@ -75,11 +75,11 @@ class OfaHtmlTabPage : public SfxTabPage
     virtual ~OfaHtmlTabPage();
 public:
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet );
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 
 };
 

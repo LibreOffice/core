@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,13 +42,13 @@ namespace sd {
 |*
 \************************************************************************/
 
-class NavigatorChildWindow
+class NavigatorChildWindow 
     : public SfxChildWindowContext
 {
 public:
     NavigatorChildWindow (
-        ::Window*,
-        sal_uInt16,
+        ::Window*, 
+        USHORT, 
         SfxBindings*,
         SfxChildWinInfo*);
 

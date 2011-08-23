@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,9 +35,8 @@
 #include "GraphicViewShellBase.hxx"
 
 #include <sfx2/viewfrm.hxx>
-#include <svtools/svtools.hrc>
 #include <com/sun/star/lang/Locale.hpp>
-#include <svtools/svtdata.hxx>
+
 #include <utility>
 #include <vector>
 
@@ -83,6 +82,7 @@
 #include "optsitem.hxx"
 #include "sdresid.hxx"
 
+// #96090#
 #include <svx/svxids.hrc>
 #include <sfx2/request.hxx>
 #include <svl/aeitem.hxx>
@@ -103,7 +103,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 {
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STYLE_FAMILY ) )
     {
-        sal_uInt16 nFamily = (sal_uInt16)GetDocSh()->GetStyleFamily();
+        UINT16 nFamily = (UINT16)GetDocSh()->GetStyleFamily();
 
         SdrView* pDrView = GetDrawView();
 
@@ -132,34 +132,37 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.Put(SfxUInt16Item(SID_STYLE_FAMILY, nFamily ));
     }
 
+    // #96090#
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_GETUNDOSTRINGS))
     {
         ImpGetUndoStrings(rSet);
     }
 
+    // #96090#
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_GETREDOSTRINGS))
     {
         ImpGetRedoStrings(rSet);
     }
 
+    // #96090#
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_UNDO))
     {
-        ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
-        sal_Bool bActivate(sal_False);
+        SfxUndoManager* pUndoManager = ImpGetUndoManager();
+        sal_Bool bActivate(FALSE);
 
         if(pUndoManager)
         {
             if(pUndoManager->GetUndoActionCount() != 0)
             {
-                bActivate = sal_True;
+                bActivate = TRUE;
             }
         }
 
         if(bActivate)
         {
-            // Set the necessary string like in
+            // #87229# Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1072 ff.
-            String aTmp( SvtResId( STR_UNDO ) );
+            String aTmp(ResId(STR_UNDO, *SFX_APP()->GetSfxResManager()));
             aTmp += pUndoManager->GetUndoActionComment(0);
             rSet.Put(SfxStringItem(SID_UNDO, aTmp));
         }
@@ -169,24 +172,25 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
+    // #96090#
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_REDO))
     {
-        ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
-        sal_Bool bActivate(sal_False);
+        SfxUndoManager* pUndoManager = ImpGetUndoManager();
+        sal_Bool bActivate(FALSE);
 
         if(pUndoManager)
         {
             if(pUndoManager->GetRedoActionCount() != 0)
             {
-                bActivate = sal_True;
+                bActivate = TRUE;
             }
         }
 
         if(bActivate)
         {
-            // Set the necessary string like in
+            // #87229# Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1081 ff.
-            String aTmp(SvtResId(STR_REDO));
+            String aTmp(ResId(STR_REDO, *SFX_APP()->GetSfxResManager()));
             aTmp += pUndoManager->GetRedoActionComment(0);
             rSet.Put(SfxStringItem(SID_REDO, aTmp));
         }
@@ -208,14 +212,13 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 SdPage* ViewShell::CreateOrDuplicatePage (
     SfxRequest& rRequest,
     PageKind ePageKind,
-    SdPage* pPage,
-    const sal_Int32 nInsertPosition)
+    SdPage* pPage)
 {
-    sal_uInt16 nSId = rRequest.GetSlot();
+    USHORT nSId = rRequest.GetSlot();
     SdDrawDocument* pDocument = GetDoc();
     SdrLayerAdmin& rLayerAdmin = pDocument->GetLayerAdmin();
-    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+    BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
+    BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
     SetOfByte aVisibleLayers;
     // Determine the page from which to copy some values, such as layers,
     // size, master page, to the new page.  This is usually the given page.
@@ -223,7 +226,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     SdPage* pTemplatePage = pPage;
     if (pTemplatePage == NULL)
         if (pDocument->GetSdPage(0, ePageKind) > 0)
-            pTemplatePage = pDocument->GetSdPage(0, ePageKind);
+            pTemplatePage = pDocument->GetSdPage(0, ePageKind); 
     if (pTemplatePage != NULL && pTemplatePage->TRG_HasMasterPage())
         aVisibleLayers = pTemplatePage->TRG_GetMasterPageVisibleLayers();
     else
@@ -233,8 +236,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     String aNotesPageName;
     AutoLayout eStandardLayout (AUTOLAYOUT_NONE);
     AutoLayout eNotesLayout (AUTOLAYOUT_NOTES);
-    sal_Bool bIsPageBack = aVisibleLayers.IsSet(aBckgrnd);
-    sal_Bool bIsPageObj = aVisibleLayers.IsSet(aBckgrndObj);
+    BOOL bIsPageBack = aVisibleLayers.IsSet(aBckgrnd);
+    BOOL bIsPageObj = aVisibleLayers.IsSet(aBckgrndObj);
 
     // 1. Process the arguments.
     const SfxItemSet* pArgs = rRequest.GetArgs();
@@ -248,8 +251,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
             && rBase.GetMainViewShell()->GetShellType()!=ViewShell::ST_DRAW)
         {
             framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
-                framework::FrameworkHelper::msLayoutTaskPanelURL,
-                false);
+                framework::FrameworkHelper::msLayoutTaskPanelURL);
         }
 */
 
@@ -271,7 +273,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     else if (pArgs->Count() == 1)
     {
         pDocument->StopWorkStartupDelay();
-        SFX_REQUEST_ARG (rRequest, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, sal_False);
+        SFX_REQUEST_ARG (rRequest, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
         if( pLayout )
         {
             if (ePageKind == PK_NOTES)
@@ -289,10 +291,10 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         // AutoLayouts muessen fertig sein
         pDocument->StopWorkStartupDelay();
 
-        SFX_REQUEST_ARG (rRequest, pPageName, SfxStringItem, ID_VAL_PAGENAME, sal_False);
-        SFX_REQUEST_ARG (rRequest, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, sal_False);
-        SFX_REQUEST_ARG (rRequest, pIsPageBack, SfxBoolItem, ID_VAL_ISPAGEBACK, sal_False);
-        SFX_REQUEST_ARG (rRequest, pIsPageObj, SfxBoolItem, ID_VAL_ISPAGEOBJ, sal_False);
+        SFX_REQUEST_ARG (rRequest, pPageName, SfxStringItem, ID_VAL_PAGENAME, FALSE);
+        SFX_REQUEST_ARG (rRequest, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
+        SFX_REQUEST_ARG (rRequest, pIsPageBack, SfxBoolItem, ID_VAL_ISPAGEBACK, FALSE);
+        SFX_REQUEST_ARG (rRequest, pIsPageObj, SfxBoolItem, ID_VAL_ISPAGEOBJ, FALSE);
 
         if (CHECK_RANGE (AUTOLAYOUT__START, (AutoLayout) pLayout->GetValue (), AUTOLAYOUT__END))
         {
@@ -308,12 +310,12 @@ SdPage* ViewShell::CreateOrDuplicatePage (
             }
 
             bIsPageBack = pIsPageBack->GetValue ();
-            bIsPageObj  = pIsPageObj->GetValue ();
+            bIsPageObj	= pIsPageObj->GetValue ();
         }
         else
         {
             Cancel();
-
+                
             if(HasCurrentFunction( SID_BEZIER_EDIT ) )
                 GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
 
@@ -340,7 +342,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     if( bUndo )
         pDrView->BegUndo( String( SdResId(STR_INSERTPAGE) ) );
 
-    sal_uInt16 nNewPageIndex = 0xffff;
+    USHORT nNewPageIndex = 0xffff;
     switch (nSId)
     {
         case SID_INSERTPAGE:
@@ -371,11 +373,10 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                         eStandardLayout,
                         eNotesLayout,
                         bIsPageBack,
-                        bIsPageObj,
-                        nInsertPosition);
+                        bIsPageObj);
                     // Select exactly the new page.
-                    sal_uInt16 nPageCount (pDocument->GetSdPageCount(ePageKind));
-                    for (sal_uInt16 i=0; i<nPageCount; i++)
+                    USHORT nPageCount (pDocument->GetSdPageCount(ePageKind));
+                    for (USHORT i=0; i<nPageCount; i++)
                     {
                         pDocument->GetSdPage(i, PK_STANDARD)->SetSelected(
                             i == nNewPageIndex);
@@ -383,7 +384,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                             i == nNewPageIndex);
                     }
                     // Move the selected page to the head of the document
-                    pDocument->MovePages ((sal_uInt16)-1);
+                    pDocument->MovePages ((USHORT)-1);
                     nNewPageIndex = 0;
                 }
             else
@@ -395,23 +396,21 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                     eStandardLayout,
                     eNotesLayout,
                     bIsPageBack,
-                    bIsPageObj,
-                    nInsertPosition);
+                    bIsPageObj);
             break;
 
         case SID_DUPLICATE_PAGE:
             // Duplication makes no sense when pPage is NULL.
             if (pPage != NULL)
                 nNewPageIndex = pDocument->DuplicatePage (
-                    pPage,
+                    pPage, 
                     ePageKind,
-                    aStandardPageName,
+                    aStandardPageName, 
                     aNotesPageName,
-                    eStandardLayout,
+                    eStandardLayout, 
                     eNotesLayout,
                     bIsPageBack,
-                    bIsPageObj,
-                    nInsertPosition);
+                    bIsPageObj);
             break;
 
         default:

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,87 +46,181 @@ SV_IMPL_PTRARR( SfxStatements_Impl, SfxMacroStatement* );
 
 struct SfxMacro_Impl
 
-/*  [Description]
+/*	[Beschreibung]
 
-    Implementation structure for the <SfxMacro> class.
+    Implementations-Struktur der Klasse <SfxMacro>.
 */
 
 {
-    SfxMacroMode        eMode;  /* purpose of the <SfxMacro> instance,
-                                   for meaning see enum <SfxMacroMode> */
-    SfxStatements_Impl  aList;  /* List of recorded Statements */
+    SfxMacroMode		eMode;	/*	Zweck der <SfxMacro>-Instanz,
+                                    Bedeutung siehe enum <SfxMacroMode> */
+    SfxStatements_Impl	aList;  /* 	Liste von aufgezeichneten Statements */
 };
 
 //====================================================================
 
 SfxMacroStatement::SfxMacroStatement
 (
-    const SfxShell& /*rShell*/,    // <SfxShell> which excexutes the Request
-    const String&   /*rTarget*/,   // Name of the target object for the
-                                   // excecution
-    sal_Bool        /*bAbsolute*/, // obsolete
-    const SfxSlot&  rSlot,         // the <SfxSlot>, which can read the
-                                   // statement
-    sal_Bool          bRequestDone,  // Was the Request really excecuted
+    const SfxShell& /*rShell*/,		// <SfxShell>, die den Request ausf"uhrte
+    const String&	/*rTarget*/,	// Name des Zielobjektes vor der Ausf"urhung
+    BOOL			/*bAbsolute*/,	// obsolet
+    const SfxSlot&	rSlot,			// der <SfxSlot>, der das Statement abspielen kann
+    BOOL			bRequestDone,	// wurde der Request tats"achlich ausgef"uhrt
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rArgs
 )
 
-/*  [Description]
+/* 	[Beschreibung]
 
-    This constructor of the SfxMacroStatement class generates a statement in
-    which an object is brought up, which is given by 'rShell'. Thus It is
-    addressing the always after 'bAbsolute' absolute, for example, as
-    '[mydoc.sdc]', or relative, that is 'active document'.
+    Dieser Konstruktor der Klasse SfxMacroStatement erzeugt ein Statement,
+    bei dem ein Objekt angesprochen wird, welches durch 'rShell' angegeben
+    ist. Dabei erfolgt die Addressierung je nach 'bAbsolute' absolut,
+    also z.B. als '[mydoc.sdc]' oder relativ, also z.B. 'ActiveDocument'.
 
-    Depending on the subclass of 'rShell', the following terms:
+    Je nach Art der Subklasse von 'rShell' ergeben sich folgende
+    Ausdr"ucke:
 
-                          | absolute                 relative
+                          | absolut                  relativ
     -----------------------------------------------------------------------
-    SfxApplication'       | 'StarCalc'              'Application'
+    SfxApplication'       | 'StarCalc'  			'Application'
     SfxViewFrame'         | '[mydoc.sdc:1]'         'ActiveWindow'
     SfxViewShell'         | '[mydoc.sdc:1]'         'AvtiveWindow'
     SfxObjectShell'       | '[mydoc.sdc]'           'ActiveDocument'
-    Other (Sub-Shells)    | '[mydoc.sdc:1]'         'ActiveWindow'
+    sonstige (Sub-Shells) | '[mydoc.sdc:1]'			'ActiveWindow'
 
-    Thus 'StarCalc' is a proxy for the name of the application
-    (Application::GetAppName()const). In the absolute sense of the selection
-    could be addressed as descriptive as in 'cell selection ("A5-D8")'), to do this
-    the application programmer must however use the constructor
-    <SfxMacroStatement::SfxMacroStatement(const String&,
-    const SfxSlot&,sal_Bool,SfxArguments*)>.
+    Dabei sind 'StarCalc' stellvertretend fuer den Namen der Applikation
+    (Application::GetAppName()const). In der absoluten Fassung k"onnte
+    die Selektion auch deskriptiv z.B. als 'CellSelection("A5-D8")')
+    angesprochen werden, dazu mu\ jedoch vom Anwendungsprogrammierer der
+    Konstruktor <SfxMacroStatement::SfxMacroStatement(const String&,
+    const SfxSlot&,BOOL,SfxArguments*)> verwendet werden.
 
-    For the so-called object is then, depending on the type of slots,
-    expressed as an assignment to one of its properties or calling its methods.
+    F"ur das so bezeichnete Objekt wird dann je nach Typ des Slots
+    eine Zuweisung an eines seiner Properties oder der Aufruf einer seiner
+    Methoden ausgedr"uckt.
 
-    [Example]
 
-    absolute:
+    [Beispiele]
+
+    absolut:
     SCalc3.OpenDocument( "\docs\mydoc.sdd", "StarDraw Presentation", 0, 0 )
     [mydoc.sdd].Activate()
     [mydoc.sdd:1].SwitchToView( 2 )
     [mydoc.sdc:1:1].CellSelection( "A5-D8" ).LineColor = 192357
 
-    relative:
+    relativ:
     ActiveWindow.LineColor = 192357
 
-    [Cross-reference]
 
-    <SfxMacroStatement::SfxMacroStatement(const String&,const SfxSlot&,sal_Bool,SfxArguments*)>
+    [Querverweise]
+
+    <SfxMacroStatement::SfxMacroStatement(const String&,const SfxSlot&,BOOL,SfxArguments*)>
     <SfxMacroStatement::SfxMacroStatement(const String&)>
 */
 
-:       nSlotId( rSlot.GetSlotId() ),
+:	nSlotId( rSlot.GetSlotId() ),
     aArgs( rArgs ),
     bDone( bRequestDone ),
     pDummy( 0 )
 {
-    // Workaround Recording non exported Slots
+    // Workaround Recording nicht exportierter Slots (#25386#)
     if ( !rSlot.pName )
         return;
+/*
+    // Objekt-Typ bestimmen
+    bool bIsApp = rShell.ISA(SfxApplication);
+    bool bIsDoc = rShell.ISA(SfxObjectShell);
+    bool bIsWin = !bIsApp && !bIsDoc &&
+                      ( rShell.ISA(SfxViewShell) || rShell.ISA(SfxViewFrame) );
+    bool bIsSel = !bIsApp && !bIsDoc && !bIsWin;
 
+    // Objekt nicht schon im Slot-Namen enthalten?
+    if ( bIsSel || rSlot.pName[0] == '.' )
+    {
+        // absolutes Aufzeichnen?
+        if ( rSlot.IsMode( SFX_SLOT_RECORDABSOLUTE ) )
+        {
+            // an der Applikation oder am Modul
+            if ( rShell.ISA(SfxApplication) || rShell.ISA(SfxModule) )
+                aStatement = rTarget;
+
+            // am Dokument?
+            // '[' = 5Bh
+            // ']' = 5Dh
+            else if ( rShell.ISA(SfxObjectShell) )
+            {
+                aStatement = 0x005B;
+                aStatement += rTarget;
+                aStatement += 0x005D;
+            }
+
+            else if ( rShell.ISA(SfxViewFrame) )
+            {
+                aStatement = 0x005B;
+                aStatement += String::CreateFromAscii("ViewFrame");//rShell.GetSbxObject()->GetName();
+                aStatement += 0x005D;
+            }
+
+            else
+            {
+                // an der View oder Sub-Shell
+                SfxViewShell *pViewShell = rShell.GetViewShell();
+                aStatement = 0x005B;
+                aStatement += String::CreateFromAscii("ViewShell");//pViewShell->GetViewFrame()->GetSbxObject()->GetName();
+                aStatement += 0x005D;
+                if ( !rShell.ISA(SfxViewFrame) )
+                    // an einer Sub-Shell zus"atlich ".Selection" anh"angen
+                    aStatement += DEFINE_CONST_UNICODE(".Selection");
+            }
+        }
+        else // relatives Aufzeichnen
+        {
+            // an der Application?
+            if ( rShell.ISA(SfxApplication) )
+                aStatement = DEFINE_CONST_UNICODE("Application");
+
+            // am Modul?
+            else if ( rShell.ISA(SfxModule) )
+                aStatement = DEFINE_CONST_UNICODE("ActiveModule");
+
+            // am Dokument
+            else if ( rShell.ISA(SfxObjectShell) )
+                aStatement = DEFINE_CONST_UNICODE("ActiveDocument");
+
+            // am Window
+            else if ( rShell.ISA(SfxViewShell) || rShell.ISA(SfxViewFrame) )
+                aStatement = DEFINE_CONST_UNICODE("ActiveWindow");
+
+            else
+                // an einer Sub-Shell
+                aStatement = DEFINE_CONST_UNICODE("Selection");
+        }
+    }
+
+    if ( bIsSel )
+    {
+        // bei Selection ggf. noch den Namen der SubShell anh"angen
+        const SfxShellObject *pShObj =
+                    (const SfxShellObject*) rShell.GetSbxObject();
+        if ( pShObj )
+        {
+            const SfxShellObject *pParentObj =
+                        (const SfxShellObject*) pShObj->GetParent();
+            SfxShell *pParentSh = pParentObj->GetShell();
+            DBG_ASSERT( pParentSh->ISA(SfxViewFrame),
+                        "parent of SubShell must be a Frame" );
+            if ( rSlot.pName[0] == '.' )
+            {
+                aStatement += '.';
+                aStatement += rShell.GetSbxObject()->GetName();
+            }
+        }
+        else
+            DBG_ASSERT( rSlot.pName[0] != '0', "recording unnamed object" );
+    }
+*/
     aStatement = DEFINE_CONST_UNICODE("Selection");
 
-    // to these object expression  of the Method-/Property-Name and parameters
+    // an diesen Objekt-Ausdruck den Methoden-/Property-Namen und Parameter
     GenerateNameAndArgs_Impl( SfxRequest::GetRecordingMacro(), rSlot, bRequestDone, aArgs);
 }
 
@@ -134,22 +228,22 @@ SfxMacroStatement::SfxMacroStatement
 
 SfxMacroStatement::SfxMacroStatement
 (
-    const String&   rTarget,  // The Object which is addressed while playing
-    const SfxSlot&  rSlot,    // The <SfxSlot>, which can playback the statement
-    sal_Bool        bRequestDone,  // was the Request actually performed
+    const String&   rTarget,		// Objekt, was beim Playing angesprochen wird
+    const SfxSlot&	rSlot,			// der <SfxSlot>, der das Statement abspielen kann
+    BOOL			bRequestDone,	// wurde der Request tats"achlich ausgef"uhrt
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rArgs
 )
 
-/*  [Description]
+/* 	[Beschreibung]
 
 
-    [Cross-reference]
+    [Querverweise]
 
     <SfxMacroStatement::SfxMacroStatement(const String&)>
-    <SfxMacroStatement::SfxMacroStatement(const SfxShell&,sal_Bool,const SfxSlot&,sal_Bool,SfxArguments*)>
+    <SfxMacroStatement::SfxMacroStatement(const SfxShell&,BOOL,const SfxSlot&,BOOL,SfxArguments*)>
 */
 
-:       nSlotId( rSlot.GetSlotId() ),
+:	nSlotId( rSlot.GetSlotId() ),
     aArgs( rArgs ),
     bDone( bRequestDone ),
     pDummy( 0 )
@@ -163,26 +257,27 @@ SfxMacroStatement::SfxMacroStatement
 
 SfxMacroStatement::SfxMacroStatement
 (
-    const String&   rStatement  // manually generated statement(s)
+    const String&   rStatement  	// manuell erzeugte(s) Statement(s)
 )
 
-/*  [Description]
+/* 	[Beschreibung]
 
-    This constructor creates a SfxMacroStatement instance, its structure is
-    determined completely by the application developer. Because the specified
-    string may contain several statements separated with CR/LF, which enables
-    a extensive in the recording of BASIC-macros, in order to handle special
-    cases.
+    Dieser Konstruktor erzeugt eine SfxMacroStatement-Instanz, deren
+    Aufbau vollst"andig vom Applikationsentwickler bestimmt wird. Da der
+    angegebene String auch mehrere mit CR/LF getrennte Statements
+    enthalten darf, ist damit ein weitgehender Eingriff in das Aufzeichnen
+    von BASIC-Makros m"oglich, um Spezialf"alle zu behandeln.
 
-    [Cross-reference]
 
-    <SfxMacroStatement::SfxMacroStatement(const String&,const SfxSlot&,sal_Bool,SfxArguments*)>
-    <SfxMacroStatement::SfxMacroStatement(const SfxShell&,sal_Bool,const SfxSlot&,sal_Bool,SfxArguments*)>
+    [Querverweise]
+
+    <SfxMacroStatement::SfxMacroStatement(const String&,const SfxSlot&,BOOL,SfxArguments*)>
+    <SfxMacroStatement::SfxMacroStatement(const SfxShell&,BOOL,const SfxSlot&,BOOL,SfxArguments*)>
 */
 
-:       nSlotId( 0 ),
+:	nSlotId( 0 ),
        aStatement( rStatement ),
-    bDone( sal_True ),
+    bDone( TRUE ),
     pDummy( 0 )
 {
 }
@@ -191,15 +286,15 @@ SfxMacroStatement::SfxMacroStatement
 
 SfxMacroStatement::SfxMacroStatement
 (
-    const SfxMacroStatement&    rOrig // Original, from which it will be copied
+    const SfxMacroStatement&	rOrig // Original, von dem kopiert wird
 )
 
-/*  [Description]
+/* 	[Beschreibung]
 
-    Copy constructor of the sSfxMacroStatement class.
+    Copy-Konstruktor der SfxMacroStatement-Klasse.
 */
 
-:       nSlotId( rOrig.nSlotId ),
+:	nSlotId( rOrig.nSlotId ),
     aStatement( rOrig.aStatement ),
        bDone( rOrig.bDone ),
     pDummy( 0 )
@@ -211,10 +306,10 @@ SfxMacroStatement::SfxMacroStatement
 
 SfxMacroStatement::~SfxMacroStatement()
 
-/*  [Description]
+/* 	[Beschreibung]
 
-    Destructor of the SfxMacroStatement class. Frees the list of the
-    current parameters.
+    Destruktor der Klasse SfxMacroStatement. Gibt die Liste der
+    aktuellen Parameter frei.
 */
 
 {
@@ -224,17 +319,18 @@ SfxMacroStatement::~SfxMacroStatement()
 
 void SfxMacroStatement::GenerateNameAndArgs_Impl
 (
-    SfxMacro*        /*pMacro*/,   // in this is recorded
-    const SfxSlot&   rSlot,        // the slot, which can playback the statement
-    sal_Bool         bRequestDone, // TRUE=was executed, FALSE=cancelled
+    SfxMacro*		/*pMacro*/,			// darin wird aufgezeichnet
+    const SfxSlot&	rSlot,			// der Slot, der das Statement abspielen kann
+    BOOL			bRequestDone,	// TRUE=wurde ausgef"uhrt, FALSE=abgebrochen
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& /*rArgs*/
 )
 
-/*  [Description]
+/*	[Beschreibung]
 
-    Internal utility method for generating the functions-/property-names as
-    well as the parameter. This method is only used if the application
-    programmer has not attached his own source to the <SfxRequest>.
+    Interne Hilfsmethode zum generieren des Funktions-/Property-Names
+    sowie der Parameter. Diese Methode wird nur verwendet, wenn der
+    Anwendungsprogrammierer keinen eigenen Source an den <SfxRequest>
+    geh"angt hat.
 */
 
 {
@@ -242,18 +338,18 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
          && rSlot.pName[0] != '.' )
         aStatement += '.';
 
-    // The name of the slots is the name of the method or properties
+    // der Name des Slots ist der Name der Methode / des Properties
     aStatement += String::CreateFromAscii(rSlot.pName);
     if ( rSlot.IsMode(SFX_SLOT_METHOD) )
         aStatement += DEFINE_CONST_UNICODE("( ");
     else
         aStatement += DEFINE_CONST_UNICODE(" = ");
 
-    // Print all required Parameters
+    // alle zusammengesuchten Parameter rausschreiben
     if ( aArgs.getLength() )
-        for ( sal_uInt16 nArg = 0; nArg < aArgs.getLength(); ++nArg )
+        for ( USHORT nArg = 0; nArg < aArgs.getLength(); ++nArg )
         {
-            // represent the parameters textually
+            // den Parameter textuell darstellen
             String aArg;
             ::com::sun::star::uno::Any& rValue = aArgs[nArg].Value;
             ::com::sun::star::uno::Type pType = rValue.getValueType();
@@ -280,10 +376,10 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                 ::rtl::OUString sTemp;
                 rValue >>= sTemp;
 
-                // Quotation marks are doubled
+                // Anf"uhrungszeichen werden verdoppelt
                 XubString aRecordable( sTemp );
-                sal_uInt16 nPos = 0;
-                while ( sal_True )
+                USHORT nPos = 0;
+                while ( TRUE )
                 {
                     nPos = aRecordable.SearchAndReplace( String('"'), DEFINE_CONST_UNICODE("\"\""), nPos );
                     if ( STRING_NOTFOUND == nPos )
@@ -291,12 +387,12 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                     nPos += 2;
                 }
 
-                // non-printable characters are written as chr $(...)
+                // nicht druckbare Zeichen werden als chr$(...) geschrieben
                 bool bPrevReplaced = false;
-                for ( sal_uInt16 n = 0; n < aRecordable.Len(); ++n )
+                for ( USHORT n = 0; n < aRecordable.Len(); ++n )
                 {
                     sal_Unicode cChar = aRecordable.GetChar(n);
-                    if ( !( cChar>=32 && cChar!=127 ) ) // As replacement for String::IsPrintable()!
+                    if ( !( cChar>=32 && cChar!=127 ) ) // ALS ERSATZ FUER String::IsPrintable()!
                     {
                         XubString aReplacement( DEFINE_CONST_UNICODE("+chr$(") );
                         aReplacement += cChar;
@@ -307,6 +403,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                             n = n + aReplacement.Len();
                             aRecordable.SetChar((unsigned short) (n-2), 0x0029);// ')' = 29h
                             aRecordable.Replace( n-1, 2, DEFINE_CONST_UNICODE("+\"") );
+                            // ++n;
                         }
                         else
                         {
@@ -320,11 +417,19 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                     else
                         bPrevReplaced = false;
 
-                    // Argument in quotation marks
+                    // Argument in Anf"uhrungszeichen
                     aArg = '"';
                     aArg += aRecordable;
                     aArg += '"';
                 }
+/*
+                case SbxBYTE:
+                {
+                    // als Zahl darstellen
+                    aArg = (USHORT) rVar.GetByte();
+                    break;
+                }
+*/
             }
             else
             {
@@ -332,12 +437,12 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                     pType == ::getVoidCppuType(), "Unknown Type in recorder!" );
             }
 
-            // Attach the parameter
+            // den Parameter anh"angen
             aStatement += aArg;
             aStatement += DEFINE_CONST_UNICODE(", ");
         }
 
-    // End statement
+    // Statement beeden
     if ( aArgs.getLength() )
         aStatement.Erase( aStatement.Len() - 2, 1 );
     else
@@ -346,7 +451,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
         aStatement += ')';
 
     if ( !bRequestDone )
-        // not comment out the "Done ()" marked statements
+        // nicht als "Done()" gekennzeichnete Statements auskommentieren
         aStatement.InsertAscii( "rem ", 0 );
 }
 
@@ -354,28 +459,29 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
 
 SfxMacro::SfxMacro
 (
-    SfxMacroMode  eMode  // Purpose of the instance, see <SfxMacroMode>
+    SfxMacroMode 	eMode		// Zweck der Instanz, siehe <SfxMacroMode>
 )
 
-/*  [Description]
+/*	[Beschreibung]
 
-    Constructor of the SfxMacro class. Instances of this class are required
-    for two purposes in SFx:
+    Konstruktor der Klasse SfxMacro. Instanzen dieser Klasse werden im
+    SFx zu zwei Zwecken ben"otigt:
 
-    1. for recording macros
-    In this cas is th constructor called with SFX_MACRO_RECORDINGABSOLUTE or
-    SFX_MACRO_RECORDINGRELATIVE. Should be an instance of a derived class,
-    in order to acommodate the derivation of information, where the macro
-    should be saved. Such a macro should, in its destructor, be saved at the
-    location specified by the user.
+    1. zum Aufzeichnen von Makros
+    In diesem Fall wird der Konstruktor mit SFX_MACRO_RECORDINGABSOLUTE
+    oder SFX_MACRO_RECORDINGRELATIVE aufgerufen. Es sollte sich um eine
+    Instanz einer abgeleiteten Klasse handeln, um in der Ableitung
+    die Information dar"uber unterzubringen, wo das Makro gespeichert
+    werden soll. Ein solches Makro solle sich dann in seinem Destruktor
+    an der vom Benutzer gew"ahlten Stelle speichern.
 
-    2. Assignment of exisiting macros
-    In this case the constructor is called with SFX_MACRO_EXISTING.
-    Such a instance is for example needed when macros are to be configured for
-    events or <SfxControllerItem>s.
+    2. zum Zuordnen von exisitierenden Makros
+    In diesem Fall wird der Konstruktor mit SFX_MACRO_EXISTING aufgerufen.
+    Eine solche Instanz wird z.B. ben"otigt, wenn Makros auf Events
+    oder <SfxControllerItem>s konfiguriert werden sollen.
 */
 
-:       pImp( new SfxMacro_Impl )
+:	pImp( new SfxMacro_Impl )
 
 {
     pImp->eMode = eMode;
@@ -385,13 +491,15 @@ SfxMacro::SfxMacro
 
 SfxMacro::~SfxMacro()
 
-/*  [Description]
+/*	[Beschreibung]
 
-    Virtual Destructor of the SfxMacro class. This should be overloaded in
-    the derived classes to save the recorded source in the mode
-    SFX_MACRO_RECORDINGABSOLUTE and SFX_MACRO_RECORDINGRELATIVE.
+    Virtueller Destruktor der Klasse SfxMacro. Dieser sollte in den
+    abgeleiteten Klassen "uberladen werden, um in den Modi
+    SFX_MACRO_RECORDINGABSOLUTE und SFX_MACRO_RECORDINGRELATIVE den
+    aufgezeichneten Source abzuspeichern.
 
-    [Cross-reference]
+
+    [Querverweise]
 
     <SfxMacro::GenerateSource()const>
 */
@@ -408,12 +516,13 @@ SfxMacro::~SfxMacro()
 
 SfxMacroMode SfxMacro::GetMode() const
 
-/*  [Description]
+/*	[Beschreibung]
 
-    Returns the mode, which indicates for what purpose this SfxMacro was
-    constructed.
+    Liefert den Modus, der besagt zu welchem Zweck das SfxMacro konstruiert
+    wurde.
 
-    [Cross-reference]
+
+    [Querverweise]
 
     enum <SfxMacroMode>
 */
@@ -426,20 +535,21 @@ SfxMacroMode SfxMacro::GetMode() const
 
 void SfxMacro::Record
 (
-    SfxMacroStatement*  pStatement  // the recordning <SfxMacroStatement>
+    SfxMacroStatement*	pStatement 	// aufzuzeichnendes <SfxMacroStatement>
 )
 
-/*  [Description]
+/*	[Beschreibung]
 
-    This method features the parameters passed on as a Statement. The
-    instance to which the pointer points is transfered to the ownership
-    of SfxMacro.
+    Diese Methode zeichnet das als Parameter "ubergeben Statement auf.
+    Die Instanz auf die der "ubergebe Pointer zeigt, geht in das Eigentum
+    des SfxMacro "uber.
 
-    The call is only valid if it is about a SfxMacro, which was constructed
-    with SFX_MACRO_RECORDINGRELATIVE or SFX_MACRO_RECORDINGABSOLUTE and is
-    available as an already recorded statement.
+    Der Aufruf ist nur g"ultig, wenn es sich um ein SfxMacro handelt,
+    welches mit SFX_MACRO_RECORDINGABSOLUTE oder SFX_MACRO_RECORDINGRELATIVE
+    konstruiert wirde.
 
-    [Cross-reference]
+
+    [Querverweise]
 
     <SfxMacro::Replace(SfxMacroStatement*)>
     <SfxMacro::Remove()>
@@ -455,30 +565,35 @@ void SfxMacro::Record
 
 void SfxMacro::Replace
 (
-    SfxMacroStatement*  pStatement  // the recording <SfxMacroStatement>
+    SfxMacroStatement*	pStatement	// aufzuzeichnendes <SfxMacroStatement>
 )
 
-/*  [Description]
+/*	[Beschreibung]
 
-    This method records the statement passed on as a parameter. This will
-    overwrite the last recorded statement. The instance to which the passed
-    pointer points is transfered to the ownership of the SfxMacro.
+    Diese Methode zeichnet das als Parameter "ubergeben Statement auf.
+    Dabei wird das jeweils zuletzt aufgezeichnete Statement "uberschrieben.
+    Die Instanz auf die der "ubergebe Pointer zeigt, geht in das Eigentum
+    des SfxMacro "uber.
 
-    With this method it is possible to combine statements. For example, instead
-    of calling the 'CursorLeft()' five times could be summarized as
-    'CursorLeft (5)'. Or rather than building a word letter by letter, this
-    could be done by a single statement 'InsertString("Hello")'.
+    Mit dieser Methode ist es m"oglich, Statements zusammenzufassen. Z.B.
+    anstelle f"unfmal hintereinander 'CursorLeft()' aufzurufen, k"onnte
+    das zu 'CursorLeft(5)' zusammengefa\st werden. Oder anstelle ein Wort
+    Buchstabe f"ur Buchstabe aufzubauen, k"onnte dies durch ein einziges
+    Statement 'InsertString("Hallo")' ersetzt werden.
 
-    The call is only valid if it is about a SfxMacro, which was constructed
-    with SFX_MACRO_RECORDINGRELATIVE or SFX_MACRO_RECORDINGABSOLUTE and is
-    available as an already recorded statement.
+    Der Aufruf ist nur g"ultig, wenn es sich um ein SfxMacro handelt,
+    welches mit SFX_MACRO_RECORDINGABSOLUTE oder SFX_MACRO_RECORDINGRELATIVE
+    konstruiert wurde und bereits ein aufgezeichnetes Statement vorhanden
+    ist.
 
-    [Note]
 
-    This method is typically called from the execute methods of
-    <SfxSlot>s created by the application developers.
+    [Anmerkung]
 
-    [Cross-reference]
+    Diese Methode wird typischerweise aus den Execute-Methoden der
+    <SfxSlot>s von den Applikationsentwicklern gerufen.
+
+
+    [Querverweise]
 
     <SfxMacro::Record(SfxMacroStatement*)>
     <SfxMacro::Remove()>
@@ -496,26 +611,30 @@ void SfxMacro::Replace
 
 void SfxMacro::Remove()
 
-/*  [Description]
+/*	[Beschreibung]
 
-    This method deletes the last recorded <SfxMacroStatement> and removes
-    it from the macro.
+    Diese Methode l"oscht das zuletzt aufgezeichnete <SfxMacroStatement>
+    und entfernt es aus dem Macro.
 
-    With this method it is possible to combine statements. For example, instead
-    of calling the 'CursorLeft()' five times could be summarized as
-    'CursorLeft (5)'. Or rather than building a word letter by letter, this
-    could be done by a single statement 'InsertString("Hello")'.
+    Mit dieser Methode ist es m"oglich, Statements zusammenzufassen. Z.B.
+    anstelle f"unfmal hintereinander 'CursorLeft()' aufzurufen, k"onnte
+    das zu 'CursorLeft(5)' zusammengefa\st werden. Oder anstelle ein Wort
+    Buchstabe f"ur Buchstabe aufzubauen, k"onnte dies durch ein einziges
+    Statement 'InsertString("Hallo")' ersetzt werden.
 
-    The call is only valid if it is about a SfxMacro, which was constructed
-    with SFX_MACRO_RECORDINGRELATIVE or SFX_MACRO_RECORDINGABSOLUTE and is
-    available as an already recorded statement.
+    Der Aufruf ist nur g"ultig, wenn es sich um ein SfxMacro handelt,
+    welches mit SFX_MACRO_RECORDINGABSOLUTE oder SFX_MACRO_RECORDINGRELATIVE
+    konstruiert wurde und bereits ein aufgezeichnetes Statement vorhanden
+    ist.
 
-    [Note]
 
-    This method is typically called from the the Execute methods of <SfxSlot>s
-    by the application developer.
+    [Anmerkung]
 
-    [Cross-reference]
+    Diese Methode wird typischerweise aus den Execute-Methoden der
+    <SfxSlot>s von den Applikationsentwicklern gerufen.
+
+
+    [Querverweise]
 
     <SfxMacro::Replace(SfxMacroStatement*)>
     <SfxMacro::Record(SfxMacroStatement*)>
@@ -532,17 +651,19 @@ void SfxMacro::Remove()
 
 const SfxMacroStatement* SfxMacro::GetLastStatement() const
 
-/*  [Description]
+/*  [Beschreibung]
 
-    This method enables read access to the last recorded statement.
-    Together with the method <SfxMacro::Replace(SfxMacroStatement*)> this opens
-    for the possibility to summarize statements.
+    Mit dieser Methode kann auf das jeweils zuletzt aufgezeichnete Statement
+    lesend zugegriffen werden. Zusammen mit der Methode
+    <SfxMacro::Replace(SfxMacroStatement*)> ergibt sich dadurch die
+    M"oglichkeit, Statements zusammenzufassen.
 
-    The call is only valid if it is about a SfxMacro, which was constructed
-    with SFX_MACRO_RECORDINGRELATIVE or SFX_MACRO_RECORDINGABSOLUTE and is
-    available as an already recorded statement.
+    Der Aufruf ist nur g"ultig, wenn es sich um ein SfxMacro handelt,
+    welches mit SFX_MACRO_RECORDINGABSOLUTE oder SFX_MACRO_RECORDINGRELATIVE
+    konstruiert wurde.
 
-    [Cross-reference]
+
+    [Querverweise]
 
     <SfxMacro::Record(SfxMacroStatement*)>
     <SfxMacro::Replace(SfxMacroStatement*)>
@@ -559,14 +680,15 @@ const SfxMacroStatement* SfxMacro::GetLastStatement() const
 
 String SfxMacro::GenerateSource() const
 
-/*  [Description]
+/*  [Beschreibung]
 
-    This function generates BASIC source code that contains the statements, but
-    does not contain the header ('Sub X') and Footer ('End Sub') from recorded
-    <SfxMacroStatement> since the construction of the instance until the time
-    of calling this method.
+    Diese Funktion generiert aus den, seit dem Konstruieren der Instanz
+    bis zum Zeitpunkt des Aufrufs dieser Methode aufgezeichneten
+    <SfxMacroStatement>s einen BASIC-Sourcecode, der die Statements,
+    jedoch nicht den Header ('Sub X') und den Footer ('End Sub') enth"alt.
 
-    [Cross-reference]
+
+    [Querverweise]
 
     <SfxMacro::Record(SfxMacroStatement*)>
     <SfxMacro::Repeat(SfxMacroStatement*)>
@@ -575,7 +697,7 @@ String SfxMacro::GenerateSource() const
 {
     DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING, "invalid call to non-recording SfxMacro" );
     String aSource;
-    for ( sal_uInt16 n = 0; n < pImp->aList.Count(); ++n )
+    for ( USHORT n = 0; n < pImp->aList.Count(); ++n )
     {
         aSource += pImp->aList.GetObject(n)->GetStatement();
         if ( (n+1) < pImp->aList.Count() )

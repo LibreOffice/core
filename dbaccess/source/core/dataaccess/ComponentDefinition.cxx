@@ -35,7 +35,6 @@
 #include "module_dba.hxx"
 
 #include <tools/debug.hxx>
-#include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -63,7 +62,7 @@ namespace dbaccess
 {
 
 /// helper class for column property change events which holds the OComponentDefinition weak
-typedef ::cppu::WeakImplHelper1 < XPropertyChangeListener > TColumnPropertyListener_BASE;
+typedef ::cppu::WeakImplHelper1	< XPropertyChangeListener > TColumnPropertyListener_BASE;
 class OColumnPropertyListener : public TColumnPropertyListener_BASE
 {
     OComponentDefinition* m_pComponent;
@@ -122,7 +121,7 @@ void OComponentDefinition::registerProperties()
 }
 
 OComponentDefinition::OComponentDefinition(const Reference< XMultiServiceFactory >& _xORB
-                                           ,const Reference< XInterface >&  _xParentContainer
+                                           ,const Reference< XInterface >&	_xParentContainer
                                            ,const TContentPtr& _pImpl
                                            ,sal_Bool _bTable)
     :OContentHelper(_xORB,_xParentContainer,_pImpl)
@@ -139,7 +138,7 @@ OComponentDefinition::~OComponentDefinition()
 }
 
 
-OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxContainer
+OComponentDefinition::OComponentDefinition(	const Reference< XInterface >& _rxContainer
                                        ,const ::rtl::OUString& _rElementName
                                        ,const Reference< XMultiServiceFactory >& _xORB
                                        ,const TContentPtr& _pImpl
@@ -152,7 +151,7 @@ OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxCo
     registerProperties();
 
     m_pImpl->m_aProps.aTitle = _rElementName;
-    OSL_ENSURE(m_pImpl->m_aProps.aTitle.getLength() != 0, "OComponentDefinition::OComponentDefinition : invalid name !");
+    DBG_ASSERT(m_pImpl->m_aProps.aTitle.getLength() != 0, "OComponentDefinition::OComponentDefinition : invalid name !");
 }
 
 IMPLEMENT_IMPLEMENTATION_ID(OComponentDefinition);
@@ -255,7 +254,7 @@ OColumn* OComponentDefinition::createColumn(const ::rtl::OUString& _rName) const
         aFind->second->addPropertyChangeListener(::rtl::OUString(),m_xColumnPropertyListener.getRef());
         return new OTableColumnWrapper( aFind->second, aFind->second, true );
     }
-    OSL_FAIL( "OComponentDefinition::createColumn: is this a valid case?" );
+    OSL_ENSURE( false, "OComponentDefinition::createColumn: is this a valid case?" );
         // This here is the last place creating a OTableColumn, and somehow /me thinks it is not needed ...
     return new OTableColumn( _rName );
 }
@@ -298,5 +297,5 @@ void OComponentDefinition::columnAppended( const Reference< XPropertySet >& _rxS
     notifyDataSourceModified();
 }
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

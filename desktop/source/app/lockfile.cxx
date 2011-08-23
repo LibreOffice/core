@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,12 @@
 #include "precompiled_desktop.hxx"
 #include <stdlib.h>
 #include <time.h>
-#ifndef WNT
-#include <unistd.h>
-#else
+#ifdef WNT
+#include <tools/prewin.h>
 #include <windows.h>
+#include <tools/postwin.h>
+#else
+#include <unistd.h>
 #endif
 #include <sal/types.h>
 #include <osl/file.hxx>
@@ -102,7 +104,7 @@ namespace desktop {
         int tmpByte = 0;
         for (int i = 0; i<nIdBytes; i++) {
             tmpByte = rand( ) % 0xFF;
-            sprintf( tmpId+i*2, "%02X", tmpByte );
+            sprintf( tmpId+i*2, "%02X", tmpByte ); // #100211# - checked
         }
         tmpId[nIdBytes*2]=0x00;
         m_aId = OUString::createFromAscii( tmpId );
@@ -119,7 +121,7 @@ namespace desktop {
 
         // try to create file
         File aFile(m_aLockname);
-        if (aFile.open( osl_File_OpenFlag_Create ) == File::E_EXIST) {
+        if (aFile.open( OpenFlag_Create ) == File::E_EXIST) {
             m_bIsLocked = sal_True;
         } else {
             // new lock created
@@ -139,7 +141,7 @@ namespace desktop {
                 // remove file and create new
                 File::remove( m_aLockname );
                 File aFile(m_aLockname);
-                aFile.open( osl_File_OpenFlag_Create );
+                aFile.open( OpenFlag_Create );
                 aFile.close( );
                 syncToFile( );
                 m_bRemove = sal_True;
@@ -163,21 +165,21 @@ namespace desktop {
         String aLockname = m_aLockname;
         Config aConfig(aLockname);
         aConfig.SetGroup(LOCKFILE_GROUP);
-        rtl::OString aIPCserver  = aConfig.ReadKey( LOCKFILE_IPCKEY );
-        if (!aIPCserver.equalsIgnoreAsciiCase(rtl::OString("true")))
+        ByteString aIPCserver  = aConfig.ReadKey( LOCKFILE_IPCKEY );
+        if (! aIPCserver.EqualsIgnoreCaseAscii( "true" ))
             return false;
 
-        rtl::OString aHost = aConfig.ReadKey( LOCKFILE_HOSTKEY );
-        rtl::OString aUser = aConfig.ReadKey( LOCKFILE_USERKEY );
+        ByteString aHost  = aConfig.ReadKey( LOCKFILE_HOSTKEY );
+        ByteString aUser  = aConfig.ReadKey( LOCKFILE_USERKEY );
 
         // lockfile from same host?
-        rtl::OString myHost( impl_getHostname() );
+        ByteString myHost( impl_getHostname() );
         if (aHost == myHost) {
             // lockfile by same UID
             OUString myUserName;
             Security aSecurity;
             aSecurity.getUserName( myUserName );
-            rtl::OString myUser(rtl::OUStringToOString(myUserName, RTL_TEXTENCODING_ASCII_US));
+            ByteString myUser  = OUStringToOString( myUserName, RTL_TEXTENCODING_ASCII_US );
             if (aUser == myUser)
                 return sal_True;
         }
@@ -191,13 +193,13 @@ namespace desktop {
         aConfig.SetGroup(LOCKFILE_GROUP);
 
         // get information
-        rtl::OString aHost( impl_getHostname() );
+        ByteString aHost( impl_getHostname() );
         OUString aUserName;
         Security aSecurity;
         aSecurity.getUserName( aUserName );
-        rtl::OString aUser  = OUStringToOString( aUserName, RTL_TEXTENCODING_ASCII_US );
-        rtl::OString aTime  = OUStringToOString( m_aDate, RTL_TEXTENCODING_ASCII_US );
-        rtl::OString aStamp = OUStringToOString( m_aId, RTL_TEXTENCODING_ASCII_US );
+        ByteString aUser  = OUStringToOString( aUserName, RTL_TEXTENCODING_ASCII_US );		
+        ByteString aTime  = OUStringToOString( m_aDate, RTL_TEXTENCODING_ASCII_US );
+        ByteString aStamp = OUStringToOString( m_aId, RTL_TEXTENCODING_ASCII_US );
 
         // write information
         aConfig.WriteKey( LOCKFILE_USERKEY,  aUser );
@@ -206,7 +208,7 @@ namespace desktop {
         aConfig.WriteKey( LOCKFILE_TIMEKEY,  aTime );
         aConfig.WriteKey(
             LOCKFILE_IPCKEY,
-            m_bIPCserver ? rtl::OString("true") : rtl::OString("false") );
+            m_bIPCserver ? ByteString("true") : ByteString("false") );
         aConfig.Flush( );
     }
 

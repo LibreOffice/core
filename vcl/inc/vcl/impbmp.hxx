@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ struct BitmapBuffer;
 class SalBitmap;
 class BitmapPalette;
 class SalGraphics;
-class ImplServerBitmap;
+class ImplServerBitmap; 
 class Bitmap;
 class OutputDevice;
 class Color;
@@ -50,11 +50,11 @@ class ImpBitmap
 {
 private:
 
-    sal_uLong               mnRefCount;
-    sal_uLong               mnChecksum;
-    SalBitmap*          mpSalBitmap;
-    Size                maSourceSize;
-
+    ULONG				mnRefCount;
+    ULONG				mnChecksum;
+    SalBitmap*			mpSalBitmap;
+    Size				maSourceSize;
+    
 public:
 
                         ImpBitmap();
@@ -64,34 +64,34 @@ public:
 
 public:
 
-    void                ImplSetSalBitmap( SalBitmap* pSalBitmap );
-    SalBitmap*          ImplGetSalBitmap() const { return mpSalBitmap; }
+    void				ImplSetSalBitmap( SalBitmap* pSalBitmap );
+    SalBitmap*			ImplGetSalBitmap() const { return mpSalBitmap; }
 
 public:
 
-    sal_Bool                ImplCreate( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
-    sal_Bool                ImplCreate( const ImpBitmap& rImpBitmap );
-    sal_Bool                ImplCreate( const ImpBitmap& rImpBitmap, SalGraphics* pGraphics );
-    sal_Bool                ImplCreate( const ImpBitmap& rImpBitmap, sal_uInt16 nNewBitCount );
+    BOOL				ImplCreate( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal );
+    BOOL				ImplCreate( const ImpBitmap& rImpBitmap );
+    BOOL				ImplCreate( const ImpBitmap& rImpBitmap, SalGraphics* pGraphics );
+    BOOL				ImplCreate( const ImpBitmap& rImpBitmap, USHORT nNewBitCount );
+                        
+    void				ImplDestroy();
+                        
+    Size				ImplGetSize() const;
+    Size				ImplGetSourceSize() const;
+    void				ImplSetSourceSize( const Size&);
+    USHORT				ImplGetBitCount() const;
+                        
+    BitmapBuffer*		ImplAcquireBuffer( BOOL bReadOnly );
+    void				ImplReleaseBuffer( BitmapBuffer* pBuffer, BOOL bReadOnly );
+                        
+public:					
+    
+    ULONG				ImplGetRefCount() const { return mnRefCount; }
+    void				ImplIncRefCount() { mnRefCount++; }
+    void				ImplDecRefCount() { mnRefCount--; }
 
-    void                ImplDestroy();
-
-    Size                ImplGetSize() const;
-    Size                ImplGetSourceSize() const;
-    void                ImplSetSourceSize( const Size&);
-    sal_uInt16              ImplGetBitCount() const;
-
-    BitmapBuffer*       ImplAcquireBuffer( sal_Bool bReadOnly );
-    void                ImplReleaseBuffer( BitmapBuffer* pBuffer, sal_Bool bReadOnly );
-
-public:
-
-    sal_uLong               ImplGetRefCount() const { return mnRefCount; }
-    void                ImplIncRefCount() { mnRefCount++; }
-    void                ImplDecRefCount() { mnRefCount--; }
-
-    inline void         ImplSetChecksum( sal_uLong nChecksum ) { mnChecksum = nChecksum; }
-    inline sal_uLong        ImplGetChecksum() const { return mnChecksum; }
+    inline void			ImplSetChecksum( ULONG nChecksum ) { mnChecksum = nChecksum; }
+    inline ULONG		ImplGetChecksum() const { return mnChecksum; }
 
 #endif // PRIVATE
 };

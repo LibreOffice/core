@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,18 +34,17 @@
 #include "salgdi.h"
 #include "saldata.hxx"
 #include "salframe.h"
-#include <vcl/svapp.hxx>
 
 #include "vcl/sysdata.hxx"
 
 // -----------------------------------------------------------------------
 
 SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
-    long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
+    long nDX, long nDY, USHORT nBitCount, const SystemGraphicsData *pData )
 {
     // #i92075# can be called first in a thread
     SalData::ensureThreadAutoreleasePool();
-
+    
     return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
 }
 
@@ -58,11 +57,11 @@ void AquaSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
 
 // =======================================================================
 
-AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
-:   mbGraphicsUsed( false )
-,   mxBitmapContext( NULL )
-,   mnBitmapDepth( 0 )
-,   mxLayer( NULL )
+AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX, long nDY, USHORT nBitCount, const SystemGraphicsData *pData )
+:	mbGraphicsUsed( false )
+,	mxBitmapContext( NULL )
+,	mnBitmapDepth( 0 )
+,	mxLayer( NULL )
 {
     if( pGraphic && pData && pData->rCGContext )
     {
@@ -92,7 +91,7 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
 
         if( nDX && nDY )
             SetSize( nDX, nDY );
-
+        
         // NOTE: if SetSize does not succeed, we just ignore the nDX and nDY
     }
 }
@@ -157,7 +156,7 @@ void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics *pGraphics )
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
+BOOL AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 {
     if( mbForeignContext )
     {
@@ -199,32 +198,14 @@ sal_Bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
             pSalFrame = *GetSalData()->maFrames.begin();
         if( pSalFrame )
         {
-            // #i91990#
-            NSWindow* pWindow = pSalFrame->getWindow();
-            if ( pWindow )
-            {
-                NSGraphicsContext* pNSContext = [NSGraphicsContext graphicsContextWithWindow: pWindow];
-                if( pNSContext )
-                    xCGContext = reinterpret_cast<CGContextRef>([pNSContext graphicsPort]);
-            }
-            else
-            {
-                // fall back to a bitmap context
-                mnBitmapDepth = 32;
-                const CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
-                const CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst;
-                const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
-
-                void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
-                mxBitmapContext = ::CGBitmapContextCreate( pRawData, nDX, nDY,
-                                                           8, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
-                xCGContext = mxBitmapContext;
-            }
+            NSGraphicsContext* pNSContext = [NSGraphicsContext graphicsContextWithWindow: pSalFrame->getWindow()];
+            if( pNSContext )
+                xCGContext = reinterpret_cast<CGContextRef>([pNSContext graphicsPort]);
         }
     }
-
+    
     DBG_ASSERT( xCGContext, "no context" );
-
+    
     const CGSize aNewSize = { nDX, nDY };
     mxLayer = CGLayerCreateWithContext( xCGContext, aNewSize, NULL );
 

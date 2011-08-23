@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ static bool isVisible( uno::Reference< awt::XLayoutConstrains > xWidget )
 {
     if ( !xWidget.is() )
     {
-        OSL_FAIL( "FIXME: invalid child !" );
+        DBG_ERROR( "FIXME: invalid child !" );
         return true;
     }
 
@@ -78,7 +78,7 @@ static bool isVisible( uno::Reference< awt::XLayoutConstrains > xWidget )
 
     return true;
 }
-
+    
 bool Box_Base::ChildData::isVisible()
 {
     // FIXME: call the 'isVisible' method on it ?
@@ -108,7 +108,7 @@ Box_Base::ChildData*
 Box_Base::removeChildData( std::list< ChildData* >& lst, css::uno::Reference< css::awt::XLayoutConstrains > const& xChild )
 {
     for ( std::list< ChildData* >::iterator it = lst.begin();
-          it != lst.end(); ++it )
+          it != lst.end(); it++ )
     {
         if ( (*it)->mxChild == xChild )
         {
@@ -132,7 +132,7 @@ Box_Base::removeChild( const uno::Reference< awt::XLayoutConstrains >& xChild )
     }
     else
     {
-        OSL_FAIL( "Box_Base: removeChild: no such child" );
+        DBG_ERROR( "Box_Base: removeChild: no such child" );
     }
 }
 
@@ -143,7 +143,7 @@ Box_Base::getChildren()
     uno::Sequence< uno::Reference< awt::XLayoutConstrains > > children( maChildren.size() );
     unsigned int index = 0;
     for ( std::list< ChildData* >::iterator it = maChildren.begin();
-          it != maChildren.end(); ++it, ++index )
+          it != maChildren.end(); it++, index++ )
         children[index] = ( *it )->mxChild;
 
     return children;
@@ -153,9 +153,9 @@ uno::Reference< beans::XPropertySet > SAL_CALL
 Box_Base::getChildProperties( const uno::Reference< awt::XLayoutConstrains >& xChild )
     throw (uno::RuntimeException)
 {
-
+    
     for ( std::list< ChildData * >::iterator it = maChildren.begin();
-          it != maChildren.end(); ++it)
+          it != maChildren.end(); it++)
     {
         if ( ( *it )->mxChild == xChild )
         {

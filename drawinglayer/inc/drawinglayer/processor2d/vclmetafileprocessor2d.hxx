@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,19 +81,19 @@ namespace drawinglayer
         private:
             /// local helper(s)
             Rectangle impDumpToMetaFile(
-                const primitive2d::Primitive2DSequence& rContent,
+                const primitive2d::Primitive2DSequence& rContent, 
                 GDIMetaFile& o_rContentMetafile);
             void impConvertFillGradientAttributeToVCLGradient(
-                Gradient& o_rVCLGradient,
+                Gradient& o_rVCLGradient, 
                 const attribute::FillGradientAttribute& rFiGrAtt,
                 bool bIsTransparenceGradient);
             void impStartSvtGraphicFill(SvtGraphicFill* pSvtGraphicFill);
             void impEndSvtGraphicFill(SvtGraphicFill* pSvtGraphicFill);
             SvtGraphicStroke* impTryToCreateSvtGraphicStroke(
-                const basegfx::B2DPolygon& rB2DPolygon,
-                const basegfx::BColor* pColor,
-                const attribute::LineAttribute* pLineAttribute,
-                const attribute::StrokeAttribute* pStrokeAttribute,
+                const basegfx::B2DPolygon& rB2DPolygon, 
+                const basegfx::BColor* pColor, 
+                const attribute::LineAttribute* pLineAttribute, 
+                const attribute::StrokeAttribute* pStrokeAttribute, 
                 const attribute::LineStartEndAttribute* pStart,
                 const attribute::LineStartEndAttribute* pEnd);
             void impStartSvtGraphicStroke(SvtGraphicStroke* pSvtGraphicStroke);
@@ -103,20 +103,20 @@ namespace drawinglayer
             basegfx::B2DPolyPolygon             maClipPolyPolygon;
 
             /// the target MetaFile
-            GDIMetaFile*                        mpMetaFile;
+            GDIMetaFile*					    mpMetaFile;
 
             /*  do not allow embedding SvtGraphicFills into each other,
                 use a counter to prevent that
              */
-            sal_uInt32                          mnSvtGraphicFillCount;
+            sal_uInt32						    mnSvtGraphicFillCount;
 
             /// same for SvtGraphicStroke
-            sal_uInt32                          mnSvtGraphicStrokeCount;
+            sal_uInt32						    mnSvtGraphicStrokeCount;
 
             /*  hold the last unified transparence value to have it handy
                 on SvtGraphicStroke creation
              */
-            double                              mfCurrentUnifiedTransparence;
+            double							    mfCurrentUnifiedTransparence;
 
             /*  break iterator support
                 made static so it only needs to be fetched once, even with many single
@@ -130,7 +130,7 @@ namespace drawinglayer
                 be emulated with the VclMetafileProcessor2D. These are potentially temporarily
                 since PDF export may use PrimitiveSequences one day directly.
              */
-            vcl::PDFExtOutDevData*              mpPDFExtOutDevData;
+            vcl::PDFExtOutDevData*				mpPDFExtOutDevData;
 
         protected:
             /*  the local processor for BasePrinitive2D-Implementation based primitives,
@@ -141,7 +141,7 @@ namespace drawinglayer
         public:
             /// constructor/destructor
             VclMetafileProcessor2D(
-                const geometry::ViewInformation2D& rViewInformation,
+                const geometry::ViewInformation2D& rViewInformation, 
                 OutputDevice& rOutDev);
             virtual ~VclMetafileProcessor2D();
         };

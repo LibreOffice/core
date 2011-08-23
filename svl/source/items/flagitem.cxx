@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 DBG_NAME(SfxFlagItem)
 
-sal_uInt16 nSfxFlagVal[16] =
+USHORT nSfxFlagVal[16] =
 {
     0x0001, 0x0002, 0x0004, 0x0008,
     0x0010, 0x0020, 0x0040, 0x0080,
@@ -52,7 +52,7 @@ TYPEINIT1(SfxFlagItem, SfxPoolItem);
 
 // -----------------------------------------------------------------------
 
-SfxFlagItem::SfxFlagItem( sal_uInt16 nW, sal_uInt16 nV ) :
+SfxFlagItem::SfxFlagItem( USHORT nW, USHORT nV ) :
     SfxPoolItem( nW ),
     nVal(nV)
 {
@@ -61,7 +61,7 @@ SfxFlagItem::SfxFlagItem( sal_uInt16 nW, sal_uInt16 nV ) :
 
 // -----------------------------------------------------------------------
 
-SfxFlagItem::SfxFlagItem( sal_uInt16 nW, SvStream &rStream) :
+SfxFlagItem::SfxFlagItem( USHORT nW, SvStream &rStream) :
     SfxPoolItem( nW )
 {
     DBG_CTOR(SfxFlagItem, 0);
@@ -79,7 +79,7 @@ SfxFlagItem::SfxFlagItem( const SfxFlagItem& rItem ) :
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxFlagItem::Store(SvStream &rStream, sal_uInt16) const
+SvStream& SfxFlagItem::Store(SvStream &rStream, USHORT) const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
     rStream << nVal;
@@ -90,41 +90,41 @@ SvStream& SfxFlagItem::Store(SvStream &rStream, sal_uInt16) const
 
 SfxItemPresentation SfxFlagItem::GetPresentation
 (
-    SfxItemPresentation     /*ePresentation*/,
-    SfxMapUnit              /*eCoreMetric*/,
-    SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              rText,
+    SfxItemPresentation 	/*ePresentation*/,
+    SfxMapUnit				/*eCoreMetric*/,
+    SfxMapUnit				/*ePresentationMetric*/,
+    XubString& 				rText,
     const IntlWrapper *
-)   const
+)	const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
     rText.Erase();
-    for ( sal_uInt8 nFlag = 0; nFlag < GetFlagCount(); ++nFlag )
+    for ( BYTE nFlag = 0; nFlag < GetFlagCount(); ++nFlag )
         rText += XubString::CreateFromInt32( GetFlag(nFlag) );
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
 // -----------------------------------------------------------------------
 
-XubString SfxFlagItem::GetFlagText( sal_uInt8 ) const
+XubString SfxFlagItem::GetFlagText( BYTE ) const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
-    DBG_WARNING( "calling GetValueText(sal_uInt16) on SfxFlagItem -- overload!" );
+    DBG_WARNING( "calling GetValueText(USHORT) on SfxFlagItem -- overload!" );
     return XubString();
 }
 
 // -----------------------------------------------------------------------
 
-sal_uInt8 SfxFlagItem::GetFlagCount() const
+BYTE SfxFlagItem::GetFlagCount() const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
-    DBG_WARNING( "calling GetValueText(sal_uInt16) on SfxFlagItem -- overload!" );
+    DBG_WARNING( "calling GetValueText(USHORT) on SfxFlagItem -- overload!" );
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxFlagItem::Create(SvStream &, sal_uInt16) const
+SfxPoolItem* SfxFlagItem::Create(SvStream &, USHORT) const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
     DBG_WARNING( "calling Create() on SfxFlagItem -- overload!" );
@@ -142,7 +142,7 @@ int SfxFlagItem::operator==( const SfxPoolItem& rItem ) const
 
 // -----------------------------------------------------------------------
 
-void SfxFlagItem::SetFlag( sal_uInt8 nFlag, int bVal )
+void SfxFlagItem::SetFlag( BYTE nFlag, int bVal )
 {
     if ( bVal )
         nVal |= nSfxFlagVal[nFlag];

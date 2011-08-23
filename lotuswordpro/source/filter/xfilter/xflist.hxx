@@ -57,11 +57,15 @@
  * @file
  * Base list object.
  ************************************************************************/
-#ifndef     _XFLIST_HXX
-#define     _XFLIST_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-17 create this file.
+ ************************************************************************/
+#ifndef		_XFLIST_HXX
+#define		_XFLIST_HXX
 
-#include    "xflistitem.hxx"
-#include    "xfcontentcontainer.hxx"
+#include	"xflistitem.hxx"
+#include	"xfcontentcontainer.hxx"
 
 class XFListItem;
 
@@ -69,7 +73,7 @@ class XFListItem;
  * @brief
  * list obejct for order-list and unordered-list.
  */
-class   XFList : public XFContentContainer
+class	XFList : public XFContentContainer
 {
 public:
     XFList();
@@ -80,51 +84,51 @@ public:
 
 public:
     /**
-     * @descr   Set whether it's an ordered list or an unordered list.
+     * @descr	Set whether it's an ordered list or an unordered list.
      */
-    void    SetOrdered(sal_Bool ordered);
+    void	SetOrdered(sal_Bool ordered);
 
     /**
-     * @descr   Set whether to continue to number list.
+     * @descr	Set whether to continue to number list.
      */
-    void    SetContinueNumber(sal_Bool bContinueNumber=sal_False);
+    void	SetContinueNumber(sal_Bool bContinueNumber=sal_False);
 
     /**
-     * @descr   Add a list item.
+     * @descr	Add a list item.
      */
-    void    AddItem(XFListItem *pItem);
+    void	AddItem(XFListItem *pItem);
 
     /**
-     * @descr   Add a simple text list item.
+     * @descr	Add a simple text list item.
      */
-    void    AddItem(rtl::OUString text);
+    void	AddItem(rtl::OUString text);
 
     /**
-     * @descr   Set the header list item. There can only be one list header.
+     * @descr	Set the header list item. There can only be one list header.
      */
-    void    SetHeader(XFListItem *pItem);
+    void	SetHeader(XFListItem *pItem);
 
     /**
-     * @descr   Output list obejct.
+     * @descr	Output list obejct.
      */
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
-    virtual void    StartList(IXFStream *pStrm, sal_Bool bContinueNumber = sal_False);
+    virtual void	StartList(IXFStream *pStrm, sal_Bool bContinueNumber = sal_False);
 
-    virtual void    EndList(IXFStream *pStrm);
+    virtual void	EndList(IXFStream *pStrm);
 
-    static void     StartListHeader(IXFStream *pStrm);
+    static void		StartListHeader(IXFStream *pStrm);
 
-    static void     EndListHeader(IXFStream *pStrm);
+    static void		EndListHeader(IXFStream *pStrm);
 
-    static void     StartListItem(IXFStream *pStrm);
+    static void		StartListItem(IXFStream *pStrm);
 
-    static void     EndListItem(IXFStream *pStrm);
+    static void		EndListItem(IXFStream *pStrm);
 
 private:
-    sal_Bool    m_bOrdered;
-    sal_Bool    m_bContinueNumber;
-    XFListItem  *m_pHeader;
+    sal_Bool	m_bOrdered;
+    sal_Bool	m_bContinueNumber;
+    XFListItem	*m_pHeader;
 
 };
 

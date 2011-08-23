@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 
 #include "TransformerBase.hxx"
 #include "TransformerActions.hxx"
@@ -53,8 +53,8 @@ using namespace ::com::sun::star::xml::sax;
 
 TYPEINIT1( XMLNotesTransformerContext, XMLPersElemContentTContext );
 
-XMLNotesTransformerContext::XMLNotesTransformerContext(
-        XMLTransformerBase& rImp,
+XMLNotesTransformerContext::XMLNotesTransformerContext( 
+        XMLTransformerBase& rImp, 
         const OUString& rQName,
         XMLTokenEnum eToken, sal_Bool bPersistent ) :
     XMLPersElemContentTContext( rImp, rQName ),
@@ -68,7 +68,7 @@ XMLNotesTransformerContext::~XMLNotesTransformerContext()
 {
 }
 
-void XMLNotesTransformerContext::StartElement(
+void XMLNotesTransformerContext::StartElement( 
         const Reference< XAttributeList >& rAttrList )
 {
     XMLTransformerActions *pActions =
@@ -83,7 +83,7 @@ void XMLNotesTransformerContext::StartElement(
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName, 
                                                                  &aLocalName );
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
         XMLTransformerActions::const_iterator aIter =
@@ -94,7 +94,7 @@ void XMLNotesTransformerContext::StartElement(
 
             if( !pMutableAttrList )
             {
-                pMutableAttrList =
+                pMutableAttrList = 
                     new XMLMutableAttributeList( xAttrList );
                 xAttrList = pMutableAttrList;
             }
@@ -133,7 +133,7 @@ void XMLNotesTransformerContext::StartElement(
         eToken = (m_bEndNote ? XML_ENDNOTE : XML_FOOTNOTE);
         break;
     case XML_NOTES_CONFIGURATION:
-        eToken = (m_bEndNote ? XML_ENDNOTES_CONFIGURATION
+        eToken = (m_bEndNote ? XML_ENDNOTES_CONFIGURATION 
                              : XML_FOOTNOTES_CONFIGURATION);
         break;
     case XML_NOTE_REF:
@@ -144,13 +144,13 @@ void XMLNotesTransformerContext::StartElement(
         break;
     }
 
-    SetExportQName( GetTransformer().GetNamespaceMap().GetQNameByKey(
-                            XML_NAMESPACE_TEXT,
+    SetExportQName( GetTransformer().GetNamespaceMap().GetQNameByKey( 
+                            XML_NAMESPACE_TEXT, 
                             ::xmloff::token::GetXMLToken( eToken ) ) );
     if( m_bPersistent )
         XMLPersElemContentTContext::StartElement( xAttrList );
     else
-        GetTransformer().GetDocHandler()->startElement( GetExportQName(),
+        GetTransformer().GetDocHandler()->startElement( GetExportQName(), 
                                                         xAttrList );
 }
 
@@ -180,12 +180,12 @@ XMLTransformerContext *XMLNotesTransformerContext::CreateChildContext(
             XMLTokenEnum eToken ( XML_TOKEN_INVALID );
             if( IsXMLToken( rLocalName, XML_NOTE_CITATION ) )
             {
-                eToken = m_bEndNote ? XML_ENDNOTE_CITATION
+                eToken = m_bEndNote ? XML_ENDNOTE_CITATION 
                                   : XML_FOOTNOTE_CITATION;
             }
             else if( IsXMLToken( rLocalName, XML_NOTE_BODY ) )
             {
-                eToken = m_bEndNote ? XML_ENDNOTE_BODY
+                eToken = m_bEndNote ? XML_ENDNOTE_BODY 
                                   : XML_FOOTNOTE_BODY;
             }
 
@@ -193,8 +193,8 @@ XMLTransformerContext *XMLNotesTransformerContext::CreateChildContext(
             {
                 if( m_bPersistent  )
                 {
-                    pContext = new XMLPersTextContentTContext(
-                                    GetTransformer(), rQName,
+                    pContext = new XMLPersTextContentTContext( 
+                                    GetTransformer(), rQName, 
                                     XML_NAMESPACE_TEXT,
                                     eToken );
                     AddContent( pContext );
@@ -202,8 +202,8 @@ XMLTransformerContext *XMLNotesTransformerContext::CreateChildContext(
                 }
                 else
                 {
-                    pContext = new XMLRenameElemTransformerContext(
-                                    GetTransformer(), rQName,
+                    pContext = new XMLRenameElemTransformerContext( 
+                                    GetTransformer(), rQName, 
                                     XML_NAMESPACE_TEXT,
                                     eToken );
                 }
@@ -213,7 +213,7 @@ XMLTransformerContext *XMLNotesTransformerContext::CreateChildContext(
 
     if( !pContext )
     {
-        pContext = m_bPersistent
+        pContext = m_bPersistent 
                         ? XMLPersElemContentTContext::CreateChildContext(
                                 nPrefix, rLocalName, rQName, rAttrList )
                         : XMLTransformerContext::CreateChildContext(

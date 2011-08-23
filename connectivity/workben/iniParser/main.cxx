@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,14 +32,10 @@
 #include <stdio.h>
 #include <com/sun/star/io/IOException.hpp>
 #include <osl/process.h>
+using namespace rtl;
 
 #include <map>
 #include <list>
-
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringToOString;
 
 struct ini_NameValue
 {
@@ -85,7 +81,7 @@ public:
         OUString curDirPth;
         OUString iniUrl;
         osl_getProcessWorkingDir( &curDirPth.pData );
-        if (osl_getAbsoluteFileURL( curDirPth.pData,    rIniName.pData, &iniUrl.pData ))
+        if (osl_getAbsoluteFileURL( curDirPth.pData,	rIniName.pData, &iniUrl.pData ))
             throw ::com::sun::star::io::IOException();
 
 
@@ -101,7 +97,7 @@ public:
             sal_uInt64 nSize = 0;
 
             osl_getFileSize(handle, &nSize);
-            OUString sectionName( RTL_CONSTASCII_USTRINGPARAM( "no name section" ));
+            OUString sectionName = OUString::createFromAscii("no name section");
             while (true)
             {
                 sal_uInt64 nPos;
@@ -132,7 +128,7 @@ public:
                         sectionName =  OStringToOUString(
                             line.copy(nIndexStart + 1,nIndexEnd - nIndexStart -1).trim(), RTL_TEXTENCODING_ASCII_US );
                         if (!sectionName.getLength())
-                            sectionName = OUString(RTL_CONSTASCII_USTRINGPARAM("no name section"));
+                            sectionName = OUString::createFromAscii("no name section");
 
                         ini_Section *aSection = &mAllSection[sectionName];
                         aSection->sName = sectionName;
@@ -188,7 +184,7 @@ int _cdecl main( int argc, char * argv[] )
 
 {
 
-    IniParser parser(OUString(RTL_CONSTASCII_USTRINGPARAM("test.ini")));
+    IniParser parser(OUString::createFromAscii("test.ini"));
     parser.Dump();
     return 0;
 }

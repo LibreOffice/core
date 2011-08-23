@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,6 +50,6 @@ public:
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
-#endif      // _XMLOFF_ENUMPROPERTYHANDLER_HXX
+#endif		// _XMLOFF_ENUMPROPERTYHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

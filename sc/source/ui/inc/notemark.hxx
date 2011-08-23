@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,37 +40,37 @@ class SdrObject;
 class ScNoteMarker
 {
 private:
-    Window*     pWindow;
-    Window*     pRightWin;
-    Window*     pBottomWin;
-    Window*     pDiagWin;
-    ScDocument* pDoc;
-    ScAddress   aDocPos;
-    String      aUserText;
+    Window*		pWindow;
+    Window*		pRightWin;
+    Window*		pBottomWin;
+    Window*		pDiagWin;
+    ScDocument*	pDoc;
+    ScAddress	aDocPos;
+    String		aUserText;
     Rectangle   aVisRect;
-    Timer       aTimer;
-    MapMode     aMapMode;
-    sal_Bool        bLeft;
-    sal_Bool        bByKeyboard;
+    Timer		aTimer;
+    MapMode		aMapMode;
+    BOOL		bLeft;
+    BOOL		bByKeyboard;
 
-    Rectangle       aRect;
-    SdrModel*       pModel;
-    SdrObject*      pObject;
-    sal_Bool            bVisible;
+    Rectangle		aRect;
+    SdrModel*		pModel;
+    SdrObject*		pObject;
+    BOOL			bVisible;
 
     DECL_LINK( TimeHdl, Timer* );
 
 public:
                 ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Window* pDiagonal,
                                 ScDocument* pD, ScAddress aPos, const String& rUser,
-                                const MapMode& rMap, sal_Bool bLeftEdge, sal_Bool bForce, sal_Bool bKeyboard );
+                                const MapMode& rMap, BOOL bLeftEdge, BOOL bForce, BOOL bKeyboard );
                 ~ScNoteMarker();
 
-    void        Draw();
-    void        InvalidateWin();
+    void		Draw();
+    void		InvalidateWin();
 
-    ScAddress   GetDocPos() const       { return aDocPos; }
-    sal_Bool        IsByKeyboard() const    { return bByKeyboard; }
+    ScAddress	GetDocPos() const		{ return aDocPos; }
+    BOOL		IsByKeyboard() const	{ return bByKeyboard; }
 };
 
 

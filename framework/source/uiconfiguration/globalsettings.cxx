@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,14 +30,14 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include "uiconfiguration/globalsettings.hxx"
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -48,7 +48,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
@@ -56,16 +56,17 @@
 #include <tools/debug.hxx>
 
 //_________________________________________________________________________________________________________________
-//  Defines
+//	Defines
 //_________________________________________________________________________________________________________________
+// 
 
+using namespace rtl;
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
-
 //_________________________________________________________________________________________________________________
-//  Namespace
+//	Namespace
 //_________________________________________________________________________________________________________________
+// 
 
 static const char GLOBALSETTINGS_ROOT_ACCESS[]              = "/org.openoffice.Office.UI.GlobalSettings/Toolbars";
 
@@ -78,12 +79,12 @@ namespace framework
 {
 
 //*****************************************************************************************************************
-//  Configuration access class for WindowState supplier implementation
+//	Configuration access class for WindowState supplier implementation
 //*****************************************************************************************************************
 
-class GlobalSettings_Access : public ::com::sun::star::lang::XComponent      ,
+class GlobalSettings_Access : public ::com::sun::star::lang::XComponent	     ,
                               public ::com::sun::star::lang::XEventListener  ,
-                              private ThreadHelpBase                         ,  // Struct for right initalization of mutex member! Must be first of baseclasses.
+                              private ThreadHelpBase						 ,	// Struct for right initalization of mutex member! Must be first of baseclasses.
                               public ::cppu::OWeakObject
 {
     public:
@@ -104,7 +105,7 @@ class GlobalSettings_Access : public ::com::sun::star::lang::XComponent      ,
         // settings access
         sal_Bool HasStatesInfo( GlobalSettings::UIElementType eElementType );
         sal_Bool GetStateInfo( GlobalSettings::UIElementType eElementType, GlobalSettings::StateInfo eStateInfo, ::com::sun::star::uno::Any& aValue );
-
+    
     private:
         sal_Bool impl_initConfigAccess();
 
@@ -121,7 +122,7 @@ class GlobalSettings_Access : public ::com::sun::star::lang::XComponent      ,
 
 
 //*****************************************************************************************************************
-//  XInterface
+//	XInterface
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_2     (   GlobalSettings_Access                           ,
                             OWeakObject                                     ,
@@ -147,28 +148,28 @@ GlobalSettings_Access::~GlobalSettings_Access()
 }
 
 // XComponent
-void SAL_CALL GlobalSettings_Access::dispose()
+void SAL_CALL GlobalSettings_Access::dispose() 
 throw ( css::uno::RuntimeException )
 {
     // SAFE
     ResetableGuard aLock( m_aLock );
-
+    
     m_xConfigAccess.clear();
     m_bDisposed = sal_True;
 }
-
-void SAL_CALL GlobalSettings_Access::addEventListener( const css::uno::Reference< css::lang::XEventListener >& )
+        
+void SAL_CALL GlobalSettings_Access::addEventListener( const css::uno::Reference< css::lang::XEventListener >& ) 
 throw (css::uno::RuntimeException)
 {
 }
 
-void SAL_CALL GlobalSettings_Access::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& )
+void SAL_CALL GlobalSettings_Access::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& ) 
 throw (css::uno::RuntimeException)
 {
 }
 
 // XEventListener
-void SAL_CALL GlobalSettings_Access::disposing( const css::lang::EventObject& )
+void SAL_CALL GlobalSettings_Access::disposing( const css::lang::EventObject& ) 
 throw (css::uno::RuntimeException)
 {
     // SAFE
@@ -189,7 +190,7 @@ sal_Bool GlobalSettings_Access::HasStatesInfo( GlobalSettings::UIElementType eEl
         return sal_False;
 
     if ( !m_bConfigRead )
-    {
+    {   
         m_bConfigRead = sal_True;
         impl_initConfigAccess();
     }
@@ -225,9 +226,9 @@ sal_Bool GlobalSettings_Access::GetStateInfo( GlobalSettings::UIElementType eEle
 
     if ( m_bDisposed )
         return sal_False;
-
+    
     if ( !m_bConfigRead )
-    {
+    {   
         m_bConfigRead = sal_True;
         impl_initConfigAccess();
     }
@@ -245,7 +246,7 @@ sal_Bool GlobalSettings_Access::GetStateInfo( GlobalSettings::UIElementType eEle
                     a = xNameAccess->getByName( m_aPropLocked );
                 else if ( eStateInfo == GlobalSettings::STATEINFO_DOCKED )
                     a = xNameAccess->getByName( m_aPropDocked );
-
+                
                 aValue = a;
                 return sal_True;
             }
@@ -265,15 +266,15 @@ sal_Bool GlobalSettings_Access::impl_initConfigAccess()
 {
     css::uno::Sequence< css::uno::Any > aArgs( 2 );
     css::beans::PropertyValue           aPropValue;
-
+    
     try
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider;
         if ( m_xServiceManager.is() )
-            xConfigProvider = css::uno::Reference< css::lang::XMultiServiceFactory >(
-                                    m_xServiceManager->createInstance( SERVICENAME_CFGPROVIDER ),
+            xConfigProvider = css::uno::Reference< css::lang::XMultiServiceFactory >( 
+                                    m_xServiceManager->createInstance( SERVICENAME_CFGPROVIDER ), 
                                     css::uno::UNO_QUERY );
-
+        
         if ( xConfigProvider.is() )
         {
             aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
@@ -282,16 +283,16 @@ sal_Bool GlobalSettings_Access::impl_initConfigAccess()
             aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "lazywrite" ));
             aPropValue.Value = css::uno::makeAny( sal_True );
             aArgs[1] = css::uno::makeAny( aPropValue );
-
-            m_xConfigAccess = css::uno::Reference< css::container::XNameAccess >(
-                                xConfigProvider->createInstanceWithArguments(
-                                    SERVICENAME_CFGREADACCESS, aArgs ),
+        
+            m_xConfigAccess = css::uno::Reference< css::container::XNameAccess >( 
+                                xConfigProvider->createInstanceWithArguments( 
+                                    SERVICENAME_CFGREADACCESS, aArgs ), 
                                 css::uno::UNO_QUERY );
 
             css::uno::Reference< css::lang::XComponent > xComponent( xConfigProvider, css::uno::UNO_QUERY );
             if ( xComponent.is() )
-                xComponent->addEventListener(
-                    css::uno::Reference< css::lang::XEventListener >(
+                xComponent->addEventListener( 
+                    css::uno::Reference< css::lang::XEventListener >( 
                         static_cast< cppu::OWeakObject* >( this ),
                         css::uno::UNO_QUERY ));
         }
@@ -309,7 +310,7 @@ sal_Bool GlobalSettings_Access::impl_initConfigAccess()
 }
 
 //*****************************************************************************************************************
-//  global class
+//	global class
 //*****************************************************************************************************************
 
 struct mutexGlobalSettings : public rtl::Static< osl::Mutex, mutexGlobalSettings > {};
@@ -318,7 +319,7 @@ static GlobalSettings_Access* pStaticSettings = 0;
 static GlobalSettings_Access* GetGlobalSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rSrvMgr )
 {
     osl::MutexGuard aGuard(mutexGlobalSettings::get());
-    if ( !pStaticSettings )
+    if ( !pStaticSettings ) 
         pStaticSettings = new GlobalSettings_Access( rSrvMgr );
     return pStaticSettings;
 }
@@ -336,7 +337,7 @@ GlobalSettings::~GlobalSettings()
 sal_Bool GlobalSettings::HasStatesInfo( UIElementType eElementType )
 {
     GlobalSettings_Access* pSettings( GetGlobalSettings( m_xSrvMgr ));
-
+    
     if ( pSettings )
         return pSettings->HasStatesInfo( eElementType );
     else
@@ -346,7 +347,7 @@ sal_Bool GlobalSettings::HasStatesInfo( UIElementType eElementType )
 sal_Bool GlobalSettings::GetStateInfo( UIElementType eElementType, StateInfo eStateInfo, ::com::sun::star::uno::Any& aValue )
 {
     GlobalSettings_Access* pSettings( GetGlobalSettings( m_xSrvMgr ));
-
+    
     if ( pSettings )
         return pSettings->GetStateInfo( eElementType, eStateInfo, aValue );
     else

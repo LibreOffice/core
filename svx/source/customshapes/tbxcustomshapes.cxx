@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include <string>
+#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
 #include <svx/svxids.hrc>
 #include <tools/shl.hxx>
@@ -42,7 +42,7 @@
 
 #include <sfx2/imagemgr.hxx>
 #include <vcl/svapp.hxx>
-#include "svx/tbxcustomshapes.hxx"
+#include "tbxcustomshapes.hxx"
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlCustomShapes, SfxBoolItem);
 
@@ -52,7 +52,7 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlCustomShapes, SfxBoolItem);
 |*
 \************************************************************************/
 
-SvxTbxCtlCustomShapes::SvxTbxCtlCustomShapes( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SvxTbxCtlCustomShapes::SvxTbxCtlCustomShapes( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     m_aSubTbxResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ) )
 {
@@ -108,11 +108,11 @@ SvxTbxCtlCustomShapes::SvxTbxCtlCustomShapes( sal_uInt16 nSlotId, sal_uInt16 nId
 
 /*************************************************************************
 |*
-|* Notification when the application status has changed
+|* Benachrichtigung, wenn sich der Applikationsstatus geaendert hat
 |*
 \************************************************************************/
 
-void SvxTbxCtlCustomShapes::StateChanged( sal_uInt16 nSID, SfxItemState eState,
+void SvxTbxCtlCustomShapes::StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
 {
     SfxToolBoxControl::StateChanged( nSID, eState, pState );
@@ -120,7 +120,7 @@ void SvxTbxCtlCustomShapes::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 
 /*************************************************************************
 |*
-|* when one wants to create a popup window
+|* Wenn man ein PopupWindow erzeugen will
 |*
 \************************************************************************/
 
@@ -131,9 +131,9 @@ SfxPopupWindowType SvxTbxCtlCustomShapes::GetPopupWindowType() const
 
 /*************************************************************************
 |*
-|* Here is the window created
-|* The location of the Toolbox is queried through GetToolBox()
-|* rItemRect are the screen coordinates
+|* Hier wird das Fenster erzeugt
+|* Lage der Toolbox mit GetToolBox() abfragbar
+|* rItemRect sind die Screen-Koordinaten
 |*
 \************************************************************************/
 
@@ -145,7 +145,7 @@ SfxPopupWindow* SvxTbxCtlCustomShapes::CreatePopupWindow()
 
 // -----------------------------------------------------------------------
 
-void SvxTbxCtlCustomShapes::Select( sal_Bool /*bMod1*/ )
+void SvxTbxCtlCustomShapes::Select( BOOL /*bMod1*/ )
 {
      if ( m_aCommand.getLength() > 0 )
     {
@@ -157,7 +157,7 @@ void SvxTbxCtlCustomShapes::Select( sal_Bool /*bMod1*/ )
 
 ::sal_Bool SAL_CALL SvxTbxCtlCustomShapes::opensSubToolbar() throw (::com::sun::star::uno::RuntimeException)
 {
-    // We control a sub-toolbar therefore we have to return true.
+    // We control a sub-toolbar therefor, we have to return true.
     return sal_True;
 }
 
@@ -180,7 +180,7 @@ void SAL_CALL SvxTbxCtlCustomShapes::functionSelected( const ::rtl::OUString& rC
         if ( m_aCommand.getLength() > 0 )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
-            Image aImage = GetImage( xFrame, m_aCommand, hasBigImages() );
+            Image aImage = GetImage( xFrame, m_aCommand, hasBigImages(), isHighContrast() );
             if ( !!aImage )
                 GetToolBox().SetItemImage( GetId(), aImage );
         }
@@ -195,7 +195,7 @@ void SAL_CALL SvxTbxCtlCustomShapes::updateImage(  ) throw (::com::sun::star::un
     if ( m_aCommand.getLength() > 0 )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
-        Image aImage = GetImage( xFrame, m_aCommand, hasBigImages() );
+        Image aImage = GetImage( xFrame, m_aCommand, hasBigImages(), isHighContrast() );
         if ( !!aImage )
             GetToolBox().SetItemImage( GetId(), aImage );
     }

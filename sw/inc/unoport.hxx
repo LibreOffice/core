@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,12 +61,17 @@ typedef ::std::deque<
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > >
     TextRangeList_t;
 
+
+/* -----------------29.05.98 14:42-------------------
+ *
+ * --------------------------------------------------*/
 enum SwTextPortionType
 {
     PORTION_TEXT,
     PORTION_FIELD,
     PORTION_FRAME,
     PORTION_FOOTNOTE,
+// obsolete!	PORTION_CONTROL_CHAR,
     PORTION_REFMARK_START,
     PORTION_REFMARK_END,
     PORTION_TOXMARK_START,
@@ -129,18 +134,21 @@ private:
 
     SwFmtFld * GetFldFmt(bool bInit = false);
 
-    void init(const SwUnoCrsr* pPortionCursor);
-
 protected:
 
-    void SAL_CALL SetPropertyValues_Impl(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues )
+    //SfxItemPropertySet& GetPropSet() { return aPropSet; }
+
+    void SAL_CALL SetPropertyValues_Impl( 
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, 
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) 
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL GetPropertyValues_Impl(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames )
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL GetPropertyValues_Impl( 
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) 
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
+//    ::com::sun::star::uno::Any  GetPropertyValue( const SfxItemPropertyMap *pEntry,
+//                                    SwUnoCrsr *pUnoCrsr,
+//                                    SfxItemSet *pSet );
     void        GetPropertyValues( const ::rtl::OUString *pPropertyNames,
                                     ::com::sun::star::uno::Any *pValues,
                                     sal_Int32 nLength );
@@ -154,11 +162,8 @@ protected:
 
     virtual ~SwXTextPortion();
 
-    //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
-
 public:
-    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwTextPortionType   eType   );
+    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwTextPortionType	eType	);
     SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwFrmFmt& rFmt );
 
     // for Ruby
@@ -181,6 +186,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::GetDirectPropertyTolerantResult > SAL_CALL getDirectPropertyValuesTolerant( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (::com::sun::star::uno::RuntimeException);
 
     //XMultiPropertySet
+//    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addPropertiesChangeListener( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
@@ -224,6 +230,9 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL createContentEnumeration(const rtl::OUString& aServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getAvailableServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
+    //SwClient
+    virtual void 				Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+
     void SetRefMark( ::com::sun::star::uno::Reference<
                         ::com::sun::star::text::XTextContent >  xMark)
     { m_xRefMark = xMark; }
@@ -257,6 +266,9 @@ public:
     {return static_cast<SwUnoCrsr*>(const_cast<SwModify*>(GetRegisteredIn()));}
 };
 
+/* -----------------29.05.98 14:42-------------------
+ *
+ * --------------------------------------------------*/
 class SwXTextPortionEnumeration
     : public ::cppu::WeakImplHelper3
         < ::com::sun::star::container::XEnumeration
@@ -306,9 +318,9 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
         getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException );
-protected:
+
     //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 };
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,27 +48,7 @@ ScCsvTableBox::ScCsvTableBox( Window* pParent, const ResId& rResId ) :
     maVScroll( this, WB_VERT | WB_DRAG ),
     maScrollBox( this )
 {
-    mbFixedMode = false;
-    mnFixedWidth = 1;
-
-    maHScroll.EnableRTL( false ); // RTL
-    maHScroll.SetLineSize( 1 );
-    maVScroll.SetLineSize( 1 );
-
-    Link aLink = LINK( this, ScCsvTableBox, CsvCmdHdl );
-    SetCmdHdl( aLink );
-    maRuler.SetCmdHdl( aLink );
-    maGrid.SetCmdHdl( aLink );
-
-    aLink = LINK( this, ScCsvTableBox, ScrollHdl );
-    maHScroll.SetScrollHdl( aLink );
-    maVScroll.SetScrollHdl( aLink );
-
-    aLink = LINK( this, ScCsvTableBox, ScrollEndHdl );
-    maHScroll.SetEndScrollHdl( aLink );
-    maVScroll.SetEndScrollHdl( aLink );
-
-    InitControls();
+    Init();
 }
 
 
@@ -115,7 +95,27 @@ void ScCsvTableBox::SetFixedWidthMode()
 
 void ScCsvTableBox::Init()
 {
-    maGrid.Init();
+    mbFixedMode = false;
+    mnFixedWidth = 1;
+
+    maHScroll.EnableRTL( false ); // #107812# RTL
+    maHScroll.SetLineSize( 1 );
+    maVScroll.SetLineSize( 1 );
+
+    Link aLink = LINK( this, ScCsvTableBox, CsvCmdHdl );
+    SetCmdHdl( aLink );
+    maRuler.SetCmdHdl( aLink );
+    maGrid.SetCmdHdl( aLink );
+
+    aLink = LINK( this, ScCsvTableBox, ScrollHdl );
+    maHScroll.SetScrollHdl( aLink );
+    maVScroll.SetScrollHdl( aLink );
+
+    aLink = LINK( this, ScCsvTableBox, ScrollEndHdl );
+    maHScroll.SetEndScrollHdl( aLink );
+    maVScroll.SetEndScrollHdl( aLink );
+
+    InitControls();
 }
 
 void ScCsvTableBox::InitControls()

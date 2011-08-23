@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,23 +31,20 @@
 
 #include "rangelst.hxx"
 #include "rangenam.hxx"
-#include "charthelper.hxx"
 
 #include <vector>
 
-/**
- * This struct stores general clipboard parameters associated with a
+/** 
+ * This struct stores general clipboard parameters associated with a 
  * ScDocument instance created in clipboard mode.
  */
 struct ScClipParam
 {
     enum Direction { Unspecified, Column, Row };
 
-    ScRangeList         maRanges;
-    Direction           meDirection;
-    bool                mbCutMode;
-    sal_uInt32          mnSourceDocID;
-    ScRangeListVector   maProtectedChartRangesVector;
+    ScRangeList maRanges;
+    Direction   meDirection;
+    bool        mbCutMode;
 
     ScClipParam();
     ScClipParam(const ScRange& rRange, bool bCutMode);
@@ -55,28 +52,25 @@ struct ScClipParam
 
     bool isMultiRange() const;
 
-    /**
+    /** 
      * Get the column size of a pasted range.  Note that when the range is
-     * non-contiguous, we first compress all individual ranges into a single
+     * non-contiguous, we first compress all individual ranges into a single 
      * range, and the size of that compressed range is returned.
      */
     SCCOL getPasteColSize();
 
-    /**
-     * Same as the above method, but returns the row size of the compressed
-     * range.
+    /** 
+     * Same as the above method, but returns the row size of the compressed 
+     * range. 
      */
     SCROW getPasteRowSize();
 
-    /**
+    /** 
      * Return a single range that encompasses all individual ranges.
      */
     ScRange getWholeRange() const;
 
     void transpose();
-
-    sal_uInt32 getSourceDocID() const { return mnSourceDocID; }
-    void setSourceDocID( sal_uInt32 nVal ) { mnSourceDocID = nVal; }
 };
 
 // ============================================================================
@@ -84,7 +78,7 @@ struct ScClipParam
 struct ScClipRangeNameData
 {
     ScRangeData::IndexMap       maRangeMap;
-    ::std::vector<ScRangeData*> mpRangeNames; // Don't insert NULL pointers.
+    ::std::vector<ScRangeData*> mpRangeNames;
     bool                        mbReplace;
 
     ScClipRangeNameData();

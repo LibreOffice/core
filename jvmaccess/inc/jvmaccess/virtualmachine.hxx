@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,10 +35,8 @@
 #ifdef SOLAR_JAVA
 #include "jni.h"
 #else
-struct JNIEnv_;
-typedef JNIEnv_ JNIEnv;
-struct JavaVM_;
-typedef JavaVM_ JavaVM;
+struct JNIEnv;
+struct JavaVM;
 typedef int jint;
 typedef void * jobject;
 #endif

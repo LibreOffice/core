@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,8 +28,14 @@
 #ifndef __com_sun_star_sheet_TableFilterField2_idl__
 #define __com_sun_star_sheet_TableFilterField2_idl__
 
+
+#ifndef __com_sun_star_sheet_FilterConnection_idl__
 #include <com/sun/star/sheet/FilterConnection.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_FilterOperator2_idl__
 #include <com/sun/star/sheet/FilterOperator2.idl>
+#endif
 
 //=============================================================================
 
@@ -43,7 +49,7 @@ module com {  module sun {  module star {  module sheet {
     member, whereas the <type>TableFilterField</type> struct uses the
     <type>FilterOperator</type> enum.</p>
 
-    @see SheetFilterDescriptor
+    @see com::sun::star::sheet::SheetFilterDescriptor
     @since OOo 3.2
  */
 published struct TableFilterField2
@@ -52,7 +58,7 @@ published struct TableFilterField2
 
     /** specifies how the condition is connected to the previous condition.
      */
-    FilterConnection Connection;
+    com::sun::star::sheet::FilterConnection Connection;
 
     //-------------------------------------------------------------------------
 
@@ -63,7 +69,7 @@ published struct TableFilterField2
     //-------------------------------------------------------------------------
 
     /** specifies the type of the condition as defined in
-        <type>FilterOperator2</type>.
+    <type>FilterOperator2</type>.
     */
     long Operator;
 

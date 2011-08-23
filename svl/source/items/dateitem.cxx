@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ TYPEINIT1(SfxDateTimeItem, SfxPoolItem);
 
 // -----------------------------------------------------------------------
 
-SfxDateTimeItem::SfxDateTimeItem( sal_uInt16 which ) :
+SfxDateTimeItem::SfxDateTimeItem( USHORT which ) :
     SfxPoolItem( which )
 {
     DBG_CTOR(SfxDateTimeItem, 0);
@@ -65,7 +65,7 @@ SfxDateTimeItem::SfxDateTimeItem( sal_uInt16 which ) :
 
 // -----------------------------------------------------------------------
 
-SfxDateTimeItem::SfxDateTimeItem( sal_uInt16 which, const DateTime& rDT ) :
+SfxDateTimeItem::SfxDateTimeItem( USHORT which, const DateTime& rDT ) :
     SfxPoolItem( which ),
     aDateTime( rDT )
 
@@ -110,7 +110,7 @@ int SfxDateTimeItem::Compare( const SfxPoolItem& rItem ) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxDateTimeItem::Create( SvStream& rStream, sal_uInt16 ) const
+SfxPoolItem* SfxDateTimeItem::Create( SvStream& rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxDateTimeItem, 0);
     sal_uInt32 nDate = 0;
@@ -123,7 +123,7 @@ SfxPoolItem* SfxDateTimeItem::Create( SvStream& rStream, sal_uInt16 ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxDateTimeItem::Store( SvStream& rStream, sal_uInt16 ) const
+SvStream& SfxDateTimeItem::Store( SvStream& rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxDateTimeItem, 0);
     rStream << aDateTime.GetDate();
@@ -143,12 +143,12 @@ SfxPoolItem* SfxDateTimeItem::Clone( SfxItemPool* ) const
 
 SfxItemPresentation SfxDateTimeItem::GetPresentation
 (
-    SfxItemPresentation     /*ePresentation*/,
-    SfxMapUnit              /*eCoreMetric*/,
-    SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              rText,
+    SfxItemPresentation 	/*ePresentation*/,
+    SfxMapUnit				/*eCoreMetric*/,
+    SfxMapUnit				/*ePresentationMetric*/,
+    XubString& 				rText,
     const IntlWrapper *   pIntlWrapper
-)   const
+)	const
 {
     DBG_CHKTHIS(SfxDateTimeItem, 0);
     if (aDateTime.IsValid())
@@ -176,7 +176,7 @@ SfxItemPresentation SfxDateTimeItem::GetPresentation
 //----------------------------------------------------------------------------
 // virtual
 bool SfxDateTimeItem::PutValue( const com::sun::star::uno::Any& rVal,
-                                   sal_uInt8 nMemberId )
+                                   BYTE nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     com::sun::star::util::DateTime aValue;
@@ -192,14 +192,14 @@ bool SfxDateTimeItem::PutValue( const com::sun::star::uno::Any& rVal,
         return true;
     }
 
-    OSL_FAIL( "SfxDateTimeItem::PutValue - Wrong type!" );
+    DBG_ERROR( "SfxDateTimeItem::PutValue - Wrong type!" );
     return false;
 }
 
 //----------------------------------------------------------------------------
 // virtual
 bool SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
-                                   sal_uInt8 nMemberId ) const
+                                   BYTE nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     com::sun::star::util::DateTime aValue( aDateTime.Get100Sec(),
@@ -220,11 +220,11 @@ bool SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
 TYPEINIT1(SfxColumnDateTimeItem, SfxDateTimeItem);
 
 
-SfxColumnDateTimeItem::SfxColumnDateTimeItem( sal_uInt16 which ) :
+SfxColumnDateTimeItem::SfxColumnDateTimeItem( USHORT which ) :
     SfxDateTimeItem( which )
 {}
 
-SfxColumnDateTimeItem::SfxColumnDateTimeItem( sal_uInt16 which, const DateTime& rDT ) :
+SfxColumnDateTimeItem::SfxColumnDateTimeItem( USHORT which, const DateTime& rDT ) :
     SfxDateTimeItem( which, rDT )
 {}
 
@@ -239,12 +239,12 @@ SfxPoolItem* SfxColumnDateTimeItem::Clone( SfxItemPool* ) const
 
 SfxItemPresentation SfxColumnDateTimeItem::GetPresentation
 (
-    SfxItemPresentation     /*ePresentation*/,
-    SfxMapUnit              /*eCoreMetric*/,
-    SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              rText,
+    SfxItemPresentation 	/*ePresentation*/,
+    SfxMapUnit				/*eCoreMetric*/,
+    SfxMapUnit				/*ePresentationMetric*/,
+    XubString& 				rText,
     const IntlWrapper *   pIntlWrapper
-)   const
+)	const
 {
     DBG_ASSERT(pIntlWrapper,
                "SfxColumnDateTimeItem::GetPresentation():"

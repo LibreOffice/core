@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,7 +105,7 @@ private:
     VirtualDevice               maGridDev;          /// Data grid with selection and cursor.
     PopupMenu                   maPopup;            /// Popup menu for column types.
 
-    ::svtools::ColorConfig*     mpColorConfig;      /// Application color configuration.
+    ::svtools::ColorConfig&     mrColorConfig;      /// Application color configuration.
     Color                       maBackColor;        /// Cell background color.
     Color                       maGridColor;        /// Table grid color.
     Color                       maGridPBColor;      /// Grid color for "first imported line" delimiter.
@@ -136,9 +136,6 @@ private:
 public:
     explicit                    ScCsvGrid( ScCsvControl& rParent );
     virtual                     ~ScCsvGrid();
-
-    /** Finishes initialization. Must be called after constructing a new object. */
-    void Init();
 
     // common grid handling ---------------------------------------------------
 public:

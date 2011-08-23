@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,12 +66,12 @@ module com {  module sun {  module star {  module report {
 /** identifies a <type>XReportEngine</type> which allows the creation of OpenDocument files.
 
     <p>The following events are supported by the report engine.
-        OnPageStarted       Is fired when a new page started.
-        OnReportStarted     Is fired when a new report started.
-        OnGroupStarted      Is fired when a new group started.
-        OnGroupEnded        Is fired when the group ended.
-        OnReportEnded       Is fired when the report ended.
-        OnPageEnded         Is fired when the page ended.
+        OnPageStarted		Is fired when a new page started.
+        OnReportStarted		Is fired when a new report started.
+        OnGroupStarted		Is fired when a new group started.
+        OnGroupEnded		Is fired when the group ended.
+        OnReportEnded		Is fired when the report ended.
+        OnPageEnded			Is fired when the page ended.
 
     @see com.sun.star.document.OfficeDocument
 */
@@ -98,14 +98,14 @@ interface XReportEngine
                 ::com::sun::star::uno::Exception );
 
     /** creates a report document.
-        @param  _frame
+        @param	_frame
             The frame must have a controller set. This controller will be set at the model.
         @throws <type scope="com::sun::star::lang">DisposedException</type>
             If the report engine is already disposed.
         @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
             If the report definition was not set or is <NULL/>.
 
-        OJ: Has to be discussed if this method is useful.
+        OJ: Has to be discussed if this method is usefull.
     */
     com::sun::star::frame::XModel createDocumentAlive([in] com::sun::star::frame::XFrame frame)
         raises( ::com::sun::star::lang::DisposedException,

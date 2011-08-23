@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ TYPEINIT1_FACTORY(SvxViewLayoutItem,SfxUInt16Item, new SvxViewLayoutItem);
 
 SvxViewLayoutItem::SvxViewLayoutItem
 (
-    sal_uInt16      nColumns,
+    USHORT      nColumns,
     bool        bBookMode,
     sal_uInt16  _nWhich
 )
@@ -58,7 +58,7 @@ SvxViewLayoutItem::SvxViewLayoutItem
 // -----------------------------------------------------------------------
 
 SvxViewLayoutItem::SvxViewLayoutItem( const SvxViewLayoutItem& rOrig )
-:   SfxUInt16Item( rOrig.Which(), rOrig.GetValue() ),
+:	SfxUInt16Item( rOrig.Which(), rOrig.GetValue() ),
     mbBookMode( rOrig.IsBookMode() )
 {
 }
@@ -108,11 +108,11 @@ int SvxViewLayoutItem::operator==( const SfxPoolItem& rAttr ) const
 
     SvxViewLayoutItem& rItem = (SvxViewLayoutItem&)rAttr;
 
-    return ( GetValue() == rItem.GetValue()     &&
+    return ( GetValue() == rItem.GetValue() 	&&
              mbBookMode == rItem.IsBookMode() );
 }
 
-bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -131,14 +131,14 @@ bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nM
         case MID_VIEWLAYOUT_COLUMNS : rVal <<= (sal_Int32) GetValue(); break;
         case MID_VIEWLAYOUT_BOOKMODE: rVal <<= (sal_Bool) mbBookMode; break;
         default:
-            OSL_FAIL("svx::SvxViewLayoutItem::QueryValue(), Wrong MemberId!");
+            DBG_ERROR("svx::SvxViewLayoutItem::QueryValue(), Wrong MemberId!");
             return false;
     }
 
     return true;
 }
 
-bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -169,7 +169,7 @@ bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
 
                 if ( bAllConverted && nConvertedCount == VIEWLAYOUT_PARAMS )
                 {
-                    SetValue( (sal_uInt16)nColumns );
+                    SetValue( (UINT16)nColumns );
                     mbBookMode = bBookMode;
                     return true;
                 }
@@ -183,7 +183,7 @@ bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
             sal_Int32 nVal = 0;
             if ( rVal >>= nVal )
             {
-                SetValue( (sal_uInt16)nVal );
+                SetValue( (UINT16)nVal );
                 return true;
             }
             else
@@ -203,7 +203,7 @@ bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
         }
 
         default:
-            OSL_FAIL("svx::SvxViewLayoutItem::PutValue(), Wrong MemberId!");
+            DBG_ERROR("svx::SvxViewLayoutItem::PutValue(), Wrong MemberId!");
             return false;
     }
 

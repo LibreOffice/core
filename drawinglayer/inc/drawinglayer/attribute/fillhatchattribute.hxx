@@ -3,6 +3,12 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
+ *  $RCSfile: fillattribute.hxx,v $
+ *
+ *  $Revision: 1.3 $
+ *
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
+ *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *
@@ -53,8 +59,8 @@ namespace drawinglayer
     {
         enum HatchStyle
         {
-            HATCHSTYLE_SINGLE,
-            HATCHSTYLE_DOUBLE,
+            HATCHSTYLE_SINGLE, 
+            HATCHSTYLE_DOUBLE, 
             HATCHSTYLE_TRIPLE
         };
     } // end of namespace attribute
@@ -74,10 +80,10 @@ namespace drawinglayer
         public:
             /// constructors/assignmentoperator/destructor
             FillHatchAttribute(
-                HatchStyle eStyle,
-                double fDistance,
-                double fAngle,
-                const basegfx::BColor& rColor,
+                HatchStyle eStyle, 
+                double fDistance, 
+                double fAngle, 
+                const basegfx::BColor& rColor, 
                 bool bFillBackground);
             FillHatchAttribute();
             FillHatchAttribute(const FillHatchAttribute& rCandidate);

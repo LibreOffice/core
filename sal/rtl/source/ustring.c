@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -552,7 +552,7 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
                                        sal_uInt32 nCvtFlags,
                                        sal_uInt32 *pInfo )
 {
-    OSL_ENSURE(nLen == 0 || rtl_isOctetTextEncoding(eTextEncoding),
+    OSL_ENSURE(rtl_isOctetTextEncoding(eTextEncoding),
                "rtl_string2UString_status() - Wrong TextEncoding" );
 
     if ( !nLen )
@@ -865,13 +865,13 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
         {
             rtl_uString *pScratch;
             rtl_TextToUnicodeConverter hConverter;
-            sal_Size nSrcBytes;
+            sal_Size nDestChars, nSrcBytes;
             sal_uInt32 nInfo;
 
             pScratch = alloca( sizeof(rtl_uString) + ulen * sizeof (IMPL_RTL_STRCODE) );
 
             hConverter = rtl_createTextToUnicodeConverter( eTextEncoding );
-            rtl_convertTextToUnicode(
+            nDestChars = rtl_convertTextToUnicode(
                 hConverter, 0, str, len, pScratch->buffer, ulen, convertFlags, &nInfo, &nSrcBytes );
             rtl_destroyTextToUnicodeConverter( hConverter );
 

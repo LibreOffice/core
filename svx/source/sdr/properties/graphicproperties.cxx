@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,12 +63,12 @@ namespace sdr
         }
 
         GraphicProperties::GraphicProperties(SdrObject& rObj)
-        :   RectangleProperties(rObj)
+        :	RectangleProperties(rObj)
         {
         }
 
         GraphicProperties::GraphicProperties(const GraphicProperties& rProps, SdrObject& rObj)
-        :   RectangleProperties(rProps, rObj)
+        :	RectangleProperties(rProps, rObj)
         {
         }
 
@@ -129,7 +129,7 @@ namespace sdr
             mpItemSet->Put( SdrGrafBlueItem( 0 ) );
             mpItemSet->Put( SdrGrafGamma100Item( 100 ) );
             mpItemSet->Put( SdrGrafTransparenceItem( 0 ) );
-            mpItemSet->Put( SdrGrafInvertItem( sal_False ) );
+            mpItemSet->Put( SdrGrafInvertItem( FALSE ) );
             mpItemSet->Put( SdrGrafModeItem( GRAPHICDRAWMODE_STANDARD ) );
             mpItemSet->Put( SdrGrafCropItem( 0, 0, 0, 0 ) );
 

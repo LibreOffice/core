@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,13 +73,13 @@ struct SchXMLCell
 
 struct SchXMLTable
 {
-    std::vector< std::vector< SchXMLCell > > aData;     /// an array of rows containing the table contents
+    std::vector< std::vector< SchXMLCell > > aData;		/// an array of rows containing the table contents
 
-    sal_Int32 nRowIndex;                                /// reflects the index of the row currently parsed
-    sal_Int32 nColumnIndex;                             /// reflects the index of the column currently parsed
-    sal_Int32 nMaxColumnIndex;                          /// the greatest number of columns detected
+    sal_Int32 nRowIndex;								/// reflects the index of the row currently parsed
+    sal_Int32 nColumnIndex;								/// reflects the index of the column currently parsed
+    sal_Int32 nMaxColumnIndex;							/// the greatest number of columns detected
 
-    sal_Int32 nNumberOfColsEstimate;                    /// parsing column-elements may yield an estimate
+    sal_Int32 nNumberOfColsEstimate;					/// parsing column-elements may yield an estimate
 
     bool bHasHeaderRow;
     bool bHasHeaderColumn;
@@ -88,15 +88,12 @@ struct SchXMLTable
 
     ::std::vector< sal_Int32 > aHiddenColumns;
 
-    bool bProtected;
-
     SchXMLTable() : nRowIndex( -1 ),
                     nColumnIndex( -1 ),
                     nMaxColumnIndex( -1 ),
                     nNumberOfColsEstimate( 0 ),
                     bHasHeaderRow( false ),
-                    bHasHeaderColumn( false ),
-                    bProtected( false )
+                    bHasHeaderColumn( false )
     {}
 };
 
@@ -136,7 +133,7 @@ struct SchNumericCellRangeAddress
 
 // ----------------------------------------
 
-enum SchXMLAxisDimension
+enum SchXMLAxisClass
 {
     SCH_XML_AXIS_X = 0,
     SCH_XML_AXIS_Y,
@@ -146,13 +143,13 @@ enum SchXMLAxisDimension
 
 struct SchXMLAxis
 {
-    enum SchXMLAxisDimension eDimension;
-    sal_Int8 nAxisIndex;//0->primary axis; 1->secondary axis
+    enum SchXMLAxisClass eClass;
+    sal_Int8 nIndexInCategory;
     rtl::OUString aName;
     rtl::OUString aTitle;
     bool bHasCategories;
 
-    SchXMLAxis() : eDimension( SCH_XML_AXIS_UNDEF ), nAxisIndex( 0 ), bHasCategories( false ) {}
+    SchXMLAxis() : eClass( SCH_XML_AXIS_UNDEF ), nIndexInCategory( 0 ), bHasCategories( false ) {}
 };
 
 // ----------------------------------------
@@ -223,6 +220,6 @@ struct DataRowPointStyle
 typedef ::std::multimap< ::rtl::OUString, ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XDataSequence > > tSchXMLRangeSequenceMap;
 
-#endif  // SCH_XML_TRANSPORTTYPES_HXX_
+#endif	// SCH_XML_TRANSPORTTYPES_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

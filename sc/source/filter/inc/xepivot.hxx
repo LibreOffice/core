@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -224,8 +224,6 @@ private:
 
     /** Writes the DCONREF record containing the source range. */
     void                WriteDconref( XclExpStream& rStrm ) const;
-    /** DCONNAME record contains range name source. */
-    void                WriteDConName( XclExpStream& rStrm ) const;
 
     /** Creates the pivot cache storage stream and writes the cache. */
     void                WriteCacheStream();
@@ -243,7 +241,6 @@ private:
     XclPCInfo           maPCInfo;           /// Pivot cache settings (SXDB record).
     XclExpPCFieldList   maFieldList;        /// List of all pivot cache fields.
     String              maTabName;          /// Name of source data sheet.
-    ::rtl::OUString     maSrcRangeName;     /// Range name for source data.
     ScRange             maOrigSrcRange;     /// The original sheet source range.
     ScRange             maExpSrcRange;      /// The exported sheet source range.
     ScRange             maDocSrcRange;      /// The range used to build the cache fields and items.

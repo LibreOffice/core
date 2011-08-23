@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "vbacommandbar.hxx"
-#include "vbacommandbarcontrols.hxx"
+#include "vbacommandbar.hxx" 
+#include "vbacommandbarcontrols.hxx" 
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -45,9 +45,9 @@ ScVbaCommandBar::ScVbaCommandBar( const uno::Reference< ov::XHelperInterface > x
 ::rtl::OUString SAL_CALL
 ScVbaCommandBar::getName() throw ( uno::RuntimeException )
 {
-    // This will get a "NULL length string" when Name is not set.
+    // This will get a "NULL length string" when Name is not set. 
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
-    uno::Any aName = xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIName")) );
+    uno::Any aName = xPropertySet->getPropertyValue( rtl::OUString::createFromAscii("UIName") );
     rtl::OUString sName;
     aName >>= sName;
     if( sName.getLength() < 1 )
@@ -56,36 +56,36 @@ ScVbaCommandBar::getName() throw ( uno::RuntimeException )
         {
             if( m_sResourceUrl.equalsAscii( ITEM_MENUBAR_URL ) )
             {
-                if( pCBarHelper->getModuleId().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sheet.SpreadsheetDocument")) )
+                if( pCBarHelper->getModuleId().equalsAscii("com.sun.star.sheet.SpreadsheetDocument") )
                     sName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Worksheet Menu Bar") );
-                else if( pCBarHelper->getModuleId().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")) )
+                else if( pCBarHelper->getModuleId().equalsAscii("com.sun.star.text.TextDocument") )
                     sName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Menu Bar") );
-                return sName;
+                return sName;    
             }
         }
         // Toolbar name
         uno::Reference< container::XNameAccess > xNameAccess = pCBarHelper->getPersistentWindowState();
         if( xNameAccess->hasByName( m_sResourceUrl ) )
         {
-            uno::Sequence< beans::PropertyValue > aToolBar;
+            uno::Sequence< beans::PropertyValue > aToolBar; 
             xNameAccess->getByName( m_sResourceUrl ) >>= aToolBar;
             getPropertyValue( aToolBar, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UIName") ) ) >>= sName;
         }
     }
     return sName;
 }
-void SAL_CALL
+void SAL_CALL 
 ScVbaCommandBar::setName( const ::rtl::OUString& _name ) throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
-    xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIName")), uno::makeAny( _name ) );
-
+    xPropertySet->setPropertyValue( rtl::OUString::createFromAscii("UIName"), uno::makeAny( _name ) );
+    
     pCBarHelper->ApplyChange( m_sResourceUrl, m_xBarSettings );
 }
-::sal_Bool SAL_CALL
+::sal_Bool SAL_CALL 
 ScVbaCommandBar::getVisible() throw (uno::RuntimeException)
 {
-    // menu bar is allways visible in OOo
+    // menu bar is allways visible in OOo 
     if( m_bIsMenu )
         return sal_True;
 
@@ -95,7 +95,7 @@ ScVbaCommandBar::getVisible() throw (uno::RuntimeException)
         uno::Reference< container::XNameAccess > xNameAccess = pCBarHelper->getPersistentWindowState();
         if( xNameAccess->hasByName( m_sResourceUrl ) )
         {
-            uno::Sequence< beans::PropertyValue > aToolBar;
+            uno::Sequence< beans::PropertyValue > aToolBar; 
             xNameAccess->getByName( m_sResourceUrl ) >>= aToolBar;
             getPropertyValue( aToolBar, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Visible") ) ) >>= bVisible;
         }
@@ -105,7 +105,7 @@ ScVbaCommandBar::getVisible() throw (uno::RuntimeException)
     }
     return bVisible;
 }
-void SAL_CALL
+void SAL_CALL 
 ScVbaCommandBar::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException)
 {
     try
@@ -122,13 +122,13 @@ ScVbaCommandBar::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException)
             xLayoutManager->destroyElement( m_sResourceUrl );
         }
     }
-    catch( uno::Exception& )
+    catch( uno::Exception e )
     {
         OSL_TRACE( "SetVisible get an exception\n" );
     }
 }
 
-::sal_Bool SAL_CALL
+::sal_Bool SAL_CALL 
 ScVbaCommandBar::getEnabled() throw (uno::RuntimeException)
 {
     // emulated with Visible
@@ -142,7 +142,7 @@ ScVbaCommandBar::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException)
     setVisible( _enabled );
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaCommandBar::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     pCBarHelper->removeSettings( m_sResourceUrl );
@@ -152,7 +152,7 @@ ScVbaCommandBar::Delete(  ) throw (script::BasicErrorException, uno::RuntimeExce
         xNameContainer->removeByName( m_sResourceUrl );
     }
 }
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 ScVbaCommandBar::Controls( const uno::Any& aIndex ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     uno::Reference< awt::XMenu > xMenu;
@@ -160,7 +160,7 @@ ScVbaCommandBar::Controls( const uno::Any& aIndex ) throw (script::BasicErrorExc
     {
         uno::Reference< frame::XLayoutManager > xLayoutManager = pCBarHelper->getLayoutManager();
         uno::Reference< beans::XPropertySet > xPropertySet( xLayoutManager->getElement( m_sResourceUrl ), uno::UNO_QUERY_THROW );
-        xMenu.set( xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("XMenuBar")) ), uno::UNO_QUERY );
+        xMenu.set( xPropertySet->getPropertyValue( rtl::OUString::createFromAscii("XMenuBar") ), uno::UNO_QUERY );
     }
     uno::Reference< XCommandBarControls > xCommandBarControls( new ScVbaCommandBarControls( this, mxContext, m_xBarSettings, pCBarHelper, m_xBarSettings, m_sResourceUrl, xMenu ) );
     if( aIndex.hasValue() )
@@ -179,20 +179,20 @@ ScVbaCommandBar::Type() throw (script::BasicErrorException, uno::RuntimeExceptio
     return nType;
 }
 
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 ScVbaCommandBar::FindControl( const uno::Any& /*aType*/, const uno::Any& /*aId*/, const uno::Any& /*aTag*/, const uno::Any& /*aVisible*/, const uno::Any& /*aRecursive*/ ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     // alwayse fail to find control
     return uno::makeAny( uno::Reference< XCommandBarControl > () );
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaCommandBar::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBar") );
     return sImplName;
 }
-uno::Sequence<rtl::OUString>
+uno::Sequence<rtl::OUString> 
 ScVbaCommandBar::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

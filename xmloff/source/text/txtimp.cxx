@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/txtstyli.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/xmlnumfi.hxx>
@@ -70,10 +70,10 @@
 #include "txtparai.hxx"
 #include <xmloff/txtimp.hxx>
 #include <xmloff/txtprmap.hxx>
-#include "xmloff/txtimppr.hxx"
+#include "txtimppr.hxx"
 #include <xmloff/xmlimp.hxx>
 #include "txtvfldi.hxx"
-#include "xmloff/i18nmap.hxx"
+#include "i18nmap.hxx"
 #include "XMLTextListItemContext.hxx"
 #include "XMLTextListBlockContext.hxx"
 #include "XMLTextFrameContext.hxx"
@@ -92,9 +92,13 @@
 #include "XMLCalculationSettingsContext.hxx"
 #include <xmloff/formsimp.hxx>
 #include "XMLNumberStylesImport.hxx"
-// XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
+// --> OD 2006-10-12 #i69629#
 #include <com/sun/star/beans/XPropertyState.hpp>
+// <--
+
+// --> OD 2008-04-25 #refactorlists#
 #include <txtlists.hxx>
+// <--
 #include <xmloff/odffields.hxx>
 #include <comphelper/stlunosequence.hxx>
 
@@ -121,42 +125,43 @@ using ::comphelper::UStringLess;
 
 
 
-static SvXMLTokenMapEntry aTextElemTokenMap[] =
+static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
 {
-    { XML_NAMESPACE_TEXT, XML_P,                XML_TOK_TEXT_P              },
-    { XML_NAMESPACE_TEXT, XML_H,                XML_TOK_TEXT_H              },
-    { XML_NAMESPACE_TEXT, XML_LIST,             XML_TOK_TEXT_LIST           },
-    { XML_NAMESPACE_DRAW, XML_FRAME,            XML_TOK_TEXT_FRAME_PAGE     },
-    { XML_NAMESPACE_DRAW, XML_A,                XML_TOK_DRAW_A_PAGE },
-    { XML_NAMESPACE_TABLE,XML_TABLE,            XML_TOK_TABLE_TABLE         },
-    { XML_NAMESPACE_TEXT, XML_VARIABLE_DECLS,   XML_TOK_TEXT_VARFIELD_DECLS },
+    { XML_NAMESPACE_TEXT, XML_P, 				XML_TOK_TEXT_P				},
+    { XML_NAMESPACE_TEXT, XML_H, 				XML_TOK_TEXT_H				},
+    { XML_NAMESPACE_TEXT, XML_LIST, 			XML_TOK_TEXT_LIST			},
+    { XML_NAMESPACE_DRAW, XML_FRAME, 			XML_TOK_TEXT_FRAME_PAGE 	},
+    { XML_NAMESPACE_DRAW, XML_A, 				XML_TOK_DRAW_A_PAGE },
+    { XML_NAMESPACE_TABLE,XML_TABLE,			XML_TOK_TABLE_TABLE 		},
+//	{ XML_NAMESPACE_TABLE,XML_SUB_TABLE,		XML_TOK_TABLE_SUBTABLE 		},
+    { XML_NAMESPACE_TEXT, XML_VARIABLE_DECLS,	XML_TOK_TEXT_VARFIELD_DECLS },
     { XML_NAMESPACE_TEXT, XML_USER_FIELD_DECLS, XML_TOK_TEXT_USERFIELD_DECLS },
-    { XML_NAMESPACE_TEXT, XML_SEQUENCE_DECLS,   XML_TOK_TEXT_SEQUENCE_DECLS },
+    { XML_NAMESPACE_TEXT, XML_SEQUENCE_DECLS,	XML_TOK_TEXT_SEQUENCE_DECLS },
     { XML_NAMESPACE_TEXT, XML_DDE_CONNECTION_DECLS, XML_TOK_TEXT_DDE_DECLS },
-    { XML_NAMESPACE_TEXT, XML_SECTION,          XML_TOK_TEXT_SECTION },
+    { XML_NAMESPACE_TEXT, XML_SECTION,			XML_TOK_TEXT_SECTION },
     { XML_NAMESPACE_TEXT, XML_TABLE_OF_CONTENT, XML_TOK_TEXT_TOC },
-    { XML_NAMESPACE_TEXT, XML_OBJECT_INDEX,     XML_TOK_TEXT_OBJECT_INDEX },
-    { XML_NAMESPACE_TEXT, XML_TABLE_INDEX,      XML_TOK_TEXT_TABLE_INDEX },
+    { XML_NAMESPACE_TEXT, XML_OBJECT_INDEX, 	XML_TOK_TEXT_OBJECT_INDEX },
+    { XML_NAMESPACE_TEXT, XML_TABLE_INDEX,		XML_TOK_TEXT_TABLE_INDEX },
     { XML_NAMESPACE_TEXT, XML_ILLUSTRATION_INDEX, XML_TOK_TEXT_ILLUSTRATION_INDEX },
-    { XML_NAMESPACE_TEXT, XML_USER_INDEX,       XML_TOK_TEXT_USER_INDEX },
+    { XML_NAMESPACE_TEXT, XML_USER_INDEX,		XML_TOK_TEXT_USER_INDEX },
     { XML_NAMESPACE_TEXT, XML_ALPHABETICAL_INDEX, XML_TOK_TEXT_ALPHABETICAL_INDEX },
     { XML_NAMESPACE_TEXT, XML_BIBLIOGRAPHY,     XML_TOK_TEXT_BIBLIOGRAPHY_INDEX },
-    { XML_NAMESPACE_TEXT, XML_INDEX_TITLE,      XML_TOK_TEXT_INDEX_TITLE },
+    { XML_NAMESPACE_TEXT, XML_INDEX_TITLE,		XML_TOK_TEXT_INDEX_TITLE },
     { XML_NAMESPACE_TEXT, XML_TRACKED_CHANGES,  XML_TOK_TEXT_TRACKED_CHANGES },
-    { XML_NAMESPACE_TEXT, XML_CHANGE_START,     XML_TOK_TEXT_CHANGE_START },
-    { XML_NAMESPACE_TEXT, XML_CHANGE_END,       XML_TOK_TEXT_CHANGE_END },
-    { XML_NAMESPACE_TEXT, XML_CHANGE,           XML_TOK_TEXT_CHANGE },
-    { XML_NAMESPACE_OFFICE, XML_FORMS,          XML_TOK_TEXT_FORMS },
-    { XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS,    XML_TOK_TEXT_CALCULATION_SETTINGS },
+    { XML_NAMESPACE_TEXT, XML_CHANGE_START,	    XML_TOK_TEXT_CHANGE_START },
+    { XML_NAMESPACE_TEXT, XML_CHANGE_END, 		XML_TOK_TEXT_CHANGE_END },
+    { XML_NAMESPACE_TEXT, XML_CHANGE, 			XML_TOK_TEXT_CHANGE },
+    { XML_NAMESPACE_OFFICE, XML_FORMS,			XML_TOK_TEXT_FORMS },
+    { XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS,	XML_TOK_TEXT_CALCULATION_SETTINGS },
     { XML_NAMESPACE_TEXT, XML_ALPHABETICAL_INDEX_AUTO_MARK_FILE, XML_TOK_TEXT_AUTOMARK },
     // --> FLR #i52127#
-    { XML_NAMESPACE_TEXT, XML_NUMBERED_PARAGRAPH, XML_TOK_TEXT_NUMBERED_PARAGRAPH   },
+    { XML_NAMESPACE_TEXT, XML_NUMBERED_PARAGRAPH, XML_TOK_TEXT_NUMBERED_PARAGRAPH	},
     // <--
 
     XML_TOKEN_MAP_END
 };
 
-static SvXMLTokenMapEntry aTextPElemTokenMap[] =
+static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_SPAN, XML_TOK_TEXT_SPAN },
     { XML_NAMESPACE_TEXT, XML_TAB, XML_TOK_TEXT_TAB_STOP },
@@ -177,7 +182,7 @@ static SvXMLTokenMapEntry aTextPElemTokenMap[] =
       XML_TOK_TEXT_REFERENCE_END },
 
     { XML_NAMESPACE_DRAW, XML_FRAME, XML_TOK_TEXT_FRAME },
-    { XML_NAMESPACE_DRAW, XML_A,                XML_TOK_DRAW_A },
+    { XML_NAMESPACE_DRAW, XML_A, 				XML_TOK_DRAW_A },
 
     // index marks
     { XML_NAMESPACE_TEXT, XML_TOC_MARK, XML_TOK_TEXT_TOC_MARK },
@@ -280,7 +285,7 @@ static SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_TEXT, XML_CONDITIONAL_TEXT,
       XML_TOK_TEXT_CONDITIONAL_TEXT },
     { XML_NAMESPACE_TEXT, XML_FILE_NAME, XML_TOK_TEXT_FILENAME },
-    { XML_NAMESPACE_TEXT, XML_CHAPTER,  XML_TOK_TEXT_CHAPTER },
+    { XML_NAMESPACE_TEXT, XML_CHAPTER,	XML_TOK_TEXT_CHAPTER },
     { XML_NAMESPACE_TEXT, XML_TEMPLATE_NAME, XML_TOK_TEXT_TEMPLATENAME },
     { XML_NAMESPACE_TEXT, XML_PARAGRAPH_COUNT, XML_TOK_TEXT_PARAGRAPH_COUNT },
     { XML_NAMESPACE_TEXT, XML_WORD_COUNT, XML_TOK_TEXT_WORD_COUNT },
@@ -308,7 +313,7 @@ static SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_TEXT, XML_SHEET_NAME, XML_TOK_TEXT_SHEET_NAME },
 
     // draw fields
-    { XML_NAMESPACE_TEXT, XML_MEASURE,  XML_TOK_TEXT_MEASURE },
+    { XML_NAMESPACE_TEXT, XML_MEASURE,	XML_TOK_TEXT_MEASURE },
 
     // RDF metadata
     { XML_NAMESPACE_TEXT, XML_META,         XML_TOK_TEXT_META },
@@ -332,15 +337,15 @@ static SvXMLTokenMapEntry aTextPElemTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static SvXMLTokenMapEntry aTextPAttrTokenMap[] =
+static __FAR_DATA SvXMLTokenMapEntry aTextPAttrTokenMap[] =
 {
-    { XML_NAMESPACE_XML  , XML_ID,          XML_TOK_TEXT_P_XMLID },
-    { XML_NAMESPACE_XHTML, XML_ABOUT,       XML_TOK_TEXT_P_ABOUT },
-    { XML_NAMESPACE_XHTML, XML_PROPERTY,    XML_TOK_TEXT_P_PROPERTY },
-    { XML_NAMESPACE_XHTML, XML_CONTENT,     XML_TOK_TEXT_P_CONTENT },
-    { XML_NAMESPACE_XHTML, XML_DATATYPE,    XML_TOK_TEXT_P_DATATYPE },
+    { XML_NAMESPACE_XML  , XML_ID,			XML_TOK_TEXT_P_XMLID },
+    { XML_NAMESPACE_XHTML, XML_ABOUT,		XML_TOK_TEXT_P_ABOUT },
+    { XML_NAMESPACE_XHTML, XML_PROPERTY,	XML_TOK_TEXT_P_PROPERTY },
+    { XML_NAMESPACE_XHTML, XML_CONTENT,		XML_TOK_TEXT_P_CONTENT },
+    { XML_NAMESPACE_XHTML, XML_DATATYPE,	XML_TOK_TEXT_P_DATATYPE },
     { XML_NAMESPACE_TEXT, XML_ID,           XML_TOK_TEXT_P_TEXTID },
-    { XML_NAMESPACE_TEXT, XML_STYLE_NAME,   XML_TOK_TEXT_P_STYLE_NAME },
+    { XML_NAMESPACE_TEXT, XML_STYLE_NAME,	XML_TOK_TEXT_P_STYLE_NAME },
     { XML_NAMESPACE_TEXT, XML_COND_STYLE_NAME,
                                             XML_TOK_TEXT_P_COND_STYLE_NAME },
     { XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,XML_TOK_TEXT_P_LEVEL },
@@ -350,7 +355,7 @@ static SvXMLTokenMapEntry aTextPAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static SvXMLTokenMapEntry aTextNumberedParagraphAttrTokenMap[] =
+static __FAR_DATA SvXMLTokenMapEntry aTextNumberedParagraphAttrTokenMap[] =
 {
     { XML_NAMESPACE_XML , XML_ID,    XML_TOK_TEXT_NUMBERED_PARAGRAPH_XMLID },
     { XML_NAMESPACE_TEXT, XML_LIST_ID,
@@ -365,26 +370,27 @@ static SvXMLTokenMapEntry aTextNumberedParagraphAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static SvXMLTokenMapEntry aTextListBlockAttrTokenMap[] =
+static __FAR_DATA SvXMLTokenMapEntry aTextListBlockAttrTokenMap[] =
 {
-    { XML_NAMESPACE_XML , XML_ID,           XML_TOK_TEXT_LIST_BLOCK_XMLID },
+    { XML_NAMESPACE_XML , XML_ID,			XML_TOK_TEXT_LIST_BLOCK_XMLID },
     { XML_NAMESPACE_TEXT, XML_STYLE_NAME,
             XML_TOK_TEXT_LIST_BLOCK_STYLE_NAME },
     { XML_NAMESPACE_TEXT, XML_CONTINUE_NUMBERING,
             XML_TOK_TEXT_LIST_BLOCK_CONTINUE_NUMBERING },
+    // --> OD 2008-04-22 #refactorlists#
     { XML_NAMESPACE_TEXT, XML_CONTINUE_LIST,
             XML_TOK_TEXT_LIST_BLOCK_CONTINUE_LIST },
     XML_TOKEN_MAP_END
 };
 
-static SvXMLTokenMapEntry aTextListBlockElemTokenMap[] =
+static __FAR_DATA SvXMLTokenMapEntry aTextListBlockElemTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_LIST_HEADER, XML_TOK_TEXT_LIST_HEADER },
-    { XML_NAMESPACE_TEXT, XML_LIST_ITEM,    XML_TOK_TEXT_LIST_ITEM   },
+    { XML_NAMESPACE_TEXT, XML_LIST_ITEM, 	XML_TOK_TEXT_LIST_ITEM	 },
     XML_TOKEN_MAP_END
 };
 
-static SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
+static __FAR_DATA SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, XML_STYLE_NAME, XML_TOK_TEXT_FRAME_STYLE_NAME },
     { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_TEXT_FRAME_NAME },
@@ -404,11 +410,11 @@ static SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
     { XML_NAMESPACE_DRAW, XML_ZINDEX, XML_TOK_TEXT_FRAME_Z_INDEX },
     { XML_NAMESPACE_SVG, XML_TRANSFORM, XML_TOK_TEXT_FRAME_TRANSFORM },
     { XML_NAMESPACE_DRAW, XML_CLASS_ID, XML_TOK_TEXT_FRAME_CLASS_ID },
-    { XML_NAMESPACE_DRAW,   XML_CODE,           XML_TOK_TEXT_FRAME_CODE },
-    { XML_NAMESPACE_DRAW,   XML_OBJECT,         XML_TOK_TEXT_FRAME_OBJECT },
-    { XML_NAMESPACE_DRAW,   XML_ARCHIVE,        XML_TOK_TEXT_FRAME_ARCHIVE },
-    { XML_NAMESPACE_DRAW,   XML_MAY_SCRIPT,     XML_TOK_TEXT_FRAME_MAY_SCRIPT },
-    { XML_NAMESPACE_DRAW,   XML_MIME_TYPE,  XML_TOK_TEXT_FRAME_MIME_TYPE },
+    { XML_NAMESPACE_DRAW,  	XML_CODE,       	XML_TOK_TEXT_FRAME_CODE },
+    { XML_NAMESPACE_DRAW,  	XML_OBJECT, 		XML_TOK_TEXT_FRAME_OBJECT },
+    { XML_NAMESPACE_DRAW,  	XML_ARCHIVE, 		XML_TOK_TEXT_FRAME_ARCHIVE },
+    { XML_NAMESPACE_DRAW,   XML_MAY_SCRIPT, 	XML_TOK_TEXT_FRAME_MAY_SCRIPT },
+    { XML_NAMESPACE_DRAW,   XML_MIME_TYPE, 	XML_TOK_TEXT_FRAME_MIME_TYPE },
     { XML_NAMESPACE_DRAW, XML_APPLET_NAME, XML_TOK_TEXT_FRAME_APPLET_NAME },
     { XML_NAMESPACE_DRAW, XML_FRAME_NAME, XML_TOK_TEXT_FRAME_FRAME_NAME },
     { XML_NAMESPACE_DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES, XML_TOK_TEXT_FRAME_NOTIFY_ON_UPDATE },
@@ -416,18 +422,18 @@ static SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static SvXMLTokenMapEntry aTextContourAttrTokenMap[] =
+static __FAR_DATA SvXMLTokenMapEntry aTextContourAttrTokenMap[] =
 {
-    { XML_NAMESPACE_SVG, XML_WIDTH,     XML_TOK_TEXT_CONTOUR_WIDTH      },
-    { XML_NAMESPACE_SVG, XML_HEIGHT,    XML_TOK_TEXT_CONTOUR_HEIGHT     },
-    { XML_NAMESPACE_SVG, XML_VIEWBOX,   XML_TOK_TEXT_CONTOUR_VIEWBOX    },
-    { XML_NAMESPACE_SVG, XML_D,         XML_TOK_TEXT_CONTOUR_D          },
-    { XML_NAMESPACE_DRAW,XML_POINTS,    XML_TOK_TEXT_CONTOUR_POINTS     },
-    { XML_NAMESPACE_DRAW,XML_RECREATE_ON_EDIT,  XML_TOK_TEXT_CONTOUR_AUTO   },
+    { XML_NAMESPACE_SVG, XML_WIDTH, 	XML_TOK_TEXT_CONTOUR_WIDTH		},
+    { XML_NAMESPACE_SVG, XML_HEIGHT,	XML_TOK_TEXT_CONTOUR_HEIGHT		},
+    { XML_NAMESPACE_SVG, XML_VIEWBOX,	XML_TOK_TEXT_CONTOUR_VIEWBOX	},
+    { XML_NAMESPACE_SVG, XML_D,	    	XML_TOK_TEXT_CONTOUR_D			},
+    { XML_NAMESPACE_DRAW,XML_POINTS,	XML_TOK_TEXT_CONTOUR_POINTS		},
+    { XML_NAMESPACE_DRAW,XML_RECREATE_ON_EDIT,	XML_TOK_TEXT_CONTOUR_AUTO	},
     XML_TOKEN_MAP_END
 };
 
-static SvXMLTokenMapEntry aTextHyperlinkAttrTokenMap[] =
+static __FAR_DATA SvXMLTokenMapEntry aTextHyperlinkAttrTokenMap[] =
 {
     { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_TEXT_HYPERLINK_HREF },
     { XML_NAMESPACE_OFFICE, XML_NAME, XML_TOK_TEXT_HYPERLINK_NAME },
@@ -439,7 +445,7 @@ static SvXMLTokenMapEntry aTextHyperlinkAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static SvXMLTokenMapEntry aTextMasterPageElemTokenMap[] =
+static __FAR_DATA SvXMLTokenMapEntry aTextMasterPageElemTokenMap[] =
 {
     { XML_NAMESPACE_STYLE, XML_HEADER, XML_TOK_TEXT_MP_HEADER },
     { XML_NAMESPACE_STYLE, XML_FOOTER, XML_TOK_TEXT_MP_FOOTER },
@@ -449,7 +455,7 @@ static SvXMLTokenMapEntry aTextMasterPageElemTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
+static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_FIXED, XML_TOK_TEXTFIELD_FIXED },
     { XML_NAMESPACE_TEXT, XML_DESCRIPTION,  XML_TOK_TEXTFIELD_DESCRIPTION },
@@ -539,10 +545,15 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
     ::std::auto_ptr<SvXMLTokenMap> m_pTextMasterPageElemTokenMap;
     ::std::auto_ptr<SvStringsDtor> m_pPrevFrmNames;
     ::std::auto_ptr<SvStringsDtor> m_pNextFrmNames;
+
+    // --> OD 2008-04-25 #refactorlists#
     ::std::auto_ptr<XMLTextListsHelper> m_pTextListsHelper;
+    // <--
 
     SvXMLImportContextRef m_xAutoStyles;
     SvXMLImportContextRef m_xFontDecls;
+
+    XMLSectionList_Impl m_SectionList;
 
     UniReference< SvXMLImportPropertyMapper > m_xParaImpPrMap;
     UniReference< SvXMLImportPropertyMapper > m_xTextImpPrMap;
@@ -551,14 +562,14 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
     UniReference< SvXMLImportPropertyMapper > m_xRubyImpPrMap;
 
     ::std::auto_ptr<SvI18NMap> m_pRenameMap;
-    /* Change and extend data structure:
-       - data structure contains candidates of paragraph styles, which
-         will be assigned to the outline style
-       - data structure contains more than one candidate for each list level
-         of the outline style (#i69629#)
-    */
+    // --> OD 2006-10-12 #i69629# - change and extend data structure:
+    // - data structure contains candidates of paragraph styles, which
+    //   will be assigned to the outline style
+    // - data structure contains more than one candidate for each list level
+    //   of the outline style
     ::boost::scoped_array< ::std::vector< ::rtl::OUString > >
         m_pOutlineStylesCandidates;
+    // <--
 
     // start range, xml:id, RDFa stuff
     typedef ::boost::tuple<
@@ -630,10 +641,13 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
         ,   m_pTextMasterPageElemTokenMap( 0 )
         ,   m_pPrevFrmNames( 0 )
         ,   m_pNextFrmNames( 0 )
+        // --> OD 2008-04-25 #refactorlists#
         ,   m_pTextListsHelper( new XMLTextListsHelper() )
+        // <--
         ,   m_pRenameMap( 0 )
-        // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
+        // --> OD 2006-10-12 #i69629#
         ,   m_pOutlineStylesCandidates( 0 )
+        // <--
         ,   m_xServiceFactory( rModel, UNO_QUERY )
         ,   m_rSvXMLImport( rImport )
         ,   m_bInsertMode( bInsertMode )
@@ -698,6 +712,11 @@ bool XMLTextImportHelper::IsOrganizerMode() const
 bool XMLTextImportHelper::IsProgress() const
 {
     return m_pImpl->m_bProgress;
+}
+
+XMLSectionList_Impl & XMLTextImportHelper::GetSectionList()
+{
+    return m_pImpl->m_SectionList;
 }
 
 uno::Reference<container::XNameContainer> const&
@@ -915,7 +934,7 @@ namespace
         {
             Sequence<OUString> vListEntriesSeq(vListEntries.size());
             copy(vListEntries.begin(), vListEntries.end(), ::comphelper::stl_begin(vListEntriesSeq));
-            vOutParams[OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY))] = makeAny(vListEntriesSeq);
+            vOutParams[OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY)] = makeAny(vListEntriesSeq);
         }
         for(::std::map<OUString, Any>::const_iterator pCurrent = vOutParams.begin();
             pCurrent != vOutParams.end();
@@ -949,6 +968,7 @@ XMLTextImportHelper::XMLTextImportHelper(
     if( xCNSupplier.is() )
     {
         m_pImpl->m_xChapterNumbering = xCNSupplier->getChapterNumberingRules();
+        // --> OD 2008-05-15 #refactorlists#
         if (m_pImpl->m_xChapterNumbering.is())
         {
             Reference< XPropertySet > const xNumRuleProps(
@@ -981,10 +1001,11 @@ XMLTextImportHelper::XMLTextImportHelper(
                 }
             }
         }
+        // <--
     }
 
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( rModel, UNO_QUERY );
-//  DBG_ASSERT( xFamiliesSupp.is(), "no chapter numbering supplier" ); for clipboard there may be documents without styles
+//	DBG_ASSERT( xFamiliesSupp.is(), "no chapter numbering supplier" ); for clipboard there may be documents without styles
 
     if( xFamiliesSupp.is() )
     {
@@ -1341,12 +1362,12 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
     return bConverted ? sChars.makeStringAndClear() : rChars;
 }
 
-/* Helper method to determine, if a paragraph style has a list style (inclusive
-   an empty one) inherits a list style (inclusive an empty one) from one of its parents (#i69629#)
-*/
-/* Apply special case, that found list style equals the chapter numbering, also
-   to the found list styles of the parent styles. (#i73973#)
-*/
+// --> OD 2006-10-12 #i69629#
+// helper method to determine, if a paragraph style has a list style (inclusive
+// an empty one) inherits a list style (inclusive an empty one) from one of its parents
+// --> OD 2007-01-29 #i73973#
+// apply special case, that found list style equals the chapter numbering, also
+// to the found list styles of the parent styles.
 sal_Bool lcl_HasListStyle( OUString sStyleName,
                            const Reference < XNameContainer >& xParaStyles,
                            SvXMLImport& rImport,
@@ -1388,11 +1409,14 @@ sal_Bool lcl_HasListStyle( OUString sStyleName,
     }
     else
     {
-        // Tools.Outline settings lost on Save (#i77708#)
+        // --> OD 2007-12-07 #i77708#
         sal_Int32 nUPD( 0 );
         sal_Int32 nBuild( 0 );
-        // Don't use UPD for versioning: xmloff/source/text/txtstyli.cxx and txtimp.cxx (#i86058#)
+        // --> OD 2008-03-19 #i86058#
+//        rImport.getBuildIds( nUPD, nBuild );
         const bool bBuildIdFound = rImport.getBuildIds( nUPD, nBuild );
+        // <--
+        // <--
         // search list style at parent
         Reference<XStyle> xStyle( xPropState, UNO_QUERY );
         while ( xStyle.is() )
@@ -1424,7 +1448,8 @@ sal_Bool lcl_HasListStyle( OUString sStyleName,
                 {
                     // list style found
                     bRet = sal_True;
-                    // Special case: the found list style equals the chapter numbering (#i73973#)
+                    // --> OD 2007-01-29 #i73973#
+                    // special case: the found list style equals the chapter numbering
                     Reference< XPropertySet > xPropSet( xPropState, UNO_QUERY );
                     if ( xPropSet.is() )
                     {
@@ -1435,10 +1460,11 @@ sal_Bool lcl_HasListStyle( OUString sStyleName,
                         {
                             bRet = sal_False;
                         }
-                        // Special handling for text documents from OOo version prior OOo 2.4 (#i77708#)
-                        /* Check explicitly on certain versions and on import of
-                           text documents in OpenOffice.org file format (#i86058#)
-                        */
+                        // --> OD 2007-12-07 #i77708#
+                        // special handling for text documents from OOo version prior OOo 2.4
+                        // --> OD 2008-03-19 #i86058#
+                        // check explicitly on certain versions and on import of
+                        // text documents in OpenOffice.org file format
                         else if ( sListStyle.getLength() == 0 &&
                                   ( rImport.IsTextDocInOOoFileFormat() ||
                                     ( bBuildIdFound &&
@@ -1471,8 +1497,9 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         sal_Bool bPara,
         sal_Bool bOutlineLevelAttrFound,
         sal_Int8 nOutlineLevel,
-        // Numberings/Bullets in table not visible aftzer save/reload (#i80724#)
+        // --> OD 2007-08-17 #i80724#
         sal_Bool bSetListAttrs )
+        // <--
 {
     static ::rtl::OUString s_ParaStyleName(
         RTL_CONSTASCII_USTRINGPARAM("ParaStyleName"));
@@ -1537,13 +1564,14 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             sStyleName = OUString();
     }
 
-    /* The outline level needs to be only applied as list level, if the heading
-       is not inside a list and if it by default applies the outline style. (#i70748#)
-    */
+    // --> OD 2008-09-10 #i70748#
+    // The outline level needs to be only applied as list level, if the heading
+    // is not inside a list and if it by default applies the outline style.
     bool bApplyOutlineLevelAsListLevel( false );
-    // Numberings/Bullets in table not visible aftzer save/reload (#i80724#)
+    // --> OD 2007-08-17 #i80724#
     if (bSetListAttrs && bPara
         && xPropSetInfo->hasPropertyByName( s_NumberingRules))
+    // <--
     {
         // Set numbering rules
         Reference< XIndexReplace > const xNumRules(
@@ -1569,20 +1597,23 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             if (!pListItem) {
                 bNumberingIsNumber = false; // list-header
             }
+            // --> OD 2008-05-08 #refactorlists#
             // consider text:style-override property of <text:list-item>
             xNewNumRules.set(
                 (pListItem != 0 && pListItem->HasNumRulesOverride())
                     ? pListItem->GetNumRulesOverride()
                     : pListBlock->GetNumRules() );
+            // <--
             nLevel = static_cast<sal_Int8>(pListBlock->GetLevel());
 
             if ( pListItem && pListItem->HasStartValue() ) {
                nStartValue = pListItem->GetStartValue();
             }
 
-            // Inconsistent behavior regarding lists (#i92811#)
+            // --> OD 2008-08-15 #i92811#
             sListId = m_pImpl->m_pTextListsHelper->GetListIdForListBlock(
                             *pListBlock);
+            // <--
         }
         else if (pNumberedParagraph)
         {
@@ -1595,7 +1626,8 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
 
         if (pListBlock || pNumberedParagraph)
         {
-            // Assure that list style of automatic paragraph style is applied at paragraph. (#i101349#)
+            // --> OD 2009-08-24 #i101349#
+            // Assure that list style of automatic paragraph style is applied at paragraph.
             sal_Bool bApplyNumRules = pStyle && pStyle->IsListStyleSet();
             if ( !bApplyNumRules )
             {
@@ -1625,6 +1657,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             }
 
             if ( bApplyNumRules )
+            // <--
             {
                 // #102607# This may except when xNewNumRules contains
                 // a Writer-NumRule-Implementation bug gets applied to
@@ -1671,6 +1704,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                                            makeAny(nStartValue));
             }
 
+            // --> OD 2008-04-23 #refactorlists#
             if (xPropSetInfo->hasPropertyByName(s_PropNameListId))
             {
                 if (sListId.getLength()) {
@@ -1678,19 +1712,20 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                         makeAny(sListId) );
                 }
             }
+            // <--
 
             GetTextListHelper().SetListItem( (XMLTextListItemContext *)0 );
         }
         else
         {
-            /* If the paragraph is not in a list but its style, remove it from
-               the list. Do not remove it, if the list of the style is
-               the chapter numbering rule.
-            */
+            // If the paragraph is not in a list but its style, remove it from
+            // the list.
+            // --> OD 2005-10-25 #126347# - do not remove it, if the list
+            // of the style is the chapter numbering rule.
             if( xNumRules.is() )
             {
                 bool bRemove( true );
-                // Special handling for document from OOo 2.x (#i70748#)
+                // --> OD 2008-12-17 #i70748# - special handling for document from OOo 2.x
                 sal_Int32 nUPD( 0 );
                 sal_Int32 nBuild( 0 );
                 const bool bBuildIdFound = rImport.getBuildIds( nUPD, nBuild );
@@ -1711,16 +1746,19 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                              xNumNamed->getName() == xChapterNumNamed->getName() )
                         {
                             bRemove = false;
-                            // RFE: inserting headings into text documents (#i70748#)
+                            // --> OD 2008-09-10 #i70748#
                             bApplyOutlineLevelAsListLevel = true;
+                            // <--
                         }
                     }
                 }
+                // <--
                 if ( bRemove )
                 {
                     xPropSet->setPropertyValue( s_NumberingRules, Any() );
                 }
             }
+            // <--
         }
     }
 
@@ -1789,7 +1827,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                         // #i107225# the combined characters need to be inserted first
                         // the selected text has to be removed afterwards
                         m_pImpl->m_xText->insertTextContent( xRange->getStart(), xTextContent, sal_True );
-
+                        
                         if( xRange->getString().getLength() )
                         {
                             try
@@ -1815,7 +1853,8 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     }
 
     // outline level; set after list style has been set
-    // Complete re-worked and corrected: (#i53198#)
+    // --> OD 2005-08-25 #i53198#
+    // Complete re-worked and corrected:
     // - set outline level at paragraph
     // - set numbering level at paragraph, if none is already set
     // - assure that style is marked as an outline style for the corresponding
@@ -1823,10 +1862,11 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     // - DO NOT set type of numbering rule to outline.
     // - DO NOT set numbering rule directly at the paragraph.
 
-    // Some minor rework and adjust access to paragraph styles (#i70748#)
+    // --> OD 2008-12-09 #i70748#
+    // Some minor rework and adjust access to paragraph styles
     if ( bPara )
     {
-        // Headings not numbered anymore in 3.1 (#i103817#)
+        // --> OD 2009-08-18 #i103817#
         sal_Int16 nCurrentOutlineLevelInheritedFromParagraphStyle = 0;
         const bool bHasOutlineLevelProp(
             xPropSetInfo->hasPropertyByName(s_OutlineLevel));
@@ -1835,8 +1875,11 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             xPropSet->getPropertyValue(s_OutlineLevel)
                 >>= nCurrentOutlineLevelInheritedFromParagraphStyle;
         }
-        if ( nOutlineLevel > 0 )
+        // <--
+        //if ( bPara && nOutlineLevel != -1 )   //#outline level,removed by zhaojianwei
+        if ( nOutlineLevel > 0 )       //add by zhaojianwei
         {
+            //#outline level,removed by zhaojianwei
             if ( bHasOutlineLevelProp )
             {
                 // In case that the value equals the value of its paragraph style
@@ -1846,9 +1889,9 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                     xPropSet->setPropertyValue( s_OutlineLevel,
                         makeAny( static_cast<sal_Int16>(nOutlineLevel) ) );
                 }
-            }
+            }//<-end,zhaojianwei
 
-            // RFE: inserting headings into text documents (#i70748#)
+            // --> OD 2008-09-10 #i70748#
             if ( bApplyOutlineLevelAsListLevel )
             {
                 sal_Int16 nNumLevel = -1;
@@ -1860,24 +1903,25 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                             makeAny( static_cast<sal_Int8>(nOutlineLevel - 1) ) );
                 }
             }
-            /* Correction: (#i69629#)
-               - for text document from version OOo 2.0.4/SO 8 PU4 and earlier
-                 the paragraph style of a heading should be assigned to the
-                 corresponding list level of the outline style.
-               - for other text documents the paragraph style of a heading is only
-                 a candidate for an assignment to the list level of the outline
-                 style, if it has no direct list style property and (if exists) the
-                 automatic paragraph style has also no direct list style set.
-            */
+            // <--
+            // --> OD 2006-10-13 #i69629# - correction:
+            // - for text document from version OOo 2.0.4/SO 8 PU4 and earlier
+            //   the paragraph style of a heading should be assigned to the
+            //   corresponding list level of the outline style.
+            // - for other text documents the paragraph style of a heading is only
+            //   a candidate for an assignment to the list level of the outline
+            //   style, if it has no direct list style property and (if exists) the
+            //   automatic paragraph style has also no direct list style set.
             if (m_pImpl->m_xParaStyles->hasByName(sStyleName))
             {
                 bool bOutlineStyleCandidate( false );
 
                 sal_Int32 nUPD( 0 );
                 sal_Int32 nBuild( 0 );
+                // --> OD 2007-12-19 #152540#
                 const bool bBuildIdFound = rImport.getBuildIds( nUPD, nBuild );
-                // Lost outline numbering in master document (#i73509#)
-                // Check explicitly on certain versions (#i86058#)
+                // --> OD 2007-07-25 #i73509#
+                // --> OD 2008-03-19 #i86058# - check explicitly on certain versions
                 if ( rImport.IsTextDocInOOoFileFormat() ||
                      ( bBuildIdFound &&
                        ( nUPD == 645 || nUPD == 641 ) ) )
@@ -1888,11 +1932,36 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 {
                     bOutlineStyleCandidate = bOutlineLevelAttrFound;
                 }
+                // <--
+//                else
+//                {
+//                    Reference< XPropertyState > xStylePropState(
+//                                    xParaStyles->getByName( sStyleName ), UNO_QUERY );
+//                    if ( xStylePropState.is() &&
+//                         xStylePropState->getPropertyState( sNumberingStyleName ) == PropertyState_DIRECT_VALUE )
+//                    {
+//                        bOutlineStyleCandidate = false;
+//                    }
+//                    // --> OD 2007-01-11 #i73361#
+//                    // The automatic paragraph style doesn't have to be considered.
+//    //                else if ( pStyle && /* automatic paragraph style */
+//    //                          pStyle->IsListStyleSet() )
+//    //                {
+//    //                    bOutlineStyleCandidate = false;
+//    //                }
+//                    // <--
+//                    else
+//                    {
+//                        bOutlineStyleCandidate = true;
+//                    }
+//                  }
+
                 if ( bOutlineStyleCandidate )
                 {
                     AddOutlineStyleCandidate( nOutlineLevel, sStyleName );
                 }
-                // Assure that heading applies the outline style (#i103817#)
+                // --> OD 2009-08-18 #i103817#
+                // Assure that heading applies the outline style
                 if ( ( !pStyle || !pStyle->IsListStyleSet() ) &&
                      !bOutlineStyleCandidate &&
                      m_pImpl->m_xChapterNumbering.is())
@@ -1910,8 +1979,11 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                             makeAny(static_cast<sal_Int8>(nOutlineLevel - 1)));
                     }
                 }
+                // <--
             }
+            // <--
         }
+        //-> #outlinelevel added by zhaojianwei
         //handle for text:p,if the paragraphstyle outlinelevel is set to[1~10]
         else if( bHasOutlineLevelProp )
         {
@@ -1921,8 +1993,9 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 xPropSet->setPropertyValue(s_OutlineLevel,
                     makeAny( static_cast<sal_Int16>(nZero) ));
             }
-        }
+        }//<-end,zhaojianwei
     }
+    // <--
 
     return sStyleName;
 }
@@ -1970,9 +2043,10 @@ void XMLTextImportHelper::FindOutlineStyleName( ::rtl::OUString& rStyleName,
 
             // finally, we'll use the previously used style name for this
             // format (or the default we've just put into that style)
-            // take last added one (#i71249#)
+            // --> OD 2006-11-06 #i71249# - take last added one
             rStyleName =
                 m_pImpl->m_pOutlineStylesCandidates[nOutlineLevel].back();
+            // <--
         }
         // else: nothing we can do, so we'll leave it empty
     }
@@ -2032,13 +2106,14 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
         }
 
         const sal_Int32 nCount = m_pImpl->m_xChapterNumbering->getCount();
-        /* First collect all paragraph styles choosen for assignment to each
-           list level of the outline style, then perform the intrinsic assignment.
-           Reason: The assignment of a certain paragraph style to a list level
-                   of the outline style causes side effects on the children
-                   paragraph styles in Writer. (#i106218#)
-        */
+        // --> OD 2009-11-13 #i106218#
+        // First collect all paragraph styles choosen for assignment to each
+        // list level of the outline style, then perform the intrinsic assignment.
+        // Reason: The assignment of a certain paragraph style to a list level
+        //         of the outline style causes side effects on the children
+        //         paragraph styles in Writer.
         ::std::vector<OUString> sChosenStyles(nCount);
+        // <--
         for( sal_Int32 i=0; i < nCount; ++i )
         {
             if ( bSetEmptyLevels ||
@@ -2076,21 +2151,23 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
                 }
             }
         }
-        // Trashed outline numbering in ODF 1.1 text document created by OOo 3.x (#i106218#)
+        // --> OD 2009-11-13 #i106218#
         Sequence < PropertyValue > aProps( 1 );
         PropertyValue *pProps = aProps.getArray();
         pProps->Name = s_HeadingStyleName;
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
-            // Paragraph style assignments in Outline of template lost from second level on (#i107610#)
+            // --> OD 2009-12-11 #i107610#
             if ( bSetEmptyLevels ||
                  sChosenStyles[i].getLength() > 0 )
+            // <--
             {
                 pProps->Value <<= sChosenStyles[i];
                 m_pImpl->m_xChapterNumbering->replaceByIndex(i,
                         makeAny( aProps ));
             }
         }
+        // <--
     }
 }
 
@@ -2221,6 +2298,7 @@ void XMLTextImportHelper::SetRuby(
                 rImport.GetStyleDisplayName(
                             XML_STYLE_FAMILY_TEXT_TEXT, rTextStyleName ) );
             if( (sDisplayName.getLength() > 0) &&
+//				xPropSetInfo->hasPropertyByName( sRubyCharStyleName ) &&
                 m_pImpl->m_xTextStyles->hasByName( sDisplayName ))
             {
                 xPropSet->setPropertyValue(sRubyCharStyleName, makeAny(sDisplayName));
@@ -2319,7 +2397,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             XML_TEXT_TYPE_HEADER_FOOTER == eType )
         {
             pContext = new XMLVariableDeclsImportContext(
-                rImport, *this, nPrefix, rLocalName, VarTypeSequence);
+                rImport, *this,	nPrefix, rLocalName, VarTypeSequence);
             bContent = sal_False;
         }
         break;
@@ -2386,7 +2464,12 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
 
     case XML_TOK_TEXT_INDEX_TITLE:
     case XML_TOK_TEXT_SECTION:
+#ifndef SVX_LIGHT
         pContext = new XMLSectionImportContext( rImport, nPrefix, rLocalName );
+#else
+        // create default context to skip content
+        pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
+#endif // #ifndef SVX_LIGHT
         break;
 
     case XML_TOK_TEXT_TOC:
@@ -2396,13 +2479,23 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     case XML_TOK_TEXT_USER_INDEX:
     case XML_TOK_TEXT_ALPHABETICAL_INDEX:
     case XML_TOK_TEXT_BIBLIOGRAPHY_INDEX:
+#ifndef SVX_LIGHT
         if( XML_TEXT_TYPE_SHAPE != eType )
             pContext = new XMLIndexTOCContext( rImport, nPrefix, rLocalName );
+#else
+        // create default context to skip content
+        pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
+#endif // #ifndef SVX_LIGHT
         break;
 
     case XML_TOK_TEXT_TRACKED_CHANGES:
+#ifndef SVX_LIGHT
         pContext = new XMLTrackedChangesImportContext( rImport, nPrefix,
                                                        rLocalName);
+#else
+        // create default context to skip content
+        pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
+#endif // #ifndef SVX_LIGHT
         bContent = sal_False;
         break;
 
@@ -2417,7 +2510,12 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         break;
 
     case XML_TOK_TEXT_FORMS:
+#ifndef SVX_LIGHT
         pContext = rImport.GetFormImport()->createOfficeFormsContext(rImport, nPrefix, rLocalName);
+#else
+        // create default context to skip content
+        pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
+#endif // #ifndef SVX_LIGHT
         bContent = sal_False;
         break;
 
@@ -2430,7 +2528,12 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         break;
 
     case XML_TOK_TEXT_CALCULATION_SETTINGS:
+#ifndef SVX_LIGHT
         pContext = new XMLCalculationSettingsContext ( rImport, nPrefix, rLocalName, xAttrList);
+#else
+        // create default context to skip content
+        pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
+#endif // #ifndef SVX_LIGHT
         bContent = sal_False;
     break;
 
@@ -2446,12 +2549,15 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         }
     }
 
+//	if( !pContext )
+//		pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+
     // handle open redlines
     if ( (XML_TOK_TEXT_CHANGE != nToken) &&
          (XML_TOK_TEXT_CHANGE_END != nToken) &&
          (XML_TOK_TEXT_CHANGE_START != nToken) )
     {
-//      ResetOpenRedlineId();
+//		ResetOpenRedlineId();
     }
 
     if( XML_TEXT_TYPE_BODY == eType && bContent )

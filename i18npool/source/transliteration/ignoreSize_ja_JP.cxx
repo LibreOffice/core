@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,11 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-
-using ::rtl::OUString;
+using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-OUString SAL_CALL
+OUString SAL_CALL 
 ignoreSize_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException)
 {
@@ -54,7 +53,7 @@ ignoreSize_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 
 }
 
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString > SAL_CALL 
 ignoreSize_ja_JP::transliterateRange( const OUString& str1, const OUString& str2 )
   throw(RuntimeException)
 {

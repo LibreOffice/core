@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- April 2005         Created
+ April 2005		 	Created
  ************************************************************************/
 #include "lwpcelllayout.hxx"
 #include "lwpfoundry.hxx"
@@ -78,7 +78,6 @@
 
 LwpCellLayout::LwpCellLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpMiddleLayout(objHdr, pStrm)
-    , cType(LDT_NONE)
 {}
 
 LwpCellLayout::~LwpCellLayout()
@@ -284,7 +283,7 @@ void LwpCellLayout::ApplyFmtStyle(XFCellStyle *pCellStyle)
         {
             XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
             m_NumfmtName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
-            pCellStyle->SetDataStyle(m_NumfmtName);
+            pCellStyle->SetDataStyle(m_NumfmtName);//modified by ,2005/11/30
         }
     }
 
@@ -292,9 +291,9 @@ void LwpCellLayout::ApplyFmtStyle(XFCellStyle *pCellStyle)
 }
 /**
  * @short   get style name according to cell position, only table default cells use this function
- * @param   nRow - default cell position row number
- * @param   nCol - default cell position col number
- * @return  OUString - registered cell style name
+ * @param	nRow - default cell position row number
+ * @param	nCol - default cell position col number
+ * @return 	OUString - registered cell style name
  */
 OUString LwpCellLayout::GetCellStyleName(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout)
 {
@@ -303,12 +302,12 @@ OUString LwpCellLayout::GetCellStyleName(sal_uInt16 nRow, sal_uInt16 nCol, LwpTa
     return m_CellStyleNames[eType];
 }
 /**
-*   Make the XFCell
-*   @date   03/26/2005
-*   @param  aTableID - ID of the table which this cell belongs to
-*   @param  bIsTopRow - whether current cell is top row
-*   @param  bIsRightCol - whether current cell is the rightest column
-*   @return XFCell*
+*	Make the XFCell
+*	@date	03/26/2005
+*	@param	aTableID - ID of the table which this cell belongs to
+*	@param	bIsTopRow - whether current cell is top row
+*	@param	bIsRightCol - whether current cell is the rightest column
+*	@return	XFCell*
 */
 XFCell* LwpCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uInt16 nCol)
 {
@@ -583,7 +582,7 @@ void LwpCellLayout::RegisterStyle()
     XFCellStyle *pCellStyle = new XFCellStyle();
 
     ApplyPadding(pCellStyle);
-//  ApplyBackColor(pCellStyle);
+//	ApplyBackColor(pCellStyle);
     ApplyBackGround(pCellStyle);
     ApplyWatermark(pCellStyle);
     ApplyFmtStyle(pCellStyle);
@@ -633,7 +632,7 @@ void LwpCellLayout::Read()
     else
     {
         crowid = pStrm->QuickReaduInt16();
-        ccolid = (sal_uInt8) pStrm->QuickReaduInt16();  // written as a lushort
+        ccolid = (sal_uInt8) pStrm->QuickReaduInt16();	// written as a lushort
 
         sal_uInt16 type;
 
@@ -670,11 +669,11 @@ sal_uInt8 LwpCellLayout::GetLeaderChar()
     return 0;
 }
 /**
-*   Apply protect attribute to cell of table
-*   @date   04/04/2005
-*   @param  aTableID - ID of the table which the cell belongs to
-*   @param
-*   @return XFCell*
+*	Apply protect attribute to cell of table
+*	@date	04/04/2005
+*	@param	aTableID - ID of the table which the cell belongs to
+*	@param
+*	@return	XFCell*
 */
 void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
 {
@@ -843,7 +842,7 @@ void LwpConnectedCellLayout::Read()
     sal_uInt16 numcols;
 
     cnumrows = m_pObjStrm->QuickReaduInt16();
-    numcols = m_pObjStrm->QuickReaduInt16();        // written as a lushort
+    numcols = m_pObjStrm->QuickReaduInt16();		// written as a lushort
     cnumcols = (sal_uInt8)numcols;
 
     m_nRealrowspan = cnumrows;
@@ -855,9 +854,9 @@ XFCell* LwpConnectedCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRo
 {
     XFCell * pXFCell = LwpCellLayout::ConvertCell(aTableID, nRow, nCol);
     pXFCell->SetColumnSpaned(cnumcols);
-//  if(!m_bSplitFlag)
-//  {
-//  }
+//	if(!m_bSplitFlag)
+//	{
+//	}
     return pXFCell;
 }
 /**

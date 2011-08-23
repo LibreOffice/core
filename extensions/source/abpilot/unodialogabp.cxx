@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,7 +120,7 @@ namespace abp
     //---------------------------------------------------------------------
     ::rtl::OUString OABSPilotUno::getImplementationName_Static() throw(RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.abp.OAddressBookSourcePilot"));
+        return ::rtl::OUString::createFromAscii("org.openoffice.comp.abp.OAddressBookSourcePilot");
     }
 
     //---------------------------------------------------------------------
@@ -133,7 +133,7 @@ namespace abp
     ::comphelper::StringSequence OABSPilotUno::getSupportedServiceNames_Static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.AddressBookSourcePilot"));
+        aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.AddressBookSourcePilot");
         return aSupported;
     }
 
@@ -159,7 +159,7 @@ namespace abp
     }
 
     //--------------------------------------------------------------------------
-    Dialog* OABSPilotUno::createDialog(Window* _pParent)
+    Dialog*	OABSPilotUno::createDialog(Window* _pParent)
     {
         return new OAddessBookSourcePilot(_pParent, m_aContext.getLegacyServiceFactory());
     }
@@ -177,7 +177,7 @@ namespace abp
         // (or he can start it again by using wizard-menu!)
         // So we should deregister it on our general job execution service by using right protocol parameters.
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > lProtocol(1);
-        lProtocol[0].Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Deactivate"));
+        lProtocol[0].Name    = ::rtl::OUString::createFromAscii("Deactivate");
         lProtocol[0].Value <<= sal_True;
         return makeAny( lProtocol );
     }
@@ -192,7 +192,7 @@ namespace abp
     }
 
 //.........................................................................
-}   // namespace abp
+}	// namespace abp
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,60 +29,120 @@
 #ifndef SC_EXCSCEN_HXX
 #define SC_EXCSCEN_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include <tools/solar.h>
+#include <tools/list.hxx>
 #include <tools/string.hxx>
+
 
 struct RootData;
 class XclImpRoot;
 class XclImpStream;
 class ScDocument;
 
+
+
 class ExcScenarioCell
 {
 private:
-    String                      aValue;
+    String						aValue;
 public:
-    const sal_uInt16                nCol;
-    const sal_uInt16                nRow;
+    const UINT16				nCol;
+    const UINT16				nRow;
 
-    ExcScenarioCell( const sal_uInt16 nC, const sal_uInt16 nR );
-
-    inline void SetValue( const String& rVal ) { aValue = rVal; }
-
-    inline const String& GetValue( void ) const { return aValue; }
+                                ExcScenarioCell( const UINT16 nC, const UINT16 nR );
+    void						SetValue( const String& rVal );
+    inline const String&		GetValue( void ) const;
 };
 
-class ExcScenario
+
+
+
+class ExcScenario : protected List
 {
-public:
-
-    ExcScenario( XclImpStream& rIn, const RootData& rRoot );
-
-    ~ExcScenario();
-
-    void Apply( const XclImpRoot& rRoot, const sal_Bool bLast = false );
-
+private:
+    friend class ExcScenarioList;
 protected:
+    String*						pName;
+    String*						pComment;
+    String*						pUserName;
+    UINT8						nProtected;
 
-    String* pName;
-    String* pComment;
-    String* pUserName;
-    sal_uInt8 nProtected;
-    const sal_uInt16 nTab;
-    boost::ptr_vector<ExcScenarioCell> aEntries;
+    const UINT16				nTab;
+
+    void                        Apply( const XclImpRoot& rRoot, const BOOL bLast = FALSE );
+public:
+                                ExcScenario( XclImpStream& rIn, const RootData& rRoot );
+    virtual						~ExcScenario();
 };
 
-struct ExcScenarioList
+
+
+
+class ExcScenarioList : protected List
 {
-    ExcScenarioList () : nLastScenario(0) {}
+private:
+    UINT16						nLastScenario;
+    inline ExcScenario*			_First( void )	{ return ( ExcScenario* ) List::First(); }
+    inline ExcScenario*			_Next( void )	{ return ( ExcScenario* ) List::Next(); }
+    inline ExcScenario*			_Last( void )	{ return ( ExcScenario* ) List::Last(); }
+    inline ExcScenario*			_Prev( void )	{ return ( ExcScenario* ) List::Prev(); }
+protected:
+public:
+                                ExcScenarioList( void );
+    virtual						~ExcScenarioList();
 
-    void Apply( const XclImpRoot& rRoot );
+    inline void					Append( ExcScenario* pNew );
 
-    sal_uInt16 nLastScenario;
-    boost::ptr_vector<ExcScenario> aEntries;
+    inline void					SetLast( const UINT16 nIndex4Last );
+
+    inline const ExcScenario*	First( void );
+    inline const ExcScenario*	Next( void );
+
+    using List::Count;
+
+    void                        Apply( const XclImpRoot& rRoot );
 };
+
+
+
+
+inline const String& ExcScenarioCell::GetValue( void ) const
+{
+    return aValue;
+}
+
+
+
+
+inline ExcScenarioList::ExcScenarioList( void )
+{
+    nLastScenario = 0;
+}
+
+
+inline void ExcScenarioList::Append( ExcScenario* p )
+{
+    List::Insert( p, LIST_APPEND );
+}
+
+
+inline const ExcScenario* ExcScenarioList::First( void )
+{
+    return ( const ExcScenario* ) List::First();
+}
+
+
+inline const ExcScenario* ExcScenarioList::Next( void )
+{
+    return ( const ExcScenario* ) List::Next();
+}
+
+
+inline void ExcScenarioList::SetLast( const UINT16 n )
+{
+    nLastScenario = n;
+}
+
 
 #endif
 

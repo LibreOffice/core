@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #ifndef SC_XINAME_HXX
 #define SC_XINAME_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <map>
 #include "xlname.hxx"
 #include "xiroot.hxx"
 
@@ -91,7 +91,7 @@ public:
     const XclImpName*   GetName( sal_uInt16 nXclNameIdx ) const;
 
 private:
-    typedef boost::ptr_vector< XclImpName > XclImpNameList;
+    typedef ScfDelList< XclImpName > XclImpNameList;
     XclImpNameList      maNameList;
 };
 

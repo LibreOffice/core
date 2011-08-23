@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,17 +38,21 @@
 |*
 |*    SvCacheStream::SvCacheStream()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 27.09.94
+|*    Letzte Aenderung  OV 27.09.94
+|*
 *************************************************************************/
 
-SvCacheStream::SvCacheStream( sal_uIntPtr nMaxMemSize )
+SvCacheStream::SvCacheStream( ULONG nMaxMemSize )
 {
     if( !nMaxMemSize )
         nMaxMemSize = 20480;
-    SvStream::bIsWritable = sal_True;
-    nMaxSize        = nMaxMemSize;
-    bPersistent     = sal_False;
-    pSwapStream     = 0;
-    pCurrentStream  = new SvMemoryStream( nMaxMemSize );
+    SvStream::bIsWritable = TRUE;
+    nMaxSize		= nMaxMemSize;
+    bPersistent		= FALSE;
+    pSwapStream		= 0;
+    pCurrentStream	= new SvMemoryStream( nMaxMemSize );
     pTempFile       = 0;
 }
 
@@ -56,11 +60,15 @@ SvCacheStream::SvCacheStream( sal_uIntPtr nMaxMemSize )
 |*
 |*    SvCacheStream::SvCacheStream()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 27.09.94
+|*    Letzte Aenderung  OV 27.09.94
+|*
 *************************************************************************/
 
 SvCacheStream::SvCacheStream( const String &rFileName,
-                              sal_uIntPtr nExpectedSize,
-                              sal_uIntPtr nMaxMemSize )
+                              ULONG nExpectedSize,
+                              ULONG nMaxMemSize )
 {
     if( !nMaxMemSize )
         nMaxMemSize = 20480;
@@ -70,18 +78,22 @@ SvCacheStream::SvCacheStream( const String &rFileName,
     else if( !nExpectedSize )
         nExpectedSize = 4096;
 
-    SvStream::bIsWritable = sal_True;
-    nMaxSize        = nMaxMemSize;
-    bPersistent     = sal_True;
-    aFileName       = rFileName;
-    pSwapStream     = 0;
-    pCurrentStream  = new SvMemoryStream( nExpectedSize );
+    SvStream::bIsWritable = TRUE;
+    nMaxSize		= nMaxMemSize;
+    bPersistent		= TRUE;
+    aFileName		= rFileName;
+    pSwapStream		= 0;
+    pCurrentStream	= new SvMemoryStream( nExpectedSize );
     pTempFile       = 0;
 }
 
 /*************************************************************************
 |*
 |*    SvCacheStream::~SvCacheStream()
+|*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 27.09.94
+|*    Letzte Aenderung  OV 27.09.94
 |*
 *************************************************************************/
 
@@ -94,7 +106,7 @@ SvCacheStream::~SvCacheStream()
     if( pSwapStream && !bPersistent && pTempFile )
     {
         // temporaeres File loeschen
-        pTempFile->EnableKillingFile( sal_True );
+        pTempFile->EnableKillingFile( TRUE );
     }
 
     delete pTempFile;
@@ -103,6 +115,10 @@ SvCacheStream::~SvCacheStream()
 /*************************************************************************
 |*
 |*    SvCacheStream::SwapOut()
+|*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 27.09.94
+|*    Letzte Aenderung  OV 27.09.94
 |*
 *************************************************************************/
 
@@ -130,7 +146,7 @@ void SvCacheStream::SwapOut()
             }
         }
 
-        sal_uIntPtr nPos = pCurrentStream->Tell();
+        ULONG nPos = pCurrentStream->Tell();
         pCurrentStream->Seek( 0 );
         if( !pSwapStream )
             pSwapStream = new SvFileStream( aFileName, STREAM_READWRITE | STREAM_TRUNC );
@@ -146,9 +162,13 @@ void SvCacheStream::SwapOut()
 |*
 |*    SvCacheStream::GetData()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 27.09.94
+|*    Letzte Aenderung  OV 27.09.94
+|*
 *************************************************************************/
 
-sal_uIntPtr SvCacheStream::GetData( void* pData, sal_uIntPtr nSize )
+ULONG SvCacheStream::GetData( void* pData, ULONG nSize )
 {
     return pCurrentStream->Read( pData, nSize );
 }
@@ -157,9 +177,13 @@ sal_uIntPtr SvCacheStream::GetData( void* pData, sal_uIntPtr nSize )
 |*
 |*    SvCacheStream::PutData()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 27.09.94
+|*    Letzte Aenderung  OV 27.09.94
+|*
 *************************************************************************/
 
-sal_uIntPtr SvCacheStream::PutData( const void* pData, sal_uIntPtr nSize )
+ULONG SvCacheStream::PutData( const void* pData, ULONG nSize )
 {
     // lieber unnoetig auslagern als unnoetig umkopieren
     if( pCurrentStream != pSwapStream
@@ -172,9 +196,13 @@ sal_uIntPtr SvCacheStream::PutData( const void* pData, sal_uIntPtr nSize )
 |*
 |*    SvCacheStream::SeekPos()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 27.09.94
+|*    Letzte Aenderung  OV 27.09.94
+|*
 *************************************************************************/
 
-sal_uIntPtr SvCacheStream::SeekPos( sal_uIntPtr nPos )
+ULONG SvCacheStream::SeekPos( ULONG nPos )
 {
     return pCurrentStream->Seek( nPos );
 }
@@ -182,6 +210,10 @@ sal_uIntPtr SvCacheStream::SeekPos( sal_uIntPtr nPos )
 /*************************************************************************
 |*
 |*    SvCacheStream::FlushData()
+|*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 27.09.94
+|*    Letzte Aenderung  OV 27.09.94
 |*
 *************************************************************************/
 
@@ -196,6 +228,10 @@ void SvCacheStream::FlushData()
 /*************************************************************************
 |*
 |*    SvCacheStream::GetStr()
+|*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 27.09.94
+|*    Letzte Aenderung  OV 27.09.94
 |*
 *************************************************************************/
 
@@ -212,9 +248,13 @@ const void* SvCacheStream::GetBuffer()
 |*
 |*    SvCacheStream::SetSize()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 27.09.94
+|*    Letzte Aenderung  OV 27.09.94
+|*
 *************************************************************************/
 
-void SvCacheStream::SetSize( sal_uIntPtr nSize )
+void SvCacheStream::SetSize( ULONG nSize )
 {
     pCurrentStream->SetStreamSize( nSize );
 }
@@ -223,15 +263,19 @@ void SvCacheStream::SetSize( sal_uIntPtr nSize )
 |*
 |*    SvCacheStream::GetSize()
 |*
+|*    Beschreibung      STREAM.SDW
+|*    Ersterstellung    OV 27.09.94
+|*    Letzte Aenderung  OV 27.09.94
+|*
 *************************************************************************/
 
-sal_uIntPtr SvCacheStream::GetSize()
+ULONG SvCacheStream::GetSize()
 {
     // ACHTUNG: SvMemoryStream::GetSize() gibt Groesse
     // des allozierten Buffers zurueck
     Flush();
-    sal_uIntPtr nTemp = Tell();
-    sal_uIntPtr nLength = Seek( STREAM_SEEK_TO_END );
+    ULONG nTemp = Tell();
+    ULONG nLength = Seek( STREAM_SEEK_TO_END );
     Seek( nTemp );
     return nLength;
 }

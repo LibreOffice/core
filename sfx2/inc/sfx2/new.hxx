@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,8 +60,15 @@ class SFX2_DLLPUBLIC SfxPreviewWin: public Window
 {
     SfxObjectShellLock &rDocShell;
 protected:
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void	Paint( const Rectangle& rRect );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+
+    /** state whether a system setting for high contrast should be evaluated
+        and taken into account for this window.
+
+        The default implementation uses the accessibility option IsForDrawings
+      */
+    virtual bool    UseHighContrastSetting() const;
 
 public:
     SfxPreviewWin( Window* pParent,
@@ -79,20 +86,20 @@ private:
 
 public:
 
-    SfxNewFileDialog(Window *pParent, sal_uInt16 nFlags = 0);
+    SfxNewFileDialog(Window *pParent, USHORT nFlags = 0);
     ~SfxNewFileDialog();
 
-        // Liefert sal_False, wenn '- Keine -' als Vorlage eingestellt ist
-        // Nur wenn IsTemplate() sal_True liefert, koennen Vorlagennamen
+        // Liefert FALSE, wenn '- Keine -' als Vorlage eingestellt ist
+        // Nur wenn IsTemplate() TRUE liefert, koennen Vorlagennamen
         // erfragt werden
-    sal_Bool IsTemplate() const;
+    BOOL IsTemplate() const;
     String GetTemplateRegion() const;
     String GetTemplateName() const;
     String GetTemplateFileName() const;
 
     // load template methods
-    sal_uInt16  GetTemplateFlags()const;
-    void    SetTemplateFlags(sal_uInt16 nSet);
+    USHORT  GetTemplateFlags()const;
+    void    SetTemplateFlags(USHORT nSet);
 };
 
 #endif

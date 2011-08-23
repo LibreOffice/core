@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+
+
 #include "oox/ppt/animationspersist.hxx"
 
 #include <rtl/ustring.hxx>
@@ -36,6 +38,8 @@
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 
 #include "oox/drawingml/shape.hxx"
+
+#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -129,7 +133,7 @@ namespace oox { namespace ppt {
         return aTarget;
     }
 
-
+    
 // BEGIN CUT&PASTE from sd/source/filter/ppt/pptinanimations.cxx
 /** this adds an any to another any.
     if rNewValue is empty, rOldValue is returned.
@@ -175,7 +179,7 @@ namespace oox { namespace ppt {
             sal_Int16 nSubType;
             aAny = mpTarget->convert( pSlide, nSubType );
         }
-        else
+        else 
         {
             aAny = maValue;
         }
@@ -187,7 +191,7 @@ namespace oox { namespace ppt {
     {
         Any aAny;
         for( AnimationConditionList::const_iterator iter = l.begin();
-             iter != l.end(); ++iter)
+             iter != l.end(); iter++)
         {
             aAny = addToSequence( aAny, iter->convert(pSlide) );
         }

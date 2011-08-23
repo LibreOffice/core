@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,49 +39,25 @@
 static const sal_Char pStrFix[] = "FIX";
 
 //------------------------------------------------------------------------
-//  Der Options-String darf kein Semikolon mehr enthalten (wegen Pickliste)
-//  darum ab Version 336 Komma stattdessen
+//	Der Options-String darf kein Semikolon mehr enthalten (wegen Pickliste)
+//	darum ab Version 336 Komma stattdessen
 
 
 ScImportOptions::ScImportOptions( const String& rStr )
 {
-    // Use the same string format as ScAsciiOptions,
-    // because the import options string is passed here when a CSV file is loaded and saved again.
-    // The old format is still supported because it might be used in macros.
-
-    bFixedWidth = false;
+    bFixedWidth = FALSE;
     nFieldSepCode = 0;
-    nTextSepCode = 0;
-    eCharSet = RTL_TEXTENCODING_DONTKNOW;
-    bSaveAsShown = sal_True;    // "true" if not in string (after CSV import)
-    bQuoteAllText = false;
-    xub_StrLen nTokenCount = rStr.GetTokenCount(',');
-    if ( nTokenCount >= 3 )
+    if ( rStr.GetTokenCount(',') >= 3 )
     {
-        // first 3 tokens: common
         String aToken( rStr.GetToken( 0, ',' ) );
         if( aToken.EqualsIgnoreCaseAscii( pStrFix ) )
-            bFixedWidth = sal_True;
+            bFixedWidth = TRUE;
         else
             nFieldSepCode = (sal_Unicode) aToken.ToInt32();
         nTextSepCode  = (sal_Unicode) rStr.GetToken(1,',').ToInt32();
-        aStrFont      = rStr.GetToken(2,',');
-        eCharSet      = ScGlobal::GetCharsetValue(aStrFont);
-
-        if ( nTokenCount == 4 )
-        {
-            // compatibility with old options string: "Save as shown" as 4th token, numeric
-            bSaveAsShown = (rStr.GetToken( 3, ',' ).ToInt32() ? sal_True : false);
-            bQuoteAllText = sal_True;   // use old default then
-        }
-        else
-        {
-            // look at the same positions as in ScAsciiOptions
-            if ( nTokenCount >= 7 )
-                bQuoteAllText = rStr.GetToken(6, ',').EqualsAscii("true");
-            if ( nTokenCount >= 9 )
-                bSaveAsShown = rStr.GetToken(8, ',').EqualsAscii("true");
-        }
+        aStrFont	  = rStr.GetToken(2,',');
+        eCharSet	  = ScGlobal::GetCharsetValue(aStrFont);
+        bSaveAsShown  = (rStr.GetToken( 3, ',' ).ToInt32() ? TRUE : FALSE);
     }
 }
 
@@ -89,7 +65,7 @@ ScImportOptions::ScImportOptions( const String& rStr )
 
 String ScImportOptions::BuildString() const
 {
-    String  aResult;
+    String	aResult;
 
     if( bFixedWidth )
         aResult.AppendAscii( pStrFix );
@@ -99,11 +75,8 @@ String ScImportOptions::BuildString() const
     aResult += String::CreateFromInt32(nTextSepCode);
     aResult += ',';
     aResult += aStrFont;
-                                                            // use the same string format as ScAsciiOptions:
-    aResult.AppendAscii( ",1,,0," );                        // first row, no column info, default language
-    aResult.AppendAscii(bQuoteAllText ? "true" : "false");  // same as "quoted field as text" in ScAsciiOptions
-    aResult.AppendAscii( ",true," );                        // "detect special numbers"
-    aResult.AppendAscii(bSaveAsShown ? "true" : "false");   // "save as shown": not in ScAsciiOptions
+    aResult += ',';
+    aResult += String::CreateFromInt32( bSaveAsShown ? 1 : 0 );
 
     return aResult;
 }

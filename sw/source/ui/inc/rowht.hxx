@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,21 +29,26 @@
 #define _ROWHT_HXX
 
 #include <svx/stddlg.hxx>
+
 #include <vcl/field.hxx>
+
 #include <vcl/fixed.hxx>
+
+#include <vcl/button.hxx>
+
 #include <vcl/button.hxx>
 
 class SwWrtShell;
 
 class SwTableHeightDlg : public SvxStandardDialog
 {
-      FixedLine       aHeightFL;
-    MetricField     aHeightEdit;
-    CheckBox        aAutoHeightCB;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
-    SwWrtShell      &rSh;
+    MetricField 	aHeightEdit;
+    CheckBox		aAutoHeightCB;
+    FixedLine       aHeightFL;
+    OKButton 		aOKBtn;
+    CancelButton 	aCancelBtn;
+    HelpButton 		aHelpBtn;
+    SwWrtShell 		&rSh;
 
 protected:
     virtual void Apply();

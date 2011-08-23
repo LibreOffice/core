@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,8 @@
 #ifndef OOX_XLS_CONDFORMATBUFFER_HXX
 #define OOX_XLS_CONDFORMATBUFFER_HXX
 
-#include <com/sun/star/sheet/ConditionOperator2.hpp>
+#include <com/sun/star/sheet/ConditionOperator.hpp>
+#include "oox/helper/containerhelper.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/worksheethelper.hxx"
 
@@ -64,11 +65,11 @@ struct CondFormatRuleModel
 
     explicit            CondFormatRuleModel();
 
-    /** Sets the passed BIFF operator for condition type cellIs. */
-    void                setBiffOperator( sal_Int32 nOperator );
+    /** Sets the passed OOBIN or BIFF operator for condition type cellIs. */
+    void                setBinOperator( sal_Int32 nOperator );
 
-    /** Sets the passed BIFF12 text comparison type and operator. */
-    void                setBiff12TextType( sal_Int32 nOperator );
+    /** Sets the passed OOBIN text comparison type and operator. */
+    void                setOobTextType( sal_Int32 nOperator );
 };
 
 // ============================================================================
@@ -87,7 +88,7 @@ public:
     void                appendFormula( const ::rtl::OUString& rFormula );
 
     /** Imports rule settings from a CFRULE record. */
-    void                importCfRule( SequenceInputStream& rStrm );
+    void                importCfRule( RecordInputStream& rStrm );
 
     /** Imports rule settings from a CFRULE record. */
     void                importCfRule( BiffInputStream& rStrm, sal_Int32 nPriority );
@@ -131,9 +132,9 @@ public:
     CondFormatRuleRef   importCfRule( const AttributeList& rAttribs );
 
     /** Imports settings from the CONDFORMATTING record. */
-    void                importCondFormatting( SequenceInputStream& rStrm );
+    void                importCondFormatting( RecordInputStream& rStrm );
     /** Imports a conditional formatting rule from the CFRULE record. */
-    void                importCfRule( SequenceInputStream& rStrm );
+    void                importCfRule( RecordInputStream& rStrm );
 
     /** Imports settings from the CFHEADER record. */
     void                importCfHeader( BiffInputStream& rStrm );
@@ -167,7 +168,7 @@ public:
     /** Imports settings from the conditionalFormatting element. */
     CondFormatRef       importConditionalFormatting( const AttributeList& rAttribs );
     /** Imports settings from the CONDFORMATTING record. */
-    CondFormatRef       importCondFormatting( SequenceInputStream& rStrm );
+    CondFormatRef       importCondFormatting( RecordInputStream& rStrm );
     /** Imports settings from the CFHEADER record. */
     void                importCfHeader( BiffInputStream& rStrm );
 
@@ -175,7 +176,8 @@ public:
     void                finalizeImport();
 
     /** Converts an OOXML condition operator token to the API constant. */
-    static sal_Int32    convertToApiOperator( sal_Int32 nToken );
+    static ::com::sun::star::sheet::ConditionOperator
+                        convertToApiOperator( sal_Int32 nToken );
 
 private:
     CondFormatRef       createCondFormat();

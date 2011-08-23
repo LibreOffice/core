@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,13 +27,17 @@
 
 package integration.forms;
 
+/**
+ *
+ * @author  fs@openoffice.org
+ */
 public class ListSelectionValidator extends integration.forms.ControlValidator
 {
     /** Creates a new instance of ListSelectionValidator */
     public ListSelectionValidator()
     {
     }
-
+    
     public String explainInvalid( Object Value )
     {
         try
@@ -48,7 +52,7 @@ public class ListSelectionValidator extends integration.forms.ControlValidator
         }
         return "";
     }
-
+    
     public boolean isValid( Object Value )
     {
         try
@@ -63,5 +67,5 @@ public class ListSelectionValidator extends integration.forms.ControlValidator
         }
         return false;
     }
-
+    
 }

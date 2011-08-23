@@ -1,7 +1,7 @@
 ﻿/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -174,6 +174,21 @@ TabPage RID_XMLSECTP_GENERAL
         ImageBitmap = Bitmap { File = "notcertificate_40x56.png"; };
            MaskColor = STD_MASKCOLOR;
     };
+    Image IMG_STATE_CERIFICATED_HC
+    {
+        ImageBitmap = Bitmap { File = "certificate_40x56_h.png"; };
+           MaskColor = STD_MASKCOLOR;
+    };
+    Image IMG_STATE_NOT_VALIDATED_HC
+    {
+        ImageBitmap = Bitmap { File = "notcertificate_40x56_h.png"; };
+           MaskColor = STD_MASKCOLOR;
+    };
+    Image IMG_KEY_HC
+    {
+        ImageBitmap = Bitmap { File = "key_12_h.png"; };
+           MaskColor = STD_MASKCOLOR;
+    };
 };
 
 TabPage RID_XMLSECTP_DETAILS
@@ -197,7 +212,6 @@ TabPage RID_XMLSECTP_DETAILS
     };
     MultiLineEdit ML_ELEMENT
     {
-        HelpID = "xmlsecurity:MultiLineEdit:RID_XMLSECTP_DETAILS:ML_ELEMENT";
         Pos = MAP_APPFONT( CV_COL_0, CV_ROW_2 );
         Size = MAP_APPFONT( CV_CONT_WIDTH, CV_ROW_3-CV_ROW_2 );
         ReadOnly = TRUE;
@@ -285,7 +299,6 @@ TabPage RID_XMLSECTP_CERTPATH
     };
     PushButton BTN_VIEWCERT
     {
-        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_CERTPATH:BTN_VIEWCERT";
         Pos = MAP_APPFONT( CV_COL_1-(CV_COL_B-CV_COL_A), CVP_ROW_2 );
         Size = MAP_APPFONT( CV_COL_B-CV_COL_A, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "View Certificate...";
@@ -298,7 +311,6 @@ TabPage RID_XMLSECTP_CERTPATH
     };
     MultiLineEdit ML_CERTSTATUS
     {
-        HelpID = "xmlsecurity:MultiLineEdit:RID_XMLSECTP_CERTPATH:ML_CERTSTATUS";
         Pos = MAP_APPFONT( CV_COL_0, CVP_ROW_4 );
         Size = MAP_APPFONT( CV_CONT_WIDTH, REST_HEIGHT/3 );
         ReadOnly = TRUE;
@@ -309,9 +321,19 @@ TabPage RID_XMLSECTP_CERTPATH
         ImageBitmap = Bitmap { File = "certificate_16.png"; };
         MaskColor = STD_MASKCOLOR;
     };
+    Image IMG_CERT_SMALL_HC
+    {
+        ImageBitmap = Bitmap { File = "certificate_16_h.png"; };
+        MaskColor = STD_MASKCOLOR;
+    };
     Image IMG_CERT_NOTVALIDATED_SMALL
     {
         ImageBitmap = Bitmap { File = "notcertificate_16.png"; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    Image IMG_CERT_NOTVALIDATED_SMALL_HC
+    {
+        ImageBitmap = Bitmap { File = "notcertificate_16_h.png"; };
         MaskColor = STD_MASKCOLOR;
     };
     String STR_PATH_CERT_OK

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,10 +103,10 @@ namespace
     ObjectType eObjectType = ObjectIdentifier::getObjectType( aObjectCID );
     if( OBJECTTYPE_UNKNOWN==eObjectType )
     {
-        OSL_FAIL("unknown ObjectType");
+        DBG_ERROR("unknown ObjectType");
         return NULL;
     }
-
+    //--
     rtl::OUString aParticleID = ObjectIdentifier::getParticleID( aObjectCID );
     bool bAffectsMultipleObjects = aParticleID.equals(C2U("ALLELEMENTS"));
     //-------------------------------------------------------------
@@ -209,7 +209,13 @@ namespace
                 sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
                 if( !ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount ) )
                     eMapTo = wrapper::GraphicPropertyItemConverter::LINE_DATA_POINT;
-
+                /*
+                FILLED_DATA_POINT,
+                LINE_DATA_POINT,
+                LINE_PROPERTIES,
+                FILL_PROPERTIES,
+                LINE_AND_FILL_PROPERTIES
+                */
                 bool bDataSeries = ( eObjectType == OBJECTTYPE_DATA_SERIES || eObjectType == OBJECTTYPE_DATA_LABELS );
 
                 //special color for pie chart:
@@ -238,7 +244,7 @@ namespace
                 sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel( xObjectProperties, xSeries, nPointIndex, xDiagram );
                 sal_Int32 nPercentNumberFormat=ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
                         xObjectProperties,uno::Reference< util::XNumberFormatsSupplier >(xChartModel, uno::UNO_QUERY));
-
+                
                 pItemConverter =  new wrapper::DataPointItemConverter( xChartModel, xContext,
                                         xObjectProperties, xSeries, rDrawModel.GetItemPool(), rDrawModel,
                                         pNumberFormatterWrapper,
@@ -350,7 +356,7 @@ rtl::OUString lcl_getTitleCIDForCommand( const ::rtl::OString& rDispatchCommand,
         nTitleType = TitleHelper::SECONDARY_X_AXIS_TITLE;
     else if( rDispatchCommand.equals("SecondaryYTitle") )
         nTitleType = TitleHelper::SECONDARY_Y_AXIS_TITLE;
-
+  
     uno::Reference< XTitle > xTitle( TitleHelper::getTitle( nTitleType, xChartModel ) );
     return ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, xChartModel );
 }
@@ -368,7 +374,7 @@ rtl::OUString lcl_getAxisCIDForCommand( const ::rtl::OString& rDispatchCommand, 
     }
     else if( rDispatchCommand.equals("DiagramAxisY"))
     {
-        nDimensionIndex=1; bMainAxis=true;
+        nDimensionIndex=1; bMainAxis=true; 
     }
     else if( rDispatchCommand.equals("DiagramAxisZ"))
     {
@@ -380,7 +386,7 @@ rtl::OUString lcl_getAxisCIDForCommand( const ::rtl::OString& rDispatchCommand, 
     }
     else if( rDispatchCommand.equals("DiagramAxisB"))
     {
-        nDimensionIndex=1; bMainAxis=false;
+        nDimensionIndex=1; bMainAxis=false;     
     }
 
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
@@ -573,7 +579,7 @@ rtl::OUString lcl_getObjectCIDForCommand( const ::rtl::OString& rDispatchCommand
             return rSelectedCID;
         else
             return ObjectIdentifier::createDataCurveCID(
-                ObjectIdentifier::getSeriesParticleFromCID( rSelectedCID ),
+                ObjectIdentifier::getSeriesParticleFromCID( rSelectedCID ), 
                     RegressionCurveHelper::getRegressionCurveIndex( xRegCurveCnt,
                         RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) ), false );
     }
@@ -622,7 +628,7 @@ rtl::OUString lcl_getObjectCIDForCommand( const ::rtl::OString& rDispatchCommand
             Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( rSelectedCID, xChartModel );
             return ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel );
         }
-
+        
     }
     //-------------------------------------------------------------------------
     // minor grid
@@ -715,11 +721,11 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
     UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::FORMAT,
                 ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aObjectCID ))),
-            m_xUndoManager );
+            m_xUndoManager, getModel() );
 
     bool bSuccess = ChartController::executeDlg_ObjectProperties_withoutUndoGuard( aObjectCID, false );
-    if( bSuccess )
-        aUndoGuard.commit();
+    if( bSuccess ) 
+        aUndoGuard.commitAction();
 }
 
 bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl::OUString& rObjectCID, bool bOkClickOnUnchangedDialogSouldBeRatedAsSuccessAlso )
@@ -728,7 +734,8 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
     bool bRet = false;
     if( !rObjectCID.getLength() )
     {
-       return bRet;
+        //DBG_ERROR("empty ObjectID");
+        return bRet;
     }
     try
     {
@@ -739,6 +746,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
         ObjectType eObjectType = ObjectIdentifier::getObjectType( rObjectCID );
         if( OBJECTTYPE_UNKNOWN==eObjectType )
         {
+            //DBG_ERROR("unknown ObjectType");
             return bRet;
         }
         if( OBJECTTYPE_DIAGRAM_WALL==eObjectType || OBJECTTYPE_DIAGRAM_FLOOR==eObjectType )
@@ -831,14 +839,16 @@ void SAL_CALL ChartController::executeDispatch_View3D()
     {
         // using assignment for broken gcc 3.3
         UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
-            String( SchResId( STR_ACTION_EDIT_3D_VIEW )),
-            m_xUndoManager );
+            ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_3D_VIEW ))),
+            m_xUndoManager, getModel());
 
+        // /--
         //open dialog
         SolarMutexGuard aSolarGuard;
         View3DDialog aDlg( m_pChartWindow, getModel(), m_pDrawModelWrapper->GetColorTable() );
         if( aDlg.Execute() == RET_OK )
-            aUndoGuard.commit();
+            aUndoGuard.commitAction();
+        // \--
     }
     catch( uno::RuntimeException& e)
     {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,6 @@ TabPage TP_FRM_WRAP
     };
     ImageRadioButton RB_NO_WRAP
     {
-        HelpID = "sw:ImageRadioButton:TP_FRM_WRAP:RB_NO_WRAP";
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
@@ -53,7 +52,6 @@ TabPage TP_FRM_WRAP
     };
     ImageRadioButton RB_WRAP_LEFT
     {
-        HelpID = "sw:ImageRadioButton:TP_FRM_WRAP:RB_WRAP_LEFT";
         Pos = MAP_APPFONT ( 65 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
@@ -62,7 +60,6 @@ TabPage TP_FRM_WRAP
     };
     ImageRadioButton RB_WRAP_RIGHT
     {
-        HelpID = "sw:ImageRadioButton:TP_FRM_WRAP:RB_WRAP_RIGHT";
         Pos = MAP_APPFONT ( 121 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
@@ -71,7 +68,6 @@ TabPage TP_FRM_WRAP
     };
     ImageRadioButton RB_WRAP_PARALLEL
     {
-        HelpID = "sw:ImageRadioButton:TP_FRM_WRAP:RB_WRAP_PARALLEL";
         Pos = MAP_APPFONT ( 177 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
@@ -80,7 +76,6 @@ TabPage TP_FRM_WRAP
     };
     ImageRadioButton RB_WRAP_THROUGH
     {
-        HelpID = "sw:ImageRadioButton:TP_FRM_WRAP:RB_WRAP_THROUGH";
         Pos = MAP_APPFONT ( 6 , 57 ) ;
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
@@ -89,7 +84,6 @@ TabPage TP_FRM_WRAP
     };
     ImageRadioButton RB_WRAP_IDEAL
     {
-        HelpID = "sw:ImageRadioButton:TP_FRM_WRAP:RB_WRAP_IDEAL";
         Pos = MAP_APPFONT ( 65 , 57 ) ;
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
@@ -99,21 +93,18 @@ TabPage TP_FRM_WRAP
 
     CheckBox CB_ANCHOR_ONLY
     {
-        HelpID = "sw:CheckBox:TP_FRM_WRAP:CB_ANCHOR_ONLY";
         Pos = MAP_APPFONT ( 139 , 111 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Text [ en-US ] = "~First paragraph" ;
     };
     CheckBox CB_TRANSPARENT
     {
-        HelpID = "sw:CheckBox:TP_FRM_WRAP:CB_TRANSPARENT";
         Pos = MAP_APPFONT ( 139 , 125 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Text [ en-US ] = "In bac~kground" ;
     };
     CheckBox CB_OUTLINE
     {
-        HelpID = "sw:CheckBox:TP_FRM_WRAP:CB_OUTLINE";
         Pos = MAP_APPFONT ( 139 , 139 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Hide = TRUE ;
@@ -121,7 +112,6 @@ TabPage TP_FRM_WRAP
     };
     CheckBox CB_ONLYOUTSIDE
     {
-        HelpID = "sw:CheckBox:TP_FRM_WRAP:CB_ONLYOUTSIDE";
         Pos = MAP_APPFONT ( 139 , 153 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Hide = TRUE ;
@@ -148,7 +138,6 @@ TabPage TP_FRM_WRAP
     };
     MetricField ED_LEFT_MARGIN
     {
-        HelpID = "sw:MetricField:TP_FRM_WRAP:ED_LEFT_MARGIN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 81 , 111 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -171,7 +160,6 @@ TabPage TP_FRM_WRAP
     };
     MetricField ED_RIGHT_MARGIN
     {
-        HelpID = "sw:MetricField:TP_FRM_WRAP:ED_RIGHT_MARGIN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 81 , 127 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -194,7 +182,6 @@ TabPage TP_FRM_WRAP
     };
     MetricField ED_TOP_MARGIN
     {
-        HelpID = "sw:MetricField:TP_FRM_WRAP:ED_TOP_MARGIN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 81 , 143 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -217,7 +204,6 @@ TabPage TP_FRM_WRAP
     };
     MetricField ED_BOTTOM_MARGIN
     {
-        HelpID = "sw:MetricField:TP_FRM_WRAP:ED_BOTTOM_MARGIN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 81 , 159 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -260,4 +246,12 @@ TabPage TP_FRM_WRAP
         MaskColor = IMAGE_MASK_COLOR ;
         WRAP_IDLIST
     };
+    ImageList ILH_WRAP
+    {
+        Prefix = "wrh";
+        MaskColor = IMAGE_MASK_COLOR ;
+        WRAP_IDLIST
+    };
+
 };
+

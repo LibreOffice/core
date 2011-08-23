@@ -20,7 +20,6 @@ SLOFILES= \
         $(SLO)$/utlist.obj		\
         $(SLO)$/lwp9reader.obj		\
         $(SLO)$/lwpatomholder.obj	\
-        $(SLO)$/lwpbackgroundoverride.obj\
         $(SLO)$/lwpbasetype.obj		\
         $(SLO)$/lwpcolor.obj		\
         $(SLO)$/lwpcontent.obj		\
@@ -65,7 +64,6 @@ SLOFILES= \
         $(SLO)$/lwpcharborderoverride.obj	\
         $(SLO)$/lwpbreaksoverride.obj	\
         $(SLO)$/lwpbackgroundstuff.obj 	\
-        $(SLO)$/lwptaboverride.obj	\
         $(SLO)$/lwptabrack.obj		\
         $(SLO)$/lwpcharacterstyle.obj	\
         $(SLO)$/lwpoverride.obj		\

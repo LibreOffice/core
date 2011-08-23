@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,20 +30,20 @@
 #define _XMLOFF_METATCONTEXT_HXX
 
 #include <rtl/ref.hxx>
-#include "xmloff/functional.hxx"
+#include "functional.hxx"
 
 #include <map>
 
 #include "FlatTContext.hxx"
 
-typedef ::std::multimap< ::rtl::OUString,
+typedef ::std::multimap< ::rtl::OUString, 
                     ::rtl::Reference< XMLPersTextContentTContext >,
                     less_functor > XMLMetaContexts_Impl;
 
 
-class XMLMetaTransformerContext : public XMLTransformerContext
+class XMLMetaTransformerContext : public XMLTransformerContext 
 {
-    XMLMetaContexts_Impl m_aContexts;
+    XMLMetaContexts_Impl m_aContexts;	
 
 public:
     TYPEINFO();
@@ -52,7 +52,7 @@ public:
     // starts. Namespace processing has been done already.
     // Note that virtual methods cannot be used inside constructors. Use
     // StartElement instead if this is required.
-    XMLMetaTransformerContext( XMLTransformerBase& rTransformer,
+    XMLMetaTransformerContext( XMLTransformerBase& rTransformer, 
                            const ::rtl::OUString& rQName );
 
     // A contexts destructor does anything that is required if an element
@@ -78,6 +78,6 @@ public:
     virtual void Characters( const ::rtl::OUString& rChars );
 };
 
-#endif  //  _XMLOFF_METATCONTEXT_HXX
+#endif	//  _XMLOFF_METATCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

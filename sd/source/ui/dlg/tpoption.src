@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,6 @@ TabPage TP_OPTIONS_CONTENTS
     };
     CheckBox CBX_RULER
     {
-        HelpID = "sd:CheckBox:TP_OPTIONS_CONTENTS:CBX_RULER";
         Pos = MAP_APPFONT ( 12 , 83 - 69 ) ;
         Size = MAP_APPFONT ( 160 , 10 ) ;
         TabStop = TRUE ;
@@ -53,7 +52,6 @@ TabPage TP_OPTIONS_CONTENTS
     };
     CheckBox CBX_HELPLINES
     {
-        HelpID = "sd:CheckBox:TP_OPTIONS_CONTENTS:CBX_HELPLINES";
         Pos = MAP_APPFONT ( 12 , 97 - 69 ) ;
         Size = MAP_APPFONT ( 160 , 10 ) ;
         TabStop = TRUE ;
@@ -61,7 +59,6 @@ TabPage TP_OPTIONS_CONTENTS
     };
     CheckBox CBX_HANDLES_BEZIER
     {
-        HelpID = "sd:CheckBox:TP_OPTIONS_CONTENTS:CBX_HANDLES_BEZIER";
         Pos = MAP_APPFONT ( 12 , 111 - 69 ) ;
         Size = MAP_APPFONT ( 160 , 10 ) ;
         TabStop = TRUE ;
@@ -69,7 +66,6 @@ TabPage TP_OPTIONS_CONTENTS
     };
     CheckBox CBX_MOVE_OUTLINE
     {
-        HelpID = "sd:CheckBox:TP_OPTIONS_CONTENTS:CBX_MOVE_OUTLINE";
         Pos = MAP_APPFONT ( 12 , 125 - 69 ) ;
         Size = MAP_APPFONT ( 160 , 10 ) ;
         TabStop = TRUE ;
@@ -91,7 +87,6 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_QUICKEDIT
     {
-        HelpID = "sd:CheckBox:TP_OPTIONS_MISC:CBX_QUICKEDIT";
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 116 , 10 ) ;
         TabStop = TRUE ;
@@ -99,7 +94,6 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_PICKTHROUGH
     {
-        HelpID = "sd:CheckBox:TP_OPTIONS_MISC:CBX_PICKTHROUGH";
         Pos = MAP_APPFONT ( 12 , 27  ) ;
         Size = MAP_APPFONT ( 116 , 10 ) ;
         TabStop = TRUE ;
@@ -113,7 +107,6 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_START_WITH_TEMPLATE
     {
-        HelpID = "sd:CheckBox:TP_OPTIONS_MISC:CBX_START_WITH_TEMPLATE";
         Pos = MAP_APPFONT ( 12 , 53  ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
@@ -127,7 +120,6 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_MASTERPAGE_CACHE
     {
-        HelpID = "sd:CheckBox:TP_OPTIONS_MISC:CBX_MASTERPAGE_CACHE";
         Pos = MAP_APPFONT ( 12 , 80  ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
@@ -135,7 +127,6 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_COPY
     {
-        HelpID = "sd:CheckBox:TP_OPTIONS_MISC:CBX_COPY";
         Pos = MAP_APPFONT ( 12 , 93  ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
@@ -143,7 +134,6 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_MARKED_HIT_MOVES_ALWAYS
     {
-        HelpID = "sd:CheckBox:TP_OPTIONS_MISC:CBX_MARKED_HIT_MOVES_ALWAYS";
         Pos = MAP_APPFONT ( 12 , 106  ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
@@ -151,7 +141,6 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_CROOK_NO_CONTORTION
     {
-        HelpID = "sd:CheckBox:TP_OPTIONS_MISC:CBX_CROOK_NO_CONTORTION";
         Pos = MAP_APPFONT ( 12 , 119  ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
@@ -166,7 +155,6 @@ TabPage TP_OPTIONS_MISC
     };
     ListBox LB_METRIC
     {
-        HelpID = "sd:ListBox:TP_OPTIONS_MISC:LB_METRIC";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 75 , 117  ) ;
         Size = MAP_APPFONT ( 50 , 50 ) ;
@@ -181,7 +169,6 @@ TabPage TP_OPTIONS_MISC
     };
     MetricField MTR_FLD_TABSTOP
     {
-        HelpID = "sd:MetricField:TP_OPTIONS_MISC:MTR_FLD_TABSTOP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 206 , 117 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
@@ -205,7 +192,6 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_START_WITH_ACTUAL_PAGE
     {
-        HelpID = "sd:CheckBox:TP_OPTIONS_MISC:CBX_START_WITH_ACTUAL_PAGE";
         Pos = MAP_APPFONT ( 12 , 145  ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
@@ -219,7 +205,6 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CB_USE_PRINTER_METRICS
     {
-        HelpID = "sd:CheckBox:TP_OPTIONS_MISC:CB_USE_PRINTER_METRICS";
         // This checkbox and the following one will change places when this
         // one is wired in into the dialog.  At the moment exists only for
         // translation to work on.
@@ -229,7 +214,6 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CB_MERGE_PARA_DIST
     {
-        HelpID = "sd:CheckBox:TP_OPTIONS_MISC:CB_MERGE_PARA_DIST";
         Pos = MAP_APPFONT ( 12 , 171 ) ;
         Size = MAP_APPFONT ( 242, 10 ) ;
         Text [ en-US ] = "Add ~spacing between paragraphs and tables (in current document)";
@@ -264,7 +248,6 @@ TabPage TP_OPTIONS_MISC
     };
     ComboBox CB_SCALE
     {
-        HelpID = "sd:ComboBox:TP_OPTIONS_MISC:CB_SCALE";
         Hide = TRUE;
         Pos = MAP_APPFONT ( 72 , 147 ) ;
         Size = MAP_APPFONT ( 30 , 70 ) ;
@@ -286,7 +269,6 @@ TabPage TP_OPTIONS_MISC
     };
     MetricField MTR_FLD_ORIGINAL_WIDTH
     {
-        HelpID = "sd:MetricField:TP_OPTIONS_MISC:MTR_FLD_ORIGINAL_WIDTH";
         Hide = TRUE;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 206 , 147 ) ;
@@ -318,7 +300,6 @@ TabPage TP_OPTIONS_MISC
     };
     MetricField MTR_FLD_ORIGINAL_HEIGHT
     {
-        HelpID = "sd:MetricField:TP_OPTIONS_MISC:MTR_FLD_ORIGINAL_HEIGHT";
         Hide = TRUE;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 206 , 163 ) ;

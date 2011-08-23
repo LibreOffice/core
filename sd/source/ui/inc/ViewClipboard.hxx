@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ protected:
     /** Return an index of a page after which the pages of the transferable
         are to be inserted into the target document.
     */
-    virtual sal_uInt16 DetermineInsertPosition (
+    virtual USHORT DetermineInsertPosition (
         const SdTransferable& rTransferable);
 
     /** Insert the slides in the given transferable behind the last selected
@@ -84,9 +84,9 @@ protected:
         @return
             Returns the number of inserted slides.
     */
-    virtual sal_uInt16 InsertSlides (
+    virtual USHORT InsertSlides (
         const SdTransferable& rTransferable,
-        sal_uInt16 nInsertPosition);
+        USHORT nInsertPosition);
 };
 
 } // end of namespace ::sd

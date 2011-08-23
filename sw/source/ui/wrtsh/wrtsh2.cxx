@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <hintids.hxx>      // define ITEMIDs
+#include <hintids.hxx>		// define ITEMIDs
 #include <svl/macitem.hxx>
 #include <sfx2/frame.hxx>
 #include <vcl/msgbox.hxx>
@@ -42,7 +42,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <fmtinfmt.hxx>
 #include <frmatr.hxx>
-#include <swtypes.hxx>      // SET_CURR_SHELL
+#include <swtypes.hxx>  	// SET_CURR_SHELL
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <fldbas.hxx>       // Felder
@@ -52,8 +52,7 @@
 #include <reffld.hxx>
 #include <swundo.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
-#include <viewopt.hxx>      // SwViewOptions
+#include <viewopt.hxx>  	// SwViewOptions
 #include <frmfmt.hxx>       // fuer UpdateTable
 #include <swtable.hxx>      // fuer UpdateTable
 #include <mdiexp.hxx>
@@ -69,10 +68,16 @@
 #include <wrtsh.hrc>
 #include "swabstdlg.hxx"
 #include "fldui.hrc"
-#include <SwRewriter.hxx>
+
+#include <undobj.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
+
+/*------------------------------------------------------------------------
+        Beschreibung:
+------------------------------------------------------------------------*/
 
 void SwWrtShell::Insert(SwField &rFld)
 {
@@ -93,7 +98,7 @@ void SwWrtShell::Insert(SwField &rFld)
     }
 
     SwEditShell::Insert2(rFld, bDeleted);
-    EndUndo();
+    EndUndo(UNDO_INSERT);
     EndAllAction();
 }
 
@@ -103,7 +108,7 @@ void SwWrtShell::Insert(SwField &rFld)
 
 
 
-void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, sal_Bool bOnlyInSel )
+void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, BOOL bOnlyInSel )
 {
     // ueber die Liste der Eingabefelder gehen und Updaten
     SwInputFieldList* pTmp = pLst;
@@ -113,21 +118,21 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, sal_Bool bOnlyInSel )
     if (bOnlyInSel)
         pTmp->RemoveUnselectedFlds();
 
-    const sal_uInt16 nCnt = pTmp->Count();
+    const USHORT nCnt = pTmp->Count();
     if(nCnt)
     {
         pTmp->PushCrsr();
 
-        sal_Bool bCancel = sal_False;
+        BOOL bCancel = FALSE;
         ByteString aDlgPos;
-        for( sal_uInt16 i = 0; i < nCnt && !bCancel; ++i )
+        for( USHORT i = 0; i < nCnt && !bCancel; ++i )
         {
             pTmp->GotoFieldPos( i );
             SwField* pField = pTmp->GetField( i );
             if(pField->GetTyp()->Which() == RES_DROPDOWN)
-                bCancel = StartDropDownFldDlg( pField, sal_True, &aDlgPos );
+                bCancel = StartDropDownFldDlg( pField, TRUE, &aDlgPos );
             else
-                bCancel = StartInputFldDlg( pField, sal_True, 0, &aDlgPos);
+                bCancel = StartInputFldDlg( pField, TRUE, 0, &aDlgPos);
 
             // Sonst Updatefehler bei Multiselektion:
             pTmp->GetField( i )->GetTyp()->UpdateFlds();
@@ -146,9 +151,12 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, sal_Bool bOnlyInSel )
 
 
 
-sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
+BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton,
                                     Window* pParentWin, ByteString* pWindowState )
 {
+//JP 14.08.96: Bug 30332 - nach Umbau der modularietaet im SFX, muss jetzt
+//				das TopWindow der Application benutzt werden.
+//	SwFldInputDlg* pDlg = new SwFldInputDlg( GetWin(), *this, pFld );
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -157,7 +165,7 @@ sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if(pWindowState && pWindowState->Len())
         pDlg->SetWindowState(*pWindowState);
-    sal_Bool bRet = RET_CANCEL == pDlg->Execute();
+    BOOL bRet = RET_CANCEL == pDlg->Execute();
     if(pWindowState)
         *pWindowState = pDlg->GetWindowState();
 
@@ -165,8 +173,10 @@ sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
     GetWin()->Update();
     return bRet;
 }
+/* -----------------17.06.2003 10:18-----------------
 
-sal_Bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, sal_Bool bNextButton, ByteString* pWindowState)
+ --------------------------------------------------*/
+BOOL SwWrtShell::StartDropDownFldDlg(SwField* pFld, BOOL bNextButton, ByteString* pWindowState)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
@@ -175,11 +185,11 @@ sal_Bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, sal_Bool bNextButton, By
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if(pWindowState && pWindowState->Len())
         pDlg->SetWindowState(*pWindowState);
-    sal_uInt16 nRet = pDlg->Execute();
+    USHORT nRet = pDlg->Execute();
     if(pWindowState)
         *pWindowState = pDlg->GetWindowState();
     delete pDlg;
-    sal_Bool bRet = RET_CANCEL == nRet;
+    BOOL bRet = RET_CANCEL == nRet;
     GetWin()->Update();
     if(RET_YES == nRet)
     {
@@ -210,9 +220,9 @@ void SwWrtShell::InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
     Beschreibung: Verzeichnis Updaten Selektion loeschen
  --------------------------------------------------------------------*/
 
-sal_Bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
+BOOL SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 {
-    sal_Bool bResult = sal_False;
+    BOOL bResult = FALSE;
 
     if(_CanInsert())
     {
@@ -220,11 +230,10 @@ sal_Bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet
 
         if (pSet == NULL)
         {
-            SwDoc *const pDoc_ = GetDoc();
-            if (pDoc_)
-            {
-                pDoc_->GetIDocumentUndoRedo().DelAllUndoObj();
-            }
+            SwDoc * _pDoc = GetDoc();
+
+            if (_pDoc != NULL)
+                _pDoc->DelAllUndoObj();
         }
     }
 
@@ -237,12 +246,12 @@ sal_Bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet
 
 void SwWrtShell::ClickToField( const SwField& rFld )
 {
-    bIsInClickToEdit = sal_True;
+    bIsInClickToEdit = TRUE;
     switch( rFld.GetTyp()->Which() )
     {
     case RES_JUMPEDITFLD:
         {
-            sal_uInt16 nSlotId = 0;
+            USHORT nSlotId = 0;
             switch( rFld.GetFormat() )
             {
             case JE_FMT_TABLE:
@@ -253,17 +262,18 @@ void SwWrtShell::ClickToField( const SwField& rFld )
                 nSlotId = FN_INSERT_FRAME;
                 break;
 
-            case JE_FMT_GRAPHIC:    nSlotId = SID_INSERT_GRAPHIC;       break;
-            case JE_FMT_OLE:        nSlotId = SID_INSERT_OBJECT;        break;
+            case JE_FMT_GRAPHIC:	nSlotId = SID_INSERT_GRAPHIC;		break;
+            case JE_FMT_OLE:        nSlotId = SID_INSERT_OBJECT;		break;
 
+//			case JE_FMT_TEXT:
             }
 
-            Right( CRSR_SKIP_CHARS, sal_True, 1, sal_False );       // Feld selektieren
+            Right( CRSR_SKIP_CHARS, TRUE, 1, FALSE );		// Feld selektieren
 
             if( nSlotId )
             {
                 StartUndo( UNDO_START );
-                //#97295# immediately select the right shell
+                //#97295# immediately select the right shell 
                 GetView().StopShellTimer();
                 GetView().GetViewFrame()->GetDispatcher()->Execute( nSlotId,
                             SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
@@ -299,29 +309,29 @@ void SwWrtShell::ClickToField( const SwField& rFld )
         break;
 
     case RES_INPUTFLD:
-        StartInputFldDlg( (SwField*)&rFld, sal_False );
+        StartInputFldDlg( (SwField*)&rFld, FALSE );
         break;
 
     case RES_SETEXPFLD:
         if( ((SwSetExpField&)rFld).GetInputFlag() )
-            StartInputFldDlg( (SwField*)&rFld, sal_False );
+            StartInputFldDlg( (SwField*)&rFld, FALSE );
         break;
     case RES_DROPDOWN :
-        StartDropDownFldDlg( (SwField*)&rFld, sal_False );
+        StartDropDownFldDlg( (SwField*)&rFld, FALSE );
     break;
     }
 
-    bIsInClickToEdit = sal_False;
+    bIsInClickToEdit = FALSE;
 }
 
 
 
-void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter )
+void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, USHORT nFilter )
 {
     if( !rItem.GetValue().Len() )
         return ;
 
-    bIsInClickToEdit = sal_True;
+    bIsInClickToEdit = TRUE;
 
     // erstmal das evt. gesetzte ObjectSelect Macro ausfuehren
     const SvxMacro* pMac = rItem.GetMacro( SFX_EVENT_MOUSECLICK_OBJECT );
@@ -329,7 +339,7 @@ void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter 
     {
         SwCallMouseEvent aCallEvent;
         aCallEvent.Set( &rItem );
-        GetDoc()->CallEvent( SFX_EVENT_MOUSECLICK_OBJECT, aCallEvent, sal_False );
+        GetDoc()->CallEvent( SFX_EVENT_MOUSECLICK_OBJECT, aCallEvent, FALSE );
     }
 
     // damit die Vorlagenumsetzung sofort angezeigt wird
@@ -341,27 +351,27 @@ void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter 
         const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisitedValid( true );
     }
 
-    bIsInClickToEdit = sal_False;
+    bIsInClickToEdit = FALSE;
 }
 
 
 
-sal_Bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )
+BOOL SwWrtShell::ClickToINetGrf( const Point& rDocPt, USHORT nFilter )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     String sURL;
     String sTargetFrameName;
     const SwFrmFmt* pFnd = IsURLGrfAtPos( rDocPt, &sURL, &sTargetFrameName );
     if( pFnd && sURL.Len() )
     {
-        bRet = sal_True;
+        bRet = TRUE;
         // erstmal das evt. gesetzte ObjectSelect Macro ausfuehren
         const SvxMacro* pMac = &pFnd->GetMacro().GetMacro( SFX_EVENT_MOUSECLICK_OBJECT );
         if( pMac )
         {
             SwCallMouseEvent aCallEvent;
             aCallEvent.Set( EVENT_OBJECT_URLITEM, pFnd );
-            GetDoc()->CallEvent( SFX_EVENT_MOUSECLICK_OBJECT, aCallEvent, sal_False );
+            GetDoc()->CallEvent( SFX_EVENT_MOUSECLICK_OBJECT, aCallEvent, FALSE );
         }
 
         ::LoadURL( sURL, this, nFilter, &sTargetFrameName);
@@ -370,7 +380,7 @@ sal_Bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )
 }
 
 
-void LoadURL( const String& rURL, ViewShell* pVSh, sal_uInt16 nFilter,
+void LoadURL( const String& rURL, ViewShell* pVSh, USHORT nFilter,
               const String *pTargetFrameName )
 {
     OSL_ENSURE( rURL.Len() && pVSh, "what should be loaded here?" );
@@ -410,9 +420,10 @@ void LoadURL( const String& rURL, ViewShell* pVSh, sal_uInt16 nFilter,
     SfxStringItem aTargetFrameName( SID_TARGETNAME, sTargetFrame );
     SfxStringItem aReferer( SID_REFERER, sReferer );
 
-    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_False );
+    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, FALSE );
     //#39076# Silent kann lt. SFX entfernt werden.
-    SfxBoolItem aBrowse( SID_BROWSE, sal_True );
+//	SfxBoolItem aSilent( SID_SILENT, TRUE );
+    SfxBoolItem aBrowse( SID_BROWSE, TRUE );
 
     if( nFilter & URLLOAD_NEWVIEW )
         aTargetFrameName.SetValue( String::CreateFromAscii("_blank") );
@@ -431,7 +442,7 @@ void LoadURL( const String& rURL, ViewShell* pVSh, sal_uInt16 nFilter,
 }
 
 void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
-                                    const sal_uInt16 nAction )
+                                    const USHORT nAction )
 {
     if( EXCHG_IN_ACTION_COPY == nAction )
     {
@@ -469,15 +480,9 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
             // the update of content from linked section at time delete
             // the undostack. Then the change of the section dont create
             // any undoobject. -  BUG 69145
-            sal_Bool bDoesUndo = DoesUndo();
-            SwUndoId nLastUndoId(UNDO_EMPTY);
-            if (GetLastUndoInfo(0, & nLastUndoId))
-            {
-                if (UNDO_INSSECTION != nLastUndoId)
-                {
-                    DoUndo(false);
-                }
-            }
+            BOOL bDoesUndo = DoesUndo();
+            if( UNDO_INSSECTION != GetUndoIds() )
+                DoUndo( FALSE );
             UpdateSection( GetSectionFmtPos( *pIns->GetFmt() ), aSection );
             DoUndo( bDoesUndo );
         }

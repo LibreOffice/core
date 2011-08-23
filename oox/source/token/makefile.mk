@@ -39,40 +39,40 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES = \
-    $(SLO)$/namespacemap.obj \
-    $(SLO)$/propertynames.obj \
-    $(SLO)$/tokenmap.obj
+SLOFILES =							\
+        $(SLO)$/propertylist.obj	\
+        $(SLO)$/tokenmap.obj
 
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
 
-GENHEADERPATH = $(INCCOM)$/oox$/token
-
-$(MISC)$/tokenhash.gperf $(INCCOM)$/tokennames.inc $(GENHEADERPATH)$/tokens.hxx $(INCCOM)$/namespacenames.inc $(MISC)$/namespaces.txt $(GENHEADERPATH)$/namespaces.hxx $(INCCOM)$/propertynames.inc $(GENHEADERPATH)$/properties.hxx :
+$(MISC)$/tokens.gperf $(INCCOM)$/tokenwords.inc $(INCCOM)$/tokens.hxx $(INCCOM)$/propertywords.inc $(INCCOM)$/properties.hxx $(INCCOM)$/oox$/core$/namespaces.hxx :
     @@noop $(assign do_phony:=.PHONY)
 
-$(SLO)$/tokenmap.obj : $(INCCOM)$/tokenhash.inc $(INCCOM)$/tokennames.inc $(GENHEADERPATH)$/tokens.hxx $(MISC)$/do_tokens
-
-$(INCCOM)$/tokenhash.inc : $(MISC)$/tokenhash.gperf $(MISC)$/do_tokens
-    $(AUGMENT_LIBRARY_PATH) gperf --compare-strncmp $(MISC)$/tokenhash.gperf | $(SED) -e "s/(char\*)0/(char\*)0, 0/g" | $(GREP) -v "^#line" >$(INCCOM)$/tokenhash.inc
-
-$(MISC)$/do_tokens $(do_phony) : tokens.txt tokens.pl tokens.hxx.head tokens.hxx.tail $(GENHEADERPATH)$/tokens.hxx $(INCCOM)$/tokennames.inc $(MISC)$/tokenhash.gperf
+$(MISC)$/do_tokens $(do_phony) : tokens.txt gentoken.pl $(MISC)$/tokens.gperf $(INCCOM)$/tokenwords.inc $(INCCOM)$/tokens.hxx
     @@-$(RM) $@
-    $(MKDIRHIER) $(GENHEADERPATH)
-    $(PERL) tokens.pl tokens.txt $(MISC)$/tokenids.inc $(INCCOM)$/tokennames.inc $(MISC)$/tokenhash.gperf && $(TYPE) tokens.hxx.head $(MISC)$/tokenids.inc tokens.hxx.tail > $(GENHEADERPATH)$/tokens.hxx && $(TOUCH) $@
+    $(PERL) gentoken.pl tokens.txt $(INCCOM)$/tokens.hxx $(INCCOM)$/tokenwords.inc $(MISC)$/tokens.gperf && $(TOUCH) $@
 
-$(SLO)$/namespacemap.obj : $(INCCOM)$/namespacenames.inc $(MISC)$/namespaces.txt $(GENHEADERPATH)$/namespaces.hxx $(MISC)$/do_namespaces
+$(INCCOM)$/oox:
+    $(MKDIR) $(INCCOM)$/oox
 
-$(MISC)$/do_namespaces $(do_phony) : namespaces.txt namespaces.pl namespaces.hxx.head namespaces.hxx.tail $(INCCOM)$/namespacenames.inc $(MISC)$/namespaces.txt $(GENHEADERPATH)$/namespaces.hxx
+$(INCCOM)$/oox$/core: $(INCCOM)$/oox
+    $(MKDIR) $(INCCOM)$/oox$/core
+
+$(MISC)$/do_namespaces $(do_phony) : namespaces.txt gennamespaces.pl
     @@-$(RM) $@
-    $(MKDIRHIER) $(GENHEADERPATH)
-    $(PERL) namespaces.pl namespaces.txt $(MISC)$/namespaceids.inc $(INCCOM)$/namespacenames.inc $(MISC)$/namespaces.txt && $(TYPE) namespaces.hxx.head $(MISC)$/namespaceids.inc namespaces.hxx.tail > $(GENHEADERPATH)$/namespaces.hxx && $(TOUCH) $@
+    $(MKDIRHIER) $(INCCOM)$/oox$/core
+    $(PERL) gennamespaces.pl namespaces.txt $(INCCOM)$/oox$/core$/namespaces.hxx && $(TOUCH) $@
 
-$(SLO)$/propertynames.obj : $(INCCOM)$/propertynames.inc $(GENHEADERPATH)$/properties.hxx $(MISC)$/do_properties
+$(INCCOM)$/tokens.inc : $(MISC)$/tokens.gperf $(MISC)$/do_tokens
+        $(AUGMENT_LIBRARY_PATH) $(GPERF) --compare-strncmp $(MISC)$/tokens.gperf | $(SED) -e "s/(char\*)0/(char\*)0, 0/g" | $(GREP) -v "^#line" >$(INCCOM)$/tokens.inc
 
-$(MISC)$/do_properties $(do_phony) : properties.txt properties.pl properties.hxx.head properties.hxx.tail $(INCCOM)$/propertynames.inc $(GENHEADERPATH)$/properties.hxx
+$(SLO)$/tokenmap.obj : $(INCCOM)$/tokens.inc $(INCCOM)$/tokenwords.inc $(INCCOM)$/tokens.hxx $(INCCOM)$/oox$/core$/namespaces.hxx $(MISC)$/do_tokens $(MISC)$/do_namespaces
+
+$(MISC)$/do_properties $(do_phony) : properties.txt genproperties.pl $(INCCOM)$/properties.hxx $(INCCOM)$/propertywords.inc
     @@-$(RM) $@
-    $(MKDIRHIER) $(GENHEADERPATH)
-    $(PERL) properties.pl properties.txt $(MISC)$/propertyids.inc $(INCCOM)$/propertynames.inc && $(TYPE) properties.hxx.head $(MISC)$/propertyids.inc properties.hxx.tail > $(GENHEADERPATH)$/properties.hxx && $(TOUCH) $@
+    $(PERL) genproperties.pl properties.txt $(INCCOM)$/properties.hxx $(INCCOM)$/propertywords.inc && $(TOUCH) $@
+
+$(SLO)$/propertylist.obj : $(INCCOM)$/propertywords.inc $(INCCOM)$/properties.hxx $(MISC)$/do_properties
+

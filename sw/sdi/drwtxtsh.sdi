@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -496,12 +496,6 @@ interface TextDrawText
         StateMethod = NoState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_TRANSLITERATE_ROTATE_CASE
-    [
-        ExecMethod = ExecRotateTransliteration;
-        StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
     SID_TRANSLITERATE_UPPER
     [
         ExecMethod = ExecTransliteration;
@@ -538,7 +532,7 @@ interface TextDrawText
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-
+    
     SID_LANGUAGE_STATUS
     [
         ExecMethod = Execute;
@@ -557,7 +551,7 @@ interface TextDrawText
     [
         ExecMethod = Execute ;
     ]
-
+    
     SID_OPEN_XML_FILTERSETTINGS // ole : no, status : ?
     [
         ExecMethod = Execute ;
@@ -581,7 +575,7 @@ interface TextDrawText
     [
         StateMethod = StateDisableItems ;
     ]
-
+    
     SID_TWAIN_TRANSFER
     [
         StateMethod = StateDisableItems ;

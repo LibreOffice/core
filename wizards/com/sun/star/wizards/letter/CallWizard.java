@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,8 @@ import com.sun.star.uno.Type;
 
 /**
  * This class capsulates the class, that implements the minimal component, a factory for
- * creating the service (<CODE>__getServiceFactory</CODE>).
+ * creating the service (<CODE>__getServiceFactory</CODE>) and a method, that writes the
+ * information into the given registry key (<CODE>__writeRegistryServiceInfo</CODE>).
  *
  * @author $author$
  * @version $Revision: 1.3.192.1 $
@@ -52,7 +53,7 @@ public class CallWizard
     /**
      * Gives a factory for creating the service. This method is called by the
      * <code>JavaLoader</code>
-     *
+     * 
      * <p></p>
      *
      * @param stringImplementationName The implementation name of the component.
@@ -74,6 +75,22 @@ public class CallWizard
         }
 
         return xsingleservicefactory;
+    }
+
+    /**
+     * Writes the service information into the given registry key. This method is called
+     * by the <code>JavaLoader</code>.
+     *
+     * @param xregistrykey Makes structural information (except regarding tree
+     *        structures) of a single registry key accessible.
+     *
+     * @return returns true if the operation succeeded
+     *
+     * @see com.sun.star.comp.loader.JavaLoader#
+     */
+    public static boolean __writeRegistryServiceInfo(XRegistryKey xregistrykey)
+    {
+        return FactoryHelper.writeRegistryServiceInfo(WizardImplementation.class.getName(), WizardImplementation.__serviceName, xregistrykey);
     }
 
     /**

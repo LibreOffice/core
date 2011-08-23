@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ void HideSlideFunction::DoExecute (SfxRequest& rRequest)
 
     model::PageEnumeration aSelectedPages (
         model::PageEnumerationProvider::CreateSelectedPagesEnumeration(mrSlideSorter.GetModel()));
-
+    
     ExclusionState eState (UNDEFINED);
 
     switch (rRequest.GetSlot())
@@ -110,10 +110,8 @@ void HideSlideFunction::DoExecute (SfxRequest& rRequest)
         while (aSelectedPages.HasMoreElements())
         {
             model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
-            static_cast<view::SlideSorterView*>(mpView)->SetState(
-                pDescriptor,
-                model::PageDescriptor::ST_Excluded,
-                eState==EXCLUDED);
+            pDescriptor->GetPage()->SetExcluded (eState==EXCLUDED);
+            static_cast<view::SlideSorterView*>(mpView)->RequestRepaint(pDescriptor);
         }
     }
 
@@ -132,7 +130,7 @@ HideSlideFunction::ExclusionState HideSlideFunction::GetExclusionState (
     model::PageEnumeration& rPageSet)
 {
     ExclusionState eState (UNDEFINED);
-    sal_Bool bState;
+    BOOL bState;
 
     // Get toggle state of the selected pages.
     while (rPageSet.HasMoreElements() && eState!=MIXED)
@@ -146,14 +144,14 @@ HideSlideFunction::ExclusionState HideSlideFunction::GetExclusionState (
                 break;
 
             case EXCLUDED:
-                // The pages before where all not part of the show,
+                // The pages before where all not part of the show, 
                 // this one is.
                 if ( ! bState)
                     eState = MIXED;
                 break;
 
             case INCLUDED:
-                // The pages before where all part of the show,
+                // The pages before where all part of the show, 
                 // this one is not.
                 if (bState)
                     eState = MIXED;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,26 +24,26 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_rendering_VolatileContentDestroyedException_idl__
+#ifndef __com_sun_star_rendering_VolatileContentDestroyedException_idl__ 
 #define __com_sun_star_rendering_VolatileContentDestroyedException_idl__
-
-#ifndef __com_sun_star_uno_Exception_idl__
-#include <com/sun/star/uno/Exception.idl>
-#endif
-
-module com { module sun { module star { module rendering {
-
+ 
+#ifndef __com_sun_star_uno_Exception_idl__ 
+#include <com/sun/star/uno/Exception.idl> 
+#endif 
+ 
+module com { module sun { module star { module rendering {  
+ 
     /** This exception indicates an invalid volatile bitmap content.<p>
 
         When accessing or rendering XVolatileBitmap data, that has
         been invalidated by the system, this exception will be thrown.<p>
 
-        @since OOo 2.0
+        @since OOo 2.0.0
     */
     exception VolatileContentDestroyedException : ::com::sun::star::uno::Exception
     {
-    };
+    }; 
 
 }; }; }; };
-
+ 
 #endif

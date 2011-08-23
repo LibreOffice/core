@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,6 +46,10 @@
 class SwTOXBaseSection;
 class SwTOXMark;
 class SwTOXType;
+
+/* -----------------07.12.98 10:08-------------------
+ *
+ * --------------------------------------------------*/
 
 typedef ::cppu::ImplInheritanceHelper5
 <   ::sfx2::MetadatableMixin
@@ -187,6 +191,9 @@ public:
 
 };
 
+/* -----------------07.12.98 10:08-------------------
+ *
+ * --------------------------------------------------*/
 typedef ::cppu::WeakImplHelper4
 <   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo
@@ -312,6 +319,9 @@ public:
 
 };
 
+/* -----------------05.05.99 12:27-------------------
+ *
+ * --------------------------------------------------*/
 class SwXDocumentIndexes
     : public SwCollectionBaseClass
     , public SwUnoCollection

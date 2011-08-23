@@ -38,6 +38,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # set in minimizer.pmk
+#EXTENSIONNAME:=PresentationMinimizer
 EXTENSION_ZIPNAME:=presentation-minimizer
 
 .IF "$(ENABLE_MINIMIZER)" != "YES"
@@ -75,7 +76,7 @@ SHL1DEPN=
 SHL1IMPLIB=		i$(SHL1TARGET)
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-SHL1VERSIONMAP=$(SOLARENV)/src/reg-component.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1RPATH=      OXT
 DEF1NAME=		$(SHL1TARGET)
 
@@ -97,10 +98,14 @@ COMPONENT_LIBRARIES= \
 COMPONENT_BITMAPS= \
     $(EXTENSIONDIR)$/bitmaps$/opt_16.png \
     $(EXTENSIONDIR)$/bitmaps$/opt_26.png \
-    $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80.png
+    $(EXTENSIONDIR)$/bitmaps$/opt_16_h.png \
+    $(EXTENSIONDIR)$/bitmaps$/opt_26_h.png \
+    $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80.png \
+    $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80_h.png
 
 COMPONENT_IMAGES=\
-    $(EXTENSIONDIR)$/bitmaps$/extension_32.png
+    $(EXTENSIONDIR)$/bitmaps$/extension_32.png \
+    $(EXTENSIONDIR)$/bitmaps$/extension_32_h.png
 
 # rather freestyle or common to all?
 COMPONENT_HELP= \

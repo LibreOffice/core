@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,12 +24,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_xml_sax_XFastAttributeList_idl__
-#define __com_sun_star_xml_sax_XFastAttributeList_idl__
+#ifndef __com_sun_star_xml_sax_XFastAttributeList_idl__ 
+#define __com_sun_star_xml_sax_XFastAttributeList_idl__ 
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 
 #ifndef __com_sun_star_xml_Attribute_idl__
 #include <com/sun/star/xml/Attribute.idl>
@@ -43,15 +43,15 @@
 #include <com/sun/star/xml/sax/SAXException.idl>
 #endif
 
-//=============================================================================
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module xml {  module sax {  
+ 
+//============================================================================= 
+ 
+/** a container for the attributes of an xml element. 
 
-module com {  module sun {  module star {  module xml {  module sax {
-
-//=============================================================================
-
-/** a container for the attributes of an XML element.
-
-    <br>Attributes are separated into known attributes and unknown attributes.
+    <br>Attributes are seperated into known attributes and unknown attributes.
     <p>Known attributes have a local name that is known to the <type>XFastTokenHandler</token>
     registered at the <type>XFastParser</type> which created the sax event containing
     this attributes. If an attribute also has a namespace, that must be registered
@@ -92,7 +92,7 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
         @returns
             The integer token of the value from the attribute or <const>FastToken::Invalid</const>
 
-        @throws SAXEXception
+        @raises SAXEXception
             if the attribute is not available
 
     */
@@ -137,7 +137,7 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
         @returns
             The string value from the attribute.
 
-        @throws SAXEXception
+        @raises SAXEXception
             if the attribute is not available
 
     */
@@ -166,15 +166,15 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
         can not be translated to tokens.
     */
     sequence< ::com::sun::star::xml::Attribute > getUnknownAttributes();
-
+    
     /** returns a sequence of attributes which names and or namespaces URLS
         are translated to tokens.
     */
     sequence< ::com::sun::star::xml::FastAttribute > getFastAttributes();
 };
 
-//=============================================================================
-
-}; }; }; }; };
-
-#endif
+//============================================================================= 
+ 
+}; }; }; }; };  
+ 
+#endif 

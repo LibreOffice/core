@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <svx/xoutbmp.hxx>
+#include <xoutbmp.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <contdlg.hrc>
@@ -41,39 +41,60 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 // #i75482#
-#include "svx/sdrpaintwindow.hxx"
+#include "sdrpaintwindow.hxx"
 
 #define TRANSCOL Color( COL_WHITE )
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 ContourWindow::ContourWindow( Window* pParent, const ResId& rResId ) :
-            GraphCtrl       ( pParent, rResId ),
-            aWorkRect       ( 0, 0, 0, 0 ),
-            bPipetteMode    ( sal_False ),
-            bWorkplaceMode  ( sal_False ),
-            bClickValid     ( sal_False )
+            GraphCtrl		( pParent, rResId ),
+            aWorkRect		( 0, 0, 0, 0 ),
+            bPipetteMode	( FALSE ),
+            bWorkplaceMode	( FALSE ),
+            bClickValid		( FALSE )
 {
     SetWinStyle( WB_SDRMODE );
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 ContourWindow::~ContourWindow()
 {
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
 {
-    SdrPage*        pPage = (SdrPage*) pModel->GetPage( 0 );
-    const sal_uInt16    nPolyCount = rPolyPoly.Count();
+    SdrPage*		pPage = (SdrPage*) pModel->GetPage( 0 );
+    const USHORT	nPolyCount = rPolyPoly.Count();
 
-    // First delete all drawing objects
+    // zuerst alle Zeichenobjekte loeschen
     aPolyPoly = rPolyPoly;
 
+    // #117412#
     // To avoid to have destroyed objects which are still selected, it is necessary to deselect
     // them first (!)
     pView->UnmarkAllObj();
 
     pPage->Clear();
 
-    for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
+    for ( USHORT i = 0; i < nPolyCount; i++ )
     {
         basegfx::B2DPolyPolygon aPolyPolygon;
         aPolyPolygon.append(aPolyPoly[ i ].getB2DPolygon());
@@ -87,6 +108,7 @@ void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
             aSet.Put( XFillColorItem( String(), TRANSCOL ) );
             aSet.Put( XFillTransparenceItem( 50 ) );
 
+            //pPathObj->SetItemSetAndBroadcast(aSet);
             pPathObj->SetMergedItemSetAndBroadcast(aSet);
 
             pPage->InsertObject( pPathObj );
@@ -101,6 +123,13 @@ void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
 
     pModel->SetChanged( sal_False );
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 const PolyPolygon& ContourWindow::GetPolyPolygon()
 {
@@ -125,6 +154,13 @@ const PolyPolygon& ContourWindow::GetPolyPolygon()
     return aPolyPoly;
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void ContourWindow::InitSdrModel()
 {
     GraphCtrl::InitSdrModel();
@@ -134,8 +170,15 @@ void ContourWindow::InitSdrModel()
     aSet.Put( XFillColorItem( String(), TRANSCOL ) );
     aSet.Put( XFillTransparenceItem( 50 ) );
     pView->SetAttributes( aSet );
-    pView->SetFrameDragSingles( sal_True );
+    pView->SetFrameDragSingles( TRUE );
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 void ContourWindow::SdrObjCreated( const SdrObject&  )
 {
@@ -143,16 +186,30 @@ void ContourWindow::SdrObjCreated( const SdrObject&  )
     pView->CombineMarkedObjects( sal_False );
 }
 
-sal_Bool ContourWindow::IsContourChanged() const
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+BOOL ContourWindow::IsContourChanged() const
 {
-    SdrPage*    pPage = (SdrPage*) pModel->GetPage( 0 );
-    sal_Bool        bRet = sal_False;
+    SdrPage*	pPage = (SdrPage*) pModel->GetPage( 0 );
+    BOOL		bRet = FALSE;
 
     if ( pPage && pPage->GetObjCount() )
         bRet = ( (SdrPathObj*) pPage->GetObj( 0 ) )->GetPathPoly().count() && pModel->IsChanged();
 
     return bRet;
 }
+
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 void ContourWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -163,16 +220,23 @@ void ContourWindow::MouseButtonDown( const MouseEvent& rMEvt )
         SetPolyPolygon( PolyPolygon() );
         aWorkRect = Rectangle( aLogPt, aLogPt );
         Paint( Rectangle( Point(), GetGraphicSize() ) );
-        SetEditMode( sal_True );
+        SetEditMode( TRUE );
     }
 
     if ( !bPipetteMode )
         GraphCtrl::MouseButtonDown( rMEvt );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void ContourWindow::MouseMove( const MouseEvent& rMEvt )
 {
-    bClickValid = sal_False;
+    bClickValid = FALSE;
 
     if ( bPipetteMode )
     {
@@ -191,11 +255,18 @@ void ContourWindow::MouseMove( const MouseEvent& rMEvt )
         GraphCtrl::MouseMove( rMEvt );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
 {
     Point aTmpPoint;
-    const Rectangle aGraphRect( aTmpPoint, GetGraphicSize() );
-    const Point     aLogPt( PixelToLogic( rMEvt.GetPosPixel() ) );
+    const Rectangle	aGraphRect( aTmpPoint, GetGraphicSize() );
+    const Point		aLogPt( PixelToLogic( rMEvt.GetPosPixel() ) );
 
     bClickValid = aGraphRect.IsInside( aLogPt );
     ReleaseMouse();
@@ -236,6 +307,13 @@ void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
         GraphCtrl::MouseButtonUp( rMEvt );
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void ContourWindow::Paint( const Rectangle& rRect )
 {
     // #i75482#
@@ -247,7 +325,7 @@ void ContourWindow::Paint( const Rectangle& rRect )
     const Graphic& rGraphic = GetGraphic();
     const Color& rOldLineColor = GetLineColor();
     const Color& rOldFillColor = GetFillColor();
-
+    
     rTarget.SetLineColor( Color( COL_BLACK ) );
     rTarget.SetFillColor( Color( COL_WHITE ) );
 
@@ -262,7 +340,7 @@ void ContourWindow::Paint( const Rectangle& rRect )
     if ( aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom() )
     {
         PolyPolygon _aPolyPoly( 2, 2 );
-        const Color aOldFillColor( GetFillColor() );
+        const Color	aOldFillColor( GetFillColor() );
 
         _aPolyPoly.Insert( Rectangle( Point(), GetGraphicSize() ) );
         _aPolyPoly.Insert( aWorkRect );

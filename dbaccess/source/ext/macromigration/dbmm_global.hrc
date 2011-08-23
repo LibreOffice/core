@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,13 +74,13 @@
 #define STR_JAVA                    ( RID_DBMM_STRING_START +  9 )
 #define STR_PYTHON                  ( RID_DBMM_STRING_START + 10 )
 #define STR_DIALOG                  ( RID_DBMM_STRING_START + 11 )
-#define STR_MIGRATING_LIBS          ( RID_DBMM_STRING_START + 12 )
+#define STR_MIGRATING_LIBS		    ( RID_DBMM_STRING_START + 12 )
 #define STR_ERRORS                  ( RID_DBMM_STRING_START + 13 )
 #define STR_WARNINGS                ( RID_DBMM_STRING_START + 14 )
 #define STR_EXCEPTION               ( RID_DBMM_STRING_START + 15 )
 #define STR_LIBRARY_TYPE_AND_NAME   ( RID_DBMM_STRING_START + 16 )
-#define STR_INVALID_NUMBER_ARGS     ( RID_DBMM_STRING_START + 17 )
-#define STR_NO_DATABASE             ( RID_DBMM_STRING_START + 18 )
-#define STR_NOT_READONLY            ( RID_DBMM_STRING_START + 19 )
+#define STR_INVALID_NUMBER_ARGS		( RID_DBMM_STRING_START + 17 )
+#define STR_NO_DATABASE				( RID_DBMM_STRING_START + 18 )
+#define STR_NOT_READONLY			( RID_DBMM_STRING_START + 19 )
 
 #endif // DBACCESS_DBMM_GLOBAL_HRC

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,8 +51,8 @@ using ::com::sun::star::uno::makeAny;
 
 using namespace ::com::sun::star;
 
-#define TIMESTAMP_INVALID_DATETIME      ( DateTime ( Date ( 1, 1, 1601 ), Time ( 0, 0, 0 ) ) )  /// Invalid value for date and time to create invalid instance of TimeStamp.
-#define TIMESTAMP_INVALID_UTILDATETIME  ( util::DateTime ( 0, 0, 0, 0, 1, 1, 1601 ) )   /// Invalid value for date and time to create invalid instance of TimeStamp.
+#define TIMESTAMP_INVALID_DATETIME    	( DateTime ( Date ( 1, 1, 1601 ), Time ( 0, 0, 0 ) ) )	/// Invalid value for date and time to create invalid instance of TimeStamp.
+#define TIMESTAMP_INVALID_UTILDATETIME  ( util::DateTime ( 0, 0, 0, 0, 1, 1, 1601 ) )	/// Invalid value for date and time to create invalid instance of TimeStamp.
 
 static
 bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
@@ -591,14 +591,14 @@ void SfxOleFileTimeProperty::ImplSave( SvStream& rStrm )
 {
     DateTime aDateTimeUtc(
             Date(
-                static_cast< sal_uInt16 >( maDateTime.Day ),
-                static_cast< sal_uInt16 >( maDateTime.Month ),
-                static_cast< sal_uInt16 >( maDateTime.Year ) ),
+                static_cast< USHORT >( maDateTime.Day ),
+                static_cast< USHORT >( maDateTime.Month ),
+                static_cast< USHORT >( maDateTime.Year ) ),
             Time(
-                static_cast< sal_uIntPtr >( maDateTime.Hours ),
-                static_cast< sal_uIntPtr >( maDateTime.Minutes ),
-                static_cast< sal_uIntPtr >( maDateTime.Seconds ),
-                static_cast< sal_uIntPtr >( maDateTime.HundredthSeconds ) ) );
+                static_cast< ULONG >( maDateTime.Hours ),
+                static_cast< ULONG >( maDateTime.Minutes ),
+                static_cast< ULONG >( maDateTime.Seconds ),
+                static_cast< ULONG >( maDateTime.HundredthSeconds ) ) );
     // invalid time stamp is not converted to UTC
     // heuristic to detect editing durations (which we assume to be < 1 year):
     // check only the year, not the entire date

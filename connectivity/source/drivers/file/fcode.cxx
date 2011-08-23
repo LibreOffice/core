@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,13 @@
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::file;
+//using namespace ::com::sun::star::uno;
+//using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
+//using namespace ::com::sun::star::container;
+//using namespace ::com::sun::star::beans;
+//using namespace ::com::sun::star::sdbcx;
 
 TYPEINIT0(OCode);
 TYPEINIT1(OOperand, OCode);
@@ -130,7 +135,7 @@ sal_Bool OOperandAttr::isIndexed() const
 }
 //------------------------------------------------------------------
 OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
-    : OOperandRow(static_cast<sal_uInt16>(_nPos), DataType::VARCHAR)         // Standard-Type
+    : OOperandRow(static_cast<sal_uInt16>(_nPos), DataType::VARCHAR)		 // Standard-Typ
 {
     OSL_ENSURE(SQL_ISRULE(pNode,parameter),"Argument ist kein Parameter");
     OSL_ENSURE(pNode->count() > 0,"Fehler im Parse Tree");
@@ -143,18 +148,20 @@ OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
         aParameterName = pNode->getChild(1)->getTokenValue();
     else
     {
-        OSL_FAIL("Fehler im Parse Tree");
+        OSL_ASSERT("Fehler im Parse Tree");
     }
 
-    // set up Parameter-Column with default type, can be specified more precisely later using Describe-Parameter
+    // Parameter-Column aufsetzen mit defult typ, kann zu einem spaeteren Zeitpunkt ueber DescribeParameter
+    // genauer spezifiziert werden
 
-    // save Identity (not escpecially necessary here, just for the sake of symmetry)
+    // Identitaet merken (hier eigentlich nicht erforderlich, aber aus
+    // Symmetriegruenden ...)
 
     // todo
-    //  OColumn* pColumn = new OFILEColumn(aParameterName,eDBType,255,0,SQL_FLAGS_NULLALLOWED);
-    //  rParamColumns->AddColumn(pColumn);
+    //	OColumn* pColumn = new OFILEColumn(aParameterName,eDBType,255,0,SQL_FLAGS_NULLALLOWED);
+    //	rParamColumns->AddColumn(pColumn);
 
-    // the value will be set just before the evaluation
+    // der Wert wird erst kurz vor der Auswertung gesetzt
 }
 
 
@@ -172,15 +179,15 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const rtl::OUStrin
     switch (rColumnRef.getNodeType())
     {
         case SQL_NODE_STRING:
-            m_aValue    = aStrValue;
-            m_eDBType   = DataType::VARCHAR;
+            m_aValue	= aStrValue;
+            m_eDBType	= DataType::VARCHAR;
             m_aValue.setBound(sal_True);
             return;
         case SQL_NODE_INTNUM:
         case SQL_NODE_APPROXNUM:
         {
-            m_aValue    = aStrValue.toDouble();
-            m_eDBType   = DataType::DOUBLE;
+            m_aValue	= aStrValue.toDouble();
+            m_eDBType	= DataType::DOUBLE;
             m_aValue.setBound(sal_True);
             return;
         }
@@ -200,7 +207,7 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const rtl::OUStrin
     }
     else
     {
-        OSL_FAIL("Parse Error");
+        OSL_ASSERT("Parse Error");
     }
     m_aValue.setBound(sal_True);
 }
@@ -223,9 +230,9 @@ sal_Bool OBoolOperator::operate(const OOperand*, const OOperand*) const
 void OBoolOperator::Exec(OCodeStack& rCodeStack)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OBoolOperator::Exec" );
-    OOperand  *pRight   = rCodeStack.top();
+    OOperand  *pRight	= rCodeStack.top();
     rCodeStack.pop();
-    OOperand  *pLeft    = rCodeStack.top();
+    OOperand  *pLeft	= rCodeStack.top();
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResultBOOL(operate(pLeft, pRight)));
@@ -252,7 +259,7 @@ void OOp_NOT::Exec(OCodeStack& rCodeStack)
         delete pOperand;
 }
 //------------------------------------------------------------------
-sal_uInt16 OOp_NOT::getRequestedOperands() const
+sal_uInt16 OOp_NOT::getRequestedOperands() const 
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_NOT::getRequestedOperands" );
     return 1;
@@ -273,7 +280,7 @@ sal_Bool OOp_OR::operate(const OOperand* pLeft, const OOperand* pRight) const
 }
 
 //------------------------------------------------------------------
-sal_uInt16 OOp_ISNULL::getRequestedOperands() const
+sal_uInt16 OOp_ISNULL::getRequestedOperands() const 
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_ISNULL::getRequestedOperands" );
     return 1;
@@ -341,7 +348,7 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
     sal_Bool bResult = sal_False;
     sal_Int32 eDBType = pLeft->getDBType();
 
-    // Comparison (depending on Data-type):
+    // Vergleich (je nach Datentyp):
     switch (eDBType)
     {
         case DataType::CHAR:
@@ -349,7 +356,7 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
         case DataType::LONGVARCHAR:
         {
             rtl::OUString sLH = aLH, sRH = aRH;
-            sal_Int32 nRes = rtl_ustr_compareIgnoreAsciiCase_WithLength
+            INT32 nRes = rtl_ustr_compareIgnoreAsciiCase_WithLength
                 (
                  sLH.pData->buffer,
                  sLH.pData->length,
@@ -357,13 +364,13 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
                  sRH.pData->length );
             switch(aPredicateType)
             {
-                case SQLFilterOperator::EQUAL:          bResult = (nRes == 0); break;
-                case SQLFilterOperator::NOT_EQUAL:          bResult = (nRes != 0); break;
-                case SQLFilterOperator::LESS:               bResult = (nRes <  0); break;
-                case SQLFilterOperator::LESS_EQUAL:     bResult = (nRes <= 0); break;
-                case SQLFilterOperator::GREATER:            bResult = (nRes >  0); break;
-                case SQLFilterOperator::GREATER_EQUAL:  bResult = (nRes >= 0); break;
-                default:                        bResult = sal_False;
+                case SQLFilterOperator::EQUAL:			bResult = (nRes == 0); break;
+                case SQLFilterOperator::NOT_EQUAL:			bResult = (nRes != 0); break;
+                case SQLFilterOperator::LESS:				bResult = (nRes <  0); break;
+                case SQLFilterOperator::LESS_EQUAL:		bResult = (nRes <= 0); break;
+                case SQLFilterOperator::GREATER:			bResult = (nRes >  0); break;
+                case SQLFilterOperator::GREATER_EQUAL:	bResult = (nRes >= 0); break;
+                default:						bResult = sal_False;
             }
         } break;
         case DataType::TINYINT:
@@ -382,15 +389,15 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
 
             switch (aPredicateType)
             {
-                case SQLFilterOperator::EQUAL:          bResult = (n == m); break;
-                case SQLFilterOperator::LIKE:               bResult = (n == m); break;
-                case SQLFilterOperator::NOT_EQUAL:          bResult = (n != m); break;
-                case SQLFilterOperator::NOT_LIKE:           bResult = (n != m); break;
-                case SQLFilterOperator::LESS:               bResult = (n < m); break;
-                case SQLFilterOperator::LESS_EQUAL:     bResult = (n <= m); break;
-                case SQLFilterOperator::GREATER:            bResult = (n > m); break;
-                case SQLFilterOperator::GREATER_EQUAL:  bResult = (n >= m); break;
-                default:                        bResult = sal_False;
+                case SQLFilterOperator::EQUAL:			bResult = (n == m); break;
+                case SQLFilterOperator::LIKE:				bResult = (n == m); break;
+                case SQLFilterOperator::NOT_EQUAL:			bResult = (n != m); break;
+                case SQLFilterOperator::NOT_LIKE:			bResult = (n != m); break;
+                case SQLFilterOperator::LESS:				bResult = (n < m); break;
+                case SQLFilterOperator::LESS_EQUAL:		bResult = (n <= m); break;
+                case SQLFilterOperator::GREATER:			bResult = (n > m); break;
+                case SQLFilterOperator::GREATER_EQUAL:	bResult = (n >= m); break;
+                default:						bResult = sal_False;
             }
         } break;
         default:
@@ -404,9 +411,9 @@ void ONumOperator::Exec(OCodeStack& rCodeStack)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ONumOperator::Exec" );
 
-    OOperand  *pRight   = rCodeStack.top();
+    OOperand  *pRight	= rCodeStack.top();
     rCodeStack.pop();
-    OOperand  *pLeft    = rCodeStack.top();
+    OOperand  *pLeft	= rCodeStack.top();
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResultNUM(operate(pLeft->getValue(), pRight->getValue())));
@@ -458,7 +465,7 @@ void ONthOperator::Exec(OCodeStack& rCodeStack)
     do
     {
         OSL_ENSURE(!rCodeStack.empty(),"Stack must be none empty!");
-        pOperand    = rCodeStack.top();
+        pOperand	= rCodeStack.top();
         rCodeStack.pop();
         if ( !IS_TYPE(OStopOperand,pOperand) )
             aValues.push_back( pOperand->getValue() );
@@ -480,9 +487,9 @@ void ONthOperator::Exec(OCodeStack& rCodeStack)
 void OBinaryOperator::Exec(OCodeStack& rCodeStack)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OBinaryOperator::Exec" );
-    OOperand  *pRight   = rCodeStack.top();
+    OOperand  *pRight	= rCodeStack.top();
     rCodeStack.pop();
-    OOperand  *pLeft    = rCodeStack.top();
+    OOperand  *pLeft	= rCodeStack.top();
     rCodeStack.pop();
 
     if ( !rCodeStack.empty() && IS_TYPE(OStopOperand,rCodeStack.top()) )

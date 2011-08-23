@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_package.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XHierarchicalStorageAccess2.hpp>
+#include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
 #include "ohierarchyholder.hxx"
@@ -42,7 +42,7 @@ using namespace ::com::sun::star;
 //===============================================
 
 //-----------------------------------------------
-uno::Reference< embed::XExtendedStorageStream > OHierarchyHolder_Impl::GetStreamHierarchically( sal_Int32 nStorageMode, OStringList_Impl& aListPath, sal_Int32 nStreamMode, const ::comphelper::SequenceAsHashMap& aEncryptionData )
+uno::Reference< embed::XExtendedStorageStream > OHierarchyHolder_Impl::GetStreamHierarchically( sal_Int32 nStorageMode, OStringList_Impl& aListPath, sal_Int32 nStreamMode, const ::rtl::OUString& aPass )
 {
     uno::Reference< embed::XStorage > xOwnStor( m_xWeakOwnStorage.get(), uno::UNO_QUERY_THROW );
 
@@ -50,7 +50,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyHolder_Impl::GetStream
         throw io::IOException();
 
     uno::Reference< embed::XExtendedStorageStream > xResult =
-        m_xChild->GetStreamHierarchically( nStorageMode, aListPath, nStreamMode, aEncryptionData );
+        m_xChild->GetStreamHierarchically( nStorageMode, aListPath, nStreamMode, aPass );
     if ( !xResult.is() )
         throw uno::RuntimeException();
 
@@ -89,7 +89,7 @@ OStringList_Impl OHierarchyHolder_Impl::GetListPathFromString( const ::rtl::OUSt
 //===============================================
 
 //-----------------------------------------------
-uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStreamHierarchically( sal_Int32 nStorageMode, OStringList_Impl& aListPath, sal_Int32 nStreamMode, const ::comphelper::SequenceAsHashMap& aEncryptionData )
+uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStreamHierarchically( sal_Int32 nStorageMode, OStringList_Impl& aListPath, sal_Int32 nStreamMode, const ::rtl::OUString& aPass )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -111,16 +111,11 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
 
     if ( !aListPath.size() )
     {
-        if ( !aEncryptionData.size() )
-        {
-            uno::Reference< embed::XHierarchicalStorageAccess > xHStorage( xOwnStor, uno::UNO_QUERY_THROW );
+        uno::Reference< embed::XHierarchicalStorageAccess > xHStorage( xOwnStor, uno::UNO_QUERY_THROW );
+        if ( !aPass.getLength() )
             xResult = xHStorage->openStreamElementByHierarchicalName( aNextName, nStreamMode );
-        }
         else
-        {
-            uno::Reference< embed::XHierarchicalStorageAccess2 > xHStorage( xOwnStor, uno::UNO_QUERY_THROW );
-            xResult = xHStorage->openEncryptedStreamByHierarchicalName( aNextName, nStreamMode, aEncryptionData.getAsConstNamedValueList() );
-        }
+            xResult = xHStorage->openEncryptedStreamElementByHierarchicalName( aNextName, nStreamMode, aPass );
 
         uno::Reference< embed::XTransactedObject > xTransact( xResult, uno::UNO_QUERY );
         if ( xTransact.is() )
@@ -156,7 +151,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
             aElement = new OHierarchyElement_Impl( NULL, xChildStorage );
         }
 
-        xResult = aElement->GetStreamHierarchically( nStorageMode, aListPath, nStreamMode, aEncryptionData );
+        xResult = aElement->GetStreamHierarchically( nStorageMode, aListPath, nStreamMode, aPass );
         if ( !xResult.is() )
             throw uno::RuntimeException();
 
@@ -197,6 +192,7 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( OStringList_Impl& aList
     }
     else
     {
+        sal_Bool bNewElement = sal_False;
         ::rtl::Reference< OHierarchyElement_Impl > aElement;
         OHierarchyElementList_Impl::iterator aIter = m_aChildren.find( aNextName );
         if ( aIter != m_aChildren.end() )
@@ -204,6 +200,7 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( OStringList_Impl& aList
 
         if ( !aElement.is() )
         {
+            bNewElement = sal_True;
             uno::Reference< embed::XStorage > xChildStorage = xOwnStor->openStorageElement( aNextName,
                                                                                             embed::ElementModes::READWRITE );
             if ( !xChildStorage.is() )
@@ -279,7 +276,7 @@ void SAL_CALL OHierarchyElement_Impl::disposing( const lang::EventObject& Source
         throw ( uno::RuntimeException )
 {
     uno::Sequence< embed::XStorage > aStoragesToCommit;
-
+    
     try
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );

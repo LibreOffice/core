@@ -111,7 +111,7 @@ case "$_os" in
 	"AIX")
 	  OS_VERSION=sysvr4
 	  ;;
-	"OpenBSD"|DragonFly)
+	"OpenBSD")
 	  OS_VERSION=linux
 	  ;;
    *)
@@ -211,7 +211,7 @@ AC_FUNC_MEMCMP
 AC_TYPE_SIGNAL
 AC_FUNC_UTIME_NULL
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS(getcwd getwd strerror setvbuf tzset settz mkstemp tempnam gettimeofday setenv)
+AC_CHECK_FUNCS(getcwd getwd strerror setvbuf tzset settz mkstemp tempnam gettimeofday)
 # Usefull, but special to newlib/MSVC
 AC_CHECK_FUNCS(strlwr)
 

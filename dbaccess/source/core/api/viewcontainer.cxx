@@ -78,7 +78,7 @@ OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent
                                  ,::osl::Mutex& _rMutex
                                  ,const Reference< XConnection >& _xCon
                                  ,sal_Bool _bCase
-                                 ,IRefreshListener* _pRefreshListener
+                                 ,IRefreshListener*	_pRefreshListener
                                  ,::dbtools::IWarningsContainer* _pWarningsContainer
                                  ,oslInterlockedCount& _nInAppend)
     :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer,_nInAppend)
@@ -89,6 +89,7 @@ OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent
 
 OViewContainer::~OViewContainer()
 {
+    //	dispose();
     DBG_DTOR(OViewContainer, NULL);
 }
 
@@ -124,8 +125,8 @@ ObjectType OViewContainer::createObject(const ::rtl::OUString& _rName)
 Reference< XPropertySet > OViewContainer::createDescriptor()
 {
     Reference< XPropertySet > xRet;
-    // first we have to look if the master tables support this
-    // and if so then create a table object as well with the master tables
+    // frist we have to look if the master tables does support this
+    // and if then create a table object as well with the master tables
     Reference<XColumnsSupplier > xMasterColumnsSup;
     Reference<XDataDescriptorFactory> xDataFactory(m_xMasterContainer,UNO_QUERY);
     if(xDataFactory.is())
@@ -195,9 +196,9 @@ void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementN
             Reference<XPropertySet> xTable(getObject(_nPos),UNO_QUERY);
             if ( xTable.is() )
             {
-                xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-                xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
-                xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
+                xTable->getPropertyValue(PROPERTY_CATALOGNAME)	>>= sCatalog;
+                xTable->getPropertyValue(PROPERTY_SCHEMANAME)	>>= sSchema;
+                xTable->getPropertyValue(PROPERTY_NAME)			>>= sTable;
 
                 sComposedName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInTableDefinitions );
             }

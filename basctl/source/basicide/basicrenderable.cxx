@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ BasicRenderable::BasicRenderable( IDEBaseWindow* pWin )
 , mpWindow( pWin )
 {
     ResStringArray aStrings( IDEResId( RID_PRINTDLG_STRLIST )  );
-    DBG_ASSERT( aStrings.Count() >= 3, "resource incomplete" );
-    if( aStrings.Count() < 3 ) // bad resource ?
+    DBG_ASSERT( aStrings.Count() >= 5, "resource incomplete" );
+    if( aStrings.Count() < 5 ) // bad resource ?
         return;
 
     m_aUIProperties.realloc( 3 );
@@ -64,13 +64,13 @@ BasicRenderable::BasicRenderable( IDEBaseWindow* pWin )
     // create a choice for the range to print
     rtl::OUString aPrintContentName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
     Sequence< rtl::OUString > aChoices( 2 );
-    Sequence< rtl::OUString > aHelpIds( 2 );
+    Sequence< rtl::OUString > aHelpTexts( 2 );
     aChoices[0] = aStrings.GetString( 1 );
-    aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ) );
-    aChoices[1] = aStrings.GetString( 2 );
-    aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ) );
+    aHelpTexts[0] = aStrings.GetString( 2 );
+    aChoices[1] = aStrings.GetString( 3 );
+    aHelpTexts[1] = aStrings.GetString( 4 );
     m_aUIProperties[1].Value = getChoiceControlOpt( rtl::OUString(),
-                                                    aHelpIds,
+                                                    aHelpTexts,
                                                     aPrintContentName,
                                                     aChoices,
                                                     0 );
@@ -82,7 +82,7 @@ BasicRenderable::BasicRenderable( IDEBaseWindow* pWin )
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
                                                   rtl::OUString(),
                                                   aPageRangeOpt
-                                                  );
+                                                  ); 
 }
 
 BasicRenderable::~BasicRenderable()
@@ -130,10 +130,10 @@ sal_Int32 SAL_CALL BasicRenderable::getRendererCount (
         else
             throw lang::IllegalArgumentException();
     }
-
+    
     return nCount;
 }
-
+    
 Sequence<beans::PropertyValue> SAL_CALL BasicRenderable::getRenderer (
         sal_Int32, const Any&, const Sequence<beans::PropertyValue>& i_xOptions
         ) throw (lang::IllegalArgumentException, RuntimeException)
@@ -147,7 +147,7 @@ Sequence<beans::PropertyValue> SAL_CALL BasicRenderable::getRenderer (
     if( pPrinter )
     {
         Size aPageSize( pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
-
+        
         aVals.realloc( 1 );
         aVals[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
         awt::Size aSize;
@@ -155,12 +155,12 @@ Sequence<beans::PropertyValue> SAL_CALL BasicRenderable::getRenderer (
         aSize.Height = aPageSize.Height();
         aVals[0].Value <<= aSize;
     }
-
+        
     appendPrintUIOptions( aVals );
 
     return aVals;
 }
-
+    
 void SAL_CALL BasicRenderable::render (
         sal_Int32 nRenderer, const Any&,
         const Sequence<beans::PropertyValue>& i_xOptions

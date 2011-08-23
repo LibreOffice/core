@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 
 #include <vcl/field.hxx>
 
-#include "swtypes.hxx"      //fuer MAXLEVEL
+#include "swtypes.hxx"		//fuer MAXLEVEL
 #include <numprevw.hxx>
 #include <numberingtypelistbox.hxx>
 
@@ -54,25 +54,25 @@ class SwChapterNumRules;
 
 class SwOutlineTabDialog : public SfxTabDialog
 {
-    static     sal_uInt16    nNumLevel;
+    static     USHORT    nNumLevel;
 
     String              aNullStr;
-    String              aCollNames[MAXLEVEL];
-    PopupMenu           aFormMenu;
+    String				aCollNames[MAXLEVEL];
+    PopupMenu			aFormMenu;
 
-    SwWrtShell&         rWrtSh;
-    SwNumRule*          pNumRule;
-    SwChapterNumRules*  pChapterNumRules;
+    SwWrtShell&			rWrtSh;
+    SwNumRule*			pNumRule;
+    SwChapterNumRules*	pChapterNumRules;
 
-    sal_Bool                bModified : 1;
+    BOOL                bModified : 1;
 
     protected:
     DECL_LINK( CancelHdl, Button * );
     DECL_LINK( FormHdl, Button * );
     DECL_LINK( MenuSelectHdl, Menu * );
 
-        virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage);
-        virtual short   Ok();
+        virtual void 	PageCreated(USHORT nPageId, SfxTabPage& rPage);
+        virtual short	Ok();
 
     public:
         SwOutlineTabDialog(Window* pParent,
@@ -80,43 +80,43 @@ class SwOutlineTabDialog : public SfxTabDialog
                     SwWrtShell &);
         ~SwOutlineTabDialog();
 
-    SwNumRule*          GetNumRule() {return pNumRule;}
-    sal_uInt16              GetLevel(const String &rFmtName) const;
-    String*             GetCollNames() {return aCollNames;}
+    SwNumRule*			GetNumRule() {return pNumRule;}
+    USHORT 				GetLevel(const String &rFmtName) const;
+    String*				GetCollNames() {return aCollNames;}
 
-    static sal_uInt16       GetActNumLevel() {return nNumLevel;}
-    static void         SetActNumLevel(sal_uInt16 nSet) {nNumLevel = nSet;}
+    static USHORT       GetActNumLevel() {return nNumLevel;}
+    static void         SetActNumLevel(USHORT nSet) {nNumLevel = nSet;}
 };
 
 class SwOutlineSettingsTabPage : public SfxTabPage
 {
+    ListBox			aLevelLB;
     FixedLine       aLevelFL;
-    ListBox         aLevelLB;
 
-    FixedLine        aNumberFL;
-    FixedText       aCollLbl;
-    ListBox         aCollBox;
-    FixedText       aNumberLbl;
-    SwNumberingTypeListBox  aNumberBox;
-    FixedText       aCharFmtFT;
-    ListBox         aCharFmtLB;
+    FixedText		aCollLbl;
+    ListBox 		aCollBox;
+    FixedText		aNumberLbl;
+    SwNumberingTypeListBox	aNumberBox;
+    FixedText		aCharFmtFT;
+    ListBox			aCharFmtLB;
     FixedText       aAllLevelFT;
-    NumericField    aAllLevelNF;
-    FixedText       aDelim;
-    FixedText       aPrefixFT;
-    Edit            aPrefixED;
-    FixedText       aSuffixFT;
-    Edit            aSuffixED;
-    FixedText       aStartLbl;
-    NumericField    aStartEdit;
+    NumericField	aAllLevelNF;
+    FixedText		aDelim;
+    FixedText		aPrefixFT;
+    Edit			aPrefixED;
+    FixedText		aSuffixFT;
+    Edit			aSuffixED;
+    FixedText		aStartLbl;
+    NumericField 	aStartEdit;
+    FixedLine        aNumberFL;
     NumberingPreview aPreviewWIN;
 
-    String              aNoFmtName;
-    String              aSaveCollNames[MAXLEVEL];
-    SwWrtShell*         pSh;
-    SwNumRule*          pNumRule;
-    String*             pCollNames;
-    sal_uInt16              nActLevel;
+    String				aNoFmtName;
+    String				aSaveCollNames[MAXLEVEL];
+    SwWrtShell*			pSh;
+    SwNumRule*			pNumRule;
+    String*				pCollNames;
+    USHORT 				nActLevel;
 
     DECL_LINK( LevelHdl, ListBox * );
     DECL_LINK( ToggleComplete, NumericField * );
@@ -127,9 +127,9 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     DECL_LINK( StartModified, NumericField * );
     DECL_LINK( CharFmtHdl, ListBox * );
 
-    void    Update();
+    void   	Update();
 
-    void    SetModified(){aPreviewWIN.Invalidate();}
+    void	SetModified(){aPreviewWIN.Invalidate();}
     void    CheckForStartValue_Impl(sal_uInt16 nNumberingType);
 
     using SfxTabPage::ActivatePage;
@@ -141,12 +141,12 @@ public:
 
     void SetWrtShell(SwWrtShell* pShell);
 
-    virtual void        ActivatePage(const SfxItemSet& rSet);
-    virtual int         DeactivatePage(SfxItemSet *pSet);
+    virtual void 		ActivatePage(const SfxItemSet& rSet);
+    virtual int 		DeactivatePage(SfxItemSet *pSet);
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
-    static SfxTabPage*  Create( Window* pParent,
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 };
 

@@ -45,7 +45,7 @@ SHL1OBJS=  \
     $(SLO)$/osl_Security.obj
 
 SHL1TARGET= osl_Security
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 .IF "$(GUI)" == "WNT"
 SHL1STDLIBS+= $(ADVAPI32LIB)
 .ENDIF
@@ -61,4 +61,4 @@ SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk
+.INCLUDE : _cppunit.mk

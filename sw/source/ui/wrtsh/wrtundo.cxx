@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,12 +36,9 @@
 #include <sfx2/app.hxx>
 #include <svl/slstitm.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>                   // fuer Undo-Ids
-#include <IDocumentUndoRedo.hxx>
+#include <swundo.hxx>               	// fuer Undo-Ids
 #include <swdtflvr.hxx>
-#include <svtools/svtdata.hxx>
-#include <svtools/svtools.hrc>
-#include <svtools/svtdata.hxx>
+
 #include <wrtsh.hrc>
 #include <sfx2/sfx.hrc>
 
@@ -50,7 +47,7 @@
 // ist, muss die fuer die weiteren Aktionen beruecksichtigt werden.
 
 
-void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
+void SwWrtShell::Do( DoType eDoType, USHORT nCnt )
 {
     // #105332# save current state of DoesUndo()
     sal_Bool bSaveDoesUndo = DoesUndo();
@@ -62,7 +59,7 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
             DoUndo(sal_False); // #i21739#
             // Modi zuruecksetzen
             EnterStdMode();
-            SwEditShell::Undo(nCnt);
+            SwEditShell::Undo(UNDO_EMPTY, nCnt );
             break;
         case REDO:
             DoUndo(sal_False); // #i21739#
@@ -79,8 +76,8 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
     // #105332# restore undo state
     DoUndo(bSaveDoesUndo);
 
-    sal_Bool bCreateXSelection = sal_False;
-    const sal_Bool bFrmSelected = IsFrmSelected() || IsObjSelected();
+    BOOL bCreateXSelection = FALSE;
+    const BOOL bFrmSelected = IsFrmSelected() || IsObjSelected();
     if ( IsSelection() )
     {
         if ( bFrmSelected )
@@ -90,92 +87,95 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
         // bei Cursor setzen
         fnKillSel = &SwWrtShell::ResetSelect;
         fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
-        bCreateXSelection = sal_True;
+        bCreateXSelection = TRUE;
     }
     else if ( bFrmSelected )
     {
         EnterSelFrmMode();
-        bCreateXSelection = sal_True;
+        bCreateXSelection = TRUE;
     }
     else if( (CNT_GRF | CNT_OLE ) & GetCntType() )
     {
         SelectObj( GetCharRect().Pos() );
         EnterSelFrmMode();
-        bCreateXSelection = sal_True;
+        bCreateXSelection = TRUE;
     }
 
     if( bCreateXSelection )
         SwTransferable::CreateSelection( *this );
 
     // Bug 32918: nach loeschen der Numerierung bleibt die Obj. Leiste stehen
-    //          Warum wird hier nicht immer ein CallChgLink gerufen?
+    //			Warum wird hier nicht immer ein CallChgLink gerufen?
     CallChgLnk();
 }
 
 
 String SwWrtShell::GetDoString( DoType eDoType ) const
 {
-    ::rtl::OUString aUndoStr;
-    sal_uInt16 nResStr = STR_UNDO;
+    String aStr, aUndoStr;
+    USHORT nResStr = STR_UNDO;
     switch( eDoType )
     {
     case UNDO:
         nResStr = STR_UNDO;
-        GetLastUndoInfo(& aUndoStr, 0);
+        aUndoStr = GetUndoIdsStr();
         break;
     case REDO:
         nResStr = STR_REDO;
-        GetFirstRedoInfo(& aUndoStr);
+        aUndoStr = GetRedoIdsStr();
         break;
     default:;//prevent warning
     }
 
-    ::rtl::OUStringBuffer buf = ::rtl::OUStringBuffer( String( SvtResId( nResStr ) ) );
-    buf.append(aUndoStr);
+    aStr.Insert( String(ResId( nResStr, *SFX_APP()->GetSfxResManager())), 0 );
+    aStr += aUndoStr;
 
-    return buf.makeStringAndClear();
+    return aStr;
 }
 
-sal_uInt16 SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) const
+USHORT SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) const
 {
-    SwUndoComments_t comments;
+    SwUndoIds aIds;
     switch( eDoType )
     {
     case UNDO:
-        comments = GetIDocumentUndoRedo().GetUndoComments();
+        GetUndoIds( NULL, &aIds );
         break;
     case REDO:
-        comments = GetIDocumentUndoRedo().GetRedoComments();
+        GetRedoIds( NULL, &aIds );
         break;
     default:;//prevent warning
     }
 
-    ::rtl::OUStringBuffer buf;
-    for (size_t i = 0; i < comments.size(); ++i)
+    String sList;
+    for( USHORT n = 0, nEnd = aIds.Count(); n < nEnd; ++n )
     {
-        OSL_ENSURE(comments[i].getLength(), "no Undo/Redo Text set");
-        buf.append(comments[i]);
-        buf.append(sal_Unicode('\n'));
+        const SwUndoIdAndName& rIdNm = *aIds[ n ];
+        if( rIdNm.GetUndoStr() )
+            sList += *rIdNm.GetUndoStr();
+        else
+        {
             OSL_ENSURE( !this, "no Undo/Redo Test set" );
+        }
+        sList += '\n';
     }
-    rStrs.SetString(buf.makeStringAndClear());
-    return static_cast<sal_uInt16>(comments.size());
+    rStrs.SetString( sList );
+    return aIds.Count();
 }
 
 
 String SwWrtShell::GetRepeatString() const
 {
-    ::rtl::OUString str;
-    GetRepeatInfo(& str);
+    String aStr;
+    String aUndoStr = GetRepeatIdsStr();
 
-    if (str.getLength() == 0)
+    if (aUndoStr.Len() > 0)
     {
-        return str;
+        aStr.Insert( ResId( STR_REPEAT, *SFX_APP()->GetSfxResManager()), 0 );
+        aStr += aUndoStr;
     }
 
-    ::rtl::OUStringBuffer buf( String(SvtResId(STR_REPEAT)) );
-    buf.append(str);
-    return buf.makeStringAndClear();
+    return aStr;
 }
 
 

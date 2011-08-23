@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,8 @@ PlotterBase::PlotterBase( sal_Int32 nDimensionCount )
 {
 }
 
-void PlotterBase::initPlotter(  const uno::Reference< drawing::XShapes >& xLogicTarget
+    void SAL_CALL PlotterBase
+::initPlotter(  const uno::Reference< drawing::XShapes >& xLogicTarget
        , const uno::Reference< drawing::XShapes >& xFinalTarget
        , const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory
        , const rtl::OUString& rCID )
@@ -77,9 +78,11 @@ PlotterBase::~PlotterBase()
     delete m_pShapeFactory;
 }
 
-void PlotterBase::setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis )
+void SAL_CALL PlotterBase::setScales( const uno::Sequence< ExplicitScaleData >& rScales
+                                     , sal_Bool bSwapXAndYAxis )
+                            throw (uno::RuntimeException)
 {
-    DBG_ASSERT(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
+    DBG_ASSERT(m_nDimension<=rScales.getLength(),"Dimension of Plotter does not fit two dimension of given scale sequence");
     m_pPosHelper->setScales( rScales, bSwapXAndYAxis );
 }
 
@@ -125,7 +128,7 @@ bool PlotterBase::isValidPosition( const drawing::Position3D& rPos )
         return false;
     if( ::rtl::math::isInf(rPos.PositionZ) )
         return false;
-    return true;
+    return true;    
 }
 
 //.............................................................................

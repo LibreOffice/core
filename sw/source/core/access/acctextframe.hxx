@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ namespace com { namespace star {
 class SwAccessibleTextFrame : public SwAccessibleFrameBase
 {
 private:
-    // #i73249#
+    // --> OD 2009-07-14 #i73249#
     ::rtl::OUString msTitle;
     ::rtl::OUString msDesc;
     // <--
@@ -47,15 +47,17 @@ protected:
 
     virtual ~SwAccessibleTextFrame();
 
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
-
 public:
 
     SwAccessibleTextFrame( SwAccessibleMap* pInitMap, const SwFlyFrm* pFlyFrm );
 
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+
+
     //=====  XAccessibleContext  ==============================================
 
-    // #i73249# - Return the object's current name.
+    // --> OD 2009-07-14 #i73249#
+    /// Return the object's current name.
     virtual ::rtl::OUString SAL_CALL
         getAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException);
@@ -67,13 +69,13 @@ public:
 
     //=====  XServiceInfo  ====================================================
 
-    /** Returns an identifier for the implementation of this object.
+    /**	Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Return whether the specified service is supported by this class.
+    /**	Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
         supportsService (const ::rtl::OUString& sServiceName)

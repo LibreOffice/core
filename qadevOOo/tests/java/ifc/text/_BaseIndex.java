@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,7 +106,7 @@ public class _BaseIndex extends MultiPropertyTest {
     public void _LevelFormat() {
         log.println(
                 "Testing property 'LevelFormat' with custom property tester");
-        testProperty("LevelFormat",
+        testProperty("LevelFormat", 
                      new PropertyTester() {
             PropertyValue[][] newVal = null;
             PropertyValue[][] oldVal = null;
@@ -134,31 +134,31 @@ public class _BaseIndex extends MultiPropertyTest {
 
                     indProp.replaceByIndex(0, newVal);
                 } catch (com.sun.star.lang.WrappedTargetException e) {
-                    log.println("Exception occurred while testing LevelFormat");
+                    log.println("Exception occured while testing LevelFormat");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                    log.println("Exception occurred while testing LevelFormat");
+                    log.println("Exception occured while testing LevelFormat");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
-                    log.println("Exception occurred while testing LevelFormat");
+                    log.println("Exception occured while testing LevelFormat");
                     e.printStackTrace(log);
                 }
 
                 return indProp;
             }
 
-            protected void checkResult(String propName, Object oldValue,
-                                       Object newValue, Object resValue,
+            protected void checkResult(String propName, Object oldValue, 
+                                       Object newValue, Object resValue, 
                                        Exception exception)
                                 throws Exception {
                 PropertyValue[][] res = (PropertyValue[][]) ((XIndexAccess) UnoRuntime.queryInterface(
-                                                                     XIndexAccess.class,
+                                                                     XIndexAccess.class, 
                                                                      resValue)).getByIndex(0);
 
                 log.println("Result:");
                 printLevelFormatProperty(resValue);
 
-                boolean result = (res.length != oldVal.length) ||
+                boolean result = (res.length != oldVal.length) || 
                                  !util.ValueComparer.equalValue(res, oldVal);
 
                 tRes.tested(propName, result);
@@ -176,7 +176,7 @@ public class _BaseIndex extends MultiPropertyTest {
         PropertyValue[][] val = null;
 
         try {
-            log.println(" \u0421ollection has " + indProp.getCount() +
+            log.println(" \u0421ollection has " + indProp.getCount() + 
                         " elements : ");
 
             for (int i = 0; i < indProp.getCount(); i++) {
@@ -188,16 +188,16 @@ public class _BaseIndex extends MultiPropertyTest {
                     log.println("    " + j + " level :");
 
                     for (int k = 0; k < val[j].length; k++) {
-                        log.println("      " + val[j][k].Name + "=" +
+                        log.println("      " + val[j][k].Name + "=" + 
                                     val[j][k].Value);
                     }
                 }
             }
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occurred while printing LevelFormat");
+            log.println("Exception occured while printing LevelFormat");
             e.printStackTrace(log);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception occurred while printing LevelFormat");
+            log.println("Exception occured while printing LevelFormat");
             e.printStackTrace(log);
         }
     }

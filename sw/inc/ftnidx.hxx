@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,10 +36,10 @@ class SwTxtFtn;
 class SwNodeIndex;
 class SwSectionNode;
 
-// Everywhere where NodeIndex is used, the header files missing here
-// are already included. Therefore put here as defines only and
-// not as inline methods (saves compile time).
-#define _SwTxtFtn_GetIndex( pFIdx ) (pFIdx->GetTxtNode().GetIndex())
+// ueberall, wo der NodeIndex gebraucht wird, werden die hier fehlenden
+// Headerfiles schon includes. Darum hier nur als define und nicht als
+// inline Methode (spart Compile-Zeit)
+#define _SwTxtFtn_GetIndex( pFIdx )	(pFIdx->GetTxtNode().GetIndex())
 
 
 typedef SwTxtFtn* SwTxtFtnPtr;
@@ -50,10 +50,10 @@ class SwFtnIdxs : public _SwFtnIdxs
 public:
     SwFtnIdxs() {}
 
-    void UpdateFtn( const SwNodeIndex& rStt ); // Update all from pos.
-    void UpdateAllFtn();                       // Update all footnotes.
+    void UpdateFtn( const SwNodeIndex& rStt );   	// ab Pos. alle Updaten
+    void UpdateAllFtn();					// alle Fussnoten updaten
 
-    SwTxtFtn* SeekEntry( const SwNodeIndex& rIdx, sal_uInt16* pPos = 0 ) const;
+    SwTxtFtn* SeekEntry( const SwNodeIndex& rIdx, USHORT* pPos = 0 ) const;
 };
 
 
@@ -70,8 +70,8 @@ public:
     static const SwSectionNode* FindSectNdWithEndAttr(
                                             const SwTxtFtn& rTxtFtn );
 
-    sal_uInt16 GetNumber( const SwTxtFtn& rTxtFtn, const SwSectionNode& rNd );
-    sal_uInt16 ChkNumber( const SwTxtFtn& rTxtFtn );
+    USHORT GetNumber( const SwTxtFtn& rTxtFtn, const SwSectionNode& rNd );
+    USHORT ChkNumber( const SwTxtFtn& rTxtFtn );
 };
 
 

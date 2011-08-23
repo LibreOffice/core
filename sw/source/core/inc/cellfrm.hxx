@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef SW_CELLFRM_HXX
-#define SW_CELLFRM_HXX
+#ifndef _CELLFRM_HXX
+#define _CELLFRM_HXX
 
 #include <tools/mempool.hxx>
 
@@ -42,16 +42,15 @@ class SwCellFrm: public SwLayoutFrm
 
 protected:
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
-    SwCellFrm( const SwTableBox &, SwFrm*, bool bInsertContent = true );
+    SwCellFrm( const SwTableBox &, bool bInsertContent = true );
     ~SwCellFrm();
 
-    virtual sal_Bool GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0 ) const;
-    virtual void Paint( SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const;
-    virtual void CheckDirection( sal_Bool bVert );
+    virtual BOOL GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0 ) const;
+    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
+    virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
+    virtual void CheckDirection( BOOL bVert );
 
     // --> OD 2010-02-17 #i103961#
     virtual void Cut();

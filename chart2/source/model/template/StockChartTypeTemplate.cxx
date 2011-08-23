@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,6 +40,7 @@
 #include "ContainerHelper.hxx"
 #include "AxisIndexDefines.hxx"
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -104,66 +105,46 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-struct StaticStockChartTypeTemplateDefaults_Initializer
+void lcl_AddDefaultsToMap(
+    ::chart::tPropertyValueMap & rOutMap )
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_STOCKCHARTTYPE_TEMPLATE_OPEN, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_STOCKCHARTTYPE_TEMPLATE_LOW_HIGH, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE, false );
-    }
-};
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_STOCKCHARTTYPE_TEMPLATE_OPEN, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_STOCKCHARTTYPE_TEMPLATE_LOW_HIGH, true );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE, false );
+}
 
-struct StaticStockChartTypeTemplateDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticStockChartTypeTemplateDefaults_Initializer >
+const Sequence< Property > & lcl_GetPropertySequence()
 {
-};
+    static Sequence< Property > aPropSeq;
 
-struct StaticStockChartTypeTemplateInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
     {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    Sequence< Property > lcl_GetPropertySequence()
-    {
+        // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
 
+        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        // transfer result to static Sequence
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
-};
 
-struct StaticStockChartTypeTemplateInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticStockChartTypeTemplateInfoHelper_Initializer >
-{
-};
+    return aPropSeq;
+}
 
-struct StaticStockChartTypeTemplateInfo_Initializer
+::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
 {
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticStockChartTypeTemplateInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
+    static ::cppu::OPropertyArrayHelper aArrayHelper(
+        lcl_GetPropertySequence(),
+        /* bSorted = */ sal_True );
 
-struct StaticStockChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticStockChartTypeTemplateInfo_Initializer >
-{
-};
+    return aArrayHelper;
+}
 
 } // anonymous namespace
 // ----------------------------------------
@@ -200,23 +181,49 @@ StockChartTypeTemplate::~StockChartTypeTemplate()
 uno::Any StockChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticStockChartTypeTemplateDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
+    static tPropertyValueMap aStaticDefaults;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aStaticDefaults.size() )
+    {
+        // initialize defaults
+        lcl_AddDefaultsToMap( aStaticDefaults );
+    }
+
+    tPropertyValueMap::const_iterator aFound(
+        aStaticDefaults.find( nHandle ));
+
+    if( aFound == aStaticDefaults.end())
         return uno::Any();
+
     return (*aFound).second;
+    // \--
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL StockChartTypeTemplate::getInfoHelper()
 {
-    return *StaticStockChartTypeTemplateInfoHelper::get();
+    return lcl_getInfoHelper();
 }
 
+
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL StockChartTypeTemplate::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL
+    StockChartTypeTemplate::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    return *StaticStockChartTypeTemplateInfo::get();
+    static uno::Reference< beans::XPropertySetInfo > xInfo;
+
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( !xInfo.is())
+    {
+        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
+            getInfoHelper());
+    }
+
+    return xInfo;
+    // \--
 }
 
 sal_Int32 StockChartTypeTemplate::getAxisCountByDimension( sal_Int32 nDimension )
@@ -275,7 +282,7 @@ void SAL_CALL StockChartTypeTemplate::applyStyle(
                     xProp->setPropertyValue( C2U("LineStyle"), uno::makeAny( drawing::LineStyle_SOLID ));
             }
         }
-
+        
     }
     catch( uno::Exception & ex )
     {
@@ -367,7 +374,7 @@ void StockChartTypeTemplate::createChartTypes(
                 xFact->createInstance(
                     CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ), uno::UNO_QUERY_THROW );
             aChartTypeVec.push_back( xCT );
-
+            
             if( aSeriesSeq.getLength() > nSeriesIndex &&
                 aSeriesSeq[nSeriesIndex].getLength() > 0 )
             {
@@ -389,7 +396,7 @@ void StockChartTypeTemplate::createChartTypes(
             xCTProp->setPropertyValue( C2U("ShowFirst"), uno::makeAny( bShowFirst ));
             xCTProp->setPropertyValue( C2U("ShowHighLow"), uno::makeAny( bShowHighLow ));
         }
-
+        
         if( aSeriesSeq.getLength() > nSeriesIndex &&
             aSeriesSeq[ nSeriesIndex ].getLength() > 0 )
         {

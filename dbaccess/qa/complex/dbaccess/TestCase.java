@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,14 +26,12 @@
  ************************************************************************/
 package complex.dbaccess;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
-// import com.sun.star.uno.Exception;
+import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import helper.FileTools;
@@ -42,29 +40,27 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-// ---------- junit imports -----------------
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.openoffice.test.OfficeConnection;
-import static org.junit.Assert.*;
-// ------------------------------------------
-
-
-public abstract class TestCase
+public abstract class TestCase extends complexlib.ComplexTestCase
 {
+    // --------------------------------------------------------------------------------------------------------
+    protected final XMultiServiceFactory getORB()
+    {
+        return (XMultiServiceFactory)param.getMSF();
+    }
+
     // --------------------------------------------------------------------------------------------------------
     protected final XComponentContext getComponentContext()
     {
         XComponentContext context = null;
         try
         {
-            final XPropertySet orbProps = UnoRuntime.queryInterface( XPropertySet.class, getMSF() );
+            final XPropertySet orbProps = UnoRuntime.queryInterface( XPropertySet.class, getORB() );
             context = UnoRuntime.queryInterface( XComponentContext.class,
                 orbProps.getPropertyValue( "DefaultContext" ) );
         }
         catch ( Exception ex )
         {
-            fail( "could not retrieve the ComponentContext" );
+            failed( "could not retrieve the ComponentContext" );
         }
         return context;
     }
@@ -81,17 +77,15 @@ public abstract class TestCase
 
     // --------------------------------------------------------------------------------------------------------
     /** returns the URL of a temporary file which can be used during the test.
-     *
+     * 
      *  The file will be deleted when the process exits
      *  @return the URL of a temporary file
      */
     protected final String createTempFileURL() throws IOException
     {
-        final File documentFile = java.io.File.createTempFile( "dbaccess_test", ".odb" ).getAbsoluteFile();
+        final File documentFile = java.io.File.createTempFile( getTestObjectName(), ".odb" ).getAbsoluteFile();
         if ( documentFile.exists() )
-        {
             documentFile.delete();
-        }
         return FileHelper.getOOoCompatibleFileURL( documentFile.toURI().toURL().toString() );
     }
 
@@ -117,106 +111,9 @@ public abstract class TestCase
     protected final XModel loadDocument( final String _docURL ) throws Exception
     {
         final XComponentLoader loader = UnoRuntime.queryInterface( XComponentLoader.class,
-            getMSF().createInstance( "com.sun.star.frame.Desktop" ) );
+            getORB().createInstance( "com.sun.star.frame.Desktop" ) );
         return UnoRuntime.queryInterface( XModel.class,
             loader.loadComponentFromURL( _docURL, "_blank", 0, new PropertyValue[] {} ) );
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    /** invokes a given method on a given object, and assures a certain exception is caught
-     * @param _message
-     *          is the message to print when the check fails
-     * @param _object
-     *          is the object to invoke the method on
-     * @param _methodName
-     *          is the name of the method to invoke
-     * @param _methodArgs
-     *          are the arguments to pass to the method.
-     * @param _argClasses
-     *          are the classes to assume for the arguments of the methods
-     * @param _expectedExceptionClass
-     *          is the class of the exception to be caught. If this is null,
-     *          it means that <em>no</em> exception must be throw by invoking the method.
-    */
-    protected void assureException( final String _message, final Object _object, final String _methodName,
-        final Class[] _argClasses, final Object[] _methodArgs, final Class _expectedExceptionClass )
-    {
-        Class objectClass = _object.getClass();
-
-        boolean noExceptionAllowed = ( _expectedExceptionClass == null );
-
-        boolean caughtExpected = noExceptionAllowed ? true : false;
-        try
-        {
-            Method method = objectClass.getMethod( _methodName, _argClasses );
-            method.invoke(_object, _methodArgs );
-        }
-        catch ( InvocationTargetException e )
-        {
-            caughtExpected =    noExceptionAllowed
-                            ?   false
-                            :   ( e.getTargetException().getClass().equals( _expectedExceptionClass ) );
-        }
-        catch( Exception e )
-        {
-            caughtExpected = false;
-        }
-
-        assertTrue( _message, caughtExpected );
-    }
-
-    /** invokes a given method on a given object, and assures a certain exception is caught
-     * @param _message is the message to print when the check fails
-     * @param _object is the object to invoke the method on
-     * @param _methodName is the name of the method to invoke
-     * @param _methodArgs are the arguments to pass to the method. Those implicitly define
-     *      the classes of the arguments of the method which is called.
-     * @param _expectedExceptionClass is the class of the exception to be caught. If this is null,
-     *          it means that <em>no</em> exception must be throw by invoking the method.
-    */
-    protected void assureException( final String _message, final Object _object, final String _methodName,
-        final Object[] _methodArgs, final Class _expectedExceptionClass )
-    {
-        Class[] argClasses = new Class[ _methodArgs.length ];
-        for ( int i=0; i<_methodArgs.length; ++i )
-            argClasses[i] = _methodArgs[i].getClass();
-        assureException( _message, _object, _methodName, argClasses, _methodArgs, _expectedExceptionClass );
-    }
-
-    /** invokes a given method on a given object, and assures a certain exception is caught
-     * @param _object is the object to invoke the method on
-     * @param _methodName is the name of the method to invoke
-     * @param _methodArgs are the arguments to pass to the method. Those implicitly define
-     *      the classes of the arguments of the method which is called.
-     * @param _expectedExceptionClass is the class of the exception to be caught. If this is null,
-     *          it means that <em>no</em> exception must be throw by invoking the method.
-    */
-    protected void assureException( final Object _object, final String _methodName, final Object[] _methodArgs,
-        final Class _expectedExceptionClass )
-    {
-        assureException(
-            "did not catch the expected exception (" +
-                ( ( _expectedExceptionClass == null ) ? "none" : _expectedExceptionClass.getName() ) +
-                ") while calling " + _object.getClass().getName() + "." + _methodName,
-            _object, _methodName, _methodArgs, _expectedExceptionClass );
-    }
-
-    /** invokes a given method on a given object, and assures a certain exception is caught
-     * @param _object is the object to invoke the method on
-     * @param _methodName is the name of the method to invoke
-     * @param _methodArgs are the arguments to pass to the method
-     * @param _argClasses are the classes to assume for the arguments of the methods
-     * @param _expectedExceptionClass is the class of the exception to be caught. If this is null,
-     *          it means that <em>no</em> exception must be throw by invoking the method.
-    */
-    protected void assureException( final Object _object, final String _methodName, final Class[] _argClasses,
-        final Object[] _methodArgs, final Class _expectedExceptionClass )
-    {
-        assureException(
-            "did not catch the expected exception (" +
-                ( ( _expectedExceptionClass == null ) ? "none" : _expectedExceptionClass.getName() ) +
-                ") while calling " + _object.getClass().getName() + "." + _methodName,
-            _object, _methodName, _argClasses, _methodArgs, _expectedExceptionClass );
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -226,29 +123,4 @@ public abstract class TestCase
         assureException( UnoRuntime.queryInterface( _unoInterfaceClass, _object ), _methodName,
             _methodArgs, _expectedExceptionClass );
     }
-
-    // --------------------------------------------------------------------------------------------------------
-    protected XMultiServiceFactory getMSF()
-    {
-        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
-        return xMSF1;
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    // setup and close connections
-    @BeforeClass
-    public static void setUpConnection() throws Exception
-    {
-        connection.setUp();
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    @AfterClass
-    public static void tearDownConnection() throws InterruptedException, com.sun.star.uno.Exception
-    {
-        connection.tearDown();
-    }
-
-    private static final OfficeConnection connection = new OfficeConnection();
-
 }

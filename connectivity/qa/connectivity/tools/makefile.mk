@@ -42,11 +42,15 @@ all:
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunnerLight.jar
 JAVAFILES       := $(shell @$(FIND) . -name "*.java")
+JAVACLASSFILES	:= $(foreach,i,$(JAVAFILES) $(CLASSDIR)/$(PACKAGE)/$(i:d)$(i:b).class)
 
 #----- make a jar from compiled files ------------------------------
 
-JARCLASSDIRS = $(PACKAGE)
-JARTARGET    = $(TARGET).jar
+MAXLINELENGTH = 100000
+
+JARCLASSDIRS    = $(PACKAGE)
+JARTARGET       = $(TARGET).jar
+JARCOMPRESS 	= TRUE
 
 # --- Targets ------------------------------------------------------
 

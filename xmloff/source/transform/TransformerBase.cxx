@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <comphelper/processfactory.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include "IgnoreTContext.hxx"
 #include "RenameElemTContext.hxx"
 #include "ProcAttrTContext.hxx"
@@ -80,7 +80,7 @@ bool lcl_ConvertAttr( OUString & rOutAttribute, sal_Int32 nParam )
 }
 } // anonymous namespace
 
-XMLTransformerContext *XMLTransformerBase::CreateContext( sal_uInt16 nPrefix,
+XMLTransformerContext *XMLTransformerBase::CreateContext( USHORT nPrefix,
     const OUString& rLocalName, const OUString& rQName )
 {
     XMLTransformerActions::key_type aKey( nPrefix, rLocalName );
@@ -515,7 +515,7 @@ static MapUnit lcl_getUnit( const OUString& rValue )
 
 XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
         Reference< XAttributeList >& rAttrList, sal_uInt16 nActionMap,
-           sal_Bool bClone  )
+           sal_Bool bClone	)
 {
     XMLMutableAttributeList *pMutableAttrList = 0;
     XMLTransformerActions *pActions = GetUserDefinedActions( nActionMap );
@@ -606,8 +606,8 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
 
                                 // #i13778#,#i36248# apply correct twip-to-1/100mm
                                 nMeasure = (sal_Int32)( nMeasure >= 0
-                                                        ? ((nMeasure*127+36)/72)
-                                                        : ((nMeasure*127-36)/72) );
+                                                        ? ((nMeasure*127L+36L)/72L)
+                                                        : ((nMeasure*127L-36L)/72L) );
 
                                 rtl::OUStringBuffer aBuffer;
                                 SvXMLUnitConverter::convertMeasure( aBuffer, nMeasure, MAP_100TH_MM, nDestUnit );
@@ -766,8 +766,8 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
 
                                 // #i13778#,#i36248#/ apply correct 1/100mm-to-twip conversion
                                 nMeasure = (sal_Int32)( nMeasure >= 0
-                                                        ? ((nMeasure*72+63)/127)
-                                                        : ((nMeasure*72-63)/127) );
+                                                        ? ((nMeasure*72L+63L)/127L)
+                                                        : ((nMeasure*72L-63L)/127L) );
 
                                 OUStringBuffer aBuffer;
                                 SvXMLUnitConverter::convertMeasure( aBuffer, nMeasure, MAP_100TH_MM, nDestUnit );
@@ -1055,8 +1055,8 @@ sal_Bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
                                 ->xCharClass =
                                     Reference < XCharacterClassification >(
                                 xFactory->createInstance(
-                                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.i18n.CharacterClassification_Unicode")) ),
+                                    OUString::createFromAscii(
+                        "com.sun.star.i18n.CharacterClassification_Unicode") ),
                                 UNO_QUERY );
 
                             OSL_ENSURE( xCharClass.is(),
@@ -1073,18 +1073,18 @@ sal_Bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
 
                     switch( nType )
                     {
-                    case UnicodeType::UPPERCASE_LETTER:     // Lu
-                    case UnicodeType::LOWERCASE_LETTER:     // Ll
-                    case UnicodeType::TITLECASE_LETTER:     // Lt
-                    case UnicodeType::OTHER_LETTER:         // Lo
-                    case UnicodeType::LETTER_NUMBER:        // Nl
+                    case UnicodeType::UPPERCASE_LETTER:		// Lu
+                    case UnicodeType::LOWERCASE_LETTER:		// Ll
+                    case UnicodeType::TITLECASE_LETTER:		// Lt
+                    case UnicodeType::OTHER_LETTER:			// Lo
+                    case UnicodeType::LETTER_NUMBER: 		// Nl
                         bValidChar = sal_True;
                         break;
-                    case UnicodeType::NON_SPACING_MARK:     // Ms
-                    case UnicodeType::ENCLOSING_MARK:       // Me
-                    case UnicodeType::COMBINING_SPACING_MARK:   //Mc
-                    case UnicodeType::MODIFIER_LETTER:      // Lm
-                    case UnicodeType::DECIMAL_DIGIT_NUMBER: // Nd
+                    case UnicodeType::NON_SPACING_MARK:		// Ms
+                    case UnicodeType::ENCLOSING_MARK:		// Me
+                    case UnicodeType::COMBINING_SPACING_MARK:	//Mc
+                    case UnicodeType::MODIFIER_LETTER:		// Lm
+                    case UnicodeType::DECIMAL_DIGIT_NUMBER:	// Nd
                         bValidChar = i > 0;
                         break;
                     }
@@ -1187,7 +1187,7 @@ sal_Bool XMLTransformerBase::NegPercent( OUString& rValue )
     sal_Bool bNeg = sal_False;
     double nVal = 0;
 
-    sal_Int32 nPos = 0;
+    sal_Int32 nPos = 0L;
     sal_Int32 nLen = rValue.getLength();
 
     // skip white space
@@ -1312,12 +1312,12 @@ sal_Bool XMLTransformerBase::ConvertURIToOASIS( ::rtl::OUString& rURI,
                     {
                     case '/':
                         // a relative path segement
-                        nPos = nLen;    // leave loop
+                        nPos = nLen;	// leave loop
                         break;
                     case ':':
                         // a schema
                         bRel = sal_False;
-                        nPos = nLen;    // leave loop
+                        nPos = nLen;	// leave loop
                         break;
                     default:
                         // we don't care about any other characters
@@ -1378,12 +1378,12 @@ sal_Bool XMLTransformerBase::ConvertURIToOOo( ::rtl::OUString& rURI,
                     {
                     case '/':
                         // a relative path segement within the package
-                        nPos = nLen;    // leave loop
+                        nPos = nLen;	// leave loop
                         break;
                     case ':':
                         // a schema
                         bPackage = sal_False;
-                        nPos = nLen;    // leave loop
+                        nPos = nLen;	// leave loop
                         break;
                     default:
                         // we don't care about any other characters
@@ -1468,8 +1468,8 @@ const XMLTransformerContext *XMLTransformerBase::GetAncestorContext(
 bool XMLTransformerBase::isWriter() const
 {
     Reference< XServiceInfo > xSI( mxModel, UNO_QUERY );
-    return  xSI.is() &&
-        (   xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ) ) ||
+    return	xSI.is() &&
+        (	xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ) ) ||
             xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.WebDocument" ) ) ) ||
             xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.GlobalDocument" ) ) ) );
 }

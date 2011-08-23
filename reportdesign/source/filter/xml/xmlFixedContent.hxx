@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,9 +48,8 @@ namespace rptxml
         virtual SvXMLImportContext* _CreateChildContext( sal_uInt16 nPrefix,
                     const ::rtl::OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
-    private:
         OXMLFixedContent(const OXMLFixedContent&);
-        OXMLFixedContent& operator =(const OXMLFixedContent&);
+        void operator =(const OXMLFixedContent&);
     public:
 
         OXMLFixedContent( ORptFilter& rImport, sal_uInt16 nPrfx,

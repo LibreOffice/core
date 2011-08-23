@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,15 +45,15 @@
 #include <editeng/memberids.hrc>
 #include <tools/stream.hxx>
 
-#include "svx/unoapi.hxx"
+#include "unoapi.hxx"
 #include <svl/style.hxx>
 #include "unopolyhelper.hxx"
 
 #include <tools/bigint.hxx>
 #include <svl/itemset.hxx>
 #include <svx/dialogs.hrc>
-#include "svx/svdstr.hrc"
-#include "svx/xattr.hxx"
+#include "svdstr.hrc"
+#include "xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
 #include <editeng/itemtype.hxx>
@@ -76,7 +76,7 @@ using namespace ::com::sun::star;
 
 /************************************************************************/
 
-#define VCLTOSVCOL( rCol ) (sal_uInt16)((((sal_uInt16)(rCol))<<8)|(rCol))
+#define VCLTOSVCOL( rCol ) (USHORT)((((USHORT)(rCol))<<8)|(rCol))
 
 /************************************************************************/
 
@@ -108,11 +108,15 @@ long ScaleMetricValue( long nVal, long nMul, long nDiv )
 
 /*************************************************************************
 |*
-|*    NameOrIndex::NameOrIndex(sal_uInt16 nWhich, sal_Int32 nIndex)
+|*	  NameOrIndex::NameOrIndex(USHORT nWhich, INT32 nIndex)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	14.11.94
+|*	  Letzte Aenderung	14.11.94
 |*
 *************************************************************************/
 
-NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, sal_Int32 nIndex) :
+NameOrIndex::NameOrIndex(USHORT _nWhich, INT32 nIndex) :
     SfxStringItem(_nWhich, aNameOrIndexEmptyString),
     nPalIndex(nIndex)
 {
@@ -120,11 +124,15 @@ NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, sal_Int32 nIndex) :
 
 /*************************************************************************
 |*
-|*    NameOrIndex::NameOrIndex(sal_uInt16 nWhich, const String& rName)
+|*	  NameOrIndex::NameOrIndex(USHORT nWhich, const String& rName)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	14.11.94
+|*	  Letzte Aenderung	14.11.94
 |*
 *************************************************************************/
 
-NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, const XubString& rName) :
+NameOrIndex::NameOrIndex(USHORT _nWhich, const XubString& rName) :
     SfxStringItem(_nWhich, rName),
     nPalIndex(-1)
 {
@@ -132,11 +140,15 @@ NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, const XubString& rName) :
 
 /*************************************************************************
 |*
-|*    NameOrIndex::NameOrIndex(sal_uInt16 nWhich, SvStream& rIn)
+|*	  NameOrIndex::NameOrIndex(USHORT nWhich, SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	14.11.94
+|*	  Letzte Aenderung	14.11.94
 |*
 *************************************************************************/
 
-NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, SvStream& rIn) :
+NameOrIndex::NameOrIndex(USHORT _nWhich, SvStream& rIn) :
     SfxStringItem(_nWhich, rIn)
 {
     rIn >> nPalIndex;
@@ -144,7 +156,11 @@ NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    NameOrIndex::NameOrIndex(const NameOrIndex& rNameOrIndex)
+|*	  NameOrIndex::NameOrIndex(const NameOrIndex& rNameOrIndex)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	14.11.94
+|*	  Letzte Aenderung	14.11.94
 |*
 *************************************************************************/
 
@@ -156,7 +172,11 @@ NameOrIndex::NameOrIndex(const NameOrIndex& rNameOrIndex) :
 
 /*************************************************************************
 |*
-|*    int NameOrIndex::operator==(const SfxPoolItem& rItem) const
+|*	  int NameOrIndex::operator==(const SfxPoolItem& rItem) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	14.11.94
+|*	  Letzte Aenderung	14.11.94
 |*
 *************************************************************************/
 
@@ -168,7 +188,11 @@ int NameOrIndex::operator==(const SfxPoolItem& rItem) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* NameOrIndex::Clone(SfxItemPool* pPool) const
+|*	  SfxPoolItem* NameOrIndex::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	14.11.94
+|*	  Letzte Aenderung	14.11.94
 |*
 *************************************************************************/
 
@@ -180,22 +204,30 @@ SfxPoolItem* NameOrIndex::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* NameOrIndex::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* NameOrIndex::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	14.11.94
+|*	  Letzte Aenderung	14.11.94
 |*
 *************************************************************************/
 
-SfxPoolItem* NameOrIndex::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* NameOrIndex::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new NameOrIndex(Which(), rIn);
 }
 
 /*************************************************************************
 |*
-|*    SvStream* NameOrIndex::Store(SvStream& rIn) const
+|*	  SvStream* NameOrIndex::Store(SvStream& rIn) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	14.11.94
+|*	  Letzte Aenderung	14.11.94
 |*
 *************************************************************************/
 
-SvStream& NameOrIndex::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& NameOrIndex::Store( SvStream& rOut, USHORT nItemVersion ) const
 {
     SfxStringItem::Store( rOut, nItemVersion );
     rOut << nPalIndex;
@@ -207,7 +239,7 @@ SvStream& NameOrIndex::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
     Argument pPool2 can be null.
     If returned string equals NameOrIndex->GetName(), the name was already unique.
 */
-String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* /*pPool2*/, SvxCompareValueFunc pCompareValueFunc, sal_uInt16 nPrefixResId, XPropertyList* pDefaults )
+String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* /*pPool2*/, SvxCompareValueFunc pCompareValueFunc, USHORT nPrefixResId, XPropertyList* pDefaults )
 {
     sal_Bool bForceNew = sal_False;
 
@@ -219,12 +251,12 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
 
     if( aUniqueName.Len() && pPool1 )
     {
-        const sal_uInt32 nCount = pPool1->GetItemCount2( nWhich );
+        const sal_uInt16 nCount = pPool1->GetItemCount( nWhich );
 
         const NameOrIndex *pItem;
-        for( sal_uInt32 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+        for( sal_uInt16 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
         {
-            pItem = (NameOrIndex*)pPool1->GetItem2( nWhich, nSurrogate );
+            pItem = (NameOrIndex*)pPool1->GetItem( nWhich, nSurrogate );
 
             if( pItem && ( pItem->GetName() == pCheckItem->GetName() ) )
             {
@@ -301,11 +333,11 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
 
         if( (aUniqueName.Len() == 0) && pPool1 )
         {
-            const sal_uInt32 nCount = pPool1->GetItemCount2( nWhich );
+            const sal_uInt16 nCount = pPool1->GetItemCount( nWhich );
             const NameOrIndex *pItem;
-            for( sal_uInt32 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+            for( sal_uInt16 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
             {
-                pItem = (NameOrIndex*)pPool1->GetItem2( nWhich, nSurrogate );
+                pItem = (NameOrIndex*)pPool1->GetItem( nWhich, nSurrogate );
 
                 if( pItem && pItem->GetName().Len() )
                 {
@@ -337,11 +369,11 @@ TYPEINIT1_AUTOFACTORY(XColorItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XColorItem::XColorItem(sal_uInt16 nWhich, sal_Int32 nIndex, const Color& rTheColor)
+|*	  XColorItem::XColorItem(USHORT nWhich, INT32 nIndex, const Color& rTheColor)
 |*
 \************************************************************************/
 
-XColorItem::XColorItem(sal_uInt16 _nWhich, sal_Int32 nIndex, const Color& rTheColor) :
+XColorItem::XColorItem(USHORT _nWhich, INT32 nIndex, const Color& rTheColor) :
     NameOrIndex(_nWhich, nIndex),
     aColor(rTheColor)
 {
@@ -349,11 +381,11 @@ XColorItem::XColorItem(sal_uInt16 _nWhich, sal_Int32 nIndex, const Color& rTheCo
 
 /*************************************************************************
 |*
-|*    XColorItem::XColorItem(sal_uInt16 nWhich, const String& rName, const Color& rTheColor)
+|*	  XColorItem::XColorItem(USHORT nWhich, const String& rName, const Color& rTheColor)
 |*
 \************************************************************************/
 
-XColorItem::XColorItem(sal_uInt16 _nWhich, const XubString& rName, const Color& rTheColor) :
+XColorItem::XColorItem(USHORT _nWhich, const XubString& rName, const Color& rTheColor) :
     NameOrIndex(_nWhich, rName),
     aColor(rTheColor)
 {
@@ -361,7 +393,7 @@ XColorItem::XColorItem(sal_uInt16 _nWhich, const XubString& rName, const Color& 
 
 /*************************************************************************
 |*
-|*    XColorItem::XColorItem(const XColorItem& rItem)
+|*	  XColorItem::XColorItem(const XColorItem& rItem)
 |*
 \************************************************************************/
 
@@ -373,11 +405,11 @@ XColorItem::XColorItem(const XColorItem& rItem) :
 
 /*************************************************************************
 |*
-|*    XColorItem::XColorItem(sal_uInt16 nWhich, SvStream& rIn)
+|*	  XColorItem::XColorItem(USHORT nWhich, SvStream& rIn)
 |*
 \************************************************************************/
 
-XColorItem::XColorItem(sal_uInt16 _nWhich, SvStream& rIn) :
+XColorItem::XColorItem(USHORT _nWhich, SvStream& rIn) :
     NameOrIndex(_nWhich, rIn)
 {
     if (!IsIndex())
@@ -388,7 +420,7 @@ XColorItem::XColorItem(sal_uInt16 _nWhich, SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XColorItem::Clone(SfxItemPool* pPool) const
+|*	  XColorItem::Clone(SfxItemPool* pPool) const
 |*
 \************************************************************************/
 
@@ -399,7 +431,7 @@ SfxPoolItem* XColorItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    int XColorItem::operator==(const SfxPoolItem& rItem) const
+|*	  int XColorItem::operator==(const SfxPoolItem& rItem) const
 |*
 \************************************************************************/
 
@@ -411,22 +443,22 @@ int XColorItem::operator==(const SfxPoolItem& rItem) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XColorItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XColorItem::Create(SvStream& rIn, USHORT nVer) const
 |*
 \************************************************************************/
 
-SfxPoolItem* XColorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XColorItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XColorItem(Which(), rIn);
 }
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XColorItem::Store(SvStream& rOut) const
+|*	  SfxPoolItem* XColorItem::Store(SvStream& rOut) const
 |*
 \************************************************************************/
 
-SvStream& XColorItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& XColorItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 {
     NameOrIndex::Store( rOut, nItemVersion );
 
@@ -440,7 +472,7 @@ SvStream& XColorItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const XColor& XColorItem::GetColorValue(const XColorTable* pTable) const
+|*	  const XColor& XColorItem::GetColorValue(const XColorTable* pTable) const
 |*
 \************************************************************************/
 
@@ -453,13 +485,13 @@ const Color& XColorItem::GetColorValue(const XColorTable* pTable) const
 
 }
 
-bool XColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetColorValue().GetRGBColor();
     return true;
 }
 
-bool XColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
@@ -470,7 +502,7 @@ bool XColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*n
 
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                           Linienattribute
+//							 Linienattribute
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //---------------------
@@ -480,18 +512,26 @@ TYPEINIT1_AUTOFACTORY(XLineStyleItem, SfxEnumItem);
 
 /*************************************************************************
 |*
-|*    XLineStyleItem::XLineStyleItem(XLineStyle eTheLineStyle)
+|*	  XLineStyleItem::XLineStyleItem(XLineStyle eTheLineStyle)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
 XLineStyleItem::XLineStyleItem(XLineStyle eTheLineStyle) :
-    SfxEnumItem(XATTR_LINESTYLE, sal::static_int_cast< sal_uInt16 >(eTheLineStyle))
+    SfxEnumItem(XATTR_LINESTYLE, sal::static_int_cast< USHORT >(eTheLineStyle))
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineStyleItem::XLineStyleItem(SvStream& rIn)
+|*	  XLineStyleItem::XLineStyleItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -502,7 +542,11 @@ XLineStyleItem::XLineStyleItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XLineStyleItem::Clone(SfxItemPool* pPool) const
+|*	  XLineStyleItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	09.11.94
+|*	  Letzte Aenderung	09.11.94
 |*
 *************************************************************************/
 
@@ -513,11 +557,15 @@ SfxPoolItem* XLineStyleItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineStyleItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XLineStyleItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-SfxPoolItem* XLineStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineStyleItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XLineStyleItem(rIn);
 }
@@ -527,10 +575,10 @@ SfxPoolItem* XLineStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 SfxItemPresentation XLineStyleItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -541,9 +589,9 @@ SfxItemPresentation XLineStyleItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
-            sal_uInt16 nId = 0;
+            USHORT nId = 0;
 
-            switch( (sal_uInt16)GetValue() )
+            switch( (USHORT)GetValue() )
             {
                 case XLINE_NONE:
                     nId = RID_SVXSTR_INVISIBLE;
@@ -562,14 +610,14 @@ SfxItemPresentation XLineStyleItem::GetPresentation
     }
 }
 
-bool XLineStyleItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineStyleItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     ::com::sun::star::drawing::LineStyle eLS = (::com::sun::star::drawing::LineStyle)GetValue();
     rVal <<= eLS;
     return true;
 }
 
-bool XLineStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     ::com::sun::star::drawing::LineStyle eLS;
     if(!(rVal >>= eLS ))
@@ -581,13 +629,13 @@ bool XLineStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
         eLS = (::com::sun::star::drawing::LineStyle)nLS;
     }
 
-    SetValue( sal::static_int_cast< sal_uInt16 >( eLS ) );
+    SetValue( sal::static_int_cast< USHORT >( eLS ) );
     return true;
 }
 
 //------------------------------------------------------------------------
 
-sal_uInt16 XLineStyleItem::GetValueCount() const
+USHORT XLineStyleItem::GetValueCount() const
 {
     return 3;
 }
@@ -598,12 +646,16 @@ sal_uInt16 XLineStyleItem::GetValueCount() const
 // ------------
 /*************************************************************************
 |*
-|*    XDash::XDash(XDashStyle, sal_uInt16, sal_uIntPtr, sal_uInt16, sal_uIntPtr, sal_uIntPtr)
+|*	  XDash::XDash(XDashStyle, USHORT, ULONG, USHORT, ULONG, ULONG)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	21.11.94
+|*	  Letzte Aenderung	21.11.94
 |*
 *************************************************************************/
 
-XDash::XDash(XDashStyle eTheDash, sal_uInt16 nTheDots, sal_uIntPtr nTheDotLen,
-             sal_uInt16 nTheDashes, sal_uIntPtr nTheDashLen, sal_uIntPtr nTheDistance) :
+XDash::XDash(XDashStyle eTheDash, USHORT nTheDots, ULONG nTheDotLen,
+             USHORT nTheDashes, ULONG nTheDashLen, ULONG nTheDistance) :
     eDash(eTheDash),
     nDots(nTheDots),
     nDotLen(nTheDotLen),
@@ -615,22 +667,26 @@ XDash::XDash(XDashStyle eTheDash, sal_uInt16 nTheDots, sal_uIntPtr nTheDotLen,
 
 /*************************************************************************
 |*
-|*    int XDash::operator==(const SfxPoolItem& rItem) const
+|*	  int XDash::operator==(const SfxPoolItem& rItem) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	29.11.94
+|*	  Letzte Aenderung	29.11.94
 |*
 *************************************************************************/
 
 bool XDash::operator==(const XDash& rDash) const
 {
-    return ( eDash      == rDash.eDash      &&
-             nDots      == rDash.nDots      &&
-             nDotLen    == rDash.nDotLen    &&
-             nDashes    == rDash.nDashes    &&
-             nDashLen   == rDash.nDashLen   &&
-             nDistance  == rDash.nDistance );
+    return ( eDash		== rDash.eDash		&&
+             nDots		== rDash.nDots		&&
+             nDotLen	== rDash.nDotLen	&&
+             nDashes	== rDash.nDashes	&&
+             nDashLen	== rDash.nDashLen	&&
+             nDistance	== rDash.nDistance );
 }
 
-// XDash is translated into an array of doubles which describe the lengths of the
-// dashes, dots and empty passages. It returns the complete length of the full DashDot
+// XDash is translated into an array of doubles which describe the lengths of the 
+// dashes, dots and empty passages. It returns the complete length of the full DashDot 
 // sequence and fills the given vetor of doubles accordingly (also resizing, so deleting it).
 static double SMALLEST_DASH_WIDTH(26.95);
 double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double fLineWidth) const
@@ -828,11 +884,15 @@ TYPEINIT1_AUTOFACTORY(XLineDashItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XLineDashItem::XLineDashItem(sal_Int32 nIndex, const XDash& rTheDash)
+|*	  XLineDashItem::XLineDashItem(INT32 nIndex, const XDash& rTheDash)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-XLineDashItem::XLineDashItem(sal_Int32 nIndex, const XDash& rTheDash) :
+XLineDashItem::XLineDashItem(INT32 nIndex, const XDash& rTheDash) :
     NameOrIndex(XATTR_LINEDASH, nIndex),
     aDash(rTheDash)
 {
@@ -840,7 +900,11 @@ XLineDashItem::XLineDashItem(sal_Int32 nIndex, const XDash& rTheDash) :
 
 /*************************************************************************
 |*
-|*    XLineDashItem::XLineDashItem(const String& rName, const XDash& rTheDash)
+|*	  XLineDashItem::XLineDashItem(const String& rName, const XDash& rTheDash)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -852,7 +916,11 @@ XLineDashItem::XLineDashItem(const XubString& rName, const XDash& rTheDash) :
 
 /*************************************************************************
 |*
-|*    XLineDashItem::XLineDashItem(const XLineDashItem& rItem)
+|*	  XLineDashItem::XLineDashItem(const XLineDashItem& rItem)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -864,7 +932,11 @@ XLineDashItem::XLineDashItem(const XLineDashItem& rItem) :
 
 /*************************************************************************
 |*
-|*    XLineDashItem::XLineDashItem(SvStream& rIn)
+|*	  XLineDashItem::XLineDashItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -873,9 +945,9 @@ XLineDashItem::XLineDashItem(SvStream& rIn) :
 {
     if (!IsIndex())
     {
-        sal_uInt16  nSTemp;
-        sal_uInt32  nLTemp;
-        sal_Int32   nITemp;
+        USHORT	nSTemp;
+        UINT32	nLTemp;
+        INT32   nITemp;
 
         rIn >> nITemp; aDash.SetDashStyle((XDashStyle)nITemp);
         rIn >> nSTemp; aDash.SetDots(nSTemp);
@@ -889,7 +961,7 @@ XLineDashItem::XLineDashItem(SvStream& rIn) :
 //*************************************************************************
 
 XLineDashItem::XLineDashItem(SfxItemPool* /*pPool*/, const XDash& rTheDash)
-:   NameOrIndex( XATTR_LINEDASH, -1 ),
+: 	NameOrIndex( XATTR_LINEDASH, -1 ),
     aDash(rTheDash)
 {
 }
@@ -903,7 +975,11 @@ XLineDashItem::XLineDashItem(SfxItemPool* /*pPool*/)
 
 /*************************************************************************
 |*
-|*    XLineDashItem::Clone(SfxItemPool* pPool) const
+|*	  XLineDashItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -914,7 +990,11 @@ SfxPoolItem* XLineDashItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    int XLineDashItem::operator==(const SfxPoolItem& rItem) const
+|*	  int XLineDashItem::operator==(const SfxPoolItem& rItem) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -926,33 +1006,41 @@ int XLineDashItem::operator==(const SfxPoolItem& rItem) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineDashItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XLineDashItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-SfxPoolItem* XLineDashItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineDashItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XLineDashItem(rIn);
 }
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineDashItem::Store(SvStream& rOut) const
+|*	  SfxPoolItem* XLineDashItem::Store(SvStream& rOut) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-SvStream& XLineDashItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& XLineDashItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 {
     NameOrIndex::Store( rOut, nItemVersion );
 
     if (!IsIndex())
     {
-        rOut << (sal_Int32) aDash.GetDashStyle();
+        rOut << (INT32) aDash.GetDashStyle();
         rOut << aDash.GetDots();
-        rOut << (sal_uInt32) aDash.GetDotLen();
+        rOut << (UINT32) aDash.GetDotLen();
         rOut << aDash.GetDashes();
-        rOut << (sal_uInt32) aDash.GetDashLen();
-        rOut << (sal_uInt32) aDash.GetDistance();
+        rOut << (UINT32) aDash.GetDashLen();
+        rOut << (UINT32) aDash.GetDistance();
     }
 
     return rOut;
@@ -960,7 +1048,11 @@ SvStream& XLineDashItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const XDash& XLineDashItem::GetValue(const XDashTable* pTable) const
+|*	  const XDash& XLineDashItem::GetValue(const XDashTable* pTable) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -977,10 +1069,10 @@ const XDash& XLineDashItem::GetDashValue(const XDashTable* pTable) const // GetV
 SfxItemPresentation XLineDashItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -1013,7 +1105,7 @@ bool XLineDashItem::ScaleMetrics(long nMul, long nDiv)
     return true;
 }
 
-bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1023,11 +1115,11 @@ bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMem
         case 0:
         {
             uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
-
+            
             ::com::sun::star::drawing::LineDash aLineDash;
 
             const XDash& rXD = GetDashValue();
-            aLineDash.Style = (::com::sun::star::drawing::DashStyle)((sal_uInt16)rXD.GetDashStyle());
+            aLineDash.Style = (::com::sun::star::drawing::DashStyle)((UINT16)rXD.GetDashStyle());
             aLineDash.Dots = rXD.GetDots();
             aLineDash.DotLen = rXD.GetDotLen();
             aLineDash.Dashes = rXD.GetDashes();
@@ -1043,7 +1135,7 @@ bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMem
             rVal = uno::makeAny( aPropSeq );
             break;
         }
-
+    
         case MID_NAME:
         {
             rtl::OUString aApiName;
@@ -1058,7 +1150,7 @@ bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMem
 
             ::com::sun::star::drawing::LineDash aLineDash;
 
-            aLineDash.Style = (::com::sun::star::drawing::DashStyle)((sal_uInt16)rXD.GetDashStyle());
+            aLineDash.Style = (::com::sun::star::drawing::DashStyle)((UINT16)rXD.GetDashStyle());
             aLineDash.Dots = rXD.GetDots();
             aLineDash.DotLen = rXD.GetDotLen();
             aLineDash.Dashes = rXD.GetDashes();
@@ -1111,13 +1203,13 @@ bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMem
             break;
         }
 
-        default: OSL_FAIL("Wrong MemberId!"); return false;
+        default: DBG_ERROR("Wrong MemberId!"); return false;
     }
 
     return true;
 }
 
-bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1143,13 +1235,13 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
                             bLineDash = true;
                     }
                 }
-
+                
                 SetName( aName );
                 if ( bLineDash )
                 {
                     XDash aXDash;
 
-                    aXDash.SetDashStyle((XDashStyle)((sal_uInt16)(aLineDash.Style)));
+                    aXDash.SetDashStyle((XDashStyle)((UINT16)(aLineDash.Style)));
                     aXDash.SetDots(aLineDash.Dots);
                     aXDash.SetDotLen(aLineDash.DotLen);
                     aXDash.SetDashes(aLineDash.Dashes);
@@ -1161,13 +1253,13 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
 
                     SetDashValue( aXDash );
                 }
-
+                
                 return true;
             }
 
             return false;
         }
-
+    
         case MID_NAME:
         {
             rtl::OUString aName;
@@ -1185,7 +1277,7 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
 
             XDash aXDash;
 
-            aXDash.SetDashStyle((XDashStyle)((sal_uInt16)(aLineDash.Style)));
+            aXDash.SetDashStyle((XDashStyle)((UINT16)(aLineDash.Style)));
             aXDash.SetDots(aLineDash.Dots);
             aXDash.SetDotLen(aLineDash.DotLen);
             aXDash.SetDashes(aLineDash.Dashes);
@@ -1206,7 +1298,7 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
                 return false;
 
             XDash aXDash = GetDashValue();
-            aXDash.SetDashStyle((XDashStyle)((sal_uInt16)(nVal)));
+            aXDash.SetDashStyle((XDashStyle)((UINT16)(nVal)));
 
             if((0 == aXDash.GetDots()) && (0 == aXDash.GetDashes()))
                 aXDash.SetDots(1);
@@ -1222,7 +1314,7 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
             sal_Int16 nVal = sal_Int16();
             if(!(rVal >>= nVal))
                 return false;
-
+            
             XDash aXDash = GetDashValue();
             if ( nMemberId == MID_LINEDASH_DOTS )
                 aXDash.SetDots( nVal );
@@ -1243,7 +1335,7 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
             sal_Int32 nVal = 0;
             if(!(rVal >>= nVal))
                 return false;
-
+            
             XDash aXDash = GetDashValue();
             if ( nMemberId == MID_LINEDASH_DOTLEN )
                 aXDash.SetDotLen( nVal );
@@ -1257,13 +1349,13 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
 
             SetDashValue( aXDash );
             break;
-        }
+        }		
     }
-
+    
     return true;
 }
 
-sal_Bool XLineDashItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
+BOOL XLineDashItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
     return ((XLineDashItem*)p1)->GetDashValue() == ((XLineDashItem*)p2)->GetDashValue();
 }
@@ -1272,7 +1364,7 @@ XLineDashItem* XLineDashItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
-        const String aUniqueName = NameOrIndex::CheckNamedItem( this,
+        const String aUniqueName = NameOrIndex::CheckNamedItem(	this,
                                                                 XATTR_LINEDASH,
                                                                 &pModel->GetItemPool(),
                                                                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
@@ -1297,7 +1389,11 @@ TYPEINIT1_AUTOFACTORY(XLineWidthItem, SfxMetricItem);
 
 /*************************************************************************
 |*
-|*    XLineWidthItem::XLineWidthItem(long nWidth)
+|*	  XLineWidthItem::XLineWidthItem(long nWidth)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -1308,7 +1404,11 @@ XLineWidthItem::XLineWidthItem(long nWidth) :
 
 /*************************************************************************
 |*
-|*    XLineWidthItem::XLineWidthItem(SvStream& rIn)
+|*	  XLineWidthItem::XLineWidthItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1319,7 +1419,11 @@ XLineWidthItem::XLineWidthItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XLineWidthItem::Clone(SfxItemPool* pPool) const
+|*	  XLineWidthItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1330,11 +1434,15 @@ SfxPoolItem* XLineWidthItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineWidthItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XLineWidthItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-SfxPoolItem* XLineWidthItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineWidthItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XLineWidthItem(rIn);
 }
@@ -1344,10 +1452,10 @@ SfxPoolItem* XLineWidthItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 SfxItemPresentation XLineWidthItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxMapUnit			eCoreUnit,
+    SfxMapUnit			ePresUnit,
     XubString&          rText, const IntlWrapper * pIntl
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -1365,17 +1473,17 @@ SfxItemPresentation XLineWidthItem::GetPresentation
     }
 }
 
-bool XLineWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XLineWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
     sal_Int32 nValue = GetValue();
     if( 0 != (nMemberId&CONVERT_TWIPS) )
         nValue = TWIP_TO_MM100(nValue);
-
+    
     rVal <<= nValue;
     return true;
 }
 
-bool XLineWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XLineWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
@@ -1393,18 +1501,26 @@ TYPEINIT1_AUTOFACTORY(XLineColorItem, XColorItem);
 
 /*************************************************************************
 |*
-|*    XLineColorItem::XLineColorItem(sal_Int32 nIndex, const Color& rTheColor)
+|*	  XLineColorItem::XLineColorItem(INT32 nIndex, const Color& rTheColor)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-XLineColorItem::XLineColorItem(sal_Int32 nIndex, const Color& rTheColor) :
+XLineColorItem::XLineColorItem(INT32 nIndex, const Color& rTheColor) :
     XColorItem(XATTR_LINECOLOR, nIndex, rTheColor)
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineColorItem::XLineColorItem(const XubString& rName, const Color& rTheColor)
+|*	  XLineColorItem::XLineColorItem(const XubString& rName, const Color& rTheColor)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1415,7 +1531,11 @@ XLineColorItem::XLineColorItem(const XubString& rName, const Color& rTheColor) :
 
 /*************************************************************************
 |*
-|*    XLineColorItem::XLineColorItem(SvStream& rIn)
+|*	  XLineColorItem::XLineColorItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1426,7 +1546,11 @@ XLineColorItem::XLineColorItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XLineColorItem::Clone(SfxItemPool* pPool) const
+|*	  XLineColorItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1437,11 +1561,15 @@ SfxPoolItem* XLineColorItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineColorItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XLineColorItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-SfxPoolItem* XLineColorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineColorItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XLineColorItem(rIn);
 }
@@ -1451,10 +1579,10 @@ SfxPoolItem* XLineColorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 SfxItemPresentation XLineColorItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -1470,13 +1598,13 @@ SfxItemPresentation XLineColorItem::GetPresentation
     }
 }
 
-bool XLineColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetColorValue().GetRGBColor();
     return true;
 }
 
-bool XLineColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
@@ -1522,7 +1650,7 @@ namespace
                         const basegfx::B2DVector aControlVectorA(aCandidate.getPrevControlPoint(b));
                         rOut << aControlVectorA.getX();
                         rOut << aControlVectorA.getY();
-
+                        
                         const basegfx::B2DVector aControlVectorB(aCandidate.getNextControlPoint(b));
                         rOut << aControlVectorB.getX();
                         rOut << aControlVectorB.getY();
@@ -1568,7 +1696,7 @@ namespace
                         rIn >> fX;
                         rIn >> fY;
                         aCandidate.setPrevControlPoint(b, basegfx::B2DVector(fX, fY));
-
+                        
                         rIn >> fX;
                         rIn >> fY;
                         aCandidate.setNextControlPoint(b, basegfx::B2DVector(fX, fY));
@@ -1592,43 +1720,59 @@ TYPEINIT1_AUTOFACTORY(XLineStartItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XLineStartItem::XLineStartItem(sal_Int32 nIndex)
+|*	  XLineStartItem::XLineStartItem(INT32 nIndex)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
-XLineStartItem::XLineStartItem(sal_Int32 nIndex)
-:   NameOrIndex(XATTR_LINESTART, nIndex)
+XLineStartItem::XLineStartItem(INT32 nIndex) 
+:	NameOrIndex(XATTR_LINESTART, nIndex)
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineStartItem::XLineStartItem(const XubString& rName,
-|*                                   const basegfx::B2DPolyPolygon& rXPolygon)
+|*	  XLineStartItem::XLineStartItem(const XubString& rName,
+|*									 const basegfx::B2DPolyPolygon& rXPolygon)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
 XLineStartItem::XLineStartItem(const XubString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon)
-:   NameOrIndex(XATTR_LINESTART, rName),
+:	NameOrIndex(XATTR_LINESTART, rName),
     maPolyPolygon(rPolyPolygon)
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineStartItem::XLineStartItem(const XLineStartItem& rItem)
+|*	  XLineStartItem::XLineStartItem(const XLineStartItem& rItem)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	17.11.94
 |*
 *************************************************************************/
 
-XLineStartItem::XLineStartItem(const XLineStartItem& rItem)
-:   NameOrIndex(rItem),
+XLineStartItem::XLineStartItem(const XLineStartItem& rItem) 
+:	NameOrIndex(rItem),
     maPolyPolygon(rItem.maPolyPolygon)
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineStartItem::XLineStartItem(SvStream& rIn)
+|*	  XLineStartItem::XLineStartItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	17.11.94
 |*
 *************************************************************************/
 
@@ -1644,7 +1788,7 @@ XLineStartItem::XLineStartItem(SvStream& rIn) :
 //*************************************************************************
 
 XLineStartItem::XLineStartItem(SfxItemPool* /*pPool*/, const basegfx::B2DPolyPolygon& rPolyPolygon)
-:   NameOrIndex( XATTR_LINESTART, -1 ),
+: 	NameOrIndex( XATTR_LINESTART, -1 ),
     maPolyPolygon(rPolyPolygon)
 {
 }
@@ -1652,13 +1796,17 @@ XLineStartItem::XLineStartItem(SfxItemPool* /*pPool*/, const basegfx::B2DPolyPol
 //*************************************************************************
 
 XLineStartItem::XLineStartItem(SfxItemPool* /*pPool*/)
-:   NameOrIndex(XATTR_LINESTART, -1 )
+:	NameOrIndex(XATTR_LINESTART, -1 )
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineStartItem::Clone(SfxItemPool* pPool) const
+|*	  XLineStartItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -1669,7 +1817,11 @@ SfxPoolItem* XLineStartItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    int XLineStartItem::operator==(const SfxPoolItem& rItem) const
+|*	  int XLineStartItem::operator==(const SfxPoolItem& rItem) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -1680,22 +1832,30 @@ int XLineStartItem::operator==(const SfxPoolItem& rItem) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineStartItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XLineStartItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-SfxPoolItem* XLineStartItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineStartItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XLineStartItem(rIn);
 }
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineStartItem::Store(SvStream& rOut) const
+|*	  SfxPoolItem* XLineStartItem::Store(SvStream& rOut) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
-SvStream& XLineStartItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& XLineStartItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 {
     NameOrIndex::Store( rOut, nItemVersion );
 
@@ -1709,8 +1869,12 @@ SvStream& XLineStartItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const basegfx::B2DPolyPolygon& XLineStartItem::GetValue(const XLineEndTable* pTable)
-|*                                             const
+|*	  const basegfx::B2DPolyPolygon& XLineStartItem::GetValue(const XLineEndTable* pTable)
+|*											   const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -1731,10 +1895,10 @@ basegfx::B2DPolyPolygon XLineStartItem::GetLineStartValue(const XLineEndTable* p
 SfxItemPresentation XLineStartItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -1750,7 +1914,7 @@ SfxItemPresentation XLineStartItem::GetPresentation
     }
 }
 
-bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1770,7 +1934,7 @@ bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
     return true;
 }
 
-bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1840,16 +2004,16 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
         // 2. if we have a name check if there is already an item with the
         // same name in the documents pool with a different line end or start
 
-        sal_uInt32 nCount, nSurrogate;
+        sal_uInt16 nCount, nSurrogate;
 
         const SfxItemPool* pPool1 = &pModel->GetItemPool();
         if( aUniqueName.Len() && pPool1 )
         {
-            nCount = pPool1->GetItemCount2( XATTR_LINESTART );
+            nCount = pPool1->GetItemCount( XATTR_LINESTART );
 
             for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
             {
-                const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem2( XATTR_LINESTART, nSurrogate );
+                const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem( XATTR_LINESTART, nSurrogate );
 
                 if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
                 {
@@ -1867,11 +2031,11 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
 
             if( !bForceNew )
             {
-                nCount = pPool1->GetItemCount2( XATTR_LINEEND );
+                nCount = pPool1->GetItemCount( XATTR_LINEEND );
 
                 for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
                 {
-                    const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem2( XATTR_LINEEND, nSurrogate );
+                    const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem( XATTR_LINEEND, nSurrogate );
 
                     if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
                     {
@@ -1892,10 +2056,10 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
         const SfxItemPool* pPool2 = pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL;
         if( aUniqueName.Len() && pPool2)
         {
-            nCount = pPool2->GetItemCount2( XATTR_LINESTART );
+            nCount = pPool2->GetItemCount( XATTR_LINESTART );
             for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
             {
-                const XLineStartItem* pItem = (const XLineStartItem*)pPool2->GetItem2( XATTR_LINESTART, nSurrogate );
+                const XLineStartItem* pItem = (const XLineStartItem*)pPool2->GetItem( XATTR_LINESTART, nSurrogate );
 
                 if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
                 {
@@ -1913,10 +2077,10 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
 
             if( !bForceNew )
             {
-                nCount = pPool2->GetItemCount2( XATTR_LINEEND );
+                nCount = pPool2->GetItemCount( XATTR_LINEEND );
                 for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
                 {
-                    const XLineEndItem* pItem = (const XLineEndItem*)pPool2->GetItem2( XATTR_LINEEND, nSurrogate );
+                    const XLineEndItem* pItem = (const XLineEndItem*)pPool2->GetItem( XATTR_LINEEND, nSurrogate );
 
                     if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
                     {
@@ -1946,12 +2110,12 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
 
             if( pPool1 )
             {
-                nCount = pPool1->GetItemCount2( XATTR_LINESTART );
-                sal_uInt32 nSurrogate2;
+                nCount = pPool1->GetItemCount( XATTR_LINESTART );
+                sal_uInt16 nSurrogate2;
 
                 for( nSurrogate2 = 0; nSurrogate2 < nCount; nSurrogate2++ )
                 {
-                    const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem2( XATTR_LINESTART, nSurrogate2 );
+                    const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem( XATTR_LINESTART, nSurrogate2 );
 
                     if( pItem && pItem->GetName().Len() )
                     {
@@ -1971,10 +2135,10 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                     }
                 }
 
-                nCount = pPool1->GetItemCount2( XATTR_LINEEND );
+                nCount = pPool1->GetItemCount( XATTR_LINEEND );
                 for( nSurrogate2 = 0; nSurrogate2 < nCount; nSurrogate2++ )
                 {
-                    const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem2( XATTR_LINEEND, nSurrogate2 );
+                    const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem( XATTR_LINEEND, nSurrogate2 );
 
                     if( pItem && pItem->GetName().Len() )
                     {
@@ -2028,43 +2192,59 @@ TYPEINIT1_AUTOFACTORY(XLineEndItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XLineEndItem::XLineEndItem(sal_Int32 nIndex)
+|*	  XLineEndItem::XLineEndItem(INT32 nIndex)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
-XLineEndItem::XLineEndItem(sal_Int32 nIndex)
-:   NameOrIndex(XATTR_LINEEND, nIndex)
+XLineEndItem::XLineEndItem(INT32 nIndex) 
+:	NameOrIndex(XATTR_LINEEND, nIndex)
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineEndItem::XLineEndItem(const XubString& rName,
-|*                               const basegfx::B2DPolyPolygon& rXPolygon)
+|*	  XLineEndItem::XLineEndItem(const XubString& rName,
+|*								 const basegfx::B2DPolyPolygon& rXPolygon)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
-XLineEndItem::XLineEndItem(const XubString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon)
-:   NameOrIndex(XATTR_LINEEND, rName),
+XLineEndItem::XLineEndItem(const XubString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon) 
+:	NameOrIndex(XATTR_LINEEND, rName),
     maPolyPolygon(rPolyPolygon)
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineEndItem::XLineEndItem(const XLineEndItem& rItem)
+|*	  XLineEndItem::XLineEndItem(const XLineEndItem& rItem)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
-XLineEndItem::XLineEndItem(const XLineEndItem& rItem)
-:   NameOrIndex(rItem),
+XLineEndItem::XLineEndItem(const XLineEndItem& rItem) 
+:	NameOrIndex(rItem),
     maPolyPolygon(rItem.maPolyPolygon)
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineEndItem::XLineEndItem(SvStream& rIn)
+|*	  XLineEndItem::XLineEndItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	17.11.94
 |*
 *************************************************************************/
 
@@ -2080,7 +2260,7 @@ XLineEndItem::XLineEndItem(SvStream& rIn) :
 //*************************************************************************
 
 XLineEndItem::XLineEndItem(SfxItemPool* /*pPool*/, const basegfx::B2DPolyPolygon& rPolyPolygon)
-:   NameOrIndex( XATTR_LINEEND, -1 ),
+: 	NameOrIndex( XATTR_LINEEND, -1 ),
     maPolyPolygon(rPolyPolygon)
 {
 }
@@ -2088,13 +2268,17 @@ XLineEndItem::XLineEndItem(SfxItemPool* /*pPool*/, const basegfx::B2DPolyPolygon
 //*************************************************************************
 
 XLineEndItem::XLineEndItem(SfxItemPool* /*pPool*/)
-:   NameOrIndex(XATTR_LINEEND, -1 )
+:	NameOrIndex(XATTR_LINEEND, -1 )
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineEndItem::Clone(SfxItemPool* pPool) const
+|*	  XLineEndItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2105,7 +2289,11 @@ SfxPoolItem* XLineEndItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    int XLineEndItem::operator==(const SfxPoolItem& rItem) const
+|*	  int XLineEndItem::operator==(const SfxPoolItem& rItem) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	17.11.94
 |*
 *************************************************************************/
 
@@ -2116,22 +2304,30 @@ int XLineEndItem::operator==(const SfxPoolItem& rItem) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineEndItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XLineEndItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-SfxPoolItem* XLineEndItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineEndItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XLineEndItem(rIn);
 }
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineEndItem::Store(SvStream& rOut) const
+|*	  SfxPoolItem* XLineEndItem::Store(SvStream& rOut) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	17.11.94
 |*
 *************************************************************************/
 
-SvStream& XLineEndItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& XLineEndItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 {
     NameOrIndex::Store( rOut, nItemVersion );
 
@@ -2145,7 +2341,11 @@ SvStream& XLineEndItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const basegfx::B2DPolyPolygon& XLineEndItem::GetValue(const XLineEndTable* pTable) const
+|*	  const basegfx::B2DPolyPolygon& XLineEndItem::GetValue(const XLineEndTable* pTable) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -2207,11 +2407,11 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
         const SfxItemPool* pPool1 = &pModel->GetItemPool();
         if( aUniqueName.Len() && pPool1 )
         {
-            nCount = pPool1->GetItemCount2( XATTR_LINESTART );
+            nCount = pPool1->GetItemCount( XATTR_LINESTART );
 
             for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
             {
-                const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem2( XATTR_LINESTART, nSurrogate );
+                const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem( XATTR_LINESTART, nSurrogate );
 
                 if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
                 {
@@ -2229,11 +2429,11 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
 
             if( !bForceNew )
             {
-                nCount = pPool1->GetItemCount2( XATTR_LINEEND );
+                nCount = pPool1->GetItemCount( XATTR_LINEEND );
 
                 for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
                 {
-                    const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem2( XATTR_LINEEND, nSurrogate );
+                    const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem( XATTR_LINEEND, nSurrogate );
 
                     if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
                     {
@@ -2254,10 +2454,10 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
         const SfxItemPool* pPool2 = pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL;
         if( aUniqueName.Len() && pPool2)
         {
-            nCount = pPool2->GetItemCount2( XATTR_LINESTART );
+            nCount = pPool2->GetItemCount( XATTR_LINESTART );
             for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
             {
-                const XLineStartItem* pItem = (const XLineStartItem*)pPool2->GetItem2( XATTR_LINESTART, nSurrogate );
+                const XLineStartItem* pItem = (const XLineStartItem*)pPool2->GetItem( XATTR_LINESTART, nSurrogate );
 
                 if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
                 {
@@ -2275,10 +2475,10 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
 
             if( !bForceNew )
             {
-                nCount = pPool2->GetItemCount2( XATTR_LINEEND );
+                nCount = pPool2->GetItemCount( XATTR_LINEEND );
                 for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
                 {
-                    const XLineEndItem* pItem = (const XLineEndItem*)pPool2->GetItem2( XATTR_LINEEND, nSurrogate );
+                    const XLineEndItem* pItem = (const XLineEndItem*)pPool2->GetItem( XATTR_LINEEND, nSurrogate );
 
                     if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
                     {
@@ -2308,12 +2508,12 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
 
             if( pPool1 )
             {
-                nCount = pPool1->GetItemCount2( XATTR_LINESTART );
-                sal_uInt32 nSurrogate2;
+                nCount = pPool1->GetItemCount( XATTR_LINESTART );
+                sal_uInt16 nSurrogate2;
 
                 for( nSurrogate2 = 0; nSurrogate2 < nCount; nSurrogate2++ )
                 {
-                    const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem2( XATTR_LINESTART, nSurrogate2 );
+                    const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem( XATTR_LINESTART, nSurrogate2 );
 
                     if( pItem && pItem->GetName().Len() )
                     {
@@ -2333,10 +2533,10 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                     }
                 }
 
-                nCount = pPool1->GetItemCount2( XATTR_LINEEND );
+                nCount = pPool1->GetItemCount( XATTR_LINEEND );
                 for( nSurrogate2 = 0; nSurrogate2 < nCount; nSurrogate2++ )
                 {
-                    const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem2( XATTR_LINEEND, nSurrogate2 );
+                    const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem( XATTR_LINEEND, nSurrogate2 );
 
                     if( pItem && pItem->GetName().Len() )
                     {
@@ -2389,10 +2589,10 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
 SfxItemPresentation XLineEndItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -2408,7 +2608,7 @@ SfxItemPresentation XLineEndItem::GetPresentation
     }
 }
 
-bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -2427,7 +2627,7 @@ bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemb
     return true;
 }
 
-bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -2464,7 +2664,11 @@ TYPEINIT1_AUTOFACTORY(XLineStartWidthItem, SfxMetricItem);
 
 /*************************************************************************
 |*
-|*    XLineStartWidthItem::XLineStartWidthItem(sal_Int32 nWidth)
+|*	  XLineStartWidthItem::XLineStartWidthItem(INT32 nWidth)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -2475,7 +2679,11 @@ XLineStartWidthItem::XLineStartWidthItem(long nWidth) :
 
 /*************************************************************************
 |*
-|*    XLineStartWidthItem::XLineStartWidthItem(SvStream& rIn)
+|*	  XLineStartWidthItem::XLineStartWidthItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2486,7 +2694,11 @@ XLineStartWidthItem::XLineStartWidthItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XLineStartWidthItem::Clone(SfxItemPool* pPool) const
+|*	  XLineStartWidthItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2497,12 +2709,16 @@ SfxPoolItem* XLineStartWidthItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineStartWidthItem::Create(SvStream& rIn, sal_uInt16 nVer)
-|*                                              const
+|*	  SfxPoolItem* XLineStartWidthItem::Create(SvStream& rIn, USHORT nVer)
+|*												const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-SfxPoolItem* XLineStartWidthItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineStartWidthItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XLineStartWidthItem(rIn);
 }
@@ -2512,10 +2728,10 @@ SfxPoolItem* XLineStartWidthItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) con
 SfxItemPresentation XLineStartWidthItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxMapUnit			eCoreUnit,
+    SfxMapUnit			ePresUnit,
     XubString&          rText, const IntlWrapper * pIntl
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -2533,13 +2749,13 @@ SfxItemPresentation XLineStartWidthItem::GetPresentation
     }
 }
 
-bool XLineStartWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineStartWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
     return true;
 }
 
-bool XLineStartWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineStartWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
@@ -2556,7 +2772,11 @@ TYPEINIT1_AUTOFACTORY(XLineEndWidthItem, SfxMetricItem);
 
 /*************************************************************************
 |*
-|*    XLineEndWidthItem::XLineEndWidthItem(long nWidth)
+|*	  XLineEndWidthItem::XLineEndWidthItem(long nWidth)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2567,7 +2787,11 @@ XLineEndWidthItem::XLineEndWidthItem(long nWidth) :
 
 /*************************************************************************
 |*
-|*    XLineEndWidthItem::XLineEndWidthItem(SvStream& rIn)
+|*	  XLineEndWidthItem::XLineEndWidthItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2578,7 +2802,11 @@ XLineEndWidthItem::XLineEndWidthItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XLineEndWidthItem::Clone(SfxItemPool* pPool) const
+|*	  XLineEndWidthItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2589,11 +2817,15 @@ SfxPoolItem* XLineEndWidthItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineEndWidthItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XLineEndWidthItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-SfxPoolItem* XLineEndWidthItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineEndWidthItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XLineEndWidthItem(rIn);
 }
@@ -2603,10 +2835,10 @@ SfxPoolItem* XLineEndWidthItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 SfxItemPresentation XLineEndWidthItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxMapUnit			eCoreUnit,
+    SfxMapUnit			ePresUnit,
     XubString&          rText, const IntlWrapper *pIntl
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -2624,13 +2856,13 @@ SfxItemPresentation XLineEndWidthItem::GetPresentation
     }
 }
 
-bool XLineEndWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineEndWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
     return true;
 }
 
-bool XLineEndWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineEndWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
@@ -2646,18 +2878,26 @@ TYPEINIT1_AUTOFACTORY(XLineStartCenterItem, SfxBoolItem);
 
 /*************************************************************************
 |*
-|*    XLineStartCenterItem::XLineStartCenterItem(sal_Bool bStartCenter)
+|*	  XLineStartCenterItem::XLineStartCenterItem(BOOL bStartCenter)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-XLineStartCenterItem::XLineStartCenterItem(sal_Bool bStartCenter) :
+XLineStartCenterItem::XLineStartCenterItem(BOOL bStartCenter) :
     SfxBoolItem(XATTR_LINESTARTCENTER, bStartCenter)
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineStartCenterItem::XLineStartCenterItem(SvStream& rIn)
+|*	  XLineStartCenterItem::XLineStartCenterItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2668,7 +2908,11 @@ XLineStartCenterItem::XLineStartCenterItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XLineStartCenterItem::Clone(SfxItemPool* pPool) const
+|*	  XLineStartCenterItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2679,12 +2923,16 @@ SfxPoolItem* XLineStartCenterItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineStartCenterItem::Create(SvStream& rIn, sal_uInt16 nVer)
-|*                                              const
+|*	  SfxPoolItem* XLineStartCenterItem::Create(SvStream& rIn, USHORT nVer)
+|*												const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-SfxPoolItem* XLineStartCenterItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineStartCenterItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XLineStartCenterItem(rIn);
 }
@@ -2694,10 +2942,10 @@ SfxPoolItem* XLineStartCenterItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) co
 SfxItemPresentation XLineStartCenterItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -2714,14 +2962,14 @@ SfxItemPresentation XLineStartCenterItem::GetPresentation
     }
 }
 
-bool XLineStartCenterItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineStartCenterItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     sal_Bool bValue = GetValue();
     rVal.setValue( &bValue, ::getCppuBooleanType()  );
     return true;
 }
 
-bool XLineStartCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineStartCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     if( !rVal.hasValue() || rVal.getValueType() != ::getCppuBooleanType() )
         return false;
@@ -2738,18 +2986,26 @@ TYPEINIT1_AUTOFACTORY(XLineEndCenterItem, SfxBoolItem);
 
 /*************************************************************************
 |*
-|*    XLineEndCenterItem::XLineEndCenterItem(sal_Bool bEndCenter)
+|*	  XLineEndCenterItem::XLineEndCenterItem(BOOL bEndCenter)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-XLineEndCenterItem::XLineEndCenterItem(sal_Bool bEndCenter) :
+XLineEndCenterItem::XLineEndCenterItem(BOOL bEndCenter) :
     SfxBoolItem(XATTR_LINEENDCENTER, bEndCenter)
 {
 }
 
 /*************************************************************************
 |*
-|*    XLineEndCenterItem::XLineEndCenterItem(SvStream& rIn)
+|*	  XLineEndCenterItem::XLineEndCenterItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2760,7 +3016,11 @@ XLineEndCenterItem::XLineEndCenterItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XLineEndCenterItem::Clone(SfxItemPool* pPool) const
+|*	  XLineEndCenterItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2771,12 +3031,16 @@ SfxPoolItem* XLineEndCenterItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineEndCenterItem::Create(SvStream& rIn, sal_uInt16 nVer)
-|*                                              const
+|*	  SfxPoolItem* XLineEndCenterItem::Create(SvStream& rIn, USHORT nVer)
+|*												const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-SfxPoolItem* XLineEndCenterItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XLineEndCenterItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XLineEndCenterItem(rIn);
 }
@@ -2786,10 +3050,10 @@ SfxPoolItem* XLineEndCenterItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) cons
 SfxItemPresentation XLineEndCenterItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -2806,14 +3070,14 @@ SfxItemPresentation XLineEndCenterItem::GetPresentation
     }
 }
 
-bool XLineEndCenterItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineEndCenterItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     sal_Bool bValue = GetValue();
     rVal.setValue( &bValue, ::getCppuBooleanType()  );
     return true;
 }
 
-bool XLineEndCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineEndCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     if( !rVal.hasValue() || rVal.getValueType() != ::getCppuBooleanType() )
         return false;
@@ -2824,7 +3088,7 @@ bool XLineEndCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
 
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                           Fuellattribute
+//							 Fuellattribute
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // --------------------
@@ -2834,18 +3098,26 @@ TYPEINIT1_AUTOFACTORY(XFillStyleItem, SfxEnumItem);
 
 /*************************************************************************
 |*
-|*    XFillStyleItem::XFillStyleItem(XFillStyle eFillStyle)
+|*	  XFillStyleItem::XFillStyleItem(XFillStyle eFillStyle)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
 XFillStyleItem::XFillStyleItem(XFillStyle eFillStyle) :
-    SfxEnumItem(XATTR_FILLSTYLE, sal::static_int_cast< sal_uInt16 >(eFillStyle))
+    SfxEnumItem(XATTR_FILLSTYLE, sal::static_int_cast< USHORT >(eFillStyle))
 {
 }
 
 /*************************************************************************
 |*
-|*    XFillStyleItem::XFillStyleItem(SvStream& rIn)
+|*	  XFillStyleItem::XFillStyleItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2856,7 +3128,11 @@ XFillStyleItem::XFillStyleItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFillStyleItem::Clone(SfxItemPool* pPool) const
+|*	  XFillStyleItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	09.11.94
+|*	  Letzte Aenderung	09.11.94
 |*
 *************************************************************************/
 
@@ -2867,11 +3143,15 @@ SfxPoolItem* XFillStyleItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillStyleItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XFillStyleItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFillStyleItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFillStyleItem(rIn);
 }
@@ -2881,10 +3161,10 @@ SfxPoolItem* XFillStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 SfxItemPresentation XFillStyleItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     rText.Erase();
 
@@ -2896,9 +3176,9 @@ SfxItemPresentation XFillStyleItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            sal_uInt16 nId = 0;
+            USHORT nId = 0;
 
-            switch( (sal_uInt16)GetValue() )
+            switch( (USHORT)GetValue() )
             {
                 case XFILL_NONE:
                     nId = RID_SVXSTR_INVISIBLE;
@@ -2928,13 +3208,13 @@ SfxItemPresentation XFillStyleItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-sal_uInt16 XFillStyleItem::GetValueCount() const
+USHORT XFillStyleItem::GetValueCount() const
 {
     return 5;
 }
 
 // -----------------------------------------------------------------------
-bool XFillStyleItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XFillStyleItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     ::com::sun::star::drawing::FillStyle eFS = (::com::sun::star::drawing::FillStyle)GetValue();
 
@@ -2944,7 +3224,7 @@ bool XFillStyleItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*n
 }
 
 // -----------------------------------------------------------------------
-bool XFillStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XFillStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     ::com::sun::star::drawing::FillStyle eFS;
     if(!(rVal >>= eFS))
@@ -2956,7 +3236,7 @@ bool XFillStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
         eFS = (::com::sun::star::drawing::FillStyle)nFS;
     }
 
-    SetValue( sal::static_int_cast< sal_uInt16 >( eFS ) );
+    SetValue( sal::static_int_cast< USHORT >( eFS ) );
 
     return true;
 }
@@ -2969,18 +3249,26 @@ TYPEINIT1_AUTOFACTORY(XFillColorItem, XColorItem);
 
 /*************************************************************************
 |*
-|*    XFillColorItem::XFillColorItem(sal_Int32 nIndex, const Color& rTheColor)
+|*	  XFillColorItem::XFillColorItem(INT32 nIndex, const Color& rTheColor)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-XFillColorItem::XFillColorItem(sal_Int32 nIndex, const Color& rTheColor) :
+XFillColorItem::XFillColorItem(INT32 nIndex, const Color& rTheColor) :
     XColorItem(XATTR_FILLCOLOR, nIndex, rTheColor)
 {
 }
 
 /*************************************************************************
 |*
-|*    XFillColorItem::XFillColorItem(const XubString& rName, const Color& rTheColor)
+|*	  XFillColorItem::XFillColorItem(const XubString& rName, const Color& rTheColor)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -2991,7 +3279,11 @@ XFillColorItem::XFillColorItem(const XubString& rName, const Color& rTheColor) :
 
 /*************************************************************************
 |*
-|*    XFillColorItem::XFillColorItem(SvStream& rIn)
+|*	  XFillColorItem::XFillColorItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3002,7 +3294,11 @@ XFillColorItem::XFillColorItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFillColorItem::Clone(SfxItemPool* pPool) const
+|*	  XFillColorItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3013,11 +3309,15 @@ SfxPoolItem* XFillColorItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillColorItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XFillColorItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillColorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFillColorItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFillColorItem(rIn);
 }
@@ -3027,10 +3327,10 @@ SfxPoolItem* XFillColorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 SfxItemPresentation XFillColorItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -3048,7 +3348,7 @@ SfxItemPresentation XFillColorItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-bool XFillColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XFillColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetColorValue().GetRGBColor();
 
@@ -3057,7 +3357,7 @@ bool XFillColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*n
 
 // -----------------------------------------------------------------------
 
-bool XFillColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XFillColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     if(!(rVal >>= nValue ))
@@ -3072,7 +3372,7 @@ bool XFillColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
 // -----------------------------
 TYPEINIT1_AUTOFACTORY(XSecondaryFillColorItem, XColorItem);
 
-XSecondaryFillColorItem::XSecondaryFillColorItem(sal_Int32 nIndex, const Color& rTheColor) :
+XSecondaryFillColorItem::XSecondaryFillColorItem(INT32 nIndex, const Color& rTheColor) :
     XColorItem(XATTR_SECONDARYFILLCOLOR, nIndex, rTheColor)
 {
 }
@@ -3092,24 +3392,24 @@ SfxPoolItem* XSecondaryFillColorItem::Clone(SfxItemPool* /*pPool*/) const
     return new XSecondaryFillColorItem(*this);
 }
 
-SfxPoolItem* XSecondaryFillColorItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
+SfxPoolItem* XSecondaryFillColorItem::Create( SvStream& rIn, USHORT nVer ) const
 {
     if ( nVer >= 2 )
         return new XSecondaryFillColorItem( rIn );
     else
         return new XSecondaryFillColorItem( String(), Color(0,184,255) );
 }
-sal_uInt16 XSecondaryFillColorItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/ ) const
+USHORT XSecondaryFillColorItem::GetVersion( USHORT /*nFileFormatVersion*/ ) const
 {
     return 2;
 }
 SfxItemPresentation XSecondaryFillColorItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -3152,15 +3452,19 @@ XGradient::XGradient() :
 /*************************************************************************
 |*
 |*    XGradient::XGradient(XGradientStyle, const Color&, const Color&,
-|*                         long, sal_uInt16, sal_uInt16, sal_uInt16)
+|*                         long, USHORT, USHORT, USHORT)
+|*
+|*    Beschreibung
+|*    Ersterstellung    21.11.94
+|*    Letzte Aenderung  21.11.94
 |*
 *************************************************************************/
 
 XGradient::XGradient(const Color& rStart, const Color& rEnd,
-                     XGradientStyle eTheStyle, long nTheAngle, sal_uInt16 nXOfs,
-                     sal_uInt16 nYOfs, sal_uInt16 nTheBorder,
-                     sal_uInt16 nStartIntens, sal_uInt16 nEndIntens,
-                     sal_uInt16 nSteps) :
+                     XGradientStyle eTheStyle, long nTheAngle, USHORT nXOfs,
+                     USHORT nYOfs, USHORT nTheBorder,
+                     USHORT nStartIntens, USHORT nEndIntens,
+                     USHORT nSteps) :
     eStyle(eTheStyle),
     aStartColor(rStart),
     aEndColor(rEnd),
@@ -3176,22 +3480,26 @@ XGradient::XGradient(const Color& rStart, const Color& rEnd,
 
 /*************************************************************************
 |*
-|*    int XGradient::operator==(const SfxPoolItem& rItem) const
+|*	  int XGradient::operator==(const SfxPoolItem& rItem) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	29.11.94
+|*	  Letzte Aenderung	29.11.94
 |*
 *************************************************************************/
 
 bool XGradient::operator==(const XGradient& rGradient) const
 {
-    return ( eStyle         == rGradient.eStyle         &&
-             aStartColor    == rGradient.aStartColor    &&
-             aEndColor      == rGradient.aEndColor      &&
-             nAngle         == rGradient.nAngle         &&
-             nBorder        == rGradient.nBorder        &&
-             nOfsX          == rGradient.nOfsX          &&
-             nOfsY          == rGradient.nOfsY          &&
-             nIntensStart   == rGradient.nIntensStart   &&
-             nIntensEnd     == rGradient.nIntensEnd     &&
-             nStepCount     == rGradient.nStepCount );
+    return ( eStyle 		== rGradient.eStyle 		&&
+             aStartColor	== rGradient.aStartColor	&&
+             aEndColor		== rGradient.aEndColor		&&
+             nAngle 		== rGradient.nAngle 		&&
+             nBorder		== rGradient.nBorder		&&
+             nOfsX			== rGradient.nOfsX			&&
+             nOfsY			== rGradient.nOfsY			&&
+             nIntensStart	== rGradient.nIntensStart	&&
+             nIntensEnd		== rGradient.nIntensEnd		&&
+             nStepCount		== rGradient.nStepCount );
 }
 
 
@@ -3202,12 +3510,16 @@ TYPEINIT1_AUTOFACTORY(XFillGradientItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XFillGradientItem::XFillGradientItem(sal_Int32 nIndex,
-|*                                       const XGradient& rTheGradient)
+|*	  XFillGradientItem::XFillGradientItem(INT32 nIndex,
+|*										 const XGradient& rTheGradient)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-XFillGradientItem::XFillGradientItem(sal_Int32 nIndex,
+XFillGradientItem::XFillGradientItem(INT32 nIndex,
                                    const XGradient& rTheGradient) :
     NameOrIndex(XATTR_FILLGRADIENT, nIndex),
     aGradient(rTheGradient)
@@ -3216,8 +3528,12 @@ XFillGradientItem::XFillGradientItem(sal_Int32 nIndex,
 
 /*************************************************************************
 |*
-|*    XFillGradientItem::XFillGradientItem(const XubString& rName,
-|*                                       const XGradient& rTheGradient)
+|*	  XFillGradientItem::XFillGradientItem(const XubString& rName,
+|*										 const XGradient& rTheGradient)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3230,7 +3546,11 @@ XFillGradientItem::XFillGradientItem(const XubString& rName,
 
 /*************************************************************************
 |*
-|*    XFillGradientItem::XFillGradientItem(const XFillGradientItem& rItem)
+|*	  XFillGradientItem::XFillGradientItem(const XFillGradientItem& rItem)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3242,35 +3562,39 @@ XFillGradientItem::XFillGradientItem(const XFillGradientItem& rItem) :
 
 /*************************************************************************
 |*
-|*    XFillGradientItem::XFillGradientItem(SvStream& rIn)
+|*	  XFillGradientItem::XFillGradientItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-XFillGradientItem::XFillGradientItem(SvStream& rIn, sal_uInt16 nVer) :
+XFillGradientItem::XFillGradientItem(SvStream& rIn, USHORT nVer) :
     NameOrIndex(XATTR_FILLGRADIENT, rIn),
     aGradient(COL_BLACK, COL_WHITE)
 {
     if (!IsIndex())
     {
-        sal_uInt16 nUSTemp;
-        sal_uInt16 nRed;
-        sal_uInt16 nGreen;
-        sal_uInt16 nBlue;
-        sal_Int16  nITemp;
-        sal_Int32  nLTemp;
+        USHORT nUSTemp;
+        USHORT nRed;
+        USHORT nGreen;
+        USHORT nBlue;
+        INT16  nITemp;
+        INT32  nLTemp;
 
         rIn >> nITemp; aGradient.SetGradientStyle((XGradientStyle)nITemp);
         rIn >> nRed;
         rIn >> nGreen;
         rIn >> nBlue;
         Color aCol;
-        aCol = Color( (sal_uInt8)( nRed >> 8 ), (sal_uInt8)( nGreen >> 8 ), (sal_uInt8)( nBlue >> 8 ) );
+        aCol = Color( (BYTE)( nRed >> 8 ), (BYTE)( nGreen >> 8 ), (BYTE)( nBlue >> 8 ) );
         aGradient.SetStartColor( aCol );
 
         rIn >> nRed;
         rIn >> nGreen;
         rIn >> nBlue;
-        aCol = Color( (sal_uInt8)( nRed >> 8 ), (sal_uInt8)( nGreen >> 8 ), (sal_uInt8)( nBlue >> 8 ) );
+        aCol = Color( (BYTE)( nRed >> 8 ), (BYTE)( nGreen >> 8 ), (BYTE)( nBlue >> 8 ) );
         aGradient.SetEndColor(aCol);
         rIn >> nLTemp; aGradient.SetAngle(nLTemp);
         rIn >> nUSTemp; aGradient.SetBorder(nUSTemp);
@@ -3291,7 +3615,7 @@ XFillGradientItem::XFillGradientItem(SvStream& rIn, sal_uInt16 nVer) :
 //*************************************************************************
 
 XFillGradientItem::XFillGradientItem(SfxItemPool* /*pPool*/, const XGradient& rTheGradient)
-:   NameOrIndex( XATTR_FILLGRADIENT, -1 ),
+: 	NameOrIndex( XATTR_FILLGRADIENT, -1 ),
     aGradient(rTheGradient)
 {
 }
@@ -3305,7 +3629,11 @@ XFillGradientItem::XFillGradientItem(SfxItemPool* /*pPool*/)
 
 /*************************************************************************
 |*
-|*    XFillGradientItem::Clone(SfxItemPool* pPool) const
+|*	  XFillGradientItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3316,7 +3644,11 @@ SfxPoolItem* XFillGradientItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    int XFillGradientItem::operator==(const SfxPoolItem& rItem) const
+|*	  int XFillGradientItem::operator==(const SfxPoolItem& rItem) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3328,30 +3660,38 @@ int XFillGradientItem::operator==(const SfxPoolItem& rItem) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillGradientItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XFillGradientItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillGradientItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+SfxPoolItem* XFillGradientItem::Create(SvStream& rIn, USHORT nVer) const
 {
     return new XFillGradientItem(rIn, nVer);
 }
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillGradientItem::Store(SvStream& rOut) const
+|*	  SfxPoolItem* XFillGradientItem::Store(SvStream& rOut) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-SvStream& XFillGradientItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& XFillGradientItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 {
     NameOrIndex::Store( rOut, nItemVersion );
 
     if (!IsIndex())
     {
-        rOut << (sal_Int16)aGradient.GetGradientStyle();
+        rOut << (INT16)aGradient.GetGradientStyle();
 
-        sal_uInt16 nTmp;
+        USHORT nTmp;
 
         nTmp = VCLTOSVCOL( aGradient.GetStartColor().GetRed() ); rOut << nTmp;
         nTmp = VCLTOSVCOL( aGradient.GetStartColor().GetGreen() ); rOut << nTmp;
@@ -3360,7 +3700,7 @@ SvStream& XFillGradientItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) co
         nTmp = VCLTOSVCOL( aGradient.GetEndColor().GetGreen() ); rOut << nTmp;
         nTmp = VCLTOSVCOL( aGradient.GetEndColor().GetBlue() ); rOut << nTmp;
 
-        rOut << (sal_Int32) aGradient.GetAngle();
+        rOut << (INT32) aGradient.GetAngle();
         rOut << aGradient.GetBorder();
         rOut << aGradient.GetXOffset();
         rOut << aGradient.GetYOffset();
@@ -3374,8 +3714,12 @@ SvStream& XFillGradientItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) co
 
 /*************************************************************************
 |*
-|*    const XGradient& XFillGradientItem::GetValue(const XGradientTable* pTable)
-|*                                                                 const
+|*	  const XGradient& XFillGradientItem::GetValue(const XGradientTable* pTable)
+|*																   const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -3390,11 +3734,15 @@ const XGradient& XFillGradientItem::GetGradientValue(const XGradientTable* pTabl
 
 /*************************************************************************
 |*
-|*    sal_uInt16 XFillGradientItem::GetVersion() const
+|*	  USHORT XFillGradientItem::GetVersion() const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	01.11.95
+|*	  Letzte Aenderung	01.11.95
 |*
 *************************************************************************/
 
-sal_uInt16 XFillGradientItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
+USHORT XFillGradientItem::GetVersion( USHORT /*nFileFormatVersion*/) const
 {
     // !!! this version number also represents the version number of superclasses
     // !!! (e.g. XFillFloatTransparenceItem); if you make any changes here,
@@ -3407,10 +3755,10 @@ sal_uInt16 XFillGradientItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) con
 SfxItemPresentation XFillGradientItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -3427,7 +3775,7 @@ SfxItemPresentation XFillGradientItem::GetPresentation
 }
 
 // -----------------------------------------------------------------------
-bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
     //sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -3441,8 +3789,8 @@ bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 
 
             const XGradient& aXGradient = GetGradientValue();
             aGradient2.Style = (::com::sun::star::awt::GradientStyle) aXGradient.GetGradientStyle();
-            aGradient2.StartColor = (sal_Int32)aXGradient.GetStartColor().GetColor();
-            aGradient2.EndColor = (sal_Int32)aXGradient.GetEndColor().GetColor();
+            aGradient2.StartColor = (INT32)aXGradient.GetStartColor().GetColor();
+            aGradient2.EndColor = (INT32)aXGradient.GetEndColor().GetColor();
             aGradient2.Angle = (short)aXGradient.GetAngle();
             aGradient2.Border = aXGradient.GetBorder();
             aGradient2.XOffset = aXGradient.GetXOffset();
@@ -3467,8 +3815,8 @@ bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 
             ::com::sun::star::awt::Gradient aGradient2;
 
             aGradient2.Style = (::com::sun::star::awt::GradientStyle) aXGradient.GetGradientStyle();
-            aGradient2.StartColor = (sal_Int32)aXGradient.GetStartColor().GetColor();
-            aGradient2.EndColor = (sal_Int32)aXGradient.GetEndColor().GetColor();
+            aGradient2.StartColor = (INT32)aXGradient.GetStartColor().GetColor();
+            aGradient2.EndColor = (INT32)aXGradient.GetEndColor().GetColor();
             aGradient2.Angle = (short)aXGradient.GetAngle();
             aGradient2.Border = aXGradient.GetBorder();
             aGradient2.XOffset = aXGradient.GetXOffset();
@@ -3500,14 +3848,14 @@ bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 
         case MID_GRADIENT_ENDINTENSITY: rVal <<= GetGradientValue().GetEndIntens(); break;
         case MID_GRADIENT_STEPCOUNT: rVal <<= GetGradientValue().GetSteps(); break;
 
-        default: OSL_FAIL("Wrong MemberId!"); return false;
+        default: DBG_ERROR("Wrong MemberId!"); return false;
     }
 
     return true;
 }
 
 // -----------------------------------------------------------------------
-bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -3651,7 +3999,7 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
     return true;
 }
 
-sal_Bool XFillGradientItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
+BOOL XFillGradientItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
     return ((XFillGradientItem*)p1)->GetGradientValue() == ((XFillGradientItem*)p2)->GetGradientValue();
 }
@@ -3660,7 +4008,7 @@ XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) con
 {
     if( pModel )
     {
-        const String aUniqueName = NameOrIndex::CheckNamedItem( this,
+        const String aUniqueName = NameOrIndex::CheckNamedItem(	this,
                                                                 XATTR_FILLGRADIENT,
                                                                 &pModel->GetItemPool(),
                                                                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
@@ -3687,25 +4035,25 @@ TYPEINIT1_AUTOFACTORY( XFillFloatTransparenceItem, XFillGradientItem );
 // -----------------------------------------------------------------------------
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem() :
-    bEnabled( sal_False )
+    bEnabled( FALSE )
 {
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
 
 //------------------------------------------------------------------------
 
-XFillFloatTransparenceItem::XFillFloatTransparenceItem( sal_Int32 nIndex, const XGradient& rGradient, sal_Bool bEnable ) :
-    XFillGradientItem   ( nIndex, rGradient ),
-    bEnabled            ( bEnable )
+XFillFloatTransparenceItem::XFillFloatTransparenceItem( INT32 nIndex, const XGradient& rGradient, BOOL bEnable ) :
+    XFillGradientItem	( nIndex, rGradient ),
+    bEnabled			( bEnable )
 {
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
 
 //------------------------------------------------------------------------
 
-XFillFloatTransparenceItem::XFillFloatTransparenceItem(const XubString& rName, const XGradient& rGradient, sal_Bool bEnable ) :
-    XFillGradientItem   ( rName, rGradient ),
-    bEnabled            ( bEnable )
+XFillFloatTransparenceItem::XFillFloatTransparenceItem(const XubString& rName, const XGradient& rGradient, BOOL bEnable ) :
+    XFillGradientItem	( rName, rGradient ),
+    bEnabled			( bEnable )
 {
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
@@ -3713,26 +4061,26 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem(const XubString& rName, c
 //------------------------------------------------------------------------
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem( const XFillFloatTransparenceItem& rItem ) :
-    XFillGradientItem   ( rItem ),
-    bEnabled            ( rItem.bEnabled )
+    XFillGradientItem	( rItem ),
+    bEnabled			( rItem.bEnabled )
 {
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
 
 //------------------------------------------------------------------------
 
-//XFillFloatTransparenceItem::XFillFloatTransparenceItem( SvStream& rIn, sal_uInt16 nVer ) :
-//  XFillGradientItem   ( rIn, nVer )
+//XFillFloatTransparenceItem::XFillFloatTransparenceItem( SvStream& rIn, USHORT nVer ) :
+//	XFillGradientItem	( rIn, nVer )
 //{
-//  SetWhich( XATTR_FILLFLOATTRANSPARENCE );
-//  rIn >> bEnabled;
+//	SetWhich( XATTR_FILLFLOATTRANSPARENCE );
+//	rIn >> bEnabled;
 //}
 
 //*************************************************************************
 
-XFillFloatTransparenceItem::XFillFloatTransparenceItem(SfxItemPool* /*pPool*/, const XGradient& rTheGradient, sal_Bool bEnable )
-:   XFillGradientItem   ( -1, rTheGradient ),
-    bEnabled            ( bEnable )
+XFillFloatTransparenceItem::XFillFloatTransparenceItem(SfxItemPool* /*pPool*/, const XGradient& rTheGradient, BOOL bEnable )
+: 	XFillGradientItem	( -1, rTheGradient ),
+    bEnabled			( bEnable )
 {
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
@@ -3762,46 +4110,46 @@ SfxPoolItem* XFillFloatTransparenceItem::Clone( SfxItemPool* /*pPool*/) const
 
 //------------------------------------------------------------------------
 
-//SfxPoolItem* XFillFloatTransparenceItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
+//SfxPoolItem* XFillFloatTransparenceItem::Create( SvStream& rIn, USHORT nVer ) const
 //{
-//  return( ( 0 == nVer ) ? Clone( NULL ) : new XFillFloatTransparenceItem( rIn, nVer ) );
+//	return( ( 0 == nVer ) ? Clone( NULL ) : new XFillFloatTransparenceItem( rIn, nVer ) );
 //}
 
 //------------------------------------------------------------------------
 
-//SvStream& XFillFloatTransparenceItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+//SvStream& XFillFloatTransparenceItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 //{
-//  XFillGradientItem::Store( rOut, nItemVersion );
-//  rOut << bEnabled;
-//  return rOut;
+//	XFillGradientItem::Store( rOut, nItemVersion );
+//	rOut << bEnabled;
+//	return rOut;
 //}
 
 //------------------------------------------------------------------------
 
-sal_uInt16 XFillFloatTransparenceItem::GetVersion( sal_uInt16 nFileFormatVersion ) const
+USHORT XFillFloatTransparenceItem::GetVersion( USHORT nFileFormatVersion ) const
 {
-    // !!! if version number of this object must be increased, please   !!!
-    // !!! increase version number of base class XFillGradientItem      !!!
+    // !!! if version number of this object must be increased, please	!!!
+    // !!! increase version number of base class XFillGradientItem		!!!
     return XFillGradientItem::GetVersion( nFileFormatVersion );
 }
 
 //------------------------------------------------------------------------
 
-bool XFillFloatTransparenceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XFillFloatTransparenceItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
     return XFillGradientItem::QueryValue( rVal, nMemberId );
 }
 
 //------------------------------------------------------------------------
 
-bool XFillFloatTransparenceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XFillFloatTransparenceItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
     return XFillGradientItem::PutValue( rVal, nMemberId );
 }
 
 //------------------------------------------------------------------------
 
-SfxItemPresentation XFillFloatTransparenceItem::GetPresentation(    SfxItemPresentation ePres,
+SfxItemPresentation XFillFloatTransparenceItem::GetPresentation(	SfxItemPresentation ePres,
                                                                     SfxMapUnit eCoreUnit, SfxMapUnit ePresUnit,
                                                                     XubString& rText,
                                                                     const IntlWrapper * pIntlWrapper ) const
@@ -3809,9 +4157,9 @@ SfxItemPresentation XFillFloatTransparenceItem::GetPresentation(    SfxItemPrese
     return XFillGradientItem::GetPresentation( ePres, eCoreUnit, ePresUnit, rText, pIntlWrapper );
 }
 
-sal_Bool XFillFloatTransparenceItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
+BOOL XFillFloatTransparenceItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
-    return  ((XFillFloatTransparenceItem*)p1)->IsEnabled() == ((XFillFloatTransparenceItem*)p2)->IsEnabled() &&
+    return	((XFillFloatTransparenceItem*)p1)->IsEnabled() == ((XFillFloatTransparenceItem*)p2)->IsEnabled() &&
             ((XFillFloatTransparenceItem*)p1)->GetGradientValue()  == ((XFillFloatTransparenceItem*)p2)->GetGradientValue();
 }
 
@@ -3822,7 +4170,7 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
     {
         if( pModel )
         {
-            const String aUniqueName = NameOrIndex::CheckNamedItem( this,
+            const String aUniqueName = NameOrIndex::CheckNamedItem(	this,
                                                                     XATTR_FILLFLOATTRANSPARENCE,
                                                                     &pModel->GetItemPool(),
                                                                     pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
@@ -3833,7 +4181,7 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
             // if the given name is not valid, replace it!
             if( aUniqueName != GetName() )
             {
-                return new XFillFloatTransparenceItem( aUniqueName, GetGradientValue(), sal_True );
+                return new XFillFloatTransparenceItem( aUniqueName, GetGradientValue(), TRUE );
             }
         }
     }
@@ -3842,7 +4190,7 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
         // #85953# if disabled, force name to empty string
         if(GetName().Len())
         {
-            return new XFillFloatTransparenceItem(String(), GetGradientValue(), sal_False);
+            return new XFillFloatTransparenceItem(String(), GetGradientValue(), FALSE);
         }
     }
 
@@ -3855,7 +4203,11 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
 
 /*************************************************************************
 |*
-|*    XHatch::XHatch(XHatchStyle, const Color&, long, long)
+|*	  XHatch::XHatch(XHatchStyle, const Color&, long, long)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	21.11.94
+|*	  Letzte Aenderung	21.11.94
 |*
 *************************************************************************/
 
@@ -3870,16 +4222,20 @@ XHatch::XHatch(const Color& rCol, XHatchStyle eTheStyle, long nTheDistance,
 
 /*************************************************************************
 |*
-|*    int XHatch::operator==(const SfxPoolItem& rItem) const
+|*	  int XHatch::operator==(const SfxPoolItem& rItem) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	29.11.94
+|*	  Letzte Aenderung	29.11.94
 |*
 *************************************************************************/
 
 bool XHatch::operator==(const XHatch& rHatch) const
 {
-    return ( eStyle     == rHatch.eStyle    &&
-             aColor     == rHatch.aColor    &&
-             nDistance  == rHatch.nDistance &&
-             nAngle     == rHatch.nAngle );
+    return ( eStyle 	== rHatch.eStyle	&&
+             aColor 	== rHatch.aColor	&&
+             nDistance	== rHatch.nDistance &&
+             nAngle 	== rHatch.nAngle );
 }
 
 
@@ -3890,12 +4246,16 @@ TYPEINIT1_AUTOFACTORY(XFillHatchItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XFillHatchItem::XFillHatchItem(sal_Int32 nIndex,
-|*                                 const XHatch& rTheHatch)
+|*	  XFillHatchItem::XFillHatchItem(INT32 nIndex,
+|*								   const XHatch& rTheHatch)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-XFillHatchItem::XFillHatchItem(sal_Int32 nIndex,
+XFillHatchItem::XFillHatchItem(INT32 nIndex,
                              const XHatch& rTheHatch) :
     NameOrIndex(XATTR_FILLHATCH, nIndex),
     aHatch(rTheHatch)
@@ -3904,8 +4264,12 @@ XFillHatchItem::XFillHatchItem(sal_Int32 nIndex,
 
 /*************************************************************************
 |*
-|*    XFillHatchItem::XFillHatchItem(const XubString& rName,
-|*                                 const XHatch& rTheHatch)
+|*	  XFillHatchItem::XFillHatchItem(const XubString& rName,
+|*								   const XHatch& rTheHatch)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3918,7 +4282,11 @@ XFillHatchItem::XFillHatchItem(const XubString& rName,
 
 /*************************************************************************
 |*
-|*    XFillHatchItem::XFillHatchItem(const XFillHatchItem& rItem)
+|*	  XFillHatchItem::XFillHatchItem(const XFillHatchItem& rItem)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3930,7 +4298,11 @@ XFillHatchItem::XFillHatchItem(const XFillHatchItem& rItem) :
 
 /*************************************************************************
 |*
-|*    XFillHatchItem::XFillHatchItem(SvStream& rIn)
+|*	  XFillHatchItem::XFillHatchItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3940,11 +4312,11 @@ XFillHatchItem::XFillHatchItem(SvStream& rIn) :
 {
     if (!IsIndex())
     {
-        sal_uInt16 nRed;
-        sal_uInt16 nGreen;
-        sal_uInt16 nBlue;
-        sal_Int16  nITemp;
-        sal_Int32  nLTemp;
+        USHORT nRed;
+        USHORT nGreen;
+        USHORT nBlue;
+        INT16  nITemp;
+        INT32  nLTemp;
 
         rIn >> nITemp; aHatch.SetHatchStyle((XHatchStyle)nITemp);
         rIn >> nRed;
@@ -3952,7 +4324,7 @@ XFillHatchItem::XFillHatchItem(SvStream& rIn) :
         rIn >> nBlue;
 
         Color aCol;
-        aCol = Color( (sal_uInt8)( nRed >> 8 ), (sal_uInt8)( nGreen >> 8 ), (sal_uInt8)( nBlue >> 8 ) );
+        aCol = Color( (BYTE)( nRed >> 8 ), (BYTE)( nGreen >> 8 ), (BYTE)( nBlue >> 8 ) );
         aHatch.SetColor(aCol);
         rIn >> nLTemp; aHatch.SetDistance(nLTemp);
         rIn >> nLTemp; aHatch.SetAngle(nLTemp);
@@ -3962,7 +4334,7 @@ XFillHatchItem::XFillHatchItem(SvStream& rIn) :
 //*************************************************************************
 
 XFillHatchItem::XFillHatchItem(SfxItemPool* /*pPool*/, const XHatch& rTheHatch)
-:   NameOrIndex( XATTR_FILLHATCH, -1 ),
+: 	NameOrIndex( XATTR_FILLHATCH, -1 ),
     aHatch(rTheHatch)
 {
 }
@@ -3976,7 +4348,11 @@ XFillHatchItem::XFillHatchItem(SfxItemPool* /*pPool*/)
 
 /*************************************************************************
 |*
-|*    XFillHatchItem::Clone(SfxItemPool* pPool) const
+|*	  XFillHatchItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3987,7 +4363,11 @@ SfxPoolItem* XFillHatchItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    int XFillHatchItem::operator==(const SfxPoolItem& rItem) const
+|*	  int XFillHatchItem::operator==(const SfxPoolItem& rItem) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
@@ -3999,36 +4379,44 @@ int XFillHatchItem::operator==(const SfxPoolItem& rItem) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillHatchItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XFillHatchItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillHatchItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFillHatchItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFillHatchItem(rIn);
 }
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillHatchItem::Store(SvStream& rOut) const
+|*	  SfxPoolItem* XFillHatchItem::Store(SvStream& rOut) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	15.11.94
 |*
 *************************************************************************/
 
-SvStream& XFillHatchItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& XFillHatchItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 {
     NameOrIndex::Store( rOut, nItemVersion );
 
     if (!IsIndex())
     {
-        rOut << (sal_Int16)aHatch.GetHatchStyle();
+        rOut << (INT16)aHatch.GetHatchStyle();
 
-        sal_uInt16 nTmp;
+        USHORT nTmp;
         nTmp = VCLTOSVCOL( aHatch.GetColor().GetRed() ); rOut << nTmp;
         nTmp = VCLTOSVCOL( aHatch.GetColor().GetGreen() ); rOut << nTmp;
         nTmp = VCLTOSVCOL( aHatch.GetColor().GetBlue() ); rOut << nTmp;
 
-        rOut << (sal_Int32) aHatch.GetDistance();
-        rOut << (sal_Int32) aHatch.GetAngle();
+        rOut << (INT32) aHatch.GetDistance();
+        rOut << (INT32) aHatch.GetAngle();
     }
 
     return rOut;
@@ -4036,7 +4424,11 @@ SvStream& XFillHatchItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const XHatch& XFillHatchItem::GetValue(const XHatchTable* pTable) const
+|*	  const XHatch& XFillHatchItem::GetValue(const XHatchTable* pTable) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	15.11.94
+|*	  Letzte Aenderung	18.11.94
 |*
 *************************************************************************/
 
@@ -4053,10 +4445,10 @@ const XHatch& XFillHatchItem::GetHatchValue(const XHatchTable* pTable) const // 
 SfxItemPresentation XFillHatchItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
+    SfxMapUnit			/*eCoreUnit*/,
+    SfxMapUnit			/*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -4088,7 +4480,7 @@ bool XFillHatchItem::ScaleMetrics(long nMul, long nDiv)
 }
 
 // -----------------------------------------------------------------------
-bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -4145,14 +4537,14 @@ bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
         case MID_HATCH_ANGLE:
             rVal <<= aHatch.GetAngle(); break;
 
-        default: OSL_FAIL("Wrong MemberId!"); return false;
+        default: DBG_ERROR("Wrong MemberId!"); return false;
     }
 
     return true;
 }
 
 // -----------------------------------------------------------------------
-bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -4242,13 +4634,13 @@ bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
             break;
         }
 
-        default: OSL_FAIL("Wrong MemberId!"); return false;
+        default: DBG_ERROR("Wrong MemberId!"); return false;
     }
 
     return true;
 }
 
-sal_Bool XFillHatchItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
+BOOL XFillHatchItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
     return ((XFillHatchItem*)p1)->GetHatchValue() == ((XFillHatchItem*)p2)->GetHatchValue();
 }
@@ -4257,7 +4649,7 @@ XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
-        const String aUniqueName = NameOrIndex::CheckNamedItem( this,
+        const String aUniqueName = NameOrIndex::CheckNamedItem(	this,
                                                                 XATTR_FILLHATCH,
                                                                 &pModel->GetItemPool(),
                                                                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
@@ -4276,7 +4668,7 @@ XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                          FormText-Attribute
+//							FormText-Attribute
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //-------------------------
@@ -4286,18 +4678,26 @@ TYPEINIT1_AUTOFACTORY(XFormTextStyleItem, SfxEnumItem);
 
 /*************************************************************************
 |*
-|*    XFormTextStyleItem::XFormTextStyleItem()
+|*	  XFormTextStyleItem::XFormTextStyleItem()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
 XFormTextStyleItem::XFormTextStyleItem(XFormTextStyle eTheStyle) :
-    SfxEnumItem(XATTR_FORMTXTSTYLE, sal::static_int_cast< sal_uInt16 >(eTheStyle))
+    SfxEnumItem(XATTR_FORMTXTSTYLE, sal::static_int_cast< USHORT >(eTheStyle))
 {
 }
 
 /*************************************************************************
 |*
-|*    XFormTextStyleItem::XFormTextStyleItem(SvStream& rIn)
+|*	  XFormTextStyleItem::XFormTextStyleItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4308,7 +4708,11 @@ XFormTextStyleItem::XFormTextStyleItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextStyleItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextStyleItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4319,11 +4723,15 @@ SfxPoolItem* XFormTextStyleItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextStyleItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XFormTextStyleItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
-SfxPoolItem* XFormTextStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextStyleItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFormTextStyleItem(rIn);
 }
@@ -4334,7 +4742,7 @@ SfxPoolItem* XFormTextStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) cons
 |*
 \*************************************************************************/
 
-sal_uInt16 XFormTextStyleItem::GetValueCount() const
+USHORT XFormTextStyleItem::GetValueCount() const
 {
     return 5;
 }
@@ -4346,7 +4754,7 @@ sal_uInt16 XFormTextStyleItem::GetValueCount() const
 \*************************************************************************/
 
 // #FontWork#
-bool XFormTextStyleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XFormTextStyleItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
     return true;
@@ -4359,11 +4767,11 @@ bool XFormTextStyleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) co
 \*************************************************************************/
 
 // #FontWork#
-bool XFormTextStyleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XFormTextStyleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
-    SetValue(sal::static_int_cast< sal_uInt16 >(nValue));
+    SetValue(sal::static_int_cast< USHORT >(nValue));
 
     return true;
 }
@@ -4375,18 +4783,26 @@ TYPEINIT1_AUTOFACTORY(XFormTextAdjustItem, SfxEnumItem);
 
 /*************************************************************************
 |*
-|*    XFormTextAdjustItem::XFormTextAdjustItem()
+|*	  XFormTextAdjustItem::XFormTextAdjustItem()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
 XFormTextAdjustItem::XFormTextAdjustItem(XFormTextAdjust eTheAdjust) :
-    SfxEnumItem(XATTR_FORMTXTADJUST, sal::static_int_cast< sal_uInt16 >(eTheAdjust))
+    SfxEnumItem(XATTR_FORMTXTADJUST, sal::static_int_cast< USHORT >(eTheAdjust))
 {
 }
 
 /*************************************************************************
 |*
-|*    XFormTextAdjustItem::XFormTextAdjustItem(SvStream& rIn)
+|*	  XFormTextAdjustItem::XFormTextAdjustItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4397,7 +4813,11 @@ XFormTextAdjustItem::XFormTextAdjustItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextAdjustItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextAdjustItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4408,11 +4828,15 @@ SfxPoolItem* XFormTextAdjustItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextAdjustItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XFormTextAdjustItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
-SfxPoolItem* XFormTextAdjustItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextAdjustItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFormTextAdjustItem(rIn);
 }
@@ -4423,7 +4847,7 @@ SfxPoolItem* XFormTextAdjustItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) con
 |*
 \*************************************************************************/
 
-sal_uInt16 XFormTextAdjustItem::GetValueCount() const
+USHORT XFormTextAdjustItem::GetValueCount() const
 {
     return 4;
 }
@@ -4435,7 +4859,7 @@ sal_uInt16 XFormTextAdjustItem::GetValueCount() const
 \*************************************************************************/
 
 // #FontWork#
-bool XFormTextAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XFormTextAdjustItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
     return true;
@@ -4448,11 +4872,11 @@ bool XFormTextAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) c
 \*************************************************************************/
 
 // #FontWork#
-bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
-    SetValue(sal::static_int_cast< sal_uInt16 >(nValue));
+    SetValue(sal::static_int_cast< USHORT >(nValue));
 
     return true;
 }
@@ -4464,7 +4888,11 @@ TYPEINIT1_AUTOFACTORY(XFormTextDistanceItem, SfxMetricItem);
 
 /*************************************************************************
 |*
-|*    XFormTextDistanceItem::XFormTextDistanceItem()
+|*	  XFormTextDistanceItem::XFormTextDistanceItem()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4475,7 +4903,11 @@ XFormTextDistanceItem::XFormTextDistanceItem(long nDist) :
 
 /*************************************************************************
 |*
-|*    XFormTextDistanceItem::XFormTextDistanceItem(SvStream& rIn)
+|*	  XFormTextDistanceItem::XFormTextDistanceItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4486,7 +4918,11 @@ XFormTextDistanceItem::XFormTextDistanceItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextDistanceItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextDistanceItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4497,11 +4933,15 @@ SfxPoolItem* XFormTextDistanceItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextDistanceItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XFormTextDistanceItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
-SfxPoolItem* XFormTextDistanceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextDistanceItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFormTextDistanceItem(rIn);
 }
@@ -4513,7 +4953,11 @@ TYPEINIT1_AUTOFACTORY(XFormTextStartItem, SfxMetricItem);
 
 /*************************************************************************
 |*
-|*    XFormTextStartItem::XFormTextStartItem(long nStart)
+|*	  XFormTextStartItem::XFormTextStartItem(long nStart)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4524,7 +4968,11 @@ XFormTextStartItem::XFormTextStartItem(long nStart) :
 
 /*************************************************************************
 |*
-|*    XFormTextStartItem::XFormTextStartItem(SvStream& rIn)
+|*	  XFormTextStartItem::XFormTextStartItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4535,7 +4983,11 @@ XFormTextStartItem::XFormTextStartItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextStartItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextStartItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4546,11 +4998,15 @@ SfxPoolItem* XFormTextStartItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextStartItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XFormTextStartItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	02.02.95 ESO
+|*	  Letzte Aenderung	02.02.95 ESO
 |*
 *************************************************************************/
 
-SfxPoolItem* XFormTextStartItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextStartItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFormTextStartItem(rIn);
 }
@@ -4562,18 +5018,24 @@ TYPEINIT1_AUTOFACTORY(XFormTextMirrorItem, SfxBoolItem);
 
 /*************************************************************************
 |*
-|*    XFormTextMirrorItem::XFormTextMirrorItem(sal_Bool bMirror)
+|*	  XFormTextMirrorItem::XFormTextMirrorItem(BOOL bMirror)
+|*
+|*	  Ersterstellung	06.02.95 ESO
+|*	  Letzte Aenderung	06.02.95 ESO
 |*
 *************************************************************************/
 
-XFormTextMirrorItem::XFormTextMirrorItem(sal_Bool bMirror) :
+XFormTextMirrorItem::XFormTextMirrorItem(BOOL bMirror) :
     SfxBoolItem(XATTR_FORMTXTMIRROR, bMirror)
 {
 }
 
 /*************************************************************************
 |*
-|*    XFormTextMirrorItem::XFormTextMirrorItem(SvStream& rIn)
+|*	  XFormTextMirrorItem::XFormTextMirrorItem(SvStream& rIn)
+|*
+|*	  Ersterstellung	06.02.95 ESO
+|*	  Letzte Aenderung	06.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4584,7 +5046,10 @@ XFormTextMirrorItem::XFormTextMirrorItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextMirrorItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextMirrorItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Ersterstellung	06.02.95 ESO
+|*	  Letzte Aenderung	06.02.95 ESO
 |*
 *************************************************************************/
 
@@ -4595,12 +5060,15 @@ SfxPoolItem* XFormTextMirrorItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextMirrorItem::Create(SvStream& rIn, sal_uInt16 nVer)
-|*                                              const
+|*	  SfxPoolItem* XFormTextMirrorItem::Create(SvStream& rIn, USHORT nVer)
+|*												const
+|*
+|*	  Ersterstellung	06.02.95 ESO
+|*	  Letzte Aenderung	06.02.95 ESO
 |*
 *************************************************************************/
 
-SfxPoolItem* XFormTextMirrorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextMirrorItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFormTextMirrorItem(rIn);
 }
@@ -4613,18 +5081,24 @@ TYPEINIT1_AUTOFACTORY(XFormTextOutlineItem, SfxBoolItem);
 
 /*************************************************************************
 |*
-|*    XFormTextOutlineItem::XFormTextOutlineItem()
+|*	  XFormTextOutlineItem::XFormTextOutlineItem()
+|*
+|*	  Ersterstellung	27.06.95 ESO
+|*	  Letzte Aenderung	27.06.95 ESO
 |*
 *************************************************************************/
 
-XFormTextOutlineItem::XFormTextOutlineItem(sal_Bool bOutline) :
+XFormTextOutlineItem::XFormTextOutlineItem(BOOL bOutline) :
     SfxBoolItem(XATTR_FORMTXTOUTLINE, bOutline)
 {
 }
 
 /*************************************************************************
 |*
-|*    XFormTextOutlineItem::XFormTextOutlineItem(SvStream& rIn)
+|*	  XFormTextOutlineItem::XFormTextOutlineItem(SvStream& rIn)
+|*
+|*	  Ersterstellung	27.06.95 ESO
+|*	  Letzte Aenderung	27.06.95 ESO
 |*
 *************************************************************************/
 
@@ -4635,7 +5109,10 @@ XFormTextOutlineItem::XFormTextOutlineItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextOutlineItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextOutlineItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Ersterstellung	27.06.95 ESO
+|*	  Letzte Aenderung	27.06.95 ESO
 |*
 *************************************************************************/
 
@@ -4646,12 +5123,15 @@ SfxPoolItem* XFormTextOutlineItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextOutlineItem::Create(SvStream& rIn, sal_uInt16 nVer)
-|*                                              const
+|*	  SfxPoolItem* XFormTextOutlineItem::Create(SvStream& rIn, USHORT nVer)
+|*												const
+|*
+|*	  Ersterstellung	27.06.95 ESO
+|*	  Letzte Aenderung	27.06.95 ESO
 |*
 *************************************************************************/
 
-SfxPoolItem* XFormTextOutlineItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextOutlineItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFormTextOutlineItem(rIn);
 }
@@ -4663,19 +5143,27 @@ TYPEINIT1_AUTOFACTORY(XFormTextShadowItem, SfxEnumItem);
 
 /*************************************************************************
 |*
-|*    XFormTextShadowItem::XFormTextShadowItem()
+|*	  XFormTextShadowItem::XFormTextShadowItem()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
 XFormTextShadowItem::XFormTextShadowItem(XFormTextShadow eFormTextShadow) :
     SfxEnumItem(
-        XATTR_FORMTXTSHADOW, sal::static_int_cast< sal_uInt16 >(eFormTextShadow))
+        XATTR_FORMTXTSHADOW, sal::static_int_cast< USHORT >(eFormTextShadow))
 {
 }
 
 /*************************************************************************
 |*
-|*    XFormTextShadowItem::XFormTextShadowItem(SvStream& rIn)
+|*	  XFormTextShadowItem::XFormTextShadowItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -4686,7 +5174,11 @@ XFormTextShadowItem::XFormTextShadowItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextShadowItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextShadowItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -4697,11 +5189,15 @@ SfxPoolItem* XFormTextShadowItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextShadowItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XFormTextShadowItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
-SfxPoolItem* XFormTextShadowItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextShadowItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFormTextShadowItem(rIn);
 }
@@ -4713,7 +5209,7 @@ SfxPoolItem* XFormTextShadowItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) con
 |*
 \*************************************************************************/
 
-sal_uInt16 XFormTextShadowItem::GetValueCount() const
+USHORT XFormTextShadowItem::GetValueCount() const
 {
     return 3;
 }
@@ -4725,7 +5221,7 @@ sal_uInt16 XFormTextShadowItem::GetValueCount() const
 \*************************************************************************/
 
 // #FontWork#
-bool XFormTextShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XFormTextShadowItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
     return true;
@@ -4738,11 +5234,11 @@ bool XFormTextShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) c
 \*************************************************************************/
 
 // #FontWork#
-bool XFormTextShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XFormTextShadowItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
-    SetValue(sal::static_int_cast< sal_uInt16 >(nValue));
+    SetValue(sal::static_int_cast< USHORT >(nValue));
 
     return true;
 }
@@ -4754,11 +5250,15 @@ TYPEINIT1_AUTOFACTORY(XFormTextShadowColorItem, XColorItem);
 
 /*************************************************************************
 |*
-|*    XFormTextShadowColorItem::XFormTextShadowColorItem()
+|*	  XFormTextShadowColorItem::XFormTextShadowColorItem()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
-XFormTextShadowColorItem::XFormTextShadowColorItem(sal_Int32 nIndex,
+XFormTextShadowColorItem::XFormTextShadowColorItem(INT32 nIndex,
                                                      const Color& rTheColor) :
     XColorItem(XATTR_FORMTXTSHDWCOLOR, nIndex, rTheColor)
 {
@@ -4766,7 +5266,11 @@ XFormTextShadowColorItem::XFormTextShadowColorItem(sal_Int32 nIndex,
 
 /*************************************************************************
 |*
-|*    XFormTextShadowColorItem::XFormTextShadowColorItem(const XubString& rName, const Color& rTheColor)
+|*	  XFormTextShadowColorItem::XFormTextShadowColorItem(const XubString& rName, const Color& rTheColor)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -4778,7 +5282,11 @@ XFormTextShadowColorItem::XFormTextShadowColorItem(const XubString& rName,
 
 /*************************************************************************
 |*
-|*    XFormTextShadowColorItem::XFormTextShadowColorItem(SvStream& rIn)
+|*	  XFormTextShadowColorItem::XFormTextShadowColorItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -4789,7 +5297,11 @@ XFormTextShadowColorItem::XFormTextShadowColorItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextShadowColorItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextShadowColorItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -4800,11 +5312,15 @@ SfxPoolItem* XFormTextShadowColorItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextShadowColorItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XFormTextShadowColorItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
-SfxPoolItem* XFormTextShadowColorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextShadowColorItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFormTextShadowColorItem(rIn);
 }
@@ -4816,7 +5332,11 @@ TYPEINIT1_AUTOFACTORY(XFormTextShadowXValItem, SfxMetricItem);
 
 /*************************************************************************
 |*
-|*    XFormTextShadowXValItem::XFormTextShadowXValItem(long)
+|*	  XFormTextShadowXValItem::XFormTextShadowXValItem(long)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.06.95 ESO
+|*	  Letzte Aenderung	28.06.95 ESO
 |*
 *************************************************************************/
 
@@ -4827,7 +5347,11 @@ XFormTextShadowXValItem::XFormTextShadowXValItem(long nVal) :
 
 /*************************************************************************
 |*
-|*    XFormTextShadowXValItem::XFormTextShadowXValItem(SvStream& rIn)
+|*	  XFormTextShadowXValItem::XFormTextShadowXValItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.06.95 ESO
+|*	  Letzte Aenderung	28.06.95 ESO
 |*
 *************************************************************************/
 
@@ -4838,7 +5362,11 @@ XFormTextShadowXValItem::XFormTextShadowXValItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextShadowXValItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextShadowXValItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.06.95 ESO
+|*	  Letzte Aenderung	28.06.95 ESO
 |*
 *************************************************************************/
 
@@ -4849,11 +5377,15 @@ SfxPoolItem* XFormTextShadowXValItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextShadowXValItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XFormTextShadowXValItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.06.95 ESO
+|*	  Letzte Aenderung	28.06.95 ESO
 |*
 *************************************************************************/
 
-SfxPoolItem* XFormTextShadowXValItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextShadowXValItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFormTextShadowXValItem(rIn);
 }
@@ -4865,7 +5397,11 @@ TYPEINIT1_AUTOFACTORY(XFormTextShadowYValItem, SfxMetricItem);
 
 /*************************************************************************
 |*
-|*    XFormTextShadowYValItem::XFormTextShadowYValItem(long)
+|*	  XFormTextShadowYValItem::XFormTextShadowYValItem(long)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.06.95 ESO
+|*	  Letzte Aenderung	28.06.95 ESO
 |*
 *************************************************************************/
 
@@ -4876,7 +5412,11 @@ XFormTextShadowYValItem::XFormTextShadowYValItem(long nVal) :
 
 /*************************************************************************
 |*
-|*    XFormTextShadowYValItem::XFormTextShadowYValItem(SvStream& rIn)
+|*	  XFormTextShadowYValItem::XFormTextShadowYValItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.06.95 ESO
+|*	  Letzte Aenderung	28.06.95 ESO
 |*
 *************************************************************************/
 
@@ -4887,7 +5427,11 @@ XFormTextShadowYValItem::XFormTextShadowYValItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextShadowYValItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextShadowYValItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.06.95 ESO
+|*	  Letzte Aenderung	28.06.95 ESO
 |*
 *************************************************************************/
 
@@ -4898,11 +5442,15 @@ SfxPoolItem* XFormTextShadowYValItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextShadowYValItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XFormTextShadowYValItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	28.06.95 ESO
+|*	  Letzte Aenderung	28.06.95 ESO
 |*
 *************************************************************************/
 
-SfxPoolItem* XFormTextShadowYValItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextShadowYValItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFormTextShadowYValItem(rIn);
 }
@@ -4914,19 +5462,27 @@ TYPEINIT1_AUTOFACTORY(XFormTextStdFormItem, SfxEnumItem);
 
 /*************************************************************************
 |*
-|*    XFormTextStdFormItem::XFormTextStdFormItem()
+|*	  XFormTextStdFormItem::XFormTextStdFormItem()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
 XFormTextStdFormItem::XFormTextStdFormItem(XFormTextStdForm eFormTextStdForm) :
     SfxEnumItem(
-        XATTR_FORMTXTSTDFORM, sal::static_int_cast< sal_uInt16 >(eFormTextStdForm))
+        XATTR_FORMTXTSTDFORM, sal::static_int_cast< USHORT >(eFormTextStdForm))
 {
 }
 
 /*************************************************************************
 |*
-|*    XFormTextStdFormItem::XFormTextStdFormItem(SvStream& rIn)
+|*	  XFormTextStdFormItem::XFormTextStdFormItem(SvStream& rIn)
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -4937,7 +5493,11 @@ XFormTextStdFormItem::XFormTextStdFormItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextStdFormItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextStdFormItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
@@ -4948,11 +5508,15 @@ SfxPoolItem* XFormTextStdFormItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextStdFormItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*	  SfxPoolItem* XFormTextStdFormItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	27.06.95
+|*	  Letzte Aenderung	27.06.95
 |*
 *************************************************************************/
 
-SfxPoolItem* XFormTextStdFormItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextStdFormItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFormTextStdFormItem(rIn);
 }
@@ -4964,7 +5528,7 @@ SfxPoolItem* XFormTextStdFormItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) co
 |*
 \*************************************************************************/
 
-sal_uInt16 XFormTextStdFormItem::GetValueCount() const
+USHORT XFormTextStdFormItem::GetValueCount() const
 {
     return 3;
 }
@@ -4976,7 +5540,7 @@ sal_uInt16 XFormTextStdFormItem::GetValueCount() const
 \*************************************************************************/
 
 // #FontWork#
-bool XFormTextStdFormItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XFormTextStdFormItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
     return true;
@@ -4989,11 +5553,11 @@ bool XFormTextStdFormItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) 
 \*************************************************************************/
 
 // #FontWork#
-bool XFormTextStdFormItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XFormTextStdFormItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
-    SetValue(sal::static_int_cast< sal_uInt16 >(nValue));
+    SetValue(sal::static_int_cast< USHORT >(nValue));
 
     return true;
 }
@@ -5005,18 +5569,24 @@ TYPEINIT1_AUTOFACTORY(XFormTextHideFormItem, SfxBoolItem);
 
 /*************************************************************************
 |*
-|*    XFormTextHideFormItem::XFormTextHideFormItem()
+|*	  XFormTextHideFormItem::XFormTextHideFormItem()
+|*
+|*	  Ersterstellung	27.06.95 ESO
+|*	  Letzte Aenderung	27.06.95 ESO
 |*
 *************************************************************************/
 
-XFormTextHideFormItem::XFormTextHideFormItem(sal_Bool bHide) :
+XFormTextHideFormItem::XFormTextHideFormItem(BOOL bHide) :
     SfxBoolItem(XATTR_FORMTXTHIDEFORM, bHide)
 {
 }
 
 /*************************************************************************
 |*
-|*    XFormTextHideFormItem::XFormTextHideFormItem(SvStream& rIn)
+|*	  XFormTextHideFormItem::XFormTextHideFormItem(SvStream& rIn)
+|*
+|*	  Ersterstellung	27.06.95 ESO
+|*	  Letzte Aenderung	27.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5027,7 +5597,10 @@ XFormTextHideFormItem::XFormTextHideFormItem(SvStream& rIn) :
 
 /*************************************************************************
 |*
-|*    XFormTextHideFormItem::Clone(SfxItemPool* pPool) const
+|*	  XFormTextHideFormItem::Clone(SfxItemPool* pPool) const
+|*
+|*	  Ersterstellung	27.06.95 ESO
+|*	  Letzte Aenderung	27.06.95 ESO
 |*
 *************************************************************************/
 
@@ -5038,12 +5611,15 @@ SfxPoolItem* XFormTextHideFormItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextHideFormItem::Create(SvStream& rIn, sal_uInt16 nVer)
-|*                                              const
+|*	  SfxPoolItem* XFormTextHideFormItem::Create(SvStream& rIn, USHORT nVer)
+|*												const
+|*
+|*	  Ersterstellung	27.06.95 ESO
+|*	  Letzte Aenderung	27.06.95 ESO
 |*
 *************************************************************************/
 
-SfxPoolItem* XFormTextHideFormItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
+SfxPoolItem* XFormTextHideFormItem::Create(SvStream& rIn, USHORT /*nVer*/) const
 {
     return new XFormTextHideFormItem(rIn);
 }
@@ -5051,7 +5627,7 @@ SfxPoolItem* XFormTextHideFormItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) c
 
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//                              SetItems
+//								SetItems
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 TYPEINIT1(XLineAttrSetItem, SfxSetItem);
@@ -5107,7 +5683,7 @@ SfxPoolItem* XLineAttrSetItem::Clone( SfxItemPool* pPool ) const
 |*
 \************************************************************************/
 
-SfxPoolItem* XLineAttrSetItem::Create( SvStream& rStream, sal_uInt16 /*nVersion*/) const
+SfxPoolItem* XLineAttrSetItem::Create( SvStream& rStream, USHORT /*nVersion*/) const
 {
     SfxItemSet *pSet2 = new SfxItemSet( *GetItemSet().GetPool(),
                                     XATTR_LINE_FIRST, XATTR_LINE_LAST);
@@ -5121,7 +5697,7 @@ SfxPoolItem* XLineAttrSetItem::Create( SvStream& rStream, sal_uInt16 /*nVersion*
 |*
 \************************************************************************/
 
-SvStream& XLineAttrSetItem::Store( SvStream& rStream, sal_uInt16 nItemVersion ) const
+SvStream& XLineAttrSetItem::Store( SvStream& rStream, USHORT nItemVersion ) const
 {
     return SfxSetItem::Store( rStream, nItemVersion );
 }
@@ -5180,7 +5756,7 @@ SfxPoolItem* XFillAttrSetItem::Clone( SfxItemPool* pPool ) const
 |*
 \************************************************************************/
 
-SfxPoolItem* XFillAttrSetItem::Create( SvStream& rStream, sal_uInt16 /*nVersion*/) const
+SfxPoolItem* XFillAttrSetItem::Create( SvStream& rStream, USHORT /*nVersion*/) const
 {
     SfxItemSet *pSet2 = new SfxItemSet( *GetItemSet().GetPool(),
                                     XATTR_FILL_FIRST, XATTR_FILL_LAST);
@@ -5194,7 +5770,7 @@ SfxPoolItem* XFillAttrSetItem::Create( SvStream& rStream, sal_uInt16 /*nVersion*
 |*
 \************************************************************************/
 
-SvStream& XFillAttrSetItem::Store( SvStream& rStream, sal_uInt16 nItemVersion ) const
+SvStream& XFillAttrSetItem::Store( SvStream& rStream, USHORT nItemVersion ) const
 {
     return SfxSetItem::Store( rStream, nItemVersion );
 }

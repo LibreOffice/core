@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,8 +52,8 @@ namespace textconversiondlgs
 //.............................................................................
 using namespace ::com::sun::star;
 
-#define SERVICE_IMPLEMENTATION_NAME ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.linguistic2.ChineseTranslationDialog"))
-#define SERVICE_NAME ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ChineseTranslationDialog"))
+#define SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.linguistic2.ChineseTranslationDialog")
+#define SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.linguistic2.ChineseTranslationDialog")
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
@@ -233,7 +233,7 @@ void SAL_CALL ChineseTranslation_UnoDialog::setPropertyValue( const ::rtl::OUStr
 uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const ::rtl::OUString& rPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aRet;
-
+    
     sal_Bool bDirectionToSimplified = sal_True;
     sal_Bool bUseCharacterVariants = sal_False;
     sal_Bool bTranslateCommonTerms = sal_False;
@@ -244,7 +244,7 @@ uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const ::rtl::O
             return aRet;
         m_pDialog->getSettings( bDirectionToSimplified, bUseCharacterVariants, bTranslateCommonTerms );
     }
-
+    
     if( rPropertyName.equals( C2U("IsDirectionToSimplified") ) )
     {
         aRet <<= bDirectionToSimplified;
@@ -262,7 +262,7 @@ uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const ::rtl::O
         throw beans::UnknownPropertyException();
     }
     return aRet;
-
+    
 }
 void SAL_CALL ChineseTranslation_UnoDialog::addPropertyChangeListener( const ::rtl::OUString& , const uno::Reference< beans::XPropertyChangeListener >&  ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {

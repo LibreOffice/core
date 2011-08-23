@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,6 @@
 #include <memory>
 #include <algorithm>
 #include <functional>
-#include <o3tl/compat_functional.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/date.hxx>
@@ -52,7 +51,6 @@ using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
 using com::sun::star::util::Time;
 using namespace std;
-using namespace o3tl;
 
 typedef com::sun::star::util::Date UNODate;
 typedef com::sun::star::util::Time UNOTime;
@@ -224,18 +222,18 @@ namespace
 
     // ------------------------------------------------------------------------
     Any lcl_toAny_bool( const OUString& rStr )
-    {
+    { 
         bool b = ( rStr == OUSTRING("true")  ||  rStr == OUSTRING("1") );
         return makeAny( b );
     }
 
     // ------------------------------------------------------------------------
     OUString lcl_toXSD_double( const Any& rAny )
-    {
+    { 
         double f = 0.0;
         rAny >>= f;
 
-        return rtl::math::isFinite( f )
+        return rtl::math::isFinite( f ) 
             ? rtl::math::doubleToUString( f, rtl_math_StringFormat_Automatic,
                                         rtl_math_DecimalPlaces_Max, '.',
                                         sal_True )
@@ -244,9 +242,9 @@ namespace
 
     // ------------------------------------------------------------------------
     Any lcl_toAny_double( const OUString& rString )
-    {
+    { 
         rtl_math_ConversionStatus eStatus;
-        double f = rtl::math::stringToDouble(
+        double f = rtl::math::stringToDouble( 
             rString, sal_Unicode('.'), sal_Unicode(','), &eStatus, NULL );
         return ( eStatus == rtl_math_ConversionStatus_Ok ) ? makeAny( f ) : Any();
     }
@@ -541,7 +539,7 @@ Convert::Types_t Convert::getTypes()
 {
     Types_t aTypes( maMap.size() );
     transform( maMap.begin(), maMap.end(), aTypes.getArray(),
-               o3tl::select1st<Map_t::value_type>() );
+               select1st<Map_t::value_type>() );
     return aTypes;
 }
 
@@ -551,7 +549,7 @@ rtl::OUString Convert::toXSD( const Any_t& rAny )
     return aIter != maMap.end() ? aIter->second.first( rAny ) : OUString();
 }
 
-Convert::Any_t Convert::toAny( const rtl::OUString& rValue,
+Convert::Any_t Convert::toAny( const rtl::OUString& rValue, 
                                const Type_t& rType )
 {
     Map_t::iterator aIter = maMap.find( rType );
@@ -565,7 +563,7 @@ Convert::Any_t Convert::toAny( const rtl::OUString& rValue,
     switch( _nWhitespaceTreatment )
     {
     default:
-        OSL_FAIL( "Convert::convertWhitespace: invalid whitespace treatment constant!" );
+        OSL_ENSURE( sal_False, "Convert::convertWhitespace: invalid whitespace treatment constant!" );
         // NO break
     case com::sun::star::xsd::WhiteSpaceTreatment::Preserve:
         sConverted = _rString;

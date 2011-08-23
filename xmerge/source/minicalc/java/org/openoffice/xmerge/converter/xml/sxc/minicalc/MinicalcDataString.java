@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public class MinicalcDataString {
     /**
      *  Checks if the MiniCalc data <code>String</code> is a <i>formula</i>.
      *
-     *  @return  true if the MiniCalc data <code>String</code> is a
+     *  @return  true if the MiniCalc data <code>String</code> is a 
      *           <i>formula</i>, false if the MiniCalc data <code>String</code>
      *           is not a <i>formula</i>.
      */
@@ -312,8 +312,8 @@ public class MinicalcDataString {
      *  character of the MiniCalc data <code>String</code>, the
      *  MiniCalc data <code>String</code> is returned.
      *
-     *  @return  The MiniCalc data <code>String</code> minus the
-     *           percent sign.  If the MiniCalc data <code>String</code>
+     *  @return  The MiniCalc data <code>String</code> minus the 
+     *           percent sign.  If the MiniCalc data <code>String</code> 
      *           does not begin with a percent sign, the MiniCalc data
      *           <code>String</code> is returned.
      */

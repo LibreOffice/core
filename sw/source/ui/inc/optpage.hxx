@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,29 +51,29 @@ class SwContentOptPage : public SfxTabPage
 {
     //visual aids
     FixedLine   aLineFL;
-    CheckBox    aCrossCB;
-    CheckBox    aSolidHandleCB;
-    CheckBox    aBigHandleCB;
+    CheckBox	aCrossCB;
+    CheckBox	aSolidHandleCB;
+    CheckBox	aBigHandleCB;
 
     //view
     FixedLine   aWindowFL;
-    CheckBox    aHScrollBox;
-    CheckBox    aVScrollBox;
+    CheckBox 	aHScrollBox;
+    CheckBox 	aVScrollBox;
     CheckBox    aAnyRulerCB;
     CheckBox    aHRulerCBox;
     ListBox     aHMetric;
-    CheckBox    aVRulerCBox;
+    CheckBox 	aVRulerCBox;
     CheckBox    aVRulerRightCBox;
     ListBox     aVMetric;
-    CheckBox    aSmoothCBox;
+    CheckBox	aSmoothCBox;
 
     //display
     FixedLine   aDispFL;
-    CheckBox    aGrfCB;
-    CheckBox    aTblCB;
-    CheckBox    aDrwCB;
-    CheckBox    aFldNameCB;
-    CheckBox    aPostItCB;
+    CheckBox	aGrfCB;
+    CheckBox 	aTblCB;
+    CheckBox	aDrwCB;
+    CheckBox 	aFldNameCB;
+    CheckBox 	aPostItCB;
 
     FixedLine   aSettingsFL;
     FixedText   aMetricFT;
@@ -86,26 +86,26 @@ public:
                                            const SfxItemSet& rSet );
                         ~SwContentOptPage();
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 
 };
 
-/*--------------------------------------------------------
+/*-------- OS 27.01.95 -----------------------------------
  TabPage Druckereinstellungen Zusaetze
 --------------------------------------------------------- */
 class SwAddPrinterTabPage : public SfxTabPage
 {
     FixedLine       aFL1;
     CheckBox        aGrfCB;
-//  CheckBox        aTabCB;
-//  CheckBox        aDrawCB;
-    CheckBox        aCtrlFldCB;
-    CheckBox        aBackgroundCB;
-    CheckBox        aBlackFontCB;
+//	CheckBox 		aTabCB;
+//	CheckBox		aDrawCB;
+    CheckBox		aCtrlFldCB;
+    CheckBox		aBackgroundCB;
+    CheckBox		aBlackFontCB;
     CheckBox        aPrintHiddenTextCB;
     CheckBox        aPrintTextPlaceholderCB;
 
@@ -113,30 +113,30 @@ class SwAddPrinterTabPage : public SfxTabPage
 
     FixedLine       aFL2;
     CheckBox        aLeftPageCB;
-    CheckBox        aRightPageCB;
-//  CheckBox        aReverseCB;
+    CheckBox		aRightPageCB;
+//	CheckBox		aReverseCB;
     CheckBox        aProspectCB;
     CheckBox        aProspectCB_RTL;
 
     FixedLine       aSeparatorRFL;
 
-    FixedLine        aFL3;
     RadioButton     aNoRB;
     RadioButton     aOnlyRB;
     RadioButton     aEndRB;
     RadioButton     aEndPageRB;
+    FixedLine        aFL3;
     FixedLine        aFL4;
     CheckBox        aPrintEmptyPagesCB;
 //    CheckBox        aSingleJobsCB;
-    CheckBox        aPaperFromSetupCB;
+    CheckBox	    aPaperFromSetupCB;
     FixedText       aFaxFT;
     ListBox         aFaxLB;
     String          sNone;
 
-    sal_Bool        bAttrModified;
-    sal_Bool        bPreview;
+    BOOL		bAttrModified;
+    BOOL		bPreview;
 
-    void        Init();
+    void		Init();
                 DECL_LINK( AutoClickHdl, CheckBox * );
                 DECL_LINK( SelectHdl, ListBox * );
 
@@ -145,14 +145,14 @@ class SwAddPrinterTabPage : public SfxTabPage
                                            const SfxItemSet& rSet );
 public:
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet );
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
-    void                SetFax( const SvStringsDtor& );
-    void                SelectFax( const String& );
-    void                SetPreview(sal_Bool bPrev);
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
+    void 				SetFax( const SvStringsDtor& );
+    void 				SelectFax( const String& );
+    void				SetPreview(BOOL bPrev);
     virtual void        PageCreated (SfxAllItemSet aSet);
 
 };
@@ -164,56 +164,56 @@ class SwStdFontTabPage : public SfxTabPage
     FixedText       aTypeFT;
 
     FixedText       aStandardLbl;
-    ComboBox        aStandardBox;
+    ComboBox 		aStandardBox;
 
     FixedText       aHeightFT;
     FontSizeBox     aStandardHeightLB;
 
     FixedText       aTitleLbl   ;
-    ComboBox        aTitleBox   ;
+    ComboBox 		aTitleBox   ;
     FontSizeBox     aTitleHeightLB;
 
-    FixedText       aListLbl    ;
-    ComboBox        aListBox    ;
+    FixedText 		aListLbl    ;
+    ComboBox 		aListBox    ;
     FontSizeBox     aListHeightLB;
 
-    FixedText       aLabelLbl   ;
-    ComboBox        aLabelBox   ;
+    FixedText 		aLabelLbl   ;
+    ComboBox 		aLabelBox   ;
     FontSizeBox     aLabelHeightLB;
 
-    FixedText       aIdxLbl     ;
-    ComboBox        aIdxBox     ;
+    FixedText 		aIdxLbl     ;
+    ComboBox 		aIdxBox     ;
     FontSizeBox     aIndexHeightLB;
 
-    CheckBox        aDocOnlyCB  ;
+    CheckBox		aDocOnlyCB	;
     PushButton      aStandardPB;
 
-    String          sShellStd;
-    String          sShellTitle;
-    String          sShellList;
+    String 			sShellStd;
+    String 			sShellTitle;
+    String			sShellList;
     String          sShellLabel;
     String          sShellIndex;
 
-    SfxPrinter*         pPrt;
+    SfxPrinter* 		pPrt;
     FontList*           pFontList;
-    SwStdFontConfig*    pFontConfig;
-    SwWrtShell*         pWrtShell;
+    SwStdFontConfig* 	pFontConfig;
+    SwWrtShell*			pWrtShell;
     LanguageType        eLanguage;
     // waren nur defaults vorhanden? wurden sie mit den Boxen ueberschrieben
-    sal_Bool    bListDefault    :1;
-    sal_Bool    bSetListDefault :1;
-    sal_Bool    bLabelDefault   :1;
-    sal_Bool    bSetLabelDefault :1;
-    sal_Bool    bIdxDefault     :1;
-    sal_Bool    bSetIdxDefault  :1;
-    sal_Bool    bDeletePrinter :1;
+    BOOL 	bListDefault	:1;
+    BOOL 	bSetListDefault :1;
+    BOOL 	bLabelDefault	:1;
+    BOOL 	bSetLabelDefault :1;
+    BOOL 	bIdxDefault		:1;
+    BOOL 	bSetIdxDefault 	:1;
+    BOOL 	bDeletePrinter :1;
 
-    sal_Bool    bListHeightDefault    :1;
-    sal_Bool    bSetListHeightDefault :1;
-    sal_Bool    bLabelHeightDefault   :1;
-    sal_Bool    bSetLabelHeightDefault :1;
-    sal_Bool    bIndexHeightDefault     :1;
-    sal_Bool    bSetIndexHeightDefault  :1;
+    BOOL    bListHeightDefault    :1;
+    BOOL    bSetListHeightDefault :1;
+    BOOL    bLabelHeightDefault   :1;
+    BOOL    bSetLabelHeightDefault :1;
+    BOOL    bIndexHeightDefault     :1;
+    BOOL    bSetIndexHeightDefault  :1;
 
     sal_uInt8 nFontGroup; //fontcfg.hxx: FONT_GROUP_[STANDARD|CJK|CTL]
 
@@ -231,11 +231,11 @@ class SwStdFontTabPage : public SfxTabPage
             ~SwStdFontTabPage();
 
 public:
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet );
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 
     void    SetFontMode(sal_uInt8 nGroup) {nFontGroup = nGroup;}
     virtual void        PageCreated (SfxAllItemSet aSet);
@@ -245,40 +245,40 @@ class SwTableOptionsTabPage : public SfxTabPage
 {
     FixedLine   aTableFL;
     CheckBox    aHeaderCB;
-    CheckBox    aRepeatHeaderCB;
-    CheckBox    aDontSplitCB;
-    CheckBox    aBorderCB;
+    CheckBox	aRepeatHeaderCB;
+    CheckBox	aDontSplitCB;
+    CheckBox	aBorderCB;
 
     FixedLine   aSeparatorFL;
 
     FixedLine   aTableInsertFL;
-    CheckBox    aNumFormattingCB;
-    CheckBox    aNumFmtFormattingCB;
-    CheckBox    aNumAlignmentCB;
+    CheckBox	aNumFormattingCB;
+    CheckBox	aNumFmtFormattingCB;
+    CheckBox	aNumAlignmentCB;
 
     FixedLine   aMoveFL;
     FixedText   aMoveFT;
     FixedText   aRowMoveFT;
-    MetricField aRowMoveMF;
-    FixedText   aColMoveFT;
-    MetricField aColMoveMF;
+    MetricField	aRowMoveMF;
+    FixedText	aColMoveFT;
+    MetricField	aColMoveMF;
 
     FixedText   aInsertFT;
-    FixedText   aRowInsertFT;
-    MetricField aRowInsertMF;
-    FixedText   aColInsertFT;
-    MetricField aColInsertMF;
+    FixedText	aRowInsertFT;
+    MetricField	aRowInsertMF;
+    FixedText	aColInsertFT;
+    MetricField	aColInsertMF;
 
     FixedText   aHandlingFT;
-    RadioButton aFixRB;
+    RadioButton	aFixRB;
     RadioButton aFixPropRB;
     RadioButton aVarRB;
-    FixedText   aFixFT;
-    FixedText   aFixPropFT;
-    FixedText   aVarFT;
+    FixedText	aFixFT;
+    FixedText	aFixPropFT;
+    FixedText	aVarFT;
 
-    SwWrtShell* pWrtShell;
-    sal_Bool        bHTMLMode;
+    SwWrtShell*	pWrtShell;
+    BOOL        bHTMLMode;
 
     DECL_LINK(CheckBoxHdl, CheckBox *pCB);
 
@@ -289,30 +289,30 @@ class SwTableOptionsTabPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet );
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 
     void SetWrtShell(SwWrtShell* pSh) {pWrtShell = pSh;}
     virtual void        PageCreated (SfxAllItemSet aSet);
 
 };
 
-/*--------------------------------------------------
+/*-----------------31.10.97 17:55-------------------
  TabPage fuer ShadowCrsr
 --------------------------------------------------*/
 class SwShdwCrsrOptionsTabPage : public SfxTabPage
 {
     //nonprinting characters
     FixedLine   aUnprintFL;
-    CheckBox    aParaCB;
-    CheckBox    aSHyphCB;
-    CheckBox    aSpacesCB;
-    CheckBox    aHSpacesCB;
-    CheckBox    aTabCB;
-    CheckBox    aBreakCB;
+    CheckBox 	aParaCB;
+    CheckBox	aSHyphCB;
+    CheckBox 	aSpacesCB;
+    CheckBox 	aHSpacesCB;
+    CheckBox 	aTabCB;
+    CheckBox 	aBreakCB;
     CheckBox    aCharHiddenCB;
     CheckBox    aFldHiddenCB;
     CheckBox    aFldHiddenParaCB;
@@ -320,35 +320,26 @@ class SwShdwCrsrOptionsTabPage : public SfxTabPage
     FixedLine   aSeparatorFL;
 
     FixedLine       aFlagFL;
-    CheckBox        aOnOffCB;
+    CheckBox		aOnOffCB;
 
-    FixedText       aFillModeFT;
+    FixedText		aFillModeFT;
     RadioButton     aFillMarginRB;
     RadioButton     aFillIndentRB;
     RadioButton     aFillTabRB;
     RadioButton     aFillSpaceRB;
 
     FixedLine       aCrsrOptFL;
-    CheckBox        aCrsrInProtCB;
-
-    FixedLine       m_aLayoutOptionsFL;
-    CheckBox        m_aMathBaselineAlignmentCB;
-
-    SwWrtShell *    m_pWrtShell;
-
+    CheckBox		aCrsrInProtCB;
 
     SwShdwCrsrOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
     ~SwShdwCrsrOptionsTabPage();
 
 public:
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
-
-    void    SetWrtShell( SwWrtShell * pSh ) { m_pWrtShell = pSh; }
-    virtual void        PageCreated( SfxAllItemSet aSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 
 /*-----------------------------------------------------------------------
@@ -356,36 +347,36 @@ public:
  -----------------------------------------------------------------------*/
 class SwMarkPreview : public Window
 {
-    Color           m_aBgCol;           // background
-    Color           m_aTransCol;        // transparency
-    Color           m_aMarkCol;         // marks
-    Color           m_aLineCol;         // general lines
-    Color           m_aShadowCol;       // shadow
-    Color           m_aTxtCol;          // text
-    Color           m_aPrintAreaCol;    // frame for print area
+    Color			m_aBgCol;			// background
+    Color			m_aTransCol;		// transparency
+    Color			m_aMarkCol;			// marks
+    Color			m_aLineCol;			// general lines
+    Color			m_aShadowCol;		// shadow
+    Color			m_aTxtCol;			// text
+    Color			m_aPrintAreaCol;	// frame for print area
 
-    Rectangle       aPage;
-    Rectangle       aLeftPagePrtArea;
-    Rectangle       aRightPagePrtArea;
+    Rectangle 		aPage;
+    Rectangle 		aLeftPagePrtArea;
+    Rectangle 		aRightPagePrtArea;
 
-    sal_uInt16          nMarkPos;
+    USHORT			nMarkPos;
 
     using OutputDevice::DrawRect;
-    void            DrawRect(const Rectangle &rRect, const Color &rFillColor, const Color &rLineColor);
+    void			DrawRect(const Rectangle &rRect, const Color &rFillColor, const Color &rLineColor);
 
-    void            Paint(const Rectangle&);
-    void            PaintPage(const Rectangle &rRect);
-    void            InitColors( void );
+    void			Paint(const Rectangle&);
+    void			PaintPage(const Rectangle &rRect);
+    void			InitColors( void );
 
 protected:
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void	DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
                     SwMarkPreview(Window* pParent, const ResId& rResID);
-    virtual         ~SwMarkPreview();
+    virtual			~SwMarkPreview();
 
-    inline void     SetColor(const Color& rCol) { m_aMarkCol = rCol; }
-    inline void     SetMarkPos(sal_uInt16 nPos) { nMarkPos = nPos; }
+    inline void		SetColor(const Color& rCol)	{ m_aMarkCol = rCol; }
+    inline void		SetMarkPos(USHORT nPos)	{ nMarkPos = nPos; }
 };
 
 /*-----------------------------------------------------------------------
@@ -397,9 +388,9 @@ class SwRedlineOptionsTabPage : public SfxTabPage
 
     FixedText           aInsertFT;
     FixedText           aInsertAttrFT;
-    ListBox             aInsertLB;
+    ListBox				aInsertLB;
     FixedText           aInsertColorFT;
-    ColorListBox        aInsertColorLB;
+    ColorListBox		aInsertColorLB;
     SvxFontPrevWindow   aInsertedPreviewWN;
 
     FixedText           aDeletedFT;
@@ -419,13 +410,13 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     FixedLine           aChangedFL;
 
     FixedText           aMarkPosFT;
-    ListBox             aMarkPosLB;
-    FixedText           aMarkColorFT;
-    ColorListBox        aMarkColorLB;
-    SwMarkPreview       aMarkPreviewWN;
+    ListBox				aMarkPosLB;
+    FixedText			aMarkColorFT;
+    ColorListBox		aMarkColorLB;
+    SwMarkPreview		aMarkPreviewWN;
 
     String              sAuthor;
-    String              sNone;
+    String				sNone;
 
     SwRedlineOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
     ~SwRedlineOptionsTabPage();
@@ -434,17 +425,17 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     DECL_LINK( ChangedMaskPrevHdl, ListBox *pLB = 0 );
     DECL_LINK( ColorHdl, ColorListBox *pColorLB );
 
-    void                InitFontStyle(SvxFontPrevWindow& rExampleWin);
+    void 				InitFontStyle(SvxFontPrevWindow& rExampleWin);
 
 public:
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 
-/*-------------------------------------------------------
+/*--------OS 11.01.95 -----------------------------------
  TabPage Testeinstellungen fuer SW
 --------------------------------------------------------- */
 
@@ -456,11 +447,11 @@ public:
                         SwTestTabPage( Window* pParent,
                                            const SfxItemSet& rSet );
 
-    static SfxTabPage*  Create( Window* pParent,
+    static SfxTabPage*	Create( Window* pParent,
                                 const SfxItemSet& rAttrSet );
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 
 private:
     FixedLine aTestFL;
@@ -475,13 +466,14 @@ private:
     CheckBox aTest9CBox;
     CheckBox aTest10CBox;
 
-    sal_Bool        bAttrModified;
+    BOOL		bAttrModified;
 
-    void        Init();
+    void		Init();
     DECL_LINK( AutoClickHdl, CheckBox * );
 
 };
 #endif //PRODUCT
 
 #endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

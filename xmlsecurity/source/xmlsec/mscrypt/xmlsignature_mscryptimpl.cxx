@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,11 +33,15 @@
 
 #include "com/sun/star/xml/crypto/SecurityOperationStatus.hdl"
 #include "xmlsignature_mscryptimpl.hxx"
+
 #include "xmldocumentwrapper_xmlsecimpl.hxx"
+
 #include "xmlelementwrapper_xmlsecimpl.hxx"
+
 #include "securityenvironment_mscryptimpl.hxx"
 #include "xmlstreamio.hxx"
 #include "errorcallback.hxx"
+
 #include "xmlsec/xmlsec.h"
 #include "xmlsec/xmldsig.h"
 #include "xmlsec/crypto.h"
@@ -69,7 +73,7 @@ Reference< XXMLSignatureTemplate >
 SAL_CALL XMLSignature_MSCryptImpl :: generate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XSecurityEnvironment >& aEnvironment
-) throw( com::sun::star::xml::crypto::XMLSignatureException,
+) throw( com::sun::star::xml::crypto::XMLSignatureException, 
          com::sun::star::uno::SecurityException )
 {
     xmlSecKeysMngrPtr pMngr = NULL ;
@@ -136,7 +140,7 @@ SAL_CALL XMLSignature_MSCryptImpl :: generate(
     }
 
     //Sign the template
-    if( xmlSecDSigCtxSign( pDsigCtx , pNode ) == 0 )
+    if( xmlSecDSigCtxSign( pDsigCtx , pNode ) == 0 ) 
     {
         if (pDsigCtx->status == xmlSecDSigStatusSucceeded)
             aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
@@ -165,12 +169,13 @@ Reference< XXMLSignatureTemplate >
 SAL_CALL XMLSignature_MSCryptImpl :: validate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
-) throw( com::sun::star::uno::RuntimeException,
-         com::sun::star::uno::SecurityException,
+) throw( com::sun::star::uno::RuntimeException, 
+         com::sun::star::uno::SecurityException, 
          com::sun::star::xml::crypto::XMLSignatureException ) {
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecDSigCtxPtr pDsigCtx = NULL ;
     xmlNodePtr pNode = NULL ;
+    //sal_Bool valid ;
 
     if( !aTemplate.is() )
         throw RuntimeException() ;
@@ -179,7 +184,7 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
         throw RuntimeException() ;
 
     //Get Keys Manager
-    Reference< XSecurityEnvironment > xSecEnv
+    Reference< XSecurityEnvironment > xSecEnv 
         = aSecurityCtx->getSecurityEnvironmentByIndex(
             aSecurityCtx->getDefaultSecurityEnvironmentIndex());
     Reference< XUnoTunnel > xSecTunnel( xSecEnv , UNO_QUERY ) ;
@@ -215,6 +220,15 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
             throw RuntimeException() ;
     }
 
+    //added for test: save the result
+    /*
+    {
+        FILE *dstFile = fopen( "c:\\1.txt", "w" ) ;
+        xmlDocDump( dstFile, pNode->doc) ;
+        fclose( dstFile ) ;
+    }
+    */
+
      setErrorRecorder( );
 
     pMngr = pSecEnv->createKeysManager() ; //i39448
@@ -227,6 +241,7 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
     if( pDsigCtx == NULL )
     {
         pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+        //throw XMLSignatureException() ;
         clearErrorRecorder();
         return aTemplate;
     }
@@ -252,12 +267,12 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
     pSecEnv->destroyKeysManager( pMngr ) ; //i39448
-
+    
     //Unregistered the stream/URI binding
     if( xUriBinding.is() )
         xmlUnregisterStreamInputCallbacks() ;
-
-
+    
+    
     clearErrorRecorder();
     return aTemplate;
 }
@@ -292,12 +307,12 @@ Sequence< OUString > SAL_CALL XMLSignature_MSCryptImpl :: getSupportedServiceNam
 Sequence< OUString > XMLSignature_MSCryptImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.XMLSignature")) ;
+    seqServiceNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.xml.crypto.XMLSignature" ) ;
     return seqServiceNames ;
 }
 
 OUString XMLSignature_MSCryptImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.XMLSignature_MSCryptImpl")) ;
+    return OUString::createFromAscii( "com.sun.star.xml.security.bridge.xmlsec.XMLSignature_MSCryptImpl" ) ;
 }
 
 //Helper for registry
@@ -306,6 +321,9 @@ Reference< XInterface > SAL_CALL XMLSignature_MSCryptImpl :: impl_createInstance
 }
 
 Reference< XSingleServiceFactory > XMLSignature_MSCryptImpl :: impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
+    //Reference< XSingleServiceFactory > xFactory ;
+    //xFactory = ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName , impl_createInstance , impl_getSupportedServiceNames ) ;
+    //return xFactory ;
     return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
 }
 

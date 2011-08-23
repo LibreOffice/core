@@ -13,7 +13,7 @@ do while( lines())
 
 	l = linein()
 	IF LENGTH(l)>0 THEN DO
-  	  say l 
+  	  say l /* ' @'ord ' RESIDENTNAME' */
 	  ord = ord + 1
 	END
 end

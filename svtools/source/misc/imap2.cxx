@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
+#ifdef WIN
+#include <sysdep.hxx>
+#endif
 #include <string.h>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
@@ -43,6 +46,9 @@
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
 
+#ifdef WIN
+#include <sysdep.hxx>
+#endif
 #include <string.h>
 #include <math.h>
 
@@ -64,7 +70,7 @@ TYPEINIT0_AUTOFACTORY( ImageMap );
 
 void IMapObject::AppendCERNCoords( const Point& rPoint100, ByteString& rStr ) const
 {
-    const Point aPixPt( Application::GetDefaultDevice()->LogicToPixel( rPoint100, MapMode( MAP_100TH_MM ) ) );
+    const Point	aPixPt( Application::GetDefaultDevice()->LogicToPixel( rPoint100, MapMode( MAP_100TH_MM ) ) );
 
     rStr += '(';
     rStr += ByteString::CreateFromInt32( aPixPt.X() );
@@ -82,7 +88,7 @@ void IMapObject::AppendCERNCoords( const Point& rPoint100, ByteString& rStr ) co
 
 void IMapObject::AppendNCSACoords( const Point& rPoint100, ByteString& rStr ) const
 {
-    const Point aPixPt( Application::GetDefaultDevice()->LogicToPixel( rPoint100, MapMode( MAP_100TH_MM ) ) );
+    const Point	aPixPt( Application::GetDefaultDevice()->LogicToPixel( rPoint100, MapMode( MAP_100TH_MM ) ) );
 
     rStr += ByteString::CreateFromInt32( aPixPt.X() );
     rStr += ',';
@@ -209,10 +215,10 @@ void IMapCircleObject::WriteNCSA( SvStream& rOStm, const String& rBaseURL ) cons
 
 void IMapPolygonObject::WriteCERN( SvStream& rOStm, const String& rBaseURL  ) const
 {
-    ByteString      aStr( "polygon " );
-    const sal_uInt16    nCount = aPoly.GetSize();
+    ByteString		aStr( "polygon " );
+    const USHORT	nCount = aPoly.GetSize();
 
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
+    for ( USHORT i = 0; i < nCount; i++ )
         AppendCERNCoords( aPoly[ i ], aStr );
 
     AppendCERNURL( aStr, rBaseURL );
@@ -229,12 +235,12 @@ void IMapPolygonObject::WriteCERN( SvStream& rOStm, const String& rBaseURL  ) co
 
 void IMapPolygonObject::WriteNCSA( SvStream& rOStm, const String& rBaseURL  ) const
 {
-    ByteString      aStr( "poly " );
-    const sal_uInt16    nCount = Min( aPoly.GetSize(), (sal_uInt16) 100 );
+    ByteString		aStr( "poly " );
+    const USHORT	nCount = Min( aPoly.GetSize(), (USHORT) 100 );
 
     AppendNCSAURL( aStr, rBaseURL );
 
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
+    for ( USHORT i = 0; i < nCount; i++ )
         AppendNCSACoords( aPoly[ i ], aStr );
 
     rOStm.WriteLine( aStr );
@@ -251,7 +257,7 @@ void IMapPolygonObject::WriteNCSA( SvStream& rOStm, const String& rBaseURL  ) co
 |*
 \******************************************************************************/
 
-void ImageMap::Write( SvStream& rOStm, sal_uLong nFormat, const String& rBaseURL ) const
+void ImageMap::Write( SvStream& rOStm, ULONG nFormat, const String& rBaseURL ) const
 {
     switch( nFormat )
     {
@@ -274,9 +280,9 @@ void ImageMap::Write( SvStream& rOStm, sal_uLong nFormat, const String& rBaseURL
 void ImageMap::ImpWriteCERN( SvStream& rOStm, const String& rBaseURL ) const
 {
     IMapObject* pObj;
-    sal_uInt16      nCount = (sal_uInt16) maList.Count();
+    USHORT		nCount = (USHORT) maList.Count();
 
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
+    for ( USHORT i = 0; i < nCount; i++ )
     {
         pObj = GetIMapObject( i );
 
@@ -310,9 +316,9 @@ void ImageMap::ImpWriteCERN( SvStream& rOStm, const String& rBaseURL ) const
 void ImageMap::ImpWriteNCSA( SvStream& rOStm, const String& rBaseURL  ) const
 {
     IMapObject* pObj;
-    sal_uInt16      nCount = (sal_uInt16) maList.Count();
+    USHORT		nCount = (USHORT) maList.Count();
 
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
+    for ( USHORT i = 0; i < nCount; i++ )
     {
         pObj = GetIMapObject( i );
 
@@ -343,9 +349,9 @@ void ImageMap::ImpWriteNCSA( SvStream& rOStm, const String& rBaseURL  ) const
 |*
 \******************************************************************************/
 
-sal_uLong ImageMap::Read( SvStream& rIStm, sal_uLong nFormat, const String& rBaseURL  )
+ULONG ImageMap::Read( SvStream& rIStm, ULONG nFormat, const String& rBaseURL  )
 {
-    sal_uLong nRet = IMAP_ERR_FORMAT;
+    ULONG nRet = IMAP_ERR_FORMAT;
 
     if ( nFormat == IMAP_FORMAT_DETECT )
         nFormat = ImpDetectFormat( rIStm );
@@ -373,7 +379,7 @@ sal_uLong ImageMap::Read( SvStream& rIStm, sal_uLong nFormat, const String& rBas
 |*
 \******************************************************************************/
 
-sal_uLong ImageMap::ImpReadCERN( SvStream& rIStm, const String& rBaseURL )
+ULONG ImageMap::ImpReadCERN( SvStream& rIStm, const String& rBaseURL )
 {
     ByteString aStr;
 
@@ -395,16 +401,16 @@ sal_uLong ImageMap::ImpReadCERN( SvStream& rIStm, const String& rBaseURL )
 
 void ImageMap::ImpReadCERNLine( const ByteString& rLine, const String& rBaseURL  )
 {
-    ByteString  aStr( rLine );
-    ByteString  aToken;
+    ByteString	aStr( rLine );
+    ByteString	aToken;
 
     aStr.EraseLeadingChars( ' ' );
     aStr.EraseLeadingChars( '\t' );
     aStr.EraseAllChars( ';' );
     aStr.ToLowerAscii();
 
-    const char* pStr = aStr.GetBuffer();
-    char        cChar = *pStr++;
+    const char*	pStr = aStr.GetBuffer();
+    char		cChar = *pStr++;
 
         // Anweisung finden
     while( ( cChar >= 'a' ) && ( cChar <= 'z' ) && NOTEOL( cChar ) )
@@ -417,18 +423,18 @@ void ImageMap::ImpReadCERNLine( const ByteString& rLine, const String& rBaseURL 
     {
         if ( ( aToken == "rectangle" ) || ( aToken == "rect" ) )
         {
-            const Point     aTopLeft( ImpReadCERNCoords( &pStr ) );
-            const Point     aBottomRight( ImpReadCERNCoords( &pStr ) );
+            const Point		aTopLeft( ImpReadCERNCoords( &pStr ) );
+            const Point		aBottomRight( ImpReadCERNCoords( &pStr ) );
             const String    aURL( ImpReadCERNURL( &pStr, rBaseURL ) );
-            const Rectangle aRect( aTopLeft, aBottomRight );
+            const Rectangle	aRect( aTopLeft, aBottomRight );
 
             IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, String(), String(), String(), String() );
             maList.Insert( pObj, LIST_APPEND );
         }
         else if ( ( aToken == "circle" ) || ( aToken == "circ" ) )
         {
-            const Point     aCenter( ImpReadCERNCoords( &pStr ) );
-            const long      nRadius = ImpReadCERNRadius( &pStr );
+            const Point		aCenter( ImpReadCERNCoords( &pStr ) );
+            const long		nRadius = ImpReadCERNRadius( &pStr );
             const String    aURL( ImpReadCERNURL( &pStr, rBaseURL ) );
 
             IMapCircleObject* pObj = new IMapCircleObject( aCenter, nRadius, aURL, String(), String(), String(), String() );
@@ -436,11 +442,11 @@ void ImageMap::ImpReadCERNLine( const ByteString& rLine, const String& rBaseURL 
         }
         else if ( ( aToken == "polygon" ) || ( aToken == "poly" ) )
         {
-            const sal_uInt16    nCount = aStr.GetTokenCount( '(' ) - 1;
-            Polygon         aPoly( nCount );
-            String          aURL;
+            const USHORT	nCount = aStr.GetTokenCount( '(' ) - 1;
+            Polygon			aPoly( nCount );
+            String			aURL;
 
-            for ( sal_uInt16 i = 0; i < nCount; i++ )
+            for ( USHORT i = 0; i < nCount; i++ )
                 aPoly[ i ] = ImpReadCERNCoords( &pStr );
 
             aURL = ImpReadCERNURL( &pStr, rBaseURL );
@@ -460,10 +466,10 @@ void ImageMap::ImpReadCERNLine( const ByteString& rLine, const String& rBaseURL 
 
 Point ImageMap::ImpReadCERNCoords( const char** ppStr )
 {
-    String  aStrX;
-    String  aStrY;
-    Point   aPt;
-    char    cChar = *(*ppStr)++;
+    String	aStrX;
+    String	aStrY;
+    Point	aPt;
+    char	cChar = *(*ppStr)++;
 
     while( NOTEOL( cChar ) && ( ( cChar < '0' ) || ( cChar > '9' ) ) )
         cChar = *(*ppStr)++;
@@ -507,8 +513,8 @@ Point ImageMap::ImpReadCERNCoords( const char** ppStr )
 
 long ImageMap::ImpReadCERNRadius( const char** ppStr )
 {
-    String  aStr;
-    char    cChar = *(*ppStr)++;
+    String	aStr;
+    char	cChar = *(*ppStr)++;
 
     while( NOTEOL( cChar ) && ( ( cChar < '0' ) || ( cChar > '9' ) ) )
         cChar = *(*ppStr)++;
@@ -534,7 +540,7 @@ long ImageMap::ImpReadCERNRadius( const char** ppStr )
 
 String ImageMap::ImpReadCERNURL( const char** ppStr, const String& rBaseURL )
 {
-    String  aStr( String::CreateFromAscii( *ppStr ) );
+    String	aStr( String::CreateFromAscii( *ppStr ) );
 
     aStr.EraseLeadingChars( ' ' );
     aStr.EraseLeadingChars( '\t' );
@@ -551,7 +557,7 @@ String ImageMap::ImpReadCERNURL( const char** ppStr, const String& rBaseURL )
 |*
 \******************************************************************************/
 
-sal_uLong ImageMap::ImpReadNCSA( SvStream& rIStm, const String& rBaseURL )
+ULONG ImageMap::ImpReadNCSA( SvStream& rIStm, const String& rBaseURL )
 {
     ByteString aStr;
 
@@ -573,16 +579,16 @@ sal_uLong ImageMap::ImpReadNCSA( SvStream& rIStm, const String& rBaseURL )
 
 void ImageMap::ImpReadNCSALine( const ByteString& rLine, const String& rBaseURL )
 {
-    ByteString  aStr( rLine );
-    ByteString  aToken;
+    ByteString	aStr( rLine );
+    ByteString	aToken;
 
     aStr.EraseLeadingChars( ' ' );
     aStr.EraseLeadingChars( '\t' );
     aStr.EraseAllChars( ';' );
     aStr.ToLowerAscii();
 
-    const char* pStr = aStr.GetBuffer();
-    char        cChar = *pStr++;
+    const char*	pStr = aStr.GetBuffer();
+    char		cChar = *pStr++;
 
         // Anweisung finden
     while( ( cChar >= 'a' ) && ( cChar <= 'z' ) && NOTEOL( cChar ) )
@@ -596,9 +602,9 @@ void ImageMap::ImpReadNCSALine( const ByteString& rLine, const String& rBaseURL 
         if ( aToken == "rect" )
         {
             const String    aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
-            const Point     aTopLeft( ImpReadNCSACoords( &pStr ) );
-            const Point     aBottomRight( ImpReadNCSACoords( &pStr ) );
-            const Rectangle aRect( aTopLeft, aBottomRight );
+            const Point		aTopLeft( ImpReadNCSACoords( &pStr ) );
+            const Point		aBottomRight( ImpReadNCSACoords( &pStr ) );
+            const Rectangle	aRect( aTopLeft, aBottomRight );
 
             IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, String(), String(), String(), String() );
             maList.Insert( pObj, LIST_APPEND );
@@ -606,9 +612,9 @@ void ImageMap::ImpReadNCSALine( const ByteString& rLine, const String& rBaseURL 
         else if ( aToken == "circle" )
         {
             const String    aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
-            const Point     aCenter( ImpReadNCSACoords( &pStr ) );
-            const Point     aDX( aCenter - ImpReadNCSACoords( &pStr ) );
-            long            nRadius = (long) sqrt( (double) aDX.X() * aDX.X() +
+            const Point		aCenter( ImpReadNCSACoords( &pStr ) );
+            const Point		aDX( aCenter - ImpReadNCSACoords( &pStr ) );
+            long			nRadius = (long) sqrt( (double) aDX.X() * aDX.X() +
                                                    (double) aDX.Y() * aDX.Y() );
 
             IMapCircleObject* pObj = new IMapCircleObject( aCenter, nRadius, aURL, String(), String(), String(), String() );
@@ -616,11 +622,11 @@ void ImageMap::ImpReadNCSALine( const ByteString& rLine, const String& rBaseURL 
         }
         else if ( aToken == "poly" )
         {
-            const sal_uInt16    nCount = aStr.GetTokenCount( ',' ) - 1;
+            const USHORT	nCount = aStr.GetTokenCount( ',' ) - 1;
             const String    aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
-            Polygon         aPoly( nCount );
+            Polygon			aPoly( nCount );
 
-            for ( sal_uInt16 i = 0; i < nCount; i++ )
+            for ( USHORT i = 0; i < nCount; i++ )
                 aPoly[ i ] = ImpReadNCSACoords( &pStr );
 
             IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, String(), String(), String(), String() );
@@ -638,8 +644,8 @@ void ImageMap::ImpReadNCSALine( const ByteString& rLine, const String& rBaseURL 
 
 String ImageMap::ImpReadNCSAURL( const char** ppStr, const String& rBaseURL )
 {
-    String  aStr;
-    char    cChar = *(*ppStr)++;
+    String	aStr;
+    char	cChar = *(*ppStr)++;
 
     while( NOTEOL( cChar ) && ( ( cChar == ' ' ) || ( cChar == '\t' ) ) )
         cChar = *(*ppStr)++;
@@ -665,10 +671,10 @@ String ImageMap::ImpReadNCSAURL( const char** ppStr, const String& rBaseURL )
 
 Point ImageMap::ImpReadNCSACoords( const char** ppStr )
 {
-    String  aStrX;
-    String  aStrY;
-    Point   aPt;
-    char    cChar = *(*ppStr)++;
+    String	aStrX;
+    String	aStrY;
+    Point	aPt;
+    char	cChar = *(*ppStr)++;
 
     while( NOTEOL( cChar ) && ( ( cChar < '0' ) || ( cChar > '9' ) ) )
         cChar = *(*ppStr)++;
@@ -706,11 +712,11 @@ Point ImageMap::ImpReadNCSACoords( const char** ppStr )
 |*
 \******************************************************************************/
 
-sal_uLong ImageMap::ImpDetectFormat( SvStream& rIStm )
+ULONG ImageMap::ImpDetectFormat( SvStream& rIStm )
 {
-    sal_uLong   nPos = rIStm.Tell();
-    sal_uLong   nRet = IMAP_FORMAT_BIN;
-    char    cMagic[6];
+    ULONG	nPos = rIStm.Tell();
+    ULONG	nRet = IMAP_FORMAT_BIN;
+    char	cMagic[6];
 
     rIStm.Read( cMagic, sizeof( cMagic ) );
 
@@ -718,8 +724,8 @@ sal_uLong ImageMap::ImpDetectFormat( SvStream& rIStm )
     // untersuchen wir das Format
     if ( memcmp( cMagic, IMAPMAGIC, sizeof( cMagic ) ) )
     {
-        ByteString  aStr;
-        long        nCount = 128;
+        ByteString	aStr;
+        long		nCount = 128;
 
         rIStm.Seek( nPos );
         while ( rIStm.ReadLine( aStr ) && nCount-- )

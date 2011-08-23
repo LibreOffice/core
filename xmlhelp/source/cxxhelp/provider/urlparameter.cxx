@@ -29,7 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmlhelp.hxx"
 
+#define WORKAROUND_98119
+
+#ifdef WORKAROUND_98119
 #include "bufferedinputstream.hxx"
+#endif
 
 #include <string.h>
 #include <osl/diagnose.hxx>
@@ -181,7 +185,7 @@ rtl::OUString URLParameter::get_title()
             m_aTitle = inf->get_title();
     }
     else   // This must be the root
-        m_aTitle = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("root"));
+        m_aTitle = rtl::OUString::createFromAscii("root");
 
     return m_aTitle;
 }
@@ -276,7 +280,7 @@ rtl::OUString URLParameter::get_the_jar()
         return m_aJar;
     }
     else
-        return get_module() + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".jar"));
+        return get_module() + rtl::OUString::createFromAscii(".jar");
 }
 
 
@@ -284,7 +288,7 @@ rtl::OUString URLParameter::get_the_jar()
 
 void URLParameter::readBerkeley()
 {
-    static rtl::OUString aQuestionMark(RTL_CONSTASCII_USTRINGPARAM("?"));
+    static rtl::OUString aQuestionMark( rtl::OUString::createFromAscii( "?" ) );
 
     if( get_id().compareToAscii("") == 0 )
         return;
@@ -446,7 +450,7 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
     {
         Reference< XInputStream > xStream;
         Reference< XHierarchicalNameAccess > xNA =
-            m_pDatabases->jarFile( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "picture.jar" )),
+            m_pDatabases->jarFile( rtl::OUString::createFromAscii( "picture.jar" ),
                                    get_language() );
 
         rtl::OUString path = get_path();
@@ -516,7 +520,7 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
     {
         Reference< XInputStream > xStream;
         Reference< XHierarchicalNameAccess > xNA =
-            m_pDatabases->jarFile( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "picture.jar" )),
+            m_pDatabases->jarFile( rtl::OUString::createFromAscii( "picture.jar" ),
                                    get_language() );
 
         rtl::OUString path = get_path();
@@ -533,7 +537,11 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
             {
             }
         }
+#ifdef WORKAROUND_98119
         xDataSink->setInputStream( turnToSeekable(xStream) );
+#else
+        xDataSink->setInputStream( xStream );
+#endif
     }
     else
         // a standard document or else an active help text, plug in the new input stream
@@ -543,6 +551,7 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
 
 void URLParameter::parse() throw( com::sun::star::ucb::IllegalIdentifierException )
 {
+    // fprintf(stdout,"url send to xmlhelp: %s\n",(rtl::OUStringToOString(m_aURL,RTL_TEXTENCODING_UTF8).getStr()));
     m_aExpr = m_aURL;
 
     sal_Int32 lstIdx = m_aExpr.lastIndexOf( sal_Unicode( '#' ) );
@@ -569,7 +578,7 @@ bool URLParameter::scheme()
         if( aLastStr.compareToAscii( "DbPAR=" ) == 0 )
         {
             rtl::OUString aNewExpr = m_aExpr.copy( 0, 20 );
-            rtl::OUString aSharedStr(RTL_CONSTASCII_USTRINGPARAM("shared"));
+            rtl::OUString aSharedStr = rtl::OUString::createFromAscii( "shared" );
             aNewExpr += aSharedStr;
             aNewExpr += m_aExpr.copy( 20 );
             aNewExpr += aSharedStr;
@@ -618,6 +627,9 @@ bool URLParameter::name( bool modulePresent )
     {
         sal_Int32 idx = 1;
         while( idx < length && (m_aExpr.getStr())[idx] != '?' )
+//                ( isLetterOrDigit( (m_aExpr.getStr())[idx] )
+//                  || (m_aExpr.getStr())[idx] == '/'
+//                  || (m_aExpr.getStr())[idx] == '.' ))
             ++idx;
 
         if( idx != 1 && ! modulePresent )
@@ -629,6 +641,7 @@ bool URLParameter::name( bool modulePresent )
         }
     }
 
+//    fprintf(stdout,"id %s\n",(rtl::OUStringToOString(m_aId,RTL_TEXTENCODING_UTF8).getStr()));
     return true;
 }
 
@@ -682,7 +695,7 @@ bool URLParameter::query()
             if( ! m_aQuery.getLength() )
                 m_aQuery = value;
             else
-                m_aQuery += ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " )) + value );
+                m_aQuery += ( rtl::OUString::createFromAscii( " " ) + value );
         }
         else if( parameter.compareToAscii( "Scope" ) == 0 )
             m_aScope = value;
@@ -748,7 +761,7 @@ helpMatch(const char * URI) {
 static void *
 fileOpen(const char *URI) {
     osl::File *pRet = new osl::File(rtl::OUString(URI, strlen(URI), RTL_TEXTENCODING_UTF8));
-    pRet->open(osl_File_OpenFlag_Read);
+    pRet->open(OpenFlag_Read);
     return pRet;
 }
 
@@ -881,6 +894,18 @@ fileClose(void * context) {
 
 } // extern "C"
 
+/*
+// For debugging only
+extern "C" void StructuredXMLErrorFunction(void *userData, xmlErrorPtr error)
+{
+    (void)userData;
+    (void)error;
+
+    // Reset error handler
+    xmlSetStructuredErrorFunc( NULL, NULL );
+}
+*/
+
 InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
                                                 Databases*    pDatabases,
                                                 bool isRoot )
@@ -1010,7 +1035,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             if( !xContext.is() )
             {
                 throw RuntimeException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "InputStreamTransformer::InputStreamTransformer(), no XComponentContext" )),
+                    ::rtl::OUString::createFromAscii( "InputStreamTransformer::InputStreamTransformer(), no XComponentContext" ),
                     Reference< XInterface >() );
             }
 
@@ -1048,6 +1073,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         xmlRegisterInputCallbacks(zipMatch, zipOpen, zipRead, uriClose);
         xmlRegisterInputCallbacks(helpMatch, helpOpen, helpRead, uriClose);
         xmlRegisterInputCallbacks(fileMatch, fileOpen, fileRead, fileClose);
+        //xmlSetStructuredErrorFunc( NULL, (xmlStructuredErrorFunc)StructuredXMLErrorFunction );
 
         xsltStylesheetPtr cur =
             xsltParseStylesheetFile((const xmlChar *)xslURLascii.getStr());
@@ -1063,9 +1089,9 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             addToBuffer((const char*)doc_txt_ptr, doc_txt_len);
             xmlFree(doc_txt_ptr);
         }
-        xmlPopInputCallbacks(); //filePatch
-        xmlPopInputCallbacks(); //helpPatch
-        xmlPopInputCallbacks(); //zipMatch
+        xmlPopInputCallbacks();	//filePatch
+        xmlPopInputCallbacks();	//helpPatch
+        xmlPopInputCallbacks();	//zipMatch
         xmlFreeDoc(res);
         xmlFreeDoc(doc);
         xsltFreeStylesheet(cur);

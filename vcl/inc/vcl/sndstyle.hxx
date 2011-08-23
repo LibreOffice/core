@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 // - Sound-Types -
 // ---------------
 
-typedef sal_uInt16 SoundType;
+typedef USHORT SoundType;
 #define SOUND_DEFAULT                   ((SoundType)0)
 #define SOUND_INFO                      ((SoundType)1)
 #define SOUND_WARNING                   ((SoundType)2)

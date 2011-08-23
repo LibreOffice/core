@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,13 +50,13 @@ namespace dbaui
         SvxNumberInfoItem* pNumberInfoItem;
 
     public:
-        SbaSbAttrDlg( Window * pParent, const SfxItemSet*, SvNumberFormatter*, sal_uInt16 nFlags = TP_ATTR_CHAR , sal_Bool bRow = sal_False);
+        SbaSbAttrDlg( Window * pParent, const SfxItemSet*, SvNumberFormatter*, USHORT nFlags = TP_ATTR_CHAR , BOOL bRow = FALSE);
         ~SbaSbAttrDlg();
 
-        virtual void  PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage );
+        virtual void  PageCreated( USHORT nPageId, SfxTabPage& rTabPage );
     };
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif//DBAUI_SBATTRDLG_HXX

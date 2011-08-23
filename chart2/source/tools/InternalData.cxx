@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,10 @@
 #include "macros.hxx"
 
 #include <rtl/math.hxx>
-#include <algorithm>
 
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
 
-using namespace ::com::sun::star;
 using namespace ::std;
 
 namespace chart
@@ -58,10 +56,10 @@ struct lcl_NumberedStringGenerator
             m_nWildcardLength( rWildcard.getLength())
     {
     }
-    vector< uno::Any > operator()()
+    vector< OUString > operator()()
     {
-        vector< uno::Any > aRet(1);
-        aRet[0] = uno::makeAny( m_aStub.replaceAt( m_nStubStartIndex, m_nWildcardLength, OUString::valueOf( ++m_nCounter )) );
+        vector< OUString > aRet(1);
+        aRet[0] = m_aStub.replaceAt( m_nStubStartIndex, m_nWildcardLength, OUString::valueOf( ++m_nCounter ));
         return aRet;
     }
 private:
@@ -113,16 +111,16 @@ void InternalData::createDefaultData()
     m_aData.resize( nSize );
     for( sal_Int32 i=0; i<nSize; ++i )
         m_aData[i] = fDefaultData[i];
-
+   
     m_aRowLabels.clear();
     m_aRowLabels.reserve( m_nRowCount );
     generate_n( back_inserter( m_aRowLabels ), m_nRowCount,
-        lcl_NumberedStringGenerator( aRowName, C2U("%ROWNUMBER") ));
+                lcl_NumberedStringGenerator( aRowName, C2U("%ROWNUMBER") ));
 
     m_aColumnLabels.clear();
     m_aColumnLabels.reserve( m_nColumnCount );
     generate_n( back_inserter( m_aColumnLabels ), m_nColumnCount,
-        lcl_NumberedStringGenerator( aColName, C2U("%COLUMNNUMBER") ));
+                lcl_NumberedStringGenerator( aColName, C2U("%COLUMNNUMBER") ));
 }
 
 bool InternalData::isDefaultData()
@@ -185,7 +183,7 @@ Sequence< Sequence< double > > InternalData::getData() const
     for( sal_Int32 i=0; i<m_nRowCount; ++i )
         aResult[i] = lcl_ValarrayToSequence< tDataType::value_type >(
             m_aData[ ::std::slice( i*m_nColumnCount, m_nColumnCount, 1 ) ] );
-
+    
     return aResult;
 }
 
@@ -209,7 +207,7 @@ void InternalData::setColumnValues( sal_Int32 nColumnIndex, const vector< double
     if( nColumnIndex < 0 )
         return;
     enlargeData( nColumnIndex + 1, rNewData.size() );
-
+    
     tDataType aSlice = m_aData[ ::std::slice( nColumnIndex, m_nRowCount, m_nColumnCount ) ];
     for( vector< double >::size_type i = 0; i < rNewData.size(); ++i )
         aSlice[i] = rNewData[i];
@@ -228,7 +226,7 @@ void InternalData::setRowValues( sal_Int32 nRowIndex, const vector< double > & r
     m_aData[ ::std::slice( nRowIndex*m_nColumnCount, m_nColumnCount, 1 ) ]= aSlice;
 }
 
-void InternalData::setComplexColumnLabel( sal_Int32 nColumnIndex, const vector< uno::Any >& rComplexLabel )
+void InternalData::setComplexColumnLabel( sal_Int32 nColumnIndex, const vector< OUString >& rComplexLabel )
 {
     if( nColumnIndex < 0 )
         return;
@@ -237,10 +235,10 @@ void InternalData::setComplexColumnLabel( sal_Int32 nColumnIndex, const vector< 
         m_aColumnLabels.resize(nColumnIndex+1);
         enlargeData( nColumnIndex+1, 0 );
     }
+
     m_aColumnLabels[nColumnIndex]=rComplexLabel;
 }
-
-void InternalData::setComplexRowLabel( sal_Int32 nRowIndex, const vector< uno::Any >& rComplexLabel )
+void InternalData::setComplexRowLabel( sal_Int32 nRowIndex, const vector< OUString >& rComplexLabel )
 {
     if( nRowIndex < 0 )
         return;
@@ -249,22 +247,23 @@ void InternalData::setComplexRowLabel( sal_Int32 nRowIndex, const vector< uno::A
         m_aRowLabels.resize(nRowIndex+1);
         enlargeData( 0, nRowIndex+1 );
     }
+
     m_aRowLabels[nRowIndex] = rComplexLabel;
 }
 
-vector< uno::Any > InternalData::getComplexColumnLabel( sal_Int32 nColumnIndex ) const
+vector< OUString > InternalData::getComplexColumnLabel( sal_Int32 nColumnIndex ) const
 {
     if( nColumnIndex < static_cast< sal_Int32 >( m_aColumnLabels.size() ) )
         return m_aColumnLabels[nColumnIndex];
     else
-        return vector< uno::Any >();
+        return vector< OUString >();
 }
-vector< uno::Any > InternalData::getComplexRowLabel( sal_Int32 nRowIndex ) const
+vector< OUString > InternalData::getComplexRowLabel( sal_Int32 nRowIndex ) const
 {
     if( nRowIndex < static_cast< sal_Int32 >( m_aRowLabels.size() ) )
         return m_aRowLabels[nRowIndex];
     else
-        return vector< uno::Any >();
+        return vector< OUString >();
 }
 
 void InternalData::swapRowWithNext( sal_Int32 nRowIndex )
@@ -281,7 +280,7 @@ void InternalData::swapRowWithNext( sal_Int32 nRowIndex )
             m_aData[nIndex2] = fTemp;
         }
 
-        vector< uno::Any > aTemp( m_aRowLabels[nRowIndex] );
+        vector< OUString > aTemp( m_aRowLabels[nRowIndex] );
         m_aRowLabels[nRowIndex] = m_aRowLabels[nRowIndex + 1];
         m_aRowLabels[nRowIndex + 1] = aTemp;
     }
@@ -300,8 +299,8 @@ void InternalData::swapColumnWithNext( sal_Int32 nColumnIndex )
             m_aData[nIndex1] = m_aData[nIndex2];
             m_aData[nIndex2] = fTemp;
         }
-
-        vector< uno::Any > aTemp( m_aColumnLabels[nColumnIndex] );
+        
+        vector< OUString > aTemp( m_aColumnLabels[nColumnIndex] );
         m_aColumnLabels[nColumnIndex] = m_aColumnLabels[nColumnIndex + 1];
         m_aColumnLabels[nColumnIndex + 1] = aTemp;
     }
@@ -364,9 +363,9 @@ void InternalData::insertColumn( sal_Int32 nAfterIndex )
 
     // labels
     if( nAfterIndex < static_cast< sal_Int32 >( m_aColumnLabels.size()))
-        m_aColumnLabels.insert( m_aColumnLabels.begin() + (nAfterIndex + 1), vector< uno::Any >(1) );
+        m_aColumnLabels.insert( m_aColumnLabels.begin() + (nAfterIndex + 1), vector< OUString >(1) );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
     traceData();
 #endif
 }
@@ -416,9 +415,9 @@ void InternalData::insertRow( sal_Int32 nAfterIndex )
 
     // labels
     if( nAfterIndex < static_cast< sal_Int32 >( m_aRowLabels.size()))
-        m_aRowLabels.insert( m_aRowLabels.begin() + nIndex, vector< uno::Any > (1));
-
-#if OSL_DEBUG_LEVEL > 1
+        m_aRowLabels.insert( m_aRowLabels.begin() + nIndex, vector< OUString> (1));
+    
+#if OSL_DEBUG_LEVEL > 2
     traceData();
 #endif
 }
@@ -454,7 +453,7 @@ void InternalData::deleteColumn( sal_Int32 nAtIndex )
     if( nAtIndex < static_cast< sal_Int32 >( m_aColumnLabels.size()))
         m_aColumnLabels.erase( m_aColumnLabels.begin() + nAtIndex );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
     traceData();
 #endif
 }
@@ -494,7 +493,7 @@ void InternalData::deleteRow( sal_Int32 nAtIndex )
     if( nAtIndex < static_cast< sal_Int32 >( m_aRowLabels.size()))
         m_aRowLabels.erase( m_aRowLabels.begin() + nAtIndex );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
     traceData();
 #endif
 }
@@ -509,7 +508,7 @@ sal_Int32 InternalData::getColumnCount() const
     return m_nColumnCount;
 }
 
-void InternalData::setComplexRowLabels( const vector< vector< uno::Any > >& rNewRowLabels )
+void InternalData::setComplexRowLabels( const vector< vector< OUString > >& rNewRowLabels )
 {
     m_aRowLabels = rNewRowLabels;
     sal_Int32 nNewRowCount = static_cast< sal_Int32 >( m_aRowLabels.size() );
@@ -519,12 +518,12 @@ void InternalData::setComplexRowLabels( const vector< vector< uno::Any > >& rNew
         enlargeData( 0, nNewRowCount );
 }
 
-vector< vector< uno::Any > > InternalData::getComplexRowLabels() const
+vector< vector< OUString > > InternalData::getComplexRowLabels() const
 {
     return m_aRowLabels;
 }
 
-void InternalData::setComplexColumnLabels( const vector< vector< uno::Any > >& rNewColumnLabels )
+void InternalData::setComplexColumnLabels( const vector< vector< OUString > >& rNewColumnLabels )
 {
     m_aColumnLabels = rNewColumnLabels;
     sal_Int32 nNewColumnCount = static_cast< sal_Int32 >( m_aColumnLabels.size() );
@@ -534,12 +533,12 @@ void InternalData::setComplexColumnLabels( const vector< vector< uno::Any > >& r
         enlargeData( nNewColumnCount, 0 );
 }
 
-vector< vector< uno::Any > > InternalData::getComplexColumnLabels() const
+vector< vector< OUString > > InternalData::getComplexColumnLabels() const
 {
     return m_aColumnLabels;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
 void InternalData::traceData() const
 {
     OSL_TRACE( "InternalData: Data in rows\n" );

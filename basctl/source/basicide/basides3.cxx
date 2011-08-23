@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #include <baside2.hxx>
 #include <baside3.hxx>
 #include <basobj.hxx>
-#include <localizationmgr.hxx>
+#include <localizationmgr.hxx> 
 #include <dlgedview.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
@@ -58,9 +58,9 @@ using namespace ::com::sun::star::io;
 
 DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName )
 {
-    bCreatingWindow = sal_True;
-
-    sal_uLong nKey = 0;
+    bCreatingWindow = TRUE;
+    
+    ULONG nKey = 0;
     DialogWindow* pWin = 0;
     String aLibName( rLibName );
     String aDlgName( rDlgName );
@@ -74,13 +74,13 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
         aDlgName = rDocument.createObjectName( E_DIALOGS, aLibName );
 
     // Vielleicht gibt es ein suspendiertes?
-    pWin = FindDlgWin( rDocument, aLibName, aDlgName, sal_False, sal_True );
+    pWin = FindDlgWin( rDocument, aLibName, aDlgName, FALSE, TRUE );
 
     if ( !pWin )
     {
         try
         {
-            Reference< io::XInputStreamProvider > xISP;
+            Reference< io::XInputStreamProvider > xISP;			
             if ( rDocument.hasDialog( aLibName, aDlgName ) )
                 rDocument.getDialog( aLibName, aDlgName, xISP );
             else
@@ -108,7 +108,7 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
         catch ( uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
-        }
+        }						
     }
     else
     {
@@ -126,17 +126,17 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
     if( pWin )
     {
         pWin->GrabScrollBars( &aHScrollBar, &aVScrollBar );
-        pTabBar->InsertPage( (sal_uInt16)nKey, aDlgName );
+        pTabBar->InsertPage( (USHORT)nKey, aDlgName );
         pTabBar->Sort();
         if ( !pCurWin )
-            SetCurWindow( pWin, sal_False, sal_False );
+            SetCurWindow( pWin, FALSE, FALSE );
     }
 
-    bCreatingWindow = sal_False;
+    bCreatingWindow = FALSE;
     return pWin;
 }
 
-DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended )
+DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName, BOOL bCreateIfNotExist, BOOL bFindSuspended )
 {
     DialogWindow* pDlgWin = 0;
     IDEBaseWindow* pWin = aIDEWindowTable.First();
@@ -144,7 +144,7 @@ DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const 
     {
         if ( ( !pWin->IsSuspended() || bFindSuspended ) && pWin->IsA( TYPE( DialogWindow ) ) )
         {
-            if ( !rLibName.Len() )  // nur irgendeins finden...
+            if ( !rLibName.Len() )	// nur irgendeins finden...
                 pDlgWin = (DialogWindow*)pWin;
             else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rDlgName )
                 pDlgWin = (DialogWindow*)pWin;
@@ -167,7 +167,7 @@ SdrView* BasicIDEShell::GetCurDlgView() const
 }
 
 // Nur wenn Dialogfenster oben:
-void BasicIDEShell::ExecuteDialog( SfxRequest& rReq )
+void __EXPORT BasicIDEShell::ExecuteDialog( SfxRequest& rReq )
 {
     if ( pCurWin && ( pCurWin->IsA( TYPE( DialogWindow) ) ||
         (rReq.GetSlot() == SID_IMPORT_DIALOG &&pCurWin->IsA( TYPE( ModulWindow) ) ) ) )

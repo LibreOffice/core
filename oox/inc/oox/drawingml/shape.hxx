@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,6 @@
 #include <vector>
 #include <map>
 
-namespace oox { namespace vml {
-    struct OleObjectInfo;
-} }
-
 namespace oox { namespace drawingml {
 
 class CustomShapeProperties;
@@ -62,14 +58,36 @@ typedef ::std::map< sal_Int32, ShapeStyleRef > ShapeStyleRefMap;
 
 // ============================================================================
 
-/** Additional information for a chart embedded in a drawing shape. */
-struct ChartShapeInfo
-{
-    ::rtl::OUString     maFragmentPath;     /// Path to related XML stream, e.g. for charts.
-    bool                mbEmbedShapes;      /// True = load chart shapes into chart, false = load into parent drawpage.
+/** A callback that will be called before and after the API shape is created
+    from the imported shape.
 
-    inline explicit     ChartShapeInfo( bool bEmbedShapes ) : mbEmbedShapes( bEmbedShapes ) {}
+    An instance of a derived class of this callback can be set at every
+    ::oox::drawingml::Shape instance to implement anything that needs a created
+    and inserted XShape.
+ */
+class CreateShapeCallback
+{
+public:
+    virtual ::rtl::OUString onCreateXShape(
+                            const ::rtl::OUString& rServiceName,
+                            const ::com::sun::star::awt::Rectangle& rShapeRect );
+
+    virtual void        onXShapeCreated(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes ) const;
+
+    inline const PropertyMap& getShapeProperties() const { return maShapeProps; }
+
+protected:
+    explicit            CreateShapeCallback( ::oox::core::XmlFilterBase& rFilter );
+    virtual             ~CreateShapeCallback();
+
+protected:
+    ::oox::core::XmlFilterBase& mrFilter;
+    PropertyMap         maShapeProps;
 };
+
+typedef ::boost::shared_ptr< CreateShapeCallback > CreateShapeCallbackRef;
 
 // ============================================================================
 
@@ -78,7 +96,7 @@ class Shape
 {
 public:
 
-    explicit Shape( const sal_Char* pServiceType = 0 );
+    Shape( const sal_Char* pServiceType = NULL );
     virtual ~Shape();
 
     rtl::OUString&                  getServiceName(){ return msServiceName; }
@@ -97,7 +115,7 @@ public:
 
     CustomShapePropertiesPtr        getCustomShapeProperties(){ return mpCustomShapePropertiesPtr; }
 
-    table::TablePropertiesPtr       getTableProperties();
+    table::TablePropertiesPtr		getTableProperties();
 
     void                              setChildPosition( com::sun::star::awt::Point nPosition ){ maChPosition = nPosition; }
     void                              setChildSize( com::sun::star::awt::Size aSize ){ maChSize = aSize; }
@@ -112,21 +130,15 @@ public:
     void                            setName( const rtl::OUString& rName ) { msName = rName; }
     ::rtl::OUString                 getName( ) { return msName; }
     void                            setId( const rtl::OUString& rId ) { msId = rId; }
-    ::rtl::OUString                 getId() { return msId; }
-    void                            setHidden( sal_Bool bHidden ) { mbHidden = bHidden; }
-    sal_Bool                        getHidden() const { return mbHidden; };
+    void							setHidden( sal_Bool bHidden ) { mbHidden = bHidden; }
+    sal_Bool						getHidden() const { return mbHidden; };
     void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
     void                            setSubTypeIndex( sal_uInt32 nSubTypeIndex ) { mnSubTypeIndex = nSubTypeIndex; }
-    sal_Int32                       getSubTypeIndex() const { return mnSubTypeIndex; }
+    sal_Int32						getSubTypeIndex() const { return mnSubTypeIndex; }
 
     // setDefaults has to be called if styles are imported (OfficeXML is not storing properties having the default value)
     void                            setDefaults();
-
-    ::oox::vml::OleObjectInfo&      setOleObjectType();
-    ChartShapeInfo&                 setChartType( bool bEmbedShapes );
-    void                            setDiagramType();
-    void                            setTableType();
 
     void                setTextBody(const TextBodyPtr & pTextBody);
     TextBodyPtr         getTextBody();
@@ -137,15 +149,17 @@ public:
     inline const ShapeStyleRefMap&  getShapeStyleRefs() const { return maShapeStyleRefs; }
     const ShapeStyleRef*            getShapeStyleRef( sal_Int32 nRefType ) const;
 
+    inline void         setCreateShapeCallback( CreateShapeCallbackRef xCallback ) { mxCreateCallback = xCallback; }
+
     // addShape is creating and inserting the corresponding XShape.
     void                addShape(
-                            ::oox::core::XmlFilterBase& rFilterBase,
+                            const oox::core::XmlFilterBase& rFilterBase,
                             const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle* pShapeRect = 0,
                             ShapeIdMap* pShapeMap = 0 );
 
-    void                setXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rXShape )
+    void				setXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rXShape )
                             { mxShape = rXShape; };
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &
                         getXShape() const { return mxShape; }
@@ -156,7 +170,7 @@ protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                         createAndInsert(
-                            ::oox::core::XmlFilterBase& rFilterBase,
+                            const ::oox::core::XmlFilterBase& rFilterBase,
                             const ::rtl::OUString& rServiceName,
                             const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
@@ -164,21 +178,12 @@ protected:
                             sal_Bool bClearText );
 
     void                addChildren(
-                            ::oox::core::XmlFilterBase& rFilterBase,
+                            const ::oox::core::XmlFilterBase& rFilterBase,
                             Shape& rMaster,
                             const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle& rClientRect,
                             ShapeIdMap* pShapeMap );
-
-    virtual ::rtl::OUString finalizeServiceName(
-                            ::oox::core::XmlFilterBase& rFilter,
-                            const ::rtl::OUString& rServiceName,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect );
-
-    virtual void        finalizeXShape(
-                            ::oox::core::XmlFilterBase& rFilter,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
 
     std::vector< ShapePtr >     maChildren;               // only used for group shapes
     com::sun::star::awt::Size   maChSize;                 // only used for group shapes
@@ -192,17 +197,17 @@ protected:
     FillPropertiesPtr           mpFillPropertiesPtr;
     GraphicPropertiesPtr        mpGraphicPropertiesPtr;
     CustomShapePropertiesPtr    mpCustomShapePropertiesPtr;
-    table::TablePropertiesPtr   mpTablePropertiesPtr;
+    table::TablePropertiesPtr	mpTablePropertiesPtr;
     PropertyMap                 maShapeProperties;
     PropertyMap                 maDefaultShapeProperties;
     TextListStylePtr            mpMasterTextListStyle;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
 
-    rtl::OUString       msServiceName;
-    rtl::OUString       msName;
-    rtl::OUString       msId;
-    sal_Int32           mnSubType;      // if this type is not zero, then the shape is a placeholder
-    sal_Int32           mnSubTypeIndex;
+    rtl::OUString		msServiceName;
+    rtl::OUString		msName;
+    rtl::OUString		msId;
+    sal_Int32			mnSubType;      // if this type is not zero, then the shape is a placeholder
+    sal_Int32			mnSubTypeIndex;
 
     ShapeStyleRefMap   maShapeStyleRefs;
 
@@ -210,31 +215,14 @@ protected:
     com::sun::star::awt::Point      maPosition;
 
 private:
-    enum FrameType
-    {
-        FRAMETYPE_GENERIC,          /// Generic shape, no special type.
-        FRAMETYPE_OLEOBJECT,        /// OLE object embedded in a shape.
-        FRAMETYPE_CHART,            /// Chart embedded in a shape.
-        FRAMETYPE_DIAGRAM,          /// Complex diagram drawing shape.
-        FRAMETYPE_TABLE             /// A table embedded in a shape.
-    };
-
-    typedef ::boost::shared_ptr< ::oox::vml::OleObjectInfo >    OleObjectInfoRef;
-    typedef ::boost::shared_ptr< ChartShapeInfo >               ChartShapeInfoRef;
-
-    FrameType           meFrameType;        /// Type for graphic frame shapes.
-    OleObjectInfoRef    mxOleObjectInfo;    /// Additional data for OLE objects.
-    ChartShapeInfoRef   mxChartShapeInfo;   /// Additional data for chart shapes.
-
+    CreateShapeCallbackRef          mxCreateCallback;
     sal_Int32                       mnRotation;
     sal_Bool                        mbFlipH;
     sal_Bool                        mbFlipV;
-    sal_Bool                        mbHidden;
+    sal_Bool						mbHidden;
 };
 
 ::rtl::OUString GetShapeType( sal_Int32 nType );
-
-// ============================================================================
 
 } }
 

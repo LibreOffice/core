@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ published service CachedContentResultSet
     service com::sun::star::ucb::ContentResultSet;
 
     //-------------------------------------------------------------------------
-    /** contains the number of result set rows that should be fetched from
+    /** contains the number of result set rows that should be fethched from
     an underlying database.
 
     <p>The default fetch size is implementation specific.

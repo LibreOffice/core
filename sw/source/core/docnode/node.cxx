@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,8 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+
 #include <hintids.hxx>
+
+// --> OD 2005-02-21 #i42921#
 #include <editeng/frmdiritem.hxx>
+// <--
 #include <editeng/protitem.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
 #include <fmtcntnt.hxx>
@@ -68,11 +72,13 @@
 #include <crsskip.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <scriptinfo.hxx>
+// --> OD 2005-12-05 #i27138#
 #include <rootfrm.hxx>
+// <--
 #include <istyleaccess.hxx>
+// --> OD 2007-10-31 #i83479#
 #include <IDocumentListItems.hxx>
-#include <switerator.hxx>
-#include "ndole.hxx"
+// <--
 
 using namespace ::com::sun::star::i18n;
 
@@ -158,7 +164,7 @@ int Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet, const SwCntntNode& rNo
 
     // --> FME 2007-4-12 #i76273# Robust: Save the style name items:
     SfxItemSet* pStyleNames = 0;
-    if ( SFX_ITEM_SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, sal_False ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, FALSE ) )
     {
         pStyleNames = new SfxItemSet( *aNewSet.GetPool(), RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME );
         pStyleNames->Put( aNewSet );
@@ -208,7 +214,7 @@ int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
 
     // --> FME 2007-4-12 #i76273# Robust: Save the style name items:
     SfxItemSet* pStyleNames = 0;
-    if ( SFX_ITEM_SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, sal_False ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, FALSE ) )
     {
         pStyleNames = new SfxItemSet( *aNewSet.GetPool(), RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME );
         pStyleNames->Put( aNewSet );
@@ -236,28 +242,28 @@ int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
     return nRet;
 }
 
-sal_uInt16 ClearItem_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
-                     const SwCntntNode& rNode, sal_uInt16 nWhich,
+USHORT ClearItem_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+                     const SwCntntNode& rNode, USHORT nWhich,
                      SwAttrSet* pOld, SwAttrSet* pNew )
 {
     SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
     if( rNode.GetModifyAtAttr() )
         aNewSet.SetModifyAtAttr( &rNode );
-    const sal_uInt16 nRet = aNewSet.ClearItem_BC( nWhich, pOld, pNew );
+    const USHORT nRet = aNewSet.ClearItem_BC( nWhich, pOld, pNew );
     if ( nRet )
         GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
     return nRet;
 }
 
-sal_uInt16 ClearItem_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+USHORT ClearItem_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
                      const SwCntntNode& rNode,
-                     sal_uInt16 nWhich1, sal_uInt16 nWhich2,
+                     USHORT nWhich1, USHORT nWhich2,
                      SwAttrSet* pOld, SwAttrSet* pNew )
 {
     SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
     if( rNode.GetModifyAtAttr() )
         aNewSet.SetModifyAtAttr( &rNode );
-    const sal_uInt16 nRet = aNewSet.ClearItem_BC( nWhich1, nWhich2, pOld, pNew );
+    const USHORT nRet = aNewSet.ClearItem_BC( nWhich1, nWhich2, pOld, pNew );
     if ( nRet )
         GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
     return nRet;
@@ -267,30 +273,36 @@ sal_uInt16 ClearItem_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
 
 /*******************************************************************
 |*
-|*  SwNode::GetSectionLevel
+|*	SwNode::GetSectionLevel
 |*
-|*  Beschreibung
-|*      Die Funktion liefert den Sectionlevel an der durch
-|*      aIndex bezeichneten Position.
+|*	Beschreibung
+|*		Die Funktion liefert den Sectionlevel an der durch
+|*		aIndex bezeichneten Position.
 |*
-|*      Die Logik ist wie folgt:   ( S -> Start, E -> End, C -> CntntNode)
-|*          Level   0       E
-|*                  1   S  E
-|*                  2    SC
+|*		Die Logik ist wie folgt:   ( S -> Start, E -> End, C -> CntntNode)
+|*			Level 	0		E
+|*					1 	S  E
+|*					2  	 SC
 |*
-|*      alle EndNodes der GrundSection haben den Level 0
-|*      alle StartNodes der GrundSection haben den Level 1
+|*		alle EndNodes der GrundSection haben den Level 0
+|*		alle StartNodes der GrundSection haben den Level 1
+|*
+|*	Ersterstellung
+|*		VER0100 vb 901214
+|*
+|*	Aenderung:	JP	11.08.93
+|*		keine Rekursion mehr !!
 |*
 *******************************************************************/
 
 
-sal_uInt16 SwNode::GetSectionLevel() const
+USHORT SwNode::GetSectionLevel() const
 {
     // EndNode einer Grund-Section ?? diese sind immer 0 !!
     if( IsEndNode() && 0 == pStartOfSection->StartOfSectionIndex() )
         return 0;
 
-    sal_uInt16 nLevel;
+    USHORT nLevel;
     const SwNode* pNode = IsStartNode() ? this : pStartOfSection;
     for( nLevel = 1; 0 != pNode->StartOfSectionIndex(); ++nLevel )
         pNode = pNode->pStartOfSection;
@@ -299,23 +311,29 @@ sal_uInt16 SwNode::GetSectionLevel() const
 
 /*******************************************************************
 |*
-|*  SwNode::SwNode
+|*	SwNode::SwNode
 |*
-|*  Beschreibung
-|*      Konstruktor; dieser fuegt einen Node in das Array rNodes
-|*      an der Position rWhere ein. Dieser bekommt als
-|*      theEndOfSection den EndOfSection-Index des Nodes
-|*      unmittelbar vor ihm. Falls er sich an der Position 0
-|*      innerhalb des variablen Arrays befindet, wird
-|*      theEndOfSection 0 (der neue selbst).
+|*	Beschreibung
+|*		Konstruktor; dieser fuegt einen Node in das Array rNodes
+|*		an der Position rWhere ein. Dieser bekommt als
+|*		theEndOfSection den EndOfSection-Index des Nodes
+|*		unmittelbar vor ihm. Falls er sich an der Position 0
+|*		innerhalb des variablen Arrays befindet, wird
+|*		theEndOfSection 0 (der neue selbst).
 |*
-|*  Parameter
-|*      IN
-|*      rNodes bezeichnet das variable Array, in das der Node
-|*      eingefuegt werden soll
-|*      IN
-|*      rWhere bezeichnet die Position innerhalb dieses Arrays,
-|*      an der der Node eingefuegt werden soll
+|*	Parameter
+|*		IN
+|*		rNodes bezeichnet das variable Array, in das der Node
+|*		eingefuegt werden soll
+|*		IN
+|*		rWhere bezeichnet die Position innerhalb dieses Arrays,
+|*		an der der Node eingefuegt werden soll
+|*
+|*	Ersterstellung
+|*		VER0100 vb 901214
+|*
+|*	Stand
+|*		VER0100 vb 901214
 |*
 *******************************************************************/
 
@@ -323,14 +341,14 @@ sal_uInt16 SwNode::GetSectionLevel() const
 long SwNode::nSerial = 0;
 #endif
 
-SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
+SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
     : nNodeType( nNdType ), pStartOfSection( 0 )
 {
-    bSetNumLSpace = bIgnoreDontExpand = sal_False;
+    bSetNumLSpace = bIgnoreDontExpand = FALSE;
     nAFmtNumLvl = 0;
 
     SwNodes& rNodes = (SwNodes&)rWhere.GetNodes();
-    SwNode* pInsNd = this;      // der MAC kann this nicht einfuegen !!
+    SwNode* pInsNd = this; 		// der MAC kann this nicht einfuegen !!
     if( rWhere.GetIndex() )
     {
         SwNode* pNd = rNodes[ rWhere.GetIndex() -1 ];
@@ -338,7 +356,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
         if( 0 == ( pStartOfSection = pNd->GetStartNode()) )
         {
             pStartOfSection = pNd->pStartOfSection;
-            if( pNd->GetEndNode() )     // EndNode ? Section ueberspringen!
+            if( pNd->GetEndNode() )		// EndNode ? Section ueberspringen!
             {
                 pNd = pStartOfSection;
                 pStartOfSection = pNd->pStartOfSection;
@@ -357,13 +375,13 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
 #endif
 }
 
-SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const sal_uInt8 nNdType )
+SwNode::SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNdType )
     : nNodeType( nNdType ), pStartOfSection( 0 )
 {
-    bSetNumLSpace = bIgnoreDontExpand = sal_False;
+    bSetNumLSpace = bIgnoreDontExpand = FALSE;
     nAFmtNumLvl = 0;
 
-    SwNode* pInsNd = this;      // der MAC kann this nicht einfuegen !!
+    SwNode* pInsNd = this; 		// der MAC kann this nicht einfuegen !!
     if( nPos )
     {
         SwNode* pNd = rNodes[ nPos - 1 ];
@@ -371,7 +389,7 @@ SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const sal_uInt8 nNdType )
         if( 0 == ( pStartOfSection = pNd->GetStartNode()) )
         {
             pStartOfSection = pNd->pStartOfSection;
-            if( pNd->GetEndNode() )     // EndNode ? Section ueberspringen!
+            if( pNd->GetEndNode() )		// EndNode ? Section ueberspringen!
             {
                 pNd = pStartOfSection;
                 pStartOfSection = pNd->pStartOfSection;
@@ -414,9 +432,9 @@ SwTableNode* SwNode::FindTableNode()
 
 
 // liegt der Node im Sichtbarenbereich der Shell ?
-sal_Bool SwNode::IsInVisibleArea( ViewShell* pSh ) const
+BOOL SwNode::IsInVisibleArea( ViewShell* pSh ) const
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     const SwCntntNode* pNd;
 
     if( ND_STARTNODE & nNodeType )
@@ -432,33 +450,32 @@ sal_Bool SwNode::IsInVisibleArea( ViewShell* pSh ) const
     else
         pNd = GetCntntNode();
 
-    if( !pSh )
-        // dann die Shell vom Doc besorgen:
-        GetDoc()->GetEditShell( &pSh );
-
-    if( pSh )
+    const SwFrm* pFrm;
+    if( pNd && 0 != ( pFrm = pNd->GetFrm( 0, 0, FALSE ) ) )
     {
-        const SwFrm* pFrm;
-        if( pNd && 0 != ( pFrm = pNd->getLayoutFrm( pSh->GetLayout(), 0, 0, sal_False ) ) )
-        {
+        if( !pSh )
+            // dann die Shell vom Doc besorgen:
+            GetDoc()->GetEditShell( &pSh );
 
+        if( pSh )
+        {
             if ( pFrm->IsInTab() )
                 pFrm = pFrm->FindTabFrm();
 
             if( !pFrm->IsValid() )
                 do
-                {   pFrm = pFrm->FindPrev();
+                {	pFrm = pFrm->FindPrev();
                 } while ( pFrm && !pFrm->IsValid() );
 
             if( !pFrm || pSh->VisArea().IsOver( pFrm->Frm() ) )
-                bRet = sal_True;
+                bRet = TRUE;
         }
     }
 
     return bRet;
 }
 
-sal_Bool SwNode::IsInProtectSect() const
+BOOL SwNode::IsInProtectSect() const
 {
     const SwNode* pNd = ND_SECTIONNODE == nNodeType ? pStartOfSection : this;
     const SwSectionNode* pSectNd = pNd->FindSectionNode();
@@ -467,36 +484,36 @@ sal_Bool SwNode::IsInProtectSect() const
 
     // befindet sich der Node in irgendetwas geschuetzten ?
     // (Bereich/Rahmen/Tabellenzellen/... incl. des Ankers bei
-    //  Rahmen/Fussnoten/..)
-sal_Bool SwNode::IsProtect() const
+    //	Rahmen/Fussnoten/..)
+BOOL SwNode::IsProtect() const
 {
     const SwNode* pNd = ND_SECTIONNODE == nNodeType ? pStartOfSection : this;
     const SwStartNode* pSttNd = pNd->FindSectionNode();
     if( pSttNd && ((SwSectionNode*)pSttNd)->GetSection().IsProtectFlag() )
-        return sal_True;
+        return TRUE;
 
     if( 0 != ( pSttNd = FindTableBoxStartNode() ) )
     {
         SwCntntFrm* pCFrm;
-        if( IsCntntNode() && 0 != (pCFrm = ((SwCntntNode*)this)->getLayoutFrm( GetDoc()->GetCurrentLayout() ) ))
+        if( IsCntntNode() && 0 != (pCFrm = ((SwCntntNode*)this)->GetFrm() ))
             return pCFrm->IsProtected();
 
         const SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().
                                         GetTblBox( pSttNd->GetIndex() );
         //Robust #149568
         if( pBox && pBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
-            return sal_True;
+            return TRUE;
     }
 
     SwFrmFmt* pFlyFmt = GetFlyFmt();
     if( pFlyFmt )
     {
         if( pFlyFmt->GetProtect().IsCntntProtected() )
-            return sal_True;
+            return TRUE;
         const SwFmtAnchor& rAnchor = pFlyFmt->GetAnchor();
         return rAnchor.GetCntntAnchor()
                 ? rAnchor.GetCntntAnchor()->nNode.GetNode().IsProtect()
-                : sal_False;
+                : FALSE;
     }
 
     if( 0 != ( pSttNd = FindFootnoteStartNode() ) )
@@ -507,15 +524,16 @@ sal_Bool SwNode::IsProtect() const
             return pTFtn->GetTxtNode().IsProtect();
     }
 
-    return sal_False;
+    return FALSE;
 }
 
     // suche den PageDesc, mit dem dieser Node formatiert ist. Wenn das
     // Layout vorhanden ist wird ueber das gesucht, ansonsten gibt es nur
     // die harte Tour ueber die Nodes nach vorne suchen!!
-const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
+const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
                                         sal_uInt32* pPgDescNdIdx ) const
 {
+    // OD 18.03.2003 #106329#
     if ( !GetNodes().IsDocNodes() )
     {
         return 0;
@@ -546,10 +564,11 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
     {
         const SwFrm* pFrm;
         const SwPageFrm* pPage;
-        if( pNode && 0 != ( pFrm = pNode->getLayoutFrm( pNode->GetDoc()->GetCurrentLayout(), 0, 0, bCalcLay ) ) &&
+        if( pNode && 0 != ( pFrm = pNode->GetFrm( 0, 0, bCalcLay ) ) &&
             0 != ( pPage = pFrm->FindPageFrm() ) )
         {
             pPgDesc = pPage->GetPageDesc();
+            // OD 18.03.2003 #106329#
             if ( pPgDescNdIdx )
             {
                 *pPgDescNdIdx = pNode->GetIndex();
@@ -569,7 +588,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
             // dann erstmal den richtigen Anker finden
             const SwFrmFmt* pFmt = 0;
             const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
-            sal_uInt16 n;
+            USHORT n;
 
             for( n = 0; n < rFmts.Count(); ++n )
             {
@@ -623,7 +642,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                         if( n >= rFmts.Count() )
                         {
                             OSL_ENSURE( !this, "Fly-Section aber kein Format gefunden" );
-                            return sal_False;
+                            return FALSE;
                         }
                     }
                 }
@@ -646,7 +665,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                     0 != ( pSttNd = pNd->FindFooterStartNode() ))
                 {
                     // dann in den PageDescs diesen StartNode suchen
-                    sal_uInt16 nId;
+                    USHORT nId;
                     UseOnPage eAskUse;
                     if( SwHeaderStartNode == pSttNd->GetStartNodeType())
                     {
@@ -659,7 +678,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                         eAskUse = nsUseOnPage::PD_FOOTERSHARE;
                     }
 
-                    for( sal_uInt16 n = pDoc->GetPageDescCnt(); n && !pPgDesc; )
+                    for( USHORT n = pDoc->GetPageDescCnt(); n && !pPgDesc; )
                     {
                         const SwPageDesc& rPgDsc = pDoc->GetPageDesc( --n );
                         const SwFrmFmt* pFmt = &rPgDsc.GetMaster();
@@ -694,7 +713,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                     // der Anker kann nur im Bodytext sein
                     const SwTxtFtn* pTxtFtn;
                     const SwFtnIdxs& rFtnArr = pDoc->GetFtnIdxs();
-                    for( sal_uInt16 n = 0; n < rFtnArr.Count(); ++n )
+                    for( USHORT n = 0; n < rFtnArr.Count(); ++n )
                         if( 0 != ( pTxtFtn = rFtnArr[ n ])->GetStartNode() &&
                             (SwNode*)pSttNd ==
                             &pTxtFtn->GetStartNode()->GetNode() )
@@ -722,9 +741,9 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
             SwFindNearestNode aInfo( *pNd );
             // dann ueber alle Nodes aller PageDesc
             const SfxPoolItem* pItem;
-            sal_uInt32 i, nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_PAGEDESC );
+            USHORT i, nMaxItems = pDoc->GetAttrPool().GetItemCount( RES_PAGEDESC );
             for( i = 0; i < nMaxItems; ++i )
-                if( 0 != (pItem = pDoc->GetAttrPool().GetItem2( RES_PAGEDESC, i ) ) &&
+                if( 0 != (pItem = pDoc->GetAttrPool().GetItem( RES_PAGEDESC, i ) ) &&
                     ((SwFmtPageDesc*)pItem)->GetDefinedIn() )
                 {
                     const SwModify* pMod = ((SwFmtPageDesc*)pItem)->GetDefinedIn();
@@ -745,6 +764,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                 else if( pNd->IsSectionNode() )
                     pPgDesc = pNd->GetSectionNode()->GetSection().
                             GetFmt()->GetPageDesc().GetPageDesc();
+                // OD 18.03.2003 #106329#
                 if ( pPgDescNdIdx )
                 {
                     *pPgDescNdIdx = pNd->GetIndex();
@@ -768,15 +788,16 @@ SwFrmFmt* SwNode::GetFlyFmt() const
     {
         if( IsCntntNode() )
         {
-            SwCntntFrm* pFrm = SwIterator<SwCntntFrm,SwCntntNode>::FirstElement( *(SwCntntNode*)this );
-            if( pFrm )
-                pRet = pFrm->FindFlyFrm()->GetFmt();
+            SwClientIter aIter( *(SwCntntNode*)this );
+            SwClient* pCli = aIter.First( TYPE( SwCntntFrm ));
+            if( pCli )
+                pRet = ((SwCntntFrm*)pCli)->FindFlyFrm()->GetFmt();
         }
         if( !pRet )
         {
             // dann gibts noch harten steinigen Weg uebers Dokument:
             const SwSpzFrmFmts& rFrmFmtTbl = *GetDoc()->GetSpzFrmFmts();
-            for( sal_uInt16 n = 0; n < rFrmFmtTbl.Count(); ++n )
+            for( USHORT n = 0; n < rFrmFmtTbl.Count(); ++n )
             {
                 SwFrmFmt* pFmt = rFrmFmtTbl[n];
                 const SwFmtCntnt& rCntnt = pFmt->GetCntnt();
@@ -815,21 +836,21 @@ SwStartNode* SwNode::FindSttNodeByType( SwStartNodeType eTyp )
     return eTyp == pTmp->GetStartNodeType() ? pTmp : 0;
 }
 
-const SwTxtNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
+const SwTxtNode* SwNode::FindOutlineNodeOfLevel( BYTE nLvl ) const
 {
     const SwTxtNode* pRet = 0;
     const SwOutlineNodes& rONds = GetNodes().GetOutLineNds();
     if( MAXLEVEL > nLvl && rONds.Count() )
     {
-        sal_uInt16 nPos;
+        USHORT nPos;
         SwNode* pNd = (SwNode*)this;
-        sal_Bool bCheckFirst = sal_False;
+        BOOL bCheckFirst = FALSE;
         if( !rONds.Seek_Entry( pNd, &nPos ))
         {
             if( nPos )
                 nPos = nPos-1;
             else
-                bCheckFirst = sal_True;
+                bCheckFirst = TRUE;
         }
 
         if( bCheckFirst )
@@ -842,8 +863,8 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
             const SwCntntNode* pCNd = GetCntntNode();
 
             Point aPt( 0, 0 );
-            const SwFrm* pFrm = pRet->getLayoutFrm( pRet->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False ),
-                       * pMyFrm = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False ) : 0;
+            const SwFrm* pFrm = pRet->GetFrm( &aPt, 0, FALSE ),
+                       * pMyFrm = pCNd ? pCNd->GetFrm( &aPt, 0, FALSE ) : 0;
             const SwPageFrm* pPgFrm = pFrm ? pFrm->FindPageFrm() : 0;
             if( pPgFrm && pMyFrm &&
                 pPgFrm->Frm().Top() > pMyFrm->Frm().Top() )
@@ -857,10 +878,11 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
             // oder ans Feld und von dort holen !!
             while( nPos &&
                    nLvl < ( pRet = rONds[nPos]->GetTxtNode() )
+                    //->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
                     ->GetAttrOutlineLevel() - 1 )  //<-end,zhaojianwei
                 --nPos;
 
-            if( !nPos )     // bei 0 gesondert holen !!
+            if( !nPos )		// bei 0 gesondert holen !!
                 pRet = rONds[0]->GetTxtNode();
         }
     }
@@ -875,15 +897,16 @@ inline sal_Bool IsValidNextPrevNd( const SwNode& rNd )
             ND_TABLENODE == rNd.StartOfSectionNode()->GetNodeType() );
 }
 
-sal_uInt8 SwNode::HasPrevNextLayNode() const
+BYTE SwNode::HasPrevNextLayNode() const
 {
     // assumption: <this> node is a node inside the document nodes array section.
 
-    sal_uInt8 nRet = 0;
+    BYTE nRet = 0;
     if( IsValidNextPrevNd( *this ))
     {
         SwNodeIndex aIdx( *this, -1 );
-        // #i77805# - skip section start and end nodes
+        // --> OD 2007-06-04 #i77805#
+        // skip section start and end nodes
         while ( aIdx.GetNode().IsSectionNode() ||
                 ( aIdx.GetNode().IsEndNode() &&
                   aIdx.GetNode().StartOfSectionNode()->IsSectionNode() ) )
@@ -893,7 +916,9 @@ sal_uInt8 SwNode::HasPrevNextLayNode() const
         // <--
         if( IsValidNextPrevNd( aIdx.GetNode() ))
             nRet |= ND_HAS_PREV_LAYNODE;
-        // #i77805# - skip section start and end nodes
+        // --> OD 2007-06-04 #i77805#
+        // skip section start and end nodes
+//        aIdx += 2;
         aIdx = SwNodeIndex( *this, +1 );
         while ( aIdx.GetNode().IsSectionNode() ||
                 ( aIdx.GetNode().IsEndNode() &&
@@ -901,6 +926,7 @@ sal_uInt8 SwNode::HasPrevNextLayNode() const
         {
             ++aIdx;
         }
+        // <--
         if( IsValidNextPrevNd( aIdx.GetNode() ))
             nRet |= ND_HAS_NEXT_LAYNODE;
     }
@@ -909,20 +935,25 @@ sal_uInt8 SwNode::HasPrevNextLayNode() const
 
 /*******************************************************************
 |*
-|*  SwNode::StartOfSection
+|*	SwNode::StartOfSection
 |*
-|*  Beschreibung
-|*      Die Funktion liefert die StartOfSection des Nodes.
+|*	Beschreibung
+|*		Die Funktion liefert die StartOfSection des Nodes.
 |*
-|*  Parameter
-|*      IN
-|*      rNodes bezeichnet das variable Array, in dem sich der Node
-|*      befindet
+|*	Parameter
+|*		IN
+|*		rNodes bezeichnet das variable Array, in dem sich der Node
+|*		befindet
+|*	Ersterstellung
+|*		VER0100 vb 901214
+|*
+|*	Stand
+|*		VER0100 vb 901214
 |*
 *******************************************************************/
 
 
-SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
+SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const BYTE nNdType,
                             SwStartNodeType eSttNd )
     : SwNode( rWhere, nNdType ), eSttNdTyp( eSttNd )
 {
@@ -930,7 +961,7 @@ SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
     pEndOfSection = (SwEndNode*)this;
 }
 
-SwStartNode::SwStartNode( SwNodes& rNodes, sal_uLong nPos )
+SwStartNode::SwStartNode( SwNodes& rNodes, ULONG nPos )
     : SwNode( rNodes, nPos, ND_STARTNODE ), eSttNdTyp( SwNormalStartNode )
 {
     // erstmal temporaer, bis der EndNode eingefuegt wird.
@@ -942,7 +973,7 @@ void SwStartNode::CheckSectionCondColl() const
 {
 //FEATURE::CONDCOLL
     SwNodeIndex aIdx( *this );
-    sal_uLong nEndIdx = EndOfSectionIndex();
+    ULONG nEndIdx = EndOfSectionIndex();
     const SwNodes& rNds = GetNodes();
     SwCntntNode* pCNd;
     while( 0 != ( pCNd = rNds.GoNext( &aIdx )) && pCNd->GetIndex() < nEndIdx )
@@ -952,25 +983,31 @@ void SwStartNode::CheckSectionCondColl() const
 
 /*******************************************************************
 |*
-|*  SwEndNode::SwEndNode
+|*	SwEndNode::SwEndNode
 |*
-|*  Beschreibung
-|*      Konstruktor; dieser fuegt einen Node in das Array rNodes
-|*      an der Position aWhere ein. Der
-|*      theStartOfSection-Pointer wird entsprechend gesetzt,
-|*      und der EndOfSection-Pointer des zugehoerigen
-|*      Startnodes -- durch rStartOfSection bezeichnet --
-|*      wird auf diesen Node gesetzt.
+|*	Beschreibung
+|*		Konstruktor; dieser fuegt einen Node in das Array rNodes
+|*		an der Position aWhere ein. Der
+|*		theStartOfSection-Pointer wird entsprechend gesetzt,
+|*		und der EndOfSection-Pointer des zugehoerigen
+|*		Startnodes -- durch rStartOfSection bezeichnet --
+|*		wird auf diesen Node gesetzt.
 |*
-|*  Parameter
-|*      IN
-|*      rNodes bezeichnet das variable Array, in das der Node
-|*      eingefuegt werden soll
-|*      IN
-|*      aWhere bezeichnet die Position innerhalb dieses Arrays,
-|*      an der der Node eingefuegt werden soll
-|*      !!!!!!!!!!!!
-|*      Es wird eine Kopie uebergeben!
+|*	Parameter
+|*		IN
+|*		rNodes bezeichnet das variable Array, in das der Node
+|*		eingefuegt werden soll
+|*		IN
+|*		aWhere bezeichnet die Position innerhalb dieses Arrays,
+|*		an der der Node eingefuegt werden soll
+|*		!!!!!!!!!!!!
+|*		Es wird eine Kopie uebergeben!
+|*
+|*	Ersterstellung
+|*		VER0100 vb 901214
+|*
+|*	Stand
+|*		VER0100 vb 901214
 |*
 *******************************************************************/
 
@@ -982,7 +1019,7 @@ SwEndNode::SwEndNode( const SwNodeIndex &rWhere, SwStartNode& rSttNd )
     pStartOfSection->pEndOfSection = this;
 }
 
-SwEndNode::SwEndNode( SwNodes& rNds, sal_uLong nPos, SwStartNode& rSttNd )
+SwEndNode::SwEndNode( SwNodes& rNds, ULONG nPos, SwStartNode& rSttNd )
     : SwNode( rNds, nPos, ND_ENDNODE )
 {
     pStartOfSection = &rSttNd;
@@ -996,12 +1033,15 @@ SwEndNode::SwEndNode( SwNodes& rNds, sal_uLong nPos, SwStartNode& rSttNd )
 // --------------------
 
 
-SwCntntNode::SwCntntNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
+SwCntntNode::SwCntntNode( const SwNodeIndex &rWhere, const BYTE nNdType,
                             SwFmtColl *pColl )
-    : SwModify( pColl ),     // CrsrsShell, FrameFmt,
+    : SwModify( pColl ),	 // CrsrsShell, FrameFmt,
     SwNode( rWhere, nNdType ),
     pCondColl( 0 ),
     mbSetModifyAtAttr( false )
+#ifdef OLD_INDEX
+    ,SwIndexReg(2)
+#endif
 {
 }
 
@@ -1021,9 +1061,9 @@ SwCntntNode::~SwCntntNode()
         ((SwAttrSet*)mpAttrSet.get())->SetModifyAtAttr( 0 );
 }
 
-void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
+void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 {
-    sal_uInt16 nWhich = pOldValue ? pOldValue->Which() :
+    USHORT nWhich = pOldValue ? pOldValue->Which() :
                     pNewValue ? pNewValue->Which() : 0 ;
 
     switch( nWhich )
@@ -1033,7 +1073,7 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
             SwFmt * pFmt = (SwFmt *) ((SwPtrMsgPoolItem *)pNewValue)->pObject;
 
             // nicht umhaengen wenn dieses das oberste Format ist !!
-            if( GetRegisteredIn() == pFmt )
+            if( pRegisteredIn == pFmt )
             {
                 if( pFmt->GetRegisteredIn() )
                 {
@@ -1073,14 +1113,14 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
         {
             ChkCondColl();
         }
-        return ;    // nicht an die Basisklasse / Frames weitergeben
+        return ;	// nicht an die Basisklasse / Frames weitergeben
 //FEATURE::CONDCOLL
 
     case RES_ATTRSET_CHG:
         if( GetNodes().IsDocNodes() && IsTxtNode() )
         {
             if( SFX_ITEM_SET == ((SwAttrSetChg*)pOldValue)->GetChgSet()->GetItemState(
-                RES_CHRATR_HIDDEN, sal_False ) )
+                RES_CHRATR_HIDDEN, FALSE ) )
             {
                 ((SwTxtNode*)this)->SetCalcHiddenCharFlags();
             }
@@ -1090,7 +1130,7 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
     case RES_UPDATE_ATTR:
         if( GetNodes().IsDocNodes() && IsTxtNode() )
         {
-            const sal_uInt16 nTmp = ((SwUpdateAttr*)pNewValue)->nWhichAttr;
+            const USHORT nTmp = ((SwUpdateAttr*)pNewValue)->nWhichAttr;
             if ( RES_ATTRSET_CHG == nTmp )
             {
                 // anybody wants to do some optimization here?
@@ -1100,47 +1140,49 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
         break;
     }
 
-    NotifyClients( pOldValue, pNewValue );
+    SwModify::Modify( pOldValue, pNewValue );
 }
 
-sal_Bool SwCntntNode::InvalidateNumRule()
+BOOL SwCntntNode::InvalidateNumRule()
 {
     SwNumRule* pRule = 0;
     const SfxPoolItem* pItem;
     if( GetNodes().IsDocNodes() &&
-        0 != ( pItem = GetNoCondAttr( RES_PARATR_NUMRULE, sal_True )) &&
+        0 != ( pItem = GetNoCondAttr( RES_PARATR_NUMRULE, TRUE )) &&
         ((SwNumRuleItem*)pItem)->GetValue().Len() &&
         0 != (pRule = GetDoc()->FindNumRulePtr(
                                 ((SwNumRuleItem*)pItem)->GetValue() ) ) )
     {
-        pRule->SetInvalidRule( sal_True );
+        pRule->SetInvalidRule( TRUE );
     }
     return 0 != pRule;
 }
 
-SwCntntFrm *SwCntntNode::getLayoutFrm( const SwRootFrm* _pRoot,
-    const Point* pPoint, const SwPosition *pPos, const sal_Bool bCalcFrm ) const
+
+SwCntntFrm *SwCntntNode::GetFrm( const Point* pPoint,
+                                const SwPosition *pPos,
+                                const BOOL bCalcFrm ) const
 {
-    return (SwCntntFrm*) ::GetFrmOfModify( _pRoot, *(SwModify*)this, FRM_CNTNT,
+    return (SwCntntFrm*) ::GetFrmOfModify( *(SwModify*)this, FRM_CNTNT,
                                             pPoint, pPos, bCalcFrm );
 }
 
-SwRect SwCntntNode::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
-                                    const sal_Bool bCalcFrm ) const
+SwRect SwCntntNode::FindLayoutRect( const BOOL bPrtArea, const Point* pPoint,
+                                    const BOOL bCalcFrm ) const
 {
     SwRect aRet;
-    SwCntntFrm* pFrm = (SwCntntFrm*)::GetFrmOfModify( 0, *(SwModify*)this,
+    SwCntntFrm* pFrm = (SwCntntFrm*)::GetFrmOfModify( *(SwModify*)this,
                                             FRM_CNTNT, pPoint, 0, bCalcFrm );
     if( pFrm )
         aRet = bPrtArea ? pFrm->Prt() : pFrm->Frm();
     return aRet;
 }
 
-SwRect SwCntntNode::FindPageFrmRect( const sal_Bool bPrtArea, const Point* pPoint,
-                                    const sal_Bool bCalcFrm ) const
+SwRect SwCntntNode::FindPageFrmRect( const BOOL bPrtArea, const Point* pPoint,
+                                    const BOOL bCalcFrm ) const
 {
     SwRect aRet;
-    SwFrm* pFrm = ::GetFrmOfModify( 0, *(SwModify*)this,
+    SwFrm* pFrm = ::GetFrmOfModify( *(SwModify*)this,
                                             FRM_CNTNT, pPoint, 0, bCalcFrm );
     if( pFrm && 0 != ( pFrm = pFrm->FindPageFrm() ))
         aRet = bPrtArea ? pFrm->Prt() : pFrm->Frm();
@@ -1167,8 +1209,8 @@ SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
 
 //FEATURE::CONDCOLL
         // HACK: hier muss die entsprechend der neuen Vorlage die Bedingungen
-        //      neu ueberprueft werden!
-        if( sal_True /*pNewColl */ )
+        //		neu ueberprueft werden!
+        if( TRUE /*pNewColl */ )
         {
             SetCondFmtColl( 0 );
         }
@@ -1178,21 +1220,23 @@ SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
         {
             SwFmtChg aTmp1( pOldColl );
             SwFmtChg aTmp2( pNewColl );
+            // damit alles was im Modify passiert hier nicht noch impl.
+            // werden muss
             SwCntntNode::Modify( &aTmp1, &aTmp2 );
         }
     }
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( FALSE );
     }
     return pOldColl;
 }
 
 
-sal_Bool SwCntntNode::GoNext(SwIndex * pIdx, sal_uInt16 nMode ) const
+BOOL SwCntntNode::GoNext(SwIndex * pIdx, USHORT nMode ) const
 {
-    sal_Bool bRet = sal_True;
+    BOOL bRet = TRUE;
     if( pIdx->GetIndex() < Len() )
     {
         if( !IsTxtNode() )
@@ -1224,23 +1268,23 @@ sal_Bool SwCntntNode::GoNext(SwIndex * pIdx, sal_uInt16 nMode ) const
                 if( 1 == nDone )
                     *pIdx = nPos;
                 else
-                    bRet = sal_False;
+                    bRet = FALSE;
             }
             else if( nPos < rTNd.GetTxt().Len() )
                 (*pIdx)++;
             else
-                bRet = sal_False;
+                bRet = FALSE;
         }
     }
     else
-        bRet = sal_False;
+        bRet = FALSE;
     return bRet;
 }
 
 
-sal_Bool SwCntntNode::GoPrevious(SwIndex * pIdx, sal_uInt16 nMode ) const
+BOOL SwCntntNode::GoPrevious(SwIndex * pIdx, USHORT nMode ) const
 {
-    sal_Bool bRet = sal_True;
+    BOOL bRet = TRUE;
     if( pIdx->GetIndex() > 0 )
     {
         if( !IsTxtNode() )
@@ -1272,16 +1316,16 @@ sal_Bool SwCntntNode::GoPrevious(SwIndex * pIdx, sal_uInt16 nMode ) const
                 if( 1 == nDone )
                     *pIdx = nPos;
                 else
-                    bRet = sal_False;
+                    bRet = FALSE;
             }
             else if( nPos )
                 (*pIdx)--;
             else
-                bRet = sal_False;
+                bRet = FALSE;
         }
     }
     else
-        bRet = sal_False;
+        bRet = FALSE;
     return bRet;
 }
 
@@ -1298,7 +1342,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
     OSL_ENSURE( &rNode != this,
             "Kein Contentnode oder Copy-Node und neuer Node identisch." );
 
-    if( !GetDepends() || &rNode == this )   // gibt es ueberhaupt Frames ??
+    if( !GetDepends() || &rNode == this )	// gibt es ueberhaupt Frames ??
         return;
 
     SwFrm *pFrm, *pNew;
@@ -1310,16 +1354,16 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
 
     while( 0 != (pUpper = aNode2Layout.UpperFrm( pFrm, rNode )) )
     {
-        pNew = rNode.MakeFrm( pUpper );
+        pNew = rNode.MakeFrm();
         pNew->Paste( pUpper, pFrm );
-        // #i27138#
+        // --> OD 2005-12-01 #i27138#
         // notify accessibility paragraphs objects about changed
         // CONTENT_FLOWS_FROM/_TO relation.
         // Relation CONTENT_FLOWS_FROM for next paragraph will change
         // and relation CONTENT_FLOWS_TO for previous paragraph will change.
         if ( pNew->IsTxtFrm() )
         {
-            ViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
+            ViewShell* pViewShell( pNew->GetShell() );
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
             {
@@ -1344,7 +1388,60 @@ void SwCntntNode::DelFrms()
     if( !GetDepends() )
         return;
 
-    SwCntntFrm::DelFrms(*this);
+    SwClientIter aIter( *this );
+    SwCntntFrm *pFrm;
+
+    for( pFrm = (SwCntntFrm*)aIter.First( TYPE(SwCntntFrm)); pFrm;
+         pFrm = (SwCntntFrm*)aIter.Next() )
+    {
+        // --> OD 2005-12-01 #i27138#
+        // notify accessibility paragraphs objects about changed
+        // CONTENT_FLOWS_FROM/_TO relation.
+        // Relation CONTENT_FLOWS_FROM for current next paragraph will change
+        // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
+        if ( pFrm->IsTxtFrm() )
+        {
+            ViewShell* pViewShell( pFrm->GetShell() );
+            if ( pViewShell && pViewShell->GetLayout() &&
+                 pViewShell->GetLayout()->IsAnyShellAccessible() )
+            {
+                pViewShell->InvalidateAccessibleParaFlowRelation(
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindNextCnt( true )),
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
+            }
+        }
+        // <--
+        if( pFrm->HasFollow() )
+            pFrm->GetFollow()->_SetIsFollow( pFrm->IsFollow() );
+        if( pFrm->IsFollow() )
+        {
+            SwCntntFrm* pMaster = (SwTxtFrm*)pFrm->FindMaster();
+            pMaster->SetFollow( pFrm->GetFollow() );
+            pFrm->_SetIsFollow( FALSE );
+        }
+        pFrm->SetFollow( 0 );//Damit er nicht auf dumme Gedanken kommt.
+                                //Andernfalls kann es sein, dass ein Follow
+                                //vor seinem Master zerstoert wird, der Master
+                                //greift dann ueber den ungueltigen
+                                //Follow-Pointer auf fremdes Memory zu.
+                                //Die Kette darf hier zerknauscht werden, weil
+                                //sowieso alle zerstoert werden.
+        if( pFrm->GetUpper() && pFrm->IsInFtn() && !pFrm->GetIndNext() &&
+            !pFrm->GetIndPrev() )
+        {
+            SwFtnFrm *pFtn = pFrm->FindFtnFrm();
+            OSL_ENSURE( pFtn, "You promised a FtnFrm?" );
+            SwCntntFrm* pCFrm;
+            if( !pFtn->GetFollow() && !pFtn->GetMaster() &&
+                0 != ( pCFrm = pFtn->GetRefFromAttr()) && pCFrm->IsFollow() )
+            {
+                OSL_ENSURE( pCFrm->IsTxtFrm(), "NoTxtFrm has Footnote?" );
+                ((SwTxtFrm*)pCFrm->FindMaster())->Prepare( PREP_FTN_GONE );
+            }
+        }
+        pFrm->Cut();
+        delete pFrm;
+    }
     if( IsTxtNode() )
     {
         ((SwTxtNode*)this)->SetWrong( NULL );
@@ -1376,7 +1473,7 @@ SwCntntNode *SwCntntNode::JoinPrev()
 
 
     // erfrage vom Modify Informationen
-sal_Bool SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
+BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
 {
     switch( rInfo.Which() )
     {
@@ -1384,21 +1481,40 @@ sal_Bool SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
         if( &GetNodes() == ((SwAutoFmtGetDocNode&)rInfo).pNodes )
         {
             ((SwAutoFmtGetDocNode&)rInfo).pCntntNode = this;
-            return sal_False;
+            return FALSE;
         }
         break;
+    // --> OD 2008-02-19 #refactorlists#
+//    case RES_GETNUMNODES:
+//        // #111955# only numbered nodes in rInfo
+//        if( IsTxtNode())
+//        {
+//            SwTxtNode * pTxtNode = (SwTxtNode*)this;
+//            pItem = (SwNumRuleItem*)GetNoCondAttr(RES_PARATR_NUMRULE, TRUE );
+
+//            if (0 != pItem  &&
+//                pItem->GetValue().Len() &&
+//                pItem->GetValue() == ((SwNumRuleInfo&)rInfo).GetName() &&
+//                GetNodes().IsDocNodes())
+//            {
+//                ((SwNumRuleInfo&)rInfo).AddNode( *pTxtNode );
+//            }
+//        }
+
+//        return TRUE;
+    // <--
 
     case RES_FINDNEARESTNODE:
         if( ((SwFmtPageDesc&)GetAttr( RES_PAGEDESC )).GetPageDesc() )
             ((SwFindNearestNode&)rInfo).CheckNode( *this );
-        return sal_True;
+        return TRUE;
 
     case RES_CONTENT_VISIBLE:
         {
             ((SwPtrMsgPoolItem&)rInfo).pObject =
-                SwIterator<SwFrm,SwCntntNode>::FirstElement(*this);
+                SwClientIter( *(SwCntntNode*)this ).First( TYPE(SwFrm) );
         }
-        return sal_False;
+        return FALSE;
     }
 
     return SwModify::GetInfo( rInfo );
@@ -1406,20 +1522,20 @@ sal_Bool SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
 
 
     // setze ein Attribut
-sal_Bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
+BOOL SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
 {
     if( !GetpSwAttrSet() )            // lasse von den entsprechenden Nodes die
-        NewAttrSet( GetDoc()->GetAttrPool() );      // AttrSets anlegen
+        NewAttrSet( GetDoc()->GetAttrPool() );		// AttrSets anlegen
 
     OSL_ENSURE( GetpSwAttrSet(), "warum wurde kein AttrSet angelegt?" );
 
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( FALSE );
     }
 
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     // wenn Modify gelockt ist, werden keine Modifies verschickt
     if( IsModifyLocked() ||
         ( !GetDepends() &&  RES_PARATR_NUMRULE != rAttr.Which() ))
@@ -1434,23 +1550,23 @@ sal_Bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
         {
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
             SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-            ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
         }
     }
     return bRet;
 }
 #include <svl/itemiter.hxx>
 
-sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
+BOOL SwCntntNode::SetAttr( const SfxItemSet& rSet )
 {
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( FALSE );
     }
 
     const SfxPoolItem* pFnd = 0;
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_AUTO_STYLE, sal_False, &pFnd ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_AUTO_STYLE, FALSE, &pFnd ) )
     {
         OSL_ENSURE( rSet.Count() == 1, "SetAutoStyle mixed with other attributes?!" );
         const SwFmtAutoFmt* pTmp = static_cast<const SwFmtAutoFmt*>(pFnd);
@@ -1479,24 +1595,24 @@ sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
             // the string is empty.
             const SfxPoolItem* pNameItem = 0;
             if ( 0 != GetCondFmtColl() ||
-                 SFX_ITEM_SET != mpAttrSet->GetItemState( RES_FRMATR_STYLE_NAME, sal_False, &pNameItem ) ||
+                 SFX_ITEM_SET != mpAttrSet->GetItemState( RES_FRMATR_STYLE_NAME, FALSE, &pNameItem ) ||
                  0 == static_cast<const SfxStringItem*>(pNameItem)->GetValue().Len() )
                 AttrSetHandleHelper::SetParent( mpAttrSet, *this, &GetAnyFmtColl(), GetFmtColl() );
             else
                 const_cast<SfxItemSet*>(mpAttrSet.get())->SetParent( &GetFmtColl()->GetAttrSet() );
         }
 
-        return sal_True;
+        return TRUE;
     }
 
     if( !GetpSwAttrSet() )            // lasse von den entsprechenden Nodes die
-        NewAttrSet( GetDoc()->GetAttrPool() );      // AttrSets anlegen
+        NewAttrSet( GetDoc()->GetAttrPool() );		// AttrSets anlegen
 
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     // wenn Modify gelockt ist, werden keine Modifies verschickt
     if ( IsModifyLocked() ||
          ( !GetDepends() &&
-           SFX_ITEM_SET != rSet.GetItemState( RES_PARATR_NUMRULE, sal_False ) ) )
+           SFX_ITEM_SET != rSet.GetItemState( RES_PARATR_NUMRULE, FALSE ) ) )
     {
         // einige Sonderbehandlungen fuer Attribute
         bRet = 0 != AttrSetHandleHelper::Put( mpAttrSet, *this, rSet );
@@ -1510,7 +1626,7 @@ sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
             // einige Sonderbehandlungen fuer Attribute
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
             SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-            ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
         }
     }
     return bRet;
@@ -1519,24 +1635,24 @@ sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
 // Nimmt den Hint mit nWhich aus dem Delta-Array
 
 
-sal_Bool SwCntntNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
+BOOL SwCntntNode::ResetAttr( USHORT nWhich1, USHORT nWhich2 )
 {
     if( !GetpSwAttrSet() )
-        return sal_False;
+        return FALSE;
 
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( FALSE );
     }
 
     // wenn Modify gelockt ist, werden keine Modifies verschickt
     if( IsModifyLocked() )
     {
-        sal_uInt16 nDel = 0;
+        USHORT nDel = 0;
         if ( !nWhich2 || nWhich2 < nWhich1 )
         {
-            std::vector<sal_uInt16> aClearWhichIds;
+            std::vector<USHORT> aClearWhichIds;
             aClearWhichIds.push_back( nWhich1 );
             nDel = ClearItemsFromAttrSet( aClearWhichIds );
         }
@@ -1550,40 +1666,40 @@ sal_Bool SwCntntNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 
     // sollte kein gueltiger Bereich definiert sein ?
     if( !nWhich2 || nWhich2 < nWhich1 )
-        nWhich2 = nWhich1;      // dann setze auf 1. Id, nur dieses Item
+        nWhich2 = nWhich1;		// dann setze auf 1. Id, nur dieses Item
 
     SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
               aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
-    sal_Bool bRet = 0 != AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, nWhich1, nWhich2, &aOld, &aNew );
+    BOOL bRet = 0 != AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, nWhich1, nWhich2, &aOld, &aNew );
 
     if( bRet )
     {
         SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
         SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-        ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+        Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
 
         if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
             mpAttrSet.reset();//DELETEZ( mpAttrSet );
     }
     return bRet;
 }
-sal_Bool SwCntntNode::ResetAttr( const SvUShorts& rWhichArr )
+BOOL SwCntntNode::ResetAttr( const SvUShorts& rWhichArr )
 {
     if( !GetpSwAttrSet() )
-        return sal_False;
+        return FALSE;
 
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( FALSE );
     }
 
     // wenn Modify gelockt ist, werden keine Modifies verschickt
-    sal_uInt16 nDel = 0;
+    USHORT nDel = 0;
     if( IsModifyLocked() )
     {
-        std::vector<sal_uInt16> aClearWhichIds;
-        for( sal_uInt16 n = 0, nEnd = rWhichArr.Count(); n < nEnd; ++n )
+        std::vector<USHORT> aClearWhichIds;
+        for( USHORT n = 0, nEnd = rWhichArr.Count(); n < nEnd; ++n )
             aClearWhichIds.push_back( rWhichArr[ n ] );
 
         nDel = ClearItemsFromAttrSet( aClearWhichIds );
@@ -1593,7 +1709,7 @@ sal_Bool SwCntntNode::ResetAttr( const SvUShorts& rWhichArr )
         SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
                   aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
 
-        for( sal_uInt16 n = 0, nEnd = rWhichArr.Count(); n < nEnd; ++n )
+        for( USHORT n = 0, nEnd = rWhichArr.Count(); n < nEnd; ++n )
             if( AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, rWhichArr[ n ], &aOld, &aNew ))
                 ++nDel;
 
@@ -1601,7 +1717,7 @@ sal_Bool SwCntntNode::ResetAttr( const SvUShorts& rWhichArr )
         {
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
             SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-            ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
         }
     }
     if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
@@ -1610,7 +1726,7 @@ sal_Bool SwCntntNode::ResetAttr( const SvUShorts& rWhichArr )
 }
 
 
-sal_uInt16 SwCntntNode::ResetAllAttr()
+USHORT SwCntntNode::ResetAllAttr()
 {
     if( !GetpSwAttrSet() )
         return 0;
@@ -1618,15 +1734,15 @@ sal_uInt16 SwCntntNode::ResetAllAttr()
     if ( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( sal_False );
+        SetInCache( FALSE );
     }
 
     // wenn Modify gelockt ist, werden keine Modifies verschickt
     if( IsModifyLocked() )
     {
-        std::vector<sal_uInt16> aClearWhichIds;
+        std::vector<USHORT> aClearWhichIds;
         aClearWhichIds.push_back(0);
-        sal_uInt16 nDel = ClearItemsFromAttrSet( aClearWhichIds );
+        USHORT nDel = ClearItemsFromAttrSet( aClearWhichIds );
         if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
             mpAttrSet.reset();            // DELETEZ( mpAttrSet );
         return nDel;
@@ -1634,13 +1750,13 @@ sal_uInt16 SwCntntNode::ResetAllAttr()
 
     SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
               aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
-    sal_Bool bRet = 0 != AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, 0, &aOld, &aNew );
+    BOOL bRet = 0 != AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, 0, &aOld, &aNew );
 
     if( bRet )
     {
         SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
         SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-        ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+        Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
 
         if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
             mpAttrSet.reset();//DELETEZ( mpAttrSet );
@@ -1649,28 +1765,28 @@ sal_uInt16 SwCntntNode::ResetAllAttr()
 }
 
 
-sal_Bool SwCntntNode::GetAttr( SfxItemSet& rSet, sal_Bool bInParent ) const
+BOOL SwCntntNode::GetAttr( SfxItemSet& rSet, BOOL bInParent ) const
 {
     if( rSet.Count() )
         rSet.ClearItem();
 
     const SwAttrSet& rAttrSet = GetSwAttrSet();
     if( bInParent )
-        return rSet.Set( rAttrSet, sal_True ) ? sal_True : sal_False;
+        return rSet.Set( rAttrSet, TRUE ) ? TRUE : FALSE;
 
     rSet.Put( rAttrSet );
-    return rSet.Count() ? sal_True : sal_False;
+    return rSet.Count() ? TRUE : FALSE;
 }
 
-sal_uInt16 SwCntntNode::ClearItemsFromAttrSet( const std::vector<sal_uInt16>& rWhichIds )
+USHORT SwCntntNode::ClearItemsFromAttrSet( const std::vector<USHORT>& rWhichIds )
 {
-    sal_uInt16 nRet = 0;
+    USHORT nRet = 0;
     if ( 0 == rWhichIds.size() )
         return nRet;
 
     OSL_ENSURE( GetpSwAttrSet(), "no item set" );
     SwAttrSet aNewAttrSet( *GetpSwAttrSet() );
-    for ( std::vector<sal_uInt16>::const_iterator aIter = rWhichIds.begin();
+    for ( std::vector<USHORT>::const_iterator aIter = rWhichIds.begin();
           aIter != rWhichIds.end();
           ++aIter )
     {
@@ -1682,17 +1798,17 @@ sal_uInt16 SwCntntNode::ClearItemsFromAttrSet( const std::vector<sal_uInt16>& rW
     return nRet;
 }
 
-const SfxPoolItem* SwCntntNode::GetNoCondAttr( sal_uInt16 nWhich,
-                                                sal_Bool bInParents ) const
+const SfxPoolItem* SwCntntNode::GetNoCondAttr( USHORT nWhich,
+                                                BOOL bInParents ) const
 {
     const SfxPoolItem* pFnd = 0;
     if( pCondColl && pCondColl->GetRegisteredIn() )
     {
         if( !GetpSwAttrSet() || ( SFX_ITEM_SET != GetpSwAttrSet()->GetItemState(
-                    nWhich, sal_False, &pFnd ) && bInParents ))
+                    nWhich, FALSE, &pFnd ) && bInParents ))
             ((SwFmt*)GetRegisteredIn())->GetItemState( nWhich, bInParents, &pFnd );
     }
-    // undo change of issue #i51029#
+    // --> OD 2005-10-25 #126347# - undo change of issue #i51029#
     // Note: <GetSwAttrSet()> returns <mpAttrSet>, if set, otherwise it returns
     //       the attribute set of the paragraph style, which is valid for the
     //       content node - see file <node.hxx>
@@ -1709,7 +1825,7 @@ const SfxPoolItem* SwCntntNode::GetNoCondAttr( sal_uInt16 nWhich,
 int SwCntntNode::CanJoinNext( SwNodeIndex* pIdx ) const
 {
     const SwNodes& rNds = GetNodes();
-    sal_uInt8 nNdType = GetNodeType();
+    BYTE nNdType = GetNodeType();
     SwNodeIndex aIdx( *this, 1 );
 
     const SwNode* pNd = this;
@@ -1719,7 +1835,7 @@ int SwCntntNode::CanJoinNext( SwNodeIndex* pIdx ) const
         aIdx++;
 
     if( pNd->GetNodeType() != nNdType || rNds.Count()-1 == aIdx.GetIndex() )
-        return sal_False;
+        return FALSE;
     if( IsTxtNode() )
     {   // Do not merge strings if the result exceeds the allowed string length
         const SwTxtNode* pTxtNd = static_cast<const SwTxtNode*>(this);
@@ -1727,11 +1843,11 @@ int SwCntntNode::CanJoinNext( SwNodeIndex* pIdx ) const
         pTxtNd = static_cast<const SwTxtNode*>(pNd);
         nSum += pTxtNd->GetTxt().Len();
         if( nSum > STRING_LEN )
-            return sal_False;
+            return FALSE;
     }
     if( pIdx )
         *pIdx = aIdx;
-    return sal_True;
+    return TRUE;
 }
 
 
@@ -1739,7 +1855,7 @@ int SwCntntNode::CanJoinNext( SwNodeIndex* pIdx ) const
     // in pIdx kann die 2. Position returnt werden.
 int SwCntntNode::CanJoinPrev( SwNodeIndex* pIdx ) const
 {
-    sal_uInt8 nNdType = GetNodeType();
+    BYTE nNdType = GetNodeType();
     SwNodeIndex aIdx( *this, -1 );
 
     const SwNode* pNd = this;
@@ -1749,10 +1865,10 @@ int SwCntntNode::CanJoinPrev( SwNodeIndex* pIdx ) const
         aIdx--;
 
     if( pNd->GetNodeType() != nNdType || 0 == aIdx.GetIndex() )
-        return sal_False;
+        return FALSE;
     if( pIdx )
         *pIdx = aIdx;
-    return sal_True;
+    return TRUE;
 }
 
 
@@ -1780,18 +1896,18 @@ void SwCntntNode::SetCondFmtColl( SwFmtColl* pColl )
         {
             SwFmtChg aTmp1( pOldColl ? pOldColl : GetFmtColl() );
             SwFmtChg aTmp2( pColl ? pColl : GetFmtColl() );
-            NotifyClients( &aTmp1, &aTmp2 );
+            SwModify::Modify( &aTmp1, &aTmp2 );
         }
         if( IsInCache() )
         {
             SwFrm::GetCache().Delete( this );
-            SetInCache( sal_False );
+            SetInCache( FALSE );
         }
     }
 }
 
 
-sal_Bool SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
+BOOL SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
 {
     const SwNodes& rNds = GetNodes();
     {
@@ -1801,8 +1917,8 @@ sal_Bool SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
         {
             switch( pSttNd->GetNodeType() )
             {
-            case ND_TABLENODE:      nCond = PARA_IN_TABLEBODY; break;
-            case ND_SECTIONNODE:    nCond = PARA_IN_SECTION; break;
+            case ND_TABLENODE:		nCond = PARA_IN_TABLEBODY; break;
+            case ND_SECTIONNODE: 	nCond = PARA_IN_SECTION; break;
 
             default:
                 switch( pSttNd->GetStartNodeType() )
@@ -1818,7 +1934,7 @@ sal_Bool SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
                             nCond = PARA_IN_TABLEHEAD;
                     }
                     break;
-                case SwFlyStartNode:        nCond = PARA_IN_FRAME; break;
+                case SwFlyStartNode:		nCond = PARA_IN_FRAME; break;
                 case SwFootnoteStartNode:
                     {
                         nCond = PARA_IN_FOOTENOTE;
@@ -1826,7 +1942,7 @@ sal_Bool SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
                         const SwTxtFtn* pTxtFtn;
                         const SwNode* pSrchNd = pSttNd;
 
-                        for( sal_uInt16 n = 0; n < rFtnArr.Count(); ++n )
+                        for( USHORT n = 0; n < rFtnArr.Count(); ++n )
                             if( 0 != ( pTxtFtn = rFtnArr[ n ])->GetStartNode() &&
                                 pSrchNd == &pTxtFtn->GetStartNode()->GetNode() )
                             {
@@ -1845,7 +1961,7 @@ sal_Bool SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
             if( nCond )
             {
                 rTmp.SetCondition( (Master_CollConditions)nCond, 0 );
-                return sal_True;
+                return TRUE;
             }
             pSttNd = pSttNd->GetIndex()
                         ? pSttNd->StartOfSectionNode()
@@ -1854,7 +1970,7 @@ sal_Bool SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
     }
 
     {
-        sal_uInt16 nPos;
+        USHORT nPos;
         const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
         if( rOutlNds.Count() )
         {
@@ -1868,13 +1984,13 @@ sal_Bool SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
                 if( pOutlNd->IsOutline())
                 {
                     rTmp.SetCondition( PARA_IN_OUTLINE, pOutlNd->GetAttrOutlineLevel() - 1 );
-                    return sal_True;
+                    return TRUE;
                 }
             }
         }
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 
@@ -1922,7 +2038,7 @@ void SwCntntNode::ChkCondColl()
     }
 }
 
-// #i42921#
+// --> OD 2005-02-21 #i42921#
 short SwCntntNode::GetTextDirection( const SwPosition& rPos,
                                      const Point* pPt ) const
 {
@@ -1932,8 +2048,10 @@ short SwCntntNode::GetTextDirection( const SwPosition& rPos,
     if( pPt )
         aPt = *pPt;
 
-    // #i72024# - No format of the frame, because this can cause recursive layout actions
-    SwFrm* pFrm = getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, &rPos, sal_False );
+    // --> OD 2007-01-10 #i72024#
+    // No format of the frame, because this can cause recursive layout actions
+    SwFrm* pFrm = GetFrm( &aPt, &rPos, FALSE );
+    // <--
 
     if ( pFrm )
     {
@@ -1957,24 +2075,6 @@ short SwCntntNode::GetTextDirection( const SwPosition& rPos,
     return nRet;
 }
 // <--
-
-SwOLENodes* SwCntntNode::CreateOLENodesArray( const SwFmtColl& rColl, bool bOnlyWithInvalidSize )
-{
-    SwOLENodes *pNodes = 0;
-    SwIterator<SwCntntNode,SwFmtColl> aIter( rColl );
-    for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
-    {
-        SwOLENode *pONd = pNd->GetOLENode();
-        if ( pONd && (!bOnlyWithInvalidSize || pONd->IsOLESizeInvalid()) )
-        {
-            if ( !pNodes  )
-                pNodes = new SwOLENodes;
-            pNodes->Insert( pONd, pNodes->Count() );
-        }
-    }
-
-    return pNodes;
-}
 
 //FEATURE::CONDCOLL
 // Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
@@ -2008,16 +2108,17 @@ const IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() const { return G
 IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() { return GetDoc(); }
 IDocumentContentOperations* SwNode::getIDocumentContentOperations() { return GetDoc(); }
 IStyleAccess& SwNode::getIDocumentStyleAccess() { return GetDoc()->GetIStyleAccess(); }
-// #i83479#
+// --> OD 2007-10-31 #i83479#
 IDocumentListItems& SwNode::getIDocumentListItems()
 {
     return *GetDoc();
 }
+// <--
 
-sal_Bool SwNode::IsInRedlines() const
+BOOL SwNode::IsInRedlines() const
 {
     const SwDoc * pDoc = GetDoc();
-    sal_Bool bResult = sal_False;
+    BOOL bResult = FALSE;
 
     if (pDoc != NULL)
         bResult = pDoc->IsInRedlines(*this);

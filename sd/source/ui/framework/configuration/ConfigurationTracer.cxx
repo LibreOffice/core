@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ void ConfigurationTracer::TraceBoundResources (
 {
     Sequence<Reference<XResourceId> > aResourceList (
         rxConfiguration->getResources(rxResourceId, ::rtl::OUString(), AnchorBindingMode_DIRECT));
-    const ::rtl::OUString sIndentation (RTL_CONSTASCII_USTRINGPARAM("    "));
+    const ::rtl::OUString sIndentation (::rtl::OUString::createFromAscii("    "));
     for (sal_Int32 nIndex=0; nIndex<aResourceList.getLength(); ++nIndex)
     {
         ::rtl::OUString sLine (aResourceList[nIndex]->getResourceURL());

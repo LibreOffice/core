@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,7 +152,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
 
             @param  xFrame
                     the frame where the corresponding dispatch was started.
-
+    
             @param  sTarget
                     help us to find the right target for this close operation.
          */
@@ -226,7 +226,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
                     We need it to implement the CLOSE_DOC semantic.
 
             @return [boolean]
-                    sal_True if closing was successfully.
+                    TRUE if closing was successfully.
          */
         sal_Bool implts_prepareFrameForClosing(const css::uno::Reference< css::frame::XFrame >& xFrame                ,
                                                      sal_Bool                                   bAllowSuspend         ,
@@ -246,7 +246,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
                     frame is closed ....
 
             @return [bool]
-                    sal_True if closing was successfully.
+                    TRUE if closing was successfully.
          */
         sal_Bool implts_closeFrame();
 
@@ -255,7 +255,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
                     as new component of our m_xCloseFrame.
 
             @return [bool]
-                    sal_True if operation was successfully.
+                    TRUE if operation was successfully.
          */
         sal_Bool implts_establishBackingMode();
 
@@ -269,7 +269,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
                     Because he should know, that such things will happen :-)
 
             @return [bool]
-                    sal_True if termination of the application was started ...
+                    TRUE if termination of the application was started ...
          */
         sal_Bool implts_terminateApplication();
 
@@ -296,7 +296,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
         //---------------------------------------
         /** @short  try to find the right target frame where this close request
                     must be realy done.
-
+                    
             @descr  The problem behind: closing some resources depends sometimes from the
                     context where its dispatched. Sometimes the start frame of the dispatch
                     has to be closed itself (target=_self) ... sometimes it's parent frame
@@ -305,14 +305,14 @@ class CloseDispatcher : public css::lang::XTypeProvider
                     not frames containg top level windows. So normaly _magic (which btw does not
                     exists at the moment .-) ) should be used. So we interpret target=<empty>
                     as _magic !
-
+                    
             @param  xFrame
                     start point for search of right dispatch frame.
-
+                    
             @param  sTarget
                     give us an idea how this target frame must be searched.
         */
-
+        
         static css::uno::Reference< css::frame::XFrame > static_impl_searchRightTargetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame ,
                                                                                             const ::rtl::OUString&                           sTarget);
 

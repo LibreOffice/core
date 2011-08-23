@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ public class _DatabaseImportDescriptor extends MultiMethodTest {
                 tRes.tested(name, true);
             }
         } catch (Exception e) {
-             log.println("Exception occurred while testing property '" +
+             log.println("Exception occured while testing property '" +
                  name + "'");
              e.printStackTrace(log);
              tRes.tested(name, false);

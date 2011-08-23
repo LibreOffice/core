@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 //------------------------------
 class SdrShadowItem: public SdrOnOffItem {
 public:
-    SdrShadowItem(sal_Bool bShadow=sal_False): SdrOnOffItem(SDRATTR_SHADOW, bShadow) {}
+    SdrShadowItem(BOOL bShadow=FALSE): SdrOnOffItem(SDRATTR_SHADOW, bShadow) {}
     SdrShadowItem(SvStream& rIn):      SdrOnOffItem(SDRATTR_SHADOW, rIn)     {}
 };
 

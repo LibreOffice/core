@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,6 @@ namespace chart
 
 class LegendPositionResources
 {
-
 public:
     //constructor without Display checkbox
     LegendPositionResources( Window* pParent );
@@ -66,8 +65,6 @@ public:
     DECL_LINK( PositionEnableHdl, void* );
     DECL_LINK( PositionChangeHdl, RadioButton* );
 
-    void SetAccessibleRelationMemberOf(Window* pMemberOf); //IAccessibility2 Implementation 2009-----
-
 private:
     void impl_setRadioButtonToggleHdl();
 
@@ -77,10 +74,10 @@ private:
 
     CheckBox        m_aCbxShow;
 
-    RadioButton     m_aRbtLeft;
-    RadioButton     m_aRbtRight;
-    RadioButton     m_aRbtTop;
-    RadioButton     m_aRbtBottom;
+    RadioButton		m_aRbtLeft;
+    RadioButton		m_aRbtTop;
+    RadioButton		m_aRbtRight;
+    RadioButton		m_aRbtBottom;
 
     Link            m_aChangeLink;
 };

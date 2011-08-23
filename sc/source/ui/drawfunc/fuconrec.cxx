@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include "drawview.hxx"
 
 #include <editeng/outlobj.hxx>
-// Create default drawing objects via keyboard
+// #98185# Create default drawing objects via keyboard
 #include <svx/svdopath.hxx>
 #include <svx/svdocapt.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -74,12 +74,12 @@ FuConstRectangle::~FuConstRectangle()
 |*
 \************************************************************************/
 
-sal_Bool FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL __EXPORT FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
@@ -107,7 +107,7 @@ sal_Bool FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstRectangle::MouseMove(const MouseEvent& rMEvt)
+BOOL __EXPORT FuConstRectangle::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -118,12 +118,12 @@ sal_Bool FuConstRectangle::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL __EXPORT FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = false;
+    BOOL bReturn = FALSE;
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )
     {
@@ -132,22 +132,22 @@ sal_Bool FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 
         if (aSfxRequest.GetSlot() == SID_DRAW_CAPTION_VERTICAL)
         {
-            //  set vertical flag for caption object
+            //	set vertical flag for caption object
 
             const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             if (rMarkList.GetMark(0))
             {
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                //  create OutlinerParaObject now so it can be set to vertical
+                //	create OutlinerParaObject now so it can be set to vertical
                 if ( pObj->ISA(SdrTextObj) )
                     ((SdrTextObj*)pObj)->ForceOutlinerParaObject();
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                 if( pOPO && !pOPO->IsVertical() )
-                    pOPO->SetVertical( sal_True );
+                    pOPO->SetVertical( TRUE );
             }
         }
 
-        bReturn = sal_True;
+        bReturn = TRUE;
     }
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 }
@@ -156,14 +156,14 @@ sal_Bool FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
 |* FALSE.
 |*
 \************************************************************************/
 
-sal_Bool FuConstRectangle::KeyInput(const KeyEvent& rKEvt)
+BOOL __EXPORT FuConstRectangle::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
+    BOOL bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
@@ -206,7 +206,7 @@ void FuConstRectangle::Activate()
             break;
     }
 
-    pView->SetCurrentObj(sal::static_int_cast<sal_uInt16>(aObjKind));
+    pView->SetCurrentObj(sal::static_int_cast<UINT16>(aObjKind));
 
     aOldPointer = pWindow->GetPointer();
     pViewShell->SetActivePointer( aNewPointer );
@@ -226,9 +226,15 @@ void FuConstRectangle::Deactivate()
     pViewShell->SetActivePointer( aOldPointer );
 }
 
-// Create default drawing objects via keyboard
+// #98185# Create default drawing objects via keyboard
 SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
+    // case SID_DRAW_LINE:
+    // case SID_DRAW_RECT:
+    // case SID_DRAW_ELLIPSE:
+    // case SID_DRAW_CAPTION:
+    // case SID_DRAW_CAPTION_VERTICAL:
+
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
         0L, pDrDoc);
@@ -253,7 +259,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
                 }
                 else
                 {
-                    OSL_FAIL("Object is NO line object");
+                    DBG_ERROR("Object is NO line object");
                 }
 
                 break;
@@ -266,7 +272,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
                     sal_Bool bIsVertical(SID_DRAW_CAPTION_VERTICAL == nID);
 
                     ((SdrTextObj*)pObj)->SetVerticalWriting(bIsVertical);
-
+                        
                     if(bIsVertical)
                     {
                         SfxItemSet aSet(pObj->GetMergedItemSet());
@@ -275,7 +281,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
                         pObj->SetMergedItemSet(aSet);
                     }
 
-                    //  don't set default text, start edit mode instead
+                    //  #105815# don't set default text, start edit mode instead
                     //  (Edit mode is started in ScTabViewShell::ExecDraw, because
                     //  it must be handled by FuText)
                     // String aText(ScResId(STR_CAPTION_DEFAULT_TEXT));
@@ -287,7 +293,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
                 }
                 else
                 {
-                    OSL_FAIL("Object is NO caption object");
+                    DBG_ERROR("Object is NO caption object");
                 }
 
                 break;

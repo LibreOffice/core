@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,14 +30,14 @@
 #define __FRAMEWORK_UIELEMENT_TOOLBARSMENUCONTROLLER_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -53,7 +53,7 @@
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
@@ -72,13 +72,13 @@ namespace framework
         public:
             ToolbarsMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
             virtual ~ToolbarsMenuController();
-
+            
             // XServiceInfo
             DECLARE_XSERVICEINFO
 
             // XPopupMenuController
             virtual void SAL_CALL setPopupMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >& PopupMenu ) throw (::com::sun::star::uno::RuntimeException);
-
+            
             // XInitialization
             virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
@@ -98,15 +98,15 @@ namespace framework
                 ::com::sun::star::util::URL                                                aTargetURL;
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
             };
-
+        
             DECL_STATIC_LINK( ToolbarsMenuController, ExecuteHdl_Impl, ExecuteInfo* );
-
+        
         private:
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > getLayoutManagerToolbars( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& rLayoutManager );
             rtl::OUString getUINameFromCommand( const rtl::OUString& rCommandURL );
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > getDispatchFromCommandURL( const rtl::OUString& rCommandURL );
-            void addCommand( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL, const rtl::OUString& aLabel );
+            void addCommand( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL, USHORT nHelpId, const rtl::OUString& aLabel );
             sal_Bool isContextSensitiveToolbarNonVisible();
 
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >                m_xPersistentWindowState;

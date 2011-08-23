@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 //------------------------------------------------------------------
 
 ScXMLEmptyContext::ScXMLEmptyContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
@@ -49,7 +49,7 @@ ScXMLEmptyContext::~ScXMLEmptyContext()
 {
 }
 
-SvXMLImportContext *ScXMLEmptyContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLEmptyContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )

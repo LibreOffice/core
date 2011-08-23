@@ -3,6 +3,12 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
+ *  $RCSfile: sdrattribute.hxx,v $
+ *
+ *  $Revision: 1.4 $
+ *
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
+ *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *
@@ -58,13 +64,13 @@ namespace drawinglayer
         public:
             /// constructors/assignmentoperator/destructor
             SdrLineStartEndAttribute(
-                const basegfx::B2DPolyPolygon& rStartPolyPolygon,
+                const basegfx::B2DPolyPolygon& rStartPolyPolygon, 
                 const basegfx::B2DPolyPolygon& rEndPolyPolygon,
-                double fStartWidth,
-                double fEndWidth,
-                bool bStartActive,
-                bool bEndActive,
-                bool bStartCentered,
+                double fStartWidth, 
+                double fEndWidth, 
+                bool bStartActive, 
+                bool bEndActive, 
+                bool bStartCentered, 
                 bool bEndCentered);
             SdrLineStartEndAttribute();
             SdrLineStartEndAttribute(const SdrLineStartEndAttribute& rCandidate);

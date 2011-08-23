@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,20 +48,20 @@ class SwEnvFmtPage : public SfxTabPage
 {
 
     FixedLine    aAddrFL;
-    FixedInfo    aAddrPosInfo;
+    FixedInfo	 aAddrPosInfo;
     FixedText    aAddrLeftText;
     MetricField  aAddrLeftField;
     FixedText    aAddrTopText;
     MetricField  aAddrTopField;
-    FixedInfo    aAddrFormatInfo;
+    FixedInfo	 aAddrFormatInfo;
     MenuButton   aAddrEditButton;
     FixedLine    aSendFL;
-    FixedInfo    aSendPosInfo;
+    FixedInfo	 aSendPosInfo;
     FixedText    aSendLeftText;
     MetricField  aSendLeftField;
     FixedText    aSendTopText;
     MetricField  aSendTopField;
-    FixedInfo    aSendFormatInfo;
+    FixedInfo	 aSendFormatInfo;
     MenuButton   aSendEditButton;
     FixedLine    aSizeFL;
     FixedText    aSizeFormatText;
@@ -83,10 +83,10 @@ class SwEnvFmtPage : public SfxTabPage
 
     void SetMinMax();
 
-    SfxItemSet  *GetCollItemSet(SwTxtFmtColl* pColl, sal_Bool bSender);
-
+    SfxItemSet	*GetCollItemSet(SwTxtFmtColl* pColl, BOOL bSender);
+    
     using Window::GetParent;
-    SwEnvDlg    *GetParent() {return (SwEnvDlg*) SfxTabPage::GetParent()->GetParent();}
+    SwEnvDlg	*GetParent() {return (SwEnvDlg*) SfxTabPage::GetParent()->GetParent();}
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
@@ -98,7 +98,7 @@ public:
     virtual void ActivatePage(const SfxItemSet& rSet);
     virtual int  DeactivatePage(SfxItemSet* pSet = 0);
             void FillItem(SwEnvItem& rItem);
-    virtual sal_Bool FillItemSet(SfxItemSet& rSet);
+    virtual BOOL FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 };
 

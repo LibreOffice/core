@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,6 +35,10 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 
+#include <vcl/button.hxx>
+
+#include <vcl/fixed.hxx>
+
 #include <vcl/combobox.hxx>
 
 #include <vcl/menubtn.hxx>
@@ -61,7 +65,7 @@ const short RET_EDIT = 100;
 
 class SwGlTreeListBox : public SvTreeListBox
 {
-    const String    sReadonly;
+    const String 	sReadonly;
 
     SvLBoxEntry*  pDragEntry;
 
@@ -72,17 +76,17 @@ class SwGlTreeListBox : public SvTreeListBox
     virtual sal_Bool    NotifyMoving(   SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
                                     SvLBoxEntry*& rpNewParent,
-                                    sal_uLong&        rNewChildPos
+                                    ULONG&        rNewChildPos
                                 );
-    virtual sal_Bool    NotifyCopying(  SvLBoxEntry*  pTarget,
+    virtual sal_Bool	NotifyCopying(	SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
                                     SvLBoxEntry*& rpNewParent,
-                                    sal_uLong&        rNewChildPos);
+                                    ULONG&		  rNewChildPos);
 public:
     SwGlTreeListBox(Window* pParent, const ResId& rResId);
 
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
-    void            Clear();
+    virtual void 	RequestHelp( const HelpEvent& rHEvt );
+    void			Clear();
 };
 
 //------------------------------------------------------------------
@@ -92,44 +96,44 @@ class SwGlossaryDlg : public SvxStandardDialog
     friend class SwNewGlosNameDlg;
     friend class SwGlTreeListBox;
 
-    CheckBox        aInsertTipCB;
-    FixedText       aNameLbl;
-    Edit            aNameED;
-    FixedText       aShortNameLbl;
-    NoSpaceEdit     aShortNameEdit;
-    SwGlTreeListBox aCategoryBox;
+    CheckBox		aInsertTipCB;
+    FixedText		aNameLbl;
+    Edit			aNameED;
+    FixedText		aShortNameLbl;
+    NoSpaceEdit 	aShortNameEdit;
+    SwGlTreeListBox	aCategoryBox;
     FixedLine       aRelativeFL;
-    CheckBox        aFileRelCB;
-    CheckBox        aNetRelCB;
+    CheckBox		aFileRelCB;
+    CheckBox		aNetRelCB;
     Window          aExampleWIN;
     Window          aExampleDummyWIN;
     CheckBox        aShowExampleCB;
-    OKButton        aInsertBtn;
-    CancelButton    aCloseBtn;
-    HelpButton      aHelpBtn;
-    MenuButton      aEditBtn;
-    PushButton      aBibBtn;
-    PushButton      aPathBtn;
+    OKButton		aInsertBtn;
+    CancelButton	aCloseBtn;
+    HelpButton		aHelpBtn;
+    MenuButton		aEditBtn;
+    PushButton		aBibBtn;
+    PushButton		aPathBtn;
 
-    String          sReadonlyPath;
+    String 			sReadonlyPath;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        _xAutoText;
-    SwOneExampleFrame*  pExampleFrame;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  		_xAutoText;
+    SwOneExampleFrame*	pExampleFrame;
 
-    PopupMenu*      pMenu;
-    SwGlossaryHdl*  pGlossaryHdl;
+    PopupMenu*		pMenu;
+    SwGlossaryHdl*	pGlossaryHdl;
 
-    String          sResumeGroup;
-    String          sResumeShortName;
-    sal_Bool            bResume;
+    String 			sResumeGroup;
+    String			sResumeShortName;
+    BOOL			bResume;
 
 
-    const sal_Bool      bSelection : 1;
-    sal_Bool            bReadOnly : 1;
-    sal_Bool            bIsOld : 1;
-    sal_Bool            bIsDocReadOnly:1;
+    const sal_Bool		bSelection : 1;
+    sal_Bool 			bReadOnly : 1;
+    sal_Bool 			bIsOld : 1;
+    sal_Bool			bIsDocReadOnly:1;
 
-    SwWrtShell*     pSh;
+    SwWrtShell*		pSh;
 
     void EnableShortName(sal_Bool bOn = sal_True);
 
@@ -146,26 +150,26 @@ class SwGlossaryDlg : public SvxStandardDialog
     DECL_LINK( PreviewLoadedHdl, void * );
 
 
-    virtual void    Apply();
-    void            Init();
-    SvLBoxEntry*    DoesBlockExist(const String& sBlock, const String& rShort);
-    void            ShowAutoText(const String& rGroup, const String& rShortName);
-    void            ResumeShowAutoText();
+    virtual void 	Apply();
+    void 			Init();
+    SvLBoxEntry* 	DoesBlockExist(const String& sBlock, const String& rShort);
+    void 			ShowAutoText(const String& rGroup, const String& rShortName);
+    void			ResumeShowAutoText();
 
-    sal_Bool            GetResumeData(String& rGroup, String& rShortName)
+    BOOL			GetResumeData(String& rGroup, String& rShortName)
                         {rGroup = sResumeGroup; rShortName = sResumeShortName; return bResume;}
-    void            SetResumeData(const String& rGroup, const String& rShortName)
-                        {sResumeGroup = rGroup; sResumeShortName = rShortName; bResume = sal_True;}
-    void            ResetResumeData() {bResume = sal_False;}
+    void			SetResumeData(const String& rGroup, const String& rShortName)
+                        {sResumeGroup = rGroup; sResumeShortName = rShortName; bResume = TRUE;}
+    void			ResetResumeData() {bResume = FALSE;}
 public:
     SwGlossaryDlg(SfxViewFrame* pViewFrame, SwGlossaryHdl* pGlosHdl, SwWrtShell *pWrtShell);
     ~SwGlossaryDlg();
-    String          GetCurrGrpName() const;
-    inline String   GetCurrLongName() const;
-    inline String   GetCurrShortName() const;
+    String			GetCurrGrpName() const;
+    inline String	GetCurrLongName() const;
+    inline String	GetCurrShortName() const;
     static String   GetCurrGroup();
-    static void     SetActGroup(const String& rNewGroup);
-    static String   GetExtension();
+    static void   	SetActGroup(const String& rNewGroup);
+    static String	GetExtension();
 };
 
 inline String SwGlossaryDlg::GetCurrLongName() const

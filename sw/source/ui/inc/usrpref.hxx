@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,18 +33,18 @@
 #include <unotools/configitem.hxx>
 #include <fldupde.hxx>
 #include "viewopt.hxx"
-#include <tools/fldunit.hxx>
+#include <vcl/fldunit.hxx>
 
 class SwMasterUsrPref;
 
 class SwContentViewConfig : public utl::ConfigItem
 {
-    SwMasterUsrPref&        rParent;
-    sal_Bool                    bWeb;
+    SwMasterUsrPref& 		rParent;
+    BOOL 					bWeb;
 
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
     public:
-        SwContentViewConfig(sal_Bool bWeb, SwMasterUsrPref& rParent);
+        SwContentViewConfig(BOOL bWeb, SwMasterUsrPref& rParent);
         ~SwContentViewConfig();
 
     // utl::ConfigItem
@@ -52,44 +52,44 @@ class SwContentViewConfig : public utl::ConfigItem
     virtual void    Commit();
 
     void                    Load();
-    void                    SetModified(){ConfigItem::SetModified();}
+    void 					SetModified(){ConfigItem::SetModified();}
 };
 
 class SwLayoutViewConfig : public utl::ConfigItem
 {
-    SwMasterUsrPref&    rParent;
-    sal_Bool                bWeb;
+    SwMasterUsrPref& 	rParent;
+    BOOL 				bWeb;
 
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
     public:
-        SwLayoutViewConfig(sal_Bool bWeb, SwMasterUsrPref& rParent);
+        SwLayoutViewConfig(BOOL bWeb, SwMasterUsrPref& rParent);
         ~SwLayoutViewConfig();
 
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
-    virtual void            Commit();
-    void                    Load();
-    void                    SetModified(){ConfigItem::SetModified();}
+    virtual void			Commit();
+    void					Load();
+    void 					SetModified(){ConfigItem::SetModified();}
 };
 
 class SwGridConfig : public utl::ConfigItem
 {
-    SwMasterUsrPref&    rParent;
-    sal_Bool                bWeb;
+    SwMasterUsrPref& 	rParent;
+    BOOL 				bWeb;
 
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
     public:
-        SwGridConfig(sal_Bool bWeb, SwMasterUsrPref& rParent);
+        SwGridConfig(BOOL bWeb, SwMasterUsrPref& rParent);
         ~SwGridConfig();
 
     virtual void Commit();
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
-    void                    Load();
-    void                    SetModified(){ConfigItem::SetModified();}
+    void					Load();
+    void 					SetModified(){ConfigItem::SetModified();}
 };
 
 class SwCursorConfig : public utl::ConfigItem
 {
-    SwMasterUsrPref&    rParent;
+    SwMasterUsrPref& 	rParent;
 
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
     public:
@@ -98,13 +98,13 @@ class SwCursorConfig : public utl::ConfigItem
 
     virtual void Commit();
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
-    void                    Load();
-    void                    SetModified(){ConfigItem::SetModified();}
+    void					Load();
+    void 					SetModified(){ConfigItem::SetModified();}
 };
 
 class SwWebColorConfig : public utl::ConfigItem
 {
-    SwMasterUsrPref&        rParent;
+    SwMasterUsrPref& 		rParent;
     com::sun::star::uno::Sequence<rtl::OUString> aPropNames;
 
     public:
@@ -113,8 +113,8 @@ class SwWebColorConfig : public utl::ConfigItem
 
     virtual void Commit();
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
-    void                    Load();
-    void                    SetModified(){ConfigItem::SetModified();}
+    void					Load();
+    void 					SetModified(){ConfigItem::SetModified();}
 };
 
 class SwMasterUsrPref : public SwViewOption
@@ -126,18 +126,16 @@ class SwMasterUsrPref : public SwViewOption
     friend class SwWebColorConfig;
 
     SwFldUpdateFlags eFldUpdateFlags;    //udpate of fields and charts
-    sal_Int32   nLinkUpdateMode;
-    FieldUnit   eUserMetric;
+    sal_Int32	nLinkUpdateMode;
+    FieldUnit	eUserMetric;
     FieldUnit   eHScrollMetric;
     sal_Bool    bIsHScrollMetricSet;
     FieldUnit   eVScrollMetric;
     sal_Bool    bIsVScrollMetricSet;
 
-    sal_Int32   nDefTab;            //default tab stop distance
+    sal_Int32	nDefTab;			//default tab stop distance
 
     sal_Bool    bIsSquaredPageMode; //default page mode for text grid
-    sal_Bool    bIsAlignMathObjectsToBaseline;
-
     SwContentViewConfig aContentConfig;
     SwLayoutViewConfig  aLayoutConfig;
     SwGridConfig        aGridConfig;
@@ -146,7 +144,7 @@ class SwMasterUsrPref : public SwViewOption
 
     sal_Bool bApplyCharUnit; // apply_char_unit
 public:
-    SwMasterUsrPref(sal_Bool bWeb);
+    SwMasterUsrPref(BOOL bWeb);
     ~SwMasterUsrPref();
 
     void SetUsrPref(const SwViewOption &rCopy);
@@ -178,7 +176,7 @@ public:
         }
     sal_Int32 GetUpdateLinkMode() const {return nLinkUpdateMode; }
 
-    void SetUpdateFields(sal_Bool bSet, sal_Bool bNoModify = sal_False)
+    void SetUpdateFields(BOOL bSet, sal_Bool bNoModify = sal_False)
         {
             if(bSet && eFldUpdateFlags == AUTOUPD_OFF)
             {
@@ -203,7 +201,7 @@ public:
                 aContentConfig.SetModified();
         }
 
-    void SetUpdateCharts(sal_Bool bSet, sal_Bool bNoModify = sal_False)
+    void SetUpdateCharts(BOOL bSet, sal_Bool bNoModify = sal_False)
         {
             if(bSet)
             {
@@ -220,7 +218,7 @@ public:
         };
     sal_Bool IsUpdateCharts()const {return eFldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS; }
 
-    FieldUnit   GetMetric() const { return eUserMetric;}
+    FieldUnit	GetMetric() const { return eUserMetric;}
     void        SetMetric(FieldUnit eSet, sal_Bool bNoModify = sal_False)
                 {
                     eUserMetric = eSet;
@@ -250,7 +248,7 @@ public:
     {
         return bApplyCharUnit;
     }
-    void   SetApplyCharUnit(sal_Bool bSet, sal_Bool bNoModify = sal_False)
+    void   SetApplyCharUnit(BOOL bSet, sal_Bool bNoModify = sal_False)
     {
         bApplyCharUnit = bSet;
         if(!bNoModify)
@@ -264,23 +262,16 @@ public:
                     if(!bNoModify)
                         aLayoutConfig.SetModified();
                 }
-
+    
     //default page mode for text grid
     sal_Bool    IsSquaredPageMode() const {return bIsSquaredPageMode;}
-    void        SetDefaultPageMode( sal_Bool bVal, sal_Bool bNoModify = sal_False )
-                {
+    void        SetDefaultPageMode( sal_Bool bVal, sal_Bool bNoModify = sal_False ) 
+                { 
                     bIsSquaredPageMode = bVal;
                     if(!bNoModify)
-                        aLayoutConfig.SetModified();
+                        aLayoutConfig.SetModified(); 
                 }
 
-    sal_Bool    IsAlignMathObjectsToBaseline() const { return bIsAlignMathObjectsToBaseline; }
-    void        SetAlignMathObjectsToBaseline( sal_Bool bVal, sal_Bool bNoModify = sal_False )
-                {
-                    bIsAlignMathObjectsToBaseline = bVal;
-                    if(!bNoModify)
-                        aLayoutConfig.SetModified();
-                }
 };
 
 #endif

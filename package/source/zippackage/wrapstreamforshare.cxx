@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ WrapStreamForShare::WrapStreamForShare( const uno::Reference< io::XInputStream >
     m_xSeekable = uno::Reference< io::XSeekable >( m_xInStream, uno::UNO_QUERY );
     if ( !m_rMutexRef.Is() || !m_xInStream.is() || !m_xSeekable.is() )
     {
-        OSL_FAIL( "Wrong initialization of wrapping stream!\n" );
+        OSL_ENSURE( sal_False, "Wrong initialization of wrapping stream!\n" );
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 }
@@ -54,7 +54,7 @@ WrapStreamForShare::~WrapStreamForShare()
 }
 
 // XInputStream
-sal_Int32 SAL_CALL WrapStreamForShare::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL WrapStreamForShare::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) 
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
@@ -92,7 +92,7 @@ sal_Int32 SAL_CALL WrapStreamForShare::readSomeBytes( uno::Sequence< sal_Int8 >&
     return nRead;
 }
 
-void SAL_CALL WrapStreamForShare::skipBytes( sal_Int32 nBytesToSkip )
+void SAL_CALL WrapStreamForShare::skipBytes( sal_Int32 nBytesToSkip ) 
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
                 io::IOException,
@@ -122,7 +122,7 @@ sal_Int32 SAL_CALL WrapStreamForShare::available()
     return m_xInStream->available();
 }
 
-void SAL_CALL WrapStreamForShare::closeInput()
+void SAL_CALL WrapStreamForShare::closeInput() 
         throw ( io::NotConnectedException,
                 io::IOException,
                 uno::RuntimeException )
@@ -156,7 +156,7 @@ void SAL_CALL WrapStreamForShare::seek( sal_Int64 location )
 }
 
 sal_Int64 SAL_CALL WrapStreamForShare::getPosition()
-        throw ( io::IOException,
+        throw ( io::IOException, 
                 uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );

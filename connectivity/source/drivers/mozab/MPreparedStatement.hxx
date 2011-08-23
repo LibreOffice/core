@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ namespace connectivity
             void checkAndResizeParameters(sal_Int32 parameterIndex);
             void setParameter(sal_Int32 parameterIndex, const ORowSetValue& x);
 
-            sal_uInt32 AddParameter(connectivity::OSQLParseNode * pParameter,
+            sal_uInt32 AddParameter(connectivity::OSQLParseNode * pParameter, 
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol);
             void scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes);
             void describeColumn(OSQLParseNode* _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable);

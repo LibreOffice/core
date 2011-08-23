@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <vector>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/resetableguard.hxx>
@@ -51,7 +51,7 @@
 #include <uielement/menubarmanager.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -60,7 +60,7 @@
 #include <com/sun/star/util/CloseVetoException.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -74,7 +74,7 @@ namespace framework
                     public  css::util::XCloseable               ,
                     // base classes
                     // Order is neccessary for right initialization!
-                    private ThreadHelpBase                      , // Struct for right initalization of mutex member! Must be first of baseclasses.
+                    private ThreadHelpBase						, // Struct for right initalization of mutex member! Must be first of baseclasses.
                     public  ::cppu::OWeakObject                   // => XWeak, XInterface
     {
     private:
@@ -83,22 +83,38 @@ namespace framework
     public:
         License( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMGR );
         virtual ~License();
-
+        
         /** declaration of XInterface, XTypeProvider, XServiceInfo */
         FWK_DECLARE_XINTERFACE
         FWK_DECLARE_XTYPEPROVIDER
-        DECLARE_XSERVICEINFO
+        DECLARE_XSERVICEINFO  
 
+        /*
+        XJob...
+        any execute([in] sequence< ::com::sun::star::beans::NamedValue > Arguments ) 
+            raises(
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::uno::Exception );
+        */
         virtual css::uno::Any SAL_CALL execute(const css::uno::Sequence<css::beans::NamedValue>& args)
             throw( css::lang::IllegalArgumentException, css::uno::Exception);
 
-        virtual void SAL_CALL close(sal_Bool bDeliverOwnership) throw (css::util::CloseVetoException);
+        /*
+        XCLoseable
+        void close( [in] boolean DeliverOwnership ) raises(CloseVetoException );
+        */
+        virtual void SAL_CALL close(sal_Bool bDeliverOwnership) throw (css::util::CloseVetoException);	 
 
+        /*
+        XCloseVroadcaster
+        [oneway] void addCloseListener([in] XCloseListenerListener );
+        [oneway] void removeCloseListener([in] XCloseListenerListener );
+        */
         virtual void SAL_CALL addCloseListener(const css::uno::Reference< css::util::XCloseListener >& aListener) throw (css::uno::RuntimeException);
         virtual void SAL_CALL removeCloseListener(const css::uno::Reference< css::util::XCloseListener >& aListener) throw (css::uno::RuntimeException);
 
 };
-
+    
 } // namespace framework
 
 #endif // __FRAMEWORK_SERVICES_LAYOUTMANAGER_HXX_

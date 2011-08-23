@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,52 +27,70 @@
  ************************************************************************/
 
 #include <vcl/window.hxx>
-#include <vector>
 
-#define MARKER_NOMARKER 0xFFFF
+#define MARKER_NOMARKER	0xFFFF
+
 
 class SbModule;
+class BreakpointListe;
 struct Breakpoint;
 class ImageList;
 
-class BreakpointWindow : public Window
+DECLARE_LIST( BreakpointList, Breakpoint* )
+
+class BreakpointWindow : public Window, public BreakpointList
 {
 using Window::Scroll;
 
 public:
     BreakpointWindow( Window *pParent );
+//	~BreakpointWindow();
 
-    void        Reset();
+    void		Reset();
 
-    void        SetModule( SbModule *pMod );
-    void        SetBPsInModule();
+    void		SetModule( SbModule *pMod );
+    void		SetBPsInModule();
 
-    void        InsertBreakpoint( sal_uInt32 nLine );
-    void        ToggleBreakpoint( sal_uInt32 nLine );
-    void        AdjustBreakpoints( sal_uInt32 nLine, bool bInserted );
+    void		InsertBreakpoint( USHORT nLine );
+    void		ToggleBreakpoint( USHORT nLine );
+    void		AdjustBreakpoints( ULONG nLine, BOOL bInserted );
 
-    void        LoadBreakpoints( String aFilename );
-    void        SaveBreakpoints( String aFilename );
-
-private:
-    ::std::vector< Breakpoint* > BreakpointList;
-    long                nCurYOffset;
-    sal_uInt32          nMarkerPos;
-    SbModule*           pModule;
-    bool                bErrorMarker;
-    static ImageList*   pImages;
+    void		LoadBreakpoints( String aFilename );
+    void		SaveBreakpoints( String aFilename );
 
 protected:
-    virtual void    Paint( const Rectangle& );
-    Breakpoint*     FindBreakpoint( const Point& rMousePos );
-    Breakpoint*     FindBreakpoint( sal_uInt32 nLine );
-    void            ShowMarker( bool bShow );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+    Breakpoint*	FindBreakpoint( ULONG nLine );
+
+private:
+    long			nCurYOffset;
+    USHORT			nMarkerPos;
+    SbModule*		pModule;
+    BOOL			bErrorMarker;
+    static ImageList *pImages;
+
+protected:
+    virtual void	Paint( const Rectangle& );
+    Breakpoint* 	FindBreakpoint( const Point& rMousePos );
+    void			ShowMarker( BOOL bShow );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
 
 public:
-    void            SetMarkerPos( sal_uInt32 nLine, bool bErrorMarker = false );
-    virtual void    Scroll( long nHorzScroll, long nVertScroll, sal_uInt16 nFlags = 0 );
-    long&           GetCurYOffset()         { return nCurYOffset; }
+
+//	void			SetModulWindow( ModulWindow* pWin )
+//						{ pModulWindow = pWin; }
+
+    void			SetMarkerPos( USHORT nLine, BOOL bErrorMarker = FALSE );
+
+    virtual void        Scroll( long nHorzScroll, long nVertScroll,
+                                USHORT nFlags = 0 );
+    long&			GetCurYOffset() 		{ return nCurYOffset; }
 };
+
+
+
+
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

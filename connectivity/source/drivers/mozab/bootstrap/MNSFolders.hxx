@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,6 +37,9 @@
 #include <rtl/ustring.hxx>
 
 ::rtl::OUString getRegistryDir(::com::sun::star::mozilla::MozillaProductType product);
+#ifndef MINIMAL_PROFILEDISCOVER
+::rtl::OUString getRegistryFileName(::com::sun::star::mozilla::MozillaProductType product);
+#endif
 
 #endif
 

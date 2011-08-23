@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,6 +28,7 @@
 package complex.api_internal;
 
 // imports
+import complexlib.ComplexTestCase;
 import helper.OfficeProvider;
 import helper.ProcessHandler;
 import com.sun.star.task.XJob;
@@ -37,27 +38,16 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.beans.NamedValue;
 
+import java.io.PrintWriter;
 import java.util.Vector;
 import java.util.StringTokenizer;
-
-
-// ---------- junit imports -----------------
-import lib.TestParameters;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
-import static org.junit.Assert.*;
-// ------------------------------------------
 
 /**
  * This test executes the API tests internally in StarOffice. Prerequiste is
  * that a OOoRunner.jar is registered inseide of StarOffice. Adjust the joblist
  * inside of the ChekAPI.props to determine which tetss will be executed.
  */
-public class CheckAPI  {
+public class CheckAPI extends ComplexTestCase {
 
     // The name of the tested service
     private final String testName = "StarOfficeAPI";
@@ -66,46 +56,40 @@ public class CheckAPI  {
      * Return all test methods.
      * @return The test methods.
      */
-//    public String[] getTestMethodNames() {
-//        return new String[]{"checkAPI"};
-//    }
-
-    /**
-     * The test parameters
-     */
-    private static TestParameters param = null;
-
-    /**
-     *
-     */
-    @Before public void before()
-    {
-        param = new TestParameters();
+    public String[] getTestMethodNames() {
+        return new String[]{"checkAPI"};
     }
+
     /**
      * Execute the API tests inside of the Office. If the Office crashes, it
      * will be restarted and the job will continue after the one that caused the crash.
      */
-    @Test public void checkAPI() {
-        System.out.println("Start with test");
+    public void checkAPI() {
+        log.println("Start with test");
         // if test is idle for 5 minutes, assume that it hangs and kill it.
-        // param.put("TimeOut", new Integer("300000"));
-        XMultiServiceFactory xMSF = getMSF();
+        param.put("TimeOut", new Integer("300000"));
+/*        AppProvider office = (AppProvider)dcl.getInstance("helper.OfficeProvider");
+        Object msf = office.getManager(param);
+        if (msf == null) {
+            failed("Could not connect an Office.");
+        }
+        param.put("ServiceFactory",msf); */
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)param.getMSF();
         Object oObj = null;
         try {
             oObj = xMSF.createInstance("org.openoffice.RunnerService");
         }
         catch(com.sun.star.uno.Exception e) {
-            fail("Could not create Instance of 'org.openoffice.RunnerService'");
+            failed("Could not create Instance of 'org.openoffice.RunnerService'");
         }
-        assertNotNull("Cannot create 'org.openoffice.RunnerService'", oObj);
-
+        if ( oObj == null ) {
+            failed("Cannot create 'org.openoffice.RunnerService'");
+        }
         // get the parameters for the internal test
         String paramList = (String)param.get("ParamList");
         Vector p = new Vector();
         StringTokenizer paramTokens = new StringTokenizer(paramList, " ");
-        while(paramTokens.hasMoreTokens())
-        {
+        while(paramTokens.hasMoreTokens()) {
             p.add(paramTokens.nextToken());
         }
         int length = p.size()/2+1;
@@ -114,17 +98,15 @@ public class CheckAPI  {
             internalParams[i] = new NamedValue();
             internalParams[i].Name = (String)p.get(i*2);
             internalParams[i].Value = p.get(i*2+1);
-            System.out.println("Name: "+internalParams[i].Name);
-            System.out.println("Value: "+(String)internalParams[i].Value);
+            log.println("Name: "+internalParams[i].Name);
+            log.println("Value: "+(String)internalParams[i].Value);
         }
 
         // do we have test jobs?
         String testJob = (String)param.get("job");
         PropertyValue[]props;
-        if (testJob==null)
-        {
-            if ( param.get("job1")==null )
-            {
+        if (testJob==null) {
+            if ( param.get("job1")==null ) {
                 // get all test jobs from runner service
                 XPropertyAccess xPropAcc = (XPropertyAccess)UnoRuntime.queryInterface(XPropertyAccess.class, oObj);
                 props = xPropAcc.getPropertyValues();
@@ -149,13 +131,13 @@ public class CheckAPI  {
             props[0].Value = testJob;
         }
 
-        System.out.println("Props length: "+ props.length);
+        log.println("Props length: "+ props.length);
         for (int i=0; i<props.length; i++) {
-            XJob xJob = UnoRuntime.queryInterface(XJob.class, oObj);
+            XJob xJob = (XJob)UnoRuntime.queryInterface(XJob.class, oObj);
             internalParams[length-1] = new NamedValue();
             internalParams[length-1].Name = "-o";
             internalParams[length-1].Value = props[i].Value;
-            System.out.println("Executing: " + (String)props[i].Value);
+            log.println("Executing: " + (String)props[i].Value);
 
             String erg = null;
 
@@ -164,8 +146,8 @@ public class CheckAPI  {
             }
             catch(Throwable t) {
                 // restart and go on with test!!
-                t.printStackTrace();
-                fail("Test run '" + (String)props[i].Value +"' could not be executed: Office crashed and is killed!");
+                t.printStackTrace((PrintWriter)log);
+                failed("Test run '" + (String)props[i].Value +"' could not be executed: Office crashed and is killed!", true);
                 xMSF = null;
                 ProcessHandler handler = (ProcessHandler)param.get("AppProvider");
                 handler.kill();
@@ -174,18 +156,19 @@ public class CheckAPI  {
                 }
                 catch(java.lang.InterruptedException e) {}
                 OfficeProvider op = new OfficeProvider();
+                //                op.closeExistingOffice(param, true);
                 xMSF = (XMultiServiceFactory)op.getManager(param);
                 param.put("ServiceFactory",xMSF);
                 try {
                     oObj = xMSF.createInstance("org.openoffice.RunnerService");
                 }
                 catch(com.sun.star.uno.Exception e) {
-                    fail("Could not create Instance of 'org.openoffice.RunnerService'");
+                    failed("Could not create Instance of 'org.openoffice.RunnerService'");
                 }
             }
-            System.out.println(erg);
+            log.println(erg);
             String processedErg = parseResult(erg);
-            assertTrue("Run '" + (String)props[i].Value + "' has result '" + processedErg + "'", processedErg == null);
+            assure("Run '" + (String)props[i].Value + "' has result '" + processedErg + "'", processedErg == null, true);
         }
     }
 
@@ -212,31 +195,6 @@ public class CheckAPI  {
         }
         return processedErg;
     }
-
-
-
-
-    private XMultiServiceFactory getMSF()
-    {
-        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
-        return xMSF1;
-    }
-
-    // setup and close connections
-    @BeforeClass public static void setUpConnection() throws Exception {
-        System.out.println("setUpConnection()");
-        connection.setUp();
-    }
-
-    @AfterClass public static void tearDownConnection()
-        throws InterruptedException, com.sun.star.uno.Exception
-    {
-        System.out.println("tearDownConnection()");
-        connection.tearDown();
-    }
-
-    private static final OfficeConnection connection = new OfficeConnection();
-
 }
 
 

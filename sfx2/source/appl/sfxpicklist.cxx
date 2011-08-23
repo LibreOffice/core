@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,8 +68,8 @@ using namespace ::com::sun::star::util;
 
 // ----------------------------------------------------------------------------
 
-osl::Mutex*     SfxPickList::pMutex = 0;
-SfxPickList*    SfxPickList::pUniqueInstance = 0;
+osl::Mutex*		SfxPickList::pMutex = 0;
+SfxPickList*	SfxPickList::pUniqueInstance = 0;
 
 // ----------------------------------------------------------------------------
 
@@ -89,7 +89,7 @@ class StringLength : public ::cppu::WeakImplHelper1< XStringWidth >
 
 // ----------------------------------------------------------------------------
 
-osl::Mutex* SfxPickList::GetOrCreateMutex()
+osl::Mutex*	SfxPickList::GetOrCreateMutex()
 {
     if ( !pMutex )
     {
@@ -101,7 +101,7 @@ osl::Mutex* SfxPickList::GetOrCreateMutex()
     return pMutex;
 }
 
-void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, const String& aURLString, sal_uInt32 nNo )
+void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, USHORT nItemId, const String& aURLString, sal_uInt32 nNo )
 {
     String aPickEntry;
 
@@ -116,9 +116,9 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, cons
         aPickEntry += String::CreateFromInt32( nNo + 1 );
     aPickEntry += DEFINE_CONST_UNICODE(": ");
 
-    INetURLObject   aURL( aURLString );
-    rtl::OUString   aTipHelpText;
-    rtl::OUString   aAccessibleName( aPickEntry );
+    INetURLObject	aURL( aURLString );
+    rtl::OUString	aTipHelpText;
+    rtl::OUString	aAccessibleName( aPickEntry );
 
     if ( aURL.GetProtocol() == INET_PROT_FILE )
     {
@@ -126,8 +126,10 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, cons
         // path and abbreviate it with a special function:
         String aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
-        ::rtl::OUString aSystemPath( aFileSystemPath );
-        ::rtl::OUString aCompactedSystemPath;
+//		::utl::LocalFileHelper::ConvertURLToPhysicalName( aURLString, aPhysicalName );
+
+        ::rtl::OUString	aSystemPath( aFileSystemPath );
+        ::rtl::OUString	aCompactedSystemPath;
 
         aTipHelpText = aSystemPath;
         aAccessibleName += aSystemPath;
@@ -146,7 +148,7 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, cons
     else
     {
         // Use INetURLObject to abbreviate all other URLs
-        String  aShortURL;
+        String	aShortURL;
         aShortURL = aURL.getAbbreviated( m_xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
         aPickEntry += aShortURL;
         aTipHelpText = aURLString;
@@ -167,7 +169,7 @@ void SfxPickList::RemovePickListEntries()
     m_aPicklistVector.clear();
 }
 
-SfxPickList::PickListEntry* SfxPickList::GetPickListEntry( sal_uInt32 nIndex )
+SfxPickList::PickListEntry*	SfxPickList::GetPickListEntry( sal_uInt32 nIndex )
 {
     OSL_ASSERT( m_aPicklistVector.size() > nIndex );
 
@@ -177,7 +179,7 @@ SfxPickList::PickListEntry* SfxPickList::GetPickListEntry( sal_uInt32 nIndex )
         return 0;
 }
 
-SfxPickList*    SfxPickList::GetOrCreate( const sal_uInt32 nMenuSize )
+SfxPickList*	SfxPickList::GetOrCreate( const sal_uInt32 nMenuSize )
 {
     if ( !pUniqueInstance )
     {
@@ -218,17 +220,17 @@ void SfxPickList::CreatePickListEntries()
 {
     RemovePickListEntries();
 
-    // Reading the pick list
+    // Einlesen der Pickliste
     Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
 
-    sal_uInt32 nCount   = seqPicklist.getLength();
-    sal_uInt32 nEntries = ::std::min( m_nAllowedMenuSize, nCount );
+    sal_uInt32 nCount	= seqPicklist.getLength();
+    sal_uInt32 nEntries	= ::std::min( m_nAllowedMenuSize, nCount );
 
     for( sal_uInt32 nItem=0; nItem < nEntries; ++nItem )
     {
         Sequence< PropertyValue > seqPropertySet = seqPicklist[ nItem ];
 
-        INetURLObject   aURL;
+        INetURLObject	aURL;
         ::rtl::OUString sURL;
         ::rtl::OUString sFilter;
         ::rtl::OUString sTitle;
@@ -265,7 +267,7 @@ void SfxPickList::CreatePickListEntries()
 
 void SfxPickList::CreateMenuEntries( Menu* pMenu )
 {
-    static sal_Bool bPickListMenuInitializing = sal_False;
+    static sal_Bool	bPickListMenuInitializing = sal_False;
 
     ::osl::MutexGuard aGuard( GetOrCreateMutex() );
 
@@ -291,8 +293,8 @@ void SfxPickList::CreateMenuEntries( Menu* pMenu )
     {
         PickListEntry* pEntry = GetPickListEntry( i );
 
-        pMenu->InsertItem( (sal_uInt16)(START_ITEMID_PICKLIST + i), aEmptyString );
-        CreatePicklistMenuTitle( pMenu, (sal_uInt16)(START_ITEMID_PICKLIST + i), pEntry->aName, i );
+        pMenu->InsertItem( (USHORT)(START_ITEMID_PICKLIST + i), aEmptyString );
+        CreatePicklistMenuTitle( pMenu, (USHORT)(START_ITEMID_PICKLIST + i), pEntry->aName, i );
     }
 
     bPickListMenuInitializing = sal_False;
@@ -313,7 +315,7 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
         String aFilter( pPick->aFilter );
         aGuard.clear();
 
-        sal_uInt16 nPos=aFilter.Search('|');
+        USHORT nPos=aFilter.Search('|');
         if( nPos != STRING_NOTFOUND )
         {
             String aOptions(aFilter.Copy( nPos ).GetBuffer()+1);
@@ -327,7 +329,7 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
     }
 }
 
-void SfxPickList::ExecuteMenuEntry( sal_uInt16 nId )
+void SfxPickList::ExecuteMenuEntry( USHORT nId )
 {
     ExecuteEntry( (sal_uInt32)( nId - START_ITEMID_PICKLIST ) );
 }
@@ -355,7 +357,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( rHint.IsA( TYPE( SfxEventHint )))
     {
         SfxEventHint* pEventHint = PTR_CAST(SfxEventHint,&rHint);
-        // only ObjectShell-related events with media interest
+        // nur ObjectShell-bezogene Events mit Medium interessieren
         SfxObjectShell* pDocSh = pEventHint->GetObjShell();
         if( !pDocSh )
             return;
@@ -391,12 +393,12 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 if( !pMed )
                     return;
 
-                // Unnamed Documents and embedded-Documents not in History
+                // unbenannt-Docs und embedded-Docs nicht in History
                 if ( !pDocSh->HasName() ||
                      SFX_CREATE_MODE_STANDARD != pDocSh->GetCreateMode() )
                     return;
 
-                // Help not in History
+                // Hilfe nicht in History
                 INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : ::rtl::OUString( pMed->GetOrigURL() ) );
                 if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
                     return;
@@ -422,12 +424,12 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 if( !pMed )
                     return;
 
-                // Unnamed Documents and embedded-Documents not im Pickliste
+                // unbenannt-Docs und embedded-Docs nicht in Pickliste
                 if ( !pDocSh->HasName() ||
                      SFX_CREATE_MODE_STANDARD != pDocSh->GetCreateMode() )
                     return;
 
-                // Help not in History
+                // Hilfe nicht in History
                 INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : ::rtl::OUString( pMed->GetOrigURL() ) );
                 if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
                     return;
@@ -445,11 +447,11 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     return;
 
                 // ignore hidden documents
-                if ( !SfxViewFrame::GetFirst( pDocSh, sal_True ) )
+                if ( !SfxViewFrame::GetFirst( pDocSh, TRUE ) )
                     return;
 
-                ::rtl::OUString  aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
-                ::rtl::OUString  aFilter;
+                ::rtl::OUString	 aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
+                ::rtl::OUString	 aFilter;
                 const SfxFilter* pFilter = pMed->GetOrigFilter();
                 if ( pFilter )
                     aFilter = pFilter->GetFilterName();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ void TabPage::ImplInit( Window* pParent, WinBits nStyle )
     // if the tabpage is drawn (ie filled) by a native widget, make sure all contols will have transparent background
     // otherwise they will paint with a wrong background
     if( IsNativeControlSupported(CTRL_TAB_BODY, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
-        EnableChildTransparentMode( sal_True );
+        EnableChildTransparentMode( TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -67,16 +67,16 @@ void TabPage::ImplInitSettings()
     Window* pParent = GetParent();
     if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
-        EnableChildTransparentMode( sal_True );
+        EnableChildTransparentMode( TRUE );
         SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        SetPaintTransparent( sal_True );
+        SetPaintTransparent( TRUE );
         SetBackground();
     }
     else
     {
-        EnableChildTransparentMode( sal_False );
+        EnableChildTransparentMode( FALSE );
         SetParentClipMode( 0 );
-        SetPaintTransparent( sal_False );
+        SetPaintTransparent( FALSE );
 
         if ( IsControlBackground() )
             SetBackground( GetControlBackground() );
@@ -166,7 +166,7 @@ void TabPage::Paint( const Rectangle& )
 }
 
 // -----------------------------------------------------------------------
-void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong )
+void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG )
 {
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
@@ -174,7 +174,7 @@ void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sa
     Wallpaper aWallpaper = GetBackground();
     if ( !aWallpaper.IsBitmap() )
         ImplInitSettings();
-
+    
     pDev->Push();
     pDev->SetMapMode();
     pDev->SetLineColor();
@@ -203,6 +203,15 @@ void TabPage::ActivatePage()
 
 void TabPage::DeactivatePage()
 {
+}
+
+// -----------------------------------------------------------------------
+
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > TabPage::CreateAccessible()
+{
+    // TODO: remove this method (incompatible)
+
+    return Window::CreateAccessible();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

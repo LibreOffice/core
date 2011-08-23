@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -145,7 +145,7 @@ private:
 |*
 \************************************************************************/
 
-Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
+Outliner::Outliner( SdDrawDocument* pDoc, USHORT nMode )
     : SdrOutliner( &pDoc->GetItemPool(), nMode ),
       mpImpl(new Implementation()),
       meMode(SEARCH),
@@ -155,13 +155,13 @@ Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
       mpDrawDocument(pDoc),
       mnConversionLanguage(LANGUAGE_NONE),
       mnIgnoreCurrentPageChangesLevel(0),
-      mbStringFound(sal_False),
+      mbStringFound(FALSE),
       mbMatchMayExist(false),
       mnPageCount(0),
       mnObjectCount(0),
-      mbEndOfSearch(sal_False),
-      mbFoundObject(sal_False),
-      mbError(sal_False),
+      mbEndOfSearch(FALSE),
+      mbFoundObject(FALSE),
+      mbError(FALSE),
       mbDirectionIsForward(true),
       mbRestrictSearchToSelection(false),
       maMarkListCopy(),
@@ -173,7 +173,7 @@ Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
       mpParaObj(NULL),
       meStartViewMode(PK_STANDARD),
       meStartEditMode(EM_PAGE),
-      mnStartPageIndex((sal_uInt16)-1),
+      mnStartPageIndex((USHORT)-1),
       mpStartEditedObject(NULL),
       maStartSelection(),
       mpSearchItem(NULL),
@@ -192,13 +192,13 @@ Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
     SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
     SetForbiddenCharsTable( pDoc->GetForbiddenCharsTable() );
 
-    sal_uLong nCntrl = GetControlWord();
+    ULONG nCntrl = GetControlWord();
     nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
     nCntrl |= EE_CNTRL_URLSFXEXECUTE;
     nCntrl |= EE_CNTRL_MARKFIELDS;
     nCntrl |= EE_CNTRL_AUTOCORRECT;
 
-    sal_Bool bOnlineSpell = false;
+    BOOL bOnlineSpell = false;
 
     DrawDocShell* pDocSh = mpDrawDocument->GetDocSh();
 
@@ -216,12 +216,12 @@ Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
             Any                     aAny;
 
             aAny = aLinguConfig.GetProperty(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_SPELL_AUTO )) );
+                rtl::OUString::createFromAscii( UPN_IS_SPELL_AUTO ) );
             aAny >>= bOnlineSpell;
         }
         catch( ... )
         {
-            OSL_FAIL( "Ill. type in linguistic property" );
+            DBG_ERROR( "Ill. type in linguistic property" );
         }
     }
 
@@ -290,13 +290,13 @@ void Outliner::PrepareSpelling (void)
 
         if (mpViewShell.get() != NULL)
         {
-            mbStringFound = sal_False;
+            mbStringFound = FALSE;
 
             mbWholeDocumentProcessed = false;
             // Supposed that we are not located at the very beginning/end of
             // the document then there may be a match in the document
             // prior/after the current position.
-            mbMatchMayExist = sal_True;
+            mbMatchMayExist = TRUE;
 
             maObjectIterator = ::sd::outliner::Iterator();
             maSearchStartPosition = ::sd::outliner::Iterator();
@@ -367,20 +367,20 @@ void Outliner::EndSpelling (void)
                 mpImpl->ReleaseOutlinerView();
             }
 
-            SetUpdateMode(sal_True);
+            SetUpdateMode(TRUE);
         }
 
-        // Before clearing the modify flag use it as a hint that
+        // #95811# Before clearing the modify flag use it as a hint that
         // changes were done at SpellCheck
         if(IsModified())
         {
             if(mpView && mpView->ISA(OutlineView))
-                static_cast<OutlineView*>(mpView)->PrepareClose(sal_False);
+                static_cast<OutlineView*>(mpView)->PrepareClose(FALSE);
             if(mpDrawDocument && !mpDrawDocument->IsChanged())
-                mpDrawDocument->SetChanged(sal_True);
+                mpDrawDocument->SetChanged(TRUE);
         }
 
-        // now clear the modify flag to have a specified state of
+        // #95811# now clear the modify flag to have a specified state of
         // Outliner
         ClearModifyFlag();
 
@@ -397,7 +397,7 @@ void Outliner::EndSpelling (void)
 
 
 
-sal_Bool Outliner::SpellNextDocument (void)
+BOOL Outliner::SpellNextDocument (void)
 {
     if (mpViewShell->ISA(OutlineViewShell))
     {
@@ -409,8 +409,8 @@ sal_Bool Outliner::SpellNextDocument (void)
     else
     {
         if (mpView->ISA(OutlineView))
-            ((OutlineView*)mpView)->PrepareClose(sal_False);
-        mpDrawDocument->GetDocSh()->SetWaitCursor( sal_True );
+            ((OutlineView*)mpView)->PrepareClose(FALSE);
+        mpDrawDocument->GetDocSh()->SetWaitCursor( TRUE );
 
         Initialize (true);
 
@@ -420,11 +420,11 @@ sal_Bool Outliner::SpellNextDocument (void)
             pOutlinerView->SetWindow(mpWindow);
         ProvideNextTextObject ();
 
-        mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );
+        mpDrawDocument->GetDocSh()->SetWaitCursor( FALSE );
         ClearModifyFlag();
     }
 
-    return mbEndOfSearch ? sal_False : sal_True;
+    return mbEndOfSearch ? FALSE : TRUE;
 
 }
 
@@ -484,11 +484,11 @@ sal_Bool Outliner::SpellNextDocument (void)
 */
 bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
 {
-    sal_Bool bEndOfSearch = sal_True;
+    BOOL bEndOfSearch = TRUE;
 
     if (mbViewShellValid)
     {
-        mpDrawDocument->GetDocSh()->SetWaitCursor( sal_True );
+        mpDrawDocument->GetDocSh()->SetWaitCursor( TRUE );
         if (mbPrepareSpellingPending)
             PrepareSpelling();
         ViewShellBase* pBase = PTR_CAST(ViewShellBase,SfxViewShell::Current());
@@ -522,26 +522,26 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
             meMode = SEARCH;
             mpSearchItem = pSearchItem;
 
-            mbFoundObject = sal_False;
+            mbFoundObject = FALSE;
 
             Initialize ( ! mpSearchItem->GetBackward());
 
-            sal_uInt16 nCommand = mpSearchItem->GetCommand();
+            USHORT nCommand = mpSearchItem->GetCommand();
             if (nCommand == SVX_SEARCHCMD_REPLACE_ALL)
                 bEndOfSearch = SearchAndReplaceAll ();
             else
             {
                 RememberStartPosition ();
                 bEndOfSearch = SearchAndReplaceOnce ();
-                // restore start position if nothing was found
+                //#107233# restore start position if nothing was found
                 if(!mbStringFound)
                     RestoreStartPosition ();
                 else
-                    mnStartPageIndex = (sal_uInt16)-1;
+                    mnStartPageIndex = (USHORT)-1;
             }
         }
         else
-            mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );
+            mpDrawDocument->GetDocSh()->SetWaitCursor( FALSE );
     }
 
     return bEndOfSearch;
@@ -685,7 +685,7 @@ bool Outliner::SearchAndReplaceOnce (void)
                     pOutlinerView->StartSearchAndReplace(*mpSearchItem);
 
             // Search for the next match.
-            sal_uLong nMatchCount = 0;
+            ULONG nMatchCount = 0;
             if (mpSearchItem->GetCommand() != SVX_SEARCHCMD_REPLACE_ALL)
                 nMatchCount = pOutlinerView->StartSearchAndReplace(*mpSearchItem);
 
@@ -709,7 +709,7 @@ bool Outliner::SearchAndReplaceOnce (void)
                         "SearchAndReplace without valid view!" );
                     if ( ! GetEditEngine().HasView( &pOutlinerView->GetEditView() ) )
                     {
-                        mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );
+                        mpDrawDocument->GetDocSh()->SetWaitCursor( FALSE );
                         return true;
                     }
 
@@ -720,7 +720,7 @@ bool Outliner::SearchAndReplaceOnce (void)
         }
         else if (mpViewShell->ISA(OutlineViewShell))
         {
-            mpDrawDocument->GetDocSh()->SetWaitCursor (sal_False);
+            mpDrawDocument->GetDocSh()->SetWaitCursor (FALSE);
             // The following loop is executed more then once only when a
             // wrap arround search is done.
             while (true)
@@ -741,7 +741,7 @@ bool Outliner::SearchAndReplaceOnce (void)
         }
     }
 
-    mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );
+    mpDrawDocument->GetDocSh()->SetWaitCursor( FALSE );
 
     return mbEndOfSearch;
 }
@@ -771,7 +771,7 @@ void Outliner::DetectChange (void)
         if (pPageView != NULL)
             mpView->UnmarkAllObj (pPageView);
         mpView->SdrEndTextEdit();
-        SetUpdateMode(sal_False);
+        SetUpdateMode(FALSE);
         OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
         if (pOutlinerView != NULL)
             pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
@@ -817,7 +817,7 @@ void Outliner::DetectChange (void)
 bool Outliner::DetectSelectionChange (void)
 {
     bool bSelectionHasChanged = false;
-    sal_uLong nMarkCount = mpView->GetMarkedObjectList().GetMarkCount();
+    ULONG nMarkCount = mpView->GetMarkedObjectList().GetMarkCount();
 
     // If mpObj is NULL then we have not yet found our first match.
     // Detecting a change makes no sense.
@@ -890,7 +890,7 @@ void Outliner::RememberStartPosition (void)
     }
     else
     {
-        mnStartPageIndex = (sal_uInt16)-1;
+        mnStartPageIndex = (USHORT)-1;
     }
 }
 
@@ -902,7 +902,7 @@ void Outliner::RestoreStartPosition (void)
     bool bRestore = true;
     // Take a negative start page index as inidicator that restoring the
     // start position is not requested.
-    if (mnStartPageIndex == (sal_uInt16)-1 )
+    if (mnStartPageIndex == (USHORT)-1 )
         bRestore = false;
     // Dont't resore when the view shell is not valid.
     if (mpViewShell == NULL)
@@ -974,7 +974,7 @@ void Outliner::ProvideNextTextObject (void)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    SetUpdateMode(sal_False);
+    SetUpdateMode(FALSE);
     OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
     if (pOutlinerView != NULL)
         pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
@@ -1047,7 +1047,7 @@ void Outliner::EndOfSearch (void)
         if ( ! mbMatchMayExist)
         {
             ShowEndOfSearchDialog ();
-            mbEndOfSearch = sal_True;
+            mbEndOfSearch = TRUE;
         }
         // Ask the user whether to wrap arround and continue the search or
         // to terminate.
@@ -1112,7 +1112,7 @@ bool Outliner::ShowWrapArroundDialog (void)
     if (mpSearchItem != NULL)
     {
         // When searching display the dialog only for single find&replace.
-        sal_uInt16 nCommand = mpSearchItem->GetCommand();
+        USHORT nCommand = mpSearchItem->GetCommand();
         bShowDialog = (nCommand==SVX_SEARCHCMD_REPLACE)
             || (nCommand==SVX_SEARCHCMD_FIND);
     }
@@ -1123,9 +1123,9 @@ bool Outliner::ShowWrapArroundDialog (void)
     if (bShowDialog)
     {
         // The question text depends on the search direction.
-        sal_Bool bImpress = mpDrawDocument!=NULL
+        BOOL bImpress = mpDrawDocument!=NULL
             && mpDrawDocument->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
-        sal_uInt16 nStringId;
+        USHORT nStringId;
         if (mbDirectionIsForward)
             nStringId = bImpress
                 ? STR_SAR_WRAP_FORWARD
@@ -1142,7 +1142,7 @@ bool Outliner::ShowWrapArroundDialog (void)
             WB_YES_NO | WB_DEF_YES,
             String(SdResId(nStringId)));
         aQuestionBox.SetImage (QueryBox::GetStandardImage());
-        sal_uInt16 nBoxResult = ShowModalMessageBox(aQuestionBox);
+        USHORT nBoxResult = ShowModalMessageBox(aQuestionBox);
         bDoWrapArround = (nBoxResult == BUTTONID_YES);
     }
 
@@ -1192,8 +1192,8 @@ void Outliner::PrepareSpellCheck (void)
 
     if (eState == EE_SPELL_NOLANGUAGE)
     {
-        mbError = sal_True;
-        mbEndOfSearch = sal_True;
+        mbError = TRUE;
+        mbEndOfSearch = TRUE;
         ErrorBox aErrorBox (NULL,
             WB_OK,
             String(SdResId(STR_NOLANGUAGE)));
@@ -1215,7 +1215,7 @@ void Outliner::PrepareSpellCheck (void)
             }
         }
 
-        EnterEditMode( sal_False );
+        EnterEditMode( FALSE );
     }
 }
 
@@ -1231,7 +1231,7 @@ void Outliner::PrepareSearchAndReplace (void)
 
         EnterEditMode ();
 
-        mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );
+        mpDrawDocument->GetDocSh()->SetWaitCursor( FALSE );
         // Start seach at the right end of the current object's text
         // depending on the search direction.
         OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
@@ -1250,7 +1250,7 @@ void Outliner::SetViewMode (PageKind ePageKind)
     if (pDrawViewShell.get()!=NULL && ePageKind != pDrawViewShell->GetPageKind())
     {
         // Restore old edit mode.
-        pDrawViewShell->ChangeEditMode(mpImpl->meOriginalEditMode, sal_False);
+        pDrawViewShell->ChangeEditMode(mpImpl->meOriginalEditMode, FALSE);
 
         SetStatusEventHdl(Link());
         ::rtl::OUString sViewURL;
@@ -1309,7 +1309,7 @@ void Outliner::SetViewMode (PageKind ePageKind)
 
 
 
-void Outliner::SetPage (EditMode eEditMode, sal_uInt16 nPageIndex)
+void Outliner::SetPage (EditMode eEditMode, USHORT nPageIndex)
 {
     if ( ! mbRestrictSearchToSelection)
     {
@@ -1318,7 +1318,7 @@ void Outliner::SetPage (EditMode eEditMode, sal_uInt16 nPageIndex)
         OSL_ASSERT(pDrawViewShell.get()!=NULL);
         if (pDrawViewShell.get() != NULL)
         {
-            pDrawViewShell->ChangeEditMode(eEditMode, sal_False);
+            pDrawViewShell->ChangeEditMode(eEditMode, FALSE);
             pDrawViewShell->SwitchPage(nPageIndex);
         }
     }
@@ -1327,7 +1327,7 @@ void Outliner::SetPage (EditMode eEditMode, sal_uInt16 nPageIndex)
 
 
 
-void Outliner::EnterEditMode (sal_Bool bGrabFocus)
+void Outliner::EnterEditMode (BOOL bGrabFocus)
 {
     OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
     if (mbViewShellValid && pOutlinerView != NULL)
@@ -1356,8 +1356,8 @@ void Outliner::EnterEditMode (sal_Bool bGrabFocus)
         // Turn on the edit mode for the text object.
         mpView->SdrBeginTextEdit(mpTextObj, pPV, mpWindow, sal_True, this, pOutlinerView, sal_True, sal_True, bGrabFocus);
 
-        SetUpdateMode(sal_True);
-        mbFoundObject = sal_True;
+        SetUpdateMode(TRUE);
+        mbFoundObject = TRUE;
     }
 }
 
@@ -1373,7 +1373,7 @@ void Outliner::EnterEditMode (sal_Bool bGrabFocus)
 IMPL_LINK_INLINE_START( Outliner, SpellError, void *, nLang )
 {
     mbError = true;
-    String aError( SvtLanguageTable::GetLanguageString( (LanguageType)(sal_uLong)nLang ) );
+    String aError( SvtLanguageTable::GetLanguageString( (LanguageType)(ULONG)nLang ) );
     ErrorHandler::HandleError(* new StringErrorInfo(
                                 ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aError) );
     return 0;
@@ -1395,7 +1395,7 @@ ESelection Outliner::GetSearchStartPosition (void)
     {
         // Retrieve the position after the last character in the last
         // paragraph.
-        sal_uInt16 nParagraphCount = static_cast<sal_uInt16>(GetParagraphCount());
+        USHORT nParagraphCount = static_cast<USHORT>(GetParagraphCount());
         if (nParagraphCount == 0)
             aPosition = ESelection();
         else
@@ -1420,7 +1420,7 @@ bool Outliner::HasNoPreviousMatch (void)
 
     // Detect whether the cursor stands at the beginning
     // resp. at the end of the text.
-    return pOutlinerView->GetSelection().IsEqual(GetSearchStartPosition ()) == sal_True;
+    return pOutlinerView->GetSelection().IsEqual(GetSearchStartPosition ()) == TRUE;
 }
 
 
@@ -1460,7 +1460,7 @@ SdrObject* Outliner::SetObject (
     const ::sd::outliner::IteratorPosition& rPosition)
 {
     SetViewMode (rPosition.mePageKind);
-    SetPage (rPosition.meEditMode, (sal_uInt16)rPosition.mnPageIndex);
+    SetPage (rPosition.meEditMode, (USHORT)rPosition.mnPageIndex);
     mnText = rPosition.mnText;
     return rPosition.mxObject.get();
 }
@@ -1477,6 +1477,8 @@ void Outliner::SetViewShell (const ::boost::shared_ptr<ViewShell>& rpViewShell)
         // When the outline view is not owned by us then we have to clear
         // that pointer so that the current one for the new view shell will
         // be used (in ProvideOutlinerView).
+        //        if ( ! mbOwnOutlineView)
+        //            mpOutlineView = NULL;
         if (mpViewShell.get() != NULL)
         {
             mpView = mpViewShell->GetView();
@@ -1502,17 +1504,17 @@ void Outliner::SetViewShell (const ::boost::shared_ptr<ViewShell>& rpViewShell)
 void Outliner::HandleChangedSelection (void)
 {
     maMarkListCopy.clear();
-    mbRestrictSearchToSelection = (mpView->AreObjectsMarked()==sal_True);
+    mbRestrictSearchToSelection = (mpView->AreObjectsMarked()==TRUE);
     if (mbRestrictSearchToSelection)
     {
         // Make a copy of the current mark list.
         const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-        sal_uLong nCount = rMarkList.GetMarkCount();
+        ULONG nCount = rMarkList.GetMarkCount();
         if (nCount > 0)
         {
             maMarkListCopy.clear();
             maMarkListCopy.reserve (nCount);
-            for (sal_uLong i=0; i<nCount; i++)
+            for (ULONG i=0; i<nCount; i++)
                 maMarkListCopy.push_back (rMarkList.GetMark(i)->GetMarkedSdrObj ());
         }
         else
@@ -1525,10 +1527,10 @@ void Outliner::HandleChangedSelection (void)
 
 
 
-void Outliner::StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
-        const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive )
+void Outliner::StartConversion( INT16 nSourceLanguage,  INT16 nTargetLanguage,
+        const Font *pTargetFont, INT32 nOptions, BOOL bIsInteractive )
 {
-    sal_Bool bMultiDoc = mpViewShell->ISA(DrawViewShell);
+    BOOL bMultiDoc = mpViewShell->ISA(DrawViewShell);
 
     meMode = TEXT_CONVERSION;
     mbDirectionIsForward = true;
@@ -1564,14 +1566,15 @@ void Outliner::PrepareConversion (void)
     if( HasConvertibleTextPortion( mnConversionLanguage ) )
     {
         SetUpdateMode(sal_False);
-        mbStringFound = sal_True;
-        mbMatchMayExist = sal_True;
+        mbStringFound = TRUE;
+        mbMatchMayExist = TRUE;
 
         EnterEditMode ();
 
-        mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );
+        mpDrawDocument->GetDocSh()->SetWaitCursor( FALSE );
         // Start seach at the right end of the current object's text
         // depending on the search direction.
+//		mpOutlineView->SetSelection (GetSearchStartPosition ());
     }
     else
     {
@@ -1592,12 +1595,12 @@ void Outliner::BeginConversion (void)
 
     if (mpViewShell != NULL)
     {
-        mbStringFound = sal_False;
+        mbStringFound = FALSE;
 
         // Supposed that we are not located at the very beginning/end of the
         // document then there may be a match in the document prior/after
         // the current position.
-        mbMatchMayExist = sal_True;
+        mbMatchMayExist = TRUE;
 
         maObjectIterator = ::sd::outliner::Iterator();
         maSearchStartPosition = ::sd::outliner::Iterator();
@@ -1626,7 +1629,7 @@ sal_Bool Outliner::ConvertNextDocument()
     if( mpViewShell && mpViewShell->ISA(OutlineViewShell) )
         return false;
 
-    mpDrawDocument->GetDocSh()->SetWaitCursor( sal_True );
+    mpDrawDocument->GetDocSh()->SetWaitCursor( TRUE );
 
     Initialize ( true );
 
@@ -1638,7 +1641,7 @@ sal_Bool Outliner::ConvertNextDocument()
     }
     ProvideNextTextObject ();
 
-    mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );
+    mpDrawDocument->GetDocSh()->SetWaitCursor( FALSE );
     ClearModifyFlag();
 
     // for text conversion we automaticly wrap around one
@@ -1659,7 +1662,7 @@ sal_Bool Outliner::ConvertNextDocument()
 
 
 
-sal_uInt16 Outliner::ShowModalMessageBox (Dialog& rMessageBox)
+USHORT Outliner::ShowModalMessageBox (Dialog& rMessageBox)
 {
     // We assume that the parent of the given messge box is NULL, i.e. it is
     // modal with respect to the top application window. However, this
@@ -1690,13 +1693,13 @@ sal_uInt16 Outliner::ShowModalMessageBox (Dialog& rMessageBox)
     if (pChildWindow != NULL)
         pSearchDialog = pChildWindow->GetWindow();
     if (pSearchDialog != NULL)
-        pSearchDialog->EnableInput(sal_False,sal_True);
+        pSearchDialog->EnableInput(FALSE,TRUE);
 
-    sal_uInt16 nResult = rMessageBox.Execute();
+    USHORT nResult = rMessageBox.Execute();
 
     // Unlock the search dialog.
     if (pSearchDialog != NULL)
-        pSearchDialog->EnableInput(sal_True,sal_True);
+        pSearchDialog->EnableInput(TRUE,TRUE);
 
     return nResult;
 }
@@ -1768,12 +1771,12 @@ void Outliner::Implementation::ProvideOutlinerView (
                 }
                 else
                     mpOutlineView->SetWindow(pWindow);
-                sal_uLong nStat = mpOutlineView->GetControlWord();
+                ULONG nStat = mpOutlineView->GetControlWord();
                 nStat &= ~EV_CNTRL_AUTOSCROLL;
                 mpOutlineView->SetControlWord(nStat);
                 if (bInsert)
                     rOutliner.InsertView( mpOutlineView );
-                rOutliner.SetUpdateMode(sal_False);
+                rOutliner.SetUpdateMode(FALSE);
                 mpOutlineView->SetOutputArea (Rectangle (Point(), Size(1, 1)));
                 rOutliner.SetPaperSize( Size(1, 1) );
                 rOutliner.SetText( String(), rOutliner.GetParagraph( 0 ) );

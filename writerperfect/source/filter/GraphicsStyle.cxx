@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* GraphicsStyle:
  *
  * Copyright (C) 2007 Fridrich Strba .strba@bluewin.ch)
@@ -39,5 +38,3 @@ GraphicsStyle::~GraphicsStyle()
 void GraphicsStyle::write(DocumentHandlerInterface * /* pHandler */) const
 {
 }
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,22 +34,22 @@
 
 class ScUnitConverterData : public StrData
 {
-            double          fValue;
+            double			fValue;
 
                             // not implemented
-    ScUnitConverterData&    operator=( const ScUnitConverterData& );
+    ScUnitConverterData&	operator=( const ScUnitConverterData& );
 
 public:
                             ScUnitConverterData( const String& rFromUnit,
                                 const String& rToUnit, double fValue = 1.0 );
                             ScUnitConverterData( const ScUnitConverterData& );
-    virtual                 ~ScUnitConverterData() {};
+    virtual					~ScUnitConverterData() {};
 
-    virtual ScDataObject*       Clone() const;
+    virtual	ScDataObject*		Clone() const;
 
-            double          GetValue() const    { return fValue; }
+            double			GetValue() const	{ return fValue; }
 
-    static  void            BuildIndexString( String& rStr,
+    static	void			BuildIndexString( String& rStr,
                                 const String& rFromUnit, const String& rToUnit );
 
 };
@@ -59,13 +59,13 @@ class ScUnitConverter : public ScStrCollection
 {
                             // not implemented
                             ScUnitConverter( const ScUnitConverter& );
-        ScUnitConverter&    operator=( const ScUnitConverter& );
+        ScUnitConverter&	operator=( const ScUnitConverter& );
 
 public:
-                            ScUnitConverter( sal_uInt16 nInit = 16, sal_uInt16 nDelta = 4 );
-    virtual                 ~ScUnitConverter() {};
+                            ScUnitConverter( USHORT nInit = 16, USHORT nDelta = 4 );
+    virtual					~ScUnitConverter() {};
 
-        sal_Bool                GetValue( double& fValue, const String& rFromUnit,
+        BOOL				GetValue( double& fValue, const String& rFromUnit,
                                 const String& rToUnit ) const;
 };
 

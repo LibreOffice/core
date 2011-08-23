@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -739,7 +739,7 @@ bool hasUnhiddenData( const uno::Reference< chart2::XDataSeries >& xSeries )
 
 struct lcl_LessIndex
 {
-    inline bool operator() ( const sal_Int32& first, const sal_Int32& second ) const
+    inline bool operator() ( const sal_Int32& first, const sal_Int32& second )
     {
         return ( first < second );
     }

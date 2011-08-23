@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,12 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
-
-#define t_print printf
-
+#include <testshl/simpleheader.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <osl/thread.h>
@@ -48,8 +43,11 @@
 #include <sal/macros.h>
 
 #if ( defined WNT )                     // Windows
-#   include <windows.h>
+#include <tools/prewin.h>
+#	define WIN32_LEAN_AND_MEAN
+// #	include <windows.h>
 #   include <tchar.h>
+#include <tools/postwin.h>
 #endif
 
 #include "rtl/allocator.hxx"
@@ -61,19 +59,10 @@
 #include <iterator>
 #include <string>
 
-#ifdef UNX
-#if defined( MACOSX )
-# include <crt_externs.h>
-# define environ (*_NSGetEnviron())
-# else
-    extern char** environ;
-# endif
-#endif
-
 #if defined(WNT) || defined(OS2)
-    const rtl::OUString EXECUTABLE_NAME (RTL_CONSTASCII_USTRINGPARAM("osl_process_child.exe"));
+    const rtl::OUString EXECUTABLE_NAME = rtl::OUString::createFromAscii("osl_process_child.exe");
 #else
-    const rtl::OUString EXECUTABLE_NAME (RTL_CONSTASCII_USTRINGPARAM("osl_process_child"));
+    const rtl::OUString EXECUTABLE_NAME = rtl::OUString::createFromAscii("osl_process_child");
 #endif
 
 
@@ -86,10 +75,7 @@ std::string OUString_to_std_string(const rtl::OUString& oustr)
 
 //########################################
 using namespace osl;
-
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
+using namespace rtl;
 
 /** print a UNI_CODE String.
 */
@@ -110,7 +96,7 @@ inline ::rtl::OUString getExecutablePath( void )
     osl::Module::getUrlFromAddress( ( void* ) &getExecutablePath, dirPath );
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') );
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') + 1);
-    dirPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bin"));
+    dirPath += rtl::OUString::createFromAscii("bin");
     return dirPath;
 }
 
@@ -130,15 +116,15 @@ class Test_osl_joinProcess : public CppUnit::TestFixture
 public:
 
     Test_osl_joinProcess() :
-        join_param_(OUString(RTL_CONSTASCII_USTRINGPARAM("-join"))),
-        wait_time_(OUString(RTL_CONSTASCII_USTRINGPARAM("1"))),
+        join_param_(OUString::createFromAscii("-join")),
+        wait_time_(OUString::createFromAscii("1")),
         parameters_count_(2)
     {
         parameters_[0] = join_param_.pData;
         parameters_[1] = wait_time_.pData;
         suCWD = getExecutablePath();
         suExecutableFileURL = suCWD;
-        suExecutableFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        suExecutableFileURL += rtl::OUString::createFromAscii("/");
         suExecutableFileURL += EXECUTABLE_NAME;
     }
 
@@ -362,32 +348,6 @@ private:
     string_container_t exclude_list_;
 };
 
-namespace
-{
-    class starts_with
-        : public std::unary_function<const std::string&, bool>
-    {
-    private:
-        const std::string m_rString;
-    public:
-        starts_with(const char *pString) : m_rString(pString) {}
-        bool operator()(const std::string &rEntry) const
-        {
-            return rEntry.find(m_rString) == 0;
-        }
-    };
-
-    void tidy_container(string_container_t &env_container)
-    {
-        //sort them because there are no guarantees to ordering
-        std::sort(env_container.begin(), env_container.end());
-        //remove LD_PRELOAD because valgrind injects that into the
-        //parent process
-        env_container.erase(std::remove_if(env_container.begin(), env_container.end(),
-            starts_with("LD_PRELOAD=")), env_container.end());
-    }
-}
-
 #ifdef WNT
     void read_parent_environment(string_container_t* env_container)
     {
@@ -400,14 +360,13 @@ namespace
             p += l + 1;
         }
         FreeEnvironmentStrings(env);
-        tidy_container(*env_container);
     }
 #else
+    extern char** environ;
     void read_parent_environment(string_container_t* env_container)
     {
         for (int i = 0; NULL != environ[i]; i++)
             env_container->push_back(std::string(environ[i]));
-        tidy_container(*env_container);
     }
 #endif
 
@@ -416,43 +375,38 @@ class Test_osl_executeProcess : public CppUnit::TestFixture
 {
     const OUString env_param_;
 
-    OUString     temp_file_url_;
     OUString     temp_file_path_;
     rtl_uString* parameters_[2];
     int          parameters_count_;
-    OUString    suCWD;
-    OUString    suExecutableFileURL;
+    OUString	suCWD;
+    OUString	suExecutableFileURL;
 
 public:
 
     //------------------------------------------------
     // ctor
     Test_osl_executeProcess() :
-        env_param_(OUString(RTL_CONSTASCII_USTRINGPARAM("-env"))),
+        env_param_(OUString::createFromAscii("-env")),
         parameters_count_(2)
     {
         parameters_[0] = env_param_.pData;
         suCWD = getExecutablePath();
         suExecutableFileURL = suCWD;
-        suExecutableFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        suExecutableFileURL += rtl::OUString::createFromAscii("/");
         suExecutableFileURL += EXECUTABLE_NAME;
     }
 
     //------------------------------------------------
     virtual void setUp()
     {
-        temp_file_path_ = create_temp_file(temp_file_url_);
+        temp_file_path_ = create_temp_file();
         parameters_[1]  = temp_file_path_.pData;
     }
 
-    virtual void tearDown()
-    {
-        osl::File::remove(temp_file_url_);
-    }
-
     //------------------------------------------------
-    OUString create_temp_file(OUString &temp_file_url)
+    OUString create_temp_file()
     {
+        OUString temp_file_url;
         FileBase::RC rc = FileBase::createTempFile(0, 0, &temp_file_url);
         CPPUNIT_ASSERT_MESSAGE("createTempFile failed", FileBase::E_None == rc);
 
@@ -477,9 +431,17 @@ public:
         );
 
         std::string line;
-        while (std::getline(file, line, '\0'))
+        while (std::getline(file, line))
             env_container->push_back(line);
-        tidy_container(*env_container);
+    }
+
+    //------------------------------------------------
+    void dump_env(const string_container_t& env, OUString file_name)
+    {
+        OString fname = OUStringToOString(file_name, osl_getThreadTextEncoding());
+        std::ofstream file(fname.getStr());
+        std::ostream_iterator<std::string> oi(file, "\n");
+        std::copy(env.begin(), env.end(), oi);
     }
 
     //------------------------------------------------
@@ -506,31 +468,17 @@ public:
         string_container_t parent_env;
         read_parent_environment(&parent_env);
 
-#if OSL_DEBUG_LEVEL > 1
-        for (string_container_t::const_iterator iter = parent_env.begin(), end = parent_env.end(); iter != end; ++iter)
-            std::cerr << "initially parent env: " << *iter << std::endl;
-#endif
-
         //remove the environment variables that we have changed
         //in the child environment from the read parent environment
         parent_env.erase(
             std::remove_if(parent_env.begin(), parent_env.end(), exclude(different_env_vars)),
             parent_env.end());
 
-#if OSL_DEBUG_LEVEL > 1
-        for (string_container_t::const_iterator iter = parent_env.begin(), end = parent_env.end(); iter != end; ++iter)
-            std::cerr << "stripped parent env: " << *iter << std::endl;
-#endif
-
         //read the child environment and exclude the variables that
         //are different
         string_container_t child_env;
         read_child_environment(&child_env);
 
-#if OSL_DEBUG_LEVEL > 1
-        for (string_container_t::const_iterator iter = child_env.begin(), end = child_env.end(); iter != end; ++iter)
-            std::cerr << "initial child env: " << *iter << std::endl;
-#endif
         //partition the child environment into the variables that
         //are different to the parent environment (they come first)
         //and the variables that should be equal between parent
@@ -541,24 +489,8 @@ public:
         string_container_t different_child_env_vars(child_env.begin(), iter_logical_end);
         child_env.erase(child_env.begin(), iter_logical_end);
 
-#if OSL_DEBUG_LEVEL > 1
-        for (string_container_t::const_iterator iter = child_env.begin(), end = child_env.end(); iter != end; ++iter)
-            std::cerr << "stripped child env: " << *iter << std::endl;
-#endif
-
         bool common_env_size_equals    = (parent_env.size() == child_env.size());
         bool common_env_content_equals = std::equal(child_env.begin(), child_env.end(), parent_env.begin());
-
-#if OSL_DEBUG_LEVEL > 1
-        for (string_container_t::const_iterator iter = different_env_vars.begin(), end = different_env_vars.end(); iter != end; ++iter)
-            std::cerr << "different should be: " << *iter << std::endl;
-#endif
-
-
-#if OSL_DEBUG_LEVEL > 1
-        for (string_container_t::const_iterator iter = different_child_env_vars.begin(), end = different_child_env_vars.end(); iter != end; ++iter)
-            std::cerr << "different are: " << *iter << std::endl;
-#endif
 
         bool different_env_size_equals    = (different_child_env_vars.size() == different_env_vars.size());
         bool different_env_content_equals =
@@ -605,7 +537,7 @@ public:
 
         CPPUNIT_ASSERT_MESSAGE
         (
-            "Parent and child environment not equal",
+            "Parent an child environment not equal",
             compare_environments()
         );
     }
@@ -619,10 +551,10 @@ public:
     void osl_execProc_merged_child_environment()
     {
         rtl_uString* child_env[4];
-        OUString env1(RTL_CONSTASCII_USTRINGPARAM(ENV1));
-        OUString env2(RTL_CONSTASCII_USTRINGPARAM(ENV2));
-        OUString env3(RTL_CONSTASCII_USTRINGPARAM(ENV3));
-        OUString env4(RTL_CONSTASCII_USTRINGPARAM(ENV4));
+        OUString env1 = OUString::createFromAscii(ENV1);
+        OUString env2 = OUString::createFromAscii(ENV2);
+        OUString env3 = OUString::createFromAscii(ENV3);
+        OUString env4 = OUString::createFromAscii(ENV4);
 
         child_env[0] = env1.pData;
         child_env[1] = env2.pData;
@@ -672,11 +604,7 @@ public:
     void osl_execProc_test_batch()
     {
         oslProcess process;
-#if defined(WNT) || defined(OS2)
-        rtl::OUString suBatch = suCWD + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("batch.bat"));
-#else
-        rtl::OUString suBatch = suCWD + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("batch.sh"));
-#endif
+        rtl::OUString suBatch = suCWD + rtl::OUString::createFromAscii("/") + rtl::OUString::createFromAscii("batch.bat");
         oslProcessError osl_error = osl_executeProcess(
             suBatch.pData,
             NULL,
@@ -742,23 +670,18 @@ public:
     }
 
     CPPUNIT_TEST_SUITE(Test_osl_executeProcess);
-    //TODO: Repair these under windows.
-#ifndef WNT
     CPPUNIT_TEST(osl_execProc_parent_equals_child_environment);
     CPPUNIT_TEST(osl_execProc_merged_child_environment);
-#endif
-    ///TODO: Repair makefile to get the batch.sh, batch.bat copied to $(BIN) for test execution
-    // CPPUNIT_TEST(osl_execProc_test_batch);
-    ///TODO: Repair test (or tested function ;-) - test fails.
-    // CPPUNIT_TEST(osl_execProc_exe_name_in_argument_list);
+    CPPUNIT_TEST(osl_execProc_test_batch);
+    CPPUNIT_TEST(osl_execProc_exe_name_in_argument_list);
     CPPUNIT_TEST_SUITE_END();
 };
 
 //#####################################
 // register test suites
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test_osl_joinProcess,    "Test_osl_joinProcess");
-CPPUNIT_TEST_SUITE_REGISTRATION(Test_osl_executeProcess);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test_osl_executeProcess, "Test_osl_executeProcess");
 
-CPPUNIT_PLUGIN_IMPLEMENT();
+NOADDITIONAL;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

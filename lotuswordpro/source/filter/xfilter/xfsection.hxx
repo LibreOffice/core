@@ -57,13 +57,17 @@
  * @file
  * Section object.
  ************************************************************************/
-#ifndef     _XFSECTION_HXX
-#define     _XFSECTION_HXX
+/*************************************************************************
+ * Change History
+ * 2005-12-28 create this file.
+ ************************************************************************/
+#ifndef		_XFSECTION_HXX
+#define		_XFSECTION_HXX
 
-#include    "xfcontentcontainer.hxx"
-#include    "xfcontent.hxx"
-#include    "xfcolor.hxx"
-#include    <vector>
+#include	"xfcontentcontainer.hxx"
+#include	"xfcontent.hxx"
+#include	"xfcolor.hxx"
+#include	<vector>
 
 /**
  * @brief
@@ -78,26 +82,26 @@ public:
 
 public:
     /**
-     * @descr   Set section name. If not setted, i'll generate a name for it.
+     * @descr	Set section name. If not setted, i'll generate a name for it.
      */
-    void    SetSectionName(rtl::OUString name);
+    void	SetSectionName(rtl::OUString name);
 
-    void    SetSourceLink(rtl::OUString link);
-
-    /**
-     * @descr   Set protected.
-     */
-    void    SetProtected(sal_Bool bProtected);
+    void	SetSourceLink(rtl::OUString link);
 
     /**
-     * @descr   Set hidden.
+     * @descr	Set protected.
      */
-    void    SetHiden(sal_Bool hiden);
+    void	SetProtected(sal_Bool bProtected);
 
     /**
-     * @descr   Output section obejct.
+     * @descr	Set hidden.
      */
-    virtual void    ToXml(IXFStream *pStrm);
+    void	SetHiden(sal_Bool hiden);
+
+    /**
+     * @descr	Output section obejct.
+     */
+    virtual void	ToXml(IXFStream *pStrm);
 /*
 private:
     void ToXmlHeader(IXFStream *pStrm);
@@ -105,13 +109,13 @@ private:
     void ToXmlTail(IXFStream *pStrm);
 */
 private:
-    rtl::OUString   m_strSectionName;
-    sal_Bool    m_bProtected;
-    sal_Bool    m_bHiden;
-    XFColor     m_aBackColor;
-    double      m_fMarginLeft;
-    double      m_fMarginRight;
-    rtl::OUString   m_strSourceLink;
+    rtl::OUString	m_strSectionName;
+    sal_Bool	m_bProtected;
+    sal_Bool	m_bHiden;
+    XFColor		m_aBackColor;
+    double		m_fMarginLeft;
+    double		m_fMarginRight;
+    rtl::OUString	m_strSourceLink;
 };
 
 #endif

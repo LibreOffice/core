@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+//---------------------------------------
+//
+//---------------------------------------
+
 #include "registryw9x.hxx"
 
 #include <windows.h>
@@ -39,6 +43,10 @@
 #ifdef _MSC_VER
 #pragma warning(disable : 4786 4350)
 #endif
+
+//---------------------------------------
+//
+//---------------------------------------
 
 const size_t MAX_TMP_BUFF_SIZE = 1024 * sizeof(wchar_t);
 
@@ -130,6 +138,9 @@ size_t RegistryKeyImplWin9x::GetSubKeyCount() const
     return nSubKeys;
 }
 
+//-----------------------------------------------------
+/**
+*/
 StringListPtr RegistryKeyImplWin9x::GetSubKeyNames() const
 {
     assert(IsOpen());
@@ -165,6 +176,9 @@ StringListPtr RegistryKeyImplWin9x::GetSubKeyNames() const
     return (StringListPtr) key_names;
 }
 
+//-----------------------------------------------------
+/**
+*/
 StringListPtr RegistryKeyImplWin9x::GetSubValueNames() const
 {
     assert(IsOpen());
@@ -432,7 +446,7 @@ void RegistryKeyImplWin9x::DeleteSubKey(const std::wstring& Name)
     else if (ERROR_ACCESS_DENIED == rc)
         throw RegistryAccessDeniedException(rc);
     else if (ERROR_SUCCESS != rc)
-        throw RegistryException(rc);
+        throw RegistryException(rc);		
 }
 
 //-----------------------------------------------------
@@ -464,7 +478,7 @@ void RegistryKeyImplWin9x::DeleteSubKeyTree(const std::wstring& Name)
                  IsWriteable = true
                  HasValue(Name) = true
 
-        @throws RegistryIOException
+        @throws	RegistryIOException
                 RegistryWriteAccessDeniedException
                 RegistryValueNotFoundException
 */

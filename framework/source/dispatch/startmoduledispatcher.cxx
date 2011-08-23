@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <pattern/frame.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
-#include <framework/framelistanalyzer.hxx>
+#include <classes/framelistanalyzer.hxx>
 #include <dispatchcommands.h>
 #include <targets.h>
 #include <services.h>
@@ -120,7 +120,7 @@ void SAL_CALL StartModuleDispatcher::dispatchWithNotification(const css::util::U
     throw(css::uno::RuntimeException)
 {
     ::sal_Int16 nResult = css::frame::DispatchResultState::DONTKNOW;
-    if (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_UNO_SHOWSTARTMODULE)))
+    if (aURL.Complete.equals (CMD_UNO_SHOWSTARTMODULE))
     {
         nResult = css::frame::DispatchResultState::FAILURE;
         if (implts_isBackingModePossible ())
@@ -166,24 +166,24 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
 {
     if ( ! SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
         return sal_False;
-
+    
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
-
+    
     css::uno::Reference< css::frame::XFramesSupplier > xDesktop(
         xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
-
+    
     FrameListAnalyzer aCheck(
         xDesktop,
         css::uno::Reference< css::frame::XFrame >(),
         FrameListAnalyzer::E_HELP | FrameListAnalyzer::E_BACKINGCOMPONENT);
-
+    
     ::sal_Bool  bIsPossible    = sal_False;
     ::sal_Int32 nVisibleFrames = aCheck.m_lOtherVisibleFrames.getLength ();
-
+    
     if (
         ( ! aCheck.m_xBackingComponent.is ()) &&
         (   nVisibleFrames < 1              )
@@ -191,7 +191,7 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
     {
         bIsPossible = sal_True;
     }
-
+    
     return bIsPossible;
 }
 

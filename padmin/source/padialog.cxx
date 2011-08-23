@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,21 +63,19 @@
 #include "com/sun/star/awt/Size.hpp"
 
 using namespace psp;
+using namespace rtl;
 using namespace padmin;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
-PADialog* PADialog::Create( Window* pParent, sal_Bool bAdmin )
+PADialog* PADialog::Create( Window* pParent, BOOL bAdmin )
 {
     return new PADialog( pParent, bAdmin );
 }
 
-PADialog::PADialog( Window* pParent, sal_Bool /*bAdmin*/ ) :
+PADialog::PADialog( Window* pParent, BOOL /*bAdmin*/ ) :
         ModalDialog( pParent, PaResId( RID_PADIALOG ) ),
         m_aDevicesLB( this, PaResId( RID_PA_LB_DEV ) ),
         m_aConfPB( this, PaResId( RID_PA_BTN_CONF ) ),
@@ -111,9 +109,18 @@ PADialog::PADialog( Window* pParent, sal_Bool /*bAdmin*/ ) :
 
 void PADialog::updateSettings()
 {
-    m_aPrinterImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PRINTER ) ) );
-    m_aFaxImg     = Image( BitmapEx( PaResId( RID_BMP_SMALL_FAX     ) ) );
-    m_aPdfImg     = Image( BitmapEx( PaResId( RID_BMP_SMALL_PDF     ) ) );
+    if( ! GetSettings().GetStyleSettings().GetHighContrastMode() )
+    {
+        m_aPrinterImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PRINTER ) ) );
+        m_aFaxImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_FAX ) ) );
+        m_aPdfImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PDF ) ) );
+    }
+    else
+    {
+        m_aPrinterImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PRINTER_HC ) ) );
+        m_aFaxImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_FAX_HC ) ) );
+        m_aPdfImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PDF_HC ) ) );
+    }
 }
 
 void PADialog::Init()
@@ -121,11 +128,11 @@ void PADialog::Init()
     // #i79787# initially ensure printer discovery has ended
     m_rPIManager.checkPrintersChanged( true );
     m_aCUPSCB.Check( m_rPIManager.isCUPSDisabled() );
-
+    
     UpdateDevice();
     UpdateText();
 
-    m_aRemPB.Enable( sal_False );
+    m_aRemPB.Enable( FALSE );
 
     m_aDevicesLB.SetDoubleClickHdl( LINK( this, PADialog, DoubleClickHdl ) );
     m_aDevicesLB.SetSelectHdl( LINK( this, PADialog, SelectHdl ) );
@@ -141,25 +148,11 @@ void PADialog::Init()
 
     ::psp::PrintFontManager& rFontManager( ::psp::PrintFontManager::get() );
     if( ! rFontManager.checkImportPossible() )
-        m_aFontsPB.Enable( sal_False );
+        m_aFontsPB.Enable( FALSE );
     if( rFontManager.hasFontconfig() )
     {
-        m_aFontsPB.Enable( sal_False );
-        m_aFontsPB.Show( sal_False );
-    }
-
-    // at this point no actual changes will be  written
-    // but the write will have checked whether any writeable config exists
-    if( ! m_rPIManager.writePrinterConfig() )
-    {
-        m_aAddPB.Enable( sal_False );
-        m_aRemPB.Enable( sal_False );
-        m_aConfPB.Enable( sal_False );
-        m_aRenamePB.Enable( sal_False );
-        m_aStdPB.Enable( sal_False );
-        m_aCUPSCB.Enable( sal_False );
-        ErrorBox aBox( GetParent(), WB_OK | WB_DEF_OK, String( PaResId( RID_ERR_NOWRITE ) ) );
-        aBox.Execute();
+        m_aFontsPB.Enable( FALSE );
+        m_aFontsPB.Show( FALSE );
     }
 }
 
@@ -255,9 +248,9 @@ IMPL_LINK( PADialog, SelectHdl, ListBox*, pListBox )
         String sSelect = getSelectedDevice();
         String sDefPrt = m_rPIManager.getDefaultPrinter();
         if( sDefPrt == sSelect || ! m_rPIManager.removePrinter( sSelect, true ) )
-            m_aRemPB.Enable( sal_False );
+            m_aRemPB.Enable( FALSE );
         else
-            m_aRemPB.Enable( sal_True );
+            m_aRemPB.Enable( TRUE );
         UpdateText();
     }
     return 0;
@@ -272,7 +265,7 @@ void PADialog::UpdateDefPrt()
 
     if( m_aRemPB.HasFocus() )
         m_aDevicesLB.GetFocus();
-    m_aRemPB.Enable( sal_False );
+    m_aRemPB.Enable( FALSE );
 }
 
 void PADialog::UpdateText()
@@ -326,7 +319,7 @@ static Point project( const Point& rPoint )
 static Color approachColor( const Color& rFrom, const Color& rTo )
 {
     Color aColor;
-    sal_uInt8 nDiff;
+    UINT8 nDiff;
     // approach red
     if( rFrom.GetRed() < rTo.GetRed() )
     {
@@ -380,7 +373,7 @@ public:
     {}
     virtual ~SpaPrinterController()
     {}
-
+    
     virtual int getPageCount() const { return 1; }
     virtual Sequence< PropertyValue > getPageParameters( int i_nPage ) const;
     virtual void printPage( int i_nPage ) const;
@@ -390,22 +383,22 @@ public:
 Sequence< PropertyValue > SpaPrinterController::getPageParameters( int ) const
 {
     Sequence< PropertyValue > aRet( 1 );
-
+    
     Size aPageSize( getPrinter()->GetPaperSizePixel() );
     aPageSize = getPrinter()->PixelToLogic( aPageSize, MapMode( MAP_100TH_MM ) );
-
+    
     awt::Size aSize;
     aSize.Width = aPageSize.Width();
     aSize.Height = aPageSize.Height();
     aRet[0].Value = makeAny(aSize);
-
+    
     return aRet;
 }
 
 void SpaPrinterController::printPage( int ) const
 {
     const double DELTA = 5.0;
-
+    
     boost::shared_ptr<Printer> pPrinter( getPrinter() );
 
     PrinterInfo aInfo( psp::PrinterInfoManager::get().getPrinterInfo( pPrinter->GetName() ) );
@@ -451,7 +444,7 @@ void SpaPrinterController::printPage( int ) const
     static const struct
     {
             const char* const pDirect;
-            sal_uInt16 nResId;
+            USHORT nResId;
     } aResIds[] =
         {
             { NULL, RID_TXT_TESTPAGE_NAME },
@@ -648,7 +641,7 @@ void PADialog::RemDevice()
     {
         if( m_aDevicesLB.GetEntry( i ).CompareTo( aDefPrinter, aDefPrinter.Len() ) == COMPARE_EQUAL )
         {
-            m_aDevicesLB.SelectEntryPos( i, sal_True );
+            m_aDevicesLB.SelectEntryPos( i, TRUE );
             UpdateText();
             break;
         }
@@ -657,7 +650,7 @@ void PADialog::RemDevice()
     m_aDevicesLB.GetFocus();
 
     if( m_aDevicesLB.GetEntryCount() < 2 )
-        m_aRemPB.Enable( sal_False );
+        m_aRemPB.Enable( FALSE );
 }
 
 void PADialog::ConfigureDevice()
@@ -715,7 +708,7 @@ void PADialog::RenameDevice()
 void PADialog::UpdateDevice()
 {
     m_aDevicesLB.Clear();
-
+    
     m_rPIManager.listPrinters( m_aPrinters );
     ::std::list< OUString >::iterator it;
     for( it = m_aPrinters.begin(); it != m_aPrinters.end(); ++it )
@@ -753,7 +746,7 @@ void PADialog::UpdateDevice()
                                       bFax ? m_aFaxImg :
                                       bPdf ? m_aPdfImg : m_aPrinterImg
                                       );
-        m_aDevicesLB.SetEntryData( nPos, (void*)(sal_IntPtr)it->getLength() );
+        m_aDevicesLB.SetEntryData( nPos, (void*)it->getLength() );
         if( *it == m_rPIManager.getDefaultPrinter() )
         {
             m_aDevicesLB.SelectEntryPos( nPos );

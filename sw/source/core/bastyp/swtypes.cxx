@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,7 @@
 #include <frmfmt.hxx>
 #include <frmtool.hxx>
 #include <ndtxt.hxx>
-#include <UndoDelete.hxx>
-#include <UndoInsert.hxx>
+#include <undobj.hxx>
 #include <swtable.hxx>
 #include <viscrs.hxx>
 #include <fntcache.hxx>
@@ -58,9 +57,9 @@
 
 using namespace com::sun::star;
 
-ByteString aEmptyByteStr;       // Konstante Strings
-String aEmptyStr;               // Konstante Strings
-String aDotStr('.');            // Konstante Strings
+ByteString aEmptyByteStr;		// Konstante Strings
+String aEmptyStr;				// Konstante Strings
+String aDotStr('.');			// Konstante Strings
 
 IMPL_FIXEDMEMPOOL_NEWDEL( SwAttrSet, 25, 25 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwStartNode, 20, 20 )
@@ -76,16 +75,16 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwpHints, 25, 25 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwFntObj, 50, 50 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwFontObj, 50, 50 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwBorderAttrs, 100, 100 )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwCellFrm,    50, 50 )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwRowFrm,     10, 10 )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwColumnFrm,  40, 40 )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwSectionFrm, 20, 20 )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwTabFrm, 10, 10 )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwPageFrm,    20, 20 )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwBodyFrm,    20, 20 )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwHeaderFrm,  20, 20 )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwFooterFrm,  20, 20 )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtFrm,     50,  50 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwCellFrm,	50, 50 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwRowFrm,		10, 10 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwColumnFrm,	40, 40 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwSectionFrm,	20, 20 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwTabFrm,	10, 10 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwPageFrm,	20, 20 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwBodyFrm,	20, 20 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwHeaderFrm,	20, 20 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwFooterFrm,	20, 20 )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtFrm, 	50,  50 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTableFmt, 10, 10 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTableLineFmt, 10, 10 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTableBoxFmt, 50, 50 )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 
@@ -170,22 +173,22 @@ IMPL_LINK( SvxImprovementDialog, HandleOK, OKButton*, EMPTYARG )
 {
     uno::Reference< lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
     uno::Reference< com::sun::star::oooimprovement::XCoreController > core_c(
-            xSMGR->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.oooimprovement.CoreController") ) ),
+            xSMGR->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.oooimprovement.CoreController")),
             uno::UNO_QUERY);
     if(core_c.is())
     {
         ::comphelper::ConfigurationHelper::writeDirectKey(
             xSMGR,
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.OOoImprovement.Settings") ),
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Participation") ),
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowedInvitation") ),
+            ::rtl::OUString::createFromAscii("/org.openoffice.Office.OOoImprovement.Settings"),
+            ::rtl::OUString::createFromAscii("Participation"),
+            ::rtl::OUString::createFromAscii("ShowedInvitation"),
             uno::makeAny( true ),
             ::comphelper::ConfigurationHelper::E_STANDARD );
         ::comphelper::ConfigurationHelper::writeDirectKey(
             xSMGR,
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.OOoImprovement.Settings") ),
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Participation") ),
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InvitationAccepted") ),
+            ::rtl::OUString::createFromAscii("/org.openoffice.Office.OOoImprovement.Settings"),
+            ::rtl::OUString::createFromAscii("Participation"),
+            ::rtl::OUString::createFromAscii("InvitationAccepted"),
             uno::makeAny( m_pPage->IsYesChecked() ),
             ::comphelper::ConfigurationHelper::E_STANDARD );
         // TODO: refactor
@@ -194,6 +197,33 @@ IMPL_LINK( SvxImprovementDialog, HandleOK, OKButton*, EMPTYARG )
     }
     EndDialog( RET_OK );
     return 0;
+}
+
+// class SvxInfoWindow ---------------------------------------------------
+
+SvxInfoWindow::SvxInfoWindow( Window* pParent, const ResId& rResId ) :
+    Window( pParent, rResId ),
+    m_aInfoText( this )
+{
+    m_aInfoText.SetPosSizePixel( Point( 10, 10 ), Size( 150, 10 ) );
+
+    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
+    Wallpaper aWall( rSettings.GetWindowColor() );
+    SetBackground( aWall );
+    Font aNewFont( m_aInfoText.GetFont() );
+    aNewFont.SetTransparent( TRUE );
+    m_aInfoText.SetFont( aNewFont );
+    m_aInfoText.SetBackground( aWall );
+    m_aInfoText.SetControlForeground( rSettings.GetWindowTextColor() );
+}
+
+void SvxInfoWindow::SetInfoText( const String& rText )
+{
+    m_aInfoText.SetText( rText );
+    Size aSize = m_aInfoText.CalcMinimumSize();
+    Size aWinSize = GetSizePixel();
+    Point aPos( ( aWinSize.Width() - aSize.Width() ) / 2, ( aWinSize.Height() - aSize.Height() ) / 2 );
+    m_aInfoText.SetPosSizePixel( aPos, aSize );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

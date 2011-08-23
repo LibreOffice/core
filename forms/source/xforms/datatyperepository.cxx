@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,6 @@
 
 #include <functional>
 #include <algorithm>
-#include <o3tl/compat_functional.hxx>
 
 //........................................................................
 namespace xforms
@@ -206,7 +205,7 @@ namespace xforms
             m_aRepository.begin(),
             m_aRepository.end(),
             aNames.getArray(),
-            ::o3tl::select1st< Repository::value_type >()
+            ::std::select1st< Repository::value_type >()
         );
         return aNames;
     }

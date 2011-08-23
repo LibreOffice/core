@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,14 +40,14 @@ using namespace ::com::sun::star;
 
 TYPEINIT1_FACTORY( XWindowItem, SfxPoolItem, new XWindowItem );
 
-
-XWindowItem::XWindowItem() :
+    
+XWindowItem::XWindowItem() : 
     SfxPoolItem()
 {
 }
 
 
-XWindowItem::XWindowItem( sal_uInt16 nWhichId, Window * pWin ) :
+XWindowItem::XWindowItem( USHORT nWhichId, Window * pWin ) :
     SfxPoolItem( nWhichId )
 {
     if (pWin)
@@ -58,16 +58,16 @@ XWindowItem::XWindowItem( sal_uInt16 nWhichId, Window * pWin ) :
     }
 }
 
-
-XWindowItem::XWindowItem( sal_uInt16 nWhichId, uno::Reference< awt::XWindow > & rxWin ) :
-    SfxPoolItem( nWhichId ),
+    
+XWindowItem::XWindowItem( USHORT nWhichId, uno::Reference< awt::XWindow > & rxWin ) :
+    SfxPoolItem( nWhichId ), 
     m_xWin( rxWin )
 {
-}
+}    
 
 
 XWindowItem::XWindowItem( const XWindowItem &rItem ) :
-    SfxPoolItem( Which() ),
+    SfxPoolItem( Which() ), 
     m_xWin( rItem.m_xWin )
 {
 }
@@ -77,12 +77,12 @@ XWindowItem::~XWindowItem()
 {
 }
 
-
+    
 SfxPoolItem * XWindowItem::Clone( SfxItemPool* /*pPool*/ ) const
 {
     return new XWindowItem( *this );
 }
-
+    
 
 int XWindowItem::operator == ( const SfxPoolItem & rAttr ) const
 {

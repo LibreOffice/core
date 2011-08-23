@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,36 +24,38 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_lang_NullPointerException_idl__
-#define __com_sun_star_lang_NullPointerException_idl__
-
-#include <com/sun/star/uno/Exception.idl>
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module lang {
-
-//=============================================================================
-
+#ifndef __com_sun_star_lang_NullPointerException_idl__ 
+#define __com_sun_star_lang_NullPointerException_idl__ 
+ 
+#ifndef __com_sun_star_uno_Exception_idl__ 
+#include <com/sun/star/uno/Exception.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module lang {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: exception com::sun::star::lang::NullPointerException
-/** This exception is thrown when an application attempts to use
+/** This exception is thrown when an application attempts to use 
     <NULL/> in a case where an object is required.
-
-    <p>Applications should throw instances of this class to indicate
+    
+    <p>Applications should throw instances of this class to indicate 
     other illegal uses of the <NULL/> object.  </p>
 
     @see com::sun::star::reflection::XIdlReflection::forName
  */
 published exception NullPointerException: com::sun::star::uno::Exception
-{
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+{ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

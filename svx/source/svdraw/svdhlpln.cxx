@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ Pointer SdrHelpLine::GetPointer() const
     } // switch
 }
 
-bool SdrHelpLine::IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const
+bool SdrHelpLine::IsHit(const Point& rPnt, USHORT nTolLog, const OutputDevice& rOut) const
 {
     Size a1Pix(rOut.PixelToLogic(Size(1,1)));
     bool bXHit=rPnt.X()>=aPos.X()-nTolLog && rPnt.X()<=aPos.X()+nTolLog+a1Pix.Width();
@@ -64,7 +64,7 @@ bool SdrHelpLine::IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevic
             }
         } break;
     } // switch
-    return sal_False;
+    return FALSE;
 }
 
 Rectangle SdrHelpLine::GetBoundRect(const OutputDevice& rOut) const
@@ -106,8 +106,8 @@ bool SdrHelpLine::IsVisibleEqual( const SdrHelpLine& rHelpLine, const OutputDevi
 
 void SdrHelpLineList::Clear()
 {
-    sal_uInt16 nAnz=GetCount();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    USHORT nAnz=GetCount();
+    for (USHORT i=0; i<nAnz; i++) {
         delete GetObject(i);
     }
     aList.Clear();
@@ -116,8 +116,8 @@ void SdrHelpLineList::Clear()
 void SdrHelpLineList::operator=(const SdrHelpLineList& rSrcList)
 {
     Clear();
-    sal_uInt16 nAnz=rSrcList.GetCount();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    USHORT nAnz=rSrcList.GetCount();
+    for (USHORT i=0; i<nAnz; i++) {
         Insert(rSrcList[i]);
     }
 }
@@ -125,10 +125,10 @@ void SdrHelpLineList::operator=(const SdrHelpLineList& rSrcList)
 bool SdrHelpLineList::operator==(const SdrHelpLineList& rSrcList) const
 {
     bool bEqual = false;
-    sal_uInt16 nAnz=GetCount();
+    USHORT nAnz=GetCount();
     if (nAnz==rSrcList.GetCount()) {
         bEqual = true;
-        for (sal_uInt16 i=0; i<nAnz && bEqual; i++) {
+        for (USHORT i=0; i<nAnz && bEqual; i++) {
             if (*GetObject(i)!=*rSrcList.GetObject(i)) {
                 bEqual = false;
             }
@@ -137,10 +137,10 @@ bool SdrHelpLineList::operator==(const SdrHelpLineList& rSrcList) const
     return bEqual;
 }
 
-sal_uInt16 SdrHelpLineList::HitTest(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const
+USHORT SdrHelpLineList::HitTest(const Point& rPnt, USHORT nTolLog, const OutputDevice& rOut) const
 {
-    sal_uInt16 nAnz=GetCount();
-    for (sal_uInt16 i=nAnz; i>0;) {
+    USHORT nAnz=GetCount();
+    for (USHORT i=nAnz; i>0;) {
         i--;
         if (GetObject(i)->IsHit(rPnt,nTolLog,rOut)) return i;
     }

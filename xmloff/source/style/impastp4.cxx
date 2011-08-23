@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/attrlist.hxx>
 #include "impastpl.hxx"
 #include <xmloff/xmlexppr.hxx>
@@ -58,7 +58,7 @@ using namespace ::xmloff::token;
 //
 
 SvXMLAutoStylePoolP_Impl::SvXMLAutoStylePoolP_Impl( SvXMLExport& rExp)
-    :   rExport( rExp ),
+    :	rExport( rExp ),
         maFamilyList( 5, 5 )
 {
 }
@@ -66,7 +66,7 @@ SvXMLAutoStylePoolP_Impl::SvXMLAutoStylePoolP_Impl( SvXMLExport& rExp)
 SvXMLAutoStylePoolP_Impl::~SvXMLAutoStylePoolP_Impl()
 {
     for (;;) {
-        XMLFamilyData_Impl* pData = maFamilyList.Remove( sal_uLong(0) );
+        XMLFamilyData_Impl* pData = maFamilyList.Remove( ULONG(0) );
         if (pData == NULL) {
             break;
         }
@@ -87,7 +87,7 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
         sal_Bool bAsFamily )
 {
     // store family in a list if not already stored
-    sal_uLong nPos;
+    ULONG nPos;
 
     sal_uInt16 nExportFlags = GetExport().getExportFlags();
     sal_Bool bStylesOnly = (nExportFlags & EXPORT_STYLES) != 0 && (nExportFlags & EXPORT_CONTENT) == 0;
@@ -115,7 +115,7 @@ void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& 
 {
     SvXMLAutoStylePoolNamesP_Impl *pNames = 0;
 
-    sal_uLong nPos;
+    ULONG nPos;
     XMLFamilyData_Impl aTmp( nFamily );
     if( maFamilyList.Seek_Entry( &aTmp, &nPos ) )
         pNames = maFamilyList.GetObject( nPos )->mpNameList;
@@ -175,6 +175,10 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
 // if not added, yet.
 //
 
+/*OUString SvXMLAutoStylePoolP_Impl::Add( sal_Int32 nFamily,
+                                         const OUString& rParent,
+                                        const vector< XMLPropertyState >& rProperties,
+                                        sal_Bool bCache )*/
 sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
                 const OUString& rParent,
                 const ::std::vector< XMLPropertyState >& rProperties,
@@ -182,7 +186,7 @@ sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
                 bool bDontSeek )
 {
     sal_Bool bRet(sal_False);
-    sal_uLong nPos;
+    ULONG nPos;
 
     XMLFamilyData_Impl *pFamily = 0;
     XMLFamilyData_Impl aTemporary( nFamily );
@@ -217,9 +221,10 @@ sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
         if( bCache )
         {
             if( !pFamily->pCache )
-                pFamily->pCache = new SvXMLAutoStylePoolCache_Impl();
-            if( pFamily->pCache->size() < MAX_CACHE_SIZE )
-                pFamily->pCache->push_back( new OUString( rName ) );
+                pFamily->pCache = new SvXMLAutoStylePoolCache_Impl( 256, 256 );
+            if( pFamily->pCache->Count() < MAX_CACHE_SIZE )
+                pFamily->pCache->Insert( new OUString( rName ),
+                                         pFamily->pCache->Count() );
         }
     }
 
@@ -231,7 +236,7 @@ sal_Bool SvXMLAutoStylePoolP_Impl::AddNamed(const OUString& rName, sal_Int32 nFa
 {
     // get family and parent the same way as in Add()
     sal_Bool bRet(sal_False);
-    sal_uLong nPos;
+    ULONG nPos;
 
     XMLFamilyData_Impl *pFamily = 0;
     XMLFamilyData_Impl aTemporary( nFamily );
@@ -270,7 +275,7 @@ sal_Bool SvXMLAutoStylePoolP_Impl::AddNamed(const OUString& rName, sal_Int32 nFa
 OUString SvXMLAutoStylePoolP_Impl::AddToCache( sal_Int32 nFamily,
                                          const OUString& rParent )
 {
-    sal_uLong nPos;
+    ULONG nPos;
 
     XMLFamilyData_Impl *pFamily = 0;
     XMLFamilyData_Impl aTmp( nFamily );
@@ -283,9 +288,10 @@ OUString SvXMLAutoStylePoolP_Impl::AddToCache( sal_Int32 nFamily,
     if( pFamily )
     {
         if( !pFamily->pCache )
-            pFamily->pCache = new SvXMLAutoStylePoolCache_Impl();
-        if( pFamily->pCache->size() < MAX_CACHE_SIZE )
-            pFamily->pCache->push_back( new OUString( rParent ) );
+            pFamily->pCache = new SvXMLAutoStylePoolCache_Impl( 256, 256 );
+        if( pFamily->pCache->Count() < MAX_CACHE_SIZE )
+            pFamily->pCache->Insert( new OUString( rParent ),
+                                     pFamily->pCache->Count() );
     }
 
     return rParent;
@@ -301,7 +307,7 @@ OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
 {
     OUString sName;
 
-    sal_uLong nPos;
+    ULONG nPos;
     XMLFamilyData_Impl aTemporary( nFamily );
     XMLFamilyData_Impl *pFamily = 0;
     if( maFamilyList.Seek_Entry( &aTemporary, &nPos ) )
@@ -328,7 +334,7 @@ OUString SvXMLAutoStylePoolP_Impl::FindAndRemoveCached( sal_Int32 nFamily ) cons
 {
     OUString sName;
 
-    sal_uLong nPos;
+    ULONG nPos;
     XMLFamilyData_Impl aTmp( nFamily );
     XMLFamilyData_Impl *pFamily = 0;
     if( maFamilyList.Seek_Entry( &aTmp, &nPos ) )
@@ -344,10 +350,9 @@ OUString SvXMLAutoStylePoolP_Impl::FindAndRemoveCached( sal_Int32 nFamily ) cons
 
         // The cache may be empty already. This happens if it was filled
         // completly.
-        if( pFamily->pCache && !pFamily->pCache->empty() )
+        if( pFamily->pCache && pFamily->pCache->Count() )
         {
-            OUString *pName = (*pFamily->pCache)[ 0 ];
-            pFamily->pCache->erase( pFamily->pCache->begin() );
+            OUString *pName = pFamily->pCache->Remove( 0UL );
             sName = *pName;
             delete pName;
         }
@@ -371,7 +376,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
     sal_uInt32 nCount = 0;
 
     // Get list of parents for current family (nFamily)
-    sal_uLong nPos;
+    ULONG nPos;
     XMLFamilyData_Impl aTmp( nFamily );
     XMLFamilyData_Impl *pFamily = 0;
     if( maFamilyList.Seek_Entry( &aTmp, &nPos ) )
@@ -406,11 +411,11 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         {
             const SvXMLAutoStylePoolParentP_Impl* pParent =
                 pParents->GetObject( i );
-            size_t nProperties = pParent->GetPropertiesList().size();
-            for( size_t j = 0; j < nProperties; j++ )
+            sal_uInt32 nProperties = pParent->GetPropertiesList().Count();
+            for( sal_uInt32 j=0; j < nProperties; j++ )
             {
-                const SvXMLAutoStylePoolPropertiesP_Impl* pProperties =
-                    pParent->GetPropertiesList()[ j ];
+                const SvXMLAutoStylePoolPropertiesP_Impl *pProperties =
+                    pParent->GetPropertiesList().GetObject( j );
                 nPos = pProperties->GetPos();
                 DBG_ASSERT( nPos < nCount,
                         "SvXMLAutoStylePool_Impl::exportXML: wrong position" );

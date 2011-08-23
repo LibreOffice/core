@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 #include "SDriver.hxx"
@@ -54,7 +54,7 @@ namespace connectivity
     }
 }
 // --------------------------------------------------------------------------------
-SkeletonDriver::SkeletonDriver()
+SkeletonDriver::SkeletonDriver() 
     : ODriver_BASE(m_aMutex)
 {
 }
@@ -62,7 +62,7 @@ SkeletonDriver::SkeletonDriver()
 void SkeletonDriver::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-
+    
     // when driver will be destroied so all our connections have to be destroied as well
     for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
     {
@@ -79,17 +79,17 @@ void SkeletonDriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString SkeletonDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbc.SkeletonDriver"));
+    return rtl::OUString::createFromAscii("com.sun.star.comp.sdbc.SkeletonDriver");
         // this name is referenced in the configuration and in the skeleton.xml
         // Please take care when changing it.
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SkeletonDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    // which service is supported
+    // which service is supported 
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
+    aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
     return aSNS;
 }
 
@@ -122,19 +122,19 @@ Reference< XConnection > SAL_CALL SkeletonDriver::connect( const ::rtl::OUString
 {
     // create a new connection with the given properties and append it to our vector
     OConnection* pCon = new OConnection(this);
-    Reference< XConnection > xCon = pCon;   // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
-    pCon->construct(url,info);              // late constructor call which can throw exception and allows a correct dtor call when so
+    Reference< XConnection > xCon = pCon;	// important here because otherwise the connection could be deleted inside (refcount goes -> 0)
+    pCon->construct(url,info);				// late constructor call which can throw exception and allows a correct dtor call when so
     m_xConnections.push_back(WeakReferenceHelper(*pCon));
-
+    
     return xCon;
 }
 // --------------------------------------------------------------------------------
-sal_Bool SAL_CALL SkeletonDriver::acceptsURL( const ::rtl::OUString& url )
+sal_Bool SAL_CALL SkeletonDriver::acceptsURL( const ::rtl::OUString& url ) 
         throw(SQLException, RuntimeException)
 {
     // here we have to look if we support this url format
     // change the URL format to your needs, but please aware that the first on who accepts the URl wins.
-    return (!url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:skeleton:")),14));
+    return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:skeleton:"),14));
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL SkeletonDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
@@ -202,7 +202,7 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 {
     if (_bThrow)
         throw DisposedException();
-
+        
 }
 //.........................................................................
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,19 +32,21 @@
 
 namespace tabopts
 {
-    const sal_uInt16 DEFAULT_BORDER     = 0x01;
-    const sal_uInt16 HEADLINE           = 0x02;
-    const sal_uInt16 SPLIT_LAYOUT       = 0x08;
-    const sal_uInt16 HEADLINE_NO_BORDER = HEADLINE | SPLIT_LAYOUT;
-    const sal_uInt16 ALL_TBL_INS_ATTR   = DEFAULT_BORDER | HEADLINE | SPLIT_LAYOUT;
+    const USHORT DEFAULT_BORDER     = 0x01;
+    const USHORT HEADLINE           = 0x02;
+//    const USHORT REPEAT             = 0x04;
+//    const USHORT HEADLINE_REPEAT    = 0x06;  // Headline + Repeat
+    const USHORT SPLIT_LAYOUT       = 0x08;
+    const USHORT HEADLINE_NO_BORDER = HEADLINE | SPLIT_LAYOUT;
+    const USHORT ALL_TBL_INS_ATTR   = DEFAULT_BORDER | HEADLINE | SPLIT_LAYOUT;
 }
 
 struct SwInsertTableOptions
 {
-    sal_uInt16 mnInsMode;
-    sal_uInt16 mnRowsToRepeat;
+    USHORT mnInsMode;
+    USHORT mnRowsToRepeat;
 
-    SwInsertTableOptions( sal_uInt16 nInsMode, sal_uInt16 nRowsToRepeat ) :
+    SwInsertTableOptions( USHORT nInsMode, USHORT nRowsToRepeat ) :
         mnInsMode( nInsMode ), mnRowsToRepeat( nRowsToRepeat ) {};
 };
 

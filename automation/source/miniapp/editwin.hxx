@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@ class GHEditWindow : public FloatingWindow
 
 protected:
 
-    MultiLineEdit   aInhalt;
+    MultiLineEdit	aInhalt;
 
-    virtual sal_Bool Close(); // derived
+    virtual BOOL Close(); // derived
     void Resize();
 
 public:
@@ -48,7 +48,7 @@ public:
     GHEditWindow(Window * pParent, String aName = CUniString("Neues Fenster"), WinBits iWstyle = WB_STDWORK);
 
     void Clear();
-    void AddText( String aNew, sal_Bool bMoveToEnd = sal_True);
+    void AddText( String aNew, BOOL bMoveToEnd = TRUE);
 };
 
 
@@ -57,7 +57,7 @@ class EditFileWindow : public GHEditWindow
 {
 
     String  aFileName;
-    virtual sal_Bool Close(); // derived
+    virtual BOOL Close(); // derived
     void LoadFile();
 
 public:

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,12 +49,12 @@ public class TestComponentMain
 
     static class InstanceProvider implements XInstanceProvider {
         XComponentContext ctx;
-
+        
         public InstanceProvider( XComponentContext ctx )
         {
             this.ctx = ctx;
         }
-
+        
         public Object getInstance( /*IN*/String sInstanceName )
             throws com.sun.star.container.NoSuchElementException, com.sun.star.uno.RuntimeException
         {
@@ -73,7 +73,7 @@ public class TestComponentMain
     }
 
     static public void main(String args[]) throws Exception, com.sun.star.uno.Exception {
-        if(args.length != 2)    {
+        if(args.length != 2)	{
             System.err.println("usage : com.sun.star.comp.bridge.TestComponentMain uno:connection;protocol;objectName singleaccept");
             System.exit(-1);
         }
@@ -84,7 +84,7 @@ public class TestComponentMain
 
         String dcp = args[0];
         boolean singleaccept = args[1].equals("singleaccept");
-
+        
         int index = dcp.indexOf(':');
         String url = dcp.substring(0, index).trim();
         dcp = dcp.substring(index + 1).trim();
@@ -92,11 +92,11 @@ public class TestComponentMain
         index = dcp.indexOf(';');
         conDcp = dcp.substring(0, index).trim();
         dcp = dcp.substring(index + 1).trim();
-
+        
         index = dcp.indexOf(';');
         protDcp = dcp.substring(0, index).trim();
         dcp = dcp.substring(index + 1).trim();
-
+        
         rootOid = dcp.trim().trim();
 
         XComponentContext ctx = com.sun.star.comp.helper.Bootstrap.createInitialComponentContext( null );
@@ -109,7 +109,7 @@ public class TestComponentMain
         Object o = com.sun.star.comp.bridge.TestComponent.__getServiceFactory(
             "com.sun.star.comp.bridge.TestComponent$_TestObject", oldsmgr,null );
         set.insert(o);
-
+        
         XAcceptor xAcceptor = Acceptor.create(ctx);
 
         while( true )
@@ -117,11 +117,11 @@ public class TestComponentMain
             System.err.println("waiting for connect...");
 
             XConnection xConnection = xAcceptor.accept(conDcp);
-
+            
             XBridgeFactory xBridgeFactory = UnoRuntime.queryInterface(
                 XBridgeFactory.class,
                 smgr.createInstanceWithContext("com.sun.star.bridge.BridgeFactory",ctx));
-
+            
             XBridge xBridge = xBridgeFactory.createBridge(
                 "", protDcp, xConnection, new InstanceProvider(ctx));
 
@@ -133,7 +133,7 @@ public class TestComponentMain
                 break;
             }
         }
-
+            
     }
 
     private static final class Listener implements XEventListener {

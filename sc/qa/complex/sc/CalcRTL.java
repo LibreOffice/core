@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,32 +44,23 @@ import com.sun.star.sheet.XCellRangeAddressable;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
-// import com.sun.star.table.XCell;
+import com.sun.star.table.XCell;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCloseable;
 
-// import complexlib.ComplexTestCase;
+import complexlib.ComplexTestCase;
 
-// import java.io.PrintWriter;
+import java.io.PrintWriter;
 
 import util.DrawTools;
 import util.SOfficeFactory;
 import util.ValueComparer;
 
-// import org.junit.After;
-import org.junit.AfterClass;
-// import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
-import static org.junit.Assert.*;
 
-
-public class CalcRTL /* extends ComplexTestCase */
-{
+public class CalcRTL extends ComplexTestCase {
     XSpreadsheetDocument xSheetDoc = null;
 
     /*
@@ -83,12 +74,12 @@ public class CalcRTL /* extends ComplexTestCase */
      * <br>
      * 3. A calc document is opened and a shape inserted, afterwards the effect of changing the TableLayout to the shape is checked
      */
-//     public String[] getTestMethodNames() {
-//         return new String[] {
-//             "checkSpreadsheetProperties", "checkShapeProperties",
-//             "checkInfluenceOfSpreadsheetChange"
-//         };
-//     }
+    public String[] getTestMethodNames() {
+        return new String[] {
+            "checkSpreadsheetProperties", "checkShapeProperties", 
+            "checkInfluenceOfSpreadsheetChange"
+        };
+    }
 
     /*
      * In this method a spreadsheet document is opened<br>
@@ -101,26 +92,26 @@ public class CalcRTL /* extends ComplexTestCase */
      *<li> TableLayout
      *</ul>
      */
-    @Test public void checkSpreadsheetProperties() {
-        assertTrue("Couldn't open document", openSpreadsheetDocument());
+    public void checkSpreadsheetProperties() {
+        assure("Couldn't open document", openSpreadsheetDocument());
 
-        XPropertySet set =  UnoRuntime.queryInterface(
+        XPropertySet set = (XPropertySet) UnoRuntime.queryInterface(
                                    XPropertySet.class, getSpreadsheet());
-        assertTrue("Problems when setting property 'IsVisible'",
+        assure("Problems when setting property 'IsVisible'", 
                changeProperty(set, "IsVisible", Boolean.FALSE));
-        assertTrue("Problems when setting property 'IsVisible'",
+        assure("Problems when setting property 'IsVisible'", 
                changeProperty(set, "IsVisible", Boolean.TRUE));
-        assertTrue("Problems when setting property 'PageStyle'",
+        assure("Problems when setting property 'PageStyle'", 
                changeProperty(set, "PageStyle", "Report"));
-        assertTrue("Problems when setting property 'PageStyle'",
+        assure("Problems when setting property 'PageStyle'", 
                changeProperty(set, "PageStyle", "Default"));
-        assertTrue("Problems when setting property 'TableLayout'",
-               changeProperty(set, "TableLayout",
+        assure("Problems when setting property 'TableLayout'", 
+               changeProperty(set, "TableLayout", 
                               new Short(com.sun.star.text.WritingMode2.RL_TB)));
-        assertTrue("Problems when setting property 'TableLayout'",
-               changeProperty(set, "TableLayout",
+        assure("Problems when setting property 'TableLayout'", 
+               changeProperty(set, "TableLayout", 
                               new Short(com.sun.star.text.WritingMode2.LR_TB)));
-        assertTrue("Couldn't close document", closeSpreadsheetDocument());
+        assure("Couldn't close document", closeSpreadsheetDocument());
     }
 
     /*
@@ -134,69 +125,67 @@ public class CalcRTL /* extends ComplexTestCase */
      *<li> VertOrientPosition
      *</ul>
      */
-    @Test public void checkShapeProperties() {
-        assertTrue("Couldn't open document", openSpreadsheetDocument());
+    public void checkShapeProperties() {
+        assure("Couldn't open document", openSpreadsheetDocument());
 
-        XPropertySet set =  UnoRuntime.queryInterface(
+        XPropertySet set = (XPropertySet) UnoRuntime.queryInterface(
                                    XPropertySet.class, getInsertedShape());
 
         try {
-            assertTrue("Problems when setting property 'Anchor'",
-                   changeProperty(set, "Anchor",
+            assure("Problems when setting property 'Anchor'", 
+                   changeProperty(set, "Anchor", 
                                   getSpreadsheet().getCellByPosition(5, 5)));
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            // assure("Problems when setting property 'Anchor'", false);
-            fail("Problems when setting property 'Anchor'");
+            assure("Problems when setting property 'Anchor'", false);
         }
 
-        assertTrue("Problems when setting property 'HoriOrientPosition'",
+        assure("Problems when setting property 'HoriOrientPosition'", 
                changeProperty(set, "HoriOrientPosition", new Integer(1000)));
 
-        assertTrue("Problems when setting property 'VertOrientPosition'",
+        assure("Problems when setting property 'VertOrientPosition'", 
                changeProperty(set, "VertOrientPosition", new Integer(1000)));
 
-        assertTrue("Couldn't close document", closeSpreadsheetDocument());
+        assure("Couldn't close document", closeSpreadsheetDocument());
     }
 
-    @Test public void checkInfluenceOfSpreadsheetChange() {
-        assertTrue("Couldn't open document", openSpreadsheetDocument());
+    public void checkInfluenceOfSpreadsheetChange() {
+        assure("Couldn't open document", openSpreadsheetDocument());
 
         XShape oShape = getInsertedShape();
-        XPropertySet sheetProps = UnoRuntime.queryInterface(
+        XPropertySet sheetProps = (XPropertySet) UnoRuntime.queryInterface(
                                           XPropertySet.class, getSpreadsheet());
-        XPropertySet shapeProps = UnoRuntime.queryInterface(
+        XPropertySet shapeProps = (XPropertySet) UnoRuntime.queryInterface(
                                           XPropertySet.class, oShape);
 
         String[] previous = getShapeProps(shapeProps, oShape);
-        assertTrue("Problems when setting property 'TableLayout'",
-               changeProperty(sheetProps, "TableLayout",
+        assure("Problems when setting property 'TableLayout'", 
+               changeProperty(sheetProps, "TableLayout", 
                               new Short(com.sun.star.text.WritingMode2.RL_TB)));
 
         String[] RL_TB = getShapeProps(shapeProps, oShape);
-        assertTrue("Problems when setting property 'TableLayout'",
-               changeProperty(sheetProps, "TableLayout",
+        assure("Problems when setting property 'TableLayout'", 
+               changeProperty(sheetProps, "TableLayout", 
                               new Short(com.sun.star.text.WritingMode2.LR_TB)));
 
         String[] LR_TB = getShapeProps(shapeProps, oShape);
-        assertTrue("Anchor has changed",
+        assure("Anchor has changed", 
                (previous[0].equals(RL_TB[0]) && previous[0].equals(LR_TB[0])));
-        assertEquals("HoriOrientPosition has changed",
-               2100, (Integer.valueOf(previous[1]).intValue() + Integer.valueOf(
+        assure("HoriOrientPosition has changed", 
+               (Integer.valueOf(previous[1]).intValue() + Integer.valueOf(
                                                                   RL_TB[1])
-                                                                 .intValue() +
-                   Integer.valueOf(LR_TB[1]).intValue()));
-        assertEquals("VertOrientPosition has changed",
-                3*Integer.valueOf(previous[2]).intValue(),
+                                                                 .intValue() + 
+                   Integer.valueOf(LR_TB[1]).intValue() == 2099));
+        assure("VertOrientPosition has changed", 
                (Integer.valueOf(previous[2]).intValue() + Integer.valueOf(
                                                                   RL_TB[2])
-                                                                 .intValue() +
-                   Integer.valueOf(LR_TB[2]).intValue()));
-        assertTrue("x-position hasn't changed",
-               (previous[3].equals(LR_TB[3]) &&
-                   ((Integer.valueOf(previous[3]).intValue() * (-1)) -
+                                                                 .intValue() + 
+                   Integer.valueOf(LR_TB[2]).intValue() == 3*Integer.valueOf(previous[2]).intValue()));
+        assure("x-position hasn't changed", 
+               (previous[3].equals(LR_TB[3]) && 
+                   ((Integer.valueOf(previous[3]).intValue() * (-1)) - 
                        oShape.getSize().Width != Integer.valueOf(LR_TB[2])
                                                         .intValue())));
-        assertTrue("Couldn't close document", closeSpreadsheetDocument());
+        assure("Couldn't close document", closeSpreadsheetDocument());
     }
 
     protected String[] getShapeProps(XPropertySet set, XShape oShape) {
@@ -211,10 +200,10 @@ public class CalcRTL /* extends ComplexTestCase */
         } catch (com.sun.star.lang.WrappedTargetException e) {
         }
 
-        System.out.println("\t Anchor :" + reValue[0]);
-        System.out.println("\t HoriOrientPosition :" + reValue[1]);
-        System.out.println("\t VertOrientPosition :" + reValue[2]);
-        System.out.println("\t Shape Position (x,y) : (" + oShape.getPosition().X +
+        log.println("\t Anchor :" + reValue[0]);
+        log.println("\t HoriOrientPosition :" + reValue[1]);
+        log.println("\t VertOrientPosition :" + reValue[2]);
+        log.println("\t Shape Position (x,y) : (" + oShape.getPosition().X + 
                     "," + oShape.getPosition().Y + ")");
 
         return reValue;
@@ -224,21 +213,17 @@ public class CalcRTL /* extends ComplexTestCase */
      * this method opens a calc document and sets the corresponding class variable xSheetDoc
      */
     protected boolean openSpreadsheetDocument() {
-        // SOfficeFactory SOF = SOfficeFactory.getFactory(
-        //                             (XMultiServiceFactory) param.getMSF());
-
-        final XMultiServiceFactory xMsf = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
-        SOfficeFactory SOF = SOfficeFactory.getFactory(xMsf);
-
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     (XMultiServiceFactory) param.getMSF());
         boolean worked = true;
 
         try {
-            System.out.println("creating a sheetdocument");
+            log.println("creating a sheetdocument");
             xSheetDoc = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
             worked = false;
-            e.printStackTrace(/*(PrintWriter) log*/ System.out);
+            e.printStackTrace((PrintWriter) log);
         }
 
         return worked;
@@ -250,21 +235,21 @@ public class CalcRTL /* extends ComplexTestCase */
     protected boolean closeSpreadsheetDocument() {
         boolean worked = true;
 
-        System.out.println("    disposing xSheetDoc ");
+        log.println("    disposing xSheetDoc ");
 
         try {
-            XCloseable oCloser =  UnoRuntime.queryInterface(
+            XCloseable oCloser = (XCloseable) UnoRuntime.queryInterface(
                                          XCloseable.class, xSheetDoc);
             oCloser.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
             worked = false;
-            System.out.println("Couldn't close document");
+            log.println("Couldn't close document");
         } catch (com.sun.star.lang.DisposedException e) {
             worked = false;
-            System.out.println("Document already disposed");
+            log.println("Document already disposed");
         } catch (java.lang.NullPointerException e) {
             worked = false;
-            System.out.println("Couldn't get XCloseable");
+            log.println("Couldn't get XCloseable");
         }
 
         xSheetDoc = null;
@@ -279,22 +264,22 @@ public class CalcRTL /* extends ComplexTestCase */
     protected XSpreadsheet getSpreadsheet() {
         XSpreadsheet oSheet = null;
 
-        System.out.println("getting sheets");
+        log.println("getting sheets");
 
-        XSpreadsheets xSpreadsheets = xSheetDoc.getSheets();
+        XSpreadsheets xSpreadsheets = (XSpreadsheets) xSheetDoc.getSheets();
 
-        System.out.println("getting a sheet");
+        log.println("getting a sheet");
 
-        XIndexAccess oIndexAccess =  UnoRuntime.queryInterface(
+        XIndexAccess oIndexAccess = (XIndexAccess) UnoRuntime.queryInterface(
                                             XIndexAccess.class, xSpreadsheets);
 
         try {
-            oSheet =  UnoRuntime.queryInterface(
+            oSheet = (XSpreadsheet) UnoRuntime.queryInterface(
                              XSpreadsheet.class, oIndexAccess.getByIndex(0));
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(System.out);
+            e.printStackTrace((PrintWriter) log);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(System.out);
+            e.printStackTrace((PrintWriter) log);
         }
 
         return oSheet;
@@ -307,7 +292,7 @@ public class CalcRTL /* extends ComplexTestCase */
      * @param pName : The name of the Property that has to be changed
      * @param pValue : The value, the property should be changed too.
      */
-    protected boolean changeProperty(XPropertySet set, String pName,
+    protected boolean changeProperty(XPropertySet set, String pName, 
                                      Object pValue) {
         boolean worked = true;
 
@@ -337,10 +322,10 @@ public class CalcRTL /* extends ComplexTestCase */
 
 
             // checking results
-            worked = checkResult(set, pName, oldValue, pValue, resValue,
+            worked = checkResult(set, pName, oldValue, pValue, resValue, 
                                  exception);
         } catch (Exception e) {
-            System.out.println("Exception occurred while testing property '" +
+            System.out.println("Exception occured while testing property '" + 
                                pName + "'");
             e.printStackTrace();
             worked = false;
@@ -359,8 +344,8 @@ public class CalcRTL /* extends ComplexTestCase */
      * @param resValue : the value getPropertyValue returned for the property
      * @param exception : the exeption thrown during the change of the property
      */
-    protected boolean checkResult(XPropertySet set, String propName,
-                                  Object oldValue, Object newValue,
+    protected boolean checkResult(XPropertySet set, String propName, 
+                                  Object oldValue, Object newValue, 
                                   Object resValue, Exception exception)
                            throws Exception {
         XPropertySetInfo info = set.getPropertySetInfo();
@@ -376,19 +361,19 @@ public class CalcRTL /* extends ComplexTestCase */
 
         //check get-set methods
         if (maybeVoid) {
-            System.out.println("Property " + propName + " is void");
+            log.println("Property " + propName + " is void");
         }
 
         if (readOnly) {
-            System.out.println("Property " + propName + " is readOnly");
+            log.println("Property " + propName + " is readOnly");
         }
 
         if (util.utils.isVoid(oldValue) && !maybeVoid) {
-            System.out.println(propName + " is void, but it's not MAYBEVOID");
+            log.println(propName + " is void, but it's not MAYBEVOID");
 
             return false;
         } else if (oldValue == null) {
-            System.out.println(propName +
+            log.println(propName + 
                         " has null value, and therefore can't be changed");
 
             return true;
@@ -397,26 +382,26 @@ public class CalcRTL /* extends ComplexTestCase */
             if (exception != null) {
                 if (exception instanceof PropertyVetoException) {
                     // the change of read only prohibited - OK
-                    System.out.println("Property is ReadOnly and wasn't changed");
-                    System.out.println("Property '" + propName + "' OK");
+                    log.println("Property is ReadOnly and wasn't changed");
+                    log.println("Property '" + propName + "' OK");
 
                     return true;
                 } else if (exception instanceof IllegalArgumentException) {
                     // the change of read only prohibited - OK
-                    System.out.println("Property is ReadOnly and wasn't changed");
-                    System.out.println("Property '" + propName + "' OK");
+                    log.println("Property is ReadOnly and wasn't changed");
+                    log.println("Property '" + propName + "' OK");
 
                     return true;
                 } else if (exception instanceof UnknownPropertyException) {
                     // the change of read only prohibited - OK
-                    System.out.println("Property is ReadOnly and wasn't changed");
-                    System.out.println("Property '" + propName + "' OK");
+                    log.println("Property is ReadOnly and wasn't changed");
+                    log.println("Property '" + propName + "' OK");
 
                     return true;
                 } else if (exception instanceof RuntimeException) {
                     // the change of read only prohibited - OK
-                    System.out.println("Property is ReadOnly and wasn't changed");
-                    System.out.println("Property '" + propName + "' OK");
+                    log.println("Property is ReadOnly and wasn't changed");
+                    log.println("Property '" + propName + "' OK");
 
                     return true;
                 } else {
@@ -426,28 +411,28 @@ public class CalcRTL /* extends ComplexTestCase */
                 // if no exception - check that value
                 // has not changed
                 if (!ValueComparer.equalValue(resValue, oldValue)) {
-                    System.out.println("Read only property '" + propName +
+                    log.println("Read only property '" + propName + 
                                 "' has changed");
 
                     try {
-                        if (!util.utils.isVoid(oldValue) &&
+                        if (!util.utils.isVoid(oldValue) && 
                                 oldValue instanceof Any) {
                             oldValue = AnyConverter.toObject(
-                                               new Type(((Any) oldValue).getClass()),
+                                               new Type(((Any) oldValue).getClass()), 
                                                oldValue);
                         }
 
-                        System.out.println("old = " + toString(oldValue));
-                        System.out.println("new = " + toString(newValue));
-                        System.out.println("result = " + toString(resValue));
+                        log.println("old = " + toString(oldValue));
+                        log.println("new = " + toString(newValue));
+                        log.println("result = " + toString(resValue));
                     } catch (com.sun.star.lang.IllegalArgumentException iae) {
                     }
 
                     return false;
                 } else {
-                    System.out.println("Read only property '" + propName +
+                    log.println("Read only property '" + propName + 
                                 "' hasn't changed");
-                    System.out.println("Property '" + propName + "' OK");
+                    log.println("Property '" + propName + "' OK");
 
                     return true;
                 }
@@ -456,29 +441,29 @@ public class CalcRTL /* extends ComplexTestCase */
             if (exception == null) {
                 // if no exception thrown
                 // check that the new value is set
-                if ((!ValueComparer.equalValue(resValue, newValue)) ||
+                if ((!ValueComparer.equalValue(resValue, newValue)) || 
                         (ValueComparer.equalValue(resValue, oldValue))) {
-                    System.out.println("Value for '" + propName +
+                    log.println("Value for '" + propName + 
                                 "' hasn't changed as expected");
 
                     try {
-                        if (!util.utils.isVoid(oldValue) &&
+                        if (!util.utils.isVoid(oldValue) && 
                                 oldValue instanceof Any) {
                             oldValue = AnyConverter.toObject(
-                                               new Type(((Any) oldValue).getClass()),
+                                               new Type(((Any) oldValue).getClass()), 
                                                oldValue);
                         }
 
-                        System.out.println("old = " + toString(oldValue));
-                        System.out.println("new = " + toString(newValue));
-                        System.out.println("result = " + toString(resValue));
+                        log.println("old = " + toString(oldValue));
+                        log.println("new = " + toString(newValue));
+                        log.println("result = " + toString(resValue));
                     } catch (com.sun.star.lang.IllegalArgumentException iae) {
                     }
 
                     if (resValue != null) {
-                        if ((!ValueComparer.equalValue(resValue, oldValue)) ||
+                        if ((!ValueComparer.equalValue(resValue, oldValue)) || 
                                 (!resValue.equals(oldValue))) {
-                            System.out.println("But it has changed.");
+                            log.println("But it has changed.");
 
                             return true;
                         } else {
@@ -490,19 +475,19 @@ public class CalcRTL /* extends ComplexTestCase */
 
                     //tRes.tested(propName, false);
                 } else {
-                    System.out.println("Property '" + propName + "' OK");
+                    log.println("Property '" + propName + "' OK");
 
                     try {
-                        if (!util.utils.isVoid(oldValue) &&
+                        if (!util.utils.isVoid(oldValue) && 
                                 oldValue instanceof Any) {
                             oldValue = AnyConverter.toObject(
-                                               new Type(((Any) oldValue).getClass()),
+                                               new Type(((Any) oldValue).getClass()), 
                                                oldValue);
                         }
 
-                        System.out.println("old = " + toString(oldValue));
-                        System.out.println("new = " + toString(newValue));
-                        System.out.println("result = " + toString(resValue));
+                        log.println("old = " + toString(oldValue));
+                        log.println("new = " + toString(newValue));
+                        log.println("result = " + toString(resValue));
                     } catch (com.sun.star.lang.IllegalArgumentException iae) {
                     }
 
@@ -529,10 +514,10 @@ public class CalcRTL /* extends ComplexTestCase */
         Object value = null;
 
         if (UnoRuntime.queryInterface(XCellRangeAddressable.class, obj) != null) {
-            XCellRangeAddressable aCell =  UnoRuntime.queryInterface(
-                                                  XCellRangeAddressable.class,
+            XCellRangeAddressable aCell = (XCellRangeAddressable) UnoRuntime.queryInterface(
+                                                  XCellRangeAddressable.class, 
                                                   obj);
-            value = "Cell in Column " + aCell.getRangeAddress().StartColumn +
+            value = "Cell in Column " + aCell.getRangeAddress().StartColumn + 
                     " and Row " + aCell.getRangeAddress().StartRow;
         } else {
             return obj;
@@ -548,54 +533,35 @@ public class CalcRTL /* extends ComplexTestCase */
         XShape insertedShape = null;
 
         try {
-            System.out.println("getting Drawpages");
+            log.println("getting Drawpages");
 
-            XDrawPagesSupplier oDPS =  UnoRuntime.queryInterface(
-                                              XDrawPagesSupplier.class,
+            XDrawPagesSupplier oDPS = (XDrawPagesSupplier) UnoRuntime.queryInterface(
+                                              XDrawPagesSupplier.class, 
                                               xSheetDoc);
-            XDrawPages oDP =  oDPS.getDrawPages();
-            XDrawPage firstDrawPage =  UnoRuntime.queryInterface(
-                                              XDrawPage.class,
+            XDrawPages oDP = (XDrawPages) oDPS.getDrawPages();
+            XDrawPage firstDrawPage = (XDrawPage) UnoRuntime.queryInterface(
+                                              XDrawPage.class, 
                                               oDP.getByIndex(0));
 
-            final XMultiServiceFactory xMsf = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
-            SOfficeFactory SOF = SOfficeFactory.getFactory(xMsf);
-
-            // SOfficeFactory SOF = SOfficeFactory.getFactory(
-            //                              (XMultiServiceFactory) param.getMSF());
-            XComponent xComp =  UnoRuntime.queryInterface(
+            SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                         (XMultiServiceFactory) param.getMSF());
+            XComponent xComp = (XComponent) UnoRuntime.queryInterface(
                                        XComponent.class, xSheetDoc);
-            insertedShape = SOF.createShape(xComp, 5000, 3500, 700, 500,
+            insertedShape = SOF.createShape(xComp, 5000, 3500, 700, 500, 
                                             "Rectangle");
             DrawTools.getShapes(firstDrawPage).add(insertedShape);
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            System.out.println("Couldn't create instance");
-            e.printStackTrace();
+            log.println("Couldn't create instance");
+            e.printStackTrace((PrintWriter) log);
 
             return null;
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            System.out.println("Couldn't create instance");
-            e.printStackTrace();
+            log.println("Couldn't create instance");
+            e.printStackTrace((PrintWriter) log);
 
             return null;
         }
 
         return insertedShape;
     }
-
-
-
-
-    @BeforeClass public static void setUpConnection() throws Exception {
-        connection.setUp();
-    }
-
-    @AfterClass public static void tearDownConnection()
-        throws InterruptedException, com.sun.star.uno.Exception
-    {
-        connection.tearDown();
-    }
-
-    private static final OfficeConnection connection = new OfficeConnection();
-
 }

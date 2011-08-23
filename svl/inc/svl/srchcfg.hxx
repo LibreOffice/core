@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,9 +68,9 @@ public:
     SvxSearchConfig(sal_Bool bEnableNotify = sal_True);
     virtual ~SvxSearchConfig();
 
-    void            Load();
-    virtual void    Commit();
-    virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    void 			Load();
+    virtual void	Commit();
+    virtual void 	Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
 
     sal_uInt16                  Count();
     const SvxSearchEngineData&  GetData(sal_uInt16 nPos);

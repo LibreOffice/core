@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,18 +70,18 @@ OXMLCondPrtExpr::OXMLCondPrtExpr( ORptFilter& _rImport,
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
-                case XML_TOK_FUNCTION_FORMULA:
+                case XML_TOK_FUNCTION_FORMULA: 
                     m_xComponent->setPropertyValue(PROPERTY_CONDITIONALPRINTEXPRESSION,uno::makeAny(ORptFilter::convertFormula(sValue)));
                     break;
                 default:
                     break;
             }
-
+        
         }
     }
     catch(const Exception&)
     {
-        OSL_FAIL("Exception catched while putting Function props!");
+        OSL_ENSURE(0,"Exception catched while putting Function props!");
     }
 }
 // -----------------------------------------------------------------------------

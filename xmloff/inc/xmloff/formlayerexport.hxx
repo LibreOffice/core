@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,9 +62,9 @@ namespace xmloff
     {
     protected:
         /// our export context
-        SvXMLExport&                m_rContext;
+        SvXMLExport&				m_rContext;
         // impl class
-        OFormLayerXMLExport_Impl*   m_pImpl;
+        OFormLayerXMLExport_Impl*	m_pImpl;
 
     protected:
         ~OFormLayerXMLExport();
@@ -143,12 +143,12 @@ namespace xmloff
             expect the the forms collection to be stored like
                 <listing>
                     &lt;Forms&gt;
-                        ....    // all the forms stuff here
+                        ....	// all the forms stuff here
                     &lt;/Forms&gt;
                 </listing>
             you have to start the Forms element yourself.</p>
 
-            @param  _rxDrawPage
+            @param	_rxDrawPage
                 the draw page to examine. The object will be queried for a <type scope="com.sun.star.form">XFormsSupplier</type>
                 interface to obtain the forms container.
         */
@@ -165,6 +165,9 @@ namespace xmloff
         /** determines whether the given page contains XForm instances
         */
         bool documentContainsXForms() const;
+
+        /// retrieves the property mapper for control styles
+        ::rtl::Reference< SvXMLExportPropertyMapper > getStylePropertyMapper();
 
         /** exports the controls number styles
         */
@@ -195,7 +198,7 @@ namespace xmloff
     class XMLOFF_DLLPUBLIC OOfficeFormsExport
     {
     private:
-        OFormsRootExport*   m_pImpl;
+        OFormsRootExport*	m_pImpl;
 
     public:
         OOfficeFormsExport( SvXMLExport& _rExp );
@@ -203,7 +206,7 @@ namespace xmloff
     };
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMLAYEREXPORT_HXX_

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,26 +45,26 @@ public:
                 using Container::GetSize;
                 using Container::Clear;
 
-                DynArray( sal_uIntPtr nSize = 16 ) : Container( nSize ) {}
+                DynArray( ULONG nSize = 16 ) : Container( nSize ) {}
                 DynArray( const DynArray& rAry ) : Container( rAry ) {}
 
-    void*       Put( sal_uIntPtr nIndex, void* p )
+    void*       Put( ULONG nIndex, void* p )
                     { return Container::Replace( p, nIndex ); }
-    void*       Get( sal_uIntPtr nIndex ) const
+    void*       Get( ULONG nIndex ) const
                     { return Container::GetObject( nIndex ); }
 
-    sal_uIntPtr       GetIndex( const void* p ) const
+    ULONG       GetIndex( const void* p ) const
                     { return Container::GetPos( p ); }
-    sal_uIntPtr       GetIndex( const void* p, sal_uIntPtr nStartIndex,
-                          sal_Bool bForward = sal_True ) const
+    ULONG       GetIndex( const void* p, ULONG nStartIndex,
+                          BOOL bForward = TRUE ) const
                     { return Container::GetPos( p, nStartIndex, bForward ); }
 
     DynArray&   operator =( const DynArray& rAry )
                     { Container::operator =( rAry ); return *this; }
 
-    sal_Bool        operator ==( const DynArray& rAry ) const
+    BOOL        operator ==( const DynArray& rAry ) const
                     { return Container::operator ==( rAry ); }
-    sal_Bool        operator !=( const DynArray& rAry ) const
+    BOOL        operator !=( const DynArray& rAry ) const
                     { return Container::operator !=( rAry ); }
 };
 
@@ -76,24 +76,24 @@ public:
 class ClassName : private DynArray                                      \
 {                                                                       \
 public:                                                                 \
-                using DynArray::SetSize;                                \
-                using DynArray::GetSize;                                \
-                using DynArray::Clear;                                  \
+                using DynArray::SetSize;								\
+                using DynArray::GetSize;								\
+                using DynArray::Clear;									\
                                                                         \
-                ClassName( sal_uIntPtr nSize = 16 ) :                         \
+                ClassName( ULONG nSize = 16 ) :                         \
                     DynArray( nSize ) {}                                \
                 ClassName( const ClassName& rClassName ) :              \
                     DynArray( rClassName ) {}                           \
                                                                         \
-    Type        Put( sal_uIntPtr nIndex, Type p )                             \
+    Type        Put( ULONG nIndex, Type p )                             \
                     { return (Type)DynArray::Put( nIndex, (void*)p ); } \
-    Type        Get( sal_uIntPtr nIndex ) const                               \
+    Type        Get( ULONG nIndex ) const                               \
                     { return (Type)DynArray::Get( nIndex ); }           \
                                                                         \
-    sal_uIntPtr       GetIndex( const Type p ) const                          \
+    ULONG       GetIndex( const Type p ) const                          \
                     { return DynArray::GetIndex( (const void*)p ); }    \
-    sal_uIntPtr       GetIndex( const Type p, sal_uIntPtr nStartIndex,              \
-                          sal_Bool bForward = sal_True ) const                  \
+    ULONG       GetIndex( const Type p, ULONG nStartIndex,              \
+                          BOOL bForward = TRUE ) const                  \
                     { return DynArray::GetIndex( (const void*)p,        \
                                                  nStartIndex,           \
                                                  bForward ); }          \
@@ -102,9 +102,9 @@ public:                                                                 \
                     { DynArray::operator =( rClassName );               \
                       return *this; }                                   \
                                                                         \
-    sal_Bool        operator ==( const ClassName& rAry ) const              \
+    BOOL        operator ==( const ClassName& rAry ) const              \
                     { return DynArray::operator ==( rAry ); }           \
-    sal_Bool        operator !=( const ClassName& rAry ) const              \
+    BOOL        operator !=( const ClassName& rAry ) const              \
                     { return DynArray::operator !=( rAry ); }           \
 };
 

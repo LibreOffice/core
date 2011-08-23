@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,99 +24,105 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_registry_XImplementationRegistration_idl__
-#define __com_sun_star_registry_XImplementationRegistration_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
-#include <com/sun/star/registry/XSimpleRegistry.idl>
-
-#include <com/sun/star/registry/CannotRegisterImplementationException.idl>
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module registry {
-
-//=============================================================================
-
+#ifndef __com_sun_star_registry_XImplementationRegistration_idl__ 
+#define __com_sun_star_registry_XImplementationRegistration_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_registry_XSimpleRegistry_idl__ 
+#include <com/sun/star/registry/XSimpleRegistry.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_registry_CannotRegisterImplementationException_idl__ 
+#include <com/sun/star/registry/CannotRegisterImplementationException.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module registry {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: interface com::sun::star::registry::XImplementationRegistration
 /** offers a registry for implementation objects and provides information
     about the registered implementations.
  */
 published interface XImplementationRegistration: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::registry::XImplementationRegistration::registerImplementation
-    /** registers a component which provides one or more implementations.
-
-        @param aLocation
-            specifies the location of the component with the URL.
-
-        @param xReg
+    /** registers a component which provides one or more implementations. 
+        
+        @param aLocation 
+            specifies the location of the component with the URL.  
+              
+        @param xReg 
             specifies the registry where the component should be installed.
             If it is a NULL interface, then the component will be installed
             in the system registry (if this feature is supported).
      */
-    void registerImplementation( [in] string aImplementationLoader,
-             [in] string aLocation,
-             [in] com::sun::star::registry::XSimpleRegistry xReg )
-            raises( com::sun::star::registry::CannotRegisterImplementationException );
-
-    //-------------------------------------------------------------------------
-
+    void registerImplementation( [in] string aImplementationLoader, 
+             [in] string aLocation, 
+             [in] com::sun::star::registry::XSimpleRegistry xReg ) 
+            raises( com::sun::star::registry::CannotRegisterImplementationException ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::registry::XImplementationRegistration::revokeImplementation
-    /** revokes a component and all their provided implementations from the registry.
-
-        @param aLocation
-            specifies the location of the component with the URL.
-
-        @param xReg
+    /** revokes a component and all their provided implementations from the registry. 
+        
+        @param aLocation 
+            specifies the location of the component with the URL.  
+              
+        @param xReg 
             specifies the registry where the component should be installed.
             If it is a NULL interface, then the component will be revoked
             from the system registry (if this feature is supported).
      */
-    boolean revokeImplementation( [in] string aLocation,
-             [in] com::sun::star::registry::XSimpleRegistry xReg );
-
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XImplementationRegistration::getImplementations
-
+    boolean revokeImplementation( [in] string aLocation, 
+             [in] com::sun::star::registry::XSimpleRegistry xReg ); 
+ 
+    //------------------------------------------------------------------------- 
+    // DOCUMENTATION CHANGED FOR XImplementationRegistration::getImplementations 
+     
     // DocMerge from idl: method com::sun::star::registry::XImplementationRegistration::getImplementations
-    /** @returns
-            the names of the implementations registered by the url location.
-
-        @param aImplementationLoader
-            specifies the name of the needed loader for this type of implementation. For
-            example, the loader "com.sun.star.loader.SharedLibrary" for implementations
-            that are realized as an SharedLibrary.
-
-        @param aLocation
-            specifies the location of the component with the URL.
+    /** @returns 
+            the names of the implementations registered by the url location. 
+              
+        @param aImplementationLoader 
+            specifies the name of the needed loader for this type of implementation. For  
+            example, the loader "com.sun.star.loader.SharedLibrary" for implementations  
+            that are realized as an SharedLibrary.  
+              
+        @param aLocation 
+            specifies the location of the component with the URL.  
      */
-    sequence<string> getImplementations( [in] string aImplementationLoader,
-             [in] string aLocation );
-
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XImplementationRegistration::checkInstantiation
-
+    sequence<string> getImplementations( [in] string aImplementationLoader, 
+             [in] string aLocation ); 
+ 
+    //------------------------------------------------------------------------- 
+    // DOCUMENTATION CHANGED FOR XImplementationRegistration::checkInstantiation 
+     
     // DocMerge from idl: method com::sun::star::registry::XImplementationRegistration::checkInstantiation
-    /** @returns
+    /** @returns 
              a sequence with names of the missing services to create an instance of this implementation.
 
         @param implementationName
-            specifies the name of the checked implementation.
+            specifies the name of the checked implementation. 
      */
-    sequence<string> checkInstantiation( [in] string implementationName );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    sequence<string> checkInstantiation( [in] string implementationName ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

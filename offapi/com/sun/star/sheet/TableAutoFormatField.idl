@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ published service TableAutoFormatField
 {
     //-------------------------------------------------------------------------
 
-//! service com::sun::star::beans::PropertySet;
+//!	service com::sun::star::beans::PropertySet;
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
@@ -88,7 +88,7 @@ published service TableAutoFormatField
      */
     [property] string CharFontName;
 
-    /** specifies the name of the Asian font.
+    /** specifies the name of the asian font.
      */
     [optional, property] string CharFontNameAsian;
 
@@ -102,7 +102,7 @@ published service TableAutoFormatField
      */
     [property] string CharFontStyleName;
 
-    /** specifies the name of the Asian font style.
+    /** specifies the name of the asian font style.
      */
     [optional, property] string CharFontStyleNameAsian;
 
@@ -116,7 +116,7 @@ published service TableAutoFormatField
      */
     [property] string CharFontCharSet;
 
-    /** contains the value of the character set of the Asian font.
+    /** contains the value of the character set of the asian font.
      */
     [optional, property] string CharFontCharSetAsian;
 
@@ -130,7 +130,7 @@ published service TableAutoFormatField
      */
     [property] string CharFontFamily;
 
-    /** contains the value of the Asian font family.
+    /** contains the value of the asian font family.
      */
     [optional, property] string CharFontFamilyAsian;
 
@@ -144,7 +144,7 @@ published service TableAutoFormatField
      */
     [property] string CharFontPitch;
 
-    /** contains the value of the pitch of the Asian font.
+    /** contains the value of the pitch of the asian font.
      */
     [optional, property] string CharFontPitchAsian;
 
@@ -158,7 +158,7 @@ published service TableAutoFormatField
      */
     [property] float CharHeight;
 
-    /** contains the height of characters of the Asian font in point.
+    /** contains the height of characters of the asian font in point.
      */
     [optional, property] float CharHeightAsian;
 
@@ -172,7 +172,7 @@ published service TableAutoFormatField
      */
     [property] float CharWeight;
 
-    /** contains the value for the weight of characters of the Asian font.
+    /** contains the value for the weight of characters of the asian font.
      */
     [optional, property] float CharWeightAsian;
 
@@ -186,11 +186,11 @@ published service TableAutoFormatField
      */
     [property] com::sun::star::awt::FontSlant CharPosture;
 
-    /** contains the value of the posture of characters of the Asian font.
+    /** contains the value of the posture of characters of the asian font.
      */
     [optional, property] com::sun::star::awt::FontSlant CharPostureAsian;
 
-    /** contains the value of the posture of characters of the complex font.
+    /** contains the value of the posture of characters of the comlex font.
      */
     [optional, property] com::sun::star::awt::FontSlant CharPostureComplex;
 
@@ -278,7 +278,7 @@ published service TableAutoFormatField
 
     //-------------------------------------------------------------------------
 
-    /** contains the reference edge of the cell rotation.
+    /** contains the reference egde of the cell rotation.
      */
     [optional, property] com::sun::star::table::CellVertJustify RotateReference;
 

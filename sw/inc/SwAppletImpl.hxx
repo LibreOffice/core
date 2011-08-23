@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,17 +53,17 @@ class SfxItemSet;
 class SwApplet_Impl
 {
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xApplet;
-    SvCommandList     aCommandList;
-    SfxItemSet        aItemSet;
-    String            sAlt;
+    SvCommandList     aCommandList; // und die szugehorige Command-List
+    SfxItemSet 		  aItemSet;
+    String			  sAlt;
 
 public:
-    static sal_uInt16 GetOptionType( const String& rName, sal_Bool bApplet );
-    SwApplet_Impl( SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
+    static USHORT GetOptionType( const String& rName, BOOL bApplet );
+    SwApplet_Impl( SfxItemPool& rPool, USHORT nWhich1, USHORT nWhich2 );
     SwApplet_Impl( SfxItemSet& rSet ): aItemSet ( rSet) {}
     ~SwApplet_Impl();
     void CreateApplet( const String& rCode, const String& rName,
-                       sal_Bool bMayScript, const String& rCodeBase,
+                       BOOL bMayScript, const String& rCodeBase,
                        const String& rBaseURL );
 #ifdef SOLAR_JAVA
     sal_Bool CreateApplet( const String& rBaseURL );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,6 +48,8 @@ namespace sd
             a pointer to the next shape in list or 0*/
         SdrObject* removeShape( SdrObject& rObject );
 
+        void replaceShape( SdrObject& rOldObject, SdrObject& rNewObject );
+
         /** removes all shapes from this list */
         void clear();
 
@@ -74,7 +76,7 @@ namespace sd
         bool hasMore() const;
 
         const std::list< SdrObject* >& getList() const { return maShapeList; }
-
+        
     private:
         virtual void ObjectInDestruction(const SdrObject& rObject);
 
@@ -84,6 +86,6 @@ namespace sd
     };
 }
 
-#endif     // _SHAPELIST_HXX
+#endif	   // _SHAPELIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

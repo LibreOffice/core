@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,6 +33,7 @@
 #include "ndtxt.hxx"
 #include "flyfrm.hxx"
 #include "paratr.hxx"
+#include "errhdl.hxx"
 #include <vcl/outdev.hxx>
 #include <editeng/paravertalignitem.hxx>
 
@@ -42,20 +43,30 @@
 #include <tgrditem.hxx>
 #include <porfld.hxx>
 
+#include "txtcfg.hxx"
 #include "itrtxt.hxx"
 #include "txtfrm.hxx"
 #include "porfly.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
-#include "txtfrm.hxx"      // GetFrmID,
+# include "txtfrm.hxx"      // GetFrmID,
 #endif
 
 /*************************************************************************
- *                      SwTxtIter::CtorInitTxtIter()
+ *						SwTxtIter::CtorInitTxtIter()
  *************************************************************************/
 
 void SwTxtIter::CtorInitTxtIter( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
 {
+#ifdef DBGTXT
+    // nStopAt laesst sich vom CV bearbeiten.
+    static MSHORT nStopAt = 0;
+    if( nStopAt == pNewFrm->GetFrmId() )
+    {
+        int i = pNewFrm->GetFrmId();
+    }
+#endif
+
     SwTxtNode *pNode = pNewFrm->GetTxtNode();
 
     OSL_ENSURE( pNewFrm->GetPara(), "No paragraph" );
@@ -64,7 +75,9 @@ void SwTxtIter::CtorInitTxtIter( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
 
     pFrm = pNewFrm;
     pInf = pNewInf;
+    // --> OD 2008-01-17 #newlistlevelattrs#
     aLineInf.CtorInitLineInfo( pNode->GetSwAttrSet(), *pNode );
+    // <--
     nFrameStart = pFrm->Frm().Pos().Y() + pFrm->Prt().Pos().Y();
     SwTxtIter::Init();
     if( pNode->GetSwAttrSet().GetRegister().GetValue() )
@@ -88,7 +101,7 @@ void SwTxtIter::Init()
 }
 
 /*************************************************************************
- *                 SwTxtIter::_GetHeightAndAscent()
+ *				   SwTxtIter::_GetHeightAndAscent()
  *************************************************************************/
 
 void SwTxtIter::CalcAscentAndHeight( KSHORT &rAscent, KSHORT &rHeight ) const
@@ -98,7 +111,7 @@ void SwTxtIter::CalcAscentAndHeight( KSHORT &rAscent, KSHORT &rHeight ) const
 }
 
 /*************************************************************************
- *                    SwTxtIter::_GetPrev()
+ *					  SwTxtIter::_GetPrev()
  *************************************************************************/
 
 SwLineLayout *SwTxtIter::_GetPrev()
@@ -175,13 +188,14 @@ const SwLineLayout *SwTxtIter::NextLine()
     const SwLineLayout *pNext = Next();
     while( pNext && pNext->IsDummy() && pNext->GetNext() )
     {
+        DBG_LOOP;
         pNext = Next();
     }
     return pNext;
 }
 
 /*************************************************************************
- *                      SwTxtIter::GetNextLine()
+ *						SwTxtIter::GetNextLine()
  *************************************************************************/
 
 const SwLineLayout *SwTxtIter::GetNextLine() const
@@ -189,13 +203,14 @@ const SwLineLayout *SwTxtIter::GetNextLine() const
     const SwLineLayout *pNext = pCurr->GetNext();
     while( pNext && pNext->IsDummy() && pNext->GetNext() )
     {
+        DBG_LOOP;
         pNext = pNext->GetNext();
     }
     return (SwLineLayout*)pNext;
 }
 
 /*************************************************************************
- *                      SwTxtIter::GetPrevLine()
+ *						SwTxtIter::GetPrevLine()
  *************************************************************************/
 
 const SwLineLayout *SwTxtIter::GetPrevLine()
@@ -237,6 +252,7 @@ const SwLineLayout *SwTxtIter::PrevLine()
     const SwLineLayout *pLast = pMyPrev;
     while( pMyPrev && pMyPrev->IsDummy() )
     {
+        DBG_LOOP;
         pLast = pMyPrev;
         pMyPrev = Prev();
     }
@@ -251,7 +267,7 @@ void SwTxtIter::Bottom()
 {
     while( Next() )
     {
-        // nothing
+        DBG_LOOP;
     }
 }
 
@@ -288,9 +304,9 @@ const SwLineLayout *SwTxtCursor::CharCrsrToLine( const xub_StrLen nPosition )
  *                      SwTxtCrsr::AdjustBaseLine()
  *************************************************************************/
 
-sal_uInt16 SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
+USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
                                     const SwLinePortion* pPor,
-                                    sal_uInt16 nPorHeight, sal_uInt16 nPorAscent,
+                                    USHORT nPorHeight, USHORT nPorAscent,
                                     const sal_Bool bAutoToCentered ) const
 {
     if ( pPor )
@@ -299,14 +315,14 @@ sal_uInt16 SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
         nPorAscent = pPor->GetAscent();
     }
 
-    sal_uInt16 nOfst = rLine.GetRealHeight() - rLine.Height();
+    USHORT nOfst = rLine.GetRealHeight() - rLine.Height();
 
     GETGRID( pFrm->FindPageFrm() )
     const sal_Bool bHasGrid = pGrid && GetInfo().SnapToGrid();
 
     if ( bHasGrid )
     {
-        const sal_uInt16 nRubyHeight = pGrid->GetRubyHeight();
+        const USHORT nRubyHeight = pGrid->GetRubyHeight();
         const sal_Bool bRubyTop = ! pGrid->GetRubyTextBelow();
 
         if ( GetInfo().IsMulti() )
@@ -324,10 +340,10 @@ sal_uInt16 SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
             {
                 // Portions which are bigger than on grid distance are
                 // centered inside the whole line.
-
+                
                 //for text refactor
-                const sal_uInt16 nLineNetto =  rLine.Height() - nRubyHeight;
-                //const sal_uInt16 nLineNetto = ( nPorHeight > nGridWidth ) ?
+                const USHORT nLineNetto =  rLine.Height() - nRubyHeight;
+                //const USHORT nLineNetto = ( nPorHeight > nGridWidth ) ?
                  //                           rLine.Height() - nRubyHeight :
                  //                           nGridWidth;
                 nOfst += ( nLineNetto - nPorHeight ) / 2;
@@ -352,11 +368,7 @@ sal_uInt16 SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
             case SvxParaVertAlignItem::AUTOMATIC :
                 if ( bAutoToCentered || GetInfo().GetTxtFrm()->IsVertical() )
                 {
-                    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-                    if( GetInfo().GetTxtFrm()->IsVertLR() )
-                            nOfst += rLine.Height() - ( rLine.Height() - nPorHeight ) / 2 - nPorAscent;
-                    else
-                            nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
+                    nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
                     break;
                 }
             case SvxParaVertAlignItem::BASELINE :
@@ -400,7 +412,7 @@ sal_Bool lcl_NeedsFieldRest( const SwLineLayout* pCurr )
 }
 
 /*************************************************************************
- *                      SwTxtIter::TruncLines()
+ *						SwTxtIter::TruncLines()
  *************************************************************************/
 
 void SwTxtIter::TruncLines( sal_Bool bNoteFollow )
@@ -434,13 +446,13 @@ void SwTxtIter::TruncLines( sal_Bool bNoteFollow )
                 SwpHints* pTmpHints = GetTxtFrm()->GetTxtNode()->GetpSwpHints();
 
                 // examine hints in range nEnd - (nEnd + nRangeChar)
-                for( sal_uInt16 i = 0; i < pTmpHints->Count(); i++ )
+                for( USHORT i = 0; i < pTmpHints->Count(); i++ )
                 {
                     const SwTxtAttr* pHt = pTmpHints->GetTextHint( i );
                     if( RES_TXTATR_FLYCNT == pHt->Which() )
                     {
                         // check, if hint is in our range
-                        const sal_uInt16 nTmpPos = *pHt->GetStart();
+                        const USHORT nTmpPos = *pHt->GetStart();
                         if ( nEnd <= nTmpPos && nTmpPos < nRangeEnd )
                             pFollow->_InvalidateRange(
                                 SwCharRange( nTmpPos, nTmpPos ), 0 );
@@ -459,7 +471,7 @@ void SwTxtIter::TruncLines( sal_Bool bNoteFollow )
 }
 
 /*************************************************************************
- *                      SwTxtIter::CntHyphens()
+ *						SwTxtIter::CntHyphens()
  *************************************************************************/
 
 void SwTxtIter::CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const
@@ -473,6 +485,7 @@ void SwTxtIter::CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const
         return;
     while( pLay != pCurr )
     {
+        DBG_LOOP;
         if ( pLay->IsEndHyph() )
             nEndCnt++;
         else

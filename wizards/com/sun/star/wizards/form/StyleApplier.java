@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,6 @@ import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.NoValidPathException;
-import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.document.Control;
 import com.sun.star.wizards.document.DatabaseControl;
 import com.sun.star.wizards.document.GridControl;
@@ -112,7 +111,7 @@ public class StyleApplier
             CurUnoDialog.insertLabel("lblStyles",
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                     },
                     new Object[]
                     {
@@ -122,47 +121,47 @@ public class StyleApplier
             lstStyles = CurUnoDialog.insertListBox("lstStyles", null, SCHANGELAYOUT, this,
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "SelectedItems", PropertyNames.PROPERTY_STEP, "StringItemList", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        "Height", "HelpURL", "PositionX", "PositionY", "SelectedItems", "Step", "StringItemList", "TabIndex", "Width"
                     },
                     new Object[]
                     {
-                        new Integer(143), "HID:WIZARDS_HID_DLGFORM_LSTSTYLES", new Integer(92), new Integer(35), SelLayoutPos, IStyleStep, this.StyleNames, new Short(curtabindex++), new Integer(90)
+                        new Integer(143), "HID:34471", new Integer(92), new Integer(35), SelLayoutPos, IStyleStep, this.StyleNames, new Short(curtabindex++), new Integer(90)
                     });
 
             optNoBorder = CurUnoDialog.insertRadioButton("otpNoBorder", SCHANGEBORDERTYPE, this,
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
+                        "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Tag", "Width"
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDNOBORDER", sNoBorder, new Integer(196), new Integer(39), IStyleStep, new Short(curtabindex++), "0", new Integer(93)
+                        UIConsts.INTEGERS[10], "HID:34472", sNoBorder, new Integer(196), new Integer(39), IStyleStep, new Short(curtabindex++), "0", new Integer(93)
                     });
 
             opt3DLook = CurUnoDialog.insertRadioButton("otp3DLook", SCHANGEBORDERTYPE, this,
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
+                        "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Tag", "Width"
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMD3DBORDER", s3DLook, new Integer(196), new Integer(53), new Short((short) 1), IStyleStep, new Short(curtabindex++), "1", new Integer(93)
+                        UIConsts.INTEGERS[10], "HID:34473", s3DLook, new Integer(196), new Integer(53), new Short((short) 1), IStyleStep, new Short(curtabindex++), "1", new Integer(93)
                     });
 
             optFlat = CurUnoDialog.insertRadioButton("otpFlat", SCHANGEBORDERTYPE, this,
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
+                        "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Tag", "Width"
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDSIMPLEBORDER", sFlat, new Integer(196), new Integer(67), IStyleStep, new Short(curtabindex++), "2", new Integer(93)
+                        UIConsts.INTEGERS[10], "HID:34474", sFlat, new Integer(196), new Integer(67), IStyleStep, new Short(curtabindex++), "2", new Integer(93)
                     });
 
             CurUnoDialog.insertFixedLine("lnFieldBorder",
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                     },
                     new Object[]
                     {
@@ -194,7 +193,7 @@ public class StyleApplier
             for (int i = 0; i < StyleNodeNames.length; i++)
             {
                 Object oStyleNode = xNameAccess.getByName(StyleNodeNames[i]);
-                StyleNames[i] = (String) Helper.getUnoPropertyValue(oStyleNode, PropertyNames.PROPERTY_NAME);
+                StyleNames[i] = (String) Helper.getUnoPropertyValue(oStyleNode, "Name");
                 FileNames[i] = (String) Helper.getUnoPropertyValue(oStyleNode, "CssHref");
             }
         }
@@ -342,7 +341,7 @@ public class StyleApplier
                     {
                         String[] sPropList = JavaTools.ArrayoutofString(scurline, ":");
                         String sPropValue = sPropList[1];
-                        sPropValue = sPropValue.trim();
+                        sPropValue.trim();
                         if (sPropValue.indexOf("#") > 0)
                         {
                             sPropValue = JavaTools.replaceSubString(sPropValue, "", ";");

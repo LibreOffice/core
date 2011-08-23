@@ -59,6 +59,7 @@ using namespace com::sun::star;
 using namespace cppu;
 
 using rtl::OUString;
+
 namespace { struct lcl_CachedImplId : public rtl::Static< Sequence < sal_Int8 >, lcl_CachedImplId > {}; }
 
 const ::com::sun::star::uno::Sequence < sal_Int8 >& ZipPackageStream::static_getImplementationId()
@@ -88,16 +89,16 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
     this->mbAllowRemoveOnInsert = bAllowRemoveOnInsert;
 
     SetFolder ( sal_False );
-    aEntry.nVersion     = -1;
-    aEntry.nFlag        = 0;
-    aEntry.nMethod      = -1;
-    aEntry.nTime        = -1;
-    aEntry.nCrc         = -1;
-    aEntry.nCompressedSize  = -1;
-    aEntry.nSize        = -1;
-    aEntry.nOffset      = -1;
-    aEntry.nPathLen     = -1;
-    aEntry.nExtraLen    = -1;
+    aEntry.nVersion		= -1;
+    aEntry.nFlag		= 0;
+    aEntry.nMethod		= -1;
+    aEntry.nTime		= -1;
+    aEntry.nCrc			= -1;
+    aEntry.nCompressedSize	= -1;
+    aEntry.nSize		= -1;
+    aEntry.nOffset		= -1;
+    aEntry.nPathLen		= -1;
+    aEntry.nExtraLen	= -1;
 
     Sequence < sal_Int8 > &rCachedImplId = lcl_CachedImplId::get();
     if ( !rCachedImplId.getLength() )
@@ -416,12 +417,12 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawData()
     }
     catch (ZipException &)//rException)
     {
-        OSL_FAIL( "ZipException thrown");//rException.Message);
+        OSL_ENSURE( 0, "ZipException thrown");//rException.Message);
         return Reference < io::XInputStream > ();
     }
     catch (Exception &)
     {
-        OSL_FAIL( "Exception is thrown during stream wrapping!\n");
+        OSL_ENSURE( 0, "Exception is thrown during stream wrapping!\n");
         return Reference < io::XInputStream > ();
     }
 }
@@ -447,12 +448,12 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
     }
     catch (ZipException &)//rException)
     {
-        OSL_FAIL( "ZipException thrown");//rException.Message);
+        OSL_ENSURE( 0,"ZipException thrown");//rException.Message);
         return Reference < io::XInputStream > ();
     }
     catch (Exception &)
     {
-        OSL_FAIL( "Exception is thrown during stream wrapping!\n");
+        OSL_ENSURE( 0, "Exception is thrown during stream wrapping!\n");
         return Reference < io::XInputStream > ();
     }
 }

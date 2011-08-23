@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,14 +40,19 @@ struct TextSegment;
 
 class SwAccessiblePortionData;
 class SwTxtNode;
-class SwWrongList; // #i108125#
+// --> OD 2010-02-19 #i108125#
+class SwWrongList;
+// <--
+
 class SwTextMarkupHelper
 {
     public:
         SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
                             const SwTxtNode& rTxtNode );
+        // --> OD 2010-02-19 #i108125#
         SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
-                            const SwWrongList& rTextMarkupList ); // #i108125#
+                            const SwWrongList& rTextMarkupList );
+        // <--
         ~SwTextMarkupHelper() {}
 
         sal_Int32 getTextMarkupCount( const sal_Int32 nTextMarkupType )
@@ -74,7 +79,7 @@ class SwTextMarkupHelper
 
         const SwAccessiblePortionData& mrPortionData;
 
-        // #i108125#
+        // --> OD 2010-02-19 #i108125#
         const SwTxtNode* mpTxtNode;
         const SwWrongList* mpTextMarkupList;
         // <--

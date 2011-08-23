@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,22 +35,19 @@
 #include "poolfmt.hxx"
 #include "rootfrm.hxx"
 #include "viewsh.hxx"
-#include <set>
+
 void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )
 {
-    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
-    if (  pTmpRoot &&
+    if ( GetRootFrm() &&
          (rNew.IsCountBlankLines() != pLineNumberInfo->IsCountBlankLines() ||
           rNew.IsRestartEachPage() != pLineNumberInfo->IsRestartEachPage()) )
     {
-        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080225
-        pTmpRoot->StartAllAction();
+        GetRootFrm()->StartAllAction();
         // FME 2007-08-14 #i80120# Invalidate size, because ChgThisLines()
         // is only (onny may only be) called by the formatting routines
-        //pTmpRoot->InvalidateAllCntnt( INV_LINENUM | INV_SIZE );
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_LINENUM | INV_SIZE));//swmod 080226
-         pTmpRoot->EndAllAction();
-    }   //swmod 080219
+        GetRootFrm()->InvalidateAllCntnt( INV_LINENUM | INV_SIZE );
+        GetRootFrm()->EndAllAction();
+    }
     *pLineNumberInfo = rNew;
     SetModified();
 }
@@ -65,10 +62,10 @@ SwLineNumberInfo::SwLineNumberInfo() :
     nCountBy( 5 ),
     nDividerCountBy( 3 ),
     ePos( LINENUMBER_POS_LEFT ),
-    bPaintLineNumbers( sal_False ),
-    bCountBlankLines( sal_True ),
-    bCountInFlys( sal_False ),
-    bRestartEachPage( sal_False )
+    bPaintLineNumbers( FALSE ),
+    bCountBlankLines( TRUE ),
+    bCountInFlys( FALSE ),
+    bRestartEachPage( FALSE )
 {
 }
 
@@ -93,7 +90,7 @@ SwLineNumberInfo& SwLineNumberInfo::operator=(const SwLineNumberInfo &rCpy)
     if ( rCpy.GetRegisteredIn() )
         ((SwModify*)rCpy.GetRegisteredIn())->Add( this );
     else if ( GetRegisteredIn() )
-        GetRegisteredInNonConst()->Remove( this );
+        pRegisteredIn->Remove( this );
 
     aType = rCpy.GetNumType();
     aDivider = rCpy.GetDivider();
@@ -109,7 +106,7 @@ SwLineNumberInfo& SwLineNumberInfo::operator=(const SwLineNumberInfo &rCpy)
     return *this;
 }
 
-sal_Bool SwLineNumberInfo::operator==( const SwLineNumberInfo& rInf ) const
+BOOL SwLineNumberInfo::operator==( const SwLineNumberInfo& rInf ) const
 {
     return  GetRegisteredIn() == rInf.GetRegisteredIn() &&
             aType.GetNumberingType() == rInf.GetNumType().GetNumberingType() &&
@@ -141,17 +138,15 @@ void SwLineNumberInfo::SetCharFmt( SwCharFmt *pChFmt )
     pChFmt->Add( this );
 }
 
-void SwLineNumberInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwLineNumberInfo::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
-    CheckRegistration( pOld, pNew );
+    SwClient::Modify( pOld, pNew );
     SwDoc *pDoc = ((SwCharFmt*)GetRegisteredIn())->GetDoc();
-    SwRootFrm* pRoot = pDoc->GetCurrentLayout();
-    if( pRoot )
+    SwRootFrm* pRoot = pDoc->GetRootFrm();
+    if( pRoot && pRoot->GetCurrShell() )
     {
         pRoot->StartAllAction();
-        std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllAddPaintRect));//swmod 080305
-        //pRoot->GetCurrShell()->AddPaintRect( pRoot->Frm() );
+        pRoot->GetCurrShell()->AddPaintRect( pRoot->Frm() );
         pRoot->EndAllAction();
     }
 }

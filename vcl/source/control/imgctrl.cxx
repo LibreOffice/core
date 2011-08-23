@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,6 @@
 
 #include <vcl/event.hxx>
 #include <vcl/imgctrl.hxx>
-#include <tools/rcid.h>
 
 #include <com/sun/star/awt/ImageScaleMode.hdl>
 
@@ -39,18 +38,10 @@ namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 
 // -----------------------------------------------------------------------
 
-ImageControl::ImageControl( Window* pParent, WinBits nStyle )
-    :FixedImage( pParent, nStyle )
-    ,mnScaleMode( ImageScaleMode::Anisotropic )
+ImageControl::ImageControl( Window* pParent, WinBits nStyle ) :
+    FixedImage( pParent, nStyle )
 {
-}
-
-// -----------------------------------------------------------------------
-
-ImageControl::ImageControl( Window* pParent, const ResId& rResId )
-    :FixedImage( pParent, rResId )
-    ,mnScaleMode( ImageScaleMode::Anisotropic )
-{
+    mnScaleMode = ImageScaleMode::Anisotropic;
 }
 
 // -----------------------------------------------------------------------
@@ -96,81 +87,154 @@ namespace
 
 // -----------------------------------------------------------------------
 
-void ImageControl::ImplDraw( OutputDevice& rDev, sal_uLong nDrawFlags, const Point& rPos, const Size& rSize ) const
+void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    sal_uInt16 nStyle = 0;
-    if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
+    USHORT nStyle = 0;
+    BitmapEx* pBitmap = &maBmp;
+    if( !!maBmpHC )
     {
-        if ( !IsEnabled() )
-            nStyle |= IMAGE_DRAW_DISABLE;
+        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+            pBitmap = &maBmpHC;
     }
 
-    const Image& rImage( GetModeImage() );
-    const Image* pImage = &rImage;
-    const Rectangle aDrawRect( rPos, rSize );
-    if ( !*pImage )
+    if ( !*pBitmap )
     {
         String  sText( GetText() );
         if ( !sText.Len() )
             return;
 
         WinBits nWinStyle = GetStyle();
-        sal_uInt16 nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
-        if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
-            if ( !IsEnabled() )
-                nTextStyle |= TEXT_DRAW_DISABLE;
+        USHORT nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
+        if ( !IsEnabled() )
+            nTextStyle |= TEXT_DRAW_DISABLE;
 
-        rDev.DrawText( aDrawRect, sText, nTextStyle );
+        DrawText( rUDEvt.GetRect(), sText, nTextStyle );
         return;
     }
 
-    const Size&      rBitmapSize = pImage->GetSizePixel();
+    const Rectangle& rPaintRect = rUDEvt.GetRect();
+    const Size&      rBitmapSize = maBmp.GetSizePixel();
 
-    switch ( mnScaleMode )
+    if( nStyle & IMAGE_DRAW_COLORTRANSFORM )
     {
-    case ImageScaleMode::None:
-    {
-        rDev.DrawImage( lcl_centerWithin( aDrawRect, rBitmapSize ), *pImage, nStyle );
+        // only images support IMAGE_DRAW_COLORTRANSFORM
+        Image aImage( *pBitmap );
+        if ( !!aImage )
+        {
+            switch ( mnScaleMode )
+            {
+            case ImageScaleMode::None:
+            {
+                rUDEvt.GetDevice()->DrawImage(
+                    lcl_centerWithin( rPaintRect, rBitmapSize ), aImage, nStyle );
+            }
+            break;
+
+            case ImageScaleMode::Isotropic:
+            {
+                const Size aPaintSize = lcl_calcPaintSize( rPaintRect, rBitmapSize );
+                rUDEvt.GetDevice()->DrawImage(
+                    lcl_centerWithin( rPaintRect, aPaintSize ),
+                    aPaintSize,
+                    aImage, nStyle );
+            }
+            break;
+
+            case ImageScaleMode::Anisotropic:
+            {
+                rUDEvt.GetDevice()->DrawImage(
+                    rPaintRect.TopLeft(),
+                    rPaintRect.GetSize(),
+                    aImage, nStyle );
+            }
+            break;
+
+            default:
+                OSL_ENSURE( false, "ImageControl::UserDraw: unhandled scale mode!" );
+                break;
+
+            }   // switch ( mnScaleMode )
+        }
     }
-    break;
-
-    case ImageScaleMode::Isotropic:
+    else
     {
-        const Size aPaintSize = lcl_calcPaintSize( aDrawRect, rBitmapSize );
-        rDev.DrawImage(
-            lcl_centerWithin( aDrawRect, aPaintSize ),
-            aPaintSize,
-            *pImage, nStyle );
-    }
-    break;
-
-    case ImageScaleMode::Anisotropic:
-    {
-        rDev.DrawImage(
-            aDrawRect.TopLeft(),
-            aDrawRect.GetSize(),
-            *pImage, nStyle );
-    }
-    break;
-
-    default:
-        OSL_ENSURE( false, "ImageControl::ImplDraw: unhandled scale mode!" );
+        switch ( mnScaleMode )
+        {
+        case ImageScaleMode::None:
+        {
+            pBitmap->Draw( rUDEvt.GetDevice(), lcl_centerWithin( rPaintRect, rBitmapSize ) );
+        }
         break;
 
-    }   // switch ( mnScaleMode )
+        case ImageScaleMode::Isotropic:
+        {
+            const Size aPaintSize = lcl_calcPaintSize( rPaintRect, rBitmapSize );
+            pBitmap->Draw( rUDEvt.GetDevice(),
+                           lcl_centerWithin( rPaintRect, aPaintSize ),
+                           aPaintSize );
+        }
+        break;
+
+        case ImageScaleMode::Anisotropic:
+        {
+            pBitmap->Draw( rUDEvt.GetDevice(),
+                           rPaintRect.TopLeft(),
+                           rPaintRect.GetSize() );
+        }
+        break;
+
+        default:
+            OSL_ENSURE( false, "ImageControl::UserDraw: unhandled scale mode!" );
+            break;
+
+        }   // switch ( mnScaleMode )
+    }
 }
 
 // -----------------------------------------------------------------------
 
-void ImageControl::Paint( const Rectangle& /*rRect*/ )
+void ImageControl::SetBitmap( const BitmapEx& rBmp )
 {
-    ImplDraw( *this, 0, Point(), GetOutputSizePixel() );
+    maBmp = rBmp;
+    StateChanged( STATE_CHANGE_DATA );
+}
 
+// -----------------------------------------------------------------------
+
+BOOL ImageControl::SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode )
+{
+    if( eMode == BMP_COLOR_NORMAL )
+        SetBitmap( rBitmap );
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+    {
+        maBmpHC = rBitmap;
+        StateChanged( STATE_CHANGE_DATA );
+    }
+    else
+        return FALSE;
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+const BitmapEx& ImageControl::GetModeBitmap( BmpColorMode eMode ) const
+{
+    if( eMode == BMP_COLOR_HIGHCONTRAST )
+        return maBmpHC;
+    else
+        return maBmp;
+}
+
+// -----------------------------------------------------------------------
+
+void    ImageControl::Paint( const Rectangle& rRect )
+{
+    FixedImage::Paint( rRect );
     if( HasFocus() )
     {
         Window *pWin = GetWindow( WINDOW_BORDER );
-
-        sal_Bool bFlat = (GetBorderStyle() == 2);
+        
+        BOOL bFlat = (GetBorderStyle() == 2);
         Rectangle aRect( Point(0,0), pWin->GetOutputSizePixel() );
         Color oldLineCol = pWin->GetLineColor();
         Color oldFillCol = pWin->GetFillColor();
@@ -186,27 +250,6 @@ void ImageControl::Paint( const Rectangle& /*rRect*/ )
         pWin->SetLineColor( oldLineCol );
         pWin->SetFillColor( oldFillCol );
     }
-}
-
-// -----------------------------------------------------------------------
-void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
-{
-    const Point     aPos  = pDev->LogicToPixel( rPos );
-    const Size      aSize = pDev->LogicToPixel( rSize );
-          Rectangle aRect( aPos, aSize );
-
-    pDev->Push();
-    pDev->SetMapMode();
-
-    // Border
-    if ( !(nFlags & WINDOW_DRAW_NOBORDER) && (GetStyle() & WB_BORDER) )
-    {
-        ImplDrawFrame( pDev, aRect );
-    }
-    pDev->IntersectClipRegion( aRect );
-    ImplDraw( *pDev, nFlags, aRect.TopLeft(), aRect.GetSize() );
-
-    pDev->Pop();
 }
 
 // -----------------------------------------------------------------------

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,10 +71,16 @@ void CommandDispatchContainer::setModel(
 {
     // remove all existing dispatcher that base on the old model
     m_aCachedDispatches.clear();
-    DisposeHelper::DisposeAllElements( m_aToBeDisposedDispatches );
+    DisposeHelper::DisposeAllElements( m_aToBeDisposedDispatches );    
     m_aToBeDisposedDispatches.clear();
     m_xModel = xModel;
 }
+
+// void CommandDispatchContainer::setUndoManager(
+//     const Reference< chart2::XUndoManager > & xUndoManager )
+// {
+//     m_xUndoManager = xUndoManager;
+// }
 
 void CommandDispatchContainer::setChartDispatch(
     const Reference< frame::XDispatch > xChartDispatch,
@@ -169,7 +175,7 @@ Sequence< Reference< frame::XDispatch > > CommandDispatchContainer::getDispatche
 void CommandDispatchContainer::DisposeAndClear()
 {
     m_aCachedDispatches.clear();
-    DisposeHelper::DisposeAllElements( m_aToBeDisposedDispatches );
+    DisposeHelper::DisposeAllElements( m_aToBeDisposedDispatches );    
     m_aToBeDisposedDispatches.clear();
     m_xChartDispatcher.clear();
     m_aChartCommands.clear();

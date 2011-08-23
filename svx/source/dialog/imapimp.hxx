@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,19 +38,19 @@ class IMapOwnData
 {
 private:
 
-    SvxIMapDlg*     pIMap;
+    SvxIMapDlg*		pIMap;
 
 public:
 
-    Timer           aTimer;
-    Timer           aTbxTimer;
-    Graphic         aUpdateGraphic;
-    ImageMap        aUpdateImageMap;
-    TargetList      aUpdateTargetList;
-    void*           pUpdateEditingObject;
-    sal_Bool            bExecState;
+    Timer			aTimer;
+    Timer			aTbxTimer;
+    Graphic			aUpdateGraphic;
+    ImageMap		aUpdateImageMap;
+    TargetList		aUpdateTargetList;
+    void*			pUpdateEditingObject;
+    BOOL			bExecState;
 
-                    IMapOwnData( SvxIMapDlg* pIMapDlg ) : pIMap ( pIMapDlg ), pUpdateEditingObject( NULL )  {}
+                    IMapOwnData( SvxIMapDlg* pIMapDlg ) : pIMap	( pIMapDlg ) {}
 };
 
 

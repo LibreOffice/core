@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svx/svxerr.hxx"
+#include "svxerr.hxx"
 #include "fmpgeimp.hxx"
 #include "fmundo.hxx"
 #include "svx/fmtools.hxx"
@@ -37,8 +37,8 @@
 #include "fmservs.hxx"
 #include "fmobj.hxx"
 #include "formcontrolfactory.hxx"
-#include "svx/svditer.hxx"
-#include "svx/fmresids.hrc"
+#include "svditer.hxx"
+#include "fmresids.hrc"
 #include "svx/dbtoolsclient.hxx"
 #include "treevisitor.hxx"
 
@@ -211,7 +211,7 @@ FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage, const FmFormPageImpl& rImpl 
 
             if ( bForeignIsForm != bOwnIsForm )
             {
-                OSL_FAIL( "FmFormPageImpl::FmFormPageImpl: inconsistent ordering of objects!" );
+                OSL_ENSURE( false, "FmFormPageImpl::FmFormPageImpl: inconsistent ordering of objects!" );
                 // don't attempt to do further assignments, something's completely messed up
                 break;
             }
@@ -335,7 +335,7 @@ const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate 
     {
         m_bAttemptedFormCreation = true;
 
-        const ::rtl::OUString sFormsCollectionServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.Forms") );
+        const ::rtl::OUString sFormsCollectionServiceName = ::rtl::OUString::createFromAscii("com.sun.star.form.Forms");
         m_xForms = Reference< XNameContainer > (
             ::comphelper::getProcessServiceFactory()->createInstance( sFormsCollectionServiceName ),
             UNO_QUERY
@@ -585,15 +585,15 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
         const ::rtl::OUString& _rCursorSource, sal_Int32 nCommandType)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::findFormForDataSource" );
-    Reference< XForm >          xResultForm;
-    Reference< XRowSet >        xDBForm(rForm, UNO_QUERY);
-    Reference< XPropertySet >   xFormProps(rForm, UNO_QUERY);
+    Reference< XForm >			xResultForm;
+    Reference< XRowSet >		xDBForm(rForm, UNO_QUERY);
+    Reference< XPropertySet >	xFormProps(rForm, UNO_QUERY);
     if (!xDBForm.is() || !xFormProps.is())
         return xResultForm;
 
     OSL_ENSURE(_rxDatabase.is(), "FmFormPageImpl::findFormForDataSource: invalid data source!");
-    ::rtl::OUString sLookupName;            // the name of the data source we're looking for
-    ::rtl::OUString sFormDataSourceName;    // the name of the data source the current connection in the form is based on
+    ::rtl::OUString sLookupName;			// the name of the data source we're looking for
+    ::rtl::OUString sFormDataSourceName;	// the name of the data source the current connection in the form is based on
     try
     {
         Reference< XPropertySet > xDSProps(_rxDatabase, UNO_QUERY);
@@ -628,7 +628,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
     catch(const Exception& e)
     {
         (void)e;
-        OSL_FAIL("FmFormPageImpl::findFormForDataSource: caught an exception!");
+        OSL_ENSURE(sal_False, "FmFormPageImpl::findFormForDataSource: caught an exception!");
     }
 
     if (sLookupName == sFormDataSourceName)

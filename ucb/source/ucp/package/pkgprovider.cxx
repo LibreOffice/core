@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
  *************************************************************************/
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <osl/diagnose.h>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/contentidentifier.hxx>
@@ -117,7 +117,7 @@ struct hashString
     }
 };
 
-typedef boost::unordered_map
+typedef std::hash_map
 <
     rtl::OUString,
     Package*,
@@ -183,10 +183,10 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.comp.ucb.PackageContentProvider" )),
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        PACKAGE_CONTENT_PROVIDER_SERVICE_NAME )) );
+                     rtl::OUString::createFromAscii(
+                        "com.sun.star.comp.ucb.PackageContentProvider" ),
+                     rtl::OUString::createFromAscii(
+                        PACKAGE_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -251,7 +251,8 @@ ContentProvider::createPackage( const rtl::OUString & rName, const rtl::OUString
 
     if ( !rName.getLength() )
     {
-        OSL_FAIL( "ContentProvider::createPackage - Invalid URL!" );
+        OSL_ENSURE( sal_False,
+                    "ContentProvider::createPackage - Invalid URL!" );
         return uno::Reference< container::XHierarchicalNameAccess >();
     }
 
@@ -277,8 +278,8 @@ ContentProvider::createPackage( const rtl::OUString & rName, const rtl::OUString
 
         uno::Reference< uno::XInterface > xIfc
             = m_xSMgr->createInstanceWithArguments(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.packages.comp.ZipPackage" )),
+                rtl::OUString::createFromAscii(
+                                "com.sun.star.packages.comp.ZipPackage" ),
                 aArguments );
 
         if ( xIfc.is() )

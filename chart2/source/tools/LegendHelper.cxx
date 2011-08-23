@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_chart2.hxx"
 #include "LegendHelper.hxx"
 #include "macros.hxx"
-#include <com/sun/star/chart/ChartLegendExpansion.hpp>
+#include <com/sun/star/chart2/LegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -47,6 +47,7 @@ namespace chart
 //.............................................................................
 
 
+//static
 Reference< chart2::XLegend > LegendHelper::showLegend( const Reference< frame::XModel >& xModel
                                                     , const uno::Reference< uno::XComponentContext >& xContext )
 {
@@ -63,21 +64,22 @@ Reference< chart2::XLegend > LegendHelper::showLegend( const Reference< frame::X
             if( !(xProp->getPropertyValue( C2U( "AnchorPosition" )) >>= ePos ) )
                 xProp->setPropertyValue( C2U( "AnchorPosition" ), uno::makeAny( ePos ));
 
-            ::com::sun::star::chart::ChartLegendExpansion eExpansion =
+            chart2::LegendExpansion eExpansion =
                     ( ePos == chart2::LegendPosition_LINE_END ||
                       ePos == chart2::LegendPosition_LINE_START )
-                    ? ::com::sun::star::chart::ChartLegendExpansion_HIGH
-                    : ::com::sun::star::chart::ChartLegendExpansion_WIDE;
+                    ? chart2::LegendExpansion_HIGH
+                    : chart2::LegendExpansion_WIDE;
             if( !(xProp->getPropertyValue( C2U( "Expansion" )) >>= eExpansion ) )
                 xProp->setPropertyValue( C2U( "Expansion" ), uno::makeAny( eExpansion ));
 
             xProp->setPropertyValue( C2U( "RelativePosition" ), uno::Any());
         }
-
+        
     }
     return xLegend;
 }
 
+//static
 void LegendHelper::hideLegend( const Reference< frame::XModel >& xModel )
 {
     uno::Reference< chart2::XLegend > xLegend = LegendHelper::getLegend( xModel, 0, false );
@@ -88,6 +90,7 @@ void LegendHelper::hideLegend( const Reference< frame::XModel >& xModel )
     }
 }
 
+// static
 uno::Reference< chart2::XLegend > LegendHelper::getLegend(
       const uno::Reference< frame::XModel >& xModel
     , const uno::Reference< uno::XComponentContext >& xContext
@@ -113,7 +116,7 @@ uno::Reference< chart2::XLegend > LegendHelper::getLegend(
             }
             else if(bCreate)
             {
-                OSL_FAIL("need diagram for creation of legend");
+                DBG_ERROR("need diagram for creation of legend");
             }
         }
         catch( uno::Exception & ex )
@@ -125,6 +128,7 @@ uno::Reference< chart2::XLegend > LegendHelper::getLegend(
     return xResult;
 }
 
+// static
 bool LegendHelper::hasLegend( const uno::Reference< chart2::XDiagram > & xDiagram )
 {
     bool bReturn = false;

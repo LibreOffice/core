@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,8 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/svdopage.hxx>
-#include "svx/svdglob.hxx"  // Stringcache
-#include "svx/svdstr.hrc"   // Objektname
+#include "svdglob.hxx"  // Stringcache
+#include "svdstr.hrc"   // Objektname
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>
@@ -82,7 +82,7 @@ void SdrPageObj::PageInDestruction(const SdrPage& rPage)
 TYPEINIT1(SdrPageObj,SdrObject);
 
 SdrPageObj::SdrPageObj(SdrPage* pNewPage)
-:   mpShownPage(pNewPage)
+:	mpShownPage(pNewPage)
 {
     if(mpShownPage)
     {
@@ -91,7 +91,7 @@ SdrPageObj::SdrPageObj(SdrPage* pNewPage)
 }
 
 SdrPageObj::SdrPageObj(const Rectangle& rRect, SdrPage* pNewPage)
-:   mpShownPage(pNewPage)
+:	mpShownPage(pNewPage)
 {
     if(mpShownPage)
     {
@@ -133,8 +133,8 @@ void SdrPageObj::SetReferencedPage(SdrPage* pNewPage)
             mpShownPage->AddPageUser(*this);
         }
 
-        SetChanged();
-        BroadcastObjectChange();
+        SetChanged(); 
+        BroadcastObjectChange(); 
     }
 }
 
@@ -145,41 +145,33 @@ void SdrPageObj::SetBoundRectDirty()
     // not re-creatable view data
 }
 
-sal_uInt16 SdrPageObj::GetObjIdentifier() const
+UINT16 SdrPageObj::GetObjIdentifier() const
 {
-    return sal_uInt16(OBJ_PAGE);
+    return UINT16(OBJ_PAGE);
 }
 
 void SdrPageObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bRotateFreeAllowed=sal_False;
-    rInfo.bRotate90Allowed  =sal_False;
-    rInfo.bMirrorFreeAllowed=sal_False;
-    rInfo.bMirror45Allowed  =sal_False;
-    rInfo.bMirror90Allowed  =sal_False;
-    rInfo.bTransparenceAllowed = sal_False;
-    rInfo.bGradientAllowed = sal_False;
-    rInfo.bShearAllowed     =sal_False;
-    rInfo.bEdgeRadiusAllowed=sal_False;
-    rInfo.bNoOrthoDesired   =sal_False;
-    rInfo.bCanConvToPath    =sal_False;
-    rInfo.bCanConvToPoly    =sal_False;
-    rInfo.bCanConvToPathLineToArea=sal_False;
-    rInfo.bCanConvToPolyLineToArea=sal_False;
+    rInfo.bRotateFreeAllowed=FALSE;
+    rInfo.bRotate90Allowed  =FALSE;
+    rInfo.bMirrorFreeAllowed=FALSE;
+    rInfo.bMirror45Allowed  =FALSE;
+    rInfo.bMirror90Allowed  =FALSE;
+    rInfo.bTransparenceAllowed = FALSE;
+    rInfo.bGradientAllowed = FALSE;
+    rInfo.bShearAllowed     =FALSE;
+    rInfo.bEdgeRadiusAllowed=FALSE;
+    rInfo.bNoOrthoDesired   =FALSE;
+    rInfo.bCanConvToPath    =FALSE;
+    rInfo.bCanConvToPoly    =FALSE;
+    rInfo.bCanConvToPathLineToArea=FALSE;
+    rInfo.bCanConvToPolyLineToArea=FALSE;
 }
 
-SdrPageObj* SdrPageObj::Clone() const
+void SdrPageObj::operator=(const SdrObject& rObj)
 {
-    return CloneHelper< SdrPageObj >();
-}
-
-SdrPageObj& SdrPageObj::operator=(const SdrPageObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
     SdrObject::operator=(rObj);
-    SetReferencedPage( rObj.GetReferencedPage());
-    return *this;
+    SetReferencedPage(((const SdrPageObj&)rObj).GetReferencedPage());
 }
 
 void SdrPageObj::TakeObjNameSingul(XubString& rName) const

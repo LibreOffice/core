@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #ifndef INCLUDED_DOCTOK_LOGGERS_HXX
 #define INCLUDED_DOCTOK_LOGGERS_HXX
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG
 
 #include <resourcemodel/TagLogger.hxx>
 

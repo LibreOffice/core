@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,9 +55,9 @@
 using namespace ::com::sun::star;
 
 extern ::rtl::OUString  getStorageTypeFromGUID_Impl( GUID* guid );
-extern ::rtl::OUString  getServiceNameFromGUID_Impl( GUID* );
-extern ::rtl::OUString  getFilterNameFromGUID_Impl( GUID* );
-// extern CLIPFORMAT        getClipFormatFromGUID_Impl( GUID* );
+extern ::rtl::OUString	getServiceNameFromGUID_Impl( GUID* );
+extern ::rtl::OUString	getFilterNameFromGUID_Impl( GUID* );
+// extern CLIPFORMAT		getClipFormatFromGUID_Impl( GUID* );
 ::rtl::OUString getTestFileURLFromGUID_Impl( GUID* guid );
 
 const ::rtl::OUString aOfficeEmbedStreamName( RTL_CONSTASCII_USTRINGPARAM ( "package_stream" ) );
@@ -440,12 +440,12 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
                     ::rtl::OUString aCurType = getStorageTypeFromGUID_Impl( &m_guid ); // ???
                     CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
                     hr = WriteFmtUserTypeStg( pStg,
-                                            cf,                         // ???
+                                            cf,							// ???
                                             reinterpret_cast<LPWSTR>(( sal_Unicode* )aCurType.getStr()) );
 
                     if ( hr == S_OK )
                     {
-                        hr = pStg->CreateStream( reinterpret_cast<LPCWSTR>(aOfficeEmbedStreamName.getStr()),
+                        hr = pStg->CreateStream( reinterpret_cast<LPCWSTR>(aOfficeEmbedStreamName.getStr()), 
                                                  STGM_CREATE | ( nStreamMode & 0x73 ),
                                                  0,
                                                  0,
@@ -453,7 +453,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
 
                         if ( hr == S_OK && m_pOwnStream )
                         {
-                            hr = pStg->CreateStream( reinterpret_cast<LPCWSTR>(aExtentStreamName.getStr()),
+                            hr = pStg->CreateStream( reinterpret_cast<LPCWSTR>(aExtentStreamName.getStr()), 
                                                      STGM_CREATE | ( nStreamMode & 0x73 ),
                                                      0,
                                                      0,
@@ -611,14 +611,14 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
         if ( FAILED( hr ) ) return E_FAIL;
 
         DWORD nStreamMode = aStat.grfMode;
-        hr = pStgSave->CreateStream( reinterpret_cast<LPCWSTR>(aOfficeEmbedStreamName.getStr()),
+        hr = pStgSave->CreateStream( reinterpret_cast<LPCWSTR>(aOfficeEmbedStreamName.getStr()), 
                                  STGM_CREATE | ( nStreamMode & 0x73 ),
                                 0,
                                  0,
                                  &pTargetStream );
         if ( FAILED( hr ) || !pTargetStream ) return E_FAIL;
 
-        hr = pStgSave->CreateStream( reinterpret_cast<LPCWSTR>(aExtentStreamName.getStr()),
+        hr = pStgSave->CreateStream( reinterpret_cast<LPCWSTR>(aExtentStreamName.getStr()), 
                                  STGM_CREATE | ( nStreamMode & 0x73 ),
                                 0,
                                  0,
@@ -777,7 +777,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
     ::rtl::OUString aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
     CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
     hr = WriteFmtUserTypeStg( m_pMasterStorage,
-                            cf,                         // ???
+                            cf,							// ???
                             reinterpret_cast<LPWSTR>(( sal_Unicode* )aCurType.getStr()) );
     if ( FAILED( hr ) ) return E_FAIL;
 
@@ -828,7 +828,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
             ::rtl::OUString aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
             CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
             hr = WriteFmtUserTypeStg( m_pMasterStorage,
-                                    cf,                         // ???
+                                    cf,							// ???
                                     reinterpret_cast<LPWSTR>(( sal_Unicode* )aCurType.getStr()) );
 
             if ( SUCCEEDED( hr ) )
@@ -1010,7 +1010,7 @@ void LockedEmbedDocument_Impl::ExecuteMethod( sal_Int16 nId )
     }
 }
 
-// Fix strange warnings about some
+// Fix strange warnings about some 
 // ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
 // warning C4505: 'xxx' : unreferenced local function has been removed
 #if defined(_MSC_VER)

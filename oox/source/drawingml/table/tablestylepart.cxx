@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,6 +28,8 @@
 
 #include "oox/drawingml/table/tablestylepart.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
+#include "oox/core/namespaces.hxx"
+#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::oox::core;

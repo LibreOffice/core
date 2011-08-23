@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,21 +58,21 @@ namespace sd {
 \************************************************************************/
 
 BreakDlg::BreakDlg(
-    ::Window* pWindow,
-    DrawView* _pDrView,
+    ::Window* pWindow, 
+    DrawView* _pDrView, 
     DrawDocShell* pShell,
-    sal_uLong nSumActionCount,
-    sal_uLong nObjCount )
+    ULONG nSumActionCount, 
+    ULONG nObjCount ) 
     : SfxModalDialog     ( pWindow, SdResId( DLG_BREAK ) ),
-      aFtObjInfo            ( this, SdResId( FT_OBJ_INFO ) ),
-      aFtActInfo            ( this, SdResId( FT_ACT_INFO ) ),
-      aFtInsInfo            ( this, SdResId( FT_INS_INFO ) ),
-      aFiObjInfo            ( this, SdResId( FI_OBJ_INFO ) ),
-      aFiActInfo            ( this, SdResId( FI_ACT_INFO ) ),
-      aFiInsInfo            ( this, SdResId( FI_INS_INFO ) ),
-      aBtnCancel            ( this, SdResId( BTN_CANCEL ) ),
-      aLink             ( LINK( this, BreakDlg, UpDate)),
-      mpProgress            ( NULL )
+      aFtObjInfo			( this, SdResId( FT_OBJ_INFO ) ),
+      aFtActInfo			( this, SdResId( FT_ACT_INFO ) ),
+      aFtInsInfo			( this, SdResId( FT_INS_INFO ) ),
+      aFiObjInfo			( this, SdResId( FI_OBJ_INFO ) ),
+      aFiActInfo			( this, SdResId( FI_ACT_INFO ) ),
+      aFiInsInfo			( this, SdResId( FI_INS_INFO ) ),
+      aBtnCancel			( this, SdResId( BTN_CANCEL ) ),
+      aLink				( LINK( this, BreakDlg, UpDate)),
+      mpProgress			( NULL )
 {
     aBtnCancel.SetClickHdl( LINK( this, BreakDlg, CancelButtonHdl));
 
@@ -83,7 +83,7 @@ BreakDlg::BreakDlg(
     pProgrInfo->Init( nSumActionCount*3, nObjCount );
 
     pDrView = _pDrView;
-    bCancel = sal_False;
+    bCancel = FALSE;
 
     FreeResource();
 }
@@ -100,7 +100,7 @@ BreakDlg::~BreakDlg()
 // Control-Handler fuer den Abbruch Button
 IMPL_LINK( BreakDlg, CancelButtonHdl, void *, EMPTYARG )
 {
-  bCancel = sal_True;
+  bCancel = TRUE;
   aBtnCancel.Disable();
   return( 0L );
 }
@@ -181,7 +181,7 @@ short BreakDlg::Execute()
 IMPL_LINK( BreakDlg, InitialUpdate, Timer*, EMPTYARG )
 {
     pDrView->DoImportMarkedMtf(pProgrInfo);
-    EndDialog(sal_True);
+    EndDialog(TRUE);
     return 0L;
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define pivotcol_curs_height 32
 #define pivotcol_curs_x_hot 7
 #define pivotcol_curs_y_hot 5
-static unsigned char pivotcol_curs_bits[] = {
+static char pivotcol_curs_bits[] = {
    0xff, 0x01, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x55, 0x01, 0x00, 0x00,
    0x29, 0x01, 0x00, 0x00, 0x15, 0x01, 0x00, 0x00, 0xa9, 0x00, 0x00, 0x00,
    0x95, 0x01, 0x00, 0x00, 0xa9, 0x02, 0x00, 0x00, 0x95, 0x04, 0x00, 0x00,

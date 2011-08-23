@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,6 +36,7 @@
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
@@ -71,7 +72,7 @@ SwVbaDocument::SwVbaDocument( const uno::Reference< XHelperInterface >& xParent,
 SwVbaDocument::SwVbaDocument( uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext ) : SwVbaDocument_BASE( aArgs, xContext )
 {
     Initialize();
-}
+} 
 
 SwVbaDocument::~SwVbaDocument()
 {
@@ -79,10 +80,10 @@ SwVbaDocument::~SwVbaDocument()
 
 void SwVbaDocument::Initialize()
 {
-    mxTextDocument.set( getModel(), uno::UNO_QUERY_THROW );
+    mxTextDocument.set( getModel(), uno::UNO_QUERY_THROW );    
 }
 
-uno::Reference< word::XRange > SAL_CALL
+uno::Reference< word::XRange > SAL_CALL 
 SwVbaDocument::getContent() throw ( uno::RuntimeException )
 {
     uno::Reference< text::XTextRange > xStart = mxTextDocument->getText()->getStart();
@@ -90,12 +91,12 @@ SwVbaDocument::getContent() throw ( uno::RuntimeException )
     return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, xStart, xEnd, sal_True ) );
 }
 
-uno::Reference< word::XRange > SAL_CALL
+uno::Reference< word::XRange > SAL_CALL 
 SwVbaDocument::Range( const uno::Any& rStart, const uno::Any& rEnd ) throw ( uno::RuntimeException )
 {
     if( !rStart.hasValue() && !rEnd.hasValue() )
         return getContent();
-
+    
     sal_Int32 nStart = 0;
     sal_Int32 nEnd = 0;
     rStart >>= nStart;
@@ -129,7 +130,7 @@ SwVbaDocument::Range( const uno::Any& rStart, const uno::Any& rEnd ) throw ( uno
         catch( uno::Exception )
         {
             DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
-        }
+        }    
     }
     return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, xStart, xEnd ) );
 }
@@ -152,7 +153,7 @@ SwVbaDocument::CustomDocumentProperties( const uno::Any& index ) throw (uno::Run
     return uno::makeAny( xCol );
 }
 
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 SwVbaDocument::Bookmarks( const uno::Any& rIndex ) throw ( uno::RuntimeException )
 {
     uno::Reference< text::XBookmarksSupplier > xBookmarksSupplier( getModel(),uno::UNO_QUERY_THROW );
@@ -160,11 +161,11 @@ SwVbaDocument::Bookmarks( const uno::Any& rIndex ) throw ( uno::RuntimeException
     uno::Reference< XCollection > xBookmarksVba( new SwVbaBookmarks( this, mxContext, xBookmarks, getModel() ) );
     if (  rIndex.getValueTypeClass() == uno::TypeClass_VOID )
         return uno::makeAny( xBookmarksVba );
-
+    
     return uno::Any( xBookmarksVba->Item( rIndex, uno::Any() ) );
 }
 
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 SwVbaDocument::Variables( const uno::Any& rIndex ) throw ( uno::RuntimeException )
 {
     uno::Reference< document::XDocumentPropertiesSupplier > xDocumentPropertiesSupplier( getModel(),uno::UNO_QUERY_THROW );
@@ -174,7 +175,7 @@ SwVbaDocument::Variables( const uno::Any& rIndex ) throw ( uno::RuntimeException
     uno::Reference< XCollection > xVariables( new SwVbaVariables( this, mxContext, xUserDefined ) );
     if (  rIndex.getValueTypeClass() == uno::TypeClass_VOID )
         return uno::makeAny( xVariables );
-
+    
     return uno::Any( xVariables->Item( rIndex, uno::Any() ) );
 }
 
@@ -209,6 +210,7 @@ uno::Any SAL_CALL
 SwVbaDocument::Shapes( const uno::Any& index ) throw (uno::RuntimeException)
 {
     uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( getModel(), uno::UNO_QUERY_THROW );
+    //uno::Reference< drawing::XShapes > xShapes( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
     uno::Reference< container::XIndexAccess > xIndexAccess( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
     uno::Reference< frame::XModel > xModel( mxTextDocument, uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xCol( new ScVbaShapes( this, mxContext, xIndexAccess, xModel ) );
@@ -236,10 +238,19 @@ SwVbaDocument::TablesOfContents( const uno::Any& index ) throw (uno::RuntimeExce
     return uno::makeAny( xCol );
 }
 
+#ifdef FIELDPATCH
+uno::Any SAL_CALL
+SwVbaDocument::FormFields( const uno::Any& index ) throw (uno::RuntimeException)
+{
+    uno::Reference< XCollection > xCol( new SwVbaFormFields( this, mxContext, getModel() ) );
+    if ( index.hasValue() )
+        return xCol->Item( index, uno::Any() );
+#else
 uno::Any SAL_CALL
 SwVbaDocument::FormFields( const uno::Any& /*index*/ ) throw (uno::RuntimeException)
 {
     uno::Reference< XCollection > xCol;
+#endif
     return uno::makeAny( xCol );
 }
 
@@ -250,13 +261,13 @@ SwVbaDocument::PageSetup( ) throw (uno::RuntimeException)
     return uno::makeAny( uno::Reference< word::XPageSetup >( new SwVbaPageSetup( this, mxContext, mxModel, xPageProps ) ) );
 }
 
-rtl::OUString&
+rtl::OUString& 
 SwVbaDocument::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaDocument") );
     return sImplName;
 }
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 SwVbaDocument::getAttachedTemplate() throw (uno::RuntimeException)
 {
     uno::Reference< word::XTemplate > xTemplate;
@@ -269,7 +280,7 @@ SwVbaDocument::getAttachedTemplate() throw (uno::RuntimeException)
     return uno::makeAny( xTemplate );
 }
 
-void SAL_CALL
+void SAL_CALL 
 SwVbaDocument::setAttachedTemplate( const css::uno::Any& _attachedtemplate ) throw (uno::RuntimeException)
 {
     rtl::OUString sTemplate;
@@ -293,12 +304,12 @@ SwVbaDocument::setAttachedTemplate( const css::uno::Any& _attachedtemplate ) thr
     xDocProps->setTemplateURL( aURL );
 }
 
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 SwVbaDocument::Tables( const css::uno::Any& aIndex ) throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel( mxTextDocument, uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xColl( new SwVbaTables( mxParent, mxContext, xModel ) );
-
+    
     if ( aIndex.hasValue() )
         return xColl->Item( aIndex, uno::Any() );
     return uno::makeAny( xColl );
@@ -443,44 +454,44 @@ SwVbaDocument::getControlShape( const ::rtl::OUString& sName )
     return uno::Any();
 }
 
-uno::Reference< beans::XIntrospectionAccess > SAL_CALL
+uno::Reference< beans::XIntrospectionAccess > SAL_CALL 
 SwVbaDocument::getIntrospection(  ) throw (uno::RuntimeException)
 {
     return uno::Reference< beans::XIntrospectionAccess >();
 }
 
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 SwVbaDocument::invoke( const ::rtl::OUString& aFunctionName, const uno::Sequence< uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< uno::Any >& /*aOutParam*/ ) throw (lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
 {
     OSL_TRACE("** SwVbaDocument::invoke( %s ), will barf",
         rtl::OUStringToOString( aFunctionName, RTL_TEXTENCODING_UTF8 ).getStr() );
-
+    
     throw uno::RuntimeException(); // unsupported operation
 }
 
-void SAL_CALL
+void SAL_CALL 
 SwVbaDocument::setValue( const ::rtl::OUString& /*aPropertyName*/, const uno::Any& /*aValue*/ ) throw (beans::UnknownPropertyException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
 {
     throw uno::RuntimeException(); // unsupported operation
 }
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 SwVbaDocument::getValue( const ::rtl::OUString& aPropertyName ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     uno::Reference< drawing::XControlShape > xControlShape( getControlShape( aPropertyName ), uno::UNO_QUERY_THROW );
-
+    
     uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
     uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.ControlProvider" ) ), mxContext ), uno::UNO_QUERY_THROW );
     uno::Reference< msforms::XControl > xControl( xControlProvider->createControl(  xControlShape, getModel() ) );
     return uno::makeAny( xControl );
 }
 
-::sal_Bool SAL_CALL
+::sal_Bool SAL_CALL 
 SwVbaDocument::hasMethod( const ::rtl::OUString& /*aName*/ ) throw (uno::RuntimeException)
 {
     return sal_False;
 }
 
-::sal_Bool SAL_CALL
+::sal_Bool SAL_CALL 
 SwVbaDocument::hasProperty( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
 {
     uno::Reference< container::XNameAccess > xFormControls( getFormControls() );
@@ -489,7 +500,7 @@ SwVbaDocument::hasProperty( const ::rtl::OUString& aName ) throw (uno::RuntimeEx
     return sal_False;
 }
 
-uno::Reference< container::XNameAccess >
+uno::Reference< container::XNameAccess > 
 SwVbaDocument::getFormControls()
 {
     uno::Reference< container::XNameAccess > xFormControls;
@@ -498,7 +509,7 @@ SwVbaDocument::getFormControls()
         uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( mxTextDocument, uno::UNO_QUERY_THROW );
         uno::Reference< form::XFormsSupplier >  xFormSupplier( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
             uno::Reference< container::XIndexAccess > xIndexAccess( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
-        // get the www-standard container ( maybe we should access the
+        // get the www-standard container ( maybe we should access the 
         // 'www-standard' by name rather than index, this seems an
         // implementation detail
         xFormControls.set( xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW );
@@ -509,7 +520,7 @@ SwVbaDocument::getFormControls()
     return xFormControls;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 SwVbaDocument::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,8 +71,6 @@ using ::com::sun::star::awt::DeviceInfo;
 using ::com::sun::star::frame::XFrame;
 using ::com::sun::star::frame::XFramesSupplier;
 using ::com::sun::star::lang::XMultiServiceFactory;
-
-using namespace ::com::sun::star;
 
 // Global data ================================================================
 
@@ -161,7 +159,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     }
     catch( Exception& )
     {
-        OSL_FAIL( "XclRootData::XclRootData - cannot get output device info" );
+        OSL_ENSURE( false, "XclRootData::XclRootData - cannot get output device info" );
     }
 }
 
@@ -180,9 +178,8 @@ XclRoot::XclRoot( XclRootData& rRootData ) :
 
     // filter tracer
     // do not use CREATE_OUSTRING for conditional expression
-    mrData.mxTracer.reset( new XclTracer( GetDocUrl(), IsExport() ?
-                                                OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Tracing/Export/Excel"))
-                                              : OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Tracing/Import/Excel" )) ) );
+    mrData.mxTracer.reset( new XclTracer( GetDocUrl(), OUString::createFromAscii(
+        IsExport() ? "Office.Tracing/Export/Excel" : "Office.Tracing/Import/Excel" ) ) );
 }
 
 XclRoot::XclRoot( const XclRoot& rRoot ) :
@@ -254,11 +251,12 @@ double XclRoot::GetPixelYFromHmm( sal_Int32 nY ) const
     return static_cast< double >( (nY - 0.5) / mrData.mfScreenPixelY );
 }
 
-uno::Sequence< beans::NamedValue > XclRoot::RequestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const
+
+String XclRoot::RequestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const
 {
     ::std::vector< OUString > aDefaultPasswords;
     aDefaultPasswords.push_back( mrData.maDefPassword );
-    return ScfApiHelper::QueryEncryptionDataForMedium( mrData.mrMedium, rVerifier, &aDefaultPasswords );
+    return ScfApiHelper::QueryPasswordForMedium( mrData.mrMedium, rVerifier, &aDefaultPasswords );
 }
 
 bool XclRoot::HasVbaStorage() const
@@ -338,12 +336,6 @@ DateTime XclRoot::GetNullDate() const
     return *GetFormatter().GetNullDate();
 }
 
-sal_uInt16 XclRoot::GetBaseYear() const
-{
-    // return 1904 for 1904-01-01, and 1900 for 1899-12-30
-    return (GetNullDate().GetYear() == 1904) ? 1904 : 1900;
-}
-
 double XclRoot::GetDoubleFromDateTime( const DateTime& rDateTime ) const
 {
     double fValue = rDateTime - GetNullDate();
@@ -370,8 +362,8 @@ ScEditEngineDefaulter& XclRoot::GetEditEngine() const
         ScEditEngineDefaulter& rEE = *mrData.mxEditEngine;
         rEE.SetRefMapMode( MAP_100TH_MM );
         rEE.SetEditTextObjectPool( GetDoc().GetEditPool() );
-        rEE.SetUpdateMode( false );
-        rEE.EnableUndo( false );
+        rEE.SetUpdateMode( FALSE );
+        rEE.EnableUndo( FALSE );
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
     }
     return *mrData.mxEditEngine;
@@ -381,11 +373,11 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
 {
     if( !mrData.mxHFEditEngine.get() )
     {
-        mrData.mxHFEditEngine.reset( new ScHeaderEditEngine( EditEngine::CreatePool(), sal_True ) );
+        mrData.mxHFEditEngine.reset( new ScHeaderEditEngine( EditEngine::CreatePool(), TRUE ) );
         ScHeaderEditEngine& rEE = *mrData.mxHFEditEngine;
         rEE.SetRefMapMode( MAP_TWIP );  // headers/footers use twips as default metric
-        rEE.SetUpdateMode( false );
-        rEE.EnableUndo( false );
+        rEE.SetUpdateMode( FALSE );
+        rEE.EnableUndo( FALSE );
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
 
         // set Calc header/footer defaults
@@ -408,8 +400,8 @@ EditEngine& XclRoot::GetDrawEditEngine() const
         mrData.mxDrawEditEng.reset( new EditEngine( &GetDoc().GetDrawLayer()->GetItemPool() ) );
         EditEngine& rEE = *mrData.mxDrawEditEng;
         rEE.SetRefMapMode( MAP_100TH_MM );
-        rEE.SetUpdateMode( false );
-        rEE.EnableUndo( false );
+        rEE.SetUpdateMode( FALSE );
+        rEE.EnableUndo( FALSE );
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
     }
     return *mrData.mxDrawEditEng;

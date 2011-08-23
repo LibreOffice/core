@@ -13,14 +13,14 @@
 
 // Used to keep track of the dll
 
-class CXMergeSyncModule
+class CXMergeSyncModule  
 {
 protected:
     long  m_lLocks;
     long  m_lObjs;
 
 public:
-    long GetLockCount() const;
+    long GetLockCount();
     long LockServer(BOOL fLock);
     HINSTANCE m_hInst;
     CXMergeSyncModule();

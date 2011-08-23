@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,7 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::mozilla;
-
-using ::rtl::OUString;
+using namespace rtl;
 
 // Interfaces Needed
 
@@ -277,7 +276,7 @@ nsProfile::SetCurrentProfile(const PRUnichar * aCurrentProfile)
     }
 
 //
-//  // Do the profile switch
+//	// Do the profile switch
     gDirServiceProvider->SetProfileDir(profileDir);
     mCurrentProfileName.Assign(aCurrentProfile);
 //    gProfileDataAccess->SetCurrentProfile(aCurrentProfile);
@@ -327,7 +326,7 @@ NS_IMETHODIMP nsProfile::ShutDownCurrentProfile(PRUint32 shutDownType)
     // if shutDownType is not a well know value, skip the notifications
     // see DoOnShutdown() in nsAppRunner.cpp for where we use this behaviour to our benefit
     if (shutDownType == (PRUint32)SHUTDOWN_PERSIST || shutDownType == (PRUint32)SHUTDOWN_CLEANSE ) {
-      nsCOMPtr<nsIObserverService> observerService =
+      nsCOMPtr<nsIObserverService> observerService = 
         do_GetService("@mozilla.org/observer-service;1", &rv);
       NS_ENSURE_TRUE(observerService, NS_ERROR_FAILURE);
 
@@ -336,7 +335,7 @@ NS_IMETHODIMP nsProfile::ShutDownCurrentProfile(PRUint32 shutDownType)
       NS_NAMED_LITERAL_STRING(cleanseString, "shutdown-cleanse");
       NS_NAMED_LITERAL_STRING(persistString, "shutdown-persist");
       const nsAFlatString& context = (shutDownType == (PRUint32)SHUTDOWN_CLEANSE) ? cleanseString : persistString;
-
+      
       // Phase 1: See if anybody objects to the profile being changed.
       mProfileChangeVetoed = PR_FALSE;
       observerService->NotifyObservers(subject, "profile-approve-change", context.get());

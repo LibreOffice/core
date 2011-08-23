@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ public class _XUIElementFactoryRegistration extends MultiMethodTest {
         }
         tRes.tested("registerFactory()", result);
     }
-
+    
     public void _getRegisteredFactories() {
         requiredMethod("registerFactory()");
         PropertyValue[][]props = oObj.getRegisteredFactories();
@@ -55,18 +55,18 @@ public class _XUIElementFactoryRegistration extends MultiMethodTest {
             log.println("Null was returned as PropertyValue[][]");
             props = new PropertyValue[0][0];
         }
-        for(int i=0; i<props.length; i++)
+        for(int i=0; i<props.length; i++) 
             for(int j=0; j<props[i].length; j++)
                 log.println("Factory: " + props[i][j].Name + "    -    " + props[i][j].Value);
         tRes.tested("getRegisteredFactories()", props.length != 0);
     }
-
+    
     public void _getFactory() {
         requiredMethod("registerFactory()");
         XUIElementFactory xFactory = oObj.getFactory("private:resource/menubar/menubar", "");
         tRes.tested("getFactory()", xFactory != null);
     }
-
+    
     public void _deregisterFactory() {
         executeMethod("getRegisteredFactory()");
         executeMethod("getFactory()");

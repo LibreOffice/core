@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,30 +41,31 @@
 #include "sdiocmpt.hxx"
 #include "drawdoc.hxx"
 
+// #90477#
 #include <tools/tenccvt.hxx>
 
 using namespace ::com::sun::star;
 
 SdAnimationInfo::SdAnimationInfo(SdrObject& rObject)
                : SdrObjUserData(SdUDInventor, SD_ANIMATIONINFO_ID, 0),
-                 mePresObjKind              (PRESOBJ_NONE),
-                 meEffect                   (presentation::AnimationEffect_NONE),
-                 meTextEffect               (presentation::AnimationEffect_NONE),
-                 meSpeed                    (presentation::AnimationSpeed_SLOW),
-                 mbActive                   (sal_True),
-                 mbDimPrevious              (sal_False),
-                 mbIsMovie                  (sal_False),
-                 mbDimHide                  (sal_False),
-                 mbSoundOn                  (sal_False),
-                 mbPlayFull                 (sal_False),
-                 mpPathObj                  (NULL),
-                 meClickAction              (presentation::ClickAction_NONE),
-                 meSecondEffect             (presentation::AnimationEffect_NONE),
-                 meSecondSpeed              (presentation::AnimationSpeed_SLOW),
-                 mbSecondSoundOn            (sal_False),
-                 mbSecondPlayFull           (sal_False),
-                 mnVerb                     (0),
-                 mnPresOrder                (LIST_APPEND),
+                 mePresObjKind				(PRESOBJ_NONE),
+                 meEffect					(presentation::AnimationEffect_NONE),
+                 meTextEffect				(presentation::AnimationEffect_NONE),
+                 meSpeed 					(presentation::AnimationSpeed_SLOW),
+                 mbActive					(TRUE),
+                 mbDimPrevious				(FALSE),
+                 mbIsMovie					(FALSE),
+                 mbDimHide					(FALSE),
+                 mbSoundOn					(FALSE),
+                 mbPlayFull					(FALSE),
+                 mpPathObj					(NULL),
+                 meClickAction				(presentation::ClickAction_NONE),
+                 meSecondEffect				(presentation::AnimationEffect_NONE),
+                 meSecondSpeed				(presentation::AnimationSpeed_SLOW),
+                 mbSecondSoundOn			(FALSE),
+                 mbSecondPlayFull			(FALSE),
+                 mnVerb						(0),
+                 mnPresOrder				(LIST_APPEND),
                  mrObject                   (rObject)
 {
     maBlueScreen = RGB_Color(COL_LIGHTMAGENTA);
@@ -72,29 +73,30 @@ SdAnimationInfo::SdAnimationInfo(SdrObject& rObject)
 }
 
 SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rObject)
-               : SdrObjUserData             (rAnmInfo),
-                    mePresObjKind               (PRESOBJ_NONE),
-                 meEffect                   (rAnmInfo.meEffect),
-                 meTextEffect               (rAnmInfo.meTextEffect),
-                 meSpeed                    (rAnmInfo.meSpeed),
-                 mbActive                   (rAnmInfo.mbActive),
-                 mbDimPrevious              (rAnmInfo.mbDimPrevious),
-                 mbIsMovie                  (rAnmInfo.mbIsMovie),
-                 mbDimHide                  (rAnmInfo.mbDimHide),
-                 maBlueScreen               (rAnmInfo.maBlueScreen),
-                 maDimColor                 (rAnmInfo.maDimColor),
-                 maSoundFile                (rAnmInfo.maSoundFile),
-                 mbSoundOn                  (rAnmInfo.mbSoundOn),
-                 mbPlayFull                 (rAnmInfo.mbPlayFull),
-                 mpPathObj                  (NULL),
-                 meClickAction              (rAnmInfo.meClickAction),
-                 meSecondEffect             (rAnmInfo.meSecondEffect),
-                 meSecondSpeed              (rAnmInfo.meSecondSpeed),
+               : SdrObjUserData				(rAnmInfo),
+                    mePresObjKind				(PRESOBJ_NONE),
+                 meEffect					(rAnmInfo.meEffect),
+                 meTextEffect				(rAnmInfo.meTextEffect),
+                 meSpeed 					(rAnmInfo.meSpeed),
+                 mbActive					(rAnmInfo.mbActive),
+                 mbDimPrevious				(rAnmInfo.mbDimPrevious),
+                 mbIsMovie					(rAnmInfo.mbIsMovie),
+                 mbDimHide					(rAnmInfo.mbDimHide),
+                 maBlueScreen				(rAnmInfo.maBlueScreen),
+                 maDimColor					(rAnmInfo.maDimColor),
+                 maSoundFile 				(rAnmInfo.maSoundFile),
+                 mbSoundOn					(rAnmInfo.mbSoundOn),
+                 mbPlayFull					(rAnmInfo.mbPlayFull),
+                 mpPathObj					(NULL),
+                 meClickAction				(rAnmInfo.meClickAction),
+                 meSecondEffect				(rAnmInfo.meSecondEffect),
+                 meSecondSpeed				(rAnmInfo.meSecondSpeed),
                  maSecondSoundFile          (rAnmInfo.maSecondSoundFile),
-                 mbSecondSoundOn            (rAnmInfo.mbSecondSoundOn),
-                 mbSecondPlayFull           (rAnmInfo.mbSecondPlayFull),
-                 mnVerb                     (rAnmInfo.mnVerb),
-                 mnPresOrder                (LIST_APPEND),
+                 mbSecondSoundOn			(rAnmInfo.mbSecondSoundOn),
+                 mbSecondPlayFull			(rAnmInfo.mbSecondPlayFull),
+//				 maBookmark					(rAnmInfo.maBookmark),
+                 mnVerb						(rAnmInfo.mnVerb),
+                 mnPresOrder				(LIST_APPEND),
                  mrObject                   (rObject)
 {
     // can not be copied

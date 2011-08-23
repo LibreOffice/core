@@ -57,10 +57,14 @@
 * @file
 * Breaks override of Wordpro.
 ************************************************************************/
-#ifndef     _LWPBREAKSOVERRIDE_HXX
-#define     _LWPBREAKSOVERRIDE_HXX
+/*************************************************************************
+* Change History
+* 2005-01-12 Create and implement.
+************************************************************************/
+#ifndef		_LWPBREAKSOVERRIDE_HXX
+#define		_LWPBREAKSOVERRIDE_HXX
 
-#include    "lwpoverride.hxx"
+#include	"lwpoverride.hxx"
 
 class LwpObjectStream;
 class LwpAtomHolder;
@@ -71,25 +75,25 @@ public:
     LwpBreaksOverride();
     virtual ~LwpBreaksOverride();
 
-    virtual LwpBreaksOverride* clone() const;
-
     enum
     {
-        BO_PAGEBEFORE   = 0x01, // page break before this style
-        BO_PAGEAFTER    = 0x02, // page break after this style
-        BO_KEEPTOGETHER = 0x04,
-        BO_COLBEFORE    = 0x08, // col break before this style
-        BO_COLAFTER     = 0x10, // col break after this style
-        BO_KEEPPREV     = 0x20, // not with-PAGE BEF, COL BEF or WITHIN
-        BO_KEEPNEXT     = 0x40, // not with-PAGE AFT, COL AFT or WITHIN
-        BO_USENEXTSTYLE = 0x80, // use next style name
-        BO_NEXTSTYLE    = 0x100 // next style name
+        BO_PAGEBEFORE	= 0x01,	// page break before this style
+        BO_PAGEAFTER	= 0x02,	// page break after this style
+        BO_KEEPTOGETHER	= 0x04,
+        BO_COLBEFORE	= 0x08,	// col break before this style
+        BO_COLAFTER		= 0x10,	// col break after this style
+        BO_KEEPPREV		= 0x20,	// not with-PAGE BEF, COL BEF or WITHIN
+        BO_KEEPNEXT		= 0x40,	// not with-PAGE AFT, COL AFT or WITHIN
+        BO_USENEXTSTYLE	= 0x80,	// use next style name
+        BO_NEXTSTYLE	= 0x100	// next style name
     };
 public:
     virtual void Read(LwpObjectStream *pStrm);
 
     //add by , 01/28/2005
     void Override(LwpBreaksOverride* pOther);
+
+    void operator=(const LwpOverride& rOther);
 
     inline sal_Bool IsPageBreakBefore();
     inline sal_Bool IsPageBreakAfter();
@@ -132,14 +136,8 @@ public:
     inline LwpAtomHolder* GetNextStyle();
     //end add
 
-protected:
-    LwpBreaksOverride(LwpBreaksOverride const& rOther);
-
 private:
-    LwpBreaksOverride& operator=(const LwpBreaksOverride& rOther); // not implemented
-
-private:
-    LwpAtomHolder       *m_pNextStyle;
+    LwpAtomHolder		*m_pNextStyle;
 };
 
 inline sal_Bool LwpBreaksOverride::IsPageBreakBefore()

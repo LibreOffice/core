@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,6 +55,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
+#include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/inspection/XPropertyControlFactory.hpp>
 #include <com/sun/star/inspection/XObjectInspector.hpp>
@@ -68,7 +69,7 @@
 #include <comphelper/broadcasthelper.hxx>
 
 #include <map>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <vector>
 #include <memory>
 
@@ -95,14 +96,14 @@ namespace pcr
     //= OPropertyBrowserController
     //========================================================================
     // #95343#------------------------------------------------------------------------------------
-    typedef ::cppu::WeakImplHelper7 <   ::com::sun::star::lang::XServiceInfo
-                                    ,   ::com::sun::star::awt::XFocusListener
-                                    ,   ::com::sun::star::awt::XLayoutConstrains
-                                    ,   ::com::sun::star::beans::XPropertyChangeListener
+    typedef ::cppu::WeakImplHelper7 <	::com::sun::star::lang::XServiceInfo
+                                    ,	::com::sun::star::awt::XFocusListener
+                                    ,	::com::sun::star::awt::XLayoutConstrains
+                                    ,	::com::sun::star::beans::XPropertyChangeListener
                                     ,   ::com::sun::star::inspection::XPropertyControlFactory
                                     ,   ::com::sun::star::inspection::XObjectInspector
                                     ,   ::com::sun::star::lang::XInitialization
-                                    >   OPropertyBrowserController_Base;
+                                    >	OPropertyBrowserController_Base;
 
     class OPropertyBrowserController
                 :public ::comphelper::OMutexAndBroadcastHelper
@@ -131,15 +132,15 @@ namespace pcr
         // meta data about the properties
         OPropertyBrowserView*               m_pView;
 
-        ::rtl::OUString                     m_sPageSelection;
-        ::rtl::OUString                     m_sLastValidPageSelection;
+        ::rtl::OUString		                m_sPageSelection;
+        ::rtl::OUString		                m_sLastValidPageSelection;
 
         typedef ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >
                                                         PropertyHandlerRef;
         typedef ::std::vector< PropertyHandlerRef >     PropertyHandlerArray;
-        typedef ::boost::unordered_map< ::rtl::OUString, PropertyHandlerRef, ::rtl::OUStringHash >
+        typedef ::std::hash_map< ::rtl::OUString, PropertyHandlerRef, ::rtl::OUStringHash >
                                                         PropertyHandlerRepository;
-        typedef ::boost::unordered_multimap< ::rtl::OUString, PropertyHandlerRef, ::rtl::OUStringHash >
+        typedef ::std::hash_multimap< ::rtl::OUString, PropertyHandlerRef, ::rtl::OUStringHash >
                                                         PropertyHandlerMultiRepository;
         PropertyHandlerRepository                       m_aPropertyHandlers;
         PropertyHandlerMultiRepository                  m_aDependencyHandlers;
@@ -157,7 +158,7 @@ namespace pcr
         /// the property we're just committing
         ::rtl::OUString                                 m_sCommittingProperty;
 
-        typedef ::boost::unordered_map< ::rtl::OUString, sal_uInt16, ::rtl::OUStringHash >     HashString2Int16;
+        typedef ::std::hash_map< ::rtl::OUString, sal_uInt16, ::rtl::OUStringHash >     HashString2Int16;
         HashString2Int16                                m_aPageIds;
 
         bool        m_bContainerFocusListening;
@@ -222,8 +223,8 @@ namespace pcr
 
     protected:
         // IPropertyLineListener
-        virtual void    Clicked(    const ::rtl::OUString& _rName, sal_Bool _bPrimary );
-        virtual void    Commit(     const ::rtl::OUString& _rName, const ::com::sun::star::uno::Any& _rVal );
+        virtual void	Clicked(	const ::rtl::OUString& _rName, sal_Bool _bPrimary );
+        virtual void	Commit(		const ::rtl::OUString& _rName, const ::com::sun::star::uno::Any& _rVal );
 
         // IPropertyControlObserver
         virtual void    focusGained( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _Control );

@@ -2,7 +2,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@ class ScZoomSliderControl: public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    ScZoomSliderControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    ScZoomSliderControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~ScZoomSliderControl();
 
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void    StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual Window* CreateItemWindow( Window *pParent );
 };
 
@@ -60,13 +60,13 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > m_xDispatchProvider;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >            m_xFrame;
 
-    sal_uInt16          Offset2Zoom( long nOffset ) const;
-    long            Zoom2Offset( sal_uInt16 nZoom ) const;
+    USHORT          Offset2Zoom( long nOffset ) const;
+    long            Zoom2Offset( USHORT nZoom ) const;
     void            DoPaint( const Rectangle& rRect );
 
 public:
-    ScZoomSliderWnd( Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame , sal_uInt16 nCurrentZoom );
+    ScZoomSliderWnd( Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, 
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame , USHORT nCurrentZoom );
     ~ScZoomSliderWnd();
     void            UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem );
 

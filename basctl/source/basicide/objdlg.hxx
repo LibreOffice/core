@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ class ObjectTreeListBox : public BasicTreeListBox
 {
 private:
 
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	Command( const CommandEvent& rCEvt );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
 
 public:
             ObjectTreeListBox( Window* pParent, const ResId& rRes );
@@ -54,7 +54,8 @@ public:
 class ObjectCatalogToolBox_Impl: public ToolBox
 {
 public:
-    ObjectCatalogToolBox_Impl(Window * pParent, ResId const & rResId);
+    ObjectCatalogToolBox_Impl(Window * pParent, ResId const & rResId,
+                              ResId const & rImagesHighContrastId);
 
 private:
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
@@ -62,35 +63,37 @@ private:
     void setImages();
 
     ImageList m_aImagesNormal;
+    ImageList m_aImagesHighContrast;
+    bool m_bHighContrast;
 };
 
 class ObjectCatalog : public FloatingWindow
 {
 private:
-    ObjectTreeListBox   aMacroTreeList;
+    ObjectTreeListBox	aMacroTreeList;
     ObjectCatalogToolBox_Impl aToolBox;
-    FixedText           aMacroDescr;
-    Link                aCancelHdl;
+    FixedText			aMacroDescr;
+    Link				aCancelHdl;
 
 protected:
     DECL_LINK( ToolBoxHdl, ToolBox* );
-    void                CheckButtons();
+    void				CheckButtons();
     DECL_LINK( TreeListHighlightHdl, SvTreeListBox * );
-    void                UpdateFields();
-    virtual void        Move();
-    virtual sal_Bool        Close();
-    virtual void        Resize();
+    void				UpdateFields();
+    virtual void		Move();
+    virtual BOOL		Close();
+    virtual void		Resize();
 
 public:
     ObjectCatalog( Window * pParent );
     virtual ~ObjectCatalog();
 
-    void                UpdateEntries();
+    void				UpdateEntries();
     void                SetCurrentEntry( BasicEntryDescriptor& rDesc );
 
-    void                SetCancelHdl( const Link& rLink ) { aCancelHdl = rLink; }
+    void				SetCancelHdl( const Link& rLink ) { aCancelHdl = rLink; }
 };
 
-#endif  //_OBJDLG_HXX
+#endif	//_OBJDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

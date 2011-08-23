@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,17 +37,21 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
+
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/weakagg.hxx>
+
 #include <cppuhelper/implbase3.hxx>
+
 #include <list>
 #include <rtl/uuid.h>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/unoevent.hxx>
-#include <svtools/unoimap.hxx>
+
+#include "unoevent.hxx"
+#include "unoimap.hxx"
 #include <svtools/imap.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imaprect.hxx>
@@ -93,7 +97,7 @@ class SvUnoImageMapObject : public OWeakAggObject,
                             public XUnoTunnel
 {
 public:
-    SvUnoImageMapObject( sal_uInt16 nType, const SvEventDescription* pSupportedMacroItems );
+    SvUnoImageMapObject( UINT16 nType, const SvEventDescription* pSupportedMacroItems );
     SvUnoImageMapObject( const IMapObject& rMapObject, const SvEventDescription* pSupportedMacroItems );
     virtual ~SvUnoImageMapObject() throw();
 
@@ -126,10 +130,10 @@ public:
     virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw( RuntimeException );
 
 private:
-    static PropertySetInfo* createPropertySetInfo( sal_uInt16 nType );
+    static PropertySetInfo* createPropertySetInfo( UINT16 nType );
 
 
-    sal_uInt16 mnType;
+    UINT16 mnType;
 
     ::rtl::OUString maURL;
     ::rtl::OUString maAltText;
@@ -145,7 +149,7 @@ private:
 
 UNO3_GETIMPLEMENTATION_IMPL( SvUnoImageMapObject );
 
-PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
+PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( UINT16 nType )
 {
     switch( nType )
     {
@@ -158,8 +162,8 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
                 { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
                 { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
                 { MAP_LEN( "Name" ),        HANDLE_NAME,        &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
-                { MAP_LEN( "IsActive" ),    HANDLE_ISACTIVE,    &::getBooleanCppuType(),                0, 0 },
-                { MAP_LEN( "Polygon" ),     HANDLE_POLYGON,     SEQTYPE(::getCppuType((const PointSequence*)0)),    0, 0 },
+                { MAP_LEN( "IsActive" ),	HANDLE_ISACTIVE,	&::getBooleanCppuType(),				0, 0 },
+                { MAP_LEN( "Polygon" ),		HANDLE_POLYGON,		SEQTYPE(::getCppuType((const PointSequence*)0)),	0, 0 },
                 {0,0,0,0,0,0}
             };
 
@@ -174,9 +178,9 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
                 { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
                 { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
                 { MAP_LEN( "Name" ),            HANDLE_NAME,        &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
-                { MAP_LEN( "IsActive" ),        HANDLE_ISACTIVE,    &::getBooleanCppuType(),                0, 0 },
-                { MAP_LEN( "Center" ),      HANDLE_CENTER,      &::getCppuType((const awt::Point*)0),   0, 0 },
-                { MAP_LEN( "Radius" ),      HANDLE_RADIUS,      &::getCppuType((const sal_Int32*)0),    0, 0 },
+                { MAP_LEN( "IsActive" ),		HANDLE_ISACTIVE,	&::getBooleanCppuType(),				0, 0 },
+                { MAP_LEN( "Center" ),		HANDLE_CENTER,		&::getCppuType((const awt::Point*)0),	0, 0 },
+                { MAP_LEN( "Radius" ),		HANDLE_RADIUS,		&::getCppuType((const sal_Int32*)0),	0, 0 },
                 {0,0,0,0,0,0}
             };
 
@@ -192,8 +196,8 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
                 { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const ::rtl::OUString*)0), 0, 0 },
                 { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const ::rtl::OUString*)0), 0, 0 },
                 { MAP_LEN( "Name" ),        HANDLE_NAME,        &::getCppuType((const ::rtl::OUString*)0), 0, 0 },
-                { MAP_LEN( "IsActive" ),    HANDLE_ISACTIVE,    &::getBooleanCppuType(),            0, 0 },
-                { MAP_LEN( "Boundary" ),    HANDLE_BOUNDARY,    &::getCppuType((const awt::Rectangle*)0),   0, 0 },
+                { MAP_LEN( "IsActive" ),	HANDLE_ISACTIVE,	&::getBooleanCppuType(),			0, 0 },
+                { MAP_LEN( "Boundary" ),	HANDLE_BOUNDARY,	&::getCppuType((const awt::Rectangle*)0),	0, 0 },
                 {0,0,0,0,0,0}
             };
 
@@ -202,8 +206,8 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
     }
 }
 
-SvUnoImageMapObject::SvUnoImageMapObject( sal_uInt16 nType, const SvEventDescription* pSupportedMacroItems )
-:   PropertySetHelper( createPropertySetInfo( nType ) ),
+SvUnoImageMapObject::SvUnoImageMapObject( UINT16 nType, const SvEventDescription* pSupportedMacroItems )
+:	PropertySetHelper( createPropertySetInfo( nType ) ),
     mnType( nType )
 ,   mbIsActive( true )
 ,   mnRadius( 0 )
@@ -213,7 +217,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( sal_uInt16 nType, const SvEventDescrip
 }
 
 SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const SvEventDescription* pSupportedMacroItems )
-:   PropertySetHelper( createPropertySetInfo( rMapObject.GetType() ) ),
+:	PropertySetHelper( createPropertySetInfo( rMapObject.GetType() ) ),
     mnType( rMapObject.GetType() )
 ,   mbIsActive( true )
 ,   mnRadius( 0 )
@@ -250,11 +254,11 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
         {
             const Polygon aPoly( ((IMapPolygonObject*)&rMapObject)->GetPolygon(sal_False) );
 
-            const sal_uInt16 nCount = aPoly.GetSize();
+            const USHORT nCount = aPoly.GetSize();
             maPolygon.realloc( nCount );
             awt::Point* pPoints = maPolygon.getArray();
 
-            for( sal_uInt16 nPoint = 0; nPoint < nCount; nPoint++ )
+            for( USHORT nPoint = 0; nPoint < nCount; nPoint++ )
             {
                 const Point& rPoint = aPoly.GetPoint( nPoint );
                 pPoints->X = rPoint.X();
@@ -488,7 +492,7 @@ void SvUnoImageMapObject::_setPropertyValues( const PropertyMapEntry** ppEntries
             bOk = *pValues >>= maPolygon;
             break;
         default:
-            OSL_FAIL( "SvUnoImageMapObject::_setPropertyValues: unexpected property handle" );
+            DBG_ERROR( "SvUnoImageMapObject::_setPropertyValues: unexpected property handle" );
             break;
         }
 
@@ -538,7 +542,7 @@ void SvUnoImageMapObject::_getPropertyValues( const PropertyMapEntry** ppEntries
             *pValues <<= maPolygon;
             break;
         default:
-            OSL_FAIL( "SvUnoImageMapObject::_getPropertyValues: unexpected property handle" );
+            DBG_ERROR( "SvUnoImageMapObject::_getPropertyValues: unexpected property handle" );
             break;
         }
 
@@ -606,8 +610,8 @@ SvUnoImageMap::SvUnoImageMap( const ImageMap& rMap, const SvEventDescription* pS
 {
     maName = rMap.GetName();
 
-    const sal_uInt16 nCount = rMap.GetIMapObjectCount();
-    for( sal_uInt16 nPos = 0; nPos < nCount; nPos++ )
+    const UINT16 nCount = rMap.GetIMapObjectCount();
+    for( UINT16 nPos = 0; nPos < nCount; nPos++ )
     {
         IMapObject* pMapObject = rMap.GetIMapObject( nPos );
         SvUnoImageMapObject* pUnoObj = new SvUnoImageMapObject( *pMapObject, pSupportedMacroItems );
@@ -656,7 +660,7 @@ void SAL_CALL SvUnoImageMap::insertByIndex( sal_Int32 Index, const Any& Element 
     {
         std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
         for( sal_Int32 n = 0; n < Index; n++ )
-            ++aIter;
+            aIter++;
 
         maObjectList.insert( aIter, pObject );
     }
@@ -677,7 +681,7 @@ void SAL_CALL SvUnoImageMap::removeByIndex( sal_Int32 Index ) throw(IndexOutOfBo
     {
         std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
         for( sal_Int32 n = 0; n < Index; n++ )
-            ++aIter;
+            aIter++;
 
         (*aIter)->release();
         maObjectList.erase( aIter );
@@ -694,7 +698,7 @@ void SAL_CALL SvUnoImageMap::replaceByIndex( sal_Int32 Index, const Any& Element
 
     std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
     for( sal_Int32 n = 0; n < Index; n++ )
-        ++aIter;
+        aIter++;
 
     (*aIter)->release();
     *aIter = pObject;
@@ -715,7 +719,7 @@ Any SAL_CALL SvUnoImageMap::getByIndex( sal_Int32 Index ) throw(IndexOutOfBounds
 
     std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
     for( sal_Int32 n = 0; n < Index; n++ )
-        ++aIter;
+        aIter++;
 
     Reference< XPropertySet > xObj( *aIter );
     return makeAny( xObj );
@@ -774,7 +778,7 @@ sal_Bool SvUnoImageMap::fillImageMap( ImageMap& rMap ) const
         rMap.InsertIMapObject( *pNewMapObject );
         delete pNewMapObject;
 
-        ++aIter;
+        aIter++;
     }
 
     return sal_True;

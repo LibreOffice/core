@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,16 +35,16 @@ class SwFldDlgWrapper : public SwChildWinWrapper
 {
 public:
     AbstractSwFldDlg * pDlgInterface;
-    SwFldDlgWrapper( Window* pParent, sal_uInt16 nId,
+    SwFldDlgWrapper( Window* pParent, USHORT nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
     SFX_DECL_CHILDWINDOW(SwFldDlgWrapper);
 
-    virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh);
-    void            ShowPage(sal_uInt16 nPage = 0);
+    virtual BOOL	ReInitDlg(SwDocShell *pDocSh);
+    void			ShowPage(USHORT nPage = 0);
 };
 
-/* --------------------------------------------------
+/* -----------------04.02.2003 14:14-----------------
  * field dialog only showing database page to support
  * mail merge
  * --------------------------------------------------*/
@@ -52,12 +52,12 @@ class SwFldDataOnlyDlgWrapper : public SwChildWinWrapper
 {
 public:
     AbstractSwFldDlg * pDlgInterface;
-    SwFldDataOnlyDlgWrapper( Window* pParent, sal_uInt16 nId,
+    SwFldDataOnlyDlgWrapper( Window* pParent, USHORT nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
     SFX_DECL_CHILDWINDOW(SwFldDataOnlyDlgWrapper);
 
-    virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh);
+    virtual BOOL    ReInitDlg(SwDocShell *pDocSh);
 };
 
 #endif

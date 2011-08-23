@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ public class _XDatabaseRanges extends MultiMethodTest {
             log.println("Exception expected... Test failed.");
             bResult = false;
         } catch(com.sun.star.uno.RuntimeException e) {
-            log.println("Exception occurred while testing addNewByName() : " + e);
+            log.println("Exception occured while testing addNewByName() : " + e);
             bResult = true;
         }
 
@@ -102,7 +102,7 @@ public class _XDatabaseRanges extends MultiMethodTest {
             oObj.removeByName(name);
             bResult &= !oObj.hasByName(name);
         } catch (com.sun.star.uno.RuntimeException e) {
-            log.println("Exception occurred while testing removeByName() : " + e);
+            log.println("Exception occured while testing removeByName() : " + e);
             bResult = false;
         }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,6 @@
 
 #include "xlformula.hxx"
 #include "xeroot.hxx"
-#include <boost/shared_ptr.hpp>
 
 // External reference log =====================================================
 
@@ -89,7 +88,7 @@ public:
     XclTokenArrayRef    CreateNameXFormula( sal_uInt16 nExtSheet, sal_uInt16 nExtName );
 
 private:
-    typedef boost::shared_ptr< XclExpFmlaCompImpl > XclExpFmlaCompImplRef;
+    typedef ScfRef< XclExpFmlaCompImpl > XclExpFmlaCompImplRef;
     XclExpFmlaCompImplRef mxImpl;
 };
 

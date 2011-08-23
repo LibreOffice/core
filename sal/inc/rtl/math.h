@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -320,9 +320,7 @@ void SAL_CALL rtl_math_doubleToUString(rtl_uString ** pResult,
     @param pParsedEnd
     If non-null, returns one past the position of the last character parsed
     away.  Thus if [pBegin..pEnd) only contains the numerical string to be
-    parsed, *pParsedEnd == pEnd on return.  If no numerical (sub-)string is
-    found, *pParsedEnd == pBegin on return, even if there was leading
-    whitespace.
+    parsed, *pParsedEnd == pEnd on return.
  */
 double SAL_CALL rtl_math_stringToDouble(
     sal_Char const * pBegin, sal_Char const * pEnd, sal_Char cDecSeparator,
@@ -360,9 +358,7 @@ double SAL_CALL rtl_math_stringToDouble(
     @param pParsedEnd
     If non-null, returns one past the position of the last character parsed
     away.  Thus if [pBegin..pEnd) only contains the numerical string to be
-    parsed, *pParsedEnd == pEnd on return.  If no numerical (sub-)string is
-    found, *pParsedEnd == pBegin on return, even if there was leading
-    whitespace.
+    parsed, *pParsedEnd == pEnd on return.
  */
 double SAL_CALL rtl_math_uStringToDouble(
     sal_Unicode const * pBegin, sal_Unicode const * pEnd,

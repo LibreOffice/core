@@ -25,6 +25,7 @@
 #
 # ************************************************************************/
 
+
 # Builds the SpreadSheet examples of the Developers Guide.
 
 PRJ = ..$/..
@@ -34,6 +35,8 @@ PACKAGE = cliversion
 
 .INCLUDE: settings.mk
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
+
+#.IF "$(BUILD_FOR_CLI)" == ""
 
 .IF "$(debug)" != ""
 CSCFLAGS += -checked+ -define:DEBUG -define:TRACE -debug+
@@ -133,3 +136,7 @@ RUNINSTRUCTIONS :
     @echo ###########################   N O T E  ######################################
     @echo .
     @echo .	
+
+
+
+#.ENDIF

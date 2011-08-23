@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,48 +44,48 @@ namespace rtl
 // class SvxAdjustItem ---------------------------------------------------
 
 /*
-[Description]
-This item describes the row orientation.
+[Beschreibung]
+Dieses Item beschreibt die Zeilenausrichtung.
 */
-#define ADJUST_LASTBLOCK_VERSION        ((sal_uInt16)0x0001)
+#define	ADJUST_LASTBLOCK_VERSION		((USHORT)0x0001)
 
 class EDITENG_DLLPUBLIC SvxAdjustItem : public SfxEnumItemInterface
 {
-    sal_Bool    bLeft      : 1;
-    sal_Bool    bRight     : 1;
-    sal_Bool    bCenter    : 1;
-    sal_Bool    bBlock     : 1;
+    BOOL    bLeft      : 1;
+    BOOL    bRight     : 1;
+    BOOL    bCenter    : 1;
+    BOOL    bBlock     : 1;
 
-    // only activ when bBlock
-    sal_Bool    bOneBlock : 1;
-    sal_Bool    bLastCenter : 1;
-    sal_Bool    bLastBlock : 1;
+    // nur aktiv, wenn bBlock
+    BOOL    bOneBlock : 1;
+    BOOL    bLastCenter : 1;
+    BOOL    bLastBlock : 1;
 
     friend SvStream& operator<<( SvStream&, SvxAdjustItem& ); //$ ostream
 public:
     TYPEINFO();
 
     SvxAdjustItem( const SvxAdjust eAdjst /*= SVX_ADJUST_LEFT*/,
-                   const sal_uInt16 nId );
+                   const USHORT nId );
 
-    // "pure virtual Methods" from SfxPoolItem
-    virtual int              operator==( const SfxPoolItem& ) const;
+    // "pure virtual Methoden" vom SfxPoolItem
+    virtual int 			 operator==( const SfxPoolItem& ) const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
-    virtual sal_uInt16           GetValueCount() const;
-    virtual String           GetValueTextByPos( sal_uInt16 nPos ) const;
-    virtual sal_uInt16           GetEnumValue() const;
-    virtual void             SetEnumValue( sal_uInt16 nNewVal );
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const;
+    virtual USHORT			 GetValueCount() const;
+    virtual String			 GetValueTextByPos( USHORT nPos ) const;
+    virtual USHORT			 GetEnumValue() const;
+    virtual void			 SetEnumValue( USHORT nNewVal );
+    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*	 Create(SvStream &, USHORT) const;
+    virtual SvStream&		 Store(SvStream &, USHORT nItemVersion ) const;
+    virtual USHORT			 GetVersion( USHORT nFileVersion ) const;
 
     inline void SetOneWord( const SvxAdjust eType )
     {

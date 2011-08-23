@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,6 +38,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sot/sotref.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>
@@ -63,7 +64,7 @@ ScClient::ScClient( ScTabViewShell* pViewShell, Window* pDraw, SdrModel* pSdrMod
     SetObject( pObj->GetObjRef() );
 }
 
-ScClient::~ScClient()
+__EXPORT ScClient::~ScClient()
 {
 }
 
@@ -73,8 +74,8 @@ SdrOle2Obj* ScClient::GetDrawObj()
     SdrOle2Obj* pOle2Obj = NULL;
     String aName = GetViewShell()->GetObjectShell()->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
 
-    sal_uInt16 nPages = pModel->GetPageCount();
-    for (sal_uInt16 nPNr=0; nPNr<nPages && !pOle2Obj; nPNr++)
+    USHORT nPages = pModel->GetPageCount();
+    for (USHORT nPNr=0; nPNr<nPages && !pOle2Obj; nPNr++)
     {
         SdrPage* pPage = pModel->GetPage(nPNr);
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -93,13 +94,13 @@ SdrOle2Obj* ScClient::GetDrawObj()
     return pOle2Obj;
 }
 
-void ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
+void __EXPORT ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
 {
     SfxViewShell* pSfxViewSh = GetViewShell();
     ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
     if (!pViewSh)
     {
-        OSL_FAIL("Wrong ViewShell");
+        DBG_ERROR("Wrong ViewShell");
         return;
     }
 
@@ -114,7 +115,7 @@ void ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
             aLogicRect.SetPos( aOldRect.TopLeft() );
     }
 
-    sal_uInt16 nTab = pViewSh->GetViewData()->GetTabNo();
+    USHORT nTab = pViewSh->GetViewData()->GetTabNo();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
     if ( pPage && aLogicRect != aOldRect )
     {
@@ -122,8 +123,8 @@ void ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
         Size aSize = pPage->GetSize();
         if ( aSize.Width() < 0 )
         {
-            aPos.X() = aSize.Width() + 1;       // negative
-            aSize.Width() = -aSize.Width();     // positive
+            aPos.X() = aSize.Width() + 1;		// negative
+            aSize.Width() = -aSize.Width();		// positive
         }
         Rectangle aPageRect( aPos, aSize );
 
@@ -155,17 +156,17 @@ void ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
     }
 }
 
-void ScClient::ObjectAreaChanged()
+void __EXPORT ScClient::ObjectAreaChanged()
 {
     SfxViewShell* pSfxViewSh = GetViewShell();
     ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
     if (!pViewSh)
     {
-        OSL_FAIL("Wrong ViewShell");
+        DBG_ERROR("Wrong ViewShell");
         return;
     }
 
-    //  Position und Groesse ins Dokument uebernehmen
+    //	Position und Groesse ins Dokument uebernehmen
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)
     {
@@ -183,7 +184,7 @@ void ScClient::ObjectAreaChanged()
         pViewSh->ScrollToObject( pDrawObj );
 }
 
-void ScClient::ViewChanged()
+void __EXPORT ScClient::ViewChanged()
 {
     if ( GetAspect() == embed::Aspects::MSOLE_ICON )
     {
@@ -202,13 +203,13 @@ void ScClient::ViewChanged()
         aSz = xObj->getVisualAreaSize( GetAspect() );
     } catch ( embed::NoVisualAreaSizeException& )
     {
-        OSL_FAIL("The visual area size must be available!\n");
+        DBG_ERROR("The visual area size must be available!\n");
     }
 
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( GetAspect() ) );
     Size aVisSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aMapUnit, MAP_100TH_MM );
 
-    //  Groesse ins Dokument uebernehmen
+    //	Groesse ins Dokument uebernehmen
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)
     {
@@ -235,14 +236,14 @@ void ScClient::ViewChanged()
                 aLogicRect.SetSize( aVisSize );
                 pDrawObj->SetLogicRect( aLogicRect );
 
-                //  set document modified (SdrModel::SetChanged is not used)
+                //	set document modified (SdrModel::SetChanged is not used)
                 pViewSh->GetViewData()->GetDocShell()->SetDrawModified();
             }
         }
     }
 }
 
-void ScClient::MakeVisible()
+void __EXPORT ScClient::MakeVisible()
 {
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)

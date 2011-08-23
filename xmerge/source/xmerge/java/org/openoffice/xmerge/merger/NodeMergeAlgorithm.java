@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,6 +47,6 @@ public interface NodeMergeAlgorithm {
      *  @param  modifyNode    The <code>Node</code> to be merged.  It may
      *                        be modified.
      */
-    public void merge(Node originalNode, Node modifyNode);
+    public void merge(Node orginialNode, Node modifyNode);
 }
 

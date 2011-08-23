@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,7 +110,7 @@ public class _XImageProducer extends MultiMethodTest {
 
     /**
     * Adds a new consumer to producer. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     */
     public void _addConsumer() {
 
@@ -122,7 +122,7 @@ public class _XImageProducer extends MultiMethodTest {
 
     /**
     * Removes the consumer added before. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     * The following method tests are to be executed before :
     * <ul>
     *  <li> <code> startProduction </code>  </li>

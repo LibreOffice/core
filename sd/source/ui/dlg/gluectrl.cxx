@@ -2,7 +2,7 @@
 #/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_sd.hxx"
 
 
-#include <string>
+#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
 #include <svx/dialogs.hrc>
 #include <svx/svdglue.hxx>
@@ -51,20 +51,20 @@ using namespace ::com::sun::star::frame;
 
 // z.Z. werden von Joe nur die u.a. Moeglichkeiten unterstuetzt
 #define ESCDIR_COUNT 5
-static sal_uInt16 aEscDirArray[] =
+static UINT16 aEscDirArray[] =
 {
     SDRESC_SMART,
     SDRESC_LEFT,
     SDRESC_RIGHT,
     SDRESC_TOP,
     SDRESC_BOTTOM,
-//  SDRESC_LO,
-//  SDRESC_LU,
-//  SDRESC_RO,
-//  SDRESC_RU,
-//  SDRESC_HORZ,
-//  SDRESC_VERT,
-//  SDRESC_ALL
+//	SDRESC_LO,
+//	SDRESC_LU,
+//	SDRESC_RO,
+//	SDRESC_RU,
+//	SDRESC_HORZ,
+//	SDRESC_VERT,
+//	SDRESC_ALL
 };
 
 
@@ -92,7 +92,7 @@ GlueEscDirLB::GlueEscDirLB( Window* pParent, const Reference< XFrame >& rFrame )
 
 /*************************************************************************
 |*
-|*  Dtor
+|*	Dtor
 |*
 \************************************************************************/
 
@@ -108,7 +108,7 @@ GlueEscDirLB::~GlueEscDirLB()
 
 void GlueEscDirLB::Select()
 {
-    sal_uInt16 nPos = GetSelectEntryPos();
+    UINT16 nPos = GetSelectEntryPos();
     SfxUInt16Item aItem( SID_GLUE_ESCDIR, aEscDirArray[ nPos ] );
 
     if ( m_xFrame.is() )
@@ -158,8 +158,8 @@ void GlueEscDirLB::Fill()
 |*
 \************************************************************************/
 
-SdTbxCtlGlueEscDir::SdTbxCtlGlueEscDir(
-    sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SdTbxCtlGlueEscDir::SdTbxCtlGlueEscDir( 
+    USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
         SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
@@ -170,7 +170,7 @@ SdTbxCtlGlueEscDir::SdTbxCtlGlueEscDir(
 |*
 \************************************************************************/
 
-void SdTbxCtlGlueEscDir::StateChanged( sal_uInt16 nSId,
+void SdTbxCtlGlueEscDir::StateChanged( USHORT nSId,
                         SfxItemState eState, const SfxPoolItem* pState )
 {
     if( eState == SFX_ITEM_AVAILABLE )
@@ -188,7 +188,7 @@ void SdTbxCtlGlueEscDir::StateChanged( sal_uInt16 nSId,
                 }
                 else
                 {
-                    sal_uInt16 nEscDir = ( (const SfxUInt16Item*) pState )->GetValue();
+                    UINT16 nEscDir = ( (const SfxUInt16Item*) pState )->GetValue();
                     pGlueEscDirLB->SelectEntryPos( GetEscDirPos( nEscDir ) );
                 }
             }
@@ -202,6 +202,12 @@ void SdTbxCtlGlueEscDir::StateChanged( sal_uInt16 nSId,
 
     SfxToolBoxControl::StateChanged( nSId, eState, pState );
 }
+
+/*************************************************************************
+|*
+|* No Comment
+|*
+\************************************************************************/
 
 Window* SdTbxCtlGlueEscDir::CreateItemWindow( Window *pParent )
 {
@@ -220,9 +226,9 @@ Window* SdTbxCtlGlueEscDir::CreateItemWindow( Window *pParent )
 |*
 \************************************************************************/
 
-sal_uInt16 SdTbxCtlGlueEscDir::GetEscDirPos( sal_uInt16 nEscDir )
+UINT16 SdTbxCtlGlueEscDir::GetEscDirPos( UINT16 nEscDir )
 {
-    for( sal_uInt16 i = 0; i < ESCDIR_COUNT; i++ )
+    for( UINT16 i = 0; i < ESCDIR_COUNT; i++ )
     {
         if( aEscDirArray[ i ] == nEscDir )
             return( i );

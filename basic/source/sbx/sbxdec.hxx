@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,14 +34,16 @@
 
 #undef WB_LEFT
 #undef WB_RIGHT
-
-#include <prewin.h>
-#include <postwin.h>
+#include <tools/prewin.h>
+}	// close extern "C" {
 
 #ifndef __MINGW32__
 #include <comutil.h>
 #endif
 #include <oleauto.h>
+
+extern "C" {	// reopen extern "C" {
+#include <tools/postwin.h>
 
 #endif
 #endif
@@ -58,9 +60,9 @@ class SbxDecimal
     friend void releaseDecimalPtr( SbxDecimal*& rpDecimal );
 
 #ifdef WIN32
-    DECIMAL     maDec;
+    DECIMAL		maDec;
 #endif
-    sal_Int32       mnRefCount;
+    INT32		mnRefCount;
 
 public:
     SbxDecimal( void );
@@ -75,11 +77,11 @@ public:
     void fillAutomationDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
 
     void setChar( sal_Unicode val );
-    void setByte( sal_uInt8 val );
-    void setShort( sal_Int16 val );
-    void setLong( sal_Int32 val );
-    void setUShort( sal_uInt16 val );
-    void setULong( sal_uInt32 val );
+    void setByte( BYTE val );
+    void setShort( INT16 val );
+    void setLong( INT32 val );
+    void setUShort( UINT16 val );
+    void setULong( UINT32 val );
     bool setSingle( float val );
     bool setDouble( double val );
     void setInt( int val );
@@ -96,11 +98,11 @@ public:
     }
 
     bool getChar( sal_Unicode& rVal );
-    bool getByte( sal_uInt8& rVal );
-    bool getShort( sal_Int16& rVal );
-    bool getLong( sal_Int32& rVal );
-    bool getUShort( sal_uInt16& rVal );
-    bool getULong( sal_uInt32& rVal );
+    bool getByte( BYTE& rVal );
+    bool getShort( INT16& rVal );
+    bool getLong( INT32& rVal );
+    bool getUShort( UINT16& rVal );
+    bool getULong( UINT32& rVal );
     bool getSingle( float& rVal );
     bool getDouble( double& rVal );
     bool getInt( int& rVal );

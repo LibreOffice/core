@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,37 +33,45 @@
 
 #include <vcl/button.hxx>
 
-#include "swlbox.hxx"       // SwComboBox
+#include "swlbox.hxx"		// SwComboBox
 
 class SwWrtShell;
 class SfxRequest;
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 class BookmarkCombo : public SwComboBox
 {
-    sal_uInt16          GetFirstSelEntryPos() const;
-    sal_uInt16          GetNextSelEntryPos(sal_uInt16 nPos) const;
-    sal_uInt16          GetSelEntryPos(sal_uInt16 nPos) const;
+    USHORT			GetFirstSelEntryPos() const;
+    USHORT			GetNextSelEntryPos(USHORT nPos) const;
+    USHORT			GetSelEntryPos(USHORT nPos) const;
 
-    virtual long    PreNotify(NotifyEvent& rNEvt);
+    virtual long	PreNotify(NotifyEvent& rNEvt);
 public:
     BookmarkCombo( Window* pWin, const ResId& rResId );
 
-    sal_uInt16          GetSelectEntryCount() const;
-    sal_uInt16          GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const;
+    USHORT			GetSelectEntryCount() const;
+    USHORT			GetSelectEntryPos( USHORT nSelIndex = 0 ) const;
 
     static const String aForbiddenChars;
 };
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 class SwInsertBookmarkDlg: public SvxStandardDialog
 {
+    BookmarkCombo	aBookmarkBox;
     FixedLine       aBookmarkFl;
-    BookmarkCombo   aBookmarkBox;
-    OKButton        aOkBtn;
-    CancelButton    aCancelBtn;
-    PushButton      aDeleteBtn;
+    OKButton		aOkBtn;
+    CancelButton	aCancelBtn;
+    PushButton		aDeleteBtn;
 
-    String          sRemoveWarning;
-    SwWrtShell      &rSh;
+    String 			sRemoveWarning;
+    SwWrtShell	   	&rSh;
     SfxRequest&     rReq;
 
     DECL_LINK( ModifyHdl, BookmarkCombo * );

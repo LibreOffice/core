@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,64 +45,65 @@ const sal_uInt16 CAPTYPE_BITMAPS_COUNT = 3;
 class SvxCaptionTabPage : public SfxTabPage
 {
 private:
-    ValueSet        aCT_CAPTTYPE;
-    FixedText       aFT_ABSTAND;
-    MetricField     aMF_ABSTAND;
-    FixedText       aFT_WINKEL;
-    ListBox         aLB_WINKEL;
-    FixedText       aFT_ANSATZ;
-    ListBox         aLB_ANSATZ;
-    FixedText       aFT_UM;
-    MetricField     aMF_ANSATZ;
-    FixedText       aFT_ANSATZ_REL;
-    ListBox         aLB_ANSATZ_REL;
-    FixedText       aFT_LAENGE;
-    MetricField     aMF_LAENGE;
-    CheckBox        aCB_LAENGE;
+    ValueSet		aCT_CAPTTYPE;
+    FixedText		aFT_ABSTAND;
+    MetricField		aMF_ABSTAND;
+    FixedText		aFT_WINKEL;
+    ListBox			aLB_WINKEL;
+    FixedText		aFT_ANSATZ;
+    ListBox			aLB_ANSATZ;
+    FixedText		aFT_UM;
+    MetricField		aMF_ANSATZ;
+    FixedText		aFT_ANSATZ_REL;
+    ListBox			aLB_ANSATZ_REL;
+    FixedText		aFT_LAENGE;
+    MetricField		aMF_LAENGE;
+    CheckBox		aCB_LAENGE;
 
-    Image*          mpBmpCapTypes[CAPTYPE_BITMAPS_COUNT];
+    Image*			mpBmpCapTypes[CAPTYPE_BITMAPS_COUNT];
+    Image*			mpBmpCapTypesH[CAPTYPE_BITMAPS_COUNT];
 
-    String          aStrHorzList;
-    String          aStrVertList;
+    String			aStrHorzList;
+    String			aStrVertList;
 
-    short           nCaptionType;
-    sal_Bool            bFixedAngle;
-    sal_Int32           nFixedAngle;
-    sal_Int32           nGap;
-    short           nEscDir;
-    sal_Bool            bEscRel;
-    sal_Int32           nEscAbs;
-    sal_Int32           nEscRel;
-    sal_Int32           nLineLen;
-    sal_Bool            bFitLineLen;
+    short			nCaptionType;
+    BOOL			bFixedAngle;
+    INT32			nFixedAngle;
+    INT32			nGap;
+    short			nEscDir;
+    BOOL			bEscRel;
+    INT32			nEscAbs;
+    INT32			nEscRel;
+    INT32			nLineLen;
+    BOOL			bFitLineLen;
 
-    sal_uInt16          nAnsatzRelPos;
-    sal_uInt16          nAnsatzTypePos;
-    sal_uInt16          nWinkelTypePos;
+    USHORT			nAnsatzRelPos;
+    USHORT			nAnsatzTypePos;
+    USHORT			nWinkelTypePos;
 
 #ifdef _SVX_LABDLG_CXX
-    void            SetupAnsatz_Impl( sal_uInt16 nType );
-    void            SetupType_Impl( sal_uInt16 nType );
+    void			SetupAnsatz_Impl( USHORT nType );
+    void			SetupType_Impl( USHORT nType );
     DECL_LINK( AnsatzSelectHdl_Impl, ListBox * );
     DECL_LINK( AnsatzRelSelectHdl_Impl, ListBox * );
     DECL_LINK( LineOptHdl_Impl, Button * );
     DECL_LINK( SelectCaptTypeHdl_Impl, void * );
 #endif
 
-    const SfxItemSet&   rOutAttrs;
-    const SdrView*      pView;
+    const SfxItemSet&	rOutAttrs;
+    const SdrView*		pView;
 
 public:
     SvxCaptionTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
     virtual ~SvxCaptionTabPage();
 
-    static SfxTabPage*  Create( Window*, const SfxItemSet& );
-    static sal_uInt16*      GetRanges();
+    static SfxTabPage*	Create( Window*, const SfxItemSet& );
+    static USHORT*		GetRanges();
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& );
-    virtual void        Reset( const SfxItemSet & );
-    void                Construct();
-    void                SetView( const SdrView* pSdrView )
+    virtual BOOL 		FillItemSet( SfxItemSet& );
+    virtual void 		Reset( const SfxItemSet & );
+    void				Construct();
+    void				SetView( const SdrView* pSdrView )
                             { pView = pSdrView; }
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
@@ -114,21 +115,22 @@ public:
 class SvxCaptionTabDialog : public SfxTabDialog
 {
 private:
-    const SdrView*      pView;
-    sal_uInt16              nAnchorCtrls;
+//	const SfxItemSet&	rOutAttrs;
+    const SdrView*		pView;
+    USHORT				nAnchorCtrls;
 
     Link                aValidateLink;
-
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    
+    virtual void        PageCreated( USHORT nId, SfxTabPage &rPage );
 
 public:
 
             SvxCaptionTabDialog(Window* pParent, const SdrView* pView,
-                                    sal_uInt16 nAnchorTypes = 0 );
+                                    USHORT nAnchorTypes = 0 );
 
             ~SvxCaptionTabDialog();
-
-            //link for the Writer to validate positions
+            
+            //link for the Writer to validate positions 
             void SetValidateFramePosLink( const Link& rLink );
 };
 

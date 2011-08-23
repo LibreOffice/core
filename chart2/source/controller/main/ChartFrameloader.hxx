@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,15 +44,15 @@ class ChartFrameLoader : public ::cppu::WeakImplHelper2<
          ::com::sun::star::frame::XSynchronousFrameLoader
          , ::com::sun::star::lang::XServiceInfo
             //comprehends XComponent (required interface)
-    //  ,public ::com::sun::star::uno::XWeak            // implemented by WeakImplHelper(optional interface)
-    //  ,public ::com::sun::star::uno::XInterface       // implemented by WeakImplHelper(optional interface)
-    //  ,public ::com::sun::star::lang::XTypeProvider   // implemented by WeakImplHelper
+    //	,public ::com::sun::star::uno::XWeak			// implemented by WeakImplHelper(optional interface)
+    //	,public ::com::sun::star::uno::XInterface		// implemented by WeakImplHelper(optional interface)
+    //	,public ::com::sun::star::lang::XTypeProvider	// implemented by WeakImplHelper
         >
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>        m_xCC;
-    sal_Bool            m_bCancelRequired;
-    ::osl::Condition    m_oCancelFinished;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>		   m_xCC;
+    sal_Bool			m_bCancelRequired;
+    ::osl::Condition	m_oCancelFinished;
 
 private:
         sal_Bool impl_checkCancel();
@@ -82,7 +82,7 @@ public:
                             throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
-        cancel()            throw (::com::sun::star::uno::RuntimeException);
+        cancel()			throw (::com::sun::star::uno::RuntimeException);
 };
 
 //.............................................................................

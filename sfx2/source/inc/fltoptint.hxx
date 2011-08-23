@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,17 +25,15 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef SFX2_FLTOPTINT_HXX
-#define SFX2_FLTOPTINT_HXX
 
 #include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/document/XInteractionFilterOptions.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <comphelper/interaction.hxx>
+#include <framework/interaction.hxx>
 
-//using namespace ::framework;
-
-class FilterOptionsContinuation : public comphelper::OInteraction< ::com::sun::star::document::XInteractionFilterOptions >
+using namespace ::framework;
+ 
+class FilterOptionsContinuation : public ContinuationBase< ::com::sun::star::document::XInteractionFilterOptions >
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > rProperties;
 
@@ -47,34 +45,33 @@ public:
 class RequestFilterOptions : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
 {
     ::com::sun::star::uno::Any m_aRequest;
-
-    ::com::sun::star::uno::Sequence<
-                    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >
+        
+    ::com::sun::star::uno::Sequence< 
+                    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > 
                 > m_lContinuations;
-
-    comphelper::OInteractionAbort*  m_pAbort;
-
-    FilterOptionsContinuation*  m_pOptions;
+        
+    ContinuationAbort*	m_pAbort;
+        
+    FilterOptionsContinuation*	m_pOptions;
 
 public:
     RequestFilterOptions( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > rModel,
                               ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > rProperties );
-
-    sal_Bool    isAbort() { return m_pAbort->wasSelected(); }
-
+    
+    sal_Bool	isAbort() { return m_pAbort->isSelected(); }
+        
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > getFilterOptions()
     {
         return m_pOptions->getFilterOptions();
     }
-
-    virtual ::com::sun::star::uno::Any SAL_CALL getRequest()
+        
+    virtual ::com::sun::star::uno::Any SAL_CALL getRequest() 
         throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >
-            > SAL_CALL getContinuations()
+    virtual ::com::sun::star::uno::Sequence< 
+                ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > 
+            > SAL_CALL getContinuations() 
         throw( ::com::sun::star::uno::RuntimeException );
-};
+};  
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

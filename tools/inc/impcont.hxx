@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ class CBlock
 private:
     CBlock*         pPrev;              // Vorheriger Block
     CBlock*         pNext;              // Naechster Block
-    sal_uInt16          nSize;              // Groesse des Blocks
-    sal_uInt16          nCount;             // Anzahl Pointer
+    USHORT          nSize;              // Groesse des Blocks
+    USHORT          nCount;             // Anzahl Pointer
     void**          pNodes;             // Pointer auf die Daten
 
 #if defined DBG_UTIL
@@ -53,26 +53,26 @@ private:
 
 public:
                     // Fuer List-Container
-                    CBlock( sal_uInt16 nSize, CBlock* pPrev, CBlock* pNext );
+                    CBlock( USHORT nSize, CBlock* pPrev, CBlock* pNext );
                     // Fuer Array-Container
-                    CBlock( sal_uInt16 nSize, CBlock* pPrev );
+                    CBlock( USHORT nSize, CBlock* pPrev );
                     // Copy-Ctor
                     CBlock( const CBlock& r, CBlock* pPrev );
                     ~CBlock();
 
-    void            Insert( void* p, sal_uInt16 nIndex, sal_uInt16 nReSize );
-    CBlock*         Split( void* p, sal_uInt16 nIndex, sal_uInt16 nReSize );
-    void*           Remove( sal_uInt16 nIndex, sal_uInt16 nReSize );
-    void*           Replace( void* pNew, sal_uInt16 nIndex );
+    void            Insert( void* p, USHORT nIndex, USHORT nReSize );
+    CBlock*         Split( void* p, USHORT nIndex, USHORT nReSize );
+    void*           Remove( USHORT nIndex, USHORT nReSize );
+    void*           Replace( void* pNew, USHORT nIndex );
 
     void**          GetNodes() const { return pNodes; }
-    void**          GetObjectPtr( sal_uInt16 nIndex );
-    void*           GetObject( sal_uInt16 nIndex ) const;
+    void**          GetObjectPtr( USHORT nIndex );
+    void*           GetObject( USHORT nIndex ) const;
 
-    void            SetSize( sal_uInt16 nNewSize );
+    void            SetSize( USHORT nNewSize );
 
-    sal_uInt16          GetSize() const               { return nCount; }
-    sal_uInt16          Count() const                 { return nCount; }
+    USHORT          GetSize() const               { return nCount; }
+    USHORT          Count() const                 { return nCount; }
     void            SetPrevBlock( CBlock* p )     { pPrev = p;     }
     void            SetNextBlock( CBlock* p )     { pNext = p;     }
     CBlock*         GetPrevBlock() const          { return pPrev;  }
@@ -90,10 +90,12 @@ private:
 |*    CBlock::GetObject()
 |*
 |*    Beschreibung      Gibt einen Pointer aus dem Block zurueck
+|*    Ersterstellung    TH 17.09.91
+|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
-inline void* CBlock::GetObject( sal_uInt16 nIndex ) const
+inline void* CBlock::GetObject( USHORT nIndex ) const
 {
     return pNodes[nIndex];
 }
@@ -105,14 +107,16 @@ inline void* CBlock::GetObject( sal_uInt16 nIndex ) const
 |*    Beschreibung      Wir gehen davon aus, das Pointer in der Regel
 |*                      sich im ersten Block befindet und schalten
 |*                      deshalb eine Inline-Methode davor
+|*    Ersterstellung    TH 02.07.93
+|*    Letzte Aenderung  TH 02.07.93
 |*
 *************************************************************************/
 
-inline void* Container::ImpGetObject( sal_uIntPtr nIndex ) const
+inline void* Container::ImpGetObject( ULONG nIndex ) const
 {
     if ( pFirstBlock && (nIndex < pFirstBlock->Count()) )
         // Item innerhalb des gefundenen Blocks zurueckgeben
-        return pFirstBlock->GetObject( (sal_uInt16)nIndex );
+        return pFirstBlock->GetObject( (USHORT)nIndex );
     else
         return GetObject( nIndex );
 }
@@ -123,6 +127,8 @@ inline void* Container::ImpGetObject( sal_uIntPtr nIndex ) const
 |*
 |*    Beschreibung      Wenn es nur einen Block gibt, wird davon
 |*                      das Daten-Array zurueckgegeben
+|*    Ersterstellung    TH 24.01.96
+|*    Letzte Aenderung  TH 24.01.96
 |*
 *************************************************************************/
 

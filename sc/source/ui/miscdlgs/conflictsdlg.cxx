@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 // struct ScConflictsListEntry
 //=============================================================================
 
-bool ScConflictsListEntry::HasSharedAction( sal_uLong nSharedAction ) const
+bool ScConflictsListEntry::HasSharedAction( ULONG nSharedAction ) const
 {
     ScChangeActionList::const_iterator aEnd = maSharedActions.end();
     for ( ScChangeActionList::const_iterator aItr = maSharedActions.begin(); aItr != aEnd; ++aItr )
@@ -58,7 +58,7 @@ bool ScConflictsListEntry::HasSharedAction( sal_uLong nSharedAction ) const
     return false;
 }
 
-bool ScConflictsListEntry::HasOwnAction( sal_uLong nOwnAction ) const
+bool ScConflictsListEntry::HasOwnAction( ULONG nOwnAction ) const
 {
     ScChangeActionList::const_iterator aEnd = maOwnActions.end();
     for ( ScChangeActionList::const_iterator aItr = maOwnActions.begin(); aItr != aEnd; ++aItr )
@@ -77,7 +77,7 @@ bool ScConflictsListEntry::HasOwnAction( sal_uLong nOwnAction ) const
 // class ScConflictsListHelper
 //=============================================================================
 
-bool ScConflictsListHelper::HasOwnAction( ScConflictsList& rConflictsList, sal_uLong nOwnAction )
+bool ScConflictsListHelper::HasOwnAction( ScConflictsList& rConflictsList, ULONG nOwnAction )
 {
     ScConflictsList::const_iterator aEnd = rConflictsList.end();
     for ( ScConflictsList::const_iterator aItr = rConflictsList.begin(); aItr != aEnd; ++aItr )
@@ -91,7 +91,7 @@ bool ScConflictsListHelper::HasOwnAction( ScConflictsList& rConflictsList, sal_u
     return false;
 }
 
-ScConflictsListEntry* ScConflictsListHelper::GetSharedActionEntry( ScConflictsList& rConflictsList, sal_uLong nSharedAction )
+ScConflictsListEntry* ScConflictsListHelper::GetSharedActionEntry( ScConflictsList& rConflictsList, ULONG nSharedAction )
 {
     ScConflictsList::iterator aEnd = rConflictsList.end();
     for ( ScConflictsList::iterator aItr = rConflictsList.begin(); aItr != aEnd; ++aItr )
@@ -105,7 +105,7 @@ ScConflictsListEntry* ScConflictsListHelper::GetSharedActionEntry( ScConflictsLi
     return NULL;
 }
 
-ScConflictsListEntry* ScConflictsListHelper::GetOwnActionEntry( ScConflictsList& rConflictsList, sal_uLong nOwnAction )
+ScConflictsListEntry* ScConflictsListHelper::GetOwnActionEntry( ScConflictsList& rConflictsList, ULONG nOwnAction )
 {
     ScConflictsList::iterator aEnd = rConflictsList.end();
     for ( ScConflictsList::iterator aItr = rConflictsList.begin(); aItr != aEnd; ++aItr )
@@ -132,12 +132,12 @@ void ScConflictsListHelper::Transform_Impl( ScChangeActionList& rActionList, ScC
         if ( aItrMap != pMergeMap->end() )
         {
             *aItr = aItrMap->second;
-            ++aItr;
+            aItr++;
         }
         else
         {
             aItr = rActionList.erase( aItr );
-            OSL_FAIL( "ScConflictsListHelper::Transform_Impl: erased action from conflicts list!" );
+            DBG_ERROR( "ScConflictsListHelper::Transform_Impl: erased action from conflicts list!" );
         }
     }
 }
@@ -165,8 +165,8 @@ void ScConflictsListHelper::TransformConflictsList( ScConflictsList& rConflictsL
 // class ScConflictsFinder
 //=============================================================================
 
-ScConflictsFinder::ScConflictsFinder( ScChangeTrack* pTrack, sal_uLong nStartShared, sal_uLong nEndShared,
-        sal_uLong nStartOwn, sal_uLong nEndOwn, ScConflictsList& rConflictsList )
+ScConflictsFinder::ScConflictsFinder( ScChangeTrack* pTrack, ULONG nStartShared, ULONG nEndShared,
+        ULONG nStartOwn, ULONG nEndOwn, ScConflictsList& rConflictsList )
     :mpTrack( pTrack )
     ,mnStartShared( nStartShared )
     ,mnEndShared( nEndShared )
@@ -175,7 +175,7 @@ ScConflictsFinder::ScConflictsFinder( ScChangeTrack* pTrack, sal_uLong nStartSha
     ,mrConflictsList( rConflictsList )
 {
 }
-
+    
 ScConflictsFinder::~ScConflictsFinder()
 {
 }
@@ -216,7 +216,7 @@ ScConflictsListEntry* ScConflictsFinder::GetIntersectingEntry( const ScChangeAct
     return NULL;
 }
 
-ScConflictsListEntry* ScConflictsFinder::GetEntry( sal_uLong nSharedAction, const ScChangeActionList& rOwnActions )
+ScConflictsListEntry* ScConflictsFinder::GetEntry( ULONG nSharedAction, const ScChangeActionList& rOwnActions )
 {
     // try to get a list entry which already contains the shared action
     ScConflictsListEntry* pEntry = ScConflictsListHelper::GetSharedActionEntry( mrConflictsList, nSharedAction );
@@ -344,6 +344,25 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, bool bIsSharedA
                     }
                 }
             }
+            else if ( eConflictAction == SC_CONFLICT_ACTION_KEEP_OTHER )
+            {
+                if ( pAction->GetType() == SC_CAT_CONTENT )
+                {
+                    if ( bHandleContentAction )
+                    {
+                        // do nothing
+                        //mpTrack->SelectContent( pAction );
+                    }
+                }
+                else
+                {
+                    if ( bHandleNonContentAction )
+                    {
+                        // do nothing
+                        //mpTrack->Accept( pAction );
+                    }
+                }
+            }
         }
     }
     else
@@ -460,7 +479,7 @@ ScConflictsDlg::ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocume
     aHeader += maStrTitleDate;
     maLbConflicts.InsertHeaderEntry( aHeader, HEADERBAR_APPEND, HIB_LEFT | HIB_LEFTIMAGE | HIB_VCENTER );
 
-    maLbConflicts.SetStyle( maLbConflicts.GetStyle() | WB_HASLINES | WB_CLIPCHILDREN | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL );
+    maLbConflicts.SetWindowBits( WB_HASLINES | WB_CLIPCHILDREN | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL );
     maLbConflicts.SetSelectionMode( MULTIPLE_SELECTION );
     maLbConflicts.SetHighlightRange();
 
@@ -512,7 +531,7 @@ String ScConflictsDlg::GetActionString( const ScChangeAction* pAction, ScDocumen
     if ( pAction && pDoc )
     {
         String aDesc;
-        pAction->GetDescription( aDesc, pDoc, sal_True, false );
+        pAction->GetDescription( aDesc, pDoc, TRUE, false );
         aString += aDesc;
         aString += '\t';
 
@@ -528,7 +547,7 @@ String ScConflictsDlg::GetActionString( const ScChangeAction* pAction, ScDocumen
         DateTime aDateTime = pAction->GetDateTime();
         aString += ScGlobal::pLocaleData->getDate( aDateTime );
         aString += ' ';
-        aString += ScGlobal::pLocaleData->getTime( aDateTime, false );
+        aString += ScGlobal::pLocaleData->getTime( aDateTime, FALSE );
         aString += '\t';
     }
 
@@ -552,7 +571,7 @@ void ScConflictsDlg::HandleListBoxSelection( bool bSelectHandle )
     {
         if ( bSelectHandle )
         {
-            maLbConflicts.SelectAll( false );
+            maLbConflicts.SelectAll( FALSE );
         }
         if ( !maLbConflicts.IsSelected( pRootEntry ) )
         {
@@ -608,7 +627,7 @@ IMPL_LINK( ScConflictsDlg, UpdateSelectionHdl, Timer*, EMPTYARG )
 
     ScTabView* pTabView = mpViewData->GetView();
     pTabView->DoneBlockMode();
-    sal_Bool bContMark = false;
+    BOOL bContMark = FALSE;
     SvLBoxEntry* pEntry = maLbConflicts.FirstSelected();
     while ( pEntry )
     {
@@ -624,9 +643,9 @@ IMPL_LINK( ScConflictsDlg, UpdateSelectionHdl, Timer*, EMPTYARG )
                     const ScBigRange& rBigRange = ( static_cast< const ScChangeAction* >( pAction ) )->GetBigRange();
                     if ( rBigRange.IsValid( mpOwnDoc ) )
                     {
-                        sal_Bool bSetCursor = !maLbConflicts.NextSelected( pEntry );
+                        BOOL bSetCursor = !maLbConflicts.NextSelected( pEntry );
                         pTabView->MarkRange( rBigRange.MakeRange(), bSetCursor, bContMark );
-                        bContMark = sal_True;
+                        bContMark = TRUE;
                     }
                 }
             }
@@ -681,9 +700,9 @@ void ScConflictsDlg::KeepAllHandler( bool bMine )
         SetConflictAction( pRootEntry, eConflictAction );
         pRootEntry = maLbConflicts.NextSibling( pRootEntry );
     }
-    maLbConflicts.SetUpdateMode( false );
+    maLbConflicts.SetUpdateMode( FALSE );
     maLbConflicts.Clear();
-    maLbConflicts.SetUpdateMode( sal_True );
+    maLbConflicts.SetUpdateMode( TRUE );
     SetPointer( Pointer( POINTER_ARROW ) );
     EndDialog( RET_OK );
 }

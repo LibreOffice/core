@@ -30,69 +30,75 @@
 '* short description :
 '*
 '*********************************************************************
+' #1 tiInsertExpandSlide
+' #1 tiInsertSummarySlide
+' #1 tiFormatSeitenlayout
+' #1 t114174
+' #1 t111862
+'\********************************************************************
 
 '  Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\enter.bmp")
-'  Inhalt.SetText ConvertPath (gTesttoolPath + "graphics\required\input\leer.sxd") 
+'  Inhalt.SetText ConvertPath (gTesttoolPath + "graphics\required\input\leer.sxd")    '/// auto.sdd choosen ///'
 
 '-------------------------------------------------------------------------------
 testcase tiInsertExpandSlide
+    
+   dim i,x as integer
+   dim sTemp as string
+   dim b116350 as boolean
 
-    dim i,x as integer
-    dim sTemp as string
-    dim b116350 as boolean
+   '/// open application ///'
+   Call hNewDocument
+   Call sSelectEmptyLayout
+   '/// create presupposition ///
+   '///+ View->Master View->Outline View ///'
+   ViewWorkspaceOutlineView
+      Sleep 1
+      Kontext "DocumentImpressOutlineView"
+      '///+ create a slide with some levels...and some more slides with just one level...  ///'
+      '///+ it should look like this: ///'
+      '///+-------------------------------------------------- ///'
+      '///+ Slide 1///'
+      '///+ - A ///'
+      '///+ - - B///'
+      '///+ - - - C///'
+      '///+ - - - - D///'
+      '///+ - - - - - - F///'
+      '///+ - B///'
+      '///+ - C///'
+      '///+ - D///'
+      '///+ Slide 2 ///'
+      '///+ Slide 3 ///'
+      '///+ Slide 4 ///'
+      '///+ Slide 5 ///'
+      '///+-------------------------------------------------- ///'
+      DocumentImpressOutlineView.TypeKeys "Slide 1"
+      for i = 1 to 6
+         DocumentImpressOutlineView.TypeKeys "<return><tab>"
+         DocumentImpressOutlineView.TypeKeys chr(64+i)
+      next i
+      DocumentImpressOutlineView.TypeKeys "<return>"
+      DocumentImpressOutlineView.TypeKeys ("<shift tab>",5)
+      for i = 1 to 3
+         DocumentImpressOutlineView.TypeKeys chr(65+i)
+         DocumentImpressOutlineView.TypeKeys "<return>"
+      next i
+      DocumentImpressOutlineView.TypeKeys ("<shift tab>")
+      for i = 2 to 5
+         DocumentImpressOutlineView.TypeKeys "Slide " + i
+         DocumentImpressOutlineView.TypeKeys "<return>"
+      next i
+      DocumentImpressOutlineView.TypeKeys "<backspace>"
+   '///+ View->Master View->Drawing View ///'
+   ViewWorkspaceDrawingView
+      Sleep 1
+      '///+ there have to be 5 slides now ///'
+      fGetSlideCount (5)
 
-    printlog "open application "
-    Call hNewDocument
-    Call sSelectEmptyLayout
-    printlog "create presupposition"
-    printlog "View->Master View->Outline View "
-    ViewWorkspaceOutlineView
-    Sleep 1
-    Kontext "DocumentImpressOutlineView"
-    'create a slide with some levels...and some more slides with just one level...  "
-    'it should look like this: "
-    '-------------------------------------------------- "
-    'Slide 1"
-    ' - A "
-    '- - B"
-    ' - - - C"
-    ' - - - - D"
-    ' - - - - - - F"
-    ' - B"
-    ' - C"
-    ' - D"
-    ' Slide 2 "
-    ' Slide 3 "
-    ' Slide 4 "
-    ' Slide 5 "
-    '-------------------------------------------------- "
-    DocumentImpressOutlineView.TypeKeys "Slide 1"
-    for i = 1 to 6
-     DocumentImpressOutlineView.TypeKeys "<return><tab>"
-     DocumentImpressOutlineView.TypeKeys chr(64+i)
-    next i
-    DocumentImpressOutlineView.TypeKeys "<return>"
-    DocumentImpressOutlineView.TypeKeys ("<shift tab>",5)
-    for i = 1 to 3
-     DocumentImpressOutlineView.TypeKeys chr(65+i)
-     DocumentImpressOutlineView.TypeKeys "<return>"
-    next i
-    DocumentImpressOutlineView.TypeKeys ("<shift tab>")
-    for i = 2 to 5
-     DocumentImpressOutlineView.TypeKeys "Slide " + i
-     DocumentImpressOutlineView.TypeKeys "<return>"
-    next i
-    DocumentImpressOutlineView.TypeKeys "<backspace>"
-    printlog " View->Master View->Drawing View "
-    ViewWorkspaceDrawingView
-    Sleep 1
-    printlog "there have to be 5 slides now "
-    fGetSlideCount (5)
-
-    printlog "goto the first slide "
-    hTypeKeys "<home>"
-    printlog "Insert->Expand Slide"
-    InsertExpandSlide
+      '/// goto the first slide ///'
+      hTypeKeys "<home>"
+   '///<b> Insert->Expand Slide </b>///'
+   InsertExpandSlide
       ' usually the content of the new pages is the same as the curren, there is a slide created for every part in the first outline level (gliederungsebene)
       Sleep 1
       if (8 = fGetSlideCount (8)) then
@@ -100,7 +106,7 @@ testcase tiInsertExpandSlide
       else
          warnLog "Bug with Insert Expand Slide"
       endif
-      printlog " check slide content "
+      '///+ check slide content ///'
       hTypeKeys ("<TAB><F2>"
       EditSelectAll
       EditCopy
@@ -136,9 +142,9 @@ testcase tiInsertExpandSlide
       next i
 
       hTypeKeys "<escape><home>"
-   printlog "Insert->Expand Slide"
+   '///<b> Insert->Expand Slide </b>///'
    InsertExpandSlide
-      printlog "And since the Second slide now should be named B, we check that first "
+      '/// And since the Second slide now should be named "B", we check that first ///'
       hTypeKeys ("<TAB><F2>")
       EditSelectAll
       try
@@ -184,7 +190,7 @@ testcase tiInsertExpandSlide
          EditSelectAll
 	 next i
 
-   printlog "close application "
+   '/// close application ///'
    Call  hCloseDocument
 endcase 'tiInsertExpandSlide
 
@@ -279,29 +285,23 @@ testcase tiFormatSeitenlayout
     qaerrorlog "outcommented due to bug"
     goto endsub
     
-    Printlog "Format/Page Layout"
-    printlog "new impress document "
-     Call hNewDocument               
-
-     printlog "format page "
-     FormatPage                
+        Printlog "Format/Page Layout"
+     Call hNewDocument               '/// new impress document ///'
+    
+     FormatPage                '/// format page ///'
      Kontext "Tasks"
      sleep 5
-     printlog "get page name "
-     SetClipboard LayoutsPreview.GetText
-     printlog "change page name "
-     SeitenName.SetText "Test"          
+     SetClipboard LayoutsPreview.GetText       '/// get page name ///'
+     SeitenName.SetText "Test"          '/// change page name ///'
      sleep 1
-     printlog "check background "
-     if Hintergrund.IsChecked=False Then         
+     if Hintergrund.IsChecked=False Then         '/// check background ///'
        Hintergrund.Check
      else
        Hintergrund.UnCheck
             if Hintergrund.IsChecked=False Then PrintLog " Background is deactivated"
      end if
-
-     printlog "change status of objects on background "
-     if ObjekteAufDemHintergrund.IsChecked = True Then       
+    
+     if ObjekteAufDemHintergrund.IsChecked = True Then       '/// change status of objects on background ///'
        PrintLog " Object on background is activated"
        ObjekteAufDemHintergrund.UnCheck
        if ObjekteAufDemHintergrund.IsChecked = False Then PrintLog " Objects on background are deactivated"
@@ -309,11 +309,9 @@ testcase tiFormatSeitenlayout
        ObjekteAufDemHintegrund.Check
        PrintLog " Object on background is activated"
      end if
-     printlog "close dialog "
-     Seitenlayout.OK              
+     Seitenlayout.OK              '/// close dialog ///'
      sleep 1
-     printlog "reopen dialog "
-     FormatPage                
+     FormatPage                '/// reopen dialog ///'
      Kontext "LayoutsPreview"
      sleep 2
      if GetClipboardText <> SeitenName.GetText Then
@@ -322,8 +320,7 @@ testcase tiFormatSeitenlayout
        WarnLog " Page name is not correct"
      end if
      sleep 2
-     printlog "assign different page layout "
-     LayoutsPreview.TypeKeys "<TAB>"            
+     LayoutsPreview.TypeKeys "<TAB>"            '/// assign different page layout ///'
      LayoutsPreview.TypeKeys "<DOWN>" ,2
      LayoutsPreview.TypeKeys "<Return>"
      sleep 2
@@ -341,8 +338,7 @@ testcase tiFormatSeitenlayout
      sleep 3
      DocumentImpress.MouseDoubleClick 25,60
      sleep 3
-     printlog "check in document if layout has changed "
-     Kontext "GrafikEinfuegenDlg"          
+     Kontext "GrafikEinfuegenDlg"          '/// check in document if layout has changed ///'
      sleep 2
      if GrafikEinfuegenDlg.exists (5) then
         try
@@ -365,14 +361,13 @@ testcase tiFormatSeitenlayout
      endif
       sleep 3
      Kontext "DocumentImpress"
-     printlog "close document "
-     Call hCloseDocument             
+     Call hCloseDocument             '/// close document ///'
     endcase 'tiFormatSeitenlayout
     
 '------------------------------------------------------------------------------
 testcase t114174
 
-    printlog "resulting from regression in #111862#  "
+    '/// resulting from regression in #111862#  ///'
     dim sReference(2) as string
     dim sText(2) as string
     dim i as integer
@@ -390,10 +385,10 @@ testcase t114174
 
     sReference(1) = "Koelle"
     sReference(2) = "Alaaf!"
-    printlog "open application "
+    '/// open application ///'
     Call hNewDocument
 
-    printlog "Format->Modify Layout "
+    '/// Format->Modify Layout ///'
     FormatPage
     Kontext "Tasks"
         LayoutsPreview.TypeKeys "<TAB>"
@@ -419,7 +414,7 @@ testcase t114174
         endif
     next i
 
-    printlog "deselect all by typing key 'ESCAPE' again "
+    '/// deselect all by typing key 'ESCAPE' again ///'
     hTypeKeys("<Escape>")
 
     hFileSaveAsKill(sFile)
@@ -482,10 +477,10 @@ testcase t111862
 
     sReference(1) = "Koelle"
     sReference(2) = "Alaaf!"
-    printlog "open application "
+    '/// open application ///'
     Call hNewDocument
 
-    printlog "Format->Modify Layout "
+    '/// Format->Modify Layout ///'
     Formatpage
     Kontext "Tasks"
         LayoutsPreview.TypeKeys "<TAB>"

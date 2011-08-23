@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ published exception FilterOptionsRequest : ::com::sun::star::uno::Exception
     /** The model of the document that should be provided to filters
         that supports XExporter interface.
      */
-    ::com::sun::star::frame::XModel rModel;
+    ::com::sun::star::frame::XModel	rModel;
 
     /** The Media-descriptor of the document
      */

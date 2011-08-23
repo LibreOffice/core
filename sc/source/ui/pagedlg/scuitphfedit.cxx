@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,19 +69,19 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-static sal_uInt16 pPageRightHeaderRanges[] = { SID_SCATTR_PAGE_HEADERRIGHT,
+static USHORT pPageRightHeaderRanges[] = { SID_SCATTR_PAGE_HEADERRIGHT,
                                            SID_SCATTR_PAGE_HEADERRIGHT,
                                            0 };
 
-static sal_uInt16 pPageRightFooterRanges[] = { SID_SCATTR_PAGE_FOOTERRIGHT,
+static USHORT pPageRightFooterRanges[] = { SID_SCATTR_PAGE_FOOTERRIGHT,
                                            SID_SCATTR_PAGE_FOOTERRIGHT,
                                            0 };
 
-static sal_uInt16 pPageLeftHeaderRanges[] =  { SID_SCATTR_PAGE_HEADERLEFT,
+static USHORT pPageLeftHeaderRanges[] =  { SID_SCATTR_PAGE_HEADERLEFT,
                                            SID_SCATTR_PAGE_HEADERLEFT,
                                            0 };
 
-static sal_uInt16 pPageLeftFooterRanges[] =  { SID_SCATTR_PAGE_FOOTERLEFT,
+static USHORT pPageLeftFooterRanges[] =  { SID_SCATTR_PAGE_FOOTERLEFT,
                                            SID_SCATTR_PAGE_FOOTERLEFT,
                                            0 };
 
@@ -93,52 +93,60 @@ static ScEditWindow* pActiveEdWnd = NULL;
 // class ScHFEditPage
 //
 
-ScHFEditPage::ScHFEditPage( Window*             pParent,
-                            sal_uInt16              nResId,
-                            const SfxItemSet&   rCoreAttrs,
-                            sal_uInt16              nWhichId,
+ScHFEditPage::ScHFEditPage( Window* 			pParent,
+                            USHORT				nResId,
+                            const SfxItemSet&	rCoreAttrs,
+                            USHORT				nWhichId,
                             bool bHeader  )
 
-    :   SfxTabPage      ( pParent, ScResId( nResId ), rCoreAttrs ),
+    :	SfxTabPage		( pParent, ScResId( nResId ), rCoreAttrs ),
 
-        aFtLeft         ( this, ScResId( FT_LEFT ) ),
-        aWndLeft        ( this, ScResId( WND_LEFT ), Left ),
-        aFtCenter       ( this, ScResId( FT_CENTER ) ),
-        aWndCenter      ( this, ScResId( WND_CENTER ), Center ),
-        aFtRight        ( this, ScResId( FT_RIGHT ) ),
-        aWndRight       ( this, ScResId( WND_RIGHT ), Right ),
-        maFtDefinedHF       ( this, ScResId( FT_HF_DEFINED ) ),
-        maLbDefined     ( this, ScResId( LB_DEFINED ) ),
-        maFtCustomHF        ( this, ScResId( FT_HF_CUSTOM ) ),
-        aBtnText        ( this, ScResId( BTN_TEXT ) ),
-        aBtnFile        ( this, ScResId( BTN_FILE ) ),
-        aBtnTable       ( this, ScResId( BTN_TABLE ) ),
-        aBtnPage        ( this, ScResId( BTN_PAGE ) ),
-        aBtnLastPage    ( this, ScResId( BTN_PAGES ) ),
-        aBtnDate        ( this, ScResId( BTN_DATE ) ),
-        aBtnTime        ( this, ScResId( BTN_TIME ) ),
-        aFlInfo         ( this, ScResId( FL_INFO ) ),
-        aFtInfo         ( this, ScResId( FT_INFO ) ),
-        aPopUpFile      ( ScResId( RID_POPUP_FCOMMAND) ),
-        nWhich          ( nWhichId )
+        aFtLeft 		( this, ScResId( FT_LEFT ) ),
+        aWndLeft		( this, ScResId( WND_LEFT ), Left ),
+        aFtCenter		( this, ScResId( FT_CENTER ) ),
+        aWndCenter		( this, ScResId( WND_CENTER ), Center ),
+        aFtRight		( this, ScResId( FT_RIGHT ) ),
+        aWndRight		( this, ScResId( WND_RIGHT ), Right ),
+        maFtDefinedHF		( this, ScResId( FT_HF_DEFINED ) ),
+        maLbDefined		( this, ScResId( LB_DEFINED ) ),
+        maFtCustomHF		( this, ScResId( FT_HF_CUSTOM ) ),
+        aBtnText		( this, ScResId( BTN_TEXT ) ),
+        aBtnFile		( this, ScResId( BTN_FILE ) ),
+        aBtnTable		( this, ScResId( BTN_TABLE ) ),
+        aBtnPage		( this, ScResId( BTN_PAGE ) ),
+        aBtnLastPage	( this, ScResId( BTN_PAGES ) ),
+        aBtnDate		( this, ScResId( BTN_DATE ) ),
+        aBtnTime		( this, ScResId( BTN_TIME ) ),
+        aFlInfo 		( this, ScResId( FL_INFO ) ),
+        aFtInfo 		( this, ScResId( FT_INFO ) ),
+        aPopUpFile		( ScResId( RID_POPUP_FCOMMAND) ),
+        nWhich			( nWhichId )
 {
-    //! use default style from current document?
-    //! if font color is used, header/footer background color must be set
+    //!	use default style from current document?
+    //!	if font color is used, header/footer background color must be set
 
-    ScPatternAttr   aPatAttr( rCoreAttrs.GetPool() );
+    ScPatternAttr	aPatAttr( rCoreAttrs.GetPool() );
 
 
     aBtnFile.SetPopupMenu(&aPopUpFile);
 
     maLbDefined.SetSelectHdl( LINK( this, ScHFEditPage, ListHdl_Impl ) );
     aBtnFile.SetMenuHdl( LINK( this, ScHFEditPage, MenuHdl ) );
-    aBtnText    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-    aBtnPage    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+    aBtnText	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+    aBtnPage	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
     aBtnLastPage.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-    aBtnDate    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-    aBtnTime    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-    aBtnFile    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-    aBtnTable   .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+    aBtnDate	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+    aBtnTime	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+    aBtnFile	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+    aBtnTable	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+
+    aBtnText    .SetModeImage( Image( ScResId( IMG_TEXT_H  ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnFile    .SetModeImage( Image( ScResId( IMG_FILE_H  ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnTable   .SetModeImage( Image( ScResId( IMG_TABLE_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnPage    .SetModeImage( Image( ScResId( IMG_PAGE_H  ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnLastPage.SetModeImage( Image( ScResId( IMG_PAGES_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnDate    .SetModeImage( Image( ScResId( IMG_DATE_H  ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnTime    .SetModeImage( Image( ScResId( IMG_TIME_H  ) ), BMP_COLOR_HIGHCONTRAST );
 
     if(!bHeader)
     {
@@ -157,9 +165,9 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
         aFtLeft.SetPosPixel(pt2);
         aFtRight.SetPosPixel(pt1);
     }
-    aWndLeft.   SetFont( aPatAttr );
+    aWndLeft.	SetFont( aPatAttr );
     aWndCenter. SetFont( aPatAttr );
-    aWndRight.  SetFont( aPatAttr );
+    aWndRight.	SetFont( aPatAttr );
 
     FillCmdArr();
 
@@ -172,7 +180,7 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
 
 // -----------------------------------------------------------------------
 
-ScHFEditPage::~ScHFEditPage()
+__EXPORT ScHFEditPage::~ScHFEditPage()
 {
 }
 
@@ -187,7 +195,7 @@ void ScHFEditPage::SetNumType(SvxNumType eNumType)
 
 #define IS_AVAILABLE(w)(rCoreSet.GetItemState( (w) ) >= SFX_ITEM_AVAILABLE)
 
-void ScHFEditPage::Reset( const SfxItemSet& rCoreSet )
+void __EXPORT ScHFEditPage::Reset( const SfxItemSet& rCoreSet )
 {
     if ( IS_AVAILABLE( nWhich ) )
     {
@@ -208,12 +216,12 @@ void ScHFEditPage::Reset( const SfxItemSet& rCoreSet )
 
 // -----------------------------------------------------------------------
 
-sal_Bool ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
+BOOL __EXPORT ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
 {
-    ScPageHFItem    aItem( nWhich );
-    EditTextObject* pLeft   = aWndLeft  .CreateTextObject();
+    ScPageHFItem	aItem( nWhich );
+    EditTextObject* pLeft	= aWndLeft	.CreateTextObject();
     EditTextObject* pCenter = aWndCenter.CreateTextObject();
-    EditTextObject* pRight  = aWndRight .CreateTextObject();
+    EditTextObject* pRight	= aWndRight .CreateTextObject();
 
     aItem.SetLeftArea  ( *pLeft );
     aItem.SetCenterArea( *pCenter );
@@ -224,15 +232,15 @@ sal_Bool ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
 
     rCoreSet.Put( aItem );
 
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
 #define SET_CMD(i,id) \
-    aCmd  = aDel;                           \
-    aCmd += ScGlobal::GetRscString( id );   \
-    aCmd += aDel;                           \
+    aCmd  = aDel;							\
+    aCmd += ScGlobal::GetRscString( id );	\
+    aCmd += aDel;							\
     aCmdArr[i] = aCmd;
 
 // -----------------------------------------------------------------------
@@ -336,7 +344,7 @@ void ScHFEditPage::InitPreDefinedList()
 
 void ScHFEditPage::InsertToDefinedList()
 {
-    sal_uInt16 nCount =  maLbDefined.GetEntryCount();
+    USHORT nCount =  maLbDefined.GetEntryCount();
     if(nCount == eEntryCount)
     {
         String aCustomizedEntry(ScGlobal::GetRscString( STR_HF_CUSTOMIZED ) );
@@ -347,7 +355,7 @@ void ScHFEditPage::InsertToDefinedList()
 
 void ScHFEditPage::RemoveFromDefinedList()
 {
-    sal_uInt16 nCount =  maLbDefined.GetEntryCount();
+    USHORT nCount =  maLbDefined.GetEntryCount();
     if(nCount > eEntryCount )
         maLbDefined.RemoveEntry( nCount-1);
 }
@@ -374,8 +382,8 @@ void ScHFEditPage::SetSelectDefinedList()
 
     bool bFound = false;
 
-    sal_uInt16 i;
-    sal_uInt16 nCount =  maLbDefined.GetEntryCount();
+    USHORT i;
+    USHORT nCount =  maLbDefined.GetEntryCount();
     for(i = 0; i < nCount && !bFound; i++)
     {
         switch(static_cast<ScHFEntryId>(i))
@@ -542,7 +550,7 @@ void ScHFEditPage::SetSelectDefinedList()
     if(eSelectEntry == eEntryCount)
         InsertToDefinedList();
 
-    maLbDefined.SelectEntryPos( sal::static_int_cast<sal_uInt16>( eSelectEntry ) );
+    maLbDefined.SelectEntryPos( sal::static_int_cast<USHORT>( eSelectEntry ) );
 }
 
 bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, EditTextObject* pTextObj)
@@ -700,7 +708,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             ESelection aSel(0,0,0,0);
             aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem( SvxFileField(), EE_FEATURE_FIELD ), aSel );
             ++aSel.nEndPos;
-            String aPageEntry(RTL_CONSTASCII_USTRINGPARAM(", "));
+            String aPageEntry(RTL_CONSTASCII_STRINGPARAM(", "));
             aPageEntry += ScGlobal::GetRscString( STR_PAGE ) ;
             aPageEntry += ' ';
             aWndCenter.GetEditEngine()->QuickInsertText(aPageEntry, ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
@@ -733,7 +741,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aSel.nEndPos = aPageEntry.Len();
             aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             ++aSel.nEndPos;
-            String aCommaSpace(RTL_CONSTASCII_USTRINGPARAM(", "));
+            String aCommaSpace(RTL_CONSTASCII_STRINGPARAM(", "));
             aWndCenter.GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             aSel.nEndPos = sal::static_int_cast<xub_StrLen>( aSel.nEndPos + aCommaSpace.Len() );
             aWndCenter.GetEditEngine()->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
@@ -754,7 +762,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aSel.nEndPos = aPageEntry.Len();
             aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             ++aSel.nEndPos;
-            String aCommaSpace(RTL_CONSTASCII_USTRINGPARAM(", "));
+            String aCommaSpace(RTL_CONSTASCII_STRINGPARAM(", "));
             aWndCenter.GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             aSel.nEndPos = sal::static_int_cast<xub_StrLen>( aSel.nEndPos + aCommaSpace.Len() );
             aWndCenter.GetEditEngine()->QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
@@ -925,12 +933,12 @@ ScRightHeaderEditPage::ScRightHeaderEditPage( Window* pParent, const SfxItemSet&
 
 // -----------------------------------------------------------------------
 
-sal_uInt16* ScRightHeaderEditPage::GetRanges()
+USHORT* __EXPORT ScRightHeaderEditPage::GetRanges()
     { return pPageRightHeaderRanges; }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* ScRightHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
+SfxTabPage* __EXPORT ScRightHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScRightHeaderEditPage( pParent, rCoreSet ) ); };
 
 
@@ -945,12 +953,12 @@ ScLeftHeaderEditPage::ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& r
 
 // -----------------------------------------------------------------------
 
-sal_uInt16* ScLeftHeaderEditPage::GetRanges()
+USHORT* __EXPORT ScLeftHeaderEditPage::GetRanges()
     { return pPageLeftHeaderRanges; }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* ScLeftHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
+SfxTabPage* __EXPORT ScLeftHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScLeftHeaderEditPage( pParent, rCoreSet ) ); };
 
 //========================================================================
@@ -964,12 +972,12 @@ ScRightFooterEditPage::ScRightFooterEditPage( Window* pParent, const SfxItemSet&
 
 // -----------------------------------------------------------------------
 
-sal_uInt16* ScRightFooterEditPage::GetRanges()
+USHORT* __EXPORT ScRightFooterEditPage::GetRanges()
     { return pPageRightFooterRanges; }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* ScRightFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
+SfxTabPage* __EXPORT ScRightFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScRightFooterEditPage( pParent, rCoreSet ) ); };
 
 //========================================================================
@@ -983,12 +991,12 @@ ScLeftFooterEditPage::ScLeftFooterEditPage( Window* pParent, const SfxItemSet& r
 
 // -----------------------------------------------------------------------
 
-sal_uInt16* ScLeftFooterEditPage::GetRanges()
+USHORT* __EXPORT ScLeftFooterEditPage::GetRanges()
     { return pPageLeftFooterRanges; }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* ScLeftFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
+SfxTabPage* __EXPORT ScLeftFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScLeftFooterEditPage( pParent, rCoreSet ) ); };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

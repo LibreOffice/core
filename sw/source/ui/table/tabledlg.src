@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,6 @@ TabPage TP_FORMAT_TABLE
     };
     Edit ED_NAME
     {
-        HelpID = "sw:Edit:TP_FORMAT_TABLE:ED_NAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 75 , 14 ) ;
         Size = MAP_APPFONT ( 112 , 12 ) ;
@@ -112,7 +111,6 @@ TabPage TP_FORMAT_TABLE
     };
     MetricField ED_WIDTH
     {
-        HelpID = "sw:MetricField:TP_FORMAT_TABLE:ED_WIDTH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 75 , 30 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -131,7 +129,6 @@ TabPage TP_FORMAT_TABLE
     };
     CheckBox CB_REL_WIDTH
     {
-        HelpID = "sw:CheckBox:TP_FORMAT_TABLE:CB_REL_WIDTH";
         Pos = MAP_APPFONT ( 118 , 32 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
         TabStop = TRUE ;
@@ -145,7 +142,6 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_FULL
     {
-        HelpID = "sw:RadioButton:TP_FORMAT_TABLE:RB_FULL";
         Pos = MAP_APPFONT ( 202 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         TabStop = TRUE ;
@@ -153,7 +149,6 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_LEFT
     {
-        HelpID = "sw:RadioButton:TP_FORMAT_TABLE:RB_LEFT";
         Pos = MAP_APPFONT ( 202 , 28 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text [ en-US ] = "~Left" ;
@@ -161,7 +156,6 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_FROM_LEFT
     {
-        HelpID = "sw:RadioButton:TP_FORMAT_TABLE:RB_FROM_LEFT";
         Pos = MAP_APPFONT ( 202 , 42 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         TabStop = TRUE ;
@@ -169,7 +163,6 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_RIGHT
     {
-        HelpID = "sw:RadioButton:TP_FORMAT_TABLE:RB_RIGHT";
         Pos = MAP_APPFONT ( 202 , 56 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text [ en-US ] = "R~ight" ;
@@ -177,7 +170,6 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_CENTER
     {
-        HelpID = "sw:RadioButton:TP_FORMAT_TABLE:RB_CENTER";
         Pos = MAP_APPFONT ( 202 , 70 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text [ en-US ] = "~Center" ;
@@ -185,7 +177,6 @@ TabPage TP_FORMAT_TABLE
     };
     RadioButton RB_FREE
     {
-        HelpID = "sw:RadioButton:TP_FORMAT_TABLE:RB_FREE";
         Pos = MAP_APPFONT ( 202 , 84 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         TabStop = TRUE ;
@@ -211,7 +202,6 @@ TabPage TP_FORMAT_TABLE
     };
     MetricField ED_LEFT_DIST
     {
-        HelpID = "sw:MetricField:TP_FORMAT_TABLE:ED_LEFT_DIST";
         Pos = MAP_APPFONT ( 147 , 59 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
@@ -236,7 +226,6 @@ TabPage TP_FORMAT_TABLE
 
     MetricField ED_RIGHT_DIST
     {
-        HelpID = "sw:MetricField:TP_FORMAT_TABLE:ED_RIGHT_DIST";
         Pos = MAP_APPFONT ( 147 , 75 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
@@ -260,7 +249,6 @@ TabPage TP_FORMAT_TABLE
     };
     MetricField ED_TOP_DIST
     {
-        HelpID = "sw:MetricField:TP_FORMAT_TABLE:ED_TOP_DIST";
         Pos = MAP_APPFONT ( 147 , 91 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
@@ -284,7 +272,6 @@ TabPage TP_FORMAT_TABLE
     };
     MetricField ED_BOTTOM_DIST
     {
-        HelpID = "sw:MetricField:TP_FORMAT_TABLE:ED_BOTTOM_DIST";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 147 , 107 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -316,7 +303,6 @@ TabPage TP_FORMAT_TABLE
     };
     ListBox     LB_TEXTDIRECTION
     {
-        HelpID = "sw:ListBox:TP_FORMAT_TABLE:LB_TEXTDIRECTION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 75 , 136 ) ;
         Size = MAP_APPFONT ( 176 , 50 ) ;
@@ -343,7 +329,6 @@ TabPage TP_TABLE_COLUMN
     Hide = TRUE;
     CheckBox CB_MOD_TBL
     {
-        HelpID = "sw:CheckBox:TP_TABLE_COLUMN:CB_MOD_TBL";
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 180 , 10 ) ;
         TabStop = TRUE ;
@@ -351,7 +336,6 @@ TabPage TP_TABLE_COLUMN
     };
     CheckBox CB_PROP
     {
-        HelpID = "sw:CheckBox:TP_TABLE_COLUMN:CB_PROP";
         Pos = MAP_APPFONT ( 6 , 20 ) ;
         Size = MAP_APPFONT ( 180 , 10 ) ;
         TabStop = TRUE ;
@@ -365,7 +349,6 @@ TabPage TP_TABLE_COLUMN
     };
     MetricField ED_SPACE
     {
-        HelpID = "sw:MetricField:TP_TABLE_COLUMN:ED_SPACE";
         ReadOnly = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 95 , 34 ) ;
@@ -382,7 +365,6 @@ TabPage TP_TABLE_COLUMN
     };
     ImageButton COL_BTN_DOWN
     {
-        HelpID = "sw:ImageButton:TP_TABLE_COLUMN:COL_BTN_DOWN";
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 12 , 65 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
@@ -391,7 +373,6 @@ TabPage TP_TABLE_COLUMN
     };
     ImageButton COL_BTN_UP
     {
-        HelpID = "sw:ImageButton:TP_TABLE_COLUMN:COL_BTN_UP";
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 234 , 65 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
@@ -410,7 +391,6 @@ TabPage TP_TABLE_COLUMN
     };
     MetricField COL_MF_1
     {
-        HelpID = "sw:MetricField:TP_TABLE_COLUMN:COL_MF_1";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 13 , 81 ) ;
@@ -438,7 +418,6 @@ TabPage TP_TABLE_COLUMN
     };
     MetricField COL_MF_2
     {
-        HelpID = "sw:MetricField:TP_TABLE_COLUMN:COL_MF_2";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 52 , 81 ) ;
@@ -466,7 +445,6 @@ TabPage TP_TABLE_COLUMN
     };
     MetricField COL_MF_3
     {
-        HelpID = "sw:MetricField:TP_TABLE_COLUMN:COL_MF_3";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 91 , 81 ) ;
@@ -494,7 +472,6 @@ TabPage TP_TABLE_COLUMN
     };
     MetricField COL_MF_4
     {
-        HelpID = "sw:MetricField:TP_TABLE_COLUMN:COL_MF_4";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 130 , 81 ) ;
@@ -522,7 +499,6 @@ TabPage TP_TABLE_COLUMN
     };
     MetricField COL_MF_5
     {
-        HelpID = "sw:MetricField:TP_TABLE_COLUMN:COL_MF_5";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 169 , 81 ) ;
@@ -550,7 +526,6 @@ TabPage TP_TABLE_COLUMN
     };
     MetricField COL_MF_6
     {
-        HelpID = "sw:MetricField:TP_TABLE_COLUMN:COL_MF_6";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 208 , 81 ) ;
@@ -576,7 +551,7 @@ TabPage TP_TABLE_COLUMN
 };
 /**************************************************************************/
 /*                                                                        */
-/*  Textfluss                                                                        */
+/*	Textfluss                                                                        */
 /*                                                                        */
 /**************************************************************************/
 TabPage TP_TABLE_TEXTFLOW
@@ -593,8 +568,7 @@ TabPage TP_TABLE_TEXTFLOW
     };
     CheckBox CB_PAGEBREAK
     {
-        HelpID = "sw:CheckBox:TP_TABLE_TEXTFLOW:CB_PAGEBREAK";
-         //         Disable = TRUE;
+         //			Disable = TRUE;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
         Text [ en-US ] = "~Break" ;
@@ -603,7 +577,6 @@ TabPage TP_TABLE_TEXTFLOW
     };
     RadioButton RB_BREAKPAGE
     {
-        HelpID = "sw:RadioButton:TP_TABLE_TEXTFLOW:RB_BREAKPAGE";
         Pos = MAP_APPFONT ( 105 , 14 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "~Page" ;
@@ -612,16 +585,15 @@ TabPage TP_TABLE_TEXTFLOW
     };
     RadioButton RB_BREAKCOLUMN
     {
-        HelpID = "sw:RadioButton:TP_TABLE_TEXTFLOW:RB_BREAKCOLUMN";
-         //         Disable = TRUE;
+         //			Disable = TRUE;
         Pos = MAP_APPFONT ( 178 , 14 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
+         // ### ACHTUNG: Neuer Text in Resource? S~palte : ~Spalte
         Text [ en-US ] = "Col~umn" ;
     };
     RadioButton RB_PAGEBREAKBEFORE
     {
-        HelpID = "sw:RadioButton:TP_TABLE_TEXTFLOW:RB_PAGEBREAKBEFORE";
-         //         Disable = TRUE;
+         //			Disable = TRUE;
         Pos = MAP_APPFONT ( 105 , 28 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Be~fore" ;
@@ -630,16 +602,14 @@ TabPage TP_TABLE_TEXTFLOW
     };
     RadioButton RB_PAGEBREAKAFTER
     {
-        HelpID = "sw:RadioButton:TP_TABLE_TEXTFLOW:RB_PAGEBREAKAFTER";
-         //         Disable = TRUE;
+         //			Disable = TRUE;
         Pos = MAP_APPFONT ( 178 , 28 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "~After" ;
     };
     CheckBox CB_PAGECOLL
     {
-        HelpID = "sw:CheckBox:TP_TABLE_TEXTFLOW:CB_PAGECOLL";
-         //         Disable = TRUE;
+         //			Disable = TRUE;
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text [ en-US ] = "With Page St~yle" ;
@@ -648,7 +618,6 @@ TabPage TP_TABLE_TEXTFLOW
     };
     ListBox LB_PAGECOLL
     {
-        HelpID = "sw:ListBox:TP_TABLE_TEXTFLOW:LB_PAGECOLL";
         Pos = MAP_APPFONT ( 105 , 42 ) ;
         Size = MAP_APPFONT ( 61 , 50 ) ;
         TabStop = TRUE ;
@@ -662,7 +631,6 @@ TabPage TP_TABLE_TEXTFLOW
     };
     NumericField NF_PAGENUM
     {
-        HelpID = "sw:NumericField:TP_TABLE_TEXTFLOW:NF_PAGENUM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 222 , 42 ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
@@ -678,7 +646,6 @@ TabPage TP_TABLE_TEXTFLOW
     };
     CheckBox CB_SPLIT
     {
-        HelpID = "sw:CheckBox:TP_TABLE_TEXTFLOW:CB_SPLIT";
         Pos = MAP_APPFONT ( 12 , 58 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
@@ -686,7 +653,6 @@ TabPage TP_TABLE_TEXTFLOW
     };
     TriStateBox CB_SPLIT_ROW
     {
-        HelpID = "sw:TriStateBox:TP_TABLE_TEXTFLOW:CB_SPLIT_ROW";
         Pos = MAP_APPFONT ( 21 , 71 ) ;
         Size = MAP_APPFONT ( 227 , 10 ) ;
         TabStop = TRUE ;
@@ -694,7 +660,6 @@ TabPage TP_TABLE_TEXTFLOW
     };
     CheckBox CB_KEEP
     {
-        HelpID = "sw:CheckBox:TP_TABLE_TEXTFLOW:CB_KEEP";
         Pos = MAP_APPFONT ( 12 , 85 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "~Keep with next paragraph" ;
@@ -702,7 +667,6 @@ TabPage TP_TABLE_TEXTFLOW
     };
     CheckBox CB_HEADLINE
     {
-        HelpID = "sw:CheckBox:TP_TABLE_TEXTFLOW:CB_HEADLINE";
         Pos = MAP_APPFONT ( 12 , 99 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
@@ -716,7 +680,6 @@ TabPage TP_TABLE_TEXTFLOW
     };
     NumericField NF_REPEAT_HEADER
     {
-        HelpID = "sw:NumericField:TP_TABLE_TEXTFLOW:NF_REPEAT_HEADER";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 131 , 113 ) ;
         Size = MAP_APPFONT ( 28 , 12 ) ;
@@ -741,7 +704,6 @@ TabPage TP_TABLE_TEXTFLOW
     };
     ListBox LB_TEXTDIRECTION
     {
-        HelpID = "sw:ListBox:TP_TABLE_TEXTFLOW:LB_TEXTDIRECTION";
         Pos = MAP_APPFONT ( 85 , 130 ) ;
         Size = MAP_APPFONT ( 163 , 50 ) ;
         DropDown = TRUE;
@@ -768,7 +730,6 @@ TabPage TP_TABLE_TEXTFLOW
     };
     ListBox LB_VERTORIENT
     {
-        HelpID = "sw:ListBox:TP_TABLE_TEXTFLOW:LB_VERTORIENT";
         Pos = MAP_APPFONT ( 85 , 162 ) ;
         Size = MAP_APPFONT ( 61 , 50 ) ;
         DropDown = TRUE;
@@ -785,3 +746,4 @@ InfoBox MSG_WRONG_TABLENAME
 {
     Message [ en-US ] = "The name of the table must not contain spaces." ;
 };
+

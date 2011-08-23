@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ import com.sun.star.xml.sax.XAttributeList;
 public class AttributeListHelper implements com.sun.star.xml.sax.XAttributeList
 {
     private Vector m_AttributeList;
-
+        
     public AttributeListHelper()
     {
         m_AttributeList = new Vector();
@@ -55,7 +55,7 @@ public class AttributeListHelper implements com.sun.star.xml.sax.XAttributeList
     {
         int nLength = m_AttributeList.size();
         boolean bFound = false;
-
+        
         for (int i=0; i<nLength; ++i)
         {
             if (getNameByIndex((short)i).equals(name))
@@ -67,7 +67,7 @@ public class AttributeListHelper implements com.sun.star.xml.sax.XAttributeList
                 break;
             }
         }
-
+        
         if (!bFound)
         {
             Vector attribute = new Vector();
@@ -81,22 +81,22 @@ public class AttributeListHelper implements com.sun.star.xml.sax.XAttributeList
     public String getAttributeItem(short index, int itemIndex)
     {
         String item = null;
-
+        
         if (index>=0 && index<getLength())
         {
             Vector attribute = (Vector)m_AttributeList.get(index);
             item = (String)(attribute.get(itemIndex));
         }
-
+        
         return item;
     }
-
+    
     /* XAttributeList */
     public short getLength()
     {
         return (short)m_AttributeList.size();
     }
-
+    
     public String getNameByIndex(short i)
     {
         return getAttributeItem(i, 0);
@@ -111,12 +111,12 @@ public class AttributeListHelper implements com.sun.star.xml.sax.XAttributeList
     {
         return getAttributeItem(i, 2);
     }
-
+    
     public String getTypeByName(String aName)
     {
         int nLength = m_AttributeList.size();
         String type = null;
-
+        
         for (int i=0; i<nLength; ++i)
         {
             if (getNameByIndex((short)i).equals(aName))
@@ -125,15 +125,15 @@ public class AttributeListHelper implements com.sun.star.xml.sax.XAttributeList
                 break;
             }
         }
-
+        
         return type;
     }
-
+        
     public String getValueByName(String aName)
     {
         int nLength = m_AttributeList.size();
         String value = null;
-
+        
         for (int i=0; i<nLength; ++i)
         {
             if (getNameByIndex((short)i).equals(aName))

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,12 +57,12 @@ public:
 
     GraphicDocShell (
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
-        sal_Bool bSdDataObj=sal_False,
+        BOOL bSdDataObj=FALSE,
         DocumentType=DOCUMENT_TYPE_DRAW);
 
     GraphicDocShell (
         const sal_uInt64 nModelCreationFlags,
-        sal_Bool bSdDataObj=sal_False,
+        BOOL bSdDataObj=FALSE,
         DocumentType=DOCUMENT_TYPE_DRAW);
 
     virtual ~GraphicDocShell (void);

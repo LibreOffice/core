@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ namespace sdext { namespace presenter {
 
 OUString PresenterPaneBorderManager::getImplementationName_static (void)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterPaneBorderManager"));
+    return OUString::createFromAscii("com.sun.star.comp.Draw.PresenterPaneBorderManager");
 }
 
 
@@ -69,7 +69,7 @@ OUString PresenterPaneBorderManager::getImplementationName_static (void)
 Sequence<OUString> PresenterPaneBorderManager::getSupportedServiceNames_static (void)
 {
     static const ::rtl::OUString sServiceName(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PresenterPaneBorderManager"));
+        ::rtl::OUString::createFromAscii("com.sun.star.drawing.PresenterPaneBorderManager"));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -108,13 +108,13 @@ PresenterPaneBorderManager::PresenterPaneBorderManager (
     {
         mxPointer = Reference<awt::XPointer>(
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Pointer")),
+                OUString::createFromAscii("com.sun.star.awt.Pointer"),
                 rxContext),
             UNO_QUERY_THROW);
 
         mxPresenterHelper = Reference<drawing::XPresenterHelper>(
             xFactory->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
+                OUString::createFromAscii("com.sun.star.comp.Draw.PresenterHelper"),
                 rxContext),
             UNO_QUERY_THROW);
     }
@@ -220,25 +220,25 @@ PresenterPaneBorderManager::BorderElement
 
         case mnTop | mnLeft:
             return TopLeft;
-
+            
         case mnTop | mnRight:
             return TopRight;
-
+            
         case mnTop | mnHorizontalCenter:
             return Top;
-
+            
         case mnBottom | mnLeft:
             return BottomLeft;
-
+            
         case mnBottom | mnRight:
             return BottomRight;
-
+            
         case mnBottom | mnHorizontalCenter:
             return Bottom;
-
+            
         case mnVerticalCenter | mnLeft:
             return Left;
-
+            
         case mnVerticalCenter | mnRight:
             return Right;
     }
@@ -282,7 +282,7 @@ void SAL_CALL PresenterPaneBorderManager::initialize (const Sequence<Any>& rArgu
     else
     {
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterPane: invalid number of arguments")),
+            OUString::createFromAscii("PresenterPane: invalid number of arguments"),
                 static_cast<XWeak*>(this));
     }
 }
@@ -360,12 +360,12 @@ void SAL_CALL PresenterPaneBorderManager::mouseExited (const css::awt::MouseEven
     mxOuterDragWindow = NULL;
     mxInnerDragWindow = NULL;
 }
-
+    
 
 
 
 //----- XMouseMotionListener --------------------------------------------------
-
+    
 void SAL_CALL PresenterPaneBorderManager::mouseMoved (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
@@ -408,7 +408,7 @@ void SAL_CALL PresenterPaneBorderManager::mouseMoved (const css::awt::MouseEvent
             case PresenterPaneBorderManager::Bottom:
                 mnPointerType = awt::SystemPointer::WINDOW_SSIZE;
                 break;
-
+                
             case PresenterPaneBorderManager::Content:
             case PresenterPaneBorderManager::Outside:
             default:
@@ -451,7 +451,7 @@ void SAL_CALL PresenterPaneBorderManager::mouseDragged (const css::awt::MouseEve
 
     const sal_Int32 nOldRight = aOldBox.X + aOldBox.Width;
     const sal_Int32 nOldBottom = aOldBox.Y + aOldBox.Height;
-
+        
     awt::Rectangle aBox (aOldBox);
     sal_Int32 nRight = aBox.X + aBox.Width;
     sal_Int32 nBottom = aBox.Y + aBox.Height;
@@ -487,7 +487,7 @@ void SAL_CALL PresenterPaneBorderManager::mouseDragged (const css::awt::MouseEve
             break;
         default: break;
     }
-
+    
     aBox.Width = nRight - aBox.X;
     aBox.Height = nBottom - aBox.Y;
     if (aBox.Width > 20

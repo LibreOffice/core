@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
                                             sal_False,
                                             sal_False,
                                             sal_False,
-                                            m_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers());
+                                            m_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
                 xRet = pRet;
                 break;
             }

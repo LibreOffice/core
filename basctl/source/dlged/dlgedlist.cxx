@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,6 +53,13 @@ DlgEdPropListenerImpl::~DlgEdPropListenerImpl()
 
 void SAL_CALL DlgEdPropListenerImpl::disposing( const ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException)
 {
+    /*
+    // disconnect the listener
+    if (pDlgEdObj)
+    {
+        (pDlgEdObj->m_xPropertyChangeListener).clear();
+    }
+    */
 }
 
 // XPropertyChangeListener
@@ -87,6 +94,13 @@ DlgEdEvtContListenerImpl::~DlgEdEvtContListenerImpl()
 
 void SAL_CALL DlgEdEvtContListenerImpl::disposing( const  ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException)
 {
+    /*
+    // disconnect the listener
+    if (pDlgEdObj)
+    {
+        (pDlgEdObj->m_xContainerListener).clear();
+    }
+    */
 }
 
 // XContainerListener

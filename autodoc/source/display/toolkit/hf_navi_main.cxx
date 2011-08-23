@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,10 +113,10 @@ HF_NaviMainRow::HF_NaviMainRow( Xml::Element & o_out )
 {
     aItems.reserve(5);
 
-    pRow =
+    pRow = 
     &(  CurOut()
         >> *new Html::Table
-           << new Html::ClassAttr("navimain")
+           << new Html::ClassAttr("navimain") 
            << new Xml::AnAttribute( "border", "0" )
            << new Xml::AnAttribute( "cellpadding", "3" )
            >> *new Html::TableRow

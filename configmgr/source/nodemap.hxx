@@ -30,7 +30,9 @@
 #define INCLUDED_CONFIGMGR_SOURCE_NODEMAP_HXX
 
 #include "sal/config.h"
+
 #include <map>
+
 #include "rtl/ref.hxx"
 
 namespace rtl { class OUString; }

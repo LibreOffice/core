@@ -44,6 +44,9 @@ CDEFS+= -DVERBOSE
 CDEFS+= -DPROFILER
 .ENDIF
 
+#CFLAGS +:= /Ox /Ot					# THIS IS IMPORTANT
+
+
 .IF "$(L10N_framework)"==""
 SLOFILES =	\
     $(SLO)$/cachedprimitivebase.obj \

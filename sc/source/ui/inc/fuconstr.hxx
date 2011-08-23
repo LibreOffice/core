@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 /************************************************************************/
 
-#define MIN_FREEHAND_DISTANCE   10
+#define MIN_FREEHAND_DISTANCE	10
 
 
 /*************************************************************************
@@ -51,20 +51,20 @@ class FuConstruct : public FuDraw
 
     virtual ~FuConstruct();
                                        // Mouse- & Key-Events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
-    virtual sal_uInt8 Command(const CommandEvent& rCEvt);
+    virtual BOOL KeyInput(const KeyEvent& rKEvt);
+    virtual BOOL MouseMove(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+    virtual BYTE Command(const CommandEvent& rCEvt);
 
-            sal_Bool SimpleMouseButtonUp(const MouseEvent& rMEvt);
+            BOOL SimpleMouseButtonUp(const MouseEvent& rMEvt);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();		   // Function aktivieren
+    virtual void Deactivate();		   // Function deaktivieren
 };
 
 
 
-#endif      // _SD_FUCONSTR_HXX
+#endif		// _SD_FUCONSTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

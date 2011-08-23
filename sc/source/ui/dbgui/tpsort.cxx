@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,6 +31,8 @@
 
 #undef SC_DLLIMPLEMENTATION
 
+
+
 #include <vcl/msgbox.hxx>
 #include <i18npool/mslangid.hxx>
 #include <svtools/collatorres.hxx>
@@ -43,7 +45,6 @@
 #include "viewdata.hxx"
 #include "document.hxx"
 #include "global.hxx"
-#include "globalnames.hxx"
 #include "dbcolect.hxx"
 #include "userlist.hxx"
 #include "rangeutl.hxx"
@@ -62,7 +63,7 @@ using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
-static sal_uInt16 pSortRanges[] =
+static USHORT pSortRanges[] =
 {
     SID_SORT,
     SID_SORT,
@@ -80,11 +81,12 @@ static sal_uInt16 pSortRanges[] =
  * geloest. Wird eine Seite Aktiviert/Deaktiviert, so gleicht sie diese
  * Datenmember mit dem eigenen Zustand ab (->Activate()/Deactivate()).
  *
+ * 31.01.95:
  * Die Klasse SfxTabPage bietet mittlerweile ein Verfahren an:
  *
- * virtual sal_Bool HasExchangeSupport() const; -> return sal_True;
+ * virtual BOOL HasExchangeSupport() const; -> return TRUE;
  * virtual void ActivatePage(const SfxItemSet &);
- * virtual int  DeactivatePage(SfxItemSet * = 0);
+ * virtual int	DeactivatePage(SfxItemSet * = 0);
  *
  * muss noch geaendert werden!
  */
@@ -93,41 +95,41 @@ static sal_uInt16 pSortRanges[] =
 //========================================================================
 // Sortierkriterien-Tabpage:
 
-ScTabPageSortFields::ScTabPageSortFields( Window*           pParent,
+ScTabPageSortFields::ScTabPageSortFields( Window*			pParent,
                                           const SfxItemSet& rArgSet )
 
-    :   SfxTabPage      ( pParent,
+    :	SfxTabPage		( pParent,
                           ScResId( RID_SCPAGE_SORT_FIELDS ),
                           rArgSet ),
         //
         aFlSort1        ( this, ScResId( FL_SORT1  ) ),
-        aLbSort1        ( this, ScResId( LB_SORT1  ) ),
+        aLbSort1		( this, ScResId( LB_SORT1  ) ),
         aBtnUp1         ( this, ScResId( BTN_UP1   ) ),
-        aBtnDown1       ( this, ScResId( BTN_DOWN1 ) ),
+        aBtnDown1		( this, ScResId( BTN_DOWN1 ) ),
         //
         aFlSort2        ( this, ScResId( FL_SORT2  ) ),
-        aLbSort2        ( this, ScResId( LB_SORT2  ) ),
+        aLbSort2		( this, ScResId( LB_SORT2  ) ),
         aBtnUp2         ( this, ScResId( BTN_UP2   ) ),
-        aBtnDown2       ( this, ScResId( BTN_DOWN2 ) ),
+        aBtnDown2		( this, ScResId( BTN_DOWN2 ) ),
         //
         aFlSort3        ( this, ScResId( FL_SORT3  ) ),
-        aLbSort3        ( this, ScResId( LB_SORT3  ) ),
+        aLbSort3		( this, ScResId( LB_SORT3  ) ),
         aBtnUp3         ( this, ScResId( BTN_UP3   ) ),
-        aBtnDown3       ( this, ScResId( BTN_DOWN3 ) ),
+        aBtnDown3		( this, ScResId( BTN_DOWN3 ) ),
 
-        aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
-        aStrColumn      ( ScResId( SCSTR_COLUMN ) ),
-        aStrRow         ( ScResId( SCSTR_ROW ) ),
+        aStrUndefined	( ScResId( SCSTR_UNDEFINED ) ),
+        aStrColumn		( ScResId( SCSTR_COLUMN ) ),
+        aStrRow 		( ScResId( SCSTR_ROW ) ),
         //
-        nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
-        pDlg            ( (ScSortDlg*)(GetParent()->GetParent()) ),
-        pViewData       ( NULL ),
-        rSortData       ( ((const ScSortItem&)
+        nWhichSort		( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
+        pDlg			( (ScSortDlg*)(GetParent()->GetParent()) ),
+        pViewData		( NULL ),
+        rSortData		( ((const ScSortItem&)
                            rArgSet.Get( nWhichSort )).
                                 GetSortData() ),
-        nFieldCount     ( 0 ),
-        bHasHeader      ( false ),
-        bSortByRows     ( false )
+        nFieldCount 	( 0 ),
+        bHasHeader		( FALSE ),
+        bSortByRows 	( FALSE )
 {
     Init();
     FreeResource();
@@ -136,7 +138,7 @@ ScTabPageSortFields::ScTabPageSortFields( Window*           pParent,
 
 // -----------------------------------------------------------------------
 
-ScTabPageSortFields::~ScTabPageSortFields()
+__EXPORT ScTabPageSortFields::~ScTabPageSortFields()
 {
 }
 
@@ -162,15 +164,15 @@ void ScTabPageSortFields::Init()
     aLbSort2.Clear();
     aLbSort3.Clear();
 
-    aSortLbArr[0]       = &aLbSort1;
-    aSortLbArr[1]       = &aLbSort2;
-    aSortLbArr[2]       = &aLbSort3;
-    aDirBtnArr[0][0]    = &aBtnUp1;
-    aDirBtnArr[0][1]    = &aBtnDown1;
-    aDirBtnArr[1][0]    = &aBtnUp2;
-    aDirBtnArr[1][1]    = &aBtnDown2;
-    aDirBtnArr[2][0]    = &aBtnUp3;
-    aDirBtnArr[2][1]    = &aBtnDown3;
+    aSortLbArr[0]		= &aLbSort1;
+    aSortLbArr[1]		= &aLbSort2;
+    aSortLbArr[2]		= &aLbSort3;
+    aDirBtnArr[0][0]	= &aBtnUp1;
+    aDirBtnArr[0][1]	= &aBtnDown1;
+    aDirBtnArr[1][0]	= &aBtnUp2;
+    aDirBtnArr[1][1]	= &aBtnDown2;
+    aDirBtnArr[2][0]	= &aBtnUp3;
+    aDirBtnArr[2][1]	= &aBtnDown3;
     aFlArr[0]           = &aFlSort1;
     aFlArr[1]           = &aFlSort2;
     aFlArr[2]           = &aFlSort3;
@@ -178,25 +180,25 @@ void ScTabPageSortFields::Init()
 
 //------------------------------------------------------------------------
 
-sal_uInt16* ScTabPageSortFields::GetRanges()
+USHORT* __EXPORT ScTabPageSortFields::GetRanges()
 {
     return pSortRanges;
 }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* ScTabPageSortFields::Create( Window*    pParent,
-                                         const SfxItemSet&  rArgSet )
+SfxTabPage* __EXPORT ScTabPageSortFields::Create( Window*	pParent,
+                                         const SfxItemSet&	rArgSet )
 {
     return ( new ScTabPageSortFields( pParent, rArgSet ) );
 }
 
 // -----------------------------------------------------------------------
 
-void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
+void __EXPORT ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
 {
     bSortByRows = rSortData.bByRow;
-    bHasHeader  = rSortData.bHasHeader;
+    bHasHeader	= rSortData.bHasHeader;
 
     if ( aLbSort1.GetEntryCount() == 0 )
         FillFieldLists();
@@ -205,7 +207,7 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
 
     if ( rSortData.bDoSort[0] )
     {
-        for ( sal_uInt16 i=0; i<3; i++ )
+        for ( USHORT i=0; i<3; i++ )
         {
             if ( rSortData.bDoSort[i] )
             {
@@ -213,13 +215,13 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
                      GetFieldSelPos( rSortData.nField[i] ) );
 
                 (rSortData.bAscending[i])
-                    ? aDirBtnArr[i][0]->Check()     // Up
-                    : aDirBtnArr[i][1]->Check();    // Down
+                    ? aDirBtnArr[i][0]->Check() 	// Up
+                    : aDirBtnArr[i][1]->Check();	// Down
             }
             else
             {
                 aSortLbArr[i]->SelectEntryPos( 0 ); // "keiner" selektieren
-                aDirBtnArr[i][0]->Check();          // Up
+                aDirBtnArr[i][0]->Check();			// Up
             }
         }
 
@@ -240,7 +242,7 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
         else if( nCol > rSortData.nCol2 )
             nCol = rSortData.nCol2;
 
-        sal_uInt16  nSort1Pos = nCol - rSortData.nCol1+1;
+        USHORT	nSort1Pos = nCol - rSortData.nCol1+1;
         aLbSort1.SelectEntryPos( nSort1Pos );
         aLbSort2.SelectEntryPos( 0 );
         aLbSort3.SelectEntryPos( 0 );
@@ -261,20 +263,20 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
 
 // -----------------------------------------------------------------------
 
-sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
+BOOL __EXPORT ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
 {
     ScSortParam theSortData = rSortData;
     if (pDlg)
     {
         const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSort, sal_True, &pItem ) == SFX_ITEM_SET )
+        if ( pExample && pExample->GetItemState( nWhichSort, TRUE, &pItem ) == SFX_ITEM_SET )
             theSortData = ((const ScSortItem*)pItem)->GetSortData();
     }
 
-    sal_uInt16  nSort1Pos = aLbSort1.GetSelectEntryPos();
-    sal_uInt16  nSort2Pos = aLbSort2.GetSelectEntryPos();
-    sal_uInt16  nSort3Pos = aLbSort3.GetSelectEntryPos();
+    USHORT	nSort1Pos = aLbSort1.GetSelectEntryPos();
+    USHORT	nSort2Pos = aLbSort2.GetSelectEntryPos();
+    USHORT	nSort3Pos = aLbSort3.GetSelectEntryPos();
 
     DBG_ASSERT(    (nSort1Pos <= SC_MAXFIELDS)
                 && (nSort2Pos <= SC_MAXFIELDS)
@@ -313,36 +315,37 @@ sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
         theSortData.bAscending[0] = aBtnUp1.IsChecked();
         theSortData.bAscending[1] = aBtnUp2.IsChecked();
         theSortData.bAscending[2] = aBtnUp3.IsChecked();
-        //  bHasHeader ist in ScTabPageSortOptions::FillItemSet, wo es hingehoert
+        //	bHasHeader ist in ScTabPageSortOptions::FillItemSet, wo es hingehoert
     }
     else
     {
         theSortData.bDoSort[0] =
         theSortData.bDoSort[1] =
-        theSortData.bDoSort[2] = false;
+        theSortData.bDoSort[2] = FALSE;
     }
 
     rArgSet.Put( ScSortItem( SCITEM_SORTDATA, NULL, &theSortData ) );
 
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
 // fuer Datenaustausch ohne Dialog-Umweg: (! noch zu tun !)
+// void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
 
-void ScTabPageSortFields::ActivatePage()
+void __EXPORT ScTabPageSortFields::ActivatePage()
 {
     if ( pDlg )
     {
         if (   bHasHeader  != pDlg->GetHeaders()
             || bSortByRows != pDlg->GetByRows()   )
         {
-            sal_uInt16  nCurSel1 = aLbSort1.GetSelectEntryPos();
-            sal_uInt16  nCurSel2 = aLbSort2.GetSelectEntryPos();
-            sal_uInt16  nCurSel3 = aLbSort3.GetSelectEntryPos();
+            USHORT	nCurSel1 = aLbSort1.GetSelectEntryPos();
+            USHORT	nCurSel2 = aLbSort2.GetSelectEntryPos();
+            USHORT	nCurSel3 = aLbSort3.GetSelectEntryPos();
 
-            bHasHeader  = pDlg->GetHeaders();
+            bHasHeader	= pDlg->GetHeaders();
             bSortByRows = pDlg->GetByRows();
             FillFieldLists();
             aLbSort1.SelectEntryPos( nCurSel1 );
@@ -354,7 +357,7 @@ void ScTabPageSortFields::ActivatePage()
 
 // -----------------------------------------------------------------------
 
-int ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
+int __EXPORT ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pDlg )
     {
@@ -373,13 +376,13 @@ int ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
 
 // -----------------------------------------------------------------------
 
-void ScTabPageSortFields::DisableField( sal_uInt16 nField )
+void ScTabPageSortFields::DisableField( USHORT nField )
 {
     nField--;
 
     if ( nField<=2 )
     {
-        aSortLbArr[nField]   ->Disable();
+        aSortLbArr[nField]	 ->Disable();
         aDirBtnArr[nField][0]->Disable();
         aDirBtnArr[nField][1]->Disable();
         aFlArr[nField]       ->Disable();
@@ -388,13 +391,13 @@ void ScTabPageSortFields::DisableField( sal_uInt16 nField )
 
 // -----------------------------------------------------------------------
 
-void ScTabPageSortFields::EnableField( sal_uInt16 nField )
+void ScTabPageSortFields::EnableField( USHORT nField )
 {
     nField--;
 
     if ( nField<=2 )
     {
-        aSortLbArr[nField]   ->Enable();
+        aSortLbArr[nField]	 ->Enable();
         aDirBtnArr[nField][0]->Enable();
         aDirBtnArr[nField][1]->Enable();
         aFlArr[nField]       ->Enable();
@@ -418,23 +421,23 @@ void ScTabPageSortFields::FillFieldLists()
             aLbSort2.InsertEntry( aStrUndefined, 0 );
             aLbSort3.InsertEntry( aStrUndefined, 0 );
 
-            SCCOL   nFirstSortCol   = rSortData.nCol1;
-            SCROW   nFirstSortRow   = rSortData.nRow1;
-            SCTAB   nTab        = pViewData->GetTabNo();
-            sal_uInt16  i           = 1;
+            SCCOL	nFirstSortCol	= rSortData.nCol1;
+            SCROW	nFirstSortRow	= rSortData.nRow1;
+            SCTAB	nTab		= pViewData->GetTabNo();
+            USHORT	i			= 1;
 
             if ( bSortByRows )
             {
-                String  aFieldName;
-                SCCOL   nMaxCol = rSortData.nCol2;
-                SCCOL   col;
+                String	aFieldName;
+                SCCOL	nMaxCol = rSortData.nCol2;
+                SCCOL	col;
 
                 for ( col=nFirstSortCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
                 {
                     pDoc->GetString( col, nFirstSortRow, nTab, aFieldName );
                     if ( !bHasHeader || (aFieldName.Len() == 0) )
                     {
-                        aFieldName  = aStrColumn;
+                        aFieldName	= aStrColumn;
                         aFieldName += ' ';
                         aFieldName += ScColToAlpha( col );
                     }
@@ -447,16 +450,16 @@ void ScTabPageSortFields::FillFieldLists()
             }
             else
             {
-                String  aFieldName;
-                SCROW   nMaxRow = rSortData.nRow2;
-                SCROW   row;
+                String	aFieldName;
+                SCROW	nMaxRow = rSortData.nRow2;
+                SCROW	row;
 
                 for ( row=nFirstSortRow; row<=nMaxRow && i<SC_MAXFIELDS; row++ )
                 {
                     pDoc->GetString( nFirstSortCol, row, nTab, aFieldName );
                     if ( !bHasHeader || (aFieldName.Len() == 0) )
                     {
-                        aFieldName  = aStrRow;
+                        aFieldName	= aStrRow;
                         aFieldName += ' ';
                         aFieldName += String::CreateFromInt32( row+1 );
                     }
@@ -474,17 +477,17 @@ void ScTabPageSortFields::FillFieldLists()
 
 //------------------------------------------------------------------------
 
-sal_uInt16 ScTabPageSortFields::GetFieldSelPos( SCCOLROW nField )
+USHORT ScTabPageSortFields::GetFieldSelPos( SCCOLROW nField )
 {
-    sal_uInt16  nFieldPos   = 0;
-    sal_Bool    bFound      = false;
+    USHORT	nFieldPos	= 0;
+    BOOL	bFound		= FALSE;
 
-    for ( sal_uInt16 n=1; n<nFieldCount && !bFound; n++ )
+    for ( USHORT n=1; n<nFieldCount && !bFound; n++ )
     {
         if ( nFieldArr[n] == nField )
         {
             nFieldPos = n;
-            bFound = sal_True;
+            bFound = TRUE;
         }
     }
 
@@ -551,105 +554,104 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
 
 #endif /* ENABLE_LAYOUT_EXPERIMENTAL */
 
-ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
-                                            const SfxItemSet&   rArgSet )
+ScTabPageSortOptions::ScTabPageSortOptions( Window* 			pParent,
+                                            const SfxItemSet&	rArgSet )
 
-    :   SfxTabPage      ( pParent,
+    :	SfxTabPage		( pParent,
                           ScResId( RID_SCPAGE_SORT_OPTIONS ),
                           rArgSet ),
         //
-        aBtnCase        ( this, ScResId( BTN_CASESENSITIVE ) ),
-        aBtnHeader      ( this, ScResId( BTN_LABEL ) ),
-        aBtnFormats     ( this, ScResId( BTN_FORMATS ) ),
+        aBtnCase		( this, ScResId( BTN_CASESENSITIVE ) ),
+        aBtnHeader		( this, ScResId( BTN_LABEL ) ),
+        aBtnFormats 	( this, ScResId( BTN_FORMATS ) ),
         aBtnNaturalSort ( this, ScResId( BTN_NATURALSORT ) ),
         aBtnCopyResult  ( this, ScResId( BTN_COPYRESULT ) ),
-        aLbOutPos       ( this, ScResId( LB_OUTAREA ) ),
-        aEdOutPos       ( this, ScResId( ED_OUTAREA ) ),
-        aBtnSortUser    ( this, ScResId( BTN_SORT_USER ) ),
-        aLbSortUser     ( this, ScResId( LB_SORT_USER ) ),
+        aLbOutPos		( this, ScResId( LB_OUTAREA ) ),
+        aEdOutPos		( this, ScResId( ED_OUTAREA ) ),
+        aBtnSortUser	( this, ScResId( BTN_SORT_USER ) ),
+        aLbSortUser 	( this, ScResId( LB_SORT_USER ) ),
         aFtLanguage     ( this, ScResId( FT_LANGUAGE ) ),
-        aLbLanguage     ( this, ScResId( LB_LANGUAGE ) ),
+        aLbLanguage		( this, ScResId( LB_LANGUAGE ) ),
         aFtAlgorithm    ( this, ScResId( FT_ALGORITHM ) ),
-        aLbAlgorithm    ( this, ScResId( LB_ALGORITHM ) ),
-        aLineDirection  ( this, ScResId( FL_DIRECTION ) ),
-        aBtnTopDown     ( this, ScResId( BTN_TOP_DOWN ) ),
-        aBtnLeftRight   ( this, ScResId( BTN_LEFT_RIGHT ) ),
+        aLbAlgorithm	( this, ScResId( LB_ALGORITHM ) ),
+        aLineDirection	( this, ScResId( FL_DIRECTION ) ),
+        aBtnTopDown 	( this, ScResId( BTN_TOP_DOWN ) ),
+        aBtnLeftRight	( this, ScResId( BTN_LEFT_RIGHT ) ),
+// 		aFtAreaLabel	( this, ScResId( FT_AREA_LABEL ) ),
+//		aFtArea 		( this, ScResId( FT_AREA ) ),
         //
 #if ENABLE_LAYOUT_EXPERIMENTAL
 #undef this
 #undef ScResId
 #define ScResId(x) this, #x
 #endif /* ENABLE_LAYOUT_EXPERIMENTAL */
-        aStrRowLabel    ( ScResId( STR_ROW_LABEL ) ),
-        aStrColLabel    ( ScResId( STR_COL_LABEL ) ),
-        aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
+        aStrRowLabel	( ScResId( STR_ROW_LABEL ) ),
+        aStrColLabel	( ScResId( STR_COL_LABEL ) ),
+        aStrUndefined	( ScResId( SCSTR_UNDEFINED ) ),
+        aStrNoName		( ScGlobal::GetRscString(STR_DB_NONAME) ),
         //
-        nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
-        rSortData       ( ((const ScSortItem&)
+        nWhichSort		( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
+        rSortData		( ((const ScSortItem&)
                           rArgSet.Get( nWhichSort )).GetSortData() ),
-        pViewData       ( NULL ),
-        pDoc            ( NULL ),
-        pDlg            ( (ScSortDlg*)(GetParent() ? GetParent()->GetParent() : 0 ) ),
-        pColRes         ( NULL ),
-        pColWrap        ( NULL )
+        pViewData		( NULL ),
+        pDoc			( NULL ),
+        pDlg			( (ScSortDlg*)(GetParent() ? GetParent()->GetParent() : 0 ) ),
+        pColRes			( NULL ),
+        pColWrap		( NULL )
 {
     Init();
     FreeResource();
     SetExchangeSupport();
-
-    aLbOutPos.SetAccessibleRelationLabeledBy(&aBtnCopyResult);
-    aLbOutPos.SetAccessibleName(aBtnCopyResult.GetText());
-    aEdOutPos.SetAccessibleRelationLabeledBy(&aBtnCopyResult);
-    aEdOutPos.SetAccessibleName(aBtnCopyResult.GetText());
-    aLbSortUser.SetAccessibleRelationLabeledBy(&aBtnSortUser);
-    aLbSortUser.SetAccessibleName(aBtnSortUser.GetText());
 }
 
 // -----------------------------------------------------------------------
 
-ScTabPageSortOptions::~ScTabPageSortOptions()
+__EXPORT ScTabPageSortOptions::~ScTabPageSortOptions()
 {
-    sal_uInt16 nEntries = aLbOutPos.GetEntryCount();
+    USHORT nEntries = aLbOutPos.GetEntryCount();
 
-    for ( sal_uInt16 i=1; i<nEntries; i++ )
+    for ( USHORT i=1; i<nEntries; i++ )
         delete (String*)aLbOutPos.GetEntryData( i );
 
     delete pColRes;
-    delete pColWrap;        //! not if from document
+    delete pColWrap;		//! not if from document
 }
 
 // -----------------------------------------------------------------------
 
 void ScTabPageSortOptions::Init()
 {
-    //  CollatorRessource has user-visible names for sort algorithms
+// 	aStrAreaLabel = aFtAreaLabel.GetText();
+// 	aStrAreaLabel.Append( (sal_Unicode) ' ' );
+
+    //	CollatorRessource has user-visible names for sort algorithms
     pColRes = new CollatorRessource();
 
-    //! use CollatorWrapper from document?
+    //!	use CollatorWrapper from document?
     pColWrap = new CollatorWrapper( comphelper::getProcessServiceFactory() );
 
-    const ScSortItem&   rSortItem = (const ScSortItem&)
+    const ScSortItem&	rSortItem = (const ScSortItem&)
                                     GetItemSet().Get( nWhichSort );
 
-    aLbOutPos.SetSelectHdl    ( LINK( this, ScTabPageSortOptions, SelOutPosHdl ) );
+    aLbOutPos.SetSelectHdl	  ( LINK( this, ScTabPageSortOptions, SelOutPosHdl ) );
     aBtnCopyResult.SetClickHdl( LINK( this, ScTabPageSortOptions, EnableHdl ) );
     aBtnSortUser.SetClickHdl  ( LINK( this, ScTabPageSortOptions, EnableHdl ) );
-    aBtnTopDown.SetClickHdl   ( LINK( this, ScTabPageSortOptions, SortDirHdl ) );
+    aBtnTopDown.SetClickHdl	  ( LINK( this, ScTabPageSortOptions, SortDirHdl ) );
     aBtnLeftRight.SetClickHdl ( LINK( this, ScTabPageSortOptions, SortDirHdl ) );
     aLbLanguage.SetSelectHdl  ( LINK( this, ScTabPageSortOptions, FillAlgorHdl ) );
 
     pViewData = rSortItem.GetViewData();
-    pDoc      = pViewData ? pViewData->GetDocument() : NULL;
+    pDoc	  = pViewData ? pViewData->GetDocument() : NULL;
 
     DBG_ASSERT( pViewData, "ViewData not found! :-/" );
 
     if ( pViewData && pDoc )
     {
-        String          theArea;
-        ScDBCollection* pDBColl     = pDoc->GetDBCollection();
-        String          theDbArea;
-        const SCTAB nCurTab     = pViewData->GetTabNo();
-        String          theDbName   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+        String			theArea;
+        ScDBCollection* pDBColl 	= pDoc->GetDBCollection();
+        String			theDbArea;
+        String			theDbName	= aStrNoName;
+        const SCTAB	nCurTab		= pViewData->GetTabNo();
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         aLbOutPos.Clear();
@@ -662,7 +664,7 @@ void ScTabPageSortOptions::Init()
         String aRefStr;
         while ( aIter.Next( aName, aRange ) )
         {
-            sal_uInt16 nInsert = aLbOutPos.InsertEntry( aName );
+            USHORT nInsert = aLbOutPos.InsertEntry( aName );
 
             aRange.aStart.Format( aRefStr, SCA_ABS_3D, pDoc, eConv );
             aLbOutPos.SetEntryData( nInsert, new String( aRefStr ) );
@@ -698,20 +700,24 @@ void ScTabPageSortOptions::Init()
         theArea += theDbName;
         theArea += ')';
 
+        //aFtArea.SetText( theArea );
+        //theArea.Insert( aStrAreaLabel, 0 );
+        //aFtAreaLabel.SetText( theArea );
+
         aBtnHeader.SetText( aStrColLabel );
     }
 
     FillUserSortListBox();
 
-    //  get available languages
+    //	get available languages
 
-    aLbLanguage.SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN, false );
+    aLbLanguage.SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN, FALSE );
     aLbLanguage.InsertLanguage( LANGUAGE_SYSTEM );
 }
 
 //------------------------------------------------------------------------
 
-sal_uInt16* ScTabPageSortOptions::GetRanges()
+USHORT* __EXPORT ScTabPageSortOptions::GetRanges()
 {
     return pSortRanges;
 }
@@ -721,34 +727,34 @@ sal_uInt16* ScTabPageSortOptions::GetRanges()
 #if ENABLE_LAYOUT_EXPERIMENTAL
 #undef SfxTabPage
 #endif /* ENABLE_LAYOUT_EXPERIMENTAL */
-SfxTabPage* ScTabPageSortOptions::Create(
-                                            Window*             pParent,
-                                            const SfxItemSet&   rArgSet )
+SfxTabPage* __EXPORT ScTabPageSortOptions::Create(
+                                            Window*				pParent,
+                                            const SfxItemSet&	rArgSet )
 {
     return ( new ScTabPageSortOptions( pParent, rArgSet ) );
 }
 
 // -----------------------------------------------------------------------
 
-void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
+void __EXPORT ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
 {
     if ( rSortData.bUserDef )
     {
-        aBtnSortUser.Check( sal_True );
+        aBtnSortUser.Check( TRUE );
         aLbSortUser.Enable();
         aLbSortUser.SelectEntryPos( rSortData.nUserIndex );
     }
     else
     {
-        aBtnSortUser.Check( false );
+        aBtnSortUser.Check( FALSE );
         aLbSortUser.Disable();
         aLbSortUser.SelectEntryPos( 0 );
     }
 
-    aBtnCase.Check          ( rSortData.bCaseSens );
-    aBtnFormats.Check       ( rSortData.bIncludePattern );
-    aBtnHeader.Check        ( rSortData.bHasHeader );
-    aBtnNaturalSort.Check   ( rSortData.bNaturalSort );
+    aBtnCase.Check			( rSortData.bCaseSens );
+    aBtnFormats.Check		( rSortData.bIncludePattern );
+    aBtnHeader.Check		( rSortData.bHasHeader );
+    aBtnNaturalSort.Check	( rSortData.bNaturalSort );
 
     if ( rSortData.bByRow )
     {
@@ -765,14 +771,14 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
     if ( eLang == LANGUAGE_DONTKNOW )
         eLang = LANGUAGE_SYSTEM;
     aLbLanguage.SelectLanguage( eLang );
-    FillAlgorHdl( &aLbLanguage );               // get algorithms, select default
-    if ( !rSortData.aCollatorAlgorithm.isEmpty() )
+    FillAlgorHdl( &aLbLanguage );				// get algorithms, select default
+    if ( rSortData.aCollatorAlgorithm.Len() )
         aLbAlgorithm.SelectEntry( pColRes->GetTranslation( rSortData.aCollatorAlgorithm ) );
 
     if ( pDoc && !rSortData.bInplace )
     {
         String aStr;
-        sal_uInt16 nFormat = (rSortData.nDestTab != pViewData->GetTabNo())
+        USHORT nFormat = (rSortData.nDestTab != pViewData->GetTabNo())
                             ? SCR_ABS_3D
                             : SCR_ABS;
 
@@ -791,7 +797,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
     }
     else
     {
-        aBtnCopyResult.Check( false );
+        aBtnCopyResult.Check( FALSE );
         aLbOutPos.Disable();
         aEdOutPos.Disable();
         aEdOutPos.SetText( EMPTY_STRING );
@@ -800,28 +806,28 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
 
 // -----------------------------------------------------------------------
 
-sal_Bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
+BOOL __EXPORT ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
 {
     ScSortParam theSortData = rSortData;
     if (pDlg)
     {
         const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSort, sal_True, &pItem ) == SFX_ITEM_SET )
+        if ( pExample && pExample->GetItemState( nWhichSort, TRUE, &pItem ) == SFX_ITEM_SET )
             theSortData = ((const ScSortItem*)pItem)->GetSortData();
     }
 
-    theSortData.bByRow          = aBtnTopDown.IsChecked();
-    theSortData.bHasHeader      = aBtnHeader.IsChecked();
-    theSortData.bCaseSens       = aBtnCase.IsChecked();
-    theSortData.bNaturalSort    = aBtnNaturalSort.IsChecked();
+    theSortData.bByRow			= aBtnTopDown.IsChecked();
+    theSortData.bHasHeader		= aBtnHeader.IsChecked();
+    theSortData.bCaseSens		= aBtnCase.IsChecked();
+    theSortData.bNaturalSort	= aBtnNaturalSort.IsChecked();
     theSortData.bIncludePattern = aBtnFormats.IsChecked();
-    theSortData.bInplace        = !aBtnCopyResult.IsChecked();
-    theSortData.nDestCol        = theOutPos.Col();
-    theSortData.nDestRow        = theOutPos.Row();
-    theSortData.nDestTab        = theOutPos.Tab();
-    theSortData.bUserDef        = aBtnSortUser.IsChecked();
-    theSortData.nUserIndex      = (aBtnSortUser.IsChecked())
+    theSortData.bInplace		= !aBtnCopyResult.IsChecked();
+    theSortData.nDestCol		= theOutPos.Col();
+    theSortData.nDestRow		= theOutPos.Row();
+    theSortData.nDestTab		= theOutPos.Tab();
+    theSortData.bUserDef		= aBtnSortUser.IsChecked();
+    theSortData.nUserIndex		= (aBtnSortUser.IsChecked())
                                     ? aLbSortUser.GetSelectEntryPos()
                                     : 0;
 
@@ -835,7 +841,7 @@ sal_Bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
     {
         uno::Sequence<rtl::OUString> aAlgos = pColWrap->listCollatorAlgorithms(
                 theSortData.aCollatorLocale );
-        sal_uInt16 nSel = aLbAlgorithm.GetSelectEntryPos();
+        USHORT nSel = aLbAlgorithm.GetSelectEntryPos();
         if ( nSel < aAlgos.getLength() )
             sAlg = aAlgos[nSel];
     }
@@ -843,13 +849,14 @@ sal_Bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
 
     rArgSet.Put( ScSortItem( SCITEM_SORTDATA, &theSortData ) );
 
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
 // fuer Datenaustausch ohne Dialog-Umweg: (! noch zu tun !)
-void ScTabPageSortOptions::ActivatePage()
+// void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
+void __EXPORT ScTabPageSortOptions::ActivatePage()
 {
     if ( pDlg )
     {
@@ -872,27 +879,27 @@ void ScTabPageSortOptions::ActivatePage()
 
 // -----------------------------------------------------------------------
 
-int ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
+int __EXPORT ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 {
-    sal_Bool bPosInputOk = sal_True;
+    BOOL bPosInputOk = TRUE;
 
     if ( aBtnCopyResult.IsChecked() )
     {
-        String      thePosStr = aEdOutPos.GetText();
-        ScAddress   thePos;
-        xub_StrLen  nColonPos = thePosStr.Search( ':' );
+        String		thePosStr = aEdOutPos.GetText();
+        ScAddress	thePos;
+        xub_StrLen	nColonPos = thePosStr.Search( ':' );
 
         if ( STRING_NOTFOUND != nColonPos )
             thePosStr.Erase( nColonPos );
 
         if ( pViewData )
         {
-            //  visible table is default for input without table
-            //  must be changed to GetRefTabNo when sorting has RefInput!
+            //	visible table is default for input without table
+            //	must be changed to GetRefTabNo when sorting has RefInput!
             thePos.SetTab( pViewData->GetTabNo() );
         }
 
-        sal_uInt16 nResult = thePos.Parse( thePosStr, pDoc, pDoc->GetAddressConvention() );
+        USHORT nResult = thePos.Parse( thePosStr, pDoc, pDoc->GetAddressConvention() );
 
         bPosInputOk = ( SCA_VALID == (nResult & SCA_VALID) );
 
@@ -935,9 +942,9 @@ void ScTabPageSortOptions::FillUserSortListBox()
     aLbSortUser.Clear();
     if ( pUserLists )
     {
-        sal_uInt16 nCount = pUserLists->GetCount();
+        USHORT nCount = pUserLists->GetCount();
         if ( nCount > 0 )
-            for ( sal_uInt16 i=0; i<nCount; i++ )
+            for ( USHORT i=0; i<nCount; i++ )
                 aLbSortUser.InsertEntry( (*pUserLists)[i]->GetString() );
     }
 }
@@ -980,8 +987,8 @@ IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox *, pLb )
 {
     if ( pLb == &aLbOutPos )
     {
-        String  aString;
-        sal_uInt16  nSelPos = aLbOutPos.GetSelectEntryPos();
+        String	aString;
+        USHORT	nSelPos = aLbOutPos.GetSelectEntryPos();
 
         if ( nSelPos > 0 )
             aString = *(String*)aLbOutPos.GetEntryData( nSelPos );
@@ -1008,19 +1015,19 @@ IMPL_LINK( ScTabPageSortOptions, SortDirHdl, RadioButton *, pBtn )
 
 // -----------------------------------------------------------------------
 
-void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
+void __EXPORT ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
 {
     if ( pEd == &aEdOutPos )
     {
-        String  theCurPosStr = aEdOutPos.GetText();
-        sal_uInt16  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
+        String	theCurPosStr = aEdOutPos.GetText();
+        USHORT	nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
 
         if ( SCA_VALID == (nResult & SCA_VALID) )
         {
-            String* pStr    = NULL;
-            sal_Bool    bFound  = false;
-            sal_uInt16  i       = 0;
-            sal_uInt16  nCount  = aLbOutPos.GetEntryCount();
+            String*	pStr	= NULL;
+            BOOL	bFound	= FALSE;
+            USHORT	i		= 0;
+            USHORT	nCount	= aLbOutPos.GetEntryCount();
 
             for ( i=2; i<nCount && !bFound; i++ )
             {
@@ -1040,17 +1047,17 @@ void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
 
 IMPL_LINK( ScTabPageSortOptions, FillAlgorHdl, void *, EMPTYARG )
 {
-    aLbAlgorithm.SetUpdateMode( false );
+    aLbAlgorithm.SetUpdateMode( FALSE );
     aLbAlgorithm.Clear();
 
     LanguageType eLang = aLbLanguage.GetSelectLanguage();
     if ( eLang == LANGUAGE_SYSTEM )
     {
-        //  for LANGUAGE_SYSTEM no algorithm can be selected because
-        //  it wouldn't necessarily exist for other languages
-        //  -> leave list box empty if LANGUAGE_SYSTEM is selected
-        aFtAlgorithm.Enable( false );           // nothing to select
-        aLbAlgorithm.Enable( false );           // nothing to select
+        //	for LANGUAGE_SYSTEM no algorithm can be selected because
+        //	it wouldn't necessarily exist for other languages
+        //	-> leave list box empty if LANGUAGE_SYSTEM is selected
+        aFtAlgorithm.Enable( FALSE );           // nothing to select
+        aLbAlgorithm.Enable( FALSE );			// nothing to select
     }
     else
     {
@@ -1065,12 +1072,12 @@ IMPL_LINK( ScTabPageSortOptions, FillAlgorHdl, void *, EMPTYARG )
             String sUser = pColRes->GetTranslation( sAlg );
             aLbAlgorithm.InsertEntry( sUser, LISTBOX_APPEND );
         }
-        aLbAlgorithm.SelectEntryPos( 0 );       // first entry is default
+        aLbAlgorithm.SelectEntryPos( 0 );		// first entry is default
         aFtAlgorithm.Enable( nCount > 1 );      // enable only if there is a choice
-        aLbAlgorithm.Enable( nCount > 1 );      // enable only if there is a choice
+        aLbAlgorithm.Enable( nCount > 1 );		// enable only if there is a choice
     }
 
-    aLbAlgorithm.SetUpdateMode( sal_True );
+    aLbAlgorithm.SetUpdateMode( TRUE );
     return 0;
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,15 +42,15 @@ namespace connectivity
         class OOO_DLLPUBLIC_FILE OColumns : public sdbcx::OCollection
         {
         protected:
-            OFileTable* m_pTable;
+            OFileTable*	m_pTable;
 
             virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
         public:
-            OColumns(   OFileTable* _pTable,
+            OColumns(	OFileTable* _pTable,
                         ::osl::Mutex& _rMutex,
                         const TStringVector &_rVector
-                    ) : sdbcx::OCollection(*_pTable,_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
+                    ) : sdbcx::OCollection(*_pTable,_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
                 ,m_pTable(_pTable)
             {}
         };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,24 +36,24 @@ class ScXMLImport;
 
 class ScXMLTableSourceContext : public SvXMLImportContext
 {
-    rtl::OUString                           sLink;
-    rtl::OUString                           sTableName;
-    rtl::OUString                           sFilterName;
-    rtl::OUString                           sFilterOptions;
-    sal_Int32                               nRefresh;
-    com::sun::star::sheet::SheetLinkMode    nMode;
+    rtl::OUString							sLink;
+    rtl::OUString							sTableName;
+    rtl::OUString							sFilterName;
+    rtl::OUString							sFilterOptions;
+    sal_Int32								nRefresh;
+    com::sun::star::sheet::SheetLinkMode	nMode;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
-    ScXMLTableSourceContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLTableSourceContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     virtual ~ScXMLTableSourceContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

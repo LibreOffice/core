@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ ModalDialog GROSSER_TEST_DLG
     };
     OKButton 1
     {
-        HelpID = "hid1" ;
+        HelpID = 1 ;
         Pos = MAP_APPFONT ( 132 , 92 ) ;
         Size = MAP_APPFONT ( 64 , 12 ) ;
         TabStop = TRUE ;

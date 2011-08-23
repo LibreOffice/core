@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,6 +57,10 @@ class ScrollPanel
       public TreeNode
 {
 public:
+    /** Create a new sub tool panel with the given window as its
+        parent.  This will usually be a child window.
+    */
+    ScrollPanel (TreeNode* pParent);
     /** Create a new scroll panel which itself is the root of a TreeNode hierarchy
         parent.  This will usually be a child window.
     */
@@ -75,9 +79,9 @@ public:
             title bar as children is returned.
     */
     TitledControl* AddControl (
-        ::std::auto_ptr<TreeNode> pControl,
+        ::std::auto_ptr<TreeNode> pControl, 
         const String& rTitle,
-        const rtl::OString& sHelpId);
+        ULONG nHelpId);
 
     /** Add a control to the sub panel without a title bar.
     */
@@ -122,7 +126,7 @@ public:
         @param pWindow
             This window is used to translate the given coordinates into ones
             that are relative to the scroll panel.
-
+        
     */
     void MakeRectangleVisible (
         Rectangle& aRectangle,

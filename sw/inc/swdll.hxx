@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,12 +39,13 @@ class StatusBar;
 
 class SwDLL
 
-/**
- * This class is a wrapper for a Load-On-Demand-DLL. One instance
- * per SfxApplication will be created for the runtime of
- * SfxApplication-subclass::Main().
- *
- * Remember: Do export this class! It is used by the application.
+/*	[Description]
+
+    This class is a wrapper for a Load-On-Demand-DLL. One instance
+    per SfxApplication will be created for the runtime of
+    SfxApplication-subclass::Main().
+
+    Remember: Do export this class! It is used by the application.
 */
 
 {
@@ -57,8 +58,8 @@ public:
                     SwDLL();
                     ~SwDLL();
 
-    static void     Init();     // called directly after loading the DLL
-    static void     Exit();     // called directly befor unloading the DLL
+    static void 	Init(); 	// called directly after loading the DLL
+    static void 	Exit(); 	// called directly befor unloading the DLL
 };
 
 //-------------------------------------------------------------------------

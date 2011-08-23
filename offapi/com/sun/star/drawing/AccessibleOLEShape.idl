@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,15 +41,15 @@ module com {  module sun {  module star {  module drawing {
 /** The <type>AccessibleOLEShape</type> service is implemented by
     OLE shapes.
 
-    <p>This includes generic OLE shapes, frames, plug-ins, and applets.</p>
+    <p>This includes generic OLE shapes, frames, plugins, and applets.</p>
 
     <p>This service supports the additional <type
     scope="::com::sun::star::accessibility">XAccessibleAction</type>
     interface.</p>
 
     <p>OLE objects are handled as place holders.  While not activated the
-    accessible OLE shape is the only indicator of the OLE object's
-    existence.  When an OLE object has been activated then the accessibility
+    accessible OLE shape is the only indicator of the OLE objects'
+    existence.  When an OLE object has been activated then the accessbility
     tree representing it (as far as that is available) is included directly
     under the accessible document view and not under the OLE object.  This
     is due to underlying implementation constraints and may change in the
@@ -62,10 +62,10 @@ module com {  module sun {  module star {  module drawing {
 published service AccessibleOLEShape
 {
     /** Give access to information of generic shapes.
-
+      
         <p>See <type>AccessibleShape</type> for basic documentation and
         support of the <type
-        scope="::com::sun::star::accessibility"
+        scope="::com::sun::star::accessibility" 
         >XAccessibleContext</type>, and
         <type scope="::com::sun::star::accessibility"
         >XAccessibleComponent</type> interfaces.

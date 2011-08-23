@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,21 +48,21 @@ private:
     long                mnStartSplitPos;
     Point               maDragPos;
     Rectangle           maDragRect;
-    sal_Bool                mbHorzSplit;
-    sal_Bool                mbDragFull;
-    sal_Bool                mbKbdSplitting;
+    BOOL                mbHorzSplit;
+    BOOL                mbDragFull;
+    BOOL                mbKbdSplitting;
     long                mbInKeyEvent;
     long                mnKeyboardStepSize;
     Link                maStartSplitHdl;
     Link                maSplitHdl;
     Link                maEndSplitHdl;
 
-    SAL_DLLPRIVATE void      ImplInitSplitterData();
-    SAL_DLLPRIVATE void      ImplDrawSplitter();
+    SAL_DLLPRIVATE void 	 ImplInitSplitterData();
+    SAL_DLLPRIVATE void 	 ImplDrawSplitter();
     SAL_DLLPRIVATE void      ImplSplitMousePos( Point& rPos );
     SAL_DLLPRIVATE void      ImplStartKbdSplitting();
     SAL_DLLPRIVATE void      ImplKbdTracking( KeyCode aKeyCode );
-    SAL_DLLPRIVATE sal_Bool      ImplSplitterActive();
+    SAL_DLLPRIVATE BOOL      ImplSplitterActive();
     SAL_DLLPRIVATE Splitter* ImplFindSibling();
     SAL_DLLPRIVATE void      ImplRestoreSplitter();
 
@@ -72,7 +72,7 @@ private:
 
 protected:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void      ImplInit( Window* pParent, WinBits nWinStyle );
+    SAL_DLLPRIVATE void 	 ImplInit( Window* pParent, WinBits nWinStyle );
 
 public:
                         Splitter( Window* pParent, WinBits nStyle = WB_VSCROLL );
@@ -109,7 +109,7 @@ public:
     void                SetLastSplitPosPixel( long nNewPos );
     long                GetLastSplitPosPixel() const { return mnLastSplitPos; }
 
-    sal_Bool                IsHorizontal() const { return mbHorzSplit; }
+    BOOL                IsHorizontal() const { return mbHorzSplit; }
 
     // set the stepsize of the splitter for cursor movement
     // the default is 10% of the reference window's width/height

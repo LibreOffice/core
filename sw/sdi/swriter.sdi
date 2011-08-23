@@ -2034,54 +2034,6 @@ SfxVoidItem FormatColumns FN_FORMAT_COLUMN
     GroupId = GID_FORMAT;
 ]
 
-SfxVoidItem ExportPDF FN_EXPORT_OLE_AS_PDF
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FRAME;
-]
-
-SfxVoidItem ExportGraphic FN_EXPORT_OLE_AS_GRAPHIC
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FRAME;
-]
-
 //--------------------------------------------------------------------------
 SwFmtDrop FormatDropcap FN_FORMAT_DROPCAPS
 
@@ -3509,33 +3461,6 @@ SfxVoidItem SaveGraphic FN_SAVE_GRAPHIC
     ToolBoxConfig = TRUE,
     GroupId = GID_GRAPHIC;
 ]
-
-//------------------------------------------------------------------------
-SfxVoidItem ExternalEdit FN_EXTERNAL_EDIT
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_GRAPHIC;
-]
-//------------------------------------------------------------------------
-
 
 //--------------------------------------------------------------------------
 SfxVoidItem Grow FN_GROW_FONT_SIZE
@@ -10016,7 +9941,32 @@ SfxBoolItem SelectionModeDefault FN_SELECTION_MODE_DEFAULT
     GroupId = GID_EDIT;
 ]
 
-SfxVoidItem ReplyComment FN_REPLY
+//--------------------------------------------------------------------------
+SfxVoidItem DeleteNote FN_DELETE_NOTE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+
+SfxVoidItem ReplyNote FN_REPLY
 ()
 [
     /* flags: */
@@ -10365,55 +10315,4 @@ SfxVoidItem CopyHyperlinkLocation FN_COPY_HYPERLINK_LOCATION
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_EDIT;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem NavigateBack FN_NAVIGATION_BACK
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_NAVIGATION;
-]
-//--------------------------------------------------------------------------
-SfxVoidItem NavigateForward FN_NAVIGATION_FORWARD
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_NAVIGATION;
 ]

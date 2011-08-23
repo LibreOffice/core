@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -148,7 +148,7 @@ void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
 
 //----------------------------------------------------------------------------
 
-SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt16 nTol)
+SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, USHORT nTol)
 {
     DlgEdObj* pDlgEdObj = dynamic_cast< DlgEdObj* >(pRetval);
 
@@ -173,12 +173,12 @@ SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt
             // will access aOutRect directly
             const Rectangle aOuterRectangle(pDlgEdObj->GetLastBoundRect());
 
-            if(!aOuterRectangle.IsEmpty()
-                && RECT_EMPTY != aOuterRectangle.Right()
+            if(!aOuterRectangle.IsEmpty() 
+                && RECT_EMPTY != aOuterRectangle.Right() 
                 && RECT_EMPTY != aOuterRectangle.Bottom())
             {
                 basegfx::B2DRange aOuterRange(
-                    aOuterRectangle.Left(), aOuterRectangle.Top(),
+                    aOuterRectangle.Left(), aOuterRectangle.Top(), 
                     aOuterRectangle.Right(), aOuterRectangle.Bottom());
 
                 if(nTol)
@@ -197,7 +197,7 @@ SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt
     return pRetval;
 }
 
-SdrObject* DlgEdView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uLong nOptions, const SetOfByte* pMVisLay) const
+SdrObject* DlgEdView::CheckSingleSdrObjectHit(const Point& rPnt, USHORT nTol, SdrObject* pObj, SdrPageView* pPV, ULONG nOptions, const SetOfByte* pMVisLay) const
 {
     // call parent
     SdrObject* pRetval = SdrView::CheckSingleSdrObjectHit(rPnt, nTol, pObj, pPV, nOptions, pMVisLay);

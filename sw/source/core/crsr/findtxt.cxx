@@ -28,17 +28,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
+
+
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
-
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
-
 #include <txatritr.hxx>
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
@@ -46,16 +44,15 @@
 #include <txtfld.hxx>
 #include <swcrsr.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <pamtyp.hxx>
 #include <ndtxt.hxx>
 #include <swundo.hxx>
-#include <UndoInsert.hxx>
 #include <breakit.hxx>
 
 #include <docsh.hxx>
 #include <PostItMgr.hxx>
 #include <viewsh.hxx>
+#include <vcl/window.hxx>
 
 using namespace ::com::sun::star;
 using namespace util;
@@ -72,7 +69,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
 
     const SwpHints *pHts = rNd.GetpSwpHints();
 
-    sal_uInt16 n = 0;
+    USHORT n = 0;
     xub_StrLen nSoftHyphen = nStart;
     xub_StrLen nHintStart = STRING_LEN;
     bool bNewHint       = true;
@@ -138,16 +135,17 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                 case RES_TXTATR_METAFIELD:
                     {
                         // JP 06.05.98: mit Bug 50100 werden sie als Trenner erwuenscht und nicht
-                        //              mehr zum Wort dazu gehoerend.
+                        //				mehr zum Wort dazu gehoerend.
                         // MA 23.06.98: mit Bug 51215 sollen sie konsequenterweise auch am
-                        //              Satzanfang und -ende ignoriert werden wenn sie Leer sind.
-                        //              Dazu werden sie schlicht entfernt. Fuer den Anfang entfernen
-                        //              wir sie einfach.
-                        //              Fuer das Ende merken wir uns die Ersetzungen und entferenen
-                        //              hinterher alle am Stringende (koenten ja 'normale' 0x7f drinstehen
-                           sal_Bool bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
+                        //				Satzanfang und -ende ignoriert werden wenn sie Leer sind.
+                        //				Dazu werden sie schlicht entfernt. Fuer den Anfang entfernen
+                        //				wir sie einfach.
+                        //				Fuer das Ende merken wir uns die Ersetzungen und entferenen
+                        //				hinterher alle am Stringende (koenten ja 'normale' 0x7f drinstehen
+                           BOOL bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
                             !(static_cast<SwTxtFld const*>(pHt)
-                                ->GetFld().GetFld()->ExpandField(true).Len());
+                                ->GetFld().GetFld()->ExpandField(
+                                    rNd.GetDoc()->IsClipBoard()).Len());
                         if ( bEmpty && nStart == nAkt )
                            {
                             rArr.Insert( nAkt, rArr.Count() );
@@ -163,7 +161,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                        }
                        break;
                    default:
-                    OSL_FAIL( "unknown case in lcl_CleanStr" );
+                    OSL_ENSURE( false, "unknown case in lcl_CleanStr" );
                     break;
                 }
             }
@@ -180,7 +178,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
     }
     while ( true );
 
-    for( sal_uInt16 i = aReplaced.Count(); i; )
+    for( USHORT i = aReplaced.Count(); i; )
     {
         const xub_StrLen nTmp = aReplaced[ --i ];
         if( nTmp == rRet.Len() - 1 )
@@ -226,15 +224,15 @@ xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
     return aIndex;
 }
 
-sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes , utl::TextSearch& rSTxt,
+BYTE SwPaM::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes , utl::TextSearch& rSTxt,
                     SwMoveFn fnMove, const SwPaM * pRegion,
-                    sal_Bool bInReadOnly )
+                    BOOL bInReadOnly )
 {
     if( !rSearchOpt.searchString.getLength() )
-        return sal_False;
+        return FALSE;
 
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
-    sal_Bool bSrchForward = fnMove == fnMoveForward;
+    BOOL bSrchForward = fnMove == fnMoveForward;
     SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
     SwIndex& rCntntIdx = pPam->GetPoint()->nContent;
 
@@ -245,10 +243,10 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
             rCntntIdx.GetIndex() )
         : !rCntntIdx.GetIndex() && pPam->GetCntntNode()->Len() )
     {
-        if( !(*fnMove->fnNds)( &rNdIdx, sal_False ))
+        if( !(*fnMove->fnNds)( &rNdIdx, FALSE ))
         {
             delete pPam;
-            return sal_False;
+            return FALSE;
         }
         SwCntntNode *pNd = rNdIdx.GetNode().GetCntntNode();
         xub_StrLen nTmpPos = bSrchForward ? 0 : pNd->Len();
@@ -256,14 +254,14 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
     }
 
     /*
-     * Ist bFound == sal_True, dann wurde der String gefunden und in
+     * Ist bFound == TRUE, dann wurde der String gefunden und in
      * nStart und nEnde steht der gefundenen String
      */
-    sal_Bool bFound = sal_False;
+    BOOL bFound = FALSE;
     /*
      * StartPostion im Text oder Anfangsposition
      */
-    sal_Bool bFirst = sal_True;
+    BOOL bFirst = TRUE;
     SwCntntNode * pNode;
     //testarea
     //String sCleanStr;
@@ -272,11 +270,11 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
 
     xub_StrLen nStart, nEnde, nTxtLen;
 
-    sal_Bool bRegSearch = SearchAlgorithms_REGEXP == rSearchOpt.algorithmType;
-    sal_Bool bChkEmptyPara = bRegSearch && 2 == rSearchOpt.searchString.getLength() &&
+    BOOL bRegSearch = SearchAlgorithms_REGEXP == rSearchOpt.algorithmType;
+    BOOL bChkEmptyPara = bRegSearch && 2 == rSearchOpt.searchString.getLength() &&
                         ( !rSearchOpt.searchString.compareToAscii( "^$" ) ||
                           !rSearchOpt.searchString.compareToAscii( "$^" ) );
-    sal_Bool bChkParaEnd = bRegSearch && 1 == rSearchOpt.searchString.getLength() &&
+    BOOL bChkParaEnd = bRegSearch && 1 == rSearchOpt.searchString.getLength() &&
                       !rSearchOpt.searchString.compareToAscii( "$" );
 
 //    LanguageType eLastLang = 0;
@@ -422,7 +420,7 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
 
 bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                     SwMoveFn fnMove,
-                    sal_Bool bSrchForward, sal_Bool bRegSearch, sal_Bool bChkEmptyPara, sal_Bool bChkParaEnd,
+                    BOOL bSrchForward, BOOL bRegSearch, BOOL bChkEmptyPara, BOOL bChkParaEnd,
                     xub_StrLen &nStart, xub_StrLen &nEnde, xub_StrLen nTxtLen,SwNode* pNode, SwPaM* pPam)
 {
     bool bFound = false;
@@ -454,8 +452,8 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                         aFltArr, sCleanStr, bRemoveSoftHyphens );
 
     SwScriptIterator* pScriptIter = 0;
-    sal_uInt16 nSearchScript = 0;
-    sal_uInt16 nCurrScript = 0;
+    USHORT nSearchScript = 0;
+    USHORT nCurrScript = 0;
 
     if ( SearchAlgorithms_APPROXIMATE == rSearchOpt.algorithmType &&
          pBreakIt->GetBreakIter().is() )
@@ -526,7 +524,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
 
             if( !bSrchForward )         // rueckwaerts Suche?
                 Exchange();             // Point und Mark tauschen
-            bFound = sal_True;
+            bFound = TRUE;
             break;
         }
 
@@ -550,7 +548,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
         {
             if( !bSrchForward )         // rueckwaerts Suche?
                 Exchange();             // Point und Mark tauschen
-            //bFound = sal_True;
+            //bFound = TRUE;
             //break;
             return true;
         }
@@ -564,13 +562,13 @@ struct SwFindParaText : public SwFindParas
     const SearchOptions& rSearchOpt;
     SwCursor& rCursor;
     utl::TextSearch aSTxt;
-    sal_Bool bReplace;
-    sal_Bool bSearchInNotes;
+    BOOL bReplace;
+    BOOL bSearchInNotes;
 
-    SwFindParaText( const SearchOptions& rOpt, sal_Bool bSearchNotes, int bRepl, SwCursor& rCrsr )
+    SwFindParaText( const SearchOptions& rOpt, BOOL bSearchNotes, int bRepl, SwCursor& rCrsr )
         : rSearchOpt( rOpt ), rCursor( rCrsr ), aSTxt( rOpt ), bReplace( 0 != bRepl ), bSearchInNotes( bSearchNotes )
     {}
-    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, sal_Bool bInReadOnly );
+    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, BOOL bInReadOnly );
     virtual int IsReplaceMode() const;
     virtual ~SwFindParaText();
 };
@@ -580,15 +578,19 @@ SwFindParaText::~SwFindParaText()
 }
 
 int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
-                            const SwPaM* pRegion, sal_Bool bInReadOnly )
+                            const SwPaM* pRegion, BOOL bInReadOnly )
 {
     if( bInReadOnly && bReplace )
-        bInReadOnly = sal_False;
+        bInReadOnly = FALSE;
 
-    sal_Bool bFnd = (sal_Bool)pCrsr->Find( rSearchOpt, bSearchInNotes, aSTxt, fnMove, pRegion, bInReadOnly );
+    BOOL bFnd = (BOOL)pCrsr->Find( rSearchOpt, bSearchInNotes, aSTxt, fnMove, pRegion, bInReadOnly );
 
+    /*	 #i80135# if we found something in a note, Mark and Point is the same
+    if( bFnd && *pCrsr->GetMark() == *pCrsr->GetPoint() )
+        return FIND_NOT_FOUND;
+    */
 
-    if( bFnd && bReplace )          // String ersetzen ??
+    if( bFnd && bReplace )			// String ersetzen ??
     {
         // Replace-Methode vom SwDoc benutzen
         const bool bRegExp(SearchAlgorithms_REGEXP == rSearchOpt.algorithmType);
@@ -633,9 +635,9 @@ int SwFindParaText::IsReplaceMode() const
 }
 
 
-sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes,
+ULONG SwCursor::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes,
                         SwDocPositions nStart, SwDocPositions nEnde,
-                        sal_Bool& bCancel,
+                        BOOL& bCancel,
                         FindRanges eFndRngs, int bReplace )
 {
     // OLE-Benachrichtigung abschalten !!
@@ -643,27 +645,21 @@ sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNot
     Link aLnk( pDoc->GetOle2Link() );
     pDoc->SetOle2Link( Link() );
 
-    bool const bStartUndo = pDoc->GetIDocumentUndoRedo().DoesUndo() && bReplace;
-    if (bStartUndo)
-    {
-        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_REPLACE, NULL );
-    }
+    BOOL bSttUndo = pDoc->DoesUndo() && bReplace;
+    if( bSttUndo )
+        pDoc->StartUndo( UNDO_REPLACE, NULL );
 
-    sal_Bool bSearchSel = 0 != (rSearchOpt.searchFlag & SearchFlags::REG_NOT_BEGINOFLINE);
+    BOOL bSearchSel = 0 != (rSearchOpt.searchFlag & SearchFlags::REG_NOT_BEGINOFLINE);
     if( bSearchSel )
         eFndRngs = (FindRanges)(eFndRngs | FND_IN_SEL);
     SwFindParaText aSwFindParaText( rSearchOpt, bSearchInNotes, bReplace, *this );
-    sal_uLong nRet = FindAll( aSwFindParaText, nStart, nEnde, eFndRngs, bCancel );
+    ULONG nRet = FindAll( aSwFindParaText, nStart, nEnde, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
     if( nRet && bReplace )
         pDoc->SetModified();
 
-    if (bStartUndo)
-    {
-        SwRewriter rewriter(MakeUndoReplaceRewriter(
-                nRet, rSearchOpt.searchString, rSearchOpt.replaceString));
-        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_REPLACE, & rewriter );
-    }
+    if( bSttUndo )
+        pDoc->EndUndo( UNDO_REPLACE, NULL );
     return nRet;
 }
 
@@ -673,8 +669,8 @@ String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
     if( pPam && pPam->HasMark() &&
         SearchAlgorithms_REGEXP == rSearchOpt.algorithmType )
     {
-        const SwCntntNode* pTxtNode = pPam->GetCntntNode( sal_True );
-        if( pTxtNode && pTxtNode->IsTxtNode() && pTxtNode == pPam->GetCntntNode( sal_False ) )
+        const SwCntntNode* pTxtNode = pPam->GetCntntNode( TRUE );
+        if( pTxtNode && pTxtNode->IsTxtNode() && pTxtNode == pPam->GetCntntNode( FALSE ) )
         {
             utl::TextSearch aSTxt( rSearchOpt );
             String aStr( pPam->GetTxt() );

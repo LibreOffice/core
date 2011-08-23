@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,12 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <osl/diagnose.h>
+
+
 #include "tabcol.hxx"
+#include <errhdl.hxx>		// fuer Create-Methoden
 
-#include <limits.h> //for LONG_MAX
 
-SwTabCols::SwTabCols( sal_uInt16 nSize ) :
+SwTabCols::SwTabCols( USHORT nSize ) :
     nLeftMin( 0 ),
     nLeft( 0 ),
     nRight( 0 ),
@@ -54,7 +55,7 @@ SwTabCols::SwTabCols( const SwTabCols& rCpy ) :
     aData( rCpy.GetData() )
 {
 #if OSL_DEBUG_LEVEL > 1
-    for ( sal_uInt16 i = 0; i < Count(); ++i )
+    for ( USHORT i = 0; i < Count(); ++i )
     {
         SwTabColsEntry aEntry1 = aData[i];
         SwTabColsEntry aEntry2 = rCpy.GetData()[i];
@@ -72,8 +73,8 @@ SwTabCols::SwTabCols( const SwTabCols& rCpy ) :
 SwTabCols &SwTabCols::operator=( const SwTabCols& rCpy )
 {
     nLeftMin = rCpy.GetLeftMin();
-    nLeft    = rCpy.GetLeft();
-    nRight   = rCpy.GetRight();
+    nLeft	 = rCpy.GetLeft();
+    nRight	 = rCpy.GetRight();
     nRightMax= rCpy.GetRightMax();
     bLastRowAllowedToChange = rCpy.IsLastRowAllowedToChange();
 
@@ -83,30 +84,30 @@ SwTabCols &SwTabCols::operator=( const SwTabCols& rCpy )
     return *this;
 }
 
-sal_Bool SwTabCols::operator==( const SwTabCols& rCmp ) const
+BOOL SwTabCols::operator==( const SwTabCols& rCmp ) const
 {
-    sal_uInt16 i;
+    USHORT i;
 
     if ( !(nLeftMin == rCmp.GetLeftMin() &&
-           nLeft    == rCmp.GetLeft()    &&
-           nRight   == rCmp.GetRight()   &&
+           nLeft	== rCmp.GetLeft()	 &&
+           nRight	== rCmp.GetRight()	 &&
            nRightMax== rCmp.GetRightMax()&&
            bLastRowAllowedToChange== rCmp.IsLastRowAllowedToChange() &&
            Count()== rCmp.Count()) )
-        return sal_False;
+        return FALSE;
 
     for ( i = 0; i < Count(); ++i )
     {
         SwTabColsEntry aEntry1 = aData[i];
         SwTabColsEntry aEntry2 = rCmp.GetData()[i];
         if ( aEntry1.nPos != aEntry2.nPos || aEntry1.bHidden != aEntry2.bHidden  )
-            return sal_False;
+            return FALSE;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
-void SwTabCols::Insert( long nValue, long nMin, long nMax, sal_Bool bValue, sal_uInt16 nPos )
+void SwTabCols::Insert( long nValue, long nMin, long nMax, BOOL bValue, USHORT nPos )
 {
     SwTabColsEntry aEntry;
     aEntry.nPos = nValue;
@@ -116,7 +117,7 @@ void SwTabCols::Insert( long nValue, long nMin, long nMax, sal_Bool bValue, sal_
     aData.insert( aData.begin() + nPos, aEntry );
 }
 
-void SwTabCols::Insert( long nValue, sal_Bool bValue, sal_uInt16 nPos )
+void SwTabCols::Insert( long nValue, BOOL bValue, USHORT nPos )
 {
     SwTabColsEntry aEntry;
     aEntry.nPos = nValue;
@@ -134,7 +135,7 @@ void SwTabCols::Insert( long nValue, sal_Bool bValue, sal_uInt16 nPos )
 #endif
 }
 
-void SwTabCols::Remove( sal_uInt16 nPos, sal_uInt16 nAnz )
+void SwTabCols::Remove( USHORT nPos, USHORT nAnz )
 {
     SwTabColsEntries::iterator aStart = aData.begin() + nPos;
     aData.erase( aStart, aStart + nAnz );

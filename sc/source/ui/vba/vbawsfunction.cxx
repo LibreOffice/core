@@ -63,7 +63,7 @@ void lclConvertDoubleToBoolean( uno::Any& rAny )
 
 void lclConvertBooleanToDouble( uno::Any& rAny )
 {
-    sal_Bool bValue( false );
+    sal_Bool bValue( sal_False );
     if ( rAny >>= bValue )
     {
         if ( bValue )
@@ -268,7 +268,7 @@ ScVbaWSFunction::getValue(const rtl::OUString& /*PropertyName*/) throw(beans::Un
 sal_Bool SAL_CALL
 ScVbaWSFunction::hasMethod(const rtl::OUString& Name)  throw(uno::RuntimeException)
 {
-    sal_Bool bIsFound = false;
+    sal_Bool bIsFound = sal_False;
     try
     {
     // the function name contained in the com.sun.star.sheet.FunctionDescription service is alwayse localized.
@@ -288,7 +288,7 @@ ScVbaWSFunction::hasMethod(const rtl::OUString& Name)  throw(uno::RuntimeExcepti
 sal_Bool SAL_CALL
 ScVbaWSFunction::hasProperty(const rtl::OUString& /*Name*/)  throw(uno::RuntimeException)
 {
-     return false;
+     return sal_False;
 }
 
 ::rtl::OUString SAL_CALL

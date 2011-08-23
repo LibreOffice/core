@@ -78,7 +78,7 @@ CXXFLAGS:=-fno-strict-aliasing $(EXTRA_CFLAGS)
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)$(COM)"=="LINUXGCC"
-LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN'
+LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN' -Wl,-z,noexecstack
 .EXPORT: LDFLAGS
 #The current dir when linking is unxlngi6.pro/misc/build/db-4.2.52.NC/out
 # the map file is in  unxlngi6.pro/misc/build/db-4.2.52.NC
@@ -86,6 +86,10 @@ LDFLAGSVERSION:= -Wl,--version-script=../db_4_7_gcc4.map
 .EXPORT: LDFLAGSVERSION
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
+#.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
+#CC:=$(COMPATH)$/bin$/cc
+#CXX:=$(COMPATH)$/bin$/CC
+#.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 LDFLAGS:=$(ARCH_FLAGS) -R\''$$$$ORIGIN'\'
 .EXPORT: LDFLAGS
 .ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
@@ -105,7 +109,7 @@ CXXFLAGS+:=$(ARCH_FLAGS)
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_DIR_OUT=$(CONFIGURE_DIR)
-BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
+BUILD_ACTION=make
 
 OUT2LIB=$(BUILD_DIR)$/.libs$/libdb*$(DLLPOST)
 OUT2INC= \
@@ -133,9 +137,9 @@ db_LDFLAGS+=-L$(COMPATH)/lib -L$(MINGW_CLIB_DIR)
 db_LIBS=
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
 CFLAGS+=-D_GLIBCXX_DLL
-db_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
+db_LIBS+=-lstdc++_s
 .ENDIF
-db_LIBXSO_LIBS=$(db_LIBS)
+db_LIBXSO_LIBS=$(LIBSTLPORT) $(db_LIBS)
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 db_LIBXSO_LIBS+=-lgcc_s
 .ENDIF
@@ -156,10 +160,16 @@ OUT2INC= \
 .ENDIF
 
 .ELSE
+# make use of stlport headerfiles
+EXT_USE_STLPORT=TRUE
+
 BUILD_DIR=
 BUILD_ACTION=dmake
 
 BUILD_DIR_OUT=build_windows
+#OUT2LIB= \
+#	$(BUILD_DIR_OUT)$/Release$/libdb42.lib
+#OUT2BIN=$(BUILD_DIR_OUT)$/Release$/libdb42.dll
 OUT2INC= \
     $(BUILD_DIR_OUT)$/db.h
 .ENDIF

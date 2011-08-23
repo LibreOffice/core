@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 namespace fileaccess {
 
     class BaseContent;
-
+    
     struct equalOUString
     {
         bool operator()( const rtl::OUString& rKey1, const rtl::OUString& rKey2 ) const
@@ -44,8 +44,8 @@ namespace fileaccess {
             return !!( rKey1 == rKey2 );
         }
     };
-
-
+    
+    
     struct hashOUString
     {
         size_t operator()( const rtl::OUString& rName ) const
@@ -54,7 +54,7 @@ namespace fileaccess {
         }
     };
 
-
+    
     /******************************************************************************/
     /*                                                                            */
     /*                         Helper functions                                   */
@@ -75,37 +75,37 @@ namespace fileaccess {
 
     // returns the last part of the given url as title
     extern rtl::OUString getTitle( const rtl::OUString& aPath );
-
+    
     // returns the url without last part as parentname
     // In case aFileName is root ( file:/// ) root is returned
-
+    
     extern rtl::OUString getParentName( const rtl::OUString& aFileName );
-
+    
     /**
      *  special copy:
      *  On test = true, the implementation determines whether the
      *  destination exists and returns the appropriate errorcode E_EXIST.
      *  osl::File::copy copies unchecked.
      */
-
+    
     extern osl::FileBase::RC osl_File_copy( const rtl::OUString& strPath,
                                             const rtl::OUString& strDestPath,
                                             sal_Bool test = false );
-
+    
     /**
      *  special move:
      *  On test = true, the implementation determines whether the
      *  destination exists and returns the appropriate errorcode E_EXIST.
      *  osl::File::move moves unchecked
      */
-
+    
     extern osl::FileBase::RC osl_File_move( const rtl::OUString& strPath,
                                             const rtl::OUString& strDestPath,
                                             sal_Bool test = false );
 
     // This function implements the global exception handler of the file_ucp;
     // It never returns;
-
+    
     extern void throw_handler( sal_Int32 errorCode,
                                sal_Int32 minorCode,
                                const com::sun::star::uno::Reference<
@@ -114,7 +114,7 @@ namespace fileaccess {
                                BaseContent* pContent,
                                bool isHandled = false);
                                    // the physical URL of the object
-
+    
 } // end namespace fileaccess
 
 #endif

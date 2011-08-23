@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ module com {  module sun {  module star {  module awt {
  */
 interface XPopupMenuExtended
 {
-    /** specifies basic functions for a pop-up menu.
+    /** specifies basic functions for a popup menu.
     */
     interface ::com::sun::star::awt::XPopupMenu;
 

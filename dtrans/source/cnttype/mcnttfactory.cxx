@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ namespace
     Sequence< OUString > SAL_CALL MimeContentTypeFactory_getSupportedServiceNames( )
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory"));
+        aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.MimeContentTypeFactory");
         return aRet;
     }
 }
@@ -71,7 +71,7 @@ namespace
 // ctor
 //------------------------------------------------------------------------
 
-CMimeContentTypeFactory::CMimeContentTypeFactory( const Reference< XMultiServiceFactory >& rSrvMgr ) :
+CMimeContentTypeFactory::CMimeContentTypeFactory( const Reference< XMultiServiceFactory >& rSrvMgr ) :	
     m_SrvMgr( rSrvMgr )
 {
 }
@@ -91,17 +91,17 @@ Reference< XMimeContentType > CMimeContentTypeFactory::createMimeContentType( co
 // XServiceInfo
 // -------------------------------------------------
 
-OUString SAL_CALL CMimeContentTypeFactory::getImplementationName(  )
+OUString SAL_CALL CMimeContentTypeFactory::getImplementationName(  ) 
     throw( RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( MIMECONTENTTYPEFACTORY_IMPL_NAME ));
+    return OUString::createFromAscii( MIMECONTENTTYPEFACTORY_IMPL_NAME );
 }
 
 // -------------------------------------------------
-//  XServiceInfo
+//	XServiceInfo
 // -------------------------------------------------
 
-sal_Bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& ServiceName ) 
     throw( RuntimeException )
 {
     Sequence < OUString > SupportedServicesNames = MimeContentTypeFactory_getSupportedServiceNames();
@@ -114,10 +114,10 @@ sal_Bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& Serv
 }
 
 // -------------------------------------------------
-//  XServiceInfo
+//	XServiceInfo
 // -------------------------------------------------
 
-Sequence< OUString > SAL_CALL CMimeContentTypeFactory::getSupportedServiceNames( )
+Sequence< OUString > SAL_CALL CMimeContentTypeFactory::getSupportedServiceNames( ) 
     throw( RuntimeException )
 {
     return MimeContentTypeFactory_getSupportedServiceNames( );

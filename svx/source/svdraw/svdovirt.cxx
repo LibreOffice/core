@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ TYPEINIT1(SdrVirtObj,SdrObject);
 SdrVirtObj::SdrVirtObj(SdrObject& rNewObj):
     rRefObj(rNewObj)
 {
-    bVirtObj=sal_True; // Ja, ich bin ein virtuelles Objekt
+    bVirtObj=TRUE; // Ja, ich bin ein virtuelles Objekt
     rRefObj.AddReference(*this);
     bClosedObj=rRefObj.IsClosedObj();
 }
@@ -70,7 +70,7 @@ SdrVirtObj::SdrVirtObj(SdrObject& rNewObj, const Point& rAnchorPos):
     rRefObj(rNewObj)
 {
     aAnchor=rAnchorPos;
-    bVirtObj=sal_True; // Ja, ich bin ein virtuelles Objekt
+    bVirtObj=TRUE; // Ja, ich bin ein virtuelles Objekt
     rRefObj.AddReference(*this);
     bClosedObj=rRefObj.IsClosedObj();
 }
@@ -92,7 +92,7 @@ SdrObject& SdrVirtObj::ReferencedObj()
     return rRefObj;
 }
 
-void SdrVirtObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
+void __EXPORT SdrVirtObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
 {
     bClosedObj=rRefObj.IsClosedObj();
     SetRectsDirty(); // hier noch Optimieren.
@@ -120,12 +120,12 @@ void SdrVirtObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rRefObj.TakeObjInfo(rInfo);
 }
 
-sal_uInt32 SdrVirtObj::GetObjInventor() const
+UINT32 SdrVirtObj::GetObjInventor() const
 {
     return rRefObj.GetObjInventor();
 }
 
-sal_uInt16 SdrVirtObj::GetObjIdentifier() const
+UINT16 SdrVirtObj::GetObjIdentifier() const
 {
     return rRefObj.GetObjIdentifier();
 }
@@ -160,16 +160,16 @@ void SdrVirtObj::SetChanged()
     SdrObject::SetChanged();
 }
 
-SdrVirtObj* SdrVirtObj::Clone() const
+SdrObject* SdrVirtObj::Clone() const
 {
-    return new SdrVirtObj(this->rRefObj); // Nur eine weitere Referenz
+    SdrObject* pObj=new SdrVirtObj(((SdrVirtObj*)this)->rRefObj); // Nur eine weitere Referenz
+    return pObj;
 }
 
-SdrVirtObj& SdrVirtObj::operator=(const SdrVirtObj& rObj)
+void SdrVirtObj::operator=(const SdrObject& rObj)
 {   // ???anderes Objekt referenzieren???
     SdrObject::operator=(rObj);
-    aAnchor=rObj.aAnchor;
-    return *this;
+    aAnchor=((SdrVirtObj&)rObj).aAnchor;
 }
 
 void SdrVirtObj::TakeObjNameSingul(XubString& rName) const
@@ -198,7 +198,7 @@ void SdrVirtObj::TakeObjNamePlural(XubString& rName) const
 void operator +=(PolyPolygon& rPoly, const Point& rOfs)
 {
     if (rOfs.X()!=0 || rOfs.Y()!=0) {
-        sal_uInt16 i,j;
+        USHORT i,j;
         for (j=0; j<rPoly.Count(); j++) {
             Polygon aP1(rPoly.GetObject(j));
             for (i=0; i<aP1.GetSize(); i++) {

@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 package OfficeDev.samples.Filter;
@@ -88,7 +88,7 @@ public class AsciiReplaceFilter
     {
         //______________________________
         // const
-
+        
         // the supported service names, the first one being the service name of the component itself
         public static final String[] m_serviceNames = { "com.sun.star.comp.ansifilter.AsciiReplaceFilter" , "com.sun.star.document.ImportFilter", "com.sun.star.document.ExportFilter" };
 
@@ -354,12 +354,12 @@ public class AsciiReplaceFilter
                 bImport  = m_bImport;
                 xText    = m_xDocument;
             }
-
+  
             measure("options analyzed");
-
+  
             if (aOptions.isValid()==false)
                 return false;
-
+  
             // start real filtering
             boolean bState = false;
             if (bImport)
@@ -424,32 +424,32 @@ public class AsciiReplaceFilter
                                        FilterOptions                   aOptions )
         {
             measure("implts_import {");
-
+    
             com.sun.star.text.XSimpleText xText = (com.sun.star.text.XSimpleText)UnoRuntime.queryInterface(
                 com.sun.star.text.XSimpleText.class,
                 xTarget.getText());
-
+    
             measure("cast XSimpleText");
-
+    
             boolean bBreaked = false;
-
+    
             try
             {
                 StringBuffer sBuffer  = new StringBuffer(100000);
                 byte[][]     lData    = new byte[1][];
                 int          nRead    = aOptions.m_xInput.readBytes( lData, 4096 );
-
+    
                 measure("read first bytes");
-
+    
                 while (nRead>0 && !bBreaked)
                 {
                     // copy data from stream to temp. buffer
                     sBuffer.append( new String(lData[0]) );
                     measure("buffer append ["+nRead+"]");
-
+    
                     nRead = aOptions.m_xInput.readBytes( lData, 2048 );
                     measure("read next bytes");
-
+    
                     // check for cancelled filter proc on every loop!
                     synchronized(this)
                     {
@@ -461,11 +461,11 @@ public class AsciiReplaceFilter
                     }
                     measure("break check");
                 }
-
+    
                 // Make some replacements inside the buffer.
                 String sText = implts_replace( sBuffer, aOptions );
                 measure("replace");
-
+    
                 // copy current buffer to the document model.
                 // Create a new paragraph for every line inside original file.
                 // May not all data could be readed - but that doesn't matter here.
@@ -474,27 +474,27 @@ public class AsciiReplaceFilter
                 int nStart  =  0;
                 int nEnd    = -1;
                 int nLength = sText.length();
-
+    
                 com.sun.star.text.XTextRange xCursor = (com.sun.star.text.XTextRange)UnoRuntime.queryInterface(
                     com.sun.star.text.XTextRange.class,
                     xText.createTextCursor());
-
+    
                 while (true)
                 {
                     nEnd = sText.indexOf('\n',nStart);
-
+    
                     if (nEnd==-1 && nStart<nLength)
                         nEnd = nLength;
-
+    
                     if (nEnd==-1)
                         break;
-
+    
                     String sLine = sText.substring(nStart,nEnd);
                     nStart = nEnd+1;
-
+    
                     xText.insertString(xCursor,sLine,false);
                     xText.insertControlCharacter(xCursor,com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK,false);
-
+    
                     // check for cancelled filter proc on every loop!
                     synchronized(this)
                     {
@@ -506,9 +506,9 @@ public class AsciiReplaceFilter
                     }
                     measure("break check");
                 }
-
+    
                 measure("set on model");
-
+    
                 // with refreshing the document we are on the safe-side, otherwise the first time the filter is used the document is not fully shown (flaw!).
                 com.sun.star.util.XRefreshable xRefresh = (com.sun.star.util.XRefreshable)UnoRuntime.queryInterface(
                 com.sun.star.util.XRefreshable.class,
@@ -526,11 +526,11 @@ public class AsciiReplaceFilter
             catch(com.sun.star.io.BufferSizeExceededException exExceed   ) { bBreaked = true; }
             catch(com.sun.star.io.NotConnectedException       exConnect  ) { bBreaked = true; }
             catch(com.sun.star.io.IOException                 exIO       ) { bBreaked = true; }
-
+    
 
 
             measure("} implts_import");
-
+    
             return !bBreaked;
         }
 
@@ -556,22 +556,22 @@ public class AsciiReplaceFilter
                                        FilterOptions                   aOptions)
         {
             measure("implts_export {");
-
+    
             com.sun.star.text.XTextRange xText = (com.sun.star.text.XSimpleText)UnoRuntime.queryInterface(
                 com.sun.star.text.XSimpleText.class,
                 xSource.getText());
-
+    
             measure("cast XTextRange");
-
+    
             boolean bBreaked = false;
-
+    
             try
             {
                 StringBuffer sBuffer = new StringBuffer(xText.getString());
                 String       sText   = implts_replace(sBuffer,aOptions);
-
+    
                 measure("get text from model");
-
+    
                 // Normaly this function isn't realy cancelable
                 // But we following operation can be very expensive. So
                 // this place is the last one to stop it.
@@ -583,12 +583,12 @@ public class AsciiReplaceFilter
                         return false;
                     }
                 }
-
+    
                 aOptions.m_xOutput.writeBytes(sText.getBytes());
                 aOptions.m_xOutput.flush();
-
+    
                 measure("written to file");
-
+    
                 // If we created used stream - we must close it too.
                 if (aOptions.m_bStreamOwner==true)
                 {
@@ -599,12 +599,12 @@ public class AsciiReplaceFilter
             catch(com.sun.star.io.BufferSizeExceededException exExceed  ) { bBreaked = true; }
             catch(com.sun.star.io.NotConnectedException       exConnect ) { bBreaked = true; }
             catch(com.sun.star.io.IOException                 exIO      ) { bBreaked = true; }
-
+    
             measure("} implts_export");
-
+    
             return !bBreaked;
         }
-
+    
         /**
          * helper function to convert the used StringBuffer into a Strig value.
          * And we use this chance to have a look on optional filter options
@@ -626,7 +626,7 @@ public class AsciiReplaceFilter
                     nEnd   = nStart+nLength;
                 }
             }
-
+    
             // convert buffer into return format [string]
             // and convert to lower or upper case if required.
             String sResult = rBuffer.toString();
@@ -637,11 +637,11 @@ public class AsciiReplaceFilter
                 else
                     sResult = sResult.toUpperCase();
             }
-
+    
             return sResult;
         }
-
-
+    
+    
         //______________________________
         // interface XServiceInfo
         /**
@@ -672,7 +672,7 @@ public class AsciiReplaceFilter
                     sService.equals( m_serviceNames[2] )
                     );
         }
-
+    
         /**
          * Return the real class name of the component
          *
@@ -723,15 +723,11 @@ public class AsciiReplaceFilter
      *
      * @see com.sun.star.comp.loader.JavaLoader
      */
-    // This method not longer necessary since OOo 3.4 where the component registration
-    // was changed to passive component registration. For more details see
-    // http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
-
-//     public static boolean __writeRegistryServiceInfo( com.sun.star.registry.XRegistryKey xRegistryKey )
-//     {
-//         return Factory.writeRegistryServiceInfo(
-//             _AsciiReplaceFilter.class.getName(),
-//             _AsciiReplaceFilter.m_serviceNames,
-//             xRegistryKey );
-//     }
-}
+    public static boolean __writeRegistryServiceInfo( com.sun.star.registry.XRegistryKey xRegistryKey )
+    {
+        return Factory.writeRegistryServiceInfo(
+            _AsciiReplaceFilter.class.getName(),
+            _AsciiReplaceFilter.m_serviceNames,
+            xRegistryKey );
+    }
+}    

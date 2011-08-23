@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,13 +34,13 @@
 #include <vcl/msgbox.hxx>
 
 
-sal_Bool GHEditWindow::Close()
+BOOL GHEditWindow::Close()
 {
     if (aInhalt.IsModified())
     {
     }
     delete(this);
-    return sal_True;
+    return TRUE;
 }
 
 void GHEditWindow::Resize()
@@ -64,7 +64,7 @@ void GHEditWindow::Clear()
     aInhalt.SetText(String());
 }
 
-void GHEditWindow::AddText( String aNew, sal_Bool bMoveToEnd)
+void GHEditWindow::AddText( String aNew, BOOL bMoveToEnd)
 {
     String aOld = aInhalt.GetText();
 
@@ -110,11 +110,11 @@ void EditFileWindow::LoadFile()
 
     All.ConvertLineEnd();
 
-    AddText(All,sal_False);
+    AddText(All,FALSE);
 
 }
 
-sal_Bool EditFileWindow::Close()
+BOOL EditFileWindow::Close()
 {
 
     if (aInhalt.IsModified() && QueryBox(this,WB_DEF_YES | WB_YES_NO_CANCEL, String(aFileName).AppendAscii("\nhas been changed.\n\nSave file?")).Execute())

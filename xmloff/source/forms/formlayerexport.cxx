@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <xmloff/formlayerexport.hxx>
 #include "strings.hxx"
 #include "elementexport.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmlexp.hxx>
 #include "layerexport.hxx"
 #include "propertyexport.hxx"
@@ -94,6 +94,12 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    ::rtl::Reference< SvXMLExportPropertyMapper > OFormLayerXMLExport::getStylePropertyMapper()
+    {
+        return m_pImpl->getStylePropertyMapper();
+    }
+
+    //---------------------------------------------------------------------
     void OFormLayerXMLExport::initialize()
     {
         m_pImpl->clear();
@@ -108,7 +114,7 @@ namespace xmloff
         }
         catch(Exception&)
         {
-            OSL_FAIL("OFormLayerXMLExport::examine: could not examine the draw page!");
+            OSL_ENSURE(sal_False, "OFormLayerXMLExport::examine: could not examine the draw page!");
         }
     }
 
@@ -177,7 +183,7 @@ namespace xmloff
     }
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

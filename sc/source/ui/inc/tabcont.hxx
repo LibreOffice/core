@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,37 +38,37 @@ class ScViewData;
 
 // ---------------------------------------------------------------------------
 
-//  initial size
-#define SC_TABBAR_DEFWIDTH      270
+//	initial size
+#define SC_TABBAR_DEFWIDTH		270
 
 
 class ScTabControl : public TabBar, public DropTargetHelper, public DragSourceHelper
 {
 private:
-    ScViewData*     pViewData;
-    sal_uInt16          nMouseClickPageId;      /// Last page ID after mouse button down/up
-    sal_uInt16          nSelPageIdByMouse;      /// Selected page ID, if selected with mouse
-    sal_Bool            bErrorShown;
+    ScViewData*		pViewData;
+    USHORT          nMouseClickPageId;      /// Last page ID after mouse button down/up
+    USHORT          nSelPageIdByMouse;      /// Selected page ID, if selected with mouse
+    BOOL            bErrorShown;
 
-    void            DoDrag( const Region& rRegion );
+    void    		DoDrag( const Region& rRegion );
 
-    sal_uInt16          GetMaxId() const;
-    SCTAB           GetPrivatDropPos(const Point& rPos );
+    USHORT			GetMaxId() const;
+    SCTAB			GetPrivatDropPos(const Point& rPos );
 
 protected:
-    virtual void    Select();
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void	Select();
+    virtual void	Command( const CommandEvent& rCEvt );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt );
 
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
 
-    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual void	StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
-    virtual long    StartRenaming();
-    virtual long    AllowRenaming();
-    virtual void    EndRenaming();
+    virtual	long	StartRenaming();
+    virtual long	AllowRenaming();
+    virtual void	EndRenaming();
     virtual void    Mirror();
 
 public:
@@ -78,10 +78,10 @@ public:
     using TabBar::StartDrag;
 
     void            UpdateInputContext();
-    void            UpdateStatus();
-    void            ActivateView(sal_Bool bActivate);
+    void			UpdateStatus();
+    void			ActivateView(BOOL bActivate);
 
-    void            SetSheetLayoutRTL( sal_Bool bSheetRTL );
+    void            SetSheetLayoutRTL( BOOL bSheetRTL );
 };
 
 

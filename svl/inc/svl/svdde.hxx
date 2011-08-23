@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,6 @@
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <tools/link.hxx>
-#include <vector>
 
 class DdeString;
 class DdeData;
@@ -49,10 +48,10 @@ class DdeExecute;
 class DdeItem;
 class DdeTopic;
 class DdeService;
+class ConvList;
 struct DdeDataImp;
 struct DdeImp;
 class DdeItemImp;
-struct Conversation;
 
 #ifndef _SVDDE_NOLISTS
 DECLARE_LIST( DdeConnections, DdeConnection* )
@@ -67,8 +66,13 @@ typedef List DdeItems;
 #endif
 
 DECLARE_LIST( DdeTransactions, DdeTransaction* )
-typedef ::std::vector< long > DdeFormats;
-typedef ::std::vector< Conversation* > ConvList;
+DECLARE_LIST( DdeFormats, long )
+
+
+#ifndef STRING_LIST
+#define STRING_LIST
+DECLARE_LIST( StringList, String * )
+#endif
 
 // -----------
 // - DdeData -
@@ -84,11 +88,11 @@ class SVL_DLLPUBLIC DdeData
 
     SVL_DLLPRIVATE void            Lock();
 
-    void            SetFormat( sal_uLong nFmt );
+    void			SetFormat( ULONG nFmt );
 
 public:
                     DdeData();
-                    DdeData( const void*, long, sal_uLong = FORMAT_STRING );
+                    DdeData( const void*, long, ULONG = FORMAT_STRING );
                     DdeData( const String& );
                     DdeData( const DdeData& );
                     ~DdeData();
@@ -96,12 +100,46 @@ public:
     operator const  void*() const;
     operator        long() const;
 
-    sal_uLong           GetFormat() const;
+    ULONG           GetFormat() const;
 
     DdeData&        operator = ( const DdeData& );
 
-    static sal_uLong GetExternalFormat( sal_uLong nFmt );
-    static sal_uLong GetInternalFormat( sal_uLong nFmt );
+    static ULONG GetExternalFormat( ULONG nFmt );
+    static ULONG GetInternalFormat( ULONG nFmt );
+};
+// ------------------
+// - DdeServiceList -
+// ------------------
+
+class DdeServiceList
+{
+    StringList      aServices;
+
+public:
+                    DdeServiceList( const String* = NULL );
+                    ~DdeServiceList();
+
+    StringList&     GetServices() { return aServices; }
+
+private:
+                            DdeServiceList( const DdeServiceList& );
+    const DdeServiceList&   operator= ( const DdeServiceList& );
+};
+
+// ----------------
+// - DdeTopicList -
+// ----------------
+
+class DdeTopicList
+{
+    StringList      aTopics;
+
+                    DECL_LINK( Data, DdeData* );
+public:
+                    DdeTopicList( const String& );
+                    ~DdeTopicList();
+
+    StringList&     GetTopics() { return aTopics; }
 };
 
 // ------------------
@@ -112,7 +150,7 @@ class SVL_DLLPUBLIC DdeTransaction
 {
 public:
     virtual void    Data( const DdeData* );
-    virtual void    Done( sal_Bool bDataValid );
+    virtual void    Done( BOOL bDataValid );
 protected:
     DdeConnection&  rDde;
     DdeData         aDdeData;
@@ -122,14 +160,14 @@ protected:
     long            nTime;
     Link            aData;
     Link            aDone;
-    sal_Bool            bBusy;
+    BOOL            bBusy;
 
                     DdeTransaction( DdeConnection&, const String&, long = 0 );
 
 public:
     virtual        ~DdeTransaction();
 
-    sal_Bool            IsBusy() { return bBusy; }
+    BOOL            IsBusy() { return bBusy; }
     const String&   GetName() const;
 
     void            Execute();
@@ -140,8 +178,8 @@ public:
     void            SetDoneHdl( const Link& rLink ) { aDone = rLink; }
     const Link&     GetDoneHdl() const { return aDone; }
 
-    void            SetFormat( sal_uLong nFmt ) { aDdeData.SetFormat( nFmt );  }
-    sal_uLong           GetFormat() const       { return aDdeData.GetFormat(); }
+    void            SetFormat( ULONG nFmt ) { aDdeData.SetFormat( nFmt );  }
+    ULONG           GetFormat() const       { return aDdeData.GetFormat(); }
 
     long            GetError();
 
@@ -209,7 +247,7 @@ class SVL_DLLPUBLIC DdePoke : public DdeTransaction
 {
 public:
             DdePoke( DdeConnection&, const String&, const char*, long,
-                     sal_uLong = FORMAT_STRING, long = 0 );
+                     ULONG = FORMAT_STRING, long = 0 );
             DdePoke( DdeConnection&, const String&, const DdeData&, long = 0 );
             DdePoke( DdeConnection&, const String&, const String&, long = 0 );
 };
@@ -246,7 +284,7 @@ public:
 
     static const DdeConnections& GetConnections();
 
-    sal_Bool            IsConnected();
+    BOOL            IsConnected();
 
     const String&   GetServiceName();
     const String&   GetTopicName();
@@ -268,11 +306,11 @@ class SVL_DLLPUBLIC DdeItem
     DdeTopic*       pMyTopic;
     DdeItemImp*     pImpData;
 
-    void            IncMonitor( sal_uLong );
-    void            DecMonitor( sal_uLong );
+    void            IncMonitor( ULONG );
+    void            DecMonitor( ULONG );
 
 protected:
-    sal_uInt8            nType;
+    BYTE            nType;
 
 public:
                     DdeItem( const sal_Unicode* );
@@ -296,9 +334,9 @@ public:
                     DdeGetPutItem( const String& rStr );
                     DdeGetPutItem( const DdeItem& rItem );
 
-    virtual DdeData* Get( sal_uLong );
-    virtual sal_Bool    Put( const DdeData* );
-    virtual void    AdviseLoop( sal_Bool );     // AdviseLoop starten/stoppen
+    virtual DdeData* Get( ULONG );
+    virtual BOOL    Put( const DdeData* );
+    virtual void    AdviseLoop( BOOL );     // AdviseLoop starten/stoppen
 };
 
 // ------------
@@ -312,16 +350,16 @@ class SVL_DLLPUBLIC DdeTopic
 public:
     virtual void    Connect( long );
     virtual void    Disconnect( long );
-    virtual DdeData* Get( sal_uLong );
-    virtual sal_Bool    Put( const DdeData* );
-    virtual sal_Bool    Execute( const String* );
+    virtual DdeData* Get( ULONG );
+    virtual BOOL    Put( const DdeData* );
+    virtual BOOL    Execute( const String* );
         // evt. ein neues anlegen; return 0 -> es konnte nicht angelegt werden
-    virtual sal_Bool MakeItem( const String& rItem );
+    virtual BOOL MakeItem( const String& rItem );
 
         // es wird ein Warm-/Hot-Link eingerichtet. Return-Wert
         // besagt ob es geklappt hat
-    virtual sal_Bool    StartAdviseLoop();
-    virtual sal_Bool    StopAdviseLoop();
+    virtual BOOL    StartAdviseLoop();
+    virtual BOOL    StopAdviseLoop();
 
 private:
     friend class    DdeInternal;
@@ -357,7 +395,7 @@ public:
     const Link&     GetExecuteHdl() const { return aExecLink; }
 
     void            NotifyClient( const String& );
-    sal_Bool            IsSystemTopic();
+    BOOL            IsSystemTopic();
 
     void            InsertItem( DdeItem* );     // fuer eigene Ableitungen!
     DdeItem*        AddItem( const DdeItem& );  // werden kopiert !
@@ -379,10 +417,10 @@ class SVL_DLLPUBLIC DdeService
     friend class    DdeInternal;
 
 public:
-    virtual sal_Bool    IsBusy();
+    virtual BOOL    IsBusy();
     virtual String  GetHelp();
         // evt. ein neues anlegen; return 0 -> es konnte nicht angelegt werden
-    virtual sal_Bool    MakeTopic( const String& rItem );
+    virtual BOOL    MakeTopic( const String& rItem );
 
 protected:
     virtual String  Topics();
@@ -390,7 +428,7 @@ protected:
     virtual String  SysItems();
     virtual String  Status();
     virtual String  SysTopicGet( const String& );
-    virtual sal_Bool    SysTopicExecute( const String* );
+    virtual BOOL    SysTopicExecute( const String* );
 
     const DdeTopic* GetSysTopic() const { return pSysTopic; }
 private:
@@ -401,7 +439,7 @@ private:
     ConvList*       pConv;
     short           nStatus;
 
-    SVL_DLLPRIVATE sal_Bool            HasCbFormat( sal_uInt16 );
+    SVL_DLLPRIVATE BOOL            HasCbFormat( USHORT );
 
 public:
                     DdeService( const String& );
@@ -416,9 +454,9 @@ public:
     void            AddTopic( const DdeTopic& );
     void            RemoveTopic( const DdeTopic& );
 
-    void            AddFormat( sal_uLong );
-    void            RemoveFormat( sal_uLong );
-    sal_Bool            HasFormat( sal_uLong );
+    void            AddFormat( ULONG );
+    void            RemoveFormat( ULONG );
+    BOOL            HasFormat( ULONG );
 
 private:
       //              DdeService( const DdeService& );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,13 +45,12 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
+#include <tools/list.hxx>
 #include <svl/lstner.hxx>
 
 #include <tools/globname.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/content.hxx>
-
-#include <vector>
 
 class SvKeyValueIterator;
 class SfxObjectFactory;
@@ -64,22 +63,24 @@ class Timer;
 class SfxItemSet;
 class DateTime;
 class SvStringsDtor;
+class SvEaMgr;
 
 #define S2BS(s) ByteString( s, RTL_TEXTENCODING_MS_1252 )
 
 //____________________________________________________________________________________________________________________________________
-//  defines for namespaces
+//	defines for namespaces
 //____________________________________________________________________________________________________________________________________
 
-#define OUSTRING                    ::rtl::OUString
-#define XMULTISERVICEFACTORY        ::com::sun::star::lang::XMultiServiceFactory
-#define XSERVICEINFO                ::com::sun::star::lang::XServiceInfo
-#define OWEAKOBJECT                 ::cppu::OWeakObject
-#define REFERENCE                   ::com::sun::star::uno::Reference
-#define XINTERFACE                  ::com::sun::star::uno::XInterface
-#define EXCEPTION                   ::com::sun::star::uno::Exception
-#define RUNTIMEEXCEPTION            ::com::sun::star::uno::RuntimeException
-#define ANY                         ::com::sun::star::uno::Any
+#define	OUSTRING					::rtl::OUString
+#define	XMULTISERVICEFACTORY		::com::sun::star::lang::XMultiServiceFactory
+#define	XSERVICEINFO				::com::sun::star::lang::XServiceInfo
+#define	OWEAKOBJECT					::cppu::OWeakObject
+#define	REFERENCE					::com::sun::star::uno::Reference
+#define	XINTERFACE					::com::sun::star::uno::XInterface
+#define	SEQUENCE					::com::sun::star::uno::Sequence
+#define	EXCEPTION					::com::sun::star::uno::Exception
+#define	RUNTIMEEXCEPTION			::com::sun::star::uno::RuntimeException
+#define	ANY							::com::sun::star::uno::Any
 
 class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
 {
@@ -92,13 +93,14 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     INetURLObject*      pURLObj;
     String              aName;
     SvGlobalName        aFilterClass;
-    SvStream*           pInStream;
+    SvStream*			pInStream;
     SvStream*           pOutStream;
-    const SfxFilter*    pFilter;
-    SfxItemSet*         pSet;
-    SfxMedium_Impl*     pImp;
-    String              aLogicName;
-    String              aLongName;
+//REMOVE		SvStorageRef        aStorage;
+    const SfxFilter*	pFilter;
+    SfxItemSet*			pSet;
+    SfxMedium_Impl*		pImp;
+    String           	aLogicName;
+    String           	aLongName;
     sal_Bool            bRemote;
 
     sal_Bool            m_bIsReadOnly;
@@ -112,7 +114,7 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     SAL_DLLPRIVATE void CloseStreams_Impl();
     DECL_DLLPRIVATE_STATIC_LINK( SfxMedium, UCBHdl_Impl, sal_uInt32 * );
 
-    SAL_DLLPRIVATE void SetEncryptionDataToStorage_Impl();
+    SAL_DLLPRIVATE void SetPasswordToStorage_Impl();
 #endif
 
 public:
@@ -122,7 +124,7 @@ public:
                         SfxMedium();
                         SfxMedium( const String &rName,
                                    StreamMode nOpenMode,
-                                   sal_Bool bDirect=sal_False,
+                                   sal_Bool bDirect=FALSE,
                                    const SfxFilter *pFilter = 0,
                                    SfxItemSet *pSet = 0 );
 
@@ -136,7 +138,7 @@ public:
 
                         ~SfxMedium();
 
-    void                UseInteractionHandler( sal_Bool );
+    void                UseInteractionHandler( BOOL );
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >
                         GetInteractionHandler();
 
@@ -149,19 +151,23 @@ public:
     void                SetReferer( const String& rRefer );
     const String&       GetReferer( ) const;
     sal_Bool            Exists( sal_Bool bForceSession = sal_True );
-    void                SetFilter(const SfxFilter *pFlt, sal_Bool bResetOrig = sal_False);
+    void			    SetFilter(const SfxFilter *pFlt, sal_Bool bResetOrig = sal_False);
     const SfxFilter *   GetFilter() const { return pFilter; }
     const SfxFilter *   GetOrigFilter( sal_Bool bNotCurrent = sal_False ) const;
     const String&       GetOrigURL() const;
 
-    SfxItemSet  *       GetItemSet() const;
-    void                SetItemSet(SfxItemSet *pSet);
+    SfxItemSet	*		GetItemSet() const;
+    void				SetItemSet(SfxItemSet *pSet);
     void                Close();
     void                CloseAndRelease();
     void                ReOpen();
     void                CompleteReOpen();
     const String&       GetName() const {return aLogicName;}
+#if defined SINIX && defined GCC && defined C272
+    const INetURLObject& GetURLObject();
+#else
     const INetURLObject& GetURLObject() const;
+#endif
 
     void                CheckFileDate( const ::com::sun::star::util::DateTime& aInitDate );
     sal_Bool            DocNeedsFileDateCheck();
@@ -180,10 +186,11 @@ public:
     void                SetDataAvailableLink( const Link& rLink );
     Link                GetDataAvailableLink( ) const;
 
+    sal_uInt32          GetMIMEAndRedirect( String& );
     sal_uInt32          GetErrorCode() const;
     sal_uInt32          GetError() const
                         { return ERRCODE_TOERROR(GetErrorCode()); }
-    sal_uInt32          GetLastStorageCreationState();
+    sal_uInt32			GetLastStorageCreationState();
 
     void                SetError( sal_uInt32 nError, const ::rtl::OUString& aLogMessage );
 
@@ -193,14 +200,16 @@ public:
     sal_Bool            CloseOutStream();
 
     sal_Bool            IsRoot() const { return bRoot; }
-    void                CloseStorage();
+    void				CloseStorage();
 
-    StreamMode          GetOpenMode() const { return nStorOpenMode; }
+    StreamMode			GetOpenMode() const { return nStorOpenMode; }
     void                SetOpenMode( StreamMode nStorOpen, sal_Bool bDirect, sal_Bool bDontClose = sal_False );
-    sal_Bool            IsDirect() const { return bDirect? sal_True: sal_False; }
+    sal_Bool			IsDirect() const { return bDirect? sal_True: sal_False; }
 
     SvStream*           GetInStream();
     SvStream*           GetOutStream();
+
+    SvEaMgr*			GetEaMgr();
 
     sal_Bool            Commit();
     sal_Bool            IsStorage();
@@ -211,31 +220,31 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetStorage( sal_Bool bCreateTempIfNo = sal_True );
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetOutputStorage();
-    void                ResetError();
+    void				ResetError();
     sal_Bool            UsesCache() const;
     void                SetUsesCache( sal_Bool );
     sal_Bool            IsExpired() const;
     void                SetName( const String& rName, sal_Bool bSetOrigURL = sal_False );
-    sal_Bool            IsAllowedForExternalBrowser() const;
-    long                GetFileVersion() const;
+    sal_Bool			IsAllowedForExternalBrowser() const;
+    long				GetFileVersion() const;
 
     const com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >&
                         GetVersionList( bool _bNoReload = false );
-    sal_Bool            IsReadOnly();
+    sal_Bool			IsReadOnly();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  GetInputStream();
 
-    void                CreateTempFile( sal_Bool bReplace = sal_True );
-    void                CreateTempFileNoCopy();
+    void				CreateTempFile( sal_Bool bReplace = sal_True );
+    void				CreateTempFileNoCopy();
     ::rtl::OUString     SwitchDocumentToTempFile();
     sal_Bool            SwitchDocumentToFile( ::rtl::OUString aURL );
 
-    ::rtl::OUString     GetCharset();
-    void                SetCharset( ::rtl::OUString );
+    ::rtl::OUString		GetCharset();
+    void				SetCharset( ::rtl::OUString );
     ::rtl::OUString     GetBaseURL( bool bForSaving=false );
 
 #if _SOLAR__PRIVATE
-    SAL_DLLPRIVATE sal_Bool HasStorage_Impl() const;
+    SAL_DLLPRIVATE BOOL HasStorage_Impl() const;
 
     SAL_DLLPRIVATE void StorageBackup_Impl();
     SAL_DLLPRIVATE ::rtl::OUString GetBackup_Impl();
@@ -273,6 +282,7 @@ public:
     SAL_DLLPRIVATE void SetUpdatePickList(sal_Bool);
     SAL_DLLPRIVATE sal_Bool IsUpdatePickList() const;
 
+//REMOVE		void                SetStorage_Impl( SvStorage* pStor );
     SAL_DLLPRIVATE void SetLongName(const String &rName)
                         { aLongName = rName; }
     SAL_DLLPRIVATE const String & GetLongName() const { return aLongName; }
@@ -324,7 +334,10 @@ public:
 SV_DECL_IMPL_REF( SfxMedium )
 SV_DECL_COMPAT_WEAK( SfxMedium )
 
-typedef ::std::vector< SfxMedium* > SfxMediumList;
+#ifndef SFXMEDIUM_LIST
+#define SFXMEDIUM_LIST
+DECLARE_LIST( SfxMediumList, SfxMedium* )
+#endif
 
 #endif
 

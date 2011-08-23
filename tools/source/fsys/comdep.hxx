@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,22 +69,22 @@ char *volumeid( const char* pPfad );
 
 struct DirReader_Impl
 {
-    Dir*        pDir;
+    Dir*		pDir;
     DIR*        pDosDir;
     dirent*     pDosEntry;
     DirEntry*   pParent;
-    String      aPath;
+    String  	aPath;
     ByteString  aBypass;
-    sal_Bool        bReady;
-    sal_Bool        bInUse;
+    BOOL        bReady;
+    BOOL		bInUse;
 
                 DirReader_Impl( Dir &rDir )
-                :   pDir( &rDir ),
+                :	pDir( &rDir ),
                     pDosEntry( 0 ),
                     pParent( 0 ),
                     aPath( GUI2FSYS(rDir.GetFull()) ),
-                    bReady ( sal_False ),
-                    bInUse( sal_False )
+                    bReady ( FALSE ),
+                    bInUse( FALSE )
                 {
 #ifndef BOOTSTRAP
                     // Redirection
@@ -112,26 +112,26 @@ struct DirReader_Impl
                 { if( pDosDir ) closedir( pDosDir ); }
 
                 // die folgenden sind systemabh"angig implementiert
-    sal_uInt16      Init(); // initialisiert, liest ggf. devices
-    sal_uInt16      Read(); // liest 1 Eintrag, F2ugt ein falls ok
+    USHORT      Init(); // initialisiert, liest ggf. devices
+    USHORT      Read(); // liest 1 Eintrag, F2ugt ein falls ok
 };
 
 //--------------------------------------------------------------------
 
 struct FileCopier_Impl
 {
-    FSysAction      nActions;       // was zu tun ist (Copy/Move/recur)
-    Link            aErrorLink;     // bei Fehlern zu rufen
-    ErrCode         eErr;           // aktueller Fehlercode im Error-Handler
-    const DirEntry* pErrSource;     // fuer Error-Handler falls Source-Fehler
-    const DirEntry* pErrTarget;     // fuer Error-Handler falls Target-Fehler
+    FSysAction		nActions;		// was zu tun ist (Copy/Move/recur)
+    Link            aErrorLink;		// bei Fehlern zu rufen
+    ErrCode			eErr;           // aktueller Fehlercode im Error-Handler
+    const DirEntry*	pErrSource;		// fuer Error-Handler falls Source-Fehler
+    const DirEntry*	pErrTarget;		// fuer Error-Handler falls Target-Fehler
 
                     FileCopier_Impl()
-                    :   nActions( 0 ), eErr( 0 ),
+                    :	nActions( 0 ), eErr( 0 ),
                         pErrSource( 0 ), pErrTarget( 0 )
                     {}
                     FileCopier_Impl( const FileCopier_Impl &rOrig )
-                    :   nActions( rOrig.nActions ), eErr( 0 ),
+                    :	nActions( rOrig.nActions ), eErr( 0 ),
                         pErrSource( 0 ), pErrTarget( 0 )
                     {}
 
@@ -146,13 +146,13 @@ struct FileCopier_Impl
 //--------------------------------------------------------------------
 
 #if defined WNT || defined OS2
-sal_Bool IsRedirectable_Impl( const ByteString &rPath );
+BOOL IsRedirectable_Impl( const ByteString &rPath );
 #else
-#define IsRedirectable_Impl( rPath )    sal_True
+#define IsRedirectable_Impl( rPath )	TRUE
 #endif
 
 //--------------------------------------------------------------------
-
+ 
 
 #endif
 

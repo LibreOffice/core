@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,9 +31,9 @@
 
 /*************************************************************************
  *
- *    ATTENTION
- *    This file is intended to work inside and outside the StarOffice environment.
- *    Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
+ *	  ATTENTION
+ *	  This file is intended to work inside and outside the StarOffice environment.
+ *	  Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
  *
  ************************************************************************/
 
@@ -41,7 +41,6 @@
 #include <automation/commtypes.hxx>
 #include <automation/commdefines.hxx>
 #include "communiio.hxx"
-#include <osl/diagnose.h>
 
 /**
 Forces switch to multichannel headers even for old communication Method
@@ -87,8 +86,8 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
 
     nLen = 0;
     pData = NULL;
-    comm_BOOL bWasError = sal_False;
-    comm_BOOL bForceMultiChannelThisPacket = sal_False;
+    comm_BOOL bWasError = FALSE;
+    comm_BOOL bForceMultiChannelThisPacket = FALSE;
     if ( pReceiver )
     {
         comm_UINT32 nBytes = 0;
@@ -97,14 +96,14 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
 
         READ_SOCKET( &nBytes, sizeof(nBytes) )
         if ( bWasError )
-            return sal_False;
+            return FALSE;
 
-        if ( 0xFFFFFFFF == nBytes )     // Expliziter Request fï¿½r dieses Datenpaket auf MultiChannel umzuschalten
+        if ( 0xFFFFFFFF == nBytes )		// Expliziter Request für dieses Datenpaket auf MultiChannel umzuschalten
         {
             READ_SOCKET( &nBytes, sizeof(nBytes) )
             if ( bWasError )
-                return sal_False;
-            bForceMultiChannelThisPacket = sal_True;
+                return FALSE;
+            bForceMultiChannelThisPacket = TRUE;
         }
 
         nBytes = NETDWORD( nBytes );
@@ -114,17 +113,17 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
             comm_ULONG nReadSoFar = 0;
             comm_ULONG nHeaderReadSoFar = 0;
 
-            // Prï¿½fbyte fï¿½r Lï¿½ngenangabe
+            // Prüfbyte für Längenangabe
             unsigned char nLenCheck = 0;
             READ_SOCKET_LEN( &nLenCheck, 1, nReadSoFar );
-            // Stimmt das Prï¿½fbyte?
+            // Stimmt das Prüfbyte?
             bWasError |= nLenCheck != CalcCheckByte( nBytes );
 
 
             comm_UINT16 nHeaderBytes;
             READ_SOCKET_LEN( &nHeaderBytes, 2, nReadSoFar );
             nHeaderBytes = NETWORD( nHeaderBytes );
-            // reicht der Header ï¿½ber das Ende hinaus?
+            // reicht der Header über das Ende hinaus?
             bWasError |= !(nBytes >= nReadSoFar + nHeaderBytes);
 
             READ_SOCKET_LEN( &nReceiveHeaderType, 2, nHeaderReadSoFar );
@@ -144,16 +143,16 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
                 break;
             default:
                 {
-                    OSL_FAIL("Unbekannter Headertyp in der Kommunikation");
-                    bWasError = sal_True;
+                    DBG_ERROR("Unbekannter Headertyp in der Kommunikation");
+                    bWasError = TRUE;
                 }
 
             }
 
             if ( bWasError )
-                return sal_False;
+                return FALSE;
 
-            /// Lï¿½ngen anpassen und ggf restheader ï¿½berlesen.
+            /// Längen anpassen und ggf restheader überlesen.
             while ( nHeaderBytes > nHeaderReadSoFar )
             {
                 unsigned char nDummy;
@@ -183,12 +182,12 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
         if ( bWasError )
         {
             ::operator delete(pData), pData = 0;
-            return sal_False;
+            return FALSE;
         }
         nLen = nBytes;
     }
     else
-        bWasError = sal_True;
+        bWasError = TRUE;
 
     return !bWasError;
 }
@@ -206,18 +205,18 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
 comm_BOOL PacketHandler::TransferData( const void* pData, comm_UINT32 nLen, CMProtocol nProtocol )
 {
     comm_UINT32 nBuffer = nLen;
-    comm_BOOL bWasError = sal_False;
+    comm_BOOL bWasError = FALSE;
 
 #ifndef FORCE_MULTI_CHANNEL_HEADERS
     if ( bMultiChannel )
 #endif
-        nBuffer += 1+2+2+2; // fï¿½r einen CH_SimpleMultiChannel
+        nBuffer += 1+2+2+2;	// für einen CH_SimpleMultiChannel
 
 #ifdef FORCE_MULTI_CHANNEL_HEADERS
     if ( !bMultiChannel )
     {
         comm_UINT32 n32;
-        n32 = 0xffffffff;   // Umschalten auf MultiChannel
+        n32 = 0xffffffff;	// Umschalten auf MultiChannel
         n32 = NETDWORD( n32 );
         WRITE_SOCKET( &n32, 4 );
     }
@@ -238,11 +237,11 @@ comm_BOOL PacketHandler::TransferData( const void* pData, comm_UINT32 nLen, CMPr
         c = CalcCheckByte( nBuffer );
         WRITE_SOCKET( &c, 1 );
 
-        n16 = 4;    // Lï¿½nge des Headers fï¿½r einen CH_SimpleMultiChannel
+        n16 = 4;	// Länge des Headers für einen CH_SimpleMultiChannel
         n16 = NETWORD( n16 );
         WRITE_SOCKET( &n16, 2 );
 
-        n16 = CH_SimpleMultiChannel;    // Typ des Headers
+        n16 = CH_SimpleMultiChannel;	// Typ des Headers
         n16 = NETWORD( n16 );
         WRITE_SOCKET( &n16, 2 );
 
@@ -256,44 +255,44 @@ comm_BOOL PacketHandler::TransferData( const void* pData, comm_UINT32 nLen, CMPr
 
 comm_BOOL PacketHandler::SendHandshake( HandshakeType aHandshakeType, const void* pData, comm_UINT32 nLen )
 {
-    comm_BOOL bWasError = sal_False;
+    comm_BOOL bWasError = FALSE;
 
     comm_UINT32 nBuffer = 0;
 
-//  if ( pMyManager->IsMultiChannel() )     Wir senden immer FFFFFFFF vorweg -> immer MultiChannel (Oder GPF bei ï¿½lteren)
-        nBuffer += 1+2+2;   // fï¿½r einen CH_Handshake
+//	if ( pMyManager->IsMultiChannel() )		Wir senden immer FFFFFFFF vorweg -> immer MultiChannel (Oder GPF bei älteren)
+        nBuffer += 1+2+2;	// für einen CH_Handshake
 
-    nBuffer += 2;   // fï¿½r den Typ des Handshakes
+    nBuffer += 2;	// für den Typ des Handshakes
 
     switch ( aHandshakeType )
     {
         case CH_REQUEST_HandshakeAlive:
-            nBuffer += 0;   // Keine extra Daten
+            nBuffer += 0;	// Keine extra Daten
             break;
         case CH_RESPONSE_HandshakeAlive:
-            nBuffer += 0;   // Keine extra Daten
+            nBuffer += 0;	// Keine extra Daten
             break;
         case CH_REQUEST_ShutdownLink:
-            nBuffer += 0;   // Keine extra Daten
+            nBuffer += 0;	// Keine extra Daten
             break;
         case CH_ShutdownLink:
-            nBuffer += 0;   // Keine extra Daten
+            nBuffer += 0;	// Keine extra Daten
             break;
         case CH_SUPPORT_OPTIONS:
-            nBuffer += 2 ;  // one word extradata for options
+            nBuffer += 2 ;	// one word extradata for options
             break;
         case CH_SetApplication:
-            nBuffer += 0 ;  // one word extradata for options
+            nBuffer += 0 ;	// one word extradata for options
             break;
         default:
-            OSL_FAIL("Unknown HandshakeType");
+            DBG_ERROR("Unknown HandshakeType");
     }
 
     if ( pData )
-        nBuffer += nLen;    // Extra data in Buffer
+        nBuffer += nLen;	// Extra data in Buffer
 
     comm_UINT32 n32;
-    n32 = 0xffffffff;   // Umschalten auf MultiChannel
+    n32 = 0xffffffff;	// Umschalten auf MultiChannel
     n32 = NETDWORD( n32 );
     WRITE_SOCKET( &n32, 4 );
 
@@ -307,15 +306,15 @@ comm_BOOL PacketHandler::SendHandshake( HandshakeType aHandshakeType, const void
     c = CalcCheckByte( nBuffer );
     WRITE_SOCKET( &c, 1 );
 
-    n16 = 2;    // Lï¿½nge des Headers fï¿½r einen CH_Handshake
+    n16 = 2;	// Länge des Headers für einen CH_Handshake
     n16 = NETWORD( n16 );
     WRITE_SOCKET( &n16, 2 );
 
-    n16 = CH_Handshake; // Typ des Headers
+    n16 = CH_Handshake;	// Typ des Headers
     n16 = NETWORD( n16 );
     WRITE_SOCKET( &n16, 2 );
 
-    n16 = aHandshakeType;   // Typ des Handshakes
+    n16 = aHandshakeType;	// Typ des Handshakes
     n16 = NETWORD( n16 );
     WRITE_SOCKET( &n16, 2 );
 

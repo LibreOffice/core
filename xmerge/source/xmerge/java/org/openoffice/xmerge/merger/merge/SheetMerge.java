@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ import org.openoffice.xmerge.merger.NodeMergeAlgorithm;
 
 /**
  *  This class extends the <code>DocumentMerge</code> class.
- *  This class will merge two spreadsheet documents.
+ *  This class will merge two spreadsheet documents. 
  *  The main difference between this implementation and
  *  <code>DocumentMerge</code>
  *  is that this merge will try to maintain unsupported features by
@@ -76,7 +76,7 @@ public final class SheetMerge extends DocumentMerge {
     private void clearRow(Node node) {
         NodeList children = node.getChildNodes();
         int numOfChildren = children.getLength();
-
+ 
         // clear all the cells under the row node but maintain any unsupported
         // features
         // TODO: we can actually check anything left after the clear up.

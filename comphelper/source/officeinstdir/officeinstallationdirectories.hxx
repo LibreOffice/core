@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,13 +95,11 @@ public:
 private:
     void initDirs();
 
-    rtl::OUString                                   m_aOfficeBrandDirMacro;
-    rtl::OUString                                   m_aOfficeBaseDirMacro;
+    rtl::OUString                                   m_aOfficeDirMacro;
     rtl::OUString                                   m_aUserDirMacro;
     com::sun::star::uno::Reference<
         com::sun::star::uno::XComponentContext >    m_xCtx;
-    rtl::OUString *                                 m_pOfficeBrandDir;
-    rtl::OUString *                                 m_pOfficeBaseDir;
+    rtl::OUString *                                 m_pOfficeDir;
     rtl::OUString *                                 m_pUserDir;
 };
 

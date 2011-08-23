@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@ public:
     GenLink& operator = ( const GenLink& rOrig )
         { pFunc = rOrig.pFunc; aLink = rOrig.aLink; return *this; }
 
-    sal_Bool operator!() const { return !aLink && !pFunc; }
-    sal_Bool IsSet() const { return aLink.IsSet() || pFunc; }
+    BOOL operator!() const { return !aLink && !pFunc; }
+    BOOL IsSet() const { return aLink.IsSet() || pFunc; }
 
     long Call( void* pCaller )
          { return pFunc ? (*pFunc)(pCaller) : aLink.Call(pCaller); }

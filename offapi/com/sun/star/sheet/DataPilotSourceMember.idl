@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ published service DataPilotSourceMember
     /** specifies the member's position in its hierarchy level if sorting
         is manual.
 
-        @since OOo 2.4
+        @since OOo 2.4.0
      */
     [optional, property] boolean Position;
 };

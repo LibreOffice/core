@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,19 +35,25 @@
 // Helper class with Mutex and BroadcastHelper, because they must be
 // initialized before calling the OPropertySetHelper-CTOR
 
-class MutexAndBroadcastHelper
+class MutexAndBroadcastHelper 
 {
 public:
     MutexAndBroadcastHelper() : BrdcstHelper( Mutex ) {}
 
-    ::osl::Mutex                Mutex;
-    ::cppu::OBroadcastHelper    BrdcstHelper;
-
-    ::osl::Mutex&               GetMutex() { return Mutex; }
-    ::cppu::OBroadcastHelper&   GetBroadcastHelper() { return BrdcstHelper; }
+    
+    ::osl::Mutex				Mutex;
+    ::cppu::OBroadcastHelper	BrdcstHelper;
+    
+    ::osl::Mutex&				GetMutex() { return Mutex; }
+    
 };
 
-#endif  // _TOOLKIT_HELPER_MUTEXANDBROADCASTHELPER_HXX
+
+
+
+
+
+#endif	// _TOOLKIT_HELPER_MUTEXANDBROADCASTHELPER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

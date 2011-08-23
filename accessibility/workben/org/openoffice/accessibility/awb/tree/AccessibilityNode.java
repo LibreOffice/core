@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@ import com.sun.star.accessibility.XAccessibleEventListener;
 
 import com.sun.star.uno.UnoRuntime;
 
-class AccessibilityNode extends DefaultMutableTreeNode implements XAccessible,
+class AccessibilityNode extends DefaultMutableTreeNode implements XAccessible, 
         XAccessibleEventListener, XAccessibleEventBroadcaster {
 
     protected AccessibilityModel treeModel;
     protected XAccessibleContext unoAccessibleContext;
-
+    
     private XAccessibleEventListener listener;
 
     public AccessibilityNode(AccessibilityModel treeModel) {
@@ -63,18 +63,18 @@ class AccessibilityNode extends DefaultMutableTreeNode implements XAccessible,
     public void setAccessibleContext(XAccessibleContext xAccessibleContext) {
         unoAccessibleContext = xAccessibleContext;
     }
-
+    
     /** Returns the XAccessibleContext object of this node */
     public XAccessibleContext getAccessibleContext() {
         return unoAccessibleContext;
     }
-
+    
     /** Attaches or Detaches the itself as listener to unoAccessibleContext */
     protected void setAttached(boolean attach) {
         XAccessibleContext xAccessibleContext = unoAccessibleContext;
         if (xAccessibleContext != null) {
             try {
-                XAccessibleEventBroadcaster xAccessibleEventBroadcaster =
+                XAccessibleEventBroadcaster xAccessibleEventBroadcaster = 
                     UnoRuntime.queryInterface( XAccessibleEventBroadcaster.class, xAccessibleContext );
                 if (xAccessibleEventBroadcaster != null) {
                     if (attach) {
@@ -87,20 +87,20 @@ class AccessibilityNode extends DefaultMutableTreeNode implements XAccessible,
                 // FIXME: error message !
             }
         }
-    }
+    }        
 
     public void disposing(com.sun.star.lang.EventObject eventObject) {
         XAccessibleEventListener localListener = this.listener;
         if (localListener != null) {
             localListener.disposing(eventObject);
         }
-
+        
         treeModel.removeNode(userObject);
         userObject = null;
         unoAccessibleContext = null;
         // FIXME: mark the object as being disposed in the tree view !
     }
-
+    
     protected void handleChildRemoved(XAccessible xAccessible) {
         final AccessibilityNode node = treeModel.findNode(xAccessible);
         if (node != null) {
@@ -121,7 +121,7 @@ class AccessibilityNode extends DefaultMutableTreeNode implements XAccessible,
                     try {
                         XAccessibleContext xAC = node.getAccessibleContext();
                         if (xAC != null) {
-                            treeModel.insertNodeInto(node, parent,
+                            treeModel.insertNodeInto(node, parent, 
                                 xAC.getAccessibleIndexInParent());
                         }
                     } catch (com.sun.star.uno.RuntimeException e) {
@@ -131,7 +131,7 @@ class AccessibilityNode extends DefaultMutableTreeNode implements XAccessible,
             });
         }
     }
-
+    
     public void notifyEvent(AccessibleEventObject accessibleEventObject) {
         if (accessibleEventObject.EventId == AccessibleEventId.CHILD) {
             XAccessible xAccessible = UnoRuntime.queryInterface( XAccessible.class, accessibleEventObject.OldValue );
@@ -144,17 +144,17 @@ class AccessibilityNode extends DefaultMutableTreeNode implements XAccessible,
                 handleChildAdded(xAccessible);
             }
         }
-
+        
         XAccessibleEventListener localListener = this.listener;
         if (localListener != null) {
             localListener.notifyEvent(accessibleEventObject);
         }
     }
-
+    
     public synchronized void addEventListener(com.sun.star.accessibility.XAccessibleEventListener xAccessibleEventListener) {
          listener = AccessibleEventMulticaster.add(listener, xAccessibleEventListener);
     }
-
+    
     public synchronized void removeEventListener(com.sun.star.accessibility.XAccessibleEventListener xAccessibleEventListener) {
         listener = AccessibleEventMulticaster.remove(listener, xAccessibleEventListener);
     }

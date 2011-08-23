@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,6 @@
 #include <sfx2/dispatch.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svx/float3d.hxx>
-#include "helpids.h"
 
 #include "view/viewoverlaymanager.hxx"
 #include "app.hrc"
@@ -89,12 +88,12 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 static const ::rtl::OUString MASTER_VIEW_TOOL_BAR_NAME(
-    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("masterviewtoolbar")));
+    ::rtl::OUString::createFromAscii("masterviewtoolbar"));
 }
 
 namespace sd {
 
-sal_Bool DrawViewShell::mbPipette = sal_False;
+BOOL DrawViewShell::mbPipette = FALSE;
 
 // ------------------------
 // - ScannerEventListener -
@@ -104,7 +103,7 @@ class ScannerEventListener : public ::cppu::WeakImplHelper1< ::com::sun::star::l
 {
 private:
 
-    DrawViewShell*      mpParent;
+    DrawViewShell*		mpParent;
 
 public:
 
@@ -112,9 +111,9 @@ public:
                             ~ScannerEventListener();
 
     // XEventListener
-    virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& rEventObject ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL 	disposing( const ::com::sun::star::lang::EventObject& rEventObject ) throw (::com::sun::star::uno::RuntimeException);
 
-    void                    ParentDestroyed() { mpParent = NULL; }
+    void					ParentDestroyed() { mpParent = NULL; }
 };
 
 // -----------------------------------------------------------------------------
@@ -140,7 +139,6 @@ void SAL_CALL ScannerEventListener::disposing( const ::com::sun::star::lang::Eve
 DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, ::Window* pParentWindow, PageKind ePageKind, FrameView* pFrameViewArgument )
 : ViewShell (pFrame, pParentWindow, rViewShellBase)
 , maTabControl(this, pParentWindow)
-, mbIsLayerModeActive(false)
 , mbIsInSwitchPage(false)
 {
     if (pFrameViewArgument != NULL)
@@ -160,15 +158,15 @@ DrawViewShell::~DrawViewShell()
 {
     mpAnnotationManager.reset();
     mpViewOverlayManager.reset();
-
+   
     OSL_ASSERT (GetViewShell()!=NULL);
 
     if( mxScannerListener.is() )
         static_cast< ScannerEventListener* >( mxScannerListener.get() )->ParentDestroyed();
 
-    // Remove references to items within Svx3DWin
+    // #96642# Remove references to items within Svx3DWin
     // (maybe do a listening sometime in Svx3DWin)
-    sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();
+    USHORT nId = Svx3DChildWindow::GetChildWindowId();
     SfxChildWindow* pWindow = GetViewFrame() ? GetViewFrame()->GetChildWindow(nId) : NULL;
     if(pWindow)
     {
@@ -186,26 +184,26 @@ DrawViewShell::~DrawViewShell()
     DisposeFunctions();
 
     SdPage* pPage;
-    sal_uInt16 aPageCnt = GetDoc()->GetSdPageCount(mePageKind);
+    USHORT aPageCnt = GetDoc()->GetSdPageCount(mePageKind);
 
-    for (sal_uInt16 i = 0; i < aPageCnt; i++)
+    for (USHORT i = 0; i < aPageCnt; i++)
     {
         pPage = GetDoc()->GetSdPage(i, mePageKind);
 
         if (pPage == mpActualPage)
         {
-            GetDoc()->SetSelected(pPage, sal_True);
+            GetDoc()->SetSelected(pPage, TRUE);
         }
         else
         {
-            GetDoc()->SetSelected(pPage, sal_False);
+            GetDoc()->SetSelected(pPage, FALSE);
         }
     }
 
     if ( mpClipEvtLstnr )
     {
-        mpClipEvtLstnr->AddRemoveListener( GetActiveWindow(), sal_False );
-        mpClipEvtLstnr->ClearCallbackLink();        // prevent callback if another thread is waiting
+        mpClipEvtLstnr->AddRemoveListener( GetActiveWindow(), FALSE );
+        mpClipEvtLstnr->ClearCallbackLink();		// #103849# prevent callback if another thread is waiting
         mpClipEvtLstnr->release();
     }
 
@@ -227,11 +225,11 @@ DrawViewShell::~DrawViewShell()
 void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 {
     mpActualPage = 0;
-    mbMousePosFreezed = sal_False;
+    mbMousePosFreezed = FALSE;
     mbReadOnly = GetDocSh()->IsReadOnly();
     mpSlotArray = 0;
     mpClipEvtLstnr = 0;
-    mbPastePossible = sal_False;
+    mbPastePossible = FALSE;
     mbIsLayerModeActive = false;
 
     mpFrameView->Connect();
@@ -243,7 +241,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     // Ungerader Eintrag: gemappter Slot
     // Achtung: Anpassen von GetIdBySubId() !!!
     // Reihenfolge (insbesondere Zoom) darf nicht geaendert werden !!!
-    mpSlotArray = new sal_uInt16[ SLOTARRAY_COUNT ];
+    mpSlotArray = new USHORT[ SLOTARRAY_COUNT ];
     mpSlotArray[ 0 ]  = SID_OBJECT_CHOOSE_MODE;
     mpSlotArray[ 1 ]  = SID_OBJECT_ROTATE;
     mpSlotArray[ 2 ]  = SID_OBJECT_ALIGN;
@@ -274,8 +272,8 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     GetDoc()->CreateFirstPages();
 
     mpDrawView = new DrawView(pDocSh, GetActiveWindow(), this);
-    mpView = mpDrawView;             // Pointer der Basisklasse ViewShell
-    mpDrawView->SetSwapAsynchron(sal_True); // Asynchrones Laden von Graphiken
+    mpView = mpDrawView;			 // Pointer der Basisklasse ViewShell
+    mpDrawView->SetSwapAsynchron(TRUE); // Asynchrones Laden von Graphiken
 
     // We do not read the page kind from the frame view anymore so we have
     // to set it in order to resync frame view and this view.
@@ -335,16 +333,16 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     if( eDocType == DOCUMENT_TYPE_DRAW )
     {
         SetHelpId( SD_IF_SDGRAPHICVIEWSHELL );
-        GetActiveWindow()->SetHelpId( HID_SDGRAPHICVIEWSHELL );
-        GetActiveWindow()->SetUniqueId( HID_SDGRAPHICVIEWSHELL );
+        GetActiveWindow()->SetHelpId( SD_IF_SDGRAPHICVIEWSHELL );
+        GetActiveWindow()->SetUniqueId( SD_IF_SDGRAPHICVIEWSHELL );
     }
     else
     {
         if (mePageKind == PK_NOTES)
         {
             SetHelpId( SID_NOTESMODE );
-            GetActiveWindow()->SetHelpId( CMD_SID_NOTESMODE );
-            GetActiveWindow()->SetUniqueId( CMD_SID_NOTESMODE );
+            GetActiveWindow()->SetHelpId( SID_NOTESMODE );
+            GetActiveWindow()->SetUniqueId( SID_NOTESMODE );
 
             // AutoLayouts muessen erzeugt sein
             GetDoc()->StopWorkStartupDelay();
@@ -352,8 +350,8 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         else if (mePageKind == PK_HANDOUT)
         {
             SetHelpId( SID_HANDOUTMODE );
-            GetActiveWindow()->SetHelpId( CMD_SID_HANDOUTMODE );
-            GetActiveWindow()->SetUniqueId( CMD_SID_HANDOUTMODE );
+            GetActiveWindow()->SetHelpId( SID_HANDOUTMODE );
+            GetActiveWindow()->SetUniqueId( SID_HANDOUTMODE );
 
             // AutoLayouts muessen erzeugt sein
             GetDoc()->StopWorkStartupDelay();
@@ -361,26 +359,26 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         else
         {
             SetHelpId( SD_IF_SDDRAWVIEWSHELL );
-            GetActiveWindow()->SetHelpId( HID_SDDRAWVIEWSHELL );
-            GetActiveWindow()->SetUniqueId( HID_SDDRAWVIEWSHELL );
+            GetActiveWindow()->SetHelpId( SD_IF_SDDRAWVIEWSHELL );
+            GetActiveWindow()->SetUniqueId( SD_IF_SDDRAWVIEWSHELL );
         }
     }
 
     // Selektionsfunktion starten
     SfxRequest aReq(SID_OBJECT_SELECT, 0, GetDoc()->GetItemPool());
     FuPermanent(aReq);
-    mpDrawView->SetFrameDragSingles(sal_True);
+    mpDrawView->SetFrameDragSingles(TRUE);
 
     if (pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)
     {
-        mbZoomOnPage = sal_False;
+        mbZoomOnPage = FALSE;
     }
     else
     {
-        mbZoomOnPage = sal_True;
+        mbZoomOnPage = TRUE;
     }
 
-    mbIsRulerDrag = sal_False;
+    mbIsRulerDrag = FALSE;
 
     String aName( RTL_CONSTASCII_USTRINGPARAM("DrawViewShell"));
     SetName (aName);
@@ -392,7 +390,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     if( xMgr.is() )
     {
         mxScannerManager = ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager >(
-                           xMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.scanner.ScannerManager" )) ),
+                           xMgr->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.scanner.ScannerManager" ) ),
                            ::com::sun::star::uno::UNO_QUERY );
 
         if( mxScannerManager.is() )
@@ -402,8 +400,8 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
                                 ::com::sun::star::uno::UNO_QUERY );
         }
     }
-
-    mpAnnotationManager.reset( new AnnotationManager( GetViewShellBase() ) );
+    
+    mpAnnotationManager.reset( new AnnotationManager( GetViewShellBase() ) );    
     mpViewOverlayManager.reset( new ViewOverlayManager( GetViewShellBase() ) );
 }
 
@@ -474,7 +472,7 @@ bool DrawViewShell::RelocateToParentWindow (::Window* pParentWindow)
 /*
     linienzuege werden ueber makros als folge von
         MoveTo (x, y)
-        LineTo (x, y)   [oder BezierTo (x, y)]
+        LineTo (x, y)	[oder BezierTo (x, y)]
         LineTo (x, y)
             :
     dargestellt. einen endbefehl fuer die linienzuege
@@ -493,7 +491,7 @@ void DrawViewShell::CheckLineTo(SfxRequest& rReq)
     {
         if(SID_LINETO == rReq.GetSlot() || SID_BEZIERTO == rReq.GetSlot() || SID_MOVETO == rReq.GetSlot() )
         {
-            OSL_FAIL("DrawViewShell::CheckLineTo: slots SID_LINETO, SID_BEZIERTO, SID_MOVETO no longer supported.");
+            DBG_ERROR("DrawViewShell::CheckLineTo: slots SID_LINETO, SID_BEZIERTO, SID_MOVETO no longer supported.");
         }
     }
 #endif
@@ -512,12 +510,12 @@ void DrawViewShell::SetupPage (Size &rSize,
                                  long nRight,
                                  long nUpper,
                                  long nLower,
-                                 sal_Bool bSize,
-                                 sal_Bool bMargin,
-                                 sal_Bool bScaleAll)
+                                 BOOL bSize,
+                                 BOOL bMargin,
+                                 BOOL bScaleAll)
 {
-    sal_uInt16 nPageCnt = GetDoc()->GetMasterSdPageCount(mePageKind);
-    sal_uInt16 i;
+    USHORT nPageCnt = GetDoc()->GetMasterSdPageCount(mePageKind);
+    USHORT i;
 
     for (i = 0; i < nPageCnt; i++)
     {
@@ -590,7 +588,7 @@ void DrawViewShell::SetupPage (Size &rSize,
     if ( mePageKind == PK_STANDARD )
     {
         SdPage* pHandoutPage = GetDoc()->GetSdPage(0, PK_HANDOUT);
-        pHandoutPage->CreateTitleAndLayout(sal_True);
+        pHandoutPage->CreateTitleAndLayout(TRUE);
     }
 
     long nWidth = mpActualPage->GetSize().Width();
@@ -599,7 +597,7 @@ void DrawViewShell::SetupPage (Size &rSize,
     Point aPageOrg(nWidth, nHeight / 2);
     Size aSize( nWidth * 3, nHeight * 2);
 
-    InitWindows(aPageOrg, aSize, Point(-1, -1), sal_True);
+    InitWindows(aPageOrg, aSize, Point(-1, -1), TRUE);
 
     Point aVisAreaPos;
 
@@ -642,7 +640,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         else
         {
             SvxZoomItem* pZoomItem;
-            sal_uInt16 nZoom = (sal_uInt16) GetActiveWindow()->GetZoom();
+            UINT16 nZoom = (UINT16) GetActiveWindow()->GetZoom();
 
             if( mbZoomOnPage )
                 pZoomItem = new SvxZoomItem( SVX_ZOOM_WHOLEPAGE, nZoom );
@@ -650,7 +648,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
                 pZoomItem = new SvxZoomItem( SVX_ZOOM_PERCENT, nZoom );
 
             // Bereich einschraenken
-            sal_uInt16 nZoomValues = SVX_ZOOM_ENABLE_ALL;
+            USHORT nZoomValues = SVX_ZOOM_ENABLE_ALL;
             SdrPageView* pPageView = mpDrawView->GetSdrPageView();
 
             if( ( pPageView && pPageView->GetObjList()->GetObjCount() == 0 ) )
@@ -674,7 +672,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         else
         {
             sd::Window * pActiveWindow = GetActiveWindow();
-            SvxZoomSliderItem aZoomItem( (sal_uInt16) pActiveWindow->GetZoom(), (sal_uInt16)pActiveWindow->GetMinZoom(), (sal_uInt16)pActiveWindow->GetMaxZoom() ) ;
+            SvxZoomSliderItem aZoomItem( (UINT16) pActiveWindow->GetZoom(), (USHORT)pActiveWindow->GetMinZoom(), (USHORT)pActiveWindow->GetMaxZoom() ) ;
 
             SdrPageView* pPageView = mpDrawView->GetSdrPageView();
             if( pPageView )
@@ -771,13 +769,13 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             SdrLayer*  pLayer = NULL;
             SdrObject* pObj = NULL;
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-            sal_uLong nMarkCount = rMarkList.GetMarkCount();
-            bool bOneLayer = true;
+            ULONG nMarkCount = rMarkList.GetMarkCount();
+            bool bOneLayer = TRUE;
 
             // Use the first ten selected shapes as a (hopefully
             // representative) sample of all shapes of the current page.
             // Detect whether they belong to the same layer.
-            for( sal_uLong j = 0; j < nMarkCount && bOneLayer && j < 10; j++ )
+            for( ULONG j = 0; j < nMarkCount && bOneLayer && j < 10; j++ )
             {
                 pObj = rMarkList.GetMark( j )->GetMarkedSdrObj();
                 if( pObj )
@@ -785,7 +783,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
                     nLayer = pObj->GetLayer();
 
                     if( j != 0 && nLayer != nOldLayer )
-                        bOneLayer = sal_False;
+                        bOneLayer = FALSE;
 
                     nOldLayer = nLayer;
                 }
@@ -845,7 +843,7 @@ void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
 void DrawViewShell::ExecuteAnnotation (SfxRequest& rRequest)
 {
     if( mpAnnotationManager.get() )
-        mpAnnotationManager->ExecuteAnnotation( rRequest );
+        mpAnnotationManager->ExecuteAnnotation( rRequest );    
 }
 
 // --------------------------------------------------------------------
@@ -853,7 +851,7 @@ void DrawViewShell::ExecuteAnnotation (SfxRequest& rRequest)
 void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
 {
     if( mpAnnotationManager.get() )
-        mpAnnotationManager->GetAnnotationState( rItemSet );
+        mpAnnotationManager->GetAnnotationState( rItemSet );    
 }
 
 

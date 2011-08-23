@@ -29,7 +29,7 @@
 #ifndef BASIC_NAMECONTAINER_HXX
 #define BASIC_NAMECONTAINER_HXX
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -101,7 +101,7 @@ struct eqName_Impl
     }
 };
 
-typedef boost::unordered_map
+typedef std::hash_map
 <
     ::rtl::OUString,
     sal_Int32,
@@ -225,7 +225,6 @@ class SfxLibraryContainer   :public LibraryContainerHelper
                             ,public ::utl::OEventListenerAdapter
 {
     sal_Bool mbVBACompat;
-    rtl::OUString msProjectName;
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >   mxMSF;
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >       mxSFI;
@@ -515,8 +514,6 @@ public:
     // Methods XVBACompatibility
     virtual ::sal_Bool SAL_CALL getVBACompatibilityMode() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setVBACompatibilityMode( ::sal_Bool _vbacompatmodeon ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getProjectName() throw (::com::sun::star::uno::RuntimeException) { return msProjectName; }
-    virtual void SAL_CALL setProjectName( const ::rtl::OUString& _projectname ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 class LibraryContainerMethodGuard
@@ -691,15 +688,15 @@ protected:
 //===================================================================
 class ScriptSubPackageIterator
 {
-    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >      m_xMainPackage;
+    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >		m_xMainPackage;
 
-    bool                                                                        m_bIsValid;
-    bool                                                                        m_bIsBundle;
+    bool																		m_bIsValid;
+    bool																		m_bIsBundle;
 
     com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-        < com::sun::star::deployment::XPackage > >                              m_aSubPkgSeq;
-    sal_Int32                                                                   m_nSubPkgCount;
-    sal_Int32                                                                   m_iNextSubPkg;
+        < com::sun::star::deployment::XPackage > >								m_aSubPkgSeq;
+    sal_Int32																	m_nSubPkgCount;
+    sal_Int32																	m_iNextSubPkg;
 
     com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
         implDetectScriptPackage( const com::sun::star::uno::Reference
@@ -738,36 +735,36 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
         implGetNextBundledScriptPackage( bool& rbPureDialogLib );
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    m_xContext;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >	m_xContext;
 
-    IteratorState                                                               m_eState;
-
-    com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-        < com::sun::star::deployment::XPackage > >                              m_aUserPackagesSeq;
-    bool                                                                        m_bUserPackagesLoaded;
+    IteratorState																m_eState;
 
     com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-        < com::sun::star::deployment::XPackage > >                              m_aSharedPackagesSeq;
-    bool                                                                        m_bSharedPackagesLoaded;
+        < com::sun::star::deployment::XPackage > >								m_aUserPackagesSeq;
+    bool																		m_bUserPackagesLoaded;
+
+    com::sun::star::uno::Sequence< com::sun::star::uno::Reference
+        < com::sun::star::deployment::XPackage > >								m_aSharedPackagesSeq;
+    bool																		m_bSharedPackagesLoaded;
 
       com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-        < com::sun::star::deployment::XPackage > >                              m_aBundledPackagesSeq;
-    bool                                                                        m_bBundledPackagesLoaded;
+        < com::sun::star::deployment::XPackage > >								m_aBundledPackagesSeq;
+    bool																		m_bBundledPackagesLoaded;
 
 
-    int                                                                         m_iUserPackage;
-    int                                                                         m_iSharedPackage;
-       int                                                                          m_iBundledPackage;
+    int																			m_iUserPackage;
+    int																			m_iSharedPackage;
+       int																			m_iBundledPackage;
 
 
 
-    ScriptSubPackageIterator*                                                   m_pScriptSubPackageIterator;
+    ScriptSubPackageIterator*													m_pScriptSubPackageIterator;
 
 }; // end class ScriptExtensionIterator
 
 
 
-}   // namespace basic
+}	// namespace basic
 
 #endif
 

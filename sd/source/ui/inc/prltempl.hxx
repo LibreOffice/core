@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,36 +55,36 @@ class SfxStyleSheetBasePool;
 class SdPresLayoutTemplateDlg : public SfxTabDialog
 {
 private:
-    const SfxObjectShell*   mpDocShell;
+    const SfxObjectShell*	mpDocShell;
 
-    XColorTable*        pColorTab;
-    XGradientList*      pGradientList;
-    XHatchList*         pHatchingList;
-    XBitmapList*        pBitmapList;
-    XDashList*          pDashList;
-    XLineEndList*       pLineEndList;
+    XColorTable*		pColorTab;
+    XGradientList*		pGradientList;
+    XHatchList*			pHatchingList;
+    XBitmapList*		pBitmapList;
+    XDashList*			pDashList;
+    XLineEndList*		pLineEndList;
 
-    sal_uInt16              nPageType;
-    sal_uInt16              nDlgType;
-    sal_uInt16              nPos;
+    USHORT				nPageType;
+    USHORT				nDlgType;
+    USHORT				nPos;
 
-    ChangeType          nColorTableState;
-    ChangeType          nBitmapListState;
-    ChangeType          nGradientListState;
-    ChangeType          nHatchingListState;
-    ChangeType          nLineEndListState;
-    ChangeType          nDashListState;
+    ChangeType			nColorTableState;
+    ChangeType			nBitmapListState;
+    ChangeType			nGradientListState;
+    ChangeType			nHatchingListState;
+    ChangeType			nLineEndListState;
+    ChangeType			nDashListState;
 
-    PresentationObjects ePO;
+    PresentationObjects	ePO;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void		PageCreated( USHORT nId, SfxTabPage &rPage );
 
     // fuers Maping mit dem neuen SvxNumBulletItem
     SfxItemSet aInputSet;
     SfxItemSet* pOutSet;
     const SfxItemSet* pOrgSet;
 
-    sal_uInt16 GetOutlineLevel() const;
+    USHORT GetOutlineLevel() const;
 
     using SfxTabDialog::GetOutputItemSet;
 

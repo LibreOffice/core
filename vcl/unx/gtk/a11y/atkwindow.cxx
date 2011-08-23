@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-
+ 
 #include <plugins/gtk/gtkframe.hxx>
 #include <vcl/window.hxx>
 #include "vcl/popupmenuwindow.hxx"
@@ -46,12 +46,12 @@ extern "C" {
 
 static void (* window_real_initialize) (AtkObject *obj, gpointer data) = NULL;
 static void (* window_real_finalize) (GObject *obj) = NULL;
-
+    
 static void
 init_from_window( AtkObject *accessible, Window *pWindow )
 {
     static AtkRole aDefaultRole = ATK_ROLE_INVALID;
-
+    
     // Special role for sub-menu and combo-box popups that are exposed directly
     // by their parents already.
     if( aDefaultRole == ATK_ROLE_INVALID )
@@ -73,21 +73,21 @@ init_from_window( AtkObject *accessible, Window *pWindow )
         case AccessibleRole::FRAME:
             role = ATK_ROLE_FRAME;
             break;
-
+            
         /* Ignore window objects for sub-menus, combo- and list boxes,
          *  which are exposed as children of their parents.
          */
         case AccessibleRole::WINDOW:
         {
-            sal_uInt16 type = WINDOW_WINDOW;
+            USHORT type = WINDOW_WINDOW;
             bool parentIsMenuFloatingWindow = false;
-
+                    
             Window *pParent = pWindow->GetParent();
             if( pParent ) {
                 type = pParent->GetType();
                 parentIsMenuFloatingWindow = ( TRUE == pParent->IsMenuFloatingWindow() );
             }
-
+                    
             if( (WINDOW_LISTBOX != type) && (WINDOW_COMBOBOX != type) &&
                 (WINDOW_MENUBARWINDOW != type) && ! parentIsMenuFloatingWindow )
             {
@@ -95,7 +95,7 @@ init_from_window( AtkObject *accessible, Window *pWindow )
             }
         }
         break;
-
+                
         default:
         {
             Window *pChild = pWindow->GetChild( 0 );
@@ -125,10 +125,10 @@ init_from_window( AtkObject *accessible, Window *pWindow )
 
     accessible->role = role;
 }
-
-/*****************************************************************************/
-
-static gint
+    
+/*****************************************************************************/    
+    
+static gint 
 ooo_window_wrapper_clear_focus(gpointer)
 {
     atk_focus_tracker_notify( NULL );
@@ -137,7 +137,7 @@ ooo_window_wrapper_clear_focus(gpointer)
 
 /*****************************************************************************/
 
-static gboolean
+static gboolean 
 ooo_window_wrapper_real_focus_gtk (GtkWidget *, GdkEventFocus *)
 {
     g_idle_add( ooo_window_wrapper_clear_focus, NULL );
@@ -191,7 +191,7 @@ ooo_window_wrapper_real_initialize(AtkObject *obj, gpointer data)
         if( pWindow )
         {
             init_from_window( obj, pWindow );
-
+            
             Reference< XAccessible > xAccessible( pWindow->GetAccessible(true) );
 
             /* We need the wrapper object for the top-level XAccessible to be
@@ -221,11 +221,11 @@ ooo_window_wrapper_real_initialize(AtkObject *obj, gpointer data)
             }
         }
     }
-
+        
     g_signal_connect_after( GTK_WIDGET( data ), "focus-out-event",
                             G_CALLBACK (ooo_window_wrapper_real_focus_gtk),
                             NULL);
-
+    
     if( obj->role == ATK_ROLE_TOOL_TIP )
     {
         g_signal_connect_after( GTK_WIDGET( data ), "map-event",
@@ -254,18 +254,18 @@ ooo_window_wrapper_class_init (AtkObjectClass *klass, gpointer)
     AtkObjectClass *atk_class;
     GObjectClass *gobject_class;
     gpointer data;
-
-    /*
+    
+    /* 
      * Patch the gobject vtable of GailWindow to refer to our instance of
      * "initialize".
      */
-
+    
     data = g_type_class_peek_parent( klass );
     atk_class = ATK_OBJECT_CLASS (data);
-
+    
     window_real_initialize = atk_class->initialize;
     atk_class->initialize = ooo_window_wrapper_real_initialize;
-
+    
     gobject_class = G_OBJECT_CLASS (data);
 
     window_real_finalize = gobject_class->finalize;
@@ -276,7 +276,7 @@ ooo_window_wrapper_class_init (AtkObjectClass *klass, gpointer)
 
 /*****************************************************************************/
 
-GType
+GType 
 ooo_window_wrapper_get_type (void)
 {
     static GType type = 0;
@@ -284,33 +284,33 @@ ooo_window_wrapper_get_type (void)
     if (!type)
     {
         GType parent_type = g_type_from_name( "GailWindow" );
-
+        
         if( ! parent_type )
         {
             g_warning( "Unknown type: GailWindow" );
             parent_type = ATK_TYPE_OBJECT;
         }
-
+        
         GTypeQuery type_query;
         g_type_query( parent_type, &type_query );
-
+        
         static const GTypeInfo typeInfo =
         {
-            static_cast<guint16>(type_query.class_size),
+            type_query.class_size,
             (GBaseInitFunc) NULL,
             (GBaseFinalizeFunc) NULL,
             (GClassInitFunc) ooo_window_wrapper_class_init,
             (GClassFinalizeFunc) NULL,
             NULL,
-            static_cast<guint16>(type_query.instance_size),
+            type_query.instance_size,
             0,
             (GInstanceInitFunc) NULL,
             NULL
         } ;
-
+        
         type = g_type_register_static (parent_type, "OOoWindowAtkObject", &typeInfo, (GTypeFlags)0) ;
     }
-
+    
     return type;
 }
 
@@ -320,13 +320,13 @@ void restore_gail_window_vtable (void)
     gpointer data;
 
     GType type = g_type_from_name( "GailWindow" );
-
+    
     if( type == G_TYPE_INVALID )
         return;
-
+    
     data = g_type_class_peek( type );
     atk_class = ATK_OBJECT_CLASS (data);
-
+    
     atk_class->initialize = window_real_initialize;
 }
 

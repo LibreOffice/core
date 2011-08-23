@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,9 +49,9 @@ SwMultiTOXMarkDlg::SwMultiTOXMarkDlg( Window* pParent, SwTOXMgr& rTOXMgr ) :
     SvxStandardDialog(pParent, SW_RES(DLG_MULTMRK)),
 
     aTOXFL(this,    SW_RES(FL_TOX)),
-    aEntryFT(this,  SW_RES(FT_ENTRY)),
-    aTextFT(this,   SW_RES(FT_TEXT)),
-    aTOXFT(this,    SW_RES(FT_TOX)),
+    aEntryFT(this, 	SW_RES(FT_ENTRY)),
+    aTextFT(this, 	SW_RES(FT_TEXT)),
+    aTOXFT(this, 	SW_RES(FT_TOX)),
     aTOXLB(this,    SW_RES(LB_TOX)),
     aOkBT(this,     SW_RES(OK_BT)),
     aCancelBT(this, SW_RES(CANCEL_BT)),
@@ -60,8 +60,8 @@ SwMultiTOXMarkDlg::SwMultiTOXMarkDlg( Window* pParent, SwTOXMgr& rTOXMgr ) :
 {
     aTOXLB.SetSelectHdl(LINK(this, SwMultiTOXMarkDlg, SelectHdl));
 
-    sal_uInt16 nSize = rMgr.GetTOXMarkCount();
-    for(sal_uInt16 i=0; i < nSize; ++i)
+    USHORT nSize = rMgr.GetTOXMarkCount();
+    for(USHORT i=0; i < nSize; ++i)
         aTOXLB.InsertEntry(rMgr.GetTOXMark(i)->GetText());
 
     aTOXLB.SelectEntryPos(0);
@@ -74,7 +74,7 @@ SwMultiTOXMarkDlg::SwMultiTOXMarkDlg( Window* pParent, SwTOXMgr& rTOXMgr ) :
 IMPL_LINK_INLINE_START( SwMultiTOXMarkDlg, SelectHdl, ListBox *, pBox )
 {
     if(pBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
-    {   SwTOXMark* pMark = rMgr.GetTOXMark(pBox->GetSelectEntryPos());
+    {	SwTOXMark* pMark = rMgr.GetTOXMark(pBox->GetSelectEntryPos());
         aTextFT.SetText(pMark->GetTOXType()->GetTypeName());
         nPos = pBox->GetSelectEntryPos();
     }
@@ -88,7 +88,7 @@ void SwMultiTOXMarkDlg::Apply()
     rMgr.SetCurTOXMark(nPos);
 }
 
-/*--------------------------------------------------
+/*-----------------25.02.94 22:06-------------------
  dtor ueberladen
 --------------------------------------------------*/
 

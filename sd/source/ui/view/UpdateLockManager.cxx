@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ class UpdateLockManager::Implementation
 public:
     Implementation (ViewShellBase& rBase);
     virtual ~Implementation (void);
-
+    
     void Lock (void);
     void Unlock (void);
     bool IsLocked (void) const;
@@ -100,13 +100,13 @@ private:
         release when unlocking).
     */
     virtual void SAL_CALL layoutEvent (
-        const lang::EventObject& xSource,
+        const lang::EventObject& xSource, 
         sal_Int16 eLayoutEvent,
         const Any& rInfo)
         throw (uno::RuntimeException);
 
     //=====  lang::XEventListener  ============================================
-    virtual void SAL_CALL
+    virtual void SAL_CALL 
         disposing (const lang::EventObject& rEventObject)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -290,7 +290,7 @@ void UpdateLockManager::Implementation::Unlock (void)
         }
         catch (RuntimeException)
         { }
-
+        
         // Force a rearrangement of the UI elements of the views.
         mrBase.Rearrange();
     }
@@ -317,7 +317,7 @@ void UpdateLockManager::Implementation::ForceUnlock (void)
 
 
 void SAL_CALL UpdateLockManager::Implementation::layoutEvent (
-    const lang::EventObject&,
+    const lang::EventObject&, 
     sal_Int16 eLayoutEvent,
     const Any& rInfo)
     throw (uno::RuntimeException)
@@ -407,7 +407,7 @@ Reference< ::com::sun::star::frame::XLayoutManager>
                 try
                 {
                     Any aValue (xFrameProperties->getPropertyValue(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager"))));
+                        ::rtl::OUString::createFromAscii("LayoutManager")));
                     aValue >>= xLayoutManager;
                 }
                 catch (const beans::UnknownPropertyException& rException)

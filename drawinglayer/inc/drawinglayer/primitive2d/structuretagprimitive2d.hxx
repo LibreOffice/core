@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         /** StructureTagPrimitive2D class
-
+            
             This class is used to provode simple support for adding grouped
             pdf writer structured element information like used in sd from
             unomodel.cxx where a ViewObjectContactRedirector is used to add
@@ -54,7 +54,7 @@ namespace drawinglayer
         {
         private:
             /// the PDF structure element this grouping represents
-            vcl::PDFWriter::StructElement           maStructureElement;
+            vcl::PDFWriter::StructElement			maStructureElement;
 
         public:
             /// constructor

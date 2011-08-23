@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,17 +30,17 @@
 #include "helpid.h"
 
 /*--------------------------------------------------------------------
-    Description: strings for the types
+    Beschreibung: Strings fuer die Types
  --------------------------------------------------------------------*/
 String STR_FLD_EDIT_DLG
 {
     Text [ en-US ] = "Edit Fields" ;
 };
 /*--------------------------------------------------------------------
-    Description: strings for the types
+    Beschreibung: Strings fuer die Types
  --------------------------------------------------------------------*/
  //
- // range document
+ // Bereich Dokument
  //
 String STR_DATEFLD
 {
@@ -83,7 +83,7 @@ String STR_EXTUSERFLD
     Text [ en-US ] = "Sender" ;
 };
  //
- // range functions
+ // Bereich Funktionen
  //
 String STR_SETFLD
 {
@@ -103,6 +103,11 @@ String STR_INPUTFLD
 };
 String STR_SETINPUTFLD
 {
+    /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
+    /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
+    /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
+    /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
+    /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
     Text [ en-US ] = "Input field (variable)" ;
 };
 String STR_USRINPUTFLD
@@ -150,7 +155,7 @@ String STR_DROPDOWN
     Text [ en-US ] = "Input list" ;
 };
  //
- // range references
+ // Bereich Referenzen
  //
 String STR_SETREFFLD
 {
@@ -161,7 +166,7 @@ String STR_GETREFFLD
     Text [ en-US ] = "Insert Reference" ;
 };
  //
- //  range database
+ //  Bereich Datenbank
  //
 String STR_DBFLD
 {
@@ -192,7 +197,7 @@ String STR_HIDDENTXTFLD
     Text [ en-US ] = "Hidden text" ;
 };
  //
- //  range user fields
+ //  Bereich Benutzerfelder
  //
 String STR_USERFLD
 {
@@ -215,14 +220,14 @@ String STR_HIDDENPARAFLD
     Text [ en-US ] = "Hidden Paragraph" ;
 };
  //
- // range DocumentInfo
+ // Bereich DokumentInfo
  //
 String STR_DOCINFOFLD
 {
     Text [ en-US ] = "DocInformation" ;
 };
 /*--------------------------------------------------------------------
-    Description: SubCmd-Strings
+    Beschreibung: SubCmd-Strings
  --------------------------------------------------------------------*/
 String FLD_DATE_STD
 {
@@ -241,7 +246,7 @@ String FLD_TIME_FIX
     Text [ en-US ] = "Time (fixed)" ;
 };
  //
- //  SubCmd Statistic
+ //  SubCmd Statistik
  //
 String FLD_STAT_TABLE
 {
@@ -271,7 +276,7 @@ String FLD_STAT_PAGE
 {
     Text [ en-US ] = "Pages" ;
 };
- //  SubCmd DDETypes
+ //  SubCmd DDETypen
  //
 String FMT_DDE_HOT
 {
@@ -286,7 +291,7 @@ String FLD_INPUT_TEXT
     TEXT = "[Text]" ;
 };
 /*--------------------------------------------------------------------
-    Description: SubType Extuser
+    Beschreibung: SubType Extuser
  --------------------------------------------------------------------*/
 String FLD_EU_FIRMA
 {
@@ -357,7 +362,7 @@ String FLD_PAGEREF_ON
     Text [ en-US ] = "on" ;
 };
 /*--------------------------------------------------------------------
-    Description: path name
+    Beschreibung: Pfadname
  --------------------------------------------------------------------*/
  // Formate FileName
 String FMT_FF_NAME
@@ -385,7 +390,7 @@ String FMT_FF_UI_RANGE
     Text [ en-US ] = "Category" ;
 };
 /*--------------------------------------------------------------------
-    Description: format chapter
+    Beschreibung: Format Kapitel
  --------------------------------------------------------------------*/
 String FMT_CHAPTER_NAME
 {
@@ -401,10 +406,11 @@ String FMT_CHAPTER_NO_NOSEPARATOR
 };
 String FMT_CHAPTER_NAMENO
 {
+    /* ### ACHTUNG: Neuer Text in Resource? Kapitelnummer und Name : Nummer und Name */
     Text [ en-US ] = "Chapter number and name" ;
 };
 /*--------------------------------------------------------------------
-    Description: formats
+    Beschreibung: Formate
  --------------------------------------------------------------------*/
 String FMT_NUM_ABC
 {
@@ -443,7 +449,7 @@ String FMT_NUM_PAGESPECIAL
     Text [ en-US ] = "Text" ;
 };
 /*--------------------------------------------------------------------
-    Description: Author
+    Beschreibung: Author
  --------------------------------------------------------------------*/
 String FMT_AUTHOR_NAME
 {
@@ -454,7 +460,7 @@ String FMT_AUTHOR_SCUT
     Text [ en-US ] = "Initials" ;
 };
 /*--------------------------------------------------------------------
-    Description:   set variable
+    Beschreibung:   Varibale setzen
  --------------------------------------------------------------------*/
 String FMT_SETVAR_SYS
 {
@@ -489,7 +495,7 @@ String FMT_DBFLD_SYS
     Text [ en-US ] = "System" ;
 };
 /*--------------------------------------------------------------------
-    Description: storage fields
+    Beschreibung: Ablagefelder
  --------------------------------------------------------------------*/
 String FMT_REG_AUTHOR
 {
@@ -504,7 +510,7 @@ String FMT_REG_DATE
     Text [ en-US ] = "Date" ;
 };
 /*--------------------------------------------------------------------
-    Description: formats references
+    Beschreibung: Formate Referenzen
  --------------------------------------------------------------------*/
 String FMT_REF_TEXT
 {
@@ -551,7 +557,7 @@ String FMT_REF_NUMBER_FULL_CONTEXT
     Text [ en-US ] = "Number (full context)";
 };
 /*--------------------------------------------------------------------
-    Description: paceholder
+    Beschreibung: Platzhalter
  --------------------------------------------------------------------*/
 String FMT_MARK_TEXT
 {
@@ -574,14 +580,14 @@ String FMT_MARK_OLE
     Text [ en-US ] = "Object" ;
 };
 /*--------------------------------------------------------------------
-    Description: text only
+    Beschreibung: Nur-Text
  --------------------------------------------------------------------*/
 String FMT_TEXT
 {
     TEXT = "Text" ;
 };
 /*--------------------------------------------------------------------
-    Description: global String resources
+    Beschreibung: globale String-Ressourcen
  --------------------------------------------------------------------*/
 String STR_ALL
 {
@@ -592,7 +598,7 @@ String STR_INSERT
     Text [ en-US ] = "Insert" ;
 };
 /*--------------------------------------------------------------------
-    Description:   ExchangeStrings for Edit/NameFT
+    Beschreibung:   AustauschStrings fuer Edit/NameFT
  --------------------------------------------------------------------*/
 String STR_COND
 {

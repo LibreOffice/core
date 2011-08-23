@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,12 +33,6 @@
 
 #include <stdlib.h> // wntmsci10 does not like <cstdlib>
 
-#include <cppunit/TestSuite.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestCase.h>
-#include <cppunit/plugin/TestPlugIn.h>
-#include <cppunit/extensions/HelperMacros.h>
-
 #include "Enum1.hpp"
 #include "Enum2.hpp"
 #include "Exception1.hpp"
@@ -62,6 +56,7 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/Type.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
+#include "testshl/simpleheader.hxx"
 #include "osl/diagnose.h"
 #include "osl/interlck.h"
 #include "rtl/string.h"
@@ -203,25 +198,45 @@ public:
 class Test: public CppUnit::TestFixture {
 public:
     void testVoid();
+
     void testBoolean();
+
     void testByte();
+
     void testShort();
+
     void testUnsignedShort();
+
     void testLong();
+
     void testUnsignedLong();
+
     void testHyper();
+
     void testUnsignedHyper();
+
     void testFloat();
+
     void testDouble();
+
     void testChar();
+
     void testString();
+
     void testType();
+
     void testSequence();
+
     void testEnum();
+
     void testStruct();
+
     void testPoly();
+
     void testException();
+
     void testInterface();
+
     void testNull();
 
     CPPUNIT_TEST_SUITE(Test);
@@ -2309,10 +2324,10 @@ void Test::testNull() {
     }
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
 
 }
 
-CPPUNIT_PLUGIN_IMPLEMENT();
+NOADDITIONAL;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

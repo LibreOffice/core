@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,14 +29,14 @@ package org.openoffice.idesupport.filter;
 
 public class AllFilesFilter implements FileFilter {
     private static final AllFilesFilter filter = new AllFilesFilter();
-
+    
     private AllFilesFilter() {
     }
-
+    
     public static AllFilesFilter getInstance() {
         return filter;
     }
-
+    
     public boolean validate(String name) {
         return true;
     }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,9 +49,9 @@ class WindowsSystemEnvironment extends SystemEnvironment {
         super();
 
         // run a call to make sure things are initialized
-        // ignore the first call result as the system may
+        // ignore the first call result as the system may 
         // give inconsistent data on the first invocation ever
-        getWmicResult("computersystem", "get", "model");
+        getWmicResult("computersystem", "get", "model"); 
 
         setSystemModel(getWmicResult("computersystem", "get", "model"));
         setSystemManufacturer(getWmicResult("computersystem", "get", "manufacturer"));
@@ -131,7 +131,7 @@ class WindowsSystemEnvironment extends SystemEnvironment {
      * This method invokes wmic outside of the normal environment
      * collection routines.
      *
-     * An initial call to wmic can be costly in terms of time.
+     * An initial call to wmic can be costly in terms of time.  
      *
      * <code>
      * Details of why the first call is costly can be found at:

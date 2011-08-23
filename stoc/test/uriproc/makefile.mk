@@ -35,8 +35,6 @@ TARGET := test_uriproc
 
 ENABLE_EXCEPTIONS := TRUE
 
-my_components = stocservices
-
 .INCLUDE: settings.mk
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
@@ -64,20 +62,14 @@ ALLTAR: test
 
 test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb
     $(CPPUNITTESTER) $(SHL1TARGETN) \
-        -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/udkapi.rdb \
         -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
-        -env:URE_INTERNAL_LIB_DIR=$(my_file)$(PWD)/$(DLLDEST)
+        -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/udkapi.rdb \
+        -env:OOO_TEST_PREFIX=$(my_file)$(PWD)/$(DLLDEST)/
 
-$(MISC)/$(TARGET)/services.rdb .ERRREMOVE: $(SOLARENV)/bin/packcomponents.xslt \
-        $(MISC)/$(TARGET)/services.input \
-        $(my_components:^"$(MISC)/":+".component")
-    $(XSLTPROC) --nonet --stringparam prefix $(PWD)/$(MISC)/ -o $@ \
-        $(SOLARENV)/bin/packcomponents.xslt $(MISC)/$(TARGET)/services.input
-
-$(MISC)/$(TARGET)/services.input:
+$(MISC)/$(TARGET)/services.rdb:
     $(MKDIRHIER) $(@:d)
-    echo \
-        '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
-        > $@
+    $(RM) $@
+    $(REGCOMP) -register -r $@ -wop=vnd.sun.star.expand:\$${{OOO_TEST_PREFIX}} \
+        -c $(DLLDEST)/stocservices.uno$(DLLPOST)
 
 .END

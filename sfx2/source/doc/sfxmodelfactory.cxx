@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -149,9 +149,9 @@ namespace sfx2
         {
             static bool isSpecialArgumentName( const ::rtl::OUString& _rValueName )
             {
-                return  _rValueName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EmbeddedObject" ) )
-                    ||  _rValueName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EmbeddedScriptSupport" ) )
-                    ||  _rValueName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentRecoverySupport" ) );
+                return  _rValueName.equalsAscii( "EmbeddedObject" )
+                    ||  _rValueName.equalsAscii( "EmbeddedScriptSupport" )
+                    ||  _rValueName.equalsAscii( "DocumentRecoverySupport" );
             }
 
             bool operator()( const Any& _rArgument ) const

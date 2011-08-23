@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -165,7 +165,7 @@ namespace svt
             }
             catch( Exception& )
             {
-                OSL_FAIL( "SmartContent::bindTo: unexpected exception caught!" );
+                DBG_ERROR( "SmartContent::bindTo: unexpected exception caught!" );
             }
         }
         else
@@ -226,7 +226,7 @@ namespace svt
         try
         {
             ::rtl::OUString sTitle;
-            m_pContent->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" )) ) >>= sTitle;
+            m_pContent->getPropertyValue( ::rtl::OUString::createFromAscii( "Title" ) ) >>= sTitle;
             _rTitle =  sTitle;
 
             // from here on, we definately know that the content is valid

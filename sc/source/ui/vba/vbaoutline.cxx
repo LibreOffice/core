@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,15 +30,15 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
 void
-ScVbaOutline::ShowLevels( const uno::Any& RowLevels, const uno::Any& ColumnLevels ) throw (uno::RuntimeException)
+ScVbaOutline::ShowLevels( const uno::Any& RowLevels, const uno::Any& ColumnLevels ) throw (uno::RuntimeException) 
 {
-    if (mxOutline.is())
+    sal_Int16 nLevel = 0;
+    if (mxOutline.is()) 
     {
-        sal_Int16 nLevel = 0;
         if (RowLevels >>= nLevel)
         {
             mxOutline->showLevel(nLevel, table::TableOrientation_ROWS);
-        }
+        } 
         if (ColumnLevels >>= nLevel)
         {
             mxOutline->showLevel(nLevel,table::TableOrientation_COLUMNS);
@@ -46,14 +46,14 @@ ScVbaOutline::ShowLevels( const uno::Any& RowLevels, const uno::Any& ColumnLevel
     }
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaOutline::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaOutline") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 ScVbaOutline::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

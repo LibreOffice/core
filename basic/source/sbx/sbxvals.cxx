@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,21 +49,21 @@ SbxValues::SbxValues( const BigInt &rBig ) : eType(SbxCURRENCY)
 #pragma warning(disable: 4273)
 #endif
 
-sal_Bool BigInt::INT64( SbxINT64 *p ) const
+BOOL BigInt::INT64( SbxINT64 *p ) const
 {
     if( bIsBig ) {
         if( nLen > 4 || (nNum[3] & 0x8000) )
-            return sal_False;
+            return FALSE;
 
-        p->nLow  = ((sal_uInt32)nNum[1] << 16) | (sal_uInt32)nNum[0];
-        p->nHigh = ((sal_uInt32)nNum[3] << 16) | (sal_uInt32)nNum[2];
+        p->nLow  = ((UINT32)nNum[1] << 16) | (UINT32)nNum[0];
+        p->nHigh = ((UINT32)nNum[3] << 16) | (UINT32)nNum[2];
         if( bIsNeg )
             p->CHS();
     }
     else
-        p->Set( (sal_Int32)nVal );
+        p->Set( (INT32)nVal );
 
-    return sal_True;
+    return TRUE;
 }
 
 BigInt::BigInt( const SbxINT64 &r )
@@ -72,28 +73,28 @@ BigInt::BigInt( const SbxINT64 &r )
     *this = r.nHigh;
     if( r.nHigh )
         *this *= a10000;
-    *this += (sal_uInt16)(r.nLow >> 16);
+    *this += (USHORT)(r.nLow >> 16);
     *this *= a10000;
-    *this += (sal_uInt16)r.nLow;
+    *this += (USHORT)r.nLow;
 }
 
-sal_Bool BigInt::UINT64( SbxUINT64 *p ) const
+BOOL BigInt::UINT64( SbxUINT64 *p ) const
 {
     if( bIsBig ) {
         if( bIsNeg || nLen > 4 )
-            return sal_False;
+            return FALSE;
 
-        p->nLow  = ((sal_uInt32)nNum[1] << 16) | (sal_uInt32)nNum[0];
-        p->nHigh = ((sal_uInt32)nNum[3] << 16) | (sal_uInt32)nNum[2];
+        p->nLow  = ((UINT32)nNum[1] << 16) | (UINT32)nNum[0];
+        p->nHigh = ((UINT32)nNum[3] << 16) | (UINT32)nNum[2];
     }
     else {
         if( nVal < 0 )
-            return sal_False;
+            return FALSE;
 
-        p->Set( (sal_uInt32)nVal );
+        p->Set( (UINT32)nVal );
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 BigInt::BigInt( const SbxUINT64 &r )
@@ -103,7 +104,9 @@ BigInt::BigInt( const SbxUINT64 &r )
     *this = BigInt(r.nHigh);
     if( r.nHigh )
         *this *= a10000;
-    *this += (sal_uInt16)(r.nLow >> 16);
+    *this += (USHORT)(r.nLow >> 16);
     *this *= a10000;
-    *this += (sal_uInt16)r.nLow;
+    *this += (USHORT)r.nLow;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

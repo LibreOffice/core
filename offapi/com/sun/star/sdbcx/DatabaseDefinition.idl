@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,25 +24,25 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbcx_DatabaseDefinition_idl__
-#define __com_sun_star_sdbcx_DatabaseDefinition_idl__
-
- module com {  module sun {  module star {  module sdbcx {
-
- published interface XTablesSupplier;
- published interface XViewsSupplier;
- published interface XUsersSupplier;
- published interface XGroupsSupplier;
-
-
+#ifndef __com_sun_star_sdbcx_DatabaseDefinition_idl__ 
+#define __com_sun_star_sdbcx_DatabaseDefinition_idl__ 
+ 
+ module com {  module sun {  module star {  module sdbcx { 
+ 
+ published interface XTablesSupplier; 
+ published interface XViewsSupplier; 
+ published interface XUsersSupplier; 
+ published interface XGroupsSupplier; 
+ 
+ 
 /** could be used as an extension for performing data definition tasks on
     databases, and to control the access rights on database objects.
-
-
+    
+    
     <p>
     It may be implemented by a database driver provider, to encapsulate the
     complexity of data definition, and to give a common way for data definition as
-    the DDL of most DBMS differs.
+    the DDL of most DBMS's differs.
     </p>
     <p>
     At least, the access to the tables of a database should be implemented.
@@ -54,27 +54,27 @@
     </p>
  */
 published service DatabaseDefinition
-{
+{ 
     // gives access to the tables.
-    interface XTablesSupplier;
-
+    interface XTablesSupplier; 
+     
     /** The implementation is optional.
      */
-    [optional] interface XViewsSupplier;
-
+    [optional] interface XViewsSupplier; 
+     
     /** The implementation is optional.
      */
-    [optional] interface XUsersSupplier;
-
+    [optional] interface XUsersSupplier; 
+     
     /** The implementation is optional.
      */
-    [optional] interface XGroupsSupplier;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*===========================================================================
-===========================================================================*/
-#endif
+    [optional] interface XGroupsSupplier; 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*=========================================================================== 
+===========================================================================*/ 
+#endif 

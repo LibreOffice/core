@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,22 +46,22 @@ extern "C" { int yyerror( char * ); }
 extern "C" { int YYWarning( char * ); }
 
 // defines to parse command line
-#define STATE_NON       0x0001
-#define STATE_INPUT     0x0002
-#define STATE_OUTPUT    0x0003
-#define STATE_PRJ       0x0004
-#define STATE_ROOT      0x0005
-#define STATE_MERGESRC  0x0006
-#define STATE_ERRORLOG  0x0007
-#define STATE_UTF8      0x000B
-#define STATE_LANGUAGES 0x000C
-#define STATE_ISOCODE99 0x000D
+#define STATE_NON  		0x0001
+#define STATE_INPUT		0x0002
+#define STATE_OUTPUT	0x0003
+#define STATE_PRJ		0x0004
+#define STATE_ROOT		0x0005
+#define STATE_MERGESRC	0x0006
+#define STATE_ERRORLOG	0x0007
+#define STATE_UTF8		0x000B
+#define STATE_LANGUAGES	0x000C
+#define STATE_ISOCODE99	0x000D
 
 // set of global variables
-sal_Bool bEnableExport;
-sal_Bool bMergeMode;
-sal_Bool bErrorLog;
-sal_Bool bUTF8;
+BOOL bEnableExport;
+BOOL bMergeMode;
+BOOL bErrorLog;
+BOOL bUTF8;
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sInputFileName;
@@ -78,17 +78,17 @@ extern "C" {
 extern char *GetOutputFile( int argc, char* argv[])
 /*****************************************************************************/
 {
-    bEnableExport = sal_False;
-    bMergeMode = sal_False;
-    bErrorLog = sal_True;
-    bUTF8 = sal_True;
+    bEnableExport = FALSE;
+    bMergeMode = FALSE;
+    bErrorLog = TRUE;
+    bUTF8 = TRUE;
     sPrj = "";
     sPrjRoot = "";
     sInputFileName = "";
     sActFileName = "";
     Export::sLanguages = "";
-    sal_uInt16 nState = STATE_NON;
-    sal_Bool bInput = sal_False;
+    USHORT nState = STATE_NON;
+    BOOL bInput = FALSE;
 
     // parse command line
     for( int i = 1; i < argc; i++ ) {
@@ -109,15 +109,15 @@ extern char *GetOutputFile( int argc, char* argv[])
         }
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-E" ) {
             nState = STATE_ERRORLOG;
-            bErrorLog = sal_False;
+            bErrorLog = FALSE;
         }
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-UTF8" ) {
             nState = STATE_UTF8;
-            bUTF8 = sal_True;
+            bUTF8 = TRUE;
         }
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-NOUTF8" ) {
             nState = STATE_UTF8;
-            bUTF8 = sal_False;
+            bUTF8 = FALSE;
         }
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-L" ) {
             nState = STATE_LANGUAGES;
@@ -128,11 +128,11 @@ extern char *GetOutputFile( int argc, char* argv[])
         else {
             switch ( nState ) {
                 case STATE_NON: {
-                    return NULL;    // no valid command line
+                    return NULL;	// no valid command line
                 }
                 case STATE_INPUT: {
                     sInputFileName = argv[ i ];
-                    bInput = sal_True; // source file found
+                    bInput = TRUE; // source file found
                 }
                 break;
                 case STATE_OUTPUT: {
@@ -149,7 +149,7 @@ extern char *GetOutputFile( int argc, char* argv[])
                 break;
                 case STATE_MERGESRC: {
                     sMergeSrc = ByteString( argv[ i ]);
-                    bMergeMode = sal_True; // activate merge mode, cause merge database found
+                    bMergeMode = TRUE; // activate merge mode, cause merge database found
                 }
                 break;
                 case STATE_LANGUAGES: {
@@ -162,7 +162,7 @@ extern char *GetOutputFile( int argc, char* argv[])
 
     if ( bInput ) {
         // command line is valid
-        bEnableExport = sal_True;
+        bEnableExport = TRUE;
         char *pReturn = new char[ sOutputFile.Len() + 1 ];
         strcpy( pReturn, sOutputFile.GetBuffer());  // #100211# - checked
         return pReturn;
@@ -185,7 +185,7 @@ int InitXrmExport( char *pOutput , char* pFilename)
     ByteString sOutput( pOutput );
     ByteString sFilename( pFilename );
     Export::InitLanguages( false );
-
+ 
     if ( bMergeMode )
         pParser = new XRMResMerge( sMergeSrc, sOutputFile, sFilename );
       else if ( sOutputFile.Len()) {
@@ -290,8 +290,8 @@ int GetError()
 /*****************************************************************************/
 XRMResParser::XRMResParser()
 /*****************************************************************************/
-                : bError( sal_False ),
-                bText( sal_False )
+                : bError( FALSE ),
+                bText( FALSE )
 {
     aLanguages = Export::GetLanguages();
 }
@@ -322,6 +322,9 @@ int XRMResParser::Execute( int nToken, char * pToken )
             sLID = "";
             sGID += ".";
             sGID += GetAttribute( rToken, "id" );
+            //sLocalized = "1";
+            
+            //sLocalized = "X:";
             sLocalized = true;
         break;
 
@@ -333,7 +336,12 @@ int XRMResParser::Execute( int nToken, char * pToken )
             sLID = "";
             sGID += ".";
             sGID += GetAttribute( rToken, "id" );
-                sLocalized = true;
+//			if ( GetAttribute( rToken, "localized" ) == "false" )
+//				sLocalized += "0";
+//                sLocalized = false;
+//			else
+//				sLocalized += "1";
+                sLocalized = true;				
         break;
 
         case XRM_PARAGRAPH_END: {
@@ -341,7 +349,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
                 EndOfText( sCurrentOpenTag, sCurrentCloseTag );
             ByteString sTmp = sGID;
             sGID = "";
-            for ( sal_uInt16 i = 0; i + 1 < sTmp.GetTokenCount( '.' ); i++ ) {
+            for ( USHORT i = 0; i + 1 < sTmp.GetTokenCount( '.' ); i++ ) {
                 if ( sGID.Len())
                     sGID += ".";
                 sGID += sTmp.GetToken( i, '.' );
@@ -357,7 +365,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
                     //EndOfText( sCurrentOpenTag, sCurrentCloseTag );
                     sLID = sNewLID;
                 }
-                bText = sal_True;
+                bText = TRUE;
                 sCurrentText = "";
                 sCurrentOpenTag = rToken;
                 Output( rToken );
@@ -372,7 +380,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
                 WorkOnText( sCurrentOpenTag, sCurrentText );
                 Output( sCurrentText );
                 EndOfText( sCurrentOpenTag, sCurrentCloseTag );// <---
-                bText = sal_False;
+                bText = FALSE;
                 rToken = ByteString("");
                 sCurrentText  = ByteString("");
                 //printf("<-XRM_TEXT_END");
@@ -412,7 +420,7 @@ ByteString XRMResParser::GetAttribute( const ByteString &rToken, const ByteStrin
     ByteString sSearch( " " );
     sSearch += rAttribute;
     sSearch += "=";
-    sal_uInt16 nPos = sTmp.Search( sSearch );
+    USHORT nPos = sTmp.Search( sSearch );
 
     if ( nPos != STRING_NOTFOUND ) {
         sTmp = sTmp.Copy( nPos );
@@ -438,7 +446,9 @@ void XRMResParser::ConvertStringToDBFormat( ByteString &rString )
     do {
         sResult = rString;
         rString.EraseLeadingChars( _LF );
+    //	rString.EraseLeadingChars( ' ' );
         rString.EraseLeadingChars( '\t' );
+    //	rString.EraseTrailingChars( ' ' );
         rString.EraseTrailingChars( '\t' );
     } while ( sResult != rString );
 
@@ -544,7 +554,7 @@ void XRMResExport::EndOfText(
 )
 /*****************************************************************************/
 {
-
+    
     (void) rOpenTag;        // FIXME
     (void) rCloseTag;       // FIXME
 
@@ -553,33 +563,38 @@ void XRMResExport::EndOfText(
         char cSearch = 0x00;
         ByteString sSearch( cSearch );
 
+     //	if ( !pResData->sText[ ByteString("en-US") ].Len() ) 
+    //        pResData->sText[ ByteString("en-US") ] = pResData->sText[ ByteString("de") ];
+
         Export::FillInFallbacks( pResData );
 
         ByteString sTimeStamp( Export::GetTimeStamp());
         ByteString sCur;
         for( unsigned int n = 0; n < aLanguages.size(); n++ ){
             sCur = aLanguages[ n ];
-
+        
             ByteString sAct = pResData->sText[ sCur ];
+                //Export::UnquotHTML( sAct );
                 sAct.EraseAllChars( 0x0A );
 
                 ByteString sOutput( sPrj ); sOutput += "\t";
                 sOutput += sPath;
                 sOutput += "\t0\t";
                 sOutput += "readmeitem\t";
-                sOutput += pResData->sId;
+                sOutput += pResData->sId; 
                 // USE LID AS GID OR MERGE DON'T WORK
-                //sOutput += pResData->sGId;
+                //sOutput += pResData->sGId; 
                 sOutput += "\t";
-                sOutput += pResData->sId;
+                sOutput += pResData->sId; 
                 sOutput += "\t\t\t0\t";
                 sOutput += sCur;
                 sOutput += "\t";
-
+                
                 sOutput += sAct; sOutput += "\t\t\t\t";
                 sOutput += sTimeStamp;
 
                 sOutput.SearchAndReplaceAll( sSearch, "_" );
+                //if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sPrj ) ) )
                 if( sAct.Len() > 1 )
                     pOutputStream->WriteLine( sOutput );
             }
@@ -632,6 +647,7 @@ void XRMResMerge::WorkOnText(
     if ( pMergeDataFile ) {
         if ( !pResData ) {
             ByteString sPlatform( "" );
+//			pResData = new ResData( sPlatform, GetGID() , sFilename );
             pResData = new ResData( sPlatform, GetLID() , sFilename );
             pResData->sId = GetLID();
 
@@ -641,7 +657,7 @@ void XRMResMerge::WorkOnText(
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
             if ( pEntrys ) {
                 ByteString sContent;
-                if ( Export::isAllowed( sLang ) &&
+                if ( Export::isAllowed( sLang ) && 
                     ( pEntrys->GetText(
                         sContent, STRING_TYP_TEXT, sLang )) &&
                     ( sContent != "-" ) && ( sContent.Len()))
@@ -682,10 +698,12 @@ void XRMResMerge::EndOfText(
                 ByteString sContent;
                 if ( !sCur.EqualsIgnoreCaseAscii("en-US")  &&
                     ( pEntrys->GetText(
-                        sContent, STRING_TYP_TEXT, sCur, sal_True )) &&
+                        sContent, STRING_TYP_TEXT, sCur, TRUE )) &&
                     ( sContent != "-" ) && ( sContent.Len()))
                 {
                     ByteString sText( sContent );
+                    //Export::QuotHTMLXRM( sText );
+
                     ByteString sAdditionalLine( "\t" );
                     sAdditionalLine += rOpenTag;
                     ByteString sSearch = "xml:lang=\"";
@@ -700,7 +718,7 @@ void XRMResMerge::EndOfText(
                     sAdditionalLine += rCloseTag;
                     sAdditionalLine += "\n";
 
-                    for ( sal_uInt16 i = 0; i + 1 < GetGID().GetTokenCount( '.' ); i++ )
+                    for ( USHORT i = 0; i + 1 < GetGID().GetTokenCount( '.' ); i++ )
                         sAdditionalLine += "\t";
 
                     Output( sAdditionalLine );

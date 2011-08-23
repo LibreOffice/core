@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,12 +69,12 @@ FullScreenPane::FullScreenPane (
 
     sal_Int32 nScreenNumber = 1;
     ExtractArguments(rxPaneId, nScreenNumber);
-
+    
     if (mpWorkWindow.get() == NULL)
         return;
 
     // Create a new top-leve window that is displayed full screen.
-    mpWorkWindow->ShowFullScreenMode(sal_True, nScreenNumber);
+    mpWorkWindow->ShowFullScreenMode(TRUE, nScreenNumber);
     // For debugging (non-fullscreen) use mpWorkWindow->SetScreenNumber(nScreenNumber);
     mpWorkWindow->SetMenuBarMode(MENUBAR_MODE_HIDE);
     mpWorkWindow->SetBorderStyle(WINDOW_BORDER_REMOVEBORDER);
@@ -135,8 +135,8 @@ void SAL_CALL FullScreenPane::disposing (void)
         mpWorkWindow->RemoveEventListener(aWindowEventHandler);
         mpWorkWindow.reset();
     }
-
-
+    
+    
     FrameWindowPane::disposing();
 }
 
@@ -179,7 +179,7 @@ Reference<accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessible (vo
     ThrowIfDisposed();
 
     if (mpWorkWindow != NULL)
-        return mpWorkWindow->GetAccessible(sal_False);
+        return mpWorkWindow->GetAccessible(FALSE);
     else
         return NULL;
 }
@@ -192,7 +192,7 @@ void SAL_CALL FullScreenPane::setAccessible (
     throw (RuntimeException)
 {
     ThrowIfDisposed();
-
+    
     if (mpWindow != NULL)
     {
         Reference<lang::XInitialization> xInitializable (rxAccessible, UNO_QUERY);
@@ -243,19 +243,19 @@ Reference<rendering::XCanvas> FullScreenPane::CreateCanvas (void)
     if (pWindow != NULL)
     {
         Sequence<Any> aArg (5);
-
+        
         // common: first any is VCL pointer to window (for VCL canvas)
         aArg[0] = makeAny(reinterpret_cast<sal_Int64>(pWindow));
         aArg[1] = Any();
         aArg[2] = makeAny(::com::sun::star::awt::Rectangle());
         aArg[3] = makeAny(sal_False);
         aArg[4] = makeAny(mxWindow);
-
+        
         Reference<lang::XMultiServiceFactory> xFactory (
             mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
         return Reference<rendering::XCanvas>(
             xFactory->createInstanceWithArguments(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.rendering.SpriteCanvas.VCL")),
+                OUString::createFromAscii("com.sun.star.rendering.SpriteCanvas.VCL"),
                 aArg),
             UNO_QUERY);
     }

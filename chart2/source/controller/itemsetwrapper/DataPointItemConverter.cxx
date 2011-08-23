@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,6 +75,7 @@ namespace
 {
     static ::comphelper::ItemPropertyMapType aDataPointPropertyMap(
         ::comphelper::MakeItemPropertyMap
+//        IPM_MAP_ENTRY( CHATTR_PIE_SEGMENT_OFFSET, "Offset", 0 )
         IPM_MAP_ENTRY( SCHATTR_STYLE_SHAPE, "Geometry3D", 0 )
         );
 
@@ -108,13 +109,13 @@ sal_Int32 lcl_getSymbolStyleForSymbol( const chart2::Symbol & rSymbol )
     return nStyle;
 }
 
-bool lcl_NumberFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxItemSet & rItemSet, const uno::Reference< beans::XPropertySet > & xPropertySet, bool bOverwriteAttributedDataPointsAlso  )
+bool lcl_NumberFormatFromItemToPropertySet( USHORT nWhichId, const SfxItemSet & rItemSet, const uno::Reference< beans::XPropertySet > & xPropertySet, bool bOverwriteAttributedDataPointsAlso  )
 {
     bool bChanged = false;
     if( !xPropertySet.is() )
         return bChanged;
     rtl::OUString aPropertyName = (SID_ATTR_NUMBERFORMAT_VALUE==nWhichId) ? C2U( "NumberFormat" ) : C2U( "PercentageNumberFormat" );
-    sal_uInt16 nSourceWhich = (SID_ATTR_NUMBERFORMAT_VALUE==nWhichId) ? SID_ATTR_NUMBERFORMAT_SOURCE : SCHATTR_PERCENT_NUMBERFORMAT_SOURCE;
+    USHORT nSourceWhich = (SID_ATTR_NUMBERFORMAT_VALUE==nWhichId) ? SID_ATTR_NUMBERFORMAT_SOURCE : SCHATTR_PERCENT_NUMBERFORMAT_SOURCE;
 
     if( SFX_ITEM_SET != rItemSet.GetItemState( nSourceWhich ) )
         return bChanged;
@@ -140,7 +141,7 @@ bool lcl_NumberFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxItemSe
     if( bOverwriteAttributedDataPointsAlso )
     {
         Reference< chart2::XDataSeries > xSeries( xPropertySet, uno::UNO_QUERY);
-        if( aValue != aOldValue ||
+        if( aValue != aOldValue || 
             ::chart::DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, aPropertyName, aOldValue ) )
         {
             ::chart::DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, aPropertyName, aValue );
@@ -155,13 +156,13 @@ bool lcl_NumberFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxItemSe
     return bChanged;
 }
 
-bool lcl_UseSourceFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxItemSet & rItemSet, const uno::Reference< beans::XPropertySet > & xPropertySet, bool bOverwriteAttributedDataPointsAlso  )
+bool lcl_UseSourceFormatFromItemToPropertySet( USHORT nWhichId, const SfxItemSet & rItemSet, const uno::Reference< beans::XPropertySet > & xPropertySet, bool bOverwriteAttributedDataPointsAlso  )
 {
     bool bChanged = false;
     if( !xPropertySet.is() )
         return bChanged;
     rtl::OUString aPropertyName = (SID_ATTR_NUMBERFORMAT_SOURCE==nWhichId) ? C2U( "NumberFormat" ) : C2U( "PercentageNumberFormat" );
-    sal_uInt16 nFormatWhich = (SID_ATTR_NUMBERFORMAT_SOURCE==nWhichId) ? SID_ATTR_NUMBERFORMAT_VALUE : SCHATTR_PERCENT_NUMBERFORMAT_VALUE;
+    USHORT nFormatWhich = (SID_ATTR_NUMBERFORMAT_SOURCE==nWhichId) ? SID_ATTR_NUMBERFORMAT_VALUE : SCHATTR_PERCENT_NUMBERFORMAT_VALUE;
 
     if( SFX_ITEM_SET != rItemSet.GetItemState( nWhichId ) )
         return bChanged;
@@ -187,7 +188,7 @@ bool lcl_UseSourceFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxIte
     if( bOverwriteAttributedDataPointsAlso )
     {
         Reference< chart2::XDataSeries > xSeries( xPropertySet, uno::UNO_QUERY);
-        if( aNewValue != aOldValue ||
+        if( aNewValue != aOldValue || 
             ::chart::DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, aPropertyName, aOldValue ) )
         {
             ::chart::DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, aPropertyName, aNewValue );
@@ -291,7 +292,7 @@ bool DataPointItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const sal_uInt16 * DataPointItemConverter::GetWhichPairs() const
+const USHORT * DataPointItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     if( m_bDataSeries )
@@ -313,7 +314,7 @@ bool DataPointItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNa
 
 
 bool DataPointItemConverter::ApplySpecialItem(
-    sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
+    USHORT nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;
@@ -340,7 +341,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
                 {
                     Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
-                    if( bOldValue != rValue ||
+                    if( bOldValue != rValue || 
                         DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, C2U( "Label" ), aOldValue ) )
                     {
                         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "Label" ), uno::makeAny( aLabel ) );
@@ -380,7 +381,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
                 {
                     Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
-                    if( !aOldValue.equals(aNewValue) ||
+                    if( !aOldValue.equals(aNewValue) || 
                         DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, C2U( "LabelSeparator" ), uno::makeAny( aOldValue ) ) )
                     {
                         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "LabelSeparator" ), uno::makeAny( aNewValue ) );
@@ -402,7 +403,7 @@ bool DataPointItemConverter::ApplySpecialItem(
 
         case SCHATTR_DATADESCR_PLACEMENT:
         {
-
+            
             try
             {
                 sal_Int32 nNew = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
@@ -415,7 +416,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
                 {
                     Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
-                    if( nOld!=nNew ||
+                    if( nOld!=nNew || 
                         DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, C2U( "LabelPlacement" ), uno::makeAny( nOld ) ) )
                     {
                         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "LabelPlacement" ), uno::makeAny( nNew ) );
@@ -545,7 +546,7 @@ bool DataPointItemConverter::ApplySpecialItem(
 }
 
 void DataPointItemConverter::FillSpecialItem(
-    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
+    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     switch( nWhichId )
@@ -563,7 +564,7 @@ void DataPointItemConverter::FillSpecialItem(
                     (SCHATTR_DATADESCR_SHOW_CATEGORY==nWhichId) ? aLabel.ShowCategoryName : aLabel.ShowLegendSymbol ));
 
                 rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
-
+                
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
                 {
                     if( DataSeriesHelper::hasAttributedDataPointDifferentValue(
@@ -643,7 +644,7 @@ void DataPointItemConverter::FillSpecialItem(
         {
             SvULongs aList;
             for ( sal_Int32 nN=0; nN<m_aAvailableLabelPlacements.getLength(); nN++ )
-                aList.Insert( m_aAvailableLabelPlacements[nN], sal::static_int_cast< sal_uInt16 >(nN) );
+                aList.Insert( m_aAvailableLabelPlacements[nN], sal::static_int_cast< USHORT >(nN) );
             rOutItemSet.Put( SfxIntegerListItem( nWhichId, aList ) );
         }
         break;

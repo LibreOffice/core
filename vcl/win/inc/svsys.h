@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,10 +29,7 @@
 #ifndef _SV_SVSYS_H
 #define _SV_SVSYS_H
 
-#ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
-#endif
+#include <tools/svwin.h>
 
 #endif // _SV_SVSYS_H
 

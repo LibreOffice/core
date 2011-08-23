@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -207,6 +207,8 @@ Namespace::Search_LocalOperations( std::vector<Ce_id> & o_result,
     if ( (*itLower).first != i_sName )
         return;
 
+    operations_citer
+        itEnd = aLocalOperations.end();
     for ( operations_citer it = itLower;
           it != aLocalOperations.end() ? (*itLower).first == i_sName : false;
           ++it )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -148,7 +148,7 @@ public class ScAutoFormatsObj extends TestCase{
 
             return tEnv;
         } catch (com.sun.star.uno.Exception e) {
-            log.println ("Exception occurred while creating test Object.");
+            log.println ("Exception occured while creating test Object.");
             e.printStackTrace(log);
             throw new StatusException("Couldn't create test object", e);
         }

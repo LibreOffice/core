@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ class SbiStdObject : public SbxObject
 public:
     SbiStdObject( const String&, StarBASIC* );
     virtual SbxVariable* Find( const String&, SbxClassType );
-    virtual void SetModified( sal_Bool );
+    virtual void SetModified( BOOL );
 };
 
 #endif

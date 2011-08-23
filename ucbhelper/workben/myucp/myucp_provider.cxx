@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,10 +101,10 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 // @@@ Adjust implementation name. Keep the prefix "com.sun.star.comp."!
 // @@@ Adjust service name.
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.comp.myucp.ContentProvider" )),
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                             MYUCP_CONTENT_PROVIDER_SERVICE_NAME )) );
+                     rtl::OUString::createFromAscii(
+                            "com.sun.star.comp.myucp.ContentProvider" ),
+                     rtl::OUString::createFromAscii(
+                             MYUCP_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -127,7 +127,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
 {
     // Check URL scheme...
 
-    rtl::OUString aScheme( RTL_CONSTASCII_USTRINGPARAM( MYUCP_URL_SCHEME ) );
+    rtl::OUString aScheme( rtl::OUString::createFromAscii( MYUCP_URL_SCHEME ) );
     if ( !Identifier->getContentProviderScheme().equalsIgnoreAsciiCase( aScheme ) )
         throw ucb::IllegalIdentifierException();
 

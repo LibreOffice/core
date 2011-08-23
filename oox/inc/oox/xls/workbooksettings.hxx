@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,8 +63,8 @@ struct WorkbookSettingsModel
 
     explicit            WorkbookSettingsModel();
 
-    /** Sets BIFF object visibility mode. */
-    void                setBiffObjectMode( sal_uInt16 nObjMode );
+    /** Sets OOBIN or BIFF object visibility mode. */
+    void                setBinObjectMode( sal_uInt16 nObjMode );
 };
 
 // ============================================================================
@@ -103,11 +103,11 @@ public:
     void                importCalcPr( const AttributeList& rAttribs );
 
     /** Imports the FILESHARING record containing write protection settings. */
-    void                importFileSharing( SequenceInputStream& rStrm );
+    void                importFileSharing( RecordInputStream& rStrm );
     /** Imports the WORKBOOKPR record containing global workbook settings. */
-    void                importWorkbookPr( SequenceInputStream& rStrm );
+    void                importWorkbookPr( RecordInputStream& rStrm );
     /** Imports the CALCPR record containing workbook calculation settings. */
-    void                importCalcPr( SequenceInputStream& rStrm );
+    void                importCalcPr( RecordInputStream& rStrm );
 
     /** Sets the save external linked values flag, e.g. from the WSBOOL record. */
     void                setSaveExtLinkValues( bool bSaveExtLinks );

@@ -42,8 +42,7 @@
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
 #include <com/sun/star/reflection/XSingletonTypeDescription.hpp>
 #include <rtl/ustring.hxx>
-#include <boost/unordered_map.hpp>
-#include <vector>
+#include <hash_map>
 
 class SbUnoObject: public SbxObject
 {
@@ -52,9 +51,9 @@ class SbUnoObject: public SbxObject
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > mxInvocation;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XExactName > mxExactName;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XExactName > mxExactNameInvocation;
-    sal_Bool bNeedIntrospection;
-    sal_Bool bNativeCOMObject;
-    ::com::sun::star::uno::Any maTmpUnoObj; // Only to save obj for doIntrospection!
+    BOOL bNeedIntrospection;
+    BOOL bIgnoreNativeCOMObjectMembers;
+    ::com::sun::star::uno::Any maTmpUnoObj;	// Only to save obj for doIntrospection!
 
     // Hilfs-Methode zum Anlegen der dbg_-Properties
     void implCreateDbgProperties( void );
@@ -81,26 +80,21 @@ public:
 
     // Wert rausgeben
     ::com::sun::star::uno::Any getUnoAny( void );
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > getIntrospectionAccess( void )    { return mxUnoAccess; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > getInvocation( void )         { return mxInvocation; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > getIntrospectionAccess( void )	{ return mxUnoAccess; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > getInvocation( void )			{ return mxInvocation; }
 
     void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
-
-    bool isNativeCOMObject( void )
-        { return bNativeCOMObject; }
 };
 SV_DECL_IMPL_REF(SbUnoObject);
 
 
 // #67781 Rueckgabewerte der Uno-Methoden loeschen
 void clearUnoMethods( void );
-void clearUnoMethodsForBasic( StarBASIC* pBasic );
 
 class SbUnoMethod : public SbxMethod
 {
     friend class SbUnoObject;
     friend void clearUnoMethods( void );
-    friend void clearUnoMethodsForBasic( StarBASIC* pBasic );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlMethod > m_xUnoMethod;
     ::com::sun::star::uno::Sequence< ::com::sun::star::reflection::ParamInfo >* pParamInfoSeq;
@@ -109,15 +103,13 @@ class SbUnoMethod : public SbxMethod
     SbUnoMethod* pPrev;
     SbUnoMethod* pNext;
 
-    bool mbInvocation;       // Method is based on invocation
-    bool mbDirectInvocation; // Method should be used with XDirectInvocation interface
+    bool mbInvocation;		// Method is based on invocation
 
 public:
     TYPEINFO();
 
     SbUnoMethod( const String& aName_, SbxDataType eSbxType, ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlMethod > xUnoMethod_,
-        bool bInvocation,
-        bool bDirect = false );
+        bool bInvocation );
     virtual ~SbUnoMethod();
     virtual SbxInfo* GetInfo();
 
@@ -125,8 +117,6 @@ public:
 
     bool isInvocationBased( void )
         { return mbInvocation; }
-    bool needsDirectInvocation( void )
-        { return mbDirectInvocation; }
 };
 
 
@@ -136,15 +126,15 @@ class SbUnoProperty : public SbxProperty
 
     // Daten der Uno-Property
     ::com::sun::star::beans::Property aUnoProp;
-    sal_Int32 nId;
+    INT32 nId;
 
-    bool mbInvocation;      // Property is based on invocation
+    bool mbInvocation;		// Property is based on invocation
 
     virtual ~SbUnoProperty();
 public:
     TYPEINFO();
     SbUnoProperty( const String& aName_, SbxDataType eSbxType,
-        const ::com::sun::star::beans::Property& aUnoProp_, sal_Int32 nId_, bool bInvocation );
+        const ::com::sun::star::beans::Property& aUnoProp_, INT32 nId_, bool bInvocation );
 
     bool isInvocationBased( void )
         { return mbInvocation; }
@@ -154,14 +144,14 @@ public:
 class SbUnoFactory : public SbxFactory
 {
 public:
-    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
+    virtual SbxBase* Create( UINT16 nSbxId, UINT32 = SBXCR_SBX );
     virtual SbxObject* CreateObject( const String& );
 };
 
 // Wrapper fuer eine Uno-Klasse
 class SbUnoClass : public SbxObject
 {
-    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >   m_xClass;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >	m_xClass;
 
 public:
     TYPEINFO();
@@ -172,6 +162,7 @@ public:
         : SbxObject( aName_ )
         , m_xClass( xClass_ )
     {}
+    //~SbUnoClass();
 
     // Find ueberladen, um Elemente on Demand anzulegen
     virtual SbxVariable* Find( const String&, SbxClassType );
@@ -179,6 +170,7 @@ public:
     // Wert rausgeben
     const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >& getUnoClass( void ) { return m_xClass; }
 
+    //void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
 };
 SV_DECL_IMPL_REF(SbUnoClass);
 
@@ -191,8 +183,8 @@ SbUnoClass* findUnoClass( const String& rName );
 // Wrapper for UNO Service
 class SbUnoService : public SbxObject
 {
-    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceTypeDescription2 >    m_xServiceTypeDesc;
-    bool                                                                                                m_bNeedsInit;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceTypeDescription2 >	m_xServiceTypeDesc;
+    bool																								m_bNeedsInit;
 
 public:
     TYPEINFO();
@@ -239,7 +231,7 @@ public:
 // Wrapper for UNO Singleton
 class SbUnoSingleton : public SbxObject
 {
-    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XSingletonTypeDescription >   m_xSingletonTypeDesc;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XSingletonTypeDescription >	m_xSingletonTypeDesc;
 
 public:
     TYPEINFO();
@@ -276,7 +268,7 @@ public:
 
 class AutomationNamedArgsSbxArray : public SbxArray
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >      maNameSeq;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >		maNameSeq;
 public:
     TYPEINFO();
     AutomationNamedArgsSbxArray( sal_Int32 nSeqSize )
@@ -291,18 +283,15 @@ public:
 class StarBASIC;
 
 // Impl-Methoden fuer RTL
-void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-
-void disposeComVariablesForBasic( StarBASIC* pBasic );
-void clearNativeObjectWrapperVector( void );
+void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
+void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
+void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
+void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
+void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
+void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
+void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
+void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
+void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
 
 
 //========================================================================
@@ -319,8 +308,8 @@ class BasicCollection : public SbxObject
     virtual ~BasicCollection();
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType );
-    sal_Int32 implGetIndex( SbxVariable* pIndexVar );
-    sal_Int32 implGetIndexForName( const String& rName );
+    INT32 implGetIndex( SbxVariable* pIndexVar );
+    INT32 implGetIndexForName( const String& rName );
     void CollAdd( SbxArray* pPar_ );
     void CollItem( SbxArray* pPar_ );
     void CollRemove( SbxArray* pPar_ );
@@ -332,7 +321,7 @@ public:
     virtual void Clear();
 };
 
-typedef boost::unordered_map< ::rtl::OUString, ::com::sun::star::uno::Any, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > VBAConstantsHash;
+typedef std::hash_map< ::rtl::OUString, ::com::sun::star::uno::Any, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > VBAConstantsHash;
 
 typedef std::vector< rtl::OUString > VBAConstantsVector;
 

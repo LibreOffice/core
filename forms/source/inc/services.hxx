@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,16 +84,16 @@ namespace frm
     // service names for compatibility
     // -----------------------
     FORMS_CONSTASCII_STRING( FRM_COMPONENT_FORM, "stardiv.one.form.component.Form" );
-    FORMS_CONSTASCII_STRING( FRM_COMPONENT_EDIT, "stardiv.one.form.component.Edit" );           // compatibility
+    FORMS_CONSTASCII_STRING( FRM_COMPONENT_EDIT, "stardiv.one.form.component.Edit" );			// compatibility
     FORMS_CONSTASCII_STRING( FRM_COMPONENT_TEXTFIELD, "stardiv.one.form.component.TextField" );
     FORMS_CONSTASCII_STRING( FRM_COMPONENT_LISTBOX, "stardiv.one.form.component.ListBox" );
     FORMS_CONSTASCII_STRING( FRM_COMPONENT_COMBOBOX, "stardiv.one.form.component.ComboBox" );
     FORMS_CONSTASCII_STRING( FRM_COMPONENT_RADIOBUTTON, "stardiv.one.form.component.RadioButton" );
-    FORMS_CONSTASCII_STRING( FRM_COMPONENT_GROUPBOX, "stardiv.one.form.component.GroupBox" );       // compatibility
-    FORMS_CONSTASCII_STRING( FRM_COMPONENT_FIXEDTEXT, "stardiv.one.form.component.FixedText" );     // compatibility
+    FORMS_CONSTASCII_STRING( FRM_COMPONENT_GROUPBOX, "stardiv.one.form.component.GroupBox" );		// compatibility
+    FORMS_CONSTASCII_STRING( FRM_COMPONENT_FIXEDTEXT, "stardiv.one.form.component.FixedText" );		// compatibility
     FORMS_CONSTASCII_STRING( FRM_COMPONENT_COMMANDBUTTON, "stardiv.one.form.component.CommandButton" );
     FORMS_CONSTASCII_STRING( FRM_COMPONENT_CHECKBOX, "stardiv.one.form.component.CheckBox" );
-    FORMS_CONSTASCII_STRING( FRM_COMPONENT_GRID, "stardiv.one.form.component.Grid" );           // compatibility
+    FORMS_CONSTASCII_STRING( FRM_COMPONENT_GRID, "stardiv.one.form.component.Grid" );			// compatibility
     FORMS_CONSTASCII_STRING( FRM_COMPONENT_GRIDCONTROL, "stardiv.one.form.component.GridControl" );
     FORMS_CONSTASCII_STRING( FRM_COMPONENT_IMAGEBUTTON, "stardiv.one.form.component.ImageButton" );
     FORMS_CONSTASCII_STRING( FRM_COMPONENT_FILECONTROL, "stardiv.one.form.component.FileControl" );

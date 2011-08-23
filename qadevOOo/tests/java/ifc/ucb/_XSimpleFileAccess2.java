@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,13 +63,13 @@ public class _XSimpleFileAccess2 extends MultiMethodTest {
             tRes.tested("writeFile()",result);
         }
         catch (com.sun.star.ucb.CommandAbortedException ex) {
-            log.println("CommandAbortedException occurred while testing "+
+            log.println("CommandAbortedException occured while testing "+
                 "'writeFile()'");
             ex.printStackTrace(log);
             tRes.tested("writeFile()",false);
         }
         catch (com.sun.star.uno.Exception ex) {
-            log.println("Exception occurred while testing 'writeFile()'");
+            log.println("Exception occured while testing 'writeFile()'");
             ex.printStackTrace(log);
             tRes.tested("writeFile()",false);
         }

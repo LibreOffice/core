@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ ConditionField::ConditionField( Condition* _pParent, const ResId& _rResId ) : Ed
 {
     m_pSubEdit = new Edit(this,0);
     SetSubEdit(m_pSubEdit);
-    m_pSubEdit->EnableRTL( sal_False );
+    m_pSubEdit->EnableRTL( FALSE );
     m_pSubEdit->SetPosPixel( Point() );
 
     m_aFormula.SetText(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("...")));
@@ -106,7 +106,7 @@ IMPL_LINK( ConditionField, OnFormula, Button*, /*_pClickedButton*/ )
     {
         ReportFormula aFormula( sFormula );
         sFormula = aFormula.getCompleteFormula();
-    }
+    } // if ( nLen )
     uno::Reference< awt::XWindow> xInspectorWindow = VCLUnoHelper::GetInterface(this);
     uno::Reference< beans::XPropertySet> xProp(m_pParent->getController().getRowSet(),uno::UNO_QUERY);
     if ( rptui::openDialogFormula_nothrow( sFormula, m_pParent->getController().getContext(),xInspectorWindow,xProp ) )
@@ -130,7 +130,7 @@ class OColorPopup : public FloatingWindow
 {
     DECL_LINK( SelectHdl, void * );
     Condition* m_pCondition;
-    sal_uInt16      m_nSlotId;
+    USHORT      m_nSlotId;
 public:
     OColorPopup(Window* _pParent,Condition* _pCondition);
     ValueSet        m_aColorSet;
@@ -139,7 +139,7 @@ public:
     virtual void Resize();
 
     void StartSelection();
-    void SetSlotId(sal_uInt16 _nSlotId);
+    void SetSlotId(USHORT _nSlotId);
 };
 // -----------------------------------------------------------------------------
 OColorPopup::OColorPopup(Window* _pParent,Condition* _pCondition)
@@ -205,22 +205,22 @@ void OColorPopup::StartSelection()
     m_aColorSet.StartSelection();
 }
 // -----------------------------------------------------------------------------
-void OColorPopup::SetSlotId(sal_uInt16 _nSlotId)
+void OColorPopup::SetSlotId(USHORT _nSlotId)
 {
     m_nSlotId = _nSlotId;
     if ( SID_ATTR_CHAR_COLOR_BACKGROUND == _nSlotId || SID_BACKGROUND_COLOR == _nSlotId )
     {
         m_aColorSet.SetStyle( m_aColorSet.GetStyle() | WB_NONEFIELD );
         m_aColorSet.SetText( String(ModuleRes( STR_TRANSPARENT )) );
-    }
+    } // if ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId )
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( OColorPopup, SelectHdl, void *, EMPTYARG )
 {
-    sal_uInt16 nItemId = m_aColorSet.GetSelectItemId();
+    USHORT nItemId = m_aColorSet.GetSelectItemId();
     Color aColor( nItemId == 0 ? Color( COL_TRANSPARENT ) : m_aColorSet.GetItemColor( nItemId ) );
 
-    /*  #i33380# Moved the following line above the Dispatch() calls.
+    /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() calls.
         This instance may be deleted in the meantime (i.e. when a dialog is opened
         while in Dispatch()), accessing members will crash in this case. */
     m_aColorSet.SetNoSelection();
@@ -259,6 +259,9 @@ Condition::Condition( Window* _pParent, IConditionalFormatAction& _rAction, ::rp
     ,m_nLastKnownWindowWidth( -1 )
     ,m_bInDestruction( false )
 {
+    m_aMoveUp.SetModeImage( ModuleRes( IMG_MOVE_UP_HC ), BMP_COLOR_HIGHCONTRAST );
+    m_aMoveDown.SetModeImage( ModuleRes( IMG_MOVE_DOWN_HC ), BMP_COLOR_HIGHCONTRAST );
+
     FreeResource();
     m_aActions.SetStyle(m_aActions.GetStyle()|WB_LINESPACING);
     m_aCondLHS.GrabFocus();
@@ -328,11 +331,11 @@ Condition::~Condition()
 // -----------------------------------------------------------------------------
 IMPL_LINK( Condition, DropdownClick, ToolBox*, /*pToolBar*/ )
 {
-    sal_uInt16 nId( m_aActions.GetCurItemId() );
+    USHORT nId( m_aActions.GetCurItemId() );
     if ( !m_pColorFloat )
         m_pColorFloat = new OColorPopup(&m_aActions,this);
 
-    sal_uInt16 nTextId = 0;
+    USHORT nTextId = 0;
     switch(nId)
     {
         case SID_ATTR_CHAR_COLOR2:
@@ -343,7 +346,7 @@ IMPL_LINK( Condition, DropdownClick, ToolBox*, /*pToolBar*/ )
             break;
         default:
             break;
-    }
+    } // switch(nId)
     if ( nTextId )
         m_pColorFloat->SetText(String(ModuleRes(nTextId)));
     m_pColorFloat->SetSlotId(nId);
@@ -376,7 +379,7 @@ IMPL_LINK( Condition, OnConditionAction, Button*, _pClickedButton )
 }
 
 //------------------------------------------------------------------------------
-void Condition::ApplyCommand( sal_uInt16 _nCommandId, const ::Color& _rColor)
+void Condition::ApplyCommand( USHORT _nCommandId, const ::Color& _rColor)
 {
     if ( _nCommandId == SID_ATTR_CHAR_COLOR2 )
         m_pBtnUpdaterFontColor->Update( _rColor );
@@ -386,12 +389,16 @@ void Condition::ApplyCommand( sal_uInt16 _nCommandId, const ::Color& _rColor)
     m_rAction.applyCommand( m_nCondIndex, _nCommandId, _rColor );
 }
 //------------------------------------------------------------------------------
-ImageList Condition::getImageList(sal_Int16 _eBitmapSet) const
+ImageList Condition::getImageList(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const
 {
     sal_Int16 nN = IMG_CONDFORMAT_DLG_SC;
+    sal_Int16 nH = IMG_CONDFORMAT_DLG_SCH;
     if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
+    {
         nN = IMG_CONDFORMAT_DLG_LC;
-    return ImageList(ModuleRes(nN));
+        nH = IMG_CONDFORMAT_DLG_LCH;
+    }
+    return ImageList(ModuleRes( _bHiContast ? nH : nN ));
 }
 //------------------------------------------------------------------
 void Condition::resizeControls(const Size& _rDiff)
@@ -399,6 +406,7 @@ void Condition::resizeControls(const Size& _rDiff)
     // we use large images so we must change them
     if ( _rDiff.Width() || _rDiff.Height() )
     {
+        Point aPos = LogicToPixel( Point( 2*RELATED_CONTROLS , 0), MAP_APPFONT );
         Invalidate();
     }
 }
@@ -426,6 +434,7 @@ void Condition::StateChanged( StateChangedType nType )
     {
         // The physical toolbar changed its outlook and shows another logical toolbar!
         // We have to set the correct high contrast mode on the new tbx manager.
+        //  pMgr->SetHiContrast( IsHiContrastMode() );
         checkImageList();
     }
 }
@@ -623,8 +632,8 @@ void Condition::impl_setCondition( const ::rtl::OUString& _rConditionFormula )
     }
 
     // update UI
-    m_aConditionType.SelectEntryPos( (sal_uInt16)eType );
-    m_aOperationList.SelectEntryPos( (sal_uInt16)eOperation );
+    m_aConditionType.SelectEntryPos( (USHORT)eType );
+    m_aOperationList.SelectEntryPos( (USHORT)eOperation );
     m_aCondLHS.SetText( sLHS );
     m_aCondRHS.SetText( sRHS );
 
@@ -659,10 +668,10 @@ void Condition::updateToolbar(const uno::Reference< report::XReportControlFormat
     OSL_ENSURE(_xReportControlFormat.is(),"XReportControlFormat is NULL!");
     if ( _xReportControlFormat.is() )
     {
-        sal_uInt16 nItemCount = m_aActions.GetItemCount();
-        for (sal_uInt16 j = 0; j< nItemCount; ++j)
+        USHORT nItemCount = m_aActions.GetItemCount();
+        for (USHORT j = 0; j< nItemCount; ++j)
         {
-            sal_uInt16 nItemId = m_aActions.GetItemId(j);
+            USHORT nItemId = m_aActions.GetItemId(j);
             m_aActions.CheckItem( nItemId, m_rController.isFormatCommandEnabled( nItemId, _xReportControlFormat ) );
         }
 

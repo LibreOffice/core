@@ -30,15 +30,16 @@ PRJNAME=testtools
 PACKAGE=com$/sun$/star$/comp$/bridge
 TARGET=com_sun_star_comp_bridge
 
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
 # ------------------------------------------------------------------
 
-.IF "$(SOLAR_JAVA)" != ""
 
 JARFILES 		= ridl.jar jurt.jar juh.jar
+
 
 JAVACLASSFILES= \
     $(CLASSDIR)$/$(PACKAGE)$/CurrentContextChecker.class \
@@ -47,13 +48,14 @@ JAVACLASSFILES= \
 
 JAVAFILES		= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 
+
 JARCLASSDIRS	= $(PACKAGE) test$/testtools$/bridgetest
 JARTARGET		= testComponent.jar
 JARCOMPRESS 	= TRUE
 CUSTOMMANIFESTFILE = manifest
 
-.ENDIF
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+

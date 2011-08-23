@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,6 @@
 #include <doc.hxx>
 #include <swmodule.hxx>
 #include <docsh.hxx>
-#include <viewsh.hxx>
 #include <docstat.hxx>
 #include <swerror.h>
 #include <unotext.hxx>
@@ -69,7 +68,9 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-#include <pausethreadstarting.hxx> // #i73788#
+// --> OD 2007-03-30 #i73788#
+#include <pausethreadstarting.hxx>
+// <--
 
 
 using ::rtl::OUString;
@@ -124,10 +125,11 @@ void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
 }
 #endif
 
+// #110680#
 SwXMLExport::SwXMLExport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     sal_uInt16 nExportFlags)
-:   SvXMLExport( xServiceFactory, MAP_INCH, XML_TEXT, nExportFlags ),
+:	SvXMLExport( xServiceFactory, MAP_INCH, XML_TEXT, nExportFlags ),
 #ifdef XML_CORE_API
     pCurPaM( 0 ),
     pOrigPaM( &rPaM ),
@@ -148,7 +150,7 @@ SwXMLExport::SwXMLExport(
 }
 
 #ifdef XML_CORE_API
-
+// #110680#
 SwXMLExport::SwXMLExport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     const Reference< XModel >& rModel,
@@ -158,7 +160,7 @@ SwXMLExport::SwXMLExport(
     const Reference< XGraphicObjectResolver > & rEmbeddedGrfObjs,
     sal_Bool bExpWholeDoc, sal_Bool bExpFirstTableOnly,
     sal_Bool bShowProg )
-:   SvXMLExport( xServiceFactory, rFileName, rHandler, rModel, rEmbeddedGrfObjs,
+:	SvXMLExport( xServiceFactory, rFileName, rHandler, rModel, rEmbeddedGrfObjs,
                  SW_MOD()->GetMetric( rPaM.GetDoc()->get(IDocumentSettingAccess::HTML_MODE) ) ),
     pCurPaM( 0 ),
     pOrigPaM( &rPaM ),
@@ -186,7 +188,9 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     if( !GetModel().is() )
         return ERR_SWG_WRITE_ERROR;
 
-    SwPauseThreadStarting aPauseThreadStarting; // #i73788#
+    // --> OD 2007-03-30 #i73788#
+    SwPauseThreadStarting aPauseThreadStarting;
+    // <--
 
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
@@ -195,7 +199,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     if( !xTextTunnel.is() )
         return ERR_SWG_WRITE_ERROR;
 
-    // from here, we use core interfaces -> lock Solar-Mutex
+    // from here, we use core interfaces -> lock Solar-Mutex (#91949#)
     SolarMutexGuard aGuard;
 
     {
@@ -241,10 +245,10 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         for( sal_uInt16 j=0; j < nWhichIds; j++ )
         {
             sal_uInt16 nWhichId = aWhichIds[j];
-            sal_uInt32 i=0, nItems = rPool.GetItemCount2( nWhichId );
+            sal_uInt16 i=0, nItems = rPool.GetItemCount( nWhichId );
             for( i = 0; i < nItems; ++i )
             {
-                if( 0 != (pItem = rPool.GetItem2( nWhichId , i ) ) )
+                if( 0 != (pItem = rPool.GetItem( nWhichId , i ) ) )
                 {
                     const SvXMLAttrContainerItem *pUnknown =
                                 PTR_CAST( SvXMLAttrContainerItem, pItem );
@@ -288,7 +292,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
         SfxObjectShell* pObjSh = pDoc->GetDocShell();
         if( pObjSh )
-            pObjSh->UpdateDocInfoForSave();     // update information
+            pObjSh->UpdateDocInfoForSave();		// update information
     }
     if( bShowProgress )
     {
@@ -317,6 +321,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
             nRef += pDoc->GetCharFmts()->Count() - 1;
             nRef += pDoc->GetFrmFmts()->Count() - 1;
             nRef += pDoc->GetTxtFmtColls()->Count() - 1;
+//			nRef += pDoc->GetPageDescCnt();
             nRef *= 2; // for the above styles, xmloff will increment by 2!
             // #i93174#: count all paragraphs for the progress bar
             nRef += aDocStat.nAllPara; // 1: only content, no autostyle
@@ -431,16 +436,15 @@ XMLShapeExport* SwXMLExport::CreateShapeExport()
     return pShapeExport;
 }
 
-SwXMLExport::~SwXMLExport()
+__EXPORT SwXMLExport::~SwXMLExport()
 {
-    DeleteTableLines();
     _FinitItemExport();
 }
 
 
 void SwXMLExport::_ExportFontDecls()
 {
-    GetFontAutoStylePool(); // make sure the pool is created
+    GetFontAutoStylePool();	// make sure the pool is created
     SvXMLExport::_ExportFontDecls();
 }
 
@@ -580,8 +584,7 @@ void SwXMLExport::SetBodyAttributes()
             if( pText )
             {
                 SwDoc *pDoc = pText->GetDoc();
-                if( pDoc && pDoc->GetCurrentViewShell() &&
-                    pDoc->GetCurrentViewShell()->GetPageCount() > 1 )
+                if( pDoc && pDoc->GetPageCount() > 1 )
                 {
                     sal_Bool bValue = sal_True;
                     rtl::OUStringBuffer sBuffer;
@@ -605,12 +608,13 @@ void SwXMLExport::_ExportContent()
         Reference<XDrawPage> xPage = xDrawPageSupplier->getDrawPage();
         if (xPage.is())
         {
-            // prevent export of form controls which are embedded in mute sections
+            // #103597# prevent export of form controls which are embedded in
+            // mute sections
             Reference<XIndexAccess> xIAPage( xPage, UNO_QUERY );
             GetTextParagraphExport()->PreventExportOfControlsInMuteSections(
                 xIAPage, GetFormExport() );
 
-            // #i36597#
+            // #i36597# / 2004-12-13 / fs@openoffice.org
             if ( GetFormExport()->pageContainsForms( xPage ) || GetFormExport()->documentContainsXForms() )
             {
                 ::xmloff::OOfficeFormsExport aOfficeForms(*this);
@@ -808,6 +812,10 @@ Reference< XInterface > SAL_CALL SwXMLExportStyles_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
+    // #110680#
+    //return (cppu::OWeakObject*)new SwXMLExport(
+    //	EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
+    //	EXPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLExport( rSMgr,
         EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
         EXPORT_FONTDECLS|EXPORT_OASIS );
@@ -831,6 +839,10 @@ Reference< XInterface > SAL_CALL SwXMLExportContent_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
+    // #110680#
+    //return (cppu::OWeakObject*)new SwXMLExport(
+    //	EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
+    //	EXPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLExport(
         rSMgr,
         EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
@@ -966,7 +978,7 @@ void SwXMLExport::ExportCurPaM( sal_Bool bExportWholePaM )
         else if( pNd == &pDoc->GetNodes().GetEndOfContent() )
             break;
 
-        pCurPaM->GetPoint()->nNode++;   // next node
+        pCurPaM->GetPoint()->nNode++; 	// next node
 
         sal_uInt32 nPos = pCurPaM->GetPoint()->nNode.GetIndex();
 

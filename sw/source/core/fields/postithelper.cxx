@@ -48,7 +48,7 @@
 #include <redline.hxx>
 #include <scriptinfo.hxx>
 #include <editeng/charhiddenitem.hxx>
-#include <switerator.hxx>
+
 
 namespace {
 
@@ -91,11 +91,12 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLa
 {
     SwLayoutStatus aRet = INVISIBLE;
     const SwTxtNode* pTxtNode = rPos.nNode.GetNode().GetTxtNode();
-    SwCntntNode* pNode = rPos.nNode.GetNode().GetCntntNode();   // getfirstcontentnode // getnext...
+    SwCntntNode* pNode = rPos.nNode.GetNode().GetCntntNode();	// getfirstcontentnode // getnext...
     if( !pNode )
         return aRet;
-    SwIterator<SwTxtFrm,SwCntntNode> aIter( *pNode );
-    for( SwTxtFrm* pTxtFrm = aIter.First(); pTxtFrm; pTxtFrm = aIter.Next() )
+    SwClientIter aIter( *pNode );
+    SwTxtFrm *pTxtFrm;
+    for( pTxtFrm = (SwTxtFrm*)aIter.First( TYPE( SwTxtFrm )); pTxtFrm; pTxtFrm = (SwTxtFrm*)aIter.Next() )
     {
         if( !pTxtFrm->IsFollow() )
         {
@@ -179,12 +180,12 @@ SwPosition SwAnnotationItem::GetAnchorPosition() const
     //if( pFld )
     //{
         SwTxtNode* pTNd = pFld->GetpTxtNode();
-    //  if( pTNd )
-    //  {
+    //	if( pTNd )
+    //	{
             SwPosition aPos( *pTNd );
             aPos.nContent.Assign( pTNd, *pFld->GetStart() );
             return aPos;
-    //  }
+    //	}
     //}
 }
 
@@ -204,5 +205,22 @@ sw::sidebarwindows::SwSidebarWin* SwAnnotationItem::GetSidebarWindow(
                                                 *this,
                                                 pFmtFld );
 }
+
+/*
+SwPosition SwRedCommentItem::GetAnchorPosition()
+{
+    return *pRedline->Start();
+}
+
+SwSidebarWin* SwRedCommentItem::GetSidebarWindow(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits)
+{
+    return new SwRedComment(pParent,nBits,aMgr,aBits,pRedline);
+}
+
+bool SwRedCommentItem::UseElement()
+{
+    return true;
+}
+*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

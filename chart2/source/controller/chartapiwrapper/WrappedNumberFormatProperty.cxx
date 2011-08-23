@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ Any WrappedNumberFormatProperty::getPropertyValue( const Reference< beans::XProp
 {
     if( !xInnerPropertySet.is() )
     {
-        OSL_FAIL("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
+        DBG_ERROR("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
         return Any();
     }
     Any aRet( xInnerPropertySet->getPropertyValue( m_aInnerName ));
@@ -117,6 +117,8 @@ Any WrappedNumberFormatProperty::getPropertyDefault( const Reference< beans::XPr
 }
 
 //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 WrappedLinkNumberFormatProperty::WrappedLinkNumberFormatProperty( WrappedNumberFormatProperty* pWrappedNumberFormatProperty )
         : WrappedProperty( C2U("LinkNumberFormatToSource"), C2U("") )
@@ -142,7 +144,7 @@ void WrappedLinkNumberFormatProperty::setPropertyValue( const Any& rOuterValue, 
 {
     if( !xInnerPropertySet.is() )
     {
-        OSL_FAIL("missing xInnerPropertySet in WrappedNumberFormatProperty::setPropertyValue");
+        DBG_ERROR("missing xInnerPropertySet in WrappedNumberFormatProperty::setPropertyValue");
         return;
     }
 
@@ -178,7 +180,7 @@ Any WrappedLinkNumberFormatProperty::getPropertyValue( const Reference< beans::X
 {
     if( !xInnerPropertySet.is() )
     {
-        OSL_FAIL("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
+        DBG_ERROR("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
         return getPropertyDefault(0);
     }
     bool bLink = ! xInnerPropertySet->getPropertyValue( C2U("NumberFormat" )).hasValue();

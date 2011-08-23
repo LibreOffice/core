@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ void Bridge::handle_java_exc(
     if (! jo_exc.is())
     {
         throw BridgeRuntimeError(
-            OUSTR("java exception occurred, but no java exception available!?") +
+            OUSTR("java exception occured, but no java exception available!?") +
             jni.get_stack_trace() );
     }
 
@@ -89,7 +89,7 @@ void Bridge::handle_java_exc(
     jni.ensure_no_exception();
     OUString exc_name(
         jstring_to_oustring( jni, (jstring) jo_class_name.get() ) );
-
+    
     ::com::sun::star::uno::TypeDescription td( exc_name.pData );
     if (!td.is() || (typelib_TypeClass_EXCEPTION != td.get()->eTypeClass))
     {
@@ -126,7 +126,7 @@ void Bridge::handle_java_exc(
 #if OSL_DEBUG_LEVEL > 1
     OUStringBuffer trace_buf( 128 );
     trace_buf.appendAscii(
-        RTL_CONSTASCII_STRINGPARAM("exception occurred uno->java: [") );
+        RTL_CONSTASCII_STRINGPARAM("exception occured uno->java: [") );
     trace_buf.append( exc_name );
     trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] ") );
     trace_buf.append(
@@ -135,7 +135,7 @@ void Bridge::handle_java_exc(
     OString cstr_trace(
         OUStringToOString(
             trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( "%s", cstr_trace.getStr() );
+    OSL_TRACE( cstr_trace.getStr() );
 #endif
 }
 
@@ -148,11 +148,11 @@ void Bridge::call_java(
     void * uno_ret, void * uno_args [], uno_Any ** uno_exc ) const
 {
     OSL_ASSERT( function_pos_offset == 0 || function_pos_offset == 1 );
-
+    
     JNI_guarded_context jni(
         m_jni_info, reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
             m_java_env->pContext ) );
-
+    
     // assure fully initialized iface_td:
     ::com::sun::star::uno::TypeDescription iface_holder;
     if (! iface_td->aBase.bComplete) {
@@ -171,14 +171,14 @@ void Bridge::call_java(
             iface_holder.get() );
         OSL_ASSERT( iface_td->aBase.eTypeClass == typelib_TypeClass_INTERFACE );
     }
-
+    
     // prepare java args, save param td
 #ifdef BROKEN_ALLOCA
     jvalue * java_args = (jvalue *) malloc( sizeof (jvalue) * nParams );
 #else
     jvalue * java_args = (jvalue *) alloca( sizeof (jvalue) * nParams );
 #endif
-
+    
     sal_Int32 nPos;
     for ( nPos = 0; nPos < nParams; ++nPos )
     {
@@ -227,7 +227,7 @@ void Bridge::call_java(
         && function_pos < iface_td->nMapFunctionIndexToMemberIndex,
         "### illegal function index!" );
     function_pos -= base_members_function_pos;
-
+    
     JNI_interface_type_info const * info =
         static_cast< JNI_interface_type_info const * >(
             m_jni_info->get_type_info( jni, &iface_td->aBase ) );
@@ -261,7 +261,7 @@ void Bridge::call_java(
     OString cstr_trace(
         OUStringToOString(
             trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( "%s", cstr_trace.getStr() );
+    OSL_TRACE( cstr_trace.getStr() );
 #endif
 
     // complex return value
@@ -413,7 +413,7 @@ void Bridge::call_java(
             }
         } // else: already set integral uno return value
 
-        // no exception occurred
+        // no exception occured
         *uno_exc = 0;
     }
 #ifdef BROKEN_ALLOCA
@@ -525,7 +525,7 @@ uno_Interface * Bridge::map_to_uno(
         pUnoI = new UNO_proxy(
             jni, const_cast< Bridge * >( this ),
             javaI, (jstring) jo_oid.get(), oid, info );
-
+        
         (*m_uno_env->registerProxyInterface)(
             m_uno_env, (void **)&pUnoI,
             UNO_proxy_free,
@@ -555,10 +555,10 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     }
 #if OSL_DEBUG_LEVEL > 1
     OString cstr_msg(
-        OUStringToOString(
+        OUStringToOString( 
             OUSTR("freeing binary uno proxy: ") + that->m_oid,
             RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( "%s", cstr_msg.getStr() );
+    OSL_TRACE( cstr_msg.getStr() );
 #endif
 
     try
@@ -567,7 +567,7 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
             bridge->m_jni_info,
             reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
                 bridge->m_java_env->pContext ) );
-
+        
         jni->DeleteGlobalRef( that->m_javaI );
         jni->DeleteGlobalRef( that->m_jo_oid );
     }
@@ -576,14 +576,15 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
 #if OSL_DEBUG_LEVEL > 0
         OString cstr_msg2(
             OUStringToOString( err.m_message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( cstr_msg2.getStr() );
+        OSL_ENSURE( 0, cstr_msg2.getStr() );
 #else
         (void) err; // unused
 #endif
     }
     catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
-        OSL_FAIL(
+        OSL_ENSURE(
+            0,
             "[jni_uno bridge error] attaching current thread to java failed!" );
     }
 
@@ -628,7 +629,7 @@ void SAL_CALL UNO_proxy_dispatch(
     OString cstr_msg(
         OUStringToOString(
             trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( "%s", cstr_msg.getStr() );
+    OSL_TRACE( cstr_msg.getStr() );
 #endif
 
     try
@@ -739,7 +740,7 @@ void SAL_CALL UNO_proxy_dispatch(
                             jni_info->m_class_UnoRuntime,
                             jni_info->m_method_UnoRuntime_queryInterface,
                             args ) );
-
+                    
                     if (jni->ExceptionCheck())
                     {
                         JLocalAutoRef jo_exc( jni, jni->ExceptionOccurred() );
@@ -771,7 +772,7 @@ void SAL_CALL UNO_proxy_dispatch(
                                 reinterpret_cast<
                                   typelib_InterfaceTypeDescription * >(
                                       info->m_td.get() ) );
-
+                            
                             uno_any_construct(
                                 (uno_Any *)uno_ret, &pUnoI2,
                                 demanded_td.get(), 0 );
@@ -783,7 +784,7 @@ void SAL_CALL UNO_proxy_dispatch(
                                 reinterpret_cast< uno_Any * >( uno_ret ),
                                 0, 0, 0 );
                         }
-                        // no exception occurred
+                        // no exception occured
                         *uno_exc = 0;
                     }
                 }
@@ -864,7 +865,7 @@ void SAL_CALL UNO_proxy_dispatch(
 #if OSL_DEBUG_LEVEL > 0
         OString cstr_msg2(
             OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( cstr_msg2.getStr() );
+        OSL_ENSURE( 0, cstr_msg2.getStr() );
 #endif
     }
 }

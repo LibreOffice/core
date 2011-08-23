@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,12 @@
 
 
 /*************************************************************************
+|*
 |*    Ring::Ring()
+|*
+|*    Ersterstellung    VB	02.07.91
+|*    Letzte Aenderung  JP 10.10.97
+|*
 *************************************************************************/
 
 Ring::Ring( Ring *pObj )
@@ -52,7 +57,12 @@ Ring::Ring( Ring *pObj )
 }
 
 /*************************************************************************
+|*
 |*    Ring::~Ring()
+|*
+|*    Ersterstellung    VB	02.07.91
+|*    Letzte Aenderung  JP 10.10.97
+|*
 *************************************************************************/
 
 Ring::~Ring()
@@ -62,7 +72,12 @@ Ring::~Ring()
 }
 
 /*************************************************************************
+|*
 |*    Ring::MoveTo
+|*
+|*    Ersterstellung    VB 4.3.91
+|*    Letzte Aenderung  JP 10.10.97
+|*
 *************************************************************************/
 
 void Ring::MoveTo(Ring *pDestRing)

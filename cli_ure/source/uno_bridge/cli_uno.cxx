@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,7 @@
 
 namespace sr=System::Reflection;
 namespace css=com::sun::star;
-
-using ::rtl::OUStringBuffer;
+using namespace rtl;
 
 namespace cli_uno
 {
@@ -79,7 +78,7 @@ System::Object* Bridge::call_uno(uno_Interface * pUnoI,
     //
     // If an argument is larger then union largest, such as some structures, then the pointer
     // points to an extra block of memory. The same goes for a big return value.
-
+    
     char * mem = (char *)alloca(
         (nParams * sizeof (void *)) + return_size + (nParams * sizeof (largest)) );
     //array of pointers to args
@@ -95,7 +94,7 @@ System::Object* Bridge::call_uno(uno_Interface * pUnoI,
     {
         typelib_MethodParameter const & param = pParams[ nPos ];
         typelib_TypeDescriptionReference * type = param.pTypeRef;
-
+        
         uno_args[ nPos ] = &uno_args_mem[ nPos ];
         if (typelib_TypeClass_STRUCT == type->eTypeClass ||
             typelib_TypeClass_EXCEPTION == type->eTypeClass)
@@ -104,7 +103,7 @@ System::Object* Bridge::call_uno(uno_Interface * pUnoI,
             if (td.get()->nSize > sizeof (largest))
                 uno_args[ nPos ] = alloca( td.get()->nSize );
         }
-
+        
         if (param.bIn)
         {
             try
@@ -168,7 +167,7 @@ System::Object* Bridge::call_uno(uno_Interface * pUnoI,
                 uno_type_destructData(uno_args[nPos], type, 0);
             }
         }
-
+        
         if ((0 != return_type) &&
             (typelib_TypeClass_VOID != return_type->eTypeClass))
         {
@@ -189,7 +188,7 @@ System::Object* Bridge::call_uno(uno_Interface * pUnoI,
         }
         return 0; // void return
     }
-    else // exception occurred
+    else // exception occured
     {
         // destruct uno in args
         for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
@@ -208,11 +207,11 @@ System::Object* Bridge::call_uno(uno_Interface * pUnoI,
 
 void Bridge::call_cli(
     System::Object* cliI,
-    sr::MethodInfo* method,
+    sr::MethodInfo* method, 
     typelib_TypeDescriptionReference * return_type,
     typelib_MethodParameter * params, int nParams,
     void * uno_ret, void * uno_args [], uno_Any ** uno_exc ) const
-{
+{   
     System::Object *args[]=  new System::Object*[nParams];
     for (int nPos= 0; nPos < nParams; nPos++)
     {
@@ -237,7 +236,7 @@ void Bridge::call_cli(
         map_to_uno(memExc.get(), exc, td.get()->pWeakRef, false);
         (*uno_exc)->pType= td.get()->pWeakRef;
         (*uno_exc)->pData= memExc.release();
-        return;
+        return;        
     }
     catch (System::Exception* e)
     {
@@ -253,7 +252,7 @@ void Bridge::call_cli(
     for (int nPos = 0; nPos < nParams; ++nPos )
     {
         typelib_MethodParameter const & param = params[ nPos ];
-
+            
         if (param.bOut)
         {
             try
@@ -277,12 +276,12 @@ void Bridge::call_cli(
         }
     }
     // return value
-    if (0 != return_type)
+    if (0 != return_type) 
     {
         map_to_uno(
             uno_ret, retInvoke, return_type, false /* no assign */);
-    }
-    // no exception occurred
+    }        
+    // no exception occured
     *uno_exc = 0;
 }
 

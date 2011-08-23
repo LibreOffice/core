@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@ namespace dbaui
 {
 
     //==================================================================
-    // ConnData     ---------->*    ConnLineData
-    //    ^1                            ^1
-    //    |                             |
-    //  Conn        ---------->*    ConnLine
+    // ConnData		---------->*	ConnLineData
+    //    ^1							^1
+    //    |								|
+    //	Conn		---------->*	ConnLine
     //==================================================================
 
     /*
@@ -50,41 +50,41 @@ namespace dbaui
     class OConnectionLineData;
     class OTableConnection;
     class OTableWindow;
-    class OConnectionLine
+    class OConnectionLine 
     {
-        OTableConnection*       m_pTabConn;
-        OConnectionLineDataRef  m_pData;
+        OTableConnection*		m_pTabConn;
+        OConnectionLineDataRef	m_pData;
 
-        Point                   m_aSourceConnPos,
+        Point					m_aSourceConnPos, 
                                 m_aDestConnPos;
-        Point                   m_aSourceDescrLinePos,
+        Point					m_aSourceDescrLinePos, 
                                 m_aDestDescrLinePos;
     public:
         OConnectionLine( OTableConnection* pConn, OConnectionLineDataRef pLineData );
         OConnectionLine( const OConnectionLine& rLine );
         virtual ~OConnectionLine();
 
-        OConnectionLine& operator=( const OConnectionLine& rLine );
+        virtual OConnectionLine& operator=( const OConnectionLine& rLine );
 
-        Rectangle           GetBoundingRect();
-        sal_Bool                RecalcLine();
-        void                Draw( OutputDevice* pOutDev );
-        bool                CheckHit( const Point& rMousePos ) const;
-        String              GetSourceFieldName() const { return m_pData->GetSourceFieldName(); }
-        String              GetDestFieldName() const { return m_pData->GetDestFieldName(); }
+        Rectangle			GetBoundingRect();
+        BOOL				RecalcLine();
+        void				Draw( OutputDevice* pOutDev );
+        bool				CheckHit( const Point& rMousePos ) const;
+        String				GetSourceFieldName() const { return m_pData->GetSourceFieldName(); }
+        String				GetDestFieldName() const { return m_pData->GetDestFieldName(); }
 
-        sal_Bool                IsValid() const;
+        BOOL				IsValid() const;
 
-        Rectangle           GetSourceTextPos() const;
-        Rectangle           GetDestTextPos() const;
+        Rectangle			GetSourceTextPos() const;
+        Rectangle			GetDestTextPos() const;
 
-        OConnectionLineDataRef  GetData() const { return m_pData; }
+        OConnectionLineDataRef	GetData() const { return m_pData; }
 
-        Point               getMidPoint() const;
+        Point				getMidPoint() const;
     };
     /// unary_function Functor object for class OConnectionLine returntype is void
     /// draws a connectionline object on outputdevice
-    struct TConnectionLineDrawFunctor : ::std::unary_function<OConnectionLine*,void>
+    struct TConnectionLineDrawFunctor : ::std::unary_function<OConnectionLine*,void> 
     {
         OutputDevice* pDevice;
         TConnectionLineDrawFunctor(OutputDevice* _pDevice)
@@ -98,9 +98,9 @@ namespace dbaui
     };
     /// binary_function Functor object for class OConnectionLine returntype is bool
     /// checks if the point is on connectionline
-    struct TConnectionLineCheckHitFunctor : ::std::binary_function<OConnectionLine*,Point,bool>
+    struct TConnectionLineCheckHitFunctor : ::std::binary_function<OConnectionLine*,Point,bool> 
     {
-        inline bool operator()(const OConnectionLine* lhs,const Point& rhs) const
+        inline bool operator()(const OConnectionLine* lhs,const Point& rhs)	const
         {
             return lhs->CheckHit(rhs);
         }

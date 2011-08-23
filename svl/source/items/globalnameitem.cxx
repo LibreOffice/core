@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,8 +53,8 @@ SfxGlobalNameItem::SfxGlobalNameItem()
 
 // -----------------------------------------------------------------------
 
-SfxGlobalNameItem::SfxGlobalNameItem( sal_uInt16 nW, const SvGlobalName& rName )
-:   SfxPoolItem( nW ),
+SfxGlobalNameItem::SfxGlobalNameItem( USHORT nW, const SvGlobalName& rName )
+:	SfxPoolItem( nW ),
     m_aName( rName )
 {
 }
@@ -81,10 +81,10 @@ SfxPoolItem* SfxGlobalNameItem::Clone(SfxItemPool *) const
 
 //----------------------------------------------------------------------------
 // virtual
-bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 {
     com::sun::star::uno::Reference < com::sun::star::script::XTypeConverter > xConverter
-            ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),
+            ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
             com::sun::star::uno::UNO_QUERY );
     com::sun::star::uno::Sequence< sal_Int8 > aSeq;
     com::sun::star::uno::Any aNew;
@@ -98,13 +98,13 @@ bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
         return true;
     }
 
-    OSL_FAIL( "SfxGlobalNameItem::PutValue - Wrong type!" );
+    DBG_ERROR( "SfxGlobalNameItem::PutValue - Wrong type!" );
     return true;
 }
 
 //----------------------------------------------------------------------------
 // virtual
-bool SfxGlobalNameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
+bool SfxGlobalNameItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
 {
        com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
     void* pData = ( void* ) &m_aName.GetCLSID();

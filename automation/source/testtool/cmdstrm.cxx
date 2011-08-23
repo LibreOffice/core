@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include "svcommstream.hxx"
 #include <basic/testtool.hrc>
 
-ControlDefLoad const CmdStream::arKeyCodes [] =
+ControlDefLoad __READONLY_DATA CmdStream::arKeyCodes [] =
 #include <keycodes.hxx>
 CNames *CmdStream::pKeyCodes = NULL;
 
@@ -65,14 +65,14 @@ CmdStream::~CmdStream()
 
 
 #define PUT_CHAR(ch) \
-        sal_uInt16 nMCode = nModify + ch;                       \
-        sal_uInt16 _Code = 1;                                   \
-        if ( (nMCode & 0xFF) == 0 )                         \
-            _Code |= 2;                                     \
-        if ( (nMCode >> 8) == 0 )                           \
-            _Code |= 4;                                     \
-        Result += (char) _Code;                             \
-        Result += (char) ( nMCode & 0xFF );                 \
+        USHORT nMCode = nModify + ch;						\
+        USHORT _Code = 1;									\
+        if ( (nMCode & 0xFF) == 0 )							\
+            _Code |= 2;										\
+        if ( (nMCode >> 8) == 0 )							\
+            _Code |= 4;										\
+        Result += (char) _Code;								\
+        Result += (char) ( nMCode & 0xFF );					\
         Result += (char) ( nMCode >> 8 )
 
 
@@ -90,19 +90,18 @@ String CmdStream::WandleKeyEventString( String aKeys )
         if ( nPos2 != STRING_NOTFOUND )
         {
             String Work = aKeys.Copy(nPos1+1,nPos2-nPos1+1-2);
-            aKeys.Erase(nPos1,nPos2-nPos1+1);   // Inclusive Spitze Klammern weg
+            aKeys.Erase(nPos1,nPos2-nPos1+1);	// Inclusive Spitze Klammern weg
             String Result, Token;
-            sal_uInt16 nModify = 0;
+            USHORT nModify = 0;
             while ( Work.Len() > 0 )
             {
                 Token = Work.GetToken(0,' ');
                 Work.Erase(0,Token.Len()+1);
-                ControlDef WhatName(Token,rtl::OString());
-                sal_uInt16 nElement;
+                ControlDef WhatName(Token,SmartId());
+                USHORT nElement;
                 if (pKeyCodes->Seek_Entry(&WhatName,&nElement))
                 {
-                    // FIXME: HELPID
-                    sal_uInt16 nCode = 0;//(sal_uInt16) pKeyCodes->GetObject(nElement)->pData->aUId.GetNum();
+                    USHORT nCode = (USHORT) pKeyCodes->GetObject(nElement)->pData->aUId.GetNum();
                     if ( nCode >= KEY_SHIFT )
                         nModify ^= nCode;
                     else
@@ -123,21 +122,21 @@ String CmdStream::WandleKeyEventString( String aKeys )
                         {
                             switch ( nCode )
                             {
-                                case KEY_SPACE:     Token = ' '; break;
-                                case KEY_ADD:       Token = '+'; break;
-                                case KEY_SUBTRACT:  Token = '-'; break;
-                                case KEY_MULTIPLY:  Token = '*'; break;
-                                case KEY_DIVIDE:    Token = '/'; break;
-                                case KEY_POINT:     Token = '.'; break;
-                                case KEY_COMMA:     Token = ','; break;
-                                case KEY_LESS:      Token = '<'; break;
-                                case KEY_GREATER:   Token = '>'; break;
-                                case KEY_EQUAL:     Token = '='; break;
+                                case KEY_SPACE:		Token = ' '; break;
+                                case KEY_ADD:		Token = '+'; break;
+                                case KEY_SUBTRACT:	Token = '-'; break;
+                                case KEY_MULTIPLY:	Token = '*'; break;
+                                case KEY_DIVIDE:	Token = '/'; break;
+                                case KEY_POINT:		Token = '.'; break;
+                                case KEY_COMMA:		Token = ','; break;
+                                case KEY_LESS:		Token = '<'; break;
+                                case KEY_GREATER:	Token = '>'; break;
+                                case KEY_EQUAL:		Token = '='; break;
                                 default:
-//                                  if ( nModify == 0 )
-//                                      Token.ToLower();
-//                                  else
-//                                      Token.ToUpper();
+//									if ( nModify == 0 )
+//										Token.ToLower();
+//									else
+//										Token.ToUpper();
                                     ;
                             }
                             Result += Token;
@@ -168,24 +167,24 @@ String CmdStream::WandleKeyEventString( String aKeys )
 }
 
 
-void CmdStream::WriteSortedParams( SbxArray* rPar, sal_Bool IsKeyString )
+void CmdStream::WriteSortedParams( SbxArray* rPar, BOOL IsKeyString )
 {
-    sal_uInt16 nParams = PARAM_NONE;
-    sal_uInt16 nNr1=0,nNr2=0,nNr3=0,nNr4=0;
+    USHORT nParams = PARAM_NONE;
+    USHORT nNr1=0,nNr2=0,nNr3=0,nNr4=0;
     comm_ULONG nLNr1=0;
     String aString1,aString2;
-    sal_Bool bBool1=sal_False,bBool2=sal_False;
+    BOOL bBool1=FALSE,bBool2=FALSE;
 
     if ( rPar )
     {
-        for ( sal_uInt16 i = 1; i < rPar->Count() ; i++)
+        for ( USHORT i = 1; i < rPar->Count() ; i++)
         {
             switch (rPar->Get( i )->GetType())
             {
-                case SbxLONG:       // alles immer als Short �bertragen
+                case SbxLONG:		// alles immer als Short �bertragen
                 case SbxULONG:
-                case SbxSALINT64:
-                case SbxSALUINT64:
+                case SbxLONG64:
+                case SbxULONG64:
                 case SbxDOUBLE:
                 case SbxINTEGER:
                 case SbxBYTE:
@@ -216,7 +215,7 @@ void CmdStream::WriteSortedParams( SbxArray* rPar, sal_Bool IsKeyString )
                     else
                         SbxBase::SetError( SbxERR_WRONG_ARGS );
                     break;
-                case SbxOBJECT:     // whenever a control is passed. TabPage, MenuBar
+                case SbxOBJECT:		// whenever a control is passed. TabPage, MenuBar
                     {
                         SbxProperty *pMember = NULL;
                         if ( rPar->Get( i )->ISA( SbxObject ) )
@@ -297,39 +296,39 @@ void CmdStream::WriteSortedParams( SbxArray* rPar, sal_Bool IsKeyString )
         }
     }
     Write (nParams);
-    if( nParams & PARAM_USHORT_1 )  Write( nNr1 );
-    if( nParams & PARAM_USHORT_2 )  Write( nNr2 );
-    if( nParams & PARAM_USHORT_3 )  Write( nNr3 );
-    if( nParams & PARAM_USHORT_4 )  Write( nNr4 );
-    if( nParams & PARAM_ULONG_1 )   Write( nLNr1 );
-    if( nParams & PARAM_STR_1 )     Write( aString1, IsKeyString );
-    if( nParams & PARAM_STR_2 )     Write( aString2, IsKeyString );
-    if( nParams & PARAM_BOOL_1 )    Write( bBool1 );
-    if( nParams & PARAM_BOOL_2 )    Write( bBool2 );
+    if( nParams & PARAM_USHORT_1 )	Write( nNr1 );
+    if( nParams & PARAM_USHORT_2 )	Write( nNr2 );
+    if( nParams & PARAM_USHORT_3 )	Write( nNr3 );
+    if( nParams & PARAM_USHORT_4 )	Write( nNr4 );
+    if( nParams & PARAM_ULONG_1 )	Write( nLNr1 );
+    if( nParams & PARAM_STR_1 )		Write( aString1, IsKeyString );
+    if( nParams & PARAM_STR_2 )		Write( aString2, IsKeyString );
+    if( nParams & PARAM_BOOL_1 )	Write( bBool1 );
+    if( nParams & PARAM_BOOL_2 )	Write( bBool2 );
 }
 
-void CmdStream::GenCmdCommand( sal_uInt16 nNr, SbxArray* rPar )
+void CmdStream::GenCmdCommand( USHORT nNr, SbxArray* rPar )
 {
-    Write(sal_uInt16(SICommand));
+    Write(USHORT(SICommand));
     Write(nNr);
     WriteSortedParams(rPar, (nNr & M_KEY_STRING) != 0 );
 }
 
-void CmdStream::GenCmdSlot( sal_uInt16 nNr, SbxArray* rPar )
+void CmdStream::GenCmdSlot( USHORT nNr, SbxArray* rPar )
 {
-    Write(sal_uInt16(SISlot));
+    Write(USHORT(SISlot));
     Write(nNr);
     if (rPar)
     {
-        sal_uInt16 nAnz = (rPar->Count()-1) >> 1;   // Geteilt durch 2
+        USHORT nAnz = (rPar->Count()-1) >> 1;	// Geteilt durch 2
         Write(nAnz);
-        sal_Bool bWriteUnoSlot = rPar->Get( 1 )->GetType() == SbxSTRING;
+        BOOL bWriteUnoSlot = rPar->Get( 1 )->GetType() == SbxSTRING;
 
-        for (sal_uInt16 n = 1 ; n <= nAnz ; n++)
+        for (USHORT n = 1 ; n <= nAnz ; n++)
         {
             /// #59513# nicht mehr ben�tigt
-//          sal_uLong nUserData = rPar->Get( 2*n-1 )->GetUserData();
-//          rPar->Get( 2*n-1 )->SetUserData(ID_DoNothing);  // Verhindert Ausf�hrung der Slots, die als Parameter �bergeben sind.
+//			ULONG nUserData = rPar->Get( 2*n-1 )->GetUserData();
+//			rPar->Get( 2*n-1 )->SetUserData(ID_DoNothing);	// Verhindert Ausf�hrung der Slots, die als Parameter �bergeben sind.
 
             if ( bWriteUnoSlot )
                 Write(rPar->Get( 2*n-1 )->GetString());
@@ -344,27 +343,27 @@ void CmdStream::GenCmdSlot( sal_uInt16 nNr, SbxArray* rPar )
                 case SbxUINT:
                 case SbxSINGLE:
                     if ( !bWriteUnoSlot )
-                        Write( (sal_uInt16)BinUSHORT );
+                        Write( (USHORT)BinUSHORT );
                     Write(rPar->Get( 2*n )->GetUShort());
                     break;
                 case SbxLONG:
                 case SbxULONG:
-                case SbxSALINT64:
-                case SbxSALUINT64:
+                case SbxLONG64:
+                case SbxULONG64:
                 case SbxDOUBLE:
                     if ( !bWriteUnoSlot )
-                        Write( (sal_uInt16)BinULONG );
+                        Write( (USHORT)BinULONG );
                     Write(rPar->Get( 2*n )->GetULong());
                     break;
                 case SbxSTRING:
                 case SbxCHAR:
                     if ( !bWriteUnoSlot )
-                        Write( (sal_uInt16)BinString);
+                        Write( (USHORT)BinString);
                     Write((String)rPar->Get( 2*n )->GetString());    // Cast f�r OS/2
                     break;
                 case SbxBOOL:
                     if ( !bWriteUnoSlot )
-                        Write( (sal_uInt16)BinBool);
+                        Write( (USHORT)BinBool);
                     Write(rPar->Get( 2*n )->GetBool());
                     break;
                 default:
@@ -373,83 +372,83 @@ void CmdStream::GenCmdSlot( sal_uInt16 nNr, SbxArray* rPar )
             }
 
             /// #59513# nicht mehr ben�tigt ( siehe oben )
-//          rPar->Get( 2*n-1 )->SetUserData(nUserData); // Und wieder zur�cksetzen, so da� auch alles sauber ist.
+//			rPar->Get( 2*n-1 )->SetUserData(nUserData);	// Und wieder zur�cksetzen, so da� auch alles sauber ist.
         }
     }
     else
-        Write(sal_uInt16(0));
+        Write(USHORT(0));
 }
 
 void CmdStream::GenCmdUNOSlot( const String &aURL )
 {
-    Write( sal_uInt16(SIUnoSlot) );
-/*  Write( sal_uInt16(0) );     // Hier wird im Office die SID_OPENURL Eingetragen.
+    Write( USHORT(SIUnoSlot) );
+/*	Write( USHORT(0) );		// Hier wird im Office die SID_OPENURL Eingetragen.
                             // Dies mu� nat�rlich im Office hart verdratet werden und nicht hier,
                             // da sich die ID ja mal �ndern kann.
 
     // Da auch die ID f�r das PoolItem im Office entnommen werden mu� hier also kein PoolItem
     // gesendet werden.
 
-    Write( sal_uInt16(0) );     // Anzahl PoolItems
+    Write( USHORT(0) );		// Anzahl PoolItems
 
     // Stattdessen wird noch eine extra String gesendet, der dann Officeseitig in ein
     // SfxStringItem mit entsprechender ID gewandelt wird.
-    Write( aURL );          // String f�r das PoolItem*/
+    Write( aURL );			// String f�r das PoolItem*/
 
-    Write( aURL );          // Die UNO URL eben
+    Write( aURL );			// Die UNO URL eben
 }
 
-void CmdStream::GenCmdControl( comm_ULONG nUId, sal_uInt16 nMethodId, SbxArray* rPar )
+void CmdStream::GenCmdControl( comm_ULONG nUId, USHORT nMethodId, SbxArray* rPar )
 {
-    Write(sal_uInt16(SIControl));
+    Write(USHORT(SIControl));
     Write(nUId);
     Write(nMethodId);
     WriteSortedParams(rPar, (nMethodId & M_KEY_STRING) != 0 );
 }
 
-void CmdStream::GenCmdControl( String aUId, sal_uInt16 nMethodId, SbxArray* rPar )
+void CmdStream::GenCmdControl( String aUId, USHORT nMethodId, SbxArray* rPar )
 {
-    Write(sal_uInt16(SIStringControl));
+    Write(USHORT(SIStringControl));
     Write(aUId);
     Write(nMethodId);
     WriteSortedParams(rPar, (nMethodId & M_KEY_STRING) != 0 );
 }
 
-void CmdStream::GenCmdFlow( sal_uInt16 nArt )
+void CmdStream::GenCmdFlow( USHORT nArt )
 {
-    Write(sal_uInt16(SIFlow));
+    Write(USHORT(SIFlow));
     Write(nArt);
-    Write(sal_uInt16(PARAM_NONE));              // Typ der folgenden Parameter
+    Write(USHORT(PARAM_NONE));				// Typ der folgenden Parameter
 }
 
-void CmdStream::GenCmdFlow( sal_uInt16 nArt, sal_uInt16 nNr1 )
+void CmdStream::GenCmdFlow( USHORT nArt, USHORT nNr1 )
 {
-    Write(sal_uInt16(SIFlow));
+    Write(USHORT(SIFlow));
     Write(nArt);
-    Write(sal_uInt16(PARAM_USHORT_1));          // Typ der folgenden Parameter
+    Write(USHORT(PARAM_USHORT_1));			// Typ der folgenden Parameter
     Write(nNr1);
 }
 
-void CmdStream::GenCmdFlow( sal_uInt16 nArt, comm_ULONG nNr1 )
+void CmdStream::GenCmdFlow( USHORT nArt, comm_ULONG nNr1 )
 {
-    Write(sal_uInt16(SIFlow));
+    Write(USHORT(SIFlow));
     Write(nArt);
-    Write(sal_uInt16(PARAM_ULONG_1));           // Typ der folgenden Parameter
+    Write(USHORT(PARAM_ULONG_1));			// Typ der folgenden Parameter
     Write(nNr1);
 }
 
-void CmdStream::GenCmdFlow( sal_uInt16 nArt, String aString1 )
+void CmdStream::GenCmdFlow( USHORT nArt, String aString1 )
 {
-    Write(sal_uInt16(SIFlow));
+    Write(USHORT(SIFlow));
     Write(nArt);
-    Write(sal_uInt16(PARAM_STR_1));             // Typ der folgenden Parameter
+    Write(USHORT(PARAM_STR_1));				// Typ der folgenden Parameter
     Write(aString1);
 }
 
-void CmdStream::Write( String aString, sal_Bool IsKeyString )
+void CmdStream::Write( String aString, BOOL IsKeyString )
 {
     if ( IsKeyString )
-        Write( WandleKeyEventString( aString ), sal_False );
+        Write( WandleKeyEventString( aString ), FALSE );
     else
         Write( aString.GetBuffer(), aString.Len() );
 }

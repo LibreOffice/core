@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 #include "ScriptSecurityManager.hxx"
 #include <util/util.hxx>
 #include <util/scriptingconstants.hxx>
-#include <tools/diagnose_ex.h>
+
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -63,17 +63,17 @@ const char* const SCRIPTSTORAGEMANAGER_SERVICE =
 namespace scripting_securitymgr
 {
 
-static OUString s_configProv(RTL_CONSTASCII_USTRINGPARAM(
-    "com.sun.star.configuration.ConfigurationProvider"));
+static OUString s_configProv = ::rtl::OUString::createFromAscii(
+    "com.sun.star.configuration.ConfigurationProvider");
+ 
+static OUString s_configAccess = ::rtl::OUString::createFromAscii(
+    "com.sun.star.configuration.ConfigurationAccess");
 
-static OUString s_configAccess(RTL_CONSTASCII_USTRINGPARAM(
-    "com.sun.star.configuration.ConfigurationAccess"));
+static OUString s_configUpdate = ::rtl::OUString::createFromAscii(
+    "com.sun.star.configuration.ConfigurationUpdateAccess");
 
-static OUString s_configUpdate(RTL_CONSTASCII_USTRINGPARAM(
-    "com.sun.star.configuration.ConfigurationUpdateAccess"));
-
-static OUString s_securityDialog(RTL_CONSTASCII_USTRINGPARAM(
-    "com.sun.star.script.framework.security.SecurityDialog"));
+static OUString s_securityDialog = ::rtl::OUString::createFromAscii(
+    "com.sun.star.script.framework.security.SecurityDialog");
 
 static const int PERMISSION_NEVER = 0;
 static const int PERMISSION_PATHLIST = 1;
@@ -86,18 +86,31 @@ static const int ADD_TO_PATH = 2;
 // ScriptSecurityManager Constructor
 ScriptSecurityManager::ScriptSecurityManager(
     const Reference< XComponentContext > & xContext ) throw ( RuntimeException )
-    : m_xContext( xContext, UNO_SET_THROW )
+    : m_xContext( xContext)
 {
     OSL_TRACE( "< ScriptSecurityManager ctor called >\n" );
+    validateXRef( m_xContext,
+        "ScriptSecurityManager::ScriptSecurityManager: invalid context" );
 
     // get the service manager from the context
-    Reference< lang::XMultiComponentFactory > xMgr( m_xContext->getServiceManager(), UNO_SET_THROW );
+    Reference< lang::XMultiComponentFactory > xMgr = m_xContext->getServiceManager();
+    validateXRef( xMgr,
+        "ScriptSecurityManager::ScriptSecurityManager: cannot get ServiceManager" );
 
     // create an instance of the ConfigurationProvider
-    m_xConfigProvFactory.set( xMgr->createInstanceWithContext( s_configProv, m_xContext ), UNO_QUERY_THROW );
+    Reference< XInterface > xInterface = xMgr->createInstanceWithContext(
+        s_configProv, m_xContext );
+    validateXRef( xInterface,
+        "ScriptSecurityManager::ScriptSecurityManager: cannot get ConfigurationProvider" );
+    // create an instance of the ConfigurationAccess for accessing the
+    // scripting security settings
+    m_xConfigProvFactory = Reference < lang::XMultiServiceFactory > ( xInterface, UNO_QUERY );
+    validateXRef( m_xConfigProvFactory,
+        "ScriptSecurityManager::ScriptSecurityManager: cannot get XMultiServiceFactory interface from ConfigurationProvider" );
+
 }
 
-void ScriptSecurityManager::addScriptStorage( rtl::OUString scriptStorageURL,
+void ScriptSecurityManager::addScriptStorage( rtl::OUString scriptStorageURL, 
     sal_Int32 storageID)
 throw ( RuntimeException )
 {
@@ -105,7 +118,7 @@ throw ( RuntimeException )
     if ( ph_it != m_permissionSettings.end() )
     {
         OSL_TRACE( "ScriptSecurityManager::addScriptStorage: already called for %s",
-            ::rtl::OUStringToOString( scriptStorageURL,
+            ::rtl::OUStringToOString( scriptStorageURL, 
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer);
         return;
     }
@@ -117,18 +130,47 @@ throw ( RuntimeException )
     newPerm.execPermission=sal_False;
 
     //need to check if storage has any scripts
-    try
+    try 
     {
+        /* need to replace this with something better, now logical names are
+         * gone
+
+        Reference< XInterface > xInterface;
+        Any a = m_xContext->getValueByName(
+                OUString::createFromAscii( SCRIPTSTORAGEMANAGER_SERVICE ) );
+        if ( sal_False == ( a >>= xInterface ) )
+        {
+            throw RuntimeException( 
+                OUSTR( "ScriptSecurityManager::addScriptStorage: could not obtain ScriptStorageManager singleton" ),
+            Reference< XInterface >() );
+        }
+        validateXRef( xInterface,
+            "ScriptSecurityManager::addScriptStorage: cannot get Storage service" );
+        Reference< storage::XScriptStorageManager > xScriptStorageManager( 
+            xInterface, UNO_QUERY_THROW );
+        Reference< XInterface > xScriptStorage =
+            xScriptStorageManager->getScriptStorage( storageID );
+        validateXRef( xScriptStorage,
+          "ScriptNameResolverImpl::getStorageInstance: cannot get Script Storage service" );
+        Reference< storage::XScriptInfoAccess > xScriptInfoAccess =
+            Reference< storage::XScriptInfoAccess > ( xScriptStorage, 
+            UNO_QUERY_THROW );
+        Sequence< ::rtl::OUString > logicalNames = xScriptInfoAccess->getScriptLogicalNames();
+        if( !logicalNames.getLength() ) // we have no logical names
+        {
+            return;
+        } */
+
         // we have some scripts so read config & decide on that basis
-        // Setup flags: m_runMacroSetting, m_warning, m_confirmationRequired,
+        // Setup flags: m_runMacroSetting, m_warning, m_confirmationRequired, 
         readConfiguration();
     }
     catch ( RuntimeException & rte )
     {
         OSL_TRACE( "ScriptSecurityManager::addScriptStorage: caught RuntimeException: %s",
-            ::rtl::OUStringToOString( rte.Message,
+            ::rtl::OUStringToOString( rte.Message, 
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer);
-        throw RuntimeException(
+        throw RuntimeException( 
             OUSTR( "ScriptSecurityManager::addScriptStorage: caught RuntimeException" ).concat( rte.Message ),
         Reference< XInterface >() );
     }
@@ -141,7 +183,7 @@ throw ( RuntimeException )
             break;
         }
         case PERMISSION_PATHLIST:         // according to path list
-        {
+        { 
             OSL_TRACE("according to path");
             // check path
             rtl::OUString path = scriptStorageURL.copy( 0, scriptStorageURL.lastIndexOf( '/' ) );
@@ -181,7 +223,7 @@ throw ( RuntimeException )
                 }
             }
             break;
-        }
+        } 
         case PERMISSION_ALWAYS:         // always
             if( m_warning == sal_True )
             {
@@ -199,22 +241,22 @@ throw ( RuntimeException )
             }
             break;
         default:
-                //
+                // 
                 throw RuntimeException(
                     OUSTR( "ScriptSecurityManager::addScriptStorage got invalid OfficeBasic setting"),
                     Reference< XInterface > ());
     }
-
+    
     if ( newPerm.execPermission == sal_True )
     {
         OSL_TRACE("setting exec permission to true for %s",
-            ::rtl::OUStringToOString( scriptStorageURL,
+            ::rtl::OUStringToOString( scriptStorageURL, 
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     }
     else
     {
         OSL_TRACE("setting exec permission to false for %s",
-            ::rtl::OUStringToOString( scriptStorageURL,
+            ::rtl::OUStringToOString( scriptStorageURL, 
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     }
 
@@ -227,13 +269,13 @@ bool ScriptSecurityManager::isSecureURL( const OUString & path )
     OSL_TRACE( "no of elts in path list = %d",
         (int)m_secureURL.getLength() );
     OSL_TRACE("document path: %s",
-        ::rtl::OUStringToOString( path,
+        ::rtl::OUStringToOString( path, 
             RTL_TEXTENCODING_ASCII_US ).pData->buffer);
     int length = m_secureURL.getLength();
     for( int j = 0; j < length ; j++ )
     {
         OSL_TRACE("path list element: %s",
-            ::rtl::OUStringToOString( m_secureURL[j],
+            ::rtl::OUStringToOString( m_secureURL[j], 
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer);
 #ifdef WIN32
         OSL_TRACE("case insensitive comparison");
@@ -260,7 +302,7 @@ throw ( RuntimeException )
 short ScriptSecurityManager::executePathDialog( const OUString & path )
 throw ( RuntimeException )
 {
-    return executeDialog( path );
+    return executeDialog( path );    
 }
 
 short ScriptSecurityManager::executeDialog( const OUString & path )
@@ -276,12 +318,17 @@ throw ( RuntimeException )
     short result;
     try
     {
-        Reference< lang::XMultiComponentFactory > xMgr( m_xContext->getServiceManager(), UNO_SET_THROW );
-        Reference< awt::XDialog > xDialog(
-            xMgr->createInstanceWithArgumentsAndContext( s_securityDialog, aArgs, m_xContext ),
-            UNO_QUERY_THROW );
+        Reference< lang::XMultiComponentFactory > xMgr = m_xContext->getServiceManager();
+        validateXRef( xMgr,
+            "ScriptSecurityManager::executeDialog: cannot get ServiceManager" );
+        Reference< XInterface > xInterface =
+            xMgr->createInstanceWithArgumentsAndContext( s_securityDialog,
+                aArgs, m_xContext );
+        validateXRef( xInterface, "ScriptSecurityManager::executeDialog: Can't create SecurityDialog" );
+        Reference< awt::XDialog > xDialog( xInterface, UNO_QUERY_THROW );
         result = xDialog->execute();
-        Reference< lang::XComponent > xComponent( xDialog, UNO_QUERY_THROW );
+        Reference< lang::XComponent > xComponent( xInterface, UNO_QUERY_THROW );
+        validateXRef( xInterface, "ScriptSecurityManager::executeDialog: Can't get XComponent to dispose dialog" );
         xComponent->dispose();
     }
     catch ( RuntimeException & rte )
@@ -300,23 +347,23 @@ throw ( RuntimeException )
 }
 
 /**
- * checks to see whether the requested ScriptPermission is allowed.
+ * checks to see whether the requested ScriptPermission is allowed. 
  * This was modelled after the Java AccessController, but at this time
  * we can't see a good reason not to return a bool, rather than throw
  * an exception if the request is not granted (as is the case in Java).
  */
 void ScriptSecurityManager::checkPermission( const OUString & scriptStorageURL,
-    const OUString & permissionRequest )
+    const OUString & permissionRequest ) 
     throw ( RuntimeException, lang::IllegalArgumentException, security::AccessControlException )
 {
-    if( permissionRequest.equals( OUString(RTL_CONSTASCII_USTRINGPARAM("execute")) ) )
+    if( permissionRequest.equals( OUString::createFromAscii( "execute" ) ) )
     {
-        OSL_TRACE(
-            "ScriptSecurityManager::checkPermission: execute permission request for %s",
-            ::rtl::OUStringToOString( scriptStorageURL,
+        OSL_TRACE( 
+            "ScriptSecurityManager::checkPermission: execute permission request for %s", 
+            ::rtl::OUStringToOString( scriptStorageURL, 
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer);
         Permission_Hash::const_iterator ph_it = m_permissionSettings.find( scriptStorageURL );
-        Permission_Hash::const_iterator ph_itend =
+        Permission_Hash::const_iterator ph_itend = 
             m_permissionSettings.end();
         if ( ph_it != ph_itend )
         {
@@ -329,18 +376,18 @@ void ScriptSecurityManager::checkPermission( const OUString & scriptStorageURL,
                 OSL_TRACE( "permission refused" );
                 Any aPermission;
                 security::RuntimePermission permission;
-                permission.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("execute")).concat( scriptStorageURL );
+                permission.Name = OUString::createFromAscii( "execute" ).concat( scriptStorageURL );
                 aPermission <<= permission;
-                throw security::AccessControlException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("ScriptSecurityManager::checkPermission: no execute permission for URL")).concat( scriptStorageURL ),
+                throw security::AccessControlException( 
+                    OUString::createFromAscii( "ScriptSecurityManager::checkPermission: no execute permission for URL" ).concat( scriptStorageURL ), 
                     Reference< XInterface > (), aPermission );
             }
         }
         // we should never get here!!
-        throw lang::IllegalArgumentException( OUString(RTL_CONSTASCII_USTRINGPARAM("ScriptSecurityManager::checkPermission: storageURL not found")), Reference< XInterface > (), 0 );
+        throw lang::IllegalArgumentException( OUString::createFromAscii( "ScriptSecurityManager::checkPermission: storageURL not found" ), Reference< XInterface > (), 0 );
     }
     // inappropriate permission request
-    throw lang::IllegalArgumentException( OUString(RTL_CONSTASCII_USTRINGPARAM("ScriptSecurityManager::checkPermission: storageURL not found")), Reference< XInterface > (), 1 );
+    throw lang::IllegalArgumentException( OUString::createFromAscii( "ScriptSecurityManager::checkPermission: storageURL not found" ), Reference< XInterface > (), 1 );
 }
 
 void ScriptSecurityManager::removePermissionSettings ( ::rtl::OUString & scriptStorageURL )
@@ -350,8 +397,8 @@ void ScriptSecurityManager::removePermissionSettings ( ::rtl::OUString & scriptS
 
     if ( ph_it == m_permissionSettings.end() )
     {
-        OSL_TRACE( "Entry for storage url %s doesn't exist in map",
-            ::rtl::OUStringToOString( scriptStorageURL,
+        OSL_TRACE( "Entry for storage url %s doesn't exist in map", 
+            ::rtl::OUStringToOString( scriptStorageURL, 
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer);
         return;
     }
@@ -364,21 +411,32 @@ void ScriptSecurityManager::removePermissionSettings ( ::rtl::OUString & scriptS
 void ScriptSecurityManager::readConfiguration()
     throw ( RuntimeException)
 {
-    try
+    Reference< XInterface > xInterface;
+    try 
     {
-        beans::PropertyValue configPath;
-        configPath.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
-        configPath.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Security/Scripting"));
-        Sequence < Any > aargs( 1 );
-        aargs[ 0 ] <<= configPath;
-        ENSURE_OR_THROW( m_xConfigProvFactory.is(),
-            "ScriptSecurityManager::readConfiguration: ConfigProviderFactory no longer valid!" );
-        // get the XPropertySet interface from the ConfigurationAccess service
-        Reference < beans::XPropertySet > xPropSet( m_xConfigProvFactory->createInstanceWithArguments( s_configAccess, aargs ), UNO_QUERY_THROW );
+    beans::PropertyValue configPath;
+    configPath.Name = ::rtl::OUString::createFromAscii( "nodepath" );
+    configPath.Value <<= ::rtl::OUString::createFromAscii( "org.openoffice.Office.Common/Security/Scripting" );
+    Sequence < Any > aargs( 1 );
+    aargs[ 0 ] <<= configPath;
+    validateXRef( m_xConfigProvFactory,
+        "ScriptSecurityManager::readConfiguration: ConfigProviderFactory no longer valid!" );
+    xInterface = m_xConfigProvFactory->createInstanceWithArguments( s_configAccess, 
+            aargs );
+    validateXRef( xInterface,
+        "ScriptSecurityManager::readConfiguration: cannot get ConfigurationAccess" );
+    // get the XPropertySet interface from the ConfigurationAccess service
+    Reference < beans::XPropertySet > xPropSet( xInterface, UNO_QUERY );
+    Any value;
 
-        m_confirmationRequired = sal_True;
-        OSL_VERIFY( xPropSet->getPropertyValue( OUSTR( "Confirmation" ) ) >>= m_confirmationRequired );
-        if ( m_confirmationRequired == sal_True )
+        value=xPropSet->getPropertyValue( OUSTR( "Confirmation" ) );
+        if ( sal_False == ( value >>= m_confirmationRequired ) )
+        {
+            throw RuntimeException(
+                OUSTR( "ScriptSecurityManager:readConfiguration: can't get Confirmation setting" ),
+                Reference< XInterface > () );
+        }
+        if ( m_confirmationRequired == sal_True ) 
         {
             OSL_TRACE( "ScriptSecurityManager:readConfiguration: confirmation is true" );
         }
@@ -386,11 +444,14 @@ void ScriptSecurityManager::readConfiguration()
         {
             OSL_TRACE( "ScriptSecurityManager:readConfiguration: confirmation is false" );
         }
-
-        m_warning = true;
-        OSL_VERIFY( xPropSet->getPropertyValue( OUSTR( "Warning" ) ) >>= m_warning );
-
-        if ( m_warning == sal_True )
+        value=xPropSet->getPropertyValue( OUSTR( "Warning" ) );
+        if ( sal_False == ( value >>= m_warning ) )
+        {
+            throw RuntimeException(
+                OUSTR( "ScriptSecurityManager:readConfiguration: can't get Warning setting" ),
+                Reference< XInterface > () );
+        }
+        if ( m_warning == sal_True ) 
         {
             OSL_TRACE( "ScriptSecurityManager:readConfiguration: warning is true" );
         }
@@ -398,13 +459,21 @@ void ScriptSecurityManager::readConfiguration()
         {
             OSL_TRACE( "ScriptSecurityManager:readConfiguration: warning is false" );
         }
-
-        m_runMacroSetting = sal_True;
-        OSL_VERIFY( xPropSet->getPropertyValue( OUSTR( "OfficeBasic" ) ) >>= m_runMacroSetting );
+        value=xPropSet->getPropertyValue( OUSTR( "OfficeBasic" ) );
+        if ( sal_False == ( value >>= m_runMacroSetting ) )
+        {
+            throw RuntimeException(
+                OUSTR( "ScriptSecurityManager:readConfiguration: can't get OfficeBasic setting" ),
+                Reference< XInterface > () );
+        }
         OSL_TRACE( "ScriptSecurityManager:readConfiguration: OfficeBasic = %d", m_runMacroSetting );
-
-        m_secureURL = ::rtl::OUString();
-        OSL_VERIFY( xPropSet->getPropertyValue( OUSTR( "SecureURL" ) ) >>= m_secureURL );
+        value=xPropSet->getPropertyValue( OUSTR( "SecureURL" ) );
+        if ( sal_False == ( value >>= m_secureURL ) )
+        {
+            throw RuntimeException(
+                OUSTR( "ScriptSecurityManager:readConfiguration: can't get SecureURL setting" ),
+                Reference< XInterface > () );
+        }
     }
     catch ( beans::UnknownPropertyException & upe )
     {
@@ -421,7 +490,7 @@ void ScriptSecurityManager::readConfiguration()
     catch ( Exception & e )
     {
         OSL_TRACE( "Unknown exception in readconf: %s",
-            ::rtl::OUStringToOString(e.Message ,
+            ::rtl::OUStringToOString(e.Message , 
             RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
         throw RuntimeException(
             OUSTR( "ScriptSecurityManager:readConfiguration: exception? :" ).concat( e.Message ),
@@ -440,22 +509,26 @@ void ScriptSecurityManager::readConfiguration()
     int length = m_secureURL.getLength();
 
     // PathSubstitution needed to interpret variables found in config
-    Reference< lang::XMultiComponentFactory > xMgr( m_xContext->getServiceManager(), UNO_SET_THROW );
-    Reference< XInterface > xInterface = );
-    Reference< util::XStringSubstitution > xStringSubstitution(
-        xMgr->createInstanceWithContext(
-            ::rtl::OUString::createFromAscii( "com.sun.star.util.PathSubstitution" ), m_xContext
-        ),
-        UNO_QUERY_THROW
-    );
+    Reference< lang::XMultiComponentFactory > xMgr = m_xContext->getServiceManager();
+    validateXRef( xMgr,
+        "ScriptSecurityManager::readConfiguration: cannot get XMultiComponentFactory" );
+    xInterface = xMgr->createInstanceWithContext(  
+        ::rtl::OUString::createFromAscii(
+        "com.sun.star.util.PathSubstitution"), m_xContext);
+    validateXRef( xInterface,
+        "ScriptSecurityManager::readConfiguration: cannot get ConfigurationProvider" );
+    Reference< util::XStringSubstitution > xStringSubstitution( 
+        xInterface, UNO_QUERY);
+    validateXRef( xStringSubstitution,
+        "ScriptSecurityManager::readConfiguration: cannot get ConfigurationProvider" );
     for( int i = 0; i < length; i++ )
     {
-        OSL_TRACE( "ScriptSecurityManager:readConfiguration path = %s",
-            ::rtl::OUStringToOString(m_secureURL[i] ,
+        OSL_TRACE( "ScriptSecurityManager:readConfiguration path = %s", 
+            ::rtl::OUStringToOString(m_secureURL[i] , 
             RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
 
         OSL_TRACE( "ScriptSecurityManager: subpath = %s",
-            ::rtl::OUStringToOString(
+            ::rtl::OUStringToOString( 
             xStringSubstitution->substituteVariables( m_secureURL[i], true ),
             RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         m_secureURL[i] = xStringSubstitution->substituteVariables( m_secureURL[i], true );
@@ -464,8 +537,8 @@ void ScriptSecurityManager::readConfiguration()
     int length2 = m_secureURL.getLength();
     for( int j = 0; j < length2 ; j++ )
     {
-        OSL_TRACE( "ScriptSecurityManager: path = %s",
-            ::rtl::OUStringToOString(m_secureURL[j] ,
+        OSL_TRACE( "ScriptSecurityManager: path = %s", 
+            ::rtl::OUStringToOString(m_secureURL[j] , 
             RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
     }
 #endif
@@ -476,13 +549,20 @@ throw ( RuntimeException )
 {
     OSL_TRACE( "--->ScriptSecurityManager::addToSecurePaths" );
     beans::PropertyValue configPath;
-    configPath.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
-    configPath.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Security/Scripting"));
+    configPath.Name = ::rtl::OUString::createFromAscii( "nodepath" );
+    configPath.Value <<= ::rtl::OUString::createFromAscii( "org.openoffice.Office.Common/Security/Scripting" );
     Sequence < Any > aargs( 1 );
     aargs[ 0 ] <<= configPath;
-    Reference < container::XNameReplace > xNameReplace(
-        m_xConfigProvFactory->createInstanceWithArguments( s_configUpdate, aargs ), UNO_QUERY_THROW );
-    Reference < util::XChangesBatch > xChangesBatch( xNameReplace, UNO_QUERY_THROW );
+    Reference< XInterface > xInterface = m_xConfigProvFactory->createInstanceWithArguments( s_configUpdate, 
+            aargs );
+    validateXRef( xInterface,
+        "ScriptSecurityManager::addToSecurePaths: ScriptSecurityManager: cannot get ConfigurationUpdateAccess" );
+    Reference < container::XNameReplace > xNameReplace( xInterface, UNO_QUERY );
+    validateXRef( xNameReplace,
+        "ScriptSecurityManager::addToSecurePaths: ScriptSecurityManager: cannot get XNameReplace" );
+    Reference < util::XChangesBatch > xChangesBatch( xInterface, UNO_QUERY );
+    validateXRef( xChangesBatch,
+        "ScriptSecurityManager::addToSecurePaths: cannot get XChangesBatch" );
 
     OSL_TRACE( "--->ScriptSecurityManager::addToSecurePaths: after if stuff" );
     Reference < beans::XPropertySet > xPropSet( xInterface, UNO_QUERY );

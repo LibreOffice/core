@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -130,11 +130,11 @@ CacheConfiguration::CacheConfiguration (void)
             xHierarchy->getByHierarchicalName(sPathToNode),
             UNO_QUERY);
     }
-    catch (RuntimeException &aException)
+    catch (RuntimeException aException)
     {
         (void)aException;
     }
-    catch (Exception &aException)
+    catch (Exception aException)
     {
         (void)aException;
     }
@@ -146,14 +146,14 @@ CacheConfiguration::CacheConfiguration (void)
 Any CacheConfiguration::GetValue (const ::rtl::OUString& rName)
 {
     Any aResult;
-
+    
     if (mxCacheNode != NULL)
     {
         try
         {
             aResult = mxCacheNode->getByName(rName);
         }
-        catch (Exception &aException)
+        catch (Exception aException)
         {
             (void)aException;
         }

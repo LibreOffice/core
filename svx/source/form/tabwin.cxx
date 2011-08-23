@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@
 
 #include "fmprop.hrc"
 
-#include "svx/fmresids.hrc"
+#include "fmresids.hrc"
 #include <svx/dialmgr.hxx>
 #include <tools/shl.hxx>
 #include <svx/svdpagv.hxx>
@@ -94,13 +94,13 @@ struct ColumnInfo
     ::rtl::OUString sColumnName;
     ::rtl::OUString sLabel;
     bool bColumn;
-    ColumnInfo(const ::rtl::OUString& i_sColumnName,const ::rtl::OUString& i_sLabel)
+    ColumnInfo(const ::rtl::OUString& i_sColumnName,const ::rtl::OUString& i_sLabel) 
         : sColumnName(i_sColumnName)
         , sLabel(i_sLabel)
         , bColumn(true)
     {
     }
-    ColumnInfo(const ::rtl::OUString& i_sColumnName)
+    ColumnInfo(const ::rtl::OUString& i_sColumnName) 
         : sColumnName(i_sColumnName)
         , bColumn(false)
     {
@@ -119,9 +119,9 @@ void lcl_addToList( SvTreeListBox& _rListBox, const uno::Reference< container::X
         if ( xColumn->getPropertySetInfo()->hasPropertyByName(FM_PROP_LABEL) )
             xColumn->getPropertyValue(FM_PROP_LABEL) >>= sLabel;
         if ( sLabel.getLength() )
-            _rListBox.InsertEntry( sLabel,NULL,sal_False,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+            _rListBox.InsertEntry( sLabel,NULL,FALSE,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
         else
-            _rListBox.InsertEntry( *pEntries,NULL,sal_False,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+            _rListBox.InsertEntry( *pEntries,NULL,FALSE,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
     }
 }
 //==================================================================
@@ -158,7 +158,7 @@ sal_Int8 FmFieldWinListBox::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
 }
 
 //------------------------------------------------------------------------------
-sal_Bool FmFieldWinListBox::DoubleClickHdl()
+BOOL FmFieldWinListBox::DoubleClickHdl()
 {
     if ( pTabWin->createSelectionControls() )
         return sal_True;
@@ -180,7 +180,7 @@ void FmFieldWinListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
     aDescriptor[ daCommand ]    <<= pTabWin->GetObjectName();
     aDescriptor[ daCommandType ]<<= pTabWin->GetObjectType();
     ColumnInfo* pInfo = static_cast<ColumnInfo*>(pSelected->GetUserData());
-    aDescriptor[ daColumnName ] <<= pInfo->sColumnName;
+    aDescriptor[ daColumnName ]	<<= pInfo->sColumnName;
 
     TransferableHelper* pTransferColumn = new OColumnTransferable(
         aDescriptor, CTF_FIELD_DESCRIPTOR | CTF_CONTROL_EXCHANGE | CTF_COLUMN_DESCRIPTOR
@@ -239,7 +239,7 @@ FmFieldWin::~FmFieldWin()
     {
         m_pChangeListener->dispose();
         m_pChangeListener->release();
-        //  delete m_pChangeListener;
+        //	delete m_pChangeListener;
     }
     delete pListBox;
     delete pData;
@@ -267,10 +267,10 @@ sal_Bool FmFieldWin::createSelectionControls( )
 
         aDescr[ daConnection ]  <<= GetConnection().getTyped();
 
-        aDescr[ daCommand ]     <<= GetObjectName();
-        aDescr[ daCommandType ] <<= GetObjectType();
+        aDescr[ daCommand ]		<<= GetObjectName();
+        aDescr[ daCommandType ]	<<= GetObjectType();
         ColumnInfo* pInfo = static_cast<ColumnInfo*>(pSelected->GetUserData());
-        aDescr[ daColumnName ]  <<= pInfo->sColumnName;//::rtl::OUString( pListBox->GetEntryText( pSelected) );
+        aDescr[ daColumnName ]	<<= pInfo->sColumnName;//::rtl::OUString( pListBox->GetEntryText( pSelected) );
 
         // transfer this to the SFX world
         SfxUnoAnyItem aDescriptorItem( SID_FM_DATACCESS_DESCRIPTOR, makeAny( aDescr.createPropertyValueSequence() ) );
@@ -361,9 +361,9 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
         Reference< XPreparedStatement >  xStatement;
         Reference< XPropertySet >  xSet(xForm, UNO_QUERY);
 
-        m_aObjectName   = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_COMMAND));
-        m_aDatabaseName = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_DATASOURCE));
-        m_nObjectType   = ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_COMMANDTYPE));
+        m_aObjectName	= ::comphelper::getString(xSet->getPropertyValue(FM_PROP_COMMAND));
+        m_aDatabaseName	= ::comphelper::getString(xSet->getPropertyValue(FM_PROP_DATASOURCE));
+        m_nObjectType 	= ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_COMMANDTYPE));
 
         // get the connection of the form
         OStaticDataAccessTools aTools;
@@ -376,14 +376,14 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
         // the place, and connectRowset should be replaced with ensureRowSetConnection
 
         // get the fields of the object
-
+        
         if ( m_aConnection.is() && m_aObjectName.getLength() )
         {
             Reference< XComponent > xKeepFieldsAlive;
             Reference< XNameAccess > xColumns = getFieldsByCommandDescriptor( m_aConnection, m_nObjectType, m_aObjectName,xKeepFieldsAlive );
             if ( xColumns.is() )
                 lcl_addToList(*pListBox,xColumns);
-        }
+        }       
 
         // Prefix setzen
         UniString  aPrefix;
@@ -423,7 +423,7 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "FmTabWin::UpdateContent: caught an exception!" );
+        DBG_ERROR( "FmTabWin::UpdateContent: caught an exception!" );
     }
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,54 +34,59 @@
 #include "dptabdat.hxx"
 
 #include <vector>
-#include <boost/unordered_set.hpp>
+#include <set>
 
 class ScDPCacheTable;
 class ScDocument;
 
+// --------------------------------------------------------------------
+//
+//	implementation of ScDPTableData with database data
+//
+
 struct ScImportSourceDesc
 {
-    String  aDBName;
-    String  aObject;
-    sal_uInt16  nType;          // enum DataImportMode
-    bool    bNative;
-    ScDocument* mpDoc;
+    String	aDBName;
+    String	aObject;
+    USHORT	nType;			// enum DataImportMode
+    BOOL	bNative;
 
-    ScImportSourceDesc(ScDocument* pDoc) : nType(0), bNative(false), mpDoc(pDoc) {}
+    ScImportSourceDesc() : nType(0), bNative(FALSE) {}
 
-    bool operator== ( const ScImportSourceDesc& rOther ) const
+    BOOL operator==	( const ScImportSourceDesc& rOther ) const
         { return aDBName == rOther.aDBName &&
                  aObject == rOther.aObject &&
                  nType   == rOther.nType &&
-                 bNative == rOther.bNative &&
-                mpDoc == rOther.mpDoc; }
+                 bNative == rOther.bNative; }
 
-    ScDPCache* CreateCache() const;
+        // Wang Xu Ming -- 2009-9-15
+        // DataPilot Migration - Cache&&Performance
+    ScDPTableDataCache* GetExistDPObjectCache( ScDocument* pDoc ) const;
+    ScDPTableDataCache* CreateCache(  ScDocument* pDoc , long nID  ) const;
+    ScDPTableDataCache* GetCache( ScDocument* pDoc, long nID ) const;
+    long	GetCacheId( ScDocument* pDoc, long nID ) const;
+        // End Comments
 };
 
-/**
- * This class represents source data from database source.
- */
 class ScDatabaseDPData : public ScDPTableData
 {
 private:
-    const ScImportSourceDesc& mrImport;
-    ScDPCacheTable aCacheTable;
+     ScDPCacheTable      aCacheTable;
 public:
-                    ScDatabaseDPData(ScDocument* pDoc, const ScImportSourceDesc& rImport);
-    virtual         ~ScDatabaseDPData();
+                    ScDatabaseDPData(ScDocument* pDoc, const ScImportSourceDesc& rImport, long nCacheId = -1);
+    virtual			~ScDatabaseDPData();
 
-    virtual long                    GetColumnCount();
-    virtual String                  getDimensionName(long nColumn);
-    virtual sal_Bool                    getIsDataLayoutDimension(long nColumn);
-    virtual sal_Bool                    IsDateDimension(long nDim);
-    virtual void                    DisposeData();
-    virtual void                    SetEmptyFlags( sal_Bool bIgnoreEmptyRows, sal_Bool bRepeatIfEmpty );
+    virtual long					GetColumnCount();
+    virtual String					getDimensionName(long nColumn);
+    virtual BOOL					getIsDataLayoutDimension(long nColumn);
+    virtual BOOL					IsDateDimension(long nDim);
+    virtual void					DisposeData();
+    virtual void					SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty );
 
     virtual void                    CreateCacheTable();
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims);
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rDataDims);
     virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
-                                                     const ::boost::unordered_set<sal_Int32>& rCatDims,
+                                                     const ::std::hash_set<sal_Int32>& rCatDims,
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
     virtual const ScDPCacheTable&   GetCacheTable() const;

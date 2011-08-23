@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,18 +38,18 @@ namespace css = ::com::sun::star;
 
 class CSmplMailClient : public cppu::WeakImplHelper1<css::system::XSimpleMailClient>
 {
-public:
-    virtual css::uno::Reference<css::system::XSimpleMailMessage> SAL_CALL createSimpleMailMessage()
+public:    
+    virtual css::uno::Reference<css::system::XSimpleMailMessage> SAL_CALL createSimpleMailMessage() 
         throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL sendSimpleMailMessage(const css::uno::Reference<css::system::XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag)
+    virtual void SAL_CALL sendSimpleMailMessage(const css::uno::Reference<css::system::XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag) 
         throw (css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException);
 
-private:
-    void validateParameter(const css::uno::Reference<css::system::XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag);
-    void assembleCommandLine(const css::uno::Reference<css::system::XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag, std::vector<rtl::OUString>& rCommandArgs);
-};
+private:    
+    void validateParameter(const css::uno::Reference<css::system::XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag);        
+    void assembleCommandLine(const css::uno::Reference<css::system::XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag, std::vector<rtl::OUString>& rCommandArgs);    
+}; 
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

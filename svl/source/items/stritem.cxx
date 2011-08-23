@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ TYPEINIT1_AUTOFACTORY(SfxStringItem, CntUnencodedStringItem)
 
 //============================================================================
 // virtual
-SfxStringItem::SfxStringItem(sal_uInt16 which, SvStream & rStream):
+SfxStringItem::SfxStringItem(USHORT which, SvStream & rStream):
     CntUnencodedStringItem(which)
 {
     UniString aValue;
@@ -51,14 +51,14 @@ SfxStringItem::SfxStringItem(sal_uInt16 which, SvStream & rStream):
 
 //============================================================================
 // virtual
-SfxPoolItem * SfxStringItem::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * SfxStringItem::Create(SvStream & rStream, USHORT) const
 {
     return new SfxStringItem(Which(), rStream);
 }
 
 //============================================================================
 // virtual
-SvStream & SfxStringItem::Store(SvStream & rStream, sal_uInt16) const
+SvStream & SfxStringItem::Store(SvStream & rStream, USHORT) const
 {
     writeByteString(rStream, GetValue());
     return rStream;

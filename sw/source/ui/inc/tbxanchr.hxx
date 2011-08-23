@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,17 +32,17 @@
 
 class SwTbxAnchor : public SfxToolBoxControl
 {
-    sal_uInt16 nActAnchorId;
+    USHORT nActAnchorId;
 
 public:
 
-    virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual void Click();
     virtual SfxPopupWindow* CreatePopupWindow();
 
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SwTbxAnchor( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    SwTbxAnchor( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SwTbxAnchor();
 };
 

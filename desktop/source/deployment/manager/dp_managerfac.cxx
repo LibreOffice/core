@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,24 +51,24 @@ typedef ::cppu::WeakComponentImplHelper1<
 class PackageManagerFactoryImpl : private MutexHolder, public t_pmfac_helper
 {
     Reference<XComponentContext> m_xComponentContext;
-
+    
     Reference<deployment::XPackageManager> m_xUserMgr;
     Reference<deployment::XPackageManager> m_xSharedMgr;
     Reference<deployment::XPackageManager> m_xBundledMgr;
-    typedef ::boost::unordered_map<
+    typedef ::std::hash_map<
         OUString, WeakReference<deployment::XPackageManager>,
         ::rtl::OUStringHash > t_string2weakref;
     t_string2weakref m_managers;
-
+    
 protected:
     inline void check();
     virtual void SAL_CALL disposing();
-
+    
 public:
     virtual ~PackageManagerFactoryImpl();
     PackageManagerFactoryImpl(
         Reference<XComponentContext> const & xComponentContext );
-
+    
     // XPackageManagerFactory
     virtual Reference<deployment::XPackageManager> SAL_CALL getPackageManager(
         OUString const & context ) throw (RuntimeException);
@@ -99,7 +99,7 @@ bool singleton_entries(
     }
     catch (registry::InvalidRegistryException & exc) {
         (void) exc; // avoid warnings
-        OSL_FAIL( ::rtl::OUStringToOString(
+        OSL_ENSURE( 0, ::rtl::OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return false;
     }
@@ -161,7 +161,7 @@ PackageManagerFactoryImpl::getPackageManager( OUString const & context )
         if (xRet.is())
             return xRet;
     }
-
+    
     guard.clear();
     xRet.set( PackageManagerImpl::create( m_xComponentContext, context ) );
     guard.reset();

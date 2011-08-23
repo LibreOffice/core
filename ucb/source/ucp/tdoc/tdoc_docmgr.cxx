@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,10 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
-
 /**************************************************************************
                                 TODO
  **************************************************************************
+
+ - filter unwanted models notified by global document event broadcaster
+   - help documents
+   - others, which I don't know yet
 
  *************************************************************************/
 
@@ -42,66 +45,18 @@
 #include "comphelper/namedvaluecollection.hxx"
 #include "comphelper/documentinfo.hxx"
 
-#include "com/sun/star/awt/XTopWindow.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/container/XEnumerationAccess.hpp"
-#include "com/sun/star/document/XStorageBasedDocument.hpp"
 #include "com/sun/star/frame/XStorable.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
-#include "com/sun/star/util/XCloseBroadcaster.hpp"
+#include "com/sun/star/document/XStorageBasedDocument.hpp"
+#include "com/sun/star/awt/XTopWindow.hpp"
 
 #include "tdoc_docmgr.hxx"
 
 using namespace com::sun::star;
 using namespace tdoc_ucp;
 using ::comphelper::DocumentInfo;
-
-//=========================================================================
-//=========================================================================
-//
-// OfficeDocumentsCloseListener Implementation.
-//
-//=========================================================================
-//=========================================================================
-
-//=========================================================================
-//
-// util::XCloseListener
-//
-//=========================================================================
-
-// virtual
-void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::queryClosing(
-         const lang::EventObject& /*Source*/, sal_Bool /*GetsOwnership*/ )
-    throw ( util::CloseVetoException,
-            uno::RuntimeException )
-{
-}
-
-//=========================================================================
-void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::notifyClosing(
-         const lang::EventObject& Source )
-    throw ( uno::RuntimeException )
-{
-    document::EventObject aDocEvent;
-    aDocEvent.Source = Source.Source;
-    aDocEvent.EventName = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM( "OfficeDocumentsListener::notifyClosing" ) );
-    m_pManager->notifyEvent( aDocEvent );
-}
-
-//=========================================================================
-//
-// lang::XEventListener (base of util::XCloseListener)
-//
-//=========================================================================
-
-// virtual
-void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::disposing(
-        const lang::EventObject& /*Source*/ )
-    throw ( uno::RuntimeException )
-{
-}
 
 //=========================================================================
 //=========================================================================
@@ -116,8 +71,7 @@ OfficeDocumentsManager::OfficeDocumentsManager(
             OfficeDocumentsEventListener * pDocEventListener )
 : m_xSMgr( xSMgr ),
   m_xDocEvtNotifier( createDocumentEventNotifier( xSMgr ) ),
-  m_pDocEventListener( pDocEventListener ),
-  m_xDocCloseListener( new OfficeDocumentsCloseListener( this ) )
+  m_pDocEventListener( pDocEventListener )
 {
     if ( m_xDocEvtNotifier.is() )
     {
@@ -131,11 +85,7 @@ OfficeDocumentsManager::OfficeDocumentsManager(
 // virtual
 OfficeDocumentsManager::~OfficeDocumentsManager()
 {
-    //OSL_ENSURE( m_aDocs.empty(), "document list not empty!" );
-    // no need to assert this: Normal shutdown of OOo could already trigger it, since the order in which
-    // objects are actually released/destroyed upon shutdown is not defined. And when we arrive *here*,
-    // OOo *is* shutting down currently, since we're held by the TDOC provider, which is disposed
-    // upon shutdown.
+    OSL_ENSURE( m_aDocs.empty(), "document list not empty!" );
 }
 
 //=========================================================================
@@ -168,7 +118,7 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
         }
         catch ( lang::WrappedTargetException const & )
         {
-            OSL_FAIL( "Caught WrappedTargetException!" );
+            OSL_ENSURE( false, "Caught WrappedTargetException!" );
         }
     }
 
@@ -239,18 +189,9 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                 OSL_ENSURE( xStorage.is(), "Got no document storage!" );
 
                 rtl:: OUString aDocId = getDocumentId( Event.Source );
-                rtl:: OUString aTitle = DocumentInfo::getDocumentTitle(
-                    uno::Reference< frame::XModel >( Event.Source, uno::UNO_QUERY ) );
+                rtl:: OUString aTitle = DocumentInfo::getDocumentTitle( uno::Reference< frame::XModel >( Event.Source, uno::UNO_QUERY ) );
 
                 m_aDocs[ aDocId ] = StorageInfo( aTitle, xStorage, xModel );
-
-                uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster(
-                    Event.Source, uno::UNO_QUERY );
-                OSL_ENSURE( xCloseBroadcaster.is(),
-                    "OnLoadFinished/OnCreate event: got no close broadcaster!" );
-
-                if ( xCloseBroadcaster.is() )
-                    xCloseBroadcaster->addCloseListener( m_xDocCloseListener );
 
                 // Propagate document closure.
                 OSL_ENSURE( m_pDocEventListener,
@@ -262,17 +203,11 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
         }
     }
     else if ( Event.EventName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "OfficeDocumentsListener::notifyClosing" ) ) )
+                RTL_CONSTASCII_STRINGPARAM( "OnUnload" ) ) )
     {
         if ( isOfficeDocument( Event.Source ) )
         {
             // Document has been closed (unloaded)
-
-            // #163732# - Official event "OnUnload" does not work here. Event
-            // gets fired to early. Other OnUnload listeners called after this
-            // listener may still need TDOC access to the document. Remove the
-            // document from TDOC docs list on XCloseListener::notifyClosing.
-            // See OfficeDocumentsManager::OfficeDocumentsListener::notifyClosing.
 
             osl::MutexGuard aGuard( m_aMtx );
 
@@ -294,6 +229,8 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                         rtl::OUString aDocId( (*it).first );
                         m_pDocEventListener->notifyDocumentClosed( aDocId );
                     }
+
+
                     break;
                 }
                 ++it;
@@ -302,18 +239,8 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
             OSL_ENSURE( it != m_aDocs.end(),
                         "OnUnload event notified for unknown document!" );
 
-            if ( it != m_aDocs.end() )
-            {
-                uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster(
-                    Event.Source, uno::UNO_QUERY );
-                OSL_ENSURE( xCloseBroadcaster.is(),
-                    "OnUnload event: got no XCloseBroadcaster from XModel" );
-
-                if ( xCloseBroadcaster.is() )
-                    xCloseBroadcaster->removeCloseListener( m_xDocCloseListener );
-
+            if( it != m_aDocs.end() )
                 m_aDocs.erase( it );
-            }
         }
     }
     else if ( Event.EventName.equalsAsciiL(
@@ -381,7 +308,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                     (*it).second.xStorage = xStorage;
 
                     // Adjust title.
-                    (*it).second.aTitle = DocumentInfo::getDocumentTitle( xModel );
+                    (*it).second.aTitle = DocumentInfo::getDocumentTitle( uno::Reference< frame::XModel >( Event.Source, uno::UNO_QUERY ) );
                     break;
                 }
                 ++it;
@@ -408,7 +335,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                 if ( (*it).second.xModel == xModel )
                 {
                     // Adjust title.
-                    rtl:: OUString aTitle = DocumentInfo::getDocumentTitle( xModel );
+                    rtl:: OUString aTitle = DocumentInfo::getDocumentTitle( uno::Reference< frame::XModel >( Event.Source, uno::UNO_QUERY ) );
                     (*it).second.aTitle = aTitle;
 
                     // Adjust storage.
@@ -428,18 +355,8 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                 ++it;
             }
 
-//            OSL_ENSURE( it != m_aDocs.end(),
-//                        "TitleChanged event notified for unknown document!" );
-            // TODO: re-enable this assertion. It has been disabled for now, since it breaks the assertion-free smoketest,
-            // and the fix is more difficult than what can be done now.
-            // The problem is that at the moment, when you close a SFX-based document via API, it will first
-            // fire the notifyClosing event, which will make the OfficeDocumentsManager remove the doc from its list.
-            // Then, it will notify an OnTitleChanged, then an OnUnload. Documents closed via call the notifyClosing
-            // *after* OnUnload and all other On* events.
-            // In agreement with MBA, the implementation for SfxBaseModel::Close should be changed to also send notifyClosing
-            // as last event. When this happens, the assertion here must be enabled, again.
-            // There is no bug for this, yet - IZ is currently down due to the Kenai migration.
-            // 2011-02-23 / frank.schoenheit@sun.com
+            OSL_ENSURE( it != m_aDocs.end(),
+                        "TitleChanged event notified for unknown document!" );
         }
     }
 }
@@ -559,14 +476,6 @@ void OfficeDocumentsManager::buildDocumentsList()
 
                         m_aDocs[ aDocId ]
                             = StorageInfo( aTitle, xStorage, xModel );
-
-                        uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster(
-                            xModel, uno::UNO_QUERY );
-                        OSL_ENSURE( xCloseBroadcaster.is(),
-                            "buildDocumentsList: got no close broadcaster!" );
-
-                        if ( xCloseBroadcaster.is() )
-                            xCloseBroadcaster->addCloseListener( m_xDocCloseListener );
                     }
                 }
             }
@@ -736,11 +645,11 @@ bool OfficeDocumentsManager::isBasicIDE(
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            OSL_FAIL( "Caught IllegalArgumentException!" );
+            OSL_ENSURE( false, "Caught IllegalArgumentException!" );
         }
         catch ( frame::UnknownModuleException const & )
         {
-            OSL_FAIL( "Caught UnknownModuleException!" );
+            OSL_ENSURE( false, "Caught UnknownModuleException!" );
         }
 
         if ( aModule.getLength() > 0 )

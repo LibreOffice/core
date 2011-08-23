@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#ifndef SD_OUTLINER_HXX
+#ifndef SD_OUTLINER_HXX   
 #define SD_OUTLINER_HXX
 
 #include <svx/svdobj.hxx>
@@ -93,7 +93,7 @@ class Window;
     <p>Some related pieces of information:
     The search dialog (<type>SvxSearchDialog</type>) can be controlled in
     more than one way:
-    <ul><li>A set of option flags returned by the slot call
+    <ul><li>A set of option flags returned by the slot call 
     SID_SEARCH_OPTIONS handled by the
     <member>SdDrawDocument::GetState()</member> method.</li>
     <li>The contents of the search item of type
@@ -104,7 +104,7 @@ class Window;
     queried.  This is only sufficient for searching the outline view.
     </p>
 */
-class Outliner
+class Outliner 
     : public SdrOutliner
 {
 public:
@@ -121,7 +121,7 @@ public:
             <const>OUTLINERMODE_OUTLINEVIEW</const> are defined in
             editeng/outliner.hxx.
     */
-    Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode );
+    Outliner( SdDrawDocument* pDoc, USHORT nMode );
     virtual ~Outliner();
 
     /** Despite the name this method is called prior to spell cheking *and*
@@ -131,7 +131,7 @@ public:
         checking.
     */
     void PrepareSpelling (void);
-
+ 
     /** Initialize a spell check but do not start it yet.  This method
         is a better candiate for the name PrepareSpelling.
     */
@@ -142,8 +142,8 @@ public:
 
     /** Initiate a find and/or replace on the next relevant text object.
         @return
-            Returns </sal_True> when the search/replace is finished (as
-            indicated by user input to the search dialog).  A </sal_False> value
+            Returns </TRUE> when the search/replace is finished (as
+            indicated by user input to the search dialog).  A </FALSE> value
             indicates that another call to this method is required.
     */
     bool StartSearchAndReplace (const SvxSearchItem* pSearchItem);
@@ -162,10 +162,10 @@ public:
     /** callback for textconversion */
     sal_Bool ConvertNextDocument (void);
 
-    /** Starts the text conversion (hangul/hanja or Chinese simplified/traditional)
+    /** Starts the text conversion (hangul/hanja or Chinese simplified/traditional) 
     for the current viewshell */
-    void StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
-                const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive );
+    void StartConversion( INT16 nSourceLanguage,  INT16 nTargetLanguage, 
+                const Font *pTargetFont, INT32 nOptions, BOOL bIsInteractive );
 
     /** This is called internaly when text conversion is started.
         The position of current view mode/page/object/caret position
@@ -180,9 +180,9 @@ public:
 
     enum ChangeHint { CH_VIEW_SHELL_INVALID, CH_VIEW_SHELL_VALID };
 
-    int         GetIgnoreCurrentPageChangesLevel() const     { return mnIgnoreCurrentPageChangesLevel; };
-    void        IncreIgnoreCurrentPageChangesLevel()     { mnIgnoreCurrentPageChangesLevel++; };
-    void        DecreIgnoreCurrentPageChangesLevel()     { mnIgnoreCurrentPageChangesLevel--; };
+    int         GetIgnoreCurrentPageChangesLevel() const	 { return mnIgnoreCurrentPageChangesLevel; };
+    void        IncreIgnoreCurrentPageChangesLevel()	 { mnIgnoreCurrentPageChangesLevel++; };
+    void        DecreIgnoreCurrentPageChangesLevel()	 { mnIgnoreCurrentPageChangesLevel--; };
 
 private:
     class Implementation;
@@ -204,7 +204,7 @@ private:
     /** this is the language that is used for current text conversion.
         Only valid if meMode is TEXT_CONVERSION.
     */
-    sal_Int16 mnConversionLanguage;
+    INT16 mnConversionLanguage;
 
     /** While the value of this flag is greater than 0 changes of the current page
         do not lead to selecting the corresponding text in the outliner.
@@ -216,17 +216,17 @@ private:
 
     /** This flag indicates whether there may exist a match of the search
         string before/after the current position in the document.  It can be
-        set to </sal_False> only when starting from the beginning/end of the
+        set to </FALSE> only when starting from the beginning/end of the
         document.  When reaching the end/beginning with it still be set to
-        </sal_False> then there exists no match and the search can be terminated.
+        </FALSE> then there exists no match and the search can be terminated.
     */
     bool mbMatchMayExist;
 
     /// The number of pages in the current view.
-    sal_uInt16 mnPageCount;
-
+    USHORT mnPageCount;
+    
     /// Number of objects on the current page / in the current selection.
-    sal_Int32 mnObjectCount;
+    INT32 mnObjectCount;
 
     /** A <TRUE/> value indicates that the end of the find&replace or spell
         check has been reached.
@@ -235,11 +235,11 @@ private:
 
     /** Set to <TRUE/> when an object has been prepared successfully for
         searching/spell checking.  This flag directs the internal iteration
-        which stops when set to </sal_True>.
+        which stops when set to </TRUE>.
     */
     bool mbFoundObject;
 
-    /** When set to <TRUE/> this flag indicates that an error has occurred
+    /** When set to <TRUE/> this flag indicates that an error has occured
         that should terminate the iteration over the objects to search/spell
         check.
     */
@@ -297,7 +297,7 @@ private:
     EditMode meStartEditMode;
 
     /// The current page index on starting to search/spell check.
-    sal_uInt16 mnStartPageIndex;
+    USHORT mnStartPageIndex;
 
     /// The object in edit mode when searching /spell checking was started
     /// (if any).
@@ -327,7 +327,7 @@ private:
 
     /** This flag remebers a selection change between a call to the
         selection change listener callback and the next
-        <member>DetectChange()</member> method call.
+        <member>DetectChange()</member> method call. 
     */
     bool mbSelectionHasChanged;
 
@@ -335,7 +335,7 @@ private:
         to a programatical change of the selection.
     */
     bool mbExpectingSelectionChangeEvent;
-
+    
     /** This flag is set to true when the whole document has been
         processed once 'officially', i.e. a message box has been shown
         that tells the user so.
@@ -367,11 +367,11 @@ private:
     /** Do search and replace for whole document.
     */
     bool SearchAndReplaceAll (void);
-
+    
     /** Do search and replace for next match.
         @return
-            The return value specifies whether the search ended (</sal_True>) or
-            another call to this method is required (</sal_False>).
+            The return value specifies whether the search ended (</TRUE>) or
+            another call to this method is required (</FALSE>).
     */
     bool SearchAndReplaceOnce (void);
 
@@ -410,7 +410,7 @@ private:
 
     /** Handle the situation that the iterator has reached the last object.
         This may result in setting the <member>mbEndOfSearch</member> flag
-        back to </sal_False>.  This method may show either the end-of-search
+        back to </FALSE>.  This method may show either the end-of-search
         dialog or the wrap-arround dialog.
     */
     void EndOfSearch (void);
@@ -451,7 +451,7 @@ private:
     void PrepareSearchAndReplace (void);
 
     /** Prepare to do a text conversion on the current text
-        object. This includes putting it into edit mode.
+        object. This includes putting it into edit mode. 
     */
     void PrepareConversion (void);
 
@@ -464,17 +464,17 @@ private:
 
     /** Switch to the page or master page specified by the
         <member>mnPage</member> index.  Master page mode is specified by
-        <member>meEditMode</member>.
+        <member>meEditMode</member>. 
         @param eEditMode
             The new edit mode.
         @param nPageIndex
             The new page index.
     */
-    void SetPage (EditMode eEditMode, sal_uInt16 nPageIndex);
+    void SetPage (EditMode eEditMode, USHORT nPageIndex);
 
     /** Switch on edit mode for the currently selected text object.
     */
-    void EnterEditMode (sal_Bool bGrabFocus=sal_True);
+    void EnterEditMode (BOOL bGrabFocus=TRUE);
 
     /** Return the position at which a new search is started with respect to
         the search direction as specified by the argument.
@@ -538,14 +538,14 @@ private:
             required.  When all text objects have been processed then
             <FALSE/> is returned.
     */
-    virtual sal_Bool SpellNextDocument (void);
+    virtual BOOL SpellNextDocument (void);
 
     /** Show the given message box and make it modal.  It is assumed that
         the parent of the given dialog is NULL, i.e. the application
         window.  This function makes sure that the otherwise non-modal
         search dialog, if visible, is locked, too.
     */
-    sal_uInt16 ShowModalMessageBox (Dialog& rMessageBox);
+    USHORT ShowModalMessageBox (Dialog& rMessageBox);
 };
 
 } // end of namespace sd

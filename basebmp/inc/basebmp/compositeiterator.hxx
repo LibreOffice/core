@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,16 +79,16 @@ namespace detail
         { return *mpVal1 - *rhs.mpVal1; }
 
     private:
-        T1* mpVal1;
-        T2* mpVal2;
+        T1* mpVal1; 
+        T2* mpVal2; 
     };
 
-    template< typename Iterator1,
-              typename Iterator2,
-              typename ValueType,
+    template< typename Iterator1, 
+              typename Iterator2, 
+              typename ValueType, 
               typename DifferenceType,
               typename IteratorCategory,
-              class Derived >
+              class Derived > 
     class CompositeIteratorBase : public NonStandardIterator
     {
     public:
@@ -110,12 +110,12 @@ namespace detail
 
     public:
         CompositeIteratorBase() :
-            maIter1(),
+            maIter1(), 
             maIter2()
         {}
 
         CompositeIteratorBase( const iterator1_type& rIter1, const iterator2_type& rIter2 ) :
-            maIter1( rIter1 ),
+            maIter1( rIter1 ), 
             maIter2( rIter2 )
         {}
 
@@ -225,7 +225,7 @@ namespace detail
     };
 }
 
-/** Provide the composition of two 1D image iterators
+/** Provide the composition of two 1D image iterators 
 
     Use this template to compose two iterators into one (e.g. image
     and mask). Operations are transitive, e.g. operator== only returns
@@ -235,31 +235,31 @@ namespace detail
     avoid funny effects, iterator ranges given by a CompositeIterator
     should consist of wrapped iterators of similar range
  */
-template< typename Iterator1,
+template< typename Iterator1, 
           typename Iterator2,
-          typename ValueType,
+          typename ValueType, 
           typename DifferenceType,
-          typename IteratorCategory >
-class CompositeIterator1D :
-    public detail::CompositeIteratorBase< Iterator1,
-                                          Iterator2,
+          typename IteratorCategory > 
+class CompositeIterator1D : 
+    public detail::CompositeIteratorBase< Iterator1, 
+                                          Iterator2, 
                                           ValueType,
                                           DifferenceType,
                                           IteratorCategory,
-                                          CompositeIterator1D<Iterator1,
+                                          CompositeIterator1D<Iterator1, 
                                                               Iterator2,
-                                                              ValueType,
+                                                              ValueType, 
                                                               DifferenceType,
                                                               IteratorCategory> >
 {
-    typedef detail::CompositeIteratorBase< Iterator1,
-                                           Iterator2,
+    typedef detail::CompositeIteratorBase< Iterator1, 
+                                           Iterator2, 
                                            ValueType,
                                            DifferenceType,
                                            IteratorCategory,
-                                           CompositeIterator1D<Iterator1,
+                                           CompositeIterator1D<Iterator1, 
                                                                Iterator2,
-                                                               ValueType,
+                                                               ValueType, 
                                                                DifferenceType,
                                                                IteratorCategory> > base_type;
 public:
@@ -267,13 +267,13 @@ public:
         base_type()
     {}
 
-    CompositeIterator1D( const Iterator1& rIter1,
+    CompositeIterator1D( const Iterator1& rIter1, 
                          const Iterator2& rIter2 ) :
         base_type( rIter1, rIter2 )
     {}
 };
 
-/** Provide the composition of two 2D image iterators
+/** Provide the composition of two 2D image iterators 
 
     Use this template to compose two iterators into one (e.g. image
     and mask). Operations are transitive, e.g. operator== only returns
@@ -283,23 +283,23 @@ public:
     avoid funny effects, iterator ranges given by a CompositeIterator
     should consist of wrapped iterators of similar range
  */
-template< typename Iterator1, typename Iterator2 > class CompositeIterator2D :
-    public detail::CompositeIteratorBase< Iterator1,
-                                          Iterator2,
+template< typename Iterator1, typename Iterator2 > class CompositeIterator2D : 
+    public detail::CompositeIteratorBase< Iterator1, 
+                                          Iterator2, 
                                           std::pair<
-                                                typename vigra::IteratorTraits<Iterator1>::value_type,
+                                                typename vigra::IteratorTraits<Iterator1>::value_type, 
                                                 typename vigra::IteratorTraits<Iterator2>::value_type >,
-                                          typename vigra::IteratorTraits<Iterator1>::difference_type,
-                                          typename vigra::IteratorTraits<Iterator1>::iterator_category,
+                                          typename vigra::IteratorTraits<Iterator1>::difference_type, 
+                                          typename vigra::IteratorTraits<Iterator1>::iterator_category, 
                                           CompositeIterator2D<Iterator1, Iterator2> >
 {
-    typedef detail::CompositeIteratorBase< Iterator1,
-                                           Iterator2,
+    typedef detail::CompositeIteratorBase< Iterator1, 
+                                           Iterator2, 
                                            std::pair<
-                                                typename vigra::IteratorTraits<Iterator1>::value_type,
+                                                typename vigra::IteratorTraits<Iterator1>::value_type, 
                                                 typename vigra::IteratorTraits<Iterator2>::value_type >,
-                                           typename vigra::IteratorTraits<Iterator1>::difference_type,
-                                           typename vigra::IteratorTraits<Iterator1>::iterator_category,
+                                           typename vigra::IteratorTraits<Iterator1>::difference_type, 
+                                           typename vigra::IteratorTraits<Iterator1>::iterator_category, 
                                            CompositeIterator2D<Iterator1, Iterator2> > base_type;
 public:
     typedef CompositeIterator1D< typename Iterator1::row_iterator,
@@ -362,7 +362,7 @@ public:
                                this->maIter2.columnIterator());
     }
 };
-
+   
 } // namespace basebmp
 
 #endif /* INCLUDED_BASEBMP_COMPOSITEITERATOR_HXX */

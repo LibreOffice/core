@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@
 \************************************************************************/
 
 SdPresCellTemplateDlg::SdPresCellTemplateDlg( SdrModel* pModel, Window* pParent, SfxStyleSheetBase& rStyleBase )
-: SfxStyleDialog( pParent, SdResId(TAB_CELL_TEMPLATE), rStyleBase, sal_False )
+: SfxStyleDialog( pParent, SdResId(TAB_CELL_TEMPLATE), rStyleBase, FALSE )
 , mpColorTab( pModel->GetColorTable() )
 , mpGradientList( pModel->GetGradientList() )
 , mpHatchingList( pModel->GetHatchList() )
@@ -79,7 +79,7 @@ SdPresCellTemplateDlg::~SdPresCellTemplateDlg()
 
 // -----------------------------------------------------------------------
 
-void SdPresCellTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SdPresCellTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     switch( nId )
     {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,83 +40,76 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/compbase1.hxx>
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
+using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::awt;
 using namespace x11;
 
-using ::rtl::OUString;
-
 Sequence< OUString > SAL_CALL x11::X11Clipboard_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard"));
+    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.clipboard.SystemClipboard");
     return aRet;
 }
 
 Sequence< OUString > SAL_CALL x11::Xdnd_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.X11DragSource"));
+    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.dnd.X11DragSource");
     return aRet;
 }
 
 Sequence< OUString > SAL_CALL x11::Xdnd_dropTarget_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.X11DropTarget"));
+    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.dnd.X11DropTarget");
     return aRet;
 }
 
 // ------------------------------------------------------------------------
 
-css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
+Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
 {
-    static boost::unordered_map< OUString, ::boost::unordered_map< Atom, Reference< XClipboard > >, ::rtl::OUStringHash > m_aInstances;
+    static std::hash_map< OUString, ::std::hash_map< Atom, Reference< XClipboard > >, ::rtl::OUStringHash > m_aInstances;
 
     OUString aDisplayName;
     Atom nSelection;
-
+    
     // extract display name from connection argument. An exception is thrown
-    // by SelectionManager.initialize() if no display connection is given.
+    // by SelectionManager.initialize() if no display connection is given. 
     if( arguments.getLength() > 0 )
     {
-        css::uno::Reference< XDisplayConnection > xConn;
+        Reference< XDisplayConnection > xConn;
         arguments.getConstArray()[0] >>= xConn;
-
+        
         if( xConn.is() )
         {
             Any aIdentifier = xConn->getIdentifier();
             aIdentifier >>= aDisplayName;
         }
     }
-
+    
     SelectionManager& rManager = SelectionManager::get( aDisplayName );
     rManager.initialize( arguments );
-
+    
     // check if any other selection than clipboard selection is specified
     if( arguments.getLength() > 1 )
     {
         OUString aSelectionName;
-
+        
         arguments.getConstArray()[1] >>= aSelectionName;
         nSelection = rManager.getAtom( aSelectionName );
     }
     else
     {
         // default atom is clipboard selection
-        nSelection = rManager.getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("CLIPBOARD")) );
+        nSelection = rManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) );
     }
-
-    ::boost::unordered_map< Atom, css::uno::Reference< XClipboard > >& rMap( m_aInstances[ aDisplayName ] );
-    ::boost::unordered_map< Atom, css::uno::Reference< XClipboard > >::iterator it = rMap.find( nSelection );
+    
+    ::std::hash_map< Atom, Reference< XClipboard > >& rMap( m_aInstances[ aDisplayName ] );
+    ::std::hash_map< Atom, Reference< XClipboard > >::iterator it = rMap.find( nSelection );
     if( it != rMap.end() )
         return it->second;
 
@@ -128,16 +121,16 @@ css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequenc
 
 // ------------------------------------------------------------------------
 
-css::uno::Reference< XInterface > X11SalInstance::CreateDragSource()
+Reference< XInterface > X11SalInstance::CreateDragSource()
 {
-    return css::uno::Reference < XInterface >( ( OWeakObject * ) new SelectionManagerHolder() );
+    return Reference < XInterface >( ( OWeakObject * ) new SelectionManagerHolder() );
 }
 
 // ------------------------------------------------------------------------
 
-css::uno::Reference< XInterface > X11SalInstance::CreateDropTarget()
+Reference< XInterface > X11SalInstance::CreateDropTarget()
 {
-    return css::uno::Reference < XInterface >( ( OWeakObject * ) new DropTarget() );
+    return Reference < XInterface >( ( OWeakObject * ) new DropTarget() );
 }
 
 

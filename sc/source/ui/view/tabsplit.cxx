@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ ScTabSplitter::ScTabSplitter( Window* pParent, WinBits nWinStyle, ScViewData* pD
     Splitter( pParent, nWinStyle ),
     pViewData(pData)
 {
-    SetFixed(false);
-    EnableRTL( false );
+    SetFixed(FALSE);
+    EnableRTL( FALSE );
 }
 
 
@@ -54,7 +54,7 @@ ScTabSplitter::~ScTabSplitter()
 {
 }
 
-void ScTabSplitter::MouseMove( const MouseEvent& rMEvt )
+void __EXPORT ScTabSplitter::MouseMove( const MouseEvent& rMEvt )
 {
     if (bFixed)
         Window::MouseMove( rMEvt );
@@ -62,7 +62,7 @@ void ScTabSplitter::MouseMove( const MouseEvent& rMEvt )
         Splitter::MouseMove( rMEvt );
 }
 
-void ScTabSplitter::MouseButtonUp( const MouseEvent& rMEvt )
+void __EXPORT ScTabSplitter::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if (bFixed)
         Window::MouseButtonUp( rMEvt );
@@ -70,7 +70,7 @@ void ScTabSplitter::MouseButtonUp( const MouseEvent& rMEvt )
         Splitter::MouseButtonUp( rMEvt );
 }
 
-void ScTabSplitter::MouseButtonDown( const MouseEvent& rMEvt )
+void __EXPORT ScTabSplitter::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (bFixed)
         Window::MouseButtonDown( rMEvt );
@@ -78,7 +78,7 @@ void ScTabSplitter::MouseButtonDown( const MouseEvent& rMEvt )
         Splitter::MouseButtonDown( rMEvt );
 }
 
-void ScTabSplitter::Splitting( Point& rSplitPos )
+void __EXPORT ScTabSplitter::Splitting( Point& rSplitPos )
 {
     Window* pParent = GetParent();
     Point aScreenPos = pParent->OutputToNormalizedScreenPixel( rSplitPos );
@@ -91,7 +91,7 @@ void ScTabSplitter::Splitting( Point& rSplitPos )
 }
 
 
-void ScTabSplitter::SetFixed(sal_Bool bSet)
+void ScTabSplitter::SetFixed(BOOL bSet)
 {
     bFixed = bSet;
     if (bSet)

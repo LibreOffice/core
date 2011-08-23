@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,102 +29,127 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <hintids.hxx>          // contains RES_.. IDs
+
+#include <hintids.hxx>		// fuer RES_..
 #include <frame.hxx>
 #include <hints.hxx>
-#include <swcache.hxx>          // mba: get rid of that dependency
-#include <swfntcch.hxx>         // mba: get rid of that dependency
+#include <swcache.hxx>
+#include <swfntcch.hxx>
+
+#if OSL_DEBUG_LEVEL > 1
+#include <unotextmarkup.hxx>
+#endif
 
 static SwClientIter* pClientIters = 0;
 
-TYPEINIT0(SwClient);
+TYPEINIT0(SwClient);	//rtti
 
-/*************************************************************************/
+/*************************************************************************
+|*	  SwClient::SwClient(SwModify *)
+|*
+|*	  Beschreibung		callback.doc V1.14
+|*	  Ersterstellung	VB 20.03.91
+|*	  Letzte Aenderung	MA 20. Mar. 95
+*************************************************************************/
+
+
 SwClient::SwClient(SwModify *pToRegisterIn)
-    : pLeft( 0 ), pRight( 0 ), pRegisteredIn( 0 ), mbIsAllowedToBeRemovedInModifyCall(false)
+    : pLeft( 0 ), pRight( 0 ), pRegisteredIn( 0 )
 {
+    bModifyLocked =
+    bInModify =
+    bInDocDTOR =
+    bInCache = FALSE;
+    bInSwFntCache = FALSE;
+
     if(pToRegisterIn)
-        // connect to SwModify
         pToRegisterIn->Add(this);
 }
 
-/*************************************************************************/
-void SwClient::CheckRegistration( const SfxPoolItem* pOld, const SfxPoolItem * )
+/*************************************************************************
+|*	  SwClient::Modify()
+|*
+|*	  Beschreibung		callback.doc V1.14
+|*	  Ersterstellung	VB 20.03.91
+|*	  Letzte Aenderung	VB 20.03.91
+*************************************************************************/
+
+
+void SwClient::Modify( SfxPoolItem *pOld, SfxPoolItem * )
 {
-    // this method only handles notification about dying SwModify objects
     if( (!pOld || pOld->Which() != RES_OBJECTDYING) )
         return;
 
-    const SwPtrMsgPoolItem *pDead = static_cast<const SwPtrMsgPoolItem*>(pOld);
-    if(pDead && pDead->pObject == pRegisteredIn)
+    SwPtrMsgPoolItem *pDead = (SwPtrMsgPoolItem *)pOld;
+    if(pDead->pObject == pRegisteredIn)
     {
-        // I've got a notification from the object I know
-        SwModify *pAbove = const_cast<SwModify*>(pRegisteredIn->GetRegisteredIn());
+        SwModify *pAbove = (SwModify*)pRegisteredIn->GetRegisteredIn();
         if(pAbove)
         {
-            // if the dying object itself was listening at an SwModify, I take over
-            // adding myself to pAbove will automatically remove me from my current pRegisteredIn
             pAbove->Add(this);
             return;
         }
-
-        // destroy connection
         pRegisteredIn->Remove(this);
     }
 }
 
-void SwClient::Modify( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue )
-{
-    CheckRegistration( pOldValue, pNewValue );
-}
+/*************************************************************************
+|*	  SwClient::~SwClient()
+|*
+|*	  Beschreibung		callback.doc V1.14
+|*	  Ersterstellung	VB 20.03.91
+|*	  Letzte Aenderung	MA 25. Jan. 94
+*************************************************************************/
 
-void SwClient::SwClientNotify( const SwModify&, const SfxHint& )
-{
 
-}
-
-//*************************************************************************
 SwClient::~SwClient()
 {
-    DBG_ASSERT( !pRegisteredIn || pRegisteredIn->GetDepends(),"SwModify still known, but Client already disconnected!" );
     if( pRegisteredIn && pRegisteredIn->GetDepends() )
-        // still connected
         pRegisteredIn->Remove( this );
+
+    OSL_ENSURE( !IsModifyLocked(), "Modify destroyed but locked." );
 }
 
 
-sal_Bool SwClient::GetInfo( SfxPoolItem& ) const
+    // erfrage vom Client Informationen
+BOOL SwClient::GetInfo( SfxPoolItem& ) const
 {
-    return sal_True;        // und weiter
+    return TRUE;		// und weiter
 }
 
+/*************************************************************************
+|*	  SwModify::SwModify( SwModify * )
+|*
+|*	  Beschreibung		Dokument 1.7
+|*	  Ersterstellung	JP 20.11.90
+|*	  Letzte Aenderung	VB 20.03.91
+*************************************************************************/
 
-/*************************************************************************/
-SwModify::SwModify()
-    : SwClient(0), pRoot(0)
-{
-    bModifyLocked = sal_False;
-    bLockClientList = sal_False;
-    bInDocDTOR = sal_False;
-    bInCache = sal_False;
-    bInSwFntCache = sal_False;
-}
 
 SwModify::SwModify( SwModify *pToRegisterIn )
     : SwClient(pToRegisterIn), pRoot( 0 )
 {
-    bModifyLocked = sal_False;
-    bLockClientList = sal_False;
-    bInDocDTOR = sal_False;
-    bInCache = sal_False;
-    bInSwFntCache = sal_False;
 }
 
-/*************************************************************************/
+// @@@ forbidden and not implemented, but needs to be accessible (protected).
+SwModify::SwModify( const SwModify & )
+    : SwClient( 0 )
+{
+    OSL_PRECOND(0, "SwModify(const SwModify&): not implemented.");
+}
+
+/*************************************************************************
+|*	  SwModify::~SwModify()
+|*
+|*	  Beschreibung		Dokument 1.7
+|*	  Ersterstellung	JP 20.11.90
+|*	  Letzte Aenderung	JP 15.04.94
+*************************************************************************/
+
+
+
 SwModify::~SwModify()
 {
-    OSL_ENSURE( !IsModifyLocked(), "Modify destroyed but locked." );
-
     if ( IsInCache() )
         SwFrm::GetCache().Delete( this );
 
@@ -133,44 +158,48 @@ SwModify::~SwModify()
 
     if( pRoot )
     {
-        // there are depending objects
         if( IsInDocDTOR() )
         {
-            // if document gets destroyed anyway, just tell clients to forget me
-            // so that they don't try to get removed from my list later when they also get destroyed
+            // alle Clients "logisch" austragen
             SwClientIter aIter( *this );
-            SwClient* p = aIter.GoStart();
-            while ( p )
-            {
+            SwClient* p;
+            while( 0 != ( p = aIter++ ) )
                 p->pRegisteredIn = 0;
-                p = aIter++;
-            }
+
+            p = aIter.GoRoot(); 		// wieder ab Root (==Start) anfangen
+            do {
+                p->pRegisteredIn = 0;
+            } while( 0 != ( p = aIter-- ) );
         }
         else
         {
-            // notify all clients that they shall remove themselves
+            // verschicke die Nachricht an die abgeleiteten Objekte.
             SwPtrMsgPoolItem aDyObject( RES_OBJECTDYING, this );
-            NotifyClients( &aDyObject, &aDyObject );
+            Modify( &aDyObject, &aDyObject );
 
-            // remove all clients that have not done themselves
-            // mba: possibly a hotfix for forgotten base class calls?!
+            // Zwangsummeldung aller derjenigen, die sich nicht ausgetragen
+            // haben, durch Aufruf von SwClient::Modify()
             while( pRoot )
-                pRoot->CheckRegistration(&aDyObject, &aDyObject);
+                pRoot->SwClient::Modify(&aDyObject, &aDyObject);
         }
     }
 }
 
-/*************************************************************************/
-void SwModify::Modify( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue )
-{
-    NotifyClients( pOldValue, pNewValue );
-}
+/*************************************************************************
+|*	  SwModify::Modify( SwHint * pOldValue, SwHint * pNewValue )
+|*
+|*	  Beschreibung		Dokument 1.7
+|*	  Ersterstellung	JP 20.11.90
+|*	  Letzte Aenderung	MA 20. Mar. 95
+*************************************************************************/
 
-void SwModify::NotifyClients( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue )
+
+
+void SwModify::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 {
     if (IsInCache() || IsInSwFntCache())
     {
-        const sal_uInt16 nWhich = pOldValue ? pOldValue->Which() :
+        const USHORT nWhich = pOldValue ? pOldValue->Which() :
                                         pNewValue ? pNewValue->Which() : 0;
         CheckCaching( nWhich );
     }
@@ -180,38 +209,50 @@ void SwModify::NotifyClients( const SfxPoolItem *pOldValue, const SfxPoolItem *p
 
     LockModify();
 
-    // mba: WTF?!
+#if OSL_DEBUG_LEVEL > 1
     if( !pOldValue )
-        bLockClientList = sal_True;
+        bInModify = TRUE;
     else
-    {
-        // following Modifies shouldn't call an ASSERT
+        // following Modifies don't calls an ASSRT
         switch( pOldValue->Which() )
         {
         case RES_OBJECTDYING:
-        case RES_REMOVE_UNO_OBJECT:
-            bLockClientList = ((SwPtrMsgPoolItem *)pOldValue)->pObject != this;
+         case RES_REMOVE_UNO_OBJECT:
+            bInModify = ((SwPtrMsgPoolItem *)pOldValue)->pObject != this;
             break;
 
         case RES_FOOTNOTE_DELETED:
         case RES_REFMARK_DELETED:
         case RES_TOXMARK_DELETED:
         case RES_FIELD_DELETED:
-            bLockClientList = sal_False;
+            bInModify = FALSE;
             break;
         default:
-            bLockClientList = sal_True;
+            bInModify = TRUE;
         }
-    }
+#else
+    bInModify = TRUE;
+#endif
 
-    ModifyBroadcast( pOldValue, pNewValue );
-    bLockClientList = sal_False;
+    SwClientIter aIter( *this );
+    SwClient * pLast = aIter.GoStart();
+    if( pLast ) 	// konnte zum Anfang gesprungen werden ??
+        do
+        {
+            pLast->Modify( pOldValue, pNewValue );
+            if( !pRoot )	// Baum schon Weg ??
+                break;
+        } while( 0 != ( pLast = aIter++ ));
+
+    bInModify = FALSE;
     UnlockModify();
 }
 
-sal_Bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
+// erfrage vom Modify Informationen
+
+BOOL SwModify::GetInfo( SfxPoolItem& rInfo ) const
 {
-    sal_Bool bRet = sal_True;       // bedeutet weiter zum naechsten
+    BOOL bRet = TRUE;		// bedeutet weiter zum naechsten
 
     if( pRoot )
     {
@@ -224,38 +265,48 @@ sal_Bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
                 ;
     }
 
-    return bRet;
+    return bRet;		// und weiter
 }
 
-/*************************************************************************/
+/*************************************************************************
+|*	  SwModify::Add( SwClient *pDepend )
+|*
+|*	  Beschreibung		Dokument 1.7
+|*	  Ersterstellung	JP 20.11.90
+|*	  Letzte Aenderung	JP 14.09.94
+*************************************************************************/
+
+
+
 void SwModify::Add(SwClient *pDepend)
 {
-    OSL_ENSURE( !bLockClientList, "Client inserted while in Modify" );
+    OSL_ENSURE( !bInModify, "Client innerhalb des eigenen Modifies einfuegen?" );
 
+    // nur wenn das hier noch nicht eingetragen ist einfuegen
     if(pDepend->pRegisteredIn != this )
     {
 #if OSL_DEBUG_LEVEL > 1
         SwClientIter* pTmp = pClientIters;
         while( pTmp )
         {
-            OSL_ENSURE( &pTmp->GetModify() != pRoot, "Client added to active ClientIter" );
+            OSL_ENSURE( &pTmp->rRoot != pRoot,
+                "Client beim angemeldeten ClientIter einfuegen?" );
             pTmp = pTmp->pNxtIter;
         }
 #endif
-        // deregister new client in case it is already registered elsewhere
+        // wenn schon wanders angemeldet, dann dort abmelden
         if( pDepend->pRegisteredIn != 0 )
             pDepend->pRegisteredIn->Remove( pDepend );
 
         if( !pRoot )
         {
-            // first client added
             pRoot = pDepend;
             pRoot->pLeft = 0;
             pRoot->pRight = 0;
         }
         else
         {
-            // append client
+            // immer hinter die Root haengen
             pDepend->pRight = pRoot->pRight;
             pRoot->pRight = pDepend;
             pDepend->pLeft = pRoot;
@@ -263,24 +314,31 @@ void SwModify::Add(SwClient *pDepend)
                 pDepend->pRight->pLeft = pDepend;
         }
 
-        // connect client to me
         pDepend->pRegisteredIn = this;
     }
 }
 
-/*************************************************************************/
+/*************************************************************************
+|*	  SwModify::_Remove( SwClient *pDepend )
+|*
+|*	  Beschreibung		Dokument 1.7
+|*	  Ersterstellung	JP 20.11.90
+|*	  Letzte Aenderung	JP 14.09.94
+*************************************************************************/
 
-SwClient* SwModify::Remove(SwClient * pDepend)
+
+
+SwClient *SwModify::_Remove(SwClient * pDepend)
 {
-    if ( bInDocDTOR )
-        return 0;
+    // FME 2007-07-16 #i79641# SwXTextMarkup is allowed to be removed ...
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE( !bInModify || 0 != dynamic_cast<SwXTextMarkup*>(pDepend), "Client innerhalb des eigenen Modifies loeschen?" );
+#endif
 
-    OSL_ENSURE( !bLockClientList || pDepend->mbIsAllowedToBeRemovedInModifyCall, "SwClient shall be removed in Modify call!" );
-
+    // loesche das Object aus der Liste und setze den
+    // Registrierungs-Pointer zurueck
     if( pDepend->pRegisteredIn == this )
     {
-        // SwClient is my listener
-        // remove it from my list
         SwClient* pR = pDepend->pRight;
         SwClient* pL = pDepend->pLeft;
         if( pRoot == pDepend )
@@ -291,47 +349,46 @@ SwClient* SwModify::Remove(SwClient * pDepend)
         if( pR )
             pR->pLeft = pL;
 
-        // update ClientIters
+        // alle Client-Iters updaten
         SwClientIter* pTmp = pClientIters;
         while( pTmp )
         {
-            if( pTmp->pAct == pDepend || pTmp->pDelNext == pDepend )
-                // if object being removed is the current or next object in an iterator, advance this iterator
+            if( pTmp->pAkt == pDepend || pTmp->pDelNext == pDepend )
                 pTmp->pDelNext = pR;
+
+            // --> FME 2006-02-03 #127369# Notify SwClientIter if mpWatchClient is removed
+            if ( pTmp->mpWatchClient == pDepend )
+                pTmp->mpWatchClient = 0;
+            // <--
+
             pTmp = pTmp->pNxtIter;
         }
 
         pDepend->pLeft = 0;
         pDepend->pRight = 0;
     }
-    else
-    {
-        OSL_FAIL( "SwModify::Remove(): pDepend nicht gefunden" );
+    else {
+        OSL_ENSURE( FALSE, "SwModify::Remove(): pDepend nicht gefunden");
     }
-
-    // disconnect client from me
     pDepend->pRegisteredIn = 0;
     return pDepend;
 }
 
-int SwModify::GetClientCount() const
-{
-    int nRet=0;
-    SwClientIter aIter( *this );
-    SwClient *pLast = aIter.GoStart();
-    if( pLast )
-        do
-        {
-            ++nRet;
-        } while( 0 != ( pLast = aIter++ ));
-    return nRet;
-}
 
-void SwModify::CheckCaching( const sal_uInt16 nWhich )
+/*************************************************************************
+|*	  SwModify::CheckCaching( const USHORT nWhich )
+|*
+|*	  Ersterstellung	JP 25.06.95
+|*	  Letzte Aenderung	JP 25.06.95
+*************************************************************************/
+
+
+
+void SwModify::CheckCaching( const USHORT nWhich )
 {
     if (isCHRATR(nWhich))
     {
-        SetInSwFntCache( sal_False );
+        SetInSwFntCache( FALSE );
     }
     else
         switch ( nWhich )
@@ -339,7 +396,7 @@ void SwModify::CheckCaching( const sal_uInt16 nWhich )
         case RES_OBJECTDYING:
         case RES_FMT_CHG:
         case RES_ATTRSET_CHG:
-            SetInSwFntCache( sal_False );
+            SetInSwFntCache( FALSE );
 
         case RES_UL_SPACE:
         case RES_LR_SPACE:
@@ -351,39 +408,25 @@ void SwModify::CheckCaching( const sal_uInt16 nWhich )
             if ( IsInCache() )
             {
                 SwFrm::GetCache().Delete( this );
-                SetInCache( sal_False );
+                SetInCache( FALSE );
             }
             break;
         }
 }
 
-void SwModify::CallSwClientNotify( const SfxHint& rHint ) const
-{
-    SwClientIter aIter(*this);
-    SwClient * pClient = aIter.GoStart();
-    while (pClient)
-    {
-        pClient->SwClientNotify( *this, rHint );
-        pClient = aIter++;
-    }
-}
-
-void SwModify::ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue, TypeId nType )
-{
-    SwClientIter aIter(*this);
-    SwClient * pClient = aIter.First( nType );
-    while (pClient)
-    {
-        pClient->Modify( pOldValue, pNewValue );
-        pClient = aIter.Next();
-    }
-}
 
 // ----------
 // SwDepend
 // ----------
 
-/*************************************************************************/
+/*************************************************************************
+|*	  SwDepend::SwDepend(SwClient *pTellHim,SwModify *pDepend)
+|*
+|*	  Beschreibung		callback.doc V1.14
+|*	  Ersterstellung	VB 20.03.91
+|*	  Letzte Aenderung	VB 20.03.91
+*************************************************************************/
+
 
 SwDepend::SwDepend(SwClient *pTellHim, SwModify *pDepend)
     : SwClient(pDepend)
@@ -391,36 +434,42 @@ SwDepend::SwDepend(SwClient *pTellHim, SwModify *pDepend)
     pToTell  = pTellHim;
 }
 
-/*************************************************************************/
+/*************************************************************************
+|*
+|*	  SwDepend::Modify(SwHint *, SwHint *)
+|*
+|*	  Beschreibung		callback.doc V1.14
+|*	  Ersterstellung	VB 20.03.91
+|*	  Letzte Aenderung	VB 20.03.91
+|*
+*************************************************************************/
 
-void SwDepend::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem *pNewValue )
+
+void SwDepend::Modify( SfxPoolItem *pOldValue, SfxPoolItem *pNewValue )
 {
     if(pNewValue && pNewValue->Which() == RES_OBJECTDYING)
-        CheckRegistration(pOldValue,pNewValue);
+        SwClient::Modify(pOldValue,pNewValue);
     else if(pToTell)
-        pToTell->ModifyNotification(pOldValue, pNewValue);
+        pToTell->Modify(pOldValue, pNewValue);
 }
 
-void SwDepend::SwClientNotify( const SwModify& rMod, const SfxHint& rHint )
-{
-    if ( pToTell )
-        pToTell->SwClientNotifyCall( rMod, rHint );
-}
 
-sal_Bool SwDepend::GetInfo( SfxPoolItem& rInfo ) const
+    // erfrage vom Modify Informationen
+BOOL SwDepend::GetInfo( SfxPoolItem& rInfo ) const
 {
-    return pToTell ? pToTell->GetInfo( rInfo ) : sal_True;
+    return pToTell ? pToTell->GetInfo( rInfo ) : TRUE;
 }
 
 /********************************************************************/
 
-SwClientIter::SwClientIter( const SwModify& rModify )
+
+SwClientIter::SwClientIter( SwModify const& rModify )
     : rRoot( rModify )
 {
+    // hinten einketten!
     pNxtIter = 0;
     if( pClientIters )
     {
-        // append to list of ClientIters
         SwClientIter* pTmp = pClientIters;
         while( pTmp->pNxtIter )
             pTmp = pTmp->pNxtIter;
@@ -429,8 +478,9 @@ SwClientIter::SwClientIter( const SwModify& rModify )
     else
         pClientIters = this;
 
-    pAct = const_cast<SwClient*>(rRoot.GetDepends());
-    pDelNext = pAct;
+    pAkt = rRoot.pRoot;
+    pDelNext = pAkt;
+    mpWatchClient = 0;
 }
 
 
@@ -439,7 +489,6 @@ SwClientIter::~SwClientIter()
 {
     if( pClientIters )
     {
-        // reorganize list of ClientIters
         if( pClientIters == this )
             pClientIters = pNxtIter;
         else
@@ -457,111 +506,133 @@ SwClientIter::~SwClientIter()
 }
 
 
+#ifndef CFRONT
+    // Postfix Operator
 SwClient* SwClientIter::operator++(int)
 {
-    if( pDelNext == pAct )
+// solange der CFRONT Prefix und PostFix nicht unterscheiden kann, immer
+// als Prefix-Operator arbeiten. Wenn der CFRONT es kann, muss auch der
+// Code entsprechen umgestellt werden !!!
+    if( pDelNext == pAkt )
     {
-        pAct = pAct->pRight;
-        pDelNext = pAct;
+        pAkt = pAkt->pRight;
+        pDelNext = pAkt;
     }
     else
-        pAct = pDelNext;
-    return pAct;
+        pAkt = pDelNext;
+    return pAkt;
+}
+#endif
+
+
+    // Prefix Operator
+SwClient* SwClientIter::operator++()
+{
+    if( pDelNext == pAkt )
+    {
+        pAkt = pAkt->pRight;
+        pDelNext = pAkt;
+    }
+    else
+        pAkt = pDelNext;
+    return pAkt;
 }
 
-SwClient* SwClientIter::GoStart()
+
+#ifndef CFRONT
+    // Postfix Operator
+SwClient* SwClientIter::operator--(int)
 {
-    pAct = const_cast<SwClient*>(rRoot.GetDepends());
-    if( pAct )
-        while( pAct->pLeft )
-            pAct = pAct->pLeft;
-    pDelNext = pAct;
-    return pAct;
+// solange der CFRONT Prefix und PostFix nicht unterscheiden kann, immer
+// als Prefix-Operator arbeiten. Wenn der CFRONT es kann, muss auch der
+// Code entsprechen umgestellt werden !!!
+    if( pDelNext == pAkt )
+        pAkt = pAkt->pLeft;
+    else
+        pAkt = pDelNext->pLeft;
+    pDelNext = pAkt;
+    return pAkt;
+}
+#endif
+
+
+    // Prefix Operator
+SwClient* SwClientIter::operator--()
+{
+    if( pDelNext == pAkt )
+        pAkt = pAkt->pLeft;
+    else
+        pAkt = pDelNext->pLeft;
+    pDelNext = pAkt;
+    return pAkt;
 }
 
-SwClient* SwClientIter::GoEnd()
+
+SwClient* SwClientIter::GoStart() 		// zum Anfang des Baums
 {
-    pAct = pDelNext;
-    if( !pAct )
-        pAct = const_cast<SwClient*>(rRoot.GetDepends());
-    if( pAct )
-        while( pAct->pRight )
-            pAct = pAct->pRight;
-    pDelNext = pAct;
-    return pAct;
+    pAkt = rRoot.pRoot;
+    if( pAkt )
+        while( pAkt->pLeft )
+            pAkt = pAkt->pLeft;
+    pDelNext = pAkt;
+    return pAkt;
 }
+
+
+SwClient* SwClientIter::GoEnd()			// zum End des Baums
+{
+    pAkt = pDelNext;
+    if( !pAkt )
+        pAkt = rRoot.pRoot;
+    if( pAkt )
+        while( pAkt->pRight )
+            pAkt = pAkt->pRight;
+    pDelNext = pAkt;
+    return pAkt;
+}
+
+
 
 SwClient* SwClientIter::First( TypeId nType )
 {
     aSrchId = nType;
     GoStart();
-    if( pAct )
+    if( pAkt )
         do {
-            if( pAct->IsA( aSrchId ) )
+            if( pAkt->IsA( aSrchId ) )
                 break;
 
-            if( pDelNext == pAct )
+            if( pDelNext == pAkt )
             {
-                pAct = pAct->pRight;
-                pDelNext = pAct;
+                pAkt = pAkt->pRight;
+                pDelNext = pAkt;
             }
             else
-                pAct = pDelNext;
+                pAkt = pDelNext;
 
-        } while( pAct );
-    return pAct;
+        } while( pAkt );
+    return pAkt;
 }
+
 
 SwClient* SwClientIter::Next()
 {
     do {
-        if( pDelNext == pAct )
+        // erstmal zum naechsten
+        if( pDelNext == pAkt )
         {
-            pAct = pAct->pRight;
-            pDelNext = pAct;
+            pAkt = pAkt->pRight;
+            pDelNext = pAkt;
         }
         else
-            pAct = pDelNext;
+            pAkt = pDelNext;
 
-        if( pAct && pAct->IsA( aSrchId ) )
+        if( pAkt && pAkt->IsA( aSrchId ) )
             break;
-    } while( pAct );
-    return pAct;
+    } while( pAkt );
+    return pAkt;
 }
 
-SwClient* SwClientIter::Last( TypeId nType )
-{
-    aSrchId = nType;
-    GoEnd();
-    if( pAct )
-        do {
-            if( pAct->IsA( aSrchId ) )
-                break;
-
-            if( pDelNext == pAct )
-                pAct = pAct->pLeft;
-            else
-                pAct = pDelNext->pLeft;
-            pDelNext = pAct;
-
-        } while( pAct );
-    return pAct;
-}
-
-SwClient* SwClientIter::Previous()
-{
-    do {
-        if( pDelNext == pAct )
-            pAct = pAct->pLeft;
-        else
-            pAct = pDelNext->pLeft;
-        pDelNext = pAct;
-
-        if( pAct && pAct->IsA( aSrchId ) )
-            break;
-    } while( pAct );
-    return pAct;
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

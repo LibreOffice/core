@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,15 +71,15 @@ SdTabTemplateDlg::SdTabTemplateDlg( Window* pParent,
                                 SfxStyleSheetBase& rStyleBase,
                                 SdrModel* pModel,
                                 SdrView* pView ) :
-        SfxStyleDialog      ( pParent, SdResId( TAB_TEMPLATE ), rStyleBase, sal_False ),
-        rDocShell           ( *pDocShell ),
-        pSdrView            ( pView ),
-        pColorTab           ( pModel->GetColorTable() ),
-        pGradientList       ( pModel->GetGradientList() ),
-        pHatchingList       ( pModel->GetHatchList() ),
-        pBitmapList         ( pModel->GetBitmapList() ),
-        pDashList           ( pModel->GetDashList() ),
-        pLineEndList        ( pModel->GetLineEndList() )
+        SfxStyleDialog      ( pParent, SdResId( TAB_TEMPLATE ), rStyleBase, FALSE ),
+        rDocShell			( *pDocShell ),
+        pSdrView			( pView ),
+        pColorTab			( pModel->GetColorTable() ),
+        pGradientList		( pModel->GetGradientList() ),
+        pHatchingList		( pModel->GetHatchList() ),
+        pBitmapList 		( pModel->GetBitmapList() ),
+        pDashList			( pModel->GetDashList() ),
+        pLineEndList		( pModel->GetLineEndList() )
 {
     FreeResource();
 
@@ -122,7 +122,7 @@ SdTabTemplateDlg::~SdTabTemplateDlg()
 
 // -----------------------------------------------------------------------
 
-void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SdTabTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     switch( nId )

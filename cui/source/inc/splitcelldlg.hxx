@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 #include <vcl/button.hxx>
 
 #include <svx/stddlg.hxx>
@@ -38,19 +38,19 @@
 
 class SvxSplitTableDlg : public SvxAbstractSplittTableDialog, public SvxStandardDialog
 {
+    FixedText 			maCountLbl;
+    NumericField 		maCountEdit;
     FixedLine           maCountFL;
-    FixedText           maCountLbl;
-    NumericField        maCountEdit;
-    FixedLine           maDirFL;
-    ImageRadioButton    maHorzBox;
+    ImageRadioButton 	maHorzBox;
     ImageRadioButton    maVertBox;
     CheckBox            maPropCB;
-    OKButton            maOKBtn;
-    CancelButton        maCancelBtn;
-    HelpButton          maHelpBtn;
+    FixedLine           maDirFL;
+    OKButton 			maOKBtn;
+    CancelButton 		maCancelBtn;
+    HelpButton 			maHelpBtn;
 
-    long                mnMaxVertical;
-    long                mnMaxHorizontal;
+    long				mnMaxVertical;
+    long				mnMaxHorizontal;
 protected:
     virtual void Apply();
 

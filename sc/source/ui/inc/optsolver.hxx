@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ protected:
 struct ScOptConditionRow
 {
     String  aLeftStr;
-    sal_uInt16  nOperator;
+    USHORT  nOperator;
     String  aRightStr;
 
     ScOptConditionRow() : nOperator(0) {}
@@ -74,9 +74,9 @@ struct ScOptConditionRow
 class ScOptSolverSave
 {
     String  maObjective;
-    sal_Bool    mbMax;
-    sal_Bool    mbMin;
-    sal_Bool    mbValue;
+    BOOL    mbMax;
+    BOOL    mbMin;
+    BOOL    mbValue;
     String  maTarget;
     String  maVariable;
     std::vector<ScOptConditionRow> maConditions;
@@ -84,16 +84,16 @@ class ScOptSolverSave
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> maProperties;
 
 public:
-            ScOptSolverSave( const String& rObjective, sal_Bool bMax, sal_Bool bMin, sal_Bool bValue,
+            ScOptSolverSave( const String& rObjective, BOOL bMax, BOOL bMin, BOOL bValue,
                              const String& rTarget, const String& rVariable,
                              const std::vector<ScOptConditionRow>& rConditions,
                              const String& rEngine,
                              const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProperties );
 
     const String&   GetObjective() const    { return maObjective; }
-    sal_Bool            GetMax() const          { return mbMax; }
-    sal_Bool            GetMin() const          { return mbMin; }
-    sal_Bool            GetValue() const        { return mbValue; }
+    BOOL            GetMax() const          { return mbMax; }
+    BOOL            GetMin() const          { return mbMin; }
+    BOOL            GetValue() const        { return mbValue; }
     const String&   GetTarget() const       { return maTarget; }
     const String&   GetVariable() const     { return maVariable; }
     const std::vector<ScOptConditionRow>& GetConditions() const { return maConditions; }
@@ -110,9 +110,9 @@ public:
                     ~ScOptSolverDlg();
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual sal_Bool    IsRefInputMode() const;
+    virtual BOOL    IsRefInputMode() const;
     virtual void    SetActive();
-    virtual sal_Bool    Close();
+    virtual BOOL    Close();
 
 private:
     FixedText       maFtObjectiveCell;

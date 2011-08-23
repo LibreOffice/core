@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,6 +34,7 @@
 
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
+#include <errhdl.hxx>
 #include <ndindex.hxx>
 #include <fmtftn.hxx>
 #include <txtftn.hxx>
@@ -55,9 +56,9 @@ struct SwHTMLFootEndNote_Impl
     SvStringsDtor aNames;
 
     String sName;
-    String sContent;            // Infos fuer die letzte Fussnote
-    sal_Bool bEndNote;
-    sal_Bool bFixed;
+    String sContent;			// Infos fuer die letzte Fussnote
+    BOOL bEndNote;
+    BOOL bFixed;
 };
 
 
@@ -72,7 +73,7 @@ xub_StrLen lcl_html_getNextPart( String& rPart, const String& rContent,
     }
     else
     {
-        sal_Bool bQuoted = sal_False, bDone = sal_False;
+        BOOL bQuoted = FALSE, bDone = FALSE;
         for( ; nPos < nLen && !bDone; nPos++ )
         {
             sal_Unicode c = rContent.GetChar( nPos );
@@ -88,13 +89,13 @@ xub_StrLen lcl_html_getNextPart( String& rPart, const String& rContent,
                 if( bQuoted )
                     rPart += c;
                 else
-                    bDone = sal_True;
-                bQuoted = sal_False;
+                    bDone = TRUE;
+                bQuoted = FALSE;
                 break;
 
             default:
                 rPart += c;
-                bQuoted = sal_False;
+                bQuoted = FALSE;
                 break;
             }
         }
@@ -105,10 +106,10 @@ xub_StrLen lcl_html_getNextPart( String& rPart, const String& rContent,
 
 xub_StrLen lcl_html_getEndNoteInfo( SwEndNoteInfo& rInfo,
                                     const String& rContent,
-                                    sal_Bool bEndNote )
+                                    BOOL bEndNote )
 {
     xub_StrLen nStrPos = 0;
-    for( sal_uInt16 nPart = 0; nPart < 4; nPart++ )
+    for( USHORT nPart = 0; nPart < 4; nPart++ )
     {
         String aPart;
         if( STRING_MAXLEN != nStrPos )
@@ -124,7 +125,7 @@ xub_StrLen lcl_html_getEndNoteInfo( SwEndNoteInfo& rInfo,
             break;
 
         case 1:
-            rInfo.nFtnOffset = aPart.Len() == 0 ? 0 : (sal_uInt16)aPart.ToInt32();
+            rInfo.nFtnOffset = aPart.Len() == 0 ? 0 : (USHORT)aPart.ToInt32();
             break;
 
         case 2:
@@ -143,7 +144,7 @@ xub_StrLen lcl_html_getEndNoteInfo( SwEndNoteInfo& rInfo,
 void SwHTMLParser::FillEndNoteInfo( const String& rContent )
 {
     SwEndNoteInfo aInfo( pDoc->GetEndNoteInfo() );
-    lcl_html_getEndNoteInfo( aInfo, rContent, sal_True );
+    lcl_html_getEndNoteInfo( aInfo, rContent, TRUE );
     pDoc->SetEndNoteInfo( aInfo );
 }
 
@@ -151,9 +152,9 @@ void SwHTMLParser::FillFootNoteInfo( const String& rContent )
 {
     SwFtnInfo aInfo( pDoc->GetFtnInfo() );
 
-    xub_StrLen nStrPos = lcl_html_getEndNoteInfo( aInfo, rContent, sal_False );
+    xub_StrLen nStrPos = lcl_html_getEndNoteInfo( aInfo, rContent, FALSE );
 
-    for( sal_uInt16 nPart = 4; nPart < 8; nPart++ )
+    for( USHORT nPart = 4; nPart < 8; nPart++ )
     {
         String aPart;
         if( STRING_MAXLEN != nStrPos )
@@ -199,8 +200,8 @@ void SwHTMLParser::FillFootNoteInfo( const String& rContent )
     pDoc->SetFtnInfo( aInfo );
 }
 
-void SwHTMLParser::InsertFootEndNote( const String& rName, sal_Bool bEndNote,
-                                      sal_Bool bFixed )
+void SwHTMLParser::InsertFootEndNote( const String& rName, BOOL bEndNote,
+                                      BOOL bFixed )
 {
     if( !pFootEndNoteImpl )
         pFootEndNoteImpl = new SwHTMLFootEndNote_Impl;
@@ -240,7 +241,7 @@ void SwHTMLParser::FinishFootEndNote()
     }
     pFootEndNoteImpl->sName = aEmptyStr;
     pFootEndNoteImpl->sContent = aEmptyStr;
-    pFootEndNoteImpl->bFixed = sal_False;
+    pFootEndNoteImpl->bFixed = FALSE;
 }
 
 void SwHTMLParser::InsertFootEndNoteText()
@@ -265,8 +266,8 @@ SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const String& rName )
         // TODO: ToUpperAscii
         aName.ToUpperAscii();
 
-        sal_uInt16 nCount = pFootEndNoteImpl->aNames.Count();
-        for( sal_uInt16 i=0; i<nCount; i++ )
+        USHORT nCount = pFootEndNoteImpl->aNames.Count();
+        for( USHORT i=0; i<nCount; i++ )
         {
             if( *pFootEndNoteImpl->aNames[i] == aName )
             {
@@ -297,7 +298,7 @@ Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
         return rWrt;
 
     String sFtnName, sClass;
-    sal_uInt16 nPos;
+    USHORT nPos;
     if( rFmtFtn.IsEndNote() )
     {
         nPos = rHTMLWrt.pFootEndNotes ? rHTMLWrt.pFootEndNotes->Count() : 0;
@@ -334,12 +335,12 @@ Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
         (sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_sdfixed;
     sOut += '>';
     rWrt.Strm() << sOut.GetBuffer();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_superscript, sal_True );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_superscript, TRUE );
 
     HTMLOutFuncs::Out_String( rWrt.Strm(), rFmtFtn.GetViewNumStr(*rWrt.pDoc),
                                  rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_superscript, sal_False );
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_anchor, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_superscript, FALSE );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_anchor, FALSE );
 
     return rWrt;
 }
@@ -352,11 +353,11 @@ void SwHTMLWriter::OutFootEndNotes()
         return;
 
 #if OSL_DEBUG_LEVEL > 1
-    sal_uInt16 nFtn = nFootNote, nEn = nEndNote;
+    USHORT nFtn = nFootNote, nEn = nEndNote;
 #endif
     nFootNote = 0, nEndNote = 0;
 
-    for( sal_uInt16 i=0; i<pFootEndNotes->Count(); i++ )
+    for( USHORT i=0; i<pFootEndNotes->Count(); i++ )
     {
         SwTxtFtn *pTxtFtn = (*pFootEndNotes)[i];
         pFmtFtn = &pTxtFtn->GetFtn();
@@ -383,8 +384,8 @@ void SwHTMLWriter::OutFootEndNotes()
         HTMLOutFuncs::Out_String( Strm(), sFtnName, eDestEnc, &aNonConvertableCharacters );
         Strm() << "\">";
 
-        bLFPossible = sal_True;
-        IncIndentLevel();   // Inhalt von <DIV> einruecken
+        bLFPossible = TRUE;
+        IncIndentLevel();	// Inhalt von <DIV> einruecken
 
         OSL_ENSURE( pTxtFtn, "SwHTMLWriter::OutFootEndNotes: SwTxtFtn fehlt" );
         SwNodeIndex *pSttNdIdx = pTxtFtn->GetStartNode();
@@ -393,15 +394,15 @@ void SwHTMLWriter::OutFootEndNotes()
         if( pSttNdIdx )
         {
             HTMLSaveData aSaveData( *this, pSttNdIdx->GetIndex()+1,
-                pSttNdIdx->GetNode().EndOfSectionIndex(), sal_False );
+                pSttNdIdx->GetNode().EndOfSectionIndex(), FALSE );
             Out_SwDoc( pCurPam );
         }
 
-        DecIndentLevel();   // Inhalt von <DIV> einruecken
+        DecIndentLevel();	// Inhalt von <DIV> einruecken
         if( bLFPossible )
             OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, sal_False );
-        bLFPossible = sal_True;
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, FALSE );
+        bLFPossible = TRUE;
 
         OSL_ENSURE( !pFmtFtn,
                 "SwHTMLWriter::OutFootEndNotes: Ftn wurde nicht ausgegeben" );
@@ -498,14 +499,14 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn,
     Strm() << sOut.GetBuffer();
 
     HTMLOutFuncs::Out_String( Strm(), rNum, eDestEnc, &aNonConvertableCharacters );
-    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_anchor, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_anchor, FALSE );
 }
 
-sal_uInt16 lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
+USHORT lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
                                  String *pParts,
-                                 sal_Bool bEndNote  )
+                                 BOOL bEndNote	)
 {
-    sal_uInt16 nParts = 0;
+    USHORT nParts = 0;
     sal_Int16 eFmt = rInfo.aFmt.GetNumberingType();
     if( (bEndNote ? SVX_NUM_ROMAN_LOWER : SVX_NUM_ARABIC) != eFmt )
     {
@@ -518,17 +519,17 @@ sal_uInt16 lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
     }
     if( rInfo.nFtnOffset > 0 )
     {
-        pParts[1] = String::CreateFromInt32( (sal_Int32)rInfo.nFtnOffset );
+        pParts[1] =	String::CreateFromInt32( (sal_Int32)rInfo.nFtnOffset );
         nParts = 2;
     }
     if( rInfo.GetPrefix().Len() > 0 )
     {
-        pParts[2] = rInfo.GetPrefix();
+        pParts[2] =	rInfo.GetPrefix();
         nParts = 3;
     }
     if( rInfo.GetSuffix().Len() > 0 )
     {
-        pParts[3] = rInfo.GetSuffix();
+        pParts[3] =	rInfo.GetSuffix();
         nParts = 4;
     }
 
@@ -536,12 +537,12 @@ sal_uInt16 lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
 }
 
 void lcl_html_outFootEndNoteInfo( Writer& rWrt, String *pParts,
-                                  sal_uInt16 nParts, const sal_Char *pName )
+                                  USHORT nParts, const sal_Char *pName )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
     String aContent;
-    for( sal_uInt16 i=0; i<nParts; i++ )
+    for( USHORT i=0; i<nParts; i++ )
     {
         xub_StrLen nPos = 0;
         String aTmp( pParts[i] );
@@ -583,7 +584,7 @@ void SwHTMLWriter::OutFootEndNoteInfo()
     {
         const SwFtnInfo& rInfo = pDoc->GetFtnInfo();
         String aParts[8];
-        sal_uInt16 nParts = lcl_html_fillEndNoteInfo( rInfo, aParts, sal_False );
+        USHORT nParts = lcl_html_fillEndNoteInfo( rInfo, aParts, FALSE );
         if( rInfo.eNum != FTNNUM_DOC )
         {
             aParts[4] = rInfo.eNum == FTNNUM_CHAPTER ? 'C' : 'P';
@@ -596,12 +597,12 @@ void SwHTMLWriter::OutFootEndNoteInfo()
         }
         if( rInfo.aQuoVadis.Len() > 0 )
         {
-            aParts[6] = rInfo.aQuoVadis;
+            aParts[6] =	rInfo.aQuoVadis;
             nParts = 7;
         }
         if( rInfo.aErgoSum.Len() > 0 )
         {
-            aParts[7] = rInfo.aErgoSum;
+            aParts[7] =	rInfo.aErgoSum;
             nParts = 8;
         }
         if( nParts > 0 )
@@ -612,7 +613,7 @@ void SwHTMLWriter::OutFootEndNoteInfo()
     {
         const SwEndNoteInfo& rInfo = pDoc->GetEndNoteInfo();
         String aParts[4];
-        sal_uInt16 nParts = lcl_html_fillEndNoteInfo( rInfo, aParts, sal_True );
+        USHORT nParts = lcl_html_fillEndNoteInfo( rInfo, aParts, TRUE );
         if( nParts > 0 )
             lcl_html_outFootEndNoteInfo( *this, aParts, nParts,
                                          OOO_STRING_SVTOOLS_HTML_META_sdendnote );

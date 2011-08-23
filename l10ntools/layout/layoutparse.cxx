@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,24 +36,20 @@ LayoutXMLFile::LayoutXMLFile( bool mergeMode )
     , mMergeMode( mergeMode )
 {
 }
-
+    
 void
 LayoutXMLFile::SearchL10NElements( XMLParentNode* pCur, int )
 {
     if ( !pCur )
         pCur = this;
-
+            
     /* Recurse int children, SearchL10NElements does not do that for us.  */
     if ( XMLChildNodeList* lst = pCur->GetChildList() )
-        for ( size_t i = 0; i < lst->size(); i++ )
-            if ( (*lst)[ i ]->GetNodeType() == XML_NODE_TYPE_ELEMENT )
-                HandleElement( ( XMLElement* )(*lst)[ i ] );
-            else if ( (*lst)[ i ]->GetNodeType() == XML_NODE_TYPE_COMMENT ) {
-                XMLChildNodeList::iterator it = lst->begin();
-                ::std::advance( it, i );
-                lst->erase( it );
-                i--;
-            }
+        for ( ULONG i = 0; i < lst->Count(); i++ )
+            if ( lst->GetObject( i )->GetNodeType() == XML_NODE_TYPE_ELEMENT )
+                HandleElement( ( XMLElement* )lst->GetObject( i ) );
+            else if ( lst->GetObject( i )->GetNodeType() == XML_NODE_TYPE_COMMENT )
+                lst->Remove( i-- );
 }
 
 std::vector<XMLAttribute*>
@@ -61,11 +57,11 @@ interestingAttributes( XMLAttributeList* lst )
 {
     std::vector<XMLAttribute*> interesting;
     if ( lst )
-        for ( size_t i = 0; i < lst->size(); i++ )
-            if ( (*lst)[ i ]->Equals( STRING( "id" ) ) )
-                interesting.insert( interesting.begin(), (*lst)[ i ] );
-            else if ( ! BSTRING( *(*lst)[ i ]).CompareTo( "_", 1 ) )
-                interesting.push_back( (*lst)[ i ] );
+        for ( ULONG i = 0; i < lst->Count(); i++ )
+            if ( lst->GetObject( i )->Equals( STRING( "id" ) ) )
+                interesting.insert( interesting.begin(), lst->GetObject( i ) );
+            else if ( ! BSTRING( *lst->GetObject( i ) ).CompareTo( "_", 1 ) )
+                interesting.push_back( lst->GetObject( i ) );
     return interesting;
 }
 
@@ -73,7 +69,7 @@ void
 LayoutXMLFile::HandleElement( XMLElement* element )
 {
     std::vector<XMLAttribute*> interesting = interestingAttributes( element->GetAttributeList() );
-
+    
     if ( interesting.size() )
     {
         std::vector<XMLAttribute*>::iterator i = interesting.begin();
@@ -121,12 +117,12 @@ void LayoutXMLFile::InsertL10NElement( ByteString const& id, XMLElement* element
     (*languageMap)[ language ] = element;
 }
 
-sal_Bool LayoutXMLFile::Write( ByteString &aFilename )
+BOOL LayoutXMLFile::Write( ByteString &aFilename )
 {
 
     if ( aFilename.Len() )
     {
-        ofstream aFStream( aFilename.GetBuffer() , ios::out | ios::trunc );
+        ofstream aFStream( aFilename.GetBuffer() , ios::out | ios::trunc ); 
         if ( !aFStream )
             fprintf( stderr, "ERROR: cannot open file:%s\n", aFilename.GetBuffer() );
         else

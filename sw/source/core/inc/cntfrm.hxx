@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,80 +38,77 @@ class SwAttrSetChg;
 class SwTxtFrm;
 
 //Implementiert in cntfrm.cxx, wird von cntfrm.cxx und crsrsh.cxx angezogen
-extern sal_Bool GetFrmInPage( const SwCntntFrm*, SwWhichPage, SwPosPage, SwPaM* );
+extern BOOL GetFrmInPage( const SwCntntFrm*, SwWhichPage, SwPosPage, SwPaM* );
 
 class SwCntntFrm: public SwFrm, public SwFlowFrm
 {
-    friend void MakeNxt( SwFrm *pFrm, SwFrm *pNxt );    //ruft MakePrtArea
+    friend void MakeNxt( SwFrm *pFrm, SwFrm *pNxt );	//ruft MakePrtArea
 
     // --> OD 2007-11-26 #b6614158#
     // parameter <bObjsInNewUpper>, indicating that objects are existing in
     // remaining area of new upper
-    sal_Bool _WouldFit( SwTwips nSpace,
+    BOOL _WouldFit( SwTwips nSpace,
                     SwLayoutFrm *pNewUpper,
-                    sal_Bool bTstMove,
+                    BOOL bTstMove,
                     const bool bObjsInNewUpper );
     // <--
     virtual void MakeAll();
 
-    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
+    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
-    virtual sal_Bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool& );
+    virtual BOOL ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL& );
 
     const SwCntntFrm* ImplGetNextCntntFrm( bool bFwd ) const;
 
 protected:
 
-    sal_Bool MakePrtArea( const SwBorderAttrs & );
+    BOOL MakePrtArea( const SwBorderAttrs & );
 
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
-    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
+    virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
 
-    SwCntntFrm( SwCntntNode * const, SwFrm* );
+    SwCntntFrm( SwCntntNode * const );
 
 public:
     virtual ~SwCntntFrm();
-    TYPEINFO(); //bereits in Basisklassen drin
+    TYPEINFO();	//bereits in Basisklassen drin
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 
-    inline       SwCntntNode *GetNode();
+    inline 		 SwCntntNode *GetNode();
     inline const SwCntntNode *GetNode() const;
-                 sal_uInt16       GetSectionLevel();
+                 USHORT 	  GetSectionLevel();
 
     inline const SwCntntFrm *GetFollow() const;
-    inline       SwCntntFrm *GetFollow();
+    inline		 SwCntntFrm *GetFollow();
     SwTxtFrm* FindMaster() const;
 
         //Layoutabhaengiges Cursortravelling
-    virtual sal_Bool    LeftMargin( SwPaM * ) const;
-    virtual sal_Bool    RightMargin( SwPaM *, sal_Bool bAPI = sal_False ) const;
-    virtual sal_Bool    UnitUp( SwPaM *, const SwTwips nOffset = 0,
-                            sal_Bool bSetInReadOnly = sal_False ) const;
-    virtual sal_Bool    UnitDown( SwPaM *, const SwTwips nOffset = 0,
-                            sal_Bool bSetInReadOnly = sal_False ) const;
-    inline  sal_Bool    StartNextPage( SwPaM * ) const;
-    inline  sal_Bool    StartPrevPage( SwPaM * ) const;
-    inline  sal_Bool    StartCurrPage( SwPaM * ) const;
-    inline  sal_Bool    EndCurrPage( SwPaM * ) const;
-    inline  sal_Bool    EndNextPage( SwPaM * ) const;
-    inline  sal_Bool    EndPrevPage( SwPaM * ) const;
+    virtual BOOL	LeftMargin( SwPaM * ) const;
+    virtual BOOL	RightMargin( SwPaM *, BOOL bAPI = FALSE ) const;
+    virtual BOOL	UnitUp( SwPaM *, const SwTwips nOffset = 0,
+                            BOOL bSetInReadOnly = FALSE ) const;
+    virtual BOOL	UnitDown( SwPaM *, const SwTwips nOffset = 0,
+                            BOOL bSetInReadOnly = FALSE ) const;
+    inline	BOOL	StartNextPage( SwPaM * ) const;
+    inline	BOOL	StartPrevPage( SwPaM * ) const;
+    inline	BOOL	StartCurrPage( SwPaM * ) const;
+    inline	BOOL	EndCurrPage( SwPaM * ) const;
+    inline	BOOL	EndNextPage( SwPaM * ) const;
+    inline	BOOL	EndPrevPage( SwPaM * ) const;
 
     // nMaxHeight is the required height
     // bSplit indicates, that the paragraph has to be split
     // bTst indicates, that we are currently doing a test formatting
     virtual sal_Bool WouldFit( SwTwips &nMaxHeight, sal_Bool &bSplit, sal_Bool bTst );
 
-    sal_Bool MoveFtnCntFwd( sal_Bool, SwFtnBossFrm* );//von MoveFwd gerufen bei Ftn-Inhalt
+    BOOL MoveFtnCntFwd( BOOL, SwFtnBossFrm* );//von MoveFwd gerufen bei Ftn-Inhalt
 
     inline  SwCntntFrm* GetNextCntntFrm() const;
     inline  SwCntntFrm* GetPrevCntntFrm() const;
-    static bool CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave, long nBottom, bool bSkipRowSpanCells );
-    void RegisterToNode( SwCntntNode& );
-    static void DelFrms( const SwCntntNode& );
 };
 
 inline SwCntntFrm* SwCntntFrm::GetNextCntntFrm() const

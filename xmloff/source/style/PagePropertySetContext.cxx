@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,8 +99,6 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
                     nFil  == mxMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-1 ),
                     "invalid property map!");
-        (void)nPos;
-        (void)nFil;
         pContext =
             new XMLBackgroundImageContext( GetImport(), nPrefix,
                                            rLocalName, xAttrList,
@@ -112,15 +110,25 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
         break;
 
     case CTF_PM_TEXTCOLUMNS:
+#ifndef SVX_LIGHT
         pContext = new XMLTextColumnsContext( GetImport(), nPrefix,
                                               rLocalName, xAttrList, rProp,
                                               rProperties );
+#else
+        // create default context to skip content
+        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+#endif // #ifndef SVX_LIGHT
         break;
 
     case CTF_PM_FTN_LINE_WEIGTH:
-        pContext = new XMLFootnoteSeparatorImport(
-            GetImport(), nPrefix, rLocalName, rProperties,
+#ifndef SVX_LIGHT
+        pContext = new XMLFootnoteSeparatorImport( 
+            GetImport(), nPrefix, rLocalName, rProperties, 
             mxMapper->getPropertySetMapper(), rProp.mnIndex);
+#else
+        // create default context to skip content
+        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName);
+#endif // #ifndef SVX_LIGHT
         break;
     }
 

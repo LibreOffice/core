@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ namespace x11 {
         XLIB_Window                 m_aDropWindow;
         XLIB_Time                   m_nTimestamp;
         SelectionManager&           m_rManager;
-        com::sun::star::uno::Reference< XInterface >     m_xManagerRef;
+        Reference< XInterface >     m_xManagerRef;
     public:
         DropTargetDropContext( XLIB_Window, XLIB_Time, SelectionManager& );
         virtual ~DropTargetDropContext();
@@ -71,7 +71,7 @@ namespace x11 {
         XLIB_Window                 m_aDropWindow;
         XLIB_Time                   m_nTimestamp;
         SelectionManager&           m_rManager;
-        com::sun::star::uno::Reference< XInterface >     m_xManagerRef;
+        Reference< XInterface >     m_xManagerRef;
     public:
         DropTargetDragContext( XLIB_Window, XLIB_Time, SelectionManager& );
         virtual ~DropTargetDragContext();
@@ -89,16 +89,16 @@ namespace x11 {
         XLIB_Window                 m_aDropWindow;
         XLIB_Time                   m_nTimestamp;
         SelectionManager&           m_rManager;
-        com::sun::star::uno::Reference< XInterface >     m_xManagerRef;
+        Reference< XInterface >     m_xManagerRef;
     public:
         DragSourceContext( XLIB_Window, XLIB_Time, SelectionManager& );
         virtual ~DragSourceContext();
 
         // XDragSourceContext
-        virtual sal_Int32   SAL_CALL getCurrentCursor() throw();
-        virtual void        SAL_CALL setCursor( sal_Int32 cursorId ) throw();
-        virtual void        SAL_CALL setImage( sal_Int32 imageId ) throw();
-        virtual void        SAL_CALL transferablesFlavorsChanged() throw();
+        virtual sal_Int32	SAL_CALL getCurrentCursor() throw();
+        virtual void		SAL_CALL setCursor( sal_Int32 cursorId ) throw();
+        virtual void		SAL_CALL setImage( sal_Int32 imageId ) throw();
+        virtual void		SAL_CALL transferablesFlavorsChanged() throw();
     };
 } // namespace
 

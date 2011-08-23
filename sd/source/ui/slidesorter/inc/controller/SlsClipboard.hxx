@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,12 +25,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 #ifndef SD_SLIDESORTER_CLIPBOARD
 #define SD_SLIDESORTER_CLIPBOARD
 
 #include "ViewClipboard.hxx"
-#include "controller/SlsSelectionObserver.hxx"
+
 #include <sal/types.h>
 #include <tools/solar.h>
 #include <svx/svdpage.hxx>
@@ -86,27 +85,25 @@ public:
 
     sal_Int8 AcceptDrop (
         const AcceptDropEvent& rEvt,
-        DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL,
-        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND );
+        DropTargetHelper& rTargetHelper, 
+        ::sd::Window* pTargetWindow = NULL, 
+        USHORT nPage = SDRPAGE_NOTFOUND, 
+        USHORT nLayer = SDRPAGE_NOTFOUND );
 
     sal_Int8 ExecuteDrop (
-        const ExecuteDropEvent& rEvt,
+        const ExecuteDropEvent& rEvt, 
         DropTargetHelper& rTargetHelper,
-        ::sd::Window* pTargetWindow = NULL,
-        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
-
-    void Abort (void);
+        ::sd::Window* pTargetWindow = NULL, 
+        USHORT nPage = SDRPAGE_NOTFOUND, 
+        USHORT nLayer = SDRPAGE_NOTFOUND);
 
 protected:
-    virtual sal_uInt16 DetermineInsertPosition (
+    virtual USHORT DetermineInsertPosition (
         const SdTransferable& rTransferable);
 
-    virtual sal_uInt16 InsertSlides (
+    virtual USHORT InsertSlides (
         const SdTransferable& rTransferable,
-        sal_uInt16 nInsertPosition);
+        USHORT nInsertPosition);
 
 private:
     SlideSorter& mrSlideSorter;
@@ -127,21 +124,12 @@ private:
 
     /** When pages are moved or copied then the selection of the slide
         sorter has to be updated.  This flag is used to remember whether the
-        selection has to be updated or can stay as it is (sal_False).
+        selection has to be updated or can stay as it is (FALSE).
     */
     bool mbUpdateSelectionPending;
 
-    /** Used when a drop is executed to combine all undo actions into one.
-        Typically created in ExecuteDrop() and released in DragFinish().
-    */
-    class UndoContext;
-    ::boost::scoped_ptr<UndoContext> mpUndoContext;
-
-    ::boost::scoped_ptr<SelectionObserver::Context> mpSelectionObserverContext;
-    sal_uLong mnDragFinishedUserEventId;
-
     void CreateSlideTransferable (
-        ::Window* pWindow,
+        ::Window* pWindow, 
         bool bDrag);
 
     /** Select the pages stored in the maPagesToSelect member.  The list in
@@ -219,13 +207,8 @@ private:
         const void* pDropEvent ,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow,
-        sal_uInt16 nPage,
-        sal_uInt16 nLayer);
-
-    /** Asynchronous part of DragFinished.  The argument is the sal_Int8
-        nDropAction, disguised as void*.
-    */
-    DECL_LINK(ProcessDragFinished, void*);
+        USHORT nPage,
+        USHORT nLayer);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

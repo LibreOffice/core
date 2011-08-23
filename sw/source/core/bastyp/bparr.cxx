@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,18 +37,18 @@
 
 // die Blockverwaltung waechst/schrumpft immer um 20 Bloecke, das sind dann
 // immer ~ 20 * MAXENTRY == 20000 Eintraege
-const sal_uInt16 nBlockGrowSize = 20;
+const USHORT nBlockGrowSize = 20;
 
 #if OSL_DEBUG_LEVEL > 2
 
 #define CHECKIDX( p, n, i, c ) CheckIdx( p, n, i, c );
 
-void CheckIdx( BlockInfo** ppInf, sal_uInt16 nBlock, sal_uLong nSize, sal_uInt16 nCur )
+void CheckIdx( BlockInfo** ppInf, USHORT nBlock, ULONG nSize, USHORT nCur )
 {
     DBG_ASSERT( !nSize || nCur < nBlock, "BigPtrArray: CurIndex steht falsch" );
 
-    sal_uLong nIdx = 0;
-    for( sal_uInt16 nCnt = 0; nCnt < nBlock; ++nCnt, ++ppInf )
+    ULONG nIdx = 0;
+    for( USHORT nCnt = 0; nCnt < nBlock; ++nCnt, ++ppInf )
     {
         nIdx += (*ppInf)->nElem;
         // Array mit Luecken darf es nicht geben
@@ -70,7 +70,7 @@ BigPtrArray::BigPtrArray()
 {
     nBlock = nCur = 0;
     nSize = 0;
-    nMaxBlock = nBlockGrowSize;     // == 20 * 1000 Eintraege
+    nMaxBlock = nBlockGrowSize;		// == 20 * 1000 Eintraege
     ppInf = new BlockInfo* [ nMaxBlock ];
 }
 
@@ -81,7 +81,7 @@ BigPtrArray::~BigPtrArray()
     if( nBlock )
     {
         BlockInfo** pp = ppInf;
-        for( sal_uInt16 n = 0; n < nBlock; ++n, ++pp )
+        for( USHORT n = 0; n < nBlock; ++n, ++pp )
         {
             delete[] (*pp)->pData;
             delete    *pp;
@@ -93,19 +93,19 @@ BigPtrArray::~BigPtrArray()
 // Auch der Move ist schlicht. Optimieren ist hier wg. der
 // Stueckelung des Feldes zwecklos!
 
-void BigPtrArray::Move( sal_uLong from, sal_uLong to )
+void BigPtrArray::Move( ULONG from, ULONG to )
 {
-    sal_uInt16 cur = Index2Block( from );
+    USHORT cur = Index2Block( from );
     BlockInfo* p = ppInf[ cur ];
     ElementPtr pElem = p->pData[ from - p->nStart ];
-    Insert( pElem, to );            // erst einfuegen, dann loeschen !!!!
+    Insert( pElem, to );			// erst einfuegen, dann loeschen !!!!
     Remove( ( to < from ) ? ( from + 1 ) : from );
 }
 
 // das Ende ist EXCLUSIV
 
 
-void BigPtrArray::ForEach( sal_uLong nStart, sal_uLong nEnd,
+void BigPtrArray::ForEach( ULONG nStart, ULONG nEnd,
                             FnForEach fn, void* pArgs )
 {
     if( nEnd > nSize )
@@ -113,10 +113,10 @@ void BigPtrArray::ForEach( sal_uLong nStart, sal_uLong nEnd,
 
     if( nStart < nEnd )
     {
-        sal_uInt16 cur = Index2Block( nStart );
+        USHORT cur = Index2Block( nStart );
         BlockInfo** pp = ppInf + cur;
         BlockInfo* p = *pp;
-        sal_uInt16 nElem = sal_uInt16( nStart - p->nStart );
+        USHORT nElem = USHORT( nStart - p->nStart );
         ElementPtr* pElem = p->pData + nElem;
         nElem = p->nElem - nElem;
         for(;;)
@@ -137,12 +137,12 @@ void BigPtrArray::ForEach( sal_uLong nStart, sal_uLong nEnd,
 }
 
 
-ElementPtr BigPtrArray::operator[]( sal_uLong idx ) const
+ElementPtr BigPtrArray::operator[]( ULONG idx ) const
 {
     // weil die Funktion eben doch nicht const ist:
     DBG_ASSERT( idx < nSize, "operator[]: Index aussserhalb" );
     BigPtrArray* pThis = (BigPtrArray*) this;
-    sal_uInt16 cur = Index2Block( idx );
+    USHORT cur = Index2Block( idx );
     BlockInfo* p = ppInf[ cur ];
     pThis->nCur = cur;
     return p->pData[ idx - p->nStart ];
@@ -162,7 +162,7 @@ ElementPtr BigPtrArray::operator[]( sal_uLong idx ) const
 
 
 
-sal_uInt16 BigPtrArray::Index2Block( sal_uLong pos ) const
+USHORT BigPtrArray::Index2Block( ULONG pos ) const
 {
     // zuletzt verwendeter Block?
     BlockInfo* p = ppInf[ nCur ];
@@ -187,11 +187,11 @@ sal_uInt16 BigPtrArray::Index2Block( sal_uLong pos ) const
     }
     // Binaere Suche:
     // Diese fuehrt immer zum Erfolg
-    sal_uInt16 lower = 0, upper = nBlock - 1;
-    sal_uInt16 cur = 0;
+    USHORT lower = 0, upper = nBlock - 1;
+    USHORT cur = 0;
     for(;;)
     {
-        sal_uInt16 n = lower + ( upper - lower ) / 2;
+        USHORT n = lower + ( upper - lower ) / 2;
         cur = ( n == cur ) ? n+1 : n;
         p = ppInf[ cur ];
         if( p->nStart <= pos && p->nEnd >= pos )
@@ -208,10 +208,10 @@ sal_uInt16 BigPtrArray::Index2Block( sal_uLong pos ) const
 
 // pos bezeichnet den letzten korrekten Block
 
-void BigPtrArray::UpdIndex( sal_uInt16 pos )
+void BigPtrArray::UpdIndex( USHORT pos )
 {
     BlockInfo** pp = ppInf + pos;
-    sal_uLong idx = (*pp)->nEnd + 1;
+    ULONG idx = (*pp)->nEnd + 1;
     BlockInfo* p;
     while( ++pos < nBlock )
     {
@@ -228,7 +228,7 @@ void BigPtrArray::UpdIndex( sal_uInt16 pos )
 
 
 
-BlockInfo* BigPtrArray::InsBlock( sal_uInt16 pos )
+BlockInfo* BigPtrArray::InsBlock( USHORT pos )
 {
     if( nBlock == nMaxBlock )
     {
@@ -250,14 +250,14 @@ BlockInfo* BigPtrArray::InsBlock( sal_uInt16 pos )
         p->nStart = p->nEnd = ppInf[ pos-1 ]->nEnd + 1;
     else
         p->nStart = p->nEnd = 0;
-    p->nEnd--;  // keine Elemente
+    p->nEnd--;	// keine Elemente
     p->nElem = 0;
     p->pData = new ElementPtr [ MAXENTRY ];
     p->pBigArr = this;
     return p;
 }
 
-void BigPtrArray::BlockDel( sal_uInt16 nDel )
+void BigPtrArray::BlockDel( USHORT nDel )
 {
     nBlock = nBlock - nDel;
     if( nMaxBlock - nBlock > nBlockGrowSize )
@@ -273,12 +273,12 @@ void BigPtrArray::BlockDel( sal_uInt16 nDel )
 }
 
 
-void BigPtrArray::Insert( const ElementPtr& rElem, sal_uLong pos )
+void BigPtrArray::Insert( const ElementPtr& rElem, ULONG pos )
 {
     CHECKIDX( ppInf, nBlock, nSize, nCur );
 
     BlockInfo* p;
-    sal_uInt16 cur;
+    USHORT cur;
     if( !nSize )
         // Sonderfall: erstes Element einfuegen
         p = InsBlock( cur = 0 );
@@ -354,14 +354,14 @@ void BigPtrArray::Insert( const ElementPtr& rElem, sal_uLong pos )
     DBG_ASSERT( pos < MAXENTRY, "falsche Pos" );
     if( pos != p->nElem )
     {
-        int nCount = p->nElem - sal_uInt16(pos);
+        int nCount = p->nElem - USHORT(pos);
         ElementPtr *pFrom = p->pData + p->nElem,
                             *pTo = pFrom + 1;
         while( nCount-- )
             ++( *--pTo = *--pFrom )->nOffset;
     }
     // Element eintragen und Indexe updaten
-    ((ElementPtr&)rElem)->nOffset = sal_uInt16(pos);
+    ((ElementPtr&)rElem)->nOffset = USHORT(pos);
     ((ElementPtr&)rElem)->pBlock = p;
     p->pData[ pos ] = rElem;
     p->nEnd++;
@@ -373,28 +373,28 @@ void BigPtrArray::Insert( const ElementPtr& rElem, sal_uLong pos )
     CHECKIDX( ppInf, nBlock, nSize, nCur );
 }
 
-void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
+void BigPtrArray::Remove( ULONG pos, ULONG n )
 {
     CHECKIDX( ppInf, nBlock, nSize, nCur );
 
-    sal_uInt16 nBlkdel = 0;                 // entfernte Bloecke
-    sal_uInt16 cur = Index2Block( pos );    // aktuelle Blocknr
-    sal_uInt16 nBlk1 = cur;                 // 1. behandelter Block
-    sal_uInt16 nBlk1del = USHRT_MAX;        // 1. entfernter Block
+    USHORT nBlkdel = 0;					// entfernte Bloecke
+    USHORT cur = Index2Block( pos );	// aktuelle Blocknr
+    USHORT nBlk1 = cur;                 // 1. behandelter Block
+    USHORT nBlk1del = USHRT_MAX;		// 1. entfernter Block
     BlockInfo* p = ppInf[ cur ];
     pos -= p->nStart;
-    sal_uLong nElem = n;
+    ULONG nElem = n;
     while( nElem )
     {
-        sal_uInt16 nel = p->nElem - sal_uInt16(pos);
-        if( sal_uLong(nel) > nElem )
-            nel = sal_uInt16(nElem);
+        USHORT nel = p->nElem - USHORT(pos);
+        if( ULONG(nel) > nElem )
+            nel = USHORT(nElem);
         // Eventuell Elemente verschieben
-        if( ( pos + nel ) < sal_uLong(p->nElem) )
+        if( ( pos + nel ) < ULONG(p->nElem) )
         {
             ElementPtr *pTo = p->pData + pos,
                                 *pFrom = pTo + nel;
-            int nCount = p->nElem - nel - sal_uInt16(pos);
+            int nCount = p->nElem - nel - USHORT(pos);
             while( nCount-- )
             {
                 *pTo = *pFrom++;
@@ -422,7 +422,7 @@ void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
     if( nBlkdel )
     {
         // loeschen sollte man immer !!
-        for( sal_uInt16 i = nBlk1del; i < ( nBlk1del + nBlkdel ); i++ )
+        for( USHORT i = nBlk1del; i < ( nBlk1del + nBlkdel ); i++ )
             delete ppInf[ i ];
 
         if( ( nBlk1del + nBlkdel ) < nBlock )
@@ -431,7 +431,7 @@ void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
                      ( nBlock - nBlkdel - nBlk1del ) * sizeof( BlockInfo* ) );
 
             // JP 19.07.95: nicht den ersten behandelten, sondern den davor!!
-            //              UpdateIdx updatet nur alle Nachfolgende!!
+            //				UpdateIdx updatet nur alle Nachfolgende!!
             if( !nBlk1 )
             {
                 p = ppInf[ 0 ];
@@ -441,7 +441,7 @@ void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
             else
                 --nBlk1;
         }
-        BlockDel( nBlkdel );            // es wurden Bloecke geloescht
+        BlockDel( nBlkdel );			// es wurden Bloecke geloescht
     }
 
     nSize -= n;
@@ -458,15 +458,15 @@ void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
 }
 
 
-void BigPtrArray::Replace( sal_uLong idx, const ElementPtr& rElem)
+void BigPtrArray::Replace( ULONG idx, const ElementPtr& rElem)
 {
     // weil die Funktion eben doch nicht const ist:
     DBG_ASSERT( idx < nSize, "Set: Index aussserhalb" );
     BigPtrArray* pThis = (BigPtrArray*) this;
-    sal_uInt16 cur = Index2Block( idx );
+    USHORT cur = Index2Block( idx );
     BlockInfo* p = ppInf[ cur ];
     pThis->nCur = cur;
-    ((ElementPtr&)rElem)->nOffset = sal_uInt16(idx - p->nStart);
+    ((ElementPtr&)rElem)->nOffset = USHORT(idx - p->nStart);
     ((ElementPtr&)rElem)->pBlock = p;
     p->pData[ idx - p->nStart ] = rElem;
 }
@@ -474,7 +474,7 @@ void BigPtrArray::Replace( sal_uLong idx, const ElementPtr& rElem)
 
 // Array komprimieren
 
-sal_uInt16 BigPtrArray::Compress( short nMax )
+USHORT BigPtrArray::Compress( short nMax )
 {
     CHECKIDX( ppInf, nBlock, nSize, nCur );
 
@@ -484,18 +484,18 @@ sal_uInt16 BigPtrArray::Compress( short nMax )
     // benutzt; wobei pp das "alte" Array, qq das "neue" Array ist.
     BlockInfo** pp = ppInf, **qq = pp;
     BlockInfo* p;
-    BlockInfo* pLast(0);                // letzter nicht voller Block
-    sal_uInt16 nLast = 0;                   // fehlende Elemente
-    sal_uInt16 nBlkdel = 0;                 // Anzahl der geloeschte Bloecke
-    sal_uInt16 nFirstChgPos = USHRT_MAX;    // ab welcher Pos gab es die 1. Aenderung?
+    BlockInfo* pLast(0);				// letzter nicht voller Block
+    USHORT nLast = 0;					// fehlende Elemente
+    USHORT nBlkdel = 0;					// Anzahl der geloeschte Bloecke
+    USHORT nFirstChgPos = USHRT_MAX;	// ab welcher Pos gab es die 1. Aenderung?
 
     // von Fuell-Prozenten auf uebrige Eintrage umrechnen
     nMax = MAXENTRY - (long) MAXENTRY * nMax / 100;
 
-    for( sal_uInt16 cur = 0; cur < nBlock; ++cur )
+    for( USHORT cur = 0; cur < nBlock; ++cur )
     {
         p = *pp++;
-        sal_uInt16 n = p->nElem;
+        USHORT n = p->nElem;
         // Testen, ob der noch nicht volle Block so gelassen wird
         // dies ist der Fall, wenn der aktuelle Block gesplittet
         // werden muesste, der noch nicht volle Block aber bereits
@@ -516,7 +516,7 @@ sal_uInt16 BigPtrArray::Compress( short nMax )
             // Elemente uebertragen, vom akt. in den letzten
             ElementPtr* pElem = pLast->pData + pLast->nElem;
             ElementPtr* pFrom = p->pData;
-            for( sal_uInt16 nCount = n, nOff = pLast->nElem;
+            for( USHORT nCount = n, nOff = pLast->nElem;
                             nCount; --nCount, ++pElem )
                 *pElem = *pFrom++,
                     (*pElem)->pBlock = pLast,
@@ -548,9 +548,9 @@ sal_uInt16 BigPtrArray::Compress( short nMax )
             }
         }
 
-        if( p )     // die Blockinfo wurde nicht geloescht
+        if( p )		// die Blockinfo wurde nicht geloescht
         {
-            *qq++ = p;      // dann setze sie an die richtige neue Position
+            *qq++ = p;		// dann setze sie an die richtige neue Position
 
             // eventuell den letzten halbvollen Block festhalten
             if( !nLast && p->nElem < MAXENTRY )

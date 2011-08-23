@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 namespace connectivity
 {
-
+    
     //**************************************************************
     //************ Class: java.io.InputStream
     //**************************************************************
@@ -42,12 +42,12 @@ namespace connectivity
                                 public ::cppu::WeakImplHelper1< ::com::sun::star::io::XInputStream>
     {
     protected:
-    // statische Data for the class
+    // statische Daten fuer die Klasse
         static jclass theClass;
         virtual ~java_io_InputStream();
     public:
-        virtual jclass getMyClass() const;
-        // a Constructor, that is needed for when Returning the Object is needed:
+        virtual jclass getMyClass() const;		
+        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_io_InputStream( JNIEnv * pEnv, jobject myObj );
         // XInputStream
         virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);

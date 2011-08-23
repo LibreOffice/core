@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
  * @param subKeyName  name of the subkey to open
  *
  * @return the installation path or NULL, if no installation was found or
- *         if an error occurred
+ *         if an error occured
  */
 static char* getPathFromRegistryKey( HKEY hroot, const char* subKeyName )
 {
@@ -87,14 +87,14 @@ static char* getPathFromRegistryKey( HKEY hroot, const char* subKeyName )
  * Gets the installation path from the Windows Registry.
  *
  * @return the installation path or NULL, if no installation was found or
- *         if an error occurred
+ *         if an error occured
  */
 static char* platformSpecific()
 {
     const char* SUBKEYNAME = "Software\\LibreOffice\\UNO\\InstallPath";
 
     char* path = NULL;
-
+    
     /* read the key's default value from HKEY_CURRENT_USER */
     path = getPathFromRegistryKey( HKEY_CURRENT_USER, SUBKEYNAME );
 
@@ -112,21 +112,21 @@ static char* platformSpecific()
 #include <unistd.h>
 #include <limits.h>
 
-/*
+/*     
  * Gets the installation path from the PATH environment variable.
  *
  * <p>An installation is found, if the executable 'soffice' or a symbolic link
  * is in one of the directories listed in the PATH environment variable.</p>
  *
- * @return the installation path or NULL, if no installation was found or
- *         if an error occurred
+ * @return the installation path or NULL, if no installation was found or 
+ *         if an error occured
  */
 static char* platformSpecific()
 {
     const int SEPARATOR = '/';
     const char* PATHSEPARATOR = ":";
     const char* PATHVARNAME = "PATH";
-    const char* APPENDIX = "/libreoffice";
+    const char* APPENDIX = "/soffice";
 
     char* path = NULL;
     char* env = NULL;
@@ -197,8 +197,10 @@ char const* cppuhelper_detail_findSofficePath()
     /* get the installation path from the UNO_PATH environment variable */
     path = getenv( UNOPATHVARNAME );
 
-    if (!path || !path[0])
+    if ( path == NULL || strlen( path ) == 0 )
+    {
         path = platformSpecific();
+    }
 
     return path;
 }

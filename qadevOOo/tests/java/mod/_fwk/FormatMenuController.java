@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ import util.utils;
  */
 public class FormatMenuController extends TestCase {
     XInterface oObj = null;
-
+    
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         TestEnvironment tEnv = null;
         XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
@@ -51,10 +51,10 @@ public class FormatMenuController extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Could not create object 'FormatMenuController'", e);
         }
-
+            
         log.println("TestObject: " + utils.getImplName(oObj));
         tEnv = new TestEnvironment(oObj);
         return tEnv;
     }
-
+    
 }

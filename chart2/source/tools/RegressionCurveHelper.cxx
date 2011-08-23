@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ OUString lcl_getServiceNameForType( ::chart::RegressionCurveHelper::tRegressionT
             aServiceName = C2U( "com.sun.star.chart2.PotentialRegressionCurve" );
             break;
         default:
-            OSL_FAIL("unknown regression curve type - use linear instead");
+            OSL_ENSURE(false,"unknown regression curve type - use linear instead");
             aServiceName = C2U( "com.sun.star.chart2.LinearRegressionCurve" );
             break;
     }
@@ -89,6 +89,7 @@ namespace chart
 {
 //.............................................................................
 
+// static
 Reference< XRegressionCurve > RegressionCurveHelper::createMeanValueLine(
     const Reference< XComponentContext > & xContext )
 {
@@ -96,6 +97,7 @@ Reference< XRegressionCurve > RegressionCurveHelper::createMeanValueLine(
         new MeanValueRegressionCurve( xContext ));
 }
 
+// static
 Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServiceName(
     const Reference< XComponentContext > & xContext,
     ::rtl::OUString aServiceName )
@@ -133,6 +135,7 @@ Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServ
 
 // ------------------------------------------------------------
 
+// static
 Reference< XRegressionCurveCalculator > RegressionCurveHelper::createRegressionCurveCalculatorByServiceName(
     ::rtl::OUString aServiceName )
 {
@@ -168,6 +171,7 @@ Reference< XRegressionCurveCalculator > RegressionCurveHelper::createRegressionC
     return xResult;
 }
 
+// static
 void RegressionCurveHelper::initializeCurveCalculator(
     const Reference< XRegressionCurveCalculator > & xOutCurveCalculator,
     const Reference< data::XDataSource > & xSource,
@@ -232,6 +236,7 @@ void RegressionCurveHelper::initializeCurveCalculator(
         xOutCurveCalculator->recalculateRegression( aXValues, aYValues );
 }
 
+// static
 void RegressionCurveHelper::initializeCurveCalculator(
     const Reference< XRegressionCurveCalculator > & xOutCurveCalculator,
     const Reference< XDataSeries > & xSeries,
@@ -247,6 +252,7 @@ void RegressionCurveHelper::initializeCurveCalculator(
 
 // ----------------------------------------
 
+// static
 bool RegressionCurveHelper::hasMeanValueLine(
     const uno::Reference< XRegressionCurveContainer > & xRegCnt )
 {
@@ -271,6 +277,7 @@ bool RegressionCurveHelper::hasMeanValueLine(
     return false;
 }
 
+// static
 bool RegressionCurveHelper::isMeanValueLine(
     const uno::Reference< chart2::XRegressionCurve > & xRegCurve )
 {
@@ -282,6 +289,7 @@ bool RegressionCurveHelper::isMeanValueLine(
     return false;
 }
 
+// static
 uno::Reference< chart2::XRegressionCurve >
     RegressionCurveHelper::getMeanValueLine(
         const uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt )
@@ -307,6 +315,7 @@ uno::Reference< chart2::XRegressionCurve >
     return uno::Reference< chart2::XRegressionCurve >();
 }
 
+// static
 void RegressionCurveHelper::addMeanValueLine(
     uno::Reference< XRegressionCurveContainer > & xRegCnt,
     const uno::Reference< XComponentContext > & xContext,
@@ -331,6 +340,7 @@ void RegressionCurveHelper::addMeanValueLine(
     }
 }
 
+// static
 void RegressionCurveHelper::removeMeanValueLine(
     Reference< XRegressionCurveContainer > & xRegCnt )
 {
@@ -372,7 +382,7 @@ void RegressionCurveHelper::addRegressionCurve(
 
     if( eType == REGRESSION_TYPE_NONE )
     {
-        OSL_FAIL("don't create a regression curve of type none");
+        OSL_ENSURE(false,"don't create a regression curve of type none");
         return;
     }
 
@@ -478,6 +488,7 @@ void RegressionCurveHelper::removeEquations(
     }
 }
 
+// static
 void RegressionCurveHelper::replaceOrAddCurveAndReduceToOne(
     tRegressionType eType,
     uno::Reference< XRegressionCurveContainer > & xRegCnt,
@@ -500,12 +511,13 @@ void RegressionCurveHelper::replaceOrAddCurveAndReduceToOne(
     }
 }
 
+// static
 uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveNotMeanValueLine(
     const Reference< XRegressionCurveContainer > & xRegCnt )
 {
     if( !xRegCnt.is())
         return NULL;
-
+    
     try
     {
         uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
@@ -527,6 +539,7 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveN
     return NULL;
 }
 
+// static
 RegressionCurveHelper::tRegressionType RegressionCurveHelper::getRegressionType(
     const Reference< XRegressionCurve > & xCurve )
 {
@@ -574,6 +587,7 @@ RegressionCurveHelper::tRegressionType RegressionCurveHelper::getRegressionType(
     return eResult;
 }
 
+// static
 RegressionCurveHelper::tRegressionType RegressionCurveHelper::getFirstRegressTypeNotMeanValueLine(
     const Reference< XRegressionCurveContainer > & xRegCnt )
 {
@@ -609,7 +623,9 @@ OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XR
     if( aServiceName.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.MeanValueRegressionCurve" )))
     {
-        aResult = ::chart::SchResId::getResString( STR_REGRESSION_MEAN );
+        OSL_ENSURE( false, "Meanvalue lines in legend not supported" );
+        aResult = OUString();
+        // aResult = ::chart::SchResId::getResString( STR_OBJECT_AVERAGE_LINE );
     }
     else if( aServiceName.equalsAsciiL(
                  RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.LinearRegressionCurve" )))
@@ -635,6 +651,7 @@ OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XR
     return aResult;
 }
 
+// static
 ::std::vector< Reference< chart2::XRegressionCurve > >
     RegressionCurveHelper::getAllRegressionCurvesNotMeanValueLine(
         const Reference< chart2::XDiagram > & xDiagram )
@@ -660,6 +677,7 @@ OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XR
     return aResult;
 }
 
+// static
 void RegressionCurveHelper::resetEquationPosition(
     const Reference< chart2::XRegressionCurve > & xCurve )
 {
@@ -698,7 +716,7 @@ sal_Int32 RegressionCurveHelper::getRegressionCurveIndex(
 
 bool RegressionCurveHelper::hasEquation( const Reference< chart2::XRegressionCurve > & xCurve )
 {
-    bool bHasEquation = false;
+    bool bHasEquation = false; 
     if( xCurve.is())
     {
         uno::Reference< beans::XPropertySet > xEquationProp( xCurve->getEquationProperties());

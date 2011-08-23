@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,8 +55,6 @@
 #define THIS_OS "AIX"
 #elif defined OPENBSD
 #define THIS_OS "OpenBSD"
-#elif defined DRAGONFLY
-#define THIS_OS "DragonFly"
 #endif
 
 #if ! defined THIS_OS

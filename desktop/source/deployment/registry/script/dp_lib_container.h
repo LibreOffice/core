@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,20 +29,11 @@
 #if ! defined INCLUDED_DP_LIB_CONTAINER_H
 #define INCLUDED_DP_LIB_CONTAINER_H
 
-#include <com/sun/star/uno/Reference.hxx>
+#include "rtl/ustring.hxx"
+#include "xmlscript/xmllib_imexp.hxx"
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/ucb/XCommandEnvironment.hpp"
 
-namespace com { namespace sun { namespace star {
-    namespace uno {
-        class XComponentContext;
-    }
-    namespace ucb {
-        class XCommandEnvironment;
-    }
-}}}
-
-namespace rtl {
-    class OUString;
-}
 
 namespace css = ::com::sun::star;
 

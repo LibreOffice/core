@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
  // #define DLG_INSERT_TABLE 256
 ModalDialog DLG_INSERT_TABLE
 {
-    HelpID = CMD_FN_INSERT_TABLE ;
+    HelpID = FN_INSERT_TABLE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 280 , 166 ) ;
@@ -40,7 +40,6 @@ ModalDialog DLG_INSERT_TABLE
     Moveable = TRUE ;
     Edit ED_NAME
     {
-        HelpID = "sw:Edit:DLG_INSERT_TABLE:ED_NAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 53 , 6 ) ;
         Size = MAP_APPFONT ( 158, 12 ) ;
@@ -61,7 +60,6 @@ ModalDialog DLG_INSERT_TABLE
     };
     NumericField ED_COL
     {
-        HelpID = "sw:NumericField:DLG_INSERT_TABLE:ED_COL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 53 , 32 ) ;
         Size = MAP_APPFONT ( 28 , 12 ) ;
@@ -84,7 +82,6 @@ ModalDialog DLG_INSERT_TABLE
     };
     NumericField ED_ROW
     {
-        HelpID = "sw:NumericField:DLG_INSERT_TABLE:ED_ROW";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 53 , 48 ) ;
         Size = MAP_APPFONT ( 28 , 12 ) ;
@@ -106,7 +103,6 @@ ModalDialog DLG_INSERT_TABLE
     };
     CheckBox CB_HEADER
     {
-        HelpID = "sw:CheckBox:DLG_INSERT_TABLE:CB_HEADER";
         Pos = MAP_APPFONT ( 12 , 74 ) ;
         Size = MAP_APPFONT (113 , 10 ) ;
         TabStop = TRUE ;
@@ -114,7 +110,6 @@ ModalDialog DLG_INSERT_TABLE
     };
     CheckBox CB_REPEAT_HEADER
     {
-        HelpID = "sw:CheckBox:DLG_INSERT_TABLE:CB_REPEAT_HEADER";
         Pos = MAP_APPFONT ( 21 , 88 ) ;
         Size = MAP_APPFONT ( 104 , 10 ) ;
         TabStop = TRUE ;
@@ -128,7 +123,6 @@ ModalDialog DLG_INSERT_TABLE
     };
     NumericField NF_REPEAT_HEADER
     {
-        HelpID = "sw:NumericField:DLG_INSERT_TABLE:NF_REPEAT_HEADER";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 130 , 104 ) ;
         Size = MAP_APPFONT ( 28 , 12 ) ;
@@ -147,7 +141,6 @@ ModalDialog DLG_INSERT_TABLE
     };
     CheckBox CB_DONT_SPLIT
     {
-        HelpID = "sw:CheckBox:DLG_INSERT_TABLE:CB_DONT_SPLIT";
         Pos = MAP_APPFONT ( 12 , 118 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         Text [ en-US ] = "Don't split table";
@@ -155,7 +148,6 @@ ModalDialog DLG_INSERT_TABLE
     };
     CheckBox CB_BORDER
     {
-        HelpID = "sw:CheckBox:DLG_INSERT_TABLE:CB_BORDER";
         Pos = MAP_APPFONT ( 12 , 132 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         TabStop = TRUE ;
@@ -163,7 +155,6 @@ ModalDialog DLG_INSERT_TABLE
     };
     PushButton BT_AUTOFORMAT
     {
-        HelpID = "sw:PushButton:DLG_INSERT_TABLE:BT_AUTOFORMAT";
         Pos = MAP_APPFONT ( 12 , 146 ) ;
         Size = MAP_APPFONT ( 86 , 14 ) ;
         TabStop = TRUE ;

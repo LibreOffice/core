@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,6 +31,7 @@
 
 class ImageButton;
 class Point;
+class PrintDialog;
 class SfxItemSet;
 class SfxPrinter;
 class SfxTabPage;
@@ -42,16 +43,17 @@ class Window;
 class SwWrtShell;
 
 // folgende Funktionen stehen im viewprt.cxx
-void SetPrinter( IDocumentDeviceAccess*, SfxPrinter*, sal_Bool bWeb );
+PrintDialog* CreatePrintDialog( Window* , USHORT, SwWrtShell* );
+void SetPrinter( IDocumentDeviceAccess*, SfxPrinter*, BOOL bWeb );
 SfxTabPage* CreatePrintOptionsPage( Window*, const SfxItemSet& );
-void SetAppPrintOptions( ViewShell* pSh, sal_Bool bWeb );
+void SetAppPrintOptions( ViewShell* pSh, BOOL bWeb );
 
 // folgende Funktionen stehen im viewport.cxx
 void ViewResizePixel( const Window &rRef,
                     const Point &rOfst,
                     const Size &rSize,
                     const Size &rEditSz,
-                    const sal_Bool bInner,
+                    const BOOL bInner,
                     SwScrollbar& rVScrollbar,
                     SwScrollbar& rHScrollbar,
                     ImageButton* pPageUpBtn,
@@ -60,8 +62,8 @@ void ViewResizePixel( const Window &rRef,
                     Window& rScrollBarBox,
                     SvxRuler* pVLineal = 0,
                     SvxRuler* pHLineal = 0,
-                    sal_Bool bWebView = sal_False,
-                    sal_Bool bVRulerRight = sal_False );
+                    BOOL bWebView = FALSE,
+                    BOOL bVRulerRight = FALSE );
 
 
 #endif

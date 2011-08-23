@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include "tools/PropertySet.hxx"
 #include <boost/bind.hpp>
 #include <algorithm>
-#include <o3tl/compat_functional.hxx>
+#include <functional>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -150,10 +150,10 @@ void SAL_CALL PropertySet::removePropertyChangeListener (
         ::std::find_if(
             aRange.first,
             aRange.second,
-            o3tl::compose1(
+            std::compose1(
                 std::bind1st(std::equal_to<Reference<beans::XPropertyChangeListener> >(),
                     rxListener),
-                o3tl::select2nd<ChangeListenerContainer::value_type>())));
+                std::select2nd<ChangeListenerContainer::value_type>())));
     if (iListener != mpChangeListeners->end())
     {
         mpChangeListeners->erase(iListener);
@@ -213,7 +213,7 @@ void PropertySet::CallListeners (
         if (iListener->second.is())
             iListener->second->propertyChange(rEvent);
     }
-}
+}       
 
 
 

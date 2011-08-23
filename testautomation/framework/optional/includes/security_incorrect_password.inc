@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : gregor.hartmann@oracle.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Password protect files
 '*
@@ -66,8 +66,8 @@ testcase tIncorrectPassword( filetypeID as string )
         printlog( "Check the password checkbox" )
         Passwort.check()
 
-        printlog( "Name the file as " & filepath )
-        Dateiname.settext( filepath )
+        printlog( "Name the file as " & workpath & WORKFILE )
+        Dateiname.settext( workpath & WORKFILE )
 
         if ( filetypeID <> "current" ) then
             for iCurrentFilter = 1 to DateiTyp.getItemCount()
@@ -108,7 +108,7 @@ testcase tIncorrectPassword( filetypeID as string )
         endif
 
         printlog( "Load the file again" )
-        hFileOpen( filepath )
+        hFileOpen( workpath & WORKFILE & suffix )
         if ( not hSecurityEnterPasswordOnLoad( PASSWORD_FALSE , false ) ) then
             warnlog( "Something went wrong while using the password dialog" )
         endif
@@ -121,7 +121,7 @@ testcase tIncorrectPassword( filetypeID as string )
         endif
 
         printlog( "Delete the workfile" )
-        hDeleteFile( filepath )
+        hDeleteFile( workpath & WORKFILE & suffix )
     else
         warnlog( "Unable to open file save dialog" )
     endif

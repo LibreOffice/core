@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,17 +32,20 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+
+// #110680#
+//#include <comphelper/processfactory.hxx>
 #include <tools/globname.hxx>
 #include <sot/clsids.hxx>
 #include <tools/globname.hxx>
 #include <sot/clsids.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlerror.hxx"
+#include "xmlerror.hxx"
 #include <xmloff/attrlist.hxx>
-#include "xmloff/XMLFilterServiceNames.h"
+#include "XMLFilterServiceNames.h"
 #include "XMLEmbeddedObjectImportContext.hxx"
 
 using ::rtl::OUString;
@@ -61,7 +64,7 @@ struct XMLServiceMapEntry_Impl
 {
     enum XMLTokenEnum eClass;
     const sal_Char *sFilterService;
-    sal_Int32      nFilterServiceLen;
+    sal_Int32	   nFilterServiceLen;
 };
 
 #define SERVICE_MAP_ENTRY( cls, app ) \
@@ -88,14 +91,14 @@ class XMLEmbeddedObjectImportContext_Impl : public SvXMLImportContext
 public:
     TYPEINFO();
 
-    XMLEmbeddedObjectImportContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
+    XMLEmbeddedObjectImportContext_Impl( SvXMLImport& rImport, USHORT nPrfx,
                                     const ::rtl::OUString& rLName,
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XDocumentHandler >& rHandler );
 
     virtual ~XMLEmbeddedObjectImportContext_Impl();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                    const ::rtl::OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
@@ -109,7 +112,7 @@ public:
 TYPEINIT1( XMLEmbeddedObjectImportContext_Impl, SvXMLImportContext );
 
 XMLEmbeddedObjectImportContext_Impl::XMLEmbeddedObjectImportContext_Impl(
-        SvXMLImport& rImport, sal_uInt16 nPrfx,
+        SvXMLImport& rImport, USHORT nPrfx,
         const OUString& rLName,
         const Reference< XDocumentHandler >& rHandler ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -122,7 +125,7 @@ XMLEmbeddedObjectImportContext_Impl::~XMLEmbeddedObjectImportContext_Impl()
 }
 
 SvXMLImportContext *XMLEmbeddedObjectImportContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix,
+        USHORT nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList >& )
 {
@@ -163,6 +166,8 @@ sal_Bool XMLEmbeddedObjectImportContext::SetComponent(
 
     Sequence<Any> aArgs( 0 );
 
+    // #110680#
+    // Reference< XMultiServiceFactory > xServiceFactory = comphelper::getProcessServiceFactory();
     Reference< XMultiServiceFactory > xServiceFactory = GetImport().getServiceFactory();
 
     xHandler = Reference < XDocumentHandler >(
@@ -184,13 +189,13 @@ sal_Bool XMLEmbeddedObjectImportContext::SetComponent(
     Reference < XImporter > xImporter( xHandler, UNO_QUERY );
     xImporter->setTargetDocument( rComp );
 
-    xComp = rComp;  // keep ref to component only if there is a handler
-
+    xComp = rComp;	// keep ref to component only if there is a handler
+    
     return sal_True;
 }
 
 XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
-        SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
+        SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName,
         const Reference< XAttributeList >& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
@@ -212,7 +217,7 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
         {
             const OUString& rAttrName = xAttrList->getNameByIndex( i );
             OUString aLocalName;
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,	&aLocalName );
             if( nPrefix == XML_NAMESPACE_OFFICE &&
                 IsXMLToken( aLocalName, XML_MIMETYPE ) )
             {
@@ -253,14 +258,14 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
 
                     switch( pEntry->eClass )
                     {
-                    case XML_TEXT:          aName = SvGlobalName(SO3_SW_CLASSID); break;
-                    case XML_ONLINE_TEXT:   aName = SvGlobalName(SO3_SWWEB_CLASSID); break;
-                    case XML_SPREADSHEET:   aName = SvGlobalName(SO3_SC_CLASSID); break;
+                    case XML_TEXT:			aName = SvGlobalName(SO3_SW_CLASSID); break;
+                    case XML_ONLINE_TEXT:	aName = SvGlobalName(SO3_SWWEB_CLASSID); break;
+                    case XML_SPREADSHEET:	aName = SvGlobalName(SO3_SC_CLASSID); break;
                     case XML_DRAWING:
                     case XML_GRAPHICS:
-                    case XML_IMAGE:     aName = SvGlobalName(SO3_SDRAW_CLASSID); break;
-                    case XML_PRESENTATION:  aName = SvGlobalName(SO3_SIMPRESS_CLASSID); break;
-                    case XML_CHART:         aName = SvGlobalName(SO3_SCH_CLASSID); break;
+                    case XML_IMAGE:		aName = SvGlobalName(SO3_SDRAW_CLASSID); break;
+                    case XML_PRESENTATION:	aName = SvGlobalName(SO3_SIMPRESS_CLASSID); break;
+                    case XML_CHART:			aName = SvGlobalName(SO3_SCH_CLASSID); break;
                     default:
                         break;
                     }
@@ -280,7 +285,7 @@ XMLEmbeddedObjectImportContext::~XMLEmbeddedObjectImportContext()
 }
 
 SvXMLImportContext *XMLEmbeddedObjectImportContext::CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
+        USHORT nPrefix, const OUString& rLocalName,
         const Reference< XAttributeList >& )
 {
     if( xHandler.is() )
@@ -326,6 +331,30 @@ void XMLEmbeddedObjectImportContext::EndElement()
                                     GetPrefix(), GetLocalName() ) );
         xHandler->endDocument();
 
+
+        // storing part is commented out since it should be done through the object, not the model
+        // TODO/LATER: probably an object should be provided here an be stored here
+
+//		// Save the object. That's required because the object should not be 
+//		// modified (it has been loaded just now). Setting it to unmodified
+//		// only does not work, because it is then assumed that it has been
+//		// stored.
+//		Reference < XStorable > xStorable( xComp, UNO_QUERY );
+//		if( xStorable.is() )
+//		{
+//			try
+//			{
+//				xStorable->store();
+//			}
+//			catch( ::com::sun::star::beans::PropertyVetoException& )
+//			{
+//				Sequence<OUString> aSeq( 0 );
+//				GetImport().SetError( XMLERROR_FLAG_WARNING | 
+//								  XMLERROR_API,
+//								  aSeq );
+//			}
+//		}
+
     try
     {
         Reference < XModifiable2 > xModifiable2( xComp, UNO_QUERY_THROW );
@@ -335,6 +364,25 @@ void XMLEmbeddedObjectImportContext::EndElement()
     catch( Exception& )
     {
     }
+
+
+//		// reset modifies state for the object since it has been imported
+//		// completly and therfor hasn't been modified.
+//		Reference < XModifiable > xModifiable( xComp, UNO_QUERY );
+//		if( xModifiable.is() )
+//		{
+//			try
+//			{
+//				xModifiable->setModified( sal_False );
+//			}
+//			catch( ::com::sun::star::beans::PropertyVetoException& e )
+//			{
+//				Sequence<OUString> aSeq( 0 );
+//				GetImport().SetError( XMLERROR_FLAG_WARNING | 
+//								  XMLERROR_API,
+//								  aSeq );
+//			}
+//		}
     }
 }
 
@@ -343,5 +391,6 @@ void XMLEmbeddedObjectImportContext::Characters( const ::rtl::OUString& rChars )
     if( xHandler.is() )
         xHandler->characters( rChars );
 }
+    
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

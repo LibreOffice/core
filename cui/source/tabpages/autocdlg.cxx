@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,9 +26,11 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 #define _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_STRINGSDTOR
-
 #include <svl/svstdarr.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
@@ -79,23 +81,27 @@ static ::com::sun::star::uno::Reference<
     return xMSF;
 }
 
+/*-----------------14.10.96 15.47-------------------
+
+--------------------------------------------------*/
+
 OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
     SfxTabDialog(pParent, CUI_RES( RID_OFA_AUTOCORR_DLG ), _pSet),
-    aLanguageFT(    this, CUI_RES(FT_LANG         )),
-    aLanguageLB(    this, CUI_RES(LB_LANG             ))
+    aLanguageFT(    this, CUI_RES(FT_LANG 		  )),
+    aLanguageLB(    this, CUI_RES(LB_LANG    		  ))
 {
-    sal_Bool bShowSWOptions = sal_False;
-    sal_Bool bOpenSmartTagOptions = sal_False;
+    BOOL bShowSWOptions = FALSE;
+    BOOL bOpenSmartTagOptions = FALSE;
 
     if ( _pSet )
     {
-        SFX_ITEMSET_ARG( _pSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, sal_False );
+        SFX_ITEMSET_ARG( _pSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, FALSE );
         if ( pItem && pItem->GetValue() )
-            bShowSWOptions = sal_True;
+            bShowSWOptions = TRUE;
 
-        SFX_ITEMSET_ARG( _pSet, pItem2, SfxBoolItem, SID_OPEN_SMARTTAGOPTIONS, sal_False );
+        SFX_ITEMSET_ARG( _pSet, pItem2, SfxBoolItem, SID_OPEN_SMARTTAGOPTIONS, FALSE );
         if ( pItem2 && pItem2->GetValue() )
-            bOpenSmartTagOptions = sal_True;
+            bOpenSmartTagOptions = TRUE;
     }
 
     aLanguageFT.SetZOrder(0, WINDOW_ZORDER_FIRST);
@@ -127,18 +133,18 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
 
     AddTabPage(RID_OFAPAGE_AUTOCORR_REPLACE, OfaAutocorrReplacePage::Create, 0);
     AddTabPage(RID_OFAPAGE_AUTOCORR_EXCEPT,  OfaAutocorrExceptPage::Create, 0);
-    AddTabPage(RID_OFAPAGE_AUTOCORR_QUOTE,   OfaQuoteTabPage::Create, 0);
+    AddTabPage(RID_OFAPAGE_AUTOCORR_QUOTE, 	 OfaQuoteTabPage::Create, 0);
 
     // initialize languages
     //! LANGUAGE_NONE is displayed as '[All]' and the LanguageType
     //! will be set to LANGUAGE_DONTKNOW
     sal_Int16 nLangList = LANG_LIST_WESTERN;
-
-    if( SvtLanguageOptions().IsCTLFontEnabled() )
+    
+    if( SvtLanguageOptions().IsCTLFontEnabled() ) 
         nLangList |= LANG_LIST_CTL;
-    aLanguageLB.SetLanguageList( nLangList, sal_True, sal_True );
+    aLanguageLB.SetLanguageList( nLangList, TRUE, TRUE );
     aLanguageLB.SelectLanguage( LANGUAGE_NONE );
-    sal_uInt16 nPos = aLanguageLB.GetSelectEntryPos();
+    USHORT nPos = aLanguageLB.GetSelectEntryPos();
     DBG_ASSERT( LISTBOX_ENTRY_NOTFOUND != nPos, "listbox entry missing" );
     aLanguageLB.SetEntryData( nPos, (void*)(long) LANGUAGE_DONTKNOW );
 
@@ -162,35 +168,41 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
     if ( bOpenSmartTagOptions )
         SetCurPageId( RID_OFAPAGE_SMARTTAG_OPTIONS );
 }
+/*-----------------16.10.96 14.06-------------------
 
-sal_Bool lcl_FindEntry( ListBox& rLB, const String& rEntry,
+--------------------------------------------------*/
+
+BOOL lcl_FindEntry( ListBox& rLB, const String& rEntry,
                     CollatorWrapper& rCmpClass )
 {
-    sal_uInt16 nCount = rLB.GetEntryCount();
-    sal_uInt16 nSelPos = rLB.GetSelectEntryPos();
-    sal_uInt16 i;
+    USHORT nCount = rLB.GetEntryCount();
+    USHORT nSelPos = rLB.GetSelectEntryPos();
+    USHORT i;
     for(i = 0; i < nCount; i++)
     {
         if( 0 == rCmpClass.compareString(rEntry, rLB.GetEntry(i) ))
         {
-            rLB.SelectEntryPos(i, sal_True);
-            return sal_True;
+            rLB.SelectEntryPos(i, TRUE);
+            return TRUE;
         }
     }
     if(LISTBOX_ENTRY_NOTFOUND != nSelPos)
-        rLB.SelectEntryPos(nSelPos, sal_False);
-    return sal_False;
+        rLB.SelectEntryPos(nSelPos, FALSE);
+    return FALSE;
 }
 
+/* -----------------23.11.98 10:46-------------------
+ *
+ * --------------------------------------------------*/
 IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox*, pBox)
 {
-    sal_uInt16 nPos = pBox->GetSelectEntryPos();
+    USHORT nPos = pBox->GetSelectEntryPos();
     void* pVoid = pBox->GetEntryData(nPos);
     LanguageType eNewLang = (LanguageType)(long)pVoid;
     //alte Einstellungen speichern und neu fuellen
     if(eNewLang != eLastDialogLanguage)
     {
-        sal_uInt16  nPageId = GetCurPageId();
+        USHORT	nPageId = GetCurPageId();
         if(RID_OFAPAGE_AUTOCORR_REPLACE == nPageId)
             ((OfaAutocorrReplacePage*)GetTabPage( nPageId ))->SetLanguage(eNewLang);
         else if(RID_OFAPAGE_AUTOCORR_EXCEPT == nPageId)
@@ -198,19 +210,22 @@ IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox*, pBox)
     }
     return 0;
 }
+/*-----------------14.10.96 15.57-------------------
+
+--------------------------------------------------*/
 
 OfaAutocorrOptionsPage::OfaAutocorrOptionsPage( Window* pParent,
                                                 const SfxItemSet& rSet ) :
     SfxTabPage(pParent, CUI_RES( RID_OFAPAGE_AUTOCORR_OPTIONS ), rSet),
-    aCheckLB            (this, CUI_RES(CLB_SETTINGS )),
+    aCheckLB			(this, CUI_RES(CLB_SETTINGS	)),
 
-    sInput              (CUI_RES(ST_USE_REPLACE     )),
+    sInput    			(CUI_RES(ST_USE_REPLACE		)),
     sDoubleCaps         (CUI_RES(ST_CPTL_STT_WORD     )),
     sStartCap           (CUI_RES(ST_CPTL_STT_SENT     )),
     sBoldUnderline      (CUI_RES(ST_BOLD_UNDER        )),
     sURL                (CUI_RES(ST_DETECT_URL        )),
     sNoDblSpaces        (CUI_RES(STR_NO_DBL_SPACES    )),
-    sDash               (CUI_RES(ST_DASH              )),
+    sDash    			(CUI_RES(ST_DASH              )),
     sAccidentalCaps     (CUI_RES(ST_CORRECT_ACCIDENTAL_CAPS_LOCK))
 {
     FreeResource();
@@ -218,32 +233,46 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage( Window* pParent,
     aCheckLB.SetHelpId(HID_OFAPAGE_AUTOCORR_CLB);
 }
 
+/*-----------------14.10.96 15.58-------------------
+
+--------------------------------------------------*/
+
+
 OfaAutocorrOptionsPage::~OfaAutocorrOptionsPage()
 {
 }
 
-SfxTabPage* OfaAutocorrOptionsPage::Create( Window* pParent,
+/*-----------------14.10.96 15.58-------------------
+
+--------------------------------------------------*/
+
+
+SfxTabPage*	OfaAutocorrOptionsPage::Create( Window* pParent,
                                 const SfxItemSet& rSet)
 {
     return new OfaAutocorrOptionsPage(pParent, rSet);
 }
+/*-----------------14.10.96 15.58-------------------
 
-sal_Bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& )
+--------------------------------------------------*/
+
+
+BOOL OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     long nFlags = pAutoCorrect->GetFlags();
 
-    sal_uInt16 nPos = 0;
-    pAutoCorrect->SetAutoCorrFlag(Autocorrect,          aCheckLB.IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(CptlSttWrd,           aCheckLB.IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(CptlSttSntnc,         aCheckLB.IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ChgWeightUnderl,      aCheckLB.IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(SetINetAttr,          aCheckLB.IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ChgToEnEmDash,        aCheckLB.IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(IgnoreDoubleSpace,    aCheckLB.IsChecked(nPos++));
+    USHORT nPos = 0;
+    pAutoCorrect->SetAutoCorrFlag(Autocorrect, 			aCheckLB.IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(CptlSttWrd, 			aCheckLB.IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(CptlSttSntnc, 		aCheckLB.IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(ChgWeightUnderl,		aCheckLB.IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(SetINetAttr, 			aCheckLB.IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(ChgToEnEmDash,		aCheckLB.IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(IgnoreDoubleSpace,	aCheckLB.IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(CorrectCapsLock,      aCheckLB.IsChecked(nPos++));
 
-    sal_Bool bReturn = nFlags != pAutoCorrect->GetFlags();
+    BOOL bReturn = nFlags != pAutoCorrect->GetFlags();
     if(bReturn )
     {
         SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
@@ -253,17 +282,25 @@ sal_Bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& )
     return bReturn;
 }
 
-void    OfaAutocorrOptionsPage::ActivatePage( const SfxItemSet& )
+/* -----------------23.11.98 16:15-------------------
+ *
+ * --------------------------------------------------*/
+void	OfaAutocorrOptionsPage::ActivatePage( const SfxItemSet& )
 {
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(sal_False);
+    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(FALSE);
 }
+
+/*-----------------14.10.96 15.58-------------------
+
+--------------------------------------------------*/
+
 
 void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     const long nFlags = pAutoCorrect->GetFlags();
 
-    aCheckLB.SetUpdateMode(sal_False);
+    aCheckLB.SetUpdateMode(FALSE);
     aCheckLB.Clear();
 
     aCheckLB.InsertEntry(sInput);
@@ -275,7 +312,7 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.InsertEntry(sNoDblSpaces);
     aCheckLB.InsertEntry(sAccidentalCaps);
 
-    sal_uInt16 nPos = 0;
+    USHORT nPos = 0;
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & Autocorrect) );
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & CptlSttWrd) );
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & CptlSttSntnc) );
@@ -285,7 +322,7 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & IgnoreDoubleSpace) );
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & CorrectCapsLock) );
 
-    aCheckLB.SetUpdateMode(sal_True);
+    aCheckLB.SetUpdateMode(TRUE);
 }
 
 /*********************************************************************/
@@ -296,8 +333,8 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
 
 struct ImpUserData
 {
-    String  *pString;
-    Font*   pFont;
+    String 	*pString;
+    Font* 	pFont;
 
     ImpUserData(String* pText, Font* pFnt)
         { pString = pText; pFont = pFnt;}
@@ -306,28 +343,28 @@ struct ImpUserData
 
 /*********************************************************************/
 /*                                                                   */
-/*  Dialog fuer Prozenteinstellung                                   */
+/*	Dialog fuer Prozenteinstellung                                   */
 /*                                                                   */
 /*********************************************************************/
 
 class OfaAutoFmtPrcntSet : public ModalDialog
 {
-    OKButton        aOKPB;
-    CancelButton    aCancelPB;
-    FixedLine       aPrcntFL;
-    MetricField     aPrcntMF;
+    OKButton 		aOKPB;
+    CancelButton	aCancelPB;
+    FixedLine		aPrcntFL;
+    MetricField		aPrcntMF;
 
     public:
         OfaAutoFmtPrcntSet(Window* pParent) :
             ModalDialog(pParent, CUI_RES(RID_OFADLG_PRCNT_SET)),
-                aOKPB(this,         CUI_RES(BT_OK)),
-                aCancelPB(this,     CUI_RES(BT_CANCEL)),
-                aPrcntFL(this,      CUI_RES(FL_PRCNT)),
-                aPrcntMF(this,  CUI_RES(ED_RIGHT_MARGIN))
+                aOKPB(this, 		CUI_RES(BT_OK)),
+                aCancelPB(this, 	CUI_RES(BT_CANCEL)),
+                aPrcntFL(this, 		CUI_RES(FL_PRCNT)),
+                aPrcntMF(this, 	CUI_RES(ED_RIGHT_MARGIN))
             {
                 FreeResource();
             }
-    MetricField&    GetPrcntFld(){return aPrcntMF;}
+    MetricField& 	GetPrcntFld(){return aPrcntMF;}
 };
 
 
@@ -341,10 +378,10 @@ class OfaImpBrwString : public SvLBoxString
 {
 public:
 
-    OfaImpBrwString( SvLBoxEntry* pEntry, sal_uInt16 nFlags,
+    OfaImpBrwString( SvLBoxEntry* pEntry, USHORT nFlags,
         const String& rStr ) : SvLBoxString(pEntry,nFlags,rStr){}
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
+    virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
                                             SvLBoxEntry* pEntry);
 };
 
@@ -353,7 +390,7 @@ public:
 /*********************************************************************/
 
 
-void OfaImpBrwString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/,
+void __EXPORT OfaImpBrwString::Paint( const Point& rPos, SvLBox& rDev, USHORT /*nFlags*/,
     SvLBoxEntry* pEntry )
 {
     rDev.DrawText( rPos, GetText() );
@@ -372,8 +409,8 @@ void OfaImpBrwString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlag
         }
         aFont.SetWeight( WEIGHT_BOLD );
 
-        sal_Bool bFett = sal_True;
-        sal_uInt16 nPos = 0;
+        BOOL bFett = TRUE;
+        USHORT nPos = 0;
         do {
             String sTxt( pUserData->pString->GetToken( 0, 1, nPos ));
 
@@ -395,13 +432,13 @@ void OfaImpBrwString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlag
 
 /*********************************************************************/
 /*                                                                   */
-/*  TabPage Autoformat anwenden                                      */
+/* 	TabPage Autoformat anwenden			                             */
 /*                                                                   */
 /*********************************************************************/
 
-#define CBCOL_FIRST     0
-#define CBCOL_SECOND    1
-#define CBCOL_BOTH      2
+#define CBCOL_FIRST		0
+#define CBCOL_SECOND	1
+#define CBCOL_BOTH		2
 
 enum OfaAutoFmtOptions
 {
@@ -428,32 +465,32 @@ enum OfaAutoFmtOptions
 OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
                                 const SfxItemSet& rSet ) :
     SfxTabPage(pParent, CUI_RES(RID_OFAPAGE_AUTOFMT_APPLY), rSet),
-    aCheckLB            (this,  CUI_RES(CLB_SETTINGS)),
-    aEditPB             (this,  CUI_RES(PB_EDIT)),
-    aHeader1Expl        (this,  CUI_RES(FT_HEADER1_EXPLANATION)),
-    aHeader2Expl        (this,  CUI_RES(FT_HEADER2_EXPLANATION)),
-    sHeader1            (CUI_RES( STR_HEADER1       )),
-    sHeader2            (CUI_RES( STR_HEADER2       )),
-    sDeleteEmptyPara    (CUI_RES( ST_DEL_EMPTY_PARA)),
-    sUseReplaceTbl      (CUI_RES(   ST_USE_REPLACE  )),
-    sCptlSttWord        (CUI_RES(   ST_CPTL_STT_WORD)),
-    sCptlSttSent        (CUI_RES(   ST_CPTL_STT_SENT)),
-    sUserStyle          (CUI_RES(   ST_USER_STYLE   )),
-    sBullet             (CUI_RES(   ST_BULLET       )),
-    sBoldUnder          (CUI_RES(   ST_BOLD_UNDER   )),
-    sNoDblSpaces        (CUI_RES(   STR_NO_DBL_SPACES)),
+    aCheckLB			(this,	CUI_RES(CLB_SETTINGS)),
+    aEditPB				(this, 	CUI_RES(PB_EDIT)),
+    aHeader1Expl		(this, 	CUI_RES(FT_HEADER1_EXPLANATION)),
+    aHeader2Expl		(this, 	CUI_RES(FT_HEADER2_EXPLANATION)),
+    sHeader1			(CUI_RES( STR_HEADER1		)),
+    sHeader2			(CUI_RES( STR_HEADER2		)),
+    sDeleteEmptyPara	(CUI_RES( ST_DEL_EMPTY_PARA)),
+    sUseReplaceTbl		(CUI_RES(	ST_USE_REPLACE  )),
+    sCptlSttWord		(CUI_RES(	ST_CPTL_STT_WORD)),
+    sCptlSttSent		(CUI_RES(	ST_CPTL_STT_SENT)),
+    sUserStyle			(CUI_RES(	ST_USER_STYLE   )),
+    sBullet				(CUI_RES(	ST_BULLET       )),
+    sBoldUnder			(CUI_RES(	ST_BOLD_UNDER   )),
+    sNoDblSpaces		(CUI_RES(	STR_NO_DBL_SPACES)),
     sCorrectCapsLock    (CUI_RES(   ST_CORRECT_ACCIDENTAL_CAPS_LOCK)),
-    sDetectURL          (CUI_RES(   ST_DETECT_URL   )),
-    sDash               (CUI_RES(   ST_DASH         )),
-    sRightMargin        (CUI_RES(   ST_RIGHT_MARGIN )),
-    sNum                (CUI_RES(   STR_NUM         )),
-    sBorder             (CUI_RES(   STR_BORDER      )),
-    sTable              (CUI_RES(   STR_TABLE       )),
-    sReplaceTemplates   (CUI_RES(   STR_REPLACE_TEMPLATES)),
-    sDelSpaceAtSttEnd   (CUI_RES(   STR_DEL_SPACES_AT_STT_END)),
+    sDetectURL			(CUI_RES(	ST_DETECT_URL   )),
+    sDash				(CUI_RES(	ST_DASH         )),
+    sRightMargin		(CUI_RES(	ST_RIGHT_MARGIN	)),
+    sNum				(CUI_RES(	STR_NUM			)),
+    sBorder				(CUI_RES(	STR_BORDER		)),
+    sTable				(CUI_RES(	STR_TABLE		)),
+    sReplaceTemplates   (CUI_RES(	STR_REPLACE_TEMPLATES)),
+    sDelSpaceAtSttEnd	(CUI_RES(	STR_DEL_SPACES_AT_STT_END)),
     sDelSpaceBetweenLines(CUI_RES(STR_DEL_SPACES_BETWEEN_LINES)),
 
-    nPercent        ( 50 ),
+    nPercent		( 50 ),
     pCheckButtonData( NULL )
 
 {
@@ -463,7 +500,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
     SvtSysLocale aSysLcl;
 
     aCheckLB.SetHelpId(HID_OFAPAGE_AUTOFORMAT_CLB);
-    aCheckLB.SetStyle(aCheckLB.GetStyle()|WB_HSCROLL| WB_VSCROLL);
+    aCheckLB.SetWindowBits(WB_HSCROLL| WB_VSCROLL);
 
     aCheckLB.SetSelectHdl(LINK(this, OfaSwAutoFmtOptionsPage, SelectHdl));
     aCheckLB.SetDoubleClickHdl(LINK(this, OfaSwAutoFmtOptionsPage, EditHdl));
@@ -488,7 +525,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
 /*                                                                   */
 /*********************************************************************/
 
-SvLBoxEntry* OfaSwAutoFmtOptionsPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
+SvLBoxEntry* OfaSwAutoFmtOptionsPage::CreateEntry(String& rTxt, USHORT nCol) 
 {
     SvLBoxEntry* pEntry = new SvLBoxEntry;
 
@@ -498,16 +535,16 @@ SvLBoxEntry* OfaSwAutoFmtOptionsPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
         aCheckLB.SetCheckButtonData( pCheckButtonData );
     }
 
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));	// Sonst Puff!
 
     String sEmpty;
     if (nCol == CBCOL_SECOND)
-        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
+        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );	// Leerspalte
     else
         pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
 
     if (nCol == CBCOL_FIRST)
-        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
+        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );	// Leerspalte
     else
         pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
     pEntry->AddItem( new OfaImpBrwString( pEntry, 0, rTxt ) );
@@ -520,7 +557,7 @@ SvLBoxEntry* OfaSwAutoFmtOptionsPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
 /*********************************************************************/
 
 
-OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
+__EXPORT OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
 {
     delete (ImpUserData*) aCheckLB.GetUserData( REPLACE_BULLETS );
     delete (ImpUserData*) aCheckLB.GetUserData( APPLY_NUMBERING );
@@ -532,7 +569,7 @@ OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
 /*                                                                   */
 /*********************************************************************/
 
-SfxTabPage* OfaSwAutoFmtOptionsPage::Create( Window* pParent,
+SfxTabPage* __EXPORT OfaSwAutoFmtOptionsPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new OfaSwAutoFmtOptionsPage(pParent, rAttrSet);
@@ -542,14 +579,14 @@ SfxTabPage* OfaSwAutoFmtOptionsPage::Create( Window* pParent,
 /*                                                                   */
 /*********************************************************************/
 
-sal_Bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
+BOOL OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
 {
-    sal_Bool bModified = sal_False;
+    BOOL bModified = FALSE;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
     long nFlags = pAutoCorrect->GetFlags();
 
-    sal_Bool bCheck = aCheckLB.IsChecked(USE_REPLACE_TABLE, CBCOL_FIRST);
+    BOOL bCheck = aCheckLB.IsChecked(USE_REPLACE_TABLE, CBCOL_FIRST);
     bModified |= pOpt->bAutoCorrect != bCheck;
     pOpt->bAutoCorrect = bCheck;
     pAutoCorrect->SetAutoCorrFlag(Autocorrect,
@@ -610,7 +647,7 @@ sal_Bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
     bModified |= pOpt->bRightMargin != bCheck;
     pOpt->bRightMargin = bCheck;
     bModified |= nPercent != pOpt->nRightMargin;
-    pOpt->nRightMargin = (sal_uInt8)nPercent;
+    pOpt->nRightMargin = (BYTE)nPercent;
 
     bCheck = aCheckLB.IsChecked(APPLY_NUMBERING, CBCOL_SECOND);
     bModified |= pOpt->bSetNumRule != bCheck;
@@ -655,12 +692,15 @@ sal_Bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
         pCfg->Commit();
     }
 
-    return sal_True;
+    return TRUE;
 }
 
-void    OfaSwAutoFmtOptionsPage::ActivatePage( const SfxItemSet& )
+/* -----------------23.11.98 16:15-------------------
+ *
+ * --------------------------------------------------*/
+void	OfaSwAutoFmtOptionsPage::ActivatePage( const SfxItemSet& )
 {
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(sal_False);
+    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(FALSE);
 }
 
 /*********************************************************************/
@@ -674,52 +714,52 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
     const long nFlags = pAutoCorrect->GetFlags();
 
-    aCheckLB.SetUpdateMode(sal_False);
+    aCheckLB.SetUpdateMode(FALSE);
     aCheckLB.Clear();
 
     // Die folgenden Eintraege muessen in der selben Reihenfolge, wie im
     // OfaAutoFmtOptions-enum eingefuegt werden!
-    aCheckLB.GetModel()->Insert(CreateEntry(sUseReplaceTbl,     CBCOL_BOTH  ));
-    aCheckLB.GetModel()->Insert(CreateEntry(sCptlSttWord,       CBCOL_BOTH  ));
-    aCheckLB.GetModel()->Insert(CreateEntry(sCptlSttSent,       CBCOL_BOTH  ));
-    aCheckLB.GetModel()->Insert(CreateEntry(sBoldUnder,         CBCOL_BOTH  ));
-    aCheckLB.GetModel()->Insert(CreateEntry(sDetectURL,         CBCOL_BOTH  ));
-    aCheckLB.GetModel()->Insert(CreateEntry(sDash,              CBCOL_BOTH  ));
-    aCheckLB.GetModel()->Insert(CreateEntry(sDelSpaceAtSttEnd,  CBCOL_BOTH  ));
+    aCheckLB.GetModel()->Insert(CreateEntry(sUseReplaceTbl,		CBCOL_BOTH	));
+    aCheckLB.GetModel()->Insert(CreateEntry(sCptlSttWord,		CBCOL_BOTH	));
+    aCheckLB.GetModel()->Insert(CreateEntry(sCptlSttSent,		CBCOL_BOTH	));
+    aCheckLB.GetModel()->Insert(CreateEntry(sBoldUnder,			CBCOL_BOTH	));
+    aCheckLB.GetModel()->Insert(CreateEntry(sDetectURL,			CBCOL_BOTH	));
+    aCheckLB.GetModel()->Insert(CreateEntry(sDash,				CBCOL_BOTH  ));
+    aCheckLB.GetModel()->Insert(CreateEntry(sDelSpaceAtSttEnd,	CBCOL_BOTH  ));
     aCheckLB.GetModel()->Insert(CreateEntry(sDelSpaceBetweenLines, CBCOL_BOTH  ));
 
-    aCheckLB.GetModel()->Insert(CreateEntry(sNoDblSpaces,       CBCOL_SECOND));
+    aCheckLB.GetModel()->Insert(CreateEntry(sNoDblSpaces,		CBCOL_SECOND));
     aCheckLB.GetModel()->Insert(CreateEntry(sCorrectCapsLock,   CBCOL_SECOND));
-    aCheckLB.GetModel()->Insert(CreateEntry(sNum,               CBCOL_SECOND));
-    aCheckLB.GetModel()->Insert(CreateEntry(sBorder,            CBCOL_SECOND));
-    aCheckLB.GetModel()->Insert(CreateEntry(sTable,             CBCOL_SECOND));
-    aCheckLB.GetModel()->Insert(CreateEntry(sReplaceTemplates,  CBCOL_SECOND));
-    aCheckLB.GetModel()->Insert(CreateEntry(sDeleteEmptyPara,   CBCOL_FIRST ));
-    aCheckLB.GetModel()->Insert(CreateEntry(sUserStyle,         CBCOL_FIRST ));
-    aCheckLB.GetModel()->Insert(CreateEntry(sBullet,            CBCOL_FIRST ));
-    aCheckLB.GetModel()->Insert(CreateEntry(sRightMargin,       CBCOL_FIRST ));
+    aCheckLB.GetModel()->Insert(CreateEntry(sNum,				CBCOL_SECOND));
+    aCheckLB.GetModel()->Insert(CreateEntry(sBorder,			CBCOL_SECOND));
+    aCheckLB.GetModel()->Insert(CreateEntry(sTable,				CBCOL_SECOND));
+    aCheckLB.GetModel()->Insert(CreateEntry(sReplaceTemplates,	CBCOL_SECOND));
+    aCheckLB.GetModel()->Insert(CreateEntry(sDeleteEmptyPara,	CBCOL_FIRST	));
+    aCheckLB.GetModel()->Insert(CreateEntry(sUserStyle,			CBCOL_FIRST	));
+    aCheckLB.GetModel()->Insert(CreateEntry(sBullet,			CBCOL_FIRST	));
+    aCheckLB.GetModel()->Insert(CreateEntry(sRightMargin,		CBCOL_FIRST	));
 
-    aCheckLB.CheckEntryPos( USE_REPLACE_TABLE,  CBCOL_FIRST,    pOpt->bAutoCorrect );
-    aCheckLB.CheckEntryPos( USE_REPLACE_TABLE,  CBCOL_SECOND,   0 != (nFlags & Autocorrect));
-    aCheckLB.CheckEntryPos( CORR_UPPER,         CBCOL_FIRST,    pOpt->bCptlSttWrd );
-    aCheckLB.CheckEntryPos( CORR_UPPER,         CBCOL_SECOND,   0 != (nFlags & CptlSttWrd) );
-    aCheckLB.CheckEntryPos( BEGIN_UPPER,        CBCOL_FIRST,    pOpt->bCptlSttSntnc );
-    aCheckLB.CheckEntryPos( BEGIN_UPPER,        CBCOL_SECOND,   0 != (nFlags & CptlSttSntnc) );
-    aCheckLB.CheckEntryPos( BOLD_UNDERLINE,     CBCOL_FIRST,    pOpt->bChgWeightUnderl );
-    aCheckLB.CheckEntryPos( BOLD_UNDERLINE,     CBCOL_SECOND,   0 != (nFlags & ChgWeightUnderl) );
-    aCheckLB.CheckEntryPos( IGNORE_DBLSPACE,    CBCOL_SECOND,   0 != (nFlags & IgnoreDoubleSpace) );
+    aCheckLB.CheckEntryPos( USE_REPLACE_TABLE, 	CBCOL_FIRST,	pOpt->bAutoCorrect );
+    aCheckLB.CheckEntryPos( USE_REPLACE_TABLE,	CBCOL_SECOND,	0 != (nFlags & Autocorrect));
+    aCheckLB.CheckEntryPos( CORR_UPPER,			CBCOL_FIRST,	pOpt->bCptlSttWrd );
+    aCheckLB.CheckEntryPos( CORR_UPPER,			CBCOL_SECOND,	0 != (nFlags & CptlSttWrd) );
+    aCheckLB.CheckEntryPos( BEGIN_UPPER,		CBCOL_FIRST,	pOpt->bCptlSttSntnc );
+    aCheckLB.CheckEntryPos( BEGIN_UPPER,		CBCOL_SECOND,	0 != (nFlags & CptlSttSntnc) );
+    aCheckLB.CheckEntryPos( BOLD_UNDERLINE,		CBCOL_FIRST,	pOpt->bChgWeightUnderl );
+    aCheckLB.CheckEntryPos( BOLD_UNDERLINE,		CBCOL_SECOND,	0 != (nFlags & ChgWeightUnderl) );
+    aCheckLB.CheckEntryPos( IGNORE_DBLSPACE,	CBCOL_SECOND,	0 != (nFlags & IgnoreDoubleSpace) );
     aCheckLB.CheckEntryPos( CORRECT_CAPS_LOCK,  CBCOL_SECOND,   0 != (nFlags & CorrectCapsLock) );
-    aCheckLB.CheckEntryPos( DETECT_URL,         CBCOL_FIRST,    pOpt->bSetINetAttr );
-    aCheckLB.CheckEntryPos( DETECT_URL,         CBCOL_SECOND,   0 != (nFlags & SetINetAttr) );
-    aCheckLB.CheckEntryPos( REPLACE_DASHES,     CBCOL_FIRST,    pOpt->bChgToEnEmDash );
-    aCheckLB.CheckEntryPos( REPLACE_DASHES,     CBCOL_SECOND,   0 != (nFlags & ChgToEnEmDash) );
-    aCheckLB.CheckEntryPos( DEL_SPACES_AT_STT_END,      CBCOL_FIRST,    pOpt->bAFmtDelSpacesAtSttEnd );
-    aCheckLB.CheckEntryPos( DEL_SPACES_AT_STT_END,      CBCOL_SECOND,   pOpt->bAFmtByInpDelSpacesAtSttEnd );
-    aCheckLB.CheckEntryPos( DEL_SPACES_BETWEEN_LINES,   CBCOL_FIRST,    pOpt->bAFmtDelSpacesBetweenLines );
-    aCheckLB.CheckEntryPos( DEL_SPACES_BETWEEN_LINES,   CBCOL_SECOND,   pOpt->bAFmtByInpDelSpacesBetweenLines );
-    aCheckLB.CheckEntryPos( DEL_EMPTY_NODE,     CBCOL_FIRST,    pOpt->bDelEmptyNode );
-    aCheckLB.CheckEntryPos( REPLACE_USER_COLL,  CBCOL_FIRST,    pOpt->bChgUserColl );
-    aCheckLB.CheckEntryPos( REPLACE_BULLETS,    CBCOL_FIRST,    pOpt->bChgEnumNum );
+    aCheckLB.CheckEntryPos( DETECT_URL,			CBCOL_FIRST,	pOpt->bSetINetAttr );
+    aCheckLB.CheckEntryPos( DETECT_URL,			CBCOL_SECOND,	0 != (nFlags & SetINetAttr) );
+    aCheckLB.CheckEntryPos( REPLACE_DASHES,		CBCOL_FIRST,	pOpt->bChgToEnEmDash );
+    aCheckLB.CheckEntryPos( REPLACE_DASHES,		CBCOL_SECOND,	0 != (nFlags & ChgToEnEmDash) );
+    aCheckLB.CheckEntryPos( DEL_SPACES_AT_STT_END,		CBCOL_FIRST,	pOpt->bAFmtDelSpacesAtSttEnd );
+    aCheckLB.CheckEntryPos( DEL_SPACES_AT_STT_END,		CBCOL_SECOND,	pOpt->bAFmtByInpDelSpacesAtSttEnd );
+    aCheckLB.CheckEntryPos( DEL_SPACES_BETWEEN_LINES,	CBCOL_FIRST,	pOpt->bAFmtDelSpacesBetweenLines );
+    aCheckLB.CheckEntryPos( DEL_SPACES_BETWEEN_LINES,	CBCOL_SECOND,	pOpt->bAFmtByInpDelSpacesBetweenLines );
+    aCheckLB.CheckEntryPos( DEL_EMPTY_NODE,		CBCOL_FIRST,	pOpt->bDelEmptyNode );
+    aCheckLB.CheckEntryPos( REPLACE_USER_COLL,	CBCOL_FIRST,	pOpt->bChgUserColl );
+    aCheckLB.CheckEntryPos( REPLACE_BULLETS,	CBCOL_FIRST,	pOpt->bChgEnumNum );
 
     aBulletFont = pOpt->aBulletFont;
     sBulletChar = pOpt->cBullet;
@@ -733,7 +773,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     pUserData = new ImpUserData(&sMargin, 0);
     aCheckLB.SetUserData( MERGE_SINGLE_LINE_PARA, pUserData );
 
-    aCheckLB.CheckEntryPos( APPLY_NUMBERING,    CBCOL_SECOND,   pOpt->bSetNumRule );
+    aCheckLB.CheckEntryPos( APPLY_NUMBERING,	CBCOL_SECOND,	pOpt->bSetNumRule );
 
     aByInputBulletFont = pOpt->aByInputBulletFont;
     sByInputBulletChar = pOpt->cByInputBullet;
@@ -741,11 +781,11 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.SetUserData( APPLY_NUMBERING , pUserData2 );
 
     aCheckLB.CheckEntryPos( MERGE_SINGLE_LINE_PARA, CBCOL_FIRST, pOpt->bRightMargin );
-    aCheckLB.CheckEntryPos( INSERT_BORDER,      CBCOL_SECOND,   pOpt->bSetBorder );
-    aCheckLB.CheckEntryPos( CREATE_TABLE,       CBCOL_SECOND,   pOpt->bCreateTable );
-    aCheckLB.CheckEntryPos( REPLACE_STYLES,     CBCOL_SECOND,   pOpt->bReplaceStyles );
+    aCheckLB.CheckEntryPos( INSERT_BORDER,		CBCOL_SECOND,	pOpt->bSetBorder );
+    aCheckLB.CheckEntryPos( CREATE_TABLE,		CBCOL_SECOND,	pOpt->bCreateTable );
+    aCheckLB.CheckEntryPos( REPLACE_STYLES,		CBCOL_SECOND,	pOpt->bReplaceStyles );
 
-    aCheckLB.SetUpdateMode(sal_True);
+    aCheckLB.SetUpdateMode(TRUE);
 }
 
 /*********************************************************************/
@@ -764,7 +804,7 @@ IMPL_LINK(OfaSwAutoFmtOptionsPage, SelectHdl, OfaACorrCheckListBox*, pBox)
 
 IMPL_LINK(OfaSwAutoFmtOptionsPage, EditHdl, PushButton*, EMPTYARG)
 {
-    sal_uLong nSelEntryPos = aCheckLB.GetSelectEntryPos();
+    ULONG nSelEntryPos = aCheckLB.GetSelectEntryPos();
     if( nSelEntryPos == REPLACE_BULLETS ||
         nSelEntryPos == APPLY_NUMBERING)
     {
@@ -790,7 +830,7 @@ IMPL_LINK(OfaSwAutoFmtOptionsPage, EditHdl, PushButton*, EMPTYARG)
         aDlg.GetPrcntFld().SetValue(nPercent);
         if(RET_OK == aDlg.Execute())
         {
-            nPercent = (sal_uInt16)aDlg.GetPrcntFld().GetValue();
+            nPercent = (USHORT)aDlg.GetPrcntFld().GetValue();
             sMargin = ' ';
             sMargin += String::CreateFromInt32( nPercent );
             sMargin += '%';
@@ -807,7 +847,7 @@ IMPL_LINK(OfaSwAutoFmtOptionsPage, EditHdl, PushButton*, EMPTYARG)
 void OfaACorrCheckListBox::SetTabs()
 {
     SvxSimpleTable::SetTabs();
-    sal_uInt16 nAdjust = SV_LBOXTAB_ADJUST_RIGHT|SV_LBOXTAB_ADJUST_LEFT|SV_LBOXTAB_ADJUST_CENTER|SV_LBOXTAB_ADJUST_NUMERIC|SV_LBOXTAB_FORCE;
+    USHORT nAdjust = SV_LBOXTAB_ADJUST_RIGHT|SV_LBOXTAB_ADJUST_LEFT|SV_LBOXTAB_ADJUST_CENTER|SV_LBOXTAB_ADJUST_NUMERIC|SV_LBOXTAB_FORCE;
 
     if( aTabs.Count() > 1 )
     {
@@ -827,7 +867,7 @@ void OfaACorrCheckListBox::SetTabs()
 /*                                                                   */
 /*********************************************************************/
 
-void OfaACorrCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked)
+void OfaACorrCheckListBox::CheckEntryPos(ULONG nPos, USHORT nCol, BOOL bChecked)
 {
     if ( nPos < GetEntryCount() )
         SetCheckButtonState(
@@ -841,7 +881,7 @@ void OfaACorrCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bo
 /*                                                                   */
 /*********************************************************************/
 
-sal_Bool OfaACorrCheckListBox::IsChecked(sal_uLong nPos, sal_uInt16 nCol)
+BOOL OfaACorrCheckListBox::IsChecked(ULONG nPos, USHORT nCol)
 {
     return GetCheckButtonState( GetEntry(nPos), nCol ) == SV_BUTTON_CHECKED;
 }
@@ -850,7 +890,7 @@ sal_Bool OfaACorrCheckListBox::IsChecked(sal_uLong nPos, sal_uInt16 nCol)
 /*                                                                   */
 /*********************************************************************/
 
-void OfaACorrCheckListBox::SetCheckButtonState( SvLBoxEntry* pEntry, sal_uInt16 nCol, SvButtonState eState)
+void OfaACorrCheckListBox::SetCheckButtonState( SvLBoxEntry* pEntry, USHORT nCol, SvButtonState eState)
 {
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
 
@@ -879,7 +919,7 @@ void OfaACorrCheckListBox::SetCheckButtonState( SvLBoxEntry* pEntry, sal_uInt16 
 /*                                                                   */
 /*********************************************************************/
 
-SvButtonState OfaACorrCheckListBox::GetCheckButtonState( SvLBoxEntry* pEntry, sal_uInt16 nCol ) const
+SvButtonState OfaACorrCheckListBox::GetCheckButtonState( SvLBoxEntry* pEntry, USHORT nCol ) const
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
@@ -887,7 +927,7 @@ SvButtonState OfaACorrCheckListBox::GetCheckButtonState( SvLBoxEntry* pEntry, sa
 
     if (((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON)
     {
-        sal_uInt16 nButtonFlags = pItem->GetButtonFlags();
+        USHORT nButtonFlags = pItem->GetButtonFlags();
         eState = pCheckButtonData->ConvertToButtonState( nButtonFlags );
     }
 
@@ -898,14 +938,16 @@ void OfaACorrCheckListBox::HBarClick()
 {
     // Sortierung durch diese Ueberladung abgeklemmt
 }
+/* -----------------------------22.05.2002 11:06------------------------------
 
+ ---------------------------------------------------------------------------*/
 void    OfaACorrCheckListBox::KeyInput( const KeyEvent& rKEvt )
 {
     if(!rKEvt.GetKeyCode().GetModifier() &&
         KEY_SPACE == rKEvt.GetKeyCode().GetCode())
     {
-        sal_uLong nSelPos = GetSelectEntryPos();
-        sal_uInt16 nCol = GetCurrentTabPos() - 1;
+        ULONG nSelPos = GetSelectEntryPos();
+        USHORT nCol = GetCurrentTabPos() - 1;
         if ( nCol < 2 )
         {
             CheckEntryPos( nSelPos, nCol, !IsChecked( nSelPos, nCol ) );
@@ -913,7 +955,7 @@ void    OfaACorrCheckListBox::KeyInput( const KeyEvent& rKEvt )
         }
         else
         {
-            sal_uInt16 nCheck = IsChecked(nSelPos, 1) ? 1 : 0;
+            USHORT nCheck = IsChecked(nSelPos, 1) ? 1 : 0;
             if(IsChecked(nSelPos, 0))
                 nCheck += 2;
             nCheck--;
@@ -925,17 +967,22 @@ void    OfaACorrCheckListBox::KeyInput( const KeyEvent& rKEvt )
     else
         SvxSimpleTable::KeyInput(rKEvt);
 }
-
+/* -----------------19.11.98 15:57-------------------
+ *
+ * --------------------------------------------------*/
 struct DoubleString
 {
-    String  sShort;
-    String  sLong;
-    void*   pUserData; // CheckBox -> form. Text Bool -> Selektionstext
+    String 	sShort;
+    String 	sLong;
+    void* 	pUserData; // CheckBox -> form. Text Bool -> Selektionstext
 };
 typedef DoubleString* DoubleStringPtr;
 SV_DECL_PTRARR_DEL(DoubleStringArray, DoubleStringPtr, 4, 4)
 SV_IMPL_PTRARR(DoubleStringArray, DoubleStringPtr);
 
+/* -----------------19.11.98 16:07-------------------
+ *
+ * --------------------------------------------------*/
 void lcl_ClearTable(DoubleStringTable& rTable)
 {
     DoubleStringArrayPtr pArray = rTable.Last();
@@ -948,25 +995,29 @@ void lcl_ClearTable(DoubleStringTable& rTable)
     rTable.Clear();
 }
 
+/*-----------------14.10.96 15.57-------------------
+
+--------------------------------------------------*/
+
 OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
                                                 const SfxItemSet& rSet ) :
     SfxTabPage(pParent, CUI_RES( RID_OFAPAGE_AUTOCORR_REPLACE ), rSet),
     aTextOnlyCB(    this, CUI_RES(CB_TEXT_ONLY      )),
     aShortFT  (     this, CUI_RES(FT_SHORT          )),
-    aShortED  (     this, CUI_RES(ED_SHORT          )),
-    aReplaceFT(     this, CUI_RES(FT_REPLACE        )),
-    aReplaceED(     this, CUI_RES(ED_REPLACE        )),
-    aReplaceTLB(    this, CUI_RES(TLB_REPLACE       )),
+    aShortED  ( 	this, CUI_RES(ED_SHORT          )),
+    aReplaceFT( 	this, CUI_RES(FT_REPLACE        )),
+    aReplaceED( 	this, CUI_RES(ED_REPLACE        )),
+    aReplaceTLB( 	this, CUI_RES(TLB_REPLACE       )),
     aNewReplacePB(  this, CUI_RES(PB_NEW_REPLACE    )),
     aDeleteReplacePB(this,CUI_RES(PB_DELETE_REPLACE )),
     sModify(CUI_RES(STR_MODIFY)),
     sNew(aNewReplacePB.GetText()),
     pFormatText(0),
     eLang(eLastDialogLanguage),
-    bHasSelectionText(sal_False),
-    bFirstSelect(sal_True),
-    bReplaceEditChanged(sal_False),
-    bSWriter(sal_True)
+    bHasSelectionText(FALSE),
+    bFirstSelect(TRUE),
+    bReplaceEditChanged(FALSE),
+    bSWriter(TRUE)
 {
     FreeResource();
     SfxModule *pMod = *(SfxModule**)GetAppData(SHL_WRITER);
@@ -980,7 +1031,7 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
     static long nTabs[] = { 2 /* Tab-Count */, 1, 61 };
     aReplaceTLB.SetTabs( &nTabs[0], MAP_APPFONT );
 
-    aReplaceTLB.SetStyle(aReplaceTLB.GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
+    aReplaceTLB.SetWindowBits(WB_HSCROLL|WB_CLIPCHILDREN);
     aReplaceTLB.SetSelectHdl(LINK(this, OfaAutocorrReplacePage, SelectHdl));
     aNewReplacePB.SetClickHdl( LINK(this, OfaAutocorrReplacePage, NewDelHdl));
     aDeleteReplacePB.SetClickHdl(LINK(this, OfaAutocorrReplacePage, NewDelHdl));
@@ -989,10 +1040,15 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
     aShortED.SetActionHdl(LINK(this, OfaAutocorrReplacePage, NewDelHdl));
     aReplaceED.SetActionHdl(LINK(this, OfaAutocorrReplacePage, NewDelHdl));
 
-    aReplaceED.SetSpaces(sal_True);
-    aShortED.SetSpaces(sal_True);
+    aReplaceED.SetSpaces(TRUE);
+    aShortED.SetSpaces(TRUE);
     aShortED.SetMaxTextLen(30);
 }
+
+/*-----------------14.10.96 15.58-------------------
+
+--------------------------------------------------*/
+
 
 OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
 {
@@ -1001,26 +1057,36 @@ OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
     delete pCompareClass;
     delete pCharClass;
 }
+/*-----------------14.10.96 15.58-------------------
 
-SfxTabPage* OfaAutocorrReplacePage::Create( Window* pParent,
+--------------------------------------------------*/
+
+SfxTabPage*	OfaAutocorrReplacePage::Create( Window* pParent,
                                 const SfxItemSet& rSet)
 {
     return new OfaAutocorrReplacePage(pParent, rSet);
 }
-
-void    OfaAutocorrReplacePage::ActivatePage( const SfxItemSet& )
+/* -----------------20.11.98 13:26-------------------
+ *
+ * --------------------------------------------------*/
+void	OfaAutocorrReplacePage::ActivatePage( const SfxItemSet& )
 {
     if(eLang != eLastDialogLanguage)
         SetLanguage(eLastDialogLanguage);
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(sal_True);
+    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(TRUE);
 }
-
+/* -----------------20.11.98 13:26-------------------
+ *
+ * --------------------------------------------------*/
 int OfaAutocorrReplacePage::DeactivatePage( SfxItemSet*  )
 {
     return LEAVE_PAGE;
 }
+/*-----------------14.10.96 15.58-------------------
 
-sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
+--------------------------------------------------*/
+
+BOOL OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     DoubleStringArrayPtr pDoubleStringArray = aDoubleStringTable.Last();
@@ -1030,19 +1096,19 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
         if(eCurLang != eLang) // die aktuelle Sprache wird weiter hinten behandelt
         {
             SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eCurLang);
-            sal_uInt16 nWordListCount = pWordList->Count();
-            sal_uInt16 nDoubleStringArrayCount = pDoubleStringArray->Count();
-            sal_uInt16 nPos = nDoubleStringArrayCount;
-            sal_uInt16 nLastPos = nPos;
+            USHORT nWordListCount = pWordList->Count();
+            USHORT nDoubleStringArrayCount = pDoubleStringArray->Count();
+            USHORT nPos = nDoubleStringArrayCount;
+            USHORT nLastPos = nPos;
             // 1. Durchlauf: Eintraege loeschen oder veraendern:
 
 
-            for( sal_uInt16 nWordListPos = nWordListCount; nWordListPos; nWordListPos-- )
+            for( USHORT nWordListPos = nWordListCount; nWordListPos; nWordListPos-- )
             {
                 SvxAutocorrWordPtr pWordPtr = pWordList->GetObject(nWordListPos - 1);
                 String sEntry(pWordPtr->GetShort());
                 // formatierter Text steht nur im Writer
-                sal_Bool bFound = !bSWriter && !pWordPtr->IsTextOnly();
+                BOOL bFound = !bSWriter && !pWordPtr->IsTextOnly();
                 while(!bFound && nPos)
                 {
                     DoubleString* pDouble = pDoubleStringArray->GetObject( nPos - 1);
@@ -1051,7 +1117,7 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
                                                     sEntry, pDouble->sShort ))
                     {
                         nLastPos = nPos - 1;
-                        bFound = sal_True;
+                        bFound = TRUE;
                         if( !(pWordPtr->IsTextOnly() == (0 == pDouble->pUserData)
                             && 0 == pCompareClass->compareString(
                                 pWordPtr->GetLong(), pDouble->sLong ) ) )
@@ -1070,7 +1136,7 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
                 }
             }
             nDoubleStringArrayCount = pDoubleStringArray->Count();
-            for(sal_uInt16 nDoubleStringArrayPos = 0; nDoubleStringArrayPos < nDoubleStringArrayCount; nDoubleStringArrayPos++ )
+            for(USHORT nDoubleStringArrayPos = 0; nDoubleStringArrayPos < nDoubleStringArrayCount; nDoubleStringArrayPos++ )
             {
                 //jetzt sollte es nur noch neue Eintraege geben
                 DoubleString* pDouble = pDoubleStringArray->GetObject( nDoubleStringArrayPos );
@@ -1091,21 +1157,21 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
     aDoubleStringTable.Clear();
     // jetzt noch die aktuelle Selektion
     SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eLang);
-    sal_uInt16 nWordListCount = pWordList->Count();
-    sal_uInt16 nListBoxCount = (sal_uInt16)aReplaceTLB.GetEntryCount();
+    USHORT nWordListCount = pWordList->Count();
+    USHORT nListBoxCount = (USHORT)aReplaceTLB.GetEntryCount();
 
-    aReplaceTLB.SetUpdateMode(sal_False);
-    sal_uInt16 nListBoxPos = nListBoxCount;
-    sal_uInt16 nLastListBoxPos = nListBoxPos;
+    aReplaceTLB.SetUpdateMode(FALSE);
+    USHORT nListBoxPos = nListBoxCount;
+    USHORT nLastListBoxPos = nListBoxPos;
     // 1. Durchlauf: Eintraege loeschen oder veraendern:
 
-    sal_uInt16 i;
+    USHORT i;
     for( i = nWordListCount; i; i-- )
     {
         SvxAutocorrWordPtr pWordPtr = pWordList->GetObject(i- 1);
         String sEntry(pWordPtr->GetShort());
         // formatierter Text steht nur im Writer
-        sal_Bool bFound = !bSWriter && !pWordPtr->IsTextOnly();
+        BOOL bFound = !bSWriter && !pWordPtr->IsTextOnly();
         while(!bFound && nListBoxPos)
         {
             SvLBoxEntry*  pEntry = aReplaceTLB.GetEntry( nListBoxPos - 1);
@@ -1113,7 +1179,7 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
                         aReplaceTLB.GetEntryText(pEntry, 0)))
             {
                 nLastListBoxPos = nListBoxPos - 1;
-                bFound = sal_True;
+                bFound = TRUE;
                 String sLong = aReplaceTLB.GetEntryText(pEntry, 1);
                 if( !(pWordPtr->IsTextOnly() == (0 == pEntry->GetUserData())
                     && 0 == pCompareClass->compareString(
@@ -1134,7 +1200,7 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
         }
 
     }
-    nListBoxCount = (sal_uInt16)aReplaceTLB.GetEntryCount();
+    nListBoxCount = (USHORT)aReplaceTLB.GetEntryCount();
     for(i = 0; i < nListBoxCount; i++ )
     {
         //jetzt sollte es nur noch neue Eintraege geben
@@ -1149,10 +1215,13 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
         }
     }
 
-    return sal_False;
+    return FALSE;
 }
 
-void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
+/* -----------------19.11.98 13:16-------------------
+ *
+ * --------------------------------------------------*/
+void OfaAutocorrReplacePage::RefillReplaceBox(BOOL bFromReset,
                                         LanguageType eOldLanguage,
                                         LanguageType eNewLanguage)
 {
@@ -1164,17 +1233,17 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
         DoubleStringArray* pArray = 0;
         if(aDoubleStringTable.IsKeyValid(eOldLanguage))
         {
-            pArray = aDoubleStringTable.Seek(sal_uLong(eOldLanguage));
+            pArray = aDoubleStringTable.Seek(ULONG(eOldLanguage));
             pArray->DeleteAndDestroy(0, pArray->Count());
         }
         else
         {
             pArray = new DoubleStringArray;
-            aDoubleStringTable.Insert(sal_uLong(eOldLanguage), pArray);
+            aDoubleStringTable.Insert(ULONG(eOldLanguage), pArray);
         }
 
-        sal_uInt16 nListBoxCount = (sal_uInt16)aReplaceTLB.GetEntryCount();
-        sal_uInt16 i;
+        USHORT nListBoxCount = (USHORT)aReplaceTLB.GetEntryCount();
+        USHORT i;
         for(i = 0; i < nListBoxCount; i++)
         {
             DoubleString* pDouble = new DoubleString();
@@ -1197,11 +1266,11 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
 
     if(aDoubleStringTable.IsKeyValid(eLang))
     {
-        DoubleStringArray* pArray = aDoubleStringTable.Seek(sal_uLong(eNewLanguage));
-        for(sal_uInt16 i = 0; i < pArray->Count(); i++)
+        DoubleStringArray* pArray = aDoubleStringTable.Seek(ULONG(eNewLanguage));
+        for(USHORT i = 0; i < pArray->Count(); i++)
         {
             DoubleString* pDouble = pArray->GetObject(i);
-            sal_Bool bTextOnly = 0 == pDouble->pUserData;
+            BOOL bTextOnly = 0 == pDouble->pUserData;
             // formatierter Text wird nur im Writer angeboten
             if(bSWriter || bTextOnly)
             {
@@ -1224,10 +1293,10 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
         SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eLang);
 
-        for(sal_uInt16 i = 0; i < pWordList->Count(); i++)
+        for(USHORT i = 0; i < pWordList->Count(); i++)
         {
             SvxAutocorrWordPtr pWordPtr = pWordList->GetObject(i);
-            sal_Bool bTextOnly = pWordPtr->IsTextOnly();
+            BOOL bTextOnly = pWordPtr->IsTextOnly();
             // formatierter Text wird nur im Writer angeboten
             if(bSWriter || bTextOnly)
             {
@@ -1244,36 +1313,42 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
                 pFormatText->Insert(new String(pWordPtr->GetShort()));
             }
         }
-        aNewReplacePB.Enable(sal_False);
-        aDeleteReplacePB.Enable(sal_False);
+        aNewReplacePB.Enable(FALSE);
+        aDeleteReplacePB.Enable(FALSE);
 
     }
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    if( pViewShell && pViewShell->HasSelection( sal_True ) )
+    if( pViewShell && pViewShell->HasSelection( TRUE ) )
     {
-        bHasSelectionText = sal_True;
+        bHasSelectionText = TRUE;
         const String sSelection( pViewShell->GetSelectionText() );
         aReplaceED.SetText( sSelection );
         aTextOnlyCB.Check( !bSWriter );
         aTextOnlyCB.Enable( bSWriter && sSelection.Len() );
     }
     else
-        aTextOnlyCB.Enable( sal_False );
+        aTextOnlyCB.Enable( FALSE );
 }
+/*-----------------14.10.96 15.58-------------------
+
+--------------------------------------------------*/
 
 void OfaAutocorrReplacePage::Reset( const SfxItemSet& )
 {
-    RefillReplaceBox(sal_True, eLang, eLang);
+    RefillReplaceBox(TRUE, eLang, eLang);
     aShortED.GrabFocus();
 }
 
+/* -----------------23.11.98 10:33-------------------
+ *
+ * --------------------------------------------------*/
 void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
 {
     //save old settings an refill
     if(eSet != eLang)
     {
-        RefillReplaceBox(sal_False, eLang, eSet);
+        RefillReplaceBox(FALSE, eLang, eSet);
         eLastDialogLanguage = eSet;
         delete pCompareClass;
         delete pCharClass;
@@ -1285,6 +1360,10 @@ void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
         ModifyHdl(&aShortED);
     }
 }
+/*-----------------14.10.96 15.58-------------------
+
+--------------------------------------------------*/
+
 
 IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
 {
@@ -1294,7 +1373,7 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
         String sTmpShort(pBox->GetEntryText(pEntry, 0));
         // wird der Text ueber den ModifyHdl gesetzt, dann steht der Cursor sonst immer am Wortanfang,
         // obwohl man gerade hier editiert
-        sal_Bool bSameContent = 0 == pCompareClass->compareString(
+        BOOL bSameContent = 0 == pCompareClass->compareString(
                 sTmpShort, aShortED.GetText() );
         Selection aSel = aShortED.GetSelection();
         if(aShortED.GetText() != sTmpShort)
@@ -1309,12 +1388,17 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
         aTextOnlyCB.Check(0 == pEntry->GetUserData());
     }
     else
-        bFirstSelect = sal_False;
+        bFirstSelect = FALSE;
 
-    aNewReplacePB.Enable(sal_False);
+    aNewReplacePB.Enable(FALSE);
     aDeleteReplacePB.Enable();
     return 0;
 };
+
+/*-----------------14.10.96 15.58-------------------
+
+--------------------------------------------------*/
+
 
 IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
 {
@@ -1336,18 +1420,18 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
         if(sEntry.Len() && ( aReplaceED.GetText().Len() ||
                 ( bHasSelectionText && bSWriter ) ))
         {
-            aReplaceTLB.SetUpdateMode(sal_False);
-            sal_uInt16 nPos = USHRT_MAX;
+            aReplaceTLB.SetUpdateMode(FALSE);
+            USHORT nPos = USHRT_MAX;
             sEntry += '\t';
             sEntry += aReplaceED.GetText();
             if(_pNewEntry)
             {
-                nPos = (sal_uInt16)aReplaceTLB.GetModel()->GetAbsPos(_pNewEntry);
+                nPos = (USHORT)aReplaceTLB.GetModel()->GetAbsPos(_pNewEntry);
                 aReplaceTLB.GetModel()->Remove(_pNewEntry);
             }
             else
             {
-                sal_uInt16 j;
+                USHORT j;
                 for( j = 0; j < aReplaceTLB.GetEntryCount(); j++ )
                 {
                     SvLBoxEntry* pReplaceEntry = aReplaceTLB.GetEntry(j);
@@ -1365,7 +1449,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
                 pInsEntry->SetUserData(&bHasSelectionText); // neuer formatierter Text
 
             aReplaceTLB.MakeVisible( pInsEntry );
-            aReplaceTLB.SetUpdateMode(sal_True);
+            aReplaceTLB.SetUpdateMode(TRUE);
             // falls der Request aus dem ReplaceEdit kam, dann Focus in das ShortEdit setzen
             if(aReplaceED.HasFocus())
                 aShortED.GrabFocus();
@@ -1382,10 +1466,13 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
     return 1;
 }
 
+/*-----------------17.10.96 07.49-------------------
+
+--------------------------------------------------*/
 IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
 {
     SvLBoxEntry* pFirstSel = aReplaceTLB.FirstSelected();
-    sal_Bool bShort = pEdt == &aShortED;
+    BOOL bShort = pEdt == &aShortED;
     const String rEntry = pEdt->GetText();
     const String rRepString = aReplaceED.GetText();
     String aWordStr( pCharClass->lower( rEntry ));
@@ -1394,21 +1481,21 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
     {
         if(rEntry.Len())
         {
-            sal_Bool bFound = sal_False;
-            sal_Bool bTmpSelEntry=sal_False;
+            BOOL bFound = FALSE;
+            BOOL bTmpSelEntry=FALSE;
 
-            for(sal_uInt16 i = 0; i < aReplaceTLB.GetEntryCount(); i++)
+            for(USHORT i = 0; i < aReplaceTLB.GetEntryCount(); i++)
             {
                 SvLBoxEntry*  pEntry = aReplaceTLB.GetEntry( i );
                 String aTestStr=aReplaceTLB.GetEntryText(pEntry, 0);
                 if( 0 == pCompareClass->compareString(rEntry, aTestStr ))
                 {
                     if(rRepString.Len())
-                        bFirstSelect = sal_True;
+                        bFirstSelect = TRUE;
                     aReplaceTLB.SetCurEntry(pEntry);
                     pFirstSel = pEntry;
                     aNewReplacePB.SetText(sModify);
-                    bFound= sal_True;
+                    bFound= TRUE;
                     break;
                 }
                 else
@@ -1417,17 +1504,17 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
                     if(aTestStr.Search(aWordStr)==0 && !bTmpSelEntry)
                     {
                         aReplaceTLB.MakeVisible(pEntry);
-                        bTmpSelEntry=sal_True;
+                        bTmpSelEntry=TRUE;
                     }
                 }
             }
             if(!bFound)
             {
-                aReplaceTLB.SelectAll(sal_False);
+                aReplaceTLB.SelectAll(FALSE);
                 pFirstSel = 0;
                 aNewReplacePB.SetText(sNew);
                 if(bReplaceEditChanged)
-                    aTextOnlyCB.Enable(sal_False);
+                    aTextOnlyCB.Enable(FALSE);
             }
             aDeleteReplacePB.Enable(bFound);
         }
@@ -1440,7 +1527,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
     }
     else if(!bShort)
     {
-        bReplaceEditChanged = sal_True;
+        bReplaceEditChanged = TRUE;
         if(pFirstSel)
         {
             aNewReplacePB.SetText(sModify);
@@ -1448,17 +1535,17 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
     }
 
     const String& rShortTxt = aShortED.GetText();
-    sal_Bool bEnableNew = rShortTxt.Len() &&
+    BOOL bEnableNew = rShortTxt.Len() &&
                         ( rRepString.Len() ||
                                 ( bHasSelectionText && bSWriter )) &&
                         ( !pFirstSel || rRepString !=
                                 aReplaceTLB.GetEntryText( pFirstSel, 1 ) );
     if(bEnableNew && pFormatText)
     {
-        for(sal_uInt16 i = 0; i < pFormatText->Count(); i++)
+        for(USHORT i = 0; i < pFormatText->Count(); i++)
             if(*pFormatText->GetObject(i) == rShortTxt)
             {
-                bEnableNew = sal_False;
+                bEnableNew = FALSE;
                 break;
             }
     }
@@ -1466,6 +1553,10 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
 
     return 0;
 }
+
+/* -----------------20.11.98 13:48-------------------
+ *
+ * --------------------------------------------------*/
 
 struct StringsArrays
 {
@@ -1477,13 +1568,15 @@ struct StringsArrays
         aAbbrevStrings(5,5), aDoubleCapsStrings(5,5) {}
 };
 typedef StringsArrays* StringsArraysPtr;
-
-sal_Bool lcl_FindInArray(SvStringsDtor& rStrings, const String& rString)
+/* -----------------19.11.98 16:07-------------------
+ *
+ * --------------------------------------------------*/
+BOOL lcl_FindInArray(SvStringsDtor& rStrings, const String& rString)
 {
-    for(sal_uInt16 i = 0; i < rStrings.Count(); i++)
+    for(USHORT i = 0; i < rStrings.Count(); i++)
         if(rString == *rStrings.GetObject(i))
-            return sal_True;
-    return sal_False;
+            return TRUE;
+    return FALSE;
 }
 
 void lcl_ClearTable(StringsTable& rTable)
@@ -1497,28 +1590,27 @@ void lcl_ClearTable(StringsTable& rTable)
     rTable.Clear();
 }
 
+/*-----------------14.10.96 15.57-------------------
+
+--------------------------------------------------*/
+
 OfaAutocorrExceptPage::OfaAutocorrExceptPage( Window* pParent,
                                                 const SfxItemSet& rSet ) :
     SfxTabPage(pParent, CUI_RES( RID_OFAPAGE_AUTOCORR_EXCEPT ), rSet),
-    aAbbrevFL       (this, CUI_RES(FL_ABBREV         )),
-    aAbbrevED       (this, CUI_RES(ED_ABBREV         )),
-    aAbbrevLB       (this, CUI_RES(LB_ABBREV         )),
-    aNewAbbrevPB    (this, CUI_RES(PB_NEWABBREV  )),
-    aDelAbbrevPB    (this, CUI_RES(PB_DELABBREV  )),
-    aAutoAbbrevCB   (this, CUI_RES(CB_AUTOABBREV     )),
-    aDoubleCapsFL   (this, CUI_RES(FL_DOUBLECAPS     )),
-    aDoubleCapsED   (this, CUI_RES(ED_DOUBLE_CAPS    )),
-    aDoubleCapsLB   (this, CUI_RES(LB_DOUBLE_CAPS    )),
+    aAbbrevFL    	(this, CUI_RES(FL_ABBREV		 )),
+    aAbbrevED       (this, CUI_RES(ED_ABBREV		 )),
+    aAbbrevLB    	(this, CUI_RES(LB_ABBREV		 )),
+    aNewAbbrevPB    (this, CUI_RES(PB_NEWABBREV	 )),
+    aDelAbbrevPB    (this, CUI_RES(PB_DELABBREV	 )),
+    aAutoAbbrevCB   (this, CUI_RES(CB_AUTOABBREV	 )),
+    aDoubleCapsFL   (this, CUI_RES(FL_DOUBLECAPS	 )),
+    aDoubleCapsED   (this, CUI_RES(ED_DOUBLE_CAPS	 )),
+    aDoubleCapsLB   (this, CUI_RES(LB_DOUBLE_CAPS	 )),
     aNewDoublePB    (this, CUI_RES(PB_NEWDOUBLECAPS)),
-    aDelDoublePB    (this, CUI_RES(PB_DELDOUBLECAPS)),
-    aAutoCapsCB     (this, CUI_RES(CB_AUTOCAPS   )),
+    aDelDoublePB 	(this, CUI_RES(PB_DELDOUBLECAPS)),
+    aAutoCapsCB   	(this, CUI_RES(CB_AUTOCAPS	 )),
     eLang(eLastDialogLanguage)
 {
-    aNewAbbrevPB.SetAccessibleName(String(CUI_RES(STR_PB_NEWABBREV) ) );
-    aDelAbbrevPB.SetAccessibleName(String(CUI_RES(STR_PB_DELABBREV) ) );
-    aNewDoublePB.SetAccessibleName(String(CUI_RES(STR_PB_NEWDOUBLECAPS) ) );
-    aDelDoublePB.SetAccessibleName(String(CUI_RES(STR_PB_DELDOUBLECAPS) ) );
-
     FreeResource();
 
     ::com::sun::star::lang::Locale aLcl( SvxCreateLocale(eLastDialogLanguage ));
@@ -1539,11 +1631,11 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage( Window* pParent,
     aAbbrevED.SetActionHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
     aDoubleCapsED.SetActionHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
 
-    aNewAbbrevPB.SetAccessibleRelationMemberOf(&aAbbrevFL);
-    aDelAbbrevPB.SetAccessibleRelationMemberOf(&aAbbrevFL);
-    aNewDoublePB.SetAccessibleRelationMemberOf(&aDoubleCapsFL);
-    aDelDoublePB.SetAccessibleRelationMemberOf(&aDoubleCapsFL);
 }
+
+/*-----------------14.10.96 15.58-------------------
+
+--------------------------------------------------*/
 
 OfaAutocorrExceptPage::~OfaAutocorrExceptPage()
 {
@@ -1551,25 +1643,36 @@ OfaAutocorrExceptPage::~OfaAutocorrExceptPage()
     delete pCompareClass;
 }
 
-SfxTabPage* OfaAutocorrExceptPage::Create( Window* pParent,
+/*-----------------14.10.96 15.58-------------------
+
+--------------------------------------------------*/
+
+SfxTabPage*	OfaAutocorrExceptPage::Create( Window* pParent,
                                 const SfxItemSet& rSet)
 {
     return new OfaAutocorrExceptPage(pParent, rSet);
 }
-
-void    OfaAutocorrExceptPage::ActivatePage( const SfxItemSet& )
+/* -----------------20.11.98 13:26-------------------
+ *
+ * --------------------------------------------------*/
+void	OfaAutocorrExceptPage::ActivatePage( const SfxItemSet& )
 {
     if(eLang != eLastDialogLanguage)
         SetLanguage(eLastDialogLanguage);
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(sal_True);
+    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(TRUE);
 }
-
+/* -----------------20.11.98 13:26-------------------
+ *
+ * --------------------------------------------------*/
 int     OfaAutocorrExceptPage::DeactivatePage( SfxItemSet* )
 {
     return LEAVE_PAGE;
 }
+/*-----------------14.10.96 15.58-------------------
 
-sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
+--------------------------------------------------*/
+
+BOOL OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     StringsArraysPtr pArrays = aStringsTable.Last();
@@ -1582,8 +1685,8 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 
             if(pWrdList)
             {
-                sal_uInt16 nCount = pWrdList->Count();
-                sal_uInt16 i;
+                USHORT nCount = pWrdList->Count();
+                USHORT i;
                 for( i = nCount; i; )
                 {
                     String* pString = pWrdList->GetObject( --i );
@@ -1605,8 +1708,8 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 
             if(pCplList)
             {
-                sal_uInt16 nCount = pCplList->Count();
-                sal_uInt16 i;
+                USHORT nCount = pCplList->Count();
+                USHORT i;
                 for( i = nCount; i; )
                 {
                     String* pString = pCplList->GetObject( --i );
@@ -1631,8 +1734,8 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 
     if(pWrdList)
     {
-        sal_uInt16 nCount = pWrdList->Count();
-        sal_uInt16 i;
+        USHORT nCount = pWrdList->Count();
+        USHORT i;
         for( i = nCount; i; )
         {
             String* pString = pWrdList->GetObject( --i );
@@ -1653,8 +1756,8 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 
     if(pCplList)
     {
-        sal_uInt16 nCount = pCplList->Count();
-        sal_uInt16 i;
+        USHORT nCount = pCplList->Count();
+        USHORT i;
         for( i = nCount; i; )
         {
             String* pString = pCplList->GetObject( --i );
@@ -1674,15 +1777,18 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
         pAutoCorrect->SetAutoCorrFlag( SaveWordCplSttLst, aAutoAbbrevCB.IsChecked());
     if(aAutoCapsCB.IsChecked() != aAutoCapsCB.GetSavedValue())
         pAutoCorrect->SetAutoCorrFlag( SaveWordWrdSttLst, aAutoCapsCB.IsChecked());
-    return sal_False;
+    return FALSE;
 }
 
+/* -----------------23.11.98 10:33-------------------
+ *
+ * --------------------------------------------------*/
 void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
 {
     if(eLang != eSet)
     {
         //alte Einstellungen speichern und neu fuellen
-        RefillReplaceBoxes(sal_False, eLang, eSet);
+        RefillReplaceBoxes(FALSE, eLang, eSet);
         eLastDialogLanguage = eSet;
         delete pCompareClass;
         pCompareClass = new CollatorWrapper( GetProcessFact() );
@@ -1693,8 +1799,10 @@ void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
         ModifyHdl(&aDoubleCapsED);
     }
 }
-
-void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
+/* -----------------20.11.98 14:06-------------------
+ *
+ * --------------------------------------------------*/
+void OfaAutocorrExceptPage::RefillReplaceBoxes(BOOL bFromReset,
                                         LanguageType eOldLanguage,
                                         LanguageType eNewLanguage)
 {
@@ -1706,7 +1814,7 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
         StringsArraysPtr pArrays = 0;
         if(aStringsTable.IsKeyValid(eOldLanguage))
         {
-            pArrays = aStringsTable.Seek(sal_uLong(eOldLanguage));
+            pArrays = aStringsTable.Seek(ULONG(eOldLanguage));
             pArrays->aAbbrevStrings.DeleteAndDestroy(
                                     0, pArrays->aAbbrevStrings.Count());
             pArrays->aDoubleCapsStrings.DeleteAndDestroy(
@@ -1715,10 +1823,10 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
         else
         {
             pArrays = new StringsArrays;
-            aStringsTable.Insert(sal_uLong(eOldLanguage), pArrays);
+            aStringsTable.Insert(ULONG(eOldLanguage), pArrays);
         }
 
-        sal_uInt16 i;
+        USHORT i;
         for(i = 0; i < aAbbrevLB.GetEntryCount(); i++)
         {
             pArrays->aAbbrevStrings.Insert(
@@ -1739,8 +1847,8 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
 
     if(aStringsTable.IsKeyValid(eLang))
     {
-        StringsArraysPtr pArrays = aStringsTable.Seek(sal_uLong(eLang));
-        sal_uInt16 i;
+        StringsArraysPtr pArrays = aStringsTable.Seek(ULONG(eLang));
+        USHORT i;
         for(i = 0; i < pArrays->aAbbrevStrings.Count(); i++ )
         {
             aAbbrevLB.InsertEntry(*pArrays->aAbbrevStrings.GetObject(i));
@@ -1755,7 +1863,7 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
         const SvStringsISortDtor* pCplList = pAutoCorrect->GetCplSttExceptList(eLang);
         const SvStringsISortDtor* pWrdList = pAutoCorrect->GetWrdSttExceptList(eLang);
-        sal_uInt16 i;
+        USHORT i;
         for( i = 0; i < pCplList->Count(); i++ )
         {
             aAbbrevLB.InsertEntry(*pCplList->GetObject(i));
@@ -1767,15 +1875,24 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
     }
 }
 
+/*-----------------14.10.96 15.58-------------------
+
+--------------------------------------------------*/
+
 void OfaAutocorrExceptPage::Reset( const SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
-    RefillReplaceBoxes(sal_True, eLang, eLang);
-    aAutoAbbrevCB.  Check(  pAutoCorrect->IsAutoCorrFlag( SaveWordCplSttLst ));
-    aAutoCapsCB.    Check(  pAutoCorrect->IsAutoCorrFlag( SaveWordWrdSttLst ));
+    RefillReplaceBoxes(TRUE, eLang, eLang);
+    aAutoAbbrevCB.	Check(	pAutoCorrect->IsAutoCorrFlag( SaveWordCplSttLst ));
+    aAutoCapsCB.	Check(	pAutoCorrect->IsAutoCorrFlag( SaveWordWrdSttLst ));
     aAutoAbbrevCB.SaveValue();
     aAutoCapsCB.SaveValue();
 }
+
+/*-----------------16.10.96 12.27-------------------
+
+--------------------------------------------------*/
+
 
 IMPL_LINK(OfaAutocorrExceptPage, NewDelHdl, PushButton*, pBtn)
 {
@@ -1804,31 +1921,39 @@ IMPL_LINK(OfaAutocorrExceptPage, NewDelHdl, PushButton*, pBtn)
     return 0;
 }
 
+/*-----------------16.10.96 12.57-------------------
+
+--------------------------------------------------*/
+
 IMPL_LINK(OfaAutocorrExceptPage, SelectHdl, ListBox*, pBox)
 {
     if(pBox == &aAbbrevLB)
     {
         aAbbrevED.SetText(pBox->GetSelectEntry());
-        aNewAbbrevPB.Enable(sal_False);
+        aNewAbbrevPB.Enable(FALSE);
         aDelAbbrevPB.Enable();
     }
     else
     {
         aDoubleCapsED.SetText(pBox->GetSelectEntry());
-        aNewDoublePB.Enable(sal_False);
+        aNewDoublePB.Enable(FALSE);
         aDelDoublePB.Enable();
     }
     return 0;
 }
 
+/*-----------------16.10.96 13.02-------------------
+
+--------------------------------------------------*/
+
 IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit*, pEdt)
 {
-//  sal_Bool bSame = pEdt->GetText() == ->GetSelectEntry();
+//	BOOL bSame = pEdt->GetText() == ->GetSelectEntry();
     const String& sEntry = pEdt->GetText();
-    sal_Bool bEntryLen = 0!= sEntry.Len();
+    BOOL bEntryLen = 0!= sEntry.Len();
     if(pEdt == &aAbbrevED)
     {
-        sal_Bool bSame = lcl_FindEntry(aAbbrevLB, sEntry, *pCompareClass);
+        BOOL bSame = lcl_FindEntry(aAbbrevLB, sEntry, *pCompareClass);
         if(bSame && sEntry != aAbbrevLB.GetSelectEntry())
             pEdt->SetText(aAbbrevLB.GetSelectEntry());
         aNewAbbrevPB.Enable(!bSame && bEntryLen);
@@ -1836,7 +1961,7 @@ IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit*, pEdt)
     }
     else
     {
-        sal_Bool bSame = lcl_FindEntry(aDoubleCapsLB, sEntry, *pCompareClass);
+        BOOL bSame = lcl_FindEntry(aDoubleCapsLB, sEntry, *pCompareClass);
         if(bSame && sEntry != aDoubleCapsLB.GetSelectEntry())
             pEdt->SetText(aDoubleCapsLB.GetSelectEntry());
         aNewDoublePB.Enable(!bSame && bEntryLen);
@@ -1845,10 +1970,14 @@ IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit*, pEdt)
     return 0;
 }
 
+/*-----------------16.10.96 15.03-------------------
+
+--------------------------------------------------*/
+
 void AutoCorrEdit::KeyInput( const KeyEvent& rKEvt )
 {
     const KeyCode aKeyCode = rKEvt.GetKeyCode();
-    const sal_uInt16 nModifier = aKeyCode.GetModifier();
+    const USHORT nModifier = aKeyCode.GetModifier();
     if( aKeyCode.GetCode() == KEY_RETURN )
     {
         //wird bei Enter nichts getan, dann doch die Basisklasse rufen
@@ -1860,32 +1989,36 @@ void AutoCorrEdit::KeyInput( const KeyEvent& rKEvt )
         Edit::KeyInput(rKEvt);
 }
 
+/*-----------------03.07.97 13:17-------------------
+
+--------------------------------------------------*/
+
 enum OfaQuoteOptions
 {
     ADD_NONBRK_SPACE,
     REPLACE_1ST
 };
 
-SvLBoxEntry* OfaQuoteTabPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
+SvLBoxEntry* OfaQuoteTabPage::CreateEntry(String& rTxt, USHORT nCol) 
 {
     SvLBoxEntry* pEntry = new SvLBoxEntry;
-
+    
     if ( !pCheckButtonData )
     {
         pCheckButtonData = new SvLBoxButtonData( &aSwCheckLB );
         aSwCheckLB.SetCheckButtonData( pCheckButtonData );
     }
 
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));	// Sonst Puff!
 
     String sEmpty;
     if (nCol == CBCOL_SECOND)
-        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
+        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );	// Leerspalte
     else
         pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
 
     if (nCol == CBCOL_FIRST)
-        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
+        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );	// Leerspalte
     else
         pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
 
@@ -1896,15 +2029,15 @@ SvLBoxEntry* OfaQuoteTabPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
 
 OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, CUI_RES( RID_OFAPAGE_AUTOCORR_QUOTE ), rSet),
-    aCheckLB            (this, CUI_RES(CLB_SETTINGS     )),
-    aSwCheckLB          (this, CUI_RES(CLB_SETTINGS     )),
-    sHeader1            (CUI_RES( STR_HEADER1           )),
-    sHeader2            (CUI_RES( STR_HEADER2           )),
-    sNonBrkSpace        (CUI_RES( ST_NON_BREAK_SPACE    )),
-    sOrdinal            (CUI_RES( ST_ORDINAL            )),
+    aCheckLB			(this, CUI_RES(CLB_SETTINGS     )),
+    aSwCheckLB			(this, CUI_RES(CLB_SETTINGS     )),
+    sHeader1			(CUI_RES( STR_HEADER1		    )),
+    sHeader2			(CUI_RES( STR_HEADER2		    )),
+    sNonBrkSpace		(CUI_RES( ST_NON_BREAK_SPACE    )),
+    sOrdinal			(CUI_RES( ST_ORDINAL            )),
     pCheckButtonData    ( NULL ),
 
-    aSingleFL           (this, CUI_RES(FL_SINGLE         )),
+    aSingleFL           (this, CUI_RES(FL_SINGLE		 )),
     aSingleTypoCB       (this, CUI_RES(CB_SGL_TYPO     )),
     aSglStartQuoteFT    (this, CUI_RES(FT_SGL_STARTQUOTE )),
     aSglStartQuotePB    (this, CUI_RES(PB_SGL_STARTQUOTE )),
@@ -1920,7 +2053,7 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aStartQuotePB       (this, CUI_RES(PB_STARTQUOTE   )),
     aDblStartExFT       (this, CUI_RES(FT_DBSTEX       )),
     aEndQuoteFT         (this, CUI_RES(FT_ENDQUOTE     )),
-    aEndQuotePB         (this, CUI_RES(PB_ENDQUOTE     )),
+    aEndQuotePB    		(this, CUI_RES(PB_ENDQUOTE     )),
     aDblEndExFT         (this, CUI_RES(FT_DBECEX       )),
     aDblStandardPB      (this, CUI_RES(PB_DBL_STD      )),
 
@@ -1929,23 +2062,16 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
 
     sStandard(CUI_RES(ST_STANDARD))
 {
-    aSglStandardPB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_STD) ) );
-    aDblStandardPB.SetAccessibleName(String(CUI_RES(STR_PB_DBL_STD) ) );
-    aStartQuotePB.SetAccessibleName( String(CUI_RES(STR_PB_DBL_START) ));
-    aEndQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_DBL_END) ));
-    aSglStartQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_START) ));
-    aSglEndQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_END) ) );
-
     FreeResource();
-
-    sal_Bool bShowSWOptions = sal_False;
+    
+    BOOL bShowSWOptions = FALSE;
 
     aCheckLB.SetHelpId( HID_OFAPAGE_QUOTE_CLB );
     aSwCheckLB.SetHelpId( HID_OFAPAGE_QUOTE_SW_CLB );
 
-    SFX_ITEMSET_ARG( &rSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, sal_False );
+    SFX_ITEMSET_ARG( &rSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, FALSE );
     if ( pItem && pItem->GetValue() )
-        bShowSWOptions = sal_True;
+        bShowSWOptions = TRUE;
 
     if ( bShowSWOptions )
     {
@@ -1953,8 +2079,8 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
         {
             3, 0, 20, 40
         };
-
-        aSwCheckLB.SetStyle(aSwCheckLB.GetStyle() | WB_HSCROLL| WB_VSCROLL);
+    
+        aSwCheckLB.SetWindowBits(WB_HSCROLL| WB_VSCROLL);
 
         aSwCheckLB.SvxSimpleTable::SetTabs(aStaticTabs);
         String sHeader( sHeader1 );
@@ -1963,44 +2089,40 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
         sHeader += '\t';
         aSwCheckLB.InsertHeaderEntry( sHeader, HEADERBAR_APPEND,
                         HIB_CENTER | HIB_VCENTER | HIB_FIXEDPOS | HIB_FIXED);
-        aCheckLB.Hide( sal_True );
+        aCheckLB.Hide( TRUE );
     }
     else
     {
         aSwCheckLB.HideTable( );
     }
 
-    aStartQuotePB.SetClickHdl(LINK(this,    OfaQuoteTabPage, QuoteHdl));
-    aEndQuotePB.SetClickHdl(LINK(this,      OfaQuoteTabPage, QuoteHdl));
+    aStartQuotePB.SetClickHdl(LINK(this, 	OfaQuoteTabPage, QuoteHdl));
+    aEndQuotePB.SetClickHdl(LINK(this, 		OfaQuoteTabPage, QuoteHdl));
     aSglStartQuotePB.SetClickHdl(LINK(this, OfaQuoteTabPage, QuoteHdl));
-    aSglEndQuotePB.SetClickHdl(LINK(this,   OfaQuoteTabPage, QuoteHdl));
-    aDblStandardPB.SetClickHdl(LINK(this,   OfaQuoteTabPage, StdQuoteHdl));
-    aSglStandardPB.SetClickHdl(LINK(this,   OfaQuoteTabPage, StdQuoteHdl));
+    aSglEndQuotePB.SetClickHdl(LINK(this, 	OfaQuoteTabPage, QuoteHdl));
+    aDblStandardPB.SetClickHdl(LINK(this, 	OfaQuoteTabPage, StdQuoteHdl));
+    aSglStandardPB.SetClickHdl(LINK(this, 	OfaQuoteTabPage, StdQuoteHdl));
 
-    aSglStartQuotePB.SetAccessibleRelationLabeledBy( &aSglStartQuoteFT );
-    aSglEndQuotePB.SetAccessibleRelationLabeledBy( &aSglEndQuoteFT );
-    aSglStartQuotePB.SetAccessibleRelationMemberOf( &aSingleFL );
-    aSglEndQuotePB.SetAccessibleRelationMemberOf( &aSingleFL );
-    aStartQuotePB.SetAccessibleRelationLabeledBy( &aStartQuoteFT );
-    aEndQuotePB.SetAccessibleRelationLabeledBy( &aEndQuoteFT );
-    aStartQuotePB.SetAccessibleRelationMemberOf( &aDoubleFL );
-    aEndQuotePB.SetAccessibleRelationMemberOf( &aDoubleFL );
-    aSglStandardPB.SetAccessibleRelationMemberOf(&aSingleFL);
-    aDblStandardPB.SetAccessibleRelationMemberOf(&aDoubleFL);
 }
+/*-----------------03.07.97 13:17-------------------
 
+--------------------------------------------------*/
 OfaQuoteTabPage::~OfaQuoteTabPage()
 {
     delete( pCheckButtonData );
 }
+/*-----------------03.07.97 13:17-------------------
 
-SfxTabPage* OfaQuoteTabPage::Create( Window* pParent,
+--------------------------------------------------*/
+SfxTabPage*	OfaQuoteTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new OfaQuoteTabPage(pParent, rAttrSet);
 }
+/*-----------------03.07.97 13:18-------------------
 
-sal_Bool OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
+--------------------------------------------------*/
+BOOL OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
 
@@ -2008,17 +2130,17 @@ sal_Bool OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
 
     if ( aCheckLB.IsVisible( ) )
     {
-        sal_uInt16 nPos = 0;
-        pAutoCorrect->SetAutoCorrFlag(AddNonBrkSpace,       aCheckLB.IsChecked(nPos++));
-        pAutoCorrect->SetAutoCorrFlag(ChgOrdinalNumber,     aCheckLB.IsChecked(nPos++));
+        USHORT nPos = 0;
+        pAutoCorrect->SetAutoCorrFlag(AddNonBrkSpace,		aCheckLB.IsChecked(nPos++));
+        pAutoCorrect->SetAutoCorrFlag(ChgOrdinalNumber,		aCheckLB.IsChecked(nPos++));
     }
 
-    sal_Bool bModified = sal_False;
+    BOOL bModified = FALSE;
     if ( aSwCheckLB.IsVisible( ) )
     {
         SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
 
-        sal_Bool bCheck = aSwCheckLB.IsChecked(ADD_NONBRK_SPACE, CBCOL_FIRST);
+        BOOL bCheck = aSwCheckLB.IsChecked(ADD_NONBRK_SPACE, CBCOL_FIRST);
         bModified |= pOpt->bAddNonBrkSpace != bCheck;
         pOpt->bAddNonBrkSpace = bCheck;
         pAutoCorrect->SetAutoCorrFlag(AddNonBrkSpace,
@@ -2031,30 +2153,30 @@ sal_Bool OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
                         aSwCheckLB.IsChecked(REPLACE_1ST, CBCOL_SECOND));
     }
 
-    pAutoCorrect->SetAutoCorrFlag(ChgQuotes,        aTypoCB.IsChecked());
-    pAutoCorrect->SetAutoCorrFlag(ChgSglQuotes,     aSingleTypoCB.IsChecked());
-    sal_Bool bReturn = nFlags != pAutoCorrect->GetFlags();
+    pAutoCorrect->SetAutoCorrFlag(ChgQuotes, 		aTypoCB.IsChecked());
+    pAutoCorrect->SetAutoCorrFlag(ChgSglQuotes, 	aSingleTypoCB.IsChecked());
+    BOOL bReturn = nFlags != pAutoCorrect->GetFlags();
     if(cStartQuote != pAutoCorrect->GetStartDoubleQuote())
     {
-        bReturn = sal_True;
+        bReturn = TRUE;
         sal_Unicode cUCS2 = static_cast<sal_Unicode>(cStartQuote); //TODO
         pAutoCorrect->SetStartDoubleQuote(cUCS2);
     }
     if(cEndQuote != pAutoCorrect->GetEndDoubleQuote())
     {
-        bReturn = sal_True;
+        bReturn = TRUE;
         sal_Unicode cUCS2 = static_cast<sal_Unicode>(cEndQuote); //TODO
         pAutoCorrect->SetEndDoubleQuote(cUCS2);
     }
     if(cSglStartQuote != pAutoCorrect->GetStartSingleQuote())
     {
-        bReturn = sal_True;
+        bReturn = TRUE;
         sal_Unicode cUCS2 = static_cast<sal_Unicode>(cSglStartQuote); //TODO
         pAutoCorrect->SetStartSingleQuote(cUCS2);
     }
     if(cSglEndQuote != pAutoCorrect->GetEndSingleQuote())
     {
-        bReturn = sal_True;
+        bReturn = TRUE;
         sal_Unicode cUCS2 = static_cast<sal_Unicode>(cSglEndQuote); //TODO
         pAutoCorrect->SetEndSingleQuote(cUCS2);
     }
@@ -2067,12 +2189,16 @@ sal_Bool OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
     }
     return bReturn;
 }
-
+/* -----------------23.11.98 16:15-------------------
+ *
+ * --------------------------------------------------*/
 void OfaQuoteTabPage::ActivatePage( const SfxItemSet& )
 {
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(sal_False);
+    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(FALSE);
 }
+/*-----------------03.07.97 13:18-------------------
 
+--------------------------------------------------*/
 void OfaQuoteTabPage::Reset( const SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
@@ -2083,41 +2209,41 @@ void OfaQuoteTabPage::Reset( const SfxItemSet& )
     {
         SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
 
-        aSwCheckLB.SetUpdateMode( sal_False );
+        aSwCheckLB.SetUpdateMode( FALSE );
         aSwCheckLB.Clear();
 
         aSwCheckLB.GetModel()->Insert(CreateEntry(sNonBrkSpace,       CBCOL_BOTH ));
         aSwCheckLB.GetModel()->Insert(CreateEntry(sOrdinal,           CBCOL_BOTH ));
 
-        aSwCheckLB.CheckEntryPos( ADD_NONBRK_SPACE, CBCOL_FIRST,    pOpt->bAddNonBrkSpace );
-        aSwCheckLB.CheckEntryPos( ADD_NONBRK_SPACE, CBCOL_SECOND,   0 != (nFlags & AddNonBrkSpace) );
-        aSwCheckLB.CheckEntryPos( REPLACE_1ST,      CBCOL_FIRST,    pOpt->bChgOrdinalNumber );
-        aSwCheckLB.CheckEntryPos( REPLACE_1ST,      CBCOL_SECOND,   0 != (nFlags & ChgOrdinalNumber) );
+        aSwCheckLB.CheckEntryPos( ADD_NONBRK_SPACE, CBCOL_FIRST,	pOpt->bAddNonBrkSpace );
+        aSwCheckLB.CheckEntryPos( ADD_NONBRK_SPACE,	CBCOL_SECOND,	0 != (nFlags & AddNonBrkSpace) );
+        aSwCheckLB.CheckEntryPos( REPLACE_1ST,		CBCOL_FIRST,	pOpt->bChgOrdinalNumber );
+        aSwCheckLB.CheckEntryPos( REPLACE_1ST,		CBCOL_SECOND,	0 != (nFlags & ChgOrdinalNumber) );
 
-        aSwCheckLB.SetUpdateMode( sal_True );
+        aSwCheckLB.SetUpdateMode( TRUE );
     }
 
     // Initialize the non Sw options
     if ( aCheckLB.IsVisible( ) )
     {
-        aCheckLB.SetUpdateMode( sal_False );
+        aCheckLB.SetUpdateMode( FALSE );
         aCheckLB.Clear( );
 
         aCheckLB.InsertEntry( sNonBrkSpace );
         aCheckLB.InsertEntry( sOrdinal );
-
-        sal_uInt16 nPos = 0;
+    
+        USHORT nPos = 0;
         aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & AddNonBrkSpace) );
         aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & ChgOrdinalNumber) );
 
-        aCheckLB.SetUpdateMode( sal_True );
+        aCheckLB.SetUpdateMode( TRUE );
     }
 
     // Initialize the quote stuffs
-    aTypoCB             .Check(0 != (nFlags & ChgQuotes));
-    aSingleTypoCB       .Check(0 != (nFlags & ChgSglQuotes));
-    aTypoCB             .SaveValue();
-    aSingleTypoCB       .SaveValue();
+    aTypoCB    			.Check(0 != (nFlags & ChgQuotes));
+    aSingleTypoCB    	.Check(0 != (nFlags & ChgSglQuotes));
+    aTypoCB    			.SaveValue();
+    aSingleTypoCB    	.SaveValue();
 
     cStartQuote = pAutoCorrect->GetStartDoubleQuote();
     cEndQuote = pAutoCorrect->GetEndDoubleQuote();
@@ -2130,7 +2256,11 @@ void OfaQuoteTabPage::Reset( const SfxItemSet& )
     aDblEndExFT   .SetText(ChangeStringExt_Impl(cEndQuote));
 }
 
-#define SGL_START       0
+
+/*-----------------15.10.96 16.42-------------------
+
+--------------------------------------------------*/
+#define SGL_START		0
 #define DBL_START       1
 #define SGL_END         2
 #define DBL_END         3
@@ -2138,7 +2268,7 @@ void OfaQuoteTabPage::Reset( const SfxItemSet& )
 
 IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
 {
-    sal_uInt16 nMode = SGL_START;
+    USHORT nMode = SGL_START;
     if(pBtn == &aSglEndQuotePB)
         nMode = SGL_END;
     else if(pBtn == &aStartQuotePB)
@@ -2146,11 +2276,12 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
     else if(pBtn == &aEndQuotePB)
         nMode = DBL_END;
     // Zeichenauswahl-Dialog starten
-    SvxCharacterMap* pMap = new SvxCharacterMap( this, sal_True );
+    SvxCharacterMap* pMap = new SvxCharacterMap( this, TRUE );
     pMap->SetCharFont( OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_TEXT,
                         LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE, 0 ));
     pMap->SetText(nMode < SGL_END ? sStartQuoteDlg  :  sEndQuoteDlg );
     sal_UCS4 cDlg;
+    //The two lines below are added by BerryJia for Bug95846 Time:2002-8-13 15:50
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     LanguageType eLang = Application::GetSettings().GetLanguage();
     switch( nMode )
@@ -2158,25 +2289,25 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
         case SGL_START:
             cDlg = cSglStartQuote;
             if(cDlg == 0)
-                cDlg = pAutoCorrect->GetQuote('\'', sal_True, eLang);
+                cDlg = pAutoCorrect->GetQuote('\'',TRUE,eLang);   //add by BerryJia for Bug95846 Time:2002-8-13 15:50
         break;
         case SGL_END:
             cDlg = cSglEndQuote;
             if(cDlg == 0)
-                cDlg = pAutoCorrect->GetQuote('\'', sal_False, eLang);
+                cDlg = pAutoCorrect->GetQuote('\'',FALSE,eLang);  //add by BerryJia for Bug95846 Time:2002-8-13 15:50
         break;
         case DBL_START:
             cDlg = cStartQuote;
             if(cDlg == 0)
-                cDlg = pAutoCorrect->GetQuote('\"', sal_True, eLang);
+                cDlg = pAutoCorrect->GetQuote('\"',TRUE,eLang);   //add by BerryJia for Bug95846 Time:2002-8-13 15:50
         break;
         case DBL_END:
             cDlg = cEndQuote;
             if(cDlg == 0)
-                cDlg = pAutoCorrect->GetQuote('\"', sal_False, eLang);
+                cDlg = pAutoCorrect->GetQuote('\"',FALSE,eLang);  //add by BerryJia for Bug95846 Time:2002-8-13 15:50
         break;
         default:
-            OSL_FAIL("svx::OfaQuoteTabPage::QuoteHdl(), how to initialize cDlg?" );
+            DBG_ERROR("svx::OfaQuoteTabPage::QuoteHdl(), how to initialize cDlg?" );
             cDlg = 0;
             break;
 
@@ -2211,6 +2342,9 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
     return 0;
 }
 
+/*-----------------27.06.97 09.55-------------------
+
+--------------------------------------------------*/
 IMPL_LINK( OfaQuoteTabPage, StdQuoteHdl, PushButton*, pBtn )
 {
     if(pBtn == &aDblStandardPB)
@@ -2261,7 +2395,7 @@ String OfaQuoteTabPage::ChangeStringExt_Impl( sal_UCS4 cChar )
 OfaAutoCompleteTabPage::OfaAutoCompleteTabPage( Window* pParent,
                                                 const SfxItemSet& rSet )
     : SfxTabPage(pParent, CUI_RES( RID_OFAPAGE_AUTOCOMPLETE_OPTIONS ), rSet),
-    aCBActiv        (this, CUI_RES(CB_ACTIV)),
+    aCBActiv		(this, CUI_RES(CB_ACTIV)),
     aCBAppendSpace  (this, CUI_RES(CB_APPEND_SPACE)),
     aCBAsTip        (this, CUI_RES(CB_AS_TIP)),
     aCBCollect      (this, CUI_RES(CB_COLLECT)),
@@ -2280,7 +2414,7 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage( Window* pParent,
     FreeResource();
 
     // the defined KEYs
-    static const sal_uInt16 aKeyCodes[] = {
+    static const USHORT aKeyCodes[] = {
         KEY_END,
         KEY_RETURN,
         KEY_SPACE,
@@ -2289,37 +2423,36 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage( Window* pParent,
         0
     };
 
-    for( const sal_uInt16* pKeys = aKeyCodes; *pKeys; ++pKeys )
+    for( const USHORT* pKeys = aKeyCodes; *pKeys; ++pKeys )
     {
         KeyCode aKCode( *pKeys );
-        sal_uInt16 nPos = aDCBExpandKey.InsertEntry( aKCode.GetName() );
-        aDCBExpandKey.SetEntryData( nPos, (void*)(sal_uLong)*pKeys );
-        if( KEY_RETURN == *pKeys )      // default to RETURN
+        USHORT nPos = aDCBExpandKey.InsertEntry( aKCode.GetName() );
+        aDCBExpandKey.SetEntryData( nPos, (void*)(ULONG)*pKeys );
+        if( KEY_RETURN == *pKeys )		// default to RETURN
             aDCBExpandKey.SelectEntryPos( nPos );
     }
 
     aPBEntries.SetClickHdl(LINK(this, OfaAutoCompleteTabPage, DeleteHdl));
     aCBActiv.SetToggleHdl(LINK(this, OfaAutoCompleteTabPage, CheckHdl));
     aCBCollect.SetToggleHdl(LINK(this, OfaAutoCompleteTabPage, CheckHdl));
-    aLBEntries.SetAccessibleRelationLabeledBy(&aLBEntries);
 }
 
 OfaAutoCompleteTabPage::~OfaAutoCompleteTabPage()
 {
 }
 
-SfxTabPage* OfaAutoCompleteTabPage::Create( Window* pParent,
+SfxTabPage*	OfaAutoCompleteTabPage::Create( Window* pParent,
                                             const SfxItemSet& rSet)
 {
     return new OfaAutoCompleteTabPage( pParent, rSet );
 }
 
-sal_Bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& )
+BOOL OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& )
 {
-    sal_Bool bModified = sal_False, bCheck;
+    BOOL bModified = FALSE, bCheck;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
-    sal_uInt16 nVal;
+    USHORT nVal;
 
     bCheck = aCBActiv.IsChecked();
     bModified |= pOpt->bAutoCompleteWords != bCheck;
@@ -2328,7 +2461,7 @@ sal_Bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& )
     bModified |= pOpt->bAutoCmpltCollectWords != bCheck;
     pOpt->bAutoCmpltCollectWords = bCheck;
     bCheck = !aCBRemoveList.IsChecked(); // inverted value!
-    bModified |= pOpt->bAutoCmpltKeepList != bCheck;
+    bModified |= pOpt->bAutoCmpltKeepList != bCheck; 
     pOpt->bAutoCmpltKeepList = bCheck;
     bCheck = aCBAppendSpace.IsChecked();
     bModified |= pOpt->bAutoCmpltAppendBlanc != bCheck;
@@ -2337,25 +2470,25 @@ sal_Bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& )
     bModified |= pOpt->bAutoCmpltShowAsTip != bCheck;
     pOpt->bAutoCmpltShowAsTip = bCheck;
 
-    nVal = (sal_uInt16)aNFMinWordlen.GetValue();
+    nVal = (USHORT)aNFMinWordlen.GetValue();
     bModified |= nVal != pOpt->nAutoCmpltWordLen;
     pOpt->nAutoCmpltWordLen = nVal;
 
-    nVal = (sal_uInt16)aNFMaxEntries.GetValue();
+    nVal = (USHORT)aNFMaxEntries.GetValue();
     bModified |= nVal != pOpt->nAutoCmpltListLen;
     pOpt->nAutoCmpltListLen = nVal;
 
     nVal = aDCBExpandKey.GetSelectEntryPos();
     if( nVal < aDCBExpandKey.GetEntryCount() )
     {
-        sal_uLong nKey = (sal_uLong)aDCBExpandKey.GetEntryData( nVal );
+        ULONG nKey = (ULONG)aDCBExpandKey.GetEntryData( nVal );
         bModified |= nKey != pOpt->nAutoCmpltExpandKey;
-        pOpt->nAutoCmpltExpandKey = (sal_uInt16)nKey;
+        pOpt->nAutoCmpltExpandKey = (USHORT)nKey;
    }
 
     if( pAutoCmpltList && nAutoCmpltListCnt != aLBEntries.GetEntryCount() )
     {
-        bModified = sal_True;
+        bModified = TRUE;
         pOpt->pAutoCmpltList = pAutoCmpltList;
     }
     if( bModified )
@@ -2364,7 +2497,7 @@ sal_Bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& )
         pCfg->SetModified();
         pCfg->Commit();
     }
-    return sal_True;
+    return TRUE;
 }
 
 void OfaAutoCompleteTabPage::Reset( const SfxItemSet&  )
@@ -2383,9 +2516,9 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet&  )
 
     // select the specific KeyCode:
     {
-        sal_uLong nKey = pOpt->nAutoCmpltExpandKey;
-        for( sal_uInt16 n = 0, nCnt = aDCBExpandKey.GetEntryCount(); n < nCnt; ++n )
-            if( nKey == (sal_uLong)aDCBExpandKey.GetEntryData( n ))
+        ULONG nKey = pOpt->nAutoCmpltExpandKey;
+        for( USHORT n = 0, nCnt = aDCBExpandKey.GetEntryCount(); n < nCnt; ++n )
+            if( nKey == (ULONG)aDCBExpandKey.GetEntryData( n ))
             {
                 aDCBExpandKey.SelectEntryPos( n );
                 break;
@@ -2397,10 +2530,10 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet&  )
         pAutoCmpltList = (SvStringsISortDtor*)pOpt->pAutoCmpltList;
         pOpt->pAutoCmpltList = 0;
         nAutoCmpltListCnt = pAutoCmpltList->Count();
-        for( sal_uInt16 n = 0; n < nAutoCmpltListCnt; ++n )
+        for( USHORT n = 0; n < nAutoCmpltListCnt; ++n )
         {
             const StringPtr pStr = pAutoCmpltList->GetObject( n );
-            sal_uInt16 nPos = aLBEntries.InsertEntry( *pStr );
+            USHORT nPos = aLBEntries.InsertEntry( *pStr );
             aLBEntries.SetEntryData( nPos, (void*)pStr );
         }
     }
@@ -2416,15 +2549,15 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet&  )
 
 void OfaAutoCompleteTabPage::ActivatePage( const SfxItemSet& )
 {
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage( sal_False );
+    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage( FALSE );
 }
 
 IMPL_LINK( OfaAutoCompleteTabPage, DeleteHdl, PushButton*, EMPTYARG )
 {
-    sal_uInt16 nSelCnt = pAutoCmpltList ? aLBEntries.GetSelectEntryCount() : 0;
+    USHORT nSelCnt = pAutoCmpltList ? aLBEntries.GetSelectEntryCount() : 0;
     while( nSelCnt )
     {
-        sal_uInt16 nPos = aLBEntries.GetSelectEntryPos( --nSelCnt );
+        USHORT nPos = aLBEntries.GetSelectEntryPos( --nSelCnt );
         const StringPtr pStr = (StringPtr)aLBEntries.GetEntryData( nPos );
         aLBEntries.RemoveEntry( nPos );
         nPos = pAutoCmpltList->GetPos( pStr );
@@ -2436,7 +2569,7 @@ IMPL_LINK( OfaAutoCompleteTabPage, DeleteHdl, PushButton*, EMPTYARG )
 
 IMPL_LINK( OfaAutoCompleteTabPage, CheckHdl, CheckBox*, pBox )
 {
-    sal_Bool bEnable = pBox->IsChecked();
+    BOOL bEnable = pBox->IsChecked();
     if( pBox == &aCBActiv )
     {
         aCBAppendSpace.Enable( bEnable );
@@ -2451,7 +2584,7 @@ IMPL_LINK( OfaAutoCompleteTabPage, CheckHdl, CheckBox*, pBox )
 
 void OfaAutoCompleteTabPage::CopyToClipboard() const
 {
-    sal_uInt16 nSelCnt = aLBEntries.GetSelectEntryCount();
+    USHORT nSelCnt = aLBEntries.GetSelectEntryCount();
     if( pAutoCmpltList && nSelCnt )
     {
         TransferDataContainer* pCntnr = new TransferDataContainer;
@@ -2468,7 +2601,7 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
 
         rtl_TextEncoding nEncode = gsl_getSystemTextEncoding();
 
-        for( sal_uInt16 n = 0; n < nSelCnt; ++n )
+        for( USHORT n = 0; n < nSelCnt; ++n )
         {
             sData += ByteString( aLBEntries.GetSelectEntry( n ), nEncode );
             sData += pLineEnd;
@@ -2518,7 +2651,7 @@ OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage( Window* pParent,
     FreeResource();
 
     // some options for the list box:
-    m_aSmartTagTypesLB.SetStyle( m_aSmartTagTypesLB.GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
+    m_aSmartTagTypesLB.SetWindowBits( m_aSmartTagTypesLB.GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
     m_aSmartTagTypesLB.SetHighlightRange();
 
     // set the handlers:
@@ -2532,7 +2665,7 @@ OfaSmartTagOptionsTabPage::~OfaSmartTagOptionsTabPage()
 
 }
 
-SfxTabPage* OfaSmartTagOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet)
+SfxTabPage*	OfaSmartTagOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet)
 {
     return new OfaSmartTagOptionsTabPage( pParent, rSet );
 }
@@ -2557,8 +2690,8 @@ struct ImplSmartTagLBUserData
 */
 void OfaSmartTagOptionsTabPage::ClearListBox()
 {
-    const sal_uLong nCount = m_aSmartTagTypesLB.GetEntryCount();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    const ULONG nCount = m_aSmartTagTypesLB.GetEntryCount();
+    for ( USHORT i = 0; i < nCount; ++i )
     {
         const SvLBoxEntry* pEntry = m_aSmartTagTypesLB.GetEntry(i);
         const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
@@ -2616,7 +2749,7 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
 */
 IMPL_LINK( OfaSmartTagOptionsTabPage, ClickHdl, PushButton*, EMPTYARG )
 {
-    const sal_uInt16 nPos = m_aSmartTagTypesLB.GetSelectEntryPos();
+    const USHORT nPos = m_aSmartTagTypesLB.GetSelectEntryPos();
     const SvLBoxEntry* pEntry = m_aSmartTagTypesLB.GetEntry(nPos);
     const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
     uno::Reference< smarttags::XSmartTagRecognizer > xRec = pUserData->mxRec;
@@ -2633,7 +2766,7 @@ IMPL_LINK( OfaSmartTagOptionsTabPage, ClickHdl, PushButton*, EMPTYARG )
 */
 IMPL_LINK( OfaSmartTagOptionsTabPage, CheckHdl, CheckBox*, EMPTYARG )
 {
-    const sal_Bool bEnable = m_aMainCB.IsChecked();
+    const BOOL bEnable = m_aMainCB.IsChecked();
     m_aSmartTagTypesLB.Enable( bEnable );
     m_aSmartTagTypesLB.Invalidate();
     m_aPropertiesPB.Enable( false );
@@ -2655,7 +2788,7 @@ IMPL_LINK(OfaSmartTagOptionsTabPage, SelectHdl, SvxCheckListBox*, EMPTYARG)
     if ( m_aSmartTagTypesLB.GetEntryCount() < 1 )
         return 0;
 
-    const sal_uInt16 nPos = m_aSmartTagTypesLB.GetSelectEntryPos();
+    const USHORT nPos = m_aSmartTagTypesLB.GetSelectEntryPos();
     const SvLBoxEntry* pEntry = m_aSmartTagTypesLB.GetEntry(nPos);
     const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
     uno::Reference< smarttags::XSmartTagRecognizer > xRec = pUserData->mxRec;
@@ -2672,7 +2805,7 @@ IMPL_LINK(OfaSmartTagOptionsTabPage, SelectHdl, SvxCheckListBox*, EMPTYARG)
 
 /** Propagates the current settings to the smart tag manager.
 */
-sal_Bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
+BOOL OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
@@ -2680,19 +2813,19 @@ sal_Bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
 
     // robust!
     if ( !pSmartTagMgr )
-        return sal_False;
+        return FALSE;
 
-    sal_Bool bModifiedSmartTagTypes = sal_False;
+    BOOL bModifiedSmartTagTypes = FALSE;
     std::vector< rtl::OUString > aDisabledSmartTagTypes;
 
-    const sal_uLong nCount = m_aSmartTagTypesLB.GetEntryCount();
+    const ULONG nCount = m_aSmartTagTypesLB.GetEntryCount();
 
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    for ( USHORT i = 0; i < nCount; ++i )
     {
         const SvLBoxEntry* pEntry = m_aSmartTagTypesLB.GetEntry(i);
         const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
-        const sal_Bool bChecked = m_aSmartTagTypesLB.IsChecked(i);
-        const sal_Bool bIsCurrentlyEnabled = pSmartTagMgr->IsSmartTagTypeEnabled( pUserData->maSmartTagType );
+        const BOOL bChecked = m_aSmartTagTypesLB.IsChecked(i);
+        const BOOL bIsCurrentlyEnabled = pSmartTagMgr->IsSmartTagTypeEnabled( pUserData->maSmartTagType );
 
         bModifiedSmartTagTypes = bModifiedSmartTagTypes || ( !bChecked != !bIsCurrentlyEnabled );
 
@@ -2702,7 +2835,7 @@ sal_Bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
         delete pUserData;
     }
 
-    const sal_Bool bModifiedRecognize = ( !m_aMainCB.IsChecked() != !pSmartTagMgr->IsLabelTextWithSmartTags() );
+    const BOOL bModifiedRecognize = ( !m_aMainCB.IsChecked() != !pSmartTagMgr->IsLabelTextWithSmartTags() );
     if ( bModifiedSmartTagTypes || bModifiedRecognize )
     {
         bool bLabelTextWithSmartTags = m_aMainCB.IsChecked() ? true : false;
@@ -2710,7 +2843,7 @@ sal_Bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
                                           bModifiedSmartTagTypes ? &aDisabledSmartTagTypes : 0 );
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 /** Sets the controls based on the current settings at SmartTagMgr.
@@ -2733,7 +2866,7 @@ void OfaSmartTagOptionsTabPage::Reset( const SfxItemSet&  )
 
 void OfaSmartTagOptionsTabPage::ActivatePage( const SfxItemSet& )
 {
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage( sal_False );
+    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage( FALSE );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

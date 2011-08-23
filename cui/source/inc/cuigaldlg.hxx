@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 #include <com/sun/star/media/XPlayer.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <svtools/dialogclosedlistener.hxx>
-#include <vector>
+#include <bootstrp/sstring.hxx>
 
 // ------------
 // - Forwards -
@@ -59,15 +59,13 @@ class SearchProgress;
 class TakeProgress;
 class TPGalleryThemeProperties;
 
-typedef ::std::vector< UniString*  > StringList;
-
 // ---------------
 // - FilterEntry -
 // ---------------
 
 struct FilterEntry
 {
-    String  aFilterName;
+    String	aFilterName;
 };
 
 // ----------------
@@ -78,15 +76,15 @@ class SearchThread : public ::osl::Thread
 {
 private:
 
-    SearchProgress*             mpProgress;
-    TPGalleryThemeProperties*   mpBrowser;
-    INetURLObject               maStartURL;
+    SearchProgress*				mpProgress;
+    TPGalleryThemeProperties*	mpBrowser;
+    INetURLObject				maStartURL;
 
-    void                        ImplSearch( const INetURLObject& rStartURL,
+    void						ImplSearch( const INetURLObject& rStartURL,
                                             const ::std::vector< String >& rFormats,
-                                            sal_Bool bRecursive );
+                                            BOOL bRecursive );
 
-    virtual void SAL_CALL       run();
+    virtual void SAL_CALL		run();
     virtual void SAL_CALL       onTerminated();
 
 public:
@@ -94,7 +92,7 @@ public:
                                 SearchThread( SearchProgress* pProgess,
                                               TPGalleryThemeProperties* pBrowser,
                                               const INetURLObject& rStartURL );
-    virtual                     ~SearchThread();
+    virtual						~SearchThread();
 };
 
 // ------------------
@@ -105,15 +103,15 @@ class SearchProgress : public ModalDialog
 {
 private:
 
-    FixedText           aFtSearchDir;
+    FixedText			aFtSearchDir;
     FixedLine           aFLSearchDir;
-    FixedText           aFtSearchType;
+    FixedText			aFtSearchType;
     FixedLine           aFLSearchType;
-    CancelButton        aBtnCancel;
-    SearchThread        maSearchThread;
+    CancelButton		aBtnCancel;
+    SearchThread		maSearchThread;
 
                         DECL_LINK( ClickCancelBtn, void* );
-    void                Terminate();
+    void				Terminate();
 
 public:
                         SearchProgress( Window* pParent, const INetURLObject& rStartURL );
@@ -121,10 +119,10 @@ public:
 
                         DECL_LINK( CleanUpHdl, void* );
 
-    virtual short       Execute();
+    virtual short		Execute();
     virtual void        StartExecuteModal( const Link& rEndDialogHdl );
-    void                SetFileType( const String& rType ) { aFtSearchType.SetText( rType ); }
-    void                SetDirectory( const INetURLObject& rURL ) { aFtSearchDir.SetText( GetReducedString( rURL, 30 ) ); }
+    void 				SetFileType( const String& rType ) { aFtSearchType.SetText( rType ); }
+    void 				SetDirectory( const INetURLObject& rURL ) { aFtSearchDir.SetText( GetReducedString( rURL, 30 ) ); }
 };
 
 // --------------
@@ -135,11 +133,11 @@ class TakeThread : public ::osl::Thread
 {
 private:
 
-    TakeProgress*               mpProgress;
-    TPGalleryThemeProperties*   mpBrowser;
-    List&                       mrTakenList;
+    TakeProgress*				mpProgress;
+    TPGalleryThemeProperties*	mpBrowser;
+    List&						mrTakenList;
 
-    virtual void SAL_CALL       run();
+    virtual void SAL_CALL		run();
     virtual void SAL_CALL       onTerminated();
 
 public:
@@ -156,14 +154,14 @@ class TakeProgress : public ModalDialog
 {
 private:
 
-    FixedText           aFtTakeFile;
+    FixedText			aFtTakeFile;
     FixedLine           aFLTakeProgress;
-    CancelButton        aBtnCancel;
-    TakeThread          maTakeThread;
-    List                maTakenList;
+    CancelButton		aBtnCancel;
+    TakeThread			maTakeThread;
+    List				maTakenList;
 
                         DECL_LINK( ClickCancelBtn, void* );
-    void                Terminate();
+    void				Terminate();
 
 public:
 
@@ -172,8 +170,8 @@ public:
 
                         DECL_LINK( CleanUpHdl, void* );
 
-    void                SetFile( const INetURLObject& rURL ) { aFtTakeFile.SetText( GetReducedString( rURL, 30 ) ); }
-    virtual short       Execute();
+    void 				SetFile( const INetURLObject& rURL ) { aFtTakeFile.SetText( GetReducedString( rURL, 30 ) ); }
+    virtual short		Execute();
     virtual void        StartExecuteModal( const Link& rEndDialogHdl );
 };
 
@@ -185,12 +183,12 @@ class ActualizeProgress : public ModalDialog
 {
 private:
 
-    FixedText           aFtActualizeFile;
+    FixedText			aFtActualizeFile;
     FixedLine           aFLActualizeProgress;
-    CancelButton        aBtnCancel;
-    Timer*              pTimer;
-    GalleryTheme*       pTheme;
-    GalleryProgress     aStatusProgress;
+    CancelButton		aBtnCancel;
+    Timer*				pTimer;
+    GalleryTheme*		pTheme;
+    GalleryProgress		aStatusProgress;
 
                         DECL_LINK( ClickCancelBtn, void* );
                         DECL_LINK( TimeoutHdl, Timer* );
@@ -200,7 +198,7 @@ public:
                         ActualizeProgress( Window* pWindow, GalleryTheme* pThm );
                         ~ActualizeProgress() {};
 
-    virtual short       Execute();
+    virtual short		Execute();
 };
 
 // ---------------
@@ -211,16 +209,16 @@ class TitleDialog : public ModalDialog
 {
 private:
 
-    OKButton            maOk;
-    CancelButton        maCancel;
-    HelpButton          maHelp;
+    OKButton			maOk;
+    CancelButton		maCancel;
+    HelpButton			maHelp;
     FixedLine           maFL;
-    Edit                maEdit;
+    Edit				maEdit;
 
 public:
 
                         TitleDialog( Window* pParent, const String& rOldText );
-    String              GetTitle() const { return maEdit.GetText(); }
+    String				GetTitle() const { return maEdit.GetText(); }
 };
 
 // -------------------
@@ -231,11 +229,11 @@ class GalleryIdDialog : public ModalDialog
 {
 private:
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
     FixedLine       aFLId;
-    ListBox         aLbResName;
-    GalleryTheme*   pThm;
+    ListBox			aLbResName;
+    GalleryTheme*	pThm;
 
                     DECL_LINK( ClickOkHdl, void* );
                     DECL_LINK( ClickResNameHdl, void* );
@@ -245,7 +243,7 @@ public:
                     GalleryIdDialog( Window* pParent, GalleryTheme* pThm );
                     ~GalleryIdDialog() {}
 
-    sal_uLong           GetId() const { return aLbResName.GetSelectEntryPos(); }
+    ULONG			GetId() const { return aLbResName.GetSelectEntryPos(); }
 };
 
 // --------------------------
@@ -254,9 +252,9 @@ public:
 
 class GalleryThemeProperties : public SfxTabDialog
 {
-    ExchangeData*   pData;
+    ExchangeData*	pData;
 
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void	PageCreated( USHORT nId, SfxTabPage &rPage );
 
 public:
 
@@ -272,22 +270,22 @@ class TPGalleryThemeGeneral : public SfxTabPage
 {
 private:
 
-    FixedImage          aFiMSImage;
-    Edit                aEdtMSName;
-    FixedLine           aFlMSGeneralFirst;
-    FixedText           aFtMSType;
-    FixedText           aFtMSShowType;
-    FixedText           aFtMSPath;
-    FixedText           aFtMSShowPath;
-    FixedText           aFtMSContent;
-    FixedText           aFtMSShowContent;
-    FixedLine           aFlMSGeneralSecond;
-    FixedText           aFtMSChangeDate;
-    FixedText           aFtMSShowChangeDate;
-    ExchangeData*       pData;
+    FixedImage			aFiMSImage;
+    Edit				aEdtMSName;
+    FixedLine			aFlMSGeneralFirst;
+    FixedText			aFtMSType;
+    FixedText			aFtMSShowType;
+    FixedText			aFtMSPath;
+    FixedText			aFtMSShowPath;
+    FixedText			aFtMSContent;
+    FixedText			aFtMSShowContent;
+    FixedLine			aFlMSGeneralSecond;
+    FixedText			aFtMSChangeDate;
+    FixedText			aFtMSShowChangeDate;
+    ExchangeData*		pData;
 
-    virtual void        Reset( const SfxItemSet& ) {}
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual void		Reset( const SfxItemSet& ) {}
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
 
 
 public:
@@ -295,10 +293,10 @@ public:
                         TPGalleryThemeGeneral( Window* pParent, const SfxItemSet& rSet );
                         ~TPGalleryThemeGeneral() {}
 
-    void                SetXChgData( ExchangeData* pData );
-    const ExchangeData* GetXChgData() const { return pData; }
+    void				SetXChgData( ExchangeData* pData );
+    const ExchangeData*	GetXChgData() const { return pData; }
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rSet );
 };
 
 // ----------------------------
@@ -311,41 +309,41 @@ class TPGalleryThemeProperties : public SfxTabPage
     friend class TakeProgress;
     friend class TakeThread;
 
-    FixedText           aFtFileType;
-    ComboBox            aCbbFileType;
-    MultiListBox        aLbxFound;
-    PushButton          aBtnSearch;
-    PushButton          aBtnTake;
-    PushButton          aBtnTakeAll;
-    CheckBox            aCbxPreview;
-    GalleryPreview      aWndPreview;
+    PushButton			aBtnSearch;
+    PushButton			aBtnTake;
+    PushButton			aBtnTakeAll;
+    CheckBox			aCbxPreview;
+    ComboBox			aCbbFileType;
+    MultiListBox		aLbxFound;
+    FixedText			aFtFileType;
+    GalleryPreview		aWndPreview;
 
-    ExchangeData*       pData;
-    StringList          aFoundList;
-    List                aFilterEntryList;
-    Timer               aPreviewTimer;
-    String              aLastFilterName;
-    String              aPreviewString;
-    INetURLObject       aURL;
-    sal_uInt16              nCurFilterPos;
-    sal_uInt16              nFirstExtFilterPos;
-    sal_Bool                bEntriesFound;
-    sal_Bool                bInputAllowed;
-    sal_Bool                bTakeAll;
-    sal_Bool                bSearchRecursive;
+    ExchangeData*		pData;
+    StringList			aFoundList;
+    List				aFilterEntryList;
+    Timer				aPreviewTimer;
+    String				aLastFilterName;
+    String				aPreviewString;
+    INetURLObject		aURL;
+    USHORT				nCurFilterPos;
+    USHORT				nFirstExtFilterPos;
+    BOOL				bEntriesFound;
+    BOOL				bInputAllowed;
+    BOOL				bTakeAll;
+    BOOL				bSearchRecursive;
 
     ::com::sun::star::uno::Reference< ::svt::DialogClosedListener >                  xDialogListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >             xMediaPlayer;
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker > xFolderPicker;
 
     virtual void        Reset( const SfxItemSet& /*rSet*/ ) {}
-    virtual sal_Bool        FillItemSet( SfxItemSet& /*rSet*/ ) { return sal_True; }
-    ::rtl::OUString     addExtension( const ::rtl::OUString&, const ::rtl::OUString& );
-    void                FillFilterList();
+    virtual BOOL        FillItemSet( SfxItemSet& /*rSet*/ ) { return TRUE; }
+    ::rtl::OUString 	addExtension( const ::rtl::OUString&, const ::rtl::OUString& );
+    void				FillFilterList();
 
-    void                SearchFiles();
-    void                TakeFiles();
-    void                DoPreview();
+    void				SearchFiles();
+    void 				TakeFiles();
+    void				DoPreview();
 
                         DECL_LINK( ClickPreviewHdl, void* );
                         DECL_LINK( ClickCloseBrowserHdl, void* );
@@ -364,12 +362,12 @@ public:
                         TPGalleryThemeProperties( Window* pWindow, const SfxItemSet& rSet );
                         ~TPGalleryThemeProperties();
 
-    void                SetXChgData( ExchangeData* pData );
-    const ExchangeData* GetXChgData() const { return pData; }
+    void				SetXChgData( ExchangeData* pData );
+    const ExchangeData*	GetXChgData() const { return pData; }
 
     void                StartSearchFiles( const String& _rFolderURL, short _nDlgResult );
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rSet );
 };
 
 #endif // _CUI_GALDLG_HXX_

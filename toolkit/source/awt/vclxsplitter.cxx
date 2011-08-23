@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,6 @@
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/split.hxx>
-#include <vcl/svapp.hxx>
 
 #include "forward.hxx"
 
@@ -108,7 +107,7 @@ VCLXSplitter::getChild( int i )
 void SAL_CALL VCLXSplitter::dispose() throw(RuntimeException)
 {
     {
-        SolarMutexGuard aGuard;
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,9 +67,9 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
     if ( !pFly )
     {
         //Kein Fly oder der falsche selektiert. Ergo muessen wir leider suchen.
-        sal_Bool bExist = sal_False;
+        BOOL bExist = FALSE;
         SwStartNode *pStNd;
-        sal_uLong nSttIdx = GetNodes().GetEndOfAutotext().StartOfSectionIndex() + 1,
+        ULONG nSttIdx = GetNodes().GetEndOfAutotext().StartOfSectionIndex() + 1,
               nEndIdx = GetNodes().GetEndOfAutotext().GetIndex();
         while( nSttIdx < nEndIdx &&
                 0 != (pStNd = GetNodes()[ nSttIdx ]->GetStartNode()) )
@@ -78,8 +78,8 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
             if ( pNd->IsOLENode() &&
                  ((SwOLENode*)pNd)->GetOLEObj().GetOleRef() == xObj )
             {
-                bExist = sal_True;
-                SwFrm *pFrm = ((SwOLENode*)pNd)->getLayoutFrm( GetLayout() );
+                bExist = TRUE;
+                SwFrm *pFrm = ((SwOLENode*)pNd)->GetFrm();
                 if ( pFrm )
                     pFly = pFrm->FindFlyFrm();
                 break;
@@ -88,7 +88,6 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
         }
 
         OSL_ENSURE( bExist, "OLE-Object unknown and FlyFrm not found." );
-        (void)bExist;
     }
     return pFly;
 }
@@ -122,13 +121,13 @@ void SwFEShell::MakeObjVisible( const uno::Reference < embed::XEmbeddedObject >&
     }
 }
 
-sal_Bool SwFEShell::FinishOLEObj()                      // Server wird beendet
+BOOL SwFEShell::FinishOLEObj()						// Server wird beendet
 {
     SfxInPlaceClient* pIPClient = GetSfxViewShell()->GetIPClient();
     if ( !pIPClient )
-        return sal_False;
+        return FALSE;
 
-    sal_Bool bRet = pIPClient->IsObjectInPlaceActive();
+    BOOL bRet = pIPClient->IsObjectInPlaceActive();
     if( bRet )
     {
         uno::Reference < embed::XEmbeddedObject > xObj = pIPClient->GetObject();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ void ScVbaShapes::initBaseCollection()
 ScVbaShapes::ScVbaShapes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess > xShapes, const uno::Reference< frame::XModel>& xModel ): ScVbaShapes_BASE( xParent, xContext, xShapes, sal_True ), m_nNewShapeCount(0), m_xModel( xModel )
 {
     m_xShapes.set( xShapes, uno::UNO_QUERY_THROW );
-    m_xDrawPage.set( xShapes, uno::UNO_QUERY_THROW );
+    m_xDrawPage.set( xShapes, uno::UNO_QUERY_THROW ); 
     initBaseCollection();
 }
 
@@ -116,14 +116,14 @@ ScVbaShapes::getElementType() throw (uno::RuntimeException)
 {
     return ooo::vba::msforms::XShape::static_type(0);
 }
-rtl::OUString&
+rtl::OUString& 
 ScVbaShapes::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaShapes") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 ScVbaShapes::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;
@@ -135,12 +135,12 @@ ScVbaShapes::getServiceNames()
     return aServiceNames;
 }
 
-css::uno::Reference< css::container::XIndexAccess >
+css::uno::Reference< css::container::XIndexAccess > 
 ScVbaShapes::getShapesByArrayIndices( const uno::Any& Index  ) throw (uno::RuntimeException)
 {
     if ( Index.getValueTypeClass() != uno::TypeClass_SEQUENCE )
         throw uno::RuntimeException();
-
+    
     uno::Reference< script::XTypeConverter > xConverter = getTypeConverter(mxContext);
     uno::Any aConverted;
     aConverted = xConverter->convertTo( Index, getCppuType((uno::Sequence< uno::Any >*)0) );
@@ -163,21 +163,21 @@ ScVbaShapes::getShapesByArrayIndices( const uno::Any& Index  ) throw (uno::Runti
             sal_Int32 nIndex = 0;
             sIndices[ index ] >>= nIndex;
             // adjust for 1 based mso indexing
-            xShape.set( m_xIndexAccess->getByIndex( nIndex - 1 ), uno::UNO_QUERY );
-
+            xShape.set( m_xIndexAccess->getByIndex( nIndex - 1 ), uno::UNO_QUERY );		
+            
         }
         // populate map with drawing::XShapes
         if ( xShape.is() )
             mShapes.push_back( xShape );
-    }
+    }  
     uno::Reference< container::XIndexAccess > xIndexAccess( new XNamedObjectCollectionHelper< drawing::XShape >( mShapes ) );
     return xIndexAccess;
 }
 
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 ScVbaShapes::Item( const uno::Any& Index, const uno::Any& Index2 ) throw (uno::RuntimeException)
 {
-    // I don't think we need to support Array of indices for shapes
+    // I don't think we need to support Array of indices for shapes	
 /*
     if ( Index.getValueTypeClass() == uno::TypeClass_SEQUENCE )
     {
@@ -187,10 +187,10 @@ ScVbaShapes::Item( const uno::Any& Index, const uno::Any& Index2 ) throw (uno::R
         return uno::makeAny( xShapesCollection );
     }
 */
-    return  ScVbaShapes_BASE::Item( Index, Index2 );
+    return 	ScVbaShapes_BASE::Item( Index, Index2 );
 }
 
-uno::Reference< msforms::XShapeRange > SAL_CALL
+uno::Reference< msforms::XShapeRange > SAL_CALL 
 ScVbaShapes::Range( const uno::Any& shapes ) throw (css::uno::RuntimeException)
 {
     // shapes, can be an index or an array of indices
@@ -209,7 +209,7 @@ ScVbaShapes::Range( const uno::Any& shapes ) throw (css::uno::RuntimeException)
     return new ScVbaShapeRange(  getParent(), mxContext, xShapes, m_xDrawPage, m_xModel );
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaShapes::SelectAll() throw (uno::RuntimeException)
 {
     uno::Reference< view::XSelectionSupplier > xSelectSupp( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
@@ -218,14 +218,14 @@ ScVbaShapes::SelectAll() throw (uno::RuntimeException)
         xSelectSupp->select( uno::makeAny( m_xShapes ) );
     }
     // viewuno.cxx ScTabViewObj::select will throw IllegalArgumentException
-    // if one of the shapes is no 'markable' e.g. a button
+    // if one of the shapes is no 'markable' e.g. a button 
     // the method still works
     catch( lang::IllegalArgumentException& )
     {
     }
 }
 
-uno::Reference< drawing::XShape >
+uno::Reference< drawing::XShape > 
 ScVbaShapes::createShape( rtl::OUString service ) throw (css::uno::RuntimeException)
 {
     uno::Reference< lang::XMultiServiceFactory > xMSF( m_xModel, uno::UNO_QUERY_THROW );
@@ -233,10 +233,10 @@ ScVbaShapes::createShape( rtl::OUString service ) throw (css::uno::RuntimeExcept
     return xShape;
 }
 
-uno::Any
+uno::Any 
 ScVbaShapes::AddRectangle( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, uno::Any aRange ) throw (css::uno::RuntimeException)
 {
-    rtl::OUString sCreateShapeName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.RectangleShape")) );
+    rtl::OUString sCreateShapeName( rtl::OUString::createFromAscii( "com.sun.star.drawing.RectangleShape" ) );
     sal_Int32 nXPos = Millimeter::getInHundredthsOfOneMillimeter( startX );
     sal_Int32 nYPos = Millimeter::getInHundredthsOfOneMillimeter( startY );
     sal_Int32 nWidth = Millimeter::getInHundredthsOfOneMillimeter( nLineWidth );
@@ -245,7 +245,7 @@ ScVbaShapes::AddRectangle( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWi
     uno::Reference< drawing::XShape > xShape( createShape( sCreateShapeName ), uno::UNO_QUERY_THROW );
     m_xShapes->add( xShape );
 
-    rtl::OUString sName(createName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rectangle")) ));
+    rtl::OUString sName = createName( rtl::OUString::createFromAscii( "Rectangle" ) );
     setDefaultShapeProperties( xShape );
     setShape_NameProperty( xShape, sName );
 
@@ -261,14 +261,14 @@ ScVbaShapes::AddRectangle( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWi
     xShape->setSize( size );
 
     ScVbaShape *pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );
-    pScVbaShape->setRange( aRange );
+    pScVbaShape->setRange( aRange ); 
     return uno::makeAny( uno::Reference< msforms::XShape > ( pScVbaShape ) );
 }
 
-uno::Any
+uno::Any 
 ScVbaShapes::AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, uno::Any aRange ) throw (css::uno::RuntimeException)
 {
-    rtl::OUString sCreateShapeName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.EllipseShape") );
+    rtl::OUString sCreateShapeName( rtl::OUString::createFromAscii( "com.sun.star.drawing.EllipseShape" ) );
     sal_Int32 nXPos = Millimeter::getInHundredthsOfOneMillimeter( startX );
     sal_Int32 nYPos = Millimeter::getInHundredthsOfOneMillimeter( startY );
     sal_Int32 nWidth = Millimeter::getInHundredthsOfOneMillimeter( nLineWidth );
@@ -290,7 +290,7 @@ ScVbaShapes::AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidt
 
     setShape_AnchorTypeAndRangeProperty(xShape, _aRange);
     */
-    rtl::OUString name(createName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Oval"))));
+    rtl::OUString name = createName( rtl::OUString::createFromAscii( "Oval" ));
     setDefaultShapeProperties(xShape);
     setShape_NameProperty(xShape, name);
 
@@ -305,7 +305,7 @@ ScVbaShapes::AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidt
     xShape->setSize(size);
 
     ScVbaShape *pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );
-    pScVbaShape->setRange( aRange );
+    pScVbaShape->setRange( aRange ); 
     return uno::makeAny( uno::Reference< msforms::XShape > ( pScVbaShape ) );
 }
 
@@ -320,13 +320,13 @@ ScVbaShapes::AddLine( sal_Int32 StartX, sal_Int32 StartY, sal_Int32 endX, sal_In
     sal_Int32 nWidth = Millimeter::getInHundredthsOfOneMillimeter( nLineWidth );
     sal_Int32 nXPos = Millimeter::getInHundredthsOfOneMillimeter( StartX );
     sal_Int32 nYPos = Millimeter::getInHundredthsOfOneMillimeter( StartY );
-
-    uno::Reference< drawing::XShape > xShape( createShape( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape")) ), uno::UNO_QUERY_THROW );
+    
+    uno::Reference< drawing::XShape > xShape( createShape( rtl::OUString::createFromAscii("com.sun.star.drawing.LineShape") ), uno::UNO_QUERY_THROW );
     m_xShapes->add( xShape );
 
     awt::Point aMovePositionIfRange( 0, 0 );
-
-    rtl::OUString name(createName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Line")) ));
+    
+    rtl::OUString name = createName( rtl::OUString::createFromAscii( "Line" ) );
     setDefaultShapeProperties(xShape);
     setShape_NameProperty(xShape, name);
 
@@ -373,7 +373,7 @@ ScVbaShapes::AddTextbox( sal_Int32 _nOrientation, sal_Int32 _nLeft, sal_Int32 _n
 uno::Any
 ScVbaShapes::AddTextboxInWriter( sal_Int32 /*_nOrientation*/, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) throw (uno::RuntimeException)
 {
-    rtl::OUString sCreateShapeName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TextShape") );
+    rtl::OUString sCreateShapeName( rtl::OUString::createFromAscii( "com.sun.star.drawing.TextShape" ) );
     sal_Int32 nXPos = Millimeter::getInHundredthsOfOneMillimeter( _nLeft );
     sal_Int32 nYPos = Millimeter::getInHundredthsOfOneMillimeter( _nTop );
     sal_Int32 nWidth = Millimeter::getInHundredthsOfOneMillimeter( _nWidth );
@@ -384,7 +384,7 @@ ScVbaShapes::AddTextboxInWriter( sal_Int32 /*_nOrientation*/, sal_Int32 _nLeft, 
 
     setDefaultShapeProperties(xShape);
 
-    rtl::OUString sName(createName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text Box")) ));
+    rtl::OUString sName =  createName( rtl::OUString::createFromAscii( "Text Box") );
     setShape_NameProperty( xShape, sName );
 
     awt::Size size;
@@ -393,23 +393,23 @@ ScVbaShapes::AddTextboxInWriter( sal_Int32 /*_nOrientation*/, sal_Int32 _nLeft, 
     xShape->setSize(size);
 
     uno::Reference< beans::XPropertySet > xShapeProps( xShape, uno::UNO_QUERY_THROW );
-    xShapeProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorType")), uno::makeAny( text::TextContentAnchorType_AT_PAGE ) );
-    xShapeProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientRelation")), uno::makeAny( text::RelOrientation::PAGE_LEFT ) );
-    xShapeProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")), uno::makeAny( text::HoriOrientation::NONE ) );
-    xShapeProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")), uno::makeAny( nXPos ) );
+    xShapeProps->setPropertyValue( rtl::OUString::createFromAscii( "AnchorType" ), uno::makeAny( text::TextContentAnchorType_AT_PAGE ) );
+    xShapeProps->setPropertyValue( rtl::OUString::createFromAscii( "HoriOrientRelation" ), uno::makeAny( text::RelOrientation::PAGE_LEFT ) );
+    xShapeProps->setPropertyValue( rtl::OUString::createFromAscii( "HoriOrient" ), uno::makeAny( text::HoriOrientation::NONE ) );
+    xShapeProps->setPropertyValue( rtl::OUString::createFromAscii( "HoriOrientPosition" ), uno::makeAny( nXPos ) );
 
-    xShapeProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientRelation")), uno::makeAny( text::RelOrientation::PAGE_FRAME ) );
-    xShapeProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrient")), uno::makeAny( text::VertOrientation::NONE ) );
-    xShapeProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")), uno::makeAny( nYPos ) );
+    xShapeProps->setPropertyValue( rtl::OUString::createFromAscii( "VertOrientRelation" ), uno::makeAny( text::RelOrientation::PAGE_FRAME ) );
+    xShapeProps->setPropertyValue( rtl::OUString::createFromAscii( "VertOrient" ), uno::makeAny( text::VertOrientation::NONE ) );
+    xShapeProps->setPropertyValue( rtl::OUString::createFromAscii( "VertOrientPosition" ), uno::makeAny( nYPos ) );
 
     // set to visible
     drawing::LineStyle aLineStyle = drawing::LineStyle_SOLID;
-    xShapeProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LineStyle")), uno::makeAny( aLineStyle ) );
+    xShapeProps->setPropertyValue( rtl::OUString::createFromAscii( "LineStyle" ), uno::makeAny( aLineStyle ) );
     // set to font
     sal_Int16 nLayerId = 1;
-    rtl::OUString sLayerName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Heaven"));
-    xShapeProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayerID")), uno::makeAny( nLayerId ) );
-    xShapeProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayerName")), uno::makeAny( sLayerName ) );
+    rtl::OUString sLayerName = rtl::OUString::createFromAscii("Heaven");
+    xShapeProps->setPropertyValue( rtl::OUString::createFromAscii( "LayerID" ), uno::makeAny( nLayerId ) );
+    xShapeProps->setPropertyValue( rtl::OUString::createFromAscii( "LayerName" ), uno::makeAny( sLayerName ) );
 
 
     ScVbaShape *pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );
@@ -448,11 +448,11 @@ void
 ScVbaShapes::setDefaultShapeProperties( uno::Reference< drawing::XShape > xShape ) throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY_THROW );
-    xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillStyle")), uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SOLID")) ) );
-    xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), uno::makeAny( sal_Int32(0xFFFFFF) )  );
-    xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextWordWrap")), uno::makeAny( text::WrapTextMode_THROUGHT )  );
+    xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "FillStyle" ), uno::makeAny( rtl::OUString::createFromAscii( "SOLID" ) ) );
+    xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "FillColor"), uno::makeAny( sal_Int32(0xFFFFFF) )  );
+    xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "TextWordWrap"), uno::makeAny( text::WrapTextMode_THROUGHT )  );
     //not find in OOo2.3
-    //xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Opaque")), uno::makeAny( sal_True )  );
+    //xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "Opaque"), uno::makeAny( sal_True )  );
 }
 
 void
@@ -461,7 +461,7 @@ ScVbaShapes::setShape_NameProperty( uno::Reference< css::drawing::XShape > xShap
     uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY_THROW );
     try
     {
-        xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), uno::makeAny( sName ) );
+        xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "Name" ), uno::makeAny( sName ) );
     }
     catch( script::BasicErrorException e )
     {
@@ -472,7 +472,7 @@ rtl::OUString
 ScVbaShapes::createName( rtl::OUString sName )
 {
     sal_Int32 nActNumber = 1 + m_nNewShapeCount;
-    m_nNewShapeCount++;
+    m_nNewShapeCount++; 
     sName += rtl::OUString::valueOf( nActNumber );
     return sName;
 }

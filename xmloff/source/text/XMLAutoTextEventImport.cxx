@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "XMLAutoTextContainerEventImport.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <tools/debug.hxx>
 
@@ -61,17 +61,17 @@ const sal_Char sAPI_AutoText[] = "com.sun.star.text.AutoTextContainer";
 
 // #110680#
 XMLAutoTextEventImport::XMLAutoTextEventImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory) throw()
-:   SvXMLImport(xServiceFactory)
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory) throw() 
+:	SvXMLImport(xServiceFactory)
 {
 }
 
 XMLAutoTextEventImport::~XMLAutoTextEventImport() throw()
-{
+{	
 }
 
-void XMLAutoTextEventImport::initialize(
-    const Sequence<Any> & rArguments )
+void XMLAutoTextEventImport::initialize( 
+    const Sequence<Any> & rArguments ) 
         throw(Exception, RuntimeException)
 {
     // The events may come as either an XNameReplace or XEventsSupplier.
@@ -85,7 +85,7 @@ void XMLAutoTextEventImport::initialize(
             Reference<XEventsSupplier> xSupplier;
             rArguments[i] >>= xSupplier;
             DBG_ASSERT(xSupplier.is(), "need XEventsSupplier or XNameReplace");
-
+            
             xEvents = xSupplier->getEvents();
         }
         else if (rType == ::getCppuType( (Reference<XNameReplace>*)NULL ) )
@@ -101,7 +101,7 @@ void XMLAutoTextEventImport::initialize(
 
 
 
-SvXMLImportContext* XMLAutoTextEventImport::CreateContext(
+SvXMLImportContext* XMLAutoTextEventImport::CreateContext( 
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList > & xAttrList )
@@ -119,7 +119,7 @@ SvXMLImportContext* XMLAutoTextEventImport::CreateContext(
 }
 
 
-Sequence< OUString > SAL_CALL
+Sequence< OUString > SAL_CALL 
     XMLAutoTextEventImport_getSupportedServiceNames()
         throw()
 {
@@ -130,7 +130,7 @@ Sequence< OUString > SAL_CALL
 
 OUString SAL_CALL XMLAutoTextEventImport_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( 
         "com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter" ) );
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -125,7 +125,7 @@ namespace sdr
             Region aRegionPixel(rRegionPixel);
             RegionHandle aRegionHandle(aRegionPixel.BeginEnumRects());
             Rectangle aRegionRectanglePixel;
-
+            
             // MapModes off
             const bool bMapModeWasEnabledDest(getOutputDevice().IsMapModeEnabled());
             const bool bMapModeWasEnabledSource(maBufferDevice.IsMapModeEnabled());
@@ -210,6 +210,28 @@ namespace sdr
                     aTopLeft, aSize, // destination
                     aTopLeft, aSize, // source
                     rSource);
+
+#ifdef DBG_UTIL
+                // #i72754# possible graphical region test only with non-pro
+                static bool bDoPaintForVisualControl(false);
+                if(bDoPaintForVisualControl)
+                {
+                    const bool bMapModeWasEnabledTest(getOutputDevice().IsMapModeEnabled());
+                    getOutputDevice().EnableMapMode(false);
+                    getOutputDevice().SetLineColor(COL_LIGHTRED);
+                    getOutputDevice().SetFillColor();
+                    getOutputDevice().DrawRect(aRegionRectanglePixel);
+                    getOutputDevice().EnableMapMode(bMapModeWasEnabledTest);
+                }
+
+                static bool bDoSaveForVisualControl(false);
+                if(bDoSaveForVisualControl)
+                {
+                    const Bitmap aBitmap(maBufferDevice.GetBitmap(aTopLeft, aSize));
+                    SvFileStream aNew((const String&)String(ByteString( "c:\\test.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
+                    aNew << aBitmap;
+                }
+#endif
             }
 
             aRegion.EndEnumRects(aRegionHandle);
@@ -403,10 +425,10 @@ namespace sdr
         }
 
         OverlayManagerBuffered::OverlayManagerBuffered(
-            OutputDevice& rOutputDevice,
+            OutputDevice& rOutputDevice, 
             OverlayManager* pOldOverlayManager,
             bool bRefreshWithPreRendering)
-        :   OverlayManager(rOutputDevice, pOldOverlayManager),
+        :	OverlayManager(rOutputDevice, pOldOverlayManager),
             mbRefreshWithPreRendering(bRefreshWithPreRendering)
         {
             // Init timer
@@ -483,10 +505,10 @@ namespace sdr
                     // assume AA needs one pixel more and invalidate one pixel more
                     const double fDiscreteOne(getDiscreteOne());
                     const basegfx::B2IPoint aTopLeft(
-                        (sal_Int32)floor(aDiscreteRange.getMinX() - fDiscreteOne),
+                        (sal_Int32)floor(aDiscreteRange.getMinX() - fDiscreteOne), 
                         (sal_Int32)floor(aDiscreteRange.getMinY() - fDiscreteOne));
                     const basegfx::B2IPoint aBottomRight(
-                        (sal_Int32)ceil(aDiscreteRange.getMaxX() + fDiscreteOne),
+                        (sal_Int32)ceil(aDiscreteRange.getMaxX() + fDiscreteOne), 
                         (sal_Int32)ceil(aDiscreteRange.getMaxY() + fDiscreteOne));
 
                     maBufferRememberedRangePixel.expand(aTopLeft);

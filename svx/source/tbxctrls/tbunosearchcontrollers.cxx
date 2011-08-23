@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,23 +46,23 @@
 namespace svx
 {
 
-static const ::rtl::OUString SEARCHITEM_SEARCHSTRING( RTL_CONSTASCII_USTRINGPARAM( "SearchItem.SearchString" ) );
-static const ::rtl::OUString SEARCHITEM_SEARCHBACKWARD( RTL_CONSTASCII_USTRINGPARAM( "SearchItem.Backward" ) );
+static const ::rtl::OUString SEARCHITEM_SEARCHSTRING   = ::rtl::OUString::createFromAscii("SearchItem.SearchString");
+static const ::rtl::OUString SEARCHITEM_SEARCHBACKWARD = ::rtl::OUString::createFromAscii("SearchItem.Backward");
 
-static const ::rtl::OUString COMMAND_EXECUTESEARCH( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExecuteSearch" ) );
-static const ::rtl::OUString COMMAND_FINDTEXT( RTL_CONSTASCII_USTRINGPARAM( ".uno:FindText" ) );
-static const ::rtl::OUString COMMAND_DOWNSEARCH( RTL_CONSTASCII_USTRINGPARAM(".uno:DownSearch") );
-static const ::rtl::OUString COMMAND_UPSEARCH( RTL_CONSTASCII_USTRINGPARAM(".uno:UpSearch") );
-static const ::rtl::OUString COMMAND_APPENDSEARCHHISTORY( RTL_CONSTASCII_USTRINGPARAM( "AppendSearchHistory") );
+static const ::rtl::OUString COMMAND_EXECUTESEARCH = ::rtl::OUString::createFromAscii(".uno:ExecuteSearch");
+static const ::rtl::OUString COMMAND_FINDTEXT   = ::rtl::OUString::createFromAscii(".uno:FindText")  ;
+static const ::rtl::OUString COMMAND_DOWNSEARCH = ::rtl::OUString::createFromAscii(".uno:DownSearch");
+static const ::rtl::OUString COMMAND_UPSEARCH   = ::rtl::OUString::createFromAscii(".uno:UpSearch")  ;
+static const ::rtl::OUString COMMAND_APPENDSEARCHHISTORY   = ::rtl::OUString::createFromAscii("AppendSearchHistory");
 
-static const ::rtl::OUString SERVICENAME_URLTRANSFORMER( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer") );
+static const ::rtl::OUString SERVICENAME_URLTRANSFORMER = ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer");
 static const sal_Int32       REMEMBER_SIZE = 10;
 
 void impl_executeSearch( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr, const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Sequence< css::beans::PropertyValue >& lArgs )
 {
     css::uno::Reference< css::util::XURLTransformer > xURLTransformer( rSMgr->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY );
     if ( xURLTransformer.is() )
-    {
+    {        
         css::util::URL aURL;
         aURL.Complete = COMMAND_EXECUTESEARCH;
         xURLTransformer->parseStrict(aURL);
@@ -70,14 +70,14 @@ void impl_executeSearch( const css::uno::Reference< css::lang::XMultiServiceFact
         css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(xFrame, css::uno::UNO_QUERY);
         if ( xDispatchProvider.is() )
         {
-            css::uno::Reference< css::frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );
+            css::uno::Reference< css::frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );        
             if ( xDispatch.is() && aURL.Complete.getLength() > 0 )
                 xDispatch->dispatch( aURL, lArgs );
         }
     }
 }
 
-FindTextFieldControl::FindTextFieldControl( Window* pParent, WinBits nStyle,
+FindTextFieldControl::FindTextFieldControl( Window* pParent, WinBits nStyle, 
     css::uno::Reference< css::frame::XFrame >& xFrame,
     css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager) :
     ComboBox( pParent, nStyle ),
@@ -97,14 +97,14 @@ void FindTextFieldControl::InitControls_Impl()
     SetText( SVX_RESSTR( RID_SVXSTR_FINDBAR_FIND ) );
     SetControlForeground(GetSettings().GetStyleSettings().GetDisableColor());
 
-    EnableAutocomplete(sal_True, sal_True);
+    EnableAutocomplete(TRUE, TRUE);
 }
 
 void FindTextFieldControl::Remember_Impl(const String& rStr)
 {
-    sal_uInt16 nCount = GetEntryCount();
+    USHORT nCount = GetEntryCount();
 
-    for (sal_uInt16 i=0; i<nCount; ++i)
+    for (USHORT i=0; i<nCount; ++i)
     {
         if ( rStr == GetEntry(i))
             return;
@@ -132,28 +132,15 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
         case EVENT_KEYINPUT:
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+            sal_Bool bCtrl = pKeyEvent->GetKeyCode().IsMod1();
+            sal_Bool bAlt = pKeyEvent->GetKeyCode().IsMod2();
             sal_Bool bShift = pKeyEvent->GetKeyCode().IsShift();
             sal_uInt16 nCode = pKeyEvent->GetKeyCode().GetCode();
 
-            if ( KEY_ESCAPE == nCode )
+            if ( (bCtrl && bAlt && KEY_F == nCode) || KEY_ESCAPE == nCode )
             {
                 nRet = 1;
                 GrabFocusToDocument();
-
-                // hide the findbar
-                css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY);
-                if (xPropSet.is())
-                {
-                    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-                    css::uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) );
-                    aValue >>= xLayoutManager;
-                    if (xLayoutManager.is())
-                    {
-                        const ::rtl::OUString sResourceURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/findbar" ) );
-                        xLayoutManager->hideElement( sResourceURL );
-                        xLayoutManager->destroyElement( sResourceURL );
-                    }
-                }
             }
 
             if ( KEY_RETURN == nCode )
@@ -290,8 +277,8 @@ css::uno::Reference< css::frame::XStatusListener > SearchToolbarControllersManag
 // FindTextToolbarController
 
 FindTextToolbarController::FindTextToolbarController( const css::uno::Reference< css::lang::XMultiServiceFactory >& rServiceManager )
-    :svt::ToolboxController( rServiceManager,
-    css::uno::Reference< css::frame::XFrame >(),
+    :svt::ToolboxController( rServiceManager, 
+    css::uno::Reference< css::frame::XFrame >(), 
     COMMAND_FINDTEXT )
 {
 }
@@ -323,11 +310,11 @@ void SAL_CALL FindTextToolbarController::release() throw ()
 // XServiceInfo
 ::rtl::OUString SAL_CALL FindTextToolbarController::getImplementationName() throw( css::uno::RuntimeException )
 {
-    return getImplementationName_Static();
+    return getImplementationName_Static(); 
 }
 
 sal_Bool SAL_CALL FindTextToolbarController::supportsService( const ::rtl::OUString& ServiceName ) throw( css::uno::RuntimeException )
-{
+{	
     const css::uno::Sequence< ::rtl::OUString > aSNL( getSupportedServiceNames() );
     const ::rtl::OUString * pArray = aSNL.getConstArray();
 
@@ -356,7 +343,7 @@ void SAL_CALL FindTextToolbarController::dispose() throw ( css::uno::RuntimeExce
     SolarMutexGuard aSolarMutexGuard;
 
     SearchToolbarControllersManager::createControllersManager()->freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
-
+    
     svt::ToolboxController::dispose();
     delete m_pFindTextFieldControl;
     m_pFindTextFieldControl = 0;
@@ -371,8 +358,8 @@ void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< :
     ToolBox* pToolBox = (ToolBox*)pWindow;
     if ( pToolBox )
     {
-        sal_uInt16 nItemCount = pToolBox->GetItemCount();
-        for ( sal_uInt16 i=0; i<nItemCount; ++i )
+        USHORT nItemCount = pToolBox->GetItemCount();
+        for ( USHORT i=0; i<nItemCount; ++i )
         {
             ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
             if ( sItemCommand.equals( COMMAND_DOWNSEARCH ) )
@@ -401,7 +388,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL FindTextToolbarController::cre
         ToolBox* pToolbar =  ( ToolBox* )pParent;
         m_pFindTextFieldControl = new FindTextFieldControl( pToolbar, WinBits( WB_DROPDOWN | WB_VSCROLL), m_xFrame, m_xServiceManager );
 
-        Size aSize(250, m_pFindTextFieldControl->GetTextHeight() + 200);
+        Size aSize(100, m_pFindTextFieldControl->GetTextHeight() + 200);
         m_pFindTextFieldControl->SetSizePixel( aSize );
         m_pFindTextFieldControl->SetModifyHdl(LINK(this, FindTextToolbarController, EditModifyHdl));
     }
@@ -418,7 +405,7 @@ void SAL_CALL FindTextToolbarController::statusChanged( const css::frame::Featur
         return;
 
     ::rtl::OUString aFeatureURL = rEvent.FeatureURL.Complete;
-    if (aFeatureURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AppendSearchHistory")))
+    if (aFeatureURL.equalsAscii("AppendSearchHistory"))
     {
         m_pFindTextFieldControl->Remember_Impl(m_pFindTextFieldControl->GetText());
     }
@@ -426,7 +413,7 @@ void SAL_CALL FindTextToolbarController::statusChanged( const css::frame::Featur
 
 IMPL_LINK( FindTextToolbarController, EditModifyHdl, void *, EMPTYARG )
 {
-    // enable or disable item DownSearch/UpSearch of findbar
+    // enable or disable item DownSearch/UpSearch of findbar 
     Window* pWindow = VCLUnoHelper::GetWindow( getParent() );
     ToolBox* pToolBox = (ToolBox*)pWindow;
     if ( pToolBox && m_pFindTextFieldControl )
@@ -454,8 +441,8 @@ IMPL_LINK( FindTextToolbarController, EditModifyHdl, void *, EMPTYARG )
 // class DownSearchToolboxController
 
 DownSearchToolboxController::DownSearchToolboxController(const css::uno::Reference< css::lang::XMultiServiceFactory >& rServiceManager )
-    : svt::ToolboxController( rServiceManager,
-    css::uno::Reference< css::frame::XFrame >(),
+    : svt::ToolboxController( rServiceManager, 
+    css::uno::Reference< css::frame::XFrame >(), 
     COMMAND_DOWNSEARCH )
 {
 }
@@ -491,7 +478,7 @@ void SAL_CALL DownSearchToolboxController::release() throw ()
 }
 
 sal_Bool SAL_CALL DownSearchToolboxController::supportsService( const ::rtl::OUString& ServiceName ) throw( css::uno::RuntimeException )
-{
+{	
     const css::uno::Sequence< ::rtl::OUString > aSNL( getSupportedServiceNames() );
     const ::rtl::OUString * pArray = aSNL.getConstArray();
 
@@ -542,8 +529,8 @@ void SAL_CALL DownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) 
     ToolBox* pToolBox = (ToolBox*)pWindow;
     if ( pToolBox )
     {
-        sal_uInt16 nItemCount = pToolBox->GetItemCount();
-        for ( sal_uInt16 i=0; i<nItemCount; ++i )
+        USHORT nItemCount = pToolBox->GetItemCount();
+        for ( USHORT i=0; i<nItemCount; ++i )
         {
             ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
             if ( sItemCommand.equals( COMMAND_FINDTEXT ) )
@@ -552,7 +539,7 @@ void SAL_CALL DownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) 
                 if (pItemWin)
                     sFindText = pItemWin->GetText();
                 break;
-            }
+            }                    
         }
     }
 
@@ -583,8 +570,8 @@ void SAL_CALL DownSearchToolboxController::statusChanged( const css::frame::Feat
 // class UpSearchToolboxController
 
 UpSearchToolboxController::UpSearchToolboxController( const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager )
-    :svt::ToolboxController( rServiceManager,
-    css::uno::Reference< css::frame::XFrame >(),
+    :svt::ToolboxController( rServiceManager, 
+    css::uno::Reference< css::frame::XFrame >(), 
     COMMAND_UPSEARCH )
 {
 }
@@ -616,11 +603,11 @@ void SAL_CALL UpSearchToolboxController::release() throw ()
 // XServiceInfo
 ::rtl::OUString SAL_CALL UpSearchToolboxController::getImplementationName() throw( css::uno::RuntimeException )
 {
-    return getImplementationName_Static();
+    return getImplementationName_Static(); 
 }
 
 sal_Bool SAL_CALL UpSearchToolboxController::supportsService( const ::rtl::OUString& ServiceName ) throw( css::uno::RuntimeException )
-{
+{	
     const css::uno::Sequence< ::rtl::OUString > aSNL( getSupportedServiceNames() );
     const ::rtl::OUString * pArray = aSNL.getConstArray();
 
@@ -671,8 +658,8 @@ void SAL_CALL UpSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) th
     ToolBox* pToolBox = (ToolBox*)pWindow;
     if ( pToolBox )
     {
-        sal_uInt16 nItemCount = pToolBox->GetItemCount();
-        for ( sal_uInt16 i=0; i<nItemCount; ++i )
+        USHORT nItemCount = pToolBox->GetItemCount();
+        for ( USHORT i=0; i<nItemCount; ++i )
         {
             ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
             if ( sItemCommand.equals( COMMAND_FINDTEXT ) )
@@ -681,7 +668,7 @@ void SAL_CALL UpSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) th
                 if (pItemWin)
                     sFindText = pItemWin->GetText();
                 break;
-            }
+            }                    
         }
     }
 
@@ -754,10 +741,10 @@ void SAL_CALL FindbarDispatcher::release() throw()
 }
 
 sal_Bool SAL_CALL FindbarDispatcher::supportsService( const ::rtl::OUString& ServiceName ) throw( css::uno::RuntimeException )
-{
+{	
     return (
-        ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.comp.svx.FindbarDispatcher")) ||
-        ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.frame.ProtocolHandler"))
+        ServiceName.equalsAscii("com.sun.star.comp.svx.FindbarDispatcher") ||
+        ServiceName.equalsAscii("com.sun.star.frame.ProtocolHandler")
         );
 }
 
@@ -786,7 +773,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL FindbarDispatcher::queryDi
 {
     css::uno::Reference< css::frame::XDispatch > xDispatch;
 
-    if ( aURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.findbar:")) )
+    if ( aURL.Protocol.equalsAscii("vnd.sun.star.findbar:") )
         xDispatch = this;
 
     return xDispatch;
@@ -807,40 +794,33 @@ css::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > SAL_CALL Fin
 void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css::uno::Sequence < css::beans::PropertyValue >& /*lArgs*/ ) throw( css::uno::RuntimeException )
 {
     //vnd.sun.star.findbar:FocusToFindbar  - set cursor to the FindTextFieldControl of the findbar
-    if ( aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FocusToFindbar")) )
+    if ( aURL.Path.equalsAscii("FocusToFindbar") )
     {
         css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY);
         if(!xPropSet.is())
             return;
 
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-        css::uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )) );
+        css::uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString::createFromAscii("LayoutManager") );
         aValue >>= xLayoutManager;
         if (!xLayoutManager.is())
             return;
 
-        const ::rtl::OUString sResourceURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/findbar" ) );
+        const ::rtl::OUString sResourceURL = ::rtl::OUString::createFromAscii("private:resource/toolbar/findbar");
         css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
         if (!xUIElement.is())
-        {
-            // show the findbar if necessary
-            xLayoutManager->createElement( sResourceURL );
-            xLayoutManager->showElement( sResourceURL );
-            xUIElement = xLayoutManager->getElement( sResourceURL );
-            if ( !xUIElement.is() )
-                return;
-        }
+            return;
 
         css::uno::Reference< css::awt::XWindow > xWindow(xUIElement->getRealInterface(), css::uno::UNO_QUERY);
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         ToolBox* pToolBox = (ToolBox*)pWindow;
         if ( pToolBox )
         {
-            sal_uInt16 nItemCount = pToolBox->GetItemCount();
-            for ( sal_uInt16 i=0; i<nItemCount; ++i )
+            USHORT nItemCount = pToolBox->GetItemCount();
+            for ( USHORT i=0; i<nItemCount; ++i )
             {
                 ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
-                if ( sItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:FindText")) )
+                if ( sItemCommand.equalsAscii(".uno:FindText") )
                 {
                     Window* pItemWin = pToolBox->GetItemWindow( i );
                     if ( pItemWin )
@@ -864,27 +844,27 @@ void SAL_CALL FindbarDispatcher::removeStatusListener( const css::uno::Reference
 }
 
 //-----------------------------------------------------------------------------------------------------------
-// create Instance
+// create Instance 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL FindTextToolbarController_createInstance(
+css::uno::Reference< css::uno::XInterface > SAL_CALL FindTextToolbarController_createInstance( 
     const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
 {
     return *new FindTextToolbarController( rSMgr );
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL DownSearchToolboxController_createInstance(
+css::uno::Reference< css::uno::XInterface > SAL_CALL DownSearchToolboxController_createInstance( 
     const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
 {
     return *new DownSearchToolboxController( rSMgr );
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL UpSearchToolboxController_createInstance(
+css::uno::Reference< css::uno::XInterface > SAL_CALL UpSearchToolboxController_createInstance( 
     const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
 {
     return *new UpSearchToolboxController( rSMgr );
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL FindbarDispatcher_createInstance(
+css::uno::Reference< css::uno::XInterface > SAL_CALL FindbarDispatcher_createInstance( 
     const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
 {
     return *new FindbarDispatcher( rSMgr );

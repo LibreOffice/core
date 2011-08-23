@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,22 +38,22 @@ namespace offapp
     {
     private:
         struct IMPL;
-        IMPL*               m_pImpl;
+        IMPL*				m_pImpl;
 
     protected:
                             InternationalOptionsPage( Window* _pParent, const SfxItemSet& _rAttrSet );
 
-        virtual sal_Bool        FillItemSet( SfxItemSet& _rSet );
-        virtual void        Reset( const SfxItemSet& _rSet );
+        virtual BOOL		FillItemSet( SfxItemSet& _rSet );
+        virtual void		Reset( const SfxItemSet& _rSet );
 
     public:
-        virtual             ~InternationalOptionsPage();
+        virtual				~InternationalOptionsPage();
 
-        static SfxTabPage*  CreateSd( Window* _pParent, const SfxItemSet& _rAttrSet );
-        static SfxTabPage*  CreateSc( Window* _pParent, const SfxItemSet& _rAttrSet );
+        static SfxTabPage*	CreateSd( Window* _pParent, const SfxItemSet& _rAttrSet );
+        static SfxTabPage*	CreateSc( Window* _pParent, const SfxItemSet& _rAttrSet );
     };
 
-}   // /namespace offapp
+}	// /namespace offapp
 
 #endif
 

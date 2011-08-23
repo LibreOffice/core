@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,21 +58,21 @@ namespace swui
 
 #define ROW_COL_PROD 16384
 
-void SwInsTableDlg::GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol,
+void SwInsTableDlg::GetValues( String& rName, USHORT& rRow, USHORT& rCol,
                                 SwInsertTableOptions& rInsTblOpts, String& rAutoName,
                                 SwTableAutoFmt *& prTAFmt )
 {
-    sal_uInt16 nInsMode = 0;
+    USHORT nInsMode = 0;
     rName = aNameEdit.GetText();
-    rRow = (sal_uInt16)aRowEdit.GetValue();
-    rCol = (sal_uInt16)aColEdit.GetValue();
+    rRow = (USHORT)aRowEdit.GetValue();
+    rCol = (USHORT)aColEdit.GetValue();
 
     if (aBorderCB.IsChecked())
         nInsMode |= tabopts::DEFAULT_BORDER;
     if (aHeaderCB.IsChecked())
         nInsMode |= tabopts::HEADLINE;
     if (aRepeatHeaderCB.IsEnabled() && aRepeatHeaderCB.IsChecked())
-        rInsTblOpts.mnRowsToRepeat = sal_uInt16( aRepeatHeaderNF.GetValue() );
+        rInsTblOpts.mnRowsToRepeat = USHORT( aRepeatHeaderNF.GetValue() );
     else
         rInsTblOpts.mnRowsToRepeat = 0;
     if (!aDontSplitCB.IsChecked())
@@ -92,30 +92,30 @@ void SwInsTableDlg::GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol
 SwInsTableDlg::SwInsTableDlg( SwView& rView )
     : SfxModalDialog( rView.GetWindow(), SW_RES(DLG_INSERT_TABLE) ),
     aNameFT                 (this, SW_RES(FT_NAME)),
-    aNameEdit               (this, SW_RES(ED_NAME)),
+    aNameEdit				(this, SW_RES(ED_NAME)),
 
     aFL                     (this, SW_RES(FL_TABLE)),
     aColLbl                 (this, SW_RES(FT_COL)),
-    aColEdit                (this, SW_RES(ED_COL)),
-    aRowLbl                 (this, SW_RES(FT_ROW)),
-    aRowEdit                (this, SW_RES(ED_ROW)),
+    aColEdit				(this, SW_RES(ED_COL)),
+    aRowLbl					(this, SW_RES(FT_ROW)),
+    aRowEdit				(this, SW_RES(ED_ROW)),
 
     aOptionsFL              (this, SW_RES(FL_OPTIONS)),
     aHeaderCB               (this, SW_RES(CB_HEADER)),
-    aRepeatHeaderCB         (this, SW_RES(CB_REPEAT_HEADER)),
-    aRepeatHeaderFT         (this, SW_RES(FT_REPEAT_HEADER)),
-    aRepeatHeaderBeforeFT   (this),
-    aRepeatHeaderNF         (this, SW_RES(NF_REPEAT_HEADER)),
-    aRepeatHeaderAfterFT    (this),
-    aRepeatHeaderCombo      (this, SW_RES(WIN_REPEAT_HEADER), aRepeatHeaderNF, aRepeatHeaderBeforeFT, aRepeatHeaderAfterFT),
+    aRepeatHeaderCB			(this, SW_RES(CB_REPEAT_HEADER)),
+    aRepeatHeaderFT			(this, SW_RES(FT_REPEAT_HEADER)),
+    aRepeatHeaderBeforeFT	(this),
+    aRepeatHeaderNF			(this, SW_RES(NF_REPEAT_HEADER)),
+    aRepeatHeaderAfterFT	(this),
+    aRepeatHeaderCombo		(this, SW_RES(WIN_REPEAT_HEADER), aRepeatHeaderNF, aRepeatHeaderBeforeFT, aRepeatHeaderAfterFT),
 
     aDontSplitCB            (this, SW_RES(CB_DONT_SPLIT)),
-    aBorderCB               (this, SW_RES(CB_BORDER)),
+    aBorderCB				(this, SW_RES(CB_BORDER)),
 
     aOkBtn                  (this, SW_RES(BT_OK)),
-    aCancelBtn              (this, SW_RES(BT_CANCEL)),
-    aHelpBtn                (this, SW_RES(BT_HELP)),
-    aAutoFmtBtn             (this, SW_RES(BT_AUTOFORMAT)),
+    aCancelBtn				(this, SW_RES(BT_CANCEL)),
+    aHelpBtn				(this, SW_RES(BT_HELP)),
+    aAutoFmtBtn				(this, SW_RES(BT_AUTOFORMAT)),
 
     pShell(&rView.GetWrtShell()),
     pTAutoFmt( 0 ),
@@ -131,11 +131,11 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     aColEdit.SetMax(ROW_COL_PROD/aRowEdit.GetValue());
     aAutoFmtBtn.SetClickHdl(LINK(this, SwInsTableDlg, AutoFmtHdl));
 
-    sal_Bool bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell())&HTMLMODE_ON);
+    BOOL bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell())&HTMLMODE_ON);
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTblFlags(bHTMLMode);
-    sal_uInt16 nInsTblFlags = aInsOpts.mnInsMode;
+    USHORT nInsTblFlags = aInsOpts.mnInsMode;
 
     aHeaderCB.Check( 0 != (nInsTblFlags & tabopts::HEADLINE) );
     aRepeatHeaderCB.Check(aInsOpts.mnRowsToRepeat > 0);
@@ -185,6 +185,9 @@ IMPL_LINK_INLINE_START( SwInsTableDlg, ModifyName, Edit *, pEdit )
 }
 IMPL_LINK_INLINE_END( SwInsTableDlg, ModifyName, Edit *, EMPTYARG )
 
+/*-----------------15.04.98 11:36-------------------
+
+--------------------------------------------------*/
 IMPL_LINK( SwInsTableDlg, ModifyRowCol, NumericField *, pField )
 {
     if(pField == &aColEdit)
@@ -220,7 +223,7 @@ IMPL_LINK( SwInsTableDlg, AutoFmtHdl, PushButton*, pButton )
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton,pShell, DLG_AUTOFMT_TABLE, sal_False, pTAutoFmt );
+    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton,pShell, DLG_AUTOFMT_TABLE, FALSE, pTAutoFmt );
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if( RET_OK == pDlg->Execute())
         pDlg->FillAutoFmtOfIndex( pTAutoFmt );

@@ -57,19 +57,22 @@
  * @file
  * Table cell.
  ************************************************************************/
+/*************************************************************************
+ * Change History
+ * 2005-01-21 create this file.
+ ************************************************************************/
+#ifndef		_XFCell_HXX
+#define		_XFCell_HXX
 
-#ifndef     _XFCell_HXX
-#define     _XFCell_HXX
-
-#include    "xfcontent.hxx"
-#include    "xfcontentcontainer.hxx"
-#include    <vector>
+#include	"xfcontent.hxx"
+#include	"xfcontentcontainer.hxx"
+#include	<vector>
 
 class XFTable;
 class XFRow;
 
 /**
- * @descr   Table cell object.
+ * @descr	Table cell object.
  */
 class XFCell : public XFContentContainer
 {
@@ -78,142 +81,140 @@ public:
 
     XFCell(const XFCell& other);
 
-    XFCell& operator=(const XFCell& other);
+    XFCell&	operator=(const XFCell& other);
 
     virtual ~XFCell();
 
 public:
-    using XFContentContainer::Add;
+    /**
+     * @descr	Add content for table cell.
+     */
+    void	Add(IXFContent *pContent);
 
     /**
-     * @descr   Add content for table cell.
+     * @descr	If cell spans more the one column, then set column span.
      */
-    void    Add(IXFContent *pContent);
+    void	SetColumnSpaned(sal_Int32 num);
 
     /**
-     * @descr   If cell spans more the one column, then set column span.
+     * @descr	Set whether the following cells use the same style and content.
      */
-    void    SetColumnSpaned(sal_Int32 num);
+    void	SetRepeated(sal_Int32 num);
 
     /**
-     * @descr   Set whether the following cells use the same style and content.
+     * @descr	Set cell number value.
      */
-    void    SetRepeated(sal_Int32 num);
+    void	SetValue(double value);
 
     /**
-     * @descr   Set cell number value.
+     * @descr	Set cell number value.
      */
-    void    SetValue(double value);
+    void	SetValue(rtl::OUString value);
 
     /**
-     * @descr   Set cell number value.
+     * @descr	Set cell string value.
      */
-    void    SetValue(rtl::OUString value);
+    void	SetString(rtl::OUString str);
 
     /**
-     * @descr   Set cell string value.
+     * @descr	Set cell as a percent value with value percent.
      */
-    void    SetString(rtl::OUString str);
+    void	SetPercent(double percent);
 
     /**
-     * @descr   Set cell as a percent value with value percent.
+     * @descr	Set cell as a percent value with value percent.
      */
-    void    SetPercent(double percent);
+    void	SetPercent(rtl::OUString percent);
 
     /**
-     * @descr   Set cell as a percent value with value percent.
+     * @descr	Set cell as a date value.
      */
-    void    SetPercent(rtl::OUString percent);
+    void	SetDate(rtl::OUString date);
 
     /**
-     * @descr   Set cell as a date value.
+     * @descr	Set cell as a time value.
      */
-    void    SetDate(rtl::OUString date);
+    void	SetTime(rtl::OUString time);
 
     /**
-     * @descr   Set cell as a time value.
+     * @descr	Set cell as a currency value.
      */
-    void    SetTime(rtl::OUString time);
+    void	SetCurrency(rtl::OUString currency);
 
     /**
-     * @descr   Set cell as a currency value.
+     * @descr	Set cell display string.
      */
-    void    SetCurrency(rtl::OUString currency);
+    void	SetDisplay(rtl::OUString display);
 
     /**
-     * @descr   Set cell display string.
+     * @descr	Set cell formula.
      */
-    void    SetDisplay(rtl::OUString display);
+    void	SetFormula(rtl::OUString formula);
 
     /**
-     * @descr   Set cell formula.
+     * @descr	Set cell protected.
      */
-    void    SetFormula(rtl::OUString formula);
+    void	SetProtect(sal_Bool protect=sal_True);
 
     /**
-     * @descr   Set cell protected.
+     * @descr	Set cell column id.
      */
-    void    SetProtect(sal_Bool protect=sal_True);
+    void	SetCol(sal_Int32 col);
 
     /**
-     * @descr   Set cell column id.
+     * @descr	Set cell owner row.
      */
-    void    SetCol(sal_Int32 col);
+    void	SetOwnerRow(XFRow *pRow);
 
     /**
-     * @descr   Set cell owner row.
+     * @descr	Return cell name. It's a tool function for formula.
      */
-    void    SetOwnerRow(XFRow *pRow);
+    rtl::OUString	GetCellName();
 
     /**
-     * @descr   Return cell name. It's a tool function for formula.
+     * @descr	Return cell column id.
      */
-    rtl::OUString   GetCellName();
+    sal_Int32	GetCol();
 
     /**
-     * @descr   Return cell column id.
+     * @descr	return cell'owner row.
      */
-    sal_Int32   GetCol();
+    XFRow*		GetOwnerRow();
 
     /**
-     * @descr   return cell'owner row.
+     * @descr	If cell has a sub-table, return it, else return NULL.
      */
-    XFRow*      GetOwnerRow();
+    XFTable*	GetSubTable();
 
     /**
-     * @descr   If cell has a sub-table, return it, else return NULL.
+     * @descr	return cell column span property.
      */
-    XFTable*    GetSubTable();
+    sal_Int32	GetColSpaned();
 
     /**
-     * @descr   return cell column span property.
+     * @descr	Output cell as xml element.
      */
-    sal_Int32   GetColSpaned();
-
-    /**
-     * @descr   Output cell as xml element.
-     */
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    XFRow       *m_pOwnerRow;
-    XFTable     *m_pSubTable;
-    sal_Int32   m_nCol;
-    sal_Int32   m_nColSpaned;
-    sal_Int32   m_nRepeated;
-    enumXFValueType m_eValueType;
-    rtl::OUString   m_strValue;
-    rtl::OUString   m_strDisplay;
-    rtl::OUString   m_strFormula;
-    sal_Bool    m_bProtect;
+    XFRow		*m_pOwnerRow;
+    XFTable		*m_pSubTable;
+    sal_Int32	m_nCol;
+    sal_Int32	m_nColSpaned;
+    sal_Int32	m_nRepeated;
+    enumXFValueType	m_eValueType;
+    rtl::OUString	m_strValue;
+    rtl::OUString	m_strDisplay;
+    rtl::OUString	m_strFormula;
+    sal_Bool	m_bProtect;
 };
 
-inline void XFCell::SetColumnSpaned(sal_Int32 num)
+inline void	XFCell::SetColumnSpaned(sal_Int32 num)
 {
     m_nColSpaned = num;
 }
 
-inline void XFCell::SetRepeated(sal_Int32 repeated)
+inline void	XFCell::SetRepeated(sal_Int32 repeated)
 {
     m_nRepeated = repeated;
 }
@@ -233,22 +234,22 @@ inline void XFCell::SetCol(sal_Int32 col)
     m_nCol = col;
 }
 
-inline void XFCell::SetOwnerRow(XFRow *pRow)
+inline void	XFCell::SetOwnerRow(XFRow *pRow)
 {
     m_pOwnerRow = pRow;
 }
 
-inline sal_Int32    XFCell::GetCol()
+inline sal_Int32	XFCell::GetCol()
 {
     return m_nCol;
 }
 
-inline XFRow*   XFCell::GetOwnerRow()
+inline XFRow*	XFCell::GetOwnerRow()
 {
     return m_pOwnerRow;
 }
 
-inline XFTable* XFCell::GetSubTable()
+inline XFTable*	XFCell::GetSubTable()
 {
     return m_pSubTable;
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,9 @@
 #ifndef __com_sun_star_java_JavaVMCreationFailureException_idl__
 #define __com_sun_star_java_JavaVMCreationFailureException_idl__
 
+#ifndef __com_sun_star_java_JavaInitializationException_idl__
 #include <com/sun/star/java/JavaInitializationException.idl>
+#endif
 
 module com { module sun { module star { module java {
 
@@ -38,7 +40,7 @@ module com { module sun { module star { module java {
     Machine failed, even if the runtime library could be loaded.
     Possible reasons for a failure are that JNI_CreateJavaVM returns
     an error code that reflects a failure, JNI_CreateJavaVM does not
-    return because it tries to quit the process ( _exit), the shared
+    return because it tries to quit the process ( _exit), the shared 
     library is corrupted, so that the symbols for JNI_GetDefaultVMInitArgs
     or JNI_CreateJavaVM cannot be found, etc.
 
@@ -47,8 +49,8 @@ module com { module sun { module star { module java {
 published exception JavaVMCreationFailureException: JavaInitializationException
 {
     /** contains an error code that reflects the returned error code of
-        JNI_CreateJavaVM or other errors. A negative value represents
-        the returned error code of JNI_CreateJavaVM. All other values
+        JNI_CreateJavaVM or other errors. A negative value represents 
+        the returned error code of JNI_CreateJavaVM. All other values 
         indicate a different cause.
     */
     long ErrorCode;

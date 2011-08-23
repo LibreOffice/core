@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,8 @@ public:
                             XFillAttrSetItem(const XFillAttrSetItem& rAttr,
                                              SfxItemPool* pItemPool);
     virtual SfxPoolItem*    Clone( SfxItemPool* pToPool ) const;
-    virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVersion ) const;
-    virtual SvStream&       Store( SvStream& rStream, sal_uInt16 nItemVersion ) const;
+    virtual SfxPoolItem*    Create( SvStream& rStream, USHORT nVersion ) const;
+    virtual SvStream&       Store( SvStream& rStream, USHORT nItemVersion ) const;
 };
 
 #endif

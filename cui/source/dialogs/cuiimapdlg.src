@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,6 @@
 
 ModalDialog RID_SVXDLG_IMAPURL
 {
-    HelpID = "cui:ModalDialog:RID_SVXDLG_IMAPURL";
     SVLook = TRUE ;
     OutputSize = TRUE ;
     Closeable = TRUE ;
@@ -47,7 +46,6 @@ ModalDialog RID_SVXDLG_IMAPURL
     };
     Edit EDT_URL
     {
-        HelpID = "cui:Edit:RID_SVXDLG_IMAPURL:EDT_URL";
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -63,7 +61,6 @@ ModalDialog RID_SVXDLG_IMAPURL
     };
     ComboBox CBB_TARGETS
     {
-        HelpID = "cui:ComboBox:RID_SVXDLG_IMAPURL:CBB_TARGETS";
         Border = TRUE ;
         Sort = TRUE ;
         Pos = MAP_APPFONT ( 6 , 43 ) ;
@@ -72,7 +69,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         DropDown = TRUE ;
         HScroll = TRUE ;
     };
-
+    
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 6 , 59 ) ;
@@ -81,7 +78,6 @@ ModalDialog RID_SVXDLG_IMAPURL
     };
     Edit EDT_NAME
     {
-        HelpID = "cui:Edit:RID_SVXDLG_IMAPURL:EDT_NAME";
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -98,7 +94,6 @@ ModalDialog RID_SVXDLG_IMAPURL
 
     Edit EDT_URLDESCRIPTION
     {
-        HelpID = "cui:Edit:RID_SVXDLG_IMAPURL:EDT_URLDESCRIPTION";
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -114,7 +109,6 @@ ModalDialog RID_SVXDLG_IMAPURL
 
     MultiLineEdit EDT_DESCRIPTION
     {
-        HelpID = "cui:MultiLineEdit:RID_SVXDLG_IMAPURL:EDT_DESCRIPTION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 122 ) ;
         Size = MAP_APPFONT ( 202 , 34 ) ;
@@ -128,7 +122,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Pos = MAP_APPFONT ( 0 , 160 ) ;
         Size = MAP_APPFONT ( 214 , 4 ) ;
     };
-
+    
     // Buttons
     HelpButton BTN_HELP1
     {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ DBG_NAME(CntByteItem)
 TYPEINIT1_AUTOFACTORY(CntByteItem, SfxPoolItem);
 
 //============================================================================
-CntByteItem::CntByteItem(sal_uInt16 which, SvStream & rStream):
+CntByteItem::CntByteItem(USHORT which, SvStream & rStream):
     SfxPoolItem(which)
 {
     DBG_CTOR(CntByteItem, 0);
@@ -88,7 +88,7 @@ SfxItemPresentation CntByteItem::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-bool CntByteItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
+bool CntByteItem::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 {
     sal_Int8 nValue = m_nValue;
     rVal <<= nValue;
@@ -97,7 +97,7 @@ bool CntByteItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 
 //============================================================================
 // virtual
-bool CntByteItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
+bool CntByteItem::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
     sal_Int8 nValue = sal_Int8();
     if (rVal >>= nValue)
@@ -106,23 +106,23 @@ bool CntByteItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
         return true;
     }
 
-    OSL_FAIL( "CntByteItem::PutValue - Wrong type!" );
+    DBG_ERROR( "CntByteItem::PutValue - Wrong type!" );
     return false;
 }
 
 //============================================================================
 // virtual
-SfxPoolItem * CntByteItem::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * CntByteItem::Create(SvStream & rStream, USHORT) const
 {
     DBG_CHKTHIS(CntByteItem, 0);
     short nTheValue = 0;
     rStream >> nTheValue;
-    return new CntByteItem(Which(), sal_uInt8(nTheValue));
+    return new CntByteItem(Which(), BYTE(nTheValue));
 }
 
 //============================================================================
 // virtual
-SvStream & CntByteItem::Store(SvStream & rStream, sal_uInt16) const
+SvStream & CntByteItem::Store(SvStream & rStream, USHORT) const
 {
     DBG_CHKTHIS(CntByteItem, 0);
     rStream << short(m_nValue);
@@ -139,7 +139,7 @@ SfxPoolItem * CntByteItem::Clone(SfxItemPool *) const
 
 //============================================================================
 // virtual
-sal_uInt8 CntByteItem::GetMin() const
+BYTE CntByteItem::GetMin() const
 {
     DBG_CHKTHIS(CntByteItem, 0);
     return 0;
@@ -147,7 +147,7 @@ sal_uInt8 CntByteItem::GetMin() const
 
 //============================================================================
 // virtual
-sal_uInt8 CntByteItem::GetMax() const
+BYTE CntByteItem::GetMax() const
 {
     DBG_CHKTHIS(CntByteItem, 0);
     return 255;
@@ -173,11 +173,11 @@ DBG_NAME(CntUInt16Item);
 TYPEINIT1_AUTOFACTORY(CntUInt16Item, SfxPoolItem);
 
 //============================================================================
-CntUInt16Item::CntUInt16Item(sal_uInt16 which, SvStream & rStream) :
+CntUInt16Item::CntUInt16Item(USHORT which, SvStream & rStream) :
     SfxPoolItem(which)
 {
     DBG_CTOR(CntUInt16Item, 0);
-    sal_uInt16 nTheValue = 0;
+    USHORT nTheValue = 0;
     rStream >> nTheValue;
     m_nValue = nTheValue;
 }
@@ -223,7 +223,7 @@ SfxItemPresentation CntUInt16Item::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-bool CntUInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
+bool CntUInt16Item::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 {
     sal_Int32 nValue = m_nValue;
     rVal <<= nValue;
@@ -232,7 +232,7 @@ bool CntUInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 
 //============================================================================
 // virtual
-bool CntUInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
+bool CntUInt16Item::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
     sal_Int32 nValue = 0;
     if (rVal >>= nValue)
@@ -242,13 +242,13 @@ bool CntUInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
         return true;
     }
 
-    OSL_FAIL( "CntUInt16Item::PutValue - Wrong type!" );
+    DBG_ERROR( "CntUInt16Item::PutValue - Wrong type!" );
     return false;
 }
 
 //============================================================================
 // virtual
-SfxPoolItem * CntUInt16Item::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * CntUInt16Item::Create(SvStream & rStream, USHORT) const
 {
     DBG_CHKTHIS(CntUInt16Item, 0);
     return new CntUInt16Item(Which(), rStream);
@@ -256,10 +256,10 @@ SfxPoolItem * CntUInt16Item::Create(SvStream & rStream, sal_uInt16) const
 
 //============================================================================
 // virtual
-SvStream & CntUInt16Item::Store(SvStream &rStream, sal_uInt16) const
+SvStream & CntUInt16Item::Store(SvStream &rStream, USHORT) const
 {
     DBG_CHKTHIS(CntUInt16Item, 0);
-    rStream << sal_uInt16(m_nValue);
+    rStream << USHORT(m_nValue);
     return rStream;
 }
 
@@ -273,7 +273,7 @@ SfxPoolItem * CntUInt16Item::Clone(SfxItemPool *) const
 
 //============================================================================
 // virtual
-sal_uInt16 CntUInt16Item::GetMin() const
+UINT16 CntUInt16Item::GetMin() const
 {
     DBG_CHKTHIS(CntUInt16Item, 0);
     return 0;
@@ -281,7 +281,7 @@ sal_uInt16 CntUInt16Item::GetMin() const
 
 //============================================================================
 // virtual
-sal_uInt16 CntUInt16Item::GetMax() const
+UINT16 CntUInt16Item::GetMax() const
 {
     DBG_CHKTHIS(CntUInt16Item, 0);
     return 65535;
@@ -307,7 +307,7 @@ DBG_NAME(CntInt32Item);
 TYPEINIT1_AUTOFACTORY(CntInt32Item, SfxPoolItem);
 
 //============================================================================
-CntInt32Item::CntInt32Item(sal_uInt16 which, SvStream & rStream) :
+CntInt32Item::CntInt32Item(USHORT which, SvStream & rStream) :
     SfxPoolItem(which)
 {
     DBG_CTOR(CntInt32Item, 0);
@@ -355,7 +355,7 @@ SfxItemPresentation CntInt32Item::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-bool CntInt32Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
+bool CntInt32Item::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 {
     sal_Int32 nValue = m_nValue;
     rVal <<= nValue;
@@ -364,7 +364,7 @@ bool CntInt32Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 
 //============================================================================
 // virtual
-bool CntInt32Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
+bool CntInt32Item::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
     sal_Int32 nValue = 0;
     if (rVal >>= nValue)
@@ -373,13 +373,13 @@ bool CntInt32Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
         return true;
     }
 
-    OSL_FAIL( "CntInt32Item::PutValue - Wrong type!" );
+    DBG_ERROR( "CntInt32Item::PutValue - Wrong type!" );
     return false;
 }
 
 //============================================================================
 // virtual
-SfxPoolItem * CntInt32Item::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * CntInt32Item::Create(SvStream & rStream, USHORT) const
 {
     DBG_CHKTHIS(CntInt32Item, 0);
     return new CntInt32Item(Which(), rStream);
@@ -387,7 +387,7 @@ SfxPoolItem * CntInt32Item::Create(SvStream & rStream, sal_uInt16) const
 
 //============================================================================
 // virtual
-SvStream & CntInt32Item::Store(SvStream &rStream, sal_uInt16) const
+SvStream & CntInt32Item::Store(SvStream &rStream, USHORT) const
 {
     DBG_CHKTHIS(CntInt32Item, 0);
     rStream << long(m_nValue);
@@ -404,15 +404,15 @@ SfxPoolItem * CntInt32Item::Clone(SfxItemPool *) const
 
 //============================================================================
 // virtual
-sal_Int32 CntInt32Item::GetMin() const
+INT32 CntInt32Item::GetMin() const
 {
     DBG_CHKTHIS(CntInt32Item, 0);
-    return sal_Int32(0x80000000);
+    return INT32(0x80000000);
 }
 
 //============================================================================
 // virtual
-sal_Int32 CntInt32Item::GetMax() const
+INT32 CntInt32Item::GetMax() const
 {
     DBG_CHKTHIS(CntInt32Item, 0);
     return 0x7FFFFFFF;
@@ -438,7 +438,7 @@ DBG_NAME(CntUInt32Item);
 TYPEINIT1_AUTOFACTORY(CntUInt32Item, SfxPoolItem);
 
 //============================================================================
-CntUInt32Item::CntUInt32Item(sal_uInt16 which, SvStream & rStream) :
+CntUInt32Item::CntUInt32Item(USHORT which, SvStream & rStream) :
     SfxPoolItem(which)
 {
     DBG_CTOR(CntUInt32Item, 0);
@@ -488,7 +488,7 @@ SfxItemPresentation CntUInt32Item::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-bool CntUInt32Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
+bool CntUInt32Item::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 {
     sal_Int32 nValue = m_nValue;
     DBG_ASSERT( nValue>=0, "Overflow in UInt32 value!");
@@ -498,7 +498,7 @@ bool CntUInt32Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 
 //============================================================================
 // virtual
-bool CntUInt32Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
+bool CntUInt32Item::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 {
     sal_Int32 nValue = 0;
     if (rVal >>= nValue)
@@ -508,13 +508,13 @@ bool CntUInt32Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
         return true;
     }
 
-    OSL_FAIL( "CntUInt32Item::PutValue - Wrong type!" );
+    DBG_ERROR( "CntUInt32Item::PutValue - Wrong type!" );
     return false;
 }
 
 //============================================================================
 // virtual
-SfxPoolItem * CntUInt32Item::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * CntUInt32Item::Create(SvStream & rStream, USHORT) const
 {
     DBG_CHKTHIS(CntUInt32Item, 0);
     return new CntUInt32Item(Which(), rStream);
@@ -522,7 +522,7 @@ SfxPoolItem * CntUInt32Item::Create(SvStream & rStream, sal_uInt16) const
 
 //============================================================================
 // virtual
-SvStream & CntUInt32Item::Store(SvStream &rStream, sal_uInt16) const
+SvStream & CntUInt32Item::Store(SvStream &rStream, USHORT) const
 {
     DBG_CHKTHIS(CntUInt32Item, 0);
     rStream << static_cast<sal_uInt32>(m_nValue);
@@ -539,7 +539,7 @@ SfxPoolItem * CntUInt32Item::Clone(SfxItemPool *) const
 
 //============================================================================
 // virtual
-sal_uInt32 CntUInt32Item::GetMin() const
+UINT32 CntUInt32Item::GetMin() const
 {
     DBG_CHKTHIS(CntUInt32Item, 0);
     return 0;
@@ -547,7 +547,7 @@ sal_uInt32 CntUInt32Item::GetMin() const
 
 //============================================================================
 // virtual
-sal_uInt32 CntUInt32Item::GetMax() const
+UINT32 CntUInt32Item::GetMax() const
 {
     DBG_CHKTHIS(CntUInt32Item, 0);
     return 0xFFFFFFFF;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,22 +33,22 @@
 #include <document.hxx>
 
 // Defaultwerte
-const sal_uInt8 nDezStd = 0;        // Dezimalstellen fuer Standard-Zellen
-const sal_uInt8 nDezFloat = 2;  //        "         "  Float-Zellen
+const BYTE	nDezStd = 0;		// Dezimalstellen fuer Standard-Zellen
+const BYTE	nDezFloat = 2;	//        "         "  Float-Zellen
 
-void        PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char *pString );
+void		PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char *pString );
 
-void        SetFormat( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sal_uInt8 nSt );
+void		SetFormat( SCCOL nCol, SCROW nRow, SCTAB nTab, BYTE nFormat, BYTE nSt );
 
-void        InitPage( void );
+void		InitPage( void );
 
-String      DosToSystem( sal_Char *pSource );
+String		DosToSystem( sal_Char *pSource );
 
-double      SnumToDouble( sal_Int16 nVal );
+double		SnumToDouble( INT16 nVal );
 
-double          Snum32ToDouble( sal_uInt32 nValue );
+double          Snum32ToDouble( UINT32 nValue );
 
-typedef sal_uInt16 StampTyp;
+typedef UINT16 StampTyp;
 
 #define MAKE_STAMP(nF,nS) ((nS&0x0F)+((nF&0x7F)*16))
             // Bit 0...3  = Bit 0...3 von Stellenzahl
@@ -57,8 +57,8 @@ typedef sal_uInt16 StampTyp;
 class FormIdent
 {
 private:
-    StampTyp        nStamp;         // Identifikations-Schluessel
-    SfxUInt32Item*  pAttr;          // zugehoeriges Attribut
+    StampTyp		nStamp;			// Identifikations-Schluessel
+    SfxUInt32Item*	pAttr;			// zugehoeriges Attribut
 public:
                     FormIdent( void )
                     {
@@ -66,39 +66,39 @@ public:
                         pAttr = NULL;
                     }
 
-                    FormIdent( sal_uInt8 nFormat, sal_uInt8 nSt, SfxUInt32Item& rAttr )
+                    FormIdent( BYTE nFormat, BYTE nSt, SfxUInt32Item& rAttr )
                     {
                         nStamp = MAKE_STAMP( nFormat, nSt );
                         pAttr = &rAttr;
                     }
 
-                    FormIdent( sal_uInt8 nFormat, sal_uInt8 nSt )
+                    FormIdent( BYTE nFormat, BYTE nSt )
                     {
                         nStamp = MAKE_STAMP( nFormat, nSt );
                         pAttr = NULL;
                     }
 
-    sal_Bool            operator ==( const FormIdent& rComp ) const
+    BOOL			operator ==( const FormIdent& rComp ) const
                     {
                         return ( nStamp == rComp.nStamp );
                     }
 
-    sal_Bool            operator ==( const StampTyp& rStamp ) const
+    BOOL			operator ==( const StampTyp& rStamp ) const
                     {
                         return ( nStamp == rStamp );
                     }
 
-    StampTyp        GetStamp( void ) const
+    StampTyp		GetStamp( void ) const
                     {
                         return nStamp;
                     }
 
-    SfxUInt32Item*  GetAttr( void )
+    SfxUInt32Item*	GetAttr( void )
                     {
                         return pAttr;
                     }
 
-    void            SetStamp( sal_uInt8 nFormat, sal_uInt8 nSt )
+    void			SetStamp( BYTE nFormat, BYTE nSt )
                     {
                         nStamp = MAKE_STAMP( nFormat, nSt );
                     }
@@ -113,34 +113,34 @@ public:
 class FormCache
 {
 private:
-    FormIdent           aIdents[ __nSize ]; //gepufferte Formate
-    sal_Bool                bValid[ __nSize ];
-    FormIdent           aCompareIdent;      // zum Vergleichen
-    sal_uInt8               nDefaultFormat;     // Defaultformat der Datei
-    SvNumberFormatter*  pFormTable;         // Value-Format-Table-Anker
-    StampTyp            nIndex;
-    LanguageType        eLanguage;          // Systemsprache
+    FormIdent			aIdents[ __nSize ];	//gepufferte Formate
+    BOOL				bValid[ __nSize ];
+    FormIdent			aCompareIdent;		// zum Vergleichen
+    BYTE				nDefaultFormat;		// Defaultformat der Datei
+    SvNumberFormatter*	pFormTable;			// Value-Format-Table-Anker
+    StampTyp			nIndex;
+    LanguageType		eLanguage;			// Systemsprache
 
-    SfxUInt32Item*      NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt );
+    SfxUInt32Item*		NewAttr( BYTE nFormat, BYTE nSt );
 public:
-                        FormCache( ScDocument*, sal_uInt8 nNewDefaultFormat = 0xFF );
+                        FormCache( ScDocument*, BYTE nNewDefaultFormat = 0xFF );
                         ~FormCache();
 
-    inline const SfxUInt32Item* GetAttr( sal_uInt8 nFormat, sal_uInt8 nSt );
-    void                SetDefaultFormat( sal_uInt8 nD = 0xFF )
+    inline const SfxUInt32Item*	GetAttr( BYTE nFormat, BYTE nSt );
+    void				SetDefaultFormat( BYTE nD = 0xFF )
                         {
                             nDefaultFormat = nD;
                         }
 };
 
 
-inline const SfxUInt32Item* FormCache::GetAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
+inline const SfxUInt32Item* FormCache::GetAttr( BYTE nFormat, BYTE nSt )
 {
-    // PREC:    nFormat = Lotus-Format-Byte
-    //          nSt = Stellenzahl
-    // POST:    return = zu nFormat und nSt passendes SC-Format
-    SfxUInt32Item*      pAttr;
-    SfxUInt32Item*      pRet;
+    // PREC:	nFormat = Lotus-Format-Byte
+    //			nSt = Stellenzahl
+    // POST:	return = zu nFormat und nSt passendes SC-Format
+    SfxUInt32Item*		pAttr;
+    SfxUInt32Item*		pRet;
 
     aCompareIdent.SetStamp( nFormat, nSt );
     nIndex = aCompareIdent.GetStamp();
@@ -154,7 +154,7 @@ inline const SfxUInt32Item* FormCache::GetAttr( sal_uInt8 nFormat, sal_uInt8 nSt
         DBG_ASSERT( pAttr, "FormCache::GetAttr(): Nix Speicherus" );
 
         aIdents[ nIndex ] = FormIdent( nFormat, nSt, *pAttr );
-        bValid[ nIndex ] = sal_True;
+        bValid[ nIndex ] = TRUE;
 
         pRet = pAttr;
     }

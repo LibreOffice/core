@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 
 
 ConstArc::ConstArc(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView)
-    : SwDrawBase(pWrtShell, pEditWin, pSwView), nAnzButUp(0)
+    : SwDrawBase(pWrtShell, pEditWin, pSwView),	nAnzButUp(0)
 {
 }
 
@@ -62,11 +62,11 @@ ConstArc::ConstArc(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView)
 
 
 
-sal_Bool ConstArc::MouseButtonDown( const MouseEvent& rMEvt )
+BOOL ConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    sal_Bool bReturn;
+    BOOL bReturn;
 
-    if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)) == sal_True)
+    if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)) == TRUE)
     {
         if (!nAnzButUp)
             aStartPnt = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
@@ -82,9 +82,9 @@ sal_Bool ConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 
 
 
-sal_Bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
+BOOL ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    sal_Bool bReturn = sal_False;
+    BOOL bReturn = FALSE;
 
     if ((m_pSh->IsDrawCreate() || m_pWin->IsDrawAction()) && rMEvt.IsLeft())
     {
@@ -92,21 +92,26 @@ sal_Bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
         if (!nAnzButUp && aPnt == aStartPnt)
         {
             SwDrawBase::MouseButtonUp(rMEvt);
-            bReturn = sal_True;
+            bReturn = TRUE;
         }
         else
-        {   nAnzButUp++;
+        {	nAnzButUp++;
 
-            if (nAnzButUp == 3)     // Kreisbogenerzeugung beendet
+            if (nAnzButUp == 3)		// Kreisbogenerzeugung beendet
             {
                 SwDrawBase::MouseButtonUp(rMEvt);
                 nAnzButUp = 0;
-                bReturn = sal_True;
+                bReturn = TRUE;
             }
             else
                 m_pSh->EndCreate(SDRCREATE_NEXTPOINT);
         }
     }
+/*	else if ( pView->IsCreateObj() && rMEvt.IsRight() )
+    {
+        pView->EndCreateObj( SDRCREATE_FORCEEND );
+        bReturn = TRUE;
+    }*/
 
     return (bReturn);
 }
@@ -119,7 +124,7 @@ sal_Bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 
 
 
-void ConstArc::Activate(const sal_uInt16 nSlotId)
+void ConstArc::Activate(const USHORT nSlotId)
 {
     switch (nSlotId)
     {

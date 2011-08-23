@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <cppcanvas/canvasgraphic.hxx>
 #include <cppcanvas/bitmapcanvas.hxx>
 
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering 
 {
     class  XBitmap;
 } } } }
@@ -67,12 +67,12 @@ namespace cppcanvas
 
             @return whether the rendering finished successfully.
          */
-        virtual bool                        drawAlphaModulated( double nAlphaModulation ) const = 0;
+        virtual bool 						drawAlphaModulated( double nAlphaModulation ) const = 0;
 
-        virtual BitmapCanvasSharedPtr       getBitmapCanvas() const = 0;
+        virtual BitmapCanvasSharedPtr		getBitmapCanvas() const = 0;
 
-        virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::rendering::XBitmap >  getUNOBitmap() const = 0;
+        virtual ::com::sun::star::uno::Reference< 
+            ::com::sun::star::rendering::XBitmap > 	getUNOBitmap() const = 0;
     };
 
     typedef ::boost::shared_ptr< ::cppcanvas::Bitmap > BitmapSharedPtr;

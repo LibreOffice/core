@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ SAL_DLLPUBLIC_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStor
         }
         catch(Exception&)
         {
-            OSL_FAIL( "NativeStorageAccess::close: caught an exception while flushing!" );
+            OSL_ENSURE( false, "NativeStorageAccess::close: caught an exception while flushing!" );
         }
 #ifdef HSQLDB_DBG
     {
@@ -237,7 +237,7 @@ jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject /*obj_this*/,js
         jsize nLen = env->GetArrayLength(buffer);
         if ( nLen < len || len <= 0 )
         {
-            ThrowException( env,
+            ThrowException(	env,
                     "java/io/IOException",
                     "len is greater or equal to the buffer size");
             return -1;
@@ -265,7 +265,7 @@ jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject /*obj_this*/,js
 #endif
         return nBytesRead;
     }
-    ThrowException( env,
+    ThrowException(	env,
                     "java/io/IOException",
                     "Stream is not valid");
     return -1;
@@ -354,7 +354,7 @@ SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStor
 #endif
         return nRet;
     }
-    ThrowException( env,
+    ThrowException(	env,
                     "java/io/IOException",
                     "No InputStream");
     return -1;
@@ -443,14 +443,14 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jst
             if (JNI_FALSE != env->ExceptionCheck())
             {
                 env->ExceptionClear();
-                OSL_FAIL("ExceptionClear");
+                OSL_ENSURE(0,"ExceptionClear");
             }
             OSL_ENSURE(buf,"buf is NULL");
             if ( buf && len > 0 && len <= env->GetArrayLength(buffer))
             {
                 Sequence< ::sal_Int8 > aData(buf + off,len);
                 env->ReleaseByteArrayElements(buffer, buf, JNI_ABORT);
-                xOut->writeBytes(aData);
+                xOut->writeBytes(aData);				
 #ifdef HSQLDB_DBG
                 if ( logger )
                     logger->write( aData.getConstArray(), len );
@@ -459,14 +459,14 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jst
         }
         else
         {
-            ThrowException( env,
+            ThrowException(	env,
                     "java/io/IOException",
                     "No OutputStream");
         }
     }
     catch(Exception& e)
     {
-        OSL_FAIL("Exception caught! : write [BII)V");
+        OSL_ENSURE(0,"Exception caught! : write [BII)V");
         StorageContainer::throwJavaException(e,env);
     }
 }
@@ -518,14 +518,14 @@ void write_to_storage_stream( JNIEnv* env, jobject /*obj_this*/, jstring name, j
         }
         else
         {
-            ThrowException( env,
+            ThrowException(	env,
                     "java/io/IOException",
                     "No OutputStream");
         }
     }
     catch(Exception& e)
     {
-        OSL_FAIL("Exception catched! : writeBytes(aData);");
+        OSL_ENSURE(0,"Exception catched! : writeBytes(aData);");
         StorageContainer::throwJavaException(e,env);
     }
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,12 +55,12 @@ using SbxVariable::GetInfo;
     // Definition eines Tabelleneintrags. Dies wird hier gemacht,
     // da dadurch die Methoden und Properties als private deklariert
     // werden koennen.
-#if defined ( ICC ) || defined ( C50 ) || defined ( C52 )
+#if defined ( ICC ) || defined ( HPUX ) || defined ( C50 ) || defined ( C52 )
 public:
 #endif
     typedef void( SampleObject::*pMeth )
-        ( SbxVariable* pThis, SbxArray* pArgs, sal_Bool bWrite );
-#if defined ( ICC )
+        ( SbxVariable* pThis, SbxArray* pArgs, BOOL bWrite );
+#if defined ( ICC ) || defined ( HPUX )
 private:
 #endif
 
@@ -73,10 +73,10 @@ private:
     static Methods aMethods[];  // Methodentabelle
 
     // Methoden
-    void Display( SbxVariable*, SbxArray*, sal_Bool );
-    void Event( SbxVariable*, SbxArray*, sal_Bool );
-    void Square( SbxVariable*, SbxArray*, sal_Bool );
-    void Create( SbxVariable*, SbxArray*, sal_Bool );
+    void Display( SbxVariable*, SbxArray*, BOOL );
+    void Event( SbxVariable*, SbxArray*, BOOL );
+    void Square( SbxVariable*, SbxArray*, BOOL );
+    void Create( SbxVariable*, SbxArray*, BOOL );
     // Infoblock auffuellen
     SbxInfo* GetInfo( short nIdx );
     // Broadcaster Notification

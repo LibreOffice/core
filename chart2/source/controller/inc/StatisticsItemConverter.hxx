@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 
 #include "ItemConverter.hxx"
 #include "GraphicPropertyItemConverter.hxx"
-#include "NumberFormatterWrapper.hxx"
+#include "chartview/NumberFormatterWrapper.hxx"
 
 #include <vector>
 
@@ -56,12 +56,12 @@ public:
     virtual ~StatisticsItemConverter();
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const;
+    virtual const USHORT * GetWhichPairs() const;
     virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const;
 
-    virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
+    virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
         throw( ::com::sun::star::uno::Exception );
-    virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
+    virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
         throw( ::com::sun::star::uno::Exception );
 
 private:

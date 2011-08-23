@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,19 +36,19 @@
 
 class SwMergeTblDlg : public SvxStandardDialog
 {
-    OKButton        aOKPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
+    OKButton 		aOKPB;
+    CancelButton 	aCancelPB;
+    HelpButton 		aHelpPB;
     FixedLine        aMergeFL;
-    RadioButton     aMergePrevRB;
-    RadioButton     aMergeNextRB;
+    RadioButton		aMergePrevRB;
+    RadioButton		aMergeNextRB;
 
-    sal_Bool&           rMergePrev;
+    BOOL& 			rMergePrev;
 protected:
     virtual void Apply();
 
 public:
-    SwMergeTblDlg( Window *pParent, sal_Bool& rWithPrev );
+    SwMergeTblDlg( Window *pParent, BOOL& rWithPrev );
 };
 
 #endif

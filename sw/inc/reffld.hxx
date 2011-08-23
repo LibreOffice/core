@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef SW_REFFLD_HXX
-#define SW_REFFLD_HXX
+#ifndef _REFFLD_HXX
+#define _REFFLD_HXX
 
 #include <fldbas.hxx>
 
@@ -56,7 +56,7 @@ enum REFERENCEMARK
     REF_ONLYNUMBER,
     REF_ONLYCAPTION,
     REF_ONLYSEQNO,
-    // --> #i81002#
+    // --> OD 2007-08-24 #i81002#
     // new reference format types for referencing bookmarks and set references
     REF_NUMBER,
     REF_NUMBER_NO_CONTEXT,
@@ -73,20 +73,19 @@ enum REFERENCEMARK
 class SwGetRefFieldType : public SwFieldType
 {
     SwDoc* pDoc;
-protected:
-    // ueberlagert, um alle Ref-Felder zu updaten
-   virtual void Modify( const SfxPoolItem*, const SfxPoolItem * );
 public:
     SwGetRefFieldType(SwDoc* pDoc );
     virtual SwFieldType*    Copy() const;
 
-    SwDoc*                  GetDoc() const { return pDoc; }
+    SwDoc* 					GetDoc() const { return pDoc; }
+    // ueberlagert, um alle Ref-Felder zu updaten
+    virtual void Modify( SfxPoolItem *, SfxPoolItem * );
 
     void MergeWithOtherDoc( SwDoc& rDestDoc );
 
     static SwTxtNode* FindAnchor( SwDoc* pDoc, const String& rRefMark,
-                                        sal_uInt16 nSubType, sal_uInt16 nSeqNo,
-                                        sal_uInt16* pStt, sal_uInt16* pEnd = 0 );
+                                        USHORT nSubType, USHORT nSeqNo,
+                                        USHORT* pStt, USHORT* pEnd = 0 );
 };
 
 /*--------------------------------------------------------------------
@@ -98,28 +97,27 @@ class SW_DLLPUBLIC SwGetRefField : public SwField
 private:
     String sSetRefName;
     String sTxt;
-    sal_uInt16 nSubType;
-    sal_uInt16 nSeqNo;
+    USHORT nSubType;
+    USHORT nSeqNo;
 
-    virtual String      Expand() const;
-    virtual SwField*    Copy() const;
-
-    // #i81002#
+    // --> OD 2007-08-24 #i81002#
     String MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
                           const SwTxtNode& rTxtNodeOfReferencedItem,
                           const sal_uInt32 nRefNumFormat ) const;
-
+    // <--
 public:
     SwGetRefField( SwGetRefFieldType*, const String& rSetRef,
-                    sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uLong nFmt );
+                    USHORT nSubType, USHORT nSeqNo, ULONG nFmt );
 
     virtual ~SwGetRefField();
 
-    virtual String      GetFieldName() const;
+    virtual	String		GetCntnt(BOOL bName = FALSE) const;
+    virtual String	 	Expand() const;
+    virtual SwField* 	Copy() const;
 
-    const String&       GetSetRefName() const { return sSetRefName; }
+    const String& 		GetSetRefName() const { return sSetRefName; }
 
-    // #i81002#
+    // --> OD 2007-09-06 #i81002#
     // The <SwTxtFld> instance, which represents the text attribute for the
     // <SwGetRefField> instance, has to be passed to the method.
     // This <SwTxtFld> instance is needed for the reference format type REF_UPDOWN
@@ -127,33 +125,33 @@ public:
     // Note: This instance may be NULL (field in Undo/Redo). This will cause
     // no update for these reference format types.
     void                UpdateField( const SwTxtFld* pFldTxtAttr );
-
-    void                SetExpand( const String& rStr ) { sTxt = rStr; }
+    // <--
+    void 				SetExpand( const String& rStr ) { sTxt = rStr; }
 
     // SubType erfragen/setzen
-    virtual sal_uInt16      GetSubType() const;
-    virtual void        SetSubType( sal_uInt16 n );
+    virtual USHORT 		GetSubType() const;
+    virtual void  		SetSubType( USHORT n );
 
-    // --> #i81002#
+    // --> OD 2007-11-09 #i81002#
     bool IsRefToHeadingCrossRefBookmark() const;
     bool IsRefToNumItemCrossRefBookmark() const;
     const SwTxtNode* GetReferencedTxtNode() const;
     // <--
-    // #i85090#
+    // --> OD 2008-01-09 #i85090#
     String GetExpandedTxtOfReferencedTxtNode() const;
-
+    // <--
 
     // SequenceNo erfragen/setzen (nur fuer REF_SEQUENCEFLD interressant)
-    sal_uInt16              GetSeqNo() const        { return nSeqNo; }
-    void                SetSeqNo( sal_uInt16 n )    { nSeqNo = n; }
+    USHORT 				GetSeqNo() const		{ return nSeqNo; }
+    void  				SetSeqNo( USHORT n ) 	{ nSeqNo = n; }
 
     // Name der Referenz
     virtual const String& GetPar1() const;
-    virtual void        SetPar1(const String& rStr);
+    virtual void		SetPar1(const String& rStr);
 
-    virtual String      GetPar2() const;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
+    virtual String 		GetPar2() const;
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
 
     void                ConvertProgrammaticToUIName();
 
@@ -161,6 +159,6 @@ public:
 };
 
 
-#endif // SW_REFFLD_HXX
+#endif // _REFFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

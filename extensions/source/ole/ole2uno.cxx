@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,6 +54,22 @@ Mutex * getBridgeMutex()
             MutexInit(), ::osl::GetGlobalMutex());
 }
 
+
+// Mutex* getBridgeMutex()
+// {
+// 	static Mutex* pMutex= NULL;
+
+// 	if( ! pMutex)
+// 	{
+// 		MutexGuard guard( Mutex::getGlobalMutex() );
+// 		if( !pMutex)
+// 		{
+// 			static Mutex aMutex;
+// 			pMutex= &aMutex;
+// 		}
+// 	}
+// 	return pMutex;
+// }
 
 }
 

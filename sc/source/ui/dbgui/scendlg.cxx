@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,32 +52,32 @@
 
 //========================================================================
 
-ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bool bEdit, sal_Bool bSheetProtected)
+ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL bEdit, BOOL bSheetProtected)
 
-    :   ModalDialog     ( pParent, ScResId( RID_SCDLG_NEWSCENARIO ) ),
+    :	ModalDialog 	( pParent, ScResId( RID_SCDLG_NEWSCENARIO ) ),
         aFlName         ( this, ScResId( FL_NAME )),
-        aEdName         ( this, ScResId( ED_NAME ) ),
+        aEdName 		( this, ScResId( ED_NAME ) ),
         aFlComment      ( this, ScResId( FL_COMMENT ) ),
-        aEdComment      ( this, ScResId( ED_COMMENT ) ),
+        aEdComment		( this, ScResId( ED_COMMENT ) ),
         aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
-        aCbShowFrame    ( this, ScResId( CB_SHOWFRAME ) ),
-        aLbColor        ( this, ScResId( LB_COLOR ) ),
-        //aCbPrintFrame ( this, ScResId( CB_PRINTFRAME ) ),
-        aCbTwoWay       ( this, ScResId( CB_TWOWAY ) ),
-        //aCbAttrib     ( this, ScResId( CB_ATTRIB ) ),
-        //aCbValue      ( this, ScResId( CB_VALUE ) ),
-        aCbCopyAll      ( this, ScResId( CB_COPYALL ) ),
+        aCbShowFrame	( this, ScResId( CB_SHOWFRAME ) ),
+        aLbColor		( this, ScResId( LB_COLOR ) ),
+        //aCbPrintFrame	( this, ScResId( CB_PRINTFRAME ) ),
+        aCbTwoWay		( this, ScResId( CB_TWOWAY ) ),
+        //aCbAttrib		( this, ScResId( CB_ATTRIB ) ),
+        //aCbValue		( this, ScResId( CB_VALUE ) ),
+        aCbCopyAll		( this, ScResId( CB_COPYALL ) ),
         aCbProtect      ( this, ScResId( CB_PROTECT ) ),
-        aBtnOk          ( this, ScResId( BTN_OK ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
+        aBtnOk			( this, ScResId( BTN_OK ) ),
+        aBtnCancel		( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp		( this, ScResId( BTN_HELP ) ),
         aDefScenarioName( rName ),
-        bIsEdit         ( bEdit )
+        bIsEdit			( bEdit )
 {
     if (bIsEdit)
         SetText(String(ScResId(STR_EDIT)));
 
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    SfxObjectShell*	pDocSh = SfxObjectShell::Current();
     if ( pDocSh )
     {
         const SfxPoolItem* pItem = pDocSh->GetItem( SID_COLOR_TABLE );
@@ -86,14 +86,14 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bo
             XColorTable* pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();
             if (pColorTable)
             {
-                aLbColor.SetUpdateMode( false );
+                aLbColor.SetUpdateMode( FALSE );
                 long nCount = pColorTable->Count();
                 for ( long n=0; n<nCount; n++ )
                 {
                     XColorEntry* pEntry = pColorTable->GetColor(n);
                     aLbColor.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
                 }
-                aLbColor.SetUpdateMode( sal_True );
+                aLbColor.SetUpdateMode( TRUE );
             }
         }
     }
@@ -113,62 +113,57 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bo
     aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
     aComment += ScGlobal::GetpLocaleData()->getTime( Time() );
 
-    aEdComment  .SetText( aComment );
-    aEdName     .SetText( rName );
-    aBtnOk      .SetClickHdl( LINK( this, ScNewScenarioDlg, OkHdl ) );
+    aEdComment	.SetText( aComment );
+    aEdName 	.SetText( rName );
+    aBtnOk		.SetClickHdl( LINK( this, ScNewScenarioDlg, OkHdl ) );
     aCbShowFrame.SetClickHdl( LINK( this, ScNewScenarioDlg, EnableHdl ) );
-
-    aLbColor.SetAccessibleName(String(ScResId( STR_COLOR ) ));
 
     FreeResource();
 
     aLbColor.SelectEntry( Color( COL_LIGHTGRAY ) );
-    aCbShowFrame.Check(sal_True);
-    //aCbPrintFrame.Check(sal_True);
-    aCbTwoWay.Check(sal_True);
-    //aCbAttrib.Check(sal_False);
-    //aCbValue.Check(sal_False);
-    aCbCopyAll.Check(false);
-    aCbProtect.Check(sal_True);
+    aCbShowFrame.Check(TRUE);
+    //aCbPrintFrame.Check(TRUE);
+    aCbTwoWay.Check(TRUE);
+    //aCbAttrib.Check(FALSE);
+    //aCbValue.Check(FALSE);
+    aCbCopyAll.Check(FALSE);
+    aCbProtect.Check(TRUE);
 
     if (bIsEdit)
-        aCbCopyAll.Enable(false);
+        aCbCopyAll.Enable(FALSE);
     // If the Sheet is protected then we disable the Scenario Protect input
     // and default it to true above. Note we are in 'Add' mode here as: if
     // Sheet && scenario protection are true, then we cannot edit this dialog.
     if (bSheetProtected)
-        aCbProtect.Enable(false);
+        aCbProtect.Enable(FALSE);
 
-    //! die drei funktionieren noch nicht...
+    //!	die drei funktionieren noch nicht...
     /*
-    aCbPrintFrame.Enable(sal_False);
-    aCbAttrib.Enable(sal_False);
-    aCbValue.Enable(sal_False);
+    aCbPrintFrame.Enable(FALSE);
+    aCbAttrib.Enable(FALSE);
+    aCbValue.Enable(FALSE);
     */
-
-    aEdComment.SetAccessibleRelationMemberOf(&aFlComment);
-    aLbColor.SetAccessibleRelationLabeledBy(&aCbShowFrame);
 }
 
 //------------------------------------------------------------------------
 
-ScNewScenarioDlg::~ScNewScenarioDlg()
+__EXPORT ScNewScenarioDlg::~ScNewScenarioDlg()
 {
 }
 
 //------------------------------------------------------------------------
 
 void ScNewScenarioDlg::GetScenarioData( String& rName, String& rComment,
-                                        Color& rColor, sal_uInt16& rFlags ) const
+                                        Color& rColor, USHORT& rFlags ) const
 {
     rComment = aEdComment.GetText();
-    rName    = aEdName.GetText();
+    rName	 = aEdName.GetText();
 
     if ( rName.Len() == 0 )
         rName = aDefScenarioName;
 
     rColor = aLbColor.GetSelectEntryColor();
-    sal_uInt16 nBits = 0;
+    USHORT nBits = 0;
     if (aCbShowFrame.IsChecked())
         nBits |= SC_SCENARIO_SHOWFRAME;
     /*
@@ -191,7 +186,7 @@ void ScNewScenarioDlg::GetScenarioData( String& rName, String& rComment,
 }
 
 void ScNewScenarioDlg::SetScenarioData( const String& rName, const String& rComment,
-                                        const Color& rColor, sal_uInt16 nFlags )
+                                        const Color& rColor, USHORT nFlags )
 {
     aEdComment.SetText(rComment);
     aEdName.SetText(rName);
@@ -203,7 +198,7 @@ void ScNewScenarioDlg::SetScenarioData( const String& rName, const String& rComm
     aCbTwoWay.Check    ( (nFlags & SC_SCENARIO_TWOWAY)     != 0 );
     //aCbAttrib.Check    ( (nFlags & SC_SCENARIO_ATTRIB)     != 0 );
     //aCbValue.Check     ( (nFlags & SC_SCENARIO_VALUE)      != 0 );
-    //  CopyAll nicht
+    //	CopyAll nicht
     aCbProtect.Check    ( (nFlags & SC_SCENARIO_PROTECT)     != 0 );
 }
 
@@ -211,8 +206,8 @@ void ScNewScenarioDlg::SetScenarioData( const String& rName, const String& rComm
 
 IMPL_LINK( ScNewScenarioDlg, OkHdl, OKButton *, EMPTYARG )
 {
-    String      aName   ( aEdName.GetText() );
-    ScDocument* pDoc    = ((ScTabViewShell*)SfxViewShell::Current())->
+    String		aName	( aEdName.GetText() );
+    ScDocument* pDoc	= ((ScTabViewShell*)SfxViewShell::Current())->
                                 GetViewData()->GetDocument();
 
     aName.EraseLeadingChars( ' ' );
@@ -235,7 +230,7 @@ IMPL_LINK( ScNewScenarioDlg, OkHdl, OKButton *, EMPTYARG )
         EndDialog( RET_OK );
     return 0;
 
-    //! beim Editieren testen, ob eine andere Tabelle den Namen hat!
+    //!	beim Editieren testen, ob eine andere Tabelle den Namen hat!
 }
 
 //------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,7 @@
 #define OOX_CORE_RECORDPARSER_HXX
 
 #include <map>
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <rtl/ref.hxx>

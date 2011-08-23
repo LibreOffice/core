@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_SDR_PRIMITIVE2D_SdrOleContentPrimitive2D_HXX
+#ifndef INCLUDED_SDR_PRIMITIVE2D_SDROLECONTENTPRIMITIVE2D_HXX
 #define INCLUDED_SDR_PRIMITIVE2D_SDROLECONTENTPRIMITIVE2D_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
@@ -48,12 +48,15 @@ namespace drawinglayer
         {
         private:
             SdrObjectWeakRef                            mpSdrOle2Obj;
-            basegfx::B2DHomMatrix                       maObjectTransform;
+            basegfx::B2DHomMatrix						maObjectTransform;
 
             // #i104867# The GraphicVersion number to identify in operator== if
             // the graphic has changed, but without fetching it (which may
             // be expensive, e.g. triggering chart creation)
             sal_uInt32                                  mnGraphicVersion;
+
+            // bitfield
+            unsigned                                    mbHighContrast : 1;
 
         protected:
             // local decomposition.
@@ -62,9 +65,9 @@ namespace drawinglayer
         public:
             SdrOleContentPrimitive2D(
                 const SdrOle2Obj& rSdrOle2Obj,
-                const basegfx::B2DHomMatrix& rObjectTransform,
-                sal_uInt32 nGraphicVersion
-            );
+                const basegfx::B2DHomMatrix& rObjectTransform, 
+                sal_uInt32 nGraphicVersion,
+                bool bHighContrast);
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
@@ -75,6 +78,7 @@ namespace drawinglayer
             // data access
             const basegfx::B2DHomMatrix& getObjectTransform() const { return maObjectTransform; }
             sal_uInt32 getGraphicVersion() const { return mnGraphicVersion; }
+            bool getHighContrast() const { return mbHighContrast; }
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

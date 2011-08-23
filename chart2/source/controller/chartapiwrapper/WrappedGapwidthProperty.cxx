@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,6 +49,8 @@ namespace wrapper
 const sal_Int32 DEFAULT_GAPWIDTH = 100;
 const sal_Int32 DEFAULT_OVERLAP = 0;
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 WrappedBarPositionProperty_Base::WrappedBarPositionProperty_Base(
@@ -170,6 +172,8 @@ Any WrappedBarPositionProperty_Base::getPropertyValue( const Reference< beans::X
 }
 
 //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 WrappedGapwidthProperty::WrappedGapwidthProperty(
         ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
@@ -180,6 +184,8 @@ WrappedGapwidthProperty::~WrappedGapwidthProperty()
 {
 }
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 WrappedBarOverlapProperty::WrappedBarOverlapProperty(

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ uno::Sequence< ::rtl::OUString > lcl_getFormattedFieldOptionals()
 DBG_NAME( rpt_OFormattedField )
 // -----------------------------------------------------------------------------
 OFormattedField::OFormattedField(uno::Reference< uno::XComponentContext > const & _xContext)
-:FormattedFieldBase(m_aMutex)
+:FormattedFieldBase(m_aMutex) 
 ,FormattedFieldPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getFormattedFieldOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nFormatKey(0)
@@ -71,7 +71,7 @@ OFormattedField::OFormattedField(uno::Reference< uno::XComponentContext > const 
 OFormattedField::OFormattedField(uno::Reference< uno::XComponentContext > const & _xContext
                                  ,const uno::Reference< lang::XMultiServiceFactory>& _xFactory
                                  ,uno::Reference< drawing::XShape >& _xShape)
-:FormattedFieldBase(m_aMutex)
+:FormattedFieldBase(m_aMutex) 
 ,FormattedFieldPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getFormattedFieldOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nFormatKey(0)
@@ -91,6 +91,7 @@ OFormattedField::~OFormattedField()
     DBG_DTOR( rpt_OFormattedField,NULL);
 }
 // -----------------------------------------------------------------------------
+//IMPLEMENT_FORWARD_XINTERFACE2(OFormattedField,FormattedFieldBase,FormattedFieldPropertySet)
 IMPLEMENT_FORWARD_REFCOUNT( OFormattedField, FormattedFieldBase )
 // --------------------------------------------------------------------------------
 uno::Any SAL_CALL OFormattedField::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException)
@@ -105,7 +106,7 @@ uno::Any SAL_CALL OFormattedField::queryInterface( const uno::Type& _rType ) thr
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL OFormattedField::dispose() throw(uno::RuntimeException)
+void SAL_CALL OFormattedField::dispose() throw(uno::RuntimeException) 
 {
     FormattedFieldPropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
@@ -129,7 +130,7 @@ uno::Sequence< ::rtl::OUString > OFormattedField::getSupportedServiceNames_Stati
     uno::Sequence< ::rtl::OUString > aServices(2);
     aServices.getArray()[0] = SERVICE_FORMATTEDFIELD;
     aServices.getArray()[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFormattedFieldModel"));
-
+    
     return aServices;
 }
 //--------------------------------------------------------------------------
@@ -230,7 +231,7 @@ uno::Reference< util::XCloneable > SAL_CALL OFormattedField::createClone(  ) thr
 {
     uno::Reference< report::XReportComponent> xSource = this;
     uno::Reference< report::XFormattedField> xSet(cloneObject(xSource,m_aProps.aComponent.m_xFactory,SERVICE_FORMATTEDFIELD),uno::UNO_QUERY_THROW);
-
+    
     if ( xSet.is() )
     {
         ::std::vector< uno::Reference< report::XFormatCondition> >::iterator aIter = m_aProps.m_aFormatConditions.begin();

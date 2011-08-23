@@ -34,7 +34,7 @@ TARFILE_MD5=bd30e9cf5523cdfc019b94f5e1d7fd19
     # from <https://sourceforge.net/projects/cppunit/files/cppunit/1.12.1/
     #  cppunit-1.12.1.tar.gz/download>
 
-PATCH_FILES = solarisfinite.patch warnings.patch windows.patch ldflags.patch aix.patch avoid-synthetised-destructor.patch
+PATCH_FILES = solarisfinite.patch warnings.patch windows.patch ldflags.patch aix.patch
     # solarisfinite.patch: see <https://sourceforge.net/tracker/?func=detail&
     #  aid=2912590&group_id=11795&atid=311795>
     # warnings.patch: see <https://sourceforge.net/tracker/?func=detail&
@@ -75,23 +75,35 @@ $(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE): ooo-cppunit_dll.mk ooo-DllPlugInTester.mk
 EXTRA_CFLAGS += -mthreads
 LDFLAGS += -Wl,--enable-runtime-pseudo-reloc-v2
 
+.IF "$(USE_SYSTEM_STL)" != "YES"
+
+OOO_STLPORT_CXXFLAGS = -I$(SOLARINCDIR)/stl
+.IF "$(USE_STLP_DEBUG)" == "TRUE"
+OOO_STLPORT_CXXFLAGS += -D_STLP_DEBUG
+.END
+OOO_STLPORT_CXXFLAGS += -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH)
+
+OOO_STLPORT_LDFLAGS = -L$(SOLARLIBDIR)
+OOO_STLPORT_LIBS = $(LIBSTLPORT)
+
+.END
+
 CONFIGURE_ACTION = ./configure
 CONFIGURE_FLAGS = --prefix=$(shell cd $(PACKAGE_DIR) && \
     pwd $(PWDFLAGS))/$(TARFILE_ROOTDIR)/ooo-install \
     --disable-dependency-tracking --disable-static --disable-doxygen \
     --disable-html-docs --disable-latex-docs CC='$(CC)' CXX='$(CXX)' \
-    CXXFLAGS='$(EXTRA_CFLAGS)' \
-    LDFLAGS='$(LDFLAGS)' \
-    LIBS='$(MY_LIBS)'
+    CXXFLAGS='$(EXTRA_CFLAGS) $(OOO_STLPORT_CXXFLAGS)' \
+    LDFLAGS='$(LDFLAGS) $(OOO_STLPORT_LDFLAGS)' \
+    LIBS='$(OOO_STLPORT_LIBS) $(MY_LIBS)'
 
-BUILD_ACTION = $(GNUMAKE) -j$(EXTMAXPROCESS)
+BUILD_ACTION = $(GNUMAKE)
 BUILD_FLAGS = install
 
 OUTDIR2INC = ooo-install/include/cppunit
 
 OUT2BIN = ooo-install/bin/DllPlugInTester.exe \
     ooo-install/bin/cygcppunit-1-12-1.dll
-OUT2LIB = ooo-install/lib/libcppunit.dll.a
 
 .INCLUDE: set_ext.mk
 .INCLUDE: target.mk
@@ -101,6 +113,47 @@ OUT2LIB = ooo-install/lib/libcppunit.dll.a
 .ENDIF # "$(COM)" == "MSC"
 
 .ELSE
+
+.IF "$(USE_SYSTEM_STL)" != "YES"
+
+OOO_STLPORT_CXXFLAGS = -I$(SOLARINCDIR)/stl
+.IF "$(USE_STLP_DEBUG)" == "TRUE"
+OOO_STLPORT_CXXFLAGS += -D_STLP_DEBUG
+.END
+.IF "$(COM)" == "GCC"
+OOO_STLPORT_CXXFLAGS += -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH)
+.END
+
+OOO_STLPORT_LDFLAGS = -L$(SOLARLIBDIR)
+OOO_STLPORT_LIBS = $(LIBSTLPORT)
+
+# When "checking for C compiler default output file name" configure
+# unfortunately uses "$CC $CFLAGS $CPPFLAGS $LDFLAGS conftest.c $LIBS" to build
+# a C program that links against $(LIBSTLPORT); at least on one unxlngi6
+# machine, this has been observed to fail with "/lib/libm.so.6: undefined
+# reference to `_rtld_global_ro@GLIBC_PRIVATE'" unless -lm is also specified:
+.IF "$(OS)" == "LINUX" && "$(COM)" == "GCC" && "$(CPU)" == "I"
+OOO_STLPORT_LIBS += -lm
+# #i112124# furthermore, STLPort seems to require libstdc++
+OOO_STLPORT_LIBS += -lstdc++
+.END
+
+# And later, when "checking whether the C compiler works" configure tries to
+# execute that program; however, the program would fail to locate the STLport
+# library (another work-around might be to add something like --as-needed around
+# $(LIBSTLPORT)):
+.IF "$(OS)" == "FREEBSD" || "$(OS)" == "LINUX" || "$(OS)" == "SOLARIS" || "$(OS)" == "OPENBSD"
+.IF "$(LD_LIBRARY_PATH)" == ""
+LD_LIBRARY_PATH := $(SOLARLIBDIR)
+    # strictly speaking, this is incorrect if the LD_LIBRARY_PATH environment
+    # variable is set to the empty string
+.ELSE
+LD_LIBRARY_PATH := $(LD_LIBRARY_PATH):$(SOLARLIBDIR)
+.END
+.EXPORT: LD_LIBRARY_PATH
+.END
+
+.END
 
 # At least on Solaris with Sun CC, linking the cppunit dynamic library fails as
 # TestAssert.o uses fabs but -lm is missing from the command line (cppunit's
@@ -115,11 +168,11 @@ CONFIGURE_FLAGS = --prefix=$(shell cd $(PACKAGE_DIR) && \
     pwd $(PWDFLAGS))/$(TARFILE_ROOTDIR)/ooo-install \
     --disable-dependency-tracking --disable-static --disable-doxygen \
     --disable-html-docs --disable-latex-docs CC='$(CC)' CXX='$(CXX)' \
-    CXXFLAGS='$(EXTRA_CFLAGS)' \
-    LDFLAGS='$(LDFLAGS)' \
-    LIBS='$(MY_LIBS)'
+    CXXFLAGS='$(EXTRA_CFLAGS) $(OOO_STLPORT_CXXFLAGS)' \
+    LDFLAGS='$(LDFLAGS) $(OOO_STLPORT_LDFLAGS)' \
+    LIBS='$(OOO_STLPORT_LIBS) $(MY_LIBS)'
 
-BUILD_ACTION = $(GNUMAKE) -j$(EXTMAXPROCESS)
+BUILD_ACTION = $(GNUMAKE)
 BUILD_FLAGS = install
 
 OUTDIR2INC = ooo-install/include/cppunit

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+using namespace rtl;
 using namespace utl;
 using namespace vcl;
 using namespace com::sun::star::uno;
@@ -42,12 +43,10 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-using ::rtl::OUString;
-
 #define SETTINGS_CONFIGNODE "VCL/Settings"
 
 /*
- *  SettingsConfigItem::get
+ *	SettingsConfigItem::get
  */
 
 SettingsConfigItem* SettingsConfigItem::get()
@@ -90,7 +89,7 @@ void SettingsConfigItem::Commit()
     if( ! IsValidConfigMgr() )
         return;
 
-    boost::unordered_map< OUString, SmallOUStrMap, rtl::OUStringHash >::const_iterator group;
+    std::hash_map< OUString, SmallOUStrMap, rtl::OUStringHash >::const_iterator group;
 
     for( group = m_aSettings.begin(); group != m_aSettings.end(); ++group )
     {
@@ -105,10 +104,10 @@ void SettingsConfigItem::Commit()
             String aName( aKeyName );
             aName.Append( '/' );
             aName.Append( String( it->first ) );
-            pValues[nIndex].Name    = aName;
-            pValues[nIndex].Handle  = 0;
+            pValues[nIndex].Name	= aName;
+            pValues[nIndex].Handle	= 0;
             pValues[nIndex].Value <<= it->second;
-            pValues[nIndex].State   = PropertyState_DIRECT_VALUE;
+            pValues[nIndex].State	= PropertyState_DIRECT_VALUE;
             nIndex++;
         }
         ReplaceSetProperties( aKeyName, aValues );
@@ -135,11 +134,12 @@ void SettingsConfigItem::getValues()
     m_aSettings.clear();
 
     Sequence< OUString > aNames( GetNodeNames( OUString() ) );
+    m_aSettings.resize( aNames.getLength() );
 
     for( int j = 0; j < aNames.getLength(); j++ )
     {
 #if OSL_DEBUG_LEVEL > 2
-        OSL_TRACE( "found settings data for \"%s\"\n",
+        fprintf( stderr, "found settings data for \"%s\"\n",
                  OUStringToOString( aNames.getConstArray()[j], RTL_TEXTENCODING_ASCII_US ).getStr()
                  );
 #endif
@@ -165,7 +165,7 @@ void SettingsConfigItem::getValues()
                 if( pLine->getLength() )
                     m_aSettings[ aKeyName ][ pFrom[i] ] = *pLine;
 #if OSL_DEBUG_LEVEL > 2
-                OSL_TRACE( "   \"%s\"=\"%.30s\"\n",
+                fprintf( stderr, "   \"%s\"=\"%.30s\"\n",
                          OUStringToOString( aKeys.getConstArray()[i], RTL_TEXTENCODING_ASCII_US ).getStr(),
                          OUStringToOString( *pLine, RTL_TEXTENCODING_ASCII_US ).getStr()
                          );
@@ -181,7 +181,7 @@ void SettingsConfigItem::getValues()
 
 const OUString& SettingsConfigItem::getValue( const OUString& rGroup, const OUString& rKey ) const
 {
-    ::boost::unordered_map< OUString, SmallOUStrMap, rtl::OUStringHash >::const_iterator group = m_aSettings.find( rGroup );
+    ::std::hash_map< OUString, SmallOUStrMap, rtl::OUStringHash >::const_iterator group = m_aSettings.find( rGroup );
     if( group == m_aSettings.end() || group->second.find( rKey ) == group->second.end() )
     {
         static OUString aEmpty;

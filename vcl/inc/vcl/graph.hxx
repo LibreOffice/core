@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,19 +106,19 @@ public:
     virtual             ~Graphic();
 
     Graphic&            operator=( const Graphic& rGraphic );
-    sal_Bool                operator==( const Graphic& rGraphic ) const;
-    sal_Bool                operator!=( const Graphic& rGraphic ) const;
-    sal_Bool                operator!() const;
+    BOOL                operator==( const Graphic& rGraphic ) const;
+    BOOL                operator!=( const Graphic& rGraphic ) const;
+    BOOL                operator!() const;
 
     void                Clear();
 
     GraphicType         GetType() const;
     void                SetDefaultType();
-    sal_Bool                IsSupportedGraphic() const;
+    BOOL                IsSupportedGraphic() const;
 
-    sal_Bool                IsTransparent() const;
-    sal_Bool                IsAlpha() const;
-    sal_Bool                IsAnimated() const;
+    BOOL                IsTransparent() const;
+    BOOL                IsAlpha() const;
+    BOOL                IsAnimated() const;
 
     // #i102089# Access of Bitmap potentially will have to rasterconvert the Graphic
     // if it is a MetaFile. To be able to control this conversion it is necessary to
@@ -141,7 +141,7 @@ public:
 
     Size                GetSizePixel( const OutputDevice* pRefDevice = NULL ) const;
 
-    sal_uLong               GetSizeBytes() const;
+    ULONG               GetSizeBytes() const;
 
     void                Draw( OutputDevice* pOutDev,
                               const Point& rDestPt ) const;
@@ -170,12 +170,12 @@ public:
     void                SetAnimationNotifyHdl( const Link& rLink );
     Link                GetAnimationNotifyHdl() const;
 
-    sal_uLong               GetAnimationLoopCount() const;
+    ULONG               GetAnimationLoopCount() const;
     void                ResetAnimationLoopCount();
 
     List*               GetAnimationInfoList() const;
 
-    sal_uLong               GetChecksum() const;
+    ULONG               GetChecksum() const;
 
 public:
 
@@ -184,26 +184,26 @@ public:
 
 public:
 
-    static sal_uInt16       GetGraphicsCompressMode( SvStream& rIStm );
+    static USHORT       GetGraphicsCompressMode( SvStream& rIStm );
 
-    void                SetDocFileName( const String& rName, sal_uLong nFilePos );
+    void                SetDocFileName( const String& rName, ULONG nFilePos );
     const String&       GetDocFileName() const;
-    sal_uLong               GetDocFilePos() const;
+    ULONG               GetDocFilePos() const;
 
-    sal_Bool                ReadEmbedded( SvStream& rIStream, sal_Bool bSwap = sal_False );
-    sal_Bool                WriteEmbedded( SvStream& rOStream );
+    BOOL                ReadEmbedded( SvStream& rIStream, BOOL bSwap = FALSE );
+    BOOL                WriteEmbedded( SvStream& rOStream );
 
-    sal_Bool                SwapOut();
-    sal_Bool                SwapOut( SvStream* pOStm );
-    sal_Bool                SwapIn();
-    sal_Bool                SwapIn( SvStream* pIStm );
-    sal_Bool                IsSwapOut() const;
+    BOOL                SwapOut();
+    BOOL                SwapOut( SvStream* pOStm );
+    BOOL                SwapIn();
+    BOOL                SwapIn( SvStream* pIStm );
+    BOOL                IsSwapOut() const;
 
     void                SetLink( const GfxLink& );
     GfxLink             GetLink() const;
-    sal_Bool                IsLink() const;
+    BOOL                IsLink() const;
 
-    sal_Bool                ExportNative( SvStream& rOStream ) const;
+    BOOL				ExportNative( SvStream& rOStream ) const;
 
     friend VCL_DLLPUBLIC SvStream&    operator<<( SvStream& rOStream, const Graphic& rGraphic );
     friend VCL_DLLPUBLIC SvStream&    operator>>( SvStream& rIStream, Graphic& rGraphic );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module ui {
 
  published interface XContextMenuInterceptor;
 /** This interface enables an object to get interceptors registered that
- change context menus or prevent them from being executed.
+ change context menue or prevent them from beeing executed.
  */
 published interface XContextMenuInterception : ::com::sun::star::uno::XInterface
 {

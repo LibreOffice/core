@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@
 // header for define DBG_ERROR1
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "SchXMLImport.hxx"
@@ -116,7 +116,7 @@ void SchXMLDomain2Context::StartElement( const uno::Reference< xml::sax::XAttrib
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_TABLE &&
             IsXMLToken( aLocalName, XML_CELL_RANGE_ADDRESS ) )
@@ -212,7 +212,7 @@ void lcl_insertErrorBarLSequencesToMap(
         for( sal_Int32 nIndex = 0; nIndex < aLSequences.getLength(); ++nIndex )
         {
             // use "0" as data index. This is ok, as it is not used for error bars
-            rInOutMap.insert(
+            rInOutMap.insert( 
                 tSchXMLLSequencesPerIndex::value_type(
                     tSchXMLIndexWithPart( 0, SCH_XML_PART_ERROR_BARS ), aLSequences[ nIndex ] ));
         }
@@ -239,7 +239,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_createAndAddSequenceToSeries
     Reference< chart2::data::XDataSequence > xSeq = SchXMLTools::CreateDataSequence( rRange, xChartDoc );
     Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
     if( xSeqProp.is())
-        xSeqProp->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM( "Role" )), uno::makeAny( rRole));
+        xSeqProp->setPropertyValue(OUString::createFromAscii("Role"), uno::makeAny( rRole));
     xLabeledSeq->setValues( xSeq );
 
     // add new sequence to data series / push to front to have the correct sequence order if charttype is changed afterwards
@@ -317,7 +317,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
@@ -335,7 +335,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                     for( sal_Int32 nCurrent = 0; nCurrent < nNumOfAxes; nCurrent++ )
                     {
                         if( aValue.equals( mrAxes[ nCurrent ].aName ) &&
-                            mrAxes[ nCurrent ].eDimension == SCH_XML_AXIS_Y )
+                            mrAxes[ nCurrent ].eClass == SCH_XML_AXIS_Y )
                         {
                             mpAttachedAxis = &( mrAxes[ nCurrent ] );
                         }
@@ -363,7 +363,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
 
     if( mpAttachedAxis )
     {
-        if( mpAttachedAxis->nAxisIndex > 0 )
+        if( mpAttachedAxis->nIndexInCategory > 0 )
         {
             // secondary axis => property has to be set (primary is default)
             mnAttachedAxis = 2;
@@ -387,7 +387,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                 && m_bStockHasVolume
                 && mnSeriesIndex == 0 )
             {
-                maSeriesChartTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ColumnChartType" ));
+                maSeriesChartTypeName = OUString::createFromAscii( "com.sun.star.chart2.ColumnChartType" );
                 bIsCandleStick = false;
             }
             else
@@ -422,16 +422,16 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
 
         // values
         Reference< chart2::data::XDataSequence > xSeq;
-        if( bHasRange && m_aSeriesRange.getLength() )
+        if( bHasRange )
             xSeq = SchXMLTools::CreateDataSequence( m_aSeriesRange, mxNewDoc );
 
         Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
         if( xSeqProp.is())
         {
-            OUString aMainRole(RTL_CONSTASCII_USTRINGPARAM("values-y"));
+            OUString aMainRole( OUString::createFromAscii("values-y") );
             if( maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.BubbleChartType") ) )
-                aMainRole = OUString(RTL_CONSTASCII_USTRINGPARAM( "values-size" ));
-            xSeqProp->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM( "Role" )), uno::makeAny( aMainRole ));
+                aMainRole = OUString::createFromAscii("values-size");
+            xSeqProp->setPropertyValue(OUString::createFromAscii("Role"), uno::makeAny( aMainRole ));
         }
         xLabeledSeq->setValues( xSeq );
 
@@ -441,7 +441,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                 tSchXMLIndexWithPart( m_rGlobalSeriesImportInfo.nCurrentDataIndex, SCH_XML_PART_VALUES ), xLabeledSeq ));
 
         // label
-        if( bHasLabelRange && m_aSeriesLabelRange.getLength() )
+        if( bHasLabelRange )
         {
             Reference< chart2::data::XDataSequence > xLabelSequence =
                 SchXMLTools::CreateDataSequence( m_aSeriesLabelRange, mxNewDoc );
@@ -464,7 +464,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
     catch( uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_FAIL( ::rtl::OUStringToOString(
+        OSL_ENSURE( false, ::rtl::OUStringToOString(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                         ::rtl::OUString::createFromAscii( typeid( ex ).name()) +
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
@@ -520,7 +520,7 @@ void SchXMLSeries2Context::EndElement()
     //different handling for different chart types necessary
     if( bIsScatterChart || ( nDomainCount==1 && !bIsBubbleChart ) )
     {
-        DomainInfo aDomainInfo( OUString(RTL_CONSTASCII_USTRINGPARAM( "values-x" )), m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress, m_rGlobalSeriesImportInfo.nFirstFirstDomainIndex ) ;
+        DomainInfo aDomainInfo( OUString::createFromAscii("values-x"), m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress, m_rGlobalSeriesImportInfo.nFirstFirstDomainIndex ) ;
         bool bCreateXValues = true;
         if( !maDomainAddresses.empty() )
         {
@@ -546,14 +546,14 @@ void SchXMLSeries2Context::EndElement()
                 bCreateXValues = false;//they will be created for the next series
             }
         }
-        if( bCreateXValues )
+        if( bCreateXValues ) 
             aDomainInfos.push_back( aDomainInfo );
     }
     else if( bIsBubbleChart )
     {
         if( nDomainCount>1 )
         {
-            DomainInfo aDomainInfo( OUString(RTL_CONSTASCII_USTRINGPARAM( "values-x" )), maDomainAddresses[1], m_rGlobalSeriesImportInfo.nCurrentDataIndex ) ;
+            DomainInfo aDomainInfo( OUString::createFromAscii("values-x"), maDomainAddresses[1], m_rGlobalSeriesImportInfo.nCurrentDataIndex ) ;
             if( !m_rGlobalSeriesImportInfo.aFirstSecondDomainAddress.getLength() )
             {
                 //for bubble chart the second domain contains the x values which should become an index smaller than y values for own data table
@@ -566,12 +566,12 @@ void SchXMLSeries2Context::EndElement()
         }
         else if( m_rGlobalSeriesImportInfo.aFirstSecondDomainAddress.getLength() )
         {
-            DomainInfo aDomainInfo( OUString(RTL_CONSTASCII_USTRINGPARAM( "values-x" )), m_rGlobalSeriesImportInfo.aFirstSecondDomainAddress, m_rGlobalSeriesImportInfo.nFirstSecondDomainIndex ) ;
+            DomainInfo aDomainInfo( OUString::createFromAscii("values-x"), m_rGlobalSeriesImportInfo.aFirstSecondDomainAddress, m_rGlobalSeriesImportInfo.nFirstSecondDomainIndex ) ;
             aDomainInfos.push_back( aDomainInfo );
         }
         if( nDomainCount>0)
         {
-            DomainInfo aDomainInfo( OUString(RTL_CONSTASCII_USTRINGPARAM( "values-y" )), maDomainAddresses.front(), m_rGlobalSeriesImportInfo.nCurrentDataIndex ) ;
+            DomainInfo aDomainInfo( OUString::createFromAscii("values-y"), maDomainAddresses.front(), m_rGlobalSeriesImportInfo.nCurrentDataIndex ) ;
             if( !m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress.getLength() )
             {
                 m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress = maDomainAddresses.front();
@@ -579,11 +579,6 @@ void SchXMLSeries2Context::EndElement()
             }
             aDomainInfos.push_back( aDomainInfo );
             m_rGlobalSeriesImportInfo.nCurrentDataIndex++;
-        }
-        else if( m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress.getLength() )
-        {
-            DomainInfo aDomainInfo( OUString::createFromAscii("values-y"), m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress, m_rGlobalSeriesImportInfo.nFirstFirstDomainIndex ) ;
-            aDomainInfos.push_back( aDomainInfo );
         }
     }
 
@@ -608,7 +603,7 @@ void SchXMLSeries2Context::EndElement()
             mrStyleList.push_back( aStyle );
         }
     }
-
+    
     for( std::vector< DomainInfo >::reverse_iterator aIt( aDomainInfos.rbegin() ); aIt!= aDomainInfos.rend(); ++aIt )
     {
         DomainInfo aDomainInfo( *aIt );
@@ -639,7 +634,7 @@ void SchXMLSeries2Context::EndElement()
 }
 
 SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
-    sal_uInt16 nPrefix,
+    USHORT nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >&  )
 {
@@ -701,7 +696,7 @@ void SchXMLSeries2Context::initSeriesPropertySets( SeriesDefaultsAndStyles& rSer
         , const uno::Reference< frame::XModel >& xChartModel )
 {
     ::std::list< DataRowPointStyle >::iterator iStyle;
-
+    
     // iterate over series first and remind propertysets in map
     // new api <-> old api wrapper
     ::std::map< Reference< chart2::XDataSeries >, Reference< beans::XPropertySet > > aSeriesMap;
@@ -709,12 +704,12 @@ void SchXMLSeries2Context::initSeriesPropertySets( SeriesDefaultsAndStyles& rSer
     {
         if( iStyle->meType != DataRowPointStyle::DATA_SERIES )
             continue;
-
+        
         if( !iStyle->m_xOldAPISeries.is() )
             iStyle->m_xOldAPISeries = SchXMLSeriesHelper::createOldAPISeriesPropertySet( iStyle->m_xSeries, xChartModel );
 
         aSeriesMap[iStyle->m_xSeries] = iStyle->m_xOldAPISeries;
-
+        
     }
 
     //initialize m_xOldAPISeries for all other styles also
@@ -860,7 +855,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
             catch( uno::Exception & rEx )
             {
                 (void)rEx; // avoid warning for pro build
-                OSL_TRACE( "Exception caught during setting styles to series: %s",
+                DBG_ERROR1( "Exception caught during setting styles to series: %s",
                                 OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             }
         }
@@ -944,7 +939,7 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
             catch( uno::Exception & rEx )
             {
                 (void)rEx; // avoid warning for pro build
-                OSL_TRACE( "Exception caught during setting styles to series: %s",
+                DBG_ERROR1( "Exception caught during setting styles to series: %s",
                                 OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             }
         }
@@ -965,7 +960,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
     {
         if( iStyle->meType != DataRowPointStyle::DATA_POINT )
             continue;
-
+        
         if( iStyle->m_nPointIndex == -1 )
             continue;
 
@@ -989,7 +984,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                 uno::Reference< beans::XPropertySet > xPointProp(
                     SchXMLSeriesHelper::createOldAPIDataPointPropertySet( iStyle->m_xSeries, iStyle->m_nPointIndex + i
                         , uno::Reference< frame::XModel >( rImportHelper.GetChartDocument(), uno::UNO_QUERY ) ) );
-
+                
                 if( !xPointProp.is() )
                     continue;
 
@@ -1043,11 +1038,11 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
             catch( uno::Exception & rEx )
             {
                 (void)rEx; // avoid warning for pro build
-                OSL_TRACE( "Exception caught during setting styles to data points: %s",
+                DBG_ERROR1( "Exception caught during setting styles to data points: %s",
                                     OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             }
         }
-    }   // styles iterator
+    }	// styles iterator
 }
 
 //static
@@ -1055,7 +1050,7 @@ void SchXMLSeries2Context::switchSeriesLinesOff( ::std::list< DataRowPointStyle 
 {
     ::std::list< DataRowPointStyle >::iterator iStyle;
     // iterate over series
-
+    
     for( iStyle = rSeriesStyleList.begin(); iStyle != rSeriesStyleList.end(); iStyle++ )
     {
         if( iStyle->meType != DataRowPointStyle::DATA_SERIES )

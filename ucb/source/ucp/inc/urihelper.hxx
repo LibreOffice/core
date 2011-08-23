@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,14 +77,14 @@ namespace ucb_impl { namespace urihelper {
                   : rURI;
 
         if ( aFragment.getLength() > 1 )
-            aFragment =
+            aFragment = 
                 rtl::Uri::encode( aFragment,
                                   rtl_UriCharClassUric,
                                   rtl_UriEncodeKeepEscapes, /* #i81690# */
                                   RTL_TEXTENCODING_UTF8 );
 
         if ( aParams.getLength() > 1 )
-            aParams =
+            aParams = 
                 rtl::Uri::encode( aParams,
                                   rtl_UriCharClassUric,
                                   rtl_UriEncodeKeepEscapes, /* #i81690# */

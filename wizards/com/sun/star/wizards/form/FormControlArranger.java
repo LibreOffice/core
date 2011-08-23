@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,6 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.Resource;
-import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.*;
 import com.sun.star.wizards.document.Control;
 import com.sun.star.wizards.document.DatabaseControl;
@@ -101,7 +100,7 @@ public class FormControlArranger
         setFormSize(_FormSize);
     }
     // Note: on all Controls except for the checkbox the Label has to be set
-    // a bit under the DBControl because its Height is also smaller
+    // a bit under the DBControl because its Height is also smaller 
     private int getLabelDiffHeight(int _index)
     {
         if (curDBControl != null)
@@ -265,7 +264,7 @@ public class FormControlArranger
     }
 
     /**
-     *
+     * 
      * @param StartIndex
      * @param EndIndex
      * @param nDist
@@ -499,7 +498,7 @@ public class FormControlArranger
                 break;
         }
 //      if ((nYRefPos + nDBHeight) > nMaxDBYPos)
-//          nMaxDBYPos = nYRefPos + nDBHeight;
+//          nMaxDBYPos = nYRefPos + nDBHeight;      
     }
 
     private void repositionColumnarLeftControls(int LastIndex)
@@ -644,7 +643,7 @@ public class FormControlArranger
                     if (DBControlList[i].getControlType() == FormHandler.SOCHECKBOX)
                     {
                         // Checkboxes have no Label near by
-                        DBControlList[i].setPropertyValue(PropertyNames.PROPERTY_LABEL, "");
+                        DBControlList[i].setPropertyValue("Label", "");
                     }
                 }
             }
@@ -663,7 +662,7 @@ public class FormControlArranger
             }
             if (nFieldType == DataType.LONGVARCHAR) /* memo */
             {
-                Helper.setUnoPropertyValue(LabelControlList[i], PropertyNames.PROPERTY_MULTILINE, Boolean.TRUE);
+                Helper.setUnoPropertyValue(LabelControlList[i], "MultiLine", Boolean.TRUE);
             }
             checkOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, true);
             aDBControl.setPropertyValue("Border", NBorderType);

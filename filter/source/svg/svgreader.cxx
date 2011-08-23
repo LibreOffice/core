@@ -64,7 +64,7 @@
 #include <tools/zcodec.hxx>
 
 #include <boost/bind.hpp>
-#include <boost/unordered_set.hpp>
+#include <hash_set>
 #include <map>
 #include <string.h>
 
@@ -147,7 +147,6 @@ struct AnnotatingVisitor
                       StateMap&                                         rStateMap,
                       const State&                                       rInitialState,
                       const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler) :
-        mbSeenText(false),
         mnCurrStateId(0),
         maCurrState(),
         maParentStates(),
@@ -184,7 +183,7 @@ struct AnnotatingVisitor
                 {
                     const rtl::OUString sValue(xNode->getNodeValue());
                     ElementRefMapType::iterator aFound=maGradientIdMap.end();
-                    if (sValue.copy(0,1).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("#")))
+                    if (sValue.copy(0,1).equalsAscii("#"))
                         aFound = maGradientIdMap.find(sValue.copy(1));
                     else
                         aFound = maGradientIdMap.find(sValue);;
@@ -222,7 +221,7 @@ struct AnnotatingVisitor
                 {
                     const rtl::OUString sValue(xNode->getNodeValue());
                     ElementRefMapType::iterator aFound=maGradientIdMap.end();
-                    if (sValue.copy(0,1).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("#")))
+                    if (sValue.copy(0,1).equalsAscii("#"))
                         aFound = maGradientIdMap.find(sValue.copy(1));
                     else
                         aFound = maGradientIdMap.find(sValue);;
@@ -266,13 +265,6 @@ struct AnnotatingVisitor
                 maCurrState = maParentStates.back();
                 maCurrState.maTransform.identity();
                 maCurrState.maViewBox.reset();
-
-                // set default font size here to ensure writing styles for text
-                if( !mbSeenText && XML_TEXT == nTagId )
-                {
-                    maCurrState.mnFontSize = 12.0;
-                    mbSeenText = true;
-                }
 
                 // scan for style info
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
@@ -418,13 +410,13 @@ struct AnnotatingVisitor
         const sal_uInt8 nGreen( toByteColor(rColor.g) );
         const sal_uInt8 nBlue ( toByteColor(rColor.b)  );
         aBuf.append( sal_Unicode('#') );
-        if( nRed < 0x10 )
+        if( nRed < 10 )
             aBuf.append( sal_Unicode('0') );
         aBuf.append( sal_Int32(nRed), 16 );
-        if( nGreen < 0x10 )
+        if( nGreen < 10 )
             aBuf.append( sal_Unicode('0') );
         aBuf.append( sal_Int32(nGreen), 16 );
-        if( nBlue < 0x10 )
+        if( nBlue < 10 )
             aBuf.append( sal_Unicode('0') );
         aBuf.append( sal_Int32(nBlue), 16 );
 
@@ -828,7 +820,7 @@ struct AnnotatingVisitor
             case XML_HREF:
             {
                 ElementRefMapType::iterator aFound=maStopIdMap.end();
-                if (sValue.copy(0,1).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("#")))
+                if (sValue.copy(0,1).equalsAscii("#"))
                     aFound = maStopIdMap.find(sValue.copy(1));
                 else
                     aFound = maStopIdMap.find(sValue);;
@@ -881,7 +873,7 @@ struct AnnotatingVisitor
             {
                 // TODO(F1): preserveAspectRatio
                 parseViewBox(
-                    aValueUtf8.getStr(),
+                    aValueUtf8,
                     maCurrState.maViewBox);
                 break;
             }
@@ -1003,7 +995,7 @@ struct AnnotatingVisitor
                 if( aValueUtf8 == "inherit" )
                     maCurrState.maCurrentColor = maParentStates.back().maCurrentColor;
                 else
-                    parseColor(aValueUtf8.getStr(), maCurrState.maCurrentColor);
+                    parseColor(aValueUtf8, maCurrState.maCurrentColor);
                 break;
             }
             case XML_TRANSFORM:
@@ -1035,7 +1027,7 @@ struct AnnotatingVisitor
                 if( maGradientVector.empty() ||
                     maGradientVector.back().maStops.empty() )
                     break;
-                parseColor( aValueUtf8.getStr(),
+                parseColor( aValueUtf8,
                             maGradientStopVector[
                                 maGradientVector.back().maStops.back()].maStopColor );
                 break;
@@ -1043,7 +1035,7 @@ struct AnnotatingVisitor
                 if( maGradientVector.empty() ||
                     maGradientVector.back().maStops.empty() )
                     break;
-                parseOpacity( aValueUtf8.getStr(),
+                parseOpacity( aValueUtf8,
                               maGradientStopVector[
                                   maGradientVector.back().maStops.back()].maStopColor );
                 break;
@@ -1140,7 +1132,8 @@ struct AnnotatingVisitor
             if( aPaintUri.first != aPaintUri.second )
             {
                 // assuming gradient. assumption does not hold generally
-                if( strstr(sValue,")") && rValue.getLength() > 5 )
+                const char* pClosingBracket;
+                if( (pClosingBracket=strstr(sValue,")")) && rValue.getLength() > 5 )
                 {
                     ElementRefMapType::iterator aRes;
                     if( (aRes=maGradientIdMap.find(
@@ -1169,7 +1162,6 @@ struct AnnotatingVisitor
         }
     }
 
-    bool                                       mbSeenText;
     sal_Int32                                  mnCurrStateId;
     State                                      maCurrState;
     std::vector<State>                         maParentStates;
@@ -1475,7 +1467,7 @@ struct ShapeWritingVisitor
                 // collect text from all TEXT_NODE children into sText
                 rtl::OUStringBuffer sText;
                 visitChildren(boost::bind(
-                                  (rtl::OUStringBuffer& (rtl::OUStringBuffer::*)(const rtl::OUString& str))&rtl::OUStringBuffer::append,
+                                  (rtl::OUStringBuffer& (rtl::OUStringBuffer::*)(const sal_Unicode* str))&rtl::OUStringBuffer::append,
                                   boost::ref(sText),
                                   boost::bind(&xml::dom::XNode::getNodeValue,
                                               _1)),
@@ -1829,7 +1821,7 @@ sal_Bool SVGReader::parseAndConvert()
 {
     uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(
         m_xServiceFactory->createInstance(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.dom.DocumentBuilder" ))), uno::UNO_QUERY_THROW );
+            rtl::OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder")), uno::UNO_QUERY_THROW );
 
     uno::Reference<xml::dom::XDocument> xDom(
         xDomBuilder->parse(m_xInputStream),
@@ -2314,8 +2306,8 @@ struct ShapeRenderingVisitor
                     SvMemoryStream aSrc(aData.getArray(),
                                         aData.getLength(),
                                         STREAM_READ);
-                    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
-                    sal_uInt16 pDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
+                    USHORT nFormat = GRFILTER_FORMAT_DONTKNOW;
+                    USHORT pDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
                     GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), aSrc ,nFormat,&pDeterminedFormat );
 
                     if (pDeterminedFormat == GRFILTER_FORMAT_DONTKNOW)
@@ -2323,17 +2315,17 @@ struct ShapeRenderingVisitor
                         //Read the first two byte to check whether it is a gzipped stream, is so it may be in wmz or emz format
                         //unzip them and try again
 
-                        sal_uInt8    sFirstBytes[ 2 ];
+                        BYTE    sFirstBytes[ 2 ];
 
                         aSrc.Seek( STREAM_SEEK_TO_END );
-                        sal_uLong nStreamLen = aSrc.Tell();
+                        ULONG nStreamLen = aSrc.Tell();
                         aSrc.Seek( 0 );
 
                         if ( !nStreamLen )
                         {
                             SvLockBytes* pLockBytes = aSrc.GetLockBytes();
                             if ( pLockBytes  )
-                                pLockBytes->SetSynchronMode( sal_True );
+                                pLockBytes->SetSynchronMode( TRUE );
 
                             aSrc.Seek( STREAM_SEEK_TO_END );
                             nStreamLen = aSrc.Tell();
@@ -2355,7 +2347,7 @@ struct ShapeRenderingVisitor
                                 if (aZCodec.EndCompression() && pDest )
                                 {
                                     pDest->Seek( STREAM_SEEK_TO_END );
-                                    sal_uLong nStreamLen_ = pDest->Tell();
+                                    ULONG nStreamLen_ = pDest->Tell();
                                     if (nStreamLen_)
                                     {
                                         pDest->Seek(0L);
@@ -2385,7 +2377,7 @@ struct ShapeRenderingVisitor
                 // collect text from all TEXT_NODE children into sText
                 rtl::OUStringBuffer sText;
                 visitChildren(boost::bind(
-                                  (rtl::OUStringBuffer& (rtl::OUStringBuffer::*)(const rtl::OUString& str))&rtl::OUStringBuffer::append,
+                                  (rtl::OUStringBuffer& (rtl::OUStringBuffer::*)(const sal_Unicode* str))&rtl::OUStringBuffer::append,
                                   boost::ref(sText),
                                   boost::bind(&xml::dom::XNode::getNodeValue,
                                               _1)),
@@ -2429,7 +2421,7 @@ struct ShapeRenderingVisitor
                 aFont.SetColor(getVclColor(maCurrState.maFillColor));
                 aFont.SetFillColor(getVclColor(maCurrState.maFillColor));
 
-                if( !maCurrState.maFontStyle.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("normal")) )
+                if( !maCurrState.maFontStyle.equalsAscii("normal") )
                     aFont.SetItalic(ITALIC_NORMAL); // TODO: discriminate
                 if( !maCurrState.mnFontWeight != 400.0 )
                     aFont.SetWeight(WEIGHT_BOLD); // TODO: discriminate
@@ -2571,13 +2563,13 @@ struct ShapeRenderingVisitor
             {
                 ::Gradient aTransparencyGradient=aGradient;
 
-                const sal_uInt8 cTransStart( 255-
+                const BYTE	cTransStart( 255-
                     basegfx::fround(mrGradientStopVector[
                                         aState.maFillGradient.maStops[1]].maStopColor.a*
                                     aState.mnFillOpacity*maCurrState.mnOpacity*255.0));
                 const Color aTransStart( cTransStart, cTransStart, cTransStart );
 
-                const sal_uInt8 cTransEnd( 255-
+                const BYTE	cTransEnd( 255-
                     basegfx::fround(mrGradientStopVector[
                                         aState.maFillGradient.maStops[0]].maStopColor.a*
                                     aState.mnFillOpacity*maCurrState.mnOpacity*255.0));
@@ -2587,10 +2579,10 @@ struct ShapeRenderingVisitor
                 aTransparencyGradient.SetStartColor(aTransStart);
                 aTransparencyGradient.SetEndColor(aTransEnd);
 
-                VirtualDevice   aVDev;
-                GDIMetaFile     aMtf;
+                VirtualDevice	aVDev;
+                GDIMetaFile		aMtf;
 
-                aVDev.EnableOutput( sal_False );
+                aVDev.EnableOutput( FALSE );
                 aVDev.SetMapMode( mrOutDev.GetMapMode() );
                 aMtf.Record( &aVDev );
 
@@ -2735,7 +2727,7 @@ bool importSvg(SvStream & rStream, Graphic & rGraphic )
 
     uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(
         xServiceFactory->createInstance(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.dom.DocumentBuilder" ))),
+            rtl::OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder")),
         uno::UNO_QUERY_THROW );
 
     uno::Reference<io::XInputStream> xStream(
@@ -2748,10 +2740,10 @@ bool importSvg(SvStream & rStream, Graphic & rGraphic )
     uno::Reference<xml::dom::XElement> xDocElem( xDom->getDocumentElement(),
                                                  uno::UNO_QUERY_THROW );
 
-    VirtualDevice   aVDev;
-    GDIMetaFile     aMtf;
+    VirtualDevice	aVDev;
+    GDIMetaFile		aMtf;
 
-    aVDev.EnableOutput( sal_False );
+    aVDev.EnableOutput( FALSE );
     aMtf.Record( &aVDev );
     aVDev.SetTextAlign(ALIGN_BASELINE);
 

@@ -30,7 +30,7 @@
 #define _UNOCONTROLS_FRAMECONTROL_CTRL_HXX
 
 //______________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //______________________________________________________________________________________________________________
 
 #include <com/sun/star/frame/XFrameActionListener.hpp>
@@ -44,13 +44,13 @@
 #include <cppuhelper/propshlp.hxx>
 
 //______________________________________________________________________________________________________________
-//  includes of my own project
+//	includes of my own project
 //______________________________________________________________________________________________________________
 #include "basecontrol.hxx"
 #include "OConnectionPointContainerHelper.hxx"
 
 //______________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //______________________________________________________________________________________________________________
 
 namespace unocontrols{
@@ -62,39 +62,39 @@ namespace unocontrols{
 #define CSS_FRAME   ::com::sun::star::frame
 
 //______________________________________________________________________________________________________________
-//  defines
+//	defines
 //______________________________________________________________________________________________________________
 
-#define SERVICENAME_FRAMECONTROL                        "com.sun.star.frame.FrameControl"
-#define IMPLEMENTATIONNAME_FRAMECONTROL                 "stardiv.UnoControls.FrameControl"
-#define PROPERTYNAME_LOADERARGUMENTS                    "LoaderArguments"
-#define PROPERTYNAME_COMPONENTURL                       "ComponentURL"
-#define PROPERTYNAME_FRAME                              "Frame"
-#define ERRORTEXT_VOSENSHURE                            "This is an invalid property handle."
-#define PROPERTY_COUNT                                  3                                                       // you must count the propertys
-#define PROPERTYHANDLE_COMPONENTURL                     0                                                       // Id must be the index into the array
-#define PROPERTYHANDLE_FRAME                            1
-#define PROPERTYHANDLE_LOADERARGUMENTS                  2
+#define	SERVICENAME_FRAMECONTROL						"com.sun.star.frame.FrameControl"
+#define	IMPLEMENTATIONNAME_FRAMECONTROL					"stardiv.UnoControls.FrameControl"
+#define	PROPERTYNAME_LOADERARGUMENTS					"LoaderArguments"
+#define	PROPERTYNAME_COMPONENTURL						"ComponentURL"
+#define	PROPERTYNAME_FRAME								"Frame"
+#define	ERRORTEXT_VOSENSHURE							"This is an invalid property handle."
+#define PROPERTY_COUNT									3                                       				// you must count the propertys
+#define PROPERTYHANDLE_COMPONENTURL						0														// Id must be the index into the array
+#define PROPERTYHANDLE_FRAME							1
+#define PROPERTYHANDLE_LOADERARGUMENTS					2
 
 //______________________________________________________________________________________________________________
-//  class
+//	class
 //______________________________________________________________________________________________________________
 
-class FrameControl  : public CSS_AWT::XControlModel
+class FrameControl	: public CSS_AWT::XControlModel
                     , public CSS_LANG::XConnectionPointContainer
-                    , public BaseControl                                // This order is neccessary for right initialization of m_aMutex!
+                    , public BaseControl								// This order is neccessary for right initialization of m_aMutex!
                     , public ::cppu::OBroadcastHelper
                     , public ::cppu::OPropertySetHelper
 {
 
 //______________________________________________________________________________________________________________
-//  public methods
+//	public methods
 //______________________________________________________________________________________________________________
 
 public:
 
     //__________________________________________________________________________________________________________
-    //  construct/destruct
+    //	construct/destruct
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -125,10 +125,10 @@ public:
         @onerror
     */
 
-    virtual ~FrameControl();
+    virtual	~FrameControl();
 
     //__________________________________________________________________________________________________________
-    //  XInterface
+    //	XInterface
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -149,39 +149,39 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short      increment refcount
-        @descr      -
+        @short		increment refcount
+        @descr		-
 
-        @seealso    XInterface
-        @seealso    release()
+        @seealso	XInterface
+        @seealso	release()
 
-        @param      -
+        @param		-
 
-        @return     -
+        @return		-
 
-        @onerror    A RuntimeException is thrown.
+        @onerror	A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL acquire() throw();
 
     /**_______________________________________________________________________________________________________
-        @short      decrement refcount
-        @descr      -
+        @short		decrement refcount
+        @descr		-
 
-        @seealso    XInterface
-        @seealso    acquire()
+        @seealso	XInterface
+        @seealso	acquire()
 
-        @param      -
+        @param		-
 
-        @return     -
+        @return		-
 
-        @onerror    A RuntimeException is thrown.
+        @onerror	A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL release() throw();
 
     //__________________________________________________________________________________________________________
-    //  XTypeProvider
+    //	XTypeProvider
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -201,7 +201,7 @@ public:
         throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
-    //  XAggregation
+    //	XAggregation
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -222,7 +222,7 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
-    //  XControl
+    //	XControl
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -277,7 +277,7 @@ public:
         throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
-    //  XComponent
+    //	XComponent
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -296,7 +296,7 @@ public:
     virtual void SAL_CALL dispose() throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
-    //  XView
+    //	XView
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -333,7 +333,7 @@ public:
         throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
-    //  XConnectionPointContainer
+    //	XConnectionPointContainer
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -383,7 +383,7 @@ public:
     */
 
     virtual void SAL_CALL advise(
-        const CSS_UNO::Type&                                aType       ,
+        const CSS_UNO::Type&                                aType		,
         const CSS_UNO::Reference< CSS_UNO::XInterface >&    xListener
     ) throw( CSS_UNO::RuntimeException );
 
@@ -406,7 +406,7 @@ public:
     ) throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
-    //  impl but public methods to register service!
+    //	impl but public methods to register service!
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -440,13 +440,13 @@ public:
     static const ::rtl::OUString impl_getStaticImplementationName();
 
 //______________________________________________________________________________________________________________
-//  protected methods
+//	protected methods
 //______________________________________________________________________________________________________________
 
 protected:
     using OPropertySetHelper::getFastPropertyValue;
     //__________________________________________________________________________________________________________
-    //  OPropertySetHelper
+    //	OPropertySetHelper
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -484,7 +484,7 @@ protected:
 
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle ,
-        const CSS_UNO::Any& rValue
+        const CSS_UNO::Any&	rValue
     ) throw ( ::com::sun::star::uno::Exception );
 
     /**_________________________________________________________________________________________________________
@@ -500,8 +500,8 @@ protected:
         @onerror
     */
 
-    virtual void SAL_CALL getFastPropertyValue( CSS_UNO::Any&   rValue  ,
-                                                sal_Int32       nHandle ) const ;
+    virtual void SAL_CALL getFastPropertyValue(	CSS_UNO::Any&   rValue	,
+                                                sal_Int32       nHandle	) const ;
 
     /**_________________________________________________________________________________________________________
         @short
@@ -519,7 +519,7 @@ protected:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
     //__________________________________________________________________________________________________________
-    //  XPropertySet
+    //	XPropertySet
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -539,7 +539,7 @@ protected:
         throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
-    //  BaseControl
+    //	BaseControl
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -560,7 +560,7 @@ protected:
     );
 
 //______________________________________________________________________________________________________________
-//  private methods
+//	private methods
 //______________________________________________________________________________________________________________
 
 private:
@@ -578,9 +578,9 @@ private:
         @onerror
     */
 
-    void impl_createFrame(  const CSS_UNO::Reference< CSS_AWT::XWindowPeer >&       xPeer           ,
-                            const ::rtl::OUString&                                  sURL            ,
-                            const CSS_UNO::Sequence< CSS_BEANS::PropertyValue >&    seqArguments    );
+    void impl_createFrame(	const CSS_UNO::Reference< CSS_AWT::XWindowPeer >&       xPeer			,
+                            const ::rtl::OUString&                                  sURL			,
+                            const CSS_UNO::Sequence< CSS_BEANS::PropertyValue >&    seqArguments	);
 
     /**_________________________________________________________________________________________________________
         @short
@@ -614,18 +614,18 @@ private:
 
 
 //______________________________________________________________________________________________________________
-//  private variables
+//	private variables
 //______________________________________________________________________________________________________________
 
 private:
 
-    CSS_UNO::Reference< CSS_FRAME::XFrame >         m_xFrame                    ;
-    ::rtl::OUString                                 m_sComponentURL             ;
-    CSS_UNO::Sequence< CSS_BEANS::PropertyValue >   m_seqLoaderArguments        ;
-    ::cppu::OMultiTypeInterfaceContainerHelper      m_aInterfaceContainer       ;
-    OConnectionPointContainerHelper                 m_aConnectionPointContainer ;
+    CSS_UNO::Reference< CSS_FRAME::XFrame >         m_xFrame					;
+    ::rtl::OUString                                 m_sComponentURL				;
+    CSS_UNO::Sequence< CSS_BEANS::PropertyValue >   m_seqLoaderArguments		;
+    ::cppu::OMultiTypeInterfaceContainerHelper      m_aInterfaceContainer		;
+    OConnectionPointContainerHelper                 m_aConnectionPointContainer	;
 
-};  // class FrameControl
+};	// class FrameControl
 
 // The namespace alaises are only used in the header
 #undef CSS_UNO
@@ -634,8 +634,8 @@ private:
 #undef CSS_AWT
 #undef CSS_FRAME
 
-}   // namespace unocontrols
+}	// namespace unocontrols
 
-#endif  // #ifndef _UNOCONTROLS_FRAMECONTROL_CTRL_HXX
+#endif	// #ifndef _UNOCONTROLS_FRAMECONTROL_CTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

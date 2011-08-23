@@ -38,10 +38,10 @@ EXTENSION_VERSION_BASE=1.2.1
 
 # --- Settings ----------------------------------
 .INCLUDE :  makefile.pmk
-
 .IF "$(L10N_framework)"==""
 # ------------------------------------------------------------------
 # calready set in util$/makefile.pmk
+# EXTENSIONNAME:=report-builder
 EXTENSION_ZIPNAME:=report-builder
 
 # create Extension -----------------------------
@@ -76,7 +76,8 @@ COMPONENT_OTR_FILES= \
     $(EXTENSIONDIR)$/template$/en-US$/wizard$/report$/default.otr
     
 COMPONENT_IMAGES= \
-    $(EXTENSIONDIR)$/images$/extension_32.png
+    $(EXTENSIONDIR)$/images$/extension_32.png \
+    $(EXTENSIONDIR)$/images$/extension_32_h.png
 
 COMPONENT_HTMLFILES = $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html \
             $(EXTENSIONDIR)$/readme_en-US.html \
@@ -94,18 +95,17 @@ COMPONENT_EXTJARFILES = \
     $(EXTENSIONDIR)$/reportbuilderwizard.jar
 
 .IF "$(SYSTEM_JFREEREPORT)" != "YES"
-.INCLUDE :  $(SOLARBINDIR)/jfreereport_version.mk
 COMPONENT_EXTJARFILES += \
-    $(EXTENSIONDIR)$/flute-$(FLUTE_VERSION).jar				            \
-    $(EXTENSIONDIR)$/libserializer-$(LIBSERIALIZER_VERSION).jar			\
-    $(EXTENSIONDIR)$/libbase-$(LIBBASE_VERSION).jar                     \
-    $(EXTENSIONDIR)$/libfonts-$(LIBFONTS_VERSION).jar					\
-    $(EXTENSIONDIR)$/libformula-$(LIBFORMULA_VERSION).jar						\
-    $(EXTENSIONDIR)$/liblayout-$(LIBLAYOUT_VERSION).jar					\
-    $(EXTENSIONDIR)$/libloader-$(LIBLOADER_VERSION).jar					\
-    $(EXTENSIONDIR)$/librepository-$(LIBREPOSITORY_VERSION).jar			\
-    $(EXTENSIONDIR)$/libxml-$(LIBXML_VERSION).jar						\
-    $(EXTENSIONDIR)$/flow-engine-$(FLOW_ENGINE_VERSION).jar 	        \
+    $(EXTENSIONDIR)$/flute-1.3.0.jar				            \
+    $(EXTENSIONDIR)$/libserializer-1.0.0.jar				    \
+    $(EXTENSIONDIR)$/libbase-1.0.0.jar                          \
+    $(EXTENSIONDIR)$/libfonts-1.0.0.jar							\
+    $(EXTENSIONDIR)$/libformula-0.2.0.jar						\
+    $(EXTENSIONDIR)$/liblayout-0.2.9.jar						\
+    $(EXTENSIONDIR)$/libloader-1.0.0.jar						\
+    $(EXTENSIONDIR)$/librepository-1.0.0.jar					\
+    $(EXTENSIONDIR)$/libxml-1.0.0.jar							\
+    $(EXTENSIONDIR)$/flow-engine-0.9.2.jar 	                    \
     $(EXTENSIONDIR)$/sac.jar
 .ENDIF
 .IF "$(SYSTEM_APACHE_COMMONS)" != "YES"

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 
 #include <svx/xdash.hxx>
 #include <svx/svdmodel.hxx>
-#include "svx/unofill.hxx"
+#include "unofill.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -49,7 +49,7 @@ class SvxUnoDashTable : public SvxUnoNameItemTable
 {
 public:
     SvxUnoDashTable( SdrModel* pModel ) throw();
-    virtual ~SvxUnoDashTable() throw();
+    virtual	~SvxUnoDashTable() throw();
 
     virtual NameOrIndex* createItem() const throw();
 

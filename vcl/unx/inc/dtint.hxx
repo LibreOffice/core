@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,11 +32,18 @@
 #include <tools/string.hxx>
 #include <tools/color.hxx>
 #include <vcl/font.hxx>
-#include "svunx.h"
 
 class SalBitmap;
 class SalDisplay;
 class AllSettings;
+
+#if !defined(_XLIB_H_) && !defined(_X11_XLIB_H_)
+// forwards from X
+struct Display;
+struct XEvent;
+#define Atom UINT32
+#define XLIB_Window UINT32
+#endif
 
 enum DtType {
     DtGeneric,
@@ -46,27 +53,27 @@ enum DtType {
 class DtIntegrator
 {
 protected:
-    DtType              meType;
-    Display*            mpDisplay;
-    SalDisplay*         mpSalDisplay;
-    int                 mnSystemLookCommandProcess;
+    DtType				meType;
+    Display*			mpDisplay;
+    SalDisplay*			mpSalDisplay;
+    int					mnSystemLookCommandProcess;
 
 
     DtIntegrator();
 
-    static String           aHomeDir;
+    static String			aHomeDir;
 
 public:
     static DtIntegrator* CreateDtIntegrator();
-
+    
     virtual ~DtIntegrator();
 
     // SystemLook
     virtual void GetSystemLook( AllSettings& rSettings );
-
-    DtType          GetDtType() { return meType; }
-    SalDisplay*     GetSalDisplay() { return mpSalDisplay; }
-    Display*        GetDisplay() { return mpDisplay; }
+    
+    DtType			GetDtType() { return meType; }
+    SalDisplay*		GetSalDisplay() { return mpSalDisplay; }
+    Display*		GetDisplay() { return mpDisplay; }
 };
 
 #endif

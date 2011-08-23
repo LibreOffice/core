@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,9 +113,10 @@ rtl_str_hash_insert_nonequal (StringHashTable   *pHash,
 {
     sal_uInt32  nHash = hashString (pString);
     sal_uInt32  n;
+    rtl_uString *pHashStr;
 
     n = nHash % pHash->nSize;
-    while (pHash->pData[n] != NULL) {
+    while ((pHashStr = pHash->pData[n]) != NULL) {
         n++;
         if (n >= pHash->nSize)
             n = 0;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ class ImplFontData;
 // -----------------
 
 // used for managing runs e.g. for BiDi, glyph and script fallback
-class VCL_PLUGIN_PUBLIC ImplLayoutRuns
+class VCL_DLLPUBLIC ImplLayoutRuns
 {
 private:
     int                 mnRunIndex;
@@ -149,7 +149,7 @@ sal_UCS4 GetVerticalChar( sal_UCS4 );
 // #i80090# GetMirroredChar also needed outside vcl, moved to svapp.hxx
 // VCL_DLLPUBLIC sal_UCS4 GetMirroredChar( sal_UCS4 );
 sal_UCS4 GetLocalizedChar( sal_UCS4, LanguageType );
-VCL_PLUGIN_PUBLIC const char* GetAutofallback( sal_UCS4 ) ;
+VCL_DLLPUBLIC const char* GetAutofallback( sal_UCS4 ) ;
 
 // -------------
 // - SalLayout -
@@ -180,7 +180,7 @@ typedef sal_uInt32 sal_GlyphId;
 // all positions/widths are in font units
 // one exception: drawposition is in pixel units
 
-class VCL_PLUGIN_PUBLIC SalLayout
+class VCL_DLLPUBLIC SalLayout
 {
 public:
     // used by upper layers
@@ -197,7 +197,7 @@ public:
 
     int             GetUnitsPerPixel() const                { return mnUnitsPerPixel; }
     int             GetOrientation() const                  { return mnOrientation; }
-
+    
     virtual const ImplFontData* GetFallbackFontData( sal_GlyphId ) const;
 
     // methods using string indexing
@@ -259,7 +259,7 @@ protected:
 // - MultiSalLayout -
 // ------------------
 
-class VCL_PLUGIN_PUBLIC MultiSalLayout : public SalLayout
+class VCL_DLLPUBLIC MultiSalLayout : public SalLayout
 {
 public:
     virtual void    DrawText( SalGraphics& ) const;
@@ -272,7 +272,7 @@ public:
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
-    explicit        MultiSalLayout( SalLayout& rBaseLayout,
+                    MultiSalLayout( SalLayout& rBaseLayout,
                          const ImplFontData* pBaseFont = NULL );
     virtual bool    AddFallback( SalLayout& rFallbackLayout,
                          ImplLayoutRuns&, const ImplFontData* pFallbackFont );
@@ -330,9 +330,9 @@ public:
 
     enum{ FALLBACK_MASK=0xFF, IS_IN_CLUSTER=0x100, IS_RTL_GLYPH=0x200, IS_DIACRITIC=0x400 };
 
-    bool    IsClusterStart() const  { return ((mnFlags & IS_IN_CLUSTER) == 0); }
-    bool    IsRTLGlyph() const      { return ((mnFlags & IS_RTL_GLYPH) != 0); }
-    bool    IsDiacritic() const     { return ((mnFlags & IS_DIACRITIC) != 0); }
+    bool    IsClusterStart() const	{ return ((mnFlags & IS_IN_CLUSTER) == 0); }
+    bool    IsRTLGlyph() const		{ return ((mnFlags & IS_RTL_GLYPH) != 0); }
+    bool    IsDiacritic() const		{ return ((mnFlags & IS_DIACRITIC) != 0); }
 };
 
 // ---------------
@@ -342,7 +342,7 @@ typedef std::vector<GlyphItem> GlyphVector;
 
 // ---------------
 
-class VCL_PLUGIN_PUBLIC GenericSalLayout : public SalLayout
+class VCL_DLLPUBLIC GenericSalLayout : public SalLayout
 {
 public:
     // used by layout engines

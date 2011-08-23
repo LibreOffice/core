@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,19 +95,17 @@ void _PaMIntoCrsrShellRing::RemoveFromRing( SwPaM& rPam, Ring* pPrev )
 
 SwAutoCorrDoc::SwAutoCorrDoc( SwEditShell& rEditShell, SwPaM& rPam,
                                 sal_Unicode cIns )
-    : rEditSh( rEditShell ), rCrsr( rPam ), pIdx( 0 )
-    , m_nEndUndoCounter(0)
-    , bUndoIdInitialized( cIns ? false : true )
+    : rEditSh( rEditShell ), rCrsr( rPam ), pIdx( 0 ),
+    nUndoId( UNDO_EMPTY  ),
+    bUndoIdInitialized( cIns ? false : true )
 {
 }
 
 
 SwAutoCorrDoc::~SwAutoCorrDoc()
 {
-    for (int i = 0; i < m_nEndUndoCounter; ++i)
-    {
-        rEditSh.EndUndo();
-    }
+    if( UNDO_EMPTY != nUndoId )
+        rEditSh.EndUndo( nUndoId );
     delete pIdx;
 }
 
@@ -127,7 +125,7 @@ void SwAutoCorrDoc::DeleteSel( SwPaM& rDelPam )
     }
 }
 
-sal_Bool SwAutoCorrDoc::Delete( xub_StrLen nStt, xub_StrLen nEnd )
+BOOL SwAutoCorrDoc::Delete( xub_StrLen nStt, xub_StrLen nEnd )
 {
     const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
     SwPaM aSel( rNd, nStt, rNd, nEnd );
@@ -135,11 +133,11 @@ sal_Bool SwAutoCorrDoc::Delete( xub_StrLen nStt, xub_StrLen nEnd )
 
     if( bUndoIdInitialized )
         bUndoIdInitialized = true;
-    return sal_True;
+    return TRUE;
 }
 
 
-sal_Bool SwAutoCorrDoc::Insert( xub_StrLen nPos, const String& rTxt )
+BOOL SwAutoCorrDoc::Insert( xub_StrLen nPos, const String& rTxt )
 {
     SwPaM aPam( rCrsr.GetPoint()->nNode.GetNode(), nPos );
     rEditSh.GetDoc()->InsertString( aPam, rTxt );
@@ -147,20 +145,13 @@ sal_Bool SwAutoCorrDoc::Insert( xub_StrLen nPos, const String& rTxt )
     {
         bUndoIdInitialized = true;
         if( 1 == rTxt.Len() )
-        {
-            rEditSh.StartUndo( UNDO_AUTOCORRECT );
-            ++m_nEndUndoCounter;
-        }
+            rEditSh.StartUndo( nUndoId = UNDO_AUTOCORRECT );
     }
-    return sal_True;
+    return TRUE;
 }
 
 
-sal_Bool SwAutoCorrDoc::Replace( xub_StrLen nPos, const String& rTxt )
-{
-    return ReplaceRange( nPos, rTxt.Len(), rTxt );
-}
-sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength, const String& rTxt )
+BOOL SwAutoCorrDoc::Replace( xub_StrLen nPos, const String& rTxt )
 {
     SwPaM* pPam = &rCrsr;
     if( pPam->GetPoint()->nContent.GetIndex() != nPos )
@@ -172,7 +163,7 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength,
     SwTxtNode * const pNd = pPam->GetNode()->GetTxtNode();
     if ( !pNd )
     {
-        return sal_False;
+        return FALSE;
     }
 
     // text attributes with dummy characters must not be replaced!
@@ -193,9 +184,13 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength,
     {
         SwDoc* pDoc = rEditSh.GetDoc();
 
+//		if( !pDoc->IsAutoFmtRedline() &&
+//			pPam != &rCrsr )	// nur an akt. Position das Redline sichern
+//			pDoc->SetRedlineMode_intern( eOld | REDLINE_IGNORE );
+
         if( pDoc->IsAutoFmtRedline() )
         {
-            if( nPos == pNd->GetTxt().Len() )       // am Ende erfolgt ein Insert
+            if( nPos == pNd->GetTxt().Len() )		// am Ende erfolgt ein Insert
             {
                 pDoc->InsertString( *pPam, rTxt );
             }
@@ -205,55 +200,40 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength,
 
                 pPam->SetMark();
                 pPam->GetPoint()->nContent = Min( pNd->GetTxt().Len(),
-                                              xub_StrLen( nPos + nSourceLength ));
+                                              xub_StrLen( nPos + rTxt.Len() ));
                 pDoc->ReplaceRange( *pPam, rTxt, false );
                 pPam->Exchange();
                 pPam->DeleteMark();
             }
         }
         else
-        {
-            if( nSourceLength != rTxt.Len() )
-            {
-                pPam->SetMark();
-                pPam->GetPoint()->nContent = Min( pNd->GetTxt().Len(),
-                                              xub_StrLen( nPos + nSourceLength ));
-                pDoc->ReplaceRange( *pPam, rTxt, false );
-                pPam->Exchange();
-                pPam->DeleteMark();
-            }
-            else
-                pDoc->Overwrite( *pPam, rTxt );
-        }
+            pDoc->Overwrite( *pPam, rTxt );
 
-//      pDoc->SetRedlineMode_intern( eOld );
+//		pDoc->SetRedlineMode_intern( eOld );
         if( bUndoIdInitialized )
         {
             bUndoIdInitialized = true;
             if( 1 == rTxt.Len() )
-            {
-                rEditSh.StartUndo( UNDO_AUTOCORRECT );
-                ++m_nEndUndoCounter;
-            }
+                rEditSh.StartUndo( nUndoId = UNDO_AUTOCORRECT );
         }
     }
 
     if( pPam != &rCrsr )
         delete pPam;
 
-    return sal_True;
+    return TRUE;
 }
 
 
 
-sal_Bool SwAutoCorrDoc::SetAttr( xub_StrLen nStt, xub_StrLen nEnd, sal_uInt16 nSlotId,
+BOOL SwAutoCorrDoc::SetAttr( xub_StrLen nStt, xub_StrLen nEnd, USHORT nSlotId,
                                         SfxPoolItem& rItem )
 {
     const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
     SwPaM aPam( rNd, nStt, rNd, nEnd );
 
     SfxItemPool& rPool = rEditSh.GetDoc()->GetAttrPool();
-    sal_uInt16 nWhich = rPool.GetWhich( nSlotId, sal_False );
+    USHORT nWhich = rPool.GetWhich( nSlotId, FALSE );
     if( nWhich )
     {
         rItem.SetWhich( nWhich );
@@ -271,7 +251,7 @@ sal_Bool SwAutoCorrDoc::SetAttr( xub_StrLen nStt, xub_StrLen nEnd, sal_uInt16 nS
 
 
 
-sal_Bool SwAutoCorrDoc::SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const String& rURL )
+BOOL SwAutoCorrDoc::SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const String& rURL )
 {
     const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
     SwPaM aPam( rNd, nStt, rNd, nEnd );
@@ -282,17 +262,17 @@ sal_Bool SwAutoCorrDoc::SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const Str
     rEditSh.GetDoc()->SetFmtItemByAutoFmt( aPam, aSet );
     if( bUndoIdInitialized )
         bUndoIdInitialized = true;
-    return sal_True;
+    return TRUE;
 }
 
     // returne den Text eines vorherigen Absatzes.
     // Dieser darf nicht leer sein!
     // Gibt es diesen nicht oder gibt es davor nur Leere, dann returne 0
     // Das Flag gibt an:
-    //      sal_True: den, vor der normalen Einfuegeposition (sal_True)
-    //      sal_False: den, in den das korrigierte Wort eingfuegt wurde.
-    //              (Muss nicht der gleiche Absatz sein!!!!)
-const String* SwAutoCorrDoc::GetPrevPara( sal_Bool bAtNormalPos )
+    //		TRUE: den, vor der normalen Einfuegeposition (TRUE)
+    // 		FALSE: den, in den das korrigierte Wort eingfuegt wurde.
+    //				(Muss nicht der gleiche Absatz sein!!!!)
+const String* SwAutoCorrDoc::GetPrevPara( BOOL bAtNormalPos )
 {
     const String* pStr = 0;
 
@@ -307,6 +287,7 @@ const String* SwAutoCorrDoc::GetPrevPara( sal_Bool bAtNormalPos )
         (*pIdx)--;
         pTNd = pIdx->GetNode().GetTxtNode();
     }
+    //if( pTNd && NO_NUMBERING == pTNd->GetTxtColl()->GetOutlineLevel() )
     if( pTNd && 0 == pTNd->GetAttrOutlineLevel() )//#outline level,zhaojianwei
         pStr = &pTNd->GetTxt();
 
@@ -316,7 +297,7 @@ const String* SwAutoCorrDoc::GetPrevPara( sal_Bool bAtNormalPos )
 }
 
 
-sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
+BOOL SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
                                             SvxAutoCorrect& rACorrect,
                                             const String** ppPara )
 {
@@ -328,16 +309,16 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
     SwTxtNode* pTxtNd = rCrsr.GetNode()->GetTxtNode();
     OSL_ENSURE( pTxtNd, "wo ist denn der TextNode?" );
 
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     if( nEndPos == rSttPos )
         return bRet;
 
-    LanguageType eLang = GetLanguage(nEndPos, sal_False);
+    LanguageType eLang = GetLanguage(nEndPos, FALSE);
     if(LANGUAGE_SYSTEM == eLang)
         eLang = (LanguageType)GetAppLanguage();
 
     //JP 22.04.99: Bug 63883 - Sonderbehandlung fuer Punkte.
-    sal_Bool bLastCharIsPoint = nEndPos < pTxtNd->GetTxt().Len() &&
+    BOOL bLastCharIsPoint = nEndPos < pTxtNd->GetTxt().Len() &&
                             '.' == pTxtNd->GetTxt().GetChar( nEndPos );
 
     const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList(
@@ -356,13 +337,13 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
             {
                 // replace the selection
                 pDoc->ReplaceRange( aPam, pFnd->GetLong(), false);
-                bRet = sal_True;
+                bRet = TRUE;
             }
         }
         else
         {
-            SwTextBlocks aTBlks( rACorrect.GetAutoCorrFileName( eLang, sal_False, sal_True ));
-            sal_uInt16 nPos = aTBlks.GetIndex( pFnd->GetShort() );
+            SwTextBlocks aTBlks( rACorrect.GetAutoCorrFileName( eLang, FALSE, TRUE ));
+            USHORT nPos = aTBlks.GetIndex( pFnd->GetShort() );
             if( USHRT_MAX != nPos && aTBlks.BeginGetDoc( nPos ) )
             {
                 DeleteSel( aPam );
@@ -405,7 +386,7 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
                     (*pIdx)++;
                     pTxtNd = pIdx->GetNode().GetTxtNode();
                 }
-                bRet = sal_True;
+                bRet = TRUE;
             }
             aTBlks.EndGetDoc();
         }
@@ -419,21 +400,21 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
 
 
     // wird nach dem austauschen der Zeichen von den Funktionen
-    //  - FnCptlSttWrd
-    //  - FnCptlSttSntnc
+    //	- FnCptlSttWrd
+    // 	- FnCptlSttSntnc
     // gerufen. Dann koennen die Worte ggfs. in die Ausnahmelisten
     // aufgenommen werden.
-void SwAutoCorrDoc::SaveCpltSttWord( sal_uLong nFlag, xub_StrLen nPos,
+void SwAutoCorrDoc::SaveCpltSttWord( ULONG nFlag, xub_StrLen nPos,
                                             const String& rExceptWord,
                                             sal_Unicode cChar )
 {
-    sal_uLong nNode = pIdx ? pIdx->GetIndex() : rCrsr.GetPoint()->nNode.GetIndex();
-    LanguageType eLang = GetLanguage(nPos, sal_False);
+    ULONG nNode = pIdx ? pIdx->GetIndex() : rCrsr.GetPoint()->nNode.GetIndex();
+    LanguageType eLang = GetLanguage(nPos, FALSE);
     rEditSh.GetDoc()->SetAutoCorrExceptWord( new SwAutoCorrExceptWord( nFlag,
                                         nNode, nPos, rExceptWord, cChar, eLang ));
 }
 
-LanguageType SwAutoCorrDoc::GetLanguage( xub_StrLen nPos, sal_Bool bPrevPara ) const
+LanguageType SwAutoCorrDoc::GetLanguage( xub_StrLen nPos, BOOL bPrevPara ) const
 {
     LanguageType eRet = LANGUAGE_SYSTEM;
 
@@ -456,7 +437,7 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
         rPos.nContent.GetIndex() == nCntnt )
     {
         // die akt. Autokorrektur besorgen:
-        SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+        SvxAutoCorrect*	pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
 
         // dann in die Liste aufnehmen:
         if( CptlSttWrd & nFlags )
@@ -467,12 +448,12 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
 }
 
 
-sal_Bool SwAutoCorrExceptWord::CheckDelChar( const SwPosition& rPos )
+BOOL SwAutoCorrExceptWord::CheckDelChar( const SwPosition& rPos )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     if( !bDeleted && rPos.nNode.GetIndex() == nNode &&
         rPos.nContent.GetIndex() == nCntnt )
-        bDeleted = bRet = sal_True;
+        bDeleted = bRet = TRUE;
     return bRet;
 }
 
@@ -506,8 +487,8 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
 
         if( pTxtNd->GetpSwpHints() && pTxtNd->GetpSwpHints()->Count() )
         {
-            const sal_uInt16 nSize = pTxtNd->GetpSwpHints()->Count();
-            sal_uInt16 n;
+            const USHORT nSize = pTxtNd->GetpSwpHints()->Count();
+            USHORT n;
             xub_StrLen nAttrStart;
             const xub_StrLen* pAttrEnd;
 
@@ -515,7 +496,7 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
             {
                 SwTxtAttr* pHt = pTxtNd->GetpSwpHints()->GetTextHint( n );
                 nAttrStart = *pHt->GetStart();
-                if( nAttrStart > nStart )       // ueber den Bereich hinaus
+                if( nAttrStart > nStart ) 		// ueber den Bereich hinaus
                     break;
 
                 if( 0 != ( pAttrEnd = pHt->GetEnd() ) &&
@@ -527,13 +508,13 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
                 {
                     const SfxPoolItem* pItem;
                     if( !pDontExpItems || SFX_ITEM_SET != pDontExpItems->
-                        GetItemState( pHt->Which(), sal_False, &pItem ) ||
+                        GetItemState( pHt->Which(), FALSE, &pItem ) ||
                         *pItem != pHt->GetAttr() )
                     {
                         // das Attribut war vorher nicht in dieser Form im Absatz
                         // gesetzt, also kann es nur durchs einfuegen/kopieren erzeugt
                         // worden sein. Damit ist es ein Kandiadat fuers DontExpand
-                        pHt->SetDontExpand( sal_True );
+                        pHt->SetDontExpand( TRUE );
                     }
                 }
             }

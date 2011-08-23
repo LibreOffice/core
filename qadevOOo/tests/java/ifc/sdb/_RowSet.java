@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,15 +119,15 @@ public class _RowSet extends MultiPropertyTest {
         boolean result = false;
         try {
             XConnection the_connection = null;
-
+            
             try {
                 the_connection = (XConnection) AnyConverter.toObject(
                                     new Type(XConnection.class),
                                     oObj.getPropertyValue("ActiveConnection"));
             } catch (com.sun.star.lang.IllegalArgumentException iae) {
                 throw new StatusException("couldn't convert Any",iae);
-            }
-
+            }            
+            
             result = (the_connection != null);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
             log.println("the property is unknown");

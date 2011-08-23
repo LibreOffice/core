@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,16 +81,12 @@ public:
             ignored and the preview is rendered in normal mode.  When
             <TRUE/> and high contrast mode is active then the preview is
             rendered in high contrast mode.
-        @param bDisplayPresentationObjects
-            When <FALSE/> then the PresObj place holders are not displayed
-            in the returned preview.
     */
     Image RenderPage (
-        const SdPage* pPage,
+        const SdPage* pPage, 
         const sal_Int32 nWidth,
         const String& sSubstitutionText,
-        const bool bObeyHighContrastMode = true,
-        const bool bDisplayPresentationObjects = true);
+        const bool bObeyHighContrastMode = true);
 
     /** Render a page with the given pixel size.
         @param pPage
@@ -106,16 +102,12 @@ public:
             ignored and the preview is rendered in normal mode.  When
             <TRUE/> and high contrast mode is active then the preview is
             rendered in high contrast mode.
-        @param bDisplayPresentationObjects
-            When <FALSE/> then the PresObj place holders are not displayed
-            in the returned preview.
     */
     Image RenderPage (
-        const SdPage* pPage,
+        const SdPage* pPage, 
         const Size aPreviewPixelSize,
         const String& sSubstitutionText,
-        const bool bObeyHighContrastMode = true,
-        const bool bDisplayPresentationObjects = true);
+        const bool bObeyHighContrastMode = true);
 
     /** Render an image that contains the given substitution text instead of a
         slide preview.
@@ -125,7 +117,7 @@ public:
     Image RenderSubstitution (
         const Size& rPreviewPixelSize,
         const String& sSubstitutionText);
-
+    
     /** Scale the given bitmap by keeping its aspect ratio to the desired
         width.  Add a frame to it afterwards.
     */
@@ -152,9 +144,7 @@ private:
         const Size& rPixelSize,
         const bool bObeyHighContrastMode);
     void Cleanup (void);
-    void PaintPage (
-        const SdPage* pPage,
-        const bool bDisplayPresentationObjects);
+    void PaintPage (const SdPage* pPage);
     void PaintSubstitutionText (const String& rSubstitutionText);
     void PaintFrame (void);
 

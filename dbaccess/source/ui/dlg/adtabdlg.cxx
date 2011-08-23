@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ class TableListFacade : public ::cppu::BaseMutex
 {
     OTableTreeListBox&          m_rTableList;
     Reference< XConnection >    m_xConnection;
-    ::rtl::Reference< comphelper::OContainerListenerAdapter>
+    ::rtl::Reference< comphelper::OContainerListenerAdapter>                    
                                 m_pContainerListener;
     bool                        m_bAllowViews;
 
@@ -94,7 +94,7 @@ public:
     {
     }
     virtual ~TableListFacade();
-
+    
 
 private:
     virtual void    updateTableObjectList( bool _bAllowViews );
@@ -133,8 +133,8 @@ String TableListFacade::getSelectedName( String& _out_rAliasName ) const
     try
     {
         Reference< XDatabaseMetaData > xMeta( m_xConnection->getMetaData(), UNO_QUERY_THROW );
-        if (  !aCatalog.getLength()
-            && aSchema.getLength()
+        if (  !aCatalog.getLength() 
+            && aSchema.getLength() 
             && xMeta->supportsCatalogsInDataManipulation()
             && !xMeta->supportsSchemasInDataManipulation() )
         {
@@ -175,7 +175,7 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
     try
     {
         Reference< XTablesSupplier > xTableSupp( m_xConnection, UNO_QUERY_THROW );
-
+        
         Reference< XViewsSupplier > xViewSupp;
         Reference< XNameAccess > xTables, xViews;
         Sequence< ::rtl::OUString > sTables, sViews;
@@ -190,7 +190,7 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
                     m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
             }
             sTables = xTables->getElementNames();
-        }
+        } // if ( xTables.is() )
 
         xViewSupp.set( xTableSupp, UNO_QUERY );
         if ( xViewSupp.is() )
@@ -203,12 +203,12 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
         // if no views are allowed remove the views also out the table name filter
         if ( !_bAllowViews )
         {
-            const ::rtl::OUString* pTableBegin  = sTables.getConstArray();
-            const ::rtl::OUString* pTableEnd    = pTableBegin + sTables.getLength();
+            const ::rtl::OUString* pTableBegin	= sTables.getConstArray();
+            const ::rtl::OUString* pTableEnd	= pTableBegin + sTables.getLength();
             ::std::vector< ::rtl::OUString > aTables(pTableBegin,pTableEnd);
 
             const ::rtl::OUString* pViewBegin = sViews.getConstArray();
-            const ::rtl::OUString* pViewEnd   = pViewBegin + sViews.getLength();
+            const ::rtl::OUString* pViewEnd	  = pViewBegin + sViews.getLength();
             ::comphelper::TStringMixEqualFunctor aEqualFunctor;
             for(;pViewBegin != pViewEnd;++pViewBegin)
                 aTables.erase(::std::remove_if(aTables.begin(),aTables.end(),::std::bind2nd(aEqualFunctor,*pViewBegin)),aTables.end());
@@ -249,7 +249,7 @@ class QueryListFacade : public ::cppu::BaseMutex
 {
     SvTreeListBox&              m_rQueryList;
     Reference< XConnection >    m_xConnection;
-    ::rtl::Reference< comphelper::OContainerListenerAdapter>
+    ::rtl::Reference< comphelper::OContainerListenerAdapter>                    
                                 m_pContainerListener;
 
 public:
@@ -298,10 +298,13 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
     try
     {
         ImageProvider aImageProvider( m_xConnection );
-        Image aQueryImage( aImageProvider.getDefaultImage( DatabaseObject::QUERY ) );
+        Image aQueryImage( aImageProvider.getDefaultImage( DatabaseObject::QUERY, false ) );
+        Image aQueryImageHC( aImageProvider.getDefaultImage( DatabaseObject::QUERY, true ) );
 
-        m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImage );
-        m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImage );
+        m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImage, BMP_COLOR_NORMAL );
+        m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImage, BMP_COLOR_NORMAL );
+        m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImageHC, BMP_COLOR_HIGHCONTRAST );
+        m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImageHC, BMP_COLOR_HIGHCONTRAST );
 
         Reference< XQueriesSupplier > xSuppQueries( m_xConnection, UNO_QUERY_THROW );
         Reference< XNameAccess > xQueries( xSuppQueries->getQueries(), UNO_QUERY_THROW );
@@ -374,15 +377,15 @@ OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
     m_aQueryList.SetSelectHdl( LINK( this, OAddTableDlg, TableListSelectHdl ) );
 
     //////////////////////////////////////////////////////////////////////
-    m_aTableList.EnableInplaceEditing( sal_False );
-    m_aTableList.SetStyle(m_aTableList.GetStyle() | WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_SORT | WB_HSCROLL );
+    m_aTableList.EnableInplaceEditing( FALSE );
+    m_aTableList.SetWindowBits(WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_SORT | WB_HSCROLL );
     m_aTableList.EnableCheckButton( NULL ); // do not show any buttons
     m_aTableList.SetSelectionMode( SINGLE_SELECTION );
     m_aTableList.notifyHiContrastChanged();
     m_aTableList.suppressEmptyFolders();
 
     //////////////////////////////////////////////////////////////////////
-    m_aQueryList.EnableInplaceEditing( sal_False );
+    m_aQueryList.EnableInplaceEditing( FALSE );
     m_aQueryList.SetSelectionMode( SINGLE_SELECTION );
 
     //////////////////////////////////////////////////////////////////////
@@ -419,15 +422,15 @@ void OAddTableDlg::impl_switchTo( ObjectList _eList )
     switch ( _eList )
     {
     case Tables:
-        m_aTableList.Show( sal_True );  m_aCaseTables.Check( sal_True );
-        m_aQueryList.Show( sal_False ); m_aCaseQueries.Check( sal_False );
+        m_aTableList.Show( TRUE );  m_aCaseTables.Check( TRUE );
+        m_aQueryList.Show( FALSE ); m_aCaseQueries.Check( FALSE );
         m_pCurrentList.reset( new TableListFacade( m_aTableList, m_rContext.getConnection() ) );
         m_aTableList.GrabFocus();
         break;
 
     case Queries:
-        m_aTableList.Show( sal_False ); m_aCaseTables.Check( sal_False );
-        m_aQueryList.Show( sal_True );  m_aCaseQueries.Check( sal_True );
+        m_aTableList.Show( FALSE ); m_aCaseTables.Check( FALSE );
+        m_aQueryList.Show( TRUE );  m_aCaseQueries.Check( TRUE );
         m_pCurrentList.reset( new QueryListFacade( m_aQueryList, m_rContext.getConnection() ) );
         m_aQueryList.GrabFocus();
         break;
@@ -501,7 +504,7 @@ IMPL_LINK( OAddTableDlg, OnTypeSelected, void*, /*EMPTY_ARG*/ )
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OAddTableDlg::Close()
+BOOL OAddTableDlg::Close()
 {
     m_rContext.onWindowClosing( this );
     return ModelessDialog::Close();
@@ -510,7 +513,7 @@ sal_Bool OAddTableDlg::Close()
 //------------------------------------------------------------------------------
 bool OAddTableDlg::impl_isAddAllowed()
 {
-    return  m_rContext.allowAddition();
+    return	m_rContext.allowAddition();
 }
 
 //------------------------------------------------------------------------------

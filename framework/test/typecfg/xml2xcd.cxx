@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #define VCL_NEED_BASETSD
@@ -45,12 +45,12 @@
 #include <filterflags.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
 #include <unotools/processfactory.hxx>
@@ -64,17 +64,17 @@
 #include <vcl/msgbox.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 using namespace ::framework ;
 
 //_________________________________________________________________________________________________________________
-//  const
+//	const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  defines
+//	defines
 //_________________________________________________________________________________________________________________
 
 /*
@@ -116,7 +116,7 @@ using namespace ::framework ;
 #define SCPFILE_ADDITIONAL              "scp_additional.txt"
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-***************************************************************************************************************/
@@ -222,7 +222,7 @@ class XCDGenerator : public Application
 };  //  class XCDGenerator
 
 //_________________________________________________________________________________________________________________
-//  global variables
+//	global variables
 //_________________________________________________________________________________________________________________
 
 XCDGenerator gGenerator;
@@ -230,6 +230,8 @@ XCDGenerator gGenerator;
 //*****************************************************************************************************************
 void XCDGenerator::Main()
 {
+    // Must be :-)
+//    impl_printCopyright();
 
     // Init global servicemanager and set it.
     // It's neccessary for other services ... e.g. configuration.
@@ -341,6 +343,24 @@ void XCDGenerator::impl_parseCommandLine( AppMember& rMember )
     while( nArgument<nCount )
     {
         osl_getCommandArg( nArgument, &sArgument.pData );
+/*OBSOLETE
+        //_____________________________________________________________________________________________________
+        // look for "-fis=..."
+        if( sArgument.compareTo( ARGUMENT_FILENAME_STANDARD, ARGUMENTLENGTH ) == ARGUMENTFOUND )
+        {
+            rMember.sFileNameStandard = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
+            ++nMinCount;
+        }
+        else
+        //_____________________________________________________________________________________________________
+        // look for "-fia=..."
+        if( sArgument.compareTo( ARGUMENT_FILENAME_ADDITIONAL, ARGUMENTLENGTH ) == ARGUMENTFOUND )
+        {
+            rMember.sFileNameAdditional = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
+            ++nMinCount;
+        }
+        else
+*/
         //_____________________________________________________________________________________________________
         // look for "-pas=..."
         if( sArgument.compareTo( ARGUMENT_PACKAGE_STANDARD, ARGUMENTLENGTH ) == ARGUMENTFOUND )
@@ -1402,13 +1422,13 @@ void XCDGenerator::impl_generateIntProperty(        ::rtl::OUStringBuffer& sXCD 
                                             const   ::rtl::OUString&       sName       ,
                                                     sal_Int32              nValue      )
 {
-    sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""                );
-    sXCD.append     ( sName                                             );
-    sXCD.appendAscii( "\" cfg:type=\"int\" cfg:writable=\""             );
+    sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""		   		);
+    sXCD.append		( sName										   		);
+    sXCD.appendAscii( "\" cfg:type=\"int\" cfg:writable=\""		   		);
     sXCD.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n" );
-    sXCD.appendAscii( "\t\t\t\t<default:data>"                          );
-    sXCD.append     ( (sal_Int32)(nValue)                               );
-    sXCD.appendAscii( "</default:data>\n\t\t\t</default:value>\n"       );
+    sXCD.appendAscii( "\t\t\t\t<default:data>"							);
+    sXCD.append		( (sal_Int32)(nValue)								);
+    sXCD.appendAscii( "</default:data>\n\t\t\t</default:value>\n"		);
 }
 
 //*****************************************************************************************************************
@@ -1416,13 +1436,13 @@ void XCDGenerator::impl_generateBoolProperty(           ::rtl::OUStringBuffer& s
                                                 const   ::rtl::OUString&       sName       ,
                                                         sal_Bool               bValue      )
 {
-    sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""                );
-    sXCD.append     ( sName                                             );
+    sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""				);
+    sXCD.append		( sName												);
     sXCD.appendAscii( "\" cfg:type=\"boolean\" cfg:writable=\""         );
     sXCD.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n" );
-    sXCD.appendAscii( "\t\t\t\t<default:data>"                          );
-    sXCD.appendAscii( bValue==sal_True ? "true" : "false"               );
-    sXCD.appendAscii( "</default:data>\n\t\t\t</default:value>\n"       );
+    sXCD.appendAscii( "\t\t\t\t<default:data>"							);
+    sXCD.appendAscii( bValue==sal_True ? "true" : "false"				);
+    sXCD.appendAscii( "</default:data>\n\t\t\t</default:value>\n"		);
 }
 
 //*****************************************************************************************************************
@@ -1430,9 +1450,9 @@ void XCDGenerator::impl_generateStringProperty(         ::rtl::OUStringBuffer& s
                                                 const   ::rtl::OUString&       sName       ,
                                                 const   ::rtl::OUString&       sValue      )
 {
-    sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""            );
-    sXCD.append     ( sName                                         );
-    sXCD.appendAscii( "\" cfg:type=\"string\" cfg:writable=\""      );
+    sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""			);
+    sXCD.append		( sName											);
+    sXCD.appendAscii( "\" cfg:type=\"string\" cfg:writable=\""		);
     sXCD.appendAscii( m_aData.bWriteable==sal_True ? "true\"" : "false\""   );
     if( sValue.getLength() > 0 )
     {
@@ -1471,7 +1491,7 @@ void XCDGenerator::impl_generateStringListProperty(         ::rtl::OUStringBuffe
 
     if( nCount > 0 )
     {
-        sXCD.appendAscii( ">\n\t\t\t\t<default:data>"   );
+        sXCD.appendAscii( ">\n\t\t\t\t<default:data>"	);
         for( ConstStringListIterator pEntry=lValue.begin(); pEntry!=lValue.end(); ++pEntry )
         {
             sXCD.append( *pEntry );
@@ -1496,9 +1516,9 @@ void XCDGenerator::impl_generateUINamesProperty(        ::rtl::OUStringBuffer&  
                                                 const   ::rtl::OUString&            sName       ,
                                                 const   StringHash&                 lUINames    )
 {
-    sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""                                );
-    sXCD.append     ( sName                                                             );
-    sXCD.appendAscii( "\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""   );
+    sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""								);
+    sXCD.append		( sName																);
+    sXCD.appendAscii( "\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""	);
     sXCD.appendAscii( m_aData.bWriteable==sal_True ? "true\"" : "false\""               );
 
     if( lUINames.size() > 0 )
@@ -1554,8 +1574,8 @@ void XCDGenerator::impl_generateUINamesProperty(        ::rtl::OUStringBuffer&  
 {
     ::rtl::OUStringBuffer  sSource     ( sValue );
     ::rtl::OUStringBuffer  sDestination( 10000  );
-    sal_Int32       nCount      = sValue.getLength();
-    sal_Int32       i           = 0;
+    sal_Int32		nCount		= sValue.getLength();
+    sal_Int32		i			= 0;
 
     for( i=0; i<nCount; ++i )
     {
@@ -2290,6 +2310,53 @@ sal_Bool XCDGenerator::impl_isUsAsciiAlphaDigit(sal_Unicode c, sal_Bool bDigitAl
 ::rtl::OUString XCDGenerator::impl_encodeSetName( const ::rtl::OUString& rSource )
 {
     return impl_encodeSpecialSigns( rSource );
+/*
+    rtl::OUStringBuffer aTarget;
+
+    sal_Unicode const * pBegin = rSource.getStr();
+    sal_Unicode const * pEnd = pBegin + rSource.getLength();
+    sal_Unicode const * pCopyEnd = pBegin;
+    sal_Unicode const * p = pBegin;
+    while (p != pEnd)
+    {
+        sal_Unicode c = *p;
+        if (!impl_isUsAsciiAlphaDigit(c,p != pBegin))
+            switch (c)
+            {
+                case '-':
+                case '.':
+                    if (p != pBegin)
+                        break;
+                default:
+                    aTarget.append(pCopyEnd, p - pCopyEnd);
+                    aTarget.append(sal_Unicode('_'));
+                    ModifiedUTF7Buffer aBuffer(&aTarget);
+                    for (;;)
+                    {
+                        aBuffer.write(c);
+                        ++p;
+                        if (p == pEnd)
+                            break;
+                        c = *p;
+                        if (impl_isUsAsciiAlphaDigit(c) || c == '-' || c == '.')
+                            break;
+                    }
+                    aBuffer.flush();
+                    aTarget.append(sal_Unicode('_'));
+                    pCopyEnd = p;
+                    continue;
+            }
+        ++p;
+    }
+
+    if (pCopyEnd == pBegin)
+        return rSource;
+    else
+    {
+        aTarget.append(pCopyEnd, pEnd - pCopyEnd);
+        return aTarget.makeStringAndClear();
+    }
+*/
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

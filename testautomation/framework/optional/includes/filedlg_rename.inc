@@ -26,7 +26,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : gregor.hartmann@oracle.com
+'*  owner : Joerg.Skottke@Sun.Com
 '*
 '*  short description : Remane files dialog
 '*

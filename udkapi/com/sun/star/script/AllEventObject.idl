@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,53 +24,57 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_script_AllEventObject_idl__
-#define __com_sun_star_script_AllEventObject_idl__
-
-#include <com/sun/star/lang/EventObject.idl>
-
-#include <com/sun/star/reflection/XIdlClass.idl>
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module script {
-
-//=============================================================================
+#ifndef __com_sun_star_script_AllEventObject_idl__ 
+#define __com_sun_star_script_AllEventObject_idl__ 
+ 
+#ifndef __com_sun_star_lang_EventObject_idl__ 
+#include <com/sun/star/lang/EventObject.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_reflection_XIdlClass_idl__ 
+#include <com/sun/star/reflection/XIdlClass.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module script {  
+ 
+//============================================================================= 
 /** This event is a wrapper for an original event in a forwarding event.
-
-    <p> Usually the original event is the first argument in the
+    
+    <p> Usually the original event is the first argument in the 
     array of arguments. </p>
  */
 published struct AllEventObject: com::sun::star::lang::EventObject
-{
-    //-------------------------------------------------------------------------
+{ 
+    //------------------------------------------------------------------------- 
     /** A helper value for the implementation that can be used arbitrarily.
-
-        <p>This field reflects the third parameter of the method
+        
+        <p>This field reflects the third parameter of the method 
         <member>XAllListenerAdapterService::createAllListerAdapter</member>.
         </p>
      */
-    any Helper;
-
-    //-------------------------------------------------------------------------
+    any Helper; 
+ 
+    //------------------------------------------------------------------------- 
     /** contains the type of the original listener.
      */
-    type ListenerType;
-
-    //-------------------------------------------------------------------------
+    type ListenerType; 
+ 
+    //------------------------------------------------------------------------- 
     /** The original method name on which the event was fired.
      */
-    string MethodName;
-
-    //-------------------------------------------------------------------------
+    string MethodName; 
+ 
+    //------------------------------------------------------------------------- 
     /** The arguments of the original method.
      */
-    sequence<any> Arguments;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    sequence<any> Arguments; 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

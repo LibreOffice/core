@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ published interface XTransferDataAccess: com::sun::star::uno::XInterface
     /** To query for the summarized data size in bytes of a sequence of <type>DataFlavor</type>.
 
         @param aFlavorList
-        A sequence of requested <type>DataFlavor</type>.
+        A squence of requested <type>DataFlavor</type>. 
         <p>An unsupported <type>DataFlavor</type> will be ignored.</p>
 
         @returns
@@ -66,11 +66,11 @@ published interface XTransferDataAccess: com::sun::star::uno::XInterface
     /** To get all the data of a sequence of <type>DataFlavor</type>.
 
         @param aFlavorList
-        The sequence of requested <type>DataFlavor</type>.
+        The sequence of requested <type>DataFlavor</type>. 
         <p>An unsupported <type>DataFlavor</type> will be ignored.</p>
 
         @returns
-        The data in the requested <type>DataFlavor</type>.
+        The data in the requested <type>DataFlavor</type>. 
         <p>For unsupported <type>DataFlavor</type> an
         empty any will be returned.</p>
      */
@@ -79,6 +79,6 @@ published interface XTransferDataAccess: com::sun::star::uno::XInterface
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,8 +83,8 @@
 #include <com/sun/star/beans/UnknownPropertyException.idl>
 #endif
 
-#ifndef __com_sun_star_beans_PropertyVetoException_idl__
-#include <com/sun/star/beans/PropertyVetoException.idl>
+#ifndef __com_sun_star_beans_PropertyVetoException_idl__ 
+#include <com/sun/star/beans/PropertyVetoException.idl> 
 #endif
 
 //============================================================================
@@ -94,13 +94,13 @@
 //============================================================================
 /** This is a temporary interface that is introduced to temporarily optimize
     the document storing process. PLEASE DO NOT USE IT, it might change in any
-    time and will be deprecated soon!
+    time and will be depricated soon!
     Another solution will be introduced as final one.
  */
 published interface XOptimizedStorage
 {
     // -----------------------------------------------------------------------
-    /** allows to insert a raw stream representing non-encrypted stream with
+    /** allows to insert a raw stream representing nonencrypted stream with
         header.
      */
     void insertRawNonEncrStreamElementDirect(
@@ -174,13 +174,13 @@ published interface XOptimizedStorage
         of the supported by element properties.
      */
     any getElementPropertyValue( [in] string sElementName,
-                                 [in] string sPropertyName )
+                                 [in] string sPropertyName ) 
         raises( ::com::sun::star::embed::InvalidStorageException,
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException,
-                ::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::beans::PropertyVetoException,
+                ::com::sun::star::beans::UnknownPropertyException, 
+                ::com::sun::star::beans::PropertyVetoException, 
                 ::com::sun::star::embed::StorageWrappedTargetException );
 
     // -----------------------------------------------------------------------

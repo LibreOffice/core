@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,11 @@
 #include "precompiled_svl.hxx"
 
 #include <tools/debug.hxx>
-#include <svl/broadcast.hxx>
-#include <svl/listener.hxx>
+
+#include "broadcast.hxx"
+#include "listener.hxx"
 #include "listenerbase.hxx"
-#include <svl/listeneriter.hxx>
+#include "listeneriter.hxx"
 
 
 //====================================================================
@@ -73,7 +74,7 @@ SvtListener::~SvtListener()
 
 // registeres at a specific SvtBroadcaster
 
-sal_Bool SvtListener::StartListening( SvtBroadcaster& rBroadcaster )
+BOOL SvtListener::StartListening( SvtBroadcaster& rBroadcaster )
 {
     const SvtListenerBase* pLst = pBrdCastLst;
     while( pLst )
@@ -81,19 +82,19 @@ sal_Bool SvtListener::StartListening( SvtBroadcaster& rBroadcaster )
         if( &rBroadcaster == pLst->GetBroadcaster() )
         {
             // double, than return
-            return sal_False;
+            return FALSE;
         }
         pLst = pLst->GetNext();
     }
     new SvtListenerBase( *this, rBroadcaster );
-    return sal_True;
+    return TRUE;
 }
 
 //--------------------------------------------------------------------
 
 // unregisteres at a specific SvtBroadcaster
 
-sal_Bool SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
+BOOL SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
 {
     SvtListenerBase *pLst = pBrdCastLst, *pPrev = pLst;
     while( pLst )
@@ -106,12 +107,12 @@ sal_Bool SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
                 pPrev->SetNext( pLst->GetNext() );
 
             delete pLst;
-            return sal_True;
+            return TRUE;
         }
         pPrev = pLst;
         pLst = pLst->GetNext();
     }
-    return sal_False;
+    return FALSE;
 }
 
 //--------------------------------------------------------------------
@@ -133,7 +134,7 @@ void SvtListener::EndListeningAll()
 
 //--------------------------------------------------------------------
 
-sal_Bool SvtListener::IsListening( SvtBroadcaster& rBroadcaster ) const
+BOOL SvtListener::IsListening( SvtBroadcaster& rBroadcaster ) const
 {
     const SvtListenerBase *pLst = pBrdCastLst;
     while( pLst )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,9 +53,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;
 using namespace cppu;
 using namespace osl;
+using namespace rtl;
 using namespace x11;
-
-using ::rtl::OUString;
 
 X11Clipboard::X11Clipboard( SelectionManager& rManager, Atom aSelection ) :
         ::cppu::WeakComponentImplHelper4<
@@ -80,7 +79,7 @@ X11Clipboard::X11Clipboard( SelectionManager& rManager, Atom aSelection ) :
     else
     {
         m_rSelectionManager.registerHandler( XA_PRIMARY, *this );
-        m_rSelectionManager.registerHandler( m_rSelectionManager.getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("CLIPBOARD")) ), *this );
+        m_rSelectionManager.registerHandler( m_rSelectionManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) ), *this );
     }
 }
 
@@ -98,7 +97,7 @@ X11Clipboard::~X11Clipboard()
     else
     {
         m_rSelectionManager.deregisterHandler( XA_PRIMARY );
-        m_rSelectionManager.deregisterHandler( m_rSelectionManager.getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("CLIPBOARD")) ) );
+        m_rSelectionManager.deregisterHandler( m_rSelectionManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) ) );
     }
 }
 
@@ -109,7 +108,7 @@ void X11Clipboard::fireChangedContentsEvent()
 {
     ClearableMutexGuard aGuard( m_rSelectionManager.getMutex() );
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "X11Clipboard::fireChangedContentsEvent for %s (%" SAL_PRI_SIZET "u listeners)\n",
+    fprintf( stderr, "X11Clipboard::fireChangedContentsEvent for %s (%d listeners)\n",
              OUStringToOString( m_rSelectionManager.getString( m_aSelection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), m_aListeners.size() );
 #endif
     ::std::list< Reference< XClipboardListener > > listeners( m_aListeners );
@@ -138,7 +137,7 @@ void X11Clipboard::clearContents()
     // clear members
     m_aOwner.clear();
     m_aContents.clear();
-
+    
     // release the mutex
     aGuard.clear();
 
@@ -183,7 +182,7 @@ void SAL_CALL X11Clipboard::setContents(
     else
     {
         m_rSelectionManager.requestOwnership( XA_PRIMARY );
-        m_rSelectionManager.requestOwnership( m_rSelectionManager.getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("CLIPBOARD")) ) );
+        m_rSelectionManager.requestOwnership( m_rSelectionManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) ) );
     }
 
     // notify old owner on loss of ownership
@@ -262,7 +261,7 @@ Reference< XInterface > X11Clipboard::getReference() throw()
 OUString SAL_CALL X11Clipboard::getImplementationName(  )
     throw(RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(X11_CLIPBOARD_IMPLEMENTATION_NAME));
+    return OUString::createFromAscii(X11_CLIPBOARD_IMPLEMENTATION_NAME);
 }
 
 // ------------------------------------------------------------------------
@@ -287,7 +286,7 @@ void SAL_CALL X11Clipboard::initialize( const Sequence< Any >& ) throw( ::com::s
 
 // ------------------------------------------------------------------------
 
-Sequence< OUString > SAL_CALL X11Clipboard::getSupportedServiceNames(    )
+Sequence< OUString > SAL_CALL X11Clipboard::getSupportedServiceNames(	 )
     throw(RuntimeException)
 {
     return X11Clipboard_getSupportedServiceNames();

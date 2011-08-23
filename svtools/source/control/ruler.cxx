@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,10 +33,11 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/poly.hxx>
+
 #include <vcl/i18nhelp.hxx>
 
 #define _SV_RULER_CXX
-#include <svtools/ruler.hxx>
+#include <ruler.hxx>
 
 // =======================================================================
 
@@ -81,7 +82,7 @@
 #define RULER_UNIT_MILE     6
 #define RULER_UNIT_POINT    7
 #define RULER_UNIT_PICA     8
-#define RULER_UNIT_CHAR     9
+#define RULER_UNIT_CHAR	    9
 #define RULER_UNIT_LINE    10
 #define RULER_UNIT_COUNT    11
 
@@ -106,15 +107,15 @@ private:
     long                nNullOff;
     long                nMargin1;
     long                nMargin2;
-    sal_uInt16              nLines;
-    sal_uInt16              nArrows;
-    sal_uInt16              nBorders;
-    sal_uInt16              nIndents;
-    sal_uInt16              nTabs;
-    sal_uInt16              nMargin1Style;
-    sal_uInt16              nMargin2Style;
-    sal_Bool                bAutoPageWidth;
-    sal_Bool                bTextRTL;
+    USHORT              nLines;
+    USHORT              nArrows;
+    USHORT              nBorders;
+    USHORT              nIndents;
+    USHORT              nTabs;
+    USHORT              nMargin1Style;
+    USHORT              nMargin2Style;
+    BOOL                bAutoPageWidth;
+    BOOL                bTextRTL;
 
 #ifdef _SV_RULER_CXX
 public:
@@ -133,7 +134,7 @@ struct ImplRulerUnitData
     long            nTick2;             // Tick fuer halbe Werte
     long            nTick3;             // Tick fuer Zahlenausgabe
     long            n100THMM;           // Teiler fuer Einheit
-    sal_uInt16          nUnitDigits;        // Anzahl Nachkommastellen
+    USHORT          nUnitDigits;        // Anzahl Nachkommastellen
     sal_Char        aUnitStr[8];        // Einheiten-String
 };
 
@@ -148,7 +149,7 @@ static ImplRulerUnitData aImplRulerUnitTab[RULER_UNIT_COUNT] =
 { MAP_10TH_INCH,    633600, 63360, 316800, 633600, 1609344, 4, " miles" }, // MILE
 { MAP_POINT,             1,    12,     12,     36,     353, 2, " pt"    }, // POINT
 { MAP_100TH_MM,        423,   423,    423,    846,     423, 3, " pi"    }, // PICA
-{ MAP_100TH_MM,        371,   371,    371,    743,     371, 3, " ch"    }, // CHAR
+{ MAP_100TH_MM,	       371,   371,    371,    743,     371, 3, " ch"    }, // CHAR
 { MAP_100TH_MM,        551,   551,    551,   1102,     551, 3, " li"    }  // LINE
 };
 
@@ -158,13 +159,13 @@ struct ImplRulerHitTest
 {
     long        nPos;
     RulerType   eType;
-    sal_uInt16      nAryPos;
-    sal_uInt16      mnDragSize;
-    sal_Bool        bSize;
-    sal_Bool        bSizeBar;
-    sal_Bool        bExpandTest;
+    USHORT      nAryPos;
+    USHORT      mnDragSize;
+    BOOL        bSize;
+    BOOL        bSizeBar;
+    BOOL        bExpandTest;
     ImplRulerHitTest() :
-        bExpandTest( sal_False ) {}
+        bExpandTest( FALSE ) {}
 };
 
 // =======================================================================
@@ -174,7 +175,7 @@ ImplRulerData::ImplRulerData()
     memset( this, 0, sizeof( ImplRulerData ) );
 
     // PageBreite == EditWinBreite
-    bAutoPageWidth   = sal_True;
+    bAutoPageWidth   = TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -192,9 +193,6 @@ ImplRulerData::~ImplRulerData()
 
 ImplRulerData& ImplRulerData::operator=( const ImplRulerData& rData )
 {
-    if( this == &rData )
-        return *this;
-
     delete[] pLines;
     delete[] pArrows;
     delete[] pBorders;
@@ -249,7 +247,7 @@ void Ruler::ImplInit( WinBits nWinBits )
 
         // --- RTL --- no UI mirroring for horizontal rulers, because
         // the document is also not mirrored
-        EnableRTL( sal_False );
+        EnableRTL( FALSE );
     }
 
     // Variablen initialisieren
@@ -273,13 +271,13 @@ void Ruler::ImplInit( WinBits nWinBits )
     mnExtraModifier = 0;                    // Modifier-Tasten beim Click im Extrafeld
     mnCharWidth     = 371;
     mnLineHeight    = 551;
-    mbCalc          = sal_True;                 // Muessen Pagebreiten neu berechnet werden
-    mbFormat        = sal_True;                 // Muss neu ausgegeben werden
-    mbDrag          = sal_False;                // Sind wir im Drag-Modus
-    mbDragDelete    = sal_False;                // Wird Maus beim Draggen unten rausgezogen
-    mbDragCanceled  = sal_False;                // Wurde Dragging abgebrochen
-    mbAutoWinWidth  = sal_True;                 // EditWinBreite == RulerBreite
-    mbActive        = sal_True;                 // Ist Lineal aktiv
+    mbCalc          = TRUE;                 // Muessen Pagebreiten neu berechnet werden
+    mbFormat        = TRUE;                 // Muss neu ausgegeben werden
+    mbDrag          = FALSE;                // Sind wir im Drag-Modus
+    mbDragDelete    = FALSE;                // Wird Maus beim Draggen unten rausgezogen
+    mbDragCanceled  = FALSE;                // Wurde Dragging abgebrochen
+    mbAutoWinWidth  = TRUE;                 // EditWinBreite == RulerBreite
+    mbActive        = TRUE;                 // Ist Lineal aktiv
     mnUpdateFlags   = 0;                    // Was soll im Update-Handler upgedatet werden
     mpData          = mpSaveData;           // Wir zeigen auf die normalen Daten
     meExtraType     = RULER_EXTRA_DONTKNOW; // Was im ExtraFeld dargestellt wird
@@ -303,7 +301,7 @@ void Ruler::ImplInit( WinBits nWinBits )
         mnBorderWidth = 0;
 
     // Einstellungen setzen
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( TRUE, TRUE, TRUE );
 
     // Default-Groesse setzen
     long nDefHeight = GetTextHeight() + RULER_OFF*2 + RULER_TEXTOFF*2 + mnBorderWidth;
@@ -313,7 +311,6 @@ void Ruler::ImplInit( WinBits nWinBits )
     else
         aDefSize.Width() = nDefHeight;
     SetOutputSizePixel( aDefSize );
-    SetType(WINDOW_RULER);
 }
 
 // -----------------------------------------------------------------------
@@ -402,7 +399,7 @@ void Ruler::ImplVDrawText( long nX, long nY, const String& rText )
 
 // -----------------------------------------------------------------------
 
-void Ruler::ImplInvertLines( sal_Bool bErase )
+void Ruler::ImplInvertLines( BOOL bErase )
 {
     // Positionslinien
     if ( mpData->nLines && mbActive && !mbDrag && !mbFormat &&
@@ -422,7 +419,7 @@ void Ruler::ImplInvertLines( sal_Bool bErase )
             aRect.Right() = nY;
 
         // Linien ausgeben
-        for ( sal_uInt16 i = 0; i < mpData->nLines; i++ )
+        for ( USHORT i = 0; i < mpData->nLines; i++ )
         {
             n = mpData->pLines[i].nPos+nNullWinOff;
             if ( (n >= nRulX1) && (n < nRulX2) )
@@ -468,13 +465,14 @@ void Ruler::ImplInvertLines( sal_Bool bErase )
 void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
 {
     long    n = 0;
+    long    nTick = 0;
     long    nTick3 = aImplRulerUnitTab[mnUnitIndex].nTick3;
     long    nTickCount = aImplRulerUnitTab[mnUnitIndex].nTick1;
     Size    aPixSize = maVirDev.LogicToPixel( Size( nTick3, nTick3 ), maMapMode );
     long    nTickWidth;
     long    nX;
     long    nY;
-    sal_Bool    bNoTicks = sal_False;
+    BOOL    bNoTicks = FALSE;
 
     //Amelia
     long    nTickUnit = 0;
@@ -500,8 +498,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     aPixSize = maVirDev.LogicToPixel( Size( nTick3, nTick3 ), maMapMode );
 
     // Groessenvorberechnung
-    // Sizes calculation
-    sal_Bool bVertRight = sal_False;
+    BOOL bVertRight = FALSE;
     if ( mnWinStyle & WB_HORZ )
         nTickWidth = aPixSize.Width();
     else
@@ -510,7 +507,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
         if ( mnWinStyle & WB_RIGHT_ALIGNED )
         {
             aFont.SetOrientation( 2700 );
-            bVertRight = sal_True;
+            bVertRight = TRUE;
         }
         else
             aFont.SetOrientation( 900 );
@@ -519,7 +516,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     }
     long nMaxWidth = maVirDev.PixelToLogic( Size( mpData->nPageWidth, 0 ), maMapMode ).Width();
     if ( nMaxWidth < 0 )
-        nMaxWidth = -nMaxWidth;
+        nMaxWidth *= -1;
     // Amelia
     if (( mnUnitIndex == RULER_UNIT_CHAR ) || ( mnUnitIndex == RULER_UNIT_LINE ))
         nMaxWidth /= nTickUnit;
@@ -536,7 +533,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
         while ( nTickWidth < nTxtWidth+nTextOff )
         {
             long nOldMulti = nMulti;
-            if ( !nTickWidth ) //If nTickWidth equals 0
+            if ( !nTickWidth )
                 nMulti *= 10;
             else if ( nMulti < 10 )
                 nMulti++;
@@ -551,7 +548,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
             // koennen
             if ( nMulti < nOldMulti )
             {
-                bNoTicks = sal_True;
+                bNoTicks = TRUE;
                 break;
             }
 
@@ -571,7 +568,6 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     {
         long nTxtWidth2;
         long nTxtHeight2 = GetTextHeight()/2;
-        long nTick = 0;
         while ( ((nStart-n) >= nMin) || ((nStart+n) <= nMax) )
         {
             // Null-Punkt
@@ -658,7 +654,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                 }
             }
             // #i49017# with some zoom factors the value nTick can overflow
-            if( ((sal_uLong)nTick + (sal_uLong)nTickCount) > (sal_uLong)LONG_MAX)
+            if( ((ULONG)nTick + (ULONG)nTickCount) > (ULONG)LONG_MAX)
                 break;
             nTick += nTickCount;
         }
@@ -669,7 +665,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
 
 void Ruler::ImplDrawArrows( long nCenter )
 {
-    sal_uInt16          i;
+    USHORT          i;
     long            n1;
     long            n2;
     long            n3;
@@ -677,7 +673,7 @@ void Ruler::ImplDrawArrows( long nCenter )
     long            nLogWidth;
     String          aStr;
     String          aStr2;
-    sal_Bool            bDrawUnit;
+    BOOL            bDrawUnit;
     long            nTxtWidth;
     long            nTxtHeight2 = GetTextHeight()/2;
 
@@ -702,14 +698,14 @@ void Ruler::ImplDrawArrows( long nCenter )
             nLogWidth = (nLogWidth / aImplRulerUnitTab[mnUnitIndex].n100THMM) * 1000;
         else
             nLogWidth = (nLogWidth*1000) / aImplRulerUnitTab[mnUnitIndex].n100THMM;
-        aStr = rI18nHelper.GetNum( nLogWidth, aImplRulerUnitTab[mnUnitIndex].nUnitDigits, sal_True, sal_False );
+        aStr = rI18nHelper.GetNum( nLogWidth, aImplRulerUnitTab[mnUnitIndex].nUnitDigits, TRUE, FALSE );
 
         // Einheit an den String haengen
         aStr2 = aStr;
         aStr2.AppendAscii( aImplRulerUnitTab[mnUnitIndex].aUnitStr );
 
         // Textbreite ermitteln
-        bDrawUnit = sal_True;
+        bDrawUnit = TRUE;
         nTxtWidth = GetTextWidth( aStr2 );
         if ( nTxtWidth < mpData->pArrows[i].nWidth-10 )
             aStr = aStr2;
@@ -717,7 +713,7 @@ void Ruler::ImplDrawArrows( long nCenter )
         {
             nTxtWidth = GetTextWidth( aStr );
             if ( nTxtWidth > mpData->pArrows[i].nWidth-10 )
-                bDrawUnit = sal_False;
+                bDrawUnit = FALSE;
         }
 
         // Ist genuegen Platz fuer Einheiten-String vorhanden
@@ -761,7 +757,7 @@ void Ruler::ImplDrawBorders( long nMin, long nMax, long nVirTop, long nVirBottom
     long    n2;
     long    nTemp1;
     long    nTemp2;
-    sal_uInt16  i;
+    USHORT  i;
 
     for ( i = 0; i < mpData->nBorders; i++ )
     {
@@ -879,12 +875,12 @@ void Ruler::ImplDrawBorders( long nMin, long nMax, long nVirTop, long nVirBottom
 
 // -----------------------------------------------------------------------
 
-void Ruler::ImplDrawIndent( const Polygon& rPoly, sal_uInt16 nStyle )
+void Ruler::ImplDrawIndent( const Polygon& rPoly, USHORT nStyle )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     Point   aPos1;
     Point   aPos2;
-    sal_uInt16  nIndentStyle = nStyle & RULER_INDENT_STYLE;
+    USHORT  nIndentStyle = nStyle & RULER_INDENT_STYLE;
 
     if ( nStyle & RULER_STYLE_INVISIBLE )
         return;
@@ -968,7 +964,7 @@ void Ruler::ImplDrawIndent( const Polygon& rPoly, sal_uInt16 nStyle )
 
 void Ruler::ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom )
 {
-    sal_uInt16  j;
+    USHORT  j;
     long    n;
     long    nIndentHeight = (mnVirHeight/2) - 1;
     long    nIndentWidth2 = nIndentHeight-3;
@@ -979,8 +975,8 @@ void Ruler::ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom
         if ( mpData->pIndents[j].nStyle & RULER_STYLE_INVISIBLE )
             continue;
 
-        sal_uInt16  nStyle = mpData->pIndents[j].nStyle;
-        sal_uInt16  nIndentStyle = nStyle & RULER_INDENT_STYLE;
+        USHORT  nStyle = mpData->pIndents[j].nStyle;
+        USHORT  nIndentStyle = nStyle & RULER_INDENT_STYLE;
 
         n = mpData->pIndents[j].nPos+mpData->nNullVirOff;
 
@@ -1012,7 +1008,7 @@ void Ruler::ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom
             if(0 == (mnWinStyle & WB_HORZ))
             {
                 Point aTmp;
-                for(sal_uInt16 i = 0; i < 5; i++)
+                for(USHORT i = 0; i < 5; i++)
                 {
                     aTmp = aPoly[i];
                     Point aSet(nVirBottom - aTmp.Y(), aTmp.X());
@@ -1027,9 +1023,9 @@ void Ruler::ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom
 
 // -----------------------------------------------------------------------
 
-static void ImplCenterTabPos( Point& rPos, sal_uInt16 nTabStyle )
+static void ImplCenterTabPos( Point& rPos, USHORT nTabStyle )
 {
-    sal_Bool bRTL  = 0 != (nTabStyle & RULER_TAB_RTL);
+    BOOL bRTL  = 0 != (nTabStyle & RULER_TAB_RTL);
     nTabStyle &= RULER_TAB_STYLE;
     rPos.Y() += RULER_TAB_HEIGHT/2;
     if ( (!bRTL && nTabStyle == RULER_TAB_LEFT) ||( bRTL && nTabStyle == RULER_TAB_RIGHT))
@@ -1039,7 +1035,7 @@ static void ImplCenterTabPos( Point& rPos, sal_uInt16 nTabStyle )
 }
 
 // -----------------------------------------------------------------------
-void lcl_RotateRect_Impl(Rectangle& rRect, const long nReference, sal_Bool bRightAligned)
+void lcl_RotateRect_Impl(Rectangle& rRect, const long nReference, BOOL bRightAligned)
 {
     if(!rRect.IsEmpty())
     {
@@ -1059,13 +1055,13 @@ void lcl_RotateRect_Impl(Rectangle& rRect, const long nReference, sal_Bool bRigh
 // -----------------------------------------------------------------------
 
 static void ImplDrawRulerTab( OutputDevice* pDevice,
-                             const Point& rPos, sal_uInt16 nStyle, WinBits nWinBits )
+                             const Point& rPos, USHORT nStyle, WinBits nWinBits )
 {
     if ( nStyle & RULER_STYLE_INVISIBLE )
         return;
 
-    sal_uInt16 nTabStyle = nStyle & RULER_TAB_STYLE;
-    sal_Bool bRTL = 0 != (nStyle & RULER_TAB_RTL);
+    USHORT nTabStyle = nStyle & RULER_TAB_STYLE;
+    BOOL bRTL = 0 != (nStyle & RULER_TAB_RTL);
     Rectangle aRect1, aRect2, aRect3;
     aRect3.SetEmpty();
     if ( nTabStyle == RULER_TAB_DEFAULT )
@@ -1123,7 +1119,7 @@ static void ImplDrawRulerTab( OutputDevice* pDevice,
     }
     if( 0 == (nWinBits&WB_HORZ) )
     {
-        sal_Bool bRightAligned = 0 != (nWinBits&WB_RIGHT_ALIGNED);
+        BOOL bRightAligned = 0 != (nWinBits&WB_RIGHT_ALIGNED);
         lcl_RotateRect_Impl(aRect1, rPos.Y(), bRightAligned);
         lcl_RotateRect_Impl(aRect2, rPos.Y(), bRightAligned);
         lcl_RotateRect_Impl(aRect3, rPos.Y(), bRightAligned);
@@ -1137,7 +1133,7 @@ static void ImplDrawRulerTab( OutputDevice* pDevice,
 
 // -----------------------------------------------------------------------
 
-void Ruler::ImplDrawTab( OutputDevice* pDevice, const Point& rPos, sal_uInt16 nStyle )
+void Ruler::ImplDrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle )
 {
     if ( nStyle & RULER_STYLE_INVISIBLE )
         return;
@@ -1157,7 +1153,7 @@ void Ruler::ImplDrawTab( OutputDevice* pDevice, const Point& rPos, sal_uInt16 nS
 
 void Ruler::ImplDrawTabs( long nMin, long nMax, long nVirTop, long nVirBottom )
 {
-    for ( sal_uInt16 i = 0; i < mpData->nTabs; i++ )
+    for ( USHORT i = 0; i < mpData->nTabs; i++ )
     {
         if ( mpData->pTabs[i].nStyle & RULER_STYLE_INVISIBLE )
             continue;
@@ -1173,8 +1169,8 @@ void Ruler::ImplDrawTabs( long nMin, long nMax, long nVirTop, long nVirBottom )
 
 // -----------------------------------------------------------------------
 
-void Ruler::ImplInitSettings( sal_Bool bFont,
-                              sal_Bool bForeground, sal_Bool bBackground )
+void Ruler::ImplInitSettings( BOOL bFont,
+                              BOOL bForeground, BOOL bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -1263,7 +1259,7 @@ void Ruler::ImplCalc()
             mpData->nRulWidth = mnHeight-nRulWinOff;
     }
 
-    mbCalc = sal_False;
+    mbCalc = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -1303,9 +1299,9 @@ void Ruler::ImplFormat()
         return;
 
     Size    aVirDevSize;
-    sal_Bool    b3DLook = !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO);
+    BOOL    b3DLook = !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO);
 
-    // initialize VirtualDevice
+    // initialize VirtualDevice 
     if ( mnWinStyle & WB_HORZ )
     {
         aVirDevSize.Width() = mnVirWidth;
@@ -1317,7 +1313,7 @@ void Ruler::ImplFormat()
         aVirDevSize.Width() = mnVirHeight;
     }
     if ( aVirDevSize != maVirDev.GetOutputSizePixel() )
-        maVirDev.SetOutputSizePixel( aVirDevSize, sal_True );
+        maVirDev.SetOutputSizePixel( aVirDevSize, TRUE );
     else
         maVirDev.Erase();
 
@@ -1457,12 +1453,12 @@ void Ruler::ImplFormat()
         ImplDrawArrows( nVirTop+((nVirBottom-nVirTop)/2) );
 
     // Wir haben formatiert
-    mbFormat = sal_False;
+    mbFormat = FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-void Ruler::ImplInitExtraField( sal_Bool bUpdate )
+void Ruler::ImplInitExtraField( BOOL bUpdate )
 {
     // Extra-Field beruecksichtigen
     if ( mnWinStyle & WB_EXTRAFIELD )
@@ -1492,8 +1488,8 @@ void Ruler::ImplInitExtraField( sal_Bool bUpdate )
 
     if ( bUpdate )
     {
-        mbCalc      = sal_True;
-        mbFormat    = sal_True;
+        mbCalc      = TRUE;
+        mbFormat    = TRUE;
         Invalidate();
     }
 }
@@ -1517,31 +1513,31 @@ void Ruler::ImplDraw()
             if(mpData->bTextRTL)
                 aVirDevSize.Width() -= maExtraRect.GetWidth();
 
-//  else
-//      aVirDevSize.Width() -= mnVirOff;
+//	else
+//		aVirDevSize.Width() -= mnVirOff;
             aOffPos.Y() = RULER_OFF;
         }
         else
         {
             aOffPos.X() = RULER_OFF;
             aOffPos.Y() = mnVirOff;
-//  else
-//      aVirDevSize.Height() -= mnVirOff;
+//	else
+//		aVirDevSize.Height() -= mnVirOff;
         }
         DrawOutDev( aOffPos, aVirDevSize, Point(), aVirDevSize, maVirDev );
 
         // Positionslinien neu malen
-        ImplInvertLines( sal_True );
+        ImplInvertLines( TRUE );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void Ruler::ImplDrawExtra( sal_Bool bPaint )
+void Ruler::ImplDrawExtra( BOOL bPaint )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     Rectangle   aRect = maExtraRect;
-    sal_Bool        bEraseRect = sal_False;
+    BOOL        bEraseRect = FALSE;
 
     if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
     {
@@ -1564,14 +1560,14 @@ void Ruler::ImplDrawExtra( sal_Bool bPaint )
             SetFillColor( rStyleSettings.GetFaceColor() );
         else
             SetFillColor( rStyleSettings.GetWindowColor() );
-        bEraseRect = sal_True;
+        bEraseRect = TRUE;
     }
     else
     {
         if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) && (mnExtraStyle & RULER_STYLE_HIGHLIGHT) )
         {
             SetFillColor( rStyleSettings.GetCheckedColor() );
-            bEraseRect = sal_True;
+            bEraseRect = TRUE;
         }
     }
 
@@ -1595,7 +1591,7 @@ void Ruler::ImplDrawExtra( sal_Bool bPaint )
     }
     else if ( meExtraType == RULER_EXTRA_TAB )
     {
-        sal_uInt16 nTabStyle = mnExtraStyle & RULER_TAB_STYLE;
+        USHORT nTabStyle = mnExtraStyle & RULER_TAB_STYLE;
         if(mpData->bTextRTL)
             nTabStyle |= RULER_TAB_RTL;
         Point aCenter = aRect.Center();
@@ -1622,7 +1618,7 @@ void Ruler::ImplDrawExtra( sal_Bool bPaint )
 
 // -----------------------------------------------------------------------
 
-void Ruler::ImplUpdate( sal_Bool bMustCalc )
+void Ruler::ImplUpdate( BOOL bMustCalc )
 {
     // Hier schon Linien loeschen, damit Sie vor dem Neuberechnen schon
     // geloscht sind, da danach die alten Positionen nicht mehr bestimmt
@@ -1632,8 +1628,8 @@ void Ruler::ImplUpdate( sal_Bool bMustCalc )
 
     // Flags setzen
     if ( bMustCalc )
-        mbCalc = sal_True;
-    mbFormat = sal_True;
+        mbCalc = TRUE;
+    mbFormat = TRUE;
 
     // Wenn wir am Draggen sind, wird nach dem Drag-Handler automatisch
     // das Lineal neu upgedatet
@@ -1651,11 +1647,11 @@ void Ruler::ImplUpdate( sal_Bool bMustCalc )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
-                         sal_Bool bRequireStyle, sal_uInt16 nRequiredStyle ) const
+BOOL Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
+                         BOOL bRequireStyle, USHORT nRequiredStyle ) const
 {
-    sal_uInt16      i;
-    sal_uInt16      nStyle;
+    USHORT      i;
+    USHORT      nStyle;
     long        nHitBottom;
     long        nX;
     long        nY;
@@ -1663,10 +1659,10 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
     long        n2;
 
     if ( !mbActive )
-        return sal_False;
+        return FALSE;
 
     // Position ermitteln
-    sal_Bool bIsHori = 0 != (mnWinStyle & WB_HORZ);
+    BOOL bIsHori = 0 != (mnWinStyle & WB_HORZ);
     if ( bIsHori )
     {
         nX = rPos.X();
@@ -1682,8 +1678,8 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
     // --> FME 2004-08-05 #i32608#
     pHitTest->nAryPos = 0;
     pHitTest->mnDragSize = 0;
-    pHitTest->bSize = sal_False;
-    pHitTest->bSizeBar = sal_False;
+    pHitTest->bSize = FALSE;
+    pHitTest->bSizeBar = FALSE;
     // <--
 
     // Damit ueberstehende Tabs und Einzuege mit beruecksichtigt werden
@@ -1701,7 +1697,7 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
     {
         pHitTest->nPos = 0;
         pHitTest->eType = RULER_TYPE_OUTSIDE;
-        return sal_False;
+        return FALSE;
     }
 
     nX -= mpData->nNullVirOff;
@@ -1747,7 +1743,7 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
                     {
                         pHitTest->eType     = RULER_TYPE_TAB;
                         pHitTest->nAryPos   = i-1;
-                        return sal_True;
+                        return TRUE;
                     }
                 }
             }
@@ -1788,7 +1784,7 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
                 {
                     pHitTest->eType     = RULER_TYPE_INDENT;
                     pHitTest->nAryPos   = i-1;
-                    return sal_True;
+                    return TRUE;
                 }
             }
         }
@@ -1799,7 +1795,7 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
     {
         pHitTest->nPos = 0;
         pHitTest->eType = RULER_TYPE_OUTSIDE;
-        return sal_False;
+        return FALSE;
     }
 
     // Danach die Spalten testen
@@ -1834,7 +1830,7 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
                 {
                     if ( nStyle & RULER_BORDER_MOVEABLE )
                     {
-                        pHitTest->bSizeBar = sal_True;
+                        pHitTest->bSizeBar = TRUE;
                         pHitTest->mnDragSize = RULER_DRAGSIZE_MOVE;
                     }
                 }
@@ -1854,25 +1850,25 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
 
                     if ( nX <= n1+nMOff )
                     {
-                        pHitTest->bSize = sal_True;
+                        pHitTest->bSize = TRUE;
                         pHitTest->mnDragSize = RULER_DRAGSIZE_1;
                     }
                     else if ( nX >= n2-nMOff )
                     {
-                        pHitTest->bSize = sal_True;
+                        pHitTest->bSize = TRUE;
                         pHitTest->mnDragSize = RULER_DRAGSIZE_2;
                     }
                     else
                     {
                         if ( nStyle & RULER_BORDER_MOVEABLE )
                         {
-                            pHitTest->bSizeBar = sal_True;
+                            pHitTest->bSizeBar = TRUE;
                             pHitTest->mnDragSize = RULER_DRAGSIZE_MOVE;
                         }
                     }
                 }
 
-                return sal_True;
+                return TRUE;
             }
         }
     }
@@ -1886,8 +1882,8 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
         if ( (nX >= n1 - nMarginTolerance) && (nX <= n1 + nMarginTolerance) )
         {
             pHitTest->eType = RULER_TYPE_MARGIN1;
-            pHitTest->bSize = sal_True;
-            return sal_True;
+            pHitTest->bSize = TRUE;
+            return TRUE;
         }
     }
     if ( (mpData->nMargin2Style & (RULER_MARGIN_SIZEABLE | RULER_STYLE_INVISIBLE)) == RULER_MARGIN_SIZEABLE )
@@ -1896,8 +1892,8 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
         if ( (nX >= n1 - nMarginTolerance) && (nX <= n1 + nMarginTolerance) )
         {
             pHitTest->eType = RULER_TYPE_MARGIN2;
-            pHitTest->bSize = sal_True;
-            return sal_True;
+            pHitTest->bSize = TRUE;
+            return TRUE;
         }
     }
 
@@ -1942,28 +1938,28 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
                     {
                         pHitTest->eType     = RULER_TYPE_TAB;
                         pHitTest->nAryPos   = i-1;
-                        return sal_True;
+                        return TRUE;
                     }
                 }
             }
         }
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
+BOOL Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
                             ImplRulerHitTest* pHitTest ) const
 {
     Point aPos = rPos;
-    sal_Bool bRequiredStyle = sal_False;
-    sal_uInt16 nRequiredStyle = 0;
+    BOOL bRequiredStyle = FALSE;
+    USHORT nRequiredStyle = 0;
 
     if (eDragType == RULER_TYPE_INDENT)
     {
-        bRequiredStyle = sal_True;
+        bRequiredStyle = TRUE;
         nRequiredStyle = RULER_INDENT_BOTTOM;
     }
 
@@ -1983,7 +1979,7 @@ sal_Bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
         if ( ImplHitTest( aPos, pHitTest, bRequiredStyle, nRequiredStyle ) )
         {
             if ( (pHitTest->eType == eDragType) || (eDragType == RULER_TYPE_DONTKNOW) )
-                return sal_True;
+                return TRUE;
         }
     }
 
@@ -1999,7 +1995,7 @@ sal_Bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
         if ( ImplHitTest( aPos, pHitTest, bRequiredStyle, nRequiredStyle ) )
         {
             if ( (pHitTest->eType == eDragType) || (eDragType == RULER_TYPE_DONTKNOW) )
-                return sal_True;
+                return TRUE;
         }
     }
 
@@ -2015,25 +2011,25 @@ sal_Bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
         if ( ImplHitTest( aPos, pHitTest ) )
         {
             if ( (pHitTest->eType == eDragType) || (eDragType == RULER_TYPE_DONTKNOW) )
-                return sal_True;
+                return TRUE;
         }
     }
 
     // Auf DontKnow setzen
     pHitTest->eType = RULER_TYPE_DONTKNOW;
 
-    return sal_False;
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Ruler::ImplStartDrag( ImplRulerHitTest* pHitTest, sal_uInt16 nModifier )
+BOOL Ruler::ImplStartDrag( ImplRulerHitTest* pHitTest, USHORT nModifier )
 {
     // Wenn eine Spalte angeklick wurde, die weder verschiebar noch
     // in der Groesse aenderbar ist, brauchen wir auch kein Drag ausloesen
     if ( (pHitTest->eType == RULER_TYPE_BORDER) &&
          !pHitTest->bSize && !pHitTest->bSizeBar )
-        return sal_False;
+        return FALSE;
 
     // Dragdaten setzen
     meDragType      = pHitTest->eType;
@@ -2050,10 +2046,10 @@ sal_Bool Ruler::ImplStartDrag( ImplRulerHitTest* pHitTest, sal_uInt16 nModifier 
         // Wenn der Handler das Draggen erlaubt, dann das Draggen
         // initialisieren
         ImplInvertLines();
-        mbDrag = sal_True;
+        mbDrag = TRUE;
         mnStartDragPos = mnDragPos;
         StartTracking();
-        return sal_True;
+        return TRUE;
     }
     else
     {
@@ -2066,7 +2062,7 @@ sal_Bool Ruler::ImplStartDrag( ImplRulerHitTest* pHitTest, sal_uInt16 nModifier 
         mpData          = mpSaveData;
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -2105,18 +2101,18 @@ void Ruler::ImplDrag( const Point& rPos )
     nX -= mpData->nNullVirOff;
 
     // Wenn oberhalb oder links vom Lineal, dann alte Werte
-    mbDragDelete = sal_False;
+    mbDragDelete = FALSE;
     if ( nY < 0 )
     {
         if ( !mbDragCanceled )
         {
             // Daten wiederherstellen
-            mbDragCanceled = sal_True;
+            mbDragCanceled = TRUE;
             ImplRulerData aTempData;
             aTempData = *mpDragData;
             *mpDragData = *mpSaveData;
-            mbCalc = sal_True;
-            mbFormat = sal_True;
+            mbCalc = TRUE;
+            mbFormat = TRUE;
 
             // Handler rufen
             mnDragPos = mnStartDragPos;
@@ -2137,11 +2133,11 @@ void Ruler::ImplDrag( const Point& rPos )
     }
     else
     {
-        mbDragCanceled = sal_False;
+        mbDragCanceled = FALSE;
 
         // +2, damit nicht so schnell die Tabs geloescht werden
         if ( nY > nOutHeight+2 )
-            mbDragDelete = sal_True;
+            mbDragDelete = TRUE;
 
         mnDragPos = nX;
 
@@ -2166,7 +2162,7 @@ void Ruler::ImplEndDrag()
     else
         *mpSaveData = *mpDragData;
     mpData = mpSaveData;
-    mbDrag = sal_False;
+    mbDrag = FALSE;
 
     // Handler rufen
     EndDrag();
@@ -2176,8 +2172,8 @@ void Ruler::ImplEndDrag()
     mnDragPos       = 0;
     mnDragAryPos    = 0;
     mnDragSize      = 0;
-    mbDragCanceled  = sal_False;
-    mbDragDelete    = sal_False;
+    mbDragCanceled  = FALSE;
+    mbDragDelete    = FALSE;
     mnDragModifier  = 0;
     mnDragScroll    = 0;
     mnStartDragPos  = 0;
@@ -2214,8 +2210,8 @@ void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeft() && !IsTracking() )
     {
         Point   aMousePos = rMEvt.GetPosPixel();
-        sal_uInt16  nMouseClicks = rMEvt.GetClicks();
-        sal_uInt16  nMouseModifier = rMEvt.GetModifier();
+        USHORT  nMouseClicks = rMEvt.GetClicks();
+        USHORT  nMouseModifier = rMEvt.GetModifier();
 
         // Gegebenenfalls Lineal updaten (damit mit den richtigen Daten
         // gearbeitet wird und die Anzeige auch zur Bearbeitung passt)
@@ -2321,8 +2317,8 @@ void Ruler::Tracking( const TrackingEvent& rTEvt )
         // Bei Abbruch, den alten Status wieder herstellen
         if ( rTEvt.IsTrackingCanceled() )
         {
-            mbDragCanceled = sal_True;
-            mbFormat       = sal_True;
+            mbDragCanceled = TRUE;
+            mbFormat       = TRUE;
         }
 
         ImplEndDrag();
@@ -2371,7 +2367,7 @@ void Ruler::Paint( const Rectangle& )
         }
 
         // Imhalt vom Extrafeld ausgeben
-        ImplDrawExtra( sal_True );
+        ImplDrawExtra( TRUE );
     }
 
     if ( mnWinStyle & WB_BORDER )
@@ -2436,7 +2432,7 @@ void Ruler::Resize()
     }
 
     // Hier schon Linien loeschen
-    sal_Bool bVisible = IsReallyVisible();
+    BOOL bVisible = IsReallyVisible();
     if ( bVisible && mpData->nLines )
     {
         ImplInvertLines();
@@ -2444,7 +2440,7 @@ void Ruler::Resize()
         if ( !mnUpdateEvtId )
             mnUpdateEvtId = Application::PostUserEvent( LINK( this, Ruler, ImplUpdateHdl ), NULL );
     }
-    mbFormat = sal_True;
+    mbFormat = TRUE;
 
     // Wenn sich die Hoehe bzw. Breite aendert, dann muessen besimmte Werte
     // neu berechnet werden
@@ -2452,15 +2448,15 @@ void Ruler::Resize()
     ImplInitExtraField( mpData->bTextRTL );
     if ( nNewHeight )
     {
-        mbCalc = sal_True;
+        mbCalc = TRUE;
         mnVirHeight = nNewHeight - mnBorderWidth - (RULER_OFF*2);
     }
     else
     {
         if ( mpData->bAutoPageWidth )
-            ImplUpdate( sal_True );
+            ImplUpdate( TRUE );
         else if ( mbAutoWinWidth )
-            mbCalc = sal_True;
+            mbCalc = TRUE;
     }
 
     // Wenn Ruler eine Groesse hat, dann Groesse vom VirtualDevice setzen
@@ -2534,17 +2530,17 @@ void Ruler::StateChanged( StateChangedType nType )
     else if ( (nType == STATE_CHANGE_ZOOM) ||
               (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        ImplInitSettings( sal_True, sal_False, sal_False );
+        ImplInitSettings( TRUE, FALSE, FALSE );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( sal_False, sal_True, sal_False );
+        ImplInitSettings( FALSE, TRUE, FALSE );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( sal_False, sal_False, sal_True );
+        ImplInitSettings( FALSE, FALSE, TRUE );
         Invalidate();
     }
 }
@@ -2561,8 +2557,8 @@ void Ruler::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        mbFormat = sal_True;
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        mbFormat = TRUE;
+        ImplInitSettings( TRUE, TRUE, TRUE );
         Invalidate();
     }
 }
@@ -2574,7 +2570,7 @@ long Ruler::StartDrag()
     if ( maStartDragHdl.IsSet() )
         return maStartDragHdl.Call( this );
     else
-        return sal_False;
+        return FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -2616,9 +2612,9 @@ void Ruler::ExtraDown()
 
 void Ruler::Activate()
 {
-    mbActive = sal_True;
+    mbActive = TRUE;
 
-    // Positionslinien wieder anzeigen (erst hinter mbActive=sal_True rufen, da
+    // Positionslinien wieder anzeigen (erst hinter mbActive=TRUE rufen, da
     // von ImplInvertLines() ausgewertet wird). Das Zeichnen der Linien
     // wird verzoegert, damit im vermutlich noch nicht gepainteten Zustand
     // Linien gezeichnet werden.
@@ -2631,25 +2627,25 @@ void Ruler::Activate()
 
 void Ruler::Deactivate()
 {
-    // Positionslinien loeschen (schon vor mbActive=sal_False rufen, da
+    // Positionslinien loeschen (schon vor mbActive=FALSE rufen, da
     // von ImplInvertLines() ausgewertet wird)
     ImplInvertLines();
 
-    mbActive = sal_False;
+    mbActive = FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
+BOOL Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
 {
     if ( !mbDrag )
     {
         Point               aMousePos = rMEvt.GetPosPixel();
-        sal_uInt16              nMouseClicks = rMEvt.GetClicks();
-        sal_uInt16              nMouseModifier = rMEvt.GetModifier();
+        USHORT              nMouseClicks = rMEvt.GetClicks();
+        USHORT              nMouseModifier = rMEvt.GetModifier();
         ImplRulerHitTest    aHitTest;
         if(eDragType != RULER_TYPE_DONTKNOW)
-            aHitTest.bExpandTest = sal_True;
+            aHitTest.bExpandTest = TRUE;
 
         // Gegebenenfalls Lineal updaten (damit mit den richtigen Daten
         // gearbeitet wird und die Anzeige auch zur Bearbeitung passt)
@@ -2698,17 +2694,17 @@ sal_Bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
             mnDragPos       = 0;
             mnDragAryPos    = 0;
 
-            return sal_True;
+            return TRUE;
         }
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
 RulerType Ruler::GetDocType( const Point& rPos, RulerType eDragType,
-                             sal_uInt16* pAryPos ) const
+                             USHORT* pAryPos ) const
 {
     ImplRulerHitTest aHitTest;
 
@@ -2742,7 +2738,7 @@ void Ruler::CancelDrag()
 
 // -----------------------------------------------------------------------
 
-RulerType Ruler::GetType( const Point& rPos, sal_uInt16* pAryPos ) const
+RulerType Ruler::GetType( const Point& rPos, USHORT* pAryPos ) const
 {
     ImplRulerHitTest aHitTest;
 
@@ -2769,14 +2765,14 @@ void Ruler::SetWinPos( long nNewOff, long nNewWidth )
 {
     // Gegebenenfalls werden die Breiten automatisch berechnet
     if ( !nNewWidth )
-        mbAutoWinWidth = sal_True;
+        mbAutoWinWidth = TRUE;
     else
-        mbAutoWinWidth = sal_False;
+        mbAutoWinWidth = FALSE;
 
     // Werte setzen (werden in ImplFormat gegebenenfalls mitberechnet)
     mnWinOff = nNewOff;
     mnWinWidth = nNewWidth;
-    ImplUpdate( sal_True );
+    ImplUpdate( TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -2789,14 +2785,14 @@ void Ruler::SetPagePos( long nNewOff, long nNewWidth )
 
     // Gegebenenfalls werden die Breiten automatisch berechnet
     if ( !nNewWidth )
-        mpData->bAutoPageWidth = sal_True;
+        mpData->bAutoPageWidth = TRUE;
     else
-        mpData->bAutoPageWidth = sal_False;
+        mpData->bAutoPageWidth = FALSE;
 
     // Werte setzen (werden in ImplFormat gegebenenfalls mitberechnet)
     mpData->nPageOff     = nNewOff;
     mpData->nPageWidth   = nNewWidth;
-    ImplUpdate( sal_True );
+    ImplUpdate( TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -2886,14 +2882,14 @@ void Ruler::SetZoom( const Fraction& rNewZoom )
 
 // -----------------------------------------------------------------------
 
-void Ruler::SetExtraType( RulerExtra eNewExtraType, sal_uInt16 nStyle )
+void Ruler::SetExtraType( RulerExtra eNewExtraType, USHORT nStyle )
 {
     if ( mnWinStyle & WB_EXTRAFIELD )
     {
         meExtraType  = eNewExtraType;
         mnExtraStyle = nStyle;
         if ( IsReallyVisible() && IsUpdateMode() )
-            ImplDrawExtra( sal_False );
+            ImplDrawExtra( FALSE );
     }
 }
 
@@ -2910,7 +2906,7 @@ void Ruler::SetNullOffset( long nPos )
 
 // -----------------------------------------------------------------------
 
-void Ruler::SetMargin1( long nPos, sal_uInt16 nMarginStyle )
+void Ruler::SetMargin1( long nPos, USHORT nMarginStyle )
 {
     if ( (mpData->nMargin1 != nPos) || (mpData->nMargin1Style != nMarginStyle) )
     {
@@ -2922,7 +2918,7 @@ void Ruler::SetMargin1( long nPos, sal_uInt16 nMarginStyle )
 
 // -----------------------------------------------------------------------
 
-void Ruler::SetMargin2( long nPos, sal_uInt16 nMarginStyle )
+void Ruler::SetMargin2( long nPos, USHORT nMarginStyle )
 {
     DBG_ASSERT( (nPos >= mpData->nMargin1) ||
                 (mpData->nMargin1Style & RULER_STYLE_INVISIBLE) ||
@@ -2939,12 +2935,12 @@ void Ruler::SetMargin2( long nPos, sal_uInt16 nMarginStyle )
 
 // -----------------------------------------------------------------------
 
-void Ruler::SetLines( sal_uInt16 n, const RulerLine* pLineAry )
+void Ruler::SetLines( USHORT n, const RulerLine* pLineAry )
 {
     // To determine if what has changed
     if ( mpData->nLines == n )
     {
-        sal_uInt16           i = n;
+        USHORT           i = n;
         const RulerLine* pAry1 = mpData->pLines;
         const RulerLine* pAry2 = pLineAry;
         while ( i )
@@ -2961,11 +2957,11 @@ void Ruler::SetLines( sal_uInt16 n, const RulerLine* pLineAry )
     }
 
     // New values and new share issue
-    sal_Bool bMustUpdate;
+    BOOL bMustUpdate;
     if ( IsReallyVisible() && IsUpdateMode() )
-        bMustUpdate = sal_True;
+        bMustUpdate = TRUE;
     else
-        bMustUpdate = sal_False;
+        bMustUpdate = FALSE;
 
     // Delete old lines
     if ( bMustUpdate )
@@ -2999,7 +2995,7 @@ void Ruler::SetLines( sal_uInt16 n, const RulerLine* pLineAry )
 
 // -----------------------------------------------------------------------
 
-void Ruler::SetArrows( sal_uInt16 n, const RulerArrow* pArrowAry )
+void Ruler::SetArrows( USHORT n, const RulerArrow* pArrowAry )
 {
     if ( !n || !pArrowAry )
     {
@@ -3019,7 +3015,7 @@ void Ruler::SetArrows( sal_uInt16 n, const RulerArrow* pArrowAry )
         }
         else
         {
-            sal_uInt16            i = n;
+            USHORT            i = n;
             const RulerArrow* pAry1 = mpData->pArrows;
             const RulerArrow* pAry2 = pArrowAry;
             while ( i )
@@ -3045,7 +3041,7 @@ void Ruler::SetArrows( sal_uInt16 n, const RulerArrow* pArrowAry )
 
 // -----------------------------------------------------------------------
 
-void Ruler::SetBorders( sal_uInt16 n, const RulerBorder* pBrdAry )
+void Ruler::SetBorders( USHORT n, const RulerBorder* pBrdAry )
 {
     if ( !n || !pBrdAry )
     {
@@ -3065,7 +3061,7 @@ void Ruler::SetBorders( sal_uInt16 n, const RulerBorder* pBrdAry )
         }
         else
         {
-            sal_uInt16             i = n;
+            USHORT             i = n;
             const RulerBorder* pAry1 = mpData->pBorders;
             const RulerBorder* pAry2 = pBrdAry;
             while ( i )
@@ -3090,7 +3086,7 @@ void Ruler::SetBorders( sal_uInt16 n, const RulerBorder* pBrdAry )
 
 // -----------------------------------------------------------------------
 
-void Ruler::SetIndents( sal_uInt16 n, const RulerIndent* pIndentAry )
+void Ruler::SetIndents( USHORT n, const RulerIndent* pIndentAry )
 {
 
     if ( !n || !pIndentAry )
@@ -3111,7 +3107,7 @@ void Ruler::SetIndents( sal_uInt16 n, const RulerIndent* pIndentAry )
         }
         else
         {
-            sal_uInt16             i = n;
+            USHORT             i = n;
             const RulerIndent* pAry1 = mpData->pIndents;
             const RulerIndent* pAry2 = pIndentAry;
             while ( i )
@@ -3135,7 +3131,7 @@ void Ruler::SetIndents( sal_uInt16 n, const RulerIndent* pIndentAry )
 
 // -----------------------------------------------------------------------
 
-void Ruler::SetTabs( sal_uInt16 n, const RulerTab* pTabAry )
+void Ruler::SetTabs( USHORT n, const RulerTab* pTabAry )
 {
     if ( !n || !pTabAry )
     {
@@ -3155,7 +3151,7 @@ void Ruler::SetTabs( sal_uInt16 n, const RulerTab* pTabAry )
         }
         else
         {
-            sal_uInt16          i = n;
+            USHORT          i = n;
             const RulerTab* pAry1 = mpData->pTabs;
             const RulerTab* pAry2 = pTabAry;
             while ( i )
@@ -3184,17 +3180,17 @@ void Ruler::SetStyle( WinBits nStyle )
     if ( mnWinStyle != nStyle )
     {
         mnWinStyle = nStyle;
-        ImplInitExtraField( sal_True );
+        ImplInitExtraField( TRUE );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void Ruler::DrawTab( OutputDevice* pDevice, const Point& rPos, sal_uInt16 nStyle )
+void Ruler::DrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle )
 {
     /*const StyleSettings&    rStyleSettings =*/ pDevice->GetSettings().GetStyleSettings();
     Point                   aPos( rPos );
-    sal_uInt16                  nTabStyle = nStyle & (RULER_TAB_STYLE | RULER_TAB_RTL);
+    USHORT                  nTabStyle = nStyle & (RULER_TAB_STYLE | RULER_TAB_RTL);
 
     pDevice->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
     pDevice->SetLineColor();
@@ -3203,14 +3199,16 @@ void Ruler::DrawTab( OutputDevice* pDevice, const Point& rPos, sal_uInt16 nStyle
     ImplDrawRulerTab( pDevice, aPos, nTabStyle, nStyle  );
     pDevice->Pop();
 }
-
-void Ruler::SetTextRTL(sal_Bool bRTL)
+/* -----------------16.10.2002 15:17-----------------
+ *
+ * --------------------------------------------------*/
+void Ruler::SetTextRTL(BOOL bRTL)
 {
     if(mpData->bTextRTL != bRTL)
     {
         mpData->bTextRTL = bRTL;
         if ( IsReallyVisible() && IsUpdateMode() )
-            ImplInitExtraField( sal_True );
+            ImplInitExtraField( TRUE );
     }
 
 }
@@ -3218,22 +3216,24 @@ long Ruler::GetPageOffset() const { return mpData->nPageOff; }
 long                Ruler::GetPageWidth() const { return mpData->nPageWidth; }
 long                Ruler::GetNullOffset() const { return mpData->nNullOff; }
 long                Ruler::GetMargin1() const { return mpData->nMargin1; }
-sal_uInt16              Ruler::GetMargin1Style() const { return mpData->nMargin1Style; }
+USHORT              Ruler::GetMargin1Style() const { return mpData->nMargin1Style; }
 long                Ruler::GetMargin2() const { return mpData->nMargin2; }
-sal_uInt16              Ruler::GetMargin2Style() const { return mpData->nMargin2Style; }
-sal_uInt16              Ruler::GetLineCount() const { return mpData->nLines; }
+USHORT              Ruler::GetMargin2Style() const { return mpData->nMargin2Style; }
+USHORT              Ruler::GetLineCount() const { return mpData->nLines; }
 const RulerLine*    Ruler::GetLines() const { return mpData->pLines; }
-sal_uInt16              Ruler::GetArrowCount() const { return mpData->nArrows; }
+USHORT              Ruler::GetArrowCount() const { return mpData->nArrows; }
 const RulerArrow*   Ruler::GetArrows() const { return mpData->pArrows; }
-sal_uInt16              Ruler::GetBorderCount() const { return mpData->nBorders; }
+USHORT              Ruler::GetBorderCount() const { return mpData->nBorders; }
 const RulerBorder*  Ruler::GetBorders() const { return mpData->pBorders; }
-sal_uInt16              Ruler::GetIndentCount() const { return mpData->nIndents; }
+USHORT              Ruler::GetIndentCount() const { return mpData->nIndents; }
 const RulerIndent*  Ruler::GetIndents() const { return mpData->pIndents; }
 
-
+/* ---------------------------------------------------
+ *
+ * ---------------------------------------------------*/
 void Ruler::DrawTicks()
 {
-    mbFormat = sal_True;
+    mbFormat = TRUE;
     ImplDraw();
 }
 

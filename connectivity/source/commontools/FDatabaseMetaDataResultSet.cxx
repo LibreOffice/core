@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,9 +93,9 @@ ODatabaseMetaDataResultSet::~ODatabaseMetaDataResultSet()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::construct()
 {
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),           PROPERTY_ID_FETCHSIZE,          0,&m_nFetchSize,        ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),			PROPERTY_ID_FETCHSIZE,			0,&m_nFetchSize,		::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),        PROPERTY_ID_RESULTSETTYPE,          PropertyAttribute::READONLY,&m_nResultSetType,       ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),      PROPERTY_ID_FETCHDIRECTION,     0,  &m_nFetchDirection, ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),		PROPERTY_ID_FETCHDIRECTION,		0,	&m_nFetchDirection,	::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY), PROPERTY_ID_RESULTSETCONCURRENCY,   PropertyAttribute::READONLY,&m_nResultSetConcurrency,                ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
 }
 // -----------------------------------------------------------------------------
@@ -121,7 +121,7 @@ void ODatabaseMetaDataResultSet::setType(MetaDataResultSetType _eType)
         case eBestRowIdentifier:    setBestRowIdentifierMap(); break;
         case eVersionColumns:       setVersionColumnsMap(); break;
         default:
-            OSL_FAIL("Wrong type!");
+            OSL_ENSURE(0,"Wrong type!");
     }
 }
 // -------------------------------------------------------------------------
@@ -130,7 +130,7 @@ void ODatabaseMetaDataResultSet::disposing(void)
     OPropertySetHelper::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_aStatement    = NULL;
+    m_aStatement	= NULL;
 m_xMetaData.clear();
     m_aRowsIter = m_aRows.end();
     m_aRows.clear();
@@ -155,7 +155,7 @@ Any SAL_CALL ODatabaseMetaDataResultSet::queryInterface( const Type & rType ) th
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL ODatabaseMetaDataResultSet::getTypes(  ) throw(RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
+    ::cppu::OTypeCollection aTypes(	::getCppuType( (const Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
 
@@ -677,55 +677,55 @@ ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getBasicValue()
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getSelectValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT")));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("SELECT"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getInsertValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INSERT")));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("INSERT"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getDeleteValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DELETE")));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("DELETE"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getUpdateValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UPDATE")));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("UPDATE"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getCreateValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CREATE")));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("CREATE"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getReadValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("READ")));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("READ"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getAlterValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ALTER")));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("ALTER"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getDropValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DROP")));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("DROP"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getQuoteValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'")));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("'"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
@@ -835,7 +835,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
     Sequence< ::rtl::OUString > ODatabaseMetaDataResultSet::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSNS( 1 );
-        aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ResultSet"));
+        aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ResultSet");
         return aSNS;
     }
     //------------------------------------------------------------------
@@ -877,7 +877,7 @@ namespace
             &cppu::createSingleComponentFactory, 0, 0 },
         { &ParameterSubstitution::create, &ParameterSubstitution::getImplementationName_Static, &ParameterSubstitution::getSupportedServiceNames_Static,
             &cppu::createSingleComponentFactory, 0, 0 },
-        { 0, 0, 0, 0, 0, 0 }
+        { 0, 0, 0, 0, 0, 0 } 
     };
 }
 using ::rtl::OUString;
@@ -901,11 +901,16 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const 
 }
 
 //---------------------------------------------------------------------------------------
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void* serviceManager, com::sun::star::registry::XRegistryKey* registryKey)
+{
+    return cppu::component_writeInfoHelper(serviceManager, registryKey, entries);
+}
+//---------------------------------------------------------------------------------------
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* implName, ::com::sun::star::lang::XMultiServiceFactory* serviceManager, void* registryKey)
 {
     return cppu::component_getFactoryHelper(implName, serviceManager, registryKey, entries);
 }
 
-}   // extern "C"
+}	// extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

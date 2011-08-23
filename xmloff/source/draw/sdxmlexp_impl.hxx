@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,13 +31,12 @@
 
 #include <xmloff/xmlexp.hxx>
 
+
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <comphelper/stl_types.hxx>
-
-#include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -50,17 +49,15 @@ class OUStringsSort_Impl;
 class Rectangle;
 
 class ImpPresPageDrawStylePropMapper;
+class ImpXMLEXPPageMasterList;
 class ImpXMLEXPPageMasterInfo;
 class ImpXMLDrawPageInfoList;
-class ImpXMLAutoLayoutInfo;
+class ImpXMLAutoLayoutInfoList;
 class SvXMLAutoStylePoolP;
 class XMLSdPropHdlFactory;
 class ImpXMLShapeStyleInfo;
 class XMLShapeExportPropertyMapper;
 class XMLPageExportPropertyMapper;
-
-typedef ::std::vector< ImpXMLEXPPageMasterInfo* > ImpXMLEXPPageMasterList;
-typedef ::std::vector< ImpXMLAutoLayoutInfo*    > ImpXMLAutoLayoutInfoList;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -108,52 +105,52 @@ class SdXMLExport : public SvXMLExport
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > mxDocStyleFamilies;
     com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > mxDocMasterPages;
     com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > mxDocDrawPages;
-    sal_Int32                   mnDocMasterPageCount;
-    sal_Int32                   mnDocDrawPageCount;
-    sal_uInt32                  mnShapeStyleInfoIndex;
-    sal_uInt32                  mnObjectCount;
+    sal_Int32					mnDocMasterPageCount;
+    sal_Int32					mnDocDrawPageCount;
+    sal_uInt32					mnShapeStyleInfoIndex;
+    sal_uInt32					mnObjectCount;
 
     // temporary infos
-    ImpXMLEXPPageMasterList*    mpPageMasterInfoList;
-    ImpXMLEXPPageMasterList*    mpPageMasterUsageList;
-    ImpXMLEXPPageMasterList*    mpNotesPageMasterUsageList;
-    ImpXMLEXPPageMasterInfo*    mpHandoutPageMaster;
-    ImpXMLAutoLayoutInfoList*   mpAutoLayoutInfoList;
+    ImpXMLEXPPageMasterList*	mpPageMasterInfoList;
+    ImpXMLEXPPageMasterList*	mpPageMasterUsageList;
+    ImpXMLEXPPageMasterList*	mpNotesPageMasterUsageList;
+    ImpXMLEXPPageMasterInfo*	mpHandoutPageMaster;
+    ImpXMLAutoLayoutInfoList*	mpAutoLayoutInfoList;
 
     com::sun::star::uno::Sequence< ::rtl::OUString > maDrawPagesAutoLayoutNames;
 
-    ::std::vector< ::rtl::OUString >        maDrawPagesStyleNames;
-    ::std::vector< ::rtl::OUString >        maDrawNotesPagesStyleNames;
-    ::std::vector< ::rtl::OUString >        maMasterPagesStyleNames;
-    ::rtl::OUString                         maHandoutMasterStyleName;
-    ::std::vector< HeaderFooterPageSettingsImpl >   maDrawPagesHeaderFooterSettings;
-    ::std::vector< HeaderFooterPageSettingsImpl >   maDrawNotesPagesHeaderFooterSettings;
+    ::std::vector< ::rtl::OUString >		maDrawPagesStyleNames;
+    ::std::vector< ::rtl::OUString >		maDrawNotesPagesStyleNames;
+    ::std::vector< ::rtl::OUString >		maMasterPagesStyleNames;
+    ::rtl::OUString							maHandoutMasterStyleName;
+    ::std::vector< HeaderFooterPageSettingsImpl >	maDrawPagesHeaderFooterSettings;
+    ::std::vector< HeaderFooterPageSettingsImpl >	maDrawNotesPagesHeaderFooterSettings;
 
-    ::std::vector< ::rtl::OUString >        maHeaderDeclsVector;
-    ::std::vector< ::rtl::OUString >        maFooterDeclsVector;
-    ::std::vector< DateTimeDeclImpl >       maDateTimeDeclsVector;
+    ::std::vector< ::rtl::OUString >		maHeaderDeclsVector;
+    ::std::vector< ::rtl::OUString >		maFooterDeclsVector;
+    ::std::vector< DateTimeDeclImpl >		maDateTimeDeclsVector;
 
-    HeaderFooterPageSettingsImpl            maHandoutPageHeaderFooterSettings;
+    HeaderFooterPageSettingsImpl			maHandoutPageHeaderFooterSettings;
 
-    XMLSdPropHdlFactory*                mpSdPropHdlFactory;
-    XMLShapeExportPropertyMapper*       mpPropertySetMapper;
-    XMLPageExportPropertyMapper*        mpPresPagePropsMapper;
+    XMLSdPropHdlFactory*				mpSdPropHdlFactory;
+    XMLShapeExportPropertyMapper*		mpPropertySetMapper;
+    XMLPageExportPropertyMapper*		mpPresPagePropsMapper;
 
-    SdXMLFormatMap  maUsedDateStyles;           // this is a vector with the used formatings for date fields
-    SdXMLFormatMap  maUsedTimeStyles;           // this is a vector with the used formatings for time fields
+    SdXMLFormatMap	maUsedDateStyles;			// this is a vector with the used formatings for date fields
+    SdXMLFormatMap	maUsedTimeStyles;			// this is a vector with the used formatings for time fields
 
-    sal_Bool                    mbIsDraw;
-    sal_Bool                    mbFamilyGraphicUsed;
-    sal_Bool                    mbFamilyPresentationUsed;
+    sal_Bool					mbIsDraw;
+    sal_Bool					mbFamilyGraphicUsed;
+    sal_Bool					mbFamilyPresentationUsed;
 
-    const rtl::OUString         msZIndex;
-    const rtl::OUString         msEmptyPres;
-    const rtl::OUString         msModel;
-    const rtl::OUString         msStartShape;
-    const rtl::OUString         msEndShape;
-    const rtl::OUString         msPageLayoutNames;
+    const rtl::OUString			msZIndex;
+    const rtl::OUString			msEmptyPres;
+    const rtl::OUString			msModel;
+    const rtl::OUString			msStartShape;
+    const rtl::OUString			msEndShape;
+    const rtl::OUString			msPageLayoutNames;
 
-    virtual void _ExportStyles(sal_Bool bUsed);
+    virtual void _ExportStyles(BOOL bUsed);
     virtual void _ExportAutoStyles();
     virtual void _ExportMasterStyles();
     virtual void _ExportContent();
@@ -173,7 +170,7 @@ class SdXMLExport : public SvXMLExport
     void ImpWritePresentationStyles();
     ::rtl::OUString ImpCreatePresPageStyleName( com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> xDrawPage, bool bExportBackground = true );
 
-    sal_Bool ImpPrepAutoLayoutInfo(const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >& xPage, rtl::OUString& rName);
+    BOOL ImpPrepAutoLayoutInfo(const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >& xPage, rtl::OUString& rName);
     void ImpWriteAutoLayoutInfos();
     void ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectangle& rRect);
     void ImpWriteHeaderFooterDecls();
@@ -196,7 +193,7 @@ protected:
 
 public:
     // #110680#
-    SdXMLExport(
+    SdXMLExport( 
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         sal_Bool bIsDraw, sal_uInt16 nExportFlags = EXPORT_ALL );
     virtual ~SdXMLExport();
@@ -211,13 +208,13 @@ public:
     XMLShapeExportPropertyMapper* GetPropertySetMapper() const { return mpPropertySetMapper; }
     XMLPageExportPropertyMapper* GetPresPagePropsMapper() const { return mpPresPagePropsMapper; }
 
-    sal_Bool IsDraw() const { return mbIsDraw; }
-    sal_Bool IsImpress() const { return !mbIsDraw; }
+    BOOL IsDraw() const { return mbIsDraw; }
+    BOOL IsImpress() const { return !mbIsDraw; }
 
-    sal_Bool IsFamilyGraphicUsed() const { return mbFamilyGraphicUsed; }
-    void SetFamilyGraphicUsed() { mbFamilyGraphicUsed = sal_True; }
-    sal_Bool IsFamilyPresentationUsed() const { return mbFamilyPresentationUsed; }
-    void SetFamilyPresentationUsed() { mbFamilyPresentationUsed = sal_True; }
+    BOOL IsFamilyGraphicUsed() const { return mbFamilyGraphicUsed; }
+    void SetFamilyGraphicUsed() { mbFamilyGraphicUsed = TRUE; }
+    BOOL IsFamilyPresentationUsed() const { return mbFamilyPresentationUsed; }
+    void SetFamilyPresentationUsed() { mbFamilyPresentationUsed = TRUE; }
 
     virtual void addDataStyle(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat = sal_False );
     virtual void exportDataStyles();
@@ -228,6 +225,6 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 };
 
-#endif  //  _SDXMLEXP_HXX
+#endif	//  _SDXMLEXP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

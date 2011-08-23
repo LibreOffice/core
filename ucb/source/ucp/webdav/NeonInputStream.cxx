@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,9 +32,11 @@
 #include <rtl/memory.h>
 
 using namespace cppu;
+using namespace rtl;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace webdav_ucp;
+
 
 // -------------------------------------------------------------------
 // Constructor

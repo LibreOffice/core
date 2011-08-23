@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,11 +53,11 @@ using ::rtl::OUString ;
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 
-XMLSecurityContext_NssImpl :: XMLSecurityContext_NssImpl( const Reference< XMultiServiceFactory >& aFactory )
+XMLSecurityContext_NssImpl :: XMLSecurityContext_NssImpl( const Reference< XMultiServiceFactory >& aFactory ) 
     ://i39448 : m_pKeysMngr( NULL ) ,
     m_xServiceManager( aFactory ) ,
     m_nDefaultEnvIndex(-1)
-    //m_xSecurityEnvironment( NULL )
+    //m_xSecurityEnvironment( NULL ) 
 {
     //Init xmlsec library
     if( xmlSecInit() < 0 ) {
@@ -79,7 +79,11 @@ XMLSecurityContext_NssImpl :: XMLSecurityContext_NssImpl( const Reference< XMult
 }
 
 XMLSecurityContext_NssImpl :: ~XMLSecurityContext_NssImpl() {
-    //i39448
+#if 0 //i39448
+    if( m_pKeysMngr != NULL ) {
+        xmlSecKeysMngrDestroy( m_pKeysMngr ) ;
+    }
+#endif
 
     xmlDisableStreamInputCallbacks() ;
     xmlSecCryptoShutdown() ;
@@ -107,25 +111,25 @@ sal_Int32 SAL_CALL XMLSecurityContext_NssImpl::getSecurityEnvironmentNumber(  )
 {
     return m_vSecurityEnvironments.size();
 }
-
+    
 ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL
     XMLSecurityContext_NssImpl::getSecurityEnvironmentByIndex( sal_Int32 index )
     throw (::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecurityEnvironment;
-
+    
     if (index >= 0 && index < ( sal_Int32 )m_vSecurityEnvironments.size())
     {
         xSecurityEnvironment = m_vSecurityEnvironments[index];
     }
     else
         throw RuntimeException() ;
-
+        
     return xSecurityEnvironment;
 }
-
-::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL
-    XMLSecurityContext_NssImpl::getSecurityEnvironment(  )
+    
+::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL 
+    XMLSecurityContext_NssImpl::getSecurityEnvironment(  ) 
     throw (::com::sun::star::uno::RuntimeException)
 {
     if (m_nDefaultEnvIndex >= 0 && m_nDefaultEnvIndex < ( sal_Int32 )m_vSecurityEnvironments.size())
@@ -146,7 +150,86 @@ void SAL_CALL XMLSecurityContext_NssImpl::setDefaultSecurityEnvironmentIndex( sa
     m_nDefaultEnvIndex = nDefaultEnvIndex;
 }
 
-//i39448 : old methods deleted
+#if 0 //i39448 : old methods should be deleted
+/* XXMLSecurityContext */
+void SAL_CALL XMLSecurityContext_NssImpl :: setSecurityEnvironment( const Reference< XSecurityEnvironment >& aSecurityEnvironment ) throw( com::sun::star::security::SecurityInfrastructureException ) {
+    PK11SlotInfo* slot ;
+    CERTCertDBHandle* handler ;
+    //xmlSecKeyPtr key ;
+    //xmlSecKeyDataPtr keyData ;
+    PK11SymKey* symKey ;
+    SECKEYPublicKey* pubKey ;
+    SECKEYPrivateKey* priKey ;
+    unsigned int i ;
+
+    if( !aSecurityEnvironment.is() )
+        throw RuntimeException() ;
+
+    m_xSecurityEnvironment = aSecurityEnvironment ;
+
+    //Clear key manager
+    if( m_pKeysMngr != NULL ) {
+        xmlSecKeysMngrDestroy( m_pKeysMngr ) ;
+        m_pKeysMngr = NULL ;
+    }
+
+    //Create key manager
+    Reference< XUnoTunnel > xEnvTunnel( m_xSecurityEnvironment , UNO_QUERY ) ;
+    if( !xEnvTunnel.is() ) {
+        throw RuntimeException() ;^1
+    }
+
+    SecurityEnvironment_NssImpl* pSecEnv = ( SecurityEnvironment_NssImpl* )xEnvTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ) ;
+    if( pSecEnv == NULL )
+        throw RuntimeException() ;
+
+    //todo
+//	slot = pSecEnv->getCryptoSlot() ;
+    handler = pSecEnv->getCertDb() ;
+
+    /*-
+     * The following lines is based on the private version of xmlSec-NSS
+     * crypto engine
+     */
+    m_pKeysMngr = xmlSecNssAppliedKeysMngrCreate( slot , handler ) ;
+    if( m_pKeysMngr == NULL )
+        throw RuntimeException() ;
+
+    /*-
+     * Adopt symmetric key into keys manager
+     */
+    for( i = 0 ; ( symKey = pSecEnv->getSymKey( i ) ) != NULL ; i ++ ) {
+        if( xmlSecNssAppliedKeysMngrSymKeyLoad( m_pKeysMngr, symKey ) < 0 ) {
+            throw RuntimeException() ;
+        }
+    }
+
+    /*-
+     * Adopt asymmetric public key into keys manager
+     */
+    for( i = 0 ; ( pubKey = pSecEnv->getPubKey( i ) ) != NULL ; i ++ ) {
+        if( xmlSecNssAppliedKeysMngrPubKeyLoad( m_pKeysMngr, pubKey ) < 0 ) {
+            throw RuntimeException() ;
+        }
+    }
+
+    /*-
+     * Adopt asymmetric private key into keys manager
+     */
+    for( i = 0 ; ( priKey = pSecEnv->getPriKey( i ) ) != NULL ; i ++ ) {
+        if( xmlSecNssAppliedKeysMngrPriKeyLoad( m_pKeysMngr, priKey ) < 0 ) {
+            throw RuntimeException() ;
+        }
+    }
+}
+
+/* XXMLSecurityContext */
+Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContext_NssImpl :: getSecurityEnvironment() 
+    throw (RuntimeException)
+{
+    return	m_xSecurityEnvironment ;
+}
+#endif
 
 
 /* XInitialization */
@@ -179,12 +262,12 @@ Sequence< OUString > SAL_CALL XMLSecurityContext_NssImpl :: getSupportedServiceN
 Sequence< OUString > XMLSecurityContext_NssImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.XMLSecurityContext")) ;
+    seqServiceNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.xml.crypto.XMLSecurityContext" ) ;
     return seqServiceNames ;
 }
 
 OUString XMLSecurityContext_NssImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.XMLSecurityContext_NssImpl")) ;
+    return OUString::createFromAscii( "com.sun.star.xml.security.bridge.xmlsec.XMLSecurityContext_NssImpl" ) ;
 }
 
 //Helper for registry
@@ -199,5 +282,45 @@ Reference< XSingleServiceFactory > XMLSecurityContext_NssImpl :: impl_createFact
     return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
 }
 
+#if 0 //not useful any longer
+/* XUnoTunnel */
+sal_Int64 SAL_CALL XMLSecurityContext_NssImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier ) 
+throw (RuntimeException)
+{
+    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) { 
+        return ( sal_Int64 )this ;
+    }
+    return 0 ;
+}
+
+/* XUnoTunnel extension */
+const Sequence< sal_Int8>& XMLSecurityContext_NssImpl :: getUnoTunnelId() {
+    static Sequence< sal_Int8 >* pSeq = 0 ;
+    if( !pSeq ) {
+        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
+        if( !pSeq ) {
+            static Sequence< sal_Int8> aSeq( 16 ) ;
+            rtl_createUuid( ( sal_uInt8* )aSeq.getArray() , 0 , sal_True ) ;
+            pSeq = &aSeq ;
+        }
+    }
+    return *pSeq ;
+}
+
+/* XUnoTunnel extension */
+XMLSecurityContext_NssImpl* XMLSecurityContext_NssImpl :: getImplementation( const Reference< XInterface > xObj ) {
+    Reference< XUnoTunnel > xUT( xObj , UNO_QUERY ) ;
+    if( xUT.is() ) {
+        return ( XMLSecurityContext_NssImpl* )xUT->getSomething( getUnoTunnelId() ) ;
+    } else
+        return NULL ;
+}
+
+/* Native methods */
+xmlSecKeysMngrPtr XMLSecurityContext_NssImpl :: keysManager() throw( Exception, RuntimeException ) {
+    return m_pKeysMngr ;
+}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

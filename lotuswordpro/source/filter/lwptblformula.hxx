@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- Mar 2005           Created
+ Mar 2005			Created
  ************************************************************************/
 #ifndef _LWPTBLFORMULA_HXX_
 #define _LWPTBLFORMULA_HXX_
@@ -71,39 +71,39 @@ values unless you filter them.
 */
 enum lTokenType
 {
-    TK_BAD                  = 0,
-    TK_OPERAND              = 1,
-    TK_END                  = 2,
-    TK_RIGHTPAREN           = 3,
-    TK_FUNCTION             = 4,
-    TK_LEFTPAREN            = 5,
-    TK_UNARY_MINUS          = 6,
-    TK_ADD                  = 7,
-    TK_SUBTRACT             = 8,
-    TK_MULTIPLY             = 9,
-    TK_DIVIDE               = 10,
-    TK_EQUAL                = 11,
-    TK_LESS                 = 12,
-    TK_GREATER              = 13,
-    TK_NOT_EQUAL            = 14,
-    TK_GREATER_OR_EQUAL     = 15,
-    TK_LESS_OR_EQUAL        = 16,
-    TK_NOT                  = 17,
-    TK_AND                  = 18,
-    TK_OR                   = 19,
-    TK_CELLID               = 20,
-    TK_CONSTANT             = 21,
-    TK_TEXT                 = 22,
-    TK_SUM                  = 23,
-    TK_IF                   = 24,
-    TK_AVERAGE              = 25,
-    TK_MAXIMUM              = 26,
-    TK_MINIMUM              = 27,
-    TK_COUNT                = 28,
-    TK_CELLRANGE            = 29,
-    TK_EXPRESSION           = 30,
-    TK_OPEN_FUNCTION        = 31,
-    TK_LIST_SEPARATOR       = 32
+    TK_BAD					= 0,
+    TK_OPERAND				= 1,
+    TK_END					= 2,
+    TK_RIGHTPAREN			= 3,
+    TK_FUNCTION				= 4,
+    TK_LEFTPAREN			= 5,
+    TK_UNARY_MINUS			= 6,
+    TK_ADD					= 7,
+    TK_SUBTRACT				= 8,
+    TK_MULTIPLY				= 9,
+    TK_DIVIDE				= 10,
+    TK_EQUAL				= 11,
+    TK_LESS					= 12,
+    TK_GREATER				= 13,
+    TK_NOT_EQUAL			= 14,
+    TK_GREATER_OR_EQUAL		= 15,
+    TK_LESS_OR_EQUAL		= 16,
+    TK_NOT					= 17,
+    TK_AND					= 18,
+    TK_OR					= 19,
+    TK_CELLID				= 20,
+    TK_CONSTANT				= 21,
+    TK_TEXT					= 22,
+    TK_SUM					= 23,
+    TK_IF					= 24,
+    TK_AVERAGE				= 25,
+    TK_MAXIMUM				= 26,
+    TK_MINIMUM				= 27,
+    TK_COUNT				= 28,
+    TK_CELLRANGE			= 29,
+    TK_EXPRESSION			= 30,
+    TK_OPEN_FUNCTION		= 31,
+    TK_LIST_SEPARATOR		= 32
 };
 class LwpTableLayout;
 class LwpFormulaArg
@@ -202,7 +202,7 @@ public:
     LwpFormulaInfo(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     ~LwpFormulaInfo();
     sal_Bool IsFormula(){return sal_True;}
-    void SetRow(sal_uInt16 nRow){ m_nFormulaRow = nRow;}
+    void SetRow(USHORT nRow){ m_nFormulaRow = nRow;}
     String Convert(LwpTableLayout* pCellsMap);
     void Convert(XFCell * pCell, LwpTableLayout* pCellsMap);
 protected:
@@ -218,7 +218,7 @@ private:
     sal_Bool ReadConst();
     void MarkUnsupported(sal_uInt16 TokenType);
 
-    sal_uInt16 m_nFormulaRow;
+    USHORT m_nFormulaRow;
 };
 
 #endif

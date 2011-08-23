@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ static SvPtrarr *pProgressContainer = 0;
 
 static SwProgress *lcl_SwFindProgress( SwDocShell *pDocShell )
 {
-    for ( sal_uInt16 i = 0; i < pProgressContainer->Count(); ++i )
+    for ( USHORT i = 0; i < pProgressContainer->Count(); ++i )
     {
         SwProgress *pTmp = (SwProgress*)(*pProgressContainer)[i];
         if ( pTmp->pDocShell == pDocShell )
@@ -65,7 +65,7 @@ static SwProgress *lcl_SwFindProgress( SwDocShell *pDocShell )
 }
 
 
-void StartProgress( sal_uInt16 nMessResId, long nStartValue, long nEndValue,
+void StartProgress( USHORT nMessResId, long nStartValue, long nEndValue,
                     SwDocShell *pDocShell )
 {
     if( !SW_MOD()->IsEmbeddedLoadSave() )
@@ -85,8 +85,8 @@ void StartProgress( sal_uInt16 nMessResId, long nStartValue, long nEndValue,
             pProgress->pProgress = new SfxProgress( pDocShell,
                                                     SW_RESSTR(nMessResId),
                                                     nEndValue - nStartValue,
-                                                    sal_False,
-                                                    sal_True );
+                                                    FALSE,
+                                                    TRUE );
             pProgress->nStartCount = 1;
             pProgress->pDocShell = pDocShell;
             pProgressContainer->Insert( (void*)pProgress, 0 );
@@ -112,7 +112,7 @@ void EndProgress( SwDocShell *pDocShell )
     if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
     {
         SwProgress *pProgress = 0;
-        sal_uInt16 i;
+        USHORT i;
         for ( i = 0; i < pProgressContainer->Count(); ++i )
         {
             SwProgress *pTmp = (SwProgress*)(*pProgressContainer)[i];
@@ -129,7 +129,7 @@ void EndProgress( SwDocShell *pDocShell )
             pProgressContainer->Remove( i );
             delete pProgress->pProgress;
             delete pProgress;
-            //#112337# it may happen that the container has been removed
+            //#112337# it may happen that the container has been removed 
             //while rescheduling
             if ( pProgressContainer && !pProgressContainer->Count() )
                 delete pProgressContainer, pProgressContainer = 0;
@@ -138,7 +138,7 @@ void EndProgress( SwDocShell *pDocShell )
 }
 
 
-void SetProgressText( sal_uInt16 nId, SwDocShell *pDocShell )
+void SetProgressText( USHORT nId, SwDocShell *pDocShell )
 {
     if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
     {

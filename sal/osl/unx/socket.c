@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 #endif
 
 #if defined(LINUX) || defined(NETBSD) || defined ( FREEBSD ) || \
-    defined (MACOSX) || defined (OPENBSD) || defined(DRAGONFLY)
+	defined (MACOSX) || defined (OPENBSD)
 #include <sys/poll.h>
 #define HAVE_POLL_H
 #endif /* HAVE_POLL_H */
@@ -95,8 +95,8 @@
 /* conceal the struct sockaddr from the eyes of the user. */
 
 
-#define OSL_INVALID_SOCKET      -1
-#define OSL_SOCKET_ERROR        -1
+#define OSL_INVALID_SOCKET		-1
+#define OSL_SOCKET_ERROR		-1
 
 
 /* Buffer size for gethostbyname */
@@ -108,9 +108,9 @@
 
 /* map */
 static unsigned long FamilyMap[]= {
-    AF_INET,                    /* osl_Socket_FamilyInet    */
-    AF_IPX,                     /* osl_Socket_FamilyIpx     */
-    0                           /* osl_Socket_FamilyInvalid */
+    AF_INET,					/* osl_Socket_FamilyInet    */
+    AF_IPX,						/* osl_Socket_FamilyIpx     */
+    0							/* osl_Socket_FamilyInvalid */
 };
 
 /* reverse map */
@@ -130,7 +130,7 @@ static oslAddrFamily osl_AddrFamilyFromNative(sal_uInt32 nativeType)
 
 /* macros */
 #define FAMILY_FROM_NATIVE(y) osl_AddrFamilyFromNative(y)
-#define FAMILY_TO_NATIVE(x) (short)FamilyMap[x]
+#define FAMILY_TO_NATIVE(x)	(short)FamilyMap[x]
 
 /*****************************************************************************/
 /* enum oslProtocol */
@@ -138,11 +138,11 @@ static oslAddrFamily osl_AddrFamilyFromNative(sal_uInt32 nativeType)
 
 /* map */
 static sal_uInt32 ProtocolMap[]= {
-    0,                          /* osl_Socket_ProtocolIp      */
-    NSPROTO_IPX,                /* osl_Socket_ProtocolIpx     */
-    NSPROTO_SPX,                /* osl_Socket_ProtocolSpx     */
-    NSPROTO_SPXII,              /* osl_Socket_ProtocolSpxII   */
-    0                           /* osl_Socket_ProtocolInvalid */
+    0,							/* osl_Socket_ProtocolIp	  */
+    NSPROTO_IPX,				/* osl_Socket_ProtocolIpx	  */
+    NSPROTO_SPX,				/* osl_Socket_ProtocolSpx	  */
+    NSPROTO_SPXII,				/* osl_Socket_ProtocolSpxII   */
+    0							/* osl_Socket_ProtocolInvalid */
 };
 
 /* reverse map */
@@ -164,7 +164,7 @@ static oslProtocol osl_ProtocolFromNative(sal_uInt32 nativeType)
 
 /* macros */
 #define PROTOCOL_FROM_NATIVE(y) osl_ProtocolFromNative(y)
-#define PROTOCOL_TO_NATIVE(x)   ProtocolMap[x]
+#define PROTOCOL_TO_NATIVE(x)	ProtocolMap[x]
 
 
 /*****************************************************************************/
@@ -173,12 +173,12 @@ static oslProtocol osl_ProtocolFromNative(sal_uInt32 nativeType)
 
 /* map */
 static sal_uInt32 TypeMap[]= {
-    SOCK_STREAM,                /* osl_Socket_TypeStream    */
-    SOCK_DGRAM,                 /* osl_Socket_TypeDgram     */
-    SOCK_RAW,                   /* osl_Socket_TypeRaw       */
-    SOCK_RDM,                   /* osl_Socket_TypeRdm       */
-    SOCK_SEQPACKET,             /* osl_Socket_TypeSeqPacket */
-    0                           /* osl_Socket_TypeInvalid   */
+    SOCK_STREAM,				/* osl_Socket_TypeStream    */
+    SOCK_DGRAM,					/* osl_Socket_TypeDgram     */
+    SOCK_RAW,					/* osl_Socket_TypeRaw       */
+    SOCK_RDM,					/* osl_Socket_TypeRdm       */
+    SOCK_SEQPACKET,				/* osl_Socket_TypeSeqPacket */
+    0							/* osl_Socket_TypeInvalid   */
 };
 
 /* reverse map */
@@ -197,8 +197,8 @@ static oslSocketType osl_SocketTypeFromNative(sal_uInt32 nativeType)
 }
 
 /* macros */
-#define TYPE_TO_NATIVE(x)       TypeMap[x]
-#define TYPE_FROM_NATIVE(y)     osl_SocketTypeFromNative(y)
+#define TYPE_TO_NATIVE(x)		TypeMap[x]
+#define TYPE_FROM_NATIVE(y)		osl_SocketTypeFromNative(y)
 
 
 /*****************************************************************************/
@@ -207,25 +207,25 @@ static oslSocketType osl_SocketTypeFromNative(sal_uInt32 nativeType)
 
 /* map */
 static sal_uInt32 OptionMap[]= {
-    SO_DEBUG,                   /* osl_Socket_OptionDebug       */
-    SO_ACCEPTCONN,              /* osl_Socket_OptionAcceptConn  */
-    SO_REUSEADDR,               /* osl_Socket_OptionReuseAddr   */
-    SO_KEEPALIVE,               /* osl_Socket_OptionKeepAlive   */
-    SO_DONTROUTE,               /* osl_Socket_OptionDontRoute   */
-    SO_BROADCAST,               /* osl_Socket_OptionBroadcast   */
-    SO_USELOOPBACK,             /* osl_Socket_OptionUseLoopback */
-    SO_LINGER,                  /* osl_Socket_OptionLinger      */
-    SO_OOBINLINE,               /* osl_Socket_OptionOOBinLine   */
-    SO_SNDBUF,                  /* osl_Socket_OptionSndBuf      */
-    SO_RCVBUF,                  /* osl_Socket_OptionRcvBuf      */
-    SO_SNDLOWAT,                /* osl_Socket_OptionSndLowat    */
-    SO_RCVLOWAT,                /* osl_Socket_OptionRcvLowat    */
-    SO_SNDTIMEO,                /* osl_Socket_OptionSndTimeo    */
-    SO_RCVTIMEO,                /* osl_Socket_OptionRcvTimeo    */
-    SO_ERROR,                   /* osl_Socket_OptionError       */
-    SO_TYPE,                    /* osl_Socket_OptionType        */
-    TCP_NODELAY,                /* osl_Socket_OptionTcpNoDelay  */
-    0                           /* osl_Socket_OptionInvalid     */
+    SO_DEBUG,					/* osl_Socket_OptionDebug 		*/
+    SO_ACCEPTCONN,				/* osl_Socket_OptionAcceptConn  */
+    SO_REUSEADDR,				/* osl_Socket_OptionReuseAddr   */
+    SO_KEEPALIVE,				/* osl_Socket_OptionKeepAlive   */
+    SO_DONTROUTE,				/* osl_Socket_OptionDontRoute   */
+    SO_BROADCAST,				/* osl_Socket_OptionBroadcast   */
+    SO_USELOOPBACK,				/* osl_Socket_OptionUseLoopback */
+    SO_LINGER,					/* osl_Socket_OptionLinger		*/
+    SO_OOBINLINE,				/* osl_Socket_OptionOOBinLine   */
+    SO_SNDBUF,					/* osl_Socket_OptionSndBuf      */
+    SO_RCVBUF,					/* osl_Socket_OptionRcvBuf      */
+    SO_SNDLOWAT,				/* osl_Socket_OptionSndLowat    */
+    SO_RCVLOWAT,				/* osl_Socket_OptionRcvLowat    */
+    SO_SNDTIMEO,				/* osl_Socket_OptionSndTimeo    */
+    SO_RCVTIMEO,				/* osl_Socket_OptionRcvTimeo    */
+    SO_ERROR,					/* osl_Socket_OptionError       */
+    SO_TYPE,					/* osl_Socket_OptionType        */
+    TCP_NODELAY,				/* osl_Socket_OptionTcpNoDelay  */
+    0							/* osl_Socket_OptionInvalid     */
 };
 
 /* reverse map */
@@ -245,8 +245,8 @@ static oslSocketOption osl_SocketOptionFromNative(sal_uInt32 nativeType)
 }
 */
 /* macros */
-#define OPTION_TO_NATIVE(x)     OptionMap[x]
-#define OPTION_FROM_NATIVE(y)       osl_SocketOptionFromNative(y)
+#define OPTION_TO_NATIVE(x)		OptionMap[x]
+#define OPTION_FROM_NATIVE(y)		osl_SocketOptionFromNative(y)
 
 
 /*****************************************************************************/
@@ -254,9 +254,9 @@ static oslSocketOption osl_SocketOptionFromNative(sal_uInt32 nativeType)
 /*****************************************************************************/
 
 static sal_uInt32 OptionLevelMap[]= {
-    SOL_SOCKET,                 /* osl_Socket_LevelSocket  */
-    IPPROTO_TCP,                /* osl_Socket_LevelTcp     */
-    0                           /* osl_Socket_LevelInvalid */
+    SOL_SOCKET,					/* osl_Socket_LevelSocket  */
+    IPPROTO_TCP,				/* osl_Socket_LevelTcp     */
+    0							/* osl_Socket_LevelInvalid */
 };
 
 /* reverse map */
@@ -276,20 +276,20 @@ static oslSocketOptionLevel osl_SocketOptionLevelFromNative(sal_uInt32 nativeTyp
 }
 */
 /* macros */
-#define OPTION_LEVEL_TO_NATIVE(x)       OptionLevelMap[x]
-#define OPTION_LEVEL_FROM_NATIVE(y)     osl_SocketOptionLevelFromNative(y)
+#define OPTION_LEVEL_TO_NATIVE(x)		OptionLevelMap[x]
+#define OPTION_LEVEL_FROM_NATIVE(y)		osl_SocketOptionLevelFromNative(y)
 
 /*****************************************************************************/
 /* enum oslSocketMsgFlag */
 /*****************************************************************************/
 
 static sal_uInt32 SocketMsgFlagMap[]= {
-    0,                          /* osl_Socket_MsgNormal    */
-    MSG_OOB,                    /* osl_Socket_MsgOOB       */
-    MSG_PEEK,                   /* osl_Socket_MsgPeek      */
-    MSG_DONTROUTE,              /* osl_Socket_MsgDontRoute */
-    MSG_MAXIOVLEN,              /* osl_Socket_MsgMaxIOVLen */
-    0                           /* osl_Socket_MsgInvalid   */
+    0,							/* osl_Socket_MsgNormal    */
+    MSG_OOB,					/* osl_Socket_MsgOOB       */
+    MSG_PEEK,					/* osl_Socket_MsgPeek      */
+    MSG_DONTROUTE,				/* osl_Socket_MsgDontRoute */
+    MSG_MAXIOVLEN,				/* osl_Socket_MsgMaxIOVLen */
+    0							/* osl_Socket_MsgInvalid   */
 };
 
 /* reverse map */
@@ -310,8 +310,8 @@ static oslSocketMsgFlag osl_SocketMsgFlagFromNative(sal_uInt32 nativeType)
 */
 
 /* macros */
-#define MSG_FLAG_TO_NATIVE(x)       SocketMsgFlagMap[x]
-#define MSG_FLAG_FROM_NATIVE(y)     osl_SocketMsgFlagFromNative(y)
+#define MSG_FLAG_TO_NATIVE(x)		SocketMsgFlagMap[x]
+#define MSG_FLAG_FROM_NATIVE(y)		osl_SocketMsgFlagFromNative(y)
 
 
 /*****************************************************************************/
@@ -319,10 +319,10 @@ static oslSocketMsgFlag osl_SocketMsgFlagFromNative(sal_uInt32 nativeType)
 /*****************************************************************************/
 
 static sal_uInt32 SocketDirection[]= {
-    SD_RECEIVE,                 /* osl_Socket_DirRead      */
-    SD_SEND,                    /* osl_Socket_DirWrite     */
-    SD_BOTH,                    /* osl_Socket_DirReadWrite */
-    0                           /* osl_Socket_DirInvalid   */
+    SD_RECEIVE,					/* osl_Socket_DirRead      */
+    SD_SEND,					/* osl_Socket_DirWrite     */
+    SD_BOTH,					/* osl_Socket_DirReadWrite */
+    0							/* osl_Socket_DirInvalid   */
 };
 
 /* reverse map */
@@ -343,8 +343,8 @@ static oslSocketDirection osl_SocketDirectionFromNative(sal_uInt32 nativeType)
 */
 
 /* macros */
-#define DIRECTION_TO_NATIVE(x)      SocketDirection[x]
-#define DIRECTION_FROM_NATIVE(y)    osl_SocketDirectionFromNative(y)
+#define DIRECTION_TO_NATIVE(x)		SocketDirection[x]
+#define DIRECTION_FROM_NATIVE(y)	osl_SocketDirectionFromNative(y)
 
 /*****************************************************************************/
 /* enum oslSocketError */
@@ -355,40 +355,40 @@ static struct
     int            errcode;
     oslSocketError error;
 } SocketError[]= {
-    { 0,               osl_Socket_E_None              }, /* no error */
-    { ENOTSOCK,        osl_Socket_E_NotSocket         }, /* Socket operation on non-socket */
-    { EDESTADDRREQ,    osl_Socket_E_DestAddrReq       }, /* Destination address required */
-    { EMSGSIZE,        osl_Socket_E_MsgSize           }, /* Message too long */
-    { EPROTOTYPE,      osl_Socket_E_Prototype         }, /* Protocol wrong type for socket */
-    { ENOPROTOOPT,     osl_Socket_E_NoProtocol        }, /* Protocol not available */
+    { 0,			   osl_Socket_E_None 			  }, /* no error */
+    { ENOTSOCK,		   osl_Socket_E_NotSocket 		  }, /* Socket operation on non-socket */
+    { EDESTADDRREQ,	   osl_Socket_E_DestAddrReq 	  }, /* Destination address required */
+    { EMSGSIZE,		   osl_Socket_E_MsgSize 		  }, /* Message too long */
+    { EPROTOTYPE,	   osl_Socket_E_Prototype 		  }, /* Protocol wrong type for socket */
+    { ENOPROTOOPT,	   osl_Socket_E_NoProtocol 		  }, /* Protocol not available */
     { EPROTONOSUPPORT, osl_Socket_E_ProtocolNoSupport }, /* Protocol not supported */
-    { ESOCKTNOSUPPORT, osl_Socket_E_TypeNoSupport     }, /* Socket type not supported */
-    { EOPNOTSUPP,      osl_Socket_E_OpNotSupport      }, /* Operation not supported on socket */
-    { EPFNOSUPPORT,    osl_Socket_E_PfNoSupport       }, /* Protocol family not supported */
-    { EAFNOSUPPORT,    osl_Socket_E_AfNoSupport       }, /* Address family not supported by */
+    { ESOCKTNOSUPPORT, osl_Socket_E_TypeNoSupport 	  }, /* Socket type not supported */
+    { EOPNOTSUPP,	   osl_Socket_E_OpNotSupport 	  }, /* Operation not supported on socket */
+    { EPFNOSUPPORT,	   osl_Socket_E_PfNoSupport 	  }, /* Protocol family not supported */
+    { EAFNOSUPPORT,	   osl_Socket_E_AfNoSupport 	  }, /* Address family not supported by */
                                                             /* protocol family */
-    { EADDRINUSE,      osl_Socket_E_AddrInUse         }, /* Address already in use */
-    { EADDRNOTAVAIL,   osl_Socket_E_AddrNotAvail      }, /* Can't assign requested address */
-    { ENETDOWN,        osl_Socket_E_NetDown           }, /* Network is down */
-    { ENETUNREACH,     osl_Socket_E_NetUnreachable    }, /* Network is unreachable */
-    { ENETRESET,       osl_Socket_E_NetReset          }, /* Network dropped connection because */
+    { EADDRINUSE,	   osl_Socket_E_AddrInUse 		  }, /* Address already in use */
+    { EADDRNOTAVAIL,   osl_Socket_E_AddrNotAvail 	  }, /* Can't assign requested address */
+    { ENETDOWN,		   osl_Socket_E_NetDown 		  }, /* Network is down */
+    { ENETUNREACH,	   osl_Socket_E_NetUnreachable    }, /* Network is unreachable */
+    { ENETRESET,	   osl_Socket_E_NetReset 		  }, /* Network dropped connection because */
                                                              /* of reset */
-    { ECONNABORTED,    osl_Socket_E_ConnAborted       }, /* Software caused connection abort */
-    { ECONNRESET,      osl_Socket_E_ConnReset         }, /* Connection reset by peer */
-    { ENOBUFS,         osl_Socket_E_NoBufferSpace     }, /* No buffer space available */
-    { EISCONN,         osl_Socket_E_IsConnected       }, /* Socket is already connected */
-    { ENOTCONN,        osl_Socket_E_NotConnected      }, /* Socket is not connected */
-    { ESHUTDOWN,       osl_Socket_E_Shutdown          }, /* Can't send after socket shutdown */
-    { ETOOMANYREFS,    osl_Socket_E_TooManyRefs       }, /* Too many references: can't splice */
-    { ETIMEDOUT,       osl_Socket_E_TimedOut          }, /* Connection timed out */
-    { ECONNREFUSED,    osl_Socket_E_ConnRefused       }, /* Connection refused */
-    { EHOSTDOWN,       osl_Socket_E_HostDown          }, /* Host is down */
-    { EHOSTUNREACH,    osl_Socket_E_HostUnreachable   }, /* No route to host */
-    { EWOULDBLOCK,     osl_Socket_E_WouldBlock        }, /* call would block on non-blocking socket */
-    { EALREADY,        osl_Socket_E_Already           }, /* operation already in progress */
-    { EINPROGRESS,     osl_Socket_E_InProgress        }, /* operation now in progress */
-    { EAGAIN,          osl_Socket_E_WouldBlock        }, /* same as EWOULDBLOCK */
-    { -1,              osl_Socket_E_InvalidError      }
+    { ECONNABORTED,	   osl_Socket_E_ConnAborted 	  }, /* Software caused connection abort */
+    { ECONNRESET,	   osl_Socket_E_ConnReset 		  }, /* Connection reset by peer */
+    { ENOBUFS,		   osl_Socket_E_NoBufferSpace 	  }, /* No buffer space available */
+    { EISCONN,		   osl_Socket_E_IsConnected 	  }, /* Socket is already connected */
+    { ENOTCONN,		   osl_Socket_E_NotConnected 	  }, /* Socket is not connected */
+    { ESHUTDOWN,	   osl_Socket_E_Shutdown 		  }, /* Can't send after socket shutdown */
+    { ETOOMANYREFS,	   osl_Socket_E_TooManyRefs 	  }, /* Too many references: can't splice */
+    { ETIMEDOUT,	   osl_Socket_E_TimedOut 		  }, /* Connection timed out */
+    { ECONNREFUSED,	   osl_Socket_E_ConnRefused 	  }, /* Connection refused */
+    { EHOSTDOWN,	   osl_Socket_E_HostDown 		  }, /* Host is down */
+    { EHOSTUNREACH,	   osl_Socket_E_HostUnreachable   }, /* No route to host */
+    { EWOULDBLOCK,	   osl_Socket_E_WouldBlock 		  }, /* call would block on non-blocking socket */
+    { EALREADY,		   osl_Socket_E_Already 		  }, /* operation already in progress */
+    { EINPROGRESS,	   osl_Socket_E_InProgress 		  }, /* operation now in progress */
+    { EAGAIN,		   osl_Socket_E_WouldBlock 		  }, /* same as EWOULDBLOCK */
+    { -1,		   	   osl_Socket_E_InvalidError      }
 };
 
 /* map */
@@ -416,8 +416,8 @@ static oslSocketError osl_SocketErrorFromNative(int nativeType)
 }
 
 /* macros */
-#define ERROR_TO_NATIVE(x)      osl_NativeFromSocketError(x)
-#define ERROR_FROM_NATIVE(y)    osl_SocketErrorFromNative(y)
+#define ERROR_TO_NATIVE(x)		osl_NativeFromSocketError(x)
+#define ERROR_FROM_NATIVE(y)	osl_SocketErrorFromNative(y)
 
 /*****************************************************************************/
 /* local function prototypes */
@@ -452,7 +452,7 @@ sal_Int32 SAL_CALL osl_psz_getServicePort (
 oslSocketResult SAL_CALL osl_psz_getHostnameOfSocketAddr (
     oslSocketAddr Addr, sal_Char *pBuffer, sal_uInt32 BufferSize);
 
-oslSocketResult SAL_CALL osl_psz_getDottedInetAddrOfSocketAddr (
+oslSocketResult	SAL_CALL osl_psz_getDottedInetAddrOfSocketAddr (
     oslSocketAddr Addr, sal_Char *pBuffer, sal_uInt32 BufferSize);
 
 void SAL_CALL osl_psz_getLastSocketErrorDescription (
@@ -594,17 +594,11 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
     oslSocketAddr Addr1,
     oslSocketAddr Addr2)
 {
-    OSL_ASSERT(Addr1);
-    OSL_ASSERT(Addr2);
     struct sockaddr* pAddr1= &(Addr1->m_sockaddr);
     struct sockaddr* pAddr2= &(Addr2->m_sockaddr);
 
     OSL_ASSERT(pAddr1);
     OSL_ASSERT(pAddr2);
-    if (pAddr1 == pAddr2)
-    {
-        return (sal_True);
-    }
 
     if (pAddr1->sa_family == pAddr2->sa_family)
     {
@@ -623,7 +617,7 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
 
             default:
             {
-                return (memcmp(pAddr1, pAddr2, sizeof(struct sockaddr)) == 0);
+                return (memcmp(pAddr1, Addr2, sizeof(struct sockaddr)) == 0);
             }
         }
     }
@@ -791,7 +785,7 @@ static struct hostent* _osl_gethostbyname_r (
     const char *name, struct hostent *result,
     char *buffer, int buflen, int *h_errnop)
 {
-#if defined(LINUX) || (defined(FREEBSD) && (__FreeBSD_version >= 601103)) || defined(DRAGONFLY)
+#if defined(LINUX) || (defined(FREEBSD) && (__FreeBSD_version >= 601103))
     struct hostent *__result; /* will be the same as result */
     int __error;
     __error = gethostbyname_r (name, result, buffer, buflen,
@@ -860,9 +854,9 @@ static sal_Bool  _osl_getDomainName (sal_Char *buffer, sal_Int32 bufsiz)
 
 static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
 {
-#   define DOMAINNAME_LENGTH 512
-    sal_uInt32          nLengthOfHostName;
-    static sal_uInt32   nLengthOfDomainName = 0;
+#	define DOMAINNAME_LENGTH 512
+    sal_uInt32 			nLengthOfHostName;
+    static sal_uInt32 	nLengthOfDomainName = 0;
     static sal_Char    *pDomainName = NULL;
 
     sal_Char  *pFullQualifiedName;
@@ -919,10 +913,10 @@ static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
         sal_Bool        bHostsAreEqual;
 
         /* buffer for calls to reentrant version of gethostbyname */
-        struct hostent  aHostByName, aQualifiedHostByName;
-        sal_Char        pHostBuffer[ MAX_HOSTBUFFER_SIZE ];
+        struct hostent 	aHostByName, aQualifiedHostByName;
+        sal_Char		pHostBuffer[ MAX_HOSTBUFFER_SIZE ];
         sal_Char        pQualifiedHostBuffer[ MAX_HOSTBUFFER_SIZE ];
-        int     nErrorNo;
+        int		nErrorNo;
 
         pHostBuffer[0] = '\0';
         pQualifiedHostBuffer[0] = '\0';
@@ -1104,6 +1098,7 @@ oslHostAddr SAL_CALL osl_createHostAddr (
         rtl_string_release(strHostname);
     }
 
+
     return HostAddr;
 }
 
@@ -1127,7 +1122,7 @@ oslHostAddr SAL_CALL osl_psz_createHostAddr (
 
     pHostAddr= (oslHostAddr) malloc(sizeof(struct oslHostAddrImpl));
     OSL_ASSERT(pHostAddr);
-    if (pHostAddr == NULL)
+    if (pAddr == NULL)
     {
         free (cn);
         return ((oslHostAddr)NULL);
@@ -1171,7 +1166,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *ustrHostname)
 oslHostAddr SAL_CALL osl_psz_createHostAddrByName (const sal_Char *pszHostname)
 {
     struct hostent *he;
-        oslHostAddr addr;
+        oslHostAddr	addr;
 
     static oslMutex mutex = NULL;
 
@@ -1521,7 +1516,7 @@ sal_Bool SAL_CALL osl_setInetPortOfSocketAddr(oslSocketAddr pAddr, sal_Int32 Por
 /*****************************************************************************/
 /* osl_getHostnameOfSocketAddr */
 /*****************************************************************************/
-oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(oslSocketAddr Addr, rtl_uString **ustrHostname)
+oslSocketResult	SAL_CALL osl_getHostnameOfSocketAddr(oslSocketAddr Addr, rtl_uString **ustrHostname)
 {
     oslSocketResult Result;
     sal_Char pszHostname[1024];
@@ -1558,7 +1553,7 @@ oslSocketResult SAL_CALL osl_psz_getHostnameOfSocketAddr(oslSocketAddr pAddr,
 /*****************************************************************************/
 /* osl_getDottedInetAddrOfSocketAddr */
 /*****************************************************************************/
-oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr(oslSocketAddr Addr, rtl_uString **ustrDottedInetAddr)
+oslSocketResult	SAL_CALL osl_getDottedInetAddrOfSocketAddr(oslSocketAddr Addr, rtl_uString **ustrDottedInetAddr)
 {
     oslSocketResult Result;
     sal_Char pszDottedInetAddr[1024];
@@ -1573,7 +1568,7 @@ oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr(oslSocketAddr Addr, r
 
 }
 
-oslSocketResult SAL_CALL osl_psz_getDottedInetAddrOfSocketAddr(oslSocketAddr pAddr,
+oslSocketResult	SAL_CALL osl_psz_getDottedInetAddrOfSocketAddr(oslSocketAddr pAddr,
                                                   sal_Char *pBuffer, sal_uInt32 BufferSize)
 {
     OSL_ASSERT(pAddr);
@@ -1597,11 +1592,11 @@ oslSocketResult SAL_CALL osl_psz_getDottedInetAddrOfSocketAddr(oslSocketAddr pAd
 /*****************************************************************************/
 /* osl_createSocket  */
 /*****************************************************************************/
-oslSocket SAL_CALL osl_createSocket(oslAddrFamily   Family,
-                           oslSocketType    Type,
-                           oslProtocol      Protocol)
+oslSocket SAL_CALL osl_createSocket(oslAddrFamily	Family,
+                           oslSocketType	Type,
+                           oslProtocol		Protocol)
 {
-    int            Flags;
+    int 		   Flags;
     oslSocket pSocket;
 
     /* alloc memory */
@@ -1642,8 +1637,8 @@ oslSocket SAL_CALL osl_createSocket(oslAddrFamily   Family,
         }
 
 
-        pSocket->m_CloseCallback    = NULL;
-        pSocket->m_CallbackArg  = NULL;
+        pSocket->m_CloseCallback 	= NULL;
+        pSocket->m_CallbackArg	= NULL;
     }
 
     return pSocket;
@@ -1661,7 +1656,7 @@ void SAL_CALL osl_releaseSocket( oslSocket pSocket )
 #if defined(LINUX)
     if ( pSocket->m_bIsAccepting == sal_True )
     {
-        OSL_FAIL("osl_destroySocket : attempt to destroy socket while accepting\n");
+        OSL_ENSURE(0, "osl_destroySocket : attempt to destroy socket while accepting\n");
         return;
     }
 #endif /* LINUX */
@@ -1943,8 +1938,8 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
     if (pTimeout)
     {
         /* divide milliseconds into seconds and microseconds */
-        tv.tv_sec=  pTimeout->Seconds;
-        tv.tv_usec= pTimeout->Nanosec / 1000L;
+        tv.tv_sec=	pTimeout->Seconds;
+        tv.tv_usec=	pTimeout->Nanosec / 1000L;
     }
 
     /* select */
@@ -2083,12 +2078,12 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
 
     }
 
-    pConnectionSockImpl->m_Socket           = Connection;
-    pConnectionSockImpl->m_nLastError       = 0;
-    pConnectionSockImpl->m_CloseCallback    = NULL;
-    pConnectionSockImpl->m_CallbackArg      = NULL;
+    pConnectionSockImpl->m_Socket			= Connection;
+    pConnectionSockImpl->m_nLastError		= 0;
+    pConnectionSockImpl->m_CloseCallback	= NULL;
+    pConnectionSockImpl->m_CallbackArg		= NULL;
 #if defined(LINUX)
-    pConnectionSockImpl->m_bIsAccepting     = sal_False;
+    pConnectionSockImpl->m_bIsAccepting		= sal_False;
 
     pSocket->m_bIsAccepting = sal_False;
 #endif /* LINUX */
@@ -2288,7 +2283,7 @@ sal_Int32 SAL_CALL osl_readSocket (
 
     OSL_ASSERT( pSocket);
 
-    /* loop until all desired bytes were read or an error occurred */
+    /* loop until all desired bytes were read or an error occured */
     while (BytesToRead > 0)
     {
         sal_Int32 RetVal;
@@ -2297,7 +2292,7 @@ sal_Int32 SAL_CALL osl_readSocket (
                                    BytesToRead,
                                    osl_Socket_MsgNormal);
 
-        /* error occurred? */
+        /* error occured? */
         if(RetVal <= 0)
         {
             break;
@@ -2317,7 +2312,7 @@ sal_Int32 SAL_CALL osl_readSocket (
 sal_Int32 SAL_CALL osl_writeSocket(
     oslSocket pSocket, const void *pBuffer, sal_Int32 n )
 {
-    /* loop until all desired bytes were send or an error occurred */
+    /* loop until all desired bytes were send or an error occured */
     sal_uInt32 BytesSend= 0;
     sal_uInt32 BytesToSend= n;
     sal_uInt8 *Ptr = ( sal_uInt8 * )pBuffer;
@@ -2330,7 +2325,7 @@ sal_Int32 SAL_CALL osl_writeSocket(
 
         RetVal= osl_sendSocket( pSocket,Ptr,BytesToSend,osl_Socket_MsgNormal);
 
-        /* error occurred? */
+        /* error occured? */
         if(RetVal <= 0)
         {
             break;
@@ -2359,10 +2354,7 @@ sal_Bool __osl_socket_poll (
     int           timeout;
     int           result;
 
-    OSL_ASSERT(0 != pSocket);
-    if (0 == pSocket)
-      return sal_False; /* EINVAL */
-
+    OSL_ASSERT(pSocket);
     pSocket->m_nLastError = 0;
 
     fds.fd      = pSocket->m_Socket;
@@ -2405,10 +2397,7 @@ sal_Bool __osl_socket_poll (
     struct timeval tv;
     int            result;
 
-    OSL_ASSERT(0 != pSocket);
-    if (0 == pSocket)
-      return sal_False; /* EINVAL */
-
+    OSL_ASSERT(pSocket);
     pSocket->m_nLastError = 0;
 
     FD_ZERO(&fds);
@@ -2524,10 +2513,10 @@ sal_Bool SAL_CALL osl_shutdownSocket(oslSocket pSocket,
 /* osl_getSocketOption  */
 /*****************************************************************************/
 sal_Int32 SAL_CALL osl_getSocketOption(oslSocket pSocket,
-                            oslSocketOptionLevel    Level,
-                            oslSocketOption         Option,
-                            void*                   pBuffer,
-                            sal_uInt32                  BufferLen)
+                            oslSocketOptionLevel	Level,
+                            oslSocketOption			Option,
+                            void*					pBuffer,
+                            sal_uInt32  				BufferLen)
 {
     socklen_t nOptLen = (socklen_t) BufferLen;
 
@@ -2556,10 +2545,10 @@ sal_Int32 SAL_CALL osl_getSocketOption(oslSocket pSocket,
 /* osl_setSocketOption  */
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_setSocketOption(oslSocket pSocket,
-                            oslSocketOptionLevel    Level,
-                            oslSocketOption         Option,
-                            void*                   pBuffer,
-                            sal_uInt32                  BufferLen)
+                            oslSocketOptionLevel	Level,
+                            oslSocketOption			Option,
+                            void*					pBuffer,
+                            sal_uInt32					BufferLen)
 {
     int nRet;
 
@@ -2649,7 +2638,7 @@ sal_Bool SAL_CALL osl_isNonBlockingMode(oslSocket pSocket)
 /*****************************************************************************/
 oslSocketType SAL_CALL osl_getSocketType(oslSocket pSocket)
 {
-    int Type=0;
+    int	Type=0;
     socklen_t TypeSize= sizeof(Type);
 
     OSL_ASSERT(pSocket);
@@ -2725,8 +2714,8 @@ oslSocketError SAL_CALL osl_getLastSocketError(oslSocket pSocket)
 /*****************************************************************************/
 typedef struct _TSocketSetImpl
 {
-    int     m_MaxHandle;    /* for select(), the largest descriptor in the set */
-    fd_set  m_Set;          /* the set of descriptors */
+    int		m_MaxHandle;	/* for select(), the largest descriptor in the set */
+    fd_set	m_Set;			/* the set of descriptors */
 
 } TSocketSetImpl;
 
@@ -2826,7 +2815,7 @@ void SAL_CALL osl_removeFromSocketSet(oslSocketSet Set, oslSocket pSocket)
         pSet->m_MaxHandle--;
         if(pSet->m_MaxHandle < 0)
         {
-            pSet->m_MaxHandle= 0;   /* avoid underflow */
+            pSet->m_MaxHandle= 0;	/* avoid underflow */
         }
     }
 
@@ -2861,7 +2850,7 @@ sal_Int32 SAL_CALL osl_demultiplexSocketEvents(oslSocketSet IncomingSet,
                                     const TimeValue* pTimeout)
 {
     int MaxHandle= 0;
-    struct timeval  tv;
+    struct timeval 	tv;
     TSocketSetImpl* pInSet;
     TSocketSetImpl* pOutSet;
     TSocketSetImpl* pOOBSet;

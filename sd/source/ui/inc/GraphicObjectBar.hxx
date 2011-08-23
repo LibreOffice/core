@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ class View;
 class ViewShell;
 
 
-class GraphicObjectBar
+class GraphicObjectBar 
     : public SfxShell
 {
 public:
@@ -49,16 +49,16 @@ public:
     GraphicObjectBar (ViewShell* pSdViewShell, ::sd::View* pSdView);
     virtual ~GraphicObjectBar (void);
 
-    void            GetAttrState( SfxItemSet& rSet );
-    void            Execute( SfxRequest& rReq );
+    void			GetAttrState( SfxItemSet& rSet );
+    void			Execute( SfxRequest& rReq );
 
-    void            GetFilterState( SfxItemSet& rSet );
-    void            ExecuteFilter( SfxRequest& rReq );
+    void			GetFilterState( SfxItemSet& rSet );
+    void			ExecuteFilter( SfxRequest& rReq );
 
 protected:
     ::sd::View* mpView;
-    ViewShell*  mpViewSh;
-    sal_uInt16          nMappedSlotFilter;
+    ViewShell*	mpViewSh;
+    USHORT			nMappedSlotFilter;
 
 };
 

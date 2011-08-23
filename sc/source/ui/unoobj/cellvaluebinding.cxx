@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ namespace calc
         ,OCellValueBinding_PBase( OCellValueBinding_Base::rBHelper )
         ,m_xDocument( _rxDocument )
         ,m_aModifyListeners( m_aMutex )
-        ,m_bInitialized( false )
+        ,m_bInitialized( sal_False )
         ,m_bListPos( _bListPos )
     {
         DBG_CTOR( OCellValueBinding, checkConsistency_static );
@@ -96,7 +96,7 @@ namespace calc
         // register our property at the base class
         CellAddress aInitialPropValue;
         registerPropertyNoMember(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "BoundCell" )),
+            ::rtl::OUString::createFromAscii( "BoundCell" ),
             PROP_HANDLE_BOUND_CELL,
             PropertyAttribute::BOUND | PropertyAttribute::READONLY,
             ::getCppuType( &aInitialPropValue ),
@@ -136,6 +136,7 @@ namespace calc
             xBroadcaster->removeModifyListener( this );
         }
 
+//        OCellValueBinding_Base::disposing();
         WeakAggComponentImplHelperBase::disposing();
 
         // TODO: clean up here whatever you need to clean up (e.g. deregister as XEventListener
@@ -208,7 +209,7 @@ namespace calc
 
         return aTypes;
     }
-
+        
     //--------------------------------------------------------------------
     sal_Bool SAL_CALL OCellValueBinding::supportsType( const Type& aType ) throw (RuntimeException)
     {
@@ -224,9 +225,9 @@ namespace calc
             if ( aType.equals( *pTypes++ ) )
                 return sal_True;
 
-        return false;
+        return sal_False;
     }
-
+        
     //--------------------------------------------------------------------
     Any SAL_CALL OCellValueBinding::getValue( const Type& aType ) throw (IncompatibleTypesException, RuntimeException)
     {
@@ -252,7 +253,7 @@ namespace calc
             {
                 // check if the cell has a numeric value (this might go into a helper function):
 
-                sal_Bool bHasValue = false;
+                sal_Bool bHasValue = sal_False;
                 CellContentType eCellType = m_xCell->getType();
                 if ( eCellType == CellContentType_VALUE )
                     bHasValue = sal_True;
@@ -265,7 +266,7 @@ namespace calc
                         if ( xProp.is() )
                         {
                             CellContentType eResultType;
-                            if ( (xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FormulaResultType" )) ) >>= eResultType) && eResultType == CellContentType_VALUE )
+                            if ( (xProp->getPropertyValue(::rtl::OUString::createFromAscii( "FormulaResultType" ) ) >>= eResultType) && eResultType == CellContentType_VALUE )
                                 bHasValue = sal_True;
                         }
                     }
@@ -307,13 +308,13 @@ namespace calc
             break;
 
         default:
-            OSL_FAIL( "OCellValueBinding::getValue: unreachable code!" );
+            DBG_ERROR( "OCellValueBinding::getValue: unreachable code!" );
                 // a type other than double and string should never have survived the checkValueType
                 // above
         }
         return aReturn;
     }
-
+        
     //--------------------------------------------------------------------
     void SAL_CALL OCellValueBinding::setValue( const Any& aValue ) throw (IncompatibleTypesException, NoSupportException, RuntimeException)
     {
@@ -343,7 +344,7 @@ namespace calc
                 // boolean is stored as values 0 or 1
                 // TODO: set the number format to boolean if no format is set?
 
-                sal_Bool bValue( false );
+                sal_Bool bValue( sal_False );
                 aValue >>= bValue;
                 double nCellValue = bValue ? 1.0 : 0.0;
 
@@ -393,7 +394,7 @@ namespace calc
             break;
 
         default:
-            OSL_FAIL( "OCellValueBinding::setValue: unreachable code!" );
+            DBG_ERROR( "OCellValueBinding::setValue: unreachable code!" );
                 // a type other than double and string should never have survived the checkValueType
                 // above
         }
@@ -403,7 +404,7 @@ namespace calc
     {
         // set boolean number format if not already set
 
-        ::rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "NumberFormat" ) );
+        ::rtl::OUString sPropName( ::rtl::OUString::createFromAscii( "NumberFormat" ) );
         Reference<XPropertySet> xCellProp( m_xCell, UNO_QUERY );
         Reference<XNumberFormatsSupplier> xSupplier( m_xDocument, UNO_QUERY );
         if ( xSupplier.is() && xCellProp.is() )
@@ -413,7 +414,7 @@ namespace calc
             if ( xTypes.is() )
             {
                 Locale aLocale;
-                sal_Bool bWasBoolean = false;
+                sal_Bool bWasBoolean = sal_False;
 
                 sal_Int32 nOldIndex = ::comphelper::getINT32( xCellProp->getPropertyValue( sPropName ) );
                 Reference<XPropertySet> xOldFormat;
@@ -428,10 +429,10 @@ namespace calc
                 if ( xOldFormat.is() )
                 {
                     // use the locale of the existing format
-                    xOldFormat->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Locale" )) ) >>= aLocale;
+                    xOldFormat->getPropertyValue( ::rtl::OUString::createFromAscii( "Locale" ) ) >>= aLocale;
 
                     sal_Int16 nOldType = ::comphelper::getINT16(
-                        xOldFormat->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Type" )) ) );
+                        xOldFormat->getPropertyValue( ::rtl::OUString::createFromAscii( "Type" ) ) );
                     if ( nOldType & NumberFormat::LOGICAL )
                         bWasBoolean = sal_True;
                 }
@@ -484,7 +485,7 @@ namespace calc
 
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.sheet.OCellValueBinding" ) );
     }
-
+        
     //--------------------------------------------------------------------
     sal_Bool SAL_CALL OCellValueBinding::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
     {
@@ -497,9 +498,9 @@ namespace calc
             if ( *pLookup++ == _rServiceName )
                 return sal_True;
 
-        return false;
+        return sal_False;
     }
-
+        
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL OCellValueBinding::getSupportedServiceNames(  ) throw (RuntimeException)
     {
@@ -519,7 +520,7 @@ namespace calc
        if ( _rxListener.is() )
            m_aModifyListeners.addInterface( _rxListener );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL OCellValueBinding::removeModifyListener( const Reference< XModifyListener >& _rxListener ) throw (RuntimeException)
     {
@@ -546,7 +547,7 @@ namespace calc
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "OCellValueBinding::notifyModified: caught a (non-runtime) exception!" );
+                DBG_ERROR( "OCellValueBinding::notifyModified: caught a (non-runtime) exception!" );
             }
         }
     }
@@ -582,7 +583,7 @@ namespace calc
 
         // get the cell address
         CellAddress aAddress;
-        sal_Bool bFoundAddress = false;
+        sal_Bool bFoundAddress = sal_False;
 
         const Any* pLoop = _rArguments.getConstArray();
         const Any* pLoopEnd = _rArguments.getConstArray() + _rArguments.getLength();
@@ -591,7 +592,7 @@ namespace calc
             NamedValue aValue;
             if ( *pLoop >>= aValue )
             {
-                if ( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BoundCell" ) ) )
+                if ( aValue.Name.equalsAscii( "BoundCell" ) )
                 {
                     if ( aValue.Value >>= aAddress )
                         bFoundAddress = sal_True;
@@ -629,7 +630,7 @@ namespace calc
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OCellValueBinding::initialize: caught an exception while retrieving the cell object!" );
+            DBG_ERROR( "OCellValueBinding::initialize: caught an exception while retrieving the cell object!" );
         }
 
         if ( !m_xCell.is() )

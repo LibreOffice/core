@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- Feb 2005           Created
+ Feb 2005		 	Created
  ************************************************************************/
 #include <stdio.h>
 #include <tools/stream.hxx>
@@ -214,12 +214,14 @@ void LwpOleObject::Read()
 
     cPersistentFlags = m_pObjStrm->QuickReaduInt16();
 
+    sal_uInt16 nNonVersionedPersistentFlags = 0;
+    sal_uInt16 nNumberOfPages = 0;
     // qCMarker read
     LwpObjectID ID;
 
     if (LwpFileHeader::m_nFileRevision >= 0x0004)
     {
-        m_pObjStrm->QuickReaduInt16();
+        nNonVersionedPersistentFlags = m_pObjStrm->QuickReaduInt16();
 
         OUString sFormat = m_pObjStrm->QuickReadStringPtr();
 
@@ -227,7 +229,7 @@ void LwpOleObject::Read()
         {
             // null pointers have a VO_INVALID type
             //if (VO_INVALID == m_pObjStrm->QuickReaduInt16())
-            //  return;
+            //	return;
 
             ID.Read(m_pObjStrm);
             //return m_pObjStrm->Locate(ID);
@@ -236,7 +238,7 @@ void LwpOleObject::Read()
         {
             ID.ReadIndexed(m_pObjStrm);
             //if (ID.IsNull())
-            //  return;
+            //	return;
 
             //return m_pObjStrm->Locate(ID);
         }
@@ -244,12 +246,31 @@ void LwpOleObject::Read()
 
     if (m_pObjStrm->CheckExtra())
     {
-        m_pObjStrm->QuickReaduInt16();
+        nNumberOfPages = m_pObjStrm->QuickReaduInt16();
         m_pObjStrm->SkipExtra();
     }
 
 }
+/**
+ * @descr:   Construct ole-storage name by ObjectID
+ * @param:  pObjName - input&output string of object name, spaces allocated outside and at least length should be MAX_STREAMORSTORAGENAME
+ * @return:  None
+ * @date:    2/22/2005
+ */
+void LwpOleObject::GetChildStorageName(char *pObjName)
+{
+    /*LwpObjectFactory * pObjMgr = LwpObjectFactory::Instance();
+    LwpIndexManager * pIdxMgr = pObjMgr->GetIndexManager();
+    sal_uInt32 nLowID = pIdxMgr->GetObjTime(static_cast<sal_uInt16>(GetObjectID()->GetLow()));*/
 
+    char sName[MAX_STREAMORSTORAGENAME];
+    //LwpObjectID ID(nLowID, GetObjectID()->GetHigh());
+    sprintf( sName, "%s%X,%X", "Ole",
+      GetObjectID()->GetHigh(), GetObjectID()->GetLow());
+
+    strcpy( pObjName, sName);
+    return;
+}
 /**
  * @descr:   Parse VO_OLEOBJECT and dump to XML stream only on WIN32 platform
  * @param:  pOutputStream - stream to dump OLE object
@@ -295,7 +316,7 @@ Rectangle LwpOleObject::GetOLEObjectSize( SotStorage * pStor ) const
         return aSize;
 
 
-    for( sal_uInt16 i = 1; i < 10; i++ )
+    for( USHORT i = 1; i < 10; i++ )
     {
         SotStorageStreamRef xStm = pStor->OpenSotStream( aStreamName,
             STREAM_READ | STREAM_NOCREATE );
@@ -324,9 +345,9 @@ Rectangle LwpOleObject::GetOLEObjectSize( SotStorage * pStor ) const
 /**
 * @descr:   Read OLE object picture information
 */
-sal_Bool LwpOlePres::Read( SvStream & /*rStm*/ )
+BOOL LwpOlePres::Read( SvStream & /*rStm*/ )
 {
-    return sal_True;
+    return TRUE;
 }
 
 /**
@@ -335,17 +356,17 @@ sal_Bool LwpOlePres::Read( SvStream & /*rStm*/ )
 void LwpOlePres::Write( SvStream & rStm )
 {
     WriteClipboardFormat( rStm, FORMAT_GDIMETAFILE );
-    rStm << (sal_Int32)(nJobLen +4);       // immer leeres TargetDevice
+    rStm << (INT32)(nJobLen +4);       // immer leeres TargetDevice
     if( nJobLen )
         rStm.Write( pJob, nJobLen );
-    rStm << (sal_uInt32)nAspect;
-    rStm << (sal_Int32)-1;      //L-Index immer -1
-    rStm << (sal_Int32)nAdvFlags;
-    rStm << (sal_Int32)0;       //Compression
-    rStm << (sal_Int32)aSize.Width();
-    rStm << (sal_Int32)aSize.Height();
-    sal_uLong nPos = rStm.Tell();
-    rStm << (sal_Int32)0;
+    rStm << (UINT32)nAspect;
+    rStm << (INT32)-1;      //L-Index immer -1
+    rStm << (INT32)nAdvFlags;
+    rStm << (INT32)0;       //Compression
+    rStm << (INT32)aSize.Width();
+    rStm << (INT32)aSize.Height();
+    ULONG nPos = rStm.Tell();
+    rStm << (INT32)0;
 
     if( GetFormat() == FORMAT_GDIMETAFILE && pMtf )
     {
@@ -373,11 +394,11 @@ void LwpOlePres::Write( SvStream & rStm )
     }
     else
     {
-        OSL_FAIL( "unknown format" );
+        DBG_ERROR( "unknown format" );
     }
-    sal_uLong nEndPos = rStm.Tell();
+    ULONG nEndPos = rStm.Tell();
     rStm.Seek( nPos );
-    rStm << (sal_uInt32)(nEndPos - nPos - 4);
+    rStm << (UINT32)(nEndPos - nPos - 4);
     rStm.Seek( nEndPos );
 }
 //End by

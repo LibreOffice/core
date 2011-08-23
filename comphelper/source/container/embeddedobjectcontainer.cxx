@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <algorithm>
 
 #include <rtl/logfile.hxx>
@@ -78,7 +78,7 @@ struct eqObjectName_Impl
     }
 };
 
-typedef boost::unordered_map
+typedef std::hash_map
 <
     ::rtl::OUString,
     ::com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >,
@@ -204,7 +204,7 @@ void EmbeddedObjectContainer::ReleaseImageSubStorage()
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL( "Problems releasing image substorage!\n" );
+            OSL_ASSERT( "Problems releasing image substorage!\n" );
         }
     }
 }
@@ -318,7 +318,7 @@ sal_Bool EmbeddedObjectContainer::HasInstantiatedEmbeddedObject( const ::rtl::OU
             aIt++;
     }
 
-    OSL_FAIL( "Unknown object!" );
+    OSL_ENSURE( 0, "Unknown object!" );
     return ::rtl::OUString();
 }
 
@@ -335,7 +335,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::GetEmbeddedOb
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
     uno::Sequence< ::rtl::OUString> aSeq = xAccess->getElementNames();
     const ::rtl::OUString* pIter = aSeq.getConstArray();
-    const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+    const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
     for(;pIter != pEnd;++pIter)
     {
         (void)*pIter;
@@ -715,7 +715,8 @@ sal_Bool EmbeddedObjectContainer::CopyEmbeddedObject( EmbeddedObjectContainer& r
 {
     RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::CopyEmbeddedObject" );
 
-    OSL_FAIL( "This method is depricated! Use EmbeddedObjectContainer::CopyAndGetEmbeddedObject() to copy object!\n" );
+    OSL_ENSURE( sal_False,
+                "This method is depricated! Use EmbeddedObjectContainer::CopyAndGetEmbeddedObject() to copy object!\n" );
 
     // get the object name before(!) it is assigned to a new storage
     ::rtl::OUString aOrigName;
@@ -843,7 +844,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                         {
                             // impossibility to copy readonly property is not treated as an error for now
                             // but the assertion is helpful to detect such scenarios and review them
-                            OSL_FAIL( "Could not copy readonly property!\n" );
+                            OSL_ENSURE( sal_False, "Could not copy readonly property!\n" );
                         }
                     }
                 }
@@ -911,7 +912,7 @@ sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& r
     catch ( uno::Exception& e )
     {
         (void)e;
-        OSL_FAIL( "Failed to insert embedded object into storage!" );
+        OSL_ENSURE( sal_False, "Failed to insert embedded object into storage!" );
         bRet = sal_False;
     }
 
@@ -943,7 +944,7 @@ sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& r
             }
             catch ( uno::Exception& )
             {
-                OSL_FAIL( "Failed to remove object from storage!" );
+                OSL_ENSURE( sal_False, "Failed to remove object from storage!" );
                 bRet = sal_False;
             }
         }
@@ -1008,13 +1009,13 @@ sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( const ::rtl::OUString& rNa
         }
         catch ( uno::Exception& )
         {
-            OSL_FAIL("Could not move object!");
+            OSL_ENSURE(0,"Could not move object!");
             return sal_False;
         }
 
     }
     else
-        OSL_FAIL("Unknown object!");
+        OSL_ENSURE(0,"Unknown object!");
     return sal_False;
 }
 
@@ -1030,7 +1031,7 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
 #if OSL_DEBUG_LEVEL > 1
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
     uno::Reference < embed::XLinkageSupport > xLink( xPersist, uno::UNO_QUERY );
-    sal_Bool bIsNotEmbedded = !xPersist.is() || ( xLink.is() && xLink->isLink() );
+    sal_Bool bIsNotEmbedded = !xPersist.is() || xLink.is() && xLink->isLink();
 
     // if the object has a persistance and the object is not a link than it must have persistence entry in the storage
     OSL_ENSURE( bIsNotEmbedded || xAccess->hasByName(aName), "Removing element not present in storage!" );
@@ -1093,7 +1094,7 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
                     }
                     catch( uno::Exception& )
                     {
-                        OSL_FAIL( "Can not set the new media type to a storage!\n" );
+                        OSL_ENSURE( sal_False, "Can not set the new media type to a storage!\n" );
                     }
                 }
 
@@ -1135,7 +1136,6 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
     }
 
     OSL_ENSURE( bFound, "Object not found for removal!" );
-    (void)bFound;
     if ( xPersist.is() )
     {
         // remove replacement image (if there is one)
@@ -1153,7 +1153,7 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
         }
         catch ( uno::Exception& )
         {
-            OSL_FAIL( "Failed to remove object from storage!" );
+            OSL_ENSURE( sal_False, "Failed to remove object from storage!" );
             return sal_False;
         }
     }
@@ -1364,7 +1364,7 @@ namespace {
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL( "The pictures storage is not available!\n" );
+            OSL_ENSURE( sal_False, "The pictures storage is not available!\n" );
         }
     }
 
@@ -1378,7 +1378,7 @@ sal_Bool EmbeddedObjectContainer::StoreAsChildren(sal_Bool _bOasisFormat,sal_Boo
         comphelper::EmbeddedObjectContainer aCnt( _xStorage );
         const uno::Sequence < ::rtl::OUString > aNames = GetObjectNames();
         const ::rtl::OUString* pIter = aNames.getConstArray();
-        const ::rtl::OUString* pEnd   = pIter + aNames.getLength();
+        const ::rtl::OUString* pEnd	  = pIter + aNames.getLength();
         for(;pIter != pEnd;++pIter)
         {
             uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( *pIter );
@@ -1493,7 +1493,7 @@ sal_Bool EmbeddedObjectContainer::StoreChildren(sal_Bool _bOasisFormat,sal_Bool 
     sal_Bool bResult = sal_True;
     const uno::Sequence < ::rtl::OUString > aNames = GetObjectNames();
     const ::rtl::OUString* pIter = aNames.getConstArray();
-    const ::rtl::OUString* pEnd   = pIter + aNames.getLength();
+    const ::rtl::OUString* pEnd	  = pIter + aNames.getLength();
     for(;pIter != pEnd;++pIter)
     {
         uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( *pIter );
@@ -1618,7 +1618,7 @@ sal_Bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< emb
     sal_Bool bError = sal_False;
     const uno::Sequence < ::rtl::OUString > aNames = GetObjectNames();
     const ::rtl::OUString* pIter = aNames.getConstArray();
-    const ::rtl::OUString* pEnd   = pIter + aNames.getLength();
+    const ::rtl::OUString* pEnd	  = pIter + aNames.getLength();
     for(;pIter != pEnd;++pIter)
     {
         uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( *pIter );

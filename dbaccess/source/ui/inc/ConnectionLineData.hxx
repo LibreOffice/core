@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@ namespace dbaui
 {
 
     //==================================================================
-    // ConnData     ---------->*    ConnLineData
-    //    ^1                            ^1
-    //    |                             |
-    //  Conn        ---------->*    ConnLine
+    // ConnData		---------->*	ConnLineData
+    //    ^1							^1
+    //    |								|
+    //	Conn		---------->*	ConnLine
     //==================================================================
 
 
@@ -65,23 +65,23 @@ namespace dbaui
         OConnectionLineData();
         OConnectionLineData( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName );
         OConnectionLineData( const OConnectionLineData& rConnLineData );
-
+        
         // eine Kopie der eigenen Instanz liefern (das ist mir irgendwie angenehmer als ein virtueller Zuweisungsoperator)
         void CopyFrom(const OConnectionLineData& rSource);
 
         // Memberzugriff (schreiben)
-        void SetFieldName(EConnectionSide nWhich, const ::rtl::OUString& strFieldName)
-        {
-            if (nWhich==JTCS_FROM)
-                m_aSourceFieldName = strFieldName;
-            else
-                m_aDestFieldName = strFieldName;
+        void SetFieldName(EConnectionSide nWhich, const ::rtl::OUString& strFieldName) 
+        { 
+            if (nWhich==JTCS_FROM) 
+                m_aSourceFieldName = strFieldName; 
+            else 
+                m_aDestFieldName = strFieldName; 
         }
         void SetSourceFieldName( const ::rtl::OUString& rSourceFieldName){ SetFieldName(JTCS_FROM, rSourceFieldName); }
         void SetDestFieldName( const ::rtl::OUString& rDestFieldName ){ SetFieldName(JTCS_TO, rDestFieldName); }
 
         inline bool clearSourceFieldName() { SetSourceFieldName(::rtl::OUString()); return true;}
-        inline bool clearDestFieldName() { SetDestFieldName(::rtl::OUString());     return true;}
+        inline bool clearDestFieldName() { SetDestFieldName(::rtl::OUString());		return true;}
 
         // Memberzugriff (lesen)
         ::rtl::OUString GetFieldName(EConnectionSide nWhich) const { return (nWhich == JTCS_FROM) ? m_aSourceFieldName : m_aDestFieldName; }
@@ -94,8 +94,8 @@ namespace dbaui
 
     //-------------------------------------------------------------------------
     //------------------------------------------------------------------
-    typedef ::rtl::Reference< OConnectionLineData >     OConnectionLineDataRef;
-    typedef ::std::vector< OConnectionLineDataRef > OConnectionLineDataVec;
+    typedef ::rtl::Reference< OConnectionLineData >		OConnectionLineDataRef;
+    typedef ::std::vector< OConnectionLineDataRef >	OConnectionLineDataVec;
 }
 #endif // DBAUI_CONNECTIONLINEDATA_HXX
 

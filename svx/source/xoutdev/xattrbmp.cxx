@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,13 +39,13 @@
 #include <editeng/memberids.hrc>
 
 #include <svx/dialogs.hrc>
-#include "svx/xattr.hxx"
+#include "xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/xdef.hxx>
 #include <svx/unomid.hxx>
 #include <editeng/unoprnms.hxx>
 
-#include "svx/unoapi.hxx"
+#include "unoapi.hxx"
 #include <svx/svdmodel.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -61,28 +61,36 @@ using namespace ::com::sun::star;
 |*
 |*    XOBitmap::XOBitmap()
 |*
+|*    Beschreibung
+|*    Ersterstellung    27.07.95
+|*    Letzte Aenderung  27.07.95
+|*
 *************************************************************************/
 
 XOBitmap::XOBitmap() :
-    eType           ( XBITMAP_NONE ),
-    eStyle          ( XBITMAP_STRETCH ),
-    pPixelArray     ( NULL ),
-    bGraphicDirty   ( sal_False )
+    eType			( XBITMAP_NONE ),
+    eStyle			( XBITMAP_STRETCH ),
+    pPixelArray		( NULL ),
+    bGraphicDirty	( FALSE )
 {
 }
 
 /*************************************************************************
 |*
 |*    XOBitmap::XOBitmap( Bitmap aBitmap, XBitmapStyle eStyle = XBITMAP_TILE )
+|*
+|*    Beschreibung
+|*    Ersterstellung    26.07.95
+|*    Letzte Aenderung  26.07.95
 |*
 *************************************************************************/
 
 XOBitmap::XOBitmap( const Bitmap& rBmp, XBitmapStyle eInStyle ) :
-    eType           ( XBITMAP_IMPORT ),
-    eStyle          ( eInStyle ),
-    aGraphicObject  ( rBmp ),
-    pPixelArray     ( NULL ),
-    bGraphicDirty   ( sal_False )
+    eType			( XBITMAP_IMPORT ),
+    eStyle			( eInStyle ),
+    aGraphicObject	( rBmp ),
+    pPixelArray		( NULL ),
+    bGraphicDirty	( FALSE )
 {
 }
 
@@ -90,42 +98,50 @@ XOBitmap::XOBitmap( const Bitmap& rBmp, XBitmapStyle eInStyle ) :
 |*
 |*    XOBitmap::XOBitmap( Bitmap aBitmap, XBitmapStyle eStyle = XBITMAP_TILE )
 |*
+|*    Beschreibung
+|*    Ersterstellung    26.07.95
+|*    Letzte Aenderung  26.07.95
+|*
 *************************************************************************/
 
 XOBitmap::XOBitmap( const GraphicObject& rGraphicObject, XBitmapStyle eInStyle ) :
-    eType           ( XBITMAP_IMPORT ),
-    eStyle          ( eInStyle ),
-    aGraphicObject  ( rGraphicObject ),
-    pPixelArray     ( NULL ),
-    bGraphicDirty   ( sal_False )
+    eType			( XBITMAP_IMPORT ),
+    eStyle			( eInStyle ),
+    aGraphicObject	( rGraphicObject ),
+    pPixelArray		( NULL ),
+    bGraphicDirty	( FALSE )
 {
 }
 
 /*************************************************************************
 |*
-|*    XOBitmap::XOBitmap( sal_uInt16* pArray, const Color& aPixelColor,
+|*    XOBitmap::XOBitmap( USHORT* pArray, const Color& aPixelColor,
 |*          const Color& aBckgrColor, const Size& rSize = Size( 8, 8 ),
 |*          XBitmapStyle eStyle = XBITMAP_TILE )
 |*
+|*    Beschreibung
+|*    Ersterstellung    26.07.95
+|*    Letzte Aenderung  26.07.95
+|*
 *************************************************************************/
 
-XOBitmap::XOBitmap( const sal_uInt16* pArray, const Color& rPixelColor,
+XOBitmap::XOBitmap( const USHORT* pArray, const Color& rPixelColor,
             const Color& rBckgrColor, const Size& rSize,
             XBitmapStyle eInStyle ) :
-    eStyle          ( eInStyle ),
-    pPixelArray     ( NULL ),
-    aArraySize      ( rSize ),
-    aPixelColor     ( rPixelColor ),
-    aBckgrColor     ( rBckgrColor ),
-    bGraphicDirty   ( sal_True )
+    eStyle			( eInStyle ),
+    pPixelArray		( NULL ),
+    aArraySize		( rSize ),
+    aPixelColor		( rPixelColor ),
+    aBckgrColor		( rBckgrColor ),
+    bGraphicDirty	( TRUE )
 
 {
     if( aArraySize.Width() == 8 && aArraySize.Height() == 8 )
     {
         eType = XBITMAP_8X8;
-        pPixelArray = new sal_uInt16[ 64 ];
+        pPixelArray = new USHORT[ 64 ];
 
-        for( sal_uInt16 i = 0; i < 64; i++ )
+        for( USHORT i = 0; i < 64; i++ )
             *( pPixelArray + i ) = *( pArray + i );
     }
     else
@@ -137,6 +153,10 @@ XOBitmap::XOBitmap( const sal_uInt16* pArray, const Color& rPixelColor,
 /*************************************************************************
 |*
 |*    XOBitmap::XOBitmap( const XOBitmap& rXBmp )
+|*
+|*    Beschreibung
+|*    Ersterstellung    27.07.95
+|*    Letzte Aenderung  27.07.95
 |*
 *************************************************************************/
 
@@ -155,9 +175,9 @@ XOBitmap::XOBitmap( const XOBitmap& rXBmp ) :
     {
         if( eType == XBITMAP_8X8 )
         {
-            pPixelArray = new sal_uInt16[ 64 ];
+            pPixelArray = new USHORT[ 64 ];
 
-            for( sal_uInt16 i = 0; i < 64; i++ )
+            for( USHORT i = 0; i < 64; i++ )
                 *( pPixelArray + i ) = *( rXBmp.pPixelArray + i );
         }
     }
@@ -166,6 +186,10 @@ XOBitmap::XOBitmap( const XOBitmap& rXBmp ) :
 /*************************************************************************
 |*
 |*    XOBitmap::XOBitmap( Bitmap aBitmap, XBitmapStyle eStyle = XBITMAP_TILE )
+|*
+|*    Beschreibung
+|*    Ersterstellung    26.07.95
+|*    Letzte Aenderung  26.07.95
 |*
 *************************************************************************/
 
@@ -178,6 +202,10 @@ XOBitmap::~XOBitmap()
 /*************************************************************************
 |*
 |*    XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
+|*
+|*    Beschreibung
+|*    Ersterstellung    27.07.95
+|*    Letzte Aenderung  27.07.95
 |*
 *************************************************************************/
 
@@ -195,9 +223,9 @@ XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
     {
         if( eType == XBITMAP_8X8 )
         {
-            pPixelArray = new sal_uInt16[ 64 ];
+            pPixelArray = new USHORT[ 64 ];
 
-            for( sal_uInt16 i = 0; i < 64; i++ )
+            for( USHORT i = 0; i < 64; i++ )
                 *( pPixelArray + i ) = *( rXBmp.pPixelArray + i );
         }
     }
@@ -207,6 +235,10 @@ XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
 /*************************************************************************
 |*
 |*    int XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
+|*
+|*    Beschreibung
+|*    Ersterstellung    26.07.95
+|*    Letzte Aenderung  26.07.95
 |*
 *************************************************************************/
 
@@ -220,40 +252,44 @@ int XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
         aBckgrColor != rXOBitmap.aBckgrColor ||
         bGraphicDirty != rXOBitmap.bGraphicDirty )
     {
-        return( sal_False );
+        return( FALSE );
     }
 
     if( pPixelArray && rXOBitmap.pPixelArray )
     {
-        sal_uInt16 nCount = (sal_uInt16) ( aArraySize.Width() * aArraySize.Height() );
-        for( sal_uInt16 i = 0; i < nCount; i++ )
+        USHORT nCount = (USHORT) ( aArraySize.Width() * aArraySize.Height() );
+        for( USHORT i = 0; i < nCount; i++ )
         {
             if( *( pPixelArray + i ) != *( rXOBitmap.pPixelArray + i ) )
-                return( sal_False );
+                return( FALSE );
         }
     }
-    return( sal_True );
+    return( TRUE );
 }
 
 /*************************************************************************
 |*
-|*    void SetPixelArray( const sal_uInt16* pArray )
+|*    void SetPixelArray( const USHORT* pArray )
+|*
+|*    Beschreibung
+|*    Ersterstellung    27.07.95
+|*    Letzte Aenderung  27.07.95
 |*
 *************************************************************************/
 
-void XOBitmap::SetPixelArray( const sal_uInt16* pArray )
+void XOBitmap::SetPixelArray( const USHORT* pArray )
 {
     if( eType == XBITMAP_8X8 )
     {
         if( pPixelArray )
             delete []pPixelArray;
 
-        pPixelArray = new sal_uInt16[ 64 ];
+        pPixelArray = new USHORT[ 64 ];
 
-        for( sal_uInt16 i = 0; i < 64; i++ )
+        for( USHORT i = 0; i < 64; i++ )
             *( pPixelArray + i ) = *( pArray + i );
 
-        bGraphicDirty = sal_True;
+        bGraphicDirty = TRUE;
     }
     else
     {
@@ -265,6 +301,10 @@ void XOBitmap::SetPixelArray( const sal_uInt16* pArray )
 |*
 |*    Bitmap XOBitmap::GetBitmap()
 |*
+|*    Beschreibung
+|*    Ersterstellung    26.07.95
+|*    Letzte Aenderung  26.07.95
+|*
 *************************************************************************/
 
 Bitmap XOBitmap::GetBitmap() const
@@ -275,6 +315,10 @@ Bitmap XOBitmap::GetBitmap() const
 /*************************************************************************
 |*
 |*    Bitmap XOBitmap::GetGraphicObject()
+|*
+|*    Beschreibung
+|*    Ersterstellung
+|*    Letzte Aenderung
 |*
 *************************************************************************/
 
@@ -292,18 +336,20 @@ const GraphicObject& XOBitmap::GetGraphicObject() const
 |*
 |*    Beschreibung      Umwandlung der Bitmap in Array, Hinter- u.
 |*                      Vordergrundfarbe
+|*    Ersterstellung    27.07.95
+|*    Letzte Aenderung  27.07.95
 |*
 *************************************************************************/
 
 void XOBitmap::Bitmap2Array()
 {
     VirtualDevice   aVD;
-    sal_Bool            bPixelColor = sal_False;
-    const Bitmap    aBitmap( GetBitmap() );
-    const sal_uInt16    nLines = 8; // von Type abhaengig
+    BOOL            bPixelColor = FALSE;
+    const Bitmap	aBitmap( GetBitmap() );
+    const USHORT	nLines = 8; // von Type abhaengig
 
     if( !pPixelArray )
-        pPixelArray = new sal_uInt16[ nLines * nLines ];
+        pPixelArray = new USHORT[ nLines * nLines ];
 
     aVD.SetOutputSizePixel( aBitmap.GetSizePixel() );
     aVD.DrawBitmap( Point(), aBitmap );
@@ -311,9 +357,9 @@ void XOBitmap::Bitmap2Array()
 
     // Aufbau des Arrays und Ermittlung der Vorder-, bzw.
     // Hintergrundfarbe
-    for( sal_uInt16 i = 0; i < nLines; i++ )
+    for( USHORT i = 0; i < nLines; i++ )
     {
-        for( sal_uInt16 j = 0; j < nLines; j++ )
+        for( USHORT j = 0; j < nLines; j++ )
         {
             if ( aVD.GetPixel( Point( j, i ) ) == aBckgrColor )
                 *( pPixelArray + j + i * nLines ) = 0;
@@ -323,7 +369,7 @@ void XOBitmap::Bitmap2Array()
                 if( !bPixelColor )
                 {
                     aPixelColor = aVD.GetPixel( Point( j, i ) );
-                    bPixelColor = sal_True;
+                    bPixelColor = TRUE;
                 }
             }
         }
@@ -336,13 +382,15 @@ void XOBitmap::Bitmap2Array()
 |*
 |*    Beschreibung      Umwandlung des Arrays, Hinter- u.
 |*                      Vordergrundfarbe in eine Bitmap
+|*    Ersterstellung    27.07.95
+|*    Letzte Aenderung  27.07.95
 |*
 *************************************************************************/
 
 void XOBitmap::Array2Bitmap()
 {
     VirtualDevice   aVD;
-    sal_uInt16          nLines = 8; // von Type abhaengig
+    USHORT          nLines = 8; // von Type abhaengig
 
     if( !pPixelArray )
         return;
@@ -350,9 +398,9 @@ void XOBitmap::Array2Bitmap()
     aVD.SetOutputSizePixel( Size( nLines, nLines ) );
 
     // Aufbau der Bitmap
-    for( sal_uInt16 i = 0; i < nLines; i++ )
+    for( USHORT i = 0; i < nLines; i++ )
     {
-        for( sal_uInt16 j = 0; j < nLines; j++ )
+        for( USHORT j = 0; j < nLines; j++ )
         {
             if( *( pPixelArray + j + i * nLines ) == 0 )
                 aVD.DrawPixel( Point( j, i ), aBckgrColor );
@@ -362,7 +410,7 @@ void XOBitmap::Array2Bitmap()
     }
 
     aGraphicObject = GraphicObject( aVD.GetBitmap( Point(), Size( nLines, nLines ) ) );
-    bGraphicDirty = sal_False;
+    bGraphicDirty = FALSE;
 }
 
 // -----------------------
@@ -374,6 +422,10 @@ TYPEINIT1_AUTOFACTORY(XFillBitmapItem, NameOrIndex);
 |*
 |*    XFillBitmapItem::XFillBitmapItem(long nIndex,
 |*                                   const Bitmap& rTheBitmap)
+|*
+|*    Beschreibung
+|*    Ersterstellung    17.11.94
+|*    Letzte Aenderung  17.11.94
 |*
 *************************************************************************/
 
@@ -389,6 +441,10 @@ XFillBitmapItem::XFillBitmapItem(long nIndex,
 |*    XFillBitmapItem::XFillBitmapItem(const XubString& rName,
 |*                                 const Bitmap& rTheBitmap)
 |*
+|*    Beschreibung
+|*    Ersterstellung    17.11.94
+|*    Letzte Aenderung  17.11.94
+|*
 *************************************************************************/
 
 XFillBitmapItem::XFillBitmapItem(const XubString& rName,
@@ -402,6 +458,10 @@ XFillBitmapItem::XFillBitmapItem(const XubString& rName,
 |*
 |*    XFillBitmapItem::XFillBitmapItem(const XFillBitmapItem& rItem)
 |*
+|*    Beschreibung
+|*    Ersterstellung    17.11.94
+|*    Letzte Aenderung  17.11.94
+|*
 *************************************************************************/
 
 XFillBitmapItem::XFillBitmapItem(const XFillBitmapItem& rItem) :
@@ -414,9 +474,13 @@ XFillBitmapItem::XFillBitmapItem(const XFillBitmapItem& rItem) :
 |*
 |*    XFillBitmapItem::XFillBitmapItem(SvStream& rIn)
 |*
+|*    Beschreibung
+|*    Ersterstellung    17.11.94
+|*    Letzte Aenderung  26.07.94
+|*
 *************************************************************************/
 
-XFillBitmapItem::XFillBitmapItem( SvStream& rIn, sal_uInt16 nVer ) :
+XFillBitmapItem::XFillBitmapItem( SvStream& rIn, USHORT nVer ) :
     NameOrIndex( XATTR_FILLBITMAP, rIn )
 {
     if( nVer == 0 )
@@ -445,7 +509,7 @@ XFillBitmapItem::XFillBitmapItem( SvStream& rIn, sal_uInt16 nVer ) :
     {
         if (!IsIndex())
         {
-            sal_Int16 iTmp;
+            INT16 iTmp;
             rIn >> iTmp;
             aXOBitmap.SetBitmapStyle( (XBitmapStyle) iTmp );
             rIn >> iTmp;
@@ -459,10 +523,10 @@ XFillBitmapItem::XFillBitmapItem( SvStream& rIn, sal_uInt16 nVer ) :
             }
             else if( aXOBitmap.GetBitmapType() == XBITMAP_8X8 )
             {
-                sal_uInt16* pArray = new sal_uInt16[ 64 ];
+                USHORT* pArray = new USHORT[ 64 ];
                 Color   aColor;
 
-                for( sal_uInt16 i = 0; i < 64; i++ )
+                for( USHORT i = 0; i < 64; i++ )
                     rIn >> *( pArray + i );
                 aXOBitmap.SetPixelArray( pArray );
 
@@ -483,7 +547,7 @@ XFillBitmapItem::XFillBitmapItem( SvStream& rIn, sal_uInt16 nVer ) :
 //*************************************************************************
 
 XFillBitmapItem::XFillBitmapItem( SfxItemPool* /*pPool*/, const XOBitmap& rTheBitmap )
-:   NameOrIndex( XATTR_FILLBITMAP, -1 ),
+: 	NameOrIndex( XATTR_FILLBITMAP, -1 ),
     aXOBitmap( rTheBitmap )
 {
 }
@@ -499,6 +563,10 @@ XFillBitmapItem::XFillBitmapItem( SfxItemPool* /*pPool*/)
 |*
 |*    XFillBitmapItem::Clone(SfxItemPool* pPool) const
 |*
+|*    Beschreibung
+|*    Ersterstellung    17.11.94
+|*    Letzte Aenderung  17.11.94
+|*
 *************************************************************************/
 
 SfxPoolItem* XFillBitmapItem::Clone(SfxItemPool* /*pPool*/) const
@@ -510,6 +578,10 @@ SfxPoolItem* XFillBitmapItem::Clone(SfxItemPool* /*pPool*/) const
 |*
 |*    int XFillBitmapItem::operator==(const SfxPoolItem& rItem) const
 |*
+|*    Beschreibung
+|*    Ersterstellung    17.11.94
+|*    Letzte Aenderung  26.07.95
+|*
 *************************************************************************/
 
 int XFillBitmapItem::operator==(const SfxPoolItem& rItem) const
@@ -520,11 +592,15 @@ int XFillBitmapItem::operator==(const SfxPoolItem& rItem) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillBitmapItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+|*    SfxPoolItem* XFillBitmapItem::Create(SvStream& rIn, USHORT nVer) const
+|*
+|*    Beschreibung
+|*    Ersterstellung    17.11.94
+|*    Letzte Aenderung  17.11.94
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillBitmapItem::Create(SvStream& rIn, sal_uInt16 nVer) const
+SfxPoolItem* XFillBitmapItem::Create(SvStream& rIn, USHORT nVer) const
 {
     return new XFillBitmapItem( rIn, nVer );
 }
@@ -533,24 +609,28 @@ SfxPoolItem* XFillBitmapItem::Create(SvStream& rIn, sal_uInt16 nVer) const
 |*
 |*    SfxPoolItem* XFillBitmapItem::Store(SvStream& rOut) const
 |*
+|*    Beschreibung
+|*    Ersterstellung    17.11.94
+|*    Letzte Aenderung  26.07.94
+|*
 *************************************************************************/
 
-SvStream& XFillBitmapItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& XFillBitmapItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 {
     NameOrIndex::Store( rOut, nItemVersion );
 
     if (!IsIndex())
     {
-        rOut << (sal_Int16) aXOBitmap.GetBitmapStyle();
+        rOut << (INT16) aXOBitmap.GetBitmapStyle();
         if( !aXOBitmap.GetBitmap() )
-            rOut << (sal_Int16) XBITMAP_NONE;
+            rOut << (INT16) XBITMAP_NONE;
         else
         {
-            rOut << (sal_Int16) aXOBitmap.GetBitmapType();
+            rOut << (INT16) aXOBitmap.GetBitmapType();
             if( aXOBitmap.GetBitmapType() == XBITMAP_IMPORT )
             {
-                const sal_uInt16    nOldComprMode = rOut.GetCompressMode();
-                sal_uInt16          nNewComprMode = nOldComprMode;
+                const USHORT    nOldComprMode = rOut.GetCompressMode();
+                USHORT          nNewComprMode = nOldComprMode;
 
                 if( rOut.GetVersion() >= SOFFICE_FILEFORMAT_50 )
                     nNewComprMode |= COMPRESSMODE_ZBITMAP;
@@ -563,9 +643,9 @@ SvStream& XFillBitmapItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) cons
             }
             else if( aXOBitmap.GetBitmapType() == XBITMAP_8X8 )
             {
-                sal_uInt16* pArray = aXOBitmap.GetPixelArray();
-                for( sal_uInt16 i = 0; i < 64; i++ )
-                    rOut << (sal_uInt16) *( pArray + i );
+                USHORT* pArray = aXOBitmap.GetPixelArray();
+                for( USHORT i = 0; i < 64; i++ )
+                    rOut << (USHORT) *( pArray + i );
 
                 rOut << aXOBitmap.GetPixelColor();
                 rOut << aXOBitmap.GetBackgroundColor();
@@ -580,6 +660,10 @@ SvStream& XFillBitmapItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) cons
 |*
 |*    const Bitmap& XFillBitmapItem::GetValue(const XBitmapTable* pTable) const
 |*
+|*    Beschreibung
+|*    Ersterstellung    15.11.94
+|*    Letzte Aenderung  26.07.94
+|*
 *************************************************************************/
 
 const XOBitmap& XFillBitmapItem::GetBitmapValue(const XBitmapTable* pTable) const // GetValue -> GetBitmapValue
@@ -593,11 +677,15 @@ const XOBitmap& XFillBitmapItem::GetBitmapValue(const XBitmapTable* pTable) cons
 
 /*************************************************************************
 |*
-|*    sal_uInt16 XFillBitmapItem::GetVersion() const
+|*    USHORT XFillBitmapItem::GetVersion() const
+|*
+|*    Beschreibung
+|*    Ersterstellung    26.07.95
+|*    Letzte Aenderung  26.07.95
 |*
 *************************************************************************/
 
-sal_uInt16 XFillBitmapItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
+USHORT XFillBitmapItem::GetVersion( USHORT /*nFileFormatVersion*/) const
 {
     // 2. Version
     return( 1 );
@@ -629,7 +717,7 @@ SfxItemPresentation XFillBitmapItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -695,7 +783,7 @@ bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nM
 
 //------------------------------------------------------------------------
 
-bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -778,7 +866,7 @@ bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt
     return (bSetName || bSetURL || bSetBitmap);
 }
 
-sal_Bool XFillBitmapItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
+BOOL XFillBitmapItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
     return ((XFillBitmapItem*)p1)->GetBitmapValue().GetGraphicObject().GetUniqueID() ==
            ((XFillBitmapItem*)p2)->GetBitmapValue().GetGraphicObject().GetUniqueID();
@@ -788,7 +876,7 @@ XFillBitmapItem* XFillBitmapItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
-        const String aUniqueName = NameOrIndex::CheckNamedItem( this,
+        const String aUniqueName = NameOrIndex::CheckNamedItem(	this,
                                                                 XATTR_FILLBITMAP,
                                                                 &pModel->GetItemPool(),
                                                                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ public class NestedRegistry extends TestCase {
     */
     protected void copyFile(String src, String dst, PrintWriter log)
             throws java.io.IOException {
-        log.println("Copy File "+src+" to "+dst);
+        log.println("Copy File "+src+" to "+dst);            	
         File srcF = new File(src) ;
         File dstF = new File(dst) ;
 
@@ -155,9 +155,9 @@ public class NestedRegistry extends TestCase {
             copyFile(source, openF, log) ;
             copyFile(source, mergeF, log) ;
         } catch (java.io.IOException e) {
-            log.println("Exception occurred while copying files");
+            log.println("Exception occured while copying files");
             e.printStackTrace(log);
-            throw new StatusException("Exception occurred while copying files", e);
+            throw new StatusException("Exception occured while copying files", e);
         }
 
         try {

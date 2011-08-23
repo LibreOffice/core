@@ -28,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
 #include <svtools/imapobj.hxx>
@@ -56,7 +55,6 @@
 #include <viewimp.hxx>
 #include <viscrs.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <dview.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
@@ -65,20 +63,21 @@
 #include <ndtxt.hxx>
 #include <edimp.hxx>
 #include <swtable.hxx>
-#include <mvsave.hxx>       // Strukturen zum Sichern beim Move/Delete
+#include <mvsave.hxx>		// Strukturen zum Sichern beim Move/Delete
 #include <ndgrf.hxx>
 #include <flyfrms.hxx>
 #include <flypos.hxx>
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
 #include <swundo.hxx>
-#include <frame.hxx>
-#include <notxtfrm.hxx>
+// --> OD 2006-03-06 #125892#
 #include <HandleAnchorNodeChg.hxx>
+// <--
 #include <frmatr.hxx>
-#include <fmtsrnd.hxx> // #i89920#
-#include <ndole.hxx>
+// --> OD 2009-12-29 #i89920#
+#include <fmtsrnd.hxx>
 #include <editeng/opaqitem.hxx>
+// <--
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -88,10 +87,12 @@ using namespace ::com::sun::star;
 void RegistFlys( SwPageFrm*, const SwLayoutFrm* );
 
 /***********************************************************************
-#*  Class       :  SwDoc
-#*  Methode     :  UseSpzLayoutFmt
-#*  Beschreibung:  Anhand des Request werden zu dem Format entsprechende
-#*      Aenderungen an den Spezifischen Layouts vorgenommen.
+#*	Class	   	:  SwDoc
+#*	Methode	   	:  UseSpzLayoutFmt
+#*	Beschreibung:  Anhand des Request werden zu dem Format entsprechende
+#*		Aenderungen an den Spezifischen Layouts vorgenommen.
+#*	Datum	   	:  MA 23. Sep. 92
+#*	Update	   	:  JP 09.03.98
 #***********************************************************************/
 
 sal_Bool lcl_SetNewFlyPos( const SwNode& rNode, SwFmtAnchor& rAnchor,
@@ -108,7 +109,7 @@ sal_Bool lcl_SetNewFlyPos( const SwNode& rNode, SwFmtAnchor& rAnchor,
     else
     {
         const SwCntntNode *pCntNd = rNode.GetCntntNode();
-        const SwCntntFrm* pCFrm = pCntNd ? pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(), &rPt, 0, sal_False ) : 0;
+        const SwCntntFrm* pCFrm = pCntNd ? pCntNd->GetFrm( &rPt, 0, sal_False ) : 0;
         const SwPageFrm *pPg = pCFrm ? pCFrm->FindPageFrm() : 0;
 
         rAnchor.SetPageNum( pPg ? pPg->GetPhyPageNum() : 1 );
@@ -117,10 +118,10 @@ sal_Bool lcl_SetNewFlyPos( const SwNode& rNode, SwFmtAnchor& rAnchor,
     return bRet;
 }
 
-sal_Bool lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
+BOOL lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
                         SfxItemSet& rSet )
 {
-    sal_Bool bRet = sal_True;
+    BOOL bRet = TRUE;
     SwFmtAnchor aNewAnch( (SwFmtAnchor&)rSet.Get( RES_ANCHOR ) );
     RndStdIds nNew = aNewAnch.GetAnchorId();
     const SwFrm *pNewAnch;
@@ -140,7 +141,7 @@ sal_Bool lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
             pNewAnch = ::FindAnchor( pFrm, aTmpPnt );
             if( pNewAnch->IsProtected() )
             {
-                bRet = sal_False;
+                bRet = FALSE;
                 break;
             }
 
@@ -150,7 +151,7 @@ sal_Bool lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
                 // es muss ein TextNode gefunden werden, denn nur in diesen
                 // ist ein Inhaltsgebundene Frames zu verankern
                 SwCrsrMoveState aState( MV_SETONLYTEXT );
-                aTmpPnt.X() -= 1;                   //nicht im Fly landen!!
+                aTmpPnt.X() -= 1;					//nicht im Fly landen!!
                 if( !pNewAnch->GetCrsrOfst( &aPos, aTmpPnt, &aState ) )
                 {
                     SwCntntNode* pCNd = ((SwCntntFrm*)pNewAnch)->GetNode();
@@ -170,10 +171,10 @@ sal_Bool lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
             //dichtesten SwFlyFrm suchen.
             SwCrsrMoveState aState( MV_SETONLYTEXT );
             SwPosition aPos( rDoc.GetNodes() );
-            aTmpPnt.X() -= 1;                   //nicht im Fly landen!!
-            rDoc.GetCurrentLayout()->GetCrsrOfst( &aPos, aTmpPnt, &aState );    //swmod 071108//swmod 071225
+            aTmpPnt.X() -= 1;					//nicht im Fly landen!!
+            rDoc.GetRootFrm()->GetCrsrOfst( &aPos, aTmpPnt, &aState );
             pNewAnch = ::FindAnchor(
-                aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( rFrm.getRootFrm(), 0, 0, sal_False ),
+                aPos.nNode.GetNode().GetCntntNode()->GetFrm( 0, 0, sal_False ),
                 aTmpPnt )->FindFlyFrm();
 
             if( pNewAnch && &rFrm != pNewAnch && !pNewAnch->IsProtected() )
@@ -231,13 +232,13 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew )
 {
     SET_CURR_SHELL( this );
 
-    //  Wenn es ein neuer Rahmen ist, so soll er selektiert sein.
-    //  !!Rahmen immer selektieren, wenn sie nicht selektiert sind.
-    //  - Es kann ein neuer 'alter' sein weil der Anker gewechselt wurde.
-    //  - 'alte' Rahmen sind vorher immer selektiert denn sonst wird nix
-    //    an ihnen veraendert.
-    //  Der Rahmen darf nicht per Dokumentposition selektiert werden, weil er
-    //  auf jedenfall selektiert sein muss!
+    //	Wenn es ein neuer Rahmen ist, so soll er selektiert sein.
+    //	!!Rahmen immer selektieren, wenn sie nicht selektiert sind.
+    // 	- Es kann ein neuer 'alter' sein weil der Anker gewechselt wurde.
+    //	- 'alte' Rahmen sind vorher immer selektiert denn sonst wird nix
+    //	  an ihnen veraendert.
+    //	Der Rahmen darf nicht per Dokumentposition selektiert werden, weil er
+    //	auf jedenfall selektiert sein muss!
     SwViewImp *pImpl = Imp();
     if( GetWin() && (bNew || !pImpl->GetDrawView()->AreObjectsMarked()) )
     {
@@ -252,6 +253,13 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew )
         if( rFrm.IsFlyInCntFrm() && rFrm.GetAnchorFrm() )
              rFrm.GetAnchorFrm()->SetCompletePaint();
 
+        // --> OD 2004-06-11 #i28701# - no format at all.
+//        //Hier wurde immer kalkuliert. Leider ist der Sonderfall Fly in Fly mit
+//        //Spalten u.U. sehr kritisch wenn der innenliegende zuerst formatiert
+//        //wird. Um kein Risiko einzugehen entschaerfen wir nur diesen Sonderfall.
+//        if( !rFrm.GetAnchorFrm()->IsInFly() )
+//            rFrm.Calc();
+
         if( pImpl->GetDrawView()->AreObjectsMarked() )
             pImpl->GetDrawView()->UnmarkAll();
 
@@ -265,9 +273,11 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew )
 
 /*************************************************************************
 |*
-|*  SwFEShell::FindFlyFrm()
+|*	SwFEShell::FindFlyFrm()
 |*
-|*  Beschreibung        Liefert den Fly wenn einer Selektiert ist.
+|* 	Beschreibung		Liefert den Fly wenn einer Selektiert ist.
+|*	Ersterstellung		MA 03. Nov. 92
+|*	Letzte Aenderung	MA 05. Mar. 96
 |*
 *************************************************************************/
 
@@ -281,17 +291,19 @@ SwFlyFrm *SwFEShell::FindFlyFrm() const
             return 0;
 
         SdrObject *pO = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-        return ( pO && pO->ISA(SwVirtFlyDrawObj) ) ? ((SwVirtFlyDrawObj*)pO)->GetFlyFrm() : 0;
+        return pO->ISA(SwVirtFlyDrawObj) ? ((SwVirtFlyDrawObj*)pO)->GetFlyFrm() : 0;
     }
     return 0;
 }
 
 /*************************************************************************
 |*
-|*  SwFEShell::IsFlyInFly()
+|*	SwFEShell::IsFlyInFly()
 |*
-|*  Beschreibung        Liefert sal_True, wenn der aktuelle Fly an einem anderen
-|*                      verankert werden koennte (also innerhalb ist)
+|* 	Beschreibung		Liefert sal_True, wenn der aktuelle Fly an einem anderen
+|*						verankert werden koennte (also innerhalb ist)
+|*	Ersterstellung		AMA 11. Sep. 97
+|*	Letzte Aenderung	AMA 14. Jan. 98
 |*
 *************************************************************************/
 
@@ -338,10 +350,12 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
         SwNodeIndex aSwNodeIndex( GetDoc()->GetNodes() );
         SwPosition aPos( aSwNodeIndex );
         Point aPoint( aTmpPos );
-        aPoint.X() -= 1;                    //nicht im Fly landen!!
+        aPoint.X() -= 1;					//nicht im Fly landen!!
         GetLayout()->GetCrsrOfst( &aPos, aPoint, &aState );
-        // determine text frame by left-top-corner of object
-        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(), &aTmpPos, 0, sal_False );
+        // OD 01.07.2003 #108784# - determine text frame by left-top-corner
+        // of object
+        //pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->GetFrm( 0, 0, sal_False );
+        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->GetFrm( &aTmpPos, 0, sal_False );
     }
     const SwFrm *pTmp = ::FindAnchor( pTxtFrm, aTmpPos );
     const SwFlyFrm *pFly = pTmp->FindFlyFrm();
@@ -352,7 +366,10 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
 
 /*************************************************************************
 |*
-|*  SwFEShell::SetFlyPos
+|*	SwFEShell::SetFlyPos
+|*
+|*	Ersterstellung		MA 14. Jan. 93
+|*	Letzte Aenderung	MA 14. Feb. 95
 |*
 *************************************************************************/
 
@@ -378,6 +395,8 @@ void SwFEShell::SetFlyPos( const Point& rAbsPos )
     else
     {
             const SwFrm *pAnch = pFly->GetAnchorFrm();
+            // --> OD 2004-06-11 #i28701# - no format here
+//          pAnch->Calc();
             Point aOrient( pAnch->Frm().Pos() );
 
         if ( pFly->IsFlyInCntFrm() )
@@ -388,12 +407,17 @@ void SwFEShell::SetFlyPos( const Point& rAbsPos )
         aOrient.Y() = rAbsPos.Y() - aOrient.Y();
         pFly->ChgRelPos( aOrient );
     }
-    CallChgLnk();       // rufe das AttrChangeNotify auf der UI-Seite.
+    // --> OD 2004-06-11 #i28701# - no format here
+//    pFly->Calc();
+    CallChgLnk();		// rufe das AttrChangeNotify auf der UI-Seite.
 }
 
 /*************************************************************************
 |*
-|*  SwFEShell::FindAnchorPos
+|*	SwFEShell::FindAnchorPos
+|*
+|*	Ersterstellung		AMA 24. Sep. 97
+|*	Letzte Aenderung	AMA 24. Sep. 97
 |*
 *************************************************************************/
 
@@ -443,7 +467,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
             pFooterOrHeader = pCntnt->FindFooterOrHeader();
         }
     }
-    // set <pFooterOrHeader> also for drawing
+    // OD 26.06.2003 #108784# - set <pFooterOrHeader> also for drawing
     // objects, but not for control objects.
     // Necessary for moving 'anchor symbol' at the user interface inside header/footer.
     else if ( !::CheckControlLayer( pObj ) )
@@ -462,7 +486,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
         SwPosition aPos( GetDoc()->GetNodes().GetEndOfExtras() );
         Point aTmpPnt( rAbsPos );
         GetLayout()->GetCrsrOfst( &aPos, aTmpPnt, &aState );
-        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(),0,&aPos,sal_False );
+        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->GetFrm(0,&aPos,FALSE );
     }
     const SwFrm *pNewAnch;
     if( pTxtFrm )
@@ -552,7 +576,8 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
                 if( bMoveIt )
                 {
                     StartAllAction();
-                    // --> handle change of anchor node:
+                    // --> OD 2006-02-28 #125892#
+                    // handle change of anchor node:
                     // if count of the anchor frame also change, the fly frames have to be
                     // re-created. Thus, delete all fly frames except the <this> before the
                     // anchor attribute is change and re-create them afterwards.
@@ -587,7 +612,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
             //TODO: That doesn't seem to be intended
             if( Color(COL_TRANSPARENT) != GetOut()->GetLineColor() )
             {
-                OSL_FAIL( "Hey, Joe: Where's my Null Pen?" );
+                OSL_ENSURE( FALSE, "Hey, Joe: Where's my Null Pen?" );
                 GetOut()->SetLineColor( Color(COL_TRANSPARENT) );
             }
 #endif
@@ -598,9 +623,11 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
 }
 
 /***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  NewFlyFrm
-#*  Beschreibung:
+#*	Class	   	:  SwFEShell
+#*	Methode	   	:  NewFlyFrm
+#*	Beschreibung:
+#*	Datum	   	:  MA 03. Nov. 92
+#*	Update	   	:  JP 11. Aug. 93
 #***********************************************************************/
 
 const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchValid,
@@ -629,6 +656,9 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
             // we better get the current pCurCrsr instead of working with the
             // deleted one:
             pCrsr = GetCrsr();
+            // <--
+
+//          KillPams();
         }
         else
             bMoveCntnt = sal_False;
@@ -643,7 +673,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
     switch( eRndId )
     {
     case FLY_AT_PAGE:
-        if( !rAnch.GetPageNum() )       //HotFix: Bug in UpdateByExample
+        if( !rAnch.GetPageNum() )		//HotFix: Bug in UpdateByExample
             rAnch.SetPageNum( 1 );
         break;
 
@@ -672,7 +702,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
     SwFlyFrmFmt *pRet;
     if( bMoveCntnt )
     {
-        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_INSLAYFMT, NULL );
+        GetDoc()->StartUndo( UNDO_INSLAYFMT, NULL );
         SwFmtAnchor* pOldAnchor = 0;
         sal_Bool bHOriChgd = sal_False, bVOriChgd = sal_False;
         SwFmtVertOrient aOldV;
@@ -683,8 +713,8 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
             // erstmal als mit Seitenbindung, Absatz/Zeichenbindung erst wenn
             // alles verschoben ist. Dann ist die Position gueltig!
             // JP 13.05.98: ggfs. auch noch die Hori/Vert-Orientierung
-            //              umsetzen, damit diese beim Umanker NICHT
-            //              korrigiert wird
+            //				umsetzen, damit diese beim Umanker NICHT
+            //				korrigiert wird
             pOldAnchor = new SwFmtAnchor( rAnch );
             const_cast<SfxItemSet&>(rSet).Put( SwFmtAnchor( FLY_AT_PAGE, 1 ) );
 
@@ -715,8 +745,8 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
             {
                 // neue Position bestimmen
                 //JP 24.03.97: immer ueber die Seitenbindung gehen - der
-                //           chaos::Anchor darf nie im verschobenen Bereich
-                //              liegen
+                //			 chaos::Anchor darf nie	im verschobenen Bereich
+                //				liegen
                 pRet->DelFrms();
 
                 const SwFrm* pAnch = ::FindAnchor( GetLayout(), aPt, sal_False );
@@ -730,18 +760,9 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
                 // das verschieben von TabelleSelektion ist noch nicht
                 // Undofaehig - also darf das UmAnkern auch nicht
                 // aufgezeichnet werden.
-                bool const bDoesUndo =
-                    GetDoc()->GetIDocumentUndoRedo().DoesUndo();
-                SwUndoId nLastUndoId(UNDO_EMPTY);
-                if (bDoesUndo &&
-                    GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(0,
-                        & nLastUndoId))
-                {
-                    if (UNDO_INSLAYFMT == nLastUndoId)
-                    {
-                        GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
-                    }
-                }
+                sal_Bool bDoesUndo = GetDoc()->DoesUndo();
+                if( bDoesUndo && UNDO_INSLAYFMT == GetDoc()->GetUndoIds(NULL, NULL) )
+                    GetDoc()->DoUndo( sal_False );
 
                 ((SfxItemSet&)rSet).Put( *pOldAnchor );
 
@@ -751,17 +772,17 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
                     ((SfxItemSet&)rSet).Put( aOldV );
 
                 GetDoc()->SetFlyFrmAttr( *pRet, (SfxItemSet&)rSet );
-                GetDoc()->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
+                GetDoc()->DoUndo( bDoesUndo );
             }
             delete pOldAnchor;
         }
-        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_INSLAYFMT, NULL );
+        GetDoc()->EndUndo( UNDO_INSLAYFMT, NULL );
     }
     else
-        /* If called from a shell try to propagate an
+        /* #109161# If called from a shell try to propagate an
             existing adjust item from rPos to the content node of the
             new frame. */
-        pRet = GetDoc()->MakeFlySection( eRndId, &rPos, &rSet, pParent, sal_True );
+        pRet = GetDoc()->MakeFlySection( eRndId, &rPos, &rSet, pParent, TRUE );
 
     if( pRet )
     {
@@ -780,8 +801,10 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
 }
 
 /***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  Insert
+#*	Class	   	:  SwFEShell
+#*	Methode	   	:  Insert
+#*	Datum	   	:  ??
+#*	Update	   	:  MA 12. Sep. 94
 #***********************************************************************/
 
 void SwFEShell::Insert( const String& rGrfName, const String& rFltName,
@@ -905,8 +928,8 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
     {
         SwCrsrMoveState aState( MV_SETONLYTEXT );
         Point aTmpPt( rInsertPosition );
-        GetLayout()->GetCrsrOfst( aPam.GetPoint(), aTmpPt, &aState );
-        const SwFrm* pFrm = aPam.GetCntntNode()->getLayoutFrm( GetLayout(), 0, 0, sal_False );
+        getIDocumentLayoutAccess()->GetRootFrm()->GetCrsrOfst( aPam.GetPoint(), aTmpPt, &aState );
+        const SwFrm* pFrm = aPam.GetCntntNode()->GetFrm( 0, 0, sal_False );
         const Point aRelPos( rInsertPosition.X() - pFrm->Frm().Left(),
                              rInsertPosition.Y() - pFrm->Frm().Top() );
         rDrawObj.SetRelativePos( aRelPos );
@@ -935,8 +958,10 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
 }
 
 /***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  GetPageObjs
+#*	Class	   	:  SwFEShell
+#*	Methode	   	:  GetPageObjs
+#*	Datum	   	:  ??
+#*	Update	   	:  MA 11. Jan. 95
 #***********************************************************************/
 
 void SwFEShell::GetPageObjs( SvPtrarr& rFillArr )
@@ -956,8 +981,10 @@ void SwFEShell::GetPageObjs( SvPtrarr& rFillArr )
 }
 
 /***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  SetPageFlysNewPage
+#*	Class	   	:  SwFEShell
+#*	Methode	   	:  SetPageFlysNewPage
+#*	Datum	   	:  ??
+#*	Update	   	:  MA 14. Feb. 95
 #***********************************************************************/
 
 void SwFEShell::SetPageObjsNewPage( SvPtrarr& rFillArr, int nOffset )
@@ -970,7 +997,7 @@ void SwFEShell::SetPageObjsNewPage( SvPtrarr& rFillArr, int nOffset )
 
     SwFrmFmt* pFmt;
     long nNewPage;
-    SwRootFrm* pTmpRootFrm = GetLayout();//swmod 080317
+    SwRootFrm* pTmpRootFrm = getIDocumentLayoutAccess()->GetRootFrm();
     sal_uInt16 nMaxPage = pTmpRootFrm->GetPageNum();
     sal_Bool bTmpAssert = sal_False;
     for( sal_uInt16 n = 0; n < rFillArr.Count(); ++n )
@@ -1011,12 +1038,14 @@ void SwFEShell::SetPageObjsNewPage( SvPtrarr& rFillArr, int nOffset )
 }
 
 /***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  GetFlyFrmAttr
-#*  Beschreibung:  Alle Attribute in dem 'Koerbchen' werden mit den
-#*                 Attributen des aktuellen FlyFrms gefuellt.
-#*                 Sind Attribute nicht zu fuellen weil fehl am Platz oder
-#*                 uneindeutig (Mehrfachtselektionen) so werden sie entfernt.
+#*	Class	   	:  SwFEShell
+#*	Methode	   	:  GetFlyFrmAttr
+#*	Beschreibung:  Alle Attribute in dem 'Koerbchen' werden mit den
+#*				   Attributen des aktuellen FlyFrms gefuellt.
+#*				   Sind Attribute nicht zu fuellen weil fehl am Platz oder
+#* 				   uneindeutig (Mehrfachtselektionen) so werden sie entfernt.
+#*	Datum	   	:  MA 03. Nov. 92
+#*	Update	   	:  MA 03. Feb. 94
 #***********************************************************************/
 
 sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
@@ -1024,12 +1053,15 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
     SwFlyFrm *pFly = FindFlyFrm();
     if ( !pFly )
     {
+        // --> OD 2006-11-08 #139670# - make code robust
         SwFrm* pCurrFrm( GetCurrFrm() );
         if ( !pCurrFrm )
         {
-            OSL_FAIL( "<SwFEShell::GetFlyFrmAttr(..)> - missing current frame. This is a serious defect, please inform OD." );
+            OSL_ENSURE( false,
+                    "<SwFEShell::GetFlyFrmAttr(..)> - missing current frame. This is a serious defect, please inform OD." );
             return sal_False;
         }
+        // <--
         pFly = GetCurrFrm()->FindFlyFrm();
         if ( !pFly )
         {
@@ -1055,6 +1087,7 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
         {
             // OD 12.11.2003 #i22341# - content anchor of anchor item is needed.
             // Thus, don't overwrite anchor item by default contructed anchor item.
+            //rSet.Put( SwFmtAnchor( eType ) );
             if ( FLY_AS_CHAR == eType )
             {
                 rSet.ClearItem( RES_OPAQUE );
@@ -1063,7 +1096,7 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
         }
     }
     rSet.SetParent( pFly->GetFmt()->GetAttrSet().GetParent() );
-    // die Attribute MUESSEN entfern werden!
+    //JP 11.02.97: Bug #35894#: die Attribute MUESSEN entfern werden!
     rSet.ClearItem( RES_FILL_ORDER );
     rSet.ClearItem( RES_CNTNT );
     //MA: Ersteinmal entfernen (Template by example usw.)
@@ -1071,9 +1104,11 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
     return sal_True;
 }
 /***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  SetFlyFrmAttr
-#*  Beschreibung:  Die Attribute des aktuellen Flys aendern sich.
+#*	Class	   	:  SwFEShell
+#*	Methode	   	:  SetFlyFrmAttr
+#*	Beschreibung:  Die Attribute des aktuellen Flys aendern sich.
+#*	Datum	   	:  MA 03. Nov. 92
+#*	Update	   	:  MA 01. Aug. 95
 #***********************************************************************/
 
 sal_Bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
@@ -1114,7 +1149,9 @@ sal_Bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
     }
     return bRet;
 }
+/*-- 30.03.2004 15:05:07---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 sal_Bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
 {
     sal_Bool bRet = sal_False;
@@ -1156,10 +1193,12 @@ sal_Bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
 
 
 /***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  ResetFlyFrmAttr
-#*  Beschreibung:  Das gewuenschte Attribut oder die im Set befindlichen
-#*                  werden zurueckgesetzt.
+#*	Class	   	:  SwFEShell
+#*	Methode	   	:  ResetFlyFrmAttr
+#*	Beschreibung:  Das gewuenschte Attribut oder die im Set befindlichen
+#*					werden zurueckgesetzt.
+#*	Datum	   	:  MA 14. Mar. 97
+#*	Update	   	:  MA 14. Mar. 97
 #***********************************************************************/
 
 sal_Bool SwFEShell::ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet )
@@ -1207,9 +1246,11 @@ sal_Bool SwFEShell::ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet )
 }
 
 /***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  GetCurFrmFmt
-#*  Beschreibung:  liefert wenn Rahmen, dann Rahmenvorlage, sonst 0
+#*	Class	   	:  SwFEShell
+#*	Methode	   	:  GetCurFrmFmt
+#*	Beschreibung:  liefert wenn Rahmen, dann Rahmenvorlage, sonst 0
+#*	Datum	   	:  ST 04. Jun. 93
+#*	Update	   	:
 #***********************************************************************/
 
 SwFrmFmt* SwFEShell::GetCurFrmFmt() const
@@ -1223,8 +1264,10 @@ SwFrmFmt* SwFEShell::GetCurFrmFmt() const
 }
 
 /******************************************************************************
- *  Methode     :   void SwFEShell::SetFrmFmt(SwFrmFmt *pNewFmt)
- *  Beschreibung:
+ *	Methode		:	void SwFEShell::SetFrmFmt(SwFrmFmt *pNewFmt)
+ *	Beschreibung:
+ *	Erstellt	:	OK 14.04.94 15:40
+ *	Aenderung	:	MA 23. Apr. 97
  ******************************************************************************/
 
 void SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, sal_Bool bKeepOrient, Point* pDocPos )
@@ -1275,7 +1318,10 @@ void SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, sal_Bool bKeepOrient, Point* pDocP
 
 /*************************************************************************
 |*
-|*  SwFEShell::GetFlyFrmFmt()
+|*	SwFEShell::GetFlyFrmFmt()
+|*
+|*	Ersterstellung		OK 23.06.93 13:15
+|*	Letzte Aenderung	OK 23.06.93 13:15
 |*
 *************************************************************************/
 
@@ -1307,7 +1353,10 @@ SwFrmFmt* SwFEShell::GetFlyFrmFmt()
 
 /*************************************************************************
 |*
-|*  SwFEShell::GetFlyRect()
+|*	SwFEShell::GetFlyRect()
+|*
+|*	Ersterstellung		AMA 6. Mae. 97
+|*	Letzte Aenderung	AMA 6. Mae. 97
 |*
 *************************************************************************/
 
@@ -1326,7 +1375,10 @@ SwRect SwFEShell::GetFlyRect() const
 
 /*************************************************************************
 |*
-|*  SwFEShell::GetObjRect()
+|*	SwFEShell::GetObjRect()
+|*
+|*	Ersterstellung		MA 22. Aug. 93
+|*	Letzte Aenderung	MA 11. Jan. 95
 |*
 *************************************************************************/
 
@@ -1346,13 +1398,15 @@ void SwFEShell::SetObjRect( const SwRect& rRect )
     if ( Imp()->HasDrawView() )
     {
         Imp()->GetDrawView()->SetAllMarkedRect( rRect.SVRect() );
-        CallChgLnk();   // rufe das AttrChangeNotify auf der UI-Seite.
+        CallChgLnk();	// rufe das AttrChangeNotify auf der UI-Seite.
     }
 }
 
 /***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  RequestObjectResize()
+#*	Class	   	:  SwFEShell
+#*	Methode	   	:  RequestObjectResize()
+#*	Datum	   	:  MA 10. Feb. 95
+#*	Update	   	:  MA 13. Jul. 95
 #***********************************************************************/
 
 Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference < embed::XEmbeddedObject >& xObj )
@@ -1399,7 +1453,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
         {
             // search for a sequence field:
             const SfxPoolItem* pItem;
-            for( sal_uInt16 n = 0, nEnd = pHts->Count(); n < nEnd; ++n )
+            for( USHORT n = 0, nEnd = pHts->Count(); n < nEnd; ++n )
                 if( RES_TXTATR_FIELD == ( pItem =
                             &(*pHts)[ n ]->GetAttr())->Which() &&
                     TYP_SEQFLD == ((SwFmtFld*)pItem)->GetFld()->GetTypeId() )
@@ -1469,12 +1523,6 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
             pFly->ChgRelPos( aTmp );
         }
     }
-
-    SwFlyFrmFmt *pFlyFrmFmt = pFly->GetFmt();
-    OSL_ENSURE( pFlyFrmFmt, "fly frame format missing!" );
-    if ( pFlyFrmFmt )
-        pFlyFrmFmt->SetLastFlyFrmPrtRectPos( pFly->Prt().Pos() ); //stores the value of last Prt rect
-
     EndAllAction();
 
     return aResult;
@@ -1482,8 +1530,10 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
 
 
 /***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  WizzardFindCurFrmFmt
+#*	Class	   	:  SwFEShell
+#*	Methode	   	:  WizzardFindCurFrmFmt
+#*	Datum	   	:  JP 31.07.95
+#*	Update	   	:  JP 31.07.95
 #***********************************************************************/
 
 SwFrmFmt* SwFEShell::WizzardGetFly()
@@ -1538,20 +1588,6 @@ const String& SwFEShell::GetFlyName() const
 }
 
 
-const uno::Reference < embed::XEmbeddedObject > SwFEShell::GetOleRef() const
-{
-    uno::Reference < embed::XEmbeddedObject > xObj;
-    SwFlyFrm * pFly = FindFlyFrm();
-    if (pFly && pFly->Lower() && pFly->Lower()->IsNoTxtFrm())
-    {
-        SwOLENode *pNd = ((SwNoTxtFrm*)pFly->Lower())->GetNode()->GetOLENode();
-        if (pNd)
-            xObj = pNd->GetOLEObj().GetOleRef();
-    }
-    return xObj;
-}
-
-
 String SwFEShell::GetUniqueGrfName() const
 {
     return GetDoc()->GetUniqueGrfName();
@@ -1579,8 +1615,8 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
         const SwFmtURL &rURL = pFly->GetFmt()->GetURL();
         if( rURL.GetURL().Len() || rURL.GetMap() )
         {
-            sal_Bool bSetTargetFrameName = pTargetFrameName != 0;
-            sal_Bool bSetDescription = pDescription != 0;
+            BOOL bSetTargetFrameName = pTargetFrameName != 0;
+            BOOL bSetDescription = pDescription != 0;
             if ( rURL.GetMap() )
             {
                 IMapObject *pObject = pFly->GetFmt()->GetIMapObject( rPt, pFly );
@@ -1709,7 +1745,7 @@ const SwFrmFmt* SwFEShell::GetFmtFromAnyObj( const Point& rPt ) const
         Point aPt( rPt );
         GetLayout()->GetCrsrOfst( &aPos, aPt );
         SwCntntNode *pNd = aPos.nNode.GetNode().GetCntntNode();
-        SwFrm* pFrm = pNd->getLayoutFrm( GetLayout(), &rPt, 0, sal_False )->FindFlyFrm();
+        SwFrm* pFrm = pNd->GetFrm( &rPt )->FindFlyFrm();
         pRet = pFrm ? ((SwLayoutFrm*)pFrm)->GetFmt() : 0;
     }
     return pRet;
@@ -1719,7 +1755,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
 {
     ObjCntType eType = OBJCNT_NONE;
 
-    // investigate 'master' drawing object, if method
+    // OD 23.06.2003 #108784# - investigate 'master' drawing object, if method
     // is called for a 'virtual' drawing object.
     const SdrObject* pInvestigatedObj;
     if ( rObj.ISA(SwDrawVirtObj) )
@@ -1771,7 +1807,8 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
         SwDrawContact* pDrawContact( dynamic_cast<SwDrawContact*>(GetUserCall( pInvestigatedObj ) ) );
         if ( !pDrawContact )
         {
-            OSL_FAIL( "<SwFEShell::GetObjCntType(..)> - missing draw contact object" );
+            OSL_ENSURE( false,
+                    "<SwFEShell::GetObjCntType(..)> - missing draw contact object" );
             eType = OBJCNT_NONE;
         }
         else
@@ -1779,7 +1816,8 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
             SwFrmFmt* pFrmFmt( pDrawContact->GetFmt() );
             if ( !pFrmFmt )
             {
-                OSL_FAIL( "<SwFEShell::GetObjCntType(..)> - missing frame format" );
+                OSL_ENSURE( false,
+                        "<SwFEShell::GetObjCntType(..)> - missing frame format" );
                 eType = OBJCNT_NONE;
             }
             else if ( FLY_AS_CHAR != pFrmFmt->GetAnchor().GetAnchorId() )
@@ -1826,8 +1864,6 @@ ObjCntType SwFEShell::GetObjCntTypeOfSelection( SdrObject** ppObj ) const
         for( sal_uInt32 i = 0, nE = rMrkList.GetMarkCount(); i < nE; ++i )
         {
             SdrObject* pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-            if( !pObj )
-                continue;
             ObjCntType eTmp = GetObjCntType( *pObj );
             if( !i )
             {
@@ -1871,8 +1907,8 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
             const Rectangle &rBound = pObj->GetSnapRect();
             Point aRelPos( pObj->GetRelativePos() );
 
-            const long nWidth = rBound.Right()  - rBound.Left();
-            const long nHeight= rBound.Bottom() - rBound.Top();
+            const long nWidth = rBound.Right()	- rBound.Left();
+            const long nHeight=	rBound.Bottom() - rBound.Top();
             aFrmSet.Put( SwFmtFrmSize( ATT_MIN_SIZE,
                                 Max( nWidth,  long(MINFLY) ),
                                 Max( nHeight, long(MINFLY) )));
@@ -1895,6 +1931,11 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
 
         pFmt = GetDoc()->Insert( *GetCrsr(), rGrfName, rFltName, pGrf, &aFrmSet, NULL, NULL );
 
+        // die Ordnungsnummer (Z-Order) noch uebertragen
+        // JP 04.07.98: klappt aber nicht richtig!
+        //SdrObject* pNewObj = ::FindSdrObject( pFmt );
+        //pNewObj->SetOrdNum( nOrdNum );
+
         EndUndo();
         EndAllAction();
         bRet = sal_True;
@@ -1902,13 +1943,13 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
     return bRet;
 }
 
-static sal_uInt16 SwFmtGetPageNum(const SwFlyFrmFmt * pFmt)
+static USHORT SwFmtGetPageNum(const SwFlyFrmFmt * pFmt)
 {
     OSL_ENSURE(pFmt != NULL, "invalid argument");
 
     SwFlyFrm * pFrm = pFmt->GetFrm();
 
-    sal_uInt16 aResult;
+    USHORT aResult;
 
     if (pFrm != NULL)
         aResult = pFrm->GetPhyPageNum();
@@ -1922,7 +1963,7 @@ static sal_uInt16 SwFmtGetPageNum(const SwFlyFrmFmt * pFmt)
 
 void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
                                       const String & rReference,
-                                      sal_Bool bSuccessors,
+                                      BOOL bSuccessors,
                                       ::std::vector< String > & aPrevPageVec,
                                       ::std::vector< String > & aThisPageVec,
                                       ::std::vector< String > & aNextPageVec,
@@ -1982,7 +2023,7 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
         aRestVec.clear();
 
         /* number of page rFmt resides on */
-        sal_uInt16 nPageNum = SwFmtGetPageNum((SwFlyFrmFmt *) &rFmt);
+        USHORT nPageNum = SwFmtGetPageNum((SwFlyFrmFmt *) &rFmt);
 
         ::std::vector< const SwFrmFmt * >::const_iterator aIt;
 
@@ -1994,7 +2035,7 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
                itself */
             if (aString != rReference && aString != rFmt.GetName())
             {
-                sal_uInt16 nNum1 =
+                USHORT nNum1 =
                     SwFmtGetPageNum((SwFlyFrmFmt *) *aIt);
 
                 if (nNum1 == nPageNum -1)
@@ -2113,95 +2154,6 @@ void SwFEShell::SetObjDescription( const String& rDescription )
         }
     }
 }
-
-
-void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedObject >& xObj, SwFlyFrm * pFly )
-{
-#if OSL_DEBUG_LEVEL > 1
-    SvGlobalName aCLSID( xObj->getClassID() );
-    const bool bStarMath = ( SotExchange::IsMath( aCLSID ) != 0 );
-    OSL_ENSURE( bStarMath, "AlignFormulaToBaseline should only be called for Math objects" );
-
-    if ( !bStarMath )
-        return;
-#endif
-
-    if (!pFly)
-        pFly = FindFlyFrm( xObj );
-    OSL_ENSURE( pFly , "No fly frame!" );
-    SwFrmFmt * pFrmFmt = pFly ? pFly->GetFmt() : 0;
-
-    // baseline to baseline alignment should only be applied to formulas anchored as char
-    if ( pFly && pFrmFmt && FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
-    {
-        // get baseline from Math object
-        uno::Any aBaseline;
-        if( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
-        {
-            uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
-            if ( xSet.is() )
-            {
-                try
-                {
-                    aBaseline = xSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BaseLine") ) );
-                }
-                catch ( uno::Exception& )
-                {
-                    OSL_FAIL( "Baseline could not be retrieved from Starmath!" );
-                }
-            }
-        }
-
-        sal_Int32 nBaseline = ::comphelper::getINT32(aBaseline);
-        const MapMode aSourceMapMode( MAP_100TH_MM );
-        const MapMode aTargetMapMode( MAP_TWIP );
-        nBaseline = OutputDevice::LogicToLogic( nBaseline, aSourceMapMode.GetMapUnit(), aTargetMapMode.GetMapUnit() );
-
-        OSL_ENSURE( nBaseline > 0, "Wrong value of Baseline while retrieving from Starmath!" );
-        //nBaseline must be moved by aPrt position
-        const SwFlyFrmFmt *pFlyFrmFmt = pFly->GetFmt();
-        OSL_ENSURE( pFlyFrmFmt, "fly frame format missing!" );
-        if ( pFlyFrmFmt )
-            nBaseline += pFlyFrmFmt->GetLastFlyFrmPrtRectPos().Y();
-
-        const SwFmtVertOrient &rVert = pFrmFmt->GetVertOrient();
-        SwFmtVertOrient aVert( rVert );
-        aVert.SetPos( -nBaseline );
-        aVert.SetVertOrient( com::sun::star::text::VertOrientation::NONE );
-
-        pFrmFmt->LockModify();
-        pFrmFmt->SetFmtAttr( aVert );
-        pFrmFmt->UnlockModify();
-        pFly->InvalidatePos();
-    }
-}
-
-
-void SwFEShell::AlignAllFormulasToBaseline()
-{
-    StartAllAction();
-
-    SwStartNode *pStNd;
-    SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
-    while ( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
-    {
-        ++aIdx;
-        SwOLENode *pOleNode = dynamic_cast< SwOLENode * >( &aIdx.GetNode() );
-        if ( pOleNode )
-        {
-            const uno::Reference < embed::XEmbeddedObject > & xObj( pOleNode->GetOLEObj().GetOleRef() );
-            if (xObj.is())
-            {
-                SvGlobalName aCLSID( xObj->getClassID() );
-                if ( SotExchange::IsMath( aCLSID ) )
-                    AlignFormulaToBaseline( xObj );
-            }
-        }
-
-        aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
-    }
-
-    EndAllAction();
-}
+// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

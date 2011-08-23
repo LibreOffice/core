@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ public:
             sal_Int16   _nWhitespaceTreatment
     );
 
-    /** replace all occurrences 0x08, 0x0A, 0x0D with 0x20
+    /** replace all occurences 0x08, 0x0A, 0x0D with 0x20
     */
     static ::rtl::OUString replaceWhitespace( const ::rtl::OUString& _rString );
 

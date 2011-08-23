@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace ucbhelper {
 
 //=========================================================================
 
-#define RESULTSET_SERVICE_NAME  "com.sun.star.ucb.ContentResultSet"
+#define RESULTSET_SERVICE_NAME 	"com.sun.star.ucb.ContentResultSet"
 
 //=========================================================================
 
@@ -557,7 +557,7 @@ public:
 
     /**
      * This method will be called by the resultset implementation in order
-     * check, whether an error has occurred while collecting data. The
+     * check, whether an error has occured while collecting data. The
      * implementation of this method must throw an exception in that case.
      *
      * Note: An exception thrown to indicate an error must always be thrown
@@ -569,7 +569,7 @@ public:
      * In case data are obtained synchronously, the ResultSetException can
      * be thrown directly.
      *
-     * @exception ResultSetException thrown, if an error has occurred
+     * @exception ResultSetException thrown, if an error has occured
      */
     virtual void validate()
         throw( com::sun::star::ucb::ResultSetException ) = 0;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ namespace svt
                             nPos = 0;
                         if (nPos >= GetEntryCount())
                             nPos = GetEntryCount() - 1;
-                        SetText(GetEntry(sal::static_int_cast< sal_uInt16 >(nPos)));
+                        SetText(GetEntry(sal::static_int_cast< USHORT >(nPos)));
                         return 1;
                     }
                 }
@@ -188,8 +188,8 @@ namespace svt
                             nPos = 0;
                         if (nPos >= GetEntryCount())
                             nPos = GetEntryCount() - 1;
-                        SelectEntryPos(sal::static_int_cast< sal_uInt16 >(nPos));
-                        Select();   // for calling Modify
+                        SelectEntryPos(sal::static_int_cast< USHORT >(nPos));
+                        Select();	// for calling Modify
                         return 1;
                     }
                     else if (GetParent()->PreNotify(rNEvt))
@@ -312,7 +312,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------
-    void CheckBoxControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
+    void CheckBoxControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags )
     {
         pBox->Draw(pDev,rPos,rSize,nFlags);
     }
@@ -400,7 +400,7 @@ namespace svt
     EditCellController::EditCellController( Edit* _pEdit )
         :CellController( _pEdit )
         ,m_pEditImplementation( new EditImplementation( *_pEdit ) )
-        ,m_bOwnImplementation( sal_True )
+        ,m_bOwnImplementation( TRUE )
     {
     }
 
@@ -408,7 +408,7 @@ namespace svt
     EditCellController::EditCellController( MultiLineTextCell* _pEdit )
         :CellController( _pEdit )
         ,m_pEditImplementation( new MultiLineEditImplementation( *_pEdit ) )
-        ,m_bOwnImplementation( sal_True )
+        ,m_bOwnImplementation( TRUE )
     {
     }
 
@@ -416,7 +416,7 @@ namespace svt
     EditCellController::EditCellController( IEditImplementation* _pImplementation )
         :CellController( &_pImplementation->GetControl() )
         ,m_pEditImplementation( _pImplementation )
-        ,m_bOwnImplementation( sal_False )
+        ,m_bOwnImplementation( FALSE )
     {
     }
 
@@ -450,13 +450,13 @@ namespace svt
             {
                 Selection aSel = m_pEditImplementation->GetSelection();
                 bResult = !aSel && aSel.Max() == m_pEditImplementation->GetText( LINEEND_LF ).Len();
-            }   break;
+            }	break;
             case KEY_HOME:
             case KEY_LEFT:
             {
                 Selection aSel = m_pEditImplementation->GetSelection();
                 bResult = !aSel && aSel.Min() == 0;
-            }   break;
+            }	break;
             default:
                 bResult = sal_True;
         }
@@ -507,13 +507,13 @@ namespace svt
             {
                 Selection aSel = GetSpinWindow().GetSelection();
                 bResult = !aSel && aSel.Max() == GetSpinWindow().GetText().Len();
-            }   break;
+            }	break;
             case KEY_HOME:
             case KEY_LEFT:
             {
                 Selection aSel = GetSpinWindow().GetSelection();
                 bResult = !aSel && aSel.Min() == 0;
-            }   break;
+            }	break;
             default:
                 bResult = sal_True;
         }
@@ -553,21 +553,21 @@ namespace svt
     //------------------------------------------------------------------
     void MultiLineTextCell::Modify()
     {
-        GetTextEngine()->SetModified( sal_True );
+        GetTextEngine()->SetModified( TRUE );
         MultiLineEdit::Modify();
     }
 
     //------------------------------------------------------------------
-    sal_Bool MultiLineTextCell::dispatchKeyEvent( const KeyEvent& _rEvent )
+    BOOL MultiLineTextCell::dispatchKeyEvent( const KeyEvent& _rEvent )
     {
         Selection aOldSelection( GetSelection() );
 
-        sal_Bool bWasModified = IsModified();
+        BOOL bWasModified = IsModified();
         ClearModifyFlag( );
 
-        sal_Bool bHandled = GetTextView()->KeyInput( _rEvent );
+        BOOL bHandled = GetTextView()->KeyInput( _rEvent );
 
-        sal_Bool bIsModified = IsModified();
+        BOOL bIsModified = IsModified();
         if ( bWasModified && !bIsModified )
             // not sure whether this can really happen
             SetModifyFlag();
@@ -580,9 +580,9 @@ namespace svt
             if  (  aNewSelection != aOldSelection   // selection changed
                 || bIsModified                      // or some other modification
                 )
-                return sal_True;
+                return TRUE;
         }
-        return sal_False;
+        return FALSE;
     }
 
     //------------------------------------------------------------------
@@ -600,7 +600,7 @@ namespace svt
 
                 const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
                 const KeyCode&  rKeyCode  = pKeyEvent->GetKeyCode();
-                sal_uInt16 nCode = rKeyCode.GetCode();
+                USHORT nCode = rKeyCode.GetCode();
 
                 if ( ( nCode == KEY_RETURN ) && ( rKeyCode.GetModifier() == KEY_MOD1 ) )
                 {
@@ -623,7 +623,7 @@ namespace svt
     }
 
 // .......................................................................
-}   // namespace svt
+}	// namespace svt
 // .......................................................................
 
 

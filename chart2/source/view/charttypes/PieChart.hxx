@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,10 +50,24 @@ public:
             , sal_Int32 nDimensionCount, bool bExcludingPositioning );
     virtual ~PieChart();
 
-    virtual void createShapes();
-    virtual void rearrangeLabelToAvoidOverlapIfRequested( const ::com::sun::star::awt::Size& rPageSize );
+    //-------------------------------------------------------------------------
+    // chart2::XPlotter
+    //-------------------------------------------------------------------------
 
-    virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
+    virtual void SAL_CALL createShapes();
+    virtual void rearrangeLabelToAvoidOverlapIfRequested( const ::com::sun::star::awt::Size& rPageSize );
+    
+    virtual void SAL_CALL setScales(
+          const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::chart2::ExplicitScaleData >& rScales
+            , sal_Bool bSwapXAndYAxis )
+                throw (::com::sun::star::uno::RuntimeException);
+    /*
+    virtual ::rtl::OUString SAL_CALL getCoordinateSystemTypeID(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setScales( const ::com::sun::star::uno::Sequence< ::com::sun::star::chart2::ExplicitScaleData >& rScales ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTransformation( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >& xTransformationToLogicTarget, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >& xTransformationToFinalPage ) throw (::com::sun::star::uno::RuntimeException);
+    */
+
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
 
     //-------------------

@@ -65,7 +65,7 @@
 #include "boost/bind.hpp"
 
 #include <list>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <algorithm>
 
 namespace deploy = com::sun::star::deployment;
@@ -78,6 +78,8 @@ namespace beans = com::sun::star::beans;
 namespace util = com::sun::star::util;
 namespace css = com::sun::star;
 
+//#define OUSTR(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
+
 using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;
 
@@ -88,6 +90,7 @@ struct CompIdentifiers
     bool operator() (::std::vector<Reference<deploy::XPackage> > const & a,
                      ::std::vector<Reference<deploy::XPackage> > const & b)
         {
+
             if (getName(a).compareTo(getName(b)) < 0)
                 return true;
             return false;
@@ -167,7 +170,7 @@ ExtensionRemoveGuard::~ExtensionRemoveGuard()
     }
 }
 
-}
+} //end namespace
 
 namespace dp_manager {
 
@@ -178,8 +181,12 @@ ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& x
     ::cppu::WeakComponentImplHelper1< css::deployment::XExtensionManager >(getMutex()),
     m_xContext( xContext )
 {
-    m_xPackageManagerFactory = deploy::thePackageManagerFactory::get(m_xContext);
-    OSL_ASSERT(m_xPackageManagerFactory.is());
+    Reference<deploy::XPackageManagerFactory> xPackageManagerFactory(
+        deploy::thePackageManagerFactory::get(m_xContext));
+    m_userRepository = xPackageManagerFactory->getPackageManager(OUSTR("user"));
+    m_sharedRepository = xPackageManagerFactory->getPackageManager(OUSTR("shared"));
+    m_bundledRepository = xPackageManagerFactory->getPackageManager(OUSTR("bundled"));
+    m_tmpRepository =  xPackageManagerFactory->getPackageManager(OUSTR("tmp"));
 
     m_repositoryNames.push_back(OUSTR("user"));
     m_repositoryNames.push_back(OUSTR("shared"));
@@ -190,23 +197,6 @@ ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& x
 
 ExtensionManager::~ExtensionManager()
 {
-}
-
-Reference<deploy::XPackageManager> ExtensionManager::getUserRepository()
-{
-    return m_xPackageManagerFactory->getPackageManager(OUSTR("user"));
-}
-Reference<deploy::XPackageManager>  ExtensionManager::getSharedRepository()
-{
-    return m_xPackageManagerFactory->getPackageManager(OUSTR("shared"));
-}
-Reference<deploy::XPackageManager>  ExtensionManager::getBundledRepository()
-{
-    return m_xPackageManagerFactory->getPackageManager(OUSTR("bundled"));
-}
-Reference<deploy::XPackageManager>  ExtensionManager::getTmpRepository()
-{
-    return m_xPackageManagerFactory->getPackageManager(OUSTR("tmp"));
 }
 
 Reference<task::XAbortChannel> ExtensionManager::createAbortChannel()
@@ -221,11 +211,11 @@ ExtensionManager::getPackageManager(::rtl::OUString const & repository)
 {
     Reference<deploy::XPackageManager> xPackageManager;
     if (repository.equals(OUSTR("user")))
-        xPackageManager = getUserRepository();
+        xPackageManager = m_userRepository;
     else if (repository.equals(OUSTR("shared")))
-        xPackageManager = getSharedRepository();
+        xPackageManager = m_sharedRepository;
     else if (repository.equals(OUSTR("bundled")))
-        xPackageManager = getBundledRepository();
+        xPackageManager = m_bundledRepository;
     else
         throw lang::IllegalArgumentException(
             OUSTR("No valid repository name provided."),
@@ -237,7 +227,7 @@ ExtensionManager::getPackageManager(::rtl::OUString const & repository)
   Enters the XPackage objects into a map. They must be all from the
   same repository. The value type of the map is a vector, where each vector
   represents an extension with a particular identifier. The first member
-  represents the user extension, the second the shared extension and the
+  is represents the user extension, the second the shared extension and the
   third the bundled extension.
  */
 void ExtensionManager::addExtensionsToMap(
@@ -276,8 +266,8 @@ void ExtensionManager::addExtensionsToMap(
 
 /*
    returns a list containing extensions with the same identifier from
-   all repositories (user, shared, bundled). If one repository does not
-   have this extension, then the list contains an empty Reference. The list
+   all repositories (user, shared, bundled) If one repository does not
+   have this extension, then the list contains an empty Referenc. The list
    is ordered according to the priority of the repostories:
    1. user
    2. shared
@@ -293,21 +283,29 @@ void ExtensionManager::addExtensionsToMap(
 
 {
     ::std::list<Reference<deploy::XPackage> > extensionList;
-    Reference<deploy::XPackageManager> lRepos[] = {
-          getUserRepository(), getSharedRepository(), getBundledRepository() };
-    for (int i(0); i != SAL_N_ELEMENTS(lRepos); ++i)
+    try
+    {   //will throw an exception if the extension does not exist
+        extensionList.push_back(m_userRepository->getDeployedPackage(
+            identifier, fileName, Reference<ucb::XCommandEnvironment>()));
+    } catch(lang::IllegalArgumentException &)
     {
-        Reference<deploy::XPackage> xPackage;
-        try
-        {
-            xPackage = lRepos[i]->getDeployedPackage(
-                identifier, fileName, Reference<ucb::XCommandEnvironment>());
-        }
-        catch(lang::IllegalArgumentException &)
-        {
-            // thrown if the extension does not exist in this repository
-        }
-        extensionList.push_back(xPackage);
+        extensionList.push_back(Reference<deploy::XPackage>());
+    }
+    try
+    {
+        extensionList.push_back(m_sharedRepository->getDeployedPackage(
+            identifier, fileName, Reference<ucb::XCommandEnvironment>()));
+    } catch (lang::IllegalArgumentException &)
+    {
+        extensionList.push_back(Reference<deploy::XPackage>());
+    }
+    try
+    {
+       extensionList.push_back(m_bundledRepository->getDeployedPackage(
+           identifier, fileName, Reference<ucb::XCommandEnvironment>()));
+    } catch (lang::IllegalArgumentException &)
+    {
+        extensionList.push_back(Reference<deploy::XPackage>());
     }
     OSL_ASSERT(extensionList.size() == 3);
     return extensionList;
@@ -505,7 +503,7 @@ Reference<deploy::XPackage> ExtensionManager::backupExtension(
 
     if (xOldExtension.is())
     {
-        xBackup = getTmpRepository()->addPackage(
+        xBackup = m_tmpRepository->addPackage(
             xOldExtension->getURL(), uno::Sequence<beans::NamedValue>(),
             OUString(), Reference<task::XAbortChannel>(), tmpCmdEnv);
 
@@ -526,7 +524,7 @@ uno::Sequence< Reference<deploy::XPackageTypeInfo> >
 ExtensionManager::getSupportedPackageTypes()
     throw (uno::RuntimeException)
 {
-    return getUserRepository()->getSupportedPackageTypes();
+    return m_userRepository->getSupportedPackageTypes();
 }
 //Do some necessary checks and user interaction. This function does not
 //aquire the extension manager mutex and that mutex must not be aquired
@@ -646,9 +644,9 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
     //Determine the repository to use
     Reference<deploy::XPackageManager> xPackageManager;
     if (repository.equals(OUSTR("user")))
-        xPackageManager = getUserRepository();
+        xPackageManager = m_userRepository;
     else if (repository.equals(OUSTR("shared")))
-        xPackageManager = getSharedRepository();
+        xPackageManager = m_sharedRepository;
     else
         throw lang::IllegalArgumentException(
             OUSTR("No valid repository name provided."),
@@ -661,7 +659,7 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
         getTempExtension(url, xAbortChannel, xCmdEnv);
     //Make sure the extension is removed from the tmp repository in case
     //of an exception
-    ExtensionRemoveGuard tmpExtensionRemoveGuard(xTmpExtension, getTmpRepository());
+    ExtensionRemoveGuard tmpExtensionRemoveGuard(xTmpExtension, m_tmpRepository);
     const OUString sIdentifier = dp_misc::getIdentifier(xTmpExtension);
     const OUString sFileName = xTmpExtension->getName();
     Reference<deploy::XPackage> xOldExtension;
@@ -705,7 +703,7 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                         //the xTmpExtension
                         //no command environment supplied, only this class shall interact
                         //with the user!
-                        xExtensionBackup = getTmpRepository()->importExtension(
+                        xExtensionBackup = m_tmpRepository->importExtension(
                             xOldExtension, Reference<task::XAbortChannel>(),
                             Reference<ucb::XCommandEnvironment>());
                         tmpExtensionRemoveGuard.reset(xExtensionBackup);
@@ -722,7 +720,7 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                 }
                 //check again dependencies but prevent user interaction,
                 //We can disregard the license, because the user must have already
-                //accepted it, when we called checkPrerequisites the first time
+                //accepted it, whe we called checkPrerequisites the first time
                 SilentCheckPrerequisitesCommandEnv * pSilentCommandEnv =
                     new SilentCheckPrerequisitesCommandEnv();
                 Reference<ucb::XCommandEnvironment> silentCommandEnv(pSilentCommandEnv);
@@ -858,9 +856,9 @@ void ExtensionManager::removeExtension(
     {
 //Determine the repository to use
         if (repository.equals(OUSTR("user")))
-            xPackageManager = getUserRepository();
+            xPackageManager = m_userRepository;
         else if (repository.equals(OUSTR("shared")))
-            xPackageManager = getSharedRepository();
+            xPackageManager = m_sharedRepository;
         else
             throw lang::IllegalArgumentException(
                 OUSTR("No valid repository name provided."),
@@ -920,7 +918,7 @@ void ExtensionManager::removeExtension(
                     Reference<task::XAbortChannel>(),
                     tmpCmdEnv);
 
-                getTmpRepository()->removePackage(
+                m_tmpRepository->removePackage(
                     dp_misc::getIdentifier(xExtensionBackup),
                     xExtensionBackup->getName(), xAbortChannel, xCmdEnv);
                 fireModified();
@@ -933,7 +931,7 @@ void ExtensionManager::removeExtension(
     }
 
     if (xExtensionBackup.is())
-        getTmpRepository()->removePackage(
+        m_tmpRepository->removePackage(
             dp_misc::getIdentifier(xExtensionBackup),
             xExtensionBackup->getName(), xAbortChannel, xCmdEnv);
 }
@@ -1160,20 +1158,20 @@ uno::Sequence< uno::Sequence<Reference<deploy::XPackage> > >
         id2extensions mapExt;
 
         uno::Sequence<Reference<deploy::XPackage> > userExt =
-            getUserRepository()->getDeployedPackages(xAbort, xCmdEnv);
+            m_userRepository->getDeployedPackages(xAbort, xCmdEnv);
         addExtensionsToMap(mapExt, userExt, OUSTR("user"));
         uno::Sequence<Reference<deploy::XPackage> > sharedExt =
-            getSharedRepository()->getDeployedPackages(xAbort, xCmdEnv);
+            m_sharedRepository->getDeployedPackages(xAbort, xCmdEnv);
         addExtensionsToMap(mapExt, sharedExt, OUSTR("shared"));
         uno::Sequence<Reference<deploy::XPackage> > bundledExt =
-            getBundledRepository()->getDeployedPackages(xAbort, xCmdEnv);
+            m_bundledRepository->getDeployedPackages(xAbort, xCmdEnv);
         addExtensionsToMap(mapExt, bundledExt, OUSTR("bundled"));
 
         //copy the values of the map to a vector for sorting
         ::std::vector< ::std::vector<Reference<deploy::XPackage> > >
               vecExtensions;
         id2extensions::const_iterator mapIt = mapExt.begin();
-        for (;mapIt != mapExt.end(); ++mapIt)
+        for (;mapIt != mapExt.end(); mapIt++)
             vecExtensions.push_back(mapIt->second);
 
         //sort the element according to the identifier
@@ -1236,7 +1234,7 @@ void ExtensionManager::reinstallDeployedExtensions(
                 const OUString id =  dp_misc::getIdentifier(extensions[ pos ]);
                 const OUString fileName = extensions[ pos ]->getName();
                 OSL_ASSERT(id.getLength());
-                activateExtension(id, fileName, false, true, xAbortChannel, xCmdEnv );
+                activateExtension(id, fileName, false, false, xAbortChannel, xCmdEnv );
             }
             catch (lang::DisposedException &)
             {
@@ -1260,64 +1258,6 @@ void ExtensionManager::reinstallDeployedExtensions(
     }
 }
 
-/** Works on the bundled repository. That is using the variables
-    BUNDLED_EXTENSIONS and BUNDLED_EXTENSIONS_USER.
- */
-void ExtensionManager::synchronizeBundledPrereg(
-    Reference<task::XAbortChannel> const & xAbortChannel,
-    Reference<ucb::XCommandEnvironment> const & xCmdEnv )
-    throw (deploy::DeploymentException,
-           uno::RuntimeException)
-{
-    try
-    {
-        String sSynchronizingBundled(StrSyncRepository::get());
-        sSynchronizingBundled.SearchAndReplaceAllAscii( "%NAME", OUSTR("bundled"));
-        dp_misc::ProgressLevel progressBundled(xCmdEnv, sSynchronizingBundled);
-
-        Reference<deploy::XPackageManagerFactory> xPackageManagerFactory(
-            deploy::thePackageManagerFactory::get(m_xContext));
-
-        Reference<deploy::XPackageManager> xMgr =
-            xPackageManagerFactory->getPackageManager(OUSTR("bundled_prereg"));
-        xMgr->synchronize(xAbortChannel, xCmdEnv);
-        progressBundled.update(OUSTR("\n\n"));
-
-        uno::Sequence<Reference<deploy::XPackage> > extensions = xMgr->getDeployedPackages(
-            xAbortChannel, xCmdEnv);
-        try
-        {
-            for (sal_Int32 i = 0; i < extensions.getLength(); i++)
-            {
-                extensions[i]->registerPackage(true, xAbortChannel, xCmdEnv);
-            }
-        }
-        catch (...)
-        {
-            OSL_ASSERT(0);
-        }
-        OUString lastSyncBundled(RTL_CONSTASCII_USTRINGPARAM(
-                                     "$BUNDLED_EXTENSIONS_PREREG/lastsynchronized"));
-        writeLastModified(lastSyncBundled, xCmdEnv);
-
-    } catch (deploy::DeploymentException& ) {
-        throw;
-    } catch (ucb::CommandFailedException & ) {
-        throw;
-    } catch (ucb::CommandAbortedException & ) {
-        throw;
-    } catch (lang::IllegalArgumentException &) {
-        throw;
-    } catch (uno::RuntimeException &) {
-        throw;
-    } catch (...) {
-        uno::Any exc = ::cppu::getCaughtException();
-        throw deploy::DeploymentException(
-            OUSTR("Extension Manager: exception in synchronize"),
-            static_cast<OWeakObject*>(this), exc);
-    }
-}
-
 sal_Bool ExtensionManager::synchronize(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
@@ -1335,13 +1275,13 @@ sal_Bool ExtensionManager::synchronize(
         String sSynchronizingShared(StrSyncRepository::get());
         sSynchronizingShared.SearchAndReplaceAllAscii( "%NAME", OUSTR("shared"));
         dp_misc::ProgressLevel progressShared(xCmdEnv, sSynchronizingShared);
-        bModified = getSharedRepository()->synchronize(xAbortChannel, xCmdEnv);
+        bModified = m_sharedRepository->synchronize(xAbortChannel, xCmdEnv);
         progressShared.update(OUSTR("\n\n"));
 
         String sSynchronizingBundled(StrSyncRepository::get());
         sSynchronizingBundled.SearchAndReplaceAllAscii( "%NAME", OUSTR("bundled"));
         dp_misc::ProgressLevel progressBundled(xCmdEnv, sSynchronizingBundled);
-        bModified |= getBundledRepository()->synchronize(xAbortChannel, xCmdEnv);
+        bModified |= m_bundledRepository->synchronize(xAbortChannel, xCmdEnv);
         progressBundled.update(OUSTR("\n\n"));
 
         //Always determine the active extension. This is necessary for the
@@ -1368,7 +1308,7 @@ sal_Bool ExtensionManager::synchronize(
         {
             //We catch the exception, so we can write the lastmodified file
             //so we will no repeat this everytime OOo starts.
-            OSL_FAIL("Extensions Manager: synchronize");
+            OSL_ENSURE(0, "Extensions Manager: synchronize");
         }
         OUString lastSyncBundled(RTL_CONSTASCII_USTRINGPARAM(
                                      "$BUNDLED_EXTENSIONS_USER/lastsynchronized"));
@@ -1468,7 +1408,7 @@ Reference<deploy::XPackage> ExtensionManager::getTempExtension(
 
 {
     Reference<ucb::XCommandEnvironment> tmpCmdEnvA(new TmpRepositoryCommandEnv());
-    Reference<deploy::XPackage> xTmpPackage = getTmpRepository()->addPackage(
+    Reference<deploy::XPackage> xTmpPackage = m_tmpRepository->addPackage(
         url, uno::Sequence<beans::NamedValue>(),OUString(), xAbortChannel, tmpCmdEnvA);
     if (!xTmpPackage.is())
     {
@@ -1499,6 +1439,8 @@ sal_Bool ExtensionManager::isReadOnlyRepository(::rtl::OUString const & reposito
     return getPackageManager(repository)->isReadOnly();
 }
 //------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<ExtensionManager> servicePIP;
@@ -1524,7 +1466,7 @@ bool singleton_entries(
     }
     catch (registry::InvalidRegistryException & exc) {
         (void) exc; // avoid warnings
-        OSL_FAIL( ::rtl::OUStringToOString(
+        OSL_ENSURE( 0, ::rtl::OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return false;
     }

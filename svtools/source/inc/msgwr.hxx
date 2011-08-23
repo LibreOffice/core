@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,9 +30,9 @@
 #define _MSGWR_HXX
 
 
-sal_Bool ConvertGraphicToMSG(const Graphic & rGraphic, SvStream & rTargetStream,
-                         sal_Bool(*pCallback)(void *, sal_uInt16), void * pCallerData,
-                         sal_uLong nMinPercent, sal_uLong nMaxPercent);
+BOOL ConvertGraphicToMSG(const Graphic & rGraphic, SvStream & rTargetStream,
+                         BOOL(*pCallback)(void *, USHORT), void * pCallerData,
+                         ULONG nMinPercent, ULONG nMaxPercent);
 
 
 #endif // _MSGWR_HXX

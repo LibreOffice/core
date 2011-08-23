@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,6 +52,14 @@ using namespace ::com::sun::star::mozilla;
 
 namespace
 {
+    #if defined(XP_MAC) || defined(XP_MACOSX) || defined(MACOSX) 
+        #define APP_REGISTRY_NAME "Application Registry"
+    #elif defined(XP_WIN) || defined(XP_OS2)
+        #define APP_REGISTRY_NAME "registry.dat"
+    #else
+        #define APP_REGISTRY_NAME "appreg"
+    #endif
+
     // -------------------------------------------------------------------
     static ::rtl::OUString lcl_getUserDataDirectory()
     {
@@ -59,22 +67,22 @@ namespace
         ::rtl::OUString   aConfigPath;
 
         aSecurity.getConfigDir( aConfigPath );
-        return aConfigPath + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        return aConfigPath + ::rtl::OUString::createFromAscii( "/" );
     }
 
     // -------------------------------------------------------------------
     static const char* DefaultProductDir[3][3] =
     {
     #if defined(XP_WIN)
-        { "Mozilla/SeaMonkey/", NULL, NULL },
+        { "Mozilla/", NULL, NULL },
         { "Mozilla/Firefox/", NULL, NULL },
         { "Thunderbird/", "Mozilla/Thunderbird/", NULL }
     #elif(MACOSX)
-        { "../Mozilla/SeaMonkey/", NULL, NULL },
+        { "../Mozilla/", NULL, NULL },
         { "Firefox/", NULL, NULL },
         { "../Thunderbird/", NULL, NULL }
     #else
-        { ".mozilla/seamonkey/", NULL, NULL },
+        { ".mozilla/", NULL, NULL },
         { ".mozilla/firefox/", NULL, NULL },
         { ".thunderbird/", ".mozilla-thunderbird/", ".mozilla/thunderbird/" }
     #endif
@@ -108,7 +116,7 @@ namespace
             else
             {
                 ::rtl::OUString sProductDirCandidate;
-                const char* pProfileRegistry = "profiles.ini";
+                const char* pProfileRegistry = ( _product == MozillaProductType_Mozilla ) ? APP_REGISTRY_NAME : "profiles.ini";
 
                 // check all possible candidates
                 for ( size_t i=0; i<3; ++i )
@@ -152,5 +160,15 @@ namespace
 
     return lcl_guessProfileRoot( product );
 }
+#ifndef MINIMAL_PROFILEDISCOVER
+// -----------------------------------------------------------------------
+::rtl::OUString getRegistryFileName(MozillaProductType product)
+{
+    if (product == MozillaProductType_Default)
+        return ::rtl::OUString();
+
+    return getRegistryDir(product) + ::rtl::OUString::createFromAscii(APP_REGISTRY_NAME);
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

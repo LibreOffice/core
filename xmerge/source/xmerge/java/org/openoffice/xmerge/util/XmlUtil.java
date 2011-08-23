@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -135,10 +135,10 @@ public final class XmlUtil {
      *  @return  Name and type of XML DOM <code>Node</code>.
      */
     public static String getNodeInfo(Node node) {
-
+    
         String str = null;
         switch (node.getNodeType()) {
-
+    
             case Node.ELEMENT_NODE:
                 str = "ELEMENT";
                 break;

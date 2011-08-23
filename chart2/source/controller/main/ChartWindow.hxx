@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,9 +69,9 @@ public:
     virtual void RequestHelp( const HelpEvent& rHEvt );
 
     void ForceInvalidate();
-    virtual void Invalidate( sal_uInt16 nFlags = 0 );
-    virtual void Invalidate( const Rectangle& rRect, sal_uInt16 nFlags = 0 );
-    virtual void Invalidate( const Region& rRegion, sal_uInt16 nFlags = 0 );
+    virtual void Invalidate( USHORT nFlags = 0 );
+    virtual void Invalidate( const Rectangle& rRect, USHORT nFlags = 0 );
+    virtual void Invalidate( const Region& rRegion, USHORT nFlags = 0 );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 

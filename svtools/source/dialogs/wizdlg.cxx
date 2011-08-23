@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -198,7 +198,7 @@ void WizardDialog::ImplPosCtrls()
         long    nViewWidth = 0;
         long    nViewHeight = 0;
         long    nDlgHeight = nOffY;
-        sal_uInt16  nViewPosFlags = WINDOW_POSSIZE_POS;
+        USHORT  nViewPosFlags = WINDOW_POSSIZE_POS;
         if ( meViewAlign == WINDOWALIGN_TOP )
         {
             nViewOffX       = WIZARDDIALOG_VIEW_DLGOFFSET_X;
@@ -244,7 +244,7 @@ void WizardDialog::ImplPosCtrls()
 
 
 long WizardDialog::LogicalCoordinateToPixel(int iCoordinate){
-    Size aLocSize = LogicToPixel(Size( iCoordinate, 0 ), MAP_APPFONT );
+    Size aLocSize = LogicToPixel(Size( iCoordinate, 0 ), MAP_APPFONT ); 
     int iPixelCoordinate =  aLocSize.Width();
     return iPixelCoordinate;
 }
@@ -333,9 +333,9 @@ void WizardDialog::ImplShowTabPage( TabPage* pTabPage )
 
 // -----------------------------------------------------------------------
 
-TabPage* WizardDialog::ImplGetPage( sal_uInt16 nLevel ) const
+TabPage* WizardDialog::ImplGetPage( USHORT nLevel ) const
 {
-    sal_uInt16              nTempLevel = 0;
+    USHORT              nTempLevel = 0;
     ImplWizPageData*    pPageData = mpFirstPage;
     while ( pPageData )
     {
@@ -442,7 +442,7 @@ long WizardDialog::Notify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         KeyCode         aKeyCode = pKEvt->GetKeyCode();
-        sal_uInt16          nKeyCode = aKeyCode.GetCode();
+        USHORT          nKeyCode = aKeyCode.GetCode();
 
         if ( aKeyCode.IsMod1() )
         {
@@ -453,11 +453,11 @@ long WizardDialog::Notify( NotifyEvent& rNEvt )
                     if ( mpPrevBtn->IsVisible() &&
                          mpPrevBtn->IsEnabled() && mpPrevBtn->IsInputEnabled() )
                     {
-                        mpPrevBtn->SetPressed( sal_True );
-                        mpPrevBtn->SetPressed( sal_False );
+                        mpPrevBtn->SetPressed( TRUE );
+                        mpPrevBtn->SetPressed( FALSE );
                         mpPrevBtn->Click();
                     }
-                    return sal_True;
+                    return TRUE;
                 }
             }
             else
@@ -467,11 +467,11 @@ long WizardDialog::Notify( NotifyEvent& rNEvt )
                     if ( mpNextBtn->IsVisible() &&
                          mpNextBtn->IsEnabled() && mpNextBtn->IsInputEnabled() )
                     {
-                        mpNextBtn->SetPressed( sal_True );
-                        mpNextBtn->SetPressed( sal_False );
+                        mpNextBtn->SetPressed( TRUE );
+                        mpNextBtn->SetPressed( FALSE );
                         mpNextBtn->Click();
                     }
-                    return sal_True;
+                    return TRUE;
                 }
             }
         }
@@ -494,43 +494,43 @@ long WizardDialog::DeactivatePage()
     if ( maDeactivateHdl.IsSet() )
         return maDeactivateHdl.Call( this );
     else
-        return sal_True;
+        return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool WizardDialog::ShowNextPage()
+BOOL WizardDialog::ShowNextPage()
 {
     return ShowPage( mnCurLevel+1 );
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool WizardDialog::ShowPrevPage()
+BOOL WizardDialog::ShowPrevPage()
 {
     if ( !mnCurLevel )
-        return sal_False;
+        return FALSE;
     return ShowPage( mnCurLevel-1 );
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool WizardDialog::ShowPage( sal_uInt16 nLevel )
+BOOL WizardDialog::ShowPage( USHORT nLevel )
 {
     if ( DeactivatePage() )
     {
         mnCurLevel = nLevel;
         ActivatePage();
         ImplShowTabPage( ImplGetPage( mnCurLevel ) );
-        return sal_True;
+        return TRUE;
     }
     else
-        return sal_False;
+        return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool WizardDialog::Finnish( long nResult )
+BOOL WizardDialog::Finnish( long nResult )
 {
     if ( DeactivatePage() )
     {
@@ -541,10 +541,10 @@ sal_Bool WizardDialog::Finnish( long nResult )
             EndDialog( nResult );
         else if ( GetStyle() & WB_CLOSEABLE )
             Close();
-        return sal_True;
+        return TRUE;
     }
     else
-        return sal_False;
+        return FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -590,14 +590,14 @@ void WizardDialog::RemovePage( TabPage* pPage )
         pPageData = pPageData->mpNext;
     }
 
-    OSL_FAIL( "WizardDialog::RemovePage() - Page not in list" );
+    DBG_ERROR( "WizardDialog::RemovePage() - Page not in list" );
 }
 
 // -----------------------------------------------------------------------
 
-void WizardDialog::SetPage( sal_uInt16 nLevel, TabPage* pPage )
+void WizardDialog::SetPage( USHORT nLevel, TabPage* pPage )
 {
-    sal_uInt16              nTempLevel = 0;
+    USHORT              nTempLevel = 0;
     ImplWizPageData*    pPageData = mpFirstPage;
     while ( pPageData )
     {
@@ -618,9 +618,9 @@ void WizardDialog::SetPage( sal_uInt16 nLevel, TabPage* pPage )
 
 // -----------------------------------------------------------------------
 
-TabPage* WizardDialog::GetPage( sal_uInt16 nLevel ) const
+TabPage* WizardDialog::GetPage( USHORT nLevel ) const
 {
-    sal_uInt16              nTempLevel = 0;
+    USHORT              nTempLevel = 0;
     ImplWizPageData*    pPageData = mpFirstPage;
     while ( pPageData )
     {
@@ -676,12 +676,12 @@ void WizardDialog::RemoveButton( Button* pButton )
         pBtnData = pBtnData->mpNext;
     }
 
-    OSL_FAIL( "WizardDialog::RemoveButton() - Button not in list" );
+    DBG_ERROR( "WizardDialog::RemoveButton() - Button not in list" );
 }
 
 // -----------------------------------------------------------------------
 
-void WizardDialog::ShowButtonFixedLine( sal_Bool bVisible )
+void WizardDialog::ShowButtonFixedLine( BOOL bVisible )
 {
     if ( !mpFixedLine )
     {
@@ -696,7 +696,7 @@ void WizardDialog::ShowButtonFixedLine( sal_Bool bVisible )
 
 // -----------------------------------------------------------------------
 
-sal_Bool WizardDialog::IsButtonFixedLineVisible()
+BOOL WizardDialog::IsButtonFixedLineVisible()
 {
     return (mpFixedLine && mpFixedLine->IsVisible());
 }

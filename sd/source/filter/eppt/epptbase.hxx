@@ -81,12 +81,12 @@ struct PHLayout
     sal_uInt8   nTypeOfTitle;
     sal_uInt8   nTypeOfOutliner;
 
-    sal_Bool    bTitlePossible;
-    sal_Bool    bOutlinerPossible;
-    sal_Bool    bSecOutlinerPossible;
+    BOOL    bTitlePossible;
+    BOOL    bOutlinerPossible;
+    BOOL    bSecOutlinerPossible;
 };
 
-enum PageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3, LAYOUT = 4 };
+enum PageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3 };
 
 class PropValue
 {
@@ -375,7 +375,7 @@ protected:
     virtual sal_Bool ImplCreateMainNotes()=0;
 
     sal_Bool GetStyleSheets();
-    sal_Bool GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup = sal_False );
+    sal_Bool GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup = FALSE );
 
     sal_Bool CreateMainNotes();
 
@@ -404,7 +404,6 @@ public:
     PHLayout& GetLayout( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const;
     PHLayout& GetLayout( sal_Int32 nOffset ) const;
     sal_Int32 GetLayoutOffset( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const;
-    sal_Int32 GetLayoutOffsetFixed( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const;
 
     sal_Bool CreateSlide( sal_uInt32 nPageNum );
     sal_Bool CreateSlideMaster( sal_uInt32 nPageNum );

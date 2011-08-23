@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,10 +72,10 @@ public:
             of a parameter of this function. */
         ForceArray,
 
-        /** Area reference is not converted to array, but ForceArray must be
-            propagated to subsequent operators and functions being part of a
-            parameter of this function. Used with functions that treat
-            references separately from arrays, but need the forced array
+        /** Area reference is not converted to array, but ForceArray must be 
+            propagated to subsequent operators and functions being part of a 
+            parameter of this function. Used with functions that treat 
+            references separately from arrays, but need the forced array 
             calculation of parameters that are not references.*/
         ReferenceOrForceArray
     };
@@ -89,7 +89,7 @@ public:
                                     @param nParameter
                                         Which parameter, 0-based */
     static  Type                GetParameterType( const formula::FormulaToken* pToken,
-                                        sal_uInt16 nParameter);
+                                        USHORT nParameter);
 
                                 /** Whether OpCode has a parameter of type
                                     ForceArray or ReferenceOrForceArray. */
@@ -125,7 +125,7 @@ private:
     struct RunData
     {
         CommonData  aData;
-        sal_uInt8        nMinParams;         // fix or minimum, or repeat start
+        BYTE        nMinParams;         // fix or minimum, or repeat start
         bool        bHasForceArray;
     };
 
@@ -134,7 +134,7 @@ private:
 
     // ocExternal AddIns
     static  Type                GetExternalParameterType(
-                                    const formula::FormulaToken* pToken, sal_uInt16 nParameter);
+                                    const formula::FormulaToken* pToken, USHORT nParameter);
 
 #if OSL_DEBUG_LEVEL > 1
     // Generate documentation to stdout if environment variable
@@ -152,14 +152,14 @@ private:
 
                                 /** Minimum number of parameters, or fix number
                                     of parameters if HasRepeatParameters()
-                                    returns sal_False. For opcodes not specified in
+                                    returns FALSE. For opcodes not specified in
                                     the implementation a parameter count of 1
                                     is assumed, for opcodes out of range 0 is
                                     assumed. If HasRepeatParameters() returns
-                                    sal_True, information is NOT related to whether
+                                    TRUE, information is NOT related to whether
                                     any parameters are optional, only the type
                                     of parameters is significant. */
-    static  inline  sal_uInt8        GetMinimumParameters( OpCode eOp)
+    static  inline  BYTE        GetMinimumParameters( OpCode eOp)
                                     {
                                         if ( eOp <= SC_OPCODE_LAST_OPCODE_ID )
                                             return pData[eOp].aData.nParam[0]

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,6 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_deployment_XUpdateInformationProvider_idl__
-#define __com_sun_star_deployment_XUpdateInformationProvider_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/uno/Exception.idl>
@@ -45,30 +43,30 @@ interface XElement;
 
 module com { module sun { module star { module deployment {
 
-/** Objects implementing this interface provide access to the xml root of
+/** Objects implementing this interface provide access to the xml root of 
     one or more update information files for a given set of URLs.
-
+    
     @since OOo 2.2
 */
 interface XUpdateInformationProvider
 {
-    /** get update information for a specific extension or all available
+    /** get update information for a specific extension or all available 
         information from a repository.
 
         @param repositories
                a repository and its mirrors.
         @param extensionId
                the unique identifier of an extension. If it is not empty and
-               the update document is an atom feed, only items whose "term"
+               the update document is an atom feed, only items whose 'term'
                attribute of the atom:category tag matches extensionId are returned.
-
+               
     */
     sequence < com::sun::star::xml::dom::XElement > getUpdateInformation(
-        [in] sequence< string > repositories,
-        [in] string extensionId
+        [in] sequence< string > repositories, 
+        [in] string extensionId 
     ) raises ( com::sun::star::uno::Exception );
 
-    /** interrupts a getUpdateInformation call and let's it return immediately.
+    /** interrupts a getUpdateInformation call and let's it return immediatly.
     */
     void cancel();
 
@@ -95,7 +93,7 @@ interface XUpdateInformationProvider
                a repository and its mirrors.
         @param extensionId
                the unique identifier of an extension. If it is not empty and
-               the update document is an atom feed, only items whose "term"
+               the update document is an atom feed, only items whose 'term'
                attribute of the atom:category tag matches extensionId are returned.
 
         @returns
@@ -108,4 +106,4 @@ interface XUpdateInformationProvider
 };
 
 }; }; }; };
-#endif
+

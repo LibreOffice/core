@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <osl/process.h>
 #include <rtl/string.hxx>
-#include <boost/unordered_set.hpp>
+#include <hash_set>
 #include <assert.h>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -83,7 +83,7 @@ class URLLister
 
         if (nIndex == -1)
         {
-            nIndex = mString.indexOf(mLF);
+            nIndex = mString.indexOf(mLF);            
         }
 
         return nIndex;
@@ -97,12 +97,12 @@ public:
         uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess
             (xFactory->createInstanceWithContext
              (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                              ("com.sun.star.ucb.SimpleFileAccess")),
+                              ("com.sun.star.ucb.SimpleFileAccess")), 
               xContext), uno::UNO_QUERY_THROW);
         xInputStream = xFileAccess->openFileRead(absFileUrl) ;
 
-        mLF = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n"));
-        mCRLF = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\r\n"));
+        mLF = rtl::OUString::createFromAscii("\n");
+        mCRLF = rtl::OUString::createFromAscii("\r\n");
     }
 
     rtl::OUString getURL()
@@ -155,16 +155,16 @@ xContext( xContext_ )
 }
 
 sal_Int32 SAL_CALL AnalyzeService::run
-( const uno::Sequence< rtl::OUString >& aArguments )
+( const uno::Sequence< rtl::OUString >& aArguments ) 
     throw (uno::RuntimeException)
 {
     uno::Sequence<uno::Any> aUcbInitSequence(2);
     aUcbInitSequence[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
-    aUcbInitSequence[1] <<=
+    aUcbInitSequence[1] <<= 
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
-    uno::Reference<lang::XMultiServiceFactory>
+    uno::Reference<lang::XMultiServiceFactory> 
         xServiceFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
-    uno::Reference<lang::XMultiComponentFactory>
+    uno::Reference<lang::XMultiComponentFactory> 
         xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW );
 
     if (::ucbhelper::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
@@ -175,7 +175,7 @@ sal_Int32 SAL_CALL AnalyzeService::run
 
         rtl_uString *dir=NULL;
         osl_getProcessWorkingDir(&dir);
-
+                
         rtl::OUString absFileUrlUrls;
         osl_getAbsoluteFileURL(dir, arg.pData, &absFileUrlUrls.pData);
 
@@ -192,42 +192,42 @@ sal_Int32 SAL_CALL AnalyzeService::run
             uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess
                 (xFactory->createInstanceWithContext
                  (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                                  ("com.sun.star.ucb.SimpleFileAccess")),
+                                  ("com.sun.star.ucb.SimpleFileAccess")), 
                   xContext), uno::UNO_QUERY_THROW );
-
+            
             rtl::OString aStr;
             aURL.convertToString(&aStr, RTL_TEXTENCODING_ASCII_US,
                                  OUSTRING_TO_OSTRING_CVTFLAGS);
-
+          
             fprintf(stdout, "<file><name>%s</name>\n", aStr.getStr());
             fprintf(stderr, "%s\n", aStr.getStr());
             fflush(stderr);
-
+        
             bool bStatus = true;
-            try
+            try 
             {
-                uno::Reference<io::XInputStream> xInputStream =
+                uno::Reference<io::XInputStream> xInputStream = 
                     xFileAccess->openFileRead(aURL);
 
                 if (xInputStream.is())
                 {
-                    ooxml::OOXMLStream::Pointer_t pDocStream =
+                    ooxml::OOXMLStream::Pointer_t pDocStream = 
                         ooxml::OOXMLDocumentFactory::createStream
                         (xContext, xInputStream);
-
+                    
                     if (pDocStream.get() != NULL)
                     {
                         ooxml::OOXMLDocument::Pointer_t pDocument
                             (ooxml::OOXMLDocumentFactory::createDocument
                              (pDocStream));
-
-                        Stream::Pointer_t pAnalyzer =
+                        
+                        Stream::Pointer_t pAnalyzer = 
                             writerfilter::createAnalyzer();
                         pDocument->resolve(*pAnalyzer);
                     }
                     else
                     {
-                        fprintf(stdout,
+                        fprintf(stdout, 
                                 "<exception>file open failed</exception>\n");
                         bStatus = false;
                     }
@@ -252,13 +252,13 @@ sal_Int32 SAL_CALL AnalyzeService::run
             fprintf(stdout, "</file>\n");
             fflush(stdout);
         }
-
+        
         fprintf(stdout, "</analyze>\n");
 
         rtl_uString_release(dir);
         ::ucbhelper::ContentBroker::deinitialize();
 
-
+        
     }
     else
     {
@@ -269,18 +269,18 @@ sal_Int32 SAL_CALL AnalyzeService::run
 
 ::rtl::OUString AnalyzeService_getImplementationName ()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ( AnalyzeService::IMPLEMENTATION_NAME ));
+    return rtl::OUString::createFromAscii ( AnalyzeService::IMPLEMENTATION_NAME );
 }
 
 sal_Bool SAL_CALL AnalyzeService_supportsService( const ::rtl::OUString& ServiceName )
 {
-    return ServiceName.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( AnalyzeService::SERVICE_NAME )) );
+    return ServiceName.equals( rtl::OUString::createFromAscii( AnalyzeService::SERVICE_NAME ) );
 }
 uno::Sequence< rtl::OUString > SAL_CALL AnalyzeService_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
     uno::Sequence < rtl::OUString > aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ( AnalyzeService::SERVICE_NAME ));
+    pArray[0] =  rtl::OUString::createFromAscii ( AnalyzeService::SERVICE_NAME );
     return aRet;
 }
 

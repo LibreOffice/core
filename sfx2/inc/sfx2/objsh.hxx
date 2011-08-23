@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,11 +43,14 @@
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
+
 #include <boost/shared_ptr.hpp>
 
+
 //________________________________________________________________________________________________________________
-//  include something else
+//	include something else
 //________________________________________________________________________________________________________________
 
 #include <vcl/timer.hxx>
@@ -69,6 +72,7 @@ class BasicManager;
 class SfxMedium;
 class SfxObjectFactory;
 class SfxDocumentInfoDialog;
+class SfxEventConfigItem_Impl;
 class SfxStyleSheetBasePool;
 class INote;
 class SfxStyleSheetPool;
@@ -99,15 +103,15 @@ class Point;
 #define ASPECT_ALL      (ASPECT_CONTENT | ASPECT_THUMBNAIL | ASPECT_ICON | ASPECT_DOCPRINT)
 
 // from pseudo.hxx; must be the same as in OLE2
-#define SVOBJ_MISCSTATUS_SERVERRESIZE           1
-#define SVOBJ_MISCSTATUS_NOTREPLACE             4
-#define SVOBJ_MISCSTATUS_CANTLINKINSIDE         16
-#define SVOBJ_MISCSTATUS_LINK                   64
-#define SVOBJ_MISCSTATUS_INSIDEOUT              128
+#define SVOBJ_MISCSTATUS_SERVERRESIZE 			1
+#define SVOBJ_MISCSTATUS_NOTREPLACE   			4
+#define SVOBJ_MISCSTATUS_CANTLINKINSIDE			16
+#define SVOBJ_MISCSTATUS_LINK         			64
+#define SVOBJ_MISCSTATUS_INSIDEOUT    			128
 #define SVOBJ_MISCSTATUS_ACTIVATEWHENVISIBLE    256
-#define SVOBJ_MISCSTATUS_NOTRESIZEABLE          512
-#define SVOBJ_MISCSTATUS_ALWAYSACTIVATE         1024
-#define SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE  2048
+#define SVOBJ_MISCSTATUS_NOTRESIZEABLE			512
+#define SVOBJ_MISCSTATUS_ALWAYSACTIVATE			1024
+#define SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE	2048
 #define SVOBJ_MISCSTATUS_SPECIALOBJECT          4096
 
 
@@ -140,7 +144,7 @@ typedef sal_uInt32 SfxObjectShellFlags;
 
 //--------------------------------------------------------------------
 
-#define SFX_TITLE_TITLE    0
+#define SFX_TITLE_TITLE	   0
 #define SFX_TITLE_FILENAME 1
 #define SFX_TITLE_FULLNAME 2
 #define SFX_TITLE_APINAME  3
@@ -153,6 +157,11 @@ typedef sal_uInt32 SfxObjectShellFlags;
 #define SFX_LOADED_MAINDOCUMENT 1
 #define SFX_LOADED_IMAGES       2
 #define SFX_LOADED_ALL          3
+
+//--------------------------------------------------------------------
+
+#define	SEQUENCE				::com::sun::star::uno::Sequence
+#define	OUSTRING				::rtl::OUString
 
 //--------------------------------------------------------------------
 
@@ -188,6 +197,12 @@ in fremde Objekte integriert werden k"onnen.
 
 ----------------------------------------------------------------------*/
 
+enum SfxTitleQuery
+{
+    SFX_TITLE_QUERY_SAVE_NAME_PROPOSAL
+};
+
+
 class SfxToolBoxConfig;
 struct TransferableObjectDescriptor;
 
@@ -196,15 +211,14 @@ class SFX2_DLLPUBLIC SfxObjectShell :
     public ::comphelper::IEmbeddedHelper, public ::sfx2::IXmlIdRegistrySupplier
 {
 friend struct ModifyBlocker_Impl;
-friend class SfxObjectShellLock;
 
 private:
-    struct SfxObjectShell_Impl* pImp;               // interne Daten
+    struct SfxObjectShell_Impl* pImp;				// interne Daten
 
-    SfxMedium *                 pMedium;            // Beschreibung der Datei bzw. des Storage, in dem sich das Objekt befindet
-    SfxStyleSheetBasePool*      pStyleSheetPool;    // StyleSheets
-    SfxObjectCreateMode         eCreateMode;        // Zweck des Objekts
-    sal_Bool                    bHasName :1,        // sal_True := bestehendes Objekt, sal_False := es ist ein neues Objekt
+    SfxMedium * 				pMedium;			// Beschreibung der Datei bzw. des Storage, in dem sich das Objekt befindet
+    SfxStyleSheetBasePool*		pStyleSheetPool;	// StyleSheets
+    SfxObjectCreateMode 		eCreateMode;		// Zweck des Objekts
+    sal_Bool					bHasName :1,		// sal_True := bestehendes Objekt, sal_False := es ist ein neues Objekt
                                 bIsTmp :1;          // temp. Storage
 
 private:
@@ -216,9 +230,9 @@ private:
 protected:
                                 SfxObjectShell(SfxObjectCreateMode);
                                 SfxObjectShell( const sal_uInt64 i_nCreationFlags );    // see sfxmodelfactory.hxx
-    virtual                     ~SfxObjectShell();
+    virtual         			~SfxObjectShell();
 
-    virtual void                ModifyChanged();
+    virtual void				ModifyChanged();
     virtual sal_Bool            Close();
 
     /** declares the document to have capabilities to contain basic/dialog libraries
@@ -241,33 +255,34 @@ public:
     using SotObject::GetInterface;
 
     // Document-Shell Iterator
-    static SfxObjectShell*      GetFirst( const TypeId* pType = 0,
+    static SfxObjectShell*		GetFirst( const TypeId* pType = 0,
                                           sal_Bool bOnlyVisible = sal_True );
-    static SfxObjectShell*      GetNext( const SfxObjectShell& rPrev,
+    static SfxObjectShell*		GetNext( const SfxObjectShell& rPrev,
                                          const TypeId* pType = 0,
                                          sal_Bool bOnlyVisible = sal_True );
-    static SfxObjectShell*      Current();
-    static sal_uInt16           Count();
+    static SfxObjectShell*		Current();
+    static sal_uInt16			Count();
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                                 GetCurrentComponent();
-    static void                 SetCurrentComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
+    static void					SetCurrentComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
 
-    virtual void                Invalidate(sal_uInt16 nId = 0);
+    virtual	void                Invalidate(USHORT nId = 0);
 
     void                        SetFlags( SfxObjectShellFlags eFlags );
     SfxObjectShellFlags         GetFlags( ) const ;
 
     SfxModule*                  GetModule() const;
 
-    virtual SfxObjectFactory&   GetFactory() const=0;
-    SfxMedium *                 GetMedium() const { return pMedium; }
-    void                        ForgetMedium() { pMedium = 0; }
+    virtual SfxObjectFactory&  	GetFactory() const=0;
+    SfxMedium *                	GetMedium() const { return pMedium; }
+    void						ForgetMedium() { pMedium = 0; }
     ::com::sun::star::uno::Reference<
         ::com::sun::star::document::XDocumentProperties > getDocProperties();
     void                        UpdateDocInfoForSave(  );
     void                        FlushDocInfo();
     sal_Bool                    HasName() const { return bHasName; }
     virtual String              GetAPIName() const;
+    void                        SetHasName( sal_Bool bSet = sal_True ) { bHasName = bSet; }
     void                        SetReadOnly();
     sal_Bool                    IsReadOnly() const;
     sal_Bool                    IsReadOnlyMedium() const;
@@ -276,8 +291,10 @@ public:
     void                        SetNoName();
     sal_Bool                    IsInModalMode() const;
     sal_Bool                    IsInPrepareClose() const;
-    virtual sal_Bool            AcceptStateUpdate() const;
-    sal_Bool                    HasModalViews() const;
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    virtual sal_Bool			AcceptStateUpdate() const;
+    //-->Added by PengYunQuan for Validity Cell Range Picker
+    sal_Bool					HasModalViews() const;
     sal_Bool                    IsHelpDocument() const;
 
     sal_Bool                    IsDocShared() const;
@@ -306,7 +323,7 @@ public:
     sal_Bool                    DoLoad( SfxMedium* pMedium );
     sal_Bool                    DoSave();
     sal_Bool                    DoSaveAs( SfxMedium &rNewStor );
-    sal_Bool                    DoSaveObjectAs( SfxMedium &rNewStor, sal_Bool bCommit );
+    sal_Bool                    DoSaveObjectAs( SfxMedium &rNewStor, BOOL bCommit );
 
     // TODO/LATER: currently only overloaded in Calc, should be made non-virtual
     virtual sal_Bool            DoSaveCompleted( SfxMedium* pNewStor=0 );
@@ -318,7 +335,7 @@ public:
     virtual sal_Bool            InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual sal_Bool            Load( SfxMedium &rMedium  );
     virtual sal_Bool            LoadFrom( SfxMedium& rMedium );
-    virtual sal_Bool            Save();
+    virtual sal_Bool   			Save();
     virtual sal_Bool            SaveAs( SfxMedium &rMedium  );
     virtual sal_Bool            SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual sal_Bool            SwitchPersistance(
@@ -333,9 +350,9 @@ public:
     void                        SetConfigOptionsChecked( sal_Bool bChecked );
 
     // called for a few slots like SID_SAVE[AS]DOC, SID_PRINTDOC[DIRECT], derived classes may abort the action
-    virtual sal_Bool            QuerySlotExecutable( sal_uInt16 nSlotId );
+    virtual sal_Bool            QuerySlotExecutable( USHORT nSlotId );
 
-    sal_Bool                    SaveChildren(sal_Bool bObjectsOnly=sal_False);
+    sal_Bool                    SaveChildren(BOOL bObjectsOnly=FALSE);
     sal_Bool                    SaveAsChildren( SfxMedium &rMedium );
     sal_Bool                    SwitchChildrenPersistance(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
@@ -352,11 +369,36 @@ public:
     sal_uInt16                  GetScriptingSignatureState();
     void                        SignScriptingContent();
 
-    virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(
+    virtual String              QueryTitle( SfxTitleQuery ) const;
+    virtual	SfxDocumentInfoDialog* CreateDocumentInfoDialog(
                                         Window *pParent, const SfxItemSet& );
+    sal_Bool                    IsBasic( const String & rCode, SbxObject * pVCtrl = NULL );
 
     ErrCode                     CallBasic( const String& rMacro, const String& rBasicName,
-                                    SbxArray* pArgs = 0, SbxValue* pRet = 0 );
+                                    SbxObject* pVCtrl, SbxArray* pArgs = 0, SbxValue* pRet = 0 );
+    ErrCode                     Call( const String & rCode, sal_Bool bIsBasicReturn, SbxObject * pVCtrl = NULL );
+
+    ErrCode                     CallScript(
+        const String & rScriptType, const String & rCode, const void* pArgs = NULL, void* pRet = NULL );
+
+    /** calls a StarBasic script without magic
+    @param _rMacroName
+        specifies the name of the method to execute
+    @param _rLocation
+        specifies the location of the script to execute. Allowed values are "application" and "document".
+    @param _pArguments
+        This is a pointer to a Sequence< Any >. All elements of the Sequence are wrapped into Basic objects
+        and passed as arguments to the method specified by <arg>_rMacroName</arg>
+    @param _pReturn
+        If not <NULL/>, the Any pointed to by this argument contains the return value of the (synchronous) call
+        to the StarBasic macro
+    */
+    ErrCode     CallStarBasicScript(
+        const String& _rMacroName,
+        const String& _rLocation,
+        const void* _pArguments = NULL,
+        void* _pReturn = NULL
+    );
 
     ErrCode     CallXScript(
         const String& rScriptURL,
@@ -411,30 +453,30 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetModifyPasswordInfo() const;
     sal_Bool                    SetModifyPasswordInfo( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aInfo );
 
-    static sal_uInt32           HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );
+    static sal_uInt32			HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );
 
-    virtual void                ViewAssigned();
-    virtual sal_uInt16          PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
+    virtual void				ViewAssigned();
+    virtual sal_uInt16			PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
     virtual sal_Bool            IsInformationLost();
     virtual sal_uInt16          GetHiddenInformationState( sal_uInt16 nStates );
-    sal_Int16                   QueryHiddenInformation( HiddenWarningFact eFact, Window* pParent );
-    virtual sal_Bool            HasSecurityOptOpenReadOnly() const;
-    sal_Bool                    IsSecurityOptOpenReadOnly() const;
-    void                        SetSecurityOptOpenReadOnly( sal_Bool bOpenReadOnly = sal_True );
+    sal_Int16					QueryHiddenInformation( HiddenWarningFact eFact, Window* pParent );
+    virtual sal_Bool			HasSecurityOptOpenReadOnly() const;
+    sal_Bool					IsSecurityOptOpenReadOnly() const;
+    void						SetSecurityOptOpenReadOnly( sal_Bool bOpenReadOnly = sal_True );
 
     virtual Size                GetFirstPageSize();
-    virtual sal_Bool            DoClose();
+    virtual sal_Bool			DoClose();
     virtual void                PrepareReload();
     virtual ::boost::shared_ptr<GDIMetaFile> GetPreviewMetaFile( sal_Bool bFullContent = sal_False ) const;
     virtual void                CancelTransfers();
 
-    sal_Bool                    GenerateAndStoreThumbnail(
+    sal_Bool					GenerateAndStoreThumbnail(
                                     sal_Bool bEncrypted,
                                     sal_Bool bSigned,
                                     sal_Bool bIsTemplate,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor );
 
-    sal_Bool                    WriteThumbnail(
+    sal_Bool					WriteThumbnail(
                                     sal_Bool bEncrypted,
                                     sal_Bool bSigned,
                                     sal_Bool bIsTemplate,
@@ -448,53 +490,55 @@ public:
     void                        FinishedLoading( sal_uInt16 nWhich = SFX_LOADED_ALL );
     void                        TemplateDisconnectionAfterLoad();
     sal_Bool                    IsLoading() const;
-    sal_Bool                    IsLoadingFinished() const;
+    sal_Bool					IsLoadingFinished() const;
     void                        SetAutoLoad( const INetURLObject&, sal_uInt32 nTime, sal_Bool bReload = sal_True );
-    void                        LockAutoLoad( sal_Bool bLock );
-    sal_Bool                    IsAutoLoadLocked() const;
+    void						LockAutoLoad( sal_Bool bLock );
+    sal_Bool					IsAutoLoadLocked() const;
     void                        NotifyReloadAvailable();
-    sal_Bool                    IsSecure();
+    sal_Bool					IsSecure();
 
     // Misc
-    sal_Bool                    IsPreview() const;
-    SfxObjectCreateMode         GetCreateMode() const { return eCreateMode; }
-    virtual void                MemoryError();
-    SfxProgress*                GetProgress() const;
-    void                        SetWaitCursor( sal_Bool bSet ) const;
+    sal_Bool					IsPreview() const;
+    SfxObjectCreateMode			GetCreateMode() const { return eCreateMode; }
+    virtual void				MemoryError();
+    SfxProgress*				GetProgress() const;
+    void                        SetWaitCursor( BOOL bSet ) const;
+
+//(mba)    virtual SotObjectRef        CreateAggObj( const SotFactory* pFact );
 
     // Naming Interface
     void                        SetTitle( const String& rTitle );
-    String                      GetTitle( sal_uInt16 nMaxLen = 0 ) const;
-    void                        InvalidateName();   // Zuruecksetzen auf unbenannt
+    String						GetTitle( sal_uInt16 nMaxLen = 0 ) const;
+    void						InvalidateName();	// Zuruecksetzen auf unbenannt
 
     // DDE-Interface
-    virtual long                DdeExecute( const String& rCmd );
-    virtual long                DdeGetData( const String& rItem,
+    virtual long				DdeExecute( const String& rCmd );
+    virtual long				DdeGetData( const String& rItem,
                                             const String& rMimeType,
                                         ::com::sun::star::uno::Any & rValue );
-    virtual long                DdeSetData( const String& rItem,
+    virtual long				DdeSetData( const String& rItem,
                                             const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
-    virtual ::sfx2::SvLinkSource*       DdeCreateLinkSource( const String& rItem );
+    virtual ::sfx2::SvLinkSource* 		DdeCreateLinkSource( const String& rItem );
     virtual void                ReconnectDdeLink(SfxObjectShell& rServer);
 
     static void                 ReconnectDdeLinks(SfxObjectShell& rServer);
 
     // Contents
-    virtual SfxStyleSheetBasePool*  GetStyleSheetPool();
-    void                    SetStyleSheetPool( SfxStyleSheetBasePool *pBasePool ) {
+    virtual SfxStyleSheetBasePool*	GetStyleSheetPool();
+    void					SetStyleSheetPool( SfxStyleSheetBasePool *pBasePool ) {
                                         pStyleSheetPool = pBasePool; }
 
     //determine the position of the "Automatic" filter in the stylist
     void                        SetAutoStyleFilterIndex(sal_uInt16 nSet);
     sal_uInt16                  GetAutoStyleFilterIndex();
     virtual sal_Bool            HasBasic() const;
-    BasicManager*               GetBasicManager() const;
+    BasicManager*				GetBasicManager() const;
     com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >
                                 GetBasicContainer();
     com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >
                                 GetDialogContainer();
-    StarBASIC*                  GetBasic() const;
+    StarBASIC*					GetBasic() const;
 
     // Interface Dok-Inhalte, Organizer
 #define INDEX_IGNORE USHRT_MAX
@@ -508,26 +552,38 @@ public:
     virtual void                SetOrganizerSearchMask(
                                     SfxStyleSheetBasePool* ) const;
 
-    virtual sal_uInt16          GetContentCount( sal_uInt16 nIdx1 = INDEX_IGNORE );
 
-    virtual sal_Bool            CanHaveChilds(
+    virtual sal_uInt16 			GetContentCount(
+                                        sal_uInt16 nIdx1 = INDEX_IGNORE,
+                                        sal_uInt16 nIdx2 = INDEX_IGNORE );
+    virtual sal_Bool   			CanHaveChilds(
                                         sal_uInt16 nIdx1,
-                                        sal_uInt16 nIdx2 = INDEX_IGNORE
-                                );
-
-    virtual void                GetContent( String &,
+                                            sal_uInt16 nIdx2 = INDEX_IGNORE );
+    virtual void   				GetContent( String &,
                                         Bitmap &rClosedBitmap,
                                         Bitmap &rOpenedBitmap,
                                         sal_Bool   &bCanDelete,
                                         sal_uInt16 nPos,
-                                        sal_uInt16 nIdx1
-                                );
+                                        sal_uInt16 nIdx1,
+                                        sal_uInt16 nIdx2 = INDEX_IGNORE );
 
-    virtual void                TriggerHelpPI( sal_uInt16 nIdx1, sal_uInt16 nIdx2 );
+    virtual void   				GetContent( String &,
+                                        Bitmap &rClosedBitmap,
+                                        Bitmap &rOpenedBitmap,
+                                        BmpColorMode eColorMode,
+                                        sal_Bool   &bCanDelete,
+                                        sal_uInt16 nPos,
+                                        sal_uInt16 nIdx1,
+                                        sal_uInt16 nIdx2 = INDEX_IGNORE );
 
-    virtual Bitmap              GetStyleFamilyBitmap(SfxStyleFamily eFamily);
+    virtual void                TriggerHelpPI(
+                                    sal_uInt16 nIdx1, sal_uInt16 nIdx2, sal_uInt16 nIdx3);
 
-    virtual sal_Bool            Insert( SfxObjectShell &rSource,
+    virtual Bitmap 				GetStyleFamilyBitmap(SfxStyleFamily eFamily );
+
+    virtual Bitmap 				GetStyleFamilyBitmap(SfxStyleFamily eFamily, BmpColorMode eColorMode );
+
+    virtual sal_Bool			Insert( SfxObjectShell &rSource,
                                         sal_uInt16 nSourceIdx1,
                                         sal_uInt16 nSourceIdx2,
                                         sal_uInt16 nSourceIdx3,
@@ -536,58 +592,62 @@ public:
                                         sal_uInt16 &nIdx3,
                                         sal_uInt16 &rIdxDeleted);
 
-    virtual sal_Bool            Remove( sal_uInt16 nIdx1,
+    virtual sal_Bool 			Remove( sal_uInt16 nIdx1,
                                         sal_uInt16 nIdx2 = INDEX_IGNORE,
                                         sal_uInt16 nIdx3 = INDEX_IGNORE);
 
-    sal_Bool                    Print( Printer &rPrt,
+    sal_Bool 			        Print( Printer &rPrt,
                                        sal_uInt16 nIdx1,
                                        sal_uInt16 nIdx2 = INDEX_IGNORE,
                                        sal_uInt16 nIdx3 = INDEX_IGNORE,
                                        const String *pObjectName = 0 );
 
-    virtual void                LoadStyles( SfxObjectShell &rSource );
+    virtual void				LoadStyles( SfxObjectShell &rSource );
     void                        ReadNote( INote * );
     void                        UpdateNote( INote * );
 
                                 // F"ur Docs, die zum Formatieren die Viewgr"o\se
                                 // ben"otigen
-    virtual SfxObjectShell*     GetObjectShell();
+    virtual SfxObjectShell* 	GetObjectShell();
+    //void                        SetBaseURL( const String& rURL );
+    //const String&               GetBaseURL() const;
+    //const String&               GetBaseURLForSaving() const;
+    //void                        SetEmptyBaseURL();
 
-    virtual SfxFrame*           GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium );
+    virtual SfxFrame*      		GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                                 GetModel() const;
     // Nur uebergangsweise fuer die Applikationen !!!
-    void                        SetBaseModel( SfxBaseModel* pModel );
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetBaseModel() const;
+    void						SetBaseModel( SfxBaseModel* pModel );
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >	GetBaseModel() const;
     // Nur uebergangsweise fuer die Applikationen !!!
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > GetEventNames();
+    virtual SEQUENCE< OUSTRING >	GetEventNames();
 
     Window*                     GetDialogParent( SfxMedium* pMedium=0 );
-    String                      UpdateTitle( SfxMedium* pMed=NULL, sal_uInt16 nDocViewNo=0 );
-    static SfxObjectShell*      CreateObject( const String& rServiceName, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
-    static SfxObjectShell*      CreateObjectByFactoryName( const String& rURL, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
+    String                      UpdateTitle( SfxMedium* pMed=NULL, USHORT nDocViewNo=0 );
+    static SfxObjectShell*		CreateObject( const String& rServiceName, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
+    static SfxObjectShell*		CreateObjectByFactoryName( const String& rURL, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
     static SfxObjectShell*      CreateAndLoadObject( const SfxItemSet& rSet, SfxFrame* pFrame=0 );
     static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                                 CreateAndLoadComponent( const SfxItemSet& rSet, SfxFrame* pFrame = NULL );
     static SfxObjectShell*      GetShellFromComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xComp );
-    static String               GetServiceNameFromFactory( const String& rFact );
-    sal_Bool                        IsInPlaceActive();
-    sal_Bool                        IsUIActive();
-    virtual void                InPlaceActivate( sal_Bool );
-    virtual void                UIActivate( sal_Bool );
+    static String				GetServiceNameFromFactory( const String& rFact );
+    BOOL						IsInPlaceActive();
+    BOOL						IsUIActive();
+    virtual void                InPlaceActivate( BOOL );
+    virtual void                UIActivate( BOOL );
 
     static sal_Bool             CopyStoragesOfUnknownMediaType(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xSource,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xTarget );
 
     // ==== The functions from SvPersist
-    void            EnableSetModified( sal_Bool bEnable = sal_True );
-    sal_Bool        IsEnableSetModified() const;
-    virtual void    SetModified( sal_Bool bModified = sal_True );
-    sal_Bool        IsModified();
+    void			EnableSetModified( sal_Bool bEnable = sal_True );
+    sal_Bool		IsEnableSetModified() const;
+    virtual void	SetModified( sal_Bool bModified = sal_True );
+    sal_Bool		IsModified();
 
     void            SetupStorage(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
@@ -596,6 +656,7 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetStorage();
 
+//REMOVE		void SetFileName( const ::rtl::OUString& );
     SvGlobalName    GetClassName() const;
 
     // comphelper::IEmbeddedHelper
@@ -616,25 +677,25 @@ public:
     void    ClearEmbeddedObjects();
 
     // ==== The functions from SvEmbeddedObject
-    virtual Printer *       GetDocumentPrinter();
+    virtual	Printer *		GetDocumentPrinter();
     virtual OutputDevice*    GetDocumentRefDev();
-    virtual void            OnDocumentPrinterChanged( Printer * pNewPrinter );
-    virtual Rectangle GetVisArea( sal_uInt16 nAspect ) const;
+    virtual	void			OnDocumentPrinterChanged( Printer * pNewPrinter );
+    virtual Rectangle GetVisArea( USHORT nAspect ) const;
     virtual void    SetVisArea( const Rectangle & rVisArea );
     const Rectangle & GetVisArea() const;
     void            SetVisAreaSize( const Size & rVisSize );
-    virtual sal_uIntPtr GetMiscStatus() const;
+    virtual ULONG	GetMiscStatus() const;
 
     MapUnit         GetMapUnit() const;
     void            SetMapUnit( MapUnit nMUnit );
 
-    void            FillTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc ) const;
+    void			FillTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc ) const;
     void            DoDraw( OutputDevice *, const Point & rObjPos,
                             const Size & rSize,
                             const JobSetup & rSetup,
-                            sal_uInt16 nAspect = ASPECT_CONTENT );
+                            USHORT nAspect = ASPECT_CONTENT );
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,
-                          sal_uInt16 nAspect = ASPECT_CONTENT ) = 0;
+                          USHORT nAspect = ASPECT_CONTENT ) = 0;
 
 
     virtual void    FillClass( SvGlobalName * pClassName,
@@ -656,7 +717,7 @@ public:
 
     // =================================
 
-    SAL_DLLPRIVATE ::boost::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const;
+    SAL_DLLPRIVATE ::boost::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHighContrast ) const;
 
     SAL_DLLPRIVATE sal_Bool IsOwnStorageFormat_Impl(const SfxMedium &) const;
 
@@ -698,7 +759,7 @@ public:
                                             const Fraction & rScaleX,
                                             const Fraction & rScaleY,
                                             const JobSetup & rSetup,
-                                            sal_uInt16 nAspect );
+                                            USHORT nAspect );
 
     // Shell Interface
     SAL_DLLPRIVATE void ExecFile_Impl(SfxRequest &);
@@ -737,17 +798,19 @@ public:
     SAL_DLLPRIVATE SfxObjectShell* GetParentShellByModel_Impl();
 
     // configuration items
+    SAL_DLLPRIVATE SfxEventConfigItem_Impl* GetEventConfig_Impl( sal_Bool bForce=sal_False );
     SAL_DLLPRIVATE SfxToolBoxConfig* GetToolBoxConfig_Impl();
-    SAL_DLLPRIVATE sal_uInt16 ImplGetSignatureState( sal_Bool bScriptingContent = sal_False );
+    SAL_DLLPRIVATE sal_uInt16 ImplGetSignatureState( sal_Bool bScriptingContent = FALSE );
 
     SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >
-        ImplAnalyzeSignature(
-            sal_Bool bScriptingContent,
+        ImplAnalyzeSignature( 
+            sal_Bool bScriptingContent, 
             const ::com::sun::star::uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >& xSigner
                 = ::com::sun::star::uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >() );
 
-    SAL_DLLPRIVATE void ImplSign( sal_Bool bScriptingContent = sal_False );
+    SAL_DLLPRIVATE void ImplSign( sal_Bool bScriptingContent = FALSE );
     SAL_DLLPRIVATE sal_Bool QuerySaveSizeExceededModules_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
+//#endif
 };
 
 #define SFX_GLOBAL_CLASSID \
@@ -773,6 +836,7 @@ public:
 
 
 //--------------------------------------------------------------------
+
 #ifndef SFX_DECL_OBJECTSHELL_DEFINED
 #define SFX_DECL_OBJECTSHELL_DEFINED
 SV_DECL_REF(SfxObjectShell)
@@ -781,6 +845,7 @@ SV_DECL_LOCK(SfxObjectShell)
 SV_IMPL_LOCK(SfxObjectShell)
 SV_IMPL_REF(SfxObjectShell)
 
+SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& rName, BOOL bWriting );
 //--------------------------------------------------------------------
 class AutoReloadTimer_Impl : public Timer
 {
@@ -798,7 +863,7 @@ public:
 
 class SFX2_DLLPUBLIC SfxObjectShellItem: public SfxPoolItem
 {
-    SfxObjectShell*         pObjSh;
+    SfxObjectShell* 		pObjSh;
 
 public:
                             TYPEINFO();
@@ -816,12 +881,12 @@ public:
                                 pObjSh( pObjShell )
                             {}
 
-    virtual int             operator==( const SfxPoolItem& ) const;
-    virtual String          GetValueText() const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
-    SfxObjectShell*         GetObjectShell() const
+    virtual int 			operator==( const SfxPoolItem& ) const;
+    virtual String			GetValueText() const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    SfxObjectShell* 		GetObjectShell() const
                             { return pObjSh; }
 
 };

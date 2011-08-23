@@ -38,6 +38,13 @@
 '*
 '\*******************************************************************
 
+' Tools->Autocorrect...
+' Replace; Exceptions; Options; Custom Quotes
+' these are Language
+' dependant in the
+' listbox above!!
+' box only enabled, if the both tabpages are selected ...
+
 testcase tToolsAutocorrectReplace
 
     dim i as integer
@@ -69,9 +76,7 @@ testcase tToolsAutocorrectReplace
     TabErsetzung.OK
 
     hCloseDocument
-endcase 'tToolsAutocorrectReplace
-
-'-------------------------------------------------------------------------------
+endcase
 
 testcase tToolsAutocorrectExceptions
     dim i as integer
@@ -114,10 +119,9 @@ testcase tToolsAutocorrectExceptions
     TabAusnahmen.OK
 
     hCloseDocument
-endcase 'tToolsAutocorrectExceptions
+endcase
 
 '-------------------------------------------------------------------------------
-
 testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
 
     ' bSinple = true: use simple quotes ;; else Double Quotes
@@ -147,6 +151,8 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
         warnlog "The language-file was not found or accessible! The test ends."
         goto endsub
     endif
+
+    'HDE has same problems in w_106a.inc ;-) !!! migrate ?!?! ///'
     Call hNewDocument
 
     hFileOpen sFileName
@@ -375,7 +381,7 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     sleep 1
 
     hCloseDocument
-endcase 'tToolsAutocorrectCustomQuotes
+endcase
 
 '-------------------------------------------------------------------------------
 testcase tToolsAutocorrectOption
@@ -449,6 +455,6 @@ testcase tToolsAutocorrectOption
 
     hCloseDocument
     sleep 1
-endcase 'tToolsAutocorrectOption
+endcase
 
 '-------------------------------------------------------------------------------

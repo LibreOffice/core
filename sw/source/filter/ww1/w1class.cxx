@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,13 +58,13 @@ Ww1Fib::Ww1Fib( SvStream& _rStream )
 
 ///////////////////////////////////////////////////////////// PlainText
 
-Ww1PlainText::Ww1PlainText(Ww1Fib& rWwFib, sal_uLong nFilePos, sal_uLong nCountBytes)
+Ww1PlainText::Ww1PlainText(Ww1Fib& rWwFib, ULONG nFilePos, ULONG nCountBytes)
     : rFib(rWwFib), ulFilePos(nFilePos), ulCountBytes(nCountBytes),
     ulSeek(0), bOK(true)
 {
 }
 
-sal_Unicode Ww1PlainText::operator [] ( sal_uLong ulOffset )
+sal_Unicode Ww1PlainText::operator [] ( ULONG ulOffset )
 {
     DBG_ASSERT( ulOffset<Count(), "Ww1PlainText" );
     sal_Unicode cRet;
@@ -79,7 +79,7 @@ sal_Unicode Ww1PlainText::operator [] ( sal_uLong ulOffset )
     return cRet;
 }
 
-String Ww1PlainText::GetText( sal_uLong ulOffset, sal_uLong nLen ) const
+String Ww1PlainText::GetText( ULONG ulOffset, ULONG nLen ) const
 {
     String sRet;
     ByteString aStr;
@@ -101,7 +101,7 @@ Ww1Style::~Ww1Style()
     delete pPapx;
 }
 
-void Ww1Style::SetDefaults(sal_uInt8 stc)
+void Ww1Style::SetDefaults(BYTE stc)
 {
     if( 222 == stc )
     {
@@ -111,14 +111,14 @@ void Ww1Style::SetDefaults(sal_uInt8 stc)
     }
 }
 
-sal_uInt16 Ww1Style::ReadName( sal_uInt8*&p, sal_uInt16& rnCountBytes, sal_uInt16 stc )
+USHORT Ww1Style::ReadName( BYTE*&p, USHORT& rnCountBytes, USHORT stc )
 {
-    sal_uInt8 nCountBytes = SVBT8ToByte(p);
+    BYTE nCountBytes = SVBT8ToByte(p);
     p++;
     rnCountBytes--;
     if( !nCountBytes ) // default
     {
-        static const sal_Char* const names[] =
+        static const sal_Char* __READONLY_DATA names[] =
         {
             "W1 Null",  //222
             "W1 Annotation reference",  //223
@@ -176,9 +176,9 @@ sal_uInt16 Ww1Style::ReadName( sal_uInt8*&p, sal_uInt16& rnCountBytes, sal_uInt1
     return 0;
 }
 
-sal_uInt16 Ww1Style::ReadChpx( sal_uInt8*&p, sal_uInt16& rnCountBytes )
+USHORT Ww1Style::ReadChpx( BYTE*&p, USHORT& rnCountBytes )
 {
-    sal_uInt16 nCountBytes = SVBT8ToByte(p);
+    USHORT nCountBytes = SVBT8ToByte(p);
     p++;
     rnCountBytes--;
     if (nCountBytes != 255 // unused
@@ -194,9 +194,9 @@ sal_uInt16 Ww1Style::ReadChpx( sal_uInt8*&p, sal_uInt16& rnCountBytes )
     return 0;
 }
 
-sal_uInt16 Ww1Style::ReadPapx(sal_uInt8*&p, sal_uInt16& rnCountBytes)
+USHORT Ww1Style::ReadPapx(BYTE*&p, USHORT& rnCountBytes)
 {
-    sal_uInt16 nCountBytes = SVBT8ToByte(p);
+    USHORT nCountBytes = SVBT8ToByte(p);
     p++;
     rnCountBytes--;
     if (nCountBytes != 255)
@@ -211,7 +211,7 @@ sal_uInt16 Ww1Style::ReadPapx(sal_uInt8*&p, sal_uInt16& rnCountBytes)
     return 0;
 }
 
-sal_uInt16 Ww1Style::ReadEstcp(sal_uInt8*&p, sal_uInt16& rnCountBytes)
+USHORT Ww1Style::ReadEstcp(BYTE*&p, USHORT& rnCountBytes)
 {
     stcNext = SVBT8ToByte(p);
     p++;
@@ -227,22 +227,22 @@ sal_uInt16 Ww1Style::ReadEstcp(sal_uInt8*&p, sal_uInt16& rnCountBytes)
 Ww1StyleSheet::Ww1StyleSheet(Ww1Fib& _rFib)
     : cstcStd(0),
     rFib(_rFib),
-    bOK(sal_False)
+    bOK(FALSE)
 {
-    sal_uInt16 cbStshf = rFib.GetFIB().cbStshfGet();
+    USHORT cbStshf = rFib.GetFIB().cbStshfGet();
     DBG_ASSERT(cbStshf>=17, "Ww1StyleSheet");
-    for (sal_uInt16 stc=0;stc<Count();stc++)
+    for (USHORT stc=0;stc<Count();stc++)
     {
         aStyles[stc].SetParent(this);
-        aStyles[stc].SetDefaults((sal_uInt8)stc);
+        aStyles[stc].SetDefaults((BYTE)stc);
     }
-    sal_uInt8* del = NULL;
+    BYTE* del = NULL;
     if (rFib.GetStream().Seek(rFib.GetFIB().fcStshfGet())
-      == (sal_uLong)rFib.GetFIB().fcStshfGet()
-     && (del = new sal_uInt8[cbStshf]) != NULL
-     && rFib.GetStream().Read(del, cbStshf) == (sal_uLong)cbStshf)
+      == (ULONG)rFib.GetFIB().fcStshfGet()
+     && (del = new BYTE[cbStshf]) != NULL
+     && rFib.GetStream().Read(del, cbStshf) == (ULONG)cbStshf)
         {
-        sal_uInt8* p = del;
+        BYTE* p = del;
             cstcStd = SVBT16ToShort(p);
             p += sizeof(SVBT16);
             cbStshf -= sizeof(SVBT16);
@@ -256,17 +256,17 @@ Ww1StyleSheet::Ww1StyleSheet(Ww1Fib& _rFib)
     delete [] del;
 }
 
-sal_uInt16 Ww1StyleSheet::ReadNames( sal_uInt8*& p, sal_uInt16& rnCountBytes )
+USHORT Ww1StyleSheet::ReadNames( BYTE*& p, USHORT& rnCountBytes )
 {
-    sal_uInt16 nCountBytes = SVBT16ToShort(p);
+    USHORT nCountBytes = SVBT16ToShort(p);
     p += sizeof(SVBT16);
     DBG_ASSERT(rnCountBytes>=nCountBytes, "Ww1StyleSheet");
     rnCountBytes = rnCountBytes - nCountBytes;
     nCountBytes = nCountBytes - sizeof(SVBT16);
-    sal_uInt16 stcp = 0;
+    USHORT stcp = 0;
     while (nCountBytes > 0)
     {
-        sal_uInt16 stc = (stcp - cstcStd) & 255;
+        USHORT stc = (stcp - cstcStd) & 255;
         aStyles[stc].ReadName(p, nCountBytes, stc);
         stcp++;
     }
@@ -274,17 +274,17 @@ sal_uInt16 Ww1StyleSheet::ReadNames( sal_uInt8*& p, sal_uInt16& rnCountBytes )
     return 0;
 }
 
-sal_uInt16 Ww1StyleSheet::ReadChpx(sal_uInt8*& p, sal_uInt16& rnCountBytes)
+USHORT Ww1StyleSheet::ReadChpx(BYTE*& p, USHORT& rnCountBytes)
 {
-    sal_uInt16 nCountBytes = SVBT16ToShort(p);
+    USHORT nCountBytes = SVBT16ToShort(p);
     p += sizeof(SVBT16);
     DBG_ASSERT(rnCountBytes>=nCountBytes, "Ww1StyleSheet");
     rnCountBytes = rnCountBytes - nCountBytes;
     nCountBytes = nCountBytes - sizeof(SVBT16);
-    sal_uInt16 stcp = 0;
+    USHORT stcp = 0;
     while (nCountBytes > 0)
     {
-        sal_uInt16 stc = (stcp - cstcStd) & 255;
+        USHORT stc = (stcp - cstcStd) & 255;
         aStyles[stc].ReadChpx(p, nCountBytes);
         stcp++;
     }
@@ -292,17 +292,17 @@ sal_uInt16 Ww1StyleSheet::ReadChpx(sal_uInt8*& p, sal_uInt16& rnCountBytes)
     return 0;
 }
 
-sal_uInt16 Ww1StyleSheet::ReadPapx(sal_uInt8*& p, sal_uInt16& rnCountBytes)
+USHORT Ww1StyleSheet::ReadPapx(BYTE*& p, USHORT& rnCountBytes)
 {
-    sal_uInt16 nCountBytes = SVBT16ToShort(p);
+    USHORT nCountBytes = SVBT16ToShort(p);
     p += sizeof(SVBT16);
     DBG_ASSERT(rnCountBytes>=nCountBytes, "Ww1StyleSheet");
     rnCountBytes = rnCountBytes - nCountBytes;
     nCountBytes = nCountBytes - sizeof(SVBT16);
-    sal_uInt16 stcp = 0;
+    USHORT stcp = 0;
     while (nCountBytes > 0)
     {
-        sal_uInt16 stc = (stcp - cstcStd) & 255;
+        USHORT stc = (stcp - cstcStd) & 255;
         aStyles[stc].ReadPapx(p, nCountBytes);
         stcp++;
     }
@@ -310,15 +310,15 @@ sal_uInt16 Ww1StyleSheet::ReadPapx(sal_uInt8*& p, sal_uInt16& rnCountBytes)
     return 0;
 }
 
-sal_uInt16 Ww1StyleSheet::ReadEstcp(sal_uInt8*& p, sal_uInt16& rnCountBytes)
+USHORT Ww1StyleSheet::ReadEstcp(BYTE*& p, USHORT& rnCountBytes)
 {
-    sal_uInt16 iMac = SVBT16ToShort(p);
+    USHORT iMac = SVBT16ToShort(p);
     p += sizeof(SVBT16);
     DBG_ASSERT(rnCountBytes>=sizeof(SVBT16), "Ww1StyleSheet");
     rnCountBytes -= sizeof(SVBT16);
-    for (sal_uInt16 stcp=0;stcp<iMac;stcp++)
+    for (USHORT stcp=0;stcp<iMac;stcp++)
     {
-        sal_uInt16 stc = (stcp - cstcStd) & 255;
+        USHORT stc = (stcp - cstcStd) & 255;
         aStyles[stc].ReadEstcp(p, rnCountBytes);
     }
     DBG_ASSERT(rnCountBytes==0, "Ww1StyleSheet");
@@ -327,7 +327,7 @@ sal_uInt16 Ww1StyleSheet::ReadEstcp(sal_uInt8*& p, sal_uInt16& rnCountBytes)
 
 ///////////////////////////////////////////////////////////////// Fonts
 
-Ww1Fonts::Ww1Fonts(Ww1Fib& rInFib, sal_uLong nFieldFlgs)
+Ww1Fonts::Ww1Fonts(Ww1Fib& rInFib, ULONG nFieldFlgs)
     : pFontA(0), rFib(rInFib), nFieldFlags(nFieldFlgs), nMax(0), bOK(false)
 {
     if(rFib.GetFIB().cbSttbfffnGet() > 2 ) // ueberhaupt fonts?
@@ -335,7 +335,7 @@ Ww1Fonts::Ww1Fonts(Ww1Fib& rInFib, sal_uLong nFieldFlgs)
         SVBT16 nCountBytes;
         DBG_ASSERT(rFib.GetFIB().cbSttbfffnGet() > sizeof(nCountBytes), "Ww1Fonts");
         if (rFib.GetStream().Seek(rFib.GetFIB().fcSttbfffnGet())
-         == (sal_uLong)rFib.GetFIB().fcSttbfffnGet())
+         == (ULONG)rFib.GetFIB().fcSttbfffnGet())
             if (rFib.GetStream().Read(nCountBytes, sizeof(nCountBytes))
              == sizeof(nCountBytes)) // Laenge steht hier nochmal
             {
@@ -346,8 +346,8 @@ Ww1Fonts::Ww1Fonts(Ww1Fib& rInFib, sal_uLong nFieldFlgs)
                  - sizeof(nCountBytes)]; // Alloziere Font-Array
                 //~ Ww1: new-NULL
                 if (rFib.GetStream().Read(pA, rFib.GetFIB().cbSttbfffnGet()
-                 - sizeof(nCountBytes)) == (sal_uLong)rFib.GetFIB().cbSttbfffnGet()
-                 - sizeof(nCountBytes)) // lese alle Fonts
+                 - sizeof(nCountBytes)) == (ULONG)rFib.GetFIB().cbSttbfffnGet()
+                 - sizeof(nCountBytes))	// lese alle Fonts
                 {} //nothing
 
                 long nLeft = rFib.GetFIB().cbSttbfffnGet()
@@ -355,22 +355,22 @@ Ww1Fonts::Ww1Fonts(Ww1Fib& rInFib, sal_uLong nFieldFlgs)
                 W1_FFN* p = pA;
                 while (1)
                 {
-                    sal_uInt16 nNextSiz;
+                    USHORT nNextSiz;
                     nNextSiz = p->cbFfnM1Get() + 1;
                     if(nNextSiz > nLeft)
                         break;
                     nMax++;
                     nLeft -= nNextSiz;
-                    if(nLeft < 1)           // naechste Laenge muss gelesen werden koennen
+                    if(nLeft < 1)			// naechste Laenge muss gelesen werden koennen
                         break;
                     p = (W1_FFN *)(((char*)p) + nNextSiz);
                 }
                 if (nMax)
                 {
-                    pFontA = new W1_FFN*[nMax];         // alloziere Index-Array
+                    pFontA = new W1_FFN*[nMax];			// alloziere Index-Array
                     //~ Ww1: new-NULL
-                    pFontA[0] = pA;                     // fuelle Index-Array
-                    sal_uInt16 i;
+                    pFontA[0] = pA;						// fuelle Index-Array
+                    USHORT i;
                     for(i=1, p=pA; i<nMax; i++)
                     {
                         p = (W1_FFN*)(((char*)p) + p->cbFfnM1Get() + 1);
@@ -378,13 +378,13 @@ Ww1Fonts::Ww1Fonts(Ww1Fib& rInFib, sal_uLong nFieldFlgs)
                     }
                 }
                 else
-                    pFontA = 0; // Keine Eintraege -> kein Array
+                    pFontA = 0;	// Keine Eintraege -> kein Array
             }
     }
-    bOK = sal_True;
+    bOK = TRUE;
 }
 
-W1_FFN* Ww1Fonts::GetFFN(sal_uInt16 nNum)
+W1_FFN* Ww1Fonts::GetFFN(USHORT nNum)
 {
     W1_FFN* pRet = NULL;
     if (pFontA)
@@ -404,22 +404,22 @@ Ww1Dop::Ww1Dop(Ww1Fib& _rFib)
     else
         nRead = rFib.GetFIB().cbDopGet();
     bOK = rFib.GetStream().Seek(rFib.GetFIB().fcDopGet()) ==
-                (sal_uLong)rFib.GetFIB().fcDopGet() &&
-            rFib.GetStream().Read(&aDop, nRead) == (sal_uLong)nRead;
+                (ULONG)rFib.GetFIB().fcDopGet() &&
+            rFib.GetStream().Read(&aDop, nRead) == (ULONG)nRead;
 }
 
 /////////////////////////////////////////////////////////////// Picture
-Ww1Picture::Ww1Picture(SvStream& rStream, sal_uLong ulFilePos)
+Ww1Picture::Ww1Picture(SvStream& rStream, ULONG ulFilePos)
     : bOK(false), pPic(0)
 {
     ulFilePos &= 0xffffff; //~ ww1: warum auch immer - im highbyte steht eine 5?!?!
     SVBT32 lcb;
-    if (rStream.Seek(ulFilePos) == (sal_uLong)ulFilePos)
-        if (rStream.Read(&lcb, sizeof(lcb)) == (sal_uLong)sizeof(lcb))
+    if (rStream.Seek(ulFilePos) == (ULONG)ulFilePos)
+        if (rStream.Read(&lcb, sizeof(lcb)) == (ULONG)sizeof(lcb))
             if (sizeof(int)>=4 || SVBT32ToUInt32(lcb) < 0x8000) //~ mdt: 64K & 16bit
-                if ((pPic = (W1_PIC*)(new sal_uInt8[SVBT32ToUInt32(lcb)])) != NULL)
-                    if (rStream.Seek(ulFilePos) == (sal_uLong)ulFilePos)
-                        if (rStream.Read(pPic, SVBT32ToUInt32(lcb)) == (sal_uLong)SVBT32ToUInt32(lcb))
+                if ((pPic = (W1_PIC*)(new BYTE[SVBT32ToUInt32(lcb)])) != NULL)
+                    if (rStream.Seek(ulFilePos) == (ULONG)ulFilePos)
+                        if (rStream.Read(pPic, SVBT32ToUInt32(lcb)) == (ULONG)SVBT32ToUInt32(lcb))
                         {
                             DBG_ASSERT(pPic->cbHeaderGet()==sizeof(*pPic)-sizeof(pPic->rgb), "Ww1Picture");
                             bOK = true;
@@ -427,43 +427,43 @@ Ww1Picture::Ww1Picture(SvStream& rStream, sal_uLong ulFilePos)
 }
 
 ////////////////////////////////////////////////////////////////// Sprm
-Ww1Sprm::Ww1Sprm(sal_uInt8* x, sal_uInt16 _nCountBytes)
+Ww1Sprm::Ww1Sprm(BYTE* x, USHORT _nCountBytes)
     : p(NULL),
     nCountBytes(_nCountBytes),
-    bOK(sal_False),
+    bOK(FALSE),
     pArr(NULL),
     count(0)
 {
     if (nCountBytes == 0)
-        bOK = sal_True;
+        bOK = TRUE;
     else
-        if ((p = new sal_uInt8[nCountBytes]) != NULL)
+        if ((p = new BYTE[nCountBytes]) != NULL)
         {
             memcpy(p, x, nCountBytes);
             if (ReCalc())
-                bOK = sal_True;
+                bOK = TRUE;
         }
 }
 
-Ww1Sprm::Ww1Sprm(SvStream& rStream, sal_uLong ulFilePos)
+Ww1Sprm::Ww1Sprm(SvStream& rStream, ULONG ulFilePos)
     : p(NULL),
     nCountBytes(0),
-    bOK(sal_False),
+    bOK(FALSE),
     pArr(NULL),
     count(0)
 {
     SVBT8 x;
     ByteToSVBT8(0, x);
-    if (rStream.Seek(ulFilePos) == (sal_uLong)ulFilePos)
-        if (rStream.Read(&x, sizeof(x)) == (sal_uLong)sizeof(x))
+    if (rStream.Seek(ulFilePos) == (ULONG)ulFilePos)
+        if (rStream.Read(&x, sizeof(x)) == (ULONG)sizeof(x))
             if ((nCountBytes = SVBT8ToByte(x)) == 255
              || !nCountBytes
-             || (p = new sal_uInt8[nCountBytes]) != NULL)
+             || (p = new BYTE[nCountBytes]) != NULL)
                 if (nCountBytes == 255
                  || !nCountBytes
-                 || rStream.Read(p, nCountBytes) == (sal_uLong)nCountBytes)
+                 || rStream.Read(p, nCountBytes) == (ULONG)nCountBytes)
                     if (ReCalc())
-                        bOK = sal_True;
+                        bOK = TRUE;
 }
 
 Ww1Sprm::~Ww1Sprm()
@@ -472,22 +472,22 @@ Ww1Sprm::~Ww1Sprm()
     delete p;
 }
 
-sal_uInt16 Ww1SingleSprm::Size(sal_uInt8* /*pSprm*/)
+USHORT Ww1SingleSprm::Size(BYTE* /*pSprm*/)
 {
     return nCountBytes;
 }
 
-sal_uInt16 Ww1SingleSprmTab::Size(sal_uInt8* pSprm) // Doc 24/25, Fastsave-Sprm
+USHORT Ww1SingleSprmTab::Size(BYTE* pSprm) // Doc 24/25, Fastsave-Sprm
 {
     DBG_ASSERT(nCountBytes==0, "Ww1SingleSprmTab");
-    sal_uInt16 nRet = sizeof(SVBT8);
-    sal_uInt16 nSize = SVBT8ToByte(pSprm);
+    USHORT nRet = sizeof(SVBT8);
+    USHORT nSize = SVBT8ToByte(pSprm);
     if (nSize != 255)
         nRet = nRet + nSize;
     else
     {
-        sal_uInt16 nDel = SVBT8ToByte(pSprm+1) * 4;
-        sal_uInt16 nIns = SVBT8ToByte(pSprm + 3 + nDel) * 3;
+        USHORT nDel = SVBT8ToByte(pSprm+1) * 4;
+        USHORT nIns = SVBT8ToByte(pSprm + 3 + nDel) * 3;
         nRet += nDel + nIns;
     }
     DBG_ASSERT(nRet <= 354, "Ww1SingleSprmTab");
@@ -496,58 +496,62 @@ sal_uInt16 Ww1SingleSprmTab::Size(sal_uInt8* pSprm) // Doc 24/25, Fastsave-Sprm
     return nRet;
 }
 
-sal_uInt16 Ww1SingleSprmByteSized::Size(sal_uInt8* pSprm)
+USHORT Ww1SingleSprmByteSized::Size(BYTE* pSprm)
 {
-    sal_uInt16 nRet;
+    USHORT nRet;
     nRet = SVBT8ToByte(pSprm);
-    nRet += sizeof(SVBT8);  // var. l. byte-size
+    nRet += sizeof(SVBT8);	// var. l. byte-size
+//	pSprm += sizeof(SVBT8); // var. l. byte-size
     nRet = nRet + nCountBytes;
     return nRet;
 }
 
-sal_uInt16 Ww1SingleSprmWordSized::Size(sal_uInt8* pSprm)
+USHORT Ww1SingleSprmWordSized::Size(BYTE* pSprm)
 {
-    sal_uInt16 nRet;
+    USHORT nRet;
     nRet = SVBT16ToShort(pSprm);
     nRet += sizeof(SVBT16);  // var. l. word-size
+//	pSprm += sizeof(SVBT16); // var. l. word-size
     nRet = nRet + nCountBytes;
     return nRet;
 }
 
-static sal_uInt8 nLast = 0;
-static sal_uInt8 nCurrent = 0;
-sal_uInt16 Ww1Sprm::GetSize(sal_uInt8 nId, sal_uInt8* pSprm)
+static BYTE nLast = 0;
+static BYTE nCurrent = 0;
+USHORT Ww1Sprm::GetSize(BYTE nId, BYTE* pSprm)
 {
-    sal_uInt16 nL = 0;
+    //DBG_ASSERT( nId < sizeof(aTab) / sizeof(*aTab), "Ww1Sprm" );
+    USHORT nL = 0;
     nL = GetTab(nId).Size(pSprm);
     nLast = nCurrent;
     nCurrent = nId;
     return nL;
 }
 
-sal_Bool Ww1Sprm::Fill(sal_uInt16 index, sal_uInt8& nId, sal_uInt16& nL, sal_uInt8*& pSprm)
+BOOL Ww1Sprm::Fill(USHORT index, BYTE& nId, USHORT& nL, BYTE*& pSprm)
 {
+    //DBG_ASSERT( nId < sizeof(aTab) / sizeof(*aTab), "Ww1Sprm");
     DBG_ASSERT(index < Count(), "Ww1Sprm");
     pSprm = p + pArr[index];
     nId = SVBT8ToByte(pSprm);
     pSprm++;
     nL = GetTab(nId).Size(pSprm);
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool Ww1Sprm::ReCalc()
+BOOL Ww1Sprm::ReCalc()
 {
-    sal_Bool bRet = sal_True;
+    BOOL bRet = TRUE;
     delete pArr;
     pArr = NULL;
     count = 0;
     if (nCountBytes != 255) // not unused?
     {
-        sal_uInt16 cbsik = nCountBytes;
-        sal_uInt8* psik = p;
+        USHORT cbsik = nCountBytes;
+        BYTE* psik = p;
         while (cbsik > 0)
         {
-            sal_uInt16 iLen = GetSizeBrutto(psik);
+            USHORT iLen = GetSizeBrutto(psik);
             DBG_ASSERT(iLen<=cbsik, "Ww1Sprm");
             if (iLen > cbsik)
                 cbsik = 0; // ignore the rest: we are wrong...
@@ -559,16 +563,16 @@ sal_Bool Ww1Sprm::ReCalc()
             }
         }
         if (bRet
-         && (pArr = new sal_uInt16[count]) != NULL)
+         && (pArr = new USHORT[count]) != NULL)
         {
             cbsik = nCountBytes;
-            sal_uInt16 offset = 0;
-            sal_uInt16 current = 0;
+            USHORT offset = 0;
+            USHORT current = 0;
             psik = p;
             while (current<count)
             {
                 pArr[current++] = offset;
-                sal_uInt16 iLen = GetSizeBrutto(psik);
+                USHORT iLen = GetSizeBrutto(psik);
                 psik += iLen;
                 if (iLen > cbsik)
                     cbsik = 0;
@@ -598,7 +602,7 @@ void Ww1Sprm::InitTab()
     pSingleSprm = new Ww1SingleSprm( 0, DUMPNAME(pUnknown));
 
     aTab[  2] = new Ww1SingleSprmByte(DUMPNAME("sprmPStc")); //   2 pap.istd (style code)
-    aTab[  3] = new Ww1SingleSprmByteSized(0, DUMPNAME("sprmPIstdPermute")); //   3 pap.istd    permutation
+    aTab[  3] = new Ww1SingleSprmByteSized(0, DUMPNAME("sprmPIstdPermute")); //   3 pap.istd	permutation
     aTab[  4] = new Ww1SingleSprmByte(DUMPNAME("sprmPIncLevel")); //   4 pap.istddifference
     aTab[  5] = new Ww1SingleSprmPJc(DUMPNAME("sprmPJc")); //   5 pap.jc (justification)
     aTab[  6] = new Ww1SingleSprmBool(DUMPNAME("sprmPFSideBySide")); //   6 pap.fSideBySide
@@ -615,7 +619,7 @@ void Ww1Sprm::InitTab()
     aTab[ 17] = new Ww1SingleSprmPDxaLeft(DUMPNAME("sprmPDxaLeft")); //  17 pap.dxaLeft
     aTab[ 18] = new Ww1SingleSprmWord(DUMPNAME("sprmPNest")); //  18 pap.dxaNest
     aTab[ 19] = new Ww1SingleSprmPDxaLeft1(DUMPNAME("sprmPDxaLeft1")); //  19 pap.dxaLeft1
-    aTab[ 20] = new Ww1SingleSprmPDyaLine(DUMPNAME("sprmPDyaLine")); //  20 pap.lspd    an LSPD
+    aTab[ 20] = new Ww1SingleSprmPDyaLine(DUMPNAME("sprmPDyaLine")); //  20 pap.lspd	an LSPD
     aTab[ 21] = new Ww1SingleSprmPDyaBefore(DUMPNAME("sprmPDyaBefore")); //  21 pap.dyaBefore
     aTab[ 22] = new Ww1SingleSprmPDyaAfter(DUMPNAME("sprmPDyaAfter")); //  22 pap.dyaAfter
     aTab[ 23] = new Ww1SingleSprmTab(0, DUMPNAME(pUnknown)); // 23 pap.itbdMac, pap.rgdxaTab
@@ -710,33 +714,33 @@ void Ww1Sprm::InitTab()
 }
 
 ////////////////////////////////////////////////////////////// SprmPapx
-Ww1SprmPapx::Ww1SprmPapx(sal_uInt8* pByte, sal_uInt16 nSize) :
+Ww1SprmPapx::Ww1SprmPapx(BYTE* pByte, USHORT nSize) :
     Ww1Sprm(Sprm(pByte, nSize), SprmSize(pByte, nSize))
 {
     memset(&aPapx, 0, sizeof(aPapx));
     memcpy(&aPapx, pByte, nSize<sizeof(aPapx)?nSize:sizeof(aPapx));
 }
 
-sal_uInt16 Ww1SprmPapx::SprmSize(sal_uInt8*, sal_uInt16 nSize)
+USHORT Ww1SprmPapx::SprmSize(BYTE*, USHORT nSize)
 {
-    sal_uInt16 nRet = 0;
+    USHORT nRet = 0;
     if (nSize >= sizeof(W1_PAPX))
         nRet = nSize - ( sizeof(W1_PAPX) - 1 ); // im W1_PAPX ist das
                                                 // 1. SprmByte enthalten
     return nRet;
 }
 
-sal_uInt8* Ww1SprmPapx::Sprm(sal_uInt8* pByte, sal_uInt16 nSize)
+BYTE* Ww1SprmPapx::Sprm(BYTE* pByte, USHORT nSize)
 {
-    sal_uInt8* pRet = NULL;
+    BYTE* pRet = NULL;
     if (nSize >= sizeof(W1_PAPX))
         pRet = ((W1_PAPX*)(pByte))->grpprlGet();
     return pRet;
 }
 
 /////////////////////////////////////////////////////////////////// Plc
-Ww1Plc::Ww1Plc(Ww1Fib& rInFib, sal_uLong ulFilePos, sal_uInt16 nInCountBytes,
-    sal_uInt16 nInItemSize)
+Ww1Plc::Ww1Plc(Ww1Fib& rInFib, ULONG ulFilePos, USHORT nInCountBytes,
+    USHORT nInItemSize)
     : p(0), nCountBytes(nInCountBytes), iMac(0), nItemSize(nInItemSize),
     bOK(false), rFib(rInFib)
 {
@@ -744,17 +748,17 @@ Ww1Plc::Ww1Plc(Ww1Fib& rInFib, sal_uLong ulFilePos, sal_uInt16 nInCountBytes,
         bOK = true;
     else
     {
-        if (rFib.GetStream().Seek(ulFilePos) == (sal_uLong)ulFilePos)
+        if (rFib.GetStream().Seek(ulFilePos) == (ULONG)ulFilePos)
         {
-            if ((p = new sal_uInt8[nCountBytes]) != NULL)
+            if ((p = new BYTE[nCountBytes]) != NULL)
             {
-                if (rFib.GetStream().Read(p, nCountBytes) == (sal_uLong)nCountBytes)
+                if (rFib.GetStream().Read(p, nCountBytes) == (ULONG)nCountBytes)
                 {
                     bOK = true;
                     iMac = (nCountBytes -
                         sizeof(SVBT32)) / (sizeof(SVBT32) + nItemSize);
-                    DBG_ASSERT(iMac * ((sal_uInt16)sizeof(sal_uLong) + nItemSize) +
-                     (sal_uInt16)sizeof(SVBT32) == nCountBytes, "Ww1Plc");
+                    DBG_ASSERT(iMac * ((USHORT)sizeof(ULONG) + nItemSize) +
+                     (USHORT)sizeof(SVBT32) == nCountBytes, "Ww1Plc");
                 }
             }
         }
@@ -766,25 +770,25 @@ Ww1Plc::~Ww1Plc()
     delete p;
 }
 
-void Ww1Plc::Seek(sal_uLong ulSeek, sal_uInt16& nIndex)
+void Ww1Plc::Seek(ULONG ulSeek, USHORT& nIndex)
 {
     if (iMac)
         for (;nIndex <= iMac && Where(nIndex) < ulSeek;nIndex++)
             ;
 }
 
-sal_uLong Ww1Plc::Where(sal_uInt16 nIndex)
+ULONG Ww1Plc::Where(USHORT nIndex)
 {
-    sal_uLong ulRet = 0xffffffff;
+    ULONG ulRet = 0xffffffff;
     DBG_ASSERT(nIndex <= iMac, "index out of bounds");
     if (iMac && nIndex <= iMac)
         ulRet = SVBT32ToUInt32(p + sizeof(SVBT32) * nIndex);
     return ulRet;
 }
 
-sal_uInt8* Ww1Plc::GetData(sal_uInt16 nIndex)
+BYTE* Ww1Plc::GetData(USHORT nIndex)
 {
-    sal_uInt8* pRet = NULL;
+    BYTE* pRet = NULL;
     DBG_ASSERT(nIndex < iMac, "index out of bounds");
     if (nIndex < iMac)
         pRet = p + (iMac + 1) * sizeof(SVBT32) +
@@ -792,20 +796,34 @@ sal_uInt8* Ww1Plc::GetData(sal_uInt16 nIndex)
     return pRet;
 }
 
+/////////////////////////////////////////////////////////////////// Sep
+
+//////////////////////////////////////////////////////////////// PlcSep
+
+//////////////////////////////////////////////////////////////// PlcPap
+
+//////////////////////////////////////////////////////////////// PlcChp
+
+//////////////////////////////////////////////////////////////// PlcFnr
+
+///////////////////////////////////////////////////////////// PlcFnText
+
+///////////////////////////////////////////////////////////// PlcFields
+
 ///////////////////////////////////////////////////////////// PlcBookmarks
 // class Ww1StringList liest im Ctor eine Anzahl von P-Strings aus dem Stream
 // in den Speicher und patcht sie zu C-Strings um.
 // Die Anzahl wird in nMax zurueckgeliefert.
 // im Index 0 stehen alle Strings nacheinander, ab Index 1 werden
 // die einzelnen Strings referenziert.
-Ww1StringList::Ww1StringList( SvStream& rSt, sal_uLong nFc, sal_uInt16 nCb )
+Ww1StringList::Ww1StringList( SvStream& rSt, ULONG nFc, USHORT nCb )
     : pIdxA(0), nMax(0)
 {
-    if( nCb > 2 )            // ueberhaupt Eintraege ?
+    if( nCb > 2 )			 // ueberhaupt Eintraege ?
     {
         SVBT16 nCountBytes;
         DBG_ASSERT(nCb > sizeof(nCountBytes), "Ww1StringList");
-        if (rSt.Seek(nFc) == (sal_uLong)nFc)
+        if (rSt.Seek(nFc) == (ULONG)nFc)
             if (rSt.Read(nCountBytes, sizeof(nCountBytes))
                      == sizeof(nCountBytes)) // Laenge steht hier nochmal
             {
@@ -816,49 +834,49 @@ Ww1StringList::Ww1StringList( SvStream& rSt, sal_uLong nFc, sal_uInt16 nCb )
                                     // Alloziere PString-Array
                 //~ Ww1: new-NULL
                 if (rSt.Read(pA, nCb - sizeof(nCountBytes))
-                        == (sal_uLong)nCb - sizeof(nCountBytes))    // lese alle
+                        == (ULONG)nCb - sizeof(nCountBytes))	// lese alle
                 {}// do nothing
                                     // Zaehle, wieviele Fonts enthalten
                 long nLeft = nCb - sizeof(nCountBytes);
                 sal_Char* p = pA;
                 while (1)
                 {
-                    sal_uInt16 nNextSiz;
+                    USHORT nNextSiz;
                     nNextSiz = *p + 1;
                     if(nNextSiz > nLeft)
                         break;
                     nMax++;
                     nLeft -= nNextSiz;
-                    if(nLeft < 1)           // naechste Laenge muss gelesen werden koennen
+                    if(nLeft < 1)			// naechste Laenge muss gelesen werden koennen
                         break;
                     p = p + nNextSiz;
                 }
                 if (nMax)
                 {
-                    pIdxA = new sal_Char*[nMax+1];      // alloziere Index-Array
-                    pIdxA[0] = pA;                      // Index 0 : alles
+                    pIdxA = new sal_Char*[nMax+1];		// alloziere Index-Array
+                    pIdxA[0] = pA;						// Index 0 : alles
                                                         // ab Index 1 C-Strings
-                    pIdxA[1] = pA + 1;                  // fuelle Index-Array
-                    sal_uInt16 i = 2;
+                    pIdxA[1] = pA + 1;					// fuelle Index-Array
+                    USHORT i = 2;
                     p = pA;
-                    sal_uInt8 nL = *p;
+                    BYTE nL = *p;
                     while(1)
                     {
-                        p += nL + 1;                    // Neues Laengen-Byte
-                        nL = *p;                        // merke Laenge
-                        *p = '\0';                      // mach C-String draus
+                        p += nL + 1;					// Neues Laengen-Byte
+                        nL = *p;						// merke Laenge
+                        *p = '\0';						// mach C-String draus
                         if( i > nMax )
                             break;
-                        pIdxA[i] = p + 1;               // Ptr auf C-String
+                        pIdxA[i] = p + 1;				// Ptr auf C-String
                         i++;
                     }
                 }
                 else
-                    pIdxA = 0;  // Keine Eintraege -> kein Array
+                    pIdxA = 0;	// Keine Eintraege -> kein Array
             }
     }
 }
-const String Ww1StringList::GetStr( sal_uInt16 nNum ) const
+const String Ww1StringList::GetStr( USHORT nNum ) const
 {
     String sRet;
     if( nNum <= nMax )
@@ -870,10 +888,10 @@ Ww1Bookmarks::Ww1Bookmarks(Ww1Fib& rInFib)
     : aNames(rInFib), rFib(rInFib), nIsEnd(0)
 {
     pPos[0] = new Ww1PlcBookmarkPos(rFib, rFib.GetFIB().fcPlcfbkfGet(),
-                                    rFib.GetFIB().cbPlcfbkfGet(), sal_False);
+                                    rFib.GetFIB().cbPlcfbkfGet(), FALSE);
     nPlcIdx[0] = 0;
     pPos[1] = new Ww1PlcBookmarkPos(rFib, rFib.GetFIB().fcPlcfbklGet(),
-                                    rFib.GetFIB().cbPlcfbklGet(), sal_True);
+                                    rFib.GetFIB().cbPlcfbklGet(), TRUE);
     nPlcIdx[1] = 0;
     bOK = !aNames.GetError() && !pPos[0]->GetError() && !pPos[1]->GetError();
 }
@@ -895,8 +913,8 @@ void Ww1Bookmarks::operator ++( int )
     {
         nPlcIdx[nIsEnd]++;
 
-        sal_uLong l0 = pPos[0]->Where(nPlcIdx[0]);
-        sal_uLong l1 = pPos[1]->Where(nPlcIdx[1]);
+        ULONG l0 = pPos[0]->Where(nPlcIdx[0]);
+        ULONG l1 = pPos[1]->Where(nPlcIdx[1]);
         if( l0 < l1 )
             nIsEnd = 0;
         else if( l1 < l0 )
@@ -913,7 +931,7 @@ long Ww1Bookmarks::GetHandle() const
         if( nIsEnd )
             return nPlcIdx[1];
 
-        const sal_uInt8* p = pPos[0]->GetData( nPlcIdx[0] );
+        const BYTE* p = pPos[0]->GetData( nPlcIdx[0] );
         if( p )
             return SVBT16ToShort( p );
     }
@@ -924,10 +942,10 @@ long Ww1Bookmarks::Len() const
 {
     if( nIsEnd )
     {
-        DBG_ASSERT( sal_False, "Falscher Aufruf (1) von Ww1Bookmarks::Len()" );
+        DBG_ASSERT( FALSE, "Falscher Aufruf (1) von Ww1Bookmarks::Len()" );
         return 0;
     }
-    sal_uInt16 nEndIdx = SVBT16ToShort(pPos[0]->GetData(nPlcIdx[0]));
+    USHORT nEndIdx = SVBT16ToShort(pPos[0]->GetData(nPlcIdx[0]));
     return pPos[1]->Where(nEndIdx) - pPos[0]->Where(nPlcIdx[0]);
 }
 
@@ -939,27 +957,27 @@ const String Ww1Bookmarks::GetName() const
 }
 
 /////////////////////////////////////////////////////////////////// Fkp
-Ww1Fkp::Ww1Fkp(SvStream& rStream, sal_uLong ulFilePos, sal_uInt16 _nItemSize) :
+Ww1Fkp::Ww1Fkp(SvStream& rStream, ULONG ulFilePos, USHORT _nItemSize) :
     nItemSize(_nItemSize),
-    bOK(sal_False)
+    bOK(FALSE)
 {
-    if (rStream.Seek(ulFilePos) == (sal_uLong)ulFilePos)
+    if (rStream.Seek(ulFilePos) == (ULONG)ulFilePos)
         if (rStream.Read(aFkp, sizeof(aFkp)) == sizeof(aFkp))
-            bOK = sal_True;
+            bOK = TRUE;
 }
 
-sal_uLong Ww1Fkp::Where(sal_uInt16 nIndex)
+ULONG Ww1Fkp::Where(USHORT nIndex)
 {
-    sal_uLong lRet = 0xffffffff;
+    ULONG lRet = 0xffffffff;
     DBG_ASSERT(nIndex<=Count(), "index out of bounds");
     if (nIndex<=Count())
         lRet = SVBT32ToUInt32(aFkp+nIndex*sizeof(SVBT32));
     return lRet;
 }
 
-sal_uInt8* Ww1Fkp::GetData(sal_uInt16 nIndex)
+BYTE* Ww1Fkp::GetData(USHORT nIndex)
 {
-    sal_uInt8* pRet = NULL;
+    BYTE* pRet = NULL;
     DBG_ASSERT(nIndex<=Count(), "index out of bounds");
     if (nIndex<=Count())
         pRet = aFkp + (Count()+1) * sizeof(SVBT32) +
@@ -968,16 +986,17 @@ sal_uInt8* Ww1Fkp::GetData(sal_uInt16 nIndex)
 }
 
 //////////////////////////////////////////////////////////////// FkpPap
-sal_Bool Ww1FkpPap::Fill(sal_uInt16 nIndex, sal_uInt8*& p, sal_uInt16& rnCountBytes)
+BOOL Ww1FkpPap::Fill(USHORT nIndex, BYTE*& p, USHORT& rnCountBytes)
 {
     DBG_ASSERT( nIndex < Count(), "Ww1FkpPap::Fill() Index out of Range" );
-    sal_uInt16 nOffset = SVBT8ToByte(GetData(nIndex)) * 2;
+    USHORT nOffset = SVBT8ToByte(GetData(nIndex)) * 2;
     if (nOffset)
     {
-        DBG_ASSERT(nOffset>(sal_uInt16)(Count()*sizeof(SVBT32)), "calc error");
+        DBG_ASSERT(nOffset>(USHORT)(Count()*sizeof(SVBT32)), "calc error");
+//		rnCountBytes = SVBT8ToByte(aFkp+nOffset) * 2 + 1;  // SH: +1 ?????
         rnCountBytes = SVBT8ToByte(aFkp+nOffset) * 2;
         nOffset += sizeof(SVBT8);
-        if( nOffset + rnCountBytes < 511 )  // SH: Assert schlug 1 zu frueh zu
+        if( nOffset + rnCountBytes < 511 )	// SH: Assert schlug 1 zu frueh zu
             rnCountBytes++;                 // SH: Ich weiss nicht genau,
                                             // ob das letzte Byte des PAPX
                                             // genutzt wird, aber so vergessen
@@ -991,33 +1010,33 @@ sal_Bool Ww1FkpPap::Fill(sal_uInt16 nIndex, sal_uInt8*& p, sal_uInt16& rnCountBy
         p = NULL;
         rnCountBytes = 0;
     }
-    return sal_True;
+    return TRUE;
 }
 
 //////////////////////////////////////////////////////////////// FkpChp
-sal_Bool Ww1FkpChp::Fill(sal_uInt16 nIndex, W1_CHP& aChp)
+BOOL Ww1FkpChp::Fill(USHORT nIndex, W1_CHP& aChp)
 {
     DBG_ASSERT( nIndex < Count(), "Ww1FkpChp::Fill() Index out of Range" );
-    memset(&aChp, 0, sizeof(aChp)); // Default, da verkuerzt gespeichert
-    sal_uInt16 nOffset = GetData(nIndex)[0] * 2;
+    memset(&aChp, 0, sizeof(aChp));	// Default, da verkuerzt gespeichert
+    USHORT nOffset = GetData(nIndex)[0] * 2;
     if (nOffset)
     {
-        DBG_ASSERT(nOffset>(sal_uInt16)(Count()*sizeof(SVBT32)), "calc error");
-        sal_uInt16 nCountBytes = aFkp[nOffset];
+        DBG_ASSERT(nOffset>(USHORT)(Count()*sizeof(SVBT32)), "calc error");
+        USHORT nCountBytes = aFkp[nOffset];
         nOffset += sizeof(SVBT8);
         DBG_ASSERT(nCountBytes <= 511-nOffset, "calc error");
         DBG_ASSERT(nCountBytes <= sizeof(aChp), "calc error");
         memcpy(&aChp, aFkp+nOffset, nCountBytes);
     }
-    return sal_True;
+    return TRUE;
 }
 
 ///////////////////////////////////////////////////////////////// Assoc
 Ww1Assoc::Ww1Assoc(Ww1Fib& _rFib)
-    : rFib(_rFib), pBuffer(NULL), bOK(sal_False)
+    : rFib(_rFib), pBuffer(NULL), bOK(FALSE)
 {
-    sal_uInt16 cb = rFib.GetFIB().cbSttbfAssocGet();
-    sal_uInt16 i;
+    USHORT cb = rFib.GetFIB().cbSttbfAssocGet();
+    USHORT i;
 
     for ( i = 0; i < MaxFields; i++ )
         pStrTbl[i] = NULL;
@@ -1026,23 +1045,23 @@ Ww1Assoc::Ww1Assoc(Ww1Fib& _rFib)
         rFib.GetFIB().fcSttbfAssocGet()
      && rFib.GetStream().Read(pBuffer, cb) == cb)
     {
-        sal_uInt16 j;
+        USHORT j;
         DBG_ASSERT( cb == SVBT16ToShort( *(SVBT16*)pBuffer ), "size missmatch");
         for (i=0,j=sizeof(SVBT16);j<cb && i<Criteria1;i++)
         {
             pStrTbl[i] = pBuffer+j;
             j += (*pBuffer + j) + 1;
         }
-        bOK = sal_True;
+        bOK = TRUE;
     }
 }
 
-String Ww1Assoc::GetStr(sal_uInt16 code)
+String Ww1Assoc::GetStr(USHORT code)
 {
     String sRet;
     DBG_ASSERT(code<MaxFields, "out of range");
     if (pStrTbl[code] != NULL)
-        for( sal_uInt16 i=0;i<pStrTbl[code][0];i++ )
+        for( USHORT i=0;i<pStrTbl[code][0];i++ )
             sRet += String( pStrTbl[code][i+1], RTL_TEXTENCODING_MS_1252 );
     return sRet;
 }
@@ -1054,7 +1073,7 @@ Ww1Pap::Ww1Pap(Ww1Fib& _rFib)
 {
 }
 
-void Ww1Pap::Seek(sal_uLong ulSeek)
+void Ww1Pap::Seek(ULONG ulSeek)
 {
     while (ulSeek > Where())
         (*this)++;
@@ -1064,9 +1083,9 @@ void Ww1Pap::Seek(sal_uLong ulSeek)
 // Fkps der zugehoerige Index auf 0 gesetzt werden soll
 // ( darf fuer Push/Pop nicht passieren )
 // Ein eleganterer Weg faellt mir auf die Schnelle nicht ein
-sal_uLong Ww1Pap::Where( sal_Bool bSetIndex )
+ULONG Ww1Pap::Where( BOOL bSetIndex )
 {
-    sal_uLong ulRet = 0xffffffff;
+    ULONG ulRet = 0xffffffff;
     if (pPap == NULL)
         if (nPlcIndex < Count())
         {
@@ -1076,6 +1095,7 @@ sal_uLong Ww1Pap::Where( sal_Bool bSetIndex )
                 nFkpIndex = 0;
         }
     if (pPap != NULL)
+//		if (nFkpIndex < pPap->Count())
         if (nFkpIndex <= pPap->Count())
             ulRet = pPap->Where(nFkpIndex) - rFib.GetFIB().fcMinGet();
     return ulRet;
@@ -1084,6 +1104,7 @@ sal_uLong Ww1Pap::Where( sal_Bool bSetIndex )
 void Ww1Pap::operator++(int)
 {
     if (pPap != NULL)
+//		if (++nFkpIndex >= pPap->Count())
         if (++nFkpIndex > pPap->Count())
         {
             delete pPap;
@@ -1094,46 +1115,46 @@ void Ww1Pap::operator++(int)
 
 // SH: FindSprm sucht in grpprl nach Sprm nId
 // Rueckgabe: Pointer oder 0
-sal_Bool Ww1Pap::FindSprm(sal_uInt16 nId, sal_uInt8* pStart, sal_uInt8* pEnd)
+BOOL Ww1Pap::FindSprm(USHORT nId, BYTE* pStart, BYTE* pEnd)
 {
-    Ww1Sprm aSprm( pStart, static_cast< sal_uInt16 >(pEnd-pStart) );
-    sal_uInt16 nC = aSprm.Count();
-    sal_uInt16 i;
-    sal_uInt8 nI;
-    sal_uInt16 nLen;
-    sal_uInt8 *pData;
+    Ww1Sprm aSprm( pStart, static_cast< USHORT >(pEnd-pStart) );
+    USHORT nC = aSprm.Count();
+    USHORT i;
+    BYTE nI;
+    USHORT nLen;
+    BYTE *pData;
     for( i = 0; i < nC; i++ ){
         aSprm.Fill( i, nI, nLen, pData );
         if( nI == nId )
-            return sal_True;
+            return TRUE;
     }
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool Ww1Pap::HasId0(sal_uInt16 nId)
+BOOL Ww1Pap::HasId0(USHORT nId)
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     UpdateIdx();
 
     if( !pPap ){
-        DBG_ASSERT( sal_False, "Ww1Pap::HasId():: kann kein pPap erzeugen" );
-        return sal_False;
+        DBG_ASSERT( FALSE, "Ww1Pap::HasId():: kann kein pPap erzeugen" );
+        return FALSE;
     }
 
-    sal_uInt8* pByte;
-    sal_uInt16 n;
+    BYTE* pByte;
+    USHORT n;
     if( pPap->Fill(nFkpIndex, pByte, n) ){
-        sal_uInt8* p2 = ((W1_PAPX*)(pByte))->grpprlGet(); // SH: Offset fehlte
+        BYTE* p2 = ((W1_PAPX*)(pByte))->grpprlGet(); // SH: Offset fehlte
         bRet = FindSprm( nId, p2, pByte + n );
     }
     return bRet;
 }
 
-sal_Bool Ww1Pap::HasId(sal_uInt16 nId)
+BOOL Ww1Pap::HasId(USHORT nId)
 {
-    sal_Bool bRet = sal_False;
-    sal_uInt16 nPushedPlcIndex2 = nPlcIndex;
-    sal_uInt16 nPushedFkpIndex2 = nFkpIndex;
+    BOOL bRet = FALSE;
+    USHORT nPushedPlcIndex2 = nPlcIndex;
+    USHORT nPushedFkpIndex2 = nFkpIndex;
     bRet = HasId0( nId );
     if (nPlcIndex != nPushedPlcIndex2)
     {
@@ -1142,7 +1163,7 @@ sal_Bool Ww1Pap::HasId(sal_uInt16 nId)
     }
     nPlcIndex = nPushedPlcIndex2;
     nFkpIndex = nPushedFkpIndex2;
-    Where( sal_False );
+    Where( FALSE );
     return bRet;
 }
 
@@ -1153,7 +1174,7 @@ Ww1Chp::Ww1Chp(Ww1Fib& _rFib)
 {
 }
 
-void Ww1Chp::Seek(sal_uLong ulSeek)
+void Ww1Chp::Seek(ULONG ulSeek)
 {
     while (ulSeek > Where())
         (*this)++;
@@ -1163,9 +1184,9 @@ void Ww1Chp::Seek(sal_uLong ulSeek)
 // Fkps der zugehoerige Index auf 0 gesetzt werden soll
 // ( darf fuer Push/Pop nicht passieren )
 // Ein eleganterer Weg faellt mir auf die Schnelle nicht ein
-sal_uLong Ww1Chp::Where( sal_Bool bSetIndex )
+ULONG Ww1Chp::Where( BOOL bSetIndex )
 {
-    sal_uLong ulRet = 0xffffffff;
+    ULONG ulRet = 0xffffffff;
     if (pChp == NULL)
         if (nPlcIndex < Count())
         {
@@ -1175,6 +1196,7 @@ sal_uLong Ww1Chp::Where( sal_Bool bSetIndex )
                 nFkpIndex = 0;
         }
     if (pChp != NULL)
+//		if (nFkpIndex < pChp->Count())
         if (nFkpIndex <= pChp->Count())
             ulRet = pChp->Where(nFkpIndex) -
                      rFib.GetFIB().fcMinGet() - ulOffset;
@@ -1184,6 +1206,7 @@ sal_uLong Ww1Chp::Where( sal_Bool bSetIndex )
 void Ww1Chp::operator++(int)
 {
     if (pChp != NULL)
+//		if (++nFkpIndex >= pChp->Count())
         if (++nFkpIndex > pChp->Count())
         {
             delete pChp;
@@ -1193,8 +1216,8 @@ void Ww1Chp::operator++(int)
 }
 
 ////////////////////////////////////////////////////////////// Manager
-Ww1Manager::Ww1Manager(SvStream& rStrm, sal_uLong nFieldFlgs)
-    : bOK(sal_False), bInTtp(sal_False), bInStyle(sal_False), bStopAll(sal_False), aFib(rStrm),
+Ww1Manager::Ww1Manager(SvStream& rStrm, ULONG nFieldFlgs)
+    : bOK(FALSE), bInTtp(FALSE), bInStyle(FALSE), bStopAll(FALSE), aFib(rStrm),
     aDop(aFib), aFonts(aFib, nFieldFlgs), aDoc(aFib), pDoc(&aDoc),
     ulDocSeek(0), pSeek(&ulDocSeek), aFld(aFib), pFld(&aFld), aChp(aFib),
     aPap(aFib), aFtn(aFib), aBooks(aFib),
@@ -1211,22 +1234,22 @@ Ww1Manager::Ww1Manager(SvStream& rStrm, sal_uLong nFieldFlgs)
         && !aBooks.GetError();
 }
 
-sal_Bool Ww1Manager::HasInTable()
+BOOL Ww1Manager::HasInTable()
 {
     return aPap.HasId(24); // Ww1SingleSprmPFInTable
 }
 
-sal_Bool Ww1Manager::HasTtp()
+BOOL Ww1Manager::HasTtp()
 {
     return aPap.HasId(25); // Ww1SingleSprmPTtp
 }
 
-sal_Bool Ww1Manager::HasPPc()
+BOOL Ww1Manager::HasPPc()
 {
     return aPap.HasId(29); // Ww1SingleSprmPPc
 }
 
-sal_Bool Ww1Manager::HasPDxaAbs()
+BOOL Ww1Manager::HasPDxaAbs()
 {
     return aPap.HasId(26); // Ww1SingleSprmPDxaAbs
 }

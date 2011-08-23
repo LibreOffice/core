@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,6 +46,7 @@ namespace com { namespace sun { namespace star {
     namespace graphic { class XGraphic; }
     namespace graphic { class XGraphicObject; }
     namespace graphic { class XGraphicProvider; }
+    namespace lang { class XMultiServiceFactory; }
     namespace uno { class XComponentContext; }
 } } }
 
@@ -68,13 +69,13 @@ class OOX_DLLPUBLIC GraphicHelper
 {
 public:
     explicit            GraphicHelper(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxTargetFrame,
                             const StorageRef& rxStorage );
     virtual             ~GraphicHelper();
 
     // System colors and predefined colors ------------------------------------
-
+    
     /** Returns a system color specified by the passed XML token identifier. */
     sal_Int32           getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb = API_RGB_TRANSPARENT ) const;
     /** Derived classes may implement to resolve a scheme color from the passed XML token identifier. */
@@ -83,7 +84,7 @@ public:
     virtual sal_Int32   getPaletteColor( sal_Int32 nPaletteIdx ) const;
 
     // Device info and device dependent unit conversion -----------------------
-
+    
     /** Returns information about the output device. */
     const ::com::sun::star::awt::DeviceInfo& getDeviceInfo() const;
 
@@ -116,7 +117,7 @@ public:
     ::com::sun::star::awt::Size convertHmmToAppFont( const ::com::sun::star::awt::Size& rHmm ) const;
 
     // Graphics and graphic objects  ------------------------------------------
-
+    
     /** Imports a graphic from the passed input stream. */
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
                         importGraphic(
@@ -147,10 +148,6 @@ public:
     /** Imports a graphic object from the storage stream with the passed path and name.
         @return  The URL of the created and internally cached graphic object. */
     ::rtl::OUString     importEmbeddedGraphicObject( const ::rtl::OUString& rStreamName ) const;
-
-    /** calculates the orignal size of a graphic which is necessary to be able to calculate cropping values
-        @return The original Graphic size in 100thmm */
-    ::com::sun::star::awt::Size getOriginalSize( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic ) const;
 
     // ------------------------------------------------------------------------
 private:

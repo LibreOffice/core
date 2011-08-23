@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ namespace basprov
     {
         SolarMutexGuard aGuard;
 
-        Sequence< Reference< browse::XBrowseNode > > aChildNodes;
+        Sequence< Reference< browse::XBrowseNode > > aChildNodes; 
 
         if ( m_pModule )
         {
@@ -101,7 +101,7 @@ namespace basprov
                 sal_Int32 nRealCount = 0;
                 for ( sal_Int32 i = 0; i < nCount; ++i )
                 {
-                    SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Get( static_cast< sal_uInt16 >( i ) ) );
+                    SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Get( static_cast< USHORT >( i ) ) );
                     if ( pMethod && !pMethod->IsHidden() )
                         ++nRealCount;
                 }
@@ -111,7 +111,7 @@ namespace basprov
                 sal_Int32 iTarget = 0;
                 for ( sal_Int32 i = 0; i < nCount; ++i )
                 {
-                    SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Get( static_cast< sal_uInt16 >( i ) ) );
+                    SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Get( static_cast< USHORT >( i ) ) );
                     if ( pMethod && !pMethod->IsHidden() )
                         pChildNodes[iTarget++] = static_cast< browse::XBrowseNode* >( new BasicMethodNodeImpl( m_xContext, m_sScriptingContext, pMethod, m_bIsAppScript ) );
                 }
@@ -150,7 +150,7 @@ namespace basprov
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}   // namespace basprov
+}	// namespace basprov
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 
 //=============================================================================
 
-module com { module sun { module star { module configuration {
+module com { module sun { module star { module configuration { 
 
 //=============================================================================
 /** provides write access to a dynamic, homogeneous, non-hierarchical set of
@@ -69,7 +69,7 @@ published service SimpleSetUpdate
 
 /** allows inserting, removing, and replacing elements.
 
- <p>This interface extends the interface
+ <p>This interface extends the interface 
  <type scope="com::sun::star::container">XNameAccess</type> supported
  by service <type>SimpleSetAccess</type> to allow modifying the container.
  </p>
@@ -107,11 +107,11 @@ published service SimpleSetUpdate
  <member scope="com::sun::star::container">XNameContainer::removeByName()</member>
  or replaced using
  <member scope="com::sun::star::container">XNameContainer::replaceByName()</member>
- remain valid and can be reinserted into a set supporting the same template and
+ remain valid and can be reinserted into a set supporting the same template and 
  even under a different name.
  </p>
 
- <p>An implementation need not support insertion of objects that were not
+ <p>An implementation need not support insertion of objects that were not 
  obtained in one of the ways described above. If it does, the implementation
  must reject elements that do not have the correct structure as described
  by the template.
@@ -121,17 +121,17 @@ published service SimpleSetUpdate
 
 /** allows creating an object that can be inserted into this set. [conditional]
 
- <p>This interface shall be implemented by an implementation,
+ <p>This interface shall be implemented by an implementation, 
  if and only if the element type of the set, as returned by
  <member scope="com::sun::star::container">XElementAccess::getElementType()</member>,
  is an object type, such as an interface.
- </p>
+ </p> 
 
  <p>Using <member scope="com::sun::star::lang">XSingleServiceFactory::createInstance()</member>
  an instance of the element template of this set is created. If the set
  supports multiple templates or variations of the basic template, a default
  variant of the basic template is instantiated. If an implementation supports
- variations, they may be specified by passing arguments to
+ variations, they may be specified by passing arguments to 
  <member scope="com::sun::star::lang">XSingleServiceFactory::createInstanceWithArguments()</member>.
  There are no predefined arguments for all versions of this service.
  </p>
@@ -147,19 +147,19 @@ published service SimpleSetUpdate
 
 /** allows creating various objects that can be inserted into this set. [optional]
 
- <p>This interface may be implemented by an implementation of
+ <p>This interface may be implemented by an implementation of 
  service SetUpdate to support creating elements from other than
  the basic element template. An example of this would be an
  implementation that supports inheritance, allowing the use of
  templates derived from the basic template by extension.
- </p>
+ </p> 
 
- <p>This interface may only be implemented if the element type of the set
+ <p>This interface may only be implemented if the element type of the set 
  (as returned by
  <member scope="com::sun::star::container">XElementAccess::getElementType()</member>)
  is an object type, such as an interface. An implementation should also implement
  interface <type>XTemplateContainer</type> which is optional in this service.
- </p>
+ </p> 
 
  <p>The service identifier argument passed
  to <member scope="com::sun::star::lang">XMultiServiceFactory::createInstance()</member>
@@ -170,7 +170,7 @@ published service SimpleSetUpdate
  as a service identifier, in which case the result shall be the same as if
  the corresponding member of <type scope="com::sun::star::lang">XSingleServiceFactory</type>
  had been called.
- </p>
+ </p> 
 
 */
     [optional] interface com::sun::star::lang::XMultiServiceFactory;
@@ -179,6 +179,6 @@ published service SimpleSetUpdate
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif

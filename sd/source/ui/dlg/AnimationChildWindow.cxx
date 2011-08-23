@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,9 +50,9 @@ SFX_IMPL_DOCKINGWINDOW(AnimationChildWindow, SID_ANIMATION_OBJECTS)
 
 AnimationChildWindow::AnimationChildWindow(
     ::Window* _pParent,
-    sal_uInt16 nId,
+    USHORT nId,
     SfxBindings* pBindings,
-    SfxChildWinInfo* pInfo )
+    SfxChildWinInfo* pInfo ) 
     : SfxChildWindow( _pParent, nId )
 {
     AnimationWindow* pAnimWin = new AnimationWindow(
@@ -76,7 +76,7 @@ AnimationChildWindow::AnimationChildWindow(
 
     pAnimWin->aFltWinSize = pWindow->GetSizePixel();
     */
-    SetHideNotDelete( sal_True );
+    SetHideNotDelete( TRUE );
 }
 
 } // end of namespace sd

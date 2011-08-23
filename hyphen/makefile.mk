@@ -36,14 +36,12 @@ TARGET=hyphen
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=hyphen-2.7.1
-TARFILE_MD5=48a9f787f43a09c0a9b7b00cd1fddbbf
+TARFILE_NAME=hyphen-2.4
+TARFILE_MD5=d0b5af6e408b8d2958f3d83b5244f5e8
 
 ADDITIONAL_FILES += makefile.mk
 
-PATCH_FILES= \
-    hyphen-2.7.1.patch \
-    hyphen-2.7.1-read-charset.patch
+PATCH_FILES=hyphen-2.4.patch
 
 .IF "$(GUI)"=="UNX"
 CONFIGURE_DIR=$(BUILD_DIR)
@@ -76,7 +74,7 @@ BUILD_ACTION=make hyph_en_US.dic
 @all:
     echo "Nothing to do here."
 .ELSE
-BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
+BUILD_ACTION=make && make check
 OUT2INC += hyphen.h 
 .ENDIF
 

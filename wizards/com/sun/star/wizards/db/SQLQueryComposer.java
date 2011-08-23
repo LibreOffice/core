@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -183,7 +183,7 @@ public class SQLQueryComposer
             try
             {
                 XPropertySet xColumnPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xColumnIndexAccess.getByIndex(i));
-                String sName = (String) xColumnPropertySet.getPropertyValue(PropertyNames.PROPERTY_NAME);
+                String sName = (String) xColumnPropertySet.getPropertyValue("Name");
                 if (JavaTools.FieldInTable(CurDBMetaData.getSortFieldNames(), sName) == -1)
                 {
                     boolean bascend = AnyConverter.toBoolean(xColumnPropertySet.getPropertyValue("IsAscending"));

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,9 +54,9 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
     //====================================================================
     //= OGeometryControlModel_Base
     //====================================================================
-    typedef ::cppu::WeakAggComponentImplHelper2 <   ::com::sun::star::util::XCloneable
-                                                ,   ::com::sun::star::script::XScriptEventsSupplier
-                                                >   OGCM_Base;
+    typedef ::cppu::WeakAggComponentImplHelper2	<	::com::sun::star::util::XCloneable
+                                                ,	::com::sun::star::script::XScriptEventsSupplier
+                                                >	OGCM_Base;
     class OGeometryControlModel_Base
         :public ::comphelper::OMutexAndBroadcastHelper
         ,public ::comphelper::OPropertySetAggregationHelper
@@ -66,27 +66,27 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >
                     m_xAggregate;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > 
                     mxEventContainer;
 
         // <properties>
-        sal_Int32       m_nPosX;
-        sal_Int32       m_nPosY;
-        sal_Int32       m_nWidth;
-        sal_Int32       m_nHeight;
-        ::rtl::OUString m_aName;
-        sal_Int16       m_nTabIndex;
-        sal_Int32       m_nStep;
+        sal_Int32		m_nPosX;
+        sal_Int32		m_nPosY;
+        sal_Int32		m_nWidth;
+        sal_Int32		m_nHeight;
+        ::rtl::OUString	m_aName;
+        sal_Int16		m_nTabIndex;
+        sal_Int32		m_nStep;
         ::rtl::OUString m_aTag;
         ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver > m_xStrResolver;
         // </properties>
 
-        sal_Bool        m_bCloneable;
+        sal_Bool		m_bCloneable;
 
     protected:
-        virtual ::com::sun::star::uno::Any          ImplGetDefaultValueByHandle(sal_Int32 nHandle) const;
-        virtual ::com::sun::star::uno::Any          ImplGetPropertyValueByHandle(sal_Int32 nHandle) const;
-        virtual void                                ImplSetPropertyValueByHandle(sal_Int32 nHandle, const :: com::sun::star::uno::Any& aValue);
+        virtual ::com::sun::star::uno::Any 			ImplGetDefaultValueByHandle(sal_Int32 nHandle) const;
+        virtual ::com::sun::star::uno::Any 			ImplGetPropertyValueByHandle(sal_Int32 nHandle) const;
+        virtual void					 			ImplSetPropertyValueByHandle(sal_Int32 nHandle, const :: com::sun::star::uno::Any& aValue);
 
     protected:
         /**
@@ -137,9 +137,9 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
             ::com::sun::star::uno::Any& _rValue, sal_Int32 _nHandle) const;
 
         // OPropertyStateHelper overridables
-        virtual ::com::sun::star::beans::PropertyState  getPropertyStateByHandle(sal_Int32 nHandle);
-        virtual void                                    setPropertyToDefaultByHandle(sal_Int32 nHandle);
-        virtual ::com::sun::star::uno::Any              getPropertyDefaultByHandle(sal_Int32 nHandle) const;
+        virtual ::com::sun::star::beans::PropertyState	getPropertyStateByHandle(sal_Int32 nHandle);
+        virtual void									setPropertyToDefaultByHandle(sal_Int32 nHandle);
+        virtual ::com::sun::star::uno::Any				getPropertyDefaultByHandle(sal_Int32 nHandle) const;
 
         // XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
@@ -151,7 +151,7 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw(::com::sun::star::uno::RuntimeException);
 
         //XScriptEventsSupplier
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > 
             SAL_CALL getEvents(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // XCloneable implementation - to be overwritten
@@ -177,7 +177,7 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
     //====================================================================
     //= OGeometryControlModel
     //====================================================================
-    /*  example for usage:
+    /*	example for usage:
             Reference< XAggregation > xIFace = new ::toolkit::OGeometryControlModel< UnoControlButtonModel > ();
     */
     template <class CONTROLMODEL>
@@ -186,7 +186,7 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         ,public ::comphelper::OAggregationArrayUsageHelper< OTemplateInstanceDisambiguation< CONTROLMODEL > >
     {
     public:
-        OGeometryControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+        OGeometryControlModel();
 
     private:
         OGeometryControlModel(::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance);
@@ -220,8 +220,8 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         ,public ::comphelper::OIdPropertyArrayUsageHelper< OCommonGeometryControlModel >
     {
     private:
-        ::rtl::OUString m_sServiceSpecifier;        // the service specifier of our aggregate
-        sal_Int32       m_nPropertyMapId;           // our unique property info id, used to look up in s_aAggregateProperties
+        ::rtl::OUString	m_sServiceSpecifier;		// the service specifier of our aggregate
+        sal_Int32		m_nPropertyMapId;			// our unique property info id, used to look up in s_aAggregateProperties
 
     public:
         /** instantiate the model
@@ -232,7 +232,7 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         */
         OCommonGeometryControlModel(
                     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAgg,
-            const   ::rtl::OUString& _rxServiceSpecifier
+            const	::rtl::OUString& _rxServiceSpecifier
         );
 
         // OIdPropertyArrayUsageHelper overridables
@@ -257,7 +257,7 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
 #include "toolkit/controls/geometrycontrolmodel_impl.hxx"
 
 //........................................................................
-// }    // namespace toolkit
+// }	// namespace toolkit
 //........................................................................
 
 #endif // _TOOLKIT_HELPERS_GEOMETRYCONTROLMODEL_HXX_

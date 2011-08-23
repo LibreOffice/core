@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -246,10 +246,7 @@ sal_Int32 AccessibleGridControlTableBase::implGetChildIndex(
 
 void AccessibleGridControlTableBase::implGetSelectedRows( Sequence< sal_Int32 >& rSeq )
 {
-    sal_Int32 const selectionCount( m_aTable.GetSelectedRowCount() );
-    rSeq.realloc( selectionCount );
-    for ( sal_Int32 i=0; i<selectionCount; ++i )
-        rSeq[i] = m_aTable.GetSelectedRowIndex(i);
+    rSeq = comphelper::containerToSequence(m_aTable.GetSelectedRows());
 }
 
 void AccessibleGridControlTableBase::ensureIsValidRow( sal_Int32 nRow )

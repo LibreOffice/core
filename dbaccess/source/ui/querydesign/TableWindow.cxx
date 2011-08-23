@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,8 @@
 #include "QueryDesignView.hxx"
 #include "TableWindowData.hxx"
 #include "imageprovider.hxx"
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/wall.hxx>
 
@@ -67,12 +67,12 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
-#define TABWIN_SIZING_AREA      4
-#define LISTBOX_SCROLLING_AREA  6
-#define SCROLLING_TIMESPAN      500
+#define TABWIN_SIZING_AREA		4
+#define LISTBOX_SCROLLING_AREA	6
+#define SCROLLING_TIMESPAN		500
 
-#define TABWIN_WIDTH_MIN    90
-#define TABWIN_HEIGHT_MIN   80
+#define TABWIN_WIDTH_MIN	90
+#define TABWIN_HEIGHT_MIN	80
 
 //========================================================================
 // class OTableWindow
@@ -90,7 +90,7 @@ OTableWindow::OTableWindow( Window* pParent, const TTableWindowData::value_type&
           ,m_nMoveCount(0)
           ,m_nMoveIncrement(1)
           ,m_nSizingFlags( SIZING_NONE )
-          ,m_bActive( sal_False )
+          ,m_bActive( FALSE )
 {
     DBG_CTOR(OTableWindow,NULL);
 
@@ -121,10 +121,10 @@ OTableWindow::~OTableWindow()
         OSL_ENSURE(m_pListBox->GetEntryCount()==0,"Forgot to call EmptyListbox()!");
         ::std::auto_ptr<Window> aTemp(m_pListBox);
         m_pListBox = NULL;
-    }
+    } // if (m_pListBox)
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
-
+    
     m_pAccessible = NULL;
 }
 // -----------------------------------------------------------------------------
@@ -178,7 +178,7 @@ OTableWindowListBox* OTableWindow::CreateListBox()
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OTableWindow::FillListBox()
+BOOL OTableWindow::FillListBox()
 {
     m_pListBox->Clear();
     if ( !m_pContainerListener.is() )
@@ -188,13 +188,13 @@ sal_Bool OTableWindow::FillListBox()
             m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
     }
     // mark all primary keys with special image
-    ModuleRes TmpRes(IMG_JOINS);
+    ModuleRes TmpRes(isHiContrast(m_pListBox) ? IMG_JOINS_H : IMG_JOINS);
     ImageList aImageList(TmpRes);
     Image aPrimKeyImage = aImageList.GetImage(IMG_PRIMARY_KEY);
 
     if (GetData()->IsShowAll())
     {
-        SvLBoxEntry* pEntry = m_pListBox->InsertEntry( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) );
+        SvLBoxEntry* pEntry = m_pListBox->InsertEntry( ::rtl::OUString::createFromAscii("*") );
         pEntry->SetUserData( createUserData(NULL,false) );
     }
 
@@ -205,7 +205,7 @@ sal_Bool OTableWindow::FillListBox()
     }
     catch(Exception&)
     {
-        OSL_FAIL("Exception occurred!");
+        OSL_ENSURE(0,"Exception occured!");
     }
     try
     {
@@ -234,10 +234,10 @@ sal_Bool OTableWindow::FillListBox()
     }
     catch(Exception&)
     {
-        OSL_FAIL("Exception occurred!");
+        OSL_ENSURE(0,"Exception occured!");
     }
 
-    return sal_True;
+    return TRUE;
 }
 // -----------------------------------------------------------------------------
 void* OTableWindow::createUserData(const Reference< XPropertySet>& /*_xColumn*/,bool /*_bPrimaryKey*/)
@@ -273,27 +273,28 @@ void OTableWindow::impl_updateImage()
 {
     ImageProvider aImageProvider( getDesignView()->getController().getConnection() );
 
-    Image aImage;
-    aImageProvider.getImages( GetComposedName(), m_pData->isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, aImage );
+    Image aImage, aImageHC;
+    aImageProvider.getImages( GetComposedName(), m_pData->isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, aImage, aImageHC );
 
-    if ( !aImage )
+    if ( !aImage || !aImageHC )
     {
-        OSL_FAIL( "OTableWindow::impl_updateImage: no images!" );
+        OSL_ENSURE( false, "OTableWindow::impl_updateImage: no images!" );
         return;
     }
 
-    m_aTypeImage.SetModeImage( aImage );
+    m_aTypeImage.SetModeImage( aImage, BMP_COLOR_NORMAL );
+    m_aTypeImage.SetModeImage( aImageHC, BMP_COLOR_HIGHCONTRAST );
     m_aTypeImage.Show();
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OTableWindow::Init()
+BOOL OTableWindow::Init()
 {
     // create list box if necessary
     if ( !m_pListBox )
     {
         m_pListBox = CreateListBox();
-        OSL_ENSURE( m_pListBox != NULL, "OTableWindow::Init() : CreateListBox hat NULL geliefert !" );
+        DBG_ASSERT( m_pListBox != NULL, "OTableWindow::Init() : CreateListBox hat NULL geliefert !" );
         m_pListBox->SetSelectionMode( MULTIPLE_SELECTION );
     }
 
@@ -305,9 +306,9 @@ sal_Bool OTableWindow::Init()
 
     // die Felder in die ListBox eintragen
     clearListBox();
-    sal_Bool bSuccess = FillListBox();
+    BOOL bSuccess = FillListBox();
     if ( bSuccess )
-        m_pListBox->SelectAll( sal_False );
+        m_pListBox->SelectAll( FALSE );
 
     impl_updateImage();
 
@@ -359,7 +360,7 @@ void OTableWindow::Draw3DBorder(const Rectangle& rRect)
 Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSize) const
 {
     Rectangle aSizingRect = Rectangle( GetPosPixel(), GetSizePixel() );
-    sal_uInt16 nSizingFlags = GetSizingFlags();
+    UINT16 nSizingFlags = GetSizingFlags();
 
     if( nSizingFlags & SIZING_TOP )
     {
@@ -398,7 +399,7 @@ Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSiz
 // -----------------------------------------------------------------------------
 void OTableWindow::setSizingFlag(const Point& _rPos)
 {
-    Size    aOutSize = GetOutputSizePixel();
+    Size	aOutSize = GetOutputSizePixel();
     //////////////////////////////////////////////////////////////////////
     // Flags anpassen, wenn Mauszeiger in sizingArea
     m_nSizingFlags = SIZING_NONE;
@@ -424,9 +425,9 @@ void OTableWindow::MouseMove( const MouseEvent& rEvt )
     if (pCont->getDesignView()->getController().isReadOnly())
         return;
 
-    Point   aPos = rEvt.GetPosPixel();
+    Point	aPos = rEvt.GetPosPixel();
     setSizingFlag(aPos);
-    Pointer aPointer;
+    Pointer	aPointer;
 
 
     //////////////////////////////////////////////////////////////////////
@@ -476,7 +477,7 @@ void OTableWindow::Resize()
 {
     //////////////////////////////////////////////////////////////////////
     // Das Fenster darf nicht verschwinden, deshalb min. Groesse setzen
-    Size    aOutSize = GetOutputSizePixel();
+    Size	aOutSize = GetOutputSizePixel();
     aOutSize = Size(CalcZoom(aOutSize.Width()),CalcZoom(aOutSize.Height()));
 
     long nTitleHeight = CalcZoom( GetTextHeight() )+ CalcZoom( 4 );
@@ -509,7 +510,7 @@ void OTableWindow::Resize()
 }
 
 //------------------------------------------------------------------------------
-void OTableWindow::SetBoldTitle( sal_Bool bBold )
+void OTableWindow::SetBoldTitle( BOOL bBold )
 {
     Font aFont = m_aTitle.GetFont();
     aFont.SetWeight( bBold?WEIGHT_BOLD:WEIGHT_NORMAL );
@@ -531,7 +532,7 @@ void OTableWindow::setActive(sal_Bool _bActive)
     SetBoldTitle( _bActive );
     m_bActive = _bActive;
     if (!_bActive && m_pListBox && m_pListBox->GetSelectionCount() != 0)
-        m_pListBox->SelectAll(sal_False);
+        m_pListBox->SelectAll(FALSE);
 }
 
 //------------------------------------------------------------------------------
@@ -544,25 +545,25 @@ void OTableWindow::Remove()
     pTabWinCont->Invalidate();
 }
 //------------------------------------------------------------------------------
-sal_Bool OTableWindow::HandleKeyInput( const KeyEvent& rEvt )
+BOOL OTableWindow::HandleKeyInput( const KeyEvent& rEvt )
 {
     const KeyCode& rCode = rEvt.GetKeyCode();
-    sal_uInt16 nCode = rCode.GetCode();
-    sal_Bool   bShift = rCode.IsShift();
-    sal_Bool   bCtrl = rCode.IsMod1();
+    USHORT nCode = rCode.GetCode();
+    BOOL   bShift = rCode.IsShift();
+    BOOL   bCtrl = rCode.IsMod1();
 
-    sal_Bool bHandle = sal_False;
+    BOOL bHandle = FALSE;
 
     if( !bCtrl && !bShift && (nCode==KEY_DELETE) )
     {
         Remove();
-        bHandle = sal_True;
+        bHandle = TRUE;
     }
     return bHandle;
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OTableWindow::ExistsAConn() const
+BOOL OTableWindow::ExistsAConn() const
 {
     return getTableView()->ExistsAConn(this);
 }
@@ -648,7 +649,7 @@ void OTableWindow::Command(const CommandEvent& rEvt)
 // -----------------------------------------------------------------------------
 long OTableWindow::PreNotify(NotifyEvent& rNEvt)
 {
-    sal_Bool bHandled = sal_False;
+    BOOL bHandled = FALSE;
     switch (rNEvt.GetType())
     {
         case EVENT_KEYINPUT:
@@ -656,7 +657,7 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
             if ( getDesignView()->getController().isReadOnly() )
                 break;
 
-            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+            const KeyEvent* pKeyEvent =	rNEvt.GetKeyEvent();
             const KeyCode& rCode = pKeyEvent->GetKeyCode();
             if ( rCode.IsMod1() )
             {
@@ -670,19 +671,19 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
                 switch( rCode.GetCode() )
                 {
                     case KEY_DOWN:
-                        bHandled = sal_True;
+                        bHandled = TRUE;
                         aStartPoint.Y() += m_nMoveIncrement;
                         break;
                     case KEY_UP:
-                        bHandled = sal_True;
+                        bHandled = TRUE;
                         aStartPoint.Y() += -m_nMoveIncrement;
                         break;
                     case KEY_LEFT:
-                        bHandled = sal_True;
+                        bHandled = TRUE;
                         aStartPoint.X() += -m_nMoveIncrement;
                         break;
                     case KEY_RIGHT:
-                        bHandled = sal_True;
+                        bHandled = TRUE;
                         aStartPoint.X()  += m_nMoveIncrement;
                         break;
                 }
@@ -736,40 +737,40 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
                             }
                             else
                             {
-                                m_nMoveCount        = 0; // reset our movement count
-                                m_nMoveIncrement    = 1;
+                                m_nMoveCount		= 0; // reset our movement count
+                                m_nMoveIncrement	= 1;
                             }
                         }
                         else
                         {
-                            m_nMoveCount        = 0; // reset our movement count
-                            m_nMoveIncrement    = 1;
+                            m_nMoveCount		= 0; // reset our movement count
+                            m_nMoveIncrement	= 1;
                         }
                     }
                     resetSizingFlag();
                 }
                 else
                 {
-                    m_nMoveCount        = 0; // reset our movement count
-                    m_nMoveIncrement    = 1;
+                    m_nMoveCount		= 0; // reset our movement count
+                    m_nMoveIncrement	= 1;
                 }
             }
             else
             {
-                m_nMoveCount        = 0; // reset our movement count
-                m_nMoveIncrement    = 1;
+                m_nMoveCount		= 0; // reset our movement count
+                m_nMoveIncrement	= 1;
             }
         }
             break;
         case EVENT_KEYUP:
         {
-            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+            const KeyEvent* pKeyEvent =	rNEvt.GetKeyEvent();
             const KeyCode& rCode = pKeyEvent->GetKeyCode();
-            sal_uInt16 nKeyCode = rCode.GetCode();
+            USHORT nKeyCode = rCode.GetCode();
             if ( rCode.IsMod2() && nKeyCode != KEY_UP && nKeyCode != KEY_DOWN && nKeyCode != KEY_LEFT && nKeyCode != KEY_RIGHT )
             {
-                m_nMoveCount        = 0; // reset our movement count
-                m_nMoveIncrement    = 1;
+                m_nMoveCount		= 0; // reset our movement count
+                m_nMoveIncrement	= 1;
             }
         }
             break;

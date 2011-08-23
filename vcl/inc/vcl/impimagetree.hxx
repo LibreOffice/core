@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <utility>
 #include <vector>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -58,11 +58,7 @@ public:
 
     bool loadImage(
         rtl::OUString const & name, rtl::OUString const & style,
-        BitmapEx & bitmap, bool localized = false, bool loadMissing = false );
-
-    bool loadDefaultImage(
-        rtl::OUString const & style,
-        BitmapEx& bitmap);
+        BitmapEx & bitmap, bool localized = false );
 
     void shutDown();
         // a crude form of life cycle control (called from DeInitVCL; otherwise,
@@ -70,19 +66,15 @@ public:
         // be too late for the destructors of the bitmaps in m_iconCache)
 
 private:
-    bool doLoadImage(
-        rtl::OUString const & name, rtl::OUString const & style,
-        BitmapEx & bitmap, bool localized);
-
     typedef std::list<
         std::pair<
             rtl::OUString,
             com::sun::star::uno::Reference<
                 com::sun::star::container::XNameAccess > > > Zips;
 
-    typedef boost::unordered_map<
+    typedef std::hash_map<
         rtl::OUString, bool, rtl::OUStringHash > CheckStyleCache;
-    typedef boost::unordered_map<
+    typedef std::hash_map<
         rtl::OUString, std::pair< bool, BitmapEx >, rtl::OUStringHash > IconCache;
 
     rtl::OUString m_style;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #ifndef _HIERARCHYPROVIDER_HXX
 #define _HIERARCHYPROVIDER_HXX
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <ucbhelper/providerhelper.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 
@@ -48,11 +48,11 @@ namespace hierarchy_ucp {
 
 #define HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME \
                 "com.sun.star.ucb.HierarchyContentProvider"
-#define HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME_LENGTH  41
+#define HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME_LENGTH	41
 
 #define HIERARCHY_URL_SCHEME \
                 "vnd.sun.star.hier"
-#define HIERARCHY_URL_SCHEME_LENGTH 17
+#define HIERARCHY_URL_SCHEME_LENGTH	17
 
 #define HIERARCHY_FOLDER_CONTENT_TYPE \
                 "application/" HIERARCHY_URL_SCHEME "-folder"
@@ -89,7 +89,7 @@ struct hashString
     }
 };
 
-typedef boost::unordered_map
+typedef std::hash_map
 <
     rtl::OUString,  // servcie specifier
     ConfigProviderMapEntry,

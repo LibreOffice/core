@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,13 +51,12 @@
 #define DEFAULTFONT_CONFIGNODE "VCL/DefaultFonts"
 #define SUBSTFONT_CONFIGNODE "VCL/FontSubstitutions"
 
+using namespace rtl;
 using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
-
-using ::rtl::OUString;
 
 static DefaultFontConfiguration* mpDefaultFontConfiguration = 0;
 
@@ -95,7 +94,7 @@ static const char* getKeyType( int nKeyType )
     case DEFAULTFONT_UI_FIXED: return "UI_FIXED";
     case DEFAULTFONT_UI_SANS: return "UI_SANS";
     default:
-        OSL_FAIL( "unmatched type" );
+        DBG_ERROR( "unmatched type" );
         return "";
     }
 }
@@ -194,7 +193,7 @@ OUString DefaultFontConfiguration::tryLocale( const Locale& rLocale, const OUStr
 {
     OUString aRet;
 
-    boost::unordered_map< Locale, LocaleAccess, LocaleHash >::const_iterator it =
+    std::hash_map< Locale, LocaleAccess, LocaleHash >::const_iterator it =
         m_aConfig.find( rLocale );
     if( it != m_aConfig.end() )
     {
@@ -235,7 +234,7 @@ OUString DefaultFontConfiguration::tryLocale( const Locale& rLocale, const OUStr
             }
         }
     }
-
+    
     return aRet;
 }
 
@@ -245,7 +244,7 @@ OUString DefaultFontConfiguration::getDefaultFont( const Locale& rLocale, int nT
     aLocale.Language = rLocale.Language.toAsciiLowerCase();
     aLocale.Country = rLocale.Country.toAsciiUpperCase();
     aLocale.Variant = rLocale.Variant.toAsciiUpperCase();
-
+    
     OUString aType = OUString::createFromAscii( getKeyType( nType ) );
     OUString aRet = tryLocale( aLocale, aType );
     if( ! aRet.getLength() && aLocale.Variant.getLength() )
@@ -328,40 +327,40 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
     static const OUString aFallBackKorean( aFallBackKoreanLocalized );
 
     // optimize font list for some locales, as long as Andale Sans UI does not support them
-    if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ar" ) ) ||
-        aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "he" ) ) ||
-        aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "iw" ) ) )
+    if( aLocale.Language.equalsAscii( "ar" ) ||
+        aLocale.Language.equalsAscii( "he" ) ||
+        aLocale.Language.equalsAscii( "iw" ) )
     {
         return aFallBackArabic;
     }
-    else if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "th" ) ) )
+    else if( aLocale.Language.equalsAscii( "th" ) )
     {
         return aFallBackThai;
     }
-    else if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ko" ) ) )
+    else if( aLocale.Language.equalsAscii( "ko" ) )
     {
         return aFallBackKorean;
     }
-    else if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "cs" ) ) ||
-             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hu" ) ) ||
-             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "pl" ) ) ||
-             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ro" ) ) ||
-             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "rm" ) ) ||
-             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hr" ) ) ||
-             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sk" ) ) ||
-             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sl" ) ) ||
-             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sb" ) ) )
+    else if( aLocale.Language.equalsAscii( "cs" ) ||
+             aLocale.Language.equalsAscii( "hu" ) ||
+             aLocale.Language.equalsAscii( "pl" ) ||
+             aLocale.Language.equalsAscii( "ro" ) ||
+             aLocale.Language.equalsAscii( "rm" ) ||
+             aLocale.Language.equalsAscii( "hr" ) ||
+             aLocale.Language.equalsAscii( "sk" ) ||
+             aLocale.Language.equalsAscii( "sl" ) ||
+             aLocale.Language.equalsAscii( "sb" ) )
     {
         return aFallbackLatin2;
     }
-    else if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "zh" ) ) )
+    else if( aLocale.Language.equalsAscii( "zh" ) )
     {
-        if( ! aLocale.Country.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "cn" ) ) )
+        if( ! aLocale.Country.equalsAscii( "cn" ) )
             return aFallBackChineseTRD;
         else
             return aFallBackChineseSIM;
     }
-    else if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ja" ) ) )
+    else if( aLocale.Language.equalsAscii( "ja" ) )
     {
         return aFallBackJapanese;
     }
@@ -572,7 +571,7 @@ struct ImplFontAttrWeightSearchData
 static ImplFontAttrWeightSearchData const aImplWeightAttrSearchList[] =
 {
 // the attribute names are ordered by "first match wins"
-// e.g. "semilight" should wins over "semi"
+// e.g. "semilight" should wins over "semi" 
 {   "extrablack",           WEIGHT_BLACK },
 {   "ultrablack",           WEIGHT_BLACK },
 {   "ultrabold",            WEIGHT_ULTRABOLD },
@@ -615,7 +614,7 @@ static ImplFontAttrWidthSearchData const aImplWidthAttrSearchList[] =
 struct ImplFontAttrTypeSearchData
 {
     const char*             mpStr;
-    sal_uLong                   mnType;
+    ULONG                   mnType;
 };
 
 static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
@@ -779,23 +778,23 @@ static bool ImplKillTrailingWithExceptions( String& rName, const char* const* pp
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplFindAndErase( String& rName, const char* pStr )
+static BOOL ImplFindAndErase( String& rName, const char* pStr )
 {
     xub_StrLen nPos = rName.SearchAscii( pStr );
     if ( nPos == STRING_NOTFOUND )
-        return sal_False;
+        return FALSE;
 
     const char* pTempStr = pStr;
     while ( *pTempStr )
         pTempStr++;
     rName.Erase( nPos, (xub_StrLen)(pTempStr-pStr) );
-    return sal_True;
+    return TRUE;
 }
 
 // =======================================================================
 
 void FontSubstConfiguration::getMapName( const String& rOrgName, String& rShortName,
-    String& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, sal_uLong& rType )
+    String& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, ULONG& rType )
 {
     rShortName = rOrgName;
 
@@ -1088,13 +1087,13 @@ unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::R
     catch( WrappedTargetException )
     {
     }
-
+    
     return type;
 }
 
 void FontSubstConfiguration::readLocaleSubst( const com::sun::star::lang::Locale& rLocale ) const
 {
-    boost::unordered_map< Locale, LocaleSubst, LocaleHash >::const_iterator it =
+    std::hash_map< Locale, LocaleSubst, LocaleHash >::const_iterator it =
         m_aSubst.find( rLocale );
     if( it != m_aSubst.end() )
     {
@@ -1120,7 +1119,7 @@ void FontSubstConfiguration::readLocaleSubst( const com::sun::star::lang::Locale
                 const OUString* pFontNames = aFonts.getConstArray();
                 // improve performance, heap fragmentation
                 it->second.aSubstAttributes.reserve( nFonts );
-
+                
                 // strings for subst retrieval, construct only once
                 OUString aSubstFontsStr     ( RTL_CONSTASCII_USTRINGPARAM( "SubstFonts" ) );
                 OUString aSubstFontsMSStr   ( RTL_CONSTASCII_USTRINGPARAM( "SubstFontsMS" ) );
@@ -1162,7 +1161,7 @@ void FontSubstConfiguration::readLocaleSubst( const com::sun::star::lang::Locale
                     aAttr.Weight = getSubstWeight( xFont, aSubstWeightStr );
                     aAttr.Width = getSubstWidth( xFont, aSubstWidthStr );
                     aAttr.Type = getSubstType( xFont, aSubstTypeStr );
-
+                    
                     // finally insert this entry
                     it->second.aSubstAttributes.push_back( aAttr );
                 }
@@ -1194,7 +1193,7 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontNam
 
     while( aLocale.Language.getLength() )
     {
-        boost::unordered_map< Locale, LocaleSubst, LocaleHash >::const_iterator lang = m_aSubst.find( aLocale );
+        std::hash_map< Locale, LocaleSubst, LocaleHash >::const_iterator lang = m_aSubst.find( aLocale );
         if( lang != m_aSubst.end() )
         {
             if( ! lang->second.bConfigRead )
@@ -1217,7 +1216,7 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontNam
             aLocale.Variant = OUString();
         else if( aLocale.Country.getLength() )
             aLocale.Country = OUString();
-        else if( ! aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "en" ) ) )
+        else if( ! aLocale.Language.equalsAscii( "en" ) )
             aLocale.Language = OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
         else
             aLocale.Language = OUString();

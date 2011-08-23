@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,9 +85,9 @@ namespace sd {
 
 TYPEINIT1( FuInsertFile, FuPoor );
 
-#define POOL_BUFFER_SIZE        (sal_uInt16)32768
-#define BASIC_BUFFER_SIZE       (sal_uInt16)8192
-#define DOCUMENT_BUFFER_SIZE    (sal_uInt16)32768
+#define POOL_BUFFER_SIZE		(USHORT)32768
+#define BASIC_BUFFER_SIZE		(USHORT)8192
+#define DOCUMENT_BUFFER_SIZE	(USHORT)32768
 
 /*************************************************************************
 |*
@@ -97,10 +97,10 @@ TYPEINIT1( FuInsertFile, FuPoor );
 
 FuInsertFile::FuInsertFile (
     ViewShell*    pViewSh,
-    ::sd::Window*      pWin,
-    ::sd::View*        pView,
+    ::sd::Window*	   pWin,
+    ::sd::View*		   pView,
     SdDrawDocument* pDoc,
-    SfxRequest&    rReq)
+    SfxRequest&	   rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
 }
@@ -127,7 +127,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
         Reference< XFilterManager > xFilterManager( xFilePicker, UNO_QUERY );
         String aOwnCont;
         String aOtherCont;
-        const SfxFilter*            pFilter = NULL;
+        const SfxFilter*	        pFilter = NULL;
 
         aFileDialog.SetTitle( String( SdResId(STR_DLG_INSERT_PAGES_FROM_FILE ) ) );
 
@@ -258,8 +258,8 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
     }
     else
     {
-        SFX_REQUEST_ARG (rReq, pFileName, SfxStringItem, ID_VAL_DUMMY0, sal_False);
-        SFX_REQUEST_ARG (rReq, pFilterName, SfxStringItem, ID_VAL_DUMMY1, sal_False);
+        SFX_REQUEST_ARG (rReq, pFileName, SfxStringItem, ID_VAL_DUMMY0, FALSE);
+        SFX_REQUEST_ARG (rReq, pFilterName, SfxStringItem, ID_VAL_DUMMY1, FALSE);
 
         aFile = pFileName->GetValue ();
 
@@ -267,15 +267,15 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
             aFilterName = pFilterName->GetValue ();
     }
 
-    mpDocSh->SetWaitCursor( sal_True );
+    mpDocSh->SetWaitCursor( TRUE );
 
-    SfxMedium*          pMedium = new SfxMedium( aFile, STREAM_READ | STREAM_NOCREATE, sal_False );
-    const SfxFilter*    pFilter = NULL;
-
+    SfxMedium*			pMedium = new SfxMedium( aFile, STREAM_READ | STREAM_NOCREATE, FALSE );
+    const SfxFilter*	pFilter = NULL;
+    
     SFX_APP()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
-
-    sal_Bool                bDrawMode = mpViewShell && mpViewShell->ISA(DrawViewShell);
-    sal_Bool                bInserted = sal_False;
+    
+    BOOL				bDrawMode = mpViewShell && mpViewShell->ISA(DrawViewShell);
+    BOOL                bInserted = FALSE;
 
     if( pFilter )
     {
@@ -295,19 +295,19 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                     InsSDDinOlMode( pMedium );
 
                 // don't delete Medium here, ownership of pMedium has changed in this case
-                bInserted = sal_True;
+                bInserted = TRUE;
             }
         }
         else
         {
-            sal_Bool bFound = ( ::std::find( aFilterVector.begin(), aFilterVector.end(), pFilter->GetMimeType() ) != aFilterVector.end() );
+            BOOL bFound = ( ::std::find( aFilterVector.begin(), aFilterVector.end(), pFilter->GetMimeType() ) != aFilterVector.end() );
             if( !bFound &&
                 ( aFilterName.SearchAscii( "Text" ) != STRING_NOTFOUND ||
                 aFilterName.SearchAscii( "Rich" ) != STRING_NOTFOUND ||
                 aFilterName.SearchAscii( "RTF" )  != STRING_NOTFOUND ||
                 aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND ) )
             {
-                bFound = sal_True;
+                bFound = TRUE;
             }
 
             if( bFound )
@@ -317,13 +317,13 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 else
                     InsTextOrRTFinOlMode(pMedium);
 
-                bInserted = sal_True;
+                bInserted = TRUE;
                 delete pMedium;
             }
         }
     }
 
-    mpDocSh->SetWaitCursor( sal_False );
+    mpDocSh->SetWaitCursor( FALSE );
 
     if( !bInserted )
     {
@@ -335,37 +335,37 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
 // -----------------------------------------------------------------------------
 
-sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
+BOOL FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 {
-    sal_Bool bOK = sal_False;
+    BOOL bOK = FALSE;
 
     // Liste mit Seitennamen (wenn NULL, dann alle Seiten)
     List* pBookmarkList = NULL;
 
-    mpDocSh->SetWaitCursor( sal_False );
+    mpDocSh->SetWaitCursor( FALSE );
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
     AbstractSdInsertPagesObjsDlg* pDlg = pFact ? pFact->CreateSdInsertPagesObjsDlg( NULL, mpDoc, pMedium, aFile ) : 0;
 
     if( !pDlg )
-        return sal_False;
+        return FALSE;
 
     // Ev. wird eine QueryBox geoeffnet ("Links aktualisieren?"),
     // daher wird der Dialog der aktuelle DefModalDialogParent
     ::Window* pDefParent = GetpApp()->GetDefDialogParent();
     GetpApp()->SetDefDialogParent(pDlg->GetWindow());
 
-    sal_uInt16 nRet = pDlg->Execute();
+    USHORT nRet = pDlg->Execute();
 
     GetpApp()->SetDefDialogParent(pDefParent);
 
-    mpDocSh->SetWaitCursor( sal_True );
+    mpDocSh->SetWaitCursor( TRUE );
 
     if( nRet == RET_OK )
     {
         // Zuerst Seiten einfuegen
         pBookmarkList = pDlg->GetList( 1 ); // Seiten
-        sal_Bool bLink = pDlg->IsLink();
-        sal_Bool bReplace = sal_False;
+        BOOL bLink = pDlg->IsLink();
+        BOOL bReplace = FALSE;
         SdPage* pPage = NULL;
         ::sd::View* pView = mpViewShell->GetView();
 
@@ -378,7 +378,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             pPage = static_cast<SdPage*>(pView->GetSdrPageView()->GetPage());
         }
 
-        sal_uInt16 nPos = 0xFFFF;
+        USHORT nPos = 0xFFFF;
 
         if (pPage && !pPage->IsMasterPage())
         {
@@ -392,7 +392,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             }
         }
 
-        sal_Bool  bNameOK;
+        BOOL  bNameOK;
         List* pObjectBookmarkList = pDlg->GetList( 2 ); // Objekte
         List* pExchangeList = NULL;
 
@@ -403,15 +403,15 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             // Um zu gewaehrleisten, dass alle Seitennamen eindeutig sind, werden
             // die einzufuegenden geprueft und gegebenenfalls in einer Ersatzliste
             // aufgenommen
-            // bNameOK == sal_False -> Benutzer hat abgebrochen
+            // bNameOK == FALSE -> Benutzer hat abgebrochen
             bNameOK = mpView->GetExchangeList( pExchangeList, pBookmarkList, 0 );
 
             if( bNameOK )
                 bOK = mpDoc->InsertBookmarkAsPage( pBookmarkList, pExchangeList,
                                     bLink, bReplace, nPos,
-                                    sal_False, NULL, sal_True, sal_True, sal_False );
+                                    FALSE, NULL, TRUE, TRUE, FALSE );
 
-            // delete the BookmarkList
+            // Loeschen der BookmarkList
             if( pBookmarkList )
             {
                 String* pString = (String*) pBookmarkList->First();
@@ -423,7 +423,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
                 delete pBookmarkList;
                 pBookmarkList = NULL;
             }
-            // delete the ExchangeList
+            // Loeschen der ExchangeList
             if( pExchangeList )
             {
                 String* pString = (String*) pExchangeList->First();
@@ -437,6 +437,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             }
         }
         // Dann Objekte einfuegen
+        //pBookmarkList = pDlg->GetList( 2 ); // Objekte
         pBookmarkList = pObjectBookmarkList;
 
         // Um zu gewaehrleisten... (s.o.)
@@ -446,7 +447,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             bOK = mpDoc->InsertBookmarkAsObject( pBookmarkList, pExchangeList,
                                 bLink, NULL, NULL);
 
-        // delete the BookmarkList
+        // Loeschen der BookmarkList
         if( pBookmarkList )
         {
             String* pString = (String*) pBookmarkList->First();
@@ -458,7 +459,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             delete pBookmarkList;
             pBookmarkList = NULL;
         }
-        // delete the ExchangeList
+        // Loeschen der ExchangeList
         if( pExchangeList )
         {
             String* pString = (String*) pExchangeList->First();
@@ -489,15 +490,15 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
     if( !pDlg )
         return;
 
-    mpDocSh->SetWaitCursor( sal_False );
+    mpDocSh->SetWaitCursor( FALSE );
 
-    sal_uInt16 nRet = pDlg->Execute();
-    mpDocSh->SetWaitCursor( sal_True );
+    USHORT nRet = pDlg->Execute();
+    mpDocSh->SetWaitCursor( TRUE );
 
     if( nRet == RET_OK )
     {
         // gewaehltes Dateiformat: Text oder RTF oder HTML (Default ist Text)
-        sal_uInt16 nFormat = EE_FORMAT_TEXT;
+        USHORT nFormat = EE_FORMAT_TEXT;
 
         if( aFilterName.SearchAscii( "Rich") != STRING_NOTFOUND )
             nFormat = EE_FORMAT_RTF;
@@ -511,7 +512,11 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         // was zeichnen muessen;
         // der globale Outliner koennte in SdPage::CreatePresObj
         // benutzt werden
+//		SfxItemPool* pPool = mpDoc->GetDrawOutliner().GetEmptyItemSet().GetPool();
         SdrOutliner* pOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
+//		pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)mpDoc->GetStyleSheetPool());
+//		pOutliner->SetEditTextObjectPool(pPool);
+//		pOutliner->SetForbiddenCharsTable( mpDoc->GetForbiddenCharsTable() );
 
         // Referenz-Device setzen
         pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
@@ -526,7 +531,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         DBG_ASSERT( pStream, "Kein InStream!" );
         pStream->Seek( 0 );
 
-        sal_uLong nErr = pOutliner->Read( *pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes() );
+        ULONG nErr = pOutliner->Read( *pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes() );
 
         if (nErr || !pOutliner->GetEditEngine().GetText().Len())
         {
@@ -559,9 +564,9 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                     while ( pOutliner->GetParagraphCount() > 1 )
                     {
                         Paragraph* pPara = pOutliner->GetParagraph( 0 );
-                        sal_uLong nLen = pOutliner->GetText( pPara, 1 ).Len();
-                        pOutliner->QuickDelete( ESelection( 0, (sal_uInt16) nLen, 1, 0 ) );
-                        pOutliner->QuickInsertLineBreak( ESelection( 0, (sal_uInt16) nLen, 0, (sal_uInt16) nLen ) );
+                        ULONG nLen = pOutliner->GetText( pPara, 1 ).Len();
+                        pOutliner->QuickDelete( ESelection( 0, (USHORT) nLen, 1, 0 ) );
+                        pOutliner->QuickInsertLineBreak( ESelection( 0, (USHORT) nLen, 0, (USHORT) nLen ) );
                     }
                 }
             }
@@ -622,32 +627,30 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 {
     // gewaehltes Dateiformat: Text oder RTF oder HTML (Default ist Text)
-    sal_uInt16 nFormat = EE_FORMAT_TEXT;
+    USHORT nFormat = EE_FORMAT_TEXT;
 
     if( aFilterName.SearchAscii( "Rich") != STRING_NOTFOUND )
         nFormat = EE_FORMAT_RTF;
     else if( aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND )
         nFormat = EE_FORMAT_HTML;
 
-    ::Outliner*    pDocliner = static_cast<OutlineView*>(mpView)->GetOutliner();
-
-    std::vector<Paragraph*> aSelList;
-    pDocliner->GetView(0)->CreateSelectionList(aSelList);
-
-    Paragraph* pPara = aSelList.empty() ? NULL : *(aSelList.begin());
+    ::Outliner*	   pDocliner = static_cast<OutlineView*>(mpView)->GetOutliner();
+    List*		   pList	 = pDocliner->GetView(0)->CreateSelectionList();
+    Paragraph*	   pPara	 = (Paragraph*)pList->First();
 
     // wo soll eingefuegt werden?
     while( !pDocliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
+    {
         pPara = pDocliner->GetParent(pPara);
-
-    sal_uLong nTargetPos = pDocliner->GetAbsPos(pPara) + 1;
+    }
+    ULONG nTargetPos = pDocliner->GetAbsPos(pPara) + 1;
 
     // Layout der Vorgaengerseite uebernehmen
-    sal_uInt16 nPage = 0;
+    USHORT nPage = 0;
     pPara = pDocliner->GetParagraph( pDocliner->GetAbsPos( pPara ) - 1 );
     while (pPara)
     {
-        sal_uLong nPos = pDocliner->GetAbsPos( pPara );
+        ULONG nPos = pDocliner->GetAbsPos( pPara );
         if ( pDocliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
             nPage++;
         pPara = pDocliner->GetParagraph( nPos - 1 );
@@ -674,7 +677,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     DBG_ASSERT( pStream, "Kein InStream!" );
     pStream->Seek( 0 );
 
-    sal_uLong nErr = pOutliner->Read(*pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes());
+    ULONG nErr = pOutliner->Read(*pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes());
 
     if (nErr || !pOutliner->GetEditEngine().GetText().Len())
     {
@@ -684,20 +687,20 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     }
     else
     {
-        sal_uLong nParaCount = pOutliner->GetParagraphCount();
+        ULONG nParaCount = pOutliner->GetParagraphCount();
 
         // fuer Fortschrittsanzeige: Anzahl der Ebene-0-Absaetze
-        sal_uInt16 nNewPages = 0;
+        USHORT nNewPages = 0;
         pPara = pOutliner->GetParagraph( 0 );
         while (pPara)
         {
-            sal_uLong nPos = pOutliner->GetAbsPos( pPara );
+            ULONG nPos = pOutliner->GetAbsPos( pPara );
             if( pOutliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
                 nNewPages++;
             pPara = pOutliner->GetParagraph( ++nPos );
         }
 
-        mpDocSh->SetWaitCursor( sal_False );
+        mpDocSh->SetWaitCursor( FALSE );
 
         SfxProgress* pProgress = new SfxProgress( mpDocSh, String( SdResId(STR_CREATE_PAGES)), nNewPages);
         if( pProgress )
@@ -708,13 +711,13 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
         pDocliner->GetUndoManager().EnterListAction(
                                     String(SdResId(STR_UNDO_INSERT_FILE)), String() );
 
-        sal_uLong nSourcePos = 0;
+        ULONG nSourcePos = 0;
         SfxStyleSheet* pStyleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );
         Paragraph* pSourcePara = pOutliner->GetParagraph( 0 );
         while (pSourcePara)
         {
-            sal_uLong nPos = pOutliner->GetAbsPos( pSourcePara );
-            sal_Int16 nDepth = pOutliner->GetDepth( (sal_uInt16) nPos );
+            ULONG nPos = pOutliner->GetAbsPos( pSourcePara );
+            sal_Int16 nDepth = pOutliner->GetDepth( (USHORT) nPos );
 
             // den letzte Absatz nur uebernehmen, wenn er gefuellt ist
             if (nSourcePos < nParaCount - 1 ||
@@ -746,7 +749,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
         if( pProgress )
             delete pProgress;
 
-        mpDocSh->SetWaitCursor( sal_True );
+        mpDocSh->SetWaitCursor( TRUE );
     }
 
     delete pOutliner;
@@ -754,7 +757,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
 // -----------------------------------------------------------------------------
 
-sal_Bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
+BOOL FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
 {
     OutlineView* pOlView = static_cast<OutlineView*>(mpView);
 
@@ -771,14 +774,14 @@ sal_Bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
         pOutliner->SetParaInsertedHdl( Link(NULL, NULL));
         Link aOldParagraphRemovingHdl = pOutliner->GetParaRemovingHdl();
         pOutliner->SetParaRemovingHdl( Link(NULL, NULL));
-        Link aOldDepthChangedHdl      = pOutliner->GetDepthChangedHdl();
+        Link aOldDepthChangedHdl	  = pOutliner->GetDepthChangedHdl();
         pOutliner->SetDepthChangedHdl( Link(NULL, NULL));
-        Link aOldBeginMovingHdl       = pOutliner->GetBeginMovingHdl();
+        Link aOldBeginMovingHdl 	  = pOutliner->GetBeginMovingHdl();
         pOutliner->SetBeginMovingHdl( Link(NULL, NULL));
-        Link aOldEndMovingHdl         = pOutliner->GetEndMovingHdl();
+        Link aOldEndMovingHdl		  = pOutliner->GetEndMovingHdl();
         pOutliner->SetEndMovingHdl( Link(NULL, NULL));
 
-        Link aOldStatusEventHdl       = pOutliner->GetStatusEventHdl();
+        Link aOldStatusEventHdl 	  = pOutliner->GetStatusEventHdl();
         pOutliner->SetStatusEventHdl(Link(NULL, NULL));
 
         pOutliner->Clear();
@@ -792,10 +795,10 @@ sal_Bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
         pOutliner->SetEndMovingHdl(aOldEndMovingHdl);
         pOutliner->SetStatusEventHdl(aOldStatusEventHdl);
 
-        return sal_True;
+        return TRUE;
     }
     else
-        return sal_False;
+        return FALSE;
 }
 
 // -----------------------------------------------------------------------------

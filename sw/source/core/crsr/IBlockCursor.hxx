@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ class Point;
  /** Access to the block cursor
 
     A block cursor contains a SwShellCrsr and additional information about
-    the rectangle which has been created by pressing the mouse button and
+    the rectangle which has been created by pressing the mouse button and 
     moving the mouse.
     This interface provides access to the SwShellCrsr and to start and end
     point of the mouse movement.
@@ -51,7 +51,7 @@ class Point;
     virtual SwShellCrsr& getShellCrsr() = 0;
 
 /** Defines the starting vertex of the block selection
-
+    
     @param rPt
     rPt should contain the document coordinates of the mouse cursor when
     the block selection starts (MouseButtonDown)
@@ -59,7 +59,7 @@ class Point;
     virtual void setStartPoint( const Point &rPt ) = 0;
 
 /** Defines the ending vertex of the block selection
-
+    
     @param rPt
     rPt should contain the document coordinates of the mouse cursor when
     the block selection has started and the mouse has been moved (MouseMove)

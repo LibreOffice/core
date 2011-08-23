@@ -59,7 +59,6 @@ IDLFILES=\
     PasswordContainerInteractionHandler.idl\
     PasswordRequest.idl\
     PasswordRequestMode.idl\
-    PDFExportException.idl\
     OfficeRestartManager.idl\
     UnsupportedOverwriteRequest.idl\
     UrlRecord.idl\

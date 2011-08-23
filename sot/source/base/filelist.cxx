@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,20 +29,30 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sot.hxx"
 
-#include <tools/stream.hxx>
-#include <tools/string.hxx>
-#include <tools/rtti.hxx>
-#include <sot/exchange.hxx>
-#include<sot/filelist.hxx>
+#include<tools/list.hxx>
+#include<tools/stream.hxx>
+#include<tools/string.hxx>
+#include<tools/rtti.hxx>
+#include<sot/exchange.hxx>
+#include<filelist.hxx>
 #include <osl/thread.h>
 
 TYPEINIT1_AUTOFACTORY( FileList, SvDataCopyStream );
+
+// String-Liste zum Speichern der Namen deklarieren
+DECLARE_LIST( FileStringList, String* )
+
 
 /*************************************************************************
 |*
 |*    FileList - Ctor/Dtor
 |*
 \*************************************************************************/
+
+FileList::FileList()
+{
+    pStrList = new FileStringList();
+}
 
 FileList::~FileList()
 {
@@ -51,9 +61,13 @@ FileList::~FileList()
 
 void FileList::ClearAll( void )
 {
-    for ( size_t i = 0, n = aStrList.size(); i < n; ++i )
-        delete aStrList[ i ];
-    aStrList.clear();
+    // Strings in der Liste loeschen
+    ULONG nCount = pStrList->Count();
+    for( ULONG i = 0 ; i < nCount ; i++ )
+        delete pStrList->GetObject( i );
+
+    // Liste loeschen
+    delete pStrList;
 }
 
 /*************************************************************************
@@ -64,8 +78,14 @@ void FileList::ClearAll( void )
 
 FileList& FileList::operator=( const FileList& rFileList )
 {
-    for ( size_t i = 0, n = rFileList.aStrList.size(); i < n; ++i )
-        aStrList.push_back( new String( *rFileList.aStrList[ i ] ) );
+    // Liste duplizieren
+    *pStrList = *rFileList.pStrList;
+
+    // Strings in der Liste kopieren
+    ULONG nCount = pStrList->Count();
+    for( ULONG i = 0 ; i < nCount ; i++ )
+        pStrList->Replace( new String( *rFileList.pStrList->GetObject( i ) ), i );
+
     return *this;
 }
 
@@ -75,14 +95,14 @@ FileList& FileList::operator=( const FileList& rFileList )
 |*
 \*************************************************************************/
 
-sal_uLong FileList::GetFormat()
+ULONG FileList::GetFormat()
 {
     return FORMAT_FILE_LIST;
 }
 
 /******************************************************************************
 |*
-|*  virtuelle SvData-Methoden
+|*	virtuelle SvData-Methoden
 |*
 \******************************************************************************/
 
@@ -103,7 +123,7 @@ void FileList::Assign( const SvDataCopyStream& rCopyStream )
 
 /******************************************************************************
 |*
-|*  Stream-Operatoren
+|*	Stream-Operatoren
 |*
 \******************************************************************************/
 
@@ -114,23 +134,24 @@ void FileList::Assign( const SvDataCopyStream& rCopyStream )
 
 SvStream& operator<<( SvStream& rOStm, const FileList& /*rFileList*/ )
 {
-    OSL_FAIL("Not implemented!");
+    OSL_ENSURE(false, "Not implemented!");    	    
     return rOStm;
 }
 
-/* #i28176#
+/* #i28176# 
    The Windows clipboard bridge now provides a double '\0'
-   terminated list of file names for format SOT_FORMAT_FILE_LIST
+   terminated list of file names for format SOT_FORMAT_FILE_LIST 
    instead of the original Windows Sv_DROPFILES structure. All strings
-   in this list are UTF16 strings. Shell link files will be already
+   in this list are UTF16 strings. Shell link files will be already 
    resolved by the Windows clipboard bridge.*/
 SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
 {
     rFileList.ClearAll();
-
+    rFileList.pStrList = new FileStringList();
+    
     String aStr;
     sal_uInt16 c;
-
+    
     while (!rIStm.IsEof())
     {
         aStr.Erase();
@@ -149,32 +170,32 @@ SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
 
         // append the filepath
         rFileList.AppendFile(aStr);
-    }
+    }    						
     return rIStm;
 }
 
 /******************************************************************************
 |*
-|*  Liste fuellen/abfragen
+|*	Liste fuellen/abfragen
 |*
 \******************************************************************************/
 
 void FileList::AppendFile( const String& rStr )
 {
-    aStrList.push_back( new String( rStr ) );
+    pStrList->Insert( new String( rStr ) , pStrList->Count() );
 }
 
-String FileList::GetFile( size_t i ) const
+String FileList::GetFile( ULONG i ) const
 {
     String aStr;
-    if( i < aStrList.size() )
-        aStr = *aStrList[ i ];
+    if( i < pStrList->Count() )
+        aStr = *pStrList->GetObject( i );
     return aStr;
 }
 
-size_t FileList::Count( void ) const
+ULONG FileList::Count( void ) const
 {
-    return aStrList.size();
+    return pStrList->Count();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

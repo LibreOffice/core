@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,14 +28,13 @@
 #ifndef TOOLS_INETMIME_HXX
 #define TOOLS_INETMIME_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include "tools/toolsdllapi.h"
 #include <rtl/alloc.h>
 #include <rtl/string.h>
 #include "rtl/tencinfo.h"
 #include <tools/debug.hxx>
 #include <tools/errcode.hxx>
+#include <tools/list.hxx>
 #include <tools/string.hxx>
 
 class DateTime;
@@ -1419,35 +1418,29 @@ inline INetContentTypeParameter::INetContentTypeParameter(const ByteString &
 {}
 
 //============================================================================
-class TOOLS_DLLPUBLIC INetContentTypeParameterList
+class TOOLS_DLLPUBLIC INetContentTypeParameterList: private List
 {
 public:
+    ~INetContentTypeParameterList() { Clear(); }
+
+    using List::Count;
 
     void Clear();
 
-    void Insert(INetContentTypeParameter * pParameter, sal_uIntPtr nIndex)
-    {
-        maEntries.insert(maEntries.begin()+nIndex,pParameter);
-    }
+    void Insert(INetContentTypeParameter * pParameter, ULONG nIndex)
+    { List::Insert(pParameter, nIndex); }
 
-    void Append(INetContentTypeParameter *pParameter)
-    {
-        maEntries.push_back(pParameter);
-    }
-
-    inline const INetContentTypeParameter * GetObject(sal_uIntPtr nIndex) const
-    {
-        return &(maEntries[nIndex]);
-    }
+    inline const INetContentTypeParameter * GetObject(ULONG nIndex) const;
 
     const INetContentTypeParameter * find(const ByteString & rAttribute)
         const;
-
-private:
-
-    boost::ptr_vector<INetContentTypeParameter> maEntries;
 };
 
+inline const INetContentTypeParameter *
+INetContentTypeParameterList::GetObject(ULONG nIndex) const
+{
+    return static_cast< INetContentTypeParameter * >(List::GetObject(nIndex));
+}
 
 #endif // TOOLS_INETMIME_HXX
 

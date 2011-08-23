@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,11 +45,11 @@ class ScNumFormatAbbrev
 public:
     ScNumFormatAbbrev();
     ScNumFormatAbbrev(const ScNumFormatAbbrev& aFormat);
-    ScNumFormatAbbrev(sal_uLong nFormat, SvNumberFormatter& rFormatter);
-    void Load( SvStream& rStream, CharSet eByteStrSet );            // loading of the numberformats
-    void Save( SvStream& rStream, CharSet eByteStrSet ) const;   // saving of the numberformats
-    void PutFormatIndex(sal_uLong nFormat, SvNumberFormatter& rFormatter);
-    sal_uLong GetFormatIndex( SvNumberFormatter& rFormatter);
+    ScNumFormatAbbrev(ULONG nFormat, SvNumberFormatter& rFormatter);
+    void Load( SvStream& rStream, CharSet eByteStrSet );            // Laden der Zahlenformate
+    void Save( SvStream& rStream, CharSet eByteStrSet ) const;   // Speichern der Zahlenformate
+    void PutFormatIndex(ULONG nFormat, SvNumberFormatter& rFormatter);
+    ULONG GetFormatIndex( SvNumberFormatter& rFormatter);
     inline int operator==(const ScNumFormatAbbrev& rNumFormat) const
     {
         return ((sFormatstring == rNumFormat.sFormatstring)

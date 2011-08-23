@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,8 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
-#include "svx/tbxalign.hxx"
-#include "svx/tbxdraw.hxx"
+#include "tbxalign.hxx"
+#include "tbxdraw.hxx"
 #include "tbxdraw.hrc"
 #include <tools/shl.hxx>
 #include <sfx2/imagemgr.hxx>
@@ -52,7 +52,7 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlAlign, SfxAllEnumItem);
 |*
 \************************************************************************/
 
-SvxTbxCtlAlign::SvxTbxCtlAlign( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SvxTbxCtlAlign::SvxTbxCtlAlign( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
     ,   m_aSubTbName( RTL_CONSTASCII_USTRINGPARAM( "alignmentbar" ))
     ,   m_aSubTbResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/alignmentbar" ))
@@ -82,7 +82,7 @@ SfxPopupWindowType SvxTbxCtlAlign::GetPopupWindowType() const
 |*
 \************************************************************************/
 
-SfxPopupWindow* SvxTbxCtlAlign::CreatePopupWindow()
+SfxPopupWindow*	SvxTbxCtlAlign::CreatePopupWindow()
 {
     SolarMutexGuard aGuard;
     if ( GetSlotId() == SID_OBJECT_ALIGN )
@@ -102,7 +102,7 @@ SfxPopupWindow* SvxTbxCtlAlign::CreatePopupWindow()
 
 ::rtl::OUString SAL_CALL SvxTbxCtlAlign::getSubToolbarName() throw (::com::sun::star::uno::RuntimeException)
 {
-    // Provide the controlled sub-toolbar name, so we are notified whenever
+    // Provide the controlled sub-toolbar name, so we are notified whenever 
     // this toolbar executes a function.
     SolarMutexGuard aGuard;
     return m_aSubTbName;
@@ -118,7 +118,7 @@ void SAL_CALL SvxTbxCtlAlign::functionSelected( const ::rtl::OUString& aCommand 
         if ( aCommand.getLength() > 0 )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
-            Image aImage = GetImage( xFrame, aCommand, hasBigImages() );
+            Image aImage = GetImage( xFrame, aCommand, hasBigImages(), isHighContrast() );
             if ( !!aImage )
                 GetToolBox().SetItemImage( GetId(), aImage );
         }
@@ -133,7 +133,7 @@ void SAL_CALL SvxTbxCtlAlign::updateImage() throw (::com::sun::star::uno::Runtim
     if ( m_aCommand.getLength() > 0 )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
-        Image aImage = GetImage( xFrame, m_aCommand, hasBigImages() );
+        Image aImage = GetImage( xFrame, m_aCommand, hasBigImages(), isHighContrast() );
         if ( !!aImage )
             GetToolBox().SetItemImage( GetId(), aImage );
     }

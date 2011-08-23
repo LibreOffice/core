@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,6 +51,9 @@ namespace chart
 namespace wrapper
 {
 
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 class WrappedStockProperty : public WrappedProperty
@@ -106,16 +109,17 @@ void WrappedStockProperty::setPropertyValue( const ::com::sun::star::uno::Any& r
         DiagramHelper::tTemplateWithServiceName aTemplateAndService =
                 DiagramHelper::getTemplateForDiagram( xDiagram, xFactory );
 
-        uno::Reference< chart2::XChartTypeTemplate > xTemplate =
+        uno::Reference< chart2::XChartTypeTemplate > xTemplate = 
                 getNewTemplate( bNewValue, aTemplateAndService.second, xFactory );
 
         if(xTemplate.is())
         {
             try
             {
-                // locked controllers
+                // /-- locked controllers
                 ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
                 xTemplate->changeDiagram( xDiagram );
+                // \-- locked controllers
             }
             catch( uno::Exception & ex )
             {
@@ -131,6 +135,8 @@ void WrappedStockProperty::setPropertyValue( const ::com::sun::star::uno::Any& r
     return m_aDefaultValue;
 }
 
+//-------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
 
 class WrappedVolumeProperty : public WrappedStockProperty
@@ -186,7 +192,7 @@ uno::Reference< chart2::XChartTypeTemplate > WrappedVolumeProperty::getNewTempla
 
     if(!xFactory.is())
         return xTemplate;
-
+    
     if( bNewValue ) //add volume
     {
         if( rCurrentTemplate.equals( C2U( "com.sun.star.chart2.template.StockLowHighClose" ) ) )
@@ -205,6 +211,8 @@ uno::Reference< chart2::XChartTypeTemplate > WrappedVolumeProperty::getNewTempla
 }
 
 //-------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
+
 
 class WrappedUpDownProperty : public WrappedStockProperty
 {
@@ -282,6 +290,9 @@ enum
 }//anonymous namespace
 
 //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//static
 void WrappedStockProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -301,12 +312,19 @@ void WrappedStockProperties::addProperties( ::std::vector< Property > & rOutProp
 }
 
 //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+//static
 void WrappedStockProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
     rList.push_back( new WrappedVolumeProperty( spChart2ModelContact ) );
     rList.push_back( new WrappedUpDownProperty( spChart2ModelContact ) );
 }
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 } //namespace wrapper
 } //namespace chart

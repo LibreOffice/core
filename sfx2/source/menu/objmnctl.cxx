@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,6 +31,7 @@
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/VerbAttributes.hpp>
 
+#include <tools/list.hxx>
 #include <vcl/menu.hxx>
 #include <svl/stritem.hxx>
 
@@ -49,11 +50,11 @@ using namespace com::sun::star;
 //--------------------------------------------------------------------
 
 /*
-    Constructor; sets the Select-Handler for the Menu and inserts it into
-    its Parent.
+    Ctor; setzt Select-Handler am Menu und traegt Menu
+    in seinen Parent ein.
  */
 
-SfxObjectVerbsControl::SfxObjectVerbsControl(sal_uInt16 nSlotId, Menu &rMenu, SfxBindings &rBindings)
+SfxObjectVerbsControl::SfxObjectVerbsControl(USHORT nSlotId, Menu &rMenu, SfxBindings &rBindings)
     : SfxMenuControl( nSlotId, rBindings )
     , pMenu(new PopupMenu)
     , rParent(rMenu)
@@ -66,7 +67,7 @@ SfxObjectVerbsControl::SfxObjectVerbsControl(sal_uInt16 nSlotId, Menu &rMenu, Sf
 //--------------------------------------------------------------------
 
 /*
-    Make up a menu with the current view of the verbs from ViewShell.
+    Fuellt das Menu mit den aktuellen Verben aus der ViewShell.
  */
 
 void SfxObjectVerbsControl::FillMenu()
@@ -79,8 +80,8 @@ void SfxObjectVerbsControl::FillMenu()
         const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs =  pView->GetVerbs();
         if ( aVerbs.getLength() )
         {
-            sal_uInt16 nSlotId = SID_VERB_START;
-            for (sal_uInt16 n=0; n<aVerbs.getLength(); n++)
+            USHORT nSlotId = SID_VERB_START;
+            for (USHORT n=0; n<aVerbs.getLength(); n++)
             {
                 // check for ReadOnly verbs
                 if ( pDoc->IsReadOnly() && !(aVerbs[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_NEVERDIRTIES) )
@@ -90,7 +91,7 @@ void SfxObjectVerbsControl::FillMenu()
                 if ( !(aVerbs[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU) )
                     continue;
 
-                DBG_ASSERT(nSlotId <= SID_VERB_END, "Too many Verbs!");
+                DBG_ASSERT(nSlotId <= SID_VERB_END, "Zuviele Verben!");
                 if (nSlotId > SID_VERB_END)
                     break;
 
@@ -99,20 +100,21 @@ void SfxObjectVerbsControl::FillMenu()
         }
     }
 
-    rParent.EnableItem( GetId(), (sal_Bool)pMenu->GetItemCount() );
+    rParent.EnableItem( GetId(), (BOOL)pMenu->GetItemCount() );
 }
 
 //--------------------------------------------------------------------
 
 /*
-    Status notification:
-    Fill the menu with the current verbs from the ViewShell of the
-    the DocumentShell. If the functionality is disabled, the corresponding
-    menu entry in Parent menu is disabled, otherwise it is enabled.
+    Statusbenachrichtigung;
+    fuellt gfs. das Menu mit den aktuellen Verben aus der ViewShell.
+    der DocumentShell.
+    Ist die Funktionalit"at disabled, wird der entsprechende
+    Menueeintrag im Parentmenu disabled, andernfalls wird er enabled.
  */
 
-void SfxObjectVerbsControl::StateChanged(
-    sal_uInt16 /*nSID*/,
+void SfxObjectVerbsControl::StateChanged( 
+    USHORT /*nSID*/, 
     SfxItemState eState,
     const SfxPoolItem* /*pState*/ )
 {
@@ -124,13 +126,13 @@ void SfxObjectVerbsControl::StateChanged(
 //--------------------------------------------------------------------
 
 /*
-    Select-Handler for Menus;
-    run the selected Verb,
+    Select-Handler des Menus;
+    das selektierte Verb mit ausgef"uhrt,
  */
 
 IMPL_LINK_INLINE_START( SfxObjectVerbsControl, MenuSelect, Menu *, pSelMenu )
 {
-    const sal_uInt16 nSlotId = pSelMenu->GetCurItemId();
+    const USHORT nSlotId = pSelMenu->GetCurItemId();
     if( nSlotId )
         GetBindings().Execute(nSlotId);
     return 1;
@@ -140,7 +142,7 @@ IMPL_LINK_INLINE_END( SfxObjectVerbsControl, MenuSelect, Menu *, pSelMenu )
 //--------------------------------------------------------------------
 
 /*
-    Destructor; releases the Menu.
+    Dtor; gibt das Menu frei.
  */
 
 SfxObjectVerbsControl::~SfxObjectVerbsControl()

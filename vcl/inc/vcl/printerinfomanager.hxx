@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #ifndef _PSPRINT_PRINTERINFOMANAGER_HXX_
 #define _PSPRINT_PRINTERINFOMANAGER_HXX_
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <list>
 
 #include "vcl/dllapi.h"
@@ -70,9 +70,9 @@ struct PrinterInfo : JobData
     // this vector is currently implicitly given by the adobe
     // standard encoding
     bool                        m_bPerformFontSubstitution;
-    boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >
+    std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >
     m_aFontSubstitutes;
-    boost::unordered_map< fontID, fontID >
+    std::hash_map< fontID, fontID >
     m_aFontSubstitutions;
 
     PrinterInfo() :
@@ -122,43 +122,42 @@ protected:
         PrinterInfo             m_aInfo;
     };
 
-    boost::unordered_map< rtl::OUString, Printer, rtl::OUStringHash > m_aPrinters;
+    std::hash_map< rtl::OUString, Printer, rtl::OUStringHash > m_aPrinters;
     PrinterInfo                         m_aGlobalDefaults;
     std::list< WatchFile >            m_aWatchFiles;
     rtl::OUString                     m_aDefaultPrinter;
     rtl::OUString                     m_aSystemPrintCommand;
-
+    
     std::list< SystemPrintQueue >     m_aSystemPrintQueues;
 
-    SystemQueueInfo*                  m_pQueueInfo;
+    SystemQueueInfo*				  m_pQueueInfo;
 
-    Type                              m_eType;
+    Type						      m_eType;
     bool                              m_bUseIncludeFeature;
     bool                              m_bUseJobPatch;
     rtl::OUString                     m_aSystemDefaultPaper;
-
+    
     bool                              m_bDisableCUPS;
 
     PrinterInfoManager( Type eType = Default );
+    virtual ~PrinterInfoManager();
 
     virtual void initialize();
 
     // fill in font substitutions
-    // the resulting boost::unordered_map maps from source to target font ids
+    // the resulting hash_map maps from source to target font ids
     void fillFontSubstitutions( PrinterInfo& rInfo ) const;
-
+    
     // fill default paper if not configured in config file
     // default paper is e.g. locale dependent
     // if a paper is already set it will not be overwritten
     void setDefaultPaper( PPDContext& rInfo ) const;
-
+    
     void initSystemDefaultPaper();
 public:
 
     // there can only be one
     static PrinterInfoManager& get();
-    // only called by SalData destructor, frees the global instance
-    static void release();
 
     // get PrinterInfoManager type
     Type getType() const { return m_eType; }
@@ -171,7 +170,7 @@ public:
 
     // gets info about a named printer
     const PrinterInfo& getPrinterInfo( const rtl::OUString& rPrinter ) const;
-
+        
     // gets the name of the default printer
     const rtl::OUString& getDefaultPrinter() const { return m_aDefaultPrinter; }
 
@@ -210,7 +209,7 @@ public:
     // primarily used internally but also by padmin
     // returns the printer queue names
     virtual const std::list< SystemPrintQueue >& getSystemPrintQueues();
-
+        
     // similar but returnse whole commandlines
     virtual void getSystemPrintCommands( std::list< rtl::OUString >& rCommands );
 
@@ -219,29 +218,25 @@ public:
     // this may either be a regular file or the result of popen()
     virtual FILE* startSpool( const rtl::OUString& rPrinterName, bool bQuickCommand );
     // close the FILE* returned by startSpool and does the actual spooling
-    // set bBanner to "false" will attempt to suppress banner printing
-    // set bBanner to "true" will rely on the system default
     // returns a numerical job id
-    virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner );
-
+    virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData );
+    
     // for spadmin: whether adding or removing a printer is possible
     virtual bool addOrRemovePossible() const;
-
+    
     bool getUseIncludeFeature() const { return m_bUseIncludeFeature; }
     bool getUseJobPatch() const { return m_bUseJobPatch; }
-
+    
     // check whether a printer's feature string contains a subfeature
     bool checkFeatureToken( const rtl::OUString& rPrinterName, const char* pToken ) const;
-
+    
     // set m_bDisableCUPS and update printer config
     void setCUPSDisabled( bool );
-
+    
     // gets m_bDisableCUPS, initialized from printer config
     bool isCUPSDisabled() const;
-
-    virtual ~PrinterInfoManager();
 };
-
+    
 } // namespace
 
 #endif // _PSPRINT_PRINTERINFOMANAGER_HXX_

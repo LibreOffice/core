@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define SC_FUMARK_HXX
 
 #include "fupoor.hxx"
-#include "rangelst.hxx"         // ScRangeListRef
+#include "rangelst.hxx"			// ScRangeListRef
 
 
 /*************************************************************************
@@ -42,18 +42,18 @@
 class FuMarkRect : public FuPoor
 {
  protected:
-    Point           aBeginPos;
-    Rectangle       aZoomRect;
-    sal_Bool            bVisible;
-    sal_Bool            bStartDrag;
-    ScRangeListRef  aSourceRange;
+    Point			aBeginPos;
+    Rectangle		aZoomRect;
+    BOOL			bVisible;
+    BOOL			bStartDrag;
+    ScRangeListRef	aSourceRange;
 
  public:
     FuMarkRect(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuMarkRect();
 
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
+    virtual BOOL KeyInput(const KeyEvent& rKEvt);
 
     virtual void ScrollStart();
     virtual void ScrollEnd();
@@ -63,10 +63,10 @@ class FuMarkRect : public FuPoor
 
     virtual void ForcePointer(const MouseEvent* pMEvt);
 
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
-    virtual sal_uInt8 Command(const CommandEvent& rCEvt);
+    virtual BOOL MouseMove(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+    virtual BYTE Command(const CommandEvent& rCEvt);
 };
 
 

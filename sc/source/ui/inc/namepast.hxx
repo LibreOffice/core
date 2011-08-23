@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define SC_NAMEPAST_HXX
 
 #include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
@@ -44,16 +44,16 @@ class ScNamePasteDlg : public ModalDialog
     DECL_LINK( ListDblClickHdl, ListBox * );
 
 protected:
-    FixedText       aLabelText;
-    ListBox         aNameList;
-    OKButton        aOKButton;
-    CancelButton    aCancelButton;
-    HelpButton      aHelpButton;
-    PushButton      aInsListButton;
+    FixedText		aLabelText;
+    ListBox			aNameList;
+    OKButton		aOKButton;
+    CancelButton	aCancelButton;
+    HelpButton		aHelpButton;
+    PushButton		aInsListButton;
 public:
-    ScNamePasteDlg( Window * pParent, const ScRangeName* pList, sal_Bool bInsList=sal_True );
+    ScNamePasteDlg( Window * pParent, const ScRangeName* pList, BOOL bInsList=TRUE );
 
-    String          GetSelectedName() const;
+    String			GetSelectedName() const;
 };
 
 

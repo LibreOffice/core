@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,11 +26,15 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 #include "dbregister.hxx"
 #include "dbregister.hrc"
 #include "dbregistersettings.hxx"
 #include "connpooloptions.hxx"
 #include <svl/filenotation.hxx>
+#include <cuires.hrc>
 #include "helpid.hrc"
 #include <svtools/editbrowsebox.hxx>
 #include <cuires.hrc>
@@ -54,9 +58,9 @@
 #include "dbregisterednamesconfig.hxx"
 #include <svx/dialogs.hrc>
 
-#define TAB_WIDTH1      80
+#define TAB_WIDTH1		80
 #define TAB_WIDTH_MIN   10
-#define TAB_WIDTH2      1000
+#define TAB_WIDTH2		1000
 #define ITEMID_TYPE       1
 #define ITEMID_PATH       2
 //........................................................................
@@ -115,18 +119,18 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
 
     SfxTabPage( pParent, CUI_RES( RID_SFXPAGE_DBREGISTER), rSet ),
 
-    aStdBox         ( this, CUI_RES( GB_STD ) ),
-    aTypeText       ( this, CUI_RES( FT_TYPE ) ),
-    aPathText       ( this, CUI_RES( FT_PATH ) ),
-    aPathCtrl       ( this, CUI_RES( LB_PATH ) ),
-    m_aNew          ( this, CUI_RES( BTN_NEW ) ),
-    m_aEdit         ( this, CUI_RES( BTN_EDIT ) ),
-    m_aDelete       ( this, CUI_RES( BTN_DELETE ) ),
-    pHeaderBar      ( NULL ),
-    pPathBox        ( NULL ),
-    m_pCurEntry     ( NULL ),
-    m_nOldCount     ( 0 ),
-    m_bModified     ( sal_False )
+    aStdBox			( this, CUI_RES( GB_STD ) ),
+    aTypeText		( this, CUI_RES( FT_TYPE ) ),
+    aPathText		( this, CUI_RES( FT_PATH ) ),
+    aPathCtrl		( this, CUI_RES( LB_PATH ) ),
+    m_aNew			( this, CUI_RES( BTN_NEW ) ),
+    m_aEdit			( this, CUI_RES( BTN_EDIT ) ),
+    m_aDelete		( this, CUI_RES( BTN_DELETE ) ),
+    pHeaderBar		( NULL ),
+    pPathBox		( NULL ),
+    m_pCurEntry		( NULL ),
+    m_nOldCount		( 0 ),
+    m_bModified		( FALSE )
 {
     m_aNew.SetClickHdl( LINK( this, DbRegistrationOptionsPage, NewHdl ) );
     m_aEdit.SetClickHdl( LINK( this, DbRegistrationOptionsPage, EditHdl ) );
@@ -156,7 +160,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
     Size aHeadSize = pHeaderBar->GetSizePixel();
 
     aPathCtrl.SetFocusControl( pPathBox );
-    pPathBox->SetStyle( pPathBox->GetStyle()|nBits );
+    pPathBox->SetWindowBits( nBits );
     pPathBox->SetDoubleClickHdl( LINK( this, DbRegistrationOptionsPage, EditHdl ) );
     pPathBox->SetSelectHdl( LINK( this, DbRegistrationOptionsPage, PathSelect_Impl ) );
     pPathBox->SetSelectionMode( SINGLE_SELECTION );
@@ -183,7 +187,7 @@ DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
     aPathCtrl.SetFocusControl( NULL );
 
     pHeaderBar->Hide();
-    for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
+    for ( USHORT i = 0; i < pPathBox->GetEntryCount(); ++i )
         delete static_cast< DatabaseRegistration* >( pPathBox->GetEntry(i)->GetUserData() );
     delete pPathBox;
     delete pHeaderBar;
@@ -191,7 +195,7 @@ DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* DbRegistrationOptionsPage::Create( Window* pParent,
+SfxTabPage*	DbRegistrationOptionsPage::Create( Window* pParent,
                                     const SfxItemSet& rAttrSet )
 {
     return ( new DbRegistrationOptionsPage( pParent, rAttrSet ) );
@@ -199,13 +203,13 @@ SfxTabPage* DbRegistrationOptionsPage::Create( Window* pParent,
 
 // -----------------------------------------------------------------------
 
-sal_Bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
+BOOL DbRegistrationOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
 {
     // the settings for the single drivers
     sal_Bool bModified = sal_False;
     DatabaseRegistrations aRegistrations;
-    sal_uLong nCount = pPathBox->GetEntryCount();
-    for ( sal_uLong i = 0; i < nCount; ++i )
+    ULONG nCount = pPathBox->GetEntryCount();
+    for ( ULONG i = 0; i < nCount; ++i )
     {
         SvLBoxEntry* pEntry = pPathBox->GetEntry(i);
         DatabaseRegistration* pRegistration = static_cast< DatabaseRegistration* >( pEntry->GetUserData() );
@@ -253,8 +257,8 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
         pHeaderBar->SetItemSize( ITEMID_TYPE, aUserData.GetToken(0).ToInt32() );
         HeaderEndDrag_Impl( NULL );
         // Sortierrichtung restaurieren
-        sal_Bool bUp = (sal_Bool)(sal_uInt16)aUserData.GetToken(1).ToInt32();
-        HeaderBarItemBits nBits = pHeaderBar->GetItemBits(ITEMID_TYPE);
+        BOOL bUp = (BOOL)(USHORT)aUserData.GetToken(1).ToInt32();
+        HeaderBarItemBits nBits	= pHeaderBar->GetItemBits(ITEMID_TYPE);
 
         if ( bUp )
         {
@@ -277,8 +281,8 @@ void DbRegistrationOptionsPage::FillUserData()
 {
     String aUserData = String::CreateFromInt32( pHeaderBar->GetItemSize( ITEMID_TYPE ) );
     aUserData += ';';
-    HeaderBarItemBits nBits = pHeaderBar->GetItemBits( ITEMID_TYPE );
-    sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    HeaderBarItemBits nBits	= pHeaderBar->GetItemBits( ITEMID_TYPE );
+    BOOL bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     aUserData += bUp ? '1' : '0';
     SetUserData( aUserData );
 }
@@ -330,8 +334,8 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar )
     if ( pBar && pBar->GetCurItemId() != ITEMID_TYPE )
         return 0;
 
-    HeaderBarItemBits nBits = pHeaderBar->GetItemBits(ITEMID_TYPE);
-    sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    HeaderBarItemBits nBits	= pHeaderBar->GetItemBits(ITEMID_TYPE);
+    BOOL bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     SvSortMode eMode = SortAscending;
 
     if ( bUp )
@@ -362,7 +366,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
     if ( !pHeaderBar->IsItemMode() )
     {
         Size aSz;
-        sal_uInt16 nTabs = pHeaderBar->GetItemCount();
+        USHORT nTabs = pHeaderBar->GetItemCount();
         long nTmpSz = 0;
         long nWidth = pHeaderBar->GetItemSize(ITEMID_TYPE);
         long nBarWidth = pHeaderBar->GetSizePixel().Width();
@@ -372,7 +376,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
         else if ( ( nBarWidth - nWidth ) < TAB_WIDTH_MIN )
             pHeaderBar->SetItemSize( ITEMID_TYPE, nBarWidth - TAB_WIDTH_MIN );
 
-        for ( sal_uInt16 i = 1; i <= nTabs; ++i )
+        for ( USHORT i = 1; i <= nTabs; ++i )
         {
             long _nWidth = pHeaderBar->GetItemSize(i);
             aSz.Width() =  _nWidth + nTmpSz;
@@ -409,7 +413,8 @@ void DbRegistrationOptionsPage::insertNewEntry( const ::rtl::OUString& _sName,co
     SvLBoxEntry* pEntry = NULL;
     if ( _bReadOnly )
     {
-        Image aLocked( CUI_RES( RID_SVXBMP_LOCK ) );
+        sal_Bool bHighContrast = pPathBox->GetDisplayBackground().GetColor().IsDark();
+        Image aLocked( CUI_RES( bHighContrast ? RID_SVXBMP_LOCK_HC : RID_SVXBMP_LOCK ) );
         pEntry = pPathBox->InsertEntry( aStr, aLocked, aLocked );
     }
     else
@@ -420,6 +425,60 @@ void DbRegistrationOptionsPage::insertNewEntry( const ::rtl::OUString& _sName,co
     pEntry->SetUserData( new DatabaseRegistration( _sLocation, _bReadOnly ) );
 }
 
+// -----------------------------------------------------------------------------
+String DbRegistrationOptionsPage::getFileLocation(const String& _sLocation)
+{
+    try
+    {
+        rtl::OUString aService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) );
+        Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+        Reference < XFilePicker > xFilePicker( xFactory->createInstance( aService ), UNO_QUERY );
+        OSL_ENSURE(xFilePicker.is() ,"Could create file picker service!");
+        Reference < XFilterManager> xFilterManager(xFilePicker,UNO_QUERY);
+        static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
+        const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
+        if ( pFilter )
+        {
+            xFilterManager->appendFilter( pFilter->GetUIName(),pFilter->GetDefaultExtension());
+            xFilterManager->setCurrentFilter(pFilter->GetUIName());
+        }
+
+        INetURLObject aURL( _sLocation, INET_PROT_FILE );
+        xFilePicker->setMultiSelectionMode(sal_False);
+        xFilePicker->setDisplayDirectory( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+        short nRet = xFilePicker->execute();
+
+        if ( ExecutableDialogResults::OK == nRet )
+        {
+
+            // old path is an URL?
+            INetURLObject aObj( _sLocation );
+            bool bURL = ( aObj.GetProtocol() != INET_PROT_NOT_VALID );
+            Sequence< ::rtl::OUString > aFiles = xFilePicker->getFiles();
+            INetURLObject aNewObj( aFiles[0] );
+            aNewObj.removeFinalSlash();
+
+            // then the new path also an URL else system path
+            String sNewLocation = bURL ? rtl::OUString(aFiles[0]) : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
+
+            if (
+#ifdef UNX
+    // Unix is case sensitive
+                                ( sNewLocation != _sLocation )
+#else
+                                ( sNewLocation.CompareIgnoreCaseToAscii( _sLocation ) != COMPARE_EQUAL )
+#endif
+            )
+                return sNewLocation;
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERRORFILE( "DbRegistrationOptionsPage::EditLocationHdl: exception from folder picker" );
+    }
+
+    return String();
+}
 // -----------------------------------------------------------------------------
 void DbRegistrationOptionsPage::openLinkDialog(const String& _sOldName,const String& _sOldLocation,SvLBoxEntry* _pEntry)
 {
@@ -449,8 +508,8 @@ IMPL_LINK( DbRegistrationOptionsPage, NameValidator, String*, _pName )
 {
     if ( _pName )
     {
-        sal_uLong nCount = pPathBox->GetEntryCount();
-        for ( sal_uLong i = 0; i < nCount; ++i )
+        ULONG nCount = pPathBox->GetEntryCount();
+        for ( ULONG i = 0; i < nCount; ++i )
         {
             SvLBoxEntry* pEntry = pPathBox->GetEntry(i);
             if ( (!m_pCurEntry || m_pCurEntry != pEntry) && pPathBox->GetEntryText(pEntry,0) == *_pName )
@@ -460,7 +519,7 @@ IMPL_LINK( DbRegistrationOptionsPage, NameValidator, String*, _pName )
     return 1L;
 }
 //........................................................................
-}   // namespace svx
+}	// namespace svx
 //........................................................................
 
 

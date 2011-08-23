@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include "SchXMLTextListContext.hxx"
 #include "SchXMLParagraphContext.hxx"
 
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 
@@ -53,7 +53,7 @@ public:
     virtual void EndElement();
 
     virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix,
+        USHORT nPrefix,
         const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
@@ -82,7 +82,7 @@ void SchXMLListItemContext::EndElement()
 }
 
 SvXMLImportContext* SchXMLListItemContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName,
+    USHORT nPrefix, const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
@@ -122,7 +122,7 @@ void SchXMLTextListContext::EndElement()
 }
 
 SvXMLImportContext* SchXMLTextListContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName,
+    USHORT nPrefix, const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;

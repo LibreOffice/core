@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -207,15 +207,15 @@ SotStorageStreamRef ScfTools::OpenStorageStreamWrite( SotStorageRef xStrg, const
 
 // *** item handling *** ------------------------------------------------------
 
-bool ScfTools::CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId, bool bDeep )
+bool ScfTools::CheckItem( const SfxItemSet& rItemSet, USHORT nWhichId, bool bDeep )
 {
     return rItemSet.GetItemState( nWhichId, bDeep ) == SFX_ITEM_SET;
 }
 
-bool ScfTools::CheckItems( const SfxItemSet& rItemSet, const sal_uInt16* pnWhichIds, bool bDeep )
+bool ScfTools::CheckItems( const SfxItemSet& rItemSet, const USHORT* pnWhichIds, bool bDeep )
 {
     DBG_ASSERT( pnWhichIds, "ScfTools::CheckItems - no which id list" );
-    for( const sal_uInt16* pnWhichId = pnWhichIds; *pnWhichId != 0; ++pnWhichId )
+    for( const USHORT* pnWhichId = pnWhichIds; *pnWhichId != 0; ++pnWhichId )
         if( CheckItem( rItemSet, *pnWhichId, bDeep ) )
             return true;
     return false;
@@ -398,7 +398,7 @@ ScFormatFilterPluginImpl::ScFormatFilterPluginImpl()
 {
 }
 
-SAL_DLLPUBLIC_EXPORT ScFormatFilterPlugin * SAL_CALL ScFilterCreate(void)
+ScFormatFilterPlugin * SAL_CALL ScFilterCreate(void)
 {
     return new ScFormatFilterPluginImpl();
 }

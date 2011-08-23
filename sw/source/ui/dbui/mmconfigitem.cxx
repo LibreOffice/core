@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -302,7 +302,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         }
     }
     //read the list of data base assignments
-    Sequence<OUString> aAssignments = GetNodeNames(rtl::OUString::createFromAscii(cAddressDataAssignments));
+    Sequence<OUString> aAssignments = GetNodeNames(C2U(cAddressDataAssignments));
     if(aAssignments.getLength())
     {
         //create a list of property names to load the URLs of all data bases
@@ -313,18 +313,18 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         OUString sSlash = C2U("/");
         for(nAssign = 0; nAssign < aAssignProperties.getLength(); nAssign += 4)
         {
-            String sAssignPath = rtl::OUString::createFromAscii(cAddressDataAssignments);
+            String sAssignPath = C2U(cAddressDataAssignments);
             sAssignPath += '/';
             sAssignPath += String(pAssignments[nAssign / 4]);
             sAssignPath += '/';
             pAssignProperties[nAssign] = sAssignPath;
-            pAssignProperties[nAssign] += rtl::OUString::createFromAscii(cDataSourceName);
+            pAssignProperties[nAssign] += C2U(cDataSourceName);
             pAssignProperties[nAssign + 1] = sAssignPath;
-            pAssignProperties[nAssign + 1] += rtl::OUString::createFromAscii(cDataTableName);
+            pAssignProperties[nAssign + 1] += C2U(cDataTableName);
             pAssignProperties[nAssign + 2] = sAssignPath;
-            pAssignProperties[nAssign + 2] += rtl::OUString::createFromAscii(cDataCommandType);
+            pAssignProperties[nAssign + 2] += C2U(cDataCommandType);
             pAssignProperties[nAssign + 3] = sAssignPath;
-            pAssignProperties[nAssign + 3] += rtl::OUString::createFromAscii(cDBColumnAssignments);
+            pAssignProperties[nAssign + 3] += C2U(cDBColumnAssignments);
         }
         Sequence<Any> aAssignValues = GetProperties(aAssignProperties);
         const Any* pAssignValues = aAssignValues.getConstArray();
@@ -408,7 +408,7 @@ void lcl_ConvertToNumbers(OUString& rBlock, const ResStringArray& rHeaders )
     //convert the strings used for UI to numbers used for the configuration
     String sBlock(rBlock);
     sBlock.SearchAndReplaceAllAscii("\n", String::CreateFromAscii("\\n"));
-    for(sal_uInt16 i = 0; i < rHeaders.Count(); ++i)
+    for(USHORT i = 0; i < rHeaders.Count(); ++i)
     {
         String sHeader = rHeaders.GetString( i );
         sHeader.Insert('<', 0);
@@ -445,7 +445,7 @@ void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHeaders)
             }
             else
             {
-                OSL_FAIL("parse error in address block or greeting line");
+                OSL_ENSURE(false, "parse error in address block or greeting line");
             }
         }
         else
@@ -597,7 +597,7 @@ void  SwMailMergeConfigItem_Impl::Commit()
     //store the changed / new assignments
 
     //load the existing node names to find new names
-    Sequence<OUString> aAssignments = GetNodeNames(rtl::OUString::createFromAscii(cAddressDataAssignments));
+    Sequence<OUString> aAssignments = GetNodeNames(C2U(cAddressDataAssignments));
 
     ::std::vector<DBAddressDataAssignment>::iterator aAssignIter;
     for(aAssignIter = aAddressDataAssignments.begin();
@@ -610,7 +610,7 @@ void  SwMailMergeConfigItem_Impl::Commit()
                         aAssignIter->sConfigNodeName :
                         lcl_CreateNodeName(aAssignments);
             OUString sSlash = C2U("/");
-            OUString sNodePath = rtl::OUString::createFromAscii(cAddressDataAssignments);
+            OUString sNodePath = C2U(cAddressDataAssignments);
             sNodePath += sSlash;
             sNodePath += sNewNode;
             sNodePath += sSlash;
@@ -618,19 +618,19 @@ void  SwMailMergeConfigItem_Impl::Commit()
             Sequence< PropertyValue > aNewValues(4);
             PropertyValue* pNewValues = aNewValues.getArray();
             pNewValues[0].Name = sNodePath;
-            pNewValues[0].Name += rtl::OUString::createFromAscii(cDataSourceName);
+            pNewValues[0].Name += C2U(cDataSourceName);
             pNewValues[0].Value <<= aAssignIter->aDBData.sDataSource;
             pNewValues[1].Name = sNodePath;
-            pNewValues[1].Name += rtl::OUString::createFromAscii(cDataTableName);
+            pNewValues[1].Name += C2U(cDataTableName);
             pNewValues[1].Value <<= aAssignIter->aDBData.sCommand;
             pNewValues[2].Name = sNodePath;
-            pNewValues[2].Name += rtl::OUString::createFromAscii(cDataCommandType);
+            pNewValues[2].Name += C2U(cDataCommandType);
             pNewValues[2].Value <<= aAssignIter->aDBData.nCommandType;
             pNewValues[3].Name = sNodePath;
-            pNewValues[3].Name += rtl::OUString::createFromAscii(cDBColumnAssignments);
+            pNewValues[3].Name += C2U(cDBColumnAssignments);
             pNewValues[3].Value <<= aAssignIter->aDBColumnAssignments;
 
-            SetSetProperties(rtl::OUString::createFromAscii(cAddressDataAssignments), aNewValues);
+            SetSetProperties(C2U(cAddressDataAssignments), aNewValues);
         }
     }
 
@@ -930,7 +930,7 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
                 }
                 catch(Exception&)
                 {
-                    OSL_FAIL("exception caught in xResultSet->SetFilter()");
+                    OSL_ENSURE(false, "exception caught in xResultSet->SetFilter()");
                 }
                 xRowSet->execute();
                 m_pImpl->xResultSet = xRowSet.get();
@@ -940,7 +940,7 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
         }
         catch(Exception& )
         {
-            OSL_FAIL("exception caught in: SwMailMergeConfigItem::GetResultSet() ");
+            OSL_ENSURE(false, "exception caught in: SwMailMergeConfigItem::GetResultSet() ");
         }
     }
     return m_pImpl->xResultSet;
@@ -978,7 +978,7 @@ void  SwMailMergeConfigItem::SetFilter(::rtl::OUString& rFilter)
             }
             catch(Exception&)
             {
-                OSL_FAIL("exception caught in SwMailMergeConfigItem::SetFilter()");
+                OSL_ENSURE(false, "exception caught in SwMailMergeConfigItem::SetFilter()");
             }
         }
     }
@@ -997,7 +997,7 @@ sal_Int32 SwMailMergeConfigItem::MoveResultSet(sal_Int32 nTarget)
             {
                 if(nTarget > 0)
                 {
-                    sal_Bool bMoved = m_pImpl->xResultSet->absolute(nTarget);
+                    BOOL bMoved = m_pImpl->xResultSet->absolute(nTarget);
                     if(!bMoved)
                     {
                         if(nTarget > 1)
@@ -1326,7 +1326,7 @@ bool SwMailMergeConfigItem::IsAddressFieldsAssigned() const
         if(aItem.bIsColumn)
         {
             String sConvertedColumn = aItem.sText;
-            for(sal_uInt16 nColumn = 0;
+            for(USHORT nColumn = 0;
                     nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
                                                                                 ++nColumn)
             {
@@ -1385,7 +1385,7 @@ bool SwMailMergeConfigItem::IsGreetingFieldsAssigned() const
         if(aItem.bIsColumn)
         {
             String sConvertedColumn = aItem.sText;
-            for(sal_uInt16 nColumn = 0;
+            for(USHORT nColumn = 0;
                     nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
                                                                                 ++nColumn)
             {
@@ -1666,13 +1666,13 @@ sal_uInt32 SwMailMergeConfigItem::GetMergedDocumentCount() const
 SwView* lcl_ExistsView(SwView* pView)
 {
     const TypeId aType(TYPE(SwView));
-    SfxViewShell* pViewShell = SfxViewShell::GetFirst( &aType, sal_False );
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst( &aType, FALSE );
     while(pViewShell)
     {
         if(pViewShell == pView)
             return pView;
 
-        pViewShell = SfxViewShell::GetNext( *pViewShell, &aType, sal_False );
+        pViewShell = SfxViewShell::GetNext( *pViewShell, &aType, FALSE );
     }
     return 0;
 }

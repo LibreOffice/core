@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,11 +82,11 @@ SvxShowCharSet::SvxShowCharSet( Window* pParent, const ResId& rResId ) :
 
     SetStyle( GetStyle() | WB_CLIPCHILDREN );
     aVscrollSB.SetScrollHdl( LINK( this, SvxShowCharSet, VscrollHdl ) );
-    aVscrollSB.EnableDrag( sal_True );
+    aVscrollSB.EnableDrag( TRUE );
     // other settings like aVscroll depend on selected font => see SetFont
 
-    bDrag = sal_False;
-    InitSettings( sal_True, sal_True );
+    bDrag = FALSE;
+    InitSettings( TRUE, TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -94,7 +94,7 @@ SvxShowCharSet::SvxShowCharSet( Window* pParent, const ResId& rResId ) :
 void SvxShowCharSet::GetFocus()
 {
     Control::GetFocus();
-    SelectIndex( nSelectedIndex, sal_True );
+    SelectIndex( nSelectedIndex, TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -102,7 +102,7 @@ void SvxShowCharSet::GetFocus()
 void SvxShowCharSet::LoseFocus()
 {
     Control::LoseFocus();
-    SelectIndex( nSelectedIndex, sal_False );
+    SelectIndex( nSelectedIndex, FALSE );
 }
 
 // -----------------------------------------------------------------------
@@ -110,9 +110,9 @@ void SvxShowCharSet::LoseFocus()
 void SvxShowCharSet::StateChanged( StateChangedType nType )
 {
     if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
-        InitSettings( sal_True, sal_False );
+        InitSettings( TRUE, FALSE );
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
-        InitSettings( sal_False, sal_True );
+        InitSettings( FALSE, TRUE );
 
     Control::StateChanged( nType );
 }
@@ -123,7 +123,7 @@ void SvxShowCharSet::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS )
       && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
-        InitSettings( sal_True, sal_True );
+        InitSettings( TRUE, TRUE );
     else
         Control::DataChanged( rDCEvt );
 }
@@ -137,7 +137,7 @@ void SvxShowCharSet::MouseButtonDown( const MouseEvent& rMEvt )
         if ( rMEvt.GetClicks() == 1 )
         {
             GrabFocus();
-            bDrag = sal_True;
+            bDrag = TRUE;
             CaptureMouse();
 
             int nIndex = PixelToMapIndex( rMEvt.GetPosPixel() );
@@ -159,7 +159,7 @@ void SvxShowCharSet::MouseButtonUp( const MouseEvent& rMEvt )
         if ( Rectangle(Point(), GetOutputSize()).IsInside(rMEvt.GetPosPixel()))
             aSelectHdl.Call( this );
         ReleaseMouse();
-        bDrag = sal_False;
+        bDrag = FALSE;
     }
 }
 
@@ -196,14 +196,14 @@ void SvxShowCharSet::Command( const CommandEvent& rCEvt )
 
 // -----------------------------------------------------------------------------
 
-sal_uInt16 SvxShowCharSet::GetRowPos(sal_uInt16 _nPos) const
+USHORT SvxShowCharSet::GetRowPos(USHORT _nPos) const
 {
     return _nPos / COLUMN_COUNT ;
 }
 
 // -----------------------------------------------------------------------------
 
-sal_uInt16 SvxShowCharSet::GetColumnPos(sal_uInt16 _nPos) const
+USHORT SvxShowCharSet::GetColumnPos(USHORT _nPos) const
 {
     return _nPos % COLUMN_COUNT ;
 }
@@ -222,9 +222,9 @@ int SvxShowCharSet::FirstInView( void ) const
 
 int SvxShowCharSet::LastInView( void ) const
 {
-    sal_uIntPtr nIndex = FirstInView();
+    ULONG nIndex = FirstInView();
     nIndex += ROW_COUNT * COLUMN_COUNT - 1;
-    sal_uIntPtr nCompare = sal::static_int_cast<sal_uIntPtr>( maFontCharMap.GetCharCount() - 1 );
+    ULONG nCompare = sal::static_int_cast<ULONG>( maFontCharMap.GetCharCount() - 1 );
     if( nIndex > nCompare )
         nIndex = nCompare;
     return nIndex;
@@ -311,7 +311,7 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
 
     if ( tmpSelected >= 0 )
     {
-        SelectIndex( tmpSelected, sal_True );
+        SelectIndex( tmpSelected, TRUE );
         aPreSelectHdl.Call( this );
     }
 }
@@ -441,7 +441,7 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
 
 // -----------------------------------------------------------------------
 
-void SvxShowCharSet::InitSettings( sal_Bool bForeground, sal_Bool bBackground )
+void SvxShowCharSet::InitSettings( BOOL bForeground, BOOL bBackground )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
@@ -487,12 +487,12 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     aFont.SetAlign( ALIGN_TOP );
     int nFontHeight = (aOrigSize.Height() - 5) * 2 / (3 * ROW_COUNT);
     aFont.SetSize( PixelToLogic( Size( 0, nFontHeight ) ) );
-    aFont.SetTransparent( sal_True );
+    aFont.SetTransparent( TRUE );
     Control::SetFont( aFont );
     GetFontCharMap( maFontCharMap );
 
     // hide scrollbar when there is nothing to scroll
-    sal_Bool bNeedVscroll = (maFontCharMap.GetCharCount() > ROW_COUNT*COLUMN_COUNT);
+    BOOL bNeedVscroll = (maFontCharMap.GetCharCount() > ROW_COUNT*COLUMN_COUNT);
 
     nX = (aOrigSize.Width() - (bNeedVscroll ? SBWIDTH : 0)) / COLUMN_COUNT;
     nY = aOrigSize.Height() / ROW_COUNT;
@@ -523,7 +523,7 @@ void SvxShowCharSet::SetFont( const Font& rFont )
 
 // -----------------------------------------------------------------------
 
-void SvxShowCharSet::SelectIndex( int nNewIndex, sal_Bool bFocus )
+void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
 {
     if( nNewIndex < 0 )
     {
@@ -608,7 +608,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, sal_Bool bFocus )
 
 // -----------------------------------------------------------------------
 
-void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew, sal_Bool bFocus )
+void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew, BOOL bFocus )
 {
     // get next available char of current font
     sal_UCS4 cNext = maFontCharMap.GetNextChar( cNew - 1 );
@@ -679,7 +679,7 @@ void SvxShowCharSet::ReleaseAccessible()
     if ( aFind == m_aItems.end() )
     {
         OSL_ENSURE(m_pAccessible,"Who wants to create a child of my table without a parent?");
-        aFind = m_aItems.insert(ItemsMap::value_type(_nPos,new ::svx::SvxShowCharSetItem(*this,m_pAccessible->getTable(),sal::static_int_cast< sal_uInt16 >(_nPos)))).first;
+        aFind = m_aItems.insert(ItemsMap::value_type(_nPos,new ::svx::SvxShowCharSetItem(*this,m_pAccessible->getTable(),sal::static_int_cast< USHORT >(_nPos)))).first;
         rtl::OUStringBuffer buf;
         buf.appendUtf32( maFontCharMap.GetCharFromIndex( _nPos ) );
         aFind->second->maText = buf.makeStringAndClear();
@@ -760,9 +760,11 @@ void SubsetMap::InitList()
         aAllSubsets.push_back( Subset( 0x02B0, 0x02FF, RID_SUBSETSTR_SPACING_MODIFIERS ) );
         aAllSubsets.push_back( Subset( 0x0300, 0x036F, RID_SUBSETSTR_COMB_DIACRITICAL ) );
         aAllSubsets.push_back( Subset( 0x0370, 0x03FF, RID_SUBSETSTR_BASIC_GREEK ) );
+    //  aAllSubsets.push_back( Subset( 0x03D0, 0x03F3, RID_SUBSETSTR_GREEK_SYMS_COPTIC ) );
         aAllSubsets.push_back( Subset( 0x0400, 0x04FF, RID_SUBSETSTR_CYRILLIC ) );
         aAllSubsets.push_back( Subset( 0x0530, 0x058F, RID_SUBSETSTR_ARMENIAN ) );
         aAllSubsets.push_back( Subset( 0x0590, 0x05FF, RID_SUBSETSTR_BASIC_HEBREW ) );
+    //  aAllSubsets.push_back( Subset( 0x0591, 0x05C4, RID_SUBSETSTR_HEBREW_EXTENDED ) );
         aAllSubsets.push_back( Subset( 0x0600, 0x065F, RID_SUBSETSTR_BASIC_ARABIC ) );
         aAllSubsets.push_back( Subset( 0x0660, 0x06FF, RID_SUBSETSTR_ARABIC_EXTENDED ) );
         aAllSubsets.push_back( Subset( 0x0700, 0x074F, RID_SUBSETSTR_SYRIAC ) );

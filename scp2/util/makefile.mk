@@ -44,6 +44,7 @@ SCP1TARGET = setup_osl
 SCP1FILES  = installation_ooo.par          \
              scpaction_ooo.par             \
              directory_ooo.par             \
+             datacarrier_ooo.par           \
              file_ooo.par                  \
              file_extra_ooo.par            \
              file_font_ooo.par             \
@@ -229,6 +230,7 @@ SCP2TARGET = setup_osljre
 SCP2FILES  = installation_ooo.par          \
              scpaction_ooo.par             \
              directory_ooo.par             \
+             datacarrier_ooo.par           \
              file_ooo.par                  \
              file_extra_ooo.par            \
              file_font_ooo.par             \

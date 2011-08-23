@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,8 +86,8 @@ void SfxMacroConfig::Release_Impl()
 struct SfxMacroConfig_Impl
 {
     SfxMacroInfoArr_Impl    aArr;
-    sal_uInt32              nEventId;
-    sal_Bool                bWaitingForCallback;
+    sal_uInt32					nEventId;
+    sal_Bool					bWaitingForCallback;
 
                             SfxMacroConfig_Impl()
                             : nEventId( 0 )
@@ -179,7 +179,7 @@ SfxMacroInfo::SfxMacroInfo( const String& rURL ) :
         if ( aTmp.GetTokenCount('/') > 3 )
         {
             // 'macro:///lib.mod.proc(args)' => Macro via App-BASIC-Mgr
-            // 'macro://[docname|.]/lib.mod.proc(args)' => Macro via included Doc-BASIC-Mgr
+            // 'macro://[docname|.]/lib.mod.proc(args)' => Macro via zugehoerigen Doc-BASIC-Mgr
             if ( aTmp.CompareToAscii("///", 3 ) != COMPARE_EQUAL )
                 bAppBasic = FALSE;
             aTmp = rURL.GetToken( 3, '/' );
@@ -226,7 +226,7 @@ SfxMacroInfo::SfxMacroInfo(bool _bAppBasic, const String& rLibName,
 //==========================================================================
 
 SfxMacroInfo::SfxMacroInfo(bool _bAppBasic, const String& rQualifiedName )
-:       pHelpText(0),
+:	pHelpText(0),
     nRefCnt(0),
     bAppBasic(_bAppBasic),
     nSlotId(0),
@@ -266,7 +266,7 @@ SfxMacroInfo::~SfxMacroInfo()
 sal_Bool SfxMacroInfo::operator==(const SfxMacroInfo& rOther) const
 {
     if ( GetQualifiedName() == rOther.GetQualifiedName() &&
-            bAppBasic   == rOther.bAppBasic )
+            bAppBasic	== rOther.bAppBasic )
         return sal_True;
     else
         return sal_False;
@@ -299,16 +299,14 @@ String SfxMacroInfo::GetQualifiedName() const
         aMacroName += '.';
     }
 
-    // due to ::com::sun::star::script::JavaScript
-    // no more disassembly of the string
+    // Wg. ::com::sun::star::script::JavaScript kein Zerlegen des Strings mehr
     aMacroName += aMethodName;
     return aMacroName;
 }
 
 String SfxMacroInfo::GetFullQualifiedName() const
 {
-    // Returns only nonsense, when called for a
-    // ::com::sun::star::script::JavaScript !
+    // Liefert nur Unsinn, wenn f"ur ein ::com::sun::star::script::JavaScript aufgerufen !
     String aRet;
     if ( bAppBasic )
         aRet = SFX_APP()->GetName();
@@ -323,7 +321,7 @@ String SfxMacroInfo::GetURL() const
         return aMethodName;
 
     // 'macro:///lib.mod.proc(args)' => Macro via App-BASIC-Mgr
-    // 'macro://[docname|.]/lib.mod.proc(args)' => Macro via included Doc-BASIC-Mgr
+    // 'macro://[docname|.]/lib.mod.proc(args)' => Macro via zugehoerigen Doc-BASIC-Mgr
     // 'macro://obj.method(args)' => Object via App-BASIC-Mgr
     String aURL( String::CreateFromAscii("macro://") );
     if ( !bAppBasic )
@@ -405,6 +403,83 @@ void SfxMacroInfo::SetHelpText( const String& rName )
     *pHelpText = rName;
 }
 
+//==========================================================================
+
+SvStream& operator >> (SvStream& rStream, SfxMacroInfo& rInfo)
+{
+    sal_uInt16 nAppBasic, nFileVersion;
+    String aDocName;
+
+    rStream >> nFileVersion;
+    if ( nVersion < nCompatVersion )
+    {
+        // In der 1.Version ohne Versionskennung
+        nAppBasic = nVersion;
+        nFileVersion = 1;
+        rStream.ReadByteString(aDocName,RTL_TEXTENCODING_UTF8);
+        rStream.ReadByteString(rInfo.aLibName,RTL_TEXTENCODING_UTF8);
+        rStream.ReadByteString(rInfo.aModuleName,RTL_TEXTENCODING_UTF8);
+        rStream.ReadByteString(rInfo.aMethodName,RTL_TEXTENCODING_UTF8);
+    }
+    else
+    {
+        String aInput;
+        rStream	>> nAppBasic;
+        rStream.ReadByteString(aDocName,RTL_TEXTENCODING_UTF8);					// Vorsicht: kann bei AppName Unsinn sein!
+        rStream.ReadByteString(rInfo.aLibName,RTL_TEXTENCODING_UTF8);
+        rStream.ReadByteString(rInfo.aModuleName,RTL_TEXTENCODING_UTF8);
+        rStream.ReadByteString(aInput,RTL_TEXTENCODING_UTF8);
+
+        if ( nFileVersion == nCompatVersion )
+            rInfo.aMethodName = aInput;
+        else
+        {
+            sal_uInt16 nCount = aInput.GetTokenCount('.');
+            rInfo.aMethodName = aInput.GetToken( nCount-1, '.' );
+            if ( nCount > 1 )
+                rInfo.aModuleName = aInput.GetToken( nCount-2, '.' );
+            if ( nCount > 2 )
+                rInfo.aLibName = aInput.GetToken( 0, '.' );
+        }
+    }
+
+    rInfo.bAppBasic = (sal_Bool) nAppBasic;
+    return rStream;
+}
+
+int SfxMacroInfo::Load( SvStream& rStream )
+{
+    rStream >> (*this);
+    nSlotId = SFX_APP()->GetMacroConfig()->GetSlotId(this);
+    return 0;
+}
+
+//==========================================================================
+
+SvStream& operator << (SvStream& rStream, const SfxMacroInfo& rInfo)
+{
+    if ( rInfo.bAppBasic )
+    {
+        rStream << nVersion
+                << (sal_uInt16) rInfo.bAppBasic;
+        rStream.WriteByteString(rInfo.GetBasicName(),RTL_TEXTENCODING_UTF8);
+        rStream.WriteByteString(rInfo.aLibName,RTL_TEXTENCODING_UTF8);
+        rStream.WriteByteString(rInfo.aModuleName,RTL_TEXTENCODING_UTF8);
+        rStream.WriteByteString(rInfo.aMethodName,RTL_TEXTENCODING_UTF8);
+    }
+    else
+    {
+        rStream << nVersion
+                << (sal_uInt16) rInfo.bAppBasic;
+        rStream.WriteByteString(SFX_APP()->GetName(),RTL_TEXTENCODING_UTF8);
+        rStream.WriteByteString(rInfo.aLibName,RTL_TEXTENCODING_UTF8);
+        rStream.WriteByteString(rInfo.aModuleName,RTL_TEXTENCODING_UTF8);
+        rStream.WriteByteString(rInfo.aMethodName,RTL_TEXTENCODING_UTF8);
+    }
+
+    return rStream;
+}
+
 sal_Bool SfxMacroInfo::Compare( const SvxMacro& rMacro ) const
 {
     String aName = rMacro.GetLibName();
@@ -438,18 +513,17 @@ SFX_EXEC_STUB( SfxApplication, MacroExec_Impl )
 
 sal_uInt16 SfxMacroConfig::GetSlotId(SfxMacroInfoPtr pInfo)
 {
-    sal_uInt16 nCount = pImp->aArr.Count();      // Search for Macro
+    sal_uInt16 nCount = pImp->aArr.Count(); 	 // Macro suchen
     sal_uInt16 i;
     for (i=0; i<nCount; i++)
         if ((*(pImp->aArr)[i]) == (*pInfo))
             break;
 
     if (i == nCount)
-    {
-        // Macro still unknown
+    {									// Macro noch unbekannt
         nCount = aIdArray.Count();
         sal_uInt16 n;
-        for (n=0; n<nCount; n++) // Seearch for free SlotId
+        for (n=0; n<nCount; n++) // freie SlotId suchen
             if (aIdArray[n] > SID_MACRO_START + n)
                 break;
 
@@ -482,7 +556,7 @@ sal_uInt16 SfxMacroConfig::GetSlotId(SfxMacroInfoPtr pInfo)
         else
             pNewSlot->pNextSlot = pNewSlot;
 
-        // Take over Macro
+        // Macro uebernehmen
         SfxMacroInfoPtr pNewInfo = new SfxMacroInfo(*pInfo);
         pNewInfo->nSlotId = SID_MACRO_START + n;
         pImp->aArr.Insert(pNewInfo,n);
@@ -503,7 +577,7 @@ sal_uInt16 SfxMacroConfig::GetSlotId(SfxMacroInfoPtr pInfo)
 
 void SfxMacroConfig::ReleaseSlotId(sal_uInt16 nId)
 {
-    DBG_ASSERT( IsMacroSlot( nId ), "SlotId is no Macro!");
+    DBG_ASSERT( IsMacroSlot( nId ), "SlotId ist kein Macro!");
 
     sal_uInt16 nCount = pImp->aArr.Count();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -514,23 +588,23 @@ void SfxMacroConfig::ReleaseSlotId(sal_uInt16 nId)
             pInfo->nRefCnt--;
             if (pInfo->nRefCnt == 0)
             {
-                // Slot is no longer referenced, so get
+                // Slot wird nicht mehr referenziert, also holen
                 SfxSlot *pSlot = pInfo->pSlot;
 
-                // Take out Slot from the concatenation
+                // Slot aus der Verkettung rausnehmen
                 while (pSlot->pNextSlot != pInfo->pSlot)
                     pSlot = (SfxSlot*) pSlot->pNextSlot;
                 pSlot->pNextSlot = pInfo->pSlot->pNextSlot;
 
-                // Slot close itself briefly
+                // Slot selbst kurz schlie\sen
                 pSlot = pInfo->pSlot;
                 pSlot->pNextSlot = pSlot;
 
-                // Remove Macro info from array so that it can not cause
-                // any harm
+                // MacroInfo aus Array entfernen, damit sie kein Unheil
+                // anrichten kann
                 pImp->aArr.Remove(i);
 
-                // Release SlotId again
+                // SlotId wieder freigeben
                 sal_uInt16 nIdCount = aIdArray.Count();
                 for (sal_uInt16 n=0; n<nIdCount; n++)
                 {
@@ -541,9 +615,9 @@ void SfxMacroConfig::ReleaseSlotId(sal_uInt16 nId)
                     }
                 }
 
-                // Unless the application is not shut down, then
-                // the Slot has to be deleted asynchronously if cancelled in
-                // its own Execute!
+                // Sofern nicht die Applikation heruntergefahren wird, mu\s
+                // der Slot asynchron gel"oscht werden, falls er in seinem
+                // eigenen Execute abgeschossen wird!
                 if ( !SFX_APP()->Get_Impl()->bInQuit )
                     pImp->nEventId = Application::PostUserEvent( LINK(this, SfxMacroConfig, EventHdl_Impl), pInfo );
                 else
@@ -553,14 +627,14 @@ void SfxMacroConfig::ReleaseSlotId(sal_uInt16 nId)
         }
     }
 
-    OSL_FAIL("Macro-SlotId is not found!");
+    DBG_ERROR("Macro-SlotId nicht gefunden!");
 }
 
 //==========================================================================
 
 void SfxMacroConfig::RegisterSlotId(sal_uInt16 nId)
 {
-    DBG_ASSERT( IsMacroSlot( nId ), "SlotId is no Macro!");
+    DBG_ASSERT( IsMacroSlot( nId ), "SlotId ist kein Macro!");
 
     sal_uInt16 nCount = pImp->aArr.Count();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -572,7 +646,7 @@ void SfxMacroConfig::RegisterSlotId(sal_uInt16 nId)
         }
     }
 
-    OSL_FAIL("Macro-SlotId is not found!");
+    DBG_ERROR("Macro-SlotId nicht gefunden!");
 }
 
 //==========================================================================
@@ -611,7 +685,7 @@ sal_Bool SfxMacroConfig::ExecuteMacro( sal_uInt16 nId, const String& rArgs ) con
     SvxMacro aMacro( pInfo->GetQualifiedName(), pInfo->GetBasicName(), STARBASIC );
     sal_Bool bRet = ExecuteMacro( pSh, &aMacro, rArgs );
 
-    // Release, because a register was created in the dispatcher Execute
+    // Release, da im Dispatcher-Execute ein Register gemacht wurde
     ((SfxMacroConfig*)this)->ReleaseSlotId( nId );
     return bRet;
 }
@@ -620,11 +694,11 @@ sal_Bool SfxMacroConfig::ExecuteMacro( SfxObjectShell *pSh, const SvxMacro* pMac
 {
     SfxApplication *pApp = SFX_APP();
 
-    // Name of the Macros or Scripts (ScriptCode)
+    // Name des Macros oder Scripts bzw. ScriptCode
     String aCode( pMacro->GetMacName() );
     ErrCode nErr = ERRCODE_NONE;
 
-    // Is it a Basic-Macro ?
+    // Ist es ein Basic-Macro ?
     ScriptType eSType = pMacro->GetScriptType();
     sal_Bool bIsBasic = eSType == STARBASIC;
     sal_Bool bIsStarScript = ( eSType == EXTENDED_STYPE && pMacro->GetLibName().SearchAscii( "StarScript" ) != STRING_NOTFOUND );
@@ -636,10 +710,10 @@ sal_Bool SfxMacroConfig::ExecuteMacro( SfxObjectShell *pSh, const SvxMacro* pMac
         BasicManager *pAppMgr = SFX_APP()->GetBasicManager();
         if( bIsBasic )
         {
-            // BasicManager of the Document?
+            // BasicManager von Document?
             BasicManager *pMgr = pSh ? pSh->GetBasicManager() : NULL;
 
-            // As the name has unfortunately been changed often ...
+            // Da leider der Name zwischendurch h"aufig gewechselt hat ...
             if( SFX_APP()->GetName() == pMacro->GetLibName() ||
                     pMacro->GetLibName().EqualsAscii("StarDesktop") )
                 pMgr = pAppMgr;
@@ -679,16 +753,16 @@ sal_Bool SfxMacroConfig::CheckMacro( SfxObjectShell *pSh, const SvxMacro* pMacro
 {
     SfxApplication *pApp = SFX_APP();
 
-    // Name of Macros or Scripts (ScriptCode)
+    // Name des Macros oder Scripts bzw. ScriptCode
     String aCode( pMacro->GetMacName() );
     ErrCode nErr = ERRCODE_NONE;
 
-    // BasicManager of Document or Application
+    // BasicManager von Document oder Application
     pApp->EnterBasicCall();
     BasicManager *pAppMgr = SFX_APP()->GetBasicManager();
     BasicManager *pMgr = pSh ? pSh->GetBasicManager() : NULL;
 
-    // As the name has unfortunately been changed often ...
+    // Da leider der Name zwischendurch h"aufig gewechselt hat ...
     if( SFX_APP()->GetName() == pMacro->GetLibName() ||
             pMacro->GetLibName().EqualsAscii("StarDesktop") )
         pMgr = pAppMgr;
@@ -709,15 +783,14 @@ sal_Bool SfxMacroConfig::CheckMacro( sal_uInt16 nId ) const
     if ( !pInfo )
         return sal_False;
 
-    // only initialize Basic, when default is not
-    // ::com::sun::star::script::JavaScript; then the Basic has to be created
-    // anyway in IsBasic()
+    // Basic nur initialisieren, wenn default nicht ::com::sun::star::script::JavaScript; dann mu\s
+    // in IsBasic() sowieso das Basic angelegt werden
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
     SfxApplication *pApp = SFX_APP();
     pApp->EnterBasicCall();
 
-    // BasicManager of Document or Application
+    // BasicManager von Document oder Application
     BasicManager *pAppMgr = SFX_APP()->GetBasicManager();
     BasicManager *pMgr = pSh ? pSh->GetBasicManager() : NULL;
 
@@ -748,9 +821,9 @@ IMPL_LINK( SfxMacroConfig, EventHdl_Impl, SfxMacroInfo*, pInfo )
     return 0;
 }
 
-sal_Bool SfxMacroConfig::IsBasic(
-    SbxObject* /*pVCtrl*/,
-    const String& rCode,
+sal_Bool SfxMacroConfig::IsBasic( 
+    SbxObject* /*pVCtrl*/, 
+    const String& rCode, 
     BasicManager* pMgr )
 {
     sal_Bool bFound;
@@ -760,11 +833,11 @@ sal_Bool SfxMacroConfig::IsBasic(
     return bFound;
 }
 
-ErrCode SfxMacroConfig::Call(
+ErrCode SfxMacroConfig::Call( 
     SbxObject* /*pVCtrl*/,
-    const String& rCode,
-    BasicManager* pMgr,
-    SbxArray *pArgs,
+    const String& rCode, 
+    BasicManager* pMgr, 
+    SbxArray *pArgs, 
     SbxValue *pRet )
 {
     SfxApplication *pApp = SFX_APP();

@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: canvastools.hxx,v $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,14 +41,15 @@ static void validateInput(const std::vector<double>& rKeyStops)
 {
     (void)rKeyStops;
 #ifdef DBG_UTIL
-    OSL_ENSURE( rKeyStops.size() > 1,
+    OSL_ENSURE( rKeyStops.size() > 1, 
                 "KeyStopLerp::KeyStopLerp(): key stop vector must have two entries or more" );
-
+            
     // rKeyStops must be sorted in ascending order
     for( ::std::size_t i=1, len=rKeyStops.size(); i<len; ++i )
     {
         if( rKeyStops[i-1] > rKeyStops[i] )
-            OSL_FAIL( "KeyStopLerp::KeyStopLerp(): time vector is not sorted in ascending order!" );
+            OSL_ENSURE( false, 
+                        "KeyStopLerp::KeyStopLerp(): time vector is not sorted in ascending order!" );
     }
 #endif
 }
@@ -63,10 +67,10 @@ namespace basegfx
 
         KeyStopLerp::KeyStopLerp( const ::com::sun::star::uno::Sequence<double>& rKeyStops ) :
             maKeyStops(rKeyStops.getLength()),
-            mnLastIndex(0)
+            mnLastIndex(0)            
         {
-            std::copy( rKeyStops.getConstArray(),
-                       rKeyStops.getConstArray()+rKeyStops.getLength(),
+            std::copy( rKeyStops.getConstArray(), 
+                       rKeyStops.getConstArray()+rKeyStops.getLength(), 
                        maKeyStops.begin() );
             validateInput(maKeyStops);
         }
@@ -78,7 +82,7 @@ namespace basegfx
                 maKeyStops.at(mnLastIndex+1) >= fAlpha )
             {
                 // nope, find new index
-                mnLastIndex = std::min<std::ptrdiff_t>(
+                mnLastIndex = std::min<std::ptrdiff_t>( 
                     maKeyStops.size()-2,
                     // range is ensured by max below
                     std::max<std::ptrdiff_t>(
@@ -91,7 +95,7 @@ namespace basegfx
 
             // lerp between stop and stop+1
             const double fRawLerp=
-                (fAlpha-maKeyStops.at(mnLastIndex)) /
+                (fAlpha-maKeyStops.at(mnLastIndex)) / 
                 (maKeyStops.at(mnLastIndex+1) - maKeyStops.at(mnLastIndex));
 
             // clamp to permissible range (input fAlpha might be

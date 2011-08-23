@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ class ScOutlineEntry : public ScDataObject
 
 public:
                             ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize,
-                                                bool bNewHidden = false );
+                                                bool bNewHidden = FALSE );
                             ScOutlineEntry( const ScOutlineEntry& rEntry );
 
     virtual ScDataObject*       Clone() const;
@@ -56,8 +56,8 @@ public:
     SCCOLROW                GetStart() const    { return nStart; }
     SCSIZE                  GetSize() const     { return nSize; }
     SCCOLROW                GetEnd() const      { return nStart+nSize-1; }
-    bool                    IsHidden() const    { return bHidden; }             // group hidden
-    bool                    IsVisible() const   { return bVisible; }            // control visible?
+    bool                    IsHidden() const    { return bHidden; }             // Gruppe versteckt
+    bool                    IsVisible() const   { return bVisible; }            // Control sichtbar?
 
     void                    Move( SCsCOLROW nDelta );
     void                    SetSize( SCSIZE nNewSize );
@@ -74,7 +74,7 @@ public:
 
     virtual short           Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
 
-    sal_uInt16                  FindStart( SCCOLROW nMinStart );
+    USHORT                  FindStart( SCCOLROW nMinStart );
 };
 
 
@@ -83,46 +83,46 @@ class SC_DLLPUBLIC ScOutlineArray
 friend class ScSubOutlineIterator;
 
 private:
-    sal_uInt16                  nDepth;
+    USHORT                  nDepth;
     ScOutlineCollection     aCollections[SC_OL_MAXDEPTH];
 
-    sal_Bool                    DecDepth();
-    void                    FindEntry( SCCOLROW nSearchPos, sal_uInt16& rFindLevel, sal_uInt16& rFindIndex,
-                                        sal_uInt16 nMaxLevel = SC_OL_MAXDEPTH );
-    void                    RemoveSub( SCCOLROW nStartPos, SCCOLROW nEndPos, sal_uInt16 nLevel );
-    void                    PromoteSub( SCCOLROW nStartPos, SCCOLROW nEndPos, sal_uInt16 nStartLevel );
+    BOOL                    DecDepth();
+    void                    FindEntry( SCCOLROW nSearchPos, USHORT& rFindLevel, USHORT& rFindIndex,
+                                        USHORT nMaxLevel = SC_OL_MAXDEPTH );
+    void                    RemoveSub( SCCOLROW nStartPos, SCCOLROW nEndPos, USHORT nLevel );
+    void                    PromoteSub( SCCOLROW nStartPos, SCCOLROW nEndPos, USHORT nStartLevel );
 
 public:
                             ScOutlineArray();
                             ScOutlineArray( const ScOutlineArray& rArray );
 
-    sal_uInt16                  GetDepth() const         { return nDepth; }
+    USHORT                  GetDepth() const         { return nDepth; }
 
-    sal_Bool                    FindTouchedLevel( SCCOLROW nBlockStart, SCCOLROW nBlockEnd,
-                                                sal_uInt16& rFindLevel ) const;
+    BOOL                    FindTouchedLevel( SCCOLROW nBlockStart, SCCOLROW nBlockEnd,
+                                                USHORT& rFindLevel ) const;
 
-    sal_Bool                    Insert( SCCOLROW nStartPos, SCCOLROW nEndPos, sal_Bool& rSizeChanged,
-                                    sal_Bool bHidden = false, sal_Bool bVisible = sal_True );
-    sal_Bool                    Remove( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, sal_Bool& rSizeChanged );
+    BOOL                    Insert( SCCOLROW nStartPos, SCCOLROW nEndPos, BOOL& rSizeChanged,
+                                    BOOL bHidden = FALSE, BOOL bVisible = TRUE );
+    BOOL                    Remove( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, BOOL& rSizeChanged );
 
-    ScOutlineEntry*         GetEntry( sal_uInt16 nLevel, sal_uInt16 nIndex ) const;
-    sal_uInt16                  GetCount( sal_uInt16 nLevel ) const;
-    ScOutlineEntry*         GetEntryByPos( sal_uInt16 nLevel, SCCOLROW nPos ) const;
+    ScOutlineEntry*         GetEntry( USHORT nLevel, USHORT nIndex ) const;
+    USHORT                  GetCount( USHORT nLevel ) const;
+    ScOutlineEntry*         GetEntryByPos( USHORT nLevel, SCCOLROW nPos ) const;
 
-    sal_Bool                    GetEntryIndex( sal_uInt16 nLevel, SCCOLROW nPos, sal_uInt16& rnIndex ) const;
-    sal_Bool                    GetEntryIndexInRange(
-                                sal_uInt16 nLevel, SCCOLROW nBlockStart, SCCOLROW nBlockEnd,
-                                sal_uInt16& rnIndex ) const;
+    BOOL                    GetEntryIndex( USHORT nLevel, SCCOLROW nPos, USHORT& rnIndex ) const;
+    BOOL                    GetEntryIndexInRange(
+                                USHORT nLevel, SCCOLROW nBlockStart, SCCOLROW nBlockEnd,
+                                USHORT& rnIndex ) const;
 
-    void                    SetVisibleBelow( sal_uInt16 nLevel, sal_uInt16 nEntry, sal_Bool bValue,
-                                                sal_Bool bSkipHidden = false );
+    void                    SetVisibleBelow( USHORT nLevel, USHORT nEntry, BOOL bValue,
+                                                BOOL bSkipHidden = FALSE );
 
     void                    GetRange( SCCOLROW& rStart, SCCOLROW& rEnd ) const;
-    void                    ExtendBlock( sal_uInt16 nLevel, SCCOLROW& rBlkStart, SCCOLROW& rBlkEnd );
+    void                    ExtendBlock( USHORT nLevel, SCCOLROW& rBlkStart, SCCOLROW& rBlkEnd );
 
-    sal_Bool                    TestInsertSpace( SCSIZE nSize, SCCOLROW nMaxVal ) const;
+    BOOL                    TestInsertSpace( SCSIZE nSize, SCCOLROW nMaxVal ) const;
     void                    InsertSpace( SCCOLROW nStartPos, SCSIZE nSize );
-    sal_Bool                    DeleteSpace( SCCOLROW nStartPos, SCSIZE nSize );
+    BOOL                    DeleteSpace( SCCOLROW nStartPos, SCSIZE nSize );
 
     bool                    ManualAction( SCCOLROW nStartPos, SCCOLROW nEndPos, bool bShow, ScTable& rTable, bool bCol );
 
@@ -145,12 +145,12 @@ public:
     const ScOutlineArray*   GetRowArray() const     { return &aRowOutline; }
     ScOutlineArray*         GetRowArray()           { return &aRowOutline; }
 
-    sal_Bool                    TestInsertCol( SCSIZE nSize );
+    BOOL                    TestInsertCol( SCSIZE nSize );
     void                    InsertCol( SCCOL nStartCol, SCSIZE nSize );
-    sal_Bool                    DeleteCol( SCCOL nStartCol, SCSIZE nSize ); // TRUE: Undo only using original
-    sal_Bool                    TestInsertRow( SCSIZE nSize );
+    BOOL                    DeleteCol( SCCOL nStartCol, SCSIZE nSize ); // TRUE: Undo nur ueber Original
+    BOOL                    TestInsertRow( SCSIZE nSize );
     void                    InsertRow( SCROW nStartRow, SCSIZE nSize );
-    sal_Bool                    DeleteRow( SCROW nStartRow, SCSIZE nSize );
+    BOOL                    DeleteRow( SCROW nStartRow, SCSIZE nSize );
 };
 
 
@@ -160,18 +160,18 @@ private:
     ScOutlineArray*         pArray;
     SCCOLROW                nStart;
     SCCOLROW                nEnd;
-    sal_uInt16                  nSubLevel;
-    sal_uInt16                  nSubEntry;
-    sal_uInt16                  nCount;
-    sal_uInt16                  nDepth;
+    USHORT                  nSubLevel;
+    USHORT                  nSubEntry;
+    USHORT                  nCount;
+    USHORT                  nDepth;
 
 public:
                             ScSubOutlineIterator( ScOutlineArray* pOutlineArray );
                             ScSubOutlineIterator( ScOutlineArray* pOutlineArray,
-                                                    sal_uInt16 nLevel, sal_uInt16 nEntry );
+                                                    USHORT nLevel, USHORT nEntry );
     ScOutlineEntry*         GetNext();
-    sal_uInt16                  LastLevel() const;
-    sal_uInt16                  LastEntry() const;
+    USHORT                  LastLevel() const;
+    USHORT                  LastEntry() const;
     void                    DeleteLast();
 };
 

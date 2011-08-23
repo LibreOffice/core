@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,8 @@
 #include <frmatr.hxx>
 #include <SwPortionHandler.hxx>
 
-#include "viewopt.hxx"  // SwViewOptions
+#include "viewopt.hxx"	// SwViewOptions
+#include "txtcfg.hxx"
 #include "portab.hxx"
 #include "inftxt.hxx"
 #include "itrform2.hxx"
@@ -74,7 +75,7 @@ const SvxTabStop *SwLineInfo::GetTabStop( const SwTwips nSearchPos,
  *                    SwLineInfo::NumberOfTabStops()
  *************************************************************************/
 
-sal_uInt16 SwLineInfo::NumberOfTabStops() const
+USHORT SwLineInfo::NumberOfTabStops() const
 {
     return pRuler->Count();
 }
@@ -82,6 +83,7 @@ sal_uInt16 SwLineInfo::NumberOfTabStops() const
 /*************************************************************************
  *                      SwTxtFormatter::NewTabPortion()
  *************************************************************************/
+
 SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto ) const
 {
     SwTabPortion *pTabPor = 0;
@@ -137,12 +139,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
                                        nLinePos - nTabPos :
                                        nLinePos + nTabPos;
 
-       //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-        SwTwips nMyRight;
-        if ( pFrm->IsVertLR() )
-           nMyRight = Left();
-        else
-           nMyRight = Right();
+        SwTwips nMyRight = Right();
 
         if ( pFrm->IsVertical() )
         {
@@ -213,73 +210,63 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             cFill = 0;
             eAdj = SVX_TAB_ADJUST_LEFT;
         }
-
-        // #i115705# - correction and refactoring:
-        // overrule determined next tab stop position in order to apply
-        // a tab stop at the left margin under the following conditions:
-        // - the new tab portion is inside the hanging indent
-        // - a tab stop at the left margin is allowed
-        // - the determined next tab stop is a default tab stop position OR
-        //   the determined next tab stop is beyond the left margin
+        // --> OD 2008-02-07 #newlistlevelattrs#
+        long nForced = 0;
+        if ( !bTabsRelativeToIndent )
         {
-            long nLeftMarginTabPos = 0;
+            if ( bRTL )
             {
-                if ( !bTabsRelativeToIndent )
-                {
-                    if ( bRTL )
-                    {
-                        Point aPoint( Left(), 0 );
-                        pFrm->SwitchLTRtoRTL( aPoint );
-                        nLeftMarginTabPos = pFrm->Frm().Right() - aPoint.X();
-                    }
-                    else
-                    {
-                        nLeftMarginTabPos = Left() - pFrm->Frm().Left();
-                    }
-                }
-                if( pCurr->HasForcedLeftMargin() )
-                {
-                    SwLinePortion* pPor = pCurr->GetPortion();
-                    while( pPor && !pPor->IsFlyPortion() )
-                    {
-                        pPor = pPor->GetPortion();
-                    }
-                    if ( pPor )
-                    {
-                        nLeftMarginTabPos += pPor->Width();
-                    }
-                }
+                Point aPoint( Left(), 0 );
+                pFrm->SwitchLTRtoRTL( aPoint );
+                nForced = pFrm->Frm().Right() - aPoint.X();
             }
-            const bool bNewTabPortionInsideHangingIndent =
-                        bRTL ? nCurrentAbsPos > nTabLeft - nLeftMarginTabPos
-                             : nCurrentAbsPos < nTabLeft + nLeftMarginTabPos;
-            if ( bNewTabPortionInsideHangingIndent )
+            else
             {
-                // If the paragraph is not inside a list having a list tab stop following
-                // the list label or no further tab stop found in such a paragraph or
-                // the next tab stop position does not equal the list tab stop,
-                // a tab stop at the left margin can be applied. If this condition is
-                // not hold, it is overruled by compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST.
-                const bool bTabAtLeftMarginAllowed =
-                    ( !aLineInf.IsListTabStopIncluded() ||
-                      !pTabStop ||
-                      nNextPos != aLineInf.GetListTabStopPosition() ) ||
-                    // compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
-                    pFrm->GetTxtNode()->getIDocumentSettingAccess()->
-                        get(IDocumentSettingAccess::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST);
-                if ( bTabAtLeftMarginAllowed )
-                {
-                    if ( !pTabStop || eAdj == SVX_TAB_ADJUST_DEFAULT ||
-                         ( nNextPos > nLeftMarginTabPos ) )
-                    {
-                        eAdj = SVX_TAB_ADJUST_DEFAULT;
-                        cFill = 0;
-                        nNextPos = nLeftMarginTabPos;
-                    }
-                }
+                nForced = Left() - pFrm->Frm().Left();
             }
         }
+        if( pCurr->HasForcedLeftMargin() )
+        {
+            SwLinePortion* pPor = pCurr->GetPortion();
+            while( pPor && !pPor->IsFlyPortion() )
+                pPor = pPor->GetPortion();
+            if( pPor )
+                nForced += pPor->Width();
+        }
 
+        // <--
+        // --> OD 2009-04-03 #i100732#
+        // correction of condition, when a tab stop at the left margin can
+        // be applied:
+        // If the paragraph is not inside a list having a list tab stop following
+        // the list label or no further tab stop found in such a paragraph or
+        // the next tab stop position does not equal the list tab stop,
+        // a tab stop at the left margin can be applied. If this condition is
+        // not hold, it is overruled by compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST.
+        const bool bTabAtLeftMargin =
+            ( !aLineInf.IsListTabStopIncluded() ||
+              !pTabStop ||
+              nNextPos != aLineInf.GetListTabStopPosition() ) ||
+            // compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
+            pFrm->GetTxtNode()->getIDocumentSettingAccess()->
+                get(IDocumentSettingAccess::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST);
+        if ( bTabAtLeftMargin &&
+        // <--
+             ( ( bRTL && nCurrentAbsPos > nTabLeft - nForced ) ||
+               ( !bRTL && nCurrentAbsPos < nTabLeft + nForced ) ) &&
+               // --> OD 2009-07-21 #i103685#
+               //  adjust condition:
+               // - back to pre OOo 3.0 condition, if tab stops are relative to indent
+               // - further checks needed, if tab stops are not relative to indent
+               ( nNextPos > 0 &&
+               ( bTabsRelativeToIndent ||
+                 ( !pTabStop || nNextPos > nForced ) ) ) )
+               // <--
+        {
+            eAdj = SVX_TAB_ADJUST_DEFAULT;
+            cFill = 0;
+            nNextPos = nForced;
+        }
         nNextPos += bRTL ? nLinePos - nTabLeft : nTabLeft - nLinePos;
         OSL_ENSURE( nNextPos >= 0, "GetTabStop: Don't go back!" );
         nNewTabPos = KSHORT(nNextPos);
@@ -389,14 +376,14 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
     OSL_ENSURE( rInf.X() <= GetTabPos(), "SwTabPortion::PreFormat: rush hour" );
 
     // Hier lassen wir uns nieder...
-    Fix( static_cast<sal_uInt16>(rInf.X()) );
+    Fix( static_cast<USHORT>(rInf.X()) );
 
     const bool bTabCompat = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
 
     // Die Mindestbreite eines Tabs ist immer mindestens ein Blank
     // --> FME 2004-11-25 #i37686# In compatibility mode, the minimum width
     // should be 1, even for non-left tab stops.
-    sal_uInt16 nMinimumTabWidth = 1;
+    USHORT nMinimumTabWidth = 1;
     // <--
     if ( !bTabCompat )
     {
@@ -426,7 +413,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
                        rInf.Width() <= rInf.X() + PrtWidth();
 
     // #95477# Rotated tab stops get the width of one blank
-    const sal_uInt16 nDir = rInf.GetFont()->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
+    const USHORT nDir = rInf.GetFont()->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
 
     if( ! bFull && 0 == nDir )
     {
@@ -445,7 +432,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
             }
             case POR_TABLEFT:
             {
-                PrtWidth( static_cast<sal_uInt16>(GetTabPos() - rInf.X()) );
+                PrtWidth( static_cast<USHORT>(GetTabPos() - rInf.X()) );
                 bFull = rInf.Width() <= rInf.X() + PrtWidth();
 
                 // In tabulator compatibility mode, we reset the bFull flag
@@ -472,7 +459,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
             !rInf.GetFly() )
             // <--
         {
-            PrtWidth( static_cast<sal_uInt16>(rInf.Width() - rInf.X()) );
+            PrtWidth( static_cast<USHORT>(rInf.Width() - rInf.X()) );
             SetFixWidth( PrtWidth() );
         }
         else
@@ -508,6 +495,7 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
     KSHORT nPorWidth = 0;
     while( pPor )
     {
+           DBG_LOOP;
         nPorWidth = nPorWidth + pPor->Width();
         pPor = pPor->GetPortion();
     }

@@ -2,7 +2,7 @@
 /************************************************************************cherex
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -531,6 +531,7 @@
 #include "unotools/pathoptions.hxx"
 #include "svl/poolitem.hxx"
 #include "svtools/prgsbar.hxx"
+#include "svtools/printdlg.hxx"
 #include "svl/ptitem.hxx"
 #include "svl/rectitem.hxx"
 #include "unotools/saveopt.hxx"
@@ -617,10 +618,12 @@
 #include "svx/galbrws.hxx"
 #include "svx/gallery.hxx"
 #include "svx/globl3d.hxx"
+#include "svx/globlac.hrc"
 #include "svx/globlmn.hrc"
 #include "svx/grafctrl.hxx"
 #include "svx/hlnkitem.hxx"
 #include "svx/hyperdlg.hxx"
+#include "svx/hyprlink.hxx"
 #include "svx/imapdlg.hxx"
 #include "svx/itemwin.hxx"
 #include "svx/langbox.hxx"
@@ -805,6 +808,7 @@
 #include "tools/gen.hxx"
 #include "tools/globname.hxx"
 #include "tools/link.hxx"
+#include "tools/list.hxx"
 #include "tools/multisel.hxx"
 #include "tools/poly.hxx"
 #include "tools/pstm.hxx"
@@ -862,7 +866,7 @@
 #include "vcl/group.hxx"
 #include "vcl/help.hxx"
 #include "vcl/image.hxx"
-#include "vcl/button.hxx"
+#include "vcl/imagebtn.hxx"
 #include "vcl/jobset.hxx"
 #include "vcl/lineinfo.hxx"
 #include "vcl/lstbox.hxx"
@@ -899,7 +903,7 @@
 #include "vcl/virdev.hxx"
 #include "vcl/waitobj.hxx"
 #include "vcl/window.hxx"
-#include "tools/wintypes.hxx"
+#include "vcl/wintypes.hxx"
 #include "vcl/wrkwin.hxx"
 
 #include "osl/diagnose.h"

@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,16 +48,16 @@ XInputStream_impl::XInputStream_impl( shell* pMyShell,const rtl::OUString& aUncP
       m_nErrorCode( TASKHANDLER_NO_ERROR ),
       m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {
-    sal_uInt32 nFlags = osl_File_OpenFlag_Read;
+    sal_uInt32 nFlags = OpenFlag_Read;
     if ( !bLock )
-        nFlags |= osl_File_OpenFlag_NoLock;
+        nFlags |= OpenFlag_NoLock;
 
     osl::FileBase::RC err = m_aFile.open( nFlags );
     if( err != osl::FileBase::E_None )
     {
         m_nIsOpen = false;
         m_aFile.close();
-
+    
         m_nErrorCode = TASKHANDLING_OPEN_FOR_INPUTSTREAM;
         m_nMinorErrorCode = err;
     }
@@ -74,12 +74,12 @@ XInputStream_impl::~XInputStream_impl()
     }
     catch (io::IOException const &)
     {
-        OSL_FAIL("unexpected situation");
+        OSL_ENSURE(false, "unexpected situation");
     }
     catch (uno::RuntimeException const &)
     {
-        OSL_FAIL("unexpected situation");
-    }
+        OSL_ENSURE(false, "unexpected situation");
+    }	
 }
 
 

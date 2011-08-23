@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,24 +58,24 @@
 
 //------------------------------------------------------------------------
 
-sal_uInt16 ScGetFontWorkId()
+USHORT ScGetFontWorkId()
 {
     return SvxFontWorkChildWindow::GetChildWindowId();
 }
 
-sal_Bool ScDrawTextObjectBar::IsNoteEdit()
+BOOL ScDrawTextObjectBar::IsNoteEdit()
 {
     return ScDrawLayer::IsNoteCaption( pViewData->GetView()->GetSdrView()->GetTextEditObject() );
 }
 
-//  wenn kein Text editiert wird, Funktionen wie in drawsh
+//	wenn kein Text editiert wird, Funktionen wie in drawsh
 
-void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
+void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 {
-    ScTabView*   pTabView  = pViewData->GetView();
-    ScDrawView*  pView     = pTabView->GetScDrawView();
+    ScTabView*	 pTabView  = pViewData->GetView();
+    ScDrawView*  pView	   = pTabView->GetScDrawView();
 
-    sal_uInt16 nSlot = rReq.GetSlot();
+    USHORT nSlot = rReq.GetSlot();
     switch ( nSlot )
     {
         case SID_COPY:
@@ -85,7 +85,7 @@ void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
         case SID_CUT:
             pView->DoCut();
             if (!pTabView->IsDrawSelMode())
-                pViewData->GetViewShell()->SetDrawShell( false );
+                pViewData->GetViewShell()->SetDrawShell( FALSE );
             break;
 
         case SID_PASTE:
@@ -93,9 +93,9 @@ void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
         case SID_CLIPBOARD_FORMAT_ITEMS:
         case SID_HYPERLINK_SETLINK:
             {
-                //  cell methods are at cell shell, which is not available if
-                //  ScDrawTextObjectBar is active
-                //! move paste etc. to view shell?
+                //	cell methods are at cell shell, which is not available if
+                //	ScDrawTextObjectBar is active
+                //!	move paste etc. to view shell?
             }
             break;
 
@@ -112,18 +112,18 @@ void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
                         com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
                         SDRATTR_TEXTDIRECTION ) );
                 pView->SetAttributes( aAttr );
-                pViewData->GetScDrawView()->InvalidateDrawTextAttrs();  // Bidi slots may be disabled
+                pViewData->GetScDrawView()->InvalidateDrawTextAttrs();	// Bidi slots may be disabled
                 rReq.Done( aAttr );
             }
             break;
 
         case SID_ENABLE_HYPHENATION:
             {
-                SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_ENABLE_HYPHENATION, false);
+                SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_ENABLE_HYPHENATION, FALSE);
                 if( pItem )
                 {
                     SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
-                    sal_Bool bValue = ( (const SfxBoolItem*) pItem)->GetValue();
+                    BOOL bValue = ( (const SfxBoolItem*) pItem)->GetValue();
                     aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
                     pView->SetAttributes( aSet );
                 }
@@ -135,12 +135,12 @@ void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 
 void ScDrawTextObjectBar::GetGlobalClipState( SfxItemSet& rSet )
 {
-    //  cell methods are at cell shell, which is not available if
-    //  ScDrawTextObjectBar is active -> disable everything
-    //! move paste etc. to view shell?
+    //	cell methods are at cell shell, which is not available if
+    //	ScDrawTextObjectBar is active -> disable everything
+    //!	move paste etc. to view shell?
 
     SfxWhichIter aIter(rSet);
-    sal_uInt16 nWhich = aIter.FirstWhich();
+    USHORT nWhich = aIter.FirstWhich();
     while (nWhich)
     {
         rSet.DisableItem( nWhich );
@@ -148,17 +148,17 @@ void ScDrawTextObjectBar::GetGlobalClipState( SfxItemSet& rSet )
     }
 }
 
-void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
+void __EXPORT ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
 {
-    ScTabView*   pTabView  = pViewData->GetView();
-    ScDrawView*  pView     = pTabView->GetScDrawView();
+    ScTabView*	 pTabView  = pViewData->GetView();
+    ScDrawView*  pView	   = pTabView->GetScDrawView();
 
-    sal_uInt16 nSlot = rReq.GetSlot();
+    USHORT nSlot = rReq.GetSlot();
     switch ( nSlot )
     {
         case SID_FONTWORK:
             {
-                sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
+                USHORT nId = SvxFontWorkChildWindow::GetChildWindowId();
                 SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
 
                 if ( rReq.GetArgs() )
@@ -181,7 +181,7 @@ void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
                                     EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
                                     EE_PARA_JUST, EE_PARA_JUST,
                                     0 );
-                sal_Bool bLeft = ( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT );
+                BOOL bLeft = ( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT );
                 aAttr.Put( SvxFrameDirectionItem(
                                 bLeft ? FRMDIR_HORI_LEFT_TOP : FRMDIR_HORI_RIGHT_TOP,
                                 EE_PARA_WRITINGDIR ) );
@@ -190,7 +190,7 @@ void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
                                 EE_PARA_JUST ) );
                 pView->SetAttributes( aAttr );
                 pViewData->GetScDrawView()->InvalidateDrawTextAttrs();
-                rReq.Done();        //! Done(aAttr) ?
+                rReq.Done();		//! Done(aAttr) ?
 
             }
             break;
@@ -199,9 +199,9 @@ void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
 
 void ScDrawTextObjectBar::ExecFormText(SfxRequest& rReq)
 {
-    ScTabView*          pTabView    = pViewData->GetView();
-    ScDrawView*         pDrView     = pTabView->GetScDrawView();
-    const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
+    ScTabView*			pTabView	= pViewData->GetView();
+    ScDrawView* 		pDrView 	= pTabView->GetScDrawView();
+    const SdrMarkList&	rMarkList	= pDrView->GetMarkedObjectList();
 
     if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() )
     {
@@ -211,15 +211,15 @@ void ScDrawTextObjectBar::ExecFormText(SfxRequest& rReq)
         if ( pDrView->IsTextEdit() )
             pDrView->ScEndTextEdit();
 
-        if (    SFX_ITEM_SET ==
-                rSet.GetItemState(XATTR_FORMTXTSTDFORM, sal_True, &pItem)
+        if (	SFX_ITEM_SET ==
+                rSet.GetItemState(XATTR_FORMTXTSTDFORM, TRUE, &pItem)
              && XFTFORM_NONE !=
                 ((const XFormTextStdFormItem*) pItem)->GetValue() )
         {
 
-            sal_uInt16 nId              = SvxFontWorkChildWindow::GetChildWindowId();
-            SfxViewFrame* pViewFrm  = pViewData->GetViewShell()->GetViewFrame();
-            SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)
+            USHORT nId				= SvxFontWorkChildWindow::GetChildWindowId();
+            SfxViewFrame* pViewFrm	= pViewData->GetViewShell()->GetViewFrame();
+            SvxFontWorkDialog* pDlg	= (SvxFontWorkDialog*)
                                        (pViewFrm->
                                             GetChildWindow(nId)->GetWindow());
 
@@ -235,11 +235,11 @@ void ScDrawTextObjectBar::ExecFormText(SfxRequest& rReq)
 
 void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
 {
-    const SdrObject*    pObj        = NULL;
-    SvxFontWorkDialog*  pDlg        = NULL;
-    ScDrawView*         pDrView     = pViewData->GetView()->GetScDrawView();
-    const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
-    sal_uInt16              nId = SvxFontWorkChildWindow::GetChildWindowId();
+    const SdrObject*	pObj		= NULL;
+    SvxFontWorkDialog*	pDlg		= NULL;
+    ScDrawView* 		pDrView 	= pViewData->GetView()->GetScDrawView();
+    const SdrMarkList&	rMarkList	= pDrView->GetMarkedObjectList();
+    USHORT				nId = SvxFontWorkChildWindow::GetChildWindowId();
 
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
     if ( pViewFrm->HasChildWindow(nId) )
@@ -252,7 +252,7 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
         !((SdrTextObj*) pObj)->HasText() )
     {
         if ( pDlg )
-            pDlg->SetActive(false);
+            pDlg->SetActive(FALSE);
 
         rSet.DisableItem(XATTR_FORMTXTSTYLE);
         rSet.DisableItem(XATTR_FORMTXTADJUST);
@@ -276,7 +276,7 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
             if ( pDocSh )
             {
                 const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-                XColorTable*        pColorTable = NULL;
+                XColorTable*		pColorTable = NULL;
 
                 if ( pItem )
                     pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();
@@ -286,7 +286,7 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
                 if ( pColorTable )
                     pDlg->SetColorTable( pColorTable );
                 else
-                    { OSL_FAIL( "ColorList not found :-/" ); }
+                    { DBG_ERROR( "ColorList not found :-/" ); }
             }
         }
         SfxItemSet aViewAttr(pDrView->GetModel()->GetItemPool());

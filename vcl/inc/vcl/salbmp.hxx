@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,29 +39,29 @@ class SalGraphics;
 class BitmapPalette;
 struct BitmapSystemData;
 
-class VCL_PLUGIN_PUBLIC SalBitmap
+class VCL_DLLPUBLIC SalBitmap
 {
 public:
     SalBitmap() {}
     virtual ~SalBitmap();
 
-    virtual bool            Create( const Size& rSize,
-                                    sal_uInt16 nBitCount,
+    virtual bool			Create( const Size& rSize, 
+                                    USHORT nBitCount, 
                                     const BitmapPalette& rPal ) = 0;
-    virtual bool            Create( const SalBitmap& rSalBmp ) = 0;
-    virtual bool            Create( const SalBitmap& rSalBmp,
+    virtual bool			Create( const SalBitmap& rSalBmp ) = 0;
+    virtual bool			Create( const SalBitmap& rSalBmp, 
                                     SalGraphics* pGraphics ) = 0;
-    virtual bool            Create( const SalBitmap& rSalBmp,
-                                    sal_uInt16 nNewBitCount ) = 0;
-    virtual bool            Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
+    virtual bool			Create( const SalBitmap& rSalBmp,
+                                    USHORT nNewBitCount ) = 0;
+    virtual bool			Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
                                     Size& rSize,
                                     bool bMask = false ) = 0;
-    virtual void            Destroy() = 0;
-    virtual Size            GetSize() const = 0;
-    virtual sal_uInt16          GetBitCount() const = 0;
+    virtual void			Destroy() = 0;
+    virtual Size			GetSize() const = 0;
+    virtual USHORT			GetBitCount() const = 0;
 
-    virtual BitmapBuffer*   AcquireBuffer( bool bReadOnly ) = 0;
-    virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly ) = 0;
+    virtual BitmapBuffer*	AcquireBuffer( bool bReadOnly ) = 0;
+    virtual void			ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly ) = 0;
     virtual bool            GetSystemData( BitmapSystemData& rData ) = 0;
 
 };

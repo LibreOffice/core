@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -130,8 +130,8 @@ drawing::HomogenMatrix3 B2DHomMatrixToHomogenMatrix3( const ::basegfx::B2DHomMat
 ::basegfx::B3DPoint Position3DToB3DPoint( const drawing::Position3D& rPosition )
 {
     return ::basegfx::B3DPoint(
-        rPosition.PositionX ,
-        rPosition.PositionY ,
+        rPosition.PositionX , 
+        rPosition.PositionY , 
         rPosition.PositionZ );
 }
 
@@ -166,7 +166,7 @@ void AddPointToPoly( drawing::PolyPolygonShape3D& rPoly, const drawing::Position
 {
     if(nPolygonIndex<0)
     {
-        OSL_FAIL( "The polygon index needs to be > 0");
+        OSL_ENSURE( false, "The polygon index needs to be > 0");
         nPolygonIndex=0;
     }
 
@@ -200,7 +200,7 @@ void AddPointToPoly( drawing::PolyPolygonShape3D& rPoly, const drawing::Position
 drawing::Position3D getPointFromPoly( const drawing::PolyPolygonShape3D& rPolygon, sal_Int32 nPointIndex, sal_Int32 nPolyIndex )
 {
     drawing::Position3D aRet(0.0,0.0,0.0);
-
+    
     if( nPolyIndex>=0 && nPolyIndex<rPolygon.SequenceX.getLength())
     {
         if(nPointIndex<rPolygon.SequenceX[nPolyIndex].getLength())
@@ -211,12 +211,12 @@ drawing::Position3D getPointFromPoly( const drawing::PolyPolygonShape3D& rPolygo
         }
         else
         {
-            OSL_FAIL("polygon was accessed with a wrong index");
+            ;DBG_ERROR("polygon was accessed with a wrong index");
         }
     }
     else
     {
-        OSL_FAIL("polygon was accessed with a wrong index");
+        ;DBG_ERROR("polygon was accessed with a wrong index");
     }
     return aRet;
 }
@@ -281,6 +281,7 @@ drawing::PolyPolygonShape3D BezierToPoly(
     const drawing::PolyPolygonBezierCoords& rBezier )
 {
     const drawing::PointSequenceSequence& rPointSequence = rBezier.Coordinates;
+//     const drawing::FlagSequenceSequence& rFlags = rBezier.Flags;
 
     drawing::PolyPolygonShape3D aRet;
     aRet.SequenceX.realloc( rPointSequence.getLength() );
@@ -352,7 +353,7 @@ void appendPointSequence( drawing::PointSequenceSequence& rTarget
     if(!nAddCount)
         return;
     sal_Int32 nOldCount = rTarget.getLength();
-
+    
     rTarget.realloc(nOldCount+nAddCount);
     for(sal_Int32 nS=0; nS<nAddCount; nS++ )
         rTarget[nOldCount+nS]=rAdd[nS];
@@ -474,6 +475,7 @@ uno::Sequence< rtl::OUString > DataSequenceToStringSequence(
     const uno::Reference< data::XDataSequence >& xDataSequence )
 {
     uno::Sequence< rtl::OUString > aResult;
+    OSL_ASSERT( xDataSequence.is());
     if(!xDataSequence.is())
         return aResult;
 

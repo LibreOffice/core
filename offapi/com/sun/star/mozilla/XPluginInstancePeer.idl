@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,147 +24,147 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_mozilla_XPluginInstancePeer_idl__
-#define __com_sun_star_mozilla_XPluginInstancePeer_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_io_XActiveDataSource_idl__
-#include <com/sun/star/io/XActiveDataSource.idl>
-#endif
-
-#ifndef __com_sun_star_io_XInputStream_idl__
-#include <com/sun/star/io/XInputStream.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
-#include <com/sun/star/lang/XMultiServiceFactory.idl>
-#endif
-
-//=============================================================================
-
- module com {  module sun {  module star {  module mozilla {
-
-//=============================================================================
-
- published interface XPluginInstanceNotifySink;
-
-//=============================================================================
-
-
+#ifndef __com_sun_star_mozilla_XPluginInstancePeer_idl__ 
+#define __com_sun_star_mozilla_XPluginInstancePeer_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_io_XActiveDataSource_idl__ 
+#include <com/sun/star/io/XActiveDataSource.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_io_XInputStream_idl__ 
+#include <com/sun/star/io/XInputStream.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__ 
+#include <com/sun/star/lang/XMultiServiceFactory.idl> 
+#endif 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module mozilla { 
+ 
+//============================================================================= 
+ 
+ published interface XPluginInstanceNotifySink; 
+ 
+//============================================================================= 
+ 
+ 
 // DocMerge from xml: interface com::sun::star::mozilla::XPluginInstancePeer
 /** Allows to communicate with a plugin from the office side.
     This interface is oriented for communication with browsers plugins.
  */
 published interface XPluginInstancePeer: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
-
+{ 
+    //------------------------------------------------------------------------- 
+     
+ 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::setWindowSize
     /** Alters the plugin's window size in the browser window.
 
-        @param width    [in]: the new window width
-        @param height   [in]: the new window height
+        @param width	[in]: the new window width
+        @param height	[in]: the new window height
 
         @return <CODE>TRUE</CODE> on success
      */
-    boolean setWindowSize( [in] long width, [in] long heigth );
-
-    //-------------------------------------------------------------------------
-
-
+    boolean setWindowSize( [in] long width, [in] long heigth ); 
+ 
+    //------------------------------------------------------------------------- 
+     
+ 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::showStatusMessage
     /** Show status / hint message in browser's message area.
 
-        @param message  [in]: the string to be displayed
+        @param message	[in]: the string to be displayed
      */
-    [oneway] void showStatusMessage( [in] string message );
-
-    //-------------------------------------------------------------------------
-
-
+    [oneway] void showStatusMessage( [in] string message ); 
+ 
+    //------------------------------------------------------------------------- 
+     
+ 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::enableScripting
     /** Indicates to the plugin that the document was loaded successfully and scripting
         interfaces are now available.
 
-        @param document         [in]: the active document
-        @param servicemanager   [in]: the office servicemanager
+        @param document			[in]: the active document
+        @param servicemanager	[in]: the office servicemanager
 
      */
-    [oneway] void enableScripting( [in] com::sun::star::uno::XInterface document, [in] com::sun::star::lang::XMultiServiceFactory servicemanager );
-
-    //-------------------------------------------------------------------------
-
-
+    [oneway] void enableScripting( [in] com::sun::star::uno::XInterface document, [in] com::sun::star::lang::XMultiServiceFactory servicemanager ); 
+ 
+    //------------------------------------------------------------------------- 
+     
+ 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::newStream
     /** Creates a new stream of data produced by the plug-in and consumed by
         the browser.
 
-        @param MIMEDesc [in]:   the MIME type of the plug-in to create
-        @param target   [in]:   the name of the target window or frame (supports _blank, _self)
-        @param data     [in]:   on success the output stream will be    associated with this instance
+        @param MIMEDesc	[in]:	the MIME type of the plug-in to create
+        @param target	[in]:	the name of the target window or frame (supports _blank, _self)
+        @param data		[in]:	on success the outputstream will be	associated with this instance
 
      */
-    [oneway] void newStream(
-        [in] string MIMEDesc,
-        [in] string target,
-        [in] com::sun::star::io::XActiveDataSource data
-    );
-
-    //-------------------------------------------------------------------------
-
-
+    [oneway] void newStream( 
+        [in] string MIMEDesc, 
+        [in] string target, 
+        [in] com::sun::star::io::XActiveDataSource data 
+    ); 
+ 
+    //------------------------------------------------------------------------- 
+     
+ 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::getURL
-    /** Fetches an URL into the target window. The parameters and their meaning map to the
+    /** Fetches an URL into the target window. The parameters and their meaning map to the 
         corresponding Netscape-API call.
-
-        @param aURL             [in]: the URL to be fetched
-        @param target           [in]: the name of the target window or frame (supports _blank, _self)
-        @param alternativeHost  [in]: alternativeHost
-        @param referrer         [in]: referrer
-        @param sink             [in]: the sink is notified on success
+        
+        @param aURL				[in]: the URL to be fetched
+        @param target			[in]: the name of the target window or frame (supports _blank, _self)
+        @param alternativeHost	[in]: alternativeHost 
+        @param referrer			[in]: referrer
+        @param sink				[in]: the sink is notified on success
 
      */
-    [oneway] void getURL (
-        [in] string aURL,
-        [in] string target,
-        [in] string alternativeHost,
-        [in] string referrer,
-        [in] XPluginInstanceNotifySink sink
-    );
-
-    //-------------------------------------------------------------------------
-
-
+    [oneway] void getURL ( 
+        [in] string aURL, 
+        [in] string target, 
+        [in] string alternativeHost, 
+        [in] string referrer, 
+        [in] XPluginInstanceNotifySink sink 
+    ); 
+ 
+    //------------------------------------------------------------------------- 
+     
+ 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::postURL
-    /** Posts to a URL with post data and/or post headers. The parameters and their meaning
+    /** Posts to a URL with post data and/or post headers. The parameters and their meaning 
         map to the corresponding Netscape-API call.
 
-        @param aURL             [in]: the URL to be posted to
-        @param postData         [in]: the data to be posted
-        @param target           [in]: the name of the target window or frame (supports _blank, _self)
-        @param alternativeHost  [in]: alternativeHost
-        @param referrer         [in]: referrer
-        @param postHeaders      [in]: the header to be posted
-        @param sink             [in]: the sink is notified on success
+        @param aURL				[in]: the URL to be posted to
+        @param postData			[in]: the data to be posted
+        @param target			[in]: the name of the target window or frame (supports _blank, _self)
+        @param alternativeHost	[in]: alternativeHost 
+        @param referrer			[in]: referrer
+        @param postHeaders		[in]: the header to be posted
+        @param sink				[in]: the sink is notified on success
 
      */
-    [oneway] void postURL (
-        [in] string aURL,
-        [in] com::sun::star::io::XInputStream postData,
-        [in] string target,
-        [in] string alternativeHost,
-        [in] string referrer,
-        [in] com::sun::star::io::XInputStream postHeaders,
-        [in] XPluginInstanceNotifySink sink
-    );
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    [oneway] void postURL ( 
+        [in] string aURL, 
+        [in] com::sun::star::io::XInputStream postData, 
+        [in] string target, 
+        [in] string alternativeHost, 
+        [in] string referrer, 
+        [in] com::sun::star::io::XInputStream postHeaders, 
+        [in] XPluginInstanceNotifySink sink 
+    ); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+#endif 

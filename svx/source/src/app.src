@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,12 +29,8 @@
 #include "app.hrc"
 
  //----------------------------------------------------------------------------
-String RID_APPTITLE
-{
-    Text = "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION" ;
-};
 
-#define MASKCOLOR       MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
+#define MASKCOLOR		MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
 
 ErrorBox RID_ERRBOX_MODULENOTINSTALLED
 {
@@ -63,6 +59,20 @@ ImageList RID_DEFAULTIMAGELIST_SC
 ImageList RID_DEFAULTIMAGELIST_LC
 {
     Prefix = "lc";
+    MASKCOLOR
+    IMAGE_ID_LIST
+};
+
+ImageList RID_DEFAULTIMAGELIST_SCH
+{
+    Prefix = "sch";
+    MASKCOLOR
+    IMAGE_ID_LIST
+};
+
+ImageList RID_DEFAULTIMAGELIST_LCH
+{
+    Prefix = "lch";
     MASKCOLOR
     IMAGE_ID_LIST
 };

@@ -57,7 +57,11 @@
  * @file
  * Rect object.
  ************************************************************************/
-#include    "xfdrawrect.hxx"
+/*************************************************************************
+ * Change History
+ * 2004-2-17 create this file.
+ ************************************************************************/
+#include	"xfdrawrect.hxx"
 
 XFDrawRect::XFDrawRect()
 {
@@ -66,7 +70,7 @@ XFDrawRect::XFDrawRect()
 
 void XFDrawRect::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
 

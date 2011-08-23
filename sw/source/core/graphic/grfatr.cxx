@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ TYPEINIT1_AUTOFACTORY(SwCropGrf, SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SwGammaGrf, SfxPoolItem)
 
 /******************************************************************************
- *  Implementierung     class SwMirrorGrf
+ *	Implementierung		class SwMirrorGrf
  ******************************************************************************/
 
 SfxPoolItem* SwMirrorGrf::Clone( SfxItemPool* ) const
@@ -76,19 +76,19 @@ int SwMirrorGrf::operator==( const SfxPoolItem& rItem) const
             ((SwMirrorGrf&)rItem).IsGrfToggle() == IsGrfToggle();
 }
 
-sal_Bool lcl_IsHoriOnEvenPages(int nEnum, sal_Bool bToggle)
+BOOL lcl_IsHoriOnEvenPages(int nEnum, BOOL bToggle)
 {
-    sal_Bool bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
+    BOOL bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
                    nEnum == RES_MIRROR_GRAPH_BOTH;
             return bEnum != bToggle;
 }
-sal_Bool lcl_IsHoriOnOddPages(int nEnum)
+BOOL lcl_IsHoriOnOddPages(int nEnum)
 {
-    sal_Bool bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
+    BOOL bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
                    nEnum == RES_MIRROR_GRAPH_BOTH;
             return bEnum;
 }
-bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwMirrorGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     bool bRet = true;
     sal_Bool bVal;
@@ -114,7 +114,7 @@ bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwMirrorGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     bool bRet = true;
     sal_Bool bVal = *(sal_Bool*)rVal.getValue();
@@ -125,17 +125,17 @@ bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_MIRROR_HORZ_EVEN_PAGES:
         case MID_MIRROR_HORZ_ODD_PAGES:
         {
-            sal_Bool bIsVert = GetValue() == RES_MIRROR_GRAPH_HOR ||
+            BOOL bIsVert = GetValue() == RES_MIRROR_GRAPH_HOR ||
                                 GetValue() == RES_MIRROR_GRAPH_BOTH;
-            sal_Bool bOnOddPages = nMemberId == MID_MIRROR_HORZ_EVEN_PAGES ?
+            BOOL bOnOddPages = nMemberId == MID_MIRROR_HORZ_EVEN_PAGES ?
                                     lcl_IsHoriOnOddPages(GetValue()) : bVal;
-            sal_Bool bOnEvenPages = nMemberId == MID_MIRROR_HORZ_ODD_PAGES ?
+            BOOL bOnEvenPages = nMemberId == MID_MIRROR_HORZ_ODD_PAGES ?
                                        lcl_IsHoriOnEvenPages(GetValue(), IsGrfToggle()) : bVal;
             MirrorGraph nEnum = bOnOddPages ?
                     bIsVert ? RES_MIRROR_GRAPH_BOTH : RES_MIRROR_GRAPH_VERT :
                         bIsVert ? RES_MIRROR_GRAPH_HOR : RES_MIRROR_GRAPH_DONT;
-            sal_Bool bToggle = bOnOddPages != bOnEvenPages;
-            SetValue(static_cast<sal_uInt16>(nEnum));
+            BOOL bToggle = bOnOddPages != bOnEvenPages;
+            SetValue(static_cast<USHORT>(nEnum));
             SetGrfToggle( bToggle );
         }
         break;
@@ -164,7 +164,7 @@ bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 
 /******************************************************************************
- *  Implementierung     class SwCropGrf
+ *	Implementierung		class SwCropGrf
  ******************************************************************************/
 
 SwCropGrf::SwCropGrf()
@@ -188,14 +188,14 @@ SfxPoolItem* SwRotationGrf::Clone( SfxItemPool * ) const
 }
 
 
-int SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
+int	SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
 {
     return SfxUInt16Item::operator==( rCmp ) &&
         GetUnrotatedSize() == ((SwRotationGrf&)rCmp).GetUnrotatedSize();
 }
 
 
-bool SwRotationGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+bool SwRotationGrf::QueryValue( uno::Any& rVal, BYTE ) const
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
@@ -203,19 +203,19 @@ bool SwRotationGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
     return true;
 }
 
-bool SwRotationGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
+bool SwRotationGrf::PutValue( const uno::Any& rVal, BYTE )
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
     sal_Int16 nValue = 0;
     if (rVal >>= nValue)
     {
-        // sal_uInt16 argument needed
-        SetValue( (sal_uInt16) nValue );
+        // UINT16 argument needed
+        SetValue( (UINT16) nValue );
         return true;
     }
 
-    OSL_FAIL( "SwRotationGrf::PutValue - Wrong type!" );
+    DBG_ERROR( "SwRotationGrf::PutValue - Wrong type!" );
     return false;
 }
 
@@ -261,19 +261,19 @@ SfxPoolItem* SwGammaGrf::Clone( SfxItemPool * ) const
     return new SwGammaGrf( *this );
 }
 
-int SwGammaGrf::operator==( const SfxPoolItem& rCmp ) const
+int	SwGammaGrf::operator==( const SfxPoolItem& rCmp ) const
 {
     return SfxPoolItem::operator==( rCmp ) &&
         nValue == ((SwGammaGrf&)rCmp).GetValue();
 }
 
-bool SwGammaGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+bool SwGammaGrf::QueryValue( uno::Any& rVal, BYTE ) const
 {
     rVal <<= nValue;
     return true;
 }
 
-bool SwGammaGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
+bool SwGammaGrf::PutValue( const uno::Any& rVal, BYTE )
 {
     return rVal >>= nValue;
 }
@@ -293,7 +293,7 @@ SfxPoolItem* SwTransparencyGrf::Clone( SfxItemPool * ) const
 }
 // ------------------------------------------------------------------
 bool SwTransparencyGrf::QueryValue( uno::Any& rVal,
-                                        sal_uInt8 ) const
+                                        BYTE ) const
 {
     DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!");
     sal_Int16 nRet = GetValue();
@@ -303,7 +303,7 @@ bool SwTransparencyGrf::QueryValue( uno::Any& rVal,
 }
 // ------------------------------------------------------------------
 bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
-                                        sal_uInt8 )
+                                        BYTE )
 {
     //temporary conversion until this is a SfxInt16Item!
     DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!");
@@ -313,12 +313,13 @@ bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
     if(nVal < 0)
     {
         // for compatibility with old documents
-        // introduce rounding as for SO 6.0 PP2
+        // OD 05.11.2002 #104308# - introduce rounding as for SO 6.0 PP2
+        // introduced by fix of #104293#.
         nVal = ( ( nVal * 128 ) - (99/2) ) / 100;
         nVal += 128;
     }
     DBG_ASSERT( 0 <= nVal && nVal <= 100, "value out of range" );
-    SetValue(static_cast<sal_uInt8>(nVal));
+    SetValue(static_cast<BYTE>(nVal));
     return true;
 }
 
@@ -329,13 +330,17 @@ SfxPoolItem* SwDrawModeGrf::Clone( SfxItemPool * ) const
     return new SwDrawModeGrf( *this );
 }
 
-sal_uInt16 SwDrawModeGrf::GetValueCount() const
+USHORT SwDrawModeGrf::GetValueCount() const
 {
+    // GRAPHICDRAWMODE_STANDARD = 0,
+    // GRAPHICDRAWMODE_GREYS = 1,
+    // GRAPHICDRAWMODE_MONO = 2,
+    // GRAPHICDRAWMODE_WATERMARK = 3
     return GRAPHICDRAWMODE_WATERMARK + 1;
 }
 
 bool SwDrawModeGrf::QueryValue( uno::Any& rVal,
-                                sal_uInt8 ) const
+                                BYTE ) const
 {
     drawing::ColorMode eRet = (drawing::ColorMode)GetEnumValue();
     rVal <<= eRet;
@@ -343,12 +348,12 @@ bool SwDrawModeGrf::QueryValue( uno::Any& rVal,
 }
 
 bool SwDrawModeGrf::PutValue( const uno::Any& rVal,
-                                sal_uInt8 )
+                                BYTE )
 {
     sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
     if(eVal >= 0 && eVal <= GRAPHICDRAWMODE_WATERMARK)
     {
-        SetEnumValue((sal_uInt16)eVal);
+        SetEnumValue((USHORT)eVal);
         return true;
     }
     return false;

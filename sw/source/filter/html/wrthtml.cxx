@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,10 +71,10 @@
 #include <pam.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
-#include <mdiexp.hxx>       // ...Percent()
+#include <mdiexp.hxx>		// ...Percent()
 #include <fltini.hxx>
 #include <viewopt.hxx>
-#include <IMark.hxx>        // fuer SwBookmark ...
+#include <IMark.hxx>		// fuer SwBookmark ...
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
 #include <section.hxx>
@@ -87,7 +87,7 @@
 #include <htmlfly.hxx>
 #include <swmodule.hxx>
 
-#include <statstr.hrc>      // ResId fuer Statusleiste
+#include <statstr.hrc>		// ResId fuer Statusleiste
 #include <swerror.h>
 
 #define MAX_INDENT_LEVEL 20
@@ -95,10 +95,10 @@
 #if defined(UNX)
 const sal_Char SwHTMLWriter::sNewLine = '\012';
 #else
-const sal_Char SwHTMLWriter::sNewLine[] = "\015\012";
+const sal_Char __FAR_DATA SwHTMLWriter::sNewLine[] = "\015\012";
 #endif
 
-static sal_Char sIndentTabs[MAX_INDENT_LEVEL+2] =
+static sal_Char __FAR_DATA sIndentTabs[MAX_INDENT_LEVEL+2] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
 SwHTMLWriter::SwHTMLWriter( const String& rBaseURL )
@@ -119,12 +119,12 @@ SwHTMLWriter::SwHTMLWriter( const String& rBaseURL )
 }
 
 
-SwHTMLWriter::~SwHTMLWriter()
+__EXPORT SwHTMLWriter::~SwHTMLWriter()
 {
     delete pNumRuleInfo;
 }
 
-sal_uLong SwHTMLWriter::WriteStream()
+ULONG SwHTMLWriter::WriteStream()
 {
     // neue Konfiguration setzen
     SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
@@ -157,6 +157,7 @@ sal_uLong SwHTMLWriter::WriteStream()
         nHTMLMode |= HTMLMODE_ABS_POS_FLY|HTMLMODE_ABS_POS_DRAW;
 
     if( HTML_CFG_WRITER==nExportMode )
+//		nHTMLMode |= HTMLMODE_FLY_MARGINS | HTMLMODE_FRSTLINE_IN_NUMBUL;
         nHTMLMode |= HTMLMODE_FLY_MARGINS;
 
     if( HTML_CFG_NS40==nExportMode )
@@ -191,6 +192,14 @@ sal_uLong SwHTMLWriter::WriteStream()
     const sal_Char *pCharSet =
         rtl_getBestMimeCharsetFromTextEncoding( eDestEnc );
     eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
+
+    // fuer Netscape optimieren heisst Spacer- und Multicol ausgeben
+//	bCfgMultiCol = pHtmlOptions->IsNetscape3();
+//	bCfgSpacer = pHtmlOptions->IsNetscape3();
+
+    // wenn Styles exportiert werden, wird ein Style einem HTML-Tag manchmal
+    // vorgezogen, wenn nicht fuer Netscape exportiert wird
+    // bCfgPreferStyles = bCfgOutStyles; // && !pHtmlOptions->IsNetscape3();
 
     // Nur noch fuer den MS-IE ziehen wir den Export von Styles vor.
     bCfgPreferStyles = HTML_CFG_MSIE==nExportMode;
@@ -309,7 +318,7 @@ sal_uLong SwHTMLWriter::WriteStream()
                 (((((((sOut += OOO_STRING_SVTOOLS_HTML_division)
                     += ' ') += OOO_STRING_SVTOOLS_HTML_O_id) += "=\"")
                     += aName) += '\"')
-                    += '>') += aStartTags;
+                    += '>')	+= aStartTags;
 
                 aStartTags = sOut;
             }
@@ -486,7 +495,7 @@ const SwFmtCol *lcl_html_GetFmtCol( const SwHTMLWriter& rHTMLWrt,
     return pCol;
 }
 
-sal_Bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, sal_uLong nIndex )
+sal_Bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, ULONG nIndex )
 {
     sal_Bool bRet = sal_False;
     const SwSectionNode *pSectNd =
@@ -502,7 +511,7 @@ sal_Bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, sal_uLong nInde
     return bRet;
 }
 
-sal_Bool lcl_html_IsMultiColEnd( const SwHTMLWriter& rHTMLWrt, sal_uLong nIndex )
+sal_Bool lcl_html_IsMultiColEnd( const SwHTMLWriter& rHTMLWrt, ULONG nIndex )
 {
     sal_Bool bRet = sal_False;
     const SwEndNode *pEndNd = rHTMLWrt.pDoc->GetNodes()[nIndex]->GetEndNode();
@@ -727,7 +736,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
 
 void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
 {
-    sal_Bool bSaveWriteAll = bWriteAll;     // sichern
+    sal_Bool bSaveWriteAll = bWriteAll;		// sichern
 
     // suche die naechste text::Bookmark-Position aus der text::Bookmark-Tabelle
     nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : -1;
@@ -770,7 +779,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
             else if( pNd == &pDoc->GetNodes().GetEndOfContent() )
                 break;
 
-            pCurPam->GetPoint()->nNode++;   // Bewegen
+            pCurPam->GetPoint()->nNode++; 	// Bewegen
             sal_uInt32 nPos = pCurPam->GetPoint()->nNode.GetIndex();
 
             if( bShowProgress )
@@ -791,9 +800,9 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
                               // beim Aufrufer
         OutAndSetDefList( 0 );
 
-    } while( CopyNextPam( &pPam ) );        // bis alle PaM's bearbeitet
+    } while( CopyNextPam( &pPam ) );		// bis alle PaM's bearbeitet
 
-    bWriteAll = bSaveWriteAll;          // wieder auf alten Wert zurueck
+    bWriteAll = bSaveWriteAll;			// wieder auf alten Wert zurueck
 }
 
 
@@ -865,8 +874,8 @@ static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
 
 sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
 {
-    sal_uLong nIdx = pCurPam->GetPoint()->nNode.GetIndex();
-    sal_uLong nEndIdx = pCurPam->GetMark()->nNode.GetIndex();
+    ULONG nIdx = pCurPam->GetPoint()->nNode.GetIndex();
+    ULONG nEndIdx = pCurPam->GetMark()->nNode.GetIndex();
 
     SwTxtNode *pTxtNd = 0;
     while( nIdx<=nEndIdx &&
@@ -920,11 +929,12 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_head );
 
-    IncIndentLevel();   // Inhalt von <HEAD> einruecken
+    IncIndentLevel();	// Inhalt von <HEAD> einruecken
 
     // DokumentInfo
     ByteString sIndent;
     GetIndentString( sIndent );
+//	OutNewLine();
     using namespace ::com::sun::star;
     uno::Reference<document::XDocumentProperties> xDocProps;
     SwDocShell *pDocShell(pDoc->GetDocShell());
@@ -945,10 +955,11 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     OutFootEndNoteInfo();
 
     const SwPageDesc *pPageDesc = 0;
-
+    //if( !pDoc->IsHTMLMode() )
+    //{
         // In Nicht-HTML-Dokumenten wird die erste gesetzte Seitenvorlage
         // exportiert und wenn keine gesetzt ist die Standard-Vorlage
-        sal_uLong nNodeIdx = pCurPam->GetPoint()->nNode.GetIndex();
+        ULONG nNodeIdx = pCurPam->GetPoint()->nNode.GetIndex();
 
         while( nNodeIdx < pDoc->GetNodes().Count() )
         {
@@ -971,6 +982,12 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
         if( !pPageDesc )
             pPageDesc = &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
+    //}
+    //else
+    //{
+        // In HTML-Dokumenten nehmen wir immer die HTML-Vorlage
+    //	pPageDesc = pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML );
+    //}
 
     // und nun ... das Style-Sheet!!!
     if( bCfgOutStyles )
@@ -979,10 +996,10 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     }
 
     // und nun ... das BASIC und JavaScript!
-    if( pDoc->GetDocShell() )   // nur mit DocShell ist Basic moeglich
+    if( pDoc->GetDocShell() )	// nur mit DocShell ist Basic moeglich
         OutBasic();
 
-    DecIndentLevel();   // Inhalt von <HEAD> einruecken
+    DecIndentLevel();	// Inhalt von <HEAD> einruecken
     OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_head, sal_False );
 
@@ -1022,7 +1039,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
         OutCSS1_BodyTagStyleOpt( *this, rItemSet, aEmbGrfName );
 
     // Events anhaengen
-    if( pDoc->GetDocShell() )   // nur mit DocShell ist Basic moeglich
+    if( pDoc->GetDocShell() )	// nur mit DocShell ist Basic moeglich
         OutBasicBodyEvents();
 
     Strm() << '>';
@@ -1068,7 +1085,7 @@ void SwHTMLWriter::OutBookmarks()
     sal_uInt16 nPos;
     for( nPos = 0; nPos < aOutlineMarkPoss.Count() &&
                    aOutlineMarkPoss[nPos] < nNode; nPos++ )
-        ;
+        ; 
 
     while( nPos < aOutlineMarkPoss.Count() && aOutlineMarkPoss[nPos] == nNode )
     {
@@ -1091,7 +1108,7 @@ void SwHTMLWriter::OutImplicitMark( const String& rMark,
         sal_uInt16 nPos;
         if( aImplicitMarks.Seek_Entry( &sMark, &nPos ) )
         {
-            sMark.SearchAndReplaceAll( '?', '_' );  // '?' causes problems in IE/Netscape 5
+            sMark.SearchAndReplaceAll( '?', '_' );	// '?' causes problems in IE/Netscape 5
             OutAnchor( sMark );
             aImplicitMarks.DeleteAndDestroy( nPos, 1 );
         }
@@ -1117,7 +1134,7 @@ void SwHTMLWriter::OutHyperlinkHRefValue( const String& rURL )
                 sCmp.EqualsAscii( pMarkToOutline ) ||
                 sCmp.EqualsAscii( pMarkToText ) )
             {
-                sURL.SearchAndReplaceAll( '?', '_' );   // '?' causes problems in IE/Netscape 5
+                sURL.SearchAndReplaceAll( '?', '_' );	// '?' causes problems in IE/Netscape 5
             }
         }
     }
@@ -1131,6 +1148,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
                                   String& rEmbGrfNm, sal_Bool bGraphic )
 {
     const Color &rBackColor = pBrushItem->GetColor();
+    /// OD 02.09.2002 #99657#
     /// check, if background color is not "no fill"/"auto fill", instead of
     /// only checking, if transparency is not set.
     if( rBackColor.GetColor() != COL_TRANSPARENT )
@@ -1159,7 +1177,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
             sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, rEmbGrfNm,
                     String::CreateFromAscii( "JPG" ),
                     XOUTBMP_USE_NATIVE_IF_POSSIBLE );
-            if( !nErr )     // fehlerhaft, da ist nichts auszugeben
+            if( !nErr )		// fehlerhaft, da ist nichts auszugeben
             {
                 rEmbGrfNm = URIHelper::SmartRel2Abs(
                     INetURLObject( GetBaseURL() ), rEmbGrfNm,
@@ -1325,9 +1343,9 @@ sal_uInt16 SwHTMLWriter::GetHTMLFontSize( sal_uInt32 nHeight ) const
 
 // Struktur speichert die aktuellen Daten des Writers zwischen, um
 // einen anderen Dokument-Teil auszugeben, wie z.B. Header/Footer
-HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, sal_uLong nStt,
-                            sal_uLong nEnd, sal_Bool bSaveNum,
-                                const SwFrmFmt *pFrmFmt ) :
+HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, ULONG nStt,
+                            ULONG nEnd, sal_Bool bSaveNum,
+                                const SwFrmFmt *pFrmFmt	) :
     rWrt( rWriter ),
     pOldPam( rWrt.pCurPam ),
     pOldEnd( rWrt.GetEndPaM() ),
@@ -1381,7 +1399,7 @@ HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, sal_uLong nStt,
 
 HTMLSaveData::~HTMLSaveData()
 {
-    delete rWrt.pCurPam;                    // Pam wieder loeschen
+    delete rWrt.pCurPam;					// Pam wieder loeschen
 
     rWrt.pCurPam = pOldPam;
     rWrt.SetEndPaM( pOldEnd );

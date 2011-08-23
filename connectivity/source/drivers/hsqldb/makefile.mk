@@ -103,7 +103,6 @@ SHL1STDLIBS=\
 
 
 SHL1DEPN=
-SHL1CREATEJNILIB=TRUE
 SHL1IMPLIB=	i$(HSQLDB_TARGET)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
@@ -116,11 +115,3 @@ DEF1EXPORTFILE=	exports.dxp
 .INCLUDE : $(PRJ)$/target.pmk
 
 
-
-ALLTAR : $(MISC)/hsqldb.component
-
-$(MISC)/hsqldb.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        hsqldb.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt hsqldb.component

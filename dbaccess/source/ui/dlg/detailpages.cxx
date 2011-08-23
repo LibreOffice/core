@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ namespace dbaui
     //========================================================================
     DBG_NAME(OCommonBehaviourTabPage)
     //------------------------------------------------------------------------
-    OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, sal_uInt16 nResId, const SfxItemSet& _rCoreAttrs,
+    OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, USHORT nResId, const SfxItemSet& _rCoreAttrs,
         sal_uInt32 nControlFlags,bool _bFreeResource)
 
         :OGenericAdministrationPage(pParent, ModuleRes(nResId), _rCoreAttrs)
@@ -110,7 +110,7 @@ namespace dbaui
             m_pCharset->SetSelectHdl(getControlModifiedLink());
         }
 
-        Window* pWindows[] = {  m_pAutoRetrievingEnabled, m_pAutoFixedLine,
+        Window* pWindows[] = { 	m_pAutoRetrievingEnabled, m_pAutoFixedLine,
                                 m_pAutoIncrementLabel, m_pAutoIncrement,
                                 m_pAutoRetrievingLabel, m_pAutoRetrieving };
 
@@ -231,10 +231,10 @@ namespace dbaui
     //------------------------------------------------------------------------
     ODbaseDetailsPage::ODbaseDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_DBASE, _rCoreAttrs, CBTP_USE_CHARSET ,false)
-        ,m_aShowDeleted     (this, ModuleRes(CB_SHOWDELETEDROWS))
-        ,m_aFL_1            (this, ModuleRes( FL_SEPARATOR1) )
-        ,m_aFT_Message      (this, ModuleRes( FT_SPECIAL_MESSAGE) )
-        ,m_aIndexes         (this, ModuleRes(PB_INDICIES))
+        ,m_aShowDeleted		(this, ModuleRes(CB_SHOWDELETEDROWS))
+        ,m_aFL_1			(this, ModuleRes( FL_SEPARATOR1) )
+        ,m_aFT_Message		(this, ModuleRes( FT_SPECIAL_MESSAGE) )
+        ,m_aIndexes			(this, ModuleRes(PB_INDICIES))
     {
         DBG_CTOR(ODbaseDetailsPage,NULL);
 
@@ -255,7 +255,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateDbase( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage*	ODriversSettings::CreateDbase( Window* pParent,	const SfxItemSet& _rAttrSet )
     {
         return ( new ODbaseDetailsPage( pParent, _rAttrSet ) );
     }
@@ -346,7 +346,7 @@ namespace dbaui
         DBG_DTOR(OAdoDetailsPage,NULL);
     }
     // -----------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateAdo( Window* pParent,   const SfxItemSet& _rAttrSet )
+    SfxTabPage*	ODriversSettings::CreateAdo( Window* pParent,	const SfxItemSet& _rAttrSet )
     {
         return ( new OAdoDetailsPage( pParent, _rAttrSet ) );
     }
@@ -357,8 +357,8 @@ namespace dbaui
     //========================================================================
     OOdbcDetailsPage::OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_CHARSET | CBTP_USE_OPTIONS,false)
-        ,m_aFL_1        (this, ModuleRes(FL_SEPARATOR1))
-        ,m_aUseCatalog  (this, ModuleRes(CB_USECATALOG))
+        ,m_aFL_1		(this, ModuleRes(FL_SEPARATOR1))
+        ,m_aUseCatalog	(this, ModuleRes(CB_USECATALOG))
     {
         m_aUseCatalog.SetToggleHdl(getControlModifiedLink());
         FreeResource();
@@ -373,7 +373,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateODBC( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage*	ODriversSettings::CreateODBC( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OOdbcDetailsPage( pParent, _rAttrSet ) );
     }
@@ -417,18 +417,18 @@ namespace dbaui
     OUserDriverDetailsPage::OUserDriverDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_USERDRIVER, _rCoreAttrs,
         CBTP_USE_CHARSET | CBTP_USE_OPTIONS ,false)
-        ,m_aFTHostname      (this, ModuleRes(FT_HOSTNAME))
-        ,m_aEDHostname      (this, ModuleRes(ET_HOSTNAME))
-        ,m_aPortNumber      (this, ModuleRes(FT_PORTNUMBER))
-        ,m_aNFPortNumber    (this, ModuleRes(NF_PORTNUMBER))
-        ,m_aUseCatalog      (this, ModuleRes(CB_USECATALOG))
+        ,m_aFTHostname		(this, ModuleRes(FT_HOSTNAME))
+        ,m_aEDHostname		(this, ModuleRes(ET_HOSTNAME))
+        ,m_aPortNumber		(this, ModuleRes(FT_PORTNUMBER))
+        ,m_aNFPortNumber	(this, ModuleRes(NF_PORTNUMBER))
+        ,m_aUseCatalog		(this, ModuleRes(CB_USECATALOG))
     {
         m_aUseCatalog.SetToggleHdl(getControlModifiedLink());
         FreeResource();
     }
 
     // -----------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateUser( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage*	ODriversSettings::CreateUser( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OUserDriverDetailsPage( pParent, _rAttrSet ) );
     }
@@ -492,7 +492,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateMySQLODBC( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage*	ODriversSettings::CreateMySQLODBC( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OMySQLODBCDetailsPage( pParent, _rAttrSet ) );
     }
@@ -500,18 +500,18 @@ namespace dbaui
     //========================================================================
     //= OMySQLJDBCDetailsPage
     //========================================================================
-    OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage( Window* pParent,sal_uInt16 _nResId, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId)
+    OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage( Window* pParent,USHORT _nResId, const SfxItemSet& _rCoreAttrs ,USHORT _nPortId)
         :OCommonBehaviourTabPage(pParent, _nResId, _rCoreAttrs, CBTP_USE_CHARSET ,false)
-        ,m_aFL_1            (this, ModuleRes( FL_SEPARATOR1) )
-        ,m_aFTHostname      (this, ModuleRes(FT_HOSTNAME))
-        ,m_aEDHostname      (this, ModuleRes(ET_HOSTNAME))
-        ,m_aPortNumber      (this, ModuleRes(FT_PORTNUMBER))
-        ,m_aNFPortNumber    (this, ModuleRes(NF_PORTNUMBER))
-        ,m_aFTSocket        (this, ModuleRes(FT_SOCKET))
-        ,m_aEDSocket        (this, ModuleRes(ET_SOCKET))
-        ,m_aFTDriverClass   (this, ModuleRes(FT_JDBCDRIVERCLASS))
-        ,m_aEDDriverClass   (this, ModuleRes(ET_JDBCDRIVERCLASS))
-        ,m_aTestJavaDriver  (this, ModuleRes(PB_TESTDRIVERCLASS))
+        ,m_aFL_1			(this, ModuleRes( FL_SEPARATOR1) )
+        ,m_aFTHostname		(this, ModuleRes(FT_HOSTNAME))
+        ,m_aEDHostname		(this, ModuleRes(ET_HOSTNAME))
+        ,m_aPortNumber		(this, ModuleRes(FT_PORTNUMBER))
+        ,m_aNFPortNumber	(this, ModuleRes(NF_PORTNUMBER))
+        ,m_aFTSocket		(this, ModuleRes(FT_SOCKET))
+        ,m_aEDSocket		(this, ModuleRes(ET_SOCKET))
+        ,m_aFTDriverClass	(this, ModuleRes(FT_JDBCDRIVERCLASS))
+        ,m_aEDDriverClass	(this, ModuleRes(ET_JDBCDRIVERCLASS))
+        ,m_aTestJavaDriver	(this, ModuleRes(PB_TESTDRIVERCLASS))
         ,m_nPortId(_nPortId)
         ,m_bUseClass(true)
     {
@@ -531,14 +531,14 @@ namespace dbaui
         else
         {
             m_bUseClass = false;
-            m_aFTDriverClass.Show(sal_False);
-            m_aEDDriverClass.Show(sal_False);
-            m_aTestJavaDriver.Show(sal_False);
+            m_aFTDriverClass.Show(FALSE);
+            m_aEDDriverClass.Show(FALSE);
+            m_aTestJavaDriver.Show(FALSE);
         }
 
         m_aFTSocket.Show(PAGE_MYSQL_JDBC == _nResId && !m_bUseClass);
         m_aEDSocket.Show(PAGE_MYSQL_JDBC == _nResId && !m_bUseClass);
-
+        
         m_aEDHostname.SetModifyHdl(getControlModifiedLink());
         m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
         m_aEDSocket.SetModifyHdl(getControlModifiedLink());
@@ -648,7 +648,7 @@ namespace dbaui
         {
         }
 
-        sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
+        USHORT nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         OSQLMessageBox aMsg( this, String( ModuleRes( nMessage ) ), String() );
         aMsg.Execute();
         return 0L;
@@ -750,18 +750,18 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateMySQLJDBC( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage*	ODriversSettings::CreateMySQLJDBC( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OGeneralSpecialJDBCDetailsPage( pParent,PAGE_MYSQL_JDBC, _rAttrSet,DSID_MYSQL_PORTNUMBER ) );
     }
     // -----------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateMySQLNATIVE( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage*	ODriversSettings::CreateMySQLNATIVE( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new MySQLNativePage( pParent, _rAttrSet ) );
     }
 
     // -----------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateOracleJDBC( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage*	ODriversSettings::CreateOracleJDBC( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OGeneralSpecialJDBCDetailsPage( pParent,PAGE_ORACLE_JDBC, _rAttrSet,DSID_ORACLE_PORTNUMBER) );
     }
@@ -772,35 +772,35 @@ namespace dbaui
     //========================================================================
     OAdabasDetailsPage::OAdabasDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_ADABAS, _rCoreAttrs, CBTP_USE_CHARSET ,false)
-        ,m_aFTHostname      (this, ModuleRes(FT_HOSTNAME))
-        ,m_aEDHostname      (this, ModuleRes(ET_HOSTNAME))
-        ,m_aFL_1            (this, ModuleRes( FL_SEPARATOR1) )
-        ,m_FT_CACHE_SIZE(       this, ModuleRes( FT_CACHE_SIZE      ) )
-        ,m_NF_CACHE_SIZE(       this, ModuleRes( NF_CACHE_SIZE      ) )
-        ,m_FT_DATA_INCREMENT(   this, ModuleRes( FT_DATA_INCREMENT  ) )
-        ,m_NF_DATA_INCREMENT(   this, ModuleRes( NF_DATA_INCREMENT  ) )
-        ,m_aFL_2(               this, ModuleRes( FL_SEPARATOR2      ) )
-        ,m_FT_CTRLUSERNAME(     this, ModuleRes( FT_CTRLUSERNAME    ) )
-        ,m_ET_CTRLUSERNAME(     this, ModuleRes( ET_CTRLUSERNAME    ) )
-        ,m_FT_CTRLPASSWORD(     this, ModuleRes( FT_CTRLPASSWORD    ) )
-        ,m_ET_CTRLPASSWORD(     this, ModuleRes( ET_CTRLPASSWORD    ) )
-        ,m_CB_SHUTDB(           this, ModuleRes( CB_SHUTDB          ) )
-        ,m_PB_STAT(             this, ModuleRes( PB_STAT            ) )
+        ,m_aFTHostname		(this, ModuleRes(FT_HOSTNAME))
+        ,m_aEDHostname		(this, ModuleRes(ET_HOSTNAME))
+        ,m_aFL_1			(this, ModuleRes( FL_SEPARATOR1) )
+        ,m_FT_CACHE_SIZE(		this, ModuleRes( FT_CACHE_SIZE		) )
+        ,m_NF_CACHE_SIZE(		this, ModuleRes( NF_CACHE_SIZE		) )
+        ,m_FT_DATA_INCREMENT(	this, ModuleRes( FT_DATA_INCREMENT	) )
+        ,m_NF_DATA_INCREMENT(	this, ModuleRes( NF_DATA_INCREMENT	) )
+        ,m_aFL_2(				this, ModuleRes( FL_SEPARATOR2		) )
+        ,m_FT_CTRLUSERNAME(		this, ModuleRes( FT_CTRLUSERNAME	) )
+        ,m_ET_CTRLUSERNAME(		this, ModuleRes( ET_CTRLUSERNAME	) )
+        ,m_FT_CTRLPASSWORD(		this, ModuleRes( FT_CTRLPASSWORD	) )
+        ,m_ET_CTRLPASSWORD(		this, ModuleRes( ET_CTRLPASSWORD	) )
+        ,m_CB_SHUTDB(			this, ModuleRes( CB_SHUTDB			) )
+        ,m_PB_STAT(				this, ModuleRes( PB_STAT			) )
     {
         m_aEDHostname.SetModifyHdl(getControlModifiedLink());
 
         FreeResource();
 
-        m_PB_STAT.SetClickHdl(              LINK(this,OAdabasDetailsPage,PBClickHdl));
+        m_PB_STAT.SetClickHdl(				LINK(this,OAdabasDetailsPage,PBClickHdl));
 
-        m_CB_SHUTDB.SetClickHdl(            LINK(this,OAdabasDetailsPage,AttributesChangedHdl));
-        m_NF_CACHE_SIZE.SetModifyHdl(       LINK(this,OAdabasDetailsPage,AttributesChangedHdl));
-        m_NF_DATA_INCREMENT.SetModifyHdl(   LINK(this,OAdabasDetailsPage,AttributesChangedHdl));
-        m_ET_CTRLUSERNAME.SetModifyHdl(     LINK(this,OAdabasDetailsPage,AttributesChangedHdl));
-        m_ET_CTRLPASSWORD.SetModifyHdl(     LINK(this,OAdabasDetailsPage,AttributesChangedHdl));
+        m_CB_SHUTDB.SetClickHdl(			LINK(this,OAdabasDetailsPage,AttributesChangedHdl));
+        m_NF_CACHE_SIZE.SetModifyHdl(		LINK(this,OAdabasDetailsPage,AttributesChangedHdl));
+        m_NF_DATA_INCREMENT.SetModifyHdl(	LINK(this,OAdabasDetailsPage,AttributesChangedHdl));
+        m_ET_CTRLUSERNAME.SetModifyHdl(		LINK(this,OAdabasDetailsPage,AttributesChangedHdl));
+        m_ET_CTRLPASSWORD.SetModifyHdl(		LINK(this,OAdabasDetailsPage,AttributesChangedHdl));
 
-        m_ET_CTRLUSERNAME.SetLoseFocusHdl(  LINK(this,OAdabasDetailsPage,LoseFocusHdl));
-        m_ET_CTRLPASSWORD.SetLoseFocusHdl(  LINK(this,OAdabasDetailsPage,LoseFocusHdl));
+        m_ET_CTRLUSERNAME.SetLoseFocusHdl(	LINK(this,OAdabasDetailsPage,LoseFocusHdl));
+        m_ET_CTRLPASSWORD.SetLoseFocusHdl(	LINK(this,OAdabasDetailsPage,LoseFocusHdl));
 
         m_NF_DATA_INCREMENT.SetMin(20);
         m_NF_DATA_INCREMENT.SetMax(LONG_MAX);
@@ -826,7 +826,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateAdabas( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage*	ODriversSettings::CreateAdabas( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OAdabasDetailsPage( pParent, _rAttrSet ) );
     }
@@ -900,7 +900,7 @@ namespace dbaui
     IMPL_LINK( OAdabasDetailsPage, AttributesChangedHdl, void *, EMPTYARG )
     {
         m_CB_SHUTDB.Enable(m_ET_CTRLUSERNAME.GetText().Len() && m_ET_CTRLPASSWORD.GetText().Len());
-        bAttrsChanged = sal_True;
+        bAttrsChanged = TRUE;
         callModifiedHdl();
         return 0;
     }
@@ -941,14 +941,14 @@ namespace dbaui
     //========================================================================
     OLDAPDetailsPage::OLDAPDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_LDAP, _rCoreAttrs,0,false)
-        ,m_aFL_1            (this, ModuleRes( FL_SEPARATOR1) )
-        ,m_aBaseDN          (this, ModuleRes(FT_BASEDN))
-        ,m_aETBaseDN        (this, ModuleRes(ET_BASEDN))
+        ,m_aFL_1			(this, ModuleRes( FL_SEPARATOR1) )
+        ,m_aBaseDN			(this, ModuleRes(FT_BASEDN))
+        ,m_aETBaseDN		(this, ModuleRes(ET_BASEDN))
          ,m_aCBUseSSL        (this, ModuleRes(CB_USESSL))
-        ,m_aPortNumber      (this, ModuleRes(FT_PORTNUMBER))
-        ,m_aNFPortNumber    (this, ModuleRes(NF_PORTNUMBER))
-        ,m_aFTRowCount      (this, ModuleRes(FT_LDAPROWCOUNT))
-        ,m_aNFRowCount      (this, ModuleRes(NF_LDAPROWCOUNT))
+        ,m_aPortNumber		(this, ModuleRes(FT_PORTNUMBER))
+        ,m_aNFPortNumber	(this, ModuleRes(NF_PORTNUMBER))
+        ,m_aFTRowCount		(this, ModuleRes(FT_LDAPROWCOUNT))
+        ,m_aNFRowCount		(this, ModuleRes(NF_LDAPROWCOUNT))
     {
         m_aETBaseDN.SetModifyHdl(getControlModifiedLink());
         m_aCBUseSSL.SetToggleHdl(getControlModifiedLink());
@@ -963,7 +963,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateLDAP( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage*	ODriversSettings::CreateLDAP( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OLDAPDetailsPage( pParent, _rAttrSet ) );
     }
@@ -1065,7 +1065,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateText( Window* pParent,  const SfxItemSet& _rAttrSet )
+    SfxTabPage*	ODriversSettings::CreateText( Window* pParent,	const SfxItemSet& _rAttrSet )
     {
         return ( new OTextDetailsPage( pParent, _rAttrSet ) );
     }
@@ -1109,20 +1109,20 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateGeneratedValuesPage( Window* _pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage*	ODriversSettings::CreateGeneratedValuesPage( Window* _pParent, const SfxItemSet& _rAttrSet )
     {
         return new GeneratedValuesPage( _pParent, _rAttrSet );
     }
 
     //------------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateSpecialSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage*	ODriversSettings::CreateSpecialSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet )
     {
         ::rtl::OUString eType = ODbDataSourceAdministrationHelper::getDatasourceType( _rAttrSet );
         DataSourceMetaData aMetaData( eType );
-        return new SpecialSettingsPage( _pParent, _rAttrSet, aMetaData );
+        return new SpecialSettingsPage(	_pParent, _rAttrSet, aMetaData );
     }
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

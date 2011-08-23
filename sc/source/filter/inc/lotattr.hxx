@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,130 +29,126 @@
 #ifndef SC_LOTATTR_HXX
 #define SC_LOTATTR_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include <tools/solar.h>
-
-#include "address.hxx"
+#include <tools/list.hxx>
+#include "patattr.hxx"
 #include "scitems.hxx"
+#include "address.hxx"
 
+// ----- forwards --------------------------------------------------------
 class ScDocument;
 class ScDocumentPool;
-class ScPatternAttr;
+class SvxBorderLine;
 class SvxColorItem;
 class Color;
+
 class LotAttrTable;
 
-namespace editeng { class SvxBorderLine; }
 
 struct LotAttrWK3
 {
-    sal_uInt8 nFont;
-    sal_uInt8 nLineStyle;
-    sal_uInt8 nFontCol;
-    sal_uInt8 nBack;
+    UINT8					nFont;
+    UINT8					nLineStyle;
+    UINT8					nFontCol;
+    UINT8					nBack;
 
-    inline bool HasStyles () const
-    {
-        return ( nFont || nLineStyle || nFontCol || ( nBack & 0x7F ) );
-                    // !! ohne Center-Bit!!
-    }
-
-    inline bool IsCentered () const
-    {
-        return ( nBack & 0x80 );
-    }
+    inline BOOL				HasStyles( void );
+    inline BOOL				IsCentered( void );
 };
 
-class LotAttrCache
+
+inline BOOL LotAttrWK3::HasStyles( void )
 {
-public:
+    return ( nFont || nLineStyle || nFontCol || ( nBack & 0x7F ) );
+                    // !! ohne Center-Bit!!
+}
 
-    LotAttrCache ();
 
-    ~LotAttrCache();
+inline BOOL LotAttrWK3::IsCentered( void )
+{
+    return ( nBack & 0x80 );
+}
 
-    const ScPatternAttr& GetPattAttr( const LotAttrWK3& );
 
+class LotAttrCache : private List
+{
 private:
-
     friend class LotAttrTable;
 
     struct ENTRY
     {
-        ScPatternAttr*  pPattAttr;
-        sal_uInt32          nHash0;
+        ScPatternAttr*	pPattAttr;
+        UINT32			nHash0;
 
-        ENTRY (const ScPatternAttr &r);
+        inline			ENTRY( const ScPatternAttr& r )			{ pPattAttr = new ScPatternAttr( r ); }
 
-        ENTRY (ScPatternAttr* p);
+        inline			ENTRY( ScPatternAttr* p )				{ pPattAttr = p; }
 
-        ~ENTRY ();
+        inline			~ENTRY()								{ delete pPattAttr; }
 
-        inline bool operator == (const ENTRY &r) const { return nHash0 == r.nHash0; }
+        inline BOOL		operator ==( const ENTRY& r ) const		{ return nHash0 == r.nHash0; }
 
-        inline bool operator == (const sal_uInt32 &r) const { return nHash0 == r; }
+        inline BOOL		operator ==( const UINT32& r ) const	{ return nHash0 == r; }
     };
 
-    inline static void  MakeHash( const LotAttrWK3& rAttr, sal_uInt32& rOut )
-    {
-        ( ( sal_uInt8* ) &rOut )[ 0 ] = rAttr.nFont & 0x7F;
-        ( ( sal_uInt8* ) &rOut )[ 1 ] = rAttr.nLineStyle;
-        ( ( sal_uInt8* ) &rOut )[ 2 ] = rAttr.nFontCol;
-        ( ( sal_uInt8* ) &rOut )[ 3 ] = rAttr.nBack;
-    }
+    ScDocumentPool*		pDocPool;
+    SvxColorItem*		ppColorItems[ 6 ];		// 0 und 7 fehlen!
+    SvxColorItem*		pBlack;
+    SvxColorItem*		pWhite;
+    Color*				pColTab;
 
-    static void LotusToScBorderLine( sal_uInt8 nLine, ::editeng::SvxBorderLine& );
+    inline static void	MakeHash( const LotAttrWK3& rAttr, UINT32& rOut )
+                        {
+                            ( ( UINT8* ) &rOut )[ 0 ] = rAttr.nFont & 0x7F;
+                            ( ( UINT8* ) &rOut )[ 1 ] = rAttr.nLineStyle;
+                            ( ( UINT8* ) &rOut )[ 2 ] = rAttr.nFontCol;
+                            ( ( UINT8* ) &rOut )[ 3 ] = rAttr.nBack;
+                        }
+    static void			LotusToScBorderLine( UINT8 nLine, SvxBorderLine& );
+    const SvxColorItem&	GetColorItem( const UINT8 nLotIndex ) const;
+    const Color&		GetColor( const UINT8 nLotIndex ) const;
+public:
+                        LotAttrCache( void );
+                        ~LotAttrCache();
 
-    const SvxColorItem& GetColorItem( const sal_uInt8 nLotIndex ) const;
-
-    const Color& GetColor( const sal_uInt8 nLotIndex ) const;
-
-    ScDocumentPool*     pDocPool;
-    SvxColorItem*       ppColorItems[6];        // 0 und 7 fehlen!
-    SvxColorItem*       pBlack;
-    SvxColorItem*       pWhite;
-    Color*              pColTab;
-    boost::ptr_vector<ENTRY> aEntries;
+    const ScPatternAttr&	GetPattAttr( const LotAttrWK3& );
 };
 
 
-class LotAttrCol
+class LotAttrCol : private List
 {
-public:
-
-    void SetAttr (const SCROW nRow, const ScPatternAttr&);
-
-    void Apply (const SCCOL nCol, const SCTAB nTab, const sal_Bool bClear = true);
-
-    void Clear ();
-
 private:
-
     struct ENTRY
     {
-        const ScPatternAttr* pPattAttr;
-        SCROW nFirstRow;
-        SCROW nLastRow;
+        const ScPatternAttr*	pPattAttr;
+        SCROW					nFirstRow;
+        SCROW					nLastRow;
     };
 
-    boost::ptr_vector<ENTRY> aEntries;
+public:
+                                ~LotAttrCol( void );
+    void						SetAttr( const SCROW nRow, const ScPatternAttr& );
+    void						Apply( const SCCOL nCol, const SCTAB nTab, const BOOL bClear = TRUE );
+    void						Clear( void );
 };
 
 
 class LotAttrTable
 {
-public:
-
-    void SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow, const LotAttrWK3& );
-
-    void Apply( const SCTAB nTabNum );
-
 private:
+    LotAttrCol			pCols[ MAXCOLCOUNT ];
+    LotAttrCache		aAttrCache;
+public:
+                        LotAttrTable( void );
+                        ~LotAttrTable();
 
-    LotAttrCol pCols[ MAXCOLCOUNT ];
-    LotAttrCache aAttrCache;
+    void				SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow, const LotAttrWK3& );
+    void				Apply( const SCTAB nTabNum );
 };
+
+
+
+
 
 #endif
 

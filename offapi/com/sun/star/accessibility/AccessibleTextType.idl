@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_accessibility_AccessibleTextType_idl__
-#define __com_sun_star_accessibility_AccessibleTextType_idl__
+#ifndef	__com_sun_star_accessibility_AccessibleTextType_idl__
+#define	__com_sun_star_accessibility_AccessibleTextType_idl__
 
 module com { module sun { module star { module accessibility {
 
@@ -42,13 +42,13 @@ module com { module sun { module star { module accessibility {
 published constants AccessibleTextType
 {
     /** Single character.
-
+    
         <p>Indicates that single (multibyte) characters are used.</p>
     */
     const short CHARACTER = 1;
-
+    
     /** Single word.
-
+    
         <p>Indicates that single words are used.  The definition of what a
         word is is implementation and language/locale dependent.  While in
         English a word is ended by a space or a special character like a
@@ -56,26 +56,26 @@ published constants AccessibleTextType
         languages.</p>
     */
     const short WORD = 2;
-
+    
     /** Single sentence.
-
+    
         <p>Indicates that single sentences are used.  The definition of what
         a sentence is is implementation and language/locale dependent.
         While in English a sentence is ended by a period, this is not
         necessarily true in other languages.</p>
     */
     const short SENTENCE = 3;
-
+    
     /** Single paragraph.
-
+    
         <p>Indicates that single paragraphs are used.  The definition of
         what a paragraph is is implementation and language/locale
         dependent.</p>
     */
     const short PARAGRAPH = 4;
-
+    
     /** Single line.
-
+    
         <p>Indicates that single lines, as displayed on the screen, are
         used.  In contrast to the constants <const>CHARACTER</const>,
         <const>WORD</const>, <const>SENTENCE</const>, and
@@ -99,7 +99,7 @@ published constants AccessibleTextType
     */
     const short ATTRIBUTE_RUN = 7;
 };
-
+          
 }; }; }; };
 
 #endif

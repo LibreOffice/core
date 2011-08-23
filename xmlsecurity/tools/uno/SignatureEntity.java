@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ import com.sun.star.uno.XComponentContext;
 
 import com.sun.star.xml.crypto.*;
 import com.sun.star.xml.crypto.sax.*;
-
+    
 /*
  * this class maintains the data for a signature operation.
  */
@@ -45,10 +45,10 @@ class SignatureEntity extends SecurityEntity
 {
     private Vector m_vReferenceIds;
     private int    m_nSignatureElementCollectorId;
-
+    
     SignatureEntity(
         XSecuritySAXEventKeeper xSAXEventKeeper,
-        boolean isExporting,
+        boolean isExporting, 
         Object resultListener,
         XXMLSecurityContext xXMLSecurityContext,
         XXMLSignature xXMLSignature,
@@ -58,9 +58,9 @@ class SignatureEntity extends SecurityEntity
     {
         super(xSAXEventKeeper, xXMLSecurityContext, xXMLSignature,
             xXMLEncryption, xRemoteServiceManager, xRemoteContext);
-
+        
         m_vReferenceIds = new Vector();
-
+        
         if (isExporting)
         {
             m_nSignatureElementCollectorId = m_xSAXEventKeeper.addSecurityElementCollector(
@@ -70,24 +70,24 @@ class SignatureEntity extends SecurityEntity
             m_xSAXEventKeeper.setSecurityId(m_nSignatureElementCollectorId, m_nSecurityId);
 
             try
-            {
+            {	
                 /*
                  * creates a SignatureCreator.
                  */
                 Object signatureCreator = m_xRemoteServiceManager.createInstanceWithContext(
                     TestTool.SIGNATURECREATOR_COMPONENT, m_xRemoteContext);
-
-                m_xReferenceResolvedListener =
+                
+                m_xReferenceResolvedListener = 
                     (XReferenceResolvedListener)UnoRuntime.queryInterface(
-                        XReferenceResolvedListener.class, signatureCreator);
-
+                        XReferenceResolvedListener.class, signatureCreator); 
+                            
                             /*
                              * initializes the SignatureCreator.
                              */
-                XInitialization xInitialization =
+                XInitialization xInitialization = 
                     (XInitialization)UnoRuntime.queryInterface(
                         XInitialization.class, m_xReferenceResolvedListener);
-
+                    
                 Object args[]=new Object[5];
                 args[0] = new Integer(m_nSecurityId).toString();
                 args[1] = m_xSAXEventKeeper;
@@ -95,21 +95,21 @@ class SignatureEntity extends SecurityEntity
                 args[3] = m_xXMLSecurityContext.getSecurityEnvironment();
                 args[4] = m_xXMLSignature;
                 xInitialization.initialize(args);
-
+                
                 /*
                  * creates a Blocker.
                  */
                 int blockerId = m_xSAXEventKeeper.addBlocker();
                 m_xSAXEventKeeper.setSecurityId(blockerId, m_nSecurityId);
-
+            
                 XBlockerMonitor xBlockerMonitor = (XBlockerMonitor)UnoRuntime.queryInterface(
                     XBlockerMonitor.class, m_xReferenceResolvedListener);
                 xBlockerMonitor.setBlockerId(blockerId);
-
+                
                 /*
                  * sets signature creation result listener.
                  */
-                XSignatureCreationResultBroadcaster xSignatureCreationResultBroadcaster =
+                XSignatureCreationResultBroadcaster xSignatureCreationResultBroadcaster = 
                     (XSignatureCreationResultBroadcaster)UnoRuntime.queryInterface(
                         XSignatureCreationResultBroadcaster.class, m_xReferenceResolvedListener);
                 xSignatureCreationResultBroadcaster.addSignatureCreationResultListener(
@@ -120,15 +120,15 @@ class SignatureEntity extends SecurityEntity
             {
                 e.printStackTrace();
             }
-
+                
         }
         else
         {
             m_nSignatureElementCollectorId = m_xSAXEventKeeper.addSecurityElementCollector(
                 ElementMarkPriority.BEFOREMODIFY, false);
-
+                
             m_xSAXEventKeeper.setSecurityId(m_nSignatureElementCollectorId, m_nSecurityId);
-
+            
             try
             {
                 /*
@@ -136,15 +136,15 @@ class SignatureEntity extends SecurityEntity
                  */
                 Object signatureVerifier = m_xRemoteServiceManager.createInstanceWithContext(
                     TestTool.SIGNATUREVERIFIER_COMPONENT, m_xRemoteContext);
-
-                m_xReferenceResolvedListener =
+                    
+                m_xReferenceResolvedListener = 
                     (XReferenceResolvedListener)UnoRuntime.queryInterface(
-                        XReferenceResolvedListener.class, signatureVerifier);
-
+                        XReferenceResolvedListener.class, signatureVerifier); 
+                        
                             /*
                              * initializes the SignatureVerifier.
                              */
-                XInitialization xInitialization =
+                XInitialization xInitialization = 
                     (XInitialization)UnoRuntime.queryInterface(
                         XInitialization.class, m_xReferenceResolvedListener);
                 Object args[]=new Object[5];
@@ -154,11 +154,11 @@ class SignatureEntity extends SecurityEntity
                 args[3] = m_xXMLSecurityContext;
                 args[4] = m_xXMLSignature;
                 xInitialization.initialize(args);
-
+                
                 /*
                  * sets signature verify result listener.
                  */
-                XSignatureVerifyResultBroadcaster xSignatureVerifyResultBroadcaster =
+                XSignatureVerifyResultBroadcaster xSignatureVerifyResultBroadcaster = 
                     (XSignatureVerifyResultBroadcaster)UnoRuntime.queryInterface(
                         XSignatureVerifyResultBroadcaster.class, m_xReferenceResolvedListener);
                 xSignatureVerifyResultBroadcaster.addSignatureVerifyResultListener(
@@ -174,7 +174,7 @@ class SignatureEntity extends SecurityEntity
         /*
          * configures the resolve listener for the signature template.
          */
-        XReferenceResolvedBroadcaster xReferenceResolvedBroadcaster =
+        XReferenceResolvedBroadcaster xReferenceResolvedBroadcaster = 
             (XReferenceResolvedBroadcaster)UnoRuntime.queryInterface(
                 XReferenceResolvedBroadcaster.class, m_xSAXEventKeeper);
         xReferenceResolvedBroadcaster.addReferenceResolvedListener(
@@ -192,7 +192,7 @@ class SignatureEntity extends SecurityEntity
     private boolean hasReference(String id)
     {
         boolean rc = false;
-
+        
         int length = m_vReferenceIds.size();
         for (int i=0; i<length; ++i)
         {
@@ -202,15 +202,15 @@ class SignatureEntity extends SecurityEntity
                 break;
             }
         }
-
+        
         return rc;
     }
-
+    
 
 /**************************************************************************************
  * protected methods
  **************************************************************************************/
-
+    
     /*
      * adds a new reference id.
      */
@@ -218,7 +218,7 @@ class SignatureEntity extends SecurityEntity
     {
         m_vReferenceIds.add(referenceId);
     }
-
+    
     /*
      * notifies how many reference in this signature.
      */
@@ -226,7 +226,7 @@ class SignatureEntity extends SecurityEntity
     {
         try
         {
-            XReferenceCollector xReferenceCollector =
+            XReferenceCollector xReferenceCollector = 
                 (XReferenceCollector)UnoRuntime.queryInterface(
                     XReferenceCollector.class, m_xReferenceResolvedListener);
             xReferenceCollector.setReferenceCount(m_vReferenceIds.size());
@@ -236,7 +236,7 @@ class SignatureEntity extends SecurityEntity
             e.printStackTrace();
         }
     }
-
+    
     /*
      * tries to add a reference to this signature.
      *
@@ -251,25 +251,25 @@ class SignatureEntity extends SecurityEntity
     protected boolean setReference(String id, boolean isExporting)
     {
         boolean rc = false;
-
+        
         if (hasReference(id))
         {
             int referenceId = m_xSAXEventKeeper.addSecurityElementCollector(
                 isExporting?
                 (ElementMarkPriority.AFTERMODIFY):(ElementMarkPriority.BEFOREMODIFY),
                 false );
-
+                
             m_xSAXEventKeeper.setSecurityId(referenceId, m_nSecurityId);
 
-            XReferenceResolvedBroadcaster xReferenceResolvedBroadcaster =
+            XReferenceResolvedBroadcaster xReferenceResolvedBroadcaster = 
                 (XReferenceResolvedBroadcaster)UnoRuntime.queryInterface(
                     XReferenceResolvedBroadcaster.class, m_xSAXEventKeeper);
             xReferenceResolvedBroadcaster.addReferenceResolvedListener(
                 referenceId, m_xReferenceResolvedListener);
-
+            
             try
             {
-                XReferenceCollector xReferenceCollector =
+                XReferenceCollector xReferenceCollector = 
                     (XReferenceCollector)UnoRuntime.queryInterface(
                         XReferenceCollector.class, m_xReferenceResolvedListener);
                 xReferenceCollector.setReferenceId(referenceId);
@@ -278,7 +278,7 @@ class SignatureEntity extends SecurityEntity
             {
                 e.printStackTrace();
             }
-
+                
             rc = true;
         }
 

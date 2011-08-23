@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,9 +28,9 @@
 #ifndef _CHART2_EXPLICITVALUEPROVIDER_HXX
 #define _CHART2_EXPLICITVALUEPROVIDER_HXX
 
-#include "ExplicitScaleValues.hxx"
-
 #include <boost/shared_ptr.hpp>
+#include <com/sun/star/chart2/ExplicitIncrementData.hpp>
+#include <com/sun/star/chart2/ExplicitScaleData.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
@@ -60,8 +60,8 @@ public:
      */
     virtual sal_Bool getExplicitValuesForAxis(
         ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis > xAxis
-        , ExplicitScaleData&  rExplicitScale
-        , ExplicitIncrementData& rExplicitIncrement )=0;
+        , ::com::sun::star::chart2::ExplicitScaleData&  rExplicitScale
+        , ::com::sun::star::chart2::ExplicitIncrementData& rExplicitIncrement )=0;
 
     /** for rotated objects the shape size and position differs from the visible rectangle
         if bSnapRect is set to true you get the resulting visible position (left-top) and size
@@ -100,12 +100,15 @@ public:
             , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
             , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
+    SAL_DLLPRIVATE static sal_Int32 getPercentNumberFormat( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+
     static sal_Int32 getExplicitNumberFormatKeyForDataLabel(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesOrPointProp
             , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries
             , sal_Int32 nPointIndex /*-1 for whole series*/
             , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram );
-
+    
     static sal_Int32 getExplicitPercentageNumberFormatKeyForDataLabel(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesOrPointProp
             , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );

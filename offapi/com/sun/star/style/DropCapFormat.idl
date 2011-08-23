@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,16 +24,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_style_DropCapFormat_idl__
-#define __com_sun_star_style_DropCapFormat_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module style {
-
-//=============================================================================
-
+#ifndef __com_sun_star_style_DropCapFormat_idl__ 
+#define __com_sun_star_style_DropCapFormat_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module style {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: struct com::sun::star::style::DropCapFormat
 /** This struct describes drop caps at a paragraph object.
  */
@@ -42,29 +42,29 @@ published struct DropCapFormat
     // DocMerge from xml: field com::sun::star::style::DropCapFormat::Lines
     /** This is the number of lines used for a drop cap.
      */
-    byte Lines;
-
-    //-------------------------------------------------------------------------
-
+    byte Lines; 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: field com::sun::star::style::DropCapFormat::Count
     /** This is the number of characters in the drop cap.
      */
-    byte Count;
-
-    //-------------------------------------------------------------------------
-
+    byte Count; 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: field com::sun::star::style::DropCapFormat::Distance
     /** This is the distance between the drop cap in the following text.
      */
-    short Distance;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    short Distance; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 #ifndef __com_sun_star_document_XDocumentEventListener_idl__
 #define __com_sun_star_document_XDocumentEventListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
+#ifndef __com_sun_star_lang_XEventListener_idl__ 
 #include <com/sun/star/lang/XEventListener.idl>
 #endif
 
@@ -47,7 +47,7 @@ module com { module sun { module star { module document {
     anymore.</p>
 
     @see XDocumentEventBroadcaster
-    @since OOo 3.1
+    @since OpenOffice.org 3.1
  */
 interface XDocumentEventListener : ::com::sun::star::lang::XEventListener
 {

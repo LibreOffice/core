@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,11 +81,11 @@ class MalformedVersionException
 {
 public:
     MalformedVersionException();
-
+    
     MalformedVersionException(const MalformedVersionException &);
-
+    
     virtual ~MalformedVersionException();
-
+    
     MalformedVersionException & operator =(const MalformedVersionException &);
 };
 
@@ -93,7 +93,7 @@ class VendorBase: public salhelper::SimpleReferenceObject
 {
 public:
     VendorBase();
-    /* returns relative paths to the java executable as
+    /* returns relativ paths to the java executable as
        file URLs.
 
        For example "bin/java.exe". You need
@@ -103,7 +103,7 @@ public:
        The paths are relative file URLs. That is, they always
        contain '/' even on windows. The paths are relative
        to the installation directory of a JRE.
-
+      
 
        The signature of this function must correspond to
        getJavaExePaths_func.
@@ -149,7 +149,7 @@ public:
        if so, needsRestart returns true.
      */
     virtual bool needsRestart() const;
-
+    
     /* compares versions of this vendor. MUST be overridden
        in a derived class.
        ####################################################
@@ -159,7 +159,7 @@ public:
       0 this.version == sSecond
       1 this.version > sSecond
       -1 this.version < sSEcond
-
+      
       @throw
       MalformedVersionException if the version string was not recognized.
      */

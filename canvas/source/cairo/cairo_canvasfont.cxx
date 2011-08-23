@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,10 +47,10 @@ using namespace ::com::sun::star;
 namespace cairocanvas
 {
 
-    CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
-                            const uno::Sequence< beans::PropertyValue >&    /*rExtraFontProperties*/,
-                            const geometry::Matrix2D&                       rFontMatrix,
-                            const SurfaceProviderRef&                       rDevice ) :
+    CanvasFont::CanvasFont( const rendering::FontRequest& 					rFontRequest,
+                            const uno::Sequence< beans::PropertyValue >&	/*rExtraFontProperties*/, 
+                            const geometry::Matrix2D& 						rFontMatrix,
+                            const SurfaceProviderRef&						rDevice ) :
         CanvasFont_Base( m_aMutex ),
         maFont( Font( rFontRequest.FontDescription.FamilyName,
                       rFontRequest.FontDescription.StyleName,
@@ -60,7 +60,7 @@ namespace cairocanvas
     {
         maFont->SetAlign( ALIGN_BASELINE );
         maFont->SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==com::sun::star::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
-        maFont->SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? sal_True : sal_False );
+        maFont->SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? TRUE : FALSE );
 
         // TODO(F2): improve panose->vclenum conversion
         maFont->SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
@@ -79,12 +79,12 @@ namespace cairocanvas
             if( pOutDev )
             {
                 const bool bOldMapState( pOutDev->IsMapModeEnabled() );
-                pOutDev->EnableMapMode(sal_False);
+                pOutDev->EnableMapMode(FALSE);
 
                 const Size aSize = pOutDev->GetFontMetric( *maFont ).GetSize();
 
                 const double fDividend( rFontMatrix.m10 + rFontMatrix.m11 );
-                double fStretch = (rFontMatrix.m00 + rFontMatrix.m01);
+                double fStretch = (rFontMatrix.m00 + rFontMatrix.m01);            
 
                 if( !::basegfx::fTools::equalZero( fDividend) )
                     fStretch /= fDividend;
@@ -112,9 +112,9 @@ namespace cairocanvas
         if( !mpRefDevice.is() )
             return uno::Reference< rendering::XTextLayout >(); // we're disposed
 
-        return new TextLayout( aText,
-                               nDirection,
-                               nRandomSeed,
+        return new TextLayout( aText, 
+                               nDirection, 
+                               nRandomSeed, 
                                Reference( this ),
                                mpRefDevice );
     }

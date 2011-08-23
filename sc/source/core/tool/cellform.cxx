@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,10 +47,10 @@ const ScFormulaCell* pLastFormulaTreeTop = 0;
 
 // -----------------------------------------------------------------------
 
-void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, String& rString,
+void ScCellFormat::GetString( ScBaseCell* pCell, ULONG nFormat, String& rString,
                               Color** ppColor, SvNumberFormatter& rFormatter,
-                              sal_Bool bNullVals,
-                              sal_Bool bFormula,
+                              BOOL bNullVals,
+                              BOOL bFormula,
                               ScForceTextFmt eForceTextFmt )
 {
     *ppColor = NULL;
@@ -102,12 +102,12 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, String& rStr
             break;
         case CELLTYPE_FORMULA:
             {
-                ScFormulaCell*  pFCell = (ScFormulaCell*)pCell;
+                ScFormulaCell*	pFCell = (ScFormulaCell*)pCell;
                 if ( bFormula )
                     pFCell->GetFormula( rString );
                 else
                 {
-                    // A macro started from the interpreter, which has
+                    // #62160# A macro started from the interpreter, which has
                     // access to Formular Cells, becomes a CellText, even if
                     // that triggers further interpretation, except if those
                     // cells are already being interpreted.
@@ -121,7 +121,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, String& rStr
                     }
                     else
                     {
-                        sal_uInt16 nErrCode = pFCell->GetErrCode();
+                        USHORT nErrCode = pFCell->GetErrCode();
 
                         // get the number format only after interpretation (GetErrCode):
                         if ( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
@@ -156,7 +156,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, String& rStr
     }
 }
 
-void ScCellFormat::GetInputString( ScBaseCell* pCell, sal_uLong nFormat, String& rString,
+void ScCellFormat::GetInputString( ScBaseCell* pCell, ULONG nFormat, String& rString,
                                       SvNumberFormatter& rFormatter )
 {
     if (&rFormatter==NULL)
@@ -200,7 +200,7 @@ void ScCellFormat::GetInputString( ScBaseCell* pCell, sal_uLong nFormat, String&
                     ((ScFormulaCell*)pCell)->GetString( rString );
                 }
 
-                sal_uInt16 nErrCode = ((ScFormulaCell*)pCell)->GetErrCode();
+                USHORT nErrCode = ((ScFormulaCell*)pCell)->GetErrCode();
                 if (nErrCode != 0)
                 {
                     rString.Erase();

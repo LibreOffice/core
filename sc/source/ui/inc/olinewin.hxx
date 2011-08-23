@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -209,7 +209,7 @@ private:
                                     long nLevelStart, long nEntryStart,
                                     long nLevelEnd, long nEntryEnd );
     /** Draws the specified image unpressed. */
-    void                        DrawImageRel( long nLevelPos, long nEntryPos, sal_uInt16 nId );
+    void                        DrawImageRel( long nLevelPos, long nEntryPos, USHORT nId );
     /** Draws a pressed or unpressed border. */
     void                        DrawBorderRel( size_t nLevel, size_t nEntry, bool bPressed );
 

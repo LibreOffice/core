@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,6 +38,6 @@
 // muss angepasst werden!
 #define CLICK_ACTION_COUNT 14
 
-#endif  // _SD_ANIMATIONDEF_HXX
+#endif	// _SD_ANIMATIONDEF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

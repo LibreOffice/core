@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,9 @@
 #include "CommonConverters.hxx"
 #include "AxisHelper.hxx"
 #include <com/sun/star/chart2/XAxis.hpp>
-#include <com/sun/star/chart/ChartAxisType.hpp>
-#include <chartview/ExplicitScaleValues.hxx>
+#include <com/sun/star/chart2/ExplicitIncrementData.hpp>
+#include <com/sun/star/chart2/ExplicitScaleData.hpp>
+#include <com/sun/star/chart2/AxisOrientation.hpp>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
@@ -43,7 +44,6 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
-using ::com::sun::star::chart::TimeIncrement;
 
 //.............................................................................
 namespace chart
@@ -92,15 +92,6 @@ WrappedScaleProperty::WrappedScaleProperty( tScaleProperty eScaleProperty
         case SCALE_PROP_AUTO_STEPHELP:
             m_aOuterName = C2U("AutoStepHelp");
             break;
-        case SCALE_PROP_AXIS_TYPE:
-            m_aOuterName = C2U("AxisType");
-            break;
-        case SCALE_PROP_DATE_INCREMENT:
-            m_aOuterName = C2U("TimeIncrement");
-            break;
-        case SCALE_PROP_EXPLICIT_DATE_INCREMENT:
-            m_aOuterName = C2U("ExplicitTimeIncrement");
-            break;
         case SCALE_PROP_LOGARITHMIC:
             m_aOuterName = C2U("Logarithmic");
             break;
@@ -108,7 +99,7 @@ WrappedScaleProperty::WrappedScaleProperty( tScaleProperty eScaleProperty
             m_aOuterName = C2U("ReverseDirection");
             break;
         default:
-            OSL_FAIL("unknown scale property");
+            OSL_ENSURE(false,"unknown scale property");
             break;
     }
 }
@@ -117,6 +108,7 @@ WrappedScaleProperty::~WrappedScaleProperty()
 {
 }
 
+//static
 void WrappedScaleProperty::addWrappedProperties( std::vector< WrappedProperty* >& rList
             , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
@@ -131,9 +123,6 @@ void WrappedScaleProperty::addWrappedProperties( std::vector< WrappedProperty* >
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_AUTO_ORIGIN, spChart2ModelContact ) );
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_AUTO_STEPMAIN, spChart2ModelContact ) );
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_AUTO_STEPHELP, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_AXIS_TYPE, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_DATE_INCREMENT, spChart2ModelContact ) );
-    rList.push_back( new WrappedScaleProperty( SCALE_PROP_EXPLICIT_DATE_INCREMENT, spChart2ModelContact ) );
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_LOGARITHMIC, spChart2ModelContact ) );
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_REVERSEDIRECTION, spChart2ModelContact ) );
 }
@@ -163,7 +152,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
     bool bSetScaleData     = false;
 
     chart2::ScaleData aScaleData( xAxis->getScaleData() );
-
+    
     sal_Bool bBool = false;
     switch( eScaleProperty )
     {
@@ -191,10 +180,9 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
             if( rSubIncrements.getLength() == 0 )
                 rSubIncrements.realloc( 1 );
 
-            double fStepHelp = 0;
+            double fStepMain = 0, fStepHelp = 0;
             if( (rOuterValue >>= fStepHelp) )
             {
-                double fStepMain = 0;
                 if( AxisHelper::isLogarithmic(aScaleData.Scaling) )
                 {
                     sal_Int32 nIntervalCount = static_cast< sal_Int32 >(fStepHelp);
@@ -279,49 +267,12 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
             bSetScaleData = true;
             break;
         }
-        case SCALE_PROP_AXIS_TYPE:
-        {
-            sal_Int32 nType = 0;
-            if( (rOuterValue >>= nType) )
-            {
-                if( ::com::sun::star::chart::ChartAxisType::AUTOMATIC == nType )
-                {
-                    aScaleData.AutoDateAxis = true;
-                    if( aScaleData.AxisType == AxisType::DATE )
-                        aScaleData.AxisType = AxisType::CATEGORY;
-                }
-                else if( ::com::sun::star::chart::ChartAxisType::CATEGORY == nType )
-                {
-                    aScaleData.AutoDateAxis = false;
-                    if( aScaleData.AxisType == AxisType::DATE )
-                        aScaleData.AxisType = AxisType::CATEGORY;
-                }
-                else if( ::com::sun::star::chart::ChartAxisType::DATE == nType )
-                {
-                    if( aScaleData.AxisType == AxisType::CATEGORY )
-                        aScaleData.AxisType = AxisType::DATE;
-                }
-                bSetScaleData = true;
-            }
-            break;
-        }
-        case SCALE_PROP_DATE_INCREMENT:
-        {
-            TimeIncrement aTimeIncrement;
-            rOuterValue >>= aTimeIncrement;
-            aScaleData.TimeIncrement = aTimeIncrement;
-            bSetScaleData = true;
-            break;
-        }
-        case SCALE_PROP_EXPLICIT_DATE_INCREMENT:
-            //read only property
-            break;
         case SCALE_PROP_LOGARITHMIC:
         {
             if( rOuterValue >>= bBool )
             {
                 bool bWasLogarithm = AxisHelper::isLogarithmic( aScaleData.Scaling );
-
+                
                 // safe comparison between sal_Bool and bool
                 if( (!bBool) != (!bWasLogarithm) )
                 {
@@ -349,7 +300,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
         }
         default:
         {
-            OSL_FAIL("unknown scale property");
+            OSL_ENSURE(false,"unknown scale property");
             break;
         }
     }
@@ -362,17 +313,17 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet( m_aOuterValue );
-
+    
     Reference< chart2::XAxis > xAxis( xInnerPropertySet, uno::UNO_QUERY );
     OSL_ENSURE(xAxis.is(),"need an XAxis");
     if(!xAxis.is())
         return aRet;
-
+    
     chart2::ScaleData aScaleData( xAxis->getScaleData() );
-
-    ExplicitScaleData aExplicitScale;
-    ExplicitIncrementData aExplicitIncrement;
-
+    
+    chart2::ExplicitScaleData aExplicitScale;
+    chart2::ExplicitIncrementData aExplicitIncrement;
+        
     switch( eScaleProperty )
     {
         case SCALE_PROP_MAX:
@@ -397,7 +348,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
             }
             break;
         }
-
+        
         case SCALE_PROP_STEPMAIN:
         {
             aRet = aScaleData.IncrementData.Distance;
@@ -451,8 +402,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
             {
                 m_spChart2ModelContact->getExplicitValuesForAxis(
                     xAxis, aExplicitScale, aExplicitIncrement );
-
-                if( !aExplicitIncrement.SubIncrements.empty() &&
+                if( aExplicitIncrement.SubIncrements.getLength() > 0 &&
                      aExplicitIncrement.SubIncrements[ 0 ].IntervalCount > 0 )
                 {
                     if( bLogarithmic )
@@ -491,7 +441,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
             if( bNeedToCalculateExplicitValues )
             {
                 m_spChart2ModelContact->getExplicitValuesForAxis( xAxis, aExplicitScale, aExplicitIncrement );
-                if( !aExplicitIncrement.SubIncrements.empty() )
+                if( aExplicitIncrement.SubIncrements.getLength() > 0 )
                     nIntervalCount = aExplicitIncrement.SubIncrements[ 0 ].IntervalCount;
             }
             aRet = uno::makeAny( nIntervalCount );
@@ -537,46 +487,6 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
             aRet <<= !hasDoubleValue(aScaleData.Origin);
             break;
         }
-        case SCALE_PROP_AXIS_TYPE:
-        {
-            sal_Int32 nType = ::com::sun::star::chart::ChartAxisType::AUTOMATIC;
-            if( aScaleData.AxisType == AxisType::DATE )
-            {
-                nType = ::com::sun::star::chart::ChartAxisType::DATE;
-            }
-            else if( aScaleData.AxisType == AxisType::CATEGORY )
-            {
-                if( !aScaleData.AutoDateAxis )
-                    nType = ::com::sun::star::chart::ChartAxisType::CATEGORY;
-            }
-            aRet = uno::makeAny( nType );
-            break;
-        }
-        case SCALE_PROP_DATE_INCREMENT:
-        {
-            if( aScaleData.AxisType == AxisType::DATE || aScaleData.AutoDateAxis )
-                aRet = uno::makeAny( aScaleData.TimeIncrement );
-            break;
-        }
-        case SCALE_PROP_EXPLICIT_DATE_INCREMENT:
-        {
-            if( aScaleData.AxisType == AxisType::DATE || aScaleData.AutoDateAxis )
-            {
-                m_spChart2ModelContact->getExplicitValuesForAxis( xAxis, aExplicitScale, aExplicitIncrement );
-                if( aExplicitScale.AxisType == AxisType::DATE )
-                {
-                    TimeIncrement aTimeIncrement;
-                    aTimeIncrement.MajorTimeInterval = uno::makeAny( aExplicitIncrement.MajorTimeInterval );
-                    aTimeIncrement.MinorTimeInterval = uno::makeAny( aExplicitIncrement.MinorTimeInterval );
-                    aTimeIncrement.TimeResolution = uno::makeAny( aExplicitScale.TimeResolution );
-                    aRet = uno::makeAny(aTimeIncrement);
-                }
-            }
-
-            if( aScaleData.AxisType == AxisType::DATE || aScaleData.AutoDateAxis )
-                aRet = uno::makeAny( aScaleData.TimeIncrement );
-            break;
-        }
         case SCALE_PROP_LOGARITHMIC:
         {
             aRet <<= static_cast< sal_Bool >( AxisHelper::isLogarithmic(aScaleData.Scaling) );
@@ -589,7 +499,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
         }
         default:
         {
-            OSL_FAIL("unknown scale property");
+            OSL_ENSURE(false,"unknown scale property");
             break;
         }
     }
@@ -598,7 +508,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
 }
 
 } //  namespace wrapper
-} //  namespace chart
+} //namespace chart
 //.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

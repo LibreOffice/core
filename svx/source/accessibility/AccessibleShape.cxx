@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/AccessibleShape.hxx>
-#include "svx/DescriptionGenerator.hxx"
+#include "DescriptionGenerator.hxx"
 #include <svx/AccessibleShapeInfo.hxx>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <rtl/uuid.h>
@@ -48,13 +48,13 @@
 #include <svx/unoshtxt.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>
-#include "svx/unoapi.hxx"
+#include "unoapi.hxx"
 #include <com/sun/star/uno/Exception.hpp>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
 
 #include "accessibility.hrc"
-#include "svx/svdstr.hrc"
+#include "svdstr.hrc"
 #include <svx/dialmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
@@ -62,7 +62,7 @@
 #include "AccessibleEmptyEditSource.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;
 
@@ -75,7 +75,7 @@ OUString GetOptionalProperty (
     const OUString& rsPropertyName)
 {
     OUString sValue;
-
+    
     if (rxSet.is())
     {
         const Reference<beans::XPropertySetInfo> xInfo (rxSet->getPropertySetInfo());
@@ -249,7 +249,7 @@ void AccessibleShape::UpdateStates (void)
     // XXX fix_me this has to be done with an extra interface later on
     if ( m_pShape && maShapeTreeInfo.GetSdrView() )
     {
-        bShapeIsSelected = maShapeTreeInfo.GetSdrView()->IsObjMarked(m_pShape) == sal_True;
+        bShapeIsSelected = maShapeTreeInfo.GetSdrView()->IsObjMarked(m_pShape) == TRUE;
     }
 
     if (bShapeIsSelected)
@@ -378,7 +378,7 @@ uno::Reference<XAccessible> SAL_CALL
     }
     else
         throw lang::IndexOutOfBoundsException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shape has no child with index "))
+            ::rtl::OUString::createFromAscii ("shape has no child with index ")
             + rtl::OUString::valueOf(nIndex),
             static_cast<uno::XWeak*>(this));
 
@@ -388,7 +388,7 @@ uno::Reference<XAccessible> SAL_CALL
 
 
 
-/** Return a copy of the state set.
+/**	Return a copy of the state set.
     Possible states are:
         ENABLED
         SHOWING
@@ -513,7 +513,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
                         aValue >>= aBoundingBox;
                         bFoundBoundRect = true;
                     }
-                    catch (beans::UnknownPropertyException const&)
+                    catch (beans::UnknownPropertyException e)
                     {
                         // Handled below (bFoundBoundRect stays false).
                     }
@@ -569,6 +569,27 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
             int x = aPixelPosition.getX() - aParentLocation.X;
             int y = aPixelPosition.getY() - aParentLocation.Y;
 
+            /*        //  The following block is a workarround for bug #99889# (property
+            //  BoundRect returnes coordinates relative to document window
+            //  instead of absolute coordinates for shapes in Writer).  Has to
+            //  be removed as soon as bug is fixed.
+
+            // Use a non-null anchor position as flag that the shape is in a
+            // Writer document.
+            if (xSetInfo.is())
+                if (xSetInfo->hasPropertyByName (sAnchorPositionName))
+                {
+                    uno::Any aPos = xSet->getPropertyValue (sAnchorPositionName);
+                    awt::Point aAnchorPosition;
+                    aPos >>= aAnchorPosition;
+                    if (aAnchorPosition.X > 0)
+                    {
+                        x = aPixelPosition.getX();
+                        y = aPixelPosition.getY();
+                    }
+                }
+            //  End of workarround.
+            */
             // Clip with parent (with coordinates relative to itself).
             ::Rectangle aBBox (
                 x, y, x + aPixelSize.getWidth(), y + aPixelSize.getHeight());
@@ -655,7 +676,7 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground (void)
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue (OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")) );
+            aColor = aSet->getPropertyValue (OUString::createFromAscii ("LineColor"));
             aColor >>= nColor;
         }
     }
@@ -681,7 +702,7 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue (OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")) );
+            aColor = aSet->getPropertyValue (OUString::createFromAscii ("FillColor"));
             aColor >>= nColor;
         }
     }
@@ -824,6 +845,8 @@ uno::Sequence<uno::Type> SAL_CALL
         ::getCppuType((const uno::Reference<document::XEventListener>*)0);
     const uno::Type aUnoTunnelType =
         ::getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
+    //    const uno::Type aStateSetType =
+    //    	::getCppuType((const uno::Reference<XAccessibleStateSet>*)0);
 
     // ... and merge them all into one list.
     sal_Int32   nTypeCount (aTypeList.getLength()),
@@ -868,7 +891,7 @@ void SAL_CALL
         }
 
     }
-    catch (uno::RuntimeException const&)
+    catch (uno::RuntimeException e)
     {
         OSL_TRACE ("caught exception while disposing");
     }
@@ -954,7 +977,7 @@ sal_Int64 SAL_CALL
 {
     sal_Int64 nReturn( 0 );
 
-    if( ( rIdentifier.getLength() == 16 ) && ( 0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
+    if(	( rIdentifier.getLength() == 16 ) && ( 0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
         nReturn = reinterpret_cast< sal_Int64 >( this );
 
     return( nReturn );
@@ -984,7 +1007,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
 
 
 //=====  protected internal  ==================================================
-/// Set this object's name if is different to the current name.
+///	Set this object's name if is different to the current name.
 ::rtl::OUString
     AccessibleShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -1011,7 +1034,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
             uno::Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
             if (xSet.is())
             {
-                uno::Any aZOrder (xSet->getPropertyValue (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")) ));
+                uno::Any aZOrder (xSet->getPropertyValue (::rtl::OUString::createFromAscii ("ZOrder")));
                 aZOrder >>= nIndex;
 
                 // Add one to be not zero based.
@@ -1081,10 +1104,10 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
             break;
 
         case DRAWING_CONTROL:
-            aDG.AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBackground")),
+            aDG.AddProperty (OUString::createFromAscii ("ControlBackground"),
                 DescriptionGenerator::COLOR,
                 OUString());
-            aDG.AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBorder")),
+            aDG.AddProperty (OUString::createFromAscii ("ControlBorder"),
                 DescriptionGenerator::INTEGER,
                 OUString());
             break;
@@ -1167,7 +1190,7 @@ sal_Int32 SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
-    //  Use a simple but slow solution for now.  Optimize later.
+    //	Use a simple but slow solution for now.  Optimize later.
 
     sal_Int32 nIndex = m_nIndexInParent;
     if ( -1 == nIndex )

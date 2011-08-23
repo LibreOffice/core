@@ -43,6 +43,8 @@ LIBTARGET=NO
 PACKAGE := com$/sun$/star$/testtool
 TARGET  := com_sun_star_testtool
 
+
+#RDB=$(SOLARBINDIR)$/applicat.rdb
 RDB=$(BIN)$/mozillatesttool.rdb
 
 
@@ -59,6 +61,8 @@ GENJAVACLASSFILES = \
 
 TYPES={$(subst,.class, $(subst,$/,.  $(subst,$(CLASSDIR)$/,-T  $(GENJAVACLASSFILES))))}
 GENJAVAFILES = {$(subst,.class,.java $(subst,$/class, $(GENJAVACLASSFILES)))}
+#JAVAFILES= $(GENJAVAFILES)
+
 
 
 UNOUCRDEP=$(RDB)
@@ -89,6 +93,34 @@ UNOTYPES= \
         com.sun.star.testtool.XResult \
         com.sun.star.testtool.ResultType \
         com.sun.star.testtool.XMozillaTesttoolServer
+
+
+
+#SLOFILES= \
+#		$(SLO)$/iserverproxy.obj \
+#		$(SLO)$/broadcastclient.obj \
+#		$(SLO)$/genericinformation.obj \
+#		$(SLO)$/informationclient.obj
+
+# ---- test ----
+
+#LIB1TARGET=$(SLB)$/iserverproxy.lib
+#LIB1OBJFILES=$(SLOFILES)
+
+#SHL1TARGET=iserverproxy
+#SHL1STDLIBS= \
+#		 $(OSLLIB) $(RTLLIB) $(TOOLSLIB) \
+#		$(CPPULIB)		\
+#		$(CPPUHELPERLIB)	\
+#		$(UNOLIB)	\
+#		$(SVTOOLLIB)	 \
+#		$(SALLIB)		 \
+#		$(BOOTSTRP)
+
+#SHL1LIBS=	$(LIB1TARGET) $(LB)$/ico.lib
+#SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+#DEF1NAME=	$(SHL1TARGET)
+#DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 

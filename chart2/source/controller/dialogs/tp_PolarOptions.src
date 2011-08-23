@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,14 +30,12 @@
 
 TabPage TP_POLAROPTIONS
 {
-    HelpID = "chart2:TabPage:TP_POLAROPTIONS";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
 
     CheckBox CB_CLOCKWISE
     {
-        HelpID = "chart2:CheckBox:TP_POLAROPTIONS:CB_CLOCKWISE";
         Pos = MAP_APPFONT ( 12 , 8  );
         Size = MAP_APPFONT ( 248 , 10 );
         TabStop = TRUE;
@@ -51,7 +49,7 @@ TabPage TP_POLAROPTIONS
     };
     Control CT_ANGLE_DIAL
     {
-        HelpId  = HID_SCH_STARTING_ANGLE_DIAL ;
+        HelpId	= HID_SCH_STARTING_ANGLE_DIAL ;
         Pos     = MAP_APPFONT ( 12 , 38  ) ;
         Size    = MAP_APPFONT ( 43 , 43 ) ;
     };
@@ -63,7 +61,6 @@ TabPage TP_POLAROPTIONS
     };
     NumericField NF_STARTING_ANGLE
     {
-        HelpID = "chart2:NumericField:TP_POLAROPTIONS:NF_STARTING_ANGLE";
         Pos = MAP_APPFONT ( 61 , 53 ) ;
         Size = MAP_APPFONT ( 28 , 12 ) ;
         Border = TRUE ;
@@ -82,7 +79,6 @@ TabPage TP_POLAROPTIONS
     };
     CheckBox CB_INCLUDE_HIDDEN_CELLS_POLAR
     {
-        HelpID = "chart2:CheckBox:TP_POLAROPTIONS:CB_INCLUDE_HIDDEN_CELLS_POLAR";
         Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;

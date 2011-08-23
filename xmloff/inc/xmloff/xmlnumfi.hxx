@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,9 @@
 #include <xmloff/xmlstyle.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <i18npool/lang.h>
+#ifndef __SGI_STL_VECTOR
 #include <vector>
+#endif
 #include <unotools/localedatawrapper.hxx>
 
 #define XML_NUMBERSTYLES "NumberStyles"
@@ -72,8 +74,8 @@ struct SvXMLNumberInfo;
 class SvNumberFormatter;
 class SvtSysLocale;
 
-//  use SvXMLNumFmtHelper in the context for <office:styles> to create
-//  child contexts for data styles
+//	use SvXMLNumFmtHelper in the context for <office:styles> to create
+//	child contexts for data styles
 
 class SvXMLNumFmtHelper
 {
@@ -85,36 +87,43 @@ class SvXMLNumFmtHelper
 public:
     // #110680#
     //SvXMLNumFmtHelper( const ::com::sun::star::uno::Reference<
-    //      ::com::sun::star::util::XNumberFormatsSupplier >& rSupp );
+    //		::com::sun::star::util::XNumberFormatsSupplier >& rSupp );
     //SvXMLNumFmtHelper( SvNumberFormatter* pNumberFormatter );
-    SvXMLNumFmtHelper(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& rSupp,
+    SvXMLNumFmtHelper( 
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& rSupp, 
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory );
 
-    SvXMLNumFmtHelper(
-        SvNumberFormatter* pNumberFormatter,
+    SvXMLNumFmtHelper( 
+        SvNumberFormatter* pNumberFormatter, 
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory );
 
     ~SvXMLNumFmtHelper();
 
-    SvXMLStyleContext*  CreateChildContext( SvXMLImport& rImport,
-                sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
+    SvXMLStyleContext*	CreateChildContext( SvXMLImport& rImport,
+                USHORT nPrefix, const rtl::OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                     SvXMLStylesContext& rStyles);
 
     SvXMLNumImpData* getData() { return pData; }
 
-    const SvXMLTokenMap&    GetStylesElemTokenMap();
+    const SvXMLTokenMap&	GetStylesElemTokenMap();
 
-//  sal_uInt32  GetKeyForName( const rtl::OUString& rName );
+//	sal_uInt32	GetKeyForName( const rtl::OUString& rName );
 };
 
-//  SvXMLNumFmtDefaults is used in import and export
+//	SvXMLNumFmtDefaults is used in import and export
 
 class SvXMLNumFmtDefaults
 {
 public:
+    static sal_Bool	IsSystemLongDay( const SvtSysLocale& rSysLoc, BOOL bLong );
+    static sal_Bool	IsSystemLongMonth( const SvtSysLocale& rSysLoc, BOOL bLong );
+    static sal_Bool	IsSystemTextualMonth( const SvtSysLocale& rSysLoc, BOOL bLong );
+    static sal_Bool	IsSystemLongYear( const SvtSysLocale& rSysLoc, BOOL bLong );
+    static sal_Bool	IsSystemLongEra( const SvtSysLocale& rSysLoc, BOOL bLong );
+    static sal_Bool	IsSystemLongDayOfWeek( const SvtSysLocale& rSysLoc, BOOL bLong );
+
     // return value is NfIndexTableOffset
     static sal_uInt16 GetDefaultDateFormat( SvXMLDateElementAttributes eDOW,
                 SvXMLDateElementAttributes eDay, SvXMLDateElementAttributes eMonth,
@@ -125,82 +134,82 @@ public:
 
 struct MyCondition
 {
-    rtl::OUString   sCondition;
-    rtl::OUString   sMapName;
+    rtl::OUString	sCondition;
+    rtl::OUString	sMapName;
 };
 
 class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
 {
-    SvXMLNumImpData*    pData;
-    SvXMLStylesContext*             pStyles;
-    std::vector <MyCondition>   aMyConditions;
-    sal_uInt16          nType;
-    sal_Int32           nKey;
-//  rtl::OUString       sFormatName;
-    rtl::OUString       sFormatTitle;
-//  rtl::OUString       sMapName;
-    rtl::OUString       sCalendar;
-    rtl::OUString       sFormatString;
-    LanguageType        nFormatLang;
-    com::sun::star::lang::Locale    aLocale;
-    sal_Bool            bAutoOrder;
-    sal_Bool            bFromSystem;
-    sal_Bool            bTruncate;
-    sal_Bool            bAutoDec;       // set in AddNumber
-    sal_Bool            bAutoInt;       // set in AddNumber
-    sal_Bool            bHasExtraText;
-    rtl::OUStringBuffer aFormatCode;
-    rtl::OUStringBuffer aConditions;
-    sal_Bool            bHasLongDoW;
-    sal_Bool            bHasEra;
-    sal_Bool            bHasDateTime;
-    sal_Bool            bRemoveAfterUse;
+    SvXMLNumImpData*	pData;
+    SvXMLStylesContext*				pStyles;
+    std::vector <MyCondition>	aMyConditions;
+    sal_uInt16			nType;
+    sal_Int32			nKey;
+//	rtl::OUString		sFormatName;
+    rtl::OUString		sFormatTitle;
+//	rtl::OUString		sMapName;
+    rtl::OUString		sCalendar;
+    rtl::OUString		sFormatString;
+    LanguageType		nFormatLang;
+    com::sun::star::lang::Locale	aLocale;
+    sal_Bool			bAutoOrder;
+    sal_Bool			bFromSystem;
+    sal_Bool			bTruncate;
+    sal_Bool			bAutoDec;		// set in AddNumber
+    sal_Bool			bAutoInt;		// set in AddNumber
+    sal_Bool			bHasExtraText;
+    rtl::OUStringBuffer	aFormatCode;
+    rtl::OUStringBuffer	aConditions;
+    sal_Bool			bHasLongDoW;
+    sal_Bool			bHasEra;
+    sal_Bool			bHasDateTime;
+    sal_Bool			bRemoveAfterUse;
 
-    //  contained date elements, used to recognize default date formats
-    SvXMLDateElementAttributes  eDateDOW;
-    SvXMLDateElementAttributes  eDateDay;
-    SvXMLDateElementAttributes  eDateMonth;
-    SvXMLDateElementAttributes  eDateYear;
-    SvXMLDateElementAttributes  eDateHours;
-    SvXMLDateElementAttributes  eDateMins;
-    SvXMLDateElementAttributes  eDateSecs;
-    sal_Bool                    bDateNoDefault;
+    //	contained date elements, used to recognize default date formats
+    SvXMLDateElementAttributes	eDateDOW;
+    SvXMLDateElementAttributes	eDateDay;
+    SvXMLDateElementAttributes	eDateMonth;
+    SvXMLDateElementAttributes	eDateYear;
+    SvXMLDateElementAttributes	eDateHours;
+    SvXMLDateElementAttributes	eDateMins;
+    SvXMLDateElementAttributes	eDateSecs;
+    sal_Bool					bDateNoDefault;
 
     SAL_DLLPRIVATE sal_Int32 PrivateGetKey();
 
 public:
-                SvXMLNumFormatContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+                SvXMLNumFormatContext( SvXMLImport& rImport, USHORT nPrfx,
                                     const rtl::OUString& rLName,
                                     SvXMLNumImpData* pNewData, sal_uInt16 nNewType,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     SvXMLStylesContext& rStyles );
-                SvXMLNumFormatContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+                SvXMLNumFormatContext( SvXMLImport& rImport, USHORT nPrfx,
                                     const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     const sal_Int32 nKey,
                                     SvXMLStylesContext& rStyles );
-    virtual     ~SvXMLNumFormatContext();
+    virtual		~SvXMLNumFormatContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                     const rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void CreateAndInsert(sal_Bool bOverwrite);
     virtual void Finish(sal_Bool bOverwrite);
 
-    SvXMLNumImpData* GetData() const                { return pData; }
+    SvXMLNumImpData* GetData() const				{ return pData; }
     sal_Int32 GetKey();
     sal_Int32 CreateAndInsert( SvNumberFormatter* pFormatter );
     sal_Int32 CreateAndInsert( com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >& xFormatsSupplier );
-    sal_uInt16 GetType() const                      { return nType; }   // SvXMLStylesTokens
+    sal_uInt16 GetType() const						{ return nType; }	// SvXMLStylesTokens
 
-    sal_Bool IsFromSystem() const                   { return bFromSystem; }
-    sal_Bool HasLongDoW() const                     { return bHasLongDoW; }
-    void SetHasLongDoW(sal_Bool bSet)               { bHasLongDoW = bSet; }
-    sal_Bool HasEra() const                         { return bHasEra; }
-    void SetHasEra(sal_Bool bSet)                   { bHasEra = bSet; }
+    sal_Bool IsFromSystem() const					{ return bFromSystem; }
+    sal_Bool HasLongDoW() const						{ return bHasLongDoW; }
+    void SetHasLongDoW(sal_Bool bSet)				{ bHasLongDoW = bSet; }
+    sal_Bool HasEra() const							{ return bHasEra; }
+    void SetHasEra(sal_Bool bSet)					{ bHasEra = bSet; }
 
     void UpdateCalendar( const rtl::OUString& rNewCalendar );
 

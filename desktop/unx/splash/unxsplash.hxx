@@ -31,7 +31,6 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase2.hxx>
@@ -55,17 +54,28 @@ private:
     UnxSplashScreen( void );
     UnxSplashScreen operator =( const UnxSplashScreen& );
 
+    UnxSplashScreen( const Reference< XMultiServiceFactory >& xFactory );
+
     virtual ~UnxSplashScreen();
 
     static  UnxSplashScreen *m_pINSTANCE;
 
     static osl::Mutex m_aMutex;
-    Reference< XComponentContext > m_xCtx;
+    Reference< XMultiServiceFactory > m_rFactory;
 
     FILE *m_pOutFd;
 
 public:
-    UnxSplashScreen( const Reference< XComponentContext >& xCtx );
+    static const char* interfaces[];
+    static const sal_Char *serviceName;
+    static const sal_Char *implementationName;
+    static const sal_Char *supportedServiceNames[];
+
+    static Reference< XInterface > getInstance( const Reference < XMultiServiceFactory >& xFactory );
+
+    // static service info
+    static OUString  impl_getImplementationName();
+    static Sequence<OUString> impl_getSupportedServiceNames();
 
     // XStatusIndicator
     virtual void SAL_CALL start( const OUString& aText, sal_Int32 nRange ) throw ( RuntimeException );

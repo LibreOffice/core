@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace pcr
     class OBrowserPage : public TabPage
     {
     private:
-        OBrowserListBox     m_aListBox;
+        OBrowserListBox		m_aListBox;
 
     protected:
         virtual void Resize();
@@ -55,7 +55,7 @@ namespace pcr
 
         sal_Int32 getMinimumWidth();
         sal_Int32 getMinimumHeight();
-
+        
               OBrowserListBox& getListBox();
         const OBrowserListBox& getListBox() const;
     };

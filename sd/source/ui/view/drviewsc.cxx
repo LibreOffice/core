@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,6 +55,7 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "helpids.h"
+#include "misc.hxx"
 #include "Window.hxx"
 #include "imapinfo.hxx"
 #include "futempl.hxx"
@@ -63,11 +64,11 @@
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "drawview.hxx"
-#include "sdabstdlg.hxx"
-#include "brkdlg.hrc"
+#include "sdabstdlg.hxx" 
+#include "brkdlg.hrc" 
 namespace sd {
 
-#define MIN_ACTIONS_FOR_DIALOG  5000    // bei mehr als 1600 Metaobjekten
+#define	MIN_ACTIONS_FOR_DIALOG	5000	// bei mehr als 1600 Metaobjekten
                                         // wird beim Aufbrechen ein Dialog
                                         // angezeigt.
 /*************************************************************************
@@ -78,12 +79,12 @@ namespace sd {
 
 void DrawViewShell::FuTemp03(SfxRequest& rReq)
 {
-    sal_uInt16 nSId = rReq.GetSlot();
+    USHORT nSId = rReq.GetSlot();
     switch( nSId )
     {
         case SID_GROUP:  // BASIC
         {
-            if ( mpDrawView->IsPresObjSelected( sal_True, sal_True, sal_True ) )
+            if ( mpDrawView->IsPresObjSelected( TRUE, TRUE, TRUE ) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
@@ -120,7 +121,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
                 AbstractSvxObjectNameDialog* pDlg = pFact->CreateSvxObjectNameDialog(NULL, aName);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
-
+                
                 pDlg->SetCheckNameHdl(LINK(this, DrawViewShell, NameObjectHdl));
 
                 if(RET_OK == pDlg->Execute())
@@ -133,7 +134,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
             }
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
-            rBindings.Invalidate( SID_NAVIGATOR_STATE, sal_True, sal_False );
+            rBindings.Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
             rBindings.Invalidate( SID_CONTEXT );
 
             Cancel();
@@ -168,7 +169,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
             }
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
-            rBindings.Invalidate( SID_NAVIGATOR_STATE, sal_True, sal_False );
+            rBindings.Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
             rBindings.Invalidate( SID_CONTEXT );
 
             Cancel();
@@ -199,10 +200,10 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
             rReq.Done ();
         }
         break;
-
+        
         case SID_COMBINE:  // BASIC
         {
-            // End text edit to avoid conflicts
+            // #88224# End text edit to avoid conflicts
             if(mpDrawView->IsTextEdit())
                 mpDrawView->SdrEndTextEdit();
 
@@ -239,7 +240,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_POLY_MERGE:
         {
-            // End text edit to avoid conflicts
+            // #88224# End text edit to avoid conflicts
             if(mpDrawView->IsTextEdit())
                 mpDrawView->SdrEndTextEdit();
 
@@ -260,7 +261,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_POLY_SUBSTRACT:
         {
-            // End text edit to avoid conflicts
+            // #88224# End text edit to avoid conflicts
             if(mpDrawView->IsTextEdit())
                 mpDrawView->SdrEndTextEdit();
 
@@ -281,7 +282,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_POLY_INTERSECT:
         {
-            // End text edit to avoid conflicts
+            // #88224# End text edit to avoid conflicts
             if(mpDrawView->IsTextEdit())
                 mpDrawView->SdrEndTextEdit();
 
@@ -302,10 +303,10 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_DISMANTLE:  // BASIC
         {
-            if ( mpDrawView->IsDismantlePossible(sal_False) )
+            if ( mpDrawView->IsDismantlePossible(FALSE) )
             {
                 WaitObject aWait( (Window*)GetActiveWindow() );
-                mpDrawView->DismantleMarkedObjects(sal_False);
+                mpDrawView->DismantleMarkedObjects(FALSE);
             }
             Cancel();
             rReq.Done ();
@@ -341,21 +342,21 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                 WaitObject aWait( (Window*)GetActiveWindow() );
                 mpDrawView->Break3DObj();
             }
-            else if ( mpDrawView->IsDismantlePossible(sal_True) )
+            else if ( mpDrawView->IsDismantlePossible(TRUE) )
             {
                 WaitObject aWait( (Window*)GetActiveWindow() );
-                mpDrawView->DismantleMarkedObjects(sal_True);
+                mpDrawView->DismantleMarkedObjects(TRUE);
             }
             else if ( mpDrawView->IsImportMtfPossible() )
             {
 
                 WaitObject aWait( (Window*)GetActiveWindow() );
                 const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-                sal_uLong nAnz=rMarkList.GetMarkCount();
+                ULONG nAnz=rMarkList.GetMarkCount();
 
                 // Summe der Metaobjekte aller sel. Metafiles erm.
-                sal_uLong nCount = 0;
-                for(sal_uLong nm=0; nm<nAnz; nm++)
+                ULONG nCount = 0;
+                for(ULONG nm=0; nm<nAnz; nm++)
                 {
                     SdrMark*     pM=rMarkList.GetMark(nm);
                     SdrObject*   pObj=pM->GetMarkedSdrObj();
@@ -411,7 +412,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                     }
 
                     WaitObject aWait( (Window*)GetActiveWindow() );
-                    mpDrawView->ConvertMarkedObjTo3D(sal_True);
+                    mpDrawView->ConvertMarkedObjTo3D(TRUE);
                 }
             }
 
@@ -420,7 +421,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         }
         break;
 
-        case SID_FRAME_TO_TOP:  // BASIC
+        case SID_FRAME_TO_TOP:	// BASIC
         {
             mpDrawView->PutMarkedToTop();
             Cancel();
@@ -438,7 +439,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         }
         break;
 
-        case SID_MOREBACK:  // BASIC
+        case SID_MOREBACK:	// BASIC
         {
             mpDrawView->MovMarkedToBtm();
             Cancel();
@@ -447,7 +448,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         }
         break;
 
-        case SID_FRAME_TO_BOTTOM:   // BASIC
+        case SID_FRAME_TO_BOTTOM:	// BASIC
         {
             mpDrawView->PutMarkedToBtm();
             Cancel();
@@ -464,7 +465,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         }
         break;
 
-        case SID_VERTICAL:  // BASIC
+        case SID_VERTICAL:	// BASIC
         {
             mpDrawView->MirrorAllMarkedVertical();
             Cancel();
@@ -536,7 +537,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         }
         break;
 
-        case SID_STYLE_NEW: // BASIC ???
+        case SID_STYLE_NEW:	// BASIC ???
         case SID_STYLE_APPLY:
         case SID_STYLE_EDIT:
         case SID_STYLE_DELETE:
@@ -571,7 +572,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                 SfxStringItem aStyleNameItem( SID_STYLE_EDIT, pStyleSheet->GetName() );
                 aSet.Put(aStyleNameItem);
 
-                SfxUInt16Item aStyleFamilyItem( SID_STYLE_FAMILY, (sal_uInt16)pStyleSheet->GetFamily() );
+                SfxUInt16Item aStyleFamilyItem( SID_STYLE_FAMILY, (UINT16)pStyleSheet->GetFamily() );
                 aSet.Put(aStyleFamilyItem);
 
                 rReq.SetArgs(aSet);
@@ -593,7 +594,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         case SID_IMAP:
         {
             SvxIMapDlg* pDlg;
-            sal_uInt16      nId = SvxIMapDlgChildWindow::GetChildWindowId();
+            USHORT		nId = SvxIMapDlgChildWindow::GetChildWindowId();
 
             GetViewFrame()->ToggleChildWindow( nId );
             GetViewFrame()->GetBindings().Invalidate( SID_IMAP );
@@ -601,7 +602,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
             if ( GetViewFrame()->HasChildWindow( nId )
                 && ( ( pDlg = ViewShell::Implementation::GetImageMapDialog() ) != NULL ) )
             {
-                const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
+                const SdrMarkList&	rMarkList = mpDrawView->GetMarkedObjectList();
 
                 if ( rMarkList.GetMarkCount() == 1 )
                     UpdateIMapDlg( rMarkList.GetMark( 0 )->GetMarkedSdrObj() );
@@ -641,9 +642,9 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 |*
 \************************************************************************/
 
-sal_uInt16 DrawViewShell::GetIdBySubId( sal_uInt16 nSId )
+USHORT DrawViewShell::GetIdBySubId( USHORT nSId )
 {
-    sal_uInt16 nMappedSId = 0;
+    USHORT nMappedSId = 0;
     switch( nSId )
     {
         case SID_OBJECT_ROTATE:
@@ -782,6 +783,9 @@ sal_uInt16 DrawViewShell::GetIdBySubId( sal_uInt16 nSId )
         break;
 
         case SID_INSERT_DIAGRAM:
+#ifdef STARIMAGE_AVAILABLE
+        case SID_INSERT_IMAGE:
+#endif
         case SID_ATTR_TABLE:
         case SID_INSERTFILE:
         case SID_INSERT_GRAPHIC:
@@ -793,6 +797,7 @@ sal_uInt16 DrawViewShell::GetIdBySubId( sal_uInt16 nSId )
         case SID_INSERT_PLUGIN:
         case SID_INSERT_SOUND:
         case SID_INSERT_VIDEO:
+        case SID_INSERT_APPLET:
         case SID_INSERT_TABLE:
         {
             nMappedSId = SID_DRAWTBX_INSERT;
@@ -841,13 +846,13 @@ sal_uInt16 DrawViewShell::GetIdBySubId( sal_uInt16 nSId )
 |*
 \************************************************************************/
 
-void DrawViewShell::MapSlot( sal_uInt16 nSId )
+void DrawViewShell::MapSlot( USHORT nSId )
 {
-    sal_uInt16 nMappedSId = GetIdBySubId( nSId );
+    USHORT nMappedSId = GetIdBySubId( nSId );
 
     if( nMappedSId > 0 )
     {
-        sal_uInt16 nID = GetArrayId( nMappedSId ) + 1;
+        USHORT nID = GetArrayId( nMappedSId ) + 1;
         mpSlotArray[ nID ] = nSId;
     }
 }
@@ -858,11 +863,11 @@ void DrawViewShell::MapSlot( sal_uInt16 nSId )
 |*
 \************************************************************************/
 
-void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, sal_Bool bPermanent )
+void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, BOOL bPermanent )
 {
     if( !bPermanent )
     {
-        sal_uInt16 nId = GetArrayId( SID_ZOOM_TOOLBOX ) + 1;
+        USHORT nId = GetArrayId( SID_ZOOM_TOOLBOX ) + 1;
         rSet.Put( TbxImageItem( SID_ZOOM_TOOLBOX, mpSlotArray[nId] ) );
 
         nId = GetArrayId( SID_DRAWTBX_INSERT ) + 1;
@@ -876,7 +881,7 @@ void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, sal_Bool bPermanent )
     }
     else
     {
-        for( sal_uInt16 nId = 0; nId < SLOTARRAY_COUNT; nId += 2 )
+        for( USHORT nId = 0; nId < SLOTARRAY_COUNT; nId += 2 )
         {
             rSet.Put( TbxImageItem( mpSlotArray[nId], mpSlotArray[nId+1] ) );
         }
@@ -889,10 +894,10 @@ void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, sal_Bool bPermanent )
 |*
 \************************************************************************/
 
-sal_uInt16 DrawViewShell::GetMappedSlot( sal_uInt16 nSId )
+USHORT DrawViewShell::GetMappedSlot( USHORT nSId )
 {
-    sal_uInt16 nSlot = 0;
-    sal_uInt16 nId = GetArrayId( nSId );
+    USHORT nSlot = 0;
+    USHORT nId = GetArrayId( nSId );
     if( nId != USHRT_MAX )
         nSlot = mpSlotArray[ nId+1 ];
 
@@ -912,14 +917,14 @@ sal_uInt16 DrawViewShell::GetMappedSlot( sal_uInt16 nSId )
 |*
 \************************************************************************/
 
-sal_uInt16 DrawViewShell::GetArrayId( sal_uInt16 nSId )
+USHORT DrawViewShell::GetArrayId( USHORT nSId )
 {
-    for( sal_uInt16 i = 0; i < SLOTARRAY_COUNT; i += 2 )
+    for( USHORT i = 0; i < SLOTARRAY_COUNT; i += 2 )
     {
         if( mpSlotArray[ i ] == nSId )
             return( i );
     }
-    OSL_FAIL( "Slot im Array nicht gefunden!" );
+    DBG_ERROR( "Slot im Array nicht gefunden!" );
     return( USHRT_MAX );
 }
 
@@ -935,9 +940,9 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
     if( ( pObj->ISA( SdrGrafObj ) || pObj->ISA( SdrOle2Obj ) ) && !mpDrawView->IsTextEdit() &&
          GetViewFrame()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
     {
-        Graphic     aGraphic;
-        ImageMap*   pIMap = NULL;
-        TargetList* pTargetList = NULL;
+        Graphic 	aGraphic;
+        ImageMap*	pIMap = NULL;
+        TargetList*	pTargetList = NULL;
         SdIMapInfo* pIMapInfo = GetDoc()->GetIMapInfo( pObj );
 
         // get graphic from shape
@@ -957,8 +962,13 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
         // TargetListe kann von uns wieder geloescht werden
         if ( pTargetList )
         {
-            for ( size_t i = 0, n = pTargetList->size(); i < n; ++i )
-                delete pTargetList->at( i );
+            String* pEntry = pTargetList->First();
+            while( pEntry )
+            {
+                delete pEntry;
+                pEntry = pTargetList->Next();
+            }
+
             delete pTargetList;
         }
     }

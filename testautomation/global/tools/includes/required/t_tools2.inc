@@ -226,6 +226,32 @@ end function
 
 '-------------------------------------------------------------------------
 
+function GetBuildNumHidLst as String
+'/// Get the &quot;BuildId&quot; out of the <i>hid.lst</i>.
+  Dim FileNum as Integer
+  Dim xmlZeile as String
+  dim iIndex as integer
+  dim sTemp as string
+
+   if Dir (gtHidLstPath + "hid.lst") <> "" then
+      FileNum = FreeFile
+      Open (gtHidLstPath + "hid.lst") For Input As #FileNum
+      do until EOF(#FileNum) = True
+         line input #FileNum, xmlZeile
+         iIndex = inStr (1, xmlZeile, "010101010101010", 1)
+         sTemp = Left (xmlZeile, abs(iIndex - 1))
+         ' usually only the first line is read
+         if (sTemp <> "") then exit do
+      loop
+      Close #FileNum
+      GetBuildNumHidLst = sTemp
+    else
+      GetBuildNumHidLst = ""
+   end if
+end function
+
+'-------------------------------------------------------------------------
+
 function hGetUNOService(optional bSilent as boolean, optional byRef sUnoPortExternal as string) as object
 '/// Function enables the UNO communication inside the
 '///+ TestTool to the office application.
@@ -591,7 +617,7 @@ function fRelativeToAbsolutePath (sRelativePath as string) as string
     sIntern = sRelativePath
     ' get count of 'relative path ups'
     aSplitOnDoublePoints = split(sIntern, gPathSigne+"..")
-    ' for every occurrence cut part from path
+    ' for every occurence cut part from path
     iHowOften = uBound(aSplitOnDoublePoints)-1
     for i = 0 to iHowOften
         ' Split on every "/.."

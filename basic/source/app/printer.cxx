@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <basic/ttstrhlp.hxx>
 
 #include <algorithm>
-
+ 
 #include "app.hxx"
 #include "printer.hxx"
 #include "basic.hrc"
@@ -88,7 +88,7 @@ void BasicPrinter::Print( const String& rFile, const String& rText, BasicFrame *
     // Disable PRINT-Menu
     MenuBar* pBar = pFrame->GetMenuBar();
     Menu* pFileMenu = pBar->GetPopupMenu( RID_APPFILE );
-    pFileMenu->EnableItem( RID_FILEPRINT, sal_False );
+    pFileMenu->EnableItem( RID_FILEPRINT, FALSE );
 
     mpListener.reset( new vcl::OldStylePrintAdaptor( mpPrinter ) );
     mpListener->StartPage();
@@ -104,10 +104,10 @@ void BasicPrinter::Print( const String& rFile, const String& rText, BasicFrame *
         nLine++;
     }
     mpListener->EndPage();
-
+    
     Printer::PrintJob( mpListener, mpPrinter->GetJobSetup() );
     nPage = 1;
-    pFileMenu->EnableItem( RID_FILEPRINT, sal_True );
+    pFileMenu->EnableItem( RID_FILEPRINT, TRUE );
 }
 
 

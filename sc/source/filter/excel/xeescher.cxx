@@ -85,11 +85,10 @@
 #include "svx/xlnstit.hxx"
 #include "svx/sxmspitm.hxx"
 
-#include <oox/token/tokens.hxx>
+#include <oox/core/tokens.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/chartexport.hxx>
 #include <oox/export/utils.hxx>
-#include <boost/shared_ptr.hpp>
 
 using ::rtl::OString;
 using ::rtl::OUString;
@@ -115,12 +114,9 @@ using ::com::sun::star::chart2::XChartDocument;
 using ::com::sun::star::container::XNamed;
 using ::oox::drawingml::DrawingML;
 using ::oox::drawingml::ChartExport;
-using namespace oox;
 
 #define  HMM2XL(x)        ((x)/26.5)+0.5
 
-#ifdef XLSX_OOXML_FUTURE
-// these function are only used within that context
 // Static Function Helpers
 static const char *ToHorizAlign( SdrTextHorzAdjust eAdjust )
 {
@@ -171,13 +167,12 @@ static void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr rComments, Rectan
     rComments->writeEscaped( OUString::valueOf( aRect.Bottom() ) );
     rComments->endElement( FSNS( XML_xdr, XML_rowOff ) );
 }
-#endif
 
-static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_Int32 nTab, Rectangle &aFrom, Rectangle &aTo )
+static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, INT32 nTab, Rectangle &aFrom, Rectangle &aTo )
 {
     bool bTo = false;
-    sal_Int32 nCol = 0, nRow = 0;
-    sal_Int32 nColOff = 0, nRowOff= 0;
+    INT32 nCol = 0, nRow = 0;
+    INT32 nColOff = 0, nRowOff= 0;
 
     while(1)
     {
@@ -252,12 +247,12 @@ void XclExpDffAnchorBase::WriteData( EscherEx& rEscherEx, const Rectangle& rRect
 
 void XclExpDffAnchorBase::ImplSetFlags( const SdrObject& )
 {
-    OSL_FAIL( "XclExpDffAnchorBase::ImplSetFlags - not implemented" );
+    OSL_ENSURE( false, "XclExpDffAnchorBase::ImplSetFlags - not implemented" );
 }
 
 void XclExpDffAnchorBase::ImplCalcAnchorRect( const Rectangle&, MapUnit )
 {
-    OSL_FAIL( "XclExpDffAnchorBase::ImplCalcAnchorRect - not implemented" );
+    OSL_ENSURE( false, "XclExpDffAnchorBase::ImplCalcAnchorRect - not implemented" );
 }
 
 // ----------------------------------------------------------------------------
@@ -532,10 +527,10 @@ XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Referenc
     ScfPropertySet aCtrlProp( XclControlHelper::GetControlModel( xShape ) );
 
     // OBJ record flags
-    SetLocked( sal_True );
+    SetLocked( TRUE );
     SetPrintable( aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "Printable" ) ) );
-    SetAutoFill( false );
-    SetAutoLine( false );
+    SetAutoFill( FALSE );
+    SetAutoLine( FALSE );
 
     // fill DFF property set
     mrEscherEx.OpenContainer( ESCHER_SpContainer );
@@ -554,7 +549,7 @@ XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Referenc
     // meta file
     //! TODO - needs check
     Reference< XPropertySet > xShapePS( xShape, UNO_QUERY );
-    if( xShapePS.is() && aPropOpt.CreateGraphicProperties( xShapePS, CREATE_STRING( "MetaFile" ), false ) )
+    if( xShapePS.is() && aPropOpt.CreateGraphicProperties( xShapePS, CREATE_STRING( "MetaFile" ), sal_False ) )
     {
         sal_uInt32 nBlipId;
         if( aPropOpt.GetOpt( ESCHER_Prop_pib, nBlipId ) )
@@ -676,10 +671,10 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
         return;
 
     // OBJ record flags
-    SetLocked( sal_True );
+    SetLocked( TRUE );
     SetPrintable( aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "Printable" ) ) );
-    SetAutoFill( false );
-    SetAutoLine( false );
+    SetAutoFill( FALSE );
+    SetAutoLine( FALSE );
 
     // fill DFF property set
     mrEscherEx.OpenContainer( ESCHER_SpContainer );
@@ -878,6 +873,17 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
 bool XclExpTbxControlObj::SetMacroLink( const ScriptEventDescriptor& rEvent )
 {
     return XclMacroHelper::SetMacroLink( rEvent, meEventType );
+/*
+    String aMacroName = XclControlHelper::ExtractFromMacroDescriptor( rEvent, meEventType );
+    if( aMacroName.Len() )
+    {
+        sal_uInt16 nExtSheet = GetLocalLinkManager().FindExtSheet( EXC_EXTSH_OWNDOC );
+        sal_uInt16 nNameIdx = GetNameManager().InsertMacroCall( aMacroName, true, false );
+        mxMacroLink = GetFormulaCompiler().CreateNameXFormula( nExtSheet, nNameIdx );
+        return true;
+    }
+    return false;
+*/
 }
 
 void XclExpTbxControlObj::WriteSubRecs( XclExpStream& rStrm )
@@ -1120,6 +1126,7 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
         nChartCount++;
         aChartExport.WriteChartObj( mxShape, nChartCount );
         // TODO: get the correcto chart number
+        //WriteChartObj( pDrawing, rStrm );
     }
 
     pDrawing->singleElement( FSNS( XML_xdr, XML_clientData),
@@ -1155,7 +1162,9 @@ void XclExpChartObj::WriteChartObj( sax_fastparser::FSHelperPtr pDrawing, XclExp
     pDrawing->endElement( FSNS( XML_xdr, XML_nvGraphicFramePr ) );
 
     // visual chart properties
+    //pDrawing->startElement( FSNS( XML_xdr, XML_xfrm ), FSEND );
     WriteShapeTransformation( pDrawing, mxShape );
+    //pDrawing->endElement( FSNS( XML_xdr, XML_xfrm ) );
 
     // writer chart object
     pDrawing->startElement( FSNS( XML_a, XML_graphic ), FSEND );
@@ -1257,7 +1266,14 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
 
                     // AutoFill style would change if Postit.cxx object creation values are changed
                     OUString aCol(((XFillColorItem &)GETITEM(aItemSet, XFillColorItem , XATTR_FILLCOLOR)).GetValue());
-                    mbAutoFill  = !aCol.getLength() && (GETITEMVALUE(aItemSet, XFillStyleItem, XATTR_FILLSTYLE, sal_uLong) == XFILL_SOLID);
+                    mbAutoFill  = !aCol.getLength() && (GETITEMVALUE(aItemSet, XFillStyleItem, XATTR_FILLSTYLE, ULONG) == XFILL_SOLID);
+#if 0
+                    // TODO: Get AutoLine bool
+                    aCol = OUString(((XLineStartItem &)GETITEM(aItemSet, XLineStartItem, XATTR_LINESTART)).GetValue());
+                    mbAutoLine = !aCol.getLength() &&
+                                 (GETITEMVALUE(aItemSet, XLineStartWidthItem, XATTR_LINESTARTWIDTH, ULONG) == 200) &&
+                                 (GETITEMBOOL(aItemSet, XATTR_LINESTARTCENTER) == FALSE);
+#endif
                     mbAutoLine  = true;
                     mbRowHidden = (rRoot.GetDoc().RowHidden(maScPos.Row(),maScPos.Tab()));
                     mbColHidden = (rRoot.GetDoc().ColHidden(maScPos.Col(),maScPos.Tab()));
@@ -1345,8 +1361,14 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
             FSEND );
     rComments->startElement( XML_text, FSEND );
     // OOXTODO: phoneticPr, rPh, r
-    if( mpNoteContents )
+#if 0
+    rComments->startElement( XML_t, FSEND );
+    rComments->writeEscaped( XclXmlUtils::ToOUString( maOrigNoteText ) );
+    rComments->endElement ( XML_t );
+#else
+    if( mpNoteContents.is() )
         mpNoteContents->WriteXml( rStrm );
+#endif
     rComments->endElement( XML_text );
 
 /*
@@ -1359,7 +1381,9 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
         rComments->startElement( XML_commentPr,
                 XML_autoFill,       XclXmlUtils::ToPsz( mbAutoFill ),
                 XML_autoScale,      XclXmlUtils::ToPsz( mbAutoScale ),
+                // XML_autoLine,       XclXmlUtils::ToPsz( mbAutoLine ),
                 XML_colHidden,      XclXmlUtils::ToPsz( mbColHidden ),
+                // XML_defaultSize,    "true",
                 XML_locked,         XclXmlUtils::ToPsz( mbLocked ),
                 XML_rowHidden,      XclXmlUtils::ToPsz( mbRowHidden ),
                 XML_textHAlign,     ToHorizAlign( meTHA ),
@@ -1395,7 +1419,7 @@ XclMacroHelper::~XclMacroHelper()
 
 void XclMacroHelper::WriteMacroSubRec( XclExpStream& rStrm )
 {
-    if( mxMacroLink )
+    if( mxMacroLink.is() )
         WriteFormulaSubRec( rStrm, EXC_ID_OBJMACRO, *mxMacroLink );
 }
 
@@ -1504,7 +1528,7 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
     for( size_t i = 0; i < nNotes; ++i )
     {
         XclExpNoteList::RecordRefType xNote = mrNotes.GetRecord( i );
-        Authors::iterator aAuthor = aAuthors.find(
+        Authors::const_iterator aAuthor = aAuthors.find(
                 XclXmlUtils::ToOUString( xNote->GetAuthor() ) );
         sal_Int32 nAuthorId = distance( aAuthors.begin(), aAuthor );
         xNote->WriteXml( nAuthorId, rStrm );
@@ -1541,9 +1565,9 @@ XclExpDffAnchorBase* XclExpObjectManager::CreateDffAnchor() const
     return new XclExpDffSheetAnchor( GetRoot() );
 }
 
-boost::shared_ptr< XclExpRecordBase > XclExpObjectManager::CreateDrawingGroup()
+ScfRef< XclExpRecordBase > XclExpObjectManager::CreateDrawingGroup()
 {
-    return boost::shared_ptr< XclExpRecordBase >( new XclExpMsoDrawingGroup( *mxEscherEx ) );
+    return ScfRef< XclExpRecordBase >( new XclExpMsoDrawingGroup( *mxEscherEx ) );
 }
 
 void XclExpObjectManager::StartSheet()
@@ -1551,11 +1575,11 @@ void XclExpObjectManager::StartSheet()
     mxObjList.reset( new XclExpObjList( GetRoot(), *mxEscherEx ) );
 }
 
-boost::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( SdrPage* pSdrPage )
+ScfRef< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( SdrPage* pSdrPage )
 {
     if( pSdrPage )
         mxEscherEx->AddSdrPage( *pSdrPage );
-    // the first dummy object may still be open
+    // #106213# the first dummy object may still be open
     DBG_ASSERT( mxEscherEx->GetGroupLevel() <= 1, "XclExpObjectManager::ProcessDrawing - still groups open?" );
     while( mxEscherEx->GetGroupLevel() )
         mxEscherEx->LeaveGroup();
@@ -1563,11 +1587,11 @@ boost::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( SdrPa
     return mxObjList;
 }
 
-boost::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( const Reference< XShapes >& rxShapes )
+ScfRef< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( const Reference< XShapes >& rxShapes )
 {
     if( rxShapes.is() )
         mxEscherEx->AddUnoShapes( rxShapes );
-    // the first dummy object may still be open
+    // #106213# the first dummy object may still be open
     DBG_ASSERT( mxEscherEx->GetGroupLevel() <= 1, "XclExpObjectManager::ProcessDrawing - still groups open?" );
     while( mxEscherEx->GetGroupLevel() )
         mxEscherEx->LeaveGroup();

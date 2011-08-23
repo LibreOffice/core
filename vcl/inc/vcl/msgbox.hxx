@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,20 +45,20 @@ class CheckBox;
 // Return-Werte von Execute
 //!!! bei Aenderungen \basic\source\runtime\methods.cxx msgbox anpassen
 
-#define RET_OK               sal_True
-#define RET_CANCEL           sal_False
-#define RET_YES              2
-#define RET_NO               3
-#define RET_RETRY            4
+#define RET_OK				 TRUE
+#define RET_CANCEL			 FALSE
+#define RET_YES 			 2
+#define RET_NO				 3
+#define RET_RETRY			 4
 #define RET_IGNORE           5
 
-#define BUTTONID_OK          RET_OK
-#define BUTTONID_CANCEL      RET_CANCEL
-#define BUTTONID_YES         RET_YES
-#define BUTTONID_NO          RET_NO
-#define BUTTONID_RETRY       RET_RETRY
+#define BUTTONID_OK 		 RET_OK
+#define BUTTONID_CANCEL 	 RET_CANCEL
+#define BUTTONID_YES		 RET_YES
+#define BUTTONID_NO 		 RET_NO
+#define BUTTONID_RETRY		 RET_RETRY
 #define BUTTONID_IGNORE      RET_IGNORE
-#define BUTTONID_HELP        10
+#define BUTTONID_HELP		 10
 
 // -----------
 // - MessBox -
@@ -67,23 +67,24 @@ class CheckBox;
 class VCL_DLLPUBLIC MessBox : public ButtonDialog
 {
 protected:
-    FixedText*          mpFixedText;
-    FixedImage*         mpFixedImage;
-    XubString           maMessText;
-    Image               maImage;
-    sal_uInt16              mnSoundType;
-    sal_Bool                mbHelpBtn;
-    sal_Bool                mbSound;
+    FixedText*			mpFixedText;
+    FixedImage* 		mpFixedImage;
+    XubString			maMessText;
+    Image				maImage;
+    Image				maImageHC;
+    USHORT				mnSoundType;
+    BOOL				mbHelpBtn;
+    BOOL				mbSound;
     CheckBox*           mpCheckBox;
     XubString           maCheckBoxText;
-    sal_Bool                mbCheck;
+    BOOL                mbCheck;
 
-    SAL_DLLPRIVATE void ImplInitMessBoxData();
-    SAL_DLLPRIVATE void ImplInitButtons();
-    SAL_DLLPRIVATE void ImplPosControls();
+    SAL_DLLPRIVATE void	ImplInitMessBoxData();
+    SAL_DLLPRIVATE void	ImplInitButtons();
+    SAL_DLLPRIVATE void	ImplPosControls();
 
 protected:
-    SAL_DLLPRIVATE void ImplLoadRes( const ResId& rResId );
+    SAL_DLLPRIVATE void	ImplLoadRes( const ResId& rResId );
                         MessBox( WindowType nType );
 
 public:
@@ -92,22 +93,22 @@ public:
                         MessBox( Window* pParent, const ResId& rResId );
                         ~MessBox();
 
-    virtual void        StateChanged( StateChangedType nStateChange );
+    virtual void		StateChanged( StateChangedType nStateChange );
 
-    void                SetMessText( const XubString& rText ) { maMessText = rText; }
-    const XubString&    GetMessText() const { return maMessText; }
+    void				SetMessText( const XubString& rText ) { maMessText = rText; }
+    const XubString& 	GetMessText() const { return maMessText; }
 
-    void                SetImage( const Image& rImage ) { maImage = rImage; }
-    const Image&        GetImage() const { return maImage; }
+    void				SetImage( const Image& rImage ) { maImage = rImage; }
+    const Image&		GetImage() const { return maImage; }
 
-    sal_Bool            SetModeImage( const Image& rImage );
-    const Image&        GetModeImage( ) const;
+    BOOL                SetModeImage( const Image& rImage, BmpColorMode eMode = BMP_COLOR_NORMAL );
+    const Image&        GetModeImage( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
 
     void                SetDefaultCheckBoxText();
     void                SetCheckBoxText( const XubString& rText ) { maCheckBoxText = rText;}
     const XubString&    GetCheckBoxText() const { return maCheckBoxText;}
-    void                SetCheckBoxState( sal_Bool bCheck );
-    sal_Bool                GetCheckBoxState() const;
+    void                SetCheckBoxState( BOOL bCheck );
+    BOOL                GetCheckBoxState() const;
 
     virtual Size        GetOptimalSize(WindowSizeType eType) const;
 };
@@ -119,13 +120,14 @@ public:
 class VCL_DLLPUBLIC InfoBox : public MessBox
 {
 private:
-    SAL_DLLPRIVATE void ImplInitInfoBoxData();
+    SAL_DLLPRIVATE void	ImplInitInfoBoxData();
 
 public:
                         InfoBox( Window* pParent, const XubString& rMessage );
                         InfoBox( Window* pParent, const ResId & rResId );
 
-    static Image        GetStandardImage();
+    static Image		GetStandardImage();
+    static Image		GetStandardImageHC();
 };
 
 // --------------
@@ -135,7 +137,7 @@ public:
 class VCL_DLLPUBLIC WarningBox : public MessBox
 {
 private:
-    SAL_DLLPRIVATE void ImplInitWarningBoxData();
+    SAL_DLLPRIVATE void	ImplInitWarningBoxData();
 
 public:
                         WarningBox( Window* pParent, WinBits nStyle,
@@ -144,7 +146,8 @@ public:
 
     void                SetDefaultCheckBoxText();
 
-    static Image        GetStandardImage();
+    static Image		GetStandardImage();
+    static Image		GetStandardImageHC();
 };
 
 // ------------
@@ -154,14 +157,15 @@ public:
 class VCL_DLLPUBLIC ErrorBox : public MessBox
 {
 private:
-    SAL_DLLPRIVATE void ImplInitErrorBoxData();
+    SAL_DLLPRIVATE void	ImplInitErrorBoxData();
 
 public:
                         ErrorBox( Window* pParent, WinBits nStyle,
                                   const XubString& rMessage );
                         ErrorBox( Window* pParent, const ResId& rResId );
 
-    static Image        GetStandardImage();
+    static Image		GetStandardImage();
+    static Image		GetStandardImageHC();
 };
 
 // ------------
@@ -171,7 +175,7 @@ public:
 class VCL_DLLPUBLIC QueryBox : public MessBox
 {
 private:
-    SAL_DLLPRIVATE void ImplInitQueryBoxData();
+    SAL_DLLPRIVATE void	ImplInitQueryBoxData();
 
 public:
                         QueryBox( Window* pParent, WinBits nStyle,
@@ -180,9 +184,10 @@ public:
 
     void                SetDefaultCheckBoxText();
 
-    static Image        GetStandardImage();
+    static Image		GetStandardImage();
+    static Image		GetStandardImageHC();
 };
 
-#endif  // _SV_MSGBOX_HXX
+#endif	// _SV_MSGBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

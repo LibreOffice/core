@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,15 +34,14 @@
 #include "XMLCodeNameProvider.hxx"
 #include "document.hxx"
 
+using namespace rtl;
 using namespace com::sun::star;
-
-using ::rtl::OUString;
 
 sal_Bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, String& rCodeName )
 {
     uno::Sequence<beans::PropertyValue> aProps;
     if( !(aAny >>= aProps) )
-        return false;
+        return sal_False;
 
     OUString sCodeNameProp( RTL_CONSTASCII_USTRINGPARAM("CodeName") );
     sal_Int32 nPropCount = aProps.getLength();
@@ -59,22 +58,22 @@ sal_Bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, String& rCodeN
         }
     }
 
-    return false;
+    return sal_False;
 }
 
 
-XMLCodeNameProvider::XMLCodeNameProvider( ScDocument* pDoc ) :
-    mpDoc( pDoc ),
+XMLCodeNameProvider::XMLCodeNameProvider( ScDocument* pDoc ) : 
+    mpDoc( pDoc ), 
     msDocName( RTL_CONSTASCII_USTRINGPARAM("*doc*") ),
     msCodeNameProp( RTL_CONSTASCII_USTRINGPARAM("CodeName") )
 {
 }
 
-XMLCodeNameProvider::~XMLCodeNameProvider()
+XMLCodeNameProvider::~XMLCodeNameProvider() 
 {
 }
 
-::sal_Bool SAL_CALL XMLCodeNameProvider::hasByName( const OUString& aName )
+::sal_Bool SAL_CALL XMLCodeNameProvider::hasByName( const OUString& aName ) 
     throw (uno::RuntimeException )
 {
     if( aName == msDocName )
@@ -92,11 +91,11 @@ XMLCodeNameProvider::~XMLCodeNameProvider()
         }
     }
 
-    return false;
+    return sal_False;
 }
 
 uno::Any SAL_CALL XMLCodeNameProvider::getByName( const OUString& aName )
-    throw (container::NoSuchElementException,
+    throw (container::NoSuchElementException, 
            lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aRet;
@@ -132,7 +131,7 @@ uno::Sequence< OUString > SAL_CALL XMLCodeNameProvider::getElementNames(  )
     throw (uno::RuntimeException)
 {
     SCTAB nCount = mpDoc->GetTableCount() + 1;
-    uno::Sequence< OUString > aNames( nCount );
+    uno::Sequence< rtl::OUString > aNames( nCount ); 
     sal_Int32 nRealCount = 0;
 
     if( mpDoc->GetCodeName().Len() )
@@ -176,7 +175,7 @@ uno::Type SAL_CALL XMLCodeNameProvider::getElementType(  )
             return sal_True;
     }
 
-    return false;
+    return sal_False;
 }
 
 void XMLCodeNameProvider::set( const uno::Reference< container::XNameAccess>& xNameAccess, ScDocument *pDoc )
@@ -195,7 +194,7 @@ void XMLCodeNameProvider::set( const uno::Reference< container::XNameAccess>& xN
     String sSheetName;
     for( SCTAB i = 0; i < nCount; i++ )
     {
-        if( pDoc->GetName( i, sSheetName ) &&
+        if( pDoc->GetName( i, sSheetName ) && 
             xNameAccess->hasByName( sSheetName ) )
         {
             aAny = xNameAccess->getByName( sSheetName );

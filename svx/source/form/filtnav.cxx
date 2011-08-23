@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,16 +35,13 @@
 #include "fmhelp.hrc"
 #include "fmitems.hxx"
 #include "fmprop.hrc"
-#include "svx/fmresids.hrc"
+#include "fmresids.hrc"
+#include "gridcell.hxx"
 
 /** === begin UNO includes === **/
-#include <com/sun/star/awt/XControlModel.hpp>
-#include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/processfactory.hxx>
@@ -66,16 +63,15 @@
 #include <svx/svxids.hrc>
 #include <tools/shl.hxx>
 #include <vcl/wrkwin.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <functional>
 
-#define SYNC_DELAY                      200
-#define DROP_ACTION_TIMER_INITIAL_TICKS     10
+#define SYNC_DELAY						200
+#define DROP_ACTION_TIMER_INITIAL_TICKS 	10
     // solange dauert es, bis das Scrollen anspringt
-#define DROP_ACTION_TIMER_SCROLL_TICKS      3
+#define DROP_ACTION_TIMER_SCROLL_TICKS		3
     // in diesen Intervallen wird jeweils eine Zeile gescrollt
-#define DROP_ACTION_TIMER_TICK_BASE         10
+#define DROP_ACTION_TIMER_TICK_BASE 		10
     // das ist die Basis, mit der beide Angaben multipliziert werden (in ms)
 
 using namespace ::svxform;
@@ -150,7 +146,7 @@ OLocalExchange* OFilterExchangeHelper::createExchange() const
 
 //========================================================================
 TYPEINIT0(FmFilterData);
-Image FmFilterData::GetImage() const
+Image FmFilterData::GetImage( BmpColorMode /*_eMode*/ ) const
 {
     return Image();
 }
@@ -168,16 +164,20 @@ FmParentData::~FmParentData()
 //========================================================================
 TYPEINIT1(FmFormItem, FmParentData);
 //------------------------------------------------------------------------
-Image FmFormItem::GetImage() const
+Image FmFormItem::GetImage( BmpColorMode _eMode ) const
 {
     static Image aImage;
+    static Image aImage_HC;
 
     if (!aImage)
     {
         ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
+        ImageList aNavigatorImages_HC( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
+
         aImage = aNavigatorImages.GetImage( RID_SVXIMG_FORM );
+        aImage_HC = aNavigatorImages_HC.GetImage( RID_SVXIMG_FORM );
     }
-    return aImage;
+    return ( BMP_COLOR_HIGHCONTRAST == _eMode ) ? aImage_HC : aImage;
 }
 
 //========================================================================
@@ -199,16 +199,20 @@ FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) co
 }
 
 //------------------------------------------------------------------------
-Image FmFilterItems::GetImage() const
+Image FmFilterItems::GetImage( BmpColorMode _eMode ) const
 {
     static Image aImage;
+    static Image aImage_HC;
 
     if (!aImage)
     {
         ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
+        ImageList aNavigatorImages_HC( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
+
         aImage = aNavigatorImages.GetImage( RID_SVXIMG_FILTER );
+        aImage_HC = aNavigatorImages_HC.GetImage( RID_SVXIMG_FILTER );
     }
-    return aImage;
+    return ( BMP_COLOR_HIGHCONTRAST == _eMode ) ? aImage_HC : aImage;
 }
 
 //========================================================================
@@ -226,16 +230,20 @@ FmFilterItem::FmFilterItem( const Reference< XMultiServiceFactory >& _rxFactory,
 }
 
 //------------------------------------------------------------------------
-Image FmFilterItem::GetImage() const
+Image FmFilterItem::GetImage( BmpColorMode _eMode ) const
 {
     static Image aImage;
+    static Image aImage_HC;
 
     if (!aImage)
     {
         ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
+        ImageList aNavigatorImages_HC( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
+
         aImage = aNavigatorImages.GetImage( RID_SVXIMG_FIELD );
+        aImage_HC = aNavigatorImages_HC.GetImage( RID_SVXIMG_FIELD );
     }
-    return aImage;
+    return ( BMP_COLOR_HIGHCONTRAST == _eMode ) ? aImage_HC : aImage;
 }
 
 //========================================================================
@@ -243,7 +251,7 @@ Image FmFilterItem::GetImage() const
 //========================================================================
 class FmFilterHint : public SfxHint
 {
-    FmFilterData*   m_pData;
+    FmFilterData*	m_pData;
 
 public:
     TYPEINFO();
@@ -255,7 +263,7 @@ TYPEINIT1( FmFilterHint, SfxHint );
 //========================================================================
 class FmFilterInsertedHint : public FmFilterHint
 {
-    sal_Int32 m_nPos;   // Position relative to the parent of the data
+    sal_Int32 m_nPos;	// Position relative to the parent of the data
 
 public:
     TYPEINFO();
@@ -312,7 +320,7 @@ TYPEINIT1( FmFilterCurrentChangedHint, SfxHint );
 //========================================================================
 class FmFilterAdapter : public ::cppu::WeakImplHelper1< XFilterControllerListener >
 {
-    FmFilterModel*              m_pModel;
+    FmFilterModel*			    m_pModel;
     Reference< XIndexAccess >   m_xControllers;
 
 public:
@@ -538,7 +546,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event )
     bool bValidIndex = ( nInsertPos >= 0 ) && ( (size_t)nInsertPos <= pFormItem->GetChildren().size() );
     if ( !bValidIndex )
     {
-        OSL_FAIL( "FmFilterAdapter::disjunctiveTermAdded: invalid index!" );
+        OSL_ENSURE( false, "FmFilterAdapter::disjunctiveTermAdded: invalid index!" );
         return;
     }
 
@@ -584,8 +592,8 @@ void FmFilterModel::Clear()
     }
 
     m_pCurrentItems  = NULL;
-    m_xController    = NULL;
-    m_xControllers   = NULL;
+    m_xController	 = NULL;
+    m_xControllers	 = NULL;
 
     for (::std::vector<FmFilterData*>::const_iterator i = m_aChildren.begin();
          i != m_aChildren.end(); i++)
@@ -945,7 +953,7 @@ void FmFilterModel::SetTextForItem(FmFilterItem* pItem, const ::rtl::OUString& r
 
     m_pAdapter->setText(nParentPos, pItem, rText);
 
-    if (rText.isEmpty())
+    if (!rText)
         Remove(pItem);
     else
     {
@@ -1043,7 +1051,7 @@ void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
 class FmFilterItemsString : public SvLBoxString
 {
 public:
-    FmFilterItemsString( SvLBoxEntry* pEntry, sal_uInt16 nFlags,    const XubString& rStr )
+    FmFilterItemsString( SvLBoxEntry* pEntry, sal_uInt16 nFlags,	const XubString& rStr )
         :SvLBoxString(pEntry,nFlags,rStr){}
 
     virtual void Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
@@ -1164,11 +1172,22 @@ FmFilterNavigator::FmFilterNavigator( Window* pParent )
     SetHelpId( HID_FILTER_NAVIGATOR );
 
     {
-        ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-        SetNodeBitmaps(
-            aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-            aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
-        );
+        {
+            ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
+            SetNodeBitmaps(
+                aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
+                aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
+                BMP_COLOR_NORMAL
+            );
+        }
+        {
+            ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
+            SetNodeBitmaps(
+                aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
+                aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
+                BMP_COLOR_HIGHCONTRAST
+            );
+        }
     }
 
     m_pModel = new FmFilterModel(comphelper::getProcessServiceFactory());
@@ -1250,7 +1269,7 @@ sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const XubString& r
     if (aText.Len() == 0)
     {
         // deleting the entry asynchron
-        sal_uLong nEvent;
+        ULONG nEvent;
         PostUserEvent(nEvent, LINK(this, FmFilterNavigator, OnRemove), pEntry);
     }
     else
@@ -1308,7 +1327,7 @@ IMPL_LINK( FmFilterNavigator, OnDropActionTimer, void*, EMPTYARG )
         case DA_EXPANDNODE:
         {
             SvLBoxEntry* pToExpand = GetEntry(m_aTimerTriggered);
-            if (pToExpand && (GetChildCount(pToExpand) > 0) &&  !IsExpanded(pToExpand))
+            if (pToExpand && (GetChildCount(pToExpand) > 0) &&	!IsExpanded(pToExpand))
                 // tja, eigentlich muesste ich noch testen, ob die Node nicht schon expandiert ist, aber ich
                 // habe dazu weder in den Basisklassen noch im Model eine Methode gefunden ...
                 // aber ich denke, die BK sollte es auch so vertragen
@@ -1353,7 +1372,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
                 bNeedTrigger = sal_True;
             }
             else
-            {   // is it an entry whith children, and not yet expanded?
+            {	// is it an entry whith children, and not yet expanded?
                 SvLBoxEntry* pDropppedOn = GetEntry(aDropPos);
                 if (pDropppedOn && (GetChildCount(pDropppedOn) > 0) && !IsExpanded(pDropppedOn))
                 {
@@ -1416,19 +1435,19 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
     return rEvt.mnAction;
 }
 // -----------------------------------------------------------------------------
-namespace
+namespace 
 {
     FmFilterItems* getTargetItems(SvLBoxEntry* _pTarget)
     {
-        FmFilterData*   pData = static_cast<FmFilterData*>(_pTarget->GetUserData());
-        FmFilterItems*  pTargetItems = pData->ISA(FmFilterItems)
-                                        ?
+        FmFilterData*	pData = static_cast<FmFilterData*>(_pTarget->GetUserData());
+        FmFilterItems*	pTargetItems = pData->ISA(FmFilterItems) 
+                                        ? 
                                         PTR_CAST(FmFilterItems,pData)
-                                        :
+                                        : 
                                     PTR_CAST(FmFilterItems,pData->GetParent());
         return pTargetItems;
     }
-}
+}	
 //------------------------------------------------------------------------
 sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
@@ -1447,14 +1466,14 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
         return DND_ACTION_NONE;
 
     // search the container where to add the items
-    FmFilterItems*  pTargetItems = getTargetItems(pDropTarget);
+    FmFilterItems*	pTargetItems = getTargetItems(pDropTarget);
     SelectAll(sal_False);
     SvLBoxEntry* pEntry = FindEntry(pTargetItems);
     Select(pEntry, sal_True);
     SetCurEntry(pEntry);
 
     insertFilterItem(m_aControlExchange->getDraggedEntries(),pTargetItems,DND_ACTION_COPY == rEvt.mnAction);
-
+    
     return sal_True;
 }
 
@@ -1480,7 +1499,7 @@ void FmFilterNavigator::InitEntry(SvLBoxEntry* pEntry,
 //------------------------------------------------------------------------
 sal_Bool FmFilterNavigator::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
 {
-    if (bSelect == IsSelected(pEntry))  // das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)
+    if (bSelect == IsSelected(pEntry))	// das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)
         return sal_True;
 
     if (SvTreeListBox::Select(pEntry, bSelect))
@@ -1568,7 +1587,12 @@ void FmFilterNavigator::Insert(FmFilterData* pItem, sal_Int32 nPos)
 
     // insert the item
     SvLBoxEntry* pParentEntry = FindEntry( pParent );
-    InsertEntry( pItem->GetText(), pItem->GetImage(), pItem->GetImage(), pParentEntry, sal_False, nPos, pItem );
+    SvLBoxEntry* pNewEntry = InsertEntry(pItem->GetText(), pItem->GetImage(), pItem->GetImage(), pParentEntry, sal_False, nPos, pItem );
+    if ( pNewEntry )
+    {
+        SetExpandedEntryBmp( pNewEntry, pItem->GetImage( BMP_COLOR_HIGHCONTRAST ), BMP_COLOR_HIGHCONTRAST );
+        SetCollapsedEntryBmp( pNewEntry, pItem->GetImage( BMP_COLOR_HIGHCONTRAST ), BMP_COLOR_HIGHCONTRAST );
+    }
     if ( pParentEntry )
         Expand( pParentEntry );
 }
@@ -1743,7 +1767,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
                 case SID_FM_FILTER_EDIT:
                 {
                     EditEntry( pClicked );
-                }   break;
+                }	break;
                 case SID_FM_FILTER_IS_NULL:
                 case SID_FM_FILTER_IS_NOT_NULL:
                 {
@@ -1757,11 +1781,11 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
                     m_pModel->ValidateText((FmFilterItem*)pClicked->GetUserData(),
                                             aText, aErrorMsg);
                     m_pModel->SetTextForItem((FmFilterItem*)pClicked->GetUserData(), aText);
-                }   break;
+                }	break;
                 case SID_FM_DELETE:
                 {
                     DeleteSelection();
-                }   break;
+                }	break;
             }
             bHandled = sal_True;
         } break;
@@ -1899,7 +1923,7 @@ void FmFilterNavigator::DeleteSelection()
     }
 
     // Remove the selection
-    SelectAll(sal_False);
+    SelectAll(FALSE);
 
     for (::std::vector<SvLBoxEntry*>::reverse_iterator i = aEntryList.rbegin();
         // link problems with operator ==
@@ -1940,7 +1964,7 @@ void FmFilterNavigatorWin::UpdateContent(FmFormShell* pFormShell)
     else
     {
         Reference< XFormController >  xController(pFormShell->GetImpl()->getActiveInternalController());
-        Reference< XIndexAccess >   xContainer;
+        Reference< XIndexAccess >	xContainer;
         if (xController.is())
         {
             Reference< XChild >  xChild(xController, UNO_QUERY);
@@ -2058,7 +2082,7 @@ FmFilterNavigatorWinMgr::FmFilterNavigatorWinMgr( Window *_pParent, sal_uInt16 _
 }
 
 //........................................................................
-}   // namespace svxform
+}	// namespace svxform
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

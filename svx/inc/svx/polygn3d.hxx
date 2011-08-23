@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,10 +36,10 @@ class SVX_DLLPUBLIC E3dPolygonObj : public E3dCompoundObject
 {
 private:
     // parameters
-    basegfx::B3DPolyPolygon aPolyPoly3D;
-    basegfx::B3DPolyPolygon aPolyNormals3D;
-    basegfx::B2DPolyPolygon aPolyTexture2D;
-    sal_Bool            bLineOnly;
+    basegfx::B3DPolyPolygon	aPolyPoly3D;
+    basegfx::B3DPolyPolygon	aPolyNormals3D;
+    basegfx::B2DPolyPolygon	aPolyTexture2D;
+    BOOL			bLineOnly;
 
     SVX_DLLPRIVATE void CreateDefaultNormals();
     SVX_DLLPRIVATE void CreateDefaultTexture();
@@ -55,20 +55,20 @@ public:
     TYPEINFO();
 
     E3dPolygonObj(
-        E3dDefaultAttributes& rDefault,
+        E3dDefaultAttributes& rDefault, 
         const basegfx::B3DPolyPolygon& rPolyPoly3D,
-        sal_Bool bLinOnly=sal_False);
+        BOOL bLinOnly=FALSE);
     E3dPolygonObj(
-        E3dDefaultAttributes& rDefault,
+        E3dDefaultAttributes& rDefault, 
         const basegfx::B3DPolyPolygon& rPolyPoly3D,
-        const basegfx::B3DPolyPolygon& rPolyNormals3D,
-        sal_Bool bLinOnly=sal_False);
+        const basegfx::B3DPolyPolygon& rPolyNormals3D, 
+        BOOL bLinOnly=FALSE);
     E3dPolygonObj(
-        E3dDefaultAttributes& rDefault,
+        E3dDefaultAttributes& rDefault, 
         const basegfx::B3DPolyPolygon& rPolyPoly3D,
-        const basegfx::B3DPolyPolygon& rPolyNormals3D,
-        const basegfx::B2DPolyPolygon& rPolyTexture2D,
-        sal_Bool bLinOnly=sal_False);
+        const basegfx::B3DPolyPolygon& rPolyNormals3D, 
+        const basegfx::B2DPolyPolygon& rPolyTexture2D, 
+        BOOL bLinOnly=FALSE);
 
     E3dPolygonObj();
     virtual ~E3dPolygonObj();
@@ -77,16 +77,16 @@ public:
     const basegfx::B3DPolyPolygon& GetPolyNormals3D() const { return aPolyNormals3D; }
     const basegfx::B2DPolyPolygon& GetPolyTexture2D() const { return aPolyTexture2D; }
 
-    virtual sal_uInt16 GetObjIdentifier() const;
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
+    virtual UINT16 GetObjIdentifier() const;
+    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
 
-    virtual E3dPolygonObj* Clone() const;
+    virtual void operator=(const SdrObject&);
 
     // LineOnly?
-    sal_Bool GetLineOnly() { return bLineOnly; }
-    void SetLineOnly(sal_Bool bNew);
+    BOOL GetLineOnly() { return bLineOnly; }
+    void SetLineOnly(BOOL bNew);
 };
 
-#endif          // _E3D_POLYGON3D_HXX
+#endif			// _E3D_POLYGON3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

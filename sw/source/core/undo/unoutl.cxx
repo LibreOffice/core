@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+
+
 #include "doc.hxx"
-#include "swundo.hxx"           // fuer die UndoIds
+#include "swundo.hxx"			// fuer die UndoIds
 #include "pam.hxx"
 #include "ndtxt.hxx"
 
-#include <UndoCore.hxx>
+#include "undobj.hxx"
 
+
+inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 SwUndoOutlineLeftRight::SwUndoOutlineLeftRight( const SwPaM& rPam,
                                                 short nOff )
@@ -43,22 +47,26 @@ SwUndoOutlineLeftRight::SwUndoOutlineLeftRight( const SwPaM& rPam,
 {
 }
 
-void SwUndoOutlineLeftRight::UndoImpl(::sw::UndoRedoContext & rContext)
+
+void SwUndoOutlineLeftRight::Undo( SwUndoIter& rUndoIter )
 {
-    SwPaM & rPaM( AddUndoRedoPaM(rContext) );
-    rContext.GetDoc().OutlineUpDown(rPaM, -nOffset);
+    SetPaM( rUndoIter );
+    rUndoIter.GetDoc().OutlineUpDown( *rUndoIter.pAktPam, -nOffset );
 }
 
-void SwUndoOutlineLeftRight::RedoImpl(::sw::UndoRedoContext & rContext)
+
+void SwUndoOutlineLeftRight::Redo( SwUndoIter& rUndoIter )
 {
-    SwPaM & rPaM( AddUndoRedoPaM(rContext) );
-    rContext.GetDoc().OutlineUpDown(rPaM,  nOffset);
+    SetPaM( rUndoIter );
+    rUndoIter.GetDoc().OutlineUpDown( *rUndoIter.pAktPam, nOffset );
 }
 
-void SwUndoOutlineLeftRight::RepeatImpl(::sw::RepeatContext & rContext)
+
+void SwUndoOutlineLeftRight::Repeat( SwUndoIter& rUndoIter )
 {
-    rContext.GetDoc().OutlineUpDown(rContext.GetRepeatPaM(), nOffset);
+    rUndoIter.GetDoc().OutlineUpDown( *rUndoIter.pAktPam, nOffset );
 }
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

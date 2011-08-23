@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ class SwAutoCompleteClient : public SwClient
     SwAutoCompleteWord* pAutoCompleteWord;
     SwDoc*              pDoc;
 #if OSL_DEBUG_LEVEL > 1
-    static sal_uLong nSwAutoCompleteClientCount;
+    static ULONG nSwAutoCompleteClientCount;
 #endif
 public:
     SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& rSwDoc);
@@ -65,12 +65,11 @@ public:
 
     SwAutoCompleteClient& operator=(const SwAutoCompleteClient& rClient);
 
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
     const SwDoc& GetDoc(){return *pDoc;}
 #if OSL_DEBUG_LEVEL > 1
-    static sal_uLong GetElementCount() {return nSwAutoCompleteClientCount;}
+    static ULONG GetElementCount() {return nSwAutoCompleteClientCount;}
 #endif
-protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
 
 typedef std::vector<SwAutoCompleteClient> SwAutoCompleteClientVector;
@@ -91,7 +90,7 @@ typedef std::vector<SwDocPtr> SwDocPtrVector;
 class SwAutoCompleteString : public String
 {
 #if OSL_DEBUG_LEVEL > 1
-    static sal_uLong nSwAutoCompleteStringCount;
+    static ULONG nSwAutoCompleteStringCount;
 #endif
     SwDocPtrVector aSourceDocs;
     public:
@@ -102,12 +101,12 @@ class SwAutoCompleteString : public String
         //returns true if last document reference has been removed
         sal_Bool     RemoveDocument(const SwDoc& rDoc);
 #if OSL_DEBUG_LEVEL > 1
-    static sal_uLong GetElementCount() {return nSwAutoCompleteStringCount;}
+    static ULONG GetElementCount() {return nSwAutoCompleteStringCount;}
 #endif
 };
 #if OSL_DEBUG_LEVEL > 1
-    sal_uLong SwAutoCompleteClient::nSwAutoCompleteClientCount = 0;
-    sal_uLong SwAutoCompleteString::nSwAutoCompleteStringCount = 0;
+    ULONG SwAutoCompleteClient::nSwAutoCompleteClientCount = 0;
+    ULONG SwAutoCompleteString::nSwAutoCompleteStringCount = 0;
 #endif
 
 SwAutoCompleteClient::SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& rSwDoc) :
@@ -143,13 +142,13 @@ SwAutoCompleteClient& SwAutoCompleteClient::operator=(const SwAutoCompleteClient
     pAutoCompleteWord = rClient.pAutoCompleteWord;
     pDoc = rClient.pDoc;
     if(rClient.GetRegisteredIn())
-        ((SwModify*)rClient.GetRegisteredIn())->Add(this);
+        rClient.pRegisteredIn->Add(this);
     else if(GetRegisteredIn())
-        GetRegisteredInNonConst()->Remove(this);
+        pRegisteredIn->Remove(this);
     return *this;
 }
 
-void SwAutoCompleteClient::Modify( const SfxPoolItem* pOld, const SfxPoolItem *)
+void SwAutoCompleteClient::Modify(SfxPoolItem *pOld, SfxPoolItem *)
 {
     switch( pOld ? pOld->Which() : 0 )
     {
@@ -166,7 +165,7 @@ void SwAutoCompleteClient::Modify( const SfxPoolItem* pOld, const SfxPoolItem *)
 void SwAutoCompleteWord_Impl::AddDocument(SwDoc& rDoc)
 {
     SwAutoCompleteClientVector::iterator aIt;
-    for(aIt = aClientVector.begin(); aIt != aClientVector.end(); ++aIt)
+    for(aIt = aClientVector.begin(); aIt != aClientVector.end(); aIt++)
     {
         if(&aIt->GetDoc() == &rDoc)
             return;
@@ -177,7 +176,7 @@ void SwAutoCompleteWord_Impl::AddDocument(SwDoc& rDoc)
 void SwAutoCompleteWord_Impl::RemoveDocument(const SwDoc& rDoc)
 {
     SwAutoCompleteClientVector::iterator aIt;
-    for(aIt = aClientVector.begin(); aIt != aClientVector.end(); ++aIt)
+    for(aIt = aClientVector.begin(); aIt != aClientVector.end(); aIt++)
     {
         if(&aIt->GetDoc() == &rDoc)
         {
@@ -205,7 +204,7 @@ SwAutoCompleteString::~SwAutoCompleteString()
 void SwAutoCompleteString::AddDocument(const SwDoc& rDoc)
 {
     SwDocPtrVector::iterator aIt;
-    for(aIt = aSourceDocs.begin(); aIt != aSourceDocs.end(); ++aIt)
+    for(aIt = aSourceDocs.begin(); aIt != aSourceDocs.end(); aIt++)
     {
         if(*aIt == &rDoc)
             return;
@@ -217,7 +216,7 @@ void SwAutoCompleteString::AddDocument(const SwDoc& rDoc)
 sal_Bool SwAutoCompleteString::RemoveDocument(const SwDoc& rDoc)
 {
     SwDocPtrVector::iterator aIt;
-    for(aIt = aSourceDocs.begin(); aIt != aSourceDocs.end(); ++aIt)
+    for(aIt = aSourceDocs.begin(); aIt != aSourceDocs.end(); aIt++)
     {
         if(*aIt == &rDoc)
         {
@@ -228,18 +227,18 @@ sal_Bool SwAutoCompleteString::RemoveDocument(const SwDoc& rDoc)
     return sal_False;
 }
 
-SwAutoCompleteWord::SwAutoCompleteWord( sal_uInt16 nWords, sal_uInt16 nMWrdLen )
+SwAutoCompleteWord::SwAutoCompleteWord( USHORT nWords, USHORT nMWrdLen )
     : aWordLst( 0, 255 ), aLRULst( 0, 255 ),
     pImpl(new SwAutoCompleteWord_Impl(*this)),
     nMaxCount( nWords ),
     nMinWrdLen( nMWrdLen ),
-    bLockWordLst( sal_False )
+    bLockWordLst( FALSE )
 {
 }
 
 SwAutoCompleteWord::~SwAutoCompleteWord()
 {
-    for(sal_uInt16 nPos = aWordLst.Count(); nPos; nPos--)
+    for(USHORT nPos = aWordLst.Count(); nPos; nPos--)
     {
         SwAutoCompleteString* pCurrent = (SwAutoCompleteString*)aWordLst[ nPos - 1 ];
         aWordLst.Remove( nPos - 1 );
@@ -247,13 +246,13 @@ SwAutoCompleteWord::~SwAutoCompleteWord()
     }
     delete pImpl;
 #if OSL_DEBUG_LEVEL > 1
-    sal_uLong nStrings = SwAutoCompleteString::GetElementCount();
-    sal_uLong nClients = SwAutoCompleteClient::GetElementCount();
-    OSL_ENSURE(!nStrings && !nClients, "AutoComplete: clients or string count mismatch");
+    ULONG nStrings = SwAutoCompleteString::GetElementCount();
+    ULONG nClients = SwAutoCompleteClient::GetElementCount();
+    DBG_ASSERT(!nStrings && !nClients, "AutoComplete: clients or string count mismatch");
 #endif
 }
 
-sal_Bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
+BOOL SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
 {
     SwDocShell* pDocShell = rDoc.GetDocShell();
     SfxMedium* pMedium = pDocShell ? pDocShell->GetMedium() : 0;
@@ -270,7 +269,7 @@ sal_Bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
     aNewWord.EraseAllChars( CH_TXTATR_BREAKWORD );
 
     pImpl->AddDocument(rDoc);
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     xub_StrLen nWrdLen = aNewWord.Len();
     while( nWrdLen && '.' == aNewWord.GetChar( nWrdLen-1 ))
         --nWrdLen;
@@ -280,10 +279,10 @@ sal_Bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
         SwAutoCompleteString* pAutoString;
         StringPtr pNew = pAutoString = new SwAutoCompleteString( aNewWord, 0, nWrdLen );
         pAutoString->AddDocument(rDoc);
-        sal_uInt16 nInsPos;
+        USHORT nInsPos;
         if( aWordLst.Insert( pNew, nInsPos ) )
         {
-            bRet = sal_True;
+            bRet = TRUE;
             if( aLRULst.Count() < nMaxCount )
                 aLRULst.Insert( pNew, 0 );
             else
@@ -323,15 +322,15 @@ sal_Bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
     return bRet;
 }
 
-void SwAutoCompleteWord::SetMaxCount( sal_uInt16 nNewMax )
+void SwAutoCompleteWord::SetMaxCount( USHORT nNewMax )
 {
     if( nNewMax < nMaxCount && aLRULst.Count() > nNewMax )
     {
         // dann die unten ueberhaengenden entfernen
-        sal_uInt16 nLRUIndex = nNewMax-1;
+        USHORT nLRUIndex = nNewMax-1;
         while( nNewMax < aWordLst.Count() && nLRUIndex < aLRULst.Count())
         {
-            sal_uInt16 nPos = aWordLst.GetPos( (String*)aLRULst[ nLRUIndex++ ] );
+            USHORT nPos = aWordLst.GetPos( (String*)aLRULst[ nLRUIndex++ ] );
             OSL_ENSURE( USHRT_MAX != nPos, "String nicht gefunden" );
             void * pDel = aWordLst[nPos];
             aWordLst.Remove(nPos);
@@ -342,7 +341,7 @@ void SwAutoCompleteWord::SetMaxCount( sal_uInt16 nNewMax )
     nMaxCount = nNewMax;
 }
 
-void SwAutoCompleteWord::SetMinWordLen( sal_uInt16 n )
+void SwAutoCompleteWord::SetMinWordLen( USHORT n )
 {
     // will man wirklich alle Worte, die kleiner als die neue Min Laenge
     // sind entfernen?
@@ -351,13 +350,13 @@ void SwAutoCompleteWord::SetMinWordLen( sal_uInt16 n )
     // JP 11.03.99 - mal testhalber eingebaut
     if( n < nMinWrdLen )
     {
-        for( sal_uInt16 nPos = 0; nPos < aWordLst.Count(); ++nPos  )
+        for( USHORT nPos = 0; nPos < aWordLst.Count(); ++nPos  )
             if( aWordLst[ nPos ]->Len() < n )
             {
                 void* pDel = aWordLst[ nPos ];
                 aWordLst.Remove(nPos);
 
-                sal_uInt16 nDelPos = aLRULst.GetPos( pDel );
+                USHORT nDelPos = aLRULst.GetPos( pDel );
                 OSL_ENSURE( USHRT_MAX != nDelPos, "String nicht gefunden" );
                 aLRULst.Remove( nDelPos );
                 --nPos;
@@ -368,8 +367,8 @@ void SwAutoCompleteWord::SetMinWordLen( sal_uInt16 n )
     nMinWrdLen = n;
 }
 
-sal_Bool SwAutoCompleteWord::GetRange( const String& rWord, sal_uInt16& rStt,
-                                    sal_uInt16& rEnd ) const
+BOOL SwAutoCompleteWord::GetRange( const String& rWord, USHORT& rStt,
+                                    USHORT& rEnd ) const
 {
     const StringPtr pStr = (StringPtr)&rWord;
     aWordLst.Seek_Entry( pStr, &rStt );
@@ -384,8 +383,8 @@ sal_Bool SwAutoCompleteWord::GetRange( const String& rWord, sal_uInt16& rStt,
 
 void SwAutoCompleteWord::CheckChangedList( const SvStringsISortDtor& rNewLst )
 {
-    sal_uInt16 nMyLen = aWordLst.Count(), nNewLen = rNewLst.Count();
-    sal_uInt16 nMyPos = 0, nNewPos = 0;
+    USHORT nMyLen = aWordLst.Count(), nNewLen = rNewLst.Count();
+    USHORT nMyPos = 0, nNewPos = 0;
 
     for( ; nMyPos < nMyLen && nNewPos < nNewLen; ++nMyPos, ++nNewPos )
     {
@@ -395,7 +394,7 @@ void SwAutoCompleteWord::CheckChangedList( const SvStringsISortDtor& rNewLst )
             void* pDel = aWordLst[ nMyPos ];
             aWordLst.Remove(nMyPos);
 
-            sal_uInt16 nPos = aLRULst.GetPos( pDel );
+            USHORT nPos = aLRULst.GetPos( pDel );
             OSL_ENSURE( USHRT_MAX != nPos, "String nicht gefunden" );
             aLRULst.Remove( nPos );
             delete (SwAutoCompleteString*)pDel;
@@ -410,7 +409,7 @@ void SwAutoCompleteWord::CheckChangedList( const SvStringsISortDtor& rNewLst )
         for( ; nNewPos < nMyLen; ++nNewPos )
         {
             void* pDel = aWordLst[ nNewPos ];
-            sal_uInt16 nPos = aLRULst.GetPos( pDel );
+            USHORT nPos = aLRULst.GetPos( pDel );
             OSL_ENSURE( USHRT_MAX != nPos, "String nicht gefunden" );
             aLRULst.Remove( nPos );
             delete (SwAutoCompleteString*)pDel;
@@ -426,13 +425,13 @@ void SwAutoCompleteWord::DocumentDying(const SwDoc& rDoc)
 
     SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     const sal_Bool bDelete = !pACorr->GetSwFlags().bAutoCmpltKeepList;
-    for(sal_uInt16 nPos = aWordLst.Count(); nPos; nPos--)
+    for(USHORT nPos = aWordLst.Count(); nPos; nPos--)
     {
         SwAutoCompleteString* pCurrent = (SwAutoCompleteString*)aWordLst[ nPos - 1 ];
         if(pCurrent->RemoveDocument(rDoc) && bDelete)
         {
             aWordLst.Remove( nPos - 1 );
-            sal_uInt16 nLRUPos = aLRULst.GetPos( (void*)pCurrent );
+            USHORT nLRUPos = aLRULst.GetPos( (void*)pCurrent );
             DBG_ASSERT(nLRUPos < USHRT_MAX, "word not found in LRU list" );
             aLRULst.Remove( nLRUPos );
             delete pCurrent;

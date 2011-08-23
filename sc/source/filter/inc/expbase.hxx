@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,44 +41,44 @@ class ScExportBase
 {
 public:
 #if defined UNX
-    static const sal_Char sNewLine;
+    static const sal_Char __FAR_DATA sNewLine;
 #else
-    static const sal_Char sNewLine[];
+    static const sal_Char __FAR_DATA sNewLine[];
 #endif
 
 protected:
 
-    SvStream&           rStrm;
-    ScRange             aRange;
-    ScDocument*         pDoc;
-    SvNumberFormatter*  pFormatter;
-    ScFieldEditEngine*  pEditEngine;
+    SvStream&			rStrm;
+    ScRange     		aRange;
+    ScDocument* 		pDoc;
+    SvNumberFormatter*	pFormatter;
+    ScFieldEditEngine*	pEditEngine;
 
 public:
 
                         ScExportBase( SvStream&, ScDocument*, const ScRange& );
-    virtual             ~ScExportBase();
+    virtual				~ScExportBase();
 
                         // Hidden Cols/Rows an den Raendern trimmen,
-                        // return: sal_True wenn Bereich vorhanden
+                        // return: TRUE wenn Bereich vorhanden
                         // Start/End/Col/Row muessen gueltige Ausgangswerte sein
-    sal_Bool                TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
+    BOOL				TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
                             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const;
 
                         // Ausgabebereich einer Tabelle ermitteln,
                         // Hidden Cols/Rows an den Raendern beruecksichtigt,
-                        // return: sal_True wenn Bereich vorhanden
-    sal_Bool                GetDataArea( SCTAB nTab, SCCOL& nStartCol,
+                        // return: TRUE wenn Bereich vorhanden
+    BOOL				GetDataArea( SCTAB nTab, SCCOL& nStartCol,
                             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const;
 
                         // Tabelle nicht vorhanden oder leer
-    sal_Bool                IsEmptyTable( SCTAB nTab ) const;
+    BOOL				IsEmptyTable( SCTAB nTab ) const;
 
-    ScFieldEditEngine&  GetEditEngine() const;
+    ScFieldEditEngine&	GetEditEngine() const;
 
 };
 
 
-#endif  // SC_EXPBASE_HXX
+#endif	// SC_EXPBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,27 +44,27 @@ class SwAutoCompleteWord
     SvPtrarr aLRULst;
 
     SwAutoCompleteWord_Impl* pImpl;
-    sal_uInt16 nMaxCount, nMinWrdLen;
+    USHORT nMaxCount, nMinWrdLen;
     bool bLockWordLst;
 
     void DocumentDying(const SwDoc& rDoc);
 public:
-    SwAutoCompleteWord( sal_uInt16 nWords = 500, sal_uInt16 nMWrdLen = 10 );
+    SwAutoCompleteWord( USHORT nWords = 500, USHORT nMWrdLen = 10 );
     ~SwAutoCompleteWord();
 
-    sal_Bool InsertWord( const String& rWord, SwDoc& rDoc );
+    BOOL InsertWord( const String& rWord, SwDoc& rDoc );
 
-    sal_Bool GetRange( const String& rWord, sal_uInt16& rStt, sal_uInt16& rEnd ) const;
+    BOOL GetRange( const String& rWord, USHORT& rStt, USHORT& rEnd ) const;
 
-    const String& operator[]( sal_uInt16 n ) const { return *aWordLst[ n ]; }
+    const String& operator[]( USHORT n ) const { return *aWordLst[ n ]; }
 
     bool IsLockWordLstLocked() const           { return bLockWordLst; }
     void SetLockWordLstLocked( bool bFlag ) { bLockWordLst = bFlag; }
 
-    void SetMaxCount( sal_uInt16 n );
+    void SetMaxCount( USHORT n );
 
-    sal_uInt16 GetMinWordLen() const                { return nMinWrdLen; }
-    void SetMinWordLen( sal_uInt16 n );
+    USHORT GetMinWordLen() const 				{ return nMinWrdLen; }
+    void SetMinWordLen( USHORT n );
 
     const SvStringsISortDtor& GetWordList() const { return aWordLst; }
     void CheckChangedList( const SvStringsISortDtor& rNewLst );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,14 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 
-#include <svl/whiter.hxx>
+#include "whiter.hxx"
 #include <svl/itemset.hxx>
 
 DBG_NAME(SfxWhichIter)
 
 // -----------------------------------------------------------------------
 
-SfxWhichIter::SfxWhichIter( const SfxItemSet& rSet, sal_uInt16 nFromWh, sal_uInt16 nToWh ):
+SfxWhichIter::SfxWhichIter( const SfxItemSet& rSet, USHORT nFromWh, USHORT nToWh ):
     pRanges(rSet.GetRanges()),
     pStart(rSet.GetRanges()),
     nOfst(0), nFrom(nFromWh), nTo(nToWh)
@@ -55,19 +55,19 @@ SfxWhichIter::~SfxWhichIter()
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SfxWhichIter::NextWhich()
+USHORT SfxWhichIter::NextWhich()
 {
     DBG_CHKTHIS(SfxWhichIter, 0);
     while ( 0 != *pRanges )
     {
-        const sal_uInt16 nLastWhich = *pRanges + nOfst;
+        const USHORT nLastWhich = *pRanges + nOfst;
         ++nOfst;
         if (*(pRanges+1) == nLastWhich)
         {
             pRanges += 2;
             nOfst = 0;
         }
-        sal_uInt16 nWhich = *pRanges + nOfst;
+        USHORT nWhich = *pRanges + nOfst;
         if ( 0 == nWhich || ( nWhich >= nFrom && nWhich <= nTo ) )
             return nWhich;
     }
@@ -76,7 +76,7 @@ sal_uInt16 SfxWhichIter::NextWhich()
 
 // -----------------------------------------------------------------------
 
-sal_uInt16  SfxWhichIter::PrevWhich()
+USHORT  SfxWhichIter::PrevWhich()
 {
     DBG_CHKTHIS(SfxWhichIter, 0);
     while ( pRanges != pStart || 0 != nOfst )
@@ -87,7 +87,7 @@ sal_uInt16  SfxWhichIter::PrevWhich()
             pRanges -= 2;
             nOfst = *(pRanges+1) - (*pRanges);
         }
-        sal_uInt16 nWhich = *pRanges + nOfst;
+        USHORT nWhich = *pRanges + nOfst;
         if ( nWhich >= nFrom && nWhich <= nTo )
             return nWhich;
     }
@@ -96,7 +96,7 @@ sal_uInt16  SfxWhichIter::PrevWhich()
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SfxWhichIter::FirstWhich()
+USHORT SfxWhichIter::FirstWhich()
 {
     DBG_CHKTHIS(SfxWhichIter, 0);
     pRanges = pStart;
@@ -108,13 +108,13 @@ sal_uInt16 SfxWhichIter::FirstWhich()
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SfxWhichIter::LastWhich()
+USHORT SfxWhichIter::LastWhich()
 {
     DBG_CHKTHIS(SfxWhichIter, 0);
     while(*pRanges)
         ++pRanges;
     nOfst = 0;
-    sal_uInt16 nWhich = *(pRanges-1);
+    USHORT nWhich = *(pRanges-1);
     if ( nWhich >= nFrom && nWhich <= nTo )
         return nWhich;
     return PrevWhich();

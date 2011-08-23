@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,48 +45,48 @@ namespace connectivity
             return 0;
 
         xub_StrLen nTokCount = 1;
-        sal_Bool bStart = sal_True;     // Are we on the first character in the Token?
-        sal_Bool bInString = sal_False; // Are we WITHIN a (cStrDel delimited) String?
+        BOOL bStart = TRUE;		// Stehen wir auf dem ersten Zeichen im Token?
+        BOOL bInString = FALSE;	// Befinden wir uns INNERHALB eines (cStrDel delimited) String?
 
-        // Search for String-end after the first not matching character
+        // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
         for( xub_StrLen i = 0; i < nLen; ++i )
         {
             const sal_Unicode cChar = m_sString.GetChar(i);
             if (bStart)
             {
-                bStart = sal_False;
-                // First character a String-Delimiter?
+                bStart = FALSE;
+                // Erstes Zeichen ein String-Delimiter?
                 if ( cChar == cStrDel )
                 {
-                    bInString = sal_True;   // then we are now WITHIN the string!
-                    continue;           // skip this character!
+                    bInString = TRUE;	// dann sind wir jetzt INNERHALB des Strings!
+                    continue;			// dieses Zeichen ueberlesen!
                 }
             }
 
-            if (bInString)
+            if (bInString) 
             {
-                // when now the String-Delimiter-character occurs ...
+                // Wenn jetzt das String-Delimiter-Zeichen auftritt ...
                 if ( cChar == cStrDel )
                 {
                     if ((i+1 < nLen) && (m_sString.GetChar(i+1) == cStrDel))
                     {
-                        // double String-Delimter-character:
-                        ++i;    // no string-end, skip next character.
+                        // Verdoppeltes String-Delimiter-Zeichen:
+                        ++i;	// kein String-Ende, naechstes Zeichen ueberlesen.
                     }
                     else
                     {
-                        // String-End
-                        bInString = sal_False;
+                        // String-Ende
+                        bInString = FALSE;
                     }
                 }
-            } // if (bInString)
-            else
+            } // if (bInString) 
+            else 
             {
-                // does the Token-character match, then raise TokCount
+                // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
                 if ( cChar == cTok )
                 {
                     ++nTokCount;
-                    bStart = sal_True;
+                    bStart = TRUE;
                 }
             }
         }
@@ -103,57 +103,58 @@ namespace connectivity
         const xub_StrLen nLen = m_sString.Len();
         if ( nLen )
         {
-            sal_Bool bInString = (nStartPos < nLen) && (m_sString.GetChar(nStartPos) == cStrDel);   // are we WITHIN a (cStrDel delimited) String?
+            BOOL bInString = (nStartPos < nLen) && (m_sString.GetChar(nStartPos) == cStrDel);	// Befinden wir uns INNERHALB eines (cStrDel delimited) String?
 
-            // First character a String-Delimiter?
+            // Erstes Zeichen ein String-Delimiter?
             if (bInString )
-                ++nStartPos;            // skip this character!
+                ++nStartPos;			// dieses Zeichen ueberlesen!
             if ( nStartPos >= nLen )
                 return;
 
             sal_Unicode* pData = _rStr.AllocBuffer( nLen - nStartPos + 1 );
             const sal_Unicode* pStart = pData;
-            // Search until end of string for the first not matching character
+            // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
             for( xub_StrLen i = nStartPos; i < nLen; ++i )
             {
                 const sal_Unicode cChar = m_sString.GetChar(i);
                 if (bInString)
                 {
-                    // when now the String-Delimiter-character occurs ...
+                    // Wenn jetzt das String-Delimiter-Zeichen auftritt ...
                     if ( cChar == cStrDel )
                     {
                         if ((i+1 < nLen) && (m_sString.GetChar(i+1) == cStrDel))
                         {
-                            // double String Delimiter-character
-                            // no end of string, skip next character.
+                            // Verdoppeltes String-Delimiter-Zeichen:
+                            // kein String-Ende, naechstes Zeichen ueberlesen.
                             ++i;
-                            *pData++ = m_sString.GetChar(i);    // character belongs to Result-String
+                            *pData++ = m_sString.GetChar(i);	// Zeichen gehoert zum Resultat-String
                         }
                         else
                         {
-                            //end of String
-                            bInString = sal_False;
+                            // String-Ende
+                            bInString = FALSE;
                             *pData = 0;
                         }
                     }
                     else
                     {
-                        *pData++ = cChar;   // character belongs to Result-String
+                        *pData++ = cChar;	// Zeichen gehoert zum Resultat-String
                     }
 
                 }
                 else
                 {
-                    // does the Token-sign match, then raise nTok
+                    // Stimmt das Tokenzeichen ueberein, dann erhoehe nTok
                     if ( cChar == cTok )
                     {
-                        // premature break of loop possible, because we found what we were looking for
+                        // Vorzeitiger Abbruch der Schleife moeglich, denn
+                        // wir haben, was wir wollten.
                         nStartPos = i+1;
                         break;
                     }
                     else
                     {
-                        *pData++ = cChar;   // character belongs to Result-String
+                        *pData++ = cChar;	// Zeichen gehoert zum Resultat-String
                     }
                 }
             } // for( xub_StrLen i = nStartPos; i < nLen; ++i )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,11 +35,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weak.hxx>
 
-
 namespace comphelper {
-
-class AbortContinuation;
-class PasswordContinuation;
 
 // ============================================================================
 
@@ -52,42 +48,13 @@ enum DocPasswordRequestType
 
 // ============================================================================
 
-class COMPHELPER_DLLPUBLIC SimplePasswordRequest :
-        public ::com::sun::star::task::XInteractionRequest,
-        public ::cppu::OWeakObject
-{
-public:
-    explicit    SimplePasswordRequest( com::sun::star::task::PasswordRequestMode eMode );
-    virtual     ~SimplePasswordRequest();
-
-    // XInterface / OWeakObject
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  ) throw ();
-    virtual void SAL_CALL release(  ) throw ();
-
-    sal_Bool            isAbort() const;
-    sal_Bool            isPassword() const;
-
-    ::rtl::OUString     getPassword() const;
-
-private:
-    // XInteractionRequest
-    virtual ::com::sun::star::uno::Any SAL_CALL getRequest() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( ::com::sun::star::uno::RuntimeException );
-
-private:
-    ::com::sun::star::uno::Any      maRequest;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > maContinuations;
-    AbortContinuation *             mpAbort;
-    PasswordContinuation *          mpPassword;
-};
-
-// ============================================================================
+class AbortContinuation;
+class PasswordContinuation;
 
 /** Implements the task.XInteractionRequest interface for requesting a password
     string for a document.
  */
-class COMPHELPER_DLLPUBLIC DocPasswordRequest :
+class COMPHELPER_DLLPUBLIC DocPasswordRequest : 
         public ::com::sun::star::task::XInteractionRequest,
         public ::cppu::OWeakObject
 {
@@ -113,15 +80,20 @@ public:
     sal_Bool            getRecommendReadOnly() const;
 
 private:
-    // XInteractionRequest
-    virtual ::com::sun::star::uno::Any SAL_CALL getRequest() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Any SAL_CALL
+                        getRequest() throw( ::com::sun::star::uno::RuntimeException );
+
+    virtual ::com::sun::star::uno::Sequence<
+                ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL
+                        getContinuations() throw( ::com::sun::star::uno::RuntimeException );
 
 private:
-    ::com::sun::star::uno::Any      maRequest;
+    ::com::sun::star::uno::Any maRequest;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > maContinuations;
-    AbortContinuation *             mpAbort;
-    PasswordContinuation *          mpPassword;
+    AbortContinuation*  mpAbort;
+    PasswordContinuation* mpPassword;
+
+    sal_Bool mbPasswordToModify;
 };
 
 // ============================================================================

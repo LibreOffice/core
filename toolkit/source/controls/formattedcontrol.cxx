@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ namespace toolkit
         const Reference< XNumberFormatsSupplier >& lcl_getDefaultFormats_throw()
         {
             ::osl::MutexGuard aGuard( getDefaultFormatsMutex() );
-
+            
             bool& rbTriedCreation = lcl_getTriedCreation();
             Reference< XNumberFormatsSupplier >& rDefaultFormats( lcl_getDefaultFormatsAccess_nothrow() );
             if ( !rDefaultFormats.is() && !rbTriedCreation )
@@ -126,9 +126,8 @@ namespace toolkit
     // = UnoControlFormattedFieldModel
     // ===================================================================
     // -------------------------------------------------------------------
-    UnoControlFormattedFieldModel::UnoControlFormattedFieldModel( const Reference< XMultiServiceFactory >& i_factory )
-        :UnoControlModel( i_factory )
-        ,m_bRevokedAsClient( false )
+    UnoControlFormattedFieldModel::UnoControlFormattedFieldModel()
+        :m_bRevokedAsClient( false )
         ,m_bSettingValueAndText( false )
     {
         ImplRegisterProperty( BASEPROPERTY_ALIGN );
@@ -376,9 +375,9 @@ namespace toolkit
             }
 
             throw IllegalArgumentException(
-                        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to convert the given value for the property "))
-                    +=  GetPropertyName((sal_uInt16)nPropId) )
-                    +=  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (double, integer, or string expected).")),
+                        ( ::rtl::OUString::createFromAscii("Unable to convert the given value for the property ")
+                    +=	GetPropertyName((sal_uInt16)nPropId) )
+                    +=  ::rtl::OUString::createFromAscii(" (double, integer, or string expected)."),
                 static_cast< XPropertySet* >(this),
                 1);
         }
@@ -417,7 +416,7 @@ namespace toolkit
         static UnoPropertyArrayHelper* pHelper = NULL;
         if ( !pHelper )
         {
-            Sequence<sal_Int32> aIDs = ImplGetPropertyIds();
+            Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
             pHelper = new UnoPropertyArrayHelper( aIDs );
         }
         return *pHelper;
@@ -435,15 +434,14 @@ namespace toolkit
     // = UnoFormattedFieldControl
     // ===================================================================
     // -------------------------------------------------------------------
-    UnoFormattedFieldControl::UnoFormattedFieldControl( const Reference< XMultiServiceFactory >& i_factory )
-        :UnoSpinFieldControl( i_factory )
+    UnoFormattedFieldControl::UnoFormattedFieldControl()
     {
     }
 
     // -------------------------------------------------------------------
     ::rtl::OUString UnoFormattedFieldControl::GetComponentServiceName()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormattedField"));
+        return ::rtl::OUString::createFromAscii( "FormattedField" );
     }
 
     // -------------------------------------------------------------------
@@ -460,14 +458,14 @@ namespace toolkit
         aValues[0] = xPeer->getProperty( aNames[0] );
         aValues[1] = xPeer->getProperty( aNames[1] );
 
-        ImplSetPropertyValues( aNames, aValues, sal_False );
-
+        ImplSetPropertyValues( aNames, aValues, FALSE );
+        
         if ( GetTextListeners().getLength() )
             GetTextListeners().textChanged( e );
     }
 
 //........................................................................
-}   // namespace toolkit
+}	// namespace toolkit
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

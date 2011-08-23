@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ SimpleResMgr* ImpSvlData::GetSimpleRM(const ::com::sun::star::lang::Locale& rLoc
         = (*static_cast< SimpleResMgrMap * >(m_pThreadsafeRMs))[aISOcode];
     if (!rResMgr)
     {
-        rResMgr = new SimpleResMgr(CREATEVERSIONRESMGR_NAME(svl), rLocale );
+        rResMgr = new SimpleResMgr(CREATEVERSIONRESMGR_NAME(svs), rLocale );
     }
     return rResMgr;
 }

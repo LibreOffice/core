@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -644,30 +644,17 @@ void ChartTypeTemplate::adaptScales(
             sal_Int32 nDim( xCooSys->getDimension());
             if( nDim > 0 )
             {
-                const sal_Int32 nDimensionX = 0;
-                const sal_Int32 nMaxIndex = xCooSys->getMaximumAxisIndexByDimension(nDimensionX);
+                const sal_Int32 nMaxIndex = xCooSys->getMaximumAxisIndexByDimension(0);
                 for(sal_Int32 nI=0; nI<=nMaxIndex; ++nI)
                 {
-                    Reference< XAxis > xAxis( xCooSys->getAxisByDimension(nDimensionX,nI) );
+                    Reference< XAxis > xAxis( xCooSys->getAxisByDimension(0,nI) );
                     if( xAxis.is())
                     {
                         ScaleData aData( xAxis->getScaleData() );
                         aData.Categories = xCategories;
-                        if(bSupportsCategories)
-                        {
-
-                            Reference< XChartType > xChartType( getChartTypeForNewSeries(Sequence< Reference< XChartType > >() ));
-                            bool bSupportsDates = ::chart::ChartTypeHelper::isSupportingDateAxis( xChartType, 2, nDimensionX );
-                            if( aData.AxisType != AxisType::CATEGORY && ( aData.AxisType != AxisType::DATE || !bSupportsDates) )
-                            {
-                                aData.AxisType = AxisType::CATEGORY;
-                                aData.AutoDateAxis = true;
-                                AxisHelper::removeExplicitScaling( aData );
-                            }
-                        }
-                        else
-                            aData.AxisType = AxisType::REALNUMBER;
-
+                        aData.AxisType = bSupportsCategories ? AxisType::CATEGORY : AxisType::REALNUMBER;
+                        if( bSupportsCategories )
+                            AxisHelper::removeExplicitScaling( aData );
                         xAxis->setScaleData( aData );
                     }
                 }
@@ -746,7 +733,7 @@ void ChartTypeTemplate::adaptAxes(
     const Sequence< Reference< XCoordinateSystem > > & rCoordSys )
 {
     //adapt properties of exsisting axes and remove superfluous axes
-
+    
     if( rCoordSys.getLength() > 0 )
     {
         for( sal_Int32 nCooSysIdx=0; nCooSysIdx < rCoordSys.getLength(); ++nCooSysIdx )
@@ -896,6 +883,7 @@ void ChartTypeTemplate::createChartTypes(
     }
 }
 
+//static
 void ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem(
                     const Sequence< Reference< XChartType > > & rOldChartTypesSeq,
                     const Reference< XChartType > & xNewChartType )

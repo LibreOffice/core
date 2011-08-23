@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,9 +163,7 @@ Size MediaWindow::getPreferredSize() const
 void MediaWindow::setPosSize( const Rectangle& rNewRect )
 {
     if( mpImpl )
-    {
         mpImpl->setPosSize( rNewRect );
-    }
 }
 
 // -------------------------------------------------------------------------
@@ -367,26 +365,25 @@ Window* MediaWindow::getWindow() const
 
 void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 {
-    static const char* pFilters[] = { "AIF Audio", "aif;aiff",
-                                      "AU Audio", "au",
-                                      "AVI", "avi",
-                                      "CD Audio", "cda",
-                                      "FLAC Audio", "flac",
-                                      "Matroska Media", "mkv",
-                                      "MIDI Audio", "mid;midi",
-                                      "MPEG Audio", "mp2;mp3;mpa",
-                                      "MPEG Video", "mpg;mpeg;mpv;mp4",
-                                      "Ogg bitstream", "ogg",
-                                      "Quicktime Video", "mov",
-                                      "Vivo Video", "viv",
-                                      "WAVE Audio", "wav",
-                                      "WebM Video", "webm" };
+    static const char* pFilters[] = {   "AIF Audio", "aif;aiff",
+                                        "AU Audio", "au",
+                                        "AVI", "avi",
+                                        "CD Audio", "cda",
+                                        "FLAC Audio", "flac",
+                                        "MIDI Audio", "mid;midi",
+                                        "MPEG Audio", "mp2;mp3;mpa",
+                                        "MPEG Video", "mpg;mpeg;mpv;mp4",
+                                        "Ogg bitstream", "ogg",
+                                        "Quicktime Video", "mov",
+                                        "Vivo Video", "viv",
+                                        "WAVE Audio", "wav" };
 
-    for( size_t i = 0; i < SAL_N_ELEMENTS(pFilters); i += 2 )
+    unsigned int i;
+    for( i = 0; i < ( sizeof( pFilters ) / sizeof( char* ) ); i += 2 )
     {
         rFilterNameVector.push_back( ::std::make_pair< ::rtl::OUString, ::rtl::OUString >(
-                                        ::rtl::OUString::createFromAscii(pFilters[i]),
-                                        ::rtl::OUString::createFromAscii(pFilters[i+1]) ) );
+                                        ::rtl::OUString::createFromAscii( pFilters[ i ] ),
+                                        ::rtl::OUString::createFromAscii( pFilters[ i + 1 ] ) ) );
     }
 }
 
@@ -469,26 +466,39 @@ bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPr
     {
         if( bDeep || pPreferredSizePixel )
         {
-            try
+            uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+
+            if( xFactory.is() )
             {
-                uno::Reference< media::XPlayer > xPlayer( priv::MediaWindowImpl::createPlayer(
-                                                            aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) );
-
-                if( xPlayer.is() )
+                try
                 {
-                    bRet = true;
+                    fprintf(stderr, "-->%s uno reference \n\n",AVMEDIA_MANAGER_SERVICE_NAME);
 
-                    if( pPreferredSizePixel )
+                    uno::Reference< ::com::sun::star::media::XManager > xManager(
+                        xFactory->createInstance( ::rtl::OUString::createFromAscii( AVMEDIA_MANAGER_SERVICE_NAME ) ),
+                        uno::UNO_QUERY );
+
+                    if( xManager.is() )
                     {
-                        const awt::Size aAwtSize( xPlayer->getPreferredPlayerWindowSize() );
+                        uno::Reference< media::XPlayer > xPlayer( xManager->createPlayer( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) );
 
-                        pPreferredSizePixel->Width() = aAwtSize.Width;
-                        pPreferredSizePixel->Height() = aAwtSize.Height;
+                        if( xPlayer.is() )
+                        {
+                            bRet = true;
+
+                            if( pPreferredSizePixel )
+                            {
+                                const awt::Size aAwtSize( xPlayer->getPreferredPlayerWindowSize() );
+
+                                pPreferredSizePixel->Width() = aAwtSize.Width;
+                                pPreferredSizePixel->Height() = aAwtSize.Height;
+                            }
+                        }
                     }
                 }
-            }
-            catch( ... )
-            {
+                catch( ... )
+                {
+                }
             }
         }
         else

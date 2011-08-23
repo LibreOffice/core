@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,15 +29,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <switerator.hxx>
+
 #include <cntfrm.hxx>
 #include <doc.hxx>
-#include <pam.hxx>      // fuer GetBodyTxtNode
+#include <pam.hxx> 		// fuer GetBodyTxtNode
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <expfld.hxx>
-#include <docfld.hxx>   // fuer _SetGetExpFld
+#include <docfld.hxx> 	// fuer _SetGetExpFld
 #include <unofldmid.h>
 
 using namespace ::com::sun::star;
@@ -58,20 +58,20 @@ SwFieldType* SwTblFieldType::Copy() const
 
 void SwTblField::CalcField( SwTblCalcPara& rCalcPara )
 {
-    if( rCalcPara.rCalc.IsCalcError() )     // ist schon Fehler gesetzt ?
+    if( rCalcPara.rCalc.IsCalcError() )		// ist schon Fehler gesetzt ?
         return;
 
     // erzeuge aus den BoxNamen die Pointer
     BoxNmToPtr( rCalcPara.pTbl );
     String sFml( MakeFormel( rCalcPara ));
     SetValue( rCalcPara.rCalc.Calculate( sFml ).GetDouble() );
-    ChgValid( !rCalcPara.IsStackOverFlow() );       // ist der Wert wieder gueltig?
+    ChgValid( !rCalcPara.IsStackOverFlow() );		// ist der Wert wieder gueltig?
 }
 
 
 
 SwTblField::SwTblField( SwTblFieldType* pInitType, const String& rFormel,
-                        sal_uInt16 nType, sal_uLong nFmt )
+                        USHORT nType, ULONG nFmt )
     : SwValueField( pInitType, nFmt ), SwTableFormula( rFormel ),
     sExpand( '0' ), nSubType(nType)
 {
@@ -82,7 +82,7 @@ SwField* SwTblField::Copy() const
 {
     SwTblField* pTmp = new SwTblField( (SwTblFieldType*)GetTyp(),
                                         SwTableFormula::GetFormula(), nSubType, GetFormat() );
-    pTmp->sExpand     = sExpand;
+    pTmp->sExpand 	  = sExpand;
     pTmp->SwValueField::SetValue(GetValue());
     pTmp->SwTableFormula::operator=( *this );
     pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
@@ -90,12 +90,22 @@ SwField* SwTblField::Copy() const
 }
 
 
-String SwTblField::GetFieldName() const
+String SwTblField::GetCntnt(BOOL bName) const
 {
-    String aStr(GetTyp()->GetName());
-    aStr += ' ';
-    aStr += const_cast<SwTblField *>(this)->GetCommand();
-    return aStr;
+    if( bName )
+    {
+        String aStr(GetTyp()->GetName());
+        aStr += ' ';
+
+        USHORT nOldSubType = nSubType;
+        SwTblField* pThis = (SwTblField*)this;
+        pThis->nSubType |= nsSwExtendedSubType::SUB_CMD;
+        aStr += Expand();
+        pThis->nSubType = nOldSubType;
+
+        return aStr;
+    }
+    return Expand();
 }
 
 // suche den TextNode, in dem das Feld steht
@@ -104,35 +114,33 @@ const SwNode* SwTblField::GetNodeOfFormula() const
     if( !GetTyp()->GetDepends() )
         return 0;
 
-    SwIterator<SwFmtFld,SwFieldType> aIter( *GetTyp() );
-    for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
+    SwClientIter aIter( *GetTyp() );
+    SwClient * pLast = aIter.GoStart();
+    if( pLast ) 	// konnte zum Anfang gesprungen werden ??
+        do {
+            const SwFmtFld* pFmtFld = (SwFmtFld*)pLast;
             if( this == pFmtFld->GetFld() )
                 return (SwTxtNode*)&pFmtFld->GetTxtFld()->GetTxtNode();
+
+        } while( 0 != ( pLast = aIter++ ));
     return 0;
 }
 
-String SwTblField::GetCommand()
-{
-    if (EXTRNL_NAME != GetNameType())
-    {
-        SwNode const*const pNd = GetNodeOfFormula();
-        SwTableNode const*const pTblNd = (pNd) ? pNd->FindTableNode() : 0;
-        if (pTblNd)
-        {
-            PtrToBoxNm( &pTblNd->GetTable() );
-        }
-    }
-    return (EXTRNL_NAME == GetNameType())
-        ? SwTableFormula::GetFormula()
-        : String();
-}
 
 String SwTblField::Expand() const
 {
     String aStr;
     if (nSubType & nsSwExtendedSubType::SUB_CMD)
     {
-        aStr = const_cast<SwTblField *>(this)->GetCommand();
+        if( EXTRNL_NAME != GetNameType() )
+        {
+            const SwNode* pNd = GetNodeOfFormula();
+            const SwTableNode* pTblNd = pNd ? pNd->FindTableNode() : 0;
+            if( pTblNd )
+                ((SwTblField*)this)->PtrToBoxNm( &pTblNd->GetTable() );
+        }
+        if( EXTRNL_NAME == GetNameType() )
+            aStr = SwTableFormula::GetFormula();
     }
     else
     {
@@ -148,12 +156,12 @@ String SwTblField::Expand() const
     return aStr;
 }
 
-sal_uInt16 SwTblField::GetSubType() const
+USHORT SwTblField::GetSubType() const
 {
     return nSubType;
 }
 
-void SwTblField::SetSubType(sal_uInt16 nType)
+void SwTblField::SetSubType(USHORT nType)
 {
     nSubType = nType;
 }
@@ -181,14 +189,18 @@ void SwTblField::SetPar2(const String& rStr)
     SetFormula( rStr );
 }
 
-bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+
+/*-----------------04.03.98 10:33-------------------
+
+--------------------------------------------------*/
+bool SwTblField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     bool bRet = true;
     switch ( nWhichId )
     {
     case FIELD_PROP_PAR2:
         {
-            sal_uInt16 nOldSubType = nSubType;
+            USHORT nOldSubType = nSubType;
             SwTblField* pThis = (SwTblField*)this;
             pThis->nSubType |= nsSwExtendedSubType::SUB_CMD;
             rAny <<= rtl::OUString( Expand() );
@@ -197,7 +209,7 @@ bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
     case FIELD_PROP_BOOL1:
         {
-            sal_Bool bFormula = 0 != (nsSwExtendedSubType::SUB_CMD & nSubType);
+            BOOL bFormula = 0 != (nsSwExtendedSubType::SUB_CMD & nSubType);
             rAny.setValue(&bFormula, ::getBooleanCppuType());
         }
         break;
@@ -212,8 +224,10 @@ bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     }
     return bRet;
 }
+/*-----------------04.03.98 10:33-------------------
 
-bool SwTblField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+--------------------------------------------------*/
+bool SwTblField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     bool bRet = true;
     String sTmp;

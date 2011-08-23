@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,6 +35,7 @@
 
 #include "sal/main.h"
 
+#include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -143,10 +144,11 @@ class TestDocumentHandler :
     public WeakImplHelper3< XExtendedDocumentHandler , XEntityResolver , XErrorHandler >
 {
 public:
-    TestDocumentHandler(const char* locale, const char* outFile )
-        : rootNode(0)
-        , nError(0)
-        , of(outFile, locale)
+    TestDocumentHandler(const char* locale, const char* outFile ) :
+      rootNode(0), nError(0), nbOfCurrencies(0), nbOfCalendars(0), nbOfFormatElements(0), 
+      nbOfTransliterations(0), nbOfCollations(0), nbOfDays(50), nbOfMonths(50), nbOfEras(10),
+      flag(-1), of(outFile, locale), isStartDayOfWeek(false), foundDefaultName(false),
+      foundVariant(false), openElement(false)
     {
         strncpy( theLocale, locale, sizeof(theLocale) );
         theLocale[sizeof(theLocale)-1] = 0;
@@ -245,6 +247,10 @@ public: // ExtendedDocumentHandler
 
         LocaleNode * l = currentNode.top();
         l->setValue (aChars);
+        ::rtl::OUString str(aChars);
+        sal_Unicode nonBreakSPace[2]= {0xa, 0x0};
+        if(!openElement || str.equals(nonBreakSPace))
+          return;
     }
 
     virtual void SAL_CALL ignorableWhitespace(const OUString& /*aWhitespaces*/) throw (SAXException,RuntimeException)
@@ -297,8 +303,23 @@ public: // ExtendedDocumentHandler
 
 public:
     int nError;
+    ::rtl::OUString currentElement;
+    sal_Int16 nbOfCurrencies;
+    sal_Int16 nbOfCalendars;
+    sal_Int16 nbOfFormatElements;
+    sal_Int16 nbOfTransliterations;
+    sal_Int16 nbOfCollations;
+    Sequence<sal_Int16> nbOfDays;
+    Sequence<sal_Int16> nbOfMonths;
+    Sequence<sal_Int16> nbOfEras;
+    sal_Char *elementTag;
     sal_Char theLocale[50];
+    sal_Int16 flag;
     OFileWriter of;
+    sal_Bool isStartDayOfWeek;
+    sal_Bool foundDefaultName;
+    sal_Bool foundVariant;
+        sal_Bool openElement;
 };
 
 
@@ -320,21 +341,52 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     {
         xSMgr = createRegistryServiceFactory(
             ::rtl::OUString::createFromAscii(argv[4]),
-            ::rtl::OUString::createFromAscii(argv[5]), true );
+            ::rtl::OUString::createFromAscii(argv[5]) );
     }
-    catch ( Exception &e )
+    catch ( Exception& )
     {
-        printf( "Exception on createRegistryServiceFactory %s\n",
-            OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() );
+        printf( "Exception on createRegistryServiceFactory\n" );
         exit(1);
     }
+
+    Reference < XImplementationRegistration > xReg;
+    try
+    {
+        // Create registration service
+        Reference < XInterface > x = xSMgr->createInstance(
+            OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) );
+        xReg = Reference<  XImplementationRegistration > ( x , UNO_QUERY );
+    }
+    catch( Exception & ) {
+        printf( "Couldn't create ImplementationRegistration service\n" );
+        exit(1);
+    }
+
+    OString sTestName;
+    try
+    {
+        // Load dll for the tested component
+        OUString aDllName =
+            OUString::createFromAscii( "sax.uno" SAL_DLLEXTENSION );
+        xReg->registerImplementation(
+            OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+            aDllName,
+            Reference< XSimpleRegistry > ()  );
+    }
+    catch( Exception &e ) {
+        printf( "Couldn't raise sax.uno library!\n" );
+        printf( "%s\n" , OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() );
+
+        exit(1);
+    }
+
 
     //--------------------------------
     // parser demo
     // read xml from a file and count elements
     //--------------------------------
     Reference< XInterface > x = xSMgr->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
+        OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ) );
     int nError = 0;
     if( x.is() )
     {
@@ -343,7 +395,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         // create and connect the document handler to the parser
         TestDocumentHandler *pDocHandler = new TestDocumentHandler( argv[1], argv[3]);
 
-        Reference < XDocumentHandler >  rDocHandler( (XDocumentHandler *) pDocHandler );
+        Reference < XDocumentHandler >	rDocHandler( (XDocumentHandler *) pDocHandler );
         Reference< XEntityResolver > rEntityResolver( (XEntityResolver *) pDocHandler );
 
         rParser->setDocumentHandler( rDocHandler );
@@ -352,7 +404,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         // create the input stream
         InputSource source;
         source.aInputStream = createStreamFromFile( argv[2] );
-        source.sSystemId    = OUString::createFromAscii( argv[2] );
+        source.sSystemId 	= OUString::createFromAscii( argv[2] );
 
         try
         {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,49 +36,49 @@
 
 struct ScMarkEntry
 {
-    SCROW           nRow;
-    sal_Bool            bMarked;
+    SCROW			nRow;
+    BOOL			bMarked;
 };
 
 class ScMarkArray
 {
-    SCSIZE          nCount;
+    SCSIZE			nCount;
     SCSIZE          nLimit;
-    ScMarkEntry*    pData;
+    ScMarkEntry*	pData;
 
 friend class ScMarkArrayIter;
-friend class ScDocument;                // for FillInfo
+friend class ScDocument;				// fuer FillInfo
 
 public:
             ScMarkArray();
             ~ScMarkArray();
-    void    Reset( sal_Bool bMarked = false );
-    sal_Bool    GetMark( SCROW nRow ) const;
-    void    SetMarkArea( SCROW nStartRow, SCROW nEndRow, sal_Bool bMarked );
-    sal_Bool    IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const;
-    sal_Bool    HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const;
+    void	Reset( BOOL bMarked = FALSE );
+    BOOL	GetMark( SCROW nRow ) const;
+    void	SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked );
+    BOOL	IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const;
+    BOOL	HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const;
 
-    sal_Bool    HasMarks() const    { return ( nCount > 1 || ( nCount == 1 && pData[0].bMarked ) ); }
+    BOOL	HasMarks() const    { return ( nCount > 1 || ( nCount == 1 && pData[0].bMarked ) ); }
 
-    void    CopyMarksTo( ScMarkArray& rDestMarkArray ) const;
+    void	CopyMarksTo( ScMarkArray& rDestMarkArray ) const;
 
-    sal_Bool    Search( SCROW nRow, SCSIZE& nIndex ) const;
+    BOOL 	Search( SCROW nRow, SCSIZE& nIndex ) const;
 
     /// Including current row, may return -1 if bUp and not found
-    SCsROW  GetNextMarked( SCsROW nRow, sal_Bool bUp ) const;
-    SCROW   GetMarkEnd( SCROW nRow, sal_Bool bUp ) const;
+    SCsROW	GetNextMarked( SCsROW nRow, BOOL bUp ) const;
+    SCROW	GetMarkEnd( SCROW nRow, BOOL bUp ) const;
 };
 
 
-class ScMarkArrayIter                   // iterate over selected range
+class ScMarkArrayIter					// selektierte Bereiche durchgehen
 {
-    const ScMarkArray*  pArray;
-    SCSIZE              nPos;
+    const ScMarkArray*	pArray;
+    SCSIZE				nPos;
 public:
                 ScMarkArrayIter( const ScMarkArray* pNewArray );
                 ~ScMarkArrayIter();
 
-    sal_Bool        Next( SCROW& rTop, SCROW& rBottom );
+    BOOL		Next( SCROW& rTop, SCROW& rBottom );
 };
 
 

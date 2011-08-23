@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,11 +68,12 @@
 #include "pam.hxx"
 #include "doc.hxx"
 #include "ndtxt.hxx"
+#include "dcontact.hxx"
 #include "flypos.hxx"
 #include "wrthtml.hxx"
 #include "htmlfly.hxx"
 #include "htmlform.hxx"
-#include "frmfmt.hxx"
+
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -99,7 +100,7 @@ struct HTMLControl
 {
     // die Form, zu der das Control gehoert
     uno::Reference< container::XIndexContainer > xFormComps;
-    sal_uLong nNdIdx;                   // der Node, in dem es verankert ist
+    ULONG nNdIdx;              		// der Node, in dem es verankert ist
     xub_StrLen nCount;              // wie viele Controls sind in dem Node
 
     HTMLControl( const uno::Reference< container::XIndexContainer > & rForm,
@@ -762,6 +763,8 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
 
+//!!!   if( rHTMLWrt.pForm != pVCSbxCtrl->GetVCForm() )
+//!!!       rHTMLWrt.nWarn = 1; // Control wird falscher Form zugeordnet
     rHTMLWrt.nFormCntrlCnt++;
 
     enum Tag { TAG_INPUT, TAG_SELECT, TAG_TEXTAREA, TAG_NONE };

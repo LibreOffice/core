@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,8 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
+#include <hash_map>
+#include <hash_set>
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
@@ -111,8 +111,8 @@ struct hash_ptr
     inline size_t operator() ( void * p ) const
         { return (size_t)p; }
 };
-typedef boost::unordered_set< void *, hash_ptr, equal_to< void * > > t_ptr_set;
-typedef boost::unordered_map< void *, t_ptr_set, hash_ptr, equal_to< void * > > t_ptr_map;
+typedef hash_set< void *, hash_ptr, equal_to< void * > > t_ptr_set;
+typedef hash_map< void *, t_ptr_set, hash_ptr, equal_to< void * > > t_ptr_map;
 
 //==============================================================================
 class FactoryImpl
@@ -185,7 +185,7 @@ struct AdapterImpl
     void invoke(
         const typelib_TypeDescription * pMemberType,
         void * pReturn, void * pArgs[], uno_Any ** ppException );
-
+    
     bool coerce_assign(
         void * pDest, typelib_TypeDescriptionReference * pType,
         uno_Any * pSource, uno_Any * pExc );
@@ -303,8 +303,8 @@ bool AdapterImpl::coerce_assign(
         (*m_pFactory->m_pConverter->pDispatcher)(
             m_pFactory->m_pConverter,
             m_pFactory->m_pConvertToTD, &ret, args, &p_exc );
-
-        if (p_exc) // exception occurred
+        
+        if (p_exc) // exception occured
         {
             OSL_ASSERT(
                 p_exc->pType->eTypeClass == typelib_TypeClass_EXCEPTION );
@@ -1014,6 +1014,14 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+//==============================================================================
+sal_Bool SAL_CALL component_writeInfo(
+    void * pServiceManager, void * pRegistryKey )
+{
+    return ::cppu::component_writeInfoHelper(
+        pServiceManager, pRegistryKey, g_entries );
 }
 
 //==============================================================================

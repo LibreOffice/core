@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,12 +48,12 @@
 
   If you want to use a default empty MzString as a parameter, use
 
-#void foo(MzString par = MzString());   // Correct#
+#void foo(MzString par = MzString());	// Correct#
 
 rather than
 
-#void foo(MzString par = "");   // WRONG!#
-#void foo(MzString par = 0);    // WRONG!#
+#void foo(MzString par = "");	// WRONG!#
+#void foo(MzString par = 0);	// WRONG!#
 
 (The last one is only wrong because some compilers can't handle it.)
 
@@ -81,7 +81,7 @@ release the memory with #delete[]#. Don't preallocate memory.
 When you want to copy an MzString, just do
 
 #MzString a, b = "String";#
-#a = b; // That's it!#
+#a = b;	// That's it!#
 
 not something like
 
@@ -108,8 +108,8 @@ class MzString
         bool      resize(int len);
 
 // Assignment
-        MzString  &operator = (MzString &s);
-        MzString  &operator = (const char *s);
+        void      operator = (MzString &s);
+        void      operator = (const char *s);
 
 // Appending
         MzString  &operator += (char);
@@ -123,21 +123,21 @@ class MzString
         MzString  &operator << (long);
         MzString  &operator << (short i)      { return *this<<(int)i; }
         MzString  &operator << (MzString const &);
-/* MzString &operator << (MzString *s)  { return *this<<*s; }
+/* MzString	&operator << (MzString *s)	{ return *this<<*s; }
 
   // Removing
-  char      operator >> (char &c);
+  char		operator >> (char &c);
 */
 // Access to specific characters
-//char      &operator [] (int n);
+//char		&operator [] (int n);
         char      operator [] (int n);
         char      last();
 
 // Comparison
 //  Return:
-//   0 : 'this' is equal to 's'.
-//  -1 : 'this' is less than 's'.
-//   1 : 'this' is greater than 's'.
+//	 0 : 'this' is equal to 's'.
+//	-1 : 'this' is less than 's'.
+//	 1 : 'this' is greater than 's'.
         int       compare(const char *s);
 
 // Searching for parts

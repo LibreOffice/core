@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
 #define _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
 
-#define EDITOR_LIST_APPEND              (sal_uInt16)-1
+#define EDITOR_LIST_APPEND	            (sal_uInt16)-1
 #define EDITOR_LIST_REPLACE_EXISTING    (sal_uInt16)-1
 
 /** === begin UNO includes === **/
@@ -38,6 +38,7 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 /** === end UNO includes === **/
 
+#include <vcl/smartid.hxx>
 #include <tools/string.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/listenernotification.hxx>
@@ -78,8 +79,8 @@ namespace pcr
     class HelpIdUrl
     {
     public:
-        static rtl::OString getHelpId( const ::rtl::OUString& _rHelpURL );
-        static ::rtl::OUString getHelpURL( const rtl::OString& );
+        static SmartId getHelpId( const ::rtl::OUString& _rHelpURL );
+        static ::rtl::OUString getHelpURL( sal_uInt32 _nHelpId );
     };
 
     //====================================================================

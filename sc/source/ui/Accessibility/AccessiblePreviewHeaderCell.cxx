@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,8 +52,8 @@
 #include <comphelper/sequence.hxx>
 #include <toolkit/helper/convert.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star;
+using namespace	::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -103,7 +103,7 @@ void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& 
     if (rHint.ISA( SfxSimpleHint ))
     {
         const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
-        sal_uLong nId = rRef.GetId();
+        ULONG nId = rRef.GetId();
         if (nId == SC_HINT_ACC_VISAREACHANGED)
         {
             if (mpTextHelper)
@@ -111,8 +111,8 @@ void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& 
         }
         else if ( nId == SFX_HINT_DATACHANGED )
         {
-            //  column / row layout may change with any document change,
-            //  so it must be invalidated
+            //	column / row layout may change with any document change,
+            //	so it must be invalidated
             DELETEZ( mpTableInfo );
         }
     }
@@ -162,8 +162,8 @@ uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getCurrentValue() throw (uno::R
 sal_Bool SAL_CALL ScAccessiblePreviewHeaderCell::setCurrentValue( const uno::Any& /* aNumber */ )
                                                                 throw (uno::RuntimeException)
 {
-    //  it is not possible to set a value
-    return false;
+    //	it is not possible to set a value
+    return sal_False;
 }
 
 uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMaximumValue() throw (uno::RuntimeException)
@@ -387,9 +387,9 @@ rtl::OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName() thr
     {
         if ( mbRowHeader )
         {
-            //! name for corner cell?
+            //!	name for corner cell?
 
-//          sName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Column/Row Header"));
+//			sName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Column/Row Header"));
         }
         else
         {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,6 @@
  ************************************************************************/
 
 #include "menu.hrc"
-#include <sfx2/sfxcommands.h>
 
 String STR_MENU_CFGITEM
 {
@@ -45,19 +44,19 @@ Menu MN_CLIPBOARDFUNCS
         MenuItem
         {
             Identifier = SID_CUT ;
-            HelpID = CMD_SID_CUT ;
+            HelpID = SID_CUT ;
             Text [ en-US ] = "Cu~t" ;
         };
         MenuItem
         {
             Identifier = SID_COPY ;
-            HelpID = CMD_SID_COPY ;
+            HelpID = SID_COPY ;
             Text [ en-US ] = "~Copy" ;
         };
         MenuItem
         {
             Identifier = SID_PASTE ;
-            HelpID = CMD_SID_PASTE ;
+            HelpID = SID_PASTE ;
             Text [ en-US ] = "~Paste" ;
         };
     };

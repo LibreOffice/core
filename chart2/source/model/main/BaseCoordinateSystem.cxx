@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,64 +70,35 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
 }
 
-struct StaticCooSysDefaults_Initializer
+void lcl_AddDefaultsToMap(
+    ::chart::tPropertyValueMap & rOutMap )
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_COORDINATESYSTEM_SWAPXANDYAXIS, false );
-    }
-};
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_COORDINATESYSTEM_SWAPXANDYAXIS, false );
+}
 
-struct StaticCooSysDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticCooSysDefaults_Initializer >
+const Sequence< Property > & lcl_GetPropertySequence()
 {
-};
+    static Sequence< Property > aPropSeq;
 
-struct StaticCooSysInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
     {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    Sequence< Property > lcl_GetPropertySequence()
-    {
+        // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
+        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        // transfer result to static Sequence
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
-};
 
-struct StaticCooSysInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticCooSysInfoHelper_Initializer >
-{
-};
-
-struct StaticCooSysInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticCooSysInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticCooSysInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticCooSysInfo_Initializer >
-{
-};
+    return aPropSeq;
+}
 
 } // anonymous namespace
 
@@ -382,25 +353,53 @@ void BaseCoordinateSystem::fireModifyEvent()
 uno::Any BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticCooSysDefaults::get();
-    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
-    if( aFound == rStaticDefaults.end() )
+    static tPropertyValueMap aStaticDefaults;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aStaticDefaults.size() )
+    {
+        // initialize defaults
+        lcl_AddDefaultsToMap( aStaticDefaults );
+    }
+
+    tPropertyValueMap::const_iterator aFound(
+        aStaticDefaults.find( nHandle ));
+
+    if( aFound == aStaticDefaults.end())
         return uno::Any();
+
     return (*aFound).second;
+    // \--
 }
 
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL BaseCoordinateSystem::getInfoHelper()
 {
-    return *StaticCooSysInfoHelper::get();
+    static ::cppu::OPropertyArrayHelper aArrayHelper( lcl_GetPropertySequence(),
+                                                      /* bSorted = */ sal_True );
+
+    return aArrayHelper;
 }
 
 
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL BaseCoordinateSystem::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > SAL_CALL
+    BaseCoordinateSystem::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    return *StaticCooSysInfo::get();
+    static Reference< beans::XPropertySetInfo > xInfo;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( !xInfo.is())
+    {
+        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
+            getInfoHelper());
+    }
+
+    return xInfo;
+    // \--
 }
 
 using impl::BaseCoordinateSystem_Base;

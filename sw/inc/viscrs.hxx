@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,11 +46,11 @@ class SwVisCrsr
     friend void _InitCore();
     friend void _FinitCore();
 
-    sal_Bool bIsVisible : 1;
-    sal_Bool bIsDragCrsr : 1;
+    BOOL bIsVisible : 1;
+    BOOL bIsDragCrsr : 1;
 
 #ifdef SW_CRSR_TIMER
-    sal_Bool bTimerOn : 1;
+    BOOL bTimerOn : 1;
 #endif
 
     Cursor aTxtCrsr;
@@ -68,17 +68,18 @@ public:
     void Show();
     void Hide();
 
-    sal_Bool IsVisible() const { return bIsVisible; }
-    void SetDragCrsr( sal_Bool bFlag = sal_True ) { bIsDragCrsr = bFlag; }
+    BOOL IsVisible() const { return bIsVisible; }
+    void SetDragCrsr( BOOL bFlag = TRUE ) { bIsDragCrsr = bFlag; }
 
 #ifdef SW_CRSR_TIMER
-    sal_Bool ChgTimerFlag( sal_Bool bTimerOn = sal_True );
+    BOOL ChgTimerFlag( BOOL bTimerOn = TRUE );
 #endif
 };
 
 
 // ------ Ab hier Klassen / Methoden fuer die Selectionen -------
 
+// #i75172# predefines
 namespace sdr { namespace overlay { class OverlayObject; }}
 
 class SwSelPaintRects : public SwRects
@@ -89,14 +90,16 @@ class SwSelPaintRects : public SwRects
     static long nPixPtX, nPixPtY;
     static MapMode *pMapMode;
 
+    // die Shell
     const SwCrsrShell* pCShell;
 
     virtual void Paint( const Rectangle& rRect );
     virtual void FillRects() = 0;
 
-    sdr::overlay::OverlayObject*    mpCursorOverlay;
+    // #i75172#
+    sdr::overlay::OverlayObject*	mpCursorOverlay;
 
-    // access to mpCursorOverlay for swapContent
+    // #i75172# access to mpCursorOverlay for swapContent
     sdr::overlay::OverlayObject* getCursorOverlay() const { return mpCursorOverlay; }
     void setCursorOverlay(sdr::overlay::OverlayObject* pNew) { mpCursorOverlay = pNew; }
 
@@ -104,7 +107,7 @@ public:
     SwSelPaintRects( const SwCrsrShell& rCSh );
     virtual ~SwSelPaintRects();
 
-    // in SwCrsrShell::CreateCrsr() the content of SwSelPaintRects is exchanged. To
+    // #i75172# in SwCrsrShell::CreateCrsr() the content of SwSelPaintRects is exchanged. To
     // make a complete swap access to mpCursorOverlay is needed there
     void swapContent(SwSelPaintRects& rSwap);
 
@@ -124,9 +127,9 @@ class SwShellCrsr : public virtual SwCursor, public SwSelPaintRects
 {
     // Dokument-Positionen der Start/End-Charakter einer SSelection
     Point aMkPt, aPtPt;
-    const SwPosition* pPt;      // fuer Zuordung vom GetPoint() zum aPtPt
+    const SwPosition* pPt;		// fuer Zuordung vom GetPoint() zum aPtPt
 
-    virtual void FillRects();   // fuer Table- und normalen Crsr
+    virtual void FillRects();	// fuer Table- und normalen Crsr
 
     using SwCursor::UpDown;
 
@@ -137,18 +140,18 @@ public:
     SwShellCrsr( SwShellCrsr& );
     virtual ~SwShellCrsr();
 
-    void Show();            // Update und zeige alle Selektionen an
-    void Hide();            // verstecke alle Selektionen
+    void Show();			// Update und zeige alle Selektionen an
+    void Hide();	  		// verstecke alle Selektionen
     void Invalidate( const SwRect& rRect );
 
-    const Point& GetPtPos() const   { return( SwPaM::GetPoint() == pPt ? aPtPt : aMkPt ); }
-          Point& GetPtPos()         { return( SwPaM::GetPoint() == pPt ? aPtPt : aMkPt ); }
-    const Point& GetMkPos() const   { return( SwPaM::GetMark() == pPt ? aPtPt : aMkPt ); }
-          Point& GetMkPos()         { return( SwPaM::GetMark() == pPt ? aPtPt : aMkPt ); }
-    const Point& GetSttPos() const  { return( SwPaM::Start() == pPt ? aPtPt : aMkPt ); }
-          Point& GetSttPos()        { return( SwPaM::Start() == pPt ? aPtPt : aMkPt ); }
-    const Point& GetEndPos() const  { return( SwPaM::End() == pPt ? aPtPt : aMkPt ); }
-          Point& GetEndPos()        { return( SwPaM::End() == pPt ? aPtPt : aMkPt ); }
+    const Point& GetPtPos() const	{ return( SwPaM::GetPoint() == pPt ? aPtPt : aMkPt ); }
+          Point& GetPtPos() 		{ return( SwPaM::GetPoint() == pPt ? aPtPt : aMkPt ); }
+    const Point& GetMkPos() const 	{ return( SwPaM::GetMark() == pPt ? aPtPt : aMkPt ); }
+          Point& GetMkPos() 		{ return( SwPaM::GetMark() == pPt ? aPtPt : aMkPt ); }
+    const Point& GetSttPos() const	{ return( SwPaM::Start() == pPt ? aPtPt : aMkPt ); }
+          Point& GetSttPos() 		{ return( SwPaM::Start() == pPt ? aPtPt : aMkPt ); }
+    const Point& GetEndPos() const	{ return( SwPaM::End() == pPt ? aPtPt : aMkPt ); }
+          Point& GetEndPos() 		{ return( SwPaM::End() == pPt ? aPtPt : aMkPt ); }
 
     virtual void SetMark();
 
@@ -157,15 +160,15 @@ public:
     virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
     virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
 
-    sal_Bool UpDown( sal_Bool bUp, sal_uInt16 nCnt = 1 );
+    BOOL UpDown( BOOL bUp, USHORT nCnt = 1 );
 
-    // sal_True: an die Position kann der Cursor gesetzt werden
-    virtual sal_Bool IsAtValidPos( sal_Bool bPoint = sal_True ) const;
+    // TRUE: an die Position kann der Cursor gesetzt werden
+    virtual BOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
 
 #if OSL_DEBUG_LEVEL > 1
-    // zum Testen des UNO-Crsr Verhaltens hier die Implementierung
-    // am sichtbaren Cursor
-    virtual sal_Bool IsSelOvr( int eFlags =
+// JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
+//				am sichtbaren Cursor
+    virtual BOOL IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
@@ -192,10 +195,10 @@ public:
                     const SwPosition &rPtPos, const Point& rPtPt );
     virtual ~SwShellTableCrsr();
 
-    virtual void FillRects();   // fuer Table- und normalen Crsr
+    virtual void FillRects();	// fuer Table- und normalen Crsr
 
     // Pruefe, ob sich der SPoint innerhalb der Tabellen-SSelection befindet
-    sal_Bool IsInside( const Point& rPt ) const;
+    BOOL IsInside( const Point& rPt ) const;
 
     virtual void SetMark();
     virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
@@ -203,13 +206,13 @@ public:
     virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
     virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
 
-    // sal_True: an die Position kann der Cursor gesetzt werden
-    virtual sal_Bool IsAtValidPos( sal_Bool bPoint = sal_True ) const;
+    // TRUE: an die Position kann der Cursor gesetzt werden
+    virtual BOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
 
 #if OSL_DEBUG_LEVEL > 1
-    // zum Testen des UNO-Crsr Verhaltens hier die Implementierung
-    // am sichtbaren Cursor
-    virtual sal_Bool IsSelOvr( int eFlags =
+// JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
+//				am sichtbaren Cursor
+    virtual BOOL IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
@@ -218,6 +221,6 @@ public:
 
 
 
-#endif  // _VISCRS_HXX
+#endif	// _VISCRS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@
 #include "queryfilter.hxx"
 #include "queryorder.hxx"
 #include <connectivity/dbtools.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <osl/diagnose.h>
 
 extern "C" void SAL_CALL createRegistryInfo_ComposerDialogs()
 {
@@ -53,11 +53,11 @@ namespace dbaui
 {
 //.........................................................................
 
-#define PROPERTY_ID_QUERYCOMPOSER       100
-#define PROPERTY_ID_ROWSET              101
+#define PROPERTY_ID_QUERYCOMPOSER		100
+#define PROPERTY_ID_ROWSET				101
 
-    IMPLEMENT_CONSTASCII_USTRING( PROPERTY_QUERYCOMPOSER,   "QueryComposer" );
-    IMPLEMENT_CONSTASCII_USTRING( PROPERTY_ROWSET,          "RowSet" );
+    IMPLEMENT_CONSTASCII_USTRING( PROPERTY_QUERYCOMPOSER,	"QueryComposer" );
+    IMPLEMENT_CONSTASCII_USTRING( PROPERTY_ROWSET,			"RowSet" );
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -86,7 +86,7 @@ namespace dbaui
     //---------------------------------------------------------------------
     ComposerDialog::~ComposerDialog()
     {
-
+    
         DBG_DTOR(ComposerDialog,NULL);
     }
 
@@ -97,7 +97,7 @@ namespace dbaui
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ComposerDialog )
 
     //---------------------------------------------------------------------
-    Dialog* ComposerDialog::createDialog(Window* _pParent)
+    Dialog*	ComposerDialog::createDialog(Window* _pParent)
     {
         // obtain all the objects needed for the dialog
         Reference< XConnection > xConnection;
@@ -124,13 +124,13 @@ namespace dbaui
             if ( !xColumns.is() || !xColumns->hasElements() )
             {   // perhaps the composer can supply us with columns? This is necessary for cases
                 // where the dialog is invoked for a rowset which is not yet loaded
-                // #i22878#
+                // #i22878# - 2003-12-16 - fs@openoffice.org
                 xSuppColumns = xSuppColumns.query( m_xComposer );
                 if ( xSuppColumns.is() )
                     xColumns = xSuppColumns->getColumns();
             }
 
-            OSL_ENSURE( xColumns.is() && xColumns->hasElements(), "ComposerDialog::createDialog: not much fun without any columns!" );
+            DBG_ASSERT( xColumns.is() && xColumns->hasElements(), "ComposerDialog::createDialog: not much fun without any columns!" );
         }
         catch( const Exception& )
         {
@@ -204,7 +204,7 @@ namespace dbaui
     }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 

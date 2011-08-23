@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,20 +45,19 @@ using namespace CSS::uno;
 using namespace CSS::ucb;
 using namespace CSS::task;
 using namespace CSS::io;
+using namespace rtl;
 using namespace osl;
 using namespace ucbhelper;
 using namespace std;
 
-using ::rtl::OUString;
-
 
 CSubmissionPost::CSubmissionPost(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
-    : CSubmission(aURL, aFragment)
+    : CSubmission(aURL, aFragment) 
 {
 }
 
 CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler)
-{
+{    
     // PUT always uses application/xml
     CSS::uno::Reference< XCommandEnvironment > aEnvironment;
     auto_ptr< CSerialization > apSerialization(createSerialization(aInteractionHandler,aEnvironment));
@@ -67,27 +66,40 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
         ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment);
 
         // use post command
-        OUString aCommandName(RTL_CONSTASCII_USTRINGPARAM("post"));
+            
+        OUString aCommandName = OUString::createFromAscii("post");
         PostCommandArgument2 aPostArgument;
         aPostArgument.Source = apSerialization->getInputStream();
+        //CSS::uno::Reference< XInterface > aSink( m_aFactory->createInstance(
+        //    OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY_THROW);
         CSS::uno::Reference< XActiveDataSink > aSink(new ucbhelper::ActiveDataSink);
+        //    OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY_THROW);
         aPostArgument.Sink = aSink;
-        aPostArgument.MediaType = OUString(RTL_CONSTASCII_USTRINGPARAM("application/xml"));
+        aPostArgument.MediaType = OUString::createFromAscii("application/xml");
         aPostArgument.Referer = OUString();
         Any aCommandArgument;
         aCommandArgument <<= aPostArgument;
         aContent.executeCommand( aCommandName, aCommandArgument);
 
+        // wait for command to finish
+        // pProgressHelper->m_cFinished.wait();
+
+        // CSS::uno::Reference< XOutputStream > xOut(aSink, UNO_QUERY_THROW);
+        // xOut->closeOutput();
+
         try {
+            // m_aResultStream = CSS::uno::Reference< XInputStream >(aSink, UNO_QUERY_THROW); 
             m_aResultStream = aSink->getInputStream();
         } catch (Exception&) {
-            OSL_FAIL("Cannot open reply stream from content");
+            OSL_ENSURE(sal_False, "Cannot open reply stream from content");
         }
     } catch (Exception&)
     {
-        OSL_FAIL("Exception during UCB operatration.");
+        // XXX
+        OSL_ENSURE(sal_False, "Exception during UCB operatration.");
         return UNKNOWN_ERROR;
     }
+    
 
     return SUCCESS;
 }

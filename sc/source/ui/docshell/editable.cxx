@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,45 +39,45 @@
 //------------------------------------------------------------------
 
 ScEditableTester::ScEditableTester() :
-    bIsEditable( sal_True ),
-    bOnlyMatrix( sal_True )
+    bIsEditable( TRUE ),
+    bOnlyMatrix( TRUE )
 {
 }
 
 ScEditableTester::ScEditableTester( ScDocument* pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) :
-    bIsEditable( sal_True ),
-    bOnlyMatrix( sal_True )
+    bIsEditable( TRUE ),
+    bOnlyMatrix( TRUE )
 {
     TestBlock( pDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
-ScEditableTester::ScEditableTester( ScDocument* pDoc,
+ScEditableTester::ScEditableTester( ScDocument* pDoc, 
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark ) :
-    bIsEditable( sal_True ),
-    bOnlyMatrix( sal_True )
+    bIsEditable( TRUE ),
+    bOnlyMatrix( TRUE )
 {
     TestSelectedBlock( pDoc, nStartCol, nStartRow, nEndCol, nEndRow, rMark );
 }
 
 ScEditableTester::ScEditableTester( ScDocument* pDoc, const ScRange& rRange ) :
-    bIsEditable( sal_True ),
-    bOnlyMatrix( sal_True )
+    bIsEditable( TRUE ),
+    bOnlyMatrix( TRUE )
 {
     TestRange( pDoc, rRange );
 }
 
 ScEditableTester::ScEditableTester( ScDocument* pDoc, const ScMarkData& rMark ) :
-    bIsEditable( sal_True ),
-    bOnlyMatrix( sal_True )
+    bIsEditable( TRUE ),
+    bOnlyMatrix( TRUE )
 {
     TestSelection( pDoc, rMark );
 }
 
 ScEditableTester::ScEditableTester( ScViewFunc* pView ) :
-    bIsEditable( sal_True ),
-    bOnlyMatrix( sal_True )
+    bIsEditable( TRUE ),
+    bOnlyMatrix( TRUE )
 {
     TestView( pView );
 }
@@ -89,17 +89,17 @@ void ScEditableTester::TestBlock( ScDocument* pDoc, SCTAB nTab,
 {
     if ( bIsEditable || bOnlyMatrix )
     {
-        sal_Bool bThisMatrix;
+        BOOL bThisMatrix;
         if ( !pDoc->IsBlockEditable( nTab, nStartCol, nStartRow, nEndCol, nEndRow, &bThisMatrix ) )
         {
-            bIsEditable = false;
+            bIsEditable = FALSE;
             if ( !bThisMatrix )
-                bOnlyMatrix = false;
+                bOnlyMatrix = FALSE;
         }
     }
 }
 
-void ScEditableTester::TestSelectedBlock( ScDocument* pDoc,
+void ScEditableTester::TestSelectedBlock( ScDocument* pDoc, 
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark )
 {
@@ -125,12 +125,12 @@ void ScEditableTester::TestSelection( ScDocument* pDoc, const ScMarkData& rMark 
 {
     if ( bIsEditable || bOnlyMatrix )
     {
-        sal_Bool bThisMatrix;
+        BOOL bThisMatrix;
         if ( !pDoc->IsSelectionEditable( rMark, &bThisMatrix ) )
         {
-            bIsEditable = false;
+            bIsEditable = FALSE;
             if ( !bThisMatrix )
-                bOnlyMatrix = false;
+                bOnlyMatrix = FALSE;
         }
     }
 }
@@ -139,19 +139,19 @@ void ScEditableTester::TestView( ScViewFunc* pView )
 {
     if ( bIsEditable || bOnlyMatrix )
     {
-        sal_Bool bThisMatrix;
+        BOOL bThisMatrix;
         if ( !pView->SelectionEditable( &bThisMatrix ) )
         {
-            bIsEditable = false;
+            bIsEditable = FALSE;
             if ( !bThisMatrix )
-                bOnlyMatrix = false;
+                bOnlyMatrix = FALSE;
         }
     }
 }
 
 //------------------------------------------------------------------
 
-sal_uInt16 ScEditableTester::GetMessageId() const
+USHORT ScEditableTester::GetMessageId() const
 {
     if (bIsEditable)
         return 0;

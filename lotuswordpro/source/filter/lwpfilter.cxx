@@ -57,6 +57,10 @@
  * @file
  * Circle object.
  ************************************************************************/
+/*************************************************************************
+ * Change History
+ * 2005-1-17  create this file.
+ ************************************************************************/
 #include "lwpfilter.hxx"
 #include "lwpresource.hxx"
 //for sax stream
@@ -110,12 +114,12 @@ sal_Bool LWPFilterReader::filter( const Sequence< PropertyValue >& aDescriptor )
     throw( RuntimeException )
 {
     uno::Reference< XInputStream> xInputStream;
-    ::rtl::OUString sURL;
+    ::rtl::OUString	sURL;
     for( sal_Int32 i = 0; i < aDescriptor.getLength(); i++ )
     {
-        if( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")) )
+        if( aDescriptor[i].Name == OUString::createFromAscii( "InputStream" ) )
             aDescriptor[i].Value >>= xInputStream;
-        if( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) )
+        if( aDescriptor[i].Name == OUString::createFromAscii( "URL" ) )
             aDescriptor[i].Value >>= sURL;
     }
 
@@ -161,7 +165,7 @@ LWPFilterImportFilter::LWPFilterImportFilter( const uno::Reference< XMultiServic
 
     try
     {
-        uno::Reference< XDocumentHandler > xDoc( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( STR_WRITER_IMPORTER_NAME )) ), UNO_QUERY );
+        uno::Reference< XDocumentHandler > xDoc( xFact->createInstance( OUString::createFromAscii( STR_WRITER_IMPORTER_NAME ) ), UNO_QUERY );
 
         LWPFilterReader *p = new LWPFilterReader;
         p->setDocumentHandler( xDoc );
@@ -202,12 +206,12 @@ void LWPFilterImportFilter::setTargetDocument( const uno::Reference< XComponent 
 
 OUString LWPFilterImportFilter::getImplementationName_Static() throw()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( STR_IMPLEMENTATION_NAME ));
+    return OUString::createFromAscii( STR_IMPLEMENTATION_NAME );
 }
 
 OUString LWPFilterImportFilter::getImplementationName() throw()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( STR_IMPLEMENTATION_NAME ));
+    return OUString::createFromAscii( STR_IMPLEMENTATION_NAME );
 }
 
 sal_Bool LWPFilterImportFilter::supportsService( const OUString& ServiceName ) throw()
@@ -226,7 +230,7 @@ sal_Bool LWPFilterImportFilter::supportsService( const OUString& ServiceName ) t
 Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) throw()
 {
     Sequence< OUString > seq(1);
-    seq.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( STR_SERVICE_NAME ));
+    seq.getArray()[0] = OUString::createFromAscii( STR_SERVICE_NAME );
     return seq;
 }
 
@@ -234,7 +238,7 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
 ::rtl::OUString SAL_CALL LWPFilterImportFilter::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    rtl::OUString   ret;
+    rtl::OUString	ret;
     rtl::OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
     // opening as template is done when a parameter tells to do so and a template filter can be detected
     // (otherwise no valid filter would be found) or if the detected filter is a template filter and
@@ -257,7 +261,7 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
     {
         OUString strTemp;
         aDescriptor[i].Value >>= strTemp;
-        if( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")) )
+        if( aDescriptor[i].Name == OUString::createFromAscii( "InputStream" ) )
         {
             uno::Reference< XInputStream> rInputStream;
             aDescriptor[i].Value >>= rInputStream;
@@ -272,22 +276,22 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
                     if(!bOpenAsTemplate)
                     {
                         aDescriptor.realloc( nPropertyCount + 1 );
-                        aDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
+                        aDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("AsTemplate");
                         aDescriptor[nPropertyCount].Value <<= sal_True;
                     }
-                    return OUString(RTL_CONSTASCII_USTRINGPARAM("wordpro_template"));
+                    return OUString::createFromAscii("wordpro_template");
                 }
                 else
                 {
-                    return OUString(RTL_CONSTASCII_USTRINGPARAM("wordpro"));
+                    return OUString::createFromAscii("wordpro");
                 }
             }
             return ret;
         }
-        else if( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) )
+        else if( aDescriptor[i].Name == OUString::createFromAscii( "URL" ) )
         {
-                    OUString        sURL;
-            OUString        sFileName;
+                    OUString		sURL;
+            OUString		sFileName;
 
                 aDescriptor[i].Value >>= sURL;
             /*
@@ -307,14 +311,14 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
                     if(!bOpenAsTemplate)
                     {
                         aDescriptor.realloc( nPropertyCount + 1 );
-                        aDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
+                        aDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("AsTemplate");
                         aDescriptor[nPropertyCount].Value <<= sal_True;
                     }
-                    return OUString(RTL_CONSTASCII_USTRINGPARAM("wordpro_template"));
+                    return OUString::createFromAscii("wordpro_template");
                 }
                 else
                 {
-                    return OUString(RTL_CONSTASCII_USTRINGPARAM("wordpro"));
+                    return OUString::createFromAscii("wordpro");
                 }
             }
             return ret;
@@ -324,10 +328,10 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
 }
 
  /**
- * @descr   decompressed small file
- * @param   pCompressed - real file stream
- * @param   pDecompressed - file decompressed, create inside, caller should delete it
- * @return  success - sal_True, fail - sal_False
+ * @descr	decompressed small file
+ * @param	pCompressed - real file stream
+ * @param	pDecompressed - file decompressed, create inside, caller should delete it
+ * @return	success - sal_True, fail - sal_False
  */
 #include "bento.hxx"
 using namespace OpenStormBento;
@@ -371,10 +375,10 @@ using namespace OpenStormBento;
 }
 
  /**
- * @descr   Get LwpSvStream, if small file, both compressed/decompressed stream
+ * @descr	Get LwpSvStream, if small file, both compressed/decompressed stream
  *                  Otherwise, only normal stream
- * @param   pStream - real file stream
- * @param    LwpSvStream * , created inside, deleted outside
+ * @param	pStream - real file stream
+ * @param	 LwpSvStream * , created inside, deleted outside
  * @param      sal_Bool, sal_True -
  */
  sal_Bool GetLwpSvStream(SvStream *pStream, LwpSvStream * & pLwpSvStream)
@@ -459,9 +463,9 @@ void ErrorMsg(int /*iErrCode*/)
 }
 
 /**
- * @descr       Compare if pBuf equals with the first 16 bytes
- * @param   pBuf that contains the file data
- * @return      if equals with the Word Pro characteristic strings
+ * @descr		Compare if pBuf equals with the first 16 bytes
+ * @param	pBuf that contains the file data
+ * @return		if equals with the Word Pro characteristic strings
  */
 sal_Bool IsWordProStr(const sal_Int8 *pBuf)
 {
@@ -484,7 +488,7 @@ sal_Bool IsWordProStr(const sal_Int8 *pBuf)
 sal_Bool IsWordproFile(rtl::OUString file)
 {
     sal_Bool bRet = sal_False;
-    SfxMedium aMedium( file, STREAM_STD_READ, sal_False);
+    SfxMedium aMedium( file, STREAM_STD_READ, FALSE);
     SvStream* pStm = aMedium.GetInStream();
 
     if(pStm)

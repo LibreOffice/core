@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ Reference<XAccessibleStateSet> ScAccessibleFilterMenuItem::getAccessibleStateSet
 OUString ScAccessibleFilterMenuItem::getImplementationName()
     throw (RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("ScAccessibleFilterMenuItem"));
+    return OUString::createFromAscii("ScAccessibleFilterMenuItem");
 }
 
 // XAccessibleAction
@@ -110,7 +110,7 @@ sal_Bool ScAccessibleFilterMenuItem::doAccessibleAction(sal_Int32 /*nIndex*/)
 OUString ScAccessibleFilterMenuItem::getAccessibleActionDescription(sal_Int32 /*nIndex*/)
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("click"));
+    return OUString::createFromAscii("click");
 }
 
 Reference<XAccessibleKeyBinding> ScAccessibleFilterMenuItem::getAccessibleActionKeyBinding(

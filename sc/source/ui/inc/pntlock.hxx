@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,33 +34,33 @@
 class ScPaintLockData
 {
 private:
-    ScRangeListRef  xRangeList;
-    sal_uInt16          nMode;
-    sal_uInt16          nLevel;
-    sal_uInt16          nDocLevel;
-    sal_uInt16          nParts;
-    sal_Bool            bModified;
+    ScRangeListRef	xRangeList;
+    USHORT			nMode;
+    USHORT			nLevel;
+    USHORT			nDocLevel;
+    USHORT			nParts;
+    BOOL			bModified;
 
 public:
-                    ScPaintLockData(sal_uInt16 nNewMode);
+                    ScPaintLockData(USHORT nNewMode);
                     ~ScPaintLockData();
 
-    void            AddRange( const ScRange& rRange, sal_uInt16 nP );
+    void			AddRange( const ScRange& rRange, USHORT nP );
 
-    void            SetModified()   { bModified = sal_True; }
-    void            IncLevel(sal_Bool bDoc)
+    void			SetModified()	{ bModified = TRUE; }
+    void			IncLevel(sal_Bool bDoc)
                         { if (bDoc) ++nDocLevel; else ++nLevel; }
-    void            DecLevel(sal_Bool bDoc)
+    void			DecLevel(sal_Bool bDoc)
                         { if (bDoc) --nDocLevel; else --nLevel; }
 
-    const ScRangeListRef&   GetRangeList() const            { return xRangeList; }
-    sal_uInt16                  GetParts() const                { return nParts; }
-    sal_uInt16                  GetLevel(sal_Bool bDoc) const
+    const ScRangeListRef&	GetRangeList() const			{ return xRangeList; }
+    USHORT					GetParts() const				{ return nParts; }
+    USHORT					GetLevel(sal_Bool bDoc) const
                                 { return bDoc ? nDocLevel : nLevel; }
-    sal_Bool                    GetModified() const             { return bModified; }
+    BOOL					GetModified() const				{ return bModified; }
 
                     // fuer Wiederherstellen nach Reset
-    void            SetLevel(sal_uInt16 nNew, sal_Bool bDoc)
+    void			SetLevel(USHORT nNew, sal_Bool bDoc)
                         { if (bDoc) nDocLevel = nNew; else nLevel = nNew; }
 };
 

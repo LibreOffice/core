@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #endif
 #include <atlbase.h>
 #include <vector>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <tools/postsys.h>
 
 #ifdef _MSC_VER
@@ -51,7 +51,7 @@
 #endif
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase6.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
@@ -60,31 +60,30 @@
 
 #include <com/sun/star/script/XDefaultProperty.hpp>
 #include <com/sun/star/script/XDefaultMethod.hpp>
-#include <com/sun/star/script/XDirectInvocation.hpp>
 
 #include <typelib/typedescription.hxx>
 #include "unoconversionutilities.hxx"
 #include "windata.hxx"
 using namespace cppu;
+using namespace rtl;
 using namespace std;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::bridge::oleautomation;
 
-using ::rtl::OUString;
 namespace ole_adapter
 {
 
 
 
-typedef boost::unordered_map<OUString, pair<DISPID, unsigned short>, hashOUString_Impl, equalOUString_Impl> DispIdMap;
+typedef hash_map<OUString, pair<DISPID, unsigned short>, hashOUString_Impl, equalOUString_Impl> DispIdMap;
 
-typedef boost::unordered_multimap<OUString, unsigned int, hashOUString_Impl, equalOUString_Impl> TLBFuncIndexMap;
+typedef hash_multimap<OUString, unsigned int, hashOUString_Impl, equalOUString_Impl> TLBFuncIndexMap;
 
 // This class wraps an IDispatch and maps XInvocation calls to IDispatch calls on the wrapped object.
 // If m_TypeDescription is set then this class represents an UNO interface implemented in a COM component.
 // The interface is not a real interface in terms of an abstract class but is realized through IDispatch.
-class IUnknownWrapper_Impl : public WeakImplHelper7< XInvocation, XBridgeSupplier2, XInitialization, XAutomationObject, XDefaultProperty, XDefaultMethod, XDirectInvocation >,
+class IUnknownWrapper_Impl : public WeakImplHelper6<XAutomationInvocation, XBridgeSupplier2, XInitialization, XAutomationObject, XDefaultProperty, XDefaultMethod>,
 
                              public UnoConversionUtilities<IUnknownWrapper_Impl>
 
@@ -133,39 +132,29 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
         throw(Exception, RuntimeException);
-
-    // XDefaultProperty
     virtual ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (::com::sun::star::uno::RuntimeException) { return m_sDefaultMember; }
-
-    // XDefaultMethod
+protected:
     virtual ::rtl::OUString SAL_CALL getDefaultMethodName(  ) throw (::com::sun::star::uno::RuntimeException) { return m_sDefaultMember; }
 
     virtual ::com::sun::star::uno::Any SAL_CALL invokeGetProperty( const ::rtl::OUString& aFunctionName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams, ::com::sun::star::uno::Sequence< ::sal_Int16 >& aOutParamIndex, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL invokePutProperty( const ::rtl::OUString& aFunctionName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams, ::com::sun::star::uno::Sequence< ::sal_Int16 >& aOutParamIndex, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
 
-    // XDirectInvocation
-    virtual ::com::sun::star::uno::Any SAL_CALL directInvoke( const ::rtl::OUString& aName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL hasMember( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
-
-
-    Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
-                            const OUString& sFuncName,
-                            const Sequence< Any >& Params,
-                            Sequence< sal_Int16 >& OutParamIndex,
-                            Sequence< Any >& OutParam);
-
-
-protected:
     // ----------------------------------------------------------------------------
     virtual Any invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                                        const Sequence< Any >& Params,
                                        Sequence<sal_Int16 >& OutParamIndex,
                                        Sequence< Any >& OutParam);
     // Is used for OleObjectFactory service
-    virtual Any invokeWithDispIdComTlb(const OUString& sFuncName,
+    virtual Any invokeWithDispIdComTlb(const OUString& sFuncName, 
                                        const Sequence< Any >& Params,
                                        Sequence< sal_Int16 >& OutParamIndex,
                                        Sequence< Any >& OutParam);
+
+  Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
+                            const OUString& sFuncName,
+                            const Sequence< Any >& Params,
+                            Sequence< sal_Int16 >& OutParamIndex,
+                            Sequence< Any >& OutParam);
 
 //    virtual void setValueWithDispId(DISPID dispID, const Any& Value);
 
@@ -173,7 +162,7 @@ protected:
 
 
     // UnoConversionUtilities -------------------------------------------------------------------------------
-    virtual Reference<XInterface> createUnoWrapperInstance();
+    virtual	Reference<XInterface> createUnoWrapperInstance();
     virtual Reference<XInterface> createComWrapperInstance();
 
     /**Obtains a FUNCDESC structure for a function.
@@ -200,13 +189,13 @@ protected:
     // After return attributInfo contains typelib_InterfaceAttributeTypeDescription::pAttributeTypeRef
     void getAttributeInfo(const OUString& sName, TypeDescription& attributeInfo);
     // used by get MethodInfo
-    TypeDescription  getInterfaceMemberDescOfCurrentCall(const OUString& sName);
+    TypeDescription	 getInterfaceMemberDescOfCurrentCall(const OUString& sName);
     /** Returns alway a valid ITypeInfo interface or throws a BridgeRuntimeError.
         The returned interface does not need to be AddRef'ed as long as it is locally
         used. The interface is kept in the instance of this class.
      */
-    ITypeInfo*  getTypeInfo();
-
+    ITypeInfo*	getTypeInfo();
+    
     /** Returns the DISPID for a function or property name. If true is returned then
         id contains a valid DISPID.
     */
@@ -214,10 +203,10 @@ protected:
     bool getDispid(const OUString& sFuncName, DISPID * id);
 
     VARTYPE getUserDefinedElementType( ITypeInfo* pTypeInfo, const DWORD nHrefType );
-
+    
     /** Gets the element type in a VARIANT like style. E.g. if desc->lptdesc contains
         a VT_PTR than it is replaced by VT_BYREF and VT_SAFEARRAY is replaced by VT_ARRAY
-        If the TYPEDESC describes an SAFEARRAY then varType is a combination of VT_ARRAY
+        If the TYPEDESC describes an SAFEARRAY then varType is a combination of VT_ARRAY 
         and the element type.
         The argument desc must be obtained from FUNCDESC::lprgelemdescParam[i].tdesc where
         FUNCDESC was obtained from the ITypeInfo belonging to wrapped IDispatch.
@@ -232,10 +221,10 @@ protected:
 
     /** Returns a FUNCDESC structure which contains type information about the
         current XInvocation::invoke call. The FUNCDESC either describes a method,
-        a property put or a property get operation.
+        a property put or a property get operation. 
         It uses the types  com.sun.star.bridge.oleautomation.PropertyPutArgument
         which can be
-        contained in the sequence of in-arguments of invoke to determine if the call is
+        contained in the sequence of in-arguments of invoke to determine if the call is 
         a property put or property get operation.
         If no adequate FUNCDESC was found, an IllegalArgumentException is thrown.
         Therefore it is safe to assume that the returned FUNCDESC* is not NULL.
@@ -270,8 +259,8 @@ protected:
     was transported as VT_DISPATCH in a VARIANT rather then a VT_UNKNOWN
     */
     sal_Bool  m_bOriginalDispatch;
-    DispIdMap           m_dispIdMap;
-    Reference<XIdlClass>*       m_pxIdlClass;
+    DispIdMap 			m_dispIdMap;
+    Reference<XIdlClass>*		m_pxIdlClass;
 
 
     // used by isJScriptObject

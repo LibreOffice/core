@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -279,7 +279,7 @@ public class _XListBox extends MultiMethodTest {
 
     /**
     * Gets line count and stores it. <p>
-    * Has <b>OK</b> status if no runtime exceptions occurred.
+    * Has <b>OK</b> status if no runtime exceptions occured.
     */
     public void _getDropDownLineCount() {
 
@@ -411,7 +411,7 @@ public class _XListBox extends MultiMethodTest {
 
     /**
     * Unselects all items, then selects a single item. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> addItems </code> : to have some items </li>
@@ -432,7 +432,7 @@ public class _XListBox extends MultiMethodTest {
 
     /**
     * Just selects some items. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> addItems </code> : to have some items </li>
@@ -450,7 +450,7 @@ public class _XListBox extends MultiMethodTest {
 
     /**
     * Just selects an item. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> addItems </code> : to have some items </li>
@@ -484,7 +484,7 @@ public class _XListBox extends MultiMethodTest {
 
     /**
     * Sets multiple mode. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     */
     public void _setMultipleMode() {
 
@@ -496,7 +496,7 @@ public class _XListBox extends MultiMethodTest {
 
     /**
     * Just calls the method to make visible third item. <p>
-    * Has <b> OK </b> status if no runtime exceptions occurred.<p>
+    * Has <b> OK </b> status if no runtime exceptions occured.<p>
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> addItems </code> </li>

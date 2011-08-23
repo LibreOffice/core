@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -297,7 +297,7 @@ namespace res
     {
         return loadBundle( _baseName, Application::GetSettings().GetUILocale() );
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XResourceBundle > SAL_CALL OpenOfficeResourceLoader::loadBundle( const ::rtl::OUString& _baseName, const Locale& _locale ) throw (MissingResourceException, RuntimeException)
     {
@@ -318,7 +318,7 @@ namespace res
 
         return xBundle;
     }
-
+    
     //--------------------------------------------------------------------
     ComponentInfo getComponentInfo_OpenOfficeResourceLoader()
     {
@@ -364,21 +364,21 @@ namespace res
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_xParent;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL OpenOfficeResourceBundle::setParent( const Reference< XResourceBundle >& _parent ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_xParent = _parent;
     }
-
+    
     //--------------------------------------------------------------------
     Locale SAL_CALL OpenOfficeResourceBundle::getLocale(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_aLocale;
     }
-
+    
     //--------------------------------------------------------------------
     bool OpenOfficeResourceBundle::impl_getResourceTypeAndId_nothrow( const ::rtl::OUString& _key, ResourceTypePtr& _out_resourceType, sal_Int32& _out_resourceId ) const
     {
@@ -424,7 +424,7 @@ namespace res
         impl_getDirectElement_nothrow( _key, aElement );
         return aElement;
     }
-
+    
     //--------------------------------------------------------------------
     Any SAL_CALL OpenOfficeResourceBundle::getByName( const ::rtl::OUString& _key ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
     {
@@ -442,16 +442,16 @@ namespace res
 
         return aElement;
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL OpenOfficeResourceBundle::getElementNames(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        OSL_FAIL( "OpenOfficeResourceBundle::getElementNames: not implemented!" );
+        OSL_ENSURE( false, "OpenOfficeResourceBundle::getElementNames: not implemented!" );
             // the (Simple)ResManager does not provide an API to enumerate the resources
         return Sequence< ::rtl::OUString >( );
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL OpenOfficeResourceBundle::hasByName( const ::rtl::OUString& _key ) throw (RuntimeException)
     {
@@ -467,18 +467,18 @@ namespace res
 
         return sal_True;
     }
-
+    
     //--------------------------------------------------------------------
     Type SAL_CALL OpenOfficeResourceBundle::getElementType(  ) throw (RuntimeException)
     {
         return ::cppu::UnoType< Any >::get();
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL OpenOfficeResourceBundle::hasElements(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        OSL_FAIL( "OpenOfficeResourceBundle::hasElements: not implemented!" );
+        OSL_ENSURE( false, "OpenOfficeResourceBundle::hasElements: not implemented!" );
             // the (Simple)ResManager does not provide an API to enumerate the resources
         return ::sal_Bool( );
     }

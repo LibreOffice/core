@@ -117,7 +117,7 @@ using namespace ::com::sun::star::uno;
 #pragma mark -
 #pragma mark Accessibility Protocol
 
--(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute {
+-(MacOSBOOL)accessibilityIsAttributeSettable:(NSString *)attribute {
     if ( [ self textArea ] != nil && (
          [ attribute isEqualToString: NSAccessibilitySelectedTextAttribute ]
       || [ attribute isEqualToString: NSAccessibilitySelectedTextRangeAttribute ]

@@ -29,7 +29,9 @@ PRJ=..$/..
 PRJNAME=basegfx
 TARGET=polygon
 
+#UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 ENABLE_EXCEPTIONS=TRUE
+#USE_DEFFILE=TRUE
 
 # --- Settings ----------------------------------
 

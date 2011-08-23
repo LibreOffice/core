@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define _SVMEMPOOL_HXX
 
 #include "tools/toolsdllapi.h"
-#include "tools/solar.h"
+#include <tools/solar.h>
 
 // ----------------
 // - FixedMemPool -
@@ -40,13 +40,11 @@ struct FixedMemPool_Impl;
 class TOOLS_DLLPUBLIC FixedMemPool
 {
     FixedMemPool_Impl * m_pImpl;
-    char const *        m_pTypeName;
 
 public:
-                    FixedMemPool( char const * pTypeName,
-                                  sal_uInt16 nTypeSize,
-                                  sal_uInt16 nInitSize = 512,
-                                  sal_uInt16 nGrowSize = 256 );
+                    FixedMemPool( USHORT nTypeSize,
+                                  USHORT nInitSize = 512,
+                                  USHORT nGrowSize = 256 );
                     ~FixedMemPool();
 
     void*           Alloc();
@@ -100,11 +98,8 @@ IMPL_FIXEDMEMPOOL_DEL_BODY( Class, aPool )
         DECL_FIXEDMEMPOOL_NEW_INLINE( Class, aPool ) \
         DECL_FIXEDMEMPOOL_DEL_INLINE( Class, aPool )
 
-#define IMPL_FIXEDMEMPOOL_STRING(x) IMPL_FIXEDMEMPOOL_MAKESTRING(x)
-#define IMPL_FIXEDMEMPOOL_MAKESTRING(x) #x
-
 #define IMPL_FIXEDMEMPOOL_NEWDEL( Class, InitSize, GrowSize) \
-    FixedMemPool Class::aPool( IMPL_FIXEDMEMPOOL_STRING( Class ), sizeof( Class ), (InitSize), (GrowSize) );
+    FixedMemPool Class::aPool( sizeof( Class ), (InitSize), (GrowSize) );
 
 #define DECL_FIXEDMEMPOOL_NEWDEL_DLL( Class ) \
     private: \
@@ -114,14 +109,14 @@ IMPL_FIXEDMEMPOOL_DEL_BODY( Class, aPool )
         DECL_FIXEDMEMPOOL_DEL_DECL();
 
 #define IMPL_FIXEDMEMPOOL_NEWDEL_DLL( Class, InitSize, GrowSize) \
-    FixedMemPool Class::aPool( IMPL_FIXEDMEMPOOL_STRING( Class ), sizeof( Class ), (InitSize), (GrowSize) ); \
+    FixedMemPool Class::aPool( sizeof( Class ), (InitSize), (GrowSize) ); \
     DECL_FIXEDMEMPOOL_NEW_IMPL( Class ) \
     IMPL_FIXEDMEMPOOL_NEW_BODY( Class, aPool ) \
     DECL_FIXEDMEMPOOL_DEL_IMPL( Class ) \
     IMPL_FIXEDMEMPOOL_DEL_BODY( Class, aPool )
 
-#define INIT_FIXEDMEMPOOL_NEWDEL_DLL( Class, aPool, InitSize, GrowSize ) \
-    aPool( IMPL_FIXEDMEMPOOL_STRING( Class ), sizeof( Class ), (InitSize), (GrowSize) )
+#define INIT_FIXEDMEMPOOL_NEWDEL_DLL( class, aPool, InitSize, GrowSize ) \
+    aPool( sizeof( class ), InitSize, GrowSize )
 
 #endif // _SVMEMPOOL_HXX
 

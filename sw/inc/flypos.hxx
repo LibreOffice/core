@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,24 +35,24 @@
 class SwFrmFmt;
 class SwNodeIndex;
 
-
-// For querying current flys in document.
+// Struktur zum Erfragen der akt. freifliegenden Rahmen am Dokument.
 class SW_DLLPUBLIC SwPosFlyFrm
 {
-    const SwFrmFmt* pFrmFmt;    // FlyFrmFmt
-    SwNodeIndex* pNdIdx;        // Index for node is sufficient.
-    sal_uInt32 nOrdNum;
+    const SwFrmFmt* pFrmFmt;	// das FlyFrmFmt
+//	SwPosition* pPos;			// Position in den ContentNode
+    SwNodeIndex* pNdIdx;		// es reicht ein Index auf den Node
+    UINT32 nOrdNum;
 public:
-    SwPosFlyFrm( const SwNodeIndex& , const SwFrmFmt*, sal_uInt16 nArrPos );
-    virtual ~SwPosFlyFrm(); // Virtual for Writer (DLL !!)
+    SwPosFlyFrm( const SwNodeIndex& , const SwFrmFmt*, USHORT nArrPos );
+    virtual ~SwPosFlyFrm(); // virtual fuer die Writer (DLL !!)
 
-    // Operators for sort array.
-    sal_Bool operator==( const SwPosFlyFrm& );
-    sal_Bool operator<( const SwPosFlyFrm& );
+    // operatoren fuer das Sort-Array
+    BOOL operator==( const SwPosFlyFrm& );
+    BOOL operator<( const SwPosFlyFrm& );
 
     const SwFrmFmt& GetFmt() const { return *pFrmFmt; }
     const SwNodeIndex& GetNdIndex() const { return *pNdIdx; }
-    sal_uInt32 GetOrdNum() const { return nOrdNum; }
+    UINT32 GetOrdNum() const { return nOrdNum; }
 };
 
 typedef SwPosFlyFrm* SwPosFlyFrmPtr;

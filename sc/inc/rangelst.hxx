@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,100 +32,74 @@
 #include "global.hxx"
 #include "address.hxx"
 #include <tools/solar.h>
-#include <vector>
 
 class ScDocument;
 
-class SC_DLLPUBLIC ScRangeList : public SvRefBase
+typedef ScRange* ScRangePtr;
+DECLARE_LIST( ScRangeListBase, ScRangePtr )
+class SC_DLLPUBLIC ScRangeList : public ScRangeListBase, public SvRefBase
 {
+private:
+    using ScRangeListBase::operator==;
+    using ScRangeListBase::operator!=;
+
 public:
                     ScRangeList() {}
                     ScRangeList( const ScRangeList& rList );
-    virtual     ~ScRangeList();
-    ScRangeList&    operator=(const ScRangeList& rList);
-    void            Append( const ScRange& rRange )
+    virtual 		~ScRangeList();
+    ScRangeList&	operator=(const ScRangeList& rList);
+    void			RemoveAll();
+    void			Append( const ScRange& rRange )
                     {
-                        ScRange* pR = new ScRange( rRange );
-                        maRanges.push_back( pR );
+                        ScRangePtr pR = new ScRange( rRange );
+                        Insert( pR, LIST_APPEND );
                     }
-
-    sal_uInt16          Parse( const String&, ScDocument* = NULL,
-                           sal_uInt16 nMask = SCA_VALID,
+    USHORT			Parse( const String&, ScDocument* = NULL,
+                           USHORT nMask = SCA_VALID,
                            formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                            sal_Unicode cDelimiter = 0 );
-
-    void            Format( String&, sal_uInt16 nFlags = 0, ScDocument* = NULL,
+    void 			Format( String&, USHORT nFlags = 0, ScDocument* = NULL,
                             formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                             sal_Unicode cDelimiter = 0 ) const;
-
-    void            Join( const ScRange&, bool bIsInList = false );
-
-    bool            UpdateReference( UpdateRefMode, ScDocument*,
-                                     const ScRange& rWhere,
-                                     SCsCOL nDx,
-                                     SCsROW nDy,
-                                     SCsTAB nDz
-                                   );
-
-    const ScRange*  Find( const ScAddress& ) const;
-    ScRange*        Find( const ScAddress& );
-    bool            operator==( const ScRangeList& ) const;
-    bool            operator!=( const ScRangeList& r ) const;
-    bool            Intersects( const ScRange& ) const;
-    bool            In( const ScRange& ) const;
-    size_t          GetCellCount() const;
-
-    ScRange*        Remove(size_t nPos);
-    void            RemoveAll();
-
-    bool            empty() const;
-    size_t          size() const;
-    ScRange*        operator[](size_t idx);
-    const ScRange*  operator[](size_t idx) const;
-    ScRange*        front();
-    const ScRange*  front() const;
-    ScRange*        back();
-    const ScRange*  back() const;
-    void            push_back(ScRange* p);
-
-private:
-    ::std::vector<ScRange*> maRanges;
+    void			Join( const ScRange&, BOOL bIsInList = FALSE );
+    BOOL 			UpdateReference( UpdateRefMode, ScDocument*,
+                                    const ScRange& rWhere,
+                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    ScRange*		Find( const ScAddress& ) const;
+    BOOL			operator==( const ScRangeList& ) const;
+    BOOL            operator!=( const ScRangeList& r ) const;
+    BOOL			Intersects( const ScRange& ) const;
+    BOOL			In( const ScRange& ) const;
+    ULONG			GetCellCount() const;
 };
 SV_DECL_IMPL_REF( ScRangeList );
 
 
-// RangePairList:
-//    aRange[0]: actual range,
-//    aRange[1]: data for that range, e.g. Rows belonging to a ColName
-class SC_DLLPUBLIC ScRangePairList : public SvRefBase
+// RangePairList: erster Range (aRange[0]) eigentlicher Range, zweiter
+// Range (aRange[1]) Daten zu diesem Range, z.B. Rows eines ColName
+DECLARE_LIST( ScRangePairListBase, ScRangePair* )
+class ScRangePairList : public ScRangePairListBase, public SvRefBase
 {
+private:
+    using ScRangePairListBase::operator==;
+
 public:
-    virtual             ~ScRangePairList();
-    ScRangePairList*    Clone() const;
-    void                Append( const ScRangePair& rRangePair )
-                        {
-                            ScRangePair* pR = new ScRangePair( rRangePair );
-                            maPairs.push_back( pR );
-                        }
-    void                Join( const ScRangePair&, bool bIsInList = false );
-    bool                UpdateReference( UpdateRefMode, ScDocument*,
+    virtual 		~ScRangePairList();
+    ScRangePairList*	Clone() const;
+    void			Append( const ScRangePair& rRangePair )
+                    {
+                        ScRangePair* pR = new ScRangePair( rRangePair );
+                        Insert( pR, LIST_APPEND );
+                    }
+    void			Join( const ScRangePair&, BOOL bIsInList = FALSE );
+    BOOL 			UpdateReference( UpdateRefMode, ScDocument*,
                                     const ScRange& rWhere,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-    void                DeleteOnTab( SCTAB nTab );
-    ScRangePair*        Find( const ScAddress& ) const;
-    ScRangePair*        Find( const ScRange& ) const;
-    ScRangePair**       CreateNameSortedArray( size_t& nCount, ScDocument* ) const;
-    bool                operator==( const ScRangePairList& ) const;
-
-    ScRangePair*        Remove(size_t nPos);
-    ScRangePair*        Remove(ScRangePair* pAdr);
-
-    size_t              size() const;
-    ScRangePair*        operator[](size_t idx);
-    const ScRangePair*  operator[](size_t idx) const;
-
-private:
-    ::std::vector< ScRangePair* > maPairs;
+    void            DeleteOnTab( SCTAB nTab );
+    ScRangePair*	Find( const ScAddress& ) const;
+    ScRangePair*	Find( const ScRange& ) const;
+    ScRangePair**	CreateNameSortedArray( ULONG& nCount, ScDocument* ) const;
+    BOOL			operator==( const ScRangePairList& ) const;
 };
 SV_DECL_IMPL_REF( ScRangePairList );
 

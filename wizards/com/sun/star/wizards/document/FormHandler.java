@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -466,7 +466,7 @@ public class FormHandler
 //                  this.xDrawPage.remove(ControlList[i].xShape);
                 {
                     ControlList[i].setPosition(new Point(this.iXNirwanaPos, this.iYNirwanaPos));
-//                  String sControlName = (String) ControlList[i].xPropertySet.getPropertyValue(PropertyNames.PROPERTY_NAME);
+//                  String sControlName = (String) ControlList[i].xPropertySet.getPropertyValue("Name");
 //
 //                  if (_xNamedForm.hasByName(sControlName))
 //                      _xNamedForm.removeByName(sControlName);

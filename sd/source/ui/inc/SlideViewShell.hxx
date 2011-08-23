@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,12 +67,12 @@ public:
             The frame view that makes it possible to pass information from
             one view shell to the next.
     */
-    SlideViewShell(SfxViewFrame* pFrame,
+    SlideViewShell(SfxViewFrame* pFrame, 
         ViewShellBase& rViewShellBase,
         ::Window* pParentWindow,
         FrameView* pFrameView = NULL);
 
-    SlideViewShell(SfxViewFrame *pFrame,
+    SlideViewShell(SfxViewFrame *pFrame, 
         ::Window* pParentWindow,
         const SlideViewShell& rShell);
 
@@ -88,26 +88,30 @@ public:
     virtual void ArrangeGUIElements (void);
     virtual void    AddWindow(::sd::Window* pWin) { pSlideView->AddWindowToPaintView((OutputDevice*) pWin); }
     virtual void    RemoveWindow(::sd::Window* pWin) { pSlideView->DeleteWindowFromPaintView((OutputDevice*) pWin); }
-
-    virtual sal_Bool    KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
+                    
+    virtual BOOL    KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
     virtual void    MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void    MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void    MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void    Command(const CommandEvent& rCEvt, ::sd::Window* pWin);
 
-    virtual SdPage* GetActualPage();
+    virtual SdPage*	GetActualPage();
 
     /** @returns
             current or selected page or 0.
     */
     virtual SdPage* getCurrentPage() const;
 
+    /** Return a string that describes the currently selected pages.
+    */
+    String GetPageRangeString (void);
+
     void            ExecCtrl(SfxRequest &rReq);
     void            GetCtrlState(SfxItemSet &rSet);
     void            GetMenuState(SfxItemSet &rSet);
     void            GetAttrState(SfxItemSet &rSet);
 
-    void            SetPagesPerRow( sal_uInt16 nPagesPerRow );
+    void            SetPagesPerRow( USHORT nPagesPerRow );
 
     void            ExecStatusBar(SfxRequest& rReq);
     void            GetStatusBarState(SfxItemSet& rSet);
@@ -119,10 +123,10 @@ public:
     virtual void    ReadFrameViewData(FrameView* pView);
     virtual void    WriteFrameViewData();
 
-    virtual void    SetZoom(long nZoom);
-    virtual void    SetZoomRect(const Rectangle& rZoomRect);
+    virtual void	SetZoom(long nZoom);
+    virtual void	SetZoomRect(const Rectangle& rZoomRect);
 
-    virtual sal_Bool    HasSelection( sal_Bool bText = sal_True ) const;
+    virtual BOOL    HasSelection( BOOL bText = TRUE ) const;
 
     /** Draw the rectangle arround the specified slide that indicates whether
         the slide is selected or not.  When not selected the rectangle is
@@ -134,8 +138,8 @@ public:
         @param nPage
             When the page number is invalid then the call is ignored.
     */
-    void            DrawSelectionRect( sal_uInt16 nPage );
-    void            DrawFocusRect( sal_uInt16 nPage );
+    void			DrawSelectionRect( USHORT nPage );
+    void			DrawFocusRect( USHORT nPage );
 
     virtual void    WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
     virtual void    ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
@@ -146,12 +150,12 @@ public:
 
     void            SelectionHasChanged();
     void            PageLayoutHasChanged();
-    void            FocusHasChanged( sal_uInt16 nOldFocusPage, sal_uInt16 nNewFocusPage );
-    void            PageVisibilityHasChanged( sal_uInt16 nPage, sal_Bool bVisible );
+    void            FocusHasChanged( USHORT nOldFocusPage, USHORT nNewFocusPage );
+    void            PageVisibilityHasChanged( USHORT nPage, BOOL bVisible );
 
     /** On activation the preview is turned off.
     */
-    virtual void Activate (sal_Bool IsMDIActivate);
+    virtual void Activate (BOOL IsMDIActivate);
 
 protected:
     virtual Size    GetOptimalSizePixel() const;
@@ -161,14 +165,14 @@ protected:
 
 private:
     SlideView* pSlideView;
-    Point           aDisplayPos;
-    Size            aDisplaySize;
-    sal_uInt16          nCurFocusPage;
-    bool            bSetInitialZoomFactor;
-    bool            bInitializeWinPos;
+    Point		    aDisplayPos;
+    Size		    aDisplaySize;
+    USHORT          nCurFocusPage;
+    bool		    bSetInitialZoomFactor;
+    bool		    bInitializeWinPos;
 
     void            Construct(SdDrawDocument* pDoc);
-    void            ImplDrawFocusRect( sal_uInt16 nPage, sal_Bool bVisible );
+    void            ImplDrawFocusRect( USHORT nPage, BOOL bVisible );
 };
 
 } // end of namespace sd

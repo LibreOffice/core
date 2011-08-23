@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 class SwCalendarWrapper : public CalendarWrapper
 {
     String sUniqueId;
-    sal_uInt16 nLang;
+    USHORT nLang;
 
 public:
     SwCalendarWrapper( const ::com::sun::star::uno::Reference<
@@ -45,7 +45,7 @@ public:
         : CalendarWrapper( xMSF ), nLang( LANGUAGE_SYSTEM )
     {}
 
-    void LoadDefaultCalendar( sal_uInt16 nLang );
+    void LoadDefaultCalendar( USHORT nLang );
 };
 
 

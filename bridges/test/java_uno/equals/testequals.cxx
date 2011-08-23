@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,7 +123,7 @@ void Service::connect(rtl::OUString const & rConnection,
         css::connection::Connector::create(m_xContext)->connect(rConnection));
     css::uno::Reference< css::bridge::XBridgeFactory > xBridgeFactory(
         m_xContext->getServiceManager()->createInstanceWithContext(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.bridge.BridgeFactory" )),
+            rtl::OUString::createFromAscii("com.sun.star.bridge.BridgeFactory"),
             m_xContext),
         css::uno::UNO_QUERY);
     m_xBridge = xBridgeFactory->createBridge(rtl::OUString(), rProtocol,
@@ -139,7 +139,8 @@ Service::get(rtl::OUString const & rName) throw (css::uno::RuntimeException)
 css::uno::Sequence< rtl::OUString > Service::getSupportedServiceNames_static()
 {
     css::uno::Sequence< rtl::OUString > aNames(1);
-    aNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.test.bridges.testequals" ));
+    aNames[0] = rtl::OUString::createFromAscii(
+        "com.sun.star.test.bridges.testequals");
     return aNames;
 }
 
@@ -196,9 +197,9 @@ namespace {
 bool writeInfo(void * pRegistryKey, sal_Char const * pImplementationName,
                css::uno::Sequence< rtl::OUString > const & rServiceNames)
 {
-    rtl::OUString aKeyName( RTL_CONSTASCII_USTRINGPARAM( "/" ));
+    rtl::OUString aKeyName(rtl::OUString::createFromAscii("/"));
     aKeyName += rtl::OUString::createFromAscii(pImplementationName);
-    aKeyName += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ));
+    aKeyName += rtl::OUString::createFromAscii("/UNO/SERVICES");
     css::uno::Reference< css::registry::XRegistryKey > xKey;
     try
     {

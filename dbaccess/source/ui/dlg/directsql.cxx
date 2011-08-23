@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ namespace dbaui
         LargeEntryListBox( Window* _pParent, const ResId& _rId );
 
     protected:
-        virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+        virtual void	UserDraw( const UserDrawEvent& rUDEvt );
     };
 
     //--------------------------------------------------------------------
@@ -83,17 +83,17 @@ DBG_NAME(DirectSQLDialog)
 //--------------------------------------------------------------------
     DirectSQLDialog::DirectSQLDialog( Window* _pParent, const Reference< XConnection >& _rxConn )
         :ModalDialog(_pParent, ModuleRes(DLG_DIRECTSQL))
-        ,m_aFrame               (this, ModuleRes(FL_SQL))
-        ,m_aSQLLabel            (this, ModuleRes(FT_SQL))
-        ,m_aSQL                 (this, ModuleRes(ME_SQL))
-        ,m_aExecute             (this, ModuleRes(PB_EXECUTE))
-        ,m_aHistoryLabel        (this, ModuleRes(FT_HISTORY))
+        ,m_aFrame				(this, ModuleRes(FL_SQL))
+        ,m_aSQLLabel			(this, ModuleRes(FT_SQL))
+        ,m_aSQL					(this, ModuleRes(ME_SQL))
+        ,m_aExecute				(this, ModuleRes(PB_EXECUTE))
+        ,m_aHistoryLabel		(this, ModuleRes(FT_HISTORY))
         ,m_pSQLHistory(new LargeEntryListBox(this, ModuleRes(LB_HISTORY)))
-        ,m_aStatusFrame         (this, ModuleRes(FL_STATUS))
-        ,m_aStatus              (this, ModuleRes(ME_STATUS))
-        ,m_aButtonSeparator     (this, ModuleRes(FL_BUTTONS))
-        ,m_aHelp                (this, ModuleRes(PB_HELP))
-        ,m_aClose               (this, ModuleRes(PB_CLOSE))
+        ,m_aStatusFrame			(this, ModuleRes(FL_STATUS))
+        ,m_aStatus				(this, ModuleRes(ME_STATUS))
+        ,m_aButtonSeparator		(this, ModuleRes(FL_BUTTONS))
+        ,m_aHelp				(this, ModuleRes(PB_HELP))
+        ,m_aClose				(this, ModuleRes(PB_CLOSE))
         ,m_nHistoryLimit(20)
         ,m_nStatusCount(1)
         ,m_xConnection(_rxConn)
@@ -127,7 +127,7 @@ DBG_NAME(DirectSQLDialog)
             stopAllComponentListening();
         }
         delete m_pSQLHistory;
-
+    
         DBG_DTOR(DirectSQLDialog,NULL);
     }
 
@@ -171,7 +171,7 @@ DBG_NAME(DirectSQLDialog)
         {
             m_aStatementHistory.pop_front();
             m_aNormalizedHistory.pop_front();
-            m_pSQLHistory->RemoveEntry((sal_uInt16)0);
+            m_pSQLHistory->RemoveEntry((USHORT)0);
         }
     }
 
@@ -299,7 +299,7 @@ DBG_NAME(DirectSQLDialog)
             if (_bUpdateListBox)
             {
                 // selecte the normalized statement in the list box
-                m_pSQLHistory->SelectEntryPos((sal_uInt16)_nHistoryPos);
+                m_pSQLHistory->SelectEntryPos((USHORT)_nHistoryPos);
                 OSL_ENSURE(m_pSQLHistory->GetSelectEntry() == m_aNormalizedHistory[_nHistoryPos],
                     "DirectSQLDialog::switchToHistory: inconsistent listbox entries!");
             }
@@ -308,7 +308,7 @@ DBG_NAME(DirectSQLDialog)
             m_aSQL.SetSelection(Selection(sStatement.Len(), sStatement.Len()));
         }
         else
-            OSL_FAIL("DirectSQLDialog::switchToHistory: invalid position!");
+            OSL_ENSURE(sal_False, "DirectSQLDialog::switchToHistory: invalid position!");
     }
 
     //--------------------------------------------------------------------
@@ -345,7 +345,7 @@ DBG_NAME(DirectSQLDialog)
     }
 
 //........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,14 +54,14 @@ SfxPoolItem* FmInterfaceItem::Clone( SfxItemPool* ) const
 //------------------------------------------------------------------------------
 SvStream& FmInterfaceItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    OSL_FAIL( "FmInterfaceItem::Store: not implemented!" );
+    DBG_ERROR( "FmInterfaceItem::Store: not implemented!" );
     return rStrm;
 }
 
 //------------------------------------------------------------------------------
 SfxPoolItem* FmInterfaceItem::Create( SvStream& /*rStrm*/, sal_uInt16 ) const
 {
-    OSL_FAIL( "FmInterfaceItem::Create: not implemented!" );
+    DBG_ERROR( "FmInterfaceItem::Create: not implemented!" );
     return new FmInterfaceItem( *this );
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,14 +55,14 @@ public:
         placeholder names, e.g. '+mj-lt' for the major latin theme font. */
     bool                getFontData(
                             ::rtl::OUString& rFontName,
-                            sal_Int16& rnFontPitch,
+                            sal_Int16 rnFontPitch,
                             sal_Int16& rnFontFamily,
                             const ::oox::core::XmlFilterBase& rFilter ) const;
 
 private:
     bool                implGetFontData(
                             ::rtl::OUString& rFontName,
-                            sal_Int16& rnFontPitch,
+                            sal_Int16 rnFontPitch,
                             sal_Int16& rnFontFamily ) const;
 
 private:

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -149,7 +149,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
 {
     uno::Reference< xml::sax::XAttributeList > xNewAttribs = _xAttrList;
     bool bExport = true;
-    if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("office:report")) )
+    if ( _sName.equalsAscii("office:report") )
     {
         const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
         static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
@@ -168,7 +168,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
 
                 switch( m_pReportElemTokenMap->Get( XML_NAMESPACE_REPORT, sLocalName ) )
                 {
-                    case XML_TOK_COMMAND_TYPE:
+                    case XML_TOK_COMMAND_TYPE: 
                         {
                             sal_uInt16 nRet = static_cast<sal_uInt16>(sdb::CommandType::COMMAND);
                             const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetCommandTypeOptions();
@@ -176,13 +176,13 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
                             m_xDatabaseDataProvider->setCommandType(nRet);
                         }
                         break;
-                    case XML_TOK_COMMAND:
+                    case XML_TOK_COMMAND: 
                         m_xDatabaseDataProvider->setCommand(sValue);
                         break;
-                    case XML_TOK_FILTER:
+                    case XML_TOK_FILTER: 
                         m_xDatabaseDataProvider->setFilter(sValue);
                         break;
-                    case XML_TOK_ESCAPE_PROCESSING:
+                    case XML_TOK_ESCAPE_PROCESSING: 
                         m_xDatabaseDataProvider->setEscapeProcessing(sValue == s_sTRUE);
                         break;
                     default:
@@ -192,12 +192,13 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
         }
         catch(uno::Exception&)
         {
+            // OSL_ENSURE(0,"Exception catched while filling the report definition props");
         }
         m_xDelegatee->startElement(lcl_createAttribute(XML_NP_OFFICE,XML_CHART),NULL);
         bExport = false;
         m_bImportedChart = true;
     }
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:master-detail-field")) )
+    else if ( _sName.equalsAscii("rpt:master-detail-field") )
     {
         const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
         static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
@@ -218,10 +219,10 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
 
                 switch( pMasterElemTokenMap->Get( XML_NAMESPACE_REPORT, sLocalName ) )
                 {
-                    case XML_TOK_MASTER:
+                    case XML_TOK_MASTER: 
                         sMasterField = sValue;
                         break;
-                    case XML_TOK_SUB_DETAIL:
+                    case XML_TOK_SUB_DETAIL: 
                         sDetailField = sValue;
                         break;
                 }
@@ -233,17 +234,17 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
         }
         catch(uno::Exception&)
         {
-            OSL_FAIL("Exception catched while filling the report definition props");
+            OSL_ENSURE(0,"Exception catched while filling the report definition props");
         }
         bExport = false;
     }
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:detail"))
-        ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:formatted-text"))
-        ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:master-detail-fields"))
-        ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:report-component"))
-        ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:report-element")))
+    else if ( _sName.equalsAscii("rpt:detail")
+        ||    _sName.equalsAscii("rpt:formatted-text")
+        ||    _sName.equalsAscii("rpt:master-detail-fields")
+        ||    _sName.equalsAscii("rpt:report-component")
+        ||    _sName.equalsAscii("rpt:report-element"))
         bExport = false;
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("chart:plot-area")))
+    else if ( _sName.equalsAscii("chart:plot-area"))
     {
         sal_Bool bHasCategories = sal_True;
         const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
@@ -257,31 +258,32 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
                 sLocalName = sAttrName;
             else
                 sLocalName = sAttrName.copy( nColonPos + 1L );
-            if ( sLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("data-source-has-labels")) )
+            if ( sLocalName.equalsAscii("data-source-has-labels") )
             {
                 const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
-                bHasCategories = sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("both"));
+                bHasCategories = sValue.equalsAscii("both");
                 break;
             }
-        }
+        } // for(sal_Int16 i = 0; i < nLength; ++i)
         beans::PropertyValue* pArgIter = m_aArguments.getArray();
         beans::PropertyValue* pArgEnd  = pArgIter + m_aArguments.getLength();
         for(;pArgIter != pArgEnd;++pArgIter)
         {
-            if ( pArgIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasCategories")) )
+            if ( pArgIter->Name.equalsAscii("HasCategories") )
             {
                 pArgIter->Value <<= bHasCategories;
                 break;
             }
-        }
+        } // for(;pArgIter != pArgEnd;++pArgIter)
+
 
         SvXMLAttributeList* pList = new SvXMLAttributeList();
         xNewAttribs = pList;
         pList->AppendAttributeList(_xAttrList);
         pList->AddAttribute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("table:cell-range-address")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("local-table.$A$1:.$Z$65536")));
-
+        
     }
-
+    
     if ( bExport )
         m_xDelegatee->startElement(_sName,xNewAttribs);
 }
@@ -290,11 +292,11 @@ void SAL_CALL ImportDocumentHandler::endElement(const ::rtl::OUString & _sName) 
 {
     bool bExport = true;
     ::rtl::OUString sNewName = _sName;
-    if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("office:report")) )
+    if ( _sName.equalsAscii("office:report") )
     {
         sNewName = lcl_createAttribute(XML_NP_OFFICE,XML_CHART);
     }
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:master-detail-fields")) )
+    else if ( _sName.equalsAscii("rpt:master-detail-fields") )
     {
         if ( !m_aMasterFields.empty() )
             m_xDatabaseDataProvider->setMasterFields(uno::Sequence< ::rtl::OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));
@@ -302,11 +304,11 @@ void SAL_CALL ImportDocumentHandler::endElement(const ::rtl::OUString & _sName) 
             m_xDatabaseDataProvider->setDetailFields(uno::Sequence< ::rtl::OUString>(&*m_aDetailFields.begin(),m_aDetailFields.size()));
         bExport = false;
     }
-    else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:detail"))
-        ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:formatted-text"))
-        ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:master-detail-field"))
-        ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:report-component"))
-        ||    _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:report-element")))
+    else if ( _sName.equalsAscii("rpt:detail") 
+        ||    _sName.equalsAscii("rpt:formatted-text")
+        ||    _sName.equalsAscii("rpt:master-detail-field")
+        ||    _sName.equalsAscii("rpt:report-component")
+        ||    _sName.equalsAscii("rpt:report-element"))
         bExport = false;
 
     if ( bExport )
@@ -356,11 +358,11 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
 
         uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xModel,uno::UNO_QUERY_THROW);
         xReceiver->attachDataProvider(m_xDatabaseDataProvider.get());
-    }
+    } // if ( !m_xDatabaseDataProvider.is() )
 
     m_aArguments = m_xDatabaseDataProvider->detectArguments(NULL);
-
-    uno::Reference< reflection::XProxyFactory > xProxyFactory( m_xContext->getServiceManager()->createInstanceWithContext(
+    
+    uno::Reference< reflection::XProxyFactory >	xProxyFactory( m_xContext->getServiceManager()->createInstanceWithContext(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory")),m_xContext),
         uno::UNO_QUERY);
     m_xProxy = xProxyFactory->createProxy(m_xDelegatee.get());

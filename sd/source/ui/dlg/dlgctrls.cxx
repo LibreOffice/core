@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ struct FadeEffectLBImpl
     std::vector< TransitionPresetPtr > maPresets;
 };
 
-FadeEffectLB::FadeEffectLB( Window* pParent, SdResId Id )
-:   ListBox( pParent, Id ),
+FadeEffectLB::FadeEffectLB( Window* pParent, SdResId Id ) 
+:	ListBox( pParent, Id ),
     mpImpl( new FadeEffectLBImpl )
 {
 }
@@ -66,7 +66,7 @@ void FadeEffectLB::Fill()
 
     const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
     TransitionPresetList::const_iterator aIter;
-    for( aIter = rPresetList.begin(); aIter != rPresetList.end(); ++aIter )
+    for( aIter = rPresetList.begin(); aIter != rPresetList.end(); aIter++ )
     {
         pPreset = (*aIter);
         const OUString aUIName( pPreset->getUIName() );
@@ -85,14 +85,14 @@ void FadeEffectLB::Fill()
 /*
 void FadeEffectLB::SelectEffect( presentation::FadeEffect eFE )
 {
-    sal_Bool bFound = sal_False;
+    BOOL bFound = FALSE;
 
     for( long i = 0, nCount = sizeof( aEffects ) / sizeof( FadeEffectPair ); ( i < nCount ) && !bFound; i++ )
     {
         if( aEffects[ i ].meFE == eFE )
         {
-            SelectEntryPos( (sal_uInt16) i );
-            bFound = sal_True;
+            SelectEntryPos( (USHORT) i );
+            bFound = TRUE;
         }
     }
 }
@@ -102,7 +102,7 @@ void FadeEffectLB::SelectEffect( presentation::FadeEffect eFE )
 
 void FadeEffectLB::applySelected( SdPage* pSlide ) const
 {
-    const sal_uInt16 nPos = GetSelectEntryPos();
+    const USHORT nPos = GetSelectEntryPos();
 
     if( pSlide && (nPos < mpImpl->maPresets.size() ) )
     {

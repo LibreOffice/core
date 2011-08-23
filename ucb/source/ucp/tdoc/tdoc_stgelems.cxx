@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,7 +111,7 @@ Storage::Storage( const uno::Reference< lang::XMultiServiceFactory > & xSMgr,
     }
     catch ( uno::Exception const & )
     {
-        OSL_FAIL( "Storage::Storage: Caught exception!" );
+        OSL_ENSURE( false, "Storage::Storage: Caught exception!" );
     }
 
     OSL_ENSURE( m_xAggProxy.is(),
@@ -157,7 +157,7 @@ Storage::~Storage()
             }
             catch ( ... )
             {
-                OSL_FAIL( "Storage::~Storage - Caught exception!" );
+                OSL_ENSURE( false, "Storage::~Storage - Caught exception!" );
             }
         }
     }
@@ -620,7 +620,7 @@ OutputStream::OutputStream(
     }
     catch ( uno::Exception const & )
     {
-        OSL_FAIL( "OutputStream::OutputStream: Caught exception!" );
+        OSL_ENSURE( false, "OutputStream::OutputStream: Caught exception!" );
     }
 
     OSL_ENSURE( m_xAggProxy.is(),
@@ -821,7 +821,7 @@ Stream::Stream(
     }
     catch ( uno::Exception const & )
     {
-        OSL_FAIL( "OutputStream::OutputStream: Caught exception!" );
+        OSL_ENSURE( false, "OutputStream::OutputStream: Caught exception!" );
     }
 
     OSL_ENSURE( m_xAggProxy.is(),

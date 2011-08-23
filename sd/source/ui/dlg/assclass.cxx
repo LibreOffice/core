@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,37 +29,50 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
+
+#include <tools/list.hxx>
 #include <tools/debug.hxx>
 #include <vcl/ctrl.hxx>
 
 #include "assclass.hxx"
 
+
 Assistent::Assistent(int nNoOfPages)
-    : mnPages(nNoOfPages), mnCurrentPage(1)
 {
-    if(mnPages > MAX_PAGES)
-        mnPages = MAX_PAGES;
+    mnPages=nNoOfPages;
+    if(mnPages>MAX_PAGES)
+    {
+        mnPages=MAX_PAGES;
+    }
 
-    mpPageStatus.reset(new bool[mnPages]);
+    mpPageStatus = new bool[mnPages];
 
-    for(int i=0; i < mnPages; ++i)
-        mpPageStatus[i] = true;
+    for(UINT8 i=0;i<mnPages;i++)
+    {
+        mpPages[i]=new List();
+        mpPageStatus[i] = TRUE;
+    }
+    mnCurrentPage=1;
 }
+
+
 
 bool Assistent::InsertControl(int nDestPage,Control* pUsedControl)
 {
     DBG_ASSERT( (nDestPage > 0) && (nDestPage <= mnPages), "Seite nicht vorhanden!");
-
     if((nDestPage>0)&&(nDestPage<=mnPages))
     {
-        maPages[nDestPage-1].push_back(pUsedControl);
+        mpPages[nDestPage-1]->Insert(pUsedControl,LIST_APPEND);
         pUsedControl->Hide();
         pUsedControl->Disable();
         return true;
     }
-
-    return false;
+    else
+    {
+        return false;
+    }
 }
+
 
 bool Assistent::NextPage()
 {
@@ -72,7 +85,6 @@ bool Assistent::NextPage()
         if(nPage <= mnPages)
             return GotoPage(nPage);
     }
-
     return false;
 }
 
@@ -98,67 +110,88 @@ bool Assistent::GotoPage(const int nPageToGo)
 
     if((nPageToGo>0)&&(nPageToGo<=mnPages)&&mpPageStatus[nPageToGo-1])
     {
+        int i;
+        Control* pCurControl;
         int nIndex=mnCurrentPage-1;
 
-        std::vector<Control*>::iterator iter = maPages[nIndex].begin();
-        std::vector<Control*>::iterator iterEnd = maPages[nIndex].end();
-
-        for(; iter != iterEnd; ++iter)
+        for(i=0;i<(int)mpPages[nIndex]->Count();i++)
         {
-            (*iter)->Disable();
-            (*iter)->Hide();
+            pCurControl=(Control*)mpPages[nIndex]->GetObject(i);
+            pCurControl->Disable();
+            pCurControl->Hide();
+                //schaltet die Controls der vorherigen Seite
+                //zurueck
         }
-
         mnCurrentPage=nPageToGo;
         nIndex=mnCurrentPage-1;
-
-        iter = maPages[nIndex].begin();
-        iterEnd = maPages[nIndex].end();
-
-        for(; iter != iterEnd; ++iter)
+        for(i=0;i<(int)mpPages[nIndex]->Count();i++)
         {
-            (*iter)->Enable();
-            (*iter)->Show();
-        }
 
+            pCurControl=(Control*)mpPages[nIndex]->GetObject(i);
+            pCurControl->Enable();
+            pCurControl->Show();
+                //zeigt die neue Seite im Fenster an
+        }
         return true;
     }
-
-    return false;
+    else
+    {
+        return false;
+    }
 }
 
 
-bool Assistent::IsLastPage() const
+bool Assistent::IsLastPage()
 {
-    if(mnCurrentPage == mnPages)
+    if(mnCurrentPage==mnPages)
+    {
         return true;
+    }
+    else
+    {
+        int nPage = mnCurrentPage+1;
+        while(nPage <= mnPages && !mpPageStatus[nPage-1])
+            nPage++;
 
-    int nPage = mnCurrentPage+1;
-    while(nPage <= mnPages && !mpPageStatus[nPage-1])
-        nPage++;
-
-    return nPage > mnPages;
+        return nPage > mnPages;
+    }
 }
 
 
-bool Assistent::IsFirstPage() const
+bool Assistent::IsFirstPage()
 {
-    if(mnCurrentPage == 1)
+    if(mnCurrentPage==1)
+    {
         return true;
+    }
+    else
+    {
+        int nPage = mnCurrentPage-1;
+        while(nPage > 0 && !mpPageStatus[nPage-1])
+            nPage--;
 
-    int nPage = mnCurrentPage-1;
-    while(nPage > 0 && !mpPageStatus[nPage-1])
-        nPage--;
-
-    return nPage == 0;
+        return nPage == 0;
+    }
 }
 
-int Assistent::GetCurrentPage() const
+
+
+int Assistent::GetCurrentPage()
 {
     return mnCurrentPage;
 }
 
-bool Assistent::IsEnabled( int nPage ) const
+Assistent::~Assistent()
+{
+    for( int i=0;i<mnPages;i++)
+    {
+        delete mpPages[i];
+    }
+
+    delete [] mpPageStatus;
+}
+
+bool Assistent::IsEnabled( int nPage )
 {
     DBG_ASSERT( (nPage>0) && (nPage <= mnPages), "Seite nicht vorhanden!" );
 

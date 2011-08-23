@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 //i20156 - new file for xmlsecurity module
 
 /** -- idl definition -- **/
@@ -44,7 +44,7 @@ module com { module sun { module star { module security {
 /** interface for signing and verifying digital signatures in office documents
 
     <p>
-    This interface can be used to digitally sign different content in a office document.
+    This interface can be used to digitaly sign different content in a office document.
     It can also be used to verify digital signatures.
     </p>
  */
@@ -103,7 +103,7 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
      */
     string getScriptingContentSignatureDefaultStreamName();
 
-    /** signs the full Package, which means everything in the storage except the content of META-INF
+    /** signs the full Package, which means everything in the storage excecpt the content of META-INF
      */
     boolean signPackage( [in] ::com::sun::star::embed::XStorage Storage,
                          [in] ::com::sun::star::io::XStream xSignStream);
@@ -121,7 +121,7 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
     void showPackageSignatures(
                         [in] ::com::sun::star::embed::XStorage xStorage,
                         [in] ::com::sun::star::io::XInputStream xSignInStream );
-
+ 
     /** allows to get the default stream name for storing of the signature of
         the package.
      */
@@ -129,9 +129,9 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
 
 
     void showCertificate( [in] com::sun::star::security::XCertificate Certificate );
-
-
-       /** manages trusted sources (Authors and paths )
+    
+    
+       /** manages trusted sources (Authors and pathes )
      */
 
     void    manageTrustedSources();
@@ -141,13 +141,13 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
     // These method should raise confirmation dialog, so it can not used from bad macros...
     void    addAuthorToTrustedSources( [in] com::sun::star::security::XCertificate Author );
     void    addLocationToTrustedSources( [in] string Location );
-
+    
 
 
 } ;
 
 } ; } ; } ; } ;
 
-#endif
+#endif 
 
 

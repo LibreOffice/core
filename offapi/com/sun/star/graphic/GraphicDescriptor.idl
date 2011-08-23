@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,21 +46,21 @@ published service GraphicDescriptor
         supported services are exchanged
     */
     interface ::com::sun::star::beans::XPropertySet;
-
+    
     /** The type of the graphic
-
+    
         @see GraphicType
     */
     [property] byte GraphicType;
 
     /** The MimeType of the loaded graphic
-
+    
         <p> The mime can be the original mime type of the graphic
-        source the graphic container was constructed from or it
+        source the graphic container was constructed from or it 
         can be the internal mime type image/x-vclgraphic, in which
         case the original mime type is not available anymore</p>
-
-        <p> Currently, the following mime types are supported for
+        
+        <p> Currently, the following mime types are supported for 
         loaded graphics:<\p>
         <ul>
             <li>image/bmp</li>
@@ -92,9 +92,9 @@ published service GraphicDescriptor
 
     */
     [property] string MimeType;
-
-    /** The Size of the graphic in pixel.
-
+        
+    /** The Size of the graphic in pixel. 
+    
         <p> This property may not be available in case of
         vector graphics or if the pixel size can not be
         determined correctly for some formats without loading
@@ -102,8 +102,8 @@ published service GraphicDescriptor
     */
     [optional, property] ::com::sun::star::awt::Size SizePixel;
 
-    /** The Size of the graphic in 100th mm.
-
+    /** The Size of the graphic in 100th mm. 
+    
         <p> This property may not be available in case of
         pixel graphics or if the logical size can not be
         determined correctly for some formats without loading
@@ -112,7 +112,7 @@ published service GraphicDescriptor
     [optional, property] ::com::sun::star::awt::Size Size100thMM;
 
     /** The number of bits per pixel used for the pixel graphic
-
+        
         <p> This property is not available for vector
         graphics and may not be available for some kinds
         of pixel graphics</p>
@@ -120,17 +120,17 @@ published service GraphicDescriptor
     [optional, property] byte BitsPerPixel;
 
     /** Indicates that it is a transparent graphic
-
+        
         <p>This property is always <TRUE/> for vector graphics.
-        The status of this flag is not always clear if the
+        The status of this flag is not always clear if the 
         graphic was not loaded at all, e.g. in case of just
         querying for the <type>GraphicDescriptor</type>.</p>
     */
     [optional, property] boolean Transparent;
 
     /** Indicates that it is a pixel graphic with an alpha channel
-
-        <p>The status of this flag is not always clear if the
+        
+        <p>The status of this flag is not always clear if the 
         graphic was not loaded at all, e.g. in case of just
         querying for the <type>GraphicDescriptor</type></p>
     */
@@ -138,14 +138,14 @@ published service GraphicDescriptor
 
     /** Indicates that it is a graphic that consists of several
         frames that can be played as an animation
-
-        <p>The status of this flag is not always clear if the
+        
+        <p>The status of this flag is not always clear if the 
         graphic was not loaded at all, e.g. in case of just
         querying for the <type>GraphicDescriptor</type></p>
     */
     [optional, property] boolean Animated;
 };
 
-} ; } ; } ; } ;
+} ; } ; } ; } ; 
 
 #endif

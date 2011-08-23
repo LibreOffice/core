@@ -51,10 +51,10 @@ static inline void copy_ustr_n( void *dest, const void *source, size_t length ) 
 
 
 #define STR_INI_EXTENSION   L".ini"
-#define STR_INI_METAHOME    "?~"
-#define STR_INI_METASYS     "?$"
-#define STR_INI_METACFG     "?^"
-#define STR_INI_METAINS     "?#"
+#define STR_INI_METAHOME	"?~"
+#define STR_INI_METASYS		"?$"
+#define STR_INI_METACFG		"?^"
+#define STR_INI_METAINS		"?#"
 
 #define STR_INI_BOOLYES     "yes"
 #define STR_INI_BOOLON      "on"
@@ -69,18 +69,18 @@ static inline void copy_ustr_n( void *dest, const void *source, size_t length ) 
 
 #define SVERSION_LOCATION   STR_INI_METACFG
 #define SVERSION_FALLBACK   STR_INI_METASYS
-#define SVERSION_NAME       "sversion"
+#define SVERSION_NAME   	"sversion"
 #define SVERSION_SECTION    "Versions"
 #define SVERSION_SOFFICE    "StarOffice"
 #define SVERSION_PROFILE    "soffice.ini"
 #define SVERSION_OPTION     "userid:"
-#define SVERSION_DIRS       { "bin", "program" }
+#define SVERSION_DIRS		{ "bin", "program" }
 #define SVERSION_USER       "user"
 
 #define DEFAULT_PMODE   (_S_IREAD | _S_IWRITE)
 
-#define _BUILD_STR_(n)  # n
-#define BUILD_STR(n)    _BUILD_STR_(n)
+#define _BUILD_STR_(n)	# n
+#define BUILD_STR(n)	_BUILD_STR_(n)
 
 
 /*#define DEBUG_OSL_PROFILE 1*/
@@ -103,8 +103,8 @@ typedef struct _osl_TFile
     HANDLE  m_Handle;
     sal_Char*   m_pReadPtr;
     sal_Char    m_ReadBuf[512];
-/*      sal_Char*   m_pWritePtr; */
-/*      sal_Char    m_WriteBuf[512]; */
+/*  	sal_Char*   m_pWritePtr; */
+/*  	sal_Char    m_WriteBuf[512]; */
     sal_Char*   m_pWriteBuf;
     sal_uInt32  m_nWriteBufLen;
     sal_uInt32  m_nWriteBufFree;
@@ -112,8 +112,8 @@ typedef struct _osl_TFile
 
 typedef struct _osl_TProfileEntry
 {
-    sal_uInt32      m_Line;
-    sal_uInt32      m_Offset;
+    sal_uInt32   	m_Line;
+    sal_uInt32    	m_Offset;
     sal_uInt32      m_Len;
 } osl_TProfileEntry;
 
@@ -193,8 +193,8 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
 {
     osl_TFile*        pFile = NULL;
     osl_TProfileImpl* pProfile;
-    rtl_uString       *FileName=NULL;
-
+    rtl_uString		  *FileName=NULL;
+    
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("In  osl_openProfile\n");
 #endif
@@ -209,10 +209,10 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
         rtl_uString_assign(&FileName, strProfileName);
     }
 
-
+    
     osl_getSystemPathFromFileURL(FileName, &FileName);
-
-
+    
+    
 #ifdef DEBUG_OSL_PROFILE
     Flags=osl_Profile_FLUSHWRITE;
 
@@ -257,10 +257,10 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
 
     pProfile = (osl_TProfileImpl*)calloc(1, sizeof(osl_TProfileImpl));
 
-
+    
     pProfile->m_Flags = Flags & FLG_USER;
     osl_getSystemPathFromFileURL(strProfileName, &pProfile->m_strFileName);
-//  rtl_uString_assign(&pProfile->m_strFileName, strProfileName);
+//	rtl_uString_assign(&pProfile->m_strFileName, strProfileName);
 
     if (Flags & (osl_Profile_READLOCK | osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE ))
         pProfile->m_pFile = pFile;
@@ -305,8 +305,8 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
         {
             if ( !( pProfile->m_Flags & osl_Profile_READLOCK )  && ( pProfile->m_Flags & FLG_MODIFIED ) )
             {
-/*                  if (pProfile->m_pFile == NULL) */
-/*                      pProfile->m_pFile = openFileImpl(pProfile->m_Filename, sal_True); */
+/*  				if (pProfile->m_pFile == NULL) */
+/*  					pProfile->m_pFile = openFileImpl(pProfile->m_Filename, sal_True); */
 
                 storeProfile(pProfile, sal_False);
             }
@@ -1313,8 +1313,8 @@ static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption Profi
     }
 
     /* mfe: new WriteBuf obsolete */
-/*  pFile->m_pWritePtr = pFile->m_Buf;*/
-/*  pFile->m_pReadPtr  = pFile->m_ReadBuf + sizeof(pFile->m_ReadBuf);*/
+/*	pFile->m_pWritePtr = pFile->m_Buf;*/
+/*	pFile->m_pReadPtr  = pFile->m_ReadBuf + sizeof(pFile->m_ReadBuf);*/
 
     return (pFile);
 }
@@ -1340,14 +1340,14 @@ static osl_TStamp closeFileImpl(osl_TFile* pFile)
     {
        /* mfe: new WriteBuf obsolete */
         /* we just closing the file here, DO NOT write, it has to be handled in higher levels */
-/*      if (pFile->m_pWritePtr > pFile->m_Buf)*/
-/*      {*/
-/*          DWORD Bytes;*/
+/*		if (pFile->m_pWritePtr > pFile->m_Buf)*/
+/*		{*/
+/*			DWORD Bytes;*/
 
-/*          WriteFile(pFile->m_Handle, pFile->m_WriteBuf,*/
-/*                    pFile->m_pWritePtr - pFile->m_WriteBuf,*/
-/*                    &Bytes, NULL);*/
-/*      }*/
+/*			WriteFile(pFile->m_Handle, pFile->m_WriteBuf,*/
+/*					  pFile->m_pWritePtr - pFile->m_WriteBuf,*/
+/*					  &Bytes, NULL);*/
+/*		}*/
 
         stamp = getFileStamp(pFile);
 
@@ -1380,16 +1380,16 @@ static sal_Bool rewindFile(osl_TFile* pFile, sal_Bool bTruncate)
     {
         /* mfe: new WriteBuf obsolete */
         /* we just closing the file here, DO NOT write, it has to be handled in higher levels */
-/*      if (pFile->m_pWritePtr > pFile->m_WriteBuf)*/
-/*      {*/
-/*          DWORD Bytes;*/
+/*		if (pFile->m_pWritePtr > pFile->m_WriteBuf)*/
+/*		{*/
+/*			DWORD Bytes;*/
 
-/*          WriteFile(pFile->m_Handle, pFile->m_WriteBuf,*/
-/*                    pFile->m_pWritePtr - pFile->m_WriteBuf,*/
-/*                    &Bytes, NULL);*/
+/*			WriteFile(pFile->m_Handle, pFile->m_WriteBuf,*/
+/*					  pFile->m_pWritePtr - pFile->m_WriteBuf,*/
+/*					  &Bytes, NULL);*/
 
-/*          pFile->m_pWritePtr = pFile->m_WriteBuf;*/
-/*      }*/
+/*			pFile->m_pWritePtr = pFile->m_WriteBuf;*/
+/*		}*/
 
         pFile->m_pReadPtr = pFile->m_ReadBuf + sizeof(pFile->m_ReadBuf);
 
@@ -1503,6 +1503,10 @@ static sal_Bool putLine(osl_TFile* pFile, const sal_Char *pszLine)
 {
     unsigned int Len = strlen(pszLine);
 
+#ifdef DEBUG_OSL_PROFILE
+    int strLen=0;
+#endif
+
     if ( pFile == 0 || pFile->m_Handle < 0 )
     {
         return (sal_False);
@@ -1535,12 +1539,18 @@ static sal_Bool putLine(osl_TFile* pFile, const sal_Char *pszLine)
 
 
     memcpy(pFile->m_pWriteBuf + ( pFile->m_nWriteBufLen - pFile->m_nWriteBufFree ),pszLine,Len+1);
-
+#ifdef DEBUG_OSL_PROFILE
+    strLen = strlen(pFile->m_pWriteBuf);
+#endif
     pFile->m_pWriteBuf[pFile->m_nWriteBufLen - pFile->m_nWriteBufFree + Len]='\r';
     pFile->m_pWriteBuf[pFile->m_nWriteBufLen - pFile->m_nWriteBufFree + Len + 1]='\n';
     pFile->m_pWriteBuf[pFile->m_nWriteBufLen - pFile->m_nWriteBufFree + Len + 2]='\0';
 
     pFile->m_nWriteBufFree-=Len+2;
+
+#ifdef DEBUG_OSL_PROFILE
+/*    OSL_TRACE("File Buffer in _putLine '%s' '%i'(%i)\n",pFile->m_pWriteBuf,strlen(pFile->m_pWriteBuf),pFile->m_nWriteBufLen - pFile->m_nWriteBufFree);*/
+#endif
 
     return (sal_True);
 }
@@ -2024,9 +2034,9 @@ static sal_Bool storeProfile(osl_TProfileImpl* pProfile, sal_Bool bCleanup)
             closeFileImpl(pTmpFile);
 
             osl_ProfileSwapProfileNames(pProfile);
-
-/*          free(pProfile->m_pFile);*/
-/*          free(pTmpFile);*/
+            
+/*			free(pProfile->m_pFile);*/
+/*			free(pTmpFile);*/
 
             pProfile->m_pFile = openFileImpl(pProfile->m_strFileName,pProfile->m_Flags);
 
@@ -2127,7 +2137,7 @@ static sal_Bool osl_ProfileSwapProfileNames(osl_TProfileImpl* pProfile)
 
     /* rename ini bak */
     MoveFileExW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( ustrIniFile )), reinterpret_cast<LPCWSTR>(rtl_uString_getStr( ustrBakFile )), MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH );
-
+    
     /* rename tmp ini */
     MoveFileExW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( ustrTmpFile )), reinterpret_cast<LPCWSTR>(rtl_uString_getStr( ustrIniFile )), MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH );
 
@@ -2143,7 +2153,7 @@ static rtl_uString* osl_ProfileGenerateExtension(rtl_uString* ustrFileName, rtl_
     sal_Unicode* pFileNameBuf  = 0;
     sal_Int32 nIndex = -1;
 
-    pFileNameBuf = rtl_uString_getStr(ustrFileName);
+    pFileNameBuf = rtl_uString_getStr(ustrFileName); 
 
     rtl_uString_newFromAscii(&ustrOldExtension,".");
 

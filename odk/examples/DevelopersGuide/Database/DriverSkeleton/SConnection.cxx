@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 #include "SConnection.hxx"
@@ -52,7 +52,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 // --------------------------------------------------------------------------------
-OConnection::OConnection(SkeletonDriver*    _pDriver)
+OConnection::OConnection(SkeletonDriver*	_pDriver) 
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
                          OMetaConnection_BASE(m_aMutex),
                          m_pDriver(_pDriver),
@@ -81,7 +81,7 @@ void SAL_CALL OConnection::release() throw()
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     osl_incrementInterlockedCount( &m_refCount );
-
+    
     // some example code how to get the information out of the sequence
 
     sal_Int32 nLen = url.indexOf(':');
@@ -89,17 +89,17 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     ::rtl::OUString aDSN(RTL_CONSTASCII_USTRINGPARAM("DSN=")), aUID, aPWD, aSysDrvSettings;
     aDSN += url.copy(nLen+1);
 
-    const char* pUser       = "user";
-    const char* pTimeout    = "Timeout";
-    const char* pSilent     = "Silent";
-    const char* pPwd        = "password";
+    const char* pUser		= "user";
+    const char* pTimeout	= "Timeout";
+    const char* pSilent		= "Silent";
+    const char* pPwd		= "password";
     const char* pUseCatalog = "UseCatalog";
-    const char* pSysDrv     = "SystemDriverSettings";
+    const char* pSysDrv		= "SystemDriverSettings";
 
     sal_Int32 nTimeout = 20;
     sal_Bool bSilent = sal_True;
-    const PropertyValue *pBegin = info.getConstArray();
-    const PropertyValue *pEnd   = pBegin + info.getLength();
+    const PropertyValue *pBegin	= info.getConstArray();
+    const PropertyValue *pEnd	= pBegin + info.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
         if(!pBegin->Name.compareToAscii(pTimeout))
@@ -109,12 +109,12 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         else if(!pBegin->Name.compareToAscii(pUser))
         {
             pBegin->Value >>= aUID;
-            aDSN = aDSN + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";UID=")) + aUID;
+            aDSN = aDSN + ::rtl::OUString::createFromAscii(";UID=") + aUID;
         }
         else if(!pBegin->Name.compareToAscii(pPwd))
         {
             pBegin->Value >>= aPWD;
-            aDSN = aDSN + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";PWD=")) + aPWD;
+            aDSN = aDSN + ::rtl::OUString::createFromAscii(";PWD=") + aPWD;
         }
         else if(!pBegin->Name.compareToAscii(pUseCatalog))
         {
@@ -123,7 +123,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         else if(!pBegin->Name.compareToAscii(pSysDrv))
         {
             pBegin->Value >>= aSysDrvSettings;
-            aDSN += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+            aDSN += ::rtl::OUString::createFromAscii(";");
             aDSN += aSysDrvSettings;
         }
     }
@@ -140,7 +140,7 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
+        
     // create a statement
     // the statement can only be executed once
     Reference< XStatement > xReturn = new OStatement(this);
@@ -152,7 +152,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
+        
     // the pre
     if(m_aTypeInfo.empty())
         buildTypeInfo();
@@ -168,8 +168,8 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
-    // not implemented yet :-) a task to do
+        
+    // not implemented yet :-) a task to do 
     return NULL;
 }
 // --------------------------------------------------------------------------------
@@ -177,7 +177,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     // when you need to transform SQL92 to you driver specific you can do it here
-
+    
     return _sSql;
 }
 // --------------------------------------------------------------------------------
@@ -210,7 +210,7 @@ void SAL_CALL OConnection::rollback(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
+        
 
     // same as commit but for the other case
 }
@@ -218,7 +218,7 @@ void SAL_CALL OConnection::rollback(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-
+    
     // just simple -> we are close when we are disposed taht means someone called dispose(); (XComponent)
     return OConnection_BASE::rBHelper.bDisposed;
 }
@@ -227,7 +227,7 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLEx
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
+        
     // here we have to create the class with biggest interface
     // The answer is 42 :-)
     Reference< XDatabaseMetaData > xMetaData = m_xMetaData;
@@ -244,15 +244,15 @@ void SAL_CALL OConnection::setReadOnly( sal_Bool readOnly ) throw(SQLException, 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
+        
     // set you connection to readonly
 }
 // --------------------------------------------------------------------------------
 sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeException)
-{
+{	
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
+        
     // return if your connection to readonly
     return sal_False;
 }
@@ -269,7 +269,7 @@ void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQ
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
+        
 
     // return your current catalog
     return ::rtl::OUString();
@@ -288,7 +288,7 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
+        
 
     // please have a look at @see com.sun.star.sdbc.TransactionIsolation
     return TransactionIsolation::NONE;
@@ -298,7 +298,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getT
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
+        
     // if your driver has special database types you can return it here
 
     return NULL;
@@ -316,7 +316,7 @@ void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
+            
     }
     dispose();
 }
@@ -340,30 +340,30 @@ void OConnection::buildTypeInfo() throw( SQLException)
     Reference< XResultSet> xRs = getMetaData ()->getTypeInfo ();
     Reference< XRow> xRow(xRs,UNO_QUERY);
     // Information for a single SQL type
-
+    
     // Loop on the result set until we reach end of file
 
-    while (xRs->next ())
+    while (xRs->next ()) 
     {
         OTypeInfo aInfo;
-        aInfo.aTypeName         = xRow->getString   (1);
-        aInfo.nType             = xRow->getShort    (2);
-        aInfo.nPrecision        = xRow->getInt      (3);
-        aInfo.aLiteralPrefix    = xRow->getString   (4);
-        aInfo.aLiteralSuffix    = xRow->getString   (5);
-        aInfo.aCreateParams     = xRow->getString   (6);
-        aInfo.bNullable         = xRow->getBoolean  (7) == ColumnValue::NULLABLE;
-        aInfo.bCaseSensitive    = xRow->getBoolean  (8);
-        aInfo.nSearchType       = xRow->getShort    (9);
-        aInfo.bUnsigned         = xRow->getBoolean  (10);
-        aInfo.bCurrency         = xRow->getBoolean  (11);
-        aInfo.bAutoIncrement    = xRow->getBoolean  (12);
-        aInfo.aLocalTypeName    = xRow->getString   (13);
-        aInfo.nMinimumScale     = xRow->getShort    (14);
-        aInfo.nMaximumScale     = xRow->getShort    (15);
-        aInfo.nNumPrecRadix     = (sal_Int16)xRow->getInt(18);
-
-
+        aInfo.aTypeName			= xRow->getString	(1);
+        aInfo.nType				= xRow->getShort	(2);
+        aInfo.nPrecision		= xRow->getInt		(3);
+        aInfo.aLiteralPrefix	= xRow->getString	(4);
+        aInfo.aLiteralSuffix	= xRow->getString	(5);
+        aInfo.aCreateParams		= xRow->getString	(6);
+        aInfo.bNullable			= xRow->getBoolean	(7) == ColumnValue::NULLABLE;
+        aInfo.bCaseSensitive	= xRow->getBoolean	(8);
+        aInfo.nSearchType		= xRow->getShort	(9);
+        aInfo.bUnsigned			= xRow->getBoolean	(10);
+        aInfo.bCurrency			= xRow->getBoolean	(11);
+        aInfo.bAutoIncrement	= xRow->getBoolean	(12);
+        aInfo.aLocalTypeName	= xRow->getString	(13);
+        aInfo.nMinimumScale		= xRow->getShort	(14);
+        aInfo.nMaximumScale		= xRow->getShort	(15);
+        aInfo.nNumPrecRadix		= (sal_Int16)xRow->getInt(18);
+        
+        
 
         // Now that we have the type info, save it
         // in the Hashtable if we don't already have an
@@ -382,7 +382,7 @@ void OConnection::disposing()
 {
     // we noticed that we should be destroied in near future so we have to dispose our statements
     ::osl::MutexGuard aGuard(m_aMutex);
-
+    
     for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
     {
         Reference< XComponent > xComp(i->get(), UNO_QUERY);
@@ -391,7 +391,7 @@ void OConnection::disposing()
     }
     m_aStatements.clear();
 
-    m_bClosed   = sal_True;
+    m_bClosed	= sal_True;
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
 
     dispose_ChildImpl();

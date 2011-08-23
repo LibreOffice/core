@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,10 @@
 #ifndef SC_XLROOT_HXX
 #define SC_XLROOT_HXX
 
-#include <com/sun/star/beans/NamedValue.hpp>
-
 #include <i18npool/lang.h>
 #include <sot/storage.hxx>
 #include "xlconst.hxx"
 #include "xltools.hxx"
-#include <boost/shared_ptr.hpp>
 
 namespace comphelper { class IDocPasswordVerifier; }
 
@@ -79,14 +76,14 @@ struct XclRootData
     : public XclDebugObjCounter
 #endif
 {
-    typedef boost::shared_ptr< ScEditEngineDefaulter > ScEEDefaulterRef;
-    typedef boost::shared_ptr< ScHeaderEditEngine >    ScHeaderEERef;
-    typedef boost::shared_ptr< EditEngine >            EditEngineRef;
-    typedef boost::shared_ptr< XclFontPropSetHelper >  XclFontPropSetHlpRef;
-    typedef boost::shared_ptr< XclChPropSetHelper >    XclChPropSetHlpRef;
-    typedef boost::shared_ptr< ScExtDocOptions >       ScExtDocOptRef;
-    typedef boost::shared_ptr< XclTracer >             XclTracerRef;
-    typedef boost::shared_ptr< RootData >              RootDataRef;
+    typedef ScfRef< ScEditEngineDefaulter > ScEEDefaulterRef;
+    typedef ScfRef< ScHeaderEditEngine >    ScHeaderEERef;
+    typedef ScfRef< EditEngine >            EditEngineRef;
+    typedef ScfRef< XclFontPropSetHelper >  XclFontPropSetHlpRef;
+    typedef ScfRef< XclChPropSetHelper >    XclChPropSetHlpRef;
+    typedef ScfRef< ScExtDocOptions >       ScExtDocOptRef;
+    typedef ScfRef< XclTracer >             XclTracerRef;
+    typedef ScfRef< RootData >              RootDataRef;
 
     XclBiff             meBiff;             /// Current BIFF version.
     XclOutput           meOutput;           /// Current Output format.
@@ -203,8 +200,7 @@ public:
     /** Returns the default password used for stream encryption. */
     inline const String& GetDefaultPassword() const { return mrData.maDefPassword; }
     /** Requests and verifies a password from the medium or the user. */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
-        RequestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
+    String              RequestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
 
     /** Returns the OLE2 root storage of the imported/exported file.
         @return  Pointer to root storage or 0, if the file is a simple stream. */
@@ -244,8 +240,6 @@ public:
     SvNumberFormatter&  GetFormatter() const;
     /** Returns the null date of the current number formatter. */
     DateTime            GetNullDate() const;
-    /** Returns the base year depending on the current null date (1900 or 1904). */
-    sal_uInt16          GetBaseYear() const;
     /** Converts a date/time value to a floating-point value. */
     double              GetDoubleFromDateTime( const DateTime& rDateTime ) const;
     /** Converts a floating-point value to a date/time value. */
@@ -290,7 +284,7 @@ public:
     inline void         IncCurrScTab() { ++mrData.mnScTab; }
 
 private:
-    XclRootData& mrData;        /// Reference to the global data struct.
+    mutable XclRootData& mrData;        /// Reference to the global data struct.
 };
 
 // ============================================================================

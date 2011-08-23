@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ class BookmarksEnumeration : public EnumerationHelperImpl
 public:
     BookmarksEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  const uno::Reference< frame::XModel >& xModel  ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), mxModel( xModel ) {}
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-    {
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException) 
+    { 
         uno::Reference< container::XNamed > xNamed( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
         rtl::OUString aName = xNamed->getName();
         return uno::makeAny( uno::Reference< word::XBookmark > ( new SwVbaBookmark( m_xParent, m_xContext, mxModel, aName ) ) );
@@ -70,7 +70,7 @@ public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  mxIndexAccess->getElementType(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return mxIndexAccess->hasElements(); }
-    // XNameAcess
+    // XNameAcess 
     virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if ( !hasByName(aName) )
@@ -114,10 +114,12 @@ public:
     }
 };
 
-SwVbaBookmarks::SwVbaBookmarks( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< ::com::sun::star::uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xBookmarks, const uno::Reference< frame::XModel >& xModel ): SwVbaBookmarks_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new BookmarkCollectionHelper( xBookmarks ) ) ), mxModel( xModel )
+SwVbaBookmarks::SwVbaBookmarks( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< ::com::sun::star::uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xBookmarks, const uno::Reference< frame::XModel >& xModel ): SwVbaBookmarks_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new BookmarkCollectionHelper( xBookmarks ) ) ), mxModel( xModel ) 
 {
     mxBookmarksSupplier.set( mxModel, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextDocument > xDocument( mxModel, uno::UNO_QUERY_THROW );
+    // use view cursor to insert bookmark, or it will fail if insert bookmark in table
+    //mxText = word::getXTextViewCursor( mxModel )->getText();
 }
 // XEnumerationAccess
 uno::Type
@@ -173,54 +175,55 @@ SwVbaBookmarks::Add( const rtl::OUString& rName, const uno::Any& rRange ) throw 
     }
 
     // remove the exist bookmark
+    // rtl::OUString aName = rName.toAsciiLowerCase();
     rtl::OUString aName = rName;
     if( m_xNameAccess->hasByName( aName ) )
         removeBookmarkByName( aName );
-
+    
     addBookmarkByName( mxModel, aName, xTextRange );
 
     return uno::makeAny( uno::Reference< word::XBookmark >( new SwVbaBookmark( getParent(), mxContext, mxModel, aName ) ) );
 }
 
-sal_Int32 SAL_CALL
+sal_Int32 SAL_CALL 
 SwVbaBookmarks::getDefaultSorting() throw (css::uno::RuntimeException)
 {
     return word::WdBookmarkSortBy::wdSortByName;
 }
 
-void SAL_CALL
+void SAL_CALL 
 SwVbaBookmarks::setDefaultSorting( sal_Int32/* _type*/ ) throw (css::uno::RuntimeException)
 {
     // not support in Writer
 }
 
-sal_Bool SAL_CALL
+sal_Bool SAL_CALL 
 SwVbaBookmarks::getShowHidden() throw (css::uno::RuntimeException)
 {
     return sal_True;
 }
 
-void SAL_CALL
+void SAL_CALL 
 SwVbaBookmarks::setShowHidden( sal_Bool /*_hidden*/ ) throw (css::uno::RuntimeException)
 {
     // not support in Writer
 }
 
-sal_Bool SAL_CALL
+sal_Bool SAL_CALL 
 SwVbaBookmarks::Exists( const rtl::OUString& rName ) throw (css::uno::RuntimeException)
 {
     sal_Bool bExist = m_xNameAccess->hasByName( rName );
     return bExist;
 }
 
-rtl::OUString&
+rtl::OUString& 
 SwVbaBookmarks::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaBookmarks") );
     return sImplName;
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<rtl::OUString> 
 SwVbaBookmarks::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > sNames;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,66 +44,66 @@ class SdPageFormatUndoAction : public SdUndoAction
     SdPage*     mpPage;
 
     Size        maOldSize;
-    sal_Int32       mnOldLeft;
-    sal_Int32       mnOldRight;
-    sal_Int32       mnOldUpper;
-    sal_Int32       mnOldLower;
-    sal_Bool        mbOldScale;
+    INT32       mnOldLeft;
+    INT32       mnOldRight;
+    INT32       mnOldUpper;
+    INT32       mnOldLower;
+    BOOL        mbOldScale;
     Orientation meOldOrientation;
-    sal_uInt16      mnOldPaperBin;
-    sal_Bool        mbOldFullSize;
+    USHORT      mnOldPaperBin;
+    BOOL        mbOldFullSize;
 
     Size        maNewSize;
-    sal_Int32       mnNewLeft;
-    sal_Int32       mnNewRight;
-    sal_Int32       mnNewUpper;
-    sal_Int32       mnNewLower;
-    sal_Bool        mbNewScale;
+    INT32       mnNewLeft;
+    INT32       mnNewRight;
+    INT32       mnNewUpper;
+    INT32       mnNewLower;
+    BOOL        mbNewScale;
     Orientation meNewOrientation;
-    sal_uInt16      mnNewPaperBin;
-    sal_Bool        mbNewFullSize;
+    USHORT      mnNewPaperBin;
+    BOOL        mbNewFullSize;
 
 public:
     TYPEINFO();
-    SdPageFormatUndoAction( SdDrawDocument* pDoc,
-                            SdPage*         pThePage,
-                            const Size&     rOldSz,
-                            sal_Int32           nOldLft,
-                            sal_Int32           nOldRgt,
-                            sal_Int32           nOldUpr,
-                            sal_Int32           nOldLwr,
-                            sal_Bool            bOldScl,
+    SdPageFormatUndoAction(	SdDrawDocument*	pDoc,
+                            SdPage*			pThePage,
+                            const Size&		rOldSz,
+                            INT32			nOldLft,
+                            INT32			nOldRgt,
+                            INT32			nOldUpr,
+                            INT32			nOldLwr,
+                            BOOL            bOldScl,
                             Orientation     eOldOrient,
-                            sal_uInt16          nOPaperBin,
-                            sal_Bool            bOFullSize,
+                            USHORT      	nOPaperBin,
+                            BOOL        	bOFullSize,
 
                             const Size&     rNewSz,
-                            sal_Int32           nNewLft,
-                            sal_Int32           nNewRgt,
-                            sal_Int32           nNewUpr,
-                            sal_Int32           nNewLwr,
-                            sal_Bool            bNewScl,
+                            INT32			nNewLft,
+                            INT32			nNewRgt,
+                            INT32			nNewUpr,
+                            INT32           nNewLwr,
+                            BOOL            bNewScl,
                             Orientation     eNewOrient,
-                            sal_uInt16          nNPaperBin,
-                            sal_Bool            bNFullSize
+                            USHORT      	nNPaperBin,
+                            BOOL        	bNFullSize
                             ) :
         SdUndoAction(pDoc),
-        mpPage      (pThePage),
-        maOldSize   (rOldSz),
-        mnOldLeft   (nOldLft),
-        mnOldRight  (nOldRgt),
-        mnOldUpper  (nOldUpr),
-        mnOldLower  (nOldLwr),
+        mpPage		(pThePage),
+        maOldSize	(rOldSz),
+        mnOldLeft	(nOldLft),
+        mnOldRight	(nOldRgt),
+        mnOldUpper	(nOldUpr),
+        mnOldLower	(nOldLwr),
         mbOldScale   (bOldScl),
         meOldOrientation(eOldOrient),
         mnOldPaperBin (nOPaperBin),
         mbOldFullSize (bOFullSize),
 
 
-        maNewSize   (rNewSz),
-        mnNewLeft   (nNewLft),
-        mnNewRight  (nNewRgt),
-        mnNewUpper  (nNewUpr),
+        maNewSize	(rNewSz),
+        mnNewLeft	(nNewLft),
+        mnNewRight	(nNewRgt),
+        mnNewUpper	(nNewUpr),
         mnNewLower   (nNewLwr),
         mbNewScale   (bNewScl),
         meNewOrientation(eNewOrient),
@@ -121,24 +121,24 @@ public:
 
 class SdPageLRUndoAction : public SdUndoAction
 {
-    SdPage* mpPage;
+    SdPage*	mpPage;
 
-    sal_Int32   mnOldLeft;
-    sal_Int32   mnOldRight;
-    sal_Int32   mnNewLeft;
-    sal_Int32   mnNewRight;
+    INT32	mnOldLeft;
+    INT32	mnOldRight;
+    INT32	mnNewLeft;
+    INT32	mnNewRight;
 
 public:
     TYPEINFO();
     SdPageLRUndoAction( SdDrawDocument* pDoc, SdPage* pThePage,
-                        sal_Int32 nOldLft, sal_Int32 nOldRgt,
-                        sal_Int32 nNewLft, sal_Int32 nNewRgt ) :
+                        INT32 nOldLft, INT32 nOldRgt,
+                        INT32 nNewLft, INT32 nNewRgt ) :
         SdUndoAction(pDoc),
-        mpPage      (pThePage),
-        mnOldLeft   (nOldLft),
-        mnOldRight  (nOldRgt),
-        mnNewLeft   (nNewLft),
-        mnNewRight  (nNewRgt)
+        mpPage		(pThePage),
+        mnOldLeft	(nOldLft),
+        mnOldRight	(nOldRgt),
+        mnNewLeft	(nNewLft),
+        mnNewRight	(nNewRgt)
         {}
     virtual ~SdPageLRUndoAction();
 
@@ -150,24 +150,24 @@ public:
 
 class SdPageULUndoAction : public SdUndoAction
 {
-    SdPage* mpPage;
+    SdPage*	mpPage;
 
-    sal_Int32   mnOldUpper;
-    sal_Int32   mnOldLower;
-    sal_Int32   mnNewUpper;
-    sal_Int32   mnNewLower;
+    INT32	mnOldUpper;
+    INT32	mnOldLower;
+    INT32	mnNewUpper;
+    INT32	mnNewLower;
 
 public:
     TYPEINFO();
     SdPageULUndoAction( SdDrawDocument* pDoc, SdPage* pThePage,
-                        sal_Int32 nOldUpr, sal_Int32 nOldLwr,
-                        sal_Int32 nNewUpr, sal_Int32 nNewLwr ) :
+                        INT32 nOldUpr, INT32 nOldLwr,
+                        INT32 nNewUpr, INT32 nNewLwr ) :
         SdUndoAction(pDoc),
-        mpPage      (pThePage),
-        mnOldUpper  (nOldUpr),
-        mnOldLower  (nOldLwr),
-        mnNewUpper  (nNewUpr),
-        mnNewLower  (nNewLwr)
+        mpPage		(pThePage),
+        mnOldUpper	(nOldUpr),
+        mnOldLower	(nOldLwr),
+        mnNewUpper	(nNewUpr),
+        mnNewLower	(nNewLwr)
         {}
     virtual ~SdPageULUndoAction();
 
@@ -177,6 +177,6 @@ public:
 
 
 
-#endif      // _SD_UNDOPAGE_HXX
+#endif		// _SD_UNDOPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

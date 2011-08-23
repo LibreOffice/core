@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public:
     TYPEINFO();
 
     DrawView (
-        DrawDocShell* pDocSh,
+        DrawDocShell* pDocSh, 
         OutputDevice* pOutDev,
         DrawViewShell* pShell);
     virtual ~DrawView (void);
@@ -61,14 +61,14 @@ public:
     virtual void MarkListHasChanged();
     void CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
 
-    virtual sal_Bool SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll = sal_False);
+    virtual BOOL SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll = FALSE);
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
-    void    BlockPageOrderChangedHint(sal_Bool bBlock);
+    void	BlockPageOrderChangedHint(BOOL bBlock);
 
-    sal_Bool    SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr = sal_False);
-    virtual sal_Bool IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const;
+    BOOL	SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr = FALSE);
+    virtual BOOL IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const;
 
     virtual void MakeVisible(const Rectangle& rRect, ::Window& rWin);
     virtual void HideSdrPage(); // SdrPageView* pPV);
@@ -82,11 +82,11 @@ protected:
 private:
     friend class DrawViewRedirector;
 
-    DrawDocShell*   mpDocShell;
-    DrawViewShell*  mpDrawViewShell;
-    VirtualDevice*  mpVDev;
+    DrawDocShell* 	mpDocShell;
+    DrawViewShell*	mpDrawViewShell;
+    VirtualDevice*	mpVDev;
 
-    sal_uInt16          mnPOCHSmph; // zum blockieren des PageOrderChangedHint
+    USHORT			mnPOCHSmph;	// zum blockieren des PageOrderChangedHint
 };
 
 } // end of namespace sd

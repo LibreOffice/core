@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,15 +48,15 @@ module com {  module sun {  module star {  module frame {
 
     <p>
     This interface can be used to retrieve additional information about
-    supported commands. This interface is normally used by configuration
-    implementations to retrieve all supported commands.
-    A dispatch information provider is normally supported by a
+    supported commands. This interface is normally used by configuration 
+    implementations to retrieve all supported commands. 
+    A dispatch information provider is normally supported by a 
     <type>Frame</type> service.
     </p>
 
     @see Frame
 
-    @since OOo 2.0
+    @since OOo 2.0.0
  */
 published interface XDispatchInformationProvider: com::sun::star::uno::XInterface
 {
@@ -71,12 +71,12 @@ published interface XDispatchInformationProvider: com::sun::star::uno::XInterfac
     sequence < short > getSupportedCommandGroups();
 
     //-------------------------------------------------------------------------
-    /** returns additional information about supported commands of a
+    /** returns additional information about supported commands of a 
         given command group.
-
+        
         @param CommandGroup
             specifies a command group.
-
+        
         @returns
             name and group name of every command supported. A group ID which is
             not supported returns an empty <type scope="com::sun::star::uno">Sequence</type>.

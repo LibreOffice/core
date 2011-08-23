@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,19 +29,17 @@
 #ifndef INC_ASSCLASS
 #define INC_ASSCLASS
 
-#include <vector>
-#include <boost/scoped_array.hpp>
-
 #include <tools/solar.h>
 #include "sddllapi.h"
 
 #define MAX_PAGES 10
 
+class List;
 class Control;
 
 class SD_DLLPUBLIC Assistent
 {
-    std::vector<Control*> maPages[MAX_PAGES];
+    List* mpPages[MAX_PAGES];
         //enthaelt fuer jede Seite die Controls die
         //korrekt geschaltet werden muessen
 
@@ -51,13 +49,13 @@ class SD_DLLPUBLIC Assistent
     int mnCurrentPage;
         //gibt die aktuelle Seite an
 
-    boost::scoped_array<bool> mpPageStatus;
+    bool* mpPageStatus;
 
 public:
 
     Assistent(int nNoOfPage);
 
-    bool IsEnabled ( int nPage ) const;
+    bool IsEnabled( int nPage );
     void EnablePage( int nPage );
     void DisablePage( int nPage );
 
@@ -73,14 +71,16 @@ public:
     bool GotoPage(const int nPageToGo);
         //springt zu einer angegebenen Seite
 
-    bool IsLastPage() const;
+    bool IsLastPage();
         //gibt an ob die aktuelle Seite die letzte ist
 
-    bool IsFirstPage() const;
+    bool IsFirstPage();
         //gibt an ob die aktuelle Seite die erste ist
 
-    int  GetCurrentPage() const;
+    int  GetCurrentPage();
         //gibt die aktuelle Seite zurueck
+
+    ~Assistent();
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ TYPEINIT1_AUTOFACTORY(SfxAllEnumItem, SfxEnumItem)
 
 struct SfxAllEnumValue_Impl
 {
-    sal_uInt16 nValue;
+    USHORT nValue;
     XubString aText;
 };
 
@@ -62,7 +62,7 @@ SfxAllEnumItem::SfxAllEnumItem() :
 {
 }
 
-SfxAllEnumItem::SfxAllEnumItem( sal_uInt16 which, sal_uInt16 nVal, const XubString &rText ):
+SfxAllEnumItem::SfxAllEnumItem( USHORT which, USHORT nVal, const XubString &rText ):
     SfxEnumItem(which, nVal),
     pValues( 0 ),
     pDisabledValues( 0 )
@@ -73,7 +73,7 @@ SfxAllEnumItem::SfxAllEnumItem( sal_uInt16 which, sal_uInt16 nVal, const XubStri
 
 // -----------------------------------------------------------------------
 
-SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which, sal_uInt16 nVal):
+SfxAllEnumItem::SfxAllEnumItem(USHORT which, USHORT nVal):
     SfxEnumItem(which, nVal),
     pValues( 0 ),
     pDisabledValues( 0 )
@@ -84,7 +84,7 @@ SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which, sal_uInt16 nVal):
 
 // -----------------------------------------------------------------------
 
-SfxAllEnumItem::SfxAllEnumItem( sal_uInt16 which, SvStream &rStream ):
+SfxAllEnumItem::SfxAllEnumItem( USHORT which, SvStream &rStream ):
     SfxEnumItem(which, rStream),
     pValues( 0 ),
     pDisabledValues( 0 )
@@ -96,7 +96,7 @@ SfxAllEnumItem::SfxAllEnumItem( sal_uInt16 which, SvStream &rStream ):
 // -----------------------------------------------------------------------
 
 
-SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which):
+SfxAllEnumItem::SfxAllEnumItem(USHORT which):
     SfxEnumItem(which, 0),
     pValues( 0 ),
     pDisabledValues( 0 )
@@ -118,7 +118,7 @@ SfxAllEnumItem::SfxAllEnumItem(const SfxAllEnumItem &rCopy):
 
     pValues = new SfxAllEnumValueArr;
 
-    for ( sal_uInt16 nPos = 0; nPos < rCopy.pValues->Count(); ++nPos )
+    for ( USHORT nPos = 0; nPos < rCopy.pValues->Count(); ++nPos )
     {
         SfxAllEnumValue_Impl *pVal = new SfxAllEnumValue_Impl;
         pVal->nValue = rCopy.pValues->GetObject(nPos)->nValue;
@@ -130,7 +130,7 @@ SfxAllEnumItem::SfxAllEnumItem(const SfxAllEnumItem &rCopy):
     if( rCopy.pDisabledValues )
     {
         pDisabledValues = new SvUShorts;
-        for ( sal_uInt16 nPos = 0; nPos < rCopy.pDisabledValues->Count(); ++nPos )
+        for ( USHORT nPos = 0; nPos < rCopy.pDisabledValues->Count(); ++nPos )
         {
             pDisabledValues->Insert( rCopy.pDisabledValues->GetObject(nPos),
                                      nPos );
@@ -149,7 +149,7 @@ SfxAllEnumItem::~SfxAllEnumItem()
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SfxAllEnumItem::GetValueCount() const
+USHORT SfxAllEnumItem::GetValueCount() const
 {
     DBG_CHKTHIS(SfxAllEnumItem, 0);
     return pValues ? pValues->Count() : 0;
@@ -157,7 +157,7 @@ sal_uInt16 SfxAllEnumItem::GetValueCount() const
 
 // -----------------------------------------------------------------------
 
-XubString SfxAllEnumItem::GetValueTextByPos( sal_uInt16 nPos ) const
+XubString SfxAllEnumItem::GetValueTextByPos( USHORT nPos ) const
 {
     DBG_CHKTHIS(SfxAllEnumItem, 0);
     DBG_ASSERT( pValues && nPos < pValues->Count(), "enum overflow" );
@@ -166,7 +166,7 @@ XubString SfxAllEnumItem::GetValueTextByPos( sal_uInt16 nPos ) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SfxAllEnumItem::GetValueByPos( sal_uInt16 nPos ) const
+USHORT SfxAllEnumItem::GetValueByPos( USHORT nPos ) const
 {
     DBG_CHKTHIS(SfxAllEnumItem, 0);
     DBG_ASSERT( pValues && nPos < pValues->Count(), "enum overflow" );
@@ -183,7 +183,7 @@ SfxPoolItem* SfxAllEnumItem::Clone( SfxItemPool * ) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxAllEnumItem::Create( SvStream & rStream, sal_uInt16 ) const
+SfxPoolItem* SfxAllEnumItem::Create( SvStream & rStream, USHORT ) const
 {
     DBG_CHKTHIS(SfxAllEnumItem, 0);
     return new SfxAllEnumItem( Which(), rStream );
@@ -192,11 +192,11 @@ SfxPoolItem* SfxAllEnumItem::Create( SvStream & rStream, sal_uInt16 ) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SfxAllEnumItem::_GetPosByValue( sal_uInt16 nVal ) const
+USHORT SfxAllEnumItem::_GetPosByValue( USHORT nVal ) const
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
-    Im Ggs. zu <SfxEnumItemInterface::GetPosByValue(sal_uInt16)const> liefert
+    Im Ggs. zu <SfxEnumItemInterface::GetPosByValue(USHORT)const> liefert
     diese interne Methode bei nicht vorhandenen Values die Position,
     an der der Wert liegen w"urde.
 */
@@ -208,7 +208,7 @@ sal_uInt16 SfxAllEnumItem::_GetPosByValue( sal_uInt16 nVal ) const
         return 0;
 
     //!O: binaere Suche oder SortArray verwenden
-    sal_uInt16 nPos;
+    USHORT nPos;
     for ( nPos = 0; nPos < pValues->Count(); ++nPos )
         if ( pValues->GetObject(nPos)->nValue >= nVal )
             return nPos;
@@ -217,11 +217,11 @@ sal_uInt16 SfxAllEnumItem::_GetPosByValue( sal_uInt16 nVal ) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SfxAllEnumItem::GetPosByValue( sal_uInt16 nValue ) const
+USHORT SfxAllEnumItem::GetPosByValue( USHORT nValue ) const
 
 /*  [Beschreibung]
 
-    Liefert im Gegensatz zu <SfxEnumItemInterface::GetPosByValue(sal_uInt16)const>
+    Liefert im Gegensatz zu <SfxEnumItemInterface::GetPosByValue(USHORT)const>
     immer nValue zur"uck, solange nicht mindestens ein Wert mit einer der
     Methoden <SfxAllEnumItem::InsertValue()> eingef"ugt wurde.
 */
@@ -237,7 +237,7 @@ sal_uInt16 SfxAllEnumItem::GetPosByValue( sal_uInt16 nValue ) const
 
 // -----------------------------------------------------------------------
 
-void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const XubString &rValue )
+void SfxAllEnumItem::InsertValue( USHORT nValue, const XubString &rValue )
 {
     DBG_CHKTHIS(SfxAllEnumItem, 0);
     SfxAllEnumValue_Impl *pVal = new SfxAllEnumValue_Impl;
@@ -255,7 +255,7 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const XubString &rValue )
 
 // -----------------------------------------------------------------------
 
-void SfxAllEnumItem::InsertValue( sal_uInt16 nValue )
+void SfxAllEnumItem::InsertValue( USHORT nValue )
 {
     DBG_CHKTHIS(SfxAllEnumItem, 0);
     SfxAllEnumValue_Impl *pVal = new SfxAllEnumValue_Impl;
@@ -268,7 +268,7 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue )
     pValues->Insert( pTemp, _GetPosByValue(nValue) ); //! doppelte?!
 }
 
-void SfxAllEnumItem::DisableValue( sal_uInt16 nValue )
+void SfxAllEnumItem::DisableValue( USHORT nValue )
 {
     DBG_CHKTHIS(SfxAllEnumItem, 0);
     if ( !pDisabledValues )
@@ -277,24 +277,24 @@ void SfxAllEnumItem::DisableValue( sal_uInt16 nValue )
     pDisabledValues->Insert( nValue, pDisabledValues->Count() );
 }
 
-sal_Bool SfxAllEnumItem::IsEnabled( sal_uInt16 nValue ) const
+BOOL SfxAllEnumItem::IsEnabled( USHORT nValue ) const
 {
     if ( pDisabledValues )
     {
-        for ( sal_uInt16 i=0; i<pDisabledValues->Count(); i++ )
+        for ( USHORT i=0; i<pDisabledValues->Count(); i++ )
             if ( (*pDisabledValues)[i] == nValue )
-                return sal_False;
+                return FALSE;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-void SfxAllEnumItem::RemoveValue( sal_uInt16 nValue )
+void SfxAllEnumItem::RemoveValue( USHORT nValue )
 {
     DBG_CHKTHIS(SfxAllEnumItem, 0);
-    sal_uInt16 nPos = GetPosByValue(nValue);
+    USHORT nPos = GetPosByValue(nValue);
     DBG_ASSERT( nPos != USHRT_MAX, "removing value not in enum" );
     pValues->Remove( nPos );
 }

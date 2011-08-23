@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -660,6 +660,7 @@
 #include "unotools/pathoptions.hxx"
 #include "svl/poolitem.hxx"
 #include "svtools/prgsbar.hxx"
+#include "svtools/printdlg.hxx"
 #include "svtools/prnsetup.hxx"
 #include "svl/ptitem.hxx"
 #include "svl/rectitem.hxx"
@@ -686,6 +687,7 @@
 #include "svtools/svtabbx.hxx"
 #include "svtools/svtreebx.hxx"
 #include "unotools/syslocale.hxx"
+#include "svtools/templdlg.hxx"
 #include "svtools/textview.hxx"
 #include "svtools/transfer.hxx"
 #include "svtools/txtattr.hxx"
@@ -747,16 +749,18 @@
 #include "svx/globlmn.hrc"
 #include "svx/grafctrl.hxx"
 #include "editeng/hangulhanja.hxx"
-#include "svx/hdft.hxx"
+#include "svx/hdft2.hxx"
 #include "svtools/htmlcfg.hxx"
 #include "svx/htmlmode.hxx"
 #include "svx/hyperdlg.hxx"
+#include "svx/hyprlink.hxx"
 #include "svx/imapdlg.hxx"
 #include "editeng/itemtype.hxx"
 #include "svx/langbox.hxx"
 #include "svx/layctrl.hxx"
 #include "svx/lboxctrl.hxx"
 #include "svx/linectrl.hxx"
+#include "sfx2/linkmgr.hxx"
 #include "filter/msfilter/mscodec.hxx"
 #include "filter/msfilter/msdffimp.hxx"
 #include "filter/msfilter/msfiltertracer.hxx"
@@ -851,6 +855,7 @@
 #include "tools/gen.hxx"
 #include "tools/globname.hxx"
 #include "tools/link.hxx"
+#include "tools/list.hxx"
 #include "tools/mempool.hxx"
 #include "tools/multisel.hxx"
 #include "tools/poly.hxx"
@@ -909,14 +914,14 @@
 #include "vcl/event.hxx"
 #include "vcl/field.hxx"
 #include "vcl/fixed.hxx"
-#include "tools/fldunit.hxx"
+#include "vcl/fldunit.hxx"
 #include "vcl/font.hxx"
 #include "unotools/fontcvt.hxx"
 #include "vcl/graph.hxx"
 #include "vcl/group.hxx"
 #include "vcl/help.hxx"
 #include "vcl/image.hxx"
-#include "vcl/button.hxx"
+#include "vcl/imagebtn.hxx"
 #include "vcl/inputctx.hxx"
 #include "vcl/jobset.hxx"
 #include "vcl/keycod.hxx"
@@ -946,9 +951,10 @@
 #include "vcl/virdev.hxx"
 #include "vcl/waitobj.hxx"
 #include "vcl/window.hxx"
-#include "tools/wintypes.hxx"
+#include "vcl/wintypes.hxx"
 #include "vcl/wrkwin.hxx"
 
+#include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 
 #include "xmloff/DocumentSettingsContext.hxx"

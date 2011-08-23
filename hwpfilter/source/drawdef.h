@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+/* NAME $Id: drawdef.h,v 1.5 2008-04-10 11:58:04 rt Exp $
+ *
+ * HISTORY
+ *        frog - Jan 11, 1999: Created.
+ */
 
 #ifndef _DRAWDEF_H_
 #define _DRAWDEF_H_

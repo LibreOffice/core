@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,25 +74,25 @@ class KeyMapping
         //---------------------------------------
         /** @short  hash structure to map identifier to key codes. */
         typedef BaseHash< sal_Int16 > Identifier2CodeHash;
-
+        
         //---------------------------------------
         /** @short  hash structure to map key codes to identifier. */
-        typedef ::boost::unordered_map< sal_Int16                    ,
+        typedef ::std::hash_map< sal_Int16                    ,
                                  ::rtl::OUString              ,
                                  ShortHashCode                ,
                                  ::std::equal_to< sal_Int16 > > Code2IdentifierHash;
-
+        
     //______________________________________
     // member
 
     private:
-
+    
         static KeyIdentifierInfo KeyIdentifierMap[];
-
+    
         //---------------------------------------
         /** @short  hash to map identifier to key codes. */
         Identifier2CodeHash m_lIdentifierHash;
-
+        
         //---------------------------------------
         /** @short  hash to map key codes to identifier. */
         Code2IdentifierHash m_lCodeHash;
@@ -108,51 +108,51 @@ class KeyMapping
         //----------------------------------
         /** @short  return a suitable key code
                     for the specified key identifier.
-
+                    
             @param  sIdentifier
                     string value, which describe the key.
 
             @return [css::awt::KeyEvent]
                     the corresponding key code as
                     short value.
-
+                    
             @throw  [css::lang::IllegalArgumentException]
                     if the given identifier does not describe
-                    a well known key code.
-         */
+                    a well known key code.                    
+         */                    
         virtual sal_uInt16 mapIdentifierToCode(const ::rtl::OUString& sIdentifier)
             throw(css::lang::IllegalArgumentException);
-
+        
         //----------------------------------
         /** @short  return a suitable key identifier
                     for the specified key code.
-
+                    
             @param  nCode
                     short value, which describe the key.
 
             @return The corresponding string identifier.
-         */
+         */                    
         virtual ::rtl::OUString mapCodeToIdentifier(sal_uInt16 nCode);
-
+            
     //______________________________________
     // helper
 
     private:
-
+    
         //----------------------------------
         /** @short  check if the given string describe a numeric
                     value ... and convert it.
 
             @param  sIdentifier
                     the string value, which should be converted.
-
-
+                    
+                    
             @param  rCode
                     contains the converted code, but is defined only
-                    if this method returns sal_True!
+                    if this method returns TRUE!
 
             @return [boolean]
-                    sal_True if convertion was successfully.
+                    TRUE if convertion was successfully.                                
           */
         sal_Bool impl_st_interpretIdentifierAsPureKeyCode(const ::rtl::OUString& sIdentifier,
                                                                 sal_uInt16&      rCode      );

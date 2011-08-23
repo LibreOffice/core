@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,12 +62,12 @@ class SharedFormulaBuffer : public WorksheetHelper
 public:
     explicit            SharedFormulaBuffer( const WorksheetHelper& rHelper );
 
-    /** Imports a shared formula from a OOXML formula string. */
+    /** Imports a shared formula from a OOX formula string. */
     void                importSharedFmla( const ::rtl::OUString& rFormula,
                             const ::rtl::OUString& rSharedRange, sal_Int32 nId,
                             const ::com::sun::star::table::CellAddress& rBaseAddr );
     /** Imports a shared formula from a SHAREDFORMULA record in the passed stream */
-    void                importSharedFmla( SequenceInputStream& rStrm,
+    void                importSharedFmla( RecordInputStream& rStrm,
                             const ::com::sun::star::table::CellAddress& rBaseAddr );
     /** Imports a shared formula from a SHAREDFMLA record in the passed stream. */
     void                importSharedFmla( BiffInputStream& rStrm,

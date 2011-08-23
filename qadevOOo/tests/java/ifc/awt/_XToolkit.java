@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ public class _XToolkit extends MultiMethodTest {
                 res = true;
             }
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occurred while checking 'createWindow':");
+            log.println("Exception occured while checking 'createWindow':");
             ex.printStackTrace(log);
         }
         tRes.tested("createWindow()", res);
@@ -119,7 +119,7 @@ public class _XToolkit extends MultiMethodTest {
                 res = true;
             }
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occurred while checking 'createWindows':");
+            log.println("Exception occured while checking 'createWindows':");
             ex.printStackTrace(log);
         }
         tRes.tested("createWindows()", res);

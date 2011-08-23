@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,6 @@
 #define _SWTEXTSH_HXX
 
 #include <basesh.hxx>
-#include <unotools/caserotate.hxx>
 
 class AbstractSvxPostItDialog;
 class SwFldMgr;
@@ -38,13 +37,12 @@ class SvxHyperlinkItem;
 
 class SwTextShell: public SwBaseShell
 {
-    SwFldMgr*   pPostItFldMgr;
-    RotateTransliteration m_aRotateCase;
+    SwFldMgr*	pPostItFldMgr;
 
     void InsertSymbol( SfxRequest& );
     void InsertHyperlink(const SvxHyperlinkItem& rHlnkItem);
     bool InsertMediaDlg( SfxRequest& );
-    void ChangeHeaderOrFooter(const String& rStyleName, sal_Bool bHeader, sal_Bool bOn, sal_Bool bShowWarning);
+    void ChangeHeaderOrFooter(const String& rStyleName, BOOL bHeader, BOOL bOn, BOOL bShowWarning);
 
 public:
     SFX_DECL_INTERFACE(SW_TEXTSHELL)
@@ -53,35 +51,34 @@ public:
     DECL_LINK( RedlineNextHdl, AbstractSvxPostItDialog * );
     DECL_LINK( RedlinePrevHdl, AbstractSvxPostItDialog * );
 
-    void    Execute(SfxRequest &);
-    void    GetState(SfxItemSet &);
+    void	Execute(SfxRequest &);
+    void	GetState(SfxItemSet &);
 
-    void    ExecInsert(SfxRequest &);
-    void    StateInsert(SfxItemSet&);
-    void    ExecDelete(SfxRequest &);
-    void    ExecEnterNum(SfxRequest &);
-    void    ExecBasicMove(SfxRequest &);
-    void    ExecMove(SfxRequest &);
-    void    ExecMovePage(SfxRequest &);
-    void    ExecMoveCol(SfxRequest &);
-    void    ExecMoveLingu(SfxRequest &);
-    void    ExecMoveMisc(SfxRequest &);
-    void    ExecField(SfxRequest &rReq);
-    void    StateField(SfxItemSet &);
-    void    ExecIdx(SfxRequest &);
-    void    GetIdxState(SfxItemSet &);
-    void    ExecGlossary(SfxRequest &);
+    void	ExecInsert(SfxRequest &);
+    void	StateInsert(SfxItemSet&);
+    void	ExecDelete(SfxRequest &);
+    void	ExecEnterNum(SfxRequest &);
+    void	ExecBasicMove(SfxRequest &);
+    void	ExecMove(SfxRequest &);
+    void	ExecMovePage(SfxRequest &);
+    void	ExecMoveCol(SfxRequest &);
+    void	ExecMoveLingu(SfxRequest &);
+    void	ExecMoveMisc(SfxRequest &);
+    void	ExecField(SfxRequest &rReq);
+    void	StateField(SfxItemSet &);
+    void	ExecIdx(SfxRequest &);
+    void	GetIdxState(SfxItemSet &);
+    void	ExecGlossary(SfxRequest &);
 
-    void    ExecCharAttr(SfxRequest &);
-    void    ExecCharAttrArgs(SfxRequest &);
-    void    ExecParaAttr(SfxRequest &);
-    void    ExecParaAttrArgs(SfxRequest &);
-    void    ExecAttr(SfxRequest &);
-    void    ExecDB(SfxRequest &);
-    void    ExecTransliteration(SfxRequest &);
-    void    ExecRotateTransliteration(SfxRequest &);
+    void	ExecCharAttr(SfxRequest &);
+    void	ExecCharAttrArgs(SfxRequest &);
+    void	ExecParaAttr(SfxRequest &);
+    void	ExecParaAttrArgs(SfxRequest &);
+    void	ExecAttr(SfxRequest &);
+    void	ExecDB(SfxRequest &);
+    void 	ExecTransliteration(SfxRequest &);
 
-    void    GetAttrState(SfxItemSet &);
+    void	GetAttrState(SfxItemSet &);
 
              SwTextShell(SwView &rView);
     virtual ~SwTextShell();

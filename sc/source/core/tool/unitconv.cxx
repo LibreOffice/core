@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,16 +36,15 @@
 
 #include "unitconv.hxx"
 #include "global.hxx"
-#include "viewopti.hxx"         //! move ScLinkConfigItem to separate header!
+#include "viewopti.hxx"			//! move ScLinkConfigItem to separate header!
 
 using namespace utl;
+using namespace rtl;
 using namespace com::sun::star::uno;
-
-using ::rtl::OUString;
 
 // --------------------------------------------------------------------
 
-const sal_Unicode cDelim = 0x01;        // Delimiter zwischen From und To
+const sal_Unicode cDelim = 0x01;		// Delimiter zwischen From und To
 
 
 // --- ScUnitConverterData --------------------------------------------
@@ -76,6 +75,7 @@ ScDataObject* ScUnitConverterData::Clone() const
 }
 
 
+// static
 void ScUnitConverterData::BuildIndexString( String& rStr,
             const String& rFromUnit, const String& rToUnit )
 {
@@ -98,18 +98,18 @@ void ScUnitConverterData::BuildIndexString( String& rStr,
 
 // --- ScUnitConverter ------------------------------------------------
 
-#define CFGPATH_UNIT        "Office.Calc/UnitConversion"
-#define CFGSTR_UNIT_FROM    "FromUnit"
-#define CFGSTR_UNIT_TO      "ToUnit"
-#define CFGSTR_UNIT_FACTOR  "Factor"
+#define CFGPATH_UNIT		"Office.Calc/UnitConversion"
+#define CFGSTR_UNIT_FROM	"FromUnit"
+#define CFGSTR_UNIT_TO		"ToUnit"
+#define CFGSTR_UNIT_FACTOR	"Factor"
 
-ScUnitConverter::ScUnitConverter( sal_uInt16 nInit, sal_uInt16 nDeltaP ) :
-        ScStrCollection( nInit, nDeltaP, false )
+ScUnitConverter::ScUnitConverter( USHORT nInit, USHORT nDeltaP ) :
+        ScStrCollection( nInit, nDeltaP, FALSE )
 {
-    //  read from configuration - "convert.ini" is no longer used
-    //! config item as member to allow change of values
+    //	read from configuration - "convert.ini" is no longer used
+    //!	config item as member to allow change of values
 
-    ScLinkConfigItem aConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_UNIT )) );
+    ScLinkConfigItem aConfigItem( OUString::createFromAscii( CFGPATH_UNIT ) );
 
     // empty node name -> use the config item's path itself
     OUString aEmptyString;
@@ -130,11 +130,11 @@ ScUnitConverter::ScUnitConverter( sal_uInt16 nInit, sal_uInt16 nDeltaP ) :
             sPrefix += sSlash;
 
             pValNameArray[nIndex] = sPrefix;
-            pValNameArray[nIndex++] += OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_UNIT_FROM ));
+            pValNameArray[nIndex++] += OUString::createFromAscii( CFGSTR_UNIT_FROM );
             pValNameArray[nIndex] = sPrefix;
-            pValNameArray[nIndex++] += OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_UNIT_TO ));
+            pValNameArray[nIndex++] += OUString::createFromAscii( CFGSTR_UNIT_TO );
             pValNameArray[nIndex] = sPrefix;
-            pValNameArray[nIndex++] += OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_UNIT_FACTOR ));
+            pValNameArray[nIndex++] += OUString::createFromAscii( CFGSTR_UNIT_FACTOR );
         }
 
         Sequence<Any> aProperties = aConfigItem.GetProperties(aValNames);
@@ -162,18 +162,18 @@ ScUnitConverter::ScUnitConverter( sal_uInt16 nInit, sal_uInt16 nDeltaP ) :
     }
 }
 
-sal_Bool ScUnitConverter::GetValue( double& fValue, const String& rFromUnit,
+BOOL ScUnitConverter::GetValue( double& fValue, const String& rFromUnit,
                 const String& rToUnit ) const
 {
     ScUnitConverterData aSearch( rFromUnit, rToUnit );
-    sal_uInt16 nIndex;
+    USHORT nIndex;
     if ( Search( &aSearch, nIndex ) )
     {
         fValue = ((const ScUnitConverterData*)(At( nIndex )))->GetValue();
-        return sal_True;
+        return TRUE;
     }
     fValue = 1.0;
-    return false;
+    return FALSE;
 }
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include "XFormsModelContext.hxx"
 #include <vector>
 #include <utility>
-#include "xmloff/xformsimport.hxx"
+#include "xformsimport.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
@@ -67,22 +67,22 @@ using com::sun::star::form::submission::XSubmission;
 using com::sun::star::form::submission::XSubmissionSupplier;
 using rtl::OUString;
 
-SvXMLImportContext* createXFormsModelContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
+SvXMLImportContext* createXFormsModelContext( 
+    SvXMLImport& rImport, 
+    USHORT nPrefix,
     const rtl::OUString& rLocalName )
 {
     return new XFormsModelContext( rImport, nPrefix, rLocalName );
 }
 
-void bindXFormsValueBinding(
+void bindXFormsValueBinding( 
     Reference<XModel> xModel,
     pair<Reference<XPropertySet>,OUString> aPair )
 {
-    Reference<XBindableValue> xBindable(
-        aPair.first,
+    Reference<XBindableValue> xBindable( 
+        aPair.first, 
         UNO_QUERY );
-    Reference<XValueBinding> xBinding(
+    Reference<XValueBinding> xBinding( 
         lcl_findXFormsBinding( xModel, aPair.second ),
         UNO_QUERY );
 
@@ -100,14 +100,14 @@ void bindXFormsValueBinding(
     }
 }
 
-void bindXFormsListBinding(
+void bindXFormsListBinding( 
     Reference<XModel> xModel,
     ::pair<Reference<XPropertySet>,OUString> aPair )
 {
-    Reference<XListEntrySink> xListEntrySink(
-        aPair.first,
+    Reference<XListEntrySink> xListEntrySink( 
+        aPair.first, 
         UNO_QUERY );
-    Reference<XListEntrySource> xListEntrySource(
+    Reference<XListEntrySource> xListEntrySource( 
         lcl_findXFormsBinding( xModel, aPair.second ),
         UNO_QUERY );
 
@@ -125,12 +125,12 @@ void bindXFormsListBinding(
     }
 }
 
-void bindXFormsSubmission(
+void bindXFormsSubmission( 
     Reference<XModel> xModel,
     pair<Reference<XPropertySet>,OUString> aPair )
 {
     Reference<XSubmissionSupplier> xSubmissionSupp( aPair.first, UNO_QUERY );
-    Reference<XSubmission> xSubmission(
+    Reference<XSubmission> xSubmission( 
         lcl_findXFormsSubmission( xModel, aPair.second ),
         UNO_QUERY );
 
@@ -158,7 +158,7 @@ void applyXFormsSettings( const Reference< XNameAccess >& _rXForms, const Sequen
     Reference< XNameAccess > xModelSettings( aSettings.get( "XFormModels" ), UNO_QUERY );
     if ( !xModelSettings.is() )
     {
-        OSL_FAIL( "applyXFormsSettings: wrong type for the XFormModels settings!" );
+        OSL_ENSURE( false, "applyXFormsSettings: wrong type for the XFormModels settings!" );
         return;
     }
 
@@ -177,7 +177,7 @@ void applyXFormsSettings( const Reference< XNameAccess >& _rXForms, const Sequen
             // the model itself
             if ( !_rXForms->hasByName( *pModelName ) )
             {
-                OSL_FAIL( "applyXFormsSettings: have settings for a non-existent XForms model!" );
+                OSL_ENSURE( false, "applyXFormsSettings: have settings for a non-existent XForms model!" );
                 continue;
             }
 
@@ -192,7 +192,7 @@ void applyXFormsSettings( const Reference< XNameAccess >& _rXForms, const Sequen
             {
                 if ( !xModelPSI->hasPropertyByName( pSetting->Name ) )
                 {
-                    OSL_FAIL( "applyXFormsSettings: non-existent model property!" );
+                    OSL_ENSURE( false, "applyXFormsSettings: non-existent model property!" );
                     continue;
                 }
 

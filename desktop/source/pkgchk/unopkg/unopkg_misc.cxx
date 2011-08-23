@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,7 +105,7 @@ OptionInfo const * getOptionInfo(
             }
         }
     }
-    OSL_FAIL( ::rtl::OUStringToOString(
+    OSL_ENSURE( 0, ::rtl::OUStringToOString(
                     opt, osl_getThreadTextEncoding() ).getStr() );
     return 0;
 }
@@ -116,14 +116,14 @@ bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex )
     OSL_ASSERT( option_info != 0 );
     if (osl_getCommandArgCount() <= *pIndex)
         return false;
-
+    
     OUString arg;
     osl_getCommandArg( *pIndex, &arg.pData );
     sal_Int32 len = arg.getLength();
-
+    
     if (len < 2 || arg[ 0 ] != '-')
         return false;
-
+    
     if (len == 2 && arg[ 1 ] == option_info->m_short_option)
     {
         ++(*pIndex);
@@ -135,7 +135,7 @@ bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex )
             arg.pData->buffer + 2, option_info->m_name ) == 0)
     {
         ++(*pIndex);
-        dp_misc::TRACE(OUSTR( __FILE__": identified option \'")
+        dp_misc::TRACE(OUSTR( __FILE__": identified option \'") 
             + OUString::createFromAscii(option_info->m_name) + OUSTR("\'\n"));
         return true;
     }
@@ -177,6 +177,7 @@ bool readArgument(
     return false;
 }
 
+//##############################################################################
 
 namespace {
 struct ExecutableDir : public rtl::StaticWithInit<
@@ -194,7 +195,7 @@ struct ProcessWorkingDir : public rtl::StaticWithInit<
     const OUString, ProcessWorkingDir> {
     const OUString operator () () {
         OUString workingDir;
-        tools::getProcessWorkingDir(workingDir);
+        tools::getProcessWorkingDir(&workingDir);
         return workingDir;
     }
 };
@@ -223,16 +224,16 @@ OUString makeAbsoluteFileUrl(
         OUString tempPath;
         if ( osl_getSystemPathFromFileURL( sys_path.pData, &tempPath.pData) == osl_File_E_None )
         {
-            file_url = sys_path;
+            file_url = sys_path; 
         }
-        else if (throw_exc)
+        else if (throw_exc) 
         {
             throw RuntimeException(
                 OUSTR("cannot get file url from system path: ") +
                 sys_path, Reference< XInterface >() );
         }
     }
-
+    
     OUString abs;
     if (osl_getAbsoluteFileURL(
             base_url.pData, file_url.pData, &abs.pData ) != osl_File_E_None)
@@ -255,6 +256,7 @@ OUString makeAbsoluteFileUrl(
         ? abs.copy( 0, abs.getLength() -1 ) : abs;
 }
 
+//##############################################################################
 
 namespace {
 
@@ -289,7 +291,7 @@ void printf_package(
     if (version.getLength() != 0)
         printf_line( OUSTR("Version"), version, level + 1 );
     printf_line( OUSTR("URL"), xPackage->getURL(), level + 1 );
-
+    
     beans::Optional< beans::Ambiguous<sal_Bool> > option(
         xPackage->isRegistered( Reference<task::XAbortChannel>(), xCmdEnv ) );
     OUString value;
@@ -303,7 +305,7 @@ void printf_package(
     else
         value = OUSTR("n/a");
     printf_line( OUSTR("is registered"), value, level + 1 );
-
+    
     const Reference<deployment::XPackageTypeInfo> xPackageType(
         xPackage->getPackageType() );
     OSL_ASSERT( xPackageType.is() );
@@ -367,6 +369,7 @@ void printf_packages(
 }
 
 
+//##############################################################################
 
 namespace {
 
@@ -374,7 +377,7 @@ namespace {
 Reference<XComponentContext> bootstrapStandAlone(
     DisposeGuard & disposeGuard, bool /*verbose */)
 {
-    Reference<XComponentContext> xContext =
+    Reference<XComponentContext> xContext = 
         ::cppu::defaultBootstrap_InitialComponentContext();
 
     // assure disposing of local component context:
@@ -385,7 +388,7 @@ Reference<XComponentContext> bootstrapStandAlone(
         xContext->getServiceManager(), UNO_QUERY_THROW );
     // set global process service factory used by unotools config helpers
     ::utl::setProcessServiceFactory( xServiceManager );
-
+    
     // initialize the ucbhelper ucb,
     // because the package implementation uses it
     Sequence<Any> ucb_args( 2 );
@@ -393,7 +396,7 @@ Reference<XComponentContext> bootstrapStandAlone(
     ucb_args[ 1 ] <<= OUSTR(UCB_CONFIGURATION_KEY2_OFFICE);
     if (! ::ucbhelper::ContentBroker::initialize( xServiceManager, ucb_args ))
         throw RuntimeException( OUSTR("cannot initialize UCB!"), 0 );
-
+    
     disposeGuard.setDeinitUCB();
     return xContext;
 }
@@ -406,7 +409,7 @@ Reference<XComponentContext> connectToOffice(
     Sequence<OUString> args( 3 );
     args[ 0 ] = OUSTR("-nologo");
     args[ 1 ] = OUSTR("-nodefault");
-
+    
     OUString pipeId( ::dp_misc::generateRandomPipeId() );
     ::rtl::OUStringBuffer buf;
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("-accept=pipe,name=") );
@@ -414,22 +417,22 @@ Reference<XComponentContext> connectToOffice(
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(";urp;") );
     args[ 2 ] = buf.makeStringAndClear();
     OUString appURL( getExecutableDir() + OUSTR("/soffice") );
-
+    
     if (verbose)
     {
         dp_misc::writeConsole(
-            OUSTR("Raising process: ") +
+            OUSTR("Raising process: ") + 
             appURL +
             OUSTR("\nArguments: -nologo -nodefault ") +
-            args[2] +
+            args[2] + 
             OUSTR("\n"));
     }
-
+    
     ::dp_misc::raiseProcess( appURL, args );
-
+    
     if (verbose)
         dp_misc::writeConsole("Ok.  Connecting...");
-
+    
     OSL_ASSERT( buf.getLength() == 0 );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("uno:pipe,name=") );
     buf.append( pipeId );
@@ -441,7 +444,7 @@ Reference<XComponentContext> connectToOffice(
         UNO_QUERY_THROW );
     if (verbose)
         dp_misc::writeConsole("Ok.\n");
-
+    
     return xRet;
 }
 
@@ -451,7 +454,7 @@ Reference<XComponentContext> connectToOffice(
     @return the path. An empty string signifies an error.
 */
 OUString getLockFilePath()
-{
+{   
     OUString ret;
     OUString sBootstrap(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}"));
     rtl::Bootstrap::expandMacros(sBootstrap);
@@ -459,7 +462,7 @@ OUString getLockFilePath()
     if (::osl::File::E_None ==  ::osl::File::getAbsoluteFileURL(
         sBootstrap, OUSTR(".lock"), sAbs))
     {
-        if (::osl::File::E_None ==
+        if (::osl::File::E_None == 
             ::osl::File::getSystemPathFromFileURL(sAbs, sBootstrap))
         {
             ret = sBootstrap;
@@ -469,7 +472,7 @@ OUString getLockFilePath()
     return ret;
 }
 //==============================================================================
-Reference<XComponentContext> getUNO(
+Reference<XComponentContext> getUNO( 
     DisposeGuard & disposeGuard, bool verbose, bool shared, bool bGui,
     Reference<XComponentContext> & out_localContext)
 {
@@ -489,14 +492,14 @@ Reference<XComponentContext> getUNO(
         xComponentContext.set(
             connectToOffice( xComponentContext, verbose ) );
     }
-    else
+    else 
     {
         if (! s_lockfile.check( 0 ))
         {
             String sMsg(ResId(RID_STR_CONCURRENTINSTANCE, *DeploymentResMgr::get()));
             //Create this string before we call DeInitVCL, because this will kill
             //the ResMgr
-            String sError(ResId(RID_STR_UNOPKG_ERROR, *DeploymentResMgr::get()));
+            String sError(ResId(RID_STR_UNOPKG_ERROR, *DeploymentResMgr::get())); 
 
             sMsg = sMsg + OUSTR("\n") + getLockFilePath();
 
@@ -510,11 +513,11 @@ Reference<XComponentContext> getUNO(
                     throw RuntimeException( OUSTR("Cannot initialize VCL!"),
                                             NULL );
                 {
-                    WarningBox warn(NULL, WB_OK | WB_DEF_OK, sMsg);
+                    WarningBox warn(NULL, WB_OK | WB_DEF_OK, sMsg); 
                     warn.SetText(::utl::ConfigManager::GetDirectConfigProperty(
                                      ::utl::ConfigManager::PRODUCTNAME).get<OUString>());
                     warn.SetIcon(0);
-                    warn.Execute();
+                    warn.Execute();			
                 }
                 DeInitVCL();
             }
@@ -523,7 +526,7 @@ Reference<XComponentContext> getUNO(
                 OUSTR("\n") + sError + sMsg + OUSTR("\n"));
         }
     }
-
+    
     return xComponentContext;
 }
 
@@ -561,7 +564,7 @@ bool hasNoFolder(OUString const & folderUrl)
             }
             i = osl::DirectoryItem();
         }
-
+                
         if (rcNext == osl::File::E_NOENT ||
             rcNext == osl::File::E_None)
         {
@@ -573,7 +576,7 @@ bool hasNoFolder(OUString const & folderUrl)
             dp_misc::writeConsole(
                 OUSTR("unopkg: Error while investigating ") + url + OUSTR("\n"));
         }
-
+        
         dir.close();
     }
     else
@@ -626,11 +629,11 @@ void removeFolder(OUString const & folderUrl)
         dir.close();
         ::osl::Directory::remove(url);
     }
-    else if (rc != osl::File::E_NOENT)
+    else
     {
         dp_misc::writeConsole(
             OUSTR("unopkg: Error while removing ") + url + OUSTR("\n"));
-    }
+    }    
 }
 
 }

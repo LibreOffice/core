@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,13 @@
 #include "precompiled_basctl.hxx"
 #include <ide_pch.hxx>
 
-#include <basidesh.hxx>
+#include <basidesh.hxx> 
 #include <baside3.hxx>
 #include <basobj.hxx>
 #include <iderdll.hxx>
 #include "dlged.hxx"
 
-#include <localizationmgr.hxx>
+#include <localizationmgr.hxx> 
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
@@ -45,9 +45,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::resource;
 
-static ::rtl::OUString aDot( RTL_CONSTASCII_USTRINGPARAM( "." ));
-static ::rtl::OUString aEsc( RTL_CONSTASCII_USTRINGPARAM( "&" ));
-static ::rtl::OUString aSemi( RTL_CONSTASCII_USTRINGPARAM( ";" ));
+static ::rtl::OUString aDot  = ::rtl::OUString::createFromAscii( "." );
+static ::rtl::OUString aEsc  = ::rtl::OUString::createFromAscii( "&" );
+static ::rtl::OUString aSemi = ::rtl::OUString::createFromAscii( ";" );
 
 
 LocalizationMgr::LocalizationMgr( BasicIDEShell* pIDEShell,
@@ -73,8 +73,9 @@ bool LocalizationMgr::isLibraryLocalized( void )
 
 void LocalizationMgr::handleTranslationbar( void )
 {
-    static ::rtl::OUString aLayoutManagerName( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ));
-    static ::rtl::OUString aToolBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/translationbar" ));
+    static ::rtl::OUString aLayoutManagerName = ::rtl::OUString::createFromAscii( "LayoutManager" );
+    static ::rtl::OUString aToolBarResName =
+        ::rtl::OUString::createFromAscii( "private:resource/toolbar/translationbar" );
 
     Reference< beans::XPropertySet > xFrameProps
         ( m_pIDEShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
@@ -99,6 +100,7 @@ void LocalizationMgr::handleTranslationbar( void )
 }
 
 
+//============================================
 // TODO: -> export from toolkit
 
 struct LanguageDependentProp
@@ -133,9 +135,9 @@ bool isLanguageDependentProperty( ::rtl::OUString aName )
         pLangDepProp++;
     }
     return bRet;
-}
-
-
+} 
+//============================================
+ 
 void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResourceMode eMode )
 {
     Sequence< ::rtl::OUString > aDlgNames = m_aDocument.getObjectNames( E_DIALOGS, m_aLibName );
@@ -146,7 +148,7 @@ void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResou
     for( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
     {
         String aDlgName = pDlgNames[ i ];
-        DialogWindow* pWin = m_pIDEShell->FindDlgWin( m_aDocument, m_aLibName, aDlgName, sal_False );
+        DialogWindow* pWin = m_pIDEShell->FindDlgWin( m_aDocument, m_aLibName, aDlgName, FALSE );
         if( pWin && pWin->IsA( TYPE( DialogWindow ) ) )
         {
             DialogWindow* pDialogWin = static_cast< DialogWindow* >( pWin );
@@ -199,11 +201,11 @@ extern bool localesAreEqual( const ::com::sun::star::lang::Locale& rLocaleLeft,
                              const ::com::sun::star::lang::Locale& rLocaleRight );
 
 // Works on xStringResourceManager's current language for SET_IDS/RESET_IDS,
-// anyway only one language should exist when calling this method then,
+// anyway only one language should exist when calling this method then, 
 // either the first one for mode SET_IDS or the last one for mode RESET_IDS
 sal_Int32 LocalizationMgr::implHandleControlResourceProperties
     ( Any aControlAny, const ::rtl::OUString& aDialogName, const ::rtl::OUString& aCtrlName,
-        Reference< XStringResourceManager > xStringResourceManager,
+        Reference< XStringResourceManager > xStringResourceManager, 
         Reference< XStringResourceResolver > xSourceStringResolver, HandleResourceMode eMode )
 {
     sal_Int32 nChangedCount = 0;
@@ -264,6 +266,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         ::rtl::OUString aPropIdStr = aEsc;
                         aPropIdStr += aPureIdStr;
                         // TODO?: Change here and in toolkit
+                        //aPropIdStr += aSemi;
                         (void)aSemi;
                         aPropAny <<= aPropIdStr;
                         xPropertySet->setPropertyValue( aPropName, aPropAny );
@@ -336,6 +339,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         ::rtl::OUString aPropIdStr = aEsc;
                         aPropIdStr += aPureIdStr;
                         // TODO?: Change here and in toolkit
+                        //aPropIdStr += aSemi;
                         (void)aSemi;
                         aPropAny <<= aPropIdStr;
                         xPropertySet->setPropertyValue( aPropName, aPropAny );
@@ -373,6 +377,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         ::rtl::OUString aPropIdStr = aEsc;
                         aPropIdStr += aPureIdStr;
                         // TODO?: Change here and in toolkit
+                        //aPropIdStr += aSemi;
                         (void)aSemi;
                         aPropAny <<= aPropIdStr;
                         xPropertySet->setPropertyValue( aPropName, aPropAny );
@@ -656,6 +661,50 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
     return nChangedCount;
 }
 
+/*
+void TEST_simulateDialogAddRemoveLocale( bool bAdd )
+{
+    Sequence< Locale > aLocaleSeq( 1 );
+    Locale* pLocales = aLocaleSeq.getArray();
+
+    ::com::sun::star::lang::Locale aLocale_en;
+    aLocale_en.Language = ::rtl::OUString::createFromAscii( "en" );
+    aLocale_en.Country = ::rtl::OUString::createFromAscii( "US" );
+
+    ::com::sun::star::lang::Locale aLocale_de;
+    aLocale_de.Language = ::rtl::OUString::createFromAscii( "de" );
+    aLocale_de.Country = ::rtl::OUString::createFromAscii( "DE" );
+
+    ::com::sun::star::lang::Locale aLocale_fr;
+    aLocale_fr.Language = ::rtl::OUString::createFromAscii( "fr" );
+    aLocale_fr.Country = ::rtl::OUString::createFromAscii( "FR" );
+
+    int n = 0;
+    if( n == 0 )
+        pLocales[0] = aLocale_en;
+    else if( n == 1 )
+        pLocales[0] = aLocale_de;
+    else if( n == 2 )
+        pLocales[0] = aLocale_fr;
+
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    LocalizationMgr* pMgr = pIDEShell->GetCurLocalizationMgr();
+    if( bAdd )
+        pMgr->handleAddLocales( aLocaleSeq );
+    else
+        pMgr->handleRemoveLocales( aLocaleSeq );
+}
+
+void TEST_simulateDialogAddLocale( void )
+{
+    TEST_simulateDialogAddRemoveLocale( true );
+}
+
+void TEST_simulateDialogRemoveLocale( void )
+{
+    TEST_simulateDialogAddRemoveLocale( false );
+}
+*/
 
 void LocalizationMgr::handleAddLocales( Sequence< Locale > aLocaleSeq )
 {
@@ -747,9 +796,8 @@ void LocalizationMgr::handleRemoveLocales( Sequence< Locale > aLocaleSeq )
         handleTranslationbar();
     }
 
-    DBG_ASSERT( bConsistant,
+    DBG_ASSERT( bConsistant, 
         "LocalizationMgr::handleRemoveLocales(): sequence contains unsupported locales" );
-    (void)bConsistant;
 }
 
 void LocalizationMgr::handleSetDefaultLocale( Locale aLocale )
@@ -762,7 +810,7 @@ void LocalizationMgr::handleSetDefaultLocale( Locale aLocale )
         }
         catch(IllegalArgumentException&)
         {
-            OSL_FAIL( "LocalizationMgr::handleSetDefaultLocale: Invalid locale" );
+            DBG_ERROR( "LocalizationMgr::handleSetDefaultLocale: Invalid locale" );
         }
 
         // update locale toolbar
@@ -782,7 +830,7 @@ void LocalizationMgr::handleSetCurrentLocale( ::com::sun::star::lang::Locale aLo
         }
         catch(IllegalArgumentException&)
         {
-            OSL_FAIL( "LocalizationMgr::handleSetCurrentLocale: Invalid locale" );
+            DBG_ERROR( "LocalizationMgr::handleSetCurrentLocale: Invalid locale" );
         }
 
         // update locale toolbar
@@ -841,7 +889,7 @@ DialogWindow* FindDialogWindowForEditor( DlgEditor* pEditor )
         pWin = aIDEWindowTable.Next();
     }
     return pFoundDlgWin;
-}
+} 
 
 
 void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor* pEditor,
@@ -856,7 +904,7 @@ void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor* pEdito
     if ( !aDocument.isValid() )
         return;
     const String& rLibName = pDlgWin->GetLibName();
-    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, sal_True ) );
+    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, TRUE ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
 
@@ -872,7 +920,7 @@ void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor* pEdito
 
     if( nChangedCount )
         BasicIDE::MarkDocumentModified( aDocument );
-}
+} 
 
 void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor* pEditor,
     ::com::sun::star::uno::Any aControlAny, const ::rtl::OUString& aNewCtrlName )
@@ -886,7 +934,7 @@ void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor* pEdito
     if ( !aDocument.isValid() )
         return;
     const String& rLibName = pDlgWin->GetLibName();
-    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, sal_True ) );
+    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, TRUE ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
 
@@ -899,7 +947,7 @@ void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor* pEdito
     implHandleControlResourceProperties
         ( aControlAny, aDialogName, aNewCtrlName, xStringResourceManager,
           xDummyStringResolver, RENAME_CONTROL_IDS );
-}
+} 
 
 
 void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor* pEditor,
@@ -914,7 +962,7 @@ void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor*
     if ( !aDocument.isValid() )
         return;
     const String& rLibName = pDlgWin->GetLibName();
-    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, sal_True ) );
+    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, TRUE ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
 
@@ -926,15 +974,15 @@ void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor*
 
     if( nChangedCount )
         BasicIDE::MarkDocumentModified( aDocument );
-}
+} 
 
 void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument, const String& aLibName,
     const String& aDlgName, Reference< container::XNameContainer > xDialogModel )
 {
-    static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
+    static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAscii( "ResourceResolver" );
 
     // Get library
-    Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, sal_True ) );
+    Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, TRUE ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
 
@@ -964,7 +1012,7 @@ void LocalizationMgr::renameStringResourceIDs( const ScriptDocument& rDocument, 
     const String& aDlgName, Reference< container::XNameContainer > xDialogModel )
 {
     // Get library
-    Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, sal_True ) );
+    Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, TRUE ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
     if( !xStringResourceManager.is() )
@@ -995,7 +1043,7 @@ void LocalizationMgr::removeResourceForDialog( const ScriptDocument& rDocument, 
     const String& aDlgName, Reference< container::XNameContainer > xDialogModel )
 {
     // Get library
-    Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, sal_True ) );
+    Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, TRUE ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
     if( !xStringResourceManager.is() )
@@ -1089,7 +1137,7 @@ void LocalizationMgr::copyResourcesForPastedEditorObject( DlgEditor* pEditor,
     if ( !aDocument.isValid() )
         return;
     const String& rLibName = pDlgWin->GetLibName();
-    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, sal_True ) );
+    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, TRUE ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
 
@@ -1101,7 +1149,7 @@ void LocalizationMgr::copyResourcesForPastedEditorObject( DlgEditor* pEditor,
     implHandleControlResourceProperties
         ( aControlAny, aDialogName, aCtrlName, xStringResourceManager,
           xSourceStringResolver, MOVE_RESOURCES );
-}
+} 
 
 void LocalizationMgr::copyResourceForDroppedDialog( Reference< container::XNameContainer > xDialogModel,
     const ::rtl::OUString& aDialogName, Reference< XStringResourceManager > xStringResourceManager,
@@ -1170,7 +1218,7 @@ Reference< XStringResourceManager > LocalizationMgr::getStringResourceFromDialog
             Reference< resource::XStringResourceResolver >
                 xStringResourceResolver = xStringResourceSupplier->getStringResource();
 
-            xStringResourceManager =
+            xStringResourceManager = 
                 Reference< resource::XStringResourceManager >( xStringResourceResolver, UNO_QUERY );
         }
     }

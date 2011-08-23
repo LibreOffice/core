@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,8 +50,8 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
     nTotalPages( 0 ),
     bLocInitialized( false )
 {
-    //  page count uses the stored cell widths for the printer anyway,
-    //  so ScPrintFunc with the document's printer can be used to count
+    //	page count uses the stored cell widths for the printer anyway,
+    //	so ScPrintFunc with the document's printer can be used to count
 
     SfxPrinter* pPrinter = pDocSh->GetPrinter();
 
@@ -77,7 +77,7 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
 
             ScPrintFunc aFunc( pDocSh, pPrinter, nTab, nAttrPage, 0, pSelRange, &aSelection.GetOptions() );
             nThisTab = aFunc.GetTotalPages();
-            nFirstAttr[nTab] = aFunc.GetFirstPageNo();          // from page style or previous sheet
+            nFirstAttr[nTab] = aFunc.GetFirstPageNo();			// from page style or previous sheet
         }
         else
             nFirstAttr[nTab] = nAttrPage;
@@ -114,7 +114,7 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
         if ( rMark.GetTableSelect( nTab ) )
         {
             ScPrintFunc aFunc( pDev, pDocSh, nTab, nFirstAttr[nTab], nTotalPages, pSelRange, &aSelection.GetOptions() );
-            aFunc.SetRenderFlag( sal_True );
+            aFunc.SetRenderFlag( TRUE );
 
             long nDisplayStart = GetDisplayStart( nTab );
 
@@ -126,7 +126,7 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
                 aPage.Select( aPageRange );
 
                 ScPreviewLocationData aLocData( pDoc, pDev );
-                aFunc.DoPrint( aPage, nTabStart, nDisplayStart, false, NULL, &aLocData );
+                aFunc.DoPrint( aPage, nTabStart, nDisplayStart, FALSE, NULL, &aLocData );
 
                 ScRange aCellRange;
                 Rectangle aPixRect;
@@ -154,10 +154,10 @@ bool ScPrintFuncCache::FindLocation( const ScAddress& rCell, ScPrintPageLocation
             return true;
         }
     }
-    return false;   // not found
+    return false;   // not found    
 }
 
-sal_Bool ScPrintFuncCache::IsSameSelection( const ScPrintSelectionStatus& rStatus ) const
+BOOL ScPrintFuncCache::IsSameSelection( const ScPrintSelectionStatus& rStatus ) const
 {
     return aSelection == rStatus;
 }
@@ -182,7 +182,7 @@ long ScPrintFuncCache::GetTabStart( SCTAB nTab ) const
 
 long ScPrintFuncCache::GetDisplayStart( SCTAB nTab ) const
 {
-    //! merge with lcl_GetDisplayStart in preview?
+    //!	merge with lcl_GetDisplayStart in preview?
 
     long nDisplayStart = 0;
     ScDocument* pDoc = pDocSh->GetDocument();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,48 +38,48 @@
 
 TYPEINIT1( SvxEditSourceHint, TextHint );
 
-SvxEditSourceHint::SvxEditSourceHint( sal_uLong _nId ) :
+SvxEditSourceHint::SvxEditSourceHint( ULONG _nId ) : 
     TextHint( _nId ),
     mnStart( 0 ),
     mnEnd( 0 )
 {
 }
 
-SvxEditSourceHint::SvxEditSourceHint( sal_uLong _nId, sal_uLong nValue, sal_uLong nStart, sal_uLong nEnd ) :
+SvxEditSourceHint::SvxEditSourceHint( ULONG _nId, ULONG nValue, ULONG nStart, ULONG nEnd ) : 
     TextHint( _nId, nValue ),
     mnStart( nStart),
     mnEnd( nEnd )
 {
 }
 
-sal_uLong SvxEditSourceHint::GetValue() const
+ULONG SvxEditSourceHint::GetValue() const
 {
     return TextHint::GetValue();
 }
 
-sal_uLong SvxEditSourceHint::GetStartValue() const
+ULONG SvxEditSourceHint::GetStartValue() const
 {
     return mnStart;
 }
 
-sal_uLong SvxEditSourceHint::GetEndValue() const
+ULONG SvxEditSourceHint::GetEndValue() const
 {
     return mnEnd;
 }
 
-void SvxEditSourceHint::SetValue( sal_uLong n )
+void SvxEditSourceHint::SetValue( ULONG n )
 {
     TextHint::SetValue( n );
 }
 
-void SvxEditSourceHint::SetStartValue( sal_uLong n )
+void SvxEditSourceHint::SetStartValue( ULONG n )
 {
     mnStart = n;
 }
 
-void SvxEditSourceHint::SetEndValue( sal_uLong n )
+void SvxEditSourceHint::SetEndValue( ULONG n )
 {
-    mnEnd = n;
+    mnEnd = n; 
 }
 
 //------------------------------------------------------------------------
@@ -96,7 +96,7 @@ void SvxEditSourceHint::SetEndValue( sal_uLong n )
             case EE_NOTIFY_PARAGRAPHINSERTED:
                 return ::std::auto_ptr<SfxHint>( new TextHint( TEXT_HINT_PARAINSERTED, aNotify->nParagraph ) );
 
-            case EE_NOTIFY_PARAGRAPHREMOVED:
+            case EE_NOTIFY_PARAGRAPHREMOVED: 
                 return ::std::auto_ptr<SfxHint>( new TextHint( TEXT_HINT_PARAREMOVED, aNotify->nParagraph ) );
 
             case EE_NOTIFY_PARAGRAPHSMOVED:
@@ -124,7 +124,7 @@ void SvxEditSourceHint::SetEndValue( sal_uLong n )
                 return ::std::auto_ptr<SfxHint>( new TextHint( TEXT_HINT_INPUT_END, 0 ) );
 
             default:
-                OSL_FAIL( "SvxEditSourceHelper::EENotification2Hint unknown notification" );
+                DBG_ERROR( "SvxEditSourceHelper::EENotification2Hint unknown notification" );
                 break;
         }
     }
@@ -132,19 +132,19 @@ void SvxEditSourceHint::SetEndValue( sal_uLong n )
     return ::std::auto_ptr<SfxHint>( new SfxHint() );
 }
 
-sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, const EditEngine& rEE, sal_uInt16 nPara, sal_uInt16 nIndex )
+sal_Bool SvxEditSourceHelper::GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, const EditEngine& rEE, USHORT nPara, USHORT nIndex )
 {
     EECharAttribArray aCharAttribs;
-
+    
     rEE.GetCharAttribs( nPara, aCharAttribs );
-
+    
     // find closest index in front of nIndex
-    sal_uInt16 nAttr, nCurrIndex;
+    USHORT nAttr, nCurrIndex;
     sal_Int32 nClosestStartIndex;
     for( nAttr=0, nClosestStartIndex=0; nAttr<aCharAttribs.Count(); ++nAttr )
     {
         nCurrIndex = aCharAttribs[nAttr].nStart;
-
+        
         if( nCurrIndex > nIndex )
             break; // aCharAttribs array is sorted in increasing order for nStart values
 
@@ -167,8 +167,8 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt
         }
     }
 
-    nStartIndex = static_cast<sal_uInt16>( nClosestStartIndex );
-    nEndIndex = static_cast<sal_uInt16>( nClosestEndIndex );
+    nStartIndex = static_cast<USHORT>( nClosestStartIndex );
+    nEndIndex = static_cast<USHORT>( nClosestEndIndex );
 
     return sal_True;
 }
@@ -185,12 +185,14 @@ Point SvxEditSourceHelper::UserSpaceToEE( const Point& rPoint, const Size& rEESi
 
 Rectangle SvxEditSourceHelper::EEToUserSpace( const Rectangle& rRect, const Size& rEESize, bool bIsVertical )
 {
+    // #106775# Don't touch rect if not vertical
     return bIsVertical ? Rectangle( EEToUserSpace(rRect.BottomLeft(), rEESize, bIsVertical),
                                     EEToUserSpace(rRect.TopRight(), rEESize, bIsVertical) ) : rRect;
 }
 
 Rectangle SvxEditSourceHelper::UserSpaceToEE( const Rectangle& rRect, const Size& rEESize, bool bIsVertical )
 {
+    // #106775# Don't touch rect if not vertical
     return bIsVertical ? Rectangle( UserSpaceToEE(rRect.TopRight(), rEESize, bIsVertical),
                                     UserSpaceToEE(rRect.BottomLeft(), rEESize, bIsVertical) ) : rRect;
 }

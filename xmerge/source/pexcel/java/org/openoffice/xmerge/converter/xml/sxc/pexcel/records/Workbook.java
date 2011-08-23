@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,18 +44,18 @@ import org.openoffice.xmerge.converter.xml.sxc.ColumnRowInfo;
 
 /**
  *  This class is used by <code> PxlDocument</code> to maintain pexcel
- *  workbooks.
+ *  workbooks. 
  *
- *  @author  Martin Maher
+ *  @author  Martin Maher 
  */
 public class Workbook implements org.openoffice.xmerge.Document,
 OfficeConstants {
 
-    private Vector fonts                = new Vector();
-    private Vector extendedFormats      = new Vector();
-    private Vector worksheets           = new Vector();
-    private Vector boundsheets          = new Vector();
-    private Vector definedNames         = new Vector();
+    private Vector fonts				= new Vector();
+    private Vector extendedFormats		= new Vector();
+    private Vector worksheets			= new Vector();
+    private Vector boundsheets			= new Vector();
+    private Vector definedNames			= new Vector();
     private static final CodePage cp;
     private static final Window1 win1;
     private static final BeginningOfFile bof;;
@@ -63,19 +63,20 @@ OfficeConstants {
     private String fileName;
 
     static {
-        cp              = new CodePage();
-        win1            = new Window1();
-        bof             = new BeginningOfFile(true);
-        eof             = new Eof();
+        cp 				= new CodePage();
+        win1			= new Window1();
+        bof				= new BeginningOfFile(true);
+        eof				= new Eof();
     }
+
 
     /**
      * Constructs a pocket Excel Workbook with the name of the file passed in
      * as an argument. Also fills out a basic header block containing the
      * minimum number of objects that can be created at this time.
      *
-     * @param   name    Name of the Pocket Excel Data file. (excluding the file
-     *                  extension)
+     * @param	name	Name of the Pocket Excel Data file. (excluding the file
+     * 					extension)
      */
     public Workbook(String name) throws IOException {
         fileName = name + PocketExcelConstants.FILE_EXTENSION;
@@ -90,9 +91,7 @@ OfficeConstants {
      * Constructs a pocket Excel Workbook from the
      * <code>InputStream</code> and assigns it the document name passed in
      *
-     * @param   name Name of the Pocket Excel Data file. (including the file
-     *               extension)
-     * @param   is   InputStream containing a Pocket Excel Data file.
+     * @param	is InputStream containing a Pocket Excel Data file.
      */
     public Workbook(String name, InputStream is) throws IOException {
         read(is);
@@ -100,9 +99,9 @@ OfficeConstants {
     }
 
     /**
-      * Writes the current workbook to the <code>Outputstream</code>
-      *
-      * @param  os The destination outputstream
+      *	Writes the current workbook to the <code>Outputstream</code> 
+      * 
+      * @param	os The destination outputstream	
       */
     public void write(OutputStream os) throws IOException {
         bof.write(os);
@@ -133,10 +132,10 @@ OfficeConstants {
     }
 
     /**
-      * Reads a workbook from the <code>InputStream</code> and contructs a
-     *  workbook object from it
+      *	Reads a workbook from the <code>InputStream</code> and contructs a
+     *	workbook object from it 
      *
-      * @param  is InputStream containing a Pocket Excel Data file.
+      * @param	is InputStream containing a Pocket Excel Data file.
       */
     public void read(InputStream is) throws IOException {
 
@@ -151,7 +150,7 @@ OfficeConstants {
                 Debug.log(Debug.TRACE,"End of file reached");
                 break;
             }
-
+                
             switch (b)
             {
                 case PocketExcelConstants.DEFINED_NAME:
@@ -159,12 +158,12 @@ OfficeConstants {
                     DefinedName dn = new DefinedName(is, this);
                     definedNames.add(dn);
                     break;
-
+                    
                 case PocketExcelConstants.BOF_RECORD:
                     Debug.log(Debug.TRACE,"BOF Record");
                     bof.read(is);
                     break;
-
+                    
                 case PocketExcelConstants.EOF_MARKER:
                     Debug.log(Debug.TRACE,"EOF Marker");
                     eof.read(is);
@@ -174,7 +173,7 @@ OfficeConstants {
                         ws = new Worksheet(this);
                     }
                     break;
-
+                    
                 case PocketExcelConstants.FONT_DESCRIPTION:
                     Debug.log(Debug.TRACE,"FONT: Font Description (31h)");
                     FontDescription fd = new FontDescription(is);
@@ -185,7 +184,7 @@ OfficeConstants {
                     Debug.log(Debug.TRACE,"WINDOW1: Window Information (3Dh) [PXL 2.0]");
                     win1.read(is);
                     break;
-
+                    
                 case PocketExcelConstants.CODEPAGE:
                     Debug.log(Debug.TRACE,"CODEPAGE : Codepage and unknown fields (42h)");
                     cp.read(is);
@@ -196,32 +195,32 @@ OfficeConstants {
                     BoundSheet bs = new BoundSheet(is);
                     boundsheets.add(bs);
                     break;
-
+                        
                 case PocketExcelConstants.EXTENDED_FORMAT:
                     Debug.log(Debug.TRACE,"XF: Extended Format (E0h) [PXL 2.0]");
                     ExtendedFormat xf = new ExtendedFormat(is);
                     extendedFormats.add(xf);
                     break;
-
+                                            
                 default:
                     b = is.read();
                     break;
             }
-
+                
         }
         is.close();
     }
-
+    
     /**
-      * Adds a font recrod to the workbook
+      *	Adds a font recrod to the workbook 
      *
-      * @param  f the font record to add
-      */
+      * @param	f the font record to add	
+      */	
     public int addFont(FontDescription f) {
 
         boolean alreadyExists = false;
         int i = 0;
-
+        
         for(Enumeration e = fonts.elements();e.hasMoreElements();) {
             FontDescription fd = (FontDescription) e.nextElement();
             if(fd.compareTo(f)) {
@@ -231,18 +230,18 @@ OfficeConstants {
                 i++;
             }
         }
-
-        if(!alreadyExists)
+        
+        if(!alreadyExists) 
                 fonts.add(f);
 
-        return i;
+        return i; 
     }
 
     /**
-      * Adds a ExtendedFormat record to the workbook
+      *	Adds a ExtendedFormat record to the workbook 
      *
-      * @param  fmt the font record to add
-      */
+      * @param	f the font recrod to add	
+      */	
     public int addExtendedFormat(Format fmt) throws IOException {
 
         FontDescription fd = new FontDescription(fmt);
@@ -251,7 +250,7 @@ OfficeConstants {
 
         boolean alreadyExists = false;
         int i = 0;
-
+        
         for(Enumeration e = extendedFormats.elements();e.hasMoreElements();) {
             ExtendedFormat currentXF = (ExtendedFormat) e.nextElement();
             if(xf.compareTo(currentXF)) {
@@ -264,30 +263,30 @@ OfficeConstants {
 
         if(!alreadyExists)
             extendedFormats.add(xf);
-
-        return i;
+        
+        return i; 
     }
-
+    
     /**
-      * Gets a worksheet at a particular index from mthe current workbook.
+      *	Gets a worksheet at a particular index from mthe current workbook. 
      *
-      * @param  index the index of the worksheet to retrieve
+      * @param	index the index of the worksheet to retrieve	
       */
     public Worksheet getWorksheet(int index) {
 
         return ((Worksheet) worksheets.elementAt(index));
     }
-
+    
     /**
      * Returns a FontDescription indictated by the
      * index parameter passed in to the method
      *
      * @param ixfnt index to the FontDescriptions, this is a 0 based index
-     * @return FontDescription indexed by ixfe
+     * @return FontDescription indexed by ixfe 
      */
     public FontDescription getFontDescription(int ixfnt) {
 
-        return (FontDescription) fonts.elementAt(ixfnt);
+        return (FontDescription) fonts.elementAt(ixfnt);	
     }
 
     /**
@@ -295,15 +294,15 @@ OfficeConstants {
      * index parameter passed in to the method
      *
      * @param ixfe index to the FontDescriptions, this is a 0 based index
-     * @return FontDescription indexed by ixfe
+     * @return FontDescription indexed by ixfe 
      */
     public ExtendedFormat getExtendedFormat(int ixfe) {
 
-        return (ExtendedFormat) extendedFormats.elementAt(ixfe);
-    }
+        return (ExtendedFormat) extendedFormats.elementAt(ixfe);	
+    }	
 
     /**
-      * Returns an enumeration of DefinedNames for this workbook
+      * Returns an enumeration of DefinedNames for this workbook	
      *
       * @return Enumeration for the DefinedNames
       */
@@ -311,9 +310,9 @@ OfficeConstants {
 
         return definedNames.elements();
     }
-
+    
     /**
-      * Returns an enumeration of <code>Settings</code> for this workbook
+      * Returns an enumeration of <code>Settings</code> for this workbook	
      *
       * @return Enumeration of <code>Settings</code>
       */
@@ -334,39 +333,39 @@ OfficeConstants {
     }
 
     /**
-     * Returns a <code>Vector</code> containing all the worksheet Names
+     * Returns a <code>Vector</code> containing all the worksheet Names  
      *
-     * @return a <code>Vector</code> containing all the worksheet Names
-     */
+     * @return a <code>Vector</code> containing all the worksheet Names 
+     */	 
     public Vector getWorksheetNames() {
 
         Vector wsNames = new Vector();
 
         for(int i = 0;i < boundsheets.size();i++) {
             wsNames.add(getSheetName(i));
-        }
+        }	
 
         return wsNames;
     }
 
     /**
-     * Returns the name of the worksheet at the specified index
+     * Returns the name of the worksheet at the specified index 
      *
-     * @return a <code>String</code> containing the name of the worksheet
-     */
+     * @return a <code>String</code> containing the name of the worksheet 
+     */	 
     public String getSheetName(int index) {
-        BoundSheet bs = (BoundSheet) boundsheets.elementAt(index);
+        BoundSheet bs = (BoundSheet) boundsheets.elementAt(index); 
 
         return bs.getSheetName();
     }
 
     /**
-     * Adds a <code>Worksheet</code> to the workbook.
+     * Adds a <code>Worksheet</code> to the workbook.  
      *
-     * @param name the name of the <code>Worksheet</code> to be added
-     */
+     * @return name the name of the <code>Worksheet</code> to be added 
+     */	 
     public void addWorksheet(String name) throws IOException {
-
+    
         BoundSheet bs = new BoundSheet(name);
         boundsheets.add(bs);
 
@@ -375,16 +374,13 @@ OfficeConstants {
     }
 
     /**
-     * Adds a cell to the current worksheet.
+     * Adds a cell to the current worksheet.  
      *
-     * @param row          Row index for the new cell.
-     * @param col          Column index for the new cell.
-     * @param fmt          Format description for the new cell.
-     * @param cellContents Contents for the new cell.
+     * @return the name of the <code>Worksheet</code> to be added 
      */
     public void addCell(int row,int col, Format fmt, String cellContents)
     throws IOException {
-
+        
         Worksheet currentWS = (Worksheet) worksheets.elementAt(worksheets.size()-1);
         int ixfe = addExtendedFormat(fmt);
 
@@ -399,7 +395,7 @@ OfficeConstants {
                 Formula f = new Formula(row, col, cellContents, ixfe, fmt, this);
                 currentWS.addCell(f);
                 if(category.equalsIgnoreCase(CELLTYPE_STRING)) {
-                    StringValue sv = new StringValue(fmt.getValue());
+                    StringValue	sv = new StringValue(fmt.getValue());
                     currentWS.addCell(sv);
                 }
             } catch(Exception e) {
@@ -414,31 +410,31 @@ OfficeConstants {
             } catch(Exception e) {
                 Debug.log(Debug.TRACE,"Error could not parse Float " + cellContents);
                 LabelCell lc = new LabelCell(row, col, cellContents, ixfe);
-                currentWS.addCell(lc);
+                currentWS.addCell(lc); 	
             }
         } else {
             if(cellContents.length()==0) {
                 Debug.log(Debug.TRACE, "Blank Cell");
                 BlankCell b = new BlankCell(row, col, ixfe);
-                currentWS.addCell(b);
+                currentWS.addCell(b); 	
             } else {
                 Debug.log(Debug.TRACE, "Label Cell : " + cellContents);
                 LabelCell lc = new LabelCell(row, col, cellContents, ixfe);
-                currentWS.addCell(lc);  // three because we assume the last three
-                                        // Records in any worksheet is the selection,
-                                        // window2 and eof Records
+                currentWS.addCell(lc); 	// three because we assume the last three 
+                                        // Records in any worksheet is the selection, 
+                                        // window2 and eof Records 
             }
         }
     }
 
     /**
       * Will create a number of ColInfo records based on the column widths
-     * passed in.
+     * based in.	
      *
-      * @param  columnRows <code>Vector</code> of <code>ColumnRowInfo</code>
+      * @param	columnRows <code>Vector</code> of <code>ColumnRowInfo</code>
       */
     public void addColInfo(Vector columnRows) throws IOException {
-
+    
         Worksheet currentWS = (Worksheet) worksheets.elementAt(worksheets.size()-1);
 
         int nCols = 0;
@@ -452,15 +448,15 @@ OfficeConstants {
             int repeated = cri.getRepeated();
             if(cri.isColumn()) {
                 Debug.log(Debug.TRACE,"Workbook: adding ColInfo width = " + size);
-                ColInfo newColInfo = new ColInfo(   nCols,
-                                                    nCols+repeated-1,
+                ColInfo newColInfo = new ColInfo(	nCols,
+                                                    nCols+repeated-1, 
                                                     size, ixfe);
                 currentWS.addCol(newColInfo);
                 nCols += repeated;
             } else if(cri.isRow()) {
-
+            
                 Debug.log(Debug.TRACE,"Workbook: adding Row Height = " + size);
-                if(!cri.isDefaultSize()) {
+                if(!cri.isDefaultSize()) {					
                     for(int i=0;i<repeated;i++) {
                         Row newRow = new Row(nRows++, size, cri.isUserDefined());
                         currentWS.addRow(newRow);
@@ -469,25 +465,26 @@ OfficeConstants {
                     // If it is the Default Row we don't need to add it
                     nRows += repeated;
                 }
-
-            }
+                
+            } 
         }
     }
 
-   /**
-    * Add a name definition to the workbook.
-    *
-    * @param nameDefinition The name definition to add.
-    */
+    /**
+      * Will create a number of ColInfo recrods based on the column widths
+     * based in.	
+     *
+      * @param	an integer list representing the column widths	
+      */
     public void addNameDefinition(NameDefinition nameDefinition) throws IOException {
 
         DefinedName dn = new DefinedName(nameDefinition, this);
         definedNames.add(dn);
     }
-
+    
     /**
       * Adds the <code>BookSettings</code> for this workbook.
-     *
+     * 
       * @param book the <code>BookSettings</code> to add
       */
     public void addSettings(BookSettings book) throws IOException {
@@ -495,7 +492,7 @@ OfficeConstants {
         int index = 0;
         Vector sheetSettings = book.getSheetSettings();
         String activeSheetName = book.getActiveSheet();
-
+        
         for(Enumeration e = worksheets.elements();e.hasMoreElements();) {
             Worksheet ws = (Worksheet) e.nextElement();
             String name = getSheetName(index++);
@@ -510,33 +507,33 @@ OfficeConstants {
             }
         }
     }
-
+    
     /**
-     * Return the filename of the pxl document without the file extension
+     * Return the filename of the pxl document without the file extension  
      *
-     * @return filename without the file extension
+     * @return filename without the file extension 
      */
     public String getName() {
 
         // We have to strip off the file extension
         int end = fileName.lastIndexOf(".");
         String name;
-        if( end >= 0)   // check in case the filename is already stripped
+        if( end >= 0)	// check in case the filename is already stripped
             name = fileName.substring(0, end);
         else
             name = fileName;
 
         return name;
     }
-
+    
     /**
-     * Returns the filename of the pxl document with the file extension
+     * Returns the filename of the pxl document with the file extension 
      *
-     * @return filename with the file extension
+     * @return filename with the file extension 
      */
     public String getFileName() {
 
         return fileName;
     }
-
+    
 }

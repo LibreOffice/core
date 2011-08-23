@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,13 +97,13 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
     }
 
 
-    sal_uInt16 nInsMode = 0;
+    USHORT nInsMode = 0;
     if (aBorderCB.IsChecked())
         nInsMode |= tabopts::DEFAULT_BORDER;
     if (aHeaderCB.IsChecked())
         nInsMode |= tabopts::HEADLINE;
     if (aRepeatHeaderCB.IsEnabled() && aRepeatHeaderCB.IsChecked())
-        rInsTblOpts.mnRowsToRepeat = sal_uInt16( aRepeatHeaderNF.GetValue() );
+        rInsTblOpts.mnRowsToRepeat = USHORT( aRepeatHeaderNF.GetValue() );
     else
         rInsTblOpts.mnRowsToRepeat = 0;
     if (!aDontSplitCB.IsChecked())
@@ -123,15 +123,15 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
 #pragma warning (disable : 4355)
 #endif
     aTabBtn         (this, SW_RES(CB_TAB)),
-    aSemiBtn        (this, SW_RES(CB_SEMI)),
-    aParaBtn        (this, SW_RES(CB_PARA)),
+    aSemiBtn		(this, SW_RES(CB_SEMI)),
+    aParaBtn		(this, SW_RES(CB_PARA)),
     aOtherBtn       (this, SW_RES(RB_OTHER)),
     aOtherEd        (this, SW_RES(ED_OTHER)),
     aKeepColumn     (this, SW_RES(CB_KEEPCOLUMN)),
     aDelimFL       (this, SW_RES(FL_DELIM)),
 
     aHeaderCB       (this, SW_RES(CB_HEADER)),
-    aRepeatHeaderCB (this, SW_RES(CB_REPEAT_HEADER)),
+    aRepeatHeaderCB	(this, SW_RES(CB_REPEAT_HEADER)),
 
     aRepeatHeaderFT         (this, SW_RES(FT_REPEAT_HEADER)),
     aRepeatHeaderBeforeFT   (this),
@@ -140,8 +140,8 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     aRepeatHeaderCombo      (this, SW_RES(WIN_REPEAT_HEADER), aRepeatHeaderNF, aRepeatHeaderBeforeFT, aRepeatHeaderAfterFT),
 
     aOptionsFL      (this, SW_RES(FL_OPTIONS)),
-    aDontSplitCB    (this, SW_RES(CB_DONT_SPLIT)),
-    aBorderCB       (this, SW_RES(CB_BORDER)),
+    aDontSplitCB	(this, SW_RES(CB_DONT_SPLIT)),
+    aBorderCB		(this, SW_RES(CB_BORDER)),
     aAutoFmtBtn(this,SW_RES(BT_AUTOFORMAT)),
 
     aOkBtn(this,SW_RES(BT_OK)),
@@ -154,8 +154,6 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     pTAutoFmt( 0 ),
     pShell( &rView.GetWrtShell() )
 {
-    aOtherEd.SetAccessibleName(String(SW_RES(STR_SYMBOL)));
-    aOtherEd.SetAccessibleRelationLabeledBy(&aOtherBtn);
     FreeResource();
     if(nSaveButtonState > -1)
     {
@@ -187,12 +185,12 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     else
     {
         //Einfuege-Optionen verstecken
-        aHeaderCB          .Show(sal_False);
-        aRepeatHeaderCB    .Show(sal_False);
-        aDontSplitCB       .Show(sal_False);
-        aBorderCB          .Show(sal_False);
-        aOptionsFL         .Show(sal_False);
-        aRepeatHeaderCombo.Show(sal_False);
+        aHeaderCB		   .Show(FALSE);
+        aRepeatHeaderCB	   .Show(FALSE);
+        aDontSplitCB	   .Show(FALSE);
+        aBorderCB		   .Show(FALSE);
+        aOptionsFL         .Show(FALSE);
+        aRepeatHeaderCombo.Show(FALSE);
 
         //Groesse anpassen
         Size aSize(GetSizePixel());
@@ -210,10 +208,10 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
 
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-    sal_Bool bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell())&HTMLMODE_ON);
+    BOOL bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell())&HTMLMODE_ON);
 
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTblFlags(bHTMLMode);
-    sal_uInt16 nInsTblFlags = aInsOpts.mnInsMode;
+    USHORT nInsTblFlags = aInsOpts.mnInsMode;
 
     aHeaderCB.Check( 0 != (nInsTblFlags & tabopts::HEADLINE) );
     aRepeatHeaderCB.Check(aInsOpts.mnRowsToRepeat > 0);
@@ -226,7 +224,7 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     CheckBoxHdl();
 }
 
-SwConvertTableDlg:: ~SwConvertTableDlg()
+SwConvertTableDlg::	~SwConvertTableDlg()
 {
     delete pTAutoFmt;
 }
@@ -236,7 +234,7 @@ IMPL_LINK( SwConvertTableDlg, AutoFmtHdl, PushButton*, pButton )
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton, pShell, DLG_AUTOFMT_TABLE, sal_False, pTAutoFmt);
+    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton, pShell, DLG_AUTOFMT_TABLE, FALSE, pTAutoFmt);
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if( RET_OK == pDlg->Execute())
         pDlg->FillAutoFmtOfIndex( pTAutoFmt );
@@ -252,7 +250,7 @@ IMPL_LINK( SwConvertTableDlg, BtnHdl, Button*, pButton )
     {
         if( aKeepColumn.IsEnabled() )
             aKeepColumn.SaveValue();
-        aKeepColumn.Check( sal_True );
+        aKeepColumn.Check( TRUE );
     }
     aKeepColumn.Enable( aTabBtn.IsChecked() );
     aOtherEd.Enable( aOtherBtn.IsChecked() );

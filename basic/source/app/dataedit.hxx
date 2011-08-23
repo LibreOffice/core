@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,37 +39,37 @@ class Font;
 
 // Find, Load and Save must be implemented,
 // the others must exist in MemberType
-#define DATA_FUNC_DEF( MemberName, MemberType )                                 \
-public:                                                                         \
-    MemberType MemberName;                                                      \
-    sal_Bool Find( const String& rStr );                                            \
-    sal_Bool Load( const String& rStr );                                            \
-    sal_Bool Save( const String& rStr );                                            \
+#define DATA_FUNC_DEF( MemberName, MemberType )									\
+public:																			\
+    MemberType MemberName;														\
+    BOOL Find( const String& rStr );											\
+    BOOL Load( const String& rStr );											\
+    BOOL Save( const String& rStr );											\
                                                                                 \
-    void GrabFocus(){ MemberName.GrabFocus(); }                                 \
-    void Show(){ MemberName.Show(); }                                           \
+    void GrabFocus(){ MemberName.GrabFocus(); }									\
+    void Show(){ MemberName.Show(); }											\
     void SetPosPixel( const Point& rNewPos ){ MemberName.SetPosPixel(rNewPos); }\
-    void SetSizePixel( const Size& rNewSize ){ MemberName.SetSizePixel(rNewSize); } \
-    Size GetSizePixel(){ return MemberName.GetSizePixel(); }                    \
-    Point GetPosPixel(){ return MemberName.GetPosPixel(); }                     \
-    void Update(){ MemberName.Update(); }                                       \
-    void SetFont( const Font& rNewFont ){ MemberName.SetFont(rNewFont); }       \
+    void SetSizePixel( const Size& rNewSize ){ MemberName.SetSizePixel(rNewSize); }	\
+    Size GetSizePixel(){ return MemberName.GetSizePixel(); }					\
+    Point GetPosPixel(){ return MemberName.GetPosPixel(); }						\
+    void Update(){ MemberName.Update(); }										\
+    void SetFont( const Font& rNewFont ){ MemberName.SetFont(rNewFont); }		\
                                                                                 \
-    void Delete();                                                              \
-    void Cut();                                                                 \
-    void Copy();                                                                \
-    void Paste();                                                               \
-    void Undo();                                                                \
-    void Redo();                                                                \
-    String GetText() const;                                                     \
-    void SetText( const String& rStr );                                         \
-    sal_Bool HasText() const;                                                       \
-    String GetSelected();                                                       \
-    TextSelection GetSelection() const;                                         \
-    void SetSelection( const TextSelection& rSelection );                       \
-    sal_uInt16 GetLineNr() const;                                                   \
-    void ReplaceSelected( const String& rStr );                                 \
-    sal_Bool IsModified();                                                          \
+    void Delete();																\
+    void Cut();																	\
+    void Copy();																\
+    void Paste();																\
+    void Undo();																\
+    void Redo();																\
+    String GetText() const;														\
+    void SetText( const String& rStr );											\
+    BOOL HasText() const;														\
+    String GetSelected();														\
+    TextSelection GetSelection() const;											\
+    void SetSelection( const TextSelection& rSelection );						\
+    USHORT GetLineNr() const;													\
+    void ReplaceSelected( const String& rStr );									\
+    BOOL IsModified();															\
     void SetModifyHdl( Link l );
 
 
@@ -86,19 +86,19 @@ public:
     virtual void Undo()=0;
     virtual void Redo()=0;
 
-    virtual sal_Bool Find( const String& )=0;         // Find and select text
-    virtual sal_Bool Load( const String& )=0;         // Load text from file
-    virtual sal_Bool Save( const String& )=0;         // Save text to file
+    virtual BOOL Find( const String& )=0;         // Find and select text
+    virtual BOOL Load( const String& )=0;         // Load text from file
+    virtual BOOL Save( const String& )=0;         // Save text to file
     virtual String GetSelected()=0;
     virtual void GrabFocus()=0;
     virtual TextSelection GetSelection() const=0;
     virtual void SetSelection( const TextSelection& rSelection )=0;
-    virtual sal_uInt16 GetLineNr() const=0;
+    virtual USHORT GetLineNr() const=0;
     virtual String GetText() const=0;
     virtual void SetText( const String& rStr )=0;
-    virtual sal_Bool HasText() const=0;               // to avoid GetText.Len()
+    virtual BOOL HasText() const=0;               // to avoid GetText.Len()
     virtual void ReplaceSelected( const String& rStr )=0;
-    virtual sal_Bool IsModified()=0;
+    virtual BOOL IsModified()=0;
     virtual void SetModifyHdl( Link )=0;
     virtual void Show()=0;
     virtual void SetPosPixel( const Point& rNewPos )=0;
@@ -109,8 +109,8 @@ public:
     virtual void SetFont( const Font& rNewFont )=0;
 
     virtual void BuildKontextMenu( PopupMenu *&pMenu )
-    {
-        (void) pMenu; /* avoid warning about unused parameter */
+    {    
+        (void) pMenu; /* avoid warning about unused parameter */ 
     }
 };
 

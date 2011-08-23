@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,17 +75,17 @@ protected:
 
 private:
 
-    ::rtl::OUString sName;  // immutable outside constructor
+    ::rtl::OUString sName;	// immutable outside constructor
 
     // The parent if it has been retrieved. This is always an
     // SwAccessibleContext. (protected by Mutex)
     ::com::sun::star::uno::WeakReference <
         ::com::sun::star::accessibility::XAccessible > xWeakParent;
 
-    SwAccessibleMap *pMap;  // must be protected by solar mutex
+    SwAccessibleMap *pMap; 	// must be protected by solar mutex
 
     sal_uInt32 nClientId;   // client id in the AccessibleEventNotifier queue
-    sal_Int16 nRole;        // immutable outside constructor
+    sal_Int16 nRole;		// immutable outside constructor
 
     // The current states (protected by mutex)
     sal_Bool bIsShowingState : 1;
@@ -96,9 +96,11 @@ private:
     // Are we currently disposing that object (protected by solar mutex)?
     sal_Bool bDisposing : 1;
 
-    // #i85634# - boolean, indicating if the accessible context is
-    // in general registered at the accessible map.
+    // --> OD 2008-03-10 #i85634#
+    // boolean, indicating if the accessible context is in general registered at
+    // the accessible map.
     bool bRegisteredAtAccessibleMap;
+    // <--
 
     void InitStates();
 
@@ -153,7 +155,7 @@ protected:
 
     // Invalidate the states of all children of the specified SwFrm. The
     // SwFrm might belong the the current object or to any child or grandchild!
-    // #i27301# - use new type definition for <_nStates>
+    // --> OD 2005-12-12 #i27301# - use new type definition for <_nStates>
     void InvalidateChildrenStates( const SwFrm* _pFrm,
                                    tAccessibleStates _nStates );
     // <--
@@ -196,12 +198,13 @@ protected:
         getBoundsImpl(sal_Bool bRelative)
         throw (::com::sun::star::uno::RuntimeException);
 
-    // #i85634#
+    // --> OD 2008-03-10 #i85634#
     inline void NotRegisteredAtAccessibleMap()
     {
         bRegisteredAtAccessibleMap = false;
     }
     void RemoveFrmFromAccessibleMap();
+    // <--
 
     virtual ~SwAccessibleContext();
 
@@ -212,60 +215,60 @@ public:
 
     //=====  XAccessible  =====================================================
 
-    /// Return the XAccessibleContext.
+    ///	Return the XAccessibleContext.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
         getAccessibleContext (void) throw (com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleContext  ==============================================
 
-    /// Return the number of currently visible children.
+    ///	Return the number of currently visible children.
     virtual sal_Int32 SAL_CALL getAccessibleChildCount (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the specified child or NULL if index is invalid.
+    ///	Return the specified child or NULL if index is invalid.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
-    /// Return a reference to the parent.
+    ///	Return a reference to the parent.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleParent (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return this objects index among the parents children.
-    virtual sal_Int32 SAL_CALL
+    ///	Return this objects index among the parents children.
+    virtual	sal_Int32 SAL_CALL
         getAccessibleIndexInParent (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return this object's role.
+    ///	Return this object's role.
     virtual sal_Int16 SAL_CALL
         getAccessibleRole (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return this object's description.
+    ///	Return this object's description.
     virtual ::rtl::OUString SAL_CALL
         getAccessibleDescription (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the object's current name.
+    ///	Return the object's current name.
     virtual ::rtl::OUString SAL_CALL
         getAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return NULL to indicate that an empty relation set.
+    ///	Return NULL to indicate that an empty relation set.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the set of current states.
+    ///	Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Return the parents locale or throw exception if this object has no
+    /**	Return the parents locale or throw exception if this object has no
         parent yet/anymore.
     */
     virtual ::com::sun::star::lang::Locale SAL_CALL
@@ -318,13 +321,13 @@ public:
 
     //=====  XServiceInfo  ====================================================
 
-    /** Returns an identifier for the implementation of this object.
+    /**	Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Return whether the specified service is supported by this class.
+    /**	Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
         supportsService (const ::rtl::OUString& sServiceName)
@@ -362,26 +365,51 @@ public:
     void InvalidateFocus();
 
     // Check states
-    // #i27301# - use new type definition for <_nStates>
+    // --> OD 2005-12-12 #i27301# - use new type definition for <_nStates>
     void InvalidateStates( tAccessibleStates _nStates );
+    // <--
 
     // the XAccessibleRelationSet may have changed
     void InvalidateRelation( sal_uInt16 nType );
 
-    void InvalidateTextSelection(); // #i27301# - text selection has changed
-    void InvalidateAttr(); // #i88069# - attributes has changed
+    /** text selection has changed
+
+        OD 2005-12-14 #i27301#
+
+        @author OD
+    */
+    void InvalidateTextSelection();
+
+    /** attributes has changed
+
+        OD 2009-01-06 #i88069#
+
+        @author OD
+    */
+    void InvalidateAttr();
 
     bool HasAdditionalAccessibleChildren();
 
-    // #i88070# - get additional child by index
+    /** get additional child by index
+
+        OD 2010-01-27 #i88070#
+
+        @author OD
+    */
     Window* GetAdditionalAccessibleChild( const sal_Int32 nIndex );
 
-    // #i88070# - get all additional accessible children
+    /** get all additional accessible children
+
+        OD 2010-01-27 #i88070#
+
+        @author OD
+    */
     void GetAdditionalAccessibleChildren( std::vector< Window* >* pChildren );
+
 
     const ::rtl::OUString& GetName() const { return sName; }
 
-    virtual sal_Bool HasCursor();   // required by map to remember that object
+    virtual sal_Bool HasCursor();	// required by map to remember that object
 
     sal_Bool Select( SwPaM *pPaM, SdrObject *pObj, sal_Bool bAdd );
     inline sal_Bool Select( SwPaM& rPaM )
@@ -404,29 +432,29 @@ public:
 const sal_Char sDefunc[] = "object is defunctional";
 const sal_Char sMissingWindow[] = "window is missing";
 
-#define THROW_RUNTIME_EXCEPTION( ifc, msg )                                 \
-    ::com::sun::star::uno::Reference < ifc > xThis( this );                 \
+#define THROW_RUNTIME_EXCEPTION( ifc, msg ) 								\
+    ::com::sun::star::uno::Reference < ifc > xThis( this );					\
     ::com::sun::star::uno::RuntimeException aExcept(                        \
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(msg) ), xThis );       \
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(msg) ), xThis );		\
     throw aExcept;
 
-#define CHECK_FOR_DEFUNC_THIS( ifc, ths )                                   \
-    if( !(GetFrm() && GetMap()) )                                           \
-    {                                                                       \
-        ::com::sun::star::uno::Reference < ifc > xThis( ths );              \
-        ::com::sun::star::lang::DisposedException aExcept(                  \
+#define CHECK_FOR_DEFUNC_THIS( ifc, ths )									\
+    if( !(GetFrm() && GetMap()) )											\
+    {																		\
+        ::com::sun::star::uno::Reference < ifc > xThis( ths );				\
+        ::com::sun::star::lang::DisposedException aExcept( 					\
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(sDefunc) ),        \
-            xThis );                                                        \
-        throw aExcept;                                                      \
+            xThis );												        \
+        throw aExcept;														\
     }
 
-#define CHECK_FOR_DEFUNC( ifc )                                             \
+#define CHECK_FOR_DEFUNC( ifc )												\
     CHECK_FOR_DEFUNC_THIS( ifc, this )
 
-#define CHECK_FOR_WINDOW( i, w )                                            \
-    if( !(w) )                                                              \
-    {                                                                       \
-        THROW_RUNTIME_EXCEPTION( i, sMissingWindow );                       \
+#define CHECK_FOR_WINDOW( i, w ) 											\
+    if( !(w) )																\
+    {																		\
+        THROW_RUNTIME_EXCEPTION( i, sMissingWindow );						\
     }
 #endif
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ void lcl_getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rCTLFont,Langu
 {
         LanguageType eLatin = _eLatin;
 
-        //      If the UI language is Korean, the default Latin font has to
+        //      #108374# / #107782#: If the UI language is Korean, the default Latin font has to
         //      be queried for Korean, too (the Latin language from the document can't be Korean).
         //      This is the same logic as in SwDocShell::InitNew.
         LanguageType eUiLanguage = Application::GetSettings().GetUILanguage();
@@ -115,6 +115,7 @@ OFormatProperties::OFormatProperties()
     }
     aFontDescriptor.Weight = awt::FontWeight::NORMAL;
     aFontDescriptor.CharacterWidth = awt::FontWidth::NORMAL;
+    // aCharLocale = SvtSysLocale().GetLocaleData().getLocale();
 }
 // -----------------------------------------------------------------------------
 void OReportComponentProperties::setShape(uno::Reference< drawing::XShape >& _xShape,const uno::Reference< report::XReportComponent>& _xTunnel,oslInterlockedCount& _rRefCount)

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@
 
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star;
+using namespace	::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -183,7 +183,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewCell::getAccessi
         pStateSet->AddState(AccessibleStateType::TRANSIENT);
         if (isVisible())
             pStateSet->AddState(AccessibleStateType::VISIBLE);
-        // MANAGES_DESCENDANTS (for paragraphs)
+        // #111635# MANAGES_DESCENDANTS (for paragraphs)
         pStateSet->AddState(AccessibleStateType::MANAGES_DESCENDANTS);
     }
     return pStateSet;
@@ -277,14 +277,14 @@ sal_Bool ScAccessiblePreviewCell::IsDefunc(
 sal_Bool ScAccessiblePreviewCell::IsEditable(
     const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
-    return false;
+    return sal_False;
 }
 
 sal_Bool ScAccessiblePreviewCell::IsOpaque(
     const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
     // test whether there is a background color
-    //! could be moved to ScAccessibleCellBase
+    //!	could be moved to ScAccessibleCellBase
 
     sal_Bool bOpaque(sal_True);
     if (mpDoc)
@@ -308,7 +308,7 @@ void ScAccessiblePreviewCell::CreateTextHelper()
         mpTextHelper = new ::accessibility::AccessibleTextHelper( pEditSource );
         mpTextHelper->SetEventSource( this );
 
-        // paragraphs in preview are transient
+        // #111635# paragraphs in preview are transient
         ::accessibility::AccessibleTextHelper::VectorOfStates aChildStates;
         aChildStates.push_back( AccessibleStateType::TRANSIENT );
         mpTextHelper->SetAdditionalChildStates( aChildStates );

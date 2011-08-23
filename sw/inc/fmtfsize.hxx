@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,52 +37,52 @@
 
 class IntlWrapper;
 
-//Frame size.
+//Die Framesize ---------------------------------
 
 enum SwFrmSize
 {
-    ATT_VAR_SIZE,       // Frame is variable in Var-direction.
-    ATT_FIX_SIZE,       // Frame cannot be moved in Var-direction.
-    ATT_MIN_SIZE        // Value in Var-direction gives minimum
-                        // (can be exceeded but not be less).
+    ATT_VAR_SIZE,		//Frm ist in der Var-Richtung variabel
+    ATT_FIX_SIZE,		//Frm ist in der Var-Richtung unbeweglich
+    ATT_MIN_SIZE		//Der Wert in der Var-Richtung beschreibt eine
+                        //Minimalgroesse, die nicht unter- wohl aber
+                        //ueberschritten werden kann.
 };
 
 class SW_DLLPUBLIC SwFmtFrmSize: public SfxPoolItem
 {
-    Size      aSize;
+    Size	  aSize;
     SwFrmSize eFrmHeightType;
     SwFrmSize eFrmWidthType;
-    sal_uInt8     nWidthPercent;    //Fuer Tabellen kann die Breite in Prozent
-    sal_uInt8     nHeightPercent;   //angegeben sein.
-
-    // For tables: width can be given in percent.
-
-    // For frames: height and/or width may be given in percent.
-    // If only one of these percentage values is given, the value 0xFF
-    // used instead of the missing percentage value indicates this side
-    // being proportional to the given one.
-    // The calculation in this case is based upon the values in Size.
-    // Percentages are always related to the environment in which
-    // the object is placed (PrtArea) and to the screen width
-    // minus borders in BrowseView if the environment is the page.
-
-
-
+    BYTE 	  nWidthPercent;	//Fuer Tabellen kann die Breite in Prozent
+    BYTE	  nHeightPercent;	//angegeben sein.
+                                //Fuer Rahmen koennen Hoehe und/oder Breite
+                                //in Prozent angegeben sein. Wenn nur eine
+                                //der Angaben in Prozent angeben ist, kann
+                                //durch den ausgezeichneten Wert 0xFF in der
+                                //anderen Prozentangabe bestimmt werden, das
+                                //sich diese Richtung proportional zur anderen
+                                //verhaelt. Basis fuer die Umrechnung sind fuer
+                                //diesen Fall die Angaben in der Size.
+                                //Die Prozentwerte beziehen sich immer auf die
+                                //Umgebung in der das Objekt steht (PrtArea)
+                                //Auf die Bildschirmbreite abzueglich Raender
+                                //in der BrowseView wenn die Umgebung die Seite
+                                //ist.
 public:
     SwFmtFrmSize( SwFrmSize eSize = ATT_VAR_SIZE,
                   SwTwips nWidth = 0, SwTwips nHeight = 0 );
     SwFmtFrmSize& operator=( const SwFmtFrmSize& rCpy );
 
-    // "Pure virtual methods" of SfxPoolItem.
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     SwFrmSize GetHeightSizeType() const { return eFrmHeightType; }
     void SetHeightSizeType( SwFrmSize eSize ) { eFrmHeightType = eSize; }
@@ -95,19 +95,19 @@ public:
 
     SwTwips GetHeight() const { return aSize.Height(); }
     SwTwips GetWidth()  const { return aSize.Width();  }
-    void    SetHeight( const SwTwips nNew ) { aSize.Height() = nNew; }
-    void    SetWidth ( const SwTwips nNew ) { aSize.Width()  = nNew; }
+    void	SetHeight( const SwTwips nNew ) { aSize.Height() = nNew; }
+    void	SetWidth ( const SwTwips nNew ) { aSize.Width()  = nNew; }
 
-    sal_uInt8    GetHeightPercent() const{ return nHeightPercent; }
-    sal_uInt8   GetWidthPercent() const { return nWidthPercent;  }
-    void    SetHeightPercent( sal_uInt8 n ) { nHeightPercent = n; }
-    void    SetWidthPercent ( sal_uInt8 n ) { nWidthPercent  = n; }
+    BYTE    GetHeightPercent() const{ return nHeightPercent; }
+    BYTE	GetWidthPercent() const { return nWidthPercent;  }
+    void	SetHeightPercent( BYTE n ) { nHeightPercent = n; }
+    void	SetWidthPercent ( BYTE n ) { nWidthPercent  = n; }
 };
 
-inline const SwFmtFrmSize &SwAttrSet::GetFrmSize(sal_Bool bInP) const
+inline const SwFmtFrmSize &SwAttrSet::GetFrmSize(BOOL bInP) const
     { return (const SwFmtFrmSize&)Get( RES_FRM_SIZE,bInP); }
 
-inline const SwFmtFrmSize &SwFmt::GetFrmSize(sal_Bool bInP) const
+inline const SwFmtFrmSize &SwFmt::GetFrmSize(BOOL bInP) const
     { return aSet.GetFrmSize(bInP); }
 
 #endif

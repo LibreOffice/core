@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,11 +32,11 @@
 #include <xmloff/xmlstyle.hxx>
 
 namespace com { namespace sun { namespace star {
-    namespace uno { template<class X> class Reference; }
+    namespace uno {	template<class X> class Reference; }
     namespace xml { namespace sax { class XAttributeList; } }
     namespace beans { class XPropertySet; }
 } } }
-namespace rtl { class OUString; }
+namespace rtl {	class OUString; }
 class SvXMLImport;
 
 /// import footnote and endnote configuration elements
@@ -93,7 +93,7 @@ public:
 
     /// for footnotes, also parse begin and end notices
     virtual SvXMLImportContext *CreateChildContext(
-        sal_uInt16 nPrefix,
+        USHORT nPrefix,
         const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
@@ -102,10 +102,10 @@ public:
     const SvXMLTokenMap& GetFtnConfigAttrTokenMap();
 
     /// set configuration at document; calls ProcessSettings
-    /* Move code from <CreateAndInsertLate(..)> to <Finish(..)>, because
-       at this time all styles it references have been set. (#i40579#)
-    */
+    // --> OD 2005-01-31 #i40579# - move code from <CreateAndInsertLate(..)>
+    // to <Finish(..)>, because at this time all styles it references have been set.
     virtual void Finish( sal_Bool bOverwrite);
+    // <--
 
     /// set configuration at document
     void ProcessSettings(

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -242,15 +242,21 @@ TYPEINIT1(ViewShellBase, SfxViewShell);
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new ViewShellBase object has been constructed.
 
+/*
+SFX_IMPL_VIEWFACTORY(ViewShellBase, SdResId(STR_DEFAULTVIEW))
+{
+    SFX_VIEW_REGISTRATION(DrawDocShell);
+}
+*/
 SfxViewFactory* ViewShellBase::pFactory;
-SfxViewShell* ViewShellBase::CreateInstance (
+SfxViewShell* __EXPORT ViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     ViewShellBase* pBase = new ViewShellBase(pFrame, pOldView);
     pBase->LateInit(OUString());
     return pBase;
 }
-void ViewShellBase::RegisterFactory( sal_uInt16 nPrio )
+void ViewShellBase::RegisterFactory( USHORT nPrio )
 {
     pFactory = new SfxViewFactory(
         &CreateInstance,&InitFactory,nPrio,"Default");
@@ -340,8 +346,8 @@ ViewShellBase::~ViewShellBase (void)
 
 void ViewShellBase::LateInit (const ::rtl::OUString& rsDefaultView)
 {
-    StartListening(*GetViewFrame(),sal_True);
-    StartListening(*GetDocShell(),sal_True);
+    StartListening(*GetViewFrame(),TRUE);
+    StartListening(*GetDocShell(),TRUE);
     mpImpl->LateInit();
     InitializeFramework();
 
@@ -486,6 +492,10 @@ void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                             SID_PRESENTATION, SFX_CALLMODE_ASYNCHRON );
                     }
                 }
+                else
+                {
+                    //                    mpPaneManager->InitPanes();
+                }
                 break;
 
             default:
@@ -551,7 +561,7 @@ void ViewShellBase::Rearrange (void)
         OSL_TRACE("Rearrange: window missing");
     }
 
-    GetViewFrame()->Resize(sal_True);
+    GetViewFrame()->Resize(TRUE);
 }
 
 
@@ -581,7 +591,7 @@ Reference<view::XRenderable> ViewShellBase::GetRenderable (void)
 
 
 
-SfxPrinter* ViewShellBase::GetPrinter (sal_Bool bCreate)
+SfxPrinter* ViewShellBase::GetPrinter (BOOL bCreate)
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
 
@@ -591,9 +601,9 @@ SfxPrinter* ViewShellBase::GetPrinter (sal_Bool bCreate)
 
 
 
-sal_uInt16 ViewShellBase::SetPrinter (
+USHORT ViewShellBase::SetPrinter (
     SfxPrinter* pNewPrinter,
-    sal_uInt16 nDiffFlags,
+    USHORT nDiffFlags,
     bool bIsAPI)
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
@@ -609,7 +619,7 @@ sal_uInt16 ViewShellBase::SetPrinter (
         pNewPrinter->SetMapMode(aMap);
         Size aNewSize = pNewPrinter->GetOutputSize();
 
-        sal_Bool bScaleAll = sal_False;
+        BOOL bScaleAll = FALSE;
         if ( bIsAPI )
         {
             WarningBox aWarnBox (
@@ -644,6 +654,16 @@ sal_uInt16 ViewShellBase::SetPrinter (
 
 
 
+PrintDialog* ViewShellBase::CreatePrintDialog (::Window *pParent)
+{
+    (void)pParent;
+    return NULL;
+    //    return mpImpl->mpPrintManager->CreatePrintDialog (pParent);
+}
+
+
+
+
 SfxTabPage*  ViewShellBase::CreatePrintOptionsPage(
     ::Window *pParent,
     const SfxItemSet &rOptions)
@@ -651,6 +671,43 @@ SfxTabPage*  ViewShellBase::CreatePrintOptionsPage(
     (void)pParent;
     (void)rOptions;
     return NULL;
+    //    return mpImpl->mpPrintManager->CreatePrintOptionsPage (pParent, rOptions);
+}
+
+
+
+
+USHORT  ViewShellBase::Print(SfxProgress&, BOOL bIsAPI, PrintDialog* pDlg)
+{
+    (void)bIsAPI;
+    (void)pDlg;
+    return 0;
+    //    return mpImpl->mpPrintManager->Print (rProgress, bIsAPI, pDlg);
+}
+
+
+
+
+ErrCode ViewShellBase::DoPrint (
+    SfxPrinter* pPrinter,
+    PrintDialog* pPrintDialog,
+    BOOL bSilent, BOOL bIsAPI )
+{
+    (void)pPrinter;
+    (void)pPrintDialog;
+    (void)bSilent;
+    (void)bIsAPI;
+    return 0;
+    //return mpImpl->mpPrintManager->DoPrint (pPrinter, pPrintDialog, bSilent, bIsAPI );
+}
+
+
+
+
+void ViewShellBase::PreparePrint (PrintDialog* pPrintDialog)
+{
+    SfxViewShell::PreparePrint (pPrintDialog);
+    //mpImpl->mpPrintManager->PreparePrint (pPrintDialog);
 }
 
 
@@ -697,7 +754,7 @@ SvBorder ViewShellBase::GetBorder (bool )
 
 void ViewShellBase::Execute (SfxRequest& rRequest)
 {
-    sal_uInt16 nSlotId = rRequest.GetSlot();
+    USHORT nSlotId = rRequest.GetSlot();
 
     switch (nSlotId)
     {
@@ -720,14 +777,14 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 framework::FrameworkHelper::msLeftDrawPaneURL,
                 framework::FrameworkHelper::msSlideSorterURL);
             break;
-
+            
         case SID_LEFT_PANE_IMPRESS:
             mpImpl->SetPaneVisibility(
                 rRequest,
                 framework::FrameworkHelper::msLeftImpressPaneURL,
                 framework::FrameworkHelper::msSlideSorterURL);
             break;
-
+            
         case SID_TASKPANE:
             mpImpl->SetPaneVisibility(
                 rRequest,
@@ -769,6 +826,12 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
 
 void ViewShellBase::GetState (SfxItemSet& rSet)
 {
+    // The full screen mode is not supported.  Disable the the slot so that
+    // it appears grayed out when somebody uses configures the menu to show
+    // an menu item for it.
+    //    if (rSet.GetItemState(SID_WIN_FULLSCREEN) == SFX_ITEM_AVAILABLE)
+    //        rSet.DisableItem(SID_WIN_FULLSCREEN);
+
     mpImpl->GetSlotState(rSet);
 
     FuBullet::GetSlotState( rSet, 0, GetViewFrame() );
@@ -841,7 +904,7 @@ void ViewShellBase::ReadUserDataSequence (
 
 
 
-void ViewShellBase::Activate (sal_Bool bIsMDIActivate)
+void ViewShellBase::Activate (BOOL bIsMDIActivate)
 {
     SfxViewShell::Activate(bIsMDIActivate);
 
@@ -859,7 +922,7 @@ void ViewShellBase::Activate (sal_Bool bIsMDIActivate)
 
 
 
-void ViewShellBase::Deactivate (sal_Bool bIsMDIActivate)
+void ViewShellBase::Deactivate (BOOL bIsMDIActivate)
 {
     SfxViewShell::Deactivate(bIsMDIActivate);
 }
@@ -881,11 +944,11 @@ void ViewShellBase::SetZoomFactor (
 
 
 
-sal_uInt16 ViewShellBase::PrepareClose (sal_Bool bUI, sal_Bool bForBrowsing)
+USHORT ViewShellBase::PrepareClose (BOOL bUI, BOOL bForBrowsing)
 {
-    sal_uInt16 nResult = SfxViewShell::PrepareClose (bUI, bForBrowsing);
+    USHORT nResult = SfxViewShell::PrepareClose (bUI, bForBrowsing);
 
-    if (nResult == sal_True)
+    if (nResult == TRUE)
     {
         mpImpl->mbIsClosing = true;
 
@@ -901,7 +964,7 @@ sal_uInt16 ViewShellBase::PrepareClose (sal_Bool bUI, sal_Bool bForBrowsing)
 
 
 
-void ViewShellBase::WriteUserData (String& rString, sal_Bool bBrowse)
+void ViewShellBase::WriteUserData (String& rString, BOOL bBrowse)
 {
     SfxViewShell::WriteUserData (rString, bBrowse);
 
@@ -914,7 +977,7 @@ void ViewShellBase::WriteUserData (String& rString, sal_Bool bBrowse)
 
 
 
-void ViewShellBase::ReadUserData (const String& rString, sal_Bool bBrowse)
+void ViewShellBase::ReadUserData (const String& rString, BOOL bBrowse)
 {
     SfxViewShell::ReadUserData (rString, bBrowse);
 
@@ -963,8 +1026,8 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
     // made only for the main view shell.  This not only avoids unnecessary
     // calls for the views in side panes but prevents calling an already
     // dying SfxViewShell base class.
-    // We have to check the existence of the window, too.
-    // The SfxViewFrame accesses the window without checking it.
+    // For issue #140703# we have to check the existence of the window,
+    // too.  The SfxViewFrame accesses the window without checking it.
     ViewShell* pMainViewShell = GetMainViewShell().get();
     if (pMainViewShell != NULL && GetWindow()!=NULL)
     {
@@ -972,7 +1035,7 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
         bool bOuterResize ( ! GetDocShell()->IsInPlaceActive());
         SvBorder aBorder (GetBorder(bOuterResize));
         aBorder += pMainViewShell->GetBorder(bOuterResize);
-
+    
         if (bForce || (aBorder != aCurrentBorder))
         {
             SetBorderPixel (aBorder);
@@ -1102,7 +1165,7 @@ const Rectangle& ViewShellBase::getClientRectangle (void) const
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
     OSL_ASSERT(mpImpl->mpUpdateLockManager.get()!=NULL);
-
+    
     return mpImpl->mpUpdateLockManager;
 }
 
@@ -1113,7 +1176,7 @@ const Rectangle& ViewShellBase::getClientRectangle (void) const
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
     OSL_ASSERT(mpImpl->mpToolBarManager.get()!=NULL);
-
+    
     return mpImpl->mpToolBarManager;
 }
 
@@ -1183,7 +1246,7 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
                 {
                     for( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                     {
-                        if( aPropSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Name" ) ))
+                        if( aPropSeq[i].Name.equalsAscii( "Name" ))
                         {
                             aPropSeq[i].Value >>= aLabel;
                             break;
@@ -1267,7 +1330,7 @@ void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot (void)
                 pHelper->GetViewURL(pFrameView->GetViewShellTypeOnLoad()),
                 FrameworkHelper::msCenterPaneURL);
             pHelper->RunOnConfigurationEvent(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdateEnd")),
+                ::rtl::OUString::createFromAscii("ConfigurationUpdateEnd"),
                 CurrentPageSetter(mrBase));
         }
     }
@@ -1279,9 +1342,9 @@ void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot (void)
 void ViewShellBase::Implementation::ShowViewTabBar (bool bShow)
 {
     if (mpViewTabBar.is()
-        && (mpViewTabBar->GetTabControl()->IsVisible()==sal_True) != bShow)
+        && (mpViewTabBar->GetTabControl()->IsVisible()==TRUE) != bShow)
     {
-        mpViewTabBar->GetTabControl()->Show(bShow ? sal_True : sal_False);
+        mpViewTabBar->GetTabControl()->Show(bShow ? TRUE : FALSE);
         mrBase.Rearrange();
     }
 }
@@ -1300,7 +1363,7 @@ void ViewShellBase::Implementation::ResizePixel (
     // Forward the call to both the base class and the main stacked sub
     // shell only when main sub shell exists.
     ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
-
+    
     // Set the ViewTabBar temporarily to full size so that, when asked
     // later, it can return its true height.
     mrBase.SetWindow (mpViewWindow.get());
@@ -1323,7 +1386,7 @@ void ViewShellBase::Implementation::ResizePixel (
         mpViewTabBar->GetTabControl()->SetPosSizePixel(
             rOrigin, Size(rSize.Width(),aBaseBorder.Top()));
     }
-
+    
     // The view window gets the remaining space.
     Point aViewWindowPosition (
         rOrigin.X()+aBaseBorder.Left(),
@@ -1332,7 +1395,7 @@ void ViewShellBase::Implementation::ResizePixel (
         rSize.Width() - aBaseBorder.Left() - aBaseBorder.Right(),
         rSize.Height() - aBaseBorder.Top() - aBaseBorder.Bottom());
     mpViewWindow->SetPosSizePixel(aViewWindowPosition, aViewWindowSize);
-
+    
     maClientArea = Rectangle(Point(0,0), aViewWindowSize);
 }
 
@@ -1354,11 +1417,11 @@ void ViewShellBase::Implementation::SetPaneVisibility (
             xContext, rsPaneURL));
         Reference<XResourceId> xViewId (ResourceId::createWithAnchorURL(
             xContext, rsViewURL, rsPaneURL));
-
+        
         // Determine the new visibility state.
         const SfxItemSet* pArguments = rRequest.GetArgs();
-        sal_Bool bShowChildWindow;
-        sal_uInt16 nSlotId = rRequest.GetSlot();
+        BOOL bShowChildWindow;
+        USHORT nSlotId = rRequest.GetSlot();
         if (pArguments != NULL)
             bShowChildWindow = static_cast<const SfxBoolItem&>(
                 pArguments->Get(nSlotId)).GetValue();
@@ -1372,10 +1435,10 @@ void ViewShellBase::Implementation::SetPaneVisibility (
                 xConfigurationController->getRequestedConfiguration());
             if ( ! xConfiguration.is())
                 throw RuntimeException();
-
+            
             bShowChildWindow = ! xConfiguration->hasResource(xPaneId);
         }
-
+    
         // Set the desired visibility state at the current configuration
         // and update it accordingly.
         Reference<XConfigurationController> xConfigurationController (
@@ -1436,7 +1499,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         xResourceId = ResourceId::create(
                             xContext, FrameworkHelper::msLeftImpressPaneURL);
                         break;
-
+                        
                     case SID_LEFT_PANE_DRAW:
                         xResourceId = ResourceId::create(
                             xContext, FrameworkHelper::msLeftDrawPaneURL);
@@ -1446,7 +1509,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         xResourceId = ResourceId::create(
                             xContext, FrameworkHelper::msRightPaneURL);
                         break;
-
+            
                     case SID_NORMAL_MULTI_PANE_GUI:
                         xResourceId = ResourceId::createWithAnchorURL(
                             xContext,
@@ -1518,13 +1581,13 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     bState &= !bMasterPageMode;
                     break;
                 }
-
+                    
                 case SID_HANDOUTMODE:
                     // There is only the master page mode for the handout
                     // view so ignore the master page flag.
                     break;
             }
-
+            
             // And finally set the state.
             rSet.Put(SfxBoolItem(nItemId, bState));
 
@@ -1545,7 +1608,7 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
 {
     // Set the visibility state of the toolpanel and one of its top
     // level panels.
-    sal_Bool bShowToolPanel = sal_True;
+    BOOL bShowToolPanel = TRUE;
     toolpanel::PanelId nPanelId (
         toolpanel::PID_UNKNOWN);
     bool bPanelIdGiven = false;
@@ -1557,14 +1620,14 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
         if ((pArgs->Count() == 1) || (pArgs->Count() == 2))
         {
             SFX_REQUEST_ARG (rRequest, pIsPanelVisible,
-                SfxBoolItem, ID_VAL_ISVISIBLE, sal_False);
+                SfxBoolItem, ID_VAL_ISVISIBLE, FALSE);
             if (pIsPanelVisible != NULL)
                 bShowToolPanel = pIsPanelVisible->GetValue();
         }
         if (pArgs->Count() == 2)
         {
             SFX_REQUEST_ARG (rRequest, pPanelId, SfxUInt32Item,
-                ID_VAL_PANEL_INDEX, sal_False);
+                ID_VAL_PANEL_INDEX, FALSE);
             if (pPanelId != NULL)
             {
                 nPanelId = static_cast<

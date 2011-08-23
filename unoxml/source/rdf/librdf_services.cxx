@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL
+void SAL_CALL
 component_getImplementationEnvironment(const sal_Char **o_ppEnvironmentTypeName,
     uno_Environment ** /* ppEnvironment */)
 {
@@ -66,12 +66,18 @@ static ::cppu::ImplementationEntry const entries[] = {
     { 0, 0, 0, 0, 0, 0 }
 };
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL
-component_getFactory(
+extern "C" void * SAL_CALL component_getFactory(
     const char * implName, void * serviceManager, void * registryKey)
 {
     return ::cppu::component_getFactoryHelper(
         implName, serviceManager, registryKey, entries);
+}
+
+extern "C" sal_Bool SAL_CALL component_writeInfo(
+    void * serviceManager, void * registryKey)
+{
+    return ::cppu::component_writeInfoHelper(serviceManager, registryKey,
+        entries);
 }
 
 } // extern "C"

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,17 +43,17 @@ namespace sd {
 |*
 \************************************************************************/
 
-class FuDraw
+class FuDraw 
     : public FuPoor
 {
 public:
     TYPEINFO();
 
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
-    virtual sal_Bool RequestHelp(const HelpEvent& rHEvt);
+    virtual BOOL KeyInput(const KeyEvent& rKEvt);
+    virtual BOOL MouseMove(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+    virtual BOOL RequestHelp(const HelpEvent& rHEvt);
 
     virtual void ScrollStart();
     virtual void ScrollEnd();
@@ -65,10 +65,10 @@ public:
 
     virtual void DoubleClick(const MouseEvent& rMEvt);
 
-    sal_Bool    SetPointer(SdrObject* pObj, const Point& rPos);
-    sal_Bool    SetHelpText(SdrObject* pObj, const Point& rPos, const SdrViewEvent& rVEvt);
+    BOOL	SetPointer(SdrObject* pObj, const Point& rPos);
+    BOOL    SetHelpText(SdrObject* pObj, const Point& rPos, const SdrViewEvent& rVEvt);
 
-    void    SetPermanent(sal_Bool bSet) { bPermanent = bSet; }
+    void    SetPermanent(BOOL bSet) { bPermanent = bSet; }
 
     /** is called when the currenct function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
@@ -79,25 +79,25 @@ public:
     virtual bool cancel();
 
 protected:
-    FuDraw (ViewShell* pViewSh,
-        ::sd::Window* pWin,
+    FuDraw (ViewShell* pViewSh, 
+        ::sd::Window* pWin, 
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument* pDoc, 
         SfxRequest& rReq);
 
     virtual ~FuDraw();
 
     Pointer aNewPointer;
     Pointer aOldPointer;
-    sal_Bool    bMBDown;
-    sal_Bool    bDragHelpLine;
-    sal_uInt16  nHelpLine;
-    sal_Bool    bPermanent;
+    BOOL	bMBDown;
+    BOOL	bDragHelpLine;
+    USHORT	nHelpLine;
+    BOOL    bPermanent;
 
 };
 
 } // end of namespace sd
 
-#endif      // _SD_FUDRAW_HXX
+#endif		// _SD_FUDRAW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

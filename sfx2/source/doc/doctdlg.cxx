@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 #include <sfx2/doctdlg.hxx>
 #include "docvor.hxx"
-#include "sfx2/sfxresid.hxx"
+#include "sfxresid.hxx"
 #include "sfxtypes.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
@@ -46,26 +46,26 @@
 
 //=========================================================================
 
-SfxDocumentTemplateDlg::SfxDocumentTemplateDlg( Window * pParent, SfxDocumentTemplates* pTempl ) :
+SfxDocumentTemplateDlg::SfxDocumentTemplateDlg(	Window * pParent, SfxDocumentTemplates* pTempl ) :
 
     ModalDialog( pParent, SfxResId( DLG_DOC_TEMPLATE ) ),
 
-    aEditFL     ( this, SfxResId( FL_EDIT ) ),
-    aNameEd     ( this, SfxResId( ED_NAME ) ),
-    aTemplateFL ( this, SfxResId( FL_STYLESHEETS ) ),
-    aRegionFt   ( this, SfxResId( FT_SECTION ) ),
-    aRegionLb   ( this, SfxResId( LB_SECTION ) ),
-    aTemplateFt ( this, SfxResId( FT_STYLESHEETS ) ),
-    aTemplateLb ( this, SfxResId( LB_STYLESHEETS ) ),
+    aEditFL		( this, SfxResId( FL_EDIT ) ),
+    aNameEd		( this, SfxResId( ED_NAME ) ),
+    aTemplateFL	( this, SfxResId( FL_STYLESHEETS ) ),
+    aRegionFt	( this, SfxResId( FT_SECTION ) ),
+    aRegionLb	( this, SfxResId( LB_SECTION ) ),
+    aTemplateFt	( this, SfxResId( FT_STYLESHEETS ) ),
+    aTemplateLb	( this, SfxResId( LB_STYLESHEETS ) ),
 
-    aOkBt       ( this, SfxResId( BT_OK ) ),
-    aCancelBt   ( this, SfxResId( BT_CANCEL ) ),
-    aHelpBt     ( this, SfxResId( BT_HELP ) ),
-    aEditBt     ( this, SfxResId( BT_EDIT ) ),
-    aOrganizeBt ( this, SfxResId( BT_ORGANIZE ) ),
+    aOkBt		( this, SfxResId( BT_OK ) ),
+    aCancelBt	( this, SfxResId( BT_CANCEL ) ),
+    aHelpBt		( this, SfxResId( BT_HELP ) ),
+    aEditBt		( this, SfxResId( BT_EDIT ) ),
+    aOrganizeBt	( this, SfxResId( BT_ORGANIZE ) ),
 
-    pTemplates  ( pTempl ),
-    pHelper     ( NULL )
+    pTemplates	( pTempl ),
+    pHelper		( NULL )
 
 {
     FreeResource();
@@ -109,8 +109,8 @@ void SfxDocumentTemplateDlg::Init()
     if(!pTemplates->IsConstructed())
         pTemplates->Construct();
 
-    const sal_uInt16 nCount = pTemplates->GetRegionCount();
-    for(sal_uInt16 i = 0; i < nCount; ++i)
+    const USHORT nCount = pTemplates->GetRegionCount();
+    for(USHORT i = 0; i < nCount; ++i)
         aRegionLb.InsertEntry(pTemplates->GetFullRegionName(i));
     if(!nCount)
         aRegionLb.InsertEntry(String(SfxResId(STR_STANDARD)));
@@ -141,10 +141,10 @@ IMPL_LINK( SfxDocumentTemplateDlg, OrganizeHdl, Button *, pButton )
     if(RET_OK == nRet)
     {
         // View aktualisieren
-        aRegionLb.SetUpdateMode( sal_False );
+        aRegionLb.SetUpdateMode( FALSE );
         aRegionLb.Clear();
         Init();
-        aRegionLb.SetUpdateMode( sal_True );
+        aRegionLb.SetUpdateMode( TRUE );
         aRegionLb.Invalidate();
         aRegionLb.Update();
         aCancelBt.SetText(String(SfxResId(STR_CLOSE)));
@@ -159,7 +159,7 @@ IMPL_LINK( SfxDocumentTemplateDlg, OrganizeHdl, Button *, pButton )
 IMPL_LINK( SfxDocumentTemplateDlg, OkHdl, Control *, pControl )
 {
     (void)pControl; //unused
-    // Test whether a template with this name exists
+    // pruefen, ob eine Vorlage diesen Namens existiert
     if(LISTBOX_ENTRY_NOTFOUND != aTemplateLb.GetEntryPos(
         GetTemplateName())) {
         QueryBox aQuery(this, SfxResId(MSG_CONFIRM_OVERWRITE_TEMPLATE));
@@ -174,14 +174,14 @@ IMPL_LINK( SfxDocumentTemplateDlg, OkHdl, Control *, pControl )
 
 IMPL_LINK( SfxDocumentTemplateDlg, RegionSelect, ListBox *, pBox )
 {
-    const sal_uInt16 nRegion = pBox->GetSelectEntryPos();
-    const sal_uInt16 nCount = pTemplates->GetCount(nRegion);
-    aTemplateLb.SetUpdateMode(sal_False);
+    const USHORT nRegion = pBox->GetSelectEntryPos();
+    const USHORT nCount = pTemplates->GetCount(nRegion);
+    aTemplateLb.SetUpdateMode(FALSE);
     aTemplateLb.Clear();
-    for(sal_uInt16 i = 0; i < nCount; ++i)
+    for(USHORT i = 0; i < nCount; ++i)
         aTemplateLb.InsertEntry(pTemplates->GetName(nRegion, i));
     aTemplateLb.SelectEntryPos(0);
-    aTemplateLb.SetUpdateMode(sal_True);
+    aTemplateLb.SetUpdateMode(TRUE);
     aTemplateLb.Invalidate();
     aTemplateLb.Update();
     return 0;

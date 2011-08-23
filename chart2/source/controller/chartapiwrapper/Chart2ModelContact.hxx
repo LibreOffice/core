@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,8 @@
 #ifndef CHART_CHART2MODELCONTACT_HXX
 #define CHART_CHART2MODELCONTACT_HXX
 
-#include <chartview/ExplicitScaleValues.hxx>
+#include <com/sun/star/chart2/ExplicitScaleData.hpp>
+#include <com/sun/star/chart2/ExplicitIncrementData.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
@@ -79,8 +80,8 @@ public:
     sal_Bool getExplicitValuesForAxis(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XAxis > & xAxis,
-        ExplicitScaleData &  rOutExplicitScale,
-        ExplicitIncrementData & rOutExplicitIncrement );
+        ::com::sun::star::chart2::ExplicitScaleData &  rOutExplicitScale,
+        ::com::sun::star::chart2::ExplicitIncrementData & rOutExplicitIncrement );
 
     sal_Int32 getExplicitNumberFormatKeyForAxis(
             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,12 +32,11 @@
 #include <X11_selection.hxx>
 
 using namespace x11;
+using namespace rtl;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
-
-using ::rtl::OUString;
 
 DropTarget::DropTarget() :
         ::cppu::WeakComponentImplHelper3<
@@ -197,14 +196,14 @@ void DropTarget::dragOver( const DropTargetDragEvent& dtde ) throw()
 // --------------------------------------------------------------------------
 
 /*
- *  XServiceInfo
+ *	XServiceInfo
  */
 
 // ------------------------------------------------------------------------
 
 OUString DropTarget::getImplementationName() throw()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(XDND_DROPTARGET_IMPLEMENTATION_NAME));
+    return OUString::createFromAscii(XDND_DROPTARGET_IMPLEMENTATION_NAME);
 }
 
 // ------------------------------------------------------------------------

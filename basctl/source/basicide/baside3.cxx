@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,12 +29,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
+//svdraw.hxx
+//#define _SVDRAW_HXX ***
 #define _SDR_NOITEMS
 #define _SDR_NOTOUCH
 #define _SDR_NOTRANSFORM
 #define _SDR_NOOBJECTS
+//#define _SDR_NOVIEWS ***
 #define _SDR_NOVIEWMARKER
 #define _SDR_NODRAGMETHODS
+//#define _SDR_NOUNDO ***
 #define _SDR_NOXOUTDEV
 
 #include <ide_pch.hxx>
@@ -43,7 +47,7 @@
 #include <vector>
 #include <basidesh.hrc>
 #include <baside3.hxx>
-#include <localizationmgr.hxx>
+#include <localizationmgr.hxx> 
 #include <accessibledialogwindow.hxx>
 #include <dlged.hxx>
 #include <dlgedmod.hxx>
@@ -80,14 +84,16 @@
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 using namespace comphelper;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::resource;
-using namespace ::com::sun::star::ui::dialogs;
+using namespace	::com::sun::star;
+using namespace	::com::sun::star::uno;
+using namespace	::com::sun::star::ucb;
+using namespace	::com::sun::star::io;
+using namespace	::com::sun::star::resource;
+using namespace	::com::sun::star::ui::dialogs;
 
-#if defined(UNX)
+#if defined(MAC)
+#define FILTERMASK_ALL "****"
+#elif defined(OW) || defined(MTF)
 #define FILTERMASK_ALL "*"
 #elif defined(PM2)
 #define FILTERMASK_ALL ""
@@ -104,7 +110,7 @@ DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, St
         :IDEBaseWindow( pParent, rDocument, aLibName, aName )
         ,pUndoMgr(NULL)
 {
-    InitSettings( sal_True, sal_True, sal_True );
+    InitSettings( TRUE, TRUE, TRUE );
 
     pEditor = new DlgEditor( rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
     pEditor->SetWindow( this );
@@ -123,11 +129,11 @@ DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, St
     // set readonly mode for readonly libraries
     ::rtl::OUString aOULibName( aLibName );
     Reference< script::XLibraryContainer2 > xDlgLibContainer( GetDocument().getLibraryContainer( E_DIALOGS ), UNO_QUERY );
-    if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) )
-        SetReadOnly( sal_True );
+    if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) 
+        SetReadOnly( TRUE );
 
     if ( rDocument.isDocument() && rDocument.isReadOnly() )
-        SetReadOnly( sal_True );
+        SetReadOnly( TRUE );
 }
 
 DialogWindow::~DialogWindow()
@@ -228,9 +234,9 @@ void DialogWindow::KeyInput( const KeyEvent& rKEvt )
 
 void DialogWindow::Command( const CommandEvent& rCEvt )
 {
-    if ( ( rCEvt.GetCommand() == COMMAND_WHEEL           ) ||
-         ( rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL ) ||
-         ( rCEvt.GetCommand() == COMMAND_AUTOSCROLL      ) )
+    if ( ( rCEvt.GetCommand() == COMMAND_WHEEL ) ||
+            ( rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL ) ||
+            ( rCEvt.GetCommand() == COMMAND_AUTOSCROLL ) )
     {
         HandleScrollCommand( rCEvt, GetHScrollBar(), GetVScrollBar() );
     }
@@ -253,10 +259,10 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
             {
                 pDispatcher->ExecutePopup( IDEResId(RID_POPUP_DLGED) );
             }
-
+            
         }
     }
-    else
+    else	
         IDEBaseWindow::Command( rCEvt );
 }
 
@@ -267,12 +273,23 @@ IMPL_LINK( DialogWindow, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
 {
     (void)pUndoAction;
 
+    // not working yet for unocontrols
+    /*
+    if (pUndoAction)
+    {
+        pUndoMgr->AddUndoAction( pUndoAction );
+        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+        if ( pBindings )
+            pBindings->Invalidate( SID_UNDO );
+    }
+    */
+
     return 0;
 }
 
 
 
-void DialogWindow::DoInit()
+void __EXPORT DialogWindow::DoInit()
 {
     GetHScrollBar()->Show();
     GetVScrollBar()->Show();
@@ -281,15 +298,15 @@ void DialogWindow::DoInit()
 
 
 
-void DialogWindow::DoScroll( ScrollBar* pCurScrollBar )
+void __EXPORT DialogWindow::DoScroll( ScrollBar* pCurScrollBar )
 {
     pEditor->DoScroll( pCurScrollBar );
 }
 
-void DialogWindow::GetState( SfxItemSet& rSet )
+void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
 {
     SfxWhichIter aIter(rSet);
-    for ( sal_uInt16 nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich() )
+    for ( USHORT nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich() )
     {
         switch ( nWh )
         {
@@ -335,10 +352,10 @@ void DialogWindow::GetState( SfxItemSet& rSet )
                 if( IDE_DLL()->GetShell()->GetFrame() )
                 {
                     rSet.Put( SfxBoolItem( SID_DIALOG_TESTMODE,
-                              (pEditor->GetMode() == DLGED_TEST) ? sal_True : sal_False) );
+                              (pEditor->GetMode() == DLGED_TEST) ? TRUE : FALSE) );
                 }
                 else
-                    rSet.Put( SfxBoolItem( SID_DIALOG_TESTMODE,sal_False ));
+                    rSet.Put( SfxBoolItem( SID_DIALOG_TESTMODE,FALSE ));
             }
             break;
 
@@ -355,7 +372,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
                         aItem.SetValue( SVX_SNAP_SELECT );
                     else
                     {
-                        sal_uInt16 nObj;
+                        USHORT nObj;
                         switch( pEditor->GetInsertObj() )
                         {
                             case OBJ_DLG_PUSHBUTTON:        nObj = SVX_SNAP_PUSHBUTTON; break;
@@ -366,21 +383,21 @@ void DialogWindow::GetState( SfxItemSet& rSet )
                             case OBJ_DLG_GROUPBOX:          nObj = SVX_SNAP_GROUPBOX; break;
                             case OBJ_DLG_EDIT:              nObj = SVX_SNAP_EDIT; break;
                             case OBJ_DLG_FIXEDTEXT:         nObj = SVX_SNAP_FIXEDTEXT; break;
-                            case OBJ_DLG_IMAGECONTROL:      nObj = SVX_SNAP_IMAGECONTROL; break;
-                            case OBJ_DLG_PROGRESSBAR:       nObj = SVX_SNAP_PROGRESSBAR; break;
+                            case OBJ_DLG_IMAGECONTROL:	    nObj = SVX_SNAP_IMAGECONTROL; break;
+                            case OBJ_DLG_PROGRESSBAR:	    nObj = SVX_SNAP_PROGRESSBAR; break;
                             case OBJ_DLG_HSCROLLBAR:        nObj = SVX_SNAP_HSCROLLBAR; break;
                             case OBJ_DLG_VSCROLLBAR:        nObj = SVX_SNAP_VSCROLLBAR; break;
-                            case OBJ_DLG_HFIXEDLINE:        nObj = SVX_SNAP_HFIXEDLINE; break;
-                            case OBJ_DLG_VFIXEDLINE:        nObj = SVX_SNAP_VFIXEDLINE; break;
-                            case OBJ_DLG_DATEFIELD:         nObj = SVX_SNAP_DATEFIELD; break;
-                            case OBJ_DLG_TIMEFIELD:         nObj = SVX_SNAP_TIMEFIELD; break;
-                            case OBJ_DLG_NUMERICFIELD:      nObj = SVX_SNAP_NUMERICFIELD; break;
-                            case OBJ_DLG_CURRENCYFIELD:     nObj = SVX_SNAP_CURRENCYFIELD; break;
-                            case OBJ_DLG_FORMATTEDFIELD:    nObj = SVX_SNAP_FORMATTEDFIELD; break;
-                            case OBJ_DLG_PATTERNFIELD:      nObj = SVX_SNAP_PATTERNFIELD; break;
-                            case OBJ_DLG_FILECONTROL:       nObj = SVX_SNAP_FILECONTROL; break;
-                            case OBJ_DLG_TREECONTROL:       nObj = SVX_SNAP_TREECONTROL; break;
-                            default:                        nObj = 0;
+                            case OBJ_DLG_HFIXEDLINE:	    nObj = SVX_SNAP_HFIXEDLINE; break;
+                            case OBJ_DLG_VFIXEDLINE:	    nObj = SVX_SNAP_VFIXEDLINE; break;
+                            case OBJ_DLG_DATEFIELD:	        nObj = SVX_SNAP_DATEFIELD; break;
+                            case OBJ_DLG_TIMEFIELD:	        nObj = SVX_SNAP_TIMEFIELD; break;
+                            case OBJ_DLG_NUMERICFIELD:	    nObj = SVX_SNAP_NUMERICFIELD; break;
+                            case OBJ_DLG_CURRENCYFIELD:	    nObj = SVX_SNAP_CURRENCYFIELD; break;
+                            case OBJ_DLG_FORMATTEDFIELD:	nObj = SVX_SNAP_FORMATTEDFIELD; break;
+                            case OBJ_DLG_PATTERNFIELD:	    nObj = SVX_SNAP_PATTERNFIELD; break;
+                            case OBJ_DLG_FILECONTROL:	    nObj = SVX_SNAP_FILECONTROL; break;
+                            case OBJ_DLG_TREECONTROL:	    nObj = SVX_SNAP_TREECONTROL; break;
+                            default:					    nObj = 0;
                         }
 #ifdef DBG_UTIL
                         if( !nObj )
@@ -399,7 +416,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             case SID_SHOW_PROPERTYBROWSER:
             {
                 BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-                SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+                SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;        
                 if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) && !pEditor->GetView()->AreObjectsMarked() )
                     rSet.DisableItem( nWh );
 
@@ -413,7 +430,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
 
 
 
-void DialogWindow::ExecuteCommand( SfxRequest& rReq )
+void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
 {
     switch ( rReq.GetSlot() )
     {
@@ -630,21 +647,21 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
     rReq.Done();
 }
 
-Reference< container::XNameContainer > DialogWindow::GetDialog() const
+Reference< container::XNameContainer > DialogWindow::GetDialog() const 
 {
     return pEditor->GetDialog();
 }
 
-sal_Bool DialogWindow::RenameDialog( const String& rNewName )
+BOOL DialogWindow::RenameDialog( const String& rNewName )
 {
     if ( !BasicIDE::RenameDialog( this, GetDocument(), GetLibName(), GetName(), rNewName ) )
-        return sal_False;
+        return FALSE;
 
     SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
     if ( pBindings )
         pBindings->Invalidate( SID_DOC_MODIFIED );
 
-    return sal_True;
+    return TRUE;
 }
 
 void DialogWindow::DisableBrowser()
@@ -665,12 +682,13 @@ void DialogWindow::UpdateBrowser()
         ((PropBrw*)(pChildWin->GetWindow()))->Update( pIDEShell );
 }
 
-static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
+static ::rtl::OUString aResourceResolverPropName =
+    ::rtl::OUString::createFromAscii( "ResourceResolver" );
 
-sal_Bool DialogWindow::SaveDialog()
+BOOL DialogWindow::SaveDialog()
 {
     DBG_CHKTHIS( DialogWindow, 0 );
-    sal_Bool bDone = sal_False;
+    BOOL bDone = FALSE;
 
     Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     Reference < XFilePicker > xFP;
@@ -714,17 +732,17 @@ sal_Bool DialogWindow::SaveDialog()
         Reference< XInputStream > xInput( xISP->createInputStream() );
 
         Reference< XSimpleFileAccess > xSFI( xMSF->createInstance
-            ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY );
-
+            ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+     
         Reference< XOutputStream > xOutput;
         try
         {
             if( xSFI->exists( aCurPath ) )
                 xSFI->kill( aCurPath );
-            xOutput = xSFI->openFileWrite( aCurPath );
+            xOutput = xSFI->openFileWrite( aCurPath ); 
         }
         catch( Exception& )
-        {}
+        {} 
 
         if( xOutput.is() )
         {
@@ -772,9 +790,9 @@ sal_Bool DialogWindow::SaveDialog()
                 aURLObj.removeSegment();
                 ::rtl::OUString aURL( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
                 sal_Bool bReadOnly = sal_False;
-                ::rtl::OUString aComment( RTL_CONSTASCII_USTRINGPARAM( "# " ));
+                ::rtl::OUString aComment( ::rtl::OUString::createFromAscii( "# " ) ); 
                 aComment += aDialogName;
-                aComment += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " strings" ));
+                aComment += ::rtl::OUString::createFromAscii( " strings" );
                 Reference< task::XInteractionHandler > xDummyHandler;
 
                 // Remove old properties files in case of overwriting Dialog files
@@ -783,7 +801,7 @@ sal_Bool DialogWindow::SaveDialog()
                     Sequence< ::rtl::OUString > aContentSeq = xSFI->getFolderContents( aURL, false );
 
                     ::rtl::OUString aDialogName_( aDialogName );
-                    aDialogName_ += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_" ));
+                    aDialogName_ += ::rtl::OUString::createFromAscii( "_" );
                     sal_Int32 nCount = aContentSeq.getLength();
                     const ::rtl::OUString* pFiles = aContentSeq.getConstArray();
                     for( int i = 0 ; i < nCount ; i++ )
@@ -800,8 +818,8 @@ sal_Bool DialogWindow::SaveDialog()
                             aExtension = aCompleteName.copy( iDot + 1 );
                         }
 
-                        if( aExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "properties" ) ) ||
-                            aExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "default" ) ) )
+                        if( aExtension.equalsAscii( "properties" ) ||
+                            aExtension.equalsAscii( "default" ) )
                         {
                             if( aPureName.indexOf( aDialogName_ ) == 0 )
                             {
@@ -815,9 +833,9 @@ sal_Bool DialogWindow::SaveDialog()
                         }
                     }
                 }
-
+        
                 Reference< XStringResourceWithLocation > xStringResourceWithLocation =
-                    StringResourceWithLocation::create( xContext, aURL, bReadOnly,
+                    StringResourceWithLocation::create( xContext, aURL, bReadOnly, 
                         xStringResourceResolver->getDefaultLocale(), aDialogName, aComment, xDummyHandler );
 
                 // Add locales
@@ -878,7 +896,7 @@ std::vector< lang::Locale > implGetLanguagesOnlyContainedInFirstSeq
         if( !bAlsoContainedInSecondSeq )
             avRet.push_back( rFirstLocale );
     }
-
+    
     return avRet;
 }
 
@@ -904,7 +922,8 @@ NameClashQueryBox::NameClashQueryBox( Window* pParent,
     AddButton( String( IDEResId( RID_STR_DLGIMP_CLASH_REPLACE ) ), RET_NO, 0 );
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
 
-    SetImage( QueryBox::GetStandardImage() );
+    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
+        QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
 }
 
 
@@ -929,12 +948,13 @@ LanguageMismatchQueryBox::LanguageMismatchQueryBox( Window* pParent,
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
     AddButton( BUTTON_HELP, BUTTONID_HELP, BUTTONDIALOG_HELPBUTTON, 4 );
 
-    SetImage( QueryBox::GetStandardImage() );
+    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
+        QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
 }
 
-sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName )
+BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName )
 {
-    sal_Bool bDone = sal_False;
+    BOOL bDone = FALSE;
 
     Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     Reference < XFilePicker > xFP;
@@ -980,11 +1000,11 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
                 ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY_THROW );
 
             Reference< XSimpleFileAccess > xSFI( xMSF->createInstance
-                ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY_THROW );
-
+                ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY_THROW );
+         
             Reference< XInputStream > xInput;
             if( xSFI->exists( aCurPath ) )
-                xInput = xSFI->openFileRead( aCurPath );
+                xInput = xSFI->openFileRead( aCurPath ); 
 
             Reference< XComponentContext > xContext;
             Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
@@ -1024,11 +1044,11 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
             if( bDialogAlreadyExists )
             {
                 String aQueryBoxTitle( IDEResId( RID_STR_DLGIMP_CLASH_TITLE ) );
-                String aQueryBoxText(  IDEResId( RID_STR_DLGIMP_CLASH_TEXT  ) );
-                aQueryBoxText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "$(ARG1)" ) ), aXmlDlgName );
+                String aQueryBoxText( IDEResId( RID_STR_DLGIMP_CLASH_TEXT ) );
+                aQueryBoxText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "$(ARG1)" ) ), aXmlDlgName ); 
 
                 NameClashQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
-                sal_uInt16 nRet = aQueryBox.Execute();
+                USHORT nRet = aQueryBox.Execute();
                 if( RET_YES == nRet )
                 {
                     // RET_YES == Rename, see NameClashQueryBox::NameClashQueryBox
@@ -1046,7 +1066,7 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
                     return bDone;
                 }
             }
-
+     
             BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
             if( pIDEShell == NULL )
             {
@@ -1059,13 +1079,13 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
             Reference< task::XInteractionHandler > xDummyHandler;
             bool bReadOnly = true;
             Reference< XStringResourceWithLocation > xImportStringResource =
-                StringResourceWithLocation::create( xContext, aBasePath, bReadOnly,
+                StringResourceWithLocation::create( xContext, aBasePath, bReadOnly, 
                 aLocale, aXmlDlgName, ::rtl::OUString(), xDummyHandler );
 
             Sequence< lang::Locale > aImportLocaleSeq = xImportStringResource->getLocales();
             sal_Int32 nImportLocaleCount = aImportLocaleSeq.getLength();
 
-            Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, sal_True ) );
+            Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, TRUE ) );
             Reference< resource::XStringResourceManager > xLibStringResourceManager = LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
             sal_Int32 nLibLocaleCount = 0;
             Sequence< lang::Locale > aLibLocaleSeq;
@@ -1090,7 +1110,7 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
                 String aQueryBoxTitle( IDEResId( RID_STR_DLGIMP_MISMATCH_TITLE ) );
                 String aQueryBoxText( IDEResId( RID_STR_DLGIMP_MISMATCH_TEXT ) );
                 LanguageMismatchQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
-                sal_uInt16 nRet = aQueryBox.Execute();
+                USHORT nRet = aQueryBox.Execute();
                 if( RET_YES == nRet )
                 {
                     // RET_YES == Add, see LanguageMismatchQueryBox::LanguageMismatchQueryBox
@@ -1176,9 +1196,9 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
             {
                 if ( BasicIDE::RemoveDialog( rDocument, aLibName, aNewDlgName ) )
                 {
-                    IDEBaseWindow* pDlgWin = pIDEShell->FindDlgWin( rDocument, aLibName, aNewDlgName, sal_False, sal_True );
+                    IDEBaseWindow* pDlgWin = pIDEShell->FindDlgWin( rDocument, aLibName, aNewDlgName, FALSE, TRUE );
                     if( pDlgWin != NULL )
-                        pIDEShell->RemoveWindow( pDlgWin, sal_True );
+                        pIDEShell->RemoveWindow( pDlgWin, TRUE );
                     BasicIDE::MarkDocumentModified( rDocument );
                 }
                 else
@@ -1221,31 +1241,31 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
             if( bSuccess )
             {
                 DialogWindow* pNewDlgWin = pIDEShell->CreateDlgWin( rDocument, aLibName, aNewDlgName );
-                pIDEShell->SetCurWindow( pNewDlgWin, sal_True );
+                pIDEShell->SetCurWindow( pNewDlgWin, TRUE );
             }
 
-            bDone = sal_True;
+            bDone = TRUE;
         }
         catch( Exception& )
-        {}
+        {} 
     }
 
     return bDone;
 }
 
-sal_Bool DialogWindow::ImportDialog()
+BOOL DialogWindow::ImportDialog()
 {
     DBG_CHKTHIS( DialogWindow, 0 );
 
     const ScriptDocument& rDocument = GetDocument();
     String aLibName = GetLibName();
-    sal_Bool bRet = implImportDialog( this, aCurPath, rDocument, aLibName );
+    BOOL bRet = implImportDialog( this, aCurPath, rDocument, aLibName );
     return bRet;
 }
 
 DlgEdModel* DialogWindow::GetModel() const
 {
-    return pEditor ? pEditor->GetModel() : NULL;
+    return pEditor ? pEditor->GetModel() : NULL;	
 }
 
 DlgEdPage* DialogWindow::GetPage() const
@@ -1258,12 +1278,12 @@ DlgEdView* DialogWindow::GetView() const
     return pEditor ? pEditor->GetView() : NULL;
 }
 
-sal_Bool DialogWindow::IsModified()
+BOOL __EXPORT DialogWindow::IsModified()
 {
     return pEditor->IsModified();
 }
 
-::svl::IUndoManager* DialogWindow::GetUndoManager()
+SfxUndoManager* __EXPORT DialogWindow::GetUndoManager()
 {
     return pUndoMgr;
 }
@@ -1282,7 +1302,7 @@ BasicEntryDescriptor DialogWindow::CreateEntryDescriptor()
     return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, GetName(), OBJ_TYPE_DIALOG );
 }
 
-void DialogWindow::SetReadOnly( sal_Bool b )
+void DialogWindow::SetReadOnly( BOOL b )
 {
     if ( pEditor )
     {
@@ -1293,23 +1313,23 @@ void DialogWindow::SetReadOnly( sal_Bool b )
     }
 }
 
-sal_Bool DialogWindow::IsReadOnly()
+BOOL DialogWindow::IsReadOnly()
 {
-    sal_Bool bReadOnly = sal_False;
+    BOOL bReadOnly = FALSE;
 
     if ( pEditor && pEditor->GetMode() == DLGED_READONLY )
-        bReadOnly = sal_True;
+        bReadOnly = TRUE;
 
     return bReadOnly;
 }
 
-sal_Bool DialogWindow::IsPasteAllowed()
+BOOL DialogWindow::IsPasteAllowed()
 {
-    return pEditor ? pEditor->IsPasteAllowed() : sal_False;
+    return pEditor ? pEditor->IsPasteAllowed() : FALSE;
 }
 
 void DialogWindow::StoreData()
-{
+{	
     if ( IsModified() )
     {
         try
@@ -1319,7 +1339,7 @@ void DialogWindow::StoreData()
             if( xLib.is() )
             {
                 Reference< container::XNameContainer > xDialogModel = pEditor->GetDialog();
-
+                    
                 if( xDialogModel.is() )
                 {
                     Reference< XComponentContext > xContext;
@@ -1360,14 +1380,14 @@ void DialogWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if( (rDCEvt.GetType()==DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        InitSettings( sal_True, sal_True, sal_True );
+        InitSettings( TRUE, TRUE, TRUE );
         Invalidate();
     }
     else
         IDEBaseWindow::DataChanged( rDCEvt );
 }
 
-void DialogWindow::InitSettings(sal_Bool bFont,sal_Bool bForeground,sal_Bool bBackground)
+void DialogWindow::InitSettings(BOOL bFont,BOOL bForeground,BOOL bBackground)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )

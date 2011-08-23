@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,14 +41,14 @@
 module com {  module sun {  module star {  module drawing {
 
 /** The <type>AccessibleShape</type> service is implemented by UNO shapes to
-    provide accessibility information that describe the shape's features.
+    provide accessibility information that describe the shapes' features.
     A UNO shape is any object that implements the <type
     scope="::com::sun::star::drawing">XShape</type> interface.
 
     <p>The content of a draw page is modeled as tree of accessible shapes
     and accessible text paragraphs.  The root of this (sub-)tree is the
     accessible draw document view.  An accessible shape implements either
-    this service or one of the "derived" services
+    this service or one of the 'derived' services
     <type>AccessibleGraphicShape</type> or <type>AccessibleOLEShape</type>.
     See the section Children in the description of the
     <type scope="::com::sun::star::accessibility"
@@ -72,7 +72,7 @@ module com {  module sun {  module star {  module drawing {
 */
 published service AccessibleShape
 {
-    /** Base interface for being accessible.  It gives access to the
+    /** Base interface for being accessible.  It gives access to the 
         <type scope="::com::sun::star::accessibility">XAccessibleContext</type>
         interface.
     */
@@ -83,7 +83,7 @@ published service AccessibleShape
         <p>You can access the following information for the shape being made
         accessible:
         <ul>
-        <li>Role: The role of all shapes is <const
+        <li>Role: The role of all shapes is <const 
             scope="com::sun::star::accessibility"
             >AccessibleRole::SHAPE</const>.</li>
         <li>Name: The name of a shape is its localized type name.</li>
@@ -103,7 +103,7 @@ published service AccessibleShape
         <li>Relations: Are set and maintained from the outside.  See the
         service description of the object that has accessible shapes as
         children for details.</li>
-        <li>States: The states supported by this service are:
+        <li>States: The states supported by this service are: 
             <ul>
             <li><p><const scope="com::sun::star::accessibility"
                 >AccessibleStateType::DEFUNC</const> is set if an accessible
@@ -115,15 +115,15 @@ published service AccessibleShape
                 the AT-Tool does not care for the events indicating
                 this.</p>
                 <p>Usually an object that has the <const
-                scope="com::sun::star::accessibility"
+                scope="com::sun::star::accessibility" 
                 >AccessibleStateType::DEFUNC</const> state set has already
                 been disposed and subsequent calls to this object result in
-                <type scope="::com::sun::star::lang">DisposedException</type>
+                <type scope="::com::sun::star::lang">DisposedException</type> 
                 exceptions.</p>
                 <p>If this state is set then no other of the states below is
                 set.  This  is also true for the states that are otherwise
-                always set (which  makes "always" more of a sort of
-                "normally").</p></li>
+                allways set (which  makes 'allways' more of a sort of
+                'normally').</p></li> 
             <li><const scope="com::sun::star::accessibility"
                 >AccessibleStateType::EDITABLE</const></li> is always set.
                 This state is interpreted to mean that not only text but
@@ -136,11 +136,11 @@ published service AccessibleShape
                 >AccessibleStateType::FOCUSED</const> is set according to
                 whether the shape currently has the focus.</li>
             <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::MULTI_LINE</const> is set if a shape
+                >AccessibleStateType::MULTI_LINE</const> is set if a shape 
                 supports the <type scope="::com::sun::star::accessibility"
                 >XAccessibleText</type> interface.</li>
             <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::OPAQUE</const> is set for certain shapes
+                >AccessibleStateType::OPAQUE</const> is set for certain shapes 
                 with certain attributes like for a filled rectangle.</li>
             <li><const scope="com::sun::star::accessibility"
                 >AccessibleStateType::RESIZABLE</const> is always set.</li>
@@ -155,7 +155,7 @@ published service AccessibleShape
                 >AccessibleStateType::VISIBLE</const> is always set.</li>
             </ul>
         <li>Locale: The shape returns the locale of its parent.</li>
-        <li>Property change listeners: Property change listeners that are
+        <li>Property change listeners: Property change listeners that are 
             registered with a shape are informed of the usual events.</li>
         </ul>
     */
@@ -164,14 +164,14 @@ published service AccessibleShape
     /** Give access to the graphical representation of a shape.
 
         <p>The bounding box returned by the <method
-        scope="::com::sun::star::accessibility"
+        scope="::com::sun::star::accessibility" 
         >XAccessibleComponent::getBounds</method> function returns the
         shape's bounding box clipped at its parent's bounding box</p>
 
         <p>An accessible shape tries as best as it can to return proper
         values for calls to the
         <method scope="::com::sun::star::accessibility"
-        >XAccessibleExtendedComponent::getForeground</method> and
+        >XAccessibleExtendedComponent::getForeground</method> and 
         <method scope="::com::sun::star::accessibility"
         >XAccessibleExtendedComponent::getBackground</method> functions.
         If the shape is painted with a uniform and non-transparent color
@@ -183,9 +183,9 @@ published service AccessibleShape
     interface ::com::sun::star::accessibility::XAccessibleComponent;
 
     /** Give extended access to the graphical representation of a shape.
-
+        
         <p>The functions <method
-        scope="::com::sun::star::accessibility"
+        scope="::com::sun::star::accessibility" 
         >XAccessibleExtendedComponent::getFont</method>,
         <method scope="::com::sun::star::accessibility"
         >XAccessibleExtendedComponent::getTitledBorderText</method>, and

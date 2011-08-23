@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 #include "showcols.hxx"
 #include "fmsearch.hrc"
 
@@ -40,7 +43,7 @@
 #define CUIFM_PROP_LABEL  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" ) )
 
 //==========================================================================
-//  FmShowColsDialog
+//	FmShowColsDialog
 //==========================================================================
 DBG_NAME(FmShowColsDialog)
 //--------------------------------------------------------------------------
@@ -83,7 +86,7 @@ IMPL_LINK( FmShowColsDialog, OnClickedOk, Button*, EMPTYARG )
                 }
                 catch(...)
                 {
-                    OSL_FAIL("FmShowColsDialog::OnClickedOk Exception occurred!");
+                    DBG_ERROR("FmShowColsDialog::OnClickedOk Exception occured!");
                 }
             }
         }
@@ -117,11 +120,11 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
 
             ::rtl::OUString sName;
             xCurCol->getPropertyValue(CUIFM_PROP_LABEL) >>= sName;
-            sCurName = sName;
+            sCurName = (const sal_Unicode*)sName;
         }
         catch(...)
         {
-            OSL_FAIL("FmShowColsDialog::SetColumns Exception occurred!");
+            DBG_ERROR("FmShowColsDialog::SetColumns Exception occured!");
         }
 
         // if the col is hidden, put it into the list

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,11 +35,11 @@
 #include "sal/types.h"
 #include "typelib/typedescription.hxx"
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 /*See: http://people.redhat.com/drepper/selinux-mem.html*/
 #if defined(LINUX) || defined(OPENBSD) || defined(FREEBSD) \
-    || defined(NETBSD) || defined(DRAGONFLY)
+	|| defined(NETBSD)
 #define USE_DOUBLE_MMAP
 #endif
 
@@ -203,7 +203,7 @@ private:
     static void flushCode(
         unsigned char const * begin, unsigned char const * end);
 
-    typedef boost::unordered_map< rtl::OUString, Vtables, rtl::OUStringHash > Map;
+    typedef std::hash_map< rtl::OUString, Vtables, rtl::OUStringHash > Map;
 
     osl::Mutex m_mutex;
     Map m_map;

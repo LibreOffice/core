@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,35 +28,26 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idlc.hxx"
-
-#include "idlc/idlc.hxx"
+#include <idlc/idlc.hxx>
 #include "sal/main.h"
-
-#include <string.h>
 
 using namespace ::rtl;
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-    std::vector< std::string > args;
-    for (int i = 1; i < argc; i++)
-    {
-        if (!Options::checkArgument (args, argv[i], strlen(argv[i])))
-            return (1);
-    }
+    Options options;
 
-    Options options(argv[0]);
-    try
+    try 
     {
-        if (!options.initOptions(args))
-           return (0);
+        if (!options.initOptions(argc, argv))
+           exit(1);
     }
     catch( IllegalArgument& e)
     {
-        fprintf(stderr, "Illegal argument: %s\n%s",
+        fprintf(stderr, "Illegal argument: %s\n%s", 
             e.m_message.getStr(),
             options.prepareVersion().getStr());
-        return (99);
+        exit(99);
     }
 
     setIdlc(&options);
@@ -123,21 +114,21 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             OString strippedFileName(sysFileName.copy(sysFileName.lastIndexOf(SEPARATOR) + 1));
             outputFileUrl = convertToFileUrl(options.getOption("-O"));
             sal_Char c = outputFileUrl.getStr()[outputFileUrl.getLength()-1];
-
+            
             if ( c != '/' )
                 outputFileUrl += OString::valueOf('/');
-
+            
             outputFileUrl += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "urd");
         } else
         {
             outputFileUrl = convertToFileUrl(sysFileName.replaceAt(sysFileName.getLength() -3 , 3, "urd"));
         }
-
+        
         if ( nErrors )
             removeIfExists(outputFileUrl);
         else
             nErrors = produceFile(outputFileUrl);
-
+        
         idlc()->reset();
     }
 
@@ -145,7 +136,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     {
         fprintf(stderr, "%s: detected %ld errors%s",
             options.getProgramName().getStr(),
-            sal::static_int_cast< long >(nErrors),
+            sal::static_int_cast< long >(nErrors), 
             options.prepareVersion().getStr());
     } else
     {

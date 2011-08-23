@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@
 
 namespace sd {
 
-#define SWITCH_TIMEOUT  20
+#define SWITCH_TIMEOUT	20
 
 // -----------------------------------------
 // - SdTabControl::SdPageObjsTransferable -
@@ -98,7 +98,7 @@ TabControl::TabControl(DrawViewShell* pViewSh, Window* pParent) :
     DragSourceHelper( this ),
     DropTargetHelper( this ),
     pDrViewSh(pViewSh),
-    bInternalMove(sal_False)
+    bInternalMove(FALSE)
 {
     EnableEditMode();
     SetSizePixel(Size(0, 0));
@@ -116,6 +116,10 @@ TabControl::~TabControl()
 {
 }
 
+/*************************************************************************
+|*
+\************************************************************************/
+
 void TabControl::Select()
 {
     SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
@@ -123,15 +127,19 @@ void TabControl::Select()
                             SFX_CALLMODE_RECORD);
 }
 
+/*************************************************************************
+|*
+\************************************************************************/
+
 void  TabControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if (rMEvt.IsLeft()
-        && !rMEvt.IsMod1()
-        && !rMEvt.IsMod2()
+        && !rMEvt.IsMod1() 
+        && !rMEvt.IsMod2() 
         && !rMEvt.IsShift())
     {
         Point aPos = PixelToLogic( rMEvt.GetPosPixel() );
-        sal_uInt16 aPageId = GetPageId(aPos);
+        USHORT aPageId = GetPageId(aPos);
 
         if (aPageId == 0)
         {
@@ -169,6 +177,10 @@ void  TabControl::MouseButtonDown(const MouseEvent& rMEvt)
     TabBar::MouseButtonDown(rMEvt);
 }
 
+/*************************************************************************
+|*
+\************************************************************************/
+
 void TabControl::DoubleClick()
 {
     if (GetCurPageId() != 0)
@@ -187,7 +199,7 @@ void TabControl::DoubleClick()
 
 void TabControl::StartDrag( sal_Int8, const Point& )
 {
-    bInternalMove = sal_True;
+    bInternalMove = TRUE;
 
     // object is delete by reference mechanismn
     ( new TabControl::TabControlTransferable( *this ) )->StartDrag( this, DND_ACTION_COPYMOVE );
@@ -201,7 +213,7 @@ void TabControl::StartDrag( sal_Int8, const Point& )
 
 void TabControl::DragFinished( sal_Int8 )
 {
-    bInternalMove = sal_False;
+    bInternalMove = FALSE;
 }
 
 /*************************************************************************
@@ -220,7 +232,7 @@ sal_Int8 TabControl::AcceptDrop( const AcceptDropEvent& rEvt )
     if( !pDrViewSh->GetDocSh()->IsReadOnly() )
     {
         SdDrawDocument* pDoc = pDrViewSh->GetDoc();
-        Point           aPos( rEvt.maPosPixel );
+        Point			aPos( rEvt.maPosPixel );
 
         if( bInternalMove )
         {
@@ -238,9 +250,9 @@ sal_Int8 TabControl::AcceptDrop( const AcceptDropEvent& rEvt )
 
             sal_Int32 nPageId = GetPageId( aPos ) - 1;
 
-            if( ( nPageId >= 0 ) && pDoc->GetPage( (sal_uInt16)nPageId ) )
+            if( ( nPageId >= 0 ) && pDoc->GetPage( (USHORT)nPageId ) )
             {
-                nRet = pDrViewSh->AcceptDrop( rEvt, *this, NULL, (sal_uInt16)nPageId, SDRLAYER_NOTFOUND );
+                nRet = pDrViewSh->AcceptDrop( rEvt, *this, NULL, (USHORT)nPageId, SDRLAYER_NOTFOUND );
                 SwitchPage( aPos );
             }
         }
@@ -258,12 +270,12 @@ sal_Int8 TabControl::AcceptDrop( const AcceptDropEvent& rEvt )
 sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     SdDrawDocument* pDoc = pDrViewSh->GetDoc();
-    Point           aPos( rEvt.maPosPixel );
-    sal_Int8        nRet = DND_ACTION_NONE;
+    Point			aPos( rEvt.maPosPixel );
+    sal_Int8		nRet = DND_ACTION_NONE;
 
     if( bInternalMove )
     {
-        sal_uInt16 nPageId = ShowDropPos( aPos ) - 1;
+        USHORT nPageId = ShowDropPos( aPos ) - 1;
 
         switch (rEvt.mnAction)
         {
@@ -274,7 +286,7 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
                     pDispatcher->Execute(SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
                 }
                 break;
-
+                
             case DND_ACTION_COPY:
             {
                 // Copying the selected page to the place that rEvt points
@@ -286,21 +298,21 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 if (pDrViewSh->IsSwitchPageAllowed())
                 {
                     // 1. Create a copy.
-                    sal_uInt16 nPageNumOfCopy = pDoc->DuplicatePage (GetCurPageId() - 1);
+                    USHORT nPageNumOfCopy = pDoc->DuplicatePage (GetCurPageId() - 1);
                     // 2. Move page.  For this first switch to the copy:
                     // MovePages operates on the currently selected page(s).
                     pDrViewSh->SwitchPage (nPageNumOfCopy);
                     // Adapt target page id when necessary, i.e. page copy
                     // has been inserted in front of the target page.
-                    sal_uInt16 nPageNum = nPageId;
-                    if ((nPageNumOfCopy <= nPageNum) && (nPageNum != (sal_uInt16)-1))
+                    USHORT nPageNum = nPageId;
+                    if ((nPageNumOfCopy <= nPageNum) && (nPageNum != (USHORT)-1))
                         nPageNum += 1;
                     if (pDoc->MovePages(nPageNum))
                     {
                         // 3. Switch to the copy that has been moved to its
                         // final destination.  Use an asynchron slot call to
                         // be executed after the still pending ones.
-                        if (nPageNumOfCopy >= nPageNum || (nPageNum == (sal_uInt16)-1))
+                        if (nPageNumOfCopy >= nPageNum || (nPageNum == (USHORT)-1))
                             nPageNum += 1;
                         SetCurPageId (GetPageId(nPageNum));
                         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
@@ -319,9 +331,9 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
     {
         sal_Int32 nPageId = GetPageId( aPos ) - 1;
 
-        if( ( nPageId >= 0 ) && pDoc->GetPage( (sal_uInt16)nPageId ) )
+        if( ( nPageId >= 0 ) && pDoc->GetPage( (USHORT)nPageId ) )
         {
-            nRet = pDrViewSh->ExecuteDrop( rEvt, *this, NULL, (sal_uInt16)nPageId, SDRLAYER_NOTFOUND );
+            nRet = pDrViewSh->ExecuteDrop( rEvt, *this, NULL, (USHORT)nPageId, SDRLAYER_NOTFOUND );
         }
     }
 
@@ -331,27 +343,35 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return nRet;
 }
 
+/*************************************************************************
+|*
+\************************************************************************/
+
 void TabControl::Command(const CommandEvent& rCEvt)
 {
-    sal_uInt16 nCmd = rCEvt.GetCommand();
+    USHORT nCmd = rCEvt.GetCommand();
 
     if ( nCmd == COMMAND_CONTEXTMENU )
     {
-        sal_Bool bGraphicShell = pDrViewSh->ISA(GraphicViewShell);
-        sal_uInt16 nResId = bGraphicShell ? RID_GRAPHIC_PAGETAB_POPUP :
+        BOOL bGraphicShell = pDrViewSh->ISA(GraphicViewShell);
+        USHORT nResId = bGraphicShell ? RID_GRAPHIC_PAGETAB_POPUP :
                                         RID_DRAW_PAGETAB_POPUP;
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
         pDispatcher->ExecutePopup( SdResId( nResId ) );
     }
 }
 
+/*************************************************************************
+|*
+\************************************************************************/
+
 long TabControl::StartRenaming()
 {
-    sal_Bool bOK = sal_False;
+    BOOL bOK = FALSE;
 
     if (pDrViewSh->GetPageKind() == PK_STANDARD)
     {
-        bOK = sal_True;
+        bOK = TRUE;
 
         ::sd::View* pView = pDrViewSh->GetView();
 
@@ -362,9 +382,13 @@ long TabControl::StartRenaming()
     return( bOK );
 }
 
+/*************************************************************************
+|*
+\************************************************************************/
+
 long TabControl::AllowRenaming()
 {
-    sal_Bool bOK = sal_True;
+    BOOL bOK = TRUE;
 
     String aNewName( GetEditText() );
     String aCompareName( GetPageText( GetEditPageId() ) );
@@ -379,17 +403,26 @@ long TabControl::AllowRenaming()
         }
         else
         {
-            bOK = sal_False;
+            bOK = FALSE;
         }
     }
     return( bOK );
 }
+
+/*************************************************************************
+|*
+\************************************************************************/
 
 void TabControl::EndRenaming()
 {
     if( !IsEditModeCanceled() )
         pDrViewSh->RenameSlide( GetEditPageId(), GetEditText() );
 }
+
+
+/*************************************************************************
+|*
+\************************************************************************/
 
 void TabControl::ActivatePage()
 {
@@ -400,6 +433,11 @@ void TabControl::ActivatePage()
                              SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
     }
 }
+
+
+/*************************************************************************
+|*
+\************************************************************************/
 
 long TabControl::DeactivatePage()
 {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,11 +69,11 @@ enum DATASOURCE_TYPE
      DST_KAB                 = 20,
      DST_MACAB               = 21,
     DST_MSACCESS_2007       = 22,
-     DST_EMBEDDED_HSQLDB    = 23,
+     DST_EMBEDDED_HSQLDB 	= 23,
     DST_MYSQL_NATIVE        = 24,
     DST_MYSQL_NATIVE_DIRECT = 25,
 
-    DST_USERDEFINE1,    /// first user defined driver
+    DST_USERDEFINE1,	/// first user defined driver
     DST_USERDEFINE2,
     DST_USERDEFINE3,
     DST_USERDEFINE4,
@@ -85,18 +85,18 @@ enum DATASOURCE_TYPE
     DST_USERDEFINE10,
 
 
-    DST_UNKNOWN         /// unrecognized type
+    DST_UNKNOWN			/// unrecognized type 
 };
 
 #define PAGE_DBSETUPWIZARD_INTRO                     0
-#define PAGE_DBSETUPWIZARD_DBASE                     1
+#define PAGE_DBSETUPWIZARD_DBASE     		         1
 #define PAGE_DBSETUPWIZARD_TEXT                      2
 #define PAGE_DBSETUPWIZARD_MSACCESS                  3
 #define PAGE_DBSETUPWIZARD_LDAP                      4
 #define PAGE_DBSETUPWIZARD_ADABAS                    5
 #define PAGE_DBSETUPWIZARD_MYSQL_INTRO               6
 #define PAGE_DBSETUPWIZARD_MYSQL_JDBC                7
-#define PAGE_DBSETUPWIZARD_MYSQL_ODBC                8
+#define PAGE_DBSETUPWIZARD_MYSQL_ODBC	             8
 #define PAGE_DBSETUPWIZARD_ORACLE                    9
 #define PAGE_DBSETUPWIZARD_JDBC                      10
 #define PAGE_DBSETUPWIZARD_ADO                       11
@@ -117,13 +117,13 @@ class OOO_DLLPUBLIC_DBA ODsnTypeCollection
 protected:
     DECLARE_STL_VECTOR(String, StringVector);
 
-    StringVector    m_aDsnTypesDisplayNames;    /// user readable names for the datasource types
-    StringVector    m_aDsnPrefixes;             /// DSN prefixes which determine the type of a datasource
+    StringVector	m_aDsnTypesDisplayNames;	/// user readable names for the datasource types
+    StringVector	m_aDsnPrefixes;				/// DSN prefixes which determine the type of a datasource
     ::connectivity::DriversConfig m_aDriverConfig;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
-#if OSL_DEBUG_LEVEL > 0
-    sal_Int32       m_nLivingIterators;         /// just for debugging reasons, counts the living iterators
+#ifdef DBG_UTIL
+    sal_Int32		m_nLivingIterators;			/// just for debugging reasons, counts the living iterators
 #endif
 
 public:
@@ -138,7 +138,7 @@ public:
 
     /// on a given string, cut the type prefix and return the result
     String cutPrefix(const ::rtl::OUString& _sURL) const;
-
+    
     /// on a given string, return the type prefix
     String getPrefix(const ::rtl::OUString& _sURL) const;
 
@@ -161,7 +161,7 @@ public:
 
     /// check if the given data source allows to show column description.
     sal_Bool supportsColumnDescription(const ::rtl::OUString& _sURL) const;
-
+    
     // check if a Browse button may be shown to insert connection url
     sal_Bool supportsBrowsing(const ::rtl::OUString& _sURL) const;
 
@@ -184,9 +184,9 @@ public:
             getDefaultDBSettings( const ::rtl::OUString& _sURL ) const;
 
     /// get access to the first element of the types collection
-    TypeIterator    begin() const;
+    TypeIterator	begin() const;
     /// get access to the (last + 1st) element of the types collection
-    TypeIterator    end() const;
+    TypeIterator	end() const;
 
     void fillPageIds(const ::rtl::OUString& _sURL,::std::vector<sal_Int16>& _rOutPathIds) const;
 
@@ -210,32 +210,32 @@ class OOO_DLLPUBLIC_DBA ODsnTypeCollection::TypeIterator
     friend bool OOO_DLLPUBLIC_DBA operator!=(const TypeIterator& lhs, const TypeIterator& rhs) { return !(lhs == rhs); }
 
 protected:
-    const ODsnTypeCollection*   m_pContainer;
-    sal_Int32                   m_nPosition;
+    const ODsnTypeCollection*	m_pContainer;
+    sal_Int32					m_nPosition;
 
 public:
     TypeIterator(const TypeIterator& _rSource);
     ~TypeIterator();
 
     ::rtl::OUString getURLPrefix() const;
-    String          getDisplayName() const;
+    String			getDisplayName() const;
 
     /// prefix increment
-    const TypeIterator& operator++();
+    const TypeIterator&	operator++();
     /// postfix increment
-    const TypeIterator  operator++(int) { TypeIterator hold(*this); ++*this; return hold; }
+    const TypeIterator	operator++(int) { TypeIterator hold(*this); ++*this; return hold; }
 
     /// prefix decrement
-    const TypeIterator& operator--();
+    const TypeIterator&	operator--();
     /// postfix decrement
-    const TypeIterator  operator--(int) { TypeIterator hold(*this); --*this; return hold; }
+    const TypeIterator	operator--(int) { TypeIterator hold(*this); --*this; return hold; }
 
 protected:
     TypeIterator(const ODsnTypeCollection* _pContainer, sal_Int32 _nInitialPos = 0);
 };
 
 //.........................................................................
-}   // namespace dbaccess
+}	// namespace dbaccess
 //.........................................................................
 
 #endif // _DBACCESS_DSNTYPES_HXX_

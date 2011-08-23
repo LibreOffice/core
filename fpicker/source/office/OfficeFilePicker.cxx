@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,10 +83,10 @@ using namespace     ::utl;
 struct FilterEntry
 {
 protected:
-    ::rtl::OUString     m_sTitle;
-    ::rtl::OUString     m_sFilter;
+    ::rtl::OUString		m_sTitle;
+    ::rtl::OUString		m_sFilter;
 
-    UnoFilterList       m_aSubFilters;
+    UnoFilterList		m_aSubFilters;
 
 public:
     FilterEntry( const ::rtl::OUString& _rTitle, const ::rtl::OUString& _rFilter )
@@ -97,21 +97,21 @@ public:
 
     FilterEntry( const ::rtl::OUString& _rTitle, const UnoFilterList& _rSubFilters );
 
-    ::rtl::OUString     getTitle() const { return m_sTitle; }
-    ::rtl::OUString     getFilter() const { return m_sFilter; }
+    ::rtl::OUString		getTitle() const { return m_sTitle; }
+    ::rtl::OUString		getFilter() const { return m_sFilter; }
 
     /// determines if the filter has sub filter (i.e., the filter is a filter group in real)
-    sal_Bool            hasSubFilters( ) const;
+    sal_Bool			hasSubFilters( ) const;
 
     /** retrieves the filters belonging to the entry
     @return
         the number of sub filters
     */
-    sal_Int32           getSubFilters( UnoFilterList& _rSubFilterList );
+    sal_Int32			getSubFilters( UnoFilterList& _rSubFilterList );
 
     // helpers for iterating the sub filters
-    const UnoFilterEntry*   beginSubFilters() const { return m_aSubFilters.getConstArray(); }
-    const UnoFilterEntry*   endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
+    const UnoFilterEntry*	beginSubFilters() const { return m_aSubFilters.getConstArray(); }
+    const UnoFilterEntry*	endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
 };
 
 //=====================================================================
@@ -140,10 +140,10 @@ sal_Int32 FilterEntry::getSubFilters( UnoFilterList& _rSubFilterList )
 
 struct ElementEntry_Impl
 {
-    sal_Int16       m_nElementID;
-    sal_Int16       m_nControlAction;
-    Any         m_aValue;
-    rtl::OUString       m_aLabel;
+    sal_Int16		m_nElementID;
+    sal_Int16		m_nControlAction;
+    Any			m_aValue;
+    rtl::OUString		m_aLabel;
     sal_Bool        m_bEnabled      : 1;
 
     sal_Bool        m_bHasValue     : 1;
@@ -451,10 +451,10 @@ void SvtFilePicker::ensureFilterList( const ::rtl::OUString& _rInitialCurrentFil
 //------------------------------------------------------------------------------------
 SvtFilePicker::SvtFilePicker( const Reference < XMultiServiceFactory >& xFactory )
     :OCommonPicker( xFactory )
-    ,m_pFilterList      ( NULL )
-    ,m_pElemList        ( NULL )
-    ,m_bMultiSelection  ( sal_False )
-    ,m_nServiceType     ( TemplateDescription::FILEOPEN_SIMPLE )
+    ,m_pFilterList		( NULL )
+    ,m_pElemList		( NULL )
+    ,m_bMultiSelection	( sal_False )
+    ,m_nServiceType		( TemplateDescription::FILEOPEN_SIMPLE )
 {
 }
 
@@ -476,7 +476,7 @@ sal_Int16 SvtFilePicker::implExecutePicker( )
 
     prepareExecute();
 
-    getDialog()->EnableAutocompletion( sal_True );
+    getDialog()->EnableAutocompletion( TRUE );
     // now we are ready to execute the dialog
     sal_Int16 nRet = getDialog()->Execute();
 
@@ -490,8 +490,8 @@ sal_Int16 SvtFilePicker::implExecutePicker( )
 //------------------------------------------------------------------------------------
 SvtFileDialog* SvtFilePicker::implCreateDialog( Window* _pParent )
 {
-    WinBits nExtraBits;
-    WinBits nBits = getWinBits( nExtraBits );
+    WinBits	nExtraBits;
+    WinBits	nBits = getWinBits( nExtraBits );
 
     SvtFileDialog* dialog = new SvtFileDialog( _pParent, nBits, nExtraBits );
 
@@ -548,7 +548,7 @@ void SAL_CALL SvtFilePicker::startExecuteModal( const Reference< ::com::sun::sta
     m_xDlgClosedListener = xListener;
     prepareDialog();
     prepareExecute();
-    getDialog()->EnableAutocompletion( sal_True );
+    getDialog()->EnableAutocompletion( TRUE );
     getDialog()->StartExecuteModal( LINK( this, SvtFilePicker, DialogClosedHdl ) );
 }
 
@@ -624,8 +624,8 @@ Sequence< rtl::OUString > SAL_CALL SvtFilePicker::getFiles() throw( RuntimeExcep
     // files first and then the list of the selected entries
 
     SvStringsDtor* pPathList = getDialog()->GetPathList();
-    sal_uInt16 i, nCount = pPathList->Count();
-    sal_uInt16 nTotal = nCount > 1 ? nCount+1: nCount;
+    USHORT i, nCount = pPathList->Count();
+    USHORT nTotal = nCount > 1 ? nCount+1: nCount;
 
     Sequence< rtl::OUString > aPath( nTotal );
 
@@ -970,7 +970,7 @@ sal_Bool SAL_CALL SvtFilePicker::getShowState() throw ( RuntimeException )
 // XFilterGroupManager functions
 //------------------------------------------------------------------------------------
 
-void SAL_CALL SvtFilePicker::appendFilterGroup( const ::rtl::OUString& sGroupTitle,
+void SAL_CALL SvtFilePicker::appendFilterGroup(	const ::rtl::OUString& sGroupTitle,
                                                 const Sequence< StringPair >& aFilters )
     throw ( IllegalArgumentException, RuntimeException )
 {
@@ -1107,19 +1107,19 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
 //-------------------------------------------------------------------------
 sal_Bool SvtFilePicker::implHandleInitializationArgument( const ::rtl::OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
 {
-    if ( _rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TemplateDescription" ) ) )
+    if ( _rName.equalsAscii( "TemplateDescription" ) )
     {
         m_nServiceType = TemplateDescription::FILEOPEN_SIMPLE;
         OSL_VERIFY( _rValue >>= m_nServiceType );
         return sal_True;
     }
-    if ( _rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StandardDir" ) ) )
+    if ( _rName.equalsAscii( "StandardDir" ) )
     {
         OSL_VERIFY( _rValue >>= m_aStandardDir );
         return sal_True;
     }
 
-    if ( _rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BlackList" ) ) )
+    if ( _rName.equalsAscii( "BlackList" ) )
     {
         OSL_VERIFY( _rValue >>= m_aBlackList );
         return sal_True;
@@ -1166,14 +1166,14 @@ Sequence< rtl::OUString > SvtFilePicker::impl_getStaticSupportedServiceNames()
 {
     Sequence< rtl::OUString > seqServiceNames( 1 );
     rtl::OUString* pArray = seqServiceNames.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.OfficeFilePicker" ));
+    pArray[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.OfficeFilePicker" );
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 rtl::OUString SvtFilePicker::impl_getStaticImplementationName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svtools.OfficeFilePicker" ));
+    return rtl::OUString::createFromAscii( "com.sun.star.svtools.OfficeFilePicker" );
 }
 
 /* Helper for registry */

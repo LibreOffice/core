@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,8 +72,10 @@
 #include <editeng/unofdesc.hxx>
 #include <fmtornt.hxx>
 #include <SwStyleNameMapper.hxx>
+// --> OD 2008-01-15 #newlistlevelattrs#
 #include <com/sun/star/text/PositionAndSpaceMode.hpp>
 #include <com/sun/star/text/LabelFollow.hpp>
+// <--
 #include <numrule.hxx>
 
 using ::rtl::OUString;
@@ -88,8 +90,8 @@ using rtl::OUString;
 
 struct PropValData
 {
-    uno::Any        aVal;
-    OUString            sPropName;
+    uno::Any 		aVal;
+    OUString			sPropName;
     PropValData(void* pVal, const char* cPropName, uno::Type aType ) :
         aVal(pVal, aType),
         sPropName(OUString::createFromAscii(cPropName))
@@ -100,46 +102,40 @@ struct PropValData
         {}
 };
 
-// Constants for the css::text::ColumnSeparatorStyle
-#define API_COL_LINE_NONE               0
-#define API_COL_LINE_SOLID              1
-#define API_COL_LINE_DOTTED             2
-#define API_COL_LINE_DASHED             3
-
 typedef PropValData* PropValDataPtr;
 SV_DECL_PTRARR(PropValDataArr, PropValDataPtr, 5, 5 )
 SV_IMPL_PTRARR(PropValDataArr, PropValDataPtr)
 
 
-#define WID_PREFIX                      0
-#define WID_SUFFIX                      1
+#define WID_PREFIX						0
+#define WID_SUFFIX  					1
 #define WID_NUMBERING_TYPE              2
 #define WID_START_AT                    3
-#define WID_FOOTNOTE_COUNTING           4
+#define WID_FOOTNOTE_COUNTING 			4
 #define WID_PARAGRAPH_STYLE             5
 #define WID_PAGE_STYLE                  6
 #define WID_CHARACTER_STYLE             7
 #define WID_POSITION_END_OF_DOC         8
 #define WID_END_NOTICE                  9
 #define WID_BEGIN_NOTICE                10
-#define WID_ANCHOR_CHARACTER_STYLE      11
+#define WID_ANCHOR_CHARACTER_STYLE		11
 
 const SfxItemPropertySet* GetFootnoteSet()
 {
     static SfxItemPropertyMapEntry aFootnoteMap_Impl[] =
     {
         { SW_PROP_NAME(UNO_NAME_ANCHOR_CHAR_STYLE_NAME),WID_ANCHOR_CHARACTER_STYLE, &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_BEGIN_NOTICE),          WID_BEGIN_NOTICE,       &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),       WID_CHARACTER_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_END_NOTICE),            WID_END_NOTICE ,        &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_FOOTNOTE_COUNTING),     WID_FOOTNOTE_COUNTING,  &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),        WID_NUMBERING_TYPE,     &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
-        { SW_PROP_NAME(UNO_NAME_PAGE_STYLE_NAME),       WID_PAGE_STYLE,         &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_PARA_STYLE_NAME),       WID_PARAGRAPH_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_POSITION_END_OF_DOC),   WID_POSITION_END_OF_DOC,&::getBooleanCppuType(), PROPERTY_NONE,         0},
-        { SW_PROP_NAME(UNO_NAME_PREFIX),                WID_PREFIX,             &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_START_AT),              WID_START_AT ,          &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
-        { SW_PROP_NAME(UNO_NAME_SUFFIX),                WID_SUFFIX,             &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_BEGIN_NOTICE),  		WID_BEGIN_NOTICE, 		&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),  		WID_CHARACTER_STYLE, 	&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_END_NOTICE),  			WID_END_NOTICE ,  		&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_FOOTNOTE_COUNTING), 	WID_FOOTNOTE_COUNTING, 	&::getCppuType((const sal_Int16*)0), PROPERTY_NONE,  	0},
+        { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),		WID_NUMBERING_TYPE, 	&::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     	0},
+        { SW_PROP_NAME(UNO_NAME_PAGE_STYLE_NAME),  		WID_PAGE_STYLE, 		&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_PARA_STYLE_NAME),  		WID_PARAGRAPH_STYLE, 	&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_POSITION_END_OF_DOC), 	WID_POSITION_END_OF_DOC,&::getBooleanCppuType(), PROPERTY_NONE,     	0},
+        { SW_PROP_NAME(UNO_NAME_PREFIX),				WID_PREFIX, 			&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_START_AT),  			WID_START_AT , 			&::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     	0},
+        { SW_PROP_NAME(UNO_NAME_SUFFIX),  				WID_SUFFIX, 			&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aFootnoteSet_Impl(aFootnoteMap_Impl);
@@ -151,13 +147,13 @@ const SfxItemPropertySet* GetEndnoteSet()
     static SfxItemPropertyMapEntry aEndnoteMap_Impl[] =
     {
         { SW_PROP_NAME(UNO_NAME_ANCHOR_CHAR_STYLE_NAME),WID_ANCHOR_CHARACTER_STYLE, &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),       WID_CHARACTER_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),        WID_NUMBERING_TYPE,     &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
-        { SW_PROP_NAME(UNO_NAME_PAGE_STYLE_NAME),       WID_PAGE_STYLE,         &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_PARA_STYLE_NAME),       WID_PARAGRAPH_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_PREFIX),                WID_PREFIX,     &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_START_AT),              WID_START_AT ,          &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
-        { SW_PROP_NAME(UNO_NAME_SUFFIX),                WID_SUFFIX,     &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),  		WID_CHARACTER_STYLE, 	&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),		WID_NUMBERING_TYPE, 	&::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     	0},
+        { SW_PROP_NAME(UNO_NAME_PAGE_STYLE_NAME),  		WID_PAGE_STYLE, 		&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_PARA_STYLE_NAME),  		WID_PARAGRAPH_STYLE, 	&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_PREFIX),				WID_PREFIX, 	&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_START_AT),  			WID_START_AT , 			&::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     	0},
+        { SW_PROP_NAME(UNO_NAME_SUFFIX),  				WID_SUFFIX, 	&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aEndnoteSet_Impl(aEndnoteMap_Impl);
@@ -168,11 +164,11 @@ const SfxItemPropertySet* GetNumberingRulesSet()
 {
     static SfxItemPropertyMapEntry aNumberingRulesMap_Impl[] =
     {
-        { SW_PROP_NAME(UNO_NAME_IS_ABSOLUTE_MARGINS),       WID_IS_ABS_MARGINS, &::getBooleanCppuType(),            PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC),              WID_IS_AUTOMATIC,   &::getBooleanCppuType(),            PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_IS_CONTINUOUS_NUMBERING),   WID_CONTINUOUS,     &::getBooleanCppuType(),            PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_NAME),                      WID_RULE_NAME   ,   &::getCppuType((const OUString*)0), PropertyAttribute::READONLY,     0},
-        { SW_PROP_NAME(UNO_NAME_NUMBERING_IS_OUTLINE),      WID_IS_OUTLINE, &::getBooleanCppuType(),            PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_IS_ABSOLUTE_MARGINS),		WID_IS_ABS_MARGINS,	&::getBooleanCppuType(), 			PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC),  			WID_IS_AUTOMATIC,	&::getBooleanCppuType(), 			PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_IS_CONTINUOUS_NUMBERING),  	WID_CONTINUOUS, 	&::getBooleanCppuType(), 			PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_NAME),  					WID_RULE_NAME	, 	&::getCppuType((const OUString*)0), PropertyAttribute::READONLY,     0},
+        { SW_PROP_NAME(UNO_NAME_NUMBERING_IS_OUTLINE),		WID_IS_OUTLINE,	&::getBooleanCppuType(), 			PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_DEFAULT_LIST_ID),           WID_DEFAULT_LIST_ID, &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
         {0,0,0,0,0,0}
     };
@@ -180,32 +176,33 @@ const SfxItemPropertySet* GetNumberingRulesSet()
     return &aNumberingRulesSet_Impl;
 }
 
-#define WID_NUM_ON                      0
+#define WID_NUM_ON						0
 #define WID_SEPARATOR_INTERVAL          1
 #define WID_NUMBERING_TYPE              2
 #define WID_NUMBER_POSITION             3
 #define WID_DISTANCE                    4
 #define WID_INTERVAL                    5
 #define WID_SEPARATOR_TEXT              6
+//#define WID_CHARACTER_STYLE             7
 #define WID_COUNT_EMPTY_LINES           8
 #define WID_COUNT_LINES_IN_FRAMES       9
-#define WID_RESTART_AT_EACH_PAGE        10
+#define WID_RESTART_AT_EACH_PAGE		10
 
 const SfxItemPropertySet* GetLineNumberingSet()
 {
     static SfxItemPropertyMapEntry aLineNumberingMap_Impl[] =
     {
         { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),         WID_CHARACTER_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_COUNT_EMPTY_LINES),       WID_COUNT_EMPTY_LINES , &::getBooleanCppuType(),PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_COUNT_EMPTY_LINES),		  WID_COUNT_EMPTY_LINES , &::getBooleanCppuType(),PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_COUNT_LINES_IN_FRAMES),   WID_COUNT_LINES_IN_FRAMES, &::getBooleanCppuType(),PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_DISTANCE       ),         WID_DISTANCE       ,    &::getCppuType((const sal_Int32*)0),PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_IS_ON),                     WID_NUM_ON,             &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_INTERVAL  ),              WID_INTERVAL  ,       &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_SEPARATOR_TEXT ),         WID_SEPARATOR_TEXT,   &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_IS_ON), 					WID_NUM_ON, 			&::getBooleanCppuType()  ,  		PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_INTERVAL  ),              WID_INTERVAL  ,    	&::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_SEPARATOR_TEXT ),         WID_SEPARATOR_TEXT, 	&::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_NUMBER_POSITION),         WID_NUMBER_POSITION,    &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),          WID_NUMBERING_TYPE ,    &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_RESTART_AT_EACH_PAGE),    WID_RESTART_AT_EACH_PAGE, &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_SEPARATOR_INTERVAL),      WID_SEPARATOR_INTERVAL, &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_RESTART_AT_EACH_PAGE), 	  WID_RESTART_AT_EACH_PAGE, &::getBooleanCppuType()  ,  		PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_SEPARATOR_INTERVAL), 	  WID_SEPARATOR_INTERVAL, &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aLineNumberingSet_Impl(aLineNumberingMap_Impl);
@@ -292,7 +289,7 @@ const unsigned short aUnoToSvxAdjust[] =
     USHRT_MAX,
     SVX_ADJUST_RIGHT,       // 1
     SVX_ADJUST_CENTER,      // 3
-    SVX_ADJUST_LEFT,        // 0
+    SVX_ADJUST_LEFT,		// 0
     USHRT_MAX,
     USHRT_MAX
 };
@@ -305,7 +302,7 @@ OUString SwXFootnoteProperties::getImplementationName(void) throw( RuntimeExcept
     return C2U("SwXFootnoteProperties");
 }
 
-sal_Bool SwXFootnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
+BOOL SwXFootnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.FootnoteSettings") == rServiceName;
 }
@@ -366,7 +363,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                 break;
                 case  WID_NUMBERING_TYPE :
                 {
-                    sal_Int16 nTmp = 0;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     if(nTmp >= 0 &&
                         (nTmp <= SVX_NUM_ARABIC ||
@@ -378,14 +375,14 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                 break;
                 case  WID_START_AT:
                 {
-                    sal_Int16 nTmp = 0;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     aFtnInfo.nFtnOffset = nTmp;
                 }
                 break;
                 case  WID_FOOTNOTE_COUNTING  :
                 {
-                    sal_Int16 nTmp = 0;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     switch(nTmp)
                     {
@@ -520,7 +517,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 case  WID_PAGE_STYLE :
                 {
                     String aString;
-                    if( rFtnInfo.KnowsPageDesc() )
+                    if( rFtnInfo.GetPageDescDep()->GetRegisteredIn() )
                     {
                         SwStyleNameMapper::FillProgName(
                                 rFtnInfo.GetPageDesc( *pDoc )->GetName(),
@@ -615,7 +612,7 @@ OUString SwXEndnoteProperties::getImplementationName(void) throw( RuntimeExcepti
     return C2U("SwXEndnoteProperties");
 }
 
-sal_Bool SwXEndnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
+BOOL SwXEndnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.FootnoteSettings") == rServiceName;
 }
@@ -677,14 +674,14 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
                 break;
                 case  WID_NUMBERING_TYPE :
                 {
-                    sal_Int16 nTmp = 0;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     aEndInfo.aFmt.SetNumberingType(nTmp);
                 }
                 break;
                 case  WID_START_AT:
                 {
-                    sal_Int16 nTmp = 0;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     aEndInfo.nFtnOffset = nTmp;
                 }
@@ -767,7 +764,7 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 case  WID_PAGE_STYLE :
                 {
                     String aString;
-                    if( rEndInfo.KnowsPageDesc() )
+                    if( rEndInfo.GetPageDescDep()->GetRegisteredIn() )
                     {
                         SwStyleNameMapper::FillProgName(
                             rEndInfo.GetPageDesc( *pDoc )->GetName(),
@@ -846,7 +843,7 @@ OUString SwXLineNumberingProperties::getImplementationName(void) throw( RuntimeE
     return C2U("SwXLineNumberingProperties");
 }
 
-sal_Bool SwXLineNumberingProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
+BOOL SwXLineNumberingProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.LineNumberingProperties") == rServiceName;
 }
@@ -909,7 +906,7 @@ void SwXLineNumberingProperties::setPropertyValue(
                 case WID_NUMBERING_TYPE  :
                 {
                     SvxNumberType aNumType(aInfo.GetNumType());
-                    sal_Int16 nTmp = 0;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     aNumType.SetNumberingType(nTmp);
                     aInfo.SetNumType(aNumType);
@@ -917,7 +914,7 @@ void SwXLineNumberingProperties::setPropertyValue(
                 break;
                 case WID_NUMBER_POSITION :
                 {
-                    sal_Int16 nTmp = 0;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     switch(nTmp)
                     {
@@ -938,17 +935,17 @@ void SwXLineNumberingProperties::setPropertyValue(
                 break;
                 case WID_DISTANCE        :
                 {
-                    sal_Int32 nVal = 0;
+                    INT32 nVal = 0;
                     aValue >>= nVal;
-                    sal_Int32 nTmp = MM100_TO_TWIP(nVal);
+                    INT32 nTmp = MM100_TO_TWIP(nVal);
                     if (nTmp > USHRT_MAX)
                         nTmp = USHRT_MAX;
-                    aInfo.SetPosFromLeft( static_cast< sal_uInt16 >(nTmp) );
+                    aInfo.SetPosFromLeft( static_cast< USHORT >(nTmp) );
                 }
                 break;
                 case WID_INTERVAL   :
                 {
-                    sal_Int16 nTmp = 0;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     if( nTmp > 0)
                         aInfo.SetCountBy(nTmp);
@@ -963,7 +960,7 @@ void SwXLineNumberingProperties::setPropertyValue(
                 break;
                 case WID_SEPARATOR_INTERVAL:
                 {
-                    sal_Int16 nTmp = 0;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     if( nTmp >= 0)
                         aInfo.SetDividerCountBy(nTmp);
@@ -1021,7 +1018,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
                     String aString;
                     // return empty string if no char format is set
                     // otherwise it would be created here
-                    if(rInfo.HasCharFormat())
+                    if(rInfo.GetRegisteredIn())
                     {
                         SwStyleNameMapper::FillProgName(
                                     rInfo.GetCharFmt(*pDoc)->GetName(),
@@ -1125,9 +1122,9 @@ DBG_WARNING("not implemented");
 /******************************************************************
  * SwXNumberingRules
  ******************************************************************/
-String  SwXNumberingRules::sInvalidStyle(String::CreateFromAscii("__XXX___invalid"));
+String	SwXNumberingRules::sInvalidStyle(String::CreateFromAscii("__XXX___invalid"));
 
-const String&   SwXNumberingRules::GetInvalidStyle()
+const String&	SwXNumberingRules::GetInvalidStyle()
 {
     return sInvalidStyle;
 }
@@ -1155,7 +1152,7 @@ OUString SwXNumberingRules::getImplementationName(void) throw( RuntimeException 
     return C2U("SwXNumberingRules");
 }
 
-sal_Bool SwXNumberingRules::supportsService(const OUString& rServiceName) throw( RuntimeException )
+BOOL SwXNumberingRules::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.NumberingRules") == rServiceName;
 }
@@ -1173,7 +1170,7 @@ SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule) :
     pDocShell(0),
     pNumRule(new SwNumRule(rRule)),
     m_pPropertySet(GetNumberingRulesSet()),
-    bOwnNumRuleCreated(sal_True)
+    bOwnNumRuleCreated(TRUE)
 {
     sal_uInt16 i;
 
@@ -1203,7 +1200,7 @@ SwXNumberingRules::SwXNumberingRules(SwDocShell& rDocSh) :
     pDocShell(&rDocSh),
     pNumRule(0),
     m_pPropertySet(GetNumberingRulesSet()),
-    bOwnNumRuleCreated(sal_False)
+    bOwnNumRuleCreated(FALSE)
 {
     pDocShell->GetDoc()->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
@@ -1213,17 +1210,19 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
     pDocShell(0),
     pNumRule(0),
     m_pPropertySet(GetNumberingRulesSet()),
-    bOwnNumRuleCreated(sal_False)
+    bOwnNumRuleCreated(FALSE)
 {
     rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
     sCreatedNumRuleName = rDoc.GetUniqueNumRuleName();
 #if OSL_DEBUG_LEVEL > 1
     sal_uInt16 nIndex =
 #endif
-    rDoc.MakeNumRule( sCreatedNumRuleName, 0, sal_False,
+    // --> OD 2008-02-11 #newlistlevelattrs#
+    rDoc.MakeNumRule( sCreatedNumRuleName, 0, FALSE,
                       // --> OD 2008-06-06 #i89178#
                       numfunc::GetDefaultPositionAndSpaceMode() );
                       // <--
+    // <--
 #if OSL_DEBUG_LEVEL > 1
     (void)nIndex;
 #endif
@@ -1256,8 +1255,12 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
                             rProperties, nIndex);
     else if(pDocShell)
     {
-        // #i87650# - correction of cws swwarnings:
+        // --> OD 2008-04-21 #i87650# - correction of cws swwarnings:
+        // Do not set member <pNumRule>
+//        pNumRule = pDocShell->GetDoc()->GetOutlineNumRule();
+//        SwNumRule aNumRule(*pNumRule);
         SwNumRule aNumRule( *(pDocShell->GetDoc()->GetOutlineNumRule()) );
+        // <--
         SwXNumberingRules::SetNumberingRuleByIndex( aNumRule,
                             rProperties, nIndex);
         //hier noch die Zeichenformate bei Bedarf setzen
@@ -1366,7 +1369,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
 
     sal_Bool bChapterNum = pDocShell != 0;
 
-    PropValDataArr  aPropertyValues;
+    PropValDataArr	aPropertyValues;
     //fill all properties into the array
 
     //adjust
@@ -1411,6 +1414,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     pData = new PropValData((void*)&nINT16, "StartWith", ::getCppuType((const sal_Int16*)0));
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
+    // --> OD 2008-01-23 #newlistlevelattrs#
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
         //leftmargin
@@ -1428,7 +1432,9 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
         pData = new PropValData((void*)&nINT32, SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_OFFSET), ::getCppuType((const sal_Int32*)0));
         aPropertyValues.Insert(pData, aPropertyValues.Count());
     }
+    // <--
 
+    // --> OD 2008-01-15 #newlistlevelattrs#
     // PositionAndSpaceMode
     nINT16 = PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION;
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
@@ -1478,6 +1484,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
                                  ::getCppuType((const sal_Int32*)0));
         aPropertyValues.Insert(pData, aPropertyValues.Count());
     }
+    // <--
 
     //numberingtype
     nINT16 = rFmt.GetNumberingType();
@@ -1544,8 +1551,11 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
                 aPropertyValues.Insert(pData, aPropertyValues.Count());
             }
              Size aSize = rFmt.GetGraphicSize();
-            // #i101131#
+            // --> OD 2010-05-04 #i101131# - applying patch from CMC
             // adjust conversion due to type mismatch between <Size> and <awt::Size>
+//            aSize.Width() = TWIP_TO_MM100( aSize.Width() );
+//            aSize.Height() = TWIP_TO_MM100( aSize.Height() );
+//            pData = new PropValData((void*)&aSize, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE), ::getCppuType((const awt::Size*)0));
             awt::Size aAwtSize(TWIP_TO_MM100(aSize.Width()), TWIP_TO_MM100(aSize.Height()));
             pData = new PropValData((void*)&aAwtSize, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE), ::getCppuType((const awt::Size*)0));
             // <--
@@ -1573,10 +1583,10 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
             if(rTxtColl.IsDefault())
                 continue;
 
-            //sal_Int8 nOutLevel = rTxtColl.GetOutlineLevel();      //#outline level,zhaojianwei
+            //sal_Int8 nOutLevel = rTxtColl.GetOutlineLevel();		//#outline level,zhaojianwei
             const sal_Int16 nOutLevel = rTxtColl.IsAssignedToListLevelOfOutlineStyle()
                                         ? static_cast<sal_Int16>(rTxtColl.GetAssignedOutlineStyleLevel())
-                                        : MAXLEVEL;                 //<-end,zhaojianwei
+                                        : MAXLEVEL;					//<-end,zhaojianwei
             if ( nOutLevel == nIndex )
             {
                 sValue = rTxtColl.GetName();
@@ -1611,9 +1621,9 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     return aSeq;
 }
 
-PropValData* lcl_FindProperty(const char* cName, PropValDataArr&    rPropertyValues)
+PropValData* lcl_FindProperty(const char* cName, PropValDataArr&	rPropertyValues)
 {
-    OUString sCmp = rtl::OUString::createFromAscii(cName);
+    OUString sCmp = C2U(cName);
     for(sal_uInt16 i = 0; i < rPropertyValues.Count(); i++)
     {
         PropValData* pTemp = rPropertyValues.GetObject(i);
@@ -1634,7 +1644,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
     // the order of the names is important!
     static const char* aNumPropertyNames[] =
     {
-        "Adjust",                               //0
+        "Adjust",  								//0
         "ParentNumbering",                      //1
         "Prefix",                               //2
         "Suffix",                               //3
@@ -1643,11 +1653,13 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         SW_PROP_NAME_STR(UNO_NAME_LEFT_MARGIN),                   //6
         SW_PROP_NAME_STR(UNO_NAME_SYMBOL_TEXT_DISTANCE),          //7
         SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_OFFSET),             //8
+        // --> OD 2008-01-15 #newlistlevelattrs#
         SW_PROP_NAME_STR(UNO_NAME_POSITION_AND_SPACE_MODE), //9
         SW_PROP_NAME_STR(UNO_NAME_LABEL_FOLLOWED_BY),       //10
         SW_PROP_NAME_STR(UNO_NAME_LISTTAB_STOP_POSITION),   //11
         SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_INDENT),       //12
         SW_PROP_NAME_STR(UNO_NAME_INDENT_AT),               //13
+        // <--
         "NumberingType",                        //14
         "BulletId",                             //15
         SW_PROP_NAME_STR(UNO_NAME_BULLET_FONT), //16
@@ -1659,8 +1671,10 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         SW_PROP_NAME_STR(UNO_NAME_VERT_ORIENT),    //22
         SW_PROP_NAME_STR(UNO_NAME_HEADING_STYLE_NAME) //23
     };
+    // --> OD 2008-01-15 #newlistlevelattrs#
     const sal_uInt16 nPropNameCount = 24;
     const sal_uInt16 nNotInChapter = 15;
+    // <--
 
     const beans::PropertyValue* pPropArray = rProperties.getConstArray();
     PropValDataArr aPropertyValues;
@@ -1697,7 +1711,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         SvxBrushItem* pSetBrush = 0;
         Size* pSetSize = 0;
         SwFmtVertOrient* pSetVOrient = 0;
-        sal_Bool bCharStyleNameSet = sal_False;
+        BOOL bCharStyleNameSet = FALSE;
 
         for(sal_uInt16 i = 0; i < nPropNameCount && !bExcept && !bWrongArg; i++)
         {
@@ -1725,7 +1739,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     sal_Int16 nSet = 0;
                     pData->aVal >>= nSet;
                     if(nSet >= 0 && MAXLEVEL >= nSet)
-                        aFmt.SetIncludeUpperLevels( static_cast< sal_uInt8 >(nSet) );
+                        aFmt.SetIncludeUpperLevels( static_cast< BYTE >(nSet) );
                 }
                 break;
                 case 2: //"Prefix",
@@ -1744,7 +1758,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 4: //"CharStyleName",
                 {
-                    bCharStyleNameSet = sal_True;
+                    bCharStyleNameSet = TRUE;
                     OUString uTmp;
                     pData->aVal >>= uTmp;
                     String sCharFmtName;
@@ -1784,9 +1798,10 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                             }
                         }
                         aFmt.SetCharFmt( pCharFmt );
-                        // #i51842#
+                        // os 2005-08-22 #i51842#
                         // If the character format has been found it's name should not be in the
                         // char style names array
+                        //sNewCharStyleNames[(sal_uInt16)nIndex] = sCharFmtName;
                         sNewCharStyleNames[(sal_uInt16)nIndex].Erase();
                      }
                     else
@@ -1795,7 +1810,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 5: //"StartWith",
                 {
-                    sal_Int16 nVal = 0;
+                    INT16 nVal = 0;
                     pData->aVal >>= nVal;
                     aFmt.SetStart(nVal);
                 }
@@ -1827,6 +1842,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     aFmt.SetFirstLineOffset((short)nValue);
                 }
                 break;
+                // --> OD 2008-01-15 #newlistlevelattrs#
                 case 9: // UNO_NAME_POSITION_AND_SPACE_MODE
                 {
                     sal_Int16 nValue = 0;
@@ -1898,6 +1914,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     aFmt.SetIndentAt( nValue );
                 }
                 break;
+                // <--
                 case 14: //"NumberingType"
                 {
                     sal_Int16 nSet = 0;
@@ -1922,7 +1939,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                      awt::FontDescriptor* pDesc =  (awt::FontDescriptor*)pData->aVal.getValue();
                     if(pDesc)
                     {
-                        // #i93725#
+                        // --> OD 2008-09-11 #i93725#
                         // do not accept "empty" font
                         if ( pDesc->Name.getLength() > 0 )
                         {
@@ -2051,7 +2068,12 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         SwTxtFmtColl &rTxtColl = *((*pColls)[k]);
                         if(rTxtColl.IsDefault())
                             continue;
-                        if ( rTxtColl.IsAssignedToListLevelOfOutlineStyle() &&
+                        //if(rTxtColl.GetOutlineLevel() == nIndex &&			//#outline level,removed by zhaojianwei
+                        //	rTxtColl.GetName() != sStyleName)
+                        //	rTxtColl..SetOutlineLevel(NO_NUMBERING);
+                        //else if(rTxtColl.GetName() == sStyleName)
+                        //	rTxtColl.SetOutlineLevel(sal_Int8(nIndex));
+                        if ( rTxtColl.IsAssignedToListLevelOfOutlineStyle() &&	//add by zhaojianwei
                              rTxtColl.GetAssignedOutlineStyleLevel() == nIndex &&
                              rTxtColl.GetName() != sStyleName )
                         {
@@ -2060,7 +2082,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         else if ( rTxtColl.GetName() == sStyleName )
                         {
                             rTxtColl.AssignToListLevelOfOutlineStyle( nIndex );
-                        }
+                        }														//<-end,,zhaojianwei,
                     }
                 }
                 break;
@@ -2145,13 +2167,13 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
 
     if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC)))
     {
-        sal_Bool bVal = *(sal_Bool*)rValue.getValue();
+        BOOL bVal = *(sal_Bool*)rValue.getValue();
         if(!pCreatedRule)
             pDocRule ? pDocRule->SetAutoRule(bVal) : pNumRule->SetAutoRule(bVal);
     }
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_CONTINUOUS_NUMBERING)))
     {
-        sal_Bool bVal = *(sal_Bool*)rValue.getValue();
+        BOOL bVal = *(sal_Bool*)rValue.getValue();
         pDocRule ? pDocRule->SetContinusNum(bVal) :
             pCreatedRule ? pCreatedRule->SetContinusNum(bVal) : pNumRule->SetContinusNum(bVal);
     }
@@ -2162,22 +2184,24 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     }
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_ABSOLUTE_MARGINS)))
     {
-        sal_Bool bVal = *(sal_Bool*)rValue.getValue();
+        BOOL bVal = *(sal_Bool*)rValue.getValue();
         pDocRule ? pDocRule->SetAbsSpaces(bVal) :
             pCreatedRule ? pCreatedRule->SetAbsSpaces(bVal) : pNumRule->SetAbsSpaces(bVal);
     }
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_IS_OUTLINE)))
     {
-        sal_Bool bVal = *(sal_Bool*)rValue.getValue();
+        BOOL bVal = *(sal_Bool*)rValue.getValue();
         SwNumRuleType eNumRuleType = bVal ? OUTLINE_RULE : NUM_RULE;
         pDocRule ? pDocRule->SetRuleType(eNumRuleType) :
             pCreatedRule ? pCreatedRule->SetRuleType(eNumRuleType) : pNumRule->SetRuleType(eNumRuleType);
     }
+    // --> OD 2008-04-23 #refactorlists#
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEFAULT_LIST_ID)))
     {
         delete pDocRule;
         throw IllegalArgumentException();
     }
+    // <--
     else
         throw UnknownPropertyException();
 
@@ -2206,32 +2230,34 @@ Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
 
     if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC)))
     {
-        sal_Bool bVal = pRule->IsAutoRule();
+        BOOL bVal = pRule->IsAutoRule();
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_CONTINUOUS_NUMBERING)))
     {
-        sal_Bool bVal = pRule->IsContinusNum();
+        BOOL bVal = pRule->IsContinusNum();
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NAME)))
         aRet <<= OUString(pRule->GetName());
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_ABSOLUTE_MARGINS)))
     {
-        sal_Bool bVal = pRule->IsAbsSpaces();
+        BOOL bVal = pRule->IsAbsSpaces();
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_IS_OUTLINE)))
     {
-        sal_Bool bVal = pRule->IsOutlineRule();
+        BOOL bVal = pRule->IsOutlineRule();
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
+    // --> OD 2008-04-23 #refactorlists#
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEFAULT_LIST_ID)))
     {
         OSL_ENSURE( pRule->GetDefaultListId().Len() != 0,
                 "<SwXNumberingRules::getPropertyValue(..)> - no default list id found. Serious defect -> please inform OD." );
         aRet <<= OUString(pRule->GetDefaultListId());
     }
+    // <--
     else
         throw UnknownPropertyException();
     return aRet;
@@ -2269,7 +2295,7 @@ OUString SwXNumberingRules::getName() throw( RuntimeException )
         SwStyleNameMapper::FillProgName(pNumRule->GetName(), aString, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE, sal_True );
         return OUString ( aString );
     }
-    // consider chapter numbering <SwXNumberingRules>
+    // --> OD 2005-10-25 #126347# - consider chapter numbering <SwXNumberingRules>
     else if ( pDocShell )
     {
         SwStyleNameMapper::FillProgName( pDocShell->GetDoc()->GetOutlineNumRule()->GetName(),
@@ -2288,7 +2314,7 @@ void SwXNumberingRules::setName(const OUString& /*rName*/) throw( RuntimeExcepti
     throw aExcept;
 }
 
-void SwXNumberingRules::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXNumberingRules::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
@@ -2305,7 +2331,7 @@ OUString SwXChapterNumbering::getImplementationName(void) throw( RuntimeExceptio
     return C2U("SwXChapterNumbering");
 }
 
-sal_Bool SwXChapterNumbering::supportsService(const OUString& rServiceName) throw( RuntimeException )
+BOOL SwXChapterNumbering::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     String sServiceName(rServiceName);
     return sServiceName.EqualsAscii("com.sun.star.text.ChapterNumbering") ||
@@ -2338,7 +2364,7 @@ OUString SwXTextColumns::getImplementationName(void) throw( RuntimeException )
     return C2U("SwXTextColumns");
 }
 
-sal_Bool SwXTextColumns::supportsService(const OUString& rServiceName) throw( RuntimeException )
+BOOL SwXTextColumns::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.TextColumns") == rServiceName;
 }
@@ -2360,8 +2386,7 @@ SwXTextColumns::SwXTextColumns(sal_uInt16 nColCount) :
     nSepLineColor(0), //black
     nSepLineHeightRelative(100),//full height
     nSepLineVertAlign(style::VerticalAlignment_MIDDLE),
-    bSepLineIsOn(sal_False),
-    nSepLineStyle(API_COL_LINE_NONE) // None
+    bSepLineIsOn(sal_False)
 {
     if(nColCount)
         setColumnCount(nColCount);
@@ -2373,7 +2398,7 @@ SwXTextColumns::SwXTextColumns(const SwFmtCol& rFmtCol) :
     bIsAutomaticWidth(rFmtCol.IsOrtho()),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_COLUMS))
 {
-    sal_uInt16 nItemGutterWidth = rFmtCol.GetGutterWidth();
+    USHORT nItemGutterWidth = rFmtCol.GetGutterWidth();
     nAutoDistance = bIsAutomaticWidth ?
                         USHRT_MAX == nItemGutterWidth ? DEF_GUTTER_WIDTH : (sal_Int32)nItemGutterWidth
                         : 0;
@@ -2387,8 +2412,8 @@ SwXTextColumns::SwXTextColumns(const SwFmtCol& rFmtCol) :
 
         pColumns[i].Width = pCol->GetWishWidth();
         nReference += pColumns[i].Width;
-        pColumns[i].LeftMargin =    TWIP_TO_MM100_UNSIGNED(pCol->GetLeft ());
-        pColumns[i].RightMargin =   TWIP_TO_MM100_UNSIGNED(pCol->GetRight());
+        pColumns[i].LeftMargin = 	TWIP_TO_MM100_UNSIGNED(pCol->GetLeft ());
+        pColumns[i].RightMargin = 	TWIP_TO_MM100_UNSIGNED(pCol->GetRight());
     }
     if(!aTextColumns.getLength())
         nReference = USHRT_MAX;
@@ -2397,21 +2422,12 @@ SwXTextColumns::SwXTextColumns(const SwFmtCol& rFmtCol) :
     nSepLineColor = rFmtCol.GetLineColor().GetColor();
     nSepLineHeightRelative = rFmtCol.GetLineHeight();
     bSepLineIsOn = rFmtCol.GetLineAdj() != COLADJ_NONE;
-    sal_Int8 nStyle = API_COL_LINE_NONE;
-    switch (rFmtCol.GetLineStyle())
-    {
-        case editeng::SOLID: nStyle = API_COL_LINE_SOLID; break;
-        case editeng::DOTTED: nStyle = API_COL_LINE_DOTTED; break;
-        case editeng::DASHED: nStyle = API_COL_LINE_DASHED; break;
-        default: break;
-    }
-    nSepLineStyle = nStyle;
     switch(rFmtCol.GetLineAdj())
     {
-        case COLADJ_TOP:    nSepLineVertAlign = style::VerticalAlignment_TOP;   break;
-        case COLADJ_BOTTOM: nSepLineVertAlign = style::VerticalAlignment_BOTTOM;    break;
+        case COLADJ_TOP: 	nSepLineVertAlign = style::VerticalAlignment_TOP; 	break;
+        case COLADJ_BOTTOM: nSepLineVertAlign = style::VerticalAlignment_BOTTOM;	break;
         case COLADJ_CENTER:
-        case COLADJ_NONE:   nSepLineVertAlign = style::VerticalAlignment_MIDDLE;
+        case COLADJ_NONE:	nSepLineVertAlign = style::VerticalAlignment_MIDDLE;
     }
 }
 
@@ -2504,11 +2520,6 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
         case WID_TXTCOL_LINE_COLOR:
             aValue >>= nSepLineColor;
         break;
-        case WID_TXTCOL_LINE_STYLE:
-        {
-            aValue >>= nSepLineStyle;
-        }
-        break;
         case WID_TXTCOL_LINE_REL_HGT:
         {
             sal_Int8 nTmp = 0;
@@ -2571,9 +2582,6 @@ Any SwXTextColumns::getPropertyValue( const OUString& rPropertyName )
         break;
         case WID_TXTCOL_LINE_COLOR:
             aRet <<= nSepLineColor;
-        break;
-        case WID_TXTCOL_LINE_STYLE:
-            aRet <<= nSepLineStyle;
         break;
         case WID_TXTCOL_LINE_REL_HGT:
             aRet <<= nSepLineHeightRelative;

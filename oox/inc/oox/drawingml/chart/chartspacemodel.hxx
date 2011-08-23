@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,6 @@ struct ChartSpaceModel
     bool                mbAutoTitleDel;     /// True = automatic title deleted manually.
     bool                mbPlotVisOnly;      /// True = plot visible cells in a sheet only.
     bool                mbShowLabelsOverMax;/// True = show labels over chart maximum.
-    bool                mbPivotChart;       /// True = pivot chart.
 
     explicit            ChartSpaceModel();
                         ~ChartSpaceModel();

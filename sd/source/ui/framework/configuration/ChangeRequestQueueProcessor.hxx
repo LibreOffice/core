@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ public:
     void AddRequest (const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::framework::XConfigurationChangeRequest>& rxRequest);
 
-    /** Returns </sal_True> when the queue is empty.
+    /** Returns </TRUE> when the queue is empty.
     */
     bool IsEmpty (void) const;
 
@@ -113,7 +113,7 @@ private:
         is destroyed.
     */
     sal_uIntPtr mnUserEventId;
-
+    
     ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::framework::XConfiguration> mxConfiguration;
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,8 @@
 #include "oox/helper/storagebase.hxx"
 
 namespace com { namespace sun { namespace star {
-    namespace container { class XNameContainer; }
     namespace lang { class XMultiServiceFactory; }
+    namespace container { class XNameContainer; }
 } } }
 
 namespace oox {
@@ -72,7 +72,7 @@ private:
     void                initStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream );
     /** Initializes the API storage object for input/output. */
     void                initStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream );
-
+    
     /** Returns true, if the object represents a valid storage. */
     virtual bool        implIsStorage() const;
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,19 +36,23 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include "svx/pfiledlg.hxx"
+#include "pfiledlg.hxx"
 #include <svx/dialogs.hrc>
 
 #include <svx/dialmgr.hxx>
 #include <list>
-
+ 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-sal_Char const sAudio[] = "audio";
-sal_Char const sVideo[] = "video";
+sal_Char __READONLY_DATA sAudio[] = "audio";
+sal_Char __READONLY_DATA sVideo[] = "video";
 
-// Filedialog to insert Plugin-Fileformats
+/*************************************************************************
+|*
+|* Filedialog to insert Plugin-Fileformats
+|*
+\************************************************************************/
 
 ErrCode SvxPluginFileDlg::Execute()
 {
@@ -60,7 +64,7 @@ String SvxPluginFileDlg::GetPath() const
     return maFileDlg.GetPath();
 }
 
-SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) :
+SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) : 
     maFileDlg(SFXWB_INSERT)
 {
     // set title of the dialogwindow
@@ -84,15 +88,15 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) :
     if( xMgr.is() )
     {
         uno::Reference< plugin::XPluginManager > rPluginManager( xMgr->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginManager")) ), uno::UNO_QUERY );
+            OUString::createFromAscii( "com.sun.star.plugin.PluginManager" ) ), uno::UNO_QUERY );
         if ( rPluginManager.is() )
         {
             const uno::Sequence<plugin::PluginDescription > aSeq( rPluginManager->getPluginDescriptions() );
             const plugin::PluginDescription* pDescription = aSeq.getConstArray();
             sal_Int32 nAnzahlPlugins = rPluginManager->getPluginDescriptions().getLength();
 
-            std::list< String > aPlugNames;
-            std::list< String > aPlugExtensions;
+            std::list< String >	aPlugNames;
+            std::list< String >	aPlugExtensions;
             std::list< String >::iterator j;
             std::list< String >::iterator k;
             std::list< String >::const_iterator end;
@@ -120,10 +124,10 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) :
                     {
                         // filterdescription already there?
                         // (then append the new extension to the existing filter)
-                        int nfound = -1;
+                        int nfound = -1;						
                          for ( j = aPlugNames.begin(),
                                   k = aPlugExtensions.begin(),
-                                  end = aPlugNames.end();
+                                  end = aPlugNames.end(); 
                               j != end && nfound != 0;  )
                         {
                             if ( ( nfound = j->Search( aStrPlugName ) ) == 0 )
@@ -134,9 +138,9 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) :
 
                                 // remove old entry, increment (iterators are invalid thereafter, thus the postincrement)
                                 aPlugNames.erase(j++); aPlugExtensions.erase(k++);
-
+                                
                                 // update end iterator (which may be invalid, too!)
-                                end = aPlugNames.end();
+                                end = aPlugNames.end(); 
                             }
                             else
                             {
@@ -173,10 +177,10 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) :
                 }
             }
 
-            // add filter to dialog
-            for ( j = aPlugNames.begin(),
+            // add filter to dialog			
+            for ( j = aPlugNames.begin(), 
                       k = aPlugExtensions.begin(),
-                      end = aPlugNames.end();
+                      end = aPlugNames.end(); 
                   j != end; ++j, ++k )
             {
                 maFileDlg.AddFilter( *j, *k );
@@ -192,6 +196,12 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) :
     maFileDlg.SetCurrentFilter( aAllFilter );
 }
 
+/*************************************************************************
+|*
+|* Dtor
+|*
+\************************************************************************/
+
 SvxPluginFileDlg::~SvxPluginFileDlg()
 {
 }
@@ -199,15 +209,15 @@ SvxPluginFileDlg::~SvxPluginFileDlg()
 /*************************************************************************
 |*
 |* Plugins available for the the MIME-Typ in nKind
-|* (with nKind = SID_INSERT_SOUND for MIME-Type audio
+|* (whith nKind = SID_INSERT_SOUND for MIME-Type audio
 |*                SID_INSERT_VIDEO for MIME-Type video
 |*
 \************************************************************************/
 
-#define PFDLG_CHECKED_SOUND     0x0001
-#define PFDLG_CHECKED_VIDEO     0x0002
-#define PFDLG_FOUND_SOUND       0x0004
-#define PFDLG_FOUND_VIDEO       0x0008
+#define PFDLG_CHECKED_SOUND		0x0001
+#define PFDLG_CHECKED_VIDEO		0x0002
+#define PFDLG_FOUND_SOUND		0x0004
+#define PFDLG_FOUND_VIDEO		0x0008
 
 bool SvxPluginFileDlg::IsAvailable (sal_uInt16 nKind)
 {
@@ -223,7 +233,7 @@ bool SvxPluginFileDlg::IsAvailable (sal_uInt16 nKind)
 
     if( xMgr.is() )
     {
-        uno::Reference< plugin::XPluginManager >  rPluginManager = uno::Reference< plugin::XPluginManager > ( xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginManager")) ), uno::UNO_QUERY );
+        uno::Reference< plugin::XPluginManager >  rPluginManager = uno::Reference< plugin::XPluginManager > ( xMgr->createInstance( OUString::createFromAscii( "com.sun.star.plugin.PluginManager" ) ), uno::UNO_QUERY );
         if( rPluginManager.is() )
         {
             const uno::Sequence<plugin::PluginDescription > aSeq( rPluginManager->getPluginDescriptions() );
@@ -263,6 +273,11 @@ bool SvxPluginFileDlg::IsAvailable (sal_uInt16 nKind)
     }
 
     return bFound;
+}
+
+void SvxPluginFileDlg::SetDialogHelpId( const sal_Int32 _nHelpId )
+{
+    maFileDlg.SetDialogHelpId( _nHelpId );
 }
 
 void SvxPluginFileDlg::SetContext( sfx2::FileDialogHelper::Context _eNewContext )

@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Copyright (C) 2007 Fridrich Strba .strba@bluewin.ch)
  *
@@ -53,5 +52,3 @@ void InternalHandler::characters(const WPXString &sCharacters)
 {
     mpElements->push_back(new CharDataElement(sCharacters.cstr()));
 }
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

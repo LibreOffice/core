@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #include "ctredlin.hrc"
 #include "helpid.hrc"
 
-#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
+#define MASKCOLOR	MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
 
 TabPage SID_REDLIN_FILTER_PAGE
 {
@@ -114,10 +114,7 @@ TabPage SID_REDLIN_FILTER_PAGE
             ImageBitmap = Bitmap { File = "time.bmp" ; };
             MASKCOLOR
         };
-        // IAccessibility2 implementation 2009. ------
-        //QuickHelpText [ en-US ] = "Set Date/Time" ;
-        QuickHelpText [ en-US ] = "Set Start Date/Time" ;
-        // ------ IAccessibility2 implementation 2009.
+        QuickHelpText [ en-US ] = "Set Date/Time" ;
     };
     FixedText FT_DATE2
     {
@@ -173,10 +170,7 @@ TabPage SID_REDLIN_FILTER_PAGE
             ImageBitmap = Bitmap { File = "time.bmp" ; };
             MASKCOLOR
         };
-        // IAccessibility2 implementation 2009. ------
-        //QuickHelpText [ en-US ] = "Set Date/Time" ;
-        QuickHelpText [ en-US ] = "Set End Date/Time" ;
-        // ------ IAccessibility2 implementation 2009.
+        QuickHelpText [ en-US ] = "Set Date/Time" ;
     };
     CheckBox CB_AUTOR
     {
@@ -255,32 +249,11 @@ TabPage SID_REDLIN_FILTER_PAGE
         Size = MAP_APPFONT ( 178 , 12 ) ;
         TabStop = TRUE ;
     };
-        /*IAccessibility2 Implementation 2009-----*/
-    String STR_DATE_COMBOX
+    Image IMG_TIME_H
     {
-        Text [ en-US ] = "Date Condition" ;
+        ImageBitmap = Bitmap { File = "time_h.bmp" ; };
+        MASKCOLOR
     };
-    String STR_DATE_SPIN
-    {
-        Text [ en-US ] = "Start Date" ;
-    };
-    String STR_DATE_SPIN1
-    {
-        Text [ en-US ] = "End Date" ;
-    };
-    String STR_DATE_TIME_SPIN
-    {
-        Text [ en-US ] = "Start Time" ;
-    };
-    String STR_DATE_TIME_SPIN1
-    {
-        Text [ en-US ] = "End Time" ;
-    };
-    String STR_TREE
-    {
-        Text [ en-US ] = "Changes" ;
-    };
-    /*-----IAccessibility2 Implementation 2009*/
 };
 TabPage SID_REDLIN_VIEW_PAGE
 {

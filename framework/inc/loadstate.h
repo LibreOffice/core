@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,14 +30,14 @@
 #define __FRAMEWORK_LOADSTATE_H_
 
 //_________________________________________________________________________________________________________________
-//  includes
+//	includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
@@ -77,14 +77,14 @@ class LoadStateHelper
                             the failed load request
 
             @param      rReason
-                            in case this Method returns <sal_True/> the referred string object
+                            in case this Method returns <TRUE/> the referred string object
                             will be used to set the original message of the
                             aborted io exception on it.
-                            If method returns <sal_False/> rReason was not used.
+                            If method returns <FALSE/> rReason was not used.
 
             @return     [boolean]
-                            <sal_True/> in case it was an IO error
-                            <sal_False/> in case it wasn't an IO error or interaction was not used
+                            <TRUE/> in case it was an IO error
+                            <FALSE/> in case it wasn't an IO error or interaction was not used
         */
         static sal_Bool wasIOError( const css::uno::Any& aRequest ,
                                           rtl::OUString& rReason  )

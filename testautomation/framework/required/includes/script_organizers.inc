@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : gregor.hartmann@oracle.com
+'*  owner : Joerg.Skottke@Sun.Com
 '*
 '*  short description : Verify names of macros and scripts
 '*

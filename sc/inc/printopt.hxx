@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,24 +36,24 @@
 class SC_DLLPUBLIC ScPrintOptions
 {
 private:
-    sal_Bool    bSkipEmpty;
-    sal_Bool    bAllSheets;
+    BOOL	bSkipEmpty;
+    BOOL	bAllSheets;
 
 public:
                 ScPrintOptions();
                 ScPrintOptions( const ScPrintOptions& rCpy );
                 ~ScPrintOptions();
 
-    sal_Bool    GetSkipEmpty() const            { return bSkipEmpty; }
-    void    SetSkipEmpty( sal_Bool bVal )       { bSkipEmpty = bVal; }
-    sal_Bool    GetAllSheets() const            { return bAllSheets; }
-    void    SetAllSheets( sal_Bool bVal )       { bAllSheets = bVal; }
+    BOOL	GetSkipEmpty() const			{ return bSkipEmpty; }
+    void	SetSkipEmpty( BOOL bVal )		{ bSkipEmpty = bVal; }
+    BOOL	GetAllSheets() const			{ return bAllSheets; }
+    void	SetAllSheets( BOOL bVal )		{ bAllSheets = bVal; }
 
-    void    SetDefaults();
+    void	SetDefaults();
 
-    const ScPrintOptions&   operator=  ( const ScPrintOptions& rCpy );
-    int                     operator== ( const ScPrintOptions& rOpt ) const;
-    int                     operator!= ( const ScPrintOptions& rOpt ) const;
+    const ScPrintOptions&	operator=  ( const ScPrintOptions& rCpy );
+    int						operator== ( const ScPrintOptions& rOpt ) const;
+    int						operator!= ( const ScPrintOptions& rOpt ) const;
 };
 
 //==================================================================
@@ -64,7 +64,7 @@ class SC_DLLPUBLIC ScTpPrintItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-                ScTpPrintItem( sal_uInt16 nWhich,
+                ScTpPrintItem( USHORT nWhich,
                                const ScPrintOptions& rOpt );
                 ScTpPrintItem( const ScTpPrintItem& rItem );
                 ~ScTpPrintItem();
@@ -73,7 +73,7 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    const ScPrintOptions&   GetPrintOptions() const { return theOptions; }
+    const ScPrintOptions&	GetPrintOptions() const { return theOptions; }
 
 private:
     ScPrintOptions theOptions;
@@ -90,9 +90,9 @@ class ScPrintCfg : public ScPrintOptions, public utl::ConfigItem
 public:
             ScPrintCfg();
 
-    void            SetOptions( const ScPrintOptions& rNew );
+    void			SetOptions( const ScPrintOptions& rNew );
 
-    virtual void    Commit();
+    virtual void	Commit();
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 };
 

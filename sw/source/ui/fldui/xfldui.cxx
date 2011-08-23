@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #include <comphelper/processfactory.hxx>
 #include <fldmgr.hxx>
 #include <dbmgr.hxx>
-#include <wrtsh.hxx>        // active window
+#include <wrtsh.hxx>		// Actives Fenster
 #include <view.hxx>
 #include <swmodule.hxx>
 
@@ -63,14 +63,14 @@ using namespace ::com::sun::star::beans;
 // ---------------------------------------------------------------------------
 
 /*--------------------------------------------------------------------
-     Description: Is the database field numeric?
-     remark: in case of error sal_True is returned
+     Beschreibung: Ist das Datenbankfeld numerisch?
+     Anm: Im Fehlerfall wird TRUE returnt.
  --------------------------------------------------------------------*/
 
-sal_Bool SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
-                            sal_Bool bIsTable, const String& rFldName)
+BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
+                            BOOL bIsTable, const String& rFldName)
 {
-    sal_Bool bNumeric = sal_True;
+    BOOL bNumeric = TRUE;
 
     SwNewDBMgr* pDBMgr = pWrtShell ? pWrtShell->GetNewDBMgr() :
                             ::GetActiveView()->GetWrtShell().GetNewDBMgr();
@@ -127,7 +127,7 @@ sal_Bool SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName
         }
         catch(Exception& )
         {
-            OSL_FAIL("Exception in getColumns()");
+            OSL_ENSURE(false, "Exception in getColumns()");
         }
         if(xCols.is() && xCols->hasByName(rFldName))
         {
@@ -171,7 +171,7 @@ sal_Bool SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName
                 case DataType::VARCHAR:
                 case DataType::LONGVARCHAR:
                 default:
-                    bNumeric = sal_False;
+                    bNumeric = FALSE;
             }
         }
     }

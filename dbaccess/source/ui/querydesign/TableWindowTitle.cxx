@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
     SetTextColor(aSystemStyle.GetButtonTextColor());
 
     Font aFont( GetFont() );
-    aFont.SetTransparent( sal_True );
+    aFont.SetTransparent( TRUE );
     SetFont( aFont );
 }
 
@@ -72,7 +72,7 @@ OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
 OTableWindowTitle::~OTableWindowTitle()
 {
     DBG_DTOR(OTableWindowTitle,NULL);
-    m_pTabWin = NULL;
+    m_pTabWin = NULL;	
 }
 
 //------------------------------------------------------------------------------
@@ -129,6 +129,15 @@ void OTableWindowTitle::Command( const CommandEvent& rEvt )
 }
 
 //------------------------------------------------------------------------------
+//void OTableWindowTitle::Paint( const Rectangle& rRect )
+//{
+//	//////////////////////////////////////////////////////////////////////
+//	// Ausgabe des Textes in der Titelzeile
+//	Rectangle aWinRect( Point(0,0), GetSizePixel() );
+//	DrawText( aWinRect, GetText(), TEXT_DRAW_CENTER|TEXT_DRAW_VCENTER|TEXT_DRAW_ENDELLIPSIS );
+//}
+
+//------------------------------------------------------------------------------
 void OTableWindowTitle::KeyInput( const KeyEvent& rEvt )
 {
     if ( m_pTabWin )
@@ -140,7 +149,7 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
 {
     if( rEvt.IsLeft() )
     {
-        if( rEvt.GetClicks() == 2)
+        if(	rEvt.GetClicks() == 2)
         {
             Size aSize(GetTextWidth(GetText()) + 20,
                         m_pTabWin->GetSizePixel().Height() - m_pTabWin->GetListBox()->GetSizePixel().Height());
@@ -206,5 +215,8 @@ void OTableWindowTitle::StateChanged( StateChangedType nType )
         Resize();
     }
 }
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

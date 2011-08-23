@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,18 +84,18 @@ class IDocumentMarkAccess
             const ::rtl::OUString& rProposedName,
             MarkType eMark) =0;
 
-        virtual sw::mark::IFieldmark* makeFieldBookmark( const SwPaM& rPaM,
-            const rtl::OUString& rName,
+        virtual sw::mark::IFieldmark* makeFieldBookmark( const SwPaM& rPaM, 
+            const rtl::OUString& rName, 
             const rtl::OUString& rType) = 0;
-        virtual sw::mark::IFieldmark* makeNoTextFieldBookmark( const SwPaM& rPaM,
-            const rtl::OUString& rName,
+        virtual sw::mark::IFieldmark* makeNoTextFieldBookmark( const SwPaM& rPaM, 
+            const rtl::OUString& rName, 
             const rtl::OUString& rType) = 0;
 
         /** Returns a mark in the document for a paragraph.
             If there is none, a mark will be created.
 
            @param rTxtNode
-           [in] the paragraph being marked (a selection over the paragraph is marked)
+           [in] the paragraph being marked (a selection over the paragraph is marked) 
 
            @param eMark
            [in] the type of the new mark.
@@ -109,18 +109,18 @@ class IDocumentMarkAccess
         /** Moves an existing mark to a new selection and performs needed updates.
             @param io_pMark
             [in/out] the mark to be moved
-
+           
             @param rPaM
-            [in] new selection to be marked
+            [in] new selection to be marked 
         */
 
         virtual void repositionMark(::sw::mark::IMark* io_pMark,
             const SwPaM& rPaM) =0;
 
-        /** Renames an existing Mark, if possible.
+        /** Renames an existing Mark, if possible. 
             @param io_pMark
             [in/out] the mark to be renamed
-
+           
             @param rNewName
             [in] new name for the mark
 
@@ -132,9 +132,9 @@ class IDocumentMarkAccess
         /** Corrects marks (absolute)
             This method ignores the previous position of the mark in the paragraph
 
-            @param rOldNode
+            @param rOldNode 
             [in] the node from which nodes should be moved
-
+           
             @param rNewPos
             [in] new position to which marks will be moved, if nOffset == 0
 
@@ -148,11 +148,11 @@ class IDocumentMarkAccess
         /** Corrects marks (relative)
             This method uses the previous position of the mark in the paragraph as offset
 
-            @param rOldNode
+            @param rOldNode 
             [in] the node from which nodes should be moved
-
+           
             @param rNewPos
-            [in] new position to which marks from the start of the paragraph will be
+            [in] new position to which marks from the start of the paragraph will be 
                  moved, if nOffset == 0
 
             @param nOffset
@@ -208,7 +208,7 @@ class IDocumentMarkAccess
             [in] the name of the mark to find.
 
             @returns
-            an iterator pointing to the mark, or pointing to getMarksEnd() if nothing was found.
+            an iterator pointing to the mark, or pointing to getMarksEnd() if nothing was found. 
         */
         virtual const_iterator_t findMark(const ::rtl::OUString& rMark) const =0;
 
@@ -233,7 +233,7 @@ class IDocumentMarkAccess
             [in] the name of the bookmark to find.
 
             @returns
-            an iterator pointing to the bookmark, or getBookmarksEnd() if nothing was found.
+            an iterator pointing to the bookmark, or getBookmarksEnd() if nothing was found. 
         */
         virtual const_iterator_t findBookmark(const ::rtl::OUString& rMark) const =0;
 

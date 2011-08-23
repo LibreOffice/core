@@ -64,7 +64,7 @@ public class ObjectViewContainer
                 Class aViewClass = (Class)maViewTemplates.elementAt (i);
                 Method aCreateMethod = aViewClass.getDeclaredMethod (
                     "Create", new Class[] {
-                        ObjectViewContainer.class,
+                        ObjectViewContainer.class, 
                         XAccessibleContext.class});
                 if (aCreateMethod != null)
                 {
@@ -142,7 +142,7 @@ public class ObjectViewContainer
     /** Update the layout manager by setting the vertical weight of the
         bottom entry to 1 and so make it strech to over the available
         space.
-
+        
     */
     private void UpdateLayoutManager ()
     {

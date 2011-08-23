@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,16 @@ class SVX_DLLPUBLIC SdrPercentItem : public SfxUInt16Item
 public:
     TYPEINFO();
     SdrPercentItem(): SfxUInt16Item() {}
-    SdrPercentItem(sal_uInt16 nId, sal_uInt16 nVal=0): SfxUInt16Item(nId,nVal) {}
-    SdrPercentItem(sal_uInt16 nId, SvStream& rIn):  SfxUInt16Item(nId,rIn) {}
+    SdrPercentItem(USHORT nId, UINT16 nVal=0): SfxUInt16Item(nId,nVal) {}
+    SdrPercentItem(USHORT nId, SvStream& rIn):  SfxUInt16Item(nId,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
+
+#ifdef SDR_ISPOOLABLE
+    virtual int IsPoolable() const;
+#endif
 };
 
 //------------------------------------------------------------
@@ -60,12 +64,16 @@ class SVX_DLLPUBLIC SdrSignedPercentItem : public SfxInt16Item
 public:
     TYPEINFO();
     SdrSignedPercentItem(): SfxInt16Item() {}
-    SdrSignedPercentItem( sal_uInt16 nId, sal_Int16 nVal = 0 ) : SfxInt16Item( nId,nVal ) {}
-    SdrSignedPercentItem( sal_uInt16 nId, SvStream& rIn ) : SfxInt16Item( nId,rIn ) {}
+    SdrSignedPercentItem( USHORT nId, INT16 nVal = 0 ) : SfxInt16Item( nId,nVal ) {}
+    SdrSignedPercentItem( USHORT nId, SvStream& rIn ) : SfxInt16Item( nId,rIn ) {}
     virtual SfxPoolItem* Clone( SfxItemPool* pPool = NULL ) const;
-    virtual SfxPoolItem* Create( SvStream& rIn, sal_uInt16 nVer ) const;
+    virtual SfxPoolItem* Create( SvStream& rIn, USHORT nVer ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0 ) const;
+
+#ifdef SDR_ISPOOLABLE
+    virtual int IsPoolable() const;
+#endif
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,27 +59,27 @@
 SV_IMPL_PTRARR( _FndBoxes, _FndBox* )
 SV_IMPL_PTRARR( _FndLines, _FndLine* )
 
-static sal_Bool bCheck1 = sal_True;
-static sal_Bool bCheck2 = sal_False;
-static sal_Bool bCheck3 = sal_False;
+static BOOL bCheck1 = TRUE;
+static BOOL bCheck2 = FALSE;
+static BOOL bCheck3 = FALSE;
 
-static sal_uInt16 nCol1 = 1;
-static sal_uInt16 nCol2 = 1;
-static sal_uInt16 nCol3 = 1;
+static USHORT nCol1 = 1;
+static USHORT nCol2 = 1;
+static USHORT nCol3 = 1;
 
-static sal_uInt16 nType1 = 0;
-static sal_uInt16 nType2 = 0;
-static sal_uInt16 nType3 = 0;
+static USHORT nType1 = 0;
+static USHORT nType2 = 0;
+static USHORT nType3 = 0;
 
-static sal_uInt16 nLang = LANGUAGE_NONE;
+static USHORT nLang = LANGUAGE_NONE;
 
-static sal_Bool   bAsc1  = sal_True;
-static sal_Bool   bAsc2  = sal_True;
-static sal_Bool   bAsc3  = sal_True;
-static sal_Bool   bCol   = sal_False;
-static sal_Bool   bCsSens= sal_False;
+static BOOL	  bAsc1	 = TRUE;
+static BOOL	  bAsc2	 = TRUE;
+static BOOL	  bAsc3	 = TRUE;
+static BOOL	  bCol	 = FALSE;
+static BOOL	  bCsSens= FALSE;
 
-static sal_Unicode    cDeli  = '\t';
+static sal_Unicode	  cDeli	 = '\t';
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -88,21 +88,21 @@ using ::rtl::OUString;
 void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
 {
     void* pDel;
-    for( sal_uInt16 n = 0, nEnd = rLstBox.GetEntryCount(); n < nEnd; ++n )
+    for( USHORT n = 0, nEnd = rLstBox.GetEntryCount(); n < nEnd; ++n )
         if( 0 != ( pDel = rLstBox.GetEntryData( n )) )
             delete (String*)pDel;
     rLstBox.Clear();
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Fuer Tabellenselektion sel. Zeilen und Spalten
+     Beschreibung: 	Fuer Tabellenselektion sel. Zeilen und Spalten
                     feststellen
  --------------------------------------------------------------------*/
-sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
+BOOL lcl_GetSelTbl( SwWrtShell &rSh, USHORT& rX, USHORT& rY )
 {
     const SwTableNode* pTblNd = rSh.IsCrsrInTbl();
     if( !pTblNd )
-        return sal_False;
+        return FALSE;
 
     _FndBox aFndBox( 0, 0 );
 
@@ -116,10 +116,10 @@ sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
     }
     rX = aFndBox.GetLines().Count();
     if( !rX )
-        return sal_False;
+        return FALSE;
 
     rY = aFndBox.GetLines()[0]->GetBoxes().Count();
-    return sal_True;
+    return TRUE;
 }
 
 /*--------------------------------------------------------------------
@@ -128,46 +128,45 @@ sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
 
     SvxStandardDialog(pParent, SW_RES(DLG_SORTING)),
+    aColLbl(this, 		SW_RES(FT_COL   )),
+    aTypLbl(this, 		SW_RES(FT_KEYTYP)),
+    aDirLbl(this, 		SW_RES(FT_DIR	)),
 
-    aColLbl(this,       SW_RES(FT_COL   )),
-    aTypLbl(this,       SW_RES(FT_KEYTYP)),
-    aDirLbl(this,       SW_RES(FT_DIR   )),
-    aSortFL(this,      SW_RES(FL_SORT_2  )),
-
-
-    aKeyCB1(this,       SW_RES(CB_KEY1  )),
-    aColEdt1(this,      SW_RES(ED_KEY1  )),
-    aTypDLB1(this,      SW_RES(DLB_KEY1 )),
-    aSortUpRB(this,     SW_RES(RB_UP    )),
-    aSortDnRB(this,     SW_RES(RB_DN    )),
-
-    aKeyCB2(this,       SW_RES(CB_KEY2  )),
-    aColEdt2(this,      SW_RES(ED_KEY2  )),
-    aTypDLB2(this,      SW_RES(DLB_KEY2 )),
-    aSortUp2RB(this,    SW_RES(RB_UP2    )),
-    aSortDn2RB(this,    SW_RES(RB_DN2    )),
-
-    aKeyCB3(this,       SW_RES(CB_KEY3  )),
-    aColEdt3(this,      SW_RES(ED_KEY3  )),
-    aTypDLB3(this,      SW_RES(DLB_KEY3 )),
-    aSortUp3RB(this,    SW_RES(RB_UP3    )),
-    aSortDn3RB(this,    SW_RES(RB_DN3    )),
     aDirFL(this,       SW_RES(FL_DIR   )),
 
-    aColumnRB(this,     SW_RES(RB_COL   )),
-    aRowRB(this,        SW_RES(RB_ROW   )),
+    aKeyCB1(this,       SW_RES(CB_KEY1  )),
+    aColEdt1(this, 		SW_RES(ED_KEY1  )),
+    aTypDLB1(this, 		SW_RES(DLB_KEY1 )),
+    aSortUpRB(this, 	SW_RES(RB_UP    )),
+    aSortDnRB(this, 	SW_RES(RB_DN    )),
+
+    aKeyCB2(this,       SW_RES(CB_KEY2  )),
+    aColEdt2(this, 		SW_RES(ED_KEY2  )),
+    aTypDLB2(this, 		SW_RES(DLB_KEY2 )),
+    aSortUp2RB(this, 	SW_RES(RB_UP2    )),
+    aSortDn2RB(this, 	SW_RES(RB_DN2    )),
+
+    aKeyCB3(this,       SW_RES(CB_KEY3  )),
+    aColEdt3(this, 		SW_RES(ED_KEY3  )),
+    aTypDLB3(this, 		SW_RES(DLB_KEY3 )),
+    aSortUp3RB(this, 	SW_RES(RB_UP3    )),
+    aSortDn3RB(this, 	SW_RES(RB_DN3    )),
+
+    aSortFL(this,      SW_RES(FL_SORT_2  )),
+    aColumnRB(this, 	SW_RES(RB_COL   )),
+    aRowRB(this, 		SW_RES(RB_ROW   )),
 
     aDelimFL(this,     SW_RES(FL_DELIM )),
     aDelimTabRB(this,   SW_RES(RB_TAB   )),
-    aDelimFreeRB(this,  SW_RES(RB_TABCH )),
-    aDelimEdt(this,     SW_RES(ED_TABCH )),
-    aDelimPB(this,      SW_RES( PB_DELIM)),
+    aDelimFreeRB(this, 	SW_RES(RB_TABCH )),
+    aDelimEdt(this, 	SW_RES(ED_TABCH )),
+    aDelimPB(this,    	SW_RES( PB_DELIM)),
 
     aLangFL(this,       SW_RES( FL_LANG )),
-    aLangLB(this,       SW_RES( LB_LANG )),
+    aLangLB(this,     	SW_RES( LB_LANG )),
 
     aSortOptFL(this,    SW_RES( FL_SORT )),
-    aCaseCB(this,       SW_RES( CB_CASE )),
+    aCaseCB(this,     	SW_RES( CB_CASE )),
 
     aOkBtn(this,        SW_RES(BT_OK    )),
     aCancelBtn(this,    SW_RES(BT_CANCEL)),
@@ -175,25 +174,12 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
 
     aColTxt(            SW_RES(STR_COL)),
     aRowTxt(            SW_RES(STR_ROW)),
-    aNumericTxt(        SW_RES(STR_NUMERIC)),
+    aNumericTxt(		SW_RES(STR_NUMERIC)),
     rSh(rShell),
     pColRes( 0 ),
     nX( 99 ),
     nY( 99 )
 {
-    aColEdt1.SetAccessibleName(aColLbl.GetText());
-    aColEdt2.SetAccessibleName(aColLbl.GetText());
-    aColEdt3.SetAccessibleName(aColLbl.GetText());
-    aTypDLB1.SetAccessibleName(aTypLbl.GetText());
-    aTypDLB2.SetAccessibleName(aTypLbl.GetText());
-    aTypDLB3.SetAccessibleName(aTypLbl.GetText());
-    aSortUpRB.SetAccessibleRelationMemberOf( &aKeyCB1 );
-    aSortDnRB.SetAccessibleRelationMemberOf( &aKeyCB1 );
-    aSortUp2RB.SetAccessibleRelationMemberOf( &aKeyCB2 );
-    aSortDn2RB.SetAccessibleRelationMemberOf( &aKeyCB2 );
-    aSortUp3RB.SetAccessibleRelationMemberOf( &aKeyCB3 );
-    aSortDn3RB.SetAccessibleRelationMemberOf( &aKeyCB3 );
-
     aDelimEdt.SetMaxTextLen( 1 );
     if(rSh.GetSelectionType() &
             (nsSelectionType::SEL_TBL|nsSelectionType::SEL_TBL_CELLS) )
@@ -201,14 +187,14 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
         aColumnRB.Check(bCol);
         aColLbl.SetText(bCol ? aRowTxt : aColTxt);
         aRowRB.Check(!bCol);
-        aDelimTabRB.Enable(sal_False);
-        aDelimFreeRB.Enable(sal_False);
-        aDelimEdt.Enable(sal_False);
+        aDelimTabRB.Enable(FALSE);
+        aDelimFreeRB.Enable(FALSE);
+        aDelimEdt.Enable(FALSE);
     }
     else
     {
-        aColumnRB.Enable(sal_False);
-        aRowRB.Check(sal_True);
+        aColumnRB.Enable(FALSE);
+        aRowRB.Check(TRUE);
         aColLbl.SetText(aColTxt);
     }
 
@@ -236,9 +222,9 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
 
     // first initialise the language, then select the
     if( LANGUAGE_NONE == nLang || LANGUAGE_DONTKNOW == nLang )
-        nLang = (sal_uInt16)GetAppLanguage();
+        nLang = (USHORT)GetAppLanguage();
 
-    aLangLB.SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN, sal_True, sal_False);
+    aLangLB.SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN, TRUE, FALSE);
     aLangLB.SelectLanguage( nLang );
 
     LanguageHdl( 0 );
@@ -257,7 +243,7 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     if(!aDelimTabRB.IsChecked())
     {
         aDelimEdt.SetText(cDeli);
-        aDelimFreeRB.Check(sal_True);
+        aDelimFreeRB.Check(TRUE);
         DelimHdl(&aDelimFreeRB);
     }
     else
@@ -266,30 +252,11 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     FreeResource();
     if( ::lcl_GetSelTbl( rSh, nX, nY) )
     {
-        sal_uInt16 nMax = aRowRB.IsChecked()? nY : nX;
+        USHORT nMax = aRowRB.IsChecked()? nY : nX;
         aColEdt1.SetMax(nMax);
         aColEdt2.SetMax(nMax);
         aColEdt3.SetMax(nMax);
     }
-
-    aDelimEdt.SetAccessibleRelationLabeledBy(&aDelimFreeRB);
-    aDelimPB.SetAccessibleRelationLabeledBy(&aDelimFreeRB);
-    aDelimPB.SetAccessibleRelationMemberOf(&aDelimFL);
-
-    aColEdt1.SetAccessibleRelationMemberOf(&aKeyCB1);
-    aColEdt1.SetAccessibleRelationLabeledBy(&aColLbl);
-    aTypDLB1.SetAccessibleRelationMemberOf(&aKeyCB1);
-    aTypDLB1.SetAccessibleRelationLabeledBy(&aTypLbl);
-
-    aColEdt2.SetAccessibleRelationMemberOf(&aKeyCB2);
-    aColEdt2.SetAccessibleRelationLabeledBy(&aColLbl);
-    aTypDLB2.SetAccessibleRelationMemberOf(&aKeyCB2);
-    aTypDLB2.SetAccessibleRelationLabeledBy(&aTypLbl);
-
-    aColEdt3.SetAccessibleRelationMemberOf(&aKeyCB3);
-    aColEdt3.SetAccessibleRelationLabeledBy(&aColLbl);
-    aTypDLB3.SetAccessibleRelationMemberOf(&aKeyCB3);
-    aTypDLB3.SetAccessibleRelationLabeledBy(&aTypLbl);
 }
 
 SwSortDlg::~SwSortDlg()
@@ -300,7 +267,7 @@ SwSortDlg::~SwSortDlg()
     delete pColRes;
 }
 
-sal_Unicode SwSortDlg::GetDelimChar() const
+sal_Unicode	SwSortDlg::GetDelimChar() const
 {
     sal_Unicode cRet = '\t';
     if( !aDelimTabRB.IsChecked() )
@@ -323,9 +290,9 @@ void SwSortDlg::Apply()
     bCheck2 = aKeyCB2.IsChecked();
     bCheck3 = aKeyCB3.IsChecked();
 
-    nCol1 = (sal_uInt16)aColEdt1.GetValue();
-    nCol2 = (sal_uInt16)aColEdt2.GetValue();
-    nCol3 = (sal_uInt16)aColEdt3.GetValue();
+    nCol1 = (USHORT)aColEdt1.GetValue();
+    nCol2 = (USHORT)aColEdt2.GetValue();
+    nCol3 = (USHORT)aColEdt3.GetValue();
 
     nType1 = aTypDLB1.GetSelectEntryPos();
     nType2 = aTypDLB2.GetSelectEntryPos();
@@ -389,9 +356,9 @@ void SwSortDlg::Apply()
     aOptions.bTable = rSh.IsTableMode();
     aOptions.bIgnoreCase = !bCsSens;
 
-    sal_Bool bRet;
+    BOOL bRet;
     {
-        SwWait aWait( *rSh.GetView().GetDocShell(), sal_True );
+        SwWait aWait( *rSh.GetView().GetDocShell(), TRUE );
         rSh.StartAllAction();
         if( 0 != (bRet = rSh.Sort( aOptions )))
             rSh.SetModified();
@@ -404,7 +371,7 @@ void SwSortDlg::Apply()
 
 IMPL_LINK( SwSortDlg, DelimHdl, RadioButton*, pButton )
 {
-    sal_Bool bEnable = pButton == &aDelimFreeRB && aDelimFreeRB.IsEnabled();
+    BOOL bEnable = pButton == &aDelimFreeRB && aDelimFreeRB.IsEnabled();
     aDelimEdt.Enable( bEnable );
     aDelimPB.Enable( bEnable );
     return 0;
@@ -421,7 +388,7 @@ IMPL_LINK( SwSortDlg, DelimCharHdl, PushButton*, EMPTYARG )
             rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
         if( RET_OK == pMap->Execute() )
         {
-            SFX_ITEMSET_ARG( pMap->GetOutputItemSet(), pItem, SfxInt32Item, SID_ATTR_CHAR, sal_False );
+            SFX_ITEMSET_ARG( pMap->GetOutputItemSet(), pItem, SfxInt32Item, SID_ATTR_CHAR, FALSE );
             if ( pItem )
                 aDelimEdt.SetText( sal_Unicode ( pItem->GetValue() ) );
         }
@@ -440,9 +407,6 @@ IMPL_LINK( SwSortDlg, CheckHdl, CheckBox *, pCheck )
         aColEdt2.SetMax(nY);
         aColEdt3.SetMax(nY);
 
-        aColEdt1.SetAccessibleName(aColTxt);
-        aColEdt2.SetAccessibleName(aColTxt);
-        aColEdt3.SetAccessibleName(aColTxt);
     }
     else if( pCheck == ( CheckBox* ) &aColumnRB)
     {
@@ -450,15 +414,11 @@ IMPL_LINK( SwSortDlg, CheckHdl, CheckBox *, pCheck )
         aColEdt1.SetMax(nX);
         aColEdt2.SetMax(nX);
         aColEdt3.SetMax(nX);
-
-        aColEdt1.SetAccessibleName(aRowTxt);
-        aColEdt2.SetAccessibleName(aRowTxt);
-        aColEdt3.SetAccessibleName(aRowTxt);
     }
     else if(!aKeyCB1.IsChecked() &&
                 !aKeyCB2.IsChecked() &&
                     !aKeyCB3.IsChecked())
-        pCheck->Check(sal_True);
+        pCheck->Check(TRUE);
     return 0;
 }
 
@@ -471,11 +431,11 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
     if( !pColRes )
         pColRes = new CollatorRessource();
 
-    const sal_uInt16 nLstBoxCnt = 3;
+    const USHORT nLstBoxCnt = 3;
     ListBox* aLstArr[ nLstBoxCnt ] = { &aTypDLB1, &aTypDLB2, &aTypDLB3 };
-    sal_uInt16* aTypeArr[ nLstBoxCnt ] = { &nType1, &nType2, &nType3 };
+    USHORT* aTypeArr[ nLstBoxCnt ] = { &nType1, &nType2, &nType3 };
     String aOldStrArr[ nLstBoxCnt ];
-    sal_uInt16 n;
+    USHORT n;
 
     void* pUserData;
     for( n = 0; n < nLstBoxCnt; ++n )
@@ -486,7 +446,7 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
         ::lcl_ClearLstBoxAndDelUserData( *pL );
     }
 
-    sal_uInt16 nInsPos;
+    USHORT nInsPos;
     String sAlg, sUINm;
     for( long nCnt = 0, nEnd = aSeq.getLength(); nCnt <= nEnd; ++nCnt )
     {

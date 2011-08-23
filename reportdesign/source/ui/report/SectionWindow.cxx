@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
 
 namespace rptui
 {
-#define SECTION_OFFSET  3
+#define SECTION_OFFSET	3
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
@@ -78,8 +78,8 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
     m_aSplitter.SetEndSplitHdl(LINK(this, OSectionWindow,EndSplitHdl));
     m_aSplitter.SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
     m_aSplitter.SetSplitPosPixel(m_aSplitter.LogicToPixel(Size(0,_xSection->getHeight())).Height());
-
-
+    
+    
     m_aStartMarker.setCollapsedHdl(LINK(this,OSectionWindow,Collapsed));
 
     m_aStartMarker.zoom(rMapMode.GetScaleX());
@@ -108,9 +108,9 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
         aEvent.Source = xGroup;
         aEvent.PropertyName = PROPERTY_EXPRESSION;
     }
-
+    
     _propertyChanged(aEvent);
-    SetPaintTransparent(sal_True);
+    SetPaintTransparent(TRUE);
 }
 // -----------------------------------------------------------------------------
 OSectionWindow::~OSectionWindow()
@@ -125,7 +125,7 @@ OSectionWindow::~OSectionWindow()
     }
     catch (uno::Exception&)
     {
-    }
+    }	
 }
 // -----------------------------------------------------------------------------
 void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw( uno::RuntimeException)
@@ -136,20 +136,23 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
         const uno::Reference< report::XSection> xCurrentSection = m_aReportSection.getSection();
         if ( _rEvent.PropertyName.equals(PROPERTY_HEIGHT) )
         {
-            m_pParent->getView()->SetUpdateMode(sal_False);
+            m_pParent->getView()->SetUpdateMode(FALSE);
             Resize();
             m_pParent->getView()->notifySizeChanged();
             m_pParent->resize(*this);
-            m_pParent->getView()->SetUpdateMode(sal_True);
+            m_pParent->getView()->SetUpdateMode(TRUE);
             m_aStartMarker.Invalidate(INVALIDATE_NOERASE);
             m_aEndMarker.Invalidate(INVALIDATE_NOERASE);
             m_aReportSection.Invalidate(/*INVALIDATE_NOERASE*/);
             getViewsWindow()->getView()->getReportView()->getController().resetZoomType();
+            // Invalidate(INVALIDATE_NOCHILDREN | INVALIDATE_TRANSPARENT);
+            // m_pParent->Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE|INVALIDATE_TRANSPARENT);
+            // m_pParent->Invalidate(/*INVALIDATE_NOCHILDREN | INVALIDATE_NOERASE |*/ INVALIDATE_NOCHILDREN | INVALIDATE_TRANSPARENT);
         }
         else if ( _rEvent.PropertyName.equals(PROPERTY_NAME) && !xSection->getGroup().is() )
         {
             uno::Reference< report::XReportDefinition > xReport = xSection->getReportDefinition();
-            if (    setReportSectionTitle(xReport,RID_STR_REPORT_HEADER,::std::mem_fun(&OReportHelper::getReportHeader),::std::mem_fun(&OReportHelper::getReportHeaderOn))
+            if (    setReportSectionTitle(xReport,RID_STR_REPORT_HEADER,::std::mem_fun(&OReportHelper::getReportHeader),::std::mem_fun(&OReportHelper::getReportHeaderOn)) 
                 ||  setReportSectionTitle(xReport,RID_STR_REPORT_FOOTER,::std::mem_fun(&OReportHelper::getReportFooter),::std::mem_fun(&OReportHelper::getReportFooterOn))
                 ||  setReportSectionTitle(xReport,RID_STR_PAGE_HEADER,::std::mem_fun(&OReportHelper::getPageHeader),::std::mem_fun(&OReportHelper::getPageHeaderOn))
                 ||  setReportSectionTitle(xReport,RID_STR_PAGE_FOOTER,::std::mem_fun(&OReportHelper::getPageFooter),::std::mem_fun(&OReportHelper::getPageFooterOn)) )
@@ -161,7 +164,7 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
                 m_aStartMarker.Invalidate(INVALIDATE_CHILDREN);
             }
         }
-    }
+    } // if ( xSection.is() )
     else if ( _rEvent.PropertyName.equals(PROPERTY_EXPRESSION) )
     {
         uno::Reference< report::XGroup > xGroup(_rEvent.Source,uno::UNO_QUERY);
@@ -173,7 +176,7 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
     }
 }
 // -----------------------------------------------------------------------------
-bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReportDefinition>& _xReport,sal_uInt16 _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OReportHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OReportHelper> _pIsSectionOn)
+bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReportDefinition>& _xReport,USHORT _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OReportHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OReportHelper> _pIsSectionOn)
 {
     OReportHelper aReportHelper(_xReport);
     const bool bRet = _pIsSectionOn(&aReportHelper) && _pGetSection(&aReportHelper) == m_aReportSection.getSection();
@@ -182,11 +185,11 @@ bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReport
         String sTitle = String(ModuleRes(_nResId));
         m_aStartMarker.setTitle(sTitle);
         m_aStartMarker.Invalidate(INVALIDATE_CHILDREN);
-    }
+    } // if ( bRet )
     return bRet;
 }
 // -----------------------------------------------------------------------------
-bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>& _xGroup,sal_uInt16 _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OGroupHelper> _pIsSectionOn)
+bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>& _xGroup,USHORT _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OGroupHelper> _pIsSectionOn)
 {
     OGroupHelper aGroupHelper(_xGroup);
     const bool bRet = _pIsSectionOn(&aGroupHelper) && _pGetSection(&aGroupHelper) == m_aReportSection.getSection() ;
@@ -203,13 +206,14 @@ bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>&
         sTitle.SearchAndReplace('#',sExpression);
         m_aStartMarker.setTitle(sTitle);
         m_aStartMarker.Invalidate(INVALIDATE_CHILDREN);
-    }
+    } // if ( _pIsSectionOn(&aGroupHelper) )
     return bRet;
 }
 //------------------------------------------------------------------------------
 void OSectionWindow::ImplInitSettings()
 {
     SetBackground( );
+    //SetBackground( Wallpaper( COL_RED ));
 }
 //-----------------------------------------------------------------------------
 void OSectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
@@ -219,15 +223,15 @@ void OSectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        ImplInitSettings();
+        ImplInitSettings();		
         Invalidate();
     }
 }
 //------------------------------------------------------------------------------
 void OSectionWindow::Resize()
 {
-    Window::Resize();
-
+    Window::Resize();	
+    
     Size aOutputSize = GetOutputSizePixel();
     Fraction aEndWidth(long(REPORT_ENDMARKER_WIDTH));
     aEndWidth *= GetMapMode().GetScaleX();
@@ -242,9 +246,9 @@ void OSectionWindow::Resize()
         m_aStartMarker.SetPosSizePixel(aPos,aOutputSize);
     }
     else
-    {
+    {	
         const bool bShowEndMarker = m_pParent->getView()->GetTotalWidth() <= (aThumbPos.X() +  aOutputSize.Width() );
-
+        
         Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
         aStartWidth *= GetMapMode().GetScaleX();
 
@@ -305,6 +309,8 @@ IMPL_LINK( OSectionWindow, Collapsed, OColorListener *, _pMarker )
 
         m_pParent->resize(*this);
         Resize();
+        // TRY
+        // m_pParent->Invalidate(INVALIDATE_TRANSPARENT | INVALIDATE_NOCHILDREN);
         Invalidate();
     }
     return 0L;
@@ -318,19 +324,21 @@ void OSectionWindow::zoom(const Fraction& _aZoom)
     setZoomFactor(_aZoom,m_aReportSection);
     setZoomFactor(_aZoom,m_aSplitter);
     setZoomFactor(_aZoom,m_aEndMarker);
-    Invalidate();
+    //Resize();
+    Invalidate(/*INVALIDATE_UPDATE |*/ /* | INVALIDATE_TRANSPARENT *//*INVALIDATE_NOCHILDREN*/);
 }
 //-----------------------------------------------------------------------------
 IMPL_LINK( OSectionWindow, StartSplitHdl, Splitter*,  )
 {
-    const String sUndoAction( ModuleRes( RID_STR_UNDO_CHANGE_SIZE ) );
-    getViewsWindow()->getView()->getReportView()->getController().getUndoManager().EnterListAction( sUndoAction, String() );
+    const String sEmpty(ModuleRes(RID_STR_UNDO_CHANGE_SIZE));
+    getViewsWindow()->getView()->getReportView()->getController().getUndoMgr()->EnterListAction(sEmpty,String()); 
     return 0L;
 }
 //------------------------------------------------------------------------------
 IMPL_LINK( OSectionWindow, EndSplitHdl, Splitter*,  )
 {
-    getViewsWindow()->getView()->getReportView()->getController().getUndoManager().LeaveListAction();
+    getViewsWindow()->getView()->getReportView()->getController().getUndoMgr()->LeaveListAction(); 
+    /*getViewsWindow()->Resize();*/
     return 0L;
 }
 //-----------------------------------------------------------------------------
@@ -342,19 +350,22 @@ IMPL_LINK( OSectionWindow, SplitHdl, Splitter*, _pSplitter )
     }
 
     sal_Int32 nSplitPos = _pSplitter->GetSplitPosPixel();
+    const Point aPos = _pSplitter->GetPosPixel();
+    
 
     const uno::Reference< report::XSection> xSection = m_aReportSection.getSection();
     nSplitPos = m_aSplitter.PixelToLogic(Size(0,nSplitPos)).Height();
-
+    // nSplitPos = xSection->getHeight() + m_aSplitter.PixelToLogic(Size(0,nSplitPos - aPos.Y() )).Height();
+    
     const sal_Int32 nCount = xSection->getCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
         uno::Reference<report::XReportComponent> xReportComponent(xSection->getByIndex(i),uno::UNO_QUERY);
-        if ( xReportComponent.is() )
+        if ( xReportComponent.is() /*&& nSplitPos < (xReportComponent->getPositionY() + xReportComponent->getHeight())*/ )
         {
             nSplitPos = ::std::max(nSplitPos,xReportComponent->getPositionY() + xReportComponent->getHeight());
         }
-    }
+    } // for (sal_Int32 i = 0; i < nCount; ++i)
 
     if ( nSplitPos < 0 )
         nSplitPos = 0;
@@ -367,7 +378,7 @@ IMPL_LINK( OSectionWindow, SplitHdl, Splitter*, _pSplitter )
 // -----------------------------------------------------------------------------
 void lcl_scroll(Window& _rWindow,const Point& _aDelta)
 {
-    _rWindow.Scroll(-_aDelta.X(),-_aDelta.Y());
+    _rWindow.Scroll(-_aDelta.X(),-_aDelta.Y()/*,SCROLL_CHILDREN*//*|SCROLL_CLIP*/);
     _rWindow.Invalidate(INVALIDATE_TRANSPARENT);
 }
 // -----------------------------------------------------------------------------
@@ -390,11 +401,13 @@ void OSectionWindow::scrollChildren(long _nX)
     const Point aNew = aMapMode.GetOrigin();
     const Point aDiff = aOld - aNew;
     {
+        //OWindowPositionCorrector aCorrector(&m_aReportSection,-aDelta.Width(),0);
         lcl_scroll(m_aReportSection,aDiff);
     }
-
+    
+    //lcl_setOrigin(m_aEndMarker,_nDeltaX, 0);
     lcl_scroll(m_aEndMarker,m_aEndMarker.PixelToLogic(Point(_nX,0)));
-
+    
     lcl_setOrigin(m_aSplitter,_nX, 0);
     lcl_scroll(m_aSplitter,aDiff);
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@
 //------------------------------------------------------------------------
 
 ScRedComDialog::ScRedComDialog( Window* pParent, const SfxItemSet& rCoreSet,
-                    ScDocShell *pShell,ScChangeAction *pAction,sal_Bool bPrevNext)
+                    ScDocShell *pShell,ScChangeAction *pAction,BOOL bPrevNext)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, bPrevNext, true );
+        pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, bPrevNext, TRUE );
         DBG_ASSERT(pDlg, "Dialog creation failed!");
         pDocShell=pShell;
         pDlg->DontChangeAuthor();
@@ -75,7 +75,7 @@ ScChangeAction *ScRedComDialog::FindPrev(ScChangeAction *pAction)
 
         while(pAction!=NULL)
         {
-            if( pAction->GetState()==SC_CAS_VIRGIN &&
+            if(	pAction->GetState()==SC_CAS_VIRGIN &&
                 pAction->IsDialogRoot() &&
                 ScViewUtil::IsActionShown(*pAction,*pSettings,*pDoc)) break;
 
@@ -96,7 +96,7 @@ ScChangeAction *ScRedComDialog::FindNext(ScChangeAction *pAction)
 
         while(pAction!=NULL)
         {
-            if( pAction->GetState()==SC_CAS_VIRGIN &&
+            if(	pAction->GetState()==SC_CAS_VIRGIN &&
                 pAction->IsDialogRoot() &&
                 ScViewUtil::IsActionShown(*pAction,*pSettings,*pDoc)) break;
 
@@ -116,8 +116,8 @@ void ScRedComDialog::ReInit(ScChangeAction *pAction)
         pDlg->SetText(aTitle);
         aComment=pChangeAction->GetComment();
 
-        sal_Bool bNext=FindNext(pChangeAction)!=NULL;
-        sal_Bool bPrev=FindPrev(pChangeAction)!=NULL;
+        BOOL bNext=FindNext(pChangeAction)!=NULL;
+        BOOL bPrev=FindPrev(pChangeAction)!=NULL;
         pDlg->EnableTravel(bNext,bPrev);
 
         String aAuthor = pChangeAction->GetUser();
@@ -125,7 +125,7 @@ void ScRedComDialog::ReInit(ScChangeAction *pAction)
         DateTime aDT = pChangeAction->GetDateTime();
         String aDate = ScGlobal::pLocaleData->getDate( aDT );
         aDate += ' ';
-        aDate += ScGlobal::pLocaleData->getTime( aDT, false, false );
+        aDate += ScGlobal::pLocaleData->getTime( aDT, FALSE, FALSE );
 
         pDlg->ShowLastAuthor(aAuthor, aDate);
         pDlg->SetNote(aComment);

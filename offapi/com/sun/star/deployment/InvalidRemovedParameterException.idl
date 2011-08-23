@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ interface XPackage;
    called with a different value for the <code>removed</code> parameter and that
    the <type>XPackage</type> object created by that call still exist.
 
-   @since OOo 3.3
+   @since OOo 3.3.0
 */
 exception InvalidRemovedParameterException: com::sun::star::uno::Exception {
     /** the value of the <code>removed</code> parameter which was used in
@@ -49,7 +49,7 @@ exception InvalidRemovedParameterException: com::sun::star::uno::Exception {
     boolean PreviousValue;
     /**
        the <type>XPackage</type> that was already bound to the provided
-       <code>url</code> parameter during
+       <code>url</code> paramter during
        <member>XPackageRegistry::bindPackage</member>.
 
        <p>Must not be <NULL/>.</p>

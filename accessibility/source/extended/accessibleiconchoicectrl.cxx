@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ namespace accessibility
     AccessibleIconChoiceCtrl::AccessibleIconChoiceCtrl( SvtIconChoiceCtrl& _rIconCtrl, const Reference< XAccessible >& _xParent ) :
 
         VCLXAccessibleComponent( _rIconCtrl.GetWindowPeer() ),
-        m_xParent       ( _xParent )
+        m_xParent		( _xParent )
     {
         DBG_CTOR( AccessibleIconChoiceCtrl, NULL );
     }
@@ -91,7 +91,7 @@ namespace accessibility
                         SvxIconChoiceCtrlEntry* pEntry = static_cast< SvxIconChoiceCtrlEntry* >( rVclWindowEvent.GetData() );
                         if ( pEntry )
                         {
-                            sal_uLong nPos = pCtrl->GetEntryListPos( pEntry );
+                            ULONG nPos = pCtrl->GetEntryListPos( pEntry );
                             Reference< XAccessible > xChild = new AccessibleIconChoiceCtrlEntry( *pCtrl, nPos, this );
                             uno::Any aOldValue, aNewValue;
                             aNewValue <<= xChild;

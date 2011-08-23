@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,25 +42,25 @@ DBG_NAMEEX(SfxDateTimeItem)
 class SfxDateTimeItem : public SfxPoolItem
 {
 private:
-    DateTime                aDateTime;
+    DateTime				aDateTime;
 
 public:
                             TYPEINFO();
 
-                            SfxDateTimeItem( sal_uInt16 nWhich );
-                            SfxDateTimeItem( sal_uInt16 nWhich,
+                            SfxDateTimeItem( USHORT nWhich );
+                            SfxDateTimeItem( USHORT nWhich,
                                              const DateTime& rDT );
                             SfxDateTimeItem( const SfxDateTimeItem& rCpy );
 
                             ~SfxDateTimeItem() {
                                 DBG_DTOR(SfxDateTimeItem, 0); }
 
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual	int				operator==( const SfxPoolItem& ) const;
     using SfxPoolItem::Compare;
-    virtual int             Compare( const SfxPoolItem &rWith ) const;
-    virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 nItemVersion ) const;
-    virtual SvStream&       Store( SvStream&, sal_uInt16 nItemVersion ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual int				Compare( const SfxPoolItem &rWith ) const;
+    virtual SfxPoolItem*	Create( SvStream&, USHORT nItemVersion ) const;
+    virtual SvStream&		Store( SvStream&, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -69,16 +69,16 @@ public:
                                     const IntlWrapper * pIntlWrapper = 0 )
         const;
 
-    const DateTime&         GetDateTime() const { return aDateTime; }
-    void                    SetDateTime( const DateTime& rDT ) {
+    const DateTime&			GetDateTime() const { return aDateTime; }
+    void					SetDateTime( const DateTime& rDT ) {
                                 DBG_ASSERT( GetRefCount() == 0,
                                             "SetDateTime() with pooled item" );
                                 aDateTime = rDT; }
 
-    virtual bool PutValue  ( const com::sun::star::uno::Any& rVal,
-                             sal_uInt8 nMemberId = 0 );
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal,
-                             sal_uInt8 nMemberId = 0 ) const;
+    virtual	bool PutValue  ( const com::sun::star::uno::Any& rVal,
+                             BYTE nMemberId = 0 );
+    virtual	bool QueryValue( com::sun::star::uno::Any& rVal,
+                             BYTE nMemberId = 0 ) const;
 };
 
 class SfxColumnDateTimeItem : public SfxDateTimeItem
@@ -86,14 +86,14 @@ class SfxColumnDateTimeItem : public SfxDateTimeItem
 public:
                             TYPEINFO();
 
-                            SfxColumnDateTimeItem( sal_uInt16 nWhich );
-                            SfxColumnDateTimeItem( sal_uInt16 nWhich,
+                            SfxColumnDateTimeItem( USHORT nWhich );
+                            SfxColumnDateTimeItem( USHORT nWhich,
                                              const DateTime& rDT );
                             SfxColumnDateTimeItem( const SfxDateTimeItem& rCpy );
 
                             ~SfxColumnDateTimeItem() {}
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

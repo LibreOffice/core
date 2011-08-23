@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,23 +50,23 @@ class ScXMLFilterContext : public SvXMLImportContext
     com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField2> aFilterFields;
     com::sun::star::table::CellAddress aOutputPosition;
     com::sun::star::table::CellRangeAddress aConditionSourceRangeAddress;
-    sal_Int16   nUserListIndex;
-    sal_Bool    bSkipDuplicates;
-    sal_Bool    bCopyOutputData;
-    sal_Bool    bUseRegularExpressions;
-    sal_Bool    bIsCaseSensitive;
-    sal_Bool    bEnabledUserList;
-    sal_Bool    bConnectionOr;
-    sal_Bool    bNextConnectionOr;
-    sal_Bool    bConditionSourceRange;
-    Stack       aConnectionOrStack;
+    sal_Int16	nUserListIndex;
+    sal_Bool	bSkipDuplicates;
+    sal_Bool	bCopyOutputData;
+    sal_Bool	bUseRegularExpressions;
+    sal_Bool	bIsCaseSensitive;
+    sal_Bool	bEnabledUserList;
+    sal_Bool	bConnectionOr;
+    sal_Bool	bNextConnectionOr;
+    sal_Bool	bConditionSourceRange;
+    Stack		aConnectionOrStack;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
 
-    ScXMLFilterContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLFilterContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -74,7 +74,7 @@ public:
 
     virtual ~ScXMLFilterContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -101,7 +101,7 @@ class ScXMLAndContext : public SvXMLImportContext
 
 public:
 
-    ScXMLAndContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLAndContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -109,7 +109,7 @@ public:
 
     virtual ~ScXMLAndContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -126,7 +126,7 @@ class ScXMLOrContext : public SvXMLImportContext
 
 public:
 
-    ScXMLOrContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLOrContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -134,7 +134,7 @@ public:
 
     virtual ~ScXMLOrContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -149,15 +149,15 @@ class ScXMLConditionContext : public SvXMLImportContext
     rtl::OUString sDataType;
     rtl::OUString sConditionValue;
     rtl::OUString sOperator;
-    sal_Int32   nField;
-    sal_Bool    bIsCaseSensitive;
+    sal_Int32	nField;
+    sal_Bool	bIsCaseSensitive;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
 
-    ScXMLConditionContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLConditionContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -165,7 +165,7 @@ public:
 
     virtual ~ScXMLConditionContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -178,29 +178,29 @@ public:
 
 class ScXMLDPFilterContext : public SvXMLImportContext
 {
-    ScXMLDataPilotTableContext* pDataPilotTable;
+    ScXMLDataPilotTableContext*	pDataPilotTable;
 
-    ScQueryParam    aFilterFields;
-    ScAddress       aOutputPosition;
-    ScRange         aConditionSourceRangeAddress;
-    sal_uInt8   nFilterFieldCount;
-    sal_Int16   nUserListIndex;
-    sal_Bool    bSkipDuplicates;
-    sal_Bool    bCopyOutputData;
-    sal_Bool    bUseRegularExpressions;
-    sal_Bool    bIsCaseSensitive;
-    sal_Bool    bEnabledUserList;
-    sal_Bool    bConnectionOr;
-    sal_Bool    bNextConnectionOr;
-    sal_Bool    bConditionSourceRange;
-    Stack       aConnectionOrStack;
+    ScQueryParam	aFilterFields;
+    ScAddress		aOutputPosition;
+    ScRange			aConditionSourceRangeAddress;
+    sal_uInt8	nFilterFieldCount;
+    sal_Int16	nUserListIndex;
+    sal_Bool	bSkipDuplicates;
+    sal_Bool	bCopyOutputData;
+    sal_Bool	bUseRegularExpressions;
+    sal_Bool	bIsCaseSensitive;
+    sal_Bool	bEnabledUserList;
+    sal_Bool	bConnectionOr;
+    sal_Bool	bNextConnectionOr;
+    sal_Bool	bConditionSourceRange;
+    Stack		aConnectionOrStack;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
 
-    ScXMLDPFilterContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDPFilterContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -208,7 +208,7 @@ public:
 
     virtual ~ScXMLDPFilterContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -234,7 +234,7 @@ class ScXMLDPAndContext : public SvXMLImportContext
 
 public:
 
-    ScXMLDPAndContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDPAndContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -242,7 +242,7 @@ public:
 
     virtual ~ScXMLDPAndContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -259,7 +259,7 @@ class ScXMLDPOrContext : public SvXMLImportContext
 
 public:
 
-    ScXMLDPOrContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDPOrContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -267,7 +267,7 @@ public:
 
     virtual ~ScXMLDPOrContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -282,15 +282,15 @@ class ScXMLDPConditionContext : public SvXMLImportContext
     rtl::OUString sDataType;
     rtl::OUString sConditionValue;
     rtl::OUString sOperator;
-    sal_Int32   nField;
-    sal_Bool    bIsCaseSensitive;
+    sal_Int32	nField;
+    sal_Bool	bIsCaseSensitive;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
 
-    ScXMLDPConditionContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLDPConditionContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -298,7 +298,7 @@ public:
 
     virtual ~ScXMLDPConditionContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

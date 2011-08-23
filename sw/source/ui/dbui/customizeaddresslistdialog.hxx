@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,9 @@
 #include <vcl/lstbox.hxx>
 
 struct SwCSVData;
+/*-- 08.04.2004 14:04:39---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 class SwCustomizeAddressListDialog : public SfxModalDialog
 {
     FixedText               m_aFieldsFT;
@@ -68,7 +70,9 @@ public:
 
     SwCSVData*    GetNewData();
 };
+/*-- 13.04.2004 13:30:21---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 class SwAddRenameEntryDialog : public SfxModalDialog
 {
     FixedText               m_aFieldNameFT;

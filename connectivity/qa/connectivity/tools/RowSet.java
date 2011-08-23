@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.io.XInputStream;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XArray;
@@ -49,6 +48,7 @@ import com.sun.star.util.Time;
 
 public class RowSet implements XRowSet, XRow
 {
+    private XMultiServiceFactory    m_orb;
     private XRowSet                 m_rowSet;
     private XRow                    m_row;
     private XPropertySet            m_rowSetProps;
@@ -57,13 +57,14 @@ public class RowSet implements XRowSet, XRow
     {
         try
         {
-            m_rowSetProps = UnoRuntime.queryInterface( XPropertySet.class, _orb.createInstance( "com.sun.star.sdb.RowSet" ) );
+            m_rowSetProps = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet.class, _orb.createInstance("com.sun.star.sdb.RowSet") );
             m_rowSetProps.setPropertyValue( "DataSourceName", _dataSource );
             m_rowSetProps.setPropertyValue( "CommandType", new Integer( _commandType ) );
             m_rowSetProps.setPropertyValue( "Command", _command );
 
-            m_rowSet = UnoRuntime.queryInterface( XRowSet.class, m_rowSetProps );
-            m_row = UnoRuntime.queryInterface( XRow.class, m_rowSetProps );
+            m_rowSet = (XRowSet)UnoRuntime.queryInterface( XRowSet.class, m_rowSetProps );
+            m_row = (XRow)UnoRuntime.queryInterface( XRow.class, m_rowSetProps );
         }
         catch ( Exception e )
         {
@@ -287,13 +288,5 @@ public class RowSet implements XRowSet, XRow
     public XArray getArray(int i) throws SQLException
     {
         return m_row.getArray(i);
-    }
-
-    public void dispose()
-    {
-        if ( m_rowSet == null )
-            return;
-        XComponent rowSetComp = UnoRuntime.queryInterface( XComponent.class, m_rowSet );
-        rowSetComp.dispose();
     }
 };

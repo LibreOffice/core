@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ SdrPage* DlgEdPage::Clone() const
 
 //----------------------------------------------------------------------------
 
-SdrObject* DlgEdPage::SetObjectOrdNum(sal_uLong nOldObjNum, sal_uLong nNewObjNum)
+SdrObject* DlgEdPage::SetObjectOrdNum(ULONG nOldObjNum, ULONG nNewObjNum)
 {
     SdrObject* pObj = SdrPage::SetObjectOrdNum( nOldObjNum, nNewObjNum );
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,11 +43,11 @@
 // #define TOKEN_INDEX_FOR_HASDIALOG      2
 
 using namespace ::com::sun::star::lang          ;   // XMultiServiceFactory
-using namespace ::com::sun::star::container     ;   // XNameAccess
-using namespace ::com::sun::star::uno           ;   // Reference
-using namespace ::com::sun::star::beans         ;   // PropertyValue
+using namespace ::com::sun::star::container		;	// XNameAccess
+using namespace ::com::sun::star::uno			;	// Reference
+using namespace ::com::sun::star::beans			;	// PropertyValue
 using namespace ::utl                           ;   // getProcessServiceFactory();
-using ::rtl::OUString;
+using namespace ::rtl							;
 
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalPixelFilterNameList[] =
 {
@@ -107,7 +107,7 @@ sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUSt
             if ( sFilterName.EqualsIgnoreCaseAscii( *pPtr ) )
                 bIsPixelFormat = sal_True;
         }
-        String aTemp( OUString(RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "?" ) )) );
+        String aTemp( OUString::createFromAscii( SVLIBRARY( "?" ) ) );
         xub_StrLen nIndex = aTemp.Search( (sal_Unicode)'?' );
         aTemp.Replace( nIndex, 1, sFilterName );
         sFilterName = aTemp;
@@ -151,7 +151,7 @@ Reference< XInterface > openConfig(const char* sPackage)
     {
         // get access to config API (not to file!)
         Reference< XMultiServiceFactory > xConfigProvider( xSMGR->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ))), UNO_QUERY);
+            OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")), UNO_QUERY);
 
         if (xConfigProvider.is())
         {
@@ -159,16 +159,16 @@ Reference< XInterface > openConfig(const char* sPackage)
             PropertyValue   aParam    ;
 
             // define cfg path for open
-            aParam.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
+            aParam.Name = OUString::createFromAscii("nodepath");
             if (TYPEPKG.equalsIgnoreAsciiCaseAscii(sPackage))
-                aParam.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.TypeDetection.Types/Types" ));
+                aParam.Value <<= OUString::createFromAscii("/org.openoffice.TypeDetection.Types/Types");
             if (FILTERPKG.equalsIgnoreAsciiCaseAscii(sPackage))
-                aParam.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.TypeDetection.GraphicFilter/Filters" ));
+                aParam.Value <<= OUString::createFromAscii("/org.openoffice.TypeDetection.GraphicFilter/Filters");
             lParams[0] = makeAny(aParam);
 
             // get access to file
             xCfg = xConfigProvider->createInstanceWithArguments(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" )), lParams);
+                OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"), lParams);
         }
     }
     catch(const RuntimeException&)
@@ -313,9 +313,9 @@ void FilterConfigCache::ImplInitSmart()
     const char** pPtr;
     for ( pPtr = InternalFilterListForSvxLight; *pPtr; pPtr++ )
     {
-        FilterConfigCacheEntry  aEntry;
+        FilterConfigCacheEntry	aEntry;
 
-        OUString    sExtension( OUString::createFromAscii( *pPtr++ ) );
+        OUString	sExtension( OUString::createFromAscii( *pPtr++ ) );
 
         aEntry.lExtensionList.realloc( 1 );
         aEntry.lExtensionList[ 0 ] = sExtension;
@@ -326,7 +326,7 @@ void FilterConfigCache::ImplInitSmart()
         ByteString sFlags( *pPtr++ );
         aEntry.nFlags = sFlags.ToInt32();
 
-        OUString    sUserData( OUString::createFromAscii( *pPtr ) );
+        OUString	sUserData( OUString::createFromAscii( *pPtr ) );
         aEntry.CreateFilterName( sUserData );
 
         if ( aEntry.nFlags & 1 )

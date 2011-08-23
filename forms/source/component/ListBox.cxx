@@ -2,7 +2,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,8 +64,6 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/svapp.hxx>
-
-#include <boost/optional.hpp>
 
 #include <algorithm>
 #include <functional>
@@ -341,7 +339,7 @@ namespace frm
         break;
 
         case PROPERTY_ID_VALUE_SEQ :
-            OSL_FAIL( "ValueItemList is read-only!" );
+            OSL_ENSURE( false, "ValueItemList is read-only!" );
             throw PropertyVetoException();
 
         case PROPERTY_ID_DEFAULT_SELECT_SEQ :
@@ -392,7 +390,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_VALUE_SEQ :
-            OSL_FAIL( "ValueItemList is read-only!" );
+            OSL_ENSURE( false, "ValueItemList is read-only!" );
             throw PropertyVetoException();
 
         case PROPERTY_ID_DEFAULT_SELECT_SEQ :
@@ -413,7 +411,7 @@ namespace frm
     void SAL_CALL OListBoxModel::setPropertyValues( const Sequence< ::rtl::OUString >& _rPropertyNames, const Sequence< Any >& _rValues ) throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
     {
         // if both SelectedItems and StringItemList are set, care for this
-        // #i27024#
+        // #i27024# / 2004-04-05 / fs@openoffice.org
         const Any* pSelectSequenceValue = NULL;
 
         const ::rtl::OUString* pStartPos = _rPropertyNames.getConstArray();
@@ -546,7 +544,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OComboBoxModel::read: caught an exception while examining the aggregate's string item list!" );
+            OSL_ENSURE( sal_False, "OComboBoxModel::read: caught an exception while examining the aggregate's string item list!" );
         }
 
         // Version
@@ -555,7 +553,7 @@ namespace frm
 
         if (nVersion > 0x0004)
         {
-            OSL_FAIL("OListBoxModel::read : invalid (means unknown) version !");
+            DBG_ERROR("OListBoxModel::read : invalid (means unknown) version !");
             ValueList().swap(m_aListSourceValues);
             m_aBoundColumn <<= (sal_Int16)0;
             ValueList().swap(m_aBoundValues);
@@ -680,13 +678,9 @@ namespace frm
             return;
         }
 
-        ::boost::optional< sal_Int16 > aBoundColumn;
-        if ( m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT )
-        {
-            sal_Int16 nBoundColumn( 0 );
+        sal_Int16 nBoundColumn = 0;
+        if (m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT)
             m_aBoundColumn >>= nBoundColumn;
-            aBoundColumn.reset( nBoundColumn );
-        }
 
         ::utl::SharedUNOComponent< XResultSet > xListCursor;
         try
@@ -710,14 +704,14 @@ namespace frm
                     ::rtl::OUString aFieldName;
                     ::rtl::OUString aBoundFieldName;
 
-                    if ( !!aBoundColumn && ( *aBoundColumn >= 0 ) && xFieldsByIndex.is() )
+                    if ((nBoundColumn > 0) && xFieldsByIndex.is())
                     {
-                        if ( *aBoundColumn >= xFieldsByIndex->getCount() )
+                        if (xFieldsByIndex->getCount() <= nBoundColumn)
                             break;
 
-                        Reference<XPropertySet> xFieldAsSet(xFieldsByIndex->getByIndex( *aBoundColumn ),UNO_QUERY);
+                        Reference<XPropertySet> xFieldAsSet(xFieldsByIndex->getByIndex(nBoundColumn),UNO_QUERY);
                         xFieldAsSet->getPropertyValue(PROPERTY_NAME) >>= aBoundFieldName;
-                        aBoundColumn.reset( 1 );
+                        nBoundColumn = 1;
 
                         xFieldAsSet.set(xFieldsByIndex->getByIndex(0),UNO_QUERY);
                         xFieldAsSet->getPropertyValue(PROPERTY_NAME) >>= aFieldName;
@@ -750,17 +744,17 @@ namespace frm
 
                     Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
                     ::rtl::OUString aQuote = xMeta->getIdentifierQuoteString();
-                    ::rtl::OUString aStatement(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
+                    ::rtl::OUString aStatement = ::rtl::OUString::createFromAscii("SELECT ");
                     if (!aBoundFieldName.getLength())   // act like a combobox
-                        aStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DISTINCT ") );
+                        aStatement += ::rtl::OUString::createFromAscii("DISTINCT ");
 
                     aStatement += quoteName(aQuote,aFieldName);
                     if (aBoundFieldName.getLength())
                     {
-                        aStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", ") );
+                        aStatement += ::rtl::OUString::createFromAscii(", ");
                         aStatement += quoteName(aQuote, aBoundFieldName);
                     }
-                    aStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM ") );
+                    aStatement += ::rtl::OUString::createFromAscii(" FROM ");
 
                     ::rtl::OUString sCatalog, sSchema, sTable;
                     qualifiedNameComponents( xMeta, sListSource, sCatalog, sSchema, sTable, eInDataManipulation );
@@ -847,12 +841,12 @@ namespace frm
 
                     // Feld der BoundColumn des ResultSets holen
                     m_nBoundColumnType = DataType::SQLNULL;
-                    if ( !!aBoundColumn && ( *aBoundColumn >= 0 ) && m_xColumn.is() )
+                    if ( ( nBoundColumn > 0 ) && m_xColumn.is() )
                     {   // don't look for a bound column if we're not connected to a field
                         try
                         {
-                            Reference< XPropertySet > xBoundField( xColumns->getByIndex( *aBoundColumn ), UNO_QUERY_THROW );
-                            OSL_VERIFY( xBoundField->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type") ) ) >>= m_nBoundColumnType );
+                            Reference< XPropertySet > xBoundField( xColumns->getByIndex( nBoundColumn ), UNO_QUERY_THROW );
+                            OSL_VERIFY( xBoundField->getPropertyValue( ::rtl::OUString::createFromAscii( "Type" ) ) >>= m_nBoundColumnType );
                         }
                         catch( const Exception& )
                         {
@@ -875,7 +869,7 @@ namespace frm
 
                         if ( impl_hasBoundComponent() )
                         {
-                            aBoundValue.fill( *aBoundColumn + 1, m_nBoundColumnType, xCursorRow );
+                            aBoundValue.fill( nBoundColumn + 1, m_nBoundColumnType, xCursorRow );
                             aValueList.push_back( aBoundValue );
                         }
 
@@ -900,7 +894,7 @@ namespace frm
                 }
                 break;
                 default:
-                    OSL_FAIL( "OListBoxModel::loadData: unreachable!" );
+                    OSL_ENSURE( false, "OListBoxModel::loadData: unreachable!" );
                     break;
             }
         }
@@ -1002,7 +996,7 @@ namespace frm
         size_t selectedValue = aSelectedIndices[0];
         if ( selectedValue >= aValues.size() )
         {
-            OSL_FAIL( "OListBoxModel::getFirstSelectedValue: inconsistent selection/valuelist!" );
+            OSL_ENSURE( false, "OListBoxModel::getFirstSelectedValue: inconsistent selection/valuelist!" );
             return s_aEmptyVaue;
         }
 
@@ -1041,7 +1035,7 @@ namespace frm
         Reference< XPropertySet > xBoundField( getField() );
         if ( !xBoundField.is() )
         {
-            OSL_FAIL( "OListBoxModel::translateDbColumnToControlValue: no field? How could that happen?!" );
+            OSL_ENSURE( false, "OListBoxModel::translateDbColumnToControlValue: no field? How could that happen?!" );
             return Any();
         }
 
@@ -1149,7 +1143,7 @@ namespace frm
             default:
                 break;
             }
-            OSL_FAIL( "lcl_getCurrentExchangeType: unsupported (unexpected) exchange type!" );
+            OSL_ENSURE( false, "lcl_getCurrentExchangeType: unsupported (unexpected) exchange type!" );
             return eEntry;
         }
     }

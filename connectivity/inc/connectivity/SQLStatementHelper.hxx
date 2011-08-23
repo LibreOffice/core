@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: dbtools.hxx,v $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +48,7 @@ namespace dbtools
     };
 
 //.........................................................................
-}   // namespace dbtools
+}	// namespace dbtools
 //.........................................................................
 
 #endif // _CONNECTIVITY_SQLSTATEMENTHELPER_HXX_

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ public:
     SwXFlatParagraph( SwTxtNode& rTxtNode, rtl::OUString aExpandText, const ModelToViewHelper::ConversionMap* pConversionMap );
     virtual ~SwXFlatParagraph();
 
-    virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual 	::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();
     virtual void SAL_CALL release(  ) throw();
 
@@ -123,9 +123,8 @@ public:
     virtual css::uno::Reference< css::text::XFlatParagraph > SAL_CALL getParaBefore(const css::uno::Reference< css::text::XFlatParagraph > & xPara) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
     virtual css::uno::Reference< css::text::XFlatParagraph > SAL_CALL getParaAfter(const css::uno::Reference< css::text::XFlatParagraph > & xPara) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
 
-protected:
     // SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
+    virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
 private:
     SwXFlatParagraphIterator( const SwXFlatParagraphIterator & ); // not defined
@@ -138,9 +137,9 @@ private:
     const sal_Int32 mnType;
     const sal_Bool mbAutomatic;
 
-    sal_uLong mnCurrentNode;    // used for non-automatic mode
-    sal_uLong mnStartNode;      // used for non-automatic mode
-    sal_uLong mnEndNode;        // used for non-automatic mode
+    ULONG mnCurrentNode;    // used for non-automatic mode
+    ULONG mnStartNode;      // used for non-automatic mode
+    ULONG mnEndNode;        // used for non-automatic mode
     sal_Bool mbWrapped;     // used for non-automatic mode
 };
 

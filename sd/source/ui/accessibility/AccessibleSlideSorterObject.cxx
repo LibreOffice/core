@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,6 @@
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
-#include "view/SlsLayouter.hxx"
-#include "view/SlsPageObjectLayouter.hxx"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
@@ -141,7 +139,7 @@ Reference<XAccessibleContext> SAL_CALL
 
 //===== XAccessibleContext ====================================================
 
-sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleChildCount (void)
+sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleChildCount (void) 
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -151,7 +149,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleChildCount (void)
 
 
 
-Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleChild (sal_Int32 )
+Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleChild (sal_Int32 ) 
     throw (lang::IndexOutOfBoundsException, RuntimeException)
 {
     ThrowIfDisposed();
@@ -161,7 +159,7 @@ Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleChild 
 
 
 
-Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleParent (void)
+Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleParent (void) 
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -171,7 +169,7 @@ Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleParent
 
 
 
-sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleIndexInParent()
+sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleIndexInParent() 
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -185,7 +183,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleIndexInParent()
         {
             sal_Int32 nChildCount (xParentContext->getAccessibleChildCount());
             for (sal_Int32 i=0; i<nChildCount; ++i)
-                if (xParentContext->getAccessibleChild(i).get()
+                if (xParentContext->getAccessibleChild(i).get() 
                     == static_cast<XAccessible*>(this))
                 {
                     nIndexInParent = i;
@@ -193,14 +191,14 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleIndexInParent()
                 }
         }
     }
-
+   
     return nIndexInParent;
 }
 
 
 
 
-sal_Int16 SAL_CALL AccessibleSlideSorterObject::getAccessibleRole (void)
+sal_Int16 SAL_CALL AccessibleSlideSorterObject::getAccessibleRole (void) 
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -211,7 +209,7 @@ sal_Int16 SAL_CALL AccessibleSlideSorterObject::getAccessibleRole (void)
 
 
 
-::rtl::OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleDescription (void)
+::rtl::OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleDescription (void) 
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -221,7 +219,7 @@ sal_Int16 SAL_CALL AccessibleSlideSorterObject::getAccessibleRole (void)
 
 
 
-::rtl::OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleName (void)
+::rtl::OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleName (void) 
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -238,7 +236,7 @@ sal_Int16 SAL_CALL AccessibleSlideSorterObject::getAccessibleRole (void)
 
 
 Reference<XAccessibleRelationSet> SAL_CALL
-    AccessibleSlideSorterObject::getAccessibleRelationSet (void)
+    AccessibleSlideSorterObject::getAccessibleRelationSet (void) 
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -249,7 +247,7 @@ Reference<XAccessibleRelationSet> SAL_CALL
 
 
 Reference<XAccessibleStateSet> SAL_CALL
-    AccessibleSlideSorterObject::getAccessibleStateSet (void)
+    AccessibleSlideSorterObject::getAccessibleStateSet (void) 
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -281,7 +279,7 @@ Reference<XAccessibleStateSet> SAL_CALL
 
 
 
-lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale (void)
+lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale (void) 
     throw (IllegalAccessibleComponentStateException,
         RuntimeException)
 {
@@ -294,8 +292,8 @@ lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale (void)
             return xParentContext->getLocale ();
     }
 
-    //  No locale and no parent.  Therefore throw exception to indicate this
-    //  cluelessness.
+    //	No locale and no parent.  Therefore throw exception to indicate this
+    //	cluelessness.
     throw IllegalAccessibleComponentStateException();
 }
 
@@ -306,7 +304,7 @@ lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale (void)
 //===== XAccessibleEventBroadcaster ===========================================
 
 void SAL_CALL AccessibleSlideSorterObject::addEventListener(
-    const Reference<XAccessibleEventListener>& rxListener)
+    const Reference<XAccessibleEventListener>& rxListener) 
     throw (RuntimeException)
 {
     if (rxListener.is())
@@ -331,7 +329,7 @@ void SAL_CALL AccessibleSlideSorterObject::addEventListener(
 
 
 void SAL_CALL AccessibleSlideSorterObject::removeEventListener(
-    const Reference<XAccessibleEventListener>& rxListener)
+    const Reference<XAccessibleEventListener>& rxListener) 
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -357,7 +355,7 @@ void SAL_CALL AccessibleSlideSorterObject::removeEventListener(
 
 //===== XAccessibleComponent ==================================================
 
-sal_Bool SAL_CALL AccessibleSlideSorterObject::containsPoint(const awt::Point& aPoint)
+sal_Bool SAL_CALL AccessibleSlideSorterObject::containsPoint(const awt::Point& aPoint) 
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -372,7 +370,7 @@ sal_Bool SAL_CALL AccessibleSlideSorterObject::containsPoint(const awt::Point& a
 
 
 Reference<XAccessible> SAL_CALL
-    AccessibleSlideSorterObject::getAccessibleAtPoint(const awt::Point& )
+    AccessibleSlideSorterObject::getAccessibleAtPoint(const awt::Point& ) 
     throw (uno::RuntimeException)
 {
     return NULL;
@@ -381,18 +379,17 @@ Reference<XAccessible> SAL_CALL
 
 
 
-awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds (void)
+awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds (void) 
     throw (RuntimeException)
 {
     ThrowIfDisposed ();
 
     const SolarMutexGuard aSolarGuard;
 
-    Rectangle aBBox (
-        mrSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetBoundingBox(
-            mrSlideSorter.GetModel().GetPageDescriptor(mnPageNumber),
-            ::sd::slidesorter::view::PageObjectLayouter::PageObject,
-            ::sd::slidesorter::view::PageObjectLayouter::WindowCoordinateSystem));
+    Rectangle aBBox (mrSlideSorter.GetView().GetPageBoundingBox (
+        mnPageNumber,
+        ::sd::slidesorter::view::SlideSorterView::CS_SCREEN,
+        ::sd::slidesorter::view::SlideSorterView::BBT_INFO));
 
     if (mxParent.is())
     {
@@ -418,7 +415,7 @@ awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds (void)
 
 
 
-awt::Point SAL_CALL AccessibleSlideSorterObject::getLocation ()
+awt::Point SAL_CALL AccessibleSlideSorterObject::getLocation () 
     throw (RuntimeException)
 {
     ThrowIfDisposed ();
@@ -429,7 +426,7 @@ awt::Point SAL_CALL AccessibleSlideSorterObject::getLocation ()
 
 
 
-awt::Point SAL_CALL AccessibleSlideSorterObject::getLocationOnScreen (void)
+awt::Point SAL_CALL AccessibleSlideSorterObject::getLocationOnScreen (void) 
     throw (RuntimeException)
 {
     ThrowIfDisposed ();
@@ -455,7 +452,7 @@ awt::Point SAL_CALL AccessibleSlideSorterObject::getLocationOnScreen (void)
 
 
 
-awt::Size SAL_CALL AccessibleSlideSorterObject::getSize (void)
+awt::Size SAL_CALL AccessibleSlideSorterObject::getSize (void) 
     throw (RuntimeException)
 {
     ThrowIfDisposed ();
@@ -466,7 +463,7 @@ awt::Size SAL_CALL AccessibleSlideSorterObject::getSize (void)
 
 
 
-void SAL_CALL AccessibleSlideSorterObject::grabFocus (void)
+void SAL_CALL AccessibleSlideSorterObject::grabFocus (void) 
     throw (RuntimeException)
 {
     // nothing to do
@@ -480,18 +477,18 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getForeground (void)
 {
     ThrowIfDisposed ();
     svtools::ColorConfig aColorConfig;
-    sal_uInt32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
+    UINT32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
     return static_cast<sal_Int32>(nColor);
 }
 
 
 
 
-sal_Int32 SAL_CALL AccessibleSlideSorterObject::getBackground (void)
+sal_Int32 SAL_CALL AccessibleSlideSorterObject::getBackground (void) 
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
-    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,19 +42,19 @@ namespace abp
     class AdminDialogInvokationPage : public AddressBookSourcePage
     {
     protected:
-        FixedText       m_aExplanation;
-        PushButton      m_aInvokeAdminDialog;
-        FixedText       m_aErrorMessage;
+        FixedText		m_aExplanation;
+        PushButton		m_aInvokeAdminDialog;
+        FixedText		m_aErrorMessage;
 
-        sal_Bool        m_bSuccessfullyExecutedDialog;
+        sal_Bool		m_bSuccessfullyExecutedDialog;
 
     public:
         AdminDialogInvokationPage( OAddessBookSourcePilot* _pParent );
 
     protected:
         // TabDialog overridables
-        virtual void        ActivatePage();
-        virtual void        initializePage();
+        virtual void		ActivatePage();
+        virtual void		initializePage();
 
         // OImportPage overridables
         virtual bool        canAdvance() const;
@@ -67,7 +67,7 @@ namespace abp
     };
 
 //.........................................................................
-}   // namespace abp
+}	// namespace abp
 //.........................................................................
 
 #endif // EXTENSIONS_ABP_ADMINDIALOG_INVOKATION_PAGE_HXX

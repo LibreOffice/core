@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ namespace connectivity
                         sal_Int32 id;
                         MacabHeader *record;
                     public:
-                        iterator& operator= (MacabHeader *_record);
+                        void operator= (MacabHeader *_record);
                         iterator();
                         ~iterator();
                         void operator++ ();

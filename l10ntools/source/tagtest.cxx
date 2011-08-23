@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,18 +37,18 @@
 
 #include "gsicheck.hxx"
 
-#define HAS_FLAG( nFlags, nFlag )       ( ( nFlags & nFlag ) != 0 )
-#define SET_FLAG( nFlags, nFlag )       ( nFlags |= nFlag )
-#define RESET_FLAG( nFlags, nFlag )     ( nFlags &= ~nFlag )    // ~ = Bitweises NOT
+#define HAS_FLAG( nFlags, nFlag )		( ( nFlags & nFlag ) != 0 )
+#define SET_FLAG( nFlags, nFlag )		( nFlags |= nFlag )
+#define RESET_FLAG( nFlags, nFlag )		( nFlags &= ~nFlag )	// ~ = Bitweises NOT
 
 
 
-TokenInfo::TokenInfo( TokenId pnId, sal_uInt16 nP, String paStr, ParserMessageList &rErrorList )
-: bClosed(sal_False)
-, bCloseTag(sal_False)
-, bIsBroken(sal_False)
-, bHasBeenFixed(sal_False)
-, bDone(sal_False)
+TokenInfo::TokenInfo( TokenId pnId, USHORT nP, String paStr, ParserMessageList &rErrorList )
+: bClosed(FALSE)
+, bCloseTag(FALSE)
+, bIsBroken(FALSE)
+, bHasBeenFixed(FALSE)
+, bDone(FALSE)
 , aTokenString( paStr )
 , nId( pnId )
 , nPos(nP)
@@ -91,14 +91,14 @@ CLOSETAG_HAS_TAG_NAME  '>' ->  FINISHED
 */
 void TokenInfo::SplitTag( ParserMessageList &rErrorList )
 {
-    sal_uInt16 nLastPos = 2;    // skip initial  \<
-    sal_uInt16 nCheckPos = nLastPos;
+    USHORT nLastPos = 2;    // skip initial  \<
+    USHORT nCheckPos = nLastPos;
     String aDelims( String::CreateFromAscii( " \\=>/" ) );
     String aPortion;
     String aValue;      // store the value of a property
-    ByteString aName;   // store the name of a property/tag
-    sal_Bool bCheckName = sal_False;
-    sal_Bool bCheckEmpty = sal_False;
+    ByteString aName;   // store the name of a property/tag 
+    BOOL bCheckName = FALSE;
+    BOOL bCheckEmpty = FALSE;
     sal_Unicode cDelim;
     tagcheck aState = TC_START;
 
@@ -112,7 +112,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
         aPortion = aTokenString.Copy( nLastPos, nCheckPos-nLastPos );
 
         if ( aTokenString.GetChar( nCheckPos ) == '\\' )
-            nCheckPos++;
+            nCheckPos++;         
 
         cDelim = aTokenString.GetChar( nCheckPos );
         nCheckPos++;
@@ -127,9 +127,9 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                 switch ( cDelim )
                 {
                     case ' ':  aState = TC_HAS_TAG_NAME;
-                               bCheckName = sal_True;
+                               bCheckName = TRUE;
                                break;
-                    case '/':
+                    case '/':  
                         {
                             if ( aPortion.Len() == 0 )
                             {
@@ -138,12 +138,12 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                             else
                             {
                                 aState = TC_CLOSED;
-                                bCheckName = sal_True;
+                                bCheckName = TRUE;
                             }
                         }
                         break;
                     case '>':  aState = TC_FINISHED;
-                               bCheckName = sal_True;
+                               bCheckName = TRUE;
                                break;
                     default:   aState = TC_ERROR;
                 }
@@ -157,16 +157,16 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                 switch ( cDelim )
                 {
                     case '=':  aState = TC_HAS_PROP_NAME_EQ;
-                               bCheckName = sal_True;
+                               bCheckName = TRUE;
                                break;
                     case ' ':  aState = TC_HAS_PROP_NAME_SP;
-                               bCheckName = sal_True;
+                               bCheckName = TRUE;
                                break;
                     case '/':  aState = TC_CLOSED;
-                               bCheckEmpty = sal_True;
+                               bCheckEmpty = TRUE;
                                break;
                     case '>':  aState = TC_FINISHED;
-                               bCheckEmpty = sal_True;
+                               bCheckEmpty = TRUE;
                                break;
                     default:   aState = TC_ERROR;
                 }
@@ -177,7 +177,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                 switch ( cDelim )
                 {
                     case '=':  aState = TC_HAS_PROP_NAME_EQ;
-                               bCheckEmpty = sal_True;
+                               bCheckEmpty = TRUE;
                                break;
                     default:   aState = TC_ERROR;
                 }
@@ -189,10 +189,10 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                 switch ( cDelim )
                 {
                     case ' ':  aState = TC_HAS_PROP_NAME_EQ_SP;
-                               bCheckEmpty = sal_True;
+                               bCheckEmpty = TRUE;
                                break;
                     case '\"': aState = TC_INSIDE_STRING;
-                               bCheckEmpty = sal_True;
+                               bCheckEmpty = TRUE;
                                aValue.Erase();
                                break;
                     default:   aState = TC_ERROR;
@@ -204,7 +204,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                 switch ( cDelim )
                 {
                     case '\"': aState = TC_INSIDE_STRING;
-                               bCheckEmpty = sal_True;
+                               bCheckEmpty = TRUE;
                                aValue.Erase();
                                break;
                     default:   aState = TC_ERROR;
@@ -216,7 +216,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
             case TC_INSIDE_STRING:
                 switch ( cDelim )
                 {
-                    case '\"':
+                    case '\"': 
                         {
                             aState = TC_PROP_FINISHED;
                             aValue += aPortion;
@@ -225,18 +225,18 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                                 if ( !IsPropertyValueValid( aName, aValue ) )
                                 {
                                     rErrorList.AddError( 25, ByteString("Property '").Append(aName).Append("' has invalid value '").Append(ByteString( aValue, RTL_TEXTENCODING_UTF8 )).Append("' "), *this );
-                                    bIsBroken = sal_True;
+                                    bIsBroken = TRUE;
                                 }
                                 aProperties[ aName ] = aValue;
                             }
                             else
                             {
                                 rErrorList.AddError( 25, ByteString("Property '").Append(aName).Append("' defined twice "), *this );
-                                bIsBroken = sal_True;
+                                bIsBroken = TRUE;
                             }
                         }
                                break;
-                    default:
+                    default:   
                         {
                             aState = TC_INSIDE_STRING;
                             aValue += aPortion;
@@ -252,13 +252,13 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                 switch ( cDelim )
                 {
                     case ' ': aState = TC_HAS_TAG_NAME;
-                               bCheckEmpty = sal_True;
+                               bCheckEmpty = TRUE;
                                break;
                     case '/': aState = TC_CLOSED;
-                               bCheckEmpty = sal_True;
+                               bCheckEmpty = TRUE;
                                break;
                     case '>': aState = TC_FINISHED;
-                               bCheckEmpty = sal_True;
+                               bCheckEmpty = TRUE;
                                break;
                     default:   aState = TC_ERROR;
                 }
@@ -270,11 +270,11 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                 switch ( cDelim )
                 {
                     case ' ': aState = TC_CLOSED_SPACE;
-                               bCheckEmpty = sal_True;
-                               bClosed = sal_True;
+                               bCheckEmpty = TRUE;
+                               bClosed = TRUE;
                                break;
                     case '>': aState = TC_FINISHED;
-                               bCheckEmpty = sal_True;
+                               bCheckEmpty = TRUE;
                                break;
                     default:   aState = TC_ERROR;
                 }
@@ -285,7 +285,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                 switch ( cDelim )
                 {
                     case '>': aState = TC_FINISHED;
-                               bCheckEmpty = sal_True;
+                               bCheckEmpty = TRUE;
                                break;
                     default:   aState = TC_ERROR;
                 }
@@ -294,16 +294,16 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
 // CLOSETAG            ' ' ->  CLOSETAG_HAS_TAG_NAME
 // CLOSETAG            '>' ->  FINISHED
             case TC_CLOSETAG:
-                bCloseTag = sal_True;
+                bCloseTag = TRUE;
                 switch ( cDelim )
                 {
                     case ' ': aState = TC_CLOSETAG_HAS_TAG_NAME;
                                aTagName = aPortion;
-                               bCheckName = sal_True;
+                               bCheckName = TRUE;
                                break;
                     case '>': aState = TC_FINISHED;
                                aTagName = aPortion;
-                               bCheckName = sal_True;
+                               bCheckName = TRUE;
                                break;
                     default:   aState = TC_ERROR;
                 }
@@ -314,7 +314,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                 switch ( cDelim )
                 {
                     case '>': aState = TC_FINISHED;
-                               bCheckEmpty = sal_True;
+                               bCheckEmpty = TRUE;
                                break;
                     default:   aState = TC_ERROR;
                 }
@@ -322,7 +322,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
 
 
             default: rErrorList.AddError( 99, "Internal error Parsing Tag ", *this );
-                     bIsBroken = sal_True;
+                     bIsBroken = TRUE;
 
         }
 
@@ -331,14 +331,14 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
             if ( aPortion.Len() == 0 )
             {
                 rErrorList.AddError( 25, "Tag/Property name missing ", *this );
-                bIsBroken = sal_True;
+                bIsBroken = TRUE;
             }
             else
             {
                 aName = ByteString( aPortion, RTL_TEXTENCODING_UTF8 );
-                // "a-zA-Z_-.0-9"
+                // "a-zA-Z_-.0-9" 
                 xub_StrLen nCount;
-                sal_Bool bBroken = sal_False;
+                BOOL bBroken = FALSE;
                 const sal_Char* aBuf = aName.GetBuffer();
                 for ( nCount = 0 ; !bBroken && nCount < aName.Len() ; nCount++ )
                 {
@@ -354,11 +354,11 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                 if ( bBroken )
                 {
                     rErrorList.AddError( 25, "Found illegal character in Tag/Property name ", *this );
-                    bIsBroken = sal_True;
+                    bIsBroken = TRUE;
                 }
             }
 
-            bCheckName = sal_False;
+            bCheckName = FALSE;
         }
 
         if ( bCheckEmpty )
@@ -366,9 +366,9 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
             if ( aPortion.Len() )
             {
                 rErrorList.AddError( 25, ByteString("Found displaced characters '").Append(ByteString( aPortion, RTL_TEXTENCODING_UTF8 )).Append("' in Tag "), *this );
-                bIsBroken = sal_True;
+                bIsBroken = TRUE;
             }
-            bCheckEmpty = sal_False;
+            bCheckEmpty = FALSE;
         }
 
 
@@ -384,23 +384,23 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
     if ( aState != TC_FINISHED )
     {
         rErrorList.AddError( 25, "Parsing error in Tag ", *this );
-        bIsBroken = sal_True;
+        bIsBroken = TRUE;
     }
 }
 
-sal_Bool TokenInfo::IsPropertyRelevant( const ByteString &aName, const String &aValue ) const
+BOOL TokenInfo::IsPropertyRelevant( const ByteString &aName, const String &aValue ) const
 {
     if ( aTagName.EqualsAscii( "alt" ) && aName.Equals( "xml-lang" ) )
-        return sal_False;
+        return FALSE;
     if ( aTagName.EqualsAscii( "ahelp" ) && aName.Equals( "visibility" ) && aValue.EqualsAscii("visible") )
-        return sal_False;
+        return FALSE;
     if ( aTagName.EqualsAscii( "image" ) && (aName.Equals( "width" ) || aName.Equals( "height" )) )
-        return sal_False;
-
-    return sal_True;
+        return FALSE;
+    
+    return TRUE;
 }
 
-sal_Bool TokenInfo::IsPropertyValueValid( const ByteString &aName, const String &aValue ) const
+BOOL TokenInfo::IsPropertyValueValid( const ByteString &aName, const String &aValue ) const
 {
 /*  removed due to i56740
     if ( aTagName.EqualsAscii( "switchinline" ) && aName.Equals( "select" ) )
@@ -416,53 +416,53 @@ sal_Bool TokenInfo::IsPropertyValueValid( const ByteString &aName, const String 
     }
 
     // we don't know any better so we assume it to be OK
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool TokenInfo::IsPropertyInvariant( const ByteString &aName, const String &aValue ) const
+BOOL TokenInfo::IsPropertyInvariant( const ByteString &aName, const String &aValue ) const
 {
     if ( aTagName.EqualsAscii( "link" ) && aName.Equals( "name" ) )
-        return sal_False;
+        return FALSE;
     if ( aTagName.EqualsAscii( "link" ) && aName.Equals( "href" ) )
     {   // check for external reference
         if (  aValue.Copy( 0, 5 ).EqualsIgnoreCaseAscii( "http:" )
            || aValue.Copy( 0, 6 ).EqualsIgnoreCaseAscii( "https:" )
            || aValue.Copy( 0, 4 ).EqualsIgnoreCaseAscii( "ftp:" ) )
-            return sal_False;
+            return FALSE;
         else
-            return sal_True;
+            return TRUE;
     }
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool TokenInfo::IsPropertyFixable( const ByteString &aName ) const
+BOOL TokenInfo::IsPropertyFixable( const ByteString &aName ) const
 {
     // name everything that is allowed to be fixed automatically here
-    if ( (aTagName.EqualsAscii( "ahelp" ) && aName.Equals( "hid" ))
-      || (aTagName.EqualsAscii( "link" ) && aName.Equals( "href" ))
-      || (aTagName.EqualsAscii( "alt" ) && aName.Equals( "id" ))
-      || (aTagName.EqualsAscii( "variable" ) && aName.Equals( "id" ))
+    if ( (aTagName.EqualsAscii( "ahelp" ) && aName.Equals( "hid" )) 
+      || (aTagName.EqualsAscii( "link" ) && aName.Equals( "href" )) 
+      || (aTagName.EqualsAscii( "alt" ) && aName.Equals( "id" )) 
+      || (aTagName.EqualsAscii( "variable" ) && aName.Equals( "id" )) 
       || (aTagName.EqualsAscii( "image" ) && aName.Equals( "src" ))
       || (aTagName.EqualsAscii( "image" ) && aName.Equals( "id" ) ))
-        return sal_True;
-    return sal_False;
+        return TRUE;
+    return FALSE;
 }
 
-sal_Bool TokenInfo::MatchesTranslation( TokenInfo& rInfo, sal_Bool bGenErrors, ParserMessageList &rErrorList, sal_Bool bFixTags ) const
+BOOL TokenInfo::MatchesTranslation( TokenInfo& rInfo, BOOL bGenErrors, ParserMessageList &rErrorList, BOOL bFixTags ) const
 {
     // check if tags are equal
     // check if all existing properties are in the translation as well and
     // wether they have a matching content (the same in most cases)
 
     if ( nId != rInfo.nId )
-        return sal_False;
+        return FALSE;
 
     if ( !aTagName.Equals( rInfo.aTagName ) )
-        return sal_False;
+        return FALSE;
 
     // If one of the tags has formating errors already it does make no sense to check here, so return right away
     if ( bGenErrors && ( bIsBroken || rInfo.bIsBroken ) )
-        return sal_True;
+        return TRUE;
 
     StringHashMap::const_iterator iProp;
     for( iProp = aProperties.begin() ; iProp != aProperties.end(); ++iProp )
@@ -486,7 +486,7 @@ sal_Bool TokenInfo::MatchesTranslation( TokenInfo& rInfo, sal_Bool bGenErrors, P
                             else
                                 rErrorList.AddError( 25, ByteString("Property '").Append(iProp->first).Append("': value different in Translation "), *this );
                         }
-                        else return sal_False;
+                        else return FALSE;
                     }
                 }
             }
@@ -497,7 +497,7 @@ sal_Bool TokenInfo::MatchesTranslation( TokenInfo& rInfo, sal_Bool bGenErrors, P
             {
                 if ( bGenErrors )
                     rErrorList.AddError( 25, ByteString("Property '").Append(iProp->first).Append("' missing in Translation "), *this );
-                else return sal_False;
+                else return FALSE;
             }
         }
     }
@@ -509,15 +509,15 @@ sal_Bool TokenInfo::MatchesTranslation( TokenInfo& rInfo, sal_Bool bGenErrors, P
             {
                 if ( bGenErrors )
                     rErrorList.AddError( 25, ByteString("Extra Property '").Append(iProp->first).Append("' in Translation "), rInfo );
-                else return sal_False;
+                else return FALSE;
             }
         }
     }
 
-    // if we reach here eather
+    // if we reach here eather 
     //   the tags match completely or
     //   the tags match but not the properties and we generated errors for that
-    return sal_True;
+    return TRUE;
 }
 
 String TokenInfo::GetTagName() const
@@ -549,29 +549,23 @@ String TokenInfo::MakeTag() const
 }
 
 
-void ParserMessageList::AddError( sal_uInt16 nErrorNr, ByteString aErrorText, const TokenInfo &rTag )
+void ParserMessageList::AddError( USHORT nErrorNr, ByteString aErrorText, const TokenInfo &rTag )
 {
-    maList.push_back( new ParserError( nErrorNr, aErrorText, rTag ) );
+    Insert( new ParserError( nErrorNr, aErrorText, rTag ), LIST_APPEND );
 }
 
-void ParserMessageList::AddWarning( sal_uInt16 nErrorNr, ByteString aErrorText, const TokenInfo &rTag )
+void ParserMessageList::AddWarning( USHORT nErrorNr, ByteString aErrorText, const TokenInfo &rTag )
 {
-    maList.push_back( new ParserWarning( nErrorNr, aErrorText, rTag ) );
+    Insert( new ParserWarning( nErrorNr, aErrorText, rTag ), LIST_APPEND );
 }
 
-sal_Bool ParserMessageList::HasErrors()
+BOOL ParserMessageList::HasErrors()
 {
-    for ( size_t i = 0, n = maList.size(); i < n; ++i )
-        if ( maList[ i ]->IsError() )
-            return sal_True;
-    return sal_False;
-}
-
-void ParserMessageList::clear()
-{
-    for ( size_t i = 0, n = maList.size(); i < n; ++i )
-        delete maList[ i ];
-    maList.clear();
+    USHORT i;
+    for ( i=0 ; i < Count() ; i++ )
+        if ( GetObject( i )->IsError() )
+            return TRUE;
+    return FALSE;
 }
 
 struct Tag
@@ -585,7 +579,7 @@ struct Tag
 static const Tag aKnownTags[] =
 {
 /*  commenting oldstyle tags
-//  { "<#GROUP_FORMAT>", TAG_GROUP_FORMAT },
+//	{ "<#GROUP_FORMAT>", TAG_GROUP_FORMAT },
     { "<#BOLD>", TAG_BOLDON },
     { "<#/BOLD>", TAG_BOLDOFF },
     { "<#ITALIC>", TAG_ITALICON },
@@ -593,12 +587,12 @@ static const Tag aKnownTags[] =
     { "<#UNDER>", TAG_UNDERLINEON },
     { "<#/UNDER>", TAG_UNDERLINEOFF },
 
-//  { "<#GROUP_NOTALLOWED>", TAG_GROUP_NOTALLOWED },
+//	{ "<#GROUP_NOTALLOWED>", TAG_GROUP_NOTALLOWED },
     { "<#HELPID>", TAG_HELPID },
     { "<#MODIFY>", TAG_MODIFY },
     { "<#REFNR>", TAG_REFNR },
 
-//  { "<#GROUP_STRUCTURE>", TAG_GROUP_STRUCTURE },
+//	{ "<#GROUP_STRUCTURE>", TAG_GROUP_STRUCTURE },
     { "<#NAME>", TAG_NAME },
     { "<#HREF>", TAG_HREF },
     { "<#AVIS>", TAG_AVIS },
@@ -614,13 +608,13 @@ static const Tag aKnownTags[] =
     { "<#GRAPHIC>", TAG_GRAPHIC },
     { "<#NEXTVERSION>", TAG_NEXTVERSION },
 
-    //  { "<#GROUP_SYSSWITCH>", TAG_GROUP_SYSSWITCH },
+    //	{ "<#GROUP_SYSSWITCH>", TAG_GROUP_SYSSWITCH },
     { "<#WIN>", TAG_WIN },
     { "<#UNIX>", TAG_UNIX },
     { "<#MAC>", TAG_MAC },
     { "<#OS2>", TAG_OS2 },
 
-//  { "<#GROUP_PROGSWITCH>", TAG_GROUP_PROGSWITCH },
+//	{ "<#GROUP_PROGSWITCH>", TAG_GROUP_PROGSWITCH },
     { "<#WRITER>", TAG_WRITER },
     { "<#CALC>", TAG_CALC },
     { "<#DRAW>", TAG_DRAW },
@@ -631,7 +625,7 @@ static const Tag aKnownTags[] =
     { "<#CHART>", TAG_CHART },
     { "<#OFFICE>", TAG_OFFICE },
   */
-//  { "<#TAG_GROUP_META>", TAG_GROUP_META },
+//	{ "<#TAG_GROUP_META>", TAG_GROUP_META },
     { "$[officefullname]", TAG_OFFICEFULLNAME },
     { "$[officename]", TAG_OFFICENAME },
     { "$[officepath]", TAG_OFFICEPATH },
@@ -642,10 +636,10 @@ static const Tag aKnownTags[] =
     { "$[portalversion]", TAG_PORTALVERSION },
     { "$[portalshortname]", TAG_PORTALSHORTNAME },
 /*  commenting oldstyle tags
-//  { "<#TAG_GROUP_SINGLE>", TAG_GROUP_SINGLE },
+//	{ "<#TAG_GROUP_SINGLE>", TAG_GROUP_SINGLE },
     { "<#REFINSERT>", TAG_REFINSERT },
 
-//  { "<#GROUP_MULTI>", TAG_GROUP_MULTI },
+//	{ "<#GROUP_MULTI>", TAG_GROUP_MULTI },
     { "<#END>", TAG_END },
     { "<#ELSE>", TAG_ELSE },
     { "<#VERSIONEND>", TAG_VERSIONEND },
@@ -670,13 +664,13 @@ void SimpleParser::Parse( String PaSource )
     nPos = 0;
     aLastToken.Erase();
     aNextTag = TokenInfo( TAG_NOMORETAGS, TOK_INVALIDPOS );
-    aTokenList.clear();
+    aTokenList.Clear();
 };
 
 TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
 {
     TokenInfo aResult;
-    sal_uInt16 nTokenStartPos = 0;
+    USHORT nTokenStartPos = 0;
     if ( aNextTag.nId != TAG_NOMORETAGS )
     {
         aResult = aNextTag;
@@ -693,9 +687,9 @@ TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
         {
             // check for paired \" \"
             bool bEven = true;
-            sal_uInt16 nQuotePos = 0;
-            sal_uInt16 nQuotedQuotesPos = aLastToken.SearchAscii( "\\\"" );
-            sal_uInt16 nQuotedBackPos = aLastToken.SearchAscii( "\\\\" );    // this is only to kick out quoted backslashes
+            USHORT nQuotePos = 0;
+            USHORT nQuotedQuotesPos = aLastToken.SearchAscii( "\\\"" );
+            USHORT nQuotedBackPos = aLastToken.SearchAscii( "\\\\" );    // this is only to kick out quoted backslashes
             while ( nQuotedQuotesPos != STRING_NOTFOUND )
             {
                 if ( nQuotedBackPos <= nQuotedQuotesPos )
@@ -714,7 +708,7 @@ TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
             }
 
             // check if we have an end-tag or a start-tag
-            sal_uInt16 nNonBlankStartPos,nNonBlankEndPos;
+            USHORT nNonBlankStartPos,nNonBlankEndPos;
             nNonBlankStartPos = 2;
             while ( aLastToken.GetChar(nNonBlankStartPos) == ' ' )
                 nNonBlankStartPos++;
@@ -732,7 +726,7 @@ TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
         }
         else
         {
-            sal_uInt16 i = 0;
+            USHORT i = 0;
             while ( aKnownTags[i].nTag != TAG_UNKNOWN_TAG &&
                 aLastToken != aKnownTags[i].GetName() )
                 i++;
@@ -742,18 +736,24 @@ TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
 
     if ( aResult.nId == TAG_UNKNOWN_TAG )
         aResult = TokenInfo( TAG_UNKNOWN_TAG, nTokenStartPos, aLastToken );
-    aTokenList.insert( aResult );
+    aTokenList.Insert( aResult, LIST_APPEND );
     return aResult;
 }
 
-String SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, sal_uInt16 &rTagStartPos )
+String SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, USHORT &rTagStartPos )
 {
-    sal_uInt16 nStyle2StartPos = aSource.SearchAscii( "$[", nPos );
-    sal_uInt16 nStyle3StartPos = aSource.SearchAscii( "\\<", nPos );
-    sal_uInt16 nStyle4StartPos = aSource.SearchAscii( "\\\\", nPos );    // this is only to kick out quoted backslashes
+//	USHORT nStyle1StartPos = aSource.SearchAscii( "<#", nPos );
+    USHORT nStyle2StartPos = aSource.SearchAscii( "$[", nPos );
+    USHORT nStyle3StartPos = aSource.SearchAscii( "\\<", nPos );
+    USHORT nStyle4StartPos = aSource.SearchAscii( "\\\\", nPos );    // this is only to kick out quoted backslashes
 
     rTagStartPos = 0;
 
+/* removing since a \<... is not likely
+    // check if the tag starts with a letter to avoid things like <> <= ... >
+    while ( STRING_NOTFOUND != nStyle3StartPos && !( aSource.Copy( nStyle3StartPos+2, 1 ).IsAlphaAscii() || aSource.GetChar( nStyle3StartPos+2 ) == '/' ) )
+        nStyle3StartPos = aSource.SearchAscii( "\\<", nStyle3StartPos+1 );
+*/
     if ( STRING_NOTFOUND == nStyle2StartPos && STRING_NOTFOUND == nStyle3StartPos )
         return String();  // no more tokens
 
@@ -763,9 +763,21 @@ String SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, sal_uInt
         return GetNextTokenString( rErrorList, rTagStartPos );
     }
 
-    if ( nStyle2StartPos < nStyle3StartPos )
-    {   // test for $[ ... ] style tokens
-        sal_uInt16 nEndPos = aSource.SearchAscii( "]", nStyle2StartPos);
+/*	if ( nStyle1StartPos < nStyle2StartPos && nStyle1StartPos <= nStyle3StartPos )  // <= to make sure our spechial tags are recognized before all others
+    {	// test for <# ... > style tokens
+        USHORT nEndPos = aSource.SearchAscii( ">", nStyle1StartPos );
+        if ( nEndPos == STRING_NOTFOUND )
+        {   // Token is incomplete. Skip start and search for better ones
+            nPos = nStyle1StartPos +2;
+            return GetNextTokenString( rErrorList, rTagStartPos );
+        }
+        nPos = nEndPos;
+        rTagStartPos = nStyle1StartPos;
+        return aSource.Copy( nStyle1StartPos, nEndPos-nStyle1StartPos +1 ).ToUpperAscii();
+    }
+    else*/ if ( nStyle2StartPos < nStyle3StartPos )
+    {	// test for $[ ... ] style tokens
+        USHORT nEndPos = aSource.SearchAscii( "]", nStyle2StartPos);
         if ( nEndPos == STRING_NOTFOUND )
         {   // Token is incomplete. Skip start and search for better ones
             nPos = nStyle2StartPos +2;
@@ -776,9 +788,9 @@ String SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, sal_uInt
         return aSource.Copy( nStyle2StartPos, nEndPos-nStyle2StartPos +1 );
     }
     else
-    {   // test for \< ... \> style tokens
-        sal_uInt16 nEndPos = aSource.SearchAscii( "\\>", nStyle3StartPos);
-        sal_uInt16 nQuotedBackPos = aSource.SearchAscii( "\\\\", nStyle3StartPos );    // this is only to kick out quoted backslashes
+    {	// test for \< ... \> style tokens
+        USHORT nEndPos = aSource.SearchAscii( "\\>", nStyle3StartPos);
+        USHORT nQuotedBackPos = aSource.SearchAscii( "\\\\", nStyle3StartPos );    // this is only to kick out quoted backslashes
         while ( nQuotedBackPos <= nEndPos && nQuotedBackPos != STRING_NOTFOUND )
         {
             nEndPos = aSource.SearchAscii( "\\>", nQuotedBackPos +2);
@@ -805,7 +817,7 @@ String SimpleParser::GetLexem( TokenInfo const &aToken )
         return aToken.aTokenString;
     else
     {
-        sal_uInt16 i = 0;
+        USHORT i = 0;
         while ( aKnownTags[i].nTag != TAG_UNKNOWN_TAG &&
             aKnownTags[i].nTag != aToken.nId )
             i++;
@@ -830,8 +842,8 @@ void TokenParser::Parse( const String &aCode, ParserMessageList* pList )
 
     nPfCaseOptions = 0;
     nAppCaseOptions = 0;
-    bPfCaseActive = sal_False;
-    bAppCaseActive = sal_False;
+    bPfCaseActive = FALSE;
+    bAppCaseActive = FALSE;
 
     nActiveRefTypes = 0;
 
@@ -865,6 +877,11 @@ void TokenParser::Parse( const String &aCode, ParserMessageList* pList )
                     ParseError( 17, "<#UNDER> expected before <#/UNDER>.", aTag );
                 }
                 break;
+/*			case TAG_MISSPARENTHESIS:
+                {
+                    ParseError( 14, "missing closing parenthesis '>'", aTag );
+                }
+                break;*/
             case TAG_AEND:
                 {
                     ParseError( 5, "Extra Tag <#AEND>. <#AVIS> or <#AHID> expected.", aTag );
@@ -961,11 +978,11 @@ void TokenParser::Paragraph()
                 if ( ! bPfCaseActive )
                 {
                     //PfCases duerfen nicht verschachtelt sein:
-                    bPfCaseActive = sal_True;
+                    bPfCaseActive = TRUE;
                     PfCase();
 
                     //So jetzt kann wieder ein PfCase kommen:
-                    bPfCaseActive = sal_False;
+                    bPfCaseActive = FALSE;
                     Paragraph();
                 }
             }
@@ -983,11 +1000,11 @@ void TokenParser::Paragraph()
                 if ( !bAppCaseActive )
                 {
                     //AppCases duerfen nicht verschachtelt sein:
-                    bAppCaseActive = sal_True;
+                    bAppCaseActive = TRUE;
                     AppCase();
 
                     //jetzt koennen wieder AppCases kommen:
-                    bAppCaseActive = sal_False;
+                    bAppCaseActive = FALSE;
                     Paragraph();
                 }
             }
@@ -1277,7 +1294,7 @@ void TokenParser::TagRef()
                     TokenId aThisToken = aTag.nId;
                     match( aTag, aTag );
                     if ( aThisToken != TAG_NAME )
-                    {   // TAG_NAME has no TAG_END
+                    {	// TAG_NAME has no TAG_END
                         SET_FLAG( nActiveRefTypes, TAG_NOGROUP( aThisToken ) );
                         Paragraph();
                         match( aTag, TAG_END );
@@ -1295,12 +1312,12 @@ void TokenParser::TagRef()
     }
 }
 
-sal_Bool TokenParser::match( const TokenInfo &aCurrentToken, const TokenId &aExpectedToken )
+BOOL TokenParser::match( const TokenInfo &aCurrentToken, const TokenId &aExpectedToken )
 {
     return match( aCurrentToken, TokenInfo( aExpectedToken, TOK_INVALIDPOS ) );
 }
 
-sal_Bool TokenParser::match( const TokenInfo &aCurrentToken, const TokenInfo &rExpectedToken )
+BOOL TokenParser::match( const TokenInfo &aCurrentToken, const TokenInfo &rExpectedToken )
 {
     TokenInfo aExpectedToken( rExpectedToken );
     if ( aCurrentToken.nId == aExpectedToken.nId )
@@ -1310,7 +1327,7 @@ sal_Bool TokenParser::match( const TokenInfo &aCurrentToken, const TokenInfo &rE
              || aCurrentToken.nId != TAG_COMMONEND )
         {
             aTag = aParser.GetNextToken( *pErrorList );
-            return sal_True;
+            return TRUE;
         }
     }
 
@@ -1331,10 +1348,10 @@ sal_Bool TokenParser::match( const TokenInfo &aCurrentToken, const TokenInfo &rE
         sTmp += " near ";
         ParseError( 7, sTmp, aCurrentToken );
     }
-    return sal_False;
+    return FALSE;
 }
 
-void TokenParser::ParseError( sal_uInt16 nErrNr, ByteString aErrMsg, const TokenInfo &rTag )
+void TokenParser::ParseError( USHORT nErrNr, ByteString aErrMsg, const TokenInfo &rTag )
 {
     pErrorList->AddError( nErrNr, aErrMsg, rTag);
 
@@ -1343,7 +1360,7 @@ void TokenParser::ParseError( sal_uInt16 nErrNr, ByteString aErrMsg, const Token
 }
 
 
-ParserMessage::ParserMessage( sal_uInt16 PnErrorNr, ByteString PaErrorText, const TokenInfo &rTag )
+ParserMessage::ParserMessage( USHORT PnErrorNr, ByteString PaErrorText, const TokenInfo &rTag )
         : nErrorNr( PnErrorNr )
         , aErrorText( PaErrorText )
         , nTagBegin( 0 )
@@ -1363,15 +1380,15 @@ ParserMessage::ParserMessage( sal_uInt16 PnErrorNr, ByteString PaErrorText, cons
     nTagLength = aLexem.Len();
 }
 
-ParserError::ParserError( sal_uInt16 ErrorNr, ByteString ErrorText, const TokenInfo &rTag )
+ParserError::ParserError( USHORT ErrorNr, ByteString ErrorText, const TokenInfo &rTag )
 : ParserMessage( ErrorNr, ErrorText, rTag )
 {}
 
-ParserWarning::ParserWarning( sal_uInt16 ErrorNr, ByteString ErrorText, const TokenInfo &rTag )
+ParserWarning::ParserWarning( USHORT ErrorNr, ByteString ErrorText, const TokenInfo &rTag )
 : ParserMessage( ErrorNr, ErrorText, rTag )
 {}
 
-sal_Bool LingTest::IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens )
+BOOL LingTest::IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens )
 {
     TokenId aTokenId = aToken.nId;
     TokenId aTokenGroup = TAG_GROUP( aTokenId );
@@ -1388,7 +1405,7 @@ sal_Bool LingTest::IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens
     {
         if ( TAG_GROUP_META == aTokenGroup )
             aMetaTokens |= aTokenId;
-        return sal_True;
+        return TRUE;
     }
     else if (   TAG_COMMONSTART == aTokenId
              || TAG_COMMONEND == aTokenId )
@@ -1400,14 +1417,18 @@ sal_Bool LingTest::IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens
               || aTagName.EqualsIgnoreCaseAscii( "item" )
               || aTagName.EqualsIgnoreCaseAscii( "br" ) );
     }
-    return sal_False;
+    return FALSE;
 }
 
-void LingTest::CheckTags( TokenList &aReference, TokenList &aTestee, sal_Bool bFixTags )
+void LingTest::CheckTags( TokenList &aReference, TokenList &aTestee, BOOL bFixTags )
 {
-    size_t i=0,j=0;
+    ULONG i=0,j=0;
     // Clean old Warnings
-    aCompareWarningList.clear();
+    while ( aCompareWarningList.Count() )
+    {
+        delete aCompareWarningList.GetCurObject();
+        aCompareWarningList.Remove();
+    }
 
     /* in xml tags, do not require the following tags
         comment
@@ -1419,102 +1440,102 @@ void LingTest::CheckTags( TokenList &aReference, TokenList &aTestee, sal_Bool bF
 
     // filter uninteresting Tags
     TokenId aMetaTokens = 0;
-    for ( i=0 ; i < aReference.size() ; i++ )
+    for ( i=0 ; i < aReference.Count() ; i++ )
     {
-        if ( !IsTagMandatory( aReference[ i ], aMetaTokens ) )
-            aReference[ i ].SetDone();
+        if ( !IsTagMandatory( aReference.GetObject( i ), aMetaTokens ) )
+            aReference.GetObject( i ).SetDone();
     }
 
     aMetaTokens = 0;
-    for ( i=0 ; i < aTestee.size() ; i++ )
+    for ( i=0 ; i < aTestee.Count() ; i++ )
     {
-        if ( !IsTagMandatory( aTestee[ i ], aMetaTokens ) )
-            aTestee[ i ].SetDone();
+        if ( !IsTagMandatory( aTestee.GetObject( i ), aMetaTokens ) )
+            aTestee.GetObject( i ).SetDone();
     }
 
     // remove all matching tags
-    for ( i=0 ; i < aReference.size() ; i++ )
+    for ( i=0 ; i < aReference.Count() ; i++ )
     {
-        if ( aReference[ i ].IsDone() )
+        if ( aReference.GetObject( i ).IsDone() )
             continue;
 
-        sal_Bool bTagFound = sal_False;
-        for ( j=0 ; j < aTestee.size() && !bTagFound ; j++ )
+        BOOL bTagFound = FALSE;
+        for ( j=0 ; j < aTestee.Count() && !bTagFound ; j++ )
         {
-            if ( aTestee[ j ].IsDone() )
+            if ( aTestee.GetObject( j ).IsDone() )
                 continue;
 
-            if ( aReference[ i ].MatchesTranslation( aTestee[ j ], sal_False, aCompareWarningList ) )
+            if ( aReference.GetObject( i ).MatchesTranslation( aTestee.GetObject( j ), FALSE, aCompareWarningList ) )
             {
-                aReference[ i ].SetDone();
-                aTestee[ j ].SetDone();
-                bTagFound = sal_True;
+                aReference.GetObject( i ).SetDone();
+                aTestee.GetObject( j ).SetDone();
+                bTagFound = TRUE;
             }
         }
     }
 
-    sal_Bool bCanFix = sal_True;
+    BOOL bCanFix = TRUE;
 
     if ( bFixTags )
     {
         // we fix only if its a really simple case
-        sal_uInt16 nTagCount = 0;
-        for ( i=0 ; i < aReference.size() ; i++ )
-            if ( !aReference[ i ].IsDone() )
+        USHORT nTagCount = 0;
+        for ( i=0 ; i < aReference.Count() ; i++ )
+            if ( !aReference.GetObject( i ).IsDone() )
                 nTagCount++;
         if ( nTagCount > 1 )
-            bCanFix = sal_False;
+            bCanFix = FALSE;
 
         nTagCount = 0;
-        for ( i=0 ; i < aTestee.size() ; i++ )
-            if ( !aTestee[ i ].IsDone() )
+        for ( i=0 ; i < aTestee.Count() ; i++ )
+            if ( !aTestee.GetObject( i ).IsDone() )
                 nTagCount++;
         if ( nTagCount > 1 )
-            bCanFix = sal_False;
+            bCanFix = FALSE;
     }
 
     // generate errors for tags that have differing attributes
-    for ( i=0 ; i < aReference.size() ; i++ )
+    for ( i=0 ; i < aReference.Count() ; i++ )
     {
-        if ( aReference[ i ].IsDone() )
+        if ( aReference.GetObject( i ).IsDone() )
             continue;
 
-        sal_Bool bTagFound = sal_False;
-        for ( j=0 ; j < aTestee.size() && !bTagFound ; j++ )
+        BOOL bTagFound = FALSE;
+        for ( j=0 ; j < aTestee.Count() && !bTagFound ; j++ )
         {
-            if ( aTestee[ j ].IsDone() )
+            if ( aTestee.GetObject( j ).IsDone() )
                 continue;
 
-            if ( aReference[ i ].MatchesTranslation( aTestee[ j ], sal_True, aCompareWarningList, bCanFix && bFixTags ) )
+            if ( aReference.GetObject( i ).MatchesTranslation( aTestee.GetObject( j ), TRUE, aCompareWarningList, bCanFix && bFixTags ) )
             {
-                aReference[ i ].SetDone();
-                aTestee[ j ].SetDone();
-                bTagFound = sal_True;
+                aReference.GetObject( i ).SetDone();
+                aTestee.GetObject( j ).SetDone();
+                bTagFound = TRUE;
             }
         }
     }
 
     // list remaining tags as errors
-    for ( i=0 ; i < aReference.size() ; i++ )
+    for ( i=0 ; i < aReference.Count() ; i++ )
     {
-        if ( aReference[ i ].IsDone() )
+        if ( aReference.GetObject( i ).IsDone() )
             continue;
 
-        aCompareWarningList.AddError( 20, "Missing Tag in Translation", aReference[ i ] );
+        aCompareWarningList.AddError( 20, "Missing Tag in Translation", aReference.GetObject( i ) );
     }
-    for ( i=0 ; i < aTestee.size() ; i++ )
+    for ( i=0 ; i < aTestee.Count() ; i++ )
     {
-        if ( aTestee[ i ].IsDone() )
+        if ( aTestee.GetObject( i ).IsDone() )
             continue;
 
-        aCompareWarningList.AddError( 21, "Extra Tag in Translation", aTestee[ i ] );
+        aCompareWarningList.AddError( 21, "Extra Tag in Translation", aTestee.GetObject( i ) );
     }
 
-    for ( i=0 ; i < aReference.size() ; i++ )
-        aReference[ i ].SetDone( sal_False );
+    for ( i=0 ; i < aReference.Count() ; i++ )
+        aReference.GetObject( i ).SetDone( FALSE );
 
-    for ( i=0 ; i < aTestee.size() ; i++ )
-        aTestee[ i ].SetDone( sal_False );
+    for ( i=0 ; i < aTestee.Count() ; i++ )
+        aTestee.GetObject( i ).SetDone( FALSE );
 }
 
 void LingTest::CheckReference( GSILine *aReference )
@@ -1522,7 +1543,7 @@ void LingTest::CheckReference( GSILine *aReference )
     aReferenceParser.Parse( aReference->GetUText(), aReference->GetMessageList() );
 }
 
-void LingTest::CheckTestee( GSILine *aTestee, sal_Bool bHasSourceLine, sal_Bool bFixTags )
+void LingTest::CheckTestee( GSILine *aTestee, BOOL bHasSourceLine, BOOL bFixTags )
 {
     aFixedTestee = aTestee->GetUText();
     aTesteeParser.Parse( aFixedTestee, aTestee->GetMessageList() );
@@ -1533,15 +1554,15 @@ void LingTest::CheckTestee( GSILine *aTestee, sal_Bool bHasSourceLine, sal_Bool 
     if ( bFixTags )
     {
         TokenList& aTesteeTokens = aTesteeParser.GetTokenList();
-        sal_Bool bFixesDone = sal_False;
+        BOOL bFixesDone = FALSE;
         // count backwards to allow replacing from right to left
         int i;
-        for ( i = aTesteeTokens.size() ; i > 0 ; )
+        for ( i=aTesteeTokens.Count()-1 ; i>=0 ; i-- )
         {
-            if ( aTesteeTokens[ --i ].HasBeenFixed() )
+            if ( aTesteeTokens.GetObject( i ).HasBeenFixed() )
             {
-                bFixesDone = sal_True;
-                aFixedTestee.Replace( aTesteeTokens[ i ].nPos, aTesteeTokens[ i ].aTokenString.Len(), aTesteeTokens[ i ].MakeTag() );
+                bFixesDone = TRUE;
+                aFixedTestee.Replace( aTesteeTokens.GetObject( i ).nPos, aTesteeTokens.GetObject( i ).aTokenString.Len(), aTesteeTokens.GetObject( i ).MakeTag() );
             }
         }
         if ( bFixesDone )

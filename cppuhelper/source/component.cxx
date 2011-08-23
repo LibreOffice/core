@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,20 +36,17 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 
 using namespace osl;
+using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
-
 namespace cppu
 {
 
-//  ----------------------------------------------------
-//  class OComponentHelper
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class OComponentHelper
+//	----------------------------------------------------
 
 OComponentHelper::OComponentHelper( Mutex & rMutex ) SAL_THROW( () )
     : rBHelper( rMutex )
@@ -106,7 +103,7 @@ void OComponentHelper::release() throw()
                     // release should not throw exceptions
 #if OSL_DEBUG_LEVEL > 0
                     OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-                    OSL_FAIL( msg.getStr() );
+                    OSL_ENSURE( 0, msg.getStr() );
 #else
                     (void) exc; // avoid warning about unused variable
 #endif

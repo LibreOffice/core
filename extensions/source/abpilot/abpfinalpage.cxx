@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,14 +62,14 @@ namespace abp
     //---------------------------------------------------------------------
     FinalPage::FinalPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_FINAL))
-        ,m_aExplanation         ( this, ModuleRes( FT_FINISH_EXPL ) )
-        ,m_aLocationLabel       ( this, ModuleRes( FT_LOCATION ) )
-        ,m_aLocation            ( this, ModuleRes( CBB_LOCATION ) )
-        ,m_aBrowse              ( this, ModuleRes( PB_BROWSE ) )
-        ,m_aRegisterName        ( this, ModuleRes( CB_REGISTER_DS ) )
-        ,m_aNameLabel           ( this, ModuleRes( FT_NAME_EXPL ) )
-        ,m_aName                ( this, ModuleRes( ET_DATASOURCENAME ) )
-        ,m_aDuplicateNameError  ( this, ModuleRes( FT_DUPLICATENAME ) )
+        ,m_aExplanation			( this, ModuleRes( FT_FINISH_EXPL ) )
+        ,m_aLocationLabel		( this, ModuleRes( FT_LOCATION ) )
+        ,m_aLocation			( this, ModuleRes( CBB_LOCATION ) )
+        ,m_aBrowse				( this, ModuleRes( PB_BROWSE ) )
+        ,m_aRegisterName		( this, ModuleRes( CB_REGISTER_DS ) )
+        ,m_aNameLabel			( this, ModuleRes( FT_NAME_EXPL ) )
+        ,m_aName				( this, ModuleRes( ET_DATASOURCENAME ) )
+        ,m_aDuplicateNameError	( this, ModuleRes( FT_DUPLICATENAME ) )
         ,m_aLocationController( ::comphelper::ComponentContext( _pParent->getORB() ), m_aLocation, m_aBrowse )
     {
         FreeResource();
@@ -77,7 +77,7 @@ namespace abp
         m_aName.SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
         m_aLocation.SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
         m_aRegisterName.SetClickHdl( LINK( this, FinalPage, OnRegister ) );
-        m_aRegisterName.Check(sal_True);
+        m_aRegisterName.Check(TRUE);
     }
 
     //---------------------------------------------------------------------
@@ -216,14 +216,14 @@ namespace abp
     // -----------------------------------------------------------------------------
     IMPL_LINK( FinalPage, OnRegister, CheckBox*, EMPTYARG )
     {
-        sal_Bool bEnable = m_aRegisterName.IsChecked();
+        BOOL bEnable = m_aRegisterName.IsChecked();
         m_aNameLabel.Enable(bEnable);
         m_aName.Enable(bEnable);
         implCheckName();
         return 0L;
     }
 //.........................................................................
-}   // namespace abp
+}	// namespace abp
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

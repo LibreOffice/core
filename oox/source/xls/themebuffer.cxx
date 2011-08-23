@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,15 +27,13 @@
  ************************************************************************/
 
 #include "oox/xls/themebuffer.hxx"
-
 #include "oox/xls/stylesbuffer.hxx"
+#include "tokens.hxx"
+
+using ::oox::drawingml::ClrScheme;
 
 namespace oox {
 namespace xls {
-
-// ============================================================================
-
-using ::oox::drawingml::ClrScheme;
 
 // ============================================================================
 
@@ -94,7 +92,7 @@ ThemeBuffer::ThemeBuffer( const WorkbookHelper& rHelper ) :
 {
     switch( getFilterType() )
     {
-        case FILTER_OOXML:
+        case FILTER_OOX:
             //! TODO: locale dependent font name
             mxDefFontModel->maName = CREATE_OUSTRING( "Cambria" );
             mxDefFontModel->mfHeight = 11.0;

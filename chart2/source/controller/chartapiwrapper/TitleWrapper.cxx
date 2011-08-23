@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -122,6 +122,7 @@ Any WrappedTitleStringProperty::getPropertyDefault( const Reference< beans::XPro
 }
 
 //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 class WrappedStackedTextProperty : public WrappedProperty
 {
@@ -140,6 +141,10 @@ WrappedStackedTextProperty::~WrappedStackedTextProperty()
 
 }// end namespace chart
 
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 namespace
@@ -178,36 +183,35 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-struct StaticTitleWrapperPropertyArray_Initializer
+const Sequence< Property > & lcl_GetPropertySequence()
 {
-    Sequence< Property >* operator()()
-    {
-        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
-        return &aPropSeq;
-    }
+    static Sequence< Property > aPropSeq;
 
-private:
-    Sequence< Property > lcl_GetPropertySequence()
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
     {
+        // get properties
         ::std::vector< beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
+//         ::chart::NamedProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
         ::chart::wrapper::WrappedAutomaticPositionProperties::addProperties( aProperties );
         ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
 
+        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        // transfer result to static Sequence
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
-};
 
-struct StaticTitleWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticTitleWrapperPropertyArray_Initializer >
-{
-};
+    return aPropSeq;
+}
 
 } // anonymous namespace
 
@@ -247,7 +251,7 @@ void SAL_CALL TitleWrapper::setPosition( const awt::Point& aPosition )
     if(xPropertySet.is())
     {
         awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
-
+        
         chart2::RelativePosition aRelativePosition;
         aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
         aRelativePosition.Primary = double(aPosition.X)/double(aPageSize.Width);
@@ -266,7 +270,7 @@ void SAL_CALL TitleWrapper::setSize( const awt::Size& /*aSize*/ )
     throw (beans::PropertyVetoException,
            uno::RuntimeException)
 {
-    OSL_FAIL( "trying to set size of title" );
+    OSL_ENSURE( false, "trying to set size of title" );
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
@@ -283,8 +287,10 @@ void SAL_CALL TitleWrapper::dispose()
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
 
+    // /--
     MutexGuard aGuard( GetMutex());
     clearWrappedPropertySet();
+    // \--
 }
 
 void SAL_CALL TitleWrapper::addEventListener(
@@ -322,7 +328,7 @@ void TitleWrapper::getFastCharacterPropertyValue( sal_Int32 nHandle, Any& rValue
 {
     OSL_ASSERT( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
                 nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
-
+    
     Reference< beans::XPropertySet > xProp( getFirstCharacterPropertySet(), uno::UNO_QUERY );
     Reference< beans::XFastPropertySet > xFastProp( xProp, uno::UNO_QUERY );
     if(xProp.is())
@@ -337,7 +343,7 @@ void TitleWrapper::getFastCharacterPropertyValue( sal_Int32 nHandle, Any& rValue
             rValue = xFastProp->getFastPropertyValue( nHandle );
         }
     }
-
+    
 }
 
 void TitleWrapper::setFastCharacterPropertyValue(
@@ -521,20 +527,20 @@ Reference< beans::XPropertySet > TitleWrapper::getInnerPropertySet()
 
 const Sequence< beans::Property >& TitleWrapper::getPropertySequence()
 {
-    return *StaticTitleWrapperPropertyArray::get();
+    return lcl_GetPropertySequence();
 }
 
 const std::vector< WrappedProperty* > TitleWrapper::createWrappedProperties()
 {
     ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
-
+    
     aWrappedProperties.push_back( new WrappedTitleStringProperty( m_spChart2ModelContact->m_xContext ) );
     aWrappedProperties.push_back( new WrappedTextRotationProperty( m_eTitleType==TitleHelper::Y_AXIS_TITLE || m_eTitleType==TitleHelper::X_AXIS_TITLE ) );
     aWrappedProperties.push_back( new WrappedStackedTextProperty() );
     WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
     WrappedAutomaticPositionProperties::addWrappedProperties( aWrappedProperties );
     WrappedScaleTextProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
-
+    
     return aWrappedProperties;
 }
 
@@ -547,6 +553,9 @@ Sequence< OUString > TitleWrapper::getSupportedServiceNames_Static()
     aServices[ 1 ] = C2U( "com.sun.star.drawing.Shape" );
     aServices[ 2 ] = C2U( "com.sun.star.xml.UserDefinedAttributeSupplier" );
     aServices[ 3 ] = C2U( "com.sun.star.style.CharacterProperties" );
+//     aServices[ 4 ] = C2U( "com.sun.star.beans.PropertySet" );
+//     aServices[ 5 ] = C2U( "com.sun.star.drawing.FillProperties" );
+//     aServices[ 6 ] = C2U( "com.sun.star.drawing.LineProperties" );
 
     return aServices;
 }

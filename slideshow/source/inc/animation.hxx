@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ namespace slideshow
                 @param rAttrLayer
                 Attribute layer to play the animation on.
              */
-            virtual void start( const AnimatableShapeSharedPtr&     rShape,
+            virtual void start( const AnimatableShapeSharedPtr&		rShape,
                                 const ShapeAttributeLayerSharedPtr& rAttrLayer ) = 0;
 
             /** Notify that the animation is about to end.

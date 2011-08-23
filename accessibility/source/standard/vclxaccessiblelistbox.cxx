@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ VCLXAccessibleListBox::~VCLXAccessibleListBox (void)
 bool VCLXAccessibleListBox::IsValid (void) const
 {
     return static_cast<ListBox*>(GetWindow()) != NULL;
-
+ 
 }
 
 
@@ -88,22 +88,23 @@ void VCLXAccessibleListBox::ProcessWindowEvent (const VclWindowEvent& rVclWindow
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString VCLXAccessibleListBox::getImplementationName (void)
+::rtl::OUString VCLXAccessibleListBox::getImplementationName (void) 
     throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleListBox" ));
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.toolkit.AccessibleListBox");
 }
 
 
 
 
-Sequence< ::rtl::OUString > VCLXAccessibleListBox::getSupportedServiceNames (void)
+Sequence< ::rtl::OUString > VCLXAccessibleListBox::getSupportedServiceNames (void) 
     throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleListBox" ));
+    aNames[nLength] = ::rtl::OUString::createFromAscii(
+        "com.sun.star.accessibility.AccessibleListBox" );
     return aNames;
 }
 

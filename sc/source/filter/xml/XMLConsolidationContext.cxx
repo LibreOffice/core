@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,26 +49,26 @@ using namespace xmloff::token;
 
 ScXMLConsolidationContext::ScXMLConsolidationContext(
         ScXMLImport& rImport,
-        sal_uInt16 nPrfx,
+        USHORT nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     eFunction( SUBTOTAL_FUNC_NONE ),
-    bLinkToSource( false ),
-    bTargetAddr(false)
+    bLinkToSource( sal_False ),
+    bTargetAddr(sal_False)
 {
-    ScXMLImport::MutexGuard aGuard(GetScImport());
+    rImport.LockSolarMutex();
     if( !xAttrList.is() ) return;
 
-    sal_Int16               nAttrCount      = xAttrList->getLength();
-    const SvXMLTokenMap&    rAttrTokenMap   = GetScImport().GetConsolidationAttrTokenMap();
+    sal_Int16				nAttrCount		= xAttrList->getLength();
+    const SvXMLTokenMap&	rAttrTokenMap	= GetScImport().GetConsolidationAttrTokenMap();
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
+        const rtl::OUString& sAttrName	(xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sValue		(xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
-        sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix		= GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -100,7 +100,7 @@ ScXMLConsolidationContext::~ScXMLConsolidationContext()
 }
 
 SvXMLImportContext *ScXMLConsolidationContext::CreateChildContext(
-        sal_uInt16 nPrefix,
+        USHORT nPrefix,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList>& /* xAttrList */ )
 {
@@ -117,19 +117,20 @@ void ScXMLConsolidationContext::EndElement()
         aConsParam.nTab = aTargetAddr.Tab();
         aConsParam.eFunction = eFunction;
 
-        sal_uInt16 nCount = (sal_uInt16) Min( ScRangeStringConverter::GetTokenCount( sSourceList ), (sal_Int32)0xFFFF );
+        sal_Bool bError = sal_False;
+        USHORT nCount = (USHORT) Min( ScRangeStringConverter::GetTokenCount( sSourceList ), (sal_Int32)0xFFFF );
         ScArea** ppAreas = nCount ? new ScArea*[ nCount ] : NULL;
         if( ppAreas )
         {
             sal_Int32 nOffset = 0;
-            sal_uInt16 nIndex;
+            USHORT nIndex;
             for( nIndex = 0; nIndex < nCount; ++nIndex )
             {
                 ppAreas[ nIndex ] = new ScArea;
                 if ( !ScRangeStringConverter::GetAreaFromString(
                     *ppAreas[ nIndex ], sSourceList, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ) )
                 {
-                    //! handle error
+                    bError = sal_True;		//! handle error
                 }
             }
 
@@ -141,13 +142,13 @@ void ScXMLConsolidationContext::EndElement()
             delete[] ppAreas;
         }
 
-        aConsParam.bByCol = aConsParam.bByRow = false;
+        aConsParam.bByCol = aConsParam.bByRow = FALSE;
         if( IsXMLToken(sUseLabel, XML_COLUMN ) )
-            aConsParam.bByCol = sal_True;
+            aConsParam.bByCol = TRUE;
         else if( IsXMLToken( sUseLabel, XML_ROW ) )
-            aConsParam.bByRow = sal_True;
+            aConsParam.bByRow = TRUE;
         else if( IsXMLToken( sUseLabel, XML_BOTH ) )
-            aConsParam.bByCol = aConsParam.bByRow = sal_True;
+            aConsParam.bByCol = aConsParam.bByRow = TRUE;
 
         aConsParam.bReferenceData = bLinkToSource;
 

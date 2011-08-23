@@ -46,8 +46,7 @@ ADDITIONAL_FILES= \
     toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java
 
 PATCH_FILES=rhino1_5R5.patch \
-    rhino1_5R5-find_swing.patch \
-    rhino1_5R5-updateToolTip.patch
+    rhino1_5R5-find_swing.patch
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=

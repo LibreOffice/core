@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/typegroupconverter.hxx"
-
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
@@ -41,20 +40,27 @@
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/chart/seriesconverter.hxx"
 #include "oox/drawingml/chart/typegroupmodel.hxx"
-#include "oox/helper/containerhelper.hxx"
+#include "properties.hxx"
+
+using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::chart2::XChartType;
+using ::com::sun::star::chart2::XChartTypeContainer;
+using ::com::sun::star::chart2::XCoordinateSystem;
+using ::com::sun::star::chart2::XDataSeries;
+using ::com::sun::star::chart2::XDataSeriesContainer;
+using ::com::sun::star::chart2::XDiagram;
+using ::com::sun::star::chart2::data::XDataSink;
+using ::com::sun::star::chart2::data::XLabeledDataSequence;
 
 namespace oox {
 namespace drawingml {
 namespace chart {
-
-// ============================================================================
-
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::chart2;
-using namespace ::com::sun::star::chart2::data;
-using namespace ::com::sun::star::uno;
-
-using ::rtl::OUString;
 
 // ============================================================================
 
@@ -165,7 +171,7 @@ TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupM
         case C_TOKEN( stockChart ):     ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_STOCK;     mb3dChart = false;  break;
         case C_TOKEN( surface3DChart ): ENSURE_AXESCOUNT( 3, 3 ); eTypeId = TYPEID_SURFACE;   mb3dChart = true;   break;
         case C_TOKEN( surfaceChart ):   ENSURE_AXESCOUNT( 2, 3 ); eTypeId = TYPEID_SURFACE;   mb3dChart = true;   break;    // 3D bar chart from all surface charts
-        default:    OSL_FAIL( "TypeGroupConverter::TypeGroupConverter - unknown chart type" );
+        default:    OSL_ENSURE( false, "TypeGroupConverter::TypeGroupConverter - unknown chart type" );
 #undef ENSURE_AXESCOUNT
     }
 
@@ -438,7 +444,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
     }
     catch( Exception& )
     {
-        OSL_FAIL( "TypeGroupConverter::convertFromModel - cannot add chart type" );
+        OSL_ENSURE( false, "TypeGroupConverter::convertFromModel - cannot add chart type" );
     }
 }
 
@@ -500,7 +506,7 @@ void TypeGroupConverter::convertBarGeometry( PropertySet& rPropSet, sal_Int32 nO
             case XML_cylinder:      nGeom3d = cssc::DataPointGeometry3D::CYLINDER;  break;
             case XML_pyramid:       nGeom3d = cssc::DataPointGeometry3D::PYRAMID;   break;
             case XML_pyramidToMax:  nGeom3d = cssc::DataPointGeometry3D::PYRAMID;   break;
-            default:                OSL_FAIL( "TypeGroupConverter::convertBarGeometry - unknown 3D bar shape type" );
+            default:                OSL_ENSURE( false, "TypeGroupConverter::convertBarGeometry - unknown 3D bar shape type" );
         }
         rPropSet.setProperty( PROP_Geometry3D, nGeom3d );
     }
@@ -555,7 +561,7 @@ void TypeGroupConverter::insertDataSeries( const Reference< XChartType >& rxChar
         }
         catch( Exception& )
         {
-            OSL_FAIL( "TypeGroupConverter::insertDataSeries - cannot add data series" );
+            OSL_ENSURE( false, "TypeGroupConverter::insertDataSeries - cannot add data series" );
         }
     }
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ namespace pcr
         aInterestingProperties[2] = PROPERTY_CONTROLSOURCE;
         return aInterestingProperties;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL CellBindingPropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException)
     {
@@ -175,7 +175,7 @@ namespace pcr
             aDependentProperties.push_back( PROPERTY_ID_BOUNDCOLUMN );
 
             // also reset the list entries if the cell range is reset
-            // #i28319#
+            // #i28319# - 2004-04-27 - fs@openoffice.org
             if ( !_bFirstTimeInit )
             {
                 try
@@ -185,7 +185,7 @@ namespace pcr
                 }
                 catch( const Exception& )
                 {
-                    OSL_FAIL( "OPropertyBrowserController::actuatingPropertyChanged( ListCellRange ): caught an exception while resetting the string items!" );
+                    OSL_ENSURE( sal_False, "OPropertyBrowserController::actuatingPropertyChanged( ListCellRange ): caught an exception while resetting the string items!" );
                 }
             }
         }
@@ -202,7 +202,7 @@ namespace pcr
         break;  // case PROPERTY_ID_CONTROLSOURCE
 
         default:
-            OSL_FAIL( "CellBindingPropertyHandler::actuatingPropertyChanged: did not register for this property!" );
+            DBG_ERROR( "CellBindingPropertyHandler::actuatingPropertyChanged: did not register for this property!" );
         }
 
         for ( ::std::vector< PropertyId >::const_iterator loopAffected = aDependentProperties.begin();
@@ -238,7 +238,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "CellBindingPropertyHandler::impl_updateDependentProperty_nothrow: caught an exception!" );
+            OSL_ENSURE( sal_False, "CellBindingPropertyHandler::impl_updateDependentProperty_nothrow: caught an exception!" );
         }
     }
 
@@ -282,7 +282,7 @@ namespace pcr
         break;
 
         default:
-            OSL_FAIL( "CellBindingPropertyHandler::getPropertyValue: cannot handle this!" );
+            DBG_ERROR( "CellBindingPropertyHandler::getPropertyValue: cannot handle this!" );
             break;
         }
         return aReturn;
@@ -342,7 +342,7 @@ namespace pcr
             break;
 
             default:
-                OSL_FAIL( "CellBindingPropertyHandler::setPropertyValue: cannot handle this!" );
+                DBG_ERROR( "CellBindingPropertyHandler::setPropertyValue: cannot handle this!" );
                 break;
             }
 
@@ -356,7 +356,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "CellBindingPropertyHandler::setPropertyValue: caught an exception!" );
+            OSL_ENSURE( sal_False, "CellBindingPropertyHandler::setPropertyValue: caught an exception!" );
         }
     }
 
@@ -401,7 +401,7 @@ namespace pcr
                 break;
 
             default:
-                OSL_FAIL( "CellBindingPropertyHandler::convertToPropertyValue: cannot handle this!" );
+                DBG_ERROR( "CellBindingPropertyHandler::convertToPropertyValue: cannot handle this!" );
                 break;
         }
 
@@ -456,7 +456,7 @@ namespace pcr
                 break;
 
             default:
-                OSL_FAIL( "CellBindingPropertyHandler::convertToControlValue: cannot handle this!" );
+                DBG_ERROR( "CellBindingPropertyHandler::convertToControlValue: cannot handle this!" );
                 break;
         }
 

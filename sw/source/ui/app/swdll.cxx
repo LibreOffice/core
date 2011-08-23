@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,26 +84,26 @@ void SwDLL::Init()
         pDocFact->SetDocumentServiceName(C2S("com.sun.star.text.TextDocument"));
     }
 
-    // register SvDraw-Fields
+    // SvDraw-Felder registrieren
     SdrRegisterFieldClasses();
 
-    // register 3D-Objekt-Factory
+    // 3D-Objekt-Factory eintragen
     E3dObjFactory();
 
-    // register form::component::Form-Objekt-Factory
+    // form::component::Form-Objekt-Factory eintragen
     FmFormObjFactory();
 
     SdrObjFactory::InsertMakeObjectHdl( LINK( &aSwObjectFactory, SwObjectFactory, MakeObject ) );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "Init Core/UI/Filter" );
 
-    // Initialisation of Statics
+    //Initialisierung der Statics
     ::_InitCore();
     ::_InitFilter();
     ::_InitUI();
 
     pModule->InitAttrPool();
-    // now SWModule can create its Pool
+    //jetzt darf das SwModule seinen Pool anlegen
 
     // register your view-factories here
     RegisterFactories();
@@ -120,15 +120,15 @@ void SwDLL::Exit()
     // called directly befor unloading the DLL
     // do whatever you want, Sw-DLL is accessible
 
-    // Pool has to be deleted before statics are
+    // der Pool muss vor den statics geloescht werden
     SW_MOD()->RemoveAttrPool();
 
     ::_FinitUI();
     ::_FinitFilter();
     ::_FinitCore();
-    // sign out Objekt-Factory
+    // Objekt-Factory austragen
     SdrObjFactory::RemoveMakeObjectHdl(LINK(&aSwObjectFactory, SwObjectFactory, MakeObject ));
-    // the SwModule must be destroyed
+   // the SwModule must be destroyed
     SwModule** ppShlPtr = (SwModule**) GetAppData(SHL_WRITER);
     delete (*ppShlPtr);
     (*ppShlPtr) = NULL;

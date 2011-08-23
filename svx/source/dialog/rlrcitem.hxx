@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@ private:
     SvxRuler& rRuler;
 
 protected:
-    virtual void StateChanged( sal_uInt16,
+    virtual void StateChanged( USHORT,
                                SfxItemState, const SfxPoolItem* pState );
 
 public:
-    SvxRulerItem( sal_uInt16 nId, SvxRuler&, SfxBindings& );
+    SvxRulerItem( USHORT nId, SvxRuler&, SfxBindings& );
 };
 
 

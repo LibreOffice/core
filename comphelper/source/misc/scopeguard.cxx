@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 
-#include "comphelper/flagguard.hxx"
+#include "comphelper/scopeguard.hxx"
 #include "osl/diagnose.h"
 #include "com/sun/star/uno/Exception.hpp"
 
@@ -46,14 +46,14 @@ ScopeGuard::~ScopeGuard()
             }
             catch (com::sun::star::uno::Exception & exc) {
                 (void) exc; // avoid warning about unused variable
-                OSL_FAIL(
-                    rtl::OUStringToOString(
+                OSL_ENSURE(
+                    false, rtl::OUStringToOString(
                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                           "UNO exception occurred: ") ) +
+                                           "UNO exception occured: ") ) +
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             }
             catch (...) {
-                OSL_FAIL( "unknown exception occurred!" );
+                OSL_ENSURE( false, "unknown exception occured!" );
             }
         }
         else
@@ -66,14 +66,6 @@ ScopeGuard::~ScopeGuard()
 void ScopeGuard::dismiss()
 {
     m_func.clear();
-}
-
-FlagGuard::~FlagGuard()
-{
-}
-
-FlagRestorationGuard::~FlagRestorationGuard()
-{
 }
 
 } // namespace comphelper

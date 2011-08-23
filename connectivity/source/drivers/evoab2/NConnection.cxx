@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ using namespace ::com::sun::star::lang;
 {
      ::rtl::OUString aExceptionType = aExceptionType_;
      if( aExceptionType.getLength() == 0 )
-         aExceptionType =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown")) ;
+         aExceptionType =  ::rtl::OUString::createFromAscii("Unknown" ) ;
 
      ::rtl::OUString aTypeLine( RTL_CONSTASCII_USTRINGPARAM("\nType: " ) );
      aTypeLine += aExceptionType;
@@ -125,9 +125,9 @@ void OEvoabConnection::construct(const ::rtl::OUString& url, const Sequence< Pro
                 }
         }
 
-    if (url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdbc:address:evolution:groupwise")))
+    if (url.equalsAscii("sdbc:address:evolution:groupwise"))
         setSDBCAddressType(SDBCAddress::EVO_GWISE);
-    else if (url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdbc:address:evolution:ldap")))
+    else if (url.equalsAscii("sdbc:address:evolution:ldap"))
         setSDBCAddressType(SDBCAddress::EVO_LDAP);
     else
         setSDBCAddressType(SDBCAddress::EVO_LOCAL);

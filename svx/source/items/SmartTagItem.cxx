@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ TYPEINIT1(SvxSmartTagItem, SfxPoolItem);
 
 // class SvxFontItem -----------------------------------------------------
 
-SvxSmartTagItem::SvxSmartTagItem( const sal_uInt16 nId,
+SvxSmartTagItem::SvxSmartTagItem( const USHORT nId,
                                   const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
                                   const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< sal_Int32 > >& rActionIndicesSequence,
                                   const com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
@@ -65,12 +65,12 @@ SvxSmartTagItem::SvxSmartTagItem( const sal_uInt16 nId,
 
 // -----------------------------------------------------------------------
 
-bool SvxSmartTagItem::QueryValue( uno::Any& /* rVal */, sal_uInt8 /* nMemberId */ ) const
+bool SvxSmartTagItem::QueryValue( uno::Any& /* rVal */, BYTE /* nMemberId */ ) const
 {
     return false;
 }
 // -----------------------------------------------------------------------
-bool SvxSmartTagItem::PutValue( const uno::Any& /*rVal*/, sal_uInt8 /* nMemberId */)
+bool SvxSmartTagItem::PutValue( const uno::Any& /*rVal*/, BYTE /* nMemberId */)
 {
     return false;
 }
@@ -90,7 +90,7 @@ int SvxSmartTagItem::operator==( const SfxPoolItem& rAttr ) const
                mxController == rItem.mxController &&
                maApplicationName == rItem.maApplicationName &&
                maRangeText == rItem.maRangeText;
-
+               
     return bRet;
 }
 
@@ -103,14 +103,14 @@ SfxPoolItem* SvxSmartTagItem::Clone( SfxItemPool * ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxSmartTagItem::Store( SvStream& rStream, sal_uInt16 /*nItemVersion*/ ) const
+SvStream& SvxSmartTagItem::Store( SvStream& rStream, USHORT /*nItemVersion*/ ) const
 {
     return rStream;
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxSmartTagItem::Create(SvStream& , sal_uInt16) const
+SfxPoolItem* SvxSmartTagItem::Create(SvStream& , USHORT) const
 {
     return 0;
 }

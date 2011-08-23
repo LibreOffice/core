@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <stdarg.h>
 
 #include <vcl/menu.hxx>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 #include <tools/link.hxx>
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -57,21 +57,21 @@ class SfxMenuManager
 {
 friend class SfxPopupMenuManager;
 
-    SfxVirtualMenu*         pMenu;          // das eigentliche Menu
-    SfxVirtualMenu*         pOldMenu;       // only while reconfiguring
-    sal_Bool                    bMenuBar;       // Popup oder MenuBar
-    SfxBindings*            pBindings;
-    ResMgr*                 pResMgr;
+    SfxVirtualMenu* 		pMenu;			// das eigentliche Menu
+    SfxVirtualMenu* 		pOldMenu;		// only while reconfiguring
+    BOOL					bMenuBar;		// Popup oder MenuBar
+    SfxBindings*			pBindings;
+    ResMgr* 				pResMgr;
     sal_uInt32              nType;
-    sal_Bool                    bAddClipboardFuncs : 1;
+    BOOL					bAddClipboardFuncs : 1;
 
-    void                    Construct( SfxVirtualMenu& rMenu );
+    void					Construct( SfxVirtualMenu& rMenu );
 
 protected:
                             SfxMenuManager( Menu*, SfxBindings& );
                             SfxMenuManager( const ResId&, SfxBindings& );
                             ~SfxMenuManager();
-    sal_uInt16                  GetItemPos( sal_uInt16 nId );
+    USHORT                  GetItemPos( USHORT nId );
     sal_uInt32              GetType() { return nType; }
 public:
 
@@ -79,16 +79,16 @@ public:
 
     DECL_LINK( Select, Menu* );
 
-    SfxVirtualMenu*         GetMenu() const
+    SfxVirtualMenu* 		GetMenu() const
                             { return pMenu; }
 
-    SfxBindings&            GetBindings() { return *pBindings; }
-    const SfxBindings&      GetBindings() const { return *pBindings; }
-    void                    SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
+    SfxBindings&			GetBindings() { return *pBindings; }
+    const SfxBindings&		GetBindings() const { return *pBindings; }
+    void					SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
     ResMgr*                 GetResMgr() const { return pResMgr; }
-    void                    SetPopupMenu( sal_uInt16 nId, PopupMenu *pMenu );
+    void					SetPopupMenu( USHORT nId, PopupMenu *pMenu );
 
-    void            Construct_Impl( Menu* pMenu, sal_Bool bWithHelp );
+    void			Construct_Impl( Menu* pMenu, BOOL bWithHelp );
 };
 
 //--------------------------------------------------------------------
@@ -97,7 +97,7 @@ class SAL_DLLPUBLIC_EXPORT SfxPopupMenuManager : public SfxMenuManager
 {
 private:
     DECL_LINK( SelectHdl, void * );
-    Menu*               pSVMenu;
+    Menu*				pSVMenu;
 
     // when #i107205 gets fixed this one should be superfluous.
     // But right now we want to avoid the memory leak that would otherwise occur,
@@ -116,27 +116,29 @@ public:
     // @deprecated!!
     // Don't use this method any longer. The whole class will be removed in the future.
     // Changing code which relies on Popup would need much more effort.
+    // Please contact cd@openoffice.org if you have questions or need help
     static SfxPopupMenuManager* Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, Window* pWindow );
 
-    sal_uInt16              Execute( const Point& rPos, Window *pWindow );
-    sal_uInt16              Execute( const Point& rPoint, Window* pWindow, va_list pArgs, const SfxPoolItem *pArg1 );
-    sal_uInt16              Execute( const Point& rPoint, Window* pWindow, const SfxPoolItem *pArg1 ... );
+    USHORT				Execute( const Point& rPos, Window *pWindow );
+    USHORT              Execute( const Point& rPoint, Window* pWindow, va_list pArgs, const SfxPoolItem *pArg1 );
+    USHORT              Execute( const Point& rPoint, Window* pWindow, const SfxPoolItem *pArg1 ... );
 
     // @deprecated (start)!!
     // Don't use these methods any longer. The whole class will be removed in the future.
     // Changing code which relies on these methods would need much more effort!
+    // Please contact cd@openoffice.org if you have questions or need help
     void                StartInsert();
-    void                EndInsert();
-    void                CheckItem( sal_uInt16, sal_Bool );
-    void                RemoveItem( sal_uInt16 );
-    void                InsertItem( sal_uInt16, const String&, MenuItemBits, const rtl::OString& rHelpId,
-                                sal_uInt16 nPos = MENU_APPEND );
-    void                InsertSeparator( sal_uInt16 nPos = MENU_APPEND );
+    void				EndInsert();
+    void				CheckItem( USHORT, BOOL );
+    void				RemoveItem( USHORT );
+    void 				InsertItem( USHORT, const String&, MenuItemBits,
+                                USHORT nPos = MENU_APPEND );
+    void 				InsertSeparator( USHORT nPos = MENU_APPEND );
     // @deprecated (end)
-
+    
     void                RemoveDisabledEntries();
-    void                AddClipboardFunctions();
-    Menu*                   GetSVMenu();
+    void				AddClipboardFunctions();
+    Menu*					GetSVMenu();
 };
 
 #endif // #ifndef _SFXMNUMGR_HXX

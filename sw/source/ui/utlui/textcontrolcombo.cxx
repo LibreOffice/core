@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,10 +35,10 @@
 
 TextControlCombo::TextControlCombo( Window* _pParent, const ResId& _rResId,
     Control& _rCtrl, FixedText& _rFTbefore, FixedText& _rFTafter )
-    :Window         ( _pParent, _rResId )
-    ,mrCtrl         ( _rCtrl )
-    ,mrFTbefore     ( _rFTbefore )
-    ,mrFTafter      ( _rFTafter )
+    :Window			( _pParent, _rResId )
+    ,mrCtrl			( _rCtrl )
+    ,mrFTbefore		( _rFTbefore )
+    ,mrFTafter		( _rFTafter )
 {
 }
 
@@ -46,37 +46,37 @@ TextControlCombo::~TextControlCombo()
 {
 }
 
-void TextControlCombo::Arrange( FixedText& _rFTcomplete, sal_Bool /*bShow*/ )
+void TextControlCombo::Arrange( FixedText& _rFTcomplete, BOOL /*bShow*/ )
 {
-    Point           aBasePos( GetPosPixel() );
-    Size            aMetricVals( GetSizePixel() );
+    Point			aBasePos( GetPosPixel() );
+    Size			aMetricVals( GetSizePixel() );
 
-    long            nTextHeight = _rFTcomplete.GetSizePixel().Height();
-    long            nCtrlHeight = mrCtrl.GetSizePixel().Height();
+    long			nTextHeight = _rFTcomplete.GetSizePixel().Height();
+    long			nCtrlHeight = mrCtrl.GetSizePixel().Height();
 
     // calc y positions / center vertical
-    long            nYFT = aBasePos.Y();
-    long            nYCtrl = nYFT;
+    long			nYFT = aBasePos.Y();
+    long			nYCtrl = nYFT;
     if( nCtrlHeight > nTextHeight )
         nYFT += aMetricVals.Height();
     else
         nYCtrl += aMetricVals.Height();
 
     // separate text parts
-    const String    aReplStr( RTL_CONSTASCII_USTRINGPARAM( "%POSITION_OF_CONTROL" ) );
-    String          aTxtBefore( _rFTcomplete.GetText() );
-    String          aTxtAfter;
-    xub_StrLen      nReplPos = aTxtBefore.Search( aReplStr );
+    const String	aReplStr( RTL_CONSTASCII_STRINGPARAM( "%POSITION_OF_CONTROL" ) );
+    String			aTxtBefore( _rFTcomplete.GetText() );
+    String			aTxtAfter;
+    xub_StrLen		nReplPos = aTxtBefore.Search( aReplStr );
     if( nReplPos != STRING_NOTFOUND )
     {
-        xub_StrLen  nStrStartAfter = nReplPos + aReplStr.Len();
+        xub_StrLen	nStrStartAfter = nReplPos + aReplStr.Len();
         aTxtAfter = String( aTxtBefore, nStrStartAfter, aTxtBefore.Len() - nStrStartAfter );
         aTxtBefore.Erase( nReplPos );
     }
 
     // arrange and fill Fixed Texts
-    long            nX = aBasePos.X();
-    long            nWidth = GetTextWidth( aTxtBefore );
+    long			nX = aBasePos.X();
+    long			nWidth = GetTextWidth( aTxtBefore );
 
     mrFTbefore.SetText( aTxtBefore );
     mrFTbefore.SetPosSizePixel( nX, nYFT, nWidth, nTextHeight );
@@ -97,14 +97,14 @@ void TextControlCombo::Arrange( FixedText& _rFTcomplete, sal_Bool /*bShow*/ )
     Window::Hide();
 }
 
-void TextControlCombo::Show( sal_Bool _bVisible, sal_uInt16 _nFlags )
+void TextControlCombo::Show( BOOL _bVisible, USHORT _nFlags )
 {
     mrCtrl.Show( _bVisible, _nFlags );
     mrFTbefore.Show( _bVisible, _nFlags );
     mrFTafter.Show( _bVisible, _nFlags );
 }
 
-void TextControlCombo::Enable( sal_Bool _bEnable, sal_Bool _bChild )
+void TextControlCombo::Enable( BOOL _bEnable, BOOL _bChild )
 {
     mrCtrl.Enable( _bEnable, _bChild );
     mrFTbefore.Enable( _bEnable, _bChild );

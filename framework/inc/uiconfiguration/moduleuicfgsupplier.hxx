@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,10 +35,10 @@
 */
 #include <vector>
 #include <list>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -48,7 +48,7 @@
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -60,7 +60,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -69,11 +69,11 @@
 
 namespace framework
 {
-    class ModuleUIConfigurationManagerSupplier : public com::sun::star::lang::XTypeProvider ,
-                                                 public com::sun::star::lang::XServiceInfo  ,
+    class ModuleUIConfigurationManagerSupplier : public com::sun::star::lang::XTypeProvider	,
+                                                 public com::sun::star::lang::XServiceInfo	,
                                                  public com::sun::star::lang::XComponent    ,
                                                  public ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier      ,
-                                                 private ThreadHelpBase                     ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                                 private ThreadHelpBase						,	// Struct for right initalization of mutex member! Must be first of baseclasses.
                                                  public ::cppu::OWeakObject
     {
         public:
@@ -86,11 +86,11 @@ namespace framework
             virtual ~ModuleUIConfigurationManagerSupplier();
 
             // XComponent
-            virtual void SAL_CALL dispose()
+            virtual void SAL_CALL dispose() 
                 throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener )
+            virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) 
                 throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
+            virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) 
                 throw (::com::sun::star::uno::RuntimeException);
 
             // XModuleUIConfigurationManagerSupplier
@@ -98,7 +98,7 @@ namespace framework
                 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
         private:
-            typedef ::boost::unordered_map< rtl::OUString, com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >, OUStringHashCode, ::std::equal_to< rtl::OUString > > ModuleToModuleCfgMgr;
+            typedef ::std::hash_map< rtl::OUString, com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >, OUStringHashCode, ::std::equal_to< rtl::OUString > > ModuleToModuleCfgMgr;
 
 //TODO_AS            void impl_initStorages();
 

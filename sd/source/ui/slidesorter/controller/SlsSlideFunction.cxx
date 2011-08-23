@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ SlideFunction::SlideFunction (
     SfxRequest& rRequest)
     : FuPoor (
         rSlideSorter.GetViewShell(),
-        rSlideSorter.GetContentWindow().get(),
+        rSlideSorter.GetView().GetWindow(), 
         &rSlideSorter.GetView(),
         rSlideSorter.GetModel().GetDocument(),
         rRequest)
@@ -62,20 +62,20 @@ void SlideFunction::ScrollEnd (void)
 {
 }
 
-sal_Bool SlideFunction::MouseMove(const MouseEvent& )
+BOOL SlideFunction::MouseMove(const MouseEvent& )
 {
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool SlideFunction::MouseButtonUp(const MouseEvent& )
+BOOL SlideFunction::MouseButtonUp(const MouseEvent& )
 {
-    return sal_False;
+    return FALSE;
 
 }
 
-sal_Bool SlideFunction::MouseButtonDown(const MouseEvent& )
+BOOL SlideFunction::MouseButtonDown(const MouseEvent& )
 {
-    return sal_False;
+    return FALSE;
 }
 
 } } } // end of namespace ::sd::slidesorter::controller

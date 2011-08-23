@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPCHARBORDEROVERRIDE_HXX
@@ -75,8 +75,6 @@ public:
     LwpCharacterBorderOverride();
 
     virtual ~LwpCharacterBorderOverride();
-
-    virtual LwpCharacterBorderOverride* clone() const;
 
     void Read(LwpObjectStream* pStrm);
 
@@ -102,24 +100,18 @@ public:
     inline void RevertAboveWidth();
     inline void RevertBelowWidth();
 
-protected:
-    LwpCharacterBorderOverride(LwpCharacterBorderOverride const& rOther);
-
 private:
-    LwpCharacterBorderOverride& operator=(LwpCharacterBorderOverride const& rOther); // not implemented
-
-private:
-    LwpBorderStuff* m_pBorderStuff;
-    LwpMargins*     m_pMargins;
-    sal_Int32       m_nAboveWidth;
-    sal_Int32       m_nBelowWidth;
+    LwpBorderStuff*	m_pBorderStuff;
+    LwpMargins*		m_pMargins;
+    sal_Int32		m_nAboveWidth;
+    sal_Int32		m_nBelowWidth;
 
     enum
     {
-        PBO_STUFF       = 0x01,
-        PBO_MARGINS     = 0x04,
-        PBO_ABOVE       = 0x40,
-        PBO_BELOW       = 0x80
+        PBO_STUFF		= 0x01,
+        PBO_MARGINS 	= 0x04,
+        PBO_ABOVE		= 0x40,
+        PBO_BELOW		= 0x80
     };
 };
 

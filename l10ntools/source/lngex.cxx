@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,46 +34,46 @@
 #include "lngmerge.hxx"
 
 // defines to parse command line
-#define STATE_NON       0x0001
-#define STATE_INPUT     0x0002
-#define STATE_OUTPUT    0x0003
-#define STATE_PRJ       0x0004
-#define STATE_ROOT      0x0005
-#define STATE_MERGESRC  0x0006
-#define STATE_ERRORLOG  0x0007
-#define STATE_BREAKHELP 0x0008
-#define STATE_UNMERGE   0x0009
-#define STATE_UTF8      0x000A
-#define STATE_ULF       0x000B
-#define STATE_LANGUAGES 0x000C
+#define STATE_NON  		0x0001
+#define STATE_INPUT		0x0002
+#define STATE_OUTPUT	0x0003
+#define STATE_PRJ		0x0004
+#define STATE_ROOT		0x0005
+#define STATE_MERGESRC	0x0006
+#define STATE_ERRORLOG	0x0007
+#define STATE_BREAKHELP	0x0008
+#define STATE_UNMERGE	0x0009
+#define STATE_UTF8		0x000A
+#define STATE_ULF		0x000B
+#define STATE_LANGUAGES	0x000C
 
 // set of global variables
 ByteString sInputFile;
-sal_Bool bEnableExport;
-sal_Bool bMergeMode;
-sal_Bool bErrorLog;
-sal_Bool bUTF8;
-sal_Bool bULF; // ULF = Unicode Language File
+BOOL bEnableExport;
+BOOL bMergeMode;
+BOOL bErrorLog;
+BOOL bUTF8;
+BOOL bULF; // ULF = Unicode Language File
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sOutputFile;
 ByteString sMergeSrc;
 
 /*****************************************************************************/
-sal_Bool ParseCommandLine( int argc, char* argv[])
+BOOL ParseCommandLine( int argc, char* argv[])
 /*****************************************************************************/
 {
-    bEnableExport = sal_False;
-    bMergeMode = sal_False;
-    bErrorLog = sal_True;
-    bUTF8 = sal_True;
-    bULF = sal_False;
+    bEnableExport = FALSE;
+    bMergeMode = FALSE;
+    bErrorLog = TRUE;
+    bUTF8 = TRUE;
+    bULF = FALSE;
     sPrj = "";
     sPrjRoot = "";
     Export::sLanguages = "";
-
-    sal_uInt16 nState = STATE_NON;
-    sal_Bool bInput = sal_False;
+    
+    USHORT nState = STATE_NON;
+    BOOL bInput = FALSE;
 
     // parse command line
     for( int i = 1; i < argc; i++ ) {
@@ -96,24 +96,32 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
         }
         else if ( sSwitch == "-E" ) {
             nState = STATE_ERRORLOG;
-            bErrorLog = sal_False;
+            bErrorLog = FALSE;
         }
         else if ( sSwitch == "-UTF8" ) {
             nState = STATE_UTF8;
-            bUTF8 = sal_True;
+            bUTF8 = TRUE;
         }
+/*		else if ( sSwitch == "-NOUTF8" ) {
+            nState = STATE_UTF8;
+            bUTF8 = FALSE;
+        }*/
+/*		else if ( sSwitch == "-ULF" ) {
+            nState = STATE_ULF;
+            bULF = TRUE;
+        }*/
         else if ( sSwitch == "-L" ) {
             nState = STATE_LANGUAGES;
         }
         else {
             switch ( nState ) {
                 case STATE_NON: {
-                    return sal_False;   // no valid command line
+                    return FALSE;	// no valid command line
                 }
                 //break;
                 case STATE_INPUT: {
                     sInputFile = argv[ i ];
-                    bInput = sal_True; // source file found
+                    bInput = TRUE; // source file found
                 }
                 break;
                 case STATE_OUTPUT: {
@@ -122,6 +130,7 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
                 break;
                 case STATE_PRJ: {
                     sPrj = argv[ i ];
+//					sPrj.ToLowerAscii(); // the project
                 }
                 break;
                 case STATE_ROOT: {
@@ -130,7 +139,7 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
                 break;
                 case STATE_MERGESRC: {
                     sMergeSrc = argv[ i ];
-                    bMergeMode = sal_True; // activate merge mode, cause merge database found
+                    bMergeMode = TRUE; // activate merge mode, cause merge database found
                 }
                 break;
                 case STATE_LANGUAGES: {
@@ -143,13 +152,13 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
 
     if ( bInput ) {
         // command line is valid
-        bULF = sal_True;
-        bEnableExport = sal_True;
-        return sal_True;
+        bULF = TRUE;
+        bEnableExport = TRUE;
+        return TRUE;
     }
 
     // command line is not valid
-    return sal_False;
+    return FALSE;
 }
 
 
@@ -183,7 +192,7 @@ int _cdecl main( int argc, char *argv[] )
         return 1;
     }
         fprintf(stdout, ".");
-        fflush( stdout );
+        fflush( stdout ); 
 
     if ( sOutputFile.Len()) {
         LngParser aParser( sInputFile, bUTF8, bULF );

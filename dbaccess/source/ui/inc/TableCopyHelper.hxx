@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ namespace dbaui
     /// unary_function Functor object for class DataFlavorExVector::value_type returntype is bool
     struct TAppSupportedSotFunctor : ::std::unary_function<DataFlavorExVector::value_type,bool>
     {
-        ElementType eEntryType;
-        sal_Bool    bQueryDrop;
+        ElementType	eEntryType;
+        sal_Bool	bQueryDrop;
         TAppSupportedSotFunctor(const ElementType& _eEntryType,sal_Bool _bQueryDrop)
             : eEntryType(_eEntryType)
             , bQueryDrop(_bQueryDrop)
@@ -58,12 +58,12 @@ namespace dbaui
         {
             switch (_aType.mnSotId)
             {
-                case SOT_FORMAT_RTF:                    // RTF data descriptions
-                case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
-                case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
+                case SOT_FORMAT_RTF:					// RTF data descriptions
+                case SOT_FORMATSTR_ID_HTML:				// HTML data descriptions
+                case SOT_FORMATSTR_ID_DBACCESS_TABLE:	// table descriptor
                     return (E_TABLE == eEntryType);
-                case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor
-                case SOT_FORMATSTR_ID_DBACCESS_COMMAND: // SQL command
+                case SOT_FORMATSTR_ID_DBACCESS_QUERY:	// query descriptor
+                case SOT_FORMATSTR_ID_DBACCESS_COMMAND:	// SQL command
                     return ((E_QUERY == eEntryType) || ( !bQueryDrop && E_TABLE == eEntryType));
             }
             return false;
@@ -74,24 +74,24 @@ namespace dbaui
     {
     private:
         OGenericUnoController*  m_pController;
-        ::rtl::OUString         m_sTableNameForAppend;
+        ::rtl::OUString		    m_sTableNameForAppend;
 
     public:
         // is needed to describe the drop target
         struct DropDescriptor
         {
-            ::svx::ODataAccessDescriptor    aDroppedData;
-
+            ::svx::ODataAccessDescriptor	aDroppedData;
+            //dyf add 20070601
             //for transfor the tablename
             ::rtl::OUString                 sDefaultTableName;
-
-            String                          aUrl;
-            SotStorageStreamRef             aHtmlRtfStorage;
-            ElementType                     nType;
+            //dyf add end
+            String							aUrl;
+            SotStorageStreamRef				aHtmlRtfStorage;
+            ElementType						nType;
             SvLBoxEntry*                    pDroppedAt;
-            sal_Int8                        nAction;
-            sal_Bool                        bHtml;
-            sal_Bool                        bError;
+            sal_Int8						nAction;
+            sal_Bool						bHtml;
+            sal_Bool						bError;
 
             DropDescriptor() : nType(E_TABLE),pDroppedAt(NULL),nAction(DND_ACTION_NONE) { }
         };
@@ -99,9 +99,9 @@ namespace dbaui
         OTableCopyHelper(OGenericUnoController* _pControler);
 
         /** pastes a table into the data source
-            @param  _rPasteData
+            @param	_rPasteData
                 The data helper.
-            @param  _sDestDataSourceName
+            @param	_sDestDataSourceName
                 The name of the dest data source.
         */
         void pasteTable( const TransferableDataHelper& _rTransData
@@ -109,11 +109,11 @@ namespace dbaui
                         ,const SharedConnection& _xConnection);
 
         /** pastes a table into the data source
-            @param  _nFormatId
+            @param	_nFormatId
                 The format which should be copied.
-            @param  _rPasteData
+            @param	_rPasteData
                 The data helper.
-            @param  _sDestDataSourceName
+            @param	_sDestDataSourceName
                 The name of the dest data source.
         */
         void pasteTable( SotFormatStringId _nFormatId
@@ -122,9 +122,9 @@ namespace dbaui
                         ,const SharedConnection& _xConnection);
 
         /** copies a table which was constructed by tags like HTML or RTF
-            @param  _rDesc
+            @param	_rDesc
                 The Drop descriptor
-            @param  _bCheck
+            @param	_bCheck
                 If set to <TRUE/> than the controller checks only if a copy is possible.
             @param  _xConnection
                 The connection
@@ -134,9 +134,9 @@ namespace dbaui
                                 const SharedConnection& _xConnection);
 
         /** copies a table which was constructed by tags like HTML or RTF
-            @param  _rDesc
+            @param	_rDesc
                 The Drop descriptor
-            @param  _bCheck
+            @param	_bCheck
                 If set to <TRUE/> than the controller checks only if a copy is possible.
             @param  _xConnection
                 The connection
@@ -148,7 +148,7 @@ namespace dbaui
         /** copies a table which was constructed by tags like HTML or RTF
             @param  _aDroppedData
                 The dropped data
-            @param  _rDesc
+            @param	_rDesc
                 IN/OUT parameter
             @param  _xConnection
                 The connection
@@ -166,9 +166,9 @@ namespace dbaui
 
     private:
         /** pastes a table into the data source
-            @param  _rPasteData
+            @param	_rPasteData
                 The data descriptor.
-            @param  _sDestDataSourceName
+            @param	_sDestDataSourceName
                 The name of the dest data source.
         */
         void pasteTable(
@@ -193,7 +193,7 @@ namespace dbaui
 
     };
 //........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //........................................................................
 #endif // DBUI_TABLECOPYHELPER_HXX
 

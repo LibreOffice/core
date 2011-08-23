@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,6 +45,11 @@
 #include <ole2.h>
 #include <objidl.h>
 
+
+//------------------------------------------------------------------------
+// 
+//------------------------------------------------------------------------
+
 class EnumFormatEtc;
 
 class CXTDataObject : public IDataObject
@@ -57,12 +62,12 @@ public:
     // ole interface implementation
     //-----------------------------------------------------------------
 
-    //IUnknown
+    //IUnknown 
     STDMETHODIMP           QueryInterface(REFIID iid, LPVOID* ppvObject);
     STDMETHODIMP_( ULONG ) AddRef( );
     STDMETHODIMP_( ULONG ) Release( );
 
-    //IDataObject
+    //IDataObject 
     STDMETHODIMP GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium );
     STDMETHODIMP GetDataHere( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium );
     STDMETHODIMP QueryGetData( LPFORMATETC pFormatetc );
@@ -81,7 +86,7 @@ public:
     //sal_Int64 SAL_CALL QueryDataSize( );
 
     // retrieve the data from the source
-    // necessary so that
+    // necessary so that 
     //void SAL_CALL GetAllDataFromSource( );
 
 private:
@@ -94,27 +99,31 @@ private:
     friend class CEnumFormatEtc;
 };
 
+//------------------------------------------------------------------------
+// 
+//------------------------------------------------------------------------
+
 class CEnumFormatEtc : public IEnumFORMATETC
 {
 public:
     CEnumFormatEtc( LPUNKNOWN pUnkDataObj );
     ~CEnumFormatEtc( );
 
-    // IUnknown
+    // IUnknown 
     STDMETHODIMP           QueryInterface( REFIID iid, LPVOID* ppvObject );
     STDMETHODIMP_( ULONG ) AddRef( );
     STDMETHODIMP_( ULONG ) Release( );
 
-    //IEnumFORMATETC
+    //IEnumFORMATETC 
     STDMETHODIMP Next( ULONG celt, LPFORMATETC rgelt, ULONG* pceltFetched );
     STDMETHODIMP Skip( ULONG celt );
     STDMETHODIMP Reset( );
     STDMETHODIMP Clone( IEnumFORMATETC** ppenum );
 
 private:
-    LONG        m_nRefCnt;
-    LPUNKNOWN   m_pUnkDataObj;
-    ULONG       m_nCurrentPos;
+    LONG		m_nRefCnt;
+    LPUNKNOWN	m_pUnkDataObj;
+    ULONG		m_nCurrentPos;
     CLIPFORMAT  m_cfFormats[2];
 };
 

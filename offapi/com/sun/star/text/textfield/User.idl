@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,11 +44,11 @@ published service User
 {
     service  com::sun::star::text::DependentTextField;
 
-    /** determines if the content is shown as text rather than as value.
+    /** determins if the content is shown as text rather than as value.
      */
     [optional, property] boolean IsShowFormula;
 
-    /** determines if the field is visible.
+    /** determins if the field is visible.
      */
     [optional, property] boolean IsVisible;
 
@@ -57,7 +57,7 @@ published service User
     */
     [optional, property] long NumberFormat;
     /** determines whether changes in language attributes at the position the text field
-        is located also change the number format as appropriate for this language.
+        is located also change the number format as appropriate for this language. 
 
     @since OOo 1.1.2
      */

@@ -57,7 +57,7 @@ ScVbaGlobals::ScVbaGlobals( uno::Sequence< uno::Any > const& aArgs, uno::Referen
     OSL_TRACE("ScVbaGlobals::ScVbaGlobals()");
 
         uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
-        aInitArgs[ 0 ].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Application"));
+        aInitArgs[ 0 ].Name = rtl::OUString::createFromAscii("Application");
         aInitArgs[ 0 ].Value = uno::makeAny( getApplication() );
         aInitArgs[ 1 ].Name = sDocCtxName;
         aInitArgs[ 1 ].Value = uno::makeAny( getXSomethingFromArgs< frame::XModel >( aArgs, 0 ) );
@@ -76,7 +76,7 @@ ScVbaGlobals::~ScVbaGlobals()
 uno::Reference<excel::XApplication >
 ScVbaGlobals::getApplication() throw (uno::RuntimeException)
 {
-//  OSL_TRACE("In ScVbaGlobals::getApplication");
+//	OSL_TRACE("In ScVbaGlobals::getApplication");
         if ( !mxApplication.is() )
         mxApplication.set( new ScVbaApplication( mxContext) );
        return mxApplication;
@@ -94,15 +94,15 @@ ScVbaGlobals::getExcel() throw (uno::RuntimeException)
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaGlobals::getActiveWorkbook() throw (uno::RuntimeException)
 {
-//  OSL_TRACE("In ScVbaGlobals::getActiveWorkbook");
+//	OSL_TRACE("In ScVbaGlobals::getActiveWorkbook");
     uno::Reference< excel::XWorkbook > xWorkbook( getApplication()->getActiveWorkbook(), uno::UNO_QUERY);
     if ( xWorkbook.is() )
     {
         return xWorkbook;
     }
 // FIXME check if this is correct/desired behavior
-    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "No activeWorkbook available" )), Reference< uno::XInterface >() );
+    throw uno::RuntimeException( rtl::OUString::createFromAscii(
+        "No activeWorkbook available" ), Reference< uno::XInterface >() );
 }
 
 

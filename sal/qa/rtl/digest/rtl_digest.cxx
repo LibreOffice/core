@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,18 +29,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
-
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
+#include <testshl/simpleheader.hxx>
 
 #include <rtl/digest.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
-
-#include <string.h>
 
 // sample, how to use digest
 
@@ -53,9 +47,9 @@ rtl::OUString CreateMD5FromString( const rtl::OUString& aMsg )
     if ( handle > 0 )
     {
         const sal_uInt8* pData = (const sal_uInt8*)aMsg.getStr();
-        sal_uInt32       nSize = ( aMsg.getLength() * sizeof( sal_Unicode ));
-        sal_uInt32       nMD5KeyLen = rtl_digest_queryLength( handle );
-        sal_uInt8*       pMD5KeyBuffer = new sal_uInt8[ nMD5KeyLen ];
+        sal_uInt32		 nSize = ( aMsg.getLength() * sizeof( sal_Unicode ));
+        sal_uInt32		 nMD5KeyLen = rtl_digest_queryLength( handle );
+        sal_uInt8*		 pMD5KeyBuffer = new sal_uInt8[ nMD5KeyLen ];
 
         rtl_digest_init( handle, pData, nSize );
         rtl_digest_update( handle, pData, nSize );
@@ -64,7 +58,7 @@ rtl::OUString CreateMD5FromString( const rtl::OUString& aMsg )
 
         // Create hex-value string from the MD5 value to keep the string size minimal
         rtl::OUStringBuffer aBuffer( nMD5KeyLen * 2 + 1 );
-        for ( sal_uInt32 i = 0; i < nMD5KeyLen; ++i )
+        for ( sal_uInt32 i = 0; i < nMD5KeyLen; i++ )
             aBuffer.append( (sal_Int32)pMD5KeyBuffer[i], 16 );
 
         delete [] pMD5KeyBuffer;
@@ -140,7 +134,7 @@ public:
     void create_007()
         {
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmInvalid );
-            printf("Handle is %p\n", handle);
+            t_print("Handle is %x\n", handle);
             CPPUNIT_ASSERT_MESSAGE("create with NULL", handle == 0);
             rtl_digest_destroy( handle );
         }
@@ -443,7 +437,7 @@ public:
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
 
             sal_uInt32 nAlgoLength = rtl_digest_queryLength(handle);
-            // printf("nAlgoLength:=%d\n", nAlgoLength);
+            // t_print("nAlgoLength:=%d\n", nAlgoLength);
             CPPUNIT_ASSERT_MESSAGE("query Length", RTL_DIGEST_LENGTH_MD5 == nAlgoLength);
 
             rtl_digest_destroy( handle );
@@ -453,7 +447,7 @@ public:
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD2 );
 
             sal_uInt32 nAlgoLength = rtl_digest_queryLength(handle);
-            // printf("nAlgoLength:=%d\n", nAlgoLength);
+            // t_print("nAlgoLength:=%d\n", nAlgoLength);
             CPPUNIT_ASSERT_MESSAGE("query length", RTL_DIGEST_LENGTH_MD2 == nAlgoLength);
 
             rtl_digest_destroy( handle );
@@ -463,7 +457,7 @@ public:
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmSHA );
 
             sal_uInt32 nAlgoLength = rtl_digest_queryLength(handle);
-            // printf("nAlgoLength:=%d\n", nAlgoLength);
+            // t_print("nAlgoLength:=%d\n", nAlgoLength);
             CPPUNIT_ASSERT_MESSAGE("query length", RTL_DIGEST_LENGTH_SHA == nAlgoLength);
 
             rtl_digest_destroy( handle );
@@ -473,7 +467,7 @@ public:
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
 
             sal_uInt32 nAlgoLength = rtl_digest_queryLength(handle);
-            // printf("nAlgoLength:=%d\n", nAlgoLength);
+            // t_print("nAlgoLength:=%d\n", nAlgoLength);
             CPPUNIT_ASSERT_MESSAGE("query length", RTL_DIGEST_LENGTH_SHA1 == nAlgoLength);
 
             rtl_digest_destroy( handle );
@@ -483,7 +477,7 @@ public:
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmHMAC_MD5 );
 
             sal_uInt32 nAlgoLength = rtl_digest_queryLength(handle);
-            // printf("nAlgoLength:=%d\n", nAlgoLength);
+            // t_print("nAlgoLength:=%d\n", nAlgoLength);
             CPPUNIT_ASSERT_MESSAGE("query length", RTL_DIGEST_LENGTH_HMAC_MD5 == nAlgoLength);
 
             rtl_digest_destroy( handle );
@@ -493,7 +487,7 @@ public:
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmHMAC_SHA1 );
 
             sal_uInt32 nAlgoLength = rtl_digest_queryLength(handle);
-            // printf("nAlgoLength:=%d\n", nAlgoLength);
+            // t_print("nAlgoLength:=%d\n", nAlgoLength);
             CPPUNIT_ASSERT_MESSAGE("query length", RTL_DIGEST_LENGTH_HMAC_SHA1 == nAlgoLength);
 
             rtl_digest_destroy( handle );
@@ -504,7 +498,7 @@ public:
             rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmInvalid );
 
             sal_uInt32 nAlgoLength = rtl_digest_queryLength(handle);
-            // printf("nAlgoLength:=%d\n", nAlgoLength);
+            // t_print("nAlgoLength:=%d\n", nAlgoLength);
             CPPUNIT_ASSERT_MESSAGE("query length", 0 == nAlgoLength);
 
             rtl_digest_destroy( handle );
@@ -531,11 +525,13 @@ rtl::OString createHex(sal_uInt8 *_pMD5KeyBuffer, sal_uInt32 _nMD5KeyLen)
 {
     // Create hex-value string from the MD5 value to keep the string size minimal
     rtl::OStringBuffer aBuffer( _nMD5KeyLen * 2 + 1 );
-    for ( sal_uInt32 i = 0; i < _nMD5KeyLen; ++i )
+    for ( sal_uInt32 i = 0; i < _nMD5KeyLen; i++ )
     {
         sal_Int32 nValue = (sal_Int32)_pMD5KeyBuffer[i];
         if (nValue < 16)                         // maximul hex value for 1 byte
-            aBuffer.append( static_cast<sal_Int32>(0), static_cast<sal_Int16>(16) /* radix */ );
+        {
+            aBuffer.append( sal_Int32(0), 16 /* radix */ );
+        }
         aBuffer.append( nValue, 16 /* radix */ );
     }
 
@@ -583,7 +579,7 @@ public:
 
             rtl::OString aMsg = sSampleString;
             const sal_uInt8 *pData = (const sal_uInt8*)aMsg.getStr();
-            sal_uInt32       nSize = ( aMsg.getLength() );
+            sal_uInt32	     nSize = ( aMsg.getLength() );
 
             rtlDigestError aError = rtl_digest_init(handle, pData, nSize);
 
@@ -598,7 +594,7 @@ public:
             rtl::OString aSum = createHex(pKeyBuffer, nKeyLen);
             delete [] pKeyBuffer;
 
-            printf("MD2 Sum: %s\n", aSum.getStr());
+            t_print("MD2 Sum: %s\n", aSum.getStr());
             // LLA: how to check right values
             // samples?
 
@@ -611,7 +607,7 @@ public:
 
             rtl::OString aMsg = sSampleString;
             const sal_uInt8 *pData = (const sal_uInt8*)aMsg.getStr();
-            sal_uInt32       nSize = ( aMsg.getLength() );
+            sal_uInt32	     nSize = ( aMsg.getLength() );
 
             rtlDigestError aError = rtl_digest_init(handle, pData, nSize);
 
@@ -626,7 +622,7 @@ public:
             rtl::OString aSum = createHex(pKeyBuffer, nKeyLen);
             delete [] pKeyBuffer;
 
-            printf("MD5 Sum: %s\n", aSum.getStr());
+            t_print("MD5 Sum: %s\n", aSum.getStr());
             // LLA: how to check right values
             // samples?
 
@@ -639,7 +635,7 @@ public:
 
             rtl::OString aMsg = sSampleString;
             const sal_uInt8 *pData = (const sal_uInt8*)aMsg.getStr();
-            sal_uInt32       nSize = ( aMsg.getLength() );
+            sal_uInt32	     nSize = ( aMsg.getLength() );
 
             rtlDigestError aError = rtl_digest_init(handle, pData, nSize);
 
@@ -654,7 +650,7 @@ public:
             rtl::OString aSum = createHex(pKeyBuffer, nKeyLen);
             delete [] pKeyBuffer;
 
-            printf("SHA Sum: %s\n", aSum.getStr());
+            t_print("SHA Sum: %s\n", aSum.getStr());
             // LLA: how to check right values
             // samples?
 
@@ -666,7 +662,7 @@ public:
 
             rtl::OString aMsg = sSampleString;
             const sal_uInt8 *pData = (const sal_uInt8*)aMsg.getStr();
-            sal_uInt32       nSize = ( aMsg.getLength() );
+            sal_uInt32	     nSize = ( aMsg.getLength() );
 
             rtlDigestError aError = rtl_digest_init(handle, pData, nSize);
 
@@ -681,7 +677,7 @@ public:
             rtl::OString aSum = createHex(pKeyBuffer, nKeyLen);
             delete [] pKeyBuffer;
 
-            printf("SHA1 Sum: %s\n", aSum.getStr());
+            t_print("SHA1 Sum: %s\n", aSum.getStr());
             // LLA: how to check right values
             // samples?
 
@@ -693,7 +689,7 @@ public:
 
             rtl::OString aMsg = sSampleString;
             const sal_uInt8 *pData = (const sal_uInt8*)aMsg.getStr();
-            sal_uInt32       nSize = ( aMsg.getLength() );
+            sal_uInt32	     nSize = ( aMsg.getLength() );
 
             sal_uInt32     nKeyLen = rtl_digest_queryLength( handle );
             CPPUNIT_ASSERT_MESSAGE( "Keylen must be greater 0", nKeyLen );
@@ -712,7 +708,7 @@ public:
             rtl::OString aSum = createHex(pKeyBuffer, nKeyLen);
             delete [] pKeyBuffer;
 
-            printf("HMAC_MD5 Sum: %s\n", aSum.getStr());
+            t_print("HMAC_MD5 Sum: %s\n", aSum.getStr());
             // LLA: how to check right values
             // samples?
 
@@ -724,7 +720,7 @@ public:
 
             rtl::OString aMsg = sSampleString;
             const sal_uInt8 *pData = (const sal_uInt8*)aMsg.getStr();
-            sal_uInt32       nSize = ( aMsg.getLength() );
+            sal_uInt32	     nSize = ( aMsg.getLength() );
 
             sal_uInt32     nKeyLen = rtl_digest_queryLength( handle );
             CPPUNIT_ASSERT_MESSAGE( "Keylen must be greater 0", nKeyLen );
@@ -743,7 +739,7 @@ public:
             rtl::OString aSum = createHex(pKeyBuffer, nKeyLen);
             delete [] pKeyBuffer;
 
-            printf("HMAC_SHA1 Sum: %s\n", aSum.getStr());
+            t_print("HMAC_SHA1 Sum: %s\n", aSum.getStr());
             // LLA: how to check right values
             // samples?
 
@@ -774,7 +770,7 @@ rtl::OString getMD5Sum(rtl::OString const& _aMsg )
     rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
 
     const sal_uInt8 *pData = (const sal_uInt8*)_aMsg.getStr();
-    sal_uInt32       nSize = ( _aMsg.getLength() );
+    sal_uInt32	     nSize = ( _aMsg.getLength() );
 
     rtl_digest_init(handle, pData, nSize);
     rtl_digest_update( handle, pData, nSize );
@@ -870,7 +866,7 @@ public:
             CPPUNIT_ASSERT(aError == rtl_Digest_E_None );
 
             rtl::OString aStr = createHex(pBuffer, RTL_DIGEST_LENGTH_MD2);
-            printf("Decrypt MD2: %s\n", aStr.getStr());
+            t_print("Decrypt MD2: %s\n", aStr.getStr());
             CPPUNIT_ASSERT_MESSAGE("checksum of sample string is wrong. Code changes or sample problems, please check.", aStr.equals(sSampleString_MD2) );
 
             delete [] pBuffer;
@@ -913,7 +909,7 @@ public:
             CPPUNIT_ASSERT(aError == rtl_Digest_E_None );
 
             rtl::OString aStr = createHex(pBuffer, RTL_DIGEST_LENGTH_MD5);
-            printf("Decrypt MD5: %s\n", aStr.getStr());
+            t_print("Decrypt MD5: %s\n", aStr.getStr());
             CPPUNIT_ASSERT_MESSAGE("checksum of sample string is wrong. Code changes or sample problems, please check.", aStr.equals(sSampleString_MD5) );
 
             delete [] pBuffer;
@@ -958,7 +954,7 @@ public:
             CPPUNIT_ASSERT(aError == rtl_Digest_E_None );
 
             rtl::OString aStr = createHex(pBuffer, RTL_DIGEST_LENGTH_SHA);
-            printf("Decrypt SHA: %s\n", aStr.getStr());
+            t_print("Decrypt SHA: %s\n", aStr.getStr());
             CPPUNIT_ASSERT_MESSAGE("checksum of sample string is wrong. Code changes or sample problems, please check.", aStr.equals(sSampleString_SHA) );
 
             delete [] pBuffer;
@@ -1003,7 +999,7 @@ public:
             CPPUNIT_ASSERT(aError == rtl_Digest_E_None );
 
             rtl::OString aStr = createHex(pBuffer, RTL_DIGEST_LENGTH_SHA1);
-            printf("Decrypt SHA1: %s\n", aStr.getStr());
+            t_print("Decrypt SHA1: %s\n", aStr.getStr());
             CPPUNIT_ASSERT_MESSAGE("checksum of sample string is wrong. Code changes or sample problems, please check.", aStr.equals(sSampleString_SHA1) );
 
             delete [] pBuffer;
@@ -1050,7 +1046,7 @@ public:
             CPPUNIT_ASSERT(aError == rtl_Digest_E_None );
 
             rtl::OString aStr = createHex(pBuffer, RTL_DIGEST_LENGTH_HMAC_MD5);
-            printf("Decrypt HMAC_MD5: %s\n", aStr.getStr());
+            t_print("Decrypt HMAC_MD5: %s\n", aStr.getStr());
             CPPUNIT_ASSERT_MESSAGE("md5sum of sample string is wrong. Code changes or sample problems, please check.", aStr.equals(sSampleString_HMAC_MD5) );
 
             delete [] pBuffer;
@@ -1097,7 +1093,7 @@ public:
             CPPUNIT_ASSERT(aError == rtl_Digest_E_None );
 
             rtl::OString aStr = createHex(pBuffer, RTL_DIGEST_LENGTH_HMAC_SHA1);
-            printf("Decrypt HMAC_SHA1: %s\n", aStr.getStr());
+            t_print("Decrypt HMAC_SHA1: %s\n", aStr.getStr());
             CPPUNIT_ASSERT_MESSAGE("md5sum of sample string is wrong. Code changes or sample problems, please check.", aStr.equals(sSampleString_HMAC_SHA1) );
 
             delete [] pBuffer;
@@ -1151,10 +1147,10 @@ public:
             CPPUNIT_ASSERT(aError == rtl_Digest_E_None );
 
             rtl::OString aKey = createHex(pKeyBuffer, nKeyLen);
-            printf("Key: %s\n", aKey.getStr());
+            t_print("Key: %s\n", aKey.getStr());
 
             // rtl::OString sSalt = createHex(pSaltData, nSaltDataLen);
-            // printf("Salt: %s\n", sSalt.getStr());
+            // t_print("Salt: %s\n", sSalt.getStr());
 
             // CPPUNIT_ASSERT_MESSAGE("md5sum of sample string is wrong. Code changes or sample problems, please check.", aStr.equals(sSampleString_PBKDF2) );
 
@@ -1244,7 +1240,7 @@ public:
 
             rtl::OString aMsg = sSampleString;
             const sal_uInt8* pData = (const sal_uInt8*)aMsg.getStr();
-            sal_uInt32       nSize = ( aMsg.getLength() );
+            sal_uInt32	     nSize = ( aMsg.getLength() );
 
             rtlDigestError aError = rtl_digest_updateMD5(aHandle, pData, nSize);
             CPPUNIT_ASSERT_MESSAGE("handle parameter 'handle' wrong", aError == rtl_Digest_E_Algorithm );
@@ -1420,34 +1416,39 @@ public:
 }; // class create
 // -----------------------------------------------------------------------------
 
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::create);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::createMD2);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::createMD5);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::createSHA);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::createSHA1);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::createHMAC_MD5);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::createHMAC_SHA1);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::create, "rtl_digest");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::createMD2, "rtl_digest");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::createMD5, "rtl_digest");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::createSHA, "rtl_digest");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::createSHA1, "rtl_digest");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::createHMAC_MD5, "rtl_digest");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::createHMAC_SHA1, "rtl_digest");
 
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::destroy);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::destroy, "rtl_digest");
 
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::queryAlgorithm);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::queryLength);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::init);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::equalTests);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::queryAlgorithm, "rtl_digest");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::queryLength, "rtl_digest");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::init, "rtl_digest");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::equalTests, "rtl_digest");
 
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::digest_MD2);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::digest_MD5);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::digest_SHA);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::digest_SHA1);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::digest_HMAC_MD5);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::digest_HMAC_SHA1);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::digest_PBKDF2);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::digest_MD2, "rtl_digest");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::digest_MD5, "rtl_digest");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::digest_SHA, "rtl_digest");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::digest_SHA1, "rtl_digest");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::digest_HMAC_MD5, "rtl_digest");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::digest_HMAC_SHA1, "rtl_digest");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::digest_PBKDF2, "rtl_digest");
 
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::update);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::get);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_digest::destroy);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::update, "rtl_digest");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::get, "rtl_digest");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_digest::destroy, "rtl_digest");
 } // namespace rtl_digest
 
-CPPUNIT_PLUGIN_IMPLEMENT();
+
+// -----------------------------------------------------------------------------
+
+// this macro creates an empty function, which will called by the RegisterAllFunctions()
+// to let the user the possibility to also register some functions by hand.
+NOADDITIONAL;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

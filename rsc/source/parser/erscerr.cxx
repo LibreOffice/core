@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,11 @@
 
 /*************************************************************************
 |*
-|*    ERRTYPE::operator = ;
+|*	  ERRTYPE::operator = ;
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 25.09.91
+|*	  Letzte Aenderung	MM 25.09.91
 |*
 *************************************************************************/
 ERRTYPE& ERRTYPE::operator = ( const ERRTYPE & rError )
@@ -56,7 +60,11 @@ ERRTYPE& ERRTYPE::operator = ( const ERRTYPE & rError )
 
 /*************************************************************************
 |*
-|*    RscError::StdOut();
+|*	  RscError::StdOut();
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 06.05.91
+|*	  Letzte Aenderung	MM 06.05.91
 |*
 *************************************************************************/
 void RscError::StdOut( const char * pStr, const RscVerbosity _verbosityLevel )
@@ -72,18 +80,28 @@ void RscError::StdOut( const char * pStr, const RscVerbosity _verbosityLevel )
 
 /*************************************************************************
 |*
-|*    RscError::StdErr();
+|*	  RscError::StdErr();
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	PL 11/07/2001
+|*	  Letzte Aenderung	PL 11/07/2001
 |*
 *************************************************************************/
 void RscError::StdErr( const char * pStr )
 {
+#ifndef WIN
     if( pStr )
         fprintf( stderr, "%s", pStr );
+#endif
 }
 
 /*************************************************************************
 |*
-|*    RscError::LstOut();
+|*	  RscError::LstOut();
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 06.05.91
+|*	  Letzte Aenderung	MM 06.05.91
 |*
 *************************************************************************/
 void RscError::LstOut( const char * pStr ){
@@ -93,7 +111,11 @@ void RscError::LstOut( const char * pStr ){
 
 /*************************************************************************
 |*
-|*    RscError::StdLstOut();
+|*	  RscError::StdLstOut();
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 06.05.91
+|*	  Letzte Aenderung	MM 06.05.91
 |*
 *************************************************************************/
 void RscError::StdLstOut( const char * pStr ){
@@ -103,7 +125,11 @@ void RscError::StdLstOut( const char * pStr ){
 
 /*************************************************************************
 |*
-|*    RscError::StdLstErr();
+|*	  RscError::StdLstErr();
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	PL 11/07/2001
+|*	  Letzte Aenderung	PL 11/07/2001
 |*
 *************************************************************************/
 void RscError::StdLstErr( const char * pStr ){
@@ -113,7 +139,11 @@ void RscError::StdLstErr( const char * pStr ){
 
 /*************************************************************************
 |*
-|*    RscError::WriteError();
+|*	  RscError::WriteError();
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 06.05.91
+|*	  Letzte Aenderung	MM 06.05.91
 |*
 *************************************************************************/
 void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
@@ -173,7 +203,7 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
         case ERR_USAGE:
             StdLstOut( "Copyright (C) 2000, 2010 Oracle and/or its affiliates.\n" );
             {
-                char    buf[40];
+                char	buf[40];
 
                 StdLstOut( "DataVersion: " );
                 sprintf( buf, "%d.%d\n\n",
@@ -378,7 +408,11 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
 
 /*************************************************************************
 |*
-|*    RscErrorFormat()
+|*	  RscErrorFormat()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 06.05.91
+|*	  Letzte Aenderung	MM 06.05.91
 |*
 *************************************************************************/
 void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
@@ -436,7 +470,11 @@ void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
 
 /*************************************************************************
 |*
-|*    RscError::Error()
+|*	  RscError::Error()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 06.05.91
+|*	  Letzte Aenderung	MM 06.05.91
 |*
 *************************************************************************/
 void RscError::Error( const ERRTYPE& rError, RscTop * pClass,
@@ -455,7 +493,11 @@ void RscError::Error( const ERRTYPE& rError, RscTop * pClass,
 
 /*************************************************************************
 |*
-|*    RscError::FatalError();
+|*	  RscError::FatalError();
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 06.05.91
+|*	  Letzte Aenderung	MM 06.05.91
 |*
 *************************************************************************/
 void RscError::FatalError( const ERRTYPE& rError, const RscId &aId,

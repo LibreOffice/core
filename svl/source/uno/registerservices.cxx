@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,6 +61,37 @@ SVL_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment (
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
+SVL_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo (
+    void * /* _pServiceManager */, void * _pRegistryKey)
+{
+    if (_pRegistryKey)
+    {
+        Reference< css::registry::XRegistryKey > xRegistryKey (
+            reinterpret_cast< css::registry::XRegistryKey* >(_pRegistryKey));
+        Reference< css::registry::XRegistryKey > xNewKey;
+
+        xNewKey = xRegistryKey->createKey (
+            OUString::createFromAscii(
+                "/com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject/UNO/SERVICES" ) );
+        xNewKey->createKey (
+            OUString::createFromAscii( "com.sun.star.util.NumberFormatsSupplier" ) );
+
+        xNewKey = xRegistryKey->createKey (
+            OUString::createFromAscii(
+                "/com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject/UNO/SERVICES" ) );
+        xNewKey->createKey (
+            OUString::createFromAscii( "com.sun.star.util.NumberFormatter" ) );
+
+        xNewKey = xRegistryKey->createKey(
+            OUString::createFromAscii( "/com.sun.star.comp.svl.PathService/UNO/SERVICES" ) );
+        xNewKey->createKey (
+            OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" ) );
+
+        return sal_True;
+    }
+    return sal_False;
+}
+
 SVL_DLLPUBLIC void* SAL_CALL component_getFactory (
     const sal_Char * pImplementationName, void * _pServiceManager, void * /* _pRegistryKey*/)
 {
@@ -74,7 +105,7 @@ SVL_DLLPUBLIC void* SAL_CALL component_getFactory (
         {
             Sequence< OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatsSupplier"));
+                OUString::createFromAscii( "com.sun.star.util.NumberFormatsSupplier" );
 
             xFactory = ::cppu::createSingleFactory(
                 reinterpret_cast< css::lang::XMultiServiceFactory* >(_pServiceManager),
@@ -88,7 +119,7 @@ SVL_DLLPUBLIC void* SAL_CALL component_getFactory (
         {
             Sequence< OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"));
+                OUString::createFromAscii( "com.sun.star.util.NumberFormatter" );
 
             xFactory = ::cppu::createSingleFactory(
                 reinterpret_cast< css::lang::XMultiServiceFactory* >(_pServiceManager),
@@ -101,7 +132,7 @@ SVL_DLLPUBLIC void* SAL_CALL component_getFactory (
         {
             Sequence< OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.config.SpecialConfigManager"));
+                OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" );
             xFactory = ::cppu::createSingleFactory (
                 reinterpret_cast< css::lang::XMultiServiceFactory* >( _pServiceManager ),
                 OUString::createFromAscii( pImplementationName ),
@@ -117,6 +148,6 @@ SVL_DLLPUBLIC void* SAL_CALL component_getFactory (
     return pResult;
 }
 
-}   // "C"
+}	// "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

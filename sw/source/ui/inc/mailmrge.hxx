@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,62 +63,62 @@ class SwMailMergeDlg : public SvxStandardDialog
     Window*         pBeamerWin;
 
     RadioButton     aAllRB;
-    RadioButton     aMarkedRB;
-    RadioButton     aFromRB;
-    NumericField    aFromNF;
-    FixedText       aBisFT;
-    NumericField    aToNF;
+    RadioButton		aMarkedRB;
+    RadioButton		aFromRB;
+    NumericField	aFromNF;
+    FixedText		aBisFT;
+    NumericField	aToNF;
     FixedLine       aRecordFL;
 
     FixedLine       aSeparatorFL;
 
     RadioButton     aPrinterRB;
-    RadioButton     aMailingRB;
-    RadioButton     aFileRB;
+    RadioButton		aMailingRB;
+    RadioButton		aFileRB;
 
-    CheckBox        aSingleJobsCB;
+    CheckBox		aSingleJobsCB;
 
     FixedLine       aSaveMergedDocumentFL;
     RadioButton     aSaveSingleDocRB;
     RadioButton     aSaveIndividualRB;
 
     CheckBox        aGenerateFromDataBaseCB;
-
+    
     FixedText       aColumnFT;
     ListBox         aColumnLB;
     FixedText       aPathFT;
-    Edit            aPathED;
-    PushButton      aPathPB;
+    Edit			aPathED;
+    PushButton		aPathPB;
     FixedText       aFilterFT;
     ListBox         aFilterLB;
 
-    ListBox         aAddressFldLB;
-    FixedText       aSubjectFT;
-    Edit            aSubjectED;
-    FixedText       aFormatFT;
-    FixedText       aAttachFT;
-    Edit            aAttachED;
-    PushButton      aAttachPB;
-    CheckBox        aFormatHtmlCB;
-    CheckBox        aFormatRtfCB;
-    CheckBox        aFormatSwCB;
+    ListBox			aAddressFldLB;
+    FixedText		aSubjectFT;
+    Edit			aSubjectED;
+    FixedText		aFormatFT;
+    FixedText		aAttachFT;
+    Edit			aAttachED;
+    PushButton		aAttachPB;
+    CheckBox		aFormatHtmlCB;
+    CheckBox		aFormatRtfCB;
+    CheckBox		aFormatSwCB;
     FixedLine       aDestFL;
 
     FixedLine       aBottomSeparatorFL;
 
     OKButton        aOkBTN;
-    CancelButton    aCancelBTN;
-    HelpButton      aHelpBTN;
+    CancelButton	aCancelBTN;
+    HelpButton		aHelpBTN;
 
     SwMailMergeDlg_Impl* pImpl;
 
     SwWrtShell&     rSh;
     SwModuleOptions* pModOpt;
-    const String&   rDBName;
-    const String&   rTableName;
+    const String&	rDBName;
+    const String&	rTableName;
 
-    sal_uInt16          nMergeType;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >       m_aSelection;
+    USHORT			nMergeType;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >		m_aSelection;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
 
     Size            m_aDialogSize;
@@ -133,7 +133,7 @@ class SwMailMergeDlg : public SvxStandardDialog
     DECL_LINK( ModifyHdl, NumericField* pLB );
     DECL_LINK( SaveTypeHdl, RadioButton* pBtn );
 
-    virtual void    Apply();
+    virtual void 	Apply();
     virtual void    Resize();
     bool            ExecQryShell();
 
@@ -146,8 +146,8 @@ public:
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >* pSelection = 0);
     ~SwMailMergeDlg();
 
-    inline sal_uInt16   GetMergeType() { return nMergeType; }
-    const ::rtl::OUString& GetSaveFilter() const {return m_sSaveFilter;}
+    inline USHORT	GetMergeType() { return nMergeType; }
+    const ::rtl::OUString& GetSaveFilter() const {return m_sSaveFilter;} 
     inline const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const { return m_aSelection; }
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const;
 
@@ -166,7 +166,7 @@ public:
     SwMailMergeCreateFromDlg(Window* pParent);
     ~SwMailMergeCreateFromDlg();
 
-    sal_Bool    IsThisDocument() const {return aThisDocRB.IsChecked();}
+    BOOL    IsThisDocument() const {return aThisDocRB.IsChecked();}
 };
 
 class SwMailMergeFieldConnectionsDlg : public ModalDialog
@@ -180,11 +180,11 @@ class SwMailMergeFieldConnectionsDlg : public ModalDialog
     OKButton        aOK;
     CancelButton    aCancel;
     HelpButton      aHelp;
-public:
+public:     
     SwMailMergeFieldConnectionsDlg(Window* pParent);
-    ~SwMailMergeFieldConnectionsDlg();
+    ~SwMailMergeFieldConnectionsDlg();        
 
-    sal_Bool    IsUseExistingConnections() const {return aUseExistingRB.IsChecked();}
+    BOOL    IsUseExistingConnections() const {return aUseExistingRB.IsChecked();}
 };
 
 #endif

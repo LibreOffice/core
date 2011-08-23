@@ -121,8 +121,7 @@ testcase tmHelpContents
           Printlog "HelpAbout: '" + HelpAbout.GetItemCount +"'"
       catch
           Index.Click
-          '#i55563# 
-          warnlog "Used Index Button"
+          qaErrorLog "#i55563# Used Index Button"
           Printlog "HelpAbout: '" + HelpAbout.GetItemCount +"'"
       endcatch
       try

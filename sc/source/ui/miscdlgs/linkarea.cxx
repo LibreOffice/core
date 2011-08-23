@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,18 +58,18 @@
 ScLinkedAreaDlg::ScLinkedAreaDlg( Window* pParent ) :
     ModalDialog ( pParent, ScResId( RID_SCDLG_LINKAREA ) ),
     //
-    aFlLocation ( this, ScResId( FL_LOCATION ) ),
-    aCbUrl      ( this, ScResId( CB_URL ) ),
-    aBtnBrowse  ( this, ScResId( BTN_BROWSE ) ),
-    aTxtHint    ( this, ScResId( FT_HINT ) ),
-    aFtRanges   ( this, ScResId( FT_RANGES ) ),
-    aLbRanges   ( this, ScResId( LB_RANGES ) ),
-    aBtnReload  ( this, ScResId( BTN_RELOAD ) ),
-    aNfDelay    ( this, ScResId( NF_DELAY ) ),
-    aFtSeconds  ( this, ScResId( FT_SECONDS ) ),
-    aBtnOk      ( this, ScResId( BTN_OK ) ),
-    aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp    ( this, ScResId( BTN_HELP ) ),
+    aFlLocation	( this, ScResId( FL_LOCATION ) ),
+    aCbUrl		( this, ScResId( CB_URL ) ),
+    aBtnBrowse	( this, ScResId( BTN_BROWSE ) ),
+    aTxtHint	( this, ScResId( FT_HINT ) ),
+    aFtRanges	( this, ScResId( FT_RANGES ) ),
+    aLbRanges	( this, ScResId( LB_RANGES ) ),
+    aBtnReload	( this, ScResId( BTN_RELOAD ) ),
+    aNfDelay	( this, ScResId( NF_DELAY ) ),
+    aFtSeconds	( this, ScResId( FT_SECONDS ) ),
+    aBtnOk		( this, ScResId( BTN_OK ) ),
+    aBtnCancel	( this, ScResId( BTN_CANCEL ) ),
+    aBtnHelp	( this, ScResId( BTN_HELP ) ),
     //
     pSourceShell( NULL ),
     pDocInserter( NULL )
@@ -77,15 +77,12 @@ ScLinkedAreaDlg::ScLinkedAreaDlg( Window* pParent ) :
 {
     FreeResource();
 
-    aCbUrl.SetHelpId( HID_SCDLG_LINKAREAURL );  // SvtURLBox ctor always sets SID_OPENURL
+    aCbUrl.SetHelpId( HID_SCDLG_LINKAREAURL );	// SvtURLBox ctor always sets SID_OPENURL
     aCbUrl.SetSelectHdl( LINK( this, ScLinkedAreaDlg, FileHdl ) );
     aBtnBrowse.SetClickHdl( LINK( this, ScLinkedAreaDlg, BrowseHdl ) );
     aLbRanges.SetSelectHdl( LINK( this, ScLinkedAreaDlg, RangeHdl ) );
     aBtnReload.SetClickHdl( LINK( this, ScLinkedAreaDlg, ReloadHdl ) );
     UpdateEnable();
-
-    aNfDelay.SetAccessibleName(aBtnReload.GetText());
-    aNfDelay.SetAccessibleRelationLabeledBy(&aBtnReload);
 }
 
 ScLinkedAreaDlg::~ScLinkedAreaDlg()
@@ -97,7 +94,7 @@ short ScLinkedAreaDlg::Execute()
 {
     // set parent for file dialog or filter options
 
-    Window* pOldDefParent = Application::GetDefDialogParent();
+    Window*	pOldDefParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
 
     short nRet = ModalDialog::Execute();
@@ -127,16 +124,16 @@ IMPL_LINK( ScLinkedAreaDlg, FileHdl, ComboBox*, EMPTYARG )
         SfxMedium* pMed = pSourceShell->GetMedium();
         if ( pMed->GetName() == aEntered )
         {
-            //  already loaded - nothing to do
+            //	already loaded - nothing to do
             return 0;
         }
     }
 
     String aFilter;
     String aOptions;
-    //  get filter name by looking at the file content (bWithContent = TRUE)
-    // Break operation if any error occurred inside.
-    if (!ScDocumentLoader::GetFilterName( aEntered, aFilter, aOptions, true, true ))
+    //	get filter name by looking at the file content (bWithContent = TRUE)
+    // Break operation if any error occured inside.
+    if (!ScDocumentLoader::GetFilterName( aEntered, aFilter, aOptions, TRUE, TRUE ))
         return 0;
 
     // #i53241# replace HTML filter with DataQuery filter
@@ -154,7 +151,7 @@ void ScLinkedAreaDlg::LoadDocument( const String& rFile, const String& rFilter, 
 {
     if ( pSourceShell )
     {
-        //  unload old document
+        //	unload old document
         pSourceShell->DoClose();
         pSourceShell = NULL;
         aSourceRef.Clear();
@@ -169,23 +166,23 @@ void ScLinkedAreaDlg::LoadDocument( const String& rFile, const String& rFilter, 
 
         SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, rFile );
 
-        ScDocumentLoader aLoader( rFile, aNewFilter, aNewOptions, 0, sal_True );    // with interaction
+        ScDocumentLoader aLoader( rFile, aNewFilter, aNewOptions, 0, TRUE );	// with interaction
         pSourceShell = aLoader.GetDocShell();
         if ( pSourceShell )
         {
-            sal_uLong nErr = pSourceShell->GetErrorCode();
+            ULONG nErr = pSourceShell->GetErrorCode();
             if (nErr)
-                ErrorHandler::HandleError( nErr );      // including warnings
+                ErrorHandler::HandleError( nErr );		// including warnings
 
             aSourceRef = pSourceShell;
-            aLoader.ReleaseDocRef();    // don't call DoClose in DocLoader dtor
+            aLoader.ReleaseDocRef();	// don't call DoClose in DocLoader dtor
         }
     }
 }
 
 void ScLinkedAreaDlg::InitFromOldLink( const String& rFile, const String& rFilter,
                                         const String& rOptions, const String& rSource,
-                                        sal_uLong nRefresh )
+                                        ULONG nRefresh )
 {
     LoadDocument( rFile, rFilter, rOptions );
     if (pSourceShell)
@@ -205,7 +202,7 @@ void ScLinkedAreaDlg::InitFromOldLink( const String& rFile, const String& rFilte
         aLbRanges.SelectEntry( aRange );
     }
 
-    sal_Bool bDoRefresh = ( nRefresh != 0 );
+    BOOL bDoRefresh = ( nRefresh != 0 );
     aBtnReload.Check( bDoRefresh );
     if (bDoRefresh)
         aNfDelay.SetValue( nRefresh );
@@ -235,7 +232,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
     {
         WaitObject aWait( this );
 
-        // replace HTML filter with DataQuery filter
+        // #92296# replace HTML filter with DataQuery filter
         const String aHTMLFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_HTML ) );
         const String aWebQFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_QUERY ) );
 
@@ -254,18 +251,19 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
         if (pSourceShell)
             pSourceShell->DoClose();        // deleted when assigning aSourceRef
 
-        pMed->UseInteractionHandler( sal_True );    // to enable the filter options dialog
+        pMed->UseInteractionHandler( TRUE );    // to enable the filter options dialog
 
         pSourceShell = new ScDocShell;
         aSourceRef = pSourceShell;
         pSourceShell->DoLoad( pMed );
 
-        sal_uLong nErr = pSourceShell->GetErrorCode();
+        ULONG nErr = pSourceShell->GetErrorCode();
         if (nErr)
             ErrorHandler::HandleError( nErr );              // including warnings
 
         if ( !pSourceShell->GetError() )                    // only errors
         {
+            //aCbUrl.SetText( pSourceShell->GetTitle( SFX_TITLE_FULLNAME ) );
             aCbUrl.SetText( pMed->GetName() );
         }
         else
@@ -288,7 +286,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
 
 void ScLinkedAreaDlg::UpdateSourceRanges()
 {
-    aLbRanges.SetUpdateMode( false );
+    aLbRanges.SetUpdateMode( FALSE );
 
     aLbRanges.Clear();
     if ( pSourceShell )
@@ -300,7 +298,7 @@ void ScLinkedAreaDlg::UpdateSourceRanges()
             aLbRanges.InsertEntry( aName );
     }
 
-    aLbRanges.SetUpdateMode( sal_True );
+    aLbRanges.SetUpdateMode( TRUE );
 
     if ( aLbRanges.GetEntryCount() == 1 )
         aLbRanges.SelectEntryPos(0);
@@ -308,10 +306,10 @@ void ScLinkedAreaDlg::UpdateSourceRanges()
 
 void ScLinkedAreaDlg::UpdateEnable()
 {
-    sal_Bool bEnable = ( pSourceShell && aLbRanges.GetSelectEntryCount() );
+    BOOL bEnable = ( pSourceShell && aLbRanges.GetSelectEntryCount() );
     aBtnOk.Enable( bEnable );
 
-    sal_Bool bReload = aBtnReload.IsChecked();
+    BOOL bReload = aBtnReload.IsChecked();
     aNfDelay.Enable( bReload );
     aFtSeconds.Enable( bReload );
 }
@@ -349,8 +347,8 @@ String ScLinkedAreaDlg::GetOptions()
 String ScLinkedAreaDlg::GetSource()
 {
     String aSource;
-    sal_uInt16 nCount = aLbRanges.GetSelectEntryCount();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    USHORT nCount = aLbRanges.GetSelectEntryCount();
+    for (USHORT i=0; i<nCount; i++)
     {
         if (i > 0)
             aSource.Append( (sal_Unicode) ';' );
@@ -359,12 +357,12 @@ String ScLinkedAreaDlg::GetSource()
     return aSource;
 }
 
-sal_uLong ScLinkedAreaDlg::GetRefresh()
+ULONG ScLinkedAreaDlg::GetRefresh()
 {
     if ( aBtnReload.IsChecked() )
-        return sal::static_int_cast<sal_uLong>( aNfDelay.GetValue() );
+        return sal::static_int_cast<ULONG>( aNfDelay.GetValue() );
     else
-        return 0;   // disabled
+        return 0;	// disabled
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

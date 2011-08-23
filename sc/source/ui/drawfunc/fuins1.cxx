@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,6 +53,54 @@
 #include "progress.hxx"
 #include "sc.hrc"
 
+
+
+////========================================================================
+////	class ImportProgress
+////
+////  Bemerkung:
+////	Diese Klasse stellt lediglich den Handler fuer den ImportProgress des
+////	Grafikfilters bereit.
+////========================================================================
+//
+//class ImportProgress
+//{
+//public:
+//		ImportProgress( GraphicFilter& rFilter );
+//		~ImportProgress();
+//
+//	DECL_LINK( Update, GraphicFilter* );
+//
+//private:
+//	ScProgress aProgress;
+//};
+//
+////------------------------------------------------------------------------
+//
+//ImportProgress::ImportProgress( GraphicFilter& rFilter )
+//	: aProgress( NULL, // SfxViewFrame*, NULL == alle Docs locken
+//				 String( ScResId(STR_INSERTGRAPHIC) ),
+//				 100 )
+//{
+//	rFilter.SetUpdatePercentHdl( LINK( this, ImportProgress, Update) );
+//}
+//
+////------------------------------------------------------------------------
+//
+//__EXPORT ImportProgress::~ImportProgress()
+//{
+//	aProgress.SetState( 100 );
+//}
+//
+////------------------------------------------------------------------------
+//
+//IMPL_LINK( ImportProgress, Update, GraphicFilter*, pGraphicFilter )
+//{
+//	aProgress.SetState( pGraphicFilter->GetPercent() );
+//	return 0;
+//}
+
+
 //------------------------------------------------------------------------
 
 void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
@@ -61,10 +109,10 @@ void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& r
         return;
 
     Size aPageSize = rPage;
-    sal_Bool bNegative = aPageSize.Width() < 0;
+    BOOL bNegative = aPageSize.Width() < 0;
     if ( bNegative )
     {
-        //  make everything positive temporarily
+        //	make everything positive temporarily
         aPageSize.Width() = -aPageSize.Width();
         rPos.X() = -rPos.X() - rSize.Width();
     }
@@ -97,18 +145,18 @@ void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& r
         rPos.Y() = aPageSize.Height() - rSize.Height();
 
     if ( bNegative )
-        rPos.X() = -rPos.X() - rSize.Width();       // back to real position
+        rPos.X() = -rPos.X() - rSize.Width();		// back to real position
 }
 
 //------------------------------------------------------------------------
 
 void lcl_InsertGraphic( const Graphic& rGraphic,
-                        const String& rFileName, const String& rFilterName, sal_Bool bAsLink, sal_Bool bApi,
-                        ScTabViewShell* pViewSh, Window* pWindow, SdrView* pView )
+                        const String& rFileName, const String& rFilterName, BOOL bAsLink, BOOL bApi,
+                        ScTabViewShell*	pViewSh, Window* pWindow, SdrView* pView )
 {
-    //  set the size so the graphic has its original pixel size
-    //  at 100% view scale (as in SetMarkedOriginalSize),
-    //  instead of respecting the current view scale
+    //	#74778# set the size so the graphic has its original pixel size
+    //	at 100% view scale (as in SetMarkedOriginalSize),
+    //	instead of respecting the current view scale
 
     ScDrawView* pDrawView = pViewSh->GetScDrawView();
     MapMode aSourceMap = rGraphic.GetPrefMapMode();
@@ -123,7 +171,7 @@ void lcl_InsertGraphic( const Graphic& rGraphic,
     Size aLogicSize = pWindow->LogicToLogic(
                             rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );
 
-    //  Limit size
+    //	Limit size
 
     SdrPageView* pPV  = pView->GetSdrPageView();
     SdrPage* pPage = pPV->GetPage();
@@ -131,7 +179,7 @@ void lcl_InsertGraphic( const Graphic& rGraphic,
 
     ScViewData* pData = pViewSh->GetViewData();
     if ( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
-        aInsertPos.X() -= aLogicSize.Width();       // move position to left edge
+        aInsertPos.X() -= aLogicSize.Width();		// move position to left edge
 
     ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
 
@@ -139,19 +187,19 @@ void lcl_InsertGraphic( const Graphic& rGraphic,
 
     SdrGrafObj* pObj = new SdrGrafObj( rGraphic, aRect );
 
-    // calling SetGraphicLink here doesn't work
+    // #118522# calling SetGraphicLink here doesn't work
 
-    //  Path is no longer used as name for the graphics object
+    //	#49961# Path is no longer used as name for the graphics object
 
     ScDrawLayer* pLayer = (ScDrawLayer*) pView->GetModel();
-    String aName = pLayer->GetNewGraphicName();                 // "Grafik x"
+    String aName = pLayer->GetNewGraphicName();					// "Grafik x"
     pObj->SetName(aName);
 
-    //  don't select if from (dispatch) API, to allow subsequent cell operations
-    sal_uLong nInsOptions = bApi ? SDRINSERT_DONTMARK : 0;
+    //	don't select if from (dispatch) API, to allow subsequent cell operations
+    ULONG nInsOptions = bApi ? SDRINSERT_DONTMARK : 0;
     pView->InsertObjectAtView( pObj, *pPV, nInsOptions );
 
-    // SetGraphicLink has to be used after inserting the object,
+    // #118522# SetGraphicLink has to be used after inserting the object,
     // otherwise an empty graphic is swapped in and the contact stuff crashes.
     // See #i37444#.
     if ( bAsLink )
@@ -164,12 +212,12 @@ void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
                       ScTabViewShell* pViewSh, Window* pWindow, SdrView* pView,
                       const Size& rPrefSize )
 {
-    SdrPageView*    pPV  = pView->GetSdrPageView();
-    SdrPage*        pPage = pPV->GetPage();
-    ScViewData*     pData = pViewSh->GetViewData();
-    Point           aInsertPos( pViewSh->GetInsertPos() );
-    Size            aSize;
-
+    SdrPageView* 	pPV  = pView->GetSdrPageView();
+    SdrPage* 		pPage = pPV->GetPage();
+    ScViewData* 	pData = pViewSh->GetViewData();
+    Point 			aInsertPos( pViewSh->GetInsertPos() );
+    Size 			aSize;
+    
     if( rPrefSize.Width() && rPrefSize.Height() )
     {
         if( pWindow )
@@ -181,13 +229,13 @@ void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
         aSize = Size( 5000, 5000 );
 
     ScLimitSizeOnDrawPage( aSize, aInsertPos, pPage->GetSize() );
-
+    
     if( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
         aInsertPos.X() -= aSize.Width();
 
     SdrMediaObj* pObj = new SdrMediaObj( Rectangle( aInsertPos, aSize ) );
-
-    pObj->setURL( rMediaURL );
+    
+    pObj->setURL( rMediaURL ); 
     pView->InsertObjectAtView( pObj, *pPV, bApi ? SDRINSERT_DONTMARK : 0 );
 }
 
@@ -201,33 +249,33 @@ void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
 #pragma optimize("",off)
 #endif
 
-FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
-                                  Window*           pWin,
+FuInsertGraphic::FuInsertGraphic( ScTabViewShell*	pViewSh,
+                                  Window*			pWin,
                                   ScDrawView*       pViewP,
-                                  SdrModel*         pDoc,
-                                  SfxRequest&       rReq )
+                                  SdrModel*			pDoc,
+                                  SfxRequest&		rReq )
        : FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
 {
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
     if ( pReqArgs &&
-         pReqArgs->GetItemState( SID_INSERT_GRAPHIC, sal_True, &pItem ) == SFX_ITEM_SET )
+         pReqArgs->GetItemState( SID_INSERT_GRAPHIC, TRUE, &pItem ) == SFX_ITEM_SET )
     {
         String aFileName = ((const SfxStringItem*)pItem)->GetValue();
 
         String aFilterName;
-        if ( pReqArgs->GetItemState( FN_PARAM_FILTER, sal_True, &pItem ) == SFX_ITEM_SET )
+        if ( pReqArgs->GetItemState( FN_PARAM_FILTER, TRUE, &pItem ) == SFX_ITEM_SET )
             aFilterName = ((const SfxStringItem*)pItem)->GetValue();
 
-        sal_Bool bAsLink = false;
-        if ( pReqArgs->GetItemState( FN_PARAM_1, sal_True, &pItem ) == SFX_ITEM_SET )
+        BOOL bAsLink = FALSE;
+        if ( pReqArgs->GetItemState( FN_PARAM_1, TRUE, &pItem ) == SFX_ITEM_SET )
             bAsLink = ((const SfxBoolItem*)pItem)->GetValue();
 
         Graphic aGraphic;
         int nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, GraphicFilter::GetGraphicFilter() );
         if ( nError == GRFILTER_OK )
         {
-            lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, sal_True, pViewSh, pWindow, pView );
+            lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, TRUE, pViewSh, pWindow, pView );
         }
     }
     else
@@ -242,19 +290,19 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
             {
                 String aFileName = aDlg.GetPath();
                 String aFilterName = aDlg.GetCurrentFilter();
-                sal_Bool bAsLink = aDlg.IsAsLink();
+                BOOL bAsLink = aDlg.IsAsLink();
 
                 // really store as link only?
                 if( bAsLink && SvtMiscOptions().ShowLinkWarningDialog() )
                 {
                     SvxLinkWarningDialog aWarnDlg(pWin,aFileName);
                     if( aWarnDlg.Execute() != RET_OK )
-                        bAsLink = false; // don't store as link
+                        bAsLink = sal_False; // don't store as link
                 }
 
-                lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, false, pViewSh, pWindow, pView );
+                lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, FALSE, pViewSh, pWindow, pView );
 
-                //  append items for recording
+                //	append items for recording
                 rReq.AppendItem( SfxStringItem( SID_INSERT_GRAPHIC, aFileName ) );
                 rReq.AppendItem( SfxStringItem( FN_PARAM_FILTER, aFilterName ) );
                 rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
@@ -262,7 +310,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
             }
             else
             {
-                //  error is handled in SvxOpenGraphicDialog::GetGraphic
+                //	error is handled in SvxOpenGraphicDialog::GetGraphic
             }
         }
     }
@@ -306,21 +354,21 @@ void FuInsertGraphic::Deactivate()
 |*
 \************************************************************************/
 
-FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
-                              Window*           pWin,
+FuInsertMedia::FuInsertMedia( ScTabViewShell*	pViewSh,
+                              Window*			pWin,
                               ScDrawView*       pViewP,
-                              SdrModel*         pDoc,
-                              SfxRequest&       rReq ) :
+                              SdrModel*			pDoc,
+                              SfxRequest&		rReq ) :
     FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
 {
-    ::rtl::OUString     aURL;
-    const SfxItemSet*   pReqArgs = rReq.GetArgs();
-    bool                bAPI = false;
+    ::rtl::OUString 	aURL;
+    const SfxItemSet*	pReqArgs = rReq.GetArgs();
+    bool				bAPI = false;
 
     if( pReqArgs )
     {
         const SfxStringItem* pStringItem = PTR_CAST( SfxStringItem, &pReqArgs->Get( rReq.GetSlot() ) );
-
+        
         if( pStringItem )
         {
             aURL = pStringItem->GetValue();
@@ -334,19 +382,19 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
 
         if( pWin )
             pWin->EnterWait();
-
+            
         if( !::avmedia::MediaWindow::isMediaURL( aURL, true, &aPrefSize ) )
         {
             if( pWin )
                 pWin->LeaveWait();
-
+            
             if( !bAPI )
                 ::avmedia::MediaWindow::executeFormatErrorBox( pWindow );
         }
         else
         {
             lcl_InsertMedia( aURL, bAPI, pViewSh, pWindow, pView, aPrefSize );
-
+        
             if( pWin )
                 pWin->LeaveWait();
         }

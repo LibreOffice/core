@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,6 +56,11 @@ public:
     virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );
 
     virtual rtl::OUString GetScreenName( unsigned int nScreen );
+    // overload pure virtual methods
+    virtual int ShowNativeDialog( const String& rTitle,
+                                  const String& rMessage,
+                                  const std::list< String >& rButtons,
+                                  int nDefButton );
     virtual int ShowNativeMessageBox( const String& rTitle,
                                       const String& rMessage,
                                       int nButtonCombination,

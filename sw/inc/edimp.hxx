@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,9 @@
 class SwPaM;
 class SwNodeIndex;
 
-// Macros to iterate over all ranges.
+/*
+ * MACROS um ueber alle Bereiche zu iterieren
+ */
 #define PCURCRSR (_pStartCrsr)
 
 #define FOREACHPAM_START(pCURSH) \
@@ -51,15 +53,15 @@ class SwNodeIndex;
 
 struct SwPamRange
 {
-    sal_uLong nStart, nEnd;
+    ULONG nStart, nEnd;
 
-    SwPamRange() : nStart( 0 ), nEnd( 0 )   {}
-    SwPamRange( sal_uLong nS, sal_uLong nE ) : nStart( nS ), nEnd( nE ) {}
+    SwPamRange() : nStart( 0 ), nEnd( 0 )	{}
+    SwPamRange( ULONG nS, ULONG nE ) : nStart( nS ), nEnd( nE )	{}
 
-    sal_Bool operator==( const SwPamRange& rRg )
-        { return nStart == rRg.nStart ? sal_True : sal_False; }
-    sal_Bool operator<( const SwPamRange& rRg )
-        { return nStart < rRg.nStart ? sal_True : sal_False; }
+    BOOL operator==( const SwPamRange& rRg )
+        { return nStart == rRg.nStart ? TRUE : FALSE; }
+    BOOL operator<( const SwPamRange& rRg )
+        { return nStart < rRg.nStart ? TRUE : FALSE; }
 };
 
 SV_DECL_VARARR_SORT( _SwPamRanges, SwPamRange, 0, 1 )
@@ -70,11 +72,11 @@ public:
     SwPamRanges( const SwPaM& rRing );
 
     void Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 );
-    SwPaM& SetPam( sal_uInt16 nArrPos, SwPaM& rPam );
+    SwPaM& SetPam( USHORT nArrPos, SwPaM& rPam );
 
-    sal_uInt16 Count() const
-                {   return _SwPamRanges::Count(); }
-    SwPamRange operator[]( sal_uInt16 nPos ) const
+    USHORT Count() const
+                {	return _SwPamRanges::Count(); }
+    SwPamRange operator[]( USHORT nPos ) const
                 { return _SwPamRanges::operator[](nPos); }
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ int main(int /*argc*/, char** /*argv*/)
         const TCHAR * errMsg= err.ErrorMessage();
         MessageBox( NULL, errMsg, "Test failed", MB_ICONERROR);
     }
-
+    
     CoUninitialize();
     return 0;
 }
@@ -82,7 +82,7 @@ HRESULT doTest()
     _variant_t varP1(L"com.sun.star.frame.Desktop");
     _variant_t varRet;
     CComDispatchDriver dispMgr(starManager);
-    if (FAILED(hr=  dispMgr.Invoke1(L"createInstance", &varP1, &varRet)))
+    if (FAILED(hr=	dispMgr.Invoke1(L"createInstance", &varP1, &varRet)))
     {
         fprintf(stderr,"createInstance of Desktop failed\n");
         return hr;
@@ -110,7 +110,7 @@ HRESULT doTest()
     CComDispatchDriver dispDoc(varRet.pdispVal);
     varRet.Clear();
     return S_OK;
-
+    
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

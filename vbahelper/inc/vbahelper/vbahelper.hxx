@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,11 +54,11 @@
 #include "vbaaccesshelper.hxx"
 
 namespace css = ::com::sun::star;
-namespace ooo
+namespace ooo 
 {
-    namespace vba
+    namespace vba 
     {
-        template < class T >
+        template < class T > 
         css::uno::Reference< T > getXSomethingFromArgs( css::uno::Sequence< css::uno::Any > const & args, sal_Int32 nPos, bool bCanBeNull = true ) throw (css::lang::IllegalArgumentException)
         {
             if ( args.getLength() < ( nPos + 1) )
@@ -83,13 +83,13 @@ namespace ooo
 
         VBAHELPER_DLLPUBLIC void dispatchRequests( const css::uno::Reference< css::frame::XModel>& xModel, const rtl::OUString& aUrl );
      VBAHELPER_DLLPUBLIC void dispatchRequests (const css::uno::Reference< css::frame::XModel>& xModel, const rtl::OUString & aUrl, const css::uno::Sequence< css::beans::PropertyValue >& sProps, const css::uno::Reference< css::frame::XDispatchResultListener >& rListener = css::uno::Reference< css::frame::XDispatchResultListener >(), const sal_Bool bSilent = sal_True );
-        VBAHELPER_DLLPUBLIC void dispatchExecute(SfxViewShell* pView, sal_uInt16 nSlot, SfxCallMode nCall = SFX_CALLMODE_SYNCHRON );
+        VBAHELPER_DLLPUBLIC void dispatchExecute(SfxViewShell* pView, USHORT nSlot, SfxCallMode nCall = SFX_CALLMODE_SYNCHRON );
         VBAHELPER_DLLPUBLIC sal_Int32 OORGBToXLRGB( sal_Int32 );
         VBAHELPER_DLLPUBLIC sal_Int32 XLRGBToOORGB( sal_Int32 );
         VBAHELPER_DLLPUBLIC css::uno::Any OORGBToXLRGB( const css::uno::Any& );
         VBAHELPER_DLLPUBLIC css::uno::Any XLRGBToOORGB( const css::uno::Any& );
-        // provide a NULL object that can be passed as variant so that
-        // the object when passed to IsNull will return true. aNULL
+        // provide a NULL object that can be passed as variant so that 
+        // the object when passed to IsNull will return true. aNULL 
         // contains an empty object reference
         VBAHELPER_DLLPUBLIC const css::uno::Any& aNULL();
         VBAHELPER_DLLPUBLIC void PrintOutHelper( SfxViewShell* pViewShell, const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, sal_Bool bSelection  );
@@ -101,7 +101,7 @@ namespace ooo
         /** Extracts a boolean value from the passed Any, which may contain sal_Bool or an integer or floating-point value.
             Throws, if the Any is empty or contains an incompatible type. */
         VBAHELPER_DLLPUBLIC bool extractBoolFromAny( const css::uno::Any& rAny ) throw (css::uno::RuntimeException);
-
+        
         VBAHELPER_DLLPUBLIC rtl::OUString getAnyAsString( const css::uno::Any& pvargItem ) throw ( css::uno::RuntimeException );
         VBAHELPER_DLLPUBLIC rtl::OUString VBAToRegexp(const rtl::OUString &rIn, bool bForLike = false); // needs to be in an uno service ( already this code is duplicated in basic )
         VBAHELPER_DLLPUBLIC double getPixelTo100thMillimeterConversionFactor( css::uno::Reference< css::awt::XDevice >& xDevice, sal_Bool bVertical);
@@ -125,9 +125,9 @@ private:
 
 public:
     Millimeter();
-
+    
     Millimeter(double mm);
-
+    
     void set(double mm);
     void setInPoints(double points) ;
     void setInHundredthsOfOneMillimeter(double hmm);
@@ -162,21 +162,21 @@ protected:
     css::uno::Reference< css::drawing::XShape > xShape;
 public:
     ShapeHelper( const css::uno::Reference< css::drawing::XShape >& _xShape) throw (css::script::BasicErrorException );
-
+    
     double getHeight();
 
         void setHeight(double _fheight) throw ( css::script::BasicErrorException );
-
+    
     double getWidth();
 
     void setWidth(double _fWidth) throw ( css::script::BasicErrorException );
-
+    
     double getLeft();
-
+    
     void setLeft(double _fLeft);
 
     double getTop();
-
+    
     void setTop(double _fTop);
 };
 
@@ -193,7 +193,6 @@ public:
     virtual void setHeight( double nHeight );
     virtual double getWidth();
     virtual void setWidth( double nWidth);
-    virtual ~ConcreteXShapeGeometryAttributes();
 };
 
 #define VBA_LEFT "PositionX"
@@ -202,8 +201,11 @@ public:
 #define VBA_WIDTH "Width"
 class VBAHELPER_DLLPUBLIC UserFormGeometryHelper : public AbstractGeometryAttributes
 {
-    css::uno::Reference< css::awt::XWindow > mxWindow;
-    sal_Bool mbDialog;
+    css::uno::Reference< css::awt::XUnitConversion > mxControlUnits;
+    css::uno::Reference< css::beans::XPropertySet > mxModel;
+
+    sal_Int32 ConvertLogicToPixel( sal_Int32 nValue, sal_Bool bIsPoint, sal_Bool bIsX, sal_Int16 nSourceUnit );
+    sal_Int32 ConvertPixelToLogic( sal_Int32 nValue, sal_Bool bIsPoint, sal_Bool bIsX, sal_Int16 nTargetUnit );
 
 public:
     UserFormGeometryHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::awt::XControl >& xControl );
@@ -220,7 +222,7 @@ public:
 class VBAHELPER_DLLPUBLIC ContainerUtilities
 {
 
-public:
+public: 
     static rtl::OUString getUniqueName( const css::uno::Sequence< ::rtl::OUString >&  _slist, const rtl::OUString& _sElementName, const ::rtl::OUString& _sSuffixSeparator);
     static rtl::OUString getUniqueName( const css::uno::Sequence< rtl::OUString >& _slist, const rtl::OUString _sElementName, const rtl::OUString& _sSuffixSeparator, sal_Int32 _nStartSuffix );
 
@@ -235,7 +237,7 @@ public:
 
     static void exception( int err,  const rtl::OUString& additionalArgument ) throw( css::script::BasicErrorException );
 
-    static void exception( const css::uno::Exception& ex ) throw( css::script::BasicErrorException );
+    static void exception( css::uno::Exception& ex ) throw( css::script::BasicErrorException );
 };
 
 class VBAHELPER_DLLPUBLIC VBADispatchListener : public cppu::WeakImplHelper1< css::frame::XDispatchResultListener >
@@ -260,6 +262,14 @@ public:
 } // org
 
 namespace ov = ooo::vba;
+
+#ifdef DEBUG
+#  define SC_VBA_FIXME(a) OSL_TRACE( a )
+#  define SC_VBA_STUB() SC_VBA_FIXME(( "%s - stubbed\n", __FUNCTION__ ))
+#else
+#  define SC_VBA_FIXME(a)
+#  define SC_VBA_STUB()
+#endif
 
 #endif
 

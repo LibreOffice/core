@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,31 +42,31 @@ public:
     // Anmerkkung:
     // sizeof(DXFGroupReader) ist gross, also nur dynamisch anlegen!
 
-    DXFGroupReader( SvStream & rIStream, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent );
+    DXFGroupReader( SvStream & rIStream, USHORT nMinPercent, USHORT nMaxPercent );
 
-    sal_Bool GetStatus() const;
+    BOOL GetStatus();
 
     void SetError();
 
-    sal_uInt16 Read();
+    USHORT Read();
         // Liesst die naechste Gruppe ein und liefert den Gruppencode zurueck.
-        // Im Falle eines Fehlers liefert GetStatus() sal_False, Gruppencode wird 0
+        // Im Falle eines Fehlers liefert GetStatus() FALSE, Gruppencode wird 0
         // gesetzt, und es wird SetS(0,"EOF") ausgefuehrt.
 
-    sal_uInt16 GetG() const;
+    USHORT GetG();
         // Liefert den letzten Gruppencode (also was Read() zuletzt lieferte)
 
-    long   GetI() const;
+    long   GetI();
         // Liefert den Integer-Wert zur Gruppe, die vorher mit Read() gelesen wurde.
         // Dabei muss es sich um einen Gruppencode fuer den Datentyp Integer
         // gehandelt haben, wenn nicht, wird 0 gelieferet.
 
-    double GetF() const;
+    double GetF();
         // Liefert den Floatingpoint-Wert zur Gruppe, die vorher mit Read() gelesen wurde.
         // Dabei muss es sich um einen Gruppencode fuer den Datentyp Floatingpoint
         // gehandelt haben, wenn nicht, wird 0 geliefert.
 
-    const char * GetS() const;
+    const char * GetS();
         // Liefert den String zur Gruppe, die vorher mit Read() gelesen wurde.
         // Dabei muss es sich um einen Gruppencode fuer den Datentyp String
         // gehandelt haben, wenn nicht, wird NULL geliefert.
@@ -75,15 +75,15 @@ public:
     // aktuelle Gruppencode angegeben werden. (DXFGroupReader speichert die Parameter
     // zu allen Gruppencodes. Dadurch ist es moeglich, dass zunaechst mit Read() einige
     // verschiedene Gruppen eingelesen werden, bevor sie ausgewertet werden.)
-    long         GetI(sal_uInt16 nG) const;
-    double       GetF(sal_uInt16 nG) const;
-    const char * GetS(sal_uInt16 nG) const;
+    long         GetI(USHORT nG);
+    double       GetF(USHORT nG);
+    const char * GetS(USHORT nG);
 
     // Mit folgenden Methoden koennen die aktuell gespeicherten Werte zu den
     // Gruppencodes veraendert werden. (z.B. um Defaultwerte zu setzen, bevor
     // 'blind' eine Menge von Gruppen eingelesen wird.)
-    void SetF(sal_uInt16 nG, double fF);
-    void SetS(sal_uInt16 nG, const char * sS); // (wird kopiert)
+    void SetF(USHORT nG, double fF);
+    void SetS(USHORT nG, const char * sS); // (wird kopiert)
 
 private:
 
@@ -93,15 +93,16 @@ private:
     void   ReadS(char * ptgt);
 
     SvStream & rIS;
-    sal_uInt16 nIBuffSize,nIBuffPos;
-    sal_Bool bStatus;
-    sal_uInt16 nLastG;
-    sal_uLong nGCount;
+    char sIBuff[1024];
+    USHORT nIBuffSize,nIBuffPos;
+    BOOL bStatus;
+    USHORT nLastG;
+    ULONG nGCount;
 
-    sal_uLong nMinPercent;
-    sal_uLong nMaxPercent;
-    sal_uLong nLastPercent;
-    sal_uLong nFileSize;
+    ULONG nMinPercent;
+    ULONG nMaxPercent;
+    ULONG nLastPercent;
+    ULONG nFileSize;
 
     char   S0_9      [10][DXF_MAX_STRING_LEN+1]; // Strings  Gruppencodes 0..9
     double F10_59    [50];      // Floats   Gruppencodes 10..59
@@ -119,7 +120,7 @@ private:
 };
 
 
-inline sal_Bool DXFGroupReader::GetStatus() const
+inline BOOL DXFGroupReader::GetStatus()
 {
     return bStatus;
 }
@@ -127,25 +128,25 @@ inline sal_Bool DXFGroupReader::GetStatus() const
 
 inline void DXFGroupReader::SetError()
 {
-    bStatus=sal_False;
+    bStatus=FALSE;
 }
 
-inline sal_uInt16 DXFGroupReader::GetG() const
+inline USHORT DXFGroupReader::GetG()
 {
     return nLastG;
 }
 
-inline long DXFGroupReader::GetI() const
+inline long DXFGroupReader::GetI()
 {
     return GetI(nLastG);
 }
 
-inline double DXFGroupReader::GetF() const
+inline double DXFGroupReader::GetF()
 {
     return GetF(nLastG);
 }
 
-inline const char * DXFGroupReader::GetS() const
+inline const char * DXFGroupReader::GetS()
 {
     return GetS(nLastG);
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include "vclxdialog.hxx"
 
 #include <com/sun/star/awt/PosSize.hpp>
@@ -39,7 +38,11 @@
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/property.hxx>
 
-#ifdef QUARTZ
+#ifdef WNT
+#include <tools/prewin.h>
+#include <windows.h>
+#include <tools/postwin.h>
+#elif defined ( QUARTZ )
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
@@ -77,6 +80,11 @@ VCLXDialog::~VCLXDialog()
     DBG_DTOR( VCLXDialog, NULL );
 }
 
+osl::SolarMutex& VCLXDialog::GetMutexImpl()
+{
+    return VCLXWindow::GetMutex();
+}
+
 Window* VCLXDialog::GetWindowImpl()
 {
     return VCLXWindow::GetWindow();
@@ -94,7 +102,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXDialog, VCLXWindow, VCLXDialog_Base );
 void SAL_CALL VCLXDialog::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
     {
-        SolarMutexGuard aGuard;
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         ::com::sun::star::lang::EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
@@ -139,7 +147,7 @@ void SAL_CALL VCLXDialog::allocateArea( const css::awt::Rectangle &rArea )
 
 void VCLXDialog::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 {
-    SolarMutexClearableGuard aGuard;
+    ::osl::ClearableSolarGuard aGuard( GetMutex() );
 
     switch ( _rVclWindowEvent.GetId() )
     {
@@ -154,7 +162,7 @@ void VCLXDialog::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 
 void SAL_CALL VCLXDialog::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any &Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
     {
@@ -171,7 +179,7 @@ void SAL_CALL VCLXDialog::setProperty( const ::rtl::OUString& PropertyName, cons
 
 ::com::sun::star::uno::Any SAL_CALL VCLXDialog::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     ::com::sun::star::uno::Any aReturn;
     if ( GetWindow() )
@@ -192,25 +200,25 @@ void SAL_CALL VCLXDialog::setProperty( const ::rtl::OUString& PropertyName, cons
 
 void VCLXDialog::setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
     if ( pWindow )
         pWindow->SetText( Title );
 }
 
-void VCLXDialog::setHelpId( const rtl::OUString& rId ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXDialog::setHelpId( sal_Int32 id ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
     if ( pWindow )
-        pWindow->SetHelpId( rtl::OUStringToOString( rId, RTL_TEXTENCODING_UTF8 ) );
+        pWindow->SetHelpId( id );
 }
 
 ::rtl::OUString VCLXDialog::getTitle() throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     ::rtl::OUString aTitle;
     Window* pWindow = GetWindow();
@@ -221,7 +229,7 @@ void VCLXDialog::setHelpId( const rtl::OUString& rId ) throw(::com::sun::star::u
 
 sal_Int16 VCLXDialog::execute() throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     sal_Int16 nRet = 0;
     if ( GetWindow() )
@@ -245,7 +253,7 @@ sal_Int16 VCLXDialog::execute() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXDialog::endDialog( sal_Int32 nResult ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     if ( nResult == BUTTONID_HELP )
     {

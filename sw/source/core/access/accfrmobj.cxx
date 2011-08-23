@@ -357,7 +357,7 @@ const SwFrm* SwAccessibleChild::GetParent( const sal_Bool bInPagePreview ) const
                 if( bInPagePreview )
                     pParent = pFly->FindPageFrm();
                 else
-                    pParent = pFly->getRootFrm();
+                    pParent = pFly->FindRootFrm();
             }
         }
         else
@@ -393,7 +393,7 @@ const SwFrm* SwAccessibleChild::GetParent( const sal_Bool bInPagePreview ) const
                 if( bInPagePreview )
                     pParent = pContact->GetAnchorFrm()->FindPageFrm();
                 else
-                    pParent = pContact->GetAnchorFrm()->getRootFrm();
+                    pParent = pContact->GetAnchorFrm()->FindRootFrm();
             }
         }
     }

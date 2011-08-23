@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,14 +75,14 @@ void GenericEditImplementation< EDIT >::SetSelection( const Selection& _rSelecti
 
 //----------------------------------------------------------------------
 template <class EDIT>
-void GenericEditImplementation< EDIT >::SetReadOnly( sal_Bool bReadOnly )
+void GenericEditImplementation< EDIT >::SetReadOnly( BOOL bReadOnly )
 {
     m_rEdit.SetReadOnly( bReadOnly );
 }
 
 //----------------------------------------------------------------------
 template <class EDIT>
-sal_Bool GenericEditImplementation< EDIT >::IsReadOnly() const
+BOOL GenericEditImplementation< EDIT >::IsReadOnly() const
 {
     return m_rEdit.IsReadOnly();
 }

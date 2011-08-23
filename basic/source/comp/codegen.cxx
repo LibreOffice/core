@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,104 +33,103 @@
 #include "sbcomp.hxx"
 #include "image.hxx"
 #include <limits>
-#include <algorithm>
 #include <com/sun/star/script/ModuleType.hpp>
 
-// nInc is the increment size of the buffers
+// nInc ist die Inkrementgroesse der Puffer
 
 SbiCodeGen::SbiCodeGen( SbModule& r, SbiParser* p, short nInc )
          : rMod( r ), aCode( p, nInc )
 {
     pParser = p;
-    bStmnt = sal_False;
+    bStmnt = FALSE; 
     nLine = 0;
     nCol = 0;
     nForLevel = 0;
 }
 
-sal_uInt32 SbiCodeGen::GetPC()
+UINT32 SbiCodeGen::GetPC()
 {
     return aCode.GetSize();
 }
 
-// memorize the statement
+// Statement merken
 
 void SbiCodeGen::Statement()
 {
-    bStmnt = sal_True;
+    bStmnt = TRUE;
 
     nLine = pParser->GetLine();
     nCol  = pParser->GetCol1();
 
-    // #29955 Store the information of the for-loop-layer
-    // in the uppper Byte of the column
+    // #29955 Information der for-Schleifen-Ebene
+    // in oberen Byte der Spalte speichern
     nCol = (nCol & 0xff) + 0x100 * nForLevel;
 }
 
-// Mark the beginning of a statement
+// Anfang eines Statements markieren
 
 void SbiCodeGen::GenStmnt()
 {
     if( bStmnt )
     {
-        bStmnt = sal_False;
+        bStmnt = FALSE;
         Gen( _STMNT, nLine, nCol );
     }
 }
 
-// The Gen-Routines return the offset of the 1. operand,
-// so that jumps can sink their backchain there.
+// Die Gen-Routinen returnen den Offset des 1. Operanden,
+// damit Jumps dort ihr Backchain versenken koennen
 
-sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode )
+UINT32 SbiCodeGen::Gen( SbiOpcode eOpcode )
 {
 #ifdef DBG_UTIL
     if( eOpcode < SbOP0_START || eOpcode > SbOP0_END )
         pParser->Error( SbERR_INTERNAL_ERROR, "OPCODE1" );
 #endif
     GenStmnt();
-    aCode += (sal_uInt8) eOpcode;
+    aCode += (UINT8) eOpcode;
     return GetPC();
 }
 
-sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd )
+UINT32 SbiCodeGen::Gen( SbiOpcode eOpcode, UINT32 nOpnd )
 {
 #ifdef DBG_UTIL
     if( eOpcode < SbOP1_START || eOpcode > SbOP1_END )
         pParser->Error( SbERR_INTERNAL_ERROR, "OPCODE2" );
 #endif
     GenStmnt();
-    aCode += (sal_uInt8) eOpcode;
-    sal_uInt32 n = GetPC();
+    aCode += (UINT8) eOpcode;
+    UINT32 n = GetPC();
     aCode += nOpnd;
     return n;
 }
 
-sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd1, sal_uInt32 nOpnd2 )
+UINT32 SbiCodeGen::Gen( SbiOpcode eOpcode, UINT32 nOpnd1, UINT32 nOpnd2 )
 {
 #ifdef DBG_UTIL
     if( eOpcode < SbOP2_START || eOpcode > SbOP2_END )
         pParser->Error( SbERR_INTERNAL_ERROR, "OPCODE3" );
 #endif
     GenStmnt();
-    aCode += (sal_uInt8) eOpcode;
-    sal_uInt32 n = GetPC();
+    aCode += (UINT8) eOpcode;
+    UINT32 n = GetPC();
     aCode += nOpnd1;
     aCode += nOpnd2;
     return n;
 }
 
-// Storing of the created image in the module
+// Abspeichern des erzeugten Images im Modul
 
 void SbiCodeGen::Save()
 {
     SbiImage* p = new SbiImage;
     rMod.StartDefinitions();
-    // OPTION BASE-Value:
+    // OPTION BASE-Wert:
     p->nDimBase = pParser->nBase;
-    // OPTION take over the EXPLICIT-Flag
+    // OPTION EXPLICIT-Flag uebernehmen
     if( pParser->bExplicit )
         p->SetFlag( SBIMG_EXPLICIT );
-
+    
     int nIfaceCount = 0;
     if( rMod.mnType == com::sun::star::script::ModuleType::CLASS )
     {
@@ -178,16 +177,16 @@ void SbiCodeGen::Save()
             String aProcName = pProc->GetName();
             String aIfaceProcName;
             String aIfaceName;
-            sal_uInt16 nPassCount = 1;
+            USHORT nPassCount = 1;
             if( nIfaceCount )
             {
-                int nPropPrefixFound =
+                int nPropPrefixFound = 
                     aProcName.Search( String( RTL_CONSTASCII_USTRINGPARAM("Property ") ) );
                 String aPureProcName = aProcName;
                 String aPropPrefix;
                 if( nPropPrefixFound == 0 )
                 {
-                    aPropPrefix = aProcName.Copy( 0, 13 );      // 13 == Len( "Property ?et " )
+                    aPropPrefix = aProcName.Copy( 0, 13 );		// 13 == Len( "Property ?et " )
                     aPureProcName = aProcName.Copy( 13 );
                 }
                 for( int i = 0 ; i < nIfaceCount ; i++ )
@@ -206,7 +205,7 @@ void SbiCodeGen::Save()
                 }
             }
             SbMethod* pMeth = NULL;
-            for( sal_uInt16 nPass = 0 ; nPass < nPassCount ; nPass++ )
+            for( USHORT nPass = 0 ; nPass < nPassCount ; nPass++ )
             {
                 if( nPass == 1 )
                     aProcName = aIfaceProcName;
@@ -223,7 +222,7 @@ void SbiCodeGen::Save()
                         case PROPERTY_MODE_LET:
                         {
                             // type == type of first parameter
-                            ePropType = SbxVARIANT;     // Default
+                            ePropType = SbxVARIANT;		// Default
                             SbiSymPool* pPool = &pProc->GetParams();
                             if( pPool->GetSize() > 1 )
                             {
@@ -237,24 +236,27 @@ void SbiCodeGen::Save()
                             ePropType = SbxOBJECT;
                             break;
                         case PROPERTY_MODE_NONE:
-                            OSL_FAIL( "Illegal PropertyMode PROPERTY_MODE_NONE" );
+                            DBG_ERROR( "Illegal PropertyMode PROPERTY_MODE_NONE" );
                             break;
                     }
                     String aPropName = pProc->GetPropName();
                     if( nPass == 1 )
                         aPropName = aPropName.Copy( aIfaceName.Len() + 1 );
-                    OSL_TRACE("*** getProcedureProperty for thing %s",
+                    SbProcedureProperty* pProcedureProperty = NULL;
+                                        OSL_TRACE("*** getProcedureProperty for thing %s",
                         rtl::OUStringToOString( aPropName,RTL_TEXTENCODING_UTF8 ).getStr() );
-                    rMod.GetProcedureProperty( aPropName, ePropType );
+                    pProcedureProperty = rMod.GetProcedureProperty( aPropName, ePropType );
                 }
                 if( nPass == 1 )
                 {
-                    rMod.GetIfaceMapperMethod( aProcName, pMeth );
+                    SbIfaceMapperMethod* pMapperMeth = NULL;
+                    pMapperMeth = rMod.GetIfaceMapperMethod( aProcName, pMeth );
                 }
                 else
                 {
                     pMeth = rMod.GetMethod( aProcName, pProc->GetType() );
 
+                    // #110004
                     if( !pProc->IsPublic() )
                         pMeth->SetFlag( SBX_PRIVATE );
 
@@ -265,23 +267,23 @@ void SbiCodeGen::Save()
                     pMeth->nStart = pProc->GetAddr();
                     pMeth->nLine1 = pProc->GetLine1();
                     pMeth->nLine2 = pProc->GetLine2();
-                    // The parameter:
+                    // Die Parameter:
                     SbxInfo* pInfo = pMeth->GetInfo();
                     String aHelpFile, aComment;
-                    sal_uIntPtr nHelpId = 0;
+                    ULONG nHelpId = 0;
                     if( pInfo )
                     {
-                        // Rescue the additional data
+                        // Die Zusatzdaten retten
                         aHelpFile = pInfo->GetHelpFile();
                         aComment  = pInfo->GetComment();
-                        nHelpId   = pInfo->GetHelpId();
+                        nHelpId	  = pInfo->GetHelpId();
                     }
-                    // And reestablish the parameter list
+                    // Und die Parameterliste neu aufbauen
                     pInfo = new SbxInfo( aHelpFile, nHelpId );
                     pInfo->SetComment( aComment );
                     SbiSymPool* pPool = &pProc->GetParams();
-                    // The first element is always the value of the function!
-                    for( sal_uInt16 i = 1; i < pPool->GetSize(); i++ )
+                    // Das erste Element ist immer der Funktionswert!
+                    for( USHORT i = 1; i < pPool->GetSize(); i++ )
                     {
                         SbiSymDef* pPar = pPool->Get( i );
                         SbxDataType t = pPar->GetType();
@@ -289,15 +291,15 @@ void SbiCodeGen::Save()
                             t = (SbxDataType) ( t | SbxBYREF );
                         if( pPar->GetDims() )
                             t = (SbxDataType) ( t | SbxARRAY );
-                        // #33677 hand-over an Optional-Info
-                        sal_uInt16 nFlags = SBX_READ;
+                        // #33677 Optional-Info durchreichen
+                        USHORT nFlags = SBX_READ;
                         if( pPar->IsOptional() )
                             nFlags |= SBX_OPTIONAL;
 
                         pInfo->AddParam( pPar->GetName(), t, nFlags );
 
-                        sal_uInt32 nUserData = 0;
-                        sal_uInt16 nDefaultId = pPar->GetDefaultId();
+                        UINT32 nUserData = 0;
+                        USHORT nDefaultId = pPar->GetDefaultId();
                         if( nDefaultId )
                             nUserData |= nDefaultId;
                         if( pPar->IsParamArray() )
@@ -311,22 +313,22 @@ void SbiCodeGen::Save()
                     pMeth->SetInfo( pInfo );
                 }
 
-            }   // for( iPass...
+            }	// for( iPass...
         }
     }
-    // The code
+    // Der Code
     p->AddCode( aCode.GetBuffer(), aCode.GetSize() );
 
-    // The global StringPool. 0 is not occupied.
+    // Der globale StringPool. 0 ist nicht belegt.
     SbiStringPool* pPool = &pParser->aGblStrings;
-    sal_uInt16 nSize = pPool->GetSize();
+    USHORT nSize = pPool->GetSize();
     p->MakeStrings( nSize );
-    sal_uInt16 i;
+    USHORT i;
     for( i = 1; i <= nSize; i++ )
         p->AddString( pPool->Find( i ) );
 
-    // Insert types
-    sal_uInt16 nCount = pParser->rTypeArray->Count();
+    // Typen einfuegen
+    USHORT nCount = pParser->rTypeArray->Count();
     for (i = 0; i < nCount; i++)
          p->AddType((SbxObject *)pParser->rTypeArray->Get(i));
 
@@ -349,10 +351,10 @@ class PCodeVisitor
 public:
     virtual ~PCodeVisitor();
 
-    virtual void start( sal_uInt8* pStart ) = 0;
-    virtual void processOpCode0( SbiOpcode eOp ) = 0;
-    virtual void processOpCode1( SbiOpcode eOp, T nOp1 ) = 0;
-    virtual void processOpCode2( SbiOpcode eOp, T nOp1, T nOp2 ) = 0;
+    virtual void start( BYTE* pStart ) = 0;
+    virtual void processOpCode0( SbiOpcode eOp ) = 0; 
+    virtual void processOpCode1( SbiOpcode eOp, T nOp1 ) = 0; 
+    virtual void processOpCode2( SbiOpcode eOp, T nOp1, T nOp2 ) = 0; 
     virtual bool processParams() = 0;
     virtual void end() = 0;
 };
@@ -365,8 +367,8 @@ class PCodeBufferWalker
 {
 private:
     T  m_nBytes;
-    sal_uInt8* m_pCode;
-    T readParam( sal_uInt8*& pCode )
+    BYTE* m_pCode;
+    T readParam( BYTE*& pCode )
     {
         short nBytes = sizeof( T );
         T nOp1=0;
@@ -375,21 +377,21 @@ private:
         return nOp1;
     }
 public:
-    PCodeBufferWalker( sal_uInt8* pCode, T nBytes ): m_nBytes( nBytes ), m_pCode( pCode )
+    PCodeBufferWalker( BYTE* pCode, T nBytes ): m_nBytes( nBytes ), m_pCode( pCode )
     {
     }
     void visitBuffer( PCodeVisitor< T >& visitor )
     {
-        sal_uInt8* pCode = m_pCode;
+        BYTE* pCode = m_pCode;
         if ( !pCode )
             return;
-        sal_uInt8* pEnd = pCode + m_nBytes;
+        BYTE* pEnd = pCode + m_nBytes;
         visitor.start( m_pCode );
         T nOp1 = 0, nOp2 = 0;
         for( ; pCode < pEnd; )
         {
             SbiOpcode eOp = (SbiOpcode)(*pCode++);
-
+            
             if ( eOp <= SbOP0_END )
                 visitor.processOpCode0( eOp );
             else if( eOp >= SbOP1_START && eOp <= SbOP1_END )
@@ -410,7 +412,7 @@ public:
                 else
                     pCode += ( sizeof( T ) * 2 );
                 visitor.processOpCode2( eOp, nOp1, nOp2 );
-            }
+            }	
         }
         visitor.end();
     }
@@ -423,19 +425,22 @@ class OffSetAccumulator : public PCodeVisitor< T >
     T m_nNumSingleParams;
     T m_nNumDoubleParams;
 public:
-
+    
     OffSetAccumulator() : m_nNumOp0(0), m_nNumSingleParams(0), m_nNumDoubleParams(0){}
-    virtual void start( sal_uInt8* /*pStart*/ ){}
+    virtual void start( BYTE* /*pStart*/ ){}
     virtual void processOpCode0( SbiOpcode /*eOp*/ ){ ++m_nNumOp0; }
     virtual void processOpCode1( SbiOpcode /*eOp*/, T /*nOp1*/ ){  ++m_nNumSingleParams; }
     virtual void processOpCode2( SbiOpcode /*eOp*/, T /*nOp1*/, T /*nOp2*/ ) { ++m_nNumDoubleParams; }
     virtual void end(){}
-    S offset()
-    {
-        T result = 0 ;
+    S offset() 
+    { 
+        T result = 0 ; 
         static const S max = std::numeric_limits< S >::max();
-        result = m_nNumOp0 + ( ( sizeof(S) + 1 ) * m_nNumSingleParams ) + ( (( sizeof(S) * 2 )+ 1 )  * m_nNumDoubleParams );
-        return std::min(static_cast<T>(max), result);
+        result = m_nNumOp0 + ( ( sizeof(S) + 1 ) * m_nNumSingleParams ) + ( (( sizeof(S) * 2 )+ 1 )  * m_nNumDoubleParams ); 
+        if ( result > max ) 
+            return max;
+    
+        return static_cast<S>(result); 
     }
    virtual bool processParams(){ return false; }
 };
@@ -446,18 +451,18 @@ template < class T, class S >
 
 class BufferTransformer : public PCodeVisitor< T >
 {
-    sal_uInt8* m_pStart;
+    BYTE* m_pStart;
     SbiBuffer m_ConvertedBuf;
 public:
     BufferTransformer():m_pStart(NULL), m_ConvertedBuf( NULL, 1024 ) {}
-    virtual void start( sal_uInt8* pStart ){ m_pStart = pStart; }
-    virtual void processOpCode0( SbiOpcode eOp )
+    virtual void start( BYTE* pStart ){ m_pStart = pStart; }
+    virtual void processOpCode0( SbiOpcode eOp ) 
     {
-        m_ConvertedBuf += (sal_uInt8)eOp;
+        m_ConvertedBuf += (UINT8)eOp;
     }
     virtual void processOpCode1( SbiOpcode eOp, T nOp1 )
     {
-        m_ConvertedBuf += (sal_uInt8)eOp;
+        m_ConvertedBuf += (UINT8)eOp;
         switch( eOp )
         {
             case _JUMP:
@@ -475,49 +480,49 @@ public:
                     nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
                 break;
             default:
-                break; //
-
+                break; // 
+                
         }
         m_ConvertedBuf += (S)nOp1;
     }
-    virtual void processOpCode2( SbiOpcode eOp, T nOp1, T nOp2 )
+    virtual void processOpCode2( SbiOpcode eOp, T nOp1, T nOp2 ) 
     {
-        m_ConvertedBuf += (sal_uInt8)eOp;
+        m_ConvertedBuf += (UINT8)eOp;
         if ( eOp == _CASEIS )
                 if ( nOp1 )
                     nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
         m_ConvertedBuf += (S)nOp1;
         m_ConvertedBuf += (S)nOp2;
-
+        
     }
     virtual bool processParams(){ return true; }
     virtual void end() {}
     // yeuch, careful here, you can only call
     // GetBuffer on the returned SbiBuffer once, also
     // you (as the caller) get to own the memory
-    SbiBuffer& buffer()
-    {
+    SbiBuffer& buffer() 
+    { 
         return m_ConvertedBuf;
     }
-    static S convertBufferOffSet( sal_uInt8* pStart, T nOp1 )
+    static S convertBufferOffSet( BYTE* pStart, T nOp1 )
     {
         PCodeBufferWalker< T > aBuff( pStart, nOp1);
         OffSetAccumulator< T, S > aVisitor;
-        aBuff.visitBuffer( aVisitor );
+        aBuff.visitBuffer( aVisitor ); 
         return aVisitor.offset();
     }
 };
 
-sal_uInt32
-SbiCodeGen::calcNewOffSet( sal_uInt8* pCode, sal_uInt16 nOffset )
+UINT32 
+SbiCodeGen::calcNewOffSet( BYTE* pCode, UINT16 nOffset )
 {
-    return BufferTransformer< sal_uInt16, sal_uInt32 >::convertBufferOffSet( pCode, nOffset );
+    return BufferTransformer< UINT16, UINT32 >::convertBufferOffSet( pCode, nOffset );
 }
 
-sal_uInt16
-SbiCodeGen::calcLegacyOffSet( sal_uInt8* pCode, sal_uInt32 nOffset )
+UINT16 
+SbiCodeGen::calcLegacyOffSet( BYTE* pCode, UINT32 nOffset )
 {
-    return BufferTransformer< sal_uInt32, sal_uInt16 >::convertBufferOffSet( pCode, nOffset );
+    return BufferTransformer< UINT32, UINT16 >::convertBufferOffSet( pCode, nOffset );
 }
 
 template <class T, class S>
@@ -526,12 +531,12 @@ PCodeBuffConvertor<T,S>::convert()
 {
     PCodeBufferWalker< T > aBuf( m_pStart, m_nSize );
     BufferTransformer< T, S > aTrnsfrmer;
-    aBuf.visitBuffer( aTrnsfrmer );
-    m_pCnvtdBuf = (sal_uInt8*)aTrnsfrmer.buffer().GetBuffer();
+    aBuf.visitBuffer( aTrnsfrmer );	
+    m_pCnvtdBuf = (BYTE*)aTrnsfrmer.buffer().GetBuffer();
     m_nCnvtdSize = static_cast<S>( aTrnsfrmer.buffer().GetSize() );
 }
 
-template class PCodeBuffConvertor< sal_uInt16, sal_uInt32 >;
-template class PCodeBuffConvertor< sal_uInt32, sal_uInt16 >;
+template class PCodeBuffConvertor< UINT16, UINT32 >;
+template class PCodeBuffConvertor< UINT32, UINT16 >;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

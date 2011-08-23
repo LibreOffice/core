@@ -42,10 +42,14 @@ namespace dmapper {
         sal_uInt32 nSprmId = rSprm.getId();
         Value::Pointer_t pValue = rSprm.getValue();
         sal_Int32 nIntValue = ((pValue.get() != NULL) ? pValue->getInt() : 0);
+        /* WRITERFILTERSTATUS: table: table_sprmdata */
         switch( nSprmId )
        {
+            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 2 */
             case NS_ooxml::LN_CT_TrPrBase_jc: //90706
+            /* WRITERFILTERSTATUS: done: 1, planned: 0.5, spent: 0.5 */
             case NS_ooxml::LN_CT_TblPrBase_jc:
+            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 2 */
             case 0x5400: // sprmTJc
             {
                 //table justification 0: left, 1: center, 2: right
@@ -55,19 +59,22 @@ namespace dmapper {
                 insertTableProps( pTableMap );
             }
             break;
+            /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
             case 0x9601: // sprmTDxaLeft
-            break;
+            break;  
+            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0x9602: // sprmTDxaGapHalf
-            {
+            {    
                 //m_nGapHalf = ConversionHelper::convertTwipToMM100( nIntValue );
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );
                 pPropMap->setValue( TablePropertyMap::GAP_HALF, ConversionHelper::convertTwipToMM100( nIntValue ) );
                 insertTableProps(pPropMap);
             }
-            break;
+            break;  
+            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 2 */
             case NS_ooxml::LN_CT_TrPrBase_trHeight: //90703
             {
-                //contains unit and value
+                //contains unit and value 
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                 {   //contains attributes x2902 (LN_unit) and x17e2 (LN_trleft)
@@ -80,17 +87,19 @@ namespace dmapper {
                 }
             }
             break;
+            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0x3403: // sprmTFCantSplit
             case NS_sprm::LN_TCantSplit: // 0x3644
-            {
+            {    
                 //row can't break across pages if nIntValue == 1
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );
                 pPropMap->Insert( PROP_IS_SPLIT_ALLOWED, false, uno::makeAny(sal_Bool( nIntValue == 1 ? sal_False : sal_True ) ));
                 insertRowProps(pPropMap);
             }
-            break;
+            break;  
+            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0x9407: // sprmTDyaRowHeight
-            {
+            {    
                 // table row height - negative values indicate 'exact height' - positive 'at least'
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );
                 bool bMinHeight = true;
@@ -99,14 +108,15 @@ namespace dmapper {
                 {
                     bMinHeight = false;
                     nHeight *= -1;
-                }
+                }    
                 pPropMap->Insert( PROP_SIZE_TYPE, false, uno::makeAny(bMinHeight ? text::SizeType::MIN : text::SizeType::FIX ));
                 pPropMap->Insert( PROP_HEIGHT, false, uno::makeAny(ConversionHelper::convertTwipToMM100( nHeight )));
                 insertRowProps(pPropMap);
             }
             break;
+            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TcPrBase_vAlign://90694
-            {
+            {    
                 sal_Int16 nVertOrient = text::VertOrientation::NONE;
                 switch( nIntValue ) //0 - top 1 - center 3 - bottom
                 {
@@ -120,8 +130,9 @@ namespace dmapper {
                 cellProps( pCellPropMap );
             }
             break;
+            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TblPrBase_tblBorders: //table borders, might be defined in table style
-            {
+            {    
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                 {
@@ -129,17 +140,18 @@ namespace dmapper {
                     pProperties->resolve(*pBorderHandler);
                     TablePropertyMapPtr pTablePropMap( new TablePropertyMap );
                     pTablePropMap->insert( pBorderHandler->getProperties() );
-
+                    
 #ifdef DEBUG_DOMAINMAPPER
-                    pTablePropMap->dumpXml( dmapper_logger );
+                    dmapper_logger->addTag(pTablePropMap->toTag());
 #endif
                     insertTableProps( pTablePropMap );
                 }
             }
             break;
+            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TcPrBase_tcBorders ://cell borders
             //contains CT_TcBorders_left, right, top, bottom
-            {
+            {    
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                 {
@@ -149,11 +161,11 @@ namespace dmapper {
                     TablePropertyMapPtr pCellPropMap( new TablePropertyMap );
                     pTDefTableHandler->fillCellProperties( 0, pCellPropMap );
                     cellProps( pCellPropMap );
-                }
+                }    
             }
             break;
             case NS_ooxml::LN_CT_TblPrBase_shd:
-            {
+            {    
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                 {
@@ -161,15 +173,20 @@ namespace dmapper {
                     pProperties->resolve( *pCellColorHandler );
                     TablePropertyMapPtr pTablePropMap( new TablePropertyMap );
                     insertTableProps( pCellColorHandler->getProperties() );
-                }
+                }    
             }
             break;
+            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0xd61a : // sprmTCellTopColor
+            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0xd61b : // sprmTCellLeftColor
+            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0xd61c : // sprmTCellBottomColor
+            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0xd61d : // sprmTCellRightColor
+            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TcPrBase_shd:
-            {
+            {    
                 // each color sprm contains as much colors as cells are in a row
                 //LN_CT_TcPrBase_shd: cell shading contains: LN_CT_Shd_val, LN_CT_Shd_fill, LN_CT_Shd_color
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -178,12 +195,13 @@ namespace dmapper {
                     CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
                     pProperties->resolve( *pCellColorHandler );
                     cellProps( pCellColorHandler->getProperties());
-                }
+                }    
             }
             break;
-//OOXML table properties
+//OOXML table properties            
+            /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TblPrBase_tblCellMar: //cell margins
-            {
+            {    
                 //contains LN_CT_TblCellMar_top, LN_CT_TblCellMar_left, LN_CT_TblCellMar_bottom, LN_CT_TblCellMar_right
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
@@ -200,7 +218,7 @@ namespace dmapper {
                     if( pCellMarginHandler->m_bRightMarginValid )
                         pMarginProps->setValue( TablePropertyMap::CELL_MAR_RIGHT, pCellMarginHandler->m_nRightMargin );
                     insertTableProps(pMarginProps);
-                }
+                }    
             }
             break;
            case NS_ooxml::LN_CT_TblPrBase_tblInd:
@@ -215,14 +233,14 @@ namespace dmapper {
                    insertTableProps(pTblIndMap);
                }
            }
-            break;
+            break;   
             default: bRet = false;
         }
-
+        
 #ifdef DEBUG_DOMAINMAPPER
-        dmapper_logger->endElement();
+        dmapper_logger->endElement("TablePropertiesHandler.sprm");
 #endif
-
+        
         return bRet;
     }
 }}

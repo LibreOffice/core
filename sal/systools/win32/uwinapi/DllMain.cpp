@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,25 +39,25 @@
 #include <tchar.h>
 
 
-HMODULE     UWINAPI_BaseAddress = NULL;
-const CHAR  szUnicowsModuleName[] = "UNICOWS.DLL";
+HMODULE		UWINAPI_BaseAddress = NULL;
+const CHAR	szUnicowsModuleName[] = "UNICOWS.DLL";
 
 static HMODULE WINAPI _LoadUnicowsLibrary(VOID)
 {
-    CHAR        szModulePath[MAX_PATH];
-    HMODULE     hModuleUnicows = NULL;
+    CHAR		szModulePath[MAX_PATH];
+    HMODULE		hModuleUnicows = NULL;
 
     // First search in the same directory as UWINAPI.DLL was loaded from. This is because
     // UWINAPI.DLL not always resides in the same directory as the actual application.
 
     if ( UWINAPI_BaseAddress && GetModuleFileNameA( UWINAPI_BaseAddress, szModulePath, MAX_PATH ) )
     {
-        char    *lpLastBkSlash = _tcsrchr( szModulePath, '\\' );
+        char	*lpLastBkSlash = _tcsrchr( szModulePath, '\\' );
 
         if ( lpLastBkSlash )
         {
-            size_t  nParentDirSize = (size_t) (_tcsinc( lpLastBkSlash ) - szModulePath);
-            LPSTR   lpUnicowsModulePath = (LPTSTR)_alloca( nParentDirSize + sizeof(szUnicowsModuleName) );
+            size_t	nParentDirSize = (size_t) (_tcsinc( lpLastBkSlash ) - szModulePath);
+            LPSTR	lpUnicowsModulePath = (LPTSTR)_alloca( nParentDirSize + sizeof(szUnicowsModuleName) );
 
             if ( lpUnicowsModulePath )
             {
@@ -79,8 +79,8 @@ static HMODULE WINAPI _LoadUnicowsLibrary(VOID)
 
 static HMODULE WINAPI LoadUnicowsLibrary(VOID)
 {
-    HMODULE hModuleUnicows;
-    int     idMsg = IDOK;
+    HMODULE	hModuleUnicows;
+    int		idMsg = IDOK;
 
     do
     {
@@ -105,7 +105,7 @@ static HMODULE WINAPI LoadUnicowsLibrary(VOID)
             CHAR szModuleFileName[MAX_PATH];
 
             GetModuleFileNameA( NULL, szModuleFileName, sizeof(szModuleFileName) );
-            LPSTR   lpMessage = (LPSTR)_alloca( strlen( (LPCSTR)lpMsgBuf ) + sizeof(szUnicowsModuleName) + 1 );
+            LPSTR	lpMessage = (LPSTR)_alloca( strlen( (LPCSTR)lpMsgBuf ) + sizeof(szUnicowsModuleName) + 1 );
             strcpy( lpMessage, (LPCSTR)lpMsgBuf );
             strcat( lpMessage, "\n" );
             strcat( lpMessage, szUnicowsModuleName );
@@ -173,7 +173,7 @@ __do_global_ctors (void)
     ;
     }
 
-  /*
+  /* 
    * Go through the list backwards calling constructors.
    */
   for (i = nptrs; i >= 1; i--)

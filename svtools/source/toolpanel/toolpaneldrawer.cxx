@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ namespace svt
         :Window( &i_rParent )
         ,m_rDrawer( i_rParent )
     {
-        SetMouseTransparent( sal_True );
+        SetMouseTransparent( TRUE );
         Show();
         SetAccessibleRole( AccessibleRole::LABEL );
     }
@@ -86,7 +86,7 @@ namespace svt
         ,m_bFocused( false )
         ,m_bExpanded( false )
     {
-        EnableMapMode( sal_False );
+        EnableMapMode( FALSE );
         SetBackground( Wallpaper() );
         SetPointer( POINTER_REFHAND );
 
@@ -152,28 +152,35 @@ namespace svt
                 i_rTextBox.Top() + ( GetTextHeight() - nHeight ) / 2
             );
             m_pPaintDevice->DrawImage( aPosition, aImage );
-
+            
             aExpansionIndicatorArea = Rectangle( aPosition, aImage.GetSizePixel() );
         }
 
         return aExpansionIndicatorArea;
     }
 
-
+    //------------------------------------------------------------------------------------------------------------------
     Image ToolPanelDrawer::impl_getExpansionIndicator() const
     {
-        sal_uInt16 nResourceId = 0;
+        const bool bHighContrastMode( GetSettings().GetStyleSettings().GetHighContrastMode() != 0 );
+        USHORT nResourceId = 0;
         if ( m_bExpanded )
-            nResourceId = IMG_TRIANGLE_DOWN;
+            if ( bHighContrastMode )
+                nResourceId = IMG_TRIANGLE_DOWN_HC;
+            else
+                nResourceId = IMG_TRIANGLE_DOWN;
         else
-            nResourceId = IMG_TRIANGLE_RIGHT;
+            if ( bHighContrastMode )
+                nResourceId = IMG_TRIANGLE_RIGHT_HC;
+            else
+                nResourceId = IMG_TRIANGLE_RIGHT;
         return Image( SvtResId( nResourceId ) );
     }
 
-
-    sal_uInt16 ToolPanelDrawer::impl_getTextStyle() const
+    //------------------------------------------------------------------------------------------------------------------
+    USHORT ToolPanelDrawer::impl_getTextStyle() const
     {
-        const sal_uInt16 nBasicStyle =  TEXT_DRAW_LEFT
+        const USHORT nBasicStyle =  TEXT_DRAW_LEFT
                                 |   TEXT_DRAW_TOP
                                 |   TEXT_DRAW_WORDBREAK;
 
@@ -206,7 +213,7 @@ namespace svt
         {
             const Rectangle aTextPixelBox( m_pPaintDevice->LogicToPixel( i_rTextBox ) );
 
-            m_pPaintDevice->EnableMapMode( sal_False );
+            m_pPaintDevice->EnableMapMode( FALSE );
             m_pPaintDevice->SetFillColor();
 
             Rectangle aBox( i_rTextBox );
@@ -223,7 +230,7 @@ namespace svt
 
             m_pPaintDevice->SetLineColor( COL_BLACK );
             m_pPaintDevice->DrawPolyLine( Polygon( aTextPixelBox ), aDottedStyle );
-            m_pPaintDevice->EnableMapMode( sal_False );
+            m_pPaintDevice->EnableMapMode( FALSE );
         }
         else
             HideFocus();
@@ -272,7 +279,7 @@ namespace svt
                 m_pPaintDevice.reset( new VirtualDevice( *this ) );
 
                 // fall through.
-
+                
             case DATACHANGED_FONTS:
             case DATACHANGED_FONTSUBSTITUTION:
             {
@@ -283,7 +290,7 @@ namespace svt
                 if ( IsControlFont() )
                     aFont.Merge( GetControlFont() );
                 SetZoomedPointFont( aFont );
-
+                
                 // Color.
                 Color aColor;
                 if ( IsControlForeground() )
@@ -300,9 +307,9 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XWindowPeer > ToolPanelDrawer::GetComponentInterface( sal_Bool i_bCreate )
+    Reference< XWindowPeer > ToolPanelDrawer::GetComponentInterface( BOOL i_bCreate )
     {
-        Reference< XWindowPeer > xWindowPeer( Window::GetComponentInterface( sal_False ) );
+        Reference< XWindowPeer > xWindowPeer( Window::GetComponentInterface( FALSE ) );
         if ( !xWindowPeer.is() && i_bCreate )
         {
             xWindowPeer.set( new ToolPanelDrawerPeer() );
@@ -324,7 +331,7 @@ namespace svt
         Rectangle aTextBox(
             Point(),
             Size(
-                nAvailableWidth,
+                nAvailableWidth, 
                 GetSettings().GetStyleSettings().GetTitleHeight()
             )
         );

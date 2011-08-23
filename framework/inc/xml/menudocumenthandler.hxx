@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_XML_MENUDOCUMENTHANDLER_HXX_
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -41,21 +41,20 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <framework/fwedllapi.h>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
-class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase : public ThreadHelpBase,    // Struct for right initalization of mutex member! Must be first of baseclasses.
+class ReadMenuDocumentHandlerBase : public ThreadHelpBase,	// Struct for right initalization of mutex member! Must be first of baseclasses.
                                     public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
@@ -64,39 +63,39 @@ class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase : public ThreadHelpBase,    // S
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument(void)
-        throw ( ::com::sun::star::xml::sax::SAXException,
+        throw (	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException ) = 0;
 
         virtual void SAL_CALL endDocument(void)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException ) = 0;
 
         virtual void SAL_CALL startElement(
             const rtl::OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException ) = 0;
 
         virtual void SAL_CALL endElement(const rtl::OUString& aName)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException ) = 0;
 
         virtual void SAL_CALL characters(const rtl::OUString& aChars)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException ) = 0;
 
         virtual void SAL_CALL ignorableWhitespace(const rtl::OUString& aWhitespaces)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL processingInstruction(const rtl::OUString& aTarget,
                                                     const rtl::OUString& aData)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL setDocumentLocator(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > &xLocator)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
     protected:
@@ -118,93 +117,98 @@ class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase : public ThreadHelpBase,    // S
 };
 
 
-class FWE_DLLPUBLIC OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBase
+class OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBase
 {
     public:
-        OReadMenuDocumentHandler(
+        // #110897#
+        OReadMenuDocumentHandler( 
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& rItemContainer );
         virtual ~OReadMenuDocumentHandler();
 
+        // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument(void)
-        throw ( ::com::sun::star::xml::sax::SAXException,
+        throw (	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL endDocument(void)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL startElement(
             const rtl::OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL endElement(const rtl::OUString& aName)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL characters(const rtl::OUString& aChars)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
     private:
-          int       m_nElementDepth;
-          sal_Bool  m_bMenuBarMode;
+          int		m_nElementDepth;
+          sal_Bool	m_bMenuBarMode;
           com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuBarContainer;
           com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
           const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
-};  // OReadMenuDocumentHandler
+};	// OReadMenuDocumentHandler
 
 
-class FWE_DLLPUBLIC OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
+class OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
 {
     public:
-        OReadMenuBarHandler(
+        // #110897#
+        OReadMenuBarHandler( 
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rMenuBarContainer,
             const com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >& rContainerFactory );
         virtual ~OReadMenuBarHandler();
 
+        // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument(void)
-        throw ( ::com::sun::star::xml::sax::SAXException,
+        throw (	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL endDocument(void)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL startElement(
             const rtl::OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL endElement(const rtl::OUString& aName)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL characters(const rtl::OUString& aChars)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
     private:
-        int         m_nElementDepth;
-        sal_Bool    m_bMenuMode;
+        int			m_nElementDepth;
+        sal_Bool	m_bMenuMode;
         com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuBarContainer;
         com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
 
+        // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
-};  // OReadMenuBarHandler
+};	// OReadMenuBarHandler
 
 
-class FWE_DLLPUBLIC OReadMenuHandler : public ReadMenuDocumentHandlerBase
+class OReadMenuHandler : public ReadMenuDocumentHandlerBase
 {
     public:
         OReadMenuHandler( const com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rMenuContainer,
@@ -213,36 +217,36 @@ class FWE_DLLPUBLIC OReadMenuHandler : public ReadMenuDocumentHandlerBase
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument(void)
-        throw ( ::com::sun::star::xml::sax::SAXException,
+        throw (	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL endDocument(void)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL startElement(
             const rtl::OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL endElement(const rtl::OUString& aName)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL characters(const rtl::OUString& aChars)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
     private:
-        int                 m_nElementDepth;
-        sal_Bool            m_bMenuPopupMode;
+        int					m_nElementDepth;
+        sal_Bool			m_bMenuPopupMode;
         com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuContainer;
         com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
 }; // OReadMenuHandler
 
 
-class FWE_DLLPUBLIC OReadMenuPopupHandler : public ReadMenuDocumentHandlerBase
+class OReadMenuPopupHandler : public ReadMenuDocumentHandlerBase
 {
     public:
         OReadMenuPopupHandler( const com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rMenuContainer,
@@ -251,41 +255,41 @@ class FWE_DLLPUBLIC OReadMenuPopupHandler : public ReadMenuDocumentHandlerBase
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument(void)
-            throw ( ::com::sun::star::xml::sax::SAXException,
+            throw (	::com::sun::star::xml::sax::SAXException,
                     ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL endDocument(void)
-            throw ( ::com::sun::star::xml::sax::SAXException,
+            throw (	::com::sun::star::xml::sax::SAXException,
                     ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL startElement(
             const rtl::OUString& aName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
-            throw ( ::com::sun::star::xml::sax::SAXException,
+            throw (	::com::sun::star::xml::sax::SAXException,
                     ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL endElement(const rtl::OUString& aName)
-            throw ( ::com::sun::star::xml::sax::SAXException,
+            throw (	::com::sun::star::xml::sax::SAXException,
                     ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL characters(const rtl::OUString& aChars)
-            throw ( ::com::sun::star::xml::sax::SAXException,
+            throw (	::com::sun::star::xml::sax::SAXException,
                     ::com::sun::star::uno::RuntimeException );
 
     private:
         enum NextElementClose { ELEM_CLOSE_NONE, ELEM_CLOSE_MENUITEM, ELEM_CLOSE_MENUSEPARATOR };
 
-        int                 m_nElementDepth;
-        sal_Bool            m_bMenuMode;
+        int					m_nElementDepth;
+        sal_Bool			m_bMenuMode;
         com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuContainer;
         com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
         com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xComponentContext;
-        NextElementClose    m_nNextElementExpected;
+        NextElementClose	m_nNextElementExpected;
 }; // OReadMenuPopupHandler
 
 
-class FWE_DLLPUBLIC OWriteMenuDocumentHandler
+class OWriteMenuDocumentHandler
 {
     public:
         OWriteMenuDocumentHandler(
@@ -310,6 +314,6 @@ class FWE_DLLPUBLIC OWriteMenuDocumentHandler
 
 } // namespace framework
 
-#endif  // #ifndef __FRAMEWORK_XML_MENUDOCUMENTHANDLER_HXX_
+#endif	// #ifndef __FRAMEWORK_XML_MENUDOCUMENTHANDLER_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

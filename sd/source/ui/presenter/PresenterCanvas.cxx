@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ Reference<XInterface> SAL_CALL PresenterCanvas_createInstance (
 
 ::rtl::OUString PresenterCanvas_getImplementationName (void) throw(RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterCanvasFactory"));
+    return OUString::createFromAscii("com.sun.star.comp.Draw.PresenterCanvasFactory");
 }
 
 
@@ -74,7 +74,7 @@ Sequence<rtl::OUString> SAL_CALL PresenterCanvas_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.rendering.Canvas")));
+        ::rtl::OUString::createFromAscii("com.sun.star.rendering.Canvas"));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -109,15 +109,15 @@ public:
 
     virtual void SAL_CALL setAlpha (double nAlpha)
         throw (lang::IllegalArgumentException,RuntimeException);
-
+    
     virtual void SAL_CALL move (const geometry::RealPoint2D& rNewPos,
         const rendering::ViewState& rViewState,
         const rendering::RenderState& rRenderState)
         throw (lang::IllegalArgumentException,RuntimeException);
-
+    
     virtual void SAL_CALL transform (const geometry::AffineMatrix2D& rTransformation)
         throw (lang::IllegalArgumentException,RuntimeException);
-
+    
     virtual void SAL_CALL clip (const Reference<rendering::XPolyPolygon2D>& rClip)
         throw (RuntimeException);
 
@@ -126,13 +126,13 @@ public:
 
     virtual void SAL_CALL show (void)
         throw (RuntimeException);
-
+    
     virtual void SAL_CALL hide (void)
         throw (RuntimeException);
 
-
+    
     // XCustomSprite
-
+    
     virtual Reference<rendering::XCanvas> SAL_CALL getContentCanvas (void)
         throw (RuntimeException);
 
@@ -142,7 +142,7 @@ private:
     Reference<awt::XWindow> mxBaseWindow;
     geometry::RealPoint2D maPosition;
     geometry::RealSize2D maSpriteSize;
-
+        
     void ThrowIfDisposed (void)
         throw (css::lang::DisposedException);
 };
@@ -188,7 +188,7 @@ PresenterCanvas::PresenterCanvas (
 {
     if (mxWindow.is())
         mxWindow->addWindowListener(this);
-
+    
     if (mxUpdateCanvas.is())
         mpUpdateRequester = CanvasUpdateRequester::Instance(mxUpdateCanvas);
 }
@@ -214,7 +214,7 @@ void SAL_CALL PresenterCanvas::disposing (void)
 
 
 //----- XInitialization -------------------------------------------------------
-
+    
 void SAL_CALL PresenterCanvas::initialize (
     const Sequence<Any>& rArguments)
     throw(Exception, RuntimeException)
@@ -233,7 +233,7 @@ void SAL_CALL PresenterCanvas::initialize (
             if ( ! (rArguments[2] >>= mxSharedWindow))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterCanvas: invalid shared window")),
+                    OUString::createFromAscii("PresenterCanvas: invalid shared window"),
                     static_cast<XWeak*>(this),
                     1);
             }
@@ -241,7 +241,7 @@ void SAL_CALL PresenterCanvas::initialize (
             if ( ! (rArguments[3] >>= mxSharedCanvas))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterCanvas: invalid shared canvas")),
+                    OUString::createFromAscii("PresenterCanvas: invalid shared canvas"),
                     static_cast<XWeak*>(this),
                     2);
             }
@@ -249,7 +249,7 @@ void SAL_CALL PresenterCanvas::initialize (
             if ( ! (rArguments[4] >>= mxWindow))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterCanvas: invalid window")),
+                    OUString::createFromAscii("PresenterCanvas: invalid window"),
                     static_cast<XWeak*>(this),
                     3);
             }
@@ -270,7 +270,7 @@ void SAL_CALL PresenterCanvas::initialize (
     else
     {
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterCanvas: invalid number of arguments")),
+            OUString::createFromAscii("PresenterCanvas: invalid number of arguments"),
                 static_cast<XWeak*>(this));
     }
 }
@@ -626,7 +626,7 @@ Reference<rendering::XAnimatedSprite> SAL_CALL
     else
         return NULL;
 }
-
+    
 
 
 
@@ -647,7 +647,7 @@ Reference<rendering::XAnimatedSprite> SAL_CALL
     else
         return NULL;
 }
-
+    
 
 
 
@@ -868,11 +868,11 @@ css::rendering::ViewState PresenterCanvas::MergeViewState (
 
     // Prepare the local clip rectangle.
     ::basegfx::B2DRectangle aWindowRange (GetClipRectangle(aViewState.AffineTransform, rOffset));
-
+    
     // Adapt the offset of the view state.
     aViewState.AffineTransform.m02 += rOffset.X;
     aViewState.AffineTransform.m12 += rOffset.Y;
-
+    
     // Adapt the clip polygon.
     if ( ! aViewState.Clip.is())
     {
@@ -964,7 +964,7 @@ awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWind
             maClipRectangle.X + maClipRectangle.Width + rOffset.X,
             maClipRectangle.Y + maClipRectangle.Height + rOffset.Y);
     }
-
+    
     // The local clip rectangle is used to clip the view state clipping
     // polygon.
     ::basegfx::B2DRectangle aWindowRectangle (
@@ -1119,7 +1119,7 @@ void SAL_CALL PresenterCustomSprite::setAlpha (const double nAlpha)
     ThrowIfDisposed();
     mxSprite->setAlpha(nAlpha);
 }
-
+    
 
 
 
@@ -1198,7 +1198,7 @@ void SAL_CALL PresenterCustomSprite::hide (void)
 
 
 //----- XCustomSprite ---------------------------------------------------------
-
+    
 Reference<rendering::XCanvas> PresenterCustomSprite::getContentCanvas (void)
     throw (RuntimeException)
 {

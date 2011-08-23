@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,18 +66,20 @@
 #define XML_LINE_TLBR 0
 #define XML_LINE_BLTR 1
 
+using ::rtl::OUString;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace xmloff::token;
+//using namespace ::com::sun::star::text;
 using namespace ::formula;
 
 using rtl::OUString;
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::UNO_QUERY;
 
 ScXMLCellImportPropertyMapper::ScXMLCellImportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper,
@@ -171,14 +173,14 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
         {
             table::BorderLine2 aBorderLine;
             pBorders[i]->maValue >>= aBorderLine;
-            if( pBorderWidths[i] )
+             if( pBorderWidths[i] )
             {
                 table::BorderLine2 aBorderLineWidth;
                 pBorderWidths[i]->maValue >>= aBorderLineWidth;
                 aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
                 aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
                 aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
-                aBorderLine.LineWidth = aBorderLineWidth.LineWidth;
+                aBorderLine.LineStyle = aBorderLineWidth.LineStyle;
                 pBorders[i]->maValue <<= aBorderLine;
             }
         }
@@ -197,7 +199,7 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
             aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
             aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
             aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
-            aBorderLine.LineWidth = aBorderLineWidth.LineWidth;
+            aBorderLine.LineStyle = aBorderLineWidth.LineStyle;
             pDiagBorders[i]->maValue <<= aBorderLine;
             if (pDiagBorderWidths[i])
                 pDiagBorderWidths[i]->mnIndex = -1;
@@ -248,9 +250,9 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
             sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(property->mnIndex);
             switch (nContextID)
             {
-                case CTF_SC_ROWHEIGHT                   : pHeight = property; break;
-                case CTF_SC_ROWOPTIMALHEIGHT            : pOptimalHeight = property; break;
-                case CTF_SC_ROWBREAKBEFORE              : pPageBreak = property; break;
+                case CTF_SC_ROWHEIGHT					: pHeight = property; break;
+                case CTF_SC_ROWOPTIMALHEIGHT			: pOptimalHeight = property; break;
+                case CTF_SC_ROWBREAKBEFORE				: pPageBreak = property; break;
             }
         }
     }
@@ -276,7 +278,7 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
     }
     else if (pHeight)
     {
-        rProperties.push_back(XMLPropertyState(maPropMapper->FindEntryIndex(CTF_SC_ROWOPTIMALHEIGHT), ::cppu::bool2any( false )));
+        rProperties.push_back(XMLPropertyState(maPropMapper->FindEntryIndex(CTF_SC_ROWOPTIMALHEIGHT), ::cppu::bool2any( sal_False )));
     }
     // don't access pointers to rProperties elements after push_back!
 }
@@ -300,7 +302,7 @@ public:
 };
 
 ScXMLMapContext::ScXMLMapContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName, const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+            const OUString& rLName,	const uno::Reference< xml::sax::XAttributeList > & xAttrList )
     : SvXMLImportContext( rImport, nPrfx, rLName )
 {
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
@@ -348,7 +350,7 @@ void XMLTableStyleContext::SetOperator( uno::Sequence< beans::PropertyValue >& r
 
 void XMLTableStyleContext::SetBaseCellAddress( uno::Sequence< beans::PropertyValue >& rProps, const OUString& rBaseCell ) const
 {
-    /*  Source position must be set as string, because it may refer
+    /*  #b4974740# Source position must be set as string, because it may refer
         to a sheet that hasn't been loaded yet. */
     lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SOURCESTR ) ), rBaseCell );
 }
@@ -394,7 +396,7 @@ void XMLTableStyleContext::SetFormula( uno::Sequence< beans::PropertyValue >& rP
             lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_GRAMMAR2 ) ), nGrammar );
         break;
         default:
-            OSL_FAIL( "XMLTableStyleContext::SetFormula - invalid formula index" );
+            OSL_ENSURE( false, "XMLTableStyleContext::SetFormula - invalid formula index" );
     }
 }
 
@@ -477,8 +479,8 @@ XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
     pStyles(&rStyles),
     nNumberFormat(-1),
     nLastSheet(-1),
-    bConditionalFormatCreated(false),
-    bParentSet(false)
+    bConditionalFormatCreated(sal_False),
+    bParentSet(sal_False)
 {
 }
 
@@ -617,7 +619,7 @@ sal_Int32 XMLTableStyleContext::GetNumberFormat()
                     pMyStyles->FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True));
             else
             {
-                OSL_FAIL("not possible to get style");
+                DBG_ERROR("not possible to get style");
             }
         }
         if (pStyle)
@@ -969,8 +971,8 @@ ScMasterPageContext::ScMasterPageContext( SvXMLImport& rImport,
         const uno::Reference< XAttributeList > & xAttrList,
         sal_Bool bOverwrite ) :
     XMLTextMasterPageContext( rImport, nPrfx, rLName, xAttrList, bOverwrite ),
-    bContainsRightHeader(false),
-    bContainsRightFooter(false)
+    bContainsRightHeader(sal_False),
+    bContainsRightFooter(sal_False)
 {
 }
 

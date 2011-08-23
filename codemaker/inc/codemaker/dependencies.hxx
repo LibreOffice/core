@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include "rtl/string.hxx"
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 namespace rtl { class OUString; }
 class TypeManager;
@@ -53,7 +53,7 @@ public:
      */
     enum Kind { KIND_NO_BASE, KIND_BASE };
 
-    typedef boost::unordered_map< rtl::OString, Kind, rtl::OStringHash > Map;
+    typedef std::hash_map< rtl::OString, Kind, rtl::OStringHash > Map;
 
     /**
        Constructs the dependencies for a given type.

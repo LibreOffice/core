@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,9 @@ class ExtendedTabBar : public TabBar
 {
     EditEngine*     pEditEngine;
     EditView*       pEditView;
-    sal_Bool            bIsInKeyInput;
+    BOOL            bIsInKeyInput;
 #if _SOLAR__PRIVATE
-    void            ImpCheckEditEngine( sal_Bool bKeepNewText );
+    void            ImpCheckEditEngine( BOOL bKeepNewText );
 #endif
 protected:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
@@ -50,17 +50,17 @@ protected:
     virtual void    KeyInput( const KeyEvent& rKEvent );
     virtual void    Paint( const Rectangle& );
 
-    virtual sal_Bool    StartRenamingTab( sal_uInt16 nCurId );
-    virtual sal_Bool    AllowRenamingTab( sal_uInt16 nCurId, const String& rNewName );
-    virtual void    TabRenamed( sal_uInt16 nCurId, const String& rNewName );
+    virtual BOOL    StartRenamingTab( USHORT nCurId );
+    virtual BOOL    AllowRenamingTab( USHORT nCurId, const String& rNewName );
+    virtual void    TabRenamed( USHORT nCurId, const String& rNewName );
 
 public:
                     ExtendedTabBar( Window* pParent, WinBits nStyle );
                     ~ExtendedTabBar();
 
     void            RenameSelectedTab();
-    sal_Bool            IsInEditMode() const { return pEditEngine ? sal_True : sal_False; }
-    void            StopEditMode( sal_Bool bKeepCurText = sal_False );
+    BOOL            IsInEditMode() const { return pEditEngine ? TRUE : FALSE; }
+    void            StopEditMode( BOOL bKeepCurText = FALSE );
 };
 
 #endif  //_BASTYPE4_HXX

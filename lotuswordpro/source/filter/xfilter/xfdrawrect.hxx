@@ -57,10 +57,14 @@
  * @file
  * Rect object.
  ************************************************************************/
-#ifndef     _XFDRAWRECT_HXX
-#define     _XFDRAWRECT_HXX
+/*************************************************************************
+ * Change History
+ * 2004-2-17 create this file.
+ ************************************************************************/
+#ifndef		_XFDRAWRECT_HXX
+#define		_XFDRAWRECT_HXX
 
-#include    "xfdrawobj.hxx"
+#include	"xfdrawobj.hxx"
 
 class XFDrawRect : public XFDrawObject
 {
@@ -68,23 +72,23 @@ public:
     XFDrawRect();
 
 public:
-    void    SetStartPoint(XFPoint pt);
+    void	SetStartPoint(XFPoint pt);
 
-    void    SetSize(double width, double height);
+    void	SetSize(double width, double height);
 
-    void    SetWidth(double width);
+    void	SetWidth(double width);
 
-    void    SetHeight(double height);
+    void	SetHeight(double height);
 
-    void    SetCornerRadius(double fCornerRadius);
+    void	SetCornerRadius(double fCornerRadius);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    double  m_fCornerRadius;
+    double	m_fCornerRadius;
 };
 
-inline void XFDrawRect::SetStartPoint(XFPoint pt)
+inline void	XFDrawRect::SetStartPoint(XFPoint pt)
 {
     m_aRect.SetStartPoint(pt);
 }

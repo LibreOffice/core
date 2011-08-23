@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,6 +31,8 @@
 #include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/textbodypropertiescontext.hxx"
 #include "oox/drawingml/textliststylecontext.hxx"
+#include "oox/core/namespaces.hxx"
+#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::oox::core;
@@ -50,22 +52,22 @@ Reference< XFastContextHandler > spDefContext::createFastChildContext( sal_Int32
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-        case A_TOKEN( spPr ):
+        case NMSP_DRAWINGML|XML_spPr:
         {
             xRet = new ShapePropertiesContext( *this, mrDefaultObject );
             break;
         }
-        case A_TOKEN( bodyPr ):
+        case NMSP_DRAWINGML|XML_bodyPr:
         {
             TextBodyPtr xTextBody( new TextBody );
             mrDefaultObject.setTextBody( xTextBody );
             xRet = new TextBodyPropertiesContext( *this, xAttribs, xTextBody->getTextProperties() );
             break;
         }
-        case A_TOKEN( lstStyle ):
+        case NMSP_DRAWINGML|XML_lstStyle:
             xRet.set( new TextListStyleContext( *this, *mrDefaultObject.getMasterTextListStyle() ) );
             break;
-        case A_TOKEN( style ):
+        case NMSP_DRAWINGML|XML_style:
             break;
     }
     if( !xRet.is() )

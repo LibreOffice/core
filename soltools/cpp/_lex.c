@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#if (defined(_WIN32) || defined(__IBMC__))
+#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
 #include <io.h>
 #else
 #include <unistd.h>
@@ -263,7 +263,7 @@ void
                         bigfsm[j][fp->state] = (short) nstate;
                     continue;
                 case C_ALPH:
-                    for (j = 0; j < 256; j++)
+                    for (j = 0; j <= 256; j++)
 #ifdef S390
                         if( isalpha( j ) || (j == '_') )
 #else
@@ -635,7 +635,7 @@ Source *
     setsource(char *name, int path, int fd, char *str, int wrap)
 {
     Source *s = new(Source);
-    size_t len;
+    int len;
 
     s->line = 1;
     s->lineinc = 0;

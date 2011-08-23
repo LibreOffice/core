@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,10 +48,10 @@ published service Database
     service  com::sun::star::text::TextFieldMaster;
 
     //------------------------------------------------------------------------
-    /** specifies the database name.
+    /** specifies the database name. 
      */
     [property] string DataBaseName;
-
+    
     //------------------------------------------------------------------------
     /** contains the CommandType this
      can be the name of a data base table, a data query or a statement.
@@ -70,22 +70,22 @@ published service Database
 
     //------------------------------------------------------------------------
     /** indicates the URL of a database file.
-        @since OOo 2.0
+        @since OOo 2.0.0
      */
     [optional, property] string DataBaseURL;
 
     //------------------------------------------------------------------------
     /** indicates a connection URL, which locates a database driver.
-        @since OOo 2.0
+        @since OOo 2.0.0
      */
     [optional, property] string DataBaseResource;
     //------------------------------------------------------------------------
-    /** contains the DataColumnName but it enables the fieldmaster and its
+    /** contains the DataColumnName but it enables the fieldmaster and its 
         depending fields to work without setting DataSourceName, DataTableName and CommandType
         @since OOo 2.3
      */
     [optional, property] string Name;
-
+    
 };
 
 //=============================================================================

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,9 +55,9 @@ OTableRowView::OTableRowView(Window* pParent)
     ,m_nDataPos(-1)
     ,m_nCurrentPos(-1)
     ,m_nCurUndoActId(0)
-    ,m_bCurrentModified(sal_False)
-    ,m_bUpdatable(sal_False)
-    ,m_bClipboardFilled(sal_False)
+    ,m_bCurrentModified(FALSE)
+    ,m_bUpdatable(FALSE)
+    ,m_bClipboardFilled(FALSE)
 {
     DBG_CTOR(OTableRowView,NULL);
 
@@ -75,6 +75,9 @@ void OTableRowView::Init()
 {
     EditBrowseBox::Init();
 
+//	SetMapMode( MapMode(MAP_TWIP) );
+//	GetDataWindow().SetMapMode( GetMapMode() );
+
     Font aFont( GetDataWindow().GetFont() );
     aFont.SetWeight( WEIGHT_NORMAL );
     GetDataWindow().SetFont( aFont );
@@ -85,7 +88,7 @@ void OTableRowView::Init()
     SetFont(aFont);
 
     // HandleColumn, fuer maximal fuenf Ziffern einrichten
-    InsertHandleColumn(static_cast<sal_uInt16>(GetTextWidth('0') * 4)/*, sal_True */);
+    InsertHandleColumn(static_cast<USHORT>(GetTextWidth('0') * 4)/*, TRUE */);
 
     BrowserMode nMode = BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_KEEPSELECTION |
                         BROWSER_HLINESFULL | BROWSER_VLINESFULL | BROWSER_AUTOSIZE_LASTCOL;
@@ -100,7 +103,7 @@ void OTableRowView::KeyInput( const KeyEvent& rEvt )
 {
     if (IsDeleteAllowed(0))
     {
-        if (rEvt.GetKeyCode().GetCode() == KEY_DELETE &&    // Delete rows
+        if (rEvt.GetKeyCode().GetCode() == KEY_DELETE &&	// Delete rows
             !rEvt.GetKeyCode().IsShift() &&
             !rEvt.GetKeyCode().IsMod1())
         {
@@ -110,7 +113,7 @@ void OTableRowView::KeyInput( const KeyEvent& rEvt )
         if( rEvt.GetKeyCode().GetCode() == KEY_F2 )
         {
             ::com::sun::star::util::URL aUrl;
-            aUrl.Complete =::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DSBEditDoc"));
+            aUrl.Complete =::rtl::OUString::createFromAscii(".uno:DSBEditDoc");
             GetView()->getController().dispatch( aUrl,Sequence< PropertyValue >() );
         }
     }
@@ -118,7 +121,7 @@ void OTableRowView::KeyInput( const KeyEvent& rEvt )
 }
 
 //------------------------------------------------------------------------
-void OTableRowView::SetUpdatable( sal_Bool bUpdate )
+void OTableRowView::SetUpdatable( BOOL bUpdate )
 {
     m_bUpdatable = bUpdate;
 
@@ -138,7 +141,7 @@ void OTableRowView::Command(const CommandEvent& rEvt)
                 return;
             }
 
-            sal_uInt16 nColId = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X());
+            USHORT nColId = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X());
             long   nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
 
             if ( nColId == HANDLE_ID )
@@ -201,7 +204,7 @@ void OTableRowView::copy()
 //------------------------------------------------------------------------------
 void OTableRowView::paste()
 {
-    OSL_FAIL("OTableRowView::Paste : (pseudo-) abstract method called !");
+    OSL_ENSURE(0,"OTableRowView::Paste : (pseudo-) abstract method called !");
 }
 
 //------------------------------------------------------------------------------

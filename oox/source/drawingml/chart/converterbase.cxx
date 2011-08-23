@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,39 +27,45 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/converterbase.hxx"
-
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart/XAxisXSupplier.hpp>
 #include <com/sun/star/chart/XAxisYSupplier.hpp>
 #include <com/sun/star/chart/XAxisZSupplier.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
-#include <com/sun/star/chart2/RelativeSize.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include "basegfx/numeric/ftools.hxx"
+#include <tools/solar.h>    // for F_PI180
+#include "properties.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/theme.hxx"
+
+using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::XInterface;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_SET_THROW;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::frame::XModel;
+using ::com::sun::star::awt::Point;
+using ::com::sun::star::awt::Rectangle;
+using ::com::sun::star::awt::Size;
+using ::com::sun::star::chart2::RelativePosition;
+using ::com::sun::star::chart2::XChartDocument;
+using ::com::sun::star::chart2::XTitle;
+using ::com::sun::star::drawing::XShape;
+using ::oox::core::XmlFilterBase;
+
+namespace cssc = ::com::sun::star::chart;
 
 namespace oox {
 namespace drawingml {
 namespace chart {
-
-// ============================================================================
-
-namespace cssc = ::com::sun::star::chart;
-
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::chart2;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-
-using ::oox::core::XmlFilterBase;
-using ::rtl::OUString;
 
 // ============================================================================
 
@@ -79,11 +85,12 @@ struct TitleKey : public ::std::pair< ObjectType, ::std::pair< sal_Int32, sal_In
 struct TitleLayoutInfo
 {
     typedef Reference< XShape > (*GetShapeFunc)( const Reference< cssc::XChartDocument >& );
-
-    Reference< XTitle > mxTitle;        /// The API title object.
+    
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >
+                        mxTitle;        /// The API title object.
     ModelRef< LayoutModel > mxLayout;   /// The layout model, if existing.
     GetShapeFunc        mpGetShape;     /// Helper function to receive the title shape.
-
+    
     inline explicit     TitleLayoutInfo() : mpGetShape( 0 ) {}
 
     void                convertTitlePos(
@@ -156,7 +163,7 @@ OOX_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupp
 struct ConverterData
 {
     typedef ::std::map< TitleKey, TitleLayoutInfo > TitleMap;
-
+    
     ObjectFormatter     maFormatter;
     TitleMap            maTitles;
     XmlFilterBase&      mrFilter;
@@ -241,7 +248,7 @@ Reference< XInterface > ConverterRoot::createInstance( const OUString& rServiceN
     Reference< XInterface > xInt;
     try
     {
-        xInt = mxData->mrFilter.getServiceFactory()->createInstance( rServiceName );
+        xInt = mxData->mrFilter.getGlobalFactory()->createInstance( rServiceName );
     }
     catch( Exception& )
     {
@@ -310,11 +317,11 @@ sal_Int32 lclCalcPosition( sal_Int32 nChartSize, double fPos, sal_Int32 nPosMode
         case XML_edge:      // absolute start position as factor of chart size
             return getLimitedValue< sal_Int32, double >( nChartSize * fPos + 0.5, 0, nChartSize );
         case XML_factor:    // position relative to object default position
-            OSL_FAIL( "lclCalcPosition - relative positioning not supported" );
+            OSL_ENSURE( false, "lclCalcPosition - relative positioning not supported" );
             return -1;
     };
 
-    OSL_FAIL( "lclCalcPosition - unknown positioning mode" );
+    OSL_ENSURE( false, "lclCalcPosition - unknown positioning mode" );
     return -1;
 }
 
@@ -324,31 +331,14 @@ sal_Int32 lclCalcSize( sal_Int32 nPos, sal_Int32 nChartSize, double fSize, sal_I
     sal_Int32 nValue = getLimitedValue< sal_Int32, double >( nChartSize * fSize + 0.5, 0, nChartSize );
     switch( nSizeMode )
     {
-        case XML_factor:    // passed value is width/height
+        case XML_factor:    // size as factor of chart size
             return nValue;
-        case XML_edge:      // passed value is right/bottom position
+        case XML_edge:      // absolute end position as factor of chart size
             return nValue - nPos + 1;
     };
 
-    OSL_FAIL( "lclCalcSize - unknown size mode" );
+    OSL_ENSURE( false, "lclCalcSize - unknown size mode" );
     return -1;
-}
-
-/** Returns a relative size value in the chart area. */
-double lclCalcRelSize( double fPos, double fSize, sal_Int32 nSizeMode )
-{
-    switch( nSizeMode )
-    {
-        case XML_factor:    // passed value is width/height
-        break;
-        case XML_edge:      // passed value is right/bottom position
-            fSize -= fPos;
-        break;
-        default:
-            OSL_ENSURE( false, "lclCalcRelSize - unknown size mode" );
-            fSize = 0.0;
-    };
-    return getLimitedValue< double, double >( fSize, 0.0, 1.0 - fPos );
 }
 
 } // namespace
@@ -387,20 +377,12 @@ bool LayoutConverter::convertFromModel( PropertySet& rPropSet )
         (mrModel.mnXMode == XML_edge) && (mrModel.mfX >= 0.0) &&
         (mrModel.mnYMode == XML_edge) && (mrModel.mfY >= 0.0) )
     {
-        RelativePosition aPos(
-            getLimitedValue< double, double >( mrModel.mfX, 0.0, 1.0 ),
-            getLimitedValue< double, double >( mrModel.mfY, 0.0, 1.0 ),
-            Alignment_TOP_LEFT );
+        RelativePosition aPos;
+        aPos.Primary = getLimitedValue< double, double >( mrModel.mfX, 0.0, 1.0 );
+        aPos.Secondary = getLimitedValue< double, double >( mrModel.mfY, 0.0, 1.0 );
+        aPos.Anchor = ::com::sun::star::drawing::Alignment_TOP_LEFT;
         rPropSet.setProperty( PROP_RelativePosition, aPos );
-
-        RelativeSize aSize(
-            lclCalcRelSize( aPos.Primary, mrModel.mfW, mrModel.mnWMode ),
-            lclCalcRelSize( aPos.Secondary, mrModel.mfH, mrModel.mnHMode ) );
-        if( (aSize.Primary > 0.0) && (aSize.Secondary > 0.0) )
-        {
-            rPropSet.setProperty( PROP_RelativeSize, aSize );
-            return true;
-        }
+        return true;
     }
     return false;
 }

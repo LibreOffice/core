@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,21 +27,21 @@
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
 
-#define RPTUI_ID_LRSPACE    1
-#define RPTUI_ID_ULSPACE    2
-#define RPTUI_ID_PAGE       3
-#define RPTUI_ID_SIZE       4
-#define RPTUI_ID_PAGE_MODE  5
-#define RPTUI_ID_START      6
-#define RPTUI_ID_END        7
-#define RPTUI_ID_BRUSH      8
-#define RPTUI_ID_METRIC     9
+#define RPTUI_ID_LRSPACE	1
+#define RPTUI_ID_ULSPACE	2
+#define RPTUI_ID_PAGE		3
+#define RPTUI_ID_SIZE		4
+#define RPTUI_ID_PAGE_MODE	5
+#define RPTUI_ID_START		6
+#define RPTUI_ID_END		7
+#define RPTUI_ID_BRUSH		8
+#define RPTUI_ID_METRIC		9
 
 #define ITEMID_LRSPACE      RPTUI_ID_LRSPACE
 #define ITEMID_ULSPACE      RPTUI_ID_ULSPACE
 #define ITEMID_SIZE         RPTUI_ID_SIZE
-#define ITEMID_PAGE         RPTUI_ID_PAGE
-#define ITEMID_BRUSH        RPTUI_ID_BRUSH
+#define ITEMID_PAGE			RPTUI_ID_PAGE
+#define ITEMID_BRUSH		RPTUI_ID_BRUSH
 
 
 #include "ReportController.hxx"
@@ -100,7 +100,6 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
@@ -128,7 +127,7 @@
 #include "DesignView.hxx"
 #include "ModuleHelper.hxx"
 #include "RptObject.hxx"
-#include "RptUndo.hxx"
+#include "Undo.hxx"
 #include "uistrings.hrc"
 #include "RptDef.hxx"
 #include "ReportSection.hxx"
@@ -154,12 +153,10 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include "UndoEnv.hxx"
 #include "InsertFunctions.hxx"
-#include "ReportControllerObserver.hxx"
 
 #include <boost/mem_fn.hpp>
 #include <boost/bind.hpp>
 #include <boost/utility.hpp>
-#include <boost/scoped_ptr.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/confignode.hxx>
@@ -167,7 +164,7 @@
 
 #include <ReportControllerObserver.hxx>
 
-#define MAX_ROWS_FOR_PREVIEW    20
+#define MAX_ROWS_FOR_PREVIEW    50
 
 using namespace ::com::sun::star;
 using namespace uno;
@@ -197,11 +194,11 @@ namespace
     {
         bool operator() (const beans::PropertyValue& x, const ::rtl::OUString& y) const
         {
-            return x.Name.equals(y);
+            return x.Name.equals(y);// ? true : false;
         }
         bool operator() (const ::rtl::OUString& x,const beans::PropertyValue& y) const
         {
-            return x.equals(y.Name);
+            return x.equals(y.Name);// ? true : false;
         }
     };
 
@@ -224,16 +221,16 @@ namespace
                         aFontDescriptor.Underline = awt::FontUnderline::SINGLE - aFontDescriptor.Underline;
                         break;
                     default:
-                        OSL_FAIL("Illegal value in default!");
+                        OSL_ENSURE(0,"Illegal value in default!");
                         break;
                 }
 
                 _xReportControlFormat->setFontDescriptor(aFontDescriptor);
             }
-            catch(const beans::UnknownPropertyException&)
+            catch(beans::UnknownPropertyException&)
             {
             }
-        }
+        } // if ( xReportControlFormat.is() )
     }
 }
 
@@ -249,16 +246,14 @@ void lcl_getReportControlFormat(const Sequence< PropertyValue >& aArgs,
         SequenceAsHashMap aMap(aArgs);
         xReportControlFormat = aMap.getUnpackedValueOrDefault(REPORTCONTROLFORMAT,uno::Reference< report::XReportControlFormat>());
         _xWindow = aMap.getUnpackedValueOrDefault(CURRENT_WINDOW,uno::Reference< awt::XWindow>());
-    }
-
+    } // if ( aArgs.getLength() )
     if ( !xReportControlFormat.is() )
     {
         _pView->fillControlModelSelection(_rControlsFormats);
-    }
+        //xReportControlFormat.set( _pView->getCurrentControlModel(),uno::UNO_QUERY);
+    } // if ( !xReportControlFormat.is() )
     else
-    {
         _rControlsFormats.push_back(xReportControlFormat);
-    }
 
     if ( !_xWindow.is() )
         _xWindow = VCLUnoHelper::GetInterface(_pView);
@@ -345,7 +340,7 @@ void OReportController::disposing()
         m_pClipbordNotifier->AddRemoveListener( getView(), sal_False );
         m_pClipbordNotifier->release();
         m_pClipbordNotifier = NULL;
-    }
+    } // if ( getView() && m_pClipbordNotifier )
     if ( m_pGroupsFloater )
     {
         SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_GROUPS_SORTING ) );
@@ -362,9 +357,9 @@ void OReportController::disposing()
         ::comphelper::disposeComponent( m_xRowSetMediator );
         ::comphelper::disposeComponent( m_xFormatter );
     }
-    catch(const uno::Exception&)
+    catch(uno::Exception&)
     {
-        OSL_FAIL("Exception caught while disposing row sets.");
+        OSL_ENSURE(0,"Exception caught while disposing row sets.");
     }
     m_xRowSet.clear();
     m_xRowSetMediator.clear();
@@ -378,15 +373,14 @@ void OReportController::disposing()
                 pSectionWindow = getDesignView()->getMarkedSection();
             if ( pSectionWindow )
                 pSectionWindow->getReportSection().deactivateOle();
-            clearUndoManager();
+            getUndoMgr()->Clear();		// clear all undo redo things
             if ( m_aReportModel )
                 listen(false);
             m_pReportControllerObserver->Clear();
             m_pReportControllerObserver->release();
         }
-        catch(const uno::Exception&)
+        catch(uno::Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -398,6 +392,7 @@ void OReportController::disposing()
     OReportController_BASE::disposing();
 
 
+    // disconnect();
     try
     {
         m_xReportDefinition.clear();
@@ -405,7 +400,7 @@ void OReportController::disposing()
         m_xFrameLoader.clear();
         m_xReportEngine.clear();
     }
-    catch(const uno::Exception&)
+    catch(uno::Exception&)
     {
     }
     if ( getDesignView() )
@@ -463,27 +458,15 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             break;
         case SID_REDO:
         case SID_UNDO:
-            {
-                size_t ( SfxUndoManager::*retrieveCount )( bool const ) const =
-                    ( _nId == SID_UNDO ) ? &SfxUndoManager::GetUndoActionCount : &SfxUndoManager::GetRedoActionCount;
-
-                SfxUndoManager& rUndoManager( getUndoManager() );
-                aReturn.bEnabled = ( rUndoManager.*retrieveCount )( ::svl::IUndoManager::TopLevel ) > 0;
-                if ( aReturn.bEnabled )
-                {
-                    // TODO: add "Undo/Redo: prefix"
-                    String ( SfxUndoManager::*retrieveComment )( size_t, bool const ) const =
-                        ( _nId == SID_UNDO ) ? &SfxUndoManager::GetUndoActionComment : &SfxUndoManager::GetRedoActionComment;
-                    aReturn.sTitle = (rUndoManager.*retrieveComment)( 0, ::svl::IUndoManager::TopLevel );
-                }
-            }
+            aReturn = OReportController_BASE::GetState(_nId);
+            aReturn.bEnabled = aReturn.bEnabled;
             break;
         case SID_OBJECT_RESIZING:
         case SID_OBJECT_SMALLESTWIDTH:
         case SID_OBJECT_SMALLESTHEIGHT:
         case SID_OBJECT_GREATESTWIDTH:
         case SID_OBJECT_GREATESTHEIGHT:
-            aReturn.bEnabled = isEditable() && getDesignView()->HasSelection();
+            aReturn.bEnabled = isEditable() && getDesignView()->HasSelection();// && getDesignView()->isAlignPossible();
             if ( aReturn.bEnabled )
                 aReturn.bEnabled = m_nSelectionCount > 1;
             break;
@@ -545,7 +528,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_SECTION_ALIGN_UP:
         case SID_SECTION_ALIGN_MIDDLE:
         case SID_SECTION_ALIGN_DOWN:
-            aReturn.bEnabled = isEditable() && getDesignView()->HasSelection();
+            aReturn.bEnabled = isEditable() && getDesignView()->HasSelection();// && getDesignView()->isAlignPossible();
             break;
         case SID_CUT:
             aReturn.bEnabled = isEditable() && getDesignView()->HasSelection() && !getDesignView()->isHandleEvent(_nId);
@@ -581,7 +564,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_EXPAND_SECTION:
         case SID_NEXT_MARK:
         case SID_PREV_MARK:
-            aReturn.bEnabled = isEditable() && !getDesignView()->isHandleEvent(_nId);
+            aReturn.bEnabled = isEditable();
             break;
         case SID_SELECT:
         case SID_SELECT_REPORT:
@@ -826,7 +809,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                         const uno::Reference< report::XReportControlModel> xControlModel(getDesignView()->getCurrentControlModel(),uno::UNO_QUERY);
                         aReturn.bEnabled = !xControlModel.is();
                     }
-                    catch(const beans::UnknownPropertyException&)
+                    catch(beans::UnknownPropertyException&)
                     {
                     }
                 else
@@ -860,7 +843,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                         break;
                     default:
                         ;
-                    }
+                    } // switch(_nCommand)
             }
             break;
         case SID_ATTR_CHAR_COLOR:
@@ -905,7 +888,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                             aReturn.bChecked = _nId == SID_ATTR_PARA_ADJUST_CENTER;
                             break;
                     }
-                }
+                } // if ( aReturn.aValue >>= nParaAdjust )
                 aReturn.aValue.clear();
             }
             break;
@@ -915,7 +898,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             break;
         case SID_CHAR_DLG:
         case SID_SETCONTROLDEFAULTS:
-            aReturn.bEnabled = m_xReportDefinition.is() && isEditable();
+            aReturn.bEnabled = m_xReportDefinition.is() && isEditable();// && getDesignView()->getCurrentControlModel().is();
             if ( aReturn.bEnabled )
             {
                 ::std::vector< uno::Reference< uno::XInterface > > aSelection;
@@ -952,6 +935,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                 SvxZoomItem aZoom(m_eZoomType,m_nZoomValue);
                 aZoom.SetValueSet(SVX_ZOOM_ENABLE_50|SVX_ZOOM_ENABLE_75|SVX_ZOOM_ENABLE_100|SVX_ZOOM_ENABLE_200);
                 aZoom.QueryValue(aReturn.aValue);
+                //aReturn.sTitle = ::rtl::OUString::valueOf((sal_Int32)m_nZoomValue);
             }
             break;
         case SID_ATTR_ZOOMSLIDER:
@@ -963,6 +947,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                 aZoomSlider.AddSnappingPoint(100);
                 aZoomSlider.AddSnappingPoint(200);
                 aZoomSlider.QueryValue(aReturn.aValue);
+                //aReturn.sTitle = ::rtl::OUString::valueOf((sal_Int32)m_nZoomValue);
             }
             break;
         default:
@@ -1000,7 +985,37 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
-
+    if ( !getView() )
+    {
+        switch(_nId)
+        {
+            case SID_RULER:
+                OSL_ENSURE(aArgs.getLength() == 1,"Invalid length!");
+                aArgs[0].Value >>= m_bShowRuler;
+                break;
+            case SID_HELPLINES_MOVE:
+                OSL_ENSURE(aArgs.getLength() == 1,"Invalid length!");
+                aArgs[0].Value >>= m_bHelplinesMove;
+                break;
+            case SID_GRID_VISIBLE:
+                OSL_ENSURE(aArgs.getLength() == 1,"Invalid length!");
+                aArgs[0].Value >>= m_bGridVisible;
+                break;
+            case SID_SHOW_PROPERTYBROWSER:
+                OSL_ENSURE(aArgs.getLength() == 1,"Invalid length!");
+                aArgs[0].Value >>= m_bShowProperties;
+                break;
+            case SID_PROPERTYBROWSER_LAST_PAGE:
+                OSL_ENSURE(aArgs.getLength() == 1,"Invalid length!");
+                aArgs[0].Value >>= m_sLastActivePage;
+                break;
+            case SID_SPLIT_POSITION:
+                OSL_ENSURE(aArgs.getLength() == 1,"Invalid length!");
+                aArgs[0].Value >>= m_nSplitPos;
+                break;
+        }
+        return; // return without execution
+    }
     sal_Bool bForceBroadcast = sal_False;
     switch(_nId)
     {
@@ -1040,12 +1055,10 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_REDO:
         case SID_UNDO:
         {
+            // const OXUndoEnvironment::OUndoEnvLock aLock( m_aReportModel->GetUndoEnv() );
+            // We would like to know if we are in undo mode
             const OXUndoEnvironment::OUndoMode aLock( m_aReportModel->GetUndoEnv() );
-            sal_Bool ( SfxUndoManager::*doXDo )() =
-                ( _nId == SID_UNDO ) ? &SfxUndoManager::Undo : &SfxUndoManager::Redo;
-
-            SfxUndoManager& rUndoManager( getUndoManager() );
-            (rUndoManager.*doXDo)();
+            OReportController_BASE::Execute( _nId, aArgs );
             InvalidateAll();
             updateFloater();
         }
@@ -1156,7 +1169,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             select(uno::makeAny(m_xReportDefinition));
             break;
         case SID_EXECUTE_REPORT:
-            getView()->PostUserEvent(LINK(this, OReportController,OnExecuteReport));
+            /*m_nExecuteReportEvent = */getView()->PostUserEvent(LINK(this, OReportController,OnExecuteReport));
             break;
         case SID_RPT_NEW_FUNCTION:
             createNewFunction(aArgs[0].Value);
@@ -1183,7 +1196,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                     uno::Reference< report::XFunctions> xFunctions(xFunction->getParent(),uno::UNO_QUERY_THROW);
                     sal_Int32 nIndex = getPositionInIndexAccess(xFunctions.get(),xFunction);
                     const String sUndoAction = String((ModuleRes(RID_STR_UNDO_REMOVE_FUNCTION)));
-                    UndoContext aUndoContext( getUndoManager(), sUndoAction );
+                    UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
                     xFunctions->removeByIndex(nIndex);
                     select(uno::makeAny(xFunctions->getParent()));
                     InvalidateFeature( SID_SAVEDOC );
@@ -1210,6 +1223,14 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             InvalidateAll();
             break;
         case SID_INSERT_DIAGRAM:
+            /*{
+                OSectionView* pView = getCurrentSectionView();
+                if ( pView )
+                {
+                    Reference< awt::XWindow> xWindow = VCLUnoHelper::GetInterface(getView()->Window::GetParent());
+                    InsertChart(m_xContext,m_xReportDefinition.get(),xWindow,pView,getSdrModel().get());
+                }
+            }*/
             getDesignView()->SetMode( RPTUI_INSERT );
             getDesignView()->SetInsertObj( OBJ_OLE2);
             createDefaultControl(aArgs);
@@ -1388,6 +1409,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                         case SID_DRAWTBX_CS_STAR:
                             sType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("star5"));
                             break;
+                        case SID_DRAWTBX_CS_BASIC:
                         default:
                             sType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("diamond"));
                     }
@@ -1461,16 +1483,19 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_ATTR_CHAR_POSTURE:
         case SID_ATTR_CHAR_UNDERLINE:
             {
+                ::std::auto_ptr<UndoManagerListAction> pListAction;
                 uno::Reference< awt::XWindow> xWindow;
                 ::std::vector< uno::Reference< uno::XInterface > > aControlsFormats;
                 lcl_getReportControlFormat( aArgs, getDesignView(), xWindow, aControlsFormats );
-
-                const String sUndoAction(ModuleRes(RID_STR_UNDO_CHANGEFONT));
-                UndoContext aUndoContext( getUndoManager(), sUndoAction );
-
+                bool bMulti = aControlsFormats.size() > 1;
                 ::std::vector< uno::Reference< uno::XInterface > >::iterator aIter = aControlsFormats.begin();
                 for(; aIter != aControlsFormats.end();++aIter)
                 {
+                    if ( !pListAction.get() && bMulti)
+                    {
+                        const String sUndoAction(ModuleRes(RID_STR_UNDO_CHANGEFONT));
+                        pListAction.reset(new UndoManagerListAction(m_aUndoManager,sUndoAction));
+                    } // if ( !pListAction.get() )
                     uno::Reference< report::XReportControlFormat> xReportControlFormat(*aIter,uno::UNO_QUERY);
                     lcl_setFontWPU_nothrow(xReportControlFormat,_nId);
                 }
@@ -1492,7 +1517,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 if ( aArgs[0].Value >>= aFont )
                 {
                     impl_setPropertyAtControls_throw(RID_STR_UNDO_CHANGEFONT,PROPERTY_CHARFONTNAME,uno::makeAny(aFont.Name),aArgs);
-                }
+                } // if ( aArgs[0].Value >>= aFont )
             }
             break;
         case SID_ATTR_CHAR_FONTHEIGHT:
@@ -1523,7 +1548,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                     case SID_ATTR_PARA_ADJUST_BLOCK:
                         eParagraphAdjust = style::ParagraphAdjust_BLOCK;
                         break;
-                }
+                } // switch(_nId)
                 impl_setPropertyAtControls_throw(RID_STR_UNDO_ALIGNMENT,PROPERTY_PARAADJUST,uno::makeAny(eParagraphAdjust),aArgs);
 
                 InvalidateFeature(SID_ATTR_PARA_ADJUST_LEFT);
@@ -1534,37 +1559,32 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             break;
         case SID_CHAR_DLG:
             {
+                ::std::auto_ptr<UndoManagerListAction> pListAction;
                 uno::Sequence< beans::NamedValue > aSettings;
                 uno::Reference< awt::XWindow> xWindow;
                 ::std::vector< uno::Reference< uno::XInterface > > aControlsFormats;
                 lcl_getReportControlFormat( aArgs, getDesignView(), xWindow, aControlsFormats );
-
-                if ( !aControlsFormats.empty() )
+                ::std::vector< uno::Reference< uno::XInterface > >::iterator aIter = aControlsFormats.begin();
+                for(; aIter != aControlsFormats.end();++aIter)
                 {
-                    const String sUndoAction( ModuleRes( RID_STR_UNDO_CHANGEFONT ) );
-                    UndoContext aUndoContext( getUndoManager(), sUndoAction );
-
-                    ::std::vector< uno::Reference< uno::XInterface > >::iterator aIter = aControlsFormats.begin();
-                    for(; aIter != aControlsFormats.end();++aIter)
+                    uno::Reference< report::XReportControlFormat > xFormat(*aIter,uno::UNO_QUERY);
+                    if ( xFormat.is() )
                     {
-                        uno::Reference< report::XReportControlFormat > xFormat( *aIter, uno::UNO_QUERY );
-                        if ( !xFormat.is() )
-                            continue;
-
-                        if ( aSettings.getLength() == 0 )
+                        if ( !pListAction.get() )
                         {
-                            ::rptui::openCharDialog( xFormat, xWindow, aSettings );
-                            if ( aSettings.getLength() == 0 )
-                                break;
-                        }
-
+                            const String sUndoAction(ModuleRes(RID_STR_UNDO_CHANGEFONT));
+                            pListAction.reset(new UndoManagerListAction(m_aUndoManager,sUndoAction));
+                            rptui::openCharDialog(xFormat,xWindow,aSettings);
+                        } // if ( !pListAction.get() )
                         applyCharacterSettings( xFormat, aSettings );
                     }
-
+                } // for(; aIter != aControlsFormats.end();++aIter)
+                if ( !aControlsFormats.empty() )
                     InvalidateAll();
-                }
             }
             break;
+        //case SID_FM_DESIGN_MODE:
+  //          break;
         case SID_INSERT_GRAPHIC:
             insertGraphic();
             break;
@@ -1590,7 +1610,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 }
                 else
                     createDateTime(aArgs);
-            }
+            } // if ( m_xReportDefinition.is() )
             break;
         case SID_INSERT_FLD_PGNUMBER:
             if ( m_xReportDefinition.is() )
@@ -1602,7 +1622,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 }
                 else
                     createPageNumber(aArgs);
-            }
+            } // if ( m_xReportDefinition.is() )
             break;
         case SID_EXPORTDOC:
         case SID_EXPORTDOCASPDF:
@@ -1621,13 +1641,14 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                         // don't change anything here so return
                         return;
                     case RET_NO:
-                        setModified(sal_False);     // and we are not modified yet
+                        setModified(sal_False);		// and we are not modified yet
                         break;
                     default:
                         break;
                 }
             }
             setEditable(!isEditable());
+            //getJoinView()->setReadOnly(!isEditable());
             InvalidateAll();
             return;
         case SID_GROUP:
@@ -1637,17 +1658,17 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
                 openZoomDialog();
             }
-            else if ( aArgs.getLength() == 1 && aArgs[0].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Zoom")) )
+            else if ( aArgs.getLength() == 1 && aArgs[0].Name.equalsAscii("Zoom") )
             {
                 SvxZoomItem aZoomItem;
                 aZoomItem.PutValue(aArgs[0].Value);
                 m_nZoomValue = aZoomItem.GetValue();
                 m_eZoomType = aZoomItem.GetType();
                 impl_zoom_nothrow();
-            }
+            } // if ( aArgs.getLength() == 1 && aArgs[0].Name.equalsAscii("Zoom") )
             break;
         case SID_ATTR_ZOOMSLIDER:
-            if ( aArgs.getLength() == 1 && aArgs[0].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ZoomSlider")) )
+            if ( aArgs.getLength() == 1 && aArgs[0].Name.equalsAscii("ZoomSlider") )
             {
                 SvxZoomSliderItem aZoomSlider;
                 aZoomSlider.PutValue(aArgs[0].Value);
@@ -1666,7 +1687,6 @@ short OReportController::saveModified()
 {
     return RET_NO;
 }
-
 // -----------------------------------------------------------------------------
 void OReportController::impl_initialize( )
 {
@@ -1682,18 +1702,15 @@ void OReportController::impl_initialize( )
     {
         if ( m_xReportDefinition.is() )
         {
-            getView()->initialize();    // show the windows and fill with our informations
-
-            m_aReportModel = reportdesign::OReportDefinition::getSdrModel(m_xReportDefinition);
+            //m_sName = m_xReportDefinition->getName();
+            getView()->initialize();	// show the windows and fill with our informations
+            getUndoMgr()->Clear();		// clear all undo redo things
+            getSdrModel();
             if ( !m_aReportModel )
-                throw RuntimeException();
-            m_aReportModel->attachController( *this );
-
-            clearUndoManager();
-            UndoSuppressor aSuppressUndo( getUndoManager() );
+                throw Exception();
 
             ::comphelper::NamedValueCollection aArgs(getModel()->getArgs());
-            setMode(aArgs.getOrDefault("Mode", ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("normal"))));
+            setMode(aArgs.getOrDefault("Mode", rtl::OUString::createFromAscii("normal")));
 
             listen(true);
             setEditable( !m_aReportModel->IsReadOnly() );
@@ -1715,11 +1732,11 @@ void OReportController::impl_initialize( )
                     m_xReportDefinition->setCommand(aNames[0]);
                     m_xReportDefinition->setCommandType(sdb::CommandType::TABLE);
                 }
-            }
+            } // if ( !sHierarchicalDocumentName.getLength() && getConnection().is() )
 
             m_aVisualAreaSize = m_xReportDefinition->getVisualAreaSize(0);
 
-        }
+        } // if ( m_xReportDefinition.is() )
 
         // check if chart is supported by the engine
         checkChartEnabled();
@@ -1757,9 +1774,9 @@ void OReportController::impl_initialize( )
             getDesignView()->setCurrentPage(m_sLastActivePage);
             uno::Sequence< beans::PropertyValue> aArgs;
             executeUnChecked(SID_SELECT_REPORT,aArgs);
-        }
+        } // if ( m_bShowProperties && m_nPageNum == -1 )
 
-        setModified(sal_False);     // and we are not modified yet
+        setModified(sal_False);		// and we are not modified yet
 
         // open the global help agent
         // we need a Frame but at this time there is no frame, therefore we send a UserEvent
@@ -1767,12 +1784,13 @@ void OReportController::impl_initialize( )
     }
     catch(const SQLException&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        OSL_ENSURE(sal_False, "OReportController::initialize: caught an exception!");
     }
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( OReportController, OnOpenHelpAgent, void* ,/*_pMemfun*/)
 {
+    //m_nExecuteReportEvent = 0;
     doOpenHelpAgent();
     return 0L;
 }
@@ -1794,8 +1812,10 @@ void OReportController::doOpenHelpAgent()
 {
     if (getFrame().is())
     {
-        rtl::OUString suURL(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.help://shared/text/shared/explorer/database/rep_main.xhp?UseDB=no&DbPAR=swriter"));
+        rtl::OUString suURL = rtl::OUString::createFromAscii("vnd.sun.star.help://shared/text/shared/explorer/database/rep_main.xhp?UseDB=no&DbPAR=swriter");
         openHelpAgent(suURL);
+        // openHelpAgent(68245 /* HID_REPORT_DESIGN... UNKNOWN */ );
+        // HID_APP_REPORT_TREE
     }
     else
     {
@@ -1818,6 +1838,7 @@ sal_Bool OReportController::Construct(Window* pParent)
     m_pClipbordNotifier->AddRemoveListener( getView(), sal_True );
 
     OReportController_BASE::Construct(pParent);
+    //getView()->Show();
     return sal_True;
 }
 // -----------------------------------------------------------------------------
@@ -1838,264 +1859,272 @@ sal_Bool SAL_CALL OReportController::suspend(sal_Bool /*_bSuspend*/) throw( Runt
 // -----------------------------------------------------------------------------
 void OReportController::describeSupportedFeatures()
 {
-    DBSubComponentController::describeSupportedFeatures();
+    OSingleDocumentController::describeSupportedFeatures();
 
-    implDescribeSupportedFeature( ".uno:TextDocument",              SID_RPT_TEXTDOCUMENT,           CommandGroup::APPLICATION );
-    implDescribeSupportedFeature( ".uno:Spreadsheet",               SID_RPT_SPREADSHEET,            CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( ".uno:TextDocument",          	SID_RPT_TEXTDOCUMENT,           CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( ".uno:Spreadsheet",          		SID_RPT_SPREADSHEET,   			CommandGroup::APPLICATION );
 
-    implDescribeSupportedFeature( ".uno:Redo",                      SID_REDO,                       CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:Undo",                      SID_UNDO,                       CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:SelectAll",                 SID_SELECTALL,                  CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:SelectAllInSection",        SID_SELECTALL_IN_SECTION,       CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:Delete",                    SID_DELETE,                     CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:SelectReport",              SID_SELECT_REPORT,              CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:ExecuteReport",             SID_EXECUTE_REPORT,             CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:Redo",          			SID_REDO,        				CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:Undo",          			SID_UNDO,		 				CommandGroup::EDIT );
+    //implDescribeSupportedFeature( ".uno:PasteSpecial",			  SID_PASTE,					CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:SelectAll",					SID_SELECTALL,					CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:SelectAllInSection",		SID_SELECTALL_IN_SECTION,		CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:Delete",					SID_DELETE,						CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:SelectReport",				SID_SELECT_REPORT,				CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:ExecuteReport",				SID_EXECUTE_REPORT,				CommandGroup::EDIT );
 
-    implDescribeSupportedFeature( ".uno:GridVisible",               SID_GRID_VISIBLE,               CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:GridUse",                   SID_GRID_USE,                   CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:HelplinesMove",             SID_HELPLINES_MOVE,             CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:ShowRuler",                 SID_RULER,                      CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:AddField",                  SID_FM_ADD_FIELD,               CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:ReportNavigator",           SID_RPT_SHOWREPORTEXPLORER,     CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:ControlProperties",         SID_SHOW_PROPERTYBROWSER,       CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:DbSortingAndGrouping",      SID_SORTINGANDGROUPING,         CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:PageHeaderFooter",          SID_PAGEHEADERFOOTER,           CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:ReportHeaderFooter",        SID_REPORTHEADERFOOTER,         CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:ZoomSlider",                SID_ATTR_ZOOMSLIDER,            CommandGroup::VIEW );
-    implDescribeSupportedFeature( ".uno:Zoom",                      SID_ATTR_ZOOM,                  CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:GridVisible",				SID_GRID_VISIBLE,				CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:GridUse",    				SID_GRID_USE,   				CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:HelplinesMove", 			SID_HELPLINES_MOVE, 			CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:ShowRuler",					SID_RULER,						CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:AddField",					SID_FM_ADD_FIELD,				CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:ReportNavigator",		    SID_RPT_SHOWREPORTEXPLORER,	    CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:ControlProperties",			SID_SHOW_PROPERTYBROWSER,		CommandGroup::VIEW );
+    //implDescribeSupportedFeature( ".uno:SwitchControlDesignMode",	SID_FM_DESIGN_MODE,				CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:DbSortingAndGrouping",		SID_SORTINGANDGROUPING,			CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:PageHeaderFooter",			SID_PAGEHEADERFOOTER,			CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:ReportHeaderFooter",		SID_REPORTHEADERFOOTER,			CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:ZoomSlider",		        SID_ATTR_ZOOMSLIDER,			CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:Zoom",		                SID_ATTR_ZOOM,			        CommandGroup::VIEW );
+    //implDescribeSupportedFeature( ".uno:SwitchControlDesignMode",	SID_FM_DESIGN_MODE,				CommandGroup::VIEW );
 
-    implDescribeSupportedFeature( ".uno:ConditionalFormatting",     SID_CONDITIONALFORMATTING,      CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:PageDialog",                SID_PAGEDIALOG,                 CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:ResetAttributes",           SID_SETCONTROLDEFAULTS,         CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:ConditionalFormatting",		SID_CONDITIONALFORMATTING,		CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:PageDialog",				SID_PAGEDIALOG,					CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:ResetAttributes",		    SID_SETCONTROLDEFAULTS,			CommandGroup::FORMAT );
 
-    implDescribeSupportedFeature( ".uno:Bold",                      SID_ATTR_CHAR_WEIGHT,           CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:Italic",                    SID_ATTR_CHAR_POSTURE,          CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:Underline",                 SID_ATTR_CHAR_UNDERLINE,        CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:BackColor",                 SID_ATTR_CHAR_COLOR_BACKGROUND, CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:BackgroundColor",           SID_BACKGROUND_COLOR,           CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:Color",                     SID_ATTR_CHAR_COLOR);
-    implDescribeSupportedFeature( ".uno:FontColor",                 SID_ATTR_CHAR_COLOR2,           CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:FontDialog",                SID_CHAR_DLG,                   CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:LeftPara",                  SID_ATTR_PARA_ADJUST_LEFT,      CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:CenterPara",                SID_ATTR_PARA_ADJUST_CENTER,    CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:RightPara",                 SID_ATTR_PARA_ADJUST_RIGHT,     CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:JustifyPara",               SID_ATTR_PARA_ADJUST_BLOCK,     CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:Bold",						SID_ATTR_CHAR_WEIGHT,			CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:Italic",					SID_ATTR_CHAR_POSTURE,			CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:Underline",					SID_ATTR_CHAR_UNDERLINE,		CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:BackColor",					SID_ATTR_CHAR_COLOR_BACKGROUND,	CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:BackgroundColor",			SID_BACKGROUND_COLOR,			CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:Color",						SID_ATTR_CHAR_COLOR);
+    implDescribeSupportedFeature( ".uno:FontColor",					SID_ATTR_CHAR_COLOR2,			CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:FontDialog",				SID_CHAR_DLG,					CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:LeftPara",				    SID_ATTR_PARA_ADJUST_LEFT,      CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:CenterPara",				SID_ATTR_PARA_ADJUST_CENTER,	CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:RightPara",				    SID_ATTR_PARA_ADJUST_RIGHT,		CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:JustifyPara",				SID_ATTR_PARA_ADJUST_BLOCK,		CommandGroup::FORMAT );
 
-    implDescribeSupportedFeature( ".uno:FontHeight",                SID_ATTR_CHAR_FONTHEIGHT,       CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:CharFontName",              SID_ATTR_CHAR_FONT,             CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:FontHeight",				SID_ATTR_CHAR_FONTHEIGHT,		CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:CharFontName",				SID_ATTR_CHAR_FONT,		        CommandGroup::FORMAT );
 
-    implDescribeSupportedFeature( ".uno:ArrangeMenu",               SID_ARRANGEMENU,                CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:BringToFront",              SID_FRAME_TO_TOP,               CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:ObjectBackOne",             SID_FRAME_DOWN,                 CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:ObjectForwardOne",          SID_FRAME_UP,                   CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SendToBack",                SID_FRAME_TO_BOTTOM,            CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SetObjectToForeground",     SID_OBJECT_HEAVEN,              CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SetObjectToBackground",     SID_OBJECT_HELL,                CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:ArrangeMenu",			    SID_ARRANGEMENU,			    CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:BringToFront",			    SID_FRAME_TO_TOP,			    CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:ObjectBackOne",				SID_FRAME_DOWN,		            CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:ObjectForwardOne",			SID_FRAME_UP,			        CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:SendToBack",				SID_FRAME_TO_BOTTOM,			CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:SetObjectToForeground",		SID_OBJECT_HEAVEN,			    CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:SetObjectToBackground",		SID_OBJECT_HELL,			    CommandGroup::FORMAT );
 
-    implDescribeSupportedFeature( ".uno:ObjectAlign",               SID_OBJECT_ALIGN,               CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:ObjectAlignLeft",           SID_OBJECT_ALIGN_LEFT,          CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:AlignCenter",               SID_OBJECT_ALIGN_CENTER,        CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:ObjectAlignRight",          SID_OBJECT_ALIGN_RIGHT,         CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:AlignUp",                   SID_OBJECT_ALIGN_UP,            CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:AlignMiddle",               SID_OBJECT_ALIGN_MIDDLE,        CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:AlignDown",                 SID_OBJECT_ALIGN_DOWN,          CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:ObjectAlign",			    SID_OBJECT_ALIGN,			    CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:ObjectAlignLeft",			SID_OBJECT_ALIGN_LEFT,			CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:AlignCenter",				SID_OBJECT_ALIGN_CENTER,		CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:ObjectAlignRight",			SID_OBJECT_ALIGN_RIGHT,			CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:AlignUp",				    SID_OBJECT_ALIGN_UP,			CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:AlignMiddle",				SID_OBJECT_ALIGN_MIDDLE,		CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:AlignDown",			    	SID_OBJECT_ALIGN_DOWN,			CommandGroup::FORMAT );
 
-    implDescribeSupportedFeature( ".uno:SectionAlign",              SID_SECTION_ALIGN,              CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SectionAlignLeft",          SID_SECTION_ALIGN_LEFT,         CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SectionAlignCenter",        SID_SECTION_ALIGN_CENTER,       CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SectionAlignRight",         SID_SECTION_ALIGN_RIGHT,        CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SectionAlignTop",           SID_SECTION_ALIGN_UP,           CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SectionAlignMiddle",        SID_SECTION_ALIGN_MIDDLE,       CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SectionAlignBottom",        SID_SECTION_ALIGN_DOWN,         CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:SectionAlign",			    SID_SECTION_ALIGN,			    CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:SectionAlignLeft",			SID_SECTION_ALIGN_LEFT,			CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:SectionAlignCenter",		SID_SECTION_ALIGN_CENTER,		CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:SectionAlignRight",			SID_SECTION_ALIGN_RIGHT,		CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:SectionAlignTop",			SID_SECTION_ALIGN_UP,			CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:SectionAlignMiddle",		SID_SECTION_ALIGN_MIDDLE,		CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:SectionAlignBottom",		SID_SECTION_ALIGN_DOWN,			CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:SectionShrink",             SID_SECTION_SHRINK,             CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:SectionShrinkTop",          SID_SECTION_SHRINK_TOP,         CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:SectionShrinkBottom",       SID_SECTION_SHRINK_BOTTOM,      CommandGroup::FORMAT );
 
-    implDescribeSupportedFeature( ".uno:ObjectResize",              SID_OBJECT_RESIZING,            CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SmallestWidth",             SID_OBJECT_SMALLESTWIDTH,       CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:SmallestHeight",            SID_OBJECT_SMALLESTHEIGHT,      CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:GreatestWidth",             SID_OBJECT_GREATESTWIDTH,       CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:GreatestHeight",            SID_OBJECT_GREATESTHEIGHT,      CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:Distribution",              SID_DISTRIBUTION,               CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:ObjectResize",			    SID_OBJECT_RESIZING,		    CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:SmallestWidth",			    SID_OBJECT_SMALLESTWIDTH,		CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:SmallestHeight",			SID_OBJECT_SMALLESTHEIGHT,		CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:GreatestWidth",			    SID_OBJECT_GREATESTWIDTH,		CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:GreatestHeight",			SID_OBJECT_GREATESTHEIGHT,		CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:Distribution",		        SID_DISTRIBUTION,		        CommandGroup::FORMAT );
 
-    implDescribeSupportedFeature( ".uno:HelpMenu",                  SID_HELPMENU,                   CommandGroup::APPLICATION );
-    implDescribeSupportedFeature( ".uno:ExportTo",                  SID_EXPORTDOC,                  CommandGroup::APPLICATION );
-    implDescribeSupportedFeature( ".uno:ExportToPDF",               SID_EXPORTDOCASPDF,             CommandGroup::APPLICATION );
-    implDescribeSupportedFeature( ".uno:PrintPreview",              SID_PRINTPREVIEW,               CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( ".uno:HelpMenu",      			SID_HELPMENU,					CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( ".uno:ExportTo",      			SID_EXPORTDOC,					CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( ".uno:ExportToPDF",   			SID_EXPORTDOCASPDF,				CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( ".uno:PrintPreview",  			SID_PRINTPREVIEW,				CommandGroup::APPLICATION );
 
-    implDescribeSupportedFeature( ".uno:NewDoc",                    SID_NEWDOC,                     CommandGroup::DOCUMENT );
-    implDescribeSupportedFeature( ".uno:Save",                      SID_SAVEDOC,                    CommandGroup::DOCUMENT );
-    implDescribeSupportedFeature( ".uno:SaveAs",                    SID_SAVEASDOC,                  CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( ".uno:NewDoc",        			SID_NEWDOC,      				CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( ".uno:Save",          			SID_SAVEDOC,					CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( ".uno:SaveAs",        			SID_SAVEASDOC,   				CommandGroup::DOCUMENT );
 
-    implDescribeSupportedFeature( ".uno:InsertPageNumberField",     SID_INSERT_FLD_PGNUMBER,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:InsertDateTimeField",       SID_DATETIME,                   CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:InsertObjectChart",         SID_INSERT_DIAGRAM,             CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:InsertGraphic",             SID_INSERT_GRAPHIC,             CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:InsertPageNumberField",		SID_INSERT_FLD_PGNUMBER,		CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:InsertDateTimeField",		SID_DATETIME,					CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:InsertObjectChart",			SID_INSERT_DIAGRAM,				CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:InsertGraphic",				SID_INSERT_GRAPHIC,				CommandGroup::INSERT );
     // controls
-    implDescribeSupportedFeature( ".uno:SelectObject",              SID_OBJECT_SELECT,              CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Label",                     SID_FM_FIXEDTEXT,               CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Edit",                      SID_FM_EDIT,                    CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ImageControl",              SID_FM_IMAGECONTROL,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:HFixedLine",                SID_INSERT_HFIXEDLINE,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:VFixedLine",                SID_INSERT_VFIXEDLINE,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SelectObject",				SID_OBJECT_SELECT,				CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Label",						SID_FM_FIXEDTEXT,				CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Edit",						SID_FM_EDIT,					CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ImageControl",				SID_FM_IMAGECONTROL,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:HFixedLine",			    SID_INSERT_HFIXEDLINE,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:VFixedLine",			    SID_INSERT_VFIXEDLINE,			CommandGroup::INSERT );
 
     // shapes
-    implDescribeSupportedFeature( ".uno:BasicShapes",               SID_DRAWTBX_CS_BASIC,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.rectangle",     SID_DRAWTBX_CS_BASIC1,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.round-rectangle",SID_DRAWTBX_CS_BASIC2,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.quadrat",       SID_DRAWTBX_CS_BASIC3,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.round-quadrat", SID_DRAWTBX_CS_BASIC4,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.circle",        SID_DRAWTBX_CS_BASIC5,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.ellipse",       SID_DRAWTBX_CS_BASIC6,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.circle-pie",    SID_DRAWTBX_CS_BASIC7,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.isosceles-triangle",SID_DRAWTBX_CS_BASIC8,      CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.right-triangle",SID_DRAWTBX_CS_BASIC9,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.trapezoid",     SID_DRAWTBX_CS_BASIC10,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.diamond",       SID_DRAWTBX_CS_BASIC11,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.parallelogram", SID_DRAWTBX_CS_BASIC12,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.pentagon",      SID_DRAWTBX_CS_BASIC13,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.hexagon",       SID_DRAWTBX_CS_BASIC14,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.octagon",       SID_DRAWTBX_CS_BASIC15,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.cross",         SID_DRAWTBX_CS_BASIC16,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.ring",          SID_DRAWTBX_CS_BASIC17,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.block-arc",     SID_DRAWTBX_CS_BASIC18,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.can",           SID_DRAWTBX_CS_BASIC19,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.cube",          SID_DRAWTBX_CS_BASIC20,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.paper",         SID_DRAWTBX_CS_BASIC21,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:BasicShapes.frame",         SID_DRAWTBX_CS_BASIC22,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes",				SID_DRAWTBX_CS_BASIC,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.rectangle",     SID_DRAWTBX_CS_BASIC1,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.round-rectangle",SID_DRAWTBX_CS_BASIC2,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.quadrat",       SID_DRAWTBX_CS_BASIC3,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.round-quadrat", SID_DRAWTBX_CS_BASIC4,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.circle",        SID_DRAWTBX_CS_BASIC5,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.ellipse",       SID_DRAWTBX_CS_BASIC6,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.circle-pie",    SID_DRAWTBX_CS_BASIC7,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.isosceles-triangle",SID_DRAWTBX_CS_BASIC8,		CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.right-triangle",SID_DRAWTBX_CS_BASIC9,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.trapezoid",     SID_DRAWTBX_CS_BASIC10,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.diamond",       SID_DRAWTBX_CS_BASIC11,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.parallelogram", SID_DRAWTBX_CS_BASIC12,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.pentagon",      SID_DRAWTBX_CS_BASIC13,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.hexagon",       SID_DRAWTBX_CS_BASIC14,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.octagon",       SID_DRAWTBX_CS_BASIC15,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.cross",         SID_DRAWTBX_CS_BASIC16,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.ring",          SID_DRAWTBX_CS_BASIC17,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.block-arc",     SID_DRAWTBX_CS_BASIC18,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.can",           SID_DRAWTBX_CS_BASIC19,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.cube",          SID_DRAWTBX_CS_BASIC20,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.paper",         SID_DRAWTBX_CS_BASIC21,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes.frame",         SID_DRAWTBX_CS_BASIC22,			CommandGroup::INSERT );
 
-    implDescribeSupportedFeature( ".uno:SymbolShapes",              SID_DRAWTBX_CS_SYMBOL,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes",				SID_DRAWTBX_CS_SYMBOL,			CommandGroup::INSERT );
 
-    implDescribeSupportedFeature( ".uno:SymbolShapes.smiley" ,      SID_DRAWTBX_CS_SYMBOL1,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.sun" ,         SID_DRAWTBX_CS_SYMBOL2,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.moon" ,        SID_DRAWTBX_CS_SYMBOL3,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.lightning" ,   SID_DRAWTBX_CS_SYMBOL4,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.heart" ,       SID_DRAWTBX_CS_SYMBOL5,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.flower" ,      SID_DRAWTBX_CS_SYMBOL6,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.cloud" ,       SID_DRAWTBX_CS_SYMBOL7,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.forbidden" ,   SID_DRAWTBX_CS_SYMBOL8,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.puzzle" ,      SID_DRAWTBX_CS_SYMBOL9,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.bracket-pair" ,SID_DRAWTBX_CS_SYMBOL10,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.left-bracket" ,SID_DRAWTBX_CS_SYMBOL11,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.right-bracket",SID_DRAWTBX_CS_SYMBOL12,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.brace-pair" ,  SID_DRAWTBX_CS_SYMBOL13,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.left-brace" ,  SID_DRAWTBX_CS_SYMBOL14,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.right-brace" , SID_DRAWTBX_CS_SYMBOL15,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.quad-bevel" ,  SID_DRAWTBX_CS_SYMBOL16,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.octagon-bevel",SID_DRAWTBX_CS_SYMBOL17,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:SymbolShapes.diamond-bevel",SID_DRAWTBX_CS_SYMBOL18,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.smiley" ,		SID_DRAWTBX_CS_SYMBOL1,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.sun" ,			SID_DRAWTBX_CS_SYMBOL2,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.moon" ,		SID_DRAWTBX_CS_SYMBOL3,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.lightning" ,	SID_DRAWTBX_CS_SYMBOL4,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.heart" ,		SID_DRAWTBX_CS_SYMBOL5,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.flower" ,		SID_DRAWTBX_CS_SYMBOL6,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.cloud" ,		SID_DRAWTBX_CS_SYMBOL7,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.forbidden" ,	SID_DRAWTBX_CS_SYMBOL8,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.puzzle" ,		SID_DRAWTBX_CS_SYMBOL9,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.bracket-pair" ,SID_DRAWTBX_CS_SYMBOL10,		CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.left-bracket" ,SID_DRAWTBX_CS_SYMBOL11,		CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.right-bracket",SID_DRAWTBX_CS_SYMBOL12,		CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.brace-pair" ,	SID_DRAWTBX_CS_SYMBOL13,		CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.left-brace" ,	SID_DRAWTBX_CS_SYMBOL14,		CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.right-brace" ,	SID_DRAWTBX_CS_SYMBOL15,		CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.quad-bevel" ,	SID_DRAWTBX_CS_SYMBOL16,		CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.octagon-bevel",SID_DRAWTBX_CS_SYMBOL17,		CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes.diamond-bevel",SID_DRAWTBX_CS_SYMBOL18,		CommandGroup::INSERT );
 
-    implDescribeSupportedFeature( ".uno:ArrowShapes.left-arrow" ,           SID_DRAWTBX_CS_ARROW1,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.right-arrow" ,          SID_DRAWTBX_CS_ARROW2,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.up-arrow" ,             SID_DRAWTBX_CS_ARROW3,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.down-arrow" ,           SID_DRAWTBX_CS_ARROW4,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.left-right-arrow" ,     SID_DRAWTBX_CS_ARROW5,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.up-down-arrow" ,        SID_DRAWTBX_CS_ARROW6,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.up-right-arrow" ,       SID_DRAWTBX_CS_ARROW7,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.up-right-down-arrow" ,  SID_DRAWTBX_CS_ARROW8,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.quad-arrow" ,           SID_DRAWTBX_CS_ARROW9,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.corner-right-arrow" ,   SID_DRAWTBX_CS_ARROW10, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.split-arrow" ,          SID_DRAWTBX_CS_ARROW11, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.striped-right-arrow" ,  SID_DRAWTBX_CS_ARROW12, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.notched-right-arrow" ,  SID_DRAWTBX_CS_ARROW13, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.pentagon-right" ,       SID_DRAWTBX_CS_ARROW14, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.chevron" ,              SID_DRAWTBX_CS_ARROW15, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.right-arrow-callout" ,  SID_DRAWTBX_CS_ARROW16, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.left-arrow-callout" ,   SID_DRAWTBX_CS_ARROW17, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.up-arrow-callout" ,     SID_DRAWTBX_CS_ARROW18, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.down-arrow-callout" ,   SID_DRAWTBX_CS_ARROW19, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.left-right-arrow-callout",SID_DRAWTBX_CS_ARROW20,       CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.up-down-arrow-callout" ,SID_DRAWTBX_CS_ARROW21, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.up-right-arrow-callout",SID_DRAWTBX_CS_ARROW22, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.quad-arrow-callout" ,   SID_DRAWTBX_CS_ARROW23, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.circular-arrow" ,       SID_DRAWTBX_CS_ARROW24, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.split-round-arrow" ,    SID_DRAWTBX_CS_ARROW25, CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:ArrowShapes.s-sharped-arrow" ,      SID_DRAWTBX_CS_ARROW26, CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.left-arrow" ,	        SID_DRAWTBX_CS_ARROW1,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.right-arrow" ,	        SID_DRAWTBX_CS_ARROW2,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.up-arrow" ,		        SID_DRAWTBX_CS_ARROW3,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.down-arrow" ,	        SID_DRAWTBX_CS_ARROW4,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.left-right-arrow" ,     SID_DRAWTBX_CS_ARROW5,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.up-down-arrow" ,        SID_DRAWTBX_CS_ARROW6,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.up-right-arrow" ,       SID_DRAWTBX_CS_ARROW7,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.up-right-down-arrow" ,  SID_DRAWTBX_CS_ARROW8,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.quad-arrow" ,	        SID_DRAWTBX_CS_ARROW9,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.corner-right-arrow" ,   SID_DRAWTBX_CS_ARROW10,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.split-arrow" ,	        SID_DRAWTBX_CS_ARROW11,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.striped-right-arrow" ,  SID_DRAWTBX_CS_ARROW12,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.notched-right-arrow" ,  SID_DRAWTBX_CS_ARROW13,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.pentagon-right" ,	    SID_DRAWTBX_CS_ARROW14,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.chevron" ,		        SID_DRAWTBX_CS_ARROW15,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.right-arrow-callout" ,  SID_DRAWTBX_CS_ARROW16,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.left-arrow-callout" ,   SID_DRAWTBX_CS_ARROW17,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.up-arrow-callout" ,	    SID_DRAWTBX_CS_ARROW18,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.down-arrow-callout" ,   SID_DRAWTBX_CS_ARROW19,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.left-right-arrow-callout",SID_DRAWTBX_CS_ARROW20,		CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.up-down-arrow-callout" ,SID_DRAWTBX_CS_ARROW21,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.up-right-arrow-callout",SID_DRAWTBX_CS_ARROW22,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.quad-arrow-callout" ,	SID_DRAWTBX_CS_ARROW23,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.circular-arrow" ,		SID_DRAWTBX_CS_ARROW24,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.split-round-arrow" ,	SID_DRAWTBX_CS_ARROW25,	CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes.s-sharped-arrow" ,		SID_DRAWTBX_CS_ARROW26,	CommandGroup::INSERT );
 
-    implDescribeSupportedFeature( ".uno:StarShapes.bang" ,                  SID_DRAWTBX_CS_STAR1,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.star4" ,                 SID_DRAWTBX_CS_STAR2,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.star5" ,                 SID_DRAWTBX_CS_STAR3,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.star6" ,                 SID_DRAWTBX_CS_STAR4,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.star8" ,                 SID_DRAWTBX_CS_STAR5,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.star12" ,                SID_DRAWTBX_CS_STAR6,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.star24" ,                SID_DRAWTBX_CS_STAR7,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.concave-star6" ,         SID_DRAWTBX_CS_STAR8,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.vertical-scroll" ,       SID_DRAWTBX_CS_STAR9,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.horizontal-scroll" ,     SID_DRAWTBX_CS_STAR10,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.signet" ,                SID_DRAWTBX_CS_STAR11,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes.doorplate" ,             SID_DRAWTBX_CS_STAR12,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:StarShapes.bang" ,			        SID_DRAWTBX_CS_STAR1,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:StarShapes.star4" ,			        SID_DRAWTBX_CS_STAR2,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:StarShapes.star5" ,			        SID_DRAWTBX_CS_STAR3,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:StarShapes.star6" ,			        SID_DRAWTBX_CS_STAR4,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:StarShapes.star8" ,			        SID_DRAWTBX_CS_STAR5,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:StarShapes.star12" ,		        SID_DRAWTBX_CS_STAR6,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:StarShapes.star24" ,		        SID_DRAWTBX_CS_STAR7,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:StarShapes.concave-star6" ,			SID_DRAWTBX_CS_STAR8,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:StarShapes.vertical-scroll" ,		SID_DRAWTBX_CS_STAR9,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:StarShapes.horizontal-scroll" ,		SID_DRAWTBX_CS_STAR10,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:StarShapes.signet" ,				SID_DRAWTBX_CS_STAR11,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:StarShapes.doorplate" ,				SID_DRAWTBX_CS_STAR12,			CommandGroup::INSERT );
 
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-process" ,            SID_DRAWTBX_CS_FLOWCHART1,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-alternate-process" ,  SID_DRAWTBX_CS_FLOWCHART2,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-decision" ,           SID_DRAWTBX_CS_FLOWCHART3,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-data" ,               SID_DRAWTBX_CS_FLOWCHART4,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-predefined-process" , SID_DRAWTBX_CS_FLOWCHART5,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-internal-storage" ,   SID_DRAWTBX_CS_FLOWCHART6,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-document" ,           SID_DRAWTBX_CS_FLOWCHART7,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-multidocument" ,      SID_DRAWTBX_CS_FLOWCHART8,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-terminator" ,         SID_DRAWTBX_CS_FLOWCHART9,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-preparation" ,        SID_DRAWTBX_CS_FLOWCHART10,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-manual-input" ,       SID_DRAWTBX_CS_FLOWCHART11,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-manual-operation" ,   SID_DRAWTBX_CS_FLOWCHART12,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-connector" ,          SID_DRAWTBX_CS_FLOWCHART13,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-off-page-connector" , SID_DRAWTBX_CS_FLOWCHART14,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-card" ,               SID_DRAWTBX_CS_FLOWCHART15,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-punched-tape" ,       SID_DRAWTBX_CS_FLOWCHART16,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-summing-junction" ,   SID_DRAWTBX_CS_FLOWCHART17,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-or" ,                 SID_DRAWTBX_CS_FLOWCHART18,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-collate" ,            SID_DRAWTBX_CS_FLOWCHART19,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-sort" ,               SID_DRAWTBX_CS_FLOWCHART20,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-extract" ,            SID_DRAWTBX_CS_FLOWCHART21,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-merge" ,              SID_DRAWTBX_CS_FLOWCHART22,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-stored-data" ,        SID_DRAWTBX_CS_FLOWCHART23,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-delay" ,              SID_DRAWTBX_CS_FLOWCHART24,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-sequential-access" ,  SID_DRAWTBX_CS_FLOWCHART25,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-magnetic-disk" ,      SID_DRAWTBX_CS_FLOWCHART26,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-direct-access-storage",SID_DRAWTBX_CS_FLOWCHART27,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-display" ,            SID_DRAWTBX_CS_FLOWCHART28,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-process" ,			SID_DRAWTBX_CS_FLOWCHART1,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-alternate-process" ,	SID_DRAWTBX_CS_FLOWCHART2,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-decision" ,			SID_DRAWTBX_CS_FLOWCHART3,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-data" ,				SID_DRAWTBX_CS_FLOWCHART4,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-predefined-process" ,	SID_DRAWTBX_CS_FLOWCHART5,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-internal-storage" ,	SID_DRAWTBX_CS_FLOWCHART6,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-document" ,			SID_DRAWTBX_CS_FLOWCHART7,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-multidocument" ,		SID_DRAWTBX_CS_FLOWCHART8,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-terminator" ,			SID_DRAWTBX_CS_FLOWCHART9,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-preparation" ,		SID_DRAWTBX_CS_FLOWCHART10,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-manual-input" ,	    SID_DRAWTBX_CS_FLOWCHART11,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-manual-operation" ,	SID_DRAWTBX_CS_FLOWCHART12,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-connector" ,			SID_DRAWTBX_CS_FLOWCHART13,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-off-page-connector" ,	SID_DRAWTBX_CS_FLOWCHART14,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-card" ,				SID_DRAWTBX_CS_FLOWCHART15,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-punched-tape" ,		SID_DRAWTBX_CS_FLOWCHART16,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-summing-junction" ,	SID_DRAWTBX_CS_FLOWCHART17,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-or" ,				    SID_DRAWTBX_CS_FLOWCHART18,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-collate" ,			SID_DRAWTBX_CS_FLOWCHART19,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-sort" ,				SID_DRAWTBX_CS_FLOWCHART20,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-extract" ,			SID_DRAWTBX_CS_FLOWCHART21,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-merge" ,				SID_DRAWTBX_CS_FLOWCHART22,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-stored-data" ,		SID_DRAWTBX_CS_FLOWCHART23,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-delay" ,				SID_DRAWTBX_CS_FLOWCHART24,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-sequential-access" ,	SID_DRAWTBX_CS_FLOWCHART25,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-magnetic-disk" ,		SID_DRAWTBX_CS_FLOWCHART26,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-direct-access-storage",SID_DRAWTBX_CS_FLOWCHART27,		CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes.flowchart-display" ,			SID_DRAWTBX_CS_FLOWCHART28,			CommandGroup::INSERT );
 
-    implDescribeSupportedFeature( ".uno:CalloutShapes.rectangular-callout" ,        SID_DRAWTBX_CS_CALLOUT1,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:CalloutShapes.round-rectangular-callout" ,  SID_DRAWTBX_CS_CALLOUT2,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:CalloutShapes.round-callout" ,              SID_DRAWTBX_CS_CALLOUT3,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:CalloutShapes.cloud-callout" ,              SID_DRAWTBX_CS_CALLOUT4,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:CalloutShapes.line-callout-1" ,             SID_DRAWTBX_CS_CALLOUT5,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:CalloutShapes.line-callout-2" ,             SID_DRAWTBX_CS_CALLOUT6,            CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:CalloutShapes.line-callout-3" ,             SID_DRAWTBX_CS_CALLOUT7,            CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:CalloutShapes.rectangular-callout" ,		SID_DRAWTBX_CS_CALLOUT1,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:CalloutShapes.round-rectangular-callout" ,	SID_DRAWTBX_CS_CALLOUT2,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:CalloutShapes.round-callout" ,				SID_DRAWTBX_CS_CALLOUT3,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:CalloutShapes.cloud-callout" ,				SID_DRAWTBX_CS_CALLOUT4,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:CalloutShapes.line-callout-1" ,				SID_DRAWTBX_CS_CALLOUT5,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:CalloutShapes.line-callout-2" ,				SID_DRAWTBX_CS_CALLOUT6,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:CalloutShapes.line-callout-3" ,				SID_DRAWTBX_CS_CALLOUT7,			CommandGroup::INSERT );
 
-    implDescribeSupportedFeature( ".uno:ArrowShapes",               SID_DRAWTBX_CS_ARROW,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes",				SID_DRAWTBX_CS_ARROW,			CommandGroup::INSERT );
 
-    implDescribeSupportedFeature( ".uno:FlowChartShapes",           SID_DRAWTBX_CS_FLOWCHART,       CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:CalloutShapes",             SID_DRAWTBX_CS_CALLOUT,         CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:StarShapes",                SID_DRAWTBX_CS_STAR,            CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes",   		SID_DRAWTBX_CS_FLOWCHART,		CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:CalloutShapes",   		    SID_DRAWTBX_CS_CALLOUT,			CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:StarShapes",   	    	    SID_DRAWTBX_CS_STAR,			CommandGroup::INSERT );
 
 
     // keys
-    implDescribeSupportedFeature( ".uno:Escape",                    SID_ESCAPE,                     CommandGroup::CONTROLS);
+    implDescribeSupportedFeature( ".uno:Escape",					SID_ESCAPE,                     CommandGroup::CONTROLS);
 
     // internal one
-    implDescribeSupportedFeature( ".uno:RPT_RPTHEADER_UNDO",            SID_REPORTHEADER_WITHOUT_UNDO);
-    implDescribeSupportedFeature( ".uno:RPT_RPTFOOTER_UNDO",            SID_REPORTFOOTER_WITHOUT_UNDO);
-    implDescribeSupportedFeature( ".uno:RPT_PGHEADER_UNDO",             SID_PAGEHEADER_WITHOUT_UNDO);
-    implDescribeSupportedFeature( ".uno:RPT_PGFOOTER_UNDO",             SID_PAGEFOOTER_WITHOUT_UNDO);
-    implDescribeSupportedFeature( ".uno:DBBackgroundColor",             SID_ATTR_CHAR_COLOR_BACKGROUND);
-    implDescribeSupportedFeature( ".uno:SID_GROUPHEADER",               SID_GROUPHEADER);
-    implDescribeSupportedFeature( ".uno:SID_GROUPHEADER_WITHOUT_UNDO",  SID_GROUPHEADER_WITHOUT_UNDO);
-    implDescribeSupportedFeature( ".uno:SID_GROUPFOOTER",               SID_GROUPFOOTER);
-    implDescribeSupportedFeature( ".uno:SID_GROUPFOOTER_WITHOUT_UNDO",  SID_GROUPFOOTER_WITHOUT_UNDO);
-    implDescribeSupportedFeature( ".uno:SID_GROUP_REMOVE",              SID_GROUP_REMOVE);
-    implDescribeSupportedFeature( ".uno:SID_GROUP_APPEND",              SID_GROUP_APPEND);
-    implDescribeSupportedFeature( ".uno:SID_ADD_CONTROL_PAIR",          SID_ADD_CONTROL_PAIR);
-    implDescribeSupportedFeature( ".uno:SplitPosition",                 SID_SPLIT_POSITION);
-    implDescribeSupportedFeature( ".uno:LastPropertyBrowserPage",       SID_PROPERTYBROWSER_LAST_PAGE);
-    implDescribeSupportedFeature( ".uno:Select",                        SID_SELECT);
-    implDescribeSupportedFeature( ".uno:InsertFunction",                SID_RPT_NEW_FUNCTION);
-    implDescribeSupportedFeature( ".uno:NextMark",                      SID_NEXT_MARK);
-    implDescribeSupportedFeature( ".uno:PrevMark",                      SID_PREV_MARK);
+    implDescribeSupportedFeature( ".uno:RPT_RPTHEADER_UNDO",			SID_REPORTHEADER_WITHOUT_UNDO);
+    implDescribeSupportedFeature( ".uno:RPT_RPTFOOTER_UNDO",			SID_REPORTFOOTER_WITHOUT_UNDO);
+    implDescribeSupportedFeature( ".uno:RPT_PGHEADER_UNDO",				SID_PAGEHEADER_WITHOUT_UNDO);
+    implDescribeSupportedFeature( ".uno:RPT_PGFOOTER_UNDO",				SID_PAGEFOOTER_WITHOUT_UNDO);
+    implDescribeSupportedFeature( ".uno:DBBackgroundColor",				SID_ATTR_CHAR_COLOR_BACKGROUND);
+    implDescribeSupportedFeature( ".uno:SID_GROUPHEADER",				SID_GROUPHEADER);
+    implDescribeSupportedFeature( ".uno:SID_GROUPHEADER_WITHOUT_UNDO",	SID_GROUPHEADER_WITHOUT_UNDO);
+    implDescribeSupportedFeature( ".uno:SID_GROUPFOOTER",				SID_GROUPFOOTER);
+    implDescribeSupportedFeature( ".uno:SID_GROUPFOOTER_WITHOUT_UNDO",	SID_GROUPFOOTER_WITHOUT_UNDO);
+    implDescribeSupportedFeature( ".uno:SID_GROUP_REMOVE",				SID_GROUP_REMOVE);
+    implDescribeSupportedFeature( ".uno:SID_GROUP_APPEND",				SID_GROUP_APPEND);
+    implDescribeSupportedFeature( ".uno:SID_ADD_CONTROL_PAIR",			SID_ADD_CONTROL_PAIR);
+    implDescribeSupportedFeature( ".uno:SplitPosition",			        SID_SPLIT_POSITION);
+    implDescribeSupportedFeature( ".uno:LastPropertyBrowserPage",	    SID_PROPERTYBROWSER_LAST_PAGE);
+    implDescribeSupportedFeature( ".uno:Select",	                    SID_SELECT);
+    implDescribeSupportedFeature( ".uno:InsertFunction",				SID_RPT_NEW_FUNCTION);
+    implDescribeSupportedFeature( ".uno:NextMark",				        SID_NEXT_MARK);
+    implDescribeSupportedFeature( ".uno:PrevMark",				        SID_PREV_MARK);
     implDescribeSupportedFeature( ".uno:TerminateInplaceActivation",    SID_TERMINATE_INPLACEACTIVATION);
     implDescribeSupportedFeature( ".uno:SelectAllLabels",               SID_SELECT_ALL_LABELS);
     implDescribeSupportedFeature( ".uno:SelectAllEdits",                SID_SELECT_ALL_EDITS);
-    implDescribeSupportedFeature( ".uno:CollapseSection",           SID_COLLAPSE_SECTION);
-    implDescribeSupportedFeature( ".uno:ExpandSection",             SID_EXPAND_SECTION);
+    implDescribeSupportedFeature( ".uno:CollapseSection",			SID_COLLAPSE_SECTION);
+    implDescribeSupportedFeature( ".uno:ExpandSection",				SID_EXPAND_SECTION);
+}
+// -----------------------------------------------------------------------------
+SfxUndoManager* OReportController::getUndoMgr()
+{
+    return &m_aUndoManager;
 }
 // -----------------------------------------------------------------------------
 void OReportController::impl_onModifyChanged()
@@ -2104,12 +2133,20 @@ void OReportController::impl_onModifyChanged()
     {
         if ( m_xReportDefinition.is() )
             m_xReportDefinition->setModified( impl_isModified() );
-        DBSubComponentController::impl_onModifyChanged();
+        OSingleDocumentController::impl_onModifyChanged();
     }
-    catch(const uno::Exception&)
+    catch(uno::Exception)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
+}
+// -----------------------------------------------------------------------------
+void OReportController::losingConnection( )
+{
+    // let the base class do it's reconnect
+    OReportController_BASE::losingConnection( );
+
+    InvalidateAll();
 }
 // -----------------------------------------------------------------------------
 void OReportController::onLoadedMenu(const Reference< frame::XLayoutManager >& _xLayoutManager)
@@ -2131,7 +2168,7 @@ void OReportController::onLoadedMenu(const Reference< frame::XLayoutManager >& _
             _xLayoutManager->createElement( s_sMenu[i] );
             _xLayoutManager->requestElement( s_sMenu[i] );
         }
-    }
+    } // if ( _xLayoutManager.is() )
 }
 // -----------------------------------------------------------------------------
 void OReportController::notifyGroupSections(const ContainerEvent& _rEvent,bool _bShow)
@@ -2197,7 +2234,7 @@ void SAL_CALL OReportController::elementReplaced( const ContainerEvent& /*_rEven
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
-    OSL_FAIL("Not yet implemented!");
+    OSL_ENSURE(0,"Not yet implemented!");
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEvent& evt ) throw (RuntimeException)
@@ -2212,7 +2249,7 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
         {
             if ( evt.PropertyName.equals( PROPERTY_REPORTHEADERON ) )
             {
-                const sal_uInt16 nPosition = m_xReportDefinition->getPageHeaderOn() ? 1 : 0;
+                const USHORT nPosition = m_xReportDefinition->getPageHeaderOn() ? 1 : 0;
                 if ( bShow )
                 {
                     getDesignView()->addSection(m_xReportDefinition->getReportHeader(),DBREPORTHEADER,nPosition);
@@ -2225,7 +2262,7 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
             }
             else if ( evt.PropertyName.equals( PROPERTY_REPORTFOOTERON ) )
             {
-                sal_uInt16 nPosition = getDesignView()->getSectionCount();
+                USHORT nPosition = getDesignView()->getSectionCount();
                 if ( m_xReportDefinition->getPageFooterOn() )
                     --nPosition;
                 if ( bShow )
@@ -2247,7 +2284,7 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
                 }
                 else
                 {
-                    getDesignView()->removeSection(sal_uInt16(0));
+                    getDesignView()->removeSection(USHORT(0));
                 }
             }
             else if ( evt.PropertyName.equals( PROPERTY_PAGEFOOTERON ) )
@@ -2277,7 +2314,7 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
             /// TODO: check what we need to notify here TitleHelper
             /*else if (   evt.PropertyName.equals( PROPERTY_CAPTION ) )
                 updateTitle();*/
-        }
+        } // if ( evt.Source == m_xReportDefinition )
         else
         {
             uno::Reference< report::XGroup> xGroup(evt.Source,uno::UNO_QUERY);
@@ -2298,17 +2335,16 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportController::disposing( const lang::EventObject& Source ) throw(uno::RuntimeException)
 {
-    // simply disambiguate
     OReportController_BASE::disposing(Source);
 }
 
 // -----------------------------------------------------------------------------
-sal_uInt16 lcl_getNonVisbleGroupsBefore( const uno::Reference< report::XGroups>& _xGroups
+USHORT lcl_getNonVisbleGroupsBefore( const uno::Reference< report::XGroups>& _xGroups
                           ,sal_Int32 _nGroupPos
                           ,::std::mem_fun_t<sal_Bool,OGroupHelper>&_pGroupMemberFunction)
 {
     uno::Reference< report::XGroup> xGroup;
-    sal_uInt16 nNonVisibleGroups = 0;
+    USHORT nNonVisibleGroups = 0;
     sal_Int32 nCount = _xGroups->getCount();
     for( sal_Int32 i = 0; i < _nGroupPos && i < nCount; ++i)
     {
@@ -2323,15 +2359,16 @@ sal_uInt16 lcl_getNonVisbleGroupsBefore( const uno::Reference< report::XGroups>&
 // -----------------------------------------------------------------------------
 void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGroup,const ::rtl::OUString& _sPropName,sal_Int32 _nGroupPos,bool _bShow)
 {
+    //adjustSectionName(_xGroup,_nGroupPos);
     ::std::mem_fun_t<sal_Bool,OGroupHelper> pMemFun = ::std::mem_fun(&OGroupHelper::getHeaderOn);
     ::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> pMemFunSection = ::std::mem_fun(&OGroupHelper::getHeader);
     ::rtl::OUString sColor(DBGROUPHEADER);
-    sal_uInt16 nPosition = 0;
+    USHORT nPosition = 0;
     bool bHandle = false;
     if ( _sPropName.equals( PROPERTY_HEADERON ) )
     {
         nPosition = m_xReportDefinition->getPageHeaderOn() ? (m_xReportDefinition->getReportHeaderOn() ? 2 : 1) : (m_xReportDefinition->getReportHeaderOn() ? 1 : 0);
-        nPosition += (static_cast<sal_uInt16>(_nGroupPos) - lcl_getNonVisbleGroupsBefore(m_xReportDefinition->getGroups(),_nGroupPos,pMemFun));
+        nPosition += (static_cast<USHORT>(_nGroupPos) - lcl_getNonVisbleGroupsBefore(m_xReportDefinition->getGroups(),_nGroupPos,pMemFun));
         bHandle = true;
     }
     else if ( _sPropName.equals( PROPERTY_FOOTERON ) )
@@ -2345,7 +2382,7 @@ void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGr
         if ( m_xReportDefinition->getReportFooterOn() )
             --nPosition;
         sColor = DBGROUPFOOTER;
-        nPosition -= (static_cast<sal_uInt16>(_nGroupPos) - lcl_getNonVisbleGroupsBefore(m_xReportDefinition->getGroups(),_nGroupPos,pMemFun));
+        nPosition -= (static_cast<USHORT>(_nGroupPos) - lcl_getNonVisbleGroupsBefore(m_xReportDefinition->getGroups(),_nGroupPos,pMemFun));
         if ( !_bShow )
             --nPosition;
         bHandle = true;
@@ -2369,6 +2406,13 @@ IMPL_LINK( OReportController, OnClipboardChanged, void*, EMPTYARG )
     return OnInvalidateClipboard( NULL );
 }
 //------------------------------------------------------------------------------
+IMPL_LINK( OReportController, NotifyUndoActionHdl, SfxUndoAction*, _pUndoAction )
+{
+    OSL_ENSURE(_pUndoAction,"UndoAction is NULL!");
+    addUndoActionAndInvalidate(_pUndoAction);
+    return 0L;
+}
+//------------------------------------------------------------------------------
 IMPL_LINK(OReportController, OnInvalidateClipboard, void*, EMPTYARG)
 {
     InvalidateFeature(SID_CUT);
@@ -2385,16 +2429,16 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
     // UNO->ItemSet
     static SfxItemInfo aItemInfos[] =
     {
-        { SID_ATTR_LRSPACE,     SFX_ITEM_POOLABLE },
-        { SID_ATTR_ULSPACE,     SFX_ITEM_POOLABLE },
-        { SID_ATTR_PAGE,        SFX_ITEM_POOLABLE },
-        { SID_ATTR_PAGE_SIZE,   SFX_ITEM_POOLABLE },
-        { SID_ENUM_PAGE_MODE,   SFX_ITEM_POOLABLE },
-        { SID_PAPER_START,      SFX_ITEM_POOLABLE },
-        { SID_PAPER_END,        SFX_ITEM_POOLABLE },
-        { SID_ATTR_BRUSH,       SFX_ITEM_POOLABLE },
-        { SID_FLAG_TYPE,        SFX_ITEM_POOLABLE },
-        { SID_ATTR_METRIC,      SFX_ITEM_POOLABLE }
+        { SID_ATTR_LRSPACE,		SFX_ITEM_POOLABLE },
+        { SID_ATTR_ULSPACE,		SFX_ITEM_POOLABLE },
+        { SID_ATTR_PAGE,		SFX_ITEM_POOLABLE },
+        { SID_ATTR_PAGE_SIZE,	SFX_ITEM_POOLABLE },
+        { SID_ENUM_PAGE_MODE,	SFX_ITEM_POOLABLE },
+        { SID_PAPER_START,		SFX_ITEM_POOLABLE },
+        { SID_PAPER_END,		SFX_ITEM_POOLABLE },
+        { SID_ATTR_BRUSH,		SFX_ITEM_POOLABLE },
+        { SID_FLAG_TYPE,		SFX_ITEM_POOLABLE },
+        { SID_ATTR_METRIC,		SFX_ITEM_POOLABLE }
     };
 
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
@@ -2409,18 +2453,18 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         new SfxAllEnumItem(RPTUI_ID_START,PAPER_A4),
         new SfxAllEnumItem(RPTUI_ID_END,PAPER_E),
         new SvxBrushItem(ITEMID_BRUSH),
-        new SfxUInt16Item(RPTUI_ID_METRIC,static_cast<sal_uInt16>(eUserMetric))
+        new SfxUInt16Item(RPTUI_ID_METRIC,static_cast<UINT16>(eUserMetric))
     };
 
-    static sal_uInt16 pRanges[] =
+    static USHORT pRanges[] =
     {
         RPTUI_ID_LRSPACE,RPTUI_ID_BRUSH,
         SID_ATTR_METRIC,SID_ATTR_METRIC,
         0
     };
     SfxItemPool* pPool( new SfxItemPool(String::CreateFromAscii("ReportPageProperties"), RPTUI_ID_LRSPACE,RPTUI_ID_METRIC, aItemInfos, pDefaults) );
-    pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );    // ripped, don't understand why
-    pPool->FreezeIdRanges();                        // the same
+    pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );	// ripped, don't understand why
+    pPool->FreezeIdRanges();						// the same
 
     try
     {
@@ -2433,9 +2477,9 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
             pDescriptor->Put(SvxSizeItem(RPTUI_ID_SIZE,VCLSize(getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE))));
             pDescriptor->Put(SvxLRSpaceItem(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_LEFTMARGIN)
                                             ,getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_RIGHTMARGIN),0,0,RPTUI_ID_LRSPACE));
-            pDescriptor->Put(SvxULSpaceItem(static_cast<sal_uInt16>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_TOPMARGIN))
-                                            ,static_cast<sal_uInt16>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BOTTOMMARGIN)),RPTUI_ID_ULSPACE));
-            pDescriptor->Put(SfxUInt16Item(SID_ATTR_METRIC,static_cast<sal_uInt16>(eUserMetric)));
+            pDescriptor->Put(SvxULSpaceItem(static_cast<USHORT>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_TOPMARGIN))
+                                            ,static_cast<USHORT>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BOTTOMMARGIN)),RPTUI_ID_ULSPACE));
+            pDescriptor->Put(SfxUInt16Item(SID_ATTR_METRIC,static_cast<UINT16>(eUserMetric)));
 
             uno::Reference< style::XStyle> xPageStyle(getUsedStyle(m_xReportDefinition));
             if ( xPageStyle.is() )
@@ -2451,7 +2495,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
             }
         }
 
-        {   // want the dialog to be destroyed before our set
+        {	// want the dialog to be destroyed before our set
             ORptPageDialog aDlg(getView(), pDescriptor.get(),_xSection.is() ? RID_PAGEDIALOG_BACKGROUND : RID_PAGEDIALOG_PAGE);
             if (RET_OK == aDlg.Execute())
             {
@@ -2469,10 +2513,11 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                 {
                     uno::Reference< beans::XPropertySet> xProp(getUsedStyle(m_xReportDefinition),uno::UNO_QUERY_THROW);
                     const String sUndoAction(ModuleRes(RID_STR_UNDO_CHANGEPAGE));
-                    UndoContext aUndoContext( getUndoManager(), sUndoAction );
+                    UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
                     const SfxPoolItem* pItem = NULL;
                     if ( SFX_ITEM_SET == pSet->GetItemState( RPTUI_ID_SIZE,sal_True,&pItem))
                     {
+                        const Size aPaperSize = static_cast<const SvxSizeItem*>(pItem)->GetSize();
                         uno::Any aValue;
                         static_cast<const SvxSizeItem*>(pItem)->QueryValue(aValue,MID_SIZE_SIZE);
                         xProp->setPropertyValue(PROPERTY_PAPERSIZE,aValue);
@@ -2509,7 +2554,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
             }
         }
     }
-    catch(const Exception&)
+    catch(Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -2519,24 +2564,13 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         delete pDefaults[i];
 
 }
-
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OReportController::attachModel(const uno::Reference< frame::XModel > & xModel) throw( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( getMutex() );
-
-    uno::Reference< report::XReportDefinition > xReportDefinition( xModel, UNO_QUERY );
-    if ( !xReportDefinition.is() )
-        return sal_False;
-
-    uno::Reference< document::XUndoManagerSupplier > xTestSuppUndo( xModel, UNO_QUERY );
-    if ( !xTestSuppUndo.is() )
-        return sal_False;
-
-    m_xReportDefinition = xReportDefinition;
-    return sal_True;
+    m_xReportDefinition.set(xModel,uno::UNO_QUERY);
+    return m_xReportDefinition.is();
 }
-
 // -----------------------------------------------------------------------------
 void OReportController::openSortingAndGroupingDialog()
 {
@@ -2590,19 +2624,19 @@ void OReportController::Notify(SfxBroadcaster & /* _rBc */, SfxHint const & _rHi
     }
 }
 // -----------------------------------------------------------------------------
-void OReportController::executeMethodWithUndo(sal_uInt16 _nUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun)
+void OReportController::executeMethodWithUndo(USHORT _nUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun)
 {
     const String sUndoAction = String((ModuleRes(_nUndoStrId)));
-    UndoContext aUndoContext( getUndoManager(), sUndoAction );
+    UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
     _pMemfun( getDesignView() );
     InvalidateFeature( SID_SAVEDOC );
     InvalidateFeature( SID_UNDO );
 }
 // -----------------------------------------------------------------------------
-void OReportController::alignControlsWithUndo(sal_uInt16 _nUndoStrId,sal_Int32 _nControlModification,bool _bAlignAtSection)
+void OReportController::alignControlsWithUndo(USHORT _nUndoStrId,sal_Int32 _nControlModification,bool _bAlignAtSection)
 {
     const String sUndoAction = String((ModuleRes(_nUndoStrId)));
-    UndoContext aUndoContext( getUndoManager(), sUndoAction );
+    UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
     getDesignView()->alignMarkedObjects(_nControlModification,_bAlignAtSection);
     InvalidateFeature( SID_SAVEDOC );
     InvalidateFeature( SID_UNDO );
@@ -2617,6 +2651,7 @@ void OReportController::shrinkSectionBottom(uno::Reference<report::XSection> _xS
         return;
     }
     const sal_Int32 nSectionHeight = _xSection->getHeight();
+    // sal_Int32 nMinPositionY = nSectionHeight;
     sal_Int32 nMaxPositionY = 0;
     uno::Reference< report::XReportComponent> xReportComponent;
 
@@ -2627,6 +2662,7 @@ void OReportController::shrinkSectionBottom(uno::Reference<report::XSection> _xS
         const sal_Int32 nReportComponentPositionY = xReportComponent->getPositionY();
         const sal_Int32 nReportComponentHeight = xReportComponent->getHeight();
         const sal_Int32 nReportComponentPositionYAndHeight = nReportComponentPositionY + nReportComponentHeight;
+        // nMinPositionY = std::min(nReportComponentPositionY, nMinPositionY);
         nMaxPositionY = std::max(nReportComponentPositionYAndHeight, nMaxPositionY);
     }
     // now we know the minimal Y-Position and maximal Y-Position
@@ -2650,6 +2686,7 @@ void OReportController::shrinkSectionTop(uno::Reference<report::XSection> _xSect
 
     const sal_Int32 nSectionHeight = _xSection->getHeight();
     sal_Int32 nMinPositionY = nSectionHeight;
+    // sal_Int32 nMaxPositionY = 0;
     uno::Reference< report::XReportComponent> xReportComponent;
 
     // for every component get it's Y-position and compare it to the current Y-position
@@ -2657,7 +2694,10 @@ void OReportController::shrinkSectionTop(uno::Reference<report::XSection> _xSect
     {
         xReportComponent.set(_xSection->getByIndex(i), uno::UNO_QUERY);
         const sal_Int32 nReportComponentPositionY = xReportComponent->getPositionY();
+        // const sal_Int32 nReportComponentHeight = xReportComponent->getHeight();
+        // const sal_Int32 nReportComponentPositionYAndHeight = nReportComponentPositionY + nReportComponentHeight;
         nMinPositionY = std::min(nReportComponentPositionY, nMinPositionY);
+        // nMaxPositionY = std::max(nReportComponentPositionYAndHeight, nMaxPositionY);
     }
     // now we know the minimal Y-Position and maximal Y-Position
     if (nMinPositionY == 0)
@@ -2676,12 +2716,12 @@ void OReportController::shrinkSectionTop(uno::Reference<report::XSection> _xSect
     _xSection->setHeight(nNewSectionHeight);
 }
 
-void OReportController::shrinkSection(sal_uInt16 _nUndoStrId, uno::Reference<report::XSection> _xSection, sal_Int32 _nSid)
+void OReportController::shrinkSection(USHORT _nUndoStrId, uno::Reference<report::XSection> _xSection, sal_Int32 _nSid)
 {
     if ( _xSection.is() )
     {
         const String sUndoAction = String((ModuleRes(_nUndoStrId)));
-        UndoContext aUndoContext( getUndoManager(), sUndoAction );
+        UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
 
         if (_nSid == SID_SECTION_SHRINK)
         {
@@ -2706,38 +2746,35 @@ void OReportController::shrinkSection(sal_uInt16 _nUndoStrId, uno::Reference<rep
 uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( getMutex() );
-
-    sal_Int32 nCommandIDs[] =
+    typedef ::std::pair< ::rtl::OUString,sal_uInt16> TStringIntPair;
+    const TStringIntPair pViewDataList[] =
     {
-        SID_GRID_VISIBLE,
-        SID_GRID_USE,
-        SID_HELPLINES_MOVE,
-        SID_RULER,
-        SID_SHOW_PROPERTYBROWSER,
-        SID_PROPERTYBROWSER_LAST_PAGE,
-        SID_SPLIT_POSITION
+         TStringIntPair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GridVisible")),            SID_GRID_VISIBLE)
+        ,TStringIntPair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GridUse")),                SID_GRID_USE)
+        ,TStringIntPair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HelplinesMove")),          SID_HELPLINES_MOVE)
+        ,TStringIntPair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowRuler")),              SID_RULER)
+        ,TStringIntPair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlProperties")),      SID_SHOW_PROPERTYBROWSER)
+        ,TStringIntPair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LastPropertyBrowserPage")),SID_PROPERTYBROWSER_LAST_PAGE)
+        ,TStringIntPair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SplitPosition")),          SID_SPLIT_POSITION)
     };
 
-    ::comphelper::NamedValueCollection aCommandProperties;
-    for ( size_t i=0; i < SAL_N_ELEMENTS(nCommandIDs); ++i )
+    uno::Sequence<beans::PropertyValue> aCommandProps(SAL_N_ELEMENTS(pViewDataList));
+    beans::PropertyValue* pIter = aCommandProps.getArray();
+    beans::PropertyValue* pEnd = pIter + aCommandProps.getLength();
+    for (sal_Int32 i = 0; pIter != pEnd; ++pIter,++i)
     {
-        const FeatureState aFeatureState = GetState( nCommandIDs[i] );
-
-        ::rtl::OUString sCommandURL( getURLForId( nCommandIDs[i] ).Main );
-        OSL_ENSURE( sCommandURL.indexOfAsciiL( ".uno:", 5 ) == 0, "OReportController::getViewData: illegal command URL!" );
-        sCommandURL = sCommandURL.copy( 5 );
-
-        Any aCommandState;
+        FeatureState aFeatureState = GetState(pViewDataList[i].second);
+        pIter->Name = pViewDataList[i].first;
         if ( !!aFeatureState.bChecked )
-            aCommandState <<= (*aFeatureState.bChecked) ? sal_True : sal_False;
+            pIter->Value <<= (*aFeatureState.bChecked) ? sal_True : sal_False;
         else if ( aFeatureState.aValue.hasValue() )
-            aCommandState = aFeatureState.aValue;
+            pIter->Value = aFeatureState.aValue;
 
-        aCommandProperties.put( sCommandURL, aCommandState );
-    }
+    } // for (; pIter != pEnd; ++pIter)
 
-    ::comphelper::NamedValueCollection aViewData;
-    aViewData.put( "CommandProperties", aCommandProperties.getPropertyValues() );
+    uno::Sequence<beans::PropertyValue> aProps(1);
+    aProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CommandProperties"));
+    aProps[0].Value <<= aCommandProps;
 
     if ( getDesignView() )
     {
@@ -2754,82 +2791,67 @@ uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeExcept
                 pCollapsedIter->Name = PROPERTY_SECTION + ::rtl::OUString::valueOf(i);
                 pCollapsedIter->Value <<= static_cast<sal_Int32>(*aIter);
             }
-
-            aViewData.put( "CollapsedSections", aCollapsedSections );
+            const sal_Int32 nCount = aProps.getLength();
+            aProps.realloc( nCount + 1 );
+            aProps[nCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CollapsedSections"));
+            aProps[nCount].Value <<= aCollapsedSections;
         }
 
         ::boost::shared_ptr<OSectionWindow> pSectionWindow = getDesignView()->getMarkedSection();
         if ( pSectionWindow.get() )
         {
-            aViewData.put( "MarkedSection", (sal_Int32)pSectionWindow->getReportSection().getPage()->GetPageNum() );
-        }
-    }
-
-    aViewData.put( "ZoomFactor", m_nZoomValue );
-    return uno::makeAny( aViewData.getPropertyValues() );
+            const sal_Int32 nCount = aProps.getLength();
+            aProps.realloc( nCount + 1 );
+            aProps[nCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MarkedSection"));
+            aProps[nCount].Value <<= (sal_Int32)pSectionWindow->getReportSection().getPage()->GetPageNum();
+        } // if ( pSectionWindow.get() )
+    } // if ( getDesignView() )
+    const sal_Int32 nCount = aProps.getLength();
+    aProps.realloc( nCount + 1 );
+    aProps[nCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZoomFactor"));
+    aProps[nCount].Value <<= m_nZoomValue;
+    return uno::makeAny(aProps);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data) throw( uno::RuntimeException )
+void SAL_CALL OReportController::restoreViewData(const uno::Any& Data) throw( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( getMutex() );
-
-    try
+    uno::Sequence<beans::PropertyValue> aProps;
+    if ( Data >>= aProps )
     {
-        const ::comphelper::NamedValueCollection aViewData( i_data );
-
-        m_aCollapsedSections = aViewData.getOrDefault( "CollapsedSections", m_aCollapsedSections );
-        m_nPageNum = aViewData.getOrDefault( "MarkedSection", m_nPageNum );
-        m_nZoomValue = aViewData.getOrDefault( "ZoomFactor", m_nZoomValue );
-        // TODO: setting those 3 members is not enough - in theory, restoreViewData can be called when the
-        // view is fully alive, so we need to reflect those 3 values in the view.
-        // (At the moment, the method is called only during construction phase)
-
-
-        ::comphelper::NamedValueCollection aCommandProperties( aViewData.get( "CommandProperties" ) );
-        const ::std::vector< ::rtl::OUString > aCommandNames( aCommandProperties.getNames() );
-
-        for (   ::std::vector< ::rtl::OUString >::const_iterator commandName = aCommandNames.begin();
-                commandName != aCommandNames.end();
-                ++commandName
-            )
+        const beans::PropertyValue* pPropsIter = aProps.getConstArray();
+        const beans::PropertyValue* pPropsEnd = pPropsIter + aProps.getLength();
+        for (sal_Int32 i = 0; pPropsIter != pPropsEnd; ++pPropsIter,++i)
         {
-            const Any& rCommandValue = aCommandProperties.get( *commandName );
-            if ( !rCommandValue.hasValue() )
-                continue;
-
-            if ( getView() )
+            if ( pPropsIter->Name.equalsAscii("CommandProperties") )
             {
                 util::URL aCommand;
-                aCommand.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ) ) + *commandName;
-
-                Sequence< PropertyValue > aCommandArgs(1);
-                aCommandArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Value" ) );
-                aCommandArgs[0].Value = rCommandValue;
-
-                executeUnChecked( aCommand, aCommandArgs );
+                uno::Sequence< beans::PropertyValue> aArgs(1);
+                beans::PropertyValue* pArg = aArgs.getArray();
+                pArg->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"));
+                uno::Sequence< beans::PropertyValue> aCommandProps;
+                if ( pPropsIter->Value >>= aCommandProps )
+                {
+                    const beans::PropertyValue* pIter = aCommandProps.getConstArray();
+                    const beans::PropertyValue* pEnd = pIter + aCommandProps.getLength();
+                    for (; pIter != pEnd; ++pIter)
+                    {
+                        pArg->Value = pIter->Value;
+                        if ( pArg->Value.hasValue() )
+                        {
+                            aCommand.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:")) + pIter->Name;
+                            executeUnChecked(aCommand,aArgs);
+                        }
+                    }
+                }
             }
-            else
-            {
-                if ( commandName->equalsAscii( "ShowRuler" ) )
-                    OSL_VERIFY( rCommandValue >>= m_bShowRuler );
-                else if ( commandName->equalsAscii( "HelplinesMove" ) )
-                    OSL_VERIFY( rCommandValue >>= m_bHelplinesMove );
-                else if ( commandName->equalsAscii( "GridVisible" ) )
-                    OSL_VERIFY( rCommandValue >>= m_bGridVisible );
-                else if ( commandName->equalsAscii( "GridUse" ) )
-                    OSL_VERIFY( rCommandValue >>= m_bGridUse );
-                else if ( commandName->equalsAscii( "ControlProperties" ) )
-                    OSL_VERIFY( rCommandValue >>= m_bShowProperties );
-                else if ( commandName->equalsAscii( "LastPropertyBrowserPage" ) )
-                    OSL_VERIFY( rCommandValue >>= m_sLastActivePage );
-                else if ( commandName->equalsAscii( "SplitPosition" ) )
-                    OSL_VERIFY( rCommandValue >>= m_nSplitPos );
-            }
+            else if ( pPropsIter->Name.equalsAscii("CollapsedSections") )
+                pPropsIter->Value >>= m_aCollapsedSections;
+            else if ( pPropsIter->Name.equalsAscii("MarkedSection") )
+                pPropsIter->Value >>= m_nPageNum;
+            else if ( pPropsIter->Name.equalsAscii("ZoomFactor") )
+                pPropsIter->Value >>= m_nZoomValue;
         }
-    }
-    catch(const IllegalArgumentException&)
-    {
-        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -2919,7 +2941,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
                 Reference<XFrame> xFrame = getXFrame();
                 xModel = m_xReportEngine->createDocumentAlive(xFrame);
             }
-            catch(const sdbc::SQLException&)
+            catch( const sdbc::SQLException& /*e*/ )
             {   // SQLExceptions and derived exceptions must not be translated
                 aInfo = ::cppu::getCaughtException();
             }
@@ -2957,7 +2979,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
             {
                 const String suSQLContext = String( ModuleRes( RID_STR_COULD_NOT_CREATE_REPORT ) );
                 aInfo.prepend(suSQLContext);
-            }
+            } // if (aInfo.isValid())
             m_bInGeneratePreview = false;
         }
 
@@ -3000,7 +3022,7 @@ uno::Reference< sdbc::XRowSet > OReportController::getRowSet()
         m_xRowSetMediator = new OPropertyMediator( m_xReportDefinition.get(), xRowSetProp, aPropertyMediation );
         m_xRowSet = xRowSet;
     }
-    catch(const uno::Exception&)
+    catch( const uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -3035,14 +3057,23 @@ void OReportController::insertGraphic()
             createControl(aArgs,xSection,::rtl::OUString(),OBJ_DLG_IMAGECONTROL);
         }
     }
-    catch(const Exception&)
+    catch(Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
-::boost::shared_ptr<rptui::OReportModel> OReportController::getSdrModel() const
+::boost::shared_ptr<rptui::OReportModel> OReportController::getSdrModel()
 {
+    if ( !m_aReportModel )
+    {
+        m_aReportModel = reportdesign::OReportDefinition::getSdrModel(m_xReportDefinition);
+        if ( m_aReportModel )
+        {
+            m_aReportModel->attachController( *this );
+            m_aReportModel->SetNotifyUndoActionHdl(LINK( this, OReportController, NotifyUndoActionHdl ));
+        }
+    }
     return m_aReportModel;
 }
 // -----------------------------------------------------------------------------
@@ -3121,6 +3152,7 @@ void OReportController::createNewFunction(const uno::Any& _aValue)
 // -----------------------------------------------------------------------------
 IMPL_LINK( OReportController, OnExecuteReport, void* ,/*_pMemfun*/)
 {
+    //m_nExecuteReportEvent = 0;
     executeReport();
     return 0L;
 }
@@ -3153,7 +3185,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
             sCustomShapeType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("diamond"));
         pSectionWindow->getReportSection().createDefault(sCustomShapeType,pNewControl);
         pNewControl->SetLogicRect(Rectangle(3000,500,6000,3500)); // switch height and width
-    }
+    } // if ( _nObjectId == OBJ_CUSTOMSHAPE )
     else if ( _nObjectId == OBJ_OLE2 || OBJ_DLG_SUBREPORT == _nObjectId  )
     {
         pNewControl = SdrObjFactory::MakeNewObject( ReportInventor, _nObjectId, pSectionWindow->getReportSection().getPage(),m_aReportModel.get() );
@@ -3197,7 +3229,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         {
             if ( xInfo->hasPropertyByName(sProps[i]) && xShapeInfo->hasPropertyByName(sProps[i]) )
                 xUnoProp->setPropertyValue(sProps[i],xShapeProp->getPropertyValue(sProps[i]));
-        }
+        } // for(size_t i = 0; i < SAL_N_ELEMENTS(sProps);++i)
 
         if ( xInfo->hasPropertyByName(PROPERTY_BORDER) && xShapeInfo->hasPropertyByName(PROPERTY_CONTROLBORDER) )
             xUnoProp->setPropertyValue(PROPERTY_BORDER,xShapeProp->getPropertyValue(PROPERTY_CONTROLBORDER));
@@ -3245,7 +3277,7 @@ void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
     getDesignView()->unmarkAllObjects(NULL);
 
     const String sUndoAction(ModuleRes(RID_STR_UNDO_INSERT_CONTROL));
-    UndoContext aUndoContext( getUndoManager(), sUndoAction );
+    UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
 
     SequenceAsHashMap aMap(_aArgs);
     aMap.createItemIfMissing(PROPERTY_FORMATKEY,aMap.getUnpackedValueOrDefault(PROPERTY_FORMATKEYDATE,sal_Int32(0)));
@@ -3273,13 +3305,13 @@ void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs
     getDesignView()->unmarkAllObjects(NULL);
 
     const String sUndoAction(ModuleRes(RID_STR_UNDO_INSERT_CONTROL));
-    UndoContext aUndoContext( getUndoManager(), sUndoAction );
+    UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
 
     if ( !m_xReportDefinition->getPageHeaderOn() )
     {
         uno::Sequence< beans::PropertyValue > aArgs;
         executeChecked(SID_PAGEHEADERFOOTER,aArgs);
-    }
+    } // if ( !m_xHoldAlive->getPageHeaderOn() )
 
     SequenceAsHashMap aMap(_aArgs);
     sal_Bool bStateOfPage = aMap.getUnpackedValueOrDefault(PROPERTY_STATE,sal_False);
@@ -3317,7 +3349,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
     }
 
     uno::Reference<report::XSection> xCurrentSection = getDesignView()->getCurrentSection();
-    UndoContext aUndoContext( getUndoManager(), String( ModuleRes( RID_STR_UNDO_INSERT_CONTROL ) ) );
+    UndoManagerListAction aUndo( *getUndoMgr(), String( ModuleRes( RID_STR_UNDO_INSERT_CONTROL ) ) );
 
     try
     {
@@ -3348,6 +3380,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             // LLA: new feature, add the Label in dependency of the given DND_ACTION one section up, normal or one section down
             sal_Int8 nDNDAction = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DNDAction")), sal_Int8(0));
             pSectionWindow[1] = pSectionWindow[0];
+            // ::boost::shared_ptr<OReportSection> pReportSectionPost;
             sal_Bool bLabelAboveTextField = nDNDAction == DND_ACTION_COPY;
             if ( bLabelAboveTextField || nDNDAction == DND_ACTION_LINK )
             {
@@ -3381,7 +3414,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     {
                         xReportDefinition->setCommand(sCommand);
                         xReportDefinition->setCommandType(nCommandType);
-                    }
+                    } // if ( !xReportDefinition->getCommand().getLength() )
 
                     xColumns = dbtools::getFieldsByCommandDescriptor(xConnection,nCommandType,sCommand,xHoldAlive);
                     if ( xColumns.is() && xColumns->hasByName(sColumnName) )
@@ -3405,7 +3438,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                         // definition is bound to - which is not supported for the parameters case, since we
                         // can retrieve parameters from the RowSet only.
                     }
-                    catch(const Exception&)
+                    catch( const Exception& )
                     {
                         DBG_UNHANDLED_EXCEPTION();
                     }
@@ -3457,6 +3490,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             SdrUnoObj* pControl[2];
             pControl[0] = NULL;
             pControl[1] = NULL;
+            //getDesignView()->GetModel()->GetUndoEnv().Lock();
             const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_RIGHTMARGIN);
             const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE).Width - nRightMargin;
             OSectionView* pSectionViews[2];
@@ -3468,6 +3502,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                 ,xField,xNumberFormats,nOBJID,::rtl::OUString(),ReportInventor,OBJ_DLG_FIXEDTEXT,
                 pSectionWindow[1]->getReportSection().getPage(),pSectionWindow[0]->getReportSection().getPage(),m_aReportModel.get(),
                 pControl[0],pControl[1]);
+            //getDesignView()->GetModel()->GetUndoEnv().UnLock();
             if ( pControl[0] && pControl[1] )
             {
                 SdrPageView* pPgViews[2];
@@ -3507,12 +3542,15 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 
                             ReportFormula aFormula( ReportFormula::Field, sName );
                             xUnoProp->setPropertyValue( PROPERTY_DATAFIELD, uno::makeAny( aFormula.getCompleteFormula() ) );
-                        }
+                        } // if ( xInfo->hasPropertyByName(PROPERTY_DATAFIELD) )
 
                         if ( xInfo->hasPropertyByName(PROPERTY_BORDER) && xShapeInfo->hasPropertyByName(PROPERTY_CONTROLBORDER) )
                             xUnoProp->setPropertyValue(PROPERTY_BORDER,xShapeProp->getPropertyValue(PROPERTY_CONTROLBORDER));
 
                         pObjs[i]->CreateMediator(sal_True);
+                        // need SectionView from the above or follow Section
+                        // (getMarkedSection) returns the current Section
+                        //pSectionViews[i]->InsertObjectAtView(pControl[i],*pPgViews[i],SDRINSERT_ADDMARK);
 
                         const sal_Int32 nShapeWidth = xShapeProp->getWidth();
                         const bool bChangedPos = (aPos.X + nShapeWidth) > nPaperWidth;
@@ -3530,6 +3568,8 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     if (pSectionViews[0] != pSectionViews[1] &&
                         nOBJID == OBJ_DLG_FORMATTEDFIELD) // we want this nice feature only at FORMATTEDFIELD
                     {
+                        // we have two different Views, so set the position x new.
+                        // pSectionViews[1].position.x = pSectionViews[0].position.x
                         uno::Reference< report::XReportComponent> xShapePropLabel(pObjs[0]->getUnoShape(),uno::UNO_QUERY_THROW);
                         uno::Reference< report::XReportComponent> xShapePropTextField(pObjs[1]->getUnoShape(),uno::UNO_QUERY_THROW);
                         if ( sLabel.getLength() )
@@ -3554,7 +3594,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     OUnoObject* pObj = dynamic_cast<OUnoObject*>(pControl[0]);
                     uno::Reference< report::XFixedText> xShapeProp(pObj->getUnoShape(),uno::UNO_QUERY_THROW);
                     xShapeProp->setName(xShapeProp->getName() + sDefaultName );
-
+                    
                     for(i = 0; i < SAL_N_ELEMENTS(pControl);++i) // insert controls
                     {
                         correctOverlapping(pControl[i],pSectionWindow[1-i]->getReportSection());
@@ -3599,6 +3639,11 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                                 xTextfield->setPositionY(aTextfield.Top());
                         }
                     }
+                        // this should never happen.
+                        // else
+                        // {
+                        //	DBG_ERROR("unhandled case.");
+                        // }
                     }
                 }
             }
@@ -3609,7 +3654,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             }
         }
     }
-    catch(const Exception&)
+    catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -3672,7 +3717,7 @@ void OReportController::listen(const bool _bAdd)
     uno::Reference< XPropertyChangeListener > xUndo = &rUndoEnv;
     uno::Sequence< beans::Property> aSeq = m_xReportDefinition->getPropertySetInfo()->getProperties();
     const beans::Property* pIter = aSeq.getConstArray();
-    const beans::Property* pEnd   = pIter + aSeq.getLength();
+    const beans::Property* pEnd	  = pIter + aSeq.getLength();
     const ::rtl::OUString* pPropsBegin = &aProps[0];
     const ::rtl::OUString* pPropsEnd   = pPropsBegin + (SAL_N_ELEMENTS(aProps)) - 3;
     for(;pIter != pEnd;++pIter)
@@ -3690,6 +3735,11 @@ void OReportController::listen(const bool _bAdd)
 
     // Add Listeners to ReportControllerObserver
     OXReportControllerObserver& rObserver = *m_pReportControllerObserver;
+    // void (OXReportControllerObserver::*pObserverFunction)( const uno::Reference< uno::XInterface >& ) =
+    //     _bAdd ? &OXReportControllerObserver::AddElement : &OXReportControllerObserver::RemoveElement;
+
+    // (rObserver.*pObserverFunction)( m_xReportDefinition->getStyleFamilies() );
+    // (rObserver.*pObserverFunction)( m_xReportDefinition->getFunctions() );
 
     if ( m_xReportDefinition->getPageHeaderOn() && _bAdd )
     {
@@ -3720,7 +3770,7 @@ void OReportController::listen(const bool _bAdd)
             getDesignView()->addSection(xGroup->getHeader(),DBGROUPHEADER);
             rObserver.AddSection(xGroup->getHeader());
         }
-    }
+    } // for (sal_Int32 i=0;i<nCount ; ++i)
 
     if ( _bAdd )
     {
@@ -3767,21 +3817,19 @@ void OReportController::switchReportSection(const sal_Int16 _nId)
     {
         const OXUndoEnvironment::OUndoEnvLock aLock( m_aReportModel->GetUndoEnv() );
         const bool bSwitchOn = !m_xReportDefinition->getReportHeaderOn();
-
-        ::boost::scoped_ptr< UndoContext > pUndoContext;
         if ( SID_REPORTHEADERFOOTER == _nId )
         {
             const String sUndoAction(ModuleRes(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER));
-            pUndoContext.reset( new UndoContext( getUndoManager(), sUndoAction ) );
+            getUndoMgr()->EnterListAction( sUndoAction, String() );
 
-            addUndoAction(new OReportSectionUndo(*(m_aReportModel),SID_REPORTHEADER_WITHOUT_UNDO
+            addUndoActionAndInvalidate(new OReportSectionUndo(*(m_aReportModel),SID_REPORTHEADER_WITHOUT_UNDO
                                                             ,::std::mem_fun(&OReportHelper::getReportHeader)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
                                                             ,0
                                                             ));
 
-            addUndoAction(new OReportSectionUndo(*(m_aReportModel),SID_REPORTFOOTER_WITHOUT_UNDO
+            addUndoActionAndInvalidate(new OReportSectionUndo(*(m_aReportModel),SID_REPORTFOOTER_WITHOUT_UNDO
                                                             ,::std::mem_fun(&OReportHelper::getReportFooter)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
@@ -3804,7 +3852,7 @@ void OReportController::switchReportSection(const sal_Int16 _nId)
         }
 
         if ( SID_REPORTHEADERFOOTER == _nId )
-            pUndoContext.reset();
+            getUndoMgr()->LeaveListAction();
         getView()->Resize();
     }
 }
@@ -3817,13 +3865,12 @@ void OReportController::switchPageSection(const sal_Int16 _nId)
         const OXUndoEnvironment::OUndoEnvLock aLock( m_aReportModel->GetUndoEnv() );
         const bool bSwitchOn = !m_xReportDefinition->getPageHeaderOn();
 
-        ::boost::scoped_ptr< UndoContext > pUndoContext;
         if ( SID_PAGEHEADERFOOTER == _nId )
         {
             const String sUndoAction(ModuleRes(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER));
-            pUndoContext.reset( new UndoContext( getUndoManager(), sUndoAction ) );
+            getUndoMgr()->EnterListAction( sUndoAction, String() );
 
-            addUndoAction(new OReportSectionUndo(*m_aReportModel
+            addUndoActionAndInvalidate(new OReportSectionUndo(*m_aReportModel
                                                             ,SID_PAGEHEADER_WITHOUT_UNDO
                                                             ,::std::mem_fun(&OReportHelper::getPageHeader)
                                                             ,m_xReportDefinition
@@ -3831,14 +3878,14 @@ void OReportController::switchPageSection(const sal_Int16 _nId)
                                                             ,0
                                                             ));
 
-            addUndoAction(new OReportSectionUndo(*m_aReportModel
+            addUndoActionAndInvalidate(new OReportSectionUndo(*m_aReportModel
                                                             ,SID_PAGEFOOTER_WITHOUT_UNDO
                                                             ,::std::mem_fun(&OReportHelper::getPageFooter)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
                                                             ,0
                                                             ));
-        }
+        } // if ( SID_PAGEHEADERFOOTER == _nId )
         switch( _nId )
         {
             case SID_PAGEHEADER_WITHOUT_UNDO:
@@ -3853,7 +3900,7 @@ void OReportController::switchPageSection(const sal_Int16 _nId)
                 break;
         }
         if ( SID_PAGEHEADERFOOTER == _nId )
-            pUndoContext.reset();
+            getUndoMgr()->LeaveListAction();
         getView()->Resize();
     }
 }
@@ -3879,7 +3926,7 @@ void OReportController::modifyGroup(const bool _bAppend, const Sequence< Propert
             rUndoEnv.AddElement( xGroup->getFunctions() );
         }
 
-        addUndoAction( new OGroupUndo(
+        addUndoActionAndInvalidate( new OGroupUndo(
             *m_aReportModel,
             _bAppend ? RID_STR_UNDO_APPEND_GROUP : RID_STR_UNDO_REMOVE_GROUP,
             _bAppend ? Inserted : Removed,
@@ -3895,7 +3942,7 @@ void OReportController::modifyGroup(const bool _bAppend, const Sequence< Propert
             xGroups->removeByIndex( nPos );
         }
     }
-    catch(const Exception&)
+    catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -3913,7 +3960,7 @@ void OReportController::createGroupSection(const bool _bUndo,const bool _bHeader
         {
             const OXUndoEnvironment::OUndoEnvLock aLock(m_aReportModel->GetUndoEnv());
             if ( _bUndo )
-                addUndoAction(new OGroupSectionUndo(*m_aReportModel
+                addUndoActionAndInvalidate(new OGroupSectionUndo(*m_aReportModel
                                                                 ,_bHeader ? SID_GROUPHEADER_WITHOUT_UNDO : SID_GROUPFOOTER_WITHOUT_UNDO
                                                                 ,_bHeader ? ::std::mem_fun(&OGroupHelper::getHeader) : ::std::mem_fun(&OGroupHelper::getFooter)
                                                                 ,xGroup
@@ -4085,7 +4132,7 @@ void SAL_CALL OReportController::setMode( const ::rtl::OUString& aMode ) throw (
 // -----------------------------------------------------------------------------
 bool OReportController::isUiVisible() const
 {
-    return !m_sMode.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("remote"));
+    return !m_sMode.equalsAscii("remote");
 }
 // -----------------------------------------------------------------------------
 void OReportController::impl_fillState_nothrow(const ::rtl::OUString& _sProperty,dbaui::FeatureState& _rState) const
@@ -4113,15 +4160,15 @@ void OReportController::impl_fillState_nothrow(const ::rtl::OUString& _sProperty
                     else if ( !comphelper::compare(aTemp,aTemp2) )
                         break;
                 }
-                catch(const beans::UnknownPropertyException&)
+                catch(beans::UnknownPropertyException&)
                 {
                     _rState.bEnabled = sal_False;
                 }
-            }
+            } // for(; aIter != aSelection.end();++aIter)
             if ( aIter == aSelection.end() )
                 _rState.aValue = aTemp;
         }
-    }
+    } // if ( _rState.bEnabled )
 }
 // -----------------------------------------------------------------------------
 void OReportController::impl_zoom_nothrow()
@@ -4129,6 +4176,8 @@ void OReportController::impl_zoom_nothrow()
     Fraction aZoom(m_nZoomValue,100);
     setZoomFactor( aZoom,*getDesignView() );
     getDesignView()->zoom(aZoom);
+    // TRY
+    /*getDesignView()->Invalidate(INVALIDATE_NOCHILDREN);*/
     InvalidateFeature(SID_ATTR_ZOOM,Reference< XStatusListener >(),sal_True);
     InvalidateFeature(SID_ATTR_ZOOMSLIDER,Reference< XStatusListener >(),sal_True);
 }
@@ -4155,9 +4204,9 @@ sal_Bool OReportController::isFormatCommandEnabled(sal_uInt16 _nCommand,const un
                     break;
                 default:
                     ;
-            }
+            } // switch(_nCommand)
         }
-        catch(const uno::Exception&)
+        catch(uno::Exception&)
         {
         }
     }
@@ -4166,21 +4215,23 @@ sal_Bool OReportController::isFormatCommandEnabled(sal_uInt16 _nCommand,const un
 // -----------------------------------------------------------------------------
 bool OReportController::impl_setPropertyAtControls_throw(const sal_uInt16 _nUndoResId,const ::rtl::OUString& _sProperty,const uno::Any& _aValue,const Sequence< PropertyValue >& _aArgs)
 {
+    ::std::auto_ptr<UndoManagerListAction> pListAction;
     ::std::vector< uno::Reference< uno::XInterface > > aSelection;
     uno::Reference< awt::XWindow> xWindow;
     lcl_getReportControlFormat( _aArgs, getDesignView(), xWindow, aSelection );
+    const bool bMultiSet = aSelection.size() > 1;
     ::std::vector< uno::Reference< uno::XInterface > >::iterator aIter = aSelection.begin();
-
-    const String sUndoAction = String( ModuleRes( _nUndoResId ) );
-    UndoContext aUndoContext( getUndoManager(), sUndoAction );
-
     for(;  aIter != aSelection.end();++aIter)
     {
+        if ( !pListAction.get() && _nUndoResId && bMultiSet )
+        {
+            const String sUndoAction = String(ModuleRes(_nUndoResId));
+            pListAction.reset(new UndoManagerListAction(m_aUndoManager,sUndoAction));
+        } // if ( !pListAction.get() )
         const uno::Reference< beans::XPropertySet > xControlModel(*aIter,uno::UNO_QUERY);
         if ( xControlModel.is() )
             xControlModel->setPropertyValue(_sProperty,_aValue);
-    }
-
+    } // for(;  aIter != aSelection.end();++aIter)
     return !aSelection.empty();
 }
 // -----------------------------------------------------------------------------
@@ -4218,14 +4269,14 @@ void OReportController::openZoomDialog()
         {
             new SvxZoomItem()
         };
-        static sal_uInt16 pRanges[] =
+        static USHORT pRanges[] =
         {
             SID_ATTR_ZOOM,SID_ATTR_ZOOM,
             0
         };
         SfxItemPool* pPool( new SfxItemPool(String::CreateFromAscii("ZoomProperties"), SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, pDefaults) );
-        pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );    // ripped, don't understand why
-        pPool->FreezeIdRanges();                        // the same
+        pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );	// ripped, don't understand why
+        pPool->FreezeIdRanges();						// the same
         try
         {
             ::std::auto_ptr<SfxItemSet> pDescriptor(new SfxItemSet(*pPool, pRanges));
@@ -4240,16 +4291,16 @@ void OReportController::openZoomDialog()
 
             if ( !bCancel )
             {
-                const SvxZoomItem&  rZoomItem = (const SvxZoomItem&)pDlg->GetOutputItemSet()->Get( SID_ATTR_ZOOM );
+                const SvxZoomItem&	rZoomItem = (const SvxZoomItem&)pDlg->GetOutputItemSet()->Get( SID_ATTR_ZOOM );
                 m_eZoomType = rZoomItem.GetType();
                 m_nZoomValue = rZoomItem.GetValue();
                 if ( m_eZoomType != SVX_ZOOM_PERCENT )
                     m_nZoomValue = getDesignView()->getZoomFactor( m_eZoomType );
 
                 impl_zoom_nothrow();
-            }
+            } // if ( !bCancel )
         }
-        catch(const uno::Exception&)
+        catch(uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -4257,7 +4308,7 @@ void OReportController::openZoomDialog()
 
         for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(pDefaults); ++i)
             delete pDefaults[i];
-    }
+    } // if(pFact)
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -4265,12 +4316,15 @@ void OReportController::openZoomDialog()
 void SAL_CALL OReportController::setVisualAreaSize( ::sal_Int64 _nAspect, const awt::Size& _aSize ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
+    //if( nAspect == embed::Aspects::MSOLE_CONTENT )
+    {
         bool bChanged =
             (m_aVisualAreaSize.Width != _aSize.Width ||
              m_aVisualAreaSize.Height != _aSize.Height);
         m_aVisualAreaSize = _aSize;
         if( bChanged )
             setModified( sal_True );
+    }
     m_nAspect = _nAspect;
 }
 // -----------------------------------------------------------------------------
@@ -4303,15 +4357,17 @@ embed::VisualRepresentation SAL_CALL OReportController::getPreferredVisualRepres
                 {
                     xTransfer->setVisualAreaSize(m_nAspect,m_aVisualAreaSize);
                     aResult = xTransfer->getPreferredVisualRepresentation( _nAspect );
-                }
+                } // if ( xTransfer.is() )
             }
-            catch(const uno::Exception&)
+            catch( uno::Exception & ex )
             {
+                (void)ex;
             }
             m_xReportEngine->setMaxRows(nOldMaxRows);
         }
-        catch(const uno::Exception&)
+        catch( uno::Exception & ex )
         {
+            (void)ex;
         }
         m_bInGeneratePreview = false;
     }
@@ -4344,34 +4400,6 @@ uno::Reference< container::XNameAccess > OReportController::getColumns() const
     }
     return sLabel;
 }
-
 // -----------------------------------------------------------------------------
-SfxUndoManager& OReportController::getUndoManager() const
-{
-    DBG_TESTSOLARMUTEX();
-        // this is expected to be called during UI actions, so the SM is assumed to be locked
 
-    ::boost::shared_ptr< OReportModel > pReportModel( getSdrModel() );
-    ENSURE_OR_THROW( !!pReportModel, "no access to our model" );
-
-    SfxUndoManager* pUndoManager( pReportModel->GetSdrUndoManager() );
-    ENSURE_OR_THROW( pUndoManager != NULL, "no access to our model's UndoManager" );
-
-    return *pUndoManager;
-}
-
-// -----------------------------------------------------------------------------
-void OReportController::clearUndoManager() const
-{
-    getUndoManager().Clear();
-}
-
-// -----------------------------------------------------------------------------
-void OReportController::addUndoAction( SfxUndoAction* i_pAction )
-{
-    getUndoManager().AddUndoAction( i_pAction );
-
-    InvalidateFeature( SID_UNDO );
-    InvalidateFeature( SID_REDO );
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,6 @@ TabPage TP_FOOTNOTE_PAGE
     Hide = TRUE;
     RadioButton RB_MAXHEIGHT_PAGE
     {
-        HelpID = "sw:RadioButton:TP_FOOTNOTE_PAGE:RB_MAXHEIGHT_PAGE";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 132 , 10 ) ;
         Text [ en-US ] = "~Not larger than page area" ;
@@ -44,14 +43,12 @@ TabPage TP_FOOTNOTE_PAGE
     };
     RadioButton RB_MAXHEIGHT
     {
-        HelpID = "sw:RadioButton:TP_FOOTNOTE_PAGE:RB_MAXHEIGHT";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 132 , 10 ) ;
         Text [ en-US ] = "Maximum footnote ~height" ;
     };
     MetricField ED_MAXHEIGHT
     {
-        HelpID = "sw:MetricField:TP_FOOTNOTE_PAGE:ED_MAXHEIGHT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 148 , 26 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
@@ -78,7 +75,6 @@ TabPage TP_FOOTNOTE_PAGE
     };
     MetricField ED_DIST
     {
-        HelpID = "sw:MetricField:TP_FOOTNOTE_PAGE:ED_DIST";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 148 , 42 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
@@ -109,7 +105,6 @@ TabPage TP_FOOTNOTE_PAGE
     };
     ListBox DLB_LINEPOS
     {
-        HelpID = "sw:ListBox:TP_FOOTNOTE_PAGE:DLB_LINEPOS";
         Pos = MAP_APPFONT ( 148 , 71 ) ;
         Size = MAP_APPFONT ( 57 , 40 ) ;
         TabStop = TRUE ;
@@ -129,73 +124,29 @@ TabPage TP_FOOTNOTE_PAGE
         Size = MAP_APPFONT ( 132 , 8 ) ;
         Group = TRUE ;
         Left = TRUE ;
-        Text [ en-US ] = "~Style" ;
+        Text [ en-US ] = "~Weight" ;
     };
     ListBox DLB_LINETYPE
     {
-        HelpID = "sw:ListBox:TP_FOOTNOTE_PAGE:DLB_LINETYPE";
         Pos = MAP_APPFONT ( 148 , 87 ) ;
         Size = MAP_APPFONT ( 57 , 50 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         DropDown = TRUE ;
+        CurPos = 0 ;
     };
+
     FixedText FT_LINEWIDTH
     {
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Group = TRUE ;
-        Left = TRUE ;
-        Text [ en-US ] = "~Thickness" ;
-    };
-    MetricField ED_LINEWIDTH
-    {
-        HelpID = "sw:MetricField:TP_FOOTNOTE_PAGE:ED_LINEWIDTH";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 148 , 103 ) ;
-        Size = MAP_APPFONT ( 42 , 12 ) ;
-        Spin = TRUE ;
-        Repeat = TRUE ;
-        SpinSize = 25 ;
-        First = 25 ;
-        Last = 900 ;
-        Maximum = 900 ;
-        Minimum = 25 ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_POINT ;
-        TabStop = TRUE ;
-        Left = TRUE ;
-    };
-    FixedText FT_LINECOLOR
-    {
-        Pos = MAP_APPFONT ( 12 , 121 ) ;
-        Size = MAP_APPFONT ( 132 , 8 ) ;
-        Group = TRUE ;
-        Left = TRUE ;
-        Text [ en-US ] = "~Color" ;
-    };
-    ListBox DLB_LINECOLOR
-    {
-        Pos = MAP_APPFONT ( 148 , 119 ) ;
-        Size = MAP_APPFONT ( 57 , 50 ) ;
-        TabStop = TRUE ;
-        Group = TRUE ;
-        DropDown = TRUE ;
-        DDExtraWidth = TRUE ;
-        Border = TRUE ;
-    };
-
-    FixedText FT_LINELENGTH
-    {
-        Pos = MAP_APPFONT ( 12 , 137 ) ;
-        Size = MAP_APPFONT ( 132 , 8 ) ;
         Left = TRUE ;
         Text [ en-US ] = "~Length" ;
     };
-    MetricField ED_LINELENGTH
+    MetricField ED_LINEWIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 148 , 135 ) ;
+        Pos = MAP_APPFONT ( 148 , 103 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -210,16 +161,15 @@ TabPage TP_FOOTNOTE_PAGE
     };
     FixedText FT_LINEDIST
     {
-        Pos = MAP_APPFONT ( 12 , 153 ) ;
+        Pos = MAP_APPFONT ( 12 , 121 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
         Text [ en-US ] = "~Spacing to footnote contents" ;
         Left = TRUE ;
     };
     MetricField ED_LINEDIST
     {
-        HelpID = "sw:MetricField:TP_FOOTNOTE_PAGE:ED_LINEDIST";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 148 , 151 ) ;
+        Pos = MAP_APPFONT ( 148 , 119 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;

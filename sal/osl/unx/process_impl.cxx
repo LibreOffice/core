@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -408,10 +408,10 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString* pustrEnvVar)
             result = osl_Process_E_None;
         else
             rtl_string_release(pBuffer);
-#elif (defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
+#elif defined(MACOSX)
         //MacOSX baseline is 10.4, which has an old-school void return
         //for unsetenv.
-                //See: http://developer.apple.com/mac/library/documentation/Darwin/Reference/ManPages/10.4/man3/unsetenv.3.html?useVersion=10.4
+        //See: http://developer.apple.com/mac/library/documentation/Darwin/Reference/ManPages/10.4/man3/unsetenv.3.html?useVersion=10.4
         unsetenv(rtl_string_getStr(pstr_env_var));
         result = osl_Process_E_None;
 #else
@@ -432,15 +432,15 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir
 {
     oslProcessError result = osl_Process_E_Unknown;
     char buffer[PATH_MAX];
-
+    
     OSL_PRECOND(ppustrWorkingDir, "osl_getProcessWorkingDir(): Invalid parameter");
 
     if (getcwd (buffer, sizeof(buffer)) != 0)
     {
         rtl_uString* ustrTmp = 0;
 
-        rtl_string2UString(
-            &ustrTmp,
+        rtl_string2UString( 
+            &ustrTmp, 
             buffer, strlen(buffer), osl_getThreadTextEncoding(),
             OSTRING_TO_OUSTRING_CVTFLAGS);
         if (ustrTmp != 0)
@@ -480,20 +480,17 @@ extern "C" int  _imp_setProcessLocale( rtl_Locale * );
  *********************************************/
 oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
 {
-    oslProcessError result = osl_Process_E_Unknown;
     OSL_PRECOND(ppLocale, "osl_getProcessLocale(): Invalid parameter.");
-    if (ppLocale)
-    {
-        pthread_mutex_lock(&(g_process_locale.m_mutex));
 
-        if (g_process_locale.m_pLocale == 0)
-            _imp_getProcessLocale (&(g_process_locale.m_pLocale));
-        *ppLocale = g_process_locale.m_pLocale;
-        result = osl_Process_E_None;
+    pthread_mutex_lock(&(g_process_locale.m_mutex));
 
-        pthread_mutex_unlock (&(g_process_locale.m_mutex));
-    }
-    return (result);
+    if (g_process_locale.m_pLocale == 0)
+        _imp_getProcessLocale (&(g_process_locale.m_pLocale));
+    *ppLocale = g_process_locale.m_pLocale;
+
+    pthread_mutex_unlock (&(g_process_locale.m_mutex));
+
+    return (osl_Process_E_None);
 }
 
 /**********************************************

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ int CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
 // virtual
 int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith) const
 {
-    OSL_FAIL("CntUnencodedStringItem::Compare(): No international");
+    DBG_ERROR("CntUnencodedStringItem::Compare(): No international");
     DBG_CHKTHIS(CntUnencodedStringItem, 0);
     DBG_ASSERT(rWith.ISA(CntUnencodedStringItem),
                 "CntUnencodedStringItem::Compare(): Bad type");
@@ -107,7 +107,7 @@ CntUnencodedStringItem::GetPresentation(SfxItemPresentation, SfxMapUnit,
 
 //============================================================================
 // virtual
-bool CntUnencodedStringItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8)
+bool CntUnencodedStringItem::QueryValue(com::sun::star::uno::Any& rVal, BYTE)
     const
 {
     rVal <<= rtl::OUString(m_aValue);
@@ -117,7 +117,7 @@ bool CntUnencodedStringItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt
 //============================================================================
 // virtual
 bool CntUnencodedStringItem::PutValue(const com::sun::star::uno::Any& rVal,
-                                         sal_uInt8)
+                                         BYTE)
 {
     rtl::OUString aTheValue;
     if (rVal >>= aTheValue)
@@ -125,7 +125,7 @@ bool CntUnencodedStringItem::PutValue(const com::sun::star::uno::Any& rVal,
         m_aValue = UniString(aTheValue);
         return true;
     }
-    OSL_FAIL("CntUnencodedStringItem::PutValue(): Wrong type");
+    DBG_ERROR("CntUnencodedStringItem::PutValue(): Wrong type");
     return false;
 }
 

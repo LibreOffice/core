@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,30 +94,30 @@ published service PageProperties
  */
 [property] string BackGraphicFilter;
 //-----------------------------------------------------------------------------
-/** determines the location of the background graphic.
+/** determins the location of the background graphic.
  */
 [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 //-----------------------------------------------------------------------------
-/** determines if the background color is transparent.
-
+/** determins if the background color is transparent.
+ 
     <p>If this property is set to <TRUE/>,
     <member>PageStyle::BackColor</member> will not be used.</p>
  */
 [property] boolean BackTransparent;
 //-----------------------------------------------------------------------------
-/** determines the left margin of the page.
+/** determins the left margin of the page.
  */
 [property] long LeftMargin;
 //-----------------------------------------------------------------------------
-/** determines the right margin of the page.
+/** determins the right margin of the page.
  */
 [property] long RightMargin;
 //-----------------------------------------------------------------------------
-/** determines the top margin of the page.
+/** determins the top margin of the page.
  */
 [property] long TopMargin;
 //-----------------------------------------------------------------------------
-/** determines the bottom margin of the page.
+/** determins the bottom margin of the page.
  */
 [property] long BottomMargin;
 //-----------------------------------------------------------------------------
@@ -137,35 +137,35 @@ published service PageProperties
  */
 [property] com::sun::star::table::BorderLine BottomBorder;
 //-----------------------------------------------------------------------------
-/** determines the left border distance of the page.
+/** determins the left border distance of the page.
  */
 [property] long LeftBorderDistance;
 //-----------------------------------------------------------------------------
-/** determines the right border distance of the page.
+/** determins the right border distance of the page.
  */
 [property] long RightBorderDistance;
 //-----------------------------------------------------------------------------
-/** determines the top border distance of the page.
+/** determins the top border distance of the page.
  */
 [property] long TopBorderDistance;
 //-----------------------------------------------------------------------------
-/** determines the bottom border distance of the page.
+/** determins the bottom border distance of the page.
  */
 [property] long BottomBorderDistance;
 //-----------------------------------------------------------------------------
-/** determines the shadow of the page.
+/** determins the shadow of the page.
  */
 [property] com::sun::star::table::ShadowFormat ShadowFormat;
 //-----------------------------------------------------------------------------
-/** determines if the page format is landscape.
+/** determins if the page format is landscape.
  */
 [property] boolean IsLandscape;
 //-----------------------------------------------------------------------------
-/** determines the default numbering type for this page.
+/** determins the default numbering type for this page.
  */
 [property] short NumberingType;
 //-----------------------------------------------------------------------------
-/** determines the layout of the page.
+/** determins the layout of the page.
  */
 [property] com::sun::star::style::PageStyleLayout PageStyleLayout;
 //-----------------------------------------------------------------------------
@@ -173,7 +173,7 @@ published service PageProperties
  */
 [property] string PrinterPaperTray;
 //-----------------------------------------------------------------------------
-/** determines if the register mode is active on that page.
+/** determins if the register mode is active on that page.
  */
 [optional, property] boolean RegisterModeActive;
 //-----------------------------------------------------------------------------
@@ -423,13 +423,6 @@ of the current page is used as limit.
 /** contains the weight of the separator line between the text and the footnote area.
  */
 [optional,property] short FootnoteLineWeight;
-//-----------------------------------------------------------------------------
-/** contains the style of the separator line between the text and the footnote area.
-
-    @see com::sun::star::style::FootnoteLineStyle
-        for the possible values.
- */
-[optional,property] short FootnoteLineStyle;
 //-----------------------------------------------------------------------------
 /** contains the color of the separator line between the text and the footnote area..
  */

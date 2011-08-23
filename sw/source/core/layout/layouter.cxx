@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+
+
 #include "layouter.hxx"
 #include "doc.hxx"
 #include "sectfrm.hxx"
@@ -49,10 +51,10 @@
 
 class SwLooping
 {
-    sal_uInt16 nMinPage;
-    sal_uInt16 nMaxPage;
-    sal_uInt16 nCount;
-    sal_uInt16 mnLoopControlStage;
+    USHORT nMinPage;
+    USHORT nMaxPage;
+    USHORT nCount;
+    USHORT mnLoopControlStage;
 public:
     SwLooping( SwPageFrm* pPage );
     void Control( SwPageFrm* pPage );
@@ -68,12 +70,12 @@ class SwEndnoter
 public:
     SwEndnoter( SwLayouter* pLay )
         : pMaster( pLay ), pSect( NULL ), pEndArr( NULL ) {}
-    ~SwEndnoter() { delete pEndArr; }
+    ~SwEndnoter() { delete pEndArr;	}
     void CollectEndnotes( SwSectionFrm* pSct );
     void CollectEndnote( SwFtnFrm* pFtn );
-    const SwSectionFrm* GetSect() const { return pSect; }
+    const SwSectionFrm* GetSect() {	return pSect; }
     void InsertEndnotes();
-    sal_Bool HasEndnotes() const { return pEndArr && pEndArr->Count(); }
+    BOOL HasEndnotes() const { return pEndArr && pEndArr->Count(); }
 };
 
 void SwEndnoter::CollectEndnotes( SwSectionFrm* pSct )
@@ -101,7 +103,7 @@ void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
             if ( pCnt )
             {
                 do
-                {   SwFrm *pNxtCnt = pCnt->GetNext();
+                {	SwFrm *pNxtCnt = pCnt->GetNext();
                     pCnt->Cut();
                     pCnt->Paste( pFtn );
                     pCnt = pNxtCnt;
@@ -121,7 +123,7 @@ void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
     }
     else if( pEndArr )
     {
-        for ( sal_uInt16 i = 0; i < pEndArr->Count(); ++i )
+        for ( USHORT i = 0; i < pEndArr->Count(); ++i )
         {
             SwFtnFrm *pEndFtn = (SwFtnFrm*)((*pEndArr)[i]);
             if( pEndFtn->GetAttr() == pFtn->GetAttr() )
@@ -178,7 +180,7 @@ void SwLooping::Control( SwPageFrm* pPage )
 {
     if( !pPage )
         return;
-    sal_uInt16 nNew = pPage->GetPhyPageNum();
+    USHORT nNew = pPage->GetPhyPageNum();
     if( nNew > nMaxPage )
         nMaxPage = nNew;
     if( nNew < nMinPage )
@@ -198,11 +200,15 @@ void SwLooping::Control( SwPageFrm* pPage )
     else if( ++nCount > LOOP_DETECT )
     {
 #if OSL_DEBUG_LEVEL > 1
-        static sal_Bool bNoLouie = sal_False;
+#if OSL_DEBUG_LEVEL > 1
+        static BOOL bNoLouie = FALSE;
         if( bNoLouie )
             return;
+#endif
+#endif
 
         // FME 2007-08-30 #i81146# new loop control
+#if OSL_DEBUG_LEVEL > 1
         OSL_ENSURE( 0 != mnLoopControlStage, "Looping Louie: Stage 1!" );
         OSL_ENSURE( 1 != mnLoopControlStage, "Looping Louie: Stage 2!!" );
         OSL_ENSURE( 2 >  mnLoopControlStage, "Looping Louie: Stage 3!!!" );
@@ -221,7 +227,10 @@ void SwLooping::Control( SwPageFrm* pPage )
 
 /*************************************************************************
 |*
-|*  SwLayouter::SwLayouter()
+|*	SwLayouter::SwLayouter()
+|*
+|*	Ersterstellung		AMA 02. Nov. 99
+|*	Letzte Aenderung	AMA 02. Nov. 99
 |*
 |*************************************************************************/
 
@@ -258,7 +267,7 @@ void SwLayouter::_CollectEndnotes( SwSectionFrm* pSect )
     pEndnoter->CollectEndnotes( pSect );
 }
 
-sal_Bool SwLayouter::HasEndnotes() const
+BOOL SwLayouter::HasEndnotes() const
 {
     return pEndnoter->HasEndnotes();
 }
@@ -275,7 +284,7 @@ void SwLayouter::InsertEndnotes( SwSectionFrm* pSect )
     pEndnoter->InsertEndnotes();
 }
 
-void SwLayouter::LoopControl( SwPageFrm* pPage, sal_uInt8 )
+void SwLayouter::LoopControl( SwPageFrm* pPage, BYTE )
 {
     OSL_ENSURE( pLooping, "Looping: Lost control" );
     pLooping->Control( pPage );
@@ -286,18 +295,18 @@ void SwLayouter::LoopingLouieLight( const SwDoc& rDoc, const SwTxtFrm& rFrm )
     if ( pLooping && pLooping->IsLoopingLouieLight() )
     {
 #if OSL_DEBUG_LEVEL > 1
-        OSL_FAIL( "Looping Louie (Light): Fixating fractious frame" );
+        OSL_ENSURE( false, "Looping Louie (Light): Fixating fractious frame" );
 #endif
         SwLayouter::InsertMovedFwdFrm( rDoc, rFrm, rFrm.FindPageFrm()->GetPhyPageNum() );
     }
 }
 
-sal_Bool SwLayouter::StartLooping( SwPageFrm* pPage )
+BOOL SwLayouter::StartLooping( SwPageFrm* pPage )
 {
     if( pLooping )
-        return sal_False;
+        return FALSE;
     pLooping = new SwLooping( pPage );
-    return sal_True;
+    return TRUE;
 }
 
 void SwLayouter::EndLoopControl()
@@ -314,10 +323,10 @@ void SwLayouter::CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect )
     pDoc->GetLayouter()->_CollectEndnotes( pSect );
 }
 
-sal_Bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn )
+BOOL SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn )
 {
     if( !pDoc->GetLayouter() )
-        return sal_False;
+        return FALSE;
     SwLayouter *pLayouter = pDoc->GetLayouter();
     if( pLayouter->pEndnoter && pLayouter->pEndnoter->GetSect() && pSect &&
         ( pLayouter->pEndnoter->GetSect()->IsAnFollow( pSect ) ||
@@ -325,12 +334,12 @@ sal_Bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFt
     {
         if( pFtn )
             pLayouter->CollectEndnote( pFtn );
-        return sal_True;
+        return TRUE;
     }
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage )
+BOOL SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage )
 {
     OSL_ENSURE( pDoc, "No doc, no fun" );
     if( !pDoc->GetLayouter() )

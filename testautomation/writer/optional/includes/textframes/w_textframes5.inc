@@ -115,7 +115,8 @@ testcase tTextframes_72
     
     '/// Open a test file , which includes 2 frames ,
     '/// Frame A is anchored Frame B
-    hFileOpenLocally( gTesttoolpath + "writer\optional\input\textframe\frameInFrame.sxw" )
+    Call hFileOpen(( Convertpath (gTesttoolpath + "writer\optional\input\textframe\frameInFrame.sxw") ),false)
+    Call sMakeReadOnlyDocumentEditable
     
     'Set focus to Frame B
     Call wTypeKeys ( "<Shift F4>" )
@@ -151,7 +152,8 @@ testcase tTextframes_73
     Call hNewDocument
     
     '/// Open a test file , which includes 1 frame in the document body
-    hFileOpenLocally( gTesttoolpath & "writer\optional\input\textframe\frame.sxw" )
+    Call hFileOpen((Convertpath (gTesttoolpath + "writer\optional\input\textframe\frame.sxw")),false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -186,7 +188,8 @@ testcase tTextframes_74
     Call hNewDocument
     
     '/// Open a test file , which includes 1 frame in the document body
-    hFileOpenLocally( gTesttoolpath + "writer\optional\input\textframe\frameInTable.sxw" )
+    Call hFileOpen((Convertpath (gTesttoolpath + "writer\optional\input\textframe\frameInTable.sxw")),false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -220,7 +223,8 @@ testcase tTextframes_75
     Call hNewDocument
     
     '/// Open a test file , which includes 1 frame in the header
-    hFileOpenLocally( gTesttoolpath + "writer\optional\input\textframe\Header.sxw" )
+    Call hFileOpen((Convertpath (gTesttoolpath + "writer\optional\input\textframe\Header.sxw")),false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -255,7 +259,8 @@ testcase tTextframes_76
     Call hNewDocument
     
     '/// Open a test file , which includes 1 frame in the footer
-    hFileOpenLocally( gTesttoolpath + "writer\optional\input\textframe\Footer.sxw" )
+    Call hFileOpen((gTesttoolpath + "writer\optional\input\textframe\Footer.sxw"),false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -290,7 +295,8 @@ testcase tTextframes_77
     Call hNewDocument
     
     '/// Open a test file , which includes 1 frame in the footnote
-    hFileOpen( gTesttoolpath & "writer\optional\input\textframe\frameInFootnote.sxw" )
+    Call hFileOpen((Convertpath(gTesttoolpath + "writer\optional\input\textframe\frameInFootnote.sxw")),false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -325,7 +331,8 @@ testcase tTextframes_78
     Call hNewDocument
     
     '/// Open a test file , which includes 1 frame in the endnote
-    hFileOpenLocally( gTesttoolpath & "writer\optional\input\textframe\frameInEndnote.sxw" )
+    Call hFileOpen((Convertpath(gTesttoolpath + "writer\optional\input\textframe\frameInEndnote.sxw")),false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -372,7 +379,8 @@ testcase tTextframes_80
     '/// Open a test file , which includes 1 frame which is
     '/// + anchored 'To Character' and a picture which is anchored
     '/// + in the frame
-    hFileOpenLocally( sTestFile )
+    Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -427,7 +435,8 @@ testcase tTextframes_81
     '/// Open a test file , which includes 1 frame which is
     '/// + anchored 'To Character' and a picture which is anchored
     '/// + in the frame
-    hFileOpenLocally( sTestFile )
+    Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -482,7 +491,8 @@ testcase tTextframes_82
     '/// Open a test file , which includes 1 frame which is
     '/// + anchored 'To Character' and a picture which is anchored
     '/// + in the frame
-    hFileOpenLocally( sTestFile )
+    Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -539,7 +549,8 @@ testcase tTextframes_83
     '/// Open a test file , which includes 1 frame which is
     '/// + anchored 'To Character' and a picture which is anchored
     '/// + in the frame
-    hFileOpenLocally( sTestFile )
+    Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -604,7 +615,8 @@ testcase tTextframes_84
     '/// Open a test file , which includes 1 frame which is
     '/// + anchored 'To Character' and a picture which is anchored
     '/// + in the frame
-    hFileOpenLocally( sTestFile )
+    Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
     
     '/// Set focus to Frame
     Call wTypeKeys ( "<Shift F4>" )
@@ -671,7 +683,9 @@ testcase tTextframes_85
     '/// + One is top to the line text ,
     '/// + another one is center to the line text ,
     '/// + the 3rd one is bottom to the line text
-    hFileOpenLocally( sTestFile )
+    Call hFileOpen(sTestFile,false)
+    Call sMakeReadOnlyDocumentEditable
+    Sleep (2)
     
     '/// Set focus to 1st Frame
     Call wTypeKeys ( "<Shift F4>" )

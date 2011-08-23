@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ public abstract class OfficeDocument
 
     /** DOM <code>Document</code> of content.xml. */
     private Document styleDoc = null;
-
+    
     /** DOM <code>Docuemtn</code> of META-INF/manifest.xml. */
     private Document manifestDoc = null;
 
@@ -103,7 +103,7 @@ public abstract class OfficeDocument
      *  XML file.
      */
     private OfficeZip zip = null;
-
+       
     /** Collection to keep track of the embedded objects in the document. */
     private Map embeddedObjects = null;
 
@@ -213,7 +213,7 @@ public abstract class OfficeDocument
         contentDoc = (Document)newDom;
     }
 
-
+    
     /**
      * Sets the meta tree of the document.
      *
@@ -223,7 +223,7 @@ public abstract class OfficeDocument
         metaDoc = (Document)newDom;
     }
 
-
+    
     /**
      * Sets the settings tree of the document.
      *
@@ -232,7 +232,7 @@ public abstract class OfficeDocument
     public void setSettingsDOM (Node newDom) {
         settingsDoc = (Document)newDom;
     }
-
+    
 
     /**
      * Sets the style tree of the document.
@@ -242,7 +242,7 @@ public abstract class OfficeDocument
     public void setStyleDOM (Node newDom) {
         styleDoc = (Document)newDom;
     }
-
+    
 
     /**
      *  Return a DOM <code>Document</code> object of the style.xml file.
@@ -300,24 +300,24 @@ public abstract class OfficeDocument
      * @return An <code>Iterator</code> of <code>EmbeddedObject</code> objects.
      */
     public Iterator getEmbeddedObjects() {
-
-        if (embeddedObjects == null && manifestDoc != null) {
-            embeddedObjects = new HashMap();
-
-            // Need to read the manifest file and construct a list of objects
+        
+        if (embeddedObjects == null && manifestDoc != null) {            
+            embeddedObjects = new HashMap();           
+            
+            // Need to read the manifest file and construct a list of objects                       
             NodeList nl = manifestDoc.getElementsByTagName(TAG_MANIFEST_FILE);
-
+                      
             // Dont create the HashMap if there are no embedded objects
             int len = nl.getLength();
             for (int i = 0; i < len; i++) {
                 Node n = nl.item(i);
-
+                
                 NamedNodeMap attrs = n.getAttributes();
-
+                
                 String type = attrs.getNamedItem(ATTRIBUTE_MANIFEST_FILE_TYPE).getNodeValue();
                 String path = attrs.getNamedItem(ATTRIBUTE_MANIFEST_FILE_PATH).getNodeValue();
-
-
+                
+                
                 /*
                  * According to OpenOffice.org XML File Format document (ver. 1)
                  * there are only two types of embedded object:
@@ -328,7 +328,7 @@ public abstract class OfficeDocument
                  * The former are represented by one or more XML files.
                  * The latter are in binary form.
                  */
-                if (type.startsWith("application/vnd.sun.xml"))
+                if (type.startsWith("application/vnd.sun.xml"))       
                 {
                     if (path.equals("/")) {
                         // Exclude the main document entries
@@ -343,34 +343,34 @@ public abstract class OfficeDocument
                     // document entries
                     continue;
                 }
-                else { // FIX (HJ): allows empty MIME type
+                else { // FIX (HJ): allows empty MIME type      
                     embeddedObjects.put(path, new EmbeddedBinaryObject(path, type, zip));
                 }
             }
         }
-
+        
         return embeddedObjects.values().iterator();
     }
-
+    
     /**
      * Returns the embedded object corresponding to the name provided.
-     * The name should be stripped of any preceding path characters, such as
+     * The name should be stripped of any preceding path characters, such as 
      * '/', '.' or '#'.
      *
      * @param   name    The name of the embedded object to retrieve.
      *
-     * @return  An <code>EmbeddedObject</code> instance representing the named
+     * @return  An <code>EmbeddedObject</code> instance representing the named 
      *          object.
      */
     public EmbeddedObject getEmbeddedObject(String name) {
         if (name == null) {
             return null;
         }
-
+        
         if (embeddedObjects == null) {
             getEmbeddedObjects();
         }
-
+        
         if (embeddedObjects.containsKey(name)) {
             return (EmbeddedObject)embeddedObjects.get(name);
         }
@@ -378,8 +378,8 @@ public abstract class OfficeDocument
             return null;
         }
     }
-
-
+    
+    
     /**
      * Adds a new embedded object to the document.
      *
@@ -389,15 +389,15 @@ public abstract class OfficeDocument
         if (embObj == null) {
             return;
         }
-
+        
         if (embeddedObjects == null) {
             embeddedObjects = new HashMap();
         }
-
+        
         embeddedObjects.put(embObj.getName(), embObj);
     }
-
-
+    
+    
     /**
      *  Read the Office <code>Document</code> from the given
      *  <code>InputStream</code>.
@@ -487,12 +487,12 @@ public abstract class OfficeDocument
             }
         }
 
-
+        
         // Read in the META-INF/manifest.xml file
         byte manifestBytes[] = zip.getManifestXMLBytes();
-
+        
         if (manifestBytes != null) {
-
+            
             try {
                 manifestDoc = parse(builder, manifestBytes);
             } catch (SAXException ex) {
@@ -508,7 +508,7 @@ public abstract class OfficeDocument
      *  <code>InputStream</code>.
      *
      *  @param  is  Office document <code>InputStream</code>.
-     *  @param  isZip <code>boolean</code> Identifies whether
+     *  @param  isZip <code>boolean</code> Identifies whether 
      *                 a file is zipped or not
      *
      *  @throws  IOException  If any I/O error occurs.
@@ -524,18 +524,22 @@ public abstract class OfficeDocument
         } catch (ParserConfigurationException ex) {
             throw new OfficeDocumentException(ex);
         }
-
+    
     if (isZip)
     {
             read(is);
     }
     else{
         try{
+        //System.out.println("\nParsing Input stream, validating?: "+builder.isValidating());
+        //contentDoc=  builder.parse((InputStream)is);
+
                Reader r = secondHack(is);
                InputSource ins = new InputSource(r);
             org.w3c.dom.Document newDoc = builder.parse(ins);
+            //org.w3c.dom.Document newDoc = builder.parse((InputStream)is);
             Element rootElement=newDoc.getDocumentElement();
-
+                
             NodeList nodeList;
             Node tmpNode;
             Node rootNode = (Node)rootElement;
@@ -544,38 +548,38 @@ public abstract class OfficeDocument
                    contentDoc = createDOM(TAG_OFFICE_DOCUMENT_CONTENT);
                    rootElement=contentDoc.getDocumentElement();
                    rootNode = (Node)rootElement;
-
+                   
                    // FIX (HJ): Include office:font-decls in content DOM
                    nodeList= newDoc.getElementsByTagName(TAG_OFFICE_FONT_DECLS);
                    if (nodeList.getLength()>0){
                        tmpNode = contentDoc.importNode(nodeList.item(0),true);
                        rootNode.appendChild(tmpNode);
                    }
-
+                   
                    nodeList= newDoc.getElementsByTagName(TAG_OFFICE_AUTOMATIC_STYLES);
                    if (nodeList.getLength()>0){
                   tmpNode = contentDoc.importNode(nodeList.item(0),true);
                   rootNode.appendChild(tmpNode);
                    }
-
+                   
                     nodeList= newDoc.getElementsByTagName(TAG_OFFICE_BODY);
                    if (nodeList.getLength()>0){
                   tmpNode = contentDoc.importNode(nodeList.item(0),true);
                   rootNode.appendChild(tmpNode);
                    }
-
+                  
            /*Styles*/
                    styleDoc = createDOM(TAG_OFFICE_DOCUMENT_STYLES);
                    rootElement=styleDoc.getDocumentElement();
                    rootNode = (Node)rootElement;
-
+                   
                    // FIX (HJ): Include office:font-decls in styles DOM
                    nodeList= newDoc.getElementsByTagName(TAG_OFFICE_FONT_DECLS);
                    if (nodeList.getLength()>0){
                       tmpNode = styleDoc.importNode(nodeList.item(0),true);
                       rootNode.appendChild(tmpNode);
                    }
-
+                   
                    nodeList= newDoc.getElementsByTagName(TAG_OFFICE_STYLES);
                    if (nodeList.getLength()>0){
                   tmpNode = styleDoc.importNode(nodeList.item(0),true);
@@ -588,7 +592,7 @@ public abstract class OfficeDocument
                       tmpNode = styleDoc.importNode(nodeList.item(0),true);
                       rootNode.appendChild(tmpNode);
                    }
-
+                   
                    // FIX (HJ): Include office:master-styles in styles DOM
                    nodeList= newDoc.getElementsByTagName(TAG_OFFICE_MASTER_STYLES);
                    if (nodeList.getLength()>0){
@@ -604,7 +608,7 @@ public abstract class OfficeDocument
                    if (nodeList.getLength()>0){
                   tmpNode = settingsDoc.importNode(nodeList.item(0),true);
                   rootNode.appendChild(tmpNode);
-                   }
+                   } 
            /*Meta*/
                    metaDoc = createDOM(TAG_OFFICE_DOCUMENT_META);
                    rootElement=metaDoc.getDocumentElement();
@@ -613,14 +617,14 @@ public abstract class OfficeDocument
                    if (nodeList.getLength()>0){
                   tmpNode = metaDoc.importNode(nodeList.item(0),true);
                   rootNode.appendChild(tmpNode);
-                   }
+                   } 
                 }
         }
         catch (SAXException ex) {
         throw new OfficeDocumentException(ex);
         }
     }
-
+      
     }
 
 
@@ -652,9 +656,9 @@ public abstract class OfficeDocument
 
         return doc;
     }
-
-
-    /**
+    
+    
+    /** 
      * Method to return the MIME type of the document.
      *
      * @return  String  The document's MIME type.
@@ -670,67 +674,67 @@ public abstract class OfficeDocument
      *  @throws  IOException  If any I/O error occurs.
      */
     public void write(OutputStream os) throws IOException {
-        if (zip == null) {
+        if (zip == null) {	
             zip = new OfficeZip();
         }
-
+        
         initManifestDOM();
-
+        
         Element domEntry;
         Element manifestRoot = manifestDoc.getDocumentElement();
-
+                   
         // The EmbeddedObjects come first.
         Iterator embObjs = getEmbeddedObjects();
         while (embObjs.hasNext()) {
             EmbeddedObject obj = (EmbeddedObject)embObjs.next();
             obj.writeManifestData(manifestDoc);
-
+            
             obj.write(zip);
         }
-
+        
         // Add in the entry for the Pictures directory.  Always present.
         domEntry = manifestDoc.createElement(TAG_MANIFEST_FILE);
         domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_PATH, "Pictures/");
         domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_TYPE, "");
         manifestRoot.appendChild(domEntry);
-
+        
     // Write content to the Zip file and then write any of the optional
         // data, if it exists.
     zip.setContentXMLBytes(docToBytes(contentDoc));
-
+        
         domEntry = manifestDoc.createElement(TAG_MANIFEST_FILE);
         domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_PATH, "content.xml");
         domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_TYPE, "text/xml");
-
+               
         manifestRoot.appendChild(domEntry);
-
+        
     if (styleDoc != null) {
             zip.setStyleXMLBytes(docToBytes(styleDoc));
-
+            
             domEntry = manifestDoc.createElement(TAG_MANIFEST_FILE);
             domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_PATH, "styles.xml");
             domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_TYPE, "text/xml");
             manifestRoot.appendChild(domEntry);
         }
-
+        
         if (metaDoc != null) {
             zip.setMetaXMLBytes(docToBytes(metaDoc));
-
+            
             domEntry = manifestDoc.createElement(TAG_MANIFEST_FILE);
-            domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_PATH, "meta.xml");
+            domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_PATH, "meta.xml");            
             domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_TYPE, "text/xml");
             manifestRoot.appendChild(domEntry);
         }
-
+        
         if (settingsDoc != null) {
             zip.setSettingsXMLBytes(docToBytes(settingsDoc));
-
+            
             domEntry = manifestDoc.createElement(TAG_MANIFEST_FILE);
             domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_PATH, "settings.xml");
             domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_TYPE, "text/xml");
             manifestRoot.appendChild(domEntry);
         }
-
+        
         zip.setManifestXMLBytes(docToBytes(manifestDoc));
 
         zip.write(os);
@@ -758,35 +762,35 @@ public abstract class OfficeDocument
         DOMImplementation domImpl = builder.getDOMImplementation();
         DocumentType docType =domImpl.createDocumentType("office:document","-//OpenOffice.org//DTD OfficeDocument 1.0//EN",null);
         org.w3c.dom.Document newDoc = domImpl.createDocument("http://openoffice.org/2000/office","office:document",null);
-
-
+        
+        
         Element rootElement=newDoc.getDocumentElement();
-        rootElement.setAttribute("xmlns:office","http://openoffice.org/2000/office");
-        rootElement.setAttribute("xmlns:style","http://openoffice.org/2000/style" );
-        rootElement.setAttribute("xmlns:text","http://openoffice.org/2000/text");
-        rootElement.setAttribute("xmlns:table","http://openoffice.org/2000/table");
-
-        rootElement.setAttribute("xmlns:draw","http://openoffice.org/2000/drawing");
-        rootElement.setAttribute("xmlns:fo","http://www.w3.org/1999/XSL/Format" );
-        rootElement.setAttribute("xmlns:xlink","http://www.w3.org/1999/xlink" );
-        rootElement.setAttribute("xmlns:dc","http://purl.org/dc/elements/1.1/" );
-        rootElement.setAttribute("xmlns:meta","http://openoffice.org/2000/meta" );
-        rootElement.setAttribute("xmlns:number","http://openoffice.org/2000/datastyle" );
-        rootElement.setAttribute("xmlns:svg","http://www.w3.org/2000/svg" );
-        rootElement.setAttribute("xmlns:chart","http://openoffice.org/2000/chart" );
-        rootElement.setAttribute("xmlns:dr3d","http://openoffice.org/2000/dr3d" );
-        rootElement.setAttribute("xmlns:math","http://www.w3.org/1998/Math/MathML" );
-        rootElement.setAttribute("xmlns:form","http://openoffice.org/2000/form" );
-        rootElement.setAttribute("xmlns:script","http://openoffice.org/2000/script" );
-        rootElement.setAttribute("xmlns:config","http://openoffice.org/2001/config" );
+        rootElement.setAttribute("xmlns:office","http://openoffice.org/2000/office"); 
+        rootElement.setAttribute("xmlns:style","http://openoffice.org/2000/style" ); 
+        rootElement.setAttribute("xmlns:text","http://openoffice.org/2000/text"); 
+        rootElement.setAttribute("xmlns:table","http://openoffice.org/2000/table"); 
+        
+        rootElement.setAttribute("xmlns:draw","http://openoffice.org/2000/drawing"); 
+        rootElement.setAttribute("xmlns:fo","http://www.w3.org/1999/XSL/Format" ); 
+        rootElement.setAttribute("xmlns:xlink","http://www.w3.org/1999/xlink" ); 
+        rootElement.setAttribute("xmlns:dc","http://purl.org/dc/elements/1.1/" ); 
+        rootElement.setAttribute("xmlns:meta","http://openoffice.org/2000/meta" ); 
+        rootElement.setAttribute("xmlns:number","http://openoffice.org/2000/datastyle" ); 
+        rootElement.setAttribute("xmlns:svg","http://www.w3.org/2000/svg" ); 
+        rootElement.setAttribute("xmlns:chart","http://openoffice.org/2000/chart" ); 
+        rootElement.setAttribute("xmlns:dr3d","http://openoffice.org/2000/dr3d" ); 
+        rootElement.setAttribute("xmlns:math","http://www.w3.org/1998/Math/MathML" ); 
+        rootElement.setAttribute("xmlns:form","http://openoffice.org/2000/form" ); 
+        rootElement.setAttribute("xmlns:script","http://openoffice.org/2000/script" ); 
+        rootElement.setAttribute("xmlns:config","http://openoffice.org/2001/config" ); 
         // #i41033# OASIS format needs the "office:class" set.
         if(getDocumentMimeType() == SXC_MIME_TYPE)
-            rootElement.setAttribute("office:class","spreadsheet" );
+            rootElement.setAttribute("office:class","spreadsheet" ); 
         else if(getDocumentMimeType() == SXW_MIME_TYPE)
-            rootElement.setAttribute("office:class","text" );
-        rootElement.setAttribute("office:version","1.0");
-
-
+            rootElement.setAttribute("office:class","text" ); 
+        rootElement.setAttribute("office:version","1.0"); 
+            
+        
         NodeList nodeList;
         Node tmpNode;
         Node rootNode = (Node)rootElement;
@@ -801,8 +805,8 @@ public abstract class OfficeDocument
             if (nodeList.getLength()>0){
             tmpNode = newDoc.importNode(nodeList.item(0),true);
             rootNode.appendChild(tmpNode);
-                }
-
+                } 
+            
         }if (settingsDoc !=null){
             nodeList= settingsDoc.getElementsByTagName(TAG_OFFICE_SETTINGS);
             if (nodeList.getLength()>0){
@@ -816,20 +820,22 @@ public abstract class OfficeDocument
             tmpNode = newDoc.importNode(nodeList.item(0),true);
                  rootNode.appendChild(tmpNode);
             }
-
-            nodeList= contentDoc.getElementsByTagName(TAG_OFFICE_BODY);
+            
+            nodeList= contentDoc.getElementsByTagName(TAG_OFFICE_BODY);  
             if (nodeList.getLength()>0){
             tmpNode = newDoc.importNode(nodeList.item(0),true);
             rootNode.appendChild(tmpNode);
             }
         }
-
+        
         byte contentBytes[] = docToBytes(newDoc);
+        //System.out.println(new String(contentBytes));
         os.write(contentBytes);
-            }
+            } 
             catch(Exception exc){
         System.out.println("\nException in OfficeDocument.write():" +exc);
             }
+        //byte contentBytes[] = docToBytes(contentDoc);
     }
     }
 
@@ -855,9 +861,9 @@ public abstract class OfficeDocument
 
         java.lang.reflect.Constructor con;
         java.lang.reflect.Method meth;
-
+        
         String domImpl = doc.getClass().getName();
-
+        
         /*
          * We may have multiple XML parsers in the Classpath.
          * Depending on which one is first, the actual type of
@@ -868,53 +874,53 @@ public abstract class OfficeDocument
         try {
             // First of all try for JAXP 1.0
             if (domImpl.equals("com.sun.xml.tree.XmlDocument")) {
-
+                
                 Debug.log(Debug.INFO, "Using JAXP");
-
+                
                 Class jaxpDoc = Class.forName("com.sun.xml.tree.XmlDocument");
-
+            
                 // The method is in the XMLDocument class itself, not a helper
-                meth = jaxpDoc.getMethod("write",
+                meth = jaxpDoc.getMethod("write", 
                             new Class[] { Class.forName("java.io.OutputStream") } );
-
+                                     
                 meth.invoke(doc, new Object [] { baos } );
             }
          else if (domImpl.equals("org.apache.crimson.tree.XmlDocument"))
         {
                 Debug.log(Debug.INFO, "Using Crimson");
-
+                
          Class crimsonDoc = Class.forName("org.apache.crimson.tree.XmlDocument");
          // The method is in the XMLDocument class itself, not a helper
-                meth = crimsonDoc.getMethod("write",
+                meth = crimsonDoc.getMethod("write", 
                             new Class[] { Class.forName("java.io.OutputStream") } );
-
-                meth.invoke(doc, new Object [] { baos } );
+                                     
+                meth.invoke(doc, new Object [] { baos } );  
         }
-            else if (domImpl.equals("org.apache.xerces.dom.DocumentImpl")
+            else if (domImpl.equals("org.apache.xerces.dom.DocumentImpl") 
             || domImpl.equals("org.apache.xerces.dom.DeferredDocumentImpl")) {
-
+                
                 Debug.log(Debug.INFO, "Using Xerces");
-
+                
                 // Try for Xerces
-                Class xercesSer =
+                Class xercesSer = 
                         Class.forName("org.apache.xml.serialize.XMLSerializer");
-
+                
                 // Get the OutputStream constructor
                 // May want to use the OutputFormat parameter at some stage too
-                con = xercesSer.getConstructor(new Class []
+                con = xercesSer.getConstructor(new Class [] 
                         { Class.forName("java.io.OutputStream"),
                           Class.forName("org.apache.xml.serialize.OutputFormat") } );
-
-
+                              
+                
                 // Get the serialize method
-                meth = xercesSer.getMethod("serialize",
-                            new Class [] { Class.forName("org.w3c.dom.Document") } );
-
-
+                meth = xercesSer.getMethod("serialize", 
+                            new Class [] { Class.forName("org.w3c.dom.Document") } );                                           
+                                           
+                          
                 // Get an instance
                 Object serializer = con.newInstance(new Object [] { baos, null } );
-
-
+                
+                
                 // Now call serialize to write the document
                 meth.invoke(serializer, new Object [] { doc } );
             }
@@ -926,7 +932,7 @@ public abstract class OfficeDocument
                 // Get the serialize method
                 meth = gnuSer.getMethod("serialize",
                             new Class [] { Class.forName("org.w3c.dom.Node"),
-                            Class.forName("java.io.OutputStream") } );
+                            Class.forName("java.io.OutputStream") } ); 
 
                 // Get an instance
                 Object serializer = gnuSer.newInstance();
@@ -945,7 +951,7 @@ public abstract class OfficeDocument
             return writer.toString().getBytes();
             }
                 catch (Exception e) {
-                    // We don't have another parser
+                    // We don't have another parser  
                     throw new IOException("No appropriate API (JAXP/Xerces) to serialize XML document: " + domImpl);
                 }
             }
@@ -975,7 +981,7 @@ public abstract class OfficeDocument
 
         contentDoc = createDOM(TAG_OFFICE_DOCUMENT_CONTENT);
 
-        // this is a work-around for a bug in Office6.0 - not really
+        // this is a work-around for a bug in Office6.0 - not really 
         // needed but StarCalc 6.0 will crash without this tag.
         Element root = contentDoc.getDocumentElement();
 
@@ -999,7 +1005,7 @@ public abstract class OfficeDocument
 
         settingsDoc = createSettingsDOM(TAG_OFFICE_DOCUMENT_SETTINGS);
 
-        // this is a work-around for a bug in Office6.0 - not really
+        // this is a work-around for a bug in Office6.0 - not really 
         // needed but StarCalc 6.0 will crash without this tag.
         Element root = settingsDoc.getDocumentElement();
 
@@ -1198,7 +1204,7 @@ public abstract class OfficeDocument
      *
      *  <p>This hacked code needs to be changed later on.</p>
      *
-     *  <p>Issue: the new oasis input file stream means
+     *  <p>Issue: the new oasis input file stream means 
      *  that the old input stream fails. see #i33702# </p>
      *
      *  @param  is  <code>InputStream</code> to be filtered.
@@ -1215,7 +1221,7 @@ public abstract class OfficeDocument
         int n = 0;
         while ((n=br.read(charArray, 0, charArray.length)) > 0)
             sBuf.append(charArray, 0, n);
-
+        
         // ensure there is no trailing garbage after the end of the stream.
         int sIndex = sBuf.lastIndexOf("</office:document>");
         sBuf.delete(sIndex, sBuf.length());
@@ -1223,36 +1229,36 @@ public abstract class OfficeDocument
         StringReader r = new StringReader(sBuf.toString());
         return r;
     }
-
-
+    
+    
     /**
      * Method to create the initial entries in the manifest.xml file stored
      * in an SX? file.
      */
     private void initManifestDOM() throws IOException {
-
+    
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
             DOMImplementation domImpl = builder.getDOMImplementation();
 
-            DocumentType docType = domImpl.createDocumentType(TAG_MANIFEST_ROOT,
-                                        "-//OpenOffice.org//DTD Manifest 1.0//EN",
+            DocumentType docType = domImpl.createDocumentType(TAG_MANIFEST_ROOT, 
+                                        "-//OpenOffice.org//DTD Manifest 1.0//EN", 
                                         "Manifest.dtd");
         manifestDoc = domImpl.createDocument("manifest", TAG_MANIFEST_ROOT, docType);
         } catch (ParserConfigurationException ex) {
             throw new OfficeDocumentException(ex);
         }
-
+        
         // Add the <manifest:manifest> entry
         Element manifestRoot = manifestDoc.getDocumentElement();
-
-        manifestRoot.setAttribute("xmlns:manifest", "http://openoffice.org/2001/manifest");
-
-        Element docRoot = manifestDoc.createElement(TAG_MANIFEST_FILE);
+        
+        manifestRoot.setAttribute("xmlns:manifest", "http://openoffice.org/2001/manifest");       
+        
+        Element docRoot = manifestDoc.createElement(TAG_MANIFEST_FILE);       
 
         docRoot.setAttribute(ATTRIBUTE_MANIFEST_FILE_PATH, "/");
         docRoot.setAttribute(ATTRIBUTE_MANIFEST_FILE_TYPE, getDocumentMimeType());
-
+        
         manifestRoot.appendChild(docRoot);
     }
 }

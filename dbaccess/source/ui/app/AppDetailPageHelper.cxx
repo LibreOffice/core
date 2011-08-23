@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,7 +139,7 @@ namespace
     class OTablePreviewWindow : public Window
     {
         DECL_LINK(OnDisableInput, void*);
-        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+        void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt);
     public:
@@ -162,7 +162,7 @@ namespace
     // -----------------------------------------------------------------------------
     IMPL_LINK(OTablePreviewWindow, OnDisableInput, void*, EMPTYARG)
     {
-        EnableInput(sal_False);
+        EnableInput(FALSE);
         return 0L;
     }
     // -----------------------------------------------------------------------------
@@ -193,7 +193,7 @@ namespace
         {
             SetTextColor( rStyleSettings.GetFieldTextColor() );
             SetTextFillColor();
-        }
+        } // if( bForeground || bFont )
 
         if( bBackground )
             SetBackground( rStyleSettings.GetFieldColor() );
@@ -225,7 +225,7 @@ OAppDetailPageHelper::OAppDetailPageHelper(Window* _pParent,OAppBorderWindow& _r
     m_aTBPreview.SetHelpId(HID_APP_VIEW_PREVIEW_CB);
     m_aTBPreview.SetDropdownClickHdl( LINK( this, OAppDetailPageHelper, OnDropdownClickHdl ) );
     m_aTBPreview.EnableMenuStrings();
-    m_aTBPreview.Enable(sal_True);
+    m_aTBPreview.Enable(TRUE);
 
     m_aBorder.SetUniqueId(UID_APP_VIEW_PREVIEW_1);
 
@@ -254,7 +254,7 @@ OAppDetailPageHelper::~OAppDetailPageHelper()
     }
     catch(Exception)
     {
-        OSL_FAIL("Exception thrown while disposing preview frame!");
+        OSL_ENSURE(0,"Exception thrown while disposing preview frame!");
     }
 
     for (int i=0; i < E_ELEMENT_TYPE_COUNT; ++i)
@@ -289,7 +289,7 @@ void OAppDetailPageHelper::selectAll()
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
-        m_pLists[nPos]->SelectAll(sal_True);
+        m_pLists[nPos]->SelectAll(TRUE);
     }
 }
 // -----------------------------------------------------------------------------
@@ -374,7 +374,7 @@ void OAppDetailPageHelper::describeCurrentSelectionForControl( const Control& _r
             return;
         }
     }
-    OSL_FAIL( "OAppDetailPageHelper::describeCurrentSelectionForControl: invalid control!" );
+    OSL_ENSURE( false, "OAppDetailPageHelper::describeCurrentSelectionForControl: invalid control!" );
 }
 
 // -----------------------------------------------------------------------------
@@ -430,7 +430,7 @@ void OAppDetailPageHelper::describeCurrentSelectionForType( const ElementType _e
         }
         break;
         default:
-            OSL_FAIL( "OAppDetailPageHelper::describeCurrentSelectionForType: unexpected type!" );
+            OSL_ENSURE( false, "OAppDetailPageHelper::describeCurrentSelectionForType: unexpected type!" );
             break;
         }
 
@@ -453,7 +453,7 @@ void OAppDetailPageHelper::selectElements(const Sequence< ::rtl::OUString>& _aNa
     if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
         DBTreeListBox& rTree = *m_pLists[nPos];
-        rTree.SelectAll(sal_False);
+        rTree.SelectAll(FALSE);
         const ::rtl::OUString* pIter = _aNames.getConstArray();
         const ::rtl::OUString* pEnd  = pIter + _aNames.getLength();
         for(;pIter != pEnd;++pIter)
@@ -543,11 +543,13 @@ sal_Bool OAppDetailPageHelper::isCutAllowed()
 // -----------------------------------------------------------------------------
 sal_Bool OAppDetailPageHelper::isCopyAllowed()
 {
+    //int nPos = getVisibleControlIndex();
     return sal_True;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OAppDetailPageHelper::isPasteAllowed()
 {
+    //int nPos = getVisibleControlIndex();
     return sal_True;
 }
 // -----------------------------------------------------------------------------
@@ -602,7 +604,7 @@ SvLBoxEntry* OAppDetailPageHelper::getEntry( const Point& _aPosPixel) const
     SvLBoxEntry* pReturn = NULL;
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
-        pReturn = m_pLists[nPos]->GetEntry( _aPosPixel,sal_True );
+        pReturn = m_pLists[nPos]->GetEntry( _aPosPixel,TRUE );
     return pReturn;
 }
 // -----------------------------------------------------------------------------
@@ -621,7 +623,8 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
 
         ImageProvider aImageProvider( _xConnection );
         createTree( pTreeView,
-            aImageProvider.getDefaultImage( DatabaseObject::TABLE )
+            aImageProvider.getDefaultImage( DatabaseObject::TABLE, false ),
+            aImageProvider.getDefaultImage( DatabaseObject::TABLE, true )
         );
 
         pTreeView->notifyHiContrastChanged();
@@ -634,17 +637,17 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
         SvLBoxEntry* pEntry = m_pLists[E_TABLE]->First();
         if ( pEntry )
             m_pLists[E_TABLE]->Expand(pEntry);
-        m_pLists[E_TABLE]->SelectAll(sal_False);
+        m_pLists[E_TABLE]->SelectAll(FALSE);
     }
 
     setDetailPage(m_pLists[E_TABLE]);
 }
 
 // -----------------------------------------------------------------------------
-void OAppDetailPageHelper::getElementIcons( ElementType _eType, sal_uInt16& _rImageId)
+void OAppDetailPageHelper::getElementIcons( ElementType _eType, USHORT& _rImageId, USHORT& _rHighContrastImageId )
 {
     ImageProvider aImageProvider;
-    _rImageId = 0;
+    _rImageId = _rHighContrastImageId = 0;
 
     sal_Int32 nDatabaseObjectType( 0 );
     switch(_eType )
@@ -653,10 +656,11 @@ void OAppDetailPageHelper::getElementIcons( ElementType _eType, sal_uInt16& _rIm
         case E_REPORT:  nDatabaseObjectType = DatabaseObject::REPORT; break;
         case E_QUERY:   nDatabaseObjectType = DatabaseObject::QUERY; break;
         default:
-            OSL_FAIL( "OAppDetailPageHelper::GetElementIcons: invalid element type!" );
+            OSL_ENSURE( sal_False, "OAppDetailPageHelper::GetElementIcons: invalid element type!" );
             return;
     }
-    _rImageId = aImageProvider.getDefaultImageResourceID( nDatabaseObjectType );
+    _rImageId = aImageProvider.getDefaultImageResourceID( nDatabaseObjectType, false );
+    _rHighContrastImageId = aImageProvider.getDefaultImageResourceID( nDatabaseObjectType, true );
 }
 
 // -----------------------------------------------------------------------------
@@ -664,41 +668,43 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
 {
     OSL_ENSURE(E_TABLE != _eType,"E_TABLE isn't allowed.");
 
-    sal_uInt16 nImageId = 0;
-    rtl::OString sHelpId;
+    USHORT nHelpId = 0, nImageId = 0, nImageIdH = 0;
     ImageProvider aImageProvider;
-    Image aFolderImage;
+    Image aFolderImage, aFolderImageHC;
     switch( _eType )
     {
         case E_FORM:
-            sHelpId = HID_APP_FORM_TREE;
-            aFolderImage = aImageProvider.getFolderImage( DatabaseObject::FORM );
+            nHelpId = HID_APP_FORM_TREE;
+            aFolderImage = aImageProvider.getFolderImage( DatabaseObject::FORM, false );
+            aFolderImageHC = aImageProvider.getFolderImage( DatabaseObject::FORM, true );
             break;
         case E_REPORT:
-            sHelpId = HID_APP_REPORT_TREE;
-            aFolderImage = aImageProvider.getFolderImage( DatabaseObject::REPORT );
+            nHelpId = HID_APP_REPORT_TREE;
+            aFolderImage = aImageProvider.getFolderImage( DatabaseObject::REPORT, false );
+            aFolderImageHC = aImageProvider.getFolderImage( DatabaseObject::REPORT, true );
             break;
         case E_QUERY:
-            sHelpId = HID_APP_QUERY_TREE;
-            aFolderImage = aImageProvider.getFolderImage( DatabaseObject::QUERY );
+            nHelpId = HID_APP_QUERY_TREE;
+            aFolderImage = aImageProvider.getFolderImage( DatabaseObject::QUERY, false );
+            aFolderImageHC = aImageProvider.getFolderImage( DatabaseObject::QUERY, true );
             break;
         default:
-            OSL_FAIL("Illegal call!");
+            OSL_ENSURE(0,"Illegal call!");
     }
-    getElementIcons( _eType, nImageId );
+    getElementIcons( _eType, nImageId, nImageIdH );
 
     if ( !m_pLists[_eType] )
     {
-        m_pLists[_eType] = createSimpleTree( sHelpId, aFolderImage );
+        m_pLists[_eType] = createSimpleTree( nHelpId, aFolderImage, aFolderImageHC );
     }
 
     if ( m_pLists[_eType] )
     {
         if ( !m_pLists[_eType]->GetEntryCount() && _xContainer.is() )
         {
-            fillNames( _xContainer, _eType, nImageId, NULL );
+            fillNames( _xContainer, _eType, nImageId, nImageIdH, NULL );
 
-            m_pLists[_eType]->SelectAll(sal_False);
+            m_pLists[_eType]->SelectAll(FALSE);
         }
         setDetailPage(m_pLists[_eType]);
     }
@@ -712,7 +718,7 @@ void OAppDetailPageHelper::setDetailPage(Window* _pWindow)
         pCurrent->Hide();
 
     showPreview(NULL);
-    sal_Bool bHasFocus = sal_False;
+    BOOL bHasFocus = FALSE;
     m_aFL.Show();
     {
         bHasFocus = pCurrent->HasChildPathFocus();
@@ -720,7 +726,7 @@ void OAppDetailPageHelper::setDetailPage(Window* _pWindow)
     }
     m_aTBPreview.Show();
     m_aBorder.Show();
-    switchPreview(m_ePreviewMode,sal_True);
+    switchPreview(m_ePreviewMode,TRUE);
 
     if ( bHasFocus )
         _pWindow->GrabFocus();
@@ -744,7 +750,7 @@ namespace
 
 // -----------------------------------------------------------------------------
 void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContainer, const ElementType _eType,
-                                      const sal_uInt16 _nImageId, SvLBoxEntry* _pParent )
+                                      const USHORT _nImageId, const USHORT _nHighContrastImageId, SvLBoxEntry* _pParent )
 {
     OSL_ENSURE(_xContainer.is(),"Data source is NULL! -> GPF");
     OSL_ENSURE( ( _eType >= E_TABLE ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OAppDetailPageHelper::fillNames: invalid type!" );
@@ -767,41 +773,47 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
             Reference<XNameAccess> xSubElements(_xContainer->getByName(*pIter),UNO_QUERY);
             if ( xSubElements.is() )
             {
-                pEntry = pList->InsertEntry( *pIter, _pParent, sal_False, LIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
+                pEntry = pList->InsertEntry( *pIter, _pParent, FALSE, LIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
                 getBorderWin().getView()->getAppController().containerFound( Reference< XContainer >( xSubElements, UNO_QUERY ) );
-                fillNames( xSubElements, _eType, _nImageId, pEntry );
+                fillNames( xSubElements, _eType, _nImageId, _nHighContrastImageId, pEntry );
             }
             else
             {
                 pEntry = pList->InsertEntry( *pIter, _pParent );
 
                 Image aImage = Image( ModuleRes( _nImageId ) );
-                pList->SetExpandedEntryBmp(  pEntry, aImage );
-                pList->SetCollapsedEntryBmp( pEntry, aImage );
+                pList->SetExpandedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
+                pList->SetCollapsedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
+
+                Image aHCImage = Image( ModuleRes( _nHighContrastImageId ) );
+                pList->SetExpandedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
+                pList->SetCollapsedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
             }
         }
     }
 }
 // -----------------------------------------------------------------------------
-DBTreeListBox* OAppDetailPageHelper::createSimpleTree( const rtl::OString& _sHelpId, const Image& _rImage)
+DBTreeListBox* OAppDetailPageHelper::createSimpleTree( ULONG _nHelpId, const Image& _rImage, const Image& _rImageHC )
 {
     DBTreeListBox* pTreeView = new DBTreeListBox(this,getBorderWin().getView()->getORB(),WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
-    pTreeView->SetHelpId( _sHelpId );
-    return createTree( pTreeView, _rImage );
+    pTreeView->SetHelpId(_nHelpId);
+    return createTree( pTreeView, _rImage, _rImageHC );
 }
 
 // -----------------------------------------------------------------------------
-DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, const Image& _rImage )
+DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, const Image& _rImage, const Image& _rImageHC )
 {
     WaitObject aWaitCursor(this);
 
-    _pTreeView->SetStyle(_pTreeView->GetStyle() | WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
+    _pTreeView->SetWindowBits(WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
     _pTreeView->GetModel()->SetSortMode(SortAscending);
     _pTreeView->EnableCheckButton( NULL ); // do not show any buttons
     _pTreeView->SetSelectionMode(MULTIPLE_SELECTION);
 
     _pTreeView->SetDefaultCollapsedEntryBmp( _rImage );
+    _pTreeView->SetDefaultCollapsedEntryBmp( _rImageHC, BMP_COLOR_HIGHCONTRAST );
     _pTreeView->SetDefaultExpandedEntryBmp( _rImage );
+    _pTreeView->SetDefaultExpandedEntryBmp( _rImageHC, BMP_COLOR_HIGHCONTRAST );
 
     _pTreeView->SetDoubleClickHdl(LINK(this, OAppDetailPageHelper, OnEntryDoubleClick));
     _pTreeView->SetEnterKeyHdl(LINK(this, OAppDetailPageHelper, OnEntryDoubleClick));
@@ -860,7 +872,7 @@ void OAppDetailPageHelper::elementReplaced(ElementType _eType
                 pEntry = lcl_findEntry(*pTreeView,_rOldName,pTreeView->First());
                 break;
             default:
-                OSL_FAIL("Invalid element type");
+                OSL_ENSURE(0,"Invalid element type");
         }
         OSL_ENSURE(pEntry,"Do you know that the name isn't existence!");
         if ( pEntry )
@@ -893,22 +905,26 @@ SvLBoxEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const ::rtl::
             }
         }
 
-        sal_uInt16 nImageId = 0;
-        getElementIcons( _eType, nImageId );
+        USHORT nImageId = 0, nImageIdH = 0;
+        getElementIcons( _eType, nImageId, nImageIdH );
         Reference<XNameAccess> xContainer(_rObject,UNO_QUERY);
         if ( xContainer.is() )
         {
             const sal_Int32 nFolderIndicator = lcl_getFolderIndicatorForType( _eType );
-            pRet = pTreeView->InsertEntry( _rName, pEntry, sal_False, LIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
-            fillNames( xContainer, _eType, nImageId, pRet );
+            pRet = pTreeView->InsertEntry( _rName, pEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
+            fillNames( xContainer, _eType, nImageId, nImageIdH, pRet );
         }
         else
         {
             pRet = pTreeView->InsertEntry( _rName, pEntry );
 
             Image aImage = Image( ModuleRes( nImageId ) );
-            pTreeView->SetExpandedEntryBmp(  pRet, aImage );
-            pTreeView->SetCollapsedEntryBmp( pRet, aImage );
+            pTreeView->SetExpandedEntryBmp( pRet, aImage, BMP_COLOR_NORMAL );
+            pTreeView->SetCollapsedEntryBmp( pRet, aImage, BMP_COLOR_NORMAL );
+
+            Image aHCImage = Image( ModuleRes( nImageIdH ) );
+            pTreeView->SetExpandedEntryBmp( pRet, aHCImage, BMP_COLOR_HIGHCONTRAST );
+            pTreeView->SetCollapsedEntryBmp( pRet, aHCImage, BMP_COLOR_HIGHCONTRAST );
         }
     }
     return pRet;
@@ -945,7 +961,7 @@ void OAppDetailPageHelper::elementRemoved( ElementType _eType,const ::rtl::OUStr
                 }
                 break;
             default:
-                OSL_FAIL("Invalid element type");
+                OSL_ENSURE(0,"Invalid element type");
         }
         if ( !pTreeView->GetEntryCount() )
             showPreview(NULL);
@@ -991,7 +1007,8 @@ IMPL_LINK( OAppDetailPageHelper, OnDeleteEntry, void*, /*NOINTERESTEDIN*/ )
 // -----------------------------------------------------------------------------
 void OAppDetailPageHelper::Resize()
 {
-    // parent window dimension
+    //////////////////////////////////////////////////////////////////////
+    // Abmessungen parent window
     Size aOutputSize( GetOutputSize() );
     long nOutputWidth  = aOutputSize.Width();
     long nOutputHeight = aOutputSize.Height();
@@ -1030,7 +1047,7 @@ sal_Bool OAppDetailPageHelper::isPreviewEnabled()
     return m_ePreviewMode != E_PREVIEWNONE;
 }
 // -----------------------------------------------------------------------------
-void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,sal_Bool _bForce)
+void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,BOOL _bForce)
 {
     if ( m_ePreviewMode != _eMode || _bForce )
     {
@@ -1128,6 +1145,12 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
             {
                 m_aPreview.Hide();
                 m_aDocumentInfo.Hide();
+
+                // Why the below code? It might have side effects, as the tree view needs to know
+                // its current selection for other purposes than the preview, too.
+//                DBTreeListBox* pTreeView = getCurrentView();
+//                if ( pTreeView )
+//                    pTreeView->clearCurrentSelection();
             }
         }
         catch( const Exception& )
@@ -1154,9 +1177,9 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
                 m_xFrame = Reference < XFrame > ( getBorderWin().getView()->getORB()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame")) ), UNO_QUERY );
                 m_xFrame->initialize( m_xWindow );
 
-                // no layout manager (and thus no toolbars) in the preview
+                // work-around for #150518#: no layout manager (and thus no toolbars) in the preview
                 // Must be called after initialize ... but before any other call to this frame.
-                // Otherwise frame throws "life time exceptions" as e.g. NON_INITIALIZED
+                // Otherwhise frame throws "life time exceptions" as e.g. NON_INITIALIZED
                 Reference< XPropertySet > xFrameProps( m_xFrame, UNO_QUERY_THROW );
                 xFrameProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ), makeAny(Reference< XLayoutManager >()) );
 
@@ -1255,7 +1278,7 @@ void OAppDetailPageHelper::KeyInput( const KeyEvent& rKEvt )
     OSL_PRECOND( pCurrentView, "OAppDetailPageHelper::KeyInput: how this?" );
 
     KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction(); (void)eFunc;
-    sal_uInt16      nCode = rKEvt.GetKeyCode().GetCode();
+    USHORT      nCode = rKEvt.GetKeyCode().GetCode();
 
     if ( ( KEY_RETURN == nCode ) && pCurrentView )
     {
@@ -1291,25 +1314,34 @@ void OAppDetailPageHelper::DataChanged( const DataChangedEvent& rDCEvt )
 void OAppDetailPageHelper::ImplInitSettings()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    if( true )
+    {
         Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
         SetPointFont( aFont );
         m_aTBPreview.SetPointFont( aFont );
+    }
 
+    if( true )
+    {
         SetTextColor( rStyleSettings.GetFieldTextColor() );
         SetTextFillColor();
         m_aBorder.SetTextColor( rStyleSettings.GetFieldTextColor() );
         m_aBorder.SetTextFillColor();
         m_aTBPreview.SetTextColor( rStyleSettings.GetFieldTextColor() );
         m_aTBPreview.SetTextFillColor();
+    } // if( true )
 
+    if( true )
+    {
         SetBackground( rStyleSettings.GetFieldColor() );
         m_aBorder.SetBackground( rStyleSettings.GetFieldColor() );
         m_aFL.SetBackground( rStyleSettings.GetFieldColor() );
         m_aDocumentInfo.SetBackground( rStyleSettings.GetFieldColor() );
         m_aTBPreview.SetBackground( rStyleSettings.GetFieldColor() );
         m_pTablePreview->SetBackground( rStyleSettings.GetFieldColor() );
+    } // if( true )
 }
 // -----------------------------------------------------------------------------
 OPreviewWindow::OPreviewWindow(Window* _pParent)
@@ -1318,11 +1350,11 @@ OPreviewWindow::OPreviewWindow(Window* _pParent)
     ImplInitSettings( sal_True, sal_True, sal_True );
 }
 // -----------------------------------------------------------------------------
-sal_Bool OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const
+BOOL OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const
 {
     const Size aWinSize( GetOutputSizePixel() );
     Size       aNewSize( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) );
-    sal_Bool       bRet = sal_False;
+    BOOL       bRet = FALSE;
 
     if( aNewSize.Width() && aNewSize.Height() )
     {
@@ -1345,7 +1377,7 @@ sal_Bool OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rect
                              ( aWinSize.Height() - aNewSize.Height() ) >> 1 );
 
         rResultRect = Rectangle( aNewPos, aNewSize );
-        bRet = sal_True;
+        bRet = TRUE;
     }
 
     return bRet;
@@ -1396,7 +1428,7 @@ void OPreviewWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal
     {
         SetTextColor( rStyleSettings.GetFieldTextColor() );
         SetTextFillColor();
-    }
+    } // if( bForeground || bFont )
 
     if( bBackground )
         SetBackground( rStyleSettings.GetFieldColor() );

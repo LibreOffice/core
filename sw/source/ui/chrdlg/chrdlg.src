@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,6 +42,7 @@ InfoBox MSG_ILLEGAL_PAGENUM
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
+    /* ### ACHTUNG: Neuer Text in Resource? Seitennummer kann nicht gesetzt werden. Auf linken Seiten dürfen nur gerade Seitenzahlen, auf rechten Seiten nur ungerade Seitenzahlen verwendet werden. : Seitennummer kann nicht gesetzt werden. Auf linken Seiten d³rfen nur gerade Seitenzahlen, auf rechten Seiten nur ungerade Seitenzahlen verwendet werden. */
     Message [ en-US ] = "Page numbers cannot be applied to the current page.  Even numbers can be used on left pages, odd numbers on right pages." ;
 };
 

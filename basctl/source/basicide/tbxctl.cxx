@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,11 +52,73 @@ SFX_IMPL_TOOLBOX_CONTROL( TbxControls, SfxAllEnumItem )
 
 /*************************************************************************
 |*
+|* WorkWindow Alignment
+|*
+\************************************************************************/
+/*
+IMPL_LINK( PopupWindowTbx, SelectHdl, void*, EMPTYARG )
+{
+    if ( IsInPopupMode() )
+        EndPopupMode();
+
+    aSelectLink.Call( &aTbx.GetToolBox() );
+
+    return 0;
+}
+
+PopupWindowTbx::PopupWindowTbx( USHORT nId, WindowAlign eAlign,
+                                ResId aRIdWin, ResId aRIdTbx,
+                                SfxBindings& rBind ) :
+                SfxPopupWindow	( nId, aRIdWin, rBind ),
+                aTbx			( this, GetBindings(), aRIdTbx )
+{
+    FreeResource();
+    aTbx.Initialize();
+
+    ToolBox& rBox = aTbx.GetToolBox();
+    rBox.SetAlign( eAlign );
+    if( eAlign == WINDOWALIGN_LEFT )
+        SetText( String() );
+
+    Size aSize = aTbx.CalcWindowSizePixel();
+    rBox.SetSizePixel( aSize );
+    SetOutputSizePixel( aSize );
+    aSelectLink = rBox.GetSelectHdl();
+    rBox.SetSelectHdl( LINK( this, PopupWindowTbx, SelectHdl ) );
+}
+
+SfxPopupWindow* PopupWindowTbx::Clone() const
+{
+    return new PopupWindowTbx( GetId(), aTbx.GetAlign(),
+                        IDEResId( RID_TBXCONTROLS ),
+                        IDEResId( RID_TOOLBOX ),
+                        (SfxBindings&) GetBindings() );
+}
+
+void PopupWindowTbx::PopupModeEnd()
+{
+    aTbx.GetToolBox().EndSelection();
+    SfxPopupWindow::PopupModeEnd();
+}
+
+void PopupWindowTbx::Update()
+{
+    ToolBox *pBox = &aTbx.GetToolBox();
+    aTbx.Activate( pBox );
+    aTbx.Deactivate( pBox );
+}
+
+PopupWindowTbx::~PopupWindowTbx()
+{
+}
+*/
+/*************************************************************************
+|*
 |* Klasse fuer Toolbox
 |*
 \************************************************************************/
 
-TbxControls::TbxControls( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+TbxControls::TbxControls( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
         SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     nLastSlot = USHRT_MAX;
@@ -77,7 +139,7 @@ SfxPopupWindowType TbxControls::GetPopupWindowType() const
     return(SFX_POPUPWINDOW_ONTIMEOUT);
 }
 
-void TbxControls::StateChanged( sal_uInt16 nSID, SfxItemState eState,
+void TbxControls::StateChanged( USHORT nSID, SfxItemState eState,
   const SfxPoolItem* pState )
 {
     if( pState )
@@ -85,8 +147,8 @@ void TbxControls::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         SfxAllEnumItem* pItem = PTR_CAST(SfxAllEnumItem, pState);
         if( pItem )
         {
-            sal_uInt16 nLastEnum = pItem->GetValue();
-            sal_uInt16 nTemp = 0;
+            USHORT nLastEnum = pItem->GetValue();
+            USHORT nTemp = 0;
             switch( nLastEnum )
             {
                 case SVX_SNAP_PUSHBUTTON:       nTemp = SID_INSERT_PUSHBUTTON; break;
@@ -119,10 +181,10 @@ void TbxControls::StateChanged( sal_uInt16 nSID, SfxItemState eState,
             {
                 rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                 aSlotURL += rtl::OUString::valueOf( sal_Int32( nTemp ));
-                Image aImage = GetImage( m_xFrame,
+                Image aImage = GetImage( m_xFrame, 
                                          aSlotURL,
-                                         hasBigImages()
-                                       );
+                                         hasBigImages(),
+                                         GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
                 ToolBox& rBox = GetToolBox();
                 rBox.SetItemImage(GetId(), aImage);
                 nLastSlot = nLastEnum;
@@ -132,7 +194,7 @@ void TbxControls::StateChanged( sal_uInt16 nSID, SfxItemState eState,
     SfxToolBoxControl::StateChanged( nSID, eState,pState );
 }
 
-void TbxControls::Select( sal_uInt16 nModifier )
+void TbxControls::Select( USHORT nModifier )
 {
     (void)nModifier;
     SfxAllEnumItem aItem( SID_CHOOSE_CONTROLS, nLastSlot );
@@ -152,11 +214,28 @@ void TbxControls::Select( sal_uInt16 nModifier )
 |* rItemRect sind die Screen-Koordinaten
 |*
 \************************************************************************/
-SfxPopupWindow* TbxControls::CreatePopupWindow()
+SfxPopupWindow*	TbxControls::CreatePopupWindow()
 {
     if ( GetSlotId() == SID_CHOOSE_CONTROLS )
         createAndPositionSubToolBar( aSubToolBarResName );
 
+/*
+    if (GetId() == SID_CHOOSE_CONTROLS)
+    {
+        PopupWindowTbx *pWin =
+            new PopupWindowTbx( GetId(),
+                                GetToolBox().IsHorizontal() ?
+                                    WINDOWALIGN_LEFT : WINDOWALIGN_TOP,
+                                IDEResId( RID_TBXCONTROLS ),
+                                IDEResId( RID_TOOLBOX ),
+                                GetBindings() );
+        pWin->StartPopupMode(&GetToolBox(), TRUE);
+        pWin->Update();
+        pWin->StartSelection();
+        pWin->Show();
+        return(pWin);
+    }
+*/
     return(0);
 }
 

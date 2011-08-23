@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include "global.hxx"
 #include "drwlayer.hxx"
 #include "userdat.hxx"
-#include "tabvwsh.hxx"          // oder GetDocument irgendwo
+#include "tabvwsh.hxx"			// oder GetDocument irgendwo
 #include "document.hxx"
 #include "editutil.hxx"
 #include "futext.hxx"
@@ -56,13 +56,13 @@
 #include "undocell.hxx"
 
 // ------------------------------------------------------------------------------------
-//  Editieren von Notiz-Legendenobjekten muss immer ueber StopEditMode beendet werden,
-//  damit die Aenderungen ins Dokument uebernommen werden!
-//  (Fontwork-Execute in drawsh und drtxtob passiert nicht fuer Legendenobjekte)
-//  bTextDirection=sal_True means that this function is called from SID_TEXTDIRECTION_XXX(drtxtob.cxx).
+//	Editieren von Notiz-Legendenobjekten muss immer ueber StopEditMode beendet werden,
+//	damit die Aenderungen ins Dokument uebernommen werden!
+//	(Fontwork-Execute in drawsh und drtxtob passiert nicht fuer Legendenobjekte)
+//	bTextDirection=TRUE means that this function is called from SID_TEXTDIRECTION_XXX(drtxtob.cxx).
 // ------------------------------------------------------------------------------------
 
-void FuText::StopEditMode(sal_Bool /*bTextDirection*/)
+void FuText::StopEditMode(BOOL /*bTextDirection*/)
 {
     SdrObject* pObject = pView->GetTextEditObject();
     if( !pObject ) return;
@@ -86,7 +86,7 @@ void FuText::StopEditMode(sal_Bool /*bTextDirection*/)
     }
 
     ScDocShell* pDocShell = rViewData.GetDocShell();
-    ::svl::IUndoManager* pUndoMgr = rDoc.IsUndoEnabled() ? pDocShell->GetUndoManager() : 0;
+    SfxUndoManager* pUndoMgr = rDoc.IsUndoEnabled() ? pDocShell->GetUndoManager() : 0;
     bool bNewNote = false;
     if( pNote && pUndoMgr )
     {
@@ -188,7 +188,7 @@ void FuText::StopEditMode(sal_Bool /*bTextDirection*/)
         // invalidate stream positions only for the affected sheet
         rDoc.LockStreamValid(false);
         if (rDoc.IsStreamValid(aNotePos.Tab()))
-            rDoc.SetStreamValid(aNotePos.Tab(), false);
+            rDoc.SetStreamValid(aNotePos.Tab(), FALSE);
     }
 }
 

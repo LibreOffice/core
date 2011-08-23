@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,13 +39,13 @@ namespace dbaui
     using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 //.........................................................................
-#define SPACEBETWEENENTRIES     4
+#define SPACEBETWEENENTRIES		4
 //========================================================================
 //= OMarkableTreeListBox
 //========================================================================
 DBG_NAME(OMarkableTreeListBox)
 //------------------------------------------------------------------------
-OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, WinBits nWinStyle )
+OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, WinBits nWinStyle ) 
     : DBTreeListBox(pParent,_rxORB,nWinStyle)
 {
     DBG_CTOR(OMarkableTreeListBox,NULL);
@@ -53,7 +53,7 @@ OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XM
     InitButtonData();
 }
 //------------------------------------------------------------------------
-OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, const ResId& rResId)
+OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, const ResId& rResId) 
     : DBTreeListBox(pParent,_rxORB,rResId)
 {
     DBG_CTOR(OMarkableTreeListBox,NULL);
@@ -152,9 +152,10 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvLBoxEntry* _pEntry)
         // we did not finish the loop because at least one of the children is in tristate
         eState = SV_BUTTON_TRISTATE;
 
-        // but this means that we did not finish all the siblings of pChildLoop,
-        // so their checking may be incorrect at the moment
+        // but this means that we did not finish all the siblings of pChildLoop, so their checking may be
+        // incorrect at the moment
         // -> correct this
+        // 88485 - 20.06.2001 - frank.schoenheit@sun.com
         while (pChildLoop)
         {
             implDetermineState(pChildLoop);
@@ -162,9 +163,9 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvLBoxEntry* _pEntry)
         }
     }
     else
-        // none if the children are in tristate
+        // none if the children is in tristate
         if (nCheckedChildren)
-            // we have at least one child checked
+            // we have at least one chil checked
             if (nCheckedChildren != nChildrenOverall)
                 // not all children are checked
                 eState = SV_BUTTON_TRISTATE;
@@ -204,7 +205,7 @@ void OMarkableTreeListBox::CheckButtonHdl()
 void OMarkableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
 {
     SvButtonState eState = GetCheckButtonState( _pEntry);
-    if (GetModel()->HasChilds(_pEntry)) // Falls Kinder, dann diese auch checken
+    if (GetModel()->HasChilds(_pEntry))	// Falls Kinder, dann diese auch checken
     {
         SvLBoxEntry* pChildEntry = GetModel()->Next(_pEntry);
         SvLBoxEntry* pSiblingEntry = GetModel()->NextSibling(_pEntry);
@@ -219,7 +220,7 @@ void OMarkableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
     while(pEntry)
     {
         SetCheckButtonState(pEntry,eState);
-        if(GetModel()->HasChilds(pEntry))   // Falls Kinder, dann diese auch checken
+        if(GetModel()->HasChilds(pEntry))	// Falls Kinder, dann diese auch checken
         {
             SvLBoxEntry* pChildEntry = GetModel()->Next(pEntry);
             SvLBoxEntry* pSiblingEntry = GetModel()->NextSibling(pEntry);
@@ -236,7 +237,7 @@ void OMarkableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
 
 //------------------------------------------------------------------------
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

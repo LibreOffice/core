@@ -44,7 +44,7 @@ VISIBILITY_HIDDEN=TRUE
 # ... object files ............................
 
 EXCEPTIONSFILES=	\
-        $(SLO)$/RptUndo.obj					\
+        $(SLO)$/Undo.obj					\
         $(SLO)$/ColorListener.obj			\
         $(SLO)$/UITools.obj					\
         $(SLO)$/rptuiservices.obj			\

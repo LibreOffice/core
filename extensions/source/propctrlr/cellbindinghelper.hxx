@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 namespace pcr
 {
 //............................................................................
-
+    
     //========================================================================
     //= CellBindingHelper
     //========================================================================
@@ -68,7 +68,7 @@ namespace pcr
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument
         );
-
+    
     public:
         /** determines whether the given model is a spreadsheet document model
 
@@ -121,7 +121,7 @@ namespace pcr
             @precond
                 The binding is a valid cell binding, or <NULL/>
             @return
-                <FALSE/> if and only if an error occurred and no valid address could be obtained
+                <FALSE/> if and only if an error occured and no valid address could be obtained
             @see isCellBinding
         */
         bool            getAddressFromCellBinding(
@@ -205,7 +205,7 @@ namespace pcr
                         ) const;
 
         /** retrieves the index of the sheet which our control belongs to
-            @return the index of the sheet which our control belongs to or -1, if an error occurred
+            @return the index of the sheet which our control belongs to or -1, if an error occured
         */
         sal_Int16       getControlSheetIndex(
                             ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >& _out_rxSheet

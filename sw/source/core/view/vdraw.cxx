@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
 #include "viewimp.hxx"
 #include "dflyobj.hxx"
 #include "viewopt.hxx"
-#include "printdata.hxx"
+#include "swprtopt.hxx"
 #include "dcontact.hxx"
 #include "dview.hxx"
 #include "flyfrm.hxx"
@@ -89,7 +89,7 @@ void SwViewImp::LockPaint()
     }
     else
     {
-        bResetHdlHiddenPaint = sal_False;
+        bResetHdlHiddenPaint = FALSE;
     }
 }
 
@@ -100,7 +100,7 @@ void SwViewImp::UnlockPaint()
 }
 
 void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
-                            SwPrintData const*const pPrintData,
+                            const SwPrtOptions * _pPrintData,
                             const SwRect& ,
                             const Color* _pPageBackgrdColor,
                             const bool _bIsPageRightToLeft ) const
@@ -109,7 +109,7 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
     {
         //change the draw mode in high contrast mode
         OutputDevice* pOutDev = GetShell()->GetOut();
-        sal_uLong nOldDrawMode = pOutDev->GetDrawMode();
+        ULONG nOldDrawMode = pOutDev->GetDrawMode();
         if( GetShell()->GetWin() &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
             (!GetShell()->IsPreView()||SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews()))
@@ -144,11 +144,11 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
         }
 
         pOutDev->Push( PUSH_LINECOLOR ); // #114231#
-        if (pPrintData)
+        if (_pPrintData)
         {
             // hide drawings but not form controls (form controls are handled elsewhere)
             SdrView &rSdrView = const_cast< SdrView & >(GetPageView()->GetView());
-            rSdrView.setHideDraw( !pPrintData->IsPrintDraw() );
+            rSdrView.setHideDraw( !_pPrintData->IsPrintDraw() );
         }
         GetPageView()->DrawLayer(_nLayerID, pOutDev);
         pOutDev->Pop();
@@ -168,31 +168,31 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
 
 #define WIEDUWILLST 400
 
-sal_Bool SwViewImp::IsDragPossible( const Point &rPoint )
+BOOL SwViewImp::IsDragPossible( const Point &rPoint )
 {
     if ( !HasDrawView() )
-        return sal_False;
+        return FALSE;
 
     const SdrMarkList &rMrkList = GetDrawView()->GetMarkedObjectList();
 
     if( !rMrkList.GetMarkCount() )
-        return sal_False;
+        return FALSE;
 
     SdrObject *pO = rMrkList.GetMark(rMrkList.GetMarkCount()-1)->GetMarkedSdrObj();
 
     SwRect aRect;
-    if( pO && ::CalcClipRect( pO, aRect, sal_False ) )
+    if( ::CalcClipRect( pO, aRect, FALSE ) )
     {
         SwRect aTmp;
-        ::CalcClipRect( pO, aTmp, sal_True );
+        ::CalcClipRect( pO, aTmp, TRUE );
         aRect.Union( aTmp );
     }
     else
         aRect = GetShell()->GetLayout()->Frm();
 
-    aRect.Top(    aRect.Top()    - WIEDUWILLST );
+    aRect.Top(	  aRect.Top()	 - WIEDUWILLST );
     aRect.Bottom( aRect.Bottom() + WIEDUWILLST );
-    aRect.Left(   aRect.Left()   - WIEDUWILLST );
+    aRect.Left(   aRect.Left()	 - WIEDUWILLST );
     aRect.Right(  aRect.Right()  + WIEDUWILLST );
     return aRect.IsInside( rPoint );
 }
@@ -207,11 +207,11 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
 
     const Rectangle aRect( Point( DOCUMENTBORDER, DOCUMENTBORDER ), rNewSz );
     const Rectangle &rOldWork = GetDrawView()->GetWorkArea();
-    sal_Bool bCheckDrawObjs = sal_False;
+    BOOL bCheckDrawObjs = FALSE;
     if ( aRect != rOldWork )
     {
         if ( rOldWork.Bottom() > aRect.Bottom() || rOldWork.Right() > aRect.Right())
-            bCheckDrawObjs = sal_True;
+            bCheckDrawObjs = TRUE;
         GetDrawView()->SetWorkArea( aRect );
     }
     if ( !bCheckDrawObjs )
@@ -219,17 +219,17 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
 
     OSL_ENSURE( pSh->getIDocumentDrawModelAccess()->GetDrawModel(), "NotifySizeChg without DrawModel" );
     SdrPage* pPage = pSh->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 );
-    const sal_uLong nObjs = pPage->GetObjCount();
-    for( sal_uLong nObj = 0; nObj < nObjs; ++nObj )
+    const ULONG nObjs = pPage->GetObjCount();
+    for( ULONG nObj = 0; nObj < nObjs; ++nObj )
     {
         SdrObject *pObj = pPage->GetObj( nObj );
         if( !pObj->ISA(SwVirtFlyDrawObj) )
         {
             const SwContact *pCont = (SwContact*)GetUserCall(pObj);
             //JP - 16.3.00 Bug 73920: this function might be called by the
-            //              InsertDocument, when a PageDesc-Attribute is
-            //              set on a node. Then the SdrObject must not have
-            //              an UserCall.
+            //				InsertDocument, when a PageDesc-Attribute is
+            //				set on a node. Then the SdrObject must not have
+            //				an UserCall.
             if( !pCont || !pCont->ISA(SwDrawContact) )
                 continue;
 

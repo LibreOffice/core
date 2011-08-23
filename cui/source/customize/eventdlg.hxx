@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,16 +42,16 @@ class SvxMacroItem;
 
 class SvxEventConfigPage : public _SvxMacroTabPage
 {
-    FixedText                           aSaveInText;
-    ListBox                             aSaveInListBox;
+    FixedText							aSaveInText;
+    ListBox								aSaveInListBox;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >   m_xAppEvents;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >   m_xDocumentEvents;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable >         m_xDocumentModifiable;
 
-    sal_Bool            bAppConfig;
+    BOOL			bAppConfig;
 
-    DECL_LINK(      SelectHdl_Impl, ListBox* );
+    DECL_LINK(		SelectHdl_Impl, ListBox* );
 
     // Forbidden and not implemented.
     SvxEventConfigPage (const SvxEventConfigPage &);
@@ -66,8 +66,8 @@ public:
     void            LateInit( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
 
 protected:
-    virtual sal_Bool    FillItemSet( SfxItemSet& );
-    virtual void    Reset( const SfxItemSet& );
+    virtual BOOL	FillItemSet( SfxItemSet& );
+    virtual void	Reset( const SfxItemSet& );
     using _SvxMacroTabPage::Reset;
 
 private:

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,6 +36,7 @@
 #include <malloc.h>
 #endif
 #include <tools/debug.hxx>
+#include <tools/list.hxx>
 #include <tools/bigint.hxx>
 #include <tools/fsys.hxx>
 #include "comdep.hxx"
@@ -45,6 +46,10 @@
 #endif
 
 int Sys2SolarError_Impl( int nSysErr );
+
+DECLARE_LIST( DirEntryList, DirEntry* );
+DECLARE_LIST( FSysSortList, FSysSort* );
+DECLARE_LIST( FileStatList, FileStat* );
 
 static char sCaseMap[256];
 static BOOL bCaseMap = FALSE;
@@ -107,7 +112,7 @@ int ApiRet2ToSolarError_Impl( int nApiRet )
         case ERROR_FILENAME_EXCED_RANGE:    return ERRCODE_IO_NAMETOOLONG;
     }
 
-    OSL_TRACE( "FSys: unknown apiret error %d occurred", nApiRet );
+    DBG_TRACE1( "FSys: unknown apiret error %d occured", nApiRet );
     return FSYS_ERR_UNKNOWN;
 }
 
@@ -138,6 +143,10 @@ char* volumeid( const char* pPfad )
 |*
 |*    DirEntry::ToAbs()
 |*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 26.04.91
+|*    Letzte Aenderung  MA 02.12.91 13:30
+|*
 *************************************************************************/
 
 BOOL DirEntry::ToAbs()
@@ -163,12 +172,16 @@ BOOL DirEntry::ToAbs()
 |*
 |*    DirEntry::GetVolume()
 |*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 04.03.92
+|*    Letzte Aenderung  MI 04.03.92
+|*
 *************************************************************************/
 
 String DirEntry::GetVolume() const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
+    
     String aRet;
     const DirEntry *pTop = ImpGetTopPtr();
     ByteString aName = ByteString( pTop->aName ).ToLowerAscii();
@@ -190,6 +203,10 @@ String DirEntry::GetVolume() const
 /*************************************************************************
 |*
 |*    DirEntry::SetCWD()
+|*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 26.04.91
+|*    Letzte Aenderung  MI 21.05.92
 |*
 *************************************************************************/
 
@@ -221,6 +238,10 @@ BOOL DirEntry::SetCWD( BOOL bSloppy ) const
 |*
 |*    DirEntry::MoveTo()
 |*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 26.04.91
+|*    Letzte Aenderung  MA 02.12.91 14:07
+|*
 *************************************************************************/
 
 
@@ -245,7 +266,7 @@ USHORT DirReader_Impl::Init()
             sDrive[0] = c;
             sRoot[0] = c;
             DirEntry* pDrive = new DirEntry( sDrive, FSYS_FLAG_VOLUME, FSYS_STYLE_HOST );
-            if ( pDir->aNameMask.Matches( String( ByteString(sDrive), osl_getThreadTextEncoding()))
+            if ( pDir->aNameMask.Matches( String( ByteString(sDrive), osl_getThreadTextEncoding())) 
                 && aDriveMap[c-'a'].nKind != FSYS_KIND_UNKNOWN )
             {
                 if ( pDir->pStatLst ) //Status fuer Sort gewuenscht?
@@ -293,8 +314,8 @@ USHORT DirReader_Impl::Read()
         {
             DirEntryFlag eFlag =
                     0 == strcmp( pDosEntry->d_name, "." ) ? FSYS_FLAG_CURRENT
-                :   0 == strcmp( pDosEntry->d_name, ".." ) ? FSYS_FLAG_PARENT
-                :   FSYS_FLAG_NORMAL;
+                :	0 == strcmp( pDosEntry->d_name, ".." ) ? FSYS_FLAG_PARENT
+                :	FSYS_FLAG_NORMAL;
             DirEntry *pTemp = new DirEntry( ByteString(pDosEntry->d_name), eFlag, FSYS_STYLE_UNX );
             if ( pParent )
                 pTemp->ImpChangeParent( new DirEntry( *pParent ), FALSE);
@@ -324,6 +345,10 @@ USHORT DirReader_Impl::Read()
 /*************************************************************************
 |*
 |*    FileStat::FileStat()
+|*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MA 05.11.91
+|*    Letzte Aenderung  MA 07.11.91
 |*
 *************************************************************************/
 
@@ -355,6 +380,10 @@ FileStat::FileStat( const void *pInfo,      // struct dirent
 /*************************************************************************
 |*
 |*    FileStat::Update()
+|*
+|*    Beschreibung      FSYS.SDW
+|*    Ersterstellung    MI 11.06.91
+|*    Letzte Aenderung  MA 07.11.91
 |*
 *************************************************************************/
 
@@ -527,6 +556,8 @@ BOOL IsRedirectable_Impl( const ByteString &rPath )
 |*
 |*    Beschreibung      liefert den Namens des Directories fuer temporaere
 |*                      Dateien
+|*    Ersterstellung    MI 16.03.94
+|*    Letzte Aenderung  MI 16.03.94
 |*
 *************************************************************************/
 
@@ -624,10 +655,10 @@ void CreateDriveMapImpl()
     aDriveMap[2].nKind = FSYS_KIND_FIXED;
     aDriveMap[2].nStyle = FSYS_STYLE_FAT;
 #else
-    FSQBUFFER_  aBuf;
+    FSQBUFFER_	aBuf;
     ULONG       nBufLen;
     APIRET      nRet;
-    USHORT      nDrive;
+    USHORT 		nDrive;
 
     // disable error-boxes for hard-errors
     DosError(FERR_DISABLEHARDERR);
@@ -747,6 +778,10 @@ Date MsDos2Date( const time_t *pTimeT )
 |*
 |*    DirEntry::GetPathStyle() const
 |*
+|*    Beschreibung
+|*    Ersterstellung    MI 11.05.95
+|*    Letzte Aenderung  MI 11.05.95
+|*
 *************************************************************************/
 
 FSysPathStyle DirEntry::GetPathStyle( const String &rDevice )
@@ -765,13 +800,17 @@ FSysPathStyle DirEntry::GetPathStyle( const String &rDevice )
 |*
 |*    DirEntry::IsCaseSensitive() const
 |*
+|*    Beschreibung
+|*    Ersterstellung    TPF 26.02.1999
+|*    Letzte Aenderung  
+|*
 *************************************************************************/
 
 BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
 {
     if (eFormatter==FSYS_STYLE_HOST)
     {
-        if  (GetPathStyle(GetDevice().GetName()) == FSYS_STYLE_UNX)
+        if 	(GetPathStyle(GetDevice().GetName()) == FSYS_STYLE_UNX)
         {
             return TRUE;
         }
@@ -782,7 +821,7 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
     }
     else
     {
-        BOOL isCaseSensitive = FALSE;           // ich bin unter OS2, also ist der default im Zweifelsfall case insensitiv
+        BOOL isCaseSensitive = FALSE;			// ich bin unter OS2, also ist der default im Zweifelsfall case insensitiv
         switch ( eFormatter )
         {
             case FSYS_STYLE_MAC:
@@ -804,7 +843,7 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
                 }
             default:
                 {
-                    isCaseSensitive = FALSE;    // ich bin unter OS2, also ist der default im Zweifelsfall case insensitiv
+                    isCaseSensitive = FALSE;	// ich bin unter OS2, also ist der default im Zweifelsfall case insensitiv
                     break;
                 }
         }

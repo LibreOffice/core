@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ public class _SpreadsheetDocumentSettings extends MultiPropertyTest {
     protected PropertyTester DateTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue) {
             Date date = (Date) oldValue;
-            Date newDate = new Date((short) (date.Day - 1), date.Month,
+            Date newDate = new Date((short) (date.Day - 1), date.Month, 
                                     date.Year);
 
             return newDate;
@@ -82,10 +82,10 @@ public class _SpreadsheetDocumentSettings extends MultiPropertyTest {
         protected boolean compare(Object obj1, Object obj2) {
             Locale loc = new Locale("ru", "RU", "");
             XForbiddenCharacters fc1 = (XForbiddenCharacters) UnoRuntime.queryInterface(
-                                               XForbiddenCharacters.class,
+                                               XForbiddenCharacters.class, 
                                                obj1);
             XForbiddenCharacters fc2 = (XForbiddenCharacters) UnoRuntime.queryInterface(
-                                               XForbiddenCharacters.class,
+                                               XForbiddenCharacters.class, 
                                                obj2);
             boolean has1 = fc1.hasForbiddenCharacters(loc);
             boolean has2 = fc2.hasForbiddenCharacters(loc);
@@ -121,8 +121,8 @@ public class _SpreadsheetDocumentSettings extends MultiPropertyTest {
 
         public ForbiddenCharacters getForbiddenCharacters(Locale rLocale)
             throws com.sun.star.container.NoSuchElementException {
-            if (rLocale.Country.equals(locale.Country) &&
-                    rLocale.Language.equals(locale.Language) &&
+            if (rLocale.Country.equals(locale.Country) && 
+                    rLocale.Language.equals(locale.Language) && 
                     rLocale.Variant.equals(locale.Variant)) {
                 return chrs;
             }
@@ -130,7 +130,7 @@ public class _SpreadsheetDocumentSettings extends MultiPropertyTest {
             throw new com.sun.star.container.NoSuchElementException();
         }
 
-        public void setForbiddenCharacters(Locale rLocale,
+        public void setForbiddenCharacters(Locale rLocale, 
                                            ForbiddenCharacters rForbiddenCharacters) {
         }
 
@@ -138,8 +138,8 @@ public class _SpreadsheetDocumentSettings extends MultiPropertyTest {
         }
 
         public boolean hasForbiddenCharacters(Locale rLocale) {
-            if (rLocale.Country.equals(locale.Country) &&
-                    rLocale.Language.equals(locale.Language) &&
+            if (rLocale.Country.equals(locale.Country) && 
+                    rLocale.Language.equals(locale.Language) && 
                     rLocale.Variant.equals(locale.Variant)) {
                 return true;
             }

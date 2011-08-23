@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,40 +30,42 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <classes/framecontainer.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <threadhelp/readguard.hxx>
 
+#include <commands.h>
+
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  non exported const
+//	non exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  non exported definitions
+//	non exported definitions
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /**-***************************************************************************************************************
@@ -151,6 +153,12 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
         // We don't need the write lock any longer ...
         // downgrade to read access.
         aWriteLock.downgrade();
+/*DEPRECATEME
+        // If last frame was removed and special quit mode is enabled by the desktop
+        // we must terminate the application by using this asynchronous callback!
+        if (m_aContainer.size()<1 && m_bAsyncQuit)
+            m_aAsyncCall.Post(0);
+*/
     }
 
     aWriteLock.unlock();
@@ -196,6 +204,12 @@ void FrameContainer::clear()
     // Its an reference to a valid container-item.
     // But no container item => no active frame!
     m_xActiveFrame = css::uno::Reference< css::frame::XFrame >();
+/*DEPRECATEME
+    // If special quit mode is used - we must terminate the desktop.
+    // He is the owner of this container and can't work without any visible tasks/frames!
+    if (m_bAsyncQuit)
+        m_aAsyncCall.Post(0);
+*/
 
     aWriteLock.unlock();
     // } SAFE

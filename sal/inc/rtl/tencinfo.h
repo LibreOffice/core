@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,7 +104,7 @@ typedef struct _rtl_TextEncodingInfo
         ASCII control codes 0x00--1F are not included here, as they are used for
         special purposes in some encodings.
 
-        If an encoding has this property, it is easy to search for occurrences of
+        If an encoding has this property, it is easy to search for occurences of
         ASCII characters within strings of this encoding---you do not need to
         keep track whether a byte in the range 0x20--7F really represents an
         ASCII character or rather is part of some multi-byte character.

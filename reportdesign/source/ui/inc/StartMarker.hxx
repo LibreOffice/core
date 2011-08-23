@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,16 +39,18 @@ namespace rptui
     class OSectionWindow;
     class OStartMarker : public OColorListener
     {
-
-        Ruler                       m_aVRuler;
+        
+        Ruler						m_aVRuler;
         FixedText                   m_aText;
         FixedImage                  m_aImage;
-        OSectionWindow*             m_pParent;
-        static Image*               s_pDefCollapsed;
-        static Image*               s_pDefExpanded;
-        static oslInterlockedCount  s_nImageRefCount; /// When 0 all static images will be destroyed
+        OSectionWindow*			    m_pParent;
+        static Image*				s_pDefCollapsed;
+        static Image*				s_pDefExpanded;
+        static Image*				s_pDefCollapsedHC;
+        static Image*				s_pDefExpandedHC;
+        static oslInterlockedCount	s_nImageRefCount; /// When 0 all static images will be destroyed
 
-        sal_Bool                    m_bShowRuler;
+        sal_Bool					m_bShowRuler;
 
         void changeImage();
         void initDefaultNodeImages();
@@ -64,19 +66,19 @@ namespace rptui
         virtual void    Notify(SfxBroadcaster & rBc, SfxHint const & rHint);
         // window overloads
         virtual void    Paint( const Rectangle& rRect );
-        virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-        virtual void    Resize();
-        virtual void    RequestHelp( const HelpEvent& rHEvt );
+        virtual void	MouseButtonUp( const MouseEvent& rMEvt );
+        virtual void	Resize();
+        virtual void	RequestHelp( const HelpEvent& rHEvt );
         using Window::Notify;
 
-        void            setTitle(const String& _sTitle);
-        sal_Int32       getMinHeight() const;
+        void			setTitle(const String& _sTitle);
+        sal_Int32		getMinHeight() const;
 
         /** shows or hides the ruler.
         */
-        void            showRuler(sal_Bool _bShow);
+        void			showRuler(sal_Bool _bShow);
 
-        virtual void    setCollapsed(sal_Bool _bCollapsed);
+        virtual void	setCollapsed(sal_Bool _bCollapsed);
 
         /** zoom the ruler and view windows
         */

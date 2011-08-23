@@ -3,7 +3,7 @@ import com.sun.star.uno.Type;
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@ import com.sun.star.uno.Type;
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 
@@ -39,44 +39,44 @@ public interface XUnoNode {
     public static final int nINTERFACE = 1;
     public static final int nSERVICE = 2;
     public static final int nOTHERS = 3;
-
+    
     public String getAnchor();
-
+    
     public String getClassName();
-
+    
     public void openIdlDescription(String _sIDLUrl);
-
+    
     public boolean isFilterApplicable(String _sFilter);
-
+    
     public void setVisible(String _sFilter);
-
+                
     public void setParameterObjects(Object[] _oParamObjects);
-
+    
     public Object[] getParameterObjects();
-
+    
     public String getName();
-
+    
     public void setFoldable(boolean _bIsFoldable);
-
+    
     public Object getUnoObject();
-
+    
     public XUnoNode getParentNode();
-
+    
     public void addChildNode(XUnoNode _xUnoNode);
-
+    
     public void  setLabel(String _sLabel);
 
     public String getLabel();
-
+    
     public int getChildCount();
-
+    
     public XUnoNode getChild(int _index);
-
+    
     public int getNodeType();
-
+    
     // possible values are nINTERFACE, nSERVICE, nOTHERS
     public void setNodeType(int _nNodeType);
-
+    
     /** delivers only the Uno-Type when the NodeType is set to nINTERFACE
      *  otherwise (when the NodeType has not been set returns null
      */

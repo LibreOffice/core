@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,9 +33,11 @@
 #include <ctype.h>
 #include <editeng/unolingu.hxx>
 #include <tools/shl.hxx>    // needed for SW_MOD() macro
+#include <errhdl.hxx>   //OSL_ENSURE
 #include <dlelstnr.hxx>
 #include <swmodule.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <txtcfg.hxx>
 #include <guess.hxx>
 #include <inftxt.hxx>
 #include <pagefrm.hxx>
@@ -56,7 +58,7 @@ using namespace ::com::sun::star::linguistic2;
 #define CH_FULL_BLANK 0x3000
 
 /*************************************************************************
- *                      SwTxtGuess::Guess
+ *						SwTxtGuess::Guess
  *
  * provides information for line break calculation
  * returns true if no line break has to be performed
@@ -77,13 +79,13 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
     OSL_ENSURE( nPorHeight, "+SwTxtGuess::Guess: no height" );
 
-    sal_uInt16 nMinSize;
-    sal_uInt16 nMaxSizeDiff;
+    USHORT nMinSize;
+    USHORT nMaxSizeDiff;
 
     const SwScriptInfo& rSI =
             ((SwParaPortion*)rInf.GetParaPortion())->GetScriptInfo();
 
-    sal_uInt16 nMaxComp = ( SW_CJK == rInf.GetFont()->GetActual() ) &&
+    USHORT nMaxComp = ( SW_CJK == rInf.GetFont()->GetActual() ) &&
                         rSI.CountCompChg() &&
                         ! rInf.IsMulti() &&
                         ! rPor.InFldGrp() &&
@@ -149,7 +151,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
             // save maximum width for later use
             if ( nMaxSizeDiff )
-                rInf.SetMaxWidthDiff( (sal_uLong)&rPor, nMaxSizeDiff );
+                rInf.SetMaxWidthDiff( (ULONG)&rPor, nMaxSizeDiff );
 
             return sal_True;
         }
@@ -200,7 +202,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
             // save maximum width for later use
             if ( nMaxSizeDiff )
-                rInf.SetMaxWidthDiff( (sal_uLong)&rPor, nMaxSizeDiff );
+                rInf.SetMaxWidthDiff( (ULONG)&rPor, nMaxSizeDiff );
 
             return sal_True;
         }
@@ -326,7 +328,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             // we have to check the script type of the last "real" character
             if ( nLangIndex < rInf.GetIdx() )
             {
-                sal_uInt16 nScript = pBreakIt->GetRealScriptOfText( rInf.GetTxt(),
+                USHORT nScript = pBreakIt->GetRealScriptOfText( rInf.GetTxt(),
                                                                 nLangIndex );
                 OSL_ENSURE( nScript, "Script is not between 1 and 4" );
 
@@ -393,10 +395,10 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             // e.g., Schiff-fahrt, referes to the word after hyphenation
             const String aHyphenatedWord = xHyphWord->getHyphenatedWord();
             // e.g., Schif-fahrt: 5, referes to our string
-            const sal_uInt16 nHyphenationPos = xHyphWord->getHyphenationPos();
+            const USHORT nHyphenationPos = xHyphWord->getHyphenationPos();
             (void)nHyphenationPos;
             // e.g., Schiff-fahrt: 6, referes to the word after hyphenation
-            const sal_uInt16 nHyphenPos = xHyphWord->getHyphenPos();
+            const USHORT nHyphenPos = xHyphWord->getHyphenPos();
             (void)nHyphenPos;
 #endif
 
@@ -503,7 +505,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         // save maximum width for later use
         if ( nMaxSizeDiff )
-            rInf.SetMaxWidthDiff( (sal_uLong)&rPor, nMaxSizeDiff );
+            rInf.SetMaxWidthDiff( (ULONG)&rPor, nMaxSizeDiff );
 
         nBreakWidth = nItalic + nMinSize;
     }
@@ -517,7 +519,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 }
 
 /*************************************************************************
- *                      SwTxtGuess::AlternativeSpelling
+ *						SwTxtGuess::AlternativeSpelling
  *************************************************************************/
 
 // returns true if word at position nPos has a diffenrent spelling
@@ -545,7 +547,7 @@ sal_Bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
     Reference< XHyphenator >  xHyph( ::GetHyphenator() );
     OSL_ENSURE( xHyph.is(), "Hyphenator is missing");
     //! subtract 1 since the UNO-interface is 0 based
-    xHyphWord = xHyph->queryAlternativeSpelling( OUString(aTxt),
+    xHyphWord =	xHyph->queryAlternativeSpelling( OUString(aTxt),
                         pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
                         nPos - nBreakStart, rInf.GetHyphValues() );
     return xHyphWord.is() && xHyphWord->isAlternativeSpelling();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,47 +24,47 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_configuration_XTemplateInstance_idl__
-#define __com_sun_star_configuration_XTemplateInstance_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-//=============================================================================
-
- module com {  module sun {  module star {  module configuration {
-
-//=============================================================================
-
-/** is implemented by objects that are instances of a named template to provide
+#ifndef __com_sun_star_configuration_XTemplateInstance_idl__ 
+#define __com_sun_star_configuration_XTemplateInstance_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module configuration {  
+ 
+//============================================================================= 
+ 
+/** is implemented by objects that are instances of a named template to provide 
     information about the template.
 
-    <p> Template names are similar to service names, but apply to structure and
+    <p>	Template names are similar to service names, but apply to structure and
         content, rather than to type.
     </p>
-    <p> Often a template description can be retrieved from a repository and then be
-        interpreted by a factory object. Templates provide a means to build
+    <p>	Often a template description can be retrieved from a repository and then be 
+        interpreted by a factory object. Templates provide a means to build 
         new kinds of objects dynamically.
     </p>
 
     @see XTemplateContainer
  */
 published interface XTemplateInstance: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** retrieves the name of the template
-
-        @returns
-            the name of the template this object was built from or conforms to.
+    
+        @returns  
+            the name of the template this object was built from or conforms to. 
      */
-    string getTemplateName();
+    string getTemplateName(); 
 
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

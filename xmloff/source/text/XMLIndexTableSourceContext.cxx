@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -67,11 +67,11 @@ TYPEINIT1(XMLIndexTableSourceContext, XMLIndexSourceBaseContext);
 
 
 XMLIndexTableSourceContext::XMLIndexTableSourceContext(
-    SvXMLImport& rImport,
+    SvXMLImport& rImport, 
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet) :
-        XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
+        XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, 
                                   rPropSet, sal_False),
         sCreateFromLabels(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromLabels)),
         sLabelCategory(RTL_CONSTASCII_USTRINGPARAM(sAPI_LabelCategory)),
@@ -86,22 +86,22 @@ XMLIndexTableSourceContext::~XMLIndexTableSourceContext()
 {
 }
 
-static SvXMLEnumMapEntry const lcl_aReferenceTypeTokenMap[] =
+static SvXMLEnumMapEntry __READONLY_DATA lcl_aReferenceTypeTokenMap[] =
 {
-
-    { XML_TEXT,                 ReferenceFieldPart::TEXT },
-    { XML_CATEGORY_AND_VALUE,   ReferenceFieldPart::CATEGORY_AND_NUMBER },
-    { XML_CAPTION,              ReferenceFieldPart::ONLY_CAPTION },
+    
+    { XML_TEXT,			        ReferenceFieldPart::TEXT },
+    { XML_CATEGORY_AND_VALUE,	ReferenceFieldPart::CATEGORY_AND_NUMBER },
+    { XML_CAPTION, 		        ReferenceFieldPart::ONLY_CAPTION },
 
     // wrong values that previous versions wrote:
-    { XML_CHAPTER,              ReferenceFieldPart::CATEGORY_AND_NUMBER },
-    { XML_PAGE,                 ReferenceFieldPart::ONLY_CAPTION },
+    { XML_CHAPTER, 		        ReferenceFieldPart::CATEGORY_AND_NUMBER },
+    { XML_PAGE,			        ReferenceFieldPart::ONLY_CAPTION },
 
-    { XML_TOKEN_INVALID,        0 }
+    { XML_TOKEN_INVALID, 		0 }
 };
 
 void XMLIndexTableSourceContext::ProcessAttribute(
-    enum IndexSourceParamEnum eParam,
+    enum IndexSourceParamEnum eParam, 
     const OUString& rValue)
 {
     bool bTmp;
@@ -123,7 +123,7 @@ void XMLIndexTableSourceContext::ProcessAttribute(
         case XML_TOK_INDEXSOURCE_SEQUENCE_FORMAT:
         {
              sal_uInt16 nTmp;
-             if (SvXMLUnitConverter::convertEnum(nTmp, rValue,
+             if (SvXMLUnitConverter::convertEnum(nTmp, rValue, 
                                                  lcl_aReferenceTypeTokenMap))
             {
                  nDisplayFormat = nTmp;
@@ -162,7 +162,7 @@ void XMLIndexTableSourceContext::EndElement()
 }
 
 
-SvXMLImportContext* XMLIndexTableSourceContext::CreateChildContext(
+SvXMLImportContext* XMLIndexTableSourceContext::CreateChildContext( 
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
@@ -170,16 +170,16 @@ SvXMLImportContext* XMLIndexTableSourceContext::CreateChildContext(
     if ( ( XML_NAMESPACE_TEXT == nPrefix ) &&
          ( IsXMLToken( rLocalName, XML_TABLE_INDEX_ENTRY_TEMPLATE ) ) )
     {
-        return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
+        return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet, 
                                            nPrefix, rLocalName,
                                            aLevelNameTableMap,
                                            XML_TOKEN_INVALID, // no outline-level attr
                                            aLevelStylePropNameTableMap,
                                            aAllowedTokenTypesTable);
     }
-    else
+    else 
     {
-        return XMLIndexSourceBaseContext::CreateChildContext(nPrefix,
+        return XMLIndexSourceBaseContext::CreateChildContext(nPrefix, 
                                                              rLocalName,
                                                              xAttrList);
     }

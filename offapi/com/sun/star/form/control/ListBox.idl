@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,27 +25,27 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_form_control_ListBox_idl__
-#define __com_sun_star_form_control_ListBox_idl__
+#ifndef __com_sun_star_form_control_ListBox_idl__ 
+#define __com_sun_star_form_control_ListBox_idl__ 
 
-#ifndef __com_sun_star_awt_UnoControlListBox_idl__
-#include <com/sun/star/awt/UnoControlListBox.idl>
-#endif
+#ifndef __com_sun_star_awt_UnoControlListBox_idl__ 
+#include <com/sun/star/awt/UnoControlListBox.idl> 
+#endif 
 
-#ifndef __com_sun_star_form_XBoundControl_idl__
-#include <com/sun/star/form/XBoundControl.idl>
-#endif
+#ifndef __com_sun_star_form_XBoundControl_idl__ 
+#include <com/sun/star/form/XBoundControl.idl> 
+#endif 
 
-#ifndef __com_sun_star_form_XChangeBroadcaster_idl__
-#include <com/sun/star/form/XChangeBroadcaster.idl>
-#endif
+#ifndef __com_sun_star_form_XChangeBroadcaster_idl__ 
+#include <com/sun/star/form/XChangeBroadcaster.idl> 
+#endif 
 
-//=============================================================================
-
- module com {  module sun {  module star {  module form {  module control {
-
-//=============================================================================
-
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module form {  module control { 
+ 
+//============================================================================= 
+ 
 /** describes a list box control which can (but not necessarily has to) be bound to a database field.
 
     <p>The model of the control has to support the <type scope="com::sun::star::form::component">ListBox</type>
@@ -73,14 +73,14 @@ published service ListBox
     interface com::sun::star::form::XChangeBroadcaster;
 };
 
-//=============================================================================
+//============================================================================= 
+ 
+}; }; }; }; }; 
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
 
-}; }; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-
-#endif
+#endif 
 
 

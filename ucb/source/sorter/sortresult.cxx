@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,8 +50,7 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace cppu;
-
-using ::rtl::OUString;
+using namespace rtl;
 
 //=========================================================================
 
@@ -249,10 +248,10 @@ XTYPEPROVIDER_IMPL_9( SortedResultSet,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( SortedResultSet,
-                               OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.comp.ucb.SortedResultSet" )),
-                               OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                RESULTSET_SERVICE_NAME )) );
+                               OUString::createFromAscii(
+                                "com.sun.star.comp.ucb.SortedResultSet" ),
+                               OUString::createFromAscii(
+                                RESULTSET_SERVICE_NAME ) );
 
 //--------------------------------------------------------------------------
 // XComponent methods.
@@ -492,7 +491,7 @@ sal_Int32 SAL_CALL SortedResultSet::getRow()
  @param row
     is the number of rows to move. Could be negative.
  @returns
-    <TRUE/> if the cursor is on a row; <FALSE/> otherwise
+    <sal_True/> if the cursor is on a row; <sal_False/> otherwise
  @throws SQLException
     if a database access error occurs or if row is 0, or the result set
     type is FORWARD_ONLY.
@@ -554,7 +553,7 @@ sal_Bool SAL_CALL SortedResultSet::absolute( sal_Int32 row )
  @param rows
     is the number of rows to move. Could be negative.
  @returns
-    <TRUE/> if the cursor is on a valid row; <FALSE/> if it is off
+    <sal_True/> if the cursor is on a valid row; <sal_False/> if it is off
     the result set.
  @throws SQLException
     if a database access error occurs or if there is no
@@ -599,7 +598,7 @@ sal_Bool SAL_CALL SortedResultSet::relative( sal_Int32 rows )
  <p>Note: <code>previous()</code> is not the same as
  <code>relative(-1)</code> because it makes sense to call
  <code>previous()</code> when there is no current row.
- @returns <TRUE/> if the cursor is on a valid row; <FALSE/> if it is off
+ @returns <sal_True/> if the cursor is on a valid row; <sal_False/> if it is off
     the result set.
  @throws SQLException
     if a database access error occurs or the result set type
@@ -939,6 +938,7 @@ Any SAL_CALL SortedResultSet::getPropertyValue( const OUString& PropertyName )
     }
     else if ( PropertyName.compareToAscii( "IsRowCountFinal" ) == 0 )
     {
+        sal_uInt32  nOrgCount = 0;
         sal_Bool    bOrgFinal = false;
         Any         aOrgRet;
 
@@ -951,8 +951,7 @@ Any SAL_CALL SortedResultSet::getPropertyValue( const OUString& PropertyName )
         if ( bOrgFinal )
         {
             aOrgRet = Reference< XPropertySet >::query(mxOriginal)->
-                getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) );
-            sal_uInt32  nOrgCount = 0;
+                getPropertyValue( OUString::createFromAscii( "RowCount" ) );
             aOrgRet >>= nOrgCount;
             if ( nOrgCount == maS2O.Count() )
                 aRet <<= (sal_Bool) sal_True;
@@ -1236,7 +1235,7 @@ long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
             }
         default:
             {
-                OSL_FAIL( "DataType not supported for compare!" );
+                OSL_ENSURE( sal_False, "DataType not supported for compare!" );
             }
     }
 
@@ -1461,7 +1460,7 @@ void SortedResultSet::Initialize(
             nIndex++;
         }
     }
-    catch ( SQLException ) { OSL_FAIL( "SortedResultSet::Initialize() : Got unexpected SQLException" ); }
+    catch ( SQLException ) { OSL_ENSURE( sal_False, "SortedResultSet::Initialize() : Got unexpected SQLException" ); }
 
     // when we have fetched all the elements, we can create the
     // original to sorted mapping list from the s2o list
@@ -1470,7 +1469,7 @@ void SortedResultSet::Initialize(
 
     // insert some dummy entries first and replace then
     // the entries with the right ones
-    size_t i;
+    sal_uInt32 i;
 
     for ( i=1; i<maS2O.Count(); i++ )
         maO2S.Insert( (void*) 0, i );   // Insert( data, pos )
@@ -1495,7 +1494,7 @@ void SortedResultSet::CheckProperties( long nOldCount, sal_Bool bWasFinal )
             sal_Bool bIsFinal = sal_False;
             PropertyChangeEvent aEvt;
 
-            aEvt.PropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount"));
+            aEvt.PropertyName = OUString::createFromAscii( "RowCount" );
             aEvt.Further = sal_False;
             aEvt.PropertyHandle = -1;
             aEvt.OldValue <<= nOldCount;
@@ -1503,7 +1502,7 @@ void SortedResultSet::CheckProperties( long nOldCount, sal_Bool bWasFinal )
 
             PropertyChanged( aEvt );
 
-            OUString aName = OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal"));
+            OUString aName = OUString::createFromAscii( "IsRowCountFinal" );
             Any aRet = getPropertyValue( aName );
             if ( (aRet >>= bIsFinal) && bIsFinal != bWasFinal )
             {
@@ -1523,7 +1522,8 @@ void SortedResultSet::CheckProperties( long nOldCount, sal_Bool bWasFinal )
 //-------------------------------------------------------------------------
 void SortedResultSet::InsertNew( long nPos, long nCount )
 {
-    // for all entries in the msS20-list, which are >= nPos, increase by nCount
+    // in der maS2O Liste alle Einträge, die >= nPos sind, um nCount
+    // erhöhen
     SortListData    *pData;
     long            i, nEnd;
 
@@ -1537,15 +1537,15 @@ void SortedResultSet::InsertNew( long nPos, long nCount )
         }
     }
 
-    // and append the new entries at the end of the maS20-list or insert at the
-    // position nPos in the maS2O-list
+    // und die neuen einträge hinten an die maS2O Liste anhängen bzw
+    // an der Position nPos in der maO2S Liste einfügen
     for ( i=0; i<nCount; i++ )
     {
         nEnd += 1;
         pData = new SortListData( nEnd );
 
-        maS2O.Insert( pData, nEnd );    // Insert( Value, Position )
-        maO2S.Insert( (void*)nEnd, (sal_uInt32)(nPos+i) );  // Insert( Value, Position )
+        maS2O.Insert( pData, nEnd );    // Insert( Wert, Position )
+        maO2S.Insert( (void*)nEnd, (sal_uInt32)(nPos+i) );  // Insert( Wert, Position )
     }
 
     mnCount += nCount;
@@ -1693,7 +1693,7 @@ void SortedResultSet::BuildSortInfo(
 
     if ( ! xMeta.is() )
     {
-        OSL_FAIL( "No MetaData, No Sorting!" );
+        OSL_ENSURE( sal_False, "No MetaData, No Sorting!" );
         return;
     }
 
@@ -1816,7 +1816,7 @@ void SortedResultSet::ResortModified( EventList* pList )
             }
         }
     }
-    catch ( SQLException ) { OSL_FAIL( "SortedResultSet::ResortModified() : Got unexpected SQLException" ); }
+    catch ( SQLException ) { OSL_ENSURE( sal_False, "SortedResultSet::ResortModified() : Got unexpected SQLException" ); }
 
     maModList.Clear();
 }
@@ -1849,7 +1849,7 @@ void SortedResultSet::ResortNew( EventList* pList )
             pList->AddEvent( ListActionType::INSERTED, nNewPos, 1 );
         }
     }
-    catch ( SQLException ) { OSL_FAIL( "SortedResultSet::ResortNew() : Got unexpected SQLException" ); }
+    catch ( SQLException ) { OSL_ENSURE( sal_False, "SortedResultSet::ResortNew() : Got unexpected SQLException" ); }
 }
 
 //-------------------------------------------------------------------------
@@ -1930,12 +1930,12 @@ long SortedEntryList::operator [] ( long nPos ) const
             return pData->mnCurPos;
         else
         {
-            OSL_FAIL( "SortedEntryList: Can't get value for modified entry!");
+            OSL_ENSURE( sal_False, "SortedEntryList: Can't get value for modified entry!");
             return 0;
         }
     else
     {
-        OSL_FAIL( "SortedEntryList: invalid pos!");
+        OSL_ENSURE( sal_False, "SortedEntryList: invalid pos!");
         return 0;
     }
 }
@@ -2003,12 +2003,12 @@ void SimpleList::Replace( void* pData, sal_uInt32 nPos )
 
 SRSPropertySetInfo::SRSPropertySetInfo()
 {
-    maProps[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount"));
+    maProps[0].Name = OUString::createFromAscii( "RowCount" );
     maProps[0].Handle = -1;
     maProps[0].Type = ::getCppuType( (const OUString*) NULL );
     maProps[0].Attributes = -1;
 
-    maProps[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal"));
+    maProps[1].Name = OUString::createFromAscii( "IsRowCountFinal" );
     maProps[1].Handle = -1;
     maProps[1].Type = ::getBooleanCppuType();
     maProps[1].Attributes = -1;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/plotareacontext.hxx"
-
 #include "oox/drawingml/shapepropertiescontext.hxx"
 #include "oox/drawingml/chart/axiscontext.hxx"
 #include "oox/drawingml/chart/plotareamodel.hxx"
@@ -35,14 +34,12 @@
 #include "oox/drawingml/chart/titlecontext.hxx"
 #include "oox/drawingml/chart/typegroupcontext.hxx"
 
+using ::oox::core::ContextHandler2Helper;
+using ::oox::core::ContextHandlerRef;
+
 namespace oox {
 namespace drawingml {
 namespace chart {
-
-// ============================================================================
-
-using ::oox::core::ContextHandler2Helper;
-using ::oox::core::ContextHandlerRef;
 
 // ============================================================================
 

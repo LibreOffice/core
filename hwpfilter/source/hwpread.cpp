@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+/* $Id: hwpread.cpp,v 1.5 2008-04-10 12:10:14 rt Exp $ */
 
 #include "precompile.h"
 
@@ -50,7 +52,7 @@ int HBox::Read(HWPFile & )
 
 // skip block
 
-int SkipData::Read(HWPFile & hwpf)
+int SkipBlock::Read(HWPFile & hwpf)
 {
     hwpf.Read4b(&data_block_len, 1);
     hwpf.Read2b(&dummy, 1);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnume.hxx>
-#include "xmloff/numehelp.hxx"
+#include "numehelp.hxx"
 
 #include <xmloff/families.hxx>
 #include <xmloff/XMLEventExport.hxx>
@@ -94,77 +94,77 @@ using namespace ::com::sun::star::container;
 using namespace ::xmloff::token;
 
 
-static sal_Char const FIELD_SERVICE_SENDER[] = "ExtendedUser";
-static sal_Char const FIELD_SERVICE_AUTHOR[] = "Author";
-static sal_Char const FIELD_SERVICE_JUMPEDIT[] = "JumpEdit";
-static sal_Char const FIELD_SERVICE_GETEXP[] = "GetExpression";
-static sal_Char const FIELD_SERVICE_SETEXP[] = "SetExpression";
-static sal_Char const FIELD_SERVICE_USER[] = "User";
-static sal_Char const FIELD_SERVICE_INPUT[] = "Input";
-static sal_Char const FIELD_SERVICE_USERINPUT[] = "InputUser";
-static sal_Char const FIELD_SERVICE_DATETIME[] = "DateTime";
-static sal_Char const FIELD_SERVICE_PAGENUMBER[] = "PageNumber";
-static sal_Char const FIELD_SERVICE_DB_NEXT[] = "DatabaseNextSet";
-static sal_Char const FIELD_SERVICE_DB_SELECT[] = "DatabaseNumberOfSet";
-static sal_Char const FIELD_SERVICE_DB_NUMBER[] = "DatabaseSetNumber";
-static sal_Char const FIELD_SERVICE_DB_DISPLAY[] = "Database";
-static sal_Char const FIELD_SERVICE_DB_NAME[] = "DatabaseName";
-static sal_Char const FIELD_SERVICE_CONDITIONAL_TEXT[] = "ConditionalText";
-static sal_Char const FIELD_SERVICE_HIDDEN_TEXT[] = "HiddenText";
-static sal_Char const FIELD_SERVICE_HIDDEN_PARAGRAPH[] = "HiddenParagraph";
-static sal_Char const FIELD_SERVICE_DOC_INFO_CHANGE_AUTHOR[] = "DocInfo.ChangeAuthor";
-static sal_Char const FIELD_SERVICE_DOC_INFO_CHANGE_AUTHOR2[] = "docinfo.ChangeAuthor";
-static sal_Char const FIELD_SERVICE_DOC_INFO_CHANGE_DATE_TIME[] = "DocInfo.ChangeDateTime";
-static sal_Char const FIELD_SERVICE_DOC_INFO_CHANGE_DATE_TIME2[] = "docinfo.ChangeDateTime";
-static sal_Char const FIELD_SERVICE_DOC_INFO_EDIT_TIME[] = "DocInfo.EditTime";
-static sal_Char const FIELD_SERVICE_DOC_INFO_EDIT_TIME2[] = "docinfo.EditTime";
-static sal_Char const FIELD_SERVICE_DOC_INFO_DESCRIPTION[] = "DocInfo.Description";
-static sal_Char const FIELD_SERVICE_DOC_INFO_DESCRIPTION2[] = "docinfo.Description";
-static sal_Char const FIELD_SERVICE_DOC_INFO_CREATE_AUTHOR[] = "DocInfo.CreateAuthor";
-static sal_Char const FIELD_SERVICE_DOC_INFO_CREATE_AUTHOR2[] = "docinfo.CreateAuthor";
-static sal_Char const FIELD_SERVICE_DOC_INFO_CREATE_DATE_TIME[] = "DocInfo.CreateDateTime";
-static sal_Char const FIELD_SERVICE_DOC_INFO_CREATE_DATE_TIME2[] = "docinfo.CreateDateTime";
-static sal_Char const FIELD_SERVICE_DOC_INFO_CUSTOM[] = "DocInfo.Custom";
-static sal_Char const FIELD_SERVICE_DOC_INFO_CUSTOM2[] = "docinfo.Custom";
-static sal_Char const FIELD_SERVICE_DOC_INFO_PRINT_AUTHOR[] = "DocInfo.PrintAuthor";
-static sal_Char const FIELD_SERVICE_DOC_INFO_PRINT_AUTHOR2[] = "docinfo.PrintAuthor";
-static sal_Char const FIELD_SERVICE_DOC_INFO_PRINT_DATE_TIME[] = "DocInfo.PrintDateTime";
-static sal_Char const FIELD_SERVICE_DOC_INFO_PRINT_DATE_TIME2[] = "docinfo.PrintDateTime";
-static sal_Char const FIELD_SERVICE_DOC_INFO_KEY_WORDS[] = "DocInfo.KeyWords";
-static sal_Char const FIELD_SERVICE_DOC_INFO_KEY_WORDS2[] = "docinfo.KeyWords";
-static sal_Char const FIELD_SERVICE_DOC_INFO_SUBJECT[] = "DocInfo.Subject";
-static sal_Char const FIELD_SERVICE_DOC_INFO_SUBJECT2[] = "docinfo.Subject";
-static sal_Char const FIELD_SERVICE_DOC_INFO_TITLE[] = "DocInfo.Title";
-static sal_Char const FIELD_SERVICE_DOC_INFO_TITLE2[] = "docinfo.Title";
-static sal_Char const FIELD_SERVICE_DOC_INFO_REVISION[] = "DocInfo.Revision";
-static sal_Char const FIELD_SERVICE_DOC_INFO_REVISION2[] = "docinfo.Revision";
-static sal_Char const FIELD_SERVICE_FILE_NAME[] = "FileName";
-static sal_Char const FIELD_SERVICE_CHAPTER[] = "Chapter";
-static sal_Char const FIELD_SERVICE_TEMPLATE_NAME[] = "TemplateName";
-static sal_Char const FIELD_SERVICE_PAGE_COUNT[] = "PageCount";
-static sal_Char const FIELD_SERVICE_PARAGRAPH_COUNT[] = "ParagraphCount";
-static sal_Char const FIELD_SERVICE_WORD_COUNT[] = "WordCount";
-static sal_Char const FIELD_SERVICE_CHARACTER_COUNT[] = "CharacterCount";
-static sal_Char const FIELD_SERVICE_TABLE_COUNT[] = "TableCount";
-static sal_Char const FIELD_SERVICE_GRAPHIC_COUNT[] = "GraphicObjectCount";
-static sal_Char const FIELD_SERVICE_OBJECT_COUNT[] = "EmbeddedObjectCount";
-static sal_Char const FIELD_SERVICE_REFERENCE_PAGE_SET[] = "ReferencePageSet";
-static sal_Char const FIELD_SERVICE_REFERENCE_PAGE_GET[] = "ReferencePageGet";
-static sal_Char const FIELD_SERVICE_SHEET_NAME[] = "SheetName";
-static sal_Char const FIELD_SERVICE_MACRO[] = "Macro";
-static sal_Char const FIELD_SERVICE_GET_REFERENCE[] = "GetReference";
-static sal_Char const FIELD_SERVICE_DDE[] = "DDE";
-static sal_Char const FIELD_SERVICE_URL[] = "URL";
-static sal_Char const FIELD_SERVICE_BIBLIOGRAPHY[] = "Bibliography";
-static sal_Char const FIELD_SERVICE_SCRIPT[] = "Script";
-static sal_Char const FIELD_SERVICE_ANNOTATION[] = "Annotation";
-static sal_Char const FIELD_SERVICE_COMBINED_CHARACTERS[] = "CombinedCharacters";
-static sal_Char const FIELD_SERVICE_META[] = "MetadataField";
-static sal_Char const FIELD_SERVICE_MEASURE[] = "Measure";
-static sal_Char const FIELD_SERVICE_TABLE_FORMULA[] = "TableFormula";
-static sal_Char const FIELD_SERVICE_DROP_DOWN[] = "DropDown";
+static sal_Char __READONLY_DATA FIELD_SERVICE_SENDER[] = "ExtendedUser";
+static sal_Char __READONLY_DATA FIELD_SERVICE_AUTHOR[] = "Author";
+static sal_Char __READONLY_DATA FIELD_SERVICE_JUMPEDIT[] = "JumpEdit";
+static sal_Char __READONLY_DATA FIELD_SERVICE_GETEXP[] = "GetExpression";
+static sal_Char __READONLY_DATA FIELD_SERVICE_SETEXP[] = "SetExpression";
+static sal_Char __READONLY_DATA FIELD_SERVICE_USER[] = "User";
+static sal_Char __READONLY_DATA FIELD_SERVICE_INPUT[] = "Input";
+static sal_Char __READONLY_DATA FIELD_SERVICE_USERINPUT[] = "InputUser";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DATETIME[] = "DateTime";
+static sal_Char __READONLY_DATA FIELD_SERVICE_PAGENUMBER[] = "PageNumber";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DB_NEXT[] = "DatabaseNextSet";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DB_SELECT[] = "DatabaseNumberOfSet";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DB_NUMBER[] = "DatabaseSetNumber";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DB_DISPLAY[] = "Database";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DB_NAME[] = "DatabaseName";
+static sal_Char __READONLY_DATA FIELD_SERVICE_CONDITIONAL_TEXT[] = "ConditionalText";
+static sal_Char __READONLY_DATA FIELD_SERVICE_HIDDEN_TEXT[] = "HiddenText";
+static sal_Char __READONLY_DATA FIELD_SERVICE_HIDDEN_PARAGRAPH[] = "HiddenParagraph";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CHANGE_AUTHOR[] = "DocInfo.ChangeAuthor";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CHANGE_AUTHOR2[] = "docinfo.ChangeAuthor";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CHANGE_DATE_TIME[] = "DocInfo.ChangeDateTime";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CHANGE_DATE_TIME2[] = "docinfo.ChangeDateTime";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_EDIT_TIME[] = "DocInfo.EditTime";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_EDIT_TIME2[] = "docinfo.EditTime";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_DESCRIPTION[] = "DocInfo.Description";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_DESCRIPTION2[] = "docinfo.Description";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CREATE_AUTHOR[] = "DocInfo.CreateAuthor";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CREATE_AUTHOR2[] = "docinfo.CreateAuthor";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CREATE_DATE_TIME[] = "DocInfo.CreateDateTime";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CREATE_DATE_TIME2[] = "docinfo.CreateDateTime";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CUSTOM[] = "DocInfo.Custom";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CUSTOM2[] = "docinfo.Custom";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_PRINT_AUTHOR[] = "DocInfo.PrintAuthor";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_PRINT_AUTHOR2[] = "docinfo.PrintAuthor";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_PRINT_DATE_TIME[] = "DocInfo.PrintDateTime";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_PRINT_DATE_TIME2[] = "docinfo.PrintDateTime";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_KEY_WORDS[] = "DocInfo.KeyWords";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_KEY_WORDS2[] = "docinfo.KeyWords";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_SUBJECT[] = "DocInfo.Subject";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_SUBJECT2[] = "docinfo.Subject";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_TITLE[] = "DocInfo.Title";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_TITLE2[] = "docinfo.Title";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_REVISION[] = "DocInfo.Revision";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_REVISION2[] = "docinfo.Revision";
+static sal_Char __READONLY_DATA FIELD_SERVICE_FILE_NAME[] = "FileName";
+static sal_Char __READONLY_DATA FIELD_SERVICE_CHAPTER[] = "Chapter";
+static sal_Char __READONLY_DATA FIELD_SERVICE_TEMPLATE_NAME[] = "TemplateName";
+static sal_Char __READONLY_DATA FIELD_SERVICE_PAGE_COUNT[] = "PageCount";
+static sal_Char __READONLY_DATA FIELD_SERVICE_PARAGRAPH_COUNT[] = "ParagraphCount";
+static sal_Char __READONLY_DATA FIELD_SERVICE_WORD_COUNT[] = "WordCount";
+static sal_Char __READONLY_DATA FIELD_SERVICE_CHARACTER_COUNT[] = "CharacterCount";
+static sal_Char __READONLY_DATA FIELD_SERVICE_TABLE_COUNT[] = "TableCount";
+static sal_Char __READONLY_DATA FIELD_SERVICE_GRAPHIC_COUNT[] = "GraphicObjectCount";
+static sal_Char __READONLY_DATA FIELD_SERVICE_OBJECT_COUNT[] = "EmbeddedObjectCount";
+static sal_Char __READONLY_DATA FIELD_SERVICE_REFERENCE_PAGE_SET[] = "ReferencePageSet";
+static sal_Char __READONLY_DATA FIELD_SERVICE_REFERENCE_PAGE_GET[] = "ReferencePageGet";
+static sal_Char __READONLY_DATA FIELD_SERVICE_SHEET_NAME[] = "SheetName";
+static sal_Char __READONLY_DATA FIELD_SERVICE_MACRO[] = "Macro";
+static sal_Char __READONLY_DATA FIELD_SERVICE_GET_REFERENCE[] = "GetReference";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DDE[] = "DDE";
+static sal_Char __READONLY_DATA FIELD_SERVICE_URL[] = "URL";
+static sal_Char __READONLY_DATA FIELD_SERVICE_BIBLIOGRAPHY[] = "Bibliography";
+static sal_Char __READONLY_DATA FIELD_SERVICE_SCRIPT[] = "Script";
+static sal_Char __READONLY_DATA FIELD_SERVICE_ANNOTATION[] = "Annotation";
+static sal_Char __READONLY_DATA FIELD_SERVICE_COMBINED_CHARACTERS[] = "CombinedCharacters";
+static sal_Char __READONLY_DATA FIELD_SERVICE_META[] = "MetadataField";
+static sal_Char __READONLY_DATA FIELD_SERVICE_MEASURE[] = "Measure";
+static sal_Char __READONLY_DATA FIELD_SERVICE_TABLE_FORMULA[] = "TableFormula";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DROP_DOWN[] = "DropDown";
 
-SvXMLEnumStringMapEntry const aFieldServiceNameMapping[] =
+SvXMLEnumStringMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
 {
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_SENDER, FIELD_ID_SENDER ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_AUTHOR, FIELD_ID_AUTHOR ),
@@ -384,7 +384,7 @@ enum FieldIdEnum XMLTextFieldExport::GetFieldID(
     const OUString* pNames = aServices.getConstArray();
     sal_Int32 nCount = aServices.getLength();
 
-    OUString sFieldName;    // service name postfix of current field
+    OUString sFieldName;	// service name postfix of current field
 
     // search for TextField service name
     while( nCount-- )
@@ -440,8 +440,8 @@ enum FieldIdEnum XMLTextFieldExport::GetFieldID(
 }
 
 enum FieldIdEnum XMLTextFieldExport::MapFieldName(
-    const OUString& sFieldName,             // field (master) name
-    const Reference<XPropertySet> & xPropSet)   // for subtype
+    const OUString& sFieldName,				// field (master) name
+    const Reference<XPropertySet> & xPropSet)	// for subtype
 {
     // we'll proceed in 2 steps:
     // a) map service name to preliminary FIELD_ID
@@ -487,8 +487,8 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
             {
                 switch (GetIntProperty(sPropertySubType, xPropSet))
                 {
-                    case SetVariableType::STRING:   // text field
-                    case SetVariableType::VAR:      // num field
+                    case SetVariableType::STRING:	// text field
+                    case SetVariableType::VAR:		// num field
                         nToken = FIELD_ID_VARIABLE_SET;
                         break;
                     case SetVariableType::SEQUENCE:
@@ -505,8 +505,8 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
         case FIELD_ID_VARIABLE_GET:
             switch (GetIntProperty(sPropertySubType, xPropSet))
             {
-                case SetVariableType::STRING:   // text field
-                case SetVariableType::VAR:      // num field
+                case SetVariableType::STRING:	// text field
+                case SetVariableType::VAR:		// num field
                     nToken = FIELD_ID_VARIABLE_GET;
                     break;
                 case SetVariableType::FORMULA:
@@ -656,7 +656,7 @@ sal_Bool XMLTextFieldExport::IsStringField(
     {
         // depends on field sub type
         return ( GetIntProperty(sPropertySubType, xPropSet) ==
-                 SetVariableType::STRING                    );
+                 SetVariableType::STRING					);
     }
 
     case FIELD_ID_USER_GET:
@@ -756,7 +756,7 @@ sal_Bool XMLTextFieldExport::IsStringField(
     case FIELD_ID_DRAW_FOOTER:
     case FIELD_ID_DRAW_DATE_TIME:
     default:
-        OSL_FAIL("unkown field type/field has no content");
+        DBG_ERROR("unkown field type/field has no content");
         return sal_True; // invalid info; string in case of doubt
     }
 }
@@ -975,7 +975,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
 
     case FIELD_ID_UNKNOWN:
     default:
-        OSL_FAIL("unkown field type!");
+        DBG_ERROR("unkown field type!");
         // ignore -> no format for unkowns
         break;
     }
@@ -1141,7 +1141,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessValueAndType(IsStringField(nToken, rPropSet),
                             GetIntProperty(sPropertyNumberFormat, rPropSet),
                             sEmpty, sEmpty, 0.0, // values not used
-                            sal_False,
+                            sal_False, 
                             bExportValueType,
                             !bCmd,
                             ! GetOptionalBoolProperty(
@@ -1181,7 +1181,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                        bCmd);
         ProcessValueAndType(IsStringField(nToken, rPropSet),
                             GetIntProperty(sPropertyNumberFormat, rPropSet),
-                            sEmpty, sEmpty, 0.0, // values not used
+                            sEmpty, sEmpty,	0.0, // values not used
                             sal_False, sal_False, !bCmd,
                             ! GetOptionalBoolProperty(
                                  sPropertyIsFixedLanguage,
@@ -1197,9 +1197,9 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_USER_INPUT:
         // user input field: name (from FieldMaster), description
-//      ProcessString(XML_NAME,
-//                    GetStringProperty(sPropertyName,
-//                                      GetMasterPropertySet(rTextField)));
+// 		ProcessString(XML_NAME,
+// 					  GetStringProperty(sPropertyName,
+// 										GetMasterPropertySet(rTextField)));
         ProcessString(XML_NAME,
                       GetStringProperty(sPropertyContent, rPropSet));
         ProcessString(XML_DESCRIPTION,
@@ -1445,7 +1445,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         // export number format if available (happens only for numbers!)
         if (!GetBoolProperty(sPropertyIsDataBaseFormat, rPropSet))
         {
-            ProcessValueAndType(sal_False,  // doesn't happen for text
+            ProcessValueAndType(sal_False,	// doesn't happen for text
                                 GetIntProperty(sPropertyNumberFormat,rPropSet),
                                 sEmpty, sEmpty, 0.0, // not used
                                 sal_False, sal_False, sal_True, sal_False);
@@ -1501,10 +1501,10 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_DOCINFO_CUSTOM:
     {
-        ProcessValueAndType(sal_False,  // doesn't happen for text
+        ProcessValueAndType(sal_False,	// doesn't happen for text
                                 GetIntProperty(sPropertyNumberFormat,rPropSet),
                                 sEmpty, sEmpty, 0.0, // not used
-                                sal_False, sal_False, sal_True,
+                                sal_False, sal_False, sal_True, 
                                 ! GetOptionalBoolProperty(
                                     sPropertyIsFixedLanguage,
                                     rPropSet, xPropSetInfo, sal_False ));
@@ -1852,7 +1852,7 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_UNKNOWN:
     default:
-        OSL_FAIL("unkown field type encountered!");
+        DBG_ERROR("unkown field type encountered!");
         // always export content
         GetExport().Characters(sPresentation);
     }
@@ -1871,10 +1871,10 @@ void XMLTextFieldExport::ExportFieldDeclarations(
     const Reference<XText> & rText )
 {
     // store lists for decl elements
-    vector<OUString>                    aVarName;
-    vector<OUString>                    aUserName;
-    vector<OUString>                    aSeqName;
-    vector<OUString>                    aDdeName;
+    vector<OUString> 					aVarName;
+    vector<OUString>					aUserName;
+    vector<OUString>					aSeqName;
+    vector<OUString>					aDdeName;
 
     // get text fields supplier and field master name access
     Reference<XTextFieldsSupplier> xTextFieldsSupp(GetExport().GetModel(),
@@ -1909,7 +1909,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                 sal_Int32 i = 0;
                 for( set<OUString>::iterator aSetIter = rOurMasters.begin();
                      aSetIter != rOurMasters.end();
-                     ++aSetIter, ++i )
+                     aSetIter++, i++ )
                 {
                     aFieldMasters[i] = *aSetIter;
                 }
@@ -1990,7 +1990,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
 
         for (vector<OUString>::iterator aVarIter = aVarName.begin();
              aVarIter != aVarName.end();
-             ++aVarIter) {
+             aVarIter++) {
 
             OUString sName = *aVarIter;
 
@@ -2049,7 +2049,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
 
         for (vector<OUString>::iterator aSeqIter = aSeqName.begin();
              aSeqIter != aSeqName.end();
-             ++aSeqIter) {
+             aSeqIter++) {
 
             OUString sName = *aSeqIter;
 
@@ -2091,7 +2091,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
 
         for (vector<OUString>::iterator aUserIter = aUserName.begin();
              aUserIter != aUserName.end();
-             ++aUserIter) {
+             aUserIter++) {
 
             OUString sName = *aUserIter;
 
@@ -2142,7 +2142,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
 
         for (vector<OUString>::iterator aDdeIter = aDdeName.begin();
              aDdeIter != aDdeName.end();
-             ++aDdeIter)
+             aDdeIter++)
         {
             OUString sName = *aDdeIter;
 
@@ -2340,16 +2340,16 @@ void XMLTextFieldExport::ExportMetaField(
 
 /// export all data-style related attributes
 void XMLTextFieldExport::ProcessValueAndType(
-    sal_Bool bIsString,     /// do we process a string or a number?
-    sal_Int32 nFormatKey,   /// format key for NumberFormatter; inv. if string
-    const OUString& sContent,   /// string content; possibly invalid
-    const OUString& sDefault,   /// default string
-    double fValue,          /// float content; possibly invalid
-    sal_Bool bExportValue,  /// export value attribute?
-    sal_Bool bExportValueType,  /// export value-type attribute?
-    sal_Bool bExportStyle,  /// export style-sttribute?
+    sal_Bool bIsString,		/// do we process a string or a number?
+    sal_Int32 nFormatKey,	/// format key for NumberFormatter; inv. if string
+    const OUString& sContent,	/// string content; possibly invalid
+    const OUString& sDefault,	/// default string
+    double fValue,			/// float content; possibly invalid
+    sal_Bool bExportValue,	/// export value attribute?
+    sal_Bool bExportValueType,	/// export value-type attribute?
+    sal_Bool bExportStyle,	/// export style-sttribute?
     sal_Bool bForceSystemLanguage, /// export language attributes?
-    sal_Bool bTimeStyle)    // exporting a time style?
+    sal_Bool bTimeStyle)	// exporting a time style?
 {
     // String or number?
     if (bIsString)
@@ -2690,30 +2690,30 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
 }
 
 
-SvXMLEnumMapEntry const aBibliographyDataTypeMap[] =
+SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataTypeMap[] =
 {
-    { XML_ARTICLE,          BibliographyDataType::ARTICLE },
-    { XML_BOOK,             BibliographyDataType::BOOK },
-    { XML_BOOKLET,          BibliographyDataType::BOOKLET },
-    { XML_CONFERENCE,       BibliographyDataType::CONFERENCE },
-    { XML_CUSTOM1,          BibliographyDataType::CUSTOM1 },
-    { XML_CUSTOM2,          BibliographyDataType::CUSTOM2 },
-    { XML_CUSTOM3,          BibliographyDataType::CUSTOM3 },
-    { XML_CUSTOM4,          BibliographyDataType::CUSTOM4 },
-    { XML_CUSTOM5,          BibliographyDataType::CUSTOM5 },
-    { XML_EMAIL,            BibliographyDataType::EMAIL },
-    { XML_INBOOK,           BibliographyDataType::INBOOK },
-    { XML_INCOLLECTION,     BibliographyDataType::INCOLLECTION },
-    { XML_INPROCEEDINGS,    BibliographyDataType::INPROCEEDINGS },
-    { XML_JOURNAL,          BibliographyDataType::JOURNAL },
-    { XML_MANUAL,           BibliographyDataType::MANUAL },
-    { XML_MASTERSTHESIS,    BibliographyDataType::MASTERSTHESIS },
-    { XML_MISC,             BibliographyDataType::MISC },
-    { XML_PHDTHESIS,        BibliographyDataType::PHDTHESIS },
-    { XML_PROCEEDINGS,      BibliographyDataType::PROCEEDINGS },
-    { XML_TECHREPORT,       BibliographyDataType::TECHREPORT },
-    { XML_UNPUBLISHED,      BibliographyDataType::UNPUBLISHED },
-    { XML_WWW,              BibliographyDataType::WWW },
+    { XML_ARTICLE,			BibliographyDataType::ARTICLE },
+    { XML_BOOK,			    BibliographyDataType::BOOK },
+    { XML_BOOKLET,			BibliographyDataType::BOOKLET },
+    { XML_CONFERENCE,		BibliographyDataType::CONFERENCE },
+    { XML_CUSTOM1,			BibliographyDataType::CUSTOM1 },
+    { XML_CUSTOM2,			BibliographyDataType::CUSTOM2 },
+    { XML_CUSTOM3,			BibliographyDataType::CUSTOM3 },
+    { XML_CUSTOM4,			BibliographyDataType::CUSTOM4 },
+    { XML_CUSTOM5,			BibliographyDataType::CUSTOM5 },
+    { XML_EMAIL,			BibliographyDataType::EMAIL },
+    { XML_INBOOK,			BibliographyDataType::INBOOK },
+    { XML_INCOLLECTION,	    BibliographyDataType::INCOLLECTION },
+    { XML_INPROCEEDINGS,	BibliographyDataType::INPROCEEDINGS },
+    { XML_JOURNAL,			BibliographyDataType::JOURNAL },
+    { XML_MANUAL,			BibliographyDataType::MANUAL },
+    { XML_MASTERSTHESIS,	BibliographyDataType::MASTERSTHESIS },
+    { XML_MISC,			    BibliographyDataType::MISC },
+    { XML_PHDTHESIS,		BibliographyDataType::PHDTHESIS },
+    { XML_PROCEEDINGS,		BibliographyDataType::PROCEEDINGS },
+    { XML_TECHREPORT,		BibliographyDataType::TECHREPORT },
+    { XML_UNPUBLISHED,		BibliographyDataType::UNPUBLISHED },
+    { XML_WWW,				BibliographyDataType::WWW },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -2893,7 +2893,7 @@ sal_Bool XMLTextFieldExport::ExplodeFieldMasterName(
 
 
 // for XDependentTextFields, get PropertySet of FieldMaster
-Reference<XPropertySet> XMLTextFieldExport::GetMasterPropertySet(
+Reference<XPropertySet>	XMLTextFieldExport::GetMasterPropertySet(
     const Reference<XTextField> & rTextField)
 {
     // name, value => get Property set of TextFieldMaster
@@ -2957,14 +2957,14 @@ enum XMLTokenEnum XMLTextFieldExport::MapPlaceholderType(sal_uInt16 nType)
 
         default:
             // unkown placeholder: XML_TEXT
-            OSL_FAIL("unkown placeholder type");
+            DBG_ERROR("unkown placeholder type");
     }
 
     return eType;
 }
 
 
-/// element name for author fields
+/// element name for author	fields
 enum XMLTokenEnum XMLTextFieldExport::MapAuthorFieldName(
     const Reference<XPropertySet> & xPropSet)
 {
@@ -2996,7 +2996,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapPageNumberName(
             nOffset -= 1;
             break;
         default:
-            OSL_FAIL("unknown page number type");
+            DBG_ERROR("unknown page number type");
             eName = XML_TOKEN_INVALID;
             break;
     }
@@ -3030,7 +3030,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapTemplateDisplayFormat(sal_Int16 nFormat
             eName = XML_TITLE;
             break;
         default:
-            OSL_FAIL("unknown template display format");
+            DBG_ERROR("unknown template display format");
             eName = XML_TOKEN_INVALID;
             break;
     }
@@ -3067,7 +3067,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapCountFieldName(FieldIdEnum nToken)
             eElement = XML_OBJECT_COUNT;
             break;
         default:
-            OSL_FAIL("no count field token");
+            DBG_ERROR("no count field token");
             eElement = XML_TOKEN_INVALID;
             break;
     }
@@ -3098,7 +3098,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapChapterDisplayFormat(sal_Int16 nFormat)
             eName = XML_PLAIN_NUMBER;
             break;
         default:
-            OSL_FAIL("unkown chapter display format");
+            DBG_ERROR("unkown chapter display format");
             eName = XML_TOKEN_INVALID;
             break;
     }
@@ -3127,7 +3127,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapFilenameDisplayFormat(sal_Int16 nFormat
             eName = XML_NAME_AND_EXTENSION;
             break;
         default:
-            OSL_FAIL("unknown filename display format");
+            DBG_ERROR("unknown filename display format");
     }
 
     return eName;
@@ -3167,7 +3167,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapReferenceType(sal_Int16 nType)
             // XML_TEMPLATE is default
             eElement = XML_TEMPLATE;
             break;
-        // Core implementation for direct cross-references (#i81002#)
+        // --> OD 2007-09-14 #i81002#
         case ReferenceFieldPart::NUMBER:
             eElement = XML_NUMBER;
             break;
@@ -3177,8 +3177,9 @@ enum XMLTokenEnum XMLTextFieldExport::MapReferenceType(sal_Int16 nType)
         case ReferenceFieldPart::NUMBER_FULL_CONTEXT:
             eElement = XML_NUMBER_ALL_SUPERIOR;
             break;
+        // <--
         default:
-            OSL_FAIL("unknown reference type");
+            DBG_ERROR("unknown reference type");
             eElement = XML_TEMPLATE;
             break;
     }
@@ -3207,7 +3208,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapReferenceSource(sal_Int16 nType)
             eElement = XML_NOTE_REF;
             break;
         default:
-            OSL_FAIL("unkown reference source");
+            DBG_ERROR("unkown reference source");
             break;
     }
 
@@ -3470,7 +3471,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapBibliographyFieldName(OUString sName)
     }
     else
     {
-        OSL_FAIL("Unknown bibliography info data");
+        DBG_ERROR("Unknown bibliography info data");
         eName = XML_TOKEN_INVALID;
     }
 

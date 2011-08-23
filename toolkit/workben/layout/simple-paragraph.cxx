@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,11 +152,10 @@ namespace SVX {
 
 
 
-SvxSimpleParagraphDialog::SvxSimpleParagraphDialog( Window* pParent )
-    : SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_STD_PARAGRAPH ), rAttr )
-    , Dialog( pParent, "simple-paragraph.xml", "dialog" )
-    , aLineSpacingList( this, "line-spacing-list" )
-    , pPrevWin(NULL)
+SvxSimpleParagraphDialog::SvxSimpleParagraphDialog( Window* pParent ) :
+    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_STD_PARAGRAPH ), rAttr ),
+    Dialog( pParent, "simple-paragraph.xml", "dialog" ),
+    aLineSpacingList( this, "line-spacing-list" )
 {
 fprintf(stderr, "creating res mgr\n");
     pMgr = ResMgr::CreateResMgr("SOME_NAME");

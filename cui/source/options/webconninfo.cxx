@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 #include <dialmgr.hxx>
@@ -51,10 +54,10 @@ namespace svx
 PasswordTable::PasswordTable( Window* pParent, const ResId& rResId ) :
     SvxSimpleTable( pParent, rResId )
 {
-    SetStyle( GetStyle() | WB_NOINITIALSELECTION );
+    SetWindowBits( GetStyle() | WB_NOINITIALSELECTION );
 }
 
-void PasswordTable::InsertHeaderItem( sal_uInt16 nColumn, const String& rText, HeaderBarItemBits nBits )
+void PasswordTable::InsertHeaderItem( USHORT nColumn, const String& rText, HeaderBarItemBits nBits )
 {
     GetTheHeaderBar()->InsertItem( nColumn, rText, 0, nBits );
 }
@@ -66,11 +69,11 @@ void PasswordTable::ResetTabs()
 
 void PasswordTable::Resort( bool bForced )
 {
-    sal_uInt16 nColumn = GetSelectedCol();
+    USHORT nColumn = GetSelectedCol();
     if ( 0 == nColumn || bForced ) // only the first column is sorted
     {
         HeaderBarItemBits nBits = GetTheHeaderBar()->GetItemBits(1);
-        sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+        BOOL bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
         SvSortMode eMode = SortAscending;
 
         if ( bUp )
@@ -160,8 +163,8 @@ WebConnectionInfoDialog::WebConnectionInfoDialog( Window* pParent ) :
     m_aChangeBtn.SetClickHdl( LINK( this, WebConnectionInfoDialog, ChangePasswordHdl ) );
     m_aPasswordsLB.SetSelectHdl( LINK( this, WebConnectionInfoDialog, EntrySelectedHdl ) );
 
-    m_aRemoveBtn.Enable( sal_False );
-    m_aChangeBtn.Enable( sal_False );
+    m_aRemoveBtn.Enable( FALSE );
+    m_aChangeBtn.Enable( FALSE );
 
     HeaderBarClickedHdl( NULL );
 }
@@ -199,24 +202,24 @@ void WebConnectionInfoDialog::FillPasswordList()
             uno::Sequence< task::UrlRecord > aURLEntries = xPasswdContainer->getAllPersistent( xInteractionHandler );
             sal_Int32 nCount = 0;
             for ( sal_Int32 nURLInd = 0; nURLInd < aURLEntries.getLength(); nURLInd++ )
-            {
+            {    
                 for ( sal_Int32 nUserInd = 0; nUserInd < aURLEntries[nURLInd].UserList.getLength(); nUserInd++ )
                 {
                     ::rtl::OUString aUIEntry( aURLEntries[nURLInd].Url );
                     aUIEntry += ::rtl::OUString::valueOf( (sal_Unicode)'\t' );
                     aUIEntry += aURLEntries[nURLInd].UserList[nUserInd].UserName;
                     SvLBoxEntry* pEntry = m_aPasswordsLB.InsertEntry( aUIEntry );
-                    pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );
+                    pEntry->SetUserData( (void*)(nCount++) );
                 }
             }
 
             // remember pos of first url container entry.
             m_nPos = nCount;
 
-            uno::Reference< task::XUrlContainer > xUrlContainer(
+            uno::Reference< task::XUrlContainer > xUrlContainer( 
                 xPasswdContainer, uno::UNO_QUERY_THROW );
 
-            uno::Sequence< rtl::OUString > aUrls
+            uno::Sequence< rtl::OUString > aUrls 
                 = xUrlContainer->getUrls( sal_True /* OnlyPersistent */ );
 
             for ( sal_Int32 nURLIdx = 0; nURLIdx < aUrls.getLength(); nURLIdx++ )
@@ -225,7 +228,7 @@ void WebConnectionInfoDialog::FillPasswordList()
                 aUIEntry += ::rtl::OUString::valueOf( (sal_Unicode)'\t' );
                 aUIEntry += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*" ) );
                 SvLBoxEntry* pEntry = m_aPasswordsLB.InsertEntry( aUIEntry );
-                pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );
+                pEntry->SetUserData( (void*)(nCount++) );
             }
         }
     }
@@ -246,7 +249,7 @@ IMPL_LINK( WebConnectionInfoDialog, RemovePasswordHdl, PushButton*, EMPTYARG )
 
             uno::Reference< task::XPasswordContainer > xPasswdContainer(
                 comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 
                         "com.sun.star.task.PasswordContainer" ) ) ),
                 uno::UNO_QUERY_THROW );
 
@@ -257,7 +260,7 @@ IMPL_LINK( WebConnectionInfoDialog, RemovePasswordHdl, PushButton*, EMPTYARG )
             }
             else
             {
-                uno::Reference< task::XUrlContainer > xUrlContainer(
+                uno::Reference< task::XUrlContainer > xUrlContainer( 
                     xPasswdContainer, uno::UNO_QUERY_THROW );
                 xUrlContainer->removeUrl( aURL );
             }
@@ -277,20 +280,20 @@ IMPL_LINK( WebConnectionInfoDialog, RemoveAllPasswordsHdl, PushButton*, EMPTYARG
     {
         uno::Reference< task::XPasswordContainer > xPasswdContainer(
             comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 
                     "com.sun.star.task.PasswordContainer" ) ) ),
             uno::UNO_QUERY_THROW );
 
         // should the master password be requested before?
         xPasswdContainer->removeAllPersistent();
 
-        uno::Reference< task::XUrlContainer > xUrlContainer(
+        uno::Reference< task::XUrlContainer > xUrlContainer( 
             xPasswdContainer, uno::UNO_QUERY_THROW );
-        uno::Sequence< rtl::OUString > aUrls
+        uno::Sequence< rtl::OUString > aUrls 
             = xUrlContainer->getUrls( sal_True /* OnlyPersistent */ );
         for ( sal_Int32 nURLIdx = 0; nURLIdx < aUrls.getLength(); nURLIdx++ )
-            xUrlContainer->removeUrl( aUrls[ nURLIdx ] );
-
+            xUrlContainer->removeUrl( aUrls[ nURLIdx ] );  
+        
         m_aPasswordsLB.Clear();
     }
     catch( uno::Exception& )
@@ -310,13 +313,15 @@ IMPL_LINK( WebConnectionInfoDialog, ChangePasswordHdl, PushButton*, EMPTYARG )
             ::rtl::OUString aURL = m_aPasswordsLB.GetEntryText( pEntry, 0 );
             ::rtl::OUString aUserName = m_aPasswordsLB.GetEntryText( pEntry, 1 );
 
-            ::comphelper::SimplePasswordRequest* pPasswordRequest
-                  = new ::comphelper::SimplePasswordRequest( task::PasswordRequestMode_PASSWORD_CREATE );
+            ::comphelper::DocPasswordRequest* pPasswordRequest 
+                  = new ::comphelper::DocPasswordRequest(
+                      ::comphelper::DocPasswordRequestType_STANDARD, 
+                      task::PasswordRequestMode_PASSWORD_CREATE, aURL );
             uno::Reference< task::XInteractionRequest > rRequest( pPasswordRequest );
 
             uno::Reference< task::XInteractionHandler > xInteractionHandler(
                 comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 
                         "com.sun.star.task.InteractionHandler" ) ) ),
                 uno::UNO_QUERY_THROW );
             xInteractionHandler->handle( rRequest );
@@ -329,10 +334,10 @@ IMPL_LINK( WebConnectionInfoDialog, ChangePasswordHdl, PushButton*, EMPTYARG )
 
                 uno::Reference< task::XPasswordContainer > xPasswdContainer(
                     comphelper::getProcessServiceFactory()->createInstance(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 
                             "com.sun.star.task.PasswordContainer" ) ) ),
                     uno::UNO_QUERY_THROW );
-                xPasswdContainer->addPersistent(
+                xPasswdContainer->addPersistent( 
                     aURL, aUserName, aPasswd, xInteractionHandler );
             }
         }
@@ -349,14 +354,14 @@ IMPL_LINK( WebConnectionInfoDialog, EntrySelectedHdl, void*, EMPTYARG )
     SvLBoxEntry* pEntry = m_aPasswordsLB.GetCurEntry();
     if ( !pEntry )
     {
-        m_aRemoveBtn.Enable( sal_False );
-        m_aChangeBtn.Enable( sal_False );
+        m_aRemoveBtn.Enable( FALSE );
+        m_aChangeBtn.Enable( FALSE );
     }
     else
     {
-        m_aRemoveBtn.Enable( sal_True );
+        m_aRemoveBtn.Enable( TRUE );
 
-        // url container entries (-> use system credentials) have
+        // url container entries (-> use system credentials) have 
         // no password
         sal_Int32 nPos = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
         m_aChangeBtn.Enable( nPos < m_nPos );

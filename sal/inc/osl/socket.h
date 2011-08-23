@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,12 @@ extern "C" {
 #endif
 
 /* error returns */
-#define OSL_INADDR_NONE             0xffffffff
+#define OSL_INADDR_NONE				0xffffffff
 #define OSL_INVALID_PORT (-1)
-#define OSL_INVALID_IPX_SOCKET_NO   0xffffffff
+#define OSL_INVALID_IPX_SOCKET_NO	0xffffffff
 
 /**@HTML
-
+   
 */
 
 /**
@@ -57,10 +57,10 @@ typedef struct oslSocketAddrImpl * oslSocketAddr;
 /**
     Represents the address-family of a socket
 */
-typedef enum {
-    osl_Socket_FamilyInet,      /* IP */
-    osl_Socket_FamilyIpx,       /* Novell IPX/SPX */
-    osl_Socket_FamilyInvalid,   /* always last entry in enum! */
+typedef enum {	
+    osl_Socket_FamilyInet,  	/* IP */
+    osl_Socket_FamilyIpx,	  	/* Novell IPX/SPX */
+    osl_Socket_FamilyInvalid,	/* always last entry in enum! */
     osl_Socket_Family_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslAddrFamily;
 
@@ -68,10 +68,10 @@ typedef enum {
     represent a specific protocol within a address-family
 */
 typedef enum {
-    osl_Socket_ProtocolIp,      /* for all af_inet */
-    osl_Socket_ProtocolIpx,     /* af_ipx datagram sockets (IPX) */
-    osl_Socket_ProtocolSpx,     /* af_ipx seqpacket or stream for SPX */
-    osl_Socket_ProtocolSpxII,   /* af_ipx seqpacket or stream for SPX II */
+    osl_Socket_ProtocolIp,	   	/* for all af_inet */
+    osl_Socket_ProtocolIpx,	   	/* af_ipx datagram sockets (IPX) */
+    osl_Socket_ProtocolSpx,	   	/* af_ipx seqpacket or stream for SPX */
+    osl_Socket_ProtocolSpxII,  	/* af_ipx seqpacket or stream for SPX II */
     osl_Socket_ProtocolInvalid,
     osl_Socket_Protocol_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslProtocol;
@@ -86,7 +86,7 @@ typedef enum {
     osl_Socket_TypeRaw,
     osl_Socket_TypeRdm,
     osl_Socket_TypeSeqPacket,
-    osl_Socket_TypeInvalid,     /* always last entry in enum! */
+    osl_Socket_TypeInvalid,		/* always last entry in enum! */
     osl_Socket_Type_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslSocketType;
 
@@ -101,7 +101,7 @@ typedef enum {
     osl_Socket_OptionKeepAlive,
     osl_Socket_OptionDontRoute,
     osl_Socket_OptionBroadcast,
-    osl_Socket_OptionUseLoopback,
+    osl_Socket_OptionUseLoopback,	
     osl_Socket_OptionLinger,
     osl_Socket_OptionOOBinLine,
     osl_Socket_OptionSndBuf,
@@ -113,9 +113,9 @@ typedef enum {
     osl_Socket_OptionError,
     osl_Socket_OptionType,
     osl_Socket_OptionTcpNoDelay,
-    osl_Socket_OptionInvalid,       /* always last entry in enum! */
+    osl_Socket_OptionInvalid,		/* always last entry in enum! */
     osl_Socket_Option_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
-} oslSocketOption;
+} oslSocketOption;	
 
 /**
     Represents the different socket-option levels
@@ -123,7 +123,7 @@ typedef enum {
 typedef enum  {
     osl_Socket_LevelSocket,
     osl_Socket_LevelTcp,
-    osl_Socket_LevelInvalid,            /* always last entry in enum! */
+    osl_Socket_LevelInvalid,			/* always last entry in enum! */
     osl_Socket_Level_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslSocketOptionLevel;
 
@@ -137,7 +137,7 @@ typedef enum {
     osl_Socket_MsgPeek,
     osl_Socket_MsgDontRoute,
     osl_Socket_MsgMaxIOVLen,
-    osl_Socket_MsgInvalid,          /* always last entry in enum! */
+    osl_Socket_MsgInvalid,			/* always last entry in enum! */
     osl_Socket_Msg_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslSocketMsgFlag;
 
@@ -148,46 +148,46 @@ typedef enum {
     osl_Socket_DirRead,
     osl_Socket_DirWrite,
     osl_Socket_DirReadWrite,
-    osl_Socket_DirInvalid,          /* always last entry in enum! */
+    osl_Socket_DirInvalid,			/* always last entry in enum! */
     osl_Socket_Dir_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslSocketDirection;
 
 /** Describes the various error socket error conditions, which may
     occur */
 typedef enum {
-    osl_Socket_E_None,              /* no error */
-    osl_Socket_E_NotSocket,         /* Socket operation on non-socket */
-    osl_Socket_E_DestAddrReq,       /* Destination address required */
-    osl_Socket_E_MsgSize,           /* Message too long */
-    osl_Socket_E_Prototype,         /* Protocol wrong type for socket */
-    osl_Socket_E_NoProtocol,        /* Protocol not available */
-    osl_Socket_E_ProtocolNoSupport, /* Protocol not supported */
-    osl_Socket_E_TypeNoSupport,     /* Socket type not supported */
-    osl_Socket_E_OpNotSupport,      /* Operation not supported on socket */
-    osl_Socket_E_PfNoSupport,       /* Protocol family not supported */
-    osl_Socket_E_AfNoSupport,       /* Address family not supported by */
+    osl_Socket_E_None,				/* no error */
+    osl_Socket_E_NotSocket,			/* Socket operation on non-socket */
+    osl_Socket_E_DestAddrReq,		/* Destination address required */
+    osl_Socket_E_MsgSize,			/* Message too long */
+    osl_Socket_E_Prototype,			/* Protocol wrong type for socket */
+    osl_Socket_E_NoProtocol,		/* Protocol not available */
+    osl_Socket_E_ProtocolNoSupport,	/* Protocol not supported */
+    osl_Socket_E_TypeNoSupport,		/* Socket type not supported */
+    osl_Socket_E_OpNotSupport,		/* Operation not supported on socket */
+    osl_Socket_E_PfNoSupport,		/* Protocol family not supported */
+    osl_Socket_E_AfNoSupport,		/* Address family not supported by */
                                     /* protocol family */
-    osl_Socket_E_AddrInUse,         /* Address already in use */
-    osl_Socket_E_AddrNotAvail,      /* Can't assign requested address */
-    osl_Socket_E_NetDown,           /* Network is down */
-    osl_Socket_E_NetUnreachable,    /* Network is unreachable */
-    osl_Socket_E_NetReset,          /* Network dropped connection because */
+    osl_Socket_E_AddrInUse,			/* Address already in use */
+    osl_Socket_E_AddrNotAvail,		/* Can't assign requested address */
+    osl_Socket_E_NetDown,			/* Network is down */
+    osl_Socket_E_NetUnreachable, 	/* Network is unreachable */
+    osl_Socket_E_NetReset,			/* Network dropped connection because */
                                     /* of reset */
-    osl_Socket_E_ConnAborted,       /* Software caused connection abort */
-    osl_Socket_E_ConnReset,         /* Connection reset by peer */
-    osl_Socket_E_NoBufferSpace,     /* No buffer space available */
-    osl_Socket_E_IsConnected,       /* Socket is already connected */
-    osl_Socket_E_NotConnected,      /* Socket is not connected */
-    osl_Socket_E_Shutdown,          /* Can't send after socket shutdown */
-    osl_Socket_E_TooManyRefs,       /* Too many references: can't splice */
-    osl_Socket_E_TimedOut,          /* Connection timed out */
-    osl_Socket_E_ConnRefused,       /* Connection refused */
-    osl_Socket_E_HostDown,          /* Host is down */
-    osl_Socket_E_HostUnreachable,   /* No route to host */
-    osl_Socket_E_WouldBlock,        /* call would block on non-blocking socket */
-    osl_Socket_E_Already,           /* operation already in progress */
-    osl_Socket_E_InProgress,        /* operation now in progress */
-    osl_Socket_E_InvalidError,      /* unmapped error: always last entry in enum! */
+    osl_Socket_E_ConnAborted,		/* Software caused connection abort */
+    osl_Socket_E_ConnReset,			/* Connection reset by peer */
+    osl_Socket_E_NoBufferSpace,		/* No buffer space available */
+    osl_Socket_E_IsConnected,		/* Socket is already connected */
+    osl_Socket_E_NotConnected,		/* Socket is not connected */
+    osl_Socket_E_Shutdown,			/* Can't send after socket shutdown */
+    osl_Socket_E_TooManyRefs,		/* Too many references: can't splice */
+    osl_Socket_E_TimedOut,			/* Connection timed out */
+    osl_Socket_E_ConnRefused,		/* Connection refused */
+    osl_Socket_E_HostDown,			/* Host is down */
+    osl_Socket_E_HostUnreachable,	/* No route to host */
+    osl_Socket_E_WouldBlock,		/* call would block on non-blocking socket */
+    osl_Socket_E_Already,			/* operation already in progress */
+    osl_Socket_E_InProgress,		/* operation now in progress */
+    osl_Socket_E_InvalidError,		/* unmapped error: always last entry in enum! */
     osl_Socket_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslSocketError;
 
@@ -195,10 +195,10 @@ typedef enum {
  */
 typedef enum {
     osl_Socket_Ok,          /* successful completion */
-    osl_Socket_Error,       /* error occurred, check osl_getLastSocketError() for details */
+    osl_Socket_Error,       /* error occured, check osl_getLastSocketError() for details */
     osl_Socket_TimedOut,    /* blocking operation timed out */
     osl_Socket_Interrupted, /* blocking operation was interrupted */
-    osl_Socket_InProgress,  /* nonblocking operation is in progress */
+    osl_Socket_InProgress,	/* nonblocking operation is in progress */
     osl_Socket_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslSocketResult;
 
@@ -211,19 +211,19 @@ typedef sal_uInt8 oslSocketIpxNodeNumber[6];
 /**@{ begin section oslSocketAddr
 */
 
-/** Creates a socket-address for the given family.
+/**	Creates a socket-address for the given family.
     @param family If family == osl_Socket_FamilyInet the address is
-                  set to INADDR_ANY port 0.
+                  set to INADDR_ANY	port 0.
     @return 0 if address could not be created.
 */
 oslSocketAddr SAL_CALL osl_createEmptySocketAddr(oslAddrFamily Family);
 
 
-/** Creates a new SocketAddress and fills it from Addr.
+/**	Creates a new SocketAddress and fills it from Addr.
 */
 oslSocketAddr SAL_CALL osl_copySocketAddr(oslSocketAddr Addr);
 
-/** Compares the values of two SocketAddresses.
+/**	Compares the values of two SocketAddresses.
     @return <code>sal_True</code> if both addresses denote the same socket address,
             <code>sal_False</code> otherwise.
 */
@@ -250,7 +250,7 @@ oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
     rtl_uString *strDottedAddr, sal_Int32 Port);
 
 
-/** Create an internet-address, consisting of hostaddress and port.
+/**	Create an internet-address, consisting of hostaddress and port.
     We interpret strDottedAddr as a dotted-decimal inet-addr
     (e.g. "141.99.128.50").
     @param strDottedAddr [in] String with dotted address.
@@ -266,7 +266,7 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
 */
 void SAL_CALL osl_destroySocketAddr(oslSocketAddr Addr);
 
-/** Looks up the port-number designated to the specified service/protocol-pair.
+/**	Looks up the port-number designated to the specified service/protocol-pair.
     (e.g. "ftp" "tcp").
     @return OSL_INVALID_PORT if no appropriate entry was found, otherwise the port-number.
 */
@@ -299,17 +299,17 @@ sal_Bool SAL_CALL osl_setInetPortOfSocketAddr(oslSocketAddr Addr, sal_Int32 Port
     @param strHostname out-parameter. The hostname represented by the address. If
     there is no hostname to be found, it returns 0.
 */
-oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(oslSocketAddr Addr, rtl_uString **strHostname);
+oslSocketResult	SAL_CALL osl_getHostnameOfSocketAddr(oslSocketAddr Addr, rtl_uString **strHostname);
 
 
 /** Gets the address in dotted decimal format.
     @param strDottedInetAddr out-parameter. Contains the dotted decimal address
-    (e.g. 141.99.20.34) represented by the address.
+    (e.g. 141.99.20.34) represented	by the address.
     If the address is invalid or not of type <code>osl_Socket_FamilyInet</code>,
     it returns 0.
     @return <code>osl_Socket_Ok</code> or <code>osl_Socket_Error</code>
 */
-oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr(oslSocketAddr Addr, rtl_uString **strDottedInetAddr);
+oslSocketResult	SAL_CALL osl_getDottedInetAddrOfSocketAddr(oslSocketAddr Addr, rtl_uString **strDottedInetAddr);
 
 /** Sets the addr field in the struct sockaddr with pByteSeq. pByteSeq must be in network byte order.
  */
@@ -321,7 +321,7 @@ oslSocketResult SAL_CALL osl_setAddrOfSocketAddr( oslSocketAddr Addr, sal_Sequen
     @return <code>osl_Socket_Ok</code> or <code>osl_Socket_Error</code>
  */
 oslSocketResult SAL_CALL osl_getAddrOfSocketAddr( oslSocketAddr Addr, sal_Sequence **ppByteSeq );
-
+    
 /*
     Opaque datatype HostAddr.
 */
@@ -356,7 +356,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname);
 oslHostAddr SAL_CALL osl_createHostAddrByAddr(const oslSocketAddr Addr);
 
 
-/** Create a copy of the given Addr.
+/**	Create a copy of the given Addr.
     @return The copied address or 0 upon failure.
 */
 oslHostAddr SAL_CALL osl_copyHostAddr(const oslHostAddr Addr);
@@ -410,17 +410,17 @@ void SAL_CALL osl_acquireSocket( oslSocket Socket );
     is destroyed and becomes invalid.
  */
 void SAL_CALL osl_releaseSocket( oslSocket Socket );
-
+    
 /** Create a socket of the specified Family and Type. The semantic of
     the Protocol parameter depends on the given family and type.
     @return 0 if socket could not be created, otherwise you get a handle
     to the allocated socket-datastructure.
 */
-oslSocket SAL_CALL osl_createSocket(oslAddrFamily   Family,
-                                    oslSocketType   Type,
+oslSocket SAL_CALL osl_createSocket(oslAddrFamily	Family,
+                                    oslSocketType	Type,
                                     oslProtocol     Protocol);
 
-/** Retrieves the Address of the local end of the socket.
+/**	Retrieves the Address of the local end of the socket.
     Note that a socket must be bound or connected before
     a vaild address can be returned.
     @return 0 if socket-address could not be created, otherwise you get
@@ -428,7 +428,7 @@ oslSocket SAL_CALL osl_createSocket(oslAddrFamily   Family,
 */
 oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket Socket);
 
-/** Retrieves the Address of the remote end of the socket.
+/**	Retrieves the Address of the remote end of the socket.
     Note that a socket must be connected before
     a vaild address can be returned.
     @return 0 if socket-address could not be created, otherwise you get
@@ -450,7 +450,7 @@ sal_Bool SAL_CALL osl_bindAddrToSocket(oslSocket Socket,
     @param Socket [in] a bound socket.
     @param Addr [in] the peer address.
     @param pTimeout Timeout value or NULL for blocking.
-
+    
     @return <code>osl_Socket_Ok</code> on successful connection,
             <code>osl_Socket_TimedOut</code> if operation timed out,
             <code>osl_Socket_Interrupted</code> if operation was interrupted
@@ -525,7 +525,7 @@ sal_Int32 SAL_CALL osl_receiveSocket(oslSocket Socket,
     <li><code>osl_Socket_MsgDontRoute</code>
     <li><code>osl_Socket_MsgMaxIOVLen</code>
     </ul>
-
+    
     @return the number of received bytes.
 */
 sal_Int32 SAL_CALL osl_receiveFromSocket(oslSocket Socket,
@@ -536,7 +536,7 @@ sal_Int32 SAL_CALL osl_receiveFromSocket(oslSocket Socket,
 
 /** Tries to send BytesToSend data from the connected socket,
     if no error occurs.
-
+    
     @param Socket [in] A connected socket.
     @param pBuffer [in] Points to a buffer that contains the send-data.
     @param BytesToSend [in] The number of bytes to send. pBuffer must have at least
@@ -589,15 +589,15 @@ sal_Int32 SAL_CALL osl_sendToSocket(oslSocket Socket,
                          oslSocketMsgFlag Flag);
 
 /** Checks if read operations will block.
-
+    
     You can specify a timeout-value in seconds/microseconds that denotes
     how long the operation will block if the Socket is not ready.
 
     @return <code>sal_True</code> if read operations (recv, recvFrom, accept) on the Socket
-    will NOT block; <code>sal_False</code> if it would block or if an error occurred.
-
+    will NOT block; <code>sal_False</code> if it would block or if an error occured.
+    
     @param Socket the Socket to perfom the operation on.
-    @param pTimeout if NULL, the operation will block without a timeout.
+    @param pTimeout if NULL, the operation will block without a timeout. 
 */
 sal_Bool SAL_CALL osl_isReceiveReady(oslSocket Socket, const TimeValue* pTimeout);
 
@@ -605,8 +605,8 @@ sal_Bool SAL_CALL osl_isReceiveReady(oslSocket Socket, const TimeValue* pTimeout
     You can specify a timeout-value in seconds/microseconds that denotes
     how long the operation will block if the Socket is not ready.
     @return <code>sal_True</code> if send operations (send, sendTo) on the Socket
-    will NOT block; <code>sal_False</code> if it would block or if an error occurred.
-
+    will NOT block; <code>sal_False</code> if it would block or if an error occured.
+    
     @param Socket the Socket to perfom the operation on.
     @param pTimeout if NULL, the operation will block without a timeout. Otherwise
     the time define by timeout value.
@@ -617,10 +617,10 @@ sal_Bool SAL_CALL osl_isSendReady(oslSocket Socket, const TimeValue* pTimeout);
     You can specify a timeout-value in seconds/microseconds that denotes
     how long the operation will block if the Socket has no pending OOB data.
     @return <code>sal_True</code> if OOB-request operations (recv with appropriate flags)
-    on the Socket will NOT block; <code>sal_False</code> if it would block or if an error occurred.
-
+    on the Socket will NOT block; <code>sal_False</code> if it would block or if an error occured.
+    
     @param Socket the Socket to perfom the operation on.
-    @param pTimeout if NULL, the operation will block without a timeout.
+    @param pTimeout if NULL, the operation will block without a timeout. 
 */
 sal_Bool SAL_CALL osl_isExceptionPending(oslSocket Socket, const TimeValue* pTimeout);
 
@@ -628,7 +628,7 @@ sal_Bool SAL_CALL osl_isExceptionPending(oslSocket Socket, const TimeValue* pTim
     @param Direction denotes which end of the socket
     should be closed:
     <ul>
-    <li> <code>osl_Socket_DirRead</code>    closes read operations.
+    <li> <code>osl_Socket_DirRead</code>	closes read operations.
     <li> <code>osl_Socket_DirReadWrite</code> closes write operations.
     <li> <code>osl_Socket_DirWrite</code> closes read and write operations.
     </ul>
@@ -643,63 +643,63 @@ sal_Bool SAL_CALL osl_shutdownSocket(oslSocket Socket,
     @param Level selects the level for which an option should be queried.
     Valid values are:
     <ul>
-    <li> osl_sol_socket:    Socket Level
-    <li> osl_sol_tcp:       Level of Transmission Control Protocol
+    <li> osl_sol_socket:	Socket Level
+    <li> osl_sol_tcp:		Level of Transmission Control Protocol
     </ul>
-
+    
     @param Option denotes the option to query.
     Valid values (depending on the Level) are:
     <ul>
     <li> <code>osl_Socket_Option_Debug</code><br>
     (sal_Bool) Socket debug flag 1 = enabled, 0 = disabled.
-
+            
     <li> <code>osl_Socket_OptionAcceptConn</code><br>
     <li> <code>osl_Socket_OptionReuseAddr</code><br>
     (sal_Bool) Allows the socket to be bound to an address that is
     already in use.
     1 = multiple bound allowed, 0 = no multiple bounds allowed
-
+              
     <li><code>osl_Socket_OptionKeepAlive</code><br>
     (sal_Bool) Keepalive packets are sent by the underlying socket.
     1 = enabled, 0 = disabled
-
+              
     <li><code>osl_Socket_OptionDontRoute</code><br>
     (sal_Bool) Do not route: send directly to interface.
     1 = do not route , 0 = routing possible
-
+               
     <li><code>osl_Socket_OptionBroadcast</code><br>
-    (sal_Bool) Transmission of broadcast messages are allowed on the socket.
+    (sal_Bool) Transmission of broadcast messages are allowed on the socket. 
     1 = transmission allowed, 0 = transmission disallowed
-
+               
     <li><code>osl_Socket_OptionUseLoopback</code><br>
 
     <li><code>osl_Socket_OptionLinger</code><br>
     (sal_Int32) Linger on close if unsent data is present.
     0 = linger is off, > 0  = timeout in seconds.
-
+              
     <li><code>osl_Socket_OptionOOBinLine</code><br>
-
+              
 
     <li><code>osl_Socket_OptionSndBuf</code><br>
     (sal_Int32) Size of the send buffer in bytes. Data is sent after
     SndTimeo or when the buffer is full. This allows faster writing
     to the socket.
-
+            
     <li><code>osl_Socket_OptionRcvBuf</code><br>
     (sal_Int32) Size of the receive buffer in bytes. Data is sent after
     SndTimeo or when the buffer is full. This allows faster writing
     to the socket and larger packet sizes.
-
+            
     <li><code>osl_Socket_OptionSndLowat</code><br>
-
+            
     <li><code>osl_Socket_OptionRcvLowat</code><br>
-
+            
     <li><code>osl_Socket_OptionSndTimeo</code><br>
     (sal_Int32) Data is sent after this timeout. This allows gathering
     of data to send larger packages but increases latency times.
-
+            
     <li><code>osl_Socket_OptionRcvTimeo</code><br>
-
+            
     <li><code>osl_Socket_OptionError</code><br>
     <li><code>osl_Socket_OptionType</code><br>
 
@@ -707,7 +707,7 @@ sal_Bool SAL_CALL osl_shutdownSocket(oslSocket Socket,
     Disables the Nagle algorithm for send coalescing. (Do not
     collect data until a packet is full, instead send immediatly.
     This increases network traffic but might improve latency-times.)
-    1 = disables the algorithm, 0 = keeps it enabled.
+    1 = disables the algorithm, 0 = keeps it enabled. 
     </ul>
     If not above mentioned otherwise, the options are only valid for
     level <code>osl_Socket_LevelSocket</code>.
@@ -717,15 +717,15 @@ sal_Bool SAL_CALL osl_shutdownSocket(oslSocket Socket,
 
     @param BufferSize contains the length of the Buffer.
 
-    @return -1 if an error occurred or else the size of the data copied into
+    @return -1 if an error occured or else the size of the data copied into
     pBuffer.
     @see osl_setSocketOption()
 */
 sal_Int32 SAL_CALL osl_getSocketOption(oslSocket            Socket,
                                oslSocketOptionLevel Level,
-                            oslSocketOption      Option,
-                            void*                pBuffer,
-                            sal_uInt32               BufferLen);
+                            oslSocketOption		 Option,
+                            void*				 pBuffer,
+                            sal_uInt32				 BufferLen);
 
 /** Sets the sockets attributes.
 
@@ -734,13 +734,13 @@ sal_Int32 SAL_CALL osl_getSocketOption(oslSocket            Socket,
     @param Level selects the level for which an option should be changed.
     Valid values are:
     <ul>
-    <li> osl_sol_socket:    Socket Level
-    <li> osl_sol_tcp:       Level of Transmission Control Protocol
+    <li> osl_sol_socket:	Socket Level
+    <li> osl_sol_tcp:		Level of Transmission Control Protocol
     </ul>
-
+    
     @param Option denotes the option to modify. See osl_setSocketOption() for more
     details.
-
+    
     @param pBuffer Pointer to a Buffer which contains the attribute-value.
 
     @param BufferSize contains the length of the Buffer.
@@ -748,10 +748,10 @@ sal_Int32 SAL_CALL osl_getSocketOption(oslSocket            Socket,
     @return True if the option could be changed.
 */
 sal_Bool SAL_CALL osl_setSocketOption(oslSocket Socket,
-                            oslSocketOptionLevel    Level,
-                            oslSocketOption         Option,
-                            void*                   pBuffer,
-                            sal_uInt32                  BufferLen);
+                            oslSocketOptionLevel	Level,
+                            oslSocketOption			Option,
+                            void*					pBuffer,
+                            sal_uInt32					BufferLen);
 
 /** Enables/disables non-blocking-mode of the socket.
     @param Socket Change mode for this socket.
@@ -778,9 +778,9 @@ sal_Bool SAL_CALL osl_isNonBlockingMode(oslSocket Socket);
     <li> osl_Socket_TypeRaw
     <li> osl_Socket_TypeRdm
     <li> osl_Socket_TypeSeqPacket
-    <li> osl_invalid_SocketType, if an error occurred
+    <li> osl_invalid_SocketType, if an error occured
     </ul>
-
+    
 */
 oslSocketType SAL_CALL osl_getSocketType(oslSocket Socket);
 
@@ -790,9 +790,9 @@ oslSocketType SAL_CALL osl_getSocketType(oslSocket Socket);
 void SAL_CALL osl_getLastSocketErrorDescription(oslSocket Socket, rtl_uString **strError);
 
 /** returns a constant decribing the last error for the socket system.
-    @return <code>osl_Socket_E_NONE</code> if no error occurred,
-            <code>osl_invalid_SocketError</code> if an unknown (unmapped)
-            error occurred, otherwise an enum describing the    error.
+    @return <code>osl_Socket_E_NONE</code> if no error occured,
+            <code>osl_invalid_SocketError</code> if	an unknown (unmapped)
+            error occured, otherwise an enum describing the	error.
 */
 oslSocketError SAL_CALL osl_getLastSocketError(oslSocket Socket);
 
@@ -858,24 +858,24 @@ sal_Int32 SAL_CALL osl_demultiplexSocketEvents(oslSocketSet IncomingSet,
  */
 void SAL_CALL osl_closeSocket(oslSocket Socket);
 
-
+    
 /** Retrieves n bytes from the stream and copies them into pBuffer.
-    The function avoids incomplete reads due to packet boundaries.
+    The function avoids incomplete reads due to packet boundaries.		
     @param pBuffer receives the read data.
     @param n the number of bytes to read. pBuffer must be large enough
     to hold the n bytes!
-    @return the number of read bytes. The number will only be smaller than
-    n if an exceptional condition (e.g. connection closed) occurs.
+    @return	the number of read bytes. The number will only be smaller than
+    n if an exceptional condition (e.g. connection closed) occurs. 
 */
 sal_Int32 SAL_CALL osl_readSocket( oslSocket Socket, void *pBuffer, sal_Int32 nSize );
 
 
-/** Writes n bytes from pBuffer to the stream. The method avoids
+/** Writes n bytes from pBuffer to the stream. The method avoids 
     incomplete writes due to packet boundaries.
     @param pBuffer contains the data to be written.
     @param n the number of bytes to write.
     @return the number of written bytes. The number will only be smaller than
-    n if an exceptional condition (e.g. connection closed) occurs.
+    n if an exceptional condition (e.g. connection closed) occurs.				
 */
 sal_Int32 SAL_CALL osl_writeSocket( oslSocket Socket, const void *pBuffer, sal_Int32 nSize );
 
@@ -888,6 +888,6 @@ sal_Int32 SAL_CALL osl_writeSocket( oslSocket Socket, const void *pBuffer, sal_I
 }
 #endif
 
-#endif  /* _OSL_SOCKET_H_ */
+#endif	/* _OSL_SOCKET_H_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

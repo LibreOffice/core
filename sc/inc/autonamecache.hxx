@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,18 +30,18 @@
 #define SC_AUTONAMECACHE_HXX
 
 #include <vector>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include "address.hxx"
 #include "global.hxx"
 
 typedef ::std::vector< ScAddress > ScAutoNameAddresses;
-typedef ::boost::unordered_map< String, ScAutoNameAddresses, ScStringHashCode, ::std::equal_to< String > > ScAutoNameHashMap;
+typedef ::std::hash_map< String, ScAutoNameAddresses, ScStringHashCode, ::std::equal_to< String > > ScAutoNameHashMap;
 
 //
 //  Cache for faster lookup of automatic names during CompileXML
 //  (during CompileXML, no document content is changed)
 //
-
+ 
 class ScAutoNameCache
 {
     ScAutoNameHashMap   aNames;
@@ -52,7 +52,7 @@ public:
             ScAutoNameCache( ScDocument* pD );
             ~ScAutoNameCache();
 
-    const ScAutoNameAddresses& GetNameOccurrences( const String& rName, SCTAB nTab );
+    const ScAutoNameAddresses& GetNameOccurences( const String& rName, SCTAB nTab );
 };
 
 #endif

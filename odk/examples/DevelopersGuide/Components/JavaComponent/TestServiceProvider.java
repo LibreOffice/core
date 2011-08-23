@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
@@ -49,27 +49,23 @@ public class TestServiceProvider
         if (implName.equals( TestComponentA.class.getName()) )
             xSingleServiceFactory = FactoryHelper.getServiceFactory(
                 TestComponentA.class, TestComponentA.__serviceName,
-                multiFactory, regKey);
+                multiFactory, regKey);        
         else if (implName.equals(TestComponentB.class.getName()))
             xSingleServiceFactory= FactoryHelper.getServiceFactory(
                 TestComponentB.class, TestComponentB.__serviceName,
                 multiFactory, regKey);
         return xSingleServiceFactory;
     }
-
-    // This method not longer necessary since OOo 3.4 where the component registration
-    // was changed to passive component registration. For more details see
-    // http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
-
-//     public static boolean __writeRegistryServiceInfo(XRegistryKey regKey){
-//         boolean bregA= FactoryHelper.writeRegistryServiceInfo(
-//             TestComponentA.class.getName(),
-//             TestComponentA.__serviceName, regKey);
-//         boolean bregB= FactoryHelper.writeRegistryServiceInfo(
-//             TestComponentB.class.getName(),
-//             TestComponentB.__serviceName, regKey);
-//         return bregA && bregB;
-//     }
+    
+    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey){
+        boolean bregA= FactoryHelper.writeRegistryServiceInfo(
+            TestComponentA.class.getName(),
+            TestComponentA.__serviceName, regKey);
+        boolean bregB= FactoryHelper.writeRegistryServiceInfo(
+            TestComponentB.class.getName(),
+            TestComponentB.__serviceName, regKey);
+        return bregA && bregB;
+    }     
 }
 
 

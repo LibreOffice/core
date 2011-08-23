@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,16 +33,16 @@
 #include "ddectrl.hxx"
 #include <basic/sberrors.hxx>
 
-#define DDE_FREECHANNEL ((DdeConnection*)0xffffffff)
+#define DDE_FREECHANNEL	((DdeConnection*)0xffffffff)
 
-#define DDE_FIRSTERR    0x4000
-#define DDE_LASTERR     0x4011
+#define DDE_FIRSTERR	0x4000
+#define DDE_LASTERR		0x4011
 
 static const SbError nDdeErrMap[] =
 {
-    /* DMLERR_ADVACKTIMEOUT       */  0x4000, SbERR_DDE_TIMEOUT,
-    /* DMLERR_BUSY                */  0x4001, SbERR_DDE_BUSY,
-    /* DMLERR_DATAACKTIMEOUT      */  0x4002, SbERR_DDE_TIMEOUT,
+    /* DMLERR_ADVACKTIMEOUT 	  */  0x4000, SbERR_DDE_TIMEOUT,
+    /* DMLERR_BUSY 				  */  0x4001, SbERR_DDE_BUSY,
+    /* DMLERR_DATAACKTIMEOUT 	  */  0x4002, SbERR_DDE_TIMEOUT,
     /* DMLERR_DLL_NOT_INITIALIZED */  0x4003, SbERR_DDE_ERROR,
     /* DMLERR_DLL_USAGE           */  0x4004, SbERR_DDE_ERROR,
     /* DMLERR_EXECACKTIMEOUT      */  0x4005, SbERR_DDE_TIMEOUT,
@@ -92,12 +92,12 @@ SbiDdeControl::~SbiDdeControl()
     delete pConvList;
 }
 
-sal_Int16 SbiDdeControl::GetFreeChannel()
+INT16 SbiDdeControl::GetFreeChannel()
 {
-    sal_Int16 nListSize = (sal_Int16)pConvList->Count();
+    INT16 nListSize = (INT16)pConvList->Count();
     DdeConnection* pPtr = pConvList->First();
     pPtr = pConvList->Next(); // nullten eintrag ueberspringen
-    sal_Int16 nChannel;
+    INT16 nChannel;
     for( nChannel = 1; nChannel < nListSize; nChannel++ )
     {
         if( pPtr == DDE_FREECHANNEL )
@@ -110,7 +110,7 @@ sal_Int16 SbiDdeControl::GetFreeChannel()
 }
 
 SbError SbiDdeControl::Initiate( const String& rService, const String& rTopic,
-            sal_Int16& rnHandle )
+            INT16& rnHandle )
 {
     SbError nErr;
     DdeConnection* pConv = new DdeConnection( rService, rTopic );
@@ -122,26 +122,26 @@ SbError SbiDdeControl::Initiate( const String& rService, const String& rTopic,
     }
     else
     {
-        sal_Int16 nChannel = GetFreeChannel();
-        pConvList->Replace( pConv, (sal_uIntPtr)nChannel );
+        INT16 nChannel = GetFreeChannel();
+        pConvList->Replace( pConv, (ULONG)nChannel );
         rnHandle = nChannel;
     }
     return 0;
 }
 
-SbError SbiDdeControl::Terminate( sal_Int16 nChannel )
+SbError SbiDdeControl::Terminate( INT16 nChannel )
 {
-    DdeConnection* pConv = pConvList->GetObject( (sal_uIntPtr)nChannel );
+    DdeConnection* pConv = pConvList->GetObject( (ULONG)nChannel );
     if( !nChannel || !pConv || pConv == DDE_FREECHANNEL )
         return SbERR_DDE_NO_CHANNEL;
-    pConvList->Replace( DDE_FREECHANNEL, (sal_uIntPtr)nChannel );
+    pConvList->Replace( DDE_FREECHANNEL, (ULONG)nChannel );
     delete pConv;
     return 0L;
 }
 
 SbError SbiDdeControl::TerminateAll()
 {
-    sal_Int16 nChannel = (sal_Int16)pConvList->Count();
+    INT16 nChannel = (INT16)pConvList->Count();
     while( nChannel )
     {
         nChannel--;
@@ -155,9 +155,9 @@ SbError SbiDdeControl::TerminateAll()
     return 0;
 }
 
-SbError SbiDdeControl::Request( sal_Int16 nChannel, const String& rItem, String& rResult )
+SbError SbiDdeControl::Request( INT16 nChannel, const String& rItem, String& rResult )
 {
-    DdeConnection* pConv = pConvList->GetObject( (sal_uIntPtr)nChannel );
+    DdeConnection* pConv = pConvList->GetObject( (ULONG)nChannel );
     if( !nChannel || !pConv || pConv == DDE_FREECHANNEL )
         return SbERR_DDE_NO_CHANNEL;
 
@@ -168,9 +168,9 @@ SbError SbiDdeControl::Request( sal_Int16 nChannel, const String& rItem, String&
     return GetLastErr( pConv );
 }
 
-SbError SbiDdeControl::Execute( sal_Int16 nChannel, const String& rCommand )
+SbError SbiDdeControl::Execute( INT16 nChannel, const String& rCommand )
 {
-    DdeConnection* pConv = pConvList->GetObject( (sal_uIntPtr)nChannel );
+    DdeConnection* pConv = pConvList->GetObject( (ULONG)nChannel );
     if( !nChannel || !pConv || pConv == DDE_FREECHANNEL )
         return SbERR_DDE_NO_CHANNEL;
     DdeExecute aRequest( *pConv, rCommand, 30000 );
@@ -178,9 +178,9 @@ SbError SbiDdeControl::Execute( sal_Int16 nChannel, const String& rCommand )
     return GetLastErr( pConv );
 }
 
-SbError SbiDdeControl::Poke( sal_Int16 nChannel, const String& rItem, const String& rData )
+SbError SbiDdeControl::Poke( INT16 nChannel, const String& rItem, const String& rData )
 {
-    DdeConnection* pConv = pConvList->GetObject( (sal_uIntPtr)nChannel );
+    DdeConnection* pConv = pConvList->GetObject( (ULONG)nChannel );
     if( !nChannel || !pConv || pConv == DDE_FREECHANNEL )
         return SbERR_DDE_NO_CHANNEL;
     DdePoke aRequest( *pConv, rItem, DdeData(rData), 30000 );

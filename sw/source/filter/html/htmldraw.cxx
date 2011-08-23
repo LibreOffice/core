@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,27 +71,27 @@
 using namespace ::com::sun::star;
 
 
-const sal_uInt32 HTML_FRMOPTS_MARQUEE   =
+const sal_uInt32 HTML_FRMOPTS_MARQUEE 	=
     HTML_FRMOPT_ALIGN |
     HTML_FRMOPT_SPACE;
 
-const sal_uInt32 HTML_FRMOPTS_MARQUEE_CSS1  =
+const sal_uInt32 HTML_FRMOPTS_MARQUEE_CSS1 	=
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SPACE;
 
-static HTMLOptionEnum aHTMLMarqBehaviorTable[] =
+static HTMLOptionEnum __FAR_DATA aHTMLMarqBehaviorTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_BEHAV_scroll,     SDRTEXTANI_SCROLL       },
-    { OOO_STRING_SVTOOLS_HTML_BEHAV_alternate,  SDRTEXTANI_ALTERNATE    },
-    { OOO_STRING_SVTOOLS_HTML_BEHAV_slide,      SDRTEXTANI_SLIDE        },
-    { 0,                        0                       }
+    { OOO_STRING_SVTOOLS_HTML_BEHAV_scroll,		SDRTEXTANI_SCROLL		},
+    { OOO_STRING_SVTOOLS_HTML_BEHAV_alternate,	SDRTEXTANI_ALTERNATE	},
+    { OOO_STRING_SVTOOLS_HTML_BEHAV_slide,		SDRTEXTANI_SLIDE		},
+    { 0,						0						}
 };
 
-static HTMLOptionEnum aHTMLMarqDirectionTable[] =
+static HTMLOptionEnum __FAR_DATA aHTMLMarqDirectionTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_AL_left,          SDRTEXTANI_LEFT         },
-    { OOO_STRING_SVTOOLS_HTML_AL_right,         SDRTEXTANI_RIGHT        },
-    { 0,                        0                       }
+    { OOO_STRING_SVTOOLS_HTML_AL_left,			SDRTEXTANI_LEFT			},
+    { OOO_STRING_SVTOOLS_HTML_AL_right,			SDRTEXTANI_RIGHT		},
+    { 0,						0						}
 };
 
 /*  */
@@ -104,8 +104,8 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
                                      sal_Bool bHidden )
 {
     // always on top of text.
-    // but in invisible layer. <ConnectToLayout> will move the object
-    // to the visible layer.
+    // OD 02.07.2003 #108784# but in invisible layer. <ConnectToLayout> will
+    // move the object to the visible layer.
     pNewDrawObj->SetLayer( pDoc->GetInvisibleHeavenId() );
 
     SfxItemSet aFrmSet( pDoc->GetAttrPool(),
@@ -181,10 +181,10 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     SwFmtAnchor aAnchor( FLY_AS_CHAR );
     if( SVX_CSS1_POS_ABSOLUTE == rCSS1PropInfo.ePosition &&
         SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.eLeftType &&
-        SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.eTopType )
+        SVX_CSS1_LTYPE_TWIP	== rCSS1PropInfo.eTopType )
     {
         const SwStartNode *pFlySttNd =
-            pPam->GetPoint()->nNode.GetNode().FindFlyStartNode();
+            pDoc->GetNodes()[pPam->GetPoint()->nNode]->FindFlyStartNode();
 
         if( pFlySttNd )
         {
@@ -196,7 +196,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         {
             aAnchor.SetType( FLY_AT_PAGE );
         }
-        // #i26791# - direct positioning for <SwDoc::Insert(..)>
+        // OD 2004-04-13 #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(rCSS1PropInfo.nLeft + nLeftSpace,
                                            rCSS1PropInfo.nTop + nUpperSpace) );
         aFrmSet.Put( SwFmtSurround(SURROUND_THROUGHT) );
@@ -207,7 +207,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         aAnchor.SetType( FLY_AT_PARA );
         aFrmSet.Put( SwFmtSurround(bHidden ? SURROUND_THROUGHT
                                              : SURROUND_RIGHT) );
-        // #i26791# - direct positioning for <SwDoc::Insert(..)>
+        // OD 2004-04-13 #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(nLeftSpace, nUpperSpace) );
     }
     else if( text::VertOrientation::NONE != eVertOri )
@@ -238,23 +238,23 @@ static void PutEEPoolItem( SfxItemSet &rEEItemSet,
 
     switch( rSwItem.Which() )
     {
-    case RES_CHRATR_COLOR:          nEEWhich = EE_CHAR_COLOR; break;
-    case RES_CHRATR_CROSSEDOUT:     nEEWhich = EE_CHAR_STRIKEOUT; break;
-    case RES_CHRATR_ESCAPEMENT:     nEEWhich = EE_CHAR_ESCAPEMENT; break;
-    case RES_CHRATR_FONT:           nEEWhich = EE_CHAR_FONTINFO; break;
-    case RES_CHRATR_CJK_FONT:       nEEWhich = EE_CHAR_FONTINFO_CJK; break;
-    case RES_CHRATR_CTL_FONT:       nEEWhich = EE_CHAR_FONTINFO_CTL; break;
-    case RES_CHRATR_FONTSIZE:       nEEWhich = EE_CHAR_FONTHEIGHT; break;
-    case RES_CHRATR_CJK_FONTSIZE:   nEEWhich = EE_CHAR_FONTHEIGHT_CJK; break;
-    case RES_CHRATR_CTL_FONTSIZE:   nEEWhich = EE_CHAR_FONTHEIGHT_CTL; break;
-    case RES_CHRATR_KERNING:        nEEWhich = EE_CHAR_KERNING; break;
-    case RES_CHRATR_POSTURE:        nEEWhich = EE_CHAR_ITALIC; break;
-    case RES_CHRATR_CJK_POSTURE:    nEEWhich = EE_CHAR_ITALIC_CJK; break;
-    case RES_CHRATR_CTL_POSTURE:    nEEWhich = EE_CHAR_ITALIC_CTL; break;
-    case RES_CHRATR_UNDERLINE:      nEEWhich = EE_CHAR_UNDERLINE; break;
-    case RES_CHRATR_WEIGHT:         nEEWhich = EE_CHAR_WEIGHT; break;
-    case RES_CHRATR_CJK_WEIGHT:     nEEWhich = EE_CHAR_WEIGHT_CJK; break;
-    case RES_CHRATR_CTL_WEIGHT:     nEEWhich = EE_CHAR_WEIGHT_CTL; break;
+    case RES_CHRATR_COLOR:			nEEWhich = EE_CHAR_COLOR; break;
+    case RES_CHRATR_CROSSEDOUT:		nEEWhich = EE_CHAR_STRIKEOUT; break;
+    case RES_CHRATR_ESCAPEMENT:		nEEWhich = EE_CHAR_ESCAPEMENT; break;
+    case RES_CHRATR_FONT:			nEEWhich = EE_CHAR_FONTINFO; break;
+    case RES_CHRATR_CJK_FONT:		nEEWhich = EE_CHAR_FONTINFO_CJK; break;
+    case RES_CHRATR_CTL_FONT:		nEEWhich = EE_CHAR_FONTINFO_CTL; break;
+    case RES_CHRATR_FONTSIZE:		nEEWhich = EE_CHAR_FONTHEIGHT; break;
+    case RES_CHRATR_CJK_FONTSIZE:	nEEWhich = EE_CHAR_FONTHEIGHT_CJK; break;
+    case RES_CHRATR_CTL_FONTSIZE:	nEEWhich = EE_CHAR_FONTHEIGHT_CTL; break;
+    case RES_CHRATR_KERNING: 		nEEWhich = EE_CHAR_KERNING; break;
+    case RES_CHRATR_POSTURE: 		nEEWhich = EE_CHAR_ITALIC; break;
+    case RES_CHRATR_CJK_POSTURE: 	nEEWhich = EE_CHAR_ITALIC_CJK; break;
+    case RES_CHRATR_CTL_POSTURE: 	nEEWhich = EE_CHAR_ITALIC_CTL; break;
+    case RES_CHRATR_UNDERLINE:		nEEWhich = EE_CHAR_UNDERLINE; break;
+    case RES_CHRATR_WEIGHT:   		nEEWhich = EE_CHAR_WEIGHT; break;
+    case RES_CHRATR_CJK_WEIGHT:   	nEEWhich = EE_CHAR_WEIGHT_CJK; break;
+    case RES_CHRATR_CTL_WEIGHT:   	nEEWhich = EE_CHAR_WEIGHT_CTL; break;
     case RES_BACKGROUND:
     case RES_CHRATR_BACKGROUND:
         {
@@ -387,9 +387,9 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     }
 
     // Ein DrawTxtobj anlegen
-    // #i52858# - method name changed
+    // --> OD 2005-08-08 #i52858# - method name changed
     SdrModel* pModel = pDoc->GetOrCreateDrawModel();
-
+    // <--
     SdrPage* pPg = pModel->GetPage( 0 );
     pMarquee = SdrObjFactory::MakeNewObject( SdrInventor,
                                              OBJ_TEXT, pPg, pModel );
@@ -406,10 +406,10 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         eAniDir = SDRTEXTANI_RIGHT;
 
     // die fuer das Scrollen benoetigten Attribute umsetzen
-    sal_uInt16 aWhichMap[7] =   { XATTR_FILL_FIRST,   XATTR_FILL_LAST,
+    sal_uInt16 aWhichMap[7] =	{ XATTR_FILL_FIRST,	  XATTR_FILL_LAST,
                               SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                              EE_CHAR_START,      EE_CHAR_END,
-                              0 };
+                              EE_CHAR_START,	  EE_CHAR_END,
+                              0	};
     SfxItemSet aItemSet( pModel->GetItemPool(), aWhichMap );
     aItemSet.Put( SdrTextAutoGrowWidthItem( sal_False ) );
     aItemSet.Put( SdrTextAutoGrowHeightItem( sal_True ) );
@@ -447,8 +447,8 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT,
         0
     };
-    SwTxtNode const*const pTxtNd =
-        pPam->GetPoint()->nNode.GetNode().GetTxtNode();
+    const SwTxtNode *pTxtNd = pDoc->GetNodes()[pPam->GetPoint()->nNode]
+                                  ->GetTxtNode();
     if( pTxtNd )
     {
         const SfxItemSet& rItemSet = pTxtNd->GetAnyFmtColl().GetAttrSet();
@@ -555,7 +555,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
     // und das Objekt in das Dok einfuegen
     InsertDrawObject( pMarquee, aSpace, eVertOri, eHoriOri, aStyleItemSet,
-                      aPropInfo );
+                      aPropInfo	);
 
     // Das Zeichen-Objekt der Tabelle bekanntmachen. Ist ein bisserl
     // umstaendlich, weil noch ueber den Parser gegangen wird, obwohl die
@@ -648,23 +648,23 @@ void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
             sal_uInt16 nSwWhich = 0;
             switch( nEEWhich )
             {
-            case EE_CHAR_COLOR:         nSwWhich = RES_CHRATR_COLOR;        break;
-            case EE_CHAR_STRIKEOUT:     nSwWhich = RES_CHRATR_CROSSEDOUT;   break;
-            case EE_CHAR_ESCAPEMENT:    nSwWhich = RES_CHRATR_ESCAPEMENT;   break;
-            case EE_CHAR_FONTINFO:      nSwWhich = RES_CHRATR_FONT;         break;
-            case EE_CHAR_FONTINFO_CJK:  nSwWhich = RES_CHRATR_CJK_FONT;     break;
-            case EE_CHAR_FONTINFO_CTL:  nSwWhich = RES_CHRATR_CTL_FONT;     break;
-            case EE_CHAR_FONTHEIGHT:    nSwWhich = RES_CHRATR_FONTSIZE;     break;
+            case EE_CHAR_COLOR:			nSwWhich = RES_CHRATR_COLOR;		break;
+            case EE_CHAR_STRIKEOUT: 	nSwWhich = RES_CHRATR_CROSSEDOUT;	break;
+            case EE_CHAR_ESCAPEMENT:	nSwWhich = RES_CHRATR_ESCAPEMENT;	break;
+            case EE_CHAR_FONTINFO: 		nSwWhich = RES_CHRATR_FONT;		    break;
+            case EE_CHAR_FONTINFO_CJK: 	nSwWhich = RES_CHRATR_CJK_FONT;	    break;
+            case EE_CHAR_FONTINFO_CTL: 	nSwWhich = RES_CHRATR_CTL_FONT;		break;
+            case EE_CHAR_FONTHEIGHT:	nSwWhich = RES_CHRATR_FONTSIZE;	    break;
             case EE_CHAR_FONTHEIGHT_CJK:nSwWhich = RES_CHRATR_CJK_FONTSIZE; break;
             case EE_CHAR_FONTHEIGHT_CTL:nSwWhich = RES_CHRATR_CTL_FONTSIZE; break;
-            case EE_CHAR_KERNING:       nSwWhich = RES_CHRATR_KERNING;      break;
-            case EE_CHAR_ITALIC:        nSwWhich = RES_CHRATR_POSTURE;      break;
-            case EE_CHAR_ITALIC_CJK:    nSwWhich = RES_CHRATR_CJK_POSTURE;  break;
-            case EE_CHAR_ITALIC_CTL:    nSwWhich = RES_CHRATR_CTL_POSTURE;  break;
-            case EE_CHAR_UNDERLINE:     nSwWhich = RES_CHRATR_UNDERLINE;    break;
-            case EE_CHAR_WEIGHT:        nSwWhich = RES_CHRATR_WEIGHT;       break;
-            case EE_CHAR_WEIGHT_CJK:    nSwWhich = RES_CHRATR_CJK_WEIGHT;   break;
-            case EE_CHAR_WEIGHT_CTL:    nSwWhich = RES_CHRATR_CTL_WEIGHT;   break;
+            case EE_CHAR_KERNING: 		nSwWhich = RES_CHRATR_KERNING; 	    break;
+            case EE_CHAR_ITALIC: 		nSwWhich = RES_CHRATR_POSTURE; 	    break;
+            case EE_CHAR_ITALIC_CJK:	nSwWhich = RES_CHRATR_CJK_POSTURE;  break;
+            case EE_CHAR_ITALIC_CTL:	nSwWhich = RES_CHRATR_CTL_POSTURE;  break;
+            case EE_CHAR_UNDERLINE: 	nSwWhich = RES_CHRATR_UNDERLINE;	break;
+            case EE_CHAR_WEIGHT: 		nSwWhich = RES_CHRATR_WEIGHT;   	break;
+            case EE_CHAR_WEIGHT_CJK: 	nSwWhich = RES_CHRATR_CJK_WEIGHT;  	break;
+            case EE_CHAR_WEIGHT_CTL: 	nSwWhich = RES_CHRATR_CTL_WEIGHT;  	break;
             }
 
             if( nSwWhich )
@@ -718,9 +718,9 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     const sal_Char *pStr = 0;
     switch( eAniKind )
     {
-    case SDRTEXTANI_SCROLL:     pStr = OOO_STRING_SVTOOLS_HTML_BEHAV_scroll;        break;
-    case SDRTEXTANI_SLIDE:      pStr = OOO_STRING_SVTOOLS_HTML_BEHAV_slide;     break;
-    case SDRTEXTANI_ALTERNATE:  pStr = OOO_STRING_SVTOOLS_HTML_BEHAV_alternate; break;
+    case SDRTEXTANI_SCROLL:		pStr = OOO_STRING_SVTOOLS_HTML_BEHAV_scroll;		break;
+    case SDRTEXTANI_SLIDE:		pStr = OOO_STRING_SVTOOLS_HTML_BEHAV_slide;		break;
+    case SDRTEXTANI_ALTERNATE:	pStr = OOO_STRING_SVTOOLS_HTML_BEHAV_alternate;	break;
     default:
         ;
     }
@@ -733,8 +733,8 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     SdrTextAniDirection eAniDir = pTextObj->GetTextAniDirection();
     switch( eAniDir )
     {
-    case SDRTEXTANI_LEFT:       pStr = OOO_STRING_SVTOOLS_HTML_AL_left;     break;
-    case SDRTEXTANI_RIGHT:      pStr = OOO_STRING_SVTOOLS_HTML_AL_right;        break;
+    case SDRTEXTANI_LEFT:		pStr = OOO_STRING_SVTOOLS_HTML_AL_left;		break;
+    case SDRTEXTANI_RIGHT:		pStr = OOO_STRING_SVTOOLS_HTML_AL_right;		break;
     default:
         ;
     }

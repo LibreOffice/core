@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,10 +36,10 @@
 class SVL_DLLPUBLIC SfxEnumItem: public CntEnumItem
 {
 protected:
-    SfxEnumItem(sal_uInt16 which = 0, sal_uInt16 nValue = 0):
+    SfxEnumItem(USHORT which = 0, USHORT nValue = 0):
         CntEnumItem(which, nValue) {}
 
-    SfxEnumItem(sal_uInt16 which, SvStream & rStream):
+    SfxEnumItem(USHORT which, SvStream & rStream):
         CntEnumItem(which, rStream) {}
 
 public:
@@ -53,13 +53,13 @@ class SVL_DLLPUBLIC SfxBoolItem: public CntBoolItem
 public:
     TYPEINFO();
 
-    SfxBoolItem(sal_uInt16 which = 0, sal_Bool bValue = sal_False):
+    SfxBoolItem(USHORT which = 0, BOOL bValue = FALSE):
         CntBoolItem(which, bValue) {}
 
-    SfxBoolItem(sal_uInt16 which, SvStream & rStream):
+    SfxBoolItem(USHORT which, SvStream & rStream):
         CntBoolItem(which, rStream) {}
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const
+    virtual SfxPoolItem * Create(SvStream & rStream, USHORT) const
     { return new SfxBoolItem(Which(), rStream); }
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const

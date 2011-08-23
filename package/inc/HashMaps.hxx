@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #include <ZipEntry.hxx>
 #include <rtl/ref.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 struct eqFunc
 {
@@ -46,19 +46,19 @@ namespace com { namespace sun { namespace star { namespace packages {
 class ContentInfo;
 } } } }
 
-typedef boost::unordered_map < rtl::OUString,
+typedef std::hash_map < rtl::OUString, 
                         ZipPackageFolder *,
-                        ::rtl::OUStringHash,
+                        ::rtl::OUStringHash, 
                         eqFunc > FolderHash;
 
-typedef boost::unordered_map < rtl::OUString,
+typedef std::hash_map < rtl::OUString, 
                         rtl::Reference < com::sun::star::packages::ContentInfo >,
-                        ::rtl::OUStringHash,
+                        ::rtl::OUStringHash, 
                         eqFunc > ContentHash;
 
-typedef boost::unordered_map < rtl::OUString,
-                        ZipEntry,
-                        rtl::OUStringHash,
+typedef std::hash_map < rtl::OUString, 
+                        ZipEntry, 
+                        rtl::OUStringHash, 
                         eqFunc > EntryHash;
 
 #endif

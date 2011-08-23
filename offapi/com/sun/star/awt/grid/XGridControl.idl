@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,64 +24,47 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_grid_XGridControl_idl__
-#define __com_sun_star_awt_grid_XGridControl_idl__
-
-#include <com/sun/star/awt/grid/XGridSelection.idl>
-
-//=============================================================================
-
-module com {  module sun {  module star {  module awt { module grid {
-
-//=============================================================================
+#ifndef __com_sun_star_awt_grid_XGridControl_idl__ 
+#define __com_sun_star_awt_grid_XGridControl_idl__ 
+ 
+#include <com/sun/star/awt/grid/XGridSelection.idl> 
+#include <com/sun/star/awt/grid/XGridColumnModel.idl> 
+#include <com/sun/star/awt/grid/XGridDataModel.idl> 
+#include <com/sun/star/awt/XMouseListener.idl> 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module awt { module grid { 
+ 
+//============================================================================= 
 
 /** An interface to a control that displays a tabular data.
 
     @see UnoControlGrid
-
-    @since OOo 3.3
- */
-interface XGridControl : XGridSelection
-{
-    /** retrieves the column which a given point belongs to
-
-        @param X
-            the ordinate of the point, in pixel coordinates.
-        @param Y
-            the abscissa of the point, in pixel coordinates.
-        @return
-            the index of the column which the point lies in, or -1 if no column is under the given point.
+    
+    @since OOo 3.3.0
+ */      
+interface XGridControl: XGridSelection 
+{ 
+    /** Converting 
     */
-    long getColumnAtPoint( [in] long X, [in] long Y );
 
-    /** retrieves the row which a given point belongs to
+    long getItemIndexAtPoint( [in] long x, [in] long y);
 
-        @param X
-            the ordinate of the point, in pixel coordinates.
-        @param Y
-            the abscissa of the point, in pixel coordinates.
-        @return
-            the index of the row which the point lies in, or -1 if no row is under the given point.
+    /** Sets tooltip for row
+        @param textForTooltip
+            text, which will be shown as tooltip. 
+            If only cell content should be displayed, leave sequence empty.
+        @param columnsForTooltip
+            column numbers, which define the cell content that should be shown in the tooltip.
+            If only text should be shown, leave this sequence empty.
     */
-    long getRowAtPoint( [in] long X, [in] long Y );
-
-    /** returns the column index of the currently active cell
-
-        <p>If the grid control's does not contain any cells (which happens if the grid column model does not contain any
-        columns, or if grid data model does not contain any rows), then <code>-1</code> is returned.</p>
-    */
-    long getCurrentColumn();
-
-    /** returns the row index of the currently active cell
-
-        <p>If the grid control's does not contain any cells (which happens if the grid column model does not contain any
-        columns, or if grid data model does not contain any rows), then <code>-1</code> is returned.</p>
-    */
-    long getCurrentRow();
-};
-
-//=============================================================================
-
-}; }; }; }; };
-
-#endif
+    void setToolTip( [in] sequence< string > textForTooltip, [in] sequence< long > columnsForTooltip);
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; }; 
+ 
+#endif 

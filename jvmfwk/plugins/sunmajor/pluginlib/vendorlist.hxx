@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,17 @@
 namespace jfw_plugin
 {
 
+//extern VendorSupportMapEntry gVendorMap[];
+
 typedef char  const * const * (* getJavaExePaths_func)(int*);
 typedef rtl::Reference<VendorBase> (* createInstance_func) ();
+
+// struct Blas
+// {
+//         char const * sVendorName;
+//     getJavaExePaths_func getJavaFunc;
+//     createInstance_func  createFunc;
+// };
 
 struct VendorSupportMapEntry
 {
@@ -47,7 +56,7 @@ struct VendorSupportMapEntry
 
 #define BEGIN_VENDOR_MAP() \
 VendorSupportMapEntry gVendorMap[] ={
-
+    
 #define VENDOR_MAP_ENTRY(x,y) \
     {x, & y::getJavaExePaths, & y::createInstance},
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -146,13 +146,13 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 break;
             case XML_TOK_BOOLEAN_COMPARISON_MODE:
                 aProperty.Name = PROPERTY_BOOLEANCOMPARISONMODE;
-                if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("equal-integer")) )
+                if ( sValue.equalsAscii("equal-integer") )
                     aProperty.Value <<= sal_Int32(0);
-                else if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("is-boolean")) )
+                else if ( sValue.equalsAscii("is-boolean") )
                     aProperty.Value <<= sal_Int32(1);
-                else if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("equal-boolean")) )
+                else if ( sValue.equalsAscii("equal-boolean") )
                     aProperty.Value <<= sal_Int32(2);
-                else if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("equal-use-only-zero")) )
+                else if ( sValue.equalsAscii("equal-use-only-zero") )
                     aProperty.Value <<= sal_Int32(3);
                 break;
             case XML_TOK_USE_CATALOG:
@@ -225,7 +225,7 @@ SvXMLImportContext* OXMLDataSource::CreateChildContext(
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
-    const SvXMLTokenMap&    rTokenMap   = GetOwnImport().GetDataSourceElemTokenMap();
+    const SvXMLTokenMap&	rTokenMap	= GetOwnImport().GetDataSourceElemTokenMap();
     const sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
 
     switch( nToken )

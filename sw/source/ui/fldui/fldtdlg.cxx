@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@
 
 
 /*--------------------------------------------------------------------
-    Description:    carrier of the dialog
+    Beschreibung:	Der Traeger des Dialoges
  --------------------------------------------------------------------*/
 
 
@@ -75,7 +75,7 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
     : SfxTabDialog( pParent, SW_RES( DLG_FLD_INSERT )),
     m_pChildWin(pCW),
     m_pBindings(pB),
-    m_bDataBaseMode(sal_False)
+    m_bDataBaseMode(FALSE)
 {
     SetStyle(GetStyle()|WB_STDMODELESS);
     m_bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
@@ -84,11 +84,11 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
 
     GetOKButton().SetText(String(SW_RES(STR_FLD_INSERT)));
     GetOKButton().SetHelpId(HID_FIELD_INSERT);
-    GetOKButton().SetHelpText(aEmptyStr);   // so that generated help text is used
+    GetOKButton().SetHelpText(aEmptyStr);	// Damit generierter Hilfetext verwendet wird
 
     GetCancelButton().SetText(String(SW_RES(STR_FLD_CLOSE)));
     GetCancelButton().SetHelpId(HID_FIELD_CLOSE);
-    GetCancelButton().SetHelpText(aEmptyStr);   // so that generated help text is used
+    GetCancelButton().SetHelpText(aEmptyStr);	// Damit generierter Hilfetext verwendet wird
 
     FreeResource();
 
@@ -133,12 +133,12 @@ SwFldDlg::~SwFldDlg()
 {
 }
 
-sal_Bool SwFldDlg::Close()
+BOOL SwFldDlg::Close()
 {
     m_pBindings->GetDispatcher()->
         Execute(m_bDataBaseMode ? FN_INSERT_FIELD_DATA_ONLY : FN_INSERT_FIELD,
         SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
-    return sal_True;
+    return TRUE;
 }
 
 void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
@@ -152,16 +152,16 @@ void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
         if ( GetStyle() & WB_SIZEABLE )
             SetSizePixel( pInfo->aSize );
 
-        // remember initial size from pInfo
+        // Initiale Gr"o\se aus pInfo merken
         aSize = GetSizePixel();
 
-        // should the FloatingWindow get zoomed?
+        // Soll das FloatingWindow eingezoomt werden ?
         if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
             RollUp();
     }
     else
     {
-        // remember initial size from resource or ctor
+        // Initiale Gr"o\se aus Resource oder ctor merken
         aSize = GetSizePixel();
 
         Size aParentSize = GetParent()->GetOutputSizePixel();
@@ -187,7 +187,7 @@ void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
     SetPosPixel( aPos );
 }
 
-SfxItemSet* SwFldDlg::CreateInputItemSet( sal_uInt16 nID  )
+SfxItemSet* SwFldDlg::CreateInputItemSet( USHORT nID  )
 {
     if ( nID == TP_FLD_DOKINF )
     {
@@ -209,30 +209,30 @@ SfxItemSet* SwFldDlg::CreateInputItemSet( sal_uInt16 nID  )
 }
 
 /*--------------------------------------------------------------------
-     Description: kick off inserting of new fields
+     Beschreibung: Einfuegen von neuen Feldern anstossen
  --------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldDlg, OKHdl, Button *, EMPTYARG )
 {
     if (GetOKButton().IsEnabled())
     {
-        SfxTabPage* pPage = GetTabPage(GetCurPageId());
+        SfxTabPage*	pPage = GetTabPage(GetCurPageId());
         pPage->FillItemSet(*(SfxItemSet*)0);
 
-        GetOKButton().GrabFocus();  // because of InputField-Dlg
+        GetOKButton().GrabFocus();	// Wegen InputField-Dlg
     }
 
     return 0;
 }
 
 /*--------------------------------------------------------------------
-    Description: newly initialise dialog after Doc-Switch
+    Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
  --------------------------------------------------------------------*/
 
 void SwFldDlg::ReInitDlg()
 {
     SwDocShell* pDocSh = (SwDocShell*)SfxObjectShell::Current();
-    sal_Bool bNewMode = (::GetHtmlMode(pDocSh) & HTMLMODE_ON) != 0;
+    BOOL bNewMode = (::GetHtmlMode(pDocSh) & HTMLMODE_ON) != 0;
 
     if (bNewMode != m_bHtmlMode)
     {
@@ -263,19 +263,19 @@ void SwFldDlg::ReInitDlg()
 }
 
 /*--------------------------------------------------------------------
-    Description: newly initialise TabPage after Doc-Switch
+    Beschreibung: Nach Dok-Wechsel TabPage neu initialisieren
  --------------------------------------------------------------------*/
 
-void SwFldDlg::ReInitTabPage( sal_uInt16 nPageId, sal_Bool bOnlyActivate )
+void SwFldDlg::ReInitTabPage( USHORT nPageId, BOOL bOnlyActivate )
 {
     SwFldPage* pPage = (SwFldPage* )GetTabPage(nPageId);
 
     if ( pPage )
-        pPage->EditNewField( bOnlyActivate );   // newly initialise TabPage
+        pPage->EditNewField( bOnlyActivate );	// TabPage neu initialisieren
 }
 
 /*--------------------------------------------------------------------
-    Description: newly initialise after activation of a few TabPages
+    Beschreibung: Nach Aktivierung einige TabPages neu initialisieren
  --------------------------------------------------------------------*/
 
 void SwFldDlg::Activate()
@@ -283,22 +283,22 @@ void SwFldDlg::Activate()
     SwView* pView = ::GetActiveView();
     if( pView )
     {
-        sal_Bool bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
+        BOOL bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
         const SwWrtShell& rSh = pView->GetWrtShell();
         GetOKButton().Enable( !rSh.IsReadOnlyAvailable() ||
                               !rSh.HasReadonlySel() );
 
-        ReInitTabPage( TP_FLD_VAR, sal_True );
+        ReInitTabPage( TP_FLD_VAR, TRUE );
 
         if( !bHtmlMode )
         {
-            ReInitTabPage( TP_FLD_REF, sal_True );
-            ReInitTabPage( TP_FLD_FUNC, sal_True );
+            ReInitTabPage( TP_FLD_REF, TRUE );
+            ReInitTabPage( TP_FLD_FUNC, TRUE );
         }
     }
 }
 
-void SwFldDlg::EnableInsert(sal_Bool bEnable)
+void SwFldDlg::EnableInsert(BOOL bEnable)
 {
     if( bEnable )
     {
@@ -307,7 +307,7 @@ void SwFldDlg::EnableInsert(sal_Bool bEnable)
         if( !pView ||
                 (pView->GetWrtShell().IsReadOnlyAvailable() &&
                     pView->GetWrtShell().HasReadonlySel()) )
-            bEnable = sal_False;
+            bEnable = FALSE;
     }
     GetOKButton().Enable(bEnable);
 }
@@ -319,7 +319,7 @@ void SwFldDlg::InsertHdl()
 
 void SwFldDlg::ActivateDatabasePage()
 {
-    m_bDataBaseMode = sal_True;
+    m_bDataBaseMode = TRUE;
     ShowPage( TP_FLD_DB );
     SfxTabPage* pDBPage =  GetTabPage( TP_FLD_DB );
     if( pDBPage )
@@ -334,7 +334,7 @@ void SwFldDlg::ActivateDatabasePage()
     RemoveTabPage(TP_FLD_FUNC);
 }
 
-void SwFldDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
+void SwFldDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
 {
     if( TP_FLD_DB == nId)
     {

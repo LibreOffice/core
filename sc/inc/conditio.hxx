@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,21 +34,21 @@
 #include "formula/grammar.hxx"
 #include <svl/svarray.hxx>
 #include "scdllapi.h"
-#include "rangelst.hxx"
 
 class ScBaseCell;
 class ScFormulaCell;
 class ScTokenArray;
+class ScRangeList;
 
 
 #define SC_COND_GROW 16
 
-//  nOptions Flags
-#define SC_COND_NOBLANKS    1
+//	nOptions Flags
+#define SC_COND_NOBLANKS	1
 
 
-// ordering of ScConditionMode and ScQueryOp is equal,
-// to facilitate the merging of both in the future
+            // Reihenfolge von ScConditionMode wie ScQueryOp,
+            // damit einmal zusammengefasst werden kann:
 
 enum ScConditionMode
 {
@@ -60,8 +60,6 @@ enum ScConditionMode
     SC_COND_NOTEQUAL,
     SC_COND_BETWEEN,
     SC_COND_NOTBETWEEN,
-    SC_COND_DUPLICATE,
-    SC_COND_NOTDUPLICATE,
     SC_COND_DIRECT,
     SC_COND_NONE
 };
@@ -73,45 +71,43 @@ enum ScConditionValType
     SC_VAL_FORMULA
 };
 
-class ScConditionalFormat;
-
 class SC_DLLPUBLIC ScConditionEntry
 {
-                                        // stored data:
-    ScConditionMode     eOp;
-    sal_uInt16              nOptions;
-    double              nVal1;          // input or calculated
-    double              nVal2;
-    String              aStrVal1;       // input or calculated
-    String              aStrVal2;
+                                        // gespeicherte Daten:
+    ScConditionMode		eOp;
+    USHORT				nOptions;
+    double				nVal1;			// eingegeben oder berechnet
+    double				nVal2;
+    String				aStrVal1;		// eingegeben oder berechnet
+    String				aStrVal2;
     String              aStrNmsp1;      // namespace to be used on (re)compilation, e.g. in XML import
     String              aStrNmsp2;      // namespace to be used on (re)compilation, e.g. in XML import
     formula::FormulaGrammar::Grammar eTempGrammar1;  // grammar to be used on (re)compilation, e.g. in XML import
     formula::FormulaGrammar::Grammar eTempGrammar2;  // grammar to be used on (re)compilation, e.g. in XML import
-    sal_Bool                bIsStr1;        // for recognition of empty strings
-    sal_Bool                bIsStr2;
-    ScTokenArray*       pFormula1;      // entered formula
-    ScTokenArray*       pFormula2;
+    BOOL				bIsStr1;		// um auch leere Strings zu erkennen
+    BOOL				bIsStr2;
+    ScTokenArray*		pFormula1;		// eingegebene Formel
+    ScTokenArray*		pFormula2;
     ScAddress           aSrcPos;        // source position for formulas
                                         // temporary data:
     String              aSrcString;     // formula source position as text during XML import
-    ScFormulaCell*      pFCell1;
-    ScFormulaCell*      pFCell2;
-    ScDocument*         pDoc;
-    sal_Bool                bRelRef1;
-    sal_Bool                bRelRef2;
-    sal_Bool                bFirstRun;
+    ScFormulaCell*		pFCell1;
+    ScFormulaCell*		pFCell2;
+    ScDocument*			pDoc;
+    BOOL				bRelRef1;
+    BOOL				bRelRef2;
+    BOOL				bFirstRun;
 
-    void    MakeCells( const ScAddress& rPos );
-    void    Compile( const String& rExpr1, const String& rExpr2,
+    void	MakeCells( const ScAddress& rPos );
+    void	Compile( const String& rExpr1, const String& rExpr2,
                         const String& rExprNmsp1, const String& rExprNmsp2,
                         formula::FormulaGrammar::Grammar eGrammar1,
                         formula::FormulaGrammar::Grammar eGrammar2,
-                        sal_Bool bTextToReal );
-    void    Interpret( const ScAddress& rPos );
+                        BOOL bTextToReal );
+    void	Interpret( const ScAddress& rPos );
 
-    sal_Bool    IsValid( double nArg, const ScAddress& rAddr ) const;
-    sal_Bool    IsValidStr( const String& rArg, const ScAddress& rAddr ) const;
+    BOOL	IsValid( double nArg ) const;
+    BOOL	IsValidStr( const String& rArg ) const;
 
 public:
             ScConditionEntry( ScConditionMode eOper,
@@ -123,21 +119,19 @@ public:
             ScConditionEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument* pDocument, const ScAddress& rPos );
-            ScConditionEntry( const ScConditionEntry& r );  // flat copy of formulas
-            // true copy of formulas (for Ref-Undo):
+            ScConditionEntry( const ScConditionEntry& r );	// flache Kopie der Formeln
+            // echte Kopie der Formeln (fuer Ref-Undo):
             ScConditionEntry( ScDocument* pDocument, const ScConditionEntry& r );
     virtual ~ScConditionEntry();
 
-    int             operator== ( const ScConditionEntry& r ) const;
+    int				operator== ( const ScConditionEntry& r ) const;
 
-    void            SetParent( ScConditionalFormat* pNew )  { pCondFormat = pNew; }
+    BOOL			IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
 
-    sal_Bool            IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
-
-    ScConditionMode GetOperation() const        { return eOp; }
-    sal_Bool            IsIgnoreBlank() const       { return ( nOptions & SC_COND_NOBLANKS ) == 0; }
-    void            SetIgnoreBlank(sal_Bool bSet);
-    ScAddress       GetSrcPos() const           { return aSrcPos; }
+    ScConditionMode	GetOperation() const		{ return eOp; }
+    BOOL			IsIgnoreBlank() const		{ return ( nOptions & SC_COND_NOBLANKS ) == 0; }
+    void			SetIgnoreBlank(BOOL bSet);
+    ScAddress		GetSrcPos() const			{ return aSrcPos; }
 
     ScAddress       GetValidSrcPos() const;     // adjusted to allow textual representation of expressions
 
@@ -146,34 +140,36 @@ public:
     void            SetFormula1( const ScTokenArray& rArray );
     void            SetFormula2( const ScTokenArray& rArray );
 
-    String          GetExpression( const ScAddress& rCursor, sal_uInt16 nPos, sal_uLong nNumFmt = 0,
+    String			GetExpression( const ScAddress& rCursor, USHORT nPos, ULONG nNumFmt = 0,
                                     const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
 
-    ScTokenArray*   CreateTokenArry( sal_uInt16 nPos ) const;
+    ScTokenArray*	CreateTokenArry( USHORT nPos ) const;
 
-    void            CompileAll();
-    void            CompileXML();
-    void            UpdateReference( UpdateRefMode eUpdateRefMode,
+    void			CompileAll();
+    void			CompileXML();
+    void			UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-    void            UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
+    void			UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
-    void            SourceChanged( const ScAddress& rChanged );
+    void			SourceChanged( const ScAddress& rChanged );
 
     bool            MarkUsedExternalReferences() const;
 
 protected:
-    virtual void    DataChanged( const ScRange* pModified ) const;
-    ScDocument*     GetDocument() const     { return pDoc; }
-    ScConditionalFormat*    pCondFormat;
+    virtual void	DataChanged( const ScRange* pModified ) const;
+    ScDocument*		GetDocument() const		{ return pDoc; }
 };
 
 //
-//  single entry for conditional formatting
+//	einzelner Eintrag fuer bedingte Formatierung
 //
+
+class ScConditionalFormat;
 
 class SC_DLLPUBLIC ScCondFormatEntry : public ScConditionEntry
 {
-    String                  aStyleName;
+    String					aStyleName;
+    ScConditionalFormat*	pParent;
 
     using ScConditionEntry::operator==;
 
@@ -192,80 +188,79 @@ public:
                                 const String& rStyle );
             ScCondFormatEntry( const ScCondFormatEntry& r );
             ScCondFormatEntry( ScDocument* pDocument, const ScCondFormatEntry& r );
-    virtual ~ScCondFormatEntry();
+    virtual	~ScCondFormatEntry();
 
-    int             operator== ( const ScCondFormatEntry& r ) const;
+    void			SetParent( ScConditionalFormat* pNew )	{ pParent = pNew; }
 
-    const String&   GetStyle() const        { return aStyleName; }
-    void            UpdateStyleName(const String& rNew)  { aStyleName=rNew; }
+    int				operator== ( const ScCondFormatEntry& r ) const;
+
+    const String&	GetStyle() const		{ return aStyleName; }
+    void			UpdateStyleName(const String& rNew)  { aStyleName=rNew; }
 
 protected:
-    virtual void    DataChanged( const ScRange* pModified ) const;
+    virtual void	DataChanged( const ScRange* pModified ) const;
 };
 
 //
-//  complete conditional formatting
+//	komplette bedingte Formatierung
 //
 
 class SC_DLLPUBLIC ScConditionalFormat
 {
-    ScDocument*         pDoc;
-    ScRangeList*        pAreas;             // area for Paint
-    sal_uInt32          nKey;               // Index in attributes
-    ScCondFormatEntry** ppEntries;
-    sal_uInt16              nEntryCount;
-    sal_Bool                bIsUsed;            // temporary at Save
-    ScRangeListRef      pRanges;            // Ranges for conditional format
+    ScDocument*			pDoc;
+    ScRangeList*		pAreas;				// Bereiche fuer Paint
+    sal_uInt32			nKey;				// Index in Attributen
+    ScCondFormatEntry**	ppEntries;
+    USHORT				nEntryCount;
+    BOOL				bIsUsed;			// temporaer beim Speichern
 
 public:
             ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument);
             ScConditionalFormat(const ScConditionalFormat& r);
             ~ScConditionalFormat();
 
-    // true copy of formulas (for Ref-Undo / between documents)
+    // echte Kopie der Formeln (fuer Ref-Undo / zwischen Dokumenten)
     ScConditionalFormat* Clone(ScDocument* pNewDoc = NULL) const;
 
-    void            AddEntry( const ScCondFormatEntry& rNew );
-    void            AddRangeInfo( const ScRangeListRef& rRanges );
-    const ScRangeListRef&  GetRangeInfo() const  { return pRanges; }
+    void			AddEntry( const ScCondFormatEntry& rNew );
 
-    sal_Bool            IsEmpty() const         { return (nEntryCount == 0); }
-    sal_uInt16          Count() const           { return nEntryCount; }
+    BOOL			IsEmpty() const			{ return (nEntryCount == 0); }
+    USHORT			Count() const			{ return nEntryCount; }
 
-    void            CompileAll();
-    void            CompileXML();
-    void            UpdateReference( UpdateRefMode eUpdateRefMode,
+    void			CompileAll();
+    void			CompileXML();
+    void			UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-    void            UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
-    void            RenameCellStyle( const String& rOld, const String& rNew );
+    void			UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
+    void			RenameCellStyle( const String& rOld, const String& rNew );
 
-    void            SourceChanged( const ScAddress& rAddr );
+    void			SourceChanged( const ScAddress& rAddr );
 
-    const ScCondFormatEntry* GetEntry( sal_uInt16 nPos ) const;
+    const ScCondFormatEntry* GetEntry( USHORT nPos ) const;
 
-    const String&   GetCellStyle( ScBaseCell* pCell, const ScAddress& rPos ) const;
+    const String&	GetCellStyle( ScBaseCell* pCell, const ScAddress& rPos ) const;
 
-    sal_Bool            EqualEntries( const ScConditionalFormat& r ) const;
+    BOOL			EqualEntries( const ScConditionalFormat& r ) const;
 
-    void            DoRepaint( const ScRange* pModified );
-    void            InvalidateArea();
+    void			DoRepaint( const ScRange* pModified );
+    void			InvalidateArea();
 
-    sal_uInt32      GetKey() const          { return nKey; }
-    void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // only if not inserted!
+    sal_uInt32		GetKey() const			{ return nKey; }
+    void			SetKey(sal_uInt32 nNew)	{ nKey = nNew; }	// nur wenn nicht eingefuegt!
 
-    void            SetUsed(sal_Bool bSet)      { bIsUsed = bSet; }
-    sal_Bool            IsUsed() const          { return bIsUsed; }
+    void			SetUsed(BOOL bSet)		{ bIsUsed = bSet; }
+    BOOL			IsUsed() const			{ return bIsUsed; }
 
     bool            MarkUsedExternalReferences() const;
 
-    //  sorted (via PTRARR) by Index
-    //  operator== only for sorting
-    sal_Bool operator ==( const ScConditionalFormat& r ) const  { return nKey == r.nKey; }
-    sal_Bool operator < ( const ScConditionalFormat& r ) const  { return nKey <  r.nKey; }
+    //	sortiert (per PTRARR) nach Index
+    //	operator== nur fuer die Sortierung
+    BOOL operator ==( const ScConditionalFormat& r ) const	{ return nKey == r.nKey; }
+    BOOL operator < ( const ScConditionalFormat& r ) const	{ return nKey <  r.nKey; }
 };
 
 //
-//  List of areas and formats:
+//	Liste der Bereiche und Formate:
 //
 
 typedef ScConditionalFormat* ScConditionalFormatPtr;
@@ -281,25 +276,25 @@ public:
         ScConditionalFormatList(ScDocument* pNewDoc, const ScConditionalFormatList& rList);
         ~ScConditionalFormatList() {}
 
-    void    InsertNew( ScConditionalFormat* pNew )
+    void	InsertNew( ScConditionalFormat* pNew )
                 { if (!Insert(pNew)) delete pNew; }
 
     ScConditionalFormat* GetFormat( sal_uInt32 nKey );
 
-    void    CompileAll();
-    void    CompileXML();
-    void    UpdateReference( UpdateRefMode eUpdateRefMode,
+    void	CompileAll();
+    void	CompileXML();
+    void	UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-    void    RenameCellStyle( const String& rOld, const String& rNew );
-    void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
+    void	RenameCellStyle( const String& rOld, const String& rNew );
+    void	UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
-    void    SourceChanged( const ScAddress& rAddr );
+    void	SourceChanged( const ScAddress& rAddr );
 
     /** Temporarily during save, returns RefManager's decision whether ALL
      *  references are marked now. */
     bool    MarkUsedExternalReferences() const;
 
-    sal_Bool    operator==( const ScConditionalFormatList& r ) const;       // for Ref-Undo
+    BOOL	operator==( const ScConditionalFormatList& r ) const;		// fuer Ref-Undo
 };
 
 #endif

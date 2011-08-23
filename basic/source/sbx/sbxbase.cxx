@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,11 +49,18 @@ TYPEINIT0(SbxBase)
 
 SbxAppData* GetSbxData_Impl()
 {
+#ifndef DOS
     SbxAppData** ppData = (SbxAppData**) ::GetAppData( SHL_SBX );
     SbxAppData* p = *ppData;
     if( !p )
         p = *ppData  = new SbxAppData;
     return p;
+#else
+    SbxAppData** ppData;
+    SbxAppData* p;
+    p = *ppData  = new SbxAppData;
+    return p;
+#endif
 }
 
 SbxAppData::~SbxAppData()
@@ -109,13 +116,13 @@ void SbxBase::Clear()
     DBG_CHKTHIS( SbxBase, 0 );
 }
 
-sal_Bool SbxBase::IsFixed() const
+BOOL SbxBase::IsFixed() const
 {
     DBG_CHKTHIS( SbxBase, 0 );
     return IsSet( SBX_FIXED );
 }
 
-void SbxBase::SetModified( sal_Bool b )
+void SbxBase::SetModified( BOOL b )
 {
     DBG_CHKTHIS( SbxBase, 0 );
     if( IsSet( SBX_NO_MODIFY ) )
@@ -138,9 +145,9 @@ void SbxBase::SetError( SbxError e )
         p->eSbxError = e;
 }
 
-sal_Bool SbxBase::IsError()
+BOOL SbxBase::IsError()
 {
-    return sal_Bool( GetSbxData_Impl()->eSbxError != SbxERR_OK );
+    return BOOL( GetSbxData_Impl()->eSbxError != SbxERR_OK );
 }
 
 void SbxBase::ResetError()
@@ -154,8 +161,8 @@ void SbxBase::AddFactory( SbxFactory* pFac )
     const SbxFactory* pTemp = pFac;
 
     // From 1996-03-06: take the HandleLast-Flag into account
-    sal_uInt16 nPos = p->aFacs.Count(); // Insert position
-    if( !pFac->IsHandleLast() )         // Only if not self HandleLast
+    USHORT nPos = p->aFacs.Count();		// Insert-Position
+    if( !pFac->IsHandleLast() )			// Only if not self HandleLast
     {
         // Rank new factory in front of factories with HandleLast
         while( nPos > 0 &&
@@ -168,7 +175,7 @@ void SbxBase::AddFactory( SbxFactory* pFac )
 void SbxBase::RemoveFactory( SbxFactory* pFac )
 {
     SbxAppData* p = GetSbxData_Impl();
-    for( sal_uInt16 i = 0; i < p->aFacs.Count(); i++ )
+    for( USHORT i = 0; i < p->aFacs.Count(); i++ )
     {
         if( p->aFacs.GetObject( i ) == pFac )
         {
@@ -178,7 +185,7 @@ void SbxBase::RemoveFactory( SbxFactory* pFac )
 }
 
 
-SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
+SbxBase* SbxBase::Create( UINT16 nSbxId, UINT32 nCreator )
 {
     // #91626: Hack to skip old Basic dialogs
     // Problem: There does not exist a factory any more,
@@ -190,21 +197,21 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
     if( nCreator == SBXCR_SBX )
       switch( nSbxId )
     {
-        case SBXID_VALUE:       return new SbxValue;
-        case SBXID_VARIABLE:    return new SbxVariable;
-        case SBXID_ARRAY:       return new SbxArray;
-        case SBXID_DIMARRAY:    return new SbxDimArray;
-        case SBXID_OBJECT:      return new SbxObject( aEmptyStr );
-        case SBXID_COLLECTION:  return new SbxCollection( aEmptyStr );
+        case SBXID_VALUE:		return new SbxValue;
+        case SBXID_VARIABLE:	return new SbxVariable;
+        case SBXID_ARRAY:  		return new SbxArray;
+        case SBXID_DIMARRAY:	return new SbxDimArray;
+        case SBXID_OBJECT:		return new SbxObject( aEmptyStr );
+        case SBXID_COLLECTION:	return new SbxCollection( aEmptyStr );
         case SBXID_FIXCOLLECTION:
                                 return new SbxStdCollection( aEmptyStr, aEmptyStr );
-        case SBXID_METHOD:      return new SbxMethod( aEmptyStr, SbxEMPTY );
-        case SBXID_PROPERTY:    return new SbxProperty( aEmptyStr, SbxEMPTY );
+        case SBXID_METHOD:		return new SbxMethod( aEmptyStr, SbxEMPTY );
+        case SBXID_PROPERTY:	return new SbxProperty( aEmptyStr, SbxEMPTY );
     }
     // Unknown type: go over the factories!
     SbxAppData* p = GetSbxData_Impl();
     SbxBase* pNew = NULL;
-    for( sal_uInt16 i = 0; i < p->aFacs.Count(); i++ )
+    for( USHORT i = 0; i < p->aFacs.Count(); i++ )
     {
         SbxFactory* pFac = p->aFacs.GetObject( i );
         pNew = pFac->Create( nSbxId, nCreator );
@@ -226,7 +233,7 @@ SbxObject* SbxBase::CreateObject( const XubString& rClass )
 {
     SbxAppData* p = GetSbxData_Impl();
     SbxObject* pNew = NULL;
-    for( sal_uInt16 i = 0; i < p->aFacs.Count(); i++ )
+    for( USHORT i = 0; i < p->aFacs.Count(); i++ )
     {
         pNew = p->aFacs.GetObject( i )->CreateObject( rClass );
         if( pNew )
@@ -244,15 +251,15 @@ SbxObject* SbxBase::CreateObject( const XubString& rClass )
     return pNew;
 }
 
-static sal_Bool bStaticEnableBroadcasting = sal_True;
+static BOOL bStaticEnableBroadcasting = TRUE;
 
 // Sbx-Solution in exchange for SfxBroadcaster::Enable()
-void SbxBase::StaticEnableBroadcasting( sal_Bool bEnable )
+void SbxBase::StaticEnableBroadcasting( BOOL bEnable )
 {
     bStaticEnableBroadcasting = bEnable;
 }
 
-sal_Bool SbxBase::StaticIsEnabledBroadcasting( void )
+BOOL SbxBase::StaticIsEnabledBroadcasting( void )
 {
     return bStaticEnableBroadcasting;
 }
@@ -260,15 +267,15 @@ sal_Bool SbxBase::StaticIsEnabledBroadcasting( void )
 
 SbxBase* SbxBase::Load( SvStream& rStrm )
 {
-    sal_uInt16 nSbxId, nFlags, nVer;
-    sal_uInt32 nCreator, nSize;
+    UINT16 nSbxId, nFlags, nVer;
+    UINT32 nCreator, nSize;
     rStrm >> nCreator >> nSbxId >> nFlags >> nVer;
 
     // Correcting a foolishness of mine:
     if( nFlags & SBX_RESERVED )
         nFlags = ( nFlags & ~SBX_RESERVED ) | SBX_GBLSEARCH;
 
-    sal_uIntPtr nOldPos = rStrm.Tell();
+    ULONG nOldPos = rStrm.Tell();
     rStrm >> nSize;
     SbxBase* p = Create( nSbxId, nCreator );
     if( p )
@@ -276,7 +283,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
         p->nFlags = nFlags;
         if( p->LoadData( rStrm, nVer ) )
         {
-            sal_uIntPtr nNewPos = rStrm.Tell();
+            ULONG nNewPos = rStrm.Tell();
             nOldPos += nSize;
             DBG_ASSERT( nOldPos >= nNewPos, "SBX: Zu viele Daten eingelesen" );
             if( nOldPos != nNewPos )
@@ -304,81 +311,81 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
 // Skip the Sbx-Object inside the stream
 void SbxBase::Skip( SvStream& rStrm )
 {
-    sal_uInt16 nSbxId, nFlags, nVer;
-    sal_uInt32 nCreator, nSize;
+    UINT16 nSbxId, nFlags, nVer;
+    UINT32 nCreator, nSize;
     rStrm >> nCreator >> nSbxId >> nFlags >> nVer;
 
-    sal_uIntPtr nStartPos = rStrm.Tell();
+    ULONG nStartPos = rStrm.Tell();
     rStrm >> nSize;
 
     rStrm.Seek( nStartPos + nSize );
 }
 
-sal_Bool SbxBase::Store( SvStream& rStrm )
+BOOL SbxBase::Store( SvStream& rStrm )
 {
     DBG_CHKTHIS( SbxBase, 0 );
     if( !( nFlags & SBX_DONTSTORE ) )
     {
-        rStrm << (sal_uInt32) GetCreator()
-              << (sal_uInt16) GetSbxId()
-              << (sal_uInt16) GetFlags()
-              << (sal_uInt16) GetVersion();
-        sal_uIntPtr nOldPos = rStrm.Tell();
-        rStrm << (sal_uInt32) 0L;
-        sal_Bool bRes = StoreData( rStrm );
-        sal_uIntPtr nNewPos = rStrm.Tell();
+        rStrm << (UINT32) GetCreator()
+              << (UINT16) GetSbxId()
+              << (UINT16) GetFlags()
+              << (UINT16) GetVersion();
+        ULONG nOldPos = rStrm.Tell();
+        rStrm << (UINT32) 0L;
+        BOOL bRes = StoreData( rStrm );
+        ULONG nNewPos = rStrm.Tell();
         rStrm.Seek( nOldPos );
-        rStrm << (sal_uInt32) ( nNewPos - nOldPos );
+        rStrm << (UINT32) ( nNewPos - nOldPos );
         rStrm.Seek( nNewPos );
         if( rStrm.GetError() != SVSTREAM_OK )
-            bRes = sal_False;
+            bRes = FALSE;
         if( bRes )
             bRes = StoreCompleted();
         return bRes;
     }
     else
-        return sal_True;
+        return TRUE;
 }
 
-sal_Bool SbxBase::LoadData( SvStream&, sal_uInt16 )
+BOOL SbxBase::LoadData( SvStream&, USHORT )
 {
     DBG_CHKTHIS( SbxBase, 0 );
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool SbxBase::StoreData( SvStream& ) const
+BOOL SbxBase::StoreData( SvStream& ) const
 {
     DBG_CHKTHIS( SbxBase, 0 );
-    return sal_False;
+    return FALSE;
 }
 
-sal_Bool SbxBase::LoadPrivateData( SvStream&, sal_uInt16 )
+BOOL SbxBase::LoadPrivateData( SvStream&, USHORT )
 {
     DBG_CHKTHIS( SbxBase, 0 );
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool SbxBase::StorePrivateData( SvStream& ) const
+BOOL SbxBase::StorePrivateData( SvStream& ) const
 {
     DBG_CHKTHIS( SbxBase, 0 );
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool SbxBase::LoadCompleted()
+BOOL SbxBase::LoadCompleted()
 {
     DBG_CHKTHIS( SbxBase, 0 );
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool SbxBase::StoreCompleted()
+BOOL SbxBase::StoreCompleted()
 {
     DBG_CHKTHIS( SbxBase, 0 );
-    return sal_True;
+    return TRUE;
 }
 
 //////////////////////////////// SbxFactory ////////////////////////////////
 
-SbxBase* SbxFactory::Create( sal_uInt16, sal_uInt32 )
+SbxBase* SbxFactory::Create( UINT16, UINT32 )
 {
     return NULL;
 }
@@ -394,7 +401,7 @@ SbxInfo::~SbxInfo()
 {}
 
 void SbxInfo::AddParam
-        ( const XubString& rName, SbxDataType eType, sal_uInt16 nFlags )
+        ( const XubString& rName, SbxDataType eType, USHORT nFlags )
 {
     const SbxParamInfo* p = new SbxParamInfo( rName, eType, nFlags );
     aParams.Insert( p, aParams.Count() );
@@ -407,7 +414,7 @@ void SbxInfo::AddParam( const SbxParamInfo& r )
     aParams.Insert( p, aParams.Count() );
 }
 
-const SbxParamInfo* SbxInfo::GetParam( sal_uInt16 n ) const
+const SbxParamInfo* SbxInfo::GetParam( USHORT n ) const
 {
     if( n < 1 || n > aParams.Count() )
         return NULL;
@@ -415,18 +422,18 @@ const SbxParamInfo* SbxInfo::GetParam( sal_uInt16 n ) const
         return aParams.GetObject( n-1 );
 }
 
-sal_Bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
+BOOL SbxInfo::LoadData( SvStream& rStrm, USHORT nVer )
 {
     aParams.Remove( 0, aParams.Count() );
-    sal_uInt16 nParam;
+    UINT16 nParam;
     rStrm.ReadByteString( aComment, RTL_TEXTENCODING_ASCII_US );
     rStrm.ReadByteString( aHelpFile, RTL_TEXTENCODING_ASCII_US );
     rStrm >> nHelpId >> nParam;
     while( nParam-- )
     {
         XubString aName;
-        sal_uInt16 nType, nFlags;
-        sal_uInt32 nUserData = 0;
+        UINT16 nType, nFlags;
+        UINT32 nUserData = 0;
         rStrm.ReadByteString( aName, RTL_TEXTENCODING_ASCII_US );
         rStrm >> nType >> nFlags;
         if( nVer > 1 )
@@ -435,23 +442,23 @@ sal_Bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         SbxParamInfo* p = aParams.GetObject( aParams.Count() - 1 );
         p->nUserData = nUserData;
     }
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool SbxInfo::StoreData( SvStream& rStrm ) const
+BOOL SbxInfo::StoreData( SvStream& rStrm ) const
 {
     rStrm.WriteByteString( aComment, RTL_TEXTENCODING_ASCII_US );
     rStrm.WriteByteString( aHelpFile, RTL_TEXTENCODING_ASCII_US );
     rStrm << nHelpId << aParams.Count();
-    for( sal_uInt16 i = 0; i < aParams.Count(); i++ )
+    for( USHORT i = 0; i < aParams.Count(); i++ )
     {
         SbxParamInfo* p = aParams.GetObject( i );
         rStrm.WriteByteString( p->aName, RTL_TEXTENCODING_ASCII_US );
-        rStrm << (sal_uInt16) p->eType
-              << (sal_uInt16) p->nFlags
-              << (sal_uInt32) p->nUserData;
+        rStrm << (UINT16) p->eType
+              << (UINT16) p->nFlags
+              << (UINT32) p->nUserData;
     }
-    return sal_True;
+    return TRUE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

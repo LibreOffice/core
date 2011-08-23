@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,8 +103,8 @@ namespace accessibility
                    nEndIndex >= 0 && nEndIndex <= USHRT_MAX ,
                    "AccessibleStaticTextBase_Impl::MakeSelection: index value overflow");
 
-        return ESelection( static_cast< sal_uInt16 >(nStartPara), static_cast< sal_uInt16 >(nStartIndex),
-                           static_cast< sal_uInt16 >(nEndPara), static_cast< sal_uInt16 >(nEndIndex) );
+        return ESelection( static_cast< USHORT >(nStartPara), static_cast< USHORT >(nStartIndex),
+                           static_cast< USHORT >(nEndPara), static_cast< USHORT >(nEndIndex) );
     }
 
     //------------------------------------------------------------------------
@@ -170,17 +170,17 @@ namespace accessibility
 #endif
 
         AccessibleEditableTextPara& GetParagraph( sal_Int32 nPara ) const;
-        sal_Int32                   GetParagraphCount() const;
+        sal_Int32 					GetParagraphCount() const;
         sal_Int32                   GetParagraphIndex() const;
         sal_Int32                   GetLineCount( sal_Int32 nParagraph ) const;
-
+        
         EPosition                   Index2Internal( sal_Int32 nFlatIndex ) const
         {
             DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
             return ImpCalcInternal( nFlatIndex, false );
         }
-
+        
         EPosition                   Range2Internal( sal_Int32 nFlatIndex ) const
         {
             DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
@@ -188,21 +188,21 @@ namespace accessibility
             return ImpCalcInternal( nFlatIndex, true );
         }
 
-        sal_Int32                   Internal2Index( EPosition nEEIndex ) const;
+        sal_Int32					Internal2Index( EPosition nEEIndex ) const;
 
-        void                        CorrectTextSegment( TextSegment&    aTextSegment,
-                                                        int             nPara   ) const;
+        void						CorrectTextSegment( TextSegment&	aTextSegment,
+                                                        int				nPara	) const;
 
-        sal_Bool                    SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
+        sal_Bool					SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                                   sal_Int32 nEndPara, sal_Int32 nEndIndex );
-        sal_Bool                    CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
+        sal_Bool					CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                               sal_Int32 nEndPara, sal_Int32 nEndIndex );
 
         Rectangle                   GetParagraphBoundingBox() const;
 
     private:
 
-        EPosition                   ImpCalcInternal( sal_Int32 nFlatIndex, bool bExclusive ) const;
+        EPosition 					ImpCalcInternal( sal_Int32 nFlatIndex, bool bExclusive ) const;
 
         // our frontend class (the one implementing the actual
         // interface). That's not necessarily the one containing the impl
@@ -338,16 +338,16 @@ namespace accessibility
             nIndex = mpTextParagraph->GetParagraphIndex();
         return nIndex;
     }
-
+        
     sal_Int32 AccessibleStaticTextBase_Impl::GetLineCount( sal_Int32 nParagraph ) const
     {
         DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
         sal_Int32 nIndex = 0;
         if( mpTextParagraph )
-            nIndex = mpTextParagraph->GetTextForwarder().GetLineCount( static_cast< sal_uInt16 >(nParagraph) );
+            nIndex = mpTextParagraph->GetTextForwarder().GetLineCount( static_cast< USHORT >(nParagraph) );
         return nIndex;
-    }
+    }    
 
     sal_Int32 AccessibleStaticTextBase_Impl::Internal2Index( EPosition nEEIndex ) const
     {
@@ -359,8 +359,8 @@ namespace accessibility
         return aRes + nEEIndex.nIndex;
     }
 
-    void AccessibleStaticTextBase_Impl::CorrectTextSegment( TextSegment&    aTextSegment,
-                                                            int             nPara   ) const
+    void AccessibleStaticTextBase_Impl::CorrectTextSegment( TextSegment&	aTextSegment,
+                                                            int				nPara	) const
     {
         // Keep 'invalid' values at the TextSegment
         if( aTextSegment.SegmentStart != -1 &&
@@ -399,7 +399,7 @@ namespace accessibility
                            nFlatIndex - nCurrIndex + nCurrCount >= 0 && nFlatIndex - nCurrIndex + nCurrCount <= USHRT_MAX ,
                            "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
 
-                return EPosition( static_cast< sal_uInt16 >(nCurrPara), static_cast< sal_uInt16 >(nFlatIndex - nCurrIndex + nCurrCount) );
+                return EPosition( static_cast< USHORT >(nCurrPara), static_cast< USHORT >(nFlatIndex - nCurrIndex + nCurrCount) );
             }
         }
 
@@ -411,7 +411,7 @@ namespace accessibility
                        nFlatIndex - nCurrIndex + nCurrCount >= 0 && nFlatIndex - nCurrIndex + nCurrCount <= USHRT_MAX ,
                        "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
 
-            return EPosition( static_cast< sal_uInt16 >(nCurrPara-1), static_cast< sal_uInt16 >(nFlatIndex - nCurrIndex + nCurrCount) );
+            return EPosition( static_cast< USHORT >(nCurrPara-1), static_cast< USHORT >(nFlatIndex - nCurrIndex + nCurrCount) );
         }
 
         // not found? Out of bounds
@@ -449,7 +449,7 @@ namespace accessibility
         try
         {
             SvxEditViewForwarder& rCacheVF = mpTextParagraph->GetEditViewForwarder( sal_True );
-            mpTextParagraph->GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
+            mpTextParagraph->GetTextForwarder();	// MUST be after GetEditViewForwarder(), see method docs
             sal_Bool aRetVal;
 
             // save current selection
@@ -489,7 +489,7 @@ namespace accessibility
     //
     //------------------------------------------------------------------------
 
-    AccessibleStaticTextBase::AccessibleStaticTextBase( ::std::auto_ptr< SvxEditSource >        pEditSource ) :
+    AccessibleStaticTextBase::AccessibleStaticTextBase( ::std::auto_ptr< SvxEditSource > 		pEditSource ) :
         mpImpl( new AccessibleStaticTextBase_Impl() )
     {
         SolarMutexGuard aGuard;
@@ -727,8 +727,8 @@ namespace accessibility
 
             // #112814# Use correct index offset
             if ( ( nIndex = rPara.getIndexAtPoint( aPoint ) ) != -1 )
-                return mpImpl->Internal2Index( EPosition(sal::static_int_cast<sal_uInt16>(i),
-                                                         sal::static_int_cast<sal_uInt16>(nIndex)) );
+                return mpImpl->Internal2Index( EPosition(sal::static_int_cast<USHORT>(i),
+                                                         sal::static_int_cast<USHORT>(nIndex)) );
         }
 
         return -1;
@@ -1027,7 +1027,7 @@ namespace accessibility
     {
         return mpImpl->GetParagraphBoundingBox();
     }
-
+    
     sal_Int32 AccessibleStaticTextBase::GetParagraphIndex() const
     {
         return mpImpl->GetParagraphIndex();
@@ -1037,11 +1037,11 @@ namespace accessibility
     {
         return mpImpl->GetParagraphCount();
     }
-
+        
     sal_Int32 AccessibleStaticTextBase::GetLineCount( sal_Int32 nParagraph ) const
     {
         return mpImpl->GetLineCount( nParagraph );
-    }
+    }    
 
 }  // end of namespace accessibility
 

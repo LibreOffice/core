@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,11 +54,11 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlDiaPages,  SfxUInt16Item )
 // SdPagesField
 //========================================================================
 
-SdPagesField::SdPagesField( Window* pParent,
-                            const uno::Reference< frame::XFrame >& rFrame,
+SdPagesField::SdPagesField( Window* pParent, 
+                            const uno::Reference< frame::XFrame >& rFrame, 
                             WinBits nBits ) :
-    SvxMetricField  ( pParent, rFrame, nBits ),
-    m_xFrame        ( rFrame )
+    SvxMetricField	( pParent, rFrame, nBits ),
+    m_xFrame		( rFrame )
 {
     String aStr( SdResId( STR_SLIDE_PLURAL ) );
     SetCustomUnitText( aStr );
@@ -108,7 +108,7 @@ void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
 
 void SdPagesField::Modify()
 {
-    SfxUInt16Item aItem( SID_PAGES_PER_ROW, (sal_uInt16) GetValue() );
+    SfxUInt16Item aItem( SID_PAGES_PER_ROW, (UINT16) GetValue() );
 
     ::uno::Any a;
     ::uno::Sequence< ::beans::PropertyValue > aArgs( 1 );
@@ -119,7 +119,7 @@ void SdPagesField::Modify()
                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PagesPerRow" )),
                                  aArgs );
 /*
-    rBindings.GetDispatcher()->Execute(
+    rBindings.GetDispatcher()->Execute( 
         SID_PAGES_PER_ROW, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L, 0L );
 */
 }
@@ -130,7 +130,7 @@ void SdPagesField::Modify()
 |*
 \************************************************************************/
 
-SdTbxCtlDiaPages::SdTbxCtlDiaPages( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SdTbxCtlDiaPages::SdTbxCtlDiaPages( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
@@ -143,7 +143,7 @@ SdTbxCtlDiaPages::~SdTbxCtlDiaPages()
 
 //========================================================================
 
-void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
+void SdTbxCtlDiaPages::StateChanged( USHORT,
                 SfxItemState eState, const SfxPoolItem* pState )
 {
     SdPagesField* pFld = (SdPagesField*) GetToolBox().GetItemWindow( GetId() );
@@ -164,7 +164,7 @@ void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
             pItem = dynamic_cast< const SfxUInt16Item* >( pState );
             DBG_ASSERT( pItem, "sd::SdTbxCtlDiaPages::StateChanged(), wrong item type!" );
         }
-
+        
         pFld->UpdatePagesField( pItem );
     }
 }

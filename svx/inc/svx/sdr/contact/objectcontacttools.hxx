@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,6 @@
 #define _SDR_CONTACT_OBJECTCONTACTTOOLS_HXX
 
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#include "svx/svxdllapi.h"
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -50,8 +49,8 @@ namespace sdr
         // create a mating VCL-Provessor for given OutputDevice. This includes
         // looking for MetaFile-recording. The returned renderer changes owner,
         // deletion is duty of the caller
-        SVX_DLLPUBLIC drawinglayer::processor2d::BaseProcessor2D* createBaseProcessor2DFromOutputDevice(
-            OutputDevice& rTargetOutDev,
+        drawinglayer::processor2d::BaseProcessor2D* createBaseProcessor2DFromOutputDevice(
+            OutputDevice& rTargetOutDev, 
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D);
 
     } // end of namespace contact

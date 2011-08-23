@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,13 +45,13 @@ PreviewValueSet::PreviewValueSet (TreeNode* pParent)
       mnMaxColumnCount(-1)
 {
     SetStyle (
-        GetStyle()
+        GetStyle() 
         & ~(WB_ITEMBORDER)// | WB_MENUSTYLEVALUESET)
         //        | WB_FLATVALUESET);
         );
 
     SetColCount(2);
-    //  SetLineCount(1);
+    //	SetLineCount(1);
     SetExtraSpacing (2);
 }
 
@@ -130,7 +130,7 @@ void PreviewValueSet::Command (const CommandEvent& rEvent)
             maContextMenuCallback.Call(&aNonConstEventCopy);
         }
         break;
-
+            
         default:
             ValueSet::Command(rEvent);
             break;
@@ -142,12 +142,12 @@ void PreviewValueSet::Command (const CommandEvent& rEvent)
 
 void PreviewValueSet::Rearrange (bool bForceRequestResize)
 {
-    sal_uInt16 nOldColumnCount (GetColCount());
-    sal_uInt16 nOldRowCount (GetLineCount());
+    USHORT nOldColumnCount (GetColCount());
+    USHORT nOldRowCount (GetLineCount());
 
-    sal_uInt16 nNewColumnCount (CalculateColumnCount (
+    USHORT nNewColumnCount (CalculateColumnCount (
         GetOutputSizePixel().Width()));
-    sal_uInt16 nNewRowCount (CalculateRowCount (nNewColumnCount));
+    USHORT nNewRowCount (CalculateRowCount (nNewColumnCount));
 
     SetColCount(nNewColumnCount);
     SetLineCount(nNewRowCount);
@@ -169,7 +169,7 @@ void PreviewValueSet::SetContextMenuCallback (const Link& rLink)
 
 
 
-sal_uInt16 PreviewValueSet::CalculateColumnCount (int nWidth) const
+USHORT PreviewValueSet::CalculateColumnCount (int nWidth) const
 {
     int nColumnCount = 0;
     if (nWidth > 0)
@@ -180,13 +180,13 @@ sal_uInt16 PreviewValueSet::CalculateColumnCount (int nWidth) const
         else if (mnMaxColumnCount>0 && nColumnCount>mnMaxColumnCount)
             nColumnCount = mnMaxColumnCount;
     }
-    return (sal_uInt16)nColumnCount;
+    return (USHORT)nColumnCount;
 }
 
 
 
 
-sal_uInt16 PreviewValueSet::CalculateRowCount (sal_uInt16 nColumnCount) const
+USHORT PreviewValueSet::CalculateRowCount (USHORT nColumnCount) const
 {
     int nRowCount = 0;
     int nItemCount = GetItemCount();
@@ -197,7 +197,7 @@ sal_uInt16 PreviewValueSet::CalculateRowCount (sal_uInt16 nColumnCount) const
             nRowCount = 1;
     }
 
-    return (sal_uInt16)nRowCount;
+    return (USHORT)nRowCount;
 }
 
 
@@ -217,7 +217,7 @@ sal_Int32 PreviewValueSet::GetPreferredWidth (sal_Int32 nHeight)
     {
         int nColumnCount = (GetItemCount()+nRowCount-1) / nRowCount;
         if (nColumnCount > 0)
-            nPreferredWidth = (maPreviewSize.Width() + 2*mnBorderWidth)
+            nPreferredWidth = (maPreviewSize.Width() + 2*mnBorderWidth) 
                 * nColumnCount;
     }
 
@@ -231,7 +231,7 @@ sal_Int32 PreviewValueSet::GetPreferredHeight (sal_Int32 nWidth)
 {
     int nRowCount (CalculateRowCount(CalculateColumnCount(nWidth)));
     int nItemHeight (maPreviewSize.Height());
-
+    
     return nRowCount * (nItemHeight + 2*mnBorderHeight);
 }
 

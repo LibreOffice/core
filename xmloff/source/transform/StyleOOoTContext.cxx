@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include "PropType.hxx"
 #include "DeepTContext.hxx"
 #include "RenameElemTContext.hxx"
@@ -71,29 +71,29 @@ const sal_uInt16 MAX_PROP_TYPES = 4;
 
 static XMLPropType aPropTypes[XML_FAMILY_TYPE_END][MAX_PROP_TYPES] =
 {
-    ENTRY3( GRAPHIC, PARAGRAPH, TEXT ),         // XML_FAMILY_TYPE_GRAPHIC,
-    ENTRY3( GRAPHIC, PARAGRAPH, TEXT ),         // XML_FAMILY_TYPE_PRESENTATION,
-    ENTRY1( DRAWING_PAGE ),                     // XML_FAMILY_TYPE_DRAWING_PAGE,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_MASTER_PAGE
-    ENTRY1( PAGE_LAYOUT ),                      // XML_FAMILY_TYPE_PAGE_LAYOUT,
-    ENTRY1( HEADER_FOOTER ),                    // XML_FAMILY_TYPE_HEADER_FOOTER
-    ENTRY1( TEXT ),                             // XML_FAMILY_TYPE_TEXT,
-    ENTRY2( PARAGRAPH, TEXT ),                  // XML_FAMILY_TYPE_PARAGRAPH,
-    ENTRY1( RUBY ),                             //XML_FAMILY_TYPE_RUBY,
-    ENTRY1( SECTION ),                          // XML_FAMILY_TYPE_SECTION,
-    ENTRY1( TABLE ),                            // XML_FAMILY_TYPE_TABLE,
-    ENTRY1( TABLE_COLUMN ),                     // XML_FAMILY_TYPE_TABLE_COLUMN,
-    ENTRY1( TABLE_ROW ),                        // XML_FAMILY_TYPE_TABLE_ROW,
-    ENTRY3( TABLE_CELL, PARAGRAPH, TEXT ),      // XML_FAMILY_TYPE_TABLE_CELL,
-    ENTRY1( LIST_LEVEL ),                       // XML_FAMILY_TYPE_LIST,
-    ENTRY4( CHART, GRAPHIC, PARAGRAPH, TEXT ),  // XML_FAMILY_TYPE_CHART,
-    ENTRY1( TEXT ),                             // XML_FAMILY_TYPE_DATA,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_GRADIENT,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_HATCH,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_FILL_IMAGE,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_STROKE_DASH,
-    ENTRY1( END ),                              // XML_FAMILY_TYPE_MARKER,
-    ENTRY1( END )                               // XML_FAMILY_TYPE_PRESENTATION_PAGE_LAYOUT,
+    ENTRY3( GRAPHIC, PARAGRAPH, TEXT ),			// XML_FAMILY_TYPE_GRAPHIC,
+    ENTRY3( GRAPHIC, PARAGRAPH, TEXT ),			// XML_FAMILY_TYPE_PRESENTATION,
+    ENTRY1( DRAWING_PAGE ),						// XML_FAMILY_TYPE_DRAWING_PAGE,
+    ENTRY1( END ),								// XML_FAMILY_TYPE_MASTER_PAGE
+    ENTRY1( PAGE_LAYOUT ),						// XML_FAMILY_TYPE_PAGE_LAYOUT,
+    ENTRY1( HEADER_FOOTER ),					// XML_FAMILY_TYPE_HEADER_FOOTER
+    ENTRY1( TEXT ),								// XML_FAMILY_TYPE_TEXT,
+    ENTRY2( PARAGRAPH, TEXT ),					// XML_FAMILY_TYPE_PARAGRAPH,
+    ENTRY1( RUBY ),								//XML_FAMILY_TYPE_RUBY,
+    ENTRY1( SECTION ),							// XML_FAMILY_TYPE_SECTION,
+    ENTRY1( TABLE ),							// XML_FAMILY_TYPE_TABLE,
+    ENTRY1( TABLE_COLUMN ),						// XML_FAMILY_TYPE_TABLE_COLUMN,
+    ENTRY1( TABLE_ROW ),						// XML_FAMILY_TYPE_TABLE_ROW,
+    ENTRY3( TABLE_CELL, PARAGRAPH, TEXT ),		// XML_FAMILY_TYPE_TABLE_CELL,
+    ENTRY1( LIST_LEVEL ),						// XML_FAMILY_TYPE_LIST,
+    ENTRY4( CHART, GRAPHIC, PARAGRAPH, TEXT ),	// XML_FAMILY_TYPE_CHART,
+    ENTRY1( TEXT ),								// XML_FAMILY_TYPE_DATA,
+    ENTRY1( END ),								// XML_FAMILY_TYPE_GRADIENT,
+    ENTRY1( END ),								// XML_FAMILY_TYPE_HATCH,
+    ENTRY1( END ),								// XML_FAMILY_TYPE_FILL_IMAGE,
+    ENTRY1( END ),								// XML_FAMILY_TYPE_STROKE_DASH,
+    ENTRY1( END ),								// XML_FAMILY_TYPE_MARKER,
+    ENTRY1( END )								// XML_FAMILY_TYPE_PRESENTATION_PAGE_LAYOUT,
 };
 
 static XMLTokenEnum aPropTokens[XML_PROP_TYPE_END] =
@@ -117,12 +117,12 @@ static XMLTokenEnum aPropTokens[XML_PROP_TYPE_END] =
 static sal_uInt16 aAttrActionMaps[XML_PROP_TYPE_END] =
 {
     PROP_OOO_GRAPHIC_ATTR_ACTIONS,
-    PROP_OOO_DRAWING_PAGE_ATTR_ACTIONS,     // DRAWING_PAGE
+    PROP_OOO_DRAWING_PAGE_ATTR_ACTIONS,		// DRAWING_PAGE
     PROP_OOO_PAGE_LAYOUT_ATTR_ACTIONS,
     PROP_OOO_HEADER_FOOTER_ATTR_ACTIONS,
     PROP_OOO_TEXT_ATTR_ACTIONS,
     PROP_OOO_PARAGRAPH_ATTR_ACTIONS,
-    MAX_OOO_PROP_ACTIONS,       // RUBY
+    MAX_OOO_PROP_ACTIONS,		// RUBY
     PROP_OOO_SECTION_ATTR_ACTIONS,
     PROP_OOO_TABLE_ATTR_ACTIONS,
     PROP_OOO_TABLE_COLUMN_ATTR_ACTIONS,
@@ -355,15 +355,15 @@ XMLTypedPropertiesOOoTContext_Impl
         ::rtl::OString aTmp("Didnt't find property: ");
         const ::rtl::OUString& rPrefix =
             GetTransformer().GetNamespaceMap().GetPrefixByKey( nPrefix );
-        aTmp += ::rtl::OString( rPrefix.getStr(), rPrefix.getLength(),
+        aTmp +=	::rtl::OString( rPrefix.getStr(), rPrefix.getLength(),
                                 RTL_TEXTENCODING_ASCII_US );
         aTmp += ::rtl::OString::valueOf( ':' );
-        aTmp += ::rtl::OString( rLocalName.getStr(), rLocalName.getLength(),
+        aTmp +=	::rtl::OString( rLocalName.getStr(), rLocalName.getLength(),
                                 RTL_TEXTENCODING_ASCII_US );
         aTmp += ::rtl::OString(", assuming <style:");
         const ::rtl::OUString& rName =
             ::xmloff::token::GetXMLToken( aPropTokens[m_aPropTypes[0]] );
-        aTmp += ::rtl::OString( rName.getStr(), rName.getLength(),
+        aTmp +=	::rtl::OString( rName.getStr(), rName.getLength(),
                                 RTL_TEXTENCODING_ASCII_US );
         aTmp += ::rtl::OString::valueOf( '>' );
 
@@ -389,7 +389,7 @@ XMLPropertiesOOoTContext_Impl::XMLPropertiesOOoTContext_Impl(
     XMLTransformerBase& rImp,
     const OUString& rQName,
     XMLPropTypes& rTypes,
-    sal_Bool bPersistent    ) :
+    sal_Bool bPersistent	) :
     XMLTransformerContext( rImp, rQName ),
     m_bPersistent( bPersistent )
 {
@@ -429,15 +429,15 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
     OUString aProtectAttrValue;
     XMLTypedPropertiesOOoTContext_Impl * pProtectContext = 0;
 
-    /* Attribute <style:mirror> has to be priority over attribute <style:draw>.
-       The filter from OpenDocument file format to OpenOffice.org file format
-       produces styles with both attributes. (#i49139#)
-    */
+    // --> OD 2005-05-13 #i49139# - attribute <style:mirror> has to be priority
+    // over attribute <style:draw>. The filter from OpenDocument file format
+    // to OpenOffice.org file format produces styles with both attributes.
     sal_Bool bExistStyleMirror( sal_False );
     OUString aStyleMirrorAttrValue;
     sal_Bool bExistDrawMirror( sal_False );
     OUString aDrawMirrorAttrValue;
     XMLTypedPropertiesOOoTContext_Impl* pMirrorContext( 0L );
+    // <--
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -609,7 +609,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                     bDouble = sal_False;
                     break;
                 default:
-                    OSL_FAIL( "xmloff::XMLPropertiesOOoTContext_Impl::StartElement(), unknown underline token!" );
+                    OSL_ENSURE( false, "xmloff::XMLPropertiesOOoTContext_Impl::StartElement(), unknown underline token!" );
                     break;
                 }
                 pContext->AddAttribute(
@@ -617,7 +617,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                             XML_NAMESPACE_STYLE,
                             GetXMLToken( XML_TEXT_UNDERLINE_STYLE ) ),
                         eToken != XML_TOKEN_END ? GetXMLToken( eToken )
-                                                   : sAttrValue );
+                                                   : sAttrValue	);
                 if( bDouble )
                     pContext->AddAttribute(
                             GetTransformer().GetNamespaceMap().GetQNameByKey(
@@ -666,7 +666,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                             XML_NAMESPACE_STYLE,
                             GetXMLToken( XML_TEXT_LINE_THROUGH_STYLE ) ),
                         eToken != XML_TOKEN_END ? GetXMLToken( eToken )
-                                                   : sAttrValue );
+                                                   : sAttrValue	);
                 if( bDouble )
                     pContext->AddAttribute(
                             GetTransformer().GetNamespaceMap().GetQNameByKey(
@@ -712,7 +712,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                         break;
 
                     default:
-                        OSL_FAIL( "invalid spline type" );
+                        OSL_ENSURE( false, "invalid spline type" );
                         pContext->AddAttribute(
                             aNewAttrName, GetXMLToken( XML_NONE ));
                         break;
@@ -773,7 +773,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                             eToken = XML_HOURGLASS;
                             break;
                         default:
-                            OSL_FAIL( "invalid named symbol" );
+                            OSL_ENSURE( false, "invalid named symbol" );
                             break;
                     }
 
@@ -804,7 +804,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                                 aNewAttrName, GetXMLToken( XML_IMAGE ));
                             break;
                         default:
-                            OSL_FAIL( "invalid symbol type" );
+                            OSL_ENSURE( false, "invalid symbol type" );
                             pContext->AddAttribute(
                                 aNewAttrName, GetXMLToken( XML_NONE ));
                             break;
@@ -887,17 +887,18 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             aProtectAttrValue = sAttrValue;
             pProtectContext = pContext;
             break;
-        case XML_ATACTION_DRAW_MIRROR_OOO:   // renames draw:mirror to style:mirror and adapts values
+        case XML_ATACTION_DRAW_MIRROR_OOO:	 // renames draw:mirror to style:mirror and adapts values
             {
-                // OpenDocument file format: attribute value of <style:mirror> wrong (#i49139#)
+                // --> OD 2005-05-13 #i49139#
                 aDrawMirrorAttrValue =
                                 GetXMLToken( IsXMLToken( sAttrValue, XML_TRUE )
                                              ? XML_HORIZONTAL : XML_NONE );
                 bExistDrawMirror = sal_True;
                 pMirrorContext = pContext;
+                // <--
             }
             break;
-        // OpenDocument file format: attribute value of <style:mirror> wrong (#i49139#)
+        // --> OD 2005-05-12 #i49139#
         case XML_ATACTION_STYLE_MIRROR_OOO:   // adapts style:mirror values
             {
                 SvXMLTokenEnumerator aTokenEnum( sAttrValue );
@@ -906,7 +907,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 {
                     if ( aStyleMirrorAttrValue.getLength() > 0 )
                     {
-                        aStyleMirrorAttrValue += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " ));
+                        aStyleMirrorAttrValue += rtl::OUString::createFromAscii( " " );
                     }
 
                     if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_LEFT_PAGES ) )
@@ -926,7 +927,8 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 pMirrorContext = pContext;
             }
             break;
-        case XML_ATACTION_GAMMA_OOO:        // converts double value to percentage
+        // <--
+        case XML_ATACTION_GAMMA_OOO:		// converts double value to percentage
             {
                 double fValue = sAttrValue.toDouble();
                 sal_Int32 nValue = (sal_Int32)((fValue * 100.0) + ( fValue > 0 ? 0.5 : - 0.5 ) );
@@ -961,7 +963,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         }
     }
 
-    // OpenDocument file format: attribute value of <style:mirror> wrong (#i49139#)
+    // --> OD 2005-05-13 #i49139#
     if ( bExistStyleMirror )
     {
         pMirrorContext->AddAttribute(
@@ -976,6 +978,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                                 XML_NAMESPACE_STYLE, GetXMLToken( XML_MIRROR ) ),
                         aDrawMirrorAttrValue);
     }
+    // <--
 
     if( bMoveProtect || bSizeProtect || aProtectAttrValue.getLength() )
     {

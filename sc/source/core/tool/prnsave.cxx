@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@
 //------------------------------------------------------------------
 
 //
-//      Daten pro Tabelle
+//		Daten pro Tabelle
 //
 
 ScPrintSaverTab::ScPrintSaverTab() :
     mpRepeatCol(NULL),
     mpRepeatRow(NULL),
-    mbEntireSheet(false)
+    mbEntireSheet(FALSE)
 {
 }
 
@@ -60,7 +60,7 @@ ScPrintSaverTab::~ScPrintSaverTab()
     delete mpRepeatRow;
 }
 
-void ScPrintSaverTab::SetAreas( const ScRangeVec& rRanges, sal_Bool bEntireSheet )
+void ScPrintSaverTab::SetAreas( const ScRangeVec& rRanges, BOOL bEntireSheet )
 {
     maPrintRanges = rRanges;
     mbEntireSheet = bEntireSheet;
@@ -74,12 +74,12 @@ void ScPrintSaverTab::SetRepeat( const ScRange* pCol, const ScRange* pRow )
     mpRepeatRow = pRow ? new ScRange(*pRow) : NULL;
 }
 
-inline sal_Bool PtrEqual( const ScRange* p1, const ScRange* p2 )
+inline BOOL PtrEqual( const ScRange* p1, const ScRange* p2 )
 {
     return ( !p1 && !p2 ) || ( p1 && p2 && *p1 == *p2 );
 }
 
-sal_Bool ScPrintSaverTab::operator==( const ScPrintSaverTab& rCmp ) const
+BOOL ScPrintSaverTab::operator==( const ScPrintSaverTab& rCmp ) const
 {
     return
         PtrEqual( mpRepeatCol, rCmp.mpRepeatCol ) &&
@@ -89,7 +89,7 @@ sal_Bool ScPrintSaverTab::operator==( const ScPrintSaverTab& rCmp ) const
 }
 
 //
-//      Daten fuer das ganze Dokument
+//		Daten fuer das ganze Dokument
 //
 
 ScPrintRangeSaver::ScPrintRangeSaver( SCTAB nCount ) :
@@ -118,14 +118,14 @@ const ScPrintSaverTab& ScPrintRangeSaver::GetTabData(SCTAB nTab) const
     return pData[nTab];
 }
 
-sal_Bool ScPrintRangeSaver::operator==( const ScPrintRangeSaver& rCmp ) const
+BOOL ScPrintRangeSaver::operator==( const ScPrintRangeSaver& rCmp ) const
 {
-    sal_Bool bEqual = ( nTabCount == rCmp.nTabCount );
+    BOOL bEqual = ( nTabCount == rCmp.nTabCount );
     if (bEqual)
         for (SCTAB i=0; i<nTabCount; i++)
             if (!(pData[i]==rCmp.pData[i]))
             {
-                bEqual = false;
+                bEqual = FALSE;
                 break;
             }
     return bEqual;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef _SVX_TABBASE_HYPERLINK_HXX
 #define _SVX_TABBASE_HYPERLINK_HXX
 
-#define INET_TELNET_SCHEME      "telnet://"
+#define INET_TELNET_SCHEME		"telnet://"
 
 #include <sfx2/app.hxx>
 #include <sfx2/tabdlg.hxx>
@@ -81,9 +81,12 @@ public:
 class SvxHyperURLBox : public SvtURLBox, public DropTargetHelper
 {
 private:
-    sal_Bool   mbAccessAddress;
+    BOOL   mbAccessAddress;
+
+//	String GetAllEmailNamesFromDragItem( USHORT nItem );
 
 protected:
+
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
@@ -93,7 +96,7 @@ protected:
     virtual long        PreNotify( NotifyEvent& rNEvt );
 
 public:
-    SvxHyperURLBox( Window* pParent, INetProtocol eSmart = INET_PROT_FILE, sal_Bool bAddresses = sal_False );
+    SvxHyperURLBox( Window* pParent, INetProtocol eSmart = INET_PROT_FILE, BOOL bAddresses = FALSE );
 
 };
 
@@ -107,15 +110,15 @@ class SvxHyperlinkTabPageBase : public IconChoicePage
 {
 private:
     FixedLine           *mpGrpMore;
-    FixedText           *mpFtFrame;
-    SvxFramesComboBox   *mpCbbFrame;
-    FixedText           *mpFtForm;
-    ListBox             *mpLbForm;
-    FixedText           *mpFtIndication;
-    Edit                *mpEdIndication;
-    FixedText           *mpFtText;
-    Edit                *mpEdText;
-    ImageButton         *mpBtScript;
+    FixedText			*mpFtFrame;
+    SvxFramesComboBox	*mpCbbFrame;
+    FixedText			*mpFtForm;
+    ListBox				*mpLbForm;
+    FixedText			*mpFtIndication;
+    Edit				*mpEdIndication;
+    FixedText			*mpFtText;
+    Edit				*mpEdText;
+    ImageButton			*mpBtScript;
 
     sal_Bool            mbIsCloseDisabled;
 
@@ -123,13 +126,13 @@ private:
                         mxDocumentFrame;
 
 protected:
-    Window*             mpDialog;
+    Window*				mpDialog;
 
-    sal_Bool                mbStdControlsInit;
+    BOOL				mbStdControlsInit;
 
-    String              maStrInitURL;
+    String				maStrInitURL;
 
-    Timer               maTimer;
+    Timer				maTimer;
 
     SvxHlinkDlgMarkWnd* mpMarkWnd;
 
@@ -141,15 +144,15 @@ protected:
                                          SvxLinkInsertMode& eMode ) = 0;
     virtual String CreateUiNameFromURL( const String& aStrURL );
 
-    void         GetDataFromCommonFields( String& aStrName,
+    void		 GetDataFromCommonFields( String& aStrName,
                                           String& aStrIntName, String& aStrFrame,
                                           SvxLinkInsertMode& eMode );
 
-    DECL_LINK (ClickScriptHdl_Impl, void * );       // Button : Script
+    DECL_LINK (ClickScriptHdl_Impl, void * );		// Button : Script
 
-    String              aEmptyStr;
+    String				aEmptyStr;
 
-    sal_Bool            FileExists( const INetURLObject& rURL );
+    BOOL			FileExists( const INetURLObject& rURL );
     static String   GetSchemeFromURL( String aStrURL );
 
     inline void     DisableClose( sal_Bool _bDisable ) { mbIsCloseDisabled = _bDisable; }
@@ -168,38 +171,38 @@ public:
         mxDocumentFrame = rxDocumentFrame;
     }
 
-    virtual sal_Bool AskApply ();
+    virtual BOOL AskApply ();
     virtual void DoApply ();
-    virtual void SetOnlineMode( sal_Bool bEnable );
+    virtual void SetOnlineMode( BOOL bEnable );
     virtual void SetInitFocus();
     virtual void SetMarkStr ( String& aStrMark );
     virtual void Reset( const SfxItemSet& );
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual BOOL FillItemSet( SfxItemSet& );
     virtual void ActivatePage( const SfxItemSet& rItemSet );
-    virtual int  DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual int	 DeactivatePage( SfxItemSet* pSet = 0 );
 
-    sal_Bool IsMarkWndVisible ()      { return ((Window*)mpMarkWnd)->IsVisible(); }
-    Size GetSizeExtraWnd ()       { return ( mpMarkWnd->GetSizePixel() ); }
-    sal_Bool MoveToExtraWnd ( Point aNewPos, sal_Bool bDisConnectDlg = sal_False );
+    BOOL IsMarkWndVisible ()      { return ((Window*)mpMarkWnd)->IsVisible(); }
+    Size GetSizeExtraWnd ()		  { return ( mpMarkWnd->GetSizePixel() ); }
+    BOOL MoveToExtraWnd ( Point aNewPos, BOOL bDisConnectDlg = FALSE );
 
     virtual void        ActivatePage();
     virtual void        DeactivatePage();
     virtual sal_Bool    QueryClose();
 
 protected:
-    virtual sal_Bool ShouldOpenMarkWnd();
-    virtual void SetMarkWndShouldOpen(sal_Bool bOpen);
+    virtual BOOL ShouldOpenMarkWnd();
+    virtual void SetMarkWndShouldOpen(BOOL bOpen);
 
     void ShowMarkWnd ();
-    void HideMarkWnd ()           { ( ( Window* ) mpMarkWnd )->Hide(); }
+    void HideMarkWnd ()	          { ( ( Window* ) mpMarkWnd )->Hide(); }
     void InvalidateMarkWnd ()     { ( ( Window* ) mpMarkWnd )->Invalidate(); }
 
     SfxDispatcher* GetDispatcher() const;
 
-    sal_uInt16             GetMacroEvents();
+    USHORT             GetMacroEvents();
     SvxMacroTableDtor* GetMacroTable();
 
-    sal_Bool IsHTMLDoc() const;
+    BOOL IsHTMLDoc() const;
 };
 
 #endif // _SVX_TABBASE_HYPERLINK_HXX

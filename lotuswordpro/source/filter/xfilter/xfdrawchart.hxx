@@ -57,10 +57,14 @@
  * @file
  * Chart object.
  ************************************************************************/
-#ifndef     _XFDRAWECLIPSE_HXX
-#define     _XFDRAWECLIPSE_HXX
+/*************************************************************************
+ * Change History
+ * 2004-2-25 	create this file,draft code for chart xml.
+ ************************************************************************/
+#ifndef		_XFDRAWECLIPSE_HXX
+#define		_XFDRAWECLIPSE_HXX
 
-#include    "xfdrawobj.hxx"
+#include	"xfdrawobj.hxx"
 #include <so3/svstor.hxx>
 /**
 * @brief
@@ -72,7 +76,7 @@ public:
     XFDrawChart();
 
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
     virtual void Add(IXFContent* pXFChartStream);
 
 private:

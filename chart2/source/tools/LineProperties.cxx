@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ void LineProperties::AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-
+    
     rOutProperties.push_back(
         Property( C2U( "LineJoint" ),
                   PROP_LINE_JOINT,
@@ -109,6 +109,7 @@ void LineProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_JOINT, drawing::LineJoint_ROUND );
 }
 
+//static
 bool LineProperties::IsLineVisible( const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >& xLineProperties )
 {
@@ -137,6 +138,7 @@ bool LineProperties::IsLineVisible( const ::com::sun::star::uno::Reference<
     return bRet;
 }
 
+//static
 void LineProperties::SetLineVisible( const ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet >& xLineProperties )
 {
@@ -161,6 +163,7 @@ void LineProperties::SetLineVisible( const ::com::sun::star::uno::Reference<
     }
 }
 
+//static
 void LineProperties::SetLineInvisible( const ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet >& xLineProperties )
 {

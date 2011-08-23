@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,11 +35,11 @@
 
 #include "sockimpl.h"
 
-#define PIPEDEFAULTPATH     "/tmp"
-#define PIPEALTERNATEPATH   "/var/tmp"
+#define PIPEDEFAULTPATH		"/tmp"
+#define PIPEALTERNATEPATH	"/var/tmp"
 
-#define PIPENAMEMASK    "OSL_PIPE_%s"
-#define SECPIPENAMEMASK "OSL_PIPE_%s_%s"
+#define PIPENAMEMASK	"OSL_PIPE_%s"
+#define SECPIPENAMEMASK	"OSL_PIPE_%s_%s"
 
 sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
 oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
@@ -54,22 +54,22 @@ static struct
     int            errcode;
     oslPipeError   error;
 } PipeError[]= {
-    { 0,               osl_Pipe_E_None              },  /* no error */
-    { EPROTOTYPE,      osl_Pipe_E_NoProtocol        },  /* Protocol wrong type for socket */
-    { ENOPROTOOPT,     osl_Pipe_E_NoProtocol        },  /* Protocol not available */
-    { EPROTONOSUPPORT, osl_Pipe_E_NoProtocol        },  /* Protocol not supported */
-    { ESOCKTNOSUPPORT, osl_Pipe_E_NoProtocol        },  /* Socket type not supported */
-    { EPFNOSUPPORT,    osl_Pipe_E_NoProtocol        },  /* Protocol family not supported */
-    { EAFNOSUPPORT,    osl_Pipe_E_NoProtocol        },  /* Address family not supported by */
+    { 0,			   osl_Pipe_E_None		    	},	/* no error */
+    { EPROTOTYPE,	   osl_Pipe_E_NoProtocol	    },	/* Protocol wrong type for socket */
+    { ENOPROTOOPT,	   osl_Pipe_E_NoProtocol	    },	/* Protocol not available */
+    { EPROTONOSUPPORT, osl_Pipe_E_NoProtocol		},	/* Protocol not supported */
+    { ESOCKTNOSUPPORT, osl_Pipe_E_NoProtocol 		},	/* Socket type not supported */
+    { EPFNOSUPPORT,	   osl_Pipe_E_NoProtocol     	},	/* Protocol family not supported */
+    { EAFNOSUPPORT,	   osl_Pipe_E_NoProtocol     	},	/* Address family not supported by */
                                                         /* protocol family */
-    { ENETRESET,       osl_Pipe_E_NetworkReset      },  /* Network dropped connection because */
+    { ENETRESET,	   osl_Pipe_E_NetworkReset 		},	/* Network dropped connection because */
                                                          /* of reset */
-    { ECONNABORTED,    osl_Pipe_E_ConnectionAbort   },  /* Software caused connection abort */
-    { ECONNRESET,      osl_Pipe_E_ConnectionReset   },  /* Connection reset by peer */
-    { ENOBUFS,         osl_Pipe_E_NoBufferSpace     },  /* No buffer space available */
-    { ETIMEDOUT,       osl_Pipe_E_TimedOut          },  /* Connection timed out */
-    { ECONNREFUSED,    osl_Pipe_E_ConnectionRefused },  /* Connection refused */
-    { -1,              osl_Pipe_E_invalidError      }
+    { ECONNABORTED,	   osl_Pipe_E_ConnectionAbort 	},	/* Software caused connection abort */
+    { ECONNRESET,	   osl_Pipe_E_ConnectionReset 	},	/* Connection reset by peer */
+    { ENOBUFS,		   osl_Pipe_E_NoBufferSpace 	},	/* No buffer space available */
+    { ETIMEDOUT,	   osl_Pipe_E_TimedOut 			},	/* Connection timed out */
+    { ECONNREFUSED,	   osl_Pipe_E_ConnectionRefused	},	/* Connection refused */
+    { -1,		   	   osl_Pipe_E_invalidError 		}
 };
 
 
@@ -100,8 +100,8 @@ static oslPipeError osl_PipeErrorFromNative(int nativeType)
 
 
 /* macros */
-#define ERROR_TO_NATIVE(x)      osl_NativeFromPipeError(x)
-#define ERROR_FROM_NATIVE(y)    osl_PipeErrorFromNative(y)
+#define ERROR_TO_NATIVE(x)		osl_NativeFromPipeError(x)
+#define ERROR_FROM_NATIVE(y)	osl_PipeErrorFromNative(y)
 
 
 /*****************************************************************************/
@@ -162,10 +162,10 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
                        oslSecurity Security)
 {
     int    Flags;
-    size_t     len;
+    size_t	   len;
     struct sockaddr_un addr;
 
-    sal_Char     name[PATH_MAX + 1];
+    sal_Char  	 name[PATH_MAX + 1];
     oslPipe  pPipe;
 
     if (access(PIPEDEFAULTPATH, R_OK|W_OK) == 0)
@@ -260,7 +260,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
             return NULL;
         }
 
-        /*  Only give access to all if no security handle was specified, otherwise security
+        /*	Only give access to all if no security handle was specified, otherwise security
             depends on umask */
 
         if ( !Security )
@@ -272,7 +272,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         if ( listen(pPipe->m_Socket, 5) < 0 )
         {
             OSL_TRACE("osl_createPipe failed to listen. Errno: %d; %s\n",errno,strerror(errno));
-            unlink(name);   /* remove filesystem entry */
+            unlink(name);	/* remove filesystem entry */
             close (pPipe->m_Socket);
             __osl_destroyPipeImpl(pPipe);
             return NULL;
@@ -322,7 +322,7 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
 {
     int nRet;
 #if defined(LINUX)
-    size_t     len;
+    size_t	   len;
     struct sockaddr_un addr;
     int fd;
 #endif
@@ -482,7 +482,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
                   (sal_Char*)pBuffer,
                   BytesToRead, 0);
 
-    if ( nRet < 0 )
+    if ( nRet <= 0 )
     {
         OSL_TRACE("osl_receivePipe failed : %i '%s'",nRet,strerror(errno));
     }
@@ -535,7 +535,7 @@ oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
 
 sal_Int32 SAL_CALL osl_writePipe( oslPipe pPipe, const void *pBuffer , sal_Int32 n )
 {
-    /* loop until all desired bytes were send or an error occurred */
+    /* loop until all desired bytes were send or an error occured */
     sal_Int32 BytesSend= 0;
     sal_Int32 BytesToSend= n;
 
@@ -546,7 +546,7 @@ sal_Int32 SAL_CALL osl_writePipe( oslPipe pPipe, const void *pBuffer , sal_Int32
 
         RetVal= osl_sendPipe(pPipe, pBuffer, BytesToSend);
 
-        /* error occurred? */
+        /* error occured? */
         if(RetVal <= 0)
         {
             break;
@@ -562,7 +562,7 @@ sal_Int32 SAL_CALL osl_writePipe( oslPipe pPipe, const void *pBuffer , sal_Int32
 
 sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
 {
-    /* loop until all desired bytes were read or an error occurred */
+    /* loop until all desired bytes were read or an error occured */
     sal_Int32 BytesRead= 0;
     sal_Int32 BytesToRead= n;
 
@@ -572,7 +572,7 @@ sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
         sal_Int32 RetVal;
         RetVal= osl_receivePipe(pPipe, pBuffer, BytesToRead);
 
-        /* error occurred? */
+        /* error occured? */
         if(RetVal <= 0)
         {
             break;

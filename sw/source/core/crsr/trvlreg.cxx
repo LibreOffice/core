@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@
 
 
 
-sal_Bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
-                        sal_Bool bInReadOnly )
+BOOL GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
+                        BOOL bInReadOnly )
 {
     SwNodeIndex aIdx( rCurCrsr.GetPoint()->nNode );
     SwSectionNode* pNd = aIdx.GetNode().FindSectionNode();
@@ -55,7 +55,7 @@ sal_Bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
             0 == ( pNd = aIdx.GetNode().StartOfSectionNode()->GetSectionNode()) )
             aIdx--;
 
-        if( pNd )       // gibt einen weiteren SectionNode ?
+        if( pNd )		// gibt einen weiteren SectionNode ?
         {
             if( pNd->GetSection().IsHiddenFlag() ||
                 ( !bInReadOnly &&
@@ -68,7 +68,7 @@ sal_Bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
             {
                 aIdx = *pNd;
                 SwCntntNode* pCNd = pNd->GetNodes().GoNextSection( &aIdx,
-                                                sal_True, !bInReadOnly );
+                                                TRUE, !bInReadOnly );
                 if( !pCNd )
                 {
                     aIdx--;
@@ -80,7 +80,7 @@ sal_Bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
             {
                 aIdx = *pNd->EndOfSectionNode();
                 SwCntntNode* pCNd = pNd->GetNodes().GoPrevSection( &aIdx,
-                                                sal_True, !bInReadOnly );
+                                                TRUE, !bInReadOnly );
                 if( !pCNd )
                 {
                     aIdx.Assign( *pNd, - 1 );
@@ -90,28 +90,28 @@ sal_Bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
             }
 
             rCurCrsr.GetPoint()->nNode = aIdx;
-            return sal_True;
+            return TRUE;
         }
     } while( pNd );
-    return sal_False;
+    return FALSE;
 }
 
 
-sal_Bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
-                        sal_Bool bInReadOnly )
+BOOL GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
+                        BOOL bInReadOnly )
 {
     SwNodeIndex aIdx( rCurCrsr.GetPoint()->nNode );
     SwSectionNode* pNd = aIdx.GetNode().FindSectionNode();
     if( pNd )
         aIdx.Assign( *pNd->EndOfSectionNode(), - 1 );
 
-    sal_uLong nEndCount = aIdx.GetNode().GetNodes().Count()-1;
+    ULONG nEndCount = aIdx.GetNode().GetNodes().Count()-1;
     do {
         while( aIdx.GetIndex() < nEndCount &&
                 0 == ( pNd = aIdx.GetNode().GetSectionNode()) )
             aIdx++;
 
-        if( pNd )       // gibt einen weiteren SectionNode ?
+        if( pNd )		// gibt einen weiteren SectionNode ?
         {
             if( pNd->GetSection().IsHiddenFlag() ||
                 ( !bInReadOnly &&
@@ -124,7 +124,7 @@ sal_Bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
             {
                 aIdx = *pNd;
                 SwCntntNode* pCNd = pNd->GetNodes().GoNextSection( &aIdx,
-                                                sal_True, !bInReadOnly );
+                                                TRUE, !bInReadOnly );
                 if( !pCNd )
                 {
                     aIdx.Assign( *pNd->EndOfSectionNode(), +1 );
@@ -136,7 +136,7 @@ sal_Bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
             {
                 aIdx = *pNd->EndOfSectionNode();
                 SwCntntNode* pCNd = pNd->GetNodes().GoPrevSection( &aIdx,
-                                                sal_True, !bInReadOnly );
+                                                TRUE, !bInReadOnly );
                 if( !pCNd )
                 {
                     aIdx++;
@@ -146,33 +146,33 @@ sal_Bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
             }
 
             rCurCrsr.GetPoint()->nNode = aIdx;
-            return sal_True;
+            return TRUE;
         }
     } while( pNd );
-    return sal_False;
+    return FALSE;
 }
 
 
-sal_Bool GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
-                        sal_Bool bInReadOnly )
+BOOL GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
+                        BOOL bInReadOnly )
 {
     SwSectionNode* pNd = rCurCrsr.GetNode()->FindSectionNode();
     if( !pNd )
-        return sal_False;
+        return FALSE;
 
     SwPosition* pPos = rCurCrsr.GetPoint();
-    sal_Bool bMoveBackward = fnPosRegion == fnMoveBackward;
+    BOOL bMoveBackward = fnPosRegion == fnMoveBackward;
 
     SwCntntNode* pCNd;
     if( bMoveBackward )
     {
         SwNodeIndex aIdx( *pNd->EndOfSectionNode() );
-        pCNd = pNd->GetNodes().GoPrevSection( &aIdx, sal_True, !bInReadOnly );
+        pCNd = pNd->GetNodes().GoPrevSection( &aIdx, TRUE, !bInReadOnly );
     }
     else
     {
         SwNodeIndex aIdx( *pNd );
-        pCNd = pNd->GetNodes().GoNextSection( &aIdx, sal_True, !bInReadOnly );
+        pCNd = pNd->GetNodes().GoNextSection( &aIdx, TRUE, !bInReadOnly );
     }
 
     if( pCNd )
@@ -185,34 +185,34 @@ sal_Bool GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 }
 
 
-sal_Bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
-                                sal_Bool bInReadOnly )
+BOOL GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
+                                BOOL bInReadOnly )
 {
     SwNode* pCurrNd = rCurCrsr.GetNode();
     SwSectionNode* pNd = pCurrNd->FindSectionNode();
     if( !pNd )
-        return sal_False;
+        return FALSE;
 
     SwPosition* pPos = rCurCrsr.GetPoint();
     xub_StrLen nCurrCnt = pPos->nContent.GetIndex();
-    sal_Bool bMoveBackward = fnPosRegion == fnMoveBackward;
+    BOOL bMoveBackward = fnPosRegion == fnMoveBackward;
 
     do {
         SwCntntNode* pCNd;
-        if( bMoveBackward ) // ans Ende vom Bereich
+        if( bMoveBackward )	// ans Ende vom Bereich
         {
             SwNodeIndex aIdx( *pNd->EndOfSectionNode() );
-            pCNd = pNd->GetNodes().GoPrevSection( &aIdx, sal_True, !bInReadOnly );
+            pCNd = pNd->GetNodes().GoPrevSection( &aIdx, TRUE, !bInReadOnly );
             if( !pCNd )
-                return sal_False;
+                return FALSE;
             pPos->nNode = aIdx;
         }
         else
         {
             SwNodeIndex aIdx( *pNd );
-            pCNd = pNd->GetNodes().GoNextSection( &aIdx, sal_True, !bInReadOnly );
+            pCNd = pNd->GetNodes().GoNextSection( &aIdx, TRUE, !bInReadOnly );
             if( !pCNd )
-                return sal_False;
+                return FALSE;
             pPos->nNode = aIdx;
         }
 
@@ -222,18 +222,18 @@ sal_Bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
         if( &pPos->nNode.GetNode() != pCurrNd ||
             pPos->nContent.GetIndex() != nCurrCnt )
             // es gab eine Veraenderung
-            return sal_True;
+            return TRUE;
 
         // dann versuche mal den "Parent" dieser Section
         SwSection* pParent = pNd->GetSection().GetParent();
         pNd = pParent ? pParent->GetFmt()->GetSectionNode() : 0;
     } while( pNd );
-    return sal_False;
+    return FALSE;
 }
 
 
 
-sal_Bool SwCursor::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
+BOOL SwCursor::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
 {
     SwCrsrSaveState aSaveState( *this );
     return !dynamic_cast<SwTableCursor*>(this) &&
@@ -243,21 +243,21 @@ sal_Bool SwCursor::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosReg
                 GetPoint()->nContent.GetIndex() != pSavePos->nCntnt );
 }
 
-sal_Bool SwCrsrShell::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
+BOOL SwCrsrShell::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
 {
-    SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
-    sal_Bool bRet = !pTblCrsr && pCurCrsr->MoveRegion( fnWhichRegion, fnPosRegion );
+    SwCallLink aLk( *this );		// Crsr-Moves ueberwachen, evt. Link callen
+    BOOL bRet = !pTblCrsr && pCurCrsr->MoveRegion( fnWhichRegion, fnPosRegion );
     if( bRet )
         UpdateCrsr();
     return bRet;
 }
 
 
-sal_Bool SwCursor::GotoRegion( const String& rName )
+BOOL SwCursor::GotoRegion( const String& rName )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( sal_uInt16 n = rFmts.Count(); n; )
+    for( USHORT n = rFmts.Count(); n; )
     {
         const SwSectionFmt* pFmt = rFmts[ --n ];
         const SwNodeIndex* pIdx;
@@ -278,10 +278,10 @@ sal_Bool SwCursor::GotoRegion( const String& rName )
     return bRet;
 }
 
-sal_Bool SwCrsrShell::GotoRegion( const String& rName )
+BOOL SwCrsrShell::GotoRegion( const String& rName )
 {
-    SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
-    sal_Bool bRet = !pTblCrsr && pCurCrsr->GotoRegion( rName );
+    SwCallLink aLk( *this );		// Crsr-Moves ueberwachen,
+    BOOL bRet = !pTblCrsr && pCurCrsr->GotoRegion( rName );
     if( bRet )
         UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
                     SwCrsrShell::READONLY ); // und den akt. Updaten

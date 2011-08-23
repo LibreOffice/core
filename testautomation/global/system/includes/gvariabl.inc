@@ -171,14 +171,11 @@ Global Const GC_MACRO_SECURITY_LEVEL_DEFAULT  = 2  '///+ GC_MACRO_SECURITY_LEVEL
 '///* OOo Improvement Program
 Global gOOoImprovementIsEnabled as boolean
 
-'///* Performance flags, set to true to eliminate wait/sleep statements, default is FALSE
-Global global_use_new_sleep as boolean
+'///* Performance flags
+Global GLOBAL_USE_NEW_SLEEP as boolean ' keep the old sleep() behavior
 
-'///* If set to TRUE  many functions become more talkative, default is FALSE
-Global gVerbose as boolean
-
-'///* When using hFileOpenLocally(...) we do not know the filename under which the file has been saved.
-Global gLastWorkFile as string
+'///* If set to TRUE in master.inc many functions become more talkative
+Global GVERBOSE as boolean
 
 sub OnlyForDocuGVariables
 '///<b>System for the installed Office</b>

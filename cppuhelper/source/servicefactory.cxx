@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppuhelper.hxx"
 
+#if OSL_DEBUG_LEVEL > 0
+#include <stdio.h>
+#endif
 #include <vector>
 
 #include "rtl/string.hxx"
+#include "rtl/ustrbuf.hxx"
 #include "rtl/bootstrap.hxx"
 #include "osl/diagnose.h"
 #include "osl/file.h"
@@ -43,7 +47,6 @@
 #include "cppuhelper/servicefactory.hxx"
 #include "cppuhelper/bootstrap.hxx"
 
-#include "com/sun/star/uno/DeploymentException.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
@@ -62,7 +65,6 @@ using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-namespace css = com::sun::star;
 
 namespace cppu
 {
@@ -130,7 +132,7 @@ Reference< registry::XSimpleRegistry > SAL_CALL createSimpleRegistry(
 #if OSL_DEBUG_LEVEL > 0
         OString cstr_msg(
             OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( !"### exception occurred:", cstr_msg.getStr() );
+        OSL_ENSURE( !"### exception occured:", cstr_msg.getStr() );
 #else
         (void) exc; // avoid warning about unused variable
 #endif
@@ -161,7 +163,7 @@ Reference< registry::XSimpleRegistry > SAL_CALL createNestedRegistry(
 #if OSL_DEBUG_LEVEL > 0
         OString cstr_msg(
             OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( !"### exception occurred:", cstr_msg.getStr() );
+        OSL_ENSURE( !"### exception occured:", cstr_msg.getStr() );
 #else
         (void) exc; // avoid warning about unused variable
 #endif
@@ -307,7 +309,7 @@ static void add_access_control_entries(
             context_values.push_back( entry );
         }
     }
-
+    
     // - ac prop: mode
     // { "off", "on", "dynamic-only", "single-user", "single-default-user" }
     entry.bLateInitService = false;
@@ -336,7 +338,7 @@ Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
                 Reference< lang::XMultiServiceFactory >(),
                 Reference< registry::XRegistryKey >() ) ),
         UNO_QUERY );
-
+    
     // add initial bootstrap services
     static char const * ar[] = {
         "bootstrap.uno" SAL_DLLEXTENSION,
@@ -409,49 +411,46 @@ Reference< XComponentContext > bootstrapInitialContext(
             if (xKey.is())
             {
                 entry.bLateInitService = true;
-
+                
                 Sequence< Reference< registry::XRegistryKey > > keys(
                     xKey->openKeys() );
                 Reference< registry::XRegistryKey > const * pKeys =
                     keys.getConstArray();
                 for ( sal_Int32 nPos = keys.getLength(); nPos--; )
                 {
-                    css::uno::Sequence< rtl::OUString > impls(
-                        css::uno::Reference< css::registry::XRegistryKey >(
-                            pKeys[nPos]->openKey(
-                                rtl::OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
-                                        "REGISTERED_BY"))),
-                            css::uno::UNO_SET_THROW)->getAsciiListValue());
-                    switch (impls.getLength()) {
-                    case 0:
-                        throw css::uno::DeploymentException(
-                            (pKeys[nPos]->getKeyName() +
-                             rtl::OUString(
-                                 RTL_CONSTASCII_USTRINGPARAM(
-                                     "/REGISTERED_BY is empty"))),
-                            css::uno::Reference< css::uno::XInterface >());
-                    case 1:
-                        break;
-                    default:
-                        OSL_TRACE(
-                            ("arbitrarily chosing \"%s\" among multiple"
-                             " implementations for \"%s\""),
-                            rtl::OUStringToOString(
-                                impls[0], RTL_TEXTENCODING_UTF8).getStr(),
-                            rtl::OUStringToOString(
-                                pKeys[nPos]->getKeyName(),
-                                RTL_TEXTENCODING_UTF8).getStr());
-                        break;
+                    Reference< registry::XRegistryKey > const & xKey2 =
+                        pKeys[ nPos ];
+                    try
+                    {
+                        OUStringBuffer buf( 32 );
+                        buf.appendAscii(
+                            RTL_CONSTASCII_STRINGPARAM("/singletons/") );
+                        buf.append(
+                            xKey2->getKeyName().copy(
+                                sizeof("/SINGLETONS") /* -\0 +'/' */ ) );
+                        entry.name = buf.makeStringAndClear();
+                        entry.value <<= xKey2->getStringValue();
+                        context_values.push_back( entry );
                     }
-                    context_values.push_back(
-                        ContextEntry_Init(
-                            (rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM("/singletons/")) +
-                             pKeys[nPos]->getKeyName().copy(
-                                 RTL_CONSTASCII_LENGTH("/SINGLETONS/"))),
-                            css::uno::makeAny(impls[0]),
-                            true));
+                    catch (Exception & rExc)
+                    {
+#if OSL_DEBUG_LEVEL > 0
+                        OString aStr(
+                            OUStringToOString(
+                                xKey2->getKeyName().copy( 11 ),
+                                RTL_TEXTENCODING_ASCII_US ) );
+                        OString aStr2(
+                            OUStringToOString(
+                                rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
+                        fprintf(
+                            stderr,
+                            "### failed reading singleton [%s]"
+                            " service name from registry: %s\n",
+                            aStr.getStr(), aStr2.getStr() );
+#else
+                        (void) rExc; // avoid warning about unused variable
+#endif
+                    }
                 }
             }
         }
@@ -613,7 +612,7 @@ static Reference< lang::XMultiComponentFactory > createImplServiceFactory(
     Reference< XComponentContext > xContext(
         bootstrapInitialContext(
             xSF, xRegistry, xRegistry, rBootstrapPath, bootstrap ) );
-
+    
     // initialize sf
     Reference< lang::XInitialization > xInit( xSF, UNO_QUERY );
     OSL_ASSERT( xInit.is() );
@@ -647,7 +646,7 @@ Reference< XComponentContext > SAL_CALL bootstrap_InitialComponentContext(
     Reference< XComponentContext > xContext(
         bootstrapInitialContext(
             xSF, xRegistry, xRegistry, rBootstrapPath, bootstrap ) );
-
+    
     // initialize sf
     Reference< lang::XInitialization > xInit( xSF, UNO_QUERY );
     OSL_ASSERT( xInit.is() );

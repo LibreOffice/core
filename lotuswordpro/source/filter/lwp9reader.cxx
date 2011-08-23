@@ -72,7 +72,7 @@ Lwp9Reader::Lwp9Reader (LwpSvStream* pInputStream, IXFStream* pStream)
 {}
 
 /**
- * @descr   The entrance of Word Pro 9 import filter.
+ * @descr	The entrance of Word Pro 9 import filter.
  **/
 void Lwp9Reader::Read()
 {
@@ -94,13 +94,13 @@ void Lwp9Reader::Read()
 }
 
 /**
- * @descr   Read the OLE objects.
+ * @descr	Read the OLE objects.
  */
 void Lwp9Reader::ReadOleObjects()
 {
 }
 /**
- * @descr   Read the LWP7 object.
+ * @descr	Read the LWP7 object.
  */
 void Lwp9Reader::ReadFileHeader()
 {
@@ -130,9 +130,9 @@ void Lwp9Reader::ReadIndex()
 }
 
 /**
- * @descr   Read all objects
- *      This function is  replaced by the read on demand model
- *      Reserverd for future use
+ * @descr	Read all objects
+ * 		This function is  replaced by the read on demand model
+ *		Reserverd for future use
 */
 void Lwp9Reader::DumpAllObjects()
 {
@@ -161,7 +161,7 @@ void Lwp9Reader::DumpAllObjects()
 }
 
 /**
- * @descr   Get file size
+ * @descr	Get file size
 */
 sal_Int64 Lwp9Reader::GetFileSize()
 {
@@ -174,7 +174,7 @@ sal_Int64 Lwp9Reader::GetFileSize()
 }
 
 /**
- * @descr       Parse all document content
+ * @descr		Parse all document content
 */
 void Lwp9Reader::ParseDocument()
 {
@@ -206,13 +206,13 @@ void Lwp9Reader::ParseDocument()
     pChangeMgr->ConvertAllChange(m_pStream);
 
     doc->Parse(m_pStream);
-    m_pStream->EndElement(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("office:body")));
+    m_pStream->EndElement(::rtl::OUString::createFromAscii("office:body"));
 
     WriteDocEnd();
 }
 
 /**
- * @descr   Write xml document header
+ * @descr 	Write xml document header
  */
 void Lwp9Reader::WriteDocHeader()
 {
@@ -242,16 +242,16 @@ void Lwp9Reader::WriteDocHeader()
     pAttrList->AddAttribute( A2OUSTR("office:class"), A2OUSTR("text"));
     pAttrList->AddAttribute( A2OUSTR("office:version"), A2OUSTR("1.0"));
 
-    m_pStream->StartElement( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("office:document")) );
+    m_pStream->StartElement( ::rtl::OUString::createFromAscii("office:document") );
     pAttrList->Clear();
 
 }
 /**
- * @descr   Write xml document end
+ * @descr 	Write xml document end
  */
 void Lwp9Reader::WriteDocEnd()
 {
-    m_pStream->EndElement(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("office:document")));
+    m_pStream->EndElement(::rtl::OUString::createFromAscii("office:document"));
     m_pStream->EndDocument();
 }
 

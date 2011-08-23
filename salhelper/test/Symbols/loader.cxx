@@ -7,18 +7,17 @@
 
 
 using namespace salhelper;
+using namespace rtl;
 
-using ::rtl::OUString;
 
-
-class SampleLibLoader
+class SampleLibLoader 
     : public ::salhelper::ODynamicLoader<SampleLib_Api>
 {
 public:
     SampleLibLoader():
         ::salhelper::ODynamicLoader<SampleLib_Api>
-            (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "samplelib") ) ),
-             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(SAMPLELIB_INIT_FUNCTION_NAME) ))
+            (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "samplelib") ) ), 
+             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(SAMPLELIB_INIT_FUNCTION_NAME) ))  
         {}
 
 };

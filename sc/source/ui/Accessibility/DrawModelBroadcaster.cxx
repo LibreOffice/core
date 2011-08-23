@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,9 +32,8 @@
 #include <svx/svdmodel.hxx>
 #include <svx/unomod.hxx>
 #include <tools/debug.hxx>
-#include <osl/diagnose.h>
 
-using namespace ::com::sun::star;
+using namespace	::com::sun::star;
 
 ScDrawModelBroadcaster::ScDrawModelBroadcaster( SdrModel *pDrawModel ) :
     maEventListeners( maListenerMutex ),
@@ -87,7 +86,7 @@ void ScDrawModelBroadcaster::Notify( SfxBroadcaster&,
 #if OSL_DEBUG_LEVEL > 1
             ByteString aError( "Runtime exception caught while notifying shape.:\n" );
             aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-            OSL_FAIL( aError.GetBuffer() );
+            DBG_ERROR( aError.GetBuffer() );
 #endif
         }
     }

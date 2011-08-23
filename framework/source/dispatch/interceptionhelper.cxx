@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,33 +30,33 @@
 #include "precompiled_framework.hxx"
 
 //_______________________________________________
-//  my own includes
+//	my own includes
 
 #include <dispatch/interceptionhelper.hxx>
 
 //_______________________________________________
-//  interface includes
+//	interface includes
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
 
 //_______________________________________________
-//  includes of other projects
+//	includes of other projects
 #include <vcl/svapp.hxx>
 
 //_______________________________________________
-//  namespace
+//	namespace
 
 namespace framework{
 
 //_______________________________________________
-//  non exported const
+//	non exported const
 
 sal_Bool InterceptionHelper::m_bPreferrFirstInterceptor = sal_True;
 
 //_______________________________________________
-//  non exported definitions
+//	non exported definitions
 
 //_______________________________________________
-//  declarations
+//	declarations
 
 /*-----------------------------------------------------------------------------
     31.03.2003 09:02
@@ -172,7 +172,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
     else
     {
         aInfo.lURLPattern.realloc(1);
-        aInfo.lURLPattern[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+        aInfo.lURLPattern[0] = ::rtl::OUString::createFromAscii("*");
     }
 
     // SAFE {
@@ -330,7 +330,7 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
     // SAFE ->
     aReadLock.lock();
     if (!m_lInterceptionRegs.empty() )
-        OSL_FAIL("There are some pending interceptor objects, which seams to be registered during (!) the destruction of a frame.");
+        OSL_ENSURE(sal_False, "There are some pending interceptor objects, which seams to be registered during (!) the destruction of a frame.");
     aReadLock.unlock();
     // <- SAFE
     #endif // ODL_DEBUG_LEVEL>0

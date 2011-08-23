@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,165 +34,327 @@
 
 struct TokenTable { SbiToken t; const char *s; };
 
-static short nToken;                    // Anzahl der Tokens
+static short nToken;					// Anzahl der Tokens
 
 static TokenTable* pTokTable;
 
-static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
+static TokenTable aTokTable_Basic [] = {		// Token-Tabelle:
 
-    { CAT,      "&" },
-    { MUL,      "*" },
-    { PLUS,     "+" },
-    { MINUS,    "-" },
-    { DIV,      "/" },
-    { EOS,      ":" },
-    { ASSIGN,   ":=" },
-    { LT,       "<" },
-    { LE,       "<=" },
-    { NE,       "<>" },
-    { EQ,       "=" },
-    { GT,       ">" },
-    { GE,       ">=" },
-    { ACCESS,   "Access" },
-    { ALIAS,    "Alias" },
-    { AND,      "And" },
-    { ANY,      "Any" },
-    { APPEND,   "Append" },
-    { AS,       "As" },
+    { CAT,		"&" },
+    { MUL,		"*" },
+    { PLUS,		"+" },
+    { MINUS,	"-" },
+    { DIV,		"/" },
+    { EOS,		":" },
+    { ASSIGN,	":=" },
+    { LT,		"<" },
+    { LE,		"<=" },
+    { NE,		"<>" },
+    { EQ,		"=" },
+    { GT,		">" },
+    { GE,		">=" },
+    { ACCESS,	"Access" },
+    { ALIAS,	"Alias" },
+    { AND,		"And" },
+    { ANY,		"Any" },
+    { APPEND,	"Append" },
+    { AS,		"As" },
     { ATTRIBUTE,"Attribute" },
-    { BASE,     "Base" },
-    { BINARY,   "Binary" },
-    { TBOOLEAN, "Boolean" },
-    { BYREF,    "ByRef", },
-    { TBYTE,    "Byte", },
-    { BYVAL,    "ByVal", },
-    { CALL,     "Call" },
-    { CASE,     "Case" },
-    { _CDECL_,  "Cdecl" },
+    { BASE,		"Base" },
+    { BINARY,	"Binary" },
+    { TBOOLEAN,	"Boolean" },
+    { BYREF,	"ByRef", },
+    { TBYTE,	"Byte", },
+    { BYVAL,	"ByVal", },
+    { CALL,		"Call" },
+    { CASE,		"Case" },
+    { _CDECL_,	"Cdecl" },
     { CLASSMODULE, "ClassModule" },
-    { CLOSE,    "Close" },
-    { COMPARE,  "Compare" },
+    { CLOSE,	"Close" },
+    { COMPARE,	"Compare" },
     { COMPATIBLE,"Compatible" },
-    { _CONST_,  "Const" },
+    { _CONST_,	"Const" },
     { TCURRENCY,"Currency" },
-    { TDATE,    "Date" },
-    { DECLARE,  "Declare" },
-    { DEFBOOL,  "DefBool" },
-    { DEFCUR,   "DefCur" },
-    { DEFDATE,  "DefDate" },
-    { DEFDBL,   "DefDbl" },
-    { DEFERR,   "DefErr" },
-    { DEFINT,   "DefInt" },
-    { DEFLNG,   "DefLng" },
-    { DEFOBJ,   "DefObj" },
-    { DEFSNG,   "DefSng" },
-    { DEFSTR,   "DefStr" },
-    { DEFVAR,   "DefVar" },
-    { DIM,      "Dim" },
-    { DO,       "Do" },
-    { TDOUBLE,  "Double" },
-    { EACH,     "Each" },
-    { ELSE,     "Else" },
-    { ELSEIF,   "ElseIf" },
-    { END,      "End" },
-    { ENDENUM,  "End Enum" },
-    { ENDFUNC,  "End Function" },
-    { ENDIF,    "End If" },
+    { TDATE,	"Date" },
+    { DECLARE,	"Declare" },
+    { DEFBOOL,	"DefBool" },
+    { DEFCUR,	"DefCur" },
+    { DEFDATE,	"DefDate" },
+    { DEFDBL,	"DefDbl" },
+    { DEFERR,	"DefErr" },
+    { DEFINT,	"DefInt" },
+    { DEFLNG,	"DefLng" },
+    { DEFOBJ,	"DefObj" },
+    { DEFSNG,	"DefSng" },
+    { DEFSTR,	"DefStr" },
+    { DEFVAR,	"DefVar" },
+    { DIM,		"Dim" },
+    { DO,		"Do" },
+    { TDOUBLE,	"Double" },
+    { EACH,		"Each" },
+    { ELSE,		"Else" },
+    { ELSEIF,	"ElseIf" },
+    { END,		"End" },
+    { ENDENUM,	"End Enum" },
+    { ENDFUNC,	"End Function" },
+    { ENDIF,	"End If" },
     { ENDPROPERTY, "End Property" },
     { ENDSELECT,"End Select" },
-    { ENDSUB,   "End Sub" },
-    { ENDTYPE,  "End Type" },
-    { ENDIF,    "EndIf" },
-    { ENUM,     "Enum" },
-    { EQV,      "Eqv" },
-    { ERASE,    "Erase" },
-    { _ERROR_,  "Error" },
-    { EXIT,     "Exit" },
-    { EXPLICIT, "Explicit" },
-    { FOR,      "For" },
-    { FUNCTION, "Function" },
-    { GET,      "Get" },
-    { GLOBAL,   "Global" },
-    { GOSUB,    "GoSub" },
-    { GOTO,     "GoTo" },
-    { IF,       "If" },
-    { IMP,      "Imp" },
+    { ENDSUB,	"End Sub" },
+    { ENDTYPE,	"End Type" },
+    { ENDIF,	"EndIf" },
+    { ENUM,		"Enum" },
+    { EQV,		"Eqv" },
+    { ERASE,	"Erase" },
+    { _ERROR_,	"Error" },
+    { EXIT,		"Exit" },
+    { EXPLICIT,	"Explicit" },
+    { FOR,		"For" },
+    { FUNCTION,	"Function" },
+    { GET,		"Get" },
+    { GLOBAL,	"Global" },
+    { GOSUB,	"GoSub" },
+    { GOTO,		"GoTo" },
+    { IF,		"If" },
+    { IMP,		"Imp" },
     { IMPLEMENTS, "Implements" },
-    { _IN_,     "In" },
-    { INPUT,    "Input" },              // auch INPUT #
-    { TINTEGER, "Integer" },
-    { IS,       "Is" },
-    { LET,      "Let" },
-    { LIB,      "Lib" },
-    { LIKE,     "Like" },
-    { LINE,     "Line" },
+    { _IN_,		"In" },
+    { INPUT,	"Input" },				// auch INPUT #
+    { TINTEGER,	"Integer" },
+    { IS,		"Is" },
+    { LET,		"Let" },
+    { LIB,		"Lib" },
+    { LIKE,		"Like" },
+    { LINE,		"Line" },
     { LINEINPUT,"Line Input" },
-    { LOCAL,    "Local" },
-    { LOCK,     "Lock" },
-    { TLONG,    "Long" },
-    { LOOP,     "Loop" },
-    { LPRINT,   "LPrint" },
+    { LOCAL,	"Local" },
+    { LOCK,		"Lock" },
+    { TLONG,	"Long" },
+    { LOOP,		"Loop" },
+    { LPRINT,	"LPrint" },
     { LSET,     "LSet" }, // JSM
-    { MOD,      "Mod" },
-    { NAME,     "Name" },
-    { NEW,      "New" },
-    { NEXT,     "Next" },
-    { NOT,      "Not" },
-    { TOBJECT,  "Object" },
-    { ON,       "On" },
-    { OPEN,     "Open" },
-    { OPTION,   "Option" },
-    { _OPTIONAL_,   "Optional" },
-    { OR,       "Or" },
-    { OUTPUT,   "Output" },
-    { PARAMARRAY,   "ParamArray" },
+    { MOD,		"Mod" },
+    { NAME,		"Name" },
+    { NEW,		"New" },
+    { NEXT,		"Next" },
+    { NOT,		"Not" },
+    { TOBJECT,	"Object" },
+    { ON,		"On" },
+    { OPEN,		"Open" },
+    { OPTION,	"Option" },
+    { _OPTIONAL_,	"Optional" },
+    { OR,		"Or" },
+    { OUTPUT,	"Output" },
+    { PARAMARRAY,	"ParamArray" },
     { PRESERVE, "Preserve" },
-    { PRINT,    "Print" },
-    { PRIVATE,  "Private" },
-    { PROPERTY, "Property" },
-    { PUBLIC,   "Public" },
-    { RANDOM,   "Random" },
-    { READ,     "Read" },
-    { REDIM,    "ReDim" },
-    { REM,      "Rem" },
-    { RESUME,   "Resume" },
-    { RETURN,   "Return" },
+    { PRINT,	"Print" },
+    { PRIVATE,	"Private" },
+    { PROPERTY,	"Property" },
+    { PUBLIC,	"Public" },
+    { RANDOM,	"Random" },
+    { READ,		"Read" },
+    { REDIM,	"ReDim" },
+    { REM, 		"Rem" },
+    { RESUME,	"Resume" },
+    { RETURN,	"Return" },
     { RSET,     "RSet" }, // JSM
-    { SELECT,   "Select" },
-    { SET,      "Set" },
+    { SELECT,	"Select" },
+    { SET,		"Set" },
 #ifdef SHARED
 #undef SHARED
 #define tmpSHARED
 #endif
-    { SHARED,   "Shared" },
+    { SHARED,	"Shared" },
 #ifdef tmpSHARED
 #define SHARED
 #undef tmpSHARED
 #endif
-    { TSINGLE,  "Single" },
-    { STATIC,   "Static" },
-    { STEP,     "Step" },
-    { STOP,     "Stop" },
-    { TSTRING,  "String" },
-    { SUB,      "Sub" },
-    { STOP,     "System" },
-    { TEXT,     "Text" },
-    { THEN,     "Then" },
-    { TO,       "To", },
-    { TYPE,     "Type" },
-    { TYPEOF,   "TypeOf" },
-    { UNTIL,    "Until" },
-    { TVARIANT, "Variant" },
-    { VBASUPPORT,   "VbaSupport" },
-    { WEND,     "Wend" },
-    { WHILE,    "While" },
-    { WITH,     "With" },
-    { WITHEVENTS,   "WithEvents" },
-    { WRITE,    "Write" },              // auch WRITE #
-    { XOR,      "Xor" },
-    { NIL,      "" }
+    { TSINGLE,	"Single" },
+    { STATIC,	"Static" },
+    { STEP,		"Step" },
+    { STOP,		"Stop" },
+    { TSTRING,	"String" },
+    { SUB,		"Sub" },
+    { STOP,		"System" },
+    { TEXT,		"Text" },
+    { THEN,		"Then" },
+    { TO,		"To", },
+    { TYPE,		"Type" },
+    { TYPEOF,	"TypeOf" },
+    { UNTIL,	"Until" },
+    { TVARIANT,	"Variant" },
+    { VBASUPPORT,	"VbaSupport" },
+    { WEND,		"Wend" },
+    { WHILE,	"While" },
+    { WITH,		"With" },
+    { WITHEVENTS,	"WithEvents" },
+    { WRITE,	"Write" },				// auch WRITE #
+    { XOR,		"Xor" },
+    { NIL,		"" }
 };
 
+/*
+TokenTable aTokTable_Java [] = {		// Token-Tabelle:
+
+    { JS_LOG_NOT,	"!" },
+    { JS_NE,		"!=" },
+    { JS_MOD,		"%" },
+    { JS_ASS_MOD,	"%=" },
+    { JS_BIT_AND,	"&" },
+    { JS_LOG_AND,	"&&" },
+    { JS_ASS_AND,	"&=" },
+    { JS_LPAREN,	"(" },
+    { JS_RPAREN,	")" },
+    { JS_MUL,		"*" },
+    { JS_ASS_MUL,	"*=" },
+    { JS_PLUS,		"+" },
+    { JS_INC,		"++" },
+    { JS_ASS_PLUS,	"+=" },
+    { JS_COMMA,		"," },
+    { JS_MINUS,		"-" },
+    { JS_DEC,		"--" },
+    { JS_ASS_MINUS,	"-=" },
+    { JS_DIV,		"/" },
+    { JS_ASS_DIV,	"/=" },
+    { JS_COND_SEL,	":" },
+    { JS_LT,		"<" },
+    { JS_LSHIFT,	"<<" },
+    { JS_ASS_LSHIFT,"<<=" },
+    { JS_LE,		"<=" },
+    { JS_NE,		"<>" },
+    { JS_ASSIGNMENT,"=" },
+    { JS_EQ,		"==" },
+    { JS_GT,		">" },
+    { JS_RSHIFT,	">>" },
+    { JS_ASS_RSHIFT,">>=" },
+    { JS_RSHIFT_Z,	">>>" },
+    { JS_ASS_RSHIFT_Z,">>>=" },
+    { JS_GE,		">=" },
+    { JS_COND_QUEST,"?" },
+    { ACCESS,	"Access" },
+    { ALIAS,	"Alias" },
+    { AND,		"And" },
+    { ANY,		"Any" },
+    { APPEND,	"Append" },
+    { AS,		"As" },
+    { BASE,		"Base" },
+    { BINARY,	"Binary" },
+    { TBOOLEAN,	"Boolean" },
+    { BYVAL,	"ByVal", },
+    { CALL,		"Call" },
+    { CASE,		"Case" },
+    { _CDECL_,	"Cdecl" },
+    { CLOSE,	"Close" },
+    { COMPARE,	"Compare" },
+    { _CONST_,	"Const" },
+    { TCURRENCY,"Currency" },
+    { TDATE,	"Date" },
+    { DECLARE,	"Declare" },
+    { DEFBOOL,	"DefBool" },
+    { DEFCUR,	"DefCur" },
+    { DEFDATE,	"DefDate" },
+    { DEFDBL,	"DefDbl" },
+    { DEFERR,	"DefErr" },
+    { DEFINT,	"DefInt" },
+    { DEFLNG,	"DefLng" },
+    { DEFOBJ,	"DefObj" },
+    { DEFSNG,	"DefSng" },
+    { DEFSTR,	"DefStr" },
+    { DEFVAR,	"DefVar" },
+    { DIM,		"Dim" },
+    { DO,		"Do" },
+    { TDOUBLE,	"Double" },
+    { EACH,		"Each" },
+    { ELSE,		"Else" },
+    { ELSEIF,	"ElseIf" },
+    { END,		"End" },
+    { ENDFUNC,	"End Function" },
+    { ENDIF,	"End If" },
+    { ENDSELECT,"End Select" },
+    { ENDSUB,	"End Sub" },
+    { ENDTYPE,	"End Type" },
+    { ENDIF,	"EndIf" },
+    { EQV,		"Eqv" },
+    { ERASE,	"Erase" },
+    { _ERROR_,	"Error" },
+    { EXIT,		"Exit" },
+    { EXPLICIT,	"Explicit" },
+    { FOR,		"For" },
+    { FUNCTION,	"Function" },
+    { GLOBAL,	"Global" },
+    { GOSUB,	"GoSub" },
+    { GOTO,		"GoTo" },
+    { IF,		"If" },
+    { IMP,		"Imp" },
+    { _IN_,		"In" },
+    { INPUT,	"Input" },				// auch INPUT #
+    { TINTEGER,	"Integer" },
+    { IS,		"Is" },
+    { LET,		"Let" },
+    { LIB,		"Lib" },
+    { LINE,		"Line" },
+    { LINEINPUT,"Line Input" },
+    { LOCAL,	"Local" },
+    { LOCK,		"Lock" },
+    { TLONG,	"Long" },
+    { LOOP,		"Loop" },
+    { LPRINT,	"LPrint" },
+    { LSET,     "LSet" }, // JSM
+    { MOD,		"Mod" },
+    { NAME,		"Name" },
+    { NEW,		"New" },
+    { NEXT,		"Next" },
+    { NOT,		"Not" },
+    { TOBJECT,	"Object" },
+    { ON,		"On" },
+    { OPEN,		"Open" },
+    { OPTION,	"Option" },
+    { _OPTIONAL_,	"Optional" },
+    { OR,		"Or" },
+    { OUTPUT,	"Output" },
+    { PRESERVE, "Preserve" },
+    { PRINT,	"Print" },
+    { PRIVATE,	"Private" },
+    { PUBLIC,	"Public" },
+    { RANDOM,	"Random" },
+    { READ,		"Read" },
+    { REDIM,	"ReDim" },
+    { REM, 		"Rem" },
+    { RESUME,	"Resume" },
+    { RETURN,	"Return" },
+    { RSET,     "RSet" }, // JSM
+    { SELECT,	"Select" },
+    { SET,		"Set" },
+    { SHARED,	"Shared" },
+    { TSINGLE,	"Single" },
+    { STATIC,	"Static" },
+    { STEP,		"Step" },
+    { STOP,		"Stop" },
+    { TSTRING,	"String" },
+    { SUB,		"Sub" },
+    { STOP,		"System" },
+    { TEXT,		"Text" },
+    { THEN,		"Then" },
+    { TO,		"To", },
+    { TYPE,		"Type" },
+    { UNTIL,	"Until" },
+    { TVARIANT,	"Variant" },
+    { WEND,		"Wend" },
+    { WHILE,	"While" },
+    { WITH,		"With" },
+    { WRITE,	"Write" },				// auch WRITE #
+    { XOR,		"Xor" },
+    { JS_LINDEX,	"[" },
+    { JS_RINDEX,	"]" },
+    { JS_BIT_XOR,	"^" },
+    { JS_ASS_XOR,	"^=" },
+    { JS_BIT_OR,	"|" },
+    { JS_ASS_OR,	"|=" },
+    { JS_LOG_OR,	"||" },
+    { JS_BIT_NOT,	"~" },
+    { NIL }
+};
+*/
 
 // #i109076
 TokenLabelInfo::TokenLabelInfo( void )
@@ -223,11 +385,13 @@ SbiTokenizer::SbiTokenizer( const ::rtl::OUString& rSrc, StarBASIC* pb )
            : SbiScanner( rSrc, pb )
 {
     pTokTable = aTokTable_Basic;
+    //if( StarBASIC::GetGlobalLanguageMode() == SB_LANG_JAVASCRIPT )
+    //	pTokTable = aTokTable_Java;
     TokenTable *tp;
-    bEof = bAs = sal_False;
+    bEof = bAs = FALSE;
     eCurTok = NIL;
     ePush = NIL;
-    bEos = bKeywords = bErrorIsSymbol = sal_True;
+    bEos = bKeywords = bErrorIsSymbol = TRUE;
     if( !nToken )
         for( nToken = 0, tp = pTokTable; tp->t; nToken++, tp++ ) {}
 }
@@ -269,9 +433,9 @@ SbiToken SbiTokenizer::Peek()
 {
     if( ePush == NIL )
     {
-        sal_uInt16 nOldLine = nLine;
-        sal_uInt16 nOldCol1 = nCol1;
-        sal_uInt16 nOldCol2 = nCol2;
+        USHORT nOldLine = nLine;
+        USHORT nOldCol1 = nCol1;
+        USHORT nOldCol2 = nCol2;
         ePush = Next();
         nPLine = nLine; nLine = nOldLine;
         nPCol1 = nCol1; nCol1 = nOldCol1;
@@ -336,15 +500,15 @@ SbiToken SbiTokenizer::Next()
     // Sonst einlesen:
     if( !NextSym() )
     {
-        bEof = bEos = sal_True;
+        bEof = bEos = TRUE;
         return eCurTok = EOLN;
     }
     // Zeilenende?
     if( aSym.GetBuffer()[0] == '\n' )
     {
-        bEos = sal_True; return eCurTok = EOLN;
+        bEos = TRUE; return eCurTok = EOLN;
     }
-    bEos = sal_False;
+    bEos = FALSE;
 
     // Zahl?
     if( bNumber )
@@ -411,25 +575,25 @@ special:
     {
         // AB, 15.3.96, Spezialbehandlung fuer END, beim Peek() geht die
         // aktuelle Zeile verloren, daher alles merken und danach restaurieren
-        sal_uInt16 nOldLine = nLine;
-        sal_uInt16 nOldCol  = nCol;
-        sal_uInt16 nOldCol1 = nCol1;
-        sal_uInt16 nOldCol2 = nCol2;
+        USHORT nOldLine = nLine;
+        USHORT nOldCol  = nCol;
+        USHORT nOldCol1 = nCol1;
+        USHORT nOldCol2 = nCol2;
         String aOldSym = aSym;
-        SaveLine();             // pLine im Scanner sichern
+        SaveLine();				// pLine im Scanner sichern
 
         eCurTok = Peek();
         switch( eCurTok )
         {
-            case IF:       Next(); eCurTok = ENDIF; break;
+            case IF: 	   Next(); eCurTok = ENDIF; break;
             case SELECT:   Next(); eCurTok = ENDSELECT; break;
-            case SUB:      Next(); eCurTok = ENDSUB; break;
+            case SUB: 	   Next(); eCurTok = ENDSUB; break;
             case FUNCTION: Next(); eCurTok = ENDFUNC; break;
             case PROPERTY: Next(); eCurTok = ENDPROPERTY; break;
-            case TYPE:     Next(); eCurTok = ENDTYPE; break;
-            case ENUM:     Next(); eCurTok = ENDENUM; break;
-            case WITH:     Next(); eCurTok = ENDWITH; break;
-            default :      eCurTok = END;
+            case TYPE: 	   Next(); eCurTok = ENDTYPE; break;
+            case ENUM: 	   Next(); eCurTok = ENDENUM; break;
+            case WITH: 	   Next(); eCurTok = ENDWITH; break;
+            default : 	   eCurTok = END;
         }
         nCol1 = nOldCol1;
         if( eCurTok == END )
@@ -440,7 +604,7 @@ special:
             nCol  = nOldCol;
             nCol2 = nOldCol2;
             aSym = aOldSym;
-            RestoreLine();      // pLine im Scanner restaurieren
+            RestoreLine();		// pLine im Scanner restaurieren
         }
         return eCurTok;
     }
@@ -450,11 +614,11 @@ special:
     eCurTok = tp->t;
     // AS: Datentypen sind Keywords
     if( tp->t == AS )
-        bAs = sal_True;
+        bAs = TRUE;
     else
     {
         if( bAs )
-            bAs = sal_False;
+            bAs = FALSE;
         else if( eCurTok >= DATATYPE1 && eCurTok <= DATATYPE2 && (bErrorIsSymbol || eCurTok != _ERROR_) )
             eCurTok = SYMBOL;
     }
@@ -491,12 +655,12 @@ special:
 
 // Kann das aktuell eingelesene Token ein Label sein?
 
-sal_Bool SbiTokenizer::MayBeLabel( sal_Bool bNeedsColon )
+BOOL SbiTokenizer::MayBeLabel( BOOL bNeedsColon )
 {
     if( eCurTok == SYMBOL || m_aTokenLabelInfo.canTokenBeLabel( eCurTok ) )
-        return bNeedsColon ? DoesColonFollow() : sal_True;
+        return bNeedsColon ? DoesColonFollow() : TRUE;
     else
-        return sal_Bool( eCurTok == NUMBER
+        return BOOL( eCurTok == NUMBER
                   && eScanType == SbxINTEGER
                   && nVal >= 0 );
 }
@@ -508,8 +672,8 @@ sal_Bool SbiTokenizer::MayBeLabel( sal_Bool bNeedsColon )
 
 void SbiTokenizer::Hilite( SbTextPortions& rList )
 {
-    bErrors = sal_False;
-    bUsedForHilite = sal_True;
+    bErrors = FALSE;
+    bUsedForHilite = TRUE;
     SbiToken eLastTok = NIL;
     for( ;; )
     {
@@ -547,7 +711,7 @@ void SbiTokenizer::Hilite( SbTextPortions& rList )
             break;
         eLastTok = eCurTok;
     }
-    bUsedForHilite = sal_False;
+    bUsedForHilite = FALSE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,20 +84,21 @@ namespace css = ::com::sun::star;
 #define SEPERATOR_QUERYPARAM                            ((sal_Unicode)':')
 #define SEPERATOR_QUERYPARAMVALUE                       ((sal_Unicode)'=')
 
-#define QUERYPARAM_IFLAGS                               ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "iflags" ))
-#define QUERYPARAM_EFLAGS                               ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "eflags" ))
-#define QUERYPARAM_SORT_PROP                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sort_prop" ))
+#define QUERYPARAM_IFLAGS                               ::rtl::OUString::createFromAscii("iflags")
+#define QUERYPARAM_EFLAGS                               ::rtl::OUString::createFromAscii("eflags")
+#define QUERYPARAM_SORT_PROP                            ::rtl::OUString::createFromAscii("sort_prop")
 
-#define QUERYPARAM_DESCENDING                           ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "descending" ))
-#define QUERYPARAM_USE_ORDER                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "use_order" ))
-#define QUERYPARAM_DEFAULT_FIRST                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "default_first" ))
-#define QUERYPARAM_CASE_SENSITIVE                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "case_sensitive" ))
+#define QUERYPARAM_DESCENDING                           ::rtl::OUString::createFromAscii("descending")
+#define QUERYPARAM_USE_ORDER                            ::rtl::OUString::createFromAscii("use_order")
+#define QUERYPARAM_DEFAULT_FIRST                        ::rtl::OUString::createFromAscii("default_first")
+#define QUERYPARAM_CASE_SENSITIVE                       ::rtl::OUString::createFromAscii("case_sensitive")
 
-#define QUERYPARAMVALUE_SORT_PROP_NAME                  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "name" ))
-#define QUERYPARAMVALUE_SORT_PROP_UINAME                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "uiname" ))
+#define QUERYPARAMVALUE_SORT_PROP_NAME                  ::rtl::OUString::createFromAscii("name")
+#define QUERYPARAMVALUE_SORT_PROP_UINAME                ::rtl::OUString::createFromAscii("uiname")
 
-
-
+/*-----------------------------------------------
+    09.07.2003 07:43
+-----------------------------------------------*/
 FilterFactory::FilterFactory(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     BaseContainer::init(xSMGR                                         ,
@@ -106,14 +107,16 @@ FilterFactory::FilterFactory(const css::uno::Reference< css::lang::XMultiService
                         FilterCache::E_FILTER                         );
 }
 
-
-
+/*-----------------------------------------------
+    09.07.2003 07:43
+-----------------------------------------------*/
 FilterFactory::~FilterFactory()
 {
 }
 
-
-
+/*-----------------------------------------------
+    16.07.2003 13:43
+-----------------------------------------------*/
 css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstance(const ::rtl::OUString& sFilter)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
@@ -121,8 +124,9 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
     return createInstanceWithArguments(sFilter, css::uno::Sequence< css::uno::Any >());
 }
 
-
-
+/*-----------------------------------------------
+    17.07.2003 08:56
+-----------------------------------------------*/
 css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstanceWithArguments(const ::rtl::OUString&                     sFilter   ,
                                                                                                 const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
@@ -143,7 +147,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
 
         if (!m_rCache->hasItem(FilterCache::E_FILTER, sFilter) && m_rCache->hasItem(FilterCache::E_TYPE, sFilter))
         {
-            OSL_FAIL("Who use this deprecated functionality?");
+            OSL_ENSURE(sal_False, "Who use this deprecated functionality?");
             _FILTER_CONFIG_LOG_("FilterFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
 
             css::uno::Sequence< css::beans::NamedValue > lQuery(1);
@@ -202,8 +206,9 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
     // <- SAFE
 }
 
-
-
+/*-----------------------------------------------
+    18.02.2004 14:21
+-----------------------------------------------*/
 css::uno::Sequence< ::rtl::OUString > SAL_CALL FilterFactory::getAvailableServiceNames()
     throw(css::uno::RuntimeException)
 {
@@ -226,12 +231,13 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL FilterFactory::getAvailableServic
         { throw; }
     catch(const css::uno::Exception&)
         { lUNOFilters.clear(); }
-
+    
     return lUNOFilters.getAsConstList();
 }
 
-
-
+/*-----------------------------------------------
+    11.03.2004 08:37
+-----------------------------------------------*/
 css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::createSubSetEnumerationByQuery(const ::rtl::OUString& sQuery)
     throw (css::uno::RuntimeException)
 {
@@ -243,10 +249,10 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
 
     // convert "_query_xxx:..." to "getByDocService=xxx:..."
     ::rtl::OUString sNewQuery(sQuery);
-    sal_Int32 pos = sNewQuery.indexOf(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_query_" )),0);
+    sal_Int32 pos = sNewQuery.indexOf(::rtl::OUString::createFromAscii("_query_"),0);
     if (pos != -1)
     {
-        OSL_FAIL("DEPRECATED!\nPlease use new query format: 'matchByDocumentService=...'");
+        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use new query format: 'matchByDocumentService=...'");
         ::rtl::OUStringBuffer sPatchedQuery(256);
         sPatchedQuery.appendAscii("matchByDocumentService=");
         sPatchedQuery.append     (sNewQuery.copy(7)        );
@@ -269,9 +275,10 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
         impl_loadOnDemand();
         aLock.clear();
         // <- SAFE ----------------------
-
+        
         if (lTokens.find(QUERY_IDENTIFIER_GETPREFERREDFILTERFORTYPE) != lTokens.end())
-            OSL_FAIL("DEPRECATED!\nPlease use prop search at the TypeDetection container!");
+            OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use prop search at the TypeDetection container!");
+//            lEnumSet = impl_queryGetPreferredFilterForType(lTokens);
         else
         if (lTokens.find(QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE) != lTokens.end())
             lEnumSet = impl_queryMatchByDocumentService(lTokens);
@@ -283,68 +290,107 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     // pack list of item names as an enum list
     // Attention: Do not return empty reference for empty list!
     // The outside check "hasMoreElements()" should be enough, to detect this state :-)
+//	size_t c = lEnumSet.size();
     css::uno::Sequence< ::rtl::OUString > lSet = lEnumSet.getAsConstList();
     ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, lSet);
     return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
 }
+/*        
+        if (lEnumSet.empty())
+        {
+            //-------------------------------------------
+            // 1) getDefaultFilterForType=<internal_typename>
 
+            pIt = lTokens.find(::rtl::OUString::createFromAscii("getDefaultFilterForType"));
+            if (pIt != lTokens.end())
+            {
+                // SAFE ->
+                ::osl::ResettableMutexGuard aLock(m_aLock);
 
+                // might not all types was loaded till now!
+                impl_loadOnDemand();
+                
+                ::rtl::OUString sType  = pIt->second;
+                FilterCache*    pCache = impl_getWorkingCache();
+                if (pCache->hasItem(FilterCache::E_TYPE, sType))
+                {
+                    CacheItem aType = pCache->getItem(FilterCache::E_TYPE, sType);
+                    ::rtl::OUString sPreferredFilter;
+                    aType[PROPNAME_PREFERREDFILTER] >>= sPreferredFilter;
 
+                    if (
+                        (sPreferredFilter.getLength()                              ) &&
+                        (pCache->hasItem(FilterCache::E_FILTER, sPreferredFilter))
+                       )
+                    {
+                        lEnumSet.push_back(sPreferredFilter);
+                    }
+                }
+
+                aLock.clear();
+                // <- SAFE
+            }
+        }
+*/
+
+/*-----------------------------------------------
+    11.03.2004 08:33
+-----------------------------------------------*/
 OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenizer& lTokens) const
 {
     // analyze query
     QueryTokenizer::const_iterator pIt;
-
+    
     ::rtl::OUString sDocumentService;
     sal_Int32       nIFlags = 0;
     sal_Int32       nEFlags = 0;
-
+    
     pIt = lTokens.find(QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE);
     if (pIt != lTokens.end())
         sDocumentService = pIt->second;
 
 #define COMP_HACK
 #ifdef COMP_HACK
-    if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("writer")))
+    if (sDocumentService.equalsAscii("writer"))
     {
-        OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ));
+        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.text.TextDocument");
     }
     else
-    if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("web")))
+    if (sDocumentService.equalsAscii("web"))
     {
-        OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.WebDocument" ));
+        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.text.WebDocument");
     }
     else
-    if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("global")))
+    if (sDocumentService.equalsAscii("global"))
     {
-        OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.GlobalDocument" ));
+        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.text.GlobalDocument");
     }
     else
-    if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("calc")))
+    if (sDocumentService.equalsAscii("calc"))
     {
-        OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ));
+        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.sheet.SpreadsheetDocument");
     }
     else
-    if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("draw")))
+    if (sDocumentService.equalsAscii("draw"))
     {
-        OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ));
+        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.drawing.DrawingDocument");
     }
     else
-    if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("impress")))
+    if (sDocumentService.equalsAscii("impress"))
     {
-        OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ));
+        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.presentation.PresentationDocument");
     }
     else
-    if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("math")))
+    if (sDocumentService.equalsAscii("math"))
     {
-        OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.formula.FormulaProperties" ));
+        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.formula.FormulaProperties");
     }
 #endif
 
@@ -363,7 +409,7 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
     FilterCache* pCache       = impl_getWorkingCache();
     OUStringList lFilterNames = pCache->getItemNames(FilterCache::E_FILTER);
     OUStringList lResult      ;
-
+    
     for (OUStringList::const_iterator pName  = lFilterNames.begin();
                                       pName != lFilterNames.end()  ;
                                     ++pName                        )
@@ -399,7 +445,7 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
             {
                 continue; // ignore filter -> try next one!
             }
-
+            
             // "eflags="        => not allowed
             // "eflags=-1"      => not allowed
             // "eflags=0"       => not usefull
@@ -411,10 +457,10 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
             {
                 continue; // ignore filter -> try next one!
             }
-
+            
             // OK - this filter passed all checks.
             // It match the query ...
-            lResult.push_back(sName);
+            lResult.push_back(sName);        
         }
         catch(const css::uno::RuntimeException& exRun)
             { throw exRun; }
@@ -424,19 +470,20 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
 
     aLock.clear();
     // <- SAFE ----------------------
-
+    
     return lResult;
 }
 
-
-
+/*-----------------------------------------------
+    21.01.2005 13:39
+-----------------------------------------------*/
 class stlcomp_removeIfMatchFlags
 {
     private:
         FilterCache* m_pCache ;
         sal_Int32    m_nFlags ;
         sal_Bool     m_bIFlags;
-
+        
     public:
         stlcomp_removeIfMatchFlags(FilterCache* pCache ,
                                    sal_Int32    nFlags ,
@@ -451,8 +498,8 @@ class stlcomp_removeIfMatchFlags
             try
             {
                 const CacheItem aFilter = m_pCache->getItem(FilterCache::E_FILTER, sFilter);
-                        sal_Int32 nFlags  = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, ((sal_Int32)0));
-
+                        sal_Int32 nFlags  = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, ((sal_Int32)0)); 
+                
                 bool bMatch = false;
                 if (m_bIFlags)
                     // IFlags are interpeted as ALL_FLAGS_MUST_MATCH !
@@ -470,17 +517,18 @@ class stlcomp_removeIfMatchFlags
         }
 };
 
-
-
+/*-----------------------------------------------
+    21.01.2005 13:39
+-----------------------------------------------*/
 OUStringList FilterFactory::impl_getSortedFilterList(const QueryTokenizer& lTokens) const
 {
     // analyze the given query parameter
     QueryTokenizer::const_iterator pIt1;
-
+    
     ::rtl::OUString sModule;
     sal_Int32       nIFlags = -1;
     sal_Int32       nEFlags = -1;
-
+    
     pIt1 = lTokens.find(QUERY_PARAM_MODULE);
     if (pIt1 != lTokens.end())
         sModule = pIt1->second;
@@ -490,7 +538,7 @@ OUStringList FilterFactory::impl_getSortedFilterList(const QueryTokenizer& lToke
     pIt1 = lTokens.find(QUERY_PARAM_EFLAGS);
     if (pIt1 != lTokens.end())
         nEFlags = ::rtl::OUString(pIt1->second).toInt32();
-
+    
     // simple search for filters of one specific module.
     OUStringList lFilterList;
     if (sModule.getLength())
@@ -517,20 +565,21 @@ OUStringList FilterFactory::impl_getSortedFilterList(const QueryTokenizer& lToke
             }
         }
     }
-
+    
     return lFilterList;
 }
 
-
-
+/*-----------------------------------------------
+    21.01.2005 10:19
+-----------------------------------------------*/
 OUStringList FilterFactory::impl_getListOfInstalledModules() const
 {
     // SAFE -> ----------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
-    aLock.clear();
+    aLock.clear();    
     // <- SAFE ----------------------
-
+    
     try
     {
         css::uno::Reference< css::container::XNameAccess > xModuleConfig(
@@ -545,12 +594,13 @@ OUStringList FilterFactory::impl_getListOfInstalledModules() const
         { throw exRun; }
     catch(const css::uno::Exception&)
         {}
-
-    return OUStringList();
+        
+    return OUStringList();        
 }
 
-
-
+/*-----------------------------------------------
+    21.01.2005 10:19
+-----------------------------------------------*/
 OUStringList FilterFactory::impl_getSortedFilterListForModule(const ::rtl::OUString& sModule,
                                                                     sal_Int32        nIFlags,
                                                                     sal_Int32        nEFlags) const
@@ -565,13 +615,13 @@ OUStringList FilterFactory::impl_getSortedFilterListForModule(const ::rtl::OUStr
     ::osl::ResettableMutexGuard aLock(m_aLock);
     FilterCache* pCache        = impl_getWorkingCache();
     OUStringList lOtherFilters = pCache->getMatchingItemsByProps(FilterCache::E_FILTER, lIProps);
-    aLock.clear();
+    aLock.clear();    
     // <- SAFE ----------------------
 
     // bring "other" filters in an alphabeticly order
     // It's needed below.
     ::std::sort(lOtherFilters.begin(), lOtherFilters.end());
-
+    
     // merge both lists together
     OUStringList           lMergedFilters = lSortedFilters;
     OUStringList::iterator pIt2;
@@ -585,7 +635,7 @@ OUStringList FilterFactory::impl_getSortedFilterListForModule(const ::rtl::OUStr
         if (pIt3 == lSortedFilters.end())
             lMergedFilters.push_back(rFilter);
     }
-
+    
     // remove all filters from this merged list, which does not fit the flag specification
     if (nIFlags != -1)
     {
@@ -597,23 +647,24 @@ OUStringList FilterFactory::impl_getSortedFilterListForModule(const ::rtl::OUStr
         pIt2 = ::std::remove_if(lMergedFilters.begin(), lMergedFilters.end(), stlcomp_removeIfMatchFlags(pCache, nEFlags, sal_False));
         lMergedFilters.erase(pIt2, lMergedFilters.end());
     }
-
+    
     // sort the default filter to the front of this list
     // TODO
-
+    
     return lMergedFilters;
 }
 
-
-
+/*-----------------------------------------------
+    21.01.2005 10:19
+-----------------------------------------------*/
 OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const ::rtl::OUString& sModule) const
 {
     // SAFE -> ----------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
-    aLock.clear();
+    aLock.clear();    
     // <- SAFE ----------------------
-
+    
     try
     {
         css::uno::Reference< css::container::XNameAccess > xUISortConfig(
@@ -639,28 +690,31 @@ OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const ::rtl::OUS
         { throw exRun; }
     catch(const css::uno::Exception&)
         {}
-
-    return OUStringList();
+        
+    return OUStringList();        
 }
 
-
-
+/*-----------------------------------------------
+    09.07.2003 07:43
+-----------------------------------------------*/
 ::rtl::OUString FilterFactory::impl_getImplementationName()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.filter.config.FilterFactory" ));
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.filter.config.FilterFactory");
 }
 
-
-
+/*-----------------------------------------------
+    09.07.2003 07:43
+-----------------------------------------------*/
 css::uno::Sequence< ::rtl::OUString > FilterFactory::impl_getSupportedServiceNames()
 {
     css::uno::Sequence< ::rtl::OUString > lServiceNames(1);
-    lServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" ));
+    lServiceNames[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory");
     return lServiceNames;
 }
 
-
-
+/*-----------------------------------------------
+    09.07.2003 07:43
+-----------------------------------------------*/
 css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     FilterFactory* pNew = new FilterFactory(xSMGR);

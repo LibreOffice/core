@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,33 +39,32 @@
 class Os2SalObject : public SalObject
 {
 public:
-    HWND                    mhWnd;                  // Window handle
-    HWND                    mhWndChild;             // Child Window handle
-    HWND                    mhLastFocusWnd;         // Child-Window, welches als letztes den Focus hatte
-    SystemChildData         maSysData;              // SystemEnvData
-    HWND                    mhLastClipWnd;          // LastClip-Window
-    HWND                    mhOldLastClipWnd;       // LastClip-Window befor BeginSetClipRegion
-    long                    mnHeight;               // Fenster-Hoehe fuer Positionsumrechnung
-    Os2SalObject*               mpNextObject;           // pointer to next object
-    void*                   mpInst;                 // instance handle for callback
-    SALOBJECTPROC           mpProc;                 // callback proc
+    HWND					mhWnd;					// Window handle
+    HWND					mhWndChild; 			// Child Window handle
+    HWND					mhLastFocusWnd; 		// Child-Window, welches als letztes den Focus hatte
+    SystemChildData 		maSysData;				// SystemEnvData
+    HWND					mhLastClipWnd;			// LastClip-Window
+    HWND					mhOldLastClipWnd;		// LastClip-Window befor BeginSetClipRegion
+    long					mnHeight;				// Fenster-Hoehe fuer Positionsumrechnung
+    Os2SalObject*				mpNextObject;			// pointer to next object
+    void*					mpInst; 				// instance handle for callback
+    SALOBJECTPROC			mpProc; 				// callback proc
 
     Os2SalObject();
     virtual ~Os2SalObject();
 
-    virtual void                    ResetClipRegion();
-    virtual USHORT                  GetClipRegionType();
-    virtual void                    BeginSetClipRegion( ULONG nRects );
-    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
-    virtual void                    EndSetClipRegion();
-    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
-    virtual void                    Show( BOOL bVisible );
-    virtual void                    Enable( BOOL nEnable );
-    virtual void                    GrabFocus();
-    virtual void                    SetBackground();
-    virtual void                    SetBackground( SalColor nSalColor );
-    virtual const SystemEnvData*    GetSystemData() const;
-    virtual void InterceptChildWindowKeyDown( sal_Bool bIntercept );
+    virtual void					ResetClipRegion();
+    virtual USHORT					GetClipRegionType();
+    virtual void					BeginSetClipRegion( ULONG nRects );
+    virtual void					UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual void					EndSetClipRegion();
+    virtual void					SetPosSize( long nX, long nY, long nWidth, long nHeight );
+    virtual void					Show( BOOL bVisible );
+    virtual void					Enable( BOOL nEnable );
+    virtual void					GrabFocus();
+    virtual void					SetBackground();
+    virtual void					SetBackground( SalColor nSalColor );
+    virtual const SystemEnvData*	GetSystemData() const;
 };
 
 #endif // _SV_SALOBJ_H

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,10 @@
 
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/textspacing.hxx"
+#include "oox/core/namespaces.hxx"
 #include "textspacingcontext.hxx"
+#include "tokens.hxx"
+
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
@@ -50,17 +53,17 @@ namespace oox { namespace drawingml {
     }
 
     Reference< XFastContextHandler > TextSpacingContext::createFastChildContext( ::sal_Int32 aElement,
-            const Reference< XFastAttributeList >& xAttribs )
+                                                                                                                                                        const Reference< XFastAttributeList >& xAttribs )
         throw ( SAXException, RuntimeException )
     {
         Reference< XFastContextHandler > xRet;
         switch( aElement )
         {
-        case A_TOKEN( spcPct ):
+        case NMSP_DRAWINGML|XML_spcPct:
             maSpacing.nUnit = TextSpacing::PERCENT;
             maSpacing.nValue = GetPercent( xAttribs->getValue( XML_val ) );
             break;
-        case A_TOKEN( spcPts ):
+        case NMSP_DRAWINGML|XML_spcPts:
             maSpacing.nUnit = TextSpacing::POINTS;
             maSpacing.nValue = GetTextSpacingPoint( xAttribs->getValue( XML_val ) );
             break;

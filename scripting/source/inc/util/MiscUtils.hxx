@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -115,11 +115,11 @@ public:
         }
         catch ( css::lang::IllegalArgumentException const & )
         {
-            OSL_FAIL( "Invalid document model!" );
+            OSL_ENSURE( false, "Invalid document model!" );
         }
     }
 
-    OSL_FAIL( "Unable to obtain URL for document model!" );
+    OSL_ENSURE( false, "Unable to obtain URL for document model!" );
     return rtl::OUString();
 }
     static css::uno::Reference< css::frame::XModel > tDocUrlToModel( const ::rtl::OUString& url )

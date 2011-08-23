@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,16 +38,16 @@
 // ---------------
 
 SvColorDialog::SvColorDialog( Window* pWindow ) :
-        ModalDialog     ( pWindow, SvtResId( DLG_COLOR ) ),
-        maColMixCtrl    ( this, SvtResId( VAL_SET_COLOR ), 8, 8 ),
-        maBtn1          ( this, SvtResId( BTN_1 ) ),
-        maBtn2          ( this, SvtResId( BTN_2 ) ),
-        //maBtn3            ( this, SvtResId( BTN_3 ) ),
-        //maBtn4            ( this, SvtResId( BTN_4 ) ),
-        //maFtRGB           ( this, SvtResId( FT_RGB ) ),
-        maCtlColor      ( this, SvtResId( CTL_COLOR ) ),
+        ModalDialog		( pWindow, SvtResId( DLG_COLOR ) ),
+        maColMixCtrl	( this, SvtResId( VAL_SET_COLOR ), 8, 8 ),
+        maBtn1			( this, SvtResId( BTN_1 ) ),
+        maBtn2			( this, SvtResId( BTN_2 ) ),
+        //maBtn3			( this, SvtResId( BTN_3 ) ),
+        //maBtn4			( this, SvtResId( BTN_4 ) ),
+        //maFtRGB			( this, SvtResId( FT_RGB ) ),
+        maCtlColor		( this, SvtResId( CTL_COLOR ) ),
 
-        maFtCyan        ( this, SvtResId( FT_CYAN ) ),
+        maFtCyan		( this, SvtResId( FT_CYAN ) ),
         maNumCyan       ( this, SvtResId( NUM_CYAN ) ),
         maFtMagenta     ( this, SvtResId( FT_MAGENTA ) ),
         maNumMagenta    ( this, SvtResId( NUM_MAGENTA ) ),
@@ -56,26 +56,26 @@ SvColorDialog::SvColorDialog( Window* pWindow ) :
         maFtKey         ( this, SvtResId( FT_KEY ) ),
         maNumKey        ( this, SvtResId( NUM_KEY ) ),
 
-        maFtRed         ( this, SvtResId( FT_RED ) ),
-        maNumRed        ( this, SvtResId( NUM_RED ) ),
-        maFtGreen       ( this, SvtResId( FT_GREEN ) ),
-        maNumGreen      ( this, SvtResId( NUM_GREEN ) ),
-        maFtBlue        ( this, SvtResId( FT_BLUE ) ),
-        maNumBlue       ( this, SvtResId( NUM_BLUE ) ),
+        maFtRed	 		( this, SvtResId( FT_RED ) ),
+        maNumRed		( this, SvtResId( NUM_RED ) ),
+        maFtGreen		( this, SvtResId( FT_GREEN ) ),
+        maNumGreen   	( this, SvtResId( NUM_GREEN ) ),
+        maFtBlue		( this, SvtResId( FT_BLUE ) ),
+        maNumBlue		( this, SvtResId( NUM_BLUE ) ),
 
-        maFtHue         ( this, SvtResId( FT_HUE ) ),
-        maNumHue        ( this, SvtResId( NUM_HUE ) ),
-        maFtSaturation  ( this, SvtResId( FT_SATURATION ) ),
-        maNumSaturation ( this, SvtResId( NUM_SATURATION ) ),
-        maFtLuminance   ( this, SvtResId( FT_LUMINANCE ) ),
-        maNumLuminance  ( this, SvtResId( NUM_LUMINANCE ) ),
+        maFtHue			( this, SvtResId( FT_HUE ) ),
+        maNumHue	   	( this, SvtResId( NUM_HUE ) ),
+        maFtSaturation	( this, SvtResId( FT_SATURATION ) ),
+        maNumSaturation	( this, SvtResId( NUM_SATURATION ) ),
+        maFtLuminance	( this, SvtResId( FT_LUMINANCE ) ),
+        maNumLuminance	( this, SvtResId( NUM_LUMINANCE ) ),
 
-        maCtlPreview    ( this, SvtResId( CTL_PREVIEW ) ),
+        maCtlPreview	( this, SvtResId( CTL_PREVIEW ) ),
         maCtlPreviewOld ( this, SvtResId( CTL_PREVIEW_OLD ) ),
 
-        maBtnOK         ( this, SvtResId( BTN_OK ) ),
-        maBtnCancel     ( this, SvtResId( BTN_CANCEL ) ),
-        maBtnHelp       ( this, SvtResId( BTN_HELP ) )
+        maBtnOK			( this, SvtResId( BTN_OK ) ),
+        maBtnCancel		( this, SvtResId( BTN_CANCEL ) ),
+        maBtnHelp		( this, SvtResId( BTN_HELP ) )
 {
     FreeResource();
 
@@ -159,7 +159,7 @@ const Color& SvColorDialog::GetColor() const
 // -----------------------------------------------------------------------
 IMPL_LINK( SvColorDialog, ColorModifyHdl, void *, p )
 {
-    sal_uInt16 n = 0x00; // 1 == RGB, 2 == CMYK, 4 == HSB
+    UINT16 n = 0x00; // 1 == RGB, 2 == CMYK, 4 == HSB
 
     if( p == &maCtlColor )
     {
@@ -172,19 +172,19 @@ IMPL_LINK( SvColorDialog, ColorModifyHdl, void *, p )
     }
     else if( p == &maNumRed )
     {
-        maColor.SetRed( (sal_uInt8)maNumRed.GetValue() );
+        maColor.SetRed( (UINT8)maNumRed.GetValue() );
         maCtlColor.SetColor( maColor );
         n = 6;
     }
     else if( p == &maNumGreen )
     {
-        maColor.SetGreen( (sal_uInt8)maNumGreen.GetValue() );
+        maColor.SetGreen( (UINT8)maNumGreen.GetValue() );
         maCtlColor.SetColor( maColor );
         n = 6;
     }
     else if( p == &maNumBlue )
     {
-        maColor.SetBlue( (sal_uInt8)maNumBlue.GetValue() );
+        maColor.SetBlue( (UINT8)maNumBlue.GetValue() );
         maCtlColor.SetColor( maColor );
         n = 6;
     }
@@ -193,9 +193,9 @@ IMPL_LINK( SvColorDialog, ColorModifyHdl, void *, p )
              p == &maNumLuminance )
     {
 
-        ColorHSB aColorHSB( (sal_uInt16) maNumHue.GetValue(),
-                            (sal_uInt16) maNumSaturation.GetValue(),
-                            (sal_uInt16) maNumLuminance.GetValue() );
+        ColorHSB aColorHSB( (UINT16) maNumHue.GetValue(),
+                            (UINT16) maNumSaturation.GetValue(),
+                            (UINT16) maNumLuminance.GetValue() );
         maCtlColor.SetColor( aColorHSB );
         maColor = maCtlColor.GetColor();
         n = 3;
@@ -210,10 +210,10 @@ IMPL_LINK( SvColorDialog, ColorModifyHdl, void *, p )
         long aYellow  = (long) ( (double)maNumYellow.GetValue() * 255.0 / 100.0 + 0.5 );
         long aKey     = (long) ( (double)maNumKey.GetValue() * 255.0 / 100.0 + 0.5 );
 
-        ColorCMYK aColorCMYK( (sal_uInt16) aCyan,
-                              (sal_uInt16) aMagenta,
-                              (sal_uInt16) aYellow,
-                              (sal_uInt16) aKey );
+        ColorCMYK aColorCMYK( (UINT16) aCyan,
+                              (UINT16) aMagenta,
+                              (UINT16) aYellow,
+                              (UINT16) aKey );
         maColor = aColorCMYK.GetRGB();
         maCtlColor.SetColor( maColor );
         n = 5;
@@ -273,7 +273,7 @@ IMPL_LINK( SvColorDialog, ClickBtnHdl, void *, p )
     }
     else if( p == &maBtn2 )
     {
-        sal_uInt16 nPos = maColMixCtrl.GetSelectItemId();
+        USHORT nPos = maColMixCtrl.GetSelectItemId();
         maColor = maColMixCtrl.GetItemColor( nPos );
         maCtlColor.SetColor( maColor );
         ColorModifyHdl( &maCtlColor );
@@ -285,7 +285,7 @@ IMPL_LINK( SvColorDialog, ClickBtnHdl, void *, p )
 // -----------------------------------------------------------------------
 IMPL_LINK( SvColorDialog, ClickMixCtrlHdl, void *, EMPTYARG )
 {
-    sal_uInt16 nPos = maColMixCtrl.GetSelectItemId();
+    USHORT nPos = maColMixCtrl.GetSelectItemId();
     CMCPosition ePos = maColMixCtrl.GetCMCPosition();
 
     if( ePos != CMC_OTHER )
@@ -303,12 +303,12 @@ IMPL_LINK( SvColorDialog, ClickMixCtrlHdl, void *, EMPTYARG )
 // -----------------------------------------------------------------------
 IMPL_LINK( SvColorDialog, SelectMixCtrlHdl, void *, EMPTYARG )
 {
-    //sal_uInt16 nPos = maColMixCtrl.GetSelectItemId();
+    //USHORT nPos = maColMixCtrl.GetSelectItemId();
     //maFtRGB.SetText( maColMixCtrl.GetItemText( nPos ) );
 
     CMCPosition ePos = maColMixCtrl.GetCMCPosition();
     if( ePos == CMC_OTHER )
-        maBtn1.Enable( sal_False );
+        maBtn1.Enable( FALSE );
     else
         maBtn1.Enable();
 

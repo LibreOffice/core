@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,34 +63,35 @@ public:
     SwGlossaryGroupTLB(Window* pParent, const ResId& rResId) :
         SvTabListBox(pParent, rResId) {}
 
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
+    virtual void 	RequestHelp( const HelpEvent& rHEvt );
 };
 
 class SwGlossaryGroupDlg : public SvxStandardDialog
 {
-    FixedText           aBibFT;
-    FEdit               aNameED;
-    FixedText           aPathFT;
-    ListBox             aPathLB;
-    FixedText           aSelectFT;
-    SwGlossaryGroupTLB  aGroupTLB;
 
-    OKButton        aOkPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
-    PushButton      aNewPB;
-    PushButton      aDelPB;
-    PushButton      aRenamePB;
+    FEdit 				aNameED;
+    ListBox				aPathLB;
+    SwGlossaryGroupTLB 	aGroupTLB;
 
-    SvStrings*      pRemovedArr;
-    SvStrings*      pInsertedArr;
-    SvStrings*      pRenamedArr;
+    OKButton 		aOkPB;
+    CancelButton 	aCancelPB;
+    HelpButton		aHelpPB;
+    PushButton		aNewPB;
+    PushButton		aDelPB;
+    PushButton		aRenamePB;
+    FixedText       aBibFT;
+    FixedText       aPathFT;
+    FixedText       aSelectFT;
 
-    SwGlossaryHdl   *pGlosHdl;
+    SvStrings*		pRemovedArr;
+    SvStrings*		pInsertedArr;
+    SvStrings*		pRenamedArr;
 
-    String          sCreatedGroup;
+    SwGlossaryHdl 	*pGlosHdl;
 
-    sal_Bool            IsDeleteAllowed(const String &rGroup);
+    String 			sCreatedGroup;
+
+    BOOL			IsDeleteAllowed(const String &rGroup);
 
 protected:
     virtual void Apply();
@@ -106,7 +107,7 @@ public:
                         SwGlossaryHdl *pGlosHdl);
     ~SwGlossaryGroupDlg();
 
-    const String&       GetCreatedGroupName() const {return sCreatedGroup;}
+    const String&		GetCreatedGroupName() const {return sCreatedGroup;}
 };
 
 #endif

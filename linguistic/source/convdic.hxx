@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,10 +36,10 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <tools/string.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <set>
 #include <memory>
-#include "linguistic/misc.hxx"
+#include "misc.hxx"
 #include "defs.hxx"
 
 // text conversion dictionary extension
@@ -53,7 +53,7 @@ class SvStream;
 
 ///////////////////////////////////////////////////////////////////////////
 
-sal_Bool    IsConvDic( const String &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType );
+BOOL    IsConvDic( const String &rFileURL, INT16 &nLang, sal_Int16 &nConvType );
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -73,12 +73,12 @@ struct StrEQ
     }
 };
 
-typedef boost::unordered_multimap< const rtl::OUString, rtl::OUString,
+typedef std::hash_multimap< const rtl::OUString, rtl::OUString,
                        const rtl::OUStringHash, StrEQ > ConvMap;
 
 typedef std::set< rtl::OUString, StrLT > ConvMapKeySet;
 
-typedef boost::unordered_multimap< const rtl::OUString, sal_Int16,
+typedef std::hash_multimap< const rtl::OUString, sal_Int16,
                        rtl::OUStringHash, StrEQ > PropTypeMap;
 
 ///////////////////////////////////////////////////////////////////////////
@@ -105,15 +105,15 @@ protected:
 
     String          aMainURL;   // URL to file
     rtl::OUString   aName;
-    sal_Int16           nLanguage;
+    INT16           nLanguage;
     sal_Int16       nConversionType;
     sal_Int16       nMaxLeftCharCount;
     sal_Int16       nMaxRightCharCount;
-    sal_Bool            bMaxCharCountIsValid;
-    sal_Bool            bNeedEntries;
-    sal_Bool            bIsModified;
-    sal_Bool            bIsActive;
-    sal_Bool            bIsReadonly;
+    BOOL            bMaxCharCountIsValid;
+    BOOL            bNeedEntries;
+    BOOL            bIsModified;
+    BOOL            bIsActive;
+    BOOL            bIsReadonly;
 
     // disallow copy-constructor and assignment-operator for now
     ConvDic(const ConvDic &);
@@ -125,9 +125,9 @@ protected:
 
 public:
     ConvDic( const String &rName,
-             sal_Int16 nLanguage,
+             INT16 nLanguage,
              sal_Int16 nConversionType,
-             sal_Bool bBiDirectional,
+             BOOL bBiDirectional,
              const String &rMainURL);
     virtual ~ConvDic();
 
@@ -164,7 +164,7 @@ public:
     static com::sun::star::uno::Sequence< ::rtl::OUString >
         getSupportedServiceNames_Static() throw();
 
-    sal_Bool    HasEntry( const rtl::OUString &rLeftText, const rtl::OUString &rRightText );
+    BOOL    HasEntry( const rtl::OUString &rLeftText, const rtl::OUString &rRightText );
     void    AddEntry( const rtl::OUString &rLeftText, const rtl::OUString &rRightText );
     void    RemoveEntry( const rtl::OUString &rLeftText, const rtl::OUString &rRightText );
 };

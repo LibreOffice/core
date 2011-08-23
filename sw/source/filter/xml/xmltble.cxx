@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,6 +62,7 @@
 #include "xmltexte.hxx"
 #include "xmlexp.hxx"
 
+
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
@@ -72,18 +73,17 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::xmloff::token;
 using table::XCell;
-using ::std::vector;
-using ::std::advance;
+
 
 class SwXMLTableColumn_Impl : public SwWriteTableCol
 {
-    OUString    sStyleName;
-    sal_uInt32  nRelWidth;
+    OUString	sStyleName;
+    sal_uInt32	nRelWidth;
 
 public:
 
 
-    SwXMLTableColumn_Impl( sal_uInt32 nPosition ) :
+    SwXMLTableColumn_Impl( sal_uInt16 nPosition ) :
         SwWriteTableCol( nPosition ),
         nRelWidth( 0UL )
     {};
@@ -117,9 +117,9 @@ IMPL_CONTAINER_SORT( SwXMLTableColumnsSortByWidth_Impl, SwXMLTableColumn_Impl,
 
 class SwXMLTableLines_Impl
 {
-    SwXMLTableColumns_Impl  aCols;
-    const SwTableLines      *pLines;
-    sal_uInt32              nWidth;
+    SwXMLTableColumns_Impl	aCols;
+    const SwTableLines  	*pLines;
+    sal_uInt32				nWidth;
 
 public:
 
@@ -138,7 +138,7 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
     nWidth( 0UL )
 {
 #if OSL_DEBUG_LEVEL > 1
-    sal_uInt32 nEndCPos = 0U;
+    sal_uInt16 nEndCPos = 0U;
 #endif
     sal_uInt16 nLines = rLines.Count();
     sal_uInt16 nLine;
@@ -148,14 +148,14 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         sal_uInt16 nBoxes = rBoxes.Count();
 
-        sal_uInt32 nCPos = 0U;
+        sal_uInt16 nCPos = 0U;
         for( sal_uInt16 nBox=0U; nBox<nBoxes; nBox++ )
         {
             const SwTableBox *pBox = rBoxes[nBox];
 
             if( nBox < nBoxes-1U || nWidth==0UL )
             {
-                nCPos = nCPos + SwWriteTable::GetBoxWidth( pBox );
+                nCPos = nCPos + (sal_uInt16)SwWriteTable::GetBoxWidth( pBox );
                 SwXMLTableColumn_Impl *pCol =
                     new SwXMLTableColumn_Impl( nCPos );
 
@@ -172,16 +172,24 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
             else
             {
 #if OSL_DEBUG_LEVEL > 1
-                sal_uInt32 nCheckPos =
-                    nCPos + SwWriteTable::GetBoxWidth( pBox );
+                sal_uInt16 nCheckPos =
+                    nCPos + (sal_uInt16)SwWriteTable::GetBoxWidth( pBox );
                 if( !nEndCPos )
                 {
                     nEndCPos = nCheckPos;
                 }
+                else
+                {
+                    /*
+                    OSL_ENSURE( SwXMLTableColumn_impl(nCheckPos) ==
+                                        SwXMLTableColumn_Impl(nEndCPos),
+                    "rows have different total widths" );
+                    */
+                }
 #endif
-                nCPos = nWidth;
+                nCPos = (sal_uInt16)nWidth;
 #if OSL_DEBUG_LEVEL > 1
-                SwXMLTableColumn_Impl aCol( nWidth );
+                SwXMLTableColumn_Impl aCol( (sal_uInt16)nWidth );
                 OSL_ENSURE( aCols.Seek_Entry(&aCol), "couldn't find last column" );
                 OSL_ENSURE( SwXMLTableColumn_Impl(nCheckPos) ==
                                             SwXMLTableColumn_Impl(nCPos),
@@ -192,17 +200,19 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
     }
 }
 
+typedef SwXMLTableLines_Impl *SwXMLTableLinesPtr;
+DECLARE_LIST( SwXMLTableLinesCache_Impl, SwXMLTableLinesPtr )
+
 // ---------------------------------------------------------------------
 
-typedef vector< SwFrmFmt* > SwXMLFrmFmts_Impl;
+typedef SwFrmFmt *SwFrmFmtPtr;
+DECLARE_LIST( SwXMLFrmFmts_Impl, SwFrmFmtPtr )
 
-class SwXMLTableFrmFmtsSort_Impl
+class SwXMLTableFrmFmtsSort_Impl : public SwXMLFrmFmts_Impl
 {
-private:
-    SwXMLFrmFmts_Impl aFormatList;
-
 public:
-    SwXMLTableFrmFmtsSort_Impl ( sal_uInt16 /* nInit */, sal_uInt16 /*nGrow*/ )
+    SwXMLTableFrmFmtsSort_Impl ( sal_uInt16 nInit, sal_uInt16 nGrow ) :
+        SwXMLFrmFmts_Impl( nInit, nGrow )
     {}
 
     sal_Bool AddRow( SwFrmFmt& rFrmFmt, const OUString& rNamePrefix, sal_uInt32 nLine );
@@ -234,14 +244,15 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
         return sal_False;
 
     // order is: -/brush, size/-, size/brush
+    sal_uInt32 nCount2 = Count();
     sal_Bool bInsert = sal_True;
-    SwXMLFrmFmts_Impl::iterator i;
-    for( i = aFormatList.begin(); i < aFormatList.end(); ++i )
+    sal_uInt32 i;
+    for( i = 0; i < nCount2; ++i )
     {
         const SwFmtFrmSize *pTestFrmSize = 0;
         const SwFmtRowSplit* pTestRowSplit = 0;
         const SvxBrushItem *pTestBrush = 0;
-        const SwFrmFmt *pTestFmt = *i;
+        const SwFrmFmt *pTestFmt = GetObject(i);
         const SfxItemSet& rTestSet = pTestFmt->GetAttrSet();
         if( SFX_ITEM_SET == rTestSet.GetItemState( RES_FRM_SIZE, sal_False,
                                                   &pItem ) )
@@ -312,8 +323,7 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
         sBuffer.append( (sal_Int32)(nLine+1UL) );
 
         rFrmFmt.SetName( sBuffer.makeStringAndClear() );
-        if ( i != aFormatList.end() ) ++i;
-        aFormatList.insert( i, &rFrmFmt );
+        Insert( &rFrmFmt, i );
     }
 
     return bInsert;
@@ -375,20 +385,21 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
 
     // order is: -/-/-/num,
     //           -/-/box/-, --/-/box/num,
-    //           -/brush/-/-, -/brush/-/num, -/brush/box/-, -/brush/box/num,
-    //           vert/-/-/-, vert/-/-/num, vert/-/box/-, ver/-/box/num,
-    //           vert/brush/-/-, vert/brush/-/num, vert/brush/box/-,
-    //           vert/brush/box/num
+    //			 -/brush/-/-, -/brush/-/num, -/brush/box/-, -/brush/box/num,
+    // 			 vert/-/-/-, vert/-/-/num, vert/-/box/-, ver/-/box/num,
+    //			 vert/brush/-/-, vert/brush/-/num, vert/brush/box/-,
+    //			 vert/brush/box/num
+    sal_uInt32 nCount2 = Count();
     sal_Bool bInsert = sal_True;
-    SwXMLFrmFmts_Impl::iterator i;
-    for( i = aFormatList.begin(); i < aFormatList.end(); ++i )
+    sal_uInt32 i;
+    for( i = 0; i < nCount2; ++i )
     {
         const SwFmtVertOrient *pTestVertOrient = 0;
         const SvxBrushItem *pTestBrush = 0;
         const SvxBoxItem *pTestBox = 0;
         const SwTblBoxNumFormat *pTestNumFmt = 0;
         const SvxFrameDirectionItem *pTestFrameDir = 0;
-        const SwFrmFmt* pTestFmt = *i;
+        const SwFrmFmt *pTestFmt = GetObject(i);
         const SfxItemSet& rTestSet = pTestFmt->GetAttrSet();
         if( SFX_ITEM_SET == rTestSet.GetItemState( RES_VERT_ORIENT, sal_False,
                                                   &pItem ) )
@@ -489,8 +500,7 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
         OUStringBuffer sBuffer( rNamePrefix.getLength() + 8UL );
         lcl_xmltble_appendBoxPrefix( sBuffer, rNamePrefix, nCol, nRow, bTop );
         rFrmFmt.SetName( sBuffer.makeStringAndClear() );
-        if ( i != aFormatList.end() ) ++i;
-        aFormatList.insert( i, &rFrmFmt );
+        Insert( &rFrmFmt, i );
     }
 
     return bInsert;
@@ -582,24 +592,24 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                                     sal_Bool bTop )
 {
     // pass 1: calculate columns
-    SwXMLTableLines_Impl *pLines = new SwXMLTableLines_Impl( rLines );
+    SwXMLTableLines_Impl *pLines =
+        new SwXMLTableLines_Impl( rLines );
     if( !pTableLines )
-        pTableLines = new SwXMLTableLinesCache_Impl();
-
-    pTableLines->push_back( pLines );
+        pTableLines = new SwXMLTableLinesCache_Impl( 5, 5 );
+    pTableLines->Insert( pLines, pTableLines->Count() );
 
     OUStringBuffer sBuffer( rNamePrefix.getLength() + 8L );
 
     // pass 2: export column styles
     {
         const SwXMLTableColumns_Impl& rCols = pLines->GetColumns();
-        sal_uInt32 nCPos = 0U;
+        sal_uInt16 nCPos = 0U;
         sal_uInt16 nColumns = rCols.Count();
-        for( sal_uInt16 nColumn=0U; nColumn<nColumns; nColumn++ )
+        for( sal_uInt16	nColumn=0U; nColumn<nColumns; nColumn++ )
         {
             SwXMLTableColumn_Impl *pColumn = rCols[nColumn];
 
-            sal_uInt32 nOldCPos = nCPos;
+            sal_uInt16 nOldCPos = nCPos;
             nCPos = pColumn->GetPos();
 
             sal_uInt32 nWidth = nCPos - nOldCPos;
@@ -625,10 +635,10 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                     nColAbsWidth += (nBaseWidth/2UL);
                     nColAbsWidth /= nBaseWidth;
                 }
-                pColumn->SetWidthOpt( nColAbsWidth, sal_False );
+                pColumn->SetWidthOpt( (sal_uInt16)nColAbsWidth, sal_False );
             }
 
-            sal_uLong nExpPos = 0;
+            ULONG nExpPos = 0;
             if( rExpCols.Seek_Entry( pColumn, &nExpPos ) )
             {
                 pColumn->SetStyleName(
@@ -669,16 +679,16 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         sal_uInt16 nBoxes = rBoxes.Count();
 
-        sal_uInt32 nCPos = 0U;
+        sal_uInt16 nCPos = 0U;
         sal_uInt16 nCol = 0U;
         for( sal_uInt16 nBox=0U; nBox<nBoxes; nBox++ )
         {
             SwTableBox *pBox = rBoxes[nBox];
 
             if( nBox < nBoxes-1U )
-                nCPos = nCPos + SwWriteTable::GetBoxWidth( pBox );
+                nCPos = nCPos + (sal_uInt16)SwWriteTable::GetBoxWidth( pBox );
             else
-                nCPos = pLines->GetWidth();
+                nCPos = (sal_uInt16)pLines->GetWidth();
 
 
             // Und ihren Index
@@ -727,7 +737,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                     }
                 }
                 else {
-                    OSL_FAIL("here should be a XCell");
+                    DBG_ERROR("here should be a XCell");
                 }
             }
             else
@@ -868,7 +878,8 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                     else if ( (-1 != nNumberFormat) && (xText->getString().getLength() > 0) )
                     {
                         // number format key:
-                        // (export values only if cell contains text;)
+                        // (export values only if cell contains text;
+                        //  cf. #83755#)
                         XMLNumberFormatAttributesExportHelper::
                             SetNumberFormatAttributes(
                                 *this, nNumberFormat, xCell->getValue(),
@@ -905,7 +916,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
             }
             else
             {
-                OSL_FAIL("here should be a XCell");
+                DBG_ERROR("here should be a XCell");
                 ClearAttrList();
             }
         }
@@ -951,7 +962,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
         const SwTableBoxes& rBoxes = rLine.GetTabBoxes();
         sal_uInt16 nBoxes = rBoxes.Count();
 
-        sal_uInt32 nCPos = 0U;
+        sal_uInt16 nCPos = 0U;
         sal_uInt16 nCol = 0U;
         for( sal_uInt16 nBox=0U; nBox<nBoxes; nBox++ )
         {
@@ -967,9 +978,9 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             }
 
             if( nBox < nBoxes-1U )
-                nCPos = nCPos + SwWriteTable::GetBoxWidth( pBox );
+                nCPos = nCPos + (sal_uInt16)SwWriteTable::GetBoxWidth( pBox );
             else
-                nCPos = rLines.GetWidth();
+                nCPos = (sal_uInt16)rLines.GetWidth();
 
             // Und ihren Index
             const sal_uInt16 nOldCol = nCol;
@@ -984,10 +995,11 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
 #endif
             }
 
-            // #i95726# - Some fault tolerance, if table is somehow corrupted.
+            // --> OD 2009-03-19 #i95726#
+            // Some fault tolerance, if table is somehow corrupted.
             if ( nCol < nOldCol )
             {
-                OSL_FAIL( "table and/or table information seems to be corrupted." );
+                OSL_ENSURE( false, "table and/or table information seems to be corrupted." );
                 if ( nBox == nBoxes - 1 )
                 {
                     nCol = rLines.GetColumns().Count() - 1;
@@ -1018,20 +1030,20 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
 
 void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
                                     SwXMLTableInfo_Impl& rTblInfo,
-                                    sal_uInt16 nHeaderRows )
+                                    USHORT nHeaderRows )
 {
-    OSL_ENSURE( pTableLines && !pTableLines->empty(),
+    OSL_ENSURE( pTableLines && pTableLines->Count(),
             "SwXMLExport::ExportTableLines: table columns infos missing" );
-    if( !pTableLines || pTableLines->empty() )
+    if( !pTableLines || 0 == pTableLines->Count() )
         return;
 
-    SwXMLTableLines_Impl* pLines = NULL;
-    size_t nInfoPos;
-    for( nInfoPos=0; nInfoPos < pTableLines->size(); nInfoPos++ )
+    SwXMLTableLines_Impl *pLines = 0;
+    sal_uInt16 nInfoPos;
+    for( nInfoPos=0; nInfoPos < pTableLines->Count(); nInfoPos++ )
     {
-        if( pTableLines->at( nInfoPos )->GetLines() == &rLines )
+        if( pTableLines->GetObject( nInfoPos )->GetLines() == &rLines )
         {
-            pLines = pTableLines->at( nInfoPos );
+            pLines = pTableLines->GetObject( nInfoPos );
             break;
         }
     }
@@ -1042,14 +1054,11 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
     if( !pLines )
         return;
 
-    SwXMLTableLinesCache_Impl::iterator it = pTableLines->begin();
-    advance( it, nInfoPos );
-    pTableLines->erase( it );
-
-    if( pTableLines->empty() )
+    pTableLines->Remove( nInfoPos );
+    if( 0 == pTableLines->Count() )
     {
         delete pTableLines ;
-        pTableLines = NULL;
+        pTableLines = 0;
     }
 
     // pass 2: export columns
@@ -1227,7 +1236,7 @@ void SwXMLTextParagraphExport::exportTable(
                 // AUTOSTYLES: Optimization: Do not export table autostyle if
                 // we are currently exporting the content.xml stuff and
                 // the table is located in header/footer:
-                // During the flat XML export (used e.g. by .sdw-export)
+                // #144704: During the flat XML export (used e.g. by .sdw-export)
                 // ALL flags are set at the same time.
                 const bool bExportStyles = ( GetExport().getExportFlags() & EXPORT_STYLES ) != 0;
                 if ( bExportStyles || !pFmt->GetDoc()->IsInHeaderFooter( aIdx ) )
@@ -1243,15 +1252,5 @@ void SwXMLTextParagraphExport::exportTable(
     ((SwXMLExport&)GetExport()).SetShowProgress( bOldShowProgress );
 }
 
-void SwXMLExport::DeleteTableLines()
-{
-    if ( pTableLines )
-    {
-        for ( size_t i = 0, n = pTableLines->size(); i < n; ++i )
-            delete pTableLines->at( i );
-        pTableLines->clear();
-        delete pTableLines;
-    }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

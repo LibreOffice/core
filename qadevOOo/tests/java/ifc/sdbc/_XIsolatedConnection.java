@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ public class _XIsolatedConnection extends MultiMethodTest {
     * Test call the method with handler passed as object relation.
     * Then value returned is checked.<p>
     * Has OK status if not null value returned. <&nbsp>
-    * FAILED if exception occurred, null value returned or object
+    * FAILED if exception occured, null value returned or object
     * relation was not found.
     */
     public void _getIsolatedConnectionWithCompletion() throws StatusException {
@@ -86,7 +86,7 @@ public class _XIsolatedConnection extends MultiMethodTest {
     * Test call the method with handler passed as object relation.
     * Then value returned is checked.<p>
     * Has OK status if not null value returned. <&nbsp>
-    * FAILED if exception occurred, null value returned or object
+    * FAILED if exception occured, null value returned or object
     * relation was not found.
     */
     public void _getIsolatedConnection() throws StatusException {
@@ -107,7 +107,7 @@ public class _XIsolatedConnection extends MultiMethodTest {
             pwd = userSettings[1].equals("")?"<empty>":userSettings[1];
         else
             pwd = "<null>";
-
+        
         log.println("Testing \"getIsolatedConnection('user', 'password')\"\n" +
                     "with user = '" + user + "'; password = '" + pwd + "'");
         XConnection con = null ;

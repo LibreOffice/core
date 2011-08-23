@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <UndoSplitMove.hxx>
 
 #include "doc.hxx"
 #include "pam.hxx"
@@ -39,11 +38,13 @@
 #include <editeng/brkitem.hxx>
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
-#include <UndoCore.hxx>
+#include "undobj.hxx"
 #include "rolbck.hxx"
 #include "redline.hxx"
 #include "docary.hxx"
-#include <IShellCursorSupplier.hxx>
+
+
+inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 
 //------------------------------------------------------------------
@@ -52,12 +53,12 @@
 
 
 SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
-                                    sal_Bool bChkTable )
+                                    BOOL bChkTable )
     : SwUndo( UNDO_SPLITNODE ), pHistory( 0 ), pRedlData( 0 ), nNode( rPos.nNode.GetIndex() ),
         nCntnt( rPos.nContent.GetIndex() ),
-        bTblFlag( sal_False ), bChkTblStt( bChkTable )
+        bTblFlag( FALSE ), bChkTblStt( bChkTable )
 {
-    SwTxtNode *const pTxtNd = rPos.nNode.GetNode().GetTxtNode();
+    SwTxtNode* pTxtNd = pDoc->GetNodes()[ rPos.nNode ]->GetTxtNode();
     OSL_ENSURE( pTxtNd, "nur beim TextNode rufen!" );
     if( pTxtNd->GetpSwpHints() )
     {
@@ -75,16 +76,21 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
     }
 }
 
+
+
+
 SwUndoSplitNode::~SwUndoSplitNode()
 {
     delete pHistory;
     delete pRedlData;
 }
 
-void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
+
+
+void SwUndoSplitNode::Undo( SwUndoIter& rUndoIter )
 {
-    SwDoc *const pDoc = & rContext.GetDoc();
-    SwPaM & rPam( rContext.GetCursorSupplier().CreateNewShellCursor() );
+    SwDoc* pDoc = &rUndoIter.GetDoc();
+    SwPaM& rPam = *rUndoIter.pAktPam;
     rPam.DeleteMark();
     if( bTblFlag )
     {
@@ -103,11 +109,11 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
             if( pNdSet )
             {
                 const SfxPoolItem *pItem;
-                if( SFX_ITEM_SET == pNdSet->GetItemState( RES_PAGEDESC, sal_False,
+                if( SFX_ITEM_SET == pNdSet->GetItemState( RES_PAGEDESC, FALSE,
                     &pItem ) )
                     pTableFmt->SetFmtAttr( *pItem );
 
-                if( SFX_ITEM_SET == pNdSet->GetItemState( RES_BREAK, sal_False,
+                if( SFX_ITEM_SET == pNdSet->GetItemState( RES_BREAK, FALSE,
                      &pItem ) )
                     pTableFmt->SetFmtAttr( *pItem );
             }
@@ -146,7 +152,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
                 rPam.SetMark();
                 rPam.GetPoint()->nContent = pTNd->GetTxt().Len();
 
-                pDoc->RstTxtAttrs( rPam, sal_True );
+                pDoc->RstTxtAttrs( rPam, TRUE );
                 pHistory->TmpRollback( pDoc, 0, false );
             }
         }
@@ -158,13 +164,23 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
     rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), nCntnt );
 }
 
-void SwUndoSplitNode::RedoImpl(::sw::UndoRedoContext & rContext)
+
+void SwUndoSplitNode::Repeat( SwUndoIter& rUndoIter )
 {
-    SwPaM & rPam( rContext.GetCursorSupplier().CreateNewShellCursor() );
+    if( UNDO_SPLITNODE == rUndoIter.GetLastUndoId() )
+        return;
+    rUndoIter.GetDoc().SplitNode( *rUndoIter.pAktPam->GetPoint(), bChkTblStt );
+    rUndoIter.pLastUndoObj = this;
+}
+
+
+void SwUndoSplitNode::Redo( SwUndoIter& rUndoIter )
+{
+    SwPaM& rPam = *rUndoIter.pAktPam;
+    ULONG nOldNode = rPam.GetPoint()->nNode.GetIndex();
     rPam.GetPoint()->nNode = nNode;
     SwTxtNode * pTNd = rPam.GetNode()->GetTxtNode();
-    OSL_ENSURE(pTNd, "SwUndoSplitNode::RedoImpl(): SwTxtNode expected");
-    if (pTNd)
+    if( pTNd )              // sollte eigentlich immer ein TextNode sein !!
     {
         rPam.GetPoint()->nContent.Assign( pTNd, nCntnt );
 
@@ -195,12 +211,8 @@ void SwUndoSplitNode::RedoImpl(::sw::UndoRedoContext & rContext)
             rPam.DeleteMark();
         }
     }
-}
-
-void SwUndoSplitNode::RepeatImpl(::sw::RepeatContext & rContext)
-{
-    rContext.GetDoc().SplitNode(
-        *rContext.GetRepeatPaM().GetPoint(), bChkTblStt );
+    else
+        rPam.GetPoint()->nNode = nOldNode;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

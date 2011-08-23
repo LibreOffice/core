@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,6 @@
 #include "UndoGuard.hxx"
 #include "Strings.hrc"
 #include "ObjectNameProvider.hxx"
-#include "DiagramHelper.hxx"
 #include "chartview/ExplicitValueProvider.hxx"
 #include "CommonConverters.hxx"
 #include <svx/ActionDescriptionProvider.hxx>
@@ -63,7 +62,7 @@ using namespace ::com::sun::star::chart2;
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, awt::Rectangle& rPosAndSize, const awt::Size aOriginalSize )
+void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, Rectangle& rPosAndSize, const awt::Size aOriginalSize )
 {
     long nPosX(0);
     long nPosY(0);
@@ -74,27 +73,27 @@ void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, awt::Rectang
 
     const SfxPoolItem* pPoolItem=NULL;
     //read position
-    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_POS_X,sal_True,&pPoolItem))
+    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_POS_X,TRUE,&pPoolItem))
         nPosX=((const SfxInt32Item*)pPoolItem)->GetValue();
-    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_POS_Y,sal_True,&pPoolItem))
+    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_POS_Y,TRUE,&pPoolItem))
         nPosY=((const SfxInt32Item*)pPoolItem)->GetValue();
     //read size
-    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_WIDTH,sal_True,&pPoolItem))
+    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_WIDTH,TRUE,&pPoolItem))
         nSizX=((const SfxUInt32Item*)pPoolItem)->GetValue();
-    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,sal_True,&pPoolItem))
+    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,TRUE,&pPoolItem))
         nSizY=((const SfxUInt32Item*)pPoolItem)->GetValue();
-    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_SIZE_POINT,sal_True,&pPoolItem))
+    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_SIZE_POINT,TRUE,&pPoolItem))
         eRP=(RECT_POINT)((const SfxAllEnumItem*)pPoolItem)->GetValue();
 
     switch( eRP )
     {
-        case RP_LT:
+        case RP_LT: 
             break;
         case RP_MT:
-            nPosX += ( aOriginalSize.Width - nSizX ) / 2;
+            nPosX += ( aOriginalSize.Width - nSizX ) / 2; 
             break;
         case RP_RT:
-            nPosX += aOriginalSize.Width - nSizX;
+            nPosX += aOriginalSize.Width - nSizX; 
             break;
         case RP_LM:
             nPosY += ( aOriginalSize.Height - nSizY ) / 2;
@@ -115,14 +114,14 @@ void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, awt::Rectang
             nPosY += aOriginalSize.Height - nSizY;
             break;
         case RP_RB:
-            nPosX += aOriginalSize.Width - nSizX;
+            nPosX += aOriginalSize.Width - nSizX;  
             nPosY += aOriginalSize.Height - nSizY;
             break;
         default:
             break;
     }
 
-    rPosAndSize = awt::Rectangle(nPosX,nPosY,nSizX,nSizY);
+    rPosAndSize = Rectangle(Point(nPosX,nPosY),Size(nSizX,nSizY));
 }
 
 void SAL_CALL ChartController::executeDispatch_PositionAndSize()
@@ -137,13 +136,11 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
     if( pProvider )
         aSelectedSize = ToSize( ( pProvider->getRectangleOfObject( aCID ) ) );
 
-    ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
-
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::POS_SIZE,
-            ObjectNameProvider::getName( eObjectType)),
-        m_xUndoManager );
+            ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aCID ))),
+        m_xUndoManager, getModel() );
 
     SfxAbstractTabDialog * pDlg = NULL;
     try
@@ -161,26 +158,24 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
             m_pChartWindow, &aItemSet, pSdrView, RID_SCH_TransformTabDLG_SVXPAGE_ANGLE, bResizePossible );
         DBG_ASSERT( pDlg, "Couldn't create SchTransformTabDialog" );
 
-
+        
         if( pDlg->Execute() == RET_OK )
         {
             const SfxItemSet* pOutItemSet = pDlg->GetOutputItemSet();
             if(pOutItemSet)
             {
-                awt::Rectangle aObjectRect;
+                Rectangle aObjectRect;
                 aItemSet.Put(*pOutItemSet);//overwrite old values with new values (-> all items are set)
                 lcl_getPositionAndSizeFromItemSet( aItemSet, aObjectRect, aSelectedSize );
                 awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
-                awt::Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
+                Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
-                bool bChanged = false;
-                if ( eObjectType == OBJECTTYPE_LEGEND )
-                    bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning( getModel(), false , true );
-
-                bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID(), getModel()
-                            , aObjectRect, aPageRect );
-                if( bMoved || bChanged )
-                    aUndoGuard.commit();
+                bool bChanged = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
+                            , getModel()
+                            , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
+                            , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight()) );
+                if( bChanged )
+                    aUndoGuard.commitAction();
             }
         }
         delete pDlg;

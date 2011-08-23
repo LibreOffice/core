@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,6 +34,7 @@
 #include <memory>
 
 
+//////////////////////////////////////////////////////////////////////
 
 struct SfxSecurityPage_Impl;
 
@@ -45,13 +46,14 @@ protected:
     SfxSecurityPage( Window* pParent, const SfxItemSet& );
     virtual ~SfxSecurityPage();
 
-    virtual sal_Bool            FillItemSet( SfxItemSet& );
+    virtual BOOL            FillItemSet( SfxItemSet& );
     virtual void            Reset( const SfxItemSet& );
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
 };
 
+//////////////////////////////////////////////////////////////////////
 
 #endif // #ifndef _SECURITYPAGE_HXX_
 

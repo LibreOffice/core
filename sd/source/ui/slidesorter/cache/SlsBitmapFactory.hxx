@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,6 +32,7 @@
 #include "PreviewRenderer.hxx"
 #include <boost/shared_ptr.hpp>
 
+class BitmapEx;
 class SdPage;
 class Size;
 
@@ -50,10 +51,9 @@ public:
     BitmapFactory (void);
     ~BitmapFactory (void);
 
-    Bitmap CreateBitmap (
+    ::boost::shared_ptr<BitmapEx> CreateBitmap (
         const SdPage& rPage,
-        const Size& rPixelSize,
-        const bool bDoSuperSampling);
+        const Size& rPixelSize);
 
 private:
     PreviewRenderer maRenderer;

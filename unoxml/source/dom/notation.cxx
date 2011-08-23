@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,24 +26,21 @@
  *
  ************************************************************************/
 
-#include <notation.hxx>
-
+#include "notation.hxx"
 #include <string.h>
 
 namespace DOM
 {
-    CNotation::CNotation(CDocument const& rDocument, ::osl::Mutex const& rMutex,
-            xmlNotationPtr const pNotation)
-        : CNotation_Base(rDocument, rMutex,
-            NodeType_NOTATION_NODE, reinterpret_cast<xmlNodePtr>(pNotation))
-        , m_aNotationPtr(pNotation)
+    CNotation::CNotation(const xmlNotationPtr aNotationPtr)
     {
+        m_aNodeType = NodeType_NOTATION_NODE;
+        m_aNotationPtr = aNotationPtr;
+        init_node((xmlNodePtr)aNotationPtr);
     }
 
     OUString SAL_CALL CNotation::getPublicId() throw (RuntimeException)
     {
-        OSL_ENSURE(false,
-            "CNotation::getPublicId: not implemented (#i113683#)");
+        // XXX
         return OUString();
     }
 
@@ -52,16 +49,13 @@ namespace DOM
     */
     OUString SAL_CALL CNotation::getSystemId() throw (RuntimeException)
     {
-        OSL_ENSURE(false,
-            "CNotation::getSystemId: not implemented (#i113683#)");
+        // XXX
         return OUString();
     }
 
 
     OUString SAL_CALL CNotation::getNodeName()throw (RuntimeException)
     {
-        ::osl::MutexGuard const g(m_rMutex);
-
        OUString aName;
         if (m_aNodePtr != NULL)
         {
@@ -70,7 +64,6 @@ namespace DOM
         }
         return aName;
     }
-
     OUString SAL_CALL CNotation::getNodeValue() throw (RuntimeException)
     {
         return OUString();

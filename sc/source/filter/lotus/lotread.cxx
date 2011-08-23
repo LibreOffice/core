@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,22 +49,22 @@ FltError ImportLotus::Read()
 {
     enum STATE
     {
-        S_START,        // analyse first BOF
-        S_WK1,          // in WK1-Stream
-        S_WK3,          // in WK3-Section
-        S_WK4,          // ...
-        S_FM3,          // ...
-        S_END           // Import finished
+        S_START,		// analyse first BOF
+        S_WK1,			// in WK1-Stream
+        S_WK3,			// in WK3-Section
+        S_WK4,			// ...
+        S_FM3,			// ...
+        S_END			// Import finished
     };
 
-    sal_uInt16          nOp;
-    sal_uInt16          nSubType;
-    sal_uInt16          nRecLen;
-    sal_uInt32          nNextRec = 0UL;
-    FltError        eRet = eERR_OK;
-//  ScFormulaCell   *pLastFormCell;
+    UINT16			nOp;
+    UINT16			nSubType;
+    UINT16			nRecLen;
+    UINT32			nNextRec = 0UL;
+    FltError		eRet = eERR_OK;
+//	ScFormulaCell	*pLastFormCell;
 
-    STATE           eAkt = S_START;
+    STATE			eAkt = S_START;
 
     nTab = 0;
     nExtTab = -2;
@@ -86,7 +86,7 @@ FltError ImportLotus::Read()
         switch( eAkt )
         {
             // -----------------------------------------------------------
-            case S_START:                                           // S_START
+            case S_START:											// S_START
             if( nOp )
             {
                 eRet = SCERR_IMPORT_UNKNOWN_WK;
@@ -99,9 +99,9 @@ FltError ImportLotus::Read()
                     Bof();
                     switch( pLotusRoot->eFirstType )
                     {
-                        case Lotus_WK1: eAkt = S_WK1; break;
-                        case Lotus_WK3: eAkt = S_WK3; break;
-                        case Lotus_WK4: eAkt = S_WK4; break;
+                        case Lotus_WK1:	eAkt = S_WK1; break;
+                        case Lotus_WK3:	eAkt = S_WK3; break;
+                        case Lotus_WK4:	eAkt = S_WK4; break;
                         case Lotus_FM3: eAkt = S_FM3; break;
                         default:
                         eRet = SCERR_IMPORT_UNKNOWN_WK;
@@ -110,78 +110,78 @@ FltError ImportLotus::Read()
                 }
                 else
                 {
-                    eAkt = S_END;   // hier kommt wat fuer <= WK1 hinne!
+                    eAkt = S_END;	// hier kommt wat fuer <= WK1 hinne!
                     eRet = 0xFFFFFFFF;
                 }
             }
             break;
             // -----------------------------------------------------------
-            case S_WK1:                                             // S_WK1
+            case S_WK1:												// S_WK1
             break;
             // -----------------------------------------------------------
-            case S_WK3:                                             // S_WK3
-            case S_WK4:                                             // S_WK4
+            case S_WK3:												// S_WK3
+            case S_WK4:												// S_WK4
             switch( nOp )
             {
-                case 0x0001:                            // EOF
+                case 0x0001:							// EOF
                 eAkt = S_FM3;
                 nTab++;
                 break;
 
-                case 0x0002:                            // PASSWORD
+                case 0x0002:							// PASSWORD
                 eRet = eERR_FILEPASSWD;
                 eAkt = S_END;
                 break;
 
-                case 0x0007:                            // COLUMNWIDTH
+                case 0x0007:							// COLUMNWIDTH
                 Columnwidth( nRecLen );
                 break;
 
-                case 0x0008:                            // HIDDENCOLUMN
+                case 0x0008:							// HIDDENCOLUMN
                 Hiddencolumn( nRecLen );
                 break;
 
-                case 0x0009:                            // USERRANGE
+                case 0x0009:							// USERRANGE
                 Userrange();
                 break;
 
-                case 0x0013:                            // FORMAT
+                case 0x0013:							// FORMAT
 
                 break;
-                case 0x0014:                            // ERRCELL
+                case 0x0014:							// ERRCELL
                 Errcell();
                 break;
 
-                case 0x0015:                            // NACELL
+                case 0x0015:							// NACELL
                 Nacell();
                 break;
 
-                case 0x0016:                            // LABELCELL
+                case 0x0016:							// LABELCELL
                 Labelcell();
                 break;
 
-                case 0x0017:                            // NUMBERCELL
+                case 0x0017:							// NUMBERCELL
                 Numbercell();
                 break;
 
-                case 0x0018:                            // SMALLNUMCELL
+                case 0x0018:							// SMALLNUMCELL
                 Smallnumcell();
                 break;
 
-                case 0x0019:                            // FORMULACELL
+                case 0x0019:							// FORMULACELL
                 Formulacell( nRecLen );
                 break;
 
-                case 0x001b:                            // extended attributes
+                case 0x001b:							// extended attributes
                 Read( nSubType );
                 nRecLen -= 2;
                 switch( nSubType )
                 {
-                    case 2007:                              // ROW PRESENTATION
+                    case 2007:								// ROW PRESENTATION
                     RowPresentation( nRecLen );
                     break;
 
-                    case 14000:                             // NAMED SHEET
+                    case 14000:								// NAMED SHEET
                     NamedSheet();
                     break;
                 }
@@ -189,15 +189,15 @@ FltError ImportLotus::Read()
 
             break;
             // -----------------------------------------------------------
-            case S_FM3:                                             // S_FM3
+            case S_FM3:												// S_FM3
             break;
             // -----------------------------------------------------------
-            case S_END:                                             // S_END
+            case S_END:												// S_END
             break;
             // -----------------------------------------------------------
 #ifdef DBG_UTIL
             default:
-            OSL_FAIL( "*ImportLotus::Read(): State unbekannt!" );
+            DBG_ERROR( "*ImportLotus::Read(): State unbekannt!" );
             eAkt = S_END;
 #endif
         }
@@ -210,11 +210,11 @@ FltError ImportLotus::Read()
     }
 
     // duemmliche Namen eliminieren
-    SCTAB       nTabs = pD->GetTableCount();
-    SCTAB       nCnt;
-    String      aTabName;
-    String      aBaseName;
-    String      aRef( RTL_CONSTASCII_USTRINGPARAM( "temp" ) );
+    SCTAB		nTabs = pD->GetTableCount();
+    SCTAB		nCnt;
+    String		aTabName;
+    String		aBaseName;
+    String		aRef( RTL_CONSTASCII_USTRINGPARAM( "temp" ) );
     if( nTabs != 0 )
     {
         if( nTabs > 1 )
@@ -246,11 +246,11 @@ FltError ImportLotus::Read( SvStream& rIn )
 {
     pIn = &rIn;
 
-    sal_Bool            bRead = sal_True;
-    sal_uInt16          nOp;
-    sal_uInt16          nRecLen;
-    sal_uInt32          nNextRec = 0UL;
-    FltError        eRet = eERR_OK;
+    BOOL			bRead = TRUE;
+    UINT16			nOp;
+    UINT16			nRecLen;
+    UINT32			nNextRec = 0UL;
+    FltError		eRet = eERR_OK;
 
     nTab = 0;
     nExtTab = -1;
@@ -265,37 +265,37 @@ FltError ImportLotus::Read( SvStream& rIn )
         *pIn >> nOp >> nRecLen;
 
         if( pIn->IsEof() )
-            bRead = false;
+            bRead = FALSE;
         else
         {
             nNextRec += nRecLen + 4;
 
             switch( nOp )
             {
-                case 0x0000:                            // BOF
+                case 0x0000:							// BOF
                 if( nRecLen != 26 || !BofFm3() )
                 {
-                    bRead = false;
+                    bRead = FALSE;
                     eRet = eERR_FORMAT;
                 }
                 break;
 
-                case 0x0001:                            // EOF
-                    bRead = false;
+                case 0x0001:							// EOF
+                    bRead = FALSE;
                     DBG_ASSERT( nTab == 0,
                         "-ImportLotus::Read( SvStream& ): Zweimal EOF nicht erlaubt" );
                     nTab++;
                 break;
 
-                case 174:                               // FONT_FACE
+                case 174:								// FONT_FACE
                     Font_Face();
                 break;
 
-                case 176:                               // FONT_TYPE
+                case 176:								// FONT_TYPE
                     Font_Type();
                 break;
 
-                case 177:                               // FONT_YSIZE
+                case 177:								// FONT_YSIZE
                     Font_Ysize();
                 break;
 

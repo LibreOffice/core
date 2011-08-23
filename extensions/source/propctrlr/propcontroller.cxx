@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ namespace pcr
     using namespace ::com::sun::star::ucb;
     using namespace ::comphelper;
 
-#define THISREF()   static_cast< XController* >(this)
+#define THISREF()	static_cast< XController* >(this)
 
     //========================================================================
     //= OPropertyBrowserController
@@ -177,7 +177,7 @@ namespace pcr
     {
         return m_xModel;
     }
-
+    
     //--------------------------------------------------------------------
     void OPropertyBrowserController::impl_initializeView_nothrow()
     {
@@ -217,7 +217,7 @@ namespace pcr
     {
         if ( !m_xModel.is() )
             return false;
-
+        
         return m_xModel->getIsReadOnly();
     }
 
@@ -272,7 +272,7 @@ namespace pcr
 
         impl_bindToNewModel_nothrow( _inspectorModel );
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XObjectInspectorUI > SAL_CALL OPropertyBrowserController::getInspectorUI() throw (RuntimeException)
     {
@@ -307,7 +307,7 @@ namespace pcr
         // we don't have any dispatches at all, right now
         return Reference< XDispatch >();
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< Reference< XDispatch > > SAL_CALL OPropertyBrowserController::queryDispatches( const Sequence< DispatchDescriptor >& Requests ) throw (RuntimeException)
     {
@@ -315,9 +315,9 @@ namespace pcr
         sal_Int32 nLen = Requests.getLength();
         aReturn.realloc( nLen );
 
-                Reference< XDispatch >* pReturn     = aReturn.getArray();
-        const   Reference< XDispatch >* pReturnEnd  = aReturn.getArray() + nLen;
-        const   DispatchDescriptor*     pDescripts  = Requests.getConstArray();
+                Reference< XDispatch >* pReturn 	= aReturn.getArray();
+        const	Reference< XDispatch >* pReturnEnd	= aReturn.getArray() + nLen;
+        const	DispatchDescriptor* 	pDescripts	= Requests.getConstArray();
 
         for ( ; pReturn != pReturnEnd; ++ pReturn, ++pDescripts )
             *pReturn = queryDispatch( pDescripts->FeatureURL, pDescripts->FrameName, pDescripts->SearchFlags );
@@ -375,7 +375,7 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if (_rxFrame.is() && haveView())
-            throw RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to attach to a second frame.")),*this);
+            throw RuntimeException(::rtl::OUString::createFromAscii("Unable to attach to a second frame."),*this);
 
         // revoke as focus listener from the old container window
         stopContainerWindowListening();
@@ -388,10 +388,10 @@ namespace pcr
         // Maybe it is intended to only announce the frame to the controller, and the instance doing this
         // announcement is responsible for calling setComponent, too.
         Reference< XWindow > xContainerWindow = m_xFrame->getContainerWindow();
-        VCLXWindow* pContainerWindow = VCLXWindow::GetImplementation(xContainerWindow);
+        VCLXWindow*	pContainerWindow = VCLXWindow::GetImplementation(xContainerWindow);
         Window* pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : NULL;
         if (!pParentWin)
-            throw RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The frame is invalid. Unable to extract the container window.")),*this);
+            throw RuntimeException(::rtl::OUString::createFromAscii("The frame is invalid. Unable to extract the container window."),*this);
 
         if ( Construct( pParentWin ) )
         {
@@ -401,7 +401,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "OPropertyBrowserController::attachFrame: caught an exception!" );
+                OSL_ENSURE( sal_False, "OPropertyBrowserController::attachFrame: caught an exception!" );
             }
         }
 
@@ -470,7 +470,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "OPropertyBrowserController::suspendPropertyHandlers_nothrow: caught an exception!" );
+                OSL_ENSURE( sal_False, "OPropertyBrowserController::suspendPropertyHandlers_nothrow: caught an exception!" );
             }
         }
         return sal_True;
@@ -597,14 +597,14 @@ namespace pcr
     //------------------------------------------------------------------------
     ::rtl::OUString OPropertyBrowserController::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.extensions.ObjectInspector"));
+        return ::rtl::OUString::createFromAscii("org.openoffice.comp.extensions.ObjectInspector");
     }
 
     //------------------------------------------------------------------------
     Sequence< ::rtl::OUString > OPropertyBrowserController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.inspection.ObjectInspector"));
+        aSupported[0] = ::rtl::OUString::createFromAscii( "com.sun.star.inspection.ObjectInspector" );
         return aSupported;
     }
 
@@ -623,7 +623,7 @@ namespace pcr
             xContainerWindow = m_xFrame->getContainerWindow();
 
         if ( xContainerWindow.get() == xSourceWindow.get() )
-        {   // our container window got the focus
+        {	// our container window got the focus
             if ( haveView() )
                 getPropertyBox().GrabFocus();
         }
@@ -748,7 +748,7 @@ namespace pcr
     {
         if ( _rEvent.Source == m_xModel )
         {
-            if ( _rEvent.PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsReadOnly" ) ) )
+            if ( _rEvent.PropertyName.equalsAscii( "IsReadOnly" ) )
                 impl_updateReadOnlyView_nothrow();
             return;
         }
@@ -990,7 +990,7 @@ namespace pcr
 
         catch(Exception&)
         {
-            OSL_FAIL("OPropertyBrowserController::impl_rebindToInspectee_nothrow: caught an exception !");
+            DBG_ERROR("OPropertyBrowserController::impl_rebindToInspectee_nothrow: caught an exception !");
         }
     }
 
@@ -1121,7 +1121,7 @@ namespace pcr
         }
         catch(Exception&)
         {
-            OSL_FAIL("OPropertyBrowserController::doInspection : caught an exception !");
+            DBG_ERROR("OPropertyBrowserController::doInspection : caught an exception !");
         }
     }
 
@@ -1192,7 +1192,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OPropertyBrowserController::describePropertyLine: caught an exception!" );
+            OSL_ENSURE( sal_False, "OPropertyBrowserController::describePropertyLine: caught an exception!" );
         }
     }
 
@@ -1257,7 +1257,7 @@ namespace pcr
                     ::rtl::OString sMessage( "OPropertyBrowserController::UpdateUI: empty category provided for property '" );
                     sMessage += ::rtl::OString( property->second.Name.getStr(), property->second.Name.getLength(), osl_getThreadTextEncoding() );
                     sMessage += "'!";
-                    OSL_FAIL( sMessage );
+                    OSL_ENSURE( false, sMessage );
                 }
             #endif
                 // finally insert this property control
@@ -1267,7 +1267,7 @@ namespace pcr
                     // this category does not yet exist. This is allowed, as an inspector model might be lazy, and not provide
                     // any category information of its own. In this case, we have a fallback ...
                     m_aPageIds[ aDescriptor.Category ] =
-                    getPropertyBox().AppendPage( aDescriptor.Category, rtl::OString() );
+                        getPropertyBox().AppendPage( aDescriptor.Category, SmartId() );
                     nTargetPageId = impl_getPageIdForCategory_nothrow( aDescriptor.Category );
                 }
 
@@ -1351,7 +1351,7 @@ namespace pcr
             InteractiveSelectionResult eResult =
                 handler->second->onInteractivePropertySelection( _rName, _bPrimary, aData,
                     m_pUIRequestComposer->getUIForPropertyHandler( handler->second ) );
-
+            
             switch ( eResult )
             {
             case InteractiveSelectionResult_Cancelled:
@@ -1365,7 +1365,7 @@ namespace pcr
                 // also okay, we expect that the handler has disabled the UI as necessary
                 break;
             default:
-                OSL_FAIL( "OPropertyBrowserController::Clicked: unknown result value!" );
+                OSL_ENSURE( false, "OPropertyBrowserController::Clicked: unknown result value!" );
                 break;
             }
         }
@@ -1398,7 +1398,7 @@ namespace pcr
 
             if ( rName.equals( PROPERTY_IMAGE_URL ) )
             {
-                // if the prop value is the PlaceHolder
+                // if the prop value is the PlaceHolder 
                 // can ignore it
                 rtl::OUString sVal;
                 _rValue >>= sVal;
@@ -1441,7 +1441,7 @@ namespace pcr
         }
         catch(Exception&)
         {
-            OSL_FAIL("OPropertyBrowserController::Commit : caught an exception !");
+            DBG_ERROR("OPropertyBrowserController::Commit : caught an exception !");
         }
 
         m_sCommittingProperty = ::rtl::OUString();
@@ -1457,7 +1457,7 @@ namespace pcr
     {
         m_aControlObservers.notifyEach( &XPropertyControlObserver::focusGained, _Control );
     }
-
+    
     //--------------------------------------------------------------------
     void OPropertyBrowserController::valueChanged( const Reference< XPropertyControl >& _Control )
     {
@@ -1590,7 +1590,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OPropertyBrowserController::rebuildPropertyUI: caught an exception!" );
+            OSL_ENSURE( sal_False, "OPropertyBrowserController::rebuildPropertyUI: caught an exception!" );
         }
 
         getPropertyBox().ChangeEntry( aDescriptor );
@@ -1714,7 +1714,7 @@ namespace pcr
     {
         m_aControlObservers.addInterface( _Observer );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::revokeControlObserver( const Reference< XPropertyControlObserver >& _Observer ) throw (RuntimeException)
     {

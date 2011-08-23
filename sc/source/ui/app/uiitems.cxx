@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,79 +45,79 @@ TYPEINIT1(ScQueryItem,          SfxPoolItem);
 TYPEINIT1(ScSubTotalItem,       SfxPoolItem);
 TYPEINIT1(ScUserListItem,       SfxPoolItem);
 TYPEINIT1(ScConsolidateItem,    SfxPoolItem);
-TYPEINIT1(ScPivotItem,          SfxPoolItem);
-TYPEINIT1(ScSolveItem,          SfxPoolItem);
-TYPEINIT1(ScTabOpItem,          SfxPoolItem);
-TYPEINIT1(ScCondFrmtItem,       SfxPoolItem);
+TYPEINIT1(ScPivotItem,		    SfxPoolItem);
+TYPEINIT1(ScSolveItem,		    SfxPoolItem);
+TYPEINIT1(ScTabOpItem,		    SfxPoolItem);
+TYPEINIT1(ScCondFrmtItem,	    SfxPoolItem);
 
-TYPEINIT1(ScTablesHint,         SfxHint);
-TYPEINIT1(ScEditViewHint,       SfxHint);
-TYPEINIT1(ScIndexHint,          SfxHint);
+TYPEINIT1(ScTablesHint,			SfxHint);
+TYPEINIT1(ScEditViewHint,		SfxHint);
+TYPEINIT1(ScIndexHint,			SfxHint);
 
 // -----------------------------------------------------------------------
 //      ScInputStatusItem - Status-Update fuer Eingabezeile
 // -----------------------------------------------------------------------
 
-ScInputStatusItem::ScInputStatusItem( sal_uInt16 nWhichP,
+ScInputStatusItem::ScInputStatusItem( USHORT nWhichP,
                                       const ScAddress& rCurPos,
                                       const ScAddress& rStartPos,
                                       const ScAddress& rEndPos,
                                       const String& rString,
                                       const EditTextObject* pData )
     :   SfxPoolItem ( nWhichP ),
-        aCursorPos  ( rCurPos ),
-        aStartPos   ( rStartPos ),
-        aEndPos     ( rEndPos ),
-        aString     ( rString ),
-        pEditData   ( pData ? pData->Clone() : NULL )
+        aCursorPos	( rCurPos ),
+        aStartPos	( rStartPos ),
+        aEndPos		( rEndPos ),
+        aString		( rString ),
+        pEditData	( pData ? pData->Clone() : NULL )
 {
 }
 
 ScInputStatusItem::ScInputStatusItem( const ScInputStatusItem& rItem )
-    :   SfxPoolItem ( rItem ),
-        aCursorPos  ( rItem.aCursorPos ),
-        aStartPos   ( rItem.aStartPos ),
-        aEndPos     ( rItem.aEndPos ),
-        aString     ( rItem.aString ),
-        pEditData   ( rItem.pEditData ? rItem.pEditData->Clone() : NULL )
+    :	SfxPoolItem	( rItem ),
+        aCursorPos	( rItem.aCursorPos ),
+        aStartPos	( rItem.aStartPos ),
+        aEndPos		( rItem.aEndPos ),
+        aString		( rItem.aString ),
+        pEditData	( rItem.pEditData ? rItem.pEditData->Clone() : NULL )
 {
 }
 
-ScInputStatusItem::~ScInputStatusItem()
+__EXPORT ScInputStatusItem::~ScInputStatusItem()
 {
     delete pEditData;
 }
 
-String ScInputStatusItem::GetValueText() const
+String __EXPORT ScInputStatusItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("InputStatus"));
 }
 
-int ScInputStatusItem::operator==( const SfxPoolItem& rItem ) const
+int __EXPORT ScInputStatusItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
-    return (    (aStartPos  == ((ScInputStatusItem&)rItem).aStartPos)
-             && (aEndPos    == ((ScInputStatusItem&)rItem).aEndPos)
-             && (aCursorPos == ((ScInputStatusItem&)rItem).aCursorPos)
-             && (aString    == ((ScInputStatusItem&)rItem).aString) );
-                                                        //! Edit-Daten vergleichen!
+    return (    (aStartPos 	== ((ScInputStatusItem&)rItem).aStartPos)
+             &&	(aEndPos   	== ((ScInputStatusItem&)rItem).aEndPos)
+             &&	(aCursorPos == ((ScInputStatusItem&)rItem).aCursorPos)
+             && (aString   	== ((ScInputStatusItem&)rItem).aString) );
+                                                        //!	Edit-Daten vergleichen!
 }
 
-SfxPoolItem* ScInputStatusItem::Clone( SfxItemPool * ) const
+SfxPoolItem* __EXPORT ScInputStatusItem::Clone( SfxItemPool * ) const
 {
     return new ScInputStatusItem( *this );
 }
 
 //
-//  ScPaintHint ist nach schints.cxx verschoben
+//	ScPaintHint ist nach schints.cxx verschoben
 //
 
 // -----------------------------------------------------------------------
-//  ScTablesHint - Views anpassen, wenn Tabellen eingefuegt / geloescht
+//	ScTablesHint - Views anpassen, wenn Tabellen eingefuegt / geloescht
 // -----------------------------------------------------------------------
 
-ScTablesHint::ScTablesHint(sal_uInt16 nNewId, SCTAB nTable1, SCTAB nTable2) :
+ScTablesHint::ScTablesHint(USHORT nNewId, SCTAB nTable1, SCTAB nTable2) :
     nId( nNewId ),
     nTab1( nTable1 ),
     nTab2( nTable2 )
@@ -130,10 +130,10 @@ ScTablesHint::~ScTablesHint()
 
 
 // -----------------------------------------------------------------------
-//  ScIndexHint
+//	ScIndexHint
 // -----------------------------------------------------------------------
 
-ScIndexHint::ScIndexHint(sal_uInt16 nNewId, sal_uInt16 nIdx) :
+ScIndexHint::ScIndexHint(USHORT nNewId, USHORT nIdx) :
     nId( nNewId ),
     nIndex( nIdx )
 {
@@ -162,7 +162,7 @@ ScEditViewHint::~ScEditViewHint()
 //      ScSortItem - Daten fuer den Sortierdialog
 // -----------------------------------------------------------------------
 
-ScSortItem::ScSortItem( sal_uInt16              nWhichP,
+ScSortItem::ScSortItem( USHORT              nWhichP,
                         ScViewData*         ptrViewData,
                         const ScSortParam*  pSortData ) :
         SfxPoolItem ( nWhichP ),
@@ -173,7 +173,7 @@ ScSortItem::ScSortItem( sal_uInt16              nWhichP,
 
 //------------------------------------------------------------------------
 
-ScSortItem::ScSortItem( sal_uInt16              nWhichP,
+ScSortItem::ScSortItem( USHORT              nWhichP,
                         const ScSortParam*  pSortData ) :
         SfxPoolItem ( nWhichP ),
         pViewData   ( NULL )
@@ -190,20 +190,20 @@ ScSortItem::ScSortItem( const ScSortItem& rItem ) :
 {
 }
 
-ScSortItem::~ScSortItem()
+__EXPORT ScSortItem::~ScSortItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String ScSortItem::GetValueText() const
+String __EXPORT ScSortItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("SortItem"));
 }
 
 //------------------------------------------------------------------------
 
-int ScSortItem::operator==( const SfxPoolItem& rItem ) const
+int __EXPORT ScSortItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -215,14 +215,14 @@ int ScSortItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* ScSortItem::Clone( SfxItemPool * ) const
+SfxPoolItem* __EXPORT ScSortItem::Clone( SfxItemPool * ) const
 {
     return new ScSortItem( *this );
 }
 
 //------------------------------------------------------------------------
 
-bool ScSortItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /* nMemberUd */ ) const
+bool ScSortItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /* nMemberUd */ ) const
 {
     // Return empty value as there is no useful conversion
     rVal = com::sun::star::uno::Any();
@@ -233,23 +233,23 @@ bool ScSortItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /* nMembe
 //      ScQueryItem - Daten fuer den Filterdialog
 // -----------------------------------------------------------------------
 
-ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
+ScQueryItem::ScQueryItem( USHORT                nWhichP,
                           ScViewData*           ptrViewData,
                           const ScQueryParam*   pQueryData ) :
         SfxPoolItem ( nWhichP ),
         pViewData   ( ptrViewData ),
-        bIsAdvanced ( false )
+        bIsAdvanced	( FALSE )
 {
     if ( pQueryData ) theQueryData = *pQueryData;
 }
 
 //------------------------------------------------------------------------
 
-ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
+ScQueryItem::ScQueryItem( USHORT                nWhichP,
                           const ScQueryParam*   pQueryData ) :
         SfxPoolItem ( nWhichP ),
         pViewData   ( NULL ),
-        bIsAdvanced ( false )
+        bIsAdvanced	( FALSE )
 {
     if ( pQueryData ) theQueryData = *pQueryData;
 }
@@ -260,12 +260,12 @@ ScQueryItem::ScQueryItem( const ScQueryItem& rItem ) :
         SfxPoolItem ( rItem ),
         pViewData   ( rItem.pViewData ),
         theQueryData( rItem.theQueryData ),
-        bIsAdvanced ( rItem.bIsAdvanced ),
-        aAdvSource  ( rItem.aAdvSource )
+        bIsAdvanced	( rItem.bIsAdvanced ),
+        aAdvSource	( rItem.aAdvSource )
 {
 }
 
-ScQueryItem::~ScQueryItem()
+__EXPORT ScQueryItem::~ScQueryItem()
 {
 }
 
@@ -276,13 +276,13 @@ void ScQueryItem::SetAdvancedQuerySource(const ScRange* pSource)
     if (pSource)
     {
         aAdvSource = *pSource;
-        bIsAdvanced = sal_True;
+        bIsAdvanced = TRUE;
     }
     else
-        bIsAdvanced = false;
+        bIsAdvanced = FALSE;
 }
 
-sal_Bool ScQueryItem::GetAdvancedQuerySource(ScRange& rSource) const
+BOOL ScQueryItem::GetAdvancedQuerySource(ScRange& rSource) const
 {
     rSource = aAdvSource;
     return bIsAdvanced;
@@ -290,14 +290,14 @@ sal_Bool ScQueryItem::GetAdvancedQuerySource(ScRange& rSource) const
 
 //------------------------------------------------------------------------
 
-String ScQueryItem::GetValueText() const
+String __EXPORT ScQueryItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("QueryItem"));
 }
 
 //------------------------------------------------------------------------
 
-int ScQueryItem::operator==( const SfxPoolItem& rItem ) const
+int __EXPORT ScQueryItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -311,7 +311,7 @@ int ScQueryItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* ScQueryItem::Clone( SfxItemPool * ) const
+SfxPoolItem* __EXPORT ScQueryItem::Clone( SfxItemPool * ) const
 {
     return new ScQueryItem( *this );
 }
@@ -320,9 +320,9 @@ SfxPoolItem* ScQueryItem::Clone( SfxItemPool * ) const
 //      ScSubTotalItem - Daten fuer den Zwischenergebnisdialog
 // -----------------------------------------------------------------------
 
-ScSubTotalItem::ScSubTotalItem( sal_uInt16                  nWhichP,
-                                ScViewData*             ptrViewData,
-                                const ScSubTotalParam*  pSubTotalData ) :
+ScSubTotalItem::ScSubTotalItem( USHORT                  nWhichP,
+                                ScViewData*           	ptrViewData,
+                                const ScSubTotalParam*	pSubTotalData ) :
         SfxPoolItem ( nWhichP ),
         pViewData   ( ptrViewData )
 {
@@ -331,8 +331,8 @@ ScSubTotalItem::ScSubTotalItem( sal_uInt16                  nWhichP,
 
 //------------------------------------------------------------------------
 
-ScSubTotalItem::ScSubTotalItem( sal_uInt16                  nWhichP,
-                                const ScSubTotalParam*  pSubTotalData ) :
+ScSubTotalItem::ScSubTotalItem( USHORT                  nWhichP,
+                                const ScSubTotalParam*	pSubTotalData ) :
         SfxPoolItem ( nWhichP ),
         pViewData   ( NULL )
 {
@@ -342,45 +342,45 @@ ScSubTotalItem::ScSubTotalItem( sal_uInt16                  nWhichP,
 //------------------------------------------------------------------------
 
 ScSubTotalItem::ScSubTotalItem( const ScSubTotalItem& rItem ) :
-        SfxPoolItem     ( rItem ),
-        pViewData       ( rItem.pViewData ),
-        theSubTotalData ( rItem.theSubTotalData )
+        SfxPoolItem		( rItem ),
+        pViewData		( rItem.pViewData ),
+        theSubTotalData	( rItem.theSubTotalData )
 {
 }
 
-ScSubTotalItem::~ScSubTotalItem()
+__EXPORT ScSubTotalItem::~ScSubTotalItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String ScSubTotalItem::GetValueText() const
+String __EXPORT ScSubTotalItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("SubTotalItem"));
 }
 
 //------------------------------------------------------------------------
 
-int ScSubTotalItem::operator==( const SfxPoolItem& rItem ) const
+int __EXPORT ScSubTotalItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScSubTotalItem& rSTItem = (const ScSubTotalItem&)rItem;
 
-    return (   (pViewData       == rSTItem.pViewData)
+    return (   (pViewData   	== rSTItem.pViewData)
             && (theSubTotalData == rSTItem.theSubTotalData) );
 }
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* ScSubTotalItem::Clone( SfxItemPool * ) const
+SfxPoolItem* __EXPORT ScSubTotalItem::Clone( SfxItemPool * ) const
 {
     return new ScSubTotalItem( *this );
 }
 
 //------------------------------------------------------------------------
 
-bool ScSubTotalItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /* nMemberUd */ ) const
+bool ScSubTotalItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /* nMemberUd */ ) const
 {
     // Return empty value as there is no useful conversion
     rVal = com::sun::star::uno::Any();
@@ -391,16 +391,16 @@ bool ScSubTotalItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /* nM
 //      ScUserListItem - Transporter fuer den Benutzerlisten-TabPage
 // -----------------------------------------------------------------------
 
-ScUserListItem::ScUserListItem( sal_uInt16 nWhichP )
+ScUserListItem::ScUserListItem( USHORT nWhichP )
     :   SfxPoolItem ( nWhichP ),
-        pUserList   ( NULL )
+        pUserList	( NULL )
 {
 }
 
 //------------------------------------------------------------------------
 
 ScUserListItem::ScUserListItem( const ScUserListItem& rItem )
-    :   SfxPoolItem ( rItem )
+    :	SfxPoolItem	( rItem )
 {
     if ( rItem.pUserList )
         pUserList = new ScUserList( *(rItem.pUserList) );
@@ -408,26 +408,26 @@ ScUserListItem::ScUserListItem( const ScUserListItem& rItem )
         pUserList = NULL;
 }
 
-ScUserListItem::~ScUserListItem()
+__EXPORT ScUserListItem::~ScUserListItem()
 {
     delete pUserList;
 }
 
 //------------------------------------------------------------------------
 
-String ScUserListItem::GetValueText() const
+String __EXPORT ScUserListItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScUserListItem"));
 }
 
 //------------------------------------------------------------------------
 
-int ScUserListItem::operator==( const SfxPoolItem& rItem ) const
+int __EXPORT ScUserListItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScUserListItem& r = (const ScUserListItem&)rItem;
-    sal_Bool bEqual = false;
+    BOOL bEqual = FALSE;
 
     if ( !pUserList || !(r.pUserList) )
         bEqual = ( !pUserList && !(r.pUserList) );
@@ -440,7 +440,7 @@ int ScUserListItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* ScUserListItem::Clone( SfxItemPool * ) const
+SfxPoolItem* __EXPORT ScUserListItem::Clone( SfxItemPool * ) const
 {
     return new ScUserListItem( *this );
 }
@@ -458,8 +458,8 @@ void ScUserListItem::SetUserList( const ScUserList& rUserList )
 // -----------------------------------------------------------------------
 
 ScConsolidateItem::ScConsolidateItem(
-                            sal_uInt16                      nWhichP,
-                            const ScConsolidateParam*   pConsolidateData ) :
+                            USHORT                      nWhichP,
+                            const ScConsolidateParam*	pConsolidateData ) :
         SfxPoolItem ( nWhichP )
 {
     if ( pConsolidateData ) theConsData = *pConsolidateData;
@@ -468,27 +468,27 @@ ScConsolidateItem::ScConsolidateItem(
 //------------------------------------------------------------------------
 
 ScConsolidateItem::ScConsolidateItem( const ScConsolidateItem& rItem ) :
-        SfxPoolItem ( rItem ),
-        theConsData ( rItem.theConsData )
+        SfxPoolItem	( rItem ),
+        theConsData	( rItem.theConsData )
 {
 }
 
 //------------------------------------------------------------------------
 
-ScConsolidateItem::~ScConsolidateItem()
+__EXPORT ScConsolidateItem::~ScConsolidateItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String ScConsolidateItem::GetValueText() const
+String __EXPORT ScConsolidateItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScConsolidateItem"));
 }
 
 //------------------------------------------------------------------------
 
-int ScConsolidateItem::operator==( const SfxPoolItem& rItem ) const
+int __EXPORT ScConsolidateItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -499,7 +499,7 @@ int ScConsolidateItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* ScConsolidateItem::Clone( SfxItemPool * ) const
+SfxPoolItem* __EXPORT ScConsolidateItem::Clone( SfxItemPool * ) const
 {
     return new ScConsolidateItem( *this );
 }
@@ -509,11 +509,11 @@ SfxPoolItem* ScConsolidateItem::Clone( SfxItemPool * ) const
 //      ScPivotItem - Daten fuer den Pivot-Dialog
 // -----------------------------------------------------------------------
 
-ScPivotItem::ScPivotItem( sal_uInt16 nWhichP, const ScDPSaveData* pData,
-                             const ScRange* pRange, sal_Bool bNew ) :
+ScPivotItem::ScPivotItem( USHORT nWhichP, const ScDPSaveData* pData,
+                             const ScRange* pRange, BOOL bNew ) :
         SfxPoolItem ( nWhichP )
 {
-    //  pSaveData must always exist
+    //	pSaveData must always exist
     if ( pData )
         pSaveData = new ScDPSaveData(*pData);
     else
@@ -525,9 +525,9 @@ ScPivotItem::ScPivotItem( sal_uInt16 nWhichP, const ScDPSaveData* pData,
 //------------------------------------------------------------------------
 
 ScPivotItem::ScPivotItem( const ScPivotItem& rItem ) :
-        SfxPoolItem ( rItem ),
-        aDestRange  ( rItem.aDestRange ),
-        bNewSheet   ( rItem.bNewSheet )
+        SfxPoolItem	( rItem ),
+        aDestRange	( rItem.aDestRange ),
+        bNewSheet	( rItem.bNewSheet )
 {
     DBG_ASSERT(rItem.pSaveData, "pSaveData");
     pSaveData = new ScDPSaveData(*rItem.pSaveData);
@@ -535,21 +535,21 @@ ScPivotItem::ScPivotItem( const ScPivotItem& rItem ) :
 
 //------------------------------------------------------------------------
 
-ScPivotItem::~ScPivotItem()
+__EXPORT ScPivotItem::~ScPivotItem()
 {
     delete pSaveData;
 }
 
 //------------------------------------------------------------------------
 
-String ScPivotItem::GetValueText() const
+String __EXPORT ScPivotItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScPivotItem"));
 }
 
 //------------------------------------------------------------------------
 
-int ScPivotItem::operator==( const SfxPoolItem& rItem ) const
+int __EXPORT ScPivotItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -562,7 +562,7 @@ int ScPivotItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* ScPivotItem::Clone( SfxItemPool * ) const
+SfxPoolItem* __EXPORT ScPivotItem::Clone( SfxItemPool * ) const
 {
     return new ScPivotItem( *this );
 }
@@ -572,8 +572,8 @@ SfxPoolItem* ScPivotItem::Clone( SfxItemPool * ) const
 //      ScSolveItem - Daten fuer den Solver-Dialog
 // -----------------------------------------------------------------------
 
-ScSolveItem::ScSolveItem( sal_uInt16                nWhichP,
-                          const ScSolveParam*   pSolveData )
+ScSolveItem::ScSolveItem( USHORT                nWhichP,
+                          const ScSolveParam*	pSolveData )
     :   SfxPoolItem ( nWhichP )
 {
     if ( pSolveData ) theSolveData = *pSolveData;
@@ -582,27 +582,27 @@ ScSolveItem::ScSolveItem( sal_uInt16                nWhichP,
 //------------------------------------------------------------------------
 
 ScSolveItem::ScSolveItem( const ScSolveItem& rItem )
-    :   SfxPoolItem     ( rItem ),
-        theSolveData    ( rItem.theSolveData )
+    :   SfxPoolItem		( rItem ),
+        theSolveData	( rItem.theSolveData )
 {
 }
 
 //------------------------------------------------------------------------
 
-ScSolveItem::~ScSolveItem()
+__EXPORT ScSolveItem::~ScSolveItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String ScSolveItem::GetValueText() const
+String __EXPORT ScSolveItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScSolveItem"));
 }
 
 //------------------------------------------------------------------------
 
-int ScSolveItem::operator==( const SfxPoolItem& rItem ) const
+int __EXPORT ScSolveItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -613,7 +613,7 @@ int ScSolveItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* ScSolveItem::Clone( SfxItemPool * ) const
+SfxPoolItem* __EXPORT ScSolveItem::Clone( SfxItemPool * ) const
 {
     return new ScSolveItem( *this );
 }
@@ -622,8 +622,8 @@ SfxPoolItem* ScSolveItem::Clone( SfxItemPool * ) const
 //      ScTabOpItem - Daten fuer den TabOp-Dialog
 // -----------------------------------------------------------------------
 
-ScTabOpItem::ScTabOpItem( sal_uInt16                nWhichP,
-                          const ScTabOpParam*   pTabOpData )
+ScTabOpItem::ScTabOpItem( USHORT                nWhichP,
+                          const ScTabOpParam*	pTabOpData )
     :   SfxPoolItem ( nWhichP )
 {
     if ( pTabOpData ) theTabOpData = *pTabOpData;
@@ -632,27 +632,27 @@ ScTabOpItem::ScTabOpItem( sal_uInt16                nWhichP,
 //------------------------------------------------------------------------
 
 ScTabOpItem::ScTabOpItem( const ScTabOpItem& rItem )
-    :   SfxPoolItem     ( rItem ),
-        theTabOpData    ( rItem.theTabOpData )
+    :   SfxPoolItem		( rItem ),
+        theTabOpData	( rItem.theTabOpData )
 {
 }
 
 //------------------------------------------------------------------------
 
-ScTabOpItem::~ScTabOpItem()
+__EXPORT ScTabOpItem::~ScTabOpItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String ScTabOpItem::GetValueText() const
+String __EXPORT ScTabOpItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScTabOpItem"));
 }
 
 //------------------------------------------------------------------------
 
-int ScTabOpItem::operator==( const SfxPoolItem& rItem ) const
+int __EXPORT ScTabOpItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -663,7 +663,7 @@ int ScTabOpItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* ScTabOpItem::Clone( SfxItemPool * ) const
+SfxPoolItem* __EXPORT ScTabOpItem::Clone( SfxItemPool * ) const
 {
     return new ScTabOpItem( *this );
 }
@@ -673,39 +673,39 @@ SfxPoolItem* ScTabOpItem::Clone( SfxItemPool * ) const
 //      ScCondFrmtItem - Daten fuer den Dialog bedingte Formatierung
 // -----------------------------------------------------------------------
 
-ScCondFrmtItem::ScCondFrmtItem( sal_uInt16 nWhichP,
-//!                             const ScConditionalFormat* pCondFrmt )
+ScCondFrmtItem::ScCondFrmtItem( USHORT nWhichP,
+//!								const ScConditionalFormat* pCondFrmt )
                                 const ScConditionalFormat& rCondFrmt )
     :   SfxPoolItem ( nWhichP ),
-        theCondFrmtData ( rCondFrmt )   //!
+        theCondFrmtData ( rCondFrmt )	//!
 {
-//! if ( pCondFrmt ) theCondFrmtData = *pCondFrmt;
+//!	if ( pCondFrmt ) theCondFrmtData = *pCondFrmt;
 }
 
 //------------------------------------------------------------------------
 
 ScCondFrmtItem::ScCondFrmtItem( const ScCondFrmtItem& rItem )
-    :   SfxPoolItem     ( rItem ),
+    :   SfxPoolItem		( rItem ),
         theCondFrmtData ( rItem.theCondFrmtData )
 {
 }
 
 //------------------------------------------------------------------------
 
-ScCondFrmtItem::~ScCondFrmtItem()
+__EXPORT ScCondFrmtItem::~ScCondFrmtItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String ScCondFrmtItem::GetValueText() const
+String __EXPORT ScCondFrmtItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScCondFrmtItem"));
 }
 
 //------------------------------------------------------------------------
 
-int ScCondFrmtItem::operator==( const SfxPoolItem& rItem ) const
+int __EXPORT ScCondFrmtItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -716,7 +716,7 @@ int ScCondFrmtItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* ScCondFrmtItem::Clone( SfxItemPool * ) const
+SfxPoolItem* __EXPORT ScCondFrmtItem::Clone( SfxItemPool * ) const
 {
     return new ScCondFrmtItem( *this );
 }

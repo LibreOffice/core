@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,14 +90,14 @@ namespace pcr
     //------------------------------------------------------------------------
     ::rtl::OUString DefaultHelpProvider::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.extensions.DefaultHelpProvider"));
+        return ::rtl::OUString::createFromAscii( "org.openoffice.comp.extensions.DefaultHelpProvider");
     }
 
     //------------------------------------------------------------------------
     Sequence< ::rtl::OUString > DefaultHelpProvider::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.inspection.DefaultHelpProvider"));
+        aSupported[0] = ::rtl::OUString::createFromAscii( "com.sun.star.inspection.DefaultHelpProvider" );
         return aSupported;
     }
 
@@ -122,7 +122,7 @@ namespace pcr
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL DefaultHelpProvider::valueChanged( const Reference< XPropertyControl >& /*_Control*/ ) throw (RuntimeException)
     {

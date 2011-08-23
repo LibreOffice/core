@@ -3,7 +3,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2010 Novell, Inc.
+ * Copyrigt 2010 Novell, Inc.
  *
  * LibreOffice - a multi-platform office productivity suite
  *
@@ -40,11 +40,9 @@ class ScDocOptions;
 class ScTpCompatOptions : public SfxTabPage
 {
 public:
-    using SfxTabPage::DeactivatePage;
-
     static  SfxTabPage* Create (Window* pParent, const SfxItemSet& rCoreAttrs);
 
-    virtual sal_Bool FillItemSet(SfxItemSet& rCoreAttrs);
+    virtual BOOL FillItemSet(SfxItemSet& rCoreAttrs);
     virtual void Reset(const SfxItemSet& rCoreAttrs);
     virtual int DeactivatePage(SfxItemSet* pSet = NULL);
 

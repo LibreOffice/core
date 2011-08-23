@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ public:
 private:
     // #111111#
     // To make things more safe, remember the page, not a number
-    SdrPage*                                mpShownPage;
+    SdrPage*								mpShownPage;
 
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
@@ -63,10 +63,9 @@ public:
     // #i96598#
     virtual void SetBoundRectDirty();
 
-    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual UINT16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual SdrPageObj* Clone() const;
-    SdrPageObj& operator=(const SdrPageObj& rObj);
+    virtual void operator=(const SdrObject& rObj);
 
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;

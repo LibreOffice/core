@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef INCLUDED_I_DOCUMENT_EXTERNAL_DATA_HXX
 #define INCLUDED_I_DOCUMENT_EXTERNAL_DATA_HXX
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <boost/shared_ptr.hpp>
 
 namespace sw
@@ -54,7 +54,7 @@ typedef ::boost::shared_ptr<ExternalData> tExternalDataPointer;
 class IDocumentExternalData
 {
 protected:
-    typedef ::boost::unordered_map<sw::tExternalDataType, sw::tExternalDataPointer, sw::ExternalDataTypeHash>
+    typedef ::std::hash_map<sw::tExternalDataType, sw::tExternalDataPointer, sw::ExternalDataTypeHash> 
     tExternalData;
 
     tExternalData m_externalData;
@@ -62,7 +62,7 @@ protected:
     virtual ~IDocumentExternalData() {};
 
 public:
-    virtual void setExternalData(sw::tExternalDataType eType,
+    virtual void setExternalData(sw::tExternalDataType eType, 
                                  sw::tExternalDataPointer pPayload) = 0;
     virtual sw::tExternalDataPointer getExternalData(sw::tExternalDataType eType) = 0;
 };

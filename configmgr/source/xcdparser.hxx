@@ -35,15 +35,14 @@
 
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
-#include "xmlreader/xmlreader.hxx"
 
 #include "parser.hxx"
-
-namespace xmlreader { struct Span; }
+#include "xmlreader.hxx"
 
 namespace configmgr {
 
 struct Data;
+struct Span;
 
 class XcdParser: public Parser {
 public:
@@ -54,14 +53,14 @@ public:
 private:
     virtual ~XcdParser();
 
-    virtual xmlreader::XmlReader::Text getTextMode();
+    virtual XmlReader::Text getTextMode();
 
     virtual bool startElement(
-        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name);
+        XmlReader & reader, XmlReader::Namespace ns, Span const & name);
 
-    virtual void endElement(xmlreader::XmlReader const & reader);
+    virtual void endElement(XmlReader const & reader);
 
-    virtual void characters(xmlreader::Span const & text);
+    virtual void characters(Span const & text);
 
     enum State {
         STATE_START, STATE_DEPENDENCIES, STATE_DEPENDENCY, STATE_COMPONENTS };

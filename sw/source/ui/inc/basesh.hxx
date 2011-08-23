@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,8 +56,8 @@ class SwBaseShell: public SfxShell
     static FlyMode eFrameMode;
 
     // Bug 75078 - if in GetState the asynch call of GetGraphic returns
-    //              synch, the set the state directly into the itemset
-    SfxItemSet*         pGetStateSet;
+    //				synch, the set the state directly into the itemset
+    SfxItemSet* 		pGetStateSet;
 
     //Update-Timer fuer Graphic
     SvUShortsSort aGrfUpdateSlots;
@@ -65,17 +65,17 @@ class SwBaseShell: public SfxShell
     DECL_LINK( GraphicArrivedHdl, SwCrsrShell* );
 
 protected:
-    SwWrtShell&         GetShell();
-    SwWrtShell*         GetShellPtr();
+    SwWrtShell&			GetShell();
+    SwWrtShell*			GetShellPtr();
 
-    inline SwView&      GetView()                       { return rView; }
-    inline void         SetGetStateSet( SfxItemSet* p ) { pGetStateSet = p; }
-    inline sal_Bool         AddGrfUpdateSlot( sal_uInt16 nSlot ){ return aGrfUpdateSlots.Insert( nSlot ); }
+    inline SwView&		GetView()						{ return rView; }
+    inline void			SetGetStateSet( SfxItemSet* p )	{ pGetStateSet = p; }
+    inline BOOL			AddGrfUpdateSlot( USHORT nSlot ){ return aGrfUpdateSlots.Insert( nSlot ); }
 
-    DECL_STATIC_LINK(   SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl* );
+    DECL_STATIC_LINK( 	SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl* );
 
-    void                InsertURLButton( const String& rURL, const String& rTarget, const String& rTxt );
-    void                InsertTable( SfxRequest& _rRequest );
+    void 				InsertURLButton( const String& rURL, const String& rTarget, const String& rTxt );
+    void 				InsertTable( SfxRequest& _rRequest );
 
 public:
     SwBaseShell(SwView &rShell);
@@ -96,8 +96,8 @@ public:
     void        GetState(SfxItemSet &);
     void        StateStyle(SfxItemSet &);
 
-    void        ExecuteGallery(SfxRequest&);
-    void        GetGalleryState(SfxItemSet&);
+    void		ExecuteGallery(SfxRequest&);
+    void		GetGalleryState(SfxItemSet&);
 
     void        ExecDlg(SfxRequest &);
 
@@ -105,18 +105,18 @@ public:
     void        ExecTxtCtrl(SfxRequest& rReq);
     void        GetTxtFontCtrlState(SfxItemSet& rSet);
     void        GetTxtCtrlState(SfxItemSet& rSet);
-    void        GetBorderState(SfxItemSet &rSet);
+    void 		GetBorderState(SfxItemSet &rSet);
     void        GetBckColState(SfxItemSet &rSet);
 
     void        ExecBckCol(SfxRequest& rReq);
-    void        SetWrapMode( sal_uInt16 nSlot );
+    void		SetWrapMode( USHORT nSlot );
 
-    void        StateDisableItems(SfxItemSet &);
+    void		StateDisableItems(SfxItemSet &);
 
-    void        EditRegionDialog(SfxRequest& rReq);
-    void        InsertRegionDialog(SfxRequest& rReq);
+    void		EditRegionDialog(SfxRequest& rReq);
+    void		InsertRegionDialog(SfxRequest& rReq);
 
-    void        ExecField(SfxRequest& rReq);
+    void		ExecField(SfxRequest& rReq);
 
     static void    SetFrmMode( FlyMode eMode, SwWrtShell *pShell );  //Mit Update!
     static void   _SetFrmMode( FlyMode eMode )   { eFrameMode = eMode; }

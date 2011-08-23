@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,6 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.wizards.common.Properties;
-import com.sun.star.wizards.common.PropertyNames;
 // import com.sun.star.wizards.db.TypeInspector;
 
 public class ColumnPropertySet
@@ -90,9 +89,9 @@ public class ColumnPropertySet
             for (int i = 0; i < _aNewColPropertyValues.length; i++)
             {
                 String sPropName = _aNewColPropertyValues[i].Name;
-                if (_sNewName != null && sPropName.equals(PropertyNames.PROPERTY_NAME))
+                if (_sNewName != null && sPropName.equals("Name"))
                 {
-                    xPropertySet.setPropertyValue(PropertyNames.PROPERTY_NAME, _sNewName);
+                    xPropertySet.setPropertyValue("Name", _sNewName);
                 }
                 else if (sPropName.equals("Precision"))
                 {
@@ -171,12 +170,12 @@ public class ColumnPropertySet
                 nType = ((Integer) _oValue).intValue();
                 xPropertySet.setPropertyValue("Type", new Integer(nType));
             }
-            else if (_spropname.equals(PropertyNames.PROPERTY_NAME))
+            else if (_spropname.equals("Name"))
             {
                 String sName = (String) _oValue;
                 if (!sName.equals(""))
                 {
-                    xPropertySet.setPropertyValue(PropertyNames.PROPERTY_NAME, sName);
+                    xPropertySet.setPropertyValue("Name", sName);
                 }
             }
             else if (_spropname.equals("Scale"))

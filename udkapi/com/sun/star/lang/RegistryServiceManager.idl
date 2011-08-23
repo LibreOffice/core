@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,44 +24,54 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_lang_RegistryServiceManager_idl__
-#define __com_sun_star_lang_RegistryServiceManager_idl__
-
-#include <com/sun/star/lang/ServiceManager.idl>
-
-#include <com/sun/star/lang/MultiServiceFactory.idl>
-
-#include <com/sun/star/lang/XInitialization.idl>
-
-#include <com/sun/star/beans/XPropertySet.idl>
-
-#include <com/sun/star/registry/XSimpleRegistry.idl>
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module lang {
-
-//=============================================================================
-
+#ifndef __com_sun_star_lang_RegistryServiceManager_idl__ 
+#define __com_sun_star_lang_RegistryServiceManager_idl__ 
+ 
+#ifndef __com_sun_star_lang_ServiceManager_idl__ 
+#include <com/sun/star/lang/ServiceManager.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_MultiServiceFactory_idl__ 
+#include <com/sun/star/lang/MultiServiceFactory.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_XInitialization_idl__ 
+#include <com/sun/star/lang/XInitialization.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_XPropertySet_idl__ 
+#include <com/sun/star/beans/XPropertySet.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_registry_XSimpleRegistry_idl__ 
+#include <com/sun/star/registry/XSimpleRegistry.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module lang {  
+ 
+//============================================================================= 
+ 
 /** Provides a collection of implementations for services reading from a
     persistent registry storage.
 
     For usage of the service manager have a look at service description
     of <type>ServiceManager</type>.
-
+    
     @see ServiceManager
 */
 published service RegistryServiceManager
-{
+{ 
     /** This is a derived ServiceManager service.
     */
-    service com::sun::star::lang::ServiceManager;
-
+    service com::sun::star::lang::ServiceManager; 
+    
     /** The first two arguments of the intitialization arguments reference:
         <ol>
-        <li>a simple registry
-        (<type scope="com::sun::star::registry">XSimpleRegistry</type>),
+        <li>a simple registry 
+        (<type scope="com::sun::star::registry">XSimpleRegistry</type>), 
         i.e. the registry to be read from</li>
         <li>a component context
         (<type scope="com::sun::star::uno">XComponentContext</type>)
@@ -71,20 +81,20 @@ published service RegistryServiceManager
         </ol>
     */
     interface com::sun::star::lang::XInitialization;
-
+    
     /** Property access.
     */
-    interface com::sun::star::beans::XPropertySet;
+    interface com::sun::star::beans::XPropertySet;    
     /** Specifies the current registry to be read from.
     */
-    [readonly, property] com::sun::star::registry::XSimpleRegistry Registry;
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    [readonly, property] com::sun::star::registry::XSimpleRegistry Registry; 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

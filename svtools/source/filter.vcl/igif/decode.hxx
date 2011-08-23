@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,33 +35,33 @@ struct GIFLZWTableEntry;
 
 class GIFLZWDecompressor
 {
-    GIFLZWTableEntry*   pTable;
-    HPBYTE              pOutBuf;
-    HPBYTE              pOutBufData;
-    HPBYTE              pBlockBuf;
-    sal_uLong               nInputBitsBuf;
-    sal_uInt16              nTableSize;
-    sal_uInt16              nClearCode;
-    sal_uInt16              nEOICode;
-    sal_uInt16              nCodeSize;
-    sal_uInt16              nOldCode;
-    sal_uInt16              nOutBufDataLen;
-    sal_uInt16              nInputBitsBufSize;
-    sal_Bool                bEOIFound;
-    sal_uInt8               nDataSize;
-    sal_uInt8               nBlockBufSize;
-    sal_uInt8               nBlockBufPos;
+    GIFLZWTableEntry*	pTable;
+    HPBYTE				pOutBuf;
+    HPBYTE				pOutBufData;
+    HPBYTE				pBlockBuf;
+    ULONG				nInputBitsBuf;
+    USHORT				nTableSize;
+    USHORT				nClearCode;
+    USHORT				nEOICode;
+    USHORT				nCodeSize;
+    USHORT				nOldCode;
+    USHORT				nOutBufDataLen;
+    USHORT				nInputBitsBufSize;
+    BOOL				bEOIFound;
+    BYTE				nDataSize;
+    BYTE				nBlockBufSize;
+    BYTE				nBlockBufPos;
 
-    void                AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData);
-    sal_Bool                ProcessOneCode();
+    void				AddToTable(USHORT nPrevCode, USHORT nCodeFirstData);
+    BOOL				ProcessOneCode();
 
 
 public:
 
-                        GIFLZWDecompressor( sal_uInt8 cDataSize );
+                        GIFLZWDecompressor( BYTE cDataSize );
                         ~GIFLZWDecompressor();
 
-    HPBYTE              DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize, sal_uLong& rCount, sal_Bool& rEOI );
+    HPBYTE				DecompressBlock( HPBYTE pSrc, BYTE cBufSize, ULONG& rCount, BOOL& rEOI );
 };
 
 #endif

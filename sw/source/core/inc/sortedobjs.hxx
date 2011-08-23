@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,6 +52,8 @@ class SwAnchoredObject;
     - internal anchor order number
     If one of the sort criteria attributes of an anchored object changes,
     the sorting has to be updated - use method <Update(..)>
+
+    @author OD
 */
 class SwSortedObjs
 {
@@ -68,6 +70,8 @@ class SwSortedObjs
 
             @param _nIndex
             input parameter - index of entry, valid value range [0..Count()-1]
+
+            @author OD
         */
         SwAnchoredObject* operator[]( sal_uInt32 _nIndex ) const;
 
@@ -80,14 +84,21 @@ class SwSortedObjs
         /** method to update the position of the given anchored object in the
             sorted list
 
+            OD 2004-07-01
+
+            @author OD
+
             @return boolean, indicating success of the update.
         */
         bool Update( SwAnchoredObject& _rAnchoredObj );
 
         /** Position of object <_rAnchoredObj> in sorted list
 
+            OD 2004-05-07
             Returns the number of the list position of object <_rAnchoredObj>.
             Returns <Count()>, if object isn't contained in list.
+
+            @author OD
 
             @return sal_uInt32
             Number of the list position of object <_rAnchoredObj>

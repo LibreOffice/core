@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace svx
         ~TextControlCharAttribDialog();
 
     protected:
-        virtual void PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage );
+        virtual void PageCreated( USHORT _nId, SfxTabPage& _rPage );
     };
 
     //====================================================================

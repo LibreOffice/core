@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,15 +102,15 @@ public class InterfaceContainer implements Cloneable
      * The capacity of the ArrayList is the length of this array buffer.
      */
     Object elementData[];
-
+    
     /**
      * The size of the ArrayList (the number of elements it contains).
      *
      * @serial
      */
     private int size;
-
-
+    
+    
     //private ArrayList data= new ArrayList();
     /** Creates a new instance of InterfaceContainer */
     public InterfaceContainer()
@@ -131,7 +131,7 @@ public class InterfaceContainer implements Cloneable
             initialCapacity);
         this.elementData = new Object[initialCapacity];
     }
-
+    
     /**
      * Trims the capacity of this <tt>ArrayList</tt> instance to be the
      * list's current size.  An application can use this operation to minimize
@@ -147,7 +147,7 @@ public class InterfaceContainer implements Cloneable
             System.arraycopy(oldData, 0, elementData, 0, size);
         }
     }
-
+    
     /**
      * Increases the capacity of this <tt>ArrayList</tt> instance, if
      * necessary, to ensure  that it can hold at least the number of elements
@@ -168,7 +168,7 @@ public class InterfaceContainer implements Cloneable
             System.arraycopy(oldData, 0, elementData, 0, size);
         }
     }
-
+    
     /**
      * Appends the specified element to the end of this list.
      *
@@ -186,7 +186,7 @@ public class InterfaceContainer implements Cloneable
         }
         return ret;
     }
-
+    
     /**
      * Inserts the specified element at the specified position in this
      * list. Shifts the element currently at that position (if any) and
@@ -195,7 +195,7 @@ public class InterfaceContainer implements Cloneable
      * @param index index at which the specified element is to be inserted.
      * @param element element to be inserted.
      * @throws    IndexOutOfBoundsException if index is out of range
-     *        <tt>(index &lt; 0 || index &gt; size())</tt>.
+     *		  <tt>(index &lt; 0 || index &gt; size())</tt>.
      */
     synchronized public void add(int index, Object element)
     {
@@ -204,7 +204,7 @@ public class InterfaceContainer implements Cloneable
             if (index > size || index < 0)
                 throw new IndexOutOfBoundsException(
                 "Index: "+index+", Size: "+size);
-
+            
             ensureCapacity(size+1);
             System.arraycopy(elementData, index, elementData, index + 1,
             size - index);
@@ -212,8 +212,8 @@ public class InterfaceContainer implements Cloneable
             size++;
         }
     }
-
-
+    
+    
     /**
      * Appends all of the elements in the specified Collection to the end of
      * this list, in the order that they are returned by the
@@ -225,13 +225,13 @@ public class InterfaceContainer implements Cloneable
      *
      * @param c the elements to be inserted into this list.
      * @throws    IndexOutOfBoundsException if index out of range <tt>(index
-     *        &lt; 0 || index &gt; size())</tt>.
+     *		  &lt; 0 || index &gt; size())</tt>.
      */
     synchronized public boolean addAll(Collection c)
     {
         int numNew = c.size();
         ensureCapacity(size + numNew);
-
+        
         Iterator e = c.iterator();
         for (int i=0; i<numNew; i++)
         {
@@ -250,10 +250,10 @@ public class InterfaceContainer implements Cloneable
      * specified Collection's iterator.
      *
      * @param index index at which to insert first element
-     *          from the specified collection.
+     *		    from the specified collection.
      * @param c elements to be inserted into this list.
      * @throws    IndexOutOfBoundsException if index out of range <tt>(index
-     *        &lt; 0 || index &gt; size())</tt>.
+     *		  &lt; 0 || index &gt; size())</tt>.
      */
     synchronized public boolean addAll(int index, Collection c)
     {
@@ -276,12 +276,12 @@ public class InterfaceContainer implements Cloneable
             }
             int numNew = curIndex;
             ensureCapacity(size + numNew);  // Increments modCount!!
-
+            
             int numMoved = size - index;
             if (numMoved > 0)
                 System.arraycopy(elementData, index, elementData, index + numNew,
                 numMoved);
-
+            
             for (int i=0; i<numNew; i++)
             {
                 elementData[index++]= arColl[i];
@@ -291,7 +291,7 @@ public class InterfaceContainer implements Cloneable
         }
         return ret;
     }
-
+    
     /**
      * Removes all of the elements from this list.  The list will
      * be empty after this call returns.
@@ -303,7 +303,7 @@ public class InterfaceContainer implements Cloneable
             // Let gc do its work
             for (int i = 0; i < size; i++)
                 elementData[i] = null;
-
+            
             size = 0;
         }
     }
@@ -316,7 +316,7 @@ public class InterfaceContainer implements Cloneable
     {
         return indexOf(elem) >= 0;
     }
-
+    
     synchronized public boolean containsAll(Collection collection)
     {
         boolean retVal= true;
@@ -341,7 +341,7 @@ public class InterfaceContainer implements Cloneable
      * @param  index index of element to return.
      * @return the element at the specified position in this list.
      * @throws    IndexOutOfBoundsException if index is out of range <tt>(index
-     *        &lt; 0 || index &gt;= size())</tt>.
+     * 		  &lt; 0 || index &gt;= size())</tt>.
      */
     synchronized public Object get(int index)
     {
@@ -352,9 +352,9 @@ public class InterfaceContainer implements Cloneable
         }
         return null;
     }
-
+    
     /**
-     * Searches for the first occurrence of the given argument, testing
+     * Searches for the first occurence of the given argument, testing
      * for equality using the <tt>equals</tt> method.
      *
      * @param   elem   an object.
@@ -375,7 +375,7 @@ public class InterfaceContainer implements Cloneable
                     break;
                 }
             }
-
+            
             if (index == -1)
             {
                 for (int i = 0; i < size; i++)
@@ -400,7 +400,7 @@ public class InterfaceContainer implements Cloneable
     {
         return size == 0;
     }
-
+    
     synchronized public Iterator iterator()
     {
         if (elementData != null)
@@ -445,9 +445,9 @@ public class InterfaceContainer implements Cloneable
         }
         return index;
     }
-
+    
     /**
-     * Returns a shallow copy of this <tt>ArrayList</tt> instance. The contained
+     * Returns a shallow copy of this <tt>ArrayList</tt> instance. The contained 
      * references are copied but the objects not.
      *
      * @return  a clone of this <tt>List</tt> instance.
@@ -469,7 +469,7 @@ public class InterfaceContainer implements Cloneable
     {
         return listIterator(0);
     }
-
+    
     /** The iterator keeps a copy of the list. Changes to InterfaceContainer do not
      *  affect the data of the iterator. Conversly, changes to the iterator are effect
      *  InterfaceContainer.
@@ -491,7 +491,7 @@ public class InterfaceContainer implements Cloneable
      * @param index the index of the element to removed.
      * @return the element that was removed from the list.
      * @throws    IndexOutOfBoundsException if index out of range <tt>(index
-     *        &lt; 0 || index &gt;= size())</tt>.
+     * 		  &lt; 0 || index &gt;= size())</tt>.
      */
     synchronized public Object remove(int index)
     {
@@ -500,7 +500,7 @@ public class InterfaceContainer implements Cloneable
         {
             RangeCheck(index);
             ret= elementData[index];
-
+            
             int numMoved = size - index - 1;
             if (numMoved > 0)
                 System.arraycopy(elementData, index+1, elementData, index,
@@ -509,8 +509,8 @@ public class InterfaceContainer implements Cloneable
         }
         return ret;
     }
-
-
+    
+    
     /** Parameter obj may  */
     synchronized public boolean remove(Object obj)
     {
@@ -526,7 +526,7 @@ public class InterfaceContainer implements Cloneable
         }
         return ret;
     }
-
+    
     synchronized public boolean removeAll(Collection collection)
     {
         boolean retVal= false;
@@ -543,7 +543,7 @@ public class InterfaceContainer implements Cloneable
         }
         return retVal;
     }
-
+    
     synchronized public boolean retainAll(Collection collection)
     {
         boolean retVal= false;
@@ -595,14 +595,14 @@ public class InterfaceContainer implements Cloneable
         }
         return retVal;
     }
-
-
-    /** Not supported.
+    
+    
+    /** Not supported. 
      * @param index index of element to replace.
      * @param element element to be stored at the specified position.
      * @return the element previously at the specified position.
      * @throws    IndexOutOfBoundsException if index out of range
-     *        <tt>(index &lt; 0 || index &gt;= size())</tt>.
+     *		  <tt>(index &lt; 0 || index &gt;= size())</tt>.
      */
     synchronized public Object set(int index, Object element)
     {
@@ -615,7 +615,7 @@ public class InterfaceContainer implements Cloneable
           }
           return ret;
     }
-
+    
     /**
      * Returns the number of elements in this list.
      *
@@ -627,14 +627,14 @@ public class InterfaceContainer implements Cloneable
             return size;
         return 0;
     }
-
+    
 
     /**
      * Returns an array containing all of the elements in this list
      * in the correct order.
      *
      * @return an array containing all of the elements in this list
-     *         in the correct order.
+     * 	       in the correct order.
      */
     synchronized public Object[] toArray()
     {
@@ -662,8 +662,8 @@ public class InterfaceContainer implements Cloneable
      * <tt>null</tt> elements.
      *
      * @param a the array into which the elements of the list are to
-     *      be stored, if it is big enough; otherwise, a new array of the
-     *      same runtime type is allocated for this purpose.
+     *		be stored, if it is big enough; otherwise, a new array of the
+     * 		same runtime type is allocated for this purpose.
      * @return an array containing the elements of the list.
      * @throws ArrayStoreException if the runtime type of a is not a supertype
      *         of the runtime type of every element in this list.
@@ -675,13 +675,13 @@ public class InterfaceContainer implements Cloneable
             a.getClass().getComponentType(), size);
         if (elementData != null)
             System.arraycopy(elementData, 0, a, 0, size);
-
+        
         if (a.length > size)
             a[size] = null;
-
+        
         return a;
     }
-
+    
     /**
      * Check if the given index is in range.  If not, throw an appropriate
      * runtime exception.
@@ -692,7 +692,7 @@ public class InterfaceContainer implements Cloneable
             throw new IndexOutOfBoundsException(
             "Index: "+index+", Size: "+size);
     }
-
+    
     public void disposeAndClear(EventObject evt)
     {
         Iterator aIt;
@@ -725,8 +725,8 @@ public class InterfaceContainer implements Cloneable
             }
         }
     }
-
-
+    
+    
     private class Itr implements Iterator
     {
         InterfaceContainer dataIt;
@@ -740,23 +740,23 @@ public class InterfaceContainer implements Cloneable
          * to remove.
          */
         int lastRet = -1;
-
+        
         /** The object that has been returned by most recent call to next
          *  or previous. Reset to null if this element is deleted by a call
          *  to remove.
          */
         Object lastRetObj= null;
-
+        
         Itr(InterfaceContainer _data)
         {
             dataIt= _data;
         }
-
+        
         synchronized public boolean hasNext()
         {
             return cursor !=dataIt.size();
         }
-
+        
         public synchronized Object next()
         {
             try
@@ -771,7 +771,7 @@ public class InterfaceContainer implements Cloneable
                 throw new java.util.NoSuchElementException();
             }
         }
-
+        
         /** Removes the interface from the list, that has been last returned by a
          *  call to next(). This is done according to the specification of the interface
          *  method. The element is also removed from InterfaceContainer but independent
@@ -785,23 +785,23 @@ public class InterfaceContainer implements Cloneable
             // Remove the entry from InterfaceContainer.
             InterfaceContainer.this.remove(lastRetObj);
             dataIt.remove(lastRet);
-
+            
             if (lastRet < cursor)
                 cursor--;
             lastRet = -1;
             lastRetObj= null;
         }
     }
-
+    
     private class LstItr extends Itr implements ListIterator
     {
-
+        
         LstItr(InterfaceContainer _data, int _index)
         {
             super(_data);
             cursor= _index;
         }
-
+        
         /** Inserts an element to the iterators list according to the specification
          *  of this interface method. The element is also added to InterfaceContainer
          *  but its location within the list cannot be guaranteed.
@@ -813,17 +813,17 @@ public class InterfaceContainer implements Cloneable
             lastRet = -1;
             lastRetObj= null;
         }
-
+        
         synchronized public boolean hasPrevious()
         {
             return cursor != 0;
         }
-
+        
         synchronized public int nextIndex()
         {
             return cursor;
         }
-
+        
         public synchronized Object previous()
         {
             try
@@ -837,20 +837,20 @@ public class InterfaceContainer implements Cloneable
                 throw new NoSuchElementException();
             }
         }
-
+        
         synchronized public int previousIndex()
         {
             return cursor-1;
         }
-
+        
         /** This is not possible since several iterators can modify InterfaceContainer
          */
         public synchronized void set(Object o)
         {
             throw new UnsupportedOperationException();
         }
-
-
+        
+        
     } // class LstItr
 }
 

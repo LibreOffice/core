@@ -45,11 +45,8 @@ sub new
 {
     my $Object = shift;
     my $solarversion = shift;
-    my $workdir;
-    my $relworkdir;
     my $self = {};
-    my @basedirs;
-    my @repos;
+    my @repositories;
 
     if (!defined ($solarversion)) {
         $solarversion = $ENV{SOLARVERSION};
@@ -61,33 +58,14 @@ sub new
 
     $self->{SOLARVERSION} = $solarversion;
 
-    $workdir = $ENV{WORKDIR};
-    if ( !$workdir ) {
-        print STDERR "can't determine WORKDIR.\n";
-        exit (1);
-    }
-
-    if ( $workdir =~ /^$solarversion/ ) {
-        $relworkdir = $workdir;
-        $relworkdir =~ s/^$solarversion\///;
-    } else {
-        print STDERR "ERROR: workdir outside $solarversion unsupported\n";
-        exit (2);
-    }
     my $SourceConfigObj = SourceConfig->new();
-    @repos = $SourceConfigObj->get_repositories();
-    if ( defined $ENV{UPDMINOREXT} ) {
-        foreach my $onedir ( @repos ) {
-            push( @basedirs, $onedir.$ENV{UPDMINOREXT} );
-        }
-    }
-    # basdirs is repositories (dmake) + workdir (gnu make)
-    push(@basedirs, $relworkdir);
-    if (!scalar @basedirs) {
-        print STDERR "no basedir and no working directory found.\n";
+    @repositories = $SourceConfigObj->get_repositories();
+
+    if (!scalar @repositories) {
+        print STDERR "no repository and no working directory found.\n";
         exit (2);
     }
-    $self->{BASEDIRS} = \@basedirs;
+    $self->{REPOSITORIES} = \@repositories;
     bless($self, $Object);
     return $self;
 }
@@ -128,10 +106,10 @@ sub create_pdb_relocators
     }
 
     # collect files
-    foreach my $basedir (@{$self->{BASEDIRS}}) {
+    foreach my $repository (@{$self->{REPOSITORIES}}) {
         my @pdb_files;
-        my $o = $self->{SOLARVERSION} . "/$basedir";
-        $basedir =~ s/(.*?)\.(.*)/$1/;
+        my $o = $self->{SOLARVERSION} . "/$repository";
+        $repository =~ s/(.*?)\.(.*)/$1/;
         $self->collect_files( $o, $inpath, \@pdb_files);
 
         foreach (@pdb_files) {
@@ -144,12 +122,12 @@ sub create_pdb_relocators
             my $target = "";
             if ( $src_location =~ /\/so\// )
             {
-                $location = "../../../$basedir$milestoneext/" . $src_location;
+                $location = "../../../$repository$milestoneext/" . $src_location;
                 $target = "$pdb_dir/so/$relocator";
             }
             else
             {
-                $location = "../../$basedir$milestoneext/" . $src_location;
+                $location = "../../$repository$milestoneext/" . $src_location;
                 $target = "$pdb_dir/$relocator";
             }
 
@@ -164,14 +142,14 @@ sub create_pdb_relocators
     return 1;
 }
 
-sub collect_files_from_all_basedirs
+sub collect_files_from_all_repositories
 {
     my $self = shift;
     my ($platform, $filesref) = @_;
-    my $basedir;
+    my $repository;
     my $ret;
-    foreach $basedir (@{$self->{BASEDIRS}}) {
-        my $srcdir = $self->{SOLARVERSION} . "/$basedir";
+    foreach $repository (@{$self->{REPOSITORIES}}) {
+        my $srcdir = $self->{SOLARVERSION} . "/$repository";
         $ret |= $self->collect_files ($srcdir, $platform, $filesref);
     }
     return $ret;
@@ -182,16 +160,14 @@ sub collect_files
     my $self = shift;
     my ($srcdir, $platform, $filesref) = @_;
     my $template = "$srcdir/*/$platform";
-    my $template2 = "$srcdir/LinkTarget";
     if ( $ENV{GUI} eq "WNT" ) {
         # collect all pdb files on o:
         # regular glob does not work with two wildcard on WNT
         my @bin    = glob("$template/bin/*.pdb");
         my @bin_so = glob("$template/bin/so/*.pdb");
-        my @workdir = glob("$template2/*/*.pdb");
         # we are only interested in pdb files which are accompanied by
         # .exe or .dll which the same name
-        foreach (@bin, @bin_so, @workdir) {
+        foreach (@bin, @bin_so) {
             my $dir  = dirname($_);
             my $base = basename($_, ".pdb");
             my $exe = "$dir/$base.exe";
@@ -204,16 +180,13 @@ sub collect_files
     else {
         # collect all shared libraries on o:
         my @lib = glob("$template/lib/*.so*");
-        my @workdir_lib = glob("$template2/Library/*.so*");
         my @lib_so = glob("$template/lib/so/*.so*");
         my @mac_lib = glob("$template/lib/*.dylib*");
-        my @mac_workdir_lib = glob("$template2/Library/*.dylib*");
         my @mac_lib_so = glob("$template/lib/so/*.dylib*");
         # collect all binary executables on o:
         my @bin = $self->find_binary_execs("$template/bin");
-        my @workdir_bin = $self->find_binary_execs("$template2/Executable");
         my @bin_so = $self->find_binary_execs("$template/bin/so");
-        push(@$filesref, (@lib, @lib_so, @workdir_lib, @mac_lib, @mac_workdir_lib, @mac_lib_so, @bin, @workdir_bin, @bin_so));
+        push(@$filesref, (@lib, @lib_so, @mac_lib, @mac_lib_so, @bin, @bin_so));
     }
     return 1;
 }

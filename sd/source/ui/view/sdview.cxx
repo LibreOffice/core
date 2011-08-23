@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -129,7 +129,7 @@ View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     mnAction(DND_ACTION_NONE),
     mnLockRedrawSmph(0),
     mpLockedRedraws(NULL),
-    mbIsDropAllowed(sal_True),
+    mbIsDropAllowed(TRUE),
     maSmartTags(*this),
     mpClipboard (new ViewClipboard (*this))
 {
@@ -139,13 +139,13 @@ View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     // #i74769#, #i75172# Use default from the configuration
     SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_DrawImpress());
 
-    EnableExtendedKeyInputDispatcher(sal_False);
-    EnableExtendedMouseEventDispatcher(sal_False);
-    EnableExtendedCommandEventDispatcher(sal_False);
+    EnableExtendedKeyInputDispatcher(FALSE);
+    EnableExtendedMouseEventDispatcher(FALSE);
+    EnableExtendedCommandEventDispatcher(FALSE);
 
-    SetUseIncompatiblePathCreateInterface(sal_False);
-    SetMarkHdlWhenTextEdit(sal_True);
-    EnableTextEditOnObjectsWithoutTextIfTextTool(sal_True);
+    SetUseIncompatiblePathCreateInterface(FALSE);
+    SetMarkHdlWhenTextEdit(TRUE);
+    EnableTextEditOnObjectsWithoutTextIfTextTool(TRUE);
 
     SetMinMoveDistancePixel(2);
     SetHitTolerancePixel(2);
@@ -178,7 +178,7 @@ View::~View()
     maSmartTags.Dispose();
 
     // release content of selection clipboard, if we own the content
-    UpdateSelectionClipboard( sal_True );
+    UpdateSelectionClipboard( TRUE );
 
     maDropErrorTimer.Stop();
     maDropInsertFileTimer.Stop();
@@ -214,7 +214,7 @@ public:
     // all default implementations just call the same methods at the original. To do something
     // different, overload the method and at least do what the method does.
     virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
-        const sdr::contact::ViewObjectContact& rOriginal,
+        const sdr::contact::ViewObjectContact& rOriginal, 
         const sdr::contact::DisplayInfo& rDisplayInfo);
 };
 
@@ -227,7 +227,7 @@ ViewRedirector::~ViewRedirector()
 }
 
 drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedPrimitive2DSequence(
-    const sdr::contact::ViewObjectContact& rOriginal,
+    const sdr::contact::ViewObjectContact& rOriginal, 
     const sdr::contact::DisplayInfo& rDisplayInfo)
 {
     SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
@@ -311,7 +311,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
 
                         // create line and stroke attribute
                         ::std::vector< double > aDotDashArray;
-
+                        
                         aDotDashArray.push_back(160.0);
                         aDotDashArray.push_back(80.0);
 
@@ -321,8 +321,8 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
 
                         // create primitive and add
                         const drawinglayer::primitive2d::Primitive2DReference xRef(new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
-                            aPolygon,
-                            aLine,
+                            aPolygon, 
+                            aLine, 
                             aStroke));
                         drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xRef);
                     }
@@ -342,7 +342,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                                     static String aTitleAreaStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_TITLE ) );
                                     aObjectString = aTitleAreaStr;
                                 }
-
+                                
                                 break;
                             }
                             case PRESOBJ_OUTLINE:
@@ -402,16 +402,16 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             basegfx::B2DTuple aTranslate;
                             double fRotate, fShearX;
                             aObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
-
+                            
                             // create font
                             SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObject );
                             const SdrTextVertAdjust eTVA(pTextObj ? pTextObj->GetTextVerticalAdjust() : SDRTEXTVERTADJUST_CENTER);
                             Font aScaledVclFont;
-
-                            // use a text size factor to get more reliable text sizes from the text layouter
+                            
+                            // use a text size factor to get more reliable text sizes from the text layouter 
                             // (and from vcl), tipp from HDU
                             static sal_uInt32 nTextSizeFactor(100);
-
+                            
                             // use a factor to get more linear text size calculations
                             aScaledVclFont.SetHeight( 500 * nTextSizeFactor );
 
@@ -419,7 +419,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
                             aTextLayouter.setFont(aScaledVclFont);
                             const xub_StrLen nTextLength(aObjectString.Len());
-
+                            
                             // do not forget to use the factor again to get the width for the 500
                             const double fTextWidth(aTextLayouter.getTextWidth(aObjectString, 0, nTextLength) * (1.0 / nTextSizeFactor));
                             const double fTextHeight(aTextLayouter.getTextHeight() * (1.0 / nTextSizeFactor));
@@ -442,7 +442,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
 
                             const drawinglayer::attribute::FontAttribute aFontAttribute(
                                 drawinglayer::primitive2d::getFontAttributeFromVclFont(
-                                    aTextSizeAttribute,
+                                    aTextSizeAttribute, 
                                     aVclFont,
                                     false,
                                     false));
@@ -450,8 +450,8 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             // fill text matrix
                             const basegfx::B2DHomMatrix aTextMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
                                 aTextSizeAttribute.getX(), aTextSizeAttribute.getY(),
-                                fShearX,
-                                fRotate,
+                                fShearX, 
+                                fRotate, 
                                 fPosX, fPosY));
 
                             // create DXTextArray (can be empty one)
@@ -463,13 +463,13 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             // create primitive and add
                             const drawinglayer::primitive2d::Primitive2DReference xRef(
                                 new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                                    aTextMatrix,
-                                    aObjectString,
-                                    0,
-                                    nTextLength,
-                                    aDXArray,
-                                    aFontAttribute,
-                                    aLocale,
+                                    aTextMatrix, 
+                                    aObjectString, 
+                                    0, 
+                                    nTextLength, 
+                                    aDXArray, 
+                                    aFontAttribute, 
+                                    aLocale, 
                                     aFontColor));
                             drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xRef);
                         }
@@ -481,9 +481,9 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
         if(bDoCreateGeometry)
         {
             drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(
-                xRetval,
+                xRetval, 
                 sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
-                    rOriginal,
+                    rOriginal, 
                     rDisplayInfo));
         }
     }
@@ -531,7 +531,7 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contac
                     bScreenDisplay = false;
                 }
 
-                // #i75566# Name change GetBackgroundColor -> GetPageBackgroundColor and
+                // #i75566# Name change GetBackgroundColor -> GetPageBackgroundColor and 
                 // hint value if screen display. Only then the AutoColor mechanisms shall be applied
                 rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor(pPgView, bScreenDisplay) );
             }
@@ -547,7 +547,7 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contac
             mpLockedRedraws = new List;
 
         SdViewRedrawRec* pRec = new SdViewRedrawRec;
-        pRec->mpOut = pOutDev;
+        pRec->mpOut	= pOutDev;
         pRec->aRect = rReg.GetBoundRect();
         mpLockedRedraws->Insert(pRec, LIST_APPEND);
     }
@@ -575,9 +575,9 @@ void View::MarkListHasChanged()
 |*
 \************************************************************************/
 
-sal_Bool View::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll)
+BOOL View::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
 {
-    sal_Bool bOk = FmFormView::SetAttributes(rSet, bReplaceAll);
+    BOOL bOk = FmFormView::SetAttributes(rSet, bReplaceAll);
     return (bOk);
 }
 
@@ -588,7 +588,7 @@ sal_Bool View::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll)
 |*
 \************************************************************************/
 
-sal_Bool View::GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr ) const
+BOOL View::GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr ) const
 {
     return( FmFormView::GetAttributes( rTargetSet, bOnlyHardAttr ) );
 }
@@ -600,7 +600,7 @@ sal_Bool View::GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr ) c
 |*
 \************************************************************************/
 
-sal_Bool View::IsPresObjSelected(sal_Bool bOnPage, sal_Bool bOnMasterPage, sal_Bool bCheckPresObjListOnly, sal_Bool bCheckLayoutOnly) const
+BOOL View::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresObjListOnly, BOOL bCheckLayoutOnly) const
 {
     /**************************************************************************
     * Ist ein Presentationsobjekt selektiert?
@@ -625,8 +625,8 @@ sal_Bool View::IsPresObjSelected(sal_Bool bOnPage, sal_Bool bOnMasterPage, sal_B
     SdPage* pPage;
     SdrObject* pObj;
 
-    sal_Bool bSelected = sal_False;
-    sal_Bool bMasterPage = sal_False;
+    BOOL bSelected = FALSE;
+    BOOL bMasterPage = FALSE;
     long nMark;
     long nMarkMax = long(pMarkList->GetMarkCount()) - 1;
 
@@ -650,11 +650,11 @@ sal_Bool View::IsPresObjSelected(sal_Bool bOnPage, sal_Bool bOnMasterPage, sal_B
                         PresObjKind eKind = pPage->GetPresObjKind(pObj);
 
                         if((eKind != PRESOBJ_FOOTER) && (eKind != PRESOBJ_HEADER) && (eKind != PRESOBJ_DATETIME) && (eKind != PRESOBJ_SLIDENUMBER) )
-                            bSelected = sal_True;
+                            bSelected = TRUE;
                     }
                     else
                     {
-                        bSelected = sal_True;
+                        bSelected = TRUE;
                     }
                 }
             }
@@ -681,7 +681,7 @@ void View::SelectAll()
     {
         OutlinerView* pOLV = GetTextEditOutlinerView();
         const ::Outliner* pOutliner = GetTextEditOutliner();
-        pOLV->SelectRange( 0, (sal_uInt16) pOutliner->GetParagraphCount() );
+        pOLV->SelectRange( 0, (USHORT) pOutliner->GetParagraphCount() );
     }
     else
     {
@@ -708,7 +708,7 @@ void View::ModelHasChanged()
 |*
 \************************************************************************/
 
-sal_Bool View::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr)
+BOOL View::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
 {
     // weiter an SdrView
     return FmFormView::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
@@ -721,9 +721,9 @@ sal_Bool View::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHar
 |*
 \************************************************************************/
 
-static void SetSpellOptions( SdDrawDocument* pDoc, sal_uLong& rCntrl )
+static void SetSpellOptions( SdDrawDocument* pDoc, ULONG& rCntrl )
 {
-    sal_Bool bOnlineSpell = pDoc->GetOnlineSpell();
+    BOOL bOnlineSpell = pDoc->GetOnlineSpell();
 
     if( bOnlineSpell )
         rCntrl |= EE_CNTRL_ONLINESPELLING;
@@ -748,7 +748,7 @@ sal_Bool View::SdrBeginTextEdit(
     {
         pOutl->SetStyleSheetPool((SfxStyleSheetPool*) mpDoc->GetStyleSheetPool());
         pOutl->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
-        sal_uLong nCntrl = pOutl->GetControlWord();
+        ULONG nCntrl = pOutl->GetControlWord();
         nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
         nCntrl |= EE_CNTRL_URLSFXEXECUTE;
         nCntrl |= EE_CNTRL_MARKFIELDS;
@@ -804,11 +804,11 @@ sal_Bool View::SdrBeginTextEdit(
 }
 
 /** ends current text editing */
-SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally )
+SdrEndTextEditKind View::SdrEndTextEdit(BOOL bDontDeleteReally )
 {
     SdrObjectWeakRef xObj( GetTextEditObject() );
 
-    sal_Bool bDefaultTextRestored = RestoreDefaultText( dynamic_cast< SdrTextObj* >( GetTextEditObject() ) );
+    BOOL bDefaultTextRestored = RestoreDefaultText( dynamic_cast< SdrTextObj* >( GetTextEditObject() ) );
 
     SdrEndTextEditKind eKind = FmFormView::SdrEndTextEdit(bDontDeleteReally);
 
@@ -816,7 +816,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally )
     {
         if( xObj.is() && !xObj->IsEmptyPresObj() )
         {
-            xObj->SetEmptyPresObj( sal_True );
+            xObj->SetEmptyPresObj( TRUE );
         }
         else
         {
@@ -830,7 +830,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally )
         {
             SdrPage* pPage = pObj->GetPage();
             if( !pPage || !pPage->IsMasterPage() )
-                pObj->SetEmptyPresObj( sal_False );
+                pObj->SetEmptyPresObj( FALSE );
         }
     }
 
@@ -887,8 +887,8 @@ bool View::RestoreDefaultText( SdrTextObj* pTextObj )
 void View::SetMarkedOriginalSize()
 {
     SdrUndoGroup*   pUndoGroup = new SdrUndoGroup(*mpDoc);
-    sal_uLong           nCount = GetMarkedObjectCount();
-    sal_Bool            bOK = sal_False;
+    ULONG           nCount = GetMarkedObjectCount();
+    BOOL            bOK = FALSE;
 
     for( sal_uInt32 i = 0; i < nCount; i++ )
     {
@@ -910,7 +910,7 @@ void View::SetMarkedOriginalSize()
                     {
                         MapMode aMap100( MAP_100TH_MM );
                         aOleSize = ((SdrOle2Obj*)pObj)->GetOrigObjSize( &aMap100 );
-                        bOK = sal_True;
+                        bOK = TRUE;
                     }
                     else
                     {
@@ -919,7 +919,7 @@ void View::SetMarkedOriginalSize()
                         {
                             awt::Size aSz = xObj->getVisualAreaSize( nAspect );
                             aOleSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aUnit, MAP_100TH_MM );
-                            bOK = sal_True;
+                            bOK = TRUE;
                         }
                         catch( embed::NoVisualAreaSizeException& )
                         {}
@@ -954,7 +954,7 @@ void View::SetMarkedOriginalSize()
                 aRect.SetSize( aSize );
                 pObj->SetLogicRect( aRect );
 
-                bOK = sal_True;
+                bOK = TRUE;
             }
         }
     }
@@ -997,7 +997,7 @@ void View::DoConnect(SdrOle2Obj* pObj)
 
                     Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
                     Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
-                    aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
+                    aScaleWidth.ReduceInaccurate(10);		// kompatibel zum SdrOle2Obj
                     aScaleHeight.ReduceInaccurate(10);
                     pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);
 
@@ -1011,17 +1011,23 @@ void View::DoConnect(SdrOle2Obj* pObj)
     }
 }
 
-sal_Bool View::IsMorphingAllowed() const
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+BOOL View::IsMorphingAllowed() const
 {
-    const SdrMarkList&  rMarkList = GetMarkedObjectList();
-    sal_Bool                bRet = sal_False;
+    const SdrMarkList&	rMarkList = GetMarkedObjectList();
+    BOOL				bRet = FALSE;
 
     if ( rMarkList.GetMarkCount() == 2 )
     {
-        const SdrObject*    pObj1 = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-        const SdrObject*    pObj2 = rMarkList.GetMark( 1 )->GetMarkedSdrObj();
-        const sal_uInt16        nKind1 = pObj1->GetObjIdentifier();
-        const sal_uInt16        nKind2 = pObj2->GetObjIdentifier();
+        const SdrObject*	pObj1 = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+        const SdrObject*	pObj2 = rMarkList.GetMark( 1 )->GetMarkedSdrObj();
+        const UINT16		nKind1 = pObj1->GetObjIdentifier();
+        const UINT16		nKind2 = pObj2->GetObjIdentifier();
 
         if ( ( nKind1 != OBJ_TEXT && nKind2 != OBJ_TEXT ) &&
              ( nKind1 != OBJ_TITLETEXT && nKind2 != OBJ_TITLETEXT ) &&
@@ -1039,35 +1045,41 @@ sal_Bool View::IsMorphingAllowed() const
              ( nKind1 != OBJ_CAPTION && nKind2 !=  OBJ_CAPTION ) &&
              !pObj1->ISA( E3dObject) && !pObj2->ISA( E3dObject) )
         {
-            SfxItemSet      aSet1( mpDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
-            SfxItemSet      aSet2( mpDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
+            SfxItemSet		aSet1( mpDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
+            SfxItemSet		aSet2( mpDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
 
             aSet1.Put(pObj1->GetMergedItemSet());
             aSet2.Put(pObj2->GetMergedItemSet());
 
-            const XFillStyle    eFillStyle1 = ( (const XFillStyleItem&) aSet1.Get( XATTR_FILLSTYLE ) ).GetValue();
-            const XFillStyle    eFillStyle2 = ( (const XFillStyleItem&) aSet2.Get( XATTR_FILLSTYLE ) ).GetValue();
+            const XFillStyle	eFillStyle1 = ( (const XFillStyleItem&) aSet1.Get( XATTR_FILLSTYLE ) ).GetValue();
+            const XFillStyle	eFillStyle2 = ( (const XFillStyleItem&) aSet2.Get( XATTR_FILLSTYLE ) ).GetValue();
 
             if( ( eFillStyle1 == XFILL_NONE || eFillStyle1 == XFILL_SOLID ) &&
                 ( eFillStyle2 == XFILL_NONE || eFillStyle2 == XFILL_SOLID ) )
-                bRet = sal_True;
+                bRet = TRUE;
         }
     }
 
     return bRet;
 }
 
-sal_Bool View::IsVectorizeAllowed() const
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+BOOL View::IsVectorizeAllowed() const
 {
-    const SdrMarkList&  rMarkList = GetMarkedObjectList();
-    sal_Bool                bRet = sal_False;
+    const SdrMarkList&	rMarkList = GetMarkedObjectList();
+    BOOL				bRet = FALSE;
 
     if( rMarkList.GetMarkCount() == 1 )
     {
         const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
         if( pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
-            bRet = sal_True;
+            bRet = TRUE;
     }
 
     return bRet;
@@ -1082,7 +1094,7 @@ void View::onAccessibilityOptionsChanged()
         {
             const StyleSettings& rStyleSettings = pWindow->GetSettings().GetStyleSettings();
 
-            sal_uInt16 nOutputSlot, nPreviewSlot;
+            USHORT nOutputSlot, nPreviewSlot;
 
             SvtAccessibilityOptions& aAccOptions = getAccessibilityOptions();
 
@@ -1154,7 +1166,7 @@ bool View::isRecordingUndo() const
     if( mpDoc && mpDoc->IsUndoEnabled() )
     {
         sd::UndoManager* pUndoManager = mpDoc ? mpDoc->GetUndoManager() : 0;
-        return pUndoManager && pUndoManager->IsInListAction();
+        return pUndoManager && pUndoManager->isInListAction();
     }
     else
     {
@@ -1181,7 +1193,7 @@ SdrViewContext View::GetContext() const
         return FmFormView::GetContext();
 }
 
-sal_Bool View::HasMarkablePoints() const
+BOOL View::HasMarkablePoints() const
 {
     if( maSmartTags.HasMarkablePoints() )
         return true;
@@ -1189,14 +1201,14 @@ sal_Bool View::HasMarkablePoints() const
         return FmFormView::HasMarkablePoints();
 }
 
-sal_uLong View::GetMarkablePointCount() const
+ULONG View::GetMarkablePointCount() const
 {
-    sal_uLong nCount = FmFormView::GetMarkablePointCount();
+    ULONG nCount = FmFormView::GetMarkablePointCount();
     nCount += maSmartTags.GetMarkablePointCount();
     return nCount;
 }
 
-sal_Bool View::HasMarkedPoints() const
+BOOL View::HasMarkedPoints() const
 {
     if( maSmartTags.HasMarkedPoints() )
         return true;
@@ -1204,14 +1216,14 @@ sal_Bool View::HasMarkedPoints() const
         return FmFormView::HasMarkedPoints();
 }
 
-sal_uLong View::GetMarkedPointCount() const
+ULONG View::GetMarkedPointCount() const
 {
-    sal_uLong nCount = FmFormView::GetMarkedPointCount();
+    ULONG nCount = FmFormView::GetMarkedPointCount();
     nCount += maSmartTags.GetMarkedPointCount();
     return nCount;
 }
 
-sal_Bool View::IsPointMarkable(const SdrHdl& rHdl) const
+BOOL View::IsPointMarkable(const SdrHdl& rHdl) const
 {
     if( maSmartTags.IsPointMarkable( rHdl ) )
         return true;
@@ -1219,7 +1231,7 @@ sal_Bool View::IsPointMarkable(const SdrHdl& rHdl) const
         return FmFormView::IsPointMarkable( rHdl );
 }
 
-sal_Bool View::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
+BOOL View::MarkPoint(SdrHdl& rHdl, BOOL bUnmark )
 {
     if( maSmartTags.MarkPoint( rHdl, bUnmark ) )
         return true;
@@ -1227,7 +1239,7 @@ sal_Bool View::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
         return FmFormView::MarkPoint( rHdl, bUnmark );
 }
 
-sal_Bool View::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark)
+BOOL View::MarkPoints(const Rectangle* pRect, BOOL bUnmark)
 {
     if( maSmartTags.MarkPoints( pRect, bUnmark ) )
         return true;
@@ -1282,7 +1294,7 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
                     pStyle = static_cast<SfxStyleSheet*>( pStylePool->Find( aStyleSheetName, pStyleSheet->GetFamily() ) );
                     DBG_ASSERT( pStyle, "sd::View::OnEndPasteOrDrop(), Style not found!" );
                 }
-
+                
                 if( !pStyle )
                     pStyle = pStyleSheet;
 

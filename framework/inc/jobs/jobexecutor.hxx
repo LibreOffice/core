@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,6 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
 
 //_______________________________________
 // other includes
@@ -87,17 +86,11 @@ class JobExecutor : public  css::lang::XTypeProvider
         /** reference to the uno service manager */
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
 
-        /** reference to the module info service */
-        css::uno::Reference< css::frame::XModuleManager > m_xModuleManager;
-
         /** cached list of all registered event names of cfg for call optimization. */
         OUStringList m_lEvents;
 
         /** we listen at the configuration for changes at the event list. */
         ConfigAccess m_aConfig;
-
-        /** helper to allow us listen to the configuration without a cyclic dependency */
-        com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> m_xConfigListener;
 
     //___________________________________
     // native interface methods

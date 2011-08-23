@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,10 +139,9 @@ public:
         OOXML layout model. Returns true, if returned rectangle is valid. */
     bool                calcAbsRectangle( ::com::sun::star::awt::Rectangle& orRect ) const;
 
-    /** Tries to set the position and size from the contained OOXML layout model.
-        Returns true, if a manual position and size could be calculated. */
+    /** Tries to set the position from the contained OOXML layout model.
+        Returns true, if a manual position could be calculated. */
     bool                convertFromModel( PropertySet& rPropSet );
-
     /** Tries to set the position from the contained OOXML layout model.
         Returns true, if a manual position could be calculated. */
     bool                convertFromModel(

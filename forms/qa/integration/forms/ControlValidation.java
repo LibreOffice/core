@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,6 +42,10 @@ import integration.forms.BooleanValidator;
 import integration.forms.ListSelectionValidator;
 import integration.forms.SingleControlValidation;
 
+/**
+ *
+ * @author  fs@openoffice.org
+ */
 public class ControlValidation extends complexlib.ComplexTestCase implements com.sun.star.lang.XEventListener
 {
     private DocumentHelper          m_document;         /// our current test document

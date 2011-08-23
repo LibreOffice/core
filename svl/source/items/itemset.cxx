@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,10 @@
 
 #include <string.h>
 
+#if STLPORT_VERSION>=321
 #include <cstdarg>
+#endif
+
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
 
@@ -39,7 +42,7 @@
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>
-#include <svl/whiter.hxx>
+#include "whiter.hxx"
 #include <svl/nranges.hxx>
 #include "whassert.hxx"
 
@@ -48,25 +51,25 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-static const sal_uInt16 nInitCount = 10; // einzelne USHORTs => 5 Paare ohne '0'
-#if OSL_DEBUG_LEVEL > 1
-static sal_uLong nRangesCopyCount = 0;   // wie oft wurden Ranges kopiert
+static const USHORT nInitCount = 10; // einzelne USHORTs => 5 Paare ohne '0'
+#ifdef DBG_UTIL
+static ULONG nRangesCopyCount = 0;	 // wie oft wurden Ranges kopiert
 #endif
 
 DBG_NAME(SfxItemSet)
 
 //========================================================================
 
-#define NUMTYPE         sal_uInt16
-#define SvNums          SvUShorts
+#define NUMTYPE 		USHORT
+#define SvNums			SvUShorts
 #define SfxNumRanges    SfxUShortRanges
 #include "nranges.cxx"
 #undef NUMTYPE
 #undef SvNums
 #undef SfxNumRanges
 
-#define NUMTYPE         sal_uLong
-#define SvNums          SvULongs
+#define NUMTYPE 		ULONG
+#define SvNums			SvULongs
 #define SfxNumRanges    SfxULongRanges
 #include "nranges.cxx"
 #undef NUMTYPE
@@ -82,8 +85,8 @@ const sal_Char *DbgCheckItemSet( const void* pVoid )
 {
     const SfxItemSet *pSet = (const SfxItemSet*) pVoid;
     SfxWhichIter aIter( *pSet );
-    sal_uInt16 nCount = 0, n = 0;
-    for ( sal_uInt16 nWh = aIter.FirstWhich(); nWh; nWh = aIter.NextWhich(), ++n )
+    USHORT nCount = 0, n = 0;
+    for ( USHORT nWh = aIter.FirstWhich(); nWh; nWh = aIter.NextWhich(), ++n )
     {
         const SfxPoolItem *pItem = pSet->_aItems[n];
         if ( pItem )
@@ -110,19 +113,19 @@ const sal_Char *DbgCheckItemSet( const void* pVoid )
 
 SfxItemSet::SfxItemSet
 (
-    SfxItemPool&    rPool,          /* der Pool, in dem die SfxPoolItems,
+    SfxItemPool&	rPool,  		/* der Pool, in dem die SfxPoolItems,
                                        welche in dieses SfxItemSet gelangen,
                                        aufgenommen werden sollen */
-    sal_Bool
+    BOOL
 #ifdef DBG_UTIL
 #ifdef SFX_ITEMSET_NO_DEFAULT_CTOR
 
-                    bTotalRanges    /* komplette Pool-Ranges uebernehmen,
-                                       muss auf sal_True gesetzt werden */
+                    bTotalRanges	/* komplette Pool-Ranges uebernehmen,
+                                       muss auf TRUE gesetzt werden */
 #endif
 #endif
 )
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Konstruktor fuer ein SfxItemSet mit genau den Which-Bereichen, welche
     dem angegebenen <SfxItemPool> bekannt sind.
@@ -134,15 +137,15 @@ SfxItemSet::SfxItemSet
     keinerlei Items mit Slot-Ids als Which-Werte aufnehmen!
 */
 
-:   _pPool( &rPool ),
+:	_pPool( &rPool ),
     _pParent( 0 ),
     _nCount( 0 )
 {
     DBG_CTOR(SfxItemSet, DbgCheckItemSet);
     DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "kein Master-Pool" );
     DBG( _pChildCountCtor; *_pChildCount(this) = 0 );
-//  DBG_ASSERT( bTotalRanges || abs( &bTotalRanges - this ) < 1000,
-//              "please use suitable ranges" );
+//	DBG_ASSERT( bTotalRanges || abs( &bTotalRanges - this ) < 1000,
+//				"please use suitable ranges" );
 #ifdef DBG_UTIL
 #ifdef SFX_ITEMSET_NO_DEFAULT_CTOR
     if ( !bTotalRanges )
@@ -150,19 +153,19 @@ SfxItemSet::SfxItemSet
 #endif
 #endif
 
-    _pWhichRanges = (sal_uInt16*) _pPool->GetFrozenIdRanges();
+    _pWhichRanges = (USHORT*) _pPool->GetFrozenIdRanges();
     DBG_ASSERT( _pWhichRanges, "don't create ItemSets with full range before FreezeIdRanges()" );
     if ( !_pWhichRanges )
         _pPool->FillItemIdRanges_Impl( _pWhichRanges );
 
-    const sal_uInt16 nSize = TotalCount();
+    const USHORT nSize = TotalCount();
     _aItems = new const SfxPoolItem* [ nSize ];
     memset( (void*) _aItems, 0, nSize * sizeof( SfxPoolItem* ) );
 }
 
 // -----------------------------------------------------------------------
 
-SfxItemSet::SfxItemSet( SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhich2 ):
+SfxItemSet::SfxItemSet( SfxItemPool& rPool, USHORT nWhich1, USHORT nWhich2 ):
     _pPool( &rPool ),
     _pParent( 0 ),
     _nCount( 0 )
@@ -177,25 +180,25 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhic
 
 // -----------------------------------------------------------------------
 
-void SfxItemSet::InitRanges_Impl(sal_uInt16 nWh1, sal_uInt16 nWh2)
+void SfxItemSet::InitRanges_Impl(USHORT nWh1, USHORT nWh2)
 {
     DBG_CHKTHIS(SfxItemSet, 0);
-    _pWhichRanges = new sal_uInt16[ 3 ];
+    _pWhichRanges = new USHORT[ 3 ];
     *(_pWhichRanges+0) = nWh1;
     *(_pWhichRanges+1) = nWh2;
     *(_pWhichRanges+2) = 0;
-    const sal_uInt16 nRg = nWh2 - nWh1 + 1;
+    const USHORT nRg = nWh2 - nWh1 + 1;
     _aItems = new const SfxPoolItem* [ nRg ];
     memset( (void*) _aItems, 0, nRg * sizeof( SfxPoolItem* ) );
 }
 
 // -----------------------------------------------------------------------
 
-void SfxItemSet::InitRanges_Impl(va_list pArgs, sal_uInt16 nWh1, sal_uInt16 nWh2, sal_uInt16 nNull)
+void SfxItemSet::InitRanges_Impl(va_list pArgs, USHORT nWh1, USHORT nWh2, USHORT nNull)
 {
     DBG_CHKTHIS(SfxItemSet, 0);
 
-    sal_uInt16 nSize = InitializeRanges_Impl( _pWhichRanges, pArgs, nWh1, nWh2, nNull );
+    USHORT nSize = InitializeRanges_Impl( _pWhichRanges, pArgs, nWh1, nWh2, nNull );
     _aItems = new const SfxPoolItem* [ nSize ];
     memset( (void*) _aItems, 0, sizeof( SfxPoolItem* ) * nSize );
 }
@@ -216,29 +219,27 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool,
 
     if(!nNull)
         InitRanges_Impl(
-            sal::static_int_cast< sal_uInt16 >(nWh1),
-            sal::static_int_cast< sal_uInt16 >(nWh2));
+            sal::static_int_cast< USHORT >(nWh1),
+            sal::static_int_cast< USHORT >(nWh2));
     else {
         va_list pArgs;
         va_start( pArgs, nNull );
         InitRanges_Impl(
-            pArgs, sal::static_int_cast< sal_uInt16 >(nWh1),
-            sal::static_int_cast< sal_uInt16 >(nWh2),
-            sal::static_int_cast< sal_uInt16 >(nNull));
+            pArgs, sal::static_int_cast< USHORT >(nWh1),
+            sal::static_int_cast< USHORT >(nWh2),
+            sal::static_int_cast< USHORT >(nNull));
     }
 }
 
 // -----------------------------------------------------------------------
 
-void SfxItemSet::InitRanges_Impl(const sal_uInt16 *pWhichPairTable)
+void SfxItemSet::InitRanges_Impl(const USHORT *pWhichPairTable)
 {
     DBG_CHKTHIS(SfxItemSet, 0);
-    #if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE("SfxItemSet: Ranges-CopyCount==%ul", ++nRangesCopyCount);
-    #endif
+    DBG_TRACE1("SfxItemSet: Ranges-CopyCount==%ul", ++nRangesCopyCount);
 
-    sal_uInt16 nCnt = 0;
-    const sal_uInt16* pPtr = pWhichPairTable;
+    USHORT nCnt = 0;
+    const USHORT* pPtr = pWhichPairTable;
     while( *pPtr )
     {
         nCnt += ( *(pPtr+1) - *pPtr ) + 1;
@@ -249,14 +250,14 @@ void SfxItemSet::InitRanges_Impl(const sal_uInt16 *pWhichPairTable)
     memset( (void*) _aItems, 0, sizeof( SfxPoolItem* ) * nCnt );
 
     std::ptrdiff_t cnt = pPtr - pWhichPairTable +1;
-    _pWhichRanges = new sal_uInt16[ cnt ];
-    memcpy( _pWhichRanges, pWhichPairTable, sizeof( sal_uInt16 ) * cnt );
+    _pWhichRanges = new USHORT[ cnt ];
+    memcpy( _pWhichRanges, pWhichPairTable, sizeof( USHORT ) * cnt );
 }
 
 
 // -----------------------------------------------------------------------
 
-SfxItemSet::SfxItemSet( SfxItemPool& rPool, const sal_uInt16* pWhichPairTable ):
+SfxItemSet::SfxItemSet( SfxItemPool& rPool, const USHORT* pWhichPairTable ):
     _pPool( &rPool ),
     _pParent( 0 ),
     _pWhichRanges(0),
@@ -284,8 +285,8 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet ):
     DBG( ++*_pChildCount(_pParent) );
 
     // errechne die Anzahl von Attributen
-    sal_uInt16 nCnt = 0;
-    sal_uInt16* pPtr = rASet._pWhichRanges;
+    USHORT nCnt = 0;
+    USHORT* pPtr = rASet._pWhichRanges;
     while( *pPtr )
     {
         nCnt += ( *(pPtr+1) - *pPtr ) + 1;
@@ -296,10 +297,10 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet ):
 
     // Attribute kopieren
     SfxItemArray ppDst = _aItems, ppSrc = rASet._aItems;
-    for( sal_uInt16 n = nCnt; n; --n, ++ppDst, ++ppSrc )
-        if ( 0 == *ppSrc ||                 // aktueller Default?
-             IsInvalidItem(*ppSrc) ||       // Dont Care?
-             IsStaticDefaultItem(*ppSrc) )  // nicht zu poolende Defaults
+    for( USHORT n = nCnt; n; --n, ++ppDst, ++ppSrc )
+        if ( 0 == *ppSrc || 				// aktueller Default?
+             IsInvalidItem(*ppSrc) ||		// Dont Care?
+             IsStaticDefaultItem(*ppSrc) )	// nicht zu poolende Defaults
             // einfach Pointer kopieren
             *ppDst = *ppSrc;
         else if ( _pPool->IsItemFlag( **ppSrc, SFX_ITEM_POOLABLE ) )
@@ -315,12 +316,10 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet ):
             *ppDst = &_pPool->Put( **ppSrc );
 
     // dann noch die Which Ranges kopieren
-    #if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE("SfxItemSet: Ranges-CopyCount==%ul", ++nRangesCopyCount);
-    #endif
+    DBG_TRACE1("SfxItemSet: Ranges-CopyCount==%ul", ++nRangesCopyCount);
     std::ptrdiff_t cnt = pPtr - rASet._pWhichRanges+1;
-    _pWhichRanges = new sal_uInt16[ cnt ];
-    memcpy( _pWhichRanges, rASet._pWhichRanges, sizeof( sal_uInt16 ) * cnt);
+    _pWhichRanges = new USHORT[ cnt ];
+    memcpy( _pWhichRanges, rASet._pWhichRanges, sizeof( USHORT ) * cnt);
 }
 
 // -----------------------------------------------------------------------
@@ -332,11 +331,11 @@ SfxItemSet::~SfxItemSet()
     DBG( DBG_ASSERT( 0 == *_pChildCount(this), "SfxItemSet: deleting parent-itemset" ) )
 #endif
 
-    sal_uInt16 nCount = TotalCount();
+    USHORT nCount = TotalCount();
     if( Count() )
     {
         SfxItemArray ppFnd = _aItems;
-        for( sal_uInt16 nCnt = nCount; nCnt; --nCnt, ++ppFnd )
+        for( USHORT nCnt = nCount; nCnt; --nCnt, ++ppFnd )
             if( *ppFnd && !IsInvalidItem(*ppFnd) )
             {
                 if( !(*ppFnd)->Which() )
@@ -366,7 +365,7 @@ SfxItemSet::~SfxItemSet()
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SfxItemSet::ClearItem( sal_uInt16 nWhich )
+USHORT SfxItemSet::ClearItem( USHORT nWhich )
 
 // einzelnes Item oder alle Items (nWhich==0) l"oschen
 
@@ -375,12 +374,12 @@ sal_uInt16 SfxItemSet::ClearItem( sal_uInt16 nWhich )
     if( !Count() )
         return 0;
 
-    sal_uInt16 nDel = 0;
+    USHORT nDel = 0;
     SfxItemArray ppFnd = _aItems;
 
     if( nWhich )
     {
-        const sal_uInt16* pPtr = _pWhichRanges;
+        const USHORT* pPtr = _pWhichRanges;
         while( *pPtr )
         {
             // in diesem Bereich?
@@ -400,7 +399,7 @@ sal_uInt16 SfxItemSet::ClearItem( sal_uInt16 nWhich )
                         if ( nWhich <= SFX_WHICH_MAX )
                         {
                             const SfxPoolItem& rNew = _pParent
-                                    ? _pParent->Get( nWhich, sal_True )
+                                    ? _pParent->Get( nWhich, TRUE )
                                     : _pPool->GetDefaultItem( nWhich );
 
                             Changed( *pItemToClear, rNew );
@@ -422,7 +421,7 @@ sal_uInt16 SfxItemSet::ClearItem( sal_uInt16 nWhich )
     {
         nDel = _nCount;
 
-        sal_uInt16* pPtr = _pWhichRanges;
+        USHORT* pPtr = _pWhichRanges;
         while( *pPtr )
         {
             for( nWhich = *pPtr; nWhich <= *(pPtr+1); ++nWhich, ++ppFnd )
@@ -438,7 +437,7 @@ sal_uInt16 SfxItemSet::ClearItem( sal_uInt16 nWhich )
                         if ( nWhich <= SFX_WHICH_MAX )
                         {
                             const SfxPoolItem& rNew = _pParent
-                                    ? _pParent->Get( nWhich, sal_True )
+                                    ? _pParent->Get( nWhich, TRUE )
                                     : _pPool->GetDefaultItem( nWhich );
 
                             Changed( *pItemToClear, rNew );
@@ -466,15 +465,15 @@ sal_uInt16 SfxItemSet::ClearItem( sal_uInt16 nWhich )
 
 // -----------------------------------------------------------------------
 
-void SfxItemSet::ClearInvalidItems( sal_Bool bHardDefault )
+void SfxItemSet::ClearInvalidItems( BOOL bHardDefault )
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
-    sal_uInt16* pPtr = _pWhichRanges;
+    USHORT* pPtr = _pWhichRanges;
     SfxItemArray ppFnd = _aItems;
     if ( bHardDefault )
         while( *pPtr )
         {
-            for ( sal_uInt16 nWhich = *pPtr; nWhich <= *(pPtr+1); ++nWhich, ++ppFnd )
+            for ( USHORT nWhich = *pPtr; nWhich <= *(pPtr+1); ++nWhich, ++ppFnd )
                 if ( IsInvalidItem(*ppFnd) )
                      *ppFnd = &_pPool->Put( _pPool->GetDefaultItem(nWhich) );
             pPtr += 2;
@@ -482,7 +481,7 @@ void SfxItemSet::ClearInvalidItems( sal_Bool bHardDefault )
     else
         while( *pPtr )
         {
-            for( sal_uInt16 nWhich = *pPtr; nWhich <= *(pPtr+1); ++nWhich, ++ppFnd )
+            for( USHORT nWhich = *pPtr; nWhich <= *(pPtr+1); ++nWhich, ++ppFnd )
                 if( IsInvalidItem(*ppFnd) )
                 {
                     *ppFnd = 0;
@@ -505,8 +504,8 @@ void SfxItemSet::InvalidateAllItems()
 
 // -----------------------------------------------------------------------
 
-SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
-                                        sal_Bool bSrchInParent,
+SfxItemState SfxItemSet::GetItemState( USHORT nWhich,
+                                        BOOL bSrchInParent,
                                         const SfxPoolItem **ppItem ) const
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
@@ -516,7 +515,7 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
     do
     {
         SfxItemArray ppFnd = pAktSet->_aItems;
-        const sal_uInt16* pPtr = pAktSet->_pWhichRanges;
+        const USHORT* pPtr = pAktSet->_pWhichRanges;
         if (pPtr)
         {
             while ( *pPtr )
@@ -562,7 +561,7 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
 
 // -----------------------------------------------------------------------
 
-const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
+const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, USHORT nWhich )
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
     DBG_ASSERT( !rItem.ISA(SfxSetItem) ||
@@ -571,14 +570,14 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
     if ( !nWhich )
         return 0; //! nur wegen Outliner-Bug
     SfxItemArray ppFnd = _aItems;
-    const sal_uInt16* pPtr = _pWhichRanges;
+    const USHORT* pPtr = _pWhichRanges;
     while( *pPtr )
     {
         if( *pPtr <= nWhich && nWhich <= *(pPtr+1) )
         {
             // in diesem Bereich
             ppFnd += nWhich - *pPtr;
-            if( *ppFnd )        // schon einer vorhanden
+            if( *ppFnd )		// schon einer vorhanden
             {
                 // selbes Item bereits vorhanden?
                 if ( *ppFnd == &rItem )
@@ -623,7 +622,7 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
                     if (nWhich <= SFX_WHICH_MAX )
                     {
                         const SfxPoolItem& rOld = _pParent
-                            ? _pParent->Get( nWhich, sal_True )
+                            ? _pParent->Get( nWhich, TRUE )
                             : _pPool->GetDefaultItem( nWhich );
                         Changed( rOld, rNew );
                     }
@@ -642,17 +641,17 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
 
 // -----------------------------------------------------------------------
 
-int SfxItemSet::Put( const SfxItemSet& rSet, sal_Bool bInvalidAsDefault )
+int SfxItemSet::Put( const SfxItemSet& rSet, BOOL bInvalidAsDefault )
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     if( rSet.Count() )
     {
         SfxItemArray ppFnd = rSet._aItems;
-        const sal_uInt16* pPtr = rSet._pWhichRanges;
+        const USHORT* pPtr = rSet._pWhichRanges;
         while ( *pPtr )
         {
-            for ( sal_uInt16 nWhich = *pPtr; nWhich <= *(pPtr+1); ++nWhich, ++ppFnd )
+            for ( USHORT nWhich = *pPtr; nWhich <= *(pPtr+1); ++nWhich, ++ppFnd )
                 if( *ppFnd )
                 {
                     if ( IsInvalidItem( *ppFnd ) )
@@ -677,12 +676,12 @@ int SfxItemSet::Put( const SfxItemSet& rSet, sal_Bool bInvalidAsDefault )
 
 void SfxItemSet::PutExtended
 (
-    const SfxItemSet&   rSet,           // Quelle der zu puttenden Items
-    SfxItemState        eDontCareAs,    // was mit DontCare-Items passiert
-    SfxItemState        eDefaultAs      // was mit Default-Items passiert
+    const SfxItemSet&	rSet,			// Quelle der zu puttenden Items
+    SfxItemState		eDontCareAs,	// was mit DontCare-Items passiert
+    SfxItemState		eDefaultAs		// was mit Default-Items passiert
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese Methode "ubernimmt die Items aus 'rSet' in '*this'. Die
     Which-Bereiche in '*this', die in 'rSet' nicht vorkommen bleiben unver-
@@ -692,9 +691,9 @@ void SfxItemSet::PutExtended
     (0 Pointer) und Invalid- (-1 Pointer) Items werden je nach Parameter
     ('eDontCareAs' und 'eDefaultAs' behandelt:
 
-    SFX_ITEM_SET:       hart auf Default des Pools gesetzt
-    SFX_ITEM_DEFAULT:   gel"oscht (0 Pointer)
-    SFX_ITEM_DONTCARE:  invalidiert (-1 Pointer)
+    SFX_ITEM_SET:		hart auf Default des Pools gesetzt
+    SFX_ITEM_DEFAULT:	gel"oscht (0 Pointer)
+    SFX_ITEM_DONTCARE:	invalidiert (-1 Pointer)
 
     Alle anderen Werte f"ur 'eDontCareAs' und 'eDefaultAs' sind ung"ultig.
 */
@@ -704,10 +703,10 @@ void SfxItemSet::PutExtended
 
     // don't "optimize" with "if( rSet.Count()" because of dont-care + defaults
     SfxItemArray ppFnd = rSet._aItems;
-    const sal_uInt16* pPtr = rSet._pWhichRanges;
+    const USHORT* pPtr = rSet._pWhichRanges;
     while ( *pPtr )
     {
-        for ( sal_uInt16 nWhich = *pPtr; nWhich <= *(pPtr+1); ++nWhich, ++ppFnd )
+        for ( USHORT nWhich = *pPtr; nWhich <= *(pPtr+1); ++nWhich, ++ppFnd )
             if( *ppFnd )
             {
                 if ( IsInvalidItem( *ppFnd ) )
@@ -728,7 +727,7 @@ void SfxItemSet::PutExtended
                             break;
 
                         default:
-                            OSL_FAIL( "invalid Argument for eDontCareAs" );
+                            DBG_ERROR( "invalid Argument for eDontCareAs" );
                     }
                 }
                 else
@@ -753,7 +752,7 @@ void SfxItemSet::PutExtended
                         break;
 
                     default:
-                        OSL_FAIL( "invalid Argument for eDefaultAs" );
+                        DBG_ERROR( "invalid Argument for eDefaultAs" );
                 }
             }
         pPtr += 2;
@@ -762,16 +761,16 @@ void SfxItemSet::PutExtended
 
 // -----------------------------------------------------------------------
 
-void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
-/** <H3>Description</H3>
+void SfxItemSet::MergeRange( USHORT nFrom, USHORT nTo )
+/**	<H3>Description</H3>
 
     Expands the ranges of settable items by 'nFrom' to 'nTo'. Keeps state of
     items which are new ranges too.
 */
 
 {
-    // special case: exactly one sal_uInt16 which is already included?
-    if ( nFrom == nTo && SFX_ITEM_AVAILABLE <= GetItemState(nFrom, sal_False) )
+    // special case: exactly one USHORT which is already included?
+    if ( nFrom == nTo && SFX_ITEM_AVAILABLE <= GetItemState(nFrom, FALSE) )
         return;
 
     // merge new range
@@ -782,9 +781,9 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
 
 // -----------------------------------------------------------------------
 
-void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
+void SfxItemSet::SetRanges( const USHORT *pNewRanges )
 
-/** <H3>Description</H3>
+/**	<H3>Description</H3>
 
     Modifies the ranges of settable items. Keeps state of items which
     are new ranges too.
@@ -794,8 +793,8 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
     // identische Ranges?
     if ( _pWhichRanges == pNewRanges )
         return;
-    const sal_uInt16* pOld = _pWhichRanges;
-    const sal_uInt16* pNew = pNewRanges;
+    const USHORT* pOld = _pWhichRanges;
+    const USHORT* pNew = pNewRanges;
     while ( *pOld == *pNew )
     {
         if ( !*pOld && !*pNew )
@@ -804,20 +803,20 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
     }
 
     // create new item-array (by iterating through all new ranges)
-    sal_uLong        nSize = Capacity_Impl(pNewRanges);
+    ULONG		 nSize = Capacity_Impl(pNewRanges);
     SfxItemArray aNewItems = new const SfxPoolItem* [ nSize ];
-    sal_uInt16       n = 0, nNewCount = 0;
+    USHORT		 n = 0, nNewCount = 0;
     if ( _nCount == 0 )
         memset( aNewItems, 0, nSize * sizeof( SfxPoolItem* ) );
     else
     {
-        for ( const sal_uInt16 *pRange = pNewRanges; *pRange; pRange += 2 )
+        for ( const USHORT *pRange = pNewRanges; *pRange; pRange += 2 )
         {
             // iterate through all ids in the range
-            for ( sal_uInt16 nWID = *pRange; nWID <= pRange[1]; ++nWID, ++n )
+            for ( USHORT nWID = *pRange; nWID <= pRange[1]; ++nWID, ++n )
             {
                 // direct move of pointer (not via pool)
-                SfxItemState eState = GetItemState( nWID, sal_False, aNewItems+n );
+                SfxItemState eState = GetItemState( nWID, FALSE, aNewItems+n );
                 if ( SFX_ITEM_SET == eState )
                 {
                     // increment new item count and possibly increment ref count
@@ -843,8 +842,8 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
             }
         }
         // free old items
-        sal_uInt16 nOldTotalCount = TotalCount();
-        for ( sal_uInt16 nItem = 0; nItem < nOldTotalCount; ++nItem )
+        USHORT nOldTotalCount = TotalCount();
+        for ( USHORT nItem = 0; nItem < nOldTotalCount; ++nItem )
         {
             const SfxPoolItem *pItem = _aItems[nItem];
             if ( pItem && !IsInvalidItem(pItem) && pItem->Which() )
@@ -860,15 +859,15 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
     if( pNewRanges == GetPool()->GetFrozenIdRanges() )
     {
         delete[] _pWhichRanges;
-        _pWhichRanges = ( sal_uInt16* ) pNewRanges;
+        _pWhichRanges = ( USHORT* ) pNewRanges;
     }
     else
     {
-        sal_uInt16 nCount = Count_Impl(pNewRanges) + 1;
+        USHORT nCount = Count_Impl(pNewRanges) + 1;
         if ( _pWhichRanges != _pPool->GetFrozenIdRanges() )
             delete[] _pWhichRanges;
-        _pWhichRanges = new sal_uInt16[ nCount ];
-        memcpy( _pWhichRanges, pNewRanges, sizeof( sal_uInt16 ) * nCount );
+        _pWhichRanges = new USHORT[ nCount ];
+        memcpy( _pWhichRanges, pNewRanges, sizeof( USHORT ) * nCount );
     }
 }
 
@@ -876,20 +875,20 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
 
 int SfxItemSet::Set
 (
-    const SfxItemSet&   rSet,   /*  das SfxItemSet, dessen SfxPoolItems
+    const SfxItemSet&	rSet,	/*	das SfxItemSet, dessen SfxPoolItems
                                     "ubernommen werden sollen */
 
-    sal_Bool                bDeep   /*  sal_True (default)
+    BOOL				bDeep	/*	TRUE (default)
                                     auch die SfxPoolItems aus den ggf. an
                                     rSet vorhandenen Parents werden direkt
                                     in das SfxItemSet "ubernommen
 
-                                    sal_False
+                                    FALSE
                                     die SfxPoolItems aus den Parents von
                                     rSet werden nicht ber"ucksichtigt */
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Das SfxItemSet nimmt genau die SfxPoolItems an, die auch in
     rSet gesetzt sind und im eigenen <Which-Bereich> liegen. Alle
@@ -897,16 +896,16 @@ int SfxItemSet::Set
     so da"s die "ubernommenen SfxPoolItems dabei ggf. vom SfxItemPool
     von rSet in den SfxItemPool von *this "ubernommen werden.
 
-    SfxPoolItems, f"ur die in rSet IsInvalidItem() == sal_True gilt,
+    SfxPoolItems, f"ur die in rSet IsInvalidItem() == TRUE gilt,
     werden als Invalid-Item "ubernommen.
 
 
     [R"uckgabewert]
 
-    int                             sal_True
+    int 							TRUE
                                     es wurden SfxPoolItems "ubernommen
 
-                                    sal_False
+                                    FALSE
                                     es wurden keine SfxPoolItems "ubernommen,
                                     da z.B. die Which-Bereiche der SfxItemSets
                                     keine Schnittmenge haben oder in der
@@ -917,23 +916,23 @@ int SfxItemSet::Set
 
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
-    int bRet = sal_False;
+    int bRet = FALSE;
     if ( _nCount )
         ClearItem();
     if ( bDeep )
     {
         SfxWhichIter aIter(*this);
-        sal_uInt16 nWhich = aIter.FirstWhich();
+        USHORT nWhich = aIter.FirstWhich();
         while ( nWhich )
         {
             const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == rSet.GetItemState( nWhich, sal_True, &pItem ) )
+            if( SFX_ITEM_SET == rSet.GetItemState( nWhich, TRUE, &pItem ) )
                 bRet |= 0 != Put( *pItem, pItem->Which() );
             nWhich = aIter.NextWhich();
         }
     }
     else
-        bRet = Put(rSet, sal_False);
+        bRet = Put(rSet, FALSE);
 
     return bRet;
 }
@@ -942,12 +941,12 @@ int SfxItemSet::Set
 
 const SfxPoolItem* SfxItemSet::GetItem
 (
-    sal_uInt16              nId,            // Slot-Id oder Which-Id des Items
-    sal_Bool                bSrchInParent,  // sal_True: auch in Parent-ItemSets suchen
-    TypeId              aItemType       // != 0 =>  RTTI Pruefung mit Assertion
-)   const
+    USHORT 				nId,   			// Slot-Id oder Which-Id des Items
+    BOOL 				bSrchInParent,  // TRUE: auch in Parent-ItemSets suchen
+    TypeId 				aItemType       // != 0 =>  RTTI Pruefung mit Assertion
+)	const
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Mit dieser Methode wird der Zugriff auf einzelne Items im
     SfxItemSet wesentlich vereinfacht. Insbesondere wird die Typpr"ufung
@@ -960,9 +959,9 @@ const SfxPoolItem* SfxItemSet::GetItem
 
 {
     // ggf. in Which-Id umrechnen
-    sal_uInt16 nWhich = GetPool()->GetWhich(nId);
+    USHORT nWhich = GetPool()->GetWhich(nId);
 
-    // ist das Item gesetzt oder bei bDeep==sal_True verf"ugbar?
+    // ist das Item gesetzt oder bei bDeep==TRUE verf"ugbar?
     const SfxPoolItem *pItem = 0;
     SfxItemState eState = GetItemState( nWhich, bSrchInParent, &pItem );
     if ( bSrchInParent && SFX_ITEM_AVAILABLE == eState &&
@@ -975,7 +974,7 @@ const SfxPoolItem* SfxItemSet::GetItem
             return pItem;
 
         // sonst Fehler melden
-        OSL_FAIL( "invalid argument type" );
+        DBG_ERROR( "invalid argument type" );
     }
 
     // kein Item gefunden oder falschen Typ gefunden
@@ -986,7 +985,7 @@ const SfxPoolItem* SfxItemSet::GetItem
 //------------------------------------------------------------------------
 
 
-const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, sal_Bool bSrchInParent) const
+const SfxPoolItem& SfxItemSet::Get( USHORT nWhich, BOOL bSrchInParent) const
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
     // suche den Bereich in dem das Which steht:
@@ -996,7 +995,7 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, sal_Bool bSrchInParent) c
         if( pAktSet->Count() )
         {
             SfxItemArray ppFnd = pAktSet->_aItems;
-            const sal_uInt16* pPtr = pAktSet->_pWhichRanges;
+            const USHORT* pPtr = pAktSet->_pWhichRanges;
             while( *pPtr )
             {
                 if( *pPtr <= nWhich && nWhich <= *(pPtr+1) )
@@ -1022,15 +1021,15 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, sal_Bool bSrchInParent) c
 #endif
                         return **ppFnd;
                     }
-                    break;          // dann beim Parent suchen
+                    break; 			// dann beim Parent suchen
                 }
                 ppFnd += *(pPtr+1) - *pPtr + 1;
                 pPtr += 2;
             }
         }
 // bis zum Ende vom Such-Bereich: was nun ? zum Parent, oder Default ??
-//      if( !*pPtr )            // bis zum Ende vom Such-Bereich ?
-//      break;
+//		if( !*pPtr )			// bis zum Ende vom Such-Bereich ?
+//		break;
     } while( bSrchInParent && 0 != ( pAktSet = pAktSet->_pParent ));
 
     // dann das Default vom Pool holen und returnen
@@ -1052,11 +1051,11 @@ void SfxItemSet::Changed( const SfxPoolItem&, const SfxPoolItem& )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SfxItemSet::TotalCount() const
+USHORT SfxItemSet::TotalCount() const
 {
     DBG_CHKTHIS(SfxItemSet, 0); // wird im Ctor benutzt bevor vollst. init.
-    sal_uInt16 nRet = 0;
-    sal_uInt16* pPtr = _pWhichRanges;
+    USHORT nRet = 0;
+    USHORT* pPtr = _pWhichRanges;
     while( *pPtr )
     {
         nRet += ( *(pPtr+1) - *pPtr ) + 1;
@@ -1072,33 +1071,33 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
     DBG_ASSERT(_pPool, "nicht implementiert ohne Pool");
-    if( !Count() )       // gar keine gesetzt ?
+    if( !Count() )		 // gar keine gesetzt ?
         return;
 
     // loesche alle Items, die im rSet nicht mehr vorhanden sind
     if( !rSet.Count() )
     {
-        ClearItem();        // alles loeschen
+        ClearItem();		// alles loeschen
         return;
     }
 
     // teste mal, ob sich die Which-Bereiche unterscheiden.
-    sal_Bool bEqual = sal_True;
-    sal_uInt16* pWh1 = _pWhichRanges;
-    sal_uInt16* pWh2 = rSet._pWhichRanges;
-    sal_uInt16 nSize = 0;
+    BOOL bEqual = TRUE;
+    USHORT* pWh1 = _pWhichRanges;
+    USHORT* pWh2 = rSet._pWhichRanges;
+    USHORT nSize = 0;
 
-    for( sal_uInt16 n = 0; *pWh1 && *pWh2; ++pWh1, ++pWh2, ++n )
+    for( USHORT n = 0; *pWh1 && *pWh2; ++pWh1, ++pWh2, ++n )
     {
         if( *pWh1 != *pWh2 )
         {
-            bEqual = sal_False;
+            bEqual = FALSE;
             break;
         }
         if( n & 1 )
             nSize += ( *(pWh1) - *(pWh1-1) ) + 1;
     }
-    bEqual = *pWh1 == *pWh2;        // auch die 0 abpruefen
+    bEqual = *pWh1 == *pWh2;		// auch die 0 abpruefen
 
     // sind die Bereiche identisch, ist es einfacher zu handhaben !
     if( bEqual )
@@ -1112,11 +1111,11 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
                 // aus dem Pool loeschen
                 if( !IsInvalidItem( *ppFnd1 ) )
                 {
-                    sal_uInt16 nWhich = (*ppFnd1)->Which();
+                    USHORT nWhich = (*ppFnd1)->Which();
                     if(nWhich <= SFX_WHICH_MAX)
                     {
                         const SfxPoolItem& rNew = _pParent
-                            ? _pParent->Get( nWhich, sal_True )
+                            ? _pParent->Get( nWhich, TRUE )
                             : _pPool->GetDefaultItem( nWhich );
 
                         Changed( **ppFnd1, rNew );
@@ -1131,13 +1130,13 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
     {
         SfxItemIter aIter( *this );
         const SfxPoolItem* pItem = aIter.GetCurItem();
-        while( sal_True )
+        while( TRUE )
         {
-            sal_uInt16 nWhich = IsInvalidItem( pItem )
+            USHORT nWhich = IsInvalidItem( pItem )
                                 ? GetWhichByPos( aIter.GetCurPos() )
                                 : pItem->Which();
-            if( 0 == rSet.GetItemState( nWhich, sal_False ) )
-                ClearItem( nWhich );        // loeschen
+            if( 0 == rSet.GetItemState( nWhich, FALSE ) )
+                ClearItem( nWhich );		// loeschen
             if( aIter.IsAtEnd() )
                 break;
             pItem = aIter.NextItem();
@@ -1154,22 +1153,22 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
         return;
 
     // teste mal, ob sich die Which-Bereiche unterscheiden.
-    sal_Bool bEqual = sal_True;
-    sal_uInt16* pWh1 = _pWhichRanges;
-    sal_uInt16* pWh2 = rSet._pWhichRanges;
-    sal_uInt16 nSize = 0;
+    BOOL bEqual = TRUE;
+    USHORT* pWh1 = _pWhichRanges;
+    USHORT* pWh2 = rSet._pWhichRanges;
+    USHORT nSize = 0;
 
-    for( sal_uInt16 n = 0; *pWh1 && *pWh2; ++pWh1, ++pWh2, ++n )
+    for( USHORT n = 0; *pWh1 && *pWh2; ++pWh1, ++pWh2, ++n )
     {
         if( *pWh1 != *pWh2 )
         {
-            bEqual = sal_False;
+            bEqual = FALSE;
             break;
         }
         if( n & 1 )
             nSize += ( *(pWh1) - *(pWh1-1) ) + 1;
     }
-    bEqual = *pWh1 == *pWh2;        // auch die 0 abpruefen
+    bEqual = *pWh1 == *pWh2;		// auch die 0 abpruefen
 
     // sind die Bereiche identisch, ist es einfacher zu handhaben !
     if( bEqual )
@@ -1183,11 +1182,11 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
                 // aus dem Pool loeschen
                 if( !IsInvalidItem( *ppFnd1 ) )
                 {
-                    sal_uInt16 nWhich = (*ppFnd1)->Which();
+                    USHORT nWhich = (*ppFnd1)->Which();
                     if(nWhich <= SFX_WHICH_MAX)
                     {
                         const SfxPoolItem& rNew = _pParent
-                            ? _pParent->Get( nWhich, sal_True )
+                            ? _pParent->Get( nWhich, TRUE )
                             : _pPool->GetDefaultItem( nWhich );
 
                         Changed( **ppFnd1, rNew );
@@ -1202,13 +1201,13 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
     {
         SfxItemIter aIter( *this );
         const SfxPoolItem* pItem = aIter.GetCurItem();
-        while( sal_True )
+        while( TRUE )
         {
-            sal_uInt16 nWhich = IsInvalidItem( pItem )
+            USHORT nWhich = IsInvalidItem( pItem )
                                 ? GetWhichByPos( aIter.GetCurPos() )
                                 : pItem->Which();
-            if( SFX_ITEM_SET == rSet.GetItemState( nWhich, sal_False ) )
-                ClearItem( nWhich );        // loeschen
+            if( SFX_ITEM_SET == rSet.GetItemState( nWhich, FALSE ) )
+                ClearItem( nWhich );		// loeschen
             if( aIter.IsAtEnd() )
                 break;
             pItem = aIter.NextItem();
@@ -1227,79 +1226,79 @@ Grundsaetze:
 
 1.-Item     2.-Item     Values  bIgnoreDefs     Remove      Assign      Add
 
-set         set         ==      sal_False           -           -           -
-default     set         ==      sal_False           -           -           -
-dontcare    set         ==      sal_False           -           -           -
-unknown     set         ==      sal_False           -           -           -
-set         default     ==      sal_False           -           -           -
-default     default     ==      sal_False           -           -           -
-dontcare    default     ==      sal_False           -           -           -
-unknown     default     ==      sal_False           -           -           -
-set         dontcare    ==      sal_False           1.-Item     -1          -
-default     dontcare    ==      sal_False           -           -1          -
-dontcare    dontcare    ==      sal_False           -           -           -
-unknown     dontcare    ==      sal_False           -           -           -
-set         unknown     ==      sal_False           1.-Item     -1          -
-default     unknown     ==      sal_False           -           -           -
-dontcare    unknown     ==      sal_False           -           -           -
-unknown     unknown     ==      sal_False           -           -           -
+set         set         ==      FALSE           -           -           -
+default     set         ==      FALSE           -           -           -
+dontcare    set         ==      FALSE           -           -           -
+unknown     set         ==      FALSE           -           -           -
+set         default     ==      FALSE           -           -           -
+default     default     ==      FALSE           -           -           -
+dontcare    default     ==      FALSE           -           -           -
+unknown     default     ==      FALSE           -           -           -
+set         dontcare    ==      FALSE           1.-Item     -1          -
+default 	dontcare	==		FALSE			-			-1			-
+dontcare    dontcare    ==      FALSE           -           -           -
+unknown     dontcare    ==      FALSE           -           -           -
+set         unknown     ==      FALSE           1.-Item     -1          -
+default     unknown     ==      FALSE           -           -           -
+dontcare    unknown     ==      FALSE           -           -           -
+unknown     unknown     ==      FALSE           -           -           -
 
-set         set         !=      sal_False           1.-Item     -1          -
-default     set         !=      sal_False           -           -1          -
-dontcare    set         !=      sal_False           -           -           -
-unknown     set         !=      sal_False           -           -           -
-set         default     !=      sal_False           1.-Item     -1          -
-default     default     !=      sal_False           -           -           -
-dontcare    default     !=      sal_False           -           -           -
-unknown     default     !=      sal_False           -           -           -
-set         dontcare    !=      sal_False           1.-Item     -1          -
-default     dontcare    !=      sal_False           -           -1          -
-dontcare    dontcare    !=      sal_False           -           -           -
-unknown     dontcare    !=      sal_False           -           -           -
-set         unknown     !=      sal_False           1.-Item     -1          -
-default     unknown     !=      sal_False           -           -           -
-dontcare    unknown     !=      sal_False           -           -           -
-unknown     unknown     !=      sal_False           -           -           -
+set         set         !=      FALSE           1.-Item     -1          -
+default     set         !=      FALSE           -           -1          -
+dontcare    set         !=      FALSE           -           -           -
+unknown     set         !=      FALSE           -           -           -
+set         default     !=      FALSE           1.-Item     -1          -
+default     default     !=      FALSE           -           -           -
+dontcare    default     !=      FALSE           -           -           -
+unknown     default     !=      FALSE           -           -           -
+set         dontcare    !=      FALSE           1.-Item     -1          -
+default     dontcare    !=      FALSE           -           -1          -
+dontcare    dontcare    !=      FALSE           -           -           -
+unknown     dontcare    !=      FALSE           -           -           -
+set         unknown     !=      FALSE           1.-Item     -1          -
+default     unknown     !=      FALSE           -           -           -
+dontcare    unknown     !=      FALSE           -           -           -
+unknown     unknown     !=      FALSE           -           -           -
 
-set         set         ==      sal_True            -           -           -
-default     set         ==      sal_True            -           2.-Item     2.-Item
-dontcare    set         ==      sal_True            -           -           -
-unknown     set         ==      sal_True            -           -           -
-set         default     ==      sal_True            -           -           -
-default     default     ==      sal_True            -           -           -
-dontcare    default     ==      sal_True            -           -           -
-unknown     default     ==      sal_True            -           -           -
-set         dontcare    ==      sal_True            -           -           -
-default     dontcare    ==      sal_True            -           -1          -
-dontcare    dontcare    ==      sal_True            -           -           -
-unknown     dontcare    ==      sal_True            -           -           -
-set         unknown     ==      sal_True            -           -           -
-default     unknown     ==      sal_True            -           -           -
-dontcare    unknown     ==      sal_True            -           -           -
-unknown     unknown     ==      sal_True            -           -           -
+set         set         ==      TRUE            -           -           -
+default 	set 		==		TRUE			-			2.-Item 	2.-Item
+dontcare    set         ==      TRUE            -           -           -
+unknown     set         ==      TRUE            -           -           -
+set         default     ==      TRUE            -           -           -
+default     default     ==      TRUE            -           -           -
+dontcare    default     ==      TRUE            -           -           -
+unknown     default     ==      TRUE            -           -           -
+set         dontcare    ==      TRUE            -           -           -
+default 	dontcare	==		TRUE			-			-1			-
+dontcare    dontcare    ==      TRUE            -           -           -
+unknown     dontcare    ==      TRUE            -           -           -
+set         unknown     ==      TRUE            -           -           -
+default     unknown     ==      TRUE            -           -           -
+dontcare    unknown     ==      TRUE            -           -           -
+unknown     unknown     ==      TRUE            -           -           -
 
-set         set         !=      sal_True            1.-Item     -1          -
-default     set         !=      sal_True            -           2.-Item     2.-Item
-dontcare    set         !=      sal_True            -           -           -
-unknown     set         !=      sal_True            -           -           -
-set         default     !=      sal_True            -           -           -
-default     default     !=      sal_True            -           -           -
-dontcare    default     !=      sal_True            -           -           -
-unknown     default     !=      sal_True            -           -           -
-set         dontcare    !=      sal_True            1.-Item     -1          -
-default     dontcare    !=      sal_True            -           -1          -
-dontcare    dontcare    !=      sal_True            -           -           -
-unknown     dontcare    !=      sal_True            -           -           -
-set         unknown     !=      sal_True            -           -           -
-default     unknown     !=      sal_True            -           -           -
-dontcare    unknown     !=      sal_True            -           -           -
-unknown     unknown     !=      sal_True            -           -           -
+set         set         !=      TRUE            1.-Item     -1          -
+default     set         !=      TRUE            -           2.-Item     2.-Item
+dontcare	set 		!=		TRUE			-			-			-
+unknown     set         !=      TRUE            -           -           -
+set         default     !=      TRUE            -           -           -
+default     default     !=      TRUE            -           -           -
+dontcare    default     !=      TRUE            -           -           -
+unknown     default     !=      TRUE            -           -           -
+set         dontcare    !=      TRUE            1.-Item     -1          -
+default     dontcare    !=      TRUE            -           -1          -
+dontcare    dontcare    !=      TRUE            -           -           -
+unknown     dontcare    !=      TRUE            -           -           -
+set         unknown     !=      TRUE            -           -           -
+default     unknown     !=      TRUE            -           -           -
+dontcare    unknown     !=      TRUE            -           -           -
+unknown     unknown     !=      TRUE            -           -           -
 */
 
 
-static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
+static void MergeItem_Impl( SfxItemPool *_pPool, USHORT &rCount,
                             const SfxPoolItem **ppFnd1, const SfxPoolItem *pFnd2,
-                            sal_Bool bIgnoreDefaults )
+                            BOOL bIgnoreDefaults )
 {
     DBG_ASSERT( ppFnd1 != 0, "Merging to 0-Item" );
 
@@ -1312,11 +1311,11 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
 
         else if ( pFnd2 && !bIgnoreDefaults &&
                   _pPool->GetDefaultItem(pFnd2->Which()) != *pFnd2 )
-            // Entscheidungstabelle: default, set, !=, sal_False
+            // Entscheidungstabelle: default, set, !=, FALSE
             *ppFnd1 = (SfxPoolItem*) -1;
 
         else if ( pFnd2 && bIgnoreDefaults )
-            // Entscheidungstabelle: default, set, egal, sal_True
+            // Entscheidungstabelle: default, set, egal, TRUE
             *ppFnd1 = &_pPool->Put( *pFnd2 );
 
         if ( *ppFnd1 )
@@ -1332,7 +1331,7 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
             if ( !bIgnoreDefaults &&
                  **ppFnd1 != _pPool->GetDefaultItem((*ppFnd1)->Which()) )
             {
-                // Entscheidungstabelle: set, default, !=, sal_False
+                // Entscheidungstabelle: set, default, !=, FALSE
                 _pPool->Remove( **ppFnd1 );
                 *ppFnd1 = (SfxPoolItem*) -1;
             }
@@ -1343,8 +1342,8 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
             if ( !bIgnoreDefaults ||
                  **ppFnd1 != _pPool->GetDefaultItem( (*ppFnd1)->Which()) )
             {
-                // Entscheidungstabelle: set, dontcare, egal, sal_False
-                // oder:                 set, dontcare, !=, sal_True
+                // Entscheidungstabelle: set, dontcare, egal, FALSE
+                // oder:				 set, dontcare, !=, TRUE
                 _pPool->Remove( **ppFnd1 );
                 *ppFnd1 = (SfxPoolItem*) -1;
             }
@@ -1364,23 +1363,23 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
 
 // -----------------------------------------------------------------------
 
-void SfxItemSet::MergeValues( const SfxItemSet& rSet, sal_Bool bIgnoreDefaults )
+void SfxItemSet::MergeValues( const SfxItemSet& rSet, BOOL bIgnoreDefaults )
 {
     // Achtung!!! Bei Aenderungen/Bugfixes immer obenstehende Tabelle pflegen!
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
     DBG_ASSERT( GetPool() == rSet.GetPool(), "MergeValues mit verschiedenen Pools" );
 
     // teste mal, ob sich die Which-Bereiche unterscheiden.
-    sal_Bool bEqual = sal_True;
-    sal_uInt16* pWh1 = _pWhichRanges;
-    sal_uInt16* pWh2 = rSet._pWhichRanges;
-    sal_uInt16 nSize = 0;
+    BOOL bEqual = TRUE;
+    USHORT* pWh1 = _pWhichRanges;
+    USHORT* pWh2 = rSet._pWhichRanges;
+    USHORT nSize = 0;
 
-    for( sal_uInt16 n = 0; *pWh1 && *pWh2; ++pWh1, ++pWh2, ++n )
+    for( USHORT n = 0; *pWh1 && *pWh2; ++pWh1, ++pWh2, ++n )
     {
         if( *pWh1 != *pWh2 )
         {
-            bEqual = sal_False;
+            bEqual = FALSE;
             break;
         }
         if( n & 1 )
@@ -1400,11 +1399,11 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet, sal_Bool bIgnoreDefaults )
     else
     {
         SfxWhichIter aIter( rSet );
-        register sal_uInt16 nWhich;
+        register USHORT nWhich;
         while( 0 != ( nWhich = aIter.NextWhich() ) )
         {
             const SfxPoolItem* pItem = 0;
-            rSet.GetItemState( nWhich, sal_True, &pItem );
+            rSet.GetItemState( nWhich, TRUE, &pItem );
             if( !pItem )
             {
                 // nicht gesetzt, also default
@@ -1422,12 +1421,12 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet, sal_Bool bIgnoreDefaults )
 
 // -----------------------------------------------------------------------
 
-void SfxItemSet::MergeValue( const SfxPoolItem& rAttr, sal_Bool bIgnoreDefaults )
+void SfxItemSet::MergeValue( const SfxPoolItem& rAttr, BOOL bIgnoreDefaults )
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
     SfxItemArray ppFnd = _aItems;
-    const sal_uInt16* pPtr = _pWhichRanges;
-    const sal_uInt16 nWhich = rAttr.Which();
+    const USHORT* pPtr = _pWhichRanges;
+    const USHORT nWhich = rAttr.Which();
     while( *pPtr )
     {
         // in diesem Bereich?
@@ -1444,11 +1443,11 @@ void SfxItemSet::MergeValue( const SfxPoolItem& rAttr, sal_Bool bIgnoreDefaults 
 
 // -----------------------------------------------------------------------
 
-void SfxItemSet::InvalidateItem( sal_uInt16 nWhich )
+void SfxItemSet::InvalidateItem( USHORT nWhich )
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
     SfxItemArray ppFnd = _aItems;
-    const sal_uInt16* pPtr = _pWhichRanges;
+    const USHORT* pPtr = _pWhichRanges;
     while( *pPtr )
     {
         if( *pPtr <= nWhich && nWhich <= *(pPtr+1) )
@@ -1456,9 +1455,9 @@ void SfxItemSet::InvalidateItem( sal_uInt16 nWhich )
             // in diesem Bereich
             ppFnd += nWhich - *pPtr;
 
-            if( *ppFnd )    // bei mir gesetzt
+            if( *ppFnd )   	// bei mir gesetzt
             {
-                if( (SfxPoolItem*)-1 != *ppFnd )        // noch nicht dontcare !
+                if( (SfxPoolItem*)-1 != *ppFnd )		// noch nicht dontcare !
                 {
                     _pPool->Remove( **ppFnd );
                     *ppFnd = (SfxPoolItem*)-1;
@@ -1478,11 +1477,11 @@ void SfxItemSet::InvalidateItem( sal_uInt16 nWhich )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SfxItemSet::GetWhichByPos( sal_uInt16 nPos ) const
+USHORT SfxItemSet::GetWhichByPos( USHORT nPos ) const
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
-    sal_uInt16 n = 0;
-    sal_uInt16* pPtr  = _pWhichRanges;
+    USHORT n = 0;
+    USHORT* pPtr  = _pWhichRanges;
     while( *pPtr )
     {
         n = ( *(pPtr+1) - *pPtr ) + 1;
@@ -1491,7 +1490,7 @@ sal_uInt16 SfxItemSet::GetWhichByPos( sal_uInt16 nPos ) const
         nPos = nPos - n;
         pPtr += 2;
     }
-    DBG_ASSERT( sal_False, "Hier sind wir falsch" );
+    DBG_ASSERT( FALSE, "Hier sind wir falsch" );
     return 0;
 }
 
@@ -1499,23 +1498,23 @@ sal_uInt16 SfxItemSet::GetWhichByPos( sal_uInt16 nPos ) const
 
 SvStream &SfxItemSet::Store
 (
-    SvStream&   rStream,        // Zielstream f"ur normale Items
+    SvStream&	rStream,		// Zielstream f"ur normale Items
     bool        bDirect         // TRUE: Items direkt speicher, FALSE: Surrogate
-)   const
+)	const
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Speichert die <SfxItemSet>-Instanz in den angegebenen Stream. Dabei
-    werden die Surrorage der gesetzten <SfxPoolItem>s bzw. ('bDirect==sal_True')
+    werden die Surrorage der gesetzten <SfxPoolItem>s bzw. ('bDirect==TRUE')
     die gesetzten Items selbst wie folgt im Stream abgelegt:
 
-            sal_uInt16              (Count) Anzahl der gesetzten Items
-    Count*  _pPool->StoreItem()  siehe <SfxItemPool::StoreItem()const>
+            USHORT				(Count) Anzahl der gesetzten Items
+    Count*	_pPool->StoreItem()  siehe <SfxItemPool::StoreItem()const>
 
 
     [Querverweise]
 
-    <SfxItemSet::Load(SvStream&,sal_Bool,const SfxItemPool*)>
+    <SfxItemSet::Load(SvStream&,BOOL,const SfxItemPool*)>
 */
 
 {
@@ -1524,14 +1523,14 @@ SvStream &SfxItemSet::Store
     DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "kein Master-Pool" );
 
     // Position des Counts merken, um ggf. zu korrigieren
-    sal_uLong nCountPos = rStream.Tell();
+    ULONG nCountPos = rStream.Tell();
     rStream << _nCount;
 
     // wenn nichts zu speichern ist, auch keinen ItemIter aufsetzen!
     if ( _nCount )
     {
         // mitz"ahlen wieviel Items tats"achlich gespeichert werden
-        sal_uInt16 nWrittenCount = 0;  // Anzahl in 'rStream' gestreamter Items
+        USHORT nWrittenCount = 0;  // Anzahl in 'rStream' gestreamter Items
 
         // "uber alle gesetzten Items iterieren
         SfxItemIter aIter(*this);
@@ -1551,7 +1550,7 @@ SvStream &SfxItemSet::Store
         if ( nWrittenCount != _nCount )
         {
             // tats"achlichen Count im Stream ablegen
-            sal_uLong nPos = rStream.Tell();
+            ULONG nPos = rStream.Tell();
             rStream.Seek( nCountPos );
             rStream << nWrittenCount;
             rStream.Seek( nPos );
@@ -1565,20 +1564,20 @@ SvStream &SfxItemSet::Store
 
 SvStream &SfxItemSet::Load
 (
-    SvStream&           rStream,    //  Stream, aus dem geladen werden soll
+    SvStream&			rStream,	//	Stream, aus dem geladen werden soll
 
     bool                bDirect,    /*  TRUE
                                         Items werden direkt aus dem Stream
                                         gelesen, nicht "uber Surrogate
 
-                                        sal_False (default)
+                                        FALSE (default)
                                         Items werden "uber Surrogate gelesen */
 
-    const SfxItemPool*  pRefPool    /*  Pool, der die Surrogate aufl"osen kann
+    const SfxItemPool*	pRefPool 	/*	Pool, der die Surrogate aufl"osen kann
                                         (z.B. zum Einf"ugen von Dokumenten) */
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese Methode l"adt ein <SfxItemSet> aus einem Stream. Falls der
     <SfxItemPool> ohne Ref-Counts geladen wurde, werden die geladenen
@@ -1587,7 +1586,7 @@ SvStream &SfxItemSet::Load
 
     [Querverweise]
 
-    <SfxItemSet::Store(Stream&,sal_Bool)const>
+    <SfxItemSet::Store(Stream&,BOOL)const>
 */
 
 {
@@ -1600,9 +1599,9 @@ SvStream &SfxItemSet::Load
         pRefPool = _pPool;
 
     // Anzahl der zu ladenden Items laden und dann ebensoviele Items
-    sal_uInt16 nCount = 0;
+    USHORT nCount = 0;
     rStream >> nCount;
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    for ( USHORT i = 0; i < nCount; ++i )
     {
         // Surrogat/Item laden und (Surrogat) aufl"osen lassen
         const SfxPoolItem *pItem =
@@ -1612,9 +1611,9 @@ SvStream &SfxItemSet::Load
         if ( pItem )
         {
             // Position f"ur Item-Pointer im Set suchen
-            sal_uInt16 nWhich = pItem->Which();
+            USHORT nWhich = pItem->Which();
             SfxItemArray ppFnd = _aItems;
-            const sal_uInt16* pPtr = _pWhichRanges;
+            const USHORT* pPtr = _pWhichRanges;
             while ( *pPtr )
             {
                 // in diesem Bereich?
@@ -1640,7 +1639,7 @@ SvStream &SfxItemSet::Load
 
 // -----------------------------------------------------------------------
 
-int SfxItemSet::operator==(const SfxItemSet &rCmp) const
+int	SfxItemSet::operator==(const SfxItemSet &rCmp) const
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
     DBG_CHKOBJ(&rCmp, SfxItemSet, DbgCheckItemSet);
@@ -1649,48 +1648,48 @@ int SfxItemSet::operator==(const SfxItemSet &rCmp) const
     if ( _pParent != rCmp._pParent ||
          _pPool != rCmp._pPool ||
          Count() != rCmp.Count() )
-        return sal_False;
+        return FALSE;
 
     // Ranges durchzaehlen lassen dauert laenger, muss aber auch gleich sein
-    sal_uInt16 nCount1 = TotalCount();
-    sal_uInt16 nCount2 = rCmp.TotalCount();
+    USHORT nCount1 = TotalCount();
+    USHORT nCount2 = rCmp.TotalCount();
     if ( nCount1 != nCount2 )
-        return sal_False;
+        return FALSE;
 
     // sind die Ranges selbst ungleich?
-    for ( sal_uInt16 nRange = 0; _pWhichRanges[nRange]; nRange += 2 )
+    for ( USHORT nRange = 0; _pWhichRanges[nRange]; nRange += 2 )
         if ( _pWhichRanges[nRange] != rCmp._pWhichRanges[nRange] ||
              _pWhichRanges[nRange+1] != rCmp._pWhichRanges[nRange+1] )
         {
             // dann m"ussen wir die langsame Methode verwenden
             SfxWhichIter aIter( *this );
-            for ( sal_uInt16 nWh = aIter.FirstWhich();
+            for ( USHORT nWh = aIter.FirstWhich();
                   nWh;
                   nWh = aIter.NextWhich() )
             {
                 // wenn die Pointer von poolable Items ungleich sind,
                 // muessen die Items gleich sein
                 const SfxPoolItem *pItem1 = 0, *pItem2 = 0;
-                if ( GetItemState( nWh, sal_False, &pItem1 ) !=
-                        rCmp.GetItemState( nWh, sal_False, &pItem2 ) ||
+                if ( GetItemState( nWh, FALSE, &pItem1 ) !=
+                        rCmp.GetItemState( nWh, FALSE, &pItem2 ) ||
                      ( pItem1 != pItem2 &&
                         ( !pItem1 || IsInvalidItem(pItem1) ||
                           ( _pPool->IsItemFlag(*pItem1, SFX_ITEM_POOLABLE) &&
                             *pItem1 != *pItem2 ) ) ) )
-                    return sal_False;
+                    return FALSE;
             }
 
-            return sal_True;
+            return TRUE;
         }
 
     // Pointer alle gleich?
     if ( 0 == memcmp( _aItems, rCmp._aItems, nCount1 * sizeof(_aItems[0]) ) )
-        return sal_True;
+        return TRUE;
 
     // dann werden wir wohl alle einzeln vergleichen muessen
     const SfxPoolItem **ppItem1 = (const SfxPoolItem**) _aItems;
     const SfxPoolItem **ppItem2 = (const SfxPoolItem**) rCmp._aItems;
-    for ( sal_uInt16 nPos = 0; nPos < nCount1; ++nPos )
+    for ( USHORT nPos = 0; nPos < nCount1; ++nPos )
     {
         // wenn die Pointer von poolable Items ungleich sind,
         // muessen die Items gleich sein
@@ -1699,18 +1698,18 @@ int SfxItemSet::operator==(const SfxItemSet &rCmp) const
                ( IsInvalidItem(*ppItem1) || IsInvalidItem(*ppItem2) ) ||
                ( _pPool->IsItemFlag(**ppItem1, SFX_ITEM_POOLABLE) ) ||
                  **ppItem1 != **ppItem2 ) )
-            return sal_False;
+            return FALSE;
 
         ++ppItem1;
         ++ppItem2;
     }
 
-    return sal_True;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-SfxItemSet *SfxItemSet::Clone(sal_Bool bItems, SfxItemPool *pToPool ) const
+SfxItemSet *SfxItemSet::Clone(BOOL bItems, SfxItemPool *pToPool ) const
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
     if ( pToPool && pToPool != _pPool )
@@ -1719,11 +1718,11 @@ SfxItemSet *SfxItemSet::Clone(sal_Bool bItems, SfxItemPool *pToPool ) const
         if ( bItems )
         {
             SfxWhichIter aIter(*pNewSet);
-            sal_uInt16 nWhich = aIter.FirstWhich();
+            USHORT nWhich = aIter.FirstWhich();
             while ( nWhich )
             {
                 const SfxPoolItem* pItem;
-                if ( SFX_ITEM_SET == GetItemState( nWhich, sal_False, &pItem ) )
+                if ( SFX_ITEM_SET == GetItemState( nWhich, FALSE, &pItem ) )
                     pNewSet->Put( *pItem, pItem->Which() );
                 nWhich = aIter.NextWhich();
             }
@@ -1738,12 +1737,12 @@ SfxItemSet *SfxItemSet::Clone(sal_Bool bItems, SfxItemPool *pToPool ) const
 
 // -----------------------------------------------------------------------
 
-int SfxItemSet::PutDirect(const SfxPoolItem &rItem)
+int	SfxItemSet::PutDirect(const SfxPoolItem &rItem)
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
     SfxItemArray ppFnd = _aItems;
-    const sal_uInt16* pPtr = _pWhichRanges;
-    const sal_uInt16 nWhich = rItem.Which();
+    const USHORT* pPtr = _pWhichRanges;
+    const USHORT nWhich = rItem.Which();
 #ifdef DBG_UTIL
     IsPoolDefaultItem(&rItem) || _pPool->GetSurrogate(&rItem);
         // nur Assertion in den callees provozieren
@@ -1755,10 +1754,10 @@ int SfxItemSet::PutDirect(const SfxPoolItem &rItem)
             // in diesem Bereich
             ppFnd += nWhich - *pPtr;
             const SfxPoolItem* pOld = *ppFnd;
-            if( pOld )      // schon einer vorhanden
+            if( pOld )		// schon einer vorhanden
             {
                 if( rItem == **ppFnd )
-                    return sal_False;       // schon vorhanden !
+                    return FALSE;		// schon vorhanden !
                 _pPool->Remove( *pOld );
             }
             else
@@ -1774,18 +1773,18 @@ int SfxItemSet::PutDirect(const SfxPoolItem &rItem)
                     rItem.AddRef();
             }
 
-            return sal_True;
+            return TRUE;
         }
         ppFnd += *(pPtr+1) - *pPtr + 1;
         pPtr += 2;
     }
-    return sal_False;
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
 SfxAllItemSet::SfxAllItemSet( SfxItemPool &rPool )
-:   SfxItemSet(rPool, (const sal_uInt16*) 0),
+:	SfxItemSet(rPool, (const USHORT*) 0),
     aDefault(0),
     nFree(nInitCount)
 {
@@ -1793,8 +1792,8 @@ SfxAllItemSet::SfxAllItemSet( SfxItemPool &rPool )
     _aItems = 0;
 
     // nInitCount Paare an USHORTs fuer Ranges allozieren
-    _pWhichRanges = new sal_uInt16[ nInitCount + 1 ];
-    memset( _pWhichRanges, 0, ( nInitCount + 1 ) * sizeof(sal_uInt16) );
+    _pWhichRanges = new USHORT[ nInitCount + 1 ];
+    memset( _pWhichRanges, 0, ( nInitCount + 1 ) * sizeof(USHORT) );
 }
 
 
@@ -1816,7 +1815,7 @@ SfxAllItemSet::SfxAllItemSet(const SfxAllItemSet &rCopy)
 :   SfxItemSet(rCopy),
     aDefault(0),
     nFree(0)
-/*  [Anmerkung]
+/*	[Anmerkung]
 
     Der mu\s sein, da sonst vom Compiler einer generiert wird, er nimmt
     nicht den Ctor mit der 'const SfxItemSet&'!
@@ -1826,12 +1825,12 @@ SfxAllItemSet::SfxAllItemSet(const SfxAllItemSet &rCopy)
 
 // -----------------------------------------------------------------------
 
-static sal_uInt16 *AddRanges_Impl(
-    sal_uInt16 *pUS, std::ptrdiff_t nOldSize, sal_uInt16 nIncr)
+static USHORT *AddRanges_Impl(
+    USHORT *pUS, std::ptrdiff_t nOldSize, USHORT nIncr)
 
-/*  Diese interne Funktion erzeugt ein neues Which-Range-Array, welches von
+/* 	Diese interne Funktion erzeugt ein neues Which-Range-Array, welches von
     dem 'nOldSize'-USHORTs langen 'pUS' kopiert wird und hinten an Platz
-    f"ur 'nIncr' neue USHORTs hat. Das terminierende sal_uInt16 mit der '0'
+    f"ur 'nIncr' neue USHORTs hat. Das terminierende USHORT mit der '0'
     wird weder in 'nOldSize' noch in 'nIncr' mitgez"ahlt, sondern implizit
     hinzugerechnet.
 
@@ -1841,13 +1840,13 @@ static sal_uInt16 *AddRanges_Impl(
 
 {
     // neues Which-Range-Array anlegen
-    sal_uInt16 *pNew = new sal_uInt16[ nOldSize + nIncr + 1 ];
+    USHORT *pNew = new USHORT[ nOldSize + nIncr + 1 ];
 
     // die alten Ranges "ubernehmen
-    memcpy( pNew, pUS, nOldSize * sizeof(sal_uInt16) );
+    memcpy( pNew, pUS, nOldSize * sizeof(USHORT) );
 
     // die neuen auf 0 initialisieren
-    memset( pNew + nOldSize, 0, ( nIncr + 1 ) * sizeof(sal_uInt16) );
+    memset( pNew + nOldSize, 0, ( nIncr + 1 ) * sizeof(USHORT) );
 
     // das alte Array freigeben
     delete[] pUS;
@@ -1857,7 +1856,7 @@ static sal_uInt16 *AddRanges_Impl(
 
 // -----------------------------------------------------------------------
 
-static SfxItemArray AddItem_Impl(SfxItemArray pItems, sal_uInt16 nOldSize, sal_uInt16 nPos)
+static SfxItemArray AddItem_Impl(SfxItemArray pItems, USHORT nOldSize, USHORT nPos)
 
 /*  Diese interne Funktion erzeugt ein neues ItemArray, welches von 'pItems'
     kopiert wird, an der Position 'nPos' jedoch Platz f"ur einen neuen
@@ -1895,17 +1894,17 @@ static SfxItemArray AddItem_Impl(SfxItemArray pItems, sal_uInt16 nOldSize, sal_u
 
 // -----------------------------------------------------------------------
 
-const SfxPoolItem* SfxAllItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
+const SfxPoolItem* SfxAllItemSet::Put( const SfxPoolItem& rItem, USHORT nWhich )
 
 // Putten mit automatischer Erweiterung der Whichs-Ids um die ID
 // des Items.
 
 {
-    sal_uInt16 nPos = 0; // Position f"ur 'rItem' in '_aItems'
-    const sal_uInt16 nItemCount = TotalCount();
+    USHORT nPos = 0; // Position f"ur 'rItem' in '_aItems'
+    const USHORT nItemCount = TotalCount();
 
     // erstmal sehen, ob es schon einen passenden Bereich gibt
-    sal_uInt16 *pPtr = _pWhichRanges;
+    USHORT *pPtr = _pWhichRanges;
     while ( *pPtr )
     {
         // Which-Id liegt in diesem Bereich?
@@ -1988,15 +1987,15 @@ const SfxPoolItem* SfxAllItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhi
     const SfxPoolItem& rNew = _pPool->Put( rItem, nWhich );
 
     // altes Item merken
-    sal_Bool bIncrementCount = sal_False;
+    BOOL bIncrementCount = FALSE;
     const SfxPoolItem* pOld = *( _aItems + nPos );
     if ( reinterpret_cast< SfxPoolItem* >( -1 ) == pOld )   // state "dontcare"
         pOld = NULL;
     if ( !pOld )
     {
-        bIncrementCount = sal_True;
+        bIncrementCount = TRUE;
         pOld = _pParent ?
-                &_pParent->Get( nWhich, sal_True )
+                &_pParent->Get( nWhich, TRUE )
                 : nWhich <= SFX_WHICH_MAX ? &_pPool->GetDefaultItem( nWhich ) : 0;
     }
 
@@ -2020,11 +2019,11 @@ const SfxPoolItem* SfxAllItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhi
 // -----------------------------------------------------------------------
 
 
-/*  Diese Methode wird forwarded, damit sie nicht durch die anderen
+/*	Diese Methode wird forwarded, damit sie nicht durch die anderen
     Put-Methoden dieser SubClass gehided wird.
 */
 
-int SfxAllItemSet::Put( const SfxItemSet& rSet, sal_Bool bInvalidAsDefault )
+int SfxAllItemSet::Put( const SfxItemSet& rSet, BOOL bInvalidAsDefault )
 {
     //? pruefen, ob Which-Ranges erweitert werden
     return SfxItemSet::Put( rSet, bInvalidAsDefault );
@@ -2033,7 +2032,7 @@ int SfxAllItemSet::Put( const SfxItemSet& rSet, sal_Bool bInvalidAsDefault )
 // -----------------------------------------------------------------------
 // Item disablen, wenn durch ein VoidItem mit dem Which-Wert 0 ausgedrueckt
 
-void SfxItemSet::DisableItem(sal_uInt16 nWhich)
+void SfxItemSet::DisableItem(USHORT nWhich)
 {
     DBG_CHKTHIS(SfxItemSet, 0);
     Put( SfxVoidItem(0), nWhich );
@@ -2041,7 +2040,7 @@ void SfxItemSet::DisableItem(sal_uInt16 nWhich)
 
 // -----------------------------------------------------------------------
 
-SfxItemSet *SfxAllItemSet::Clone(sal_Bool bItems, SfxItemPool *pToPool ) const
+SfxItemSet *SfxAllItemSet::Clone(BOOL bItems, SfxItemPool *pToPool ) const
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
     if ( pToPool && pToPool != _pPool )

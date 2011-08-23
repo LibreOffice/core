@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,19 +54,19 @@ static std::list<OUString>
 getLocaleSubdirList( lang::Locale const& rLocale )
 {
     std::list<OUString> aSubdirs;
-    aSubdirs.push_front( OUString(RTL_CONSTASCII_USTRINGPARAM(".")) );
-    aSubdirs.push_front( OUString(RTL_CONSTASCII_USTRINGPARAM("en-US")) );
+    aSubdirs.push_front( OUString::createFromAscii( "." ) );
+    aSubdirs.push_front( OUString::createFromAscii( "en-US" ) );
     if ( rLocale.Language.getLength() )
         aSubdirs.push_front( rLocale.Language );
     if ( rLocale.Country.getLength() )
     {
         OUString aLocaleCountry = rLocale.Language
-            + OUString(RTL_CONSTASCII_USTRINGPARAM("-"))
+            + OUString::createFromAscii( "-" )
             + rLocale.Country;
         aSubdirs.push_front( aLocaleCountry );
         if ( rLocale.Variant.getLength() )
             aSubdirs.push_front( aLocaleCountry
-                                 + OUString(RTL_CONSTASCII_USTRINGPARAM("."))
+                                 + OUString::createFromAscii( "." )
                                  + rLocale.Variant );
     }
     return aSubdirs;
@@ -84,10 +84,10 @@ static OUString
 getFirstExisting( OUString const& aDir, std::list<OUString> const& aSubDirs,
                   OUString const& aXMLName )
 {
-    static OUString const aSlash(RTL_CONSTASCII_USTRINGPARAM("/"));
+    static OUString const aSlash = OUString::createFromAscii( "/" );
     String aResult;
     for ( std::list<OUString>::const_iterator i = aSubDirs.begin();
-          i != aSubDirs.end(); ++i )
+          i != aSubDirs.end(); i++ )
     {
         String aFile = aDir + aSlash + *i + aSlash + aXMLName;
         OSL_TRACE( "testing: %s", OUSTRING_CSTR( aFile ) );
@@ -107,7 +107,7 @@ readRightTranslation( OUString const& aXMLName )
         = getLocaleSubdirList( Application::GetSettings().GetUILocale() );
 #if TEST_LAYOUT // read from cwd first
     OUString aCurrentWorkingUrl;
-    tools::getProcessWorkingDir( aCurrentWorkingUrl );
+    tools::getProcessWorkingDir( &aCurrentWorkingUrl );
     String aCurrentWorkingDir;
     LocalFileHelper::ConvertURLToPhysicalName( aCurrentWorkingUrl, aCurrentWorkingDir );
     aXMLFile = getFirstExisting( aCurrentWorkingDir, aSubdirs, aXMLName );
@@ -118,7 +118,7 @@ readRightTranslation( OUString const& aXMLName )
     {
         OUString aShareUrl;
         Bootstrap::locateSharedData( aShareUrl );
-        OUString aXMLUrl = aShareUrl + OUString(RTL_CONSTASCII_USTRINGPARAM("/layout"));
+        OUString aXMLUrl = aShareUrl + OUString::createFromAscii( "/layout" );
         String aXMLDir;
         LocalFileHelper::ConvertURLToPhysicalName( aXMLUrl, aXMLDir );
         aXMLFile = getFirstExisting( aXMLDir, aSubdirs, aXMLName );

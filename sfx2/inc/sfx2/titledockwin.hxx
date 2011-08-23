@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ namespace sfx2
             @return
                 the ID of the newly created toolbox item
         */
-        sal_uInt16  AddDropDownToolBoxItem( const String& i_rItemText, const rtl::OString& i_nHelpId, const Link& i_rCallback )
+        USHORT  AddDropDownToolBoxItem( const String& i_rItemText, ULONG i_nHelpId, const Link& i_rCallback )
         {
             return impl_addDropDownToolBoxItem( i_rItemText, i_nHelpId, i_rCallback );
         }
@@ -101,11 +101,6 @@ namespace sfx2
         ToolBox&        GetToolBox()        { return m_aToolbox; }
         const ToolBox&  GetToolBox() const  { return m_aToolbox; }
 
-        /** Return the border that is painted around the inner window as
-            decoration.
-        */
-        SvBorder        GetDecorationBorder (void) const  { return m_aBorder; }
-
     protected:
         // Window overridables
         virtual void Paint( const Rectangle& i_rArea );
@@ -115,7 +110,7 @@ namespace sfx2
         virtual void SetText( const String& i_rText );
 
         // DockingWindow overridables
-        void EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
+        void EndDocking( const Rectangle& rRect, BOOL bFloatMode );
 
         // own overridables
         virtual void onLayoutDone();
@@ -127,7 +122,7 @@ namespace sfx2
 
         /** internal version of AddDropDownToolBoxItem
         */
-        sal_uInt16  impl_addDropDownToolBoxItem( const String& i_rItemText, const rtl::OString& i_nHelpId, const Link& i_rCallback );
+        USHORT  impl_addDropDownToolBoxItem( const String& i_rItemText, ULONG i_nHelpId, const Link& i_rCallback );
 
         /** returns the current title.
 
@@ -159,11 +154,6 @@ namespace sfx2
             since the last Paint().
         */
         bool                m_bLayoutPending;
-
-        /** Height of the title bar.  Calculated in impl_layout().
-        */
-        int                 m_nTitleBarHeight;
-
     };
 
 //......................................................................................................................

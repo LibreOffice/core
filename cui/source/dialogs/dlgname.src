@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,6 @@ ModalDialog RID_SVXDLG_NAME
     };
     Edit EDT_STRING
     {
-        HelpID = "cui:Edit:RID_SVXDLG_NAME:EDT_STRING";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 112 , 12 ) ;
@@ -97,13 +96,12 @@ ModalDialog RID_SVXDLG_OBJECT_NAME
     };
     Edit NTD_EDT_NAME
     {
-        HelpID = "cui:Edit:RID_SVXDLG_OBJECT_NAME:NTD_EDT_NAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 168 , 12 ) ;
         TabStop = TRUE ;
     };
-
+    
     // divider
     FixedLine FL_SEPARATOR_A
     {
@@ -155,7 +153,6 @@ ModalDialog RID_SVXDLG_OBJECT_TITLE_DESC
     };
     Edit NTD_EDT_TITLE
     {
-        HelpID = "cui:Edit:RID_SVXDLG_OBJECT_TITLE_DESC:NTD_EDT_TITLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 168 , 12 ) ;
@@ -172,7 +169,6 @@ ModalDialog RID_SVXDLG_OBJECT_TITLE_DESC
     };
     MultiLineEdit NTD_EDT_DESC
     {
-        HelpID = "cui:MultiLineEdit:RID_SVXDLG_OBJECT_TITLE_DESC:NTD_EDT_DESC";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 41 ) ;
         Size = MAP_APPFONT ( 168 , (12 * 3) - 2 ) ;
@@ -222,14 +218,12 @@ ModalDialog RID_SVXDLG_MESSBOX
     Moveable = TRUE ;
     PushButton BTN_1
     {
-        HelpID = "cui:PushButton:RID_SVXDLG_MESSBOX:BTN_1";
         Pos = MAP_APPFONT ( 25 , 44 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     PushButton BTN_2
     {
-        HelpID = "cui:PushButton:RID_SVXDLG_MESSBOX:BTN_2";
         Pos = MAP_APPFONT ( 78 , 44 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -248,3 +242,28 @@ ModalDialog RID_SVXDLG_MESSBOX
     };
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -7,6 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile: imageresourceaccess.cxx,v $
+ * $Revision: 1.5 $
+ *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -48,7 +51,7 @@ namespace svt
 //........................................................................
 
 #ifndef C2U
-#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
+#define C2U(cChar)	rtl::OUString::createFromAscii(cChar)
 #endif
 
     using namespace ::com::sun::star;

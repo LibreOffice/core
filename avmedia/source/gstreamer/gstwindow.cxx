@@ -89,6 +89,7 @@ Window::~Window()
 void SAL_CALL Window::update(  )
     throw (uno::RuntimeException)
 {
+    //::RedrawWindow( (HWND) mnFrameWnd, NULL, NULL, RDW_ALLCHILDREN | RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE  );
 }
 
 // ------------------------------------------------------------------------------
@@ -104,6 +105,7 @@ sal_Bool SAL_CALL Window::setZoomLevel( media::ZoomLevel eZoomLevel )
             if( eZoomLevel != meZoomLevel )
             {
                 meZoomLevel = eZoomLevel;
+                //ImplLayoutVideoWindow();
             }
 
             bRet = true;
@@ -131,9 +133,14 @@ void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
 // XWindow
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Window::setPosSize( sal_Int32 /*X*/, sal_Int32 /*Y*/, sal_Int32 /*Width*/, sal_Int32 /*Height*/, sal_Int16 /*Flags*/ )
+void SAL_CALL Window::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
     throw (uno::RuntimeException)
 {
+//     if( mnFrameWnd )
+//     {
+//         ::SetWindowPos( (HWND) mnFrameWnd, HWND_TOP, X, Y, Width, Height, 0 );
+//         ImplLayoutVideoWindow();
+//     }
 }
 
 // ------------------------------------------------------------------------------
@@ -147,22 +154,46 @@ awt::Rectangle SAL_CALL Window::getPosSize()
     aRet.Width = 320;
     aRet.Height = 240;
 
+//     if( mnFrameWnd )
+//     {
+//         ::RECT  aWndRect;
+//         long    nX = 0, nY = 0, nWidth = 0, nHeight = 0;
+
+//         if( ::GetClientRect( (HWND) mnFrameWnd, &aWndRect ) )
+//         {
+//             aRet.X = aWndRect.left;
+//             aRet.Y = aWndRect.top;
+//             aRet.Width = aWndRect.right - aWndRect.left + 1;
+//             aRet.Height = aWndRect.bottom - aWndRect.top + 1;
+//         }
+//     }
+
     return aRet;
 }
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Window::setVisible( sal_Bool /*bVisible*/ )
+void SAL_CALL Window::setVisible( sal_Bool bVisible )
     throw (uno::RuntimeException)
 {
+//     if( mnFrameWnd )
+//     {
+//         IVideoWindow* pVideoWindow = const_cast< IVideoWindow* >( mrPlayer.getVideoWindow() );
 
+//         if( pVideoWindow )
+//             pVideoWindow->put_Visible( bVisible ? OATRUE : OAFALSE );
+
+//         ::ShowWindow( (HWND) mnFrameWnd, bVisible ? SW_SHOW : SW_HIDE );
+//     }
 }
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Window::setEnable( sal_Bool /*bEnable*/ )
+void SAL_CALL Window::setEnable( sal_Bool bEnable )
     throw (uno::RuntimeException)
 {
+//     if( mnFrameWnd )
+//         ::EnableWindow( (HWND) mnFrameWnd, bEnable );
 }
 
 // ------------------------------------------------------------------------------
@@ -170,6 +201,8 @@ void SAL_CALL Window::setEnable( sal_Bool /*bEnable*/ )
 void SAL_CALL Window::setFocus(  )
     throw (uno::RuntimeException)
 {
+//     if( mnFrameWnd )
+//         ::SetFocus( (HWND) mnFrameWnd );
 }
 
 // ------------------------------------------------------------------------------
@@ -267,6 +300,7 @@ void SAL_CALL Window::removePaintListener( const uno::Reference< awt::XPaintList
 {
     maListeners.removeInterface( getCppuType( &xListener ), xListener );
 }
+
 
 // XComponent
 // ------------------------------------------------------------------------------

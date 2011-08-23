@@ -1,8 +1,8 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
- *
+ * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,9 +35,9 @@ int main(int argc , char** argv, char** envp)
 {
     //prevent warning about unused parameters
     //we need to provide parameter names in C
-    (void)argc;
-    (void)argv;
-    (void)envp;
+    argc = argc;
+    argv = argv;
+    envp = envp;
 
     fprintf(stdout,"Hello world!\n");
     return 0;

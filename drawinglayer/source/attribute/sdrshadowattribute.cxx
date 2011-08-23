@@ -3,6 +3,12 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
+ *  $RCSfile: sdrattribute.cxx,v $
+ *
+ *  $Revision: 1.5 $
+ *
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:19 $
+ *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *
@@ -45,18 +51,18 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32                              mnRefCount;
+            sal_uInt32								mnRefCount;
 
             // shadow definitions
-            basegfx::B2DVector                  maOffset;                   // shadow offset 1/100th mm
-            double                              mfTransparence;             // [0.0 .. 1.0], 0.0==no transp.
-            basegfx::BColor                     maColor;                    // color of shadow
+            basegfx::B2DVector					maOffset;					// shadow offset 1/100th mm
+            double								mfTransparence;				// [0.0 .. 1.0], 0.0==no transp.
+            basegfx::BColor						maColor;					// color of shadow
 
             ImpSdrShadowAttribute(
-                const basegfx::B2DVector& rOffset,
-                double fTransparence,
+                const basegfx::B2DVector& rOffset, 
+                double fTransparence, 
                 const basegfx::BColor& rColor)
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 maOffset(rOffset),
                 mfTransparence(fTransparence),
                 maColor(rColor)
@@ -65,7 +71,7 @@ namespace drawinglayer
 
             // data read access
             const basegfx::B2DVector& getOffset() const { return maOffset; }
-            double getTransparence() const { return mfTransparence; }
+            double getTransparence() const { return mfTransparence;	}
             const basegfx::BColor& getColor() const { return maColor; }
 
             bool operator==(const ImpSdrShadowAttribute& rCandidate) const
@@ -74,7 +80,7 @@ namespace drawinglayer
                     && getTransparence() == rCandidate.getTransparence()
                     && getColor() == rCandidate.getColor());
             }
-
+            
             static ImpSdrShadowAttribute* get_global_default()
             {
                 static ImpSdrShadowAttribute* pDefault = 0;
@@ -83,7 +89,7 @@ namespace drawinglayer
                 {
                     pDefault = new ImpSdrShadowAttribute(
                         basegfx::B2DVector(),
-                        0.0,
+                        0.0, 
                         basegfx::BColor());
 
                     // never delete; start with RefCount 1, not 0
@@ -95,22 +101,22 @@ namespace drawinglayer
         };
 
         SdrShadowAttribute::SdrShadowAttribute(
-            const basegfx::B2DVector& rOffset,
-            double fTransparence,
+            const basegfx::B2DVector& rOffset, 
+            double fTransparence, 
             const basegfx::BColor& rColor)
-        :   mpSdrShadowAttribute(new ImpSdrShadowAttribute(
+        :	mpSdrShadowAttribute(new ImpSdrShadowAttribute(
                 rOffset, fTransparence, rColor))
         {
         }
 
         SdrShadowAttribute::SdrShadowAttribute()
-        :   mpSdrShadowAttribute(ImpSdrShadowAttribute::get_global_default())
+        :	mpSdrShadowAttribute(ImpSdrShadowAttribute::get_global_default())
         {
             mpSdrShadowAttribute->mnRefCount++;
         }
 
         SdrShadowAttribute::SdrShadowAttribute(const SdrShadowAttribute& rCandidate)
-        :   mpSdrShadowAttribute(rCandidate.mpSdrShadowAttribute)
+        :	mpSdrShadowAttribute(rCandidate.mpSdrShadowAttribute)
         {
             mpSdrShadowAttribute->mnRefCount++;
         }
@@ -144,7 +150,7 @@ namespace drawinglayer
                 {
                     delete mpSdrShadowAttribute;
                 }
-
+                
                 mpSdrShadowAttribute = rCandidate.mpSdrShadowAttribute;
                 mpSdrShadowAttribute->mnRefCount++;
             }
@@ -167,19 +173,19 @@ namespace drawinglayer
             return (*rCandidate.mpSdrShadowAttribute == *mpSdrShadowAttribute);
         }
 
-        const basegfx::B2DVector& SdrShadowAttribute::getOffset() const
-        {
-            return mpSdrShadowAttribute->getOffset();
+        const basegfx::B2DVector& SdrShadowAttribute::getOffset() const 
+        { 
+            return mpSdrShadowAttribute->getOffset(); 
         }
 
-        double SdrShadowAttribute::getTransparence() const
-        {
-            return mpSdrShadowAttribute->getTransparence();
+        double SdrShadowAttribute::getTransparence() const 
+        { 
+            return mpSdrShadowAttribute->getTransparence();	
         }
 
-        const basegfx::BColor& SdrShadowAttribute::getColor() const
-        {
-            return mpSdrShadowAttribute->getColor();
+        const basegfx::BColor& SdrShadowAttribute::getColor() const 
+        { 
+            return mpSdrShadowAttribute->getColor(); 
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer

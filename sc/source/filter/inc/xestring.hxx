@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,15 @@ public:
                             const String& rString,
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
-
+    /** Assigns a formatted string, converts this object to a BIFF8 Unicode string.
+        @param rFormats  The formatting runs.
+        @param nFlags  Modifiers for string export.
+        @param nMaxLen  The maximum number of characters to store in this string. */
+    void                Assign(
+                            const String& rString,
+                            const XclFormatRunVec& rFormats,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
     /** Assigns an unformatted string, converts this object to a BIFF8 Unicode string.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
@@ -98,7 +106,15 @@ public:
                             const ::rtl::OUString& rString,
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
-
+    /** Assigns a formatted string, converts this object to a BIFF8 Unicode string.
+        @param rFormats  The formatting runs.
+        @param nFlags  Modifiers for string export.
+        @param nMaxLen  The maximum number of characters to store in this string. */
+    void                Assign(
+                            const ::rtl::OUString& rString,
+                            const XclFormatRunVec& rFormats,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
     /** Assigns a Unicode character, converts this object to a BIFF8 Unicode string.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string (for appending). */

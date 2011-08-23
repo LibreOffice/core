@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace sdr
     namespace contact
     {
         ViewContactOfSdrEdgeObj::ViewContactOfSdrEdgeObj(SdrEdgeObj& rEdgeObj)
-        :   ViewContactOfTextObj(rEdgeObj)
+        :	ViewContactOfTextObj(rEdgeObj)
         {
         }
 
@@ -60,15 +60,15 @@ namespace sdr
             const SfxItemSet& rItemSet = GetEdgeObj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineShadowTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineShadowTextAttribute(
-                    rItemSet,
+                    rItemSet, 
                     GetEdgeObj().getText(0)));
 
-            // create primitive. Always create primitives to allow the decomposition of
+            // create primitive. Always create primitives to allow the decomposition of 
             // SdrConnectorPrimitive2D to create needed invisible elements for HitTest
             // and/or BoundRect
             const drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::SdrConnectorPrimitive2D(
-                    aAttribute,
+                    aAttribute, 
                     rEdgeTrack));
 
             return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);

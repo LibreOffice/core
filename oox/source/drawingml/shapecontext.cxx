@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,13 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/drawingml/shapecontext.hxx"
 #include "oox/drawingml/shapestylecontext.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
-#include "hyperlinkcontext.hxx"
+#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace oox::core;
@@ -80,11 +81,11 @@ Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32
 {
     Reference< XFastContextHandler > xRet;
 
-    switch( getBaseToken( aElementToken ) )
+    switch( getToken( aElementToken ) )
     {
     // nvSpPr CT_ShapeNonVisual begin
-//  case XML_drElemPr:
-//      break;
+//	case XML_drElemPr:
+//		break;
     case XML_cNvPr:
     {
         AttributeList aAttribs( xAttribs );
@@ -93,10 +94,6 @@ Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32
         mpShapePtr->setName( xAttribs->getOptionalValue( XML_name ) );
         break;
     }
-    case XML_hlinkMouseOver:
-    case XML_hlinkClick:
-        xRet = new HyperLinkContext( *this, xAttribs,  getShape()->getShapeProperties() );
-        break;
     case XML_ph:
         mpShapePtr->setSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
         if( xAttribs->hasAttribute( XML_idx ) )

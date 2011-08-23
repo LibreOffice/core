@@ -3,6 +3,12 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
+ *  $RCSfile: fillattribute.cxx,v $
+ *
+ *  $Revision: 1.4 $
+ *
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:19 $
+ *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *
@@ -44,24 +50,24 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32                              mnRefCount;
+            sal_uInt32								mnRefCount;
 
             // data definitions
-            HatchStyle                              meStyle;
-            double                                  mfDistance;
-            double                                  mfAngle;
-            basegfx::BColor                         maColor;
+            HatchStyle								meStyle;
+            double									mfDistance;
+            double									mfAngle;
+            basegfx::BColor							maColor;
 
             // bitfield
-            unsigned                                mbFillBackground : 1;
+            unsigned								mbFillBackground : 1;
 
             ImpFillHatchAttribute(
-                HatchStyle eStyle,
-                double fDistance,
-                double fAngle,
-                const basegfx::BColor& rColor,
+                HatchStyle eStyle, 
+                double fDistance, 
+                double fAngle, 
+                const basegfx::BColor& rColor, 
                 bool bFillBackground)
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 meStyle(eStyle),
                 mfDistance(fDistance),
                 mfAngle(fAngle),
@@ -107,24 +113,24 @@ namespace drawinglayer
         };
 
         FillHatchAttribute::FillHatchAttribute(
-            HatchStyle eStyle,
-            double fDistance,
-            double fAngle,
-            const basegfx::BColor& rColor,
+            HatchStyle eStyle, 
+            double fDistance, 
+            double fAngle, 
+            const basegfx::BColor& rColor, 
             bool bFillBackground)
-        :   mpFillHatchAttribute(new ImpFillHatchAttribute(
+        :	mpFillHatchAttribute(new ImpFillHatchAttribute(
                 eStyle, fDistance, fAngle, rColor, bFillBackground))
         {
         }
 
         FillHatchAttribute::FillHatchAttribute()
-        :   mpFillHatchAttribute(ImpFillHatchAttribute::get_global_default())
+        :	mpFillHatchAttribute(ImpFillHatchAttribute::get_global_default())
         {
             mpFillHatchAttribute->mnRefCount++;
         }
 
         FillHatchAttribute::FillHatchAttribute(const FillHatchAttribute& rCandidate)
-        :   mpFillHatchAttribute(rCandidate.mpFillHatchAttribute)
+        :	mpFillHatchAttribute(rCandidate.mpFillHatchAttribute)
         {
             mpFillHatchAttribute->mnRefCount++;
         }
@@ -158,7 +164,7 @@ namespace drawinglayer
                 {
                     delete mpFillHatchAttribute;
                 }
-
+                
                 mpFillHatchAttribute = rCandidate.mpFillHatchAttribute;
                 mpFillHatchAttribute->mnRefCount++;
             }
@@ -182,31 +188,31 @@ namespace drawinglayer
         }
 
         // data read access
-        HatchStyle FillHatchAttribute::getStyle() const
-        {
-            return mpFillHatchAttribute->getStyle();
+        HatchStyle FillHatchAttribute::getStyle() const 
+        { 
+            return mpFillHatchAttribute->getStyle(); 
         }
 
-        double FillHatchAttribute::getDistance() const
-        {
-            return mpFillHatchAttribute->getDistance();
+        double FillHatchAttribute::getDistance() const 
+        { 
+            return mpFillHatchAttribute->getDistance(); 
         }
 
-        double FillHatchAttribute::getAngle() const
-        {
-            return mpFillHatchAttribute->getAngle();
+        double FillHatchAttribute::getAngle() const 
+        { 
+            return mpFillHatchAttribute->getAngle(); 
         }
 
-        const basegfx::BColor& FillHatchAttribute::getColor() const
-        {
-            return mpFillHatchAttribute->getColor();
+        const basegfx::BColor& FillHatchAttribute::getColor() const 
+        { 
+            return mpFillHatchAttribute->getColor(); 
         }
 
-        bool FillHatchAttribute::isFillBackground() const
-        {
-            return mpFillHatchAttribute->isFillBackground();
+        bool FillHatchAttribute::isFillBackground() const 
+        { 
+            return mpFillHatchAttribute->isFillBackground(); 
         }
-
+    
     } // end of namespace attribute
 } // end of namespace drawinglayer
 

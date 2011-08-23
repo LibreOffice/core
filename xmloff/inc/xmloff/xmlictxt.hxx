@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,10 +47,10 @@ class XMLOFF_DLLPUBLIC SvXMLImportContext : public SvRefBase
 
     SvXMLImport& mrImport;
 
-    sal_uInt16       mnPrefix;
+    USHORT		 mnPrefix;
     ::rtl::OUString maLocalName;
 
-    SvXMLNamespaceMap   *mpRewindMap;
+    SvXMLNamespaceMap	*mpRewindMap;
 
     SAL_DLLPRIVATE SvXMLNamespaceMap *GetRewindMap() const
     { return mpRewindMap; }
@@ -64,14 +64,14 @@ protected:
 public:
     TYPEINFO();
 
-    sal_uInt16 GetPrefix() const { return mnPrefix; }
+    USHORT GetPrefix() const { return mnPrefix; }
     const ::rtl::OUString& GetLocalName() const { return maLocalName; }
 
     // A contexts constructor does anything that is required if an element
     // starts. Namespace processing has been done already.
     // Note that virtual methods cannot be used inside constructors. Use
     // StartElement instead if this is required.
-    SvXMLImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+    SvXMLImportContext( SvXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName );
 
     // A contexts destructor does anything that is required if an element
@@ -82,7 +82,7 @@ public:
 
     // Create a childs element context. By default, the import's
     // CreateContext method is called to create a new default context.
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                    const ::rtl::OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
@@ -105,6 +105,6 @@ SV_DECL_REF( SvXMLImportContext )
 SV_IMPL_REF( SvXMLImportContext )
 
 
-#endif  //  _XMLOFF_XMLICTXT_HXX
+#endif	//  _XMLOFF_XMLICTXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

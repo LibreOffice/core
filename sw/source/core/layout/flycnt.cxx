@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,14 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 #include <tools/bigint.hxx>
 #include "pagefrm.hxx"
+#include "rootfrm.hxx"
 #include "cntfrm.hxx"
 #include "flyfrm.hxx"
 #include "txtfrm.hxx"
-#include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
+#include "doc.hxx"
 #include "viewsh.hxx"
 #include "viewimp.hxx"
 #include "pam.hxx"
@@ -45,6 +44,7 @@
 #include "hints.hxx"
 #include "ndtxt.hxx"
 #include "swundo.hxx"
+#include "errhdl.hxx"
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <fmtanchr.hxx>
@@ -57,46 +57,61 @@
 #include "crstate.hxx"
 #include "sectfrm.hxx"
 
+// OD 29.10.2003 #113049#
 #include <tocntntanchoredobjectposition.hxx>
+// OD 2004-05-24 #i28701#
 #include <dcontact.hxx>
 #include <sortedobjs.hxx>
+// --> OD 2005-09-29 #125370#,#125957#
 #include <layouter.hxx>
+// <--
+// --> OD 2005-11-17 #i56300#
 #include <objectformattertxtfrm.hxx>
+// <--
+// --> OD 2006-03-06 #125892#
 #include <HandleAnchorNodeChg.hxx>
+// <--
 
 using namespace ::com::sun::star;
 
 
 /*************************************************************************
 |*
-|*  SwFlyAtCntFrm::SwFlyAtCntFrm()
+|*	SwFlyAtCntFrm::SwFlyAtCntFrm()
+|*
+|*	Ersterstellung		MA 11. Nov. 92
+|*	Letzte Aenderung	MA 09. Apr. 99
 |*
 |*************************************************************************/
 
-SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
-    SwFlyFreeFrm( pFmt, pSib, pAnch )
+SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
+    SwFlyFreeFrm( pFmt, pAnch )
 {
-    bAtCnt = sal_True;
+    bAtCnt = TRUE;
     bAutoPosition = (FLY_AT_CHAR == pFmt->GetAnchor().GetAnchorId());
 }
 
-// #i28701#
+// --> OD 2004-06-29 #i28701#
 TYPEINIT1(SwFlyAtCntFrm,SwFlyFreeFrm);
+// <--
 /*************************************************************************
 |*
-|*  SwFlyAtCntFrm::Modify()
+|*	SwFlyAtCntFrm::Modify()
+|*
+|*	Ersterstellung		MA 08. Feb. 93
+|*	Letzte Aenderung	MA 23. Nov. 94
 |*
 |*************************************************************************/
 
-void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
+void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
-    sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
+    USHORT nWhich = pNew ? pNew->Which() : 0;
     const SwFmtAnchor *pAnch = 0;
 
     if( RES_ATTRSET_CHG == nWhich && SFX_ITEM_SET ==
-        ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_ANCHOR, sal_False,
+        ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_ANCHOR, FALSE,
             (const SfxPoolItem**)&pAnch ))
-        ;       // Beim GetItemState wird der AnkerPointer gesetzt !
+        ;		// Beim GetItemState wird der AnkerPointer gesetzt !
 
     else if( RES_ANCHOR == nWhich )
     {
@@ -118,7 +133,7 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         SwCntntFrm *pCntnt = (SwCntntFrm*)GetAnchorFrm();
         AnchorFrm()->RemoveFly( this );
 
-        const sal_Bool bBodyFtn = (pCntnt->IsInDocBody() || pCntnt->IsInFtn());
+        const BOOL bBodyFtn = (pCntnt->IsInDocBody() || pCntnt->IsInFtn());
 
         //Den neuen Anker anhand des NodeIdx suchen, am alten und
         //neuen NodeIdx kann auch erkannt werden, in welche Richtung
@@ -134,11 +149,13 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         //immer noch vom Node einen Frame besorgen. Die Change, dass dies dann
         //der richtige ist, ist gut.
         const bool bNext = aOldIdx < aNewIdx;
+        // --> OD 2006-02-28 #125892#
         // consider the case that at found anchor frame candidate already a
         // fly frame of the given fly format is registered.
-        // consider, that <pCntnt> is the already
+        // --> OD 2006-03-15 #133407# - consider, that <pCntnt> is the already
         // the new anchor frame.
         bool bFound( aOldIdx == aNewIdx );
+        // <--
         while ( pCntnt && !bFound )
         {
             do
@@ -153,6 +170,7 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             if ( pCntnt )
                 aOldIdx = *pCntnt->GetNode();
 
+            // --> OD 2006-02-28 #125892#
             // check, if at found anchor frame candidate already a fly frame
             // of the given fly frame format is registered.
             bFound = aOldIdx == aNewIdx;
@@ -171,11 +189,13 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                     }
                 }
             }
+            // <--
         }
+        // <--
         if ( !pCntnt )
         {
             SwCntntNode *pNode = aNewIdx.GetNode().GetCntntNode();
-            pCntnt = pNode->getLayoutFrm( getRootFrm(), &pOldAnchor->Frm().Pos(), 0, sal_False );
+            pCntnt = pNode->GetFrm( &pOldAnchor->Frm().Pos(), 0, FALSE );
             OSL_ENSURE( pCntnt, "Neuen Anker nicht gefunden" );
         }
         //Flys haengen niemals an einem Follow sondern immer am
@@ -194,7 +214,7 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         _InvalidatePos();
         InvalidatePage();
         SetNotifyBack();
-        // #i28701# - reset member <maLastCharRect> and
+        // --> OD 2004-06-24 #i28701# - reset member <maLastCharRect> and
         // <mnLastTopOfLine> for to-character anchored objects.
         ClearCharRectAndTopOfLine();
     }
@@ -204,31 +224,34 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
 /*************************************************************************
 |*
-|*  SwFlyAtCntFrm::MakeAll()
+|*	SwFlyAtCntFrm::MakeAll()
 |*
-|*  Beschreibung        Bei einem Absatzgebunden Fly kann es durchaus sein,
-|*      das der Anker auf die Veraenderung des Flys reagiert. Auf diese
-|*      Reaktion hat der Fly natuerlich auch wieder zu reagieren.
-|*      Leider kann dies zu Oszillationen fuehren z.b. Der Fly will nach
-|*      unten, dadurch kann der Inhalt nach oben, der TxtFrm wird kleiner,
-|*      der Fly muss wieder hoeher woduch der Text wieder nach unten
-|*      verdraengt wird...
-|*      Um derartige Oszillationen zu vermeiden, wird ein kleiner Positions-
-|*      stack aufgebaut. Wenn der Fly ein Position erreicht, die er bereits
-|*      einmal einnahm, so brechen wir den Vorgang ab. Um keine Risiken
-|*      einzugehen, wird der Positionsstack so aufgebaut, dass er fuenf
-|*      Positionen zurueckblickt.
-|*      Wenn der Stack ueberlaeuft, wird ebenfalls abgebrochen.
-|*      Der Abbruch fuer dazu, dass der Fly am Ende eine unguenste Position
-|*      einnimmt. Damit es nicht durch einen wiederholten Aufruf von
-|*      Aussen zu einer 'grossen Oszillation' kommen kann wird im Abbruch-
-|*      fall das Attribut des Rahmens auf automatische Ausrichtung oben
-|*      eingestellt.
+|*	Beschreibung		Bei einem Absatzgebunden Fly kann es durchaus sein,
+|*		das der Anker auf die Veraenderung des Flys reagiert. Auf diese
+|* 		Reaktion hat der Fly natuerlich auch wieder zu reagieren.
+|* 		Leider kann dies zu Oszillationen fuehren z.b. Der Fly will nach
+|* 		unten, dadurch kann der Inhalt nach oben, der TxtFrm wird kleiner,
+|*		der Fly muss wieder hoeher woduch der Text wieder nach unten
+|*		verdraengt wird...
+|*		Um derartige Oszillationen zu vermeiden, wird ein kleiner Positions-
+|* 		stack aufgebaut. Wenn der Fly ein Position erreicht, die er bereits
+|* 		einmal einnahm, so brechen wir den Vorgang ab. Um keine Risiken
+|* 		einzugehen, wird der Positionsstack so aufgebaut, dass er fuenf
+|* 		Positionen zurueckblickt.
+|* 		Wenn der Stack ueberlaeuft, wird ebenfalls abgebrochen.
+|* 		Der Abbruch fuer dazu, dass der Fly am Ende eine unguenste Position
+|* 		einnimmt. Damit es nicht durch einen wiederholten Aufruf von
+|* 		Aussen zu einer 'grossen Oszillation' kommen kann wird im Abbruch-
+|*		fall das Attribut des Rahmens auf automatische Ausrichtung oben
+|* 		eingestellt.
+|*
+|*	Ersterstellung		MA 12. Nov. 92
+|*	Letzte Aenderung	MA 20. Sep. 96
 |*
 |*************************************************************************/
 //Wir brauchen ein Paar Hilfsklassen zur Kontrolle der Ozillation und ein paar
 //Funktionen um die Uebersicht zu gewaehrleisten.
-// #i3317# - re-factoring of the position stack
+// OD 2004-08-25 #i3317# - re-factoring of the position stack
 class SwOszControl
 {
     static const SwFlyFrm *pStk1;
@@ -238,15 +261,16 @@ class SwOszControl
     static const SwFlyFrm *pStk5;
 
     const SwFlyFrm *pFly;
-    // #i3317#
+    // --> OD 2004-08-25 #i3317#
     sal_uInt8 mnPosStackSize;
     std::vector<Point*> maObjPositions;
+    // <--
 
 public:
     SwOszControl( const SwFlyFrm *pFrm );
     ~SwOszControl();
     bool ChkOsz();
-    static sal_Bool IsInProgress( const SwFlyFrm *pFly );
+    static BOOL IsInProgress( const SwFlyFrm *pFly );
 };
 const SwFlyFrm *SwOszControl::pStk1 = 0;
 const SwFlyFrm *SwOszControl::pStk2 = 0;
@@ -256,8 +280,9 @@ const SwFlyFrm *SwOszControl::pStk5 = 0;
 
 SwOszControl::SwOszControl( const SwFlyFrm *pFrm )
     : pFly( pFrm ),
-      // #i3317#
+      // --> OD 2004-08-25 #i3317#
       mnPosStackSize( 20 )
+      // <--
 {
     if ( !SwOszControl::pStk1 )
         SwOszControl::pStk1 = pFly;
@@ -283,7 +308,7 @@ SwOszControl::~SwOszControl()
         SwOszControl::pStk4 = 0;
     else if ( SwOszControl::pStk5 == pFly )
         SwOszControl::pStk5 = 0;
-    // #i3317#
+    // --> OD 2004-08-25 #i3317#
     while ( !maObjPositions.empty() )
     {
         Point* pPos = maObjPositions.back();
@@ -291,21 +316,22 @@ SwOszControl::~SwOszControl()
 
         maObjPositions.pop_back();
     }
+    // <--
 }
 
-sal_Bool SwOszControl::IsInProgress( const SwFlyFrm *pFly )
+BOOL SwOszControl::IsInProgress( const SwFlyFrm *pFly )
 {
     if ( SwOszControl::pStk1 && !pFly->IsLowerOf( SwOszControl::pStk1 ) )
-        return sal_True;
+        return TRUE;
     if ( SwOszControl::pStk2 && !pFly->IsLowerOf( SwOszControl::pStk2 ) )
-        return sal_True;
+        return TRUE;
     if ( SwOszControl::pStk3 && !pFly->IsLowerOf( SwOszControl::pStk3 ) )
-        return sal_True;
+        return TRUE;
     if ( SwOszControl::pStk4 && !pFly->IsLowerOf( SwOszControl::pStk4 ) )
-        return sal_True;
+        return TRUE;
     if ( SwOszControl::pStk5 && !pFly->IsLowerOf( SwOszControl::pStk5 ) )
-        return sal_True;
-    return sal_False;
+        return TRUE;
+    return FALSE;
 }
 
 bool SwOszControl::ChkOsz()
@@ -326,7 +352,7 @@ bool SwOszControl::ChkOsz()
         {
             if ( *(pNewObjPos) == *(*aObjPosIter) )
             {
-                // position already occurred -> oscillation
+                // position already occured -> oscillation
                 bOscillationDetected = true;
                 delete pNewObjPos;
                 break;
@@ -343,6 +369,7 @@ bool SwOszControl::ChkOsz()
 
 void SwFlyAtCntFrm::MakeAll()
 {
+    // OD 2004-01-19 #110582#
     if ( !GetFmt()->GetDoc()->IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
     {
         return;
@@ -350,7 +377,7 @@ void SwFlyAtCntFrm::MakeAll()
 
     if ( !SwOszControl::IsInProgress( this ) && !IsLocked() && !IsColLocked() )
     {
-        // #i28701# - use new method <GetPageFrm()>
+        // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
         if( !GetPageFrm() && GetAnchorFrm() && GetAnchorFrm()->IsInFly() )
         {
             SwFlyFrm* pFly = AnchorFrm()->FindFlyFrm();
@@ -358,10 +385,10 @@ void SwFlyAtCntFrm::MakeAll()
             if( pTmpPage )
                 pTmpPage->AppendFlyToPage( this );
         }
-        // #i28701# - use new method <GetPageFrm()>
+        // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
         if( GetPageFrm() )
         {
-            bSetCompletePaintOnInvalidate = sal_True;
+            bSetCompletePaintOnInvalidate = TRUE;
             {
                 SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
                 const SwFmtFrmSize &rFrmSz = GetFmt()->GetFrmSize();
@@ -381,46 +408,50 @@ void SwFlyAtCntFrm::MakeAll()
 
             SwOszControl aOszCntrl( this );
 
-            // #i43255#
-            // #i50356# - format the anchor frame, which
+            // --> OD 2005-02-22 #i43255#
+            // --> OD 2005-06-07 #i50356# - format the anchor frame, which
             // contains the anchor position. E.g., for at-character anchored
             // object this can be the follow frame of the anchor frame.
             const bool bFormatAnchor =
                     !static_cast<const SwTxtFrm*>( GetAnchorFrmContainingAnchPos() )->IsAnyJoinLocked() &&
                     !ConsiderObjWrapInfluenceOnObjPos() &&
                     !ConsiderObjWrapInfluenceOfOtherObjs();
+            // <--
 
             const SwFrm* pFooter = GetAnchorFrm()->FindFooterOrHeader();
             if( pFooter && !pFooter->IsFooterFrm() )
                 pFooter = NULL;
             bool bOsz = false;
-            sal_Bool bExtra = Lower() && Lower()->IsColumnFrm();
-            // #i3317# - boolean, to apply temporarly the
+            BOOL bExtra = Lower() && Lower()->IsColumnFrm();
+            // --> OD 2004-08-25 #i3317# - boolean, to apply temporarly the
             // 'straightforward positioning process' for the frame due to its
             // overlapping with a previous column.
             bool bConsiderWrapInfluenceDueToOverlapPrevCol( false );
-            //  #i35911# - boolean, to apply temporarly the
+            // <--
+            // --> OD 2004-10-22 #i35911# - boolean, to apply temporarly the
             // 'straightforward positioning process' for the frame due to fact
             // that it causes the complete content of its layout environment
             // to move forward.
-            // #i40444# - extend usage of this boolean:
+            // --> OD 2005-01-14 #i40444# - extend usage of this boolean:
             // apply temporarly the 'straightforward positioning process' for
             // the frame due to the fact that the frame clears the area for
             // the anchor frame, thus it has to move forward.
             bool bConsiderWrapInfluenceDueToMovedFwdAnchor( false );
+            // <--
             do {
                 SWRECTFN( this )
                 Point aOldPos( (Frm().*fnRect->fnGetPos)() );
                 SwFlyFreeFrm::MakeAll();
                 const bool bPosChgDueToOwnFormat =
                                         aOldPos != (Frm().*fnRect->fnGetPos)();
-                // #i3317#
+                // --> OD 2004-08-25 #i3317#
                 if ( !ConsiderObjWrapInfluenceOnObjPos() &&
                      OverlapsPrevColumn() )
                 {
                     bConsiderWrapInfluenceDueToOverlapPrevCol = true;
                 }
-                // #i28701# - no format of anchor frame, if
+                // <--
+                // OD 2004-05-12 #i28701# - no format of anchor frame, if
                 // wrapping style influence is considered on object positioning
                 if ( bFormatAnchor )
                 {
@@ -428,21 +459,23 @@ void SwFlyAtCntFrm::MakeAll()
                             dynamic_cast<SwTxtFrm*>(GetAnchorFrmContainingAnchPos());
                     OSL_ENSURE( pAnchPosAnchorFrm,
                             "<SwFlyAtCntFrm::MakeAll()> - anchor frame of wrong type -> crash" );
-                    // #i58182# - For the usage of new method
+                    // --> OD 2006-01-27 #i58182# - For the usage of new method
                     // <SwObjectFormatterTxtFrm::CheckMovedFwdCondition(..)>
                     // to check move forward of anchor frame due to the object
                     // positioning it's needed to know, if the object is anchored
                     // at the master frame before the anchor frame is formatted.
                     const bool bAnchoredAtMaster( !pAnchPosAnchorFrm->IsFollow() );
+                    // <--
 
-                    // #i56300#
+                    // --> OD 2005-11-17 #i56300#
                     // perform complete format of anchor text frame and its
                     // previous frames, which have become invalid due to the
                     // fly frame format.
                     SwObjectFormatterTxtFrm::FormatAnchorFrmAndItsPrevs( *pAnchPosAnchorFrm );
-                    // #i35911#
-                    // #i40444#
-                    // #i58182# - usage of new method
+                    // <--
+                    // --> OD 2004-10-22 #i35911#
+                    // --> OD 2005-01-14 #i40444#
+                    // --> OD 2006-01-27 #i58182# - usage of new method
                     // <SwObjectFormatterTxtFrm::CheckMovedFwdCondition(..)>
                     sal_uInt32 nToPageNum( 0L );
                     bool bDummy( false );
@@ -451,7 +484,7 @@ void SwFlyAtCntFrm::MakeAll()
                                         bAnchoredAtMaster, nToPageNum, bDummy ) )
                     {
                         bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
-                        // mark anchor text frame
+                        // --> OD 2005-09-29 #125370#,#125957# - mark anchor text frame
                         // directly, that it is moved forward by object positioning.
                         SwTxtFrm* pAnchorTxtFrm( static_cast<SwTxtFrm*>(AnchorFrm()) );
                         bool bInsert( true );
@@ -470,7 +503,9 @@ void SwFlyAtCntFrm::MakeAll()
                             SwLayouter::InsertMovedFwdFrm( rDoc, *pAnchorTxtFrm,
                                                            nToPageNum );
                         }
+                        // <--
                     }
+                    // <--
                 }
 
                 if ( aOldPos != (Frm().*fnRect->fnGetPos)() ||
@@ -479,6 +514,7 @@ void SwFlyAtCntFrm::MakeAll()
                 {
                     bOsz = aOszCntrl.ChkOsz();
 
+                    // --> OD 2006-04-13 #b6403541#
                     // special loop prevention for dedicated document:
                     if ( bOsz &&
                          HasFixSize() && IsClipped() &&
@@ -498,11 +534,13 @@ void SwFlyAtCntFrm::MakeAll()
                                 pFmt->UnlockModify();
                                 bOsz = false;
 #if OSL_DEBUG_LEVEL > 1
-                                OSL_FAIL( "<SwFlyAtCntFrm::MakeAll()> - special loop prevention for dedicated document of b6403541 applied" );
+                                OSL_ENSURE( false,
+                                        "<SwFlyAtCntFrm::MakeAll()> - special loop prevention for dedicated document of b6403541 applied" );
 #endif
                             }
                         }
                     }
+                    // <--
                 }
 
                 if ( bExtra && Lower() && !Lower()->GetValidPosFlag() )
@@ -511,18 +549,20 @@ void SwFlyAtCntFrm::MakeAll()
                     // Spalten hinterlaesst, so drehen wir lieber hier eine weitere
                     // Runde und formatieren unseren Inhalt via FormatWidthCols nochmal.
                         _InvalidateSize();
-                    bExtra = sal_False; // Sicherhaltshalber gibt es nur eine Ehrenrunde.
+                    bExtra = FALSE; // Sicherhaltshalber gibt es nur eine Ehrenrunde.
                 }
             } while ( !IsValid() && !bOsz &&
-                      // #i3317#
+                      // --> OD 2004-08-25 #i3317#
                       !bConsiderWrapInfluenceDueToOverlapPrevCol &&
-                      // #i40444#
+                      // <--
+                      // --> OD 2005-01-14 #i40444#
                       !bConsiderWrapInfluenceDueToMovedFwdAnchor &&
+                      // <--
                       GetFmt()->GetDoc()->IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) );
 
-            // #i3317# - instead of attribute change apply
+            // --> OD 2004-08-25 #i3317# - instead of attribute change apply
             // temporarly the 'straightforward positioning process'.
-            // #i80924#
+            // --> OD 2007-11-29 #i80924#
             // handle special case during splitting of table rows
             if ( bConsiderWrapInfluenceDueToMovedFwdAnchor &&
                  GetAnchorFrm()->IsInTab() &&
@@ -543,22 +583,29 @@ void SwFlyAtCntFrm::MakeAll()
                     }
                 }
             }
+            // <--
             if ( bOsz || bConsiderWrapInfluenceDueToOverlapPrevCol ||
-                 // #i40444#
+                 // --> OD 2005-01-14 #i40444#
                  bConsiderWrapInfluenceDueToMovedFwdAnchor )
+                 // <--
             {
                 SetTmpConsiderWrapInfluence( true );
                 SetRestartLayoutProcess( true );
+                // --> OD 2006-07-24 #b6449874#
                 SetTmpConsiderWrapInfluenceOfOtherObjs( true );
+                // <--
             }
-            bSetCompletePaintOnInvalidate = sal_False;
+            // <--
+            bSetCompletePaintOnInvalidate = FALSE;
         }
     }
 }
 
 /** method to determine, if a <MakeAll()> on the Writer fly frame is possible
 
-    #i28701#
+    OD 2004-05-11 #i28701#
+
+    @author OD
 */
 bool SwFlyAtCntFrm::IsFormatPossible() const
 {
@@ -568,12 +615,14 @@ bool SwFlyAtCntFrm::IsFormatPossible() const
 
 /*************************************************************************
 |*
-|*  FindAnchor() und Hilfsfunktionen.
+|*	FindAnchor() und Hilfsfunktionen.
 |*
-|*  Beschreibung:       Sucht ausgehend von pOldAnch einen Anker fuer
-|*      Absatzgebundene Objekte.
-|*      Wird beim Draggen von Absatzgebundenen Objekten zur Ankeranzeige sowie
-|*      fuer Ankerwechsel benoetigt.
+|*	Beschreibung:		Sucht ausgehend von pOldAnch einen Anker fuer
+|*		Absatzgebundene Objekte.
+|*		Wird beim Draggen von Absatzgebundenen Objekten zur Ankeranzeige sowie
+|*		fuer Ankerwechsel benoetigt.
+|*	Ersterstellung		MA 22. Jun. 93
+|*	Letzte Aenderung	MA 30. Jan. 95
 |*
 |*************************************************************************/
 
@@ -584,10 +633,10 @@ public:
     SwDistance() { nMain = nSub = 0; }
     SwDistance& operator=( const SwDistance &rTwo )
         { nMain = rTwo.nMain; nSub = rTwo.nSub; return *this; }
-    sal_Bool operator<( const SwDistance& rTwo )
+    BOOL operator<( const SwDistance& rTwo )
         { return nMain < rTwo.nMain || ( nMain == rTwo.nMain && nSub &&
           rTwo.nSub && nSub < rTwo.nSub ); }
-    sal_Bool operator<=( const SwDistance& rTwo )
+    BOOL operator<=( const SwDistance& rTwo )
         { return nMain < rTwo.nMain || ( nMain == rTwo.nMain && ( !nSub ||
           !rTwo.nSub || nSub <= rTwo.nSub ) ); }
 };
@@ -611,66 +660,50 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
         while( pUp->IsSctFrm() )
             pUp = pUp->GetUpper();
         const bool bVert = pUp->IsVertical();
-        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-        const bool bVertL2R = pUp->IsVertLR();
-
         //Dem Textflus folgen.
-        // #i70582#
-        // --> OD 2009-03-05 - adopted for Support for Classical Mongolian Script
+        // --> OD 2009-01-12 #i70582#
         const SwTwips nTopForObjPos =
             bVert
-            ? ( bVertL2R
-                ? ( pCnt->Frm().Left() +
-                    pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() )
-                : ( pCnt->Frm().Left() +
-                    pCnt->Frm().Width() -
-                    pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() ) )
+            ? ( pCnt->Frm().Left() +
+                pCnt->Frm().Width() -
+                pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() )
             : ( pCnt->Frm().Top() +
                 pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() );
+        // <--
         if ( pUp->Frm().IsInside( rPt ) )
         {
-            // <rPt> point is inside environment of given content frame
-            // #i70582#
+            // OD 26.09.2003 - <rPt> point is inside environment of given content frame
+            // --> OD 2009-01-12 #i70582#
             if( bVert )
-            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-            {
-                   if ( bVertL2R )
-                    rRet.nMain =  rPt.X() - nTopForObjPos;
-                else
-                    rRet.nMain =  nTopForObjPos - rPt.X();
-            }
+                rRet.nMain =  nTopForObjPos - rPt.X();
             else
                 rRet.nMain =  rPt.Y() - nTopForObjPos;
+            // <--
             return pCnt;
         }
         else if ( rPt.Y() <= pUp->Frm().Top() )
         {
-            // <rPt> point is above environment of given content frame
-            // correct for vertical layout?
+            // OD 26.09.2003 - <rPt> point is above environment of given content frame
+            // OD: correct for vertical layout?
             rRet.nMain = LONG_MAX;
         }
         else if( rPt.X() < pUp->Frm().Left() &&
                  rPt.Y() <= ( bVert ? pUp->Frm().Top() : pUp->Frm().Bottom() ) )
         {
-            // <rPt> point is left of environment of given content frame
-            // seems not to be correct for vertical layout!?
-            const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, sal_False, pCnt );
+            // OD 26.09.2003 - <rPt> point is left of environment of given content frame
+            // OD: seems not to be correct for vertical layout!?
+            const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, FALSE, pCnt );
             if( !pLay ||
                 (bVert && (pLay->Frm().Top() + pLay->Prt().Bottom()) <rPt.Y())||
                 (!bVert && (pLay->Frm().Left() + pLay->Prt().Right())<rPt.X()) )
             {
-                // <rPt> point is in left border of environment
-                // #i70582#
+                // OD 26.09.2003 - <rPt> point is in left border of environment
+                // --> OD 2009-01-12 #i70582#
                 if( bVert )
-                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-                {
-                       if ( bVertL2R )
-                        rRet.nMain = rPt.X() - nTopForObjPos;
-                    else
-                        rRet.nMain =  nTopForObjPos - rPt.X();
-                }
+                    rRet.nMain =  nTopForObjPos - rPt.X();
                 else
                     rRet.nMain = rPt.Y() - nTopForObjPos;
+                // <--
                 return pCnt;
             }
             else
@@ -678,18 +711,17 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
         }
         else
         {
-            // Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            // --> OD 2009-01-12 #i70582#
             rRet.nMain = bVert
-                ? ( bVertL2R
-                    ? ( (pUp->Frm().Left() + pUp->Prt().Right()) - nTopForObjPos )
-                    : ( nTopForObjPos - (pUp->Frm().Left() + pUp->Prt().Left() ) ) )
-                : ( (pUp->Frm().Top() + pUp->Prt().Bottom()) - nTopForObjPos );
+                ? nTopForObjPos - (pUp->Frm().Left() + pUp->Prt().Left())
+                : (pUp->Frm().Top() + pUp->Prt().Bottom()) - nTopForObjPos;
+            // <--
 
             const SwFrm *pPre = pCnt;
-            const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, sal_True, pCnt );
+            const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, TRUE, pCnt );
             SwTwips nFrmTop = 0;
             SwTwips nPrtHeight = 0;
-            sal_Bool bSct = sal_False;
+            BOOL bSct = FALSE;
             const SwSectionFrm *pSect = pUp->FindSctFrm();
             if( pSect )
             {
@@ -698,17 +730,13 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
             }
             if( pSect && !pSect->IsAnLower( pLay ) )
             {
-                bSct = sal_False;
+                bSct = FALSE;
                 const SwSectionFrm* pNxtSect = pLay ? pLay->FindSctFrm() : 0;
                 if( pSect->IsAnFollow( pNxtSect ) )
                 {
                     if( pLay->IsVertical() )
                     {
-                        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-                        if ( pLay->IsVertLR() )
-                            nFrmTop = pLay->Frm().Left();
-                        else
-                            nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                        nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
                         nPrtHeight = pLay->Prt().Width();
                     }
                     else
@@ -723,20 +751,9 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                     pLay = pSect->GetUpper();
                     if( pLay->IsVertical() )
                     {
-                        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-                        if ( pLay->IsVertLR() )
-                        {
-                            nFrmTop = pSect->Frm().Right();
-                            nPrtHeight = pLay->Frm().Left() + pLay->Prt().Left()
-                                         + pLay->Prt().Width() - pSect->Frm().Left()
-                                         - pSect->Frm().Width();
-                         }
-                         else
-                         {
-                             nFrmTop = pSect->Frm().Left();
-                             nPrtHeight = pSect->Frm().Left() - pLay->Frm().Left()
+                        nFrmTop = pSect->Frm().Left();
+                        nPrtHeight = pSect->Frm().Left() - pLay->Frm().Left()
                                      - pLay->Prt().Left();
-                          }
                     }
                     else
                     {
@@ -752,17 +769,8 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
             {
                 if( pLay->IsVertical() )
                 {
-                    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-                    if ( pLay->IsVertLR() )
-                    {
-                        nFrmTop = pLay->Frm().Left();
-                        nPrtHeight = pLay->Prt().Width();
-                    }
-                    else
-                    {
-                        nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
-                        nPrtHeight = pLay->Prt().Width();
-                    }
+                    nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                    nPrtHeight = pLay->Prt().Width();
                 }
                 else
                 {
@@ -794,29 +802,20 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                     else
                         rRet.nMain += nPrtHeight;
                     pPre = pLay;
-                    pLay = pLay->GetLeaf( MAKEPAGE_NONE, sal_True, pCnt );
+                    pLay = pLay->GetLeaf( MAKEPAGE_NONE, TRUE, pCnt );
                     if( pSect && !pSect->IsAnLower( pLay ) )
                     {   // If we're leaving a SwSectionFrm, the next Leaf-Frm
                         // is the part of the upper below the SectionFrm.
                         const SwSectionFrm* pNxtSect = pLay ?
                             pLay->FindSctFrm() : NULL;
-                        bSct = sal_False;
+                        bSct = FALSE;
                         if( pSect->IsAnFollow( pNxtSect ) )
                         {
                             pSect = pNxtSect;
                             if( pLay->IsVertical() )
                             {
-                                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-                                if ( pLay->IsVertLR() )
-                                {
-                                    nFrmTop = pLay->Frm().Left();
-                                    nPrtHeight = pLay->Prt().Width();
-                                }
-                                else
-                                {
-                                    nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
-                                    nPrtHeight = pLay->Prt().Width();
-                                }
+                                nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                                nPrtHeight = pLay->Prt().Width();
                             }
                             else
                             {
@@ -829,20 +828,9 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                             pLay = pSect->GetUpper();
                             if( pLay->IsVertical() )
                             {
-                                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-                                if ( pLay->IsVertLR() )
-                                {
-                                    nFrmTop = pSect->Frm().Right();
-                                    nPrtHeight = pLay->Frm().Left()+pLay->Prt().Left()
-                                             + pLay->Prt().Width() - pSect->Frm().Left()
-                                             - pSect->Frm().Width();
-                                }
-                                else
-                                {
-                                    nFrmTop = pSect->Frm().Left();
-                                    nPrtHeight = pSect->Frm().Left() -
-                                            pLay->Frm().Left() - pLay->Prt().Left();
-                                }
+                                nFrmTop = pSect->Frm().Left();
+                                nPrtHeight = pSect->Frm().Left() -
+                                        pLay->Frm().Left() - pLay->Prt().Left();
                             }
                             else
                             {
@@ -858,17 +846,8 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                     {
                         if( pLay->IsVertical() )
                         {
-                             //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-                             if ( pLay->IsVertLR() )
-                              {
-                                 nFrmTop = pLay->Frm().Left();
-                                 nPrtHeight = pLay->Prt().Width();
-                             }
-                             else
-                             {
-                                 nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
-                                 nPrtHeight = pLay->Prt().Width();
-                             }
+                             nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                             nPrtHeight = pLay->Prt().Width();
                         }
                         else
                         {
@@ -883,8 +862,7 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
             {
                 if ( pLay->Frm().IsInside( rPt ) )
                 {
-                    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-                    SwTwips nDiff = pLay->IsVertical() ? ( pLay->IsVertLR() ? ( rPt.X() - nFrmTop ) : ( nFrmTop - rPt.X() ) )
+                    SwTwips nDiff = pLay->IsVertical() ? ( nFrmTop - rPt.X() )
                                                        : ( rPt.Y() - nFrmTop );
                     if( bSct || pSect )
                         rRet.nSub += nDiff;
@@ -907,9 +885,9 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
     return 0;
 }
 
-sal_uLong MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
+ULONG MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
                           const SwCntntFrm *& rpCnt,
-                          const sal_Bool bBody, const sal_Bool bFtn )
+                          const BOOL bBody, const BOOL bFtn )
 {
     //Sucht unterhalb von pLay den dichtesten Cnt zum Point. Der Bezugspunkt
     //der Cntnts ist immer die linke obere Ecke.
@@ -920,8 +898,8 @@ sal_uLong MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay
 #endif
 
     rpCnt = 0;
-    sal_uLong nDistance = ULONG_MAX;
-    sal_uLong nNearest  = ULONG_MAX;
+    ULONG nDistance = ULONG_MAX;
+    ULONG nNearest	= ULONG_MAX;
     const SwCntntFrm *pCnt = pLay->ContainsCntnt();
 
     while ( pCnt && (bBody != pCnt->IsInDocBody() || bFtn != pCnt->IsInFtn()))
@@ -943,11 +921,11 @@ sal_uLong MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay
                        Min( pCnt->Frm().Top(), rPt.Y() );
             BigInt dX1( dX ), dY1( dY );
             dX1 *= dX1; dY1 *= dY1;
-            const sal_uLong nDiff = ::SqRt( dX1 + dY1 );
+            const ULONG nDiff = ::SqRt( dX1 + dY1 );
             if ( pCnt->Frm().Top() <= rPt.Y() )
             {
                 if ( nDiff < nDistance )
-                {   //Der ist dichter dran
+                {	//Der ist dichter dran
                     nDistance = nNearest = nDiff;
                     rpCnt = pNearest = pCnt;
                 }
@@ -965,14 +943,14 @@ sal_uLong MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay
         }  while ( pCnt && pLay->IsAnLower( pCnt ) );
     }
     if ( nDistance == ULONG_MAX )
-    {   rpCnt = pNearest;
+    {	rpCnt = pNearest;
         return nNearest;
     }
     return nDistance;
 }
 
 const SwCntntFrm * MA_FASTCALL lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
-                                  const sal_Bool bBody, const sal_Bool bFtn )
+                                  const BOOL bBody, const BOOL bFtn )
 {
     //Sucht ausgehen von pCnt denjenigen CntntFrm, dessen linke obere
     //Ecke am dichtesten am Point liegt.
@@ -986,26 +964,26 @@ const SwCntntFrm * MA_FASTCALL lcl_FindCnt( const Point &rPt, const SwCntntFrm *
     //des Point sitzt.
     const SwCntntFrm  *pRet, *pNew;
     const SwLayoutFrm *pLay = pCnt->FindPageFrm();
-    sal_uLong nDist;
+    ULONG nDist;
 
     nDist = ::lcl_FindCntDiff( rPt, pLay, pNew, bBody, bFtn );
     if ( pNew )
         pRet = pNew;
     else
-    {   pRet  = pCnt;
+    {	pRet  = pCnt;
         nDist = ULONG_MAX;
     }
     const SwCntntFrm *pNearest = pRet;
-    sal_uLong nNearest = nDist;
+    ULONG nNearest = nDist;
 
     if ( pLay )
     {
         const SwLayoutFrm *pPge = pLay;
-        sal_uLong nOldNew = ULONG_MAX;
-        for ( sal_uInt16 i = 0; pPge->GetPrev() && (i < 3); ++i )
+        ULONG nOldNew = ULONG_MAX;
+        for ( USHORT i = 0; pPge->GetPrev() && (i < 3); ++i )
         {
             pPge = (SwLayoutFrm*)pPge->GetPrev();
-            const sal_uLong nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );
+            const ULONG nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );
             if ( nNew < nDist )
             {
                 if ( pNew->Frm().Top() <= rPt.Y() )
@@ -1027,10 +1005,10 @@ const SwCntntFrm * MA_FASTCALL lcl_FindCnt( const Point &rPt, const SwCntntFrm *
         }
         pPge = pLay;
         nOldNew = ULONG_MAX;
-        for ( sal_uInt16 j = 0; pPge->GetNext() && (j < 3); ++j )
+        for ( USHORT j = 0; pPge->GetNext() && (j < 3); ++j )
         {
             pPge = (SwLayoutFrm*)pPge->GetNext();
-            const sal_uLong nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );
+            const ULONG nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );
             if ( nNew < nDist )
             {
                 if ( pNew->Frm().Top() <= rPt.Y() )
@@ -1072,7 +1050,7 @@ void lcl_PointToPrt( Point &rPoint, const SwFrm *pFrm )
 }
 
 const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
-                              const sal_Bool bBodyOnly )
+                              const BOOL bBodyOnly )
 {
     //Zu der angegebenen DokumentPosition wird der dichteste Cnt im
     //Textfluss gesucht. AusgangsFrm ist der uebergebene Anker.
@@ -1090,14 +1068,14 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
             SwRect aTmpRect( aTmp, Size(0,0) );
             pTmpLay = (SwLayoutFrm*)::FindPage( aTmpRect, pTmpLay->Lower() );
         }
-        pCnt = pTmpLay->GetCntntPos( aTmp, sal_False, bBodyOnly );
+        pCnt = pTmpLay->GetCntntPos( aTmp, FALSE, bBodyOnly );
     }
 
     //Beim Suchen darauf achten, dass die Bereiche sinnvoll erhalten
     //bleiben. D.h. in diesem Fall nicht in Header/Footer hinein und
     //nicht aus Header/Footer hinaus.
-    const sal_Bool bBody = pCnt->IsInDocBody() || bBodyOnly;
-    const sal_Bool bFtn  = !bBodyOnly && pCnt->IsInFtn();
+    const BOOL bBody = pCnt->IsInDocBody() || bBodyOnly;
+    const BOOL bFtn  = !bBodyOnly && pCnt->IsInFtn();
 
     Point aNew( rNew );
     if ( bBody )
@@ -1119,7 +1097,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
         //So gibt es kein Problem mit Spalten.
         Point aTmp( aNew );
         const SwCntntFrm *pTmp = pCnt->FindPageFrm()->
-                                        GetCntntPos( aTmp, sal_False, sal_True, sal_False );
+                                        GetCntntPos( aTmp, FALSE, TRUE, FALSE );
         if ( pTmp && pTmp->Frm().IsInside( aNew ) )
             return pTmp;
     }
@@ -1133,7 +1111,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
     SwDistance nUp, nUpLst;
     ::lcl_CalcDownDist( nUp, aNew, pUpFrm );
     SwDistance nDown = nUp;
-    sal_Bool bNegAllowed = sal_True;//Einmal aus dem negativen Bereich heraus lassen.
+    BOOL bNegAllowed = TRUE;//Einmal aus dem negativen Bereich heraus lassen.
     do
     {
         pUpLst = pUpFrm; nUpLst = nUp;
@@ -1161,10 +1139,10 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
             nUp.nMain = LONG_MAX;
         if ( nUp.nMain >= 0 && LONG_MAX != nUp.nMain )
         {
-            bNegAllowed = sal_False;
+            bNegAllowed = FALSE;
             if ( nUpLst.nMain < 0 ) //nicht den falschen erwischen, wenn der Wert
                                     //gerade von negativ auf positiv gekippt ist.
-            {   pUpLst = pUpFrm;
+            {	pUpLst = pUpFrm;
                 nUpLst = nUp;
             }
         }
@@ -1214,7 +1192,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
     //fluss sondern in irgendwelchen Raendern steht.
     if ( nDownLst.nMain == LONG_MAX && nUpLst.nMain == LONG_MAX )
     {
-        // If an OLE objects, which is contained in a fly frame
+        // #102861# If an OLE objects, which is contained in a fly frame
         // is resized in inplace mode and the new Position is outside the
         // fly frame, we do not want to leave our fly frame.
         if ( pCnt->IsInFly() )
@@ -1228,7 +1206,10 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
 
 /*************************************************************************
 |*
-|*  SwFlyAtCntFrm::SetAbsPos()
+|*	SwFlyAtCntFrm::SetAbsPos()
+|*
+|*	Ersterstellung		MA 22. Jun. 93
+|*	Letzte Aenderung	MA 11. Sep. 98
 |*
 |*************************************************************************/
 
@@ -1237,8 +1218,9 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     SwPageFrm *pOldPage = FindPageFrm();
     const SwRect aOld( GetObjRectWithSpaces() );
     Point aNew( rNew );
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-      if( ( GetAnchorFrm()->IsVertical() && !GetAnchorFrm()->IsVertLR() ) || GetAnchorFrm()->IsRightToLeft() )
+
+    if( GetAnchorFrm()->IsVertical() || GetAnchorFrm()->IsRightToLeft() )
+
         aNew.X() += Frm().Width();
     SwCntntFrm *pCnt = (SwCntntFrm*)::FindAnchor( GetAnchorFrm(), aNew );
     if( pCnt->IsProtected() )
@@ -1246,8 +1228,6 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     SwPageFrm *pTmpPage = 0;
     const bool bVert = pCnt->IsVertical();
-    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    const bool bVertL2R = pCnt->IsVertLR();
     const sal_Bool bRTL = pCnt->IsRightToLeft();
 
     if( ( !bVert != !GetAnchorFrm()->IsVertical() ) ||
@@ -1277,29 +1257,23 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     SwTwips nY;
     if ( pCnt->Frm().IsInside( aNew ) )
     {
-        // #i70582#
+        // --> OD 2009-01-12 #i70582#
         const SwTwips nTopForObjPos =
                 bVert
-                ? ( bVertL2R
-                    ? ( pCnt->Frm().Left() +
-                        pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() )
-                    : ( pCnt->Frm().Left() +
-                        pCnt->Frm().Width() -
-                        pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() ) )
+                ? ( pCnt->Frm().Left() +
+                    pCnt->Frm().Width() -
+                    pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() )
                 : ( pCnt->Frm().Top() +
                     pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() );
-        if( bVert )
-        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if ( bVert )
         {
-            if ( bVertL2R )
-                nY = rNew.X() - nTopForObjPos;
-            else
-                nY = nTopForObjPos - rNew.X() - Frm().Width();
+            nY = nTopForObjPos - rNew.X() - Frm().Width();
         }
         else
         {
             nY = rNew.Y() - nTopForObjPos;
         }
+        // <--
     }
     else
     {
@@ -1319,22 +1293,16 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         while ( pCnt->IsFollow() )
         {
             do
-            {   pCnt = pCnt->GetPrevCntntFrm();
+            {	pCnt = pCnt->GetPrevCntntFrm();
             } while ( pCnt->GetFollow() != pFollow );
             pFollow = pCnt;
         }
         SwTwips nDiff = 0;
         do
-        {   const SwFrm *pUp = pFollow->GetUpper();
+        {	const SwFrm *pUp = pFollow->GetUpper();
             if( pUp->IsVertical() )
-            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-            {
-                if ( pUp->IsVertLR()  )
-                    nDiff += pUp->Prt().Width() - pFollow->GetRelPos().X();
-                else
-                       nDiff += pFollow->Frm().Left() + pFollow->Frm().Width()
-                             - pUp->Frm().Left() - pUp->Prt().Left();
-            }
+                nDiff += pFollow->Frm().Left() + pFollow->Frm().Width()
+                         - pUp->Frm().Left() - pUp->Prt().Left();
             else
                 nDiff += pUp->Prt().Height() - pFollow->GetRelPos().Y();
             pFollow = pFollow->GetFollow();
@@ -1348,34 +1316,28 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     if ( nY == LONG_MAX )
     {
-        // #i70582#
+        // --> OD 2009-01-12 #i70582#
         const SwTwips nTopForObjPos =
                 bVert
-                ? ( bVertL2R
-                    ? ( pCnt->Frm().Left() +
-                        pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() )
-                    : ( pCnt->Frm().Left() +
-                        pCnt->Frm().Width() -
-                        pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() ) )
+                ? ( pCnt->Frm().Left() +
+                    pCnt->Frm().Width() -
+                    pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() )
                 : ( pCnt->Frm().Top() +
                     pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() );
-        if( bVert )
-        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if ( bVert )
         {
-            if ( bVertL2R )
-                nY = rNew.X() - nTopForObjPos;
-            else
-                nY = nTopForObjPos - rNew.X();
+            nY = nTopForObjPos - rNew.X();
         }
         else
         {
             nY = rNew.Y() - nTopForObjPos;
         }
+        // <--
     }
 
     SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
     const SwFmtSurround& rSurround = pFmt->GetSurround();
-    const sal_Bool bWrapThrough =
+    const BOOL bWrapThrough =
         rSurround.GetSurround() == SURROUND_THROUGHT;
     SwTwips nBaseOfstForFly = 0;
     const SwFrm* pTmpFrm = pFrm ? pFrm : pCnt;
@@ -1409,7 +1371,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
                 nX = rNew.X() - pFrm->Frm().Left() - nBaseOfstForFly;
         }
     }
-    GetFmt()->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+    GetFmt()->GetDoc()->StartUndo( UNDO_START, NULL );
 
     if( pCnt != GetAnchorFrm() || ( IsAutoPos() && pCnt->IsTxtFrm() &&
                                   GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE)) )
@@ -1442,6 +1404,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
             pPos->nContent.Assign( pCnt->GetNode(), 0 );
         }
 
+        // --> OD 2006-02-27 #125892#
         // handle change of anchor node:
         // if count of the anchor frame also change, the fly frames have to be
         // re-created. Thus, delete all fly frames except the <this> before the
@@ -1450,27 +1413,87 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
             SwHandleAnchorNodeChg aHandleAnchorNodeChg( *pFmt, aAnch, this );
             pFmt->GetDoc()->SetAttr( aAnch, *pFmt );
         }
+        // <--
     }
-    // #i28701# - use new method <GetPageFrm()>
+    // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
     else if ( pTmpPage && pTmpPage != GetPageFrm() )
         GetPageFrm()->MoveFly( this, pTmpPage );
 
     const Point aRelPos = bVert ? Point( -nY, nX ) : Point( nX, nY );
-
     ChgRelPos( aRelPos );
 
-    GetFmt()->GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+    GetFmt()->GetDoc()->EndUndo( UNDO_END, NULL );
 
     if ( pOldPage != FindPageFrm() )
         ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE,
-                             sal_False );
+                             FALSE );
 }
+
+// OD 2004-08-12 #i32795# - Note: method no longer used in <flyincnt.cxx>
+//void DeepCalc( const SwFrm *pFrm )
+//{
+//    if( pFrm->IsSctFrm() ||
+//        ( pFrm->IsFlyFrm() && ((SwFlyFrm*)pFrm)->IsFlyInCntFrm() ) )
+//      return;
+//    const SwFlowFrm *pFlow = SwFlowFrm::CastFlowFrm( pFrm );
+//    if( pFlow && pFlow->IsAnyJoinLocked() )
+//        return;
+
+//    USHORT nCnt = 0;
+
+//  BOOL bContinue = FALSE;
+//  do
+//    {
+//        if ( ++nCnt == 10 )
+//      {
+//          OSL_ENSURE( !nCnt, "DeepCalc: Loop detected1?" );
+//          break;
+//      }
+
+//      const BOOL bSetComplete = !pFrm->IsValid();
+//      const SwRect aOldFrm( pFrm->Frm() );
+//      const SwRect aOldPrt( pFrm->Prt() );
+
+//      const SwFrm *pUp = pFrm->GetUpper();
+//      if ( pUp )
+//      {
+//          //Nicht weiter wenn der Up ein Fly mit Spalten ist.
+//          if( ( !pUp->IsFlyFrm() || !((SwLayoutFrm*)pUp)->Lower() ||
+//               !((SwLayoutFrm*)pUp)->Lower()->IsColumnFrm() ) &&
+//               !pUp->IsSctFrm() )
+//          {
+//                SWRECTFN( pUp )
+//                const Point aPt( (pUp->Frm().*fnRect->fnGetPos)() );
+//              ::DeepCalc( pUp );
+//                bContinue = aPt != (pUp->Frm().*fnRect->fnGetPos)();
+//          }
+//      }
+//      else
+//          pUp = pFrm;
+
+//      pFrm->Calc();
+//      if ( bSetComplete && (aOldFrm != pFrm->Frm() || aOldPrt != pFrm->Prt()))
+//          pFrm->SetCompletePaint();
+
+//      if ( pUp->IsFlyFrm() )
+//      {
+//          if ( ((SwFlyFrm*)pUp)->IsLocked() ||
+//               (((SwFlyFrm*)pUp)->IsFlyAtCntFrm() &&
+//                SwOszControl::IsInProgress( (const SwFlyFrm*)pUp )) )
+//          {
+//              bContinue = FALSE;
+//          }
+//      }
+//  } while ( bContinue );
+//}
 
 /** method to assure that anchored object is registered at the correct
     page frame
 
-    #i28701#
+    OD 2004-07-02 #i28701#
     takes over functionality of deleted method <SwFlyAtCntFrm::AssertPage()>
+
+    @author OD
 */
 void SwFlyAtCntFrm::RegisterAtCorrectPage()
 {
@@ -1488,31 +1511,33 @@ void SwFlyAtCntFrm::RegisterAtCorrectPage()
     }
 }
 
-// #i26791#
+// OD 2004-03-23 #i26791#
 //void SwFlyAtCntFrm::MakeFlyPos()
 void SwFlyAtCntFrm::MakeObjPos()
 {
+    // OD 02.10.2002 #102646#
     // if fly frame position is valid, nothing is to do. Thus, return
     if ( bValidPos )
     {
         return;
     }
 
-    // #i26791# - validate position flag here.
-    bValidPos = sal_True;
+    // OD 2004-03-24 #i26791# - validate position flag here.
+    bValidPos = TRUE;
 
-    // #i35911# - no calculation of new position, if
+    // --> OD 2004-10-22 #i35911# - no calculation of new position, if
     // anchored object is marked that it clears its environment and its
     // environment is already cleared.
-    // before checking for cleared environment
+    // --> OD 2006-01-02 #125977# - before checking for cleared environment
     // check, if member <mpVertPosOrientFrm> is set.
     if ( GetVertPosOrientFrm() &&
          ClearedEnvironment() && HasClearedEnvironment() )
     {
         return;
     }
+    // <--
 
-    // use new class to position object
+    // OD 29.10.2003 #113049# - use new class to position object
     objectpositioning::SwToCntntAnchoredObjectPosition
             aObjPositioning( *GetVirtDrawObj() );
     aObjPositioning.CalcPosition();
@@ -1520,7 +1545,7 @@ void SwFlyAtCntFrm::MakeObjPos()
     SetVertPosOrientFrm ( aObjPositioning.GetVertPosOrientFrm() );
 }
 
-// #i28701#
+// OD 2004-05-12 #i28701#
 bool SwFlyAtCntFrm::_InvalidationAllowed( const InvalidationType _nInvalid ) const
 {
     bool bAllowed( SwFlyFreeFrm::_InvalidationAllowed( _nInvalid ) );

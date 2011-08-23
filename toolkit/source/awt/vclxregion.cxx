@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,9 @@
 #include <rtl/uuid.h>
 #include <vcl/svapp.hxx>
 
-//  ----------------------------------------------------
-//  class VCLXRegion
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXRegion
+//	----------------------------------------------------
 VCLXRegion::VCLXRegion()
 {
 }
@@ -155,7 +155,7 @@ void VCLXRegion::xOrRegion( const ::com::sun::star::uno::Reference< ::com::sun::
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    sal_uLong nRects = maRegion.GetRectCount();
+    ULONG nRects = maRegion.GetRectCount();
     ::com::sun::star::uno::Sequence< ::com::sun::star::awt::Rectangle > aRects( nRects );
 
     Rectangle aRect;

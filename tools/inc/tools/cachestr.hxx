@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,41 +43,41 @@ class TOOLS_DLLPUBLIC SvCacheStream : public SvStream
 {
 private:
     String          aFileName;
-    sal_uIntPtr           nMaxSize;
+    ULONG           nMaxSize;
     int             bPersistent;
 
     SvStream*       pSwapStream;
     SvStream*       pCurrentStream;
     TempFile*       pTempFile;
 
-    Link            aFilenameLinkHdl;
+    Link    		aFilenameLinkHdl;
 
-    TOOLS_DLLPRIVATE virtual sal_uIntPtr   GetData( void* pData, sal_uIntPtr nSize );
-    TOOLS_DLLPRIVATE virtual sal_uIntPtr   PutData( const void* pData, sal_uIntPtr nSize );
-    TOOLS_DLLPRIVATE virtual sal_uIntPtr   SeekPos( sal_uIntPtr nPos );
+    TOOLS_DLLPRIVATE virtual ULONG   GetData( void* pData, ULONG nSize );
+    TOOLS_DLLPRIVATE virtual ULONG   PutData( const void* pData, ULONG nSize );
+    TOOLS_DLLPRIVATE virtual ULONG   SeekPos( ULONG nPos );
     TOOLS_DLLPRIVATE virtual void    FlushData();
-    TOOLS_DLLPRIVATE virtual void    SetSize( sal_uIntPtr nSize );
+    TOOLS_DLLPRIVATE virtual void    SetSize( ULONG nSize );
 
 public:
-                    SvCacheStream( sal_uIntPtr nMaxMemSize = 0 );
+                    SvCacheStream( ULONG nMaxMemSize = 0 );
                     SvCacheStream( const String &rFileName,
-                                   sal_uIntPtr nExpectedSize = 0,
-                                   sal_uIntPtr nMaxMemSize = 0 );
+                                   ULONG nExpectedSize = 0,
+                                   ULONG nMaxMemSize = 0 );
                     ~SvCacheStream();
 
-    void            SetFilenameHdl( const Link& rLink);
+    void			SetFilenameHdl( const Link& rLink);
     const Link&     GetFilenameHdl() const;
-    void            SetFilename( const String& rFN )
+    void			SetFilename( const String& rFN )
                  { aFileName = rFN; } // darf nur vom FilenameHdl gerufen werden!
-    const String&   GetFilename() const { return aFileName; }
+    const String&   GetFilename() const { return aFileName;	}
 
     void            SwapOut();
     const void*     GetBuffer();
-    sal_uIntPtr           GetSize();
+    ULONG           GetSize();
 
-    sal_Bool            IsPersistent() { return bPersistent != 0; }
-    void            SetPersistence( sal_Bool b = sal_True ) { bPersistent = b; }
-    void            SetSwapStream( SvStream *p )
+    BOOL			IsPersistent() { return bPersistent != 0; }
+    void			SetPersistence( BOOL b = TRUE ) { bPersistent = b; }
+    void			SetSwapStream( SvStream *p )
                  { pSwapStream = p; } // darf nur vom FilenameHdl gerufen werden!
 };
 

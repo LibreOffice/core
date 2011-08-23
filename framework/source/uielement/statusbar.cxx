@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,11 +31,11 @@
 #include <uielement/statusbar.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 
 #include <vcl/svapp.hxx>
@@ -43,7 +43,7 @@
 namespace framework
 {
 
-FrameworkStatusBar::FrameworkStatusBar(
+FrameworkStatusBar::FrameworkStatusBar( 
     Window*           pParent,
     WinBits           nWinBits ) :
     StatusBar( pParent, nWinBits ),
@@ -58,7 +58,7 @@ FrameworkStatusBar::FrameworkStatusBar(
 FrameworkStatusBar::~FrameworkStatusBar()
 {
 }
-
+        
 void FrameworkStatusBar::SetStatusBarManager( StatusBarManager* pStatusBarManager )
 {
     SolarMutexGuard aSolarMutexGuard;

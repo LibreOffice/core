@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,6 +54,7 @@
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <osl/mutex.hxx>
+#include <svtools/printdlg.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <sfx2/viewfrm.hxx>
@@ -82,8 +83,8 @@ struct IMPL_PrintListener_DataContainer : public SfxListener
     }
 
 
-    void Notify(            SfxBroadcaster& aBC     ,
-                    const   SfxHint&        aHint   ) ;
+    void Notify(			SfxBroadcaster&	aBC		,
+                    const	SfxHint&		aHint	) ;
 };
 
 awt::Size impl_Size_Object2Struct( const Size& aSize )
@@ -258,7 +259,7 @@ namespace
 }
 
 //________________________________________________________________________________________________________
-//  XPrintable
+//	XPrintable
 //________________________________________________________________________________________________________
 
 uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() throw(::com::sun::star::uno::RuntimeException)
@@ -266,20 +267,20 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
     // object already disposed?
     SolarMutexGuard aGuard;
 
-    // search for any view of this document that is currently printing
+    // search for any view of this document that is currently printing   	
     const Printer *pPrinter = NULL;
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ? SfxViewFrame::GetFirst( m_pData->m_pObjectShell, sal_False ) : 0;
     SfxViewFrame* pFirst = pViewFrm;
     while ( pViewFrm && !pPrinter )
-    {
+    {								
         pPrinter = pViewFrm->GetViewShell()->GetActivePrinter();
         pViewFrm = SfxViewFrame::GetNext( *pViewFrm, m_pData->m_pObjectShell, sal_False );
     }
-
+            
     // if no view is printing currently, use the permanent SfxPrinter instance
     if ( !pPrinter && pFirst )
         pPrinter = pFirst->GetViewShell()->GetPrinter(sal_True);
-
+        
     if ( !pPrinter )
         return uno::Sequence< beans::PropertyValue >();
 
@@ -317,13 +318,13 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
 }
 
 //________________________________________________________________________________________________________
-//  XPrintable
+//	XPrintable
 //________________________________________________________________________________________________________
 
 void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >& rPrinter,SfxPrinter*& pPrinter,sal_uInt16& nChangeFlags,SfxViewShell*& pViewSh)
 
 {
-    // Get old Printer
+    // alten Printer beschaffen
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
                                 SfxViewFrame::GetFirst( m_pData->m_pObjectShell, sal_False ) : 0;
     if ( !pViewFrm )
@@ -345,7 +346,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         // Name-Property?
         if ( rProp.Name.compareToAscii( "Name" ) == 0 )
         {
-            ::rtl::OUString sTemp;
+            OUSTRING sTemp;
             if ( ( rProp.Value >>= sTemp ) == sal_False )
                 throw ::com::sun::star::lang::IllegalArgumentException();
 
@@ -423,8 +424,8 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
             rtl::OUString aTmp;
             if ( ( rProp.Value >>= aTmp ) == sal_False )
                 throw ::com::sun::star::lang::IllegalArgumentException();
-            sal_uInt16 nCount = pPrinter->GetPaperBinCount();
-            for (sal_uInt16 nBin=0; nBin<nCount; nBin++)
+            USHORT nCount = pPrinter->GetPaperBinCount();
+            for (USHORT nBin=0; nBin<nCount; nBin++)
             {
                 ::rtl::OUString aName( pPrinter->GetPaperBinName(nBin) );
                 if ( aName == aTmp )
@@ -436,12 +437,13 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         }
     }
 
-    // The PaperSize may be set only when actually PAPER_USER
-    // applies, otherwise the driver could choose a invalid format.
+    //os 12.11.98: die PaperSize darf nur gesetzt werden, wenn tatsaechlich
+    //PAPER_USER gilt, sonst koennte vom Treiber ein falsches Format gewaehlt werden
     if(nPaperFormat == view::PaperFormat_USER && aSetPaperSize.Width())
     {
-        // Bug 56929 - MapMode of 100mm which recalculated when
-        // the device is set. Additionally only set if they were really changed.
+        //JP 23.09.98 - Bug 56929 - MapMode von 100mm in die am
+        //			Device gesetzten umrechnen. Zusaetzlich nur dann
+        //			setzen, wenn sie wirklich veraendert wurden.
         aSetPaperSize = pPrinter->LogicToPixel( aSetPaperSize, MAP_100TH_MM );
         if( aSetPaperSize != pPrinter->GetPaperSizePixel() )
         {
@@ -450,7 +452,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         }
     }
 
-    //wait until printing is done
+    // #96772#: wait until printing is done
     SfxPrinter* pDocPrinter = pViewSh->GetPrinter();
     while ( pDocPrinter->IsPrinting() )
         Application::Yield();
@@ -538,7 +540,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
             try
             {
                 INetURLObject aSplitter(sTargetURL);
-                String        sFileName = aSplitter.getName(
+                String		  sFileName = aSplitter.getName(
                                             INetURLObject::LAST_SEGMENT,
                                             true,
                                             INetURLObject::DECODE_WITH_CHARSET);
@@ -559,10 +561,10 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                             ::com::sun::star::ucb::NameClash::OVERWRITE);
                 }
             }
-            catch( ::com::sun::star::ucb::ContentCreationException& ) { OSL_FAIL("content create exception"); }
-            catch( ::com::sun::star::ucb::CommandAbortedException&  ) { OSL_FAIL("command abort exception"); }
-            catch( ::com::sun::star::uno::RuntimeException&         ) { OSL_FAIL("runtime exception"); }
-            catch( ::com::sun::star::uno::Exception&                ) { OSL_FAIL("unknown exception"); }
+            catch( ::com::sun::star::ucb::ContentCreationException& ) { DBG_ERROR("content create exception"); }
+            catch( ::com::sun::star::ucb::CommandAbortedException&  ) { DBG_ERROR("command abort exception"); }
+            catch( ::com::sun::star::uno::RuntimeException&         ) { DBG_ERROR("runtime exception"); }
+            catch( ::com::sun::star::uno::Exception&                ) { DBG_ERROR("unknown exception"); }
 
             // kill the temp file!
             delete *ppTempFile;
@@ -593,6 +595,8 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     SfxViewShell* pView = pViewFrm->GetViewShell();
     if ( !pView )
         return;
+
+//	SfxAllItemSet aArgs( pView->GetPool() );
     sal_Bool bMonitor = sal_False;
     // We need this information at the end of this method, if we start the vcl printer
     // by executing the slot. Because if it is a ucb relevant URL we must wait for
@@ -616,9 +620,9 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         if ( rProp.Name.compareToAscii( "FileName" ) == 0 )
         {
             // unpack th URL and check for a valid and well known protocol
-            ::rtl::OUString sTemp;
+            OUSTRING sTemp;
             if (
-                ( rProp.Value.getValueType()!=::getCppuType((const ::rtl::OUString*)0))  ||
+                ( rProp.Value.getValueType()!=::getCppuType((const OUSTRING*)0))  ||
                 (!(rProp.Value>>=sTemp))
                )
             {
@@ -646,7 +650,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 aCheckedArgs[nProps++].Value <<= sFileURL;
                 // and append the local filename
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
-                aCheckedArgs[nProps].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LocalFileName"));
+                aCheckedArgs[nProps].Name = rtl::OUString::createFromAscii("LocalFileName");
                 aCheckedArgs[nProps++].Value <<= ::rtl::OUString( sTemp );
             }
             else
@@ -662,7 +666,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 aCheckedArgs[nProps++].Value <<= sTemp;
                 // and append the local filename
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
-                aCheckedArgs[nProps].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LocalFileName"));
+                aCheckedArgs[nProps].Name = rtl::OUString::createFromAscii("LocalFileName");
                 aCheckedArgs[nProps++].Value <<= ::rtl::OUString( sPath );
             }
             else
@@ -680,7 +684,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 pUCBPrintTempFile->EnableKillingFile();
 
                 //FIXME: does it work?
-                aCheckedArgs[nProps].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LocalFileName"));
+                aCheckedArgs[nProps].Name = rtl::OUString::createFromAscii("LocalFileName");
                 aCheckedArgs[nProps++].Value <<= ::rtl::OUString( pUCBPrintTempFile->GetFileName() );
                 sUcbUrl = sURL;
             }
@@ -705,7 +709,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             sal_Bool bTemp = sal_Bool();
             if ( rProp.Value >>= bTemp )
             {
-                aCheckedArgs[nProps].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Collate"));
+                aCheckedArgs[nProps].Name = rtl::OUString::createFromAscii("Collate");
                 aCheckedArgs[nProps++].Value <<= bTemp;
             }
             else
@@ -715,7 +719,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         // Pages-Property
         else if ( rProp.Name.compareToAscii( "Pages" ) == 0 )
         {
-            ::rtl::OUString sTemp;
+            OUSTRING sTemp;
             if( rProp.Value >>= sTemp )
             {
                 aCheckedArgs[nProps].Name = rProp.Name;
@@ -796,8 +800,81 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
             {
                 if ( !m_xPrintJob.is() )
                     m_xPrintJob = new SfxPrintJob_Impl( this );
+/*
+                PrintDialog* pDlg = pPrintHint->GetPrintDialog();
+                Printer* pPrinter = pPrintHint->GetPrinter();
+                ::rtl::OUString aPrintFile ( ( pPrinter && pPrinter->IsPrintFileEnabled() ) ? pPrinter->GetPrintFile() : String() );
+                ::rtl::OUString aRangeText ( ( pDlg && pDlg->IsRangeChecked(PRINTDIALOG_RANGE) ) ? pDlg->GetRangeText() : String() );
+                sal_Bool bSelectionOnly = ( ( pDlg && pDlg->IsRangeChecked(PRINTDIALOG_SELECTION) ) ? sal_True : sal_False );
+
+                sal_Int32 nArgs = 2;
+                if ( aPrintFile.getLength() )
+                    nArgs++;
+                if ( aRangeText.getLength() )
+                    nArgs++;
+                else if ( bSelectionOnly )
+                    nArgs++;
+
+                m_aPrintOptions.realloc(nArgs);
+                m_aPrintOptions[0].Name = DEFINE_CONST_UNICODE("CopyCount");
+                m_aPrintOptions[0].Value <<= (sal_Int16) (pPrinter ? pPrinter->GetCopyCount() : 1 );
+                m_aPrintOptions[1].Name = DEFINE_CONST_UNICODE("Collate");
+                m_aPrintOptions[1].Value <<= (sal_Bool) (pDlg ? pDlg->IsCollateChecked() : sal_False );
+
+                if ( bSelectionOnly )
+                {
+                    m_aPrintOptions[2].Name = DEFINE_CONST_UNICODE("Selection");
+                    m_aPrintOptions[2].Value <<= bSelectionOnly;
+                }
+                else if ( aRangeText.getLength() )
+                {
+                    m_aPrintOptions[2].Name = DEFINE_CONST_UNICODE("Pages");
+                    m_aPrintOptions[2].Value <<= aRangeText;
+                }
+
+                if ( aPrintFile.getLength() )
+                {
+                    m_aPrintOptions[nArgs-1].Name = DEFINE_CONST_UNICODE("FileName");
+                    m_aPrintOptions[nArgs-1].Value <<= aPrintFile;
+                }
+*/
                 m_aPrintOptions = pPrintHint->GetOptions();
             }
+/*
+            else if ( pPrintHint->GetWhich() == -3 )    // -3 : AdditionalPrintOptions
+            {
+                    uno::Sequence < beans::PropertyValue >& lOldOpts = m_aPrintOptions;
+                    const uno::Sequence < beans::PropertyValue >& lNewOpts = pPrintHint->GetAdditionalOptions();
+                    sal_Int32 nOld = lOldOpts.getLength();
+                    sal_Int32 nAdd = lNewOpts.getLength();
+                    lOldOpts.realloc( nOld + nAdd );
+
+                    // assume that all new elements are overwriting old ones and so don't need to be added
+                    sal_Int32 nTotal = nOld;
+                    for ( sal_Int32 n=0; n<nAdd; n++ )
+                    {
+                        sal_Int32 m;
+                        for ( m=0; m<nOld; m++ )
+                            if ( lNewOpts[n].Name == lOldOpts[m].Name )
+                                // new option overwrites old one
+                                break;
+
+                        if ( m == nOld )
+                        {
+                            // this is a new option, so add it to the resulting sequence - counter must be incremented
+                            lOldOpts[nTotal].Name = lNewOpts[n].Name;
+                            lOldOpts[nTotal++].Value = lNewOpts[n].Value;
+                        }
+                        else
+                            // overwrite old option with new value, counter stays unmodified
+                            lOldOpts[m].Value = lNewOpts[n].Value;
+                    }
+
+                    if ( nTotal != lOldOpts.getLength() )
+                        // at least one new options has overwritten an old one, so we allocated too much
+                        lOldOpts.realloc(  nTotal );
+            }
+*/
             else if ( pPrintHint->GetWhich() != -2 )    // -2 : CancelPrintJob
             {
                 view::PrintJobEvent aEvent;

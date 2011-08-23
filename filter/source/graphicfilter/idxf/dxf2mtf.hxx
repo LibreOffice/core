@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,26 +46,28 @@ private:
 
     VirtualDevice * pVirDev;
     const DXFRepresentation * pDXF;
-    sal_Bool bStatus;
+    BOOL bStatus;
 
-    sal_uInt16 OptPointsPerCircle;
+    USHORT OptPointsPerCircle;
 
-    sal_uLong nMinPercent;
-    sal_uLong nMaxPercent;
-    sal_uLong nLastPercent;
-    sal_uLong nMainEntitiesCount;
+    ULONG nMinPercent;
+    ULONG nMaxPercent;
+    ULONG nLastPercent;
+    ULONG nMainEntitiesCount;
 
-    long        nBlockColor;
-    DXFLineInfo aBlockDXFLineInfo;
-    long        nParentLayerColor;
-    DXFLineInfo aParentLayerDXFLineInfo;
-    Color       aActLineColor;
-    Color       aActFillColor;
-    Font        aActFont;
+    long		nBlockColor;
+    DXFLineInfo	aBlockDXFLineInfo;
+    long		nParentLayerColor;
+    DXFLineInfo	aParentLayerDXFLineInfo;
+    Color		aActLineColor;
+    Color		aActFillColor;
+    Font		aActFont;
 
-    sal_uLong CountEntities(const DXFEntities & rEntities);
+    ULONG CountEntities(const DXFEntities & rEntities);
 
-    Color ConvertColor(sal_uInt8 nColor);
+    void MayCallback(ULONG nMainEntitiesProcessed);
+
+    Color ConvertColor(BYTE nColor);
 
     long GetEntityColor(const DXFBasicEntity & rE);
 
@@ -73,12 +75,12 @@ private:
 
     DXFLineInfo GetEntityDXFLineInfo(const DXFBasicEntity & rE);
 
-    sal_Bool SetLineAttribute(const DXFBasicEntity & rE, sal_uLong nWidth=0);
+    BOOL SetLineAttribute(const DXFBasicEntity & rE, ULONG nWidth=0);
 
-    sal_Bool SetAreaAttribute(const DXFBasicEntity & rE);
+    BOOL SetAreaAttribute(const DXFBasicEntity & rE);
 
-    sal_Bool SetFontAttribute(const DXFBasicEntity & rE, short nAngle,
-                          sal_uInt16 nHeight, double fWidthScale);
+    BOOL SetFontAttribute(const DXFBasicEntity & rE, short nAngle,
+                          USHORT nHeight, double fWidthScale);
 
     void DrawLineEntity(const DXFLineEntity & rE, const DXFTransform & rTransform);
 
@@ -109,14 +111,15 @@ private:
     void DrawHatchEntity( const DXFHatchEntity & rE, const DXFTransform & rTransform );
 
     void DrawEntities(const DXFEntities & rEntities,
-                      const DXFTransform & rTransform);
+                      const DXFTransform & rTransform,
+                      BOOL bTopEntities);
 
 public:
 
     DXF2GDIMetaFile();
     ~DXF2GDIMetaFile();
 
-    sal_Bool Convert( const DXFRepresentation & rDXF, GDIMetaFile & rMTF, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent);
+    BOOL Convert( const DXFRepresentation & rDXF, GDIMetaFile & rMTF, USHORT nMinPercent, USHORT nMaxPercent);
 
 };
 

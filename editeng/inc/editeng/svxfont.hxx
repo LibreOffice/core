@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,18 +25,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SVX_SVXFONT_HXX
-#define _SVX_SVXFONT_HXX
+#ifndef	_SVX_SVXFONT_HXX
+#define	_SVX_SVXFONT_HXX
 
-#include <limits.h>     // USHRT_MAX
+#include <limits.h>		// USHRT_MAX
 #include <editeng/svxenum.hxx>
 #include <i18npool/lang.h>
 #include <vcl/font.hxx>
 #include "editeng/editengdllapi.h"
-
-// Percentage of height of lower case small capital letters compared to upper case letters
-// See i#1526# for full explanation
-#define SMALL_CAPS_PERCENTAGE 80
 
 class SvxDoCapitals;
 class OutputDevice;
@@ -45,9 +41,9 @@ class Printer;
 class EDITENG_DLLPUBLIC SvxFont : public Font
 {
     LanguageType eLang;         // Language
-    SvxCaseMap   eCaseMap;      // Text Markup
-    short nEsc;                 // Degree of Superscript/Subscript
-    sal_uInt8  nPropr;          // Degree of reduction of the font height
+    SvxCaseMap	 eCaseMap;      // Textauszeichnung
+    short nEsc;                 // Grad der Hoch-/Tiefstellung
+    BYTE  nPropr;               // Grad der Verkleinerung der Fonthoehe
     short nKern;                // Kerning in Pt
 
 public:
@@ -55,14 +51,14 @@ public:
     SvxFont( const Font &rFont );
     SvxFont( const SvxFont &rFont );
 
-    // Methods for Superscript/Subscript
+    // Methoden fuer die Hoch-/Tiefstellung
     inline short GetEscapement() const { return nEsc; }
     inline void SetEscapement( const short nNewEsc ) { nEsc = nNewEsc; }
 
-    inline sal_uInt8 GetPropr() const { return nPropr; }
-    inline void SetPropr( const sal_uInt8 nNewPropr ) { nPropr = nNewPropr; }
-    inline void SetProprRel( const sal_uInt8 nNewPropr )
-        { SetPropr( (sal_uInt8)( (long)nNewPropr * (long)nPropr / 100L ) ); }
+    inline BYTE GetPropr() const { return nPropr; }
+    inline void SetPropr( const BYTE nNewPropr ) { nPropr = nNewPropr; }
+    inline void SetProprRel( const BYTE nNewPropr )
+        { SetPropr( (BYTE)( (long)nNewPropr * (long)nPropr / 100L ) ); }
 
     // Kerning
     inline short GetFixKerning() const { return nKern; }
@@ -75,57 +71,58 @@ public:
     inline void SetLanguage( const LanguageType eNewLan )
         { eLang = eNewLan;  Font::SetLanguage(eNewLan); }
 
-    // Is-Methods:
-    inline sal_Bool IsCaseMap() const { return SVX_CASEMAP_NOT_MAPPED != eCaseMap; }
-    inline sal_Bool IsCapital() const { return SVX_CASEMAP_KAPITAELCHEN == eCaseMap; }
-    inline sal_Bool IsKern() const { return 0 != nKern; }
-    inline sal_Bool IsEsc() const { return 0 != nEsc; }
+    // Is-Methoden:
+    inline BOOL IsCaseMap() const { return SVX_CASEMAP_NOT_MAPPED != eCaseMap; }
+    inline BOOL IsCapital() const { return SVX_CASEMAP_KAPITAELCHEN == eCaseMap; }
+    inline BOOL IsKern() const { return 0 != nKern; }
+    inline BOOL IsEsc() const { return 0 != nEsc; }
 
-    // Consider Upper case, Lower case letters etc.
+    // Versalien, Gemeine etc. beruecksichtigen
     String CalcCaseMap( const String &rTxt ) const;
 
-// The following section is not needed by anyone, so it can be excluded.
+// Der folgende Bereich wird nicht von jedem benoetigt, er kann deshalb
+// ausgeklammert werden.
 #ifndef REDUCEDSVXFONT
-    // Handle upper case letters
+    // Kapitaelchenbearbeitung
     void DoOnCapitals( SvxDoCapitals &rDo,
-                       const sal_uInt16 nPartLen = USHRT_MAX ) const;
+                       const USHORT nPartLen = USHRT_MAX ) const;
 
     void SetPhysFont( OutputDevice *pOut ) const;
     Font ChgPhysFont( OutputDevice *pOut ) const;
 
     Size GetCapitalSize( const OutputDevice *pOut, const String &rTxt,
-                          const sal_uInt16 nIdx, const sal_uInt16 nLen) const;
+                          const USHORT nIdx, const USHORT nLen) const;
     void DrawCapital( OutputDevice *pOut, const Point &rPos, const String &rTxt,
-                      const sal_uInt16 nIdx, const sal_uInt16 nLen ) const;
+                      const USHORT nIdx, const USHORT nLen ) const;
 
     Size GetPhysTxtSize( const OutputDevice *pOut, const String &rTxt,
-                         const sal_uInt16 nIdx, const sal_uInt16 nLen ) const;
+                         const USHORT nIdx, const USHORT nLen ) const;
 
     Size GetPhysTxtSize( const OutputDevice *pOut, const String &rTxt );
 
     Size GetTxtSize( const OutputDevice *pOut, const String &rTxt,
-                      const sal_uInt16 nIdx = 0, const sal_uInt16 nLen = STRING_LEN );
+                      const USHORT nIdx = 0, const USHORT nLen = STRING_LEN );
 
     void DrawText( OutputDevice *pOut, const Point &rPos, const String &rTxt,
-               const sal_uInt16 nIdx = 0, const sal_uInt16 nLen = STRING_LEN ) const;
+               const USHORT nIdx = 0, const USHORT nLen = STRING_LEN ) const;
 
     void QuickDrawText( OutputDevice *pOut, const Point &rPos, const String &rTxt,
-               const sal_uInt16 nIdx = 0, const sal_uInt16 nLen = STRING_LEN, const sal_Int32* pDXArray = NULL ) const;
+               const USHORT nIdx = 0, const USHORT nLen = STRING_LEN, const sal_Int32* pDXArray = NULL ) const;
 
     Size QuickGetTextSize( const OutputDevice *pOut, const String &rTxt,
-                         const sal_uInt16 nIdx, const sal_uInt16 nLen, sal_Int32* pDXArray = NULL ) const;
+                         const USHORT nIdx, const USHORT nLen, sal_Int32* pDXArray = NULL ) const;
 
     void DrawPrev( OutputDevice* pOut, Printer* pPrinter,
                    const Point &rPos, const String &rTxt,
-                   const sal_uInt16 nIdx = 0, const sal_uInt16 nLen = STRING_LEN ) const;
+                   const USHORT nIdx = 0, const USHORT nLen = STRING_LEN ) const;
 
 #endif // !REDUCEDSVXFONT
     static void DrawArrow( OutputDevice &rOut, const Rectangle& rRect,
-        const Size& rSize, const Color& rCol, sal_Bool bLeft );
-    SvxFont&    operator=( const SvxFont& rFont );
-    SvxFont&    operator=( const Font& rFont );
+        const Size& rSize, const Color& rCol, BOOL bLeft );
+    SvxFont&	operator=( const SvxFont& rFont );
+    SvxFont&	operator=( const Font& rFont );
 };
 
-#endif // #ifndef   _SVX_SVXFONT_HXX
+#endif // #ifndef	_SVX_SVXFONT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,25 +33,25 @@
 
 
 //==================================================================
-// CfgItem for navigator-state
+// CfgItem fuer Navigator-Zustand
 //==================================================================
 
 class ScNavipiCfg
 {
 private:
-    sal_uInt16  nListMode;
-    sal_uInt16  nDragMode;
-    sal_uInt16  nRootType;
+    USHORT 	nListMode;
+    USHORT	nDragMode;
+    USHORT	nRootType;
 
 public:
             ScNavipiCfg();
 
-    void    SetListMode(sal_uInt16 nNew);
-    sal_uInt16  GetListMode() const         { return nListMode; }
-    void    SetDragMode(sal_uInt16 nNew);
-    sal_uInt16  GetDragMode() const         { return nDragMode; }
-    void    SetRootType(sal_uInt16 nNew);
-    sal_uInt16  GetRootType() const         { return nRootType; }
+    void	SetListMode(USHORT nNew);
+    USHORT	GetListMode() const			{ return nListMode; }
+    void	SetDragMode(USHORT nNew);
+    USHORT	GetDragMode() const			{ return nDragMode; }
+    void	SetRootType(USHORT nNew);
+    USHORT	GetRootType() const			{ return nRootType; }
 };
 
 

@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef SVTOOLS_TABLEGEOMETRY_HXX
 #define SVTOOLS_TABLEGEOMETRY_HXX
 
-#include "svtools/table/tabletypes.hxx"
+#include <svtools/table/tabletypes.hxx>
 
 #include <tools/gen.hxx>
 
@@ -76,25 +76,18 @@ namespace svt { namespace table
     {
     protected:
         RowPos  m_nRowPos;
-        bool    m_bAllowVirtualRows;
 
     public:
         TableRowGeometry(
-            TableControl_Impl const & _rControl,
-            Rectangle const & _rBoundaries,
-            RowPos const _nRow,
-            bool const i_allowVirtualRows = false
-                // allow rows >= getRowCount()?
+            const TableControl_Impl& _rControl,
+            const Rectangle& _rBoundaries,
+            RowPos _nRow
         );
 
         // status
         RowPos              getRow() const  { return m_nRowPos; }
         // operations
         bool                moveDown();
-
-    private:
-        void    impl_initRect();
-        bool    impl_isValidRow( RowPos const i_row ) const;
     };
 
     //====================================================================
@@ -104,24 +97,18 @@ namespace svt { namespace table
     {
     protected:
         ColPos  m_nColPos;
-        bool    m_bAllowVirtualColumns;
 
     public:
         TableColumnGeometry(
-            TableControl_Impl const & _rControl,
-            Rectangle const & _rBoundaries,
-            ColPos const _nCol,
-            bool const i_allowVirtualColumns = false
+            const TableControl_Impl& _rControl,
+            const Rectangle& _rBoundaries,
+            ColPos _nCol
         );
 
         // status
         ColPos              getCol() const  { return m_nColPos; }
         // operations
         bool                moveRight();
-
-    private:
-        void    impl_initRect();
-        bool    impl_isValidColumn( ColPos const i_column ) const;
     };
 
     //====================================================================
@@ -137,14 +124,13 @@ namespace svt { namespace table
 
     public:
         TableCellGeometry(
-                TableControl_Impl const & _rControl,
-                Rectangle const & _rBoundaries,
-                ColPos const _nCol,
-                RowPos const _nRow,
-                bool const i_alllowVirtualCells = false
+                const TableControl_Impl& _rControl,
+                const Rectangle& _rBoundaries,
+                ColPos _nCol,
+                RowPos _nRow
             )
-            :m_aRow( _rControl, _rBoundaries, _nRow, i_alllowVirtualCells )
-            ,m_aCol( _rControl, _rBoundaries, _nCol, i_alllowVirtualCells )
+            :m_aRow( _rControl, _rBoundaries, _nRow )
+            ,m_aCol( _rControl, _rBoundaries, _nCol )
         {
         }
 

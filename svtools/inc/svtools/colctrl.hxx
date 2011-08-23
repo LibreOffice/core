@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,16 +44,16 @@ class ColorHSB;
 class SvColorControl : public Control
 {
 private:
-    Bitmap*         mpBitmap;
+    Bitmap*			mpBitmap;
     BitmapReadAccess* mpReadAccess;
-    Color           maColor;
-    short           mnLuminance;
-    Point           maPosition;
-    Link            maModifyHdl;
+    Color			maColor;
+    short			mnLuminance;
+    Point			maPosition;
+    Link			maModifyHdl;
 
-    void            Initialize();
-    void            CreateBitmap();
-    void            ShowPosition( const Point& aPos );
+    void			Initialize();
+    void			CreateBitmap();
+    void			ShowPosition( const Point& aPos );
 
 public:
                     SvColorControl( Window* pParent, WinBits nStyle = 0 );
@@ -71,12 +71,12 @@ public:
 
     virtual void    Modify();
 
-    Color           GetColor() const { return maColor; };
-    void            SetColor( const Color& rCol );
-    void            SetColor( const ColorHSB& rCol, sal_Bool bSetColor = sal_True );
+    Color			GetColor() const { return maColor; };
+    void 			SetColor( const Color& rCol );
+    void 			SetColor( const ColorHSB& rCol, BOOL bSetColor = TRUE );
 
-    short           GetLuminance() const { return mnLuminance; };
-    void            SetLuminance( short nLum );
+    short			GetLuminance() const { return mnLuminance; };
+    void 			SetLuminance( short nLum );
 
     void            SetModifyHdl( const Link& rLink ) { maModifyHdl = rLink; }
     const Link&     GetModifyHdl() const { return maModifyHdl; }
@@ -90,7 +90,7 @@ public:
 class ColorPreviewControl : public Control
 {
 private:
-    Color           maColor;
+    Color			maColor;
 
 public:
                     ColorPreviewControl( Window* pParent, WinBits nStyle = 0 );
@@ -99,8 +99,8 @@ public:
 
     virtual void    Paint( const Rectangle& rRect );
 
-    Color           GetColor() const { return maColor; };
-    void            SetColor( const Color& rCol );
+    Color			GetColor() const { return maColor; };
+    void 			SetColor( const Color& rCol );
 };
 
 // -----------------------
@@ -112,35 +112,35 @@ enum CMCPosition { CMC_TOPLEFT, CMC_TOPRIGHT, CMC_BOTTOMLEFT, CMC_BOTTOMRIGHT, C
 class ColorMixingControl : public ValueSet
 {
 private:
-    sal_uInt16          mnRows;
-    sal_uInt16          mnColumns;
-    Color           maColor[4];
+    USHORT			mnRows;
+    USHORT			mnColumns;
+    Color			maColor[4];
 
-    void            Initialize();
+    void			Initialize();
 
-    Color           CalcDifferenceColor( sal_uInt16 nCol1, sal_uInt16 nCol2, sal_uInt16 nSteps );
-    void            FillRow( sal_uInt16 nRow );
-    void            FillColumn( sal_uInt16 nColumn );
+    Color			CalcDifferenceColor( USHORT nCol1, USHORT nCol2, USHORT nSteps );
+    void			FillRow( USHORT nRow );
+    void			FillColumn( USHORT nColumn );
 
 public:
                     ColorMixingControl( Window* pParent, WinBits nStyle = 0,
-                                        sal_uInt16 nRows = 4, sal_uInt16 nColumns = 4 );
+                                        USHORT nRows = 4, USHORT nColumns = 4 );
                     ColorMixingControl( Window* pParent, const ResId& rResId,
-                                        sal_uInt16 nRows = 4, sal_uInt16 nColumns = 4 );
+                                        USHORT nRows = 4, USHORT nColumns = 4 );
                     ~ColorMixingControl();
 
-    sal_uInt16          GetRows() const { return mnRows; };
-    void            SetRows( sal_uInt16 nRows );
-    sal_uInt16          GetColumns() const { return mnColumns; };
-    void            SetColumns( sal_uInt16 nColumns );
+    USHORT			GetRows() const { return mnRows; };
+    void  			SetRows( USHORT nRows );
+    USHORT			GetColumns() const { return mnColumns; };
+    void  			SetColumns( USHORT nColumns );
 
     using ValueSet::GetColor;
-    Color           GetColor( CMCPosition ePos ) const { return maColor[ ePos ]; };
+    Color			GetColor( CMCPosition ePos ) const { return maColor[ ePos ]; };
     using ValueSet::SetColor;
-    void            SetColor( CMCPosition ePos, const Color& rCol );
+    void 			SetColor( CMCPosition ePos, const Color& rCol );
 
-    String          GetRGBString( const Color& rColor );
-    CMCPosition     GetCMCPosition() const;
+    String			GetRGBString( const Color& rColor );
+    CMCPosition		GetCMCPosition() const;
 };
 
 // ------------
@@ -150,23 +150,23 @@ public:
 class ColorHSB
 {
 private:
-    sal_uInt16      mnHue;   // Farbwinkel, 360 Grad
-    sal_uInt16      mnSat;   // Saturation, 100 %
-    sal_uInt16      mnBri;   // Brightness, 100 %
+    USHORT      mnHue;   // Farbwinkel, 360 Grad
+    USHORT      mnSat;   // Saturation, 100 %
+    USHORT      mnBri;   // Brightness, 100 %
 
 public:
                 ColorHSB()
                     { mnHue=0; mnSat=0; mnBri=0; }
-                ColorHSB( sal_uInt16 nH, sal_uInt16 nS, sal_uInt16 nB )
+                ColorHSB( USHORT nH, USHORT nS, USHORT nB )
                     { mnHue=nH; mnSat=nS; mnBri=nB; }
                 ColorHSB( const Color& rColor );
 
-    void        SetHue( sal_uInt16 nH ) { mnHue=nH; }
-    void        SetSat( sal_uInt16 nS ) { mnSat=nS; }
-    void        SetBri( sal_uInt16 nB ) { mnBri=nB; }
-    sal_uInt16      GetHue() const { return mnHue; }
-    sal_uInt16      GetSat() const { return mnSat; }
-    sal_uInt16      GetBri() const { return mnBri; }
+    void        SetHue( USHORT nH ) { mnHue=nH; }
+    void        SetSat( USHORT nS ) { mnSat=nS; }
+    void        SetBri( USHORT nB ) { mnBri=nB; }
+    USHORT      GetHue() const { return mnHue; }
+    USHORT      GetSat() const { return mnSat; }
+    USHORT      GetBri() const { return mnBri; }
     Color       GetRGB() const;
 };
 
@@ -177,26 +177,26 @@ public:
 class ColorCMYK
 {
 private:
-    sal_uInt16      mnCyan;
-    sal_uInt16      mnMagenta;
-    sal_uInt16      mnYellow;
-    sal_uInt16      mnKey;
+    USHORT		mnCyan;
+    USHORT		mnMagenta;
+    USHORT		mnYellow;
+    USHORT		mnKey;
 
 public:
                 ColorCMYK()
                     { mnCyan=0; mnMagenta=0; mnYellow=0; mnKey=100; }
-                ColorCMYK( sal_uInt16 nC, sal_uInt16 nM, sal_uInt16 nY, sal_uInt16 nK )
+                ColorCMYK( USHORT nC, USHORT nM, USHORT nY, USHORT nK )
                     { mnCyan=nC; mnMagenta=nM; mnYellow=nY; mnKey=nK; }
                 ColorCMYK( const Color& rColor );
 
-    void        SetCyan( sal_uInt16 nC ) { mnCyan=nC; }
-    void        SetMagenta( sal_uInt16 nM ) { mnMagenta=nM; }
-    void        SetYellow( sal_uInt16 nY ) { mnYellow=nY; }
-    void        SetKey( sal_uInt16 nK ) { mnKey=nK; }
-    sal_uInt16      GetCyan() const { return mnCyan; }
-    sal_uInt16      GetMagenta() const { return mnMagenta; }
-    sal_uInt16      GetYellow() const { return mnYellow; }
-    sal_uInt16      GetKey() const { return mnKey; }
+    void        SetCyan( USHORT nC ) { mnCyan=nC; }
+    void        SetMagenta( USHORT nM ) { mnMagenta=nM; }
+    void        SetYellow( USHORT nY ) { mnYellow=nY; }
+    void        SetKey( USHORT nK ) { mnKey=nK; }
+    USHORT      GetCyan() const { return mnCyan; }
+    USHORT      GetMagenta() const { return mnMagenta; }
+    USHORT      GetYellow() const { return mnYellow; }
+    USHORT      GetKey() const { return mnKey; }
     Color       GetRGB() const;
 };
 

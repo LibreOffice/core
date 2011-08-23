@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ public:
 
     /** Call Dispose() before the ownder of an EffectRewinder object dies so
         that the EffectRewinder can release all references to the owner.
-
+        
     */
     void dispose (void);
 
@@ -113,7 +113,7 @@ private:
     EventMultiplexer& mrEventMultiplexer;
     EventQueue& mrEventQueue;
     UserEventQueue& mrUserEventQueue;
-
+    
     EventHandlerSharedPtr mpSlideStartHandler;
     EventHandlerSharedPtr mpSlideEndHandler;
     AnimationEventHandlerSharedPtr mpAnimationStartHandler;
@@ -127,12 +127,12 @@ private:
         nested rewinds.
     */
     EventSharedPtr mpAsynchronousRewindEvent;
-
+    
     css::uno::Reference<css::animations::XAnimationNode> mxCurrentAnimationRootNode;
     ::boost::shared_ptr<ScreenUpdater::UpdateLock> mpPaintLock;
 
     bool mbNonUserTriggeredMainSequenceEffectSeen;
-
+    
     void initialize (void);
 
     bool resetEffectCount (void);
@@ -149,7 +149,7 @@ private:
     /** Skip the next main sequence effect.
     */
     void skipSingleMainSequenceEffects (void);
-
+    
     /** Skip the specified number of main sequence effects.
     */
     void skipSomeMainSequenceEffects (const sal_Int32 nSkipCount);

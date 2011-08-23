@@ -42,16 +42,15 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMP_NAME=FlatXmlFilter_java
-OUT_COMP_CLASS = $(OUT_CLASS)/$(COMP_NAME)
-COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
-COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
-COMP_JAR_NAME = $(COMP_NAME).uno.jar
-COMP_JAR = $(OUT_COMP_CLASS)/$(COMP_JAR_NAME)
-COMP_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMP_NAME).uno.Manifest
-COMP_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMP_NAME)/META-INF/manifest.xml
-COMP_REGISTERFLAG = $(OUT_MISC)$(PS)devguide_$(COMP_NAME)_register_component.flag
-COMP_COMPONENTS=$(COMP_NAME).components
+COMPONENT_NAME=FlatXmlFilter_java
+OUT_COMP_CLASS = $(OUT_CLASS)/$(COMPONENT_NAME)
+COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).$(UNOOXT_EXT)
+COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOOXT_EXT)")
+COMPONENT_JAR_NAME = $(COMPONENT_NAME).uno.jar
+COMPONENT_JAR = $(OUT_COMP_CLASS)/$(COMPONENT_JAR_NAME)
+COMPONENT_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT_NAME).uno.Manifest
+COMPONENT_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT_NAME)/META-INF/manifest.xml
+REGISTERFLAG = $(OUT_MISC)$(PS)devguide_$(COMPONENT_NAME)_register_component.flag
 
 JAVAFILES  = \
 	   FlatXml.java \
@@ -59,9 +58,9 @@ JAVAFILES  = \
 CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
 
 
-#$(COMP_NAME)_CLASSFILES = FlatXml.class FlatXml$(dlr)_FlatXml.class
+#$(COMPONENT_NAME)_CLASSFILES = FlatXml.class FlatXml$(dlr)_FlatXml.class
 
-$(COMP_NAME)_CLASSFILES = *.class 
+$(COMPONENT_NAME)_CLASSFILES = *.class 
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
@@ -83,7 +82,7 @@ $(CLASSFILES) : $(JAVAFILES)
 	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES)
 
 # rule for component jar file
-$(COMP_JAR) : $(COMP_MANIFESTFILE) $(CLASSFILES)
+$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(CLASSFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
@@ -96,24 +95,23 @@ $(OUT_COMP_CLASS)/%/manifest.xml :
 	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)FlatXmlFilter_java.xcu$(QM)"/$(CSEP) >> $@
-	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-components$(QM)">> $@
-	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(COMP_COMPONENTS)$(QM)"/$(CSEP)>> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
 # rule for component package file
-$(COMP_PACKAGE) : $(COMP_JAR) FlatXmlFilter_java.xcu $(COMP_UNOPKG_MANIFEST) $(COMP_COMPONENTS)
+$(COMPONENT_PACKAGE) : $(COMPONENT_JAR) FlatXmlFilter_java.xcu $(COMPONENT_UNOPKG_MANIFEST)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(SDK_ZIP) $@ FlatXmlFilter_java.xcu
-	$(SDK_ZIP) -u $@ $(COMP_COMPONENTS)
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) -u ../../bin/$(@F) $(<F)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
-$(COMP_REGISTERFLAG) : $(COMP_PACKAGE)
+$(REGISTERFLAG) : $(COMPONENT_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(DEPLOYTOOL) $(COMP_PACKAGE_URL)
+	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
 	@echo --------------------------------------------------------------------------------
@@ -123,7 +121,7 @@ else
 	@echo --------------------------------------------------------------------------------
 endif
 
-FlatXmlFilterJavaExample : $(COMP_REGISTERFLAG)
+FlatXmlFilterJavaExample : $(REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
 	@echo The Java FlatXmlFilter component is installed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo You can use the filters "$(QM)DevGuide FlatXML ...$(QM)" inside your office installation
@@ -139,5 +137,5 @@ FlatXmlFilterJavaExample : $(COMP_REGISTERFLAG)
 .PHONY: clean
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_PACKAGE_URL)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_REGISTERFLAG)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))

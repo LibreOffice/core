@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: securityenvironment_nssimpl.hxx,v $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +37,6 @@ getCertError(PRErrorCode errNum);
 
 void
 printChainFailure(CERTVerifyLog *log);
-#endif  // _XSECERROR_HXX_
+#endif	// _XSECERROR_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

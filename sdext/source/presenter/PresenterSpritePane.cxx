@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ PresenterSpritePane::PresenterSpritePane (const Reference<XComponentContext>& rx
         mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
     mxPresenterHelper = Reference<drawing::XPresenterHelper>(
         xFactory->createInstanceWithContext(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
+            OUString::createFromAscii("com.sun.star.comp.Draw.PresenterHelper"),
             mxComponentContext),
         UNO_QUERY_THROW);
 }
@@ -251,7 +251,7 @@ void PresenterSpritePane::CreateCanvases (
         const awt::Rectangle aBorderBox (mxBorderWindow->getPosSize());
         mpSprite->Resize(geometry::RealSize2D(aBorderBox.Width, aBorderBox.Height));
     }
-
+            
     UpdateCanvases();
 }
 

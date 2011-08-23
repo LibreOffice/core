@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -202,8 +202,8 @@ public:
 
     // Gleichzeitig wird der Text in den Outliner gesetzt (ggf.
     // der des EditOutliners) und die PaperSize gesetzt.
-    virtual void TakeTextRect( const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, ::Rectangle& rTextRect, bool bNoEditText = false, ::Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const;
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false, Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const;
+    virtual void TakeTextRect( const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, ::Rectangle& rTextRect, bool bNoEditText = false, ::Rectangle* pAnchorRect=NULL, BOOL bLineWidth=TRUE ) const;
+    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false, Rectangle* pAnchorRect=NULL, BOOL bLineWidth=TRUE ) const;
     virtual void TakeTextAnchorRect(const sdr::table::CellPos& rPos, ::Rectangle& rAnchorRect ) const;
     virtual void TakeTextAnchorRect(::Rectangle& rAnchorRect) const;
 
@@ -219,15 +219,14 @@ public:
     virtual void SetPage(SdrPage* pNewPage);
     virtual void SetModel(SdrModel* pNewModel);
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual UINT16 GetObjIdentifier() const;
     virtual void SetChanged();
 
     virtual bool AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt = true, bool bWdt = true) const;
     virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true);
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
-    virtual SdrTableObj* Clone() const;
-    SdrTableObj& operator=(const SdrTableObj& rObj);
+    virtual void operator=(const SdrObject& rObj);
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual basegfx::B2DPolyPolygon TakeContour() const;
     virtual void RecalcSnapRect();
@@ -267,7 +266,7 @@ public:
     virtual void EndTextEdit(SdrOutliner& rOutl);
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
     virtual void TakeTextEditArea(const sdr::table::CellPos& rPos, Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
-    virtual sal_uInt16 GetOutlinerViewAnchorMode() const;
+    virtual USHORT GetOutlinerViewAnchorMode() const;
 
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject);
 
@@ -304,9 +303,9 @@ public:
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     // #103836# iterates over the paragraphs of a given SdrObject and removes all
-    //          hard set character attributes with the which ids contained in the
-    //          given vector
-//  virtual void RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& rCharWhichIds );
+    //			hard set character attributes with the which ids contained in the
+    //			given vector
+//	virtual void RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& rCharWhichIds );
 
     /** hack for clipboard with calc and writer, export and import table content as rtf table */
     static void ExportAsRTF( SvStream& rStrm, SdrTableObj& rObj );
@@ -332,9 +331,9 @@ private:
     friend class sdr::contact::ViewContactOfTableObj;
     const TableLayouter& getTableLayouter() const;
 
-    Rectangle   maLogicRect;
+    Rectangle	maLogicRect;
 private:
-    SdrTableObjImpl*    mpImpl;
+    SdrTableObjImpl*	mpImpl;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

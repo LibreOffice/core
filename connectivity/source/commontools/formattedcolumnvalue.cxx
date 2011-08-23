@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -185,7 +185,7 @@ namespace dbtools
                 // some more formatter settings
                 _rData.m_nKeyType  = ::comphelper::getNumberFormatType( xNumberFormatsSupp->getNumberFormats(), _rData.m_nFormatKey );
                 Reference< XPropertySet > xFormatSettings( xNumberFormatsSupp->getNumberFormatSettings(), UNO_QUERY_THROW );
-                OSL_VERIFY( xFormatSettings->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "NullDate" )) ) >>= _rData.m_aNullDate );
+                OSL_VERIFY( xFormatSettings->getPropertyValue( ::rtl::OUString::createFromAscii( "NullDate" ) ) >>= _rData.m_aNullDate );
 
                 // remember the formatter
                 _rData.m_xFormatter = i_rNumberFormatter;
@@ -228,7 +228,7 @@ namespace dbtools
     //= FormattedColumnValue
     //====================================================================
     //--------------------------------------------------------------------
-    FormattedColumnValue::FormattedColumnValue( const ::comphelper::ComponentContext& i_rContext,
+    FormattedColumnValue::FormattedColumnValue( const ::comphelper::ComponentContext& i_rContext, 
             const Reference< XRowSet >& _rxRowSet, const Reference< XPropertySet >& i_rColumn )
         :m_pData( new FormattedColumnValue_Data )
     {
@@ -328,7 +328,7 @@ namespace dbtools
         {
             if ( m_pData->m_bNumericField )
             {
-                sStringValue = DBTypeConversion::getFormattedValue(
+                sStringValue = DBTypeConversion::getValue(
                     m_pData->m_xColumn, m_pData->m_xFormatter, m_pData->m_aNullDate, m_pData->m_nFormatKey, m_pData->m_nKeyType
                 );
             }

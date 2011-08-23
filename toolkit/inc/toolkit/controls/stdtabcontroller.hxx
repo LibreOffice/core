@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,38 +41,38 @@
 #include <toolkit/helper/servicenames.hxx>
 
 
-class StdTabController :    public ::com::sun::star::awt::XTabController,
+class StdTabController : 	public ::com::sun::star::awt::XTabController,
                             public ::com::sun::star::lang::XServiceInfo,
                             public ::com::sun::star::lang::XTypeProvider,
                             public ::cppu::OWeakAggObject
 {
 private:
-    ::osl::Mutex            maMutex;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >  mxModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >    mxControlContainer;
+    ::osl::Mutex			maMutex;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >	mxModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > 	mxControlContainer;
 
 protected:
-    ::osl::Mutex&               GetMutex() { return maMutex; }
-    sal_Bool                    ImplCreateComponentSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > >& rControls, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& rModels, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > >& rComponents, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>* pTabStops, sal_Bool bPeerComponent ) const;
+    ::osl::Mutex&				GetMutex() { return maMutex; }
+    sal_Bool					ImplCreateComponentSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > >& rControls, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& rModels, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > >& rComponents, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>* pTabStops, sal_Bool bPeerComponent ) const;
     // wenn rModels kuerzer als rControls ist, werden nur die rModels entsprechenden Elemente geliefert und die korrespondierenden Elemente aus rControls entfernt
-    void                        ImplActivateControl( sal_Bool bFirst ) const;
+    void						ImplActivateControl( sal_Bool bFirst ) const;
 
 public:
                             StdTabController();
                             ~StdTabController();
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  FindControl( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > >& rCtrls, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & rxCtrlModel );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >	FindControl( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > >& rCtrls, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & rxCtrlModel );
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return OWeakAggObject::queryInterface(rType); }
-    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
+    ::com::sun::star::uno::Any	SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return OWeakAggObject::queryInterface(rType); }
+    void						SAL_CALL acquire() throw()	{ OWeakAggObject::acquire(); }
+    void						SAL_CALL release() throw()	{ OWeakAggObject::release(); }
 
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Any	SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // XTabController
     void SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >& Model ) throw(::com::sun::star::uno::RuntimeException);

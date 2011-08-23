@@ -59,6 +59,7 @@ my $processes_to_run = 1;
 my %hosts_ports = ();
 my $default_port = 7890;
 my @ARGV_COPY = @ARGV; # @ARGV BACKUP
+#$ARGV_COPY{$_}++ foreach (@ARGV);
 print "arguments: @ARGV\n";
 get_options();
 
@@ -148,6 +149,7 @@ sub run_client {
                 # "active" cycle
                 foreach my $active_server (keys %active_servers) {
                     foreach my $active_port (keys %{$active_servers{$active_server}}) {
+#                        print "Active: $active_server:$active_port\n";
                         my $iaddr = inet_aton($active_server);
                         $paddr = sockaddr_in($active_port, $iaddr);
                         do {
@@ -170,6 +172,7 @@ sub run_client {
                 };
 
                 # "inactive" cycle
+#                print "Inactive: $current_server:$current_port\n";
                 my $iaddr = inet_aton($current_server);
                 $paddr = sockaddr_in($current_port, $iaddr);
                 do {
@@ -272,7 +275,7 @@ sub request_job {
     $message = "platform=$ENV_BACKUP{OUTPATH} pid=$$ osname=$^O" if (!$message);
     # create the socket, connect to the port
     socket(SOCKET, PF_INET, SOCK_STREAM, $proto) or die "socket: $!";
-    connect(SOCKET, $paddr) or return '';
+    connect(SOCKET, $paddr) or return '';#die "connect: $!";
     my $error_code = 1;
     $message .= "\n";
     syswrite SOCKET, $message, length $message;
@@ -370,6 +373,8 @@ sub do_job {
         getcwd();
         my $job_string = $job_hash{job} . ' > ' . $tmp_log_file . ' 2>&1';
         $error_code = system($job_string);
+#        rename($tmp_log_file, $job_hash{log}) or system("mv", $tmp_log_file, $job_hash{log});
+#        delete $job_temp_files{$tmp_log_file};# = $job_hash{log};
     };
     rename($tmp_log_file, $job_hash{log}) or system("mv", $tmp_log_file, $job_hash{log});
     delete $job_temp_files{$tmp_log_file};
@@ -412,7 +417,7 @@ sub print_error {
     exit(1);
 };
 sub store_env_hash {
-    my $ss_setenv_file = shift;
+    my $ss_setenv_file = shift;#($$job_hash{server_pid}.$$job_hash{setsolar_cmd}, $cmd_file);
     my %solar_vars = ();
     my $cmd_file = File::Temp::tmpnam($ENV_BACKUP{TMP});
     my $env_vars_file = File::Temp::tmpnam($ENV_BACKUP{TMP});

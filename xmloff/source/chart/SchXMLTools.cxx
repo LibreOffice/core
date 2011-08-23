@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,12 +31,16 @@
 
 #include "SchXMLTools.hxx"
 
+/*
+#include <tools/debug.hxx>
+*/
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/InlineContainer.hxx>
 // header for class SvXMLUnitConverter
 #include <xmloff/xmluconv.hxx>
 // header for struct SvXMLEnumMapEntry
 #include <xmloff/xmlement.hxx>
+// header for define __FAR_DATA
 #include <tools/solar.h>
 
 // header for class SvXMLImportPropertyMapper
@@ -46,7 +50,7 @@
 // header for class XMLPropertySetMapper
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexp.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmlmetai.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -81,7 +85,7 @@ Reference< uno::XComponentContext > lcl_getComponentContext()
     {
         Reference< beans::XPropertySet > xFactProp( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
         if( xFactProp.is())
-            xFactProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+            xFactProp->getPropertyValue(OUString::createFromAscii("DefaultContext")) >>= xContext;
     }
     catch( uno::Exception& )
     {}
@@ -145,7 +149,7 @@ Reference< chart2::data::XDataSequence > lcl_createNewSequenceFromCachedXMLRange
     OUString aRange;
     if( xSeq.is() && SchXMLTools::getXMLRangePropertyFromDataSequence( xSeq, aRange, /* bClearProp = */ true ) )
     {
-        xRet.set( xDataProvider->createDataSequenceByRangeRepresentation(
+        xRet.set( xDataProvider->createDataSequenceByRangeRepresentation( 
             lcl_ConvertRange( aRange, xDataProvider )) );
         SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
             Reference< beans::XPropertySet >( xRet, uno::UNO_QUERY ));
@@ -160,26 +164,26 @@ Reference< chart2::data::XDataSequence > lcl_createNewSequenceFromCachedXMLRange
 namespace SchXMLTools
 {
 
-static SvXMLEnumMapEntry aXMLChartClassMap[] =
+static __FAR_DATA SvXMLEnumMapEntry aXMLChartClassMap[] =
 {
-    { XML_LINE,         XML_CHART_CLASS_LINE    },
-    { XML_AREA,         XML_CHART_CLASS_AREA    },
-    { XML_CIRCLE,       XML_CHART_CLASS_CIRCLE  },
-    { XML_RING,         XML_CHART_CLASS_RING    },
-    { XML_SCATTER,      XML_CHART_CLASS_SCATTER },
-    { XML_RADAR,        XML_CHART_CLASS_RADAR   },
-    { XML_FILLED_RADAR, XML_CHART_CLASS_FILLED_RADAR },
-    { XML_BAR,          XML_CHART_CLASS_BAR     },
-    { XML_STOCK,        XML_CHART_CLASS_STOCK   },
-    { XML_BUBBLE,       XML_CHART_CLASS_BUBBLE  },
-    { XML_SURFACE,      XML_CHART_CLASS_BAR     }, //@todo change this if a surface chart is available
+    { XML_LINE,	    	XML_CHART_CLASS_LINE	},
+    { XML_AREA,		    XML_CHART_CLASS_AREA	},
+    { XML_CIRCLE,		XML_CHART_CLASS_CIRCLE	},
+    { XML_RING,		    XML_CHART_CLASS_RING	},
+    { XML_SCATTER,		XML_CHART_CLASS_SCATTER	},
+    { XML_RADAR,		XML_CHART_CLASS_RADAR	},
+    { XML_FILLED_RADAR,	XML_CHART_CLASS_FILLED_RADAR },
+    { XML_BAR,			XML_CHART_CLASS_BAR		},
+    { XML_STOCK,		XML_CHART_CLASS_STOCK	},
+    { XML_BUBBLE,		XML_CHART_CLASS_BUBBLE	},
+    { XML_SURFACE,		XML_CHART_CLASS_BAR	    }, //@todo change this if a surface chart is available
     { XML_ADD_IN,       XML_CHART_CLASS_ADDIN   },
     { XML_TOKEN_INVALID, XML_CHART_CLASS_UNKNOWN }
 };
 
 SchXMLChartTypeEnum GetChartTypeEnum( const OUString& rClassName )
 {
-    sal_uInt16 nEnumVal = XML_CHART_CLASS_UNKNOWN;
+    USHORT nEnumVal = XML_CHART_CLASS_UNKNOWN;
     if( !SvXMLUnitConverter::convertEnum(
                                     nEnumVal, rClassName, aXMLChartClassMap ) )
         nEnumVal = XML_CHART_CLASS_UNKNOWN;
@@ -193,36 +197,36 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
     //shape property -- chart model object property
     static tMakeStringStringMap g_aChartTypeNameMap =
         tMakeStringStringMap
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.LineDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.LineChartType" )) )
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.LineDiagram" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.LineChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.AreaDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.AreaChartType" )) )
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.AreaDiagram" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.AreaChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.BarDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ColumnChartType" )) )
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.BarDiagram" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.ColumnChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.PieDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.PieChartType" )) )
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.PieDiagram" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.PieChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.DonutDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.DonutChartType" )) )
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.DonutDiagram" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.DonutChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.XYDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ScatterChartType" )) )
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.XYDiagram" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.ScatterChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.NetDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.NetChartType" )) )
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.NetDiagram" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.NetChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.FilledNetDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.FilledNetChartType" )) )
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.FilledNetDiagram" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.FilledNetChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.StockDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CandleStickChartType" )) )
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.StockDiagram" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.CandleStickChartType" ) )
 
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.BubbleDiagram" ))
-        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.BubbleChartType" )) )
-
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.BubbleDiagram" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.BubbleChartType" ) )
+        
         ;
     return g_aChartTypeNameMap;
 }
@@ -343,28 +347,28 @@ XMLTokenEnum getTokenByChartType(
         {
             OUString aServiceName( rChartTypeService.copy( nSkip, nTypeLength ));
 
-            if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Line")))
+            if( aServiceName.equalsAscii("Line"))
                 eResult = XML_LINE;
-            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Area")))
+            else if( aServiceName.equalsAscii("Area"))
                 eResult = XML_AREA;
-            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bar")) ||
-                     (!bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Column"))))
+            else if( aServiceName.equalsAscii("Bar") ||
+                     (!bUseOldNames && aServiceName.equalsAscii("Column")))
                 eResult = XML_BAR;
-            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Pie")))
+            else if( aServiceName.equalsAscii("Pie"))
                 eResult = XML_CIRCLE;
-            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Donut")))
+            else if( aServiceName.equalsAscii("Donut"))
                 eResult = XML_RING;
-            else if( (bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("XY"))) ||
-                     (!bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Scatter"))))
+            else if( (bUseOldNames && aServiceName.equalsAscii("XY")) ||
+                     (!bUseOldNames && aServiceName.equalsAscii("Scatter")))
                 eResult = XML_SCATTER;
-            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bubble")))
+            else if( aServiceName.equalsAscii("Bubble"))
                 eResult = XML_BUBBLE;
-            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Net")))
+            else if( aServiceName.equalsAscii("Net"))
                 eResult = XML_RADAR;
-            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FilledNet")))
+            else if( aServiceName.equalsAscii("FilledNet"))
                 eResult = XML_FILLED_RADAR;
-            else if( (bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Stock"))) ||
-                     (!bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CandleStick"))))
+            else if( (bUseOldNames && aServiceName.equalsAscii("Stock")) ||
+                     (!bUseOldNames && aServiceName.equalsAscii("CandleStick")))
                 eResult = XML_STOCK;
         }
     }
@@ -382,7 +386,7 @@ Reference< chart2::data::XLabeledDataSequence > GetNewLabeledDataSequence()
     if( xContext.is() )
         xResult.set(
             xContext->getServiceManager()->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.data.LabeledDataSequence" )),
+                OUString::createFromAscii("com.sun.star.chart2.data.LabeledDataSequence"),
                 xContext ), uno::UNO_QUERY_THROW );
     return xResult;
 }
@@ -395,17 +399,17 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
 
     if( !xChartDoc.is() )
     {
-        OSL_FAIL( "need a chart document" );
+        DBG_ERROR( "need a chart document" );
         return xRet;
     }
 
     Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
     if( !xDataProvider.is() )
     {
-        OSL_FAIL( "need a data provider" );
+        DBG_ERROR( "need a data provider" );
         return xRet;
     }
-
+    
     try
     {
         xRet.set( xDataProvider->createDataSequenceByRangeRepresentation( lcl_ConvertRange( rRange, xDataProvider )));
@@ -413,10 +417,10 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
     }
     catch( const lang::IllegalArgumentException & )
     {
-        OSL_FAIL( "could not create data sequence" );
+        DBG_ERROR( "could not create data sequence" );
     }
 
-    if( !xRet.is() && !xChartDoc->hasInternalDataProvider() && rRange.getLength() )
+    if( !xRet.is() && !xChartDoc->hasInternalDataProvider() )
     {
         //#i103911# switch to internal data in case the parent cannot provide the requested data
         xChartDoc->createInternalDataProvider( sal_True /* bCloneExistingData */ );
@@ -428,7 +432,7 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
         }
         catch( const lang::IllegalArgumentException & )
         {
-            OSL_FAIL( "could not create data sequence" );
+            DBG_ERROR( "could not create data sequence" );
         }
     }
     return xRet;
@@ -493,7 +497,7 @@ void CreateCategories(
                                 catch( const lang::IllegalArgumentException & ex )
                                 {
                                     (void)ex; // avoid warning for pro build
-                                    OSL_FAIL( ::rtl::OUStringToOString(
+                                    OSL_ENSURE( false, ::rtl::OUStringToOString(
                                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IllegalArgumentException caught, Message: " )) +
                                                     ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
                                 }
@@ -515,7 +519,7 @@ void CreateCategories(
     }
     catch( uno::Exception & )
     {
-        OSL_FAIL( "Exception caught while creating Categories" );
+        OSL_ENSURE( false, "Exception caught while creating Categories" );
     }
 }
 
@@ -610,7 +614,7 @@ void exportRangeToSomewhere( SvXMLExport& rExport, const ::rtl::OUString& rValue
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
     if( nCurrentODFVersion == SvtSaveOptions::ODFVER_010 || nCurrentODFVersion == SvtSaveOptions::ODFVER_011 )
         return;//svg:desc is not allowed at draw:g in ODF1.0; but as the ranges for error bars are anyhow not allowed within ODF1.0 nor ODF1.1 we do not need the information
-
+    
     SvXMLElementExport aEmptyShapeGroup( rExport, XML_NAMESPACE_DRAW,
                               ::xmloff::token::GetXMLToken( ::xmloff::token::XML_G ),
                               sal_True, sal_False );
@@ -670,7 +674,7 @@ void setXMLRangePropertyAtDataSequence(
     catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_FAIL( ::rtl::OUStringToOString(
+        OSL_ENSURE( false, ::rtl::OUStringToOString(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught, Message: " )) +
                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
     }
@@ -700,7 +704,7 @@ bool getXMLRangePropertyFromDataSequence(
         catch( const uno::Exception & ex )
         {
             (void)ex; // avoid warning for pro build
-            OSL_FAIL( ::rtl::OUStringToOString(
+            OSL_ENSURE( false, ::rtl::OUStringToOString(
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught, Message: " )) +
                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }
@@ -735,7 +739,7 @@ void copyProperties(
     }
     catch( const uno::Exception & )
     {
-        OSL_FAIL( "Copying property sets failed!" );
+        OSL_ENSURE( false, "Copying property sets failed!" );
     }
 }
 
@@ -750,9 +754,9 @@ bool switchBackToDataProviderFromParent( const Reference< chart2::XChartDocument
     uno::Reference< chart2::data::XDataReceiver > xDataReceiver( xChartDoc, uno::UNO_QUERY );
     if( !xDataReceiver.is() )
         return false;
-
+    
     xDataReceiver->attachDataProvider( xDataProviderFromParent );
-
+    
     for( tSchXMLLSequencesPerIndex::const_iterator aLSeqIt( rLSequencesPerIndex.begin() );
          aLSeqIt != rLSequencesPerIndex.end(); ++aLSeqIt )
     {
@@ -840,7 +844,7 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const uno::Reference< frame:
             aGenerator = lcl_getGeneratorFromModel( uno::Reference< frame::XModel >( xChild->getParent(), uno::UNO_QUERY) );
             if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project") ) ) != -1 )
             {
-                //the chart application has not created files without a meta stream since OOo 2.3 (OOo 2.3 has written a metastream already)
+                //the chart application has not created files without a meta stream since OOo 2.3 (OOo 2.3 has written a metastream already) 
                 //only the report builder extension has created some files with OOo 3.1 that do not have a meta stream
                 if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/31") ) ) != -1 )
                     bResult = false;//#i100102# probably generated with OOo 3.1 by the report designer

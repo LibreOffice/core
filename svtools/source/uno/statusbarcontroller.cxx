@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include <svtools/statusbarcontroller.hxx>
+#include <statusbarcontroller.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -38,7 +38,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/status.hxx>
-#include <svtools/imgdef.hxx>
+#include <imgdef.hxx>
 #include <svtools/miscopt.hxx>
 #include <toolkit/unohlp.hxx>
 
@@ -189,15 +189,15 @@ throw ( Exception, RuntimeException )
         {
             if ( aArguments[i] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Frame")) )
+                if ( aPropValue.Name.equalsAscii( "Frame" ))
                     aPropValue.Value >>= m_xFrame;
-                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CommandURL")) )
+                else if ( aPropValue.Name.equalsAscii( "CommandURL" ))
                     aPropValue.Value >>= m_aCommandURL;
-                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ServiceManager")) )
+                else if ( aPropValue.Name.equalsAscii( "ServiceManager" ))
                     aPropValue.Value >>= m_xServiceManager;
-                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ParentWindow")) )
+                else if ( aPropValue.Name.equalsAscii( "ParentWindow" ))
                     aPropValue.Value >>= m_xParentWindow;
-                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Identifier")) )
+                else if ( aPropValue.Name.equalsAscii( "Identifier" ))
                     aPropValue.Value >>= m_nID;
             }
         }
@@ -300,7 +300,7 @@ throw ( RuntimeException )
         Reference< XInterface > xIfac( pIter->second, UNO_QUERY );
         if ( xSource == xIfac )
             pIter->second.clear();
-        ++pIter;
+        pIter++;
     }
 
     Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
@@ -404,7 +404,7 @@ void StatusbarController::addStatusListener( const rtl::OUString& aCommandURL )
         // intialize is called.
         if ( !m_bInitialized )
         {
-            // Put into the boost::unordered_map of status listener. Will be activated when initialized is called
+            // Put into the hash_map of status listener. Will be activated when initialized is called
             m_aListenerMap.insert( URLToDispatchMap::value_type( aCommandURL, Reference< XDispatch >() ));
             return;
         }
@@ -674,10 +674,10 @@ void StatusbarController::updateStatus( const rtl::OUString aCommandURL )
 ::Rectangle StatusbarController::getControlRect() const
 {
     ::Rectangle aRect;
-
+    
     {
         SolarMutexGuard aSolarMutexGuard;
-
+        
         if ( m_bDisposed )
             throw DisposedException();
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@
 #include <vcl/oldprintadaptor.hxx>
 
 #include <sfx2/app.hxx>
-#include "sfx2/sfxresid.hxx"
+#include "sfxresid.hxx"
 #include "appdata.hxx"
 #include <sfx2/dinfdlg.hxx>
 #include "fltfnc.hxx"
@@ -72,11 +72,11 @@
 #include <sfx2/objsh.hxx>
 #include "objshimp.hxx"
 #include <sfx2/evntconf.hxx>
-#include "sfx2/sfxhelp.hxx"
+#include "sfxhelp.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
-#include "sfx2/basmgr.hxx"
 #include <sfx2/viewfrm.hxx>
+#include "basmgr.hxx"
 #include <sfx2/doctempl.hxx>
 #include "doc.hrc"
 #include <sfx2/sfxbasemodel.hxx>
@@ -87,6 +87,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+
+//====================================================================
 
 //====================================================================
 
@@ -117,17 +119,19 @@ bool operator> (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
     return sal_False;
 }
 
+
 ::boost::shared_ptr<GDIMetaFile>
 SfxObjectShell::GetPreviewMetaFile( sal_Bool bFullContent ) const
 {
-    return CreatePreviewMetaFile_Impl( bFullContent );
+    return CreatePreviewMetaFile_Impl( bFullContent, sal_False );
 }
 
+
 ::boost::shared_ptr<GDIMetaFile>
-SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const
+SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHighContrast ) const
 {
-    // DoDraw can only be called when no printing is done, otherwise
-    // the printer may be turned off
+    // Nur wenn gerade nicht gedruckt wird, darf DoDraw aufgerufen
+    // werden, sonst wird u.U. der Printer abgeschossen !
     SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this );
     if ( pFrame && pFrame->GetViewShell() &&
          pFrame->GetViewShell()->GetPrinter() &&
@@ -137,7 +141,11 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const
     ::boost::shared_ptr<GDIMetaFile> pFile(new GDIMetaFile);
 
     VirtualDevice aDevice;
-    aDevice.EnableOutput( sal_False );
+    aDevice.EnableOutput( FALSE );
+
+    // adjust the output device if HC-metafile is requested
+    if ( bHighContrast )
+        aDevice.SetDrawMode( aDevice.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
 
     MapMode aMode( ((SfxObjectShell*)this)->GetMapUnit() );
     aDevice.SetMapMode( aMode );
@@ -233,7 +241,7 @@ lcl_add(util::Duration & rDur, Time const& rTime)
     rDur.Seconds += rTime.GetSec();
 }
 
-// Update the processing time
+// Bearbeitungszeit aktualisieren
 void SfxObjectShell::UpdateTime_Impl(
     const uno::Reference<document::XDocumentProperties> & i_xDocProps)
 {
@@ -243,10 +251,10 @@ void SfxObjectShell::UpdateTime_Impl(
             secs/3600, (secs%3600)/60, secs%60, 0);
 
     // Initialize some local member! Its neccessary for wollow operations!
-    DateTime    aNow                    ;   // Date and time at current moment
-    Time        n24Time     (24,0,0,0)  ;   // Time-value for 24 hours - see follow calculation
-    sal_uIntPtr     nDays       = 0         ;   // Count of days between now and last editing
-    Time        nAddTime    (0)         ;   // Value to add on aOldTime
+    DateTime	aNow					;	// Date and time at current moment
+    Time		n24Time		(24,0,0,0)	;	// Time-value for 24 hours - see follow calculation
+    ULONG		nDays		= 0			;	// Count of days between now and last editing
+    Time		nAddTime	(0)			;	// Value to add on aOldTime
 
     // Safe impossible cases!
     // User has changed time to the past between last editing and now ... its not possible!!!
@@ -272,9 +280,9 @@ void SfxObjectShell::UpdateTime_Impl(
             // If 1 or up to 31 days between now and last editing - calculate time indirectly.
             // nAddTime = (24h - nTime) + (nDays * 24h) + aNow
             --nDays;
-             nAddTime    =  nDays*n24Time.GetTime() ;
-            nAddTime    +=  n24Time-(const Time&)pImp->nTime        ;
-            nAddTime    +=  aNow                    ;
+             nAddTime	 =	nDays*n24Time.GetTime()	;
+            nAddTime	+=	n24Time-(const Time&)pImp->nTime		;
+            nAddTime	+=	aNow					;
         }
 
         lcl_add(editDuration, nAddTime);
@@ -321,9 +329,11 @@ void SfxObjectShell::SetOrganizerSearchMask(
 
 //--------------------------------------------------------------------
 
-sal_uInt16 SfxObjectShell::GetContentCount(sal_uInt16 nIdx)
+USHORT SfxObjectShell::GetContentCount(
+    USHORT nIdx1,
+    USHORT /*nIdx2*/)
 {
-    switch(nIdx)
+    switch(nIdx1)
     {
         case INDEX_IGNORE:
             return DEF_CONTENT_COUNT;
@@ -337,34 +347,56 @@ sal_uInt16 SfxObjectShell::GetContentCount(sal_uInt16 nIdx)
         }
         case CONTENT_MACRO:
             break;
+/*
+        case CONTENT_CONFIG:
+            return ( GetConfigManager() ) ?
+                        GetConfigManager()->GetItemCount() : 0;
+            break;
+ */
     }
     return 0;
 }
 
 
 //--------------------------------------------------------------------
-//TODO/CLEANUP: remove this method
-void  SfxObjectShell::TriggerHelpPI(sal_uInt16 nIdx1, sal_uInt16 nIdx2)
+//TODO/CLEANUP: remove this method (it's virtual)
+void  SfxObjectShell::TriggerHelpPI(USHORT nIdx1, USHORT nIdx2, USHORT)
 {
     if(nIdx1==CONTENT_STYLE && nIdx2 != INDEX_IGNORE) //StyleSheets
     {
         SfxStyleSheetBasePool *pStylePool = GetStyleSheetPool();
         SetOrganizerSearchMask(pStylePool);
+#ifdef WIR_KOENNEN_WIEDER_HILFE_FUER_STYLESHEETS
+        SfxStyleSheetBase *pStyle = (*pStylePool)[nIdx2];
+        if(pStyle)
+        {
+            String aHelpFile;
+            ULONG nHelpId=pStyle->GetHelpId(aHelpFile);
+            SfxHelpPI* pHelpPI = SFX_APP()->GetHelpPI();
+            if ( pHelpPI && nHelpId )
+                pHelpPI->LoadTopic( nHelpId );
+        }
+#endif
     }
 }
 
-sal_Bool SfxObjectShell::CanHaveChilds(sal_uInt16 nIdx1, sal_uInt16 nIdx2)
+BOOL   SfxObjectShell::CanHaveChilds(USHORT nIdx1,
+                                       USHORT nIdx2)
 {
-    switch(nIdx1)
-    {
+    switch(nIdx1) {
     case INDEX_IGNORE:
-        return true;
+        return TRUE;
     case CONTENT_STYLE:
-        return INDEX_IGNORE == nIdx2 || !GetStyleSheetPool() ? false : true;
+        return INDEX_IGNORE == nIdx2 || !GetStyleSheetPool()? FALSE: TRUE;
     case CONTENT_MACRO:
-        return false;
+//!!    return INDEX_IGNORE == nIdx2? FALSE: TRUE;
+        return FALSE;
+/*
+    case CONTENT_CONFIG:
+        return INDEX_IGNORE == nIdx2 ? FALSE : TRUE;
+ */
     }
-    return false;
+    return FALSE;
 }
 
 //--------------------------------------------------------------------
@@ -372,32 +404,70 @@ sal_Bool SfxObjectShell::CanHaveChilds(sal_uInt16 nIdx1, sal_uInt16 nIdx2)
 void SfxObjectShell::GetContent(String &rText,
                                 Bitmap &rClosedBitmap,
                                 Bitmap &rOpenedBitmap,
-                                sal_Bool &bCanDel,
-                                sal_uInt16 i,
-                                sal_uInt16 nIdx
-)
+                                BOOL &bCanDel,
+                                USHORT i,
+                                USHORT nIdx1,
+                                USHORT nIdx2 )
 {
-    bCanDel=true;
+    DBG_ERRORFILE( "Non high contrast method called. Please update calling code!" );
+    SfxObjectShell::GetContent( rText, rClosedBitmap, rOpenedBitmap, BMP_COLOR_NORMAL, bCanDel, i, nIdx1, nIdx2 );
+}
 
-    switch(nIdx)
+//--------------------------------------------------------------------
+
+void   SfxObjectShell::GetContent(String &rText,
+                                  Bitmap &rClosedBitmap,
+                                  Bitmap &rOpenedBitmap,
+                                  BmpColorMode eColorMode,
+                                  BOOL &bCanDel,
+                                  USHORT i,
+                                  USHORT nIdx1,
+                                  USHORT /*nIdx2*/ )
+{
+    bCanDel=TRUE;
+
+    switch(nIdx1)
     {
         case INDEX_IGNORE:
         {
-            sal_uInt16 nTextResId = 0;
-            sal_uInt16 nClosedBitmapResId = 0; // evtl. sp"ater mal unterschiedliche
-            sal_uInt16 nOpenedBitmapResId = 0; // "     "       "   "
+            USHORT nTextResId = 0;
+            USHORT nClosedBitmapResId = 0; // evtl. sp"ater mal unterschiedliche
+            USHORT nOpenedBitmapResId = 0; // "     "       "   "
             switch(i)
             {
                 case CONTENT_STYLE:
                     nTextResId = STR_STYLES;
-                    nClosedBitmapResId= BMP_STYLES_CLOSED;
-                    nOpenedBitmapResId= BMP_STYLES_OPENED;
+                    if ( eColorMode == BMP_COLOR_NORMAL )
+                    {
+                        nClosedBitmapResId= BMP_STYLES_CLOSED;
+                        nOpenedBitmapResId= BMP_STYLES_OPENED;
+                    }
+                    else
+                    {
+                        nClosedBitmapResId= BMP_STYLES_CLOSED_HC;
+                        nOpenedBitmapResId= BMP_STYLES_OPENED_HC;
+                    }
                     break;
                 case CONTENT_MACRO:
                     nTextResId = STR_MACROS;
+                    if ( eColorMode == BMP_COLOR_NORMAL )
+                    {
+                        nClosedBitmapResId= BMP_STYLES_CLOSED;
+                        nOpenedBitmapResId= BMP_STYLES_OPENED;
+                    }
+                    else
+                    {
+                        nClosedBitmapResId= BMP_STYLES_CLOSED_HC;
+                        nOpenedBitmapResId= BMP_STYLES_OPENED_HC;
+                    }
+                    break;
+/*
+                case CONTENT_CONFIG:
+                    nTextResId = STR_CONFIG;
                     nClosedBitmapResId= BMP_STYLES_CLOSED;
                     nOpenedBitmapResId= BMP_STYLES_OPENED;
                     break;
+ */
             }
 
             if ( nTextResId )
@@ -418,32 +488,52 @@ void SfxObjectShell::GetContent(String &rText,
             bCanDel=((pStyle->GetMask() & SFXSTYLEBIT_USERDEF)
                      == SFXSTYLEBIT_USERDEF);
             rClosedBitmap = rOpenedBitmap =
-                GetStyleFamilyBitmap(pStyle->GetFamily());
+                GetStyleFamilyBitmap(pStyle->GetFamily(), eColorMode );
         }
             break;
         case CONTENT_MACRO:
             break;
+/*
+        case CONTENT_CONFIG:
+            if ( GetConfigManager() )
+            {
+                rText = GetConfigManager()->GetItem(i);
+                bCanDel = GetConfigManager()->CanDelete(i);
+            }
+            else
+                rText = String();
+            rClosedBitmap = Bitmap(SfxResId(BMP_STYLES_CLOSED));
+            rOpenedBitmap = Bitmap(SfxResId(BMP_STYLES_OPENED));
+            break;
+*/
     }
 }
 
 //--------------------------------------------------------------------
-
-Bitmap SfxObjectShell::GetStyleFamilyBitmap(SfxStyleFamily eFamily)
+Bitmap SfxObjectShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily )
 {
-    sal_uInt16 nResId = 0;
+    DBG_ERRORFILE( "Non high contrast method called. Please update calling code!" );
+    return SfxObjectShell::GetStyleFamilyBitmap( eFamily, BMP_COLOR_NORMAL );
+}
+
+//--------------------------------------------------------------------
+
+Bitmap SfxObjectShell::GetStyleFamilyBitmap(SfxStyleFamily eFamily, BmpColorMode eColorMode )
+{
+    USHORT nResId = 0;
     switch(eFamily)
     {
         case SFX_STYLE_FAMILY_CHAR:
-            nResId = BMP_STYLES_FAMILY1;
+            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY1 : BMP_STYLES_FAMILY1_HC;
             break;
         case SFX_STYLE_FAMILY_PARA:
-            nResId = BMP_STYLES_FAMILY2;
+            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY2 : BMP_STYLES_FAMILY2_HC;
             break;
         case SFX_STYLE_FAMILY_FRAME:
-            nResId = BMP_STYLES_FAMILY3;
+            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY3 : BMP_STYLES_FAMILY3_HC;
             break;
         case SFX_STYLE_FAMILY_PAGE :
-            nResId = BMP_STYLES_FAMILY4;
+            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY4 : BMP_STYLES_FAMILY4_HC;
             break;
         case SFX_STYLE_FAMILY_PSEUDO:
         case SFX_STYLE_FAMILY_ALL:
@@ -459,16 +549,16 @@ Bitmap SfxObjectShell::GetStyleFamilyBitmap(SfxStyleFamily eFamily)
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
-                              sal_uInt16 nSourceIdx1,
-                              sal_uInt16 nSourceIdx2,
-                              sal_uInt16 /*nSourceIdx3*/,
-                              sal_uInt16 &nIdx1,
-                              sal_uInt16 &nIdx2,
-                              sal_uInt16 &/*nIdx3*/,
-                              sal_uInt16 &/*nDeleted*/)
+BOOL SfxObjectShell::Insert(SfxObjectShell &rSource,
+                              USHORT nSourceIdx1,
+                              USHORT nSourceIdx2,
+                              USHORT /*nSourceIdx3*/,
+                              USHORT &nIdx1,
+                              USHORT &nIdx2,
+                              USHORT &/*nIdx3*/,
+                              USHORT &/*nDeleted*/)
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     if (INDEX_IGNORE == nIdx1 && CONTENT_STYLE == nSourceIdx1)
         nIdx1 = CONTENT_STYLE;
@@ -484,8 +574,8 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
         if ( pHisPool && pHisPool->Count() > nSourceIdx2 )
             pHisSheet = (*pHisPool)[nSourceIdx2];
 
-        // Pasting is only needed if a style sheet is moved between
-        // different (!) Pools
+        // Einfuegen ist nur dann noetig, wenn ein StyleSheet
+        // zwischen unterschiedlichen(!) Pools bewegt wird
 
         if ( pHisSheet && pMyPool != pHisPool )
         {
@@ -494,12 +584,13 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
                 nIdx2 = pMyPool->Count();
             }
 
-            // if such a template already exists: delete!
+            // wenn so eine Vorlage schon existiert: loeschen!
             String aOldName(pHisSheet->GetName());
             SfxStyleFamily eOldFamily = pHisSheet->GetFamily();
 
             SfxStyleSheetBase* pExist = pMyPool->Find(aOldName, eOldFamily);
-            sal_Bool bUsedOrUserDefined;
+            // USHORT nOldHelpId = pExist->GetHelpId(??? VB ueberlegt sich was);
+            BOOL bUsedOrUserDefined;
             if( pExist )
             {
                 bUsedOrUserDefined =
@@ -507,13 +598,13 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
                 if( ErrorHandler::HandleError(
                     *new MessageInfo( ERRCODE_SFXMSG_STYLEREPLACE, aOldName ) )
                     != ERRCODE_BUTTON_OK )
-                    return sal_False;
+                    return FALSE;
                 else
                 {
                     pMyPool->Replace( *pHisSheet, *pExist );
-                    SetModified( sal_True );
+                    SetModified( TRUE );
                     nIdx2 = nIdx1 = INDEX_IGNORE;
-                    return sal_True;
+                    return TRUE;
                 }
             }
 
@@ -521,11 +612,10 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
                 aOldName, eOldFamily,
                 pHisSheet->GetMask(), nIdx2);
 
-            // Fill the Itemset of the new template
+            // ItemSet der neuen Vorlage fuellen
             rNewSheet.GetItemSet().Set(pHisSheet->GetItemSet());
 
-            // Who gets the new one as a Parent?
-            // Who is using the new one as Follow?
+            // wer bekommt den Neuen als Parent? wer benutzt den Neuen als Follow?
             SfxStyleSheetBase* pTestSheet = pMyPool->First();
             while (pTestSheet)
             {
@@ -534,7 +624,7 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
                     pTestSheet->GetParent() == aOldName)
                 {
                     pTestSheet->SetParent(aOldName);
-                    // Rebuild Link
+                    // Verknuepfung neu aufbauen
                 }
 
                 if (pTestSheet->GetFamily() == eOldFamily &&
@@ -542,7 +632,7 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
                     pTestSheet->GetFollow() == aOldName)
                 {
                     pTestSheet->SetFollow(aOldName);
-                    // Rebuild Link
+                    // Verknuepfung neu aufbauen
                 }
 
                 pTestSheet = pMyPool->Next();
@@ -551,7 +641,7 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
                 rNewSheet.IsUsed() || rNewSheet.IsUserDefined();
 
 
-            // has a New Parent? if so, start search with the same name
+            // hat der Neue einen Parent? wenn ja, mit gleichem Namen bei uns suchen
             if (pHisSheet->HasParentSupport())
             {
                 const String& rParentName = pHisSheet->GetParent();
@@ -564,8 +654,8 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
                 }
             }
 
-            // Has the new got a Follow? if so start search
-            // with the same name.
+            // hat der Neue einen Follow? wenn ja, mit gleichem
+            // Namen bei uns suchen
             if (pHisSheet->HasFollowSupport())
             {
                 const String& rFollowName = pHisSheet->GetFollow();
@@ -578,28 +668,50 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
                 }
             }
 
-            SetModified( sal_True );
+            SetModified( TRUE );
             if( !bUsedOrUserDefined ) nIdx2 = nIdx1 = INDEX_IGNORE;
 
-            bRet = sal_True;
+            bRet = TRUE;
         }
         else
-            bRet = sal_False;
+            bRet = FALSE;
     }
+/*
+    else if (nSourceIdx1 == CONTENT_CONFIG)
+    {
+        nIdx1 = CONTENT_CONFIG;
 
+        SfxConfigManager *pCfgMgr = SFX_CFGMANAGER();
+        if ( !GetConfigManager() )
+        {
+            SetConfigManager(new SfxConfigManager(0, pCfgMgr));
+            SetTemplateConfig(FALSE);
+            if (this == Current())
+                GetConfigManager()->Activate(pCfgMgr);
+        }
+
+        if (GetConfigManager()->CopyItem(
+            nSourceIdx2, nIdx2, rSource.GetConfigManager()))
+        {
+            SetModified(TRUE);
+            bRet = TRUE;
+            SFX_APP()->GetDispatcher_Impl()->Update_Impl(TRUE);
+        }
+    }
+*/
     return bRet;
 }
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxObjectShell::Remove
+BOOL SfxObjectShell::Remove
 (
-    sal_uInt16 nIdx1,
-    sal_uInt16 nIdx2,
-    sal_uInt16 /*nIdx3*/
+    USHORT nIdx1,
+    USHORT nIdx2,
+    USHORT /*nIdx3*/
 )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     if (CONTENT_STYLE == nIdx1)
     {
@@ -612,7 +724,7 @@ sal_Bool SfxObjectShell::Remove
         String aEmpty;
         SfxStyleFamily  eFamily = pMySheet->GetFamily();
         pMyPool->Remove(pMySheet);
-        bRet = sal_True;
+        bRet = TRUE;
 
         SfxStyleSheetBase* pTestSheet = pMyPool->First();
         while (pTestSheet)
@@ -621,20 +733,20 @@ sal_Bool SfxObjectShell::Remove
                 pTestSheet->HasParentSupport() &&
                 pTestSheet->GetParent() == aName)
             {
-                pTestSheet->SetParent(aEmpty); // Remove link
+                pTestSheet->SetParent(aEmpty); // Verknuepfung aufloesen
             }
 
             if (pTestSheet->GetFamily() == eFamily &&
                 pTestSheet->HasFollowSupport() &&
                 pTestSheet->GetFollow() == aName)
             {
-                pTestSheet->SetFollow(aEmpty); // Remove link
+                pTestSheet->SetFollow(aEmpty); // Verknuepfung aufloesen
             }
 
             pTestSheet = pMyPool->Next();
         }
 
-        SetModified( sal_True );
+        SetModified( TRUE );
     }
 
     return bRet;
@@ -642,14 +754,18 @@ sal_Bool SfxObjectShell::Remove
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxObjectShell::Print
+BOOL SfxObjectShell::Print
 (
     Printer&        rPrt,
-    sal_uInt16          nIdx1,
-    sal_uInt16          /*nIdx2*/,
-    sal_uInt16          /*nIdx3*/,
+    USHORT          nIdx1,
+    USHORT          /*nIdx2*/,
+    USHORT          /*nIdx3*/,
     const String*   pObjectName
 )
+
+/*  [Beschreibung]
+*/
+
 {
     switch(nIdx1)
     {
@@ -659,24 +775,25 @@ sal_Bool SfxObjectShell::Print
             SetOrganizerSearchMask(pStylePool);
             SfxStyleSheetIterator* pIter = pStylePool->CreateIterator(
                 pStylePool->GetSearchFamily(), pStylePool->GetSearchMask() );
+            USHORT nStyles = pIter->Count();
             SfxStyleSheetBase *pStyle = pIter->First();
             if ( !pStyle )
-                return sal_True;
+                return TRUE;
 
-            // prepare adaptor for old style StartPage/EndPage printing
+            // pepare adaptor for old style StartPage/EndPage printing
             boost::shared_ptr< Printer > pPrinter( new Printer( rPrt.GetJobSetup() ) );
             vcl::OldStylePrintAdaptor* pAdaptor = new vcl::OldStylePrintAdaptor( pPrinter );
             boost::shared_ptr< vcl::PrinterController > pController( pAdaptor );
 
             pAdaptor->StartPage();
-
+            
             pPrinter->SetMapMode(MapMode(MAP_10TH_MM));
             Font aFont( DEFINE_CONST_UNICODE( "Arial" ), Size(0, 64));   // 18pt
             aFont.SetWeight(WEIGHT_BOLD);
             pPrinter->SetFont(aFont);
             const Size aPageSize(pPrinter->GetOutputSize());
-            const sal_uInt16 nXIndent = 200;
-            sal_uInt16 nYIndent = 200;
+            const USHORT nXIndent = 200;
+            USHORT nYIndent = 200;
             Point aOutPos(nXIndent, nYIndent);
             String aHeader(SfxResId(STR_PRINT_STYLES_HEADER));
             if ( pObjectName )
@@ -688,6 +805,7 @@ sal_Bool SfxObjectShell::Print
             aOutPos.Y() += nTextHeight;
             aOutPos.Y() += nTextHeight/2;
             aFont.SetSize(Size(0, 35)); // 10pt
+            nStyles = 1;
             while(pStyle)
             {
                 // print template name
@@ -711,13 +829,13 @@ sal_Bool SfxObjectShell::Print
                 pPrinter->SetFont(aFont);
                 aStr = pStyle->GetDescription();
                 const char cDelim = ' ';
-                sal_uInt16 nStart = 0, nIdx = 0;
+                USHORT nStart = 0, nIdx = 0;
 
                 nTextHeight = pPrinter->GetTextHeight();
                 // break text into lines
                 while(nIdx < aStr.Len())
                 {
-                    sal_uInt16  nOld = nIdx;
+                    USHORT	nOld = nIdx;
                     long nTextWidth;
                     nIdx = aStr.Search(cDelim, nStart);
                     nTextWidth = pPrinter->GetTextWidth(aStr, nStart, nIdx-nStart);
@@ -738,7 +856,7 @@ sal_Bool SfxObjectShell::Print
                     }
                     else
                     {
-                        sal_uInt16 nChar = 1;
+                        USHORT nChar = 1;
                         while(
                             nStart + nChar < aStr.Len() &&
                             aOutPos.X() + pPrinter->GetTextWidth(
@@ -762,33 +880,34 @@ sal_Bool SfxObjectShell::Print
                 pStyle = pIter->Next();
             }
             pAdaptor->EndPage();
-
+            
             Printer::PrintJob( pController, rPrt.GetJobSetup() );
 
             delete pIter;
             break;
         }
       default:
-          return sal_False;
+          return FALSE;
     }
-    return sal_True;
+    return TRUE;
 }
 
 //--------------------------------------------------------------------
 
 void SfxObjectShell::LoadStyles
 (
-    SfxObjectShell &rSource         /*  the document template from which
-                                        the styles are to be loaded */
+    SfxObjectShell &rSource         /*  die Dokument-Vorlage, aus der
+                                            die Styles geladen werden sollen */
 )
 
-/*  [Description]
+/*  [Beschreibung]
 
-    This method is called by the SFx if template styles are to be loaded.
-    Existing styles are in this case overwritten. The document has then to be
-    newly formatted. Therefore, the application of this method is usually
-    overloaded and its implementation is calling the implementation in
-    the base class.
+    Diese Methode wird vom SFx gerufen, wenn aus einer Dokument-Vorlage
+    Styles nachgeladen werden sollen. Bestehende Styles soll dabei
+    "uberschrieben werden. Das Dokument mu"s daher neu formatiert werden.
+    Daher werden die Applikationen in der Regel diese Methode "uberladen
+    und in ihrer Implementierung die Implementierung der Basisklasse
+    rufen.
 */
 
 {
@@ -796,6 +915,7 @@ void SfxObjectShell::LoadStyles
     {
         SfxStyleSheetBase *pSource;
         SfxStyleSheetBase *pDest;
+//      Styles_Impl () : pSource(0), pDest(0) {}
     };
 
     SfxStyleSheetBasePool *pSourcePool = rSource.GetStyleSheetPool();
@@ -804,7 +924,7 @@ void SfxObjectShell::LoadStyles
     DBG_ASSERT(pMyPool, "Dest-DocumentShell ohne StyleSheetPool");
     pSourcePool->SetSearchMask(SFX_STYLE_FAMILY_ALL, 0xffff);
     Styles_Impl *pFound = new Styles_Impl[pSourcePool->Count()];
-    sal_uInt16 nFound = 0;
+    USHORT nFound = 0;
 
     SfxStyleSheetBase *pSource = pSourcePool->First();
     while ( pSource )
@@ -815,7 +935,7 @@ void SfxObjectShell::LoadStyles
         {
             pDest = &pMyPool->Make( pSource->GetName(),
                     pSource->GetFamily(), pSource->GetMask());
-            // Setting of Parents, the next style
+            // Setzen des Parents, der Folgevorlage
         }
         pFound[nFound].pSource = pSource;
         pFound[nFound].pDest = pDest;
@@ -823,9 +943,10 @@ void SfxObjectShell::LoadStyles
         pSource = pSourcePool->Next();
     }
 
-    for ( sal_uInt16 i = 0; i < nFound; ++i )
+    for ( USHORT i = 0; i < nFound; ++i )
     {
         pFound[i].pDest->GetItemSet().PutExtended(pFound[i].pSource->GetItemSet(), SFX_ITEM_DONTCARE, SFX_ITEM_DEFAULT);
+//      pFound[i].pDest->SetHelpId(pFound[i].pSource->GetHelpId());
         if(pFound[i].pSource->HasParentSupport())
             pFound[i].pDest->SetParent(pFound[i].pSource->GetParent());
         if(pFound[i].pSource->HasFollowSupport())
@@ -838,12 +959,13 @@ void SfxObjectShell::LoadStyles
 
 void SfxObjectShell::UpdateFromTemplate_Impl(  )
 
-/*  [Description]
+/*  [Beschreibung]
 
-    This internal method checks whether the document was created from a
-    template, and if this is newer than the document. If this is the case,
-    the user is asked if the Templates (StyleSheets) should be updated.
-    If this is answered positively, the StyleSheets are updated.
+    Diese interne Methode pr"uft, ob das Dokument aus einem Template
+    erzeugt wurde, und ob dieses neuer ist als das Dokument. Ist dies
+    der Fall, wird der Benutzer gefragt, ob die Vorlagen (StyleSheets)
+    updated werden sollen. Wird dies positiv beantwortet, werden die
+    StyleSheets updated.
 */
 
 {
@@ -873,10 +995,10 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
 
     if ( aTemplName.getLength() || (aTemplURL.getLength() && !IsReadOnly()) )
     {
-        // try to locate template, first using filename this must be done
-        // because writer global document uses this "great" idea to manage
-        // the templates of all parts in the master document but it is NOT
-        // an error if the template filename points not to a valid file
+        // try to locate template, first using filename
+        // this must be done because writer global document uses this "great" idea to manage the templates of all parts
+        // in the master document
+        // but it is NOT an error if the template filename points not to a valid file
         SfxDocumentTemplates aTempl;
         aTempl.Construct();
         if ( aTemplURL.getLength() )
@@ -887,8 +1009,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         }
 
         if( !aFoundName.Len() && aTemplName.getLength() )
-            // if the template filename did not lead to success,
-            // try to get a file name for the logical template name
+            // if the template filename did not lead to success, try to get a file name for the logical template name
             aTempl.GetFull( String(), aTemplName, aFoundName );
     }
 
@@ -896,13 +1017,13 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     {
         // check existence of template storage
         aTemplURL = aFoundName;
-        sal_Bool bLoad = sal_False;
+        BOOL bLoad = FALSE;
 
         // should the document checked against changes in the template ?
         if ( IsQueryLoadTemplate() )
         {
             // load document info of template
-            sal_Bool bOK = sal_False;
+            BOOL bOK = FALSE;
             util::DateTime aTemplDate;
             try
             {
@@ -919,7 +1040,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                 if ( aAny >>= aTemplDate )
                 {
                     // get modify date from document info
-                    bOK = sal_True;
+                    bOK = TRUE;
                 }
             }
             catch ( Exception& )
@@ -936,21 +1057,21 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     // ask user
                     if( bCanUpdateFromTemplate == document::UpdateDocMode::QUIET_UPDATE
                     || bCanUpdateFromTemplate == document::UpdateDocMode::FULL_UPDATE )
-                        bLoad = sal_True;
+                        bLoad = TRUE;
                     else if ( bCanUpdateFromTemplate == document::UpdateDocMode::ACCORDING_TO_CONFIG )
                     {
                         String sMessage( SfxResId( STR_QRYTEMPL_MESSAGE ) );
                         sMessage.SearchAndReplace( String::CreateFromAscii("$(ARG1)"), aTemplName );
                         sfx2::QueryTemplateBox aBox( GetDialogParent(), sMessage );
                         if ( RET_YES == aBox.Execute() )
-                            bLoad = sal_True;
+                            bLoad = TRUE;
                     }
 
                     if( !bLoad )
                     {
                         // user refuses, so don't ask again for this document
-                        SetQueryLoadTemplate(sal_False);
-                        SetModified( sal_True );
+                        SetQueryLoadTemplate(FALSE);
+                        SetModified( TRUE );
                     }
                 }
             }
@@ -976,10 +1097,61 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     // remember date/time of check
                     xDocProps->setTemplateDate(aTemplDate);
                     // TODO/LATER: new functionality to store document info is required ( didn't work for SO7 XML format )
+//REPLACE					pInfo->Save(xDocStor);
                 }
             }
+/*
+        SfxConfigManager *pCfgMgr = SFX_CFGMANAGER();
+        {
+            SfxConfigManager *pTemplCfg = new SfxConfigManager(aTemplStor, pCfgMgr);
+            SetConfigManager(pTemplCfg);
+            SetTemplateConfig(TRUE);
+
+            // Falls der gerade zerst"orte CfgMgr des Dokuments der
+            // aktive war, pCfgMgr lieber neu holen
+            pCfgMgr = SFX_CFGMANAGER();
+
+            // ggf. den neuen ConfigManager aktivieren
+            if ( this == SfxObjectShell::Current() )
+                pTemplCfg->Activate(pCfgMgr);
+        }
+*/
+        // Template und Template-DocInfo werden nicht mehr gebraucht
+//            delete pTemplInfo;
         }
     }
+}
+
+SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& aTargetURL, BOOL bForWriting )
+{
+    // check for own format
+    SfxObjectShellRef xDoc;
+    StreamMode nMode = bForWriting ? SFX_STREAM_READWRITE : SFX_STREAM_READONLY;
+    SfxMedium *pMed = new SfxMedium( aTargetURL, nMode, FALSE, 0 );
+    const SfxFilter* pFilter = NULL;
+    pMed->UseInteractionHandler(TRUE);
+    if( SFX_APP()->GetFilterMatcher().GuessFilter( *pMed, &pFilter ) == ERRCODE_NONE && pFilter && pFilter->IsOwnFormat() )
+    {
+        // create document
+        xDoc = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_ORGANIZER );
+        if ( xDoc.Is() )
+        {
+            // partially load, so don't use DoLoad!
+            xDoc->DoInitNew(0);
+            // TODO/LATER: make sure that we don't use binary templates!
+            if( xDoc->LoadFrom( *pMed ) )
+            {
+                // connect to storage, abandon temp. storage
+                xDoc->DoSaveCompleted( pMed );
+            }
+            else
+                xDoc.Clear();
+        }
+    }
+    else
+        delete pMed;
+
+    return xDoc;
 }
 
 sal_Bool SfxObjectShell::IsHelpDocument() const
@@ -998,10 +1170,10 @@ void SfxObjectShell::ResetFromTemplate( const String& rTemplateName, const Strin
         xDocProps->setTemplateName( ::rtl::OUString() );
         xDocProps->setTemplateDate( util::DateTime() );
         xDocProps->resetUserData( ::rtl::OUString() );
-
+    
         // TODO/REFACTOR:
         // Title?
-
+    
         if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
         {
             String aFoundName;
@@ -1010,13 +1182,13 @@ void SfxObjectShell::ResetFromTemplate( const String& rTemplateName, const Strin
                 INetURLObject aObj( rFileName );
                 xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
                 xDocProps->setTemplateName( rTemplateName );
-
+    
                 ::DateTime now;
                 xDocProps->setTemplateDate( util::DateTime(
                     now.Get100Sec(), now.GetSec(), now.GetMin(),
                     now.GetHour(), now.GetDay(), now.GetMonth(),
                     now.GetYear() ) );
-
+    
                 SetQueryLoadTemplate( sal_True );
             }
         }
@@ -1036,14 +1208,14 @@ sal_Bool SfxObjectShell::IsUseUserData() const
 void SfxObjectShell::SetQueryLoadTemplate( sal_Bool bNew )
 {
     if ( pImp->bQueryLoadTemplate != bNew )
-        SetModified( sal_True );
+        SetModified( TRUE );
     pImp->bQueryLoadTemplate = bNew;
 }
 
 void SfxObjectShell::SetUseUserData( sal_Bool bNew )
 {
     if ( pImp->bUseUserData != bNew )
-        SetModified( sal_True );
+        SetModified( TRUE );
     pImp->bUseUserData = bNew;
 }
 
@@ -1060,14 +1232,14 @@ sal_Bool SfxObjectShell::IsSaveVersionOnClose() const
 void SfxObjectShell::SetLoadReadonly( sal_Bool bNew )
 {
     if ( pImp->bLoadReadonly != bNew )
-        SetModified( sal_True );
+        SetModified( TRUE );
     pImp->bLoadReadonly = bNew;
 }
 
 void SfxObjectShell::SetSaveVersionOnClose( sal_Bool bNew )
 {
     if ( pImp->bSaveVersionOnClose != bNew )
-        SetModified( sal_True );
+        SetModified( TRUE );
     pImp->bSaveVersionOnClose = bNew;
 }
 

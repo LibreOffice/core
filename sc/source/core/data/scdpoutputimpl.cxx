@@ -2,11 +2,14 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright IBM Corporation 2009.
  * Copyright 2009 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: scdpoutputimpl.cxx,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,16 +50,16 @@ void OutputImpl::OutputDataArea()
     AddRow( mnDataStartRow );
     AddCol( mnDataStartCol );
 
-    mnCols.push_back( mnTabEndCol+1); //set last row bottom
+    mnCols.push_back( mnTabEndCol+1); //set last row bottom 
     mnRows.push_back( mnTabEndRow+1); //set last col bottom
-
-    sal_Bool bAllRows = ( ( mnTabEndRow - mnDataStartRow + 2 ) == (SCROW) mnRows.size() );
-
+    
+    BOOL bAllRows = ( ( mnTabEndRow - mnDataStartRow + 2 ) == (SCROW) mnRows.size() );
+    
     std::sort( mnCols.begin(), mnCols.end(), lcl_compareColfuc );
     std::sort( mnRows.begin(), mnRows.end(), lcl_compareRowfuc );
-
+        
     for( SCCOL nCol = 0; nCol < (SCCOL)mnCols.size()-1; nCol ++ )
-    {
+    {	
         if ( !bAllRows )
         {
             if ( nCol < (SCCOL)mnCols.size()-2)
@@ -64,7 +67,7 @@ void OutputImpl::OutputDataArea()
                 for ( SCROW i = nCol%2; i < (SCROW)mnRows.size()-2; i +=2 )
                     OutputBlockFrame( mnCols[nCol], mnRows[i], mnCols[nCol+1]-1, mnRows[i+1]-1 );
                 if ( mnRows.size()>=2 )
-                    OutputBlockFrame(  mnCols[nCol], mnRows[mnRows.size()-2], mnCols[nCol+1]-1, mnRows[mnRows.size()-1]-1 );
+                    OutputBlockFrame(  mnCols[nCol], mnRows[mnRows.size()-2], mnCols[nCol+1]-1, mnRows[mnRows.size()-1]-1 );				
             }
             else
             {
@@ -72,7 +75,7 @@ void OutputImpl::OutputDataArea()
                     OutputBlockFrame(  mnCols[nCol], mnRows[i], mnCols[nCol+1]-1,  mnRows[i+1]-1 );
             }
         }
-        else
+        else 
             OutputBlockFrame( mnCols[nCol], mnRows.front(), mnCols[nCol+1]-1, mnRows.back()-1, bAllRows );
     }
     //out put rows area outer framer
@@ -86,14 +89,14 @@ void OutputImpl::OutputDataArea()
     OutputBlockFrame( mnDataStartCol, mnTabStartRow, mnTabEndCol, mnDataStartRow-1 );
 }
 
-OutputImpl::OutputImpl( ScDocument* pDoc, sal_uInt16 nTab,
-        SCCOL   nTabStartCol,
-        SCROW   nTabStartRow,
-        SCCOL   nMemberStartCol,
-        SCROW   nMemberStartRow,
-        SCCOL nDataStartCol,
-        SCROW nDataStartRow,
-        SCCOL nTabEndCol,
+OutputImpl::OutputImpl( ScDocument*	pDoc, USHORT nTab,
+        SCCOL	nTabStartCol,
+        SCROW	nTabStartRow,
+        SCCOL	nMemberStartCol,
+        SCROW	nMemberStartRow,
+        SCCOL nDataStartCol, 
+        SCROW nDataStartRow, 
+        SCCOL nTabEndCol, 
         SCROW nTabEndRow ):
     mpDoc( pDoc ),
     mnTab( nTab ),
@@ -102,46 +105,49 @@ OutputImpl::OutputImpl( ScDocument* pDoc, sal_uInt16 nTab,
     mnMemberStartCol( nMemberStartCol),
     mnMemberStartRow( nMemberStartRow),
     mnDataStartCol ( nDataStartCol ),
-    mnDataStartRow ( nDataStartRow ),
+    mnDataStartRow ( nDataStartRow ), 
     mnTabEndCol(  nTabEndCol ),
     mnTabEndRow(  nTabEndRow )
 {
     mbNeedLineCols.resize( nTabEndCol-nDataStartCol+1, false );
     mbNeedLineRows.resize( nTabEndRow-nDataStartRow+1, false );
-
+    
 }
 
-sal_Bool OutputImpl::AddRow( SCROW nRow )
+BOOL OutputImpl::AddRow( SCROW nRow )
 {
     if ( !mbNeedLineRows[ nRow - mnDataStartRow ] )
     {
         mbNeedLineRows[ nRow - mnDataStartRow ] = true;
         mnRows.push_back( nRow );
-        return sal_True;
+        return TRUE;
     }
     else
-        return false;
+        return FALSE;
 }
 
-sal_Bool OutputImpl::AddCol( SCCOL nCol )
+BOOL OutputImpl::AddCol( SCCOL nCol )
 {
-
+    
     if ( !mbNeedLineCols[ nCol - mnDataStartCol ] )
     {
         mbNeedLineCols[ nCol - mnDataStartCol ] = true;
         mnCols.push_back( nCol );
-        return sal_True;
+        return TRUE;
     }
     else
-        return false;
+        return FALSE;	
 }
 
-void OutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sal_Bool bHori )
+void OutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, BOOL bHori )
 {
-    Color color = SC_DP_FRAME_COLOR;
-    ::editeng::SvxBorderLine aLine( &color, SC_DP_FRAME_INNER_BOLD );
-    ::editeng::SvxBorderLine aOutLine( &color, SC_DP_FRAME_OUTER_BOLD );
 
+    SvxBorderLine aLine, aOutLine;
+    aLine.SetColor( SC_DP_FRAME_COLOR );
+    aLine.SetOutWidth( SC_DP_FRAME_INNER_BOLD );
+    aOutLine.SetColor( SC_DP_FRAME_COLOR );
+    aOutLine.SetOutWidth( SC_DP_FRAME_OUTER_BOLD );
+    
     SvxBoxItem aBox( ATTR_BORDER );
 
     if ( nStartCol == mnTabStartCol )
@@ -153,29 +159,29 @@ void OutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEnd
         aBox.SetLine(&aOutLine, BOX_LINE_TOP);
     else
         aBox.SetLine(&aLine, BOX_LINE_TOP);
-
+    
     if ( nEndCol == mnTabEndCol ) //bottom row
         aBox.SetLine(&aOutLine, BOX_LINE_RIGHT);
-    else
+    else 
         aBox.SetLine(&aLine,  BOX_LINE_RIGHT);
 
-     if ( nEndRow == mnTabEndRow ) //bottom
+     if ( nEndRow == mnTabEndRow ) //bottom 
         aBox.SetLine(&aOutLine,  BOX_LINE_BOTTOM);
     else
         aBox.SetLine(&aLine,  BOX_LINE_BOTTOM);
 
-
+        
     SvxBoxInfoItem aBoxInfo( ATTR_BORDER_INNER );
-    aBoxInfo.SetValid(VALID_VERT,false );
+    aBoxInfo.SetValid(VALID_VERT,FALSE );
     if ( bHori )
     {
-        aBoxInfo.SetValid(VALID_HORI,sal_True);
+        aBoxInfo.SetValid(VALID_HORI,TRUE);
         aBoxInfo.SetLine( &aLine, BOXINFO_LINE_HORI );
     }
     else
-        aBoxInfo.SetValid(VALID_HORI,false );
+        aBoxInfo.SetValid(VALID_HORI,FALSE );
 
-    aBoxInfo.SetValid(VALID_DISTANCE,false);
+    aBoxInfo.SetValid(VALID_DISTANCE,FALSE);
 
     mpDoc->ApplyFrameAreaTab( ScRange(  nStartCol, nStartRow, mnTab, nEndCol, nEndRow , mnTab ), &aBox, &aBoxInfo );
 

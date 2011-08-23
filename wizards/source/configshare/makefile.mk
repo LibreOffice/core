@@ -26,13 +26,27 @@
 #*************************************************************************
 PRJ=..$/..
 
+
+
 PRJNAME=wizards
 TARGET=configshare
 
 .INCLUDE : settings.mk
+
 .INCLUDE : $(PRJ)$/util$/target.pmk
 
+
+
 ZIP1TARGET      = $(CONFIG_SHARE_TARGET)
+
 ZIP1LIST        = * -x makefile.*
 
+
+
+
 .INCLUDE : target.mk
+
+
+
+
+

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
     /** initialize and start the progress
 
         <p>
-        It activates a new created or reactivate an already used indicator
+        It activates a new created or reactivate an already used inidicator
         (must be finished by calling <member>XStatusIndicator::end()</member>
         before!). By the way it's possible to set first progress description
         and the possible range of progress value. That means that a progress
@@ -63,7 +63,7 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
             Value can be updated by calling <member>XStatusIndicator::setText()</member>.
 
         @param Range
-            means the maximum value of the progress which can be set by
+            mewns the maximum value of the progress which can be setted by
             calling <member>XStatusIndicator::setValue()</member>.
      */
     [oneway] void start(
@@ -104,7 +104,7 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
 
         <p>
         Wrong values must be ignored and stopped indicators must ignore this
-        call generally.
+        call generaly.
         </p>
 
         @param Value

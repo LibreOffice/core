@@ -34,16 +34,19 @@ USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------
 
+# NO_DEFAULT_STL=TRUE
 ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : settings.mk
 
 STDSHL=
+# SOLARINC!:=$(SOLARINC:s/stl//)
 
 # --- Files --------------------------------------------------------
 
 INCPRE+=.\Include
 .DIRCACHE=NO
+# CFLAGS+=-E
 
 SLOFILES =	$(SLO)$/regpatchactivex.obj
 
@@ -69,6 +72,7 @@ SHL1STDLIBS+=	libcmt.lib
 
 SHL1LIBS = $(SLB)$/$(TARGET).lib 
 
+#SHL1TARGET = $(TARGET)$(DLLPOSTFIX)
 SHL1TARGET = $(TARGET)
 SHL1IMPLIB = i$(TARGET)
 

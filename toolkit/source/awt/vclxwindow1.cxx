@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
 
+#include <tools/svwin.h>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #ifndef _SV_WORKWIN
@@ -37,8 +38,9 @@
 #include <vcl/window.hxx>
 
 #ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
+#include <tools/prewin.h>
+#include <windows.h>
+#include <tools/postwin.h>
 #elif defined ( QUARTZ )
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
@@ -53,9 +55,9 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     Window *pWindow = GetWindow();
     if ( pWindow->GetType() != WINDOW_WORKWINDOW )
     {
-        ::com::sun::star::uno::Exception *pException =
+        ::com::sun::star::uno::Exception *pException = 
             new ::com::sun::star::uno::RuntimeException;
-        pException->Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("not a work window"));
+        pException->Message = ::rtl::OUString::createFromAscii( "not a work window" );
         throw pException;
     }
 
@@ -73,9 +75,9 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
             const com::sun::star::beans::NamedValue* pProps = aProps.getConstArray();
             for( int i = 0; i < nProps; i++ )
             {
-                if( pProps[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WINDOW" ) ) )
+                if( pProps[i].Name.equalsAscii( "WINDOW" ) )
                     pProps[i].Value >>= nHandle;
-                else if( pProps[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "XEMBED" ) ) )
+                else if( pProps[i].Name.equalsAscii( "XEMBED" ) )
                     pProps[i].Value >>= bXEmbed;
             }
         }
@@ -86,13 +88,13 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     {
         ::com::sun::star::uno::Exception *pException =
             new ::com::sun::star::uno::RuntimeException;
-        pException->Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("incorrect window handle type"));
+        pException->Message = ::rtl::OUString::createFromAscii( "incorrect window handle type" );
         throw pException;
     }
     // create system parent data
-    SystemParentData aSysParentData;
+    SystemParentData aSysParentData; 
     aSysParentData.nSize = sizeof ( SystemParentData );
-#if defined( WNT ) || defined ( OS2 )
+#if defined( WIN ) || defined( WNT ) || defined ( OS2 )
     aSysParentData.hWnd = (HWND) nHandle;
 #elif defined( QUARTZ )
     aSysParentData.pView = reinterpret_cast<NSView*>(nHandle);

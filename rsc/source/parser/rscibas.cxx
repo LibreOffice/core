@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,10 +50,10 @@
 #include "rsclex.hxx"
 #include <yyrscyacc.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 /****************** M A C R O S ******************************************/
-void RscTypCont::SETCONST( RscConst * pClass, const char * szString, sal_uInt32 nVal )
+void RscTypCont::SETCONST( RscConst * pClass, const char * szString, UINT32 nVal )
 {
 #if OSL_DEBUG_LEVEL > 2
     fprintf( stderr, "setconst : %s\n", szString );
@@ -62,7 +62,7 @@ void RscTypCont::SETCONST( RscConst * pClass, const char * szString, sal_uInt32 
                          CONSTNAME, nVal ), nVal );
 }
 
-void RscTypCont::SETCONST( RscConst * pClass, Atom nName, sal_uInt32 nVal )
+void RscTypCont::SETCONST( RscConst * pClass, Atom nName, UINT32 nVal )
 {
 #if OSL_DEBUG_LEVEL > 2
     fprintf( stderr, "setconst hash: %u\n", (unsigned int)nName );
@@ -73,12 +73,12 @@ void RscTypCont::SETCONST( RscConst * pClass, Atom nName, sal_uInt32 nVal )
 
 /****************** C O D E **********************************************/
 /*************************************************************************
-|*    RscTypCont::InitLangType()
+|*	  RscTypCont::InitLangType()
 |*
-|*    Beschreibung
+|*	  Beschreibung
 *************************************************************************/
 
-typedef boost::unordered_map< rtl::OString, sal_uInt32, rtl::OStringHash > langmap;
+typedef std::hash_map< rtl::OString, sal_uInt32, rtl::OStringHash > langmap;
 static langmap ULong_Iso_map;
 
 sal_uInt32 GetLangId( const ByteString& aLang )
@@ -93,17 +93,17 @@ void RscLangEnum::Init( RscNameTable& rNames )
 {
     SetConstant( rNames.Put( "SYSTEM", CONSTNAME, (long)LANGUAGE_SYSTEM ), LANGUAGE_SYSTEM );
     SetConstant( rNames.Put( "DONTKNOW", CONSTNAME, LANGUAGE_DONTKNOW ), LANGUAGE_DONTKNOW );
-
+    
     sal_Int32 nIndex = 0;
     mnLangId = 0x400; // stay away from selfdefined...
     char csep = '-';
     const MsLangId::IsoLangEntry* pLangEntry;
     ByteString aCountry, aLang;
-
+    
     while ( NULL != ( pLangEntry = MsLangId::getIsoLangEntry( nIndex )) && ( pLangEntry->mnLang != LANGUAGE_DONTKNOW ))
     {
 #if OSL_DEBUG_LEVEL > 2
-        fprintf( stderr, "ISO Language in : %d\n",
+        fprintf( stderr, "ISO Language in : %d %d %s\n",
                  (int)nIndex,
                  pLangEntry->mnLang,
                  MsLangId::convertLanguageToIsoByteString( pLangEntry->mnLang ).getStr() );
@@ -174,7 +174,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
             nTokenCounter++;
         }
     }
-
+    
     SetConstant( rNames.Put( "LANGUAGE_USER1", CONSTNAME, LANGUAGE_USER1 ), LANGUAGE_USER1 );
     SetConstant( rNames.Put( "LANGUAGE_USER2", CONSTNAME, LANGUAGE_USER2 ), LANGUAGE_USER2 );
     SetConstant( rNames.Put( "LANGUAGE_USER3", CONSTNAME, LANGUAGE_USER3 ), LANGUAGE_USER3 );
@@ -201,7 +201,7 @@ Atom RscLangEnum::AddLanguage( const char* pLang, RscNameTable& rNames )
         mnLangId++;
     }
     #if OSL_DEBUG_LEVEL > 2
-    fprintf( stderr, "AddLanguage( %s ) = %d\n", pLang, nResult );
+    fprintf( stderr, "AddLanguage( %s ) = 0x%lx\n", pLang, nResult );
     #endif
     return nResult;
 }
@@ -214,7 +214,11 @@ RscEnum * RscTypCont::InitLangType()
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitFieldUnitsType()
+|*	  RscTypCont::InitFieldUnitsType()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 22.03.91
+|*	  Letzte Aenderung	MM 27.06.91
 |*
 *************************************************************************/
 RscEnum * RscTypCont::InitFieldUnitsType()
@@ -244,7 +248,11 @@ RscEnum * RscTypCont::InitFieldUnitsType()
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitTimeFieldFormat()
+|*	  RscTypCont::InitTimeFieldFormat()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 22.03.91
+|*	  Letzte Aenderung	MM 27.06.91
 |*
 *************************************************************************/
 RscEnum * RscTypCont::InitTimeFieldFormat()
@@ -262,7 +270,11 @@ RscEnum * RscTypCont::InitTimeFieldFormat()
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitColor()
+|*	  RscTypCont::InitColor()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 24.05.91
+|*	  Letzte Aenderung	MM 24.05.91
 |*
 *************************************************************************/
 RscEnum * RscTypCont::InitColor(){
@@ -291,7 +303,11 @@ RscEnum * RscTypCont::InitColor(){
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitMapUnit()
+|*	  RscTypCont::InitMapUnit()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 24.05.91
+|*	  Letzte Aenderung	MM 24.05.91
 |*
 *************************************************************************/
 RscEnum * RscTypCont::InitMapUnit(){
@@ -317,7 +333,11 @@ RscEnum * RscTypCont::InitMapUnit(){
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitKey()
+|*	  RscTypCont::InitKey()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 24.05.91
+|*	  Letzte Aenderung	MM 24.05.91
 |*
 *************************************************************************/
 RscEnum * RscTypCont::InitKey(){
@@ -437,7 +457,11 @@ RscEnum * RscTypCont::InitKey(){
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitTriState()
+|*	  RscTypCont::InitTriState()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 26.11.91
+|*	  Letzte Aenderung	MM 26.11.91
 |*
 *************************************************************************/
 RscEnum * RscTypCont::InitTriState(){
@@ -453,25 +477,33 @@ RscEnum * RscTypCont::InitTriState(){
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitMessButtons()
+|*	  RscTypCont::InitMessButtons()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 24.05.91
+|*	  Letzte Aenderung	MM 24.05.91
 |*
 *************************************************************************/
 RscEnum * RscTypCont::InitMessButtons()
 {
     RscEnum * pMessButtons;
     pMessButtons = new RscEnum( pHS->getID( "EnumMessButtons" ), RSC_NOTYPE );
-    SETCONST( pMessButtons, "WB_OK",                      sal::static_int_cast<sal_uInt32>(WB_OK) );
-    SETCONST( pMessButtons, "WB_OK_CANCEL",               sal::static_int_cast<sal_uInt32>(WB_OK_CANCEL) );
-    SETCONST( pMessButtons, "WB_YES_NO",                  sal::static_int_cast<sal_uInt32>(WB_YES_NO) );
-    SETCONST( pMessButtons, "WB_YES_NO_CANCEL",           sal::static_int_cast<sal_uInt32>(WB_YES_NO_CANCEL) );
-    SETCONST( pMessButtons, "WB_RETRY_CANCEL",            sal::static_int_cast<sal_uInt32>(WB_RETRY_CANCEL) );
-    SETCONST( pMessButtons, "WB_ABORT_RETRY_IGNORE",      sal::static_int_cast<sal_uInt32>(WB_ABORT_RETRY_IGNORE) );
+    SETCONST( pMessButtons, "WB_OK",                      sal::static_int_cast<UINT32>(WB_OK) );
+    SETCONST( pMessButtons, "WB_OK_CANCEL",               sal::static_int_cast<UINT32>(WB_OK_CANCEL) );
+    SETCONST( pMessButtons, "WB_YES_NO",                  sal::static_int_cast<UINT32>(WB_YES_NO) );
+    SETCONST( pMessButtons, "WB_YES_NO_CANCEL",           sal::static_int_cast<UINT32>(WB_YES_NO_CANCEL) );
+    SETCONST( pMessButtons, "WB_RETRY_CANCEL",            sal::static_int_cast<UINT32>(WB_RETRY_CANCEL) );
+    SETCONST( pMessButtons, "WB_ABORT_RETRY_IGNORE",      sal::static_int_cast<UINT32>(WB_ABORT_RETRY_IGNORE) );
     return( pMessButtons );
 }
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitMessDefButton()
+|*	  RscTypCont::InitMessDefButton()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 24.05.91
+|*	  Letzte Aenderung	MM 24.05.91
 |*
 *************************************************************************/
 RscEnum * RscTypCont::InitMessDefButton(){
@@ -479,24 +511,28 @@ RscEnum * RscTypCont::InitMessDefButton(){
     pMessDefButton = new RscEnum( pHS->getID( "EnumMessDefButton" ),
                                   RSC_NOTYPE );
 
-    SETCONST( pMessDefButton, "WB_DEF_OK",                  sal::static_int_cast<sal_uInt32>(WB_DEF_OK) );
-    SETCONST( pMessDefButton, "WB_DEF_CANCEL",              sal::static_int_cast<sal_uInt32>(WB_DEF_CANCEL) );
-    SETCONST( pMessDefButton, "WB_DEF_RETRY",               sal::static_int_cast<sal_uInt32>(WB_DEF_RETRY) );
-    SETCONST( pMessDefButton, "WB_DEF_YES",                 sal::static_int_cast<sal_uInt32>(WB_DEF_YES) );
-    SETCONST( pMessDefButton, "WB_DEF_NO",                  sal::static_int_cast<sal_uInt32>(WB_DEF_NO) );
-    SETCONST( pMessDefButton, "WB_DEF_IGNORE",              sal::static_int_cast<sal_uInt32>(WB_DEF_IGNORE) );
+    SETCONST( pMessDefButton, "WB_DEF_OK",                  sal::static_int_cast<UINT32>(WB_DEF_OK) );
+    SETCONST( pMessDefButton, "WB_DEF_CANCEL",              sal::static_int_cast<UINT32>(WB_DEF_CANCEL) );
+    SETCONST( pMessDefButton, "WB_DEF_RETRY",               sal::static_int_cast<UINT32>(WB_DEF_RETRY) );
+    SETCONST( pMessDefButton, "WB_DEF_YES",                 sal::static_int_cast<UINT32>(WB_DEF_YES) );
+    SETCONST( pMessDefButton, "WB_DEF_NO",                  sal::static_int_cast<UINT32>(WB_DEF_NO) );
+    SETCONST( pMessDefButton, "WB_DEF_IGNORE",              sal::static_int_cast<UINT32>(WB_DEF_IGNORE) );
     return( pMessDefButton );
 }
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitGeometry()
+|*	  RscTypCont::InitGeometry()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 24.05.91
+|*	  Letzte Aenderung	MM 24.05.91
 |*
 *************************************************************************/
 RscTupel * RscTypCont::InitGeometry()
 {
-    RscTop *    pTupel;
-    Atom        nId;
+    RscTop *	pTupel;
+    Atom		nId;
 
     // Clientvariablen einfuegen
     pTupel = new RscTupel( pHS->getID( "TupelDeltaSystem" ),
@@ -515,7 +551,11 @@ RscTupel * RscTypCont::InitGeometry()
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitLangGeometry()
+|*	  RscTypCont::InitLangGeometry()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 24.05.91
+|*	  Letzte Aenderung	MM 24.05.91
 |*
 *************************************************************************/
 RscArray * RscTypCont::InitLangGeometry( RscTupel * pGeo )
@@ -525,7 +565,11 @@ RscArray * RscTypCont::InitLangGeometry( RscTupel * pGeo )
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitStringList()
+|*	  RscTypCont::InitStringList()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 24.05.91
+|*	  Letzte Aenderung	MM 24.05.91
 |*
 *************************************************************************/
 RscCont * RscTypCont::InitStringList()
@@ -540,7 +584,11 @@ RscCont * RscTypCont::InitStringList()
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitLangStringList()
+|*	  RscTypCont::InitLangStringList()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 24.05.91
+|*	  Letzte Aenderung	MM 24.05.91
 |*
 *************************************************************************/
 RscArray * RscTypCont::InitLangStringList( RscCont * pStrLst )
@@ -551,13 +599,17 @@ RscArray * RscTypCont::InitLangStringList( RscCont * pStrLst )
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitStringTupel()
+|*	  RscTypCont::InitStringTupel()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 24.05.91
+|*	  Letzte Aenderung	MM 24.05.91
 |*
 *************************************************************************/
 RscTupel * RscTypCont::InitStringTupel()
 {
-    RscTop *    pTupel;
-    Atom        nId;
+    RscTop *	pTupel;
+    Atom		nId;
 
     // Clientvariablen einfuegen
     pTupel = new RscTupel( pHS->getID( "CharsTupel" ), RSC_NOTYPE, NULL );
@@ -571,13 +623,17 @@ RscTupel * RscTypCont::InitStringTupel()
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitStringLongTupel()
+|*	  RscTypCont::InitStringLongTupel()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 18.07.94
+|*	  Letzte Aenderung	MM 18.07.94
 |*
 *************************************************************************/
 RscTupel * RscTypCont::InitStringLongTupel()
 {
-    RscTop *    pTupel;
-    Atom        nId;
+    RscTop *	pTupel;
+    Atom		nId;
 
     // Clientvariablen einfuegen
     pTupel = new RscTupel( pHS->getID( "CharsLongTupel" ), RSC_NOTYPE, NULL );
@@ -591,7 +647,11 @@ RscTupel * RscTypCont::InitStringLongTupel()
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitStringTupelList()
+|*	  RscTypCont::InitStringTupelList()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 24.05.91
+|*	  Letzte Aenderung	MM 24.05.91
 |*
 *************************************************************************/
 RscCont * RscTypCont::InitStringTupelList( RscTupel * pTupelString )
@@ -606,7 +666,11 @@ RscCont * RscTypCont::InitStringTupelList( RscTupel * pTupelString )
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitStringLongTupelList()
+|*	  RscTypCont::InitStringLongTupelList()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 24.05.91
+|*	  Letzte Aenderung	MM 24.05.91
 |*
 *************************************************************************/
 RscCont * RscTypCont::InitStringLongTupelList( RscTupel * pStringLong )
@@ -621,7 +685,11 @@ RscCont * RscTypCont::InitStringLongTupelList( RscTupel * pStringLong )
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitLangStringTupelList()
+|*	  RscTypCont::InitLangStringTupelList()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 24.05.91
+|*	  Letzte Aenderung	MM 24.05.91
 |*
 *************************************************************************/
 RscArray * RscTypCont::InitLangStringTupelList( RscCont * pStrTupelLst )
@@ -632,7 +700,11 @@ RscArray * RscTypCont::InitLangStringTupelList( RscCont * pStrTupelLst )
 
 /*************************************************************************
 |*
-|*    RscTypCont::InitLangStringLongTupelList()
+|*	  RscTypCont::InitLangStringLongTupelList()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 24.05.91
+|*	  Letzte Aenderung	MM 24.05.91
 |*
 *************************************************************************/
 RscArray * RscTypCont::InitLangStringLongTupelList( RscCont * pStrLongTupelLst )

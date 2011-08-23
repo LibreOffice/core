@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-//  ItemID-Defines etc. muessen immer ganz vorne stehen
+//	ItemID-Defines etc. muessen immer ganz vorne stehen
 
 #include "scitems.hxx"
 
@@ -43,6 +43,7 @@
 #include <tools/contnr.hxx>
 #include <vcl/sv.h>
 #include <tools/ref.hxx>
+#include <tools/list.hxx>
 #include <tools/link.hxx>
 #include <i18npool/lang.h>
 #include <sfx2/sfx.hrc>
@@ -63,6 +64,7 @@
 #include <vcl/region.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/bitmap.hxx>
+#include <sot/sotref.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/vclenum.hxx>
 #include <sot/object.hxx>
@@ -76,7 +78,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 #include <vcl/event.hxx>
 #include <limits.h>
 #include <tools/errinf.hxx>
@@ -202,7 +204,7 @@
 #include <svl/stritem.hxx>
 #include <collect.hxx>
 #include <svx/svdsob.hxx>
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svdlayer.hxx>

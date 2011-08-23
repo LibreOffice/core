@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,10 +45,10 @@ class SvXMLAttrContainerData_Impl;
 
 class XMLOFF_DLLPUBLIC SvXMLAttrContainerData
 {
-    SvXMLNamespaceMap   aNamespaceMap;
-    SvUShorts           aPrefixPoss;
-    SvXMLAttrContainerData_Impl *pLNames;
-    SvXMLAttrContainerData_Impl *pValues;
+    SvXMLNamespaceMap	aNamespaceMap;
+    SvUShorts			aPrefixPoss;
+    SvXMLAttrContainerData_Impl	*pLNames;
+    SvXMLAttrContainerData_Impl	*pValues;
 
     SAL_DLLPRIVATE inline sal_uInt16 GetPrefixPos( sal_uInt16 i ) const;
 public:
@@ -59,10 +59,10 @@ public:
 
     int  operator ==( const SvXMLAttrContainerData& rCmp ) const;
 
-    sal_Bool AddAttr( const ::rtl::OUString& rLName, const rtl::OUString& rValue );
-    sal_Bool AddAttr( const ::rtl::OUString& rPrefix, const rtl::OUString& rNamespace,
+    BOOL AddAttr( const ::rtl::OUString& rLName, const rtl::OUString& rValue );
+    BOOL AddAttr( const ::rtl::OUString& rPrefix, const rtl::OUString& rNamespace,
                     const ::rtl::OUString& rLName, const rtl::OUString& rValue );
-    sal_Bool AddAttr( const ::rtl::OUString& rPrefix,
+    BOOL AddAttr( const ::rtl::OUString& rPrefix,
                   const ::rtl::OUString& rLName,
                   const ::rtl::OUString& rValue );
 
@@ -77,12 +77,12 @@ public:
     inline const ::rtl::OUString& GetNamespace( sal_uInt16 i ) const;
     inline const ::rtl::OUString& GetPrefix( sal_uInt16 i ) const;
 
-    sal_Bool SetAt( sal_uInt16 i,
+    BOOL SetAt( sal_uInt16 i,
                 const ::rtl::OUString& rLName, const rtl::OUString& rValue );
-    sal_Bool SetAt( sal_uInt16 i,
+    BOOL SetAt( sal_uInt16 i,
                 const ::rtl::OUString& rPrefix, const rtl::OUString& rNamespace,
                 const ::rtl::OUString& rLName, const rtl::OUString& rValue );
-    sal_Bool SetAt( sal_uInt16 i,
+    BOOL SetAt( sal_uInt16 i,
                 const ::rtl::OUString& rPrefix,
                 const ::rtl::OUString& rLName,
                 const ::rtl::OUString& rValue );
@@ -92,8 +92,8 @@ public:
 
 inline sal_uInt16 SvXMLAttrContainerData::GetPrefixPos( sal_uInt16 i ) const
 {
-//  DBG_ASSERT( i >= 0 && i < aPrefixPoss.Count(),
-//              "SvXMLAttrContainerData::GetPrefixPos: illegal index" );
+//	DBG_ASSERT( i >= 0 && i < aPrefixPoss.Count(),
+//				"SvXMLAttrContainerData::GetPrefixPos: illegal index" );
     return aPrefixPoss[i];
 }
 

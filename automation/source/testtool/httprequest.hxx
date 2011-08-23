@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,38 +48,38 @@ class HttpRequest
 {
     ByteString aRequestPath;
     ByteString aRequestHost;
-    sal_uInt16 nRequestPort;
+    USHORT nRequestPort;
     ByteString aProxyHost;
-    sal_uInt16 nProxyPort;
+    USHORT nProxyPort;
 
-    sal_uInt16 nStatus;
+    USHORT nStatus;
     osl::ConnectorSocket *pOutSocket;
 
     ByteString aHeader;
-    sal_uInt16 nResultId;
+    USHORT nResultId;
     ByteString aContentType;
     SvMemoryStream* pStream;
 
     void SendString( osl::StreamSocket* pSocket, ByteString aText );
-    sal_Bool IsItem( ByteString aItem, ByteString aLine );
+    BOOL IsItem( ByteString aItem, ByteString aLine );
     void Init();
 public:
     HttpRequest();
     ~HttpRequest();
 
-    void SetRequest( ByteString aHost, ByteString aPath, sal_uInt16 nPort );
-    void SetProxy( ByteString aHost, sal_uInt16 nPort );
+    void SetRequest( ByteString aHost, ByteString aPath, USHORT nPort );
+    void SetProxy( ByteString aHost, USHORT nPort );
 
-    sal_Bool Execute();
+    BOOL Execute();
     void Abort();
 
-    ByteString GetHeader() const { return aHeader; }
+    ByteString GetHeader() { return aHeader; }
     SvMemoryStream* GetBody();
 
-    ByteString GetContentType() const { return aContentType; }
-    sal_uInt16 GetResultId() const { return nResultId; }
+    ByteString GetContentType() { return aContentType; }
+    USHORT GetResultId() { return nResultId; }
 
-    sal_uInt16 GetStatus();
+    USHORT GetStatus();
 
 };
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,37 +37,37 @@
 
 CommandExtTextInputData::CommandExtTextInputData()
 {
-    mpTextAttr      = NULL;
-    mnCursorPos     = 0;
-    mnDeltaStart    = 0;
-    mnOldTextLen    = 0;
-    mnCursorFlags   = 0;
-    mbOnlyCursor    = sal_False;
+    mpTextAttr		= NULL;
+    mnCursorPos 	= 0;
+    mnDeltaStart	= 0;
+    mnOldTextLen	= 0;
+    mnCursorFlags	= 0;
+    mbOnlyCursor	= FALSE;
 }
 
 // -----------------------------------------------------------------------
 
 CommandExtTextInputData::CommandExtTextInputData( const XubString& rText,
-                                                  const sal_uInt16* pTextAttr,
+                                                  const USHORT* pTextAttr,
                                                   xub_StrLen nCursorPos,
-                                                  sal_uInt16 nCursorFlags,
+                                                  USHORT nCursorFlags,
                                                   xub_StrLen nDeltaStart,
                                                   xub_StrLen nOldTextLen,
-                                                  sal_Bool bOnlyCursor ) :
+                                                  BOOL bOnlyCursor ) :
     maText( rText )
 {
     if ( pTextAttr && maText.Len() )
     {
-        mpTextAttr = new sal_uInt16[maText.Len()];
-        memcpy( mpTextAttr, pTextAttr, maText.Len()*sizeof(sal_uInt16) );
+        mpTextAttr = new USHORT[maText.Len()];
+        memcpy( mpTextAttr, pTextAttr, maText.Len()*sizeof(USHORT) );
     }
     else
         mpTextAttr = NULL;
-    mnCursorPos     = nCursorPos;
-    mnDeltaStart    = nDeltaStart;
-    mnOldTextLen    = nOldTextLen;
-    mnCursorFlags   = nCursorFlags;
-    mbOnlyCursor    = bOnlyCursor;
+    mnCursorPos 	= nCursorPos;
+    mnDeltaStart	= nDeltaStart;
+    mnOldTextLen	= nOldTextLen;
+    mnCursorFlags	= nCursorFlags;
+    mbOnlyCursor	= bOnlyCursor;
 }
 
 // -----------------------------------------------------------------------
@@ -77,16 +77,16 @@ CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData&
 {
     if ( rData.mpTextAttr && maText.Len() )
     {
-        mpTextAttr = new sal_uInt16[maText.Len()];
-        memcpy( mpTextAttr, rData.mpTextAttr, maText.Len()*sizeof(sal_uInt16) );
+        mpTextAttr = new USHORT[maText.Len()];
+        memcpy( mpTextAttr, rData.mpTextAttr, maText.Len()*sizeof(USHORT) );
     }
     else
         mpTextAttr = NULL;
-    mnCursorPos     = rData.mnCursorPos;
-    mnDeltaStart    = rData.mnDeltaStart;
-    mnOldTextLen    = rData.mnOldTextLen;
-    mnCursorFlags   = rData.mnCursorFlags;
-    mbOnlyCursor    = rData.mbOnlyCursor;
+    mnCursorPos 	= rData.mnCursorPos;
+    mnDeltaStart	= rData.mnDeltaStart;
+    mnOldTextLen	= rData.mnOldTextLen;
+    mnCursorFlags	= rData.mnCursorFlags;
+    mbOnlyCursor	= rData.mbOnlyCursor;
 }
 
 // -----------------------------------------------------------------------

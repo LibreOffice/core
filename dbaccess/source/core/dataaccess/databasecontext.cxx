@@ -160,7 +160,7 @@ namespace dbaccess
                     {
                         Reference<util::XCloseable> xCloseable(xModel,UNO_QUERY_THROW);
                         xCloseable->close(sal_False);
-                    }
+                    } // if ( !xModel->getControllers()->hasMoreElements() )
                 }
                 catch(const CloseVetoException&)
                 {
@@ -178,7 +178,7 @@ namespace dbaccess
         void SAL_CALL DatabaseDocumentLoader::notifyTermination( const lang::EventObject& /*Event*/ ) throw (RuntimeException)
         {
         }
-
+        
         void SAL_CALL DatabaseDocumentLoader::disposing( const lang::EventObject& /*Source*/ ) throw (RuntimeException)
         {
         }
@@ -289,7 +289,7 @@ void ODatabaseContext::disposing()
 
     // dispose the data sources
     ObjectCache::iterator aEnd = m_aDatabaseObjects.end();
-    for (   ObjectCache::iterator   aIter = m_aDatabaseObjects.begin();
+    for	(	ObjectCache::iterator	aIter = m_aDatabaseObjects.begin();
             aIter != aEnd;
             ++aIter
         )
@@ -407,7 +407,7 @@ void ODatabaseContext::setTransientProperties(const ::rtl::OUString& _sURL, ODat
         const PropertyValue* pPropsEnd = rSessionPersistentProps.getConstArray() + rSessionPersistentProps.getLength();
         for ( ; pProp != pPropsEnd; ++pProp )
         {
-            if ( pProp->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AuthFailedPassword" ) ) )
+            if ( pProp->Name.equalsAscii( "AuthFailedPassword" ) )
             {
                 OSL_VERIFY( pProp->Value >>= sAuthFailedPassword );
             }
@@ -471,8 +471,8 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
             const Property* pProperties = aProperties.getConstArray();
             for ( sal_Int32 i=0; i<aProperties.getLength(); ++i, ++pProperties )
             {
-                if  (   ( ( pProperties->Attributes & PropertyAttribute::TRANSIENT) != 0 )
-                    &&  ( ( pProperties->Attributes & PropertyAttribute::READONLY) == 0 )
+                if	(	( ( pProperties->Attributes & PropertyAttribute::TRANSIENT) != 0 )
+                    &&	( ( pProperties->Attributes & PropertyAttribute::READONLY) == 0 )
                     )
                 {
                     // found such a property
@@ -487,7 +487,7 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
     }
 
     // additionally, remember the "failed password", which is not available as property
-    // #i86178#
+    // #i86178# / 2008-02-19 / frank.schoenheit@sun.com
     aRememberProps.put( "AuthFailedPassword", _rModelImpl.m_sFailedPassword );
 
     ::rtl::OUString sDocumentURL( _rModelImpl.getURL() );
@@ -497,7 +497,7 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
     }
     else if ( m_aDatabaseObjects.find( _rModelImpl.m_sName ) != m_aDatabaseObjects.end() )
     {
-        OSL_FAIL( "ODatabaseContext::storeTransientProperties: a database document register by name? This shouldn't happen anymore!" );
+        OSL_ENSURE( false, "ODatabaseContext::storeTransientProperties: a database document register by name? This shouldn't happen anymore!" );
             // all the code should have been changed so that registration is by URL only
         m_aDatasourceProperties[ _rModelImpl.m_sName ] = aRememberProps.getPropertyValues();
     }
@@ -643,19 +643,19 @@ Any ODatabaseContext::getByName(const rtl::OUString& _rName) throw( NoSuchElemen
         return makeAny( xExistent );
     }
     catch (NoSuchElementException&)
-    {   // let these exceptions through
+    {	// let these exceptions through
         throw;
     }
     catch (WrappedTargetException&)
-    {   // let these exceptions through
+    {	// let these exceptions through
         throw;
     }
     catch (RuntimeException&)
-    {   // let these exceptions through
+    {	// let these exceptions through
         throw;
     }
     catch (Exception& e)
-    {   // exceptions other than the speciafied ones -> wrap
+    {	// exceptions other than the speciafied ones -> wrap
         Any aError = ::cppu::getCaughtException();
         throw WrappedTargetException(_rName, *this, aError );
     }
@@ -698,7 +698,7 @@ void ODatabaseContext::registerDatabaseDocument( ODatabaseModelImpl& _rModelImpl
         setTransientProperties( sURL, _rModelImpl );
     }
     else
-        OSL_FAIL( "ODatabaseContext::registerDatabaseDocument: already have an object registered for this URL!" );
+        OSL_ENSURE( false, "ODatabaseContext::registerDatabaseDocument: already have an object registered for this URL!" );
 }
 
 void ODatabaseContext::revokeDatabaseDocument( const ODatabaseModelImpl& _rModelImpl )
@@ -766,5 +766,5 @@ void ODatabaseContext::onBasicManagerCreated( const Reference< XModel >& _rxForD
         _rBasicManager.SetGlobalUNOConstant( "ThisDatabaseDocument", makeAny( xDatabaseDocument ) );
 }
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

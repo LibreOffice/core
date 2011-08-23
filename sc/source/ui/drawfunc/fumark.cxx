@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,8 +52,8 @@
 FuMarkRect::FuMarkRect(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq) :
     FuPoor(pViewSh, pWin, pViewP, pDoc, rReq),
-    bVisible(false),
-    bStartDrag(false)
+    bVisible(FALSE),
+    bStartDrag(FALSE)
 {
 }
 
@@ -73,18 +73,18 @@ FuMarkRect::~FuMarkRect()
 |*
 \************************************************************************/
 
-sal_Bool FuMarkRect::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuMarkRect::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     pWindow->CaptureMouse();
-    pView->UnmarkAll();         // der Einheitlichkeit halber und wegen #50558#
-    bStartDrag = sal_True;
+    pView->UnmarkAll();			// der Einheitlichkeit halber und wegen #50558#
+    bStartDrag = TRUE;
 
     aBeginPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
     aZoomRect = Rectangle( aBeginPos, Size() );
-    return sal_True;
+    return TRUE;
 }
 
 /*************************************************************************
@@ -93,7 +93,7 @@ sal_Bool FuMarkRect::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuMarkRect::MouseMove(const MouseEvent& rMEvt)
+BOOL FuMarkRect::MouseMove(const MouseEvent& rMEvt)
 {
     if ( bStartDrag )
     {
@@ -107,7 +107,7 @@ sal_Bool FuMarkRect::MouseMove(const MouseEvent& rMEvt)
         aZoomRect = aRect;
         aZoomRect.Justify();
         pViewShell->DrawMarkRect(aZoomRect);
-        bVisible = sal_True;
+        bVisible = TRUE;
     }
 
     ForcePointer(&rMEvt);
@@ -121,45 +121,45 @@ sal_Bool FuMarkRect::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     if ( bVisible )
     {
         // Hide ZoomRect
         pViewShell->DrawMarkRect(aZoomRect);
-        bVisible = false;
+        bVisible = FALSE;
     }
 
     Size aZoomSizePixel = pWindow->LogicToPixel(aZoomRect).GetSize();
 
-    sal_uInt16 nMinMove = pView->GetMinMoveDistancePixel();
+    USHORT nMinMove = pView->GetMinMoveDistancePixel();
     if ( aZoomSizePixel.Width() < nMinMove || aZoomSizePixel.Height() < nMinMove )
     {
         // Klick auf der Stelle
 
-        aZoomRect.SetSize(Size());      // dann ganz leer
+        aZoomRect.SetSize(Size());		// dann ganz leer
     }
 
-    bStartDrag = false;
+    bStartDrag = FALSE;
     pWindow->ReleaseMouse();
 
     pViewShell->GetViewData()->GetDispatcher().
         Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
 
-        //  Daten an der View merken
+        //	Daten an der View merken
 
     pViewShell->SetChartArea( aSourceRange, aZoomRect );
 
-        //  Chart-Dialog starten:
+        //	Chart-Dialog starten:
 
-//  sal_uInt16 nId  = ScChartDlgWrapper::GetChildWindowId();
-//  SfxChildWindow* pWnd = pViewShell->GetViewFrame()->GetChildWindow( nId );
-//  SC_MOD()->SetRefDialog( nId, pWnd ? sal_False : sal_True );
+//	USHORT nId  = ScChartDlgWrapper::GetChildWindowId();
+//	SfxChildWindow* pWnd = pViewShell->GetViewFrame()->GetChildWindow( nId );
+//	SC_MOD()->SetRefDialog( nId, pWnd ? FALSE : TRUE );
 
-    return sal_True;
+    return TRUE;
 }
 
 /*************************************************************************
@@ -168,12 +168,12 @@ sal_Bool FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_uInt8 FuMarkRect::Command(const CommandEvent& rCEvt)
+BYTE FuMarkRect::Command(const CommandEvent& rCEvt)
 {
     if ( COMMAND_STARTDRAG == rCEvt.GetCommand() )
     {
-        //  nicht anfangen, auf der Tabelle rumzudraggen,
-        //  aber Maus-Status nicht zuruecksetzen
+        //	#29877# nicht anfangen, auf der Tabelle rumzudraggen,
+        //	aber Maus-Status nicht zuruecksetzen
         return SC_CMD_IGNORE;
     }
     else
@@ -184,22 +184,22 @@ sal_uInt8 FuMarkRect::Command(const CommandEvent& rCEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
 |* FALSE.
 |*
 \************************************************************************/
 
-sal_Bool FuMarkRect::KeyInput(const KeyEvent& rKEvt)
+BOOL FuMarkRect::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = false;
+    BOOL bReturn = FALSE;
 
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
         case KEY_ESCAPE:
-            //  beenden
+            //	beenden
             pViewShell->GetViewData()->GetDispatcher().
                 Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
-            bReturn = sal_True;
+            bReturn = TRUE;
             break;
     }
 
@@ -241,17 +241,17 @@ void FuMarkRect::Activate()
 {
     FuPoor::Activate();
 
-        //  Markierung merken, bevor evtl. Tabelle umgeschaltet wird
+        //	Markierung merken, bevor evtl. Tabelle umgeschaltet wird
 
     ScViewData* pViewData = pViewShell->GetViewData();
     ScMarkData& rMark = pViewData->GetMarkData();
 
     if ( !rMark.IsMultiMarked() && !rMark.IsMarked() )
-        pViewShell->MarkDataArea( sal_True );
+        pViewShell->MarkDataArea( TRUE );
 
-    pViewData->GetMultiArea( aSourceRange );        // Mehrfachselektion erlaubt
+    pViewData->GetMultiArea( aSourceRange );		// Mehrfachselektion erlaubt
 
-//  pViewShell->Unmark();
+//	pViewShell->Unmark();
 
     ForcePointer(NULL);
 }
@@ -270,8 +270,8 @@ void FuMarkRect::Deactivate()
     {
         // Hide ZoomRect
         pViewShell->DrawMarkRect(aZoomRect);
-        bVisible = false;
-        bStartDrag = false;
+        bVisible = FALSE;
+        bStartDrag = FALSE;
     }
 }
 

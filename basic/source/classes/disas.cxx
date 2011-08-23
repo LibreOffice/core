@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,6 +36,7 @@
 #include "sb.hxx"
 #include "iosys.hxx"
 #include "disas.hxx"
+#include "sbtrace.hxx"
 
 
 static const char* pOp1[] = {
@@ -130,7 +131,7 @@ static const char* pOp3[] = {
     "FIND",             // Load (+StringID+Typ)
     "ELEM",             // Load element (+StringID+Typ)
     "PARAM",            // Parameter (+Offset+Typ)
-
+    
     // Branching
     "CALL",             // Call DECLARE method (+StringID+Typ)
     "CALL.C",           // Call Cdecl-DECLARE method (+StringID+Typ)
@@ -153,8 +154,8 @@ static const char* pOp3[] = {
     "FIND_G",           // Searches for global var with special handling due to _GLOBAL_P
     "DCREATE_REDIMP",   // Change dimensions of a user defined Object-Array (+StringId+StringId)
     "FIND_CM",          // Search inside a class module (CM) to enable global search in time
-    "PUBLIC_P",         // Module global Variable (persisted between calls)(+StringID+Typ)
-    "FIND_STATIC",      // local static var lookup (+StringID+Typ)
+    "PUBLIC_P",        	// Module global Variable (persisted between calls)(+StringID+Typ)
+    "FIND_STATIC",     	// local static var lookup (+StringID+Typ) 
 };
 
 static const char** pOps[3] = { pOp1, pOp2, pOp3 };
@@ -162,27 +163,27 @@ static const char** pOps[3] = { pOp1, pOp2, pOp3 };
 typedef void( SbiDisas::*Func )( String& );  // Processing routines
 
 static const Func pOperand2[] = {
-    &SbiDisas::StrOp,   // Load a numeric constant (+ID)
-    &SbiDisas::StrOp,   // Load a string constant (+ID)
-    &SbiDisas::ImmOp,   // Immediate Load (+Wert)
-    &SbiDisas::StrOp,   // Save a named argument (+ID)
-    &SbiDisas::ImmOp,   // Strip String to fixed size (+length)
+    &SbiDisas::StrOp,	// Load a numeric constant (+ID)
+    &SbiDisas::StrOp,	// Load a string constant (+ID)
+    &SbiDisas::ImmOp,	// Immediate Load (+Wert)
+    &SbiDisas::StrOp,	// Save a named argument (+ID)
+    &SbiDisas::ImmOp,	// Strip String to fixed size (+length)
 
     // Branches
-    &SbiDisas::LblOp,   // Jump (+Target)
-    &SbiDisas::LblOp,   // eval TOS, conditional jump (+Target)
-    &SbiDisas::LblOp,   // eval TOS, conditional jump (+Target)
-    &SbiDisas::OnOp,    // eval TOS, jump in JUMP table (+MaxVal)
-    &SbiDisas::LblOp,   // UP call (+Target)
-    &SbiDisas::ReturnOp,    // UP Return (+0 or Target)
-    &SbiDisas::LblOp,   // test FOR-Variable, increment (+Endlabel)
-    &SbiDisas::LblOp,   // Tos+1 <= Case <= Tos), 2xremove (+Target)
-    &SbiDisas::LblOp,   // Error handler (+Offset)
-    &SbiDisas::ResumeOp,    // Resume after errors (+0 or 1 or Label)
+    &SbiDisas::LblOp,	// Jump (+Target)
+    &SbiDisas::LblOp,	// eval TOS, conditional jump (+Target)
+    &SbiDisas::LblOp, 	// eval TOS, conditional jump (+Target)
+    &SbiDisas::OnOp,	// eval TOS, jump in JUMP table (+MaxVal)
+    &SbiDisas::LblOp,	// UP call (+Target)
+    &SbiDisas::ReturnOp,	// UP Return (+0 or Target)
+    &SbiDisas::LblOp,	// test FOR-Variable, increment (+Endlabel)
+    &SbiDisas::LblOp,	// Tos+1 <= Case <= Tos), 2xremove (+Target)
+    &SbiDisas::LblOp,	// Error handler (+Offset)
+    &SbiDisas::ResumeOp,	// Resume after errors (+0 or 1 or Label)
 
     // I/O
-    &SbiDisas::CloseOp, // (+channel/0)
-    &SbiDisas::CharOp,  // (+char)
+    &SbiDisas::CloseOp,	// (+channel/0)
+    &SbiDisas::CharOp,	// (+char)
 
     // Objects
     &SbiDisas::StrOp,   // Test classname (+StringId)
@@ -195,19 +196,19 @@ static const Func pOperand2[] = {
 
 static const Func pOperand3[] = {
     // All opcodes with two operands
-    &SbiDisas::VarOp,   // Load from RTL (+StringID+Typ)
-    &SbiDisas::VarOp,   // Load (+StringID+Typ)
-    &SbiDisas::VarOp,   // Load Element (+StringID+Typ)
-    &SbiDisas::OffOp,   // Parameter (+Offset+Typ)
+    &SbiDisas::VarOp,	// Load from RTL (+StringID+Typ)
+    &SbiDisas::VarOp,	// Load (+StringID+Typ)
+    &SbiDisas::VarOp,	// Load Element (+StringID+Typ)
+    &SbiDisas::OffOp,	// Parameter (+Offset+Typ)
 
     // Branch
-    &SbiDisas::VarOp,   // Call DECLARE-Method (+StringID+Typ)
-    &SbiDisas::VarOp,   // Call CDecl-DECLARE-Methode (+StringID+Typ)
-    &SbiDisas::CaseOp,  // Case-Test (+Test-Opcode+False-Target)
-    &SbiDisas::StmntOp, // Statement (+Row+Column)
+    &SbiDisas::VarOp,	// Call DECLARE-Method (+StringID+Typ)
+    &SbiDisas::VarOp,	// Call CDecl-DECLARE-Methode (+StringID+Typ)
+    &SbiDisas::CaseOp,	// Case-Test (+Test-Opcode+False-Target)
+    &SbiDisas::StmntOp,	// Statement (+Row+Column)
 
     // I/O
-    &SbiDisas::StrmOp,  // (+SvStreamFlags+Flags)
+    &SbiDisas::StrmOp,	// (+SvStreamFlags+Flags)
 
     // Objects
     &SbiDisas::VarDefOp,   // Define local var (+StringID+Typ)
@@ -220,9 +221,9 @@ static const Func pOperand3[] = {
     &SbiDisas::VarDefOp,   // Define persistent global var P=PERSIST (+StringID+Typ)
     &SbiDisas::VarOp,    // Searches for global var with special handling due to  _GLOBAL_P
     &SbiDisas::Str2Op,     // Redimensionate User defined Object-Array (+StringId+StringId)
-    &SbiDisas::VarOp,    // FIND_CM
+    &SbiDisas::VarOp,	 // FIND_CM
     &SbiDisas::VarDefOp, // PUBLIC_P
-    &SbiDisas::VarOp,    // FIND_STATIC
+    &SbiDisas::VarOp,	 // FIND_STATIC
 };
 
 // TODO: Why as method? Isn't a simple define sufficient?
@@ -236,7 +237,7 @@ static const char* _crlf()
 }
 
 // This method exists because we want to load the file as own segment
-sal_Bool SbModule::Disassemble( String& rText )
+BOOL SbModule::Disassemble( String& rText )
 {
     rText.Erase();
     if( pImage )
@@ -244,7 +245,7 @@ sal_Bool SbModule::Disassemble( String& rText )
         SbiDisas aDisas( this, pImage );
         aDisas.Disas( rText );
     }
-    return sal_Bool( rText.Len() != 0 );
+    return BOOL( rText.Len() != 0 );
 }
 
 SbiDisas::SbiDisas( SbModule* p, const SbiImage* q ) : rImg( *q ), pMod( p )
@@ -278,23 +279,23 @@ SbiDisas::SbiDisas( SbModule* p, const SbiImage* q ) : rImg( *q ), pMod( p )
     }
     nOff = 0;
     // Add the publics
-    for( sal_uInt16 i = 0; i < pMod->GetMethods()->Count(); i++ )
+    for( USHORT i = 0; i < pMod->GetMethods()->Count(); i++ )
     {
         SbMethod* pMeth = PTR_CAST(SbMethod,pMod->GetMethods()->Get( i ));
         if( pMeth )
         {
-            sal_uInt16 nPos = (sal_uInt16) (pMeth->GetId());
+            USHORT nPos = (USHORT) (pMeth->GetId());
             cLabels[ nPos >> 3 ] |= ( 1 << ( nPos & 7 ) );
         }
     }
 }
 
 // Read current opcode
-sal_Bool SbiDisas::Fetch()
+BOOL SbiDisas::Fetch()
 {
     nPC = nOff;
     if( nOff >= rImg.GetCodeSize() )
-        return sal_False;
+        return FALSE;
     const unsigned char* p = (const unsigned char*)( rImg.GetCode() + nOff );
     eOp = (SbiOpcode) ( *p++ & 0xFF );
     if( eOp <= SbOP0_END )
@@ -302,29 +303,29 @@ sal_Bool SbiDisas::Fetch()
         nOp1 = nOp2 = 0;
         nParts = 1;
         nOff++;
-        return sal_True;
+        return TRUE;
     }
     else if( eOp <= SbOP1_END )
     {
         nOff += 5;
         if( nOff > rImg.GetCodeSize() )
-            return sal_False;
+            return FALSE;
         nOp1 = *p++; nOp1 |= *p++ << 8; nOp1 |= *p++ << 16; nOp1 |= *p++ << 24;
         nParts = 2;
-        return sal_True;
+        return TRUE;
     }
     else if( eOp <= SbOP2_END )
     {
         nOff += 9;
         if( nOff > rImg.GetCodeSize() )
-            return sal_False;
+            return FALSE;
         nOp1 = *p++; nOp1 |= *p++ << 8; nOp1 |= *p++ << 16; nOp1 |= *p++ << 24;
         nOp2 = *p++; nOp2 |= *p++ << 8; nOp2 |= *p++ << 16; nOp2 |= *p++ << 24;
         nParts = 3;
-        return sal_True;
+        return TRUE;
     }
     else
-        return sal_False;
+        return FALSE;
 }
 
 void SbiDisas::Disas( SvStream& r )
@@ -351,7 +352,7 @@ void SbiDisas::Disas( String& r )
     aText.ConvertLineEnd();
 }
 
-sal_Bool SbiDisas::DisasLine( String& rText )
+BOOL SbiDisas::DisasLine( String& rText )
 {
     char cBuf[ 100 ];
     const char* pMask[] = {
@@ -361,7 +362,11 @@ sal_Bool SbiDisas::DisasLine( String& rText )
         "%08" SAL_PRIXUINT32 " %02X %08X %08X " };
     rText.Erase();
     if( !Fetch() )
-        return sal_False;
+        return FALSE;
+
+#ifdef DBG_TRACE_BASIC
+    String aTraceStr_STMNT;
+#endif
 
     // New line?
     if( eOp == _STMNT && nOp1 != nLine )
@@ -369,8 +374,8 @@ sal_Bool SbiDisas::DisasLine( String& rText )
         // Find line
         String aSource = rImg.aOUSource;
         nLine = nOp1;
-        sal_uInt16 n = 0;
-        sal_uInt16 l = (sal_uInt16)nLine;
+        USHORT n = 0;
+        USHORT l = (USHORT)nLine;
         while( --l ) {
             n = aSource.SearchAscii( "\n", n );
             if( n == STRING_NOTFOUND ) break;
@@ -379,20 +384,26 @@ sal_Bool SbiDisas::DisasLine( String& rText )
         // Show position
         if( n != STRING_NOTFOUND )
         {
-            sal_uInt16 n2 = aSource.SearchAscii( "\n", n );
+            USHORT n2 = aSource.SearchAscii( "\n", n );
             if( n2 == STRING_NOTFOUND ) n2 = aSource.Len() - n;
             String s( aSource.Copy( n, n2 - n + 1 ) );
-            sal_Bool bDone;
+            BOOL bDone;
             do {
-                bDone = sal_True;
+                bDone = TRUE;
                 n = s.Search( '\r' );
-                if( n != STRING_NOTFOUND ) bDone = sal_False, s.Erase( n, 1 );
+                if( n != STRING_NOTFOUND ) bDone = FALSE, s.Erase( n, 1 );
                 n = s.Search( '\n' );
-                if( n != STRING_NOTFOUND ) bDone = sal_False, s.Erase( n, 1 );
+                if( n != STRING_NOTFOUND ) bDone = FALSE, s.Erase( n, 1 );
             } while( !bDone );
+//          snprintf( cBuf, sizeof(cBuf), pMask[ 0 ], nPC );
+//			rText += cBuf;
             rText.AppendAscii( "; " );
             rText += s;
             rText.AppendAscii( _crlf() );
+
+#ifdef DBG_TRACE_BASIC
+            aTraceStr_STMNT = s;
+#endif
         }
     }
 
@@ -402,7 +413,7 @@ sal_Bool SbiDisas::DisasLine( String& rText )
     {
         // Public?
         ByteString aByteMethName;
-        for( sal_uInt16 i = 0; i < pMod->GetMethods()->Count(); i++ )
+        for( USHORT i = 0; i < pMod->GetMethods()->Count(); i++ )
         {
             SbMethod* pMeth = PTR_CAST(SbMethod,pMod->GetMethods()->Get( i ));
             if( pMeth )
@@ -432,7 +443,7 @@ sal_Bool SbiDisas::DisasLine( String& rText )
         rText += ':';
         rText.AppendAscii( _crlf() );
     }
-    snprintf( cBuf, sizeof(cBuf), pMask[ nParts ], nPC, (sal_uInt16) eOp, nOp1, nOp2 );
+    snprintf( cBuf, sizeof(cBuf), pMask[ nParts ], nPC, (USHORT) eOp, nOp1, nOp2 );
 
     String aPCodeStr;
     aPCodeStr.AppendAscii( cBuf );
@@ -452,13 +463,17 @@ sal_Bool SbiDisas::DisasLine( String& rText )
 
     rText += aPCodeStr;
 
-    return sal_True;
+#ifdef DBG_TRACE_BASIC
+    dbg_RegisterTraceTextForPC( pMod, nPC, aTraceStr_STMNT, aPCodeStr );
+#endif
+
+    return TRUE;
 }
 
 // Read from StringPool
 void SbiDisas::StrOp( String& rText )
 {
-    String aStr = rImg.GetString( (sal_uInt16)nOp1 );
+    String aStr = rImg.GetString( (USHORT)nOp1 );
     ByteString aByteString( aStr, RTL_TEXTENCODING_ASCII_US );
     const char* p = aByteString.GetBuffer();
     if( p )
@@ -470,7 +485,7 @@ void SbiDisas::StrOp( String& rText )
     else
     {
         rText.AppendAscii( "?String? " );
-        rText += (sal_uInt16)nOp1;
+        rText += (USHORT)nOp1;
     }
 }
 
@@ -524,7 +539,7 @@ void SbiDisas::ResumeOp( String& rText )
 }
 
 // print Prompt
-// sal_False/TRUE
+// FALSE/TRUE
 void SbiDisas::PromptOp( String& rText )
 {
     if( nOp1 )
@@ -556,16 +571,16 @@ void SbiDisas::CharOp( String& rText )
         rText += '\'';
     else
         rText.AppendAscii( "char " ),
-        rText += (sal_uInt16)nOp1;
+        rText += (USHORT)nOp1;
 }
 
 // Print var: String-ID and type
 void SbiDisas::VarOp( String& rText )
 {
-    rText += rImg.GetString( (sal_uInt16)(nOp1 & 0x7FFF) );
+    rText += rImg.GetString( (USHORT)(nOp1 & 0x7FFF) );
     rText.AppendAscii( "\t; " );
     // The type
-    sal_uInt32 n = nOp1;
+    UINT32 n = nOp1;
     nOp1 = nOp2;
     TypeOp( rText );
     if( n & 0x8000 )
@@ -575,7 +590,7 @@ void SbiDisas::VarOp( String& rText )
 // Define variable: String-ID and type
 void SbiDisas::VarDefOp( String& rText )
 {
-    rText += rImg.GetString( (sal_uInt16)(nOp1 & 0x7FFF) );
+    rText += rImg.GetString( (USHORT)(nOp1 & 0x7FFF) );
     rText.AppendAscii( "\t; " );
     // The Typ
     nOp1 = nOp2;
@@ -588,7 +603,7 @@ void SbiDisas::OffOp( String& rText )
     rText += String::CreateFromInt32( nOp1 & 0x7FFF );
     rText.AppendAscii( "\t; " );
     // The type
-    sal_uInt32 n = nOp1;
+    UINT32 n = nOp1;
     nOp1 = nOp2;
     TypeOp( rText );
     if( n & 0x8000 )
@@ -596,31 +611,42 @@ void SbiDisas::OffOp( String& rText )
 }
 
 // Data type
+#ifdef HP9000 // TODO: remove this!
+static char* SbiDisas_TypeOp_pTypes[13] = {
+    "Empty","Null","Integer","Long","Single","Double",
+    "Currency","Date","String","Object","Error","Boolean",
+    "Variant" };
+#define pTypes SbiDisas_TypeOp_pTypes
+#endif
 void SbiDisas::TypeOp( String& rText )
 {
     // From 1996-01-19: type can contain flag for BYVAL (StepARGTYP)
     if( nOp1 & 0x8000 )
     {
-        nOp1 &= 0x7FFF;     // filter away the flag
+        nOp1 &= 0x7FFF;		// filter away the flag
         rText.AppendAscii( "BYVAL " );
     }
     if( nOp1 < 13 )
     {
+#ifndef HP9000
         static char pTypes[][13] = {
             "Empty","Null","Integer","Long","Single","Double",
             "Currency","Date","String","Object","Error","Boolean",
             "Variant" };
-
+#endif
         rText.AppendAscii( pTypes[ nOp1 ] );
     }
     else
     {
         rText.AppendAscii( "type " );
-        rText += (sal_uInt16)nOp1;
+        rText += (USHORT)nOp1;
     }
 }
+#ifdef HP9000
+#undef pTypes
+#endif
 
-// sal_True-Label, condition Opcode
+// TRUE-Label, condition Opcode
 void SbiDisas::CaseOp( String& rText )
 {
     LblOp( rText );
@@ -633,8 +659,8 @@ void SbiDisas::StmntOp( String& rText )
 {
     rText += String::CreateFromInt32( nOp1 );
     rText += ',';
-    sal_uInt32 nCol = nOp2 & 0xFF;
-    sal_uInt32 nFor = nOp2 / 0x100;
+    UINT32 nCol = nOp2 & 0xFF;
+    UINT32 nFor = nOp2 / 0x100;
     rText += String::CreateFromInt32( nCol );
     rText.AppendAscii( " (For-Level: " );
     rText += String::CreateFromInt32( nFor );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 #include <vcl/field.hxx>
 
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 
 #include <vcl/button.hxx>
 
@@ -42,17 +42,17 @@ class SwWrtShell;
 
 class SwSplitTableDlg : public SvxStandardDialog
 {
+    FixedText 			aCountLbl;
+    NumericField 		aCountEdit;
     FixedLine            aCountFL;
-    FixedText           aCountLbl;
-    NumericField        aCountEdit;
-    FixedLine            aDirFL;
-    ImageRadioButton    aHorzBox;
+    ImageRadioButton 	aHorzBox;
     ImageRadioButton    aVertBox;
     CheckBox            aPropCB;
-    OKButton            aOKBtn;
-    CancelButton        aCancelBtn;
-    HelpButton          aHelpBtn;
-    SwWrtShell&         rSh;
+    FixedLine            aDirFL;
+    OKButton 			aOKBtn;
+    CancelButton 		aCancelBtn;
+    HelpButton 			aHelpBtn;
+    SwWrtShell& 		rSh;
 
 protected:
     virtual void Apply();
@@ -61,8 +61,8 @@ public:
     SwSplitTableDlg(Window *pParent, SwWrtShell& rShell );
     DECL_LINK( ClickHdl, Button * );
 
-    sal_Bool                IsHorizontal() const { return aHorzBox.IsChecked(); }
-    sal_Bool                IsProportional() const { return aPropCB.IsChecked() && aHorzBox.IsChecked(); }
+    BOOL                IsHorizontal() const { return aHorzBox.IsChecked(); }
+    BOOL                IsProportional() const { return aPropCB.IsChecked() && aHorzBox.IsChecked(); }
     long                GetCount() const { return sal::static_int_cast< long >(aCountEdit.GetValue()); }
 };
 

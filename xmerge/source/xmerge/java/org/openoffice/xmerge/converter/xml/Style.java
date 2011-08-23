@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,11 +37,11 @@ import org.w3c.dom.NamedNodeMap;
  *  <code>ParaStyle</code> are used.
  *
  *  @author   David Proulx
- *  @see <a href="TextStyle.html">TextStyle</a>,
+ *  @see <a href="TextStyle.html">TextStyle</a>, 
  *  <a href="ParaStyle.html">ParaStyle</a>
  */
 public class Style {
-
+    
     /**  Name of the <code>Style</code>. */
     protected String name = null;
     /**  Family of the <code>Style</code>. */
@@ -49,22 +49,22 @@ public class Style {
     /**  Parent of the <code>Style</code>. */
     protected String parent = null;
 
-    /**
+    /** 
      *  A reference to the <code>StyleCatalog</code> to be used for
      *  looking up ancestor <code>Style</code> objects.
      */
     protected StyleCatalog sc;
-
+    
 
     /**
      *  Constructor for use when going from DOM to client device format.
      *
-     *  @param  node  A <i>style:style</i> or <i>style:default-style</i>
+     *  @param  node  A <i>style:style</i> or <i>style:default-style</i> 
      *                <code>Node</code> from the document being parsed.
      *                No checking of <code>Node</code> is done, so if it
      *                is not of the proper type the results will be
      *                unpredictable.
-     *  @param  sc    The <code>StyleCatalog</code>, which is used for
+     *  @param  sc    The <code>StyleCatalog</code>, which is used for 
      *                looking up ancestor <code>Style</code> objects.
      */
     public Style(Node node, StyleCatalog sc) {
@@ -86,12 +86,12 @@ public class Style {
                     name = attr.getNodeValue();
                 } else if (attr.getNodeName().equals("style:parent-style-name"))
                     parent = attr.getNodeValue();
-
+                
             }
         }
     }
 
-
+    
     /**
      *  Constructor for use when going from client device format to DOM.
      *
@@ -99,7 +99,7 @@ public class Style {
      *  @param  family  Family of the <code>Style</code> - usually
      *                  <i>paragraph</i>, <i>text</i>, etc.  Can be null.
      *  @param  parent  Name of the parent <code>Style</code>, or null if none.
-     *  @param  sc      The <code>StyleCatalog</code>, which is used for
+     *  @param  sc      The <code>StyleCatalog</code>, which is used for 
      *                  looking up ancestor <code>Style</code> objects.
      */
     public Style(String name, String family, String parent, StyleCatalog sc) {
@@ -108,19 +108,19 @@ public class Style {
         this.family = family;
         this.parent = parent;
     }
-
+    
 
     /**
      *  Set the <code>StyleCatalog</code> to be used when looking up the
      *  <code>Style</code> parent.
      *
-     *  @param  sc  The <code>StyleCatalog</code>, which is used for
+     *  @param  sc  The <code>StyleCatalog</code>, which is used for 
      *              looking up ancestor <code>Style</code> objects.
      */
     public void setCatalog(StyleCatalog sc) {
         this.sc = sc;
     }
-
+    
 
     /**
      *  Returns the name of this <code>Style</code>.
@@ -131,8 +131,8 @@ public class Style {
         return name;
     }
 
-
-    /**
+    
+    /** 
      *  Sets the name of this <code>Style</code>.
      *
      *  @param  newName  The new name of this <code>Style</code>.
@@ -141,7 +141,7 @@ public class Style {
         name = newName;
     }
 
-
+    
     /**
      *  Return the family of this <code>Style</code>.
      *
@@ -150,7 +150,7 @@ public class Style {
     public String getFamily() {
         return family;
     }
-
+    
     /**
      *  Return the name of the parent of this <code>Style</code>.
      *
@@ -159,8 +159,8 @@ public class Style {
     public String getParent() {
         return parent;
     }
-
-
+    
+    
     /**
      *  Return a <code>Style</code> object corresponding to this one, but with
      *  all of the inherited information from parent <code>Style</code>
@@ -175,7 +175,7 @@ public class Style {
         return new Style(name, family, parent, sc);
     }
 
-
+        
     /**
      *  Write a <code>Node</code> in <code>parentDoc</code>
      *  representing this <code>Style</code>.  Note that the
@@ -189,8 +189,8 @@ public class Style {
         // DJP: write this!  Should call writeAttributes()
         return null;
     }
-
-
+    
+    
     /**
      *  Write this <code>Style</code> object's attributes to the given
      *  <code>Node</code>.  This may involve writing child
@@ -204,7 +204,7 @@ public class Style {
      */
     public void writeAttributes(Node node) {
     }
-
+    
 
     /**
      *  Return true if <code>Style</code> is a subset of this one.  Note

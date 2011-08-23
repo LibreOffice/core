@@ -70,7 +70,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "sfx2/sfxresid.hxx"
+#include "sfxresid.hxx"
 #include "doc.hrc"
 
 using namespace ::com::sun::star;
@@ -106,9 +106,9 @@ const SfxItemPropertyMapEntry* lcl_GetDocInfoPropertyMap()
         { "AutoloadEnabled" , 15, MID_DOCINFO_AUTOLOADENABLED, &::getBooleanCppuType(),   PROPERTY_UNBOUND, 0 },
         { "AutoloadSecs"    , 12, MID_DOCINFO_AUTOLOADSECS, &::getCppuType((const sal_Int32*)0),     PROPERTY_UNBOUND, 0 },
         { "AutoloadURL"     , 11, MID_DOCINFO_AUTOLOADURL, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "Category"            , 8 , MID_CATEGORY,           &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "Company"         , 7 , MID_COMPANY,           &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "Manager"         , 7 , MID_MANAGER,           &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+    { "Category"			, 8	, MID_CATEGORY,           &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+    { "Company"			, 7	, MID_COMPANY,           &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+    { "Manager"			, 7	, MID_MANAGER,           &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
         { "CreationDate"    , 12, WID_DATE_CREATED,   &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
         { "DefaultTarget"   , 13, MID_DOCINFO_DEFAULTTARGET, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
         { "Description"     , 11, MID_DOCINFO_DESCRIPTION, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
@@ -133,10 +133,10 @@ const SfxItemPropertyMapEntry* lcl_GetDocInfoPropertyMap()
     return aDocInfoPropertyMap_Impl;
 }
 
-static sal_uInt16 aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
+static USHORT aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
                                    31, 31, 30, 31, 30, 31 };
 
-inline sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
+inline USHORT DaysInMonth( USHORT nMonth, USHORT nYear )
 {
     if ( nMonth != 2 )
         return aDaysInMonth[nMonth-1];
@@ -337,8 +337,8 @@ MixedPropertySetInfo::~MixedPropertySetInfo()
 
 struct SfxDocumentInfoObject_Impl
 {
-    ::osl::Mutex                        _aMutex;
-    ::cppu::OInterfaceContainerHelper   _aDisposeContainer;
+    ::osl::Mutex						_aMutex;
+    ::cppu::OInterfaceContainerHelper	_aDisposeContainer;
 
     sal_Bool            bDisposed;
 
@@ -394,13 +394,13 @@ void SfxDocumentInfoObject_Impl::Reset(uno::Reference<document::XDocumentPropert
                     : sName + ::rtl::OUString::valueOf(i+1);
                 while (std::find(names.begin(), names.end(), name)
                        != names.end()) {
-                    name += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
+                    name += ::rtl::OUString::createFromAscii("'");
                 }
                 // FIXME there is a race condition here
                 try {
                     xPropContainer->addProperty(name,
                         beans::PropertyAttribute::REMOVEABLE,
-                        uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(""))));
+                        uno::makeAny(::rtl::OUString::createFromAscii("")));
                 } catch (uno::RuntimeException) {
                     throw;
                 } catch (uno::Exception) {
@@ -443,14 +443,14 @@ SfxDocumentInfoObject::initialize(const uno::Sequence< uno::Any > & aArguments)
         uno::Any any = aArguments[0];
         uno::Reference<document::XDocumentProperties> xDoc;
         if (!(any >>= xDoc) || !xDoc.is()) throw lang::IllegalArgumentException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "SfxDocumentInfoObject::initialize: no XDocumentProperties given")),
+            ::rtl::OUString::createFromAscii(
+                "SfxDocumentInfoObject::initialize: no XDocumentProperties given"),
                 *this, 0);
         _pImp->Reset(xDoc);
     } else {
         throw lang::IllegalArgumentException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "SfxDocumentInfoObject::initialize: no argument given")),
+            ::rtl::OUString::createFromAscii(
+                "SfxDocumentInfoObject::initialize: no argument given"),
                 *this, 0);
     }
 }
@@ -713,7 +713,7 @@ void SAL_CALL SfxDocumentInfoObject::removeProperty(const ::rtl::OUString& sName
     return xPropSet->removeProperty(sName);
 }
 
-sal_Bool equalsDateTime( const util::DateTime& D1, const util::DateTime& D2 )
+BOOL equalsDateTime( const util::DateTime& D1, const util::DateTime& D2 )
 {
     return D1.HundredthSeconds == D2.HundredthSeconds &&
            D1.Seconds == D2.Seconds &&
@@ -745,6 +745,24 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
                 break;
             case WID_FROM :
             {
+                // QUESTION: do we still need this?
+                /*
+                // String aStrVal( sTemp );
+                if ( aStrVal.Len() > TIMESTAMP_MAXLENGTH )
+                {
+                    SvAddressParser aParser( aStrVal );
+                    if ( aParser.Count() > 0 )
+                    {
+                        String aEmail = aParser.GetEmailAddress(0);
+                        String aRealname = aParser.GetRealName(0);
+
+                        if ( aRealname.Len() <= TIMESTAMP_MAXLENGTH )
+                            aStrVal = aRealname;
+                        else if ( aEmail.Len() <= TIMESTAMP_MAXLENGTH )
+                            aStrVal = aEmail;
+                    }
+                } */
+
                 if ( _pImp->m_xDocProps->getAuthor() != sTemp )
                     _pImp->m_xDocProps->setAuthor(sTemp);
                 break;
@@ -793,6 +811,7 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
                 if ( _pImp->m_xDocProps->getDefaultTarget() != sTemp )
                     _pImp->m_xDocProps->setDefaultTarget(sTemp);
                 break;
+//            case WID_CONTENT_TYPE : // this is readonly!
                case MID_CATEGORY:
                case MID_MANAGER:
                case MID_COMPANY:
@@ -869,7 +888,7 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
                     _pImp->m_xDocProps->setAutoloadSecs(60); // default
                 } else if ( !bBoolVal && (0 != _pImp->m_xDocProps->getAutoloadSecs()) ) {
                     _pImp->m_xDocProps->setAutoloadSecs(0);
-                    _pImp->m_xDocProps->setAutoloadURL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")));
+                    _pImp->m_xDocProps->setAutoloadURL(::rtl::OUString::createFromAscii(""));
                 }
                 break;
             default:
@@ -1009,7 +1028,7 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
         case MID_DOCINFO_AUTOLOADENABLED:
             aValue <<= static_cast<sal_Bool>
                         (   (_pImp->m_xDocProps->getAutoloadSecs() != 0)
-                        || _pImp->m_xDocProps->getAutoloadURL().getLength());
+                        || !(_pImp->m_xDocProps->getAutoloadURL().equalsAscii("")));
             break;
         case MID_DOCINFO_AUTOLOADURL:
             aValue <<= _pImp->m_xDocProps->getAutoloadURL();
@@ -1055,6 +1074,9 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
 
 sal_Int16 SAL_CALL  SfxDocumentInfoObject::getUserFieldCount() throw( ::com::sun::star::uno::RuntimeException )
 {
+//    uno::Reference<beans::XPropertyAccess> xPropSet(
+//        _pImp->m_xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
+//    return xPropSet->getPropertyValues().getLength();
     return FOUR;
 }
 
@@ -1119,7 +1141,7 @@ void  SAL_CALL SfxDocumentInfoObject::setUserFieldName(sal_Int16 nIndex, const :
                 try {
                     xPropContainer->addProperty(aName,
                         beans::PropertyAttribute::REMOVEABLE,
-                        uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(""))));
+                        uno::makeAny(::rtl::OUString::createFromAscii("")));
                     _pImp->m_UserDefined[nIndex] = aName;
                 } catch (beans::PropertyExistException) {
                     _pImp->m_UserDefined[nIndex] = aName;
@@ -1197,6 +1219,7 @@ SfxStandaloneDocumentInfoObject::SfxStandaloneDocumentInfoObject( const ::com::s
     uno::Reference< lang::XInitialization > xDocProps(
         _xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "com.sun.star.document.DocumentProperties"))), uno::UNO_QUERY_THROW);
+//    xDocProps->initialize(uno::Sequence<uno::Any>());
     uno::Any a;
     a <<= xDocProps;
     uno::Sequence<uno::Any> args(1);
@@ -1276,6 +1299,8 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
     uno::Reference< document::XDocumentProperties > xDocProps(
         _xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "com.sun.star.document.DocumentProperties"))), uno::UNO_QUERY_THROW);
+//    uno::Reference< lang::XInitialization > xInit(xDocProps, uno::UNO_QUERY_THROW);
+//    xInit->initialize(uno::Sequence<uno::Any>());
     _pImp->Reset(xDocProps);
     aGuard.clear();
 
@@ -1285,9 +1310,9 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
         try
         {
             uno::Sequence<beans::PropertyValue> medium(2);
-            medium[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentBaseURL"));
+            medium[0].Name = ::rtl::OUString::createFromAscii("DocumentBaseURL");
             medium[0].Value <<= aURL;
-            medium[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+            medium[1].Name = ::rtl::OUString::createFromAscii("URL");
             medium[1].Value <<= aURL;
             _pImp->m_xDocProps->loadFromStorage(xStorage, medium);
             _pImp->Reset(_pImp->m_xDocProps);
@@ -1325,9 +1350,9 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::storeIntoURL(const ::rtl::OUStri
         try
         {
             uno::Sequence<beans::PropertyValue> medium(2);
-            medium[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentBaseURL"));
+            medium[0].Name = ::rtl::OUString::createFromAscii("DocumentBaseURL");
             medium[0].Value <<= aURL;
-            medium[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+            medium[1].Name = ::rtl::OUString::createFromAscii("URL");
             medium[1].Value <<= aURL;
 
             _pImp->m_xDocProps->storeToStorage(xStorage, medium);

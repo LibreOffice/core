@@ -97,7 +97,7 @@ namespace dbaccess
             if(aIter != m_aColumns->get().end())
                 return connectivity::sdbcx::ObjectType(*aIter,UNO_QUERY);
 
-            OSL_FAIL("Column not found in collection!");
+            OSL_ENSURE(0,"Column not found in collection!");
         }
         return NULL;
     }
@@ -109,7 +109,6 @@ namespace dbaccess
             OSQLTables::iterator aIter = m_aTables.find(_rName);
             OSL_ENSURE(aIter != m_aTables.end(),"Table not found!");
             OSL_ENSURE(aIter->second.is(),"Table is null!");
-            (void)aIter;
             return connectivity::sdbcx::ObjectType(m_aTables.find(_rName)->second,UNO_QUERY);
         }
         return NULL;

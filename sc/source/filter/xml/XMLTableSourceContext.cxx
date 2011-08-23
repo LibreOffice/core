@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ using namespace xmloff::token;
 //------------------------------------------------------------------
 
 ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
@@ -101,7 +101,7 @@ ScXMLTableSourceContext::~ScXMLTableSourceContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableSourceContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLTableSourceContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
@@ -117,9 +117,9 @@ void ScXMLTableSourceContext::EndElement()
         ScDocument* pDoc(GetScImport().GetDocument());
         if (xLinkable.is() && pDoc)
         {
-            ScXMLImport::MutexGuard aGuard(GetScImport());
+            GetScImport().LockSolarMutex();
             if (pDoc->RenameTab( static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()),
-                GetScImport().GetTables().GetCurrentSheetName(), false, sal_True))
+                GetScImport().GetTables().GetCurrentSheetName(), sal_False, sal_True))
             {
                  String aFileString(sLink);
                 String aFilterString(sFilterName);
@@ -128,9 +128,9 @@ void ScXMLTableSourceContext::EndElement()
 
                 aFileString = ScGlobal::GetAbsDocName( aFileString, pDoc->GetDocumentShell() );
                 if ( !aFilterString.Len() )
-                    ScDocumentLoader::GetFilterName( aFileString, aFilterString, aOptString, false, false );
+                    ScDocumentLoader::GetFilterName( aFileString, aFilterString, aOptString, FALSE, FALSE );
 
-                sal_uInt8 nLinkMode = SC_LINK_NONE;
+                BYTE nLinkMode = SC_LINK_NONE;
                 if ( nMode == sheet::SheetLinkMode_NORMAL )
                     nLinkMode = SC_LINK_NORMAL;
                 else if ( nMode == sheet::SheetLinkMode_VALUE )
@@ -140,6 +140,7 @@ void ScXMLTableSourceContext::EndElement()
                     nLinkMode, aFileString, aFilterString, aOptString,
                     aSheetString, nRefresh );
             }
+            GetScImport().UnlockSolarMutex();
         }
     }
 }

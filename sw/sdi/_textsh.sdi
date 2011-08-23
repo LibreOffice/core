@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ interface BaseText
         ExecMethod = Execute ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    //#outline level,add by zhaojianwei
+    //#outline level,add by zhaojianwei 
     SID_ATTR_PARA_OUTLINE_LEVEL
     [
         ExecMethod = Execute ;
@@ -180,13 +180,13 @@ interface BaseText
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    FN_INSERT_PAGEHEADER    // status(final|play|rec)
+    FN_INSERT_PAGEHEADER	// status(final|play|rec)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE;
     ]
-    FN_INSERT_PAGEFOOTER    // status(final|play|rec)
+    FN_INSERT_PAGEFOOTER	// status(final|play|rec)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
@@ -320,6 +320,12 @@ interface BaseText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_INSERT_PLUGIN  // status(final|play)
+    [
+        ExecMethod = ExecInsert ;
+        StateMethod = StateInsert ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_INSERT_APPLET  // status(final|play)
     [
         ExecMethod = ExecInsert ;
         StateMethod = StateInsert ;
@@ -464,7 +470,7 @@ interface BaseText
         StateMethod = NoState ;
     ]
      //
-     // Goto - Methoden
+     //	Goto - Methoden
      //
     SID_FM_TOGGLECONTROLFOCUS
     [
@@ -668,7 +674,7 @@ interface BaseText
     ]
 
      //
-     // Get - Properties
+     //	Get - Properties
      //
     FN_AUTOFORMAT_AUTO // status(final|play)
     [
@@ -914,7 +920,7 @@ interface BaseText
         ExecMethod = ExecField ;
         StateMethod = StateField;
     ]
-    FN_DELETE_COMMENT
+    FN_DELETE_NOTE
     [
         ExecMethod = ExecField ;
         StateMethod = StateField;
@@ -1147,17 +1153,17 @@ interface BaseText
     ]
     SID_ATTR_PARA_ADJUST // status(final|play)
     [
-         //          (0=links, 1=rechts, 2=block, 3=zentriert, )"
+         //			 (0=links, 1=rechts, 2=block, 3=zentriert, )"
         ExecMethod = ExecParaAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_PARA_LINESPACE // status(final|play)
     [
-         // SvxLineSpace        LineSpace       MID_LINESPACE;
-         // UINT16              LineHeight      MID_HEIGHT;     // % or direct
-         // SvxInterLineSpace   InterLineSpace  MID_INTER_LINESPACE;
-         // INT16               InterSpace      MID_INTER_SPACE;
+         //	SvxLineSpace		LineSpace		MID_LINESPACE;
+         //	UINT16				LineHeight		MID_HEIGHT; 	// % or direct
+         //	SvxInterLineSpace	InterLineSpace	MID_INTER_LINESPACE;
+         //	INT16				InterSpace		MID_INTER_SPACE;
         ExecMethod = ExecParaAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
@@ -1494,12 +1500,6 @@ interface BaseText
     SID_TRANSLITERATE_TOGGLE_CASE
     [
         ExecMethod = ExecTransliteration;
-        StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-    SID_TRANSLITERATE_ROTATE_CASE
-    [
-        ExecMethod = ExecRotateTransliteration;
         StateMethod = NoState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]

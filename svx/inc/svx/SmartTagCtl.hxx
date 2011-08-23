@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #ifndef _SVX_SMARTTAGSCONTROL_HXX
 #define _SVX_SMARTTAGSCONTROL_HXX
 
@@ -56,9 +56,9 @@ class SVX_DLLPUBLIC SvxSmartTagsControl : public SfxMenuControl
 {
 private:
     PopupMenu*                  mpMenu;
-    Menu&                       mrParent;
+    Menu&			            mrParent;
     const SvxSmartTagItem*      mpSmartTagItem;
-
+    
     struct InvokeAction
     {
         com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > mxAction;
@@ -66,18 +66,18 @@ private:
         sal_uInt32 mnActionID;
         InvokeAction( com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > xAction,
                       com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xSmartTagProperties,
-                      sal_uInt32 nActionID ) : mxAction( xAction ), mxSmartTagProperties( xSmartTagProperties ), mnActionID( nActionID ) {}
+                      sal_uInt32 nActionID ) : mxAction( xAction ), mxSmartTagProperties( xSmartTagProperties ), mnActionID( nActionID ) {}  
     };
 
     std::vector< InvokeAction > maInvokeActions;
 
-    void            FillMenu();
+    void			FillMenu();
     DECL_LINK( MenuSelect, PopupMenu * );
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
+    virtual void	StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
 
 public:
-    SvxSmartTagsControl( sal_uInt16 nId, Menu&, SfxBindings& );
+    SvxSmartTagsControl( USHORT nId, Menu&, SfxBindings& );
     ~SvxSmartTagsControl();
 
     virtual PopupMenu*  GetPopup() const;

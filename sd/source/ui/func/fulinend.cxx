@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,10 +94,10 @@ void FuLineEnd::DoExecute( SfxRequest& )
             if( aInfoRec.bCanConvToPath &&
                 pObj->GetObjInventor() == SdrInventor &&
                 pObj->GetObjIdentifier() != OBJ_GRUP )
-                // bCanConvToPath ist bei Gruppenobjekten sal_True,
+                // bCanConvToPath ist bei Gruppenobjekten TRUE,
                 // stuerzt aber bei ConvertToPathObj() ab !
             {
-                pNewObj = pConvPolyObj = pObj->ConvertToPolyObj( sal_True, sal_False );
+                pNewObj = pConvPolyObj = pObj->ConvertToPolyObj( TRUE, FALSE );
 
                 if( !pNewObj || !pNewObj->ISA( SdrPathObj ) )
                     return; // Abbruch, zusaetzliche Sicherheit, die bei
@@ -120,18 +120,18 @@ void FuLineEnd::DoExecute( SfxRequest& )
 
         long nCount = pLineEndList->Count();
         long j = 1;
-        sal_Bool bDifferent = sal_False;
+        BOOL bDifferent = FALSE;
 
         while( !bDifferent )
         {
             aName = aNewName;
             aName.Append( sal_Unicode(' ') );
             aName.Append( UniString::CreateFromInt32( j++ ) );
-            bDifferent = sal_True;
+            bDifferent = TRUE;
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
                 if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                    bDifferent = sal_False;
+                    bDifferent = FALSE;
             }
         }
 
@@ -145,12 +145,12 @@ void FuLineEnd::DoExecute( SfxRequest& )
             if( pDlg->Execute() == RET_OK )
             {
                 pDlg->GetName( aName );
-                bDifferent = sal_True;
+                bDifferent = TRUE;
 
                 for( long i = 0; i < nCount && bDifferent; i++ )
                 {
                     if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                        bDifferent = sal_False;
+                        bDifferent = FALSE;
                 }
 
                 if( bDifferent )

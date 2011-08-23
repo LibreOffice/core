@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,22 +71,21 @@ using ::com::sun::star::beans::XPropertySetInfo;
 SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> & rCursor )
 {
     Reference<XUnoTunnel> xTunnel( rCursor, UNO_QUERY);
-    OSL_ENSURE(xTunnel.is(), "missing XUnoTunnel for XTextCursor");
-    OTextCursorHelper *const pXCursor =
-        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xTunnel);
-    OSL_ENSURE( pXCursor, "OTextCursorHelper missing" );
-    return (pXCursor) ? pXCursor->GetDoc() : 0;
+    DBG_ASSERT( xTunnel.is(), "missing XUnoTunnel for Cursor" );
+    OTextCursorHelper* pSwXCursor = reinterpret_cast< OTextCursorHelper * >(
+            sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(OTextCursorHelper::getUnoTunnelId())) );
+    DBG_ASSERT( NULL != pSwXCursor, "OTextCursorHelper missing" );
+    return pSwXCursor->GetDoc();
 }
 
 SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> & rRange )
 {
     Reference<XUnoTunnel> xTunnel(rRange, UNO_QUERY);
-    OSL_ENSURE(xTunnel.is(), "missing XUnoTunnel for XTextRange");
-    SwXTextRange *const pXRange =
-        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xTunnel);
-    // #i115174#: this may be a SvxUnoTextRange
-//    OSL_ENSURE( pXRange, "SwXTextRange missing" );
-    return (pXRange) ? pXRange->GetDoc() : 0;
+    DBG_ASSERT(xTunnel.is(), "Can't tunnel XTextRange");
+    SwXTextRange *pRange = reinterpret_cast< SwXTextRange *>(
+            sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(SwXTextRange::getUnoTunnelId())) );
+    DBG_ASSERT( NULL != pRange, "SwXTextRange missing" );
+    return pRange->GetDoc();
 }
 
 
@@ -103,7 +102,7 @@ SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> & rRange )
 class XTextRangeOrNodeIndexPosition
 {
     Reference<XTextRange> xRange;
-    SwNodeIndex* pIndex;    /// pIndex will point to the *previous* node
+    SwNodeIndex* pIndex;	/// pIndex will point to the *previous* node
 
 public:
     XTextRangeOrNodeIndexPosition();
@@ -113,7 +112,7 @@ public:
     void Set( SwNodeIndex& rIndex );
     void SetAsNodeIndex( Reference<XTextRange> & rRange );
 
-    void CopyPositionInto(SwPosition& rPos, SwDoc & rDoc);
+    void CopyPositionInto(SwPosition& rPos);
     SwDoc* GetDoc();
 
     sal_Bool IsValid();
@@ -132,7 +131,7 @@ XTextRangeOrNodeIndexPosition::~XTextRangeOrNodeIndexPosition()
 
 void XTextRangeOrNodeIndexPosition::Set( Reference<XTextRange> & rRange )
 {
-    xRange = rRange->getStart();    // set bookmark
+    xRange = rRange->getStart();	// set bookmark
     if (NULL != pIndex)
     {
         delete pIndex;
@@ -146,7 +145,7 @@ void XTextRangeOrNodeIndexPosition::Set( SwNodeIndex& rIndex )
         delete pIndex;
 
     pIndex = new SwNodeIndex(rIndex);
-    (*pIndex)-- ;   // previous node!!!
+    (*pIndex)-- ;	// previous node!!!
     xRange = NULL;
 }
 
@@ -156,52 +155,45 @@ void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
     // XTextRange -> XTunnel -> SwXTextRange
     SwDoc* pDoc = lcl_GetDocViaTunnel(rRange);
 
-    if (!pDoc)
-    {
-        OSL_TRACE("SetAsNodeIndex: no SwDoc");
-        return;
-    }
-
     // SwXTextRange -> PaM
     SwUnoInternalPaM aPaM(*pDoc);
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     sal_Bool bSuccess =
 #endif
         ::sw::XTextRangeToSwPaM(aPaM, rRange);
-    OSL_ENSURE(bSuccess, "illegal range");
+    DBG_ASSERT(bSuccess, "illegal range");
 
     // PaM -> Index
     Set(aPaM.GetPoint()->nNode);
 }
 
-void
-XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos, SwDoc & rDoc)
+void XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos)
 {
-    OSL_ENSURE(IsValid(), "Can't get Position");
+    DBG_ASSERT(IsValid(), "Can't get Position");
 
     // create PAM from start cursor (if no node index is present)
     if (NULL == pIndex)
     {
-        SwUnoInternalPaM aUnoPaM(rDoc);
-#if OSL_DEBUG_LEVEL > 0
+        SwUnoInternalPaM aUnoPaM(*GetDoc());
+#if OSL_DEBUG_LEVEL > 1
         sal_Bool bSuccess =
 #endif
             ::sw::XTextRangeToSwPaM(aUnoPaM, xRange);
-        OSL_ENSURE(bSuccess, "illegal range");
+        DBG_ASSERT(bSuccess, "illegal range");
 
         rPos = *aUnoPaM.GetPoint();
     }
     else
     {
         rPos.nNode = *pIndex;
-        rPos.nNode++;           // pIndex points to previous index !!!
+        rPos.nNode++;			// pIndex points to previous index !!!
         rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(), 0 );
     }
 }
 
 SwDoc* XTextRangeOrNodeIndexPosition::GetDoc()
 {
-    OSL_ENSURE(IsValid(), "Can't get Doc");
+    DBG_ASSERT(IsValid(), "Can't get Doc");
 
     return (NULL != pIndex) ? pIndex->GetNodes().GetDoc() : lcl_GetDocViaTunnel(xRange);
 }
@@ -226,9 +218,9 @@ public:
     RedlineType_t eType;
 
     // info fields:
-    OUString sAuthor;               /// change author string
-    OUString sComment;              /// change comment string
-    util::DateTime aDateTime;       /// change DateTime
+    OUString sAuthor;				/// change author string
+    OUString sComment;				/// change comment string
+    util::DateTime aDateTime;		/// change DateTime
     sal_Bool bMergeLastParagraph;   /// the SwRedline::IsDelLastPara flag
 
     // each position can may be either empty, an XTextRange, or an SwNodeIndex
@@ -340,7 +332,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
         // and delete the incomplete ones. Finally, delete it.
         if( IsReady(pInfo) )
         {
-            OSL_FAIL("forgotten RedlineInfo; now inserted");
+            DBG_ERROR("forgotten RedlineInfo; now inserted");
             InsertIntoDocument( pInfo );
         }
         else
@@ -349,7 +341,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
             pInfo->bNeedsAdjustment = sal_False;
             if( IsReady(pInfo) )
             {
-                OSL_FAIL("RedlineInfo without adjustment; now inserted");
+                DBG_ERROR("RedlineInfo without adjustment; now inserted");
                 InsertIntoDocument( pInfo );
             }
             else
@@ -358,7 +350,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
                 // (i.e. end without start, or start without
                 // end). This may well be a problem in the file,
                 // rather than the code.
-                OSL_FAIL("incomplete redline (maybe file was corrupt); "
+                DBG_ERROR("incomplete redline (maybe file was corrupt); "
                           "now deleted");
             }
         }
@@ -488,13 +480,6 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
         // get document from old cursor (via tunnel)
         SwDoc* pDoc = lcl_GetDocViaTunnel(xOldCursor);
 
-        if (!pDoc)
-        {
-            OSL_TRACE("XMLRedlineImportHelper::CreateRedlineTextSection: "
-                "no SwDoc => cannot create section.");
-            return 0;
-        }
-
         // create text section for redline
         SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool
             (RES_POOLCOLL_STANDARD, false );
@@ -573,7 +558,7 @@ void XMLRedlineImportHelper::SetCursor(
 }
 
 void XMLRedlineImportHelper::AdjustStartNodeCursor(
-    const OUString& rId,        /// ID used in RedlineAdd() call
+    const OUString& rId,		/// ID used in RedlineAdd() call
     sal_Bool /*bStart*/,
     Reference<XTextRange> & /*rRange*/)
 {
@@ -614,8 +599,8 @@ inline sal_Bool XMLRedlineImportHelper::IsReady(RedlineInfo* pRedline)
 
 void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
 {
-    OSL_ENSURE(NULL != pRedlineInfo, "need redline info");
-    OSL_ENSURE(IsReady(pRedlineInfo), "redline info not complete yet!");
+    DBG_ASSERT(NULL != pRedlineInfo, "need redline info");
+    DBG_ASSERT(IsReady(pRedlineInfo), "redline info not complete yet!");
 
     // this method will modify the document directly -> lock SolarMutex
     SolarMutexGuard aGuard;
@@ -627,18 +612,11 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
     // get the document (from one of the positions)
     SwDoc* pDoc = pRedlineInfo->aAnchorStart.GetDoc();
 
-    if (!pDoc)
-    {
-        OSL_TRACE("XMLRedlineImportHelper::InsertIntoDocument: "
-                "no SwDoc => cannot insert redline.");
-        return;
-    }
-
     // now create the PaM for the redline
     SwPaM aPaM(pDoc->GetNodes().GetEndOfContent());
-    pRedlineInfo->aAnchorStart.CopyPositionInto(*aPaM.GetPoint(), *pDoc);
+    pRedlineInfo->aAnchorStart.CopyPositionInto(*aPaM.GetPoint());
     aPaM.SetMark();
-    pRedlineInfo->aAnchorEnd.CopyPositionInto(*aPaM.GetPoint(), *pDoc);
+    pRedlineInfo->aAnchorEnd.CopyPositionInto(*aPaM.GetPoint());
 
     // collapse PaM if (start == end)
     if (*aPaM.GetPoint() == *aPaM.GetMark())
@@ -648,7 +626,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
 
 
     // cover three cases:
-    // 1) empty redlines (no range, no content)
+    // 1) empty redlines (no range, no content) #100921#
     // 2) check for:
     //    a) bIgnoreRedline (e.g. insert mode)
     //    b) illegal PaM range (CheckNodesRange())
@@ -690,8 +668,8 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         // create redline (using pRedlineData which gets copied in SwRedline())
         SwRedlineData* pRedlineData = ConvertRedline(pRedlineInfo, pDoc);
         SwRedline* pRedline =
-            new SwRedline( pRedlineData, *aPaM.GetPoint(), sal_True,
-                           !pRedlineInfo->bMergeLastParagraph, sal_False );
+            new SwRedline( pRedlineData, *aPaM.GetPoint(), TRUE,
+                           !pRedlineInfo->bMergeLastParagraph, FALSE );
 
         // set mark
         if( aPaM.HasMark() )
@@ -703,13 +681,13 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         // set content node (if necessary)
         if (NULL != pRedlineInfo->pContentIndex)
         {
-            sal_uLong nPoint = aPaM.GetPoint()->nNode.GetIndex();
+            ULONG nPoint = aPaM.GetPoint()->nNode.GetIndex();
             if( nPoint < pRedlineInfo->pContentIndex->GetIndex() ||
                 nPoint > pRedlineInfo->pContentIndex->GetNode().EndOfSectionIndex() )
                 pRedline->SetContentIdx(pRedlineInfo->pContentIndex);
 #if OSL_DEBUG_LEVEL > 1
             else
-                OSL_FAIL( "Recursive change tracking" );
+                OSL_ENSURE( false, "Recursive change tracking" );
 #endif
         }
 
@@ -731,13 +709,13 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
 
     // 2) util::DateTime -> DateTime
     DateTime aDT;
-    aDT.SetYear(    pRedlineInfo->aDateTime.Year );
-    aDT.SetMonth(   pRedlineInfo->aDateTime.Month );
-    aDT.SetDay(     pRedlineInfo->aDateTime.Day );
-    aDT.SetHour(    pRedlineInfo->aDateTime.Hours );
-    aDT.SetMin(     pRedlineInfo->aDateTime.Minutes );
-    aDT.SetSec(     pRedlineInfo->aDateTime.Seconds );
-    aDT.Set100Sec(  pRedlineInfo->aDateTime.HundredthSeconds );
+    aDT.SetYear(	pRedlineInfo->aDateTime.Year );
+    aDT.SetMonth(	pRedlineInfo->aDateTime.Month );
+    aDT.SetDay(		pRedlineInfo->aDateTime.Day );
+    aDT.SetHour(	pRedlineInfo->aDateTime.Hours );
+    aDT.SetMin(		pRedlineInfo->aDateTime.Minutes );
+    aDT.SetSec(		pRedlineInfo->aDateTime.Seconds );
+    aDT.Set100Sec(	pRedlineInfo->aDateTime.HundredthSeconds );
 
     // 3) recursively convert next redline
     //    ( check presence and sanity of hierarchical redline info )
@@ -753,8 +731,8 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
     SwRedlineData* pData = new SwRedlineData(pRedlineInfo->eType,
                                              nAuthorId, aDT,
                                              pRedlineInfo->sComment,
-                                             pNext, // next data (if available)
-                                             NULL); // no extra data
+                                             pNext,	// next data (if available)
+                                             NULL);	// no extra data
 
     return pData;
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,11 +34,15 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+
+// #110680#
+//#include <comphelper/processfactory.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlmetae.hxx>
@@ -51,10 +55,11 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
+// #110680#
 XMLMetaExportComponent::XMLMetaExportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         sal_uInt16 nFlags )
-:   SvXMLExport( xServiceFactory, MAP_INCH, XML_TEXT, nFlags )
+:	SvXMLExport( xServiceFactory, MAP_INCH, XML_TEXT, nFlags )
 {
 }
 
@@ -120,7 +125,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
                 // get filter component
                 xDocHandler = uno::Reference< xml::sax::XDocumentHandler >(
                     xFactory->createInstanceWithArguments(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Oasis2OOoTransformer")),
+                        ::rtl::OUString::createFromAscii("com.sun.star.comp.Oasis2OOoTransformer"),
                         aArgs),
                     uno::UNO_QUERY_THROW );
 
@@ -128,7 +133,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
             }
             catch( com::sun::star::uno::Exception& )
             {
-                OSL_FAIL( "Cannot instantiate com.sun.star.comp.Oasis2OOoTransformer!\n");
+                OSL_ENSURE( sal_False, "Cannot instantiate com.sun.star.comp.Oasis2OOoTransformer!\n");
             }
         }
     }
@@ -154,7 +159,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
         case SvtSaveOptions::ODFVER_010: break;
 
         default:
-            OSL_FAIL("xmloff::XMLMetaExportComponent::exportDoc(), unexpected odf default version!");
+            DBG_ERROR("xmloff::XMLMetaExportComponent::exportDoc(), unexpected odf default version!");
         }
 
         if( pVersion )
@@ -209,6 +214,8 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
+    // #110680#
+    // return (cppu::OWeakObject*)new XMLMetaExportComponent;
     return (cppu::OWeakObject*)new XMLMetaExportComponent(rSMgr, EXPORT_META|EXPORT_OASIS);
 }
 
@@ -230,6 +237,8 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportOOO_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
+    // #110680#
+    // return (cppu::OWeakObject*)new XMLMetaExportComponent;
     return (cppu::OWeakObject*)new XMLMetaExportComponent(rSMgr, EXPORT_META);
 }
 

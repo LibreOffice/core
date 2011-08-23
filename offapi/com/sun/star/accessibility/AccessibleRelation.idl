@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,15 +27,15 @@
 #ifndef __com_sun_star_accessibility_AccessibleRelation_idl__
 #define __com_sun_star_accessibility_AccessibleRelation_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 
 module com { module sun { module star { module accessibility {
 
 /** An <type>AccessibleRelation</type> object defines a one-to-many
     relation.
-
+    
     <p>The represented relation points from the implementing object to a set
     of target objects.</p>
 
@@ -44,25 +44,25 @@ module com { module sun { module star { module accessibility {
 published struct AccessibleRelation
 {
     /** Type of the relation.
-
+        
         <p>Its value has to be one of the constants defined by
         <type>AccessibleRelationType</type>.  If that value is INVALID then
         the whole relation is regarded as invalid.  The content of the
-        TargetSet is then undefined.</p>
-
+        targetSet is then undefined.</p>
+            
         @see AccessibleRelationType
     */
     short RelationType;
-
+    
     /** Set of objects that are the relation's targets.
-
+        
         <p>The content of this set is undefined if the relation's type is
         INVALID.  The set must not contain references to one object more
         than once.</p>
     */
     sequence< ::com::sun::star::uno::XInterface> TargetSet;
 };
-
+          
 }; }; }; };
 
 #endif

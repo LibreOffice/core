@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,6 @@ ModalDialog RID_DLG_MANAGE_LANGUAGE
     };
     ListBox LB_LANGUAGE
     {
-        HelpID = "basctl:ListBox:RID_DLG_MANAGE_LANGUAGE:LB_LANGUAGE";
         Pos = MAP_APPFONT ( MANAGE_COL1 , MANAGE_ROW2 ) ;
         Size = MAP_APPFONT ( MANAGE_LB_WIDTH , MANAGE_LB_HEIGHT ) ;
         Border = TRUE;
@@ -53,7 +52,6 @@ ModalDialog RID_DLG_MANAGE_LANGUAGE
     };
     PushButton PB_ADD_LANG
     {
-        HelpID = "basctl:PushButton:RID_DLG_MANAGE_LANGUAGE:PB_ADD_LANG";
         Pos = MAP_APPFONT ( MANAGE_COL3 , MANAGE_ROW2 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
@@ -61,7 +59,6 @@ ModalDialog RID_DLG_MANAGE_LANGUAGE
     };
     PushButton PB_DEL_LANG
     {
-        HelpID = "basctl:PushButton:RID_DLG_MANAGE_LANGUAGE:PB_DEL_LANG";
         Pos = MAP_APPFONT ( MANAGE_COL3 , MANAGE_ROW3 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
@@ -69,7 +66,6 @@ ModalDialog RID_DLG_MANAGE_LANGUAGE
     };
     PushButton PB_MAKE_DEFAULT
     {
-        HelpID = "basctl:PushButton:RID_DLG_MANAGE_LANGUAGE:PB_MAKE_DEFAULT";
         Pos = MAP_APPFONT ( MANAGE_COL3 , MANAGE_ROW4 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
@@ -139,7 +135,6 @@ ModalDialog RID_DLG_SETDEF_LANGUAGE
     };
     ListBox LB_DEF_LANGUAGE
     {
-        HelpID = "basctl:ListBox:RID_DLG_SETDEF_LANGUAGE:LB_DEF_LANGUAGE";
         Pos = MAP_APPFONT ( SETDEF_COL1 , SETDEF_ROW2 ) ;
         Size = MAP_APPFONT ( SETDEF_LB_WIDTH , SETDEF_LB_HEIGHT ) ;
         Border = TRUE;

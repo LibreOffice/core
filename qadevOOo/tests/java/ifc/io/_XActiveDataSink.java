@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ public class _XActiveDataSink extends MultiMethodTest {
 
     /**
     * Just sets new input stream. <p>
-    * Has <b>OK</b> status if no runtime exceptions occurred.
+    * Has <b>OK</b> status if no runtime exceptions occured.
     */
     public void _setInputStream() {
         oObj.setInputStream(iStream) ;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,20 +55,20 @@ class IPolyPolygonEditorController
 {
 public:
     virtual void DeleteMarkedPoints() = 0;
-    virtual sal_Bool IsDeleteMarkedPointsPossible() const = 0;
+    virtual BOOL IsDeleteMarkedPointsPossible() const = 0;
 
-    virtual void RipUpAtMarkedPoints() = 0;
+    virtual	void RipUpAtMarkedPoints() = 0;
     virtual bool IsRipUpAtMarkedPointsPossible() const = 0;
 
-    virtual sal_Bool IsSetMarkedSegmentsKindPossible() const = 0;
+    virtual BOOL IsSetMarkedSegmentsKindPossible() const = 0;
     virtual SdrPathSegmentKind GetMarkedSegmentsKind() const = 0;
     virtual void SetMarkedSegmentsKind(SdrPathSegmentKind eKind) = 0;
 
-    virtual sal_Bool IsSetMarkedPointsSmoothPossible() const = 0;
+    virtual BOOL IsSetMarkedPointsSmoothPossible() const = 0;
     virtual SdrPathSmoothKind GetMarkedPointsSmooth() const = 0;
     virtual void SetMarkedPointsSmooth(SdrPathSmoothKind eKind) = 0;
-
-    virtual void CloseMarkedObjects(sal_Bool bToggle, sal_Bool bOpen ) = 0;
+        
+    virtual void CloseMarkedObjects(BOOL bToggle, BOOL bOpen ) = 0;
     virtual bool IsOpenCloseMarkedObjectsPossible() const = 0;
     virtual SdrObjClosedKind GetMarkedObjectsClosedState() const = 0;
 };

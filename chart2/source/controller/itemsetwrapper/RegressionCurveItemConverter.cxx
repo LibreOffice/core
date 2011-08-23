@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,7 +112,7 @@ bool RegressionCurveItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const sal_uInt16 * RegressionCurveItemConverter::GetWhichPairs() const
+const USHORT * RegressionCurveItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nRegressionCurveWhichPairs;
@@ -127,7 +127,7 @@ bool RegressionCurveItemConverter::GetItemProperty(
 
 
 bool RegressionCurveItemConverter::ApplySpecialItem(
-    sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
+    USHORT nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     uno::Reference< chart2::XRegressionCurve > xCurve( GetPropertySet(), uno::UNO_QUERY );
@@ -172,7 +172,7 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
             OSL_ASSERT( xCurve.is());
             if( xCurve.is())
             {
-                bool bNewShow = static_cast< sal_Bool >(
+                bool bNewShow = static_cast< BOOL >(
                     static_cast< const SfxBoolItem & >(
                         rItemSet.Get( nWhichId )).GetValue());
 
@@ -195,7 +195,7 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
             OSL_ASSERT( xCurve.is());
             if( xCurve.is())
             {
-                bool bNewShow = static_cast< sal_Bool >(
+                bool bNewShow = static_cast< BOOL >(
                     static_cast< const SfxBoolItem & >(
                         rItemSet.Get( nWhichId )).GetValue());
 
@@ -218,7 +218,7 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
 }
 
 void RegressionCurveItemConverter::FillSpecialItem(
-    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
+    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     uno::Reference< chart2::XRegressionCurve > xCurve( GetPropertySet(), uno::UNO_QUERY );

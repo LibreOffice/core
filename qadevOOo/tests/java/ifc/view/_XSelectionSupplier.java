@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,26 +56,26 @@ import lib.StatusException;
  * @see com.sun.star.view.XSelectionSupplier
  */
 public class _XSelectionSupplier extends MultiMethodTest {
-
+    
     public XSelectionSupplier oObj = null;
     public boolean selectionChanged = false;
     Object[] selections = null;
     Comparator ObjCompare = null;
-
+    
     protected void before() {
         selections = (Object[])tEnv.getObjRelation("Selections");
         if (selections == null) {
             throw new StatusException(Status.failed(
                     "Couldn't get relation 'Selections'"));
         }
-
-        ObjCompare = (Comparator)tEnv.getObjRelation("Comparer");
+        
+        ObjCompare = (Comparator)tEnv.getObjRelation("Comparer");        
     }
-
+    
     protected void after() {
         disposeEnvironment();
     }
-
+    
     /**
      * Listener implementation which just set flag when listener
      * method is called.
@@ -86,11 +86,11 @@ public class _XSelectionSupplier extends MultiMethodTest {
             log.println("listener called");
             selectionChanged = true;
         }
-
+        
     }
-
+    
     XSelectionChangeListener listener = new MyChangeListener();
-
+    
     /**
      * Test adds listener to the object, then selects first and
      * then second instances to be sure that selection was changed.<p>
@@ -105,13 +105,13 @@ public class _XSelectionSupplier extends MultiMethodTest {
             oObj.select(selections[1]);
             res = selectionChanged;
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occurred during addSelectionChangeListener()");
+            log.println("Exception occured during addSelectionChangeListener()");
             ex.printStackTrace(log);
             res = false;
         }
         tRes.tested("addSelectionChangeListener()", res);
     }
-
+    
     /**
      * Selects an instance from relation 'First'. <p>
      * Has <b> OK </b> status if no exceptions were thrown. <p>
@@ -127,8 +127,8 @@ public class _XSelectionSupplier extends MultiMethodTest {
                 locRes = oObj.select(selections[i]);
                 log.println("select #" + i + ": " + locRes);
                 Object curSelection = oObj.getSelection();
-                if (locRes) {
-
+                if (locRes) {                    
+                    
                     if (ObjCompare != null) {
                         ObjCompare.compare(selections[i], curSelection);
                     } else {
@@ -151,14 +151,14 @@ public class _XSelectionSupplier extends MultiMethodTest {
                 }
             }
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occurred during select()");
+            log.println("Exception occured during select()");
             ex.printStackTrace(log);
             res = false;
         }
-
+        
         tRes.tested("select()", res);
     }
-
+    
     /**
      * Test removes listener, then selects first and
      * then second instances to be sure that selection was changed.<p>
@@ -179,13 +179,13 @@ public class _XSelectionSupplier extends MultiMethodTest {
             oObj.select(selections[1]);
             res = !selectionChanged;
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occurred during removeSelectionChangeListener()");
+            log.println("Exception occured during removeSelectionChangeListener()");
             ex.printStackTrace(log);
             res = false;
         }
         tRes.tested("removeSelectionChangeListener()", res);
     }
-
+    
     /**
      * First test changes selection of the object : if nothing is
      * currently selected or first instance ('First' relation) is
@@ -200,8 +200,8 @@ public class _XSelectionSupplier extends MultiMethodTest {
     public void _getSelection() {
         requiredMethod("select()");
         tRes.tested("getSelection()", true);
-    }
-
+    }    
+    
 }  // finish class _XSelectionSupplier
 
 

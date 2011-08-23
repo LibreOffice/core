@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,27 +39,27 @@
 
 class SVGFontExport
 {
-    typedef ::boost::unordered_map< ::rtl::OUString, ::std::set< sal_Unicode >, ::comphelper::UStringHash > GlyphMap;
+    typedef ::std::hash_map< ::rtl::OUString, ::std::set< sal_Unicode >, ::comphelper::UStringHash > GlyphMap;
     typedef ::std::vector< ObjectRepresentation > ObjectVector;
 
 private:
 
-    SvXMLExport&        mrExport;
-    GlyphMap            maGlyphs;
-    ObjectVector        maObjects;
-    sal_uInt32          mnCurFontId;
-
-    void                implCollectGlyphs();
-    void                implEmbedFont( const ::rtl::OUString& rFontName, const ::std::set< sal_Unicode >& rGlyphs );
-    void                implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& rGlyphs );
-
-public:
-
+    SvXMLExport&		mrExport; 
+    GlyphMap			maGlyphs;
+    ObjectVector		maObjects;
+    sal_uInt32			mnCurFontId;
+                        
+    void				implCollectGlyphs();
+    void				implEmbedFont( const ::rtl::OUString& rFontName, const ::std::set< sal_Unicode >& rGlyphs );
+    void				implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& rGlyphs );
+                        
+public:					
+                        
                         SVGFontExport( SvXMLExport& rExport, const ::std::vector< ObjectRepresentation >& rObjects );
                         ~SVGFontExport();
-
-    void                EmbedFonts();
-    ::rtl::OUString     GetMappedFontName( const ::rtl::OUString& rFontName ) const;
+                        
+    void				EmbedFonts();
+    ::rtl::OUString		GetMappedFontName( const ::rtl::OUString& rFontName ) const;
 };
 
 #endif

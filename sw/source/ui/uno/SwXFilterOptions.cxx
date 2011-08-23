@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ void   SwXFilterOptions::setPropertyValues( const uno::Sequence<beans::PropertyV
             rProp.Value >>= sFilterName;
         else if ( aPropName == ::rtl::OUString(FILTER_OPTIONS_NAME) )
             rProp.Value >>= sFilterOptions;
-        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
+        else if ( aPropName.equalsAscii( "InputStream" ) )
             rProp.Value >>= xInputStream;
     }
 }

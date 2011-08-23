@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,26 +55,16 @@
 //----------------------------------------------------------------------------
 
 ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
-                                  ScDocument&   rDocument,
+                                  ScDocument&	rDocument,
                                   FillDir       eFillDir,
                                   FillCmd       eFillCmd,
                                   FillDateCmd   eFillDateCmd,
-                                  String        aStartStr,
-                                  double        fStep,
-                                  double        fMax,
-                                  sal_uInt16        nPossDir )
+                                  String		aStartStr,
+                                  double		fStep,
+                                  double		fMax,
+                                  USHORT		nPossDir )
 
-    :   ModalDialog     ( pParent, ScResId( RID_SCDLG_FILLSERIES ) ),
-
-        aFtStartVal     ( this, ScResId( FT_START_VALUE ) ),
-        aEdStartVal     ( this, ScResId( ED_START_VALUES ) ),
-        aStartStrVal    ( aStartStr),
-
-        aFtEndVal       ( this, ScResId( FT_END_VALUE ) ),
-        aEdEndVal       ( this, ScResId( ED_END_VALUES ) ),
-
-        aFtIncrement    ( this, ScResId( FT_INCREMENT ) ),
-        aEdIncrement    ( this, ScResId( ED_INCREMENT ) ),
+    :	ModalDialog     ( pParent, ScResId( RID_SCDLG_FILLSERIES ) ),
 
         aFlDirection    ( this, ScResId( FL_DIRECTION ) ),
         aBtnDown        ( this, ScResId( BTN_BOTTOM ) ),
@@ -94,11 +84,19 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
         aBtnMonth       ( this, ScResId( BTN_MONTH ) ),
         aBtnYear        ( this, ScResId( BTN_YEAR ) ),
 
+        aFtStartVal     ( this, ScResId( FT_START_VALUE ) ),
+        aEdStartVal     ( this, ScResId( ED_START_VALUES ) ),
+        aStartStrVal	( aStartStr),
+        aFtEndVal       ( this, ScResId( FT_END_VALUE ) ),
+        aEdEndVal       ( this, ScResId( ED_END_VALUES ) ),
+        aFtIncrement    ( this, ScResId( FT_INCREMENT ) ),
+        aEdIncrement    ( this, ScResId( ED_INCREMENT ) ),
+
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
         errMsgInvalidVal( ScResId( STR_VALERR ) ),
-        rDoc            ( rDocument ),
+        rDoc			( rDocument ),
         theFillDir      ( eFillDir ),
         theFillCmd      ( eFillCmd ),
         theFillDateCmd  ( eFillDateCmd ),
@@ -112,13 +110,13 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
 
 //----------------------------------------------------------------------------
 
-ScFillSeriesDlg::~ScFillSeriesDlg()
+__EXPORT ScFillSeriesDlg::~ScFillSeriesDlg()
 {
 }
 
 //----------------------------------------------------------------------------
 
-void ScFillSeriesDlg::SetEdStartValEnabled(sal_Bool bFlag)
+void ScFillSeriesDlg::SetEdStartValEnabled(BOOL bFlag)
 {
     bStartValFlag=bFlag;
     if(bFlag)
@@ -135,7 +133,7 @@ void ScFillSeriesDlg::SetEdStartValEnabled(sal_Bool bFlag)
 
 //----------------------------------------------------------------------------
 
-void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
+void ScFillSeriesDlg::Init( USHORT nPossDir )
 {
     aBtnOk.SetClickHdl         ( LINK( this, ScFillSeriesDlg, OKHdl ) );
     aBtnArithmetic.SetClickHdl ( LINK( this, ScFillSeriesDlg, DisableHdl ) );
@@ -224,7 +222,7 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
         rDoc.GetFormatTable()->GetInputLineString( fEndVal, 0, aEndTxt );
     aEdEndVal.SetText( aEndTxt );
 
-    bStartValFlag=false;
+    bStartValFlag=FALSE;
 
     aFlSep1.SetStyle( aFlSep1.GetStyle() | WB_VERT );
     aFlSep2.SetStyle( aFlSep2.GetStyle() | WB_VERT );
@@ -233,28 +231,27 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScFillSeriesDlg::CheckStartVal()
+BOOL __EXPORT ScFillSeriesDlg::CheckStartVal()
 {
-    sal_Bool bValOk = false;
+    BOOL bValOk = FALSE;
+    sal_uInt32 nKey = 0;
     String aStr( aEdStartVal.GetText() );
 
     if ( aStr.Len() == 0 || aBtnAutoFill.IsChecked())
     {
         fStartVal = MAXDOUBLE;
-        bValOk = sal_True;
+        bValOk = TRUE;
     }
     else
-    {
-        sal_uInt32 nKey = 0;
         bValOk = rDoc.GetFormatTable()->IsNumberFormat( aStr, nKey, fStartVal );
-    }
+
     return bValOk;
 }
 
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScFillSeriesDlg::CheckIncrementVal()
+BOOL __EXPORT ScFillSeriesDlg::CheckIncrementVal()
 {
     sal_uInt32 nKey = 0;
     String aStr( aEdIncrement.GetText() );
@@ -265,21 +262,20 @@ sal_Bool ScFillSeriesDlg::CheckIncrementVal()
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScFillSeriesDlg::CheckEndVal()
+BOOL __EXPORT ScFillSeriesDlg::CheckEndVal()
 {
-    sal_Bool    bValOk = false;
-    String  aStr( aEdEndVal.GetText() );
+    BOOL	bValOk = FALSE;
+    sal_uInt32 nKey = 0;
+    String	aStr( aEdEndVal.GetText() );
 
     if ( aStr.Len() == 0 )
     {
         fEndVal = (fIncrement < 0) ? -MAXDOUBLE : MAXDOUBLE;
-        bValOk  = sal_True;
+        bValOk  = TRUE;
     }
     else
-    {
-        sal_uInt32 nKey = 0;
         bValOk = rDoc.GetFormatTable()->IsNumberFormat( aStr, nKey, fEndVal );
-    }
+
     return bValOk;
 }
 
@@ -344,21 +340,21 @@ IMPL_LINK( ScFillSeriesDlg, OKHdl, void *, EMPTYARG )
     else if ( aBtnMonth.IsChecked() )       theFillDateCmd = FILL_MONTH;
     else if ( aBtnYear.IsChecked() )        theFillDateCmd = FILL_YEAR;
 
-    sal_Bool  bAllOk = sal_True;
+    BOOL  bAllOk = TRUE;
     Edit* pEdWrong = NULL;
     if ( !CheckStartVal() )
     {
-        bAllOk = false;
+        bAllOk = FALSE;
         pEdWrong = &aEdStartVal;
     }
     else if ( !CheckIncrementVal() )
     {
-        bAllOk = false;
+        bAllOk = FALSE;
         pEdWrong = &aEdIncrement;
     }
     else if ( !CheckEndVal() )
     {
-        bAllOk = false;
+        bAllOk = FALSE;
         pEdWrong = &aEdEndVal;
     }
     if ( bAllOk )

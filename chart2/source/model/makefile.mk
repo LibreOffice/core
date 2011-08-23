@@ -79,8 +79,7 @@ SHL1STDLIBS=	$(CHARTTOOLS) 		\
                 $(SVLLIB)			\
                 $(SVTOOLLIB)		\
                 $(SALLIB)			\
-                $(UCBHELPERLIB)     \
-                $(FWELIB)           \
+                $(UCBHELPERLIB)
 
 #--------exports
 
@@ -99,11 +98,3 @@ DEF1NAME=		$(SHL1TARGET)
 # --- Targets -----------------------------------------------------------------
 
 .INCLUDE: target.mk
-
-ALLTAR : $(MISC)/chartmodel.component
-
-$(MISC)/chartmodel.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        chartmodel.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt chartmodel.component

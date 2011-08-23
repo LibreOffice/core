@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,38 +27,29 @@
  ************************************************************************/
 
 #include "oox/core/fasttokenhandler.hxx"
-
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include "oox/helper/helper.hxx"
+#include <osl/mutex.hxx>
 #include "oox/token/tokenmap.hxx"
+
+using ::rtl::OUString;
+using ::osl::Mutex;
+using ::osl::MutexGuard;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::RuntimeException;
 
 namespace oox {
 namespace core {
 
 // ============================================================================
 
-using namespace ::com::sun::star::uno;
+namespace {
 
-using ::rtl::OUString;
-
-// ============================================================================
-
-OUString SAL_CALL FastTokenHandler_getImplementationName()
+Mutex& lclGetTokenMutex()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.core.FastTokenHandler" );
+    static Mutex aMutex;
+    return aMutex;
 }
 
-Sequence< OUString > SAL_CALL FastTokenHandler_getSupportedServiceNames()
-{
-    Sequence< OUString > aServiceNames( 1 );
-    aServiceNames[ 0 ] = CREATE_OUSTRING( "com.sun.star.xml.sax.FastTokenHandler" );
-    return aServiceNames;
-}
-
-Reference< XInterface > SAL_CALL FastTokenHandler_createInstance( const Reference< XComponentContext >& /*rxContext*/ ) throw (Exception)
-{
-    return static_cast< ::cppu::OWeakObject* >( new FastTokenHandler );
-}
+} // namespace
 
 // ============================================================================
 
@@ -71,46 +62,27 @@ FastTokenHandler::~FastTokenHandler()
 {
 }
 
-// XServiceInfo
-
-OUString SAL_CALL FastTokenHandler::getImplementationName() throw (RuntimeException)
-{
-    return FastTokenHandler_getImplementationName();
-}
-
-sal_Bool SAL_CALL FastTokenHandler::supportsService( const OUString& rServiceName ) throw (RuntimeException)
-{
-    Sequence< OUString > aServiceNames = FastTokenHandler_getSupportedServiceNames();
-    for( sal_Int32 nIndex = 0, nLength = aServiceNames.getLength(); nIndex < nLength; ++nIndex )
-        if( aServiceNames[ nIndex ] == rServiceName )
-            return sal_True;
-    return sal_False;
-}
-
-Sequence< OUString > SAL_CALL FastTokenHandler::getSupportedServiceNames() throw (RuntimeException)
-{
-    return FastTokenHandler_getSupportedServiceNames();
-}
-
-// XFastTokenHandler
-
 sal_Int32 FastTokenHandler::getToken( const OUString& rIdentifier ) throw( RuntimeException )
 {
+    MutexGuard aGuard( lclGetTokenMutex() );
     return mrTokenMap.getTokenFromUnicode( rIdentifier );
 }
 
 OUString FastTokenHandler::getIdentifier( sal_Int32 nToken ) throw( RuntimeException )
 {
+    MutexGuard aGuard( lclGetTokenMutex() );
     return mrTokenMap.getUnicodeTokenName( nToken );
 }
 
 Sequence< sal_Int8 > FastTokenHandler::getUTF8Identifier( sal_Int32 nToken ) throw( RuntimeException )
 {
+    MutexGuard aGuard( lclGetTokenMutex() );
     return mrTokenMap.getUtf8TokenName( nToken );
 }
 
 sal_Int32 FastTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& rIdentifier ) throw( RuntimeException )
 {
+    MutexGuard aGuard( lclGetTokenMutex() );
     return mrTokenMap.getTokenFromUtf8( rIdentifier );
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 struct ScUnoAddInHelpId
 {
     const sal_Char*             pFuncName;
-    const sal_Char*             sHelpId;
+    sal_uInt16                  nHelpId;
 };
 
 
@@ -171,12 +171,12 @@ void ScUnoAddInHelpIdGenerator::SetServiceName( const ::rtl::OUString& rServiceN
     pCurrHelpIds = NULL;
     sal_uInt32 nSize = 0;
 
-    if( rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.addin.Analysis" ) ) )
+    if( rServiceName.equalsAscii( "com.sun.star.sheet.addin.Analysis" ) )
     {
         pCurrHelpIds = pAnalysisHelpIds;
         nSize = sizeof( pAnalysisHelpIds );
     }
-    else if( rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.addin.DateFunctions" ) ) )
+    else if( rServiceName.equalsAscii( "com.sun.star.sheet.addin.DateFunctions" ) )
     {
         pCurrHelpIds = pDateFuncHelpIds;
         nSize = sizeof( pDateFuncHelpIds );
@@ -185,10 +185,10 @@ void ScUnoAddInHelpIdGenerator::SetServiceName( const ::rtl::OUString& rServiceN
     nArrayCount = nSize / sizeof( ScUnoAddInHelpId );
 }
 
-rtl::OString ScUnoAddInHelpIdGenerator::GetHelpId( const ::rtl::OUString& rFuncName ) const
+sal_uInt16 ScUnoAddInHelpIdGenerator::GetHelpId( const ::rtl::OUString& rFuncName ) const
 {
     if( !pCurrHelpIds || !nArrayCount )
-        return rtl::OString();
+        return 0;
 
     const ScUnoAddInHelpId* pFirst = pCurrHelpIds;
     const ScUnoAddInHelpId* pLast = pCurrHelpIds + nArrayCount - 1;
@@ -198,14 +198,14 @@ rtl::OString ScUnoAddInHelpIdGenerator::GetHelpId( const ::rtl::OUString& rFuncN
         const ScUnoAddInHelpId* pMiddle = pFirst + (pLast - pFirst) / 2;
         sal_Int32 nResult = rFuncName.compareToAscii( pMiddle->pFuncName );
         if( !nResult )
-            return pMiddle->sHelpId;
+            return pMiddle->nHelpId;
         else if( nResult < 0 )
             pLast = pMiddle - 1;
         else
             pFirst = pMiddle + 1;
     }
 
-    return rtl::OString();
+    return 0;
 }
 
 

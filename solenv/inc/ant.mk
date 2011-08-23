@@ -65,13 +65,13 @@ $(CLASSDIR)/solar.properties : $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/minor
     @cat $(DMAKEROOT)/../ant.properties >> $@
 
 ANTBUILD .PHONY:
-    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS)
+    $(ANT) $(ANT_FLAGS)
 
 clean  .PHONY:
-    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS) $@
+    $(ANT) $(ANT_FLAGS) $@
 
 prepare .PHONY:
-    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS) $@
+    $(ANT) $(ANT_FLAGS) $@
 
 main: .PHONY:
     $(ANT) $(ANT_FLAGS) $@
@@ -80,19 +80,21 @@ info: .PHONY
     $(ANT) $(ANT_FLAGS) $@
 
 jar .PHONY:
-    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS) $@
+    $(ANT) $(ANT_FLAGS) $@
 
 compile .PHONY:
-    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS) $@
+    $(ANT) $(ANT_FLAGS) $@
 
 depend .PHONY:
-    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS) $@
+    $(ANT) $(ANT_FLAGS) $@
 
 javadoc .PHONY:
-    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS) $@
+    $(ANT) $(ANT_FLAGS) $@
 
 config .PHONY:
-    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS) $@
+    $(ANT) $(ANT_FLAGS) $@
 
 test .PHONY:
-    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS) $@
+    $(ANT) $(ANT_FLAGS) $@
+
+

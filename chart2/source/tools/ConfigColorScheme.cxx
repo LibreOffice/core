@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,6 @@
 #include "macros.hxx"
 
 #include <unotools/configitem.hxx>
-#include <sal/macros.h>
 
 #include <set>
 
@@ -176,7 +175,7 @@ void ConfigColorScheme::retrieveConfigColors()
         0xff00ff, 0x00ffff, 0xffff00
     };
 
-    static const sal_Int32 nMaxDefaultColors = SAL_N_ELEMENTS( nDefaultColors );
+    static const sal_Int32 nMaxDefaultColors = sizeof( nDefaultColors ) / sizeof( sal_Int32 );
     return nDefaultColors[ nIndex % nMaxDefaultColors ];
 }
 

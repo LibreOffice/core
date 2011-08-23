@@ -58,41 +58,41 @@ class Listener_Impl
 public:
     SMART_UNO_DECLARATION( Listener_Impl, UsrObject );
 
-    virtual BOOL        queryInterface( Uik aUik, XInterfaceRef& rOut );
+    virtual BOOL		queryInterface( Uik aUik, XInterfaceRef& rOut );
 
     // XMouseListener
-    virtual void        mousePressed( const VclMouseEvent& evt );
-    virtual void        mouseReleased( const VclMouseEvent& evt );
-    virtual void        mouseEntered( const VclMouseEvent& evt );
-    virtual void        mouseExited( const VclMouseEvent& evt );
+    virtual void		mousePressed( const VclMouseEvent& evt );
+    virtual void		mouseReleased( const VclMouseEvent& evt );
+    virtual void		mouseEntered( const VclMouseEvent& evt );
+    virtual void		mouseExited( const VclMouseEvent& evt );
 
     // XMouseMotionListener
-    virtual void        mouseDragged( const VclMouseEvent& evt );
-    virtual void        mouseMoved( const VclMouseEvent& evt );
+    virtual void		mouseDragged( const VclMouseEvent& evt );
+    virtual void		mouseMoved( const VclMouseEvent& evt );
 
     // XKeyListener
-    virtual void        keyPressed( const VclKeyEvent& evt );
-    virtual void        keyReleased( const VclKeyEvent& evt );
+    virtual void		keyPressed( const VclKeyEvent& evt );
+    virtual void		keyReleased( const VclKeyEvent& evt );
 
     // XFocusListener
-    virtual void        focusGained( const FocusEvent& evt );
-    virtual void        focusLost( const FocusEvent& evt );
+    virtual void		focusGained( const FocusEvent& evt );
+    virtual void		focusLost( const FocusEvent& evt );
 
     // XWindowListener
-    virtual void        windowResized( const WindowEvent& evt );
-    virtual void        windowMoved( const WindowEvent& evt );
-    virtual void        windowShown( const EventObject& evt );
-    virtual void        windowHidden( const EventObject& evt );
+    virtual void		windowResized( const WindowEvent& evt );
+    virtual void		windowMoved( const WindowEvent& evt );
+    virtual void		windowShown( const EventObject& evt );
+    virtual void		windowHidden( const EventObject& evt );
 
     // XPaintListener
-    virtual void        windowPaint( const PaintEvent& evt );
+    virtual void		windowPaint( const PaintEvent& evt );
 
     // XEventListener
-    virtual void        disposing( const EventObject& evt );
+    virtual void		disposing( const EventObject& evt );
 
 public:
-    void                addAllListeners( const XControlRef& xControl );
-    void                removeAllListeners( const XControlRef& xControl );
+    void				addAllListeners( const XControlRef& xControl );
+    void				removeAllListeners( const XControlRef& xControl );
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -153,28 +153,28 @@ BOOL Listener_Impl::queryInterface( Uik aUik, XInterfaceRef& rOut )
 
 //--------------------------------------------------------------------------------------------------
 // XMouseListener
-void Listener_Impl::mousePressed( const VclMouseEvent& evt )    {}
-void Listener_Impl::mouseReleased( const VclMouseEvent& evt )   {}
-void Listener_Impl::mouseEntered( const VclMouseEvent& evt )    {}
-void Listener_Impl::mouseExited( const VclMouseEvent& evt )     {}
+void Listener_Impl::mousePressed( const VclMouseEvent& evt )	{}
+void Listener_Impl::mouseReleased( const VclMouseEvent& evt )	{}
+void Listener_Impl::mouseEntered( const VclMouseEvent& evt )	{}
+void Listener_Impl::mouseExited( const VclMouseEvent& evt )		{}
 
 // XMouseMotionListener
-void Listener_Impl::mouseDragged( const VclMouseEvent& evt )    {}
-void Listener_Impl::mouseMoved( const VclMouseEvent& evt )      {}
+void Listener_Impl::mouseDragged( const VclMouseEvent& evt )	{}
+void Listener_Impl::mouseMoved( const VclMouseEvent& evt )		{}
 
 // XKeyListener
-void Listener_Impl::keyPressed( const VclKeyEvent& evt )        {}
-void Listener_Impl::keyReleased( const VclKeyEvent& evt )       {}
+void Listener_Impl::keyPressed( const VclKeyEvent& evt )		{}
+void Listener_Impl::keyReleased( const VclKeyEvent& evt )		{}
 
 // XFocusListener
-void Listener_Impl::focusGained( const FocusEvent& evt )        {}
-void Listener_Impl::focusLost( const FocusEvent& evt )          {}
+void Listener_Impl::focusGained( const FocusEvent& evt )		{}
+void Listener_Impl::focusLost( const FocusEvent& evt )			{}
 
 // XWindowListener
-void Listener_Impl::windowResized( const WindowEvent& evt )     {}
-void Listener_Impl::windowMoved( const WindowEvent& evt )       {}
-void Listener_Impl::windowShown( const EventObject& evt )       {}
-void Listener_Impl::windowHidden( const EventObject& evt )      {}
+void Listener_Impl::windowResized( const WindowEvent& evt )		{}
+void Listener_Impl::windowMoved( const WindowEvent& evt )		{}
+void Listener_Impl::windowShown( const EventObject& evt )		{}
+void Listener_Impl::windowHidden( const EventObject& evt )		{}
 
 // XPaintListener
 void Listener_Impl::windowPaint( const PaintEvent& evt )
@@ -193,7 +193,7 @@ void Listener_Impl::windowPaint( const PaintEvent& evt )
 }
 
 // XEventListener
-void Listener_Impl::disposing( const EventObject& evt )     {}
+void Listener_Impl::disposing( const EventObject& evt )		{}
 
 
 //==================================================================================================
@@ -205,17 +205,17 @@ public:
     virtual void        ShowStatusText( const XubString& rText );
 
 public:
-                        FrameControlApplication()       {}
+                        FrameControlApplication()		{}
 
 private:
-    void                init();
-    void                deinit();
+    void				init();
+    void				deinit();
 
 private:
-    Listener_Impl*      _pListener;
-    XControlRef         _xControl;
+    Listener_Impl*		_pListener;
+    XControlRef			_xControl;
 
-    WorkWindow*         _pWorkWin;
+    WorkWindow*			_pWorkWin;
 };
 
 FrameControlApplication g_App;
@@ -281,7 +281,7 @@ void FrameControlApplication::deinit()
     {
 
         _pListener->removeAllListeners( _xControl );
-        _xControl->dispose();   // disposing event should occur
+        _xControl->dispose();	// disposing event should occur
         _pListener->release();
         _pListener = NULL;
 
@@ -296,8 +296,8 @@ void FrameControlApplication::deinit()
 //--------------------------------------------------------------------------------------------------
 void FrameControlApplication::Main()
 {
-//      void TestErrcodes();
-//      TestErrcodes();
+//  	void TestErrcodes();
+//  	TestErrcodes();
 
     EnterMultiThread();
     SetAppName( "RadioActiveControl-Demo" );

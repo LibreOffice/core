@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 /** class to provide creation of a thread to retrieve an input stream given by
     an URL and to consume the retrieved input stream.
 
-    #i73788#
+    OD 2007-01-29 #i73788#
 
     @author OD
 */

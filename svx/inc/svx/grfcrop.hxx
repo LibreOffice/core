@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,47 +32,47 @@
 #include "svx/svxdllapi.h"
 
 
-#define GRFCROP_VERSION_SWDEFAULT       0
-#define GRFCROP_VERSION_MOVETOSVX       1
+#define GRFCROP_VERSION_SWDEFAULT		0
+#define GRFCROP_VERSION_MOVETOSVX 		1
 
 class SVX_DLLPUBLIC SvxGrfCrop : public SfxPoolItem
 {
-    sal_Int32   nLeft, nRight, nTop, nBottom;
+    sal_Int32	nLeft, nRight, nTop, nBottom;
 public:
-    SvxGrfCrop( sal_uInt16  );
-    SvxGrfCrop( sal_Int32 nLeft,    sal_Int32 nRight,
-                sal_Int32 nTop,     sal_Int32 nBottom,
-                sal_uInt16  );
+    SvxGrfCrop( USHORT  );
+    SvxGrfCrop( sal_Int32 nLeft,	sal_Int32 nRight,
+                sal_Int32 nTop,		sal_Int32 nBottom,
+                USHORT  );
     virtual ~SvxGrfCrop();
 
     // "pure virtual methods" from SfxPoolItem
-    virtual int                 operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*        Create(SvStream &, sal_uInt16 nVer) const;
-    virtual SvStream&           Store(SvStream &, sal_uInt16 nIVer) const;
+    virtual int            		operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*		Create(SvStream &, USHORT nVer) const;
+    virtual SvStream&			Store(SvStream &, USHORT nIVer) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal,
-                             sal_uInt8 nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal,
-                           sal_uInt8 nMemberId = 0 );
+    virtual	bool QueryValue( com::sun::star::uno::Any& rVal,
+                             BYTE nMemberId = 0 ) const;
+    virtual	bool PutValue( const com::sun::star::uno::Any& rVal,
+                           BYTE nMemberId = 0 );
 
-    void SetLeft( sal_Int32 nVal )      { nLeft = nVal; }
-    void SetRight( sal_Int32 nVal )     { nRight = nVal; }
-    void SetTop( sal_Int32 nVal )       { nTop = nVal; }
-    void SetBottom( sal_Int32 nVal )    { nBottom = nVal; }
+    void SetLeft( sal_Int32 nVal )		{ nLeft = nVal; }
+    void SetRight( sal_Int32 nVal )		{ nRight = nVal; }
+    void SetTop( sal_Int32 nVal )		{ nTop = nVal; }
+    void SetBottom( sal_Int32 nVal )	{ nBottom = nVal; }
 
-    sal_Int32 GetLeft() const           { return nLeft; }
-    sal_Int32 GetRight() const          { return nRight; }
-    sal_Int32 GetTop() const            { return nTop; }
-    sal_Int32 GetBottom() const         { return nBottom; }
+    sal_Int32 GetLeft() const			{ return nLeft; }
+    sal_Int32 GetRight() const 			{ return nRight; }
+    sal_Int32 GetTop() const			{ return nTop; }
+    sal_Int32 GetBottom() const			{ return nBottom; }
 
     inline SvxGrfCrop& operator=( const SvxGrfCrop& rCrop )
         {
-            nLeft = rCrop.GetLeft();        nTop = rCrop.GetTop();
-            nRight = rCrop.GetRight();      nBottom = rCrop.GetBottom();
+            nLeft = rCrop.GetLeft(); 		nTop = rCrop.GetTop();
+            nRight = rCrop.GetRight();		nBottom = rCrop.GetBottom();
             return *this;
         }
 };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,41 +70,41 @@ public:
                         TYPEINFO();
 
                         SvLinkSource();
-    virtual             ~SvLinkSource();
+    virtual				~SvLinkSource();
 
-    sal_Bool                HasDataLinks( const SvBaseLink* = 0 ) const;
+    BOOL				HasDataLinks( const SvBaseLink* = 0 ) const;
 
-    void                Closed();
+    void				Closed();
 
-    sal_uIntPtr                 GetUpdateTimeout() const;
-    void                SetUpdateTimeout( sal_uIntPtr nTime );
+    ULONG 				GetUpdateTimeout() const;
+    void				SetUpdateTimeout( ULONG nTime );
                         // notify the sink, the mime type is not
                         // a selection criterion
-    void                DataChanged( const String & rMimeType,
+    void				DataChanged( const String & rMimeType,
                                     const ::com::sun::star::uno::Any & rVal );
-    void                SendDataChanged();
-    void                NotifyDataChanged();
+    void				SendDataChanged();
+    void				NotifyDataChanged();
 
-    virtual sal_Bool        Connect( SvBaseLink* );
-    virtual sal_Bool        GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+    virtual BOOL        Connect( SvBaseLink* );
+    virtual BOOL		GetData( ::com::sun::star::uno::Any & rData /*out param*/,
                                 const String & rMimeType,
-                                sal_Bool bSynchron = sal_False );
+                                BOOL bSynchron = FALSE );
 
-                        // sal_True => waitinmg for data
-    virtual sal_Bool        IsPending() const;
-                        // sal_True => data complete loaded
-    virtual sal_Bool        IsDataComplete() const;
+                        // TRUE => waitinmg for data
+    virtual BOOL		IsPending() const;
+                        // TRUE => data complete loaded
+    virtual BOOL		IsDataComplete() const;
 
     // Link impl: DECL_LINK( MyEndEditHdl, sfx2::FileDialogHelper* ); <= param is the dialog
     virtual void        Edit( Window *, SvBaseLink *, const Link& rEndEditHdl );
 
 
-    void                AddDataAdvise( SvBaseLink *, const String & rMimeType,
-                                        sal_uInt16 nAdviceMode );
-    void                RemoveAllDataAdvise( SvBaseLink * );
+    void				AddDataAdvise( SvBaseLink *, const String & rMimeType,
+                                        USHORT nAdviceMode );
+    void				RemoveAllDataAdvise( SvBaseLink * );
 
-    void                AddConnectAdvise( SvBaseLink * );
-    void                RemoveConnectAdvise( SvBaseLink * );
+    void				AddConnectAdvise( SvBaseLink * );
+    void				RemoveConnectAdvise( SvBaseLink * );
 
     struct StreamToLoadFrom{
         StreamToLoadFrom(

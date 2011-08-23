@@ -57,12 +57,16 @@
  * @file
  * enum const defines.
  ************************************************************************/
-#ifndef     _XFDEFS_HXX
-#define     _XFDEFS_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-21 create this file.
+ ************************************************************************/
+#ifndef		_XFDEFS_HXX
+#define		_XFDEFS_HXX
 
-#include    "sal/types.h"
+#include	"sal/types.h"
 
-enum    enumXFContent
+enum	enumXFContent
 {
     enumXFContentUnknown,
     enumXFContentText,
@@ -78,7 +82,7 @@ enum    enumXFContent
     enumXFContentContainer,
 };
 
-enum    enumXFStyle
+enum	enumXFStyle
 {
     enumXFStyleUnknown,
     enumXFStyleText,

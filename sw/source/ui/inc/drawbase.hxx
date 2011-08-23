@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ class SwEditWin;
 class KeyEvent;
 class MouseEvent;
 
-#define MIN_FREEHAND_DISTANCE   10
+#define MIN_FREEHAND_DISTANCE	10
 
 /*************************************************************************
 |*
@@ -52,32 +52,32 @@ protected:
     SwEditWin*      m_pWin;
     Point           m_aStartPos;                 // Position von BeginCreate
     Point           m_aMDPos;                // Position von MouseButtonDown
-    sal_uInt16          m_nSlotId;
-    sal_Bool            m_bCreateObj  :1;
-    sal_Bool            m_bInsForm   :1;
+    USHORT          m_nSlotId;
+    BOOL            m_bCreateObj  :1;
+    BOOL            m_bInsForm   :1;
 
     Point           GetDefaultCenterPos();
 public:
     SwDrawBase(SwWrtShell *pSh, SwEditWin* pWin, SwView* pView);
     virtual ~SwDrawBase();
 
-    void         SetDrawPointer();
-    void         EnterSelectMode(const MouseEvent& rMEvt);
-    inline sal_Bool  IsInsertForm() const { return m_bInsForm; }
-    inline sal_Bool  IsCreateObj() const { return m_bCreateObj; }
+    void		 SetDrawPointer();
+    void		 EnterSelectMode(const MouseEvent& rMEvt);
+    inline BOOL  IsInsertForm() const { return m_bInsForm; }
+    inline BOOL  IsCreateObj() const { return m_bCreateObj; }
 
-    // Mouse- & Key-Events; Returnwert=sal_True: Event wurde bearbeitet
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    // Mouse- & Key-Events; Returnwert=TRUE: Event wurde bearbeitet
+    virtual BOOL KeyInput(const KeyEvent& rKEvt);
+    virtual BOOL MouseMove(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
-    void         BreakCreate();
-    void         SetSlotId(sal_uInt16 nSlot) {m_nSlotId = nSlot;}
-    sal_uInt16       GetSlotId() { return m_nSlotId;}
+    void		 BreakCreate();
+    void         SetSlotId(USHORT nSlot) {m_nSlotId = nSlot;}
+    USHORT       GetSlotId() { return m_nSlotId;}
 
-    virtual void Activate(const sal_uInt16 nSlotId);    // Function aktivieren
-    virtual void Deactivate();                      // Function deaktivieren
+    virtual void Activate(const USHORT nSlotId);	// Function aktivieren
+    virtual void Deactivate();						// Function deaktivieren
 
     virtual void CreateDefaultObject();
 
@@ -87,6 +87,6 @@ public:
 
 
 
-#endif      // _SW_DRAWBASE_HXX
+#endif		// _SW_DRAWBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

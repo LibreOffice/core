@@ -57,10 +57,14 @@
  * @file
  * List object.
  ************************************************************************/
-#include    "xflist.hxx"
-#include    "xflistitem.hxx"
-#include    "ixfstream.hxx"
-#include    "ixfattrlist.hxx"
+/*************************************************************************
+ * Change History
+ * 2005-01-17 create this file.
+ ************************************************************************/
+#include	"xflist.hxx"
+#include	"xflistitem.hxx"
+#include	"ixfstream.hxx"
+#include	"ixfattrlist.hxx"
 
 XFList::XFList()
 {
@@ -73,14 +77,13 @@ XFList::XFList(sal_Bool ordered)
 {
     m_bOrdered = ordered;
     m_bContinueNumber = sal_False;
-    m_pHeader = NULL;
 }
 
 XFList::~XFList()
 {
 }
 
-void    XFList::AddItem(XFListItem *pItem)
+void	XFList::AddItem(XFListItem *pItem)
 {
     assert(pItem);
     assert(pItem->GetContentType()!=enumXFContentUnknown);
@@ -88,14 +91,14 @@ void    XFList::AddItem(XFListItem *pItem)
     Add(pItem);
 }
 
-void    XFList::AddItem(rtl::OUString text)
+void	XFList::AddItem(rtl::OUString text)
 {
     XFListItem *pItem = new XFListItem();
     pItem->Add(text);
     AddItem(pItem);
 }
 
-void    XFList::SetHeader(XFListItem *pItem)
+void	XFList::SetHeader(XFListItem *pItem)
 {
     if( m_pHeader )
         delete m_pHeader;
@@ -103,9 +106,9 @@ void    XFList::SetHeader(XFListItem *pItem)
     m_pHeader = pItem;
 }
 
-void    XFList::ToXml(IXFStream *pStrm)
+void	XFList::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     assert(NULL!=pAttrList);
 
     pAttrList->Clear();
@@ -131,9 +134,9 @@ void    XFList::ToXml(IXFStream *pStrm)
         pStrm->EndElement( A2OUSTR("text:unordered-list") );
 }
 
-void    XFList::StartList(IXFStream *pStrm, sal_Bool bContinueNumber)
+void	XFList::StartList(IXFStream *pStrm, sal_Bool bContinueNumber)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     assert(NULL!=pAttrList);
 
     pAttrList->Clear();
@@ -148,7 +151,7 @@ void    XFList::StartList(IXFStream *pStrm, sal_Bool bContinueNumber)
         pStrm->StartElement( A2OUSTR("text:unordered-list") );
 }
 
-void    XFList::EndList(IXFStream *pStrm)
+void	XFList::EndList(IXFStream *pStrm)
 {
     if( m_bOrdered )
         pStrm->EndElement( A2OUSTR("text:ordered-list") );
@@ -156,7 +159,7 @@ void    XFList::EndList(IXFStream *pStrm)
         pStrm->EndElement( A2OUSTR("text:unordered-list") );
 }
 
-void    XFList::StartListHeader(IXFStream *pStrm)
+void	XFList::StartListHeader(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
@@ -164,7 +167,7 @@ void    XFList::StartListHeader(IXFStream *pStrm)
     pStrm->StartElement( A2OUSTR("text:list-header") );
 }
 
-void    XFList::EndListHeader(IXFStream *pStrm)
+void	XFList::EndListHeader(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
@@ -172,16 +175,16 @@ void    XFList::EndListHeader(IXFStream *pStrm)
     pStrm->EndElement( A2OUSTR("text:list-header") );
 }
 
-void    XFList::StartListItem(IXFStream *pStrm)
+void	XFList::StartListItem(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     assert(NULL!=pAttrList);
 
     pAttrList->Clear();
     pStrm->StartElement( A2OUSTR("text:list-item") );
 }
 
-void    XFList::EndListItem(IXFStream *pStrm)
+void	XFList::EndListItem(IXFStream *pStrm)
 {
     pStrm->EndElement( A2OUSTR("text:list-item") );
 }

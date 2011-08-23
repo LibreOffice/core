@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ ScPrintRangeData::ScPrintRangeData()
     nPagesX = nPagesY = 0;
     pPageEndX = NULL;
     pPageEndY = NULL;
-    bTopDown = bAutomatic = sal_True;
+    bTopDown = bAutomatic = TRUE;
     nFirstPage = 1;
 }
 
@@ -109,18 +109,18 @@ ScPrintRangeData& ScPageBreakData::GetData(size_t nPos)
     return pData[nPos];
 }
 
-sal_Bool ScPageBreakData::IsEqual( const ScPageBreakData& rOther ) const
+BOOL ScPageBreakData::IsEqual( const ScPageBreakData& rOther ) const
 {
     if ( nUsed != rOther.nUsed )
-        return false;
+        return FALSE;
 
-    for (sal_uInt16 i=0; i<nUsed; i++)
+    for (USHORT i=0; i<nUsed; i++)
         if ( pData[i].GetPrintRange() != rOther.pData[i].GetPrintRange() )
-            return false;
+            return FALSE;
 
-    //! ScPrintRangeData komplett vergleichen ??
+    //!	ScPrintRangeData komplett vergleichen ??
 
-    return sal_True;
+    return TRUE;
 }
 
 void ScPageBreakData::AddPages()
@@ -128,7 +128,7 @@ void ScPageBreakData::AddPages()
     if ( nUsed > 1 )
     {
         long nPage = pData[0].GetFirstPage();
-        for (sal_uInt16 i=0; sal::static_int_cast<size_t>(i+1)<nUsed; i++)
+        for (USHORT i=0; sal::static_int_cast<size_t>(i+1)<nUsed; i++)
         {
             nPage += ((long)pData[i].GetPagesX())*pData[i].GetPagesY();
             pData[i+1].SetFirstPage( nPage );

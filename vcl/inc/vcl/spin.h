@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@ class OutputDevice;
 void ImplDrawSpinButton( OutputDevice* pOutDev,
                          const Rectangle& rUpperRect,
                          const Rectangle& rLowerRect,
-                         sal_Bool bUpperIn, sal_Bool bLowerIn,
-                         sal_Bool bUpperEnabled = sal_True,
-                         sal_Bool bLowerEnabled = sal_True,
-                         sal_Bool bHorz = sal_False, sal_Bool bMirrorHorz = sal_False );
+                         BOOL bUpperIn, BOOL bLowerIn,
+                         BOOL bUpperEnabled = TRUE,
+                         BOOL bLowerEnabled = TRUE,
+                         BOOL bHorz = FALSE, BOOL bMirrorHorz = FALSE );
 
 #endif  // _SV_SPIN_H
 

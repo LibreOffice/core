@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include <xmloff/SettingsExportHelper.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <tools/debug.hxx>
@@ -83,7 +83,7 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
              * This assertion pops up when exporting values which are set to:
              * PropertyAttribute::MAYBEVOID, and thus are _supposed_ to have
              * a VOID value...so I'm removing it ...mtg
-             * OSL_FAIL("no type");
+             * DBG_ERROR("no type");
              */
         }
         break;
@@ -180,7 +180,7 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
                 exportSymbolDescriptors(aProps, rName);
             }
             else {
-                OSL_FAIL("this type is not implemented now");
+                DBG_ERROR("this type is not implemented now");
             }
         }
         break;
@@ -204,7 +204,6 @@ void XMLSettingsExportHelper::exportBool(const sal_Bool bValue, const rtl::OUStr
 
 void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const rtl::OUString& rName) const
 {
-#if 0
     DBG_ASSERT(rName.getLength(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_BYTE );
@@ -213,13 +212,6 @@ void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const rtl::OUStr
     SvXMLUnitConverter::convertNumber(sBuffer, sal_Int32(nValue));
     m_rContext.Characters( sBuffer.makeStringAndClear() );
     m_rContext.EndElement( sal_False );
-#else
-    (void) nValue; (void) rName;
-    OSL_ENSURE(false, "XMLSettingsExportHelper::exportByte(): #i114162#:\n"
-        "config-items of type \"byte\" are not valid ODF, "
-        "so storing them is disabled!\n"
-        "Use a different type instead (e.g. \"short\").");
-#endif
 }
 void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const rtl::OUString& rName) const
 {
@@ -311,6 +303,7 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
                     const rtl::OUString rName) const
 {
     // #110680#
+    // uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory( m_rContext.GetServiceFactory() );
     DBG_ASSERT( xServiceFactory.is(), "XMLSettingsExportHelper::exportSymbolDescriptors: got no service manager" );
 
@@ -340,25 +333,25 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
                 beans::PropertyValue *pSymbol = aSequence.getArray();
 
                 pSymbol[XML_SYMBOL_DESCRIPTOR_NAME].Name         = sName;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_NAME].Value       <<= pDescriptor->sName;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_NAME].Value	    <<= pDescriptor->sName;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_EXPORT_NAME].Name  = sExportName;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_EXPORT_NAME].Value<<= pDescriptor->sExportName;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_FONT_NAME].Name    = sFontName;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_FONT_NAME].Value  <<= pDescriptor->sFontName;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_FONT_NAME].Value	<<= pDescriptor->sFontName;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_CHAR_SET].Name      = sCharSet;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_CHAR_SET].Value   <<= pDescriptor->nCharSet;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_CHAR_SET].Value	<<= pDescriptor->nCharSet;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_FAMILY].Name       = sFamily;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_FAMILY].Value <<= pDescriptor->nFamily;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_FAMILY].Value	<<= pDescriptor->nFamily;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_PITCH].Name        = sPitch;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_PITCH].Value      <<= pDescriptor->nPitch;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_PITCH].Value	    <<= pDescriptor->nPitch;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_WEIGHT].Name       = sWeight;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_WEIGHT].Value <<= pDescriptor->nWeight;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_WEIGHT].Value	<<= pDescriptor->nWeight;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_ITALIC].Name       = sItalic;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_ITALIC].Value <<= pDescriptor->nItalic;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_ITALIC].Value	<<= pDescriptor->nItalic;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_SYMBOL_SET].Name       = sSymbolSet;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_SYMBOL_SET].Value <<= pDescriptor->sSymbolSet;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_SYMBOL_SET].Value	<<= pDescriptor->sSymbolSet;
                 pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Name       = sCharacter;
-                pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Value  <<= pDescriptor->nCharacter;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Value	<<= pDescriptor->nCharacter;
 
                 xBox->insertByIndex(nIndex, uno::makeAny( aSequence ));
             }
@@ -430,7 +423,7 @@ void XMLSettingsExportHelper::exportIndexAccess(
     DBG_ASSERT(rName.getLength(), "no name");
     DBG_ASSERT(aIndexed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
                 "wrong IndexAccess" );
-    rtl::OUString sEmpty;
+    rtl::OUString sEmpty;// ( RTLCONSTASCII_USTRINGPARAM( "View" ) );
     if(aIndexed->hasElements())
     {
         m_rContext.AddAttribute( XML_NAME, rName );
@@ -460,6 +453,7 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
         return;
 
     // #110680#
+    // uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory( m_rContext.GetServiceFactory() );
     DBG_ASSERT( xServiceFactory.is(), "XMLSettingsExportHelper::exportForbiddenCharacters: got no service manager" );
 

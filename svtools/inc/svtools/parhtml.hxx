@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,18 +63,18 @@ enum HTMLTableRules { HTML_TR_NONE, HTML_TR_GROUPS, HTML_TR_ROWS,
 
 enum HTMLInputType
 {
-    HTML_IT_TEXT =      0x01,
-    HTML_IT_PASSWORD =  0x02,
-    HTML_IT_CHECKBOX =  0x03,
-    HTML_IT_RADIO =     0x04,
-    HTML_IT_RANGE =     0x05,
-    HTML_IT_SCRIBBLE =  0x06,
-    HTML_IT_FILE =      0x07,
-    HTML_IT_HIDDEN =    0x08,
-    HTML_IT_SUBMIT =    0x09,
-    HTML_IT_IMAGE =     0x0a,
-    HTML_IT_RESET =     0x0b,
-    HTML_IT_BUTTON =    0x0c
+    HTML_IT_TEXT =		0x01,
+    HTML_IT_PASSWORD =	0x02,
+    HTML_IT_CHECKBOX =	0x03,
+    HTML_IT_RADIO =		0x04,
+    HTML_IT_RANGE =		0x05,
+    HTML_IT_SCRIBBLE =	0x06,
+    HTML_IT_FILE =		0x07,
+    HTML_IT_HIDDEN =	0x08,
+    HTML_IT_SUBMIT =	0x09,
+    HTML_IT_IMAGE =		0x0a,
+    HTML_IT_RESET =		0x0b,
+    HTML_IT_BUTTON = 	0x0c
 };
 
 enum HTMLScriptLanguage
@@ -86,8 +86,8 @@ enum HTMLScriptLanguage
 
 struct HTMLOptionEnum
 {
-    const sal_Char *pName;  // Wert einer HTML-Option
-    sal_uInt16 nValue;      // und der dazugehoerige Wert eines Enums
+    const sal_Char *pName;	// Wert einer HTML-Option
+    sal_uInt16 nValue;		// und der dazugehoerige Wert eines Enums
 };
 
 // Repraesentation einer HTML-Option (=Atrribut in einem Start-Tag)
@@ -97,37 +97,37 @@ struct HTMLOptionEnum
 
 class SVT_DLLPUBLIC HTMLOption
 {
-    String aValue;          // der Wert der Option (immer als String)
-    String aToken;          // der Name der Option als String
-    sal_uInt16 nToken;          // und das entsprechende Token
+    String aValue;			// der Wert der Option (immer als String)
+    String aToken;			// der Name der Option als String
+    sal_uInt16 nToken;			// und das entsprechende Token
 
 public:
 
     HTMLOption( sal_uInt16 nTyp, const String& rToken, const String& rValue );
 
     // der Name der Option ...
-    sal_uInt16 GetToken() const { return nToken; }  // ... als Enum
+    sal_uInt16 GetToken() const { return nToken; }	// ... als Enum
     const String& GetTokenString() const { return aToken; } // ... als String
 
     // der Wert der Option ...
-    const String& GetString() const { return aValue; }  // ... als String
+    const String& GetString() const { return aValue; }	// ... als String
 
-    sal_uInt32 GetNumber() const;                           // ... als Zahl
-    sal_Int32 GetSNumber() const;                           // ... als Zahl
-    void GetNumbers( SvULongs &rLongs,                  // ... als Zahlen
+    sal_uInt32 GetNumber() const;                          	// ... als Zahl
+    sal_Int32 GetSNumber() const;                          	// ... als Zahl
+    void GetNumbers( SvULongs &rLongs, 					// ... als Zahlen
                      sal_Bool bSpaceDelim=sal_False ) const;
-    void GetColor( Color& ) const;                      // ... als Farbe
+    void GetColor( Color& ) const;						// ... als Farbe
 
     // ... als Enum pOptEnums ist ein HTMLOptionEnum-Array
     sal_uInt16 GetEnum( const HTMLOptionEnum *pOptEnums,
                         sal_uInt16 nDflt=0 ) const;
-    sal_Bool GetEnum( sal_uInt16 &rEnum, const HTMLOptionEnum *pOptEnums ) const;
+    BOOL GetEnum( sal_uInt16 &rEnum, const HTMLOptionEnum *pOptEnums ) const;
 
     // ... und als ein par spezielle Enums
-    HTMLInputType GetInputType() const;                 // <INPUT TYPE=...>
-    HTMLTableFrame GetTableFrame() const;               // <TABLE FRAME=...>
-    HTMLTableRules GetTableRules() const;               // <TABLE RULES=...>
-    //SvxAdjust GetAdjust() const;                      // <P,TH,TD ALIGN=>
+    HTMLInputType GetInputType() const;				   	// <INPUT TYPE=...>
+    HTMLTableFrame GetTableFrame() const;				// <TABLE FRAME=...>
+    HTMLTableRules GetTableRules() const;				// <TABLE RULES=...>
+    //SvxAdjust GetAdjust() const;						// <P,TH,TD ALIGN=>
 };
 
 typedef HTMLOption* HTMLOptionPtr;
@@ -135,28 +135,28 @@ SV_DECL_PTRARR(HTMLOptions,HTMLOptionPtr,16,16)
 
 class SVT_DLLPUBLIC HTMLParser : public SvParser
 {
-    sal_Bool bNewDoc        : 1;        // neues Doc lesen ?
-    sal_Bool bIsInHeader    : 1;        // scanne Header-Bereich
-    sal_Bool bIsInBody      : 1;        // scanne Body-Bereich
-    sal_Bool bReadListing   : 1;        // Lese Listings
-    sal_Bool bReadXMP       : 1;        // Lese XMP
-    sal_Bool bReadPRE       : 1;        // Lese preformatted Text
-    sal_Bool bReadTextArea  : 1;        // Lese TEXTAREA
-    sal_Bool bReadScript    : 1;        // Lesen von <SCRIPT>
-    sal_Bool bReadStyle     : 1;        // Lesen von <STYLE>
-    sal_Bool bEndTokenFound : 1;        // </SCRIPT> oder </STYLE> gefunden
+    BOOL bNewDoc 		: 1;		// neues Doc lesen ?
+    BOOL bIsInHeader 	: 1;		// scanne Header-Bereich
+    BOOL bIsInBody 		: 1;		// scanne Body-Bereich
+    BOOL bReadListing	: 1;		// Lese Listings
+    BOOL bReadXMP		: 1;		// Lese XMP
+    BOOL bReadPRE		: 1;		// Lese preformatted Text
+    BOOL bReadTextArea	: 1;		// Lese TEXTAREA
+    BOOL bReadScript	: 1;		// Lesen von <SCRIPT>
+    BOOL bReadStyle		: 1;		// Lesen von <STYLE>
+    BOOL bEndTokenFound : 1;		// </SCRIPT> oder </STYLE> gefunden
 
-    sal_Bool bPre_IgnoreNewPara : 1;    // Flags fuers lesen von PRE-Absaetzen
-    sal_Bool bReadNextChar : 1;         // sal_True: NextChar nochmals lesen (JavaScript!)
-    sal_Bool bReadComment : 1;          // sal_True: NextChar nochmals lesen (JavaScript!)
+    BOOL bPre_IgnoreNewPara : 1;	// Flags fuers lesen von PRE-Absaetzen
+    BOOL bReadNextChar : 1;			// TRUE: NextChar nochmals lesen (JavaScript!)
+    BOOL bReadComment : 1;			// TRUE: NextChar nochmals lesen (JavaScript!)
 
-    sal_uInt32 nPre_LinePos;            // Pos in der Line im PRE-Tag
+    sal_uInt32 nPre_LinePos;			// Pos in der Line im PRE-Tag
 
-    HTMLOptions *pOptions;          // die Optionen des Start-Tags
+    HTMLOptions *pOptions;			// die Optionen des Start-Tags
     String aEndToken;
 
 protected:
-    String sSaveToken;              // das gelesene Tag als String
+    String sSaveToken;				// das gelesene Tag als String
 
     int ScanText( const sal_Unicode cBreak = 0U );
 
@@ -167,43 +167,43 @@ protected:
 
     virtual ~HTMLParser();
 
-    void FinishHeader( sal_Bool bBody ) { bIsInHeader = sal_False; bIsInBody = bBody; }
+    void FinishHeader( BOOL bBody ) { bIsInHeader = FALSE; bIsInBody = bBody; }
 
 public:
-    HTMLParser( SvStream& rIn, int bReadNewDoc = sal_True );
+    HTMLParser( SvStream& rIn, int bReadNewDoc = TRUE );
 
     virtual SvParserState CallParser();   // Aufruf des Parsers
 
-    sal_Bool IsNewDoc() const       { return bNewDoc; }
-    sal_Bool IsInHeader() const     { return bIsInHeader; }
-    sal_Bool IsInBody() const       { return bIsInBody; }
-    sal_Bool IsValidSyntax() const  { return sal_True; }
-    sal_Bool IsReadListing() const  { return bReadListing; }
-    sal_Bool IsReadXMP() const      { return bReadXMP; }
-    sal_Bool IsReadPRE() const      { return bReadPRE; }
-    sal_Bool IsReadScript() const   { return bReadScript; }
-    sal_Bool IsReadStyle() const    { return bReadStyle; }
+    BOOL IsNewDoc() const 		{ return bNewDoc; }
+    BOOL IsInHeader() const 	{ return bIsInHeader; }
+    BOOL IsInBody() const 		{ return bIsInBody; }
+    BOOL IsValidSyntax() const 	{ return TRUE; }
+    BOOL IsReadListing() const 	{ return bReadListing; }
+    BOOL IsReadXMP() const 		{ return bReadXMP; }
+    BOOL IsReadPRE() const 		{ return bReadPRE; }
+    BOOL IsReadScript() const 	{ return bReadScript; }
+    BOOL IsReadStyle() const 	{ return bReadStyle; }
 
-    void SetReadNextChar()      { bReadNextChar = sal_True; }
+    void SetReadNextChar() 		{ bReadNextChar = TRUE; }
 
     // PRE-/LISTING oder XMP-Modus starten/beenden oder Tags entsprechend
     // filtern
-    inline void StartPRE( sal_Bool bRestart=sal_False );
-    void FinishPRE() { bReadPRE = sal_False; }
+    inline void StartPRE( BOOL bRestart=FALSE );
+    void FinishPRE() { bReadPRE = FALSE; }
     int FilterPRE( int nToken );
 
-    inline void StartListing( sal_Bool bRestart=sal_False );
-    void FinishListing() { bReadListing = sal_False; }
+    inline void StartListing( BOOL bRestart=FALSE );
+    void FinishListing() { bReadListing = FALSE; }
     int FilterListing( int nToken );
 
-    inline void StartXMP( sal_Bool bRestart=sal_False );
-    void FinishXMP() { bReadXMP = sal_False; }
+    inline void StartXMP( BOOL bRestart=FALSE );
+    void FinishXMP() { bReadXMP = FALSE; }
     int FilterXMP( int nToken );
 
-    void FinishTextArea() { bReadTextArea = sal_False; }
+    void FinishTextArea() { bReadTextArea = FALSE; }
 
     // PRE-/LSITING- und XMP-Modus beenden
-    void FinishPREListingXMP() { bReadPRE = bReadListing = bReadXMP = sal_False; }
+    void FinishPREListingXMP() { bReadPRE = bReadListing = bReadXMP = FALSE; }
 
     // Das aktuelle Token dem aktuellen Modus (PRE, XMP, ...) entsprechend
     // Filtern und die Flags setzen. Wird von Continue aufgerufen, bevor
@@ -213,7 +213,7 @@ public:
 
     // Scannen eines Scripts beenden (sollte nur unmittelbar nach dem
     // Lesen eines <SCRIPT> aufgerufen werden
-    void EndScanScript() { bReadScript = sal_False; }
+    void EndScanScript() { bReadScript = FALSE; }
 
     void ReadRawData( const sal_Char *pEndToken ) { aEndToken.AssignAscii(pEndToken); }
 
@@ -226,8 +226,8 @@ public:
     const HTMLOptions *GetOptions( sal_uInt16 *pNoConvertToken=0 ) const;
 
     // fuers asynchrone lesen aus dem SvStream
-//  virtual void SaveState( int nToken );
-//  virtual void RestoreState();
+//	virtual void SaveState( int nToken );
+//	virtual void RestoreState();
     virtual void Continue( int nToken );
 
 
@@ -254,43 +254,43 @@ public:
 
     // Ist der uebergebene 0-terminierte String (vermutlich) der Anfang
     // eines HTML-Files? Er sollte mind. 80 Zeichen lang sein.
-    // Mit Ausnahme des Falls, dass SwitchToUCS2==sal_False und
+    // Mit Ausnahme des Falls, dass SwitchToUCS2==FALSE und
     // SVPAR_CS_DONTKNOW uebergeben wird muss der String mit zwei(!)
     // 0-Bytes an einer geraden(!) Position terminiert sein.
     static bool IsHTMLFormat( const sal_Char* pHeader,
-                      sal_Bool bSwitchToUCS2 = sal_False,
+                      BOOL bSwitchToUCS2 = FALSE,
                       rtl_TextEncoding eEnc=RTL_TEXTENCODING_DONTKNOW );
 
-    sal_Bool ParseScriptOptions( String& rLangString, const String&, HTMLScriptLanguage& rLang,
+    BOOL ParseScriptOptions( String& rLangString, const String&, HTMLScriptLanguage& rLang,
                              String& rSrc, String& rLibrary, String& rModule );
 
     // Einen Kommentar um den Inhalt von <SCRIPT> oder <STYLE> entfernen
     // Bei 'bFull' wird ggf. die gesammte Zeile hinter einem "<!--"
     // entfernt (fuer JavaSript)
-    static void RemoveSGMLComment( String &rString, sal_Bool bFull );
+    static void RemoveSGMLComment( String &rString, BOOL bFull );
 
-    static sal_Bool InternalImgToPrivateURL( String& rURL );
+    static BOOL InternalImgToPrivateURL( String& rURL );
     static rtl_TextEncoding GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPHeader );
-    sal_Bool SetEncodingByHTTPHeader( SvKeyValueIterator *pHTTPHeader );
+    BOOL SetEncodingByHTTPHeader( SvKeyValueIterator *pHTTPHeader );
 };
 
-inline void HTMLParser::StartPRE( sal_Bool bRestart )
+inline void HTMLParser::StartPRE( BOOL bRestart )
 {
-    bReadPRE = sal_True;
+    bReadPRE = TRUE;
     bPre_IgnoreNewPara = !bRestart;
     nPre_LinePos = 0UL;
 }
 
-inline void HTMLParser::StartListing( sal_Bool bRestart )
+inline void HTMLParser::StartListing( BOOL bRestart )
 {
-    bReadListing = sal_True;
+    bReadListing = TRUE;
     bPre_IgnoreNewPara = !bRestart;
     nPre_LinePos = 0UL;
 }
 
-inline void HTMLParser::StartXMP( sal_Bool bRestart )
+inline void HTMLParser::StartXMP( BOOL bRestart )
 {
-    bReadXMP = sal_True;
+    bReadXMP = TRUE;
     bPre_IgnoreNewPara = !bRestart;
     nPre_LinePos = 0UL;
 }

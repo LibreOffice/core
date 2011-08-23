@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace tools
     public:
         StringListResource(const ResId& _aResId,::std::vector< ::rtl::OUString>& _rToFill ) : Resource(_aResId)
         {
-            sal_uInt16 i = 1;
+            USHORT i = 1;
             while( IsAvailableRes(ResId(i,*m_pResMgr).SetRT(RSC_STRING)) )
             {
                 String sStr = String(ResId(i,*m_pResMgr));

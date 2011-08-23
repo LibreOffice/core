@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,9 +47,10 @@
 #include "root.hxx"
 #include "excdefs.hxx"
 #include "cell.hxx"
-#include <boost/shared_ptr.hpp>
 
 //------------------------------------------------------------------ Forwards -
+
+class SvxBorderLine;
 
 class SvStream;
 class Font;
@@ -71,14 +72,14 @@ class ExcTable;
 class ExcRecord : public XclExpRecord
 {
 public:
-    virtual void            Save( XclExpStream& rStrm );
-    virtual void            SaveXml( XclExpXmlStream& rStrm );
+    virtual void			Save( XclExpStream& rStrm );
+    virtual void			SaveXml( XclExpXmlStream& rStrm );
 
-    virtual sal_uInt16          GetNum() const = 0;
+    virtual UINT16			GetNum() const = 0;
     virtual sal_Size        GetLen() const = 0;
 
 protected:
-    virtual void            SaveCont( XclExpStream& rStrm );
+    virtual void			SaveCont( XclExpStream& rStrm );
 
 private:
     /** Writes the body of the record. */
@@ -93,8 +94,8 @@ class ExcEmptyRec : public ExcRecord
 private:
 protected:
 public:
-    virtual void            Save( XclExpStream& rStrm );
-    virtual sal_uInt16          GetNum() const;
+    virtual void			Save( XclExpStream& rStrm );
+    virtual UINT16			GetNum() const;
     virtual sal_Size        GetLen() const;
 };
 
@@ -106,17 +107,17 @@ class ExcRecordList : protected List, public ExcEmptyRec
 private:
 protected:
 public:
-    virtual                 ~ExcRecordList();
+    virtual					~ExcRecordList();
 
     using                   List::Count;
 
-    inline ExcRecord*       First( void )               { return ( ExcRecord* ) List::First(); }
-    inline ExcRecord*       Next( void )                { return ( ExcRecord* ) List::Next(); }
+    inline ExcRecord*		First( void )				{ return ( ExcRecord* ) List::First(); }
+    inline ExcRecord*		Next( void )				{ return ( ExcRecord* ) List::Next(); }
 
-    inline void             Append( ExcRecord* pNew )   { if( pNew ) List::Insert( pNew, LIST_APPEND ); }
-    inline const ExcRecord* Get( sal_uInt32 nNum ) const    { return ( ExcRecord* ) List::GetObject( nNum ); }
+    inline void				Append( ExcRecord* pNew )	{ if( pNew ) List::Insert( pNew, LIST_APPEND ); }
+    inline const ExcRecord*	Get( UINT32 nNum ) const	{ return ( ExcRecord* ) List::GetObject( nNum ); }
 
-    virtual void            Save( XclExpStream& rStrm );
+    virtual void			Save( XclExpStream& rStrm );
 };
 
 
@@ -126,27 +127,27 @@ class ExcDummyRec : public ExcRecord
 {
 protected:
 public:
-    virtual void            Save( XclExpStream& rStrm );
-    virtual sal_uInt16          GetNum() const;
-    virtual const sal_uInt8*        GetData() const = 0;    // byte data must contain header and body
+    virtual void			Save( XclExpStream& rStrm );
+    virtual UINT16			GetNum() const;
+    virtual	const BYTE*		GetData() const = 0;	// byte data must contain header and body
 };
 
 
 //------------------------------------------------------- class ExcBoolRecord -
-// stores sal_Bool as 16bit val ( 0x0000 | 0x0001 )
+// stores BOOL as 16bit val ( 0x0000 | 0x0001 )
 
 class ExcBoolRecord : public ExcRecord
 {
 private:
-    virtual void            SaveCont( XclExpStream& rStrm );
+    virtual void			SaveCont( XclExpStream& rStrm );
 
 protected:
-    sal_Bool                    bVal;
+    BOOL					bVal;
 
-    inline                  ExcBoolRecord() : bVal( false ) {}
+    inline					ExcBoolRecord() : bVal( FALSE ) {}
 
 public:
-    inline                  ExcBoolRecord( const sal_Bool bDefault ) : bVal( bDefault ) {}
+    inline					ExcBoolRecord( const BOOL bDefault ) : bVal( bDefault )	{}
 
     virtual sal_Size        GetLen( void ) const;
 };
@@ -158,10 +159,10 @@ class ExcBof_Base : public ExcRecord
 {
 private:
 protected:
-    sal_uInt16                  nDocType;
-    sal_uInt16                  nVers;
-    sal_uInt16                  nRupBuild;
-    sal_uInt16                  nRupYear;
+    UINT16					nDocType;
+    UINT16					nVers;
+    UINT16					nRupBuild;
+    UINT16					nRupYear;
 public:
                             ExcBof_Base( void );
 };
@@ -173,11 +174,11 @@ public:
 class ExcBof : public ExcBof_Base
 {
 private:
-    virtual void            SaveCont( XclExpStream& rStrm );
+    virtual void			SaveCont( XclExpStream& rStrm );
 public:
                             ExcBof( void );
 
-    virtual sal_uInt16          GetNum( void ) const;
+    virtual UINT16			GetNum( void ) const;
     virtual sal_Size        GetLen( void ) const;
 };
 
@@ -188,11 +189,11 @@ public:
 class ExcBofW : public ExcBof_Base
 {
 private:
-    virtual void            SaveCont( XclExpStream& rStrm );
+    virtual void			SaveCont( XclExpStream& rStrm );
 public:
                             ExcBofW( void );
 
-    virtual sal_uInt16          GetNum( void ) const;
+    virtual UINT16			GetNum( void ) const;
     virtual sal_Size        GetLen( void ) const;
 };
 
@@ -203,7 +204,7 @@ class ExcEof : public ExcRecord
 {
 private:
 public:
-    virtual sal_uInt16          GetNum( void ) const;
+    virtual UINT16			GetNum( void ) const;
     virtual sal_Size        GetLen( void ) const;
 };
 
@@ -214,15 +215,15 @@ public:
 class ExcDummy_00 : public ExcDummyRec
 {
 private:
-    static const sal_uInt8      pMyData[];
+    static const BYTE		pMyData[];
     static const sal_Size   nMyLen;
 public:
     virtual sal_Size        GetLen( void ) const;
-    virtual const sal_uInt8*        GetData( void ) const;
+    virtual	const BYTE*		GetData( void ) const;
 };
 
 // EXC_ID_WINDOWPROTECTION
-class XclExpWindowProtection : public   XclExpBoolRecord
+class XclExpWindowProtection : public	XclExpBoolRecord
 {
     public:
         XclExpWindowProtection(bool bValue);
@@ -231,7 +232,7 @@ class XclExpWindowProtection : public   XclExpBoolRecord
 };
 
 // EXC_ID_PROTECT  Document Protection
-class XclExpProtection : public XclExpBoolRecord
+class XclExpProtection : public	XclExpBoolRecord
 {
     public:
         XclExpProtection(bool bValue);
@@ -257,11 +258,11 @@ private:
 class ExcDummy_040 : public ExcDummyRec
 {
 private:
-    static const sal_uInt8      pMyData[];
+    static const BYTE		pMyData[];
     static const sal_Size   nMyLen;
 public:
     virtual sal_Size        GetLen( void ) const;
-    virtual const sal_uInt8*        GetData( void ) const;
+    virtual	const BYTE*		GetData( void ) const;
 };
 
 
@@ -269,11 +270,11 @@ public:
 class ExcDummy_041 : public ExcDummyRec
 {
 private:
-    static const sal_uInt8      pMyData[];
+    static const BYTE		pMyData[];
     static const sal_Size   nMyLen;
 public:
     virtual sal_Size        GetLen( void ) const;
-    virtual const sal_uInt8*        GetData( void ) const;
+    virtual	const BYTE*		GetData( void ) const;
 };
 
 
@@ -283,11 +284,11 @@ class Exc1904 : public ExcBoolRecord
 {
 public:
                             Exc1904( ScDocument& rDoc );
-    virtual sal_uInt16          GetNum( void ) const;
+    virtual UINT16			GetNum( void ) const;
 
     virtual void            SaveXml( XclExpXmlStream& rStrm );
 private:
-    sal_Bool                    bDateCompatibility;
+    BOOL                    bDateCompatibility;
 };
 
 
@@ -298,7 +299,7 @@ class ExcBundlesheetBase : public ExcRecord
 protected:
     sal_Size                nStrPos;
     sal_Size                nOwnPos;    // Position NACH # und Len
-    sal_uInt16                  nGrbit;
+    UINT16					nGrbit;
     SCTAB                   nTab;
 
                             ExcBundlesheetBase();
@@ -307,9 +308,9 @@ public:
                             ExcBundlesheetBase( RootData& rRootData, SCTAB nTab );
 
     inline void             SetStreamPos( sal_Size nNewStrPos ) { nStrPos = nNewStrPos; }
-    void                    UpdateStreamPos( XclExpStream& rStrm );
+    void					UpdateStreamPos( XclExpStream& rStrm );
 
-    virtual sal_uInt16          GetNum() const;
+    virtual UINT16			GetNum() const;
 };
 
 
@@ -317,9 +318,9 @@ public:
 class ExcBundlesheet : public ExcBundlesheetBase
 {
 private:
-    ByteString              aName;
+    ByteString				aName;
 
-    virtual void            SaveCont( XclExpStream& rStrm );
+    virtual void			SaveCont( XclExpStream& rStrm );
 
 public:
                             ExcBundlesheet( RootData& rRootData, SCTAB nTab );
@@ -332,11 +333,11 @@ public:
 class ExcDummy_02a : public ExcDummyRec
 {
 private:
-    static const sal_uInt8      pMyData[];
+    static const BYTE		pMyData[];
     static const sal_Size   nMyLen;
 public:
     virtual sal_Size        GetLen( void ) const;
-    virtual const sal_uInt8*        GetData( void ) const;
+    virtual	const BYTE*		GetData( void ) const;
 };
 
 
@@ -398,9 +399,9 @@ private:
 class ExcFilterCondition
 {
 private:
-    sal_uInt8                   nType;
-    sal_uInt8                   nOper;
-    double                  fVal;
+    UINT8					nType;
+    UINT8					nOper;
+    double					fVal;
     XclExpString*           pText;
 
 protected:
@@ -408,15 +409,15 @@ public:
                             ExcFilterCondition();
                             ~ExcFilterCondition();
 
-    inline sal_Bool             IsEmpty() const     { return (nType == EXC_AFTYPE_NOTUSED); }
-    inline sal_Bool             HasEqual() const    { return (nOper == EXC_AFOPER_EQUAL); }
-    sal_uLong                   GetTextBytes() const;
+    inline BOOL				IsEmpty() const 	{ return (nType == EXC_AFTYPE_NOTUSED); }
+    inline BOOL				HasEqual() const	{ return (nOper == EXC_AFOPER_EQUAL); }
+    ULONG					GetTextBytes() const;
 
-    void                    SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, String* pT );
+    void					SetCondition( UINT8 nTp, UINT8 nOp, double fV, String* pT );
 
-    void                    Save( XclExpStream& rStrm );
-    void                    SaveXml( XclExpXmlStream& rStrm );
-    void                    SaveText( XclExpStream& rStrm );
+    void					Save( XclExpStream& rStrm );
+    void					SaveXml( XclExpXmlStream& rStrm );
+    void					SaveText( XclExpStream& rStrm );
 };
 
 // ----------------------------------------------------------------------------
@@ -424,25 +425,25 @@ public:
 class XclExpAutofilter : public XclExpRecord, protected XclExpRoot
 {
 private:
-    sal_uInt16                  nCol;
-    sal_uInt16                  nFlags;
-    ExcFilterCondition      aCond[ 2 ];
+    UINT16					nCol;
+    UINT16					nFlags;
+    ExcFilterCondition		aCond[ 2 ];
 
-    sal_Bool                    AddCondition( ScQueryConnect eConn, sal_uInt8 nType,
-                                sal_uInt8 nOp, double fVal, String* pText,
-                                sal_Bool bSimple = false );
+    BOOL					AddCondition( ScQueryConnect eConn, UINT8 nType,
+                                UINT8 nOp, double fVal, String* pText,
+                                BOOL bSimple = FALSE );
 
     virtual void            WriteBody( XclExpStream& rStrm );
 
 protected:
 public:
-                            XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC );
+                            XclExpAutofilter( const XclExpRoot& rRoot, UINT16 nC );
 
-    inline sal_uInt16           GetCol() const          { return nCol; }
-    inline sal_Bool             HasCondition() const    { return !aCond[ 0 ].IsEmpty(); }
-    inline sal_Bool             HasTop10() const        { return ::get_flag( nFlags, EXC_AFFLAG_TOP10 ); }
+    inline UINT16			GetCol() const			{ return nCol; }
+    inline BOOL				HasCondition() const	{ return !aCond[ 0 ].IsEmpty(); }
+    inline BOOL             HasTop10() const        { return ::get_flag( nFlags, EXC_AFFLAG_TOP10 ); }
 
-    sal_Bool                    AddEntry( const ScQueryEntry& rEntry );
+    BOOL                    AddEntry( const ScQueryEntry& rEntry );
 
     virtual void            SaveXml( XclExpXmlStream& rStrm );
 };
@@ -464,7 +465,7 @@ public:
 
 private:
     XclExpAutofilter*   GetByCol( SCCOL nCol ); // always 0-based
-    sal_Bool                IsFiltered( SCCOL nCol );
+    BOOL                IsFiltered( SCCOL nCol );
 
 private:
     typedef XclExpRecordList< XclExpAutofilter >    XclExpAutofilterList;
@@ -499,7 +500,7 @@ public:
 private:
     using               XclExpRoot::CreateRecord;
 
-    typedef boost::shared_ptr< ExcAutoFilterRecs >  XclExpTabFilterRef;
+    typedef ScfRef< ExcAutoFilterRecs >             XclExpTabFilterRef;
     typedef ::std::map< SCTAB, XclExpTabFilterRef > XclExpTabFilterMap;
 
     XclExpTabFilterMap  maFilterMap;

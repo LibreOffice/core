@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,34 +29,33 @@
 #define INCLUDED_CELLCOLORHANDLER_HXX
 
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/LoggedResources.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #include <boost/shared_ptr.hpp>
 
 namespace writerfilter {
 namespace dmapper
 {
 class TablePropertyMap;
-class WRITERFILTER_DLLPRIVATE CellColorHandler : public LoggedProperties
+class WRITERFILTER_DLLPRIVATE CellColorHandler : public Properties
 {
 public:
-    enum OutputFormat { Form, Paragraph, Character }; // for what part of the document
-private:
     sal_Int32 m_nShadowType;
     sal_Int32 m_nColor;
     sal_Int32 m_nFillColor;
-    OutputFormat m_OutputFormat;
-
-    // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
+    bool      m_bParagraph;
+private:
 
 public:
     CellColorHandler( );
     virtual ~CellColorHandler();
 
+    // Properties
+    virtual void attribute(Id Name, Value & val);
+    virtual void sprm(Sprm & sprm);
+
     ::boost::shared_ptr<TablePropertyMap>            getProperties();
 
-    void setOutputFormat( OutputFormat format ) { m_OutputFormat = format; }
+    void setParagraph() { m_bParagraph = true; }
 };
 typedef boost::shared_ptr< CellColorHandler >          CellColorHandlerPtr;
 }}

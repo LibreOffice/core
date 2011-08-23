@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,13 +40,13 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#include "svx/unoapi.hxx"
+#include "unoapi.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::cppu;
 
-SvxUnoNameItemTable::SvxUnoNameItemTable( SdrModel* pModel, sal_uInt16 nWhich, sal_uInt8 nMemberId ) throw()
+SvxUnoNameItemTable::SvxUnoNameItemTable( SdrModel* pModel, USHORT nWhich, BYTE nMemberId ) throw()
 : mpModel( pModel ),
   mpModelPool( pModel ? &pModel->GetItemPool() : NULL ),
   mnWhich( nWhich ), mnMemberId( nMemberId )
@@ -93,11 +93,11 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::supportsService( const  OUString& Service
     uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
     const OUString * pArray = aSNL.getConstArray();
 
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
+    for( INT32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return sal_True;
+            return TRUE;
 
-    return sal_False;
+    return FALSE;
 }
 
 void SAL_CALL SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )
@@ -160,7 +160,7 @@ void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
             maItemSetVector.erase( aIter );
             return;
         }
-        ++aIter;
+        aIter++;
     }
 
     if( !hasByName( Name ) )
@@ -195,17 +195,17 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
             (*aIter)->Put( *pNewItem );
             return;
         }
-        ++aIter;
+        aIter++;
     }
 
     // if it is not in our own sets, modify the pool!
     sal_Bool bFound = sal_False;
 
-    sal_uInt32 nSurrogate;
-    sal_uInt32 nCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
+    USHORT nSurrogate;
+    USHORT nCount = mpModelPool ? mpModelPool->GetItemCount( mnWhich ) : 0;
     for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate);
+        pItem = (NameOrIndex*)mpModelPool->GetItem( mnWhich, nSurrogate);
         if( pItem && pItem->GetName() == aSearchName )
         {
             pItem->PutValue( aElement, mnMemberId );
@@ -238,12 +238,12 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
     {
         const String aSearchName( aName );
         NameOrIndex *pItem;
-        sal_uInt32 nSurrogate;
+        sal_Int32 nSurrogate;
 
-        sal_uInt32 nSurrogateCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
+        sal_Int32 nSurrogateCount = mpModelPool ? (sal_Int32)mpModelPool->GetItemCount( mnWhich ) : 0;
         for( nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
         {
-            pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate );
+            pItem = (NameOrIndex*)mpModelPool->GetItem( mnWhich, (USHORT)nSurrogate );
 
             if( isValid( pItem ) && (pItem->GetName() == aSearchName) )
             {
@@ -266,11 +266,11 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
     NameOrIndex *pItem;
     OUString aApiName;
 
-    const sal_uInt32 nSurrogateCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
-    sal_uInt32 nSurrogate;
+    const sal_Int32 nSurrogateCount = mpModelPool ? (sal_Int32)mpModelPool->GetItemCount( mnWhich ) : 0;
+    sal_Int32 nSurrogate;
     for( nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate );
+        pItem = (NameOrIndex*)mpModelPool->GetItem( mnWhich, (USHORT)nSurrogate );
 
         if( !isValid( pItem ) )
             continue;
@@ -305,14 +305,14 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
         return sal_False;
 
     const String aSearchName( aName );
-    sal_uInt32 nSurrogate;
+    USHORT nSurrogate;
 
     const NameOrIndex *pItem;
 
-    sal_uInt32 nCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
+    USHORT nCount = mpModelPool ? mpModelPool->GetItemCount( mnWhich ) : 0;
     for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate );
+        pItem = (NameOrIndex*)mpModelPool->GetItem( mnWhich, nSurrogate );
         if( isValid( pItem ) && (pItem->GetName() == aSearchName) )
             return sal_True;
     }
@@ -327,11 +327,11 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasElements(  )
 
     const NameOrIndex *pItem;
 
-    sal_uInt32 nSurrogate;
-    const sal_uInt32 nSurrogateCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
+    sal_Int32 nSurrogate;
+    const sal_Int32 nSurrogateCount = mpModelPool ? (sal_Int32)mpModelPool->GetItemCount( mnWhich ) : 0;
     for( nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate );
+        pItem = (NameOrIndex*)mpModelPool->GetItem( mnWhich, (USHORT)nSurrogate );
 
         if( isValid( pItem ) )
             return sal_True;

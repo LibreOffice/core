@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#include "sfx2/sfxhelp.hxx"
+#include "sfxhelp.hxx"
 
-#include <set>
 #include <algorithm>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -74,15 +73,12 @@
 #include <svl/svstdarr.hxx>
 
 #include "newhelp.hxx"
-#include <sfx2/objsh.hxx>
-#include <sfx2/docfac.hxx>
-#include "sfx2/sfxresid.hxx"
+#include "sfxresid.hxx"
 #include "helper.hxx"
 #include "app.hrc"
 #include <sfx2/sfxuno.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/frame.hxx>
-#include <rtl/string.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -92,8 +88,8 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::system;
 
-#define ERROR_TAG   String( DEFINE_CONST_UNICODE("Error: ") )
-#define PATH_TAG    String( DEFINE_CONST_UNICODE("\nPath: ") )
+#define ERROR_TAG	String( DEFINE_CONST_UNICODE("Error: ") )
+#define PATH_TAG	String( DEFINE_CONST_UNICODE("\nPath: ") )
 
 class NoHelpErrorBox : public ErrorBox
 {
@@ -137,6 +133,7 @@ static rtl::OUString HelpLocaleString()
         else
         {
             rtl::OUString aBaseInstallPath;
+            // utl::Bootstrap::PathStatus aBaseLocateResult =
             utl::Bootstrap::locateBaseInstallation(aBaseInstallPath);
             static const char *szHelpPath = "/help/";
 
@@ -199,7 +196,7 @@ sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )
     {
         ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
                              Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        if ( ( aCnt.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorName")) ) >>= sAnchor ) )
+        if ( ( aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "AnchorName" ) ) >>= sAnchor ) )
         {
 
             if ( sAnchor.getLength() > 0 )
@@ -223,13 +220,13 @@ sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )
 class SfxHelpOptions_Impl : public utl::ConfigItem
 {
 private:
-    std::set < rtl::OString > m_aIds;
+    SvULongsSort*   m_pIds;
 
 public:
                     SfxHelpOptions_Impl();
                     ~SfxHelpOptions_Impl();
 
-    bool            HasId( const rtl::OString& rId ) { return m_aIds.size() ? m_aIds.find( rId ) != m_aIds.end() : false; }
+    BOOL            HasId( ULONG nId ) { USHORT nDummy; return m_pIds ? m_pIds->Seek_Entry( nId, &nDummy ) : FALSE; }
     virtual void            Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     virtual void            Commit();
 };
@@ -244,7 +241,7 @@ static Sequence< ::rtl::OUString > GetPropertyNames()
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
     Sequence< ::rtl::OUString > aNames( nCount );
     ::rtl::OUString* pNames = aNames.getArray();
-    ::rtl::OUString* pEnd   = pNames + aNames.getLength();
+    ::rtl::OUString* pEnd	= pNames + aNames.getLength();
     int i = 0;
     for ( ; pNames != pEnd; ++pNames )
         *pNames = ::rtl::OUString::createFromAscii( aPropNames[i++] );
@@ -253,7 +250,8 @@ static Sequence< ::rtl::OUString > GetPropertyNames()
 }
 
 SfxHelpOptions_Impl::SfxHelpOptions_Impl()
-    : ConfigItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.SFX/Help")) )
+    : ConfigItem( ::rtl::OUString::createFromAscii("Office.SFX/Help") )
+    , m_pIds( NULL )
 {
     Sequence< ::rtl::OUString > aNames = GetPropertyNames();
     Sequence< Any > aValues = GetProperties( aNames );
@@ -274,15 +272,11 @@ SfxHelpOptions_Impl::SfxHelpOptions_Impl()
                         ::rtl::OUString aCodedList;
                         if ( pValues[nProp] >>= aCodedList )
                         {
-                            rtl::OString aTmp( aCodedList, aCodedList.getLength(), RTL_TEXTENCODING_UTF8 );
-                            sal_Int32 nIndex = 0;
-                            do
-                            {
-                                rtl::OString aToken = aTmp.getToken( 0, ',', nIndex );
-                                if ( aToken.getLength() )
-                                    m_aIds.insert( aToken );
-                            }
-                            while ( nIndex >= 0 );
+                            String aTmp( aCodedList );
+                            USHORT nCount = aTmp.GetTokenCount( ',' );
+                            m_pIds = new SvULongsSort();
+                            for ( USHORT n=0; n<nCount; n++ )
+                                m_pIds->Insert( (ULONG) aTmp.GetToken( n, ',' ).ToInt64() );
                         }
                         else {
                             DBG_ERRORFILE( "Wrong property type!" );
@@ -302,6 +296,7 @@ SfxHelpOptions_Impl::SfxHelpOptions_Impl()
 
 SfxHelpOptions_Impl::~SfxHelpOptions_Impl()
 {
+    delete m_pIds;
 }
 
 
@@ -316,25 +311,26 @@ void SfxHelpOptions_Impl::Commit()
 class SfxHelp_Impl
 {
 private:
-    sal_Bool                            m_bIsDebug;     // environment variable "help_debug=1"
-    SfxHelpOptions_Impl*                m_pOpt;         // the options
-    ::std::vector< ::rtl::OUString >    m_aModulesList; // list of all installed modules
-    void                    Load();
+    sal_Bool							m_bIsDebug;		// environment variable "help_debug=1"
+    SfxHelpOptions_Impl*				m_pOpt;			// the options
+    ::std::vector< ::rtl::OUString >	m_aModulesList;	// list of all installed modules
+    void					Load();
 
 public:
     SfxHelp_Impl( sal_Bool bDebug );
     ~SfxHelp_Impl();
 
-    SfxHelpOptions_Impl*    GetOptions();
-    static String           GetHelpText( const rtl::OUString& aCommandURL, const String& rModule );
-    sal_Bool                HasModule( const ::rtl::OUString& rModule );            // module installed
-    sal_Bool                IsHelpInstalled();                                      // module list not empty
+    SfxHelpOptions_Impl*	GetOptions();
+    String					GetHelpText( ULONG nHelpId, const String& rModule );	// get "Active Help"
+    String                  GetHelpText( const rtl::OUString& aCommandURL, const String& rModule );
+    sal_Bool				HasModule( const ::rtl::OUString& rModule );			// module installed
+    sal_Bool				IsHelpInstalled();										// module list not empty
 };
 
 SfxHelp_Impl::SfxHelp_Impl( sal_Bool bDebug ) :
 
-    m_bIsDebug      ( bDebug ),
-    m_pOpt          ( NULL )
+    m_bIsDebug		( bDebug ),
+    m_pOpt      	( NULL )
 
 {
 }
@@ -357,7 +353,7 @@ void SfxHelp_Impl::Load()
     sal_Int32 nLen = aAllModulesList.getLength();
     m_aModulesList.reserve( nLen + 1 );
     const ::rtl::OUString* pBegin = aAllModulesList.getConstArray();
-    const ::rtl::OUString* pEnd = pBegin + nLen;
+    const ::rtl::OUString* pEnd	= pBegin + nLen;
     for ( ; pBegin != pEnd; ++pBegin )
     {
         // get one module string
@@ -367,6 +363,16 @@ void SfxHelp_Impl::Load()
         // insert the module (the host part of the "vnd.sun.star.help" url)
         m_aModulesList.push_back( ::rtl::OUString( INetURLObject( sURL ).GetHost() ) );
     }
+}
+
+String SfxHelp_Impl::GetHelpText( ULONG nHelpId, const String& rModule )
+{
+    // create help url
+    String aHelpURL = SfxHelp::CreateHelpURL( nHelpId, rModule );
+    // added 'active' parameter
+    aHelpURL.Insert( String( DEFINE_CONST_UNICODE("&Active=true") ), aHelpURL.SearchBackward( '#' ) );
+    // load help string
+    return SfxContentHelper::GetActiveHelpString( aHelpURL );
 }
 
 String SfxHelp_Impl::GetHelpText( const rtl::OUString& aCommandURL, const String& rModule )
@@ -404,7 +410,7 @@ sal_Bool SfxHelp_Impl::IsHelpInstalled()
 SfxHelp::SfxHelp() :
 
     bIsDebug( sal_False ),
-    pImp    ( NULL )
+    pImp	( NULL )
 
 {
     // read the environment variable "HELP_DEBUG"
@@ -522,7 +528,7 @@ String SfxHelp::GetHelpModuleName_Impl()
                 xCont->getByName( aModuleIdentifier ) >>= lProps;
             for ( sal_Int32 i = 0; i < lProps.getLength(); ++i )
             {
-                if ( lProps[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooSetupFactoryShortName")) )
+                if ( lProps[i].Name.equalsAscii("ooSetupFactoryShortName") )
                 {
                     lProps[i].Value >>= aFactoryShortName;
                     break;
@@ -539,26 +545,26 @@ String SfxHelp::GetHelpModuleName_Impl()
     if ( aFactoryShortName.getLength() > 0 )
     {
         // Map some module identifiers to their "real" help module string.
-        if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("chart2")) )
+        if ( aFactoryShortName.equalsAscii( "chart2" ) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "schart" ) );
-        else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("BasicIDE")) )
+        else if ( aFactoryShortName.equalsAscii( "BasicIDE" ) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sbasic" ) );
-        else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sweb"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sglobal"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swxform")) )
+        else if ( aFactoryShortName.equalsAscii( "sweb" )
+                || aFactoryShortName.equalsAscii( "sglobal" )
+                || aFactoryShortName.equalsAscii( "swxform" ) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "swriter" ) );
-        else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbquery"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbbrowser"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbrelation"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbtable"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbapp"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbreport"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swreport"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dbbrowser"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swform")) )
+        else if ( aFactoryShortName.equalsAscii( "dbquery" )
+                || aFactoryShortName.equalsAscii( "dbbrowser" )
+                || aFactoryShortName.equalsAscii( "dbrelation" )
+                || aFactoryShortName.equalsAscii( "dbtable" )
+                || aFactoryShortName.equalsAscii( "dbapp" )
+                || aFactoryShortName.equalsAscii( "dbreport" )
+                || aFactoryShortName.equalsAscii( "swreport" )
+                || aFactoryShortName.equalsAscii( "dbbrowser" )
+                || aFactoryShortName.equalsAscii( "swform" ) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
-        else if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sbibliography"))
-                || aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("StartModule")) )
+        else if ( aFactoryShortName.equalsAscii( "sbibliography" )
+                || aFactoryShortName.equalsAscii( "StartModule" ) )
             aFactoryShortName = sDefaultModule;
     }
     else
@@ -568,7 +574,77 @@ String SfxHelp::GetHelpModuleName_Impl()
     return sModuleName;
 }
 
-String  SfxHelp::CreateHelpURL_Impl( const String& aCommandURL, const String& rModuleName )
+String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
+{
+    String aModuleName( rModuleName );
+    if ( aModuleName.Len() == 0 )
+        aModuleName = getDefaultModule_Impl();
+
+    // build up the help URL
+    String aHelpURL;
+    if ( aTicket.Len() )
+    {
+        // if there is a ticket, we are inside a plugin, so a special Help URL must be sent
+        aHelpURL = DEFINE_CONST_UNICODE("vnd.sun.star.cmd:help?");
+        aHelpURL += DEFINE_CONST_UNICODE("HELP_Request_Mode=contextIndex&HELP_Session_Mode=context&HELP_CallMode=portal&HELP_Device=html");
+
+        if ( !nHelpId )
+        {
+            // no help id -> start page
+            aHelpURL += DEFINE_CONST_UNICODE("&HELP_ContextID=start");
+        }
+        else
+        {
+            aHelpURL += DEFINE_CONST_UNICODE("&HELP_ContextID=");
+            aHelpURL += String::CreateFromInt64( nHelpId );
+        }
+
+        aHelpURL += DEFINE_CONST_UNICODE("&HELP_ProgramID=");
+        aHelpURL += aModuleName;
+        aHelpURL += DEFINE_CONST_UNICODE("&HELP_User=");
+        aHelpURL += aUser;
+        aHelpURL += DEFINE_CONST_UNICODE("&HELP_Ticket=");
+        aHelpURL += aTicket;
+        aHelpURL += DEFINE_CONST_UNICODE("&HELP_Language=");
+        aHelpURL += aLanguageStr;
+        if ( aCountryStr.Len() )
+        {
+            aHelpURL += DEFINE_CONST_UNICODE("&HELP_Country=");
+            aHelpURL += aCountryStr;
+        }
+    }
+    else
+    {
+        sal_Bool bHasAnchor = sal_False;
+        String aAnchor;
+        aHelpURL = String::CreateFromAscii("vnd.sun.star.help://");
+        aHelpURL += aModuleName;
+
+        if ( !nHelpId )
+            aHelpURL += String::CreateFromAscii("/start");
+        else
+        {
+            aHelpURL += '/';
+            aHelpURL += String::CreateFromInt64( nHelpId );
+
+            String aTempURL = aHelpURL;
+            AppendConfigToken( aTempURL, sal_True );
+            bHasAnchor = GetHelpAnchor_Impl( aTempURL, aAnchor );
+        }
+
+        AppendConfigToken( aHelpURL, sal_True );
+
+        if ( bHasAnchor )
+        {
+            aHelpURL += '#';
+            aHelpURL += aAnchor;
+        }
+    }
+
+    return aHelpURL;
+}
+
+String	SfxHelp::CreateHelpURL_Impl( const String& aCommandURL, const String& rModuleName )
 {
     // build up the help URL
     String aHelpURL;
@@ -577,7 +653,28 @@ String  SfxHelp::CreateHelpURL_Impl( const String& aCommandURL, const String& rM
 
     String aModuleName( rModuleName );
     if ( aModuleName.Len() == 0 )
-        aModuleName = getDefaultModule_Impl();
+    {
+        // no active module (quicklaunch?) -> detect default module
+        SvtModuleOptions aModOpt;
+        if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+            aModuleName = DEFINE_CONST_UNICODE("swriter");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+            aModuleName = DEFINE_CONST_UNICODE("scalc");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+            aModuleName = DEFINE_CONST_UNICODE("simpress");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+            aModuleName = DEFINE_CONST_UNICODE("sdraw");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
+            aModuleName = DEFINE_CONST_UNICODE("smath");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCHART ) )
+            aModuleName = DEFINE_CONST_UNICODE("schart");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SBASIC ) )
+            aModuleName = DEFINE_CONST_UNICODE("sbasic");
+        else
+        {
+            DBG_ERRORFILE( "no installed module found" );
+        }
+    }
 
     aHelpURL = String::CreateFromAscii("vnd.sun.star.help://");
     aHelpURL += aModuleName;
@@ -590,7 +687,7 @@ String  SfxHelp::CreateHelpURL_Impl( const String& aCommandURL, const String& rM
         aHelpURL += String( rtl::Uri::encode( aCommandURL,
                                               rtl_UriCharClassRelSegment,
                                               rtl_UriEncodeKeepEscapes,
-                                              RTL_TEXTENCODING_UTF8 ));
+                                              RTL_TEXTENCODING_ASCII_US ));
 
         String aTempURL = aHelpURL;
         AppendConfigToken( aTempURL, sal_True );
@@ -658,48 +755,6 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
     return pHelpWindow;
 }
 
-XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* pWindow )
-{
-    String sModuleName = GetHelpModuleName_Impl();
-    String sHelpText = pImp->GetHelpText( aCommandURL, sModuleName );
-
-    ByteString aNewHelpId;
-
-    if ( pWindow && !sHelpText.Len() )
-    {
-        // no help text found -> try with parent help id.
-        Window* pParent = pWindow->GetParent();
-        while ( pParent )
-        {
-            aNewHelpId = pParent->GetHelpId();
-            sHelpText = pImp->GetHelpText( String( aNewHelpId, RTL_TEXTENCODING_UTF8 ), sModuleName );
-            if ( sHelpText.Len() > 0 )
-                pParent = NULL;
-            else
-                pParent = pParent->GetParent();
-        }
-
-        if ( bIsDebug && !sHelpText.Len() )
-            aNewHelpId.Erase();
-    }
-
-    // add some debug information?
-    if ( bIsDebug )
-    {
-        sHelpText += DEFINE_CONST_UNICODE("\n-------------\n");
-        sHelpText += String( sModuleName );
-        sHelpText += DEFINE_CONST_UNICODE(": ");
-        sHelpText += aCommandURL;
-        if ( aNewHelpId.Len() )
-        {
-            sHelpText += DEFINE_CONST_UNICODE(" - ");
-            sHelpText += String( aNewHelpId, RTL_TEXTENCODING_UTF8 );
-        }
-    }
-
-    return sHelpText;
-}
-
 /// Check for built-in help
 static bool impl_hasHelpInstalled( const rtl::OUString &rLang = rtl::OUString() )
 {
@@ -708,16 +763,6 @@ static bool impl_hasHelpInstalled( const rtl::OUString &rLang = rtl::OUString() 
     Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpRootURL );
 
     return ( aFactories.getLength() != 0 );
-}
-
-sal_Bool SfxHelp::SearchKeyword( const XubString& rKeyword )
-{
-    return Start_Impl( String(), NULL, rKeyword );
-}
-
-sal_Bool SfxHelp::Start( const String& rURL, const Window* pWindow )
-{
-    return Start_Impl( rURL, pWindow, String() );
 }
 
 /// Redirect the vnd.sun.star.help:// urls to http://help.libreoffice.org
@@ -748,87 +793,69 @@ static bool impl_showOnlineHelp( const String& rURL )
     return false;
 }
 
-sal_Bool SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const String& rKeyword )
+BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
 {
-    String aHelpRootURL( DEFINE_CONST_OUSTRING("vnd.sun.star.help://") );
-    AppendConfigToken( aHelpRootURL, sal_True);
-    Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpRootURL );
-
-    /* rURL may be
-        - a "real" URL
-        - a HelpID (formerly a long, now a string)
-       If rURL is a URL, CreateHelpURL should be called for this URL
-       If rURL is an arbitrary string, the same should happen, but the URL should be tried out
-       if it delivers real help content. In case only the Help Error Document is returned, the
-       parent of the window for that help was called, is asked for its HelpID.
-       For compatibility reasons this upward search is not implemented for "real" URLs.
-       Help keyword search now is implemented as own method; in former versions it
-       was done via Help::Start, but this implementation conflicted with the upward search.
-    */
-    String aHelpURL;
-    INetURLObject aParser( rURL );
+    String aHelpURL( rURL );
+    INetURLObject aParser( aHelpURL );
     INetProtocol nProtocol = aParser.GetProtocol();
-    String aHelpModuleName( GetHelpModuleName_Impl() );
 
+    // check if it's an URL or a jump mark!
     ::rtl::OUString sKeyword;
-    switch ( nProtocol )
+    if ( nProtocol != INET_PROT_VND_SUN_STAR_HELP )
     {
-        case INET_PROT_VND_SUN_STAR_HELP:
-            // already a vnd.sun.star.help URL -> nothing to do
-            aHelpURL = rURL;
-            break;
-        default:
+        // #i90162 Accept anything that is not invalid as help id, as both
+        // uno: URLs used as commands/help ids in the Office and the scheme
+        // used in extension help ids (e.g. com.foocorp.foo-ext:FooDialogButton)
+        // are accepted as INET_PROT_UNO respectively INET_PROT_GENERIC
+        bool bAcceptAsURL = ( nProtocol != INET_PROT_NOT_VALID );
+
+        // #i94891 As in some extensions help ids like foo.bar.dummy without
+        // any : have been used that worked before the fix of #i90162 (see
+        // above) strings containing . will be also accepted to avoid brea-
+        // king the help of existing extensions.
+        if( !bAcceptAsURL )
+            bAcceptAsURL = ( rURL.Search( '.' ) != STRING_NOTFOUND );
+
+        if ( bAcceptAsURL )
         {
-            // no URL, just a HelpID (maybe empty in case of keyword search)
-            aHelpURL = CreateHelpURL_Impl( rURL, aHelpModuleName );
+            aHelpURL = CreateHelpURL_Impl( rURL, GetHelpModuleName_Impl( ) );
+        }
+        else
+        {
+            aHelpURL = CreateHelpURL_Impl( 0, GetHelpModuleName_Impl( ) );
 
             // pb i91715: strings begin with ".HelpId:" are not words of the basic ide
             // they are helpid-strings used by the testtool -> so we ignore them
             static const String sHelpIdScheme( DEFINE_CONST_OUSTRING(".HelpId:") );
             if ( rURL.Search( sHelpIdScheme ) != 0 )
                 sKeyword = ::rtl::OUString( rURL );
-
-            if ( pWindow && SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
-            {
-                // no help found -> try with parent help id.
-                Window* pParent = pWindow->GetParent();
-                while ( pParent )
-                {
-                    ByteString aHelpId = pParent->GetHelpId();
-                    aHelpURL = CreateHelpURL( String( aHelpId, RTL_TEXTENCODING_UTF8 ), aHelpModuleName );
-                    if ( !SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
-                        break;
-                    else
-                    {
-                        pParent = pParent->GetParent();
-                        if ( !pParent )
-                            // create help url of start page ( helpid == 0 -> start page)
-                            aHelpURL = CreateHelpURL( String(), aHelpModuleName );
-                    }
-                }
-            }
-            break;
         }
     }
 
     if ( !impl_hasHelpInstalled() )
     {
         if ( impl_showOnlineHelp( aHelpURL ) )
-            return sal_True;
+            return TRUE;
         else
         {
             NoHelpErrorBox aErrBox( const_cast< Window* >( pWindow ) );
             aErrBox.Execute();
-            return sal_False;
+            return FALSE;
         }
     }
 
     Reference < XFrame > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
         DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
 
-    // check if help window is still open
-    // If not, create a new one and return access directly to the internal sub frame showing the help content
-    // search must be done here; search one desktop level could return an arbitraty frame
+    // check if help is still open
+    // If not - create new one and return acces directly
+    // to the internal sub frame, which shows the help content.
+
+    // Note further: We search for this sub frame here directly instead of
+    // the real top level help task ... It's needed to have the same
+    // sub frame available - so we can use it for loading (which is done
+    // in both cases)!
+
     Reference< XFrame > xHelp = xDesktop->findFrame(
         ::rtl::OUString(DEFINE_CONST_UNICODE("OFFICE_HELP_TASK")),
         FrameSearchFlag::CHILDREN);
@@ -842,24 +869,113 @@ sal_Bool SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const S
     else
         pHelpWindow = (SfxHelpWindow_Impl*)VCLUnoHelper::GetWindow(xHelp->getComponentWindow());
     if (!xHelp.is() || !xHelpContent.is() || !pHelpWindow)
-        return sal_False;
-
-#ifdef DBG_UTIL
-    ByteString aTmp("SfxHelp: HelpId = ");
-    aTmp += ByteString( aHelpURL, RTL_TEXTENCODING_UTF8 );
-    OSL_TRACE( aTmp.GetBuffer() );
-#endif
+        return FALSE;
 
     pHelpWindow->SetHelpURL( aHelpURL );
     pHelpWindow->loadHelpContent(aHelpURL);
-    if ( rKeyword.Len() )
-        pHelpWindow->OpenKeyword( rKeyword );
+    if ( sKeyword.getLength() > 0 )
+        pHelpWindow->OpenKeyword( sKeyword );
 
     Reference < ::com::sun::star::awt::XTopWindow > xTopWindow( xHelp->getContainerWindow(), UNO_QUERY );
     if ( xTopWindow.is() )
         xTopWindow->toFront();
 
-    return sal_True;
+    return TRUE;
+}
+
+BOOL SfxHelp::Start( ULONG nHelpId, const Window* pWindow )
+{
+    String aHelpModuleName( GetHelpModuleName_Impl() );
+    String aHelpURL = CreateHelpURL( nHelpId, aHelpModuleName );
+    if ( impl_hasHelpInstalled() && pWindow && SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
+    {
+        // no help found -> try with parent help id.
+        Window* pParent = pWindow->GetParent();
+        while ( pParent )
+        {
+            nHelpId = pParent->GetSmartUniqueOrHelpId().GetNum();
+            aHelpURL = CreateHelpURL( nHelpId, aHelpModuleName );
+
+            if ( !SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
+                break;
+            else
+            {
+                pParent = pParent->GetParent();
+                if ( !pParent )
+                    // create help url of start page ( helpid == 0 -> start page)
+                    aHelpURL = CreateHelpURL( 0, aHelpModuleName );
+            }
+        }
+    }
+
+    return Start( aHelpURL, pWindow );
+}
+
+XubString SfxHelp::GetHelpText( ULONG nHelpId, const Window* pWindow )
+{
+    String aModuleName = GetHelpModuleName_Impl();
+    String aHelpText = pImp->GetHelpText( nHelpId, aModuleName );
+    ULONG nNewHelpId = 0;
+
+    if ( pWindow && aHelpText.Len() == 0 )
+    {
+        // no help text found -> try with parent help id.
+        Window* pParent = pWindow->GetParent();
+        while ( pParent )
+        {
+            nNewHelpId = pParent->GetHelpId();
+            aHelpText = pImp->GetHelpText( nNewHelpId, aModuleName );
+
+            if ( aHelpText.Len() > 0 )
+                pParent = NULL;
+            else
+                pParent = pParent->GetParent();
+        }
+
+        if ( bIsDebug && aHelpText.Len() == 0 )
+            nNewHelpId = 0;
+    }
+
+    if ( bIsDebug )
+    {
+        aHelpText += DEFINE_CONST_UNICODE("\n\n");
+        aHelpText += aModuleName;
+        aHelpText += DEFINE_CONST_UNICODE(" - ");
+        aHelpText += String::CreateFromInt64( nHelpId );
+        if ( nNewHelpId )
+        {
+            aHelpText += DEFINE_CONST_UNICODE(" - ");
+            aHelpText += String::CreateFromInt64( nNewHelpId );
+        }
+    }
+
+    return aHelpText;
+}
+
+XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* )
+{
+    String sModuleName = GetHelpModuleName_Impl();
+    String sHelpText = pImp->GetHelpText( aCommandURL, sModuleName );
+
+    // add some debug information?
+    if ( bIsDebug )
+    {
+        sHelpText += DEFINE_CONST_UNICODE("\n-------------\n");
+        sHelpText += String( sModuleName );
+        sHelpText += DEFINE_CONST_UNICODE(": ");
+        sHelpText += aCommandURL;
+    }
+
+    return sHelpText;
+}
+
+String SfxHelp::CreateHelpURL( ULONG nHelpId, const String& rModuleName )
+{
+    String aURL;
+    SfxHelp* pHelp = SAL_STATIC_CAST( SfxHelp*, Application::GetHelp() );
+    if ( pHelp )
+        aURL = pHelp->CreateHelpURL_Impl( nHelpId, rModuleName );
+    return aURL;
 }
 
 String SfxHelp::CreateHelpURL( const String& aCommandURL, const String& rModuleName )
@@ -871,27 +987,27 @@ String SfxHelp::CreateHelpURL( const String& aCommandURL, const String& rModuleN
     return aURL;
 }
 
-void SfxHelp::OpenHelpAgent( SfxFrame*, const rtl::OString& sHelpId )
+void SfxHelp::OpenHelpAgent( SfxFrame*, ULONG nHelpId )
 {
-    SfxHelp* pHelp = SAL_STATIC_CAST( SfxHelp*, Application::GetHelp() );
-    if ( pHelp )
-        pHelp->OpenHelpAgent( sHelpId );
+        SfxHelp* pHelp = SAL_STATIC_CAST( SfxHelp*, Application::GetHelp() );
+        if ( pHelp )
+            pHelp->OpenHelpAgent( nHelpId );
 }
 
-void SfxHelp::OpenHelpAgent( const rtl::OString& sHelpId )
+void SfxHelp::OpenHelpAgent( ULONG nHelpId )
 {
     if ( SvtHelpOptions().IsHelpAgentAutoStartMode() )
     {
             SfxHelpOptions_Impl *pOpt = pImp->GetOptions();
-            if ( !pOpt->HasId( sHelpId ) )
+            if ( !pOpt->HasId( nHelpId ) )
                 return;
 
             try
             {
                 URL aURL;
-                aURL.Complete = CreateHelpURL_Impl( String( ByteString(sHelpId), RTL_TEXTENCODING_UTF8 ), GetHelpModuleName_Impl() );
+                aURL.Complete = CreateHelpURL_Impl( nHelpId, GetHelpModuleName_Impl() );
                 Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ), UNO_QUERY );
+                    ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" ) ), UNO_QUERY );
                 xTrans->parseStrict(aURL);
 
                 Reference < XFrame > xCurrentFrame;
@@ -904,7 +1020,7 @@ void SfxHelp::OpenHelpAgent( const rtl::OString& sHelpId )
                 Reference< XDispatch > xHelpDispatch;
                 if ( xDispProv.is() )
                     xHelpDispatch = xDispProv->queryDispatch(
-                        aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_helpagent")),
+                        aURL, ::rtl::OUString::createFromAscii("_helpagent"),
                         FrameSearchFlag::PARENT | FrameSearchFlag::SELF );
 
                 DBG_ASSERT( xHelpDispatch.is(), "OpenHelpAgent: could not get a dispatcher!" );

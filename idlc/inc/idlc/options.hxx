@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <idlc/idlctypes.hxx>
 
-typedef ::boost::unordered_map< ::rtl::OString,
+typedef	::std::hash_map< ::rtl::OString, 
                          ::rtl::OString,
                          HashString,
                          EqualString > OptionMap;
@@ -42,36 +42,25 @@ public:
     IllegalArgument(const ::rtl::OString& msg)
         : m_message(msg) {}
 
-    ::rtl::OString  m_message;
+    ::rtl::OString	m_message;	
 };
 
 
 class Options
 {
 public:
-    explicit Options(char const * progname);
+    Options();
     ~Options();
 
-    static bool checkArgument(std::vector< std::string > & rArgs, char const * arg, size_t len);
-    static bool checkCommandFile(std::vector< std::string > & rArgs, char const * filename);
-
-    bool initOptions(std::vector< std::string > & rArgs)
-        throw(IllegalArgument);
-    bool badOption(char const * reason, std::string const & rArg)
-        throw(IllegalArgument);
-    bool setOption(char const * option, std::string const & rArg);
-
-#if 0  /* @@@ */
-    sal_Bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False)
+    sal_Bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False) 
         throw( IllegalArgument );
-#endif /* @@@ */
 
     ::rtl::OString prepareHelp();
     ::rtl::OString prepareVersion();
 
-    const ::rtl::OString&   getProgramName() const;
-    bool                isValid(const ::rtl::OString& option);
-    const ::rtl::OString&   getOption(const ::rtl::OString& option)
+    const ::rtl::OString&	getProgramName() const;
+    sal_Bool				isValid(const ::rtl::OString& option);
+    const ::rtl::OString	getOption(const ::rtl::OString& option)
         throw( IllegalArgument );
 
     const StringVector& getInputFiles() const { return m_inputFiles; }
@@ -80,14 +69,14 @@ public:
     bool quiet() const { return m_quiet; }
 
 protected:
-    ::rtl::OString  m_program;
-    StringVector    m_inputFiles;
+    ::rtl::OString 	m_program;
+    StringVector	m_inputFiles;
     bool            m_stdin;
     bool            m_verbose;
     bool            m_quiet;
-    OptionMap       m_options;
+    OptionMap		m_options;
 };
-
+    
 #endif // _IDLC_OPTIONS_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

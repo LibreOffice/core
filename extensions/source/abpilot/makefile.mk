@@ -44,21 +44,21 @@ CDEFS+=-DCOMPMOD_RESPREFIX=abp
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES=	\
-        $(SLO)$/abpfinalpage.obj	\
-        $(SLO)$/abpservices.obj		\
-        $(SLO)$/abspage.obj		\
-        $(SLO)$/abspilot.obj		\
-        $(SLO)$/admininvokationimpl.obj	\
-        $(SLO)$/admininvokationpage.obj	\
-        $(SLO)$/datasourcehandling.obj	\
         $(SLO)$/fieldmappingimpl.obj	\
-        $(SLO)$/fieldmappingpage.obj	\
-        $(SLO)$/moduleabp.obj		\
-        $(SLO)$/tableselectionpage.obj	\
-        $(SLO)$/typeselectionpage.obj	\
+        $(SLO)$/datasourcehandling.obj	\
+        $(SLO)$/admininvokationimpl.obj	\
         $(SLO)$/unodialogabp.obj	\
+        $(SLO)$/moduleabp.obj	\
+        $(SLO)$/abpservices.obj \
+        $(SLO)$/typeselectionpage.obj	\
 
 SLOFILES=	\
+        $(SLO)$/fieldmappingpage.obj	\
+        $(SLO)$/abpfinalpage.obj	\
+        $(SLO)$/tableselectionpage.obj	\
+        $(SLO)$/admininvokationpage.obj	\
+        $(SLO)$/abspage.obj	\
+        $(SLO)$/abspilot.obj \
         $(EXCEPTIONSFILES)
 
 
@@ -104,11 +104,3 @@ DEF1EXPORTFILE=	exports.dxp
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
-
-ALLTAR : $(MISC)/abp.component
-
-$(MISC)/abp.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        abp.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt abp.component

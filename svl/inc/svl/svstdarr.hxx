@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,65 +32,74 @@
 *   (die defines setzen sich aus "_SVSTDARR_" und dem Namen des Array
 *    ohne "Sv" zusammen)
 *
-*   VarArr:     SvULongs, SvUShorts
-*   PtrArr:     SvStrings, SvStringsDtor
-*   SortArr:    SvStringsSort, SvStringsSortDtor,
-*               SvStringsISort, SvStringsISortDtor,
-*               SvUShortsSort
+*	VarArr:		SvBools, SvULongs, SvUShorts, SvLongs, SvShorts
+*	PtrArr:		SvStrings, SvStringsDtor
+*	SortArr:	SvStringsSort, SvStringsSortDtor,
+*				SvStringsISort, SvStringsISortDtor,
+*				SvUShortsSort
 ***********************************************************************/
 
 #include "svl/svldllapi.h"
 #include <svl/svarray.hxx>
-#include <deque>
+
+#ifndef _SVSTDARR_BOOLS_DECL
+SV_DECL_VARARR_VISIBILITY( SvBools, BOOL, 1, 1, SVL_DLLPUBLIC )
+#define _SVSTDARR_BOOLS_DECL
+#endif
+
+#ifndef _SVSTDARR_BYTES_DECL
+SV_DECL_VARARR_VISIBILITY( SvBytes, BYTE, 1, 1, SVL_DLLPUBLIC )
+#define _SVSTDARR_BYTES_DECL
+#endif
 
 #ifndef _SVSTDARR_ULONGS_DECL
-SV_DECL_VARARR_VISIBILITY( SvULongs, sal_uLong, 1, 1, SVL_DLLPUBLIC )
+SV_DECL_VARARR_VISIBILITY( SvULongs, ULONG, 1, 1, SVL_DLLPUBLIC )
 #define _SVSTDARR_ULONGS_DECL
 #endif
 
 #ifndef _SVSTDARR_ULONGSSORT_DECL
-SV_DECL_VARARR_SORT_VISIBILITY( SvULongsSort, sal_uLong, 1, 1, SVL_DLLPUBLIC )
+SV_DECL_VARARR_SORT_VISIBILITY( SvULongsSort, ULONG, 1, 1, SVL_DLLPUBLIC )
 #define _SVSTDARR_ULONGSSORT_DECL
 #endif
 
 #ifndef _SVSTDARR_USHORTS_DECL
-SV_DECL_VARARR_VISIBILITY( SvUShorts, sal_uInt16, 1, 1, SVL_DLLPUBLIC )
+SV_DECL_VARARR_VISIBILITY( SvUShorts, USHORT, 1, 1, SVL_DLLPUBLIC )
 #define _SVSTDARR_USHORTS_DECL
 #endif
 
 #ifndef _SVSTDARR_USHORTSSORT_DECL
 
-typedef sal_Bool (*FnForEach_SvUShortsSort)( const sal_uInt16&, void* );
+typedef BOOL (*FnForEach_SvUShortsSort)( const USHORT&, void* );
 class SVL_DLLPUBLIC SvUShortsSort : private SvUShorts
 {
 public:
-    SvUShortsSort(sal_uInt8 nSize = 1, sal_uInt8 nG = 1)
+    SvUShortsSort(BYTE nSize = 1, BYTE nG = 1)
         : SvUShorts(nSize,nG) {}
 
-    void Insert( const SvUShortsSort *pI, sal_uInt16 nS=0, sal_uInt16 nE=USHRT_MAX );
-    sal_Bool Insert( const sal_uInt16 aE );
-    sal_Bool Insert( const sal_uInt16 aE, sal_uInt16& rP );
-    void Insert( const sal_uInt16 *pE, sal_uInt16 nL );
+    void Insert( const SvUShortsSort *pI, USHORT nS=0, USHORT nE=USHRT_MAX );
+    BOOL Insert( const USHORT aE );
+    BOOL Insert( const USHORT aE, USHORT& rP );
+    void Insert( const USHORT *pE, USHORT nL );
     // remove ab Pos
-    void RemoveAt( const sal_uInt16 nP, sal_uInt16 nL = 1 );
+    void RemoveAt( const USHORT nP, USHORT nL = 1 );
     // remove ab dem Eintrag
-    void Remove( const sal_uInt16 nP, sal_uInt16 nL = 1 );
-    sal_Bool Seek_Entry( const sal_uInt16 aE, sal_uInt16* pP = 0 ) const;
+    void Remove( const USHORT nP, USHORT nL = 1 );
+    BOOL Seek_Entry( const USHORT aE, USHORT* pP = 0 ) const;
 
-    sal_uInt16 Count() const  {   return SvUShorts::Count();    }
-    const sal_uInt16* GetData() const { return (const sal_uInt16*)pData; }
+    USHORT Count() const  {   return SvUShorts::Count();	}
+    const USHORT* GetData() const { return (const USHORT*)pData; }
 
-    const sal_uInt16& operator[](sal_uInt16 nP) const {
+    const USHORT& operator[](USHORT nP) const {
         return SvUShorts::operator[]( nP );
     }
-    const sal_uInt16& GetObject(sal_uInt16 nP) const {
+    const USHORT& GetObject(USHORT nP) const {
         return SvUShorts::GetObject( nP );
     }
     void ForEach( FnForEach_SvUShortsSort fnForEach, void* pArgs = 0 )
     {
         _ForEach( 0, nA, (FnForEach_SvUShorts)fnForEach, pArgs );
     }
-    void ForEach( sal_uInt16 nS, sal_uInt16 nE,
+    void ForEach( USHORT nS, USHORT nE,
                     FnForEach_SvUShortsSort fnForEach, void* pArgs = 0 )
     {
         _ForEach( nS, nE, (FnForEach_SvUShorts)fnForEach, pArgs );
@@ -103,9 +112,19 @@ private:
 #define _SVSTDARR_USHORTSSORT_DECL
 #endif
 
+#ifndef _SVSTDARR_LONGS_DECL
+SV_DECL_VARARR_VISIBILITY( SvLongs, long, 1, 1, SVL_DLLPUBLIC )
+#define _SVSTDARR_LONGS_DECL
+#endif
+
 #ifndef _SVSTDARR_LONGSSORT_DECL
 SV_DECL_VARARR_SORT_VISIBILITY( SvLongsSort, long, 1, 1, SVL_DLLPUBLIC )
 #define _SVSTDARR_LONGSSORT_DECL
+#endif
+
+#ifndef _SVSTDARR_SHORTS_DECL
+SV_DECL_VARARR_VISIBILITY( SvShorts, short, 1, 1, SVL_DLLPUBLIC )
+#define _SVSTDARR_SHORTS_DECL
 #endif
 
 #include <tools/string.hxx>
@@ -174,6 +193,14 @@ SV_DECL_PTRARR_SORT_DEL_VISIBILITY( SvByteStringsISortDtor, ByteStringPtr, 1, 1,
 #define _SVSTDARR_BYTESTRINGSISORTDTOR_DECL
 #endif
 
-typedef std::deque< xub_StrLen > SvXub_StrLens;
+#ifndef _SVSTDARR_XUB_STRLEN_DECL
+SV_DECL_VARARR_VISIBILITY( SvXub_StrLens, xub_StrLen, 1, 1, SVL_DLLPUBLIC )
+#define _SVSTDARR_XUB_STRLEN_DECL
+#endif
+
+#ifndef _SVSTDARR_XUB_STRLENSORT_DECL
+SV_DECL_VARARR_SORT_VISIBILITY( SvXub_StrLensSort, xub_StrLen, 1, 1, SVL_DLLPUBLIC )
+#define _SVSTDARR_XUB_STRLENSORT_DECL
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

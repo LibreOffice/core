@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@ struct SvXMLItemMapEntry;
 class SvXMLItemSetContext : public SvXMLImportContext
 {
 protected:
-    SfxItemSet                  &rItemSet;
-    const SvXMLImportItemMapper &rIMapper;
-    const SvXMLUnitConverter    &rUnitConv;
+    SfxItemSet					&rItemSet;
+    const SvXMLImportItemMapper	&rIMapper;
+    const SvXMLUnitConverter	&rUnitConv;
 
 public:
 
-    SvXMLItemSetContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+    SvXMLItemSetContext( SvXMLImport& rImport, USHORT nPrfx,
                          const ::rtl::OUString& rLName,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                          SfxItemSet&  rItemSet,
@@ -59,14 +59,14 @@ public:
 
     virtual ~SvXMLItemSetContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     // This method is called from this instance implementation of
     // CreateChildContext if the element matches an entry in the
     // SvXMLImportItemMapper with the mid flag MID_SW_FLAG_ELEMENT_ITEM_IMPORT
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                    const ::rtl::OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                                     SfxItemSet&  rItemSet,
@@ -77,6 +77,6 @@ public:
 };
 
 
-#endif  //  _XMLITEM_HXX
+#endif	//  _XMLITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

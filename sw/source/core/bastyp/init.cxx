@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,6 +102,7 @@
 #include <fmtfordr.hxx>
 #include <fmtflcnt.hxx>
 #include <fchrfmt.hxx>
+#include <fmtautofmt.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtcnct.hxx>
 #include <fmtline.hxx>
@@ -129,7 +130,9 @@
 #include <swcalwrp.hxx>
 #include <SwStyleNameMapper.hxx>
 
+// OD 09.10.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
+// OD 2004-05-05 #i28701#
 #include <fmtwrapinfluenceonobjpos.hxx>
 
 #include <fmtmeta.hxx>
@@ -141,17 +144,18 @@ extern void _FrmFinit();
 extern void ClearFEShellTabCols();
 
 /*************************************************************************
-|*  einige Bereiche fuer die Set in Collections / Nodes
+|*	einige Bereiche fuer die Set in Collections / Nodes
 |*************************************************************************/
     // AttrSet-Range fuer die 2 Break-Attribute
-sal_uInt16 aBreakSetRange[] = {
+USHORT __FAR_DATA aBreakSetRange[] = {
     RES_PAGEDESC, RES_BREAK,
     0 };
 
     // AttrSet-Range fuer die TxtFmtColl
+    // OD 2008-02-27 #refactorlists# :
     // list attributes ( RES_PARATR_LIST_BEGIN - RES_PARATR_LIST_END ) are not
     // included in the paragraph style's itemset.
-sal_uInt16 aTxtFmtCollSetRange[] = {
+USHORT __FAR_DATA aTxtFmtCollSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
@@ -160,7 +164,7 @@ sal_uInt16 aTxtFmtCollSetRange[] = {
 };
 
     // AttrSet-Range fuer die GrfFmtColl
-sal_uInt16 aGrfFmtCollSetRange[] = {
+USHORT __FAR_DATA aGrfFmtCollSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
@@ -168,30 +172,32 @@ sal_uInt16 aGrfFmtCollSetRange[] = {
 };
 
     // AttrSet-Range fuer die TextNode
-sal_uInt16 aTxtNodeSetRange[] = {
+USHORT __FAR_DATA aTxtNodeSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
+    // --> OD 2008-02-25 #refactorlists#
     RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
+    // <--
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
     // AttrSet-Range fuer die NoTxtNode
-sal_uInt16 aNoTxtNodeSetRange[] = {
+USHORT __FAR_DATA aNoTxtNodeSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
-sal_uInt16 aTableSetRange[] = {
-    RES_FILL_ORDER,     RES_FRM_SIZE,
-    RES_LR_SPACE,       RES_BREAK,
-    RES_BACKGROUND,     RES_SHADOW,
-    RES_HORI_ORIENT,    RES_HORI_ORIENT,
-    RES_KEEP,           RES_KEEP,
-    RES_LAYOUT_SPLIT,   RES_LAYOUT_SPLIT,
+USHORT __FAR_DATA aTableSetRange[] = {
+    RES_FILL_ORDER, 	RES_FRM_SIZE,
+    RES_LR_SPACE, 		RES_BREAK,
+    RES_BACKGROUND, 	RES_SHADOW,
+    RES_HORI_ORIENT,	RES_HORI_ORIENT,
+    RES_KEEP,			RES_KEEP,
+    RES_LAYOUT_SPLIT,	RES_LAYOUT_SPLIT,
     RES_FRAMEDIR,       RES_FRAMEDIR,
     // --> collapsing borders FME 2005-05-27 #i29550#
     RES_COLLAPSING_BORDERS, RES_COLLAPSING_BORDERS,
@@ -200,23 +206,23 @@ sal_uInt16 aTableSetRange[] = {
     0
 };
 
-sal_uInt16 aTableLineSetRange[] = {
-    RES_FILL_ORDER,     RES_FRM_SIZE,
-    RES_LR_SPACE,       RES_UL_SPACE,
-    RES_BACKGROUND,     RES_SHADOW,
+USHORT __FAR_DATA aTableLineSetRange[] = {
+    RES_FILL_ORDER, 	RES_FRM_SIZE,
+    RES_LR_SPACE, 		RES_UL_SPACE,
+    RES_BACKGROUND, 	RES_SHADOW,
     RES_ROW_SPLIT,      RES_ROW_SPLIT,
     RES_PROTECT,        RES_PROTECT,
-    RES_VERT_ORIENT,    RES_VERT_ORIENT,
+    RES_VERT_ORIENT,	RES_VERT_ORIENT,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
-sal_uInt16 aTableBoxSetRange[] = {
-    RES_FILL_ORDER,     RES_FRM_SIZE,
-    RES_LR_SPACE,       RES_UL_SPACE,
-    RES_BACKGROUND,     RES_SHADOW,
-    RES_PROTECT,        RES_PROTECT,
-    RES_VERT_ORIENT,    RES_VERT_ORIENT,
+USHORT __FAR_DATA aTableBoxSetRange[] = {
+    RES_FILL_ORDER, 	RES_FRM_SIZE,
+    RES_LR_SPACE, 		RES_UL_SPACE,
+    RES_BACKGROUND, 	RES_SHADOW,
+    RES_PROTECT, 		RES_PROTECT,
+    RES_VERT_ORIENT,	RES_VERT_ORIENT,
     RES_FRAMEDIR,       RES_FRAMEDIR,
     RES_BOXATR_BEGIN,   RES_BOXATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
@@ -224,21 +230,21 @@ sal_uInt16 aTableBoxSetRange[] = {
 };
 
 // AttrSet-Range fuer die SwFrmFmt
-sal_uInt16 aFrmFmtSetRange[] = {
+USHORT __FAR_DATA aFrmFmtSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
 // AttrSet-Range fuer die SwCharFmt
-sal_uInt16 aCharFmtSetRange[] = {
+USHORT __FAR_DATA aCharFmtSetRange[] = {
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
 // AttrSet-Range fuer die character autostyles
-sal_uInt16 aCharAutoFmtSetRange[] = {
+USHORT __FAR_DATA aCharAutoFmtSetRange[] = {
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
@@ -246,7 +252,7 @@ sal_uInt16 aCharAutoFmtSetRange[] = {
 };
 
 // AttrSet-Range fuer die SwPageDescFmt
-sal_uInt16 aPgFrmFmtSetRange[] = {
+USHORT __FAR_DATA aPgFrmFmtSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
@@ -256,50 +262,50 @@ sal_uInt16 aPgFrmFmtSetRange[] = {
  * lege eine Tabelle fuer einen Zugriff auf die
  * Default-Format-Attribute an
  ******************************************************************************/
-SwDfltAttrTab aAttrTab;
+SwDfltAttrTab __FAR_DATA aAttrTab;
 
-SfxItemInfo aSlotTab[] =
+SfxItemInfo __FAR_DATA aSlotTab[] =
 {
-    { SID_ATTR_CHAR_CASEMAP, SFX_ITEM_POOLABLE },       // RES_CHRATR_CASEMAP
-    { SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEM_POOLABLE },  // RES_CHRATR_CHARSETCOLOR
-    { SID_ATTR_CHAR_COLOR, SFX_ITEM_POOLABLE },         // RES_CHRATR_COLOR
-    { SID_ATTR_CHAR_CONTOUR, SFX_ITEM_POOLABLE },       // RES_CHRATR_CONTOUR
-    { SID_ATTR_CHAR_STRIKEOUT, SFX_ITEM_POOLABLE },     // RES_CHRATR_CROSSEDOUT
-    { SID_ATTR_CHAR_ESCAPEMENT, SFX_ITEM_POOLABLE },    // RES_CHRATR_ESCAPEMENT
-    { SID_ATTR_CHAR_FONT, SFX_ITEM_POOLABLE },          // RES_CHRATR_FONT
-    { SID_ATTR_CHAR_FONTHEIGHT, SFX_ITEM_POOLABLE },    // RES_CHRATR_FONTSIZE
-    { SID_ATTR_CHAR_KERNING, SFX_ITEM_POOLABLE },       // RES_CHRATR_KERNING
-    { SID_ATTR_CHAR_LANGUAGE, SFX_ITEM_POOLABLE },      // RES_CHRATR_LANGUAGE
-    { SID_ATTR_CHAR_POSTURE, SFX_ITEM_POOLABLE },       // RES_CHRATR_POSTURE
-    { SID_ATTR_CHAR_PROPSIZE, SFX_ITEM_POOLABLE },      // RES_CHRATR_PROPORTIONALFONTSIZE
-    { SID_ATTR_CHAR_SHADOWED, SFX_ITEM_POOLABLE },      // RES_CHRATR_SHADOWED
-    { SID_ATTR_CHAR_UNDERLINE, SFX_ITEM_POOLABLE },     // RES_CHRATR_UNDERLINE
-    { SID_ATTR_CHAR_WEIGHT, SFX_ITEM_POOLABLE },        // RES_CHRATR_WEIGHT
-    { SID_ATTR_CHAR_WORDLINEMODE, SFX_ITEM_POOLABLE },  // RES_CHRATR_WORDLINEMODE
-    { SID_ATTR_CHAR_AUTOKERN, SFX_ITEM_POOLABLE },      // RES_CHRATR_AUTOKERN
-    { SID_ATTR_FLASH, SFX_ITEM_POOLABLE },              // RES_CHRATR_BLINK
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_NOLINEBREAK
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_NOHYPHEN
-    { SID_ATTR_BRUSH_CHAR, SFX_ITEM_POOLABLE },         // RES_CHRATR_BACKGROUND
-    { SID_ATTR_CHAR_CJK_FONT, SFX_ITEM_POOLABLE },      // RES_CHRATR_CJK_FONT
+    { SID_ATTR_CHAR_CASEMAP, SFX_ITEM_POOLABLE },   	// RES_CHRATR_CASEMAP
+    { SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEM_POOLABLE },	// RES_CHRATR_CHARSETCOLOR
+    { SID_ATTR_CHAR_COLOR, SFX_ITEM_POOLABLE },     	// RES_CHRATR_COLOR
+    { SID_ATTR_CHAR_CONTOUR, SFX_ITEM_POOLABLE },    	// RES_CHRATR_CONTOUR
+    { SID_ATTR_CHAR_STRIKEOUT, SFX_ITEM_POOLABLE },  	// RES_CHRATR_CROSSEDOUT
+    { SID_ATTR_CHAR_ESCAPEMENT, SFX_ITEM_POOLABLE }, 	// RES_CHRATR_ESCAPEMENT
+    { SID_ATTR_CHAR_FONT, SFX_ITEM_POOLABLE },     		// RES_CHRATR_FONT
+    { SID_ATTR_CHAR_FONTHEIGHT, SFX_ITEM_POOLABLE }, 	// RES_CHRATR_FONTSIZE
+    { SID_ATTR_CHAR_KERNING, SFX_ITEM_POOLABLE },    	// RES_CHRATR_KERNING
+    { SID_ATTR_CHAR_LANGUAGE, SFX_ITEM_POOLABLE },   	// RES_CHRATR_LANGUAGE
+    { SID_ATTR_CHAR_POSTURE, SFX_ITEM_POOLABLE },    	// RES_CHRATR_POSTURE
+    { SID_ATTR_CHAR_PROPSIZE, SFX_ITEM_POOLABLE },   	// RES_CHRATR_PROPORTIONALFONTSIZE
+    { SID_ATTR_CHAR_SHADOWED, SFX_ITEM_POOLABLE },   	// RES_CHRATR_SHADOWED
+    { SID_ATTR_CHAR_UNDERLINE, SFX_ITEM_POOLABLE },  	// RES_CHRATR_UNDERLINE
+    { SID_ATTR_CHAR_WEIGHT, SFX_ITEM_POOLABLE },     	// RES_CHRATR_WEIGHT
+    { SID_ATTR_CHAR_WORDLINEMODE, SFX_ITEM_POOLABLE },	// RES_CHRATR_WORDLINEMODE
+    { SID_ATTR_CHAR_AUTOKERN, SFX_ITEM_POOLABLE },	   	// RES_CHRATR_AUTOKERN
+    { SID_ATTR_FLASH, SFX_ITEM_POOLABLE },				// RES_CHRATR_BLINK
+    { 0, SFX_ITEM_POOLABLE },							// RES_CHRATR_NOLINEBREAK
+    { 0, SFX_ITEM_POOLABLE },							// RES_CHRATR_NOHYPHEN
+    { SID_ATTR_BRUSH_CHAR, SFX_ITEM_POOLABLE },			// RES_CHRATR_BACKGROUND
+    { SID_ATTR_CHAR_CJK_FONT, SFX_ITEM_POOLABLE },		// RES_CHRATR_CJK_FONT
     { SID_ATTR_CHAR_CJK_FONTHEIGHT, SFX_ITEM_POOLABLE },// RES_CHRATR_CJK_FONTSIZE
-    { SID_ATTR_CHAR_CJK_LANGUAGE, SFX_ITEM_POOLABLE },  // RES_CHRATR_CJK_LANGUAGE
-    { SID_ATTR_CHAR_CJK_POSTURE, SFX_ITEM_POOLABLE },   // RES_CHRATR_CJK_POSTURE
-    { SID_ATTR_CHAR_CJK_WEIGHT, SFX_ITEM_POOLABLE },    // RES_CHRATR_CJK_WEIGHT
-    { SID_ATTR_CHAR_CTL_FONT, SFX_ITEM_POOLABLE },      // RES_CHRATR_CTL_FONT
+    { SID_ATTR_CHAR_CJK_LANGUAGE, SFX_ITEM_POOLABLE },	// RES_CHRATR_CJK_LANGUAGE
+    { SID_ATTR_CHAR_CJK_POSTURE, SFX_ITEM_POOLABLE },	// RES_CHRATR_CJK_POSTURE
+    { SID_ATTR_CHAR_CJK_WEIGHT, SFX_ITEM_POOLABLE },	// RES_CHRATR_CJK_WEIGHT
+    { SID_ATTR_CHAR_CTL_FONT, SFX_ITEM_POOLABLE },		// RES_CHRATR_CTL_FONT
     { SID_ATTR_CHAR_CTL_FONTHEIGHT, SFX_ITEM_POOLABLE },// RES_CHRATR_CTL_FONTSIZE
-    { SID_ATTR_CHAR_CTL_LANGUAGE, SFX_ITEM_POOLABLE },  // RES_CHRATR_CTL_LANGUAGE
-    { SID_ATTR_CHAR_CTL_POSTURE, SFX_ITEM_POOLABLE },   // RES_CHRATR_CTL_POSTURE
-    { SID_ATTR_CHAR_CTL_WEIGHT, SFX_ITEM_POOLABLE },    // RES_CHRATR_CTL_WEIGHT
-    { SID_ATTR_CHAR_ROTATED, SFX_ITEM_POOLABLE },       // RES_CHRATR_ROTATE
-    { SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEM_POOLABLE },  // RES_CHRATR_EMPHASIS_MARK
-    { SID_ATTR_CHAR_TWO_LINES, SFX_ITEM_POOLABLE },     // RES_CHRATR_TWO_LINES
-    { SID_ATTR_CHAR_SCALEWIDTH, SFX_ITEM_POOLABLE },    // RES_CHRATR_SCALEW
-    { SID_ATTR_CHAR_RELIEF, SFX_ITEM_POOLABLE },        // RES_CHRATR_RELIEF
+    { SID_ATTR_CHAR_CTL_LANGUAGE, SFX_ITEM_POOLABLE },	// RES_CHRATR_CTL_LANGUAGE
+    { SID_ATTR_CHAR_CTL_POSTURE, SFX_ITEM_POOLABLE },	// RES_CHRATR_CTL_POSTURE
+    { SID_ATTR_CHAR_CTL_WEIGHT, SFX_ITEM_POOLABLE },	// RES_CHRATR_CTL_WEIGHT
+    { SID_ATTR_CHAR_ROTATED, SFX_ITEM_POOLABLE },		// RES_CHRATR_ROTATE
+    { SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEM_POOLABLE },	// RES_CHRATR_EMPHASIS_MARK
+    { SID_ATTR_CHAR_TWO_LINES, SFX_ITEM_POOLABLE },		// RES_CHRATR_TWO_LINES
+    { SID_ATTR_CHAR_SCALEWIDTH, SFX_ITEM_POOLABLE },	// RES_CHRATR_SCALEW
+    { SID_ATTR_CHAR_RELIEF, SFX_ITEM_POOLABLE },		// RES_CHRATR_RELIEF
     { SID_ATTR_CHAR_HIDDEN, SFX_ITEM_POOLABLE },        // RES_CHRATR_HIDDEN
-    { SID_ATTR_CHAR_OVERLINE, SFX_ITEM_POOLABLE },      // RES_CHRATR_OVERLINE
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY2
+    { SID_ATTR_CHAR_OVERLINE, SFX_ITEM_POOLABLE },  	// RES_CHRATR_OVERLINE
+    { 0, SFX_ITEM_POOLABLE },							// RES_CHRATR_DUMMY1
+    { 0, SFX_ITEM_POOLABLE },							// RES_CHRATR_DUMMY2
 
     { 0, 0 },                                           // RES_TXTATR_REFMARK
     { 0, 0 },                                           // RES_TXTATR_TOXMARK
@@ -312,26 +318,28 @@ SfxItemInfo aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_UNKNOWN_CONTAINER
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY5
 
-    { 0, 0 },                                           // RES_TXTATR_FIELD
-    { 0, 0 },                                           // RES_TXTATR_FLYCNT
-    { 0, 0 },                                           // RES_TXTATR_FTN
+    { 0, 0 },											// RES_TXTATR_FIELD
+    { 0, 0 },											// RES_TXTATR_FLYCNT
+    { 0, 0 },											// RES_TXTATR_FTN
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY4
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY3
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY1
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY2
+    { 0, SFX_ITEM_POOLABLE },							// RES_TXTATR_DUMMY1
+    { 0, SFX_ITEM_POOLABLE },							// RES_TXTATR_DUMMY2
 
-    { SID_ATTR_PARA_LINESPACE, SFX_ITEM_POOLABLE },     // RES_PARATR_LINESPACING
-    { SID_ATTR_PARA_ADJUST, SFX_ITEM_POOLABLE },        // RES_PARATR_ADJUST
-    { SID_ATTR_PARA_SPLIT, SFX_ITEM_POOLABLE },         // RES_PARATR_SPLIT
-    { SID_ATTR_PARA_ORPHANS, SFX_ITEM_POOLABLE },       // RES_PARATR_ORPHANS
-    { SID_ATTR_PARA_WIDOWS, SFX_ITEM_POOLABLE },        // RES_PARATR_WIDOWS
-    { SID_ATTR_TABSTOP, SFX_ITEM_POOLABLE },            // RES_PARATR_TABSTOP
-    { SID_ATTR_PARA_HYPHENZONE, SFX_ITEM_POOLABLE },    // RES_PARATR_HYPHENZONE
-    { FN_FORMAT_DROPCAPS, 0 },                          // RES_PARATR_DROP
-    { SID_ATTR_PARA_REGISTER, SFX_ITEM_POOLABLE },      // RES_PARATR_REGISTER
+    { SID_ATTR_PARA_LINESPACE, SFX_ITEM_POOLABLE }, 	// RES_PARATR_LINESPACING
+    { SID_ATTR_PARA_ADJUST, SFX_ITEM_POOLABLE }, 		// RES_PARATR_ADJUST
+    { SID_ATTR_PARA_SPLIT, SFX_ITEM_POOLABLE }, 		// RES_PARATR_SPLIT
+    { SID_ATTR_PARA_ORPHANS, SFX_ITEM_POOLABLE },  		// RES_PARATR_ORPHANS
+    { SID_ATTR_PARA_WIDOWS, SFX_ITEM_POOLABLE }, 		// RES_PARATR_WIDOWS
+    { SID_ATTR_TABSTOP, SFX_ITEM_POOLABLE }, 			// RES_PARATR_TABSTOP
+    { SID_ATTR_PARA_HYPHENZONE, SFX_ITEM_POOLABLE }, 	// RES_PARATR_HYPHENZONE
+    { FN_FORMAT_DROPCAPS, 0 },							// RES_PARATR_DROP
+    { SID_ATTR_PARA_REGISTER, SFX_ITEM_POOLABLE },		// RES_PARATR_REGISTER
+    // --> OD 2008-03-04 #refactorlists#
     // RES_PARATR_NUMRULE is now poolable
     { SID_ATTR_PARA_NUMRULE, SFX_ITEM_POOLABLE },       // RES_PARATR_NUMRULE
-    { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },   // RES_PARATR_SCRIPTSPACE
+    // <--
+    { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },	// RES_PARATR_SCRIPTSPACE
     { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },// RES_PARATR_HANGINGPUNCTUATION
 
     { SID_ATTR_PARA_FORBIDDEN_RULES, SFX_ITEM_POOLABLE },// RES_PARATR_FORBIDDEN_RULES
@@ -341,102 +349,105 @@ SfxItemInfo aSlotTab[] =
 
     { SID_ATTR_PARA_OUTLINE_LEVEL, SFX_ITEM_POOLABLE }, // RES_PARATR_OUTLINELEVEL //#outline level,zhaojianwei
 
+    // --> OD 2008-02-19 #refactorlists#
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ID
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_LEVEL
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ISRESTART
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_RESTARTVALUE
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ISCOUNTED
+    // <--
 
-    { 0, SFX_ITEM_POOLABLE },                           // RES_FILL_ORDER
-    { 0, SFX_ITEM_POOLABLE },                           // RES_FRM_SIZE
-    { SID_ATTR_PAGE_PAPERBIN, SFX_ITEM_POOLABLE },      // RES_PAPER_BIN
-    { SID_ATTR_LRSPACE, SFX_ITEM_POOLABLE },            // RES_LR_SPACE
-    { SID_ATTR_ULSPACE, SFX_ITEM_POOLABLE },            // RES_UL_SPACE
-    { 0, 0 },                                           // RES_PAGEDESC
-    { SID_ATTR_PARA_PAGEBREAK, SFX_ITEM_POOLABLE },     // RES_BREAK
-    { 0, 0 },                                           // RES_CNTNT
-    { 0, SFX_ITEM_POOLABLE },                           // RES_HEADER
-    { 0, SFX_ITEM_POOLABLE },                           // RES_FOOTER
-    { 0, SFX_ITEM_POOLABLE },                           // RES_PRINT
-    { FN_OPAQUE, SFX_ITEM_POOLABLE },                   // RES_OPAQUE
-    { FN_SET_PROTECT, SFX_ITEM_POOLABLE },              // RES_PROTECT
-    { FN_SURROUND, SFX_ITEM_POOLABLE },                 // RES_SURROUND
-    { FN_VERT_ORIENT, SFX_ITEM_POOLABLE },              // RES_VERT_ORIENT
-    { FN_HORI_ORIENT, SFX_ITEM_POOLABLE },              // RES_HORI_ORIENT
-    { 0, 0 },                                           // RES_ANCHOR
-    { SID_ATTR_BRUSH, SFX_ITEM_POOLABLE },              // RES_BACKGROUND
-    { SID_ATTR_BORDER_OUTER, SFX_ITEM_POOLABLE },       // RES_BOX
-    { SID_ATTR_BORDER_SHADOW, SFX_ITEM_POOLABLE },      // RES_SHADOW
-    { SID_ATTR_MACROITEM, SFX_ITEM_POOLABLE },          // RES_FRMMACRO
-    { FN_ATTR_COLUMNS, SFX_ITEM_POOLABLE },             // RES_COL
-    { SID_ATTR_PARA_KEEP, SFX_ITEM_POOLABLE },          // RES_KEEP
-    { 0, SFX_ITEM_POOLABLE },                           // RES_URL
-    { 0, SFX_ITEM_POOLABLE },                           // RES_EDIT_IN_READONLY
+    { 0, SFX_ITEM_POOLABLE },							// RES_FILL_ORDER
+    { 0, SFX_ITEM_POOLABLE }, 							// RES_FRM_SIZE
+    { SID_ATTR_PAGE_PAPERBIN, SFX_ITEM_POOLABLE }, 		// RES_PAPER_BIN
+    { SID_ATTR_LRSPACE, SFX_ITEM_POOLABLE }, 			// RES_LR_SPACE
+    { SID_ATTR_ULSPACE, SFX_ITEM_POOLABLE }, 			// RES_UL_SPACE
+    { 0, 0 },											// RES_PAGEDESC
+    { SID_ATTR_PARA_PAGEBREAK, SFX_ITEM_POOLABLE }, 	// RES_BREAK
+    { 0, 0 },											// RES_CNTNT
+    { 0, SFX_ITEM_POOLABLE },							// RES_HEADER
+    { 0, SFX_ITEM_POOLABLE },							// RES_FOOTER
+    { 0, SFX_ITEM_POOLABLE },							// RES_PRINT
+    { FN_OPAQUE, SFX_ITEM_POOLABLE },					// RES_OPAQUE
+    { FN_SET_PROTECT, SFX_ITEM_POOLABLE },				// RES_PROTECT
+    { FN_SURROUND, SFX_ITEM_POOLABLE },					// RES_SURROUND
+    { FN_VERT_ORIENT, SFX_ITEM_POOLABLE },				// RES_VERT_ORIENT
+    { FN_HORI_ORIENT, SFX_ITEM_POOLABLE },				// RES_HORI_ORIENT
+    { 0, 0 },											// RES_ANCHOR
+    { SID_ATTR_BRUSH, SFX_ITEM_POOLABLE },		 		// RES_BACKGROUND
+    { SID_ATTR_BORDER_OUTER, SFX_ITEM_POOLABLE }, 		// RES_BOX
+    { SID_ATTR_BORDER_SHADOW, SFX_ITEM_POOLABLE }, 		// RES_SHADOW
+    { SID_ATTR_MACROITEM, SFX_ITEM_POOLABLE },			// RES_FRMMACRO
+    { FN_ATTR_COLUMNS, SFX_ITEM_POOLABLE },				// RES_COL
+    { SID_ATTR_PARA_KEEP, SFX_ITEM_POOLABLE },			// RES_KEEP
+    { 0, SFX_ITEM_POOLABLE },							// RES_URL
+    { 0, SFX_ITEM_POOLABLE },							// RES_EDIT_IN_READONLY
 
-    { 0, SFX_ITEM_POOLABLE },                           // RES_LAYOUT_SPLIT
-    { 0, 0 },                                           // RES_CHAIN
+    { 0, SFX_ITEM_POOLABLE },							// RES_LAYOUT_SPLIT
+    { 0, 0 },											// RES_CHAIN
     { 0, SFX_ITEM_POOLABLE },                           // RES_TEXTGRID
     { FN_FORMAT_LINENUMBER, SFX_ITEM_POOLABLE },        // RES_LINENUMBER
-    { 0, SFX_ITEM_POOLABLE },                           // RES_FTN_AT_TXTEND
-    { 0, SFX_ITEM_POOLABLE },                           // RES_END_AT_TXTEND
-    { 0, SFX_ITEM_POOLABLE },                           // RES_COLUMNBALANCE
+    { 0, SFX_ITEM_POOLABLE },							// RES_FTN_AT_TXTEND
+    { 0, SFX_ITEM_POOLABLE },							// RES_END_AT_TXTEND
+    { 0, SFX_ITEM_POOLABLE },							// RES_COLUMNBALANCE
 
-    { SID_ATTR_FRAMEDIRECTION, SFX_ITEM_POOLABLE },     // RES_FRAMEDIR
+    { SID_ATTR_FRAMEDIRECTION, SFX_ITEM_POOLABLE },		// RES_FRAMEDIR
 
     { SID_ATTR_HDFT_DYNAMIC_SPACING, SFX_ITEM_POOLABLE }, // RES_HEADER_FOOTER_EAT_SPACING
     { FN_TABLE_ROW_SPLIT, SFX_ITEM_POOLABLE },            // RES_ROW_SPLIT
-    // #i18732# - use slot-id define in svx
+    // DVO, OD 18.09.2003 #i18732# - use slot-id define in svx
     { SID_SW_FOLLOW_TEXT_FLOW, SFX_ITEM_POOLABLE },         // RES_FOLLOW_TEXT_FLOW
-    // collapsing borders #i29550#
+    // --> collapsing borders FME 2005-05-27 #i29550#
     { SID_SW_COLLAPSING_BORDERS, SFX_ITEM_POOLABLE },       // RES_COLLAPSING_BORDERS
-    // #i28701#
+    // <-- collapsing
+    // OD 2004-05-04 #i28701#
     { SID_SW_WRAP_INFLUENCE_ON_OBJPOS, SFX_ITEM_POOLABLE }, // RES_WRAP_INFLUENCE_ON_OBJPOS
     { 0, 0 },                                           // RES_AUTO_STYLE
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_STYLE_NAME
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_CONDITIONAL_STYLE_NAME
 
-    { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_MIRRORGRF
-    { SID_ATTR_GRAF_CROP, SFX_ITEM_POOLABLE },          // RES_GRFATR_CROPGRF
-    { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_ROTATION,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_LUMINANCE,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_CONTRAST,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_CHANNELR,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_CHANNELG,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_CHANNELB,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_GAMMA,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_INVERT,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_TRANSPARENCY,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_DUMMY1,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_DUMMY2,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_DUMMY3,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_DUMMY4,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_DUMMY5,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_DUMMY6,
+    { 0, SFX_ITEM_POOLABLE },							// RES_GRFATR_MIRRORGRF
+    { SID_ATTR_GRAF_CROP, SFX_ITEM_POOLABLE }, 			// RES_GRFATR_CROPGRF
+    { 0, SFX_ITEM_POOLABLE },							// RES_GRFATR_ROTATION,
+    { 0, SFX_ITEM_POOLABLE },							// RES_GRFATR_LUMINANCE,
+    { 0, SFX_ITEM_POOLABLE },							// RES_GRFATR_CONTRAST,
+    { 0, SFX_ITEM_POOLABLE },							// RES_GRFATR_CHANNELR,
+    { 0, SFX_ITEM_POOLABLE },							// RES_GRFATR_CHANNELG,
+    { 0, SFX_ITEM_POOLABLE },							// RES_GRFATR_CHANNELB,
+    { 0, SFX_ITEM_POOLABLE },							// RES_GRFATR_GAMMA,
+    { 0, SFX_ITEM_POOLABLE },							// RES_GRFATR_INVERT,
+    { 0, SFX_ITEM_POOLABLE },							// RES_GRFATR_TRANSPARENCY,
+    { 0, SFX_ITEM_POOLABLE },							// RES_GRFATR_DUMMY1,
+    { 0, SFX_ITEM_POOLABLE },							// RES_GRFATR_DUMMY2,
+    { 0, SFX_ITEM_POOLABLE },							// RES_GRFATR_DUMMY3,
+    { 0, SFX_ITEM_POOLABLE },							// RES_GRFATR_DUMMY4,
+    { 0, SFX_ITEM_POOLABLE },							// RES_GRFATR_DUMMY5,
+    { 0, SFX_ITEM_POOLABLE },							// RES_GRFATR_DUMMY6,
 
-    { 0, SFX_ITEM_POOLABLE },                           // RES_BOXATR_FORMAT
-    { 0, 0 },                                           // RES_BOXATR_FORMULA,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_BOXATR_VALUE
+    { 0, SFX_ITEM_POOLABLE },							// RES_BOXATR_FORMAT
+    { 0, 0 },											// RES_BOXATR_FORMULA,
+    { 0, SFX_ITEM_POOLABLE },							// RES_BOXATR_VALUE
 
-    { 0, SFX_ITEM_POOLABLE }                            // RES_UNKNOWNATR_CONTAINER
+    { 0, SFX_ITEM_POOLABLE }							// RES_UNKNOWNATR_CONTAINER
 };
 
 
-sal_uInt16* SwAttrPool::pVersionMap1 = 0;
-sal_uInt16* SwAttrPool::pVersionMap2 = 0;
-sal_uInt16* SwAttrPool::pVersionMap3 = 0;
-sal_uInt16* SwAttrPool::pVersionMap4 = 0;
-// #i18732#
-sal_uInt16* SwAttrPool::pVersionMap5 = 0;
-sal_uInt16* SwAttrPool::pVersionMap6 = 0;
+USHORT* SwAttrPool::pVersionMap1 = 0;
+USHORT* SwAttrPool::pVersionMap2 = 0;
+USHORT* SwAttrPool::pVersionMap3 = 0;
+USHORT* SwAttrPool::pVersionMap4 = 0;
+// OD 2004-01-21 #i18732#
+USHORT* SwAttrPool::pVersionMap5 = 0;
+USHORT* SwAttrPool::pVersionMap6 = 0;
 SwIndexReg* SwIndexReg::pEmptyIndexArray = 0;
 
-const sal_Char* pMarkToTable        = "table";
-const sal_Char* pMarkToFrame        = "frame";
-const sal_Char* pMarkToRegion   = "region";
-const sal_Char* pMarkToText     = "text";
-const sal_Char* pMarkToOutline  = "outline";
-const sal_Char* pMarkToGraphic  = "graphic";
-const sal_Char* pMarkToOLE      = "ole";
+const sal_Char* __FAR_DATA pMarkToTable		= "table";
+const sal_Char* __FAR_DATA pMarkToFrame		= "frame";
+const sal_Char* __FAR_DATA pMarkToRegion	= "region";
+const sal_Char* __FAR_DATA pMarkToText		= "text";
+const sal_Char* __FAR_DATA pMarkToOutline	= "outline";
+const sal_Char* __FAR_DATA pMarkToGraphic	= "graphic";
+const sal_Char* __FAR_DATA pMarkToOLE		= "ole";
 
 SvPtrarr *pGlobalOLEExcludeList = 0;
 
@@ -449,7 +460,7 @@ CollatorWrapper* pCollator = 0, *pCaseCollator = 0;
 ::utl::TransliterationWrapper* pTransWrp = 0;
 
 /******************************************************************************
- *  void _InitCore()
+ *	void _InitCore()
  ******************************************************************************/
 salhelper::SingletonRef<SwCalendarWrapper>* s_getCalendarWrapper()
 {
@@ -482,9 +493,9 @@ void _InitCore()
     aAttrTab[ RES_CHRATR_WEIGHT- POOLATTR_BEGIN ] =         new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_WEIGHT );
     aAttrTab[ RES_CHRATR_WORDLINEMODE- POOLATTR_BEGIN ] =   new SvxWordLineModeItem( sal_False, RES_CHRATR_WORDLINEMODE );
     aAttrTab[ RES_CHRATR_AUTOKERN- POOLATTR_BEGIN ] =       new SvxAutoKernItem( sal_False, RES_CHRATR_AUTOKERN );
-    aAttrTab[ RES_CHRATR_BLINK - POOLATTR_BEGIN ] =         new SvxBlinkItem( sal_False, RES_CHRATR_BLINK );
-    aAttrTab[ RES_CHRATR_NOHYPHEN - POOLATTR_BEGIN ] =      new SvxNoHyphenItem( sal_True, RES_CHRATR_NOHYPHEN );
-    aAttrTab[ RES_CHRATR_NOLINEBREAK- POOLATTR_BEGIN ] =    new SvxNoLinebreakItem( sal_True, RES_CHRATR_NOLINEBREAK );
+    aAttrTab[ RES_CHRATR_BLINK - POOLATTR_BEGIN ] =         new SvxBlinkItem( FALSE, RES_CHRATR_BLINK );
+    aAttrTab[ RES_CHRATR_NOHYPHEN - POOLATTR_BEGIN ] =      new SvxNoHyphenItem( TRUE, RES_CHRATR_NOHYPHEN );
+    aAttrTab[ RES_CHRATR_NOLINEBREAK- POOLATTR_BEGIN ] =    new SvxNoLinebreakItem( TRUE, RES_CHRATR_NOLINEBREAK );
     aAttrTab[ RES_CHRATR_BACKGROUND - POOLATTR_BEGIN ] =    new SvxBrushItem( RES_CHRATR_BACKGROUND );
 
     // CJK-Attributes
@@ -503,10 +514,10 @@ void _InitCore()
 
     aAttrTab[ RES_CHRATR_ROTATE - POOLATTR_BEGIN ] =        new SvxCharRotateItem( 0, sal_False, RES_CHRATR_ROTATE );
     aAttrTab[ RES_CHRATR_EMPHASIS_MARK - POOLATTR_BEGIN ] = new SvxEmphasisMarkItem( EMPHASISMARK_NONE, RES_CHRATR_EMPHASIS_MARK );
-    aAttrTab[ RES_CHRATR_TWO_LINES - POOLATTR_BEGIN ] = new SvxTwoLinesItem( sal_False, 0, 0, RES_CHRATR_TWO_LINES );
+    aAttrTab[ RES_CHRATR_TWO_LINES - POOLATTR_BEGIN ] = new SvxTwoLinesItem( FALSE, 0, 0, RES_CHRATR_TWO_LINES );
     aAttrTab[ RES_CHRATR_SCALEW - POOLATTR_BEGIN ] = new SvxCharScaleWidthItem( 100, RES_CHRATR_SCALEW );
     aAttrTab[ RES_CHRATR_RELIEF - POOLATTR_BEGIN ] = new SvxCharReliefItem( RELIEF_NONE, RES_CHRATR_RELIEF );
-    aAttrTab[ RES_CHRATR_HIDDEN - POOLATTR_BEGIN ] = new SvxCharHiddenItem( sal_False, RES_CHRATR_HIDDEN );
+    aAttrTab[ RES_CHRATR_HIDDEN - POOLATTR_BEGIN ] = new SvxCharHiddenItem( FALSE, RES_CHRATR_HIDDEN );
     aAttrTab[ RES_CHRATR_OVERLINE- POOLATTR_BEGIN ] = new SvxOverlineItem( UNDERLINE_NONE, RES_CHRATR_OVERLINE );
 
 // CharakterAttr - Dummies
@@ -548,23 +559,25 @@ void _InitCore()
     aAttrTab[ RES_PARATR_HYPHENZONE- POOLATTR_BEGIN ] = pItem;
 
     aAttrTab[ RES_PARATR_DROP- POOLATTR_BEGIN ] = new SwFmtDrop;
-    aAttrTab[ RES_PARATR_REGISTER - POOLATTR_BEGIN ] = new SwRegisterItem( sal_False );
+    aAttrTab[ RES_PARATR_REGISTER - POOLATTR_BEGIN ] = new SwRegisterItem( FALSE );
     aAttrTab[ RES_PARATR_NUMRULE - POOLATTR_BEGIN ] = new SwNumRuleItem( aEmptyStr );
 
-    aAttrTab[ RES_PARATR_SCRIPTSPACE - POOLATTR_BEGIN ] =           new SvxScriptSpaceItem( sal_True, RES_PARATR_SCRIPTSPACE );
-    aAttrTab[ RES_PARATR_HANGINGPUNCTUATION - POOLATTR_BEGIN ] =    new SvxHangingPunctuationItem( sal_True, RES_PARATR_HANGINGPUNCTUATION );
-    aAttrTab[ RES_PARATR_FORBIDDEN_RULES - POOLATTR_BEGIN ] =       new SvxForbiddenRuleItem( sal_True, RES_PARATR_FORBIDDEN_RULES );
+    aAttrTab[ RES_PARATR_SCRIPTSPACE - POOLATTR_BEGIN ] =           new SvxScriptSpaceItem( TRUE, RES_PARATR_SCRIPTSPACE );
+    aAttrTab[ RES_PARATR_HANGINGPUNCTUATION - POOLATTR_BEGIN ] =    new SvxHangingPunctuationItem( TRUE, RES_PARATR_HANGINGPUNCTUATION );
+    aAttrTab[ RES_PARATR_FORBIDDEN_RULES - POOLATTR_BEGIN ] =       new SvxForbiddenRuleItem( TRUE, RES_PARATR_FORBIDDEN_RULES );
     aAttrTab[ RES_PARATR_VERTALIGN - POOLATTR_BEGIN ] =             new SvxParaVertAlignItem( 0, RES_PARATR_VERTALIGN );
     aAttrTab[ RES_PARATR_SNAPTOGRID - POOLATTR_BEGIN ] =            new SvxParaGridItem( sal_True, RES_PARATR_SNAPTOGRID );
     aAttrTab[ RES_PARATR_CONNECT_BORDER - POOLATTR_BEGIN ] = new SwParaConnectBorderItem;
 
     aAttrTab[ RES_PARATR_OUTLINELEVEL - POOLATTR_BEGIN ] = new SfxUInt16Item( RES_PARATR_OUTLINELEVEL, 0 );//#outline level,zhaojianwei
 
+    // --> OD 2008-02-19 #refactorlists#
     aAttrTab[ RES_PARATR_LIST_ID - POOLATTR_BEGIN ] = new SfxStringItem( RES_PARATR_LIST_ID, aEmptyStr );
     aAttrTab[ RES_PARATR_LIST_LEVEL - POOLATTR_BEGIN ] = new SfxInt16Item( RES_PARATR_LIST_LEVEL, 0 );
-    aAttrTab[ RES_PARATR_LIST_ISRESTART - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_LIST_ISRESTART, sal_False );
+    aAttrTab[ RES_PARATR_LIST_ISRESTART - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_LIST_ISRESTART, FALSE );
     aAttrTab[ RES_PARATR_LIST_RESTARTVALUE - POOLATTR_BEGIN ] = new SfxInt16Item( RES_PARATR_LIST_RESTARTVALUE, 1 );
-    aAttrTab[ RES_PARATR_LIST_ISCOUNTED - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, sal_True );
+    aAttrTab[ RES_PARATR_LIST_ISCOUNTED - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, TRUE );
+    // <--
 
     aAttrTab[ RES_FILL_ORDER- POOLATTR_BEGIN ] = new SwFmtFillOrder;
     aAttrTab[ RES_FRM_SIZE- POOLATTR_BEGIN ] = new SwFmtFrmSize;
@@ -588,7 +601,7 @@ void _InitCore()
     aAttrTab[ RES_SHADOW- POOLATTR_BEGIN ] = new SvxShadowItem( RES_SHADOW );
     aAttrTab[ RES_FRMMACRO- POOLATTR_BEGIN ] = new SvxMacroItem( RES_FRMMACRO );
     aAttrTab[ RES_COL- POOLATTR_BEGIN ] = new SwFmtCol;
-    aAttrTab[ RES_KEEP - POOLATTR_BEGIN ] = new SvxFmtKeepItem( sal_False, RES_KEEP );
+    aAttrTab[ RES_KEEP - POOLATTR_BEGIN ] = new SvxFmtKeepItem( FALSE, RES_KEEP );
     aAttrTab[ RES_URL - POOLATTR_BEGIN ] = new SwFmtURL();
     aAttrTab[ RES_EDIT_IN_READONLY - POOLATTR_BEGIN ] = new SwFmtEditInReadonly;
     aAttrTab[ RES_LAYOUT_SPLIT - POOLATTR_BEGIN ] = new SwFmtLayoutSplit;
@@ -602,12 +615,13 @@ void _InitCore()
     aAttrTab[ RES_FRAMEDIR - POOLATTR_BEGIN ] = new SvxFrameDirectionItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
     aAttrTab[ RES_ROW_SPLIT - POOLATTR_BEGIN ] = new SwFmtRowSplit;
 
-    // #i18732#
-    aAttrTab[ RES_FOLLOW_TEXT_FLOW - POOLATTR_BEGIN ] = new SwFmtFollowTextFlow( sal_True );
-    // collapsing borders #i29550#
-    aAttrTab[ RES_COLLAPSING_BORDERS - POOLATTR_BEGIN ] = new SfxBoolItem( RES_COLLAPSING_BORDERS, sal_False );
-    // #i28701#
-    // #i35017# - constant name has changed
+    // OD 18.09.2003 #i18732#
+    aAttrTab[ RES_FOLLOW_TEXT_FLOW - POOLATTR_BEGIN ] = new SwFmtFollowTextFlow( TRUE );
+    // --> collapsing borders FME 2005-05-27 #i29550#
+    aAttrTab[ RES_COLLAPSING_BORDERS - POOLATTR_BEGIN ] = new SfxBoolItem( RES_COLLAPSING_BORDERS, FALSE );
+    // <-- collapsing
+    // OD 2004-05-04 #i28701#
+    // --> OD 2004-10-18 #i35017# - constant name has changed
     aAttrTab[ RES_WRAP_INFLUENCE_ON_OBJPOS - POOLATTR_BEGIN ] =
             new SwFmtWrapInfluenceOnObjPos( text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
     // <--
@@ -651,13 +665,13 @@ void _InitCore()
                        *(SvxFontItem*)aAttrTab[ RES_CHRATR_CTL_FONT - POOLATTR_BEGIN ] );
 
     // 1. Version - neue Attribute:
-    //      - RES_CHRATR_BLINK
-    //      - RES_CHRATR_NOHYPHEN
-    //      - RES_CHRATR_NOLINEBREAK
-    //      - RES_PARATR_REGISTER
-    //      + 2 Dummies fuer die einzelnen "Bereiche"
-    SwAttrPool::pVersionMap1 = new sal_uInt16[ 60 ];
-    sal_uInt16 i;
+    //		- RES_CHRATR_BLINK
+    //		- RES_CHRATR_NOHYPHEN
+    //		- RES_CHRATR_NOLINEBREAK
+    // 		- RES_PARATR_REGISTER
+    // 		+ 2 Dummies fuer die einzelnen "Bereiche"
+    SwAttrPool::pVersionMap1 = new USHORT[ 60 ];
+    USHORT i;
     for( i = 1; i <= 17; i++ )
         SwAttrPool::pVersionMap1[ i-1 ] = i;
     for ( i = 18; i <= 27; ++i )
@@ -670,17 +684,17 @@ void _InitCore()
         SwAttrPool::pVersionMap1[ i-1 ] = i + 12;
 
     // 2. Version - neue Attribute:
-    //      10 Dummies fuer den Frame "Bereich"
-    SwAttrPool::pVersionMap2 = new sal_uInt16[ 75 ];
+    // 		10 Dummies fuer den Frame "Bereich"
+    SwAttrPool::pVersionMap2 = new USHORT[ 75 ];
     for( i = 1; i <= 70; i++ )
         SwAttrPool::pVersionMap2[ i-1 ] = i;
     for ( i = 71; i <= 75; ++i )
         SwAttrPool::pVersionMap2[ i-1 ] = i + 10;
 
     // 3. Version - neue Attribute:
-    //      neue Attribute und Dummies fuer die CJK-Version
-    //      und neue Grafik-Attribute
-    SwAttrPool::pVersionMap3 = new sal_uInt16[ 86 ];
+    // 		neue Attribute und Dummies fuer die CJK-Version
+    // 		und neue Grafik-Attribute
+    SwAttrPool::pVersionMap3 = new USHORT[ 86 ];
     for( i = 1; i <= 21; i++ )
         SwAttrPool::pVersionMap3[ i-1 ] = i;
     for ( i = 22; i <= 27; ++i )
@@ -691,22 +705,22 @@ void _InitCore()
         SwAttrPool::pVersionMap3[ i-1 ] = i + 35;
 
     // 4. Version - neue Paragraph Attribute fuer die CJK-Version
-    SwAttrPool::pVersionMap4 = new sal_uInt16[ 121 ];
+    SwAttrPool::pVersionMap4 = new USHORT[ 121 ];
     for( i = 1; i <= 65; i++ )
         SwAttrPool::pVersionMap4[ i-1 ] = i;
     for ( i = 66; i <= 121; ++i )
         SwAttrPool::pVersionMap4[ i-1 ] = i + 9;
 
-    // #i18732# - setup new version map due to extension of
+    // OD 2004-01-21 #i18732# - setup new version map due to extension of
     // the frame attributes (RES_FRMATR_*) for binary filters.
-    SwAttrPool::pVersionMap5 = new sal_uInt16[ 130 ];
+    SwAttrPool::pVersionMap5 = new USHORT[ 130 ];
     for( i = 1; i <= 109; i++ )
         SwAttrPool::pVersionMap5[ i-1 ] = i;
     for ( i = 110; i <= 130; ++i )
         SwAttrPool::pVersionMap5[ i-1 ] = i + 6;
 
     // 6. Version - new character attribute for overlining plus 2 dummies
-    SwAttrPool::pVersionMap6 = new sal_uInt16[ 136 ];
+    SwAttrPool::pVersionMap6 = new USHORT[ 136 ];
     for( i = 1; i <= 37; i++ )
         SwAttrPool::pVersionMap6[ i-1 ] = i;
     for ( i = 38; i <= 136; ++i )
@@ -718,6 +732,9 @@ void _InitCore()
 
     SwBreakIt::_Create( xMSF );
     pCheckIt = NULL;
+    /*pAppCharClass = new CharClass(
+        xMSF, SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));*/
+    //pCalendarWrapper = new SwCalendarWrapper( xMSF );
 
     _FrmInit();
     _TextInit();
@@ -735,7 +752,7 @@ void _InitCore()
 }
 
 /******************************************************************************
- *  void _FinitCore()
+ *	void _FinitCore()
  ******************************************************************************/
 
 
@@ -762,7 +779,7 @@ void _FinitCore()
 #if OSL_DEBUG_LEVEL > 1
     //Defaultattribut freigeben lassen um asserts zu vermeiden.
     if ( aAttrTab[0]->GetRefCount() )
-        SfxItemPool::ReleaseDefaults( aAttrTab, POOLATTR_END-POOLATTR_BEGIN, sal_False);
+        SfxItemPool::ReleaseDefaults( aAttrTab, POOLATTR_END-POOLATTR_BEGIN, FALSE);
 #endif
     delete SwDoc::pACmpltWords;
 
@@ -807,7 +824,7 @@ void _FinitCore()
 
     // loesche alle default-Attribute
     SfxPoolItem* pHt;
-    for( sal_uInt16 n = 0; n < POOLATTR_END - POOLATTR_BEGIN; n++ )
+    for( USHORT n = 0; n < POOLATTR_END - POOLATTR_BEGIN; n++ )
         if( 0 != ( pHt = aAttrTab[n] ))
             delete pHt;
 
@@ -818,11 +835,11 @@ void _FinitCore()
     delete[] SwAttrPool::pVersionMap2;
     delete[] SwAttrPool::pVersionMap3;
     delete[] SwAttrPool::pVersionMap4;
-    // #i18732#
+    // OD 2004-01-21 #i18732#
     delete[] SwAttrPool::pVersionMap5;
     delete[] SwAttrPool::pVersionMap6;
 
-    for ( sal_uInt16 i = 0; i < pGlobalOLEExcludeList->Count(); ++i )
+    for ( USHORT i = 0; i < pGlobalOLEExcludeList->Count(); ++i )
         delete (SvGlobalName*)(*pGlobalOLEExcludeList)[i];
     delete pGlobalOLEExcludeList;
 }
@@ -839,7 +856,7 @@ CharClass& GetAppCharClass()
     return *pAppCharClass;
 }
 
-void SwCalendarWrapper::LoadDefaultCalendar( sal_uInt16 eLang )
+void SwCalendarWrapper::LoadDefaultCalendar( USHORT eLang )
 {
     sUniqueId.Erase();
     if( eLang != nLang )

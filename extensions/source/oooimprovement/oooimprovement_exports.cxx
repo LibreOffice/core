@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,6 +66,28 @@ extern "C"
     void SAL_CALL component_getImplementationEnvironment(const sal_Char** env_type_name, uno_Environment**)
     { *env_type_name = CPPU_CURRENT_LANGUAGE_BINDING_NAME; }
 
+    sal_Bool SAL_CALL component_writeInfo(void*, void* p_reg_key)
+    {
+        if (!p_reg_key) return sal_False;
+        try
+        {
+            Reference<XRegistryKey> reg_key(reinterpret_cast<XRegistryKey*>(p_reg_key), UNO_QUERY);
+            writeInfo(reg_key,
+                CoreController::getImplementationName_static(),
+                CoreController::getSupportedServiceNames_static()[0]);
+            writeInfo(reg_key,
+                OnLogRotateJob::getImplementationName_static(),
+                OnLogRotateJob::getSupportedServiceNames_static()[0]);
+            writeInfo(reg_key,
+                InviteJob::getImplementationName_static(),
+                InviteJob::getSupportedServiceNames_static()[0]);
+            return sal_True;
+        }
+        catch(const InvalidRegistryException&)
+            { OSL_ENSURE( sal_False, "### InvalidRegistryException!" ); }
+        return sal_False;
+    }
+
     void* SAL_CALL component_getFactory(const sal_Char* pImplName, void* pServiceManager, void*)
     {
         if ( !pServiceManager || !pImplName ) return 0;
@@ -86,6 +108,6 @@ extern "C"
         factory->acquire();
         return factory.get();
     }
-}
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

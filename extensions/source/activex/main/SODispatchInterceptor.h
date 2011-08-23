@@ -33,10 +33,10 @@ class SODispatchInterceptor :
     public CComObjectRoot,
     public CComCoClass<SODispatchInterceptor,&CLSID_SODispatchInterceptor>
 {
-    CComPtr<IDispatch>  m_xMaster;
-    CComPtr<IDispatch>  m_xSlave;
-    CSOActiveX*         m_xParentControl;
-    CRITICAL_SECTION    mMutex;
+    CComPtr<IDispatch>	m_xMaster;
+    CComPtr<IDispatch>	m_xSlave;
+    CSOActiveX* 		m_xParentControl;
+    CRITICAL_SECTION	mMutex;
 public:
     SODispatchInterceptor() : m_xParentControl( NULL ) { InitializeCriticalSection(&mMutex); }
     virtual ~SODispatchInterceptor() { ATLASSERT( !m_xParentControl ); DeleteCriticalSection(&mMutex); }

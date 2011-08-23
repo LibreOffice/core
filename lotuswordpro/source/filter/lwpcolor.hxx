@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPCOLOR_HXX
@@ -68,27 +68,29 @@
 #include "lwpobjstrm.hxx"
 #include "lwpheader.hxx"
 /**
- * @brief   lwpcolor class
- *      (red, green, blue, extra)
+ * @brief	lwpcolor class
+ * 		(red, green, blue, extra)
 */
 class LwpColor
 {
 public:
-    LwpColor():m_nRed(0), m_nGreen(0), m_nBlue(0), m_nExtra(0){}
-    ~LwpColor(){}
+    LwpColor():m_nRed(0), m_nGreen(0), m_nBlue(0), m_nExtra(0){};
+    ~LwpColor(){};
 public:
     void Read(LwpObjectStream *pStrm);
     sal_uInt16 GetRed();
     sal_uInt16 GetGreen();
     sal_uInt16 GetBlue();
-    sal_Bool IsValidColor();
+    BOOL IsValidColor();
     sal_uInt32 To24Color();
-    LwpColor& operator = (const LwpColor& rOther);
+    //add by , 01/26/2005
+    void operator = (const LwpColor& rOther);
+    //end
     sal_Bool IsTransparent();
 private:
-    sal_uInt16 m_nRed;          // When extra is AGLRGB_INDEX, m_nRed holds the
-    sal_uInt16 m_nGreen;        // hi 16 bits and m_nGreen holds the lo 16 bits of
-    sal_uInt16 m_nBlue;     // the 32-bit LUT index.
+    sal_uInt16 m_nRed;			// When extra is AGLRGB_INDEX, m_nRed holds the
+    sal_uInt16 m_nGreen;		// hi 16 bits and m_nGreen holds the lo 16 bits of
+    sal_uInt16 m_nBlue;		// the 32-bit LUT index.
     sal_uInt16 m_nExtra;
     enum ColorOverride {
           AGLRGB_RGB = 0,
@@ -118,7 +120,7 @@ inline sal_uInt16 LwpColor::GetBlue()
 {
     return m_nBlue;
 }
-inline sal_Bool LwpColor::IsValidColor()
+inline BOOL LwpColor::IsValidColor()
 {
     return ((m_nExtra!=AGLRGB_INVALID) && (m_nExtra!=AGLRGB_TRANSPARENT));
 }

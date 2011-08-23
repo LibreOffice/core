@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,8 +50,8 @@
 #include "com/sun/star/awt/Size.hpp"
 #include "comphelper/processfactory.hxx"
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
+#include <hash_map>
+#include <hash_set>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -65,23 +65,28 @@ class ImplPageCache
         GDIMetaFile                 aPage;
         PrinterController::PageSize aSize;
     };
-
+    
     std::vector< CacheEntry >  maPages;
     std::vector< sal_Int32 >    maPageNumbers;
     std::vector< sal_Int32 >    maCacheRanking;
-
+    
     static const sal_Int32 nCacheSize = 6;
-
+    
     void updateRanking( sal_Int32 nLastHit )
     {
         if( maCacheRanking[0] != nLastHit )
         {
+            bool bMove = false;
             for( sal_Int32 i = nCacheSize-1; i > 0; i-- )
+            {
+                if( maCacheRanking[i] == nLastHit )
+                    bMove = true;
                 maCacheRanking[i] = maCacheRanking[i-1];
+            }
             maCacheRanking[0] = nLastHit;
         }
     }
-
+    
 public:
     ImplPageCache()
     : maPages( nCacheSize )
@@ -91,7 +96,7 @@ public:
         for( sal_Int32 i = 0; i < nCacheSize; i++ )
             maCacheRanking[i] = nCacheSize - i - 1;
     }
-
+    
     // caution: does not ensure uniqueness
     void insert( sal_Int32 i_nPageNo, const GDIMetaFile& i_rPage, const PrinterController::PageSize& i_rSize )
     {
@@ -103,7 +108,7 @@ public:
         // so update the ranking
         updateRanking( nReplacePage );
     }
-
+    
     // caution: bad algorithm; should there ever be reason to increase the cache size beyond 6
     // this needs to be urgently rewritten. However do NOT increase the cache size lightly,
     // whole pages can be rather memory intensive
@@ -121,7 +126,7 @@ public:
         }
         return false;
     }
-
+    
     void invalidate()
     {
         for( sal_Int32 i = 0; i < nCacheSize; ++i )
@@ -135,19 +140,18 @@ public:
 
 class vcl::ImplPrinterControllerData
 {
-public:
+public:    
     struct ControlDependency
     {
         rtl::OUString       maDependsOnName;
         sal_Int32           mnDependsOnEntry;
-
+        
         ControlDependency() : mnDependsOnEntry( -1 ) {}
     };
-
-    typedef boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash > PropertyToIndexMap;
-    typedef boost::unordered_map< rtl::OUString, ControlDependency, rtl::OUStringHash > ControlDependencyMap;
-    typedef boost::unordered_map< rtl::OUString, Sequence< sal_Bool >, rtl::OUStringHash > ChoiceDisableMap;
-
+    
+    typedef std::hash_map< rtl::OUString, size_t, rtl::OUStringHash > PropertyToIndexMap;
+    typedef std::hash_map< rtl::OUString, ControlDependency, rtl::OUStringHash > ControlDependencyMap;
+    
     boost::shared_ptr<Printer>                                  mpPrinter;
     Sequence< PropertyValue >                                   maUIOptions;
     std::vector< PropertyValue >                                maUIProperties;
@@ -155,24 +159,23 @@ public:
     PropertyToIndexMap                                          maPropertyToIndex;
     Link                                                        maOptionChangeHdl;
     ControlDependencyMap                                        maControlDependencies;
-    ChoiceDisableMap                                            maChoiceDisableMap;
     sal_Bool                                                    mbFirstPage;
     sal_Bool                                                    mbLastPage;
     sal_Bool                                                    mbReversePageOrder;
     view::PrintableState                                        meJobState;
 
     vcl::PrinterController::MultiPageSetup                      maMultiPage;
-
+    
     vcl::PrintProgressDialog*                                   mpProgress;
-
+    
     ImplPageCache                                               maPageCache;
-
+    
     // set by user through printer config dialog
     // if set, pages are centered and trimmed onto the fixed page
     Size                                                        maFixedPageSize;
     sal_Int32                                                   mnDefaultPaperBin;
     sal_Int32                                                   mnFixedPaperBin;
-
+    
     ImplPrinterControllerData() :
         mbFirstPage( sal_True ),
         mbLastPage( sal_False ),
@@ -183,18 +186,18 @@ public:
         mnFixedPaperBin( -1 )
     {}
     ~ImplPrinterControllerData() { delete mpProgress; }
-
-    Size getRealPaperSize( const Size& i_rPageSize, bool bNoNUP ) const
+    
+    Size getRealPaperSize( const Size& i_rPageSize ) const
     {
         if( maFixedPageSize.Width() > 0 && maFixedPageSize.Height() > 0 )
             return maFixedPageSize;
-        if( maMultiPage.nRows * maMultiPage.nColumns > 1 && ! bNoNUP )
+        if( maMultiPage.nRows * maMultiPage.nColumns > 1 )
             return maMultiPage.aPaperSize;
         return i_rPageSize;
     }
     bool isFixedPageSize() const
     { return maFixedPageSize.Width() != 0 && maFixedPageSize.Height() != 0; }
-    PrinterController::PageSize modifyJobSetup( const Sequence< PropertyValue >& i_rProps, bool bNoNUP );
+    PrinterController::PageSize modifyJobSetup( const Sequence< PropertyValue >& i_rProps );
 };
 
 PrinterController::PrinterController()
@@ -269,23 +272,23 @@ struct PrintJobAsync
 {
     boost::shared_ptr<PrinterController>  mpController;
     JobSetup                            maInitSetup;
-
+    
     PrintJobAsync( const boost::shared_ptr<PrinterController>& i_pController,
                    const JobSetup& i_rInitSetup
                    )
     : mpController( i_pController ), maInitSetup( i_rInitSetup )
     {}
-
+    
     DECL_LINK( ExecJob, void* );
 };
 
 IMPL_LINK( PrintJobAsync, ExecJob, void*, EMPTYARG )
 {
     Printer::ImplPrintJob( mpController, maInitSetup );
-
+    
     // clean up, do not access members after this
     delete this;
-
+    
     return 0;
 }
 
@@ -325,20 +328,33 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         }
         pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDirect" ) ),
                                makeAny( sal_False ) );
-    }
-
+    }    
+    
     // setup printer
 
-    // #i114306# changed behavior back from persistence
-    // if no specific printer is already set, create the default printer
+    // if no specific printer is already set, create one
+    
+    // #i108686#
+    // in case of a UI (platform independent or system dialog) print job, make the printer persistent over jobs
+    // however if no printer was already set by the print job's originator,
+    // and this is an API job, then use the system default location (because
+    // this is the only sensible default available if the user has no means of changing
+    // the destination
     if( ! pController->getPrinter() )
     {
         rtl::OUString aPrinterName( i_rInitSetup.GetPrinterName() );
+        if( ! aPrinterName.getLength() && pController->isShowDialogs() && ! pController->isDirectPrint() )
+        {
+            // get printer name from configuration
+            SettingsConfigItem* pItem = SettingsConfigItem::get();
+            aPrinterName = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
+                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPrinterUsed" ) ) );
+        }
+
         boost::shared_ptr<Printer> pPrinter( new Printer( aPrinterName ) );
-        pPrinter->SetJobSetup( i_rInitSetup );
         pController->setPrinter( pPrinter );
     }
-
+    
     // reset last page property
     i_pController->setLastPage( sal_False );
 
@@ -348,7 +364,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     // case 2: "All pages" is selected
     //         update "Page range" attribute to have a sensible default,
     //         but leave "All" as selected
-
+    
     // "Pages" attribute from API is now equivalent to "PageRange"
     // AND "PrintContent" = 1 except calc where it is "PrintRange" = 1
     // Argh ! That sure needs cleaning up
@@ -382,25 +398,17 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         {
             if( nContent == 0 )
             {
-                // do not overwrite PageRange if it is already set
-                beans::PropertyValue* pRangeVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ) );
-                rtl::OUString aRange;
-                if( pRangeVal )
-                    pRangeVal->Value >>= aRange;
-                if( aRange.getLength() == 0 )
+                sal_Int32 nPages = i_pController->getPageCount();
+                if( nPages > 0 )
                 {
-                    sal_Int32 nPages = i_pController->getPageCount();
-                    if( nPages > 0 )
+                    rtl::OUStringBuffer aBuf( 32 );
+                    aBuf.appendAscii( "1" );
+                    if( nPages > 1 )
                     {
-                        rtl::OUStringBuffer aBuf( 32 );
-                        aBuf.appendAscii( "1" );
-                        if( nPages > 1 )
-                        {
-                            aBuf.appendAscii( "-" );
-                            aBuf.append( nPages );
-                        }
-                        i_pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ), makeAny( aBuf.makeStringAndClear() ) );
+                        aBuf.appendAscii( "-" );
+                        aBuf.append( nPages );
                     }
+                    i_pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ), makeAny( aBuf.makeStringAndClear() ) );
                 }
             }
         }
@@ -425,7 +433,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             return;
         }
     }
-
+       
     // check if the printer brings up its own dialog
     // in that case leave the work to that dialog
     if( ! pController->getPrinter()->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG ) &&
@@ -463,16 +471,16 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         {
         }
     }
-
+    
     pController->pushPropertiesToPrinter();
-
+    
     rtl::OUString aJobName;
     beans::PropertyValue* pJobNameVal = pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobName" ) ) );
     if( pJobNameVal )
         pJobNameVal->Value >>= aJobName;
-
+    
     pController->getPrinter()->StartJob( String( aJobName ), pController );
-
+    
     pController->jobFinished( pController->getJobState() );
 }
 
@@ -481,18 +489,18 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     mnError = PRINTER_OK;
 
     if ( IsDisplayPrinter() )
-        return sal_False;
+        return FALSE;
 
     if ( IsJobActive() || IsPrinting() )
-        return sal_False;
-
-    sal_uLong   nCopies = mnCopyCount;
+        return FALSE;
+    
+    ULONG   nCopies = mnCopyCount;
     bool    bCollateCopy = mbCollateCopy;
-    bool    bUserCopy = sal_False;
+    bool    bUserCopy = FALSE;
 
     if ( nCopies > 1 )
     {
-        sal_uLong nDevCopy;
+        ULONG nDevCopy;
 
         if ( bCollateCopy )
             nDevCopy = GetCapabilities( PRINTER_CAPABILITIES_COLLATECOPIES );
@@ -502,20 +510,20 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
         // need to do copies by hand ?
         if ( nCopies > nDevCopy )
         {
-            bUserCopy = sal_True;
+            bUserCopy = TRUE;
             nCopies = 1;
-            bCollateCopy = sal_False;
+            bCollateCopy = FALSE;
         }
     }
     else
-        bCollateCopy = sal_False;
+        bCollateCopy = FALSE;
 
 
     ImplSVData* pSVData = ImplGetSVData();
     mpPrinter = pSVData->mpDefInst->CreatePrinter( mpInfoPrinter );
 
     if ( !mpPrinter )
-        return sal_False;
+        return FALSE;
 
     sal_Bool bSinglePrintJobs = sal_False;
     beans::PropertyValue* pSingleValue = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintCollateAsSingleJobs" ) ) );
@@ -523,7 +531,11 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     {
         pSingleValue->Value >>= bSinglePrintJobs;
     }
-
+    
+    // remark: currently it is still possible to use EnablePrintFile and
+    // SetPrintFileName to redirect printout into file
+    // it can be argued that those methods should be removed in favor
+    // of only using the LocalFileName property
     beans::PropertyValue* pFileValue = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LocalFileName" ) ) );
     if( pFileValue )
     {
@@ -531,7 +543,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
         pFileValue->Value >>= aFile;
         if( aFile.getLength() )
         {
-            mbPrintFile = sal_True;
+            mbPrintFile = TRUE;
             maPrintFile = aFile;
             bSinglePrintJobs = sal_False;
         }
@@ -540,15 +552,14 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     XubString* pPrintFile = NULL;
     if ( mbPrintFile )
         pPrintFile = &maPrintFile;
-    mpPrinterOptions->ReadFromConfig( mbPrintFile );
 
-    maJobName               = i_rJobName;
-    mnCurPage               = 1;
-    mnCurPrintPage          = 1;
-    mbPrinting              = sal_True;
-    if( GetCapabilities( PRINTER_CAPABILITIES_USEPULLMODEL ) )
+    maJobName		        = i_rJobName;
+    mnCurPage		        = 1;
+    mnCurPrintPage	        = 1;
+    mbPrinting		        = TRUE;
+    if( ImplGetSVData()->maGDIData.mbPrinterPullModel )
     {
-        mbJobActive             = sal_True;
+        mbJobActive             = TRUE;
         // sallayer does all necessary page printing
         // and also handles showing a dialog
         // that also means it must call jobStarted when the dialog is finished
@@ -567,11 +578,11 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
             if ( !mnError )
                 mnError = PRINTER_GENERALERROR;
             pSVData->mpDefInst->DestroyPrinter( mpPrinter );
-            mnCurPage           = 0;
-            mnCurPrintPage      = 0;
-            mbPrinting          = sal_False;
+            mnCurPage		    = 0;
+            mnCurPrintPage	    = 0;
+            mbPrinting		    = FALSE;
             mpPrinter = NULL;
-
+            
             return false;
         }
     }
@@ -581,7 +592,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
         // now the real job starts
         i_pController->setJobState( view::PrintableState_JOB_STARTED );
         i_pController->jobStarted();
-
+        
         int nJobs = 1;
         int nOuterRepeatCount = 1;
         int nInnerRepeatCount = 1;
@@ -598,7 +609,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
             nCopies = 1;
             nOuterRepeatCount = nInnerRepeatCount = 1;
         }
-
+        
         for( int nJobIteration = 0; nJobIteration < nJobs; nJobIteration++ )
         {
             bool bError = false, bAborted = false;
@@ -610,7 +621,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
                                      i_pController->isDirectPrint(),
                                      maJobSetup.ImplGetConstData() ) )
             {
-                mbJobActive             = sal_True;
+                mbJobActive             = TRUE;
                 i_pController->createProgressDialog();
                 int nPages = i_pController->getFilteredPageCount();
                 for( int nOuterIteration = 0; nOuterIteration < nOuterRepeatCount && ! bAborted; nOuterIteration++ )
@@ -637,17 +648,17 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
                     // FIXME: duplex ?
                 }
                 EndJob();
-
+                
                 if( nJobIteration < nJobs-1 )
                 {
                     mpPrinter = pSVData->mpDefInst->CreatePrinter( mpInfoPrinter );
-
+                    
                     if ( mpPrinter )
                     {
-                        maJobName               = i_rJobName;
-                        mnCurPage               = 1;
-                        mnCurPrintPage          = 1;
-                        mbPrinting              = sal_True;
+                        maJobName		        = i_rJobName;
+                        mnCurPage		        = 1;
+                        mnCurPrintPage	        = 1;
+                        mbPrinting		        = TRUE;
                     }
                     else
                         bError = true;
@@ -655,7 +666,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
             }
             else
                 bError = true;
-
+            
             if( bError )
             {
                 mnError = ImplSalPrinterErrorCodeToVCL( mpPrinter->GetErrorCode() );
@@ -666,11 +677,11 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
                                             : view::PrintableState_JOB_FAILED );
                 if( mpPrinter )
                     pSVData->mpDefInst->DestroyPrinter( mpPrinter );
-                mnCurPage           = 0;
-                mnCurPrintPage      = 0;
-                mbPrinting          = sal_False;
+                mnCurPage		    = 0;
+                mnCurPrintPage	    = 0;
+                mbPrinting		    = FALSE;
                 mpPrinter = NULL;
-
+                
                 return false;
             }
         }
@@ -678,7 +689,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
         if( i_pController->getJobState() == view::PrintableState_JOB_STARTED )
             i_pController->setJobState( view::PrintableState_JOB_SPOOLED );
     }
-
+    
     // make last used printer persistent for UI jobs
     if( i_pController->isShowDialogs() && ! i_pController->isDirectPrint() )
     {
@@ -688,7 +699,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
                          GetName()
                          );
     }
-
+    
     return true;
 }
 
@@ -721,13 +732,6 @@ void PrinterController::setPrinter( const boost::shared_ptr<Printer>& i_rPrinter
     mpImplData->mnFixedPaperBin = -1;
 }
 
-void PrinterController:: resetPrinterOptions( bool i_bFileOutput )
-{
-    PrinterOptions aOpt;
-    aOpt.ReadFromConfig( i_bFileOutput );
-    mpImplData->mpPrinter->SetPrinterOptions( aOpt );
-}
-
 bool PrinterController::setupPrinter( Window* i_pParent )
 {
     bool bRet = false;
@@ -736,7 +740,7 @@ bool PrinterController::setupPrinter( Window* i_pParent )
         // get old data
         Size aPaperSize( mpImplData->mpPrinter->PixelToLogic(
             mpImplData->mpPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
-        sal_uInt16 nPaperBin = mpImplData->mpPrinter->GetPaperBin();
+        USHORT nPaperBin = mpImplData->mpPrinter->GetPaperBin();
 
         // call driver setup
         bRet = mpImplData->mpPrinter->Setup( i_pParent );
@@ -745,7 +749,7 @@ bool PrinterController::setupPrinter( Window* i_pParent )
             // was papersize or bin  overridden ? if so we need to take action
             Size aNewPaperSize( mpImplData->mpPrinter->PixelToLogic(
                 mpImplData->mpPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
-            sal_uInt16 nNewPaperBin = mpImplData->mpPrinter->GetPaperBin();
+            USHORT nNewPaperBin = mpImplData->mpPrinter->GetPaperBin();
             if( aNewPaperSize != aPaperSize || nNewPaperBin != nPaperBin )
             {
                 mpImplData->maFixedPageSize = aNewPaperSize;
@@ -762,7 +766,7 @@ bool PrinterController::setupPrinter( Window* i_pParent )
     return bRet;
 }
 
-PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( const Sequence< PropertyValue >& i_rProps, bool bNoNUP )
+PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( const Sequence< PropertyValue >& i_rProps )
 {
     PrinterController::PageSize aPageSize;
     aPageSize.aSize = mpPrinter->GetPaperSize();
@@ -770,21 +774,21 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
     sal_Int32 nPaperBin = mnDefaultPaperBin;
     for( sal_Int32 nProperty = 0, nPropertyCount = i_rProps.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
-        if( i_rProps[ nProperty ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PreferredPageSize" ) ) )
+        if( i_rProps[ nProperty ].Name.equalsAscii( "PreferredPageSize" ) )
         {
             i_rProps[ nProperty ].Value >>= aSetSize;
         }
-        else if( i_rProps[ nProperty ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageSize" ) ) )
+        else if( i_rProps[ nProperty ].Name.equalsAscii( "PageSize" ) )
         {
             i_rProps[ nProperty ].Value >>= aIsSize;
         }
-        else if( i_rProps[ nProperty ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageIncludesNonprintableArea" ) ) )
+        else if( i_rProps[ nProperty ].Name.equalsAscii( "PageIncludesNonprintableArea" ) )
         {
             sal_Bool bVal = sal_False;
             i_rProps[ nProperty ].Value >>= bVal;
             aPageSize.bFullPaper = static_cast<bool>(bVal);
         }
-        else if( i_rProps[ nProperty ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrinterPaperTray" ) ) )
+        else if( i_rProps[ nProperty ].Name.equalsAscii( "PrinterPaperTray" ) )
         {
             sal_Int32 nBin = -1;
             i_rProps[ nProperty ].Value >>= nBin;
@@ -797,7 +801,7 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
     if( aSetSize.Width && aSetSize.Height )
     {
         Size aSetPaperSize( aSetSize.Width, aSetSize.Height );
-        Size aRealPaperSize( getRealPaperSize( aSetPaperSize, bNoNUP ) );
+        Size aRealPaperSize( getRealPaperSize( aSetPaperSize ) );
         if( aRealPaperSize != aCurSize )
             aIsSize = aSetSize;
     }
@@ -806,15 +810,15 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
     {
         aPageSize.aSize.Width() = aIsSize.Width;
         aPageSize.aSize.Height() = aIsSize.Height;
-
-        Size aRealPaperSize( getRealPaperSize( aPageSize.aSize, bNoNUP ) );
+        
+        Size aRealPaperSize( getRealPaperSize( aPageSize.aSize ) );
         if( aRealPaperSize != aCurSize )
             mpPrinter->SetPaperSizeUser( aRealPaperSize, ! isFixedPageSize() );
     }
-
+    
     if( nPaperBin != -1 && nPaperBin != mpPrinter->GetPaperBin() )
         mpPrinter->SetPaperBin( nPaperBin );
-
+    
     return aPageSize;
 }
 
@@ -851,7 +855,7 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
         mpImplData->mpProgress->tick();
         Application::Reschedule( true );
     }
-
+    
     if( i_bMayUseCache )
     {
         PrinterController::PageSize aPageSize;
@@ -864,21 +868,21 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
         mpImplData->maPageCache.invalidate();
 
     o_rMtf.Clear();
-
+    
     // get page parameters
     Sequence< PropertyValue > aPageParm( getPageParametersProtected( i_nUnfilteredPage ) );
     const MapMode aMapMode( MAP_100TH_MM );
 
     mpImplData->mpPrinter->Push();
     mpImplData->mpPrinter->SetMapMode( aMapMode );
-
+    
     // modify job setup if necessary
-    PrinterController::PageSize aPageSize = mpImplData->modifyJobSetup( aPageParm, true );
+    PrinterController::PageSize aPageSize = mpImplData->modifyJobSetup( aPageParm );
 
     o_rMtf.SetPrefSize( aPageSize.aSize );
     o_rMtf.SetPrefMapMode( aMapMode );
 
-    mpImplData->mpPrinter->EnableOutput( sal_False );
+    mpImplData->mpPrinter->EnableOutput( FALSE );
 
     o_rMtf.Record( mpImplData->mpPrinter.get() );
 
@@ -887,13 +891,13 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
     o_rMtf.Stop();
     o_rMtf.WindStart();
     mpImplData->mpPrinter->Pop();
-
+    
     if( i_bMayUseCache )
         mpImplData->maPageCache.insert( i_nUnfilteredPage, o_rMtf, aPageSize );
 
     // reset "FirstPage" property to false now we've gotten at least our first one
     mpImplData->mbFirstPage = sal_False;
-
+    
     return aPageSize;
 }
 
@@ -907,7 +911,7 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
     o_rMtf.AddAction( new MetaPushAction( PUSH_ALL ) );
 
     // clip to page rect
-    o_rMtf.AddAction( new MetaClipRegionAction( Region( i_rClipRect ), sal_True ) );
+    o_rMtf.AddAction( new MetaClipRegionAction( Region( i_rClipRect ), TRUE ) );
 
     // append the subpage
     io_rSubPage.WindStart();
@@ -924,8 +928,8 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
         o_rMtf.AddAction( new MetaMapModeAction( MapMode( MAP_100TH_MM ) ) );
 
         Rectangle aBorderRect( i_rClipRect );
-        o_rMtf.AddAction( new MetaLineColorAction( Color( COL_BLACK ), sal_True ) );
-        o_rMtf.AddAction( new MetaFillColorAction( Color( COL_TRANSPARENT ), sal_False ) );
+        o_rMtf.AddAction( new MetaLineColorAction( Color( COL_BLACK ), TRUE ) );
+        o_rMtf.AddAction( new MetaFillColorAction( Color( COL_TRANSPARENT ), FALSE ) );
         o_rMtf.AddAction( new MetaRectAction( aBorderRect ) );
 
         // restore gstate
@@ -939,14 +943,14 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     int nSubPages = rMPS.nRows * rMPS.nColumns;
     if( nSubPages < 1 )
         nSubPages = 1;
-
+    
     // reverse sheet order
     if( mpImplData->mbReversePageOrder )
     {
         int nDocPages = getFilteredPageCount();
         i_nFilteredPage = nDocPages - 1 - i_nFilteredPage;
     }
-
+    
     // there is no filtering to be done (and possibly the page size of the
     // original page is to be set), when N-Up is "neutral" that is there is
     // only one subpage and the margins are 0
@@ -955,7 +959,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
         rMPS.nTopMargin == 0 && rMPS.nBottomMargin == 0 )
     {
         PrinterController::PageSize aPageSize = getPageFile( i_nFilteredPage, o_rMtf, i_bMayUseCache );
-        Size aPaperSize = mpImplData->getRealPaperSize( aPageSize.aSize, true );
+        Size aPaperSize = mpImplData->getRealPaperSize( aPageSize.aSize );
         mpImplData->mpPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
         mpImplData->mpPrinter->SetPaperSizeUser( aPaperSize, ! mpImplData->isFixedPageSize() );
         if( aPaperSize != aPageSize.aSize )
@@ -971,13 +975,13 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
         }
         return aPageSize;
     }
-
+    
     // set last page property really only on the very last page to be rendered
     // that is on the last subpage of a NUp run
     sal_Bool bIsLastPage = mpImplData->mbLastPage;
     mpImplData->mbLastPage = sal_False;
-
-    Size aPaperSize( mpImplData->getRealPaperSize( mpImplData->maMultiPage.aPaperSize, false ) );
+    
+    Size aPaperSize( mpImplData->getRealPaperSize( mpImplData->maMultiPage.aPaperSize ) );
 
     // multi page area: page size minus margins + one time spacing right and down
     // the added spacing is so each subpage can be calculated including its spacing
@@ -998,7 +1002,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     o_rMtf.SetPrefSize( aPaperSize );
     o_rMtf.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
     o_rMtf.AddAction( new MetaMapModeAction( MapMode( MAP_100TH_MM ) ) );
-
+    
     int nDocPages = getPageCountProtected();
     for( int nSubPage = 0; nSubPage < nSubPages; nSubPage++ )
     {
@@ -1026,22 +1030,14 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
                     nCellX = (nSubPage / rMPS.nRows);
                     nCellY = (nSubPage % rMPS.nRows);
                     break;
-                case PrinterController::RLTB:
-                    nCellX = rMPS.nColumns - 1 - (nSubPage % rMPS.nColumns);
-                    nCellY = (nSubPage / rMPS.nColumns);
-                    break;
-                case PrinterController::TBRL:
-                    nCellX = rMPS.nColumns - 1 - (nSubPage / rMPS.nRows);
-                    nCellY = (nSubPage % rMPS.nRows);
-                    break;
                 }
                 // scale the metafile down to a sub page size
                 double fScaleX = double(aSubPageSize.Width())/double(aPageSize.aSize.Width());
                 double fScaleY = double(aSubPageSize.Height())/double(aPageSize.aSize.Height());
-                double fScale  = std::min( fScaleX, fScaleY );
+                double fScale  = std::min( fScaleX, fScaleY ); 
                 aPageFile.Scale( fScale, fScale );
                 aPageFile.WindStart();
-
+        
                 // move the subpage so it is centered in its "cell"
                 long nOffX = (aSubPageSize.Width() - long(double(aPageSize.aSize.Width()) * fScale)) / 2;
                 long nOffY = (aSubPageSize.Height() - long(double(aPageSize.aSize.Height()) * fScale)) / 2;
@@ -1053,7 +1049,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
                 Rectangle aSubPageRect( Point( nX, nY ),
                                         Size( long(double(aPageSize.aSize.Width())*fScale),
                                               long(double(aPageSize.aSize.Height())*fScale) ) );
-
+        
                 // append subpage to page
                 appendSubPage( o_rMtf, aSubPageRect, aPageFile, rMPS.bDrawBorder );
             }
@@ -1064,7 +1060,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     // subsequent getPageFile calls have changed the paper, reset it to current value
     mpImplData->mpPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
     mpImplData->mpPrinter->SetPaperSizeUser( aPaperSize, ! mpImplData->isFixedPageSize() );
-
+    
     return PrinterController::PageSize( aPaperSize, true );
 }
 
@@ -1076,9 +1072,9 @@ int PrinterController::getFilteredPageCount()
     return (getPageCountProtected() * mpImplData->maMultiPage.nRepeat + (nDiv-1)) / nDiv;
 }
 
-sal_uLong PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut )
+ULONG PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut )
 {
-    sal_uLong nRestoreDrawMode = mpImplData->mpPrinter->GetDrawMode();
+    ULONG nRestoreDrawMode = mpImplData->mpPrinter->GetDrawMode();
     sal_Int32 nMaxBmpDPIX = mpImplData->mpPrinter->ImplGetDPIX();
     sal_Int32 nMaxBmpDPIY = mpImplData->mpPrinter->ImplGetDPIY();
 
@@ -1112,7 +1108,7 @@ sal_uLong PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFi
     if( rPrinterOptions.IsConvertToGreyscales() )
     {
         mpImplData->mpPrinter->SetDrawMode( mpImplData->mpPrinter->GetDrawMode() |
-                                            ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
+                                            ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT | 
                                               DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
     }
 
@@ -1143,7 +1139,7 @@ void PrinterController::printFilteredPage( int i_nPage )
 {
     if( mpImplData->meJobState != view::PrintableState_JOB_STARTED )
         return;
-
+    
     GDIMetaFile aPageFile;
     PrinterController::PageSize aPageSize = getFilteredPageFile( i_nPage, aPageFile );
 
@@ -1174,22 +1170,22 @@ void PrinterController::printFilteredPage( int i_nPage )
         aPageFile.WindStart();
         aPageFile.Move( -aPageOffset.X(), -aPageOffset.Y(), mpImplData->mpPrinter->ImplGetDPIX(), mpImplData->mpPrinter->ImplGetDPIY() );
     }
-
+    
     GDIMetaFile aCleanedFile;
-    sal_uLong nRestoreDrawMode = removeTransparencies( aPageFile, aCleanedFile );
-
-    mpImplData->mpPrinter->EnableOutput( sal_True );
+    ULONG nRestoreDrawMode = removeTransparencies( aPageFile, aCleanedFile );
+    
+    mpImplData->mpPrinter->EnableOutput( TRUE );
 
     // actually print the page
     mpImplData->mpPrinter->ImplStartPage();
-
+    
     mpImplData->mpPrinter->Push();
     aCleanedFile.WindStart();
     aCleanedFile.Play( mpImplData->mpPrinter.get() );
     mpImplData->mpPrinter->Pop();
-
+    
     mpImplData->mpPrinter->ImplEndPage();
-
+    
     mpImplData->mpPrinter->SetDrawMode( nRestoreDrawMode );
 }
 
@@ -1230,8 +1226,8 @@ bool PrinterController::getReversePrint() const
 
 Sequence< PropertyValue > PrinterController::getJobProperties( const Sequence< PropertyValue >& i_rMergeList ) const
 {
-    boost::unordered_set< rtl::OUString, rtl::OUStringHash > aMergeSet;
-    size_t nResultLen = size_t(i_rMergeList.getLength()) + mpImplData->maUIProperties.size() + 3;
+    std::hash_set< rtl::OUString, rtl::OUStringHash > aMergeSet;
+    size_t nResultLen = size_t(i_rMergeList.getLength()) + mpImplData->maUIProperties.size() + 3; 
     for( int i = 0; i < i_rMergeList.getLength(); i++ )
         aMergeSet.insert( i_rMergeList[i].Name );
 
@@ -1279,14 +1275,14 @@ const Sequence< beans::PropertyValue >& PrinterController::getUIOptions() const
 
 beans::PropertyValue* PrinterController::getValue( const rtl::OUString& i_rProperty )
 {
-    boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
+    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
     return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : NULL;
 }
 
 const beans::PropertyValue* PrinterController::getValue( const rtl::OUString& i_rProperty ) const
 {
-    boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
+    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
     return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : NULL;
 }
@@ -1310,13 +1306,13 @@ void PrinterController::setValue( const rtl::OUString& i_rName, const Any& i_rVa
     beans::PropertyValue aVal;
     aVal.Name = i_rName;
     aVal.Value = i_rValue;
-
+    
     setValue( aVal );
 }
 
 void PrinterController::setValue( const beans::PropertyValue& i_rValue )
 {
-    boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
+    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rValue.Name );
     if( it != mpImplData->maPropertyToIndex.end() )
         mpImplData->maUIProperties[ it->second ] = i_rValue;
@@ -1343,11 +1339,10 @@ void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_
         bool bHaveProperty = false;
         rtl::OUString aPropName;
         vcl::ImplPrinterControllerData::ControlDependency aDep;
-        Sequence< sal_Bool > aChoicesDisabled;
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
             const beans::PropertyValue& rEntry( aOptProp[ n ] );
-            if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Property" ) ) )
+            if( rEntry.Name.equalsAscii( "Property" ) )
             {
                 PropertyValue aVal;
                 rEntry.Value >>= aVal;
@@ -1357,23 +1352,19 @@ void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_
                 aPropName = aVal.Name;
                 bHaveProperty = true;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Enabled" ) ) )
+            else if( rEntry.Name.equalsAscii( "Enabled" ) )
             {
                 sal_Bool bValue = sal_True;
                 rEntry.Value >>= bValue;
                 bIsEnabled = bValue;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DependsOnName" ) ) )
+            else if( rEntry.Name.equalsAscii( "DependsOnName" ) )
             {
                 rEntry.Value >>= aDep.maDependsOnName;
             }
-            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DependsOnEntry" ) ) )
+            else if( rEntry.Name.equalsAscii( "DependsOnEntry" ) )
             {
                 rEntry.Value >>= aDep.mnDependsOnEntry;
-            }
-            else if( rEntry.Name.equalsAscii( "ChoicesDisabled" ) )
-            {
-                rEntry.Value >>= aChoicesDisabled;
             }
         }
         if( bHaveProperty )
@@ -1387,15 +1378,13 @@ void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_
             }
             if( aDep.maDependsOnName.getLength() > 0 )
                 mpImplData->maControlDependencies[ aPropName ] = aDep;
-            if( aChoicesDisabled.getLength() > 0 )
-                mpImplData->maChoiceDisableMap[ aPropName ] = aChoicesDisabled;
         }
     }
 }
 
 void PrinterController::enableUIOption( const rtl::OUString& i_rProperty, bool i_bEnable )
 {
-    boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
+    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
     if( it != mpImplData->maPropertyToIndex.end() )
     {
@@ -1413,12 +1402,12 @@ void PrinterController::enableUIOption( const rtl::OUString& i_rProperty, bool i
 bool PrinterController::isUIOptionEnabled( const rtl::OUString& i_rProperty ) const
 {
     bool bEnabled = false;
-    boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator prop_it =
+    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator prop_it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
     if( prop_it != mpImplData->maPropertyToIndex.end() )
     {
         bEnabled = mpImplData->maUIPropertyEnabled[prop_it->second];
-
+        
         if( bEnabled )
         {
             // check control dependencies
@@ -1429,7 +1418,7 @@ bool PrinterController::isUIOptionEnabled( const rtl::OUString& i_rProperty ) co
                 // check if the dependency is enabled
                 // if the dependency is disabled, we are too
                 bEnabled = isUIOptionEnabled( it->second.maDependsOnName );
-
+                
                 if( bEnabled )
                 {
                     // does the dependency have the correct value ?
@@ -1448,32 +1437,18 @@ bool PrinterController::isUIOptionEnabled( const rtl::OUString& i_rProperty ) co
                             // could be a dependency on a checked boolean
                             // in this case the dependency is on a non zero for checked value
                             bEnabled = (   bDepVal && it->second.mnDependsOnEntry != 0) ||
-                                       ( ! bDepVal && it->second.mnDependsOnEntry == 0);
+                                       ( ! bDepVal && it->second.mnDependsOnEntry == 0); 
                         }
                         else
                         {
                             // if the type does not match something is awry
-                            OSL_FAIL( "strange type in control dependency" );
+                            OSL_ENSURE( 0, "strange type in control dependency" );
                             bEnabled = false;
                         }
                     }
                 }
             }
         }
-    }
-    return bEnabled;
-}
-
-bool PrinterController::isUIChoiceEnabled( const rtl::OUString& i_rProperty, sal_Int32 i_nValue ) const
-{
-    bool bEnabled = true;
-    ImplPrinterControllerData::ChoiceDisableMap::const_iterator it =
-        mpImplData->maChoiceDisableMap.find( i_rProperty );
-    if(it != mpImplData->maChoiceDisableMap.end() )
-    {
-        const Sequence< sal_Bool >& rDisabled( it->second );
-        if( i_nValue >= 0 && i_nValue < rDisabled.getLength() )
-            bEnabled = ! rDisabled[i_nValue];
     }
     return bEnabled;
 }
@@ -1486,7 +1461,7 @@ rtl::OUString PrinterController::getDependency( const rtl::OUString& i_rProperty
         mpImplData->maControlDependencies.find( i_rProperty );
     if( it != mpImplData->maControlDependencies.end() )
         aDependency = it->second.maDependsOnName;
-
+    
     return aDependency;
 }
 
@@ -1521,12 +1496,12 @@ rtl::OUString PrinterController::makeEnabled( const rtl::OUString& i_rProperty )
                else
                {
                    // if the type does not match something is awry
-                   OSL_FAIL( "strange type in control dependency" );
+                   OSL_ENSURE( 0, "strange type in control dependency" );
                }
            }
         }
     }
-
+    
     return aDependency;
 }
 
@@ -1553,7 +1528,7 @@ void PrinterController::createProgressDialog()
                 bShow = ! bApi;
             }
         }
-
+        
         if( bShow && ! Application::IsHeadlessModeEnabled() )
         {
             mpImplData->mpProgress = new PrintProgressDialog( NULL, getPageCountProtected() );
@@ -1590,7 +1565,7 @@ void PrinterController::pushPropertiesToPrinter()
     pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) );
     if( pVal )
         pVal->Value >>= bCollate;
-    mpImplData->mpPrinter->SetCopyCount( static_cast<sal_uInt16>(nCopyCount), bCollate );
+    mpImplData->mpPrinter->SetCopyCount( static_cast<USHORT>(nCopyCount), bCollate );
 
     // duplex mode
     pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DuplexMode" ) ) );
@@ -1602,7 +1577,7 @@ void PrinterController::pushPropertiesToPrinter()
         {
         case view::DuplexMode::OFF: mpImplData->mpPrinter->SetDuplexMode( DUPLEX_OFF ); break;
         case view::DuplexMode::LONGEDGE: mpImplData->mpPrinter->SetDuplexMode( DUPLEX_LONGEDGE ); break;
-        case view::DuplexMode::SHORTEDGE: mpImplData->mpPrinter->SetDuplexMode( DUPLEX_SHORTEDGE ); break;
+        case view::DuplexMode::SHORTEDGE: mpImplData->mpPrinter->SetDuplexMode( DUPLEX_SHORTEDGE ); break;            
         }
     }
 }
@@ -1634,7 +1609,7 @@ sal_Bool PrinterController::getBoolProperty( const rtl::OUString& i_rProperty, s
 Any PrinterOptionsHelper::getValue( const rtl::OUString& i_rPropertyName ) const
 {
     Any aRet;
-    boost::unordered_map< rtl::OUString, Any, rtl::OUStringHash >::const_iterator it =
+    std::hash_map< rtl::OUString, Any, rtl::OUStringHash >::const_iterator it =
         m_aPropertyMap.find( i_rPropertyName );
     if( it != m_aPropertyMap.end() )
         aRet = it->second;
@@ -1649,7 +1624,7 @@ void PrinterOptionsHelper::setValue( const rtl::OUString& i_rPropertyName, const
 bool PrinterOptionsHelper::hasProperty( const rtl::OUString& i_rPropertyName ) const
 {
     Any aRet;
-    boost::unordered_map< rtl::OUString, Any, rtl::OUStringHash >::const_iterator it =
+    std::hash_map< rtl::OUString, Any, rtl::OUStringHash >::const_iterator it =
         m_aPropertyMap.find( i_rPropertyName );
     return it != m_aPropertyMap.end();
 }
@@ -1689,7 +1664,7 @@ bool PrinterOptionsHelper::processProperties( const Sequence< PropertyValue >& i
     for( sal_Int32 i = 0; i < nElements; i++ )
     {
         bool bElementChanged = false;
-        boost::unordered_map< rtl::OUString, Any, rtl::OUStringHash >::iterator it =
+        std::hash_map< rtl::OUString, Any, rtl::OUStringHash >::iterator it =
             m_aPropertyMap.find( pVals[ i ].Name );
         if( it != m_aPropertyMap.end() )
         {
@@ -1724,16 +1699,16 @@ void PrinterOptionsHelper::appendPrintUIOptions( uno::Sequence< beans::PropertyV
 }
 
 Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
-                                           const Sequence< rtl::OUString >& i_rHelpIds,
+                                           const Sequence< rtl::OUString >& i_rHelpTexts,
                                            const rtl::OUString& i_rType,
                                            const PropertyValue* i_pVal,
                                            const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
                                            )
-{
+{    
     sal_Int32 nElements =
         1                                                               // ControlType
         + (i_rTitle.getLength() ? 1 : 0)                                // Text
-        + (i_rHelpIds.getLength() ? 1 : 0)                              // HelpId
+        + (i_rHelpTexts.getLength() ? 1 : 0)                            // HelpText
         + (i_pVal ? 1 : 0)                                              // Property
         + i_rControlOptions.maAddProps.getLength()                      // additional props
         + (i_rControlOptions.maGroupHint.getLength() ? 1 : 0)           // grouping
@@ -1756,10 +1731,10 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
         aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
         aCtrl[nUsed++].Value = makeAny( i_rTitle );
     }
-    if( i_rHelpIds.getLength() )
+    if( i_rHelpTexts.getLength() )
     {
-        aCtrl[nUsed  ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpId" ) );
-        aCtrl[nUsed++].Value = makeAny( i_rHelpIds );
+        aCtrl[nUsed  ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpText" ) );
+        aCtrl[nUsed++].Value = makeAny( i_rHelpTexts );
     }
     aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
     aCtrl[nUsed++].Value = makeAny( i_rType );
@@ -1798,7 +1773,7 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
         aCtrl[nUsed  ].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enabled" ) );
         aCtrl[nUsed++].Value <<= sal_False;
     }
-
+    
     sal_Int32 nAddProps = i_rControlOptions.maAddProps.getLength();
     for( sal_Int32 i = 0; i < nAddProps; i++ )
         aCtrl[ nUsed++ ] = i_rControlOptions.maAddProps[i];
@@ -1808,80 +1783,74 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
     return makeAny( aCtrl );
 }
 
-Any PrinterOptionsHelper::getGroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpId )
+Any PrinterOptionsHelper::getGroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpText )
 {
-    Sequence< rtl::OUString > aHelpId;
-    if( i_rHelpId.getLength() > 0 )
+    Sequence< rtl::OUString > aHelpText;
+    if( i_rHelpText.getLength() > 0 )
     {
-        aHelpId.realloc( 1 );
-        *aHelpId.getArray() = i_rHelpId;
+        aHelpText.realloc( 1 );
+        *aHelpText.getArray() = i_rHelpText;
     }
-    return getUIControlOpt( i_rTitle, aHelpId, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Group" ) ) );
+    return getUIControlOpt( i_rTitle, aHelpText, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Group" ) ) );
 }
 
 Any PrinterOptionsHelper::getSubgroupControlOpt( const rtl::OUString& i_rTitle,
-                                                 const rtl::OUString& i_rHelpId,
+                                                 const rtl::OUString& i_rHelpText,
                                                  const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
                                                  )
 {
-    Sequence< rtl::OUString > aHelpId;
-    if( i_rHelpId.getLength() > 0 )
+    Sequence< rtl::OUString > aHelpText;
+    if( i_rHelpText.getLength() > 0 )
     {
-        aHelpId.realloc( 1 );
-        *aHelpId.getArray() = i_rHelpId;
+        aHelpText.realloc( 1 );
+        *aHelpText.getArray() = i_rHelpText;
     }
-    return getUIControlOpt( i_rTitle, aHelpId, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ),
+    return getUIControlOpt( i_rTitle, aHelpText, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ),
                             NULL, i_rControlOptions );
 }
 
 Any PrinterOptionsHelper::getBoolControlOpt( const rtl::OUString& i_rTitle,
-                                             const rtl::OUString& i_rHelpId,
+                                             const rtl::OUString& i_rHelpText,
                                              const rtl::OUString& i_rProperty,
                                              sal_Bool i_bValue,
                                              const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
                                              )
 {
-    Sequence< rtl::OUString > aHelpId;
-    if( i_rHelpId.getLength() > 0 )
+    Sequence< rtl::OUString > aHelpText;
+    if( i_rHelpText.getLength() > 0 )
     {
-        aHelpId.realloc( 1 );
-        *aHelpId.getArray() = i_rHelpId;
+        aHelpText.realloc( 1 );
+        *aHelpText.getArray() = i_rHelpText;
     }
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_bValue );
-    return getUIControlOpt( i_rTitle, aHelpId, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ), &aVal, i_rControlOptions );
+    return getUIControlOpt( i_rTitle, aHelpText, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ), &aVal, i_rControlOptions );
 }
 
 Any PrinterOptionsHelper::getChoiceControlOpt( const rtl::OUString& i_rTitle,
-                                               const Sequence< rtl::OUString >& i_rHelpId,
+                                               const Sequence< rtl::OUString >& i_rHelpText,
                                                const rtl::OUString& i_rProperty,
                                                const Sequence< rtl::OUString >& i_rChoices,
                                                sal_Int32 i_nValue,
                                                const rtl::OUString& i_rType,
-                                               const Sequence< sal_Bool >& i_rDisabledChoices,
                                                const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
                                                )
 {
     UIControlOptions aOpt( i_rControlOptions );
     sal_Int32 nUsed = aOpt.maAddProps.getLength();
-    aOpt.maAddProps.realloc( nUsed + 1 + (i_rDisabledChoices.getLength() ? 1 : 0) );
+    aOpt.maAddProps.realloc( nUsed + 1 );
     aOpt.maAddProps[nUsed].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Choices" ) );
     aOpt.maAddProps[nUsed].Value = makeAny( i_rChoices );
-    if( i_rDisabledChoices.getLength() )
-    {
-        aOpt.maAddProps[nUsed+1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ChoicesDisabled" ) );
-        aOpt.maAddProps[nUsed+1].Value = makeAny( i_rDisabledChoices );
-    }
 
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_nValue );
-    return getUIControlOpt( i_rTitle, i_rHelpId, i_rType, &aVal, aOpt );
+    return getUIControlOpt( i_rTitle, i_rHelpText, i_rType, &aVal, aOpt );
 }
 
 Any PrinterOptionsHelper::getRangeControlOpt( const rtl::OUString& i_rTitle,
-                                              const rtl::OUString& i_rHelpId,
+                                              const rtl::OUString& i_rHelpText,
                                               const rtl::OUString& i_rProperty,
                                               sal_Int32 i_nValue,
                                               sal_Int32 i_nMinValue,
@@ -1900,17 +1869,17 @@ Any PrinterOptionsHelper::getRangeControlOpt( const rtl::OUString& i_rTitle,
         aOpt.maAddProps[nUsed++].Value = makeAny( i_nMaxValue );
     }
 
-    Sequence< rtl::OUString > aHelpId;
-    if( i_rHelpId.getLength() > 0 )
+    Sequence< rtl::OUString > aHelpText;
+    if( i_rHelpText.getLength() > 0 )
     {
-        aHelpId.realloc( 1 );
-        *aHelpId.getArray() = i_rHelpId;
+        aHelpText.realloc( 1 );
+        *aHelpText.getArray() = i_rHelpText;
     }
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_nValue );
     return getUIControlOpt( i_rTitle,
-                            aHelpId,
+                            aHelpText,
                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Range" ) ),
                             &aVal,
                             aOpt
@@ -1918,23 +1887,23 @@ Any PrinterOptionsHelper::getRangeControlOpt( const rtl::OUString& i_rTitle,
 }
 
 Any PrinterOptionsHelper::getEditControlOpt( const rtl::OUString& i_rTitle,
-                                             const rtl::OUString& i_rHelpId,
+                                             const rtl::OUString& i_rHelpText,
                                              const rtl::OUString& i_rProperty,
                                              const rtl::OUString& i_rValue,
                                              const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
                                            )
 {
-    Sequence< rtl::OUString > aHelpId;
-    if( i_rHelpId.getLength() > 0 )
+    Sequence< rtl::OUString > aHelpText;
+    if( i_rHelpText.getLength() > 0 )
     {
-        aHelpId.realloc( 1 );
-        *aHelpId.getArray() = i_rHelpId;
+        aHelpText.realloc( 1 );
+        *aHelpText.getArray() = i_rHelpText;
     }
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_rValue );
     return getUIControlOpt( i_rTitle,
-                            aHelpId,
+                            aHelpText,
                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Edit" ) ),
                             &aVal,
                             i_rControlOptions

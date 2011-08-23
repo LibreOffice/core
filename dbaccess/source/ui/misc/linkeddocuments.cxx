@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@
 #include <com/sun/star/ucb/OpenCommandArgument.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
-#include <comphelper/extract.hxx>
+#include <cppuhelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <vcl/msgbox.hxx>
 #include <ucbhelper/content.hxx>
@@ -54,12 +54,14 @@
 #include <svl/filenotation.hxx>
 #include "browserids.hxx"
 #include <sfx2/new.hxx>
+#include <svtools/templdlg.hxx>
 #include "moduledbu.hxx"
 // -----------------
 // for calling basic
 #include <sfx2/app.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbuno.hxx>
+#include <sfx2/macrconf.hxx>
 #include <svtools/ehdl.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
@@ -121,7 +123,7 @@ namespace dbaui
     //==================================================================
     //= OLinkedDocumentsAccess
     //==================================================================
-    DBG_NAME(OLinkedDocumentsAccess)
+    DBG_NAME(OLinkedDocumentsAccess)	
     //------------------------------------------------------------------
     OLinkedDocumentsAccess::OLinkedDocumentsAccess( Window* _pDialogParent, const Reference< XDatabaseDocumentUI >& i_rDocumentUI,
         const Reference< XMultiServiceFactory >& _rxORB, const Reference< XNameAccess >& _rxContainer,
@@ -133,14 +135,14 @@ namespace dbaui
         ,m_pDialogParent(_pDialogParent)
         ,m_sDataSourceName(_sDataSourceName)
     {
-        DBG_CTOR(OLinkedDocumentsAccess,NULL);
+        DBG_CTOR(OLinkedDocumentsAccess,NULL);		
         OSL_ENSURE(m_xORB.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid service factory!");
         OSL_ENSURE(m_pDialogParent, "OLinkedDocumentsAccess::OLinkedDocumentsAccess: really need a dialog parent!");
     }
     //------------------------------------------------------------------
     OLinkedDocumentsAccess::~OLinkedDocumentsAccess()
     {
-        DBG_DTOR(OLinkedDocumentsAccess,NULL);
+        DBG_DTOR(OLinkedDocumentsAccess,NULL);		
     }
     //------------------------------------------------------------------
     Reference< XComponent> OLinkedDocumentsAccess::impl_open( const ::rtl::OUString& _rLinkName, Reference< XComponent >& _xDefinition,
@@ -171,14 +173,14 @@ namespace dbaui
                 break;
 
             default:
-                OSL_FAIL( "OLinkedDocumentsAccess::implOpen: invalid open mode!" );
+                OSL_ENSURE( false, "OLinkedDocumentsAccess::implOpen: invalid open mode!" );
                 break;
         }
         aArguments.put( "OpenMode", sOpenMode );
 
         aArguments.put( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, m_xConnection );
         try
-        {
+        {	
             Reference<XHierarchicalNameContainer> xHier(m_xDocumentContainer,UNO_QUERY);
             if ( xHier.is() && xHier->hasByHierarchicalName(_rLinkName) )
             {
@@ -189,8 +191,9 @@ namespace dbaui
 
             xRet = xComponentLoader->loadComponentFromURL( _rLinkName, ::rtl::OUString(), 0, aArguments.getPropertyValues() );
         }
-        catch(const Exception&)
+        catch(Exception& e) 
         {
+            (void)e;
             throw;
         }
 
@@ -215,7 +218,7 @@ namespace dbaui
             }
 
             aArgs.put( "DocumentUI", m_xDocumentUI );
-
+            
             Reference< XJobExecutor > xWizard;
             {
                 WaitObject aWaitCursor( m_pDialogParent );
@@ -228,7 +231,7 @@ namespace dbaui
             xWizard->trigger( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "start" ) ) );
             ::comphelper::disposeComponent( xWizard );
         }
-        catch(const Exception&)
+        catch(const Exception& e)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -248,7 +251,7 @@ namespace dbaui
     void OLinkedDocumentsAccess::newTableWithPilot()
     {
         impl_newWithPilot( "com.sun.star.wizards.table.CallTableWizard", -1, ::rtl::OUString() );
-    }
+    }    
     //------------------------------------------------------------------
     void OLinkedDocumentsAccess::newQueryWithPilot()
     {
@@ -286,7 +289,7 @@ namespace dbaui
                     break;
 
                 default:
-                    OSL_FAIL( "OLinkedDocumentsAccess::newDocument: please use newFormWithPilot!" );
+                    OSL_ENSURE( sal_False, "OLinkedDocumentsAccess::newDocument: please use newFormWithPilot!" );
                     return Reference< XComponent >();
 
             }
@@ -295,8 +298,8 @@ namespace dbaui
         // load the document as template
         Reference< XComponent > xNewDocument;
         try
-        {   // get the desktop object
-
+        {	// get the desktop object
+        
             Reference<XMultiServiceFactory> xORB(m_xDocumentContainer,UNO_QUERY);
             if ( xORB.is() )
             {
@@ -333,7 +336,7 @@ namespace dbaui
                 xNewDocument.set( xContent->execute( aCommand, xContent->createCommandIdentifier(), NULL ), UNO_QUERY );
             }
         }
-        catch(const Exception&)
+        catch(const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -344,10 +347,10 @@ namespace dbaui
     //------------------------------------------------------------------
     Reference< XComponent > OLinkedDocumentsAccess::open( const ::rtl::OUString& _rLinkName, Reference< XComponent >& _xDefinition,
         ElementOpenMode _eOpenMode, const ::comphelper::NamedValueCollection& _rAdditionalArgs )
-    {
+    {	
         dbtools::SQLExceptionInfo aInfo;
         Reference< XComponent > xRet;
-        try
+        try 
         {
             xRet = impl_open( _rLinkName, _xDefinition, _eOpenMode, _rAdditionalArgs );
             if ( !xRet.is() )
@@ -357,12 +360,13 @@ namespace dbaui
 
                 com::sun::star::sdbc::SQLException aSQLException;
                 aSQLException.Message = sMessage;
+                // aSQLException.Context = e.Context;
                 aInfo = dbtools::SQLExceptionInfo(aSQLException);
             }
             return xRet;
         }
-        catch(const com::sun::star::io::WrongFormatException &e)
-        {
+        catch (com::sun::star::io::WrongFormatException e)
+        { 
             com::sun::star::sdbc::SQLException aSQLException;
             aSQLException.Message = e.Message;
             aSQLException.Context = e.Context;
@@ -375,9 +379,9 @@ namespace dbaui
 
             String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
             sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
-            aInfo.prepend(sMessage);
+            aInfo.prepend(sMessage);            
         }
-        catch(const Exception& e)
+        catch(Exception& e) 
         {
             Any aAny = ::cppu::getCaughtException();
             com::sun::star::sdbc::SQLException a;
@@ -387,10 +391,10 @@ namespace dbaui
                 aSQLException.Message = e.Message;
                 aSQLException.Context = e.Context;
                 aInfo = dbtools::SQLExceptionInfo(aSQLException);
-
+                
                 // more like a hack, insert an empty message
                 aInfo.prepend(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" \n")));
-
+                
                 String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
                 sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
                 aInfo.prepend(sMessage);
@@ -402,10 +406,10 @@ namespace dbaui
         }
         return xRet;
     }
-
+    
 
 //......................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //......................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

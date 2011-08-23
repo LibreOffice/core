@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define SC_INSCLDLG_HXX
 
 #include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 #include <vcl/fixed.hxx>
 
 
@@ -42,16 +42,16 @@ class ScInsertCellDlg : public ModalDialog
 {
 private:
     FixedLine       aFlFrame;
-    RadioButton     aBtnCellsDown;
-    RadioButton     aBtnCellsRight;
-    RadioButton     aBtnInsRows;
-    RadioButton     aBtnInsCols;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    RadioButton		aBtnCellsDown;
+    RadioButton		aBtnCellsRight;
+    RadioButton		aBtnInsRows;
+    RadioButton		aBtnInsCols;
+    OKButton		aBtnOk;
+    CancelButton	aBtnCancel;
+    HelpButton		aBtnHelp;
 
 public:
-            ScInsertCellDlg( Window* pParent,sal_Bool bDisallowCellMove = false );
+            ScInsertCellDlg( Window* pParent,BOOL bDisallowCellMove = FALSE );
             ~ScInsertCellDlg();
 
     InsCellCmd GetInsCellCmd() const;

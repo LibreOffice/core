@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -146,7 +146,7 @@ void SmartTagMgr::GetActionSequences( Sequence < rtl::OUString >& rSmartTagTypes
     rActionComponentsSequence.realloc( rSmartTagTypes.getLength() );
     rActionIndicesSequence.realloc( rSmartTagTypes.getLength() );
 
-    for ( sal_uInt16 j = 0; j < rSmartTagTypes.getLength(); ++j )
+    for ( USHORT j = 0; j < rSmartTagTypes.getLength(); ++j )
     {
         const rtl::OUString& rSmartTagType = rSmartTagTypes[j];
 
@@ -155,7 +155,7 @@ void SmartTagMgr::GetActionSequences( Sequence < rtl::OUString >& rSmartTagTypes
         Sequence< Reference< smarttags::XSmartTagAction > > aActions( nNumberOfActionRefs );
         Sequence< sal_Int32 > aIndices( nNumberOfActionRefs );
 
-        sal_uInt16 i = 0;
+        USHORT i = 0;
         SmartTagMapIter aActionsIter;
         SmartTagMapIter aEnd = maSmartTagMap.upper_bound( rSmartTagType );
 
@@ -260,7 +260,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
 }
 
 // ::com::sun::star::util::XModifyListener
-void SmartTagMgr::modified( const lang::EventObject& )  throw( RuntimeException )
+void SmartTagMgr::modified( const lang::EventObject& )	throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
 

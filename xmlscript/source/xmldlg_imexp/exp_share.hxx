@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,27 +61,27 @@ struct Style
     // current highest mask: 0x40
     short _all;
     short _set;
-
+    
     ::rtl::OUString _id;
-
+    
     inline Style( short all_ ) SAL_THROW( () )
         : _fontRelief( css::awt::FontRelief::NONE )
         , _fontEmphasisMark( css::awt::FontEmphasisMark::NONE )
         , _all( all_ )
         , _set( 0 )
         {}
-
+    
     css::uno::Reference< css::xml::sax::XAttributeList > createElement();
 };
 class StyleBag
 {
     ::std::vector< Style * > _styles;
-
+    
 public:
     ~StyleBag() SAL_THROW( () );
-
+    
     ::rtl::OUString getStyleId( Style const & rStyle ) SAL_THROW( () );
-
+    
     void dump( css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >
                const & xOut );
 };
@@ -91,18 +91,16 @@ class ElementDescriptor
 {
     css::uno::Reference< css::beans::XPropertySet > _xProps;
     css::uno::Reference< css::beans::XPropertyState > _xPropState;
-    css::uno::Reference< css::frame::XModel > _xDocument;
-
+    
 public:
     inline ElementDescriptor(
         css::uno::Reference< css::beans::XPropertySet > const & xProps,
         css::uno::Reference< css::beans::XPropertyState > const & xPropState,
-        ::rtl::OUString const & name, css::uno::Reference< css::frame::XModel > const & xDocument )
+        ::rtl::OUString const & name )
         SAL_THROW( () )
         : XMLElement( name )
         , _xProps( xProps )
         , _xPropState( xPropState )
-        , _xDocument( xDocument )
         {}
     inline ElementDescriptor(
         ::rtl::OUString const & name )
@@ -114,11 +112,14 @@ public:
     inline void read(
         ::rtl::OUString const & propName, ::rtl::OUString const & attrName,
         bool forceAttribute = false );
-
+    
+    //
     template<typename T>
     inline bool readProp( T * ret, ::rtl::OUString const & rPropName );
     css::uno::Any readProp( ::rtl::OUString const & rPropName );
+    //
     void readDefaults( bool supportPrintable = true, bool supportVisible = true );
+    //
     void readStringAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     inline void readDoubleAttr(
@@ -136,12 +137,10 @@ public:
     inline void readBoolAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName )
         { read<sal_Bool>( rPropName, rAttrName ); }
-
+    
     void readAlignAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     void readVerticalAlignAttr(
-        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
-    void readImageURLAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     void readImageAlignAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
@@ -159,8 +158,7 @@ public:
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     void readSelectionTypeAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
-    void readDataAwareAttr(
-        ::rtl::OUString const & rAttrName );
+    //
     inline void addBoolAttr(
         ::rtl::OUString const & rAttrName, sal_Bool bValue )
         { addAttribute( rAttrName, ::rtl::OUString::valueOf(bValue) ); }
@@ -168,17 +166,13 @@ public:
         css::uno::Reference< css::beans::XPropertySet >
         const & xFormatProperties,
         ::rtl::OUString const & rAttrName );
-
+    
+    //
     void readEvents() SAL_THROW( (css::uno::Exception) );
+    //
     void readDialogModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
-    void readBullitinBoard( StyleBag * all_styles )
-        SAL_THROW( (css::uno::Exception) );
     void readMultiPageModel( StyleBag * all_styles )
-        SAL_THROW( (css::uno::Exception) );
-    void readFrameModel( StyleBag * all_styles )
-        SAL_THROW( (css::uno::Exception) );
-    void readPageModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
     void readButtonModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
@@ -186,9 +180,9 @@ public:
         SAL_THROW( (css::uno::Exception) );
     void readCheckBoxModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
-    void readRadioButtonModel( StyleBag * all_styles )
+    void readRadioButtonModel( StyleBag * all_styles, com::sun::star::uno::Reference< com::sun::star::frame::XModel > const & xDocument )
         SAL_THROW( (css::uno::Exception) );
-    void readComboBoxModel( StyleBag * all_styles )
+    void readComboBoxModel( StyleBag * all_styles, com::sun::star::uno::Reference< com::sun::star::frame::XModel > const & xDocument )
         SAL_THROW( (css::uno::Exception) );
     void readCurrencyFieldModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
@@ -202,9 +196,9 @@ public:
         SAL_THROW( (css::uno::Exception) );
     void readGroupBoxModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
-    void readImageControlModel( StyleBag * all_styles )
+    void readImageControlModel( StyleBag * all_styles, com::sun::star::uno::Reference< com::sun::star::frame::XModel > const & xDocument  )
         SAL_THROW( (css::uno::Exception) );
-    void readListBoxModel( StyleBag * all_styles )
+    void readListBoxModel( StyleBag * all_styles, com::sun::star::uno::Reference< com::sun::star::frame::XModel > const & xDocument )
         SAL_THROW( (css::uno::Exception) );
     void readNumericFieldModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
@@ -218,9 +212,9 @@ public:
         SAL_THROW( (css::uno::Exception) );
     void readProgressBarModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
-    void readScrollBarModel( StyleBag * all_styles )
+    void readScrollBarModel( StyleBag * all_styles, com::sun::star::uno::Reference< com::sun::star::frame::XModel > const & xDocument )
         SAL_THROW( (css::uno::Exception) );
-    void readSpinButtonModel( StyleBag * all_styles )
+    void readSpinButtonModel( StyleBag * all_styles, com::sun::star::uno::Reference< com::sun::star::frame::XModel > const & xDocument )
         SAL_THROW( (css::uno::Exception) );
     void readFixedHyperLinkModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
@@ -240,7 +234,7 @@ inline void ElementDescriptor::read(
         if (a >>= v)
             addAttribute( attrName, ::rtl::OUString::valueOf(v) );
         else
-            OSL_FAIL( "### unexpected property type!" );
+            OSL_ENSURE( 0, "### unexpected property type!" );
     }
 }
 

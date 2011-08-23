@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ public:
     virtual ~SchXMLTableContext();
 
     virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix,
+        USHORT nPrefix,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -99,7 +99,7 @@ public:
                             com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > xChartDoc );
 
     /** This function reorders local data to fit the correct data structure.
-        Call it after the data series got their styles set.
+        Call it after the data series got their styles set.  
      */
     static void switchRangesFromOuterToInternalIfNecessary( const SchXMLTable& rTable,
                                   const tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
@@ -132,7 +132,7 @@ public:
     virtual ~SchXMLTableColumnsContext();
 
     virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix,
+        USHORT nPrefix,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
@@ -172,7 +172,7 @@ public:
     virtual ~SchXMLTableRowsContext();
 
     virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix,
+        USHORT nPrefix,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
@@ -193,7 +193,7 @@ public:
     virtual ~SchXMLTableRowContext();
 
     virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix,
+        USHORT nPrefix,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
@@ -219,13 +219,13 @@ public:
     virtual ~SchXMLTableCellContext();
 
     virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix,
+        USHORT nPrefix,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 };
 
-#endif  // _SCH_XMLTABLECONTEXT_HXX_
+#endif	// _SCH_XMLTABLECONTEXT_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@
 // it has the size of 64 because I use a uInt64
 #define BITFIELDSIZE 64
 
-using namespace ::utl;
-using namespace ::rtl;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::utl;
+using namespace	::rtl;
+using namespace	::com::sun::star;
+using namespace	::com::sun::star::accessibility;
 
 class AccessibleStateSetHelperImpl
 {
@@ -50,11 +50,11 @@ public:
     AccessibleStateSetHelperImpl(const AccessibleStateSetHelperImpl& rImpl);
     ~AccessibleStateSetHelperImpl();
 
-    sal_Bool IsEmpty () const
+    sal_Bool IsEmpty ()
         throw (uno::RuntimeException);
-    sal_Bool Contains (sal_Int16 aState) const
+    sal_Bool Contains (sal_Int16 aState)
         throw (uno::RuntimeException);
-    uno::Sequence<sal_Int16> GetStates() const
+    uno::Sequence<sal_Int16> GetStates()
         throw (uno::RuntimeException);
     void AddState(sal_Int16 aState)
         throw (uno::RuntimeException);
@@ -62,10 +62,10 @@ public:
         throw (uno::RuntimeException);
     sal_Bool Compare(const AccessibleStateSetHelperImpl* pComparativeValue,
                         AccessibleStateSetHelperImpl* pOldStates,
-                        AccessibleStateSetHelperImpl* pNewStates) const
+                        AccessibleStateSetHelperImpl* pNewStates)
         throw (uno::RuntimeException);
 
-    inline void AddStates( const sal_Int64 _nStates ) SAL_THROW( ( ) );
+    inline void	AddStates( const sal_Int64 _nStates ) SAL_THROW( ( ) );
 
 private:
     sal_uInt64 maStates;
@@ -85,13 +85,13 @@ AccessibleStateSetHelperImpl::~AccessibleStateSetHelperImpl()
 {
 }
 
-inline sal_Bool AccessibleStateSetHelperImpl::IsEmpty () const
+inline sal_Bool AccessibleStateSetHelperImpl::IsEmpty ()
     throw (uno::RuntimeException)
 {
     return maStates == 0;
 }
 
-inline sal_Bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState) const
+inline sal_Bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState)
     throw (uno::RuntimeException)
 {
     DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is too small");
@@ -100,7 +100,7 @@ inline sal_Bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState) const
     return ((aTempBitSet & maStates) != 0);
 }
 
-inline uno::Sequence<sal_Int16> AccessibleStateSetHelperImpl::GetStates() const
+inline uno::Sequence<sal_Int16> AccessibleStateSetHelperImpl::GetStates()
     throw (uno::RuntimeException)
 {
     uno::Sequence<sal_Int16> aRet(BITFIELDSIZE);
@@ -144,7 +144,7 @@ inline void AccessibleStateSetHelperImpl::RemoveState(sal_Int16 aState)
 inline sal_Bool AccessibleStateSetHelperImpl::Compare(
     const AccessibleStateSetHelperImpl* pComparativeValue,
         AccessibleStateSetHelperImpl* pOldStates,
-        AccessibleStateSetHelperImpl* pNewStates) const
+        AccessibleStateSetHelperImpl* pNewStates)
     throw (uno::RuntimeException)
 {
     sal_Bool bResult(sal_False);

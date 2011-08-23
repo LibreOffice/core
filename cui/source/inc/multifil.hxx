@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,16 +43,16 @@ class SvxMultiFileDialog : public SvxMultiPathDialog
 private:
     // #97807# -------------------------------------
     std::map< String, ::ucbhelper::Content >   aFileContentMap;
-
+    
     DECL_LINK( AddHdl_Impl, PushButton * );
     DECL_LINK( DelHdl_Impl, PushButton * );
 
 public:
-    SvxMultiFileDialog( Window* pParent, sal_Bool bEmptyAllowed = sal_False );
+    SvxMultiFileDialog( Window* pParent, BOOL bEmptyAllowed = FALSE );
     ~SvxMultiFileDialog();
 
-    String  GetFiles() const { return SvxMultiPathDialog::GetPath(); }
-    void    SetFiles( const String& rPath ) { SvxMultiPathDialog::SetPath(rPath); aDelBtn.Enable(); }
+    String	GetFiles() const { return SvxMultiPathDialog::GetPath(); }
+    void	SetFiles( const String& rPath ) { SvxMultiPathDialog::SetPath(rPath); aDelBtn.Enable(); }
 };
 
 

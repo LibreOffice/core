@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,9 +48,9 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <vcl/svapp.hxx>
 
-using namespace ::rtl;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::rtl;
+using namespace	::com::sun::star;
+using namespace	::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -100,7 +100,7 @@ void ScAccessibleContextBase::Init()
 void SAL_CALL ScAccessibleContextBase::disposing()
 {
     SolarMutexGuard aGuard;
-//  CommitDefunc(); not necessary and should not be send, because it cost a lot of time
+//	CommitDefunc(); not necessary and should not be send, because it cost a lot of time
 
     // hold reference to make sure that the destructor is not called
     uno::Reference< XAccessibleContext > xOwnContext(this);
@@ -182,7 +182,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAtP
         const awt::Point& /* rPoint */ )
         throw (uno::RuntimeException)
 {
-    OSL_FAIL("not implemented");
+    DBG_ERROR("not implemented");
     return uno::Reference<XAccessible>();
 }
 
@@ -223,7 +223,7 @@ sal_Bool SAL_CALL ScAccessibleContextBase::isShowing(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    sal_Bool bShowing(false);
+    sal_Bool bShowing(sal_False);
     if (mxParent.is())
     {
         uno::Reference<XAccessibleComponent> xParentComponent (mxParent->getAccessibleContext(), uno::UNO_QUERY);
@@ -246,7 +246,7 @@ sal_Bool SAL_CALL ScAccessibleContextBase::isVisible(  )
 void SAL_CALL ScAccessibleContextBase::grabFocus(  )
         throw (uno::RuntimeException)
 {
-    OSL_FAIL("not implemented");
+    DBG_ERROR("not implemented");
 }
 
 sal_Int32 SAL_CALL ScAccessibleContextBase::getForeground(  )
@@ -267,7 +267,7 @@ sal_Int32 SAL_CALL
        ScAccessibleContextBase::getAccessibleChildCount(void)
     throw (uno::RuntimeException)
 {
-    OSL_FAIL("should be implemented in the abrevated class");
+    DBG_ERROR("should be implemented in the abrevated class");
     return 0;
 }
 
@@ -275,7 +275,7 @@ uno::Reference<XAccessible> SAL_CALL
     ScAccessibleContextBase::getAccessibleChild(sal_Int32 /* nIndex */)
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    OSL_FAIL("should be implemented in the abrevated class");
+    DBG_ERROR("should be implemented in the abrevated class");
     return uno::Reference<XAccessible>();
 }
 
@@ -292,12 +292,12 @@ sal_Int32 SAL_CALL
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    //  Use a simple but slow solution for now.  Optimize later.
-   //   Return -1 to indicate that this object's parent does not know about the
-   //   object.
+    //	Use a simple but slow solution for now.  Optimize later.
+   //	Return -1 to indicate that this object's parent does not know about the
+   //	object.
     sal_Int32 nIndex(-1);
 
-    //  Iterate over all the parent's children and search for this object.
+    //	Iterate over all the parent's children and search for this object.
     if (mxParent.is())
     {
         uno::Reference<XAccessibleContext> xParentContext (
@@ -336,6 +336,7 @@ sal_Int16 SAL_CALL
     if (!msDescription.getLength())
     {
         OUString sDescription(createAccessibleDescription());
+//		DBG_ASSERT(sDescription.getLength(), "We should give always a descripition.");
 
         if (msDescription != sDescription)
         {
@@ -409,8 +410,8 @@ lang::Locale SAL_CALL
             return xParentContext->getLocale ();
     }
 
-    //  No locale and no parent.  Therefore throw exception to indicate this
-    //  cluelessness.
+    //	No locale and no parent.  Therefore throw exception to indicate this
+    //	cluelessness.
     throw IllegalAccessibleComponentStateException ();
 }
 
@@ -497,7 +498,7 @@ sal_Bool SAL_CALL
     for (int i=0; i<nLength; ++i, ++pServiceNames)
         if (sServiceName == *pServiceNames)
             return sal_True;
-    return false;
+    return sal_False;
 }
 
 uno::Sequence< ::rtl::OUString> SAL_CALL
@@ -544,7 +545,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleContextBase::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-    OSL_FAIL("should be implemented in the abrevated class");
+    DBG_ERROR("should be implemented in the abrevated class");
     return rtl::OUString();
 }
 
@@ -552,7 +553,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleContextBase::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    OSL_FAIL("should be implemented in the abrevated class");
+    DBG_ERROR("should be implemented in the abrevated class");
     return rtl::OUString();
 }
 
@@ -604,14 +605,14 @@ void ScAccessibleContextBase::CommitFocusLost() const
 Rectangle ScAccessibleContextBase::GetBoundingBoxOnScreen(void) const
         throw (uno::RuntimeException)
 {
-    OSL_FAIL("not implemented");
+    DBG_ERROR("not implemented");
     return Rectangle();
 }
 
 Rectangle ScAccessibleContextBase::GetBoundingBox(void) const
         throw (uno::RuntimeException)
 {
-    OSL_FAIL("not implemented");
+    DBG_ERROR("not implemented");
     return Rectangle();
 }
 

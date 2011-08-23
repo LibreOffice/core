@@ -31,8 +31,8 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 
-#include <boost/unordered_set.hpp>
-#include <boost/unordered_map.hpp>
+#include <hash_set>
+#include <hash_map>
 #include <rtl/ustring.hxx>
 
 namespace svgi
@@ -40,7 +40,7 @@ namespace svgi
 
 struct ARGBColor
 {
-    double toDoubleColor( sal_uInt8 val ) const { return val/255.0; }
+    double toDoubleColor( sal_uInt8 val ) { return val/255.0; }
 
     ARGBColor() : a(1.0), r(0.0), g(0.0), b(0.0)
     {}
@@ -174,7 +174,7 @@ struct State
         maViewport(),
         maViewBox(),
         maFontFamily(), // app-default
-        mnFontSize(0),
+        mnFontSize(12.0),
         maFontStyle(RTL_CONSTASCII_USTRINGPARAM("normal")),
         maFontVariant(RTL_CONSTASCII_USTRINGPARAM("normal")),
         mnFontWeight(400.0),
@@ -275,7 +275,6 @@ inline bool operator==(const State& rLHS, const State& rRHS )
         rLHS.mbVisibility==rRHS.mbVisibility &&
         rLHS.meFillType==rRHS.meFillType &&
         rLHS.mnFillOpacity==rRHS.mnFillOpacity &&
-        rLHS.mnOpacity==rRHS.mnOpacity &&
         rLHS.meStrokeType==rRHS.meStrokeType &&
         rLHS.mnStrokeOpacity==rRHS.mnStrokeOpacity &&
         rLHS.meViewportFillType==rRHS.meViewportFillType &&
@@ -320,7 +319,6 @@ struct StateHash
             ^  size_t(rState.mbVisibility)
             ^  size_t(rState.meFillType)
             ^  size_t(rState.mnFillOpacity)
-            ^  size_t(rState.mnOpacity)
             ^  size_t(rState.meStrokeType)
             ^  size_t(rState.mnStrokeOpacity)
             ^  size_t(rState.meViewportFillType)
@@ -350,8 +348,8 @@ struct StateHash
     }
 };
 
-typedef boost::unordered_set<State, StateHash> StatePool;
-typedef boost::unordered_map<sal_Int32, State> StateMap;
+typedef std::hash_set<State, StateHash> StatePool;
+typedef std::hash_map<sal_Int32, State> StateMap;
 
 } // namespace svgi
 

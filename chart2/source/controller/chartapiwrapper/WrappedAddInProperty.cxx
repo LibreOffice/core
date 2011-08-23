@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,6 +70,8 @@ Any WrappedAddInProperty::getPropertyValue( const Reference< beans::XPropertySet
 }
 
 //.............................................................................
+//.............................................................................
+//.............................................................................
 
 WrappedBaseDiagramProperty::WrappedBaseDiagramProperty( ChartDocumentWrapper& rChartDocumentWrapper )
     : ::chart::WrappedProperty( C2U( "BaseDiagram" ), OUString() )
@@ -97,6 +99,8 @@ Any WrappedBaseDiagramProperty::getPropertyValue( const Reference< beans::XPrope
 }
 
 //.............................................................................
+//.............................................................................
+//.............................................................................
 
 WrappedAdditionalShapesProperty::WrappedAdditionalShapesProperty( ChartDocumentWrapper& rChartDocumentWrapper )
     : ::chart::WrappedProperty( C2U( "AdditionalShapes" ), OUString() )
@@ -119,6 +123,8 @@ Any WrappedAdditionalShapesProperty::getPropertyValue( const Reference< beans::X
     return uno::makeAny( m_rChartDocumentWrapper.getAdditionalShapes() );
 }
 
+//.............................................................................
+//.............................................................................
 //.............................................................................
 
 WrappedRefreshAddInAllowedProperty::WrappedRefreshAddInAllowedProperty( ChartDocumentWrapper& rChartDocumentWrapper )
@@ -146,9 +152,10 @@ Any WrappedRefreshAddInAllowedProperty::getPropertyValue( const Reference< beans
     return uno::makeAny( m_rChartDocumentWrapper.getUpdateAddIn() );
 }
 
-} //namespace wrapper
+}
 
+//.............................................................................
 } //namespace chart
-
+//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

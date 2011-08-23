@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,20 +44,20 @@ protected:
     Color           aStartColor;
     Color           aEndColor;
     long            nAngle;
-    sal_uInt16          nBorder;
-    sal_uInt16          nOfsX;
-    sal_uInt16          nOfsY;
-    sal_uInt16          nIntensStart;
-    sal_uInt16          nIntensEnd;
-    sal_uInt16          nStepCount;
+    USHORT          nBorder;
+    USHORT          nOfsX;
+    USHORT          nOfsY;
+    USHORT          nIntensStart;
+    USHORT          nIntensEnd;
+    USHORT          nStepCount;
 
 public:
     XGradient();
     XGradient( const Color& rStart, const Color& rEnd,
                XGradientStyle eStyle = XGRAD_LINEAR, long nAngle = 0,
-               sal_uInt16 nXOfs = 50, sal_uInt16 nYOfs = 50, sal_uInt16 nBorder = 0,
-               sal_uInt16 nStartIntens = 100, sal_uInt16 nEndIntens = 100,
-               sal_uInt16 nSteps = 0 );
+               USHORT nXOfs = 50, USHORT nYOfs = 50, USHORT nBorder = 0,
+               USHORT nStartIntens = 100, USHORT nEndIntens = 100,
+               USHORT nSteps = 0 );
 
     bool operator==(const XGradient& rGradient) const;
 
@@ -65,23 +65,23 @@ public:
     void SetStartColor(const Color& rColor)         { aStartColor = rColor; }
     void SetEndColor(const Color& rColor)           { aEndColor = rColor; }
     void SetAngle(long nNewAngle)                   { nAngle = nNewAngle; }
-    void SetBorder(sal_uInt16 nNewBorder)               { nBorder = nNewBorder; }
-    void SetXOffset(sal_uInt16 nNewOffset)              { nOfsX = nNewOffset; }
-    void SetYOffset(sal_uInt16 nNewOffset)              { nOfsY = nNewOffset; }
-    void SetStartIntens(sal_uInt16 nNewIntens)          { nIntensStart = nNewIntens; }
-    void SetEndIntens(sal_uInt16 nNewIntens)            { nIntensEnd = nNewIntens; }
-    void SetSteps(sal_uInt16 nSteps)                    { nStepCount = nSteps; }
+    void SetBorder(USHORT nNewBorder)               { nBorder = nNewBorder; }
+    void SetXOffset(USHORT nNewOffset)              { nOfsX = nNewOffset; }
+    void SetYOffset(USHORT nNewOffset)              { nOfsY = nNewOffset; }
+    void SetStartIntens(USHORT nNewIntens)          { nIntensStart = nNewIntens; }
+    void SetEndIntens(USHORT nNewIntens)            { nIntensEnd = nNewIntens; }
+    void SetSteps(USHORT nSteps)                    { nStepCount = nSteps; }
 
     XGradientStyle GetGradientStyle() const         { return eStyle; }
     Color          GetStartColor() const            { return aStartColor; }
     Color          GetEndColor() const              { return aEndColor; }
     long           GetAngle() const                 { return nAngle; }
-    sal_uInt16         GetBorder() const                { return nBorder; }
-    sal_uInt16         GetXOffset() const               { return nOfsX; }
-    sal_uInt16         GetYOffset() const               { return nOfsY; }
-    sal_uInt16         GetStartIntens() const           { return nIntensStart; }
-    sal_uInt16         GetEndIntens() const             { return nIntensEnd; }
-    sal_uInt16         GetSteps() const                 { return nStepCount; }
+    USHORT         GetBorder() const                { return nBorder; }
+    USHORT         GetXOffset() const               { return nOfsX; }
+    USHORT         GetYOffset() const               { return nOfsY; }
+    USHORT         GetStartIntens() const           { return nIntensStart; }
+    USHORT         GetEndIntens() const             { return nIntensEnd; }
+    USHORT         GetSteps() const                 { return nStepCount; }
 };
 
 #endif

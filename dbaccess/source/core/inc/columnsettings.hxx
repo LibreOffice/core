@@ -69,17 +69,17 @@ namespace dbaccess
     //====================================================================
     class OColumnSettings
     {
-        //  <properties>
-        ::com::sun::star::uno::Any  m_aWidth;               // sal_Int32 or void
-        ::com::sun::star::uno::Any  m_aFormatKey;           // sal_Int32 or void
-        ::com::sun::star::uno::Any  m_aRelativePosition;    // sal_Int32 or void
-        ::com::sun::star::uno::Any  m_aAlignment;           // sal_Int32 (::com::sun::star::awt::TextAlign) or void
-        ::com::sun::star::uno::Any  m_aHelpText;            // the description of the column which is visible in the helptext of the column
-        ::com::sun::star::uno::Any  m_aControlDefault;      // the default value which should be displayed as by a control when moving to a new row
+        //	<properties>
+        ::com::sun::star::uno::Any	m_aWidth;				// sal_Int32 or void
+        ::com::sun::star::uno::Any	m_aFormatKey;			// sal_Int32 or void
+        ::com::sun::star::uno::Any	m_aRelativePosition;	// sal_Int32 or void
+        ::com::sun::star::uno::Any	m_aAlignment;			// sal_Int32 (::com::sun::star::awt::TextAlign) or void
+        ::com::sun::star::uno::Any	m_aHelpText;			// the description of the column which is visible in the helptext of the column
+        ::com::sun::star::uno::Any	m_aControlDefault;		// the default value which should be displayed as by a control when moving to a new row
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                     m_xControlModel;
-        sal_Bool                    m_bHidden;
-        //  </properties>
+        sal_Bool					m_bHidden;
+        //	</properties>
 
     protected:
         virtual ~OColumnSettings();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,7 +117,7 @@ namespace dbaui
             )
             return;
 
-        OSL_FAIL( "SetItemPropertyStorage::getPropertyValue: unsupported item type!" );
+        OSL_ENSURE( false, "SetItemPropertyStorage::getPropertyValue: unsupported item type!" );
     }
 
     //--------------------------------------------------------------------
@@ -129,7 +129,7 @@ namespace dbaui
             )
             return;
 
-        OSL_FAIL( "SetItemPropertyStorage::setPropertyValue: unsupported item type!" );
+        OSL_ENSURE( false, "SetItemPropertyStorage::setPropertyValue: unsupported item type!" );
     }
 
 //........................................................................

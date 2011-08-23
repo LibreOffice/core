@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -134,7 +134,7 @@ bool ErrorBarItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const sal_uInt16 * ErrorBarItemConverter::GetWhichPairs() const
+const USHORT * ErrorBarItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nErrorBarWhichPairs;
@@ -148,7 +148,7 @@ bool ErrorBarItemConverter::GetItemProperty(
 }
 
 bool ErrorBarItemConverter::ApplySpecialItem(
-    sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
+    USHORT nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;
@@ -205,7 +205,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
         case SCHATTR_STAT_PERCENT:
         case SCHATTR_STAT_BIGERROR:
         {
-            OSL_FAIL( "Deprectaed item" );
+            OSL_ENSURE( false, "Deprectaed item" );
             uno::Reference< beans::XPropertySet > xErrorBarProp( GetPropertySet());
 
             double fValue =
@@ -343,7 +343,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
 }
 
 void ErrorBarItemConverter::FillSpecialItem(
-    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
+    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     switch( nWhichId )

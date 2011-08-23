@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,6 +77,7 @@
 
 // Quicktime 6.4+ in Mac OS X 10.3
 #define QT64 0x06400000
+
 
 #endif // _QUICKTIMECOMMOM_HXX
 

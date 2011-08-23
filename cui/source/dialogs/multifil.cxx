@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
@@ -74,13 +77,13 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
         OSL_ENSURE( xID.is(), "AddHdl_Impl: invalid ID interface!" );
         // ensure the content of files are valid
 
-        sal_uInt16 nCount = aPathLB.GetEntryCount();
-        sal_Bool bDuplicated = sal_False;
+        USHORT nCount = aPathLB.GetEntryCount();
+        BOOL bDuplicated = FALSE;
         try
         {
             if( nCount > 0 ) // start comparison
             {
-                sal_uInt16 i;
+                USHORT i;
                 ::ucbhelper::Content & VContent = aContent; // temporary Content reference
                 Reference< XContent > xVContent;
                 Reference< XContentIdentifier > xVID;
@@ -111,7 +114,7 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
                         {
                             if ( 0 == xProvider->compareContentIds( xID, xVID ) )
                             {
-                                bDuplicated = sal_True;
+                                bDuplicated = TRUE;
                                 break;
                             }
                         }
@@ -121,7 +124,7 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
         } // end of try(}
         catch( const Exception& ) // catch every exception of comparison
            {
-            OSL_FAIL( "AddHdl_Impl: caught an unexpected exception!" );
+            OSL_ENSURE( sal_False, "AddHdl_Impl: caught an unexpected exception!" );
            }
 
         if ( bDuplicated ) // #97807# --------------------
@@ -132,7 +135,7 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
         }
         else
         {
-            sal_uInt16 nPos = aPathLB.InsertEntry( sInsFile, LISTBOX_APPEND );
+            USHORT nPos = aPathLB.InsertEntry( sInsFile, LISTBOX_APPEND );
             aPathLB.SetEntryData( nPos, (void*) new String( sInsFile ) );
         }
 
@@ -144,9 +147,9 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
 
 IMPL_LINK( SvxMultiFileDialog, DelHdl_Impl, PushButton *, EMPTYARG )
 {
-    sal_uInt16 nPos = aPathLB.GetSelectEntryPos();
+    USHORT nPos = aPathLB.GetSelectEntryPos();
     aPathLB.RemoveEntry( nPos );
-    sal_uInt16 nCnt = aPathLB.GetEntryCount();
+    USHORT nCnt = aPathLB.GetEntryCount();
 
     if ( nCnt )
     {
@@ -161,7 +164,7 @@ IMPL_LINK( SvxMultiFileDialog, DelHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-SvxMultiFileDialog::SvxMultiFileDialog( Window* pParent, sal_Bool bEmptyAllowed ) :
+SvxMultiFileDialog::SvxMultiFileDialog( Window* pParent, BOOL bEmptyAllowed ) :
 
     SvxMultiPathDialog( pParent, bEmptyAllowed )
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -357,12 +357,12 @@ Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxHeaderBar::getImplementationId(
 
 Rectangle AccessibleBrowseBoxHeaderBar::implGetBoundingBox()
 {
-    return mpBrowseBox->calcHeaderRect(isColumnBar(),sal_False);
+    return mpBrowseBox->calcHeaderRect(isColumnBar(),FALSE);
 }
 
 Rectangle AccessibleBrowseBoxHeaderBar::implGetBoundingBoxOnScreen()
 {
-    return mpBrowseBox->calcHeaderRect(isColumnBar(),sal_True);
+    return mpBrowseBox->calcHeaderRect(isColumnBar(),TRUE);
 }
 
 sal_Int32 AccessibleBrowseBoxHeaderBar::implGetRowCount() const

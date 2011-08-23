@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ namespace dp_gui {
 
 class LicenseView : public MultiLineEdit, public SfxListener
 {
-    sal_Bool            mbEndReached;
+    BOOL            mbEndReached;
     Link            maEndReachedHdl;
     Link            maScrolledHdl;
 
@@ -73,9 +73,9 @@ public:
 
     void ScrollDown( ScrollType eScroll );
 
-    sal_Bool IsEndReached() const;
-    sal_Bool EndReached() const { return mbEndReached; }
-    void SetEndReached( sal_Bool bEnd ) { mbEndReached = bEnd; }
+    BOOL IsEndReached() const;
+    BOOL EndReached() const { return mbEndReached; }
+    void SetEndReached( BOOL bEnd ) { mbEndReached = bEnd; }
 
     void SetEndReachedHdl( const Link& rHdl )  { maEndReachedHdl = rHdl; }
     const Link& GetAutocompleteHdl() const { return maEndReachedHdl; }
@@ -90,7 +90,7 @@ protected:
 };
 
 struct LicenseDialogImpl : public ModalDialog
-{
+{   
     cssu::Reference<cssu::XComponentContext> m_xComponentContext;
     FixedText m_ftHead;
     FixedText m_ftBody1;
@@ -102,7 +102,7 @@ struct LicenseDialogImpl : public ModalDialog
     LicenseView m_mlLicense;
     PushButton m_pbDown;
     FixedLine m_flBottom;
-
+ 
     OKButton m_acceptButton;
     CancelButton m_declineButton;
 
@@ -121,7 +121,7 @@ struct LicenseDialogImpl : public ModalDialog
         const ::rtl::OUString & sLicenseText);
 
     virtual void Activate();
-
+    
 };
 
 LicenseView::LicenseView( Window* pParent, const ResId& rResId )
@@ -146,20 +146,20 @@ void LicenseView::ScrollDown( ScrollType eScroll )
         pScroll->DoScrollAction( eScroll );
 }
 
-sal_Bool LicenseView::IsEndReached() const
+BOOL LicenseView::IsEndReached() const
 {
-    sal_Bool bEndReached;
+    BOOL bEndReached;
 
     ExtTextView*    pView = GetTextView();
     ExtTextEngine*  pEdit = GetTextEngine();
-    sal_uLong           nHeight = pEdit->GetTextHeight();
+    ULONG           nHeight = pEdit->GetTextHeight();
     Size            aOutSize = pView->GetWindow()->GetOutputSizePixel();
     Point           aBottom( 0, aOutSize.Height() );
 
-    if ( (sal_uLong) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
-        bEndReached = sal_True;
+    if ( (ULONG) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
+        bEndReached = TRUE;
     else
-        bEndReached = sal_False;
+        bEndReached = FALSE;
 
     return bEndReached;
 }
@@ -168,8 +168,8 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.IsA( TYPE(TextHint) ) )
     {
-        sal_Bool    bLastVal = EndReached();
-        sal_uLong   nId = ((const TextHint&)rHint).GetId();
+        BOOL    bLastVal = EndReached();
+        ULONG   nId = ((const TextHint&)rHint).GetId();
 
         if ( nId == TEXT_HINT_PARAINSERTED )
         {
@@ -215,6 +215,13 @@ LicenseDialogImpl::LicenseDialogImpl(
 
 {
 
+    if (GetSettings().GetStyleSettings().GetHighContrastMode())
+    {
+        // high contrast mode needs other images
+        m_fiArrow1.SetImage(Image(DpGuiResId(IMG_LICENCE_ARROW_HC)));
+        m_fiArrow2.SetImage(Image(DpGuiResId(IMG_LICENCE_ARROW_HC)));
+    }
+
     FreeResource();
 
     m_acceptButton.SetUniqueId(UID_BTN_LICENSE_ACCEPT);
@@ -222,7 +229,7 @@ LicenseDialogImpl::LicenseDialogImpl(
     m_fiArrow2.Show(false);
     m_mlLicense.SetText(sLicenseText);
     m_ftHead.SetText(m_ftHead.GetText() + OUString('\n') + sExtensionName);
-
+    
     m_mlLicense.SetEndReachedHdl( LINK(this, LicenseDialogImpl, EndReachedHdl) );
     m_mlLicense.SetScrolledHdl( LINK(this, LicenseDialogImpl, ScrolledHdl) );
     m_pbDown.SetClickHdl( LINK(this, LicenseDialogImpl, PageDownHdl) );
@@ -300,7 +307,7 @@ LicenseDialog::LicenseDialog( Sequence<Any> const& args,
 //______________________________________________________________________________
 void LicenseDialog::setTitle( OUString const & ) throw (RuntimeException)
 {
-
+ 
 }
 
 //______________________________________________________________________________

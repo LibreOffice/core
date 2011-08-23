@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ SfxTabPage* DataLabelsTabPage::Create(Window* pWindow,
     return new DataLabelsTabPage(pWindow, rOutAttrs);
 }
 
-sal_Bool DataLabelsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+BOOL DataLabelsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     return m_aDataLabelResources.FillItemSet(rOutAttrs);
 }

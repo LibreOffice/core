@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,6 +56,7 @@ RegressionCurveCalculator::RegressionCurveCalculator() :
 RegressionCurveCalculator::~RegressionCurveCalculator()
 {}
 
+// static
 bool RegressionCurveCalculator::isLinearScaling(
     const Reference< chart2::XScaling > & xScaling )
 {
@@ -67,6 +68,7 @@ bool RegressionCurveCalculator::isLinearScaling(
     return (xServiceName.is() && xServiceName->getServiceName().equals( aLinScalingServiceName ));
 }
 
+// static
 bool RegressionCurveCalculator::isLogarithmicScaling(
     const Reference< chart2::XScaling > & xScaling )
 {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,11 +62,11 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-//  registered as implementation for service FunctionAccess,
-//  also supports service SpreadsheetDocumentSettings (to set null date etc.)
+//	registered as implementation for service FunctionAccess,
+//	also supports service SpreadsheetDocumentSettings (to set null date etc.)
 
-#define SCFUNCTIONACCESS_SERVICE    "com.sun.star.sheet.FunctionAccess"
-#define SCDOCSETTINGS_SERVICE       "com.sun.star.sheet.SpreadsheetDocumentSettings"
+#define SCFUNCTIONACCESS_SERVICE	"com.sun.star.sheet.FunctionAccess"
+#define SCDOCSETTINGS_SERVICE		"com.sun.star.sheet.SpreadsheetDocumentSettings"
 
 //------------------------------------------------------------------------
 
@@ -75,23 +75,24 @@ using namespace com::sun::star;
 class ScTempDocSource
 {
 private:
-    ScTempDocCache& rCache;
-    ScDocument*     pTempDoc;
+    ScTempDocCache&	rCache;
+    ScDocument*		pTempDoc;
 
-    static ScDocument*  CreateDocument();       // create and initialize doc
+    static ScDocument*	CreateDocument();		// create and initialize doc
 
 public:
                 ScTempDocSource( ScTempDocCache& rDocCache );
                 ~ScTempDocSource();
 
-    ScDocument*     GetDocument();
+    ScDocument*		GetDocument();
 };
 
 //------------------------------------------------------------------------
 
+// static
 ScDocument* ScTempDocSource::CreateDocument()
 {
-    ScDocument* pDoc = new ScDocument;                  // SCDOCMODE_DOCUMENT
+    ScDocument* pDoc = new ScDocument;					// SCDOCMODE_DOCUMENT
     pDoc->MakeTable( 0 );
     return pDoc;
 }
@@ -104,7 +105,7 @@ ScTempDocSource::ScTempDocSource( ScTempDocCache& rDocCache ) :
         pTempDoc = CreateDocument();
     else
     {
-        rCache.SetInUse( sal_True );
+        rCache.SetInUse( TRUE );
         if ( !rCache.GetDocument() )
             rCache.SetDocument( CreateDocument() );
     }
@@ -115,7 +116,7 @@ ScTempDocSource::~ScTempDocSource()
     if ( pTempDoc )
         delete pTempDoc;
     else
-        rCache.SetInUse( false );
+        rCache.SetInUse( FALSE );
 }
 
 ScDocument* ScTempDocSource::GetDocument()
@@ -130,7 +131,7 @@ ScDocument* ScTempDocSource::GetDocument()
 
 ScTempDocCache::ScTempDocCache() :
     pDoc( NULL ),
-    bInUse( false )
+    bInUse( FALSE )
 {
 }
 
@@ -155,11 +156,11 @@ void ScTempDocCache::Clear()
 
 //------------------------------------------------------------------------
 
-//  copy results from one document into another
-//! merge this with ScAreaLink::Refresh
-//! copy directly without a clipboard document?
+//	copy results from one document into another
+//!	merge this with ScAreaLink::Refresh
+//!	copy directly without a clipboard document?
 
-sal_Bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
+BOOL lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
                     ScDocument* pDestDoc, const ScAddress& rDestPos )
 {
     SCTAB nSrcTab = rSrcRange.aStart.Tab();
@@ -172,7 +173,7 @@ sal_Bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
 
     ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
     ScMarkData aSourceMark;
-    aSourceMark.SelectOneTable( nSrcTab );      // for CopyToClip
+    aSourceMark.SelectOneTable( nSrcTab );		// for CopyToClip
     aSourceMark.SetMarkArea( rSrcRange );
     ScClipParam aClipParam(rSrcRange, false);
     pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aSourceMark, false);
@@ -181,7 +182,7 @@ sal_Bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
                                 HASATTR_MERGED | HASATTR_OVERLAPPED ) )
     {
         ScPatternAttr aPattern( pSrcDoc->GetPool() );
-        aPattern.GetItemSet().Put( ScMergeAttr() );             // Defaults
+        aPattern.GetItemSet().Put( ScMergeAttr() );				// Defaults
         aPattern.GetItemSet().Put( ScMergeFlagAttr() );
         pClipDoc->ApplyPatternAreaTab( 0,0, MAXCOL,MAXROW, nSrcTab, aPattern );
     }
@@ -199,7 +200,7 @@ sal_Bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
             if ( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
             {
                 ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-                sal_uInt16 nErrCode = pFCell->GetErrCode();
+                USHORT nErrCode = pFCell->GetErrCode();
                 if ( nErrCode == 0 && pFCell->IsValue() )
                 {
                     sal_uInt32 nNewFormat = pFCell->GetStandardFormat( *pClipDoc->GetFormatTable(), nFormat );
@@ -215,10 +216,10 @@ sal_Bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
     ScMarkData aDestMark;
     aDestMark.SelectOneTable( nDestTab );
     aDestMark.SetMarkArea( aNewRange );
-    pDestDoc->CopyFromClip( aNewRange, aDestMark, IDF_ALL & ~IDF_FORMULA, NULL, pClipDoc, false );
+    pDestDoc->CopyFromClip( aNewRange, aDestMark, IDF_ALL & ~IDF_FORMULA, NULL, pClipDoc, FALSE );
 
     delete pClipDoc;
-    return sal_True;
+    return TRUE;
 }
 
 //------------------------------------------------------------------------
@@ -229,7 +230,7 @@ ScFunctionAccess::ScFunctionAccess() :
     mbArray( true ),    // default according to behaviour of older Office versions
     mbValid( true )
 {
-    StartListening( *SFX_APP() );       // for SFX_HINT_DEINITIALIZING
+    StartListening( *SFX_APP() );		// for SFX_HINT_DEINITIALIZING
 }
 
 ScFunctionAccess::~ScFunctionAccess()
@@ -242,7 +243,7 @@ void ScFunctionAccess::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( rHint.ISA(SfxSimpleHint) &&
         ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DEINITIALIZING )
     {
-        //  document must not be used anymore
+        //	document must not be used anymore
         aDocCache.Clear();
         mbValid = false;
     }
@@ -250,7 +251,7 @@ void ScFunctionAccess::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // stuff for exService_...
 
-uno::Reference<uno::XInterface> SAL_CALL ScFunctionAccess_CreateInstance(
+uno::Reference<uno::XInterface>	SAL_CALL ScFunctionAccess_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& )
 {
     SolarMutexGuard aGuard;
@@ -261,14 +262,14 @@ uno::Reference<uno::XInterface> SAL_CALL ScFunctionAccess_CreateInstance(
 
 rtl::OUString ScFunctionAccess::getImplementationName_Static()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.StarCalc.ScFunctionAccess" ));
+    return rtl::OUString::createFromAscii( "stardiv.StarCalc.ScFunctionAccess" );
 }
 
 uno::Sequence<rtl::OUString> ScFunctionAccess::getSupportedServiceNames_Static()
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCFUNCTIONACCESS_SERVICE ));
+    pArray[0] = rtl::OUString::createFromAscii( SCFUNCTIONACCESS_SERVICE );
     return aRet;
 }
 
@@ -276,7 +277,7 @@ uno::Sequence<rtl::OUString> ScFunctionAccess::getSupportedServiceNames_Static()
 
 rtl::OUString SAL_CALL ScFunctionAccess::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScFunctionAccess") );
+    return rtl::OUString::createFromAscii( "ScFunctionAccess" );
 }
 
 sal_Bool SAL_CALL ScFunctionAccess::supportsService( const rtl::OUString& rServiceName )
@@ -292,8 +293,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScFunctionAccess::getSupportedServiceNames
 {
     uno::Sequence<rtl::OUString> aRet(2);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCFUNCTIONACCESS_SERVICE ));
-    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCDOCSETTINGS_SERVICE ));
+    pArray[0] = rtl::OUString::createFromAscii( SCFUNCTIONACCESS_SERVICE );
+    pArray[1] = rtl::OUString::createFromAscii( SCDOCSETTINGS_SERVICE );
     return aRet;
 }
 
@@ -328,7 +329,7 @@ void SAL_CALL ScFunctionAccess::setPropertyValue(
 
         // options aren't initialized from configuration - always get the same default behaviour
 
-        sal_Bool bDone = ScDocOptionsHelper::setPropertyValue( *pOptions, aPropertyMap, aPropertyName, aValue );
+        BOOL bDone = ScDocOptionsHelper::setPropertyValue( *pOptions, aPropertyMap, aPropertyName, aValue );
         if (!bDone)
             throw beans::UnknownPropertyException();
     }
@@ -355,7 +356,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFunctionAccess )
 
 // XFunctionAccess
 
-sal_Bool lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName,const ScCompiler& rCompiler )
+BOOL lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName,const ScCompiler& rCompiler )
 {
     // function names are always case-insensitive
     String aUpper( ScGlobal::pCharClass->upper( rName ) );
@@ -367,28 +368,28 @@ sal_Bool lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName,
     if ( eOp != ocNone )
     {
         rArray.AddOpCode( eOp );
-        return sal_True;
+        return TRUE;
     }
 
     // 2. old add in functions
 
-    sal_uInt16 nIndex;
+    USHORT nIndex;
     if ( ScGlobal::GetFuncCollection()->SearchFunc( aUpper, nIndex ) )
     {
         rArray.AddExternal( aUpper.GetBuffer() );
-        return sal_True;
+        return TRUE;
     }
 
     // 3. new (uno) add in functions
 
-    String aIntName(ScGlobal::GetAddInCollection()->FindFunction( aUpper, false ));
+    String aIntName(ScGlobal::GetAddInCollection()->FindFunction( aUpper, FALSE ));
     if (aIntName.Len())
     {
-        rArray.AddExternal( aIntName.GetBuffer() );     // international name
-        return sal_True;
+        rArray.AddExternal( aIntName.GetBuffer() );		// international name
+        return TRUE;
     }
 
-    return false;       // no valid function name
+    return FALSE;		// no valid function name
 }
 
 void lcl_AddRef( ScTokenArray& rArray, long nStartRow, long nColCount, long nRowCount )
@@ -415,8 +416,8 @@ public:
     // 1) virtual void visitElem( long& nCol, long& nRow, const double& elem )
     // 2) virtual void visitElem( long& nCol, long& nRow, const rtl::OUString& elem )
     // 3) virtual void visitElem( long& nCol, long& nRow, const uno::Any& elem )
-    // the other types methods are here just to reflect the orig code and for
-    // completeness.
+    // the other types methods are here just to reflect the orig code and for 
+    // completeness. 
 
     void visitElem( long nCol, long nRow, const sal_Int16& elem )
     {
@@ -451,8 +452,8 @@ public:
                     eElemClass == uno::TypeClass_FLOAT ||
                     eElemClass == uno::TypeClass_DOUBLE )
         {
-            //  accept integer types because Basic passes a floating point
-            //  variable as byte, short or long if it's an integer number.
+            //	#87871# accept integer types because Basic passes a floating point
+            //	variable as byte, short or long if it's an integer number.
             double fVal(0.0);
             rElement >>= fVal;
             visitElem( nCol, nRow, fVal );
@@ -466,25 +467,25 @@ public:
         else
             mbArgError = true;
     }
-    bool hasArgError() const { return mbArgError; }
+    bool hasArgError() { return mbArgError; }
 };
-
+    
 template< class seq >
-class SequencesContainer
+class SequencesContainer 
 {
     uno::Sequence< uno::Sequence< seq > > maSeq;
-
+    
     long& mrDocRow;
     bool mbOverflow;
     bool mbArgError;
     ScDocument* mpDoc;
     ScTokenArray& mrTokenArr;
-
+        
 public:
     SequencesContainer( const uno::Any& rArg, ScTokenArray& rTokenArr, long& rDocRow, ScDocument* pDoc ) :
         mrDocRow( rDocRow ), mbOverflow(false), mbArgError(false), mpDoc( pDoc ), mrTokenArr( rTokenArr )
-    {
-        rArg >>= maSeq;
+    { 
+        rArg >>= maSeq; 
     }
 
     void process()
@@ -493,7 +494,7 @@ public:
         long nStartRow = mrDocRow;
         long nRowCount = maSeq.getLength();
         long nMaxColCount = 0;
-        const uno::Sequence< seq >* pRowArr = maSeq.getConstArray();
+        const uno::Sequence< seq >* pRowArr = maSeq.getConstArray();		
         for ( long nRow=0; nRow<nRowCount; nRow++ )
         {
             long nColCount = pRowArr[nRow].getLength();
@@ -502,7 +503,7 @@ public:
             const seq* pColArr = pRowArr[nRow].getConstArray();
             for (long nCol=0; nCol<nColCount; nCol++)
                 if ( nCol <= MAXCOL && mrDocRow <= MAXROW )
-                    aVisitor.visitElem( nCol, mrDocRow, pColArr[ nCol ] );
+                    aVisitor.visitElem( nCol, mrDocRow, pColArr[ nCol ] );	
                 else
                     mbOverflow=true;
             mrDocRow++;
@@ -511,8 +512,8 @@ public:
         if ( nRowCount && nMaxColCount && !mbOverflow )
             lcl_AddRef( mrTokenArr, nStartRow, nMaxColCount, nRowCount );
     }
-    bool getOverflow() const { return mbOverflow; }
-    bool getArgError() const { return mbArgError; }
+    bool getOverflow() { return mbOverflow; }
+    bool getArgError() { return mbArgError; }
 };
 
 template <class T>
@@ -520,13 +521,13 @@ class ArrayOfArrayProc
 {
 public:
 static void processSequences( ScDocument* pDoc, const uno::Any& rArg, ScTokenArray& rTokenArr,
-                                long& rDocRow, sal_Bool& rArgErr, sal_Bool& rOverflow )
+                                long& rDocRow, BOOL& rArgErr, BOOL& rOverflow )
 {
     SequencesContainer< T > aContainer( rArg, rTokenArr, rDocRow, pDoc );
     aContainer.process();
     rArgErr = aContainer.getArgError();
     rOverflow = aContainer.getOverflow();
-}
+} 
 };
 
 uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
@@ -540,7 +541,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         throw uno::RuntimeException();
 
     // use cached document if not in use, temporary document otherwise
-    //  (deleted in ScTempDocSource dtor)
+    //	(deleted in ScTempDocSource dtor)
     ScTempDocSource aSource( aDocCache );
     ScDocument* pDoc = aSource.GetDocument();
     const static SCTAB nTempSheet = 1;
@@ -553,9 +554,11 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
     ScAddress aAdr;
     ScCompiler aCompiler(pDoc,aAdr);
     aCompiler.SetGrammar(pDoc->GetGrammar());
+    //if (!ScCompiler::IsInitialized())
+ //       ScCompiler::InitSymbolsEnglish();
 
     //
-    //  find function
+    //	find function
     //
 
     ScTokenArray aTokenArr;
@@ -566,18 +569,18 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
     }
 
     //
-    //  set options (null date, etc.)
+    //	set options (null date, etc.)
     //
 
     if ( pOptions )
         pDoc->SetDocOptions( *pOptions );
 
     //
-    //  add arguments to token array
+    //	add arguments to token array
     //
 
-    sal_Bool bArgErr = false;
-    sal_Bool bOverflow = false;
+    BOOL bArgErr = FALSE;
+    BOOL bOverflow = FALSE;
     long nDocRow = 0;
     long nArgCount = aArguments.getLength();
     const uno::Any* pArgArr = aArguments.getConstArray();
@@ -601,8 +604,8 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
              eClass == uno::TypeClass_FLOAT ||
              eClass == uno::TypeClass_DOUBLE )
         {
-            //  accept integer types because Basic passes a floating point
-            //  variable as byte, short or long if it's an integer number.
+            //	#87871# accept integer types because Basic passes a floating point
+            //	variable as byte, short or long if it's an integer number.
             double fVal = 0;
             rArg >>= fVal;
             aTokenArr.AddDouble( fVal );
@@ -616,23 +619,23 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         }
         else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<sal_Int16> > *)0 ) ) )
         {
-            ArrayOfArrayProc<sal_Int16>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
+            ArrayOfArrayProc<sal_Int16>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );	
         }
         else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<sal_Int32> > *)0 ) ) )
         {
-            ArrayOfArrayProc<sal_Int32>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
+            ArrayOfArrayProc<sal_Int32>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );	
         }
         else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<double> > *)0 ) ) )
         {
-            ArrayOfArrayProc<double>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
+            ArrayOfArrayProc<double>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );	
         }
         else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<rtl::OUString> > *)0 ) ) )
         {
-            ArrayOfArrayProc<rtl::OUString>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
+            ArrayOfArrayProc<rtl::OUString>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );	
         }
         else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<uno::Any> > *)0 ) ) )
         {
-            ArrayOfArrayProc<uno::Any>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
+            ArrayOfArrayProc<uno::Any>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );	
         }
         else if ( aType.equals( getCppuType( (uno::Reference<table::XCellRange>*)0 ) ) )
         {
@@ -644,21 +647,21 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
             {
                 ScDocument* pSrcDoc = pImpl->GetDocument();
                 const ScRangeList& rRanges = pImpl->GetRangeList();
-                if ( pSrcDoc && rRanges.size() == 1 )
+                if ( pSrcDoc && rRanges.Count() == 1 )
                 {
-                    ScRange aSrcRange = *rRanges[ 0 ];
+                    ScRange aSrcRange = *rRanges.GetObject(0);
 
                     long nStartRow = nDocRow;
                     long nColCount = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;
                     long nRowCount = aSrcRange.aEnd.Row() - aSrcRange.aStart.Row() + 1;
 
                     if ( nStartRow + nRowCount > MAXROWCOUNT )
-                        bOverflow = sal_True;
+                        bOverflow = TRUE;
                     else
                     {
                         // copy data
                         if ( !lcl_CopyData( pSrcDoc, aSrcRange, pDoc, ScAddress( 0, (SCROW)nDocRow, 0 ) ) )
-                            bOverflow = sal_True;
+                            bOverflow = TRUE;
                     }
 
                     nDocRow += nRowCount;
@@ -666,19 +669,19 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
                         lcl_AddRef( aTokenArr, nStartRow, nColCount, nRowCount );
                 }
                 else
-                    bArgErr = sal_True;
+                    bArgErr = TRUE;
             }
             else
-                bArgErr = sal_True;
+                bArgErr = TRUE;
         }
         else
-            bArgErr = sal_True;                 // invalid type
+            bArgErr = TRUE;					// invalid type
     }
     aTokenArr.AddOpCode(ocClose);
     aTokenArr.AddOpCode(ocStop);
 
     //
-    //  execute formula
+    //	execute formula
     //
 
     uno::Any aRet;
@@ -688,14 +691,14 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         // GRAM_PODF_A1 doesn't really matter for the token array but fits with
         // other API compatibility grammars.
         ScFormulaCell* pFormula = new ScFormulaCell( pDoc, aFormulaPos,
-                &aTokenArr, formula::FormulaGrammar::GRAM_PODF_A1, (sal_uInt8)(mbArray ? MM_FORMULA : MM_NONE) );
-        pDoc->PutCell( aFormulaPos, pFormula );     //! necessary?
+                &aTokenArr, formula::FormulaGrammar::GRAM_PODF_A1, (BYTE)(mbArray ? MM_FORMULA : MM_NONE) );
+        pDoc->PutCell( aFormulaPos, pFormula );		//! necessary?
 
-        //  call GetMatrix before GetErrCode because GetMatrix always recalculates
-        //  if there is no matrix result
+        //	call GetMatrix before GetErrCode because GetMatrix always recalculates
+        //	if there is no matrix result
 
         const ScMatrix* pMat = mbArray ? pFormula->GetMatrix() : 0;
-        sal_uInt16 nErrCode = pFormula->GetErrCode();
+        USHORT nErrCode = pFormula->GetErrCode();
         if ( nErrCode == 0 )
         {
             if ( pMat )
@@ -722,8 +725,8 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         }
         else
         {
-            //  any other error: IllegalArgumentException
-            bArgErr = sal_True;
+            //	any other error: IllegalArgumentException
+            bArgErr = TRUE;
         }
 
         pDoc->DeleteAreaTab( 0, 0, MAXCOL, MAXROW, 0, IDF_ALL );

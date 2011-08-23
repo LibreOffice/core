@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,24 +44,24 @@ class VCL_DLLPUBLIC Timer
 {
 protected:
     ImplTimerData*  mpTimerData;
-    sal_uLong           mnTimeout;
-    sal_Bool            mbActive;
-    sal_Bool            mbAuto;
+    ULONG           mnTimeout;
+    BOOL            mbActive;
+    BOOL            mbAuto;
     Link            maTimeoutHdl;
 
 public:
                     Timer();
                     Timer( const Timer& rTimer );
-    virtual         ~Timer();
+    virtual			~Timer();
 
     virtual void    Timeout();
 
     void            Start();
     void            Stop();
 
-    void            SetTimeout( sal_uLong nTimeout );
-    sal_uLong           GetTimeout() const { return mnTimeout; }
-    sal_Bool            IsActive() const { return mbActive; }
+    void            SetTimeout( ULONG nTimeout );
+    ULONG           GetTimeout() const { return mnTimeout; }
+    BOOL            IsActive() const { return mbActive; }
 
     void            SetTimeoutHdl( const Link& rLink ) { maTimeoutHdl = rLink; }
     const Link&     GetTimeoutHdl() const { return maTimeoutHdl; }

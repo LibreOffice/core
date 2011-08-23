@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,32 +46,32 @@ import org.openoffice.netbeans.modules.office.actions.ParcelCookie;
  * @author tomaso
  */
 public class ParcelDataNode extends DataNode {
-
+    
     public ParcelDataNode(ParcelDataObject obj) {
         this(obj, Children.LEAF);
     }
-
+    
     public ParcelDataNode(ParcelDataObject obj, Children ch) {
         super(obj, ch);
         setIconBase("/org/openoffice/netbeans/modules/office/resources/ParcelIcon");
     }
-
+    
     protected ParcelDataObject getParcelDataObject() {
         return (ParcelDataObject)getDataObject();
     }
-
+    
     public static class ParcelPasteType extends PasteType {
         ParcelDataNode sourceParcel = null;
         File targetDocument = null;
         boolean isCut = false;
-
+        
         public ParcelPasteType(ParcelDataNode sourceParcel,
             File targetDocument, boolean isCut) {
             this.sourceParcel = sourceParcel;
             this.targetDocument = targetDocument;
             this.isCut = isCut;
         }
-
+        
         public Transferable paste() {
             ParcelCookie parcelCookie =
                 (ParcelCookie)sourceParcel.getCookie(ParcelCookie.class);
@@ -108,7 +108,7 @@ public class ParcelDataNode extends DataNode {
         return sheet;
     }
      */
-
+    
     // Don't use getDefaultAction(); just make that first in the data loader's getActions list
-
+    
 }

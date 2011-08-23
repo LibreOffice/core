@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : gregor.hartmann@oracle.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Supported extension platforms
 '*
@@ -75,7 +75,7 @@ testcase tExtensionPlatforms
         end select
 
         printlog( "" )
-        printlog( "("+iCurrentExtension+"/"+iExtensionCount+") Current extension: " & cCurrentExtensionFile )
+        printlog( "Current extension: " & cCurrentExtensionFile )
         iStatus = hExtensionAddGUI( cCurrentExtensionPath, "InstallForUser, NoLicense, NoUpdate, Verbose" )
         
         if ( iStatus = -7 or iStatus >= 0 ) then

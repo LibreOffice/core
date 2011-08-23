@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ class SW_DLLPUBLIC SwNumRulesWithName
     {
         SwNumFmt aFmt;
         String sCharFmtName;
-        sal_uInt16 nCharPoolId;
+        USHORT nCharPoolId;
         _SwNumFmtsAttrs aItems;
 
         _SwNumFmtGlobal& operator=( const _SwNumFmtGlobal& );
@@ -58,7 +58,7 @@ class SW_DLLPUBLIC SwNumRulesWithName
     public:
         _SwNumFmtGlobal( const SwNumFmt& rFmt );
         _SwNumFmtGlobal( const _SwNumFmtGlobal& );
-        _SwNumFmtGlobal( SvStream&, sal_uInt16 nVersion );
+        _SwNumFmtGlobal( SvStream&, USHORT nVersion );
         ~_SwNumFmtGlobal();
 
         void Store( SvStream& );
@@ -73,12 +73,12 @@ protected:
 public:
     SwNumRulesWithName(const SwNumRule &, const String &);
     SwNumRulesWithName( const SwNumRulesWithName & );
-    SwNumRulesWithName(SvStream &, sal_uInt16 nVersion);
+    SwNumRulesWithName(SvStream &, USHORT nVersion);
     ~SwNumRulesWithName();
 
     const SwNumRulesWithName &operator=(const SwNumRulesWithName &);
 
-    const String& GetName() const               { return aName; }
+    const String& GetName() const 				{ return aName; }
     void MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const;
 
     void Store( SvStream& );
@@ -87,26 +87,26 @@ public:
 class SwBaseNumRules
 {
 public:
-    enum { nMaxRules = MAX_NUM_RULES };         // zur Zeit 9 definierte Forms
+    enum { nMaxRules = MAX_NUM_RULES };			// zur Zeit 9 definierte Forms
 protected:
-    SwNumRulesWithName  *pNumRules[ MAX_NUM_RULES ];
-    String              sFileName;
-    sal_uInt16              nVersion;
-     sal_Bool               bModified;
+    SwNumRulesWithName 	*pNumRules[ MAX_NUM_RULES ];
+    String 				sFileName;
+    USHORT 				nVersion;
+     BOOL 				bModified;
 
-    virtual int         Load(SvStream&);
-    virtual sal_Bool        Store(SvStream&);
+    virtual int     	Load(SvStream&);
+    virtual BOOL    	Store(SvStream&);
 
-    void                Init();
+    void 				Init();
 
 public:
     SwBaseNumRules(const String& rFileName);
     virtual ~SwBaseNumRules();
 
-    inline const SwNumRulesWithName*    GetRules(sal_uInt16 nIdx) const;
-    virtual void                        ApplyNumRules(
+    inline const SwNumRulesWithName*	GetRules(USHORT nIdx) const;
+    virtual void 						ApplyNumRules(
                                                 const SwNumRulesWithName &rCopy,
-                                                sal_uInt16 nIdx);
+                                                USHORT nIdx);
 
 };
 
@@ -117,12 +117,12 @@ public:
     SwChapterNumRules();
     virtual ~SwChapterNumRules();
 
-    virtual void        ApplyNumRules(  const SwNumRulesWithName &rCopy,
-                                            sal_uInt16 nIdx);
+    virtual void 		ApplyNumRules(	const SwNumRulesWithName &rCopy,
+                                            USHORT nIdx);
 };
 
 // INLINE METHODE --------------------------------------------------------
-inline const SwNumRulesWithName *SwBaseNumRules::GetRules(sal_uInt16 nIdx) const
+inline const SwNumRulesWithName *SwBaseNumRules::GetRules(USHORT nIdx) const
 {
     OSL_ENSURE(nIdx < nMaxRules, "Array der NumRules ueberindiziert.");
     return pNumRules[nIdx];

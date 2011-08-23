@@ -65,6 +65,7 @@ MOZINC = . \
         -DXP_WIN32 \
         -DOJI \
         -DWIN32 \
+        -D_X86_ \
         -D_WINDOWS \
         -DMOZ_XUL \
         -DMOZ_REFLOW_PERF \

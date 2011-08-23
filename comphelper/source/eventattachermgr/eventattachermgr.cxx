@@ -65,8 +65,7 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::reflection;
 using namespace cppu;
 using namespace osl;
-
-using ::rtl::OUString;
+using namespace rtl;
 
 namespace comphelper
 {
@@ -74,9 +73,9 @@ namespace comphelper
 //-----------------------------------------------------------------------------
 struct AttachedObject_Impl
 {
-    Reference< XInterface >                 xTarget;
+    Reference< XInterface >					xTarget;
     Sequence< Reference< XEventListener > > aAttachedListenerSeq;
-    Any                                     aHelper;
+    Any             	         			aHelper;
 
     bool    operator<( const AttachedObject_Impl & ) const;
     bool    operator==( const AttachedObject_Impl & ) const;
@@ -103,14 +102,14 @@ class ImplEventAttacherManager
     ::std::deque< AttacherIndex_Impl >  aIndex;
     Mutex aLock;
     // Container fuer die ScriptListener
-    OInterfaceContainerHelper           aScriptListeners;
+    OInterfaceContainerHelper   		aScriptListeners;
     // EventAttacher-Instanz
-    Reference< XEventAttacher >         xAttacher;
-    Reference< XMultiServiceFactory >   mxSMgr;
-    Reference< XIdlReflection >         mxCoreReflection;
-    Reference< XIntrospection >         mxIntrospection;
-    Reference< XTypeConverter >         xConverter;
-    sal_Int16                           nVersion;
+    Reference< XEventAttacher >			xAttacher;
+    Reference< XMultiServiceFactory > 	mxSMgr;
+    Reference< XIdlReflection > 		mxCoreReflection;
+    Reference< XIntrospection > 		mxIntrospection;
+    Reference< XTypeConverter > 		xConverter;
+    sal_Int16							nVersion;
 public:
     ImplEventAttacherManager( const Reference< XIntrospection > & rIntrospection,
                               const Reference< XMultiServiceFactory > rSMgr );
@@ -146,7 +145,7 @@ public:
     virtual void SAL_CALL read(const Reference< XObjectInputStream >& InStream) throw( IOException, RuntimeException );
 
 private:
-    Reference< XIdlReflection > getReflection() throw( Exception );
+    Reference< XIdlReflection >	getReflection() throw( Exception );
 
     /** checks if <arg>_nIndex</arg> is a valid index, throws an <type>IllegalArgumentException</type> if not
     @param _nIndex
@@ -165,11 +164,11 @@ private:
 // nur einzelne Events an einen allgemeinen AllListener weiterleitet
 class AttacherAllListener_Impl : public WeakImplHelper1< XAllListener >
 {
-    ImplEventAttacherManager*           mpManager;
+    ImplEventAttacherManager*   		mpManager;
     Reference< XEventAttacherManager >  xManager;
-    OUString                            aScriptType;
-    OUString                            aScriptCode;
-    sal_Int16                           nVersion;
+    OUString        		           	aScriptType;
+    OUString    	        	        aScriptCode;
+    sal_Int16	                	   	nVersion;
 
     void convertToEventReturn( Any & rRet, const Type & rRetType )
         throw( CannotConvertException );
@@ -248,10 +247,10 @@ void AttacherAllListener_Impl::convertToEventReturn( Any & rRet, const Type & rR
             case TypeClass_FLOAT:           rRet <<= float(0);  break;
             case TypeClass_DOUBLE:          rRet <<= double(0.0);  break;
             case TypeClass_BYTE:            rRet <<= sal_uInt8(0);      break;
-            case TypeClass_SHORT:           rRet <<= sal_Int16( 0 );    break;
-            case TypeClass_LONG:            rRet <<= sal_Int32( 0 );    break;
-            case TypeClass_UNSIGNED_SHORT:  rRet <<= sal_uInt16( 0 );   break;
-            case TypeClass_UNSIGNED_LONG:   rRet <<= sal_uInt32( 0 );   break;
+            case TypeClass_SHORT:			rRet <<= sal_Int16( 0 );	break;
+            case TypeClass_LONG:			rRet <<= sal_Int32( 0 );	break;
+            case TypeClass_UNSIGNED_SHORT:	rRet <<= sal_uInt16( 0 );	break;
+            case TypeClass_UNSIGNED_LONG:	rRet <<= sal_uInt32( 0 );	break;
 
             default:
                 OSL_ASSERT(false);
@@ -324,13 +323,13 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
                     break;
 
                     // none zero number -> return
-                case TypeClass_FLOAT:           if( *((float*)aRet.getValue()) )    return aRet; break;
-                case TypeClass_DOUBLE:          if( *((double*)aRet.getValue()) )   return aRet; break;
-                case TypeClass_BYTE:            if( *((sal_uInt8*)aRet.getValue()) )    return aRet; break;
-                case TypeClass_SHORT:           if( *((sal_Int16*)aRet.getValue()) )    return aRet; break;
-                case TypeClass_LONG:            if( *((sal_Int32*)aRet.getValue()) )    return aRet; break;
-                case TypeClass_UNSIGNED_SHORT:  if( *((sal_uInt16*)aRet.getValue()) )   return aRet; break;
-                case TypeClass_UNSIGNED_LONG:   if( *((sal_uInt32*)aRet.getValue()) )   return aRet; break;
+                case TypeClass_FLOAT:           if( *((float*)aRet.getValue()) ) 	return aRet; break;
+                case TypeClass_DOUBLE:          if( *((double*)aRet.getValue()) )  	return aRet; break;
+                case TypeClass_BYTE:            if( *((sal_uInt8*)aRet.getValue()) )	return aRet; break;
+                case TypeClass_SHORT:           if( *((sal_Int16*)aRet.getValue()) )	return aRet; break;
+                case TypeClass_LONG:            if( *((sal_Int32*)aRet.getValue()) )   	return aRet; break;
+                case TypeClass_UNSIGNED_SHORT:  if( *((sal_uInt16*)aRet.getValue()) )  	return aRet; break;
+                case TypeClass_UNSIGNED_LONG:   if( *((sal_uInt32*)aRet.getValue()) )  	return aRet; break;
 
                 default:
                     OSL_ASSERT(false);
@@ -382,7 +381,7 @@ Reference< XEventAttacherManager > createEventAttacherManager( const Reference< 
 {
     if ( rSMgr.is() )
     {
-        Reference< XInterface > xIFace( rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.beans.Introspection" )) ) );
+        Reference< XInterface > xIFace( rSMgr->createInstance( OUString::createFromAscii("com.sun.star.beans.Introspection") ) );
         if ( xIFace.is() )
         {
             Reference< XIntrospection > xIntrospection( xIFace, UNO_QUERY);
@@ -402,12 +401,12 @@ ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospect
 {
     if ( rSMgr.is() )
     {
-        Reference< XInterface > xIFace( rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.EventAttacher" )) ) );
+        Reference< XInterface > xIFace( rSMgr->createInstance( OUString::createFromAscii("com.sun.star.script.EventAttacher") ) );
         if ( xIFace.is() )
         {
             xAttacher = Reference< XEventAttacher >::query( xIFace );
         }
-        xIFace = rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" )) );
+        xIFace = rSMgr->createInstance( OUString::createFromAscii("com.sun.star.script.Converter") );
         if ( xIFace.is() )
         {
             xConverter = Reference< XTypeConverter >::query( xIFace );
@@ -434,7 +433,7 @@ Reference< XIdlReflection > ImplEventAttacherManager::getReflection() throw( Exc
     // Haben wir den Service schon? Sonst anlegen
     if( !mxCoreReflection.is() )
     {
-        Reference< XInterface > xIFace( mxSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.CoreReflection" )) ) );
+        Reference< XInterface > xIFace( mxSMgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.CoreReflection") ) );
         mxCoreReflection = Reference< XIdlReflection >( xIFace, UNO_QUERY);
     }
     return mxCoreReflection;
@@ -611,12 +610,12 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
     Sequence< ScriptEventDescriptor >& rEventList = (*aIt).aEventList;
 
             ScriptEventDescriptor* pEventList = rEventList.getArray();
-    const   ScriptEventDescriptor* pEventListEnd = pEventList + rEventList.getLength();
+    const	ScriptEventDescriptor* pEventListEnd = pEventList + rEventList.getLength();
     for( ; pEventList < pEventListEnd; ++pEventList )
     {
-        if  (   (aLstType               == pEventList->ListenerType )
-            &&  (EventMethod            == pEventList->EventMethod      )
-            &&  (ToRemoveListenerParam  == pEventList->AddListenerParam)
+        if	(	(aLstType				== pEventList->ListenerType	)
+            &&	(EventMethod            == pEventList->EventMethod		)
+            &&	(ToRemoveListenerParam  == pEventList->AddListenerParam)
             )
         {
             ScriptEventDescriptor* pMoveTo = pEventList;
@@ -989,7 +988,7 @@ void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream
         // Ganze richtig sein. Sonst ist etwas voellig daneben gegangen.
         if( nRealLen > nLen || nVersion == 1 )
         {
-            OSL_FAIL( "ImplEventAttacherManager::read(): Fatal Error, wrong object length" );
+            OSL_ENSURE( sal_False, "ImplEventAttacherManager::read(): Fatal Error, wrong object length" );
         }
         else
         {

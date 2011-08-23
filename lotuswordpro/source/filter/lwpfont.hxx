@@ -62,7 +62,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPFONT_HXX
@@ -80,14 +80,14 @@
 class LwpFontTableEntry
 {
 public:
-    LwpFontTableEntry(){}
-    ~LwpFontTableEntry(){}
+    LwpFontTableEntry(){};
+    ~LwpFontTableEntry(){};
 public:
     void Read(LwpObjectStream *pStrm);
     OUString GetFaceName();
 private:
-    LwpAtomHolder m_WindowsFaceName;    //font face name under windows
-    LwpAtomHolder m_FaceName;           //font face name
+    LwpAtomHolder m_WindowsFaceName;	//font face name under windows
+    LwpAtomHolder m_FaceName;			//font face name
     void RegisterFontDecl();
      //Not useful now, so skip
     //LwpPanoseNumber m_PanoseNumber;
@@ -101,7 +101,7 @@ public:
 public:
     void Read(LwpObjectStream *pStrm);
     OUString GetFaceName(sal_uInt16 index); //index: start from 1
-//  void RegisterFontDecls();
+//	void RegisterFontDecls();
 private:
     sal_uInt16 m_nCount;
     LwpFontTableEntry* m_pFontEntries;
@@ -111,15 +111,15 @@ private:
 class LwpFontNameEntry
 {
 public:
-    LwpFontNameEntry(){}
-    ~LwpFontNameEntry(){}
+    LwpFontNameEntry(){};
+    ~LwpFontNameEntry(){};
 public:
     void Read(LwpObjectStream *pStrm);
-    inline sal_uInt16 GetFaceID(){return m_nFaceName;}
-    inline sal_uInt16 GetAltFaceID(){return m_nAltFaceName;}
+    inline sal_uInt16 GetFaceID(){return m_nFaceName;};
+    inline sal_uInt16 GetAltFaceID(){return m_nAltFaceName;};
     void Override(XFFont* pFont);
-    inline sal_Bool IsFaceNameOverridden();
-    inline sal_Bool IsAltFaceNameOverridden();
+    inline BOOL IsFaceNameOverridden();
+    inline BOOL IsAltFaceNameOverridden();
 private:
     //Data of CFontDescriptionOverrideBase
     sal_uInt8 m_nOverrideBits;
@@ -134,24 +134,23 @@ private:
     sal_uInt16 m_nAltFaceName; //CFontTableID
     enum
     {
-        POINTSIZE       = 0x01,
-        COLOR           = 0x02,
-        OVERSTRIKE      = 0x04,
-        TIGHTNESS       = 0x08,
-        FACENAME        = 0x10,
-        BKCOLOR         = 0x20,
-        ALTFACENAME     = 0x40,
-        ALL_BITS        = (POINTSIZE | COLOR | OVERSTRIKE
+        POINTSIZE		= 0x01,
+        COLOR			= 0x02,
+        OVERSTRIKE		= 0x04,
+        TIGHTNESS		= 0x08,
+        FACENAME		= 0x10,
+        BKCOLOR			= 0x20,
+        ALTFACENAME		= 0x40,
+        ALL_BITS		= (POINTSIZE | COLOR | OVERSTRIKE
                             | ALTFACENAME
                             | TIGHTNESS | FACENAME | BKCOLOR)
     };
 
-    inline sal_Bool IsPointSizeOverridden();
-    inline sal_Bool IsColorOverridden();
-    inline sal_Bool IsBackgroundColorOverridden();
-//TODO
-//    inline sal_Bool IsTightnessOverridden();
-//    inline sal_Bool IsAnythingOverridden();
+    inline BOOL IsPointSizeOverridden();
+    inline BOOL IsColorOverridden();
+    inline BOOL IsBackgroundColorOverridden();
+    inline BOOL IsTightnessOverridden();
+    inline BOOL IsAnythingOverridden();
 };
 
 class LwpFontNameManager
@@ -167,14 +166,14 @@ private:
 
 public:
     void Read(LwpObjectStream *pStrm);
-    void    Override(sal_uInt16 index, XFFont* pFont);
+    void	Override(sal_uInt16 index, XFFont* pFont);
 };
 
 class LwpFontAttrEntry
 {
 public:
-    LwpFontAttrEntry(){}
-    ~LwpFontAttrEntry(){}
+    LwpFontAttrEntry(){};
+    ~LwpFontAttrEntry(){};
 public:
     void Read(LwpObjectStream *pStrm);
     void Override(XFFont*pFont);
@@ -188,55 +187,55 @@ private:
     sal_uInt8 m_nUnder;
     enum
     {
-        BOLD            = 0x0001,
-        ITALIC          = 0x0002,
-        STRIKETHRU      = 0x0004,
+        BOLD			= 0x0001,
+        ITALIC			= 0x0002,
+        STRIKETHRU		= 0x0004,
 
-        SUPERSCRIPT = 0x0100,
-        SUBSCRIPT       = 0x0200,
+        SUPERSCRIPT	= 0x0100,
+        SUBSCRIPT		= 0x0200,
 
-        SMALLCAPS       = 0x0400,
+        SMALLCAPS		= 0x0400,
 
-        ALL_ATTRS       = BOLD | ITALIC | STRIKETHRU
+        ALL_ATTRS		= BOLD | ITALIC | STRIKETHRU
                         | SUPERSCRIPT | SUBSCRIPT
                         | SMALLCAPS,
 
-        CASE_DONTCARE   = 0,
-        CASE_NORMAL = 1,
-        CASE_UPPER      = 2,
-        CASE_LOWER  = 3,
-        CASE_INITCAPS   = 4,
-        CASE_STYLE      = 7,
+        CASE_DONTCARE	= 0,
+        CASE_NORMAL	= 1,
+        CASE_UPPER		= 2,
+        CASE_LOWER	= 3,
+        CASE_INITCAPS	= 4,
+        CASE_STYLE		= 7,
 
-        UNDER_DONTCARE  = 0,
-        UNDER_OFF           = 1,
-        UNDER_SINGLE        = 2,
-        UNDER_DOUBLE        = 3,
-        UNDER_WORD_SINGLE   = 4,
-        UNDER_WORD_DOUBLE   = 5,
-        UNDER_STYLE         = 7,
+        UNDER_DONTCARE	= 0,
+        UNDER_OFF			= 1,
+        UNDER_SINGLE		= 2,
+        UNDER_DOUBLE		= 3,
+        UNDER_WORD_SINGLE	= 4,
+        UNDER_WORD_DOUBLE	= 5,
+        UNDER_STYLE			= 7,
 
-        CASE    = 0x01,
-        UNDER   = 0x02,
-        ALL_ATTRS2          = CASE | UNDER
+        CASE	= 0x01,
+        UNDER	= 0x02,
+        ALL_ATTRS2			= CASE | UNDER
     };
-    sal_Bool Is(sal_uInt16 Attr);
-    sal_Bool IsBoldOverridden();
-    sal_Bool IsItalicOverridden();
-    sal_Bool IsStrikeThruOverridden();
-    sal_Bool IsSmallCapsOverridden();
-    sal_Bool IsSuperOverridden();
-    sal_Bool IsSubOverridden();
-    sal_Bool IsSuperSubOverridden();
-    sal_Bool IsUnderlineOverridden();
-    sal_Bool IsCaseOverridden();
+    BOOL Is(sal_uInt16 Attr);
+    BOOL IsBoldOverridden();
+    BOOL IsItalicOverridden();
+    BOOL IsStrikeThruOverridden();
+    BOOL IsSmallCapsOverridden();
+    BOOL IsSuperOverridden();
+    BOOL IsSubOverridden();
+    BOOL IsSuperSubOverridden();
+    BOOL IsUnderlineOverridden();
+    BOOL IsCaseOverridden();
 
 };
 
 class LwpFontAttrManager
 {
 public:
-    LwpFontAttrManager():m_pFontAttrs(NULL){}
+    LwpFontAttrManager():m_pFontAttrs(NULL){};
     ~LwpFontAttrManager();
 public:
     void Read(LwpObjectStream *pStrm);
@@ -249,8 +248,8 @@ private:
 class LwpFontManager
 {
 public:
-    LwpFontManager(){}
-    ~LwpFontManager(){}
+    LwpFontManager(){};
+    ~LwpFontManager(){};
 private:
     LwpFontNameManager m_FNMgr;
     LwpFontAttrManager m_AttrMgr;

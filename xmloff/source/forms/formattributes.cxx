@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include "formattributes.hxx"
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>
@@ -51,33 +51,33 @@ namespace xmloff
     {
         switch (_nId)
         {
-            case CCA_NAME:              return "name";
-            case CCA_SERVICE_NAME:      return "control-implementation";
-            case CCA_BUTTON_TYPE:       return "button-type";
-// disabled(AddAttributeIdLegacy)   case CCA_CONTROL_ID:        return "id";
-            case CCA_CURRENT_SELECTED:  return "current-selected";
-            case CCA_CURRENT_VALUE:     return "current-value";
-            case CCA_DISABLED:          return "disabled";
-            case CCA_ENABLEVISIBLE:     return "visible";
-            case CCA_DROPDOWN:          return "dropdown";
-            case CCA_FOR:               return "for";
-            case CCA_IMAGE_DATA:        return "image-data";
-            case CCA_LABEL:             return "label";
-            case CCA_MAX_LENGTH:        return "max-length";
-            case CCA_PRINTABLE:         return "printable";
-            case CCA_READONLY:          return "readonly";
-            case CCA_SELECTED:          return "selected";
-            case CCA_SIZE:              return "size";
-            case CCA_TAB_INDEX:         return "tab-index";
-            case CCA_TARGET_FRAME:      return "target-frame";
-            case CCA_TARGET_LOCATION:   return "href";      // the only special thing here: TargetLocation is represented by an xlink:href attribute
-            case CCA_TAB_STOP:          return "tab-stop";
-            case CCA_TITLE:             return "title";
-            case CCA_VALUE:             return "value";
+            case CCA_NAME: 				return "name";
+            case CCA_SERVICE_NAME: 		return "control-implementation";
+            case CCA_BUTTON_TYPE: 		return "button-type";
+// disabled(AddAttributeIdLegacy)	case CCA_CONTROL_ID: 		return "id";
+            case CCA_CURRENT_SELECTED: 	return "current-selected";
+            case CCA_CURRENT_VALUE: 	return "current-value";
+            case CCA_DISABLED: 			return "disabled";
+            case CCA_ENABLEVISIBLE: 	return "visible";
+            case CCA_DROPDOWN: 			return "dropdown";
+            case CCA_FOR: 				return "for";
+            case CCA_IMAGE_DATA: 		return "image-data";
+            case CCA_LABEL: 			return "label";
+            case CCA_MAX_LENGTH: 		return "max-length";
+            case CCA_PRINTABLE: 		return "printable";
+            case CCA_READONLY: 			return "readonly";
+            case CCA_SELECTED: 			return "selected";
+            case CCA_SIZE: 				return "size";
+            case CCA_TAB_INDEX: 		return "tab-index";
+            case CCA_TARGET_FRAME: 		return "target-frame";
+            case CCA_TARGET_LOCATION: 	return "href";		// the only special thing here: TargetLocation is represented by an xlink:href attribute
+            case CCA_TAB_STOP: 			return "tab-stop";
+            case CCA_TITLE: 			return "title";
+            case CCA_VALUE: 			return "value";
             case CCA_ORIENTATION:       return "orientation";
             case CCA_VISUAL_EFFECT:     return "visual-effect";
             default:
-                OSL_FAIL("OAttributeMetaData::getCommonControlAttributeName: invalid id (maybe you or-ed two flags?)!");
+                OSL_ENSURE(sal_False, "OAttributeMetaData::getCommonControlAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
         return "";
     }
@@ -99,30 +99,30 @@ namespace xmloff
     {
         switch (_eAttrib)
         {
-            case faName:                return "name";
-            case faServiceName:         return "service-name";
-            case faAction:              return "href";      // the only special thing here: Action is represented by an xlink:href attribute
-            case faEnctype:             return "enctype";
-            case faMethod:              return "method";
-            case faTargetFrame:         return "target-frame";
-            case faAllowDeletes:        return "allow-deletes";
-            case faAllowInserts:        return "allow-inserts";
-            case faAllowUpdates:        return "allow-updates";
-            case faApplyFilter:         return "apply-filter";
-            case faCommand:             return "command";
-            case faCommandType:         return "command-type";
-            case faEscapeProcessing:    return "escape-processing";
-            case faDatasource:          return "datasource";
-            case faConnectionResource:  return "connection-resource";
-            case faDetailFiels:         return "detail-fields";
-            case faFilter:              return "filter";
-            case faIgnoreResult:        return "ignore-result";
-            case faMasterFields:        return "master-fields";
-            case faNavigationMode:      return "navigation-mode";
-            case faOrder:               return "order";
-            case faTabbingCycle:        return "tab-cycle";
+            case faName: 				return "name";
+            case faServiceName: 		return "service-name";
+            case faAction: 				return "href";		// the only special thing here: Action is represented by an xlink:href attribute
+            case faEnctype: 			return "enctype";
+            case faMethod: 				return "method";
+            case faTargetFrame: 		return "target-frame";
+            case faAllowDeletes:		return "allow-deletes";
+            case faAllowInserts:		return "allow-inserts";
+            case faAllowUpdates:		return "allow-updates";
+            case faApplyFilter: 		return "apply-filter";
+            case faCommand: 			return "command";
+            case faCommandType: 		return "command-type";
+            case faEscapeProcessing:	return "escape-processing";
+            case faDatasource: 			return "datasource";
+            case faConnectionResource: 	return "connection-resource";
+            case faDetailFiels: 		return "detail-fields";
+            case faFilter: 				return "filter";
+            case faIgnoreResult: 		return "ignore-result";
+            case faMasterFields: 		return "master-fields";
+            case faNavigationMode:		return "navigation-mode";
+            case faOrder: 				return "order";
+            case faTabbingCycle: 		return "tab-cycle";
             default:
-                OSL_FAIL("OAttributeMetaData::getFormAttributeName: invalid id!");
+                OSL_ENSURE(sal_False, "OAttributeMetaData::getFormAttributeName: invalid id!");
         }
         return "";
     }
@@ -144,14 +144,14 @@ namespace xmloff
     {
         switch (_nId)
         {
-            case DA_BOUND_COLUMN:       return "bound-column";
-            case DA_CONVERT_EMPTY:      return "convert-empty-to-null";
-            case DA_DATA_FIELD:         return "data-field";
-            case DA_LIST_SOURCE:        return "list-source";
-            case DA_LIST_SOURCE_TYPE:   return "list-source-type";
-            case DA_INPUT_REQUIRED:     return "input-required";
+            case DA_BOUND_COLUMN:		return "bound-column";
+            case DA_CONVERT_EMPTY:		return "convert-empty-to-null";
+            case DA_DATA_FIELD:			return "data-field";
+            case DA_LIST_SOURCE:		return "list-source";
+            case DA_LIST_SOURCE_TYPE:	return "list-source-type";
+            case DA_INPUT_REQUIRED:	    return "input-required";
             default:
-                OSL_FAIL("OAttributeMetaData::getDatabaseAttributeName: invalid id (maybe you or-ed two flags?)!");
+                OSL_ENSURE(sal_False, "OAttributeMetaData::getDatabaseAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
         return "";
     }
@@ -172,7 +172,7 @@ namespace xmloff
             case BA_LIST_LINKING_TYPE: return "list-linkage-type";
             case BA_LIST_CELL_RANGE:   return "source-cell-range";
             default:
-                OSL_FAIL("OAttributeMetaData::getBindingAttributeName: invalid id (maybe you or-ed two flags?)!");
+                OSL_ENSURE(sal_False, "OAttributeMetaData::getBindingAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
         return "";
     }
@@ -189,26 +189,26 @@ namespace xmloff
     {
         switch (_nId)
         {
-            case SCA_ECHO_CHAR:             return "echo-char";
-            case SCA_MAX_VALUE:             return "max-value";
-            case SCA_MIN_VALUE:             return "min-value";
-            case SCA_VALIDATION:            return "validation";
+            case SCA_ECHO_CHAR: 			return "echo-char";
+            case SCA_MAX_VALUE:				return "max-value";
+            case SCA_MIN_VALUE:				return "min-value";
+            case SCA_VALIDATION:			return "validation";
             case SCA_GROUP_NAME:            return "group-name";
-            case SCA_MULTI_LINE:            return "multi-line";
-            case SCA_AUTOMATIC_COMPLETION:  return "auto-complete";
-            case SCA_MULTIPLE:              return "multiple";
-            case SCA_DEFAULT_BUTTON:        return "default-button";
-            case SCA_CURRENT_STATE:         return "current-state";
-            case SCA_IS_TRISTATE:           return "is-tristate";
-            case SCA_STATE:                 return "state";
-            case SCA_COLUMN_STYLE_NAME:     return "text-style-name";
-            case SCA_STEP_SIZE:             return "step-size";
-            case SCA_PAGE_STEP_SIZE:        return "page-step-size";
-            case SCA_REPEAT_DELAY:          return "delay-for-repeat";
+            case SCA_MULTI_LINE:			return "multi-line";
+            case SCA_AUTOMATIC_COMPLETION:	return "auto-complete";
+            case SCA_MULTIPLE: 				return "multiple";
+            case SCA_DEFAULT_BUTTON: 		return "default-button";
+            case SCA_CURRENT_STATE: 		return "current-state";
+            case SCA_IS_TRISTATE: 			return "is-tristate";
+            case SCA_STATE: 				return "state";
+            case SCA_COLUMN_STYLE_NAME:		return "text-style-name";
+            case SCA_STEP_SIZE:		        return "step-size";
+            case SCA_PAGE_STEP_SIZE:		return "page-step-size";
+            case SCA_REPEAT_DELAY:		    return "delay-for-repeat";
             case SCA_TOGGLE:                return "toggle";
             case SCA_FOCUS_ON_CLICK:        return "focus-on-click";
             default:
-                OSL_FAIL("OAttributeMetaData::getSpecialAttributeName: invalid id (maybe you or-ed two flags?)!");
+                OSL_ENSURE(sal_False, "OAttributeMetaData::getSpecialAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
         return "";
     }
@@ -228,10 +228,10 @@ namespace xmloff
     {
         switch (_eAttrib)
         {
-            case ofaAutomaticFocus:     return "automatic-focus";
-            case ofaApplyDesignMode:    return "apply-design-mode";
+            case ofaAutomaticFocus:		return "automatic-focus";
+            case ofaApplyDesignMode:	return "apply-design-mode";
             default:
-                OSL_FAIL("OAttributeMetaData::getOfficeFormsAttributeName: invalid id!");
+                OSL_ENSURE(sal_False, "OAttributeMetaData::getOfficeFormsAttributeName: invalid id!");
         }
         return "";
     }
@@ -341,7 +341,7 @@ namespace xmloff
     }
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

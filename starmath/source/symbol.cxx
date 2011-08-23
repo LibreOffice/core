@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,7 @@
 #include "precompiled_starmath.hxx"
 
 
+#include <vector>
 #include <osl/mutex.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/msgbox.hxx>
@@ -63,11 +64,11 @@ SmSym::SmSym() :
     m_aName(C2S("unknown")),
     m_aSetName(C2S("unknown")),
     m_cChar('\0'),
-    m_bPredefined(false),
-    m_bDocSymbol(false)
+    m_bPredefined(FALSE),
+    m_bDocSymbol(FALSE)
 {
     m_aExportName = m_aName;
-    m_aFace.SetTransparent(true);
+    m_aFace.SetTransparent(TRUE);
     m_aFace.SetAlign(ALIGN_BASELINE);
 }
 
@@ -78,19 +79,19 @@ SmSym::SmSym(const SmSym& rSymbol)
 }
 
 
-SmSym::SmSym(const String& rName, const Font& rFont, sal_UCS4 cChar,
-             const String& rSet, bool bIsPredefined)
+SmSym::SmSym(const String& rName, const Font& rFont, sal_Unicode cChar,
+             const String& rSet, BOOL bIsPredefined)
 {
     m_aName     = m_aExportName   = rName;
 
     m_aFace     = rFont;
-    m_aFace.SetTransparent(true);
+    m_aFace.SetTransparent(TRUE);
     m_aFace.SetAlign(ALIGN_BASELINE);
 
     m_cChar         = cChar;
     m_aSetName      = rSet;
     m_bPredefined   = bIsPredefined;
-    m_bDocSymbol    = false;
+    m_bDocSymbol    = FALSE;
 }
 
 
@@ -117,7 +118,7 @@ bool SmSym::IsEqualInUI( const SmSym& rSymbol ) const
     return  m_aName == rSymbol.m_aName &&
             m_aFace == rSymbol.m_aFace &&
             m_cChar == rSymbol.m_cChar;
-}
+}    
 
 /**************************************************************************/
 
@@ -192,13 +193,13 @@ const SymbolPtrVec_t SmSymbolManager::GetSymbols() const
 bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChange )
 {
     bool bAdded = false;
-
+    
     const String aSymbolName( rSymbol.GetName() );
     if (aSymbolName.Len() > 0 && rSymbol.GetSymbolSetName().Len() > 0)
     {
         const SmSym *pFound = GetSymbolByName( aSymbolName );
         const bool bSymbolConflict = pFound && !pFound->IsEqualInUI( rSymbol );
-
+        
         // avoid having the same symbol name twice but with different symbols in use
         if (!pFound || bForceChange)
         {
@@ -207,19 +208,14 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
         }
         else if (pFound && !bForceChange && bSymbolConflict)
         {
-            // TODO: to solve this a document owned symbol manager would be required ...
-                OSL_FAIL( "symbol conflict, different symbol with same name found!" );
-            // symbols in all formulas. A copy of the global one would be needed here
-            // and then the new symbol has to be forcefully applied. This would keep
-            // the current formula intact but will leave the set of symbols in the
-            // global symbol manager somewhat to chance.
-        }
-
-    OSL_ENSURE( bAdded, "failed to add symbol" );
-        if (bAdded)
-            m_bModified = true;
-        DBG_ASSERT( bAdded || (pFound && !bSymbolConflict), "AddOrReplaceSymbol: unresolved symbol conflict" );
+                // TODO: but what ... 
+                OSL_ENSURE( 0, "symbol conflict, different symbol with same name found!" );
+        }    
     }
+    
+    OSL_ENSURE( bAdded, "failed to add symbol" );
+    if (bAdded)
+        m_bModified = true;
 
     return bAdded;
 }
@@ -235,7 +231,7 @@ void SmSymbolManager::RemoveSymbol( const String & rSymbolName )
     }
 }
 
-
+    
 std::set< String > SmSymbolManager::GetSymbolSetNames() const
 {
     std::set< String >  aRes;
@@ -245,7 +241,7 @@ std::set< String > SmSymbolManager::GetSymbolSetNames() const
     return aRes;
 }
 
-
+    
 const SymbolPtrVec_t SmSymbolManager::GetSymbolSet( const String& rSymbolSetName )
 {
     SymbolPtrVec_t aRes;
@@ -260,7 +256,7 @@ const SymbolPtrVec_t SmSymbolManager::GetSymbolSet( const String& rSymbolSetName
     }
     return aRes;
 }
-
+    
 
 void SmSymbolManager::Load()
 {
@@ -281,7 +277,7 @@ void SmSymbolManager::Load()
 
     if (0 == nSymbolCount)
     {
-        OSL_FAIL( "no symbol set found" );
+        DBG_ERROR( "no symbol set found" );
         m_bModified = false;
     }
 
@@ -302,7 +298,7 @@ void SmSymbolManager::Load()
         String aSymbolName( (sal_Unicode)'i' );
         aSymbolName += rSym.GetName();
         SmSym aSymbol( aSymbolName, aFont, rSym.GetCharacter(),
-                aSymbolSetName, true /*bIsPredefined*/ );
+                aSymbolSetName, TRUE /*bIsPredefined*/ );
 
         AddOrReplaceSymbol( aSymbol );
     }

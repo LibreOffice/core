@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,29 +28,30 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-
+#include <tools/list.hxx>
 #include <tools/table.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/accel.h>
 #include <vcl/accel.hxx>
 #include <tools/rc.h>
-#include <vector>
+
+
 
 // =======================================================================
 
 DECLARE_TABLE( ImplAccelTable, ImplAccelEntry* )
-typedef ::std::vector< ImplAccelEntry* > ImplAccelList;
+DECLARE_LIST( ImplAccelList, ImplAccelEntry* )
 
-#define ACCELENTRY_NOTFOUND     ((sal_uInt16)0xFFFF)
+#define ACCELENTRY_NOTFOUND 	((USHORT)0xFFFF)
 
 // =======================================================================
 
 class ImplAccelData
 {
 public:
-    ImplAccelTable  maKeyTable;     // Fuer KeyCodes, die mit einem Code erzeugt wurden
-    ImplAccelList   maIdList;       // Id-List
+    ImplAccelTable	maKeyTable; 	// Fuer KeyCodes, die mit einem Code erzeugt wurden
+    ImplAccelList	maIdList;		// Id-List
 };
 
 // =======================================================================
@@ -59,17 +60,17 @@ DBG_NAME( Accelerator )
 
 // =======================================================================
 
-sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
-                               sal_uInt16* pIndex = NULL )
+USHORT ImplAccelEntryGetIndex( ImplAccelList* pList, USHORT nId,
+                               USHORT* pIndex = NULL )
 {
-    size_t  nLow;
-    size_t  nHigh;
-    size_t  nMid;
-    size_t  nCount = pList->size();
-    sal_uInt16  nCompareId;
+    ULONG	nLow;
+    ULONG	nHigh;
+    ULONG	nMid;
+    ULONG	nCount = pList->Count();
+    USHORT	nCompareId;
 
     // Abpruefen, ob der erste Key groesser als der Vergleichskey ist
-    if ( !nCount || (nId < (*pList)[ 0 ]->mnId) )
+    if ( !nCount || (nId < pList->GetObject( 0 )->mnId) )
     {
         if ( pIndex )
             *pIndex = 0;
@@ -82,7 +83,7 @@ sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
     do
     {
         nMid = (nLow + nHigh) / 2;
-        nCompareId = (*pList)[ nMid ]->mnId;
+        nCompareId = pList->GetObject( nMid )->mnId;
         if ( nId < nCompareId )
             nHigh = nMid-1;
         else
@@ -90,7 +91,7 @@ sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
             if ( nId > nCompareId )
                 nLow = nMid + 1;
             else
-                return (sal_uInt16)nMid;
+                return (USHORT)nMid;
         }
     }
     while ( nLow <= nHigh );
@@ -98,9 +99,9 @@ sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
     if ( pIndex )
     {
         if ( nId > nCompareId )
-            *pIndex = (sal_uInt16)(nMid+1);
+            *pIndex = (USHORT)(nMid+1);
         else
-            *pIndex = (sal_uInt16)nMid;
+            *pIndex = (USHORT)nMid;
     }
 
     return ACCELENTRY_NOTFOUND;
@@ -110,54 +111,41 @@ sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
 
 static void ImplAccelEntryInsert( ImplAccelList* pList, ImplAccelEntry* pEntry )
 {
-    sal_uInt16  nInsIndex;
-    sal_uInt16  nIndex = ImplAccelEntryGetIndex( pList, pEntry->mnId, &nInsIndex );
+    USHORT	nInsIndex;
+    USHORT	nIndex = ImplAccelEntryGetIndex( pList, pEntry->mnId, &nInsIndex );
 
     if ( nIndex != ACCELENTRY_NOTFOUND )
     {
         do
         {
             nIndex++;
-            ImplAccelEntry* pTempEntry = (*pList)[ nIndex ];
+            ImplAccelEntry* pTempEntry = pList->GetObject( nIndex );
             if ( !pTempEntry || (pTempEntry->mnId != pEntry->mnId) )
                 break;
         }
-        while ( nIndex < pList->size() );
+        while ( nIndex < pList->Count() );
 
-        if ( nIndex < pList->size() ) {
-            ImplAccelList::iterator it = pList->begin();
-            ::std::advance( it, nIndex );
-            pList->insert( it, pEntry );
-        } else {
-            pList->push_back( pEntry );
-        }
+        pList->Insert( pEntry, (ULONG)nIndex );
     }
-    else {
-        if ( nInsIndex < pList->size() ) {
-            ImplAccelList::iterator it = pList->begin();
-            ::std::advance( it, nInsIndex );
-            pList->insert( it, pEntry );
-        } else {
-            pList->push_back( pEntry );
-        }
-    }
+    else
+        pList->Insert( pEntry, (ULONG)nInsIndex );
 }
 
 // -----------------------------------------------------------------------
 
-static sal_uInt16 ImplAccelEntryGetFirstPos( ImplAccelList* pList, sal_uInt16 nId )
+static USHORT ImplAccelEntryGetFirstPos( ImplAccelList* pList, USHORT nId )
 {
-    sal_uInt16 nIndex = ImplAccelEntryGetIndex( pList, nId );
+    USHORT nIndex = ImplAccelEntryGetIndex( pList, nId );
     if ( nIndex != ACCELENTRY_NOTFOUND )
     {
         while ( nIndex )
         {
             nIndex--;
-            if ( (*pList)[ nIndex ]->mnId != nId )
+            if ( pList->GetObject( nIndex )->mnId != nId )
                 break;
         }
 
-        if ( (*pList)[ nIndex ]->mnId != nId )
+        if ( pList->GetObject( nIndex )->mnId != nId )
             nIndex++;
     }
 
@@ -168,10 +156,10 @@ static sal_uInt16 ImplAccelEntryGetFirstPos( ImplAccelList* pList, sal_uInt16 nI
 
 void Accelerator::ImplInit()
 {
-    mnCurId             = 0;
-    mnCurRepeat         = 0;
-    mbIsCancel          = sal_False;
-    mpDel               = NULL;
+    mnCurId 			= 0;
+    mnCurRepeat 		= 0;
+    mbIsCancel			= FALSE;
+    mpDel				= NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -186,9 +174,10 @@ ImplAccelEntry* Accelerator::ImplGetAccelData( const KeyCode& rKeyCode ) const
 void Accelerator::ImplCopyData( ImplAccelData& rAccelData )
 {
     // Tabellen kopieren
-    for ( size_t i = 0, n = rAccelData.maIdList.size(); i < n; ++i )
+    ImplAccelEntry* pEntry = rAccelData.maIdList.First();
+    while ( pEntry )
     {
-        ImplAccelEntry* pEntry = new ImplAccelEntry( *rAccelData.maIdList[ i ] );
+        pEntry = new ImplAccelEntry( *pEntry );
 
         // Folge-Accelerator, dann auch kopieren
         if ( pEntry->mpAccel )
@@ -199,8 +188,10 @@ void Accelerator::ImplCopyData( ImplAccelData& rAccelData )
         else
             pEntry->mpAutoAccel = NULL;
 
-        mpData->maKeyTable.Insert( (sal_uLong)pEntry->maKeyCode.GetFullKeyCode(), pEntry );
-        mpData->maIdList.push_back( pEntry );
+        mpData->maKeyTable.Insert( (ULONG)pEntry->maKeyCode.GetFullKeyCode(), pEntry );
+        mpData->maIdList.Insert( pEntry, LIST_APPEND );
+
+        pEntry = rAccelData.maIdList.Next();
     }
 }
 
@@ -209,30 +200,32 @@ void Accelerator::ImplCopyData( ImplAccelData& rAccelData )
 void Accelerator::ImplDeleteData()
 {
     // Accelerator-Eintraege ueber die Id-Tabelle loeschen
-    for ( size_t i = 0, n = mpData->maIdList.size(); i < n; ++i ) {
-        ImplAccelEntry* pEntry = mpData->maIdList[ i ];
-        if ( pEntry->mpAutoAccel ) {
+    ImplAccelEntry* pEntry = mpData->maIdList.First();
+    while ( pEntry )
+    {
+        // AutoResAccel zerstoeren
+        if ( pEntry->mpAutoAccel )
             delete pEntry->mpAutoAccel;
-        }
         delete pEntry;
+
+        pEntry = mpData->maIdList.Next();
     }
-    mpData->maIdList.clear();
 }
 
 // -----------------------------------------------------------------------
 
-void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
-                                   sal_Bool bEnable, Accelerator* pAutoAccel )
+void Accelerator::ImplInsertAccel( USHORT nItemId, const KeyCode& rKeyCode,
+                                   BOOL bEnable, Accelerator* pAutoAccel )
 {
     DBG_CHKTHIS( Accelerator, NULL );
     DBG_ASSERT( nItemId, "Accelerator::InsertItem(): ItemId == 0" );
 
     if ( rKeyCode.IsFunction() )
     {
-        sal_uInt16 nCode1;
-        sal_uInt16 nCode2;
-        sal_uInt16 nCode3;
-                sal_uInt16 nCode4;
+        USHORT nCode1;
+        USHORT nCode2;
+        USHORT nCode3;
+                USHORT nCode4;
         ImplGetKeyCode( rKeyCode.GetFunction(), nCode1, nCode2, nCode3, nCode4 );
         if ( nCode1 )
             ImplInsertAccel( nItemId, KeyCode( nCode1, nCode1 ), bEnable, pAutoAccel );
@@ -252,23 +245,23 @@ void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
     }
 
     // Neuen Eintrag holen und fuellen
-    ImplAccelEntry* pEntry  = new ImplAccelEntry;
-    pEntry->mnId            = nItemId;
-    pEntry->maKeyCode       = rKeyCode;
-    pEntry->mpAccel         = pAutoAccel;
-    pEntry->mpAutoAccel     = pAutoAccel;
-    pEntry->mbEnabled       = bEnable;
+    ImplAccelEntry* pEntry	= new ImplAccelEntry;
+    pEntry->mnId			= nItemId;
+    pEntry->maKeyCode		= rKeyCode;
+    pEntry->mpAccel 		= pAutoAccel;
+    pEntry->mpAutoAccel 	= pAutoAccel;
+    pEntry->mbEnabled		= bEnable;
 
     // Ab in die Tabellen
-    sal_uLong nCode = rKeyCode.GetFullKeyCode();
+    ULONG nCode = rKeyCode.GetFullKeyCode();
     if ( !nCode )
     {
-        OSL_FAIL( "Accelerator::InsertItem(): KeyCode with KeyCode 0 not allowed" );
+        DBG_ERROR( "Accelerator::InsertItem(): KeyCode with KeyCode 0 not allowed" );
         delete pEntry;
     }
     else if ( !mpData->maKeyTable.Insert( nCode, pEntry ) )
     {
-        OSL_TRACE( "Accelerator::InsertItem(): KeyCode (Key: %lx) already exists", nCode );
+        DBG_ERROR1( "Accelerator::InsertItem(): KeyCode (Key: %lx) already exists", nCode );
         delete pEntry;
     }
     else
@@ -319,9 +312,9 @@ void Accelerator::ImplLoadRes( const ResId& rResId )
     GetRes( rResId );
 
     maHelpStr = ReadStringRes();
-    sal_uLong nObjFollows = ReadLongRes();
+    ULONG nObjFollows = ReadLongRes();
 
-    for( sal_uLong i = 0; i < nObjFollows; i++ )
+    for( ULONG i = 0; i < nObjFollows; i++ )
     {
         InsertItem( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
@@ -336,7 +329,7 @@ Accelerator::~Accelerator()
 
     // AccelManager benachrichtigen, das Accelrator geloescht wurde
     if ( mpDel )
-        *mpDel = sal_True;
+        *mpDel = TRUE;
 
     ImplDeleteData();
     delete mpData;
@@ -365,9 +358,9 @@ void Accelerator::Select()
 
 // -----------------------------------------------------------------------
 
-void Accelerator::InsertItem( sal_uInt16 nItemId, const KeyCode& rKeyCode )
+void Accelerator::InsertItem( USHORT nItemId, const KeyCode& rKeyCode )
 {
-    ImplInsertAccel( nItemId, rKeyCode, sal_True, NULL );
+    ImplInsertAccel( nItemId, rKeyCode, TRUE, NULL );
 }
 
 // -----------------------------------------------------------------------
@@ -376,16 +369,16 @@ void Accelerator::InsertItem( const ResId& rResId )
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
-    sal_uLong               nObjMask;
-    sal_uInt16              nAccelKeyId;
-    sal_uInt16              bDisable;
-    KeyCode             aKeyCode;
-    Accelerator*        pAutoAccel  = NULL;
+    ULONG				nObjMask;
+    USHORT				nAccelKeyId;
+    USHORT				bDisable;
+    KeyCode 			aKeyCode;
+    Accelerator*		pAutoAccel	= NULL;
 
     GetRes( rResId.SetRT( RSC_ACCELITEM ) );
-    nObjMask        = ReadLongRes();
-    nAccelKeyId     = sal::static_int_cast<sal_uInt16>(ReadLongRes());
-    bDisable        = ReadShortRes();
+    nObjMask		= ReadLongRes();
+    nAccelKeyId		= sal::static_int_cast<USHORT>(ReadLongRes());
+    bDisable		= ReadShortRes();
 
     if ( nObjMask & ACCELITEM_KEY )
     {
@@ -407,25 +400,22 @@ void Accelerator::InsertItem( const ResId& rResId )
 
 // -----------------------------------------------------------------------
 
-void Accelerator::RemoveItem( sal_uInt16 nItemId )
+void Accelerator::RemoveItem( USHORT nItemId )
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
     // Aus der Id-Liste entfernen
-    sal_uInt16 nIndex = ImplAccelEntryGetFirstPos( &(mpData->maIdList), nItemId );
+    USHORT nIndex = ImplAccelEntryGetFirstPos( &(mpData->maIdList), nItemId );
     if ( nIndex != ACCELENTRY_NOTFOUND )
     {
-        sal_uInt16 nItemCount = GetItemCount();
+        USHORT nItemCount = GetItemCount();
         do
         {
-            ImplAccelEntry* pEntry = ( nIndex < mpData->maIdList.size() ) ? mpData->maIdList[ nIndex ] : NULL;
+            ImplAccelEntry* pEntry = mpData->maIdList.GetObject( (ULONG)nIndex );
             if ( pEntry && pEntry->mnId == nItemId )
             {
                 mpData->maKeyTable.Remove( pEntry->maKeyCode.GetFullKeyCode() );
-
-                ImplAccelList::iterator it = mpData->maIdList.begin();
-                ::std::advance( it, nIndex );
-                mpData->maIdList.erase( it );
+                mpData->maIdList.Remove( (ULONG)nIndex );
 
                 // AutoResAccel zerstoeren
                 if ( pEntry->mpAutoAccel )
@@ -450,21 +440,18 @@ void Accelerator::RemoveItem( const KeyCode rKeyCode )
     if ( pEntry )
     {
         // Aus der Id-Liste entfernen
-        sal_uInt16 nIndex = ImplAccelEntryGetFirstPos( &(mpData->maIdList), pEntry->mnId );
-        sal_uInt16 nItemCount = GetItemCount();
+        USHORT nIndex = ImplAccelEntryGetFirstPos( &(mpData->maIdList), pEntry->mnId );
+        USHORT nItemCount = GetItemCount();
         do
         {
-            if ( mpData->maIdList[ nIndex ] == pEntry )
+            if ( mpData->maIdList.GetObject( (ULONG)nIndex ) == pEntry )
                 break;
             nIndex++;
         }
         while ( nIndex < nItemCount );
 
         mpData->maKeyTable.Remove( rKeyCode.GetFullKeyCode() );
-
-        ImplAccelList::iterator it = mpData->maIdList.begin();
-        ::std::advance( it, nIndex );
-        mpData->maIdList.erase( it );
+        mpData->maIdList.Remove( (ULONG)nIndex );
 
         // AutoResAccel zerstoeren
         if ( pEntry->mpAutoAccel )
@@ -482,24 +469,25 @@ void Accelerator::Clear()
 
     ImplDeleteData();
     mpData->maKeyTable.Clear();
+    mpData->maIdList.Clear();
 }
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 Accelerator::GetItemCount() const
+USHORT Accelerator::GetItemCount() const
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
-    return (sal_uInt16)mpData->maIdList.size();
+    return (USHORT)mpData->maIdList.Count();
 }
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 Accelerator::GetItemId( sal_uInt16 nPos ) const
+USHORT Accelerator::GetItemId( USHORT nPos ) const
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
-    ImplAccelEntry* pEntry = ( nPos < mpData->maIdList.size() ) ? mpData->maIdList[ nPos ] : NULL;
+    ImplAccelEntry* pEntry = mpData->maIdList.GetObject( (ULONG)nPos );
     if ( pEntry )
         return pEntry->mnId;
     else
@@ -508,11 +496,11 @@ sal_uInt16 Accelerator::GetItemId( sal_uInt16 nPos ) const
 
 // -----------------------------------------------------------------------
 
-KeyCode Accelerator::GetItemKeyCode( sal_uInt16 nPos ) const
+KeyCode Accelerator::GetItemKeyCode( USHORT nPos ) const
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
-    ImplAccelEntry* pEntry = ( nPos < mpData->maIdList.size() ) ? mpData->maIdList[ nPos ] : NULL;
+    ImplAccelEntry* pEntry = mpData->maIdList.GetObject( (ULONG)nPos );
     if ( pEntry )
         return pEntry->maKeyCode;
     else
@@ -521,7 +509,7 @@ KeyCode Accelerator::GetItemKeyCode( sal_uInt16 nPos ) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 Accelerator::GetItemId( const KeyCode& rKeyCode ) const
+USHORT Accelerator::GetItemId( const KeyCode& rKeyCode ) const
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
@@ -534,30 +522,30 @@ sal_uInt16 Accelerator::GetItemId( const KeyCode& rKeyCode ) const
 
 // -----------------------------------------------------------------------
 
-KeyCode Accelerator::GetKeyCode( sal_uInt16 nItemId ) const
+KeyCode Accelerator::GetKeyCode( USHORT nItemId ) const
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
-    sal_uInt16 nIndex = ImplAccelEntryGetFirstPos( &(mpData->maIdList), nItemId );
+    USHORT nIndex = ImplAccelEntryGetFirstPos( &(mpData->maIdList), nItemId );
     if ( nIndex != ACCELENTRY_NOTFOUND )
-        return mpData->maIdList[ nIndex ]->maKeyCode;
+        return mpData->maIdList.GetObject( (ULONG)nIndex )->maKeyCode;
     else
         return KeyCode();
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Accelerator::IsIdValid( sal_uInt16 nItemId ) const
+BOOL Accelerator::IsIdValid( USHORT nItemId ) const
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
-    sal_uInt16 nIndex = ImplAccelEntryGetIndex( &(mpData->maIdList), nItemId );
+    USHORT nIndex = ImplAccelEntryGetIndex( &(mpData->maIdList), nItemId );
     return (nIndex != ACCELENTRY_NOTFOUND);
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Accelerator::IsKeyCodeValid( const KeyCode rKeyCode ) const
+BOOL Accelerator::IsKeyCodeValid( const KeyCode rKeyCode ) const
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
@@ -567,7 +555,7 @@ sal_Bool Accelerator::IsKeyCodeValid( const KeyCode rKeyCode ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool Accelerator::Call( const KeyCode& rKeyCode, sal_uInt16 nRepeat )
+BOOL Accelerator::Call( const KeyCode& rKeyCode, USHORT nRepeat )
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
@@ -576,39 +564,39 @@ sal_Bool Accelerator::Call( const KeyCode& rKeyCode, sal_uInt16 nRepeat )
     {
         if ( pEntry->mbEnabled )
         {
-            sal_Bool bDel = sal_False;
-            mnCurId         = pEntry->mnId;
-            maCurKeyCode    = rKeyCode;
-            mnCurRepeat     = nRepeat;
-            mpDel           = &bDel;
+            BOOL bDel = FALSE;
+            mnCurId 		= pEntry->mnId;
+            maCurKeyCode	= rKeyCode;
+            mnCurRepeat 	= nRepeat;
+            mpDel			= &bDel;
             Select();
             if ( !bDel )
             {
-                mnCurId         = 0;
-                maCurKeyCode    = KeyCode();
-                mnCurRepeat     = 0;
+                mnCurId 		= 0;
+                maCurKeyCode	= KeyCode();
+                mnCurRepeat 	= 0;
             }
 
-            return sal_True;
+            return TRUE;
         }
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-void Accelerator::SetAccel( sal_uInt16 nItemId, Accelerator* pAccel )
+void Accelerator::SetAccel( USHORT nItemId, Accelerator* pAccel )
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
-    sal_uInt16 nIndex = ImplAccelEntryGetFirstPos( &(mpData->maIdList), nItemId );
+    USHORT nIndex = ImplAccelEntryGetFirstPos( &(mpData->maIdList), nItemId );
     if ( nIndex != ACCELENTRY_NOTFOUND )
     {
-        sal_uInt16 nItemCount = GetItemCount();
+        USHORT nItemCount = GetItemCount();
         do
         {
-            ImplAccelEntry* pEntry = mpData->maIdList[ nIndex ];
+            ImplAccelEntry* pEntry = mpData->maIdList.GetObject( (ULONG)nIndex );
             if ( pEntry->mnId != nItemId )
                 break;
 
@@ -621,13 +609,13 @@ void Accelerator::SetAccel( sal_uInt16 nItemId, Accelerator* pAccel )
 
 // -----------------------------------------------------------------------
 
-Accelerator* Accelerator::GetAccel( sal_uInt16 nItemId ) const
+Accelerator* Accelerator::GetAccel( USHORT nItemId ) const
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
-    sal_uInt16 nIndex = ImplAccelEntryGetIndex( &(mpData->maIdList), nItemId );
+    USHORT nIndex = ImplAccelEntryGetIndex( &(mpData->maIdList), nItemId );
     if ( nIndex != ACCELENTRY_NOTFOUND )
-        return mpData->maIdList[ nIndex ]->mpAccel;
+        return mpData->maIdList.GetObject( (ULONG)nIndex )->mpAccel;
     else
         return NULL;
 }
@@ -653,22 +641,22 @@ Accelerator* Accelerator::GetAccel( const KeyCode rKeyCode ) const
     if ( pEntry )
         return pEntry->mpAccel;
     else
-        return sal_False;
+        return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-void Accelerator::EnableItem( sal_uInt16 nItemId, sal_Bool bEnable )
+void Accelerator::EnableItem( USHORT nItemId, BOOL bEnable )
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
-    sal_uInt16 nIndex = ImplAccelEntryGetFirstPos( &(mpData->maIdList), nItemId );
+    USHORT nIndex = ImplAccelEntryGetFirstPos( &(mpData->maIdList), nItemId );
     if ( nIndex != ACCELENTRY_NOTFOUND )
     {
-        sal_uInt16 nItemCount = GetItemCount();
+        USHORT nItemCount = GetItemCount();
         do
         {
-            ImplAccelEntry* pEntry = mpData->maIdList[ nIndex ];
+            ImplAccelEntry* pEntry = mpData->maIdList.GetObject( (ULONG)nIndex );
             if ( pEntry->mnId != nItemId )
                 break;
 
@@ -681,20 +669,20 @@ void Accelerator::EnableItem( sal_uInt16 nItemId, sal_Bool bEnable )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Accelerator::IsItemEnabled( sal_uInt16 nItemId ) const
+BOOL Accelerator::IsItemEnabled( USHORT nItemId ) const
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
-    sal_uInt16 nIndex = ImplAccelEntryGetIndex( &(mpData->maIdList), nItemId );
+    USHORT nIndex = ImplAccelEntryGetIndex( &(mpData->maIdList), nItemId );
     if ( nIndex != ACCELENTRY_NOTFOUND )
-        return mpData->maIdList[ nIndex ]->mbEnabled;
+        return mpData->maIdList.GetObject( (ULONG)nIndex )->mbEnabled;
     else
-        return sal_False;
+        return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-void Accelerator::EnableItem( const KeyCode rKeyCode, sal_Bool bEnable )
+void Accelerator::EnableItem( const KeyCode rKeyCode, BOOL bEnable )
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
@@ -705,7 +693,7 @@ void Accelerator::EnableItem( const KeyCode rKeyCode, sal_Bool bEnable )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Accelerator::IsItemEnabled( const KeyCode rKeyCode ) const
+BOOL Accelerator::IsItemEnabled( const KeyCode rKeyCode ) const
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
@@ -713,7 +701,7 @@ sal_Bool Accelerator::IsItemEnabled( const KeyCode rKeyCode ) const
     if ( pEntry )
         return pEntry->mbEnabled;
     else
-        return sal_False;
+        return FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -724,15 +712,16 @@ Accelerator& Accelerator::operator=( const Accelerator& rAccel )
     DBG_CHKOBJ( &rAccel, Accelerator, NULL );
 
     // Neue Daten zuweisen
-    maHelpStr       = rAccel.maHelpStr;
-    maCurKeyCode    = KeyCode();
-    mnCurId         = 0;
-    mnCurRepeat     = 0;
-    mbIsCancel      = sal_False;
+    maHelpStr		= rAccel.maHelpStr;
+    maCurKeyCode	= KeyCode();
+    mnCurId 		= 0;
+    mnCurRepeat 	= 0;
+    mbIsCancel		= FALSE;
 
     // Tabellen loeschen und kopieren
     ImplDeleteData();
     mpData->maKeyTable.Clear();
+    mpData->maIdList.Clear();
     ImplCopyData( *((ImplAccelData*)(rAccel.mpData)) );
 
     return *this;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 #include "calc.hxx"         // Update fuer UserFields
 #include "hints.hxx"
 #include <IDocumentFieldsAccess.hxx>
-#include <fieldhint.hxx>
+
 #include <svl/smplhint.hxx>
 
 TYPEINIT3( SwFmtFld, SfxPoolItem, SwClient,SfxBroadcaster)
@@ -94,7 +94,7 @@ SwFmtFld::~SwFmtFld()
     SwFieldType* pType = pField ? pField->GetTyp() : 0;
 
     if (pType && pType->Which() == RES_DBFLD)
-        pType = 0;  // DB-Feldtypen zerstoeren sich selbst
+        pType = 0;	// DB-Feldtypen zerstoeren sich selbst
 
     Broadcast( SwFmtFldHint( this, SWFMTFLD_REMOVED ) );
     delete pField;
@@ -102,7 +102,7 @@ SwFmtFld::~SwFmtFld()
     // bei einige FeldTypen muessen wir den FeldTypen noch loeschen
     if( pType && pType->IsLastDepend() )
     {
-        sal_Bool bDel = sal_False;
+        BOOL bDel = FALSE;
         switch( pType->Which() )
         {
         case RES_USERFLD:
@@ -126,12 +126,6 @@ SwFmtFld::~SwFmtFld()
         }
     }
 }
-
-void SwFmtFld::RegisterToFieldType( SwFieldType& rType )
-{
-    rType.Add(this);
-}
-
 
 // #111840#
 void SwFmtFld::SetFld(SwField * _pField)
@@ -160,30 +154,7 @@ SfxPoolItem* SwFmtFld::Clone( SfxItemPool* ) const
     return new SwFmtFld( *this );
 }
 
-void SwFmtFld::SwClientNotify( const SwModify&, const SfxHint& rHint )
-{
-    if( !pTxtAttr )
-        return;
-
-    const SwFieldHint* pHint = dynamic_cast<const SwFieldHint*>( &rHint );
-    if ( pHint )
-    {
-        // replace field content by text
-        SwPaM* pPaM = pHint->GetPaM();
-        SwDoc* pDoc = pPaM->GetDoc();
-        const SwTxtNode& rTxtNode = pTxtAttr->GetTxtNode();
-        pPaM->GetPoint()->nNode = rTxtNode;
-        pPaM->GetPoint()->nContent.Assign( (SwTxtNode*)&rTxtNode, *pTxtAttr->GetStart() );
-
-        String const aEntry( GetFld()->ExpandField( pDoc->IsClipBoard() ) );
-        pPaM->SetMark();
-        pPaM->Move( fnMoveForward );
-        pDoc->DeleteRange( *pPaM );
-        pDoc->InsertString( *pPaM, aEntry );
-    }
-}
-
-void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     if( !pTxtAttr )
         return;
@@ -201,7 +172,7 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         case RES_TXTATR_FLDCHG:
                 // "Farbe hat sich geaendert !"
                 // this, this fuer "nur Painten"
-                pTxtNd->ModifyNotification( this, this );
+                pTxtNd->Modify( this, this );
                 return;
         case RES_REFMARKFLD_UPDATE:
                 // GetReferenz-Felder aktualisieren
@@ -215,12 +186,12 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 break;
         case RES_DOCPOS_UPDATE:
                 // Je nach DocPos aktualisieren (SwTxtFrm::Modify())
-                pTxtNd->ModifyNotification( pNew, this );
+                pTxtNd->Modify( pNew, this );
                 return;
 
         case RES_ATTRSET_CHG:
         case RES_FMT_CHG:
-                pTxtNd->ModifyNotification( pOld, pNew );
+                pTxtNd->Modify( pOld, pNew );
                 return;
         default:
                 break;
@@ -236,7 +207,7 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         case RES_DBNUMSETFLD:
         case RES_DBNEXTSETFLD:
         case RES_DBNAMEFLD:
-            pTxtNd->ModifyNotification( 0, pNew);
+            pTxtNd->Modify( 0, pNew);
             return;
     }
 
@@ -252,27 +223,27 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     pTxtAttr->Expand();
 }
 
-sal_Bool SwFmtFld::GetInfo( SfxPoolItem& rInfo ) const
+BOOL SwFmtFld::GetInfo( SfxPoolItem& rInfo ) const
 {
     const SwTxtNode* pTxtNd;
     if( RES_AUTOFMT_DOCNODE != rInfo.Which() ||
         !pTxtAttr || 0 == ( pTxtNd = pTxtAttr->GetpTxtNode() ) ||
         &pTxtNd->GetNodes() != ((SwAutoFmtGetDocNode&)rInfo).pNodes )
-        return sal_True;
+        return TRUE;
 
     ((SwAutoFmtGetDocNode&)rInfo).pCntntNode = pTxtNd;
-    return sal_False;
+    return FALSE;
 }
 
 
-sal_Bool SwFmtFld::IsFldInDoc() const
+BOOL SwFmtFld::IsFldInDoc() const
 {
     const SwTxtNode* pTxtNd;
     return pTxtAttr && 0 != ( pTxtNd = pTxtAttr->GetpTxtNode() ) &&
             pTxtNd->GetNodes().IsDocNodes();
 }
 
-sal_Bool SwFmtFld::IsProtect() const
+BOOL SwFmtFld::IsProtect() const
 {
     const SwTxtNode* pTxtNd;
     return pTxtAttr && 0 != ( pTxtNd = pTxtAttr->GetpTxtNode() ) &&
@@ -284,12 +255,15 @@ sal_Bool SwFmtFld::IsProtect() const
 |*                SwTxtFld::SwTxtFld()
 |*
 |*    Beschreibung      Attribut fuer automatischen Text, Ctor
+|*    Ersterstellung    BP 30.04.92
+|*    Letzte Aenderung	JP 15.08.94
 |*
 *************************************************************************/
 
-SwTxtFld::SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStartPos)
+SwTxtFld::SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStartPos,
+        bool const bInClipboard)
     : SwTxtAttr( rAttr, nStartPos )
-    , m_aExpand( rAttr.GetFld()->ExpandField(true) )
+    , m_aExpand( rAttr.GetFld()->ExpandField(bInClipboard) )
     , m_pTxtNode( 0 )
 {
     rAttr.pTxtAttr = this;
@@ -310,6 +284,8 @@ SwTxtFld::~SwTxtFld( )
 |*                SwTxtFld::Expand()
 |*
 |*    Beschreibung      exandiert das Feld und tauscht den Text im Node
+|*    Ersterstellung    BP 30.04.92
+|*    Letzte Aenderung	JP 15.08.94
 |*
 *************************************************************************/
 
@@ -325,7 +301,7 @@ void SwTxtFld::Expand() const
     if( aNewExpand == m_aExpand )
     {
         // Bei Seitennummernfeldern
-        const sal_uInt16 nWhich = pFld->GetTyp()->Which();
+        const USHORT nWhich = pFld->GetTyp()->Which();
         if( RES_CHAPTERFLD != nWhich && RES_PAGENUMBERFLD != nWhich &&
             RES_REFPAGEGETFLD != nWhich &&
             // --> FME 2005-05-23 #122919# Page count fields to not use aExpand
@@ -337,10 +313,10 @@ void SwTxtFld::Expand() const
         {
             // BP: das muesste man noch optimieren!
             //JP 12.06.97: stimmt, man sollte auf jedenfall eine Status-
-            //              aenderung an die Frames posten
+            //				aenderung an die Frames posten
             if( m_pTxtNode->CalcHiddenParaField() )
             {
-                m_pTxtNode->ModifyNotification( 0, 0 );
+                m_pTxtNode->Modify( 0, 0 );
             }
             return;
         }
@@ -349,7 +325,7 @@ void SwTxtFld::Expand() const
     m_aExpand = aNewExpand;
 
     // 0, this for formatting
-    m_pTxtNode->ModifyNotification( 0, const_cast<SwFmtFld*>( &GetFld() ) );
+    m_pTxtNode->Modify( 0, const_cast<SwFmtFld*>( &GetFld() ) );
 }
 
 /*************************************************************************
@@ -365,7 +341,7 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
     IDocumentFieldsAccess* pDestIDFA = pDest->m_pTxtNode->getIDocumentFieldsAccess();
 
     SwFmtFld& rFmtFld = (SwFmtFld&)pDest->GetFld();
-    const sal_uInt16 nFldWhich = rFmtFld.GetFld()->GetTyp()->Which();
+    const USHORT nFldWhich = rFmtFld.GetFld()->GetTyp()->Which();
 
     if( pIDFA != pDestIDFA )
     {
@@ -406,17 +382,20 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
     {
         // erzeuge aus der internen (fuer CORE) die externe (fuer UI) Formel
         const SwTableNode* pTblNd = m_pTxtNode->FindTableNode();
-        if( pTblNd )        // steht in einer Tabelle
+        if( pTblNd )		// steht in einer Tabelle
             ((SwTblField*)rFmtFld.GetFld())->PtrToBoxNm( &pTblNd->GetTable() );
     }
 }
 
+/* -----------------26.06.2003 13:54-----------------
+
+ --------------------------------------------------*/
 void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
 {
     //if not in undo section notify the change
     if (m_pTxtNode && m_pTxtNode->GetNodes().IsDocNodes())
     {
-        m_pTxtNode->ModifyNotification(0, &rFmtFld);
+        m_pTxtNode->Modify(0, &rFmtFld);
     }
 }
 

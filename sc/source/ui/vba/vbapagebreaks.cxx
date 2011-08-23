@@ -117,7 +117,7 @@ sal_Int32 SAL_CALL RangePageBreaks::getCount(  ) throw (uno::RuntimeException)
     {
         sal_Int32 nPos = aTablePageBreakData[i].Position;
 
-        // All page breaks before the used range should be counted.
+        // VBA. minz@cn.ibm.com. All page breaks before the used range should be counted.
         // And the page break at the end of the used range also should be counted.
         if(  nPos <= nUsedEnd + 1 )
             nCount++;
@@ -154,7 +154,7 @@ sheet::TablePageBreakData RangePageBreaks::getTablePageBreakData( sal_Int32 nAPI
     uno::Sequence<sheet::TablePageBreakData> aTablePageBreakDataList = getAllPageBreaks();
 
     sal_Int32 nLength = aTablePageBreakDataList.getLength();
-    // No need to filter the page break. All page breaks before the used range are counted.
+    //VBA. minz@cn.ibm.com. No need to filter the page break. All page breaks before the used range are counted.
     if ( nAPIItemIndex < nLength && nAPIItemIndex>=0 )
         aTablePageBreakData = aTablePageBreakDataList[nAPIItemIndex];
 
@@ -205,7 +205,7 @@ public:
 ScVbaHPageBreaks::ScVbaHPageBreaks( const uno::Reference< XHelperInterface >& xParent,
                                     const uno::Reference< uno::XComponentContext >& xContext,
                                     uno::Reference< sheet::XSheetPageBreak >& xSheetPageBreak) throw (uno::RuntimeException):
-                          ScVbaHPageBreaks_BASE( xParent,xContext, new RangePageBreaks( xParent, xContext, xSheetPageBreak, false )),
+                          ScVbaHPageBreaks_BASE( xParent,xContext, new RangePageBreaks( xParent, xContext, xSheetPageBreak, sal_False )),
                           mxSheetPageBreak( xSheetPageBreak )
 {
 }

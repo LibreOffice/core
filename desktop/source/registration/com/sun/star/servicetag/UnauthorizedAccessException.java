@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,15 +28,15 @@
 package com.sun.star.servicetag;
 
 /**
- * Thrown if the user is not authorized to
+ * Thrown if the user is not authorized to 
  * {@link Registry#updateServiceTag update} or
- * {@link Registry#removeServiceTag remove}
+ * {@link Registry#removeServiceTag remove} 
  * a service tag from a {@link Registry}.
  */
 public class UnauthorizedAccessException extends RuntimeException {
 
     /**
-     * Constructs an <code>UnauthorizedAccessException</code> object
+     * Constructs an <code>UnauthorizedAccessException</code> object 
      * without detail message.
      */
     public UnauthorizedAccessException() {

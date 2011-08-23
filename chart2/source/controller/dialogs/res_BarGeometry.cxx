@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,6 @@ BarGeometryResources::BarGeometryResources( Window* pWindow )
 {
     m_aFT_Geometry.SetText( String( SchResId( STR_BAR_GEOMETRY )) );
     m_aFT_Geometry.SetSizePixel( m_aFT_Geometry.CalcMinimumSize() );
-    m_aLB_Geometry.SetAccessibleName(m_aFT_Geometry.GetText());
-    m_aLB_Geometry.SetAccessibleRelationLabeledBy(&m_aFT_Geometry);
 }
 void BarGeometryResources::SetPosPixel( const Point& rPosition )
 {
@@ -66,11 +64,11 @@ Size BarGeometryResources::GetSizePixel() const
     long nHeight = m_aLB_Geometry.GetPosPixel().Y()
         - m_aFT_Geometry.GetPosPixel().Y();
     nHeight += m_aLB_Geometry.GetSizePixel().Height();
-
+    
     long nWidth = m_aLB_Geometry.GetSizePixel().Width();
     if( nWidth < m_aFT_Geometry.GetSizePixel().Width() )
         nWidth = m_aFT_Geometry.GetSizePixel().Width();
-
+        
     return Size( nHeight, nWidth );
 }
 BarGeometryResources::~BarGeometryResources()
@@ -93,15 +91,15 @@ void BarGeometryResources::Enable( bool bEnable )
     m_aLB_Geometry.Enable( bEnable );
 }
 
-sal_uInt16 BarGeometryResources::GetSelectEntryCount() const
+USHORT BarGeometryResources::GetSelectEntryCount() const
 {
     return m_aLB_Geometry.GetSelectEntryCount();
 }
-sal_uInt16 BarGeometryResources::GetSelectEntryPos() const
+USHORT BarGeometryResources::GetSelectEntryPos() const
 {
     return m_aLB_Geometry.GetSelectEntryPos();
 }
-void BarGeometryResources::SelectEntryPos( sal_uInt16 nPos )
+void BarGeometryResources::SelectEntryPos( USHORT nPos )
 {
     if( nPos < m_aLB_Geometry.GetEntryCount() )
         m_aLB_Geometry.SelectEntryPos( nPos );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 #include <oox/export/vmlexport.hxx>
 
-#include <oox/token/tokens.hxx>
+#include <tokens.hxx>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -83,7 +83,7 @@ VMLExport::~VMLExport()
     delete[] m_pShapeTypeWritten, m_pShapeTypeWritten = NULL;
 }
 
-void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
+void VMLExport::OpenContainer( UINT16 nEscherContainer, int nRecInstance )
 {
     EscherEx::OpenContainer( nEscherContainer, nRecInstance );
 
@@ -116,7 +116,7 @@ void VMLExport::CloseContainer()
         sal_Int32 nShapeElement = StartShape();
 
         m_pSerializer->mergeTopMarks();
-
+        
         EndShape( nShapeElement );
 
         // cleanup
@@ -127,7 +127,7 @@ void VMLExport::CloseContainer()
     EscherEx::CloseContainer();
 }
 
-sal_uInt32 VMLExport::EnterGroup( const String& rShapeName, const Rectangle* pRect )
+UINT32 VMLExport::EnterGroup( const String& rShapeName, const Rectangle* pRect )
 {
     sal_uInt32 nShapeId = GenerateShapeId();
 
@@ -172,7 +172,7 @@ void VMLExport::LeaveGroup()
     m_pSerializer->endElementNS( XML_v, XML_group );
 }
 
-void VMLExport::AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId )
+void VMLExport::AddShape( UINT32 nShapeType, UINT32 nShapeFlags, UINT32 nShapeId )
 {
     m_nShapeType = nShapeType;
     m_nShapeFlags = nShapeFlags;
@@ -319,7 +319,7 @@ inline sal_Int32 impl_GetPointComponent( const sal_uInt8* &pVal, sal_uInt16 nPoi
 
         nRet = nUnsigned;
     }
-
+    
     return nRet;
 }
 
@@ -363,13 +363,13 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                         case ESCHER_WrapThrough:   pWrapType = "through"; break;
                     }
                     if ( pWrapType )
-                        m_pSerializer->singleElementNS( XML_v, XML_wrap,
-                                FSNS( XML_v, XML_type ), pWrapType,
+                        m_pSerializer->singleElementNS( XML_w10, XML_wrap,
+                                FSNS( XML_w10, XML_type ), pWrapType,
                                 FSEND );
                 }
                 bAlreadyWritten[ ESCHER_Prop_WrapText ] = true;
                 break;
-
+                
             // coordorigin
             case ESCHER_Prop_geoLeft: // 320
             case ESCHER_Prop_geoTop: // 321
@@ -497,7 +497,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                                     break;
                             }
                         }
-
+                        
                         if ( aPath.getLength() )
                             m_pShapeAttrList->add( XML_path, aPath.getStr() );
                     }
@@ -666,7 +666,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                 break;
             default:
 #if OSL_DEBUG_LEVEL > 0
-                fprintf( stderr, "TODO VMLExport::Commit(), unimplemented id: %d, value: %" SAL_PRIuUINT32 ", data: [%" SAL_PRIuUINT32 ", %p]\n",
+                fprintf( stderr, "TODO VMLExport::Commit(), unimplemented id: %d, value: %d, data: [%d, %p]\n",
                         it->nPropId, it->nPropValue, it->nPropSize, it->pBuf );
                 if ( it->nPropSize )
                 {

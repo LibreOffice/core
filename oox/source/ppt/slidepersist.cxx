@@ -32,7 +32,9 @@
 #include "oox/ppt/slidepersist.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/vml/vmldrawing.hxx"
+#include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include "tokens.hxx"
 
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -73,14 +75,7 @@ SlidePersist::SlidePersist( XmlFilterBase& rFilter, sal_Bool bMaster, sal_Bool b
     */
         maOtherTextStylePtr->apply( *pDefaultTextStyle.get() );
     }
-#if OSL_DEBUG_LEVEL > 0
-    mxDebugPage = mxPage;
-#endif
 }
-
-#if OSL_DEBUG_LEVEL > 0
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SlidePersist::mxDebugPage;
-#endif
 
 SlidePersist::~SlidePersist()
 {
@@ -89,35 +84,35 @@ SlidePersist::~SlidePersist()
 
 sal_Int16 SlidePersist::getLayoutFromValueToken()
 {
-    sal_Int16 nLayout = 20;     // 20 == blanc (so many magic numbers :-( the description at com.sun.star.presentation.DrawPage.Layout does not help)
+    sal_Int16 nLayout = 20;		// 20 == blanc (so many magic numbers :-( the description at com.sun.star.presentation.DrawPage.Layout does not help)
     switch( mnLayoutValueToken )
     {
-        case XML_blank:             nLayout = 20; break;
-        case XML_chart:             nLayout =  2; break;
-        case XML_chartAndTx:        nLayout =  7; break;
-        case XML_clipArtAndTx:      nLayout =  9; break;
-        case XML_clipArtAndVertTx:  nLayout = 24; break;
-        case XML_fourObj:           nLayout = 18; break;
-        case XML_obj:               nLayout = 11; break;
-        case XML_objAndTx:          nLayout = 13; break;
-        case XML_objOverTx:         nLayout = 14; break;
-        case XML_tbl:               nLayout =  8; break;
-        case XML_title:             nLayout =  0; break;
-        case XML_titleOnly:         nLayout = 19; break;
+        case XML_blank:				nLayout = 20; break;
+        case XML_chart:				nLayout =  2; break;
+        case XML_chartAndTx:		nLayout =  7; break;
+        case XML_clipArtAndTx:		nLayout =  9; break;
+        case XML_clipArtAndVertTx:	nLayout = 24; break;
+        case XML_fourObj:			nLayout = 18; break;
+        case XML_obj:				nLayout = 11; break;
+        case XML_objAndTx:			nLayout = 13; break;
+        case XML_objOverTx:			nLayout = 14; break;
+        case XML_tbl:				nLayout =  8; break;
+        case XML_title:				nLayout =  0; break;
+        case XML_titleOnly:			nLayout = 19; break;
         case XML_twoObj:
-        case XML_twoColTx:          nLayout =  3; break;
-        case XML_twoObjAndTx:       nLayout = 15; break;
-        case XML_twoObjOverTx:      nLayout = 16; break;
-        case XML_tx:                nLayout =  1; break;
-        case XML_txAndChart:        nLayout =  4; break;
-        case XML_txAndClipArt:      nLayout =  6; break;
-        case XML_txAndMedia:        nLayout =  6; break;
-        case XML_txAndObj:          nLayout = 10; break;
-        case XML_txAndTwoObj:       nLayout = 12; break;
-        case XML_txOverObj:         nLayout = 17; break;
-        case XML_vertTitleAndTx:    nLayout = 22; break;
+        case XML_twoColTx:			nLayout =  3; break;
+        case XML_twoObjAndTx:		nLayout = 15; break;
+        case XML_twoObjOverTx:		nLayout = 16; break;
+        case XML_tx:				nLayout =  1; break;
+        case XML_txAndChart:		nLayout =  4; break;
+        case XML_txAndClipArt:		nLayout =  6; break;
+        case XML_txAndMedia:		nLayout =  6; break;
+        case XML_txAndObj:			nLayout = 10; break;
+        case XML_txAndTwoObj:		nLayout = 12; break;
+        case XML_txOverObj:			nLayout = 17; break;
+        case XML_vertTitleAndTx:	nLayout = 22; break;
         case XML_vertTitleAndTxOverChart: nLayout = 21; break;
-        case XML_vertTx:            nLayout = 23; break;
+        case XML_vertTx:			nLayout = 23; break;
 
         case XML_twoTxTwoObj:
         case XML_twoObjAndObj:
@@ -135,7 +130,7 @@ sal_Int16 SlidePersist::getLayoutFromValueToken()
     return nLayout;
 }
 
-void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
+void SlidePersist::createXShapes( const XmlFilterBase& rFilterBase )
 {
     applyTextStyles( rFilterBase );
 
@@ -179,17 +174,12 @@ void SlidePersist::createBackground( const XmlFilterBase& rFilterBase )
     {
         try
         {
-            sal_Int32 nPhClr = API_RGB_TRANSPARENT;
-            if ( maBackgroundColorRef.isUsed() )
-                nPhClr = maBackgroundColorRef.getColor( rFilterBase.getGraphicHelper() );
-
             PropertyMap aPropMap;
             static const rtl::OUString sBackground( RTL_CONSTASCII_USTRINGPARAM( "Background" ) );
             uno::Reference< beans::XPropertySet > xPagePropSet( mxPage, uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xPropertySet( aPropMap.makePropertySet() );
             PropertySet aPropSet( xPropertySet );
-            mpBackgroundPropertiesPtr->pushToPropSet( aPropSet, rFilterBase.getModelObjectHelper(),
-                rFilterBase.getGraphicHelper(), oox::drawingml::FillProperties::DEFAULT_IDS, 0, nPhClr );
+            mpBackgroundPropertiesPtr->pushToPropSet( aPropSet, rFilterBase.getModelObjectHelper(), rFilterBase.getGraphicHelper() );
             xPagePropSet->setPropertyValue( sBackground, Any( xPropertySet ) );
         }
         catch( Exception )
@@ -236,39 +226,39 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
                 const rtl::OUString sStandard( RTL_CONSTASCII_USTRINGPARAM( "standard" ) );
                 const rtl::OUString sSubtitle( RTL_CONSTASCII_USTRINGPARAM( "subtitle" ) );
 
-                for( int i = 0; i < 4; i++ )    // todo: aggregation of bodystyle (subtitle)
+                for( int i = 0; i < 4; i++ )	// todo: aggregation of bodystyle (subtitle)
                 {
                     switch( i )
                     {
-                        case 0 :    // title style
+                        case 0 :	// title style
                         {
                             pTextListStylePtr = maTitleTextStylePtr;
                             aStyle = sTitle;
                             aFamily= aXNamed->getName();
                             break;
                         }
-                        case 1 :    // body style
+                        case 1 :	// body style
                         {
                             pTextListStylePtr = maBodyTextStylePtr;
                             aStyle = sOutline;
                             aFamily= aXNamed->getName();
                             break;
                         }
-                        case 3 :    // notes style
+                        case 3 :	// notes style
                         {
                             pTextListStylePtr = maNotesTextStylePtr;
                             aStyle = sTitle;
                             aFamily= aXNamed->getName();
                             break;
                         }
-                        case 4 :    // standard style
+                        case 4 :	// standard style
                         {
                             pTextListStylePtr = maOtherTextStylePtr;
                             aStyle = sStandard;
                             aFamily = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) );
                             break;
                         }
-                        case 5 :    // subtitle
+                        case 5 :	// subtitle
                         {
                             pTextListStylePtr = maBodyTextStylePtr;
                             aStyle = sSubtitle;

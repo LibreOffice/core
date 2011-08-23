@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,14 +131,14 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
                 aProperty.Name = INFO_THOUSANDSDELIMITER;
                 aProperty.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
                 rImport.addInfo(aProperty);
-            }
+            } // if ( !bFoundThousand )
         }
         if ( XML_TOK_FONT_CHARSET == _nToken && !bFoundCharset )
         {
             aProperty.Name = INFO_CHARSET;
             aProperty.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("utf8"));
             rImport.addInfo(aProperty);
-        }
+        }        
     }
 }
 // -----------------------------------------------------------------------------

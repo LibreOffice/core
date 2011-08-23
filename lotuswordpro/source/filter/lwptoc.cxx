@@ -59,9 +59,9 @@
  */
 /*************************************************************************
  * Change History
- April 2005         Created
- April 2005         Modified
- April 2005                 Modified - add LwpTocLevelData class
+ April 2005		 	Created
+ April 2005			Modified
+ April 2005 				Modified - add LwpTocLevelData class
  ************************************************************************/
 #include "lwptoc.hxx"
 #include "lwpfoundry.hxx"
@@ -75,7 +75,7 @@
 #include "xfilter/xfparagraph.hxx"
 #include "xfilter/xfparastyle.hxx"
 #include "xfilter/xfindex.hxx"
-#include    "xfilter/xffloatframe.hxx"
+#include	"xfilter/xffloatframe.hxx"
 #include "xfilter/xfframestyle.hxx"
 #include "xfilter/xfframe.hxx"
 #include "xfilter/xftable.hxx"

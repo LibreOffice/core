@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@
 
 #include <vcl/outdev.hxx>
 
-//  ----------------------------------------------------
-//  class VCLXFont
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXFont
+//	----------------------------------------------------
 VCLXFont::VCLXFont()
 {
     mpFontMetric = NULL;
@@ -63,7 +63,7 @@ void VCLXFont::Init( ::com::sun::star::awt::XDevice& rxDev, const Font& rFont )
     maFont = rFont;
 }
 
-sal_Bool VCLXFont::ImplAssertValidFontMetric()
+BOOL VCLXFont::ImplAssertValidFontMetric()
 {
     if ( !mpFontMetric && mxDevice.is() )
     {
@@ -76,7 +76,7 @@ sal_Bool VCLXFont::ImplAssertValidFontMetric()
             pOutDev->SetFont( aOldFont );
         }
     }
-    return mpFontMetric ? sal_True : sal_False;
+    return mpFontMetric ? TRUE : FALSE;
 }
 
 
@@ -113,7 +113,7 @@ IMPL_XTYPEPROVIDER_END
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     ::com::sun::star::awt::SimpleFontMetric aFM;
-    if ( ImplAssertValidFontMetric() )
+    if ( ImplAssertValidFontMetric() ) 
         aFM = VCLUnoHelper::CreateFontMetric( *mpFontMetric );
     return aFM;
 }
@@ -128,7 +128,7 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c ) throw(::com::sun::star::uno::R
     {
         Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
-
+        
         nRet = sal::static_int_cast< sal_Int16 >(
             pOutDev->GetTextWidth( String(c) ));
 
@@ -147,10 +147,10 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c ) throw(::com::sun::star::uno::R
     {
         Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
-
+        
         sal_Int16 nCount = nLast-nFirst + 1;
         aSeq = ::com::sun::star::uno::Sequence<sal_Int16>( nCount );
-        for ( sal_uInt16 n = 0; n < nCount; n++ )
+        for ( USHORT n = 0; n < nCount; n++ )
         {
             aSeq.getArray()[n] = sal::static_int_cast< sal_Int16 >(
                 pOutDev->GetTextWidth(
@@ -205,7 +205,7 @@ void VCLXFont::getKernPairs( ::com::sun::star::uno::Sequence< sal_Unicode >& rnC
         Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
 
-        sal_uLong nPairs = pOutDev->GetKerningPairCount();
+        ULONG nPairs = pOutDev->GetKerningPairCount();
         if ( nPairs )
         {
             KerningPair* pData = new KerningPair[ nPairs ];
@@ -219,7 +219,7 @@ void VCLXFont::getKernPairs( ::com::sun::star::uno::Sequence< sal_Unicode >& rnC
             sal_Unicode* pChars2 = rnChars2.getArray();
             sal_Int16* pKerns = rnKerns.getArray();
 
-            for ( sal_uLong n = 0; n < nPairs; n++ )
+            for ( ULONG n = 0; n < nPairs; n++ )
             {
                 pChars1[n] = pData[n].nChar1;
                 pChars2[n] = pData[n].nChar2;

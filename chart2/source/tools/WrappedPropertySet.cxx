@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,13 +67,14 @@ Reference< beans::XPropertyState > WrappedPropertySet::getInnerPropertyState()
 
 void WrappedPropertySet::clearWrappedPropertySet()
 {
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
+    // /--
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     //delete all wrapped properties
     if(m_pWrappedPropertyMap)
     {
         for( tWrappedPropertyMap::iterator aIt = m_pWrappedPropertyMap->begin()
-            ; aIt!= m_pWrappedPropertyMap->end(); ++aIt )
+            ; aIt!= m_pWrappedPropertyMap->end(); aIt++ )
         {
             const WrappedProperty* pWrappedProperty = (*aIt).second;
             DELETEZ(pWrappedProperty);
@@ -84,27 +85,22 @@ void WrappedPropertySet::clearWrappedPropertySet()
     DELETEZ(m_pWrappedPropertyMap);
 
     m_xInfo = NULL;
+    // \--
 }
 
 //XPropertySet
 Reference< beans::XPropertySetInfo > SAL_CALL WrappedPropertySet::getPropertySetInfo(  )
                                     throw (uno::RuntimeException)
 {
-    Reference< beans::XPropertySetInfo > xInfo = m_xInfo;
-    if( !xInfo.is() )
+    if( !m_xInfo.is() )
     {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
-        xInfo = m_xInfo;
-        if( !xInfo.is() )
+        // /--
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if( !m_xInfo.is() )
         {
-            xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            m_xInfo = xInfo;
+            m_xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
         }
-    }
-    else
-    {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+        // \--
     }
     return m_xInfo;
 }
@@ -124,7 +120,7 @@ void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyNam
         else
         {
 #if OSL_DEBUG_LEVEL > 1
-            OSL_FAIL("found no inner property set to map to");
+            DBG_ERROR("found no inner property set to map to");
 #endif
         }
     }
@@ -150,7 +146,7 @@ void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyNam
     }
     catch( uno::Exception& ex )
     {
-        OSL_FAIL("invalid exception caught in WrappedPropertySet::setPropertyValue");
+        OSL_ENSURE(false,"invalid exception caught in WrappedPropertySet::setPropertyValue");
         lang::WrappedTargetException aWrappedException;
         aWrappedException.TargetException = uno::makeAny( ex );
         throw aWrappedException;
@@ -173,7 +169,7 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
         else
         {
 #if OSL_DEBUG_LEVEL > 1
-            OSL_FAIL("found no inner property set to map to");
+            DBG_ERROR("found no inner property set to map to");
 #endif
         }
     }
@@ -191,7 +187,7 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
     }
     catch( uno::Exception& ex )
     {
-        OSL_FAIL("invalid exception caught in WrappedPropertySet::setPropertyValue");
+        OSL_ENSURE(false,"invalid exception caught in WrappedPropertySet::setPropertyValue");
         lang::WrappedTargetException aWrappedException;
         aWrappedException.TargetException = uno::makeAny( ex );
         throw aWrappedException;
@@ -212,6 +208,7 @@ void SAL_CALL WrappedPropertySet::addPropertyChangeListener( const OUString& rPr
         else
             xInnerPropertySet->addPropertyChangeListener( rPropertyName, xListener );
     }
+//     m_aBoundListenerContainer.addInterface( (sal_Int32)nHandle, xListener );
 }
 void SAL_CALL WrappedPropertySet::removePropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& aListener )
                                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
@@ -273,8 +270,6 @@ void SAL_CALL WrappedPropertySet::setPropertyValues( const Sequence< OUString >&
         }
     }
     //todo: store unknown properties elsewhere
-    OSL_ENSURE(!bUnknownProperty,"unknown property");
-    (void)bUnknownProperty;
 //    if( bUnknownProperty )
 //        throw beans::UnknownPropertyException();
 }
@@ -307,19 +302,19 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyValues( const Sequence< 
 void SAL_CALL WrappedPropertySet::addPropertiesChangeListener( const Sequence< OUString >& /* rNameSeq */, const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                                     throw (uno::RuntimeException)
 {
-    OSL_FAIL("not implemented yet");
+    OSL_ENSURE(false,"not implemented yet");
     //todo
 }
 void SAL_CALL WrappedPropertySet::removePropertiesChangeListener( const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                                     throw (uno::RuntimeException)
 {
-    OSL_FAIL("not implemented yet");
+    OSL_ENSURE(false,"not implemented yet");
     //todo
 }
 void SAL_CALL WrappedPropertySet::firePropertiesChangeEvent( const Sequence< OUString >& /* rNameSeq */, const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                                     throw (uno::RuntimeException)
 {
-    OSL_FAIL("not implemented yet");
+    OSL_ENSURE(false,"not implemented yet");
     //todo
 }
 
@@ -441,21 +436,16 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence
 
 ::cppu::IPropertyArrayHelper& WrappedPropertySet::getInfoHelper()
 {
-    ::cppu::OPropertyArrayHelper* p = m_pPropertyArrayHelper;
-    if(!p)
+    if(!m_pPropertyArrayHelper)
     {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
-        p = m_pPropertyArrayHelper;
-        if(!p)
+        // /--
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if(!m_pPropertyArrayHelper)
         {
-            p = new ::cppu::OPropertyArrayHelper( getPropertySequence(), sal_True );
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            m_pPropertyArrayHelper = p;
+            sal_Bool bSorted = sal_True;
+            m_pPropertyArrayHelper = new ::cppu::OPropertyArrayHelper( getPropertySequence(), bSorted );
         }
-    }
-    else
-    {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+        // \--
     }
     return *m_pPropertyArrayHelper;
 }
@@ -464,46 +454,39 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence
 
 tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
 {
-    tWrappedPropertyMap* p = m_pWrappedPropertyMap;
-    if(!p)
+    if(!m_pWrappedPropertyMap)
     {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );//do not use different mutex than is already used for static property sequence
-        p = m_pWrappedPropertyMap;
-        if(!p)
+        // /--
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if(!m_pWrappedPropertyMap)
         {
             std::vector< WrappedProperty* > aPropList( createWrappedProperties() );
-            p = new tWrappedPropertyMap();
+            m_pWrappedPropertyMap = new tWrappedPropertyMap();
 
             for( std::vector< WrappedProperty* >::const_iterator aIt = aPropList.begin(); aIt!=aPropList.end(); ++aIt )
             {
-                WrappedProperty* pProperty = *aIt;
+                WrappedProperty* pProperty = *aIt; 
                 if(pProperty)
                 {
                     sal_Int32 nHandle = getInfoHelper().getHandleByName( pProperty->getOuterName() );
 
                     if( nHandle == -1 )
                     {
-                        OSL_FAIL( "missing property in property list" );
+                        OSL_ENSURE( false, "missing property in property list" );
                         delete pProperty;//we are owner or the created WrappedProperties
                     }
-                    else if( p->find( nHandle ) != p->end() )
+                    else if( m_pWrappedPropertyMap->find( nHandle ) != m_pWrappedPropertyMap->end() )
                     {
                         //duplicate Wrapped property
-                        OSL_FAIL( "duplicate Wrapped property" );
+                        OSL_ENSURE( false, "duplicate Wrapped property" );
                         delete pProperty;//we are owner or the created WrappedProperties
                     }
                     else
-                        (*p)[ nHandle ] = pProperty;
+                        (*m_pWrappedPropertyMap)[ nHandle ] = pProperty;
                 }
             }
-
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            m_pWrappedPropertyMap = p;
         }
-    }
-    else
-    {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+        // \--
     }
     return *m_pWrappedPropertyMap;
 }

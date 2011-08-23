@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#if (defined(_WIN32) || defined(__IBMC__))
+#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
 #include <io.h>
 #else
 #include <unistd.h>
@@ -54,17 +54,17 @@
  *      nextstate: 6 bits; ?\ marker: 1 bit; tokentype: 9 bits.
  */
 
-#define MAXSTATE        32
-#define ACT(tok,act)    ((tok<<7)+act)
-#define QBSBIT          0100
-#define GETACT(st)      ((st>>7)&0x1ff)
+#define	MAXSTATE		32
+#define	ACT(tok,act)	((tok<<7)+act)
+#define	QBSBIT			0100
+#define	GETACT(st)		((st>>7)&0x1ff)
 
 /* character classes */
-#define C_WS    1
-#define C_ALPH  2
-#define C_NUM   3
-#define C_EOF   4
-#define C_XX    5
+#define	C_WS	1
+#define	C_ALPH	2
+#define	C_NUM	3
+#define	C_EOF	4
+#define	C_XX	5
 
 enum state
 {
@@ -291,7 +291,7 @@ void
                         bigfsm[j][fp->state] = (short) nstate;
                     continue;
                 case C_ALPH:
-                    for (j = 0; j < 256; j++)
+                    for (j = 0; j <= 256; j++)
                         if (('a' <= j && j <= 'z') || ('A' <= j && j <= 'Z')
                             || j == '_')
                             bigfsm[j][fp->state] = (short) nstate;
@@ -382,7 +382,7 @@ continue2:
             oldstate = state;
 
             c = *ip;
-
+                        
             if ((state = bigfsm[c][state]) >= 0)
             {
                 ip += runelen;
@@ -428,7 +428,7 @@ continue2:
                     if (c == '\n')
                     {
                         while (s->inp + 1 >= s->inl && fillbuf(s) != EOF);
-
+                    
                         if (s->inp[1] == '\r')
                         {
                             memmove(s->inp + 1, s->inp + 2, s->inl - s->inp + 2);
@@ -441,7 +441,7 @@ continue2:
                     if (c == '\r')
                     {
                         while (s->inp + 1 >= s->inl && fillbuf(s) != EOF);
-
+                    
                         if (s->inp[1] == '\n')
                         {
                             memmove(s->inp, s->inp + 1, s->inl - s->inp + 1);
@@ -688,13 +688,9 @@ void
 
     if (s->fd >= 0)
     {
-        (void) close(s->fd);
-        dofree(s->filename);
-    }
-
-    if (s->inb)
+        close(s->fd);
         dofree(s->inb);
-
+    }
     cursource = s->next;
     dofree(s);
 }

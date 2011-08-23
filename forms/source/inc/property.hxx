@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,8 +59,8 @@ class PropertyInfoService
     //..................................................................
     struct PropertyAssignment
     {
-        ::rtl::OUString     sName;
-        sal_Int32           nHandle;
+        ::rtl::OUString		sName;
+        sal_Int32			nHandle;
 
         PropertyAssignment() { nHandle = -1; }
         PropertyAssignment(const PropertyAssignment& _rSource)
@@ -71,7 +71,7 @@ class PropertyInfoService
     };
 
     DECLARE_STL_VECTOR(PropertyAssignment, PropertyMap);
-    static PropertyMap      s_AllKnownProperties;
+    static PropertyMap		s_AllKnownProperties;
 
     //..................................................................
     // comparing two PropertyAssignment's
@@ -94,8 +94,8 @@ public:
     PropertyInfoService() { }
 
 public:
-    static sal_Int32            getPropertyId(const ::rtl::OUString& _rName);
-    static ::rtl::OUString      getPropertyName(sal_Int32 _nHandle);
+    static sal_Int32			getPropertyId(const ::rtl::OUString& _rName);
+    static ::rtl::OUString		getPropertyName(sal_Int32 _nHandle);
 
 private:
     static void initialize();
@@ -106,7 +106,7 @@ private:
 class ConcreteInfoService : public ::comphelper::IPropertyInfoService
 {
 public:
-    virtual sal_Int32 getPreferedPropertyId(const ::rtl::OUString& _rName);
+    virtual	sal_Int32 getPreferedPropertyId(const ::rtl::OUString& _rName);
 };
 
 //------------------------------------------------------------------------------
@@ -122,79 +122,79 @@ public:
     *pProperties++ = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getCppuType(reinterpret_cast< com::sun::star::uno::Reference< type >* >(NULL)),
 
 //------------------------------------------------------------------------------
-#define BEGIN_DESCRIBE_PROPERTIES( count, baseclass )   \
+#define BEGIN_DESCRIBE_PROPERTIES( count, baseclass )	\
     baseclass::describeFixedProperties( _rProps ); \
     sal_Int32 nOldCount = _rProps.getLength(); \
-    _rProps.realloc( nOldCount + ( count ) );   \
+    _rProps.realloc( nOldCount + ( count ) );	\
     ::com::sun::star::beans::Property* pProperties = _rProps.getArray() + nOldCount;       \
 
 //------------------------------------------------------------------------------
-#define BEGIN_DESCRIBE_BASE_PROPERTIES( count ) \
-    _rProps.realloc( count );   \
+#define BEGIN_DESCRIBE_BASE_PROPERTIES( count )	\
+    _rProps.realloc( count );	\
     ::com::sun::star::beans::Property* pProperties = _rProps.getArray();       \
 
 //------------------------------------------------------------------------------
-#define BEGIN_DESCRIBE_AGGREGATION_PROPERTIES( count, aggregate )   \
-    _rProps.realloc( count );   \
+#define BEGIN_DESCRIBE_AGGREGATION_PROPERTIES( count, aggregate )	\
+    _rProps.realloc( count );	\
     ::com::sun::star::beans::Property* pProperties = _rProps.getArray();       \
     \
-    if (aggregate.is()) \
-        _rAggregateProps = aggregate->getPropertySetInfo()->getProperties();    \
+    if (aggregate.is())	\
+        _rAggregateProps = aggregate->getPropertySetInfo()->getProperties();	\
 
 // ===
 //------------------------------------------------------------------------------
-#define DECL_PROP0(varname, type)   \
+#define DECL_PROP0(varname, type)	\
     DECL_PROP_IMPL(varname, type) 0)
 
 //------------------------------------------------------------------------------
-#define DECL_PROP1(varname, type, attrib1)  \
+#define DECL_PROP1(varname, type, attrib1)	\
         DECL_PROP_IMPL(varname, type) com::sun::star::beans::PropertyAttribute::attrib1)
 
 //------------------------------------------------------------------------------
-#define DECL_PROP2(varname, type, attrib1, attrib2) \
+#define DECL_PROP2(varname, type, attrib1, attrib2)	\
         DECL_PROP_IMPL(varname, type) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2)
 
 //------------------------------------------------------------------------------
-#define DECL_PROP3(varname, type, attrib1, attrib2, attrib3)    \
+#define DECL_PROP3(varname, type, attrib1, attrib2, attrib3)	\
         DECL_PROP_IMPL(varname, type) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2 | com::sun::star::beans::PropertyAttribute::attrib3)
 
 //------------------------------------------------------------------------------
-#define DECL_PROP4(varname, type, attrib1, attrib2, attrib3, attrib4)   \
+#define DECL_PROP4(varname, type, attrib1, attrib2, attrib3, attrib4)	\
         DECL_PROP_IMPL(varname, type) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2 | com::sun::star::beans::PropertyAttribute::attrib3 | com::sun::star::beans::PropertyAttribute::attrib4)
 
 // === some property types require special handling
 // === such as interfaces
 //------------------------------------------------------------------------------
-#define DECL_IFACE_PROP0(varname, type) \
+#define DECL_IFACE_PROP0(varname, type)	\
     DECL_IFACE_PROP_IMPL(varname, type) 0)
 
 //------------------------------------------------------------------------------
-#define DECL_IFACE_PROP1(varname, type, attrib1)    \
+#define DECL_IFACE_PROP1(varname, type, attrib1)	\
     DECL_IFACE_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1)
 
 //------------------------------------------------------------------------------
-#define DECL_IFACE_PROP2(varname, type, attrib1, attrib2)   \
+#define DECL_IFACE_PROP2(varname, type, attrib1, attrib2)	\
         DECL_IFACE_PROP_IMPL(varname, type) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2)
 
 //------------------------------------------------------------------------------
-#define DECL_IFACE_PROP3(varname, type, attrib1, attrib2, attrib3)  \
+#define DECL_IFACE_PROP3(varname, type, attrib1, attrib2, attrib3)	\
     DECL_IFACE_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1 | starbeans::PropertyAttribute::attrib2 | starbeans::PropertyAttribute::attrib3)
 
 //------------------------------------------------------------------------------
-#define DECL_IFACE_PROP4(varname, type, attrib1, attrib2, attrib3, attrib4) \
+#define DECL_IFACE_PROP4(varname, type, attrib1, attrib2, attrib3, attrib4)	\
     DECL_IFACE_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1 | starbeans::PropertyAttribute::attrib2 | starbeans::PropertyAttribute::attrib3 | PropertyAttribute::attrib4)
 
 // === or Boolean properties
 //------------------------------------------------------------------------------
-#define DECL_BOOL_PROP0(varname)    \
+#define DECL_BOOL_PROP0(varname)	\
     DECL_BOOL_PROP_IMPL(varname) 0)
 
 //------------------------------------------------------------------------------
-#define DECL_BOOL_PROP1(varname, attrib1)   \
+#define DECL_BOOL_PROP1(varname, attrib1)	\
         DECL_BOOL_PROP_IMPL(varname) com::sun::star::beans::PropertyAttribute::attrib1)
 
 //------------------------------------------------------------------------------
-#define DECL_BOOL_PROP2(varname, attrib1, attrib2)  \
+#define DECL_BOOL_PROP2(varname, attrib1, attrib2)	\
         DECL_BOOL_PROP_IMPL(varname) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2)
 
 //------------------------------------------------------------------------------
@@ -203,8 +203,8 @@ public:
 
 // ===
 //------------------------------------------------------------------------------
-#define END_DESCRIBE_PROPERTIES()   \
-    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?"); \
+#define END_DESCRIBE_PROPERTIES()	\
+    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?");	\
 
 //==============================================================================
 //------------------------------------------------------------------------------

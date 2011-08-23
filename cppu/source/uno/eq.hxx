@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ inline sal_Bool _equalObject(
     if ((0 == pI1) || (0 == pI2))
         return sal_False;
     sal_Bool bRet = sal_False;
-
+    
     typelib_TypeDescriptionReference * type_XInterface =
         * typelib_static_type_getByTypeClass( typelib_TypeClass_INTERFACE );
     if (0 == queryInterface)
@@ -90,11 +90,11 @@ inline sal_Bool _equalStruct(
     {
         return sal_False;
     }
-
+    
     typelib_TypeDescriptionReference ** ppTypeRefs = pTypeDescr->ppTypeRefs;
     sal_Int32 * pMemberOffsets = pTypeDescr->pMemberOffsets;
     sal_Int32 nDescr = pTypeDescr->nMembers;
-
+    
     while (nDescr--)
     {
         sal_Int32 nOffset = pMemberOffsets[nDescr];
@@ -129,10 +129,10 @@ inline sal_Bool _equalSequence(
         return sal_False;
     if (! nElements)
         return sal_True;
-
+    
     void * pDestElements = pDest->elements;
     void * pSourceElements = pSource->elements;
-
+    
     switch (pElementType->eTypeClass)
     {
     case typelib_TypeClass_CHAR:
@@ -303,7 +303,7 @@ inline sal_Bool _equalData(
     void * pDest,
     typelib_TypeDescriptionReference * pDestType, typelib_TypeDescription * pDestTypeDescr,
     void * pSource,
-    typelib_TypeDescriptionReference * pSourceType,
+    typelib_TypeDescriptionReference * pSourceType, typelib_TypeDescription * pSourceTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW( () )
 {
@@ -316,10 +316,11 @@ inline sal_Bool _equalData(
     }
     while (typelib_TypeClass_ANY == (eSourceTypeClass = pSourceType->eTypeClass))
     {
+        pSourceTypeDescr = 0;
         pSourceType = ((uno_Any *)pSource)->pType;
         pSource = ((uno_Any *)pSource)->pData;
     }
-
+    
     switch (eDestTypeClass)
     {
     case typelib_TypeClass_VOID:

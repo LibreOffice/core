@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@
 #include <unotools/pathoptions.hxx>
 #include <sfx2/opengrf.hxx>
 #include "app.hrc"
-#include "sfx2/sfxresid.hxx"
+#include "sfxresid.hxx"
 
 //-----------------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ using namespace ::cppu;
 
 //-----------------------------------------------------------------------------
 
-sal_uInt16  SvxOpenGrfErr2ResId(    short   err     )
+USHORT	SvxOpenGrfErr2ResId(	short	err		)
 {
     switch( err )
     {
@@ -90,10 +90,10 @@ sal_uInt16  SvxOpenGrfErr2ResId(    short   err     )
 
 struct SvxOpenGrf_Impl
 {
-    SvxOpenGrf_Impl         ();
+    SvxOpenGrf_Impl			();
 
-    sfx2::FileDialogHelper                  aFileDlg;
-    uno::Reference < XFilePickerControlAccess > xCtrlAcc;
+    sfx2::FileDialogHelper					aFileDlg;
+    uno::Reference < XFilePickerControlAccess >	xCtrlAcc;
 };
 
 
@@ -119,27 +119,27 @@ SvxOpenGraphicDialog::~SvxOpenGraphicDialog()
 
 short SvxOpenGraphicDialog::Execute()
 {
-    sal_uInt16  nImpRet;
-    sal_Bool    bQuitLoop(sal_False);
+    USHORT 	nImpRet;
+    BOOL	bQuitLoop(FALSE);
 
-    while( bQuitLoop == sal_False &&
+    while( bQuitLoop == FALSE &&
            mpImpl->aFileDlg.Execute() == ERRCODE_NONE )
     {
         if( GetPath().Len() )
         {
-            GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
+            GraphicFilter*	pFilter = GraphicFilter::GetGraphicFilter();
             INetURLObject aObj( GetPath() );
 
             // check whether we can load the graphic
-            String  aCurFilter( GetCurrentFilter() );
-            sal_uInt16  nFormatNum = pFilter->GetImportFormatNumber( aCurFilter );
-            sal_uInt16  nRetFormat = 0;
-            sal_uInt16  nFound = USHRT_MAX;
+            String	aCurFilter( GetCurrentFilter() );
+            USHORT 	nFormatNum = pFilter->GetImportFormatNumber( aCurFilter );
+            USHORT 	nRetFormat = 0;
+            USHORT	nFound = USHRT_MAX;
 
             // non-local?
             if ( INET_PROT_FILE != aObj.GetProtocol() )
             {
-                SfxMedium aMed( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, sal_True );
+                SfxMedium aMed( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, TRUE );
                 aMed.DownLoad();
                 SvStream* pStream = aMed.GetInStream();
 
@@ -170,14 +170,14 @@ short SvxOpenGraphicDialog::Execute()
             if ( nFound == USHRT_MAX )
             {
                 WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, String( SfxResId( SvxOpenGrfErr2ResId(nImpRet) ) ) );
-                bQuitLoop = aWarningBox.Execute()==RET_RETRY ? sal_False : sal_True;
+                bQuitLoop = aWarningBox.Execute()==RET_RETRY ? FALSE : TRUE;
             }
             else
             {
                 // setup appropriate filter (so next time, it will work)
                 if( pFilter->GetImportFormatCount() )
                 {
-                    String  aFormatName(pFilter->GetImportFormatName(nFound));
+                    String	aFormatName(pFilter->GetImportFormatName(nFound));
                     SetCurrentFilter(aFormatName);
                 }
 
@@ -203,7 +203,7 @@ void SvxOpenGraphicDialog::SetPath( const String& rPath, sal_Bool bLinkState )
 }
 
 
-void SvxOpenGraphicDialog::EnableLink( sal_Bool  state  )
+void SvxOpenGraphicDialog::EnableLink( sal_Bool	 state	)
 {
     if( mpImpl->xCtrlAcc.is() )
     {
@@ -214,26 +214,26 @@ void SvxOpenGraphicDialog::EnableLink( sal_Bool  state  )
         catch(IllegalArgumentException)
         {
 #ifdef DBG_UTIL
-            OSL_FAIL( "Cannot enable \"link\" checkbox" );
+            DBG_ERROR( "Cannot enable \"link\" checkbox" );
 #endif
         }
     }
 }
 
 
-void SvxOpenGraphicDialog::AsLink(sal_Bool  bState)
+void SvxOpenGraphicDialog::AsLink(sal_Bool	bState)
 {
     if( mpImpl->xCtrlAcc.is() )
     {
         try
         {
-            Any aAny; aAny <<= bState;
+            Any	aAny; aAny <<= bState;
             mpImpl->xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aAny );
         }
         catch(IllegalArgumentException)
         {
 #ifdef DBG_UTIL
-            OSL_FAIL( "Cannot check \"link\" checkbox" );
+            DBG_ERROR( "Cannot check \"link\" checkbox" );
 #endif
         }
     }
@@ -254,7 +254,7 @@ sal_Bool SvxOpenGraphicDialog::IsAsLink() const
     catch(IllegalArgumentException)
     {
 #ifdef DBG_UTIL
-        OSL_FAIL( "Cannot access \"link\" checkbox" );
+        DBG_ERROR( "Cannot access \"link\" checkbox" );
 #endif
     }
 
@@ -280,16 +280,19 @@ String SvxOpenGraphicDialog::GetCurrentFilter() const
 }
 
 
-void SvxOpenGraphicDialog::SetCurrentFilter(const String&   rStr)
+void SvxOpenGraphicDialog::SetCurrentFilter(const String&	rStr)
 {
     mpImpl->aFileDlg.SetCurrentFilter(rStr);
 }
 
-void SvxOpenGraphicDialog::SetControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId )
+void SvxOpenGraphicDialog::SetControlHelpIds( const INT16* _pControlId, const INT32* _pHelpId )
 {
     mpImpl->aFileDlg.SetControlHelpIds( _pControlId, _pHelpId );
 }
 
-
+void SvxOpenGraphicDialog::SetDialogHelpId( const INT32 _nHelpId )
+{
+    mpImpl->aFileDlg.SetDialogHelpId( _nHelpId );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

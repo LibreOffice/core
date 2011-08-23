@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,14 +34,14 @@ module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-/** Represents a single external document link.
+/** Represents a single external document link. 
 
     <p>An external document link contains cached data used for external cell
     and cell range references as well as external range names.</p>
 
     @see com::sun::star::sheet::XExternalDocLink
 
-    @since OOo 3.1
+    @since OOo 3.1.0
  */
 service ExternalDocLink : XExternalDocLink
 {

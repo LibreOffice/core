@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-typedef sal_Bool ( __LOADONCALLAPI *ExportPPT )( SvStorageRef&,
+typedef BOOL ( __LOADONCALLAPI *ExportPPT )( SvStorageRef&,
                                              Reference< XModel > &,
                                              Reference< XStatusIndicator > &,
                                              SvMemoryStream*, sal_uInt32 nCnvrtFlags );
@@ -60,7 +60,7 @@ typedef sal_Bool ( __LOADONCALLAPI *ExportPPT )( SvStorageRef&,
 typedef sal_Bool ( SAL_CALL *ImportPPT )( const ::rtl::OUString&, Sequence< PropertyValue >*,
                                           SdDrawDocument*, SvStream&, SvStorage&, SfxMedium& );
 
-typedef sal_Bool ( __LOADONCALLAPI *SaveVBA )( SfxObjectShell&, SvMemoryStream*& );
+typedef BOOL ( __LOADONCALLAPI *SaveVBA )( SfxObjectShell&, SvMemoryStream*& );
 
 // ---------------
 // - SdPPTFilter -
@@ -68,7 +68,7 @@ typedef sal_Bool ( __LOADONCALLAPI *SaveVBA )( SfxObjectShell&, SvMemoryStream*&
 
 SdPPTFilter::SdPPTFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress ) :
     SdFilter( rMedium, rDocShell, bShowProgress ),
-    pBas    ( NULL )
+    pBas	( NULL )
 {
 }
 
@@ -76,15 +76,15 @@ SdPPTFilter::SdPPTFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal
 
 SdPPTFilter::~SdPPTFilter()
 {
-    delete pBas;    // deleting the compressed basic storage
+    delete pBas;	// deleting the compressed basic storage
 }
 
 // -----------------------------------------------------------------------------
 
 sal_Bool SdPPTFilter::Import()
 {
-    sal_Bool    bRet = sal_False;
-    SotStorageRef pStorage = new SotStorage( mrMedium.GetInStream(), sal_False );
+    sal_Bool	bRet = sal_False;
+    SotStorageRef pStorage = new SotStorage( mrMedium.GetInStream(), FALSE );
     if( !pStorage->GetError() )
     {
         /* check if there is a dualstorage, then the
@@ -137,18 +137,22 @@ sal_Bool SdPPTFilter::Import()
 sal_Bool SdPPTFilter::Export()
 {
     ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
-    sal_Bool        bRet = sal_False;
+    sal_Bool		bRet = sal_False;
 
     if( pLibrary )
     {
         if( mxModel.is() )
         {
-            SotStorageRef    xStorRef = new SotStorage( mrMedium.GetOutStream(), sal_False );
-            ExportPPT       PPTExport = reinterpret_cast<ExportPPT>(pLibrary->getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ExportPPT")) ));
+            SotStorageRef    xStorRef = new SotStorage( mrMedium.GetOutStream(), FALSE );
+            ExportPPT		PPTExport = reinterpret_cast<ExportPPT>(pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii("ExportPPT") ));
 
+            /* !!!
+            if ( pViewShell && pViewShell->GetView() )
+                pViewShell->GetView()->SdrEndTextEdit();
+            */
             if( PPTExport && xStorRef.Is() )
             {
-                sal_uInt32          nCnvrtFlags = 0;
+                sal_uInt32			nCnvrtFlags = 0;
                 SvtFilterOptions* pFilterOptions = SvtFilterOptions::Get();
                 if ( pFilterOptions )
                 {
@@ -186,7 +190,7 @@ void SdPPTFilter::PreSaveBasic()
         ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
         if( pLibrary )
         {
-            SaveVBA pSaveVBA= reinterpret_cast<SaveVBA>(pLibrary->getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SaveVBA")) ));
+            SaveVBA pSaveVBA= reinterpret_cast<SaveVBA>(pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii("SaveVBA") ));
             if( pSaveVBA )
             {
                 pSaveVBA( (SfxObjectShell&) mrDocShell, pBas );

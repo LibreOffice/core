@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 #include <vcl/wrkwin.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/docfile.hxx>
@@ -35,6 +38,7 @@
 // UNO-Stuff
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -59,11 +63,11 @@ using namespace ::rtl;
 
 struct TargetData
 {
-    OUString        aUStrLinkname;
-    sal_Bool        bIsTarget;
+    OUString		aUStrLinkname;
+    BOOL		bIsTarget;
 
-    TargetData ( OUString aUStrLName, sal_Bool bTarget )
-        :   bIsTarget ( bTarget )
+    TargetData ( OUString aUStrLName, BOOL bTarget )
+        :	bIsTarget ( bTarget )
     {
         if ( bIsTarget )
             aUStrLinkname = aUStrLName;
@@ -73,13 +77,13 @@ struct TargetData
 
 //########################################################################
 //#                                                                      #
-//# Tree-Window                                                          #
+//# Tree-Window 														 #
 //#                                                                      #
 //########################################################################
 
 SvxHlmarkTreeLBox::SvxHlmarkTreeLBox( Window* pParent, const ResId& rResId )
-: SvTreeListBox ( pParent, rResId ),
-  mpParentWnd   ( (SvxHlinkDlgMarkWnd*) pParent )
+: SvTreeListBox	( pParent, rResId ),
+  mpParentWnd	( (SvxHlinkDlgMarkWnd*) pParent )
 {
     SetNodeDefaultImages();
 }
@@ -115,7 +119,7 @@ void SvxHlmarkTreeLBox::Paint( const Rectangle& rRect )
 
 //########################################################################
 //#                                                                      #
-//# Window-Class                                                         #
+//# Window-Class														 #
 //#                                                                      #
 //########################################################################
 
@@ -126,28 +130,25 @@ void SvxHlmarkTreeLBox::Paint( const Rectangle& rRect )
 |************************************************************************/
 
 SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
-:   ModalDialog( (Window*)pParent, CUI_RES ( RID_SVXFLOAT_HYPERLINK_MARKWND ) ),
+:	ModalDialog( (Window*)pParent, CUI_RES ( RID_SVXFLOAT_HYPERLINK_MARKWND ) ),
     maBtApply( this, CUI_RES (BT_APPLY) ),
     maBtClose( this, CUI_RES (BT_CLOSE) ),
     maLbTree ( this, CUI_RES (TLB_MARK) ),
-    mbUserMoved ( sal_False ),
-    mbFirst     ( sal_True ),
-    mpParent    ( pParent ),
-    mnError     ( LERR_NOERROR )
+    mbUserMoved ( FALSE ),
+    mbFirst	    ( TRUE ),
+    mpParent	( pParent ),
+    mnError		( LERR_NOERROR )
 {
     FreeResource();
 
-    maBtApply.SetClickHdl       ( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
-    maBtClose.SetClickHdl       ( LINK ( this, SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl ) );
-    maLbTree.SetDoubleClickHdl  ( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
+    maBtApply.SetClickHdl		( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
+    maBtClose.SetClickHdl		( LINK ( this, SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl ) );
+    maLbTree.SetDoubleClickHdl	( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
 
     // Tree-ListBox mit Linien versehen
-    maLbTree.SetStyle( maLbTree.GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
+    maLbTree.SetWindowBits( WinBits( WB_TABSTOP | WB_BORDER | WB_HASLINES |
                             WB_HASBUTTONS |  //WB_HASLINESATROOT |
-                            WB_HSCROLL | WB_HASBUTTONSATROOT );
-
-    maLbTree.SetAccessibleName(String(CUI_RES(STR_MARK_TREE)));
-
+                            WB_HSCROLL | WB_HASBUTTONSATROOT ) );
 }
 
 SvxHlinkDlgMarkWnd::~SvxHlinkDlgMarkWnd()
@@ -161,9 +162,9 @@ SvxHlinkDlgMarkWnd::~SvxHlinkDlgMarkWnd()
 |*
 |************************************************************************/
 
-sal_uInt16 SvxHlinkDlgMarkWnd::SetError( sal_uInt16 nError)
+USHORT SvxHlinkDlgMarkWnd::SetError( USHORT nError)
 {
-    sal_uInt16 nOldError = mnError;
+    USHORT nOldError = mnError;
     mnError = nError;
 
     if( mnError != LERR_NOERROR )
@@ -180,11 +181,11 @@ sal_uInt16 SvxHlinkDlgMarkWnd::SetError( sal_uInt16 nError)
 |*
 |************************************************************************/
 
-sal_Bool SvxHlinkDlgMarkWnd::MoveTo ( Point aNewPos )
+BOOL SvxHlinkDlgMarkWnd::MoveTo ( Point aNewPos )
 {
     if ( !mbUserMoved )
     {
-        sal_Bool bOldStatus = mbUserMoved;
+        BOOL bOldStatus = mbUserMoved;
         SetPosPixel ( aNewPos );
         mbUserMoved = bOldStatus;
     }
@@ -197,12 +198,12 @@ void SvxHlinkDlgMarkWnd::Move ()
     Window::Move();
 
     if ( IsReallyVisible() )
-        mbUserMoved = sal_True;
+        mbUserMoved = TRUE;
 }
 
-sal_Bool SvxHlinkDlgMarkWnd::ConnectToDialog( sal_Bool bDoit )
+BOOL SvxHlinkDlgMarkWnd::ConnectToDialog( BOOL bDoit )
 {
-    sal_Bool bOldStatus = mbUserMoved;
+    BOOL bOldStatus = mbUserMoved;
 
     mbUserMoved = !bDoit;
 
@@ -249,14 +250,14 @@ void SvxHlinkDlgMarkWnd::RefreshTree ( String aStrURL )
 |*
 |************************************************************************/
 
-sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
+BOOL SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
 {
     mnError = LERR_NOERROR;
 
     uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     if( xFactory.is() )
     {
-        uno::Reference< frame::XDesktop > xDesktop( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ),
+        uno::Reference< frame::XDesktop > xDesktop( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
                     uno::UNO_QUERY );
         if( xDesktop.is() )
         {
@@ -271,9 +272,9 @@ sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
                     try
                     {
                         uno::Sequence< beans::PropertyValue > aArg(1);
-                        aArg.getArray()[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "Hidden" ));
-                        aArg.getArray()[0].Value <<= (sal_Bool) sal_True;
-                        xComp = xLoader->loadComponentFromURL( aURL, OUString(RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0, aArg );
+                        aArg.getArray()[0].Name = OUString::createFromAscii( "Hidden" );
+                        aArg.getArray()[0].Value <<= (sal_Bool) TRUE;
+                        xComp = xLoader->loadComponentFromURL( aURL, OUString::createFromAscii( "_blank" ), 0, aArg );
                     }
                     catch( const io::IOException& )
                     {
@@ -315,6 +316,27 @@ sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
     }
     return (mnError==0);
 }
+/*
+void SvxHlinkDlgMarkWnd::Error(int nNr)
+{
+    switch(nNr)
+    {
+        case 0:
+        {
+            Rectangle aDrawRect( Point( 0, 0 ), maLbTree.GetSizePixel() );
+            //maLbTree.SetTextColor( Color(COL_BLACK) );
+            //maLbTree.DrawText( aDrawRect, "Keine Ziele im Dokument vorhanden.", TEXT_DRAW_LEFT);// | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+            maLbTree.DrawText( Point(0,0), "Keine Ziele im Dokument vorhanden.");
+            maLbTree.DrawLine(aDrawRect.TopLeft(), aDrawRect.BottomRight() );
+        }
+        break;
+        case 1:
+            Rectangle aDrawRect( Point( 0, 0 ), maLbTree.GetSizePixel() );
+            maLbTree.DrawText( aDrawRect, "Das Dokument konnte nicht ge�ffnet werden.", TEXT_DRAW_LEFT | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+            break;
+    }
+}
+*/
 /*************************************************************************
 |*
 |* Fill Tree-Control
@@ -325,19 +347,19 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
 {
     int nEntries=0;
     const uno::Sequence< OUString > aNames( xLinks->getElementNames() );
-    const sal_uLong nLinks = aNames.getLength();
+    const ULONG nLinks = aNames.getLength();
     const OUString* pNames = aNames.getConstArray();
 
     Color aMaskColor( COL_LIGHTMAGENTA );
     const OUString aProp_LinkDisplayName( RTL_CONSTASCII_USTRINGPARAM( "LinkDisplayName" ) );
     const OUString aProp_LinkTarget( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.LinkTarget" ) );
     const OUString aProp_LinkDisplayBitmap( RTL_CONSTASCII_USTRINGPARAM( "LinkDisplayBitmap" ) );
-    for( sal_uLong i = 0; i < nLinks; i++ )
+    for( ULONG i = 0; i < nLinks; i++ )
     {
         uno::Any aAny;
         OUString aLink( *pNames++ );
 
-        sal_Bool bError = sal_False;
+        BOOL bError = FALSE;
         try
         {
             aAny = xLinks->getByName( aLink );
@@ -346,7 +368,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
         {
             // if the name of the target was invalid (like empty headings)
             // no object can be provided
-            bError = sal_True;
+            bError = TRUE;
         }
         if(bError)
             continue;
@@ -365,7 +387,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
 
                 // is it a target ?
                 uno::Reference< lang::XServiceInfo > xSI( xTarget, uno::UNO_QUERY );
-                sal_Bool bIsTarget = xSI->supportsService( aProp_LinkTarget );
+                BOOL bIsTarget = xSI->supportsService( aProp_LinkTarget );
 
                 // create userdata
                 TargetData *pData = new TargetData ( aLink, bIsTarget );
@@ -383,8 +405,10 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                         pEntry = maLbTree.InsertEntry ( aStrDisplayname,
                                                         aBmp, aBmp,
                                                         pParentEntry,
-                                                        sal_False, LIST_APPEND,
+                                                        FALSE, LIST_APPEND,
                                                         (void*)pData );
+                        maLbTree.SetExpandedEntryBmp( pEntry, aBmp, BMP_COLOR_HIGHCONTRAST );
+                        maLbTree.SetCollapsedEntryBmp( pEntry, aBmp, BMP_COLOR_HIGHCONTRAST );
                         nEntries++;
                     }
                     else
@@ -392,7 +416,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                         // insert Displayname into treelist without bitmaps
                         pEntry = maLbTree.InsertEntry ( aStrDisplayname,
                                                         pParentEntry,
-                                                        sal_False, LIST_APPEND,
+                                                        FALSE, LIST_APPEND,
                                                         (void*)pData );
                         nEntries++;
                     }
@@ -402,7 +426,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                     // insert Displayname into treelist without bitmaps
                     pEntry = maLbTree.InsertEntry ( aStrDisplayname,
                                                     pParentEntry,
-                                                    sal_False, LIST_APPEND,
+                                                    FALSE, LIST_APPEND,
                                                     (void*)pData );
                     nEntries++;
                 }
@@ -449,14 +473,14 @@ void SvxHlinkDlgMarkWnd::ClearTree()
 
 SvLBoxEntry* SvxHlinkDlgMarkWnd::FindEntry ( String aStrName )
 {
-    sal_Bool bFound=sal_False;
+    BOOL bFound=FALSE;
     SvLBoxEntry* pEntry = maLbTree.First();
 
     while ( pEntry && !bFound )
     {
         TargetData* pUserData = ( TargetData * ) pEntry->GetUserData ();
         if ( aStrName == String( pUserData->aUStrLinkname ) )
-            bFound = sal_True;
+            bFound = TRUE;
         else
             pEntry = maLbTree.Next( pEntry );
     }

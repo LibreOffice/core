@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 class Window;
 namespace dbaui
 {
-    class DBSubComponentController;
+    class OSingleDocumentController;
 }
 namespace reportdesign
 {
@@ -56,8 +56,8 @@ class REPORTDESIGN_DLLPUBLIC OReportModel : public SdrModel
     friend class OReportPage;
 
 private:
-    OXUndoEnvironment*                  m_pUndoEnv;
-    ::dbaui::DBSubComponentController*  m_pController;
+    OXUndoEnvironment*	                m_pUndoEnv;
+    ::dbaui::OSingleDocumentController*	m_pController;
     ::reportdesign::OReportDefinition*  m_pReportDefinition;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
@@ -73,22 +73,22 @@ public:
     virtual void        SetChanged(sal_Bool bFlg = sal_True);
     virtual SdrPage*    AllocPage(bool bMasterPage);
     virtual Window*     GetCurDocViewWin();
-    virtual SdrPage*    RemovePage(sal_uInt16 nPgNum);
+    virtual SdrPage*    RemovePage(USHORT nPgNum);
     /** returns the numbering type that is used to format page fields in drawing shapes */
     virtual SvxNumType  GetPageNumType() const;
 
     OXUndoEnvironment&  GetUndoEnv();
     void                SetModified(sal_Bool _bModified);
 
-    inline dbaui::DBSubComponentController* getController() const { return m_pController; }
-    inline void attachController( dbaui::DBSubComponentController& _rController ) { m_pController = &_rController; }
+    inline dbaui::OSingleDocumentController* getController() const { return m_pController; }
+    inline void attachController( dbaui::OSingleDocumentController& _rController ) { m_pController = &_rController; }
     void detachController();
 
     OReportPage* createNewPage(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
 
     /** returns the page which belongs to a section
     *
-    * \param _xSection
+    * \param _xSection 
     * \return The page or <NULL/> when t´no page could be found.
     */
     OReportPage* getPage(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);

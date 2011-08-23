@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,15 +46,21 @@ TYPEINIT1(ImpressViewShellBase, ViewShellBase);
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new ImpressViewShellBase object has been constructed.
 
+/*
+SFX_IMPL_VIEWFACTORY(ImpressViewShellBase, SdResId(STR_DEFAULTVIEW))
+{
+    SFX_VIEW_REGISTRATION(DrawDocShell);
+}
+*/
 SfxViewFactory* ImpressViewShellBase::pFactory;
-SfxViewShell* ImpressViewShellBase::CreateInstance (
+SfxViewShell* __EXPORT ImpressViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     ImpressViewShellBase* pBase = new ImpressViewShellBase(pFrame, pOldView);
     pBase->LateInit(::rtl::OUString());
     return pBase;
 }
-void ImpressViewShellBase::RegisterFactory( sal_uInt16 nPrio )
+void ImpressViewShellBase::RegisterFactory( USHORT nPrio )
 {
     pFactory = new SfxViewFactory(
         &CreateInstance,&InitFactory,nPrio,"Default");
@@ -73,7 +79,7 @@ void ImpressViewShellBase::InitFactory()
 
 
 ImpressViewShellBase::ImpressViewShellBase (
-    SfxViewFrame* _pFrame,
+    SfxViewFrame* _pFrame, 
     SfxViewShell* pOldShell)
     : ViewShellBase (_pFrame, pOldShell)
 {
@@ -93,7 +99,7 @@ ImpressViewShellBase::~ImpressViewShellBase (void)
 
 void ImpressViewShellBase::Execute (SfxRequest& rRequest)
 {
-    sal_uInt16 nSlotId = rRequest.GetSlot();
+    USHORT nSlotId = rRequest.GetSlot();
 
     switch (nSlotId)
     {

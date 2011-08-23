@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,6 @@
 #include "sdresid.hxx"
 #include "helpids.h"
 #include <svtools/valueset.hxx>
-#include "app.hrc"
 
 namespace sd { namespace toolpanel { namespace controls {
 
@@ -62,59 +61,60 @@ void MasterPagesPanel::impl_construct( ViewShellBase& rBase )
 {
     SdDrawDocument* pDocument = rBase.GetDocument();
     ::std::auto_ptr<controls::MasterPagesSelector> pSelector;
+    TitledControl* pTitledControl;
 
     ::boost::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
-
+    
     // Create a panel with the master pages that are in use by the currently
     // edited document.
     DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(rBase.GetMainViewShell().get());
     pSelector.reset(new controls::CurrentMasterPagesSelector (
-        this,
+        this, 
         *pDocument,
         rBase,
         pContainer));
     pSelector->LateInit();
-    pSelector->SetHelpId( HID_SD_TASK_PANE_PREVIEW_CURRENT );
+    pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_CURRENT) );
     GetShellManager()->AddSubShell(
-        SHELLID_SD_TASK_PANE_PREVIEW_CURRENT,
+        HID_SD_TASK_PANE_PREVIEW_CURRENT,
         pSelector.get(),
         pSelector->GetWindow());
-    AddControl (
+    pTitledControl = AddControl (
         ::std::auto_ptr<TreeNode>(pSelector.release()),
         SdResId(STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE),
         HID_SD_CURRENT_MASTERS);
-
+    
     // Create a panel with the most recently used master pages.
     pSelector.reset(new controls::RecentMasterPagesSelector (
-        this,
+        this, 
         *pDocument,
         rBase,
         pContainer));
     pSelector->LateInit();
-    pSelector->SetHelpId( HID_SD_TASK_PANE_PREVIEW_RECENT );
+    pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_RECENT) );
     GetShellManager()->AddSubShell(
-        SHELLID_SD_TASK_PANE_PREVIEW_RECENT,
+        HID_SD_TASK_PANE_PREVIEW_RECENT,
         pSelector.get(),
         pSelector->GetWindow());
-    AddControl (
+    pTitledControl = AddControl (
         ::std::auto_ptr<TreeNode>(pSelector.release()),
         SdResId(STR_TASKPANEL_RECENT_MASTER_PAGES_TITLE),
         HID_SD_RECENT_MASTERS);
 
     // Create a panel with all available master pages.
     pSelector.reset(new controls::AllMasterPagesSelector (
-        this,
+        this, 
         *pDocument,
         rBase,
         *pDrawViewShell,
         pContainer));
     pSelector->LateInit();
-    pSelector->SetHelpId( HID_SD_TASK_PANE_PREVIEW_ALL );
+    pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_ALL) );
     GetShellManager()->AddSubShell(
-        SHELLID_SD_TASK_PANE_PREVIEW_ALL,
+        HID_SD_TASK_PANE_PREVIEW_ALL,
         pSelector.get(),
         pSelector->GetWindow());
-    AddControl (
+    pTitledControl = AddControl (
         ::std::auto_ptr<TreeNode>(pSelector.release()),
         SdResId(STR_TASKPANEL_ALL_MASTER_PAGES_TITLE),
         HID_SD_ALL_MASTERS);
@@ -130,9 +130,9 @@ MasterPagesPanel::~MasterPagesPanel (void)
     OSL_ENSURE( pShellManager, "MasterPagesPanel::~MasterPagesPanel: no shell manager anymore - cannot remove sub shells!" );
     if ( pShellManager )
     {
-        pShellManager->RemoveSubShell( SHELLID_SD_TASK_PANE_PREVIEW_CURRENT );
-        pShellManager->RemoveSubShell( SHELLID_SD_TASK_PANE_PREVIEW_RECENT );
-        pShellManager->RemoveSubShell( SHELLID_SD_TASK_PANE_PREVIEW_ALL );
+        pShellManager->RemoveSubShell( HID_SD_TASK_PANE_PREVIEW_CURRENT );
+        pShellManager->RemoveSubShell( HID_SD_TASK_PANE_PREVIEW_RECENT );
+        pShellManager->RemoveSubShell( HID_SD_TASK_PANE_PREVIEW_ALL );
     }
 }
 

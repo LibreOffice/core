@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 #include "AppDetailView.hxx"
-#include <osl/diagnose.h>
+#include <tools/debug.hxx>
 #include "dbaccess_helpid.hrc"
 #include "dbu_app.hrc"
 #include "AppView.hxx"
@@ -68,10 +68,10 @@ using namespace ::com::sun::star::beans;
 using ::com::sun::star::util::URL;
 using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
-#define SPACEBETWEENENTRIES     4
+#define SPACEBETWEENENTRIES		4
 
 // -----------------------------------------------------------------------------
-TaskEntry::TaskEntry( const sal_Char* _pAsciiUNOCommand, sal_uInt16 _nHelpID, sal_uInt16 _nTitleResourceID, bool _bHideWhenDisabled )
+TaskEntry::TaskEntry( const sal_Char* _pAsciiUNOCommand, USHORT _nHelpID, USHORT _nTitleResourceID, bool _bHideWhenDisabled )
     :sUNOCommand( ::rtl::OUString::createFromAscii( _pAsciiUNOCommand ) )
     ,nHelpID( _nHelpID )
     ,sTitle( ModuleRes( _nTitleResourceID ) )
@@ -86,7 +86,7 @@ OCreationList::OCreationList( OTasksWindow& _rParent )
     ,m_pMouseDownEntry( NULL )
     ,m_pLastActiveEntry( NULL )
 {
-    sal_uInt16 nSize = SPACEBETWEENENTRIES;
+    USHORT nSize = SPACEBETWEENENTRIES;
     SetSpaceBetweenEntries(nSize);
     SetSelectionMode( NO_SELECTION );
     SetExtendedWinBits( EWB_NO_AUTO_CURENTRY );
@@ -116,7 +116,7 @@ void OCreationList::PreparePaint( SvLBoxEntry* _pEntry )
         {
             // draw a selection background
             bool bIsMouseDownEntry = ( _pEntry == m_pMouseDownEntry );
-            DrawSelectionBackground( GetBoundingRect( _pEntry ), bIsMouseDownEntry ? 1 : 2, sal_False, sal_True, sal_False );
+            DrawSelectionBackground( GetBoundingRect( _pEntry ), bIsMouseDownEntry ? 1 : 2, FALSE, TRUE, FALSE );
 
             if ( bIsMouseDownEntry )
             {
@@ -138,7 +138,7 @@ void OCreationList::PreparePaint( SvLBoxEntry* _pEntry )
 void OCreationList::SelectSearchEntry( const void* _pEntry )
 {
     SvLBoxEntry* pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( _pEntry ) );
-    OSL_ENSURE( pEntry, "OCreationList::SelectSearchEntry: invalid entry!" );
+    DBG_ASSERT( pEntry, "OCreationList::SelectSearchEntry: invalid entry!" );
 
     if ( pEntry )
         setCurrentEntryInvalidate( pEntry );
@@ -148,11 +148,11 @@ void OCreationList::SelectSearchEntry( const void* _pEntry )
 }
 
 // -----------------------------------------------------------------------------
-void OCreationList::ExecuteSearchEntry( const void* _pEntry ) const
+void OCreationList::ExecuteSearchEntry( const void* _pEntry )
 {
     SvLBoxEntry* pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( _pEntry ) );
-    OSL_ENSURE( pEntry, "OCreationList::ExecuteSearchEntry: invalid entry!" );
-    OSL_ENSURE( pEntry == GetCurEntry(), "OCreationList::ExecuteSearchEntry: SelectSearchEntry should have been called before!" );
+    DBG_ASSERT( pEntry, "OCreationList::ExecuteSearchEntry: invalid entry!" );
+    DBG_ASSERT( pEntry == GetCurEntry(), "OCreationList::ExecuteSearchEntry: SelectSearchEntry should have been called before!" );
 
     if ( pEntry )
         onSelected( pEntry );
@@ -168,7 +168,7 @@ Rectangle OCreationList::GetFocusRect( SvLBoxEntry* _pEntry, long _nLine )
     SvLBoxItem* pBitmapItem = _pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP );
     SvLBoxTab* pTab = pBitmapItem ? GetTab( _pEntry, pBitmapItem ) : NULL;
     SvViewDataItem* pItemData = pBitmapItem ? GetViewDataItem( _pEntry, pBitmapItem ) : NULL;
-    OSL_ENSURE( pTab && pItemData, "OCreationList::GetFocusRect: could not find the first bitmap item!" );
+    DBG_ASSERT( pTab && pItemData, "OCreationList::GetFocusRect: could not find the first bitmap item!" );
     if ( pTab && pItemData )
         aRect.Left() = pTab->GetPos() - pItemData->aSize.Width() / 2;
 
@@ -212,7 +212,7 @@ void OCreationList::MouseButtonDown( const MouseEvent& rMEvt )
 {
     SvTreeListBox::MouseButtonDown( rMEvt );
 
-    OSL_ENSURE( !m_pMouseDownEntry, "OCreationList::MouseButtonDown: I missed some mouse event!" );
+    DBG_ASSERT( !m_pMouseDownEntry, "OCreationList::MouseButtonDown: I missed some mouse event!" );
     m_pMouseDownEntry = GetCurEntry();
     if ( m_pMouseDownEntry )
     {
@@ -234,14 +234,14 @@ void OCreationList::MouseMove( const MouseEvent& rMEvt )
         if ( m_pMouseDownEntry )
         {
             // we're currently in a "mouse down" phase
-            OSL_ENSURE( IsMouseCaptured(), "OCreationList::MouseMove: inconsistence (1)!" );
+            DBG_ASSERT( IsMouseCaptured(), "OCreationList::MouseMove: inconsistence (1)!" );
             if ( pEntry == m_pMouseDownEntry )
             {
                 setCurrentEntryInvalidate( m_pMouseDownEntry );
             }
             else
             {
-                OSL_ENSURE( ( GetCurEntry() == m_pMouseDownEntry ) || !GetCurEntry(),
+                DBG_ASSERT( ( GetCurEntry() == m_pMouseDownEntry ) || !GetCurEntry(),
                     "OCreationList::MouseMove: inconsistence (2)!" );
                 setCurrentEntryInvalidate( NULL );
             }
@@ -274,7 +274,7 @@ void OCreationList::MouseButtonUp( const MouseEvent& rMEvt )
 
     if ( m_pMouseDownEntry )
     {
-        OSL_ENSURE( IsMouseCaptured(), "OCreationList::MouseButtonUp: hmmm .... no mouse captured, but an active entry?" );
+        DBG_ASSERT( IsMouseCaptured(), "OCreationList::MouseButtonUp: hmmm .... no mouse captured, but an active entry?" );
         ReleaseMouse();
 
         InvalidateEntry( m_pMouseDownEntry );
@@ -307,7 +307,7 @@ bool OCreationList::setCurrentEntryInvalidate( SvLBoxEntry* _pEntry )
 // -----------------------------------------------------------------------------
 void OCreationList::updateHelpText()
 {
-    sal_uInt16 nHelpTextId = 0;
+    USHORT nHelpTextId = 0;
     if ( GetCurEntry() )
         nHelpTextId = reinterpret_cast< TaskEntry* >( GetCurEntry()->GetUserData() )->nHelpID;
     m_rTaskWindow.setHelpText( nHelpTextId );
@@ -315,7 +315,7 @@ void OCreationList::updateHelpText()
 // -----------------------------------------------------------------------------
 void OCreationList::onSelected( SvLBoxEntry* _pEntry ) const
 {
-    OSL_ENSURE( _pEntry, "OCreationList::onSelected: invalid entry!" );
+    DBG_ASSERT( _pEntry, "OCreationList::onSelected: invalid entry!" );
     URL aCommand;
     aCommand.Complete = reinterpret_cast< TaskEntry* >( _pEntry->GetUserData() )->sUNOCommand;
     m_rTaskWindow.getDetailView()->getBorderWin().getView()->getAppController().executeChecked( aCommand, Sequence< PropertyValue >() );
@@ -346,7 +346,7 @@ void OCreationList::KeyInput( const KeyEvent& rKEvt )
         {
             InvalidateEntry( pNewCurrent );
             CallEventListeners( VCLEVENT_LISTBOX_SELECT, pNewCurrent );
-        }
+        } // if ( pNewCurrent )
         updateHelpText();
     }
 }
@@ -360,7 +360,7 @@ OTasksWindow::OTasksWindow(Window* _pParent,OApplicationDetailView* _pDetailView
     ,m_aFL(this,WB_VERT)
     ,m_pDetailView(_pDetailView)
 {
-    DBG_CTOR(OTasksWindow,NULL);
+    DBG_CTOR(OTasksWindow,NULL);	
     SetUniqueId(UID_APP_TASKS_WINDOW);
     m_aCreation.SetHelpId(HID_APP_CREATION_LIST);
     m_aCreation.SetSelectHdl(LINK(this, OTasksWindow, OnEntrySelectHdl));
@@ -372,7 +372,7 @@ OTasksWindow::OTasksWindow(Window* _pParent,OApplicationDetailView* _pDetailView
 // -----------------------------------------------------------------------------
 OTasksWindow::~OTasksWindow()
 {
-    DBG_DTOR(OTasksWindow,NULL);
+    DBG_DTOR(OTasksWindow,NULL);	
     Clear();
 }
 // -----------------------------------------------------------------------
@@ -388,7 +388,7 @@ void OTasksWindow::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-//  -----------------------------------------------------------------------------
+//	-----------------------------------------------------------------------------
 void OTasksWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
@@ -409,6 +409,8 @@ void OTasksWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
         m_aHelpText.SetTextFillColor();
         m_aDescription.SetTextColor( rStyleSettings.GetFieldTextColor() );
         m_aDescription.SetTextFillColor();
+        //m_aFL.SetTextColor( rStyleSettings.GetFieldTextColor() );
+        //m_aFL.SetTextFillColor();
     }
 
     if( bBackground )
@@ -424,13 +426,18 @@ void OTasksWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
     m_aDescription.SetControlFont(aFont);
 }
 // -----------------------------------------------------------------------------
-void OTasksWindow::setHelpText(sal_uInt16 _nId)
+void OTasksWindow::setHelpText(USHORT _nId)
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
     if ( _nId )
     {
         String sText = ModuleRes(_nId);
 
+        // calulate the size of the text field
+        // Size aHelpTextSize = m_aHelpText.GetSizePixel();
+        // Size aHelpTextPixelSize = LogicToPixel( aHelpTextSize, MAP_APPFONT );
+        // Rectangle aPrimaryRect( Point(0,0), aHelpTextSize );
+        // Rectangle aSuggestedRect( GetTextRect( aPrimaryRect, sText, TEXT_DRAW_MULTILINE | TEXT_DRAW_LEFT | TEXT_DRAW_WORDBREAK ) );
         m_aHelpText.SetText(sText);
     }
     else
@@ -451,43 +458,39 @@ IMPL_LINK(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, /*_pTreeBox*/)
 void OTasksWindow::Resize()
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
-
-    // parent window dimension
+    //////////////////////////////////////////////////////////////////////
+    // Abmessungen parent window
     Size aOutputSize( GetOutputSize() );
-    long nOutputWidth   = aOutputSize.Width();
-    long nOutputHeight  = aOutputSize.Height();
+    long nOutputWidth	= aOutputSize.Width();
+    long nOutputHeight	= aOutputSize.Height();
 
     Size aFLSize = LogicToPixel( Size( 2, 6 ), MAP_APPFONT );
     sal_Int32 n6PPT = aFLSize.Height();
     long nHalfOutputWidth = static_cast<long>(nOutputWidth * 0.5);
-
+    
     m_aCreation.SetPosSizePixel( Point(0, 0), Size(nHalfOutputWidth - n6PPT, nOutputHeight) );
     // i77897 make the m_aHelpText a little bit smaller. (-5)
     sal_Int32 nNewWidth = nOutputWidth - nHalfOutputWidth - aFLSize.Width() - 5;
+    // m_aHelpText.SetBackground( MAKE_SALCOLOR( 0xe0, 0xe0, 0xe0 ) );
+    // Wallpaper aLightGray(Color(0xe0, 0xe0, 0xe0));
+    // m_aHelpText.SetBackground( aLightGray );
     m_aDescription.SetPosSizePixel( Point(nHalfOutputWidth + n6PPT, 0), Size(nNewWidth, nOutputHeight) );
     Size aDesc = m_aDescription.CalcMinimumSize();
     m_aHelpText.SetPosSizePixel( Point(nHalfOutputWidth + n6PPT, aDesc.Height() ), Size(nNewWidth, nOutputHeight - aDesc.Height() - n6PPT) );
-
+    
     m_aFL.SetPosSizePixel( Point(nHalfOutputWidth , 0), Size(aFLSize.Width(), nOutputHeight ) );
 }
 // -----------------------------------------------------------------------------
 void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
-{
+{	
     DBG_CHKTHIS(OTasksWindow,NULL);
     Clear();
-
+    
     try
     {
-        Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
-            getDetailView()->getBorderWin().getView()->getORB()->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ) )
-            ) ,
-            UNO_QUERY
-        );
-        Reference< XUIConfigurationManager > xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.OfficeDatabaseDocument" ) )
-        );
-        Reference< XImageManager > xImageMgr( xUIConfigMgr->getImageManager(), UNO_QUERY );
+        Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(getDetailView()->getBorderWin().getView()->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))),UNO_QUERY);
+        Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")));
+        Reference<XImageManager> xImageMgr(xUIConfigMgr->getImageManager(),UNO_QUERY);
 
         // copy the commands so we can use them with the config managers
         Sequence< ::rtl::OUString > aCommands( _rList.size() );
@@ -496,29 +499,32 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
         for ( TaskEntryList::const_iterator pCopyTask = _rList.begin(); pCopyTask != aEnd; ++pCopyTask, ++pCommands )
             *pCommands = pCopyTask->sUNOCommand;
 
-        Sequence< Reference< XGraphic> > aImages = xImageMgr->getImages(
-            ImageType::SIZE_DEFAULT | ImageType::COLOR_NORMAL ,
-            aCommands
-        );
+        Sequence< Reference< XGraphic> > aImages = xImageMgr->getImages( ImageType::SIZE_DEFAULT | ImageType::COLOR_NORMAL, aCommands );
+        Sequence< Reference< XGraphic> > aHCImages = xImageMgr->getImages( ImageType::SIZE_DEFAULT | ImageType::COLOR_HIGHCONTRAST, aCommands );
 
         const Reference< XGraphic >* pImages( aImages.getConstArray() );
+        const Reference< XGraphic >* pHCImages( aHCImages.getConstArray() );
 
-        for ( TaskEntryList::const_iterator pTask = _rList.begin(); pTask != aEnd; ++pTask, ++pImages )
+        for ( TaskEntryList::const_iterator pTask = _rList.begin(); pTask != aEnd; ++pTask, ++pImages, ++pHCImages )
         {
             SvLBoxEntry* pEntry = m_aCreation.InsertEntry( pTask->sTitle );
             pEntry->SetUserData( reinterpret_cast< void* >( new TaskEntry( *pTask ) ) );
 
             Image aImage = Image( *pImages );
-            m_aCreation.SetExpandedEntryBmp(  pEntry, aImage );
-            m_aCreation.SetCollapsedEntryBmp( pEntry, aImage );
+            m_aCreation.SetExpandedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
+            m_aCreation.SetCollapsedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
+
+            Image aHCImage = Image( *pHCImages );
+            m_aCreation.SetExpandedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
+            m_aCreation.SetCollapsedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
         }
     }
     catch(Exception&)
     {
     }
 
-    m_aCreation.Show();
-    m_aCreation.SelectAll(sal_False);
+    m_aCreation.Show();	
+    m_aCreation.SelectAll(FALSE);
     m_aHelpText.Show();
     m_aDescription.Show();
     m_aFL.Show();
@@ -536,7 +542,7 @@ void OTasksWindow::Clear()
         delete reinterpret_cast< TaskEntry* >( pEntry->GetUserData() );
         pEntry = m_aCreation.Next(pEntry);
     }
-    m_aCreation.Clear();
+    m_aCreation.Clear(); 
 }
 //==================================================================
 // class OApplicationDetailView
@@ -548,7 +554,7 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,Previe
     ,m_aContainer(this,0,WB_BORDER | WB_DIALOGCONTROL )
     ,m_rBorderWin(_rParent)
 {
-    DBG_CTOR(OApplicationDetailView,NULL);
+    DBG_CTOR(OApplicationDetailView,NULL);	
     SetUniqueId(UID_APP_DETAIL_VIEW);
     ImplInitSettings( sal_True, sal_True, sal_True );
 
@@ -566,7 +572,7 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,Previe
     m_aContainer.SetUniqueId(UID_APP_CONTAINER_VIEW);
     m_aContainer.Show();
 
-    const long  nFrameWidth = LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
+    const long	nFrameWidth = LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
     m_aHorzSplitter.SetPosSizePixel( Point(0,50), Size(0,nFrameWidth) );
     // now set the components at the base class
     set(&m_aContainer,&m_aTasks);
@@ -583,7 +589,7 @@ OApplicationDetailView::~OApplicationDetailView()
     setSplitter(NULL);
     m_pControlHelper = NULL;
 }
-//  -----------------------------------------------------------------------------
+//	-----------------------------------------------------------------------------
 void OApplicationDetailView::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
@@ -605,6 +611,7 @@ void OApplicationDetailView::ImplInitSettings( sal_Bool bFont, sal_Bool bForegro
     if( bBackground )
         SetBackground( rStyleSettings.GetFieldColor() );
 
+    //SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetDialogColor() ) );
     m_aHorzSplitter.SetBackground( rStyleSettings.GetDialogColor() );
     m_aHorzSplitter.SetFillColor( rStyleSettings.GetDialogColor() );
     m_aHorzSplitter.SetTextFillColor(rStyleSettings.GetDialogColor() );
@@ -697,6 +704,7 @@ const TaskPaneData& OApplicationDetailView::impl_getTaskPaneData( ElementType _e
     OSL_ENSURE( ( _eType >= 0 ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OApplicationDetailView::impl_getTaskPaneData: illegal element type!" );
     TaskPaneData& rData = m_aTaskPaneData[ _eType ];
 
+//    if ( rData.aTasks.empty() )
     //oj: do not check, otherwise extensions will only be visible after a reload.
     impl_fillTaskPaneData( _eType, rData );
 
@@ -738,7 +746,7 @@ void OApplicationDetailView::impl_fillTaskPaneData( ElementType _eType, TaskPane
         break;
 
     default:
-        OSL_FAIL( "OApplicationDetailView::impl_fillTaskPaneData: illegal element type!" );
+        OSL_ENSURE( false, "OApplicationDetailView::impl_fillTaskPaneData: illegal element type!" );
     }
 
     MnemonicGenerator aAllMnemonics( m_aExternalMnemonics );
@@ -870,23 +878,23 @@ SvLBoxEntry* OApplicationDetailView::getEntry( const Point& _aPoint ) const
     return m_pControlHelper->getEntry(_aPoint);
 }
 // -----------------------------------------------------------------------------
-sal_Bool OApplicationDetailView::isCutAllowed()
-{
+sal_Bool OApplicationDetailView::isCutAllowed()		
+{ 
     DBG_CHKTHIS(OApplicationDetailView,NULL);
-    return m_pControlHelper->isCutAllowed();
+    return m_pControlHelper->isCutAllowed(); 
 }
-sal_Bool OApplicationDetailView::isCopyAllowed()
-{
+sal_Bool OApplicationDetailView::isCopyAllowed()		
+{ 
     DBG_CHKTHIS(OApplicationDetailView,NULL);
-    return m_pControlHelper->isCopyAllowed();
+    return m_pControlHelper->isCopyAllowed(); 
 }
-sal_Bool OApplicationDetailView::isPasteAllowed()   { DBG_CHKTHIS(OApplicationDetailView,NULL);return m_pControlHelper->isPasteAllowed(); }
-void OApplicationDetailView::copy() { DBG_CHKTHIS(OApplicationDetailView,NULL);m_pControlHelper->copy(); }
-void OApplicationDetailView::cut()  { DBG_CHKTHIS(OApplicationDetailView,NULL);m_pControlHelper->cut(); }
-void OApplicationDetailView::paste()
-{
+sal_Bool OApplicationDetailView::isPasteAllowed()	{ DBG_CHKTHIS(OApplicationDetailView,NULL);return m_pControlHelper->isPasteAllowed(); }
+void OApplicationDetailView::copy()	{ DBG_CHKTHIS(OApplicationDetailView,NULL);m_pControlHelper->copy(); }
+void OApplicationDetailView::cut()	{ DBG_CHKTHIS(OApplicationDetailView,NULL);m_pControlHelper->cut(); }
+void OApplicationDetailView::paste()	
+{ 
     DBG_CHKTHIS(OApplicationDetailView,NULL);
-    m_pControlHelper->paste();
+    m_pControlHelper->paste(); 
 }
 // -----------------------------------------------------------------------------
 SvLBoxEntry*  OApplicationDetailView::elementAdded(ElementType _eType,const ::rtl::OUString& _rName, const Any& _rObject )
@@ -933,7 +941,7 @@ void OApplicationDetailView::showPreview(const Reference< XContent >& _xContent)
     m_pControlHelper->showPreview(_xContent);
 }
 // -----------------------------------------------------------------------------
-void OApplicationDetailView::showPreview(   const ::rtl::OUString& _sDataSourceName,
+void OApplicationDetailView::showPreview(	const ::rtl::OUString& _sDataSourceName,
                                             const ::rtl::OUString& _sName,
                                             sal_Bool _bTable)
 {

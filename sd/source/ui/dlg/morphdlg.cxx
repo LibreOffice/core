@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,11 +50,25 @@
 
 namespace sd {
 
-#define FADE_STEP   "FadeSteps"
-#define FADE_ATTRIB "FadeAttributes"
-#define FADE_ORIENT "FadeOrientation"
-#define FADE_TRUE   "true"
-#define FADE_FALSE  "false"
+
+/******************************************************************************/
+
+
+#define FADE_STEP	"FadeSteps"
+#define FADE_ATTRIB	"FadeAttributes"
+#define FADE_ORIENT	"FadeOrientation"
+#define FADE_TRUE	"true"
+#define FADE_FALSE	"false"
+
+
+/******************************************************************************/
+
+
+/******************************************************************************
+|*
+|*
+|*
+\******************************************************************************/
 
 MorphDlg::MorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2 ) :
             ModalDialog     ( pParent, SdResId( DLG_MORPH ) ),
@@ -70,17 +84,17 @@ MorphDlg::MorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* 
     FreeResource();
     LoadSettings();
 
-    SfxItemPool*    pPool = (SfxItemPool*) pObj1->GetObjectItemPool();
-    SfxItemSet      aSet1( *pPool );
-    SfxItemSet      aSet2( *pPool );
+    SfxItemPool*	pPool = (SfxItemPool*) pObj1->GetObjectItemPool();
+    SfxItemSet		aSet1( *pPool );
+    SfxItemSet		aSet2( *pPool );
 
     aSet1.Put(pObj1->GetMergedItemSet());
     aSet2.Put(pObj2->GetMergedItemSet());
 
-    const XLineStyle    eLineStyle1 = ( (const XLineStyleItem&) aSet1.Get( XATTR_LINESTYLE ) ).GetValue();
-    const XLineStyle    eLineStyle2 = ( (const XLineStyleItem&) aSet2.Get( XATTR_LINESTYLE ) ).GetValue();
-    const XFillStyle    eFillStyle1 = ( (const XFillStyleItem&) aSet1.Get( XATTR_FILLSTYLE ) ).GetValue();
-    const XFillStyle    eFillStyle2 = ( (const XFillStyleItem&) aSet2.Get( XATTR_FILLSTYLE ) ).GetValue();
+    const XLineStyle	eLineStyle1 = ( (const XLineStyleItem&) aSet1.Get( XATTR_LINESTYLE ) ).GetValue();
+    const XLineStyle	eLineStyle2 = ( (const XLineStyleItem&) aSet2.Get( XATTR_LINESTYLE ) ).GetValue();
+    const XFillStyle	eFillStyle1 = ( (const XFillStyleItem&) aSet1.Get( XATTR_FILLSTYLE ) ).GetValue();
+    const XFillStyle	eFillStyle2 = ( (const XFillStyleItem&) aSet2.Get( XATTR_FILLSTYLE ) ).GetValue();
 
     if ( ( ( eLineStyle1 == XLINE_NONE ) || ( eLineStyle2 == XLINE_NONE ) ) &&
          ( ( eFillStyle1 != XFILL_SOLID ) || ( eFillStyle2 != XFILL_SOLID ) ) )
@@ -89,17 +103,31 @@ MorphDlg::MorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* 
     }
 }
 
+
+/******************************************************************************
+|*
+|*
+|*
+\******************************************************************************/
+
 MorphDlg::~MorphDlg()
 {
 }
 
+
+/******************************************************************************
+|*
+|*
+|*
+\******************************************************************************/
+
 void MorphDlg::LoadSettings()
 {
-    SvStorageStreamRef  xIStm( SD_MOD()->GetOptionStream( UniString::CreateFromAscii(
-                               RTL_CONSTASCII_STRINGPARAM( SD_OPTION_MORPHING ) ),
+    SvStorageStreamRef	xIStm( SD_MOD()->GetOptionStream( UniString::CreateFromAscii( 
+                               RTL_CONSTASCII_STRINGPARAM( SD_OPTION_MORPHING ) ), 
                                SD_OPTION_LOAD ) );
-    sal_uInt16              nSteps;
-    sal_Bool                bOrient, bAttrib;
+    UINT16				nSteps;
+    BOOL				bOrient, bAttrib;
 
     if( xIStm.Is() )
     {
@@ -110,7 +138,7 @@ void MorphDlg::LoadSettings()
     else
     {
         nSteps = 16;
-        bOrient = bAttrib = sal_True;
+        bOrient = bAttrib = TRUE;
     }
 
     aMtfSteps.SetValue( nSteps );
@@ -122,15 +150,15 @@ void MorphDlg::LoadSettings()
 
 void MorphDlg::SaveSettings() const
 {
-    SvStorageStreamRef xOStm( SD_MOD()->GetOptionStream( UniString::CreateFromAscii(
-                               RTL_CONSTASCII_STRINGPARAM( SD_OPTION_MORPHING ) ),
+    SvStorageStreamRef xOStm( SD_MOD()->GetOptionStream( UniString::CreateFromAscii( 
+                               RTL_CONSTASCII_STRINGPARAM( SD_OPTION_MORPHING ) ),  
                                SD_OPTION_STORE ) );
 
     if( xOStm.Is() )
     {
         SdIOCompat aCompat( *xOStm, STREAM_WRITE, 1 );
 
-        *xOStm << (sal_uInt16) aMtfSteps.GetValue()
+        *xOStm << (UINT16) aMtfSteps.GetValue()
                << aCbxOrientation.IsChecked()
                << aCbxAttributes.IsChecked();
     }

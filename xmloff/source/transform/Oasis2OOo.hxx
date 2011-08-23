@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,13 +36,13 @@ class XMLTransformerOASISEventMap_Impl;
 
 class Oasis2OOoTransformer : public XMLTransformerBase
 {
-    XMLTransformerActions       *m_aActions[MAX_OASIS_ACTIONS];
+    XMLTransformerActions		*m_aActions[MAX_OASIS_ACTIONS];
     XMLTransformerOASISEventMap_Impl *m_pEventMap;
     XMLTransformerOASISEventMap_Impl *m_pFormEventMap;
 
 protected:
 
-    virtual XMLTransformerContext *CreateUserDefinedContext(
+    virtual XMLTransformerContext *CreateUserDefinedContext( 
                                       const TransformerAction_Impl& rAction,
                                       const ::rtl::OUString& rQName,
                                          sal_Bool bPersistent=sal_False );
@@ -67,6 +67,6 @@ public:
                                              sal_Bool bForm );
 };
 
-#endif  //  _XMLOFF_OASIS2OOO_HXX
+#endif	//  _XMLOFF_OASIS2OOO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,71 +74,77 @@
     };
 
  public:
-    /** Copying of a range within or to another document.
-        The position can also be within the range!
-     */
+    /** Kopieren eines Bereiches im oder in ein anderes Dokument !
+        Die Position kann auch im Bereich liegen !!
+    */
     virtual bool CopyRange(SwPaM&, SwPosition&, const bool bCopyAll ) const = 0;
 
-    /** Delete section containing the node.
+    /** Loesche die Section, in der der Node steht.
     */
     virtual void DeleteSection(SwNode* pNode) = 0;
 
-    /** Delete a range SwFlyFrmFmt.
+    /** loeschen eines BereichesSwFlyFrmFmt
     */
     virtual bool DeleteRange(SwPaM&) = 0;
 
-    /** Delete full paragraphs.
+    /** loeschen gesamter Absaetze
     */
     virtual bool DelFullPara(SwPaM&) = 0;
 
     /** complete delete of a given PaM
 
-        #i100466#
+        OD 2009-08-20 #i100466#
         Add optional parameter <bForceJoinNext>, default value <false>
         Needed for hiding of deletion redlines
     */
     virtual bool DeleteAndJoin( SwPaM&,
                                 const bool bForceJoinNext = false ) = 0;
 
+    /** verschieben eines Bereiches
+    */
     virtual bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags) = 0;
 
+    /** verschieben ganzer Nodes
+    */
     virtual bool MoveNodeRange(SwNodeRange&, SwNodeIndex&, SwMoveFlags) = 0;
 
-    /** Move a range.
+    /** verschieben eines Bereiches
     */
     virtual bool MoveAndJoin(SwPaM&, SwPosition&, SwMoveFlags) = 0;
 
-    /** Overwrite string in an existing text node.
+    /** Ueberschreiben eines Strings in einem bestehenden Textnode.
     */
     virtual bool Overwrite(const SwPaM &rRg, const String& rStr) = 0;
 
     /** Insert string into existing text node at position rRg.Point().
-     */
+    */
     virtual bool InsertString(const SwPaM &rRg, const String&,
               const enum InsertFlags nInsertMode = INS_EMPTYEXPAND ) = 0;
 
     /** change text to Upper/Lower/Hiragana/Katagana/...
-     */
+    */
     virtual void TransliterateText(const SwPaM& rPaM, utl::TransliterationWrapper&) = 0;
 
-    /** Insert graphic or formula. The XXXX are copied.
-     */
+    /** Einfuegen einer Grafik, Formel. Die XXXX werden kopiert.
+    */
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const String& rGrfName, const String& rFltName, const Graphic* pGraphic,
                         const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
-    virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
+    /**
+    */
+    virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj,	const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
-    /** Transpose graphic (with undo)
-     */
+    /** austauschen einer Grafik (mit Undo)
+    */
     virtual void ReRead(SwPaM&, const String& rGrfName, const String& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj) = 0;
 
-    /** Insert a DrawObject. The object must be already registered
-        in DrawModel.
+    /** Einfuegen eines DrawObjectes. Das Object muss bereits im DrawModel
+        angemeldet sein.
     */
     virtual SwDrawFrmFmt* Insert(const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet* pFlyAttrSet, SwFrmFmt*) = 0;
 
-    /** Insert OLE-objects.
+    /** Einfuegen von OLE-Objecten.
     */
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
@@ -146,36 +152,43 @@
     virtual SwFlyFrmFmt* InsertOLE(const SwPaM &rRg, const String& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
                            const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
-    /** Split a node at rPos (implemented only for TxtNode).
+    /** Aufspalten eines Nodes an rPos (nur fuer den TxtNode implementiert)
     */
     virtual bool SplitNode(const SwPosition &rPos, bool bChkTableStart) = 0;
 
+    /**
+    */
     virtual bool AppendTxtNode(SwPosition& rPos) = 0;
 
-    /** Replace selected range in a TxtNode with string.
-        Intended for search & replace.
-        bRegExpRplc - replace tabs (\\t) and insert the found string
-        ( not \& ). E.g.: Find: "zzz", Replace: "xx\t\\t..&..\&"
-        --> "xx\t<Tab>..zzz..&"
+    /** Ersetz einen selektierten Bereich in einem TextNode mit dem
+        String. Ist fuers Suchen&Ersetzen gedacht.
+        bRegExpRplc - ersetze Tabs (\\t) und setze den gefundenen String
+                 ein ( nicht \& )
+                    z.B.: Fnd: "zzz", Repl: "xx\t\\t..&..\&"
+                        --> "xx\t<Tab>..zzz..&"
     */
     virtual bool ReplaceRange(SwPaM& rPam, const String& rNewStr,
                               const bool bRegExReplace) = 0;
 
-    /** Insert an attribute. If rRg spans several nodes the
-        attribute is split, provided it makes sense.
-        Nodes, where this attribute does not make sense are ignored.
-        In nodes completely enclosed in the selection the attribute
-        becomes hard-formated, in all other (text-) nodes the attribute
-        is inserted into the attribute array.
-        For a character attribute, in cases where no selection exists
-        an "empty" hint is inserted. If there is a selection the attribute
-        is hard-formated and added to the node at rRg.Start().
-        If the attribute could not be inserted, the method returns
-        sal_False.
+    /** Einfuegen eines Attributs. Erstreckt sich rRg ueber
+        mehrere Nodes, wird das Attribut aufgespaltet, sofern
+        dieses Sinn macht. Nodes, in denen dieses Attribut keinen
+        Sinn macht, werden ignoriert.  In vollstaendig in der
+        Selektion eingeschlossenen Nodes wird das Attribut zu
+        harter Formatierung, in den anderen (Text-)Nodes wird das
+        Attribut in das Attributearray eingefuegt. Bei einem
+        Zeichenattribut wird ein "leerer" Hint eingefuegt,
+        wenn keine Selektion
+        vorliegt; andernfalls wird das Attribut als harte
+        Formatierung dem durch rRg.Start() bezeichneten Node
+        hinzugefuegt.  Wenn das Attribut nicht eingefuegt werden
+        konnte, liefert die Methode sal_False.
     */
     virtual bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
                                 const sal_uInt16 nFlags) = 0;
 
+    /**
+    */
     virtual bool InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
                                 const sal_uInt16 nFlags) = 0;
 

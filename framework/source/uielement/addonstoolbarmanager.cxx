@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <uielement/toolbarmerger.hxx>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 
@@ -40,11 +40,11 @@
 #include <uielement/generictoolbarcontroller.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
-#include <framework/imageproducer.hxx>
-#include <framework/sfxhelperfunctions.hxx>
+#include <helper/imageproducer.hxx>
+#include <classes/sfxhelperfunctions.hxx>
 #include <classes/fwkresid.hxx>
 #include <classes/resource.hrc>
-#include <framework/addonsoptions.hxx>
+#include <classes/addonsoptions.hxx>
 #include <uielement/comboboxtoolbarcontroller.hxx>
 #include <uielement/imagebuttontoolbarcontroller.hxx>
 #include <uielement/togglebuttontoolbarcontroller.hxx>
@@ -55,7 +55,7 @@
 #include <uielement/toolbarmerger.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
@@ -67,7 +67,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <svtools/imgdef.hxx>
 #include <svtools/toolboxcontroller.hxx>
@@ -80,7 +80,7 @@
 #include <vcl/taskpanelist.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //_________________________________________________________________________________________________________________
 
 using namespace ::com::sun::star;
@@ -98,7 +98,7 @@ namespace framework
 {
 
 static const char   TOOLBOXITEM_SEPARATOR_STR[] = "private:separator";
-static const sal_uInt16 TOOLBOXITEM_SEPARATOR_STR_LEN = sizeof( TOOLBOXITEM_SEPARATOR_STR )-1;
+static const USHORT TOOLBOXITEM_SEPARATOR_STR_LEN = sizeof( TOOLBOXITEM_SEPARATOR_STR )-1;
 
 AddonsToolBarManager::AddonsToolBarManager( const Reference< XMultiServiceFactory >& rServiceManager,
                                 const Reference< XFrame >& rFrame,
@@ -142,25 +142,25 @@ static sal_Bool IsCorrectContext( const ::rtl::OUString& rModuleIdentifier, cons
 static Image RetrieveImage( Reference< com::sun::star::frame::XFrame >& rFrame,
                             const rtl::OUString& aImageId,
                             const rtl::OUString& aURL,
-                            sal_Bool bBigImage
-)
+                            BOOL bBigImage,
+                            BOOL bHiContrast )
 {
     Image aImage;
 
     if ( aImageId.getLength() > 0 )
     {
-        aImage = framework::AddonsOptions().GetImageFromURL( aImageId, bBigImage );
+        aImage = framework::AddonsOptions().GetImageFromURL( aImageId, bBigImage, bHiContrast );
         if ( !!aImage )
             return aImage;
         else
-            aImage = GetImageFromURL( rFrame, aImageId, bBigImage );
+            aImage = GetImageFromURL( rFrame, aImageId, bBigImage, bHiContrast );
         if ( !!aImage )
             return aImage;
     }
 
-    aImage = framework::AddonsOptions().GetImageFromURL( aURL, bBigImage );
+    aImage = framework::AddonsOptions().GetImageFromURL( aURL, bBigImage, bHiContrast );
     if ( !aImage )
-        aImage = GetImageFromURL( rFrame, aImageId, bBigImage );
+        aImage = GetImageFromURL( rFrame, aImageId, bBigImage, bHiContrast );
 
     return aImage;
 }
@@ -175,7 +175,7 @@ void SAL_CALL AddonsToolBarManager::dispose() throw( RuntimeException )
         ResetableGuard aGuard( m_aLock );
         for ( sal_uInt16 n = 0; n < m_pToolBar->GetItemCount(); n++ )
         {
-            sal_uInt16 nId( m_pToolBar->GetItemId( n ) );
+            USHORT nId( m_pToolBar->GetItemId( n ) );
 
             if ( nId > 0 )
             {
@@ -203,9 +203,9 @@ bool AddonsToolBarManager::MenuItemAllowed( sal_uInt16 nId ) const
 void AddonsToolBarManager::RefreshImages()
 {
     sal_Bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
-    for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
+    for ( USHORT nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
     {
-        sal_uInt16 nId( m_pToolBar->GetItemId( nPos ) );
+        USHORT nId( m_pToolBar->GetItemId( nPos ) );
 
         if ( nId > 0 )
         {
@@ -215,10 +215,11 @@ void AddonsToolBarManager::RefreshImages()
             if ( pRuntimeItemData )
                 aImageId  = pRuntimeItemData->aImageId;
 
-            m_pToolBar->SetItemImage(
-                nId,
-                RetrieveImage( m_xFrame, aImageId, aCommandURL, bBigImages )
-            );
+            m_pToolBar->SetItemImage( nId, RetrieveImage( m_xFrame,
+                                                          aImageId,
+                                                          aCommandURL,
+                                                          bBigImages,
+                                                          m_bIsHiContrast ));
         }
     }
 }
@@ -230,7 +231,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     if ( m_bDisposed )
         return;
 
-    sal_uInt16    nId( 1 );
+    USHORT    nId( 1 );
 
     RemoveControllers();
 
@@ -260,13 +261,13 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
     for ( sal_uInt32 n = 0; n < (sal_uInt32)rAddonToolbar.getLength(); n++ )
     {
-        rtl::OUString   aValueName;
+        rtl::OUString	aValueName;
 
-        rtl::OUString   aURL;
-        rtl::OUString   aTitle;
-        rtl::OUString   aImageId;
-        rtl::OUString   aContext;
-        rtl::OUString   aTarget;
+        rtl::OUString	aURL;
+        rtl::OUString	aTitle;
+        rtl::OUString	aImageId;
+        rtl::OUString	aContext;
+        rtl::OUString	aTarget;
         rtl::OUString   aControlType;
         sal_uInt16      nWidth( 0 );
 
@@ -278,7 +279,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
         {
             if ( aURL.equalsAsciiL( TOOLBOXITEM_SEPARATOR_STR, TOOLBOXITEM_SEPARATOR_STR_LEN ))
             {
-                sal_uInt16 nCount = m_pToolBar->GetItemCount();
+                USHORT nCount = m_pToolBar->GetItemCount();
                 if ( nCount > 0 && ( m_pToolBar->GetItemType( nCount-1 ) != TOOLBOXITEM_SEPARATOR ) && nElements > 0 )
                 {
                     nElements = 0;
@@ -287,24 +288,24 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
             }
             else
             {
-                sal_uInt16 nCount = m_pToolBar->GetItemCount();
+                USHORT nCount = m_pToolBar->GetItemCount();
                 if ( bAppendSeparator && nCount > 0 && ( m_pToolBar->GetItemType( nCount-1 ) != TOOLBOXITEM_SEPARATOR ))
                 {
                     // We have to append a separator first if the last item is not a separator
                     m_pToolBar->InsertSeparator();
                 }
-                bAppendSeparator = sal_False;
+                bAppendSeparator = FALSE;
 
                 m_pToolBar->InsertItem( nId, aTitle );
 
-                Image aImage = RetrieveImage( m_xFrame, aImageId, aURL, !m_bSmallSymbols );
+                Image aImage = RetrieveImage( m_xFrame, aImageId, aURL, !m_bSmallSymbols, m_bIsHiContrast );
                 if ( !!aImage )
                     m_pToolBar->SetItemImage( nId, aImage );
 
                 // Create TbRuntimeItemData to hold additional information we will need in the future
                 AddonsParams* pRuntimeItemData = new AddonsParams;
-                pRuntimeItemData->aImageId  = aImageId;
-                pRuntimeItemData->aTarget   = aTarget;
+                pRuntimeItemData->aImageId	= aImageId;
+                pRuntimeItemData->aTarget	= aTarget;
                 m_pToolBar->SetItemData( nId, pRuntimeItemData );
                 m_pToolBar->SetItemCommand( nId, aURL );
 
@@ -428,7 +429,7 @@ IMPL_LINK( AddonsToolBarManager, Click, ToolBox*, EMPTYARG )
     if ( m_bDisposed )
         return 1;
 
-    sal_uInt16 nId( m_pToolBar->GetCurItemId() );
+    USHORT nId( m_pToolBar->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
     if ( pIter != m_aControllerMap.end() )
     {
@@ -446,7 +447,7 @@ IMPL_LINK( AddonsToolBarManager, DoubleClick, ToolBox*, EMPTYARG )
     if ( m_bDisposed )
         return 1;
 
-    sal_uInt16 nId( m_pToolBar->GetCurItemId() );
+    USHORT nId( m_pToolBar->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
     if ( pIter != m_aControllerMap.end() )
     {
@@ -475,7 +476,7 @@ IMPL_LINK( AddonsToolBarManager, Select, ToolBox*, EMPTYARG )
         return 1;
 
     sal_Int16   nKeyModifier( (sal_Int16)m_pToolBar->GetModifier() );
-    sal_uInt16      nId( m_pToolBar->GetCurItemId() );
+    USHORT      nId( m_pToolBar->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
     if ( pIter != m_aControllerMap.end() )
     {
@@ -507,6 +508,7 @@ IMPL_LINK( AddonsToolBarManager, StateChanged, StateChangedType*, pStateChangedT
 {
     if ( *pStateChangedType == STATE_CHANGE_CONTROLBACKGROUND )
     {
+        // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
     }
     return 1;
@@ -514,16 +516,17 @@ IMPL_LINK( AddonsToolBarManager, StateChanged, StateChangedType*, pStateChangedT
 
 IMPL_LINK( AddonsToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
 {
-    if ((( pDataChangedEvent->GetType() == DATACHANGED_SETTINGS )   ||
-        (  pDataChangedEvent->GetType() == DATACHANGED_DISPLAY  ))  &&
-        ( pDataChangedEvent->GetFlags() & SETTINGS_STYLE        ))
+    if ((( pDataChangedEvent->GetType() == DATACHANGED_SETTINGS	)	||
+        (  pDataChangedEvent->GetType() == DATACHANGED_DISPLAY	))	&&
+        ( pDataChangedEvent->GetFlags() & SETTINGS_STYLE		))
     {
+        // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
     }
 
-    for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
+    for ( USHORT nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
     {
-        const sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
+        const USHORT nId = m_pToolBar->GetItemId(nPos);
         Window* pWindow = m_pToolBar->GetItemWindow( nId );
         if ( pWindow )
         {

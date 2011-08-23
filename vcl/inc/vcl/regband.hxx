@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,10 +55,10 @@ IsOver.
 // element for the list with x-separations
 struct ImplRegionBandSep
 {
-    ImplRegionBandSep*          mpNextSep;
-    long                        mnXLeft;
-    long                        mnXRight;
-    sal_Bool                        mbRemoved;
+    ImplRegionBandSep*			mpNextSep;
+    long						mnXLeft;
+    long						mnXRight;
+    BOOL						mbRemoved;
 };
 
 enum LineType { LINE_ASCENDING, LINE_DESCENDING, LINE_HORIZONTAL };
@@ -66,11 +66,11 @@ enum LineType { LINE_ASCENDING, LINE_DESCENDING, LINE_HORIZONTAL };
 // element for the list with x-separations
 struct ImplRegionBandPoint
 {
-    ImplRegionBandPoint*        mpNextBandPoint;
-    long                        mnX;
-    long                        mnLineId;
-    sal_Bool                        mbEndPoint;
-    LineType                    meLineType;
+    ImplRegionBandPoint*		mpNextBandPoint;
+    long						mnX;
+    long						mnLineId;
+    BOOL						mbEndPoint;
+    LineType					meLineType;
 };
 
 // ------------------
@@ -80,13 +80,13 @@ struct ImplRegionBandPoint
 class ImplRegionBand
 {
 public:
-    ImplRegionBand*             mpNextBand;         // pointer to the next element of the list
-    ImplRegionBand*             mpPrevBand;         // pointer to the previous element of the list (only used temporaery)
-    ImplRegionBandSep*          mpFirstSep;         // root of the list with x-separations
-    ImplRegionBandPoint*        mpFirstBandPoint;   // root of the list with lines
-    long                        mnYTop;             // actual boundary of the band
-    long                        mnYBottom;
-    sal_Bool                        mbTouched;
+    ImplRegionBand* 			mpNextBand; 		// pointer to the next element of the list
+    ImplRegionBand* 			mpPrevBand; 		// pointer to the previous element of the list (only used temporaery)
+    ImplRegionBandSep*			mpFirstSep; 		// root of the list with x-separations
+    ImplRegionBandPoint*		mpFirstBandPoint;	// root of the list with lines
+    long						mnYTop; 			// actual boundary of the band
+    long						mnYBottom;
+    BOOL						mbTouched;
 
                                 // create y-band with boundaries
                                 ImplRegionBand( long nYTop, long nYBottom );
@@ -107,34 +107,34 @@ public:
                                                 const bool bIgnorePoints = true);
                                 ~ImplRegionBand();
 
-    long                        GetXLeftBoundary() const;
-    long                        GetXRightBoundary() const;
+    long						GetXLeftBoundary() const;
+    long						GetXRightBoundary() const;
 
                                 // combine overlapping bands
-    sal_Bool                        OptimizeBand();
+    BOOL						OptimizeBand();
 
                                 // generate separations from lines and process
                                 // union with existing separations
-    void                        ProcessPoints();
+    void						ProcessPoints();
                                 // insert point in the list for later processing
-    sal_Bool                        InsertPoint( long nX, long nLineID,
-                                             sal_Bool bEndPoint, LineType eLineType );
+    BOOL						InsertPoint( long nX, long nLineID,
+                                             BOOL bEndPoint, LineType eLineType );
 
-    void                        Union( long nXLeft, long nXRight );
-    void                        Intersect( long nXLeft, long nXRight );
-    void                        Exclude( long nXLeft, long nXRight );
-    void                        XOr( long nXLeft, long nXRight );
+    void						Union( long nXLeft, long nXRight );
+    void						Intersect( long nXLeft, long nXRight );
+    void						Exclude( long nXLeft, long nXRight );
+    void						XOr( long nXLeft, long nXRight );
 
-    void                        MoveX( long nHorzMove );
-    void                        ScaleX( double fHorzScale );
+    void						MoveX( long nHorzMove );
+    void						ScaleX( double fHorzScale );
 
-    sal_Bool                        IsInside( long nX );
-    sal_Bool                        IsInside( long nLeft, long nRight );
-    sal_Bool                        IsOver( long nLeft, long nRight );
+    BOOL						IsInside( long nX );
+    BOOL						IsInside( long nLeft, long nRight );
+    BOOL						IsOver( long nLeft, long nRight );
 
-    sal_Bool                        IsEmpty() const { return ((!mpFirstSep) && (!mpFirstBandPoint)); }
+    BOOL						IsEmpty() const { return ((!mpFirstSep) && (!mpFirstBandPoint)); }
 
-    sal_Bool                        operator==( const ImplRegionBand& rRegionBand ) const;
+    BOOL						operator==( const ImplRegionBand& rRegionBand ) const;
 
     /** Split the called band at the given vertical coordinate.  After the
         split the called band will cover the upper part not including nY.
@@ -148,6 +148,6 @@ public:
     ImplRegionBand*             SplitBand (const sal_Int32 nY);
 };
 
-#endif  // _SV_REGBAND_HXX
+#endif	// _SV_REGBAND_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -153,14 +153,14 @@ namespace migration
         {
             return aResult;
         }
-    }
+    }       
 
 #define MAX_HEADER_LENGTH 16
 bool IsUserWordbook( const ::rtl::OUString& rFile )
 {
-    static const sal_Char*      pVerStr2    = "WBSWG2";
-    static const sal_Char*      pVerStr5    = "WBSWG5";
-    static const sal_Char*      pVerStr6    = "WBSWG6";
+    static const sal_Char*		pVerStr2	= "WBSWG2";
+    static const sal_Char*		pVerStr5	= "WBSWG5";
+    static const sal_Char*		pVerStr6	= "WBSWG6";
     static const sal_Char*      pVerOOo7    = "OOoUserDict1";
 
     bool bRet = false;
@@ -169,7 +169,7 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
     {
         sal_Size nSniffPos = pStream->Tell();
         static sal_Size nVerOOo7Len = sal::static_int_cast< sal_Size >(strlen( pVerOOo7 ));
-        sal_Char pMagicHeader[MAX_HEADER_LENGTH];
+        sal_Char pMagicHeader[MAX_HEADER_LENGTH]; 
         pMagicHeader[ nVerOOo7Len ] = '\0';
         if ((pStream->Read((void *) pMagicHeader, nVerOOo7Len) == nVerOOo7Len))
         {
@@ -177,15 +177,15 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
                 bRet = true;
             else
             {
-                sal_uInt16 nLen;
+                USHORT nLen;
                 pStream->Seek (nSniffPos);
                 *pStream >> nLen;
                 if ( nLen < MAX_HEADER_LENGTH )
                 {
                    pStream->Read(pMagicHeader, nLen);
                    pMagicHeader[nLen] = '\0';
-                    if ( !strcmp(pMagicHeader, pVerStr2)
-                     ||  !strcmp(pMagicHeader, pVerStr5)
+                    if ( !strcmp(pMagicHeader, pVerStr2) 
+                     ||  !strcmp(pMagicHeader, pVerStr5) 
                      ||  !strcmp(pMagicHeader, pVerStr6) )
                     bRet = true;
                 }
@@ -210,29 +210,29 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
             TStringVectorPtr aFileList = getFiles( m_sSourceDir );
             TStringVector::const_iterator aI = aFileList->begin();
             while ( aI != aFileList->end() )
-            {
+            {                
                 if (IsUserWordbook(*aI) )
                 {
                     ::rtl::OUString sSourceLocalName = aI->copy( m_sSourceDir.getLength() );
                     ::rtl::OUString sTargetName = sTargetDir + sSourceLocalName;
                     INetURLObject aURL( sTargetName );
                     aURL.removeSegment();
-                    checkAndCreateDirectory( aURL );
+                    checkAndCreateDirectory( aURL );            
                     ::osl::FileBase::RC aResult = ::osl::File::copy( *aI, sTargetName );
                     if ( aResult != ::osl::FileBase::E_None )
                     {
                         ::rtl::OString aMsg( "WordbookMigration::copyFiles: cannot copy " );
                         aMsg += ::rtl::OUStringToOString( *aI, RTL_TEXTENCODING_UTF8 ) + " to "
                              +  ::rtl::OUStringToOString( sTargetName, RTL_TEXTENCODING_UTF8 );
-                        OSL_FAIL( aMsg.getStr() );
+                        OSL_ENSURE( sal_False, aMsg.getStr() );
                     }
                 }
                 ++aI;
             }
-        }
+        } 
         else
         {
-            OSL_FAIL( "WordbookMigration::copyFiles: no user installation!" );
+            OSL_ENSURE( sal_False, "WordbookMigration::copyFiles: no user installation!" );
         }
     }
 
@@ -279,11 +279,11 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
         {
             beans::NamedValue aValue;
             *pIter >>= aValue;
-            if ( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UserData" ) ) )
+            if ( aValue.Name.equalsAscii( "UserData" ) )
             {
                 if ( !(aValue.Value >>= m_sSourceDir) )
                 {
-                    OSL_FAIL( "WordbookMigration::initialize: argument UserData has wrong type!" );
+                    OSL_ENSURE( false, "WordbookMigration::initialize: argument UserData has wrong type!" );
                 }
                 m_sSourceDir += sSourceSubDir;
                 break;
@@ -319,7 +319,7 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}   // namespace migration
+}	// namespace migration
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

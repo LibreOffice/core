@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ public class _XBackend extends MultiMethodTest {
 
         try {
             XUpdateHandler aHandler = oObj.getUpdateHandler(
-                                              "org.openoffice.Office.TypeDetection",
+                                              "org.openoffice.Office.TypeDetection", 
                                               "illegal");
             log.println("Exception expected -- FAILED");
             res = false;
@@ -106,10 +106,10 @@ public class _XBackend extends MultiMethodTest {
         try {
             XStringSubstitution sts = createStringSubstitution(
                                               (XMultiServiceFactory) tParam.getMSF());
-            String ent = sts.getSubstituteVariableValue("$(inst)") +
+            String ent = sts.getSubstituteVariableValue("$(inst)") + 
                          "/share/registry";
             XUpdateHandler aHandler = oObj.getUpdateHandler(
-                                              "org.openoffice.Office.Jobs",
+                                              "org.openoffice.Office.Jobs", 
                                               ent);
 
             if (aHandler == null) {
@@ -138,11 +138,11 @@ public class _XBackend extends MultiMethodTest {
         try {
             XStringSubstitution sts = createStringSubstitution(
                                               (XMultiServiceFactory) tParam.getMSF());
-            String ent = sts.getSubstituteVariableValue("$(inst)") +
+            String ent = sts.getSubstituteVariableValue("$(inst)") + 
                          "/share/registry";
             XLayer[] Layers = oObj.listLayers(
                                       "org.openoffice.Office.Linguistic", ent);
-
+            
             for (int i = 0; i < Layers.length; i++) {
                 log.println("Checking Layer " + i);
                 res &= checkLayer(Layers[i]);
@@ -175,7 +175,7 @@ public class _XBackend extends MultiMethodTest {
             if (Layers.length==0) {
                 System.out.println("No Layers found -- FAILED");
                 res &= false;
-            }
+            }            
         } catch (com.sun.star.configuration.backend.BackendAccessException e) {
             log.println("unexpected Exception " + e + " -- FAILED");
             res = false;

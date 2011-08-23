@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,8 +74,8 @@ enum BitmapAdjustment
 class SdDisplay : public Control
 {
 private:
-    BitmapEx    aBitmapEx;
-    Fraction    aScale;
+    BitmapEx 	aBitmapEx;
+    Fraction	aScale;
 
 public:
     SdDisplay( ::Window* pWin, SdResId Id );
@@ -83,8 +83,8 @@ public:
 
     virtual void Paint( const Rectangle& rRect );
 
-    void    SetBitmapEx( BitmapEx* pBmpEx );
-    void    SetScale( const Fraction& rFrac );
+    void	SetBitmapEx( BitmapEx* pBmpEx );
+    void	SetScale( const Fraction& rFrac );
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
@@ -101,58 +101,59 @@ public:
         ::Window* pParent, const SdResId& rSdResId );
     virtual ~AnimationWindow();
 
-    void    AddObj( ::sd::View& rView );
-    void    CreateAnimObj( ::sd::View& rView );
+    void	AddObj( ::sd::View& rView );
+    void	CreateAnimObj( ::sd::View& rView );
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
 protected:
-    virtual sal_Bool    Close();
-    virtual void    Resize();
-    virtual void    FillInfo( SfxChildWinInfo& ) const;
+    virtual BOOL	Close();
+    virtual void	Resize();
+    virtual void	FillInfo( SfxChildWinInfo& ) const;
 
 private:
-    SdDisplay       aCtlDisplay;
-    ImageButton     aBtnFirst;
-    ImageButton     aBtnReverse;
-    ImageButton     aBtnStop;
-    ImageButton     aBtnPlay;
-    ImageButton     aBtnLast;
-    NumericField    aNumFldBitmap;
-    TimeField       aTimeField;
-    ListBox         aLbLoopCount;
-    FixedLine       aGrpBitmap;
-    ImageButton     aBtnGetOneObject;
-    ImageButton     aBtnGetAllObjects;
-    ImageButton     aBtnRemoveBitmap;
-    ImageButton     aBtnRemoveAll;
-    FixedText       aFtCount;
-    FixedInfo       aFiCount;
-    FixedLine       aGrpAnimation;
+    SdDisplay		aCtlDisplay;
+    ImageButton 	aBtnFirst;
+    ImageButton 	aBtnReverse;
+    ImageButton 	aBtnStop;
+    ImageButton 	aBtnPlay;
+    ImageButton 	aBtnLast;
+    NumericField	aNumFldBitmap;
+    TimeField		aTimeField;
+    ListBox 		aLbLoopCount;
 
-    RadioButton     aRbtGroup;
-    RadioButton     aRbtBitmap;
-    FixedText       aFtAdjustment;
-    ListBox         aLbAdjustment;
-    PushButton      aBtnCreateGroup;
+    ImageButton		aBtnGetOneObject;
+    ImageButton		aBtnGetAllObjects;
+    ImageButton		aBtnRemoveBitmap;
+    ImageButton		aBtnRemoveAll;
+    FixedText		aFtCount;
+    FixedInfo		aFiCount;
+    FixedLine		aGrpBitmap;
 
-    ::Window*       pWin;
-    List            aBmpExList;
-    List            aTimeList;
+    RadioButton		aRbtGroup;
+    RadioButton		aRbtBitmap;
+    FixedText		aFtAdjustment;
+    ListBox 		aLbAdjustment;
+    PushButton		aBtnCreateGroup;
+    FixedLine		aGrpAnimation;
+
+    ::Window* 		pWin;
+    List			aBmpExList;
+    List			aTimeList;
     SdDrawDocument* pMyDoc;
-    BitmapEx*       pBitmapEx;
+    BitmapEx* 		pBitmapEx;
 
-    Size            aSize;
-    Size            aFltWinSize;
-    Size            aDisplaySize;
-    Size            aBmpSize;
-    sal_Bool            bMovie;
-    sal_Bool            bAllObjects;
+    Size			aSize;
+    Size			aFltWinSize;
+    Size			aDisplaySize;
+    Size			aBmpSize;
+    BOOL			bMovie;
+    BOOL			bAllObjects;
 
-    SfxBindings*                pBindings;
-    AnimationControllerItem*    pControllerItem;
+    SfxBindings*				pBindings;
+    AnimationControllerItem*	pControllerItem;
 
-    ScopeLock       maPlayLock;
+    ScopeLock		maPlayLock;
     //------------------------------------
 
     DECL_LINK( ClickFirstHdl, void * );
@@ -166,11 +167,11 @@ private:
     DECL_LINK( ModifyBitmapHdl, void * );
     DECL_LINK( ModifyTimeHdl, void * );
 
-    void            UpdateControl( sal_uLong nPos, sal_Bool bDisableCtrls = sal_False );
-    void            ResetAttrs();
-    void            WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
+    void			UpdateControl( ULONG nPos, BOOL bDisableCtrls = FALSE );
+    void			ResetAttrs();
+    void			WaitInEffect( ULONG nMilliSeconds, ULONG nTime,
                                         SfxProgress* pStbMgr ) const;
-    Fraction        GetScale();
+    Fraction		GetScale();
 };
 
 /*************************************************************************
@@ -183,10 +184,10 @@ class AnimationControllerItem : public SfxControllerItem
 {
 
 public:
-    AnimationControllerItem( sal_uInt16, AnimationWindow*, SfxBindings* );
+    AnimationControllerItem( USHORT, AnimationWindow*, SfxBindings* );
 
 protected:
-    virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
+    virtual void StateChanged( USHORT nSId, SfxItemState eState,
         const SfxPoolItem* pState );
 private:
     AnimationWindow* pAnimationWin;

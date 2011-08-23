@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,8 +31,8 @@
 #include "WTypeSelect.hxx"
 #include "WizardPages.hrc"
 #include "dbustrings.hrc"
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <osl/diagnose.h>
 #include "FieldDescriptions.hxx"
 #include "WCopyTable.hxx"
 #include "dbaccess_helpid.hrc"
@@ -43,14 +43,13 @@
 #include "sqlmessage.hxx"
 #include "FieldControls.hxx"
 
-#include "dbaccess_slotid.hrc"
-
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
+//	using namespace ::com::sun::star::sdbcx;
 
 //========================================================================
 // OWizTypeSelectControl
@@ -99,7 +98,7 @@ void OWizTypeSelectControl::DeactivateAggregate( EControlType eType )
 // -----------------------------------------------------------------------
 void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 {
-    OSL_ENSURE(nRow == -1,"nRow muss -1 sein!");
+    DBG_ASSERT(nRow == -1,"nRow muss -1 sein!");
     (void)nRow;
 
     MultiListBox &aListBox = ((OWizTypeSelect*)GetParent())->m_lbColumnNames;
@@ -108,7 +107,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 
     sal_uInt16 nPos = aListBox.GetEntryPos( String( pCurFieldDescr->GetName() ) );
     pCurFieldDescr = static_cast< OFieldDescription* >( aListBox.GetEntryData( nPos ) );
-    OSL_ENSURE( pCurFieldDescr, "OWizTypeSelectControl::CellModified: Columnname/type not found in the listbox!" );
+    OSL_ENSURE( pCurFieldDescr, "OWizTypeSelectControl::CellModified: Columnname/type not found in the listbox!" ); 
     if ( !pCurFieldDescr )
         return;
     setCurrentFieldDescData( pCurFieldDescr );
@@ -118,7 +117,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
     const OPropColumnEditCtrl* pColumnName = getColumnCtrl();
     if ( pColumnName )
         sNewName = pColumnName->GetText();
-
+    
     switch(nColId)
     {
         case FIELD_PRPOERTY_COLUMNNAME:
@@ -130,8 +129,8 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                 if ( getMetaData().is() && !getMetaData()->supportsMixedCaseQuotedIdentifiers() )
                 {
                     bCase = sal_False;
-                    sal_uInt16 nCount = aListBox.GetEntryCount();
-                    for (sal_uInt16 i=0 ; !bDoubleName && i < nCount ; ++i)
+                    USHORT nCount = aListBox.GetEntryCount();
+                    for (USHORT i=0 ; !bDoubleName && i < nCount ; ++i)
                     {
                         ::rtl::OUString sEntry(aListBox.GetEntry(i));
                         bDoubleName = sNewName.equalsIgnoreAsciiCase(sEntry);
@@ -140,10 +139,10 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                         bDoubleName = sNewName.equalsIgnoreAsciiCase(pWiz->getPrimaryKeyName());
 
                 }
-                else
+                else 
                     bDoubleName =  ((aListBox.GetEntryPos(String(sNewName)) != LISTBOX_ENTRY_NOTFOUND)
-                                    || ( pWiz->shouldCreatePrimaryKey()
-                                        &&  pWiz->getPrimaryKeyName() == sNewName) );
+                                    || ( pWiz->shouldCreatePrimaryKey() 
+                                        &&	pWiz->getPrimaryKeyName() == sNewName) );
 
                 if ( bDoubleName )
                 {
@@ -177,7 +176,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                 aListBox.RemoveEntry(nPos);
                 aListBox.InsertEntry(pCurFieldDescr->GetName(),nPos);
                 aListBox.SetEntryData(nPos,pCurFieldDescr);
-
+                
                 pWiz->replaceColumn(nPos,pCurFieldDescr,sOldName);
             }
             break;
@@ -185,7 +184,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
     saveCurrentFieldDescData();
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::lang::Locale  OWizTypeSelectControl::GetLocale() const
+::com::sun::star::lang::Locale	OWizTypeSelectControl::GetLocale() const
 {
     return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->GetLocale();
 }
@@ -195,12 +194,12 @@ Reference< XNumberFormatter > OWizTypeSelectControl::GetFormatter() const
     return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->GetFormatter();
 }
 // -----------------------------------------------------------------------------
-TOTypeInfoSP    OWizTypeSelectControl::getTypeInfo(sal_Int32 _nPos)
+TOTypeInfoSP	OWizTypeSelectControl::getTypeInfo(sal_Int32 _nPos)
 {
     return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->getDestTypeInfo(_nPos);
 }
 // -----------------------------------------------------------------------------
-const OTypeInfoMap* OWizTypeSelectControl::getTypeInfo() const
+const OTypeInfoMap*	OWizTypeSelectControl::getTypeInfo() const
 {
     return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->getDestTypeInfo();
 }
@@ -247,7 +246,7 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent, SvStream* _pStream )
     DBG_CTOR(OWizTypeSelect,NULL);
     m_lbColumnNames.SetSelectHdl(LINK(this,OWizTypeSelect,ColumnSelectHdl));
 
-    ModuleRes aModuleRes(IMG_JOINS);
+    ModuleRes aModuleRes(isHiContrast(&m_lbColumnNames) ? IMG_JOINS_H : IMG_JOINS);
     ImageList aImageList(aModuleRes);
     m_imgPKey = aImageList.GetImage(IMG_PRIMARY_KEY);
 
@@ -332,7 +331,7 @@ void OWizTypeSelect::ActivatePage( )
     Reset();
     m_bFirstTime = bOldFirstTime;
 
-    m_lbColumnNames.SelectEntryPos(static_cast<sal_uInt16>(m_nDisplayRow));
+    m_lbColumnNames.SelectEntryPos(static_cast<USHORT>(m_nDisplayRow));
     m_nDisplayRow = 0;
     m_lbColumnNames.GetSelectHdl().Call(&m_lbColumnNames);
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,8 +147,8 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_pExampleFrame = new SwOneExampleFrame( m_aExampleWIN,
                                     EX_SHOW_DEFAULT_PAGE, &aLink, &m_sExampleURL );
 
-    m_aExampleWIN.Show( sal_False );
-    m_aExampleContainerWIN.Show(sal_True);
+    m_aExampleWIN.Show( FALSE );
+    m_aExampleContainerWIN.Show(TRUE);
 
     m_aLeftMF.SetValue(m_aLeftMF.Normalize(DEFAULT_LEFT_DISTANCE), FUNIT_TWIP);
     m_aTopMF.SetValue(m_aTopMF.Normalize(DEFAULT_TOP_DISTANCE), FUNIT_TWIP);
@@ -166,7 +166,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_aTopMF.SetUpHdl(aFrameHdl);
     m_aTopMF.SetDownHdl(aFrameHdl);
     m_aTopMF.SetLoseFocusHdl(aFrameHdl);
-
+    
     FieldUnit eFieldUnit = ::GetDfltMetric(sal_False);
     ::SetFieldUnit( m_aLeftMF, eFieldUnit );
     ::SetFieldUnit( m_aTopMF, eFieldUnit );
@@ -230,7 +230,7 @@ void SwMailMergeLayoutPage::ActivatePage()
                 m_pExampleWrtShell->GotoFly( m_pAddressBlockFormat->GetName() );
                 m_pExampleWrtShell->DelRight();
                 m_pAddressBlockFormat = 0;
-                m_pExampleWrtShell->Pop(sal_False);
+                m_pExampleWrtShell->Pop(FALSE);
             }
             else
             {
@@ -368,7 +368,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
             if(aItem.bIsColumn)
             {
                 String sConvertedColumn = aItem.sText;
-                for(sal_uInt16 nColumn = 0;
+                for(USHORT nColumn = 0;
                         nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
                                                                                     ++nColumn)
                 {
@@ -459,7 +459,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     {
         //there's already text at the desired position
         //go to start of the doc, directly!
-        rShell.SttEndDoc(sal_True);
+        rShell.SttEndDoc(TRUE);
         //and go by paragraph until the position is reached
         long nYPos = rShell.GetCharRect().Top();
         while(nYPos < GREETING_TOP_DISTANCE)
@@ -482,6 +482,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
         rShell.MovePara(GetfnParaCurr(), GetfnParaStart());
     }
     bool bSplitNode = rShell.GetText().Len() > 0;
+//    rShell.SetTxtFmtColl( rShell.GetTxtCollFromPool( RES_POOLCOLL_GREETING ) );
     sal_Int32 nMoves = rConfigItem.GetGreetingMoves();
     if( !bExample && 0 != nMoves )
     {
@@ -625,7 +626,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                         {
                             String sDB(sDBName);
                             String sConvertedColumn = aItem.sText;
-                            for(sal_uInt16 nColumn = 0;
+                            for(USHORT nColumn = 0;
                                     nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
                                                                                                 ++nColumn)
                             {
@@ -666,7 +667,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     {
         rShell.Push();
         rShell.SplitNode();
-        rShell.Pop(sal_False);
+        rShell.Pop(FALSE);
     }
     //put the cursor to the start of the paragraph
     rShell.SttPara();
@@ -676,8 +677,8 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
 
 IMPL_LINK(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, void*, EMPTYARG)
 {
-    m_aExampleWIN.Show( sal_True );
-    m_aExampleContainerWIN.Show(sal_False);
+    m_aExampleWIN.Show( TRUE );
+    m_aExampleContainerWIN.Show(FALSE);
 
     Reference< XModel > & xModel = m_pExampleFrame->GetModel();
     //now the ViewOptions should be set properly
@@ -707,8 +708,10 @@ IMPL_LINK(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, void*, EMPTYARG)
 
     Any aZoom;
     aZoom <<= (sal_Int16)DocumentZoomType::ENTIRE_PAGE;
-    m_xViewProperties->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
+    m_xViewProperties->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
 
+
+//    m_pExampleWrtShell->SetTxtFmtColl( rSh.GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
     const SwFmtFrmSize& rPageSize = m_pExampleWrtShell->GetPageDesc(
                                      m_pExampleWrtShell->GetCurPageDesc()).GetMaster().GetFrmSize();
     m_aLeftMF.SetMax(rPageSize.GetWidth() - DEFAULT_LEFT_DISTANCE);
@@ -731,9 +734,9 @@ IMPL_LINK(SwMailMergeLayoutPage, ZoomHdl_Impl, ListBox*, pBox)
         }
         Any aZoom;
         aZoom <<= eType;
-        m_xViewProperties->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
+        m_xViewProperties->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
         aZoom <<= nZoom;
-        m_xViewProperties->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_VALUE)), aZoom);
+        m_xViewProperties->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ZOOM_VALUE)), aZoom);
 
     }
     return 0;
@@ -763,7 +766,7 @@ IMPL_LINK(SwMailMergeLayoutPage, ChangeAddressHdl_Impl, MetricField*, EMPTYARG)
 IMPL_LINK(SwMailMergeLayoutPage, GreetingsHdl_Impl, PushButton*, pButton)
 {
     bool bDown = pButton == &m_aDownPB;
-    sal_Bool bMoved = m_pExampleWrtShell->MoveParagraph( bDown ? 1 : -1 );
+    BOOL bMoved = m_pExampleWrtShell->MoveParagraph( bDown ? 1 : -1 );
     if (bMoved || bDown)
         m_pWizard->GetConfigItem().MoveGreeting(bDown ? 1 : -1 );
     if(!bMoved && bDown)

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -158,7 +158,7 @@ namespace frm
         {
             m_pEngine->SetModifyHdl( LINK( this, ORichTextModel, OnEngineContentModified ) );
 
-            sal_uLong nEngineControlWord = m_pEngine->GetControlWord();
+            ULONG nEngineControlWord = m_pEngine->GetControlWord();
             nEngineControlWord = nEngineControlWord & ~EE_CNTRL_AUTOPAGESIZE;
             m_pEngine->SetControlWord( nEngineControlWord );
 
@@ -549,7 +549,7 @@ namespace frm
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "ORichTextModel::getEditEngine: caught an exception!" );
+                OSL_ENSURE( sal_False, "ORichTextModel::getEditEngine: caught an exception!" );
             }
         }
         return pEngine;

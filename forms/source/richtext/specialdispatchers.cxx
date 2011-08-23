@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,15 +79,15 @@ namespace frm
         if ( !pEngine )
             return;
 
-        sal_uInt16 nParagraphs = pEngine->GetParagraphCount();
+        USHORT nParagraphs = pEngine->GetParagraphCount();
         if ( nParagraphs )
         {
-            sal_uInt16 nLastParaNumber = nParagraphs - 1;
+            USHORT nLastParaNumber = nParagraphs - 1;
             xub_StrLen nParaLen = pEngine->GetTextLen( nLastParaNumber );
             getEditView()->SetSelection( ESelection( 0, 0, nLastParaNumber, nParaLen ) );
         }
     }
-
+    
     //--------------------------------------------------------------------
     FeatureStateEvent OSelectAllDispatcher::buildStatusEvent() const
     {
@@ -144,7 +144,7 @@ namespace frm
 
         pEngine->SetVertical( !pEngine->IsVertical() );
     }
-
+    
     //--------------------------------------------------------------------
     FeatureStateEvent OTextDirectionDispatcher::buildStatusEvent() const
     {
@@ -176,7 +176,7 @@ namespace frm
         const PropertyValue* pLookupEnd = _rArguments.getConstArray() + _rArguments.getLength();
         while ( pLookup != pLookupEnd )
         {
-            if ( pLookup->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Enable" ) ) )
+            if ( pLookup->Name.equalsAscii( "Enable" ) )
                 break;
             ++pLookup;
         }
@@ -189,7 +189,7 @@ namespace frm
             return new SfxBoolItem( (WhichId)m_nAttributeId, bEnable );
         }
 
-        OSL_FAIL( "OAsianFontLayoutDispatcher::convertDispatchArgsToItem: did not find the one and only argument!" );
+        OSL_ENSURE( sal_False, "OAsianFontLayoutDispatcher::convertDispatchArgsToItem: did not find the one and only argument!" );
         return NULL;
     }
 

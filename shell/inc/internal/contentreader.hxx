@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ public:
 
     /** Get the chunkbuffer.
 
-        @return
+        @return 
         the chunkbuffer of the document.
     */
     inline ChunkBuffer_t const & getChunkBuffer( ) const{ return m_ChunkBuffer; };
@@ -63,8 +63,8 @@ protected: // protected because its only an implementation relevant class
         attribute structure.
     */
     virtual void start_element(
-        const std::wstring& raw_name,
-        const std::wstring& local_name,
+        const std::wstring& raw_name, 
+        const std::wstring& local_name, 
         const XmlTagAttributes_t& attributes);
 
     /** end_element occurs when a tag is closed
@@ -84,7 +84,7 @@ protected: // protected because its only an implementation relevant class
     */
     virtual void characters(const std::wstring& character);
 
-protected:
+protected: 
     /** choose an appropriate tag reader to handle the tag.
 
         @param tag_name
@@ -92,13 +92,13 @@ protected:
         @param XmlAttributes
         attribute structure of the tag to save in.
     */
-    ITag* chooseTagReader(
+    ITag* chooseTagReader( 
         const std::wstring& tag_name, const XmlTagAttributes_t& XmlAttributes );
 
     /** Get the list of style locale pair.
 
-        @return
-        the Style-Locale map
+        @return 
+        the Style-Locale map 
     */
     inline StyleLocaleMap_t const & getStyleMap( ) const{ return m_StyleMap; };
 
@@ -122,7 +122,7 @@ private:
     ChunkBuffer_t   m_ChunkBuffer;
     StyleLocaleMap_t      m_StyleMap;
     LocaleSet_t m_DefaultLocale;
-};
+}; 
 
 #endif
 

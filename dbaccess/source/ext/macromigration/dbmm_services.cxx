@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,15 @@ namespace dbmm
 
     static void initializeModule()
     {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        createRegistryInfo_MacroMigrationDialogService();
+        static bool bInitialized( false );
+        if ( !bInitialized )
+        {
+            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+            if ( !bInitialized )
+            {
+                createRegistryInfo_MacroMigrationDialogService();
+            }
+        }
     }
 
 //........................................................................

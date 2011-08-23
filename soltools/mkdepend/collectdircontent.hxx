@@ -28,6 +28,8 @@ typedef pair<string, string> PathFilePair;
 struct IncludesCollection {
     private:
     DirMap allIncludes;
+//    bool search(string filePath);
+//    bool add_dir(string dirPath);
     PathFilePair split_path(const string& filePath);
     void add_to_collection(const string& dirPath);
 
@@ -54,6 +56,6 @@ int call_IncludesCollection_exists(struct IncludesCollection* m, const char* fil
 }
 #endif
 
-#endif
+#endif // COLLECTDIRCONTENT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

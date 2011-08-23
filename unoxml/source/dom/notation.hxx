@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,16 +26,14 @@
  *
  ************************************************************************/
 
-#ifndef DOM_NOTATION_HXX
-#define DOM_NOTATION_HXX
-
-#include <libxml/tree.h>
+#ifndef _NOTATION_HXX
+#define _NOTATION_HXX
 
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNotation.hpp>
-
-#include <node.hxx>
-
+#include "node.hxx"
+#include <libxml/tree.h>
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -43,20 +41,14 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    typedef cppu::ImplInheritanceHelper1< CNode, XNotation > CNotation_Base;
-
-    class CNotation
-        : public CNotation_Base
+    class CNotation : public cppu::ImplInheritanceHelper1< CNode, XNotation >
     {
-    private:
-        friend class CDocument;
-
+        friend class CNode;
     private:
         xmlNotationPtr m_aNotationPtr;
 
     protected:
-        CNotation(CDocument const& rDocument, ::osl::Mutex const& rMutex,
-                xmlNotationPtr const pNotation);
+        CNotation(const xmlNotationPtr);
 
         /**
         The public identifier of this notation.

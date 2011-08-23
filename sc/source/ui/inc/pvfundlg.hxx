@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include <sfx2/itemconnect.hxx>
 #include "pivot.hxx"
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 // ============================================================================
 
@@ -58,8 +58,8 @@ class ScDPFunctionListBox : public MultiListBox
 public:
     explicit            ScDPFunctionListBox( Window* pParent, const ResId& rResId );
 
-    void                SetSelection( sal_uInt16 nFuncMask );
-    sal_uInt16              GetSelection() const;
+    void                SetSelection( USHORT nFuncMask );
+    USHORT              GetSelection() const;
 
 private:
     void                FillFunctionNames();
@@ -69,12 +69,12 @@ private:
 
 class ScDPFunctionDlg : public ModalDialog
 {
-    typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
+    typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
 public:
-    explicit            ScDPFunctionDlg( Window* pParent, const ScDPLabelDataVector& rLabelVec,
+    explicit            ScDPFunctionDlg( Window* pParent, const ScDPLabelDataVec& rLabelVec,
                             const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
 
-    sal_uInt16              GetFuncMask() const;
+    USHORT              GetFuncMask() const;
     ::com::sun::star::sheet::DataPilotFieldReference GetFieldRef() const;
 
 private:
@@ -84,7 +84,7 @@ private:
     const ::rtl::OUString& GetBaseItemName(const ::rtl::OUString& rLayoutName) const;
 
     /** Searches for a listbox entry, starts search at specified position. */
-    sal_uInt16 FindBaseItemPos( const String& rEntry, sal_uInt16 nStartPos ) const;
+    sal_uInt16 FindBaseItemPos( const String& rEntry, USHORT nStartPos ) const;
 
     DECL_LINK( SelectHdl, ListBox* );
     DECL_LINK( DblClickHdl, MultiListBox* );
@@ -111,7 +111,7 @@ private:
 
     ScDPListBoxWrapper  maLbTypeWrp;        /// Wrapper for direct usage of API constants.
 
-    const ScDPLabelDataVector& mrLabelVec;  /// Data of all labels.
+    const ScDPLabelDataVec& mrLabelVec;     /// Data of all labels.
     bool                mbEmptyItem;        /// true = Empty base item in listbox.
 };
 
@@ -124,7 +124,7 @@ public:
                             const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData,
                             const ScDPNameVec& rDataFields, bool bEnableLayout );
 
-    sal_uInt16              GetFuncMask() const;
+    USHORT              GetFuncMask() const;
 
     void                FillLabelData( ScDPLabelData& rLabelData ) const;
 
@@ -174,7 +174,7 @@ private:
     const ::rtl::OUString& GetFieldName(const ::rtl::OUString& rLayoutName) const;
 
     /** Searches for a listbox entry, starts search at specified position. */
-    sal_uInt16 FindListBoxEntry( const ListBox& rLBox, const String& rEntry, sal_uInt16 nStartPos ) const;
+    sal_uInt16 FindListBoxEntry( const ListBox& rLBox, const String& rEntry, USHORT nStartPos ) const;
 
     DECL_LINK( RadioClickHdl, RadioButton* );
     DECL_LINK( CheckHdl, CheckBox* );
@@ -212,7 +212,7 @@ private:
     ScDPObject&         mrDPObj;            /// The DataPilot object (for member names).
     ScDPLabelData       maLabelData;        /// Cache for members data.
 
-    typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
+    typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
     NameMapType maDataFieldNameMap; /// Cache for displayed name to field name mapping.
 };
 
@@ -221,12 +221,12 @@ private:
 class ScDPShowDetailDlg : public ModalDialog
 {
 public:
-    explicit            ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient );
+    explicit            ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, USHORT nOrient );
 
     virtual short       Execute();
 
-    /**
-     * @return String internal name of the selected field.  Note that this may
+    /** 
+     * @return String internal name of the selected field.  Note that this may 
      *         be different from the name displayed in the dialog if the field
      *         has a layout name.
      */
@@ -242,7 +242,7 @@ private:
     CancelButton        maBtnCancel;
     HelpButton          maBtnHelp;
 
-    typedef ::boost::unordered_map<String, long, ScStringHashCode> DimNameIndexMap;
+    typedef ::std::hash_map<String, long, ScStringHashCode> DimNameIndexMap;
     DimNameIndexMap     maNameIndexMap;
     ScDPObject&         mrDPObj;
 };

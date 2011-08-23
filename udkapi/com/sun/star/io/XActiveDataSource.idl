@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,54 +24,58 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_io_XActiveDataSource_idl__
-#define __com_sun_star_io_XActiveDataSource_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
-#include <com/sun/star/io/XOutputStream.idl>
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module io {
-
-//=============================================================================
-
+#ifndef __com_sun_star_io_XActiveDataSource_idl__ 
+#define __com_sun_star_io_XActiveDataSource_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_io_XOutputStream_idl__ 
+#include <com/sun/star/io/XOutputStream.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module io {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: interface com::sun::star::io::XActiveDataSource
 /** has to be implemented if the class should be able to write into an output
     stream.
     @see XActiveDataControl.
  */
 published interface XActiveDataSource: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: method com::sun::star::io::XActiveDataSource::setOutputStream
-    /** plugs the output stream.
-
+    /** plugs the output stream. 
+        
         <p>If <type>XConnectable</type> is also implemented, this
         method should query <var>aStream</var> for a
         <type>XConnectable</type> and connect both.
         </p>
      */
-    void setOutputStream( [in] com::sun::star::io::XOutputStream aStream );
-
-    //-------------------------------------------------------------------------
-
+    void setOutputStream( [in] com::sun::star::io::XOutputStream aStream ); 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from idl: method com::sun::star::io::XActiveDataSource::getOutputStream
-    /** @returns
+    /** @returns  
                 the plugged stream.
      */
-    com::sun::star::io::XOutputStream getOutputStream();
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    com::sun::star::io::XOutputStream getOutputStream(); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

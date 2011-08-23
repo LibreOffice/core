@@ -26,7 +26,15 @@
  *
  ************************************************************************/
 
-#include <sal/cppunit.h>
+#include "precompiled_sfx2.hxx"
+
+#include "preextstl.h"
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+#include "postextstl.h"
+
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/util/DateTime.hpp>
@@ -108,12 +116,12 @@ void MetadatableTest::test()
     MockMetadatable m4(*pReg);
     MockMetadatable m5(*pReg);
     ::rtl::OUString empty;
-    ::rtl::OUString content( RTL_CONSTASCII_USTRINGPARAM("content.xml") );
-    ::rtl::OUString styles( RTL_CONSTASCII_USTRINGPARAM("styles.xml") );
-    ::rtl::OUString sid1( RTL_CONSTASCII_USTRINGPARAM("id1") );
-    ::rtl::OUString sid2( RTL_CONSTASCII_USTRINGPARAM("id2") );
-    ::rtl::OUString sid3( RTL_CONSTASCII_USTRINGPARAM("id3") );
-    ::rtl::OUString sid4( RTL_CONSTASCII_USTRINGPARAM("id4") );
+    ::rtl::OUString content( ::rtl::OUString::createFromAscii("content.xml") );
+    ::rtl::OUString styles ( ::rtl::OUString::createFromAscii("styles.xml") );
+    ::rtl::OUString sid1( ::rtl::OUString::createFromAscii("id1") );
+    ::rtl::OUString sid2( ::rtl::OUString::createFromAscii("id2") );
+    ::rtl::OUString sid3( ::rtl::OUString::createFromAscii("id3") );
+    ::rtl::OUString sid4( ::rtl::OUString::createFromAscii("id4") );
     beans::StringPair id1(content, sid1);
     beans::StringPair id2(content, sid2);
     beans::StringPair id3(content, sid3);

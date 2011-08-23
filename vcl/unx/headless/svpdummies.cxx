@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,17 +33,17 @@
 // SalObject
 SvpSalObject::SvpSalObject()
 {
-    m_aSystemChildData.nSize        = sizeof( SystemChildData );
-    m_aSystemChildData.pDisplay     = NULL;
-    m_aSystemChildData.aWindow      = 0;
+    m_aSystemChildData.nSize		= sizeof( SystemChildData );
+    m_aSystemChildData.pDisplay 	= NULL;
+    m_aSystemChildData.aWindow		= 0;
     m_aSystemChildData.pSalFrame    = 0;
-    m_aSystemChildData.pWidget      = 0;
-    m_aSystemChildData.pVisual      = 0;
-    m_aSystemChildData.nDepth       = 0;
-    m_aSystemChildData.aColormap    = 0;
-    m_aSystemChildData.pAppContext  = NULL;
-    m_aSystemChildData.aShellWindow = 0;
-    m_aSystemChildData.pShellWidget = NULL;
+    m_aSystemChildData.pWidget		= 0;
+    m_aSystemChildData.pVisual		= 0;
+    m_aSystemChildData.nDepth		= 0;
+    m_aSystemChildData.aColormap	= 0;
+    m_aSystemChildData.pAppContext	= NULL;
+    m_aSystemChildData.aShellWindow	= 0;
+    m_aSystemChildData.pShellWidget	= NULL;
 }
 
 SvpSalObject::~SvpSalObject()
@@ -51,18 +51,17 @@ SvpSalObject::~SvpSalObject()
 }
 
 void SvpSalObject::ResetClipRegion() {}
-sal_uInt16 SvpSalObject::GetClipRegionType() { return 0; }
-void SvpSalObject::BeginSetClipRegion( sal_uLong ) {}
+USHORT SvpSalObject::GetClipRegionType() { return 0; }
+void SvpSalObject::BeginSetClipRegion( ULONG ) {}
 void SvpSalObject::UnionClipRegion( long, long, long, long ) {}
 void SvpSalObject::EndSetClipRegion() {}
 void SvpSalObject::SetPosSize( long, long, long, long ) {}
-void SvpSalObject::Show( sal_Bool ) {}
-void SvpSalObject::Enable( sal_Bool ) {}
+void SvpSalObject::Show( BOOL ) {}
+void SvpSalObject::Enable( BOOL ) {}
 void SvpSalObject::GrabFocus() {}
 void SvpSalObject::SetBackground() {}
 void SvpSalObject::SetBackground( SalColor ) {}
 const SystemEnvData* SvpSalObject::GetSystemData() const { return &m_aSystemChildData; }
-void SvpSalObject::InterceptChildWindowKeyDown( sal_Bool ) {}
 
 // SalI18NImeStatus
 SvpImeStatus::~SvpImeStatus() {}

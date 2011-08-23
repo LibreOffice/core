@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -272,35 +272,35 @@ namespace pcr
     {
         return m_aImplControl.getControlType();
     }
-
+    
     //--------------------------------------------------------------------
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
     inline ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext > SAL_CALL CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::getControlContext() throw (::com::sun::star::uno::RuntimeException)
     {
         return m_aImplControl.getControlContext();
     }
-
+    
     //--------------------------------------------------------------------
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
     inline void SAL_CALL CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::setControlContext( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext >& _controlcontext ) throw (::com::sun::star::uno::RuntimeException)
     {
         m_aImplControl.setControlContext( _controlcontext );
     }
-
+    
     //--------------------------------------------------------------------
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
     inline ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::getControlWindow() throw (::com::sun::star::uno::RuntimeException)
     {
         return m_aImplControl.getControlWindow();
     }
-
+    
     //--------------------------------------------------------------------
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
     inline ::sal_Bool SAL_CALL CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::isModified(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         return m_aImplControl.isModified();
     }
-
+    
     //--------------------------------------------------------------------
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
     inline void SAL_CALL CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::notifyModifiedValue(  ) throw (::com::sun::star::uno::RuntimeException)

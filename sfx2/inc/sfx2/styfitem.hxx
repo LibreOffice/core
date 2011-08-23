@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,15 +33,20 @@
 
 #include <vcl/bitmap.hxx>
 #include <vcl/image.hxx>
+#include <tools/list.hxx>
 #include <tools/rc.hxx>
 #include <rsc/rscsfx.hxx>
-#include <vector>
 
+#ifndef _SFX_STYFITEM_HXX_NOLIST
 struct SfxFilterTupel {
     String aName;
-    sal_uInt16 nFlags;
+    USHORT nFlags;
 };
-typedef ::std::vector< SfxFilterTupel* > SfxStyleFilter;
+
+DECLARE_LIST(SfxStyleFilter, SfxFilterTupel*)
+#else
+typedef List SfxStyleFilter;
+#endif
 
 // CLASS -----------------------------------------------------------------
 
@@ -51,7 +56,7 @@ class SfxStyleFamilyItem: public Resource
     Bitmap          aBitmap;
     String          aText;
     String          aHelpText;
-    sal_uInt16          nFamily;
+    USHORT          nFamily;
     SfxStyleFilter  aFilterList;
 
 public:
@@ -67,10 +72,10 @@ public:
 
     // --------------------------------------------------------------------
     class GrantAccess { friend class SfxStyleFamilies; };
-    void            SetImage( const Image& _rImg ) { aImage = _rImg; }
+    void			SetImage( const Image& _rImg ) { aImage = _rImg; }
 };
 
-typedef ::std::vector< SfxStyleFamilyItem* > SfxStyleFamilyList;
+DECLARE_LIST(SfxStyleFamilyList, SfxStyleFamilyItem*)
 
 class SFX2_DLLPUBLIC SfxStyleFamilies: public Resource
 {
@@ -84,11 +89,11 @@ public:
                         SfxStyleFamilies( ) {};
                         ~SfxStyleFamilies();
 
-    size_t              size() const
-                        { return aEntryList.size(); }
+    USHORT              Count() const
+                        { return (USHORT)aEntryList.Count(); }
 
-    const SfxStyleFamilyItem* at(size_t nIdx) const
-                        { return (SfxStyleFamilyItem*)(aEntryList.empty() ? NULL : aEntryList[nIdx]); }
+    const SfxStyleFamilyItem* GetObject(ULONG nIdx) const
+                        { return (SfxStyleFamilyItem*)aEntryList.GetObject(nIdx); }
 
     /** updates the images of all single SfxStyleFamilyItems with new images from the given resource
 
@@ -100,7 +105,7 @@ public:
         @return
             <TRUE/> if an image list for the requested mode could be found in the given resource.
     */
-    sal_Bool    updateImages( const ResId& _rId );
+    sal_Bool	updateImages( const ResId& _rId, const BmpColorMode _eMode );
 };
 
 #endif

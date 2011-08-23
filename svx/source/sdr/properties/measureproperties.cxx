@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,19 +69,19 @@ namespace sdr
         }
 
         MeasureProperties::MeasureProperties(SdrObject& rObj)
-        :   TextProperties(rObj)
+        :	TextProperties(rObj)
         {
         }
 
         MeasureProperties::MeasureProperties(const MeasureProperties& rProps, SdrObject& rObj)
-        :   TextProperties(rProps, rObj)
+        :	TextProperties(rProps, rObj)
         {
         }
 
         MeasureProperties::~MeasureProperties()
         {
         }
-
+        
         BaseProperties& MeasureProperties::Clone(SdrObject& rObj) const
         {
             return *(new MeasureProperties(*this, rObj));
@@ -118,9 +118,9 @@ namespace sdr
             GetObjectItemSet();
 
             //#71958# by default, the show units Bool-Item is set as hard
-            // attribute to sal_True to aviod confusion when copying SdrMeasureObj's
+            // attribute to TRUE to aviod confusion when copying SdrMeasureObj's
             // from one application to another
-            mpItemSet->Put(SdrMeasureShowUnitItem(sal_True));
+            mpItemSet->Put(SdrMeasureShowUnitItem(TRUE));
 
             basegfx::B2DPolygon aNewPolygon;
             aNewPolygon.append(basegfx::B2DPoint(100.0, 0.0));

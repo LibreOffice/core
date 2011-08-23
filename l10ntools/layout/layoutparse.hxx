@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ public:
     LayoutXMLFile( bool mergeMode );
 
     void SearchL10NElements( XMLParentNode *pCur, int pos = 0 );
-    sal_Bool Write( ByteString &aFilename );
+    BOOL Write( ByteString &aFilename );
     void HandleElement( XMLElement* element );
     void InsertL10NElement( ByteString const& id, XMLElement* element );
 

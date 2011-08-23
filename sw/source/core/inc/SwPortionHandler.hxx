@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ class String;
  * held by the corresponding SwTxtNode.
  *
  * The SwPortionHandler can be used with the
- * SwTextFrame::VisitPortions(...) method.
+ * SwTextFrame::VisitPortions(...) method.  
  */
 class SwPortionHandler
 {
@@ -61,8 +61,8 @@ public:
      * model string.
      */
     virtual void Text(
-        sal_uInt16 nLength,      /// length of this portion in the model string
-        sal_uInt16 nType         /// type of this portion
+        USHORT nLength,      /// length of this portion in the model string
+        USHORT nType         /// type of this portion
         ) = 0;
 
     /** special portion. This method is called for every non-text
@@ -71,9 +71,9 @@ public:
      * the text which is displayed, and the type of the portion.
      */
     virtual void Special(
-        sal_uInt16 nLength,      /// length of this portion in the model string
+        USHORT nLength,      /// length of this portion in the model string
         const String& rText, /// text which is painted on-screen
-        sal_uInt16 nType         /// type of this portion
+        USHORT nType         /// type of this portion
         ) = 0;
 
     /** line break. This method is called whenever a line break in the
@@ -90,11 +90,11 @@ public:
      * Skip() between portions is not allowed.
      */
     virtual void Skip(
-        sal_uInt16 nLength   /// number of 'model string' characters to be skipped
+        USHORT nLength   /// number of 'model string' characters to be skipped
         ) = 0;
 
     /** end of paragraph. This method is to be called when all the
-     * paragraph's portions have been processed.
+     * paragraph's portions have been processed. 
      */
     virtual void Finish() = 0;
 };

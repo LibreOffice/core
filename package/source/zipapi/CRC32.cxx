@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,6 +39,7 @@
 #include <PackageConstants.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 
+using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 
@@ -47,10 +48,10 @@ using namespace com::sun::star::io;
 
 CRC32::CRC32()
 : nCRC(0)
-{
+{ 
 }
 CRC32::~CRC32()
-{
+{ 
 }
 void SAL_CALL CRC32::reset()
     throw(RuntimeException)
@@ -64,8 +65,8 @@ sal_Int32 SAL_CALL CRC32::getValue()
 }
 /** Update CRC32 with specified sequence of bytes
  */
-void SAL_CALL CRC32::updateSegment(const Sequence< sal_Int8 > &b,
-                                    sal_Int32 off,
+void SAL_CALL CRC32::updateSegment(const Sequence< sal_Int8 > &b, 
+                                    sal_Int32 off, 
                                     sal_Int32 len)
         throw(RuntimeException)
 {

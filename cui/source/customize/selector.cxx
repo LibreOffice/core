@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,18 +26,21 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
 #include <vcl/help.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/metric.hxx>
 #include "selector.hxx"
 #include <dialmgr.hxx>
 #include "selector.hrc"
-#include <svx/fmresids.hrc> // for RID_SVXIMG_...
+#include <svx/fmresids.hrc>	// for RID_SVXIMG_...
 #include <svx/dialmgr.hxx>  // for RID_SVXIMG_...
 #include <cuires.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
+#include <sfx2/macrconf.hxx>
 #include <sfx2/minfitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dispatch.hxx>
@@ -88,10 +91,10 @@ SvxConfigFunctionListBox_Impl::SvxConfigFunctionListBox_Impl( Window* pParent, c
     , pCurEntry( 0 )
     , m_pDraggingEntry( 0 )
 {
-    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
+    SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     GetModel()->SetSortMode( SortAscending );
 
-    // Timer for the BallonHelp
+    // Timer f"ur die BallonHelp
     aTimer.SetTimeout( 200 );
     aTimer.SetTimeoutHdl(
         LINK( this, SvxConfigFunctionListBox_Impl, TimerHdl ) );
@@ -141,8 +144,8 @@ IMPL_LINK( SvxConfigFunctionListBox_Impl, TimerHdl, Timer*, EMPTYARG)
 
 void SvxConfigFunctionListBox_Impl::ClearAll()
 {
-    sal_uInt16 nCount = aArr.Count();
-    for ( sal_uInt16 i=0; i<nCount; ++i )
+    USHORT nCount = aArr.Count();
+    for ( USHORT i=0; i<nCount; i++ )
     {
         SvxGroupInfo_Impl *pData = aArr[i];
         delete pData;
@@ -150,6 +153,42 @@ void SvxConfigFunctionListBox_Impl::ClearAll()
 
     aArr.Remove( 0, nCount );
     Clear();
+}
+
+SvLBoxEntry* SvxConfigFunctionListBox_Impl::GetEntry_Impl( const String& rName )
+{
+    SvLBoxEntry *pEntry = First();
+    while ( pEntry )
+    {
+        if ( GetEntryText( pEntry ) == rName )
+            return pEntry;
+        pEntry = Next( pEntry );
+    }
+
+    return NULL;
+}
+
+SvLBoxEntry* SvxConfigFunctionListBox_Impl::GetEntry_Impl( USHORT nId )
+{
+    SvLBoxEntry *pEntry = First();
+    while ( pEntry )
+    {
+        SvxGroupInfo_Impl *pData = (SvxGroupInfo_Impl*) pEntry->GetUserData();
+        if ( pData && pData->nOrd == nId )
+            return pEntry;
+        pEntry = Next( pEntry );
+    }
+
+    return NULL;
+}
+
+USHORT SvxConfigFunctionListBox_Impl::GetId( SvLBoxEntry *pEntry )
+{
+    SvxGroupInfo_Impl *pData = pEntry ?
+        (SvxGroupInfo_Impl*) pEntry->GetUserData() : 0;
+    if ( pData )
+        return pData->nOrd;
+    return 0;
 }
 
 String SvxConfigFunctionListBox_Impl::GetHelpText( SvLBoxEntry *pEntry )
@@ -207,9 +246,13 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
         : SvTreeListBox( pParent, rResId )
         , m_bShowSlots( _bShowSlots ),
     m_hdImage(ResId(IMG_HARDDISK,*rResId.GetResMgr())),
+    m_hdImage_hc(ResId(IMG_HARDDISK_HC,*rResId.GetResMgr())),
     m_libImage(ResId(IMG_LIB,*rResId.GetResMgr())),
+    m_libImage_hc(ResId(IMG_LIB_HC,*rResId.GetResMgr())),
     m_macImage(ResId(IMG_MACRO,*rResId.GetResMgr())),
+    m_macImage_hc(ResId(IMG_MACRO_HC,*rResId.GetResMgr())),
     m_docImage(ResId(IMG_DOC,*rResId.GetResMgr())),
+    m_docImage_hc(ResId(IMG_DOC_HC,*rResId.GetResMgr())),
     m_sMyMacros(String(ResId(STR_MYMACROS,*rResId.GetResMgr()))),
     m_sProdMacros(String(ResId(STR_PRODMACROS,*rResId.GetResMgr())))
 {
@@ -220,14 +263,19 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
         m_xFrame.set( xFrame );
     }
 
-    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
+    SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
 
     ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
 
     SetNodeBitmaps(
         aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-        aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
-    );
+        aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
+        BMP_COLOR_NORMAL );
+
+    SetNodeBitmaps(
+        aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
+        aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
+        BMP_COLOR_HIGHCONTRAST );
 }
 
 
@@ -238,8 +286,8 @@ SvxConfigGroupListBox_Impl::~SvxConfigGroupListBox_Impl()
 
 void SvxConfigGroupListBox_Impl::ClearAll()
 {
-    sal_uInt16 nCount = aArr.Count();
-    for ( sal_uInt16 i=0; i<nCount; ++i )
+    USHORT nCount = aArr.Count();
+    for ( USHORT i=0; i<nCount; i++ )
     {
         SvxGroupInfo_Impl *pData = aArr[i];
         delete pData;
@@ -268,7 +316,7 @@ namespace
             if ( xContext.is() )
                 xScripts.set( xContext->getScriptContainer(), UNO_QUERY );
         }
-
+            
         return Reference< XModel >( xScripts, UNO_QUERY );
     }
 
@@ -316,12 +364,12 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
             Sequence< Reference< browse::XBrowseNode > > children =
                 _rxRootNode->getChildNodes();
 
-            sal_Bool bIsRootNode = _rxRootNode->getName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Root"));
+            BOOL bIsRootNode = _rxRootNode->getName().equalsAscii("Root");
 
             /* To mimic current starbasic behaviour we
             need to make sure that only the current document
             is displayed in the config tree. Tests below
-            set the bDisplay flag to sal_False if the current
+            set the bDisplay flag to FALSE if the current
             node is a first level child of the Root and is NOT
             either the current document, user or share */
             OUString sCurrentDocTitle;
@@ -331,14 +379,14 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                 sCurrentDocTitle = ::comphelper::DocumentInfo::getDocumentTitle( xWorkingDocument );
             }
 
-            for ( long n = 0; n < children.getLength(); ++n )
+            for ( long n = 0; n < children.getLength(); n++ )
             {
                 Reference< browse::XBrowseNode >& theChild = children[n];
                 //#139111# some crash reports show that it might be unset
                 if ( !theChild.is() )
                     continue;
                 ::rtl::OUString sUIName = theChild->getName();
-                sal_Bool bDisplay = sal_True;
+                BOOL bDisplay = TRUE;
 
                 if  (   bIsRootNode
                     ||  ( m_bShowSlots && _pParentEntry && ( GetModel()->GetDepth( _pParentEntry ) == 0 ) )
@@ -346,19 +394,19 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                         // then the user & share are added at depth=1
                     )
                 {
-                    if ( sUIName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "user" ) ) )
+                    if ( sUIName.equalsAscii( "user" ) )
                     {
                         sUIName = m_sMyMacros;
                         bIsRootNode = sal_True;
                     }
-                    else if ( sUIName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "share" ) ) )
+                    else if ( sUIName.equalsAscii( "share" ) )
                     {
                         sUIName = m_sProdMacros;
                         bIsRootNode = sal_True;
                     }
                     else if ( !sUIName.equals( sCurrentDocTitle ) )
                     {
-                        bDisplay = sal_False;
+                        bDisplay = FALSE;
                     }
                 }
 
@@ -371,9 +419,13 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                 SvLBoxEntry* pNewEntry = InsertEntry( sUIName, _pParentEntry );
 
                 ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-                Image aImage = GetImage( theChild, aContext.getUNOContext(), bIsRootNode );
-                SetExpandedEntryBmp( pNewEntry, aImage );
-                SetCollapsedEntryBmp( pNewEntry, aImage );
+                Image aImage = GetImage( theChild, aContext.getUNOContext(), bIsRootNode, BMP_COLOR_NORMAL );
+                SetExpandedEntryBmp( pNewEntry, aImage, BMP_COLOR_NORMAL );
+                SetCollapsedEntryBmp( pNewEntry, aImage, BMP_COLOR_NORMAL );
+
+                aImage = GetImage( theChild, aContext.getUNOContext(), bIsRootNode, BMP_COLOR_HIGHCONTRAST );
+                SetExpandedEntryBmp( pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST );
+                SetCollapsedEntryBmp( pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST );
 
                 SvxGroupInfo_Impl* pInfo =
                     new SvxGroupInfo_Impl( SVX_CFGGROUP_SCRIPTCONTAINER, 0, theChild );
@@ -386,7 +438,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                     * way to determine if a basic lib had children
                     * without having to ask for them (which forces
                     * the library to be loaded */
-                    pNewEntry->EnableChildsOnDemand( sal_True );
+                    pNewEntry->EnableChildsOnDemand( TRUE );
                 }
                 else
                 {
@@ -395,11 +447,11 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                     Sequence< Reference< browse::XBrowseNode > > grandchildren =
                         children[n]->getChildNodes();
 
-                    for ( sal_Int32 m = 0; m < grandchildren.getLength(); ++m )
+                    for ( sal_Int32 m = 0; m < grandchildren.getLength(); m++ )
                     {
                         if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                         {
-                            pNewEntry->EnableChildsOnDemand( sal_True );
+                            pNewEntry->EnableChildsOnDemand( TRUE );
                             break;
                         }
                     }
@@ -415,7 +467,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
 
 void SvxConfigGroupListBox_Impl::Init()
 {
-    SetUpdateMode(sal_False);
+    SetUpdateMode(FALSE);
     ClearAll();
 
     Reference< XComponentContext > xContext;
@@ -437,8 +489,8 @@ void SvxConfigGroupListBox_Impl::Init()
 
         Reference< ::com::sun::star::frame::XModuleManager >
             xModuleManager( xMCF->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.frame.ModuleManager" )),
+                OUString::createFromAscii(
+                    "com.sun.star.frame.ModuleManager" ),
                 xContext ),
             UNO_QUERY );
 
@@ -450,8 +502,8 @@ void SvxConfigGroupListBox_Impl::Init()
 
         Reference< container::XNameAccess > xNameAccess(
             xMCF->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.frame.UICommandDescription" )),
+                OUString::createFromAscii(
+                    "com.sun.star.frame.UICommandDescription" ),
                 xContext ),
             UNO_QUERY );
 
@@ -462,8 +514,8 @@ void SvxConfigGroupListBox_Impl::Init()
 
         Reference< container::XNameAccess > xAllCategories(
             xMCF->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.ui.UICategoryDescription" )),
+                OUString::createFromAscii(
+                    "com.sun.star.ui.UICategoryDescription" ),
                 xContext ),
             UNO_QUERY );
 
@@ -493,7 +545,7 @@ void SvxConfigGroupListBox_Impl::Init()
             Sequence< sal_Int16 > gids =
                 xDIP->getSupportedCommandGroups();
 
-            for ( sal_Int32 i = 0; i < gids.getLength(); ++i )
+            for ( sal_Int32 i = 0; i < gids.getLength(); i++ )
             {
                 Sequence< frame::DispatchInformation > commands;
                 try
@@ -545,7 +597,7 @@ void SvxConfigGroupListBox_Impl::Init()
                 ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
             xCtx.set( _xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
             Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory")) ), UNO_QUERY_THROW );
+                OUString::createFromAscii( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
             rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
         }
         catch( const Exception& )
@@ -565,7 +617,7 @@ void SvxConfigGroupListBox_Impl::Init()
 
                 SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
                 pNewEntry->SetUserData( pInfo );
-                pNewEntry->EnableChildsOnDemand( sal_True );
+                pNewEntry->EnableChildsOnDemand( TRUE );
                 aArr.Insert( pInfo, aArr.Count() );
             }
             else
@@ -575,21 +627,20 @@ void SvxConfigGroupListBox_Impl::Init()
         }
     }
     MakeVisible( GetEntry( 0,0 ) );
-    SetUpdateMode( sal_True );
+    SetUpdateMode( TRUE );
 }
 
-Image SvxConfigGroupListBox_Impl::GetImage(
-    Reference< browse::XBrowseNode > node,
-    Reference< XComponentContext > xCtx,
-    bool bIsRootNode
-)
+Image SvxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > node, Reference< XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast )
 {
     Image aImage;
     if ( bIsRootNode )
     {
-        if ( node->getName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "user" ) ) || node->getName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "share" ) ) )
+        if ( node->getName().equalsAscii( "user" ) || node->getName().equalsAscii( "share" ) )
         {
-            aImage = m_hdImage;
+            if( bHighContrast == BMP_COLOR_NORMAL )
+                aImage = m_hdImage;
+            else
+                aImage = m_hdImage_hc;
         }
         else
         {
@@ -602,7 +653,7 @@ Image SvxConfigGroupListBox_Impl::GetImage(
                     xModuleManager(
                         xCtx->getServiceManager()
                             ->createInstanceWithContext(
-                                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager")),
+                                OUString::createFromAscii("com.sun.star.frame.ModuleManager"),
                                 xCtx ),
                             UNO_QUERY_THROW );
                 Reference<container::XNameAccess> xModuleConfig(
@@ -614,7 +665,7 @@ Image SvxConfigGroupListBox_Impl::GetImage(
                 Any aAny = xModuleConfig->getByName(appModule);
                 if( sal_True != ( aAny >>= moduleDescr ) )
                 {
-                    throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("SFTreeListBox::Init: failed to get PropertyValue")), Reference< XInterface >());
+                    throw RuntimeException(OUString::createFromAscii("SFTreeListBox::Init: failed to get PropertyValue"), Reference< XInterface >());
                 }
                 beans::PropertyValue const * pmoduleDescr =
                     moduleDescr.getConstArray();
@@ -631,20 +682,40 @@ Image SvxConfigGroupListBox_Impl::GetImage(
             }
             if( factoryURL.getLength() > 0 )
             {
-                aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL), false );
+                if( bHighContrast == BMP_COLOR_NORMAL )
+                    aImage = SvFileInformationManager::GetFileImage(
+                        INetURLObject(factoryURL), false,
+                        BMP_COLOR_NORMAL );
+                else
+                    aImage = SvFileInformationManager::GetFileImage(
+                        INetURLObject(factoryURL), false,
+                        BMP_COLOR_HIGHCONTRAST );
             }
             else
             {
-                aImage = m_docImage;
+                if( bHighContrast == BMP_COLOR_NORMAL )
+                    aImage = m_docImage;
+                else
+                    aImage = m_docImage_hc;
             }
         }
     }
     else
     {
         if( node->getType() == browse::BrowseNodeTypes::SCRIPT )
-            aImage = m_macImage;
+        {
+            if( bHighContrast == BMP_COLOR_NORMAL )
+                aImage = m_macImage;
+            else
+                aImage = m_macImage_hc;
+        }
         else
-            aImage = m_libImage;
+        {
+            if( bHighContrast == BMP_COLOR_NORMAL )
+                aImage = m_libImage;
+            else
+                aImage = m_libImage_hc;
+        }
     }
     return aImage;
 }
@@ -658,7 +729,7 @@ SvxConfigGroupListBox_Impl::getDocumentModel(
             xCtx->getServiceManager();
     Reference< frame::XDesktop > desktop (
         mcf->createInstanceWithContext(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")),                 xCtx ),
+            OUString::createFromAscii("com.sun.star.frame.Desktop"),                 xCtx ),
             UNO_QUERY );
 
     Reference< container::XEnumerationAccess > componentsAccess =
@@ -686,12 +757,12 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
 {
     SvLBoxEntry *pEntry = FirstSelected();
     SvxGroupInfo_Impl *pInfo = (SvxGroupInfo_Impl*) pEntry->GetUserData();
-    pFunctionListBox->SetUpdateMode(sal_False);
+    pFunctionListBox->SetUpdateMode(FALSE);
     pFunctionListBox->ClearAll();
     if ( pInfo->nKind != SVX_CFGGROUP_FUNCTION &&
              pInfo->nKind != SVX_CFGGROUP_SCRIPTCONTAINER )
     {
-        pFunctionListBox->SetUpdateMode(sal_True);
+        pFunctionListBox->SetUpdateMode(TRUE);
         return;
     }
 
@@ -718,7 +789,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                 {
                 }
 
-                for ( sal_Int32 i = 0; i < commands.getLength(); ++i )
+                for ( sal_Int32 i = 0; i < commands.getLength(); i++ )
                 {
                     if ( commands[i].Command.getLength() == 0 )
                     {
@@ -742,9 +813,9 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
 
                         if ( a >>= aPropSeq )
                         {
-                            for ( sal_Int32 k = 0; k < aPropSeq.getLength(); ++k )
+                            for ( sal_Int32 k = 0; k < aPropSeq.getLength(); k++ )
                             {
-                                if ( aPropSeq[k].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Name" ) ) )
+                                if ( aPropSeq[k].Name.equalsAscii( "Name" ) )
                                 {
                                     aPropSeq[k].Value >>= aLabel;
                                     break;
@@ -795,7 +866,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                     Sequence< Reference< browse::XBrowseNode > > children =
                         rootNode->getChildNodes();
 
-                    for ( long n = 0; n < children.getLength(); ++n )
+                    for ( long n = 0; n < children.getLength(); n++ )
                     {
                         if (!children[n].is())
                             continue;
@@ -828,11 +899,14 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                                 new SvxGroupInfo_Impl(
                                     SVX_CFGFUNCTION_SCRIPT, 123, uri, description );
 
-                            Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False );
+                            Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_NORMAL );
                             SvLBoxEntry* pNewEntry =
                                 pFunctionListBox->InsertEntry( children[n]->getName(), NULL );
-                            pFunctionListBox->SetExpandedEntryBmp( pNewEntry, aImage );
-                            pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage );
+                            pFunctionListBox->SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
+                            pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
+                            aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_HIGHCONTRAST );
+                            pFunctionListBox->SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
+                            pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
 
                             pNewEntry->SetUserData( _pGroupInfo );
 
@@ -859,34 +933,34 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
     if ( pFunctionListBox->GetEntryCount() )
         pFunctionListBox->Select( pFunctionListBox->GetEntry( 0, 0 ) );
 
-    pFunctionListBox->SetUpdateMode(sal_True);
+    pFunctionListBox->SetUpdateMode(TRUE);
 }
 
-sal_Bool SvxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
+BOOL SvxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
 {
-    sal_Bool bRet = SvTreeListBox::Expand( pParent );
+    BOOL bRet = SvTreeListBox::Expand( pParent );
     if ( bRet )
     {
         // Wieviele Entries k"onnen angezeigt werden ?
-        sal_uLong nEntries = GetOutputSizePixel().Height() / GetEntryHeight();
+        ULONG nEntries = GetOutputSizePixel().Height() / GetEntryHeight();
 
         // Wieviele Kinder sollen angezeigt werden ?
-        sal_uLong nChildCount = GetVisibleChildCount( pParent );
+        ULONG nChildCount = GetVisibleChildCount( pParent );
 
         // Passen alle Kinder und der parent gleichzeitig in die View ?
         if ( nChildCount+1 > nEntries )
         {
             // Wenn nicht, wenigstens parent ganz nach oben schieben
-            MakeVisible( pParent, sal_True );
+            MakeVisible( pParent, TRUE );
         }
         else
         {
             // An welcher relativen ViewPosition steht der aufzuklappende parent
             SvLBoxEntry *pEntry = GetFirstEntryInView();
-            sal_uLong nParentPos = 0;
+            ULONG nParentPos = 0;
             while ( pEntry && pEntry != pParent )
             {
-                ++nParentPos;
+                nParentPos++;
                 pEntry = GetNextEntryInView( pEntry );
             }
 
@@ -902,7 +976,7 @@ sal_Bool SvxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
 void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
 {
     SvxGroupInfo_Impl *pInfo = (SvxGroupInfo_Impl*) pEntry->GetUserData();
-    pInfo->bWasOpened = sal_True;
+    pInfo->bWasOpened = TRUE;
     switch ( pInfo->nKind )
     {
         case SVX_CFGGROUP_SCRIPTCONTAINER:
@@ -916,7 +990,7 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
         }
 
         default:
-            OSL_FAIL( "Falscher Gruppentyp!" );
+            DBG_ERROR( "Falscher Gruppentyp!" );
             break;
     }
 }
@@ -929,7 +1003,7 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
  */
 
 SvxScriptSelectorDialog::SvxScriptSelectorDialog(
-  Window* pParent, sal_Bool bShowSlots, const Reference< frame::XFrame >& xFrame )
+  Window* pParent, BOOL bShowSlots, const Reference< frame::XFrame >& xFrame )
     :
     ModelessDialog( pParent, CUI_RES( RID_DLG_SCRIPTSELECTOR ) ),
     aDialogDescription( this, CUI_RES( TXT_SELECTOR_DIALOG_DESCRIPTION ) ),
@@ -966,6 +1040,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
 
     aCategories.SetFunctionListBox( &aCommands );
     aCategories.Init();
+    // aCategories.Select( aCategories.GetEntry( 0, 0 ) );
 
     aCategories.SetSelectHdl(
             LINK( this, SvxScriptSelectorDialog, SelectHdl ) );
@@ -985,7 +1060,7 @@ void SvxScriptSelectorDialog::ResizeControls()
     Size s, news;
     long gap;
 
-    sal_uInt16 style = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP |
+    USHORT style = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP |
                    TEXT_DRAW_LEFT | TEXT_DRAW_WORDBREAK;
 
     // get dimensions of dialog instructions control
@@ -1078,12 +1153,12 @@ SvxScriptSelectorDialog::UpdateUI()
             aCommands.GetHelpText( aCommands.FirstSelected() );
         aDescriptionText.SetText( rMessage );
 
-        aOKButton.Enable( sal_True );
+        aOKButton.Enable( TRUE );
     }
     else
     {
         aDescriptionText.SetText( String() );
-        aOKButton.Enable( sal_False );
+        aOKButton.Enable( FALSE );
     }
 }
 
@@ -1093,7 +1168,7 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
     {
         // If we are displaying Slot API commands then the dialog is being
         // run from Tools/Configure and we should not close it, just hide it
-        if ( m_bShowSlots == sal_False )
+        if ( m_bShowSlots == FALSE )
         {
             EndDialog( RET_CANCEL );
         }
@@ -1108,7 +1183,7 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
 
         // If we are displaying Slot API commands then this the dialog is being
         // run from Tools/Configure and we should not close it
-        if ( m_bShowSlots == sal_False )
+        if ( m_bShowSlots == FALSE )
         {
             EndDialog( RET_OK );
         }
@@ -1138,6 +1213,12 @@ void
 SvxScriptSelectorDialog::SetDialogDescription( const String& rDescription )
 {
     aDialogDescription.SetText( rDescription );
+}
+
+USHORT
+SvxScriptSelectorDialog::GetSelectedId()
+{
+    return aCommands.GetId( aCommands.GetLastSelectedEntry() );
 }
 
 String

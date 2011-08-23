@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,6 +31,12 @@
 #include <svx/camera3d.hxx>
 #include <tools/stream.hxx>
 
+/*************************************************************************
+|*
+|* Konstruktor
+|*
+\************************************************************************/
+
 Camera3D::Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
                    double fFocalLen, double fBankAng) :
     aResetPos(rPos),
@@ -38,7 +44,7 @@ Camera3D::Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLook
     fResetFocalLength(fFocalLen),
     fResetBankAngle(fBankAng),
     fBankAngle(fBankAng),
-    bAutoAdjustProjection(sal_True)
+    bAutoAdjustProjection(TRUE)
 {
     SetVPD(0);
     SetPosition(rPos);
@@ -46,11 +52,23 @@ Camera3D::Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLook
     SetFocalLength(fFocalLen);
 }
 
+/*************************************************************************
+|*
+|* Default-Konstruktor
+|*
+\************************************************************************/
+
 Camera3D::Camera3D()
 {
     basegfx::B3DPoint aVector3D(0.0 ,0.0 ,1.0);
     Camera3D(aVector3D, basegfx::B3DPoint());
 }
+
+/*************************************************************************
+|*
+|* Konstruktor
+|*
+\************************************************************************/
 
 void Camera3D::Reset()
 {
@@ -61,18 +79,26 @@ void Camera3D::Reset()
     SetFocalLength(fResetFocalLength);
 }
 
-// Set default values for reset
+/*************************************************************************
+|*
+|* Defaultwerte fuer Reset setzen
+|*
+\************************************************************************/
 
 void Camera3D::SetDefaults(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
                             double fFocalLen, double fBankAng)
 {
-    aResetPos           = rPos;
-    aResetLookAt        = rLookAt;
-    fResetFocalLength   = fFocalLen;
-    fResetBankAngle     = fBankAng;
+    aResetPos			= rPos;
+    aResetLookAt		= rLookAt;
+    fResetFocalLength	= fFocalLen;
+    fResetBankAngle 	= fBankAng;
 }
 
-// Set ViewWindow and adjust PRP
+/*************************************************************************
+|*
+|* ViewWindow setzen und PRP anpassen
+|*
+\************************************************************************/
 
 void Camera3D::SetViewWindow(double fX, double fY, double fW, double fH)
 {
@@ -80,6 +106,12 @@ void Camera3D::SetViewWindow(double fX, double fY, double fW, double fH)
     if ( bAutoAdjustProjection )
         SetFocalLength(fFocalLength);
 }
+
+/*************************************************************************
+|*
+|* Kameraposition setzen
+|*
+\************************************************************************/
 
 void Camera3D::SetPosition(const basegfx::B3DPoint& rNewPos)
 {
@@ -92,6 +124,12 @@ void Camera3D::SetPosition(const basegfx::B3DPoint& rNewPos)
     }
 }
 
+/*************************************************************************
+|*
+|* Blickpunkt setzen
+|*
+\************************************************************************/
+
 void Camera3D::SetLookAt(const basegfx::B3DPoint& rNewLookAt)
 {
     if ( rNewLookAt != aLookAt )
@@ -101,6 +139,12 @@ void Camera3D::SetLookAt(const basegfx::B3DPoint& rNewLookAt)
         SetBankAngle(fBankAngle);
     }
 }
+
+/*************************************************************************
+|*
+|* Position und Blickpunkt setzen
+|*
+\************************************************************************/
 
 void Camera3D::SetPosAndLookAt(const basegfx::B3DPoint& rNewPos,
                                const basegfx::B3DPoint& rNewLookAt)
@@ -116,6 +160,12 @@ void Camera3D::SetPosAndLookAt(const basegfx::B3DPoint& rNewPos,
     }
 }
 
+/*************************************************************************
+|*
+|* seitlichen Neigungswinkel setzen
+|*
+\************************************************************************/
+
 void Camera3D::SetBankAngle(double fAngle)
 {
     basegfx::B3DVector aDiff(aPosition - aLookAt);
@@ -127,7 +177,7 @@ void Camera3D::SetBankAngle(double fAngle)
         aPrj.setY(-1.0);
     }
     else
-    {   // aPrj = Projection from aDiff on the XZ-plane
+    {	// aPrj = Projektion von aDiff auf die XZ-Ebene
         aPrj.setY(0.0);
 
         if ( aDiff.getY() < 0.0 )
@@ -155,7 +205,7 @@ void Camera3D::SetBankAngle(double fAngle)
         aTemp.set(2, 2, fCos);
         aTemp.set(2, 1, fSin);
         aTemp.set(1, 2, -fSin);
-
+        
         aTf *= aTemp;
     }
 
@@ -168,12 +218,12 @@ void Camera3D::SetBankAngle(double fAngle)
         aTemp.set(2, 2, fCos);
         aTemp.set(0, 2, fSin);
         aTemp.set(2, 0, -fSin);
-
+        
         aTf *= aTemp;
     }
 
     aTf.rotate(0.0, 0.0, fBankAngle);
-
+    
     {
         basegfx::B3DHomMatrix aTemp;
         const double fSin(aDiff.getX());
@@ -183,10 +233,10 @@ void Camera3D::SetBankAngle(double fAngle)
         aTemp.set(2, 2, fCos);
         aTemp.set(0, 2, fSin);
         aTemp.set(2, 0, -fSin);
-
+        
         aTf *= aTemp;
     }
-
+    
     if ( fV != 0.0 )
     {
         basegfx::B3DHomMatrix aTemp;
@@ -197,7 +247,7 @@ void Camera3D::SetBankAngle(double fAngle)
         aTemp.set(2, 2, fCos);
         aTemp.set(2, 1, fSin);
         aTemp.set(1, 2, -fSin);
-
+        
         aTf *= aTemp;
     }
 
@@ -230,7 +280,7 @@ void Camera3D::Rotate(double fHAngle, double fVAngle)
     basegfx::B3DVector aDiff(aLookAt - aPosition);
     const double fV(sqrt(aDiff.getX() * aDiff.getX() + aDiff.getZ() * aDiff.getZ()));
 
-    if ( fV != 0.0 )
+    if ( fV != 0.0 )	
     {
         basegfx::B3DHomMatrix aTemp;
         const double fSin(aDiff.getZ() / fV);
@@ -240,7 +290,7 @@ void Camera3D::Rotate(double fHAngle, double fVAngle)
         aTemp.set(2, 2, fCos);
         aTemp.set(0, 2, fSin);
         aTemp.set(2, 0, -fSin);
-
+        
         aTf *= aTemp;
     }
 
@@ -248,7 +298,7 @@ void Camera3D::Rotate(double fHAngle, double fVAngle)
         aTf.rotate(0.0, 0.0, fVAngle);
     }
 
-    if ( fV != 0.0 )
+    if ( fV != 0.0 )	
     {
         basegfx::B3DHomMatrix aTemp;
         const double fSin(-aDiff.getZ() / fV);
@@ -283,7 +333,7 @@ void Camera3D::RotateAroundLookAt(double fHAngle, double fVAngle)
     basegfx::B3DVector aDiff(aPosition - aLookAt);
     const double fV(sqrt(aDiff.getX() * aDiff.getX() + aDiff.getZ() * aDiff.getZ()));
 
-    if ( fV != 0.0 )
+    if ( fV != 0.0 )	
     {
         basegfx::B3DHomMatrix aTemp;
         const double fSin(aDiff.getZ() / fV);
@@ -301,7 +351,7 @@ void Camera3D::RotateAroundLookAt(double fHAngle, double fVAngle)
         aTf.rotate(0.0, 0.0, fVAngle);
     }
 
-    if ( fV != 0.0 )
+    if ( fV != 0.0 )	
     {
         basegfx::B3DHomMatrix aTemp;
         const double fSin(-aDiff.getZ() / fV);

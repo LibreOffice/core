@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 // Import everything we use
@@ -78,14 +78,14 @@ import com.sun.star.util.ChangesEvent;
 /* These examples show how to use the following features of the Config API:
 
     o Accessing data
-    o Updating data
+    o Updating data synchronously and asynchronously
     o Updating properties in groups
     o Adding and removing items in sets
     o Resetting data to their defaults
 
    Each example is in a separate method call.
-*/
-public class ConfigExamples
+*/ 
+public class ConfigExamples  
 {
     // The ComponentContext interface of the remote component context
     private XComponentContext mxContext = null;
@@ -96,27 +96,27 @@ public class ConfigExamples
     // The MultiServiceFactory interface of the ConfigurationProvider
     private XMultiServiceFactory mxProvider = null;
 
-    public static void main( String args[] )
+    public static void main( String args[] ) 
     {
         try {
             // get the remote office component context
             com.sun.star.uno.XComponentContext xContext =
                 com.sun.star.comp.helper.Bootstrap.bootstrap();
-
+            
             if( xContext != null )
                 System.out.println("Connected to a running office ...");
             else
                 System.out.println( "ERROR: Cannot connect - no remote component context available." );
-
+            
             // Create an instance of the class and call it's run method
             ConfigExamples aExample = new ConfigExamples(xContext);
             aExample.run( );
-
-            // if you own the service manager dispose it here
-            // to ensure that the default provider is properly disposed and flushed
+            
+            // if you own the service manager dispose it here 
+            // to ensure that the default provider is properly disposed and flushed            
             System.exit(0);
-        }
-        catch( Exception e )
+        } 
+        catch( Exception e ) 
         {
             e.printStackTrace();
             System.exit(-1);
@@ -133,10 +133,10 @@ public class ConfigExamples
 
     /** Run the examples with a default ConfigurationProvider
     */
-    public void run()
+    public void run() 
         throws com.sun.star.uno.Exception
     {
-        mxProvider = createProvider();
+        mxProvider = createProvider(); 
 
         runExamples( );
 
@@ -144,9 +144,23 @@ public class ConfigExamples
         mxProvider = null;
     }
 
+    /** Run the examples with an AdministrationProvider
+    */
+    public void runForAdmin(Object [] aAdminArgs) 
+        throws com.sun.star.uno.Exception
+    {
+        mxProvider = createAdminProvider(aAdminArgs);
+
+        runExamples( );
+
+        // this is not the default ConfigurationProvider, so we can dispose it
+        ((XComponent)UnoRuntime.queryInterface( XComponent.class, mxProvider )).dispose();
+        mxProvider = null;
+    }
+
     /** Run the examples with a given ConfigurationProvider
     */
-    public void runExamples( )
+    public void runExamples( ) 
     {
         if (checkProvider(mxProvider))
         {
@@ -156,18 +170,18 @@ public class ConfigExamples
 
             browseDataExample();
 
-            updateGroupExample();
+            updateGroupSyncExample();
 
             resetGroupExample();
 
-            updateSetExample();
+            updateSetAsyncExample();
 
             System.out.println("\nAll Examples completed.");
         }
         else
             System.out.println("ERROR: Cannot run examples without ConfigurationProvider.");
 
-    }
+    } 
 
     /** Do some simple checks, if tehre is a valid ConfigurationProvider
     */
@@ -184,10 +198,10 @@ public class ConfigExamples
         try
         {
             // check the provider implementation
-            XServiceInfo xProviderServices =
+            XServiceInfo xProviderServices = 
                 (XServiceInfo) UnoRuntime.queryInterface( XServiceInfo.class, xProvider );
 
-            if (xProviderServices == null ||
+            if (xProviderServices == null || 
                 !xProviderServices.supportsService("com.sun.star.configuration.ConfigurationProvider"))
             {
                 System.out.println("WARNING: The provider is not a com.sun.star.configuration.ConfigurationProvider");
@@ -207,15 +221,15 @@ public class ConfigExamples
             return false;
         }
     }
-
-    /** Get the provider we have
+    
+    /** Get the provider we have 
      */
     public XMultiServiceFactory getProvider( )
     {
         return mxProvider;
     }
 
-    /** Create a default configuration provider
+    /** Create a default configuration provider 
      */
     public XMultiServiceFactory createProvider( )
         throws com.sun.star.uno.Exception
@@ -224,11 +238,30 @@ public class ConfigExamples
 
         // create the provider and return it as a XMultiServiceFactory
         XMultiServiceFactory xProvider = (XMultiServiceFactory)
-            UnoRuntime.queryInterface(XMultiServiceFactory.class,
+            UnoRuntime.queryInterface(XMultiServiceFactory.class, 
                 mxServiceManager.createInstanceWithContext(sProviderService,
-                                                           mxContext));
+                                                           mxContext));	
 
         return xProvider;
+    }
+
+    /** Create an administration provider 
+
+        @param aAdminArguments
+            An array of extra arguments to be used to create the provider
+     */
+    public XMultiServiceFactory createAdminProvider(Object[] aAdminArguments)
+        throws com.sun.star.uno.Exception
+    {
+        final String sAdminService = "com.sun.star.configuration.AdministrationProvider";
+
+        // create the provider and remember it as a XMultiServiceFactory
+        XMultiServiceFactory xAdminProvider = (XMultiServiceFactory)
+            UnoRuntime.queryInterface(XMultiServiceFactory.class,
+                mxServiceManager.createInstanceWithArgumentsAndContext(
+                    sAdminService, aAdminArguments, mxContext));	
+
+        return xAdminProvider;
     }
 
     /** Create a specified read-only configuration view
@@ -241,7 +274,7 @@ public class ConfigExamples
         // The service name: Need only read access:
         final String sReadOnlyView = "com.sun.star.configuration.ConfigurationAccess";
 
-        // creation arguments: nodepath
+        // creation arguments: nodepath   
         com.sun.star.beans.PropertyValue aPathArgument = new com.sun.star.beans.PropertyValue();
         aPathArgument.Name = "nodepath";
         aPathArgument.Value = sPath;
@@ -255,7 +288,7 @@ public class ConfigExamples
         return xViewRoot;
     }
 
-    /** Create a specified updatable configuration view
+    /** Create a specified updatable configuration view using default synchronicity
      */
     Object createUpdatableView( String sPath )
         throws com.sun.star.uno.Exception
@@ -265,13 +298,43 @@ public class ConfigExamples
         // The service name: Need update access:
         final String cUpdatableView = "com.sun.star.configuration.ConfigurationUpdateAccess";
 
-        // creation arguments: nodepath
+        // creation arguments: nodepath   
         com.sun.star.beans.PropertyValue aPathArgument = new com.sun.star.beans.PropertyValue();
         aPathArgument.Name = "nodepath";
         aPathArgument.Value = sPath;
 
         Object[] aArguments = new Object[1];
         aArguments[0] = aPathArgument;
+
+        // create the view
+        Object xViewRoot = xProvider.createInstanceWithArguments(cUpdatableView, aArguments);
+
+        return xViewRoot;
+    }
+
+    /** Create a specified updatable configuration view
+     */
+    Object createUpdatableView( String sPath, boolean bAsync )
+        throws com.sun.star.uno.Exception
+    {
+        XMultiServiceFactory xProvider = getProvider();
+
+        // The service name: Need update access:
+        final String cUpdatableView = "com.sun.star.configuration.ConfigurationUpdateAccess";
+
+        // creation arguments: nodepath   
+        com.sun.star.beans.PropertyValue aPathArgument = new com.sun.star.beans.PropertyValue();
+        aPathArgument.Name = "nodepath";
+        aPathArgument.Value = sPath;
+
+        // creation arguments: commit mode - write-through or write-back  
+        com.sun.star.beans.PropertyValue aModeArgument = new com.sun.star.beans.PropertyValue();
+        aModeArgument.Name = "lazywrite";
+        aModeArgument.Value = new Boolean(bAsync);
+
+        Object[] aArguments = new Object[2];
+        aArguments[0] = aPathArgument;
+        aArguments[1] = aModeArgument;
 
         // create the view
         Object xViewRoot = xProvider.createInstanceWithArguments(cUpdatableView, aArguments);
@@ -311,15 +374,15 @@ public class ConfigExamples
         }
     }
 
-    /** This method demonstrates update access to group data
+    /** This method demonstrates synchronous update access to group data
      */
-    protected void updateGroupExample ()
+    protected void updateGroupSyncExample ()
     {
         try
         {
-            System.out.println("\n--- starting example: update group data --------------");
+            System.out.println("\n--- starting example: update group data synchronously --------------");
             editGridOptions( );
-        }
+        }   
         catch ( Exception e )
         {
             e.printStackTrace();
@@ -338,20 +401,20 @@ public class ConfigExamples
             Object aNewData = readGridConfiguration( );
             System.out.println("Before reset:   user grid options: " + aOldData);
             System.out.println("After reset: default grid options: " + aNewData);
-        }
+        }   
         catch ( Exception e )
         {
             e.printStackTrace();
         }
     }
 
-    /** This method demonstrates update access to set data
+    /** This method demonstrates asynchronous update access to set data
      */
-    protected void updateSetExample ()
+    protected void updateSetAsyncExample ()
     {
         try
         {
-            System.out.println("\n--- starting example: update set data ---------------");
+            System.out.println("\n--- starting example: update set data asynchronously ---------------");
             storeSampleDataSource( );
         }
         catch ( Exception e )
@@ -384,7 +447,7 @@ public class ConfigExamples
     protected GridOptions readGridConfiguration()
         throws com.sun.star.uno.Exception
     {
-        // The path to the root element
+        // The path to the root element 
         final String cGridOptionsPath = "/org.openoffice.Office.Calc/Grid";
 
         // create the view
@@ -392,9 +455,9 @@ public class ConfigExamples
 
         // the result structure
         GridOptions options = new GridOptions();
-
+   
       // accessing a single nested value
-        XHierarchicalPropertySet xProperties =
+        XHierarchicalPropertySet xProperties = 
             (XHierarchicalPropertySet)UnoRuntime.queryInterface(XHierarchicalPropertySet.class, xViewRoot);
 
         Object aVisible = xProperties.getHierarchicalPropertyValue("Option/VisibleGrid");
@@ -405,8 +468,8 @@ public class ConfigExamples
 
         XMultiPropertySet xSubdivProperties =
             (XMultiPropertySet)UnoRuntime.queryInterface(XMultiPropertySet.class, xSubdivision);
-
-        // variables for multi-element access
+    
+        // variables for multi-element access 
         String[] aElementNames = new String[2];
 
         aElementNames[0] = "XAxis";
@@ -420,10 +483,10 @@ public class ConfigExamples
       // accessing deeply nested subproperties
         Object xResolution = xProperties.getHierarchicalPropertyValue("Resolution");
 
-        XMultiHierarchicalPropertySet xResolutionProperties =
+        XMultiHierarchicalPropertySet xResolutionProperties = 
             (XMultiHierarchicalPropertySet)
                 UnoRuntime.queryInterface(XMultiHierarchicalPropertySet.class, xResolution);
-
+    
         aElementNames[0] = "XAxis/Metric";
         aElementNames[1] = "YAxis/Metric";
 
@@ -433,7 +496,7 @@ public class ConfigExamples
         options.resolution_y = ((Integer) aElementValues[1]).intValue();
 
       // all options have been retrieved - clean up and return
-        // we are done with the view - dispose it
+        // we are done with the view - dispose it 
 
         ((XComponent)UnoRuntime.queryInterface(XComponent.class, xViewRoot)).dispose();
 
@@ -455,7 +518,7 @@ public class ConfigExamples
         throws com.sun.star.uno.Exception
     {
         // First process this as an element (preorder traversal)
-        XHierarchicalName xElementPath =
+        XHierarchicalName xElementPath = 
             (XHierarchicalName) UnoRuntime.queryInterface(XHierarchicalName.class, xElement);
 
         String sPath = xElementPath.getHierarchicalName();
@@ -465,7 +528,7 @@ public class ConfigExamples
         // now process this as a container
         XNameAccess xChildAccess =
             (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xElement);
-
+    
         // get a list of child elements
         String[] aElementNames = xChildAccess.getElementNames();
 
@@ -477,7 +540,7 @@ public class ConfigExamples
             // is it a structural element (object) ...
             if ( aAnyConv.isObject(aChild) && !aAnyConv.isArray(aChild) )
             {
-                // then get an interface
+                // then get an interface 
                 XInterface xChildElement = (XInterface)UnoRuntime.queryInterface(XInterface.class, aChild);
 
                 // and continue processing child elements recursively
@@ -486,10 +549,10 @@ public class ConfigExamples
             // ... or is it a simple value
             else
             {
-                // Build the path to it from the path of
+                // Build the path to it from the path of 
                 // the element and the name of the child
                 String sChildPath;
-                sChildPath =
+                sChildPath = 
                     xElementPath.composeHierarchicalName(aElementNames[i]);
 
                 // and process the value
@@ -498,7 +561,7 @@ public class ConfigExamples
         }
     }
 
-    /** Method to browse the part rooted at sRootPath
+    /** Method to browse the part rooted at sRootPath 
         of the configuration that the Provider provides.
 
         All nodes will be processed by the IConfigurationProcessor passed.
@@ -508,12 +571,12 @@ public class ConfigExamples
     {
         // create the root element
         XInterface xViewRoot = (XInterface)createConfigurationView( sRootPath );
-
+   
         // now do the processing
         browseElementRecursively( xViewRoot, aProcessor );
 
-        // we are done with the view - dispose it
-        //   This assumes that the processor
+        // we are done with the view - dispose it 
+        //   This assumes that the processor 
         //   does not keep a reference to the elements in processStructuralElement
 
         ((XComponent) UnoRuntime.queryInterface(XComponent.class,xViewRoot)).dispose();
@@ -531,14 +594,14 @@ public class ConfigExamples
         final String sFilterKey = "/org.openoffice.TypeDetection.Filter/Filters";
 
        // browse the configuration, dumping filter information
-        browseConfiguration( sFilterKey,
+        browseConfiguration( sFilterKey, 
            new IConfigurationProcessor () {
                /// prints Path and Value of properties
                public void processValueElement( String sPath_, Object aValue_ ) {
                    if (new AnyConverter().isArray(aValue_))
                    {
                        final Object [] aArray = (Object [])aValue_;
-
+                       
                        System.out.print("\tValue: " + sPath_ + " = { ");
                        for (int i=0; i<aArray.length; ++i)
                        {
@@ -550,14 +613,14 @@ public class ConfigExamples
                    else
                         System.out.println("\tValue: " + sPath_ + " = " + aValue_);
                }
-
+               
                /// prints the Filter entries
                public void processStructuralElement( String sPath_, XInterface xElement_) {
                    // get template information, to detect instances of the 'Filter' template
-                   XTemplateInstance xInstance =
+                   XTemplateInstance xInstance = 
                        ( XTemplateInstance )UnoRuntime.queryInterface( XTemplateInstance .class,xElement_);
 
-                   // only select the Filter entries
+                   // only select the Filter entries 
                    if (xInstance != null && xInstance.getTemplateName().endsWith("Filter")) {
                         XNamed xNamed = (XNamed)UnoRuntime.queryInterface(XNamed.class,xElement_);
                         System.out.println("Filter " + xNamed.getName() + " (" + sPath_ + ")");
@@ -568,22 +631,22 @@ public class ConfigExamples
 
 // GROUP UPDATE example
 
-    /** This method simulates editing configuration data using a GridEditor dialog class
+    /** This method simulates editing configuration data using a GridEditor dialog class  
     */
     public void editGridOptions( )
         throws com.sun.star.uno.Exception
     {
-        // The path to the root element
+        // The path to the root element 
         final String cGridOptionsPath = "/org.openoffice.Office.Calc/Grid";
 
-      // create the view
-        Object xViewRoot = createUpdatableView( cGridOptionsPath );
+      // create the SYNCHRONOUS view for better error handling
+        Object xViewRoot = createUpdatableView( cGridOptionsPath, false);
 
         // the 'editor'
         GridOptionsEditor dialog = new GridOptionsEditor();
 
       // set up the initial values and register listeners
-        // get a data access interface, to supply the view with a model
+        // get a data access interface, to supply the view with a model 
         XMultiHierarchicalPropertySet xProperties =
             (XMultiHierarchicalPropertySet)
                 UnoRuntime.queryInterface(XMultiHierarchicalPropertySet.class, xViewRoot);
@@ -591,10 +654,10 @@ public class ConfigExamples
         dialog.setModel( xProperties );
 
         // get a listener object (probably an adapter) that notifies
-        // the dialog of external changes to its model
+        // the dialog of external changes to its model 
         XChangesListener xListener = dialog.createChangesListener( );
-
-        XChangesNotifier xNotifier =
+    
+        XChangesNotifier xNotifier = 
             (XChangesNotifier)UnoRuntime.queryInterface(XChangesNotifier.class, xViewRoot);
 
         xNotifier.addChangesListener( xListener );
@@ -605,9 +668,9 @@ public class ConfigExamples
         if (dialog.execute() == GridOptionsEditor.SAVE_SETTINGS)
         {
             // changes have been applied to the view here
-            XChangesBatch xUpdateControl =
+            XChangesBatch xUpdateControl = 
                 (XChangesBatch) UnoRuntime.queryInterface(XChangesBatch.class,xViewRoot);
-
+        
             try
             {
                xUpdateControl.commitChanges();
@@ -617,12 +680,12 @@ public class ConfigExamples
                 dialog.informUserOfError( e );
             }
         }
-
+   
       // all changes have been handled - clean up and return
         // listener is done now
         xNotifier.removeChangesListener( xListener );
 
-        // we are done with the view - dispose it
+        // we are done with the view - dispose it 
         ((XComponent)UnoRuntime.queryInterface(XComponent.class, xViewRoot)).dispose();
     }
 
@@ -684,7 +747,7 @@ public class ConfigExamples
             });
         }
         /// this method is called when data has changed to display the updated data
-        private void updateDisplay()  {
+        private void updateDisplay()  { 
             if (mxModel != null)
                 System.out.println("Grid options editor: data=" + readModel());
             else
@@ -692,7 +755,7 @@ public class ConfigExamples
         }
 
         // this method is used to read all relevant data from the model
-        private GridOptions readModel()
+        private GridOptions readModel() 
         {
             try
             {
@@ -726,7 +789,7 @@ public class ConfigExamples
         {
             try
             {
-                XHierarchicalPropertySet xHPS =
+                XHierarchicalPropertySet xHPS = 
                     (XHierarchicalPropertySet)UnoRuntime.queryInterface(XHierarchicalPropertySet.class, mxModel);
 
                 final String sSetting = "Option/VisibleGrid";
@@ -736,7 +799,7 @@ public class ConfigExamples
                 Boolean bOldValue = (Boolean)xHPS.getHierarchicalPropertyValue(sSetting);
 
                 Boolean bNewValue = new Boolean( ! bOldValue.booleanValue() );
-
+            
                 xHPS.setHierarchicalPropertyValue(sSetting,bNewValue);
             }
             catch (Exception e)
@@ -746,14 +809,14 @@ public class ConfigExamples
         }
     }
 
-    /** This method creates an extra updatable view to change some data
-        and trigger the listener of the GridEditor
+    /** This method creates an extra updatable view to change some data 
+        and trigger the listener of the GridEditor  
     */
-    void changeSomeData(String xKey)
+    void changeSomeData(String xKey) 
     {
         try
         {
-            Object xOtherViewRoot = createUpdatableView(xKey);
+            Object xOtherViewRoot = createUpdatableView(xKey, false);
 
             XNameReplace aReplace = (XNameReplace)UnoRuntime.queryInterface(XNameReplace.class, xOtherViewRoot);
 
@@ -783,12 +846,12 @@ public class ConfigExamples
             }
 
             // commit the changes
-            XChangesBatch xUpdateControl =
+            XChangesBatch xUpdateControl = 
                 (XChangesBatch) UnoRuntime.queryInterface(XChangesBatch.class,xOtherViewRoot);
-
+        
             xUpdateControl.commitChanges();
 
-            // we are done with the view - dispose it
+            // we are done with the view - dispose it 
             ((XComponent)UnoRuntime.queryInterface(XComponent.class, xOtherViewRoot)).dispose();
         }
         catch (Exception e)
@@ -803,20 +866,20 @@ public class ConfigExamples
     protected void resetGridConfiguration()
         throws com.sun.star.uno.Exception
     {
-        // The path to the root element
+        // The path to the root element 
         final String cGridOptionsPath = "/org.openoffice.Office.Calc/Grid";
 
         // create the view
         Object xViewRoot = createUpdatableView(cGridOptionsPath);
 
      // resetting a single nested value
-        XHierarchicalNameAccess xHierarchicalAccess =
+        XHierarchicalNameAccess xHierarchicalAccess = 
             (XHierarchicalNameAccess)UnoRuntime.queryInterface(XHierarchicalNameAccess.class, xViewRoot);
 
         // get using absolute name
         Object xOptions = xHierarchicalAccess.getByHierarchicalName(cGridOptionsPath + "/Option");
 
-        XPropertyState xOptionState =
+        XPropertyState xOptionState = 
             (XPropertyState)UnoRuntime.queryInterface(XPropertyState.class, xOptions);
 
         xOptionState.setPropertyToDefault("VisibleGrid");
@@ -825,9 +888,9 @@ public class ConfigExamples
         Object xResolutionX = xHierarchicalAccess.getByHierarchicalName("Resolution/XAxis");
         Object xResolutionY = xHierarchicalAccess.getByHierarchicalName("Resolution/YAxis");
 
-        XPropertyState xResolutionStateX =
+        XPropertyState xResolutionStateX = 
             (XPropertyState)UnoRuntime.queryInterface(XPropertyState.class, xResolutionX);
-        XPropertyState xResolutionStateY =
+        XPropertyState xResolutionStateY = 
             (XPropertyState)UnoRuntime.queryInterface(XPropertyState.class, xResolutionY);
 
         xResolutionStateX.setPropertyToDefault("Metric");
@@ -838,16 +901,16 @@ public class ConfigExamples
 
         XMultiPropertyStates xSubdivisionStates =
             (XMultiPropertyStates)UnoRuntime.queryInterface(XMultiPropertyStates.class, xSubdivision);
-
+    
         xSubdivisionStates.setAllPropertiesToDefault();
 
         // commit the changes
-        XChangesBatch xUpdateControl =
+        XChangesBatch xUpdateControl = 
             (XChangesBatch) UnoRuntime.queryInterface(XChangesBatch.class,xViewRoot);
-
+    
         xUpdateControl.commitChanges();
 
-       // we are done with the view - dispose it
+       // we are done with the view - dispose it 
         ((XComponent)UnoRuntime.queryInterface(XComponent.class, xViewRoot)).dispose();
     }
 
@@ -857,7 +920,7 @@ public class ConfigExamples
 
     /** This method stores a sample data source given some connection data.
 
-        ATTENTION: This example requires an older version of the
+        ATTENTION: This example requires an older version of the 
                    org.openoffice.Office.DataAccess schema.
                    It does not work with the current schema.
                    Because of this, the method currenty does nothing.
@@ -866,12 +929,12 @@ public class ConfigExamples
     void storeSampleDataSource()
         throws com.sun.star.uno.Exception
     {
-        if (SET_EXAMPLE_BROKEN_IN_THIS_RELEASE)
+        if (SET_EXAMPLE_BROKEN_IN_THIS_RELEASE) 
         {
             System.out.println("-  DISABLED: (the existing example does not work with this version) -");
             return; // this function does not work
         }
-
+        
         String sSampleDataSourceName = "SampleTextDatabase";
 
         String sSampleDataSourceURL = "sdbc:flat:$(userurl)/database/SampleTextDatabase";
@@ -901,10 +964,10 @@ public class ConfigExamples
     )
         throws com.sun.star.uno.Exception
     {
-      // create the view and get the data source element
+      // create the view and get the data source element 
         Object xDataSource = createDataSourceDescription(getProvider(),sDataSourceName);
 
-      // set the values
+      // set the values 
         XPropertySet xDataSourceProperties =
             (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, xDataSource);
 
@@ -915,7 +978,7 @@ public class ConfigExamples
 
         if ( aTableFilter != null )
             xDataSourceProperties.setPropertyValue("TableFilter",  aTableFilter  );
-
+    
       // store the driver-specific settings
         if (aDriverSettings != null)
         {
@@ -928,9 +991,9 @@ public class ConfigExamples
         Object xViewRoot = getViewRoot(xDataSource);
 
         // commit the changes
-        XChangesBatch xUpdateControl =
+        XChangesBatch xUpdateControl = 
             (XChangesBatch) UnoRuntime.queryInterface(XChangesBatch.class,xViewRoot);
-
+        
         xUpdateControl.commitChanges();
 
         // now clean up
@@ -939,6 +1002,9 @@ public class ConfigExamples
 
     /** This method gets the DataSourceDescription for a data source.
         It either gets the existing entry or creates a new instance.
+
+        The method attempts to keep the view used as small as possible. In particular there
+        is no view created, that contains data for all data source that are registered.
     */
     Object createDataSourceDescription(XMultiServiceFactory xProvider, String sDataSourceName )
         throws com.sun.star.uno.Exception
@@ -946,19 +1012,31 @@ public class ConfigExamples
         // The service name: Need an update access:
         final String cUpdatableView = "com.sun.star.configuration.ConfigurationUpdateAccess";
 
-         // The path to the DataSources set node
+         // The path to the DataSources set node 
         final String cDataSourcesPath = "/org.openoffice.Office.DataAccess/DataSources";
 
-       // creation arguments: nodepath
+       // creation arguments: nodepath   
         com.sun.star.beans.PropertyValue aPathArgument = new com.sun.star.beans.PropertyValue();
         aPathArgument.Name = "nodepath";
         aPathArgument.Value = cDataSourcesPath ;
 
-        Object[] aArguments = new Object[1];
-        aArguments[0] = aPathArgument;
+        // creation arguments: commit mode   
+        com.sun.star.beans.PropertyValue aModeArgument = new com.sun.star.beans.PropertyValue();
+        aModeArgument.Name = "lazywrite";
+        aModeArgument.Value = new Boolean( true );
 
-        // create the view
-        Object xViewRoot =
+        // creation arguments: depth   
+        com.sun.star.beans.PropertyValue aDepthArgument = new com.sun.star.beans.PropertyValue();
+        aDepthArgument.Name = "depth";
+        aDepthArgument.Value = new Integer( 1 );
+
+        Object[] aArguments = new Object[3];
+        aArguments[0] = aPathArgument;
+        aArguments[1] = aModeArgument;
+        aArguments[2] = aDepthArgument;
+
+        // create the view: asynchronously updatable, with depth 1
+        Object xViewRoot = 
             xProvider.createInstanceWithArguments(cUpdatableView, aArguments);
 
         XNameAccess xSetOfDataSources =
@@ -967,36 +1045,37 @@ public class ConfigExamples
         Object xDataSourceDescriptor = null; // the result
         if ( xSetOfDataSources .hasByName( sDataSourceName ))
         {
-            // the element is there
-            try
+            // the element is there, but it is loaded only with depth zero !
+            try 
             {
                 // the view should point to the element directly, so we need to extend the path
                 XHierarchicalName xComposePath = (XHierarchicalName)
                     UnoRuntime.queryInterface(XHierarchicalName.class, xSetOfDataSources );
-
+            
                 String sElementPath = xComposePath.composeHierarchicalName( sDataSourceName );
 
                 // use the name of the element now
                 aPathArgument.Value = sElementPath;
 
-                // create another view now
-                Object[] aDeepArguments = new Object[1];
+                // create another view now (without depth limit)
+                Object[] aDeepArguments = new Object[2];
                 aDeepArguments[0] = aPathArgument;
+                aDeepArguments[1] = aModeArgument;
 
-                // create the view
-                xDataSourceDescriptor  =
+                // create the view: asynchronously updatable, with unlimited depth
+                xDataSourceDescriptor  = 
                       xProvider.createInstanceWithArguments(cUpdatableView, aDeepArguments);
 
-                if ( xDataSourceDescriptor != null) // all went fine
+                if ( xDataSourceDescriptor != null) // all went fine 
                 {
                     // dispose the other view
                     ((XComponent)UnoRuntime.queryInterface(XComponent.class, xViewRoot)).dispose();
                     xViewRoot = null;
                 }
             }
-            catch (Exception e)
+            catch (Exception e) 
             {
-              // something went wrong, we retry with a new element
+              // something went wrong, we retry with a new element 
                System.err.println("WARNING: An exception occurred while creating a view for an existing data source: " + e);
                xDataSourceDescriptor  = null;
             }
@@ -1005,8 +1084,8 @@ public class ConfigExamples
         // do we have a result element yet ?
         if ( xDataSourceDescriptor == null)
         {
-            // get the container
-            XNameContainer xSetUpdate =
+            // get the container 
+            XNameContainer xSetUpdate = 
                 (XNameContainer)UnoRuntime.queryInterface(XNameContainer.class, xViewRoot);
 
             // create a new detached set element (instance of DataSourceDescription)
@@ -1016,7 +1095,7 @@ public class ConfigExamples
             // the new element is the result !
              xDataSourceDescriptor  = xElementFactory.createInstance();
 
-            // insert it - this also names the element
+            // insert it - this also names the element 
             xSetUpdate.insertByName( sDataSourceName ,  xDataSourceDescriptor  );
         }
 
@@ -1027,21 +1106,21 @@ public class ConfigExamples
     void storeSettings(Object xSettingsSet, com.sun.star.beans.NamedValue [] aSettings )
         throws com.sun.star.uno.Exception
     {
-        if (aSettings == null)
+        if (aSettings == null) 
             return;
 
         // get the settings set as a container
-        XNameContainer xSettingsContainer =
+        XNameContainer xSettingsContainer = 
             (XNameContainer) UnoRuntime.queryInterface( XNameContainer.class, xSettingsSet);
 
         // and get a factory interface for creating the entries
-        XSingleServiceFactory xSettingsFactory =
+        XSingleServiceFactory xSettingsFactory = 
             (XSingleServiceFactory) UnoRuntime.queryInterface(XSingleServiceFactory.class, xSettingsSet);
 
         // now insert the individual settings
         for (int i = 0; i < aSettings.length; ++i) {
             // create a DataSourceSetting object
-            XPropertySet xSetting = (XPropertySet)
+            XPropertySet xSetting = (XPropertySet) 
                 UnoRuntime.queryInterface( XPropertySet.class, xSettingsFactory.createInstance() );
 
             // can set the value before inserting
@@ -1060,9 +1139,9 @@ public class ConfigExamples
     /// This method get the view root node given an interface to any node in the view
     public static Object getViewRoot(Object xElement)
     {
-        Object xResult = xElement;
-
-        // set the result to its parent until that would be null
+        Object xResult = xElement; 
+      
+        // set the result to its parent until that would be null  
         Object xParent;
         do
         {
@@ -1085,13 +1164,13 @@ public class ConfigExamples
 // workaround methods for unimplemented functionality
 
     /// WORKAROUND: does the same as xNamedItem.setName(sNewName) should do
-    void renameSetItem(XNamed xNamedItem, String sNewName)
+    void renameSetItem(XNamed xNamedItem, String sNewName) 
         throws com.sun.star.uno.Exception
     {
-        XChild xChildItem = (XChild)
+        XChild xChildItem = (XChild) 
             UnoRuntime.queryInterface(XChild.class, xNamedItem);
 
-        XNameContainer xParentSet = (XNameContainer)
+        XNameContainer xParentSet = (XNameContainer) 
             UnoRuntime.queryInterface( XNameContainer.class, xChildItem.getParent() );
 
         String sOldName = xNamedItem.getName();
@@ -1099,16 +1178,16 @@ public class ConfigExamples
         // now rename the item
         xParentSet.removeByName(sOldName);
         xParentSet.insertByName(sNewName,xNamedItem);
-    }
+    }  
 
     /// WORKAROUND: does the same as xChildItem.setParent( xNewParent ) should do
-    void moveSetItem(XChild xChildItem, XNameContainer xNewParent)
+    void moveSetItem(XChild xChildItem, XNameContainer xNewParent) 
         throws com.sun.star.uno.Exception
     {
-        XNamed xNamedItem = (XNamed)
+        XNamed xNamedItem = (XNamed) 
             UnoRuntime.queryInterface(XNamed.class, xChildItem);
 
-        XNameContainer xOldParent = (XNameContainer)
+        XNameContainer xOldParent = (XNameContainer) 
             UnoRuntime.queryInterface( XNameContainer.class, xChildItem.getParent() );
 
         String sItemName = xNamedItem.getName();

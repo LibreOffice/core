@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include "fmscriptingenv.hxx"
-#include "svx/fmmodel.hxx"
+#include <svx/fmmodel.hxx>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -40,7 +40,6 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 /** === end UNO includes === **/
-
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/implementationreference.hxx>
@@ -49,8 +48,6 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/app.hxx>
-#include <basic/basmgr.hxx>
 
 #include <boost/shared_ptr.hpp>
 
@@ -150,7 +147,7 @@ namespace svxform
     private:
         DECL_LINK( OnAsyncScriptEvent, ScriptEvent* );
     };
-
+                                    
     //====================================================================
     //= FormScriptingEnvironment
     //====================================================================
@@ -215,7 +212,7 @@ namespace svxform
             Reference< XHierarchicalNameAccess > xTypeDescriptions( aContext.getSingleton( "com.sun.star.reflection.theTypeDescriptionManager" ), UNO_QUERY_THROW );
 
             ::rtl::OUString sMethodDescription( _rListenerType );
-            sMethodDescription += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "::" ));
+            sMethodDescription += ::rtl::OUString::createFromAscii( "::" );
             sMethodDescription += _rMethodName;
 
             Reference< XInterfaceMethodTypeDescription > xMethod( xTypeDescriptions->getByHierarchicalName( sMethodDescription ), UNO_QUERY_THROW );
@@ -242,10 +239,11 @@ namespace svxform
     void SAL_CALL FormScriptListener::firing( const ScriptEvent& _rEvent ) throw (RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
-       static const ::rtl::OUString vbaInterOp( RTL_CONSTASCII_USTRINGPARAM("VBAInterop") );
+       static const ::rtl::OUString vbaInterOp =
+           ::rtl::OUString::createFromAscii("VBAInterop");
        if ( _rEvent.ScriptType.equals(vbaInterOp) )
            return; // not handled here
-
+    
         if ( impl_isDisposed_nothrow() )
             return;
 
@@ -258,7 +256,7 @@ namespace svxform
         acquire();
         Application::PostUserEvent( LINK( this, FormScriptListener, OnAsyncScriptEvent ), new ScriptEvent( _rEvent ) );
     }
-
+    
     //--------------------------------------------------------------------
     Any SAL_CALL FormScriptListener::approveFiring( const ScriptEvent& _rEvent ) throw (InvocationTargetException, RuntimeException)
     {
@@ -270,7 +268,7 @@ namespace svxform
 
         return aResult;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL FormScriptListener::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
     {
@@ -353,19 +351,19 @@ namespace svxform
     {
         impl_registerOrRevoke_throw( _rxManager, true );
     }
-
+    
     //--------------------------------------------------------------------
     void FormScriptingEnvironment::revokeEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager )
     {
         impl_registerOrRevoke_throw( _rxManager, false );
     }
-
+    
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL FormScriptingEnvironment::acquire()
     {
         return osl_incrementInterlockedCount( &m_refCount );
     }
-
+    
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL FormScriptingEnvironment::release()
     {
@@ -435,6 +433,60 @@ namespace svxform
             }
             m_rObjectShell.CallXScript( m_sScriptCode, _rArguments, _rSynchronousResult, aOutArgsIndex, aOutArgs, true, aCaller.hasValue() ? &aCaller : 0 );
         }
+
+        //................................................................
+        //. QualifiedBasicScript
+        //................................................................
+        class QualifiedBasicScript : public IScript
+        {
+            SfxObjectShell&         m_rObjectShell;
+            const ::rtl::OUString   m_sMacroLocation;
+            const ::rtl::OUString   m_sScriptCode;
+
+        public:
+            QualifiedBasicScript( SfxObjectShell& _rObjectShell, const ::rtl::OUString& _rLocation, const ::rtl::OUString& _rScriptCode )
+                :m_rObjectShell( _rObjectShell )
+                ,m_sMacroLocation( _rLocation )
+                ,m_sScriptCode( _rScriptCode )
+            {
+            }
+
+            // IScript
+            virtual void invoke( const Sequence< Any >& _rArguments, Any& _rSynchronousResult );
+        };
+
+        //................................................................
+        void QualifiedBasicScript::invoke( const Sequence< Any >& _rArguments, Any& _rSynchronousResult )
+        {
+            m_rObjectShell.CallStarBasicScript( m_sScriptCode, m_sMacroLocation,
+                &_rArguments, &_rSynchronousResult );
+        }
+
+        //................................................................
+        //. UnqualifiedBasicScript
+        //................................................................
+        class UnqualifiedBasicScript : public IScript
+        {
+            SfxObjectShell&         m_rObjectShell;
+            const ::rtl::OUString   m_sScriptCode;
+
+        public:
+            UnqualifiedBasicScript( SfxObjectShell& _rObjectShell, const ::rtl::OUString& _rScriptCode )
+                :m_rObjectShell( _rObjectShell )
+                ,m_sScriptCode( _rScriptCode )
+            {
+            }
+
+            // IScript
+            virtual void invoke( const Sequence< Any >& _rArguments, Any& _rSynchronousResult );
+        };
+
+        //................................................................
+        void UnqualifiedBasicScript::invoke( const Sequence< Any >& _rArguments, Any& _rSynchronousResult )
+        {
+            m_rObjectShell.CallScript( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarBasic" ) ), m_sScriptCode,
+                &_rArguments, &_rSynchronousResult );
+        }
     }
 
     //--------------------------------------------------------------------
@@ -446,7 +498,6 @@ namespace svxform
         if ( m_bDisposed )
             return;
 
-        // SfxObjectShellRef is good here since the model controls the lifetime of the object
         SfxObjectShellRef xObjectShell = m_rFormModel.GetObjectShell();
         if( !xObjectShell.Is() )
             return;
@@ -454,7 +505,7 @@ namespace svxform
         // the script to execute
         PScript pScript;
 
-        if ( !_rEvent.ScriptType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StarBasic" ) ) )
+        if ( !_rEvent.ScriptType.equalsAscii( "StarBasic" ) )
         {
             pScript.reset( new NewStyleUNOScript( *xObjectShell, _rEvent.ScriptCode ) );
         }
@@ -472,31 +523,21 @@ namespace svxform
                 // and it has such a prefix
                 sMacroLocation = sScriptCode.copy( 0, nPrefixLen );
                 DBG_ASSERT( 0 == sMacroLocation.compareToAscii( "document" )
-                        ||  0 == sMacroLocation.compareToAscii( "application" ),
+                        ||	0 == sMacroLocation.compareToAscii( "application" ),
                         "FormScriptingEnvironment::doFireScriptEvent: invalid (unknown) prefix!" );
 
                 // strip the prefix: the SfxObjectShell::CallScript knows nothing about such prefixes
                 sScriptCode = sScriptCode.copy( nPrefixLen + 1 );
             }
 
-            if ( !sMacroLocation.getLength() )
-            {
-                // legacy format: use the app-wide Basic, if it has a respective method, otherwise fall back to the doc's Basic
-                if ( SFX_APP()->GetBasicManager()->HasMacro( sScriptCode ) )
-                    sMacroLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application" ) );
-                else
-                    sMacroLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "document" ) );
+            if ( sMacroLocation.getLength() )
+            {	// we have a StarBasic macro with fully-qualified macro location
+                pScript.reset( new QualifiedBasicScript( *xObjectShell, sMacroLocation, sScriptCode ) );
             }
-
-            ::rtl::OUStringBuffer aScriptURI;
-            aScriptURI.appendAscii( "vnd.sun.star.script:" );
-            aScriptURI.append( sScriptCode );
-            aScriptURI.appendAscii( "?language=Basic" );
-            aScriptURI.appendAscii( "&location=" );
-            aScriptURI.append( sMacroLocation );
-
-            const ::rtl::OUString sScriptURI( aScriptURI.makeStringAndClear() );
-            pScript.reset( new NewStyleUNOScript( *xObjectShell, sScriptURI ) );
+            else
+            {	// we have a StarBasic macro without qualified location - let the object shell gues ....
+                pScript.reset( new UnqualifiedBasicScript( *xObjectShell, sScriptCode ) );
+            }
         }
 
         OSL_ENSURE( pScript.get(), "FormScriptingEnvironment::doFireScriptEvent: no script to execute!" );

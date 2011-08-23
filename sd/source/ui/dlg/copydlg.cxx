@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,43 +65,44 @@ namespace sd {
 \************************************************************************/
 
 CopyDlg::CopyDlg(
-    ::Window* pWindow,
+    ::Window* pWindow, 
     const SfxItemSet& rInAttrs,
-    XColorTable* pColTab,
-    ::sd::View* pInView )
+    XColorTable* pColTab, 
+    ::sd::View* pInView ) 
     : SfxModalDialog     ( pWindow, SdResId( DLG_COPY ) ),
       maFtCopies           ( this, SdResId( FT_COPIES ) ),
       maNumFldCopies       ( this, SdResId( NUM_FLD_COPIES ) ),
       maBtnSetViewData     ( this, SdResId( BTN_SET_VIEWDATA ) ),
-      maGrpMovement        ( this, SdResId( GRP_MOVEMENT ) ),
       maFtMoveX            ( this, SdResId( FT_MOVE_X ) ),
       maMtrFldMoveX        ( this, SdResId( MTR_FLD_MOVE_X ) ),
       maFtMoveY            ( this, SdResId( FT_MOVE_Y ) ),
       maMtrFldMoveY        ( this, SdResId( MTR_FLD_MOVE_Y ) ),
       maFtAngle            ( this, SdResId( FT_ANGLE ) ),
       maMtrFldAngle        ( this, SdResId( MTR_FLD_ANGLE ) ),
-      maGrpEnlargement     ( this, SdResId( GRP_ENLARGEMENT ) ),
+      maGrpMovement        ( this, SdResId( GRP_MOVEMENT ) ),
       maFtWidth            ( this, SdResId( FT_WIDTH ) ),
       maMtrFldWidth        ( this, SdResId( MTR_FLD_WIDTH ) ),
       maFtHeight           ( this, SdResId( FT_HEIGHT ) ),
       maMtrFldHeight       ( this, SdResId( MTR_FLD_HEIGHT ) ),
-      maGrpColor           ( this, SdResId( GRP_COLOR ) ),
+      maGrpEnlargement     ( this, SdResId( GRP_ENLARGEMENT ) ),
       maFtStartColor       ( this, SdResId( FT_START_COLOR ) ),
       maLbStartColor       ( this, SdResId( LB_START_COLOR ) ),
       maFtEndColor         ( this, SdResId( FT_END_COLOR ) ),
       maLbEndColor         ( this, SdResId( LB_END_COLOR ) ),
+      maGrpColor           ( this, SdResId( GRP_COLOR ) ),
       maBtnOK              ( this, SdResId( BTN_OK ) ),
       maBtnCancel          ( this, SdResId( BTN_CANCEL ) ),
       maBtnHelp            ( this, SdResId( BTN_HELP ) ),
       maBtnSetDefault      ( this, SdResId( BTN_SET_DEFAULT ) ),
-      mrOutAttrs            ( rInAttrs ),
-      mpColorTab            ( pColTab ),
+      mrOutAttrs			( rInAttrs ),
+      mpColorTab			( pColTab ),
       maUIScale(pInView->GetDoc()->GetUIScale()),
-      mpView                ( pInView )
+      mpView				( pInView )
 {
     FreeResource();
 
     // Set up the view data button (image and accessible name).
+    maBtnSetViewData.SetModeImage( Image( SdResId( IMG_PIPETTE_H ) ), BMP_COLOR_HIGHCONTRAST );
     maBtnSetViewData.SetAccessibleName (maBtnSetViewData.GetQuickHelpText());
 
     // Farbtabellen
@@ -116,10 +117,10 @@ CopyDlg::CopyDlg(
 
     FieldUnit eFUnit( SfxModule::GetCurrentFieldUnit() );
 
-    SetFieldUnit( maMtrFldMoveX, eFUnit, sal_True );
-    SetFieldUnit( maMtrFldMoveY, eFUnit, sal_True );
-    SetFieldUnit( maMtrFldWidth, eFUnit, sal_True );
-    SetFieldUnit( maMtrFldHeight, eFUnit, sal_True );
+    SetFieldUnit( maMtrFldMoveX, eFUnit, TRUE );
+    SetFieldUnit( maMtrFldMoveY, eFUnit, TRUE );
+    SetFieldUnit( maMtrFldWidth, eFUnit, TRUE );
+    SetFieldUnit( maMtrFldHeight, eFUnit, TRUE );
 
     Reset(0L);
 }
@@ -171,37 +172,37 @@ IMPL_LINK( CopyDlg, Reset, void*, EMPTYARG )
 
     if( aStr.GetTokenCount( TOKEN ) < 8 )
     {
-        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_NUMBER, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_NUMBER, TRUE, &pPoolItem ) )
             maNumFldCopies.SetValue( ( ( const SfxUInt16Item* ) pPoolItem )->GetValue() );
         else
             maNumFldCopies.SetValue( 1L );
 
         long nMoveX = 500L;
-        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_X, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_X, TRUE, &pPoolItem ) )
             nMoveX = ( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
         SetMetricValue( maMtrFldMoveX, Fraction(nMoveX) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
         long nMoveY = 500L;
-        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_Y, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_Y, TRUE, &pPoolItem ) )
             nMoveY = ( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
         SetMetricValue( maMtrFldMoveY, Fraction(nMoveY) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
-        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_ANGLE, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_ANGLE, TRUE, &pPoolItem ) )
             maMtrFldAngle.SetValue( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
         else
             maMtrFldAngle.SetValue( 0L );
 
         long nWidth = 0L;
-        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_WIDTH, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_WIDTH, TRUE, &pPoolItem ) )
             nWidth = ( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
         SetMetricValue( maMtrFldWidth, Fraction(nWidth) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
         long nHeight = 0L;
-        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_HEIGHT, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_HEIGHT, TRUE, &pPoolItem ) )
             nHeight = ( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
         SetMetricValue( maMtrFldHeight, Fraction(nHeight) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
-        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, TRUE, &pPoolItem ) )
         {
             Color aColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
             maLbStartColor.SelectEntry( aColor );
@@ -259,10 +260,10 @@ void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
     long nHeight = Fraction( GetCoreValue( maMtrFldHeight, SFX_MAPUNIT_100TH_MM) ) * maUIScale;
     long nWidth  = Fraction( GetCoreValue( maMtrFldWidth, SFX_MAPUNIT_100TH_MM) ) * maUIScale;
 
-    rOutAttrs.Put( SfxUInt16Item( ATTR_COPY_NUMBER, (sal_uInt16) maNumFldCopies.GetValue() ) );
+    rOutAttrs.Put( SfxUInt16Item( ATTR_COPY_NUMBER, (UINT16) maNumFldCopies.GetValue() ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_MOVE_X, nMoveX ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_MOVE_Y, nMoveY ) );
-    rOutAttrs.Put( SfxInt32Item( ATTR_COPY_ANGLE, static_cast<sal_Int32>(maMtrFldAngle.GetValue()) ) );
+    rOutAttrs.Put( SfxInt32Item( ATTR_COPY_ANGLE, static_cast<INT32>(maMtrFldAngle.GetValue()) ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_WIDTH, nWidth ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_HEIGHT, nHeight ) );
 
@@ -288,7 +289,7 @@ void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
 
 IMPL_LINK( CopyDlg, SelectColorHdl, void *, EMPTYARG )
 {
-    sal_uInt16 nPos = maLbStartColor.GetSelectEntryPos();
+    USHORT nPos = maLbStartColor.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND &&
         !maLbEndColor.IsEnabled() )
@@ -314,8 +315,8 @@ IMPL_LINK( CopyDlg, SetViewData, void*, EMPTYARG )
                                     maUIScale, SFX_MAPUNIT_100TH_MM);
 
     // Farb-Attribut setzen
-    const SfxPoolItem*  pPoolItem = NULL;
-    if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, sal_True, &pPoolItem ) )
+    const SfxPoolItem*	pPoolItem = NULL;
+    if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, TRUE, &pPoolItem ) )
     {
         Color aColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
         maLbStartColor.SelectEntry( aColor );
@@ -342,8 +343,8 @@ IMPL_LINK( CopyDlg, SetDefault, void*, EMPTYARG )
     SetMetricValue( maMtrFldHeight, Fraction(nValue) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
     // Farb-Attribut setzen
-    const SfxPoolItem*  pPoolItem = NULL;
-    if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, sal_True, &pPoolItem ) )
+    const SfxPoolItem*	pPoolItem = NULL;
+    if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, TRUE, &pPoolItem ) )
     {
         Color aColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
         maLbStartColor.SelectEntry( aColor );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,10 +37,10 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xflhtit.hxx>
-#include "svx/unoapi.hxx"
+#include "unoapi.hxx"
 #include <svx/unomid.hxx>
 #include <editeng/unoprnms.hxx>
-#include "svx/unofill.hxx"
+#include "unofill.hxx"
 #include <editeng/memberids.hrc>
 
 using namespace ::com::sun::star;
@@ -51,7 +51,7 @@ class SvxUnoBitmapTable : public SvxUnoNameItemTable
 {
 public:
     SvxUnoBitmapTable( SdrModel* pModel ) throw();
-    virtual ~SvxUnoBitmapTable() throw();
+    virtual	~SvxUnoBitmapTable() throw();
 
     virtual NameOrIndex* createItem() const throw();
     virtual bool isValid( const NameOrIndex* pItem ) const;

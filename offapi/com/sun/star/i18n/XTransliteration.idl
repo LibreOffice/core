@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ module com { module sun { module star { module i18n {
  * 0.
  * All the IGNORE-type functionalities (Range, equals) are based on mapping.
  * except equals() method in IGNORE_CASE, which is based on Locale-independent
- * case folding
+ * casefolding
  * ( This second assumption is very complicated and may cause confusion of use)
  *
  * 1.
@@ -94,7 +94,7 @@ module com { module sun { module star { module i18n {
  *
  * 4.
  * Implementation name in the methods below is not the same as
- * the true implementation name registered.
+ * the true implemenation name registered.
  * In particular, for generic modules:"UPPERCASE_LOWERCASE",
  * "LOWERCASE_UPPERCASE", "IGNORE_CASE", there is no registered name.
  */
@@ -112,7 +112,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
     string  getName();
 
     //------------------------------------------------------------------------
-    /** Return the attribute(s) associated with this transliteration
+    /** Return the attribute(s) associated with this transliterator
         object, as defined in <type>TransliterationType</type>. The
         value is determined by the transliteration modules. For example,
         for UPPERCASE_LOWERCASE, a ONE_TO_ONE is returned, for
@@ -158,7 +158,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
 
     //------------------------------------------------------------------------
     /** Load a sequence of instances of transliteration modules.
-        Output of one module is fed as input to the next module in
+        Output of one module is feeded as input to the next module in
         the sequence. The object created by this call has
         <type>TransliterationType</type> CASCADE and IGNORE types.
 
@@ -170,7 +170,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
 
     //------------------------------------------------------------------------
     /** List the available transliteration modules for a given locale.
-        It can be filtered based on its type.
+        It can be filtered based on its type. 
 
         @param nType
             A bitmask field of values defined in
@@ -191,9 +191,9 @@ published interface XTransliteration: com::sun::star::uno::XInterface
 
         @param nStartPos
             Start position within aStr from where transliteration starts.
-
+            
         @param nCount
-            Number of code points to be transliterated.
+            Number of codepoints to be transliterated.
 
         @param rOffset
             To find the grapheme of input string corresponding to the
@@ -216,7 +216,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
     //------------------------------------------------------------------------
     /** Match two substrings and find if they are equivalent as per this
         transliteration.
-
+        
         <p> This method can be called if the object has
         <type>TransliterationType</type> IGNORE attribute. </p>
 
@@ -257,25 +257,25 @@ published interface XTransliteration: com::sun::star::uno::XInterface
             <FALSE/> else.
      */
 
-    boolean equals( [in] string aStr1, [in] long nPos1, [in] long nCount1,
+    boolean equals( [in] string aStr1, [in] long nPos1, [in] long nCount1, 
                     [out] long rMatch1,
                     [in] string aStr2, [in] long nPos2, [in] long nCount2,
                     [out] long rMatch2 );
 
     //------------------------------------------------------------------------
     /** Transliterate one set of characters to another.
-
+    
         <p> This method is intended for getting corresponding ranges and
         can be called if the object has <type>TransliterationType</type>
         IGNORE attribute. </p>
-
+     
         <p> For example: generic CASE_IGNORE transliterateRange( "a", "i" )
         returns {"A","I","a","i"}, transliterateRange( "a", "a" )
         returns {"A","A","a","a"}. </p>
-
-        <p> Use this transliteration to create regular expressions like
+     
+        <p> Use this transliteration to create regular expresssions like
         [a-i] --> [A-Ia-i]. </p>
-
+     
         @returns
             String sequence containing corresponding transliterated
             pairs of characters to represent a range.
@@ -283,7 +283,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
     sequence <string>   transliterateRange( [in] string aStr1, [in] string aStr2 );
 
     //------------------------------------------------------------------------
-    /** Compare 2 substrings as per this transliteration. It translates both
+    /** Compare 2 substrings as per this transliteration. It translates both 
         substrings before comparing them.
 
         @param aStr1

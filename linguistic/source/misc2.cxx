@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.h>
 
-#include "linguistic/misc.hxx"
+#include "misc.hxx"
 
 using namespace com::sun::star;
 
@@ -54,9 +54,9 @@ namespace linguistic
 
 ///////////////////////////////////////////////////////////////////////////
 
-sal_Bool FileExists( const String &rMainURL )
+BOOL FileExists( const String &rMainURL )
 {
-    sal_Bool bExists = sal_False;
+    BOOL bExists = FALSE;
     if (rMainURL.Len())
     {
         try
@@ -71,6 +71,69 @@ sal_Bool FileExists( const String &rMainURL )
     }
     return bExists;
 }
+
+
+#ifdef TL_OUTDATED
+
+String GetFileURL( SvtPathOptions::Pathes ePath, const String &rFileName )
+{
+    String aURL;
+    if (rFileName.Len())
+    {
+        INetURLObject aURLObj;
+        aURLObj.SetSmartProtocol( INET_PROT_FILE );
+        aURLObj.SetSmartURL( GetModulePath(ePath) );
+        aURLObj.Append( rFileName );
+        if (aURLObj.HasError())
+        {
+            DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
+        }
+        aURL = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+    }
+    return aURL;
+}
+
+
+String  GetModulePath( SvtPathOptions::Pathes ePath, BOOL bAddAccessDelim  )
+{
+    String aRes;
+
+    SvtPathOptions  aPathOpt;
+    switch (ePath)
+    {
+        case SvtPathOptions::PATH_MODULE :
+            aRes = aPathOpt.GetModulePath();
+            break;
+        case SvtPathOptions::PATH_LINGUISTIC :
+        {
+            String aTmp( aPathOpt.GetLinguisticPath() );
+            utl::LocalFileHelper::ConvertURLToPhysicalName( aTmp, aRes );
+            break;
+        }
+/*
+        case SvtPathOptions::PATH_USERDICTIONARY :
+        {
+            String aTmp( aPathOpt.GetUserDictionaryPath() );
+            utl::LocalFileHelper::ConvertURLToPhysicalName( aTmp, aRes );
+            break;
+        }
+*/
+        default:
+            DBG_ASSERT( 0, "unexpected argument (path)" );
+    }
+    if (bAddAccessDelim && aRes.Len())
+    {
+#ifdef WNT
+        aRes += '\\';
+#else
+        aRes += '/';
+#endif
+    }
+
+    return aRes;
+}
+
+#endif
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -187,10 +250,7 @@ String  GetWritableDictionaryURL( const String &rDicName )
     aURLObj.Append( rDicName, INetURLObject::ENCODE_ALL );
     DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
 
-    // NO_DECODE preserves the escape sequences that might be included in aDirName
-    // depending on the characters used in the path string. (Needed when comparing
-    // the dictionary URL with GetDictionaryWriteablePath in DicList::createDictionary.)
-    return aURLObj.GetMainURL( INetURLObject::NO_DECODE );
+    return aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
 }
 
 
@@ -206,11 +266,11 @@ String SearchFileInPaths(
     const sal_Int32 nPaths = rPaths.getLength();
     for (sal_Int32 k = 0;  k < nPaths;  ++k)
     {
-        sal_Bool bIsURL = sal_True;
+        BOOL bIsURL = TRUE;
         INetURLObject aObj( rPaths[k] );
         if ( aObj.HasError() )
         {
-            bIsURL = sal_False;
+            bIsURL = FALSE;
             String aURL;
             if ( utl::LocalFileHelper::ConvertPhysicalNameToURL( rPaths[k], aURL ) )
                 aObj.SetURL( aURL );

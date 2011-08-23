@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,14 @@
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
 
+#include "oox/core/namespaces.hxx"
 #include "oox/core/fragmenthandler.hxx"
 
 #include "commonbehaviorcontext.hxx"
 #include "commontimenodecontext.hxx"
 #include "timetargetelementcontext.hxx"
 #include "pptfilterhelpers.hxx"
+#include "tokens.hxx"
 
 #include <string.h>
 
@@ -56,7 +58,7 @@ namespace oox { namespace ppt {
     CommonBehaviorContext::CommonBehaviorContext( ContextHandler& rParent,
             const Reference< XFastAttributeList >& xAttribs,
             const TimeNodePtr & pNode )
-        : TimeNodeContext( rParent, PPT_TOKEN( cBhvr ), xAttribs, pNode )
+        : TimeNodeContext( rParent, NMSP_PPT|XML_cBhvr, xAttribs, pNode )
             , mbInAttrList( false )
             , mbIsInAttrName( false )
     {
@@ -74,13 +76,13 @@ namespace oox { namespace ppt {
     {
         switch( aElement )
         {
-        case PPT_TOKEN( cBhvr ):
+        case NMSP_PPT|XML_cBhvr:
         {
             if( !maAttributes.empty() )
             {
                 OUStringBuffer sAttributes;
                 std::list< Attribute >::const_iterator iter;
-                for(iter = maAttributes.begin(); iter != maAttributes.end(); ++iter)
+                for(iter = maAttributes.begin(); iter != maAttributes.end(); iter++)
                 {
                     if( sAttributes.getLength() )
                     {
@@ -93,10 +95,10 @@ namespace oox { namespace ppt {
             }
             break;
         }
-        case PPT_TOKEN( attrNameLst ):
+        case NMSP_PPT|XML_attrNameLst:
             mbInAttrList = false;
             break;
-        case PPT_TOKEN( attrName ):
+        case NMSP_PPT|XML_attrName:
             if( mbIsInAttrName )
             {
                 const ImplAttributeNameConversion *attrConv = gImplConversionList;
@@ -144,16 +146,16 @@ namespace oox { namespace ppt {
 
         switch ( aElementToken )
         {
-        case PPT_TOKEN( cTn ):
+        case NMSP_PPT|XML_cTn:
             xRet.set( new CommonTimeNodeContext( *this, aElementToken, xAttribs, mpNode ) );
             break;
-        case PPT_TOKEN( tgtEl ):
+        case NMSP_PPT|XML_tgtEl:
             xRet.set( new TimeTargetElementContext( *this, mpNode->getTarget() ) );
             break;
-        case PPT_TOKEN( attrNameLst ):
+        case NMSP_PPT|XML_attrNameLst:
             mbInAttrList = true;
             break;
-        case PPT_TOKEN( attrName ):
+        case NMSP_PPT|XML_attrName:
         {
             if( mbInAttrList )
             {

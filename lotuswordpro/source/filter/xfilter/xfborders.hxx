@@ -57,11 +57,16 @@
  * @file
  * Border object,now only used by paragraph object.
  ************************************************************************/
-#ifndef     _XFBORDERS_HXX
-#define     _XFBORDERS_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-14 create this file.
+ * 2005-01-17 changed for the XFColor object.
+ ************************************************************************/
+#ifndef		_XFBORDERS_HXX
+#define		_XFBORDERS_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcolor.hxx"
+#include	"xfglobal.hxx"
+#include	"xfcolor.hxx"
 
 /**
  * @brief
@@ -74,55 +79,55 @@ public:
 
 public:
     /**
-     * @descr   Set border color.
+     * @descr	Set border color.
      */
-    void        SetColor(XFColor& color);
+    void		SetColor(XFColor& color);
 
     /**
-     * @descr   Set border width in cm.
+     * @descr	Set border width in cm.
      */
-    void        SetWidth(double width);
+    void		SetWidth(double width);
 
     /**
-     * @descr   Set whether the border has double line.
+     * @descr	Set whether the border has double line.
      */
-    void        SetDoubleLine(sal_Bool dual,sal_Bool bSameWidth);
+    void		SetDoubleLine(sal_Bool dual,sal_Bool bSameWidth);
 
     /**
-     * @descr   Set inner line width for border with double line.
+     * @descr	Set inner line width for border with double line.
      */
-    void        SetWidthInner(double inner);
+    void		SetWidthInner(double inner);
 
     /**
-     * @descr   Set space between double lines fo border.
+     * @descr	Set space between double lines fo border.
      */
-    void        SetWidthSpace(double space);
+    void		SetWidthSpace(double space);
 
     /**
-     * @descr   Set outter line width for border with double line.
+     * @descr	Set outter line width for border with double line.
      */
-    void        SetWidthOutter(double outer);
+    void		SetWidthOutter(double outer);
 
 private:
     /**
-     * @descr   Forst line width to OOo border width format.
+     * @descr	Forst line width to OOo border width format.
      */
-    rtl::OUString   GetLineWidth();
+    rtl::OUString	GetLineWidth();
 
-    rtl::OUString   ToString();
+    rtl::OUString	ToString();
 
     friend bool operator==(XFBorder& b1, XFBorder& b2);
     friend bool operator!=(XFBorder& b1, XFBorder& b2);
     friend class XFBorders;
 
 private:
-    double      m_fOffset;
-    XFColor     m_aColor;
-    sal_Bool    m_bDouble;
-    sal_Bool    m_bSameWidth;
-    double      m_fWidthInner;
-    double      m_fWidthSpace;
-    double      m_fWidthOutter;
+    double		m_fOffset;
+    XFColor		m_aColor;
+    sal_Bool	m_bDouble;
+    sal_Bool	m_bSameWidth;
+    double		m_fWidthInner;
+    double		m_fWidthSpace;
+    double		m_fWidthOutter;
 };
 
 /**
@@ -137,54 +142,54 @@ public:
 
 public:
     /**
-     * @descr   Set color of border side.
+     * @descr	Set color of border side.
      */
-    void    SetColor(enumXFBorder side, XFColor& color);
+    void	SetColor(enumXFBorder side, XFColor& color);
 
     /**
-     * @descr   Set width or border side.
+     * @descr	Set width or border side.
      */
-    void    SetWidth(enumXFBorder side, double width);
+    void	SetWidth(enumXFBorder side, double width);
 
     /**
-     * @descr   Set border side as doubel line.
-     * @param   bSameWidth whether two borders are same width.
+     * @descr	Set border side as doubel line.
+     * @param	bSameWidth whether two borders are same width.
      */
-    void    SetDoubleLine(enumXFBorder side, sal_Bool dual,sal_Bool bSameWidth);
+    void	SetDoubleLine(enumXFBorder side, sal_Bool dual,sal_Bool bSameWidth);
 
     /**
-     * @descr   Set inner border with of border side.
+     * @descr	Set inner border with of border side.
      */
-    void    SetWidthInner(enumXFBorder side, double inner);
+    void	SetWidthInner(enumXFBorder side, double inner);
 
     /**
-     * @descr   Set space between two borders fo border side.
+     * @descr	Set space between two borders fo border side.
      */
-    void    SetWidthSpace(enumXFBorder side, double space);
+    void	SetWidthSpace(enumXFBorder side, double space);
 
     /**
-     * @descr   Set outter border width of border side.
+     * @descr	Set outter border width of border side.
      */
-    void    SetWidthOutter(enumXFBorder side, double outer);
+    void	SetWidthOutter(enumXFBorder side, double outer);
 
-    XFBorder * GetLeft() {return &m_aBorderLeft;}
+    XFBorder * GetLeft() {return &m_aBorderLeft;};
 
-    XFBorder * GetRight() {return &m_aBorderRight;}
+    XFBorder * GetRight() {return &m_aBorderRight;};
 
-    XFBorder * GetTop() {return &m_aBorderTop;}
+    XFBorder * GetTop() {return &m_aBorderTop;};
 
-    XFBorder * GetBottom() {return &m_aBorderBottom;}
+    XFBorder * GetBottom() {return &m_aBorderBottom;};
 
-    void    ToXml(IXFStream *pStrm);
+    void	ToXml(IXFStream *pStrm);
 
     friend bool operator==(XFBorders& b1, XFBorders& b2);
     friend bool operator!=(XFBorders& b1, XFBorders& b2);
 
 private:
-    XFBorder    m_aBorderLeft;
-    XFBorder    m_aBorderRight;
-    XFBorder    m_aBorderTop;
-    XFBorder    m_aBorderBottom;
+    XFBorder	m_aBorderLeft;
+    XFBorder	m_aBorderRight;
+    XFBorder	m_aBorderTop;
+    XFBorder	m_aBorderBottom;
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,17 +30,16 @@
 #define __FRAMEWORK_CLASSES_FWKRESID_HXX_
 
 #include <tools/resid.hxx>
-#include <framework/fwedllapi.h>
 
 namespace framework
 {
 
-class FWE_DLLPUBLIC FwkResId : public ResId
+class FwkResId : public ResId
 {
     public:
-        FwkResId( sal_uInt16 nId );
-
-    static ResMgr*  GetResManager();
+        FwkResId( USHORT nId );
+        
+    static ResMgr*	GetResManager();
 };
 
 }

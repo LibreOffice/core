@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ public class _XDataContainer extends MultiMethodTest {
 
     /**
     * Sets the content type to some value. <p>
-    * Has <b>OK</b> status if no runtime exseptions occurred.
+    * Has <b>OK</b> status if no runtime exseptions occured.
     */
     public void _setContentType() {
         oObj.setContentType("image/jpeg") ;
@@ -78,7 +78,7 @@ public class _XDataContainer extends MultiMethodTest {
 
     /**
     * Sets the data to some byte array. <p>
-    * Has <b>OK</b> status if no runtime exseptions occurred.
+    * Has <b>OK</b> status if no runtime exseptions occured.
     */
     public void _setData() {
         oObj.setData(data) ;
@@ -109,7 +109,7 @@ public class _XDataContainer extends MultiMethodTest {
 
     /**
     * Sets the data URL to some URL. <p>
-    * Has <b>OK</b> status if no runtime exseptions occurred.
+    * Has <b>OK</b> status if no runtime exseptions occured.
     */
     public void _setDataURL() {
         dataURL = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) ;

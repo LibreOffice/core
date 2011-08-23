@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 #ifndef _CONNECTIVITY_JAVA_MATH_BIGDECIMAL_HXX_
-#define _CONNECTIVITY_JAVA_MATH_BIGDECIMAL_HXX_
+#define	_CONNECTIVITY_JAVA_MATH_BIGDECIMAL_HXX_
 
 #include "java/lang/Object.hxx"
 //**************************************************************
@@ -36,12 +36,12 @@ namespace connectivity
 {
     class java_math_BigDecimal : public java_lang_Object
     {
-        // static Data for the class
+        // statische Daten fuer die Klasse
         static jclass theClass;
     public:
         virtual jclass getMyClass() const;
         virtual ~java_math_BigDecimal();
-        // a Constructor, that is needed for when Returning the Object is needed:
+        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_math_BigDecimal( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
 
         java_math_BigDecimal( const ::rtl::OUString& _par0 );

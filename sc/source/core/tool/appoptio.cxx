@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,13 +49,12 @@
 #include "miscuno.hxx"
 
 using namespace utl;
+using namespace rtl;
 using namespace com::sun::star::uno;
-
-using ::rtl::OUString;
 
 // STATIC DATA -----------------------------------------------------------
 
-#define SC_VERSION ((sal_uInt16)304)
+#define SC_VERSION ((USHORT)304)
 
 //========================================================================
 //      ScAppOptions - Applikations-Optionen
@@ -88,19 +87,19 @@ void ScAppOptions::SetDefaults()
     nTabCountInNewSpreadsheet = 3;
 
     if ( ScOptionsUtil::IsMetricSystem() )
-        eMetric     = FUNIT_CM;             // default for countries with metric system
+        eMetric		= FUNIT_CM;				// default for countries with metric system
     else
-        eMetric     = FUNIT_INCH;           // default for others
+        eMetric		= FUNIT_INCH;			// default for others
 
-    nZoom           = 100;
-    eZoomType       = SVX_ZOOM_PERCENT;
-    bSynchronizeZoom = sal_True;
-    nStatusFunc     = SUBTOTAL_FUNC_SUM;
-    bAutoComplete   = sal_True;
-    bDetectiveAuto  = sal_True;
+    nZoom 			= 100;
+    eZoomType		= SVX_ZOOM_PERCENT;
+    bSynchronizeZoom = TRUE;
+    nStatusFunc		= SUBTOTAL_FUNC_SUM;
+    bAutoComplete	= TRUE;
+    bDetectiveAuto	= TRUE;
 
     delete [] pLRUList;
-    pLRUList = new sal_uInt16[5];               // sinnvoll vorbelegen
+    pLRUList = new USHORT[5];				// sinnvoll vorbelegen
     pLRUList[0] = SC_OPCODE_SUM;
     pLRUList[1] = SC_OPCODE_AVERAGE;
     pLRUList[2] = SC_OPCODE_MIN;
@@ -112,7 +111,7 @@ void ScAppOptions::SetDefaults()
     nTrackInsertColor  = COL_TRANSPARENT;
     nTrackDeleteColor  = COL_TRANSPARENT;
     nTrackMoveColor    = COL_TRANSPARENT;
-    eLinkMode          = LM_ON_DEMAND;
+    eLinkMode		   = LM_ON_DEMAND;
 
     nDefaultObjectSizeWidth = 8000;
     nDefaultObjectSizeHeight = 5000;
@@ -125,19 +124,19 @@ void ScAppOptions::SetDefaults()
 const ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
 {
     nTabCountInNewSpreadsheet = rCpy.nTabCountInNewSpreadsheet;
-    eMetric         = rCpy.eMetric;
-    eZoomType       = rCpy.eZoomType;
+    eMetric			= rCpy.eMetric;
+    eZoomType		= rCpy.eZoomType;
     bSynchronizeZoom = rCpy.bSynchronizeZoom;
-    nZoom           = rCpy.nZoom;
+    nZoom			= rCpy.nZoom;
     SetLRUFuncList( rCpy.pLRUList, rCpy.nLRUFuncCount );
-    nStatusFunc     = rCpy.nStatusFunc;
-    bAutoComplete   = rCpy.bAutoComplete;
-    bDetectiveAuto  = rCpy.bDetectiveAuto;
+    nStatusFunc		= rCpy.nStatusFunc;
+    bAutoComplete	= rCpy.bAutoComplete;
+    bDetectiveAuto	= rCpy.bDetectiveAuto;
     nTrackContentColor = rCpy.nTrackContentColor;
     nTrackInsertColor  = rCpy.nTrackInsertColor;
     nTrackDeleteColor  = rCpy.nTrackDeleteColor;
     nTrackMoveColor    = rCpy.nTrackMoveColor;
-    eLinkMode       = rCpy.eLinkMode;
+    eLinkMode		= rCpy.eLinkMode;
     nDefaultObjectSizeWidth = rCpy.nDefaultObjectSizeWidth;
     nDefaultObjectSizeHeight = rCpy.nDefaultObjectSizeHeight;
     mbShowSharedDocumentWarning = rCpy.mbShowSharedDocumentWarning;
@@ -146,7 +145,7 @@ const ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
 
 //------------------------------------------------------------------------
 
-void ScAppOptions::SetLRUFuncList( const sal_uInt16* pList, const sal_uInt16 nCount )
+void ScAppOptions::SetLRUFuncList( const USHORT* pList,	const USHORT nCount )
 {
     delete [] pLRUList;
 
@@ -154,9 +153,9 @@ void ScAppOptions::SetLRUFuncList( const sal_uInt16* pList, const sal_uInt16 nCo
 
     if ( nLRUFuncCount > 0 )
     {
-        pLRUList = new sal_uInt16[nLRUFuncCount];
+        pLRUList = new USHORT[nLRUFuncCount];
 
-        for ( sal_uInt16 i=0; i<nLRUFuncCount; i++ )
+        for ( USHORT i=0; i<nLRUFuncCount; i++ )
             pLRUList[i] = pList[i];
     }
     else
@@ -164,7 +163,7 @@ void ScAppOptions::SetLRUFuncList( const sal_uInt16* pList, const sal_uInt16 nCo
 }
 
 //==================================================================
-//  Config Item containing app options
+//	Config Item containing app options
 //==================================================================
 
 void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
@@ -176,11 +175,11 @@ void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
         if ( nCount < USHRT_MAX )
         {
             const sal_Int32* pArray = aSeq.getConstArray();
-            sal_uInt16* pUShorts = new sal_uInt16[nCount];
+            USHORT* pUShorts = new USHORT[nCount];
             for (long i=0; i<nCount; i++)
-                pUShorts[i] = (sal_uInt16) pArray[i];
+                pUShorts[i] = (USHORT) pArray[i];
 
-            rOpt.SetLRUFuncList( pUShorts, sal::static_int_cast<sal_uInt16>(nCount) );
+            rOpt.SetLRUFuncList( pUShorts, sal::static_int_cast<USHORT>(nCount) );
 
             delete[] pUShorts;
         }
@@ -190,7 +189,7 @@ void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
 void lcl_GetLastFunctions( Any& rDest, const ScAppOptions& rOpt )
 {
     long nCount = rOpt.GetLRUFuncListCount();
-    sal_uInt16* pUShorts = rOpt.GetLRUFuncList();
+    USHORT* pUShorts = rOpt.GetLRUFuncList();
     if ( nCount && pUShorts )
     {
         Sequence<sal_Int32> aSeq( nCount );
@@ -200,7 +199,7 @@ void lcl_GetLastFunctions( Any& rDest, const ScAppOptions& rOpt )
         rDest <<= aSeq;
     }
     else
-        rDest <<= Sequence<sal_Int32>(0);   // empty
+        rDest <<= Sequence<sal_Int32>(0);	// empty
 }
 
 void lcl_SetSortList( const Any& rValue )
@@ -212,9 +211,9 @@ void lcl_SetSortList( const Any& rValue )
         const OUString* pArray = aSeq.getConstArray();
         ScUserList aList;
 
-        //  if setting is "default", keep default values from ScUserList ctor
-        //! mark "default" in a safe way
-        sal_Bool bDefault = ( nCount == 1 &&
+        //	if setting is "default", keep default values from ScUserList ctor
+        //!	mark "default" in a safe way
+        BOOL bDefault = ( nCount == 1 &&
                         pArray[0].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "NULL" ) ) );
 
         if (!bDefault)
@@ -242,64 +241,64 @@ void lcl_GetSortList( Any& rDest )
         Sequence<OUString> aSeq( nCount );
         OUString* pArray = aSeq.getArray();
         for (long i=0; i<nCount; i++)
-            pArray[i] = (*pUserList)[sal::static_int_cast<sal_uInt16>(i)]->GetString();
+            pArray[i] = (*pUserList)[sal::static_int_cast<USHORT>(i)]->GetString();
         rDest <<= aSeq;
     }
     else
-        rDest <<= Sequence<OUString>(0);    // empty
+        rDest <<= Sequence<OUString>(0);	// empty
 }
 
 //------------------------------------------------------------------
 
-#define CFGPATH_LAYOUT      "Office.Calc/Layout"
+#define CFGPATH_LAYOUT		"Office.Calc/Layout"
 
-#define SCLAYOUTOPT_MEASURE         0
-#define SCLAYOUTOPT_STATUSBAR       1
-#define SCLAYOUTOPT_ZOOMVAL         2
-#define SCLAYOUTOPT_ZOOMTYPE        3
+#define SCLAYOUTOPT_MEASURE			0
+#define SCLAYOUTOPT_STATUSBAR		1
+#define SCLAYOUTOPT_ZOOMVAL			2
+#define SCLAYOUTOPT_ZOOMTYPE		3
 #define SCLAYOUTOPT_SYNCZOOM        4
 #define SCLAYOUTOPT_COUNT           5
 
-#define CFGPATH_INPUT       "Office.Calc/Input"
+#define CFGPATH_INPUT		"Office.Calc/Input"
 
-#define SCINPUTOPT_LASTFUNCS        0
-#define SCINPUTOPT_AUTOINPUT        1
-#define SCINPUTOPT_DET_AUTO         2
-#define SCINPUTOPT_COUNT            3
+#define SCINPUTOPT_LASTFUNCS		0
+#define SCINPUTOPT_AUTOINPUT		1
+#define SCINPUTOPT_DET_AUTO			2
+#define SCINPUTOPT_COUNT			3
 
-#define CFGPATH_REVISION    "Office.Calc/Revision/Color"
+#define CFGPATH_REVISION	"Office.Calc/Revision/Color"
 
-#define SCREVISOPT_CHANGE           0
-#define SCREVISOPT_INSERTION        1
-#define SCREVISOPT_DELETION         2
-#define SCREVISOPT_MOVEDENTRY       3
-#define SCREVISOPT_COUNT            4
+#define SCREVISOPT_CHANGE			0
+#define SCREVISOPT_INSERTION		1
+#define SCREVISOPT_DELETION			2
+#define SCREVISOPT_MOVEDENTRY		3
+#define SCREVISOPT_COUNT			4
 
-#define CFGPATH_CONTENT     "Office.Calc/Content/Update"
+#define CFGPATH_CONTENT		"Office.Calc/Content/Update"
 
-#define SCCONTENTOPT_LINK           0
-#define SCCONTENTOPT_COUNT          1
+#define SCCONTENTOPT_LINK			0
+#define SCCONTENTOPT_COUNT			1
 
-#define CFGPATH_SORTLIST    "Office.Calc/SortList"
+#define CFGPATH_SORTLIST	"Office.Calc/SortList"
 
-#define SCSORTLISTOPT_LIST          0
-#define SCSORTLISTOPT_COUNT         1
+#define SCSORTLISTOPT_LIST			0
+#define SCSORTLISTOPT_COUNT			1
 
-#define CFGPATH_MISC        "Office.Calc/Misc"
+#define CFGPATH_MISC		"Office.Calc/Misc"
 
-#define SCMISCOPT_DEFOBJWIDTH       0
-#define SCMISCOPT_DEFOBJHEIGHT      1
+#define SCMISCOPT_DEFOBJWIDTH		0
+#define SCMISCOPT_DEFOBJHEIGHT		1
 #define SCMISCOPT_SHOWSHAREDDOCWARN 2
-#define SCMISCOPT_COUNT             3
+#define SCMISCOPT_COUNT				3
 
 
 Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Other/MeasureUnit/NonMetric",  // SCLAYOUTOPT_MEASURE
-        "Other/StatusbarFunction",      // SCLAYOUTOPT_STATUSBAR
-        "Zoom/Value",                   // SCLAYOUTOPT_ZOOMVAL
+        "Other/MeasureUnit/NonMetric",	// SCLAYOUTOPT_MEASURE
+        "Other/StatusbarFunction",		// SCLAYOUTOPT_STATUSBAR
+        "Zoom/Value",					// SCLAYOUTOPT_ZOOMVAL
         "Zoom/Type",                    // SCLAYOUTOPT_ZOOMTYPE
         "Zoom/Synchronize"              // SCLAYOUTOPT_SYNCZOOM
     };
@@ -308,9 +307,9 @@ Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
     for(int i = 0; i < SCLAYOUTOPT_COUNT; i++)
         pNames[i] = OUString::createFromAscii(aPropNames[i]);
 
-    //  adjust for metric system
+    //	adjust for metric system
     if (ScOptionsUtil::IsMetricSystem())
-        pNames[SCLAYOUTOPT_MEASURE] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Other/MeasureUnit/Metric") );
+        pNames[SCLAYOUTOPT_MEASURE] = OUString::createFromAscii( "Other/MeasureUnit/Metric" );
 
     return aNames;
 }
@@ -319,9 +318,9 @@ Sequence<OUString> ScAppCfg::GetInputPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "LastFunctions",            // SCINPUTOPT_LASTFUNCS
-        "AutoInput",                // SCINPUTOPT_AUTOINPUT
-        "DetectiveAuto"             // SCINPUTOPT_DET_AUTO
+        "LastFunctions",			// SCINPUTOPT_LASTFUNCS
+        "AutoInput",				// SCINPUTOPT_AUTOINPUT
+        "DetectiveAuto"				// SCINPUTOPT_DET_AUTO
     };
     Sequence<OUString> aNames(SCINPUTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -335,10 +334,10 @@ Sequence<OUString> ScAppCfg::GetRevisionPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Change",                   // SCREVISOPT_CHANGE
-        "Insertion",                // SCREVISOPT_INSERTION
-        "Deletion",                 // SCREVISOPT_DELETION
-        "MovedEntry"                // SCREVISOPT_MOVEDENTRY
+        "Change",					// SCREVISOPT_CHANGE
+        "Insertion",				// SCREVISOPT_INSERTION
+        "Deletion",					// SCREVISOPT_DELETION
+        "MovedEntry"				// SCREVISOPT_MOVEDENTRY
     };
     Sequence<OUString> aNames(SCREVISOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -352,7 +351,7 @@ Sequence<OUString> ScAppCfg::GetContentPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Link"                      // SCCONTENTOPT_LINK
+        "Link"						// SCCONTENTOPT_LINK
     };
     Sequence<OUString> aNames(SCCONTENTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -366,7 +365,7 @@ Sequence<OUString> ScAppCfg::GetSortListPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "List"                      // SCSORTLISTOPT_LIST
+        "List"						// SCSORTLISTOPT_LIST
     };
     Sequence<OUString> aNames(SCSORTLISTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -380,7 +379,7 @@ Sequence<OUString> ScAppCfg::GetMiscPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "DefaultObjectSize/Width",      // SCMISCOPT_DEFOBJWIDTH
+        "DefaultObjectSize/Width",	    // SCMISCOPT_DEFOBJWIDTH
         "DefaultObjectSize/Height",     // SCMISCOPT_DEFOBJHEIGHT
         "SharedDocument/ShowWarning"    // SCMISCOPT_SHOWSHAREDDOCWARN
     };
@@ -394,12 +393,12 @@ Sequence<OUString> ScAppCfg::GetMiscPropertyNames()
 
 
 ScAppCfg::ScAppCfg() :
-    aLayoutItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_LAYOUT )) ),
-    aInputItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_INPUT )) ),
-    aRevisionItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_REVISION )) ),
-    aContentItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_CONTENT )) ),
-    aSortListItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_SORTLIST )) ),
-    aMiscItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_MISC )) )
+    aLayoutItem( OUString::createFromAscii( CFGPATH_LAYOUT ) ),
+    aInputItem( OUString::createFromAscii( CFGPATH_INPUT ) ),
+    aRevisionItem( OUString::createFromAscii( CFGPATH_REVISION ) ),
+    aContentItem( OUString::createFromAscii( CFGPATH_CONTENT ) ),
+    aSortListItem( OUString::createFromAscii( CFGPATH_SORTLIST ) ),
+    aMiscItem( OUString::createFromAscii( CFGPATH_MISC ) )
 {
     sal_Int32 nIntVal = 0;
 
@@ -425,10 +424,10 @@ ScAppCfg::ScAppCfg() :
                         if (pValues[nProp] >>= nIntVal) SetAppMetric( (FieldUnit) nIntVal );
                         break;
                     case SCLAYOUTOPT_STATUSBAR:
-                        if (pValues[nProp] >>= nIntVal) SetStatusFunc( (sal_uInt16) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetStatusFunc( (USHORT) nIntVal );
                         break;
                     case SCLAYOUTOPT_ZOOMVAL:
-                        if (pValues[nProp] >>= nIntVal) SetZoom( (sal_uInt16) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetZoom( (USHORT) nIntVal );
                         break;
                     case SCLAYOUTOPT_ZOOMTYPE:
                         if (pValues[nProp] >>= nIntVal) SetZoomType( (SvxZoomType) nIntVal );

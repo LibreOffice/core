@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ public:
     bool                            mbIsEditDoc;
 
     // refcounter
-    sal_uInt32                      mnRefCount;
+    sal_uInt32						mnRefCount;
 
     // constuctor
     ImplOutlinerParaObject(EditTextObject* pEditTextObject, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc)
@@ -133,7 +133,7 @@ OutlinerParaObject& OutlinerParaObject::operator=(const OutlinerParaObject& rCan
         {
             delete mpImplOutlinerParaObject;
         }
-
+        
         mpImplOutlinerParaObject = rCandidate.mpImplOutlinerParaObject;
         mpImplOutlinerParaObject->mnRefCount++;
     }
@@ -225,7 +225,7 @@ const ParagraphData& OutlinerParaObject::GetParagraphData(sal_uInt32 nIndex) con
     }
     else
     {
-        OSL_FAIL("OutlinerParaObject::GetParagraphData: Access out of range (!)");
+        OSL_ENSURE(false, "OutlinerParaObject::GetParagraphData: Access out of range (!)");
         static ParagraphData aEmptyParagraphData;
         return aEmptyParagraphData;
     }

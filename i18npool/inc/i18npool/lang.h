@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@
    Language Identifier Constants and Strings
    http://msdn2.microsoft.com/en-us/library/ms776294.aspx
 
-   Hey, yet another list, maybe this one will not move around? It seems to be
+   Hey, yet another list, maybe this one will not move around? It seems to be 
    quite complete..
    Language Identifier Constants and Strings (Windows)
    http://msdn.microsoft.com/en-us/library/dd318693(VS.85).aspx
@@ -517,20 +517,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_GIKUYU                0x0655
 #define LANGUAGE_USER_RUSYN_UKRAINE         0x0656
 #define LANGUAGE_USER_RUSYN_SLOVAKIA        0x8256  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_USER_RUSYN_UKRAINE)) */
-#define LANGUAGE_USER_YIDDISH_US            0x083D  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_YIDDISH)) */
-#define LANGUAGE_USER_LIMBU                 0x0657
-#define LANGUAGE_USER_LOJBAN                0x0658  /* no locale */
-#define LANGUAGE_USER_KABYLE                0x0659
-#define LANGUAGE_USER_HAITIAN               0x065A
-#define LANGUAGE_USER_BEEMBE                0x065B
-#define LANGUAGE_USER_BEKWEL                0x065C
-#define LANGUAGE_USER_KITUBA                0x065D
-#define LANGUAGE_USER_LARI                  0x065E
-#define LANGUAGE_USER_MBOCHI                0x065F
-#define LANGUAGE_USER_TEKE_IBALI            0x0660
-#define LANGUAGE_USER_TEKE_TYEE             0x0661
-#define LANGUAGE_USER_VILI                  0x0662
-#define LANGUAGE_USER_PORTUGUESE_ANGOLA     0x8016  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_PORTUGUESE)) */
+
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
 

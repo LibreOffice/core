@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: PropertyHdl.hxx,v $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,7 +28,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #ifndef PROPERTYHDL_HXX_INCLUDED
 #define PROPERTYHDL_HXX_INCLUDED
 
@@ -39,7 +42,7 @@
 #endif
 
 // {AE424E85-F6DF-4910-A6A9-438797986431}
-const CLSID CLSID_PROPERTY_HANDLER =
+const CLSID CLSID_PROPERTY_HANDLER = 
 { 0xae424e85, 0xf6df, 0x4910, { 0xa6, 0xa9, 0x43, 0x87, 0x97, 0x98, 0x64, 0x31 } };
 
 class CMetaInfoReader;
@@ -55,7 +58,7 @@ public:
     //-----------------------------
     // IUnknown methods
     //-----------------------------
-    virtual HRESULT STDMETHODCALLTYPE QueryInterface(
+    virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
             REFIID riid,
             void __RPC_FAR *__RPC_FAR *ppvObject );
     virtual ULONG STDMETHODCALLTYPE AddRef( void );
@@ -98,7 +101,7 @@ public:
     //-----------------------------
     // IUnknown methods
     //-----------------------------
-    virtual HRESULT STDMETHODCALLTYPE QueryInterface(
+    virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
             REFIID riid,
             void __RPC_FAR *__RPC_FAR *ppvObject);
     virtual ULONG STDMETHODCALLTYPE AddRef( void );
@@ -107,7 +110,7 @@ public:
     //-----------------------------
     // IClassFactory methods
     //-----------------------------
-    virtual HRESULT STDMETHODCALLTYPE CreateInstance(
+    virtual HRESULT STDMETHODCALLTYPE CreateInstance( 
             IUnknown __RPC_FAR *pUnkOuter,
             REFIID riid,
             void __RPC_FAR *__RPC_FAR *ppvObject);
@@ -121,6 +124,6 @@ private:
     static long  s_ServerLocks;
 };
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

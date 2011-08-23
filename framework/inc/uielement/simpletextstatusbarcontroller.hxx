@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <svtools/statusbarcontroller.hxx>
 #include <vcl/image.hxx>
 
@@ -46,11 +46,11 @@ class SimpleTextStatusbarController : public svt::StatusbarController
 {
     public:
         SimpleTextStatusbarController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
-        virtual ~SimpleTextStatusbarController();
-
+        virtual ~SimpleTextStatusbarController();        
+        
         // XServiceInfo
         DECLARE_XSERVICEINFO
-
+        
         // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL acquire() throw ();
@@ -58,13 +58,13 @@ class SimpleTextStatusbarController : public svt::StatusbarController
 
         // XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-
+            
         // XComponent
         virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
 
         // XEventListener
         virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
-
+        
         // XStatusListener
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
 
@@ -72,16 +72,16 @@ class SimpleTextStatusbarController : public svt::StatusbarController
         virtual ::sal_Bool SAL_CALL mouseButtonDown( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL mouseMove( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL mouseButtonUp( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL command( const ::com::sun::star::awt::Point& aPos,
-                                       ::sal_Int32 nCommand,
-                                       ::sal_Bool bMouseEvent,
+        virtual void SAL_CALL command( const ::com::sun::star::awt::Point& aPos, 
+                                       ::sal_Int32 nCommand, 
+                                       ::sal_Bool bMouseEvent, 
                                        const ::com::sun::star::uno::Any& aData ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL paint( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics,
-                                     const ::com::sun::star::awt::Rectangle& rOutputRectangle,
+        virtual void SAL_CALL paint( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics, 
+                                     const ::com::sun::star::awt::Rectangle& rOutputRectangle, 
                                      ::sal_Int32 nItemId, ::sal_Int32 nStyle ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL click() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL doubleClick() throw (::com::sun::star::uno::RuntimeException);
-
+ 
     private:
         rtl::OUString   m_aText;
 };

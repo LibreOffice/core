@@ -33,10 +33,9 @@
 
 #include <vector>
 
+using namespace rtl;
 using namespace osl;
 using namespace com::sun::star;
-
-using ::rtl::OUString;
 
 namespace comphelper {
 
@@ -46,9 +45,9 @@ struct TagAttribute_Impl
     TagAttribute_Impl( const OUString &aName, const OUString &aType,
                          const OUString &aValue )
     {
-        this->sName     = aName;
-        this->sType     = aType;
-        this->sValue    = aValue;
+        this->sName 	= aName;
+        this->sType 	= aType;
+        this->sValue 	= aValue;
     }
 
     OUString sName;
@@ -126,7 +125,7 @@ AttributeList::~AttributeList()
     delete m_pImpl;
 }
 
-void AttributeList::AddAttribute(   const OUString &sName ,
+void AttributeList::AddAttribute( 	const OUString &sName ,
                                         const OUString &sType ,
                                         const OUString &sValue )
 {

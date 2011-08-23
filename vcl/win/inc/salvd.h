@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,22 +41,22 @@ class WinSalGraphics;
 class WinSalVirtualDevice : public SalVirtualDevice
 {
 public:
-    HDC                     mhDC;                   // HDC or 0 for Cache Device
-    HBITMAP                 mhBmp;                  // Memory Bitmap
-    HBITMAP                 mhDefBmp;               // Default Bitmap
-    WinSalGraphics*         mpGraphics;             // current VirDev graphics
-    WinSalVirtualDevice*    mpNext;                 // next VirDev
-    sal_uInt16                  mnBitCount;             // BitCount (0 or 1)
-    sal_Bool                    mbGraphics;             // is Graphics used
-    sal_Bool                    mbForeignDC;            // uses a foreign DC instead of a bitmap
+    HDC 					mhDC;					// HDC or 0 for Cache Device
+    HBITMAP 				mhBmp;					// Memory Bitmap
+    HBITMAP 				mhDefBmp;				// Default Bitmap
+    WinSalGraphics*			mpGraphics; 			// current VirDev graphics
+    WinSalVirtualDevice*	mpNext; 				// next VirDev
+    USHORT					mnBitCount; 			// BitCount (0 or 1)
+    BOOL					mbGraphics; 			// is Graphics used
+    BOOL                    mbForeignDC;            // uses a foreign DC instead of a bitmap
 
     WinSalVirtualDevice();
     virtual ~WinSalVirtualDevice();
 
-    virtual SalGraphics*            GetGraphics();
-    virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
-    virtual sal_Bool                    SetSize( long nNewDX, long nNewDY );
-    virtual void                    GetSize( long& rWidth, long& rHeight );
+    virtual SalGraphics*			GetGraphics();
+    virtual void					ReleaseGraphics( SalGraphics* pGraphics );
+    virtual BOOL                    SetSize( long nNewDX, long nNewDY );
+    virtual void				    GetSize( long& rWidth, long& rHeight );
 };
 
 #endif // _SV_SALVD_H

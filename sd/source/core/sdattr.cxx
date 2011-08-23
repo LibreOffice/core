@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,14 +36,14 @@ using namespace ::com::sun::star;
 
 /*************************************************************************
 |*
-|*  DiaEffectItem
+|*	DiaEffectItem
 |*
 *************************************************************************/
 TYPEINIT1_AUTOFACTORY( DiaEffectItem, SfxEnumItem );
 
 
 DiaEffectItem::DiaEffectItem( presentation::FadeEffect eFE ) :
-    SfxEnumItem( ATTR_DIA_EFFECT, (sal_uInt16)eFE )
+    SfxEnumItem( ATTR_DIA_EFFECT, (USHORT)eFE )
 {
 }
 
@@ -60,21 +60,21 @@ SfxPoolItem* DiaEffectItem::Clone( SfxItemPool* ) const
 }
 
 
-SfxPoolItem* DiaEffectItem::Create( SvStream& rIn, sal_uInt16 ) const
+SfxPoolItem* DiaEffectItem::Create( SvStream& rIn, USHORT ) const
 {
     return new DiaEffectItem( rIn );
 }
 
 /*************************************************************************
 |*
-|*  DiaSpeedItem
+|*	DiaSpeedItem
 |*
 *************************************************************************/
 TYPEINIT1_AUTOFACTORY( DiaSpeedItem, SfxEnumItem );
 
 
 DiaSpeedItem::DiaSpeedItem( FadeSpeed eFS ) :
-    SfxEnumItem( ATTR_DIA_SPEED, (sal_uInt16)eFS )
+    SfxEnumItem( ATTR_DIA_SPEED, (USHORT)eFS )
 {
 }
 
@@ -91,20 +91,20 @@ SfxPoolItem* DiaSpeedItem::Clone( SfxItemPool* ) const
 }
 
 
-SfxPoolItem* DiaSpeedItem::Create( SvStream& rIn, sal_uInt16 ) const
+SfxPoolItem* DiaSpeedItem::Create( SvStream& rIn, USHORT ) const
 {
     return new DiaSpeedItem( rIn );
 }
 
 /*************************************************************************
 |*
-|*  DiaAutoItem
+|*	DiaAutoItem
 |*
 *************************************************************************/
 TYPEINIT1_AUTOFACTORY( DiaAutoItem, SfxEnumItem );
 
 DiaAutoItem::DiaAutoItem( PresChange eChange ) :
-    SfxEnumItem( ATTR_DIA_AUTO, (sal_uInt16)eChange )
+    SfxEnumItem( ATTR_DIA_AUTO, (USHORT)eChange )
 {
 }
 
@@ -121,20 +121,20 @@ SfxPoolItem* DiaAutoItem::Clone( SfxItemPool* ) const
 }
 
 
-SfxPoolItem* DiaAutoItem::Create( SvStream& rIn, sal_uInt16 ) const
+SfxPoolItem* DiaAutoItem::Create( SvStream& rIn, USHORT ) const
 {
     return new DiaAutoItem( rIn );
 }
 
 /*************************************************************************
 |*
-|*  DiaTimeItem
+|*	DiaTimeItem
 |*
 *************************************************************************/
 TYPEINIT1_AUTOFACTORY( DiaTimeItem, SfxUInt32Item );
 
 
-DiaTimeItem::DiaTimeItem( sal_uInt32 nValue ) :
+DiaTimeItem::DiaTimeItem( UINT32 nValue ) :
         SfxUInt32Item( ATTR_DIA_TIME, nValue )
 {
 }

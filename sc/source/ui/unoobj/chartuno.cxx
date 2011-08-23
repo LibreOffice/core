@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,12 +120,12 @@ ScChartsObj::~ScChartsObj()
 
 void ScChartsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //! Referenz-Update
+    //!	Referenz-Update
 
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;		// ungueltig geworden
     }
 }
 
@@ -154,7 +154,7 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
                             uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                             if ( xObj.is() )
                                 aName = pDocShell->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
-                            break;  // nicht weitersuchen
+                            break;	// nicht weitersuchen
                         }
                         ++nPos;
                     }
@@ -196,23 +196,23 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
     if (!pPage || !pDoc)
         return;
 
-    //  chart can't be inserted if any ole object with that name exists on any table
-    //  (empty string: generate valid name)
+    //	chart can't be inserted if any ole object with that name exists on any table
+    //	(empty string: generate valid name)
 
     String aNameString(aName);
     SCTAB nDummy;
     if ( aNameString.Len() && pModel->GetNamedObject( aNameString, OBJ_OLE2, nDummy ) )
     {
-        //  object exists - only RuntimeException is specified
+        //	object exists - only RuntimeException is specified
         throw uno::RuntimeException();
     }
 
     ScRangeList* pList = new ScRangeList;
-    sal_uInt16 nRangeCount = (sal_uInt16)aRanges.getLength();
+    USHORT nRangeCount = (USHORT)aRanges.getLength();
     if (nRangeCount)
     {
         const table::CellRangeAddress* pAry = aRanges.getConstArray();
-        for (sal_uInt16 i=0; i<nRangeCount; i++)
+        for (USHORT i=0; i<nRangeCount; i++)
         {
             ScRange aRange( static_cast<SCCOL>(pAry[i].StartColumn), pAry[i].StartRow, pAry[i].Sheet,
                             static_cast<SCCOL>(pAry[i].EndColumn),   pAry[i].EndRow,   pAry[i].Sheet );
@@ -229,14 +229,13 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
     {
             String aObjName = aTmp;       // wirklich eingefuegter Name...
 
-            //  Rechteck anpassen
-            //! Fehler/Exception, wenn leer/ungueltig ???
+            //	Rechteck anpassen
+            //!	Fehler/Exception, wenn leer/ungueltig ???
             Point aRectPos( aRect.X, aRect.Y );
-            bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-            if ( ( aRectPos.X() < 0 && !bLayoutRTL ) || ( aRectPos.X() > 0 && bLayoutRTL ) ) aRectPos.X() = 0;
+            if (aRectPos.X() < 0) aRectPos.X() = 0;
             if (aRectPos.Y() < 0) aRectPos.Y() = 0;
             Size aRectSize( aRect.Width, aRect.Height );
-            if (aRectSize.Width() <= 0) aRectSize.Width() = 5000;   // Default-Groesse
+            if (aRectSize.Width() <= 0) aRectSize.Width() = 5000;	// Default-Groesse
             if (aRectSize.Height() <= 0) aRectSize.Height() = 5000;
             Rectangle aInsRect( aRectPos, aRectSize );
 
@@ -273,16 +272,16 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
                 // set arguments
                 uno::Sequence< beans::PropertyValue > aArgs( 4 );
                 aArgs[0] = beans::PropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellRangeRepresentation")), -1,
+                    ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
                     uno::makeAny( ::rtl::OUString( sRangeStr )), beans::PropertyState_DIRECT_VALUE );
                 aArgs[1] = beans::PropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasCategories")), -1,
+                    ::rtl::OUString::createFromAscii("HasCategories"), -1,
                     uno::makeAny( bRowHeaders ), beans::PropertyState_DIRECT_VALUE );
                 aArgs[2] = beans::PropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstCellAsLabel")), -1,
+                    ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
                     uno::makeAny( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE );
                 aArgs[3] = beans::PropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataRowSource")), -1,
+                    ::rtl::OUString::createFromAscii("DataRowSource"), -1,
                     uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
                 xReceiver->setArguments( aArgs );
             }
@@ -299,7 +298,11 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
                 xObj->setVisualAreaSize( nAspect, aSz );
 
             pPage->InsertObject( pObj );
-            pModel->AddUndo( new SdrUndoInsertObj( *pObj ) );       //! Undo-Kommentar?
+            pModel->AddUndo( new SdrUndoInsertObj( *pObj ) );		//! Undo-Kommentar?
+
+            // Dies veranlaesst Chart zum sofortigen Update
+            //SvData aEmpty;
+            //aIPObj->SendDataChanged( aEmpty );
     }
 }
 
@@ -312,13 +315,13 @@ void SAL_CALL ScChartsObj::removeByName( const rtl::OUString& aName )
     if (pObj)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
-        ScDrawLayer* pModel = pDoc->GetDrawLayer();     // ist nicht 0
+        ScDrawLayer* pModel = pDoc->GetDrawLayer();		// ist nicht 0
         SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));    // ist nicht 0
 
-        pModel->AddUndo( new SdrUndoDelObj( *pObj ) );
+        pModel->AddUndo( new SdrUndoRemoveObj( *pObj ) );	//!	Undo-Kommentar?
         pPage->RemoveObject( pObj->GetOrdNum() );
 
-        //! Notify etc.???
+        //!	Notify etc.???
     }
 }
 
@@ -336,7 +339,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScChartsObj::createEnumeration(
 sal_Int32 SAL_CALL ScChartsObj::getCount() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_Int32 nCount = 0;
+    INT32 nCount = 0;
     if ( pDocShell )
     {
         ScDocument* pDoc = pDocShell->GetDocument();
@@ -371,6 +374,7 @@ uno::Any SAL_CALL ScChartsObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xChart);
     else
         throw lang::IndexOutOfBoundsException();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScChartsObj::getElementType() throw(uno::RuntimeException)
@@ -395,6 +399,7 @@ uno::Any SAL_CALL ScChartsObj::getByName( const rtl::OUString& aName )
         return uno::makeAny(xChart);
     else
         throw container::NoSuchElementException();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::RuntimeException)
@@ -461,7 +466,7 @@ ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, const String& rN)
     pDocShell->GetDocument()->AddUnoObject(*this);
 
     uno::Sequence< table::CellRangeAddress > aInitialPropValue;
-    registerPropertyNoMember( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RelatedCellRanges" )),
+    registerPropertyNoMember( ::rtl::OUString::createFromAscii( "RelatedCellRanges" ),
         PROP_HANDLE_RELATED_CELLRANGES, beans::PropertyAttribute::MAYBEVOID,
         ::getCppuType( &aInitialPropValue ), &aInitialPropValue );
 }
@@ -474,12 +479,12 @@ ScChartObj::~ScChartObj()
 
 void ScChartObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //! Referenz-Update
+    //!	Referenz-Update
 
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;		// ungueltig geworden
     }
 }
 
@@ -548,14 +553,14 @@ void ScChartObj::Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, b
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
-        sal_Bool bUndo(pDoc->IsUndoEnabled());
+        BOOL bUndo(pDoc->IsUndoEnabled());
 
         if (bUndo)
         {
             pDocShell->GetUndoManager()->AddUndoAction(
-                new ScUndoChartData( pDocShell, aChartName, rRanges, bColHeaders, bRowHeaders, false ) );
+                new ScUndoChartData( pDocShell, aChartName, rRanges, bColHeaders, bRowHeaders, FALSE ) );
         }
-        pDoc->UpdateChartArea( aChartName, rRanges, bColHeaders, bRowHeaders, false );
+        pDoc->UpdateChartArea( aChartName, rRanges, bColHeaders, bRowHeaders, FALSE );
     }
 }
 
@@ -595,6 +600,8 @@ void ScChartObj::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno:
             }
             break;
         default:
+            {
+            }
             break;
     }
 }
@@ -609,7 +616,7 @@ void ScChartObj::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) con
                 if ( pDoc )
                 {
                     ScRange aEmptyRange;
-                    sal_uInt16 nIndex = 0;
+                    USHORT nIndex = 0;
                     ScChartListener aSearcher( aChartName, pDoc, aEmptyRange );
                     ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
                     if ( pCollection && pCollection->Search( &aSearcher, nIndex ) )
@@ -620,12 +627,12 @@ void ScChartObj::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) con
                             const ScRangeListRef& rRangeList = pListener->GetRangeList();
                             if ( rRangeList.Is() )
                             {
-                                size_t nCount = rRangeList->size();
+                                ULONG nCount = rRangeList->Count();
                                 uno::Sequence< table::CellRangeAddress > aCellRanges( nCount );
                                 table::CellRangeAddress* pCellRanges = aCellRanges.getArray();
-                                for ( size_t i = 0; i < nCount; ++i )
+                                for ( USHORT i = 0; i < nCount; ++i )
                                 {
-                                    ScRange aRange( *(*rRangeList)[i] );
+                                    ScRange aRange( *rRangeList->GetObject( i ) );
                                     table::CellRangeAddress aCellRange;
                                     ScUnoConversion::FillApiRange( aCellRange, aRange );
                                     pCellRanges[ i ] = aCellRange;
@@ -638,6 +645,8 @@ void ScChartObj::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) con
             }
             break;
         default:
+            {
+            }
             break;
     }
 }
@@ -684,7 +693,7 @@ void SAL_CALL ScChartObj::setHasColumnHeaders( sal_Bool bHasColumnHeaders )
     ScRangeListRef xRanges = new ScRangeList;
     bool bOldColHeaders, bOldRowHeaders;
     GetData_Impl( xRanges, bOldColHeaders, bOldRowHeaders );
-    if ( bOldColHeaders != (bHasColumnHeaders != false) )
+    if ( bOldColHeaders != (bHasColumnHeaders != sal_False) )
         Update_Impl( xRanges, bHasColumnHeaders, bOldRowHeaders );
 }
 
@@ -704,7 +713,7 @@ void SAL_CALL ScChartObj::setHasRowHeaders( sal_Bool bHasRowHeaders )
     ScRangeListRef xRanges = new ScRangeList;
     bool bOldColHeaders, bOldRowHeaders;
     GetData_Impl( xRanges, bOldColHeaders, bOldRowHeaders );
-    if ( bOldRowHeaders != (bHasRowHeaders != false) )
+    if ( bOldRowHeaders != (bHasRowHeaders != sal_False) )
         Update_Impl( xRanges, bOldColHeaders, bHasRowHeaders );
 }
 
@@ -716,27 +725,27 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScChartObj::getRanges() throw(un
     GetData_Impl( xRanges, bColHeaders, bRowHeaders );
     if ( xRanges.Is() )
     {
-        size_t nCount = xRanges->size();
+        ULONG nCount = xRanges->Count();
 
         table::CellRangeAddress aRangeAddress;
         uno::Sequence<table::CellRangeAddress> aSeq(nCount);
         table::CellRangeAddress* pAry = aSeq.getArray();
-        for (size_t i = 0; i < nCount; i++)
+        for (USHORT i=0; i<nCount; i++)
         {
-            ScRange aRange( *(*xRanges)[i] );
+            ScRange aRange(*xRanges->GetObject(i));
 
-            aRangeAddress.Sheet       = aRange.aStart.Tab();
+            aRangeAddress.Sheet		  = aRange.aStart.Tab();
             aRangeAddress.StartColumn = aRange.aStart.Col();
-            aRangeAddress.StartRow    = aRange.aStart.Row();
-            aRangeAddress.EndColumn   = aRange.aEnd.Col();
-            aRangeAddress.EndRow      = aRange.aEnd.Row();
+            aRangeAddress.StartRow	  = aRange.aStart.Row();
+            aRangeAddress.EndColumn	  = aRange.aEnd.Col();
+            aRangeAddress.EndRow	  = aRange.aEnd.Row();
 
             pAry[i] = aRangeAddress;
         }
         return aSeq;
     }
 
-    OSL_FAIL("ScChartObj::getRanges: keine Ranges");
+    DBG_ERROR("ScChartObj::getRanges: keine Ranges");
     return uno::Sequence<table::CellRangeAddress>();
 }
 
@@ -749,11 +758,11 @@ void SAL_CALL ScChartObj::setRanges( const uno::Sequence<table::CellRangeAddress
     GetData_Impl( xOldRanges, bColHeaders, bRowHeaders );
 
     ScRangeList* pList = new ScRangeList;
-    sal_uInt16 nRangeCount = (sal_uInt16)aRanges.getLength();
+    USHORT nRangeCount = (USHORT)aRanges.getLength();
     if (nRangeCount)
     {
         const table::CellRangeAddress* pAry = aRanges.getConstArray();
-        for (sal_uInt16 i=0; i<nRangeCount; i++)
+        for (USHORT i=0; i<nRangeCount; i++)
         {
             ScRange aRange( static_cast<SCCOL>(pAry[i].StartColumn), pAry[i].StartRow, pAry[i].Sheet,
                             static_cast<SCCOL>(pAry[i].EndColumn),   pAry[i].EndRow,   pAry[i].Sheet );
@@ -792,7 +801,7 @@ rtl::OUString SAL_CALL ScChartObj::getName() throw(uno::RuntimeException)
 void SAL_CALL ScChartObj::setName( const rtl::OUString& /* aName */ ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    throw uno::RuntimeException();      // name cannot be changed
+    throw uno::RuntimeException();		// name cannot be changed
 }
 
 // XPropertySet

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ protected:
     virtual void SAL_CALL AttachImpl(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange > & xTextRange,
-            const sal_uInt16 nWhich)
+            const USHORT nWhich)
         throw (::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::uno::RuntimeException);
 

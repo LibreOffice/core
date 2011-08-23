@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,13 +35,10 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
-#ifdef WNT
-#include <prewin.h>
-#include <postwin.h>
-#undef OPTIONAL
+#if STLPORT_VERSION>=321
+#include <cstdarg>
 #endif
 
-#include <cstdarg>
 #include <list>
 
 #include <plugin/impl.hxx>
@@ -90,11 +87,8 @@ void TRACES( char const* s, char const* s2 )
 #define TRACES(x,s)
 #endif
 
+using namespace rtl;
 using namespace com::sun::star::lang;
-
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
 
 NPNetscapeFuncs aNPNFuncs =
 {
@@ -164,9 +158,9 @@ static ::rtl::OString normalizeURL( XPlugin_Impl* plugin, const ::rtl::OString& 
 
 struct AsynchronousGetURL
 {
-    OUString                        aUrl;
-    OUString                        aTarget;
-    Reference< XEventListener >     xListener;
+    OUString						aUrl;
+    OUString						aTarget;
+    Reference< XEventListener >		xListener;
 
     DECL_LINK( getURL, XPlugin_Impl* );
 };
@@ -293,9 +287,9 @@ extern "C" {
             pImpl->addPluginEventListener( pListener );
             pListener = NULL;
         }
-        pAsync->aUrl        = OStringToOUString( aLoadURL, pImpl->getTextEncoding() );
-        pAsync->aTarget     = OStringToOUString( target, pImpl->getTextEncoding() );
-        pAsync->xListener   = pListener;
+        pAsync->aUrl		= OStringToOUString( aLoadURL, pImpl->getTextEncoding() );
+        pAsync->aTarget		= OStringToOUString( target, pImpl->getTextEncoding() );
+        pAsync->xListener	= pListener;
         pImpl->setLastGetUrl( aLoadURL );
         Application::PostUserEvent( LINK( pAsync, AsynchronousGetURL, getURL ), pImpl );
 
@@ -556,7 +550,7 @@ NPError SAL_CALL NP_LOADDS  NPN_GetValue( NPP instance, NPNVariable variable, vo
 
     if( ! pImpl )
         return 0;
-
+    
     NPError aResult( NPERR_NO_ERROR );
 
     switch( variable )
@@ -589,6 +583,23 @@ NPError SAL_CALL NP_LOADDS  NPN_GetValue( NPP instance, NPNVariable variable, vo
             *(NPBool*)value = false;
             break;
     }
+    /*
+    provisional code should there ever be NPNVariables that we actually
+    want to query from the PluginContext
+    ::rtl::OUString aValue;
+    try
+    {
+        pImpl->enterPluginCallback();
+        aValue = pImpl->getPluginContext()->
+            getValue( pImpl, (::com::sun::star::plugin::PluginVariable)variable );
+        pImpl->leavePluginCallback();
+    }
+    catch( ::com::sun::star::plugin::PluginException& e )
+    {
+        pImpl->leavePluginCallback();
+        return e.ErrorCode;
+    }
+    */
 
     return aResult;
 }
@@ -611,9 +622,9 @@ NPError SAL_CALL NP_LOADDS  NPN_SetValue( NPP instance,
     case (NPPVariable)1000: // NPNVpluginDrawingModel
     {
         int nDrawingModel = (int)value; // ugly, but that's the way we need to do it
-
+        
         TRACEN( "drawing model: ", nDrawingModel );
-
+        
         XPlugin_Impl* pImpl = XPluginManager_Impl::getXPluginFromNPP( instance );
         if( pImpl )
             pImpl->getSysPlugData().m_nDrawingModel = nDrawingModel;

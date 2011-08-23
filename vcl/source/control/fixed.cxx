@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,31 +28,31 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include "vcl/decoview.hxx"
-#include "vcl/event.hxx"
-#include "vcl/fixed.hxx"
-#include "vcl/controldata.hxx"
-#include "vcl/window.h"
+#include <vcl/decoview.hxx>
+#include <vcl/event.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/controldata.hxx>
+#include <vcl/window.h>
 
-#include "tools/rc.h"
+#include <tools/rc.h>
 
 // =======================================================================
 
-#define FIXEDLINE_TEXT_BORDER    4
+#define FIXEDLINE_TEXT_BORDER	 4
 
-#define FIXEDTEXT_VIEW_STYLE    (WB_3DLOOK |                        \
-                                 WB_LEFT | WB_CENTER | WB_RIGHT |   \
-                                 WB_TOP | WB_VCENTER | WB_BOTTOM |  \
-                                 WB_WORDBREAK | WB_NOLABEL |        \
+#define FIXEDTEXT_VIEW_STYLE	(WB_3DLOOK |						\
+                                 WB_LEFT | WB_CENTER | WB_RIGHT |	\
+                                 WB_TOP | WB_VCENTER | WB_BOTTOM |	\
+                                 WB_WORDBREAK | WB_NOLABEL |		\
                                  WB_INFO | WB_PATHELLIPSIS)
-#define FIXEDLINE_VIEW_STYLE    (WB_3DLOOK | WB_NOLABEL)
-#define FIXEDBITMAP_VIEW_STYLE  (WB_3DLOOK |                        \
-                                 WB_LEFT | WB_CENTER | WB_RIGHT |   \
-                                 WB_TOP | WB_VCENTER | WB_BOTTOM |  \
+#define FIXEDLINE_VIEW_STYLE	(WB_3DLOOK | WB_NOLABEL)
+#define FIXEDBITMAP_VIEW_STYLE	(WB_3DLOOK |						\
+                                 WB_LEFT | WB_CENTER | WB_RIGHT |	\
+                                 WB_TOP | WB_VCENTER | WB_BOTTOM |	\
                                  WB_SCALE)
-#define FIXEDIMAGE_VIEW_STYLE   (WB_3DLOOK |                        \
-                                 WB_LEFT | WB_CENTER | WB_RIGHT |   \
-                                 WB_TOP | WB_VCENTER | WB_BOTTOM |  \
+#define FIXEDIMAGE_VIEW_STYLE	(WB_3DLOOK |						\
+                                 WB_LEFT | WB_CENTER | WB_RIGHT |	\
+                                 WB_TOP | WB_VCENTER | WB_BOTTOM |	\
                                  WB_SCALE)
 
 // =======================================================================
@@ -60,8 +60,8 @@
 static Point ImplCalcPos( WinBits nStyle, const Point& rPos,
                           const Size& rObjSize, const Size& rWinSize )
 {
-    long    nX;
-    long    nY;
+    long	nX;
+    long	nY;
 
     if ( nStyle & WB_LEFT )
         nX = 0;
@@ -95,7 +95,7 @@ void FixedText::ImplInit( Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( TRUE, TRUE, TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -122,8 +122,8 @@ const Color& FixedText::GetCanonicalTextColor( const StyleSettings& _rStyle ) co
 
 // -----------------------------------------------------------------------
 
-void FixedText::ImplInitSettings( sal_Bool bFont,
-                                  sal_Bool bForeground, sal_Bool bBackground )
+void FixedText::ImplInitSettings( BOOL bFont,
+                                  BOOL bForeground, BOOL bBackground )
 {
     Control::ImplInitSettings( bFont, bForeground );
 
@@ -132,16 +132,16 @@ void FixedText::ImplInitSettings( sal_Bool bFont,
         Window* pParent = GetParent();
         if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
         {
-            EnableChildTransparentMode( sal_True );
+            EnableChildTransparentMode( TRUE );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-            SetPaintTransparent( sal_True );
+            SetPaintTransparent( TRUE );
             SetBackground();
         }
         else
         {
-            EnableChildTransparentMode( sal_False );
+            EnableChildTransparentMode( FALSE );
             SetParentClipMode( 0 );
-            SetPaintTransparent( sal_False );
+            SetPaintTransparent( FALSE );
 
             if ( IsControlBackground() )
                 SetBackground( GetControlBackground() );
@@ -183,7 +183,7 @@ FixedText::FixedText( Window* pParent, const ResId& rResId, bool bDisableAccessi
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
     if ( bDisableAccessibleLabelForRelation )
-        ImplGetWindowImpl()->mbDisableAccessibleLabelForRelation = sal_True;
+        ImplGetWindowImpl()->mbDisableAccessibleLabelForRelation = TRUE;
 
     if ( !(nStyle & WB_HIDE) )
         Show();
@@ -191,9 +191,9 @@ FixedText::FixedText( Window* pParent, const ResId& rResId, bool bDisableAccessi
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 FixedText::ImplGetTextStyle( WinBits nWinStyle )
+USHORT FixedText::ImplGetTextStyle( WinBits nWinStyle )
 {
-    sal_uInt16 nTextStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_ENDELLIPSIS;
+    USHORT nTextStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_ENDELLIPSIS;
 
     if( ! (nWinStyle & WB_NOMULTILINE) )
         nTextStyle |= TEXT_DRAW_MULTILINE;
@@ -224,15 +224,15 @@ sal_uInt16 FixedText::ImplGetTextStyle( WinBits nWinStyle )
 
 // -----------------------------------------------------------------------
 
-void FixedText::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
+void FixedText::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                           const Point& rPos, const Size& rSize,
                           bool bFillLayout
                           ) const
 {
-    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-    WinBits                 nWinStyle = GetStyle();
-    XubString               aText( GetText() );
-    sal_uInt16                  nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
+    const StyleSettings&	rStyleSettings = GetSettings().GetStyleSettings();
+    WinBits 				nWinStyle = GetStyle();
+    XubString				aText( GetText() );
+    USHORT					nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
     Point                   aPos = rPos;
 
     if ( nWinStyle & WB_EXTRAOFFSET )
@@ -280,13 +280,13 @@ void FixedText::Paint( const Rectangle& )
 // -----------------------------------------------------------------------
 
 void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                      sal_uLong nFlags )
+                      ULONG nFlags )
 {
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( TRUE, TRUE, TRUE );
 
-    Point       aPos  = pDev->LogicToPixel( rPos );
-    Size        aSize = pDev->LogicToPixel( rSize );
-    Font        aFont = GetDrawPixelFont( pDev );
+    Point		aPos  = pDev->LogicToPixel( rPos );
+    Size		aSize = pDev->LogicToPixel( rSize );
+    Font		aFont = GetDrawPixelFont( pDev );
 
     pDev->Push();
     pDev->SetMapMode();
@@ -297,8 +297,8 @@ void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
         pDev->SetTextColor( GetTextColor() );
     pDev->SetTextFillColor();
 
-    sal_Bool bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
-    sal_Bool bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
+    BOOL bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
+    BOOL bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
     if ( bBorder || bBackground )
     {
         Rectangle aRect( aPos, aSize );
@@ -344,24 +344,24 @@ void FixedText::StateChanged( StateChangedType nType )
         if ( (GetPrevStyle() & FIXEDTEXT_VIEW_STYLE) !=
              (GetStyle() & FIXEDTEXT_VIEW_STYLE) )
         {
-            ImplInitSettings( sal_True, sal_False, sal_False );
+            ImplInitSettings( TRUE, FALSE, FALSE );
             Invalidate();
         }
     }
-    else if ( (nType == STATE_CHANGE_ZOOM)  ||
+    else if ( (nType == STATE_CHANGE_ZOOM)	||
               (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        ImplInitSettings( sal_True, sal_False, sal_False );
+        ImplInitSettings( TRUE, FALSE, FALSE );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( sal_False, sal_True, sal_False );
+        ImplInitSettings( FALSE, TRUE, FALSE );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( sal_False, sal_False, sal_True );
+        ImplInitSettings( FALSE, FALSE, TRUE );
         Invalidate();
     }
 }
@@ -377,7 +377,7 @@ void FixedText::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( TRUE, TRUE, TRUE );
         Invalidate();
     }
 }
@@ -386,7 +386,7 @@ void FixedText::DataChanged( const DataChangedEvent& rDCEvt )
 
 Size FixedText::CalcMinimumTextSize( Control const *pControl, long nMaxWidth )
 {
-    sal_uInt16 nStyle = ImplGetTextStyle( pControl->GetStyle() );
+    USHORT nStyle = ImplGetTextStyle( pControl->GetStyle() );
     if ( !( pControl->GetStyle() & WB_NOLABEL ) )
         nStyle |= TEXT_DRAW_MNEMONIC;
 
@@ -435,7 +435,7 @@ void FixedLine::ImplInit( Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( TRUE, TRUE, TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -462,8 +462,8 @@ const Color& FixedLine::GetCanonicalTextColor( const StyleSettings& _rStyle ) co
 
 // -----------------------------------------------------------------------
 
-void FixedLine::ImplInitSettings( sal_Bool bFont,
-                                  sal_Bool bForeground, sal_Bool bBackground )
+void FixedLine::ImplInitSettings( BOOL bFont,
+                                  BOOL bForeground, BOOL bBackground )
 {
     Control::ImplInitSettings( bFont, bForeground );
 
@@ -472,16 +472,16 @@ void FixedLine::ImplInitSettings( sal_Bool bFont,
         Window* pParent = GetParent();
         if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
         {
-            EnableChildTransparentMode( sal_True );
+            EnableChildTransparentMode( TRUE );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-            SetPaintTransparent( sal_True );
+            SetPaintTransparent( TRUE );
             SetBackground();
         }
         else
         {
-            EnableChildTransparentMode( sal_False );
+            EnableChildTransparentMode( FALSE );
             SetParentClipMode( 0 );
-            SetPaintTransparent( sal_False );
+            SetPaintTransparent( FALSE );
 
             if ( IsControlBackground() )
                 SetBackground( GetControlBackground() );
@@ -495,57 +495,37 @@ void FixedLine::ImplInitSettings( sal_Bool bFont,
 
 void FixedLine::ImplDraw( bool bLayout )
 {
-    Size                    aOutSize = GetOutputSizePixel();
-    String                  aText = GetText();
-    WinBits                 nWinStyle = GetStyle();
-    MetricVector*           pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
-    String*                 pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
+    Size					aOutSize = GetOutputSizePixel();
+    String					aText = GetText();
+    WinBits 				nWinStyle = GetStyle();
+    MetricVector*			pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
+    String*					pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
 
     DecorationView aDecoView( this );
-    if ( !aText.Len() )
+    if ( !aText.Len() || (nWinStyle & WB_VERT) )
     {
         if( !pVector )
         {
+            long nX = 0;
+            long nY = 0;
+
             if ( nWinStyle & WB_VERT )
             {
-                long nX = (aOutSize.Width()-1)/2;
+                nX = (aOutSize.Width()-1)/2;
                 aDecoView.DrawSeparator( Point( nX, 0 ), Point( nX, aOutSize.Height()-1 ) );
             }
             else
             {
-                long nY = (aOutSize.Height()-1)/2;
+                nY = (aOutSize.Height()-1)/2;
                 aDecoView.DrawSeparator( Point( 0, nY ), Point( aOutSize.Width()-1, nY ), false );
             }
         }
     }
-    else if( (nWinStyle & WB_VERT) )
-    {
-        long nWidth = GetTextWidth( aText );
-        Push( PUSH_FONT );
-        Font aFont( GetFont() );
-        aFont.SetOrientation( 900 );
-        SetFont( aFont );
-        Point aStartPt( aOutSize.Width()/2, aOutSize.Height()-1 );
-        if( (nWinStyle & WB_VCENTER) )
-            aStartPt.Y() -= (aOutSize.Height() - nWidth)/2;
-        Point aTextPt( aStartPt );
-        aTextPt.X() -= GetTextHeight()/2;
-        DrawText( aTextPt, aText, 0, STRING_LEN, pVector, pDisplayText );
-        Pop();
-        if( aOutSize.Height() - aStartPt.Y() > FIXEDLINE_TEXT_BORDER )
-            aDecoView.DrawSeparator( Point( aStartPt.X(), aOutSize.Height()-1 ),
-                                     Point( aStartPt.X(), aStartPt.Y() + FIXEDLINE_TEXT_BORDER ) );
-        if( aStartPt.Y() - nWidth - FIXEDLINE_TEXT_BORDER > 0 )
-            aDecoView.DrawSeparator( Point( aStartPt.X(), aStartPt.Y() - nWidth - FIXEDLINE_TEXT_BORDER ),
-                                     Point( aStartPt.X(), 0 ) );
-    }
     else
     {
-        sal_uInt16      nStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_ENDELLIPSIS;
-        Rectangle   aRect( 0, 0, aOutSize.Width(), aOutSize.Height() );
+        USHORT		nStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_ENDELLIPSIS;
+        Rectangle	aRect( 0, 0, aOutSize.Width(), aOutSize.Height() );
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        if( (nWinStyle & WB_CENTER) )
-            nStyle |= TEXT_DRAW_CENTER;
 
         if ( !IsEnabled() )
             nStyle |= TEXT_DRAW_DISABLE;
@@ -560,8 +540,6 @@ void FixedLine::ImplDraw( bool bLayout )
         {
             long nTop = aRect.Top() + ((aRect.GetHeight()-1)/2);
             aDecoView.DrawSeparator( Point( aRect.Right()+FIXEDLINE_TEXT_BORDER, nTop ), Point( aOutSize.Width()-1, nTop ), false );
-            if( aRect.Left() > FIXEDLINE_TEXT_BORDER )
-                aDecoView.DrawSeparator( Point( 0, nTop ), Point( aRect.Left()-FIXEDLINE_TEXT_BORDER, nTop ), false );
         }
     }
 }
@@ -607,7 +585,7 @@ void FixedLine::Paint( const Rectangle& )
 
 // -----------------------------------------------------------------------
 
-void FixedLine::Draw( OutputDevice*, const Point&, const Size&, sal_uLong )
+void FixedLine::Draw( OutputDevice*, const Point&, const Size&, ULONG )
 {
 }
 
@@ -639,21 +617,21 @@ void FixedLine::StateChanged( StateChangedType nType )
              (GetStyle() & FIXEDLINE_VIEW_STYLE) )
             Invalidate();
     }
-    else if ( (nType == STATE_CHANGE_ZOOM)  ||
+    else if ( (nType == STATE_CHANGE_ZOOM)	||
               (nType == STATE_CHANGE_STYLE) ||
               (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        ImplInitSettings( sal_True, sal_False, sal_False );
+        ImplInitSettings( TRUE, FALSE, FALSE );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( sal_False, sal_True, sal_False );
+        ImplInitSettings( FALSE, TRUE, FALSE );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( sal_False, sal_False, sal_True );
+        ImplInitSettings( FALSE, FALSE, TRUE );
         Invalidate();
     }
 }
@@ -669,7 +647,7 @@ void FixedLine::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( TRUE, TRUE, TRUE );
         Invalidate();
     }
 }
@@ -711,16 +689,16 @@ void FixedBitmap::ImplInitSettings()
     Window* pParent = GetParent();
     if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
-        EnableChildTransparentMode( sal_True );
+        EnableChildTransparentMode( TRUE );
         SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        SetPaintTransparent( sal_True );
+        SetPaintTransparent( TRUE );
         SetBackground();
     }
     else
     {
-        EnableChildTransparentMode( sal_False );
+        EnableChildTransparentMode( FALSE );
         SetParentClipMode( 0 );
-        SetPaintTransparent( sal_False );
+        SetPaintTransparent( FALSE );
 
         if ( IsControlBackground() )
             SetBackground( GetControlBackground() );
@@ -735,7 +713,7 @@ void FixedBitmap::ImplLoadRes( const ResId& rResId )
 {
     Control::ImplLoadRes( rResId );
 
-    sal_uLong nObjMask = ReadLongRes();
+    ULONG nObjMask = ReadLongRes();
 
     if ( RSC_FIXEDBITMAP_BITMAP & nObjMask )
     {
@@ -774,12 +752,17 @@ FixedBitmap::~FixedBitmap()
 
 // -----------------------------------------------------------------------
 
-void FixedBitmap::ImplDraw( OutputDevice* pDev, sal_uLong /* nDrawFlags */,
+void FixedBitmap::ImplDraw( OutputDevice* pDev, ULONG /* nDrawFlags */,
                             const Point& rPos, const Size& rSize )
 {
-    sal_uInt16 nStyle = 0;
+    USHORT nStyle = 0;
     Bitmap* pBitmap = &maBitmap;
     Color aCol;
+    if( !!maBitmapHC )
+    {
+        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+            pBitmap = &maBitmapHC;
+    }
 
     if( nStyle & IMAGE_DRAW_COLORTRANSFORM )
     {
@@ -822,11 +805,11 @@ void FixedBitmap::Paint( const Rectangle& )
 // -----------------------------------------------------------------------
 
 void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                        sal_uLong nFlags )
+                        ULONG nFlags )
 {
-    Point       aPos  = pDev->LogicToPixel( rPos );
-    Size        aSize = pDev->LogicToPixel( rSize );
-    Rectangle   aRect( aPos, aSize );
+    Point		aPos  = pDev->LogicToPixel( rPos );
+    Size		aSize = pDev->LogicToPixel( rSize );
+    Rectangle	aRect( aPos, aSize );
 
     pDev->Push();
     pDev->SetMapMode();
@@ -901,17 +884,28 @@ void FixedBitmap::SetBitmap( const Bitmap& rBitmap )
 
 // -----------------------------------------------------------------------
 
-sal_Bool FixedBitmap::SetModeBitmap( const Bitmap& rBitmap )
+BOOL FixedBitmap::SetModeBitmap( const Bitmap& rBitmap, BmpColorMode eMode )
 {
-    SetBitmap( rBitmap );
-    return sal_True;
+    if( eMode == BMP_COLOR_NORMAL )
+        SetBitmap( rBitmap );
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+    {
+        maBitmapHC = rBitmap;
+        StateChanged( STATE_CHANGE_DATA );
+    }
+    else
+        return FALSE;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-const Bitmap& FixedBitmap::GetModeBitmap( ) const
+const Bitmap& FixedBitmap::GetModeBitmap( BmpColorMode eMode) const
 {
-    return maBitmap;
+    if( eMode == BMP_COLOR_HIGHCONTRAST )
+        return maBitmapHC;
+    else
+        return maBitmap;
 }
 
 // =======================================================================
@@ -919,7 +913,7 @@ const Bitmap& FixedBitmap::GetModeBitmap( ) const
 void FixedImage::ImplInit( Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
-    mbInUserDraw = sal_False;
+    mbInUserDraw = FALSE;
     Control::ImplInit( pParent, nStyle, NULL );
     ImplInitSettings();
 }
@@ -940,16 +934,16 @@ void FixedImage::ImplInitSettings()
     Window* pParent = GetParent();
     if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
-        EnableChildTransparentMode( sal_True );
+        EnableChildTransparentMode( TRUE );
         SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        SetPaintTransparent( sal_True );
+        SetPaintTransparent( TRUE );
         SetBackground();
     }
     else
     {
-        EnableChildTransparentMode( sal_False );
+        EnableChildTransparentMode( FALSE );
         SetParentClipMode( 0 );
-        SetPaintTransparent( sal_False );
+        SetPaintTransparent( FALSE );
 
         if ( IsControlBackground() )
             SetBackground( GetControlBackground() );
@@ -964,7 +958,7 @@ void FixedImage::ImplLoadRes( const ResId& rResId )
 {
     Control::ImplLoadRes( rResId );
 
-    sal_uLong nObjMask = ReadLongRes();
+    ULONG nObjMask = ReadLongRes();
 
     if ( RSC_FIXEDIMAGE_IMAGE & nObjMask )
     {
@@ -1003,10 +997,10 @@ FixedImage::~FixedImage()
 
 // -----------------------------------------------------------------------
 
-void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
+void FixedImage::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                            const Point& rPos, const Size& rSize )
 {
-    sal_uInt16 nStyle = 0;
+    USHORT nStyle = 0;
     if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
     {
         if ( !IsEnabled() )
@@ -1015,6 +1009,11 @@ void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
 
     Image *pImage = &maImage;
     Color aCol;
+    if( !!maImageHC )
+    {
+        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+            pImage = &maImageHC;
+    }
 
     // Haben wir ueberhaupt ein Image
     if ( !(!(*pImage)) )
@@ -1028,10 +1027,10 @@ void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
         }
     }
 
-    mbInUserDraw = sal_True;
+    mbInUserDraw = TRUE;
     UserDrawEvent aUDEvt( pDev, Rectangle( rPos, rSize ), 0, nStyle );
     UserDraw( aUDEvt );
-    mbInUserDraw = sal_False;
+    mbInUserDraw = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -1045,7 +1044,7 @@ void FixedImage::Paint( const Rectangle& )
 
 Size FixedImage::GetOptimalSize( WindowSizeType ) const
 {
-    const Image* pImage = &maImage;
+    const Image* pImage = GetSettings().GetStyleSettings().GetHighContrastMode() ? &maImageHC : &maImage;
     return pImage->GetSizePixel();
 }
 
@@ -1058,11 +1057,11 @@ void FixedImage::UserDraw( const UserDrawEvent& )
 // -----------------------------------------------------------------------
 
 void FixedImage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                       sal_uLong nFlags )
+                       ULONG nFlags )
 {
-    Point       aPos  = pDev->LogicToPixel( rPos );
-    Size        aSize = pDev->LogicToPixel( rSize );
-    Rectangle   aRect( aPos, aSize );
+    Point		aPos  = pDev->LogicToPixel( rPos );
+    Size		aSize = pDev->LogicToPixel( rSize );
+    Rectangle	aRect( aPos, aSize );
 
     pDev->Push();
     pDev->SetMapMode();
@@ -1140,17 +1139,31 @@ void FixedImage::SetImage( const Image& rImage )
 
 // -----------------------------------------------------------------------
 
-sal_Bool FixedImage::SetModeImage( const Image& rImage )
+BOOL FixedImage::SetModeImage( const Image& rImage, BmpColorMode eMode )
 {
-    SetImage( rImage );
-    return sal_True;
+    if( eMode == BMP_COLOR_NORMAL )
+        SetImage( rImage );
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+    {
+        if( maImageHC != rImage )
+        {
+            maImageHC = rImage;
+            StateChanged( STATE_CHANGE_DATA );
+        }
+    }
+    else
+        return FALSE;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-const Image& FixedImage::GetModeImage( ) const
+const Image& FixedImage::GetModeImage( BmpColorMode eMode ) const
 {
-    return maImage;
+    if( eMode == BMP_COLOR_HIGHCONTRAST )
+        return maImageHC;
+    else
+        return maImage;
 }
 
 // -----------------------------------------------------------------------

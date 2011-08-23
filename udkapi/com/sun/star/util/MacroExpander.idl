@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,8 +27,13 @@
 #ifndef __com_sun_star_util_MacroExpander_idl__
 #define __com_sun_star_util_MacroExpander_idl__
 
+#ifndef __com_sun_star_util_XMacroExpander_idl__
 #include <com/sun/star/util/XMacroExpander.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
+#endif
 
 
 //=============================================================================
@@ -41,7 +46,7 @@ module com {  module sun {  module star {  module util {
     arbitrary macro expressions, i.e. substitude macro names.
     The purpose of this service is to separate the use of macrofied strings,
     e.g. urls from the use of services.
-
+    
     @see BootstrapMacroExpander
     @see theMacroExpander
 

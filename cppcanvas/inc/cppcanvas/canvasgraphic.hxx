@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,10 +78,10 @@ namespace cppcanvas
 
             /// Copy source as-is to destination. Fa = 1, Fb = 0.
             SOURCE,
-
+    
             /// Leave destination as-is.  Fa = 0, Fb = 1.
             DESTINATION,
-
+            
             /// Copy source over destination. Fa = 1, Fb = 1-Aa.
             OVER,
 
@@ -123,7 +123,7 @@ namespace cppcanvas
 
         /** Set object transformation matrix
          */
-        virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) = 0;
+        virtual void 						     setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) = 0;
         /** Get object transformation matrix
          */
         virtual ::basegfx::B2DHomMatrix          getTransformation() const = 0;
@@ -162,7 +162,7 @@ namespace cppcanvas
             @return whether the rendering finished successfully.
          */
         virtual bool draw() const = 0;
-
+        
     };
 
     typedef ::boost::shared_ptr< ::cppcanvas::CanvasGraphic > CanvasGraphicSharedPtr;

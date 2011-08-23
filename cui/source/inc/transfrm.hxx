@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,30 +48,30 @@ class SdrView;
 
 /** put this into the nAnchorTypes parameter of the SvxTransformTabDialog c'tor
     to disable the size controls */
-const sal_uInt16 SVX_OBJ_NORESIZE = 0x0100;
+const USHORT SVX_OBJ_NORESIZE = 0x0100;
 
 /** put this into the nAnchorTypes parameter of the SvxTransformTabDialog c'tor
     to disable the protect controls */
-const sal_uInt16 SVX_OBJ_NOPROTECT = 0x0200;
+const USHORT SVX_OBJ_NOPROTECT = 0x0200;
 
 class SvxTransformTabDialog : public SfxTabDialog
 {
 private:
-    const SdrView*      pView;
+    const SdrView*		pView;
 
-    sal_uInt16              nAnchorCtrls;
+    USHORT				nAnchorCtrls;
     Link                aValidateLink;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void		PageCreated( USHORT nId, SfxTabPage &rPage );
 
 public:
 
             SvxTransformTabDialog( Window* pParent, const SfxItemSet* pAttr,
                             const SdrView* pView,
-                            sal_uInt16 nAnchorTypes = 0);
+                            USHORT nAnchorTypes = 0);
             ~SvxTransformTabDialog();
-
-            //link for the Writer to validate positions
+            
+            //link for the Writer to validate positions 
             void SetValidateFramePosLink( const Link& rLink );
 };
 
@@ -88,60 +88,60 @@ class SvxPositionSizeTabPage : public SvxTabPage
 
 private:
     // position
-    FixedLine           maFlPosition;
-    FixedText           maFtPosX;
-    MetricField         maMtrPosX;
-    FixedText           maFtPosY;
-    MetricField         maMtrPosY;
-    FixedText           maFtPosReference;
-    SvxRectCtl          maCtlPos;
+    FixedLine			maFlPosition;
+    FixedText			maFtPosX;
+    MetricField			maMtrPosX;
+    FixedText			maFtPosY;
+    MetricField			maMtrPosY;
+    FixedText			maFtPosReference;
+    SvxRectCtl			maCtlPos;
 
     // size
-    FixedLine           maFlSize;
-    FixedText           maFtWidth;
-    MetricField         maMtrWidth;
-    FixedText           maFtHeight;
-    MetricField         maMtrHeight;
-    CheckBox            maCbxScale;
-    FixedText           maFtSizeReference;
-    SvxRectCtl          maCtlSize;
+    FixedLine			maFlSize;
+    FixedText			maFtWidth;
+    MetricField			maMtrWidth;
+    FixedText			maFtHeight;
+    MetricField			maMtrHeight;
+    CheckBox   			maCbxScale;
+    FixedText			maFtSizeReference;
+    SvxRectCtl			maCtlSize;
 
     // protect
-    FixedLine           maFlProtect;
-    TriStateBox         maTsbPosProtect;
-    TriStateBox         maTsbSizeProtect;
+    FixedLine			maFlProtect;
+    TriStateBox			maTsbPosProtect;
+    TriStateBox			maTsbSizeProtect;
 
     // adjust
-    FixedLine           maFlAdjust;
+    FixedLine			maFlAdjust;
     TriStateBox         maTsbAutoGrowWidth;
     TriStateBox         maTsbAutoGrowHeight;
 
-    FixedLine           maFlDivider;
+    FixedLine			maFlDivider;
 
 private:
-    const SfxItemSet&   mrOutAttrs;
+    const SfxItemSet&	mrOutAttrs;
 
-    const SdrView*      mpView;
+    const SdrView*		mpView;
 
     // #i75273#
-    basegfx::B2DRange   maRange;
-    basegfx::B2DRange   maWorkRange;
-    basegfx::B2DPoint   maAnchor;
+    basegfx::B2DRange	maRange;
+    basegfx::B2DRange	maWorkRange;
+    basegfx::B2DPoint	maAnchor;
 
-    SfxMapUnit          mePoolUnit;
-    FieldUnit           meDlgUnit;
-    MapUnit             meMapUnit;
-    TriState            mnProtectSizeState;
-    bool                mbPageDisabled;
-    bool                mbProtectDisabled;
-    bool                mbSizeDisabled;
-    bool                mbAdjustDisabled;
+    SfxMapUnit			mePoolUnit;
+    FieldUnit			meDlgUnit;
+    MapUnit				meMapUnit;
+    TriState			mnProtectSizeState;
+    bool				mbPageDisabled;
+    bool				mbProtectDisabled;
+    bool				mbSizeDisabled;
+    bool				mbAdjustDisabled;
 
     // frome size
     // #i75273#
-    double              mfOldWidth;
-    double              mfOldHeight;
-    RECT_POINT          meRP;
+    double				mfOldWidth;
+    double				mfOldHeight;
+    RECT_POINT			meRP;
 
     //------------------------------------
 #if _SOLAR__PRIVATE
@@ -149,6 +149,8 @@ private:
     DECL_LINK( ChangeSizeProtectHdl, void * );
     DECL_LINK( ChangePosXHdl, void * );
     DECL_LINK( ChangePosYHdl, void * );
+//  DECL_LINK( SetAnchorHdl, ListBox * );
+//  DECL_LINK( SetOrientHdl, ListBox * );
 
     void SetMinMaxPosition();
     void GetTopLeftPosition(double& rfX, double& rfY, const basegfx::B2DRange& rRange);
@@ -160,17 +162,17 @@ private:
     DECL_LINK( ClickSizeProtectHdl, void * );
     DECL_LINK( ClickAutoHdl, void * );
 
-    void        SetMaxSize( Rectangle aRect );
-    Rectangle   GetRect();
+    void		SetMaxSize( Rectangle aRect );
+    Rectangle	GetRect();
 #endif
 
 public:
     SvxPositionSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
 
     static SfxTabPage* Create( Window*, const SfxItemSet& );
-    static sal_uInt16*     GetRanges();
+    static USHORT*	   GetRanges();
 
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );
@@ -178,15 +180,16 @@ public:
 
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
 
-    void         Construct();
-    void         SetView( const SdrView* pSdrView ) { mpView = pSdrView; }
+    void 		 Construct();
+    void		 SetView( const SdrView* pSdrView ) { mpView = pSdrView; }
 
+//  void         ShowAnchorCtrls(USHORT nAnchorCtrls); // Writer-spezifische Controls anzeigen
     virtual void FillUserData();
 
-    void        DisableResize();
-    void        DisableProtect();
+    void		DisableResize();
+    void		DisableProtect();
 
-    void        UpdateControlStates();
+    void 		UpdateControlStates();
 };
 
 /*************************************************************************
@@ -200,30 +203,30 @@ class SvxAngleTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    FixedLine           aFlPosition;
-    FixedText           aFtPosX;
-    MetricField         aMtrPosX;
-    FixedText           aFtPosY;
-    MetricField         aMtrPosY;
-    FixedText           aFtPosPresets;
-    SvxRectCtl          aCtlRect;
+    FixedLine			aFlPosition;
+    FixedText			aFtPosX;
+    MetricField			aMtrPosX;
+    FixedText			aFtPosY;
+    MetricField			aMtrPosY;
+    FixedText			aFtPosPresets;
+    SvxRectCtl			aCtlRect;
 
-    FixedLine           aFlAngle;
-    FixedText           aFtAngle;
-    MetricField         aMtrAngle;
-    FixedText           aFtAnglePresets;
-    SvxRectCtl          aCtlAngle;
+    FixedLine			aFlAngle;
+    FixedText			aFtAngle;
+    MetricField			aMtrAngle;
+    FixedText			aFtAnglePresets;
+    SvxRectCtl			aCtlAngle;
 
-    const SfxItemSet&   rOutAttrs;
-    const SdrView*      pView;
+    const SfxItemSet&	rOutAttrs;
+    const SdrView*		pView;
 
     // #i75273#
-    basegfx::B2DRange   maRange;
-    basegfx::B2DPoint   maAnchor;
+    basegfx::B2DRange	maRange;
+    basegfx::B2DPoint	maAnchor;
 
-    SfxMapUnit          ePoolUnit;
-    FieldUnit           eDlgUnit;
-    MapUnit             eMapUnit;
+    SfxMapUnit			ePoolUnit;
+    FieldUnit			eDlgUnit;
+    MapUnit				eMapUnit;
     //------------------------------------
 #if _SOLAR__PRIVATE
     DECL_LINK( ModifiedHdl, void * );
@@ -232,9 +235,9 @@ public:
          SvxAngleTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
 
     static SfxTabPage* Create( Window*, const SfxItemSet& );
-    static sal_uInt16*     GetRanges();
+    static USHORT*	   GetRanges();
 
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );
@@ -242,8 +245,8 @@ public:
 
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
 
-    void         Construct();
-    void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
+    void 		 Construct();
+    void		 SetView( const SdrView* pSdrView ) { pView = pSdrView; }
 };
 
 /*************************************************************************
@@ -257,31 +260,33 @@ class SvxSlantTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    FixedLine           aFlRadius;
-    FixedText           aFtRadius;
-    MetricField         aMtrRadius;
-    FixedLine           aFlAngle;
-    FixedText           aFtAngle;
-    MetricField         aMtrAngle;
+    FixedLine			aFlRadius;
+    FixedText			aFtRadius;
+    MetricField			aMtrRadius;
+    //TriStateBox			aTsbVertical;
+    FixedLine			aFlAngle;
+    FixedText			aFtAngle;
+    MetricField			aMtrAngle;
+    //SvxRectCtl			aCtlAngle;
 
-    const SfxItemSet&   rOutAttrs;
+    const SfxItemSet&	rOutAttrs;
 
-    const SdrView*      pView;
+    const SdrView*		pView;
 
     // #i75273#
-    basegfx::B2DRange   maRange;
+    basegfx::B2DRange	maRange;
 
-    SfxMapUnit          ePoolUnit;
-    FieldUnit           eDlgUnit;
-    MapUnit             eMapUnit;
+    SfxMapUnit			ePoolUnit;
+    FieldUnit			eDlgUnit;
+    MapUnit				eMapUnit;
     //------------------------------------
 public:
          SvxSlantTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
 
     static SfxTabPage* Create( Window*, const SfxItemSet& );
-    static sal_uInt16*     GetRanges();
+    static USHORT*	   GetRanges();
 
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );
@@ -289,8 +294,8 @@ public:
 
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
 
-    void         Construct();
-    void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
+    void 		 Construct();
+    void		 SetView( const SdrView* pSdrView ) { pView = pSdrView; }
 };
 
 

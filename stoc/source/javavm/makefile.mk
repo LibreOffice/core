@@ -85,10 +85,3 @@ all:
 
 .INCLUDE :	target.mk
 
-ALLTAR : $(MISC)/javavm.component
-
-$(MISC)/javavm.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        javavm.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_URE_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt javavm.component

@@ -960,26 +960,31 @@ NO_SDINAME_allowed
 .IF "$(SDI1NAME)"!=""
 .DIRCACHE=no
 SDI1TARGET=$(MISC)/$(SDI1NAME).don
+HIDSID1PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/$(SDI1NAME)_sid.hid
 .ENDIF
 
 .IF "$(SDI2NAME)"!=""
 .DIRCACHE=no
 SDI2TARGET=$(MISC)/$(SDI2NAME).don
+HIDSID2PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/$(SDI2NAME)_sid.hid
 .ENDIF
 
 .IF "$(SDI3NAME)"!=""
 .DIRCACHE=no
 SDI3TARGET=$(MISC)/$(SDI3NAME).don
+HIDSID3PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/$(SDI3NAME)_sid.hid
 .ENDIF
 
 .IF "$(SDI4NAME)"!=""
 .DIRCACHE=no
 SDI4TARGET=$(MISC)/$(SDI4NAME).don
+HIDSID4PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/$(SDI4NAME)_sid.hid
 .ENDIF
 
 .IF "$(SDI5NAME)"!=""
 .DIRCACHE=no
 SDI5TARGET=$(MISC)/$(SDI5NAME).don
+HIDSID5PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/$(SDI5NAME)_sid.hid
 .ENDIF
 
 .IF "$(XMLPROPERTIES)"!=""
@@ -1002,6 +1007,17 @@ EXTUPDATEINFO_SOURCE*=description.xml
 TARGETDPJ=$(MISC)/$(TARGET).dpj
 .ENDIF			# "$(L10N_framework)"==""
 .ENDIF
+
+.IF "$(no_hids)$(NO_HIDS)"==""
+BUILDHIDS:=TRUE
+.IF "$(GEN_HID_OTHER)"!=""
+PRJHIDOTHERTARGET=$(SRS)/hidother.hid
+COMMONPRJHIDOTHERTARGET=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC)/$(TARGET)_othr.hid)
+.ENDIF
+.IF "$(GEN_HID2)"!=""
+PRJHID2TARGET=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid.lst
+.ENDIF
+.ENDIF			# "$(no_hids)$(NO_HIDS)"==""
 
 .IF "$(make_srs_deps)"==""
 .IF "$(SRCFILES)" != "" || "$(SRC1FILES)" != "" || "$(SRC2FILES)" != ""
@@ -1040,6 +1056,8 @@ ALLTAR:	\
         $(DPRTARGET) \
         $(DPZTARGET) \
         $(ZIPALL) \
+        $(HIDSID1PARTICLE)	$(HIDSID2PARTICLE)		\
+        $(HIDSID3PARTICLE)	$(HIDSID4PARTICLE)	$(HIDSID5PARTICLE)		\
         $(SDITARGET)	$(SDI1TARGET)	$(SDI2TARGET)		\
         $(SDI3TARGET)	$(SDI4TARGET)	$(SDI5TARGET)		\
         $(XMLPROPERTIESN) \
@@ -1077,6 +1095,8 @@ ALLTAR:	\
         $(RESLIB3TARGETN) $(RESLIB4TARGETN) \
         $(RESLIB5TARGETN) $(RESLIB6TARGETN) \
         $(RESLIB7TARGETN) $(RESLIB8TARGETN) \
+        $(COMMONPRJHIDOTHERTARGET) \
+        $(PRJHID2TARGET) \
         $(LOCALIZE_ME_DEST)\
         last_target
 
@@ -1114,6 +1134,8 @@ ALLTAR: \
         $(COMP9RDBTARGETN) \
         $(IDL1TARGET)	$(IDL2TARGET)	$(IDL3TARGET)		\
         $(IDL4TARGET)	$(IDL5TARGET)		\
+        $(HIDSID1PARTICLE)	$(HIDSID2PARTICLE)		\
+        $(HIDSID3PARTICLE)	$(HIDSID4PARTICLE)	$(HIDSID5PARTICLE)		\
         $(SDI1TARGET)	$(SDI2TARGET)	$(SDI3TARGET)		\
         $(SDI4TARGET)	$(SDI5TARGET)		\
         $(HXXCOPYTARGET) \
@@ -1182,6 +1204,8 @@ ALLTAR: \
         $(RESLIB5TARGETN) $(RESLIB6TARGETN) \
         $(RESLIB7TARGETN) $(RESLIB8TARGETN) \
         $(RESLIB9TARGETN) \
+        $(COMMONPRJHIDOTHERTARGET) \
+        $(PRJHID2TARGET) \
                 $(SIGNFORNETSCAPE) \
                 $(SIGNFOREXPLORER) \
                 $(SIGNFORJARSIGNER) \
@@ -1363,7 +1387,7 @@ $(UNIXTEXT) : $(UNIXTEXT:f)
     $(TOUCH) $@
 
 .IF "$(LOCALIZATION_FOUND)"==""
-.IF "$(LOCALSDFFILE)"!="" && "$(LOCALSDFFILE)"=="$(LOCALIZESDF)"
+.IF "$(LOCALSDFFILE)"!=""
 "$(LOCALIZESDF)" : $(SOLARCOMMONSDFDIR)/$(PRJNAME).zip
     @@-$(MKDIRHIER) $(@:d)
     @@-$(MKDIRHIER) $(COMMONMISC)/$(PRJNAME)_$(TARGET)
@@ -1514,13 +1538,21 @@ $(MISC)/$(TARGET)_%.done : %.xrb
     @@$(RM)  $(MISC)/$(<:b).interm$(TARGET)
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 
-.IF "$(SDI1TARGET)$(SDI2TARGET)$(SDI3TARGET)$(SDI4TARGET)$(SDI5TARGET)$(SDI6TARGET)$(SDI7TARGET)$(SDI8TARGET)$(SDI9TARGET)"!=""
+.IF "$(HIDSID1PARTICLE)$(SDI1TARGET)$(HIDSID2PARTICLE)$(SDI2TARGET)$(HIDSID3PARTICLE)$(SDI3TARGET)$(HIDSID4PARTICLE)$(SDI4TARGET)$(HIDSID5PARTICLE)$(SDI5TARGET)$(HIDSID6PARTICLE)$(SDI6TARGET)$(HIDSID7PARTICLE)$(SDI7TARGET)$(HIDSID8PARTICLE)$(SDI8TARGET)$(HIDSID9PARTICLE)$(SDI9TARGET)"!=""
 .INCLUDE : _tg_sdi.mk
-.ENDIF			# "$(SDI1TARGET)$(SDI2TARGET)$(SDI3TARGET)$(SDI4TARGET)$(SDI5TARGET)$(SDI6TARGET)$(SDI7TARGET)$(SDI8TARGET)$(SDI9TARGET)"!=""
+.ENDIF			# "$(HIDSID1PARTICLE)$(SDI1TARGET)$(HIDSID2PARTICLE)$(SDI2TARGET)$(HIDSID3PARTICLE)$(SDI3TARGET)$(HIDSID4PARTICLE)$(SDI4TARGET)$(HIDSID5PARTICLE)$(SDI5TARGET)$(HIDSID6PARTICLE)$(SDI6TARGET)$(HIDSID7PARTICLE)$(SDI7TARGET)$(HIDSID8PARTICLE)$(SDI8TARGET)$(HIDSID9PARTICLE)$(SDI9TARGET)"!=""
 
 .IF "$(DEF1NAME)$(DEF2NAME)$(DEF3NAME)$(DEF4NAME)$(DEF5NAME)$(DEF6NAME)$(DEF7NAME)$(DEF8NAME)$(DEF9NAME)"!=""
 .INCLUDE : _tg_def.mk
 .ENDIF
+
+.IF "$(COMMONPRJHIDOTHERTARGET)"!=""
+$(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
+        @echo "Making:   " $@
+        @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
+        $(COMMAND_ECHO)$(TYPE) $(PRJHIDOTHERTARGET) > $@.$(ROUT).tmp 
+        @$(RENAME) $@.$(ROUT).tmp $@
+.ENDIF	    
 
 # -------
 # - LIB -
@@ -1990,17 +2022,17 @@ UNOUCRDEPxxx : $(UNOUCRDEP);
 .ENDIF			# "$(UNOTYPES)" != ""
 
 
-##new hid.lst trigger with GEN_HID2=TRUE
-#$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid.lst .PHONY :
-#	@echo "Making:   " $@
-#	@echo $(WORK_STAMP).$(LAST_MINOR) 010101010101010 > $@.$(ROUT).tmp
-#	$(COMMAND_ECHO)$(TYPE) $(SOLARCOMMONBINDIR)/hid/*.hid | tr -d "\015" | $(SORT) -u >> $@.$(ROUT).tmp 
-#	@$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
-#	@-$(RENAME) $@.$(ROUT).tmp $@
-#	@-mkdir $(@:d)hid
-#	$(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/gen_userfeedback_VCL_names.pl $@ $(SOLARCOMMONBINDIR)/win $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid/userfeedback_VCL_names.csv.$(ROUT).tmp
-#	@$(IFEXIST) $@ $(THEN) $(RM:s/+//) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid/userfeedback_VCL_names.csv $(FI)
-#	@-$(RENAME) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid/userfeedback_VCL_names.csv.$(ROUT).tmp $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid/userfeedback_VCL_names.csv
+#new hid.lst trigger with GEN_HID2=TRUE
+$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid.lst .PHONY :
+    @echo "Making:   " $@
+    @echo $(WORK_STAMP).$(LAST_MINOR) 010101010101010 > $@.$(ROUT).tmp
+    $(COMMAND_ECHO)$(TYPE) $(SOLARCOMMONBINDIR)/hid/*.hid | tr -d "\015" | $(SORT) -u >> $@.$(ROUT).tmp 
+    @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
+    @-$(RENAME) $@.$(ROUT).tmp $@
+    @-mkdir $(@:d)hid
+    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/gen_userfeedback_VCL_names.pl $@ $(SOLARCOMMONBINDIR)/win $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid/userfeedback_VCL_names.csv.$(ROUT).tmp
+    @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid/userfeedback_VCL_names.csv $(FI)
+    @-$(RENAME) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid/userfeedback_VCL_names.csv.$(ROUT).tmp $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid/userfeedback_VCL_names.csv
 
 
 .IF "$(SOLAR_JAVA)"!=""

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,13 +42,13 @@ class DrawSelection : public SwDrawBase
     DrawSelection(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
 
                                        // Mouse- & Key-Events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
+    virtual BOOL KeyInput(const KeyEvent& rKEvt);
 
-    virtual void Activate(const sal_uInt16 nSlotId);    // Function aktivieren
+    virtual void Activate(const USHORT nSlotId);	// Function aktivieren
 };
 
 
 
-#endif      // _SW_DSELECT_HXX
+#endif		// _SW_DSELECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

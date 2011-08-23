@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,10 +33,10 @@ namespace chart
 {
 //.............................................................................
 
-#define CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CoordinateSystems.Cartesian" ))
-#define CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CoordinateSystems.CartesianView" ))
-#define CHART2_COOSYSTEM_POLAR_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CoordinateSystems.Polar" ))
-#define CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CoordinateSystems.PolarView" ))
+#define CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.CoordinateSystems.Cartesian")
+#define CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.CoordinateSystems.CartesianView")
+#define CHART2_COOSYSTEM_POLAR_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.CoordinateSystems.Polar")
+#define CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.CoordinateSystems.PolarView")
 
 //.............................................................................
 } //namespace chart

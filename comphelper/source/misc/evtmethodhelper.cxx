@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: evtlistenerhlp.cxx,v $
+ * $Revision$
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,10 +44,10 @@ namespace comphelper
     {
         typelib_InterfaceTypeDescription *pType=0;
         type.getDescription( (typelib_TypeDescription**)&pType);
-
+    
         if(!pType)
             return Sequence< ::rtl::OUString>();
-
+        
         Sequence< ::rtl::OUString> aNames(pType->nMembers);
         ::rtl::OUString* pNames = aNames.getArray();
         for(sal_Int32 i=0;i<pType->nMembers;i++,++pNames)

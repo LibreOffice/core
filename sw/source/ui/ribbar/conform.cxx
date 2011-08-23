@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #include "drawbase.hxx"
 #include "conform.hxx"
 
-extern sal_Bool bNoInterrupt;       // in mainwn.cxx
+extern BOOL bNoInterrupt;       // in mainwn.cxx
 
 /*************************************************************************
 |*
@@ -52,7 +52,7 @@ extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 ConstFormControl::ConstFormControl(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
     SwDrawBase(pWrtShell, pEditWin, pSwView)
 {
-    m_bInsForm = sal_True;
+    m_bInsForm = TRUE;
 }
 
 /*************************************************************************
@@ -62,9 +62,9 @@ ConstFormControl::ConstFormControl(SwWrtShell* pWrtShell, SwEditWin* pEditWin, S
 \************************************************************************/
 
 
-sal_Bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
+    BOOL bReturn = FALSE;
 
     SdrView *pSdrView = m_pSh->GetDrawView();
 
@@ -73,13 +73,13 @@ sal_Bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (rMEvt.IsMod2())
     {
-        pSdrView->SetCreate1stPointAsCenter(sal_True);
-        pSdrView->SetResizeAtCenter(sal_True);
+        pSdrView->SetCreate1stPointAsCenter(TRUE);
+        pSdrView->SetResizeAtCenter(TRUE);
     }
     else
     {
-        pSdrView->SetCreate1stPointAsCenter(sal_False);
-        pSdrView->SetResizeAtCenter(sal_False);
+        pSdrView->SetCreate1stPointAsCenter(FALSE);
+        pSdrView->SetResizeAtCenter(FALSE);
     }
 
     SdrViewEvent aVEvt;
@@ -89,16 +89,16 @@ sal_Bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
     if (rMEvt.IsLeft() && !m_pWin->IsDrawAction() &&
         (eHit == SDRHIT_UNMARKEDOBJECT || eHit == SDRHIT_NONE || m_pSh->IsDrawCreate()))
     {
-        bNoInterrupt = sal_True;
+        bNoInterrupt = TRUE;
         m_pWin->CaptureMouse();
 
         m_pWin->SetPointer(Pointer(POINTER_DRAW_RECT));
 
         m_aStartPos = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
-        bReturn = m_pSh->BeginCreate( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), FmFormInventor, m_aStartPos);
+        bReturn = m_pSh->BeginCreate( static_cast< UINT16 >(m_pWin->GetSdrDrawMode()), FmFormInventor, m_aStartPos);
 
         if (bReturn)
-            m_pWin->SetDrawAction(sal_True);
+            m_pWin->SetDrawAction(TRUE);
     }
     else
         bReturn = SwDrawBase::MouseButtonDown(rMEvt);
@@ -113,7 +113,7 @@ sal_Bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
 \************************************************************************/
 
 
-void ConstFormControl::Activate(const sal_uInt16 nSlotId)
+void ConstFormControl::Activate(const USHORT nSlotId)
 {
     m_pWin->SetSdrDrawMode( static_cast<SdrObjKind>(nSlotId) );
     SwDrawBase::Activate(nSlotId);
@@ -121,7 +121,9 @@ void ConstFormControl::Activate(const sal_uInt16 nSlotId)
 
     m_pWin->SetPointer(Pointer(POINTER_DRAW_RECT));
 }
+/* -----------------------------19.04.2002 12:42------------------------------
 
+ ---------------------------------------------------------------------------*/
 void ConstFormControl::CreateDefaultObject()
 {
     Point aStartPos(GetDefaultCenterPos());
@@ -135,8 +137,8 @@ void ConstFormControl::CreateDefaultObject()
         m_pSh->MakeDrawView();
 
     SdrView *pSdrView = m_pSh->GetDrawView();
-    pSdrView->SetDesignMode(sal_True);
-    m_pSh->BeginCreate( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), FmFormInventor, aStartPos);
+    pSdrView->SetDesignMode(TRUE);
+    m_pSh->BeginCreate( static_cast< UINT16 >(m_pWin->GetSdrDrawMode()), FmFormInventor, aStartPos);
     m_pSh->MoveCreate(aEndPos);
     m_pSh->EndCreate(SDRCREATE_FORCEEND);
 }

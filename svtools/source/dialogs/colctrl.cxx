@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,20 +40,20 @@
 // ----------------
 
 SvColorControl::SvColorControl( Window* pParent, WinBits nStyle ) :
-    Control         ( pParent, nStyle ),
-    mpBitmap        ( NULL ),
-    mpReadAccess    ( NULL ),
-    mnLuminance     ( 50 )
+    Control			( pParent, nStyle ),
+    mpBitmap		( NULL ),
+    mpReadAccess	( NULL ),
+    mnLuminance		( 50 )
 {
     Initialize();
 }
 
 // -----------------------------------------------------------------------
 SvColorControl::SvColorControl( Window* pParent, const ResId& rResId ) :
-    Control         ( pParent, rResId ),
-    mpBitmap        ( NULL ),
-    mpReadAccess    ( NULL ),
-    mnLuminance     ( 50 )
+    Control			( pParent, rResId ),
+    mpBitmap		( NULL ),
+    mpReadAccess	( NULL ),
+    mnLuminance		( 50 )
 {
     Initialize();
 }
@@ -75,7 +75,7 @@ void SvColorControl::Initialize()
 void SvColorControl::CreateBitmap()
 {
     const Size aSize( GetOutputSizePixel() );
-
+    
     if( mpBitmap && mpBitmap->GetSizePixel() != aSize )
         delete mpBitmap, mpBitmap = NULL;
 
@@ -86,23 +86,23 @@ void SvColorControl::CreateBitmap()
 
     if( pWriteAccess )
     {
-        sal_uInt16 nX = (sal_uInt16) aSize.Width();
-        sal_uInt16 nY = (sal_uInt16) aSize.Height();
+        USHORT nX = (USHORT) aSize.Width();
+        USHORT nY = (USHORT) aSize.Height();
 
-        sal_uInt16      nHue, nSat;
+        UINT16      nHue, nSat;
         ColorHSB    aColHSB( 0, 0, mnLuminance );
 
-        for( sal_uInt16 i = 0; i < nY; i++ )
+        for( USHORT i = 0; i < nY; i++ )
         {
-            nSat = (sal_uInt16) FRound( 100 - ( 100.0 * i + 0.5 ) / nY );
+            nSat = (UINT16) FRound( 100 - ( 100.0 * i + 0.5 ) / nY );
 
-            for( sal_uInt16 j = 0; j < nX; j++ )
+            for( USHORT j = 0; j < nX; j++ )
             {
-                nHue = (sal_uInt16) FRound( ( 360.0 * j + 0.5 ) / nX );
+                nHue = (UINT16) FRound( ( 360.0 * j + 0.5 ) / nX );
 
                 aColHSB.SetHue( nHue );
                 aColHSB.SetSat( nSat );
-
+         
                 // mpBitmap always has a bit count of 24 => use of SetPixel(...) is safe
                 pWriteAccess->SetPixel( i, j, BitmapColor( aColHSB.GetRGB() ) );
             }
@@ -162,7 +162,7 @@ void SvColorControl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( rMEvt.IsLeft() && !rMEvt.IsShift() )
     {
-        //ShowPointer( sal_False );
+        //ShowPointer( FALSE );
         CaptureMouse();
         ShowPosition( rMEvt.GetPosPixel() );
         Modify();
@@ -172,7 +172,7 @@ void SvColorControl::MouseButtonDown( const MouseEvent& rMEvt )
 // -----------------------------------------------------------------------
 void SvColorControl::MouseButtonUp( const MouseEvent& )
 {
-    //ShowPointer( sal_True );
+    //ShowPointer( TRUE );
     if( IsMouseCaptured() )
         ReleaseMouse();
 }
@@ -220,17 +220,17 @@ void SvColorControl::Modify()
 }
 
 // -----------------------------------------------------------------------
-void SvColorControl::SetColor( const ColorHSB& rCol, sal_Bool bSetColor )
+void SvColorControl::SetColor( const ColorHSB& rCol, BOOL bSetColor )
 {
     if( bSetColor )
         maColor = rCol.GetRGB();
 
     if( mpBitmap )
     {
-        sal_uInt16  nX = (sal_uInt16) mpBitmap->GetSizePixel().Width();
-        sal_uInt16  nY = (sal_uInt16) mpBitmap->GetSizePixel().Height();
-        sal_Int16   nZ = rCol.GetBri();
-
+        USHORT  nX = (USHORT) mpBitmap->GetSizePixel().Width();
+        USHORT  nY = (USHORT) mpBitmap->GetSizePixel().Height();
+        INT16   nZ = rCol.GetBri();
+        
         SetLuminance( nZ );
         nX = rCol.GetHue() * nX / 360; // Farbe
         nY = nY - rCol.GetSat() * nY / 100; // Saettigung
@@ -246,7 +246,7 @@ void SvColorControl::SetColor( const Color& rCol )
     if( mpBitmap )
     {
         ColorHSB aColHsb( rCol );
-        SetColor( aColHsb, sal_False );
+        SetColor( aColHsb, FALSE );
     }
 }
 
@@ -287,7 +287,7 @@ void SvColorControl::SetLuminance( short nLum )
 
 // -----------------------------------------------------------------------
 ColorPreviewControl::ColorPreviewControl( Window* pParent, WinBits nStyle ) :
-    Control     ( pParent, nStyle )
+    Control		( pParent, nStyle )
 {
     SetFillColor( maColor );
     SetLineColor( maColor );
@@ -295,7 +295,7 @@ ColorPreviewControl::ColorPreviewControl( Window* pParent, WinBits nStyle ) :
 
 // -----------------------------------------------------------------------
 ColorPreviewControl::ColorPreviewControl( Window* pParent, const ResId& rResId ) :
-    Control     ( pParent, rResId )
+    Control		( pParent, rResId )
 {
     SetFillColor( maColor );
     SetLineColor( maColor );
@@ -333,20 +333,20 @@ void ColorPreviewControl::SetColor( const Color& rCol )
 
 // -----------------------------------------------------------------------
 ColorMixingControl::ColorMixingControl( Window* pParent, WinBits nStyle,
-                                        sal_uInt16 nRows, sal_uInt16 nColumns ) :
-    ValueSet    ( pParent, nStyle ),
-    mnRows      ( nRows ),
-    mnColumns   ( nColumns )
+                                        USHORT nRows, USHORT nColumns ) :
+    ValueSet	( pParent, nStyle ),
+    mnRows		( nRows ),
+    mnColumns	( nColumns )
 {
     Initialize();
 }
 
 // -----------------------------------------------------------------------
 ColorMixingControl::ColorMixingControl( Window* pParent, const ResId& rResId,
-                                        sal_uInt16 nRows, sal_uInt16 nColumns ) :
-    ValueSet    ( pParent, rResId ),
-    mnRows      ( nRows ),
-    mnColumns   ( nColumns )
+                                        USHORT nRows, USHORT nColumns ) :
+    ValueSet	( pParent, rResId ),
+    mnRows		( nRows ),
+    mnColumns	( nColumns )
 {
     Initialize();
 }
@@ -364,43 +364,53 @@ void ColorMixingControl::Initialize()
 
     Color aColor;
     String aStr;
-    for( sal_uInt16 i = 1; i <= mnRows * mnColumns; i++ )
+    for( USHORT i = 1; i <= mnRows * mnColumns; i++ )
     {
         InsertItem( i, aColor, aStr );
     }
+
+    /*maColor[ 0 ] = Color( COL_LIGHTRED );
+    maColor[ 1 ] = Color( COL_LIGHTGREEN );
+    maColor[ 2 ] = Color( COL_YELLOW );
+    maColor[ 3 ] = Color( COL_LIGHTBLUE );*/
 
     SetColor( CMC_TOPLEFT, Color( COL_LIGHTRED ) );
     SetColor( CMC_BOTTOMRIGHT, Color( COL_LIGHTBLUE ) );
 
     SetColor( CMC_TOPRIGHT, Color( COL_LIGHTGREEN ) );
     SetColor( CMC_BOTTOMLEFT, Color( COL_YELLOW ) );
+
+    /*FillColumn( 0 );
+    FillColumn( mnColumns - 1 );
+    for( i = 0; i < mnRows; i++ )
+        FillRow( i );*/
 }
 
 // -----------------------------------------------------------------------
-Color ColorMixingControl::CalcDifferenceColor( sal_uInt16 nCol1, sal_uInt16 nCol2,
-                                                sal_uInt16 nSteps )
+Color ColorMixingControl::CalcDifferenceColor( USHORT nCol1, USHORT nCol2,
+                                                USHORT nSteps )
 {
     // Die Berechnung ist noch etwas ungenau, daher sollte besser mit floats
     // gearbeitet werden...  (muss !!!)
     Color aColor( GetItemColor( nCol1 ) );
     Color aColor2( GetItemColor( nCol2 ) );
 
-    aColor.SetRed( (sal_uInt8) ( ( aColor2.GetRed() - aColor.GetRed() ) / nSteps ) );
-    aColor.SetGreen( (sal_uInt8) ( ( aColor2.GetGreen() - aColor.GetGreen() ) / nSteps ) );
-    aColor.SetBlue( (sal_uInt8) ( ( aColor2.GetBlue() - aColor.GetBlue() ) / nSteps ) );
+    aColor.SetRed( (UINT8) ( ( aColor2.GetRed() - aColor.GetRed() ) / nSteps ) );
+    aColor.SetGreen( (UINT8) ( ( aColor2.GetGreen() - aColor.GetGreen() ) / nSteps ) );
+    aColor.SetBlue( (UINT8) ( ( aColor2.GetBlue() - aColor.GetBlue() ) / nSteps ) );
 
     return( aColor );
 }
 
 // -----------------------------------------------------------------------
-void ColorMixingControl::FillRow( sal_uInt16 nRow )
+void ColorMixingControl::FillRow( USHORT nRow )
 {
-    sal_uInt16 nCol1 = nRow * mnColumns + 1;
-    sal_uInt16 nCol2 = ( nRow + 1 ) * mnColumns;
+    USHORT nCol1 = nRow * mnColumns + 1;
+    USHORT nCol2 = ( nRow + 1 ) * mnColumns;
     Color aColor( GetItemColor( nCol1 ) );
     Color aDiffColor( CalcDifferenceColor( nCol1, nCol2, mnColumns - 1 ) );
 
-    for( sal_uInt16 i = nCol1 + 1; i < nCol2; i++ )
+    for( USHORT i = nCol1 + 1; i < nCol2; i++ )
     {
         aColor.SetRed( aColor.GetRed() + aDiffColor.GetRed() );
         aColor.SetGreen( aColor.GetGreen() + aDiffColor.GetGreen() );
@@ -412,14 +422,14 @@ void ColorMixingControl::FillRow( sal_uInt16 nRow )
 }
 
 // -----------------------------------------------------------------------
-void ColorMixingControl::FillColumn( sal_uInt16 nColumn )
+void ColorMixingControl::FillColumn( USHORT nColumn )
 {
-    sal_uInt16 nCol1 = nColumn + 1;
-    sal_uInt16 nCol2 = nColumn + ( mnRows - 1 ) * mnColumns + 1;
+    USHORT nCol1 = nColumn + 1;
+    USHORT nCol2 = nColumn + ( mnRows - 1 ) * mnColumns + 1;
     Color aColor( GetItemColor( nCol1 ) );
     Color aDiffColor( CalcDifferenceColor( nCol1, nCol2, mnRows - 1 ) );
 
-    for( sal_uInt16 i = nCol1 + mnColumns; i < nCol2; i = i + mnColumns )
+    for( USHORT i = nCol1 + mnColumns; i < nCol2; i = i + mnColumns )
     {
         aColor.SetRed( aColor.GetRed() + aDiffColor.GetRed() );
         aColor.SetGreen( aColor.GetGreen() + aDiffColor.GetGreen() );
@@ -431,13 +441,13 @@ void ColorMixingControl::FillColumn( sal_uInt16 nColumn )
 }
 
 // -----------------------------------------------------------------------
-void ColorMixingControl::SetRows( sal_uInt16 nRows )
+void ColorMixingControl::SetRows( USHORT nRows )
 {
     mnRows = nRows;
 }
 
 // -----------------------------------------------------------------------
-void ColorMixingControl::SetColumns( sal_uInt16 nColumns )
+void ColorMixingControl::SetColumns( USHORT nColumns )
 {
     mnColumns = nColumns;
 }
@@ -448,8 +458,8 @@ void ColorMixingControl::SetColor( CMCPosition ePos, const Color& rCol )
     if( rCol != maColor[ ePos ] )
     {
         maColor[ ePos ] = rCol;
-        sal_uInt16 nPos = 0;
-        sal_uInt16 nColumn = 0;
+        USHORT nPos = 0;
+        USHORT nColumn = 0;
         String aStr( GetRGBString( rCol ) );
 
         switch( ePos )
@@ -480,7 +490,7 @@ void ColorMixingControl::SetColor( CMCPosition ePos, const Color& rCol )
         SetItemText( nPos, aStr );
         FillColumn( nColumn );
 
-        for( sal_uInt16 i = 0; i < mnRows; i++ )
+        for( USHORT i = 0; i < mnRows; i++ )
             FillRow( i );
     }
 }
@@ -488,7 +498,7 @@ void ColorMixingControl::SetColor( CMCPosition ePos, const Color& rCol )
 // -----------------------------------------------------------------------
 String ColorMixingControl::GetRGBString( const Color& rColor )
 {
-    String  aStr( String::CreateFromInt32(rColor.GetRed()) );
+    String 	aStr( String::CreateFromInt32(rColor.GetRed()) );
             aStr += ' ';
             aStr += String::CreateFromInt32(rColor.GetGreen());
             aStr += ' ';
@@ -497,10 +507,10 @@ String ColorMixingControl::GetRGBString( const Color& rColor )
     return aStr;
 }
 // -----------------------------------------------------------------------
-CMCPosition ColorMixingControl::GetCMCPosition() const
+CMCPosition	ColorMixingControl::GetCMCPosition() const
 {
     CMCPosition ePos = CMC_OTHER;
-    sal_uInt16 nPos = GetSelectItemId();
+    USHORT nPos = GetSelectItemId();
 
     if( nPos == 1 )
         ePos = CMC_TOPLEFT;
@@ -527,12 +537,15 @@ CMCPosition ColorMixingControl::GetCMCPosition() const
 |*
 |*    ColorHSB::ColorHSB()
 |*
+|*    Beschreibung       RGB nach HSB
+|*    Ersterstellung     SOH 02.10.97
+|*
 **************************************************************************/
 
 ColorHSB::ColorHSB( const Color& rColor )
 {
-    sal_uInt8 c[3];
-    sal_uInt8 cMax, cMin;
+    UINT8 c[3];
+    UINT8 cMax, cMin;
 
     c[0] = rColor.GetRed();
     c[1] = rColor.GetGreen();
@@ -553,7 +566,7 @@ ColorHSB::ColorHSB( const Color& rColor )
     if( c[2] < cMin )
         cMin = c[2];
 
-    sal_uInt8 cDelta = cMax - cMin;
+    UINT8 cDelta = cMax - cMin;
 
     // Saturation = max - min / max
     if( mnBri > 0 )
@@ -585,7 +598,7 @@ ColorHSB::ColorHSB( const Color& rColor )
         if( dHue < 0.0 )
             dHue += 360.0;
 
-        mnHue = (sal_uInt16) dHue;
+        mnHue = (UINT16) dHue;
     }
 }
 
@@ -593,12 +606,15 @@ ColorHSB::ColorHSB( const Color& rColor )
 |*
 |*    ColorHSB::GetRGB()
 |*
+|*    Beschreibung       HSB nach RGB
+|*    Ersterstellung     SOH 02.10.97
+|*
 **************************************************************************/
 
 Color ColorHSB::GetRGB() const
 {
-    sal_uInt8 cR,cG,cB;
-    sal_uInt8 nB = (sal_uInt8) ( mnBri * 255 / 100 );
+    UINT8 cR,cG,cB;
+    UINT8 nB = (UINT8) ( mnBri * 255 / 100 );
 
     if( mnSat == 0 )
     {
@@ -610,30 +626,30 @@ Color ColorHSB::GetRGB() const
     {
         double dH = mnHue;
         double f;
-        sal_uInt16 n;
+        UINT16 n;
         if( dH == 360.0 )
             dH = 0.0;
 
         dH /= 60.0;
-        n = (sal_uInt16) dH;
+        n = (UINT16) dH;
         f = dH - n;
 
         // #107375# Doing the calculation completely in floating
         // point, the former optimization gave sometimes negative
         // results for c and was pointless anyway
-        sal_uInt8 a = static_cast<sal_uInt8>( nB * ( 100.0 - mnSat ) / 100.0 );
-        sal_uInt8 b = static_cast<sal_uInt8>( nB * ( 100.0 - mnSat * f ) / 100.0 );
-        sal_uInt8 c = static_cast<sal_uInt8>( nB * ( 100.0 - mnSat * ( 1.0 - f ) ) / 100.0 );
+        UINT8 a = static_cast<UINT8>( nB * ( 100.0 - mnSat ) / 100.0 );
+        UINT8 b = static_cast<UINT8>( nB * ( 100.0 - mnSat * f ) / 100.0 );
+        UINT8 c = static_cast<UINT8>( nB * ( 100.0 - mnSat * ( 1.0 - f ) ) / 100.0 );
 
         switch( n )
         {
-            case 0: cR = nB;    cG = c;     cB = a;     break;
-            case 1: cR = b;     cG = nB;    cB = a;     break;
-            case 2: cR = a;     cG = nB;    cB = c;     break;
-            case 3: cR = a;     cG = b;     cB = nB;    break;
-            case 4: cR = c;     cG = a;     cB = nB;    break;
-            case 5: cR = nB;    cG = a;     cB = b;     break;
-            default: cR = 0;    cG = 0;     cB = 0;     break;  // -Wall ????
+            case 0: cR = nB;	cG = c;		cB = a; 	break;
+            case 1: cR = b;		cG = nB;	cB = a; 	break;
+            case 2: cR = a;		cG = nB;	cB = c;		break;
+            case 3: cR = a;		cG = b; 	cB = nB;	break;
+            case 4: cR = c;		cG = a; 	cB = nB;	break;
+            case 5: cR = nB; 	cG = a;		cB = b;		break;
+            default: cR = 0; 	cG = 0;		cB = 0;		break;  // -Wall ????
         }
     }
 
@@ -663,11 +679,11 @@ ColorCMYK::ColorCMYK( const Color& rColor )
 Color ColorCMYK::GetRGB() const
 {
     int nTmp = Max( 0, 255 - ( mnCyan + mnKey ) );
-    sal_uInt8 cR = (sal_uInt8) nTmp;
+    UINT8 cR = (UINT8) nTmp;
           nTmp = Max( 0, 255 - ( mnMagenta + mnKey ) );
-    sal_uInt8 cG = (sal_uInt8) nTmp;
+    UINT8 cG = (UINT8) nTmp;
           nTmp = Max( 0, 255 - ( mnYellow + mnKey ) );
-    sal_uInt8 cB = (sal_uInt8) nTmp;
+    UINT8 cB = (UINT8) nTmp;
 
     return( Color( cR, cG, cB ) );
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,10 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
+#ifdef __MINGW32__
 #include <algorithm>
+#endif
 #include "resource/ado_res.hrc"
-
-#include <o3tl/compat_functional.hxx>
 
 using namespace connectivity::ado;
 using namespace connectivity;
@@ -73,14 +73,8 @@ Reference< XPropertySet > OColumns::createDescriptor()
 sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString&, const Reference< XPropertySet >& descriptor )
 {
     OAdoColumn* pColumn = NULL;
-    Reference< XPropertySet > xColumn;
     if ( !getImplementation( pColumn, descriptor ) || pColumn == NULL )
-    {
-        // m_pConnection->throwGenericSQLException( STR_INVALID_COLUMN_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
-        pColumn = new OAdoColumn(isCaseSensitive(),m_pConnection);
-        xColumn = pColumn;
-        ::comphelper::copyProperties(descriptor,xColumn);
-    }
+        m_pConnection->throwGenericSQLException( STR_INVALID_COLUMN_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
     WpADOColumn aColumn = pColumn->getColumnImpl();
 
@@ -101,16 +95,16 @@ sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString&, const Referenc
     // search for typeinfo where the typename is equal sTypeName
     OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(),
                                                         pTypeInfoMap->end(),
-                                                        ::o3tl::compose1(
+                                                        ::std::compose1(
                                                             ::std::bind2nd(aCase, sTypeName),
-                                                            ::o3tl::compose1(
+                                                            ::std::compose1(
                                                                 ::std::mem_fun(&OExtendedTypeInfo::getDBName),
-                                                                ::o3tl::select2nd<OTypeInfoMap::value_type>())
+                                                                ::std::select2nd<OTypeInfoMap::value_type>())
                                                             )
-
+    
                                                 );
 
-    if ( aFind != pTypeInfoMap->end() ) // change column type if necessary
+    if ( aFind != pTypeInfoMap->end() ) // change column type if necessary 
         aColumn.put_Type(aFind->first);
 
     if ( SUCCEEDED(((ADOColumns*)m_aCollection)->Append(OLEVariant(aColumn.get_Name()),aColumn.get_Type(),aColumn.get_DefinedSize())) )
@@ -123,7 +117,7 @@ sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString&, const Referenc
             if ( bAutoIncrement )
                 OTools::putValue( aAddedColumn.get_Properties(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Autoincrement")), bAutoIncrement );
 
-            if ( aFind != pTypeInfoMap->end() &&  aColumn.get_Type() != aAddedColumn.get_Type() ) // change column type if necessary
+            if ( aFind != pTypeInfoMap->end() &&  aColumn.get_Type() != aAddedColumn.get_Type() ) // change column type if necessary 
                 aColumn.put_Type(aFind->first);
             aAddedColumn.put_Precision(aColumn.get_Precision());
             aAddedColumn.put_NumericScale(aColumn.get_NumericScale());

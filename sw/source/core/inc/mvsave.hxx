@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef SW_MVSAVE_HXX
-#define SW_MVSAVE_HXX
+#ifndef _MVSAVE_HXX
+#define _MVSAVE_HXX
+
 
 #include <tools/string.hxx>
 #include <vcl/keycod.hxx>
@@ -75,8 +76,8 @@ namespace sw { namespace mark
             bool m_bSavePos;
             bool m_bSaveOtherPos;
             IDocumentMarkAccess::MarkType m_eOrigBkmType;
-            sal_uLong m_nNode1;
-            sal_uLong m_nNode2;
+            ULONG m_nNode1;
+            ULONG m_nNode2;
             xub_StrLen m_nCntnt1;
             xub_StrLen m_nCntnt2;
             ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
@@ -91,11 +92,11 @@ void _DelBookmarks(const SwNodeIndex& rStt,
     ::std::vector< ::sw::mark::SaveBookmark> * SaveBkmk =0,
     const SwIndex* pSttIdx =0,
     const SwIndex* pEndIdx =0);
-void _SaveCntntIdx( SwDoc* pDoc, sal_uLong nNode, xub_StrLen nCntnt,
-                    SvULongs& rSaveArr, sal_uInt8 nSaveFly = 0 );
+void _SaveCntntIdx( SwDoc* pDoc, ULONG nNode, xub_StrLen nCntnt,
+                    SvULongs& rSaveArr, BYTE nSaveFly = 0 );
 void _RestoreCntntIdx( SwDoc* pDoc, SvULongs& rSaveArr,
-                        sal_uLong nNode, xub_StrLen nOffset = 0,
-                        sal_Bool bAuto = sal_False );
+                        ULONG nNode, xub_StrLen nOffset = 0,
+                        BOOL bAuto = FALSE );
 void _RestoreCntntIdx( SvULongs& rSaveArr, const SwNode& rNd,
                         xub_StrLen nLen, xub_StrLen nCorrLen );
 
@@ -104,11 +105,11 @@ void _RestoreCntntIdx( SvULongs& rSaveArr, const SwNode& rNd,
  *  location. */
 struct _SaveFly
 {
-    sal_uLong nNdDiff;              /// relative node difference
+    ULONG nNdDiff;              /// relative node difference
     SwFrmFmt* pFrmFmt;          /// the fly's frame format
     sal_Bool bInsertPosition;   /// if true, anchor _at_ insert position
 
-    _SaveFly( sal_uLong nNodeDiff, SwFrmFmt* pFmt, sal_Bool bInsert )
+    _SaveFly( ULONG nNodeDiff, SwFrmFmt* pFmt, sal_Bool bInsert )
         : nNdDiff( nNodeDiff ), pFrmFmt( pFmt ), bInsertPosition( bInsert )
     { }
 };
@@ -130,17 +131,17 @@ class SwDataChanged
     const SwPaM* pPam;
     const SwPosition* pPos;
     SwDoc* pDoc;
-    sal_uLong nNode;
+    ULONG nNode;
     xub_StrLen nCntnt;
-    sal_uInt16 nType;       // Insert/Move/Delete/... (UndoIds)
+    USHORT nType;		// Insert/Move/Delete/... (UndoIds)
 
 public:
-    SwDataChanged( const SwPaM& rPam, sal_uInt16 nType );
-    SwDataChanged( SwDoc* pDoc, const SwPosition& rPos, sal_uInt16 nType );
+    SwDataChanged( const SwPaM& rPam, USHORT nType );
+    SwDataChanged( SwDoc* pDoc, const SwPosition& rPos, USHORT nType );
     ~SwDataChanged();
 
-    sal_uLong GetNode() const           { return nNode; }
-    xub_StrLen GetCntnt() const     { return nCntnt; }
+    ULONG GetNode() const 			{ return nNode; }
+    xub_StrLen GetCntnt() const 	{ return nCntnt; }
 };
 
 
@@ -148,9 +149,24 @@ public:
 // Crsr verschieben kann
 // die Funktionen rufen nicht die SwDoc::Corr - Methoden!
 
+    // Setzt alle PaMs an OldPos auf NewPos + Offset
+void PaMCorrAbs( const SwPosition &rOldPos,
+                const SwPosition &rNewPos,
+                const xub_StrLen nOffset = 0 );
+
+    // Setzt alle PaMs in OldNode auf NewPos + Offset
+void PaMCorrAbs( const SwNodeIndex &rOldNode,
+                const SwPosition &rNewPos,
+                const xub_StrLen nOffset = 0 );
+
     // Setzt alle PaMs im Bereich vom Range nach NewPos
 void PaMCorrAbs( const SwPaM& rRange,
                  const SwPosition& rNewPos );
+
+    // Setzt alle PaMs im Bereich von [StartNode, EndNode] nach NewPos
+void PaMCorrAbs( const SwNodeIndex &rStartNode,
+                 const SwNodeIndex &rEndNode,
+                 const SwPosition &rNewPos );
 
     // Setzt alle PaMs in OldNode auf relative Pos
 void PaMCorrRel( const SwNodeIndex &rOldNode,
@@ -165,23 +181,23 @@ class _ZSortFly
 {
     const SwFrmFmt* pFmt;
     const SwFmtAnchor* pAnchor;
-    sal_uInt32 nOrdNum;
+    UINT32 nOrdNum;
 
 public:
     _ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAnchor,
-                sal_uInt32 nArrOrdNum );
+                UINT32 nArrOrdNum );
     _ZSortFly& operator=( const _ZSortFly& rCpy )
     {
         pFmt = rCpy.pFmt, pAnchor = rCpy.pAnchor, nOrdNum = rCpy.nOrdNum;
         return *this;
     }
 
-    int operator==( const _ZSortFly& ) const { return sal_False; }
+    int operator==( const _ZSortFly& ) const { return FALSE; }
     int operator<( const _ZSortFly& rCmp ) const
         { return nOrdNum < rCmp.nOrdNum; }
 
-    const SwFrmFmt* GetFmt() const              { return pFmt; }
-    const SwFmtAnchor* GetAnchor() const        { return pAnchor; }
+    const SwFrmFmt* GetFmt() const				{ return pFmt; }
+    const SwFmtAnchor* GetAnchor() const		{ return pAnchor; }
 };
 
 SV_DECL_VARARR_SORT( _ZSortFlys, _ZSortFly, 0, 10 )
@@ -210,6 +226,6 @@ public:
 };
 
 
-#endif  // SW_MVSAVE_HXX
+#endif	// _MVSAVE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

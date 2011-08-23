@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,6 +44,9 @@
 #include "vectdlg.hxx"
 #include "vectdlg.hrc"
 #include <tools/config.hxx>
+#ifndef _SV_OCTREE_HXX //autogen
+ #include <vcl/octree.hxx>
+#endif
 #include <vcl/bmpacc.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/metaact.hxx>
@@ -58,29 +61,29 @@
 // - SdVectorizeDlg -
 // ------------------
 
-SdVectorizeDlg::SdVectorizeDlg(
+SdVectorizeDlg::SdVectorizeDlg( 
     Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell ) :
         ModalDialog     ( pParent, SdResId( DLG_VECTORIZE ) ),
         mpDocSh          ( pDocShell ),
         aGrpSettings    ( this, SdResId( GRP_SETTINGS ) ),
-        aFtLayers       ( this, SdResId( FT_LAYERS ) ),
-        aNmLayers       ( this, SdResId( NM_LAYERS ) ),
-        aFtReduce       ( this, SdResId( FT_REDUCE ) ),
-        aMtReduce       ( this, SdResId( MT_REDUCE ) ),
-        aFtFillHoles    ( this, SdResId( FT_FILLHOLES ) ),
-        aMtFillHoles    ( this, SdResId( MT_FILLHOLES ) ),
-        aCbFillHoles    ( this, SdResId( CB_FILLHOLES ) ),
-        aFtOriginal     ( this, SdResId( FT_ORIGINAL ) ),
-        aBmpWin         ( this, SdResId( CTL_BMP ) ),
-        aFtVectorized   ( this, SdResId( FT_VECTORIZED ) ),
-        aMtfWin         ( this, SdResId( CTL_WMF ) ),
-        aGrpPrgs        ( this, SdResId( GRP_PRGS ) ),
-        aPrgs           ( this, SdResId( WND_PRGS ) ),
+        aFtLayers		( this, SdResId( FT_LAYERS ) ),
+        aNmLayers		( this, SdResId( NM_LAYERS ) ),
+        aFtReduce		( this, SdResId( FT_REDUCE ) ),
+        aMtReduce		( this, SdResId( MT_REDUCE ) ),
+        aFtFillHoles	( this, SdResId( FT_FILLHOLES ) ),
+        aMtFillHoles	( this, SdResId( MT_FILLHOLES ) ),
+        aCbFillHoles	( this, SdResId( CB_FILLHOLES ) ),
+        aFtOriginal		( this, SdResId( FT_ORIGINAL ) ),
+        aBmpWin			( this, SdResId( CTL_BMP ) ),
+        aFtVectorized	( this, SdResId( FT_VECTORIZED ) ),
+        aMtfWin			( this, SdResId( CTL_WMF ) ),
+        aGrpPrgs		( this, SdResId( GRP_PRGS ) ),
+        aPrgs			( this, SdResId( WND_PRGS ) ),
         aBtnOK          ( this, SdResId( BTN_OK ) ),
         aBtnCancel      ( this, SdResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, SdResId( BTN_HELP ) ),
-        aBtnPreview     ( this, SdResId( BTN_PREVIEW ) ),
-        aBmp            ( rBmp )
+        aBtnPreview		( this, SdResId( BTN_PREVIEW ) ),
+        aBmp			( rBmp )
 {
     FreeResource();
 
@@ -113,7 +116,7 @@ Rectangle SdVectorizeDlg::GetRect( const Size& rDispSize, const Size& rBmpSize )
 
     if( rBmpSize.Width() && rBmpSize.Height() && rDispSize.Width() && rDispSize.Height() )
     {
-        Size         aBmpSize( rBmpSize );
+        Size		 aBmpSize( rBmpSize );
         const double fGrfWH = (double) aBmpSize.Width() / aBmpSize.Height();
         const double fWinWH = (double) rDispSize.Width() / rDispSize.Height();
 
@@ -152,8 +155,8 @@ void SdVectorizeDlg::InitPreviewBmp()
 
 Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
 {
-    Bitmap      aNew( rBmp );
-    const Size  aSizePix( aNew.GetSizePixel() );
+    Bitmap		aNew( rBmp );
+    const Size	aSizePix( aNew.GetSizePixel() );
 
     if( aSizePix.Width() > VECTORIZE_MAX_EXTENT || aSizePix.Height() > VECTORIZE_MAX_EXTENT )
     {
@@ -164,7 +167,7 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
     else
         rScale = Fraction( 1, 1 );
 
-    aNew.ReduceColors( (sal_uInt16) aNmLayers.GetValue(), BMP_REDUCE_SIMPLE );
+    aNew.ReduceColors( (USHORT) aNmLayers.GetValue(), BMP_REDUCE_SIMPLE );
 
     return aNew;
 }
@@ -173,32 +176,32 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
 
 void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
 {
-    mpDocSh->SetWaitCursor( sal_True );
+    mpDocSh->SetWaitCursor( TRUE );
     aPrgs.SetValue( 0 );
 
-    Fraction    aScale;
-    Bitmap      aTmp( GetPreparedBitmap( rBmp, aScale ) );
+    Fraction	aScale;
+    Bitmap		aTmp( GetPreparedBitmap( rBmp, aScale ) );
 
     if( !!aTmp )
     {
         const Link aPrgsHdl( LINK( this, SdVectorizeDlg, ProgressHdl ) );
-        aTmp.Vectorize( rMtf, (sal_uInt8) aMtReduce.GetValue(), BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES, &aPrgsHdl );
+        aTmp.Vectorize( rMtf, (BYTE) aMtReduce.GetValue(), BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES, &aPrgsHdl );
 
         if( aCbFillHoles.IsChecked() )
         {
-            GDIMetaFile         aNewMtf;
-            BitmapReadAccess*   pRAcc = aTmp.AcquireReadAccess();
+            GDIMetaFile			aNewMtf;
+            BitmapReadAccess*	pRAcc = aTmp.AcquireReadAccess();
 
             if( pRAcc )
             {
-                const long      nWidth = pRAcc->Width();
-                const long      nHeight = pRAcc->Height();
-                const long      nTileX = static_cast<long>(aMtFillHoles.GetValue());
-                const long      nTileY = static_cast<long>(aMtFillHoles.GetValue());
-                const long      nCountX = nWidth / nTileX;
-                const long      nCountY = nHeight / nTileY;
-                const long      nRestX = nWidth % nTileX;
-                const long      nRestY = nHeight % nTileY;
+                const long		nWidth = pRAcc->Width();
+                const long		nHeight = pRAcc->Height();
+                const long		nTileX = static_cast<long>(aMtFillHoles.GetValue());
+                const long		nTileY = static_cast<long>(aMtFillHoles.GetValue());
+                const long		nCountX = nWidth / nTileX;
+                const long		nCountY = nHeight / nTileY;
+                const long		nRestX = nWidth % nTileX;
+                const long		nRestY = nHeight % nTileY;
 
                 MapMode aMap( rMtf.GetPrefMapMode() );
                 aNewMtf.SetPrefSize( rMtf.GetPrefSize() );
@@ -229,7 +232,7 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
 
                 aTmp.ReleaseAccess( pRAcc );
 
-                for( sal_uLong n = 0UL, nCount = rMtf.GetActionCount(); n < nCount; n++ )
+                for( ULONG n = 0UL, nCount = rMtf.GetActionCount(); n < nCount; n++ )
                     aNewMtf.AddAction( rMtf.GetAction( n )->Clone() );
 
                 aMap.SetScaleX( aMap.GetScaleX() * aScale );
@@ -241,7 +244,7 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
     }
 
     aPrgs.SetValue( 0 );
-    mpDocSh->SetWaitCursor( sal_False );
+    mpDocSh->SetWaitCursor( FALSE );
 }
 
 // -----------------------------------------------------------------------------
@@ -249,10 +252,10 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
 void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
                               long nPosX, long nPosY, long nWidth, long nHeight )
 {
-    sal_uLong           nSumR = 0UL, nSumG = 0UL, nSumB = 0UL;
-    const long      nRight = nPosX + nWidth - 1L;
-    const long      nBottom = nPosY + nHeight - 1L;
-    const double    fMult = 1.0 / ( nWidth * nHeight );
+    ULONG			nSumR = 0UL, nSumG = 0UL, nSumB = 0UL;
+    const long		nRight = nPosX + nWidth - 1L;
+    const long		nBottom = nPosY + nHeight - 1L;
+    const double	fMult = 1.0 / ( nWidth * nHeight );
 
     for( long nY = nPosY; nY <= nBottom; nY++ )
     {
@@ -266,12 +269,12 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
         }
     }
 
-    const Color aColor( (sal_uInt8) FRound( nSumR * fMult ),
-                        (sal_uInt8) FRound( nSumG * fMult ),
-                        (sal_uInt8) FRound( nSumB * fMult ) );
+    const Color aColor( (BYTE) FRound( nSumR * fMult ),
+                        (BYTE) FRound( nSumG * fMult ),
+                        (BYTE) FRound( nSumB * fMult ) );
 
-    Rectangle   aRect( Point( nPosX, nPosY ), Size( nWidth + 1, nHeight + 1 ) );
-    const Size& rMaxSize = rMtf.GetPrefSize();
+    Rectangle	aRect( Point( nPosX, nPosY ), Size( nWidth + 1, nHeight + 1 ) );
+    const Size&	rMaxSize = rMtf.GetPrefSize();
 
     aRect = PixelToLogic( aRect, rMtf.GetPrefMapMode() );
 
@@ -281,8 +284,8 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
     if( aRect.Bottom() > ( rMaxSize.Height() - 1L ) )
         aRect.Bottom() = rMaxSize.Height() - 1L;
 
-    rMtf.AddAction( new MetaLineColorAction( aColor, sal_True ) );
-    rMtf.AddAction( new MetaFillColorAction( aColor, sal_True ) );
+    rMtf.AddAction( new MetaLineColorAction( aColor, TRUE ) );
+    rMtf.AddAction( new MetaFillColorAction( aColor, TRUE ) );
     rMtf.AddAction( new MetaRectAction( aRect ) );
 }
 
@@ -290,7 +293,7 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
 
 IMPL_LINK( SdVectorizeDlg, ProgressHdl, void*, pData )
 {
-    aPrgs.SetValue( (sal_uInt16)(sal_uLong) pData );
+    aPrgs.SetValue( (USHORT)(ULONG) pData );
     return 0L;
 }
 
@@ -350,14 +353,14 @@ IMPL_LINK( SdVectorizeDlg, ModifyHdl, void*, EMPTYARG )
 
 void SdVectorizeDlg::LoadSettings()
 {
-    SvStorageStreamRef  xIStm( SD_MOD()->GetOptionStream(
+    SvStorageStreamRef	xIStm( SD_MOD()->GetOptionStream(
                                UniString::CreateFromAscii(
                                RTL_CONSTASCII_STRINGPARAM( SD_OPTION_VECTORIZE ) ),
                                SD_OPTION_LOAD ) );
-    sal_uInt16              nLayers;
-    sal_uInt16              nReduce;
-    sal_uInt16              nFillHoles;
-    sal_Bool                bFillHoles;
+    UINT16				nLayers;
+    UINT16				nReduce;
+    UINT16				nFillHoles;
+    BOOL				bFillHoles;
 
     if( xIStm.Is() )
     {
@@ -369,7 +372,7 @@ void SdVectorizeDlg::LoadSettings()
         nLayers = 8;
         nReduce = 0;
         nFillHoles = 32;
-        bFillHoles = sal_False;
+        bFillHoles = FALSE;
     }
 
     aNmLayers.SetValue( nLayers );
@@ -392,8 +395,8 @@ void SdVectorizeDlg::SaveSettings() const
     if( xOStm.Is() )
     {
         SdIOCompat aCompat( *xOStm, STREAM_WRITE, 1 );
-        *xOStm << (sal_uInt16) aNmLayers.GetValue() << (sal_uInt16) aMtReduce.GetValue();
-        *xOStm << (sal_uInt16) aMtFillHoles.GetValue() << aCbFillHoles.IsChecked();
+        *xOStm << (UINT16) aNmLayers.GetValue() << (UINT16) aMtReduce.GetValue();
+        *xOStm << (UINT16) aMtFillHoles.GetValue() << aCbFillHoles.IsChecked();
     }
 }
 

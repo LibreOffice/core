@@ -57,7 +57,11 @@
  * @file
  * Font decl of all used fonts.
  ************************************************************************/
-#include    "xffontdecl.hxx"
+/*************************************************************************
+ * Change History
+ * 2005-01-21 create this file.
+ ************************************************************************/
+#include	"xffontdecl.hxx"
 
 XFFontDecl::XFFontDecl()
 {
@@ -70,32 +74,32 @@ XFFontDecl::XFFontDecl(rtl::OUString name, rtl::OUString family, sal_Bool fixed)
     m_bPitchFixed = fixed;
 }
 
-rtl::OUString   XFFontDecl::GetFontName()
+rtl::OUString	XFFontDecl::GetFontName()
 {
     return m_strFontName;
 }
 
-void    XFFontDecl::SetFontName(rtl::OUString name)
+void	XFFontDecl::SetFontName(rtl::OUString name)
 {
     m_strFontName = name;
 }
 
-rtl::OUString   XFFontDecl::GetFontFamily()
+rtl::OUString	XFFontDecl::GetFontFamily()
 {
     return m_strFontFamily;
 }
 
-void    XFFontDecl::SetFontFamily(rtl::OUString family)
+void	XFFontDecl::SetFontFamily(rtl::OUString family)
 {
     m_strFontFamily = family;
 }
 
-sal_Bool    XFFontDecl::GetFontPitchFixed()
+sal_Bool	XFFontDecl::GetFontPitchFixed()
 {
     return m_bPitchFixed;
 }
 
-void    XFFontDecl::SetFontPitchFixed(sal_Bool  fixed)
+void	XFFontDecl::SetFontPitchFixed(sal_Bool	fixed)
 {
     m_bPitchFixed = fixed;
 }

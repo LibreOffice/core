@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ using namespace com::sun::star;
 namespace dxcanvas
 {
     DXCanvasItem::DXCanvasItem() :
-        ConfigItem(
-            ::rtl::OUString(
+        ConfigItem( 
+            ::rtl::OUString( 
                 RTL_CONSTASCII_USTRINGPARAM( "Office.Canvas/DXCanvas" )),
             CONFIG_MODE_IMMEDIATE_UPDATE ),
         maValues(),
@@ -93,7 +93,8 @@ namespace dxcanvas
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL( rtl::OUStringToOString(
+            OSL_ENSURE( false,
+                        rtl::OUStringToOString(
                             comphelper::anyToString( cppu::getCaughtException() ),
                             RTL_TEXTENCODING_UTF8 ).getStr() );
         }
@@ -134,7 +135,8 @@ namespace dxcanvas
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL( rtl::OUStringToOString(
+            OSL_ENSURE( false,
+                        rtl::OUStringToOString(
                             comphelper::anyToString( cppu::getCaughtException() ),
                             RTL_TEXTENCODING_UTF8 ).getStr() );
         }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace beans { class XPropertySet; }
 } } }
-namespace rtl { class OUString; }
+namespace rtl {	class OUString; }
 
 
 /**
@@ -46,7 +46,7 @@ namespace rtl { class OUString; }
 class XMLIndexUserSourceContext : public XMLIndexSourceBaseContext
 {
     const ::rtl::OUString sCreateFromEmbeddedObjects;
-    const ::rtl::OUString sCreateFromGraphicObjects;
+    const ::rtl::OUString sCreateFromGraphicObjects; 
     const ::rtl::OUString sCreateFromMarks;
     const ::rtl::OUString sCreateFromTables;
     const ::rtl::OUString sCreateFromTextFrames;
@@ -55,7 +55,7 @@ class XMLIndexUserSourceContext : public XMLIndexSourceBaseContext
     const ::rtl::OUString sUserIndexName;
 
     sal_Bool bUseObjects;
-    sal_Bool bUseGraphic;
+    sal_Bool bUseGraphic; 
     sal_Bool bUseMarks;
     sal_Bool bUseTables;
     sal_Bool bUseFrames;
@@ -68,10 +68,10 @@ public:
     TYPEINFO();
 
     XMLIndexUserSourceContext(
-        SvXMLImport& rImport,
+        SvXMLImport& rImport, 
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName,
-        ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::Reference< 
             ::com::sun::star::beans::XPropertySet> & rPropSet);
 
     ~XMLIndexUserSourceContext();
@@ -79,15 +79,15 @@ public:
 protected:
 
     virtual void ProcessAttribute(
-        enum IndexSourceParamEnum eParam,
+        enum IndexSourceParamEnum eParam, 
         const ::rtl::OUString& rValue);
 
     virtual void EndElement();
 
-    virtual SvXMLImportContext* CreateChildContext(
+    virtual SvXMLImportContext* CreateChildContext( 
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
+        const ::com::sun::star::uno::Reference< 
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };
 

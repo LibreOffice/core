@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,18 +28,17 @@
 #ifndef _GLOBNAME_HXX
 #define _GLOBNAME_HXX
 
-#include <vector>
-
 #include "tools/toolsdllapi.h"
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/string.hxx>
+#include <tools/list.hxx>
 
 /*************************************************************************
 *************************************************************************/
 struct ImpSvGlobalName
 {
-    sal_uInt8       szData[ 16 ];
-    sal_uInt16      nRefCount;
+    BYTE        szData[ 16 ];
+    USHORT      nRefCount;
 
                 ImpSvGlobalName()
                 {
@@ -48,7 +47,7 @@ struct ImpSvGlobalName
                 ImpSvGlobalName( const ImpSvGlobalName & rObj );
                 ImpSvGlobalName( int );
 
-    sal_Bool    operator == ( const ImpSvGlobalName & rObj ) const;
+    BOOL    operator == ( const ImpSvGlobalName & rObj ) const;
 };
 
 #ifdef WNT
@@ -77,9 +76,9 @@ public:
                 pImp = pImpP;
                 pImp->nRefCount++;
             }
-            SvGlobalName( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
-                          sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
-                          sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 );
+            SvGlobalName( UINT32 n1, USHORT n2, USHORT n3,
+                          BYTE b8, BYTE b9, BYTE b10, BYTE b11,
+                          BYTE b12, BYTE b13, BYTE b14, BYTE b15 );
 
             // create SvGlobalName from a platform independent representation
             SvGlobalName( const ::com::sun::star::uno::Sequence< sal_Int8 >& aSeq );
@@ -90,16 +89,16 @@ public:
     TOOLS_DLLPUBLIC friend SvStream & operator >> ( SvStream &, SvGlobalName & );
     TOOLS_DLLPUBLIC friend SvStream & operator << ( SvStream &, const SvGlobalName & );
 
-    sal_Bool            operator < ( const SvGlobalName & rObj ) const;
-    SvGlobalName &  operator += ( sal_uInt32 );
+    BOOL            operator < ( const SvGlobalName & rObj ) const;
+    SvGlobalName &  operator += ( UINT32 );
     SvGlobalName &  operator ++ () { return operator += ( 1 ); }
 
-    sal_Bool    operator == ( const SvGlobalName & rObj ) const;
-    sal_Bool    operator != ( const SvGlobalName & rObj ) const
+    BOOL    operator == ( const SvGlobalName & rObj ) const;
+    BOOL    operator != ( const SvGlobalName & rObj ) const
             { return !(*this == rObj); }
 
     void    MakeFromMemory( void * pData );
-    sal_Bool    MakeId( const String & rId );
+    BOOL    MakeId( const String & rId );
     String  GetctorName() const;
     String  GetHexName() const;
     String  GetRegDbName() const
@@ -112,7 +111,7 @@ public:
 
                   SvGlobalName( const CLSID & rId );
     const CLSID & GetCLSID() const { return *(CLSID *)pImp->szData; }
-    const sal_uInt8* GetBytes() const { return pImp->szData; }
+    const BYTE* GetBytes() const { return pImp->szData; }
 
     // platform independent representation of a "GlobalName"
     // maybe transported remotely
@@ -121,15 +120,15 @@ public:
 
 class SvGlobalNameList
 {
-    std::vector<ImpSvGlobalName*> aList;
+    List aList;
 public:
                     SvGlobalNameList();
                     ~SvGlobalNameList();
 
     void            Append( const SvGlobalName & );
-    SvGlobalName    GetObject( sal_uLong );
-    sal_Bool            IsEntry( const SvGlobalName & rName );
-    size_t          Count() const { return aList.size(); }
+    SvGlobalName    GetObject( ULONG );
+    BOOL            IsEntry( const SvGlobalName & rName );
+    ULONG           Count() const { return aList.Count(); }
 private:
                 // nicht erlaubt
                 SvGlobalNameList( const SvGlobalNameList & );

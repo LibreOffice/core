@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,6 +60,7 @@
 #include "ViewShellBase.hxx"
 #include "FactoryIds.hxx"
 
+// #110496#
 #include "slideshow.hxx"
 #include "fupoor.hxx"
 #include "Window.hxx"
@@ -125,13 +126,14 @@ void PresentationViewShell::FinishInitialization( FrameView* pFrameView )
         pFrameView->Connect();
     }
     SetRuler(false);
+//    SwitchPage (nPageNumber);
     WriteFrameViewData();
 
     GetActiveWindow()->GrabFocus();
 }
 
 
-SvxRuler* PresentationViewShell::CreateHRuler(::sd::Window*, sal_Bool)
+SvxRuler* PresentationViewShell::CreateHRuler(::sd::Window*, BOOL)
 {
     return NULL;
 }
@@ -142,13 +144,14 @@ SvxRuler* PresentationViewShell::CreateVRuler(::sd::Window*)
 }
 
 
-void PresentationViewShell::Activate( sal_Bool bIsMDIActivate )
+void PresentationViewShell::Activate( BOOL bIsMDIActivate )
 {
     DrawViewShell::Activate( bIsMDIActivate );
 
     if( bIsMDIActivate )
     {
-        SfxBoolItem aItem( SID_NAVIGATOR_INIT, sal_True );
+        //HMH::sd::View*     pView = GetView();
+        SfxBoolItem aItem( SID_NAVIGATOR_INIT, TRUE );
 
         GetViewFrame()->GetDispatcher()->Execute( SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 

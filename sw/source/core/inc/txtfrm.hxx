@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,9 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef SW_TXTFRM_HXX
-#define SW_TXTFRM_HXX
-
+#ifndef _TXTFRM_HXX
+#define _TXTFRM_HXX
 #include <tools/mempool.hxx>
 #include <tools/string.hxx>
 #include "cntfrm.hxx"
@@ -42,7 +41,7 @@ class SwParaPortion;
 class WidowsAndOrphans;
 class SwBodyFrm;
 class SwTxtFtn;
-class SwInterHyphInfo;      // Hyphenate()
+class SwInterHyphInfo;		// Hyphenate()
 class SwCache;
 class SwBorderAttrs;
 class SwFrmFmt;
@@ -66,15 +65,15 @@ class SwTxtFrm: public SwCntntFrm
     friend class SwTxtIter;
     friend class SwTestFormat;
     friend class WidowsAndOrphans;
-    friend class SwTxtFrmLocker;        // duerfen Lock()/Unlock()
-    friend sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, sal_uInt16 nNew );
+    friend class SwTxtFrmLocker;		// duerfen Lock()/Unlock()
+    friend sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, USHORT nNew );
 
-    static SwCache *pTxtCache;  //Pointer auf den Line-Cache
-    static long nMinPrtLine;    //Diese Linie darf beim Drucken nicht
+    static SwCache *pTxtCache;	//Pointer auf den Line-Cache
+    static long nMinPrtLine; 	//Diese Linie darf beim Drucken nicht
         //unterschritten werden, Hack fuer Tabellenzellen ueber mehrere Seiten
 
-    sal_uLong  nAllLines        :24;//Anzahl der Zeilen fuer das Paint (inkl. nThisLines)
-    sal_uLong  nThisLines       :8; //Anzahl der Zeilen dieses Frames
+    ULONG  nAllLines		:24;//Anzahl der Zeilen fuer das Paint (inkl. nThisLines)
+    ULONG  nThisLines		:8;	//Anzahl der Zeilen dieses Frames
 
     // The x position for flys anchored at this paragraph.
     // These values are calculated in SwTxtFrm::CalcBaseOfstForFly()
@@ -85,16 +84,18 @@ class SwTxtFrm: public SwCntntFrm
     // OD 2004-03-17 #i11860# - re-factoring of #i11859#
     // member for height of last line (value needed for proportional line spacing)
     SwTwips mnHeightOfLastLine;
+    // --> OD 2008-01-31 #newlistlevelattrs#
     // member for the additional first line offset, which is caused by the list
     // label alignment for list level position and space mode LABEL_ALIGNMENT.
     // This additional first line offset is used for the text formatting.
     // It is NOT used for the determination of printing area.
     SwTwips mnAdditionalFirstLineOffset;
+    // <--
 
 
-    xub_StrLen nOfst;           //nOfst gibt den Offset im Cntnt (Anzahl Zeichen) an.
+    xub_StrLen nOfst;			//nOfst gibt den Offset im Cntnt (Anzahl Zeichen) an.
 
-    sal_uInt16 nCacheIdx;           //Index in den Cache, USHRT_MAX wenn definitiv
+    USHORT nCacheIdx;			//Index in den Cache, USHRT_MAX wenn definitiv
                                 //kein passendes Objekt im Cache steht.
 
     //Teilt den Master ab und erzeugt einen Follow oder passt die
@@ -108,14 +109,14 @@ class SwTxtFrm: public SwCntntFrm
     //entsprechend dem Attribut ein.
     void CalcLineSpace();
 
-    void InitCtor();        // Wird in beiden Ctoren gerufen
+    void InitCtor();		// Wird in beiden Ctoren gerufen
 
     // Wird nur in Format gerufen:
     void AdjustFrm( const SwTwips nChgHeight, sal_Bool bHasToFit = sal_False );
 
     // wertet in Format() die Preps aus.
     sal_Bool CalcPreps();
-    void PrepWidows( const sal_uInt16 nNeed, sal_Bool bNotify = sal_True );
+    void PrepWidows( const USHORT nNeed, sal_Bool bNotify = sal_True );
     void _InvalidateRange( const SwCharRange &, const long = 0);
     inline void InvalidateRange( const SwCharRange &, const long = 0);
 
@@ -123,17 +124,17 @@ class SwTxtFrm: public SwCntntFrm
     void FormatAdjust( SwTxtFormatter &rLine, WidowsAndOrphans &rFrmBreak,
                        const xub_StrLen nStrLen, const sal_Bool bDummy );
 
-    sal_Bool bLocked        : 1;        // im Format?
-    sal_Bool bFormatted     : 1;        // nach Format auf sal_True
-    sal_Bool bWidow         : 1;        // sind wir ein Widow
-    sal_Bool bJustWidow     : 1;        // haben wir soeben Widow angefordert
-    sal_Bool bEmpty         : 1;        // sind wir ein leerer Absatz
-    sal_Bool bInFtnConnect  : 1;        // Steht gerade im Connect
-    sal_Bool bFtn           : 1;        // Hat mindestens eine Fussnote
-    sal_Bool bRepaint       : 1;        // TxtFrm: Repaint steht zur Abholung bereit
-    sal_Bool bBlinkPor      : 1;        // enthaelt Blink-Portions
-    sal_Bool bFieldFollow   : 1;        // beginne mit Feldrest des Masters
-    sal_Bool bHasAnimation  : 1;        // enthaelt animierte SwGrfNumPortion
+    sal_Bool bLocked		: 1;		// im Format?
+    sal_Bool bFormatted 	: 1;		// nach Format auf sal_True
+    sal_Bool bWidow			: 1;		// sind wir ein Widow
+    sal_Bool bJustWidow		: 1;		// haben wir soeben Widow angefordert
+    sal_Bool bEmpty			: 1;		// sind wir ein leerer Absatz
+    sal_Bool bInFtnConnect	: 1;		// Steht gerade im Connect
+    sal_Bool bFtn			: 1;		// Hat mindestens eine Fussnote
+    sal_Bool bRepaint		: 1;		// TxtFrm: Repaint steht zur Abholung bereit
+    sal_Bool bBlinkPor		: 1;		// enthaelt Blink-Portions
+    sal_Bool bFieldFollow	: 1;		// beginne mit Feldrest des Masters
+    sal_Bool bHasAnimation	: 1;		// enthaelt animierte SwGrfNumPortion
     sal_Bool bIsSwapped     : 1;        // during text formatting we swap the
                                         // width and height for vertical formatting
     // OD 14.03.2003 #i11760# - flag to control, if follow is formatted in
@@ -227,8 +228,6 @@ class SwTxtFrm: public SwCntntFrm
                                  xub_StrLen nInsertPos, xub_StrLen nActPos,
                                  xub_StrLen &nChgStart, xub_StrLen &nChgEnd,
                                  xub_StrLen &nInvStart, xub_StrLen &nInvEnd);
-protected:
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
 
@@ -237,11 +236,11 @@ public:
     void Init();
 
     // Wird von FormatSpelling( ) gerufen
-    SwRect _AutoSpell( const SwCntntNode*, const SwViewOption&, sal_uInt16 );
+    SwRect _AutoSpell( const SwCntntNode*, const SwViewOption&, USHORT );
     // is called from the FormatSpelling( ) method
-    SwRect SmartTagScan( SwCntntNode* , sal_uInt16 );
+    SwRect SmartTagScan( SwCntntNode* , USHORT );
     // Wird vom CollectAutoCmplWords gerufen
-    void CollectAutoCmplWrds( SwCntntNode* , sal_uInt16 );
+    void CollectAutoCmplWrds( SwCntntNode* , USHORT );
 
     // Returns the screen position of rPos. The values are relative to the upper
     // left position of the page frame.
@@ -289,13 +288,13 @@ public:
 
     // GetKeyCrsrOfst sorgt dafuer, dass der Frame nicht gewechselt wird
     // (z.B. Wechsel in den zeichengebundenen Frame).
-    inline  sal_Bool GetKeyCrsrOfst(SwPosition *pPos, const Point &rPoint ) const
+    inline	sal_Bool GetKeyCrsrOfst(SwPosition *pPos, const Point &rPoint ) const
             { return _GetCrsrOfst( pPos, rPoint, sal_False ); }
 
     void   PaintExtraData( const SwRect & rRect ) const; //Seitennummer usw.
     SwRect Paint();
-    virtual void Paint( SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const;
+    virtual void Paint( const SwRect &, const SwPrtOptions *pPrintData = NULL ) const;
+    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual sal_Bool GetInfo( SfxPoolItem & ) const;
 
     //Layoutorientiertes Cursortravelling: Linker, rechter Rand,
@@ -314,16 +313,16 @@ public:
 
     // Prepares the cursor position for a visual cursor move (BiDi).
     // The behaviour is different for insert and overwrite cursors
-    void PrepareVisualMove( xub_StrLen& nPos, sal_uInt8& nCrsrLevel,
+    void PrepareVisualMove( xub_StrLen& nPos, BYTE& nCrsrLevel,
                             sal_Bool& bRight, sal_Bool bInsertCrsr );
 
     // Methoden zur Verwaltung von FolgeFrames
            SwCntntFrm *SplitFrm( const xub_StrLen nTxtPos );
            SwCntntFrm *JoinFrm();
-    inline sal_uInt16      GetOfst() const { return nOfst; }
-           void        _SetOfst( const sal_uInt16 nNewOfst );
-    inline void        SetOfst ( const sal_uInt16 nNewOfst );
-    inline void        ManipOfst ( const sal_uInt16 nNewOfst ){ nOfst = nNewOfst; }
+    inline USHORT	   GetOfst() const { return nOfst; }
+           void		   _SetOfst( const USHORT nNewOfst );
+    inline void 	   SetOfst ( const USHORT nNewOfst );
+    inline void 	   ManipOfst ( const USHORT nNewOfst ){ nOfst = nNewOfst; }
            SwTxtFrm   *GetFrmAtPos ( const SwPosition &rPos);
     inline const SwTxtFrm *GetFrmAtPos ( const SwPosition &rPos) const;
            // OD 07.10.2003 #110978# - return <reference> instead of <pointer>
@@ -339,7 +338,7 @@ public:
     inline const SwTxtNode *GetTxtNode() const
         { return (SwTxtNode*)SwCntntFrm::GetNode(); }
 
-    SwTxtFrm(SwTxtNode * const, SwFrm* );
+    SwTxtFrm(SwTxtNode * const);
     virtual ~SwTxtFrm();
 
     // SwCntntFrm: der "kurze Dienstweg" fuer die Frames.
@@ -380,13 +379,13 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtFrm)
 
     // Locking
-    inline sal_Bool IsLocked()      const { return bLocked;     }
-    inline sal_Bool IsFormatted()   const { return bFormatted;  }
+    inline sal_Bool IsLocked() 		const { return bLocked;		}
+    inline sal_Bool IsFormatted() 	const { return bFormatted;	}
 
-    inline sal_Bool IsWidow()       const { return bWidow;      }
-    inline sal_Bool IsJustWidow()   const { return bJustWidow;  }
-    inline sal_Bool IsEmpty()       const { return bEmpty;      }
-    inline sal_Bool HasFtn()        const { return bFtn;        }
+    inline sal_Bool IsWidow() 		const { return bWidow;		}
+    inline sal_Bool IsJustWidow()	const { return bJustWidow;	}
+    inline sal_Bool IsEmpty() 		const { return bEmpty;		}
+    inline sal_Bool HasFtn() 		const { return bFtn; 		}
     inline sal_Bool IsInFtnConnect()const { return bInFtnConnect;}
     inline sal_Bool IsFieldFollow() const { return bFieldFollow;}
 
@@ -410,8 +409,8 @@ public:
 #endif
 
     // Hidden
-    sal_Bool IsHiddenNow() const;       // bHidden && pOut == pPrt
-    void HideHidden();              // Anhaengsel entfernen wenn Hidden
+    sal_Bool IsHiddenNow() const;		// bHidden && pOut == pPrt
+    void HideHidden();				// Anhaengsel entfernen wenn Hidden
     void HideFootnotes( xub_StrLen nStart, xub_StrLen nEnd );
 
     /** method to hide/show objects
@@ -444,15 +443,15 @@ public:
     inline SwTwips GetRightMargin() const;
 
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
-    virtual void  CheckDirection( sal_Bool bVert );
+    virtual void  CheckDirection( BOOL bVert );
 
     // Liefert die Summe der Zeilenhoehen in pLine zurueck.
-    sal_uInt16 GetParHeight() const;
+    USHORT GetParHeight() const;
 
     // Liefert die Resthoehe zurueck
     inline SwTwips GetRstHeight() const;
 
-    inline       SwTxtFrm *GetFollow();
+    inline 		 SwTxtFrm *GetFollow();
     inline const SwTxtFrm *GetFollow() const;
 
     // Suche die Seitennummer von ErgoSum und QuoVadis
@@ -479,13 +478,13 @@ public:
     { return HasPara() ? _GetDropRect( rRect ) : sal_False; }
 
     static SwCache *GetTxtCache() { return pTxtCache; }
-    static void     SetTxtCache( SwCache *pNew ) { pTxtCache = pNew; }
+    static void		SetTxtCache( SwCache *pNew ) { pTxtCache = pNew; }
 
     static long GetMinPrtLine() { return nMinPrtLine; }
-    static void SetMinPrtLine( long nNew ) { nMinPrtLine = nNew; }
+    static void	SetMinPrtLine( long nNew ) { nMinPrtLine = nNew; }
 
-    inline sal_uInt16 GetCacheIdx() const { return nCacheIdx; }
-    inline void   SetCacheIdx( const sal_uInt16 nNew ) { nCacheIdx = nNew; }
+    inline USHORT GetCacheIdx() const { return nCacheIdx; }
+    inline void	  SetCacheIdx( const USHORT nNew ) { nCacheIdx = nNew; }
 
     //Entfert die Line-Informationen aus dem Cache.
     void ClearPara();
@@ -503,14 +502,18 @@ public:
         line offset for the real text formatting due to the value of label
         adjustment attribute of the list level.
 
+        OD 2008-01-31 #newlistlevelattrs#
+
         @author OD
     */
     void CalcAdditionalFirstLineOffset();
 
+    // --> OD 2008-01-31 #newlistlevelattrs#
     inline SwTwips GetAdditionalFirstLineOffset() const
     {
         return mnAdditionalFirstLineOffset;
     }
+    // <--
 
     // liefert den zusaetzlichen Zeilenabstand fuer den naechsten Absatz
     // OD 07.01.2004 #i11859# - change return data type;
@@ -519,23 +522,23 @@ public:
     long GetLineSpace( const bool _bNoPropLineSpacing = false ) const;
 
     // liefert die erste Zeilenhoehe zurueck
-    sal_uInt16 FirstLineHeight() const;
+    USHORT FirstLineHeight() const;
 
     // Haengt FlyInCntFrm um, wenn nEnd > Index >= nStart ist.
-    void MoveFlyInCnt( SwTxtFrm *pNew, sal_uInt16 nStart, sal_uInt16 nEnd );
+    void MoveFlyInCnt( SwTxtFrm *pNew, USHORT nStart, USHORT nEnd );
 
     // Berechnet die Position von FlyInCntFrms
-    sal_uInt16 CalcFlyPos( SwFrmFmt* pSearch );
+    USHORT CalcFlyPos( SwFrmFmt* pSearch );
 
     // Ermittelt die Startposition und Schrittweite des Registers
-    sal_Bool FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff );
+    sal_Bool FillRegister( SwTwips& rRegStart, USHORT& rRegDiff );
 
 
-    sal_uInt16 GetLineCount( sal_uInt16 nPos );     //Ermittelt die Zeilenanzahl
+    USHORT GetLineCount( USHORT nPos );		//Ermittelt die Zeilenanzahl
 
     //Fuer die Anzeige der Zeilennummern.
-    sal_uLong GetAllLines()  const { return nAllLines; }
-    sal_uLong GetThisLines() const { return nThisLines;}
+    ULONG GetAllLines()  const { return nAllLines; }
+    ULONG GetThisLines() const { return nThisLines;}
     void RecalcAllLines();
 
     // Stoppt Animationen innerhalb von Numerierungen
@@ -608,15 +611,13 @@ public:
         return mnHeightOfLastLine;
     }
 
-    static void repaintTextFrames( const SwTxtNode& rNode );
-
 #if OSL_DEBUG_LEVEL > 1
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
 #endif
 };
 
 /*************************************************************************
- *                          class SwTxtFrmLocker
+ *							class SwTxtFrmLocker
  *************************************************************************/
 
 class SwTxtFrmLocker
@@ -631,7 +632,7 @@ public:
 };
 
 /*************************************************************************
- *                      Inline-Implementierung
+ *						Inline-Implementierung
  *************************************************************************/
 
 inline const SwParaPortion *SwTxtFrm::GetPara() const
@@ -738,6 +739,47 @@ inline void SwTxtFrm::ResetBlinkPor() const
 {
     ((SwTxtFrm*)this)->bBlinkPor = sal_False;
 }
+
+#ifdef LINGU_STATISTIK
+
+class SwLinguStatistik
+{
+public:
+    long nWords;	// gepruefte Worte
+    long nFlushCnt;	// zaehlt die Messungen
+
+    long nWrong;  // als falsch erkannt
+    long nAlter;  // Alternativvorschlaege
+    long nSpellTime; // Zeitmessung
+    long nSynonym; // Thesaurus
+    long nNoSynonym; // Thesaurus ratlos
+    long nMeaning; // Thesaurus-Bedeutung
+    long nNoMeaning; // Thesaurus meinungslos
+    long nTheTime; // Zeitmessung
+    long nHyphens; // Trennstellen
+    long nNoHyph; // Worte ohne Trennstellen
+    long nHyphErr; // Fehler beim Trennen
+    long nHyphTime; // Zeitmessung
+    SpellCheck *pSpell;
+    LanguageType eLang;
+
+    void Flush();
+
+    inline SwLinguStatistik()
+        { nWords = nWrong = nAlter = nSynonym = nNoSynonym =
+          nHyphens = nNoHyph = nHyphErr = nSpellTime = nTheTime =
+          nHyphTime = nFlushCnt = 0;
+          pSpell = NULL;
+          eLang = LANGUAGE_DONTKNOW; }
+    inline ~SwLinguStatistik(){ Flush(); }
+};
+
+// globale Variable, implementiert in txtfrm.cxx
+extern SwLinguStatistik aSwLinguStat;
+
+#define SW_LING(nWhich,nInc) (aSwLinguStat.nWhich) += nInc;
+
+#endif
 
 #define SWAP_IF_SWAPPED( pFrm )\
     sal_Bool bUndoSwap = sal_False;   \

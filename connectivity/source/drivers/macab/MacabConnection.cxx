@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ using namespace com::sun::star::sdbcx;
 
 IMPLEMENT_SERVICE_INFO(MacabConnection, "com.sun.star.sdbc.drivers.MacabConnection", "com.sun.star.sdbc.Connection")
 //-----------------------------------------------------------------------------
-MacabConnection::MacabConnection(MacabDriver*   _pDriver)
+MacabConnection::MacabConnection(MacabDriver*	_pDriver)
          : OSubComponent<MacabConnection, MacabConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
          m_pAddressBook(NULL),
          m_pDriver(_pDriver)

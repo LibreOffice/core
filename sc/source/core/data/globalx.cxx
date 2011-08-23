@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,6 +56,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 
 
+// static
 void ScGlobal::InitAddIns()
 {
     // multi paths separated by semicolons
@@ -70,8 +71,8 @@ void ScGlobal::InitAddIns()
             String aPath( aMultiPath.GetToken( 0, ';', nIndex ) );
             if ( aPath.Len() > 0 )
             {
-                //  use LocalFileHelper to convert the path to a URL that always points
-                //  to the file on the server
+                //	use LocalFileHelper to convert the path to a URL that always points
+                //	to the file on the server
                 String aUrl;
                 if ( utl::LocalFileHelper::ConvertPhysicalNameToURL( aPath, aUrl ) )
                     aPath = aUrl;
@@ -134,6 +135,7 @@ void ScGlobal::InitAddIns()
 }
 
 
+// static
 String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
 {
     if (!xOrdinalSuffix.is())
@@ -144,7 +146,7 @@ String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
                 ::comphelper::getProcessServiceFactory();
             Reference< XInterface > xInterface =
                 xServiceManager->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.OrdinalSuffix")));
+                    ::rtl::OUString::createFromAscii("com.sun.star.i18n.OrdinalSuffix"));
             if  (xInterface.is())
                 xOrdinalSuffix = Reference< i18n::XOrdinalSuffix >( xInterface, UNO_QUERY);
         }
@@ -158,12 +160,8 @@ String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
     {
         try
         {
-            uno::Sequence< rtl::OUString > aSuffixes = xOrdinalSuffix->getOrdinalSuffix( nNumber,
+            return xOrdinalSuffix->getOrdinalSuffix( nNumber,
                     ScGlobal::pLocaleData->getLocale());
-            if ( aSuffixes.getLength() > 0 )
-                return aSuffixes[0];
-            else
-                return String();
         }
         catch ( Exception& )
         {

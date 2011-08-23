@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@ namespace svt
     using namespace com::sun::star::accessibility;
     using namespace com::sun::star::uno;
     using namespace ::com::sun::star::accessibility::AccessibleEventId;
-
+    
 // -----------------------------------------------------------------------------
-Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(long _nRow, sal_uInt16 _nColumnPos,const TriState& eState,sal_Bool _bEnabled)
+Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(long _nRow, USHORT _nColumnPos,const TriState& eState,sal_Bool _bEnabled)
 {
     Reference< XAccessible > xAccessible( GetAccessible() );
     Reference< XAccessibleContext > xAccContext;
@@ -89,10 +89,10 @@ void EditBrowseBox::implCreateActiveAccessible( )
          if ( xMy.is() && xCont.is() )
           {
              m_aImpl->m_xActiveCell = getAccessibleFactory().createEditBrowseBoxTableCellAccess(
-                 xMy,                                                       // parent accessible
-                 xCont,                                                     // control accessible
-                 VCLUnoHelper::GetInterface( &aController->GetWindow() ),   // focus window (for notifications)
-                 *this,                                                     // the browse box
+                 xMy,														// parent accessible
+                 xCont,														// control accessible
+                 VCLUnoHelper::GetInterface( &aController->GetWindow() ),	// focus window (for notifications)
+                 *this,														// the browse box
                  GetCurRow(),
                  GetColumnPos( GetCurColumnId() )
              );
@@ -133,7 +133,7 @@ void EditBrowseBoxImpl::clearActiveCell()
     }
     catch(const Exception&)
     {
-        OSL_FAIL( "EditBrowseBoxImpl::clearActiveCell: caught an exception while disposing the AccessibleCell!" );
+        OSL_ENSURE( sal_False, "EditBrowseBoxImpl::clearActiveCell: caught an exception while disposing the AccessibleCell!" );
     }
 
     m_xActiveCell = NULL;
@@ -159,12 +159,12 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
 
         if ( GetBrowserFlags( ) & EBBF_SMART_TAB_TRAVEL )
         {
-            if  (   bHasFocus                           // we got the focus
-                &&  ( _nGetFocusFlags & GETFOCUS_TAB )  // using the TAB key
+            if	(	bHasFocus							// we got the focus
+                &&	( _nGetFocusFlags & GETFOCUS_TAB )	// using the TAB key
                 )
             {
                 long nRows = GetRowCount();
-                sal_uInt16 nCols = ColCount();
+                USHORT nCols = ColCount();
 
                 if ( ( nRows > 0 ) && ( nCols > 0 ) )
                 {
@@ -175,7 +175,7 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
                             GoToRowColumnId( 0, GetColumnId( 0 ) );
                         }
                         else
-                        {   // the first column is the handle column -> not focussable
+                        {	// the first column is the handle column -> not focussable
                             if ( nCols > 1 )
                                 GoToRowColumnId( 0, GetColumnId( 1 ) );
                         }
@@ -196,7 +196,7 @@ Rectangle EditBrowseBox::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nCol
     if ( SeekRow(_nRow) )
     {
         CellController* pController = GetController(
-            _nRow, GetColumnId( sal::static_int_cast< sal_uInt16 >(_nColumnPos) ) );
+            _nRow, GetColumnId( sal::static_int_cast< USHORT >(_nColumnPos) ) );
         if ( pController )
             aRect = pController->GetWindow().GetCharacterBounds(_nIndex);
     }
@@ -209,7 +209,7 @@ sal_Int32 EditBrowseBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumn
     if ( SeekRow(_nRow) )
     {
         CellController* pController = GetController(
-            _nRow, GetColumnId( sal::static_int_cast< sal_uInt16 >(_nColumnPos) ) );
+            _nRow, GetColumnId( sal::static_int_cast< USHORT >(_nColumnPos) ) );
         if ( pController )
             nRet = pController->GetWindow().GetIndexForPoint(_rPoint);
     }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
-#include <com/sun/star/chart/ChartLegendExpansion.hpp>
+#include <com/sun/star/chart2/LegendExpansion.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 
@@ -62,6 +62,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 namespace chart
@@ -139,13 +140,13 @@ void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, c
         chart2::LegendPosition eNewInnerPos(chart2::LegendPosition_LINE_END);
         if( aInnerValue >>= eNewInnerPos )
         {
-            ::com::sun::star::chart::ChartLegendExpansion eNewExpansion =
+            chart2::LegendExpansion eNewExpansion =
                 ( eNewInnerPos == chart2::LegendPosition_LINE_END ||
                   eNewInnerPos == chart2::LegendPosition_LINE_START )
-                ? ::com::sun::star::chart::ChartLegendExpansion_HIGH
-                : ::com::sun::star::chart::ChartLegendExpansion_WIDE;
+                ? chart2::LegendExpansion_HIGH
+                : chart2::LegendExpansion_WIDE;
 
-            ::com::sun::star::chart::ChartLegendExpansion eOldExpansion( ::com::sun::star::chart::ChartLegendExpansion_HIGH );
+            chart2::LegendExpansion eOldExpansion( chart2::LegendExpansion_HIGH );
             bool bExpansionWasSet(
                 xInnerPropertySet->getPropertyValue( C2U( "Expansion" ) ) >>= eOldExpansion );
 
@@ -221,6 +222,9 @@ Any WrappedLegendAlignmentProperty::convertOuterToInnerValue( const Any& rOuterV
 }
 }
 //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 namespace
 {
@@ -229,8 +233,7 @@ static const ::rtl::OUString lcl_aServiceName(
 
 enum
 {
-    PROP_LEGEND_ALIGNMENT,
-    PROP_LEGEND_EXPANSION
+    PROP_LEGEND_ALIGNMENT
 };
 
 void lcl_AddPropertiesToVector(
@@ -242,48 +245,40 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartLegendPosition * >(0)),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
-
-    rOutProperties.push_back(
-        Property( C2U( "Expansion" ),
-                  PROP_LEGEND_EXPANSION,
-                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartLegendExpansion * >(0)),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
-                  beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-struct StaticLegendWrapperPropertyArray_Initializer
+const Sequence< Property > & lcl_GetPropertySequence()
 {
-    Sequence< Property >* operator()()
-    {
-        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
-        return &aPropSeq;
-    }
+    static Sequence< Property > aPropSeq;
 
-private:
-    Sequence< Property > lcl_GetPropertySequence()
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
     {
+        // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
+//         ::chart::NamedProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
         ::chart::wrapper::WrappedAutomaticPositionProperties::addProperties( aProperties );
         ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
 
+        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        // transfer result to static Sequence
+        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
-};
 
-struct StaticLegendWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticLegendWrapperPropertyArray_Initializer >
-{
-};
-
+    return aPropSeq;
+}
 } // anonymous namespace
 
+// --------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------
 
 namespace chart
@@ -315,7 +310,7 @@ void SAL_CALL LegendWrapper::setPosition( const awt::Point& aPosition )
     if( xProp.is() )
     {
         awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
-
+        
         chart2::RelativePosition aRelativePosition;
         aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
         aRelativePosition.Primary = double(aPosition.X)/double(aPageSize.Width);
@@ -362,8 +357,10 @@ void SAL_CALL LegendWrapper::dispose()
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
 
+    // /--
     MutexGuard aGuard( GetMutex());
     clearWrappedPropertySet();
+    // \--
 }
 
 void SAL_CALL LegendWrapper::addEventListener(
@@ -422,7 +419,7 @@ Reference< beans::XPropertySet > LegendWrapper::getInnerPropertySet()
 
 const Sequence< beans::Property >& LegendWrapper::getPropertySequence()
 {
-    return *StaticLegendWrapperPropertyArray::get();
+    return lcl_GetPropertySequence();
 }
 
 const std::vector< WrappedProperty* > LegendWrapper::createWrappedProperties()
@@ -430,7 +427,6 @@ const std::vector< WrappedProperty* > LegendWrapper::createWrappedProperties()
     ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
 
     aWrappedProperties.push_back( new WrappedLegendAlignmentProperty() );
-    aWrappedProperties.push_back( new WrappedProperty( C2U("Expansion"), C2U("Expansion") ));
     WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
     //same problem as for wall: thje defaults ion the old chart are different for different charttypes, so we need to export explicitly
     aWrappedProperties.push_back( new WrappedDirectStateProperty( C2U("FillStyle"), C2U("FillStyle") ) );
@@ -450,6 +446,9 @@ Sequence< ::rtl::OUString > LegendWrapper::getSupportedServiceNames_Static()
     aServices[ 1 ] = C2U( "com.sun.star.drawing.Shape" );
     aServices[ 2 ] = C2U( "com.sun.star.xml.UserDefinedAttributeSupplier" );
     aServices[ 3 ] = C2U( "com.sun.star.style.CharacterProperties" );
+//     aServices[ 4 ] = C2U( "com.sun.star.beans.PropertySet" );
+//     aServices[ 5 ] = C2U( "com.sun.star.drawing.FillProperties" );
+//     aServices[ 6 ] = C2U( "com.sun.star.drawing.LineProperties" );
 
     return aServices;
 }

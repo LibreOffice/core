@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,15 +55,16 @@ public:
     virtual void DoExecute( SfxRequest& rReq );
 
     // Mouse- & Key-Events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual BOOL KeyInput(const KeyEvent& rKEvt);
+    virtual BOOL MouseMove(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate();           // Function aktivieren
+    virtual void Activate();		   // Function aktivieren
 
     void SetAttributes( SdrObject* pObj );
 
+    // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
     // #i33136#
@@ -71,9 +72,9 @@ public:
 
 protected:
     FuConstructCustomShape (
-        ViewShell* pViewSh,
+        ViewShell* pViewSh, 
         ::sd::Window* pWin,
-        ::sd::View* pView,
+        ::sd::View* pView, 
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 

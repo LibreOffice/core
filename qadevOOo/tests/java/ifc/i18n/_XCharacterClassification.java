@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,7 +111,7 @@ public class _XCharacterClassification extends MultiMethodTest {
     public void _toUpper() {
         boolean res = true;
         char[] characters = new char[]{586,65,97,498,721,4588,772,8413,3404};
-        String toCheck = new String(characters);
+        String toCheck = new String(characters);        
         String get = "";
         String exp = "";
 

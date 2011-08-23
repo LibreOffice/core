@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,17 +43,17 @@ SV_IMPL_PTRARR(SvxEntryLst, SvxBoxEntry*)
 
 SvxBoxEntry::SvxBoxEntry() :
     nId(LISTBOX_ENTRY_NOTFOUND),
-    bModified(sal_False),
-    bNew(sal_False)
+    bModified(FALSE),
+    bNew(FALSE)
 {
 }
 
 
-SvxBoxEntry::SvxBoxEntry(const String& aNam, sal_uInt16 nIdx) :
+SvxBoxEntry::SvxBoxEntry(const String& aNam, USHORT nIdx) :
     aName(aNam),
     nId(nIdx),
-    bModified(sal_False),
-    bNew(sal_False)
+    bModified(FALSE),
+    bNew(FALSE)
 {
 }
 
@@ -65,6 +65,10 @@ SvxBoxEntry::SvxBoxEntry(const SvxBoxEntry& rOld) :
     bNew(rOld.bNew)
 {
 }
+
+/*--------------------------------------------------------------------
+     Beschreibung:
+ --------------------------------------------------------------------*/
 
 SvxListBox::SvxListBox(Window* pParent, WinBits nBits) :
     ListBox(pParent, nBits)
@@ -83,9 +87,9 @@ SvxListBox::SvxListBox(Window* pParent, const ResId& rId):
      Beschreibung: Basisklasse Dtor
  --------------------------------------------------------------------*/
 
-SvxListBox::~SvxListBox()
+__EXPORT SvxListBox::~SvxListBox()
 {
-    aEntryLst.DeleteAndDestroy(0,   aEntryLst.Count());
+    aEntryLst.DeleteAndDestroy(0,	aEntryLst.Count());
     aDelEntryLst.DeleteAndDestroy(0, aDelEntryLst.Count());
 }
 
@@ -96,9 +100,9 @@ SvxListBox::~SvxListBox()
 void SvxListBox::InitListBox()
 {
     // Verwaltung fuer die Stringlist aus der Resource aufbauen
-    sal_uInt16 nSize = GetEntryCount();
-    for(sal_uInt16 i=0; i < nSize; ++i)
-    {   const SvxBoxEntry* pTmp = new SvxBoxEntry(ListBox::GetEntry(i), i);
+    USHORT nSize = GetEntryCount();
+    for(USHORT i=0; i < nSize; ++i)
+    {	const SvxBoxEntry* pTmp = new SvxBoxEntry(ListBox::GetEntry(i), i);
         const SvxBoxEntry* &rpTmp = pTmp;
         aEntryLst.Insert(rpTmp, aEntryLst.Count());
     }
@@ -111,7 +115,7 @@ void SvxListBox::InitListBox()
 void SvxListBox::InsertNewEntry(const SvxBoxEntry& rEntry)
 {
     SvxBoxEntry* pNew = new SvxBoxEntry(rEntry);
-    pNew->bNew = sal_True;
+    pNew->bNew = TRUE;
     InsertSorted(pNew);
 }
 
@@ -119,7 +123,7 @@ void SvxListBox::InsertNewEntry(const SvxBoxEntry& rEntry)
      Beschreibung: Eintrag in die ListBox aufnehmen
  --------------------------------------------------------------------*/
 
-void SvxListBox::InsertEntry(const SvxBoxEntry& rEntry, sal_uInt16 nPos)
+void SvxListBox::InsertEntry(const SvxBoxEntry& rEntry, USHORT nPos)
 {
     if(nPos != LISTBOX_ENTRY_NOTFOUND)
     {
@@ -136,7 +140,7 @@ void SvxListBox::InsertEntry(const SvxBoxEntry& rEntry, sal_uInt16 nPos)
      Beschreibung: Eintrag aus der Liste loeschen
  --------------------------------------------------------------------*/
 
-void SvxListBox::RemoveEntry(sal_uInt16 nPos)
+void SvxListBox::RemoveEntry(USHORT nPos)
 {
     if(nPos >= aEntryLst.Count())
         return;
@@ -160,7 +164,7 @@ void SvxListBox::RemoveEntry(sal_uInt16 nPos)
 
 void SvxListBox::RemoveEntry(const SvxBoxEntry& rEntry)
 {
-    sal_uInt16 nPos = ListBox::GetEntryPos(rEntry.aName);
+    USHORT nPos = ListBox::GetEntryPos(rEntry.aName);
     RemoveEntry(nPos);
 }
 
@@ -179,7 +183,7 @@ void SvxListBox::Clear()
      Beschreibung: Position by Name
  --------------------------------------------------------------------*/
 
-sal_uInt16 SvxListBox::GetEntryPos(const SvxBoxEntry& rEntry) const
+USHORT SvxListBox::GetEntryPos(const SvxBoxEntry& rEntry) const
 {
     return ListBox::GetEntryPos(rEntry.aName);
 }
@@ -188,7 +192,7 @@ sal_uInt16 SvxListBox::GetEntryPos(const SvxBoxEntry& rEntry) const
      Beschreibung: Rund um die Entries
  --------------------------------------------------------------------*/
 
-const SvxBoxEntry& SvxListBox::GetSvxBoxEntry(sal_uInt16 nPos) const
+const SvxBoxEntry& SvxListBox::GetSvxBoxEntry(USHORT nPos) const
 {
     if(nPos < aEntryLst.Count())
         return *aEntryLst[nPos];
@@ -200,13 +204,13 @@ const SvxBoxEntry& SvxListBox::GetSvxBoxEntry(sal_uInt16 nPos) const
      Beschreibung: aktullen Eintrag zurueckgeben
  --------------------------------------------------------------------*/
 
-const SvxBoxEntry& SvxListBox::GetSelectSvxBoxEntry(sal_uInt16 nSelId) const
+const SvxBoxEntry& SvxListBox::GetSelectSvxBoxEntry(USHORT nSelId) const
 {
     String aName(ListBox::GetSelectEntry(nSelId));
 
     if(aName.Len() > 0)
     {
-        for (sal_uInt16 i=0; i < aEntryLst.Count(); i++)
+        for (USHORT i=0; i < aEntryLst.Count(); i++)
         {
             if(aEntryLst[i]->aName == aName )
                 return *aEntryLst[i];
@@ -219,12 +223,12 @@ const SvxBoxEntry& SvxListBox::GetSelectSvxBoxEntry(sal_uInt16 nSelId) const
      Beschreibung: modifizierte Eintraege
  --------------------------------------------------------------------*/
 
-sal_uInt16 SvxListBox::GetModifiedCount() const
+USHORT SvxListBox::GetModifiedCount() const
 {
-    sal_uInt16 nMod  = 0;
-    sal_uInt16 nSize = aEntryLst.Count();
-    for(sal_uInt16 i=0; i < nSize; ++i)
-    {   if(aEntryLst[i]->bModified)
+    USHORT nMod  = 0;
+    USHORT nSize = aEntryLst.Count();
+    for(USHORT i=0; i < nSize; ++i)
+    {	if(aEntryLst[i]->bModified)
             nMod++;
     }
     return nMod;
@@ -234,15 +238,15 @@ sal_uInt16 SvxListBox::GetModifiedCount() const
      Beschreibung: Modifizierte Eintraege behandeln
  --------------------------------------------------------------------*/
 
-void SvxListBox::ModifyEntry(sal_uInt16 nPos, const String& rName)
+void SvxListBox::ModifyEntry(USHORT nPos, const String& rName)
 {
     if(nPos >= aEntryLst.Count())
         return;
 
     SvxBoxEntry* pEntry = aEntryLst[nPos];
     aEntryLst.Remove(nPos, 1);
-    aEntryLst[nPos]->aName      = rName;
-    aEntryLst[nPos]->bModified  = sal_True;
+    aEntryLst[nPos]->aName 		= rName;
+    aEntryLst[nPos]->bModified 	= TRUE;
     ListBox::RemoveEntry(nPos);
 
     InsertSorted(pEntry);
@@ -252,13 +256,13 @@ void SvxListBox::ModifyEntry(sal_uInt16 nPos, const String& rName)
      Beschreibung: alle modifizierten Eintraege bahandeln
  --------------------------------------------------------------------*/
 
-const SvxBoxEntry& SvxListBox::GetModifiedEntry(sal_uInt16 nPos) const
+const SvxBoxEntry& SvxListBox::GetModifiedEntry(USHORT nPos) const
 {
-    sal_uInt16 nSize = aEntryLst.Count();
-    sal_uInt16 nMod  = 0;
-    for(sal_uInt16 i=0; i < nSize; ++i)
-    {   if(aEntryLst[i]->bModified)
-        {   if(nMod == nPos)
+    USHORT nSize = aEntryLst.Count();
+    USHORT nMod  = 0;
+    for(USHORT i=0; i < nSize; ++i)
+    {	if(aEntryLst[i]->bModified)
+        {	if(nMod == nPos)
                 return *aEntryLst[i];
             nMod++;
         }
@@ -270,13 +274,13 @@ const SvxBoxEntry& SvxListBox::GetModifiedEntry(sal_uInt16 nPos) const
      Beschreibung: geloeschte Eintraege
  --------------------------------------------------------------------*/
 
-sal_uInt16 SvxListBox::GetRemovedCount() const
+USHORT SvxListBox::GetRemovedCount() const
 {
     return aDelEntryLst.Count();
 }
 
 
-const SvxBoxEntry& SvxListBox::GetRemovedEntry(sal_uInt16 nPos) const
+const SvxBoxEntry& SvxListBox::GetRemovedEntry(USHORT nPos) const
 {
     if(nPos < aDelEntryLst.Count())
         return *aDelEntryLst[nPos];
@@ -288,28 +292,28 @@ const SvxBoxEntry& SvxListBox::GetRemovedEntry(sal_uInt16 nPos) const
      Beschreibung: Neue Entries begutachten
  --------------------------------------------------------------------*/
 
-sal_uInt16 SvxListBox::GetNewCount() const
+USHORT SvxListBox::GetNewCount() const
 {
-    sal_uInt16 nNew = 0;
-    sal_uInt16 nSize = aEntryLst.Count();
-    for(sal_uInt16 i=0; i < nSize; ++i)
-    {   if(aEntryLst[i]->bNew)
+    USHORT nNew = 0;
+    USHORT nSize = aEntryLst.Count();
+    for(USHORT i=0; i < nSize; ++i)
+    {	if(aEntryLst[i]->bNew)
             nNew++;
     }
     return nNew;
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Alle neuen Eintraege ueberpruefen
+     Beschreibung:	Alle neuen Eintraege ueberpruefen
  --------------------------------------------------------------------*/
 
-const SvxBoxEntry& SvxListBox::GetNewEntry(sal_uInt16 nPos) const
+const SvxBoxEntry& SvxListBox::GetNewEntry(USHORT nPos) const
 {
-    sal_uInt16 nSize = aEntryLst.Count();
-    sal_uInt16 nNew  = 0;
-    for(sal_uInt16 i=0; i < nSize; ++i)
-    {   if(aEntryLst[i]->bNew)
-        {   if(nNew == nPos)
+    USHORT nSize = aEntryLst.Count();
+    USHORT nNew  = 0;
+    for(USHORT i=0; i < nSize; ++i)
+    {	if(aEntryLst[i]->bNew)
+        {	if(nNew == nPos)
                 return *aEntryLst[i];
             nNew++;
         }
@@ -324,7 +328,7 @@ const SvxBoxEntry& SvxListBox::GetNewEntry(sal_uInt16 nPos) const
 void SvxListBox::InsertSorted(SvxBoxEntry* pEntry)
 {
     ListBox::InsertEntry(pEntry->aName);
-    sal_uInt16 nPos = ListBox::GetEntryPos(pEntry->aName);
+    USHORT nPos = ListBox::GetEntryPos(pEntry->aName);
     aEntryLst.C40_INSERT(SvxBoxEntry, pEntry, nPos);
 }
 
@@ -332,7 +336,7 @@ void SvxListBox::InsertSorted(SvxBoxEntry* pEntry)
      Beschreibung: ComboBoxen mit Verwaltungseinheit
  --------------------------------------------------------------------*/
 
-SvxComboBox::SvxComboBox(Window* pParent, WinBits nBits, sal_uInt16 nStyleBits) :
+SvxComboBox::SvxComboBox(Window* pParent, WinBits nBits, USHORT nStyleBits) :
     ComboBox(pParent, nBits),
     nStyle(nStyleBits)
 {
@@ -340,7 +344,7 @@ SvxComboBox::SvxComboBox(Window* pParent, WinBits nBits, sal_uInt16 nStyleBits) 
 }
 
 
-SvxComboBox::SvxComboBox(Window* pParent, const ResId& rId, sal_uInt16 nStyleBits ):
+SvxComboBox::SvxComboBox(Window* pParent, const ResId& rId, USHORT nStyleBits ):
     ComboBox(pParent, rId),
     nStyle(nStyleBits)
 {
@@ -351,9 +355,9 @@ SvxComboBox::SvxComboBox(Window* pParent, const ResId& rId, sal_uInt16 nStyleBit
      Beschreibung: Basisklasse Dtor
  --------------------------------------------------------------------*/
 
-SvxComboBox::~SvxComboBox()
+__EXPORT SvxComboBox::~SvxComboBox()
 {
-    aEntryLst.DeleteAndDestroy(0,   aEntryLst.Count());
+    aEntryLst.DeleteAndDestroy(0,	aEntryLst.Count());
     aDelEntryLst.DeleteAndDestroy(0, aDelEntryLst.Count());
 }
 
@@ -364,9 +368,9 @@ SvxComboBox::~SvxComboBox()
 void SvxComboBox::InitComboBox()
 {
     // Verwaltung fuer die Stringlist aus der Resource aufbauen
-    sal_uInt16 nSize = GetEntryCount();
-    for(sal_uInt16 i=0; i < nSize; ++i)
-    {   const SvxBoxEntry* pTmp = new SvxBoxEntry(ComboBox::GetEntry(i), i);
+    USHORT nSize = GetEntryCount();
+    for(USHORT i=0; i < nSize; ++i)
+    {	const SvxBoxEntry* pTmp = new SvxBoxEntry(ComboBox::GetEntry(i), i);
         const SvxBoxEntry* &rpTmp = pTmp;
         aEntryLst.Insert(rpTmp, aEntryLst.Count());
     }
@@ -379,7 +383,7 @@ void SvxComboBox::InitComboBox()
 void SvxComboBox::InsertNewEntry(const SvxBoxEntry& rEntry)
 {
     SvxBoxEntry* pNew = new SvxBoxEntry(rEntry);
-    pNew->bNew = sal_True;
+    pNew->bNew = TRUE;
     InsertSorted(pNew);
 }
 
@@ -396,7 +400,7 @@ void SvxComboBox::InsertEntry(const SvxBoxEntry& rEntry)
      Beschreibung: Eintrag aus der Liste loeschen
  --------------------------------------------------------------------*/
 
-void SvxComboBox::RemoveEntry(sal_uInt16 nPos)
+void SvxComboBox::RemoveEntry(USHORT nPos)
 {
     if(nPos >= aEntryLst.Count())
         return;
@@ -420,7 +424,7 @@ void SvxComboBox::RemoveEntry(sal_uInt16 nPos)
 
 void SvxComboBox::RemoveEntry(const SvxBoxEntry& rEntry)
 {
-    sal_uInt16 nPos = ComboBox::GetEntryPos(rEntry.aName);
+    USHORT nPos = ComboBox::GetEntryPos(rEntry.aName);
     RemoveEntry(nPos);
 }
 
@@ -440,7 +444,7 @@ void SvxComboBox::Clear()
      Beschreibung: Position by Name
  --------------------------------------------------------------------*/
 
-sal_uInt16 SvxComboBox::GetEntryPos(const SvxBoxEntry& rEntry) const
+USHORT SvxComboBox::GetEntryPos(const SvxBoxEntry& rEntry) const
 {
     return ComboBox::GetEntryPos(rEntry.aName);
 }
@@ -449,7 +453,7 @@ sal_uInt16 SvxComboBox::GetEntryPos(const SvxBoxEntry& rEntry) const
      Beschreibung: Rund um die Entries
  --------------------------------------------------------------------*/
 
-const SvxBoxEntry& SvxComboBox::GetEntry(sal_uInt16 nPos) const
+const SvxBoxEntry& SvxComboBox::GetEntry(USHORT nPos) const
 {
     if(nPos < aEntryLst.Count())
         return *aEntryLst[nPos];
@@ -461,12 +465,12 @@ const SvxBoxEntry& SvxComboBox::GetEntry(sal_uInt16 nPos) const
      Beschreibung: modifizierte Eintraege
  --------------------------------------------------------------------*/
 
-sal_uInt16 SvxComboBox::GetModifiedCount() const
+USHORT SvxComboBox::GetModifiedCount() const
 {
-    sal_uInt16 nMod  = 0;
-    sal_uInt16 nSize = aEntryLst.Count();
-    for(sal_uInt16 i=0; i < nSize; ++i)
-    {   if(aEntryLst[i]->bModified)
+    USHORT nMod  = 0;
+    USHORT nSize = aEntryLst.Count();
+    for(USHORT i=0; i < nSize; ++i)
+    {	if(aEntryLst[i]->bModified)
             nMod++;
     }
     return nMod;
@@ -476,15 +480,15 @@ sal_uInt16 SvxComboBox::GetModifiedCount() const
      Beschreibung: Modifizierte Eintraege behandeln
  --------------------------------------------------------------------*/
 
-void SvxComboBox::ModifyEntry(sal_uInt16 nPos, const String& rName)
+void SvxComboBox::ModifyEntry(USHORT nPos, const String& rName)
 {
     if(nPos >= aEntryLst.Count())
         return;
 
     SvxBoxEntry* pEntry = aEntryLst[nPos];
     aEntryLst.Remove(nPos, 1);
-    aEntryLst[nPos]->aName      = rName;
-    aEntryLst[nPos]->bModified  = sal_True;
+    aEntryLst[nPos]->aName 		= rName;
+    aEntryLst[nPos]->bModified 	= TRUE;
     ComboBox::RemoveEntry(nPos);
 
     InsertSorted(pEntry);
@@ -494,13 +498,13 @@ void SvxComboBox::ModifyEntry(sal_uInt16 nPos, const String& rName)
      Beschreibung: alle modifizierten Eintraege bahandeln
  --------------------------------------------------------------------*/
 
-const SvxBoxEntry& SvxComboBox::GetModifiedEntry(sal_uInt16 nPos) const
+const SvxBoxEntry& SvxComboBox::GetModifiedEntry(USHORT nPos) const
 {
-    sal_uInt16 nSize = aEntryLst.Count();
-    sal_uInt16 nMod  = 0;
-    for(sal_uInt16 i=0; i < nSize; ++i)
-    {   if(aEntryLst[i]->bModified)
-        {   if(nMod == nPos)
+    USHORT nSize = aEntryLst.Count();
+    USHORT nMod  = 0;
+    for(USHORT i=0; i < nSize; ++i)
+    {	if(aEntryLst[i]->bModified)
+        {	if(nMod == nPos)
                 return *aEntryLst[i];
             nMod++;
         }
@@ -512,13 +516,13 @@ const SvxBoxEntry& SvxComboBox::GetModifiedEntry(sal_uInt16 nPos) const
      Beschreibung: geloeschte Eintraege
  --------------------------------------------------------------------*/
 
-sal_uInt16 SvxComboBox::GetRemovedCount() const
+USHORT SvxComboBox::GetRemovedCount() const
 {
     return aDelEntryLst.Count();
 }
 
 
-const SvxBoxEntry& SvxComboBox::GetRemovedEntry(sal_uInt16 nPos) const
+const SvxBoxEntry& SvxComboBox::GetRemovedEntry(USHORT nPos) const
 {
     if(nPos < aDelEntryLst.Count())
         return *aDelEntryLst[nPos];
@@ -530,28 +534,28 @@ const SvxBoxEntry& SvxComboBox::GetRemovedEntry(sal_uInt16 nPos) const
      Beschreibung: Neue Entries begutachten
  --------------------------------------------------------------------*/
 
-sal_uInt16 SvxComboBox::GetNewCount() const
+USHORT SvxComboBox::GetNewCount() const
 {
-    sal_uInt16 nNew = 0;
-    sal_uInt16 nSize = aEntryLst.Count();
-    for(sal_uInt16 i=0; i < nSize; ++i)
-    {   if(aEntryLst[i]->bNew)
+    USHORT nNew = 0;
+    USHORT nSize = aEntryLst.Count();
+    for(USHORT i=0; i < nSize; ++i)
+    {	if(aEntryLst[i]->bNew)
             nNew++;
     }
     return nNew;
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Alle neuen Eintraege ueberpruefen
+     Beschreibung:	Alle neuen Eintraege ueberpruefen
  --------------------------------------------------------------------*/
 
-const SvxBoxEntry& SvxComboBox::GetNewEntry(sal_uInt16 nPos) const
+const SvxBoxEntry& SvxComboBox::GetNewEntry(USHORT nPos) const
 {
-    sal_uInt16 nSize = aEntryLst.Count();
-    sal_uInt16 nNew  = 0;
-    for(sal_uInt16 i=0; i < nSize; ++i)
-    {   if(aEntryLst[i]->bNew)
-        {   if(nNew == nPos)
+    USHORT nSize = aEntryLst.Count();
+    USHORT nNew  = 0;
+    for(USHORT i=0; i < nSize; ++i)
+    {	if(aEntryLst[i]->bNew)
+        {	if(nNew == nPos)
                 return *aEntryLst[i];
             nNew++;
         }
@@ -566,7 +570,7 @@ const SvxBoxEntry& SvxComboBox::GetNewEntry(sal_uInt16 nPos) const
 void SvxComboBox::InsertSorted(SvxBoxEntry* pEntry)
 {
     ComboBox::InsertEntry(pEntry->aName);
-    sal_uInt16 nPos = ComboBox::GetEntryPos(pEntry->aName);
+    USHORT nPos = ComboBox::GetEntryPos(pEntry->aName);
     aEntryLst.C40_INSERT(SvxBoxEntry, pEntry, nPos);
 }
 
@@ -575,7 +579,7 @@ void SvxComboBox::InsertSorted(SvxBoxEntry* pEntry)
     Beschreibung: Je nach Option bestimmte Zeichen ausblenden
  --------------------------------------------------------------------*/
 
-void SvxComboBox::KeyInput( const KeyEvent& rKEvt )
+void __EXPORT SvxComboBox::KeyInput( const KeyEvent& rKEvt )
 {
     sal_Unicode cChar = rKEvt.GetCharCode();
 
@@ -585,7 +589,7 @@ void SvxComboBox::KeyInput( const KeyEvent& rKEvt )
         if( cChar == sal_Unicode( '/' ) || cChar == sal_Unicode( ' ' ) )
             return;
 #else
-        if( cChar == sal_Unicode( ':' ) || cChar == sal_Unicode( '\\' ) ||
+        if( cChar == sal_Unicode( ':' ) || cChar == sal_Unicode( '\\' ) || 
             cChar == sal_Unicode( '.' ) || cChar == sal_Unicode( ' ' ) )
             return;
 #endif

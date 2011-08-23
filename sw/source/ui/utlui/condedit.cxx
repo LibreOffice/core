@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ using namespace ::com::sun::star::uno;
 ConditionEdit::ConditionEdit( Window* pParent, const ResId& rResId )
     : Edit( pParent, rResId ),
     DropTargetHelper( this ),
-    bBrackets( sal_True ), bEnableDrop( sal_True )
+    bBrackets( TRUE ), bEnableDrop( TRUE )
 {
 }
 

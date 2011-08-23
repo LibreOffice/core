@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 
 #include <sfx2/styledlg.hxx>
 #include <sfx2/mgetempl.hxx>
-#include "sfx2/sfxresid.hxx"
+#include "sfxresid.hxx"
 #include <sfx2/sfxuno.hxx>
 
 #include "dialog.hrc"
@@ -45,23 +45,23 @@
 
 SfxStyleDialog::SfxStyleDialog
 (
-    Window* pParent,            // Parent
-    const ResId& rResId,        // ResId
-    SfxStyleSheetBase& rStyle,  // stylesheet to be processed
-    sal_Bool bFreeRes,              // Flag release resources
+    Window* pParent,			// Parent
+    const ResId& rResId,		// ResId
+    SfxStyleSheetBase& rStyle,	// zu bearbeitendes StyleSheet
+    BOOL bFreeRes,				// Flag Resourcen freigeben
     const String* pUserBtnTxt
 ) :
 
-/*  [Description]
+/*	[Beschreibung]
 
-    Constructor: Add Manage TabPage, set ExampleSet from style.
+    Konstruktor: Verwalten-TabPage zuf"ugen, ExampleSet vom Style setzen.
 */
 
     SfxTabDialog( pParent, rResId,
                   rStyle.GetItemSet().Clone(),
                   // auch ohne ParentSupport TRUE "ubergeben, aber erweitert
                   // um den StandardButton zu unterdr"ucken
-                  rStyle.HasParentSupport() ? sal_True : 2,
+                  rStyle.HasParentSupport() ? TRUE : 2,
                   pUserBtnTxt ),
 
     pStyle( &rStyle )
@@ -69,9 +69,10 @@ SfxStyleDialog::SfxStyleDialog
 {
     AddTabPage( ID_TABPAGE_MANAGESTYLES,
                 String( SfxResId( STR_TABPAGE_MANAGESTYLES ) ),
-                SfxManageStyleSheetPage::Create, 0, sal_False, 0 );
+                SfxManageStyleSheetPage::Create, 0, FALSE, 0 );
 
-    // With new template always set the management page as the current page
+    // bei neuer Vorlage immer die Verwaltungsseite als aktuelle
+    // Seite setzen
 
     if( !rStyle.GetName().Len() )
         SetCurPageId( ID_TABPAGE_MANAGESTYLES );
@@ -82,7 +83,7 @@ SfxStyleDialog::SfxStyleDialog
         sTxt += rStyle.GetName();
         SetText( sTxt );
     }
-    delete pExampleSet; // in SfxTabDialog::Ctor() already created
+    delete pExampleSet;	// im SfxTabDialog::Ctor() schon angelegt
     pExampleSet = &pStyle->GetItemSet();
 
     if ( bFreeRes )
@@ -94,10 +95,10 @@ SfxStyleDialog::SfxStyleDialog
 
 SfxStyleDialog::~SfxStyleDialog()
 
-/*  [Description]
+/*	[Beschreibung]
 
-    Destructor: set ExampleSet to NULL, so that SfxTabDialog does not delete
-    the Set from Style.
+    Destruktor: ExampleSet auf NULL setzen, damit der SfxTabDialog nicht den
+    Set vom Style l"oscht.
 */
 
 {
@@ -110,10 +111,10 @@ SfxStyleDialog::~SfxStyleDialog()
 
 const SfxItemSet* SfxStyleDialog::GetRefreshedSet()
 
-/*  [Description]
+/*  [Beschreibung]
 
-    This is called when <SfxTabPage::DeactivatePage(SfxItemSet *)>
-    returns <SfxTabPage::REFRESH_SET>.
+    Diese wird gerufen, wenn <SfxTabPage::DeactivatePage(SfxItemSet *)>
+    <SfxTabPage::REFRESH_SET> liefert.
 */
 
 {
@@ -124,9 +125,9 @@ const SfxItemSet* SfxStyleDialog::GetRefreshedSet()
 
 short SfxStyleDialog::Ok()
 
-/*  [Description]
+/*  [Beschreibung]
 
-    Overloaded, so that always RET_OK is returned.
+    "Uberladen, damit immer RET_OK zur"uckgegeben wird.
 */
 
 {
@@ -138,10 +139,10 @@ short SfxStyleDialog::Ok()
 
 IMPL_LINK( SfxStyleDialog, CancelHdl, Button *, pButton )
 
-/*  [Description]
+/*  [Beschreibung]
 
-    If the dialogue was canceled, then all selected attributes must be reset
-    again.
+    Wenn der Dialog abgebrochen wurde, m"ussen alle schon eingestellten
+    Attribute wieder zur"uckgesetzt werden.
 */
 
 {
@@ -150,11 +151,11 @@ IMPL_LINK( SfxStyleDialog, CancelHdl, Button *, pButton )
 
     const SfxItemSet* pInSet = GetInputSetImpl();
     SfxWhichIter aIter( *pInSet );
-    sal_uInt16 nWhich = aIter.FirstWhich();
+    USHORT nWhich = aIter.FirstWhich();
 
     while ( nWhich )
     {
-        SfxItemState eState = pInSet->GetItemState( nWhich, sal_False );
+        SfxItemState eState = pInSet->GetItemState( nWhich, FALSE );
 
         if ( SFX_ITEM_DEFAULT == eState )
             pExampleSet->ClearItem( nWhich );

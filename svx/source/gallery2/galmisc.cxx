@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@
 #include "codec.hxx"
 #include "gallery.hrc"
 #include "svx/gallery1.hxx"
-#include "svx/galtheme.hxx"
+#include "galtheme.hxx"
 #include "svx/galmisc.hxx"
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -76,8 +76,9 @@ ResMgr* GetGalleryResMgr()
 
     if( !pGalleryResMgr )
     {
+        ByteString aResMgrName( "gal" );
         pGalleryResMgr = ResMgr::CreateResMgr(
-            "gal", Application::GetSettings().GetUILocale() );
+            aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
     }
 
     return pGalleryResMgr;
@@ -90,7 +91,7 @@ ResMgr* GetGalleryResMgr()
 BitmapEx GalleryResGetBitmapEx( sal_uInt32 nId )
 {
     BitmapEx aBmpEx( GAL_RESID( nId ) );
-
+    
     if( !aBmpEx.IsTransparent() )
             aBmpEx = BitmapEx( aBmpEx.GetBitmap(), COL_LIGHTMAGENTA );
 
@@ -113,12 +114,12 @@ IMPL_LINK( SgaUserDataFactory, MakeUserData, SdrObjFactory*, pObjFactory )
 // - GalleryGraphicImport -
 // ------------------------
 
-sal_uInt16 GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
-                             String& rFilterName, sal_Bool bShowProgress )
+USHORT GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
+                             String& rFilterName, BOOL bShowProgress )
 {
-    sal_uInt16      nRet = SGA_IMPORT_NONE;
-    SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, sal_True );
-    String      aFilterName;
+    USHORT		nRet = SGA_IMPORT_NONE;
+    SfxMedium	aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, TRUE );
+    String		aFilterName;
 
     aMedium.DownLoad();
 
@@ -126,9 +127,9 @@ sal_uInt16 GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
 
     if( pIStm )
     {
-        GraphicFilter*      pGraphicFilter = GraphicFilter::GetGraphicFilter();
-        GalleryProgress*    pProgress = bShowProgress ? new GalleryProgress( pGraphicFilter ) : NULL;
-        sal_uInt16              nFormat;
+        GraphicFilter*		pGraphicFilter = GraphicFilter::GetGraphicFilter();
+        GalleryProgress*	pProgress = bShowProgress ? new GalleryProgress( pGraphicFilter ) : NULL;
+        USHORT				nFormat;
 
         if( !pGraphicFilter->ImportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )
         {
@@ -146,22 +147,22 @@ sal_uInt16 GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
 // - GallerySvDrawImport -
 // -----------------------
 
-sal_Bool GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
+BOOL GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
 {
-    sal_uInt32  nVersion;
-    sal_Bool    bRet = sal_False;
+    UINT32  nVersion;
+    BOOL    bRet = FALSE;
 
     if( GalleryCodec::IsCoded( rIStm, nVersion ) )
     {
-        SvMemoryStream  aMemStm( 65535, 65535 );
-        GalleryCodec    aCodec( rIStm );
+        SvMemoryStream	aMemStm( 65535, 65535 );
+        GalleryCodec	aCodec( rIStm );
 
         aCodec.Read( aMemStm );
         aMemStm.Seek( 0UL );
 
         if( 1 == nVersion )
         {
-            OSL_FAIL( "staroffice binary file formats are no longer supported inside the gallery!" );
+            DBG_ERROR( "staroffice binary file formats are no longer supported inside the gallery!" );
             bRet = false;
         }
         else if( 2 == nVersion )
@@ -194,21 +195,21 @@ sal_Bool GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
 // - CreateIMapGraphic -
 // ---------------------
 
-sal_Bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap )
+BOOL CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     if ( rModel.GetPageCount() )
     {
-        const SdrPage*      pPage = rModel.GetPage( 0 );
-        const SdrObject*    pObj = pPage->GetObj( 0 );
+        const SdrPage*		pPage = rModel.GetPage( 0 );
+        const SdrObject*	pObj = pPage->GetObj( 0 );
 
         if ( pPage->GetObjCount() == 1 && pObj->ISA( SdrGrafObj ) )
         {
-            const sal_uInt16 nCount = pObj->GetUserDataCount();
+            const USHORT nCount = pObj->GetUserDataCount();
 
             // gibt es in den User-Daten eine IMap-Information?
-            for ( sal_uInt16 i = 0; i < nCount; i++ )
+            for ( USHORT i = 0; i < nCount; i++ )
             {
                 const SdrObjUserData* pUserData = pObj->GetUserData( i );
 
@@ -216,7 +217,7 @@ sal_Bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageM
                 {
                     rGraphic = ( (SdrGrafObj*) pObj )->GetGraphic();
                     rImageMap = ( (SgaIMapInfo*) pUserData )->GetImageMap();
-                    bRet = sal_True;
+                    bRet = TRUE;
                     break;
                 }
             }
@@ -230,7 +231,7 @@ sal_Bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageM
 // - GetReducedString -
 // --------------------
 
-String GetReducedString( const INetURLObject& rURL, sal_uIntPtr nMaxLen )
+String GetReducedString( const INetURLObject& rURL, ULONG nMaxLen )
 {
     String aReduced( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
 
@@ -244,7 +245,7 @@ String GetReducedString( const INetURLObject& rURL, sal_uIntPtr nMaxLen )
 
         if( aPath.Len() > nMaxLen )
         {
-            aReduced = aPath.Copy( 0, (sal_uInt16)( nMaxLen - aName.Len() - 4 ) );
+            aReduced = aPath.Copy( 0, (USHORT)( nMaxLen - aName.Len() - 4 ) );
             aReduced += String( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
             aReduced += aDelimiter;
             aReduced += aName;
@@ -273,18 +274,18 @@ String GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL )
 
 // -----------------------------------------------------------------------------
 
-sal_Bool FileExists( const INetURLObject& rURL )
+BOOL FileExists( const INetURLObject& rURL )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     if( rURL.GetProtocol() != INET_PROT_NOT_VALID )
     {
         try
         {
-            ::ucbhelper::Content        aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
-            OUString    aTitle;
+            ::ucbhelper::Content		aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
+            OUString	aTitle;
 
-            aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) ) >>= aTitle;
+            aCnt.getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTitle;
             bRet = ( aTitle.getLength() > 0 );
         }
         catch( const ucb::ContentCreationException& )
@@ -303,26 +304,26 @@ sal_Bool FileExists( const INetURLObject& rURL )
 
 // -----------------------------------------------------------------------------
 
-sal_Bool CreateDir( const INetURLObject& rURL )
+BOOL CreateDir( const INetURLObject& rURL )
 {
-    sal_Bool bRet = FileExists( rURL );
+    BOOL bRet = FileExists( rURL );
 
     if( !bRet )
     {
         try
         {
-            uno::Reference< ucb::XCommandEnvironment >  aCmdEnv;
-            INetURLObject                           aNewFolderURL( rURL );
-            INetURLObject                           aParentURL( aNewFolderURL ); aParentURL.removeSegment();
-            ::ucbhelper::Content                    aParent( aParentURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
-            uno::Sequence< OUString >               aProps( 1 );
-            uno::Sequence< uno::Any >               aValues( 1 );
+            uno::Reference< ucb::XCommandEnvironment >	aCmdEnv;
+            INetURLObject							aNewFolderURL( rURL );
+            INetURLObject							aParentURL( aNewFolderURL ); aParentURL.removeSegment();
+            ::ucbhelper::Content					aParent( aParentURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
+            uno::Sequence< OUString >				aProps( 1 );
+            uno::Sequence< uno::Any >				aValues( 1 );
 
-            aProps.getArray()[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+            aProps.getArray()[ 0 ] = OUString::createFromAscii( "Title" );
             aValues.getArray()[ 0 ] = uno::makeAny( OUString( aNewFolderURL.GetName() ) );
 
         ::ucbhelper::Content aContent( aNewFolderURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
-        bRet = aParent.insertNewContent( OUString(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.staroffice.fsys-folder")), aProps, aValues, aContent );
+        bRet = aParent.insertNewContent( OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" ), aProps, aValues, aContent );
         }
         catch( const ucb::ContentCreationException& )
         {
@@ -340,18 +341,18 @@ sal_Bool CreateDir( const INetURLObject& rURL )
 
 // -----------------------------------------------------------------------------
 
-sal_Bool CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
+BOOL CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     try
     {
         ::ucbhelper::Content aDestPath( rDstURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
 
-        aDestPath.executeCommand( OUString(RTL_CONSTASCII_USTRINGPARAM("transfer")),
+        aDestPath.executeCommand( OUString::createFromAscii( "transfer" ),
                                   uno::makeAny( ucb::TransferInfo( sal_False, rSrcURL.GetMainURL( INetURLObject::NO_DECODE ),
                                                 rDstURL.GetName(), ucb::NameClash::OVERWRITE ) ) );
-        bRet = sal_True;
+        bRet = TRUE;
     }
     catch( const ucb::ContentCreationException& )
     {
@@ -368,28 +369,28 @@ sal_Bool CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
 
 // -----------------------------------------------------------------------------
 
-sal_Bool KillFile( const INetURLObject& rURL )
+BOOL KillFile( const INetURLObject& rURL )
 {
-    sal_Bool bRet = FileExists( rURL );
+    BOOL bRet = FileExists( rURL );
 
     if( bRet )
     {
         try
         {
             ::ucbhelper::Content aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
-            aCnt.executeCommand( OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), uno::makeAny( sal_Bool( sal_True ) ) );
+            aCnt.executeCommand( OUString::createFromAscii( "delete" ), uno::makeAny( sal_Bool( sal_True ) ) );
         }
         catch( const ucb::ContentCreationException& )
         {
-            bRet = sal_False;
+            bRet = FALSE;
         }
         catch( const uno::RuntimeException& )
         {
-            bRet = sal_False;
+            bRet = FALSE;
         }
         catch( const uno::Exception& )
         {
-            bRet = sal_False;
+            bRet = FALSE;
         }
     }
 
@@ -407,8 +408,8 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
 
     if( xMgr.is() )
     {
-        uno::Reference< awt::XProgressMonitor > xMonitor( xMgr->createInstance(
-                                                      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.XProgressMonitor")) ),
+        uno::Reference< awt::XProgressMonitor >	xMonitor( xMgr->createInstance(
+                                                      ::rtl::OUString::createFromAscii( "com.sun.star.awt.XProgressMonitor" ) ),
                                                       uno::UNO_QUERY );
 
         if ( xMonitor.is() )
@@ -422,9 +423,9 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
                 if( mpFilter )
                 {
                     aProgressText = String( GAL_RESID( RID_SVXSTR_GALLERY_FILTER ) );
-//                  mpFilter->SetUpdatePercentHdl( LINK( this, GalleryProgress, Update ) );     // sj: progress wasn't working up from SO7 at all
-//                                                                                              // so I am removing this. The gallery progress should
-//                                                                                              // be changed to use the XStatusIndicator instead of XProgressMonitor
+//					mpFilter->SetUpdatePercentHdl( LINK( this, GalleryProgress, Update ) );		// sj: progress wasn't working up from SO7 at all
+//																								// so I am removing this. The gallery progress should
+//																								// be changed to use the XStatusIndicator instead of XProgressMonitor
                 }
                 else
                     aProgressText = String( RTL_CONSTASCII_USTRINGPARAM( "Gallery" ) );
@@ -440,23 +441,23 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
 
 GalleryProgress::~GalleryProgress()
 {
-//  if( mpFilter )
-//      mpFilter->SetUpdatePercentHdl( Link() );
+//	if( mpFilter )
+//		mpFilter->SetUpdatePercentHdl( Link() );
 }
 
 // ------------------------------------------------------------------------
 
-void GalleryProgress::Update( sal_uIntPtr nVal, sal_uIntPtr nMaxVal )
+void GalleryProgress::Update( ULONG nVal, ULONG nMaxVal )
 {
     if( mxProgressBar.is() && nMaxVal )
-        mxProgressBar->setValue( Min( (sal_uIntPtr)( (double) nVal / nMaxVal * GALLERY_PROGRESS_RANGE ), (sal_uIntPtr) GALLERY_PROGRESS_RANGE ) );
+        mxProgressBar->setValue( Min( (ULONG)( (double) nVal / nMaxVal * GALLERY_PROGRESS_RANGE ), (ULONG) GALLERY_PROGRESS_RANGE ) );
 }
 
 // -----------------------
 // - GalleryTransferable -
 // -----------------------
 
-GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, sal_uIntPtr nObjectPos, bool bLazy ) :
+GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, ULONG nObjectPos, bool bLazy ) :
     mpTheme( pTheme ),
     meObjectKind( mpTheme->GetObjectKind( nObjectPos ) ),
     mnObjectPos( nObjectPos ),
@@ -486,16 +487,16 @@ void GalleryTransferable::InitData( bool bLazy )
                 if( !mpGraphicObject )
                 {
                     Graphic aGraphic;
-
+        
                     if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
                         mpGraphicObject = new GraphicObject( aGraphic );
                 }
-
+            
                 if( !mxModelStream.Is() )
                 {
                     mxModelStream = new SotStorageStream( String() );
                     mxModelStream->SetBufferSize( 16348 );
-
+        
                     if( !mpTheme->GetModelStream( mnObjectPos, mxModelStream ) )
                         mxModelStream.Clear();
                     else
@@ -504,7 +505,7 @@ void GalleryTransferable::InitData( bool bLazy )
             }
         }
         break;
-
+        
         case( SGA_OBJ_ANIM ):
         case( SGA_OBJ_BMP ):
         case( SGA_OBJ_INET ):
@@ -513,15 +514,15 @@ void GalleryTransferable::InitData( bool bLazy )
             if( !mpURL )
             {
                 mpURL = new INetURLObject;
-
+    
                 if( !mpTheme->GetURL( mnObjectPos, *mpURL ) )
                     delete mpURL, mpURL = NULL;
             }
-
+            
             if( ( SGA_OBJ_SOUND != meObjectKind ) && !mpGraphicObject )
             {
                 Graphic aGraphic;
-
+    
                 if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
                     mpGraphicObject = new GraphicObject( aGraphic );
             }
@@ -529,7 +530,7 @@ void GalleryTransferable::InitData( bool bLazy )
         break;
 
         default:
-            OSL_FAIL( "GalleryTransferable::GalleryTransferable: invalid object type" );
+            DBG_ERROR( "GalleryTransferable::GalleryTransferable: invalid object type" );
         break;
     }
 }
@@ -549,11 +550,11 @@ void GalleryTransferable::AddSupportedFormats()
     {
         if( mpURL )
             AddFormat( FORMAT_FILE );
-
+    
         if( mpGraphicObject )
         {
             AddFormat( SOT_FORMATSTR_ID_SVXB );
-
+    
             if( mpGraphicObject->GetType() == GRAPHIC_GDIMETAFILE )
             {
                 AddFormat( FORMAT_GDIMETAFILE );
@@ -572,8 +573,8 @@ void GalleryTransferable::AddSupportedFormats()
 
 sal_Bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor )
 {
-    sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
-    sal_Bool    bRet = sal_False;
+    sal_uInt32	nFormat = SotExchange::GetFormat( rFlavor );
+    sal_Bool	bRet = sal_False;
 
     InitData( false );
 
@@ -626,7 +627,7 @@ sal_Bool GalleryTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pU
 
 void GalleryTransferable::DragFinished( sal_Int8 nDropAction )
 {
-    mpTheme->SetDragging( sal_False );
+    mpTheme->SetDragging( FALSE );
     mpTheme->SetDragPos( 0 );
     if ( nDropAction )
     {

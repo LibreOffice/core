@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,11 +50,11 @@ void BitmapWriteAccess::SetLineColor()
 void BitmapWriteAccess::SetLineColor( const Color& rColor )
 {
     delete mpLineColor;
-
+    
     if( rColor.GetTransparency() == 255 )
         mpLineColor = NULL;
     else
-        mpLineColor = ( HasPalette() ? new BitmapColor(  (sal_uInt8) GetBestPaletteIndex( rColor ) ) : new BitmapColor( rColor ) );
+        mpLineColor = ( HasPalette() ? new BitmapColor(  (BYTE) GetBestPaletteIndex( rColor ) ) : new BitmapColor( rColor ) );
 }
 
 // ------------------------------------------------------------------
@@ -62,12 +62,12 @@ void BitmapWriteAccess::SetLineColor( const Color& rColor )
 Color BitmapWriteAccess::GetLineColor() const
 {
     Color aRet;
-
+    
     if( mpLineColor )
         aRet = (const Color&) *mpLineColor;
     else
         aRet.SetTransparency( 255 );
-
+    
     return aRet;
 }
 
@@ -84,11 +84,11 @@ void BitmapWriteAccess::SetFillColor()
 void BitmapWriteAccess::SetFillColor( const Color& rColor )
 {
     delete mpFillColor;
-
+    
     if( rColor.GetTransparency() == 255 )
         mpFillColor = NULL;
     else
-        mpFillColor = ( HasPalette() ? new BitmapColor(  (sal_uInt8) GetBestPaletteIndex( rColor ) ) : new BitmapColor( rColor ) );
+        mpFillColor = ( HasPalette() ? new BitmapColor(  (BYTE) GetBestPaletteIndex( rColor ) ) : new BitmapColor( rColor ) );
 }
 
 // ------------------------------------------------------------------
@@ -96,7 +96,7 @@ void BitmapWriteAccess::SetFillColor( const Color& rColor )
 Color BitmapWriteAccess::GetFillColor() const
 {
     Color aRet;
-
+    
     if( mpFillColor )
         aRet = (const Color&) *mpFillColor;
     else
@@ -113,15 +113,15 @@ void BitmapWriteAccess::Erase( const Color& rColor )
     // TODO: provide and use Erase( BitmapColor& method)
     BitmapColor aColor = rColor;
     if( HasPalette() )
-        aColor = BitmapColor( (sal_uInt8)GetBestPaletteIndex( rColor) );
+        aColor = BitmapColor( (BYTE)GetBestPaletteIndex( rColor) );
     // try fast bitmap method first
     if( ImplFastEraseBitmap( *mpBuffer, aColor ) )
         return;
 
     // use the canonical method to clear the bitmap
-    BitmapColor*    pOldFillColor = mpFillColor ? new BitmapColor( *mpFillColor ) : NULL;
-    const Point     aPoint;
-    const Rectangle aRect( aPoint, maBitmap.GetSizePixel() );
+    BitmapColor*	pOldFillColor = mpFillColor ? new BitmapColor( *mpFillColor ) : NULL;
+    const Point		aPoint;	
+    const Rectangle	aRect( aPoint, maBitmap.GetSizePixel() );
 
     SetFillColor( rColor );
     FillRect( aRect );
@@ -135,17 +135,17 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
 {
     if( mpLineColor )
     {
-        const BitmapColor&  rLineColor = *mpLineColor;
-        long                nX, nY;
-
+        const BitmapColor&	rLineColor = *mpLineColor;
+        long 				nX, nY;
+    
         if ( rStart.X() == rEnd.X() )
         {
             // vertikale Line
             const long nEndY = rEnd.Y();
-
+    
             nX = rStart.X();
             nY = rStart.Y();
-
+            
             if ( nEndY > nY )
             {
                 for (; nY <= nEndY; nY++ )
@@ -161,10 +161,10 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
         {
             // horizontale Line
             const long nEndX = rEnd.X();
-
+            
             nX = rStart.X();
             nY = rStart.Y();
-
+    
             if ( nEndX > nX )
             {
                 for (; nX <= nEndX; nX++ )
@@ -178,13 +178,13 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
         }
         else
         {
-            const long  nDX = labs( rEnd.X() - rStart.X() );
-            const long  nDY = labs( rEnd.Y() - rStart.Y() );
-            long        nX1;
-            long        nY1;
-            long        nX2;
-            long        nY2;
-
+            const long	nDX = labs( rEnd.X() - rStart.X() );
+            const long	nDY = labs( rEnd.Y() - rStart.Y() );
+            long		nX1;
+            long		nY1;
+            long		nX2;
+            long		nY2;
+    
             if ( nDX >= nDY )
             {
                 if ( rStart.X() < rEnd.X() )
@@ -201,22 +201,22 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
                     nX2 = rStart.X();
                     nY2 = rStart.Y();
                 }
-
-                const long  nDYX = ( nDY - nDX ) << 1;
-                const long  nDY2 = nDY << 1;
-                long        nD = nDY2 - nDX;
-                sal_Bool        bPos = nY1 < nY2;
-
+    
+                const long	nDYX = ( nDY - nDX ) << 1;
+                const long	nDY2 = nDY << 1;
+                long		nD = nDY2 - nDX;
+                BOOL		bPos = nY1 < nY2;
+    
                 for ( nX = nX1, nY = nY1; nX <= nX2; nX++ )
                 {
                     SetPixel( nY, nX, rLineColor );
-
+    
                     if ( nD < 0 )
                         nD += nDY2;
                     else
                     {
                         nD += nDYX;
-
+    
                         if ( bPos )
                             nY++;
                         else
@@ -240,22 +240,22 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
                     nX2 = rStart.X();
                     nY2 = rStart.Y();
                 }
-
-                const long  nDYX = ( nDX - nDY ) << 1;
-                const long  nDY2 = nDX << 1;
-                long        nD = nDY2 - nDY;
-                sal_Bool        bPos = nX1 < nX2;
-
+    
+                const long	nDYX = ( nDX - nDY ) << 1;
+                const long	nDY2 = nDX << 1;
+                long		nD = nDY2 - nDY;
+                BOOL		bPos = nX1 < nX2;
+    
                 for ( nX = nX1, nY = nY1; nY <= nY2; nY++ )
                 {
                     SetPixel( nY, nX, rLineColor );
-
+    
                     if ( nD < 0 )
                         nD += nDY2;
                     else
                     {
                         nD += nDYX;
-
+    
                         if ( bPos )
                             nX++;
                         else
@@ -273,19 +273,19 @@ void BitmapWriteAccess::FillRect( const Rectangle& rRect )
 {
     if( mpFillColor )
     {
-        const BitmapColor&  rFillColor = *mpFillColor;
-        Point               aPoint;
-        Rectangle           aRect( aPoint, maBitmap.GetSizePixel() );
+        const BitmapColor&	rFillColor = *mpFillColor;
+        Point 				aPoint;	
+        Rectangle			aRect( aPoint, maBitmap.GetSizePixel() );
 
         aRect.Intersection( rRect );
 
         if( !aRect.IsEmpty() )
         {
-            const long  nStartX = rRect.Left();
-            const long  nStartY = rRect.Top();
-            const long  nEndX = rRect.Right();
-            const long  nEndY = rRect.Bottom();
-
+            const long	nStartX = rRect.Left();
+            const long	nStartY = rRect.Top();
+            const long	nEndX = rRect.Right();
+            const long	nEndY = rRect.Bottom();
+    
             for( long nY = nStartY; nY <= nEndY; nY++ )
                 for( long nX = nStartX; nX <= nEndX; nX++ )
                     SetPixel( nY, nX, rFillColor );
@@ -299,7 +299,7 @@ void BitmapWriteAccess::DrawRect( const Rectangle& rRect )
 {
     if( mpFillColor )
         FillRect( rRect );
-
+    
     if( mpLineColor && ( !mpFillColor || ( *mpFillColor != *mpLineColor ) ) )
     {
         DrawLine( rRect.TopLeft(), rRect.TopRight() );
@@ -313,13 +313,13 @@ void BitmapWriteAccess::DrawRect( const Rectangle& rRect )
 
 void BitmapWriteAccess::FillPolygon( const Polygon& rPoly )
 {
-    const sal_uInt16 nSize = rPoly.GetSize();
+    const USHORT nSize = rPoly.GetSize();
 
     if( nSize && mpFillColor )
     {
-        const BitmapColor&  rFillColor = *mpFillColor;
-        Region              aRegion( rPoly );
-        Rectangle           aRect;
+        const BitmapColor&	rFillColor = *mpFillColor;
+        Region				aRegion( rPoly );
+        Rectangle			aRect;
 
         aRegion.Intersect( Rectangle( Point(), Size( Width(), Height() ) ) );
 
@@ -346,9 +346,9 @@ void BitmapWriteAccess::DrawPolygon( const Polygon& rPoly )
 
     if( mpLineColor && ( !mpFillColor || ( *mpFillColor != *mpLineColor ) ) )
     {
-        const sal_uInt16 nSize = rPoly.GetSize();
+        const USHORT nSize = rPoly.GetSize();
 
-        for( sal_uInt16 i = 0, nSize1 = nSize - 1; i < nSize1; i++ )
+        for( USHORT i = 0, nSize1 = nSize - 1; i < nSize1; i++ )
             DrawLine( rPoly[ i ], rPoly[ i + 1 ] );
 
         if( rPoly[ nSize - 1 ] != rPoly[ 0 ] )
@@ -360,20 +360,20 @@ void BitmapWriteAccess::DrawPolygon( const Polygon& rPoly )
 
 void BitmapWriteAccess::FillPolyPolygon( const PolyPolygon& rPolyPoly )
 {
-    const sal_uInt16 nCount = rPolyPoly.Count();
+    const USHORT nCount = rPolyPoly.Count();
 
     if( nCount && mpFillColor )
     {
-        const BitmapColor&  rFillColor = *mpFillColor;
-        Region              aRegion( rPolyPoly );
-        Rectangle           aRect;
+        const BitmapColor&	rFillColor = *mpFillColor;
+        Region				aRegion( rPolyPoly );
+        Rectangle			aRect;
 
         aRegion.Intersect( Rectangle( Point(), Size( Width(), Height() ) ) );
 
         if( !aRegion.IsEmpty() )
         {
             RegionHandle aRegHandle( aRegion.BeginEnumRects() );
-
+            
             while( aRegion.GetNextEnumRect( aRegHandle, aRect ) )
                 for( long nY = aRect.Top(), nEndY = aRect.Bottom(); nY <= nEndY; nY++ )
                     for( long nX = aRect.Left(), nEndX = aRect.Right(); nX <= nEndX; nX++ )
@@ -390,17 +390,17 @@ void BitmapWriteAccess::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
 {
     if( mpFillColor )
         FillPolyPolygon( rPolyPoly );
-
+    
     if( mpLineColor && ( !mpFillColor || ( *mpFillColor != *mpLineColor ) ) )
     {
-        for( sal_uInt16 n = 0, nCount = rPolyPoly.Count(); n < nCount; )
+        for( USHORT n = 0, nCount = rPolyPoly.Count(); n < nCount; )
         {
-            const Polygon&  rPoly = rPolyPoly[ n++ ];
-            const sal_uInt16    nSize = rPoly.GetSize();
+            const Polygon&	rPoly = rPolyPoly[ n++ ];
+            const USHORT	nSize = rPoly.GetSize();
 
             if( nSize )
             {
-                for( sal_uInt16 i = 0, nSize1 = nSize - 1; i < nSize1; i++ )
+                for( USHORT i = 0, nSize1 = nSize - 1; i < nSize1; i++ )
                     DrawLine( rPoly[ i ], rPoly[ i + 1 ] );
 
                 if( rPoly[ nSize - 1 ] != rPoly[ 0 ] )

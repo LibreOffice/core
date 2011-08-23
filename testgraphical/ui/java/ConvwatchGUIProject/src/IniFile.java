@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -587,7 +587,7 @@ public class IniFile implements Enumeration
     //         }
     //         sLocalValue = replaceEvaluatedKey(_sSection, sLocalValue);
     //         sLocalValue = replaceEvaluatedKey("global", sLocalValue);
-    //
+    //     
     //         return sLocalValue;
     //     }
     public void removeSection(String _sSectionToRemove)
@@ -700,7 +700,7 @@ public class IniFile implements Enumeration
         }
 
     /**
-     * Helper to count the occurrence of Sections
+     * Helper to count the occurence of Sections
      * @return returns the count of '^['.*']$' Elements
      */
     public int getElementCount()

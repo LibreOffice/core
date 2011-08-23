@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,28 +59,28 @@ class Window;
 
 struct ImplToolItem
 {
-    Window*             mpWindow;
-    void*               mpUserData;
-    Image               maImage;
-    Image               maHighImage;
-    long                mnImageAngle;
-    bool                mbMirrorMode;
-    XubString           maText;
-    XubString           maQuickHelpText;
-    XubString           maHelpText;
-    String              maCommandStr;
-    rtl::OString        maHelpId;
-    Rectangle           maRect;
-    Rectangle           maCalcRect;
+    Window* 			mpWindow;
+    void*				mpUserData;
+    Image				maImage;
+    Image				maHighImage;
+    long				mnImageAngle;
+    bool				mbMirrorMode;
+    XubString			maText;
+    XubString			maQuickHelpText;
+    XubString			maHelpText;
+    String				maCommandStr;
+    ULONG				mnHelpId;
+    Rectangle			maRect;
+    Rectangle			maCalcRect;
     // the overall horizontal item size, including one or more of [image size + textlength + dropdown arrow]
-    Size                maItemSize;
-    long                mnSepSize;
+    Size                maItemSize;     
+    long				mnSepSize;
     long                mnDropDownArrowWidth;
-    ToolBoxItemType     meType;
-    ToolBoxItemBits     mnBits;
-    TriState            meState;
-    sal_uInt16              mnId;
-    sal_Bool                mbEnabled:1,
+    ToolBoxItemType 	meType;
+    ToolBoxItemBits 	mnBits;
+    TriState			meState;
+    USHORT				mnId;
+    BOOL				mbEnabled:1,
                         mbVisible:1,
                         mbEmptyBtn:1,
                         mbShowWindow:1,
@@ -88,11 +88,11 @@ struct ImplToolItem
                         mbVisibleText:1;    // indicates if text will definitely be drawn, influences dropdown pos
 
                         ImplToolItem();
-                        ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
+                        ImplToolItem( USHORT nItemId, const Image& rImage,
                                       ToolBoxItemBits nItemBits );
-                        ImplToolItem( sal_uInt16 nItemId, const XubString& rTxt,
+                        ImplToolItem( USHORT nItemId, const XubString& rTxt,
                                       ToolBoxItemBits nItemBits );
-                        ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
+                        ImplToolItem( USHORT nItemId, const Image& rImage,
                                       const XubString& rTxt,
                                       ToolBoxItemBits nItemBits );
                         ~ImplToolItem();
@@ -104,18 +104,18 @@ struct ImplToolItem
     // the default size is the precomputed size for standard items
     // ie those that are just ordinary buttons (no windows or text etc.)
     // bCheckMaxWidth indicates that item windows must not exceed maxWidth in which case they will be painted as buttons
-    Size                GetSize( sal_Bool bHorz, sal_Bool bCheckMaxWidth, long maxWidth, const Size& rDefaultSize );
+    Size                GetSize( BOOL bHorz, BOOL bCheckMaxWidth, long maxWidth, const Size& rDefaultSize );  
 
     // only useful for buttons: returns if the text or image part or both can be drawn according to current button drawing style
-    void DetermineButtonDrawStyle( ButtonType eButtonType, sal_Bool& rbImage, sal_Bool& rbText ) const;
+    void DetermineButtonDrawStyle( ButtonType eButtonType, BOOL& rbImage, BOOL& rbText ) const;
 
     // returns the rectangle which contains the drop down arrow
     // or an empty rect if there is none
     // bHorz denotes the toolbox alignment
-    Rectangle   GetDropDownRect( sal_Bool bHorz ) const;
+    Rectangle   GetDropDownRect( BOOL bHorz ) const;
 
-    // returns sal_True if the toolbar item is currently clipped, which can happen for docked toolbars
-    sal_Bool IsClipped() const;
+    // returns TRUE if the toolbar item is currently clipped, which can happen for docked toolbars
+    BOOL IsClipped() const;
 };
 
 namespace vcl
@@ -123,8 +123,8 @@ namespace vcl
 
 struct ToolBoxLayoutData : public ControlLayoutData
 {
-    std::vector< sal_uInt16 >               m_aLineItemIds;
-    std::vector< sal_uInt16 >               m_aLineItemPositions;
+    std::vector< USHORT >				m_aLineItemIds;
+    std::vector< USHORT >				m_aLineItemPositions;
 };
 
 
@@ -133,8 +133,8 @@ struct ToolBoxLayoutData : public ControlLayoutData
 
 struct ImplToolBoxPrivateData
 {
-    vcl::ToolBoxLayoutData*         m_pLayoutData;
-    std::vector< ImplToolItem >     m_aItems;
+    vcl::ToolBoxLayoutData*			m_pLayoutData;
+    std::vector< ImplToolItem >		m_aItems;
 
     ImplToolBoxPrivateData();
     ~ImplToolBoxPrivateData();
@@ -143,35 +143,35 @@ struct ImplToolBoxPrivateData
 
     // called when dropdown items are clicked
     Link    maDropdownClickHdl;
-    Timer   maDropdownTimer; // for opening dropdown items on "long click"
+    Timer	maDropdownTimer; // for opening dropdown items on "long click"
 
     // large or small buttons ?
     ToolBoxButtonSize   meButtonSize;
 
     // the optional custom menu
     PopupMenu*  mpMenu;
-    sal_uInt16      maMenuType;
-    sal_uIntPtr       mnEventId;
+    USHORT      maMenuType;
+    ULONG       mnEventId;
 
     // called when menu button is clicked and before the popup menu is executed
-    Link        maMenuButtonHdl;
+    Link        maMenuButtonHdl; 
 
     // a dummy item representing the custom menu button
     ImplToolItem   maMenubuttonItem;
     long           mnMenuButtonWidth;
-
+    
     Wallpaper   maDisplayBackground;
-
+    
     // support for highcontrast
     vcl::IImageListProvider* mpImageListProvider;
     vcl::ImageListType       meImageListType;
 
-    sal_Bool    mbIsLocked:1,           // keeps last lock state from ImplDockingWindowWrapper
+    BOOL    mbIsLocked:1,           // keeps last lock state from ImplDockingWindowWrapper
             mbAssumeDocked:1,       // only used during calculations to override current floating/popup mode
             mbAssumeFloating:1,
             mbAssumePopupMode:1,
-            mbKeyInputDisabled:1,   // no KEY input if all items disabled, closing/docking will be allowed though
-            mbIsPaintLocked:1,      // don't allow paints
+            mbKeyInputDisabled:1,	// no KEY input if all items disabled, closing/docking will be allowed though
+            mbIsPaintLocked:1,		// don't allow paints
             mbMenubuttonSelected:1, // menu button is highlighted
             mbPageScroll:1,         // determines if we scroll a page at a time
             mbNativeButtons:1,      // system supports native toolbar buttons
@@ -180,6 +180,6 @@ struct ImplToolBoxPrivateData
 };
 
 
-#endif  // _SV_TOOLBOX_H
+#endif	// _SV_TOOLBOX_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

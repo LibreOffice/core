@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,29 +24,29 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_XDrawPage_idl__
-#define __com_sun_star_drawing_XDrawPage_idl__
-
-#ifndef __com_sun_star_drawing_XShapes_idl__
-#include <com/sun/star/drawing/XShapes.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_drawing_XDrawPage_idl__ 
+#define __com_sun_star_drawing_XDrawPage_idl__ 
+ 
+#ifndef __com_sun_star_drawing_XShapes_idl__ 
+#include <com/sun/star/drawing/XShapes.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 /** identifies an <type>XShapes</type> as a <type>DrawPage</type>.
  */
 published interface XDrawPage: com::sun::star::drawing::XShapes
-{
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+{ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 

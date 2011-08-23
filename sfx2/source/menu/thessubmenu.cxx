@@ -7,6 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile: thessubmenu.cxx,v $
+ * $Revision: 1.0 $
+ *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -57,13 +60,47 @@ using ::rtl::OUString;
 
 SFX_IMPL_MENU_CONTROL(SfxThesSubMenuControl, SfxStringItem);
 
+////////////////////////////////////////////////////////////
+
+String GetThesaurusReplaceText_Impl( const ::rtl::OUString &rText )
+{
+    // The strings returned by the thesaurus sometimes have some
+    // explanation text put in between '(' and ')' or a trailing '*'.
+    // These parts should not be put in the ReplaceEdit Text that may get
+    // inserted into the document. Thus we strip them from the text.
+ 
+    String aText( rText );
+
+    xub_StrLen nPos = aText.Search( sal_Unicode('(') );
+    while (STRING_NOTFOUND != nPos)
+    {
+        xub_StrLen nEnd = aText.Search( sal_Unicode(')'), nPos );
+        if (STRING_NOTFOUND != nEnd)
+            aText.Erase( nPos, nEnd-nPos+1 );
+        else
+            break;
+        nPos = aText.Search( sal_Unicode('(') );
+    }
+
+    nPos = aText.Search( sal_Unicode('*') );
+    if (STRING_NOTFOUND != nPos)
+        aText.Erase( nPos );
+
+    // remove any possible remaining ' ' that may confuse the thesaurus
+    // when it gets called with the text
+    aText.EraseLeadingAndTrailingChars( sal_Unicode(' ') );
+    
+    return aText;
+}
+
+////////////////////////////////////////////////////////////
 
 
 /*
-    Constructor; sets the Select-Handler for the Menu and inserts it into
-    its Parent.
+    Ctor; setzt Select-Handler am Menu und traegt Menu
+    in seinen Parent ein.
  */
-SfxThesSubMenuControl::SfxThesSubMenuControl( sal_uInt16 nSlotId, Menu &rMenu, SfxBindings &rBindings )
+SfxThesSubMenuControl::SfxThesSubMenuControl( USHORT nSlotId, Menu &rMenu, SfxBindings &rBindings )
     : SfxMenuControl( nSlotId, rBindings ),
     pMenu(new PopupMenu),
     rParent(rMenu)
@@ -71,7 +108,7 @@ SfxThesSubMenuControl::SfxThesSubMenuControl( sal_uInt16 nSlotId, Menu &rMenu, S
     rMenu.SetPopupMenu(nSlotId, pMenu);
     pMenu->SetSelectHdl(LINK(this, SfxThesSubMenuControl, MenuSelect));
     pMenu->Clear();
-    rParent.EnableItem( GetId(), sal_False );
+    rParent.EnableItem( GetId(), FALSE );
 }
 
 
@@ -82,12 +119,12 @@ SfxThesSubMenuControl::~SfxThesSubMenuControl()
 
 
 /*
-    Status notification:
-    If the functionality is disabled, the corresponding
-    menu entry in Parentmenu is disabled, otherwise it is enabled.
+    Statusbenachrichtigung;
+    Ist die Funktionalit"at disabled, wird der entsprechende
+    Menueeintrag im Parentmenu disabled, andernfalls wird er enabled.
  */
-void SfxThesSubMenuControl::StateChanged(
-    sal_uInt16 /*nSID*/,
+void SfxThesSubMenuControl::StateChanged( 
+    USHORT /*nSID*/, 
     SfxItemState eState,
     const SfxPoolItem* /*pState*/ )
 {
@@ -96,12 +133,12 @@ void SfxThesSubMenuControl::StateChanged(
 
 
 /*
-    Select-Handler for Menus;
-    run the selected Verb,
+    Select-Handler des Menus;
+    das selektierte Verb mit ausgef"uhrt,
  */
 IMPL_LINK_INLINE_START( SfxThesSubMenuControl, MenuSelect, Menu *, pSelMenu )
 {
-    const sal_uInt16 nSlotId = pSelMenu->GetCurItemId();
+    const USHORT nSlotId = pSelMenu->GetCurItemId();
     if( nSlotId )
         GetBindings().Execute(nSlotId);
     return 1;
@@ -115,18 +152,19 @@ PopupMenu* SfxThesSubMenuControl::GetPopup() const
 }
 
 
+////////////////////////////////////////////////////////////
 
-OUString SfxThesSubMenuHelper::GetText(
-    const String &rLookUpString,
+OUString SfxThesSubMenuHelper::GetText( 
+    const String &rLookUpString, 
     xub_StrLen nDelimPos )
 {
     return OUString( rLookUpString.Copy( 0, nDelimPos ) );
 }
 
-
-void SfxThesSubMenuHelper::GetLocale(
-    lang::Locale /*out */ &rLocale,
-    const String &rLookUpString,
+    
+void SfxThesSubMenuHelper::GetLocale( 
+    lang::Locale /*out */ &rLocale, 
+    const String &rLookUpString, 
     xub_StrLen nDelimPos  )
 {
     String aIsoLang( rLookUpString.Copy( nDelimPos + 1) );
@@ -139,7 +177,7 @@ void SfxThesSubMenuHelper::GetLocale(
     }
 }
 
-
+    
 SfxThesSubMenuHelper::SfxThesSubMenuHelper()
 {
     try
@@ -150,29 +188,29 @@ SfxThesSubMenuHelper::SfxThesSubMenuHelper()
                     "com.sun.star.linguistic2.LinguServiceManager" ))), uno::UNO_QUERY_THROW );
         m_xThesarus = m_xLngMgr->getThesaurus();
     }
-    catch (uno::Exception &e)
+    catch (uno::Exception &e)    
     {
         (void) e;
         DBG_ASSERT( 0, "failed to get thesaurus" );
-    }
+    }    
 }
 
-
+    
 SfxThesSubMenuHelper::~SfxThesSubMenuHelper()
 {
-}
+}    
 
 
 bool SfxThesSubMenuHelper::IsSupportedLocale( const lang::Locale & rLocale ) const
 {
     return m_xThesarus.is() && m_xThesarus->hasLocale( rLocale );
 }
+    
 
-
-bool SfxThesSubMenuHelper::GetMeanings(
-    std::vector< OUString > & rSynonyms,
+bool SfxThesSubMenuHelper::GetMeanings( 
+    std::vector< OUString > & rSynonyms, 
     const OUString & rWord,
-    const lang::Locale & rLocale,
+    const lang::Locale & rLocale, 
     sal_Int16 nMaxSynonms )
 {
     bool bHasMoreSynonyms = false;
@@ -182,11 +220,11 @@ bool SfxThesSubMenuHelper::GetMeanings(
         try
         {
             // get all meannings
-            const uno::Sequence< uno::Reference< linguistic2::XMeaning > > aMeaningSeq(
+            const uno::Sequence< uno::Reference< linguistic2::XMeaning > > aMeaningSeq( 
                     m_xThesarus->queryMeanings( rWord, rLocale, uno::Sequence< beans::PropertyValue >() ));
             const uno::Reference< linguistic2::XMeaning > *pxMeaning = aMeaningSeq.getConstArray();
             const sal_Int32 nMeanings = aMeaningSeq.getLength();
-
+        
             // iterate over all meanings until nMaxSynonms are found or all meanings are processed
             sal_Int32 nCount = 0;
             sal_Int32 i = 0;
@@ -203,18 +241,18 @@ bool SfxThesSubMenuHelper::GetMeanings(
                 }
                 bHasMoreSynonyms = k < nSynonyms;    // any synonym from this meaning skipped?
             }
-
+            
             bHasMoreSynonyms |= i < nMeanings;   // any meaning skipped?
         }
         catch (uno::Exception &e)
         {
             (void) e;
             DBG_ASSERT( 0, "failed to get synonyms" );
-        }
+        }    
     }
     return bHasMoreSynonyms;
 }
-
+    
 
 String SfxThesSubMenuHelper::GetThesImplName( const lang::Locale &rLocale ) const
 {
@@ -223,15 +261,16 @@ String SfxThesSubMenuHelper::GetThesImplName( const lang::Locale &rLocale ) cons
     if (m_xLngMgr.is())
     {
         uno::Sequence< OUString > aServiceNames = m_xLngMgr->getConfiguredServices(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.Thesaurus")), rLocale );
+                OUString::createFromAscii("com.sun.star.linguistic2.Thesaurus"), rLocale );
         // there should be at most one thesaurus configured for each language
         DBG_ASSERT( aServiceNames.getLength() <= 1, "more than one thesaurus found. Should not be possible" );
         if (aServiceNames.getLength() == 1)
             aRes = aServiceNames[0];
-    }
+    }    
     return aRes;
-}
+}    
 
+////////////////////////////////////////////////////////////
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

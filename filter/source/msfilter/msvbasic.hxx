@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,11 +57,12 @@ using namespace ::com::sun::star::script::ModuleType;
 
 DECLARE_DYNARRAY(StringArray,String *)
 
-// define internal types to distinguish between
+// #117718# define internal types to distinguish between
 // module types, form, class & normal
-// #i37965# add "Document", used in Excel for macros attached to sheet
+// #i37965# DR 2004-12-03: add "Document", used in Excel for macros attached to sheet
 
-// define map to hold types of module
+// #117718# define map to hold types of module
+//
 typedef sal_Int32 ModType;
 typedef ::std::map< UniString,
     ModType > ModuleTypeHash;

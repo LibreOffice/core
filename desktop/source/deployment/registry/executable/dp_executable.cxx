@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     class ExecutablePackageImpl : public ::dp_registry::backend::Package
     {
         BackendImpl * getMyBackend() const;
-
+        
         // Package
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
@@ -72,7 +72,6 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
         bool getFileAttributes(sal_uInt64& out_Attributes);
         bool isUrlTargetInExtension();
-
     public:
         inline ExecutablePackageImpl(
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
@@ -84,31 +83,28 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             {}
     };
     friend class ExecutablePackageImpl;
-
-    typedef ::boost::unordered_map< OUString, Reference<XInterface>,
+    
+    typedef ::std::hash_map< OUString, Reference<XInterface>,
                              ::rtl::OUStringHash > t_string2object;
-
+   
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
         OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv );
 
     void addDataToDb(OUString const & url);
-    bool hasActiveEntry(OUString const & url);
-    void revokeEntryFromDb(OUString const & url);
+    bool isRegisteredInDb(OUString const & url);
+    void deleteDataFromDb(OUString const & url);
 
     Reference<deployment::XPackageTypeInfo> m_xExecutableTypeInfo;
     std::auto_ptr<ExecutableBackendDb> m_backendDb;
 public:
     BackendImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
-
+    
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
-    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
-        throw (deployment::DeploymentException,
-               uno::RuntimeException);
 
     using PackageRegistryBackend::disposing;
 };
@@ -122,14 +118,15 @@ BackendImpl::BackendImpl(
                                 OUSTR("application/vnd.sun.star.executable"),
                                 OUSTR(""),
                                 OUSTR("Executable"),
-                                RID_IMG_COMPONENT ) )
+                                RID_IMG_COMPONENT,
+                                RID_IMG_COMPONENT_HC ) )
 {
     if (!transientMode())
     {
         OUString dbFile = makeURL(getCachePath(), OUSTR("backenddb.xml"));
         m_backendDb.reset(
             new ExecutableBackendDb(getComponentContext(), dbFile));
-   }
+   }    
 }
 
 void BackendImpl::addDataToDb(OUString const & url)
@@ -138,19 +135,19 @@ void BackendImpl::addDataToDb(OUString const & url)
         m_backendDb->addEntry(url);
 }
 
-void BackendImpl::revokeEntryFromDb(OUString const & url)
+bool BackendImpl::isRegisteredInDb(OUString const & url)
 {
+    bool ret = false;
     if (m_backendDb.get())
-        m_backendDb->revokeEntry(url);
+        ret = m_backendDb->getEntry(url);
+    return ret;
 }
 
-bool BackendImpl::hasActiveEntry(OUString const & url)
+void BackendImpl::deleteDataFromDb(OUString const & url)
 {
     if (m_backendDb.get())
-        return m_backendDb->hasActiveEntry(url);
-    return false;
+        m_backendDb->removeEntry(url);
 }
-
 
 // XPackageRegistry
 Sequence< Reference<deployment::XPackageTypeInfo> >
@@ -158,14 +155,6 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
     return Sequence<Reference<deployment::XPackageTypeInfo> >(
         & m_xExecutableTypeInfo, 1);
-}
-
-void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaType*/)
-        throw (deployment::DeploymentException,
-               uno::RuntimeException)
-{
-    if (m_backendDb.get())
-        m_backendDb->removeEntry(url);
 }
 
 // PackageRegistryBackend
@@ -196,7 +185,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.executable"))
             {
                 return new BackendImpl::ExecutablePackageImpl(
-                    this, url, name,  m_xExecutableTypeInfo, bRemoved,
+                    this, url, name,  m_xExecutableTypeInfo, bRemoved, 
                     identifier);
             }
         }
@@ -204,6 +193,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     return Reference<deployment::XPackage>();
 }
 
+//##############################################################################
 
 
 // Package
@@ -211,12 +201,12 @@ BackendImpl * BackendImpl::ExecutablePackageImpl::getMyBackend() const
 {
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
     if (NULL == pBackend)
-    {
+    {    
         //May throw a DisposedException
         check();
         //We should never get here...
         throw RuntimeException(
-            OUSTR("Failed to get the BackendImpl"),
+            OUSTR("Failed to get the BackendImpl"), 
             static_cast<OWeakObject*>(const_cast<ExecutablePackageImpl *>(this)));
     }
     return pBackend;
@@ -228,7 +218,7 @@ BackendImpl::ExecutablePackageImpl::isRegistered_(
     ::rtl::Reference<dp_misc::AbortChannel> const &,
     Reference<XCommandEnvironment> const & )
 {
-    bool registered = getMyBackend()->hasActiveEntry(getURL());
+    bool registered = getMyBackend()->isRegisteredInDb(getURL());
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
             sal_True /* IsPresent */,
                 beans::Ambiguous<sal_Bool>(
@@ -259,9 +249,8 @@ void BackendImpl::ExecutablePackageImpl::processPackage_(
             else if (getMyBackend()->m_context.equals(OUSTR("shared")))
                 attributes |= (osl_File_Attribute_OwnExe | osl_File_Attribute_GrpExe
                                | osl_File_Attribute_OthExe);
-            else if (!getMyBackend()->m_context.equals(OUSTR("bundled"))
-                && !getMyBackend()->m_context.equals(OUSTR("bundled_prereg")))
-                //Bundled extension are required to be in the properly
+            else if (!getMyBackend()->m_context.equals(OUSTR("bundled")))
+                //Bundled extension are required to be in the properly 
                 //installed. That is an executable must have the right flags
                 OSL_ASSERT(0);
 
@@ -273,13 +262,13 @@ void BackendImpl::ExecutablePackageImpl::processPackage_(
     }
     else
     {
-        getMyBackend()->revokeEntryFromDb(getURL());
+        getMyBackend()->deleteDataFromDb(getURL());
     }
 }
 
 //We currently cannot check if this XPackage represents a content of a particular extension
 //But we can check if we are within $UNO_USER_PACKAGES_CACHE etc.
-//Done for security reasons. For example an extension manifest could contain a path to
+//Done for security reasons. For example an extension manifest could contain a path to 
 //an executable outside the extension.
 bool BackendImpl::ExecutablePackageImpl::isUrlTargetInExtension()
 {
@@ -289,8 +278,7 @@ bool BackendImpl::ExecutablePackageImpl::isUrlTargetInExtension()
         sExtensionDir = dp_misc::expandUnoRcTerm(OUSTR("$UNO_USER_PACKAGES_CACHE"));
     else if (getMyBackend()->m_context.equals(OUSTR("shared")))
         sExtensionDir = dp_misc::expandUnoRcTerm(OUSTR("$UNO_SHARED_PACKAGES_CACHE"));
-    else if (getMyBackend()->m_context.equals(OUSTR("bundled"))
-        || getMyBackend()->m_context.equals(OUSTR("bundled_prereg")))
+    else if (getMyBackend()->m_context.equals(OUSTR("bundled"))) 
         sExtensionDir = dp_misc::expandUnoRcTerm(OUSTR("$BUNDLED_EXTENSIONS"));
     else
         OSL_ASSERT(0);
@@ -325,6 +313,7 @@ bool BackendImpl::ExecutablePackageImpl::getFileAttributes(sal_uInt64& out_Attri
     return bSuccess;
 }
 
+//##############################################################################
 
 
 } // anon namespace

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,30 +26,15 @@
  ************************************************************************/
 package complex.dbaccess;
 
-import com.sun.star.beans.PropertyState;
-import com.sun.star.sdb.SQLFilterOperator;
-import com.sun.star.beans.PropertyAttribute;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.XPropertyContainer;
-import com.sun.star.beans.NamedValue;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.sdbcx.XTablesSupplier;
-import com.sun.star.sdb.XParametersSupplier;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.sdbcx.XColumnsSupplier;
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.sdb.CommandType;
-import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.beans.*;
+import com.sun.star.sdbcx.*;
+import com.sun.star.sdb.*;
+import com.sun.star.container.*;
 
 import com.sun.star.sdbc.DataType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
-// ---------- junit imports -----------------
-import org.junit.Test;
-import static org.junit.Assert.*;
-// ------------------------------------------
 
 public class SingleSelectQueryComposer extends CRMBasedTestCase
 {
@@ -63,13 +48,32 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
     private final static String INNERPRODUCTSQUERY = "products (inner)";
 
     // --------------------------------------------------------------------------------------------------------
+    public String[] getTestMethodNames()
+    {
+        return new String[]
+                {
+                    "testSetCommand",
+                    "testAttributes",
+                    "testSubQueries",
+                    "testParameters",
+                    "testDisjunctiveNormalForm",
+                    "testConditionByColumn"
+                };
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    public String getTestObjectName()
+    {
+        return "SingleSelectQueryComposer";
+    }
+
+    // --------------------------------------------------------------------------------------------------------
     private void createQueries() throws Exception
     {
         m_database.getDatabase().getDataSource().createQuery(INNERPRODUCTSQUERY, "SELECT * FROM \"products\"");
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @Override
     protected void createTestCase()
     {
         try
@@ -83,14 +87,14 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
         }
         catch (Exception e)
         {
-            fail("caught an exception (" + e.getMessage() + ") while creating the test case");
+            assure("caught an exception (" + e.getMessage() + ") while creating the test case", false);
         }
     }
 
     // --------------------------------------------------------------------------------------------------------
     private void checkAttributeAccess(String _attributeName, String _attributeValue)
     {
-        System.out.println("setting " + _attributeName + " to " + _attributeValue);
+        log.println("setting " + _attributeName + " to " + _attributeValue);
         String realValue = null;
         try
         {
@@ -120,55 +124,53 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
         catch (InvocationTargetException e)
         {
         }
-        assertTrue("set/get" + _attributeName + " not working as expected (set: " + _attributeValue + ", get: " + (realValue != null ? realValue : "null") + ")",
+        assure("set/get" + _attributeName + " not working as expected (set: " + _attributeValue + ", get: " + (realValue != null ? realValue : "null") + ")",
                 realValue.equals(_attributeValue));
-        System.out.println("  (results in " + m_composer.getQuery() + ")");
+        log.println("  (results in " + (String) m_composer.getQuery() + ")");
     }
-
+    
     /** tests setCommand of the composer
      */
-    @Test
     public void testSetCommand()
     {
-        System.out.println("testing SingleSelectQueryComposer's setCommand");
+        log.println("testing SingleSelectQueryComposer's setCommand");
 
         try
         {
             final String table = "SELECT * FROM \"customers\"";
             m_composer.setCommand("customers",CommandType.TABLE);
-            assertTrue("setCommand/getQuery TABLE inconsistent", m_composer.getQuery().equals(table));
-
+            assure("setCommand/getQuery TABLE inconsistent", m_composer.getQuery().equals(table));
+            
             m_database.getDatabase().getDataSource().createQuery("set command test", "SELECT * FROM \"orders for customer\" \"a\", \"customers\" \"b\" WHERE \"a\".\"Product Name\" = \"b\".\"Name\"");
             m_composer.setCommand("set command test",CommandType.QUERY);
-            assertTrue("setCommand/getQuery QUERY inconsistent", m_composer.getQuery().equals(m_database.getDatabase().getDataSource().getQueryDefinition("set command test").getCommand()));
-
+            assure("setCommand/getQuery QUERY inconsistent", m_composer.getQuery().equals(m_database.getDatabase().getDataSource().getQueryDefinition("set command test").getCommand()));
+            
             final String sql = "SELECT * FROM \"orders for customer\" WHERE \"Product Name\" = 'test'";
             m_composer.setCommand(sql,CommandType.COMMAND);
-            assertTrue("setCommand/getQuery COMMAND inconsistent", m_composer.getQuery().equals(sql));
+            assure("setCommand/getQuery COMMAND inconsistent", m_composer.getQuery().equals(sql));
         }
         catch (Exception e)
         {
-            fail("Exception caught: " + e);
+            assure("Exception caught: " + e, false);
         }
     }
     /** tests accessing attributes of the composer (order, filter, group by, having)
      */
-    @Test
     public void testAttributes()
     {
-        System.out.println("testing SingleSelectQueryComposer's attributes (order, filter, group by, having)");
+        log.println("testing SingleSelectQueryComposer's attributes (order, filter, group by, having)");
 
         try
         {
-            System.out.println("check setElementaryQuery");
+            log.println("check setElementaryQuery");
             final String simpleQuery2 = "SELECT * FROM \"customers\" WHERE \"Name\" = 'oranges'";
             m_composer.setElementaryQuery(simpleQuery2);
-            assertTrue("setElementaryQuery/getQuery inconsistent", m_composer.getQuery().equals(simpleQuery2));
-
-            System.out.println("check setQuery");
+            assure("setElementaryQuery/getQuery inconsistent", m_composer.getQuery().equals(simpleQuery2));
+            
+            log.println("check setQuery");
             final String simpleQuery = "SELECT * FROM \"customers\"";
             m_composer.setQuery(simpleQuery);
-            assertTrue("set/getQuery inconsistent", m_composer.getQuery().equals(simpleQuery));
+            assure("set/getQuery inconsistent", m_composer.getQuery().equals(simpleQuery));
 
             checkAttributeAccess("Filter", "\"Name\" = 'oranges'");
             checkAttributeAccess("Group", "\"City\"");
@@ -176,16 +178,16 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
             checkAttributeAccess("HavingClause", "\"ID\" <> 4");
 
             final XIndexAccess orderColumns = m_composer.getOrderColumns();
-            assertTrue("Order columns doesn't exist: \"Address\"",
+            assure("Order columns doesn't exist: \"Address\"",
                     orderColumns != null && orderColumns.getCount() == 1 && orderColumns.getByIndex(0) != null);
 
             final XIndexAccess groupColumns = m_composer.getGroupColumns();
-            assertTrue("Group columns doesn't exist: \"City\"",
+            assure("Group columns doesn't exist: \"City\"",
                     groupColumns != null && groupColumns.getCount() == 1 && groupColumns.getByIndex(0) != null);
 
             // XColumnsSupplier
-            final XColumnsSupplier xSelectColumns = UnoRuntime.queryInterface(XColumnsSupplier.class, m_composer);
-            assertTrue("no select columns, or wrong number of select columns",
+            final XColumnsSupplier xSelectColumns = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, m_composer);
+            assure("no select columns, or wrong number of select columns",
                     xSelectColumns != null && xSelectColumns.getColumns() != null && xSelectColumns.getColumns().getElementNames().length == 6);
 
             // structured filter
@@ -194,41 +196,40 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
             final PropertyValue[][] aStructuredFilter = m_composer.getStructuredFilter();
             m_composer.setFilter("");
             m_composer.setStructuredFilter(aStructuredFilter);
-            assertTrue("Structured Filter not identical", m_composer.getFilter().equals(COMPLEXFILTER));
+            assure("Structured Filter not identical", m_composer.getFilter().equals(COMPLEXFILTER));
 
             // structured having clause
             m_composer.setHavingClause(COMPLEXFILTER);
             final PropertyValue[][] aStructuredHaving = m_composer.getStructuredHavingClause();
             m_composer.setHavingClause("");
             m_composer.setStructuredHavingClause(aStructuredHaving);
-            assertTrue("Structured Having Clause not identical", m_composer.getHavingClause().equals(COMPLEXFILTER));
+            assure("Structured Having Clause not identical", m_composer.getHavingClause().equals(COMPLEXFILTER));
         }
         catch (Exception e)
         {
-            fail("Exception caught: " + e);
+            assure("Exception caught: " + e, false);
         }
     }
 
     /** test various sub query related features ("queries in queries")
      */
-    @Test
     public void testSubQueries() throws Exception
     {
         m_composer.setQuery("SELECT * from \"" + INNERPRODUCTSQUERY + "\"");
-        final XTablesSupplier suppTables = UnoRuntime.queryInterface(XTablesSupplier.class, m_composer);
+        final XTablesSupplier suppTables = (XTablesSupplier) UnoRuntime.queryInterface(
+                XTablesSupplier.class, m_composer);
         final XNameAccess tables = suppTables.getTables();
-        assertTrue("a simple SELECT * FROM <query> could not be parsed",
+        assure("a simple SELECT * FROM <query> could not be parsed",
                 tables != null && tables.hasByName(INNERPRODUCTSQUERY));
 
         final String sInnerCommand = m_database.getDatabase().getDataSource().getQueryDefinition(INNERPRODUCTSQUERY).getCommand();
         final String sExecutableQuery = m_composer.getQueryWithSubstitution();
-        assertTrue("simple query containing a sub query improperly parsed to SDBC level statement: \n1. " + sExecutableQuery + "\n2. " + "SELECT * FROM ( " + sInnerCommand + " ) AS \"" + INNERPRODUCTSQUERY + "\"",
+        assure("simple query containing a sub query improperly parsed to SDBC level statement: \n1. " + sExecutableQuery + "\n2. " + "SELECT * FROM ( " + sInnerCommand + " ) AS \"" + INNERPRODUCTSQUERY + "\"",
                 sExecutableQuery.equals("SELECT * FROM ( " + sInnerCommand + " ) AS \"" + INNERPRODUCTSQUERY + "\""));
     }
 
     /** tests the XParametersSupplier functionality
      */
-    @Test
     public void testParameters()
     {
         try
@@ -240,7 +241,8 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
             m_database.getDatabase().getDataSource().createQuery("orders for customer and product", "SELECT * FROM \"orders for customer\" WHERE \"Product Name\" LIKE ?");
 
             m_composer.setQuery(m_database.getDatabase().getDataSource().getQueryDefinition("orders for customer and product").getCommand());
-            final XParametersSupplier suppParams = UnoRuntime.queryInterface(XParametersSupplier.class, m_composer);
+            final XParametersSupplier suppParams = (XParametersSupplier) UnoRuntime.queryInterface(
+                    XParametersSupplier.class, m_composer);
             final XIndexAccess parameters = suppParams.getParameters();
 
             final String expectedParamNames[] =
@@ -250,25 +252,25 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
             };
 
             final int paramCount = parameters.getCount();
-            assertTrue("composer did find wrong number of parameters in the nested queries.",
+            assure("composer did find wrong number of parameters in the nested queries.",
                     paramCount == expectedParamNames.length);
 
             for (int i = 0; i < paramCount; ++i)
             {
-                final XPropertySet parameter = UnoRuntime.queryInterface(XPropertySet.class, parameters.getByIndex(i));
+                final XPropertySet parameter = (XPropertySet) UnoRuntime.queryInterface(
+                        XPropertySet.class, parameters.getByIndex(i));
                 final String paramName = (String) parameter.getPropertyValue("Name");
-                assertTrue("wrong parameter name at position " + (i + 1) + " (expected: " + expectedParamNames[i] + ", found: " + paramName + ")",
+                assure("wrong parameter name at position " + (i + 1) + " (expected: " + expectedParamNames[i] + ", found: " + paramName + ")",
                         paramName.equals(expectedParamNames[i]));
 
             }
         }
         catch (Exception e)
         {
-            fail("caught an exception: " + e);
+            assure("caught an exception: " + e, false);
         }
     }
 
-    @Test
     public void testConditionByColumn()
     {
         try
@@ -280,22 +282,23 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
                 new NamedValue("AutomaticAddition", Boolean.valueOf(true))
             };
             final String serviceName = "com.sun.star.beans.PropertyBag";
-            final XPropertyContainer filter = UnoRuntime.queryInterface(XPropertyContainer.class, getMSF().createInstanceWithArguments(serviceName, initArgs));
+            final XPropertyContainer filter = (XPropertyContainer) UnoRuntime.queryInterface(XPropertyContainer.class,
+                    getORB().createInstanceWithArguments(serviceName, initArgs));
             filter.addProperty("Name", PropertyAttribute.MAYBEVOID, "Comment");
             filter.addProperty("RealName", PropertyAttribute.MAYBEVOID, "Comment");
             filter.addProperty("TableName", PropertyAttribute.MAYBEVOID, "customers");
             filter.addProperty("Value", PropertyAttribute.MAYBEVOID, "Good one.");
             filter.addProperty("Type", PropertyAttribute.MAYBEVOID, Integer.valueOf(DataType.LONGVARCHAR));
-            final XPropertySet column = UnoRuntime.queryInterface(XPropertySet.class, filter);
+            final XPropertySet column = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class,filter);
 
             m_composer.appendFilterByColumn(column, true,SQLFilterOperator.LIKE);
-            assertTrue("At least one row should exist",m_database.getConnection().createStatement().executeQuery(m_composer.getQuery()).next());
+            assure("At least one row should exist",m_database.getConnection().createStatement().executeQuery(m_composer.getQuery()).next());
 
         }
         catch (Exception e)
         {
             // this is an error: the query is expected to be parseable
-            fail("caught an exception: " + e);
+            assure("caught an exception: " + e, false);
         }
     }
 
@@ -308,18 +311,18 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
         catch (Exception e)
         {
             // this is an error: the query is expected to be parseable
-            fail("caught an exception: " + e);
+            assure("caught an exception: " + e, false);
         }
 
         final PropertyValue[][] disjunctiveNormalForm = m_composer.getStructuredFilter();
 
-        assertEquals("DNF: wrong number of rows", _expectedDNF.length, disjunctiveNormalForm.length);
+        assureEquals("DNF: wrong number of rows", _expectedDNF.length, disjunctiveNormalForm.length);
         for (int i = 0; i < _expectedDNF.length; ++i)
         {
-            assertEquals("DNF: wrong number of columns in row " + i, _expectedDNF[i].length, disjunctiveNormalForm[i].length);
+            assureEquals("DNF: wrong number of columns in row " + i, _expectedDNF[i].length, disjunctiveNormalForm[i].length);
             for (int j = 0; j < _expectedDNF[i].length; ++j)
             {
-                assertEquals("DNF: wrong content in column " + j + ", row " + i,
+                assureEquals("DNF: wrong content in column " + j + ", row " + i,
                         _expectedDNF[i][j].Name, disjunctiveNormalForm[i][j].Name);
             }
         }
@@ -328,7 +331,6 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
     /** tests the disjunctive normal form functionality, aka the structured filter,
      *  of the composer
      */
-    @Test
     public void testDisjunctiveNormalForm()
     {
         // a simple case: WHERE clause simply is a combination of predicates knitted with AND

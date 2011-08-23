@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,49 +38,41 @@
 #include <ftninfo.hxx>
 #include <charfmt.hxx>
 #include <editeng/charrotateitem.hxx>
-#include <layfrm.hxx>       // GetFrmRstHeight, etc
+#include <layfrm.hxx>		// GetFrmRstHeight, etc
 #include <viewsh.hxx>
-#include <viewopt.hxx>      // SwViewOptions
-#include <paratr.hxx>       // SwFmtDrop
+#include <viewopt.hxx>		// SwViewOptions
+#include <paratr.hxx>		// SwFmtDrop
+#include <txtcfg.hxx>
 #include <itrform2.hxx>
 #include <porrst.hxx>
-#include <portab.hxx>       // pLastTab->
-#include <porfly.hxx>       // CalcFlyWidth
-#include <portox.hxx>       // WhichTxtPortion
-#include <porref.hxx>       // WhichTxtPortion
-#include <porfld.hxx>       // SwNumberPortion fuer CalcAscent()
+#include <portab.hxx>		// pLastTab->
+#include <porfly.hxx>		// CalcFlyWidth
+#include <portox.hxx>		// WhichTxtPortion
+#include <porref.hxx>		// WhichTxtPortion
+#include <porfld.hxx>		// SwNumberPortion fuer CalcAscent()
 #include <porftn.hxx>       // SwFtnPortion
 #include <porhyph.hxx>
 #include <guess.hxx>
-#include <blink.hxx>        // pBlink
-#include <ftnfrm.hxx>       // WhichFirstPortion() -> mal Verlagern.
-#include <redlnitr.hxx>     // SwRedlineItr
+#include <blink.hxx>		// pBlink
+#include <ftnfrm.hxx>		// WhichFirstPortion() -> mal Verlagern.
+#include <redlnitr.hxx>		// SwRedlineItr
 #include <pagefrm.hxx>
 #include <pagedesc.hxx> // SwPageDesc
 #include <tgrditem.hxx>
-#include <doc.hxx>          // SwDoc
-#include <pormulti.hxx>     // SwMultiPortion
+#include <doc.hxx>			// SwDoc
+#include <pormulti.hxx> 	// SwMultiPortion
+#define _SVSTDARR_LONGS
+#include <svl/svstdarr.hxx>
 #include <unotools/charclass.hxx>
 
-#include <vector>
-
 #if OSL_DEBUG_LEVEL > 1
-#include <ndtxt.hxx>        // pSwpHints, Ausgabeoperator
+#include <ndtxt.hxx>		// pSwpHints, Ausgabeoperator
 #endif
 
 using namespace ::com::sun::star;
 
 extern sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );
-
-namespace {
-    //! Calculates and sets optimal repaint offset for the current line
-    static long lcl_CalcOptRepaint( SwTxtFormatter &rThis,
-                                    SwLineLayout &rCurr,
-                                    const xub_StrLen nOldLineEnd,
-                                    const std::vector<long> &rFlyStarts );
-    //! Determine if we need to build hidden portions
-    static bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos );
-}
+bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos );
 
 #define MAX_TXTPORLEN 300
 
@@ -94,7 +86,7 @@ inline void ClearFly( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *                  SwTxtFormatter::CtorInitTxtFormatter()
+ *					SwTxtFormatter::CtorInitTxtFormatter()
  *************************************************************************/
 
 void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *pNewInf )
@@ -123,7 +115,7 @@ void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *p
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::DTOR
+ *						SwTxtFormatter::DTOR
  *************************************************************************/
 
 SwTxtFormatter::~SwTxtFormatter()
@@ -138,7 +130,7 @@ SwTxtFormatter::~SwTxtFormatter()
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::Insert()
+ *						SwTxtFormatter::Insert()
  *************************************************************************/
 
 void SwTxtFormatter::Insert( SwLineLayout *pLay )
@@ -154,7 +146,7 @@ void SwTxtFormatter::Insert( SwLineLayout *pLay )
 }
 
 /*************************************************************************
- *                  SwTxtFormatter::GetFrmRstHeight()
+ *					SwTxtFormatter::GetFrmRstHeight()
  *************************************************************************/
 
 KSHORT SwTxtFormatter::GetFrmRstHeight() const
@@ -175,7 +167,7 @@ KSHORT SwTxtFormatter::GetFrmRstHeight() const
 }
 
 /*************************************************************************
- *                  SwTxtFormatter::UnderFlow()
+ *					SwTxtFormatter::UnderFlow()
  *************************************************************************/
 
 SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
@@ -217,6 +209,7 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
         SwLinePortion *pTmpPrev = pPor;
         while( pPor && pPor != pUnderFlow )
         {
+            DBG_LOOP;
             if( !pPor->IsKernPortion() &&
                 ( pPor->Width() || pPor->IsSoftHyphPortion() ) )
             {
@@ -257,7 +250,7 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
 //        }
 //    }
 
-    /*--------------------------------------------------
+    /*-----------------14.12.94 09:45-------------------
      * 9849: Schnellschuss
      * --------------------------------------------------*/
     if ( pPor==rInf.GetLast() )
@@ -288,7 +281,7 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
 
     // line width is adjusted, so that pPor does not fit to current
     // line anymore
-    rInf.Width( (sal_uInt16)(rInf.X() + (pPor->Width() ? pPor->Width() - 1 : 0)) );
+    rInf.Width( (USHORT)(rInf.X() + (pPor->Width() ? pPor->Width() - 1 : 0)) );
     rInf.SetLen( pPor->GetLen() );
     rInf.SetFull( sal_False );
     if( pFly )
@@ -331,7 +324,7 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::InsertPortion()
+ *						SwTxtFormatter::InsertPortion()
  *************************************************************************/
 
 void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
@@ -342,7 +335,7 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
     if( pPor == pCurr )
     {
         if ( pCurr->GetPortion() )
-        {
+        {        
             pPor = pCurr->GetPortion();
         }
 
@@ -374,6 +367,7 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
     rInf.SetLast( pPor );
     while( pPor )
     {
+        DBG_LOOP;
         pPor->Move( rInf );
         rInf.SetLast( pPor );
         pPor = pPor->GetPortion();
@@ -381,7 +375,7 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::BuildPortion()
+ *						SwTxtFormatter::BuildPortion()
  *************************************************************************/
 
 void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
@@ -424,8 +418,8 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                               GRID_LINES_CHARS == pGrid->GetGridType();
 
     const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
-    const sal_uInt16 nGridWidth = bHasGrid ?
-                                GETGRIDWIDTH(pGrid,pDoc) : 0;   //for textgrid refactor
+    const USHORT nGridWidth = bHasGrid ?
+                                GETGRIDWIDTH(pGrid,pDoc) : 0;	//for textgrid refactor
 
     // used for grid mode only:
     // the pointer is stored, because after formatting of non-asian text,
@@ -441,6 +435,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         OSL_ENSURE( rInf.GetLen() < STRING_LEN &&
                 rInf.GetIdx() <= rInf.GetTxt().Len(),
                 "SwTxtFormatter::BuildPortions: bad length in info" );
+        DBG_LOOP;
 
         // We have to check the script for fields in order to set the
         // correct nActual value for the font.
@@ -451,9 +446,9 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             rInf.GetLast() && rInf.GetLast()->InTxtGrp() &&
             rInf.GetLast()->Width() && !rInf.GetLast()->InNumberGrp() )
         {
-            sal_uInt8 nNxtActual = rInf.GetFont()->GetActual();
-            sal_uInt8 nLstActual = nNxtActual;
-            sal_uInt16 nLstHeight = (sal_uInt16)rInf.GetFont()->GetHeight();
+            BYTE nNxtActual = rInf.GetFont()->GetActual();
+            BYTE nLstActual = nNxtActual;
+            USHORT nLstHeight = (USHORT)rInf.GetFont()->GetHeight();
             sal_Bool bAllowBefore = sal_False;
             sal_Bool bAllowBehind = sal_False;
             const CharClass& rCC = GetAppCharClass();
@@ -491,7 +486,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                         if ( pTmpFnt )
                         {
                             nLstActual = pTmpFnt->GetActual();
-                            nLstHeight = (sal_uInt16)pTmpFnt->GetHeight();
+                            nLstHeight = (USHORT)pTmpFnt->GetHeight();
                         }
                     }
                 }
@@ -545,14 +540,14 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             const SwTwips nOfst = nStartX - nGridOrigin;
             if ( nOfst )
             {
-                const sal_uLong i = ( nOfst > 0 ) ?
+                const ULONG i = ( nOfst > 0 ) ?
                                 ( ( nOfst - 1 ) / nGridWidth + 1 ) :
                                 0;
                 const SwTwips nKernWidth = i * nGridWidth - nOfst;
                 const SwTwips nRestWidth = rInf.Width() - rInf.X();
 
                 if ( nKernWidth <= nRestWidth )
-                    pGridKernPortion->Width( (sal_uInt16)nKernWidth );
+                    pGridKernPortion->Width( (USHORT)nKernWidth );
             }
 
             if ( pGridKernPortion != pPor )
@@ -622,7 +617,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             ((SwMultiPortion*)pPor)->HasFlyInCntnt() ) )
             SetFlyInCntBase();
         // 5964: bUnderFlow muss zurueckgesetzt werden, sonst wird beim
-        //       naechsten Softhyphen wieder umgebrochen!
+        // 		 naechsten Softhyphen wieder umgebrochen!
         if ( !bFull )
         {
             rInf.ClrUnderFlow();
@@ -635,7 +630,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 if( nTmp == pScriptInfo->NextScriptChg( nTmp - 1 ) &&
                     nTmp != rInf.GetTxt().Len() )
                 {
-                    sal_uInt16 nDist = (sal_uInt16)(rInf.GetFont()->GetHeight()/5);
+                    USHORT nDist = (USHORT)(rInf.GetFont()->GetHeight()/5);
 
                     if( nDist )
                     {
@@ -661,8 +656,8 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             xub_StrLen nTmp = rInf.GetIdx() + pPor->GetLen();
             const SwTwips nRestWidth = rInf.Width() - rInf.X() - pPor->Width();
 
-            const sal_uInt8 nCurrScript = pFnt->GetActual(); // pScriptInfo->ScriptType( rInf.GetIdx() );
-            const sal_uInt8 nNextScript = nTmp >= rInf.GetTxt().Len() ?
+            const BYTE nCurrScript = pFnt->GetActual(); // pScriptInfo->ScriptType( rInf.GetIdx() );
+            const BYTE nNextScript = nTmp >= rInf.GetTxt().Len() ?
                                      SW_CJK :
                                      SwScriptInfo::WhichFont( nTmp, 0, pScriptInfo );
 
@@ -677,20 +672,20 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
                 // calculate size
                 SwLinePortion* pTmpPor = pGridKernPortion->GetPortion();
-                sal_uInt16 nSumWidth = pPor->Width();
+                USHORT nSumWidth = pPor->Width();
                 while ( pTmpPor )
                 {
                     nSumWidth = nSumWidth + pTmpPor->Width();
                     pTmpPor = pTmpPor->GetPortion();
                 }
 
-                const sal_uInt16 i = nSumWidth ?
+                const USHORT i = nSumWidth ?
                                  ( nSumWidth - 1 ) / nGridWidth + 1 :
                                  0;
                 const SwTwips nTmpWidth = i * nGridWidth;
                 const SwTwips nKernWidth = Min( (SwTwips)(nTmpWidth - nSumWidth),
                                                 nRestWidth );
-                const sal_uInt16 nKernWidth_1 = (sal_uInt16)(nKernWidth / 2);
+                const USHORT nKernWidth_1 = (USHORT)(nKernWidth / 2);
 
                 OSL_ENSURE( nKernWidth <= nRestWidth,
                         "Not enough space left for adjusting non-asian text in grid mode" );
@@ -742,7 +737,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *                 SwTxtFormatter::CalcAdjustLine()
+ *				   SwTxtFormatter::CalcAdjustLine()
  *************************************************************************/
 
 void SwTxtFormatter::CalcAdjustLine( SwLineLayout *pCurrent )
@@ -761,7 +756,7 @@ void SwTxtFormatter::CalcAdjustLine( SwLineLayout *pCurrent )
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::CalcAscent()
+ *						SwTxtFormatter::CalcAscent()
  *************************************************************************/
 
 void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
@@ -866,7 +861,7 @@ void SwMetaPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 
 /*************************************************************************
- *                      SwTxtFormatter::WhichTxtPor()
+ *						SwTxtFormatter::WhichTxtPor()
  *************************************************************************/
 
 SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
@@ -913,7 +908,7 @@ SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::NewTxtPortion()
+ *						SwTxtFormatter::NewTxtPortion()
  *************************************************************************/
 // Die Laenge wird ermittelt, folgende Portion-Grenzen sind definiert:
 // 1) Tabs
@@ -961,7 +956,7 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
                           KSHORT( pPor->GetAscent() ) ) / 8;
     if ( !nExpect )
         nExpect = 1;
-    nExpect = (sal_uInt16)(rInf.GetIdx() + ((rInf.Width() - rInf.X()) / nExpect));
+    nExpect = (USHORT)(rInf.GetIdx() + ((rInf.Width() - rInf.X()) / nExpect));
     if( nExpect > rInf.GetIdx() && nNextChg > nExpect )
         nNextChg = Min( nExpect, rInf.GetTxt().Len() );
 
@@ -988,7 +983,7 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
 
 
 /*************************************************************************
- *                 SwTxtFormatter::WhichFirstPortion()
+ *				   SwTxtFormatter::WhichFirstPortion()
  *************************************************************************/
 
 SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
@@ -1145,7 +1140,7 @@ sal_Bool lcl_OldFieldRest( const SwLineLayout* pCurr )
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::NewPortion()
+ *						SwTxtFormatter::NewPortion()
  *************************************************************************/
 
 /* NewPortion stellt rInf.nLen ein.
@@ -1153,11 +1148,11 @@ sal_Bool lcl_OldFieldRest( const SwLineLayout* pCurr )
  * attrwechsel.
  * Drei Faelle koennen eintreten:
  * 1) Die Zeile ist voll und der Umbruch wurde nicht emuliert
- *    -> return 0;
+ *	  -> return 0;
  * 2) Die Zeile ist voll und es wurde ein Umbruch emuliert
- *    -> Breite neu einstellen und return new FlyPortion
+ *	  -> Breite neu einstellen und return new FlyPortion
  * 3) Es muss eine neue Portion gebaut werden.
- *    -> CalcFlyWidth emuliert ggf. die Breite und return Portion
+ *	  -> CalcFlyWidth emuliert ggf. die Breite und return Portion
  */
 
 SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
@@ -1229,7 +1224,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
     if ( !pPor )
     {
         xub_StrLen nEnd = rInf.GetIdx();
-        if ( ::lcl_BuildHiddenPortion( rInf, nEnd ) )
+        if ( lcl_BuildHiddenPortion( rInf, nEnd ) )
             pPor = new SwHiddenTextPortion( nEnd - rInf.GetIdx() );
     }
 
@@ -1318,10 +1313,10 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
             case CH_BREAK:
                 pPor = new SwBreakPortion( *rInf.GetLast() ); break;
 
-            case CHAR_SOFTHYPHEN:                   // soft hyphen
+            case CHAR_SOFTHYPHEN:					// soft hyphen
                 pPor = new SwSoftHyphPortion; break;
 
-            case CHAR_HARDBLANK:                    // no-break space
+            case CHAR_HARDBLANK:					// no-break space
                 pPor = new SwBlankPortion( ' ' ); break;
 
             case CHAR_HARDHYPHEN:               // non-breaking hyphen
@@ -1341,7 +1336,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                                 break;
                             }
                             // No break
-            default        :
+            default 	   :
             {
                 SwTabPortion* pLastTabPortion = rInf.GetLastTab();
                 if ( pLastTabPortion && cChar == rInf.GetTabDecimal() )
@@ -1354,7 +1349,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                          POR_TABDECIMAL == pLastTabPortion->GetWhichPor() )
                     {
                         OSL_ENSURE( rInf.X() >= pLastTabPortion->Fix(), "Decimal tab stop position cannot be calculated" );
-                        const sal_uInt16 nWidthOfPortionsUpToDecimalPosition = (sal_uInt16)(rInf.X() - pLastTabPortion->Fix() );
+                        const USHORT nWidthOfPortionsUpToDecimalPosition = (USHORT)(rInf.X() - pLastTabPortion->Fix() );
                         static_cast<SwTabDecimalPortion*>(pLastTabPortion)->SetWidthOfPortionsUpToDecimalPosition( nWidthOfPortionsUpToDecimalPosition );
                         rInf.SetTabDecimal( 0 );
                     }
@@ -1418,7 +1413,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                 const SwAttrSet& rSet = pInfo->GetAnchorCharFmt((SwDoc&)*pDoc)->GetAttrSet();
 
                 const SfxPoolItem* pItem;
-                sal_uInt16 nDir = 0;
+                USHORT nDir = 0;
                 if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_ROTATE,
                     sal_True, &pItem ))
                     nDir = ((SvxCharRotateItem*)pItem)->GetValue();
@@ -1438,7 +1433,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 
             if ( pNumFnt )
             {
-                sal_uInt16 nDir = pNumFnt->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
+                USHORT nDir = pNumFnt->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
                 if ( 0 != nDir )
                 {
                     delete pPor;
@@ -1482,7 +1477,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::FormatLine()
+ *						SwTxtFormatter::FormatLine()
  *************************************************************************/
 
 xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
@@ -1520,18 +1515,21 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
     // before and after the BuildPortions call
     const sal_Bool bOptimizeRepaint = AllowRepaintOpt();
     const xub_StrLen nOldLineEnd = nStartPos + pCurr->GetLen();
-    std::vector<long> flyStarts;
+    SvLongs* pFlyStart = 0;
 
     // these are the conditions for a fly position comparison
     if ( bOptimizeRepaint && pCurr->IsFly() )
     {
+        pFlyStart = new SvLongs;
         SwLinePortion* pPor = pCurr->GetFirstPortion();
         long nPOfst = 0;
+        USHORT nCnt = 0;
+
         while ( pPor )
         {
             if ( pPor->IsFlyPortion() )
                 // insert start value of fly portion
-                flyStarts.push_back( nPOfst );
+                pFlyStart->Insert( nPOfst, nCnt++ );
 
             nPOfst += pPor->Width();
             pPor = pPor->GetPortion();
@@ -1622,8 +1620,9 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
     // calculate optimal repaint rectangle
     if ( bOptimizeRepaint )
     {
-        GetInfo().SetPaintOfst( ::lcl_CalcOptRepaint( *this, *pCurr, nOldLineEnd, flyStarts ) );
-        flyStarts.clear();
+        GetInfo().SetPaintOfst( CalcOptRepaint( nOldLineEnd, pFlyStart ) );
+        if ( pFlyStart )
+            delete pFlyStart;
     }
     else
         // Special case: We do not allow an optimitation of the repaint
@@ -1678,6 +1677,7 @@ void SwTxtFormatter::RecalcRealHeight()
     sal_Bool bMore = sal_True;
     while(bMore)
     {
+        DBG_LOOP;
         CalcRealHeight();
         bMore = Next() != 0;
     }
@@ -1695,12 +1695,12 @@ void SwTxtFormatter::CalcRealHeight( sal_Bool bNewLine )
     GETGRID( pFrm->FindPageFrm() )
     if ( pGrid && GetInfo().SnapToGrid() )
     {
-        const sal_uInt16 nGridWidth = pGrid->GetBaseHeight();
-        const sal_uInt16 nRubyHeight = pGrid->GetRubyHeight();
+        const USHORT nGridWidth = pGrid->GetBaseHeight();
+        const USHORT nRubyHeight = pGrid->GetRubyHeight();
         const sal_Bool bRubyTop = ! pGrid->GetRubyTextBelow();
 
         nLineHeight = nGridWidth + nRubyHeight;
-        sal_uInt16 nLineDist = nLineHeight;
+        USHORT nLineDist = nLineHeight;
 
         while ( pCurr->Height() > nLineHeight )
             nLineHeight = nLineHeight + nLineDist;
@@ -1719,13 +1719,13 @@ void SwTxtFormatter::CalcRealHeight( sal_Bool bNewLine )
         if ( ! IsParaLine() && pSpace &&
              SVX_INTER_LINE_SPACE_PROP == pSpace->GetInterLineSpaceRule() )
         {
-            sal_uLong nTmp = pSpace->GetPropLineSpace();
+            ULONG nTmp = pSpace->GetPropLineSpace();
 
             if( nTmp < 100 )
                 nTmp = 100;
 
             nTmp *= nLineHeight;
-            nLineHeight = (sal_uInt16)(nTmp / 100);
+            nLineHeight = (USHORT)(nTmp / 100);
         }
 
         pCurr->SetRealHeight( nLineHeight );
@@ -1786,7 +1786,7 @@ pCurr->GetAscent() )
                     pInf->GetParaPortion()->SetFixLineHeight();
                 }
                 break;
-                default: OSL_FAIL( ": unknown LineSpaceRule" );
+                default: OSL_ENSURE( sal_False, ": unknown LineSpaceRule" );
             }
             if( !IsParaLine() )
                 switch( pSpace->GetInterLineSpaceRule() )
@@ -1813,7 +1813,7 @@ pCurr->GetAscent() )
                         nLineHeight = nLineHeight + pSpace->GetInterLineSpace();
                         break;
                     }
-                    default: OSL_FAIL( ": unknown InterLineSpaceRule" );
+                    default: OSL_ENSURE( sal_False, ": unknown InterLineSpaceRule" );
                 }
         }
 #if OSL_DEBUG_LEVEL > 1
@@ -1837,7 +1837,7 @@ pCurr->GetAscent() )
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::FeedInf()
+ *						SwTxtFormatter::FeedInf()
  *************************************************************************/
 
 void SwTxtFormatter::FeedInf( SwTxtFormatInfo &rInf ) const
@@ -1852,7 +1852,7 @@ void SwTxtFormatter::FeedInf( SwTxtFormatInfo &rInf ) const
     rInf.SetIdx( nStart );
 
     // Handle overflows:
-    // --> FME 2004-11-25 #i34348# Changed type from sal_uInt16 to SwTwips
+    // --> FME 2004-11-25 #i34348# Changed type from USHORT to SwTwips
     SwTwips nTmpLeft = Left();
     SwTwips nTmpRight = Right();
     SwTwips nTmpFirst = FirstLeft();
@@ -1882,7 +1882,7 @@ void SwTxtFormatter::FeedInf( SwTxtFormatInfo &rInf ) const
 }
 
 /*************************************************************************
- *                      SwTxtFormatter::FormatReset()
+ *						SwTxtFormatter::FormatReset()
  *************************************************************************/
 
 void SwTxtFormatter::FormatReset( SwTxtFormatInfo &rInf )
@@ -1900,7 +1900,7 @@ void SwTxtFormatter::FormatReset( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *                SwTxtFormatter::CalcOnceMore()
+ *				  SwTxtFormatter::CalcOnceMore()
  *************************************************************************/
 
 sal_Bool SwTxtFormatter::CalcOnceMore()
@@ -1917,7 +1917,7 @@ sal_Bool SwTxtFormatter::CalcOnceMore()
 }
 
 /*************************************************************************
- *                SwTxtFormatter::CalcBottomLine()
+ *				  SwTxtFormatter::CalcBottomLine()
  *************************************************************************/
 
 SwTwips SwTxtFormatter::CalcBottomLine() const
@@ -1945,7 +1945,7 @@ SwTwips SwTxtFormatter::CalcBottomLine() const
 }
 
 /*************************************************************************
- *                SwTxtFormatter::_CalcFitToContent()
+ *				  SwTxtFormatter::_CalcFitToContent()
  *
  * FME/OD: This routine does a limited text formatting.
  *************************************************************************/
@@ -2015,148 +2015,142 @@ sal_Bool SwTxtFormatter::AllowRepaintOpt() const
     return bOptimizeRepaint;
 }
 
-namespace {
-    /*************************************************************************
-    *                      ::CalcOptRepaint()
-    *
-    * calculates and sets optimal repaint offset for the current line
-    *************************************************************************/
-    long lcl_CalcOptRepaint( SwTxtFormatter &rThis,
-                         SwLineLayout &rCurr,
-                         const xub_StrLen nOldLineEnd,
-                         const std::vector<long> &rFlyStarts )
+/*************************************************************************
+ *                      SwTxtFormatter::CalcOptRepaint()
+ *
+ * calculates an optimal repaint offset for the current line
+ *************************************************************************/
+long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
+                                     const SvLongs* pFlyStart )
+{
+    if ( GetInfo().GetIdx() < GetInfo().GetReformatStart() )
+    // the reformat position is behind our new line, that means
+    // something of our text has moved to the next line
+        return 0;
+
+    xub_StrLen nReformat = Min( GetInfo().GetReformatStart(), nOldLineEnd );
+
+    // in case we do not have any fly in our line, our repaint position
+    // is the changed position - 1
+    if ( ! pFlyStart && ! pCurr->IsFly() )
     {
-        SwTxtFormatInfo txtFmtInfo = rThis.GetInfo();
-        if ( txtFmtInfo.GetIdx() < txtFmtInfo.GetReformatStart() )
-        // the reformat position is behind our new line, that means
-        // something of our text has moved to the next line
+        // this is the maximum repaint offset determined during formatting
+        // for example: the beginning of the first right tab stop
+        // if this value is 0, this means that we do not have an upper
+        // limit for the repaint offset
+        const long nFormatRepaint = GetInfo().GetPaintOfst();
+
+        if ( nReformat < GetInfo().GetLineStart() + 3 )
             return 0;
 
-        xub_StrLen nReformat = Min( txtFmtInfo.GetReformatStart(), nOldLineEnd );
+        // step back two positions for smoother repaint
+        nReformat -= 2;
 
-        // in case we do not have any fly in our line, our repaint position
-        // is the changed position - 1
-        if ( rFlyStarts.empty() && ! rCurr.IsFly() )
+#ifndef QUARTZ
+#ifndef ENABLE_GRAPHITE
+        // --> FME 2004-09-27 #i28795#, #i34607#, #i38388#
+        // step back six(!) more characters for complex scripts
+        // this is required e.g., for Khmer (thank you, Javier!)
+        const SwScriptInfo& rSI = GetInfo().GetParaPortion()->GetScriptInfo();
+        xub_StrLen nMaxContext = 0;
+        if( ::i18n::ScriptType::COMPLEX == rSI.ScriptType( nReformat ) )
+            nMaxContext = 6;
+#else
+        // Some Graphite fonts need context for scripts not marked as complex
+        static const xub_StrLen nMaxContext = 10;
+#endif
+#else
+        // some fonts like Quartz's Zapfino need more context
+        // TODO: query FontInfo for maximum unicode context
+        static const xub_StrLen nMaxContext = 8;
+#endif
+        if( nMaxContext > 0 )
         {
-            // this is the maximum repaint offset determined during formatting
-            // for example: the beginning of the first right tab stop
-            // if this value is 0, this means that we do not have an upper
-            // limit for the repaint offset
-            const long nFormatRepaint = txtFmtInfo.GetPaintOfst();
-
-            if ( nReformat < txtFmtInfo.GetLineStart() + 3 )
-                return 0;
-
-            // step back two positions for smoother repaint
-            nReformat -= 2;
-
-    #ifndef QUARTZ
-    #ifndef ENABLE_GRAPHITE
-            // --> FME 2004-09-27 #i28795#, #i34607#, #i38388#
-            // step back six(!) more characters for complex scripts
-            // this is required e.g., for Khmer (thank you, Javier!)
-            const SwScriptInfo& rSI = txtFmtInfo.GetParaPortion()->GetScriptInfo();
-            xub_StrLen nMaxContext = 0;
-            if( ::i18n::ScriptType::COMPLEX == rSI.ScriptType( nReformat ) )
-                nMaxContext = 6;
-    #else
-            // Some Graphite fonts need context for scripts not marked as complex
-            static const xub_StrLen nMaxContext = 10;
-    #endif
-    #else
-            // some fonts like Quartz's Zapfino need more context
-            // TODO: query FontInfo for maximum unicode context
-            static const xub_StrLen nMaxContext = 8;
-    #endif
-            if( nMaxContext > 0 )
-            {
-                if ( nReformat > txtFmtInfo.GetLineStart() + nMaxContext )
-                    nReformat = nReformat - nMaxContext;
-                else
-                    nReformat = txtFmtInfo.GetLineStart();
-            }
-            // <--
-
-            // Weird situation: Our line used to end with a hole portion
-            // and we delete some characters at the end of our line. We have
-            // to take care for repainting the blanks which are not anymore
-            // covered by the hole portion
-            while ( nReformat > txtFmtInfo.GetLineStart() &&
-                    CH_BLANK == txtFmtInfo.GetChar( nReformat ) )
-                --nReformat;
-
-            OSL_ENSURE( nReformat < txtFmtInfo.GetIdx(), "Reformat too small for me!" );
-            SwRect aRect;
-
-            // Note: GetChareRect is not const. It definitely changes the
-            // bMulti flag. We have to save and resore the old value.
-            sal_Bool bOldMulti = txtFmtInfo.IsMulti();
-            rThis.GetCharRect( &aRect, nReformat );
-            txtFmtInfo.SetMulti( bOldMulti );
-
-            return nFormatRepaint ? Min( aRect.Left(), nFormatRepaint ) :
-                                    aRect.Left();
+            if ( nReformat > GetInfo().GetLineStart() + nMaxContext )
+                nReformat = nReformat - nMaxContext;
+            else
+                nReformat = GetInfo().GetLineStart();
         }
-        else
-        {
-            // nReformat may be wrong, if something around flys has changed:
-            // we compare the former and the new fly positions in this line
-            // if anything has changed, we carefully have to adjust the right
-            // repaint position
-            long nPOfst = 0;
-            sal_uInt16 nCnt = 0;
-            sal_uInt16 nX = 0;
-            sal_uInt16 nIdx = rThis.GetInfo().GetLineStart();
-            SwLinePortion* pPor = rCurr.GetFirstPortion();
+        // <--
 
-            while ( pPor )
-            {
-                if ( pPor->IsFlyPortion() )
-                {
-                    // compare start of fly with former start of fly
-                    if (nCnt < rFlyStarts.size() &&
-                        nX == rFlyStarts[ nCnt ] &&
-                        nIdx < nReformat
-                    )
-                        // found fix position, nothing has changed left from nX
-                        nPOfst = nX + pPor->Width();
-                    else
-                        break;
+        // Weird situation: Our line used to end with a hole portion
+        // and we delete some characters at the end of our line. We have
+        // to take care for repainting the blanks which are not anymore
+        // covered by the hole portion
+        while ( nReformat > GetInfo().GetLineStart() &&
+                CH_BLANK == GetInfo().GetChar( nReformat ) )
+            --nReformat;
 
-                    nCnt++;
-                }
-                nX = nX + pPor->Width();
-                nIdx = nIdx + pPor->GetLen();
-                pPor = pPor->GetPortion();
-            }
+        OSL_ENSURE( nReformat < GetInfo().GetIdx(), "Reformat too small for me!" );
+        SwRect aRect;
 
-            return nPOfst + rThis.GetLeftMargin();
-        }
+        // Note: GetChareRect is not const. It definitely changes the
+        // bMulti flag. We have to save and resore the old value.
+        sal_Bool bOldMulti = GetInfo().IsMulti();
+        GetCharRect( &aRect, nReformat );
+        GetInfo().SetMulti( bOldMulti );
+
+        return nFormatRepaint ? Min( aRect.Left(), nFormatRepaint ) :
+                                aRect.Left();
     }
-
-    // Determine if we need to build hidden portions
-    bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos )
+    else
     {
-        // Only if hidden text should not be shown:
-    //    if ( rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar() )
-        const bool bShowInDocView = rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar();
-        const bool bShowForPrinting = rInf.GetOpt().IsShowHiddenChar( sal_True ) && rInf.GetOpt().IsPrinting();
-        if (bShowInDocView || bShowForPrinting)
-            return false;
+        // nReformat may be wrong, if something around flys has changed:
+        // we compare the former and the new fly positions in this line
+        // if anything has changed, we carefully have to adjust the right
+        // repaint position
+        long nPOfst = 0;
+        USHORT nCnt = 0;
+        USHORT nX = 0;
+        USHORT nIdx = GetInfo().GetLineStart();
+        SwLinePortion* pPor = pCurr->GetFirstPortion();
 
-        const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
-        xub_StrLen nHiddenStart;
-        xub_StrLen nHiddenEnd;
-        rSI.GetBoundsOfHiddenRange( rPos, nHiddenStart, nHiddenEnd );
-        if ( nHiddenEnd )
+        while ( pPor )
         {
-            rPos = nHiddenEnd;
-            return true;
+            if ( pPor->IsFlyPortion() )
+            {
+                // compare start of fly with former start of fly
+                if ( pFlyStart &&
+                     nCnt < pFlyStart->Count() &&
+                     nX == (*pFlyStart)[ nCnt ] &&
+                     nIdx < nReformat
+                   )
+                    // found fix position, nothing has changed left from nX
+                    nPOfst = nX + pPor->Width();
+                else
+                    break;
+
+                nCnt++;
+            }
+            nX = nX + pPor->Width();
+            nIdx = nIdx + pPor->GetLen();
+            pPor = pPor->GetPortion();
         }
 
+        return nPOfst + GetLeftMargin();
+    }
+}
+
+bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos )
+{
+    // Only if hidden text should not be shown:
+//    if ( rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar() )
+    const bool bShowInDocView = rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar();
+    const bool bShowForPrinting = rInf.GetOpt().IsShowHiddenChar( TRUE ) && rInf.GetOpt().IsPrinting();
+    if (bShowInDocView || bShowForPrinting)
         return false;
+
+    const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
+    xub_StrLen nHiddenStart;
+    xub_StrLen nHiddenEnd;
+    rSI.GetBoundsOfHiddenRange( rPos, nHiddenStart, nHiddenEnd );
+    if ( nHiddenEnd )
+    {
+        rPos = nHiddenEnd;
+        return true;
     }
 
-} //end unnamed namespace
+    return false;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

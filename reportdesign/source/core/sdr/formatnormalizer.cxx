@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 /** === end UNO includes === **/
 
-#include <dbaccess/dbsubcomponentcontroller.hxx>
+#include <dbaccess/singledoccontroller.hxx>
 #include <unotools/syslocale.hxx>
 #include <connectivity/statementcomposer.hxx>
 #include <connectivity/dbtools.hxx>
@@ -68,20 +68,20 @@ namespace rptui
     //====================================================================
     //= FormatNormalizer
     //====================================================================
-    DBG_NAME(rpt_FormatNormalizer)
+    DBG_NAME(rpt_FormatNormalizer)    
     //--------------------------------------------------------------------
     FormatNormalizer::FormatNormalizer( const OReportModel& _rModel )
         :m_rModel( _rModel )
         ,m_xReportDefinition( )
         ,m_bFieldListDirty( true )
     {
-        DBG_CTOR(rpt_FormatNormalizer,NULL);
+        DBG_CTOR(rpt_FormatNormalizer,NULL);        
     }
 
     //--------------------------------------------------------------------
     FormatNormalizer::~FormatNormalizer()
     {
-        DBG_DTOR(rpt_FormatNormalizer,NULL);
+        DBG_DTOR(rpt_FormatNormalizer,NULL);        
     }
 
     //--------------------------------------------------------------------
@@ -127,9 +127,9 @@ namespace rptui
     //--------------------------------------------------------------------
     void FormatNormalizer::impl_onDefinitionPropertyChange( const ::rtl::OUString& _rChangedPropName )
     {
-        if  (   !_rChangedPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Command" ) )
-            &&  !_rChangedPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CommandType" ) )
-            &&  !_rChangedPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EscapeProcessing" ) )
+        if  (   !_rChangedPropName.equalsAscii( "Command" )
+            &&  !_rChangedPropName.equalsAscii( "CommandType" )
+            &&  !_rChangedPropName.equalsAscii( "EscapeProcessing" )
             )
             // nothing we're interested in
             return;
@@ -139,7 +139,7 @@ namespace rptui
     //--------------------------------------------------------------------
     void FormatNormalizer::impl_onFormattedProperttyChange( const Reference< XFormattedField >& _rxFormatted, const ::rtl::OUString& _rChangedPropName )
     {
-        if  ( !_rChangedPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DataField" ) ) )
+        if  ( !_rChangedPropName.equalsAscii( "DataField" ) )
             // nothing we're interested in
             return;
 
@@ -187,7 +187,7 @@ namespace rptui
         if ( !m_xReportDefinition.is() )
             return false;
 
-        ::dbaui::DBSubComponentController* pController( m_rModel.getController() );
+        ::dbaui::OSingleDocumentController* pController( m_rModel.getController() );
         OSL_ENSURE( pController, "FormatNormalizer::impl_ensureUpToDateFieldList_nothrow: no controller? how can *this* happen?!" );
         if ( !pController )
             return false;
@@ -247,7 +247,7 @@ namespace rptui
             if ( sDataField.getStr()[ sDataField.getLength() - 1 ] != ']' )
             {
                 // last character is not the closing brace
-                OSL_FAIL( "FormatNormalizer::impl_adjustFormatToDataFieldType_nothrow: suspicious data field value!" );
+                OSL_ENSURE( false, "FormatNormalizer::impl_adjustFormatToDataFieldType_nothrow: suspicious data field value!" );
                 return;
             }
             sDataField = sDataField.copy( sFieldPrefix.getLength(), sDataField.getLength() - sFieldPrefix.getLength() - 1 );

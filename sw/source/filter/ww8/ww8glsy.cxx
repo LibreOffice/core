@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 #include "ww8par.hxx"
 
 
-WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm, sal_uInt8 nVersion,
+WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm, BYTE nVersion,
     SvStorage *pStg)
     : pGlossary(0), rStrm(refStrm), xStg(pStg), nStrings(0)
 {
@@ -69,7 +69,7 @@ WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm, sal_uInt8 nVersion,
 bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex &rIdx)
 {
     bool bRet=false;
-    for( sal_uInt16 nCnt = pDoc->GetSpzFrmFmts()->Count(); nCnt; )
+    for( USHORT nCnt = pDoc->GetSpzFrmFmts()->Count(); nCnt; )
     {
         SwFrmFmt* pFrmFmt = (*pDoc->GetSpzFrmFmts())[ --nCnt ];
         if ( RES_FLYFRMFMT != pFrmFmt->Which() &&
@@ -120,7 +120,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
     {
         SwTxtFmtColl* pColl = pD->GetTxtCollFromPool
             (RES_POOLCOLL_STANDARD, false);
-        sal_uInt16 nGlosEntry = 0;
+        USHORT nGlosEntry = 0;
         SwCntntNode* pCNd = 0;
         do {
             SwPaM aPam( aStart );
@@ -154,7 +154,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
             // sttbfglsystyle list that this entry belongs to. Unused at the
             // moment
             const ww::bytes &rData = rExtra[nGlosEntry];
-            sal_uInt16 n = SVBT16ToShort( &(rData[2]) );
+            USHORT n = SVBT16ToShort( &(rData[2]) );
             if(n != 0xFFFF)
             {
                 rBlocks.ClearDoc();
@@ -164,9 +164,9 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
 
                 // Need to check make sure the shortcut is not already being used
                 xub_StrLen nStart = 0;
-                sal_uInt16 nCurPos = rBlocks.GetIndex( sShortcut );
+                USHORT nCurPos = rBlocks.GetIndex( sShortcut );
                 xub_StrLen nLen = sShortcut.Len();
-                while( (sal_uInt16)-1 != nCurPos )
+                while( (USHORT)-1 != nCurPos )
                 {
                     sShortcut.Erase( nLen ) +=
                         String::CreateFromInt32( ++nStart );    // add an Number to it
@@ -217,9 +217,9 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
 
         rStrm->Seek(0);
 
-        if ( 0 != (nStrings = static_cast< sal_uInt16 >(aStrings.size())))
+        if ( 0 != (nStrings = static_cast< USHORT >(aStrings.size())))
         {
-            SfxObjectShellLock xDocSh(new SwDocShell(SFX_CREATE_MODE_INTERNAL));
+            SfxObjectShellRef xDocSh(new SwDocShell(SFX_CREATE_MODE_INTERNAL));
             if (xDocSh->DoInitNew(0))
             {
                 SwDoc *pD =  ((SwDocShell*)(&xDocSh))->GetDoc();
@@ -256,17 +256,17 @@ bool WW8GlossaryFib::IsGlossaryFib()
     return fGlsy;
 }
 
-sal_uInt32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream & /* rTableStrm */,
-                                             SvStream & /* rStrm */,
+UINT32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream & /* rTableStrm */,
+                                             SvStream & /* rStrm */, 
                                              const WW8Fib &rFib)
 {
-    sal_uInt32 nGlossaryFibOffset = 0;
-    if ( rFib.fDot ) // its a template
+    UINT32 nGlossaryFibOffset = 0;
+    if ( rFib.fDot ) // its a template 
     {
         if ( rFib.pnNext  )
             nGlossaryFibOffset = ( rFib.pnNext * 512 );
     }
-    return nGlossaryFibOffset;
+    return nGlossaryFibOffset; 
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

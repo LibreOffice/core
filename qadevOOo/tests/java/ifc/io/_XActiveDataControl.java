@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -216,7 +216,7 @@ public class _XActiveDataControl extends MultiMethodTest {
             throw new StatusException(Status.failed(e.getMessage()));
         }
 
-        // check, if any error occurred
+        // check, if any error occured
         if (errorCalled) {
             Status.failed("Unexpected error");
             log.println("Unexpected error " + error);

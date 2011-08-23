@@ -181,7 +181,8 @@ sub get_productname_for_property_table($$)
 
     if ( $installer::globals::languagepack )
     {
-        my $langstring = get_english_language_string(); # Example: (English, German)
+        # my $langstring = get_language_string();   # Example (English, Deutsch)
+        my $langstring = get_english_language_string(); # New: (English, German)
         $productname = $name . " " . $version . " Language Pack" . " " . $langstring;
     }
     elsif ( $installer::globals::helppack )
@@ -381,8 +382,8 @@ sub set_important_properties
 
     if (( $allvariables->{'PRODUCTEXTENSION'} ) && ( $allvariables->{'PRODUCTEXTENSION'}  eq "Beta" ))
     {
-        # my $registryline = "WRITE_REGISTRY" . "\t" . "0" . "\n";
-        # push(@{$propertyfile}, $registryline);
+        my $registryline = "WRITE_REGISTRY" . "\t" . "0" . "\n";
+        push(@{$propertyfile}, $registryline);
         my $betainfoline = "BETAPRODUCT" . "\t" . "1" . "\n";
         push(@{$propertyfile}, $betainfoline);
     }

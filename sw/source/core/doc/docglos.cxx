@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <shellio.hxx>
 #include <pam.hxx>
 #include <swundo.hxx>
@@ -43,6 +38,11 @@
 #include <acorrect.hxx>
 #include <crsrsh.hxx>
 #include <docsh.hxx>
+
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 
 
 using namespace ::com::sun::star;
@@ -106,17 +106,19 @@ static void lcl_copyDocumentProperties(
     }
 }
 
-/* --------------------------------------------------
+/* -----------------22.07.99 11:47-------------------
     Description: inserts an AutoText block
  --------------------------------------------------*/
-sal_Bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
+BOOL SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
                             SwPaM& rPaM, SwCrsrShell* pShell )
 {
-    sal_Bool bRet = sal_False;
-    sal_uInt16 nIdx = rBlock.GetIndex( rEntry );
-    if( (sal_uInt16) -1 != nIdx )
+    BOOL bRet = FALSE;
+    USHORT nIdx = rBlock.GetIndex( rEntry );
+    if( (USHORT) -1 != nIdx )
     {
-        sal_Bool bSav_IsInsGlossary = mbInsOnlyTxtGlssry;
+        // Bug #70238# ask the TextOnly-Flag before BeginGetDoc, because
+        //				the method closed the Storage!
+        BOOL bSav_IsInsGlossary = mbInsOnlyTxtGlssry;
         mbInsOnlyTxtGlssry = rBlock.IsOnlyTextBlock( nIdx );
 
         if( rBlock.BeginGetDoc( nIdx ) )
@@ -159,7 +161,7 @@ sal_Bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
             pCntntNd = aCpyPam.GetCntntNode();
             aCpyPam.GetPoint()->nContent.Assign( pCntntNd, pCntntNd->Len() );
 
-            GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, NULL );
+            StartUndo( UNDO_INSGLOSSARY, NULL );
             SwPaM *_pStartCrsr = &rPaM, *__pStartCrsr = _pStartCrsr;
             do {
 
@@ -186,12 +188,12 @@ sal_Bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
                     pShell->SaveTblBoxCntnt( &rInsPos );
             } while( (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) !=
                         __pStartCrsr );
-            GetIDocumentUndoRedo().EndUndo( UNDO_INSGLOSSARY, NULL );
+            EndUndo( UNDO_INSGLOSSARY, NULL );
 
             UnlockExpFlds();
             if( !IsExpFldsLocked() )
                 UpdateExpFlds(NULL, true);
-            bRet = sal_True;
+            bRet = TRUE;
         }
         mbInsOnlyTxtGlssry = bSav_IsInsGlossary;
     }

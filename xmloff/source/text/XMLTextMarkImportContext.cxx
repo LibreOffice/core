@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/odffields.hxx>
+#include "xmlnmspe.hxx"
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -69,7 +69,7 @@ using rtl::OUString;
 
 
 XMLFieldParamImportContext::XMLFieldParamImportContext(
-    SvXMLImport& rImport,
+    SvXMLImport& rImport, 
     XMLTextImportHelper& rHlp,
     sal_uInt16 nPrefix,
     const OUString& rLocalName ) :
@@ -90,7 +90,7 @@ void XMLFieldParamImportContext::StartElement(const ::com::sun::star::uno::Refer
     {
         OUString sLocalName;
         sal_uInt16 nPrefix = rImport.GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr), 
                               &sLocalName );
 
         if ( (XML_NAMESPACE_FIELD == nPrefix) &&
@@ -113,7 +113,7 @@ void XMLFieldParamImportContext::StartElement(const ::com::sun::star::uno::Refer
 TYPEINIT1( XMLTextMarkImportContext, SvXMLImportContext);
 
 XMLTextMarkImportContext::XMLTextMarkImportContext(
-    SvXMLImport& rImport,
+    SvXMLImport& rImport, 
     XMLTextImportHelper& rHlp,
     sal_uInt16 nPrefix,
     const OUString& rLocalName )
@@ -128,18 +128,18 @@ enum lcl_MarkType { TypeReference, TypeReferenceStart, TypeReferenceEnd,
                     TypeFieldmark, TypeFieldmarkStart, TypeFieldmarkEnd
                   };
 
-static SvXMLEnumMapEntry const lcl_aMarkTypeMap[] =
+static SvXMLEnumMapEntry __READONLY_DATA lcl_aMarkTypeMap[] =
 {
-    { XML_REFERENCE_MARK,           TypeReference },
-    { XML_REFERENCE_MARK_START,     TypeReferenceStart },
-    { XML_REFERENCE_MARK_END,       TypeReferenceEnd },
-    { XML_BOOKMARK,                 TypeBookmark },
-    { XML_BOOKMARK_START,           TypeBookmarkStart },
-    { XML_BOOKMARK_END,             TypeBookmarkEnd },
-    { XML_FIELDMARK,                TypeFieldmark },
-    { XML_FIELDMARK_START,          TypeFieldmarkStart },
-    { XML_FIELDMARK_END,            TypeFieldmarkEnd },
-    { XML_TOKEN_INVALID,            0 },
+    { XML_REFERENCE_MARK,			TypeReference },
+    { XML_REFERENCE_MARK_START,	    TypeReferenceStart },
+    { XML_REFERENCE_MARK_END,		TypeReferenceEnd },
+    { XML_BOOKMARK,				    TypeBookmark },
+    { XML_BOOKMARK_START,			TypeBookmarkStart },
+    { XML_BOOKMARK_END,			    TypeBookmarkEnd },
+    { XML_FIELDMARK,				TypeFieldmark },
+    { XML_FIELDMARK_START,			TypeFieldmarkStart },
+    { XML_FIELDMARK_END,			TypeFieldmarkEnd },
+    { XML_TOKEN_INVALID,    		0 },
 };
 
 
@@ -187,9 +187,9 @@ void XMLTextMarkImportContext::StartElement(
 
     if (IsXMLToken(GetLocalName(), XML_FIELDMARK_START) || IsXMLToken(GetLocalName(), XML_FIELDMARK))
     {
-        if (m_sBookmarkName.getLength() == 0)
+        if (m_sBookmarkName.getLength() == 0) 
         {
-            m_sBookmarkName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown"));
+            m_sBookmarkName = ::rtl::OUString::createFromAscii("Unknown");
         }
         m_rHelper.pushFieldCtx( m_sBookmarkName, m_sFieldName );
     }
@@ -211,7 +211,7 @@ void XMLTextMarkImportContext::EndElement()
     if (m_sBookmarkName.getLength() > 0)
     {
         sal_uInt16 nTmp;
-        if (SvXMLUnitConverter::convertEnum(nTmp, GetLocalName(),
+        if (SvXMLUnitConverter::convertEnum(nTmp, GetLocalName(), 
                                             lcl_aMarkTypeMap))
         {
             switch ((lcl_MarkType)nTmp)
@@ -293,15 +293,10 @@ void XMLTextMarkImportContext::EndElement()
                             Reference<XTextCursor> xInsertionCursor =
                                 m_rHelper.GetText()->createTextCursorByRange(
                                     xEndRange);
-                            try {
                             xInsertionCursor->gotoRange(xStartRange, sal_True);
-                            } catch (uno::Exception&) {
-                                OSL_ENSURE(false,
-                                    "cannot go to end position of bookmark");
-                            }
 
-                            //DBG_ASSERT(! xInsertionCursor->isCollapsed(),
-                            //              "we want no point mark");
+                            //DBG_ASSERT(! xInsertionCursor->isCollapsed(), 
+                            // 				"we want no point mark");
                             // can't assert, because someone could
                             // create a file with subsequence
                             // start/end elements
@@ -348,19 +343,19 @@ void XMLTextMarkImportContext::EndElement()
                 }
 
                 case TypeReferenceStart:
-                case TypeReferenceEnd:
-                    OSL_FAIL("reference start/end are handled in txtparai !");
+                case TypeReferenceEnd:	
+                    DBG_ERROR("reference start/end are handled in txtparai !");
                     break;
 
                 default:
-                    OSL_FAIL("unknown mark type");
+                    DBG_ERROR("unknown mark type");
                     break;
             }
         }
     }
 }
 
-SvXMLImportContext *XMLTextMarkImportContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *XMLTextMarkImportContext::CreateChildContext( USHORT nPrefix,
                                         const ::rtl::OUString& rLocalName,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >&  )
 {
@@ -387,7 +382,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
 
         if (!xIfc.is())
         {
-            OSL_FAIL("CreateAndInsertMark: cannot create service?");
+            OSL_ENSURE(false, "CreateAndInsertMark: cannot create service?");
             return 0;
         }
 
@@ -401,7 +396,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
         {
             if (sMarkName.getLength())
             {
-                OSL_FAIL("name given, but XNamed not supported?");
+                OSL_ENSURE(false, "name given, but XNamed not supported?");
                 return 0;
             }
         }
@@ -424,7 +419,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
             }
             catch (com::sun::star::lang::IllegalArgumentException &)
             {
-                OSL_FAIL("CreateAndInsertMark: cannot insert?");
+                OSL_ENSURE(false, "CreateAndInsertMark: cannot insert?");
                 return 0;
             }
         }
@@ -444,7 +439,7 @@ sal_Bool XMLTextMarkImportContext::FindName(
     {
         OUString sLocalName;
         const sal_uInt16 nPrefix = rImport.GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr), 
                               &sLocalName );
 
         if ( (XML_NAMESPACE_TEXT == nPrefix) &&

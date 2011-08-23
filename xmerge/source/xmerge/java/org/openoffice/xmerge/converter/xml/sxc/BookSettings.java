@@ -50,8 +50,8 @@ public class BookSettings implements OfficeConstants {
     private org.w3c.dom.Document settings = null;
 
     private boolean hasColumnRowHeaders = true;
-    private String  activeSheet         = new String();
-    private Vector  worksheetSettings   = new Vector();
+    private String 	activeSheet			= new String();
+    private Vector	worksheetSettings	= new Vector();
 
     /**
      * Constructor for a <code>BookSettings</code>. Reads document settings
@@ -147,7 +147,7 @@ public class BookSettings implements OfficeConstants {
     public void writeNode(org.w3c.dom.Document settings, Node root) {
 
         this.settings = settings;
-        Element configItemMapNamed      = (Element) settings.createElement(TAG_CONFIG_ITEM_MAP_NAMED);
+        Element configItemMapNamed		= (Element) settings.createElement(TAG_CONFIG_ITEM_MAP_NAMED);
         configItemMapNamed.setAttribute(ATTRIBUTE_CONFIG_NAME, "Tables");
         for(Enumeration e = worksheetSettings.elements();e.hasMoreElements();) {
             SheetSettings s = (SheetSettings) e.nextElement();

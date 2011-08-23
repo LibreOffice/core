@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <services/license.hxx>
 #include <threadhelp/resetableguard.hxx>
@@ -42,7 +42,7 @@
 #include "classes/resource.hrc"
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -55,7 +55,7 @@
 
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <rtl/ustrbuf.hxx>
@@ -74,21 +74,21 @@
 #include <osl/time.h>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 using namespace utl;
-using namespace ::osl                           ;
-using namespace ::cppu                          ;
-using namespace ::com::sun::star::uno           ;
-using namespace ::com::sun::star::beans         ;
-using namespace ::com::sun::star::lang          ;
-using namespace ::com::sun::star::util          ;
-using namespace ::com::sun::star::frame         ;
+using namespace ::osl							;
+using namespace ::cppu							;
+using namespace ::com::sun::star::uno			;
+using namespace ::com::sun::star::beans			;
+using namespace ::com::sun::star::lang			;
+using namespace ::com::sun::star::util			;
+using namespace ::com::sun::star::frame 		;
 
 //_________________________________________________________________________________________________________________
-//  non exported const
+//	non exported const
 //_________________________________________________________________________________________________________________
 
 // license file name
@@ -102,23 +102,23 @@ static const char *szWNTLicenseExt = ".txt";
 #endif
 
 //_________________________________________________________________________________________________________________
-//  non exported definitions
+//	non exported definitions
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  constructor
+//	constructor
 //*****************************************************************************************************************
 License::License( const Reference< XMultiServiceFactory >& xFactory )
-        //  Init baseclasses first
-        //  Attention:
-        //      Don't change order of initialization!
+        //	Init baseclasses first
+        //	Attention:
+        //		Don't change order of initialization!
         //      ThreadHelpBase is a struct with a mutex as member. We can't use a mutex as member, while
-        //      we must garant right initialization and a valid value of this! First initialize
-        //      baseclasses and then members. And we need the mutex for other baseclasses !!!
+        //		we must garant right initialization and a valid value of this! First initialize
+        //		baseclasses and then members. And we need the mutex for other baseclasses !!!
         :   ThreadHelpBase  ( &Application::GetSolarMutex() )
         ,   OWeakObject     (                               )
         // Init member
@@ -128,34 +128,34 @@ License::License( const Reference< XMultiServiceFactory >& xFactory )
 }
 
 //*****************************************************************************************************************
-//  destructor
+//	destructor
 //*****************************************************************************************************************
 License::~License()
 {
 }
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 
-DEFINE_XINTERFACE_4                 (   License                        ,
-                                        OWeakObject                    ,
+DEFINE_XINTERFACE_4					(	License						   ,
+                                        OWeakObject					   ,
                                         DIRECT_INTERFACE(XTypeProvider ),
                                         DIRECT_INTERFACE(XServiceInfo  ),
-                                        DIRECT_INTERFACE(XJob          ),
+                                        DIRECT_INTERFACE(XJob	       ),
                                         DIRECT_INTERFACE(XCloseable    )
                                     )
 
-DEFINE_XTYPEPROVIDER_4              (   License ,
-                                        XTypeProvider   ,
-                                        XServiceInfo    ,
+DEFINE_XTYPEPROVIDER_4				(	License	,
+                                        XTypeProvider	,
+                                        XServiceInfo	,
                                         XJob            ,
                                         XCloseable
                                     )
 
-DEFINE_XSERVICEINFO_MULTISERVICE    (   License,
+DEFINE_XSERVICEINFO_MULTISERVICE	(	License,
                                         OWeakObject                 ,
-                                        SERVICENAME_LICENSE         ,
+                                        SERVICENAME_LICENSE			,
                                         IMPLEMENTATIONNAME_LICENSE
                                     )
 
@@ -211,10 +211,10 @@ static sal_Bool _parseDateTime(const ::rtl::OUString& aString, DateTime& aDateTi
     sal_Int32 nDateLength = 10;
     sal_Int32 nTimeLength = 8;
 
-    ::rtl::OUString aDateTimeSep(RTL_CONSTASCII_USTRINGPARAM("T"));
-    ::rtl::OUString aDateSep(RTL_CONSTASCII_USTRINGPARAM("-"));
-    ::rtl::OUString aTimeSep(RTL_CONSTASCII_USTRINGPARAM(":"));
-    ::rtl::OUString aUTCString(RTL_CONSTASCII_USTRINGPARAM("Z"));
+    ::rtl::OUString aDateTimeSep = ::rtl::OUString::createFromAscii("T");
+    ::rtl::OUString aDateSep = ::rtl::OUString::createFromAscii("-");
+    ::rtl::OUString aTimeSep = ::rtl::OUString::createFromAscii(":");
+    ::rtl::OUString aUTCString = ::rtl::OUString::createFromAscii("Z");
 
     ::rtl::OUString aDateString = aDateTimeString.copy(0, nDateLength);
     ::rtl::OUString aTimeString = aDateTimeString.copy(nDateLength+1, nTimeLength);
@@ -228,7 +228,7 @@ static sal_Bool _parseDateTime(const ::rtl::OUString& aString, DateTime& aDateTi
     sal_Int32 nMinute = aTimeString.getToken(0, ':', nIndex).toInt32();
     sal_Int32 nSecond = aTimeString.getToken(0, ':', nIndex).toInt32();
 
-    Date tmpDate((sal_uInt16)nDay, (sal_uInt16)nMonth, (sal_uInt16)nYear);
+    Date tmpDate((USHORT)nDay, (USHORT)nMonth, (USHORT)nYear);
     Time tmpTime(nHour, nMinute, nSecond);
     DateTime tmpDateTime(tmpDate, tmpTime);
     if (aString.indexOf(aUTCString) < 0)
@@ -258,24 +258,29 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             Bootstrap::locateBaseInstallation(aBaseInstallPath);
         if (aBaseLocateResult != Bootstrap::PATH_EXISTS)
         {
+            // base install noit found
+            // prepare termination
+            // m_bTerminate = sal_True;
+            // Application::PostUserEvent( STATIC_LINK( 0, License, Terminate ) );
             aRet <<= sal_False;
             return aRet;
         }
         // determine the filename of the license to show
         ::rtl::OUString  aLangString;
         ::com::sun::star::lang::Locale aLocale;
+        ::rtl::OString aMgrName = ::rtl::OString("fwe");
         AllSettings aSettings(Application::GetSettings());
         aLocale = aSettings.GetUILocale();
-        ResMgr* pResMgr = ResMgr::SearchCreateResMgr("fwe", aLocale);
+        ResMgr* pResMgr = ResMgr::SearchCreateResMgr(aMgrName, aLocale);
 
         aLangString = aLocale.Language;
         if ( aLocale.Country.getLength() != 0 )
         {
-            aLangString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+            aLangString += ::rtl::OUString::createFromAscii("-");
             aLangString += aLocale.Country;
             if ( aLocale.Variant.getLength() != 0 )
             {
-                aLangString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+                aLangString += ::rtl::OUString::createFromAscii("-");
                 aLangString += aLocale.Variant;
             }
         }
@@ -283,21 +288,21 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         ::rtl::OUString aLicensePath =
             aBaseInstallPath + ::rtl::OUString::createFromAscii(szLicensePath)
             + ::rtl::OUString::createFromAscii(szWNTLicenseName)
-            + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_"))
+            + ::rtl::OUString::createFromAscii("_")
             + aLangString
             + ::rtl::OUString::createFromAscii(szWNTLicenseExt);
 #else
         ::rtl::OUString aLicensePath =
             aBaseInstallPath + ::rtl::OUString::createFromAscii(szLicensePath)
             + ::rtl::OUString::createFromAscii(szUNXLicenseName)
-            + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_"))
+            + ::rtl::OUString::createFromAscii("_")
             + aLangString
             + ::rtl::OUString::createFromAscii(szUNXLicenseExt);
 #endif
         // check if we need to show the license at all
         // open org.openoffice.Setup/Office/ooLicenseAcceptDate
         ::rtl::OUString sConfigSrvc = SERVICENAME_CFGPROVIDER;
-        ::rtl::OUString sAccessSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess"));
+        ::rtl::OUString sAccessSrvc = ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess");
         ::rtl::OUString sReadSrvc   = SERVICENAME_CFGREADACCESS;
 
         // get configuration provider
@@ -305,18 +310,22 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         m_xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
         Sequence< Any > theArgs(1);
         NamedValue v;
-        v.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath"));
-        v.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office"));
+        v.Name = ::rtl::OUString::createFromAscii("NodePath");
+        v.Value <<= ::rtl::OUString::createFromAscii("org.openoffice.Setup/Office");
         theArgs[0] <<= v;
         Reference< XPropertySet > pset = Reference< XPropertySet >(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
 
         // if we find a date there, compare it to baseinstall license date
         ::rtl::OUString aAcceptDate;
-        if (pset->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooLicenseAcceptDate"))) >>= aAcceptDate)
+        if (pset->getPropertyValue(::rtl::OUString::createFromAscii("ooLicenseAcceptDate")) >>= aAcceptDate)
         {
             // get LicenseFileDate from base install
             ::rtl::OUString aLicenseURL = aLicensePath;
+            /*
+            if (FileBase::getFileURLFromSystemPath(aLicensePath, aLicenseURL) != FileBase::E_None)
+                return makeAny(sal_False);
+                */
             DirectoryItem aDirItem;
             if (DirectoryItem::get(aLicenseURL, aDirItem) != FileBase::E_None)
                 return makeAny(sal_False);
@@ -347,7 +356,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
 
             // write org.openoffice.Setup/ooLicenseAcceptDate
             aAcceptDate = _getCurrentDateString();
-            pset->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooLicenseAcceptDate")), makeAny(aAcceptDate));
+            pset->setPropertyValue(::rtl::OUString::createFromAscii("ooLicenseAcceptDate"), makeAny(aAcceptDate));
             Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
 
             // enable quickstarter
@@ -358,7 +367,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             aSeq[1] <<= bAutostart;
 
             Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.Quickstart"))),UNO_QUERY );
+                ::rtl::OUString::createFromAscii( "com.sun.star.office.Quickstart" )),UNO_QUERY );
             if ( xQuickstart.is() )
                 xQuickstart->initialize( aSeq );
 
@@ -366,6 +375,10 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         }
         else
         {
+            // license was not accepted
+            // prepare termination
+            // m_bTerminate = sal_True;
+            // Application::PostUserEvent( STATIC_LINK( 0, License, Terminate ) );
             aRet <<= sal_False;
         }
     }
@@ -411,7 +424,7 @@ LicenseDialog::LicenseDialog(const ::rtl::OUString & aLicensePath, ResMgr *pResM
     aArrow(this, ResId(IMG_ARROW, *pResMgr)),
     aStrAccept( ResId(LICENSE_ACCEPT, *pResMgr) ),
     aStrNotAccept( ResId(LICENSE_NOTACCEPT, *pResMgr) ),
-    bEndReached(sal_False)
+    bEndReached(FALSE)
 {
     FreeResource();
 
@@ -438,7 +451,7 @@ LicenseDialog::LicenseDialog(const ::rtl::OUString & aLicensePath, ResMgr *pResM
 
     // load license text
     File aLicenseFile(aLicensePath);
-    if ( aLicenseFile.open(osl_File_OpenFlag_Read) == FileBase::E_None)
+    if ( aLicenseFile.open(OpenFlag_Read) == FileBase::E_None)
     {
         DirectoryItem d;
         DirectoryItem::get(aLicensePath, d);
@@ -448,6 +461,7 @@ LicenseDialog::LicenseDialog(const ::rtl::OUString & aLicensePath, ResMgr *pResM
         sal_uInt64 nPosition = 0;
         sal_uInt32 nBytes = (sal_uInt32)fs.getFileSize();
         sal_Char *pBuffer = new sal_Char[nBytes];
+        // FileBase RC r = FileBase::E_None;
         while (aLicenseFile.read(pBuffer+nPosition, nBytes-nPosition, nBytesRead) == FileBase::E_None
             && nPosition + nBytesRead < nBytes)
         {
@@ -473,7 +487,7 @@ IMPL_LINK( LicenseDialog, PageDownHdl, PushButton *, EMPTYARG )
 
 IMPL_LINK( LicenseDialog, EndReachedHdl, LicenseView *, EMPTYARG )
 {
-    bEndReached = sal_True;
+    bEndReached = TRUE;
 
     EnableControls();
 
@@ -503,7 +517,7 @@ void LicenseDialog::EnableControls()
 {
     if( !bEndReached &&
         ( aLicenseML.IsEndReached() || !aLicenseML.GetText().Len() ) )
-        bEndReached = sal_True;
+        bEndReached = TRUE;
 
     if ( bEndReached )
     {
@@ -554,20 +568,20 @@ void LicenseView::ScrollDown( ScrollType eScroll )
         pScroll->DoScrollAction( eScroll );
 }
 
-sal_Bool LicenseView::IsEndReached() const
+BOOL LicenseView::IsEndReached() const
 {
-    sal_Bool bEndReached;
+    BOOL bEndReached;
 
     ExtTextView*    pView = GetTextView();
     ExtTextEngine*  pEdit = GetTextEngine();
-    sal_uLong           nHeight = pEdit->GetTextHeight();
+    ULONG           nHeight = pEdit->GetTextHeight();
     Size            aOutSize = pView->GetWindow()->GetOutputSizePixel();
     Point           aBottom( 0, aOutSize.Height() );
 
-    if ( (sal_uLong) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
-        bEndReached = sal_True;
+    if ( (ULONG) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
+        bEndReached = TRUE;
     else
-        bEndReached = sal_False;
+        bEndReached = FALSE;
 
     return bEndReached;
 }
@@ -576,8 +590,8 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.IsA( TYPE(TextHint) ) )
     {
-        sal_Bool    bLastVal = EndReached();
-        sal_uLong   nId = ((const TextHint&)rHint).GetId();
+        BOOL    bLastVal = EndReached();
+        ULONG   nId = ((const TextHint&)rHint).GetId();
 
         if ( nId == TEXT_HINT_PARAINSERTED )
         {
@@ -598,6 +612,6 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-}       //  namespace framework
+}		//	namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

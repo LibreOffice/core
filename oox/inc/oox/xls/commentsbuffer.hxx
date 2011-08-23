@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ public:
     /** Imports the anchor points in CommentPr */
     void                importAnchor( bool bFrom, sal_Int32 nWhich, const ::rtl::OUString &rChars );
     /** Imports a cell comment from the passed stream of a COMMENT record. */
-    void                importComment( SequenceInputStream& rStrm );
+    void                importComment( RecordInputStream& rStrm );
 
     /** Creates and returns a new rich-string object for the comment text. */
     RichStringRef       createText();

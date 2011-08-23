@@ -59,23 +59,28 @@
  * Styles for paragraph may include many style,include font,indent,margin,
  * shadow,line height,and so on.
  ************************************************************************/
-#ifndef     _XFPARASTYLE_HXX
-#define     _XFPARASTYLE_HXX
+/*************************************************************************
+ * Change History
+ * 2005-01-10 create this file.
+ * 2005-01-20 move some structure out of this file.
+ ************************************************************************/
+#ifndef		_XFPARASTYLE_HXX
+#define		_XFPARASTYLE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfstyle.hxx"
-#include    "xfcolor.hxx"
-#include    "xfmargins.hxx"
-#include    "xfbreaks.hxx"
-#include    "xfpadding.hxx"
-#include    "xfshadow.hxx"
-#include    "xfdropcap.hxx"
-#include    "xfstylecont.hxx"
-#include    "xflineheight.hxx"
+#include	"xfglobal.hxx"
+#include	"xfstyle.hxx"
+#include	"xfcolor.hxx"
+#include	"xfmargins.hxx"
+#include	"xfbreaks.hxx"
+#include	"xfpadding.hxx"
+#include	"xfshadow.hxx"
+#include	"xfdropcap.hxx"
+#include	"xfstylecont.hxx"
+#include	"xflineheight.hxx"
 
-#define     XFPARA_FLAG_FONT        0X00000001
-#define     XFPARA_FLAG_DROPCAP     0X00000002
-#define     XFPARA_FLAG_BACKCOLOR   0X00000004
+#define		XFPARA_FLAG_FONT		0X00000001
+#define		XFPARA_FLAG_DROPCAP		0X00000002
+#define		XFPARA_FLAG_BACKCOLOR	0X00000004
 
 class XFFont;
 class XFBorders;
@@ -98,173 +103,176 @@ public:
 
 public:
     /**
-     * @descr   Set layout for the paragraph.When such property was setted, this paragraph will
-     *          start at an new page.
+     * @descr	Set layout for the paragraph.When such property was setted, this paragraph will
+     *			start at an new page.
      */
-    void    SetMasterPage(rtl::OUString master);
+    void	SetMasterPage(rtl::OUString master);
 
     rtl::OUString GetMasterPage();
 
     /**
-     * @descr   set the paragraph defaut font.
-     * @param   font font obejct to be setted.Font object are deleted by font-factory,so
-     *          dont't delete it in the destructure function of para style.
+     * @descr	set the paragraph defaut font.
+     * @param	font font obejct to be setted.Font object are deleted by font-factory,so
+     *			dont't delete it in the destructure function of para style.
      */
-    void    SetFont(XFFont *font);
+    void	SetFont(XFFont *font);
 
     /**
-     * @descr   get the font object.
+     * @descr	get the font object.
      */
-    XFFont* GetFont(){ return m_pFont; }
+    XFFont*	GetFont(){ return m_pFont; }
 
     /**
-     * @descr   Set the indent of the paragraph.This is the indent for
+     * @descr	Set the indent of the paragraph.This is the indent for
                 the first line.
-     * @param   indent value of the first-line indent.
+     * @param	indent value of the first-line indent.
      */
-    void    SetIndent(double indent );
+    void	SetIndent(double indent );
 
     /**
-     * @descr   Set line number style.
+     * @descr	Set line number style.
      */
-    void    SetLineNumber(sal_Bool show, sal_Int32 restart=1);
+    void	SetLineNumber(sal_Bool show, sal_Int32 restart=1);
     /**
-     * @descr   Set the pading of the paragraph.This is the distance
+     * @descr	Set the pading of the paragraph.This is the distance
                 between the border and the top of the text.
-     * @param   indent value of the padding.
+     * @param	indent value of the padding.
      */
-    void    SetPadding(double left, double right = -1, double top = -1, double bottom = -1);
+    void	SetPadding(double left, double right = -1, double top = -1, double bottom = -1);
 
     /**
-     * @descr   Set the Margins of the paragraph.
-     * @param   -1:     don't change.
-                other:  set value.
+     * @descr	Set the Margins of the paragraph.
+     * @param	-1:		don't change.
+                other:	set value.
      */
-    void    SetMargins(double left, double right=-1,double top=-1, double bottom=-1);
+    void	SetMargins(double left, double right=-1,double top=-1, double bottom=-1);
 
     /**
-     * @descr   Set alignment property of the paragraph.
-     * @param   eAlign alignment type,left,right,center or justify.
+     * @descr	Set alignment property of the paragraph.
+     * @param	eAlign alignment type,left,right,center or justify.
      */
-    void    SetAlignType(enumXFAlignType eAlign);
+    void	SetAlignType(enumXFAlignType eAlign);
 
     enumXFAlignType GetAlighType();
 
 
     /**
-     * @descr   Set last line alignment property of the paragraph.
-     * @param   eAlign alignment type,left,right,center or justify.
+     * @descr	Set last line alignment property of the paragraph.
+     * @param	eAlign alignment type,left,right,center or justify.
                 eJustSingleWord If chars of the last-line'word should be
                 stretched.
      */
-    void    SetLastLineAlign(enumXFAlignType align,sal_Bool bJustSingleWord = sal_False);
+    void	SetLastLineAlign(enumXFAlignType align,sal_Bool	bJustSingleWord = sal_False);
 
     /**
-     * @descr   Set the shadow of the paragraph.there is 4 postions, you
+     * @descr	Set the shadow of the paragraph.there is 4 postions, you
                 can find it in the definition of enumShadowPos.
-     * @param   pos
-     * @param   offset the distance between the paragraph border and the shadow.
-     * @param   color color to fill the shadow.
+     * @param	pos
+     * @param	offset the distance between the paragraph border and the shadow.
+     * @param	color color to fill the shadow.
      */
-    void    SetShadow(enumXFShadowPos pos, double offset, XFColor& color);
+    void	SetShadow(enumXFShadowPos pos, double offset, XFColor& color);
 
     /**
-     * @descr   The borders is complex,so you have to create one before use.
+     * @descr	The borders is complex,so you have to create one before use.
                 Very few paragraphs will readly have borders property,this way
                 we can save much memory.
-     * @param   pBorders borders of the paragraph,please reference the XFBorders.
+     * @param	pBorders borders of the paragraph,please reference the XFBorders.
      */
-    void    SetBorders(XFBorders *pBorders);
+    void	SetBorders(XFBorders *pBorders);
 
     /**
-     * @descr   Set drop caption of the paragraph.
-     * @param   nLength number of chars to be droped.
-     * @param   nLines line of which the droped chars will occupy.
+     * @descr	Set drop caption of the paragraph.
+     * @param	nLength number of chars to be droped.
+     * @param	nLines line of which the droped chars will occupy.
      */
-    void    SetDropCap(sal_Int16 nLength = 1,sal_Int16 nLines = 3,double fDistance = 0);
+    void	SetDropCap(sal_Int16 nLength = 1,sal_Int16 nLines = 3,double fDistance = 0);
 
     /**
-     * @descr   Set line height of the paragraph.
-     * @param   type type of line height,fixed,space,percent or cm.
-     * @param   value value of the line height
+     * @descr	Set line height of the paragraph.
+     * @param	type type of line height,fixed,space,percent or cm.
+     * @param	value value of the line height
      */
-    void    SetLineHeight(enumLHType type, double value);
+    void	SetLineHeight(enumLHType type, double value);
 
     /**
-     * @descr   Set background color of the paragraph.
-     * @param   color value of the back color.
+     * @descr	Set background color of the paragraph.
+     * @param	color value of the back color.
      */
-    void    SetBackColor(XFColor& color);
+    void	SetBackColor(XFColor& color);
 
     /**
-     * @descr   Set background image of the paragraph.
-     * @param   image the background image to set.
+     * @descr	Set background image of the paragraph.
+     * @param	image the background image to set.
      */
-    void    SetBackImage(XFBGImage *image);
+    void	SetBackImage(XFBGImage *image);
 
     /**
-     * descr    You can only set one break property for every para style object.
+     * descr	You can only set one break property for every para style object.
      */
-    void    SetBreaks(enumXFBreaks breaks);
+    void	SetBreaks(enumXFBreaks breaks);
 
     /**
-     * @descr   For paragraph numbering.
+     * @descr	For paragraph numbering.
      */
-    void    SetPageNumber(sal_Int32 num);
+    void	SetPageNumber(sal_Int32 num);
 
     /**
-     * @descr   Add a tab style.
+     * @descr	Add a tab style.
      */
-    void    AddTabStyle(enumXFTab type, double len, sal_Unicode leader = '*', sal_Unicode delimiter='.');
+    void	AddTabStyle(enumXFTab type, double len, sal_Unicode leader = '*', sal_Unicode delimiter='.');
 
     /**
-     * @descr   for para style copy operator,sometimes you may need to override tab styles.
+     * @descr	for para style copy operator,sometimes you may need to override tab styles.
      */
-    void    ClearTabStyles();
+    void	ClearTabStyles();
 
     /**
-     * descr    set the paragraph to be in the same page with the next paragraph.
-     *          If that can't be insured,the paragraph will start with a new page.
+     * descr	set the paragraph to be in the same page with the next paragraph.
+     *			If that can't be insured,the paragraph will start with a new page.
      */
-    void    SetKeepWithNext(sal_Bool keepWithNext);
+    void	SetKeepWithNext(sal_Bool keepWithNext);
 
     sal_uInt32 GetFlag(){ return m_nFlag; }
 
-    XFMargins& GetMargins(){return m_aMargin;}
+    /**
+     * @descr	return margins.
+     */
+    XFMargins GetMargins(){return m_aMargin;}
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle	GetStyleFamily();
 
     virtual sal_Bool Equal(IXFStyle *pStyle);
 
-    virtual void    ToXml(IXFStream *strm);
+    virtual void	ToXml(IXFStream *strm);
 
     void SetNumberRight(sal_Bool bFlag){m_bNumberRight = bFlag;}
     sal_Bool GetNumberRight(){return m_bNumberRight;}
 
 protected:
-    rtl::OUString   m_strMasterPage;
-    enumXFAlignType m_eAlignType;
-    enumXFAlignType m_eLastLineAlign;
-    sal_Bool        m_bJustSingleWord;
-    sal_Bool        m_bKeepWithNext;
+    rtl::OUString	m_strMasterPage;
+    enumXFAlignType	m_eAlignType;
+    enumXFAlignType	m_eLastLineAlign;
+    sal_Bool		m_bJustSingleWord;
+    sal_Bool		m_bKeepWithNext;
 
-    double      m_fTextIndent;
-    XFColor     m_aBackColor;
-    XFMargins   m_aMargin;
-    XFPadding   m_aPadding;
+    double		m_fTextIndent;
+    XFColor		m_aBackColor;
+    XFMargins	m_aMargin;
+    XFPadding	m_aPadding;
     XFStyleContainer m_aTabs;
-    XFFont      *m_pFont;
-    XFShadow    m_aShadow;
-    XFBorders   *m_pBorders;
-    XFBGImage   *m_pBGImage;
-    XFDropcap   m_aDropcap;
+    XFFont		*m_pFont;
+    XFShadow	m_aShadow;
+    XFBorders	*m_pBorders;
+    XFBGImage	*m_pBGImage;
+    XFDropcap	m_aDropcap;
     XFLineHeight m_aLineHeight;
-    XFBreaks    m_aBreaks;
-    sal_Int32   m_nPageNumber;
-    sal_Bool    m_bNumberLines;
-    sal_Int32   m_nLineNumberRestart;
+    XFBreaks	m_aBreaks;
+    sal_Int32	m_nPageNumber;
+    sal_Bool	m_bNumberLines;
+    sal_Int32	m_nLineNumberRestart;
 
-    sal_uInt32  m_nFlag;
+    sal_uInt32	m_nFlag;
     sal_Bool m_bNumberRight;
 };
 
@@ -273,18 +281,18 @@ inline void XFParaStyle::SetMasterPage(rtl::OUString master)
     m_strMasterPage = master;
 }
 
-inline void XFParaStyle::SetBreaks(enumXFBreaks breaks)
+inline void	XFParaStyle::SetBreaks(enumXFBreaks breaks)
 {
     m_aBreaks.SetBreakType(breaks);
 }
 
-inline void XFParaStyle::SetPageNumber(sal_Int32 num)
+inline void	XFParaStyle::SetPageNumber(sal_Int32 num)
 {
     assert(num>0);
     m_nPageNumber = num;
 }
 
-inline void XFParaStyle::SetLineNumber(sal_Bool show, sal_Int32 restart)
+inline void	XFParaStyle::SetLineNumber(sal_Bool show, sal_Int32 restart)
 {
     m_bNumberLines = show;
     m_nLineNumberRestart = restart;
@@ -307,12 +315,12 @@ inline void XFParaStyle::SetPadding(double left, double right, double top, doubl
         m_aPadding.SetBottom(bottom);
 }
 
-inline void XFParaStyle::SetAlignType(enumXFAlignType eAlign)
+inline void	XFParaStyle::SetAlignType(enumXFAlignType eAlign)
 {
     m_eAlignType = eAlign;
 }
 
-inline void XFParaStyle::SetLastLineAlign(enumXFAlignType align, sal_Bool   bJustSingleWord)
+inline void XFParaStyle::SetLastLineAlign(enumXFAlignType align, sal_Bool	bJustSingleWord)
 {
     m_eLastLineAlign = align;
     m_bJustSingleWord = bJustSingleWord;
@@ -328,7 +336,7 @@ inline void XFParaStyle::ClearTabStyles()
     m_aTabs.Reset();
 }
 
-inline  rtl::OUString XFParaStyle::GetMasterPage()
+inline 	rtl::OUString XFParaStyle::GetMasterPage()
 {
     return m_strMasterPage;
 }
@@ -343,8 +351,8 @@ class XFDefaultParaStyle : public XFStyle
 public:
     XFDefaultParaStyle();
     void SetTabDistance(double len);
-    enumXFStyle GetStyleFamily();
-    virtual void    ToXml(IXFStream *pStrm);
+    enumXFStyle	GetStyleFamily();
+    virtual void	ToXml(IXFStream *pStrm);
 private:
     double m_fTabDistance;
 };

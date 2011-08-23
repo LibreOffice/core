@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,6 +39,11 @@
 #include <database.hxx>
 #include <tools/fsys.hxx>
 
+/*************************************************************************
+|*
+|*	  Syntaxbeschreibung
+|*
+*************************************************************************/
 char const * SyntaxStrings[] = {
 "basic-type:",
 "\tvoid|        char|       int|        float|      double|",
@@ -86,6 +91,7 @@ char const * SyntaxStrings[] = {
 "\t\tAccelConfig, MenuConfig, StatusBarConfig, ToolbarConfig",
 "\t\tAutomation*",
 "\t\tAutoUpdate",
+// "\t\tCachable*, Volatile",
 "\t\tContainer",
 "\t\tDefault        = Identifier",
 "\t\tExecMethod     = Identifier",
@@ -128,24 +134,47 @@ char CommandLineSyntax[] =
 "-help, ?                   @<file> response file\n"
 " <filenames>\n";
 
+/*************************************************************************
+|*
+|*	  Init()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 15.12.94
+|*	  Letzte Aenderung	MM 15.12.94
+|*
+*************************************************************************/
 void Init()
 {
     if( !IDLAPP->pHashTable )
-        IDLAPP->pHashTable      = new SvStringHashTable( 2801 );
+        IDLAPP->pHashTable		= new SvStringHashTable( 2801 );
     if( !IDLAPP->pGlobalNames )
-        IDLAPP->pGlobalNames    = new SvGlobalHashNames();
+        IDLAPP->pGlobalNames	= new SvGlobalHashNames();
 }
 
+/*************************************************************************
+|*
+|*	  DeInit()
+|*
+|*	  Beschreibung
+|*
+*************************************************************************/
 void DeInit()
 {
     delete IDLAPP;
 }
 
-sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
+/*************************************************************************
+|*
+|*	  DeInit()
+|*
+|*	  Beschreibung
+|*
+*************************************************************************/
+BOOL ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
 {
-    for( size_t n = 0; n < rCommand.aInFileList.size(); ++n )
+    for( USHORT n = 0; n < rCommand.aInFileList.Count(); n++ )
     {
-        String aFileName ( *rCommand.aInFileList[ n ] );
+        String aFileName ( *rCommand.aInFileList.GetObject( n ) );
         SvFileStream aStm( aFileName, STREAM_STD_READ | STREAM_NOCREATE );
         if( aStm.GetError() == SVSTREAM_OK )
         {
@@ -163,43 +192,46 @@ sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
                         aStr = "error during load, file ";
                     aStr += ByteString( aFileName, RTL_TEXTENCODING_UTF8 );
                     fprintf( stderr, "%s\n", aStr.GetBuffer() );
-                    return sal_False;
+                    return FALSE;
                 }
             }
             else
             {
                 SvTokenStream aTokStm( aStm, aFileName );
-                if( !pDataBase->ReadSvIdl( aTokStm, sal_False, rCommand.aPath ) )
-                    return sal_False;
+                if( !pDataBase->ReadSvIdl( aTokStm, FALSE, rCommand.aPath ) )
+                    return FALSE;
             }
         }
         else
-        {
-            const ByteString aStr( aFileName, RTL_TEXTENCODING_UTF8 );
-            fprintf( stderr, "unable to read input file: %s\n", aStr.GetBuffer() );
-            return sal_False;
-        }
+            return FALSE;
     }
-    return sal_True;
+    return TRUE;
 }
 
-static sal_Bool ResponseFile( StringList * pList, int argc, char ** argv )
+/*************************************************************************
+|*
+|*	  SvCommand::SvCommand()
+|*
+|*	  Beschreibung
+|*
+*************************************************************************/
+static BOOL ResponseFile( StringList * pList, int argc, char ** argv )
 {
-    // program name
-    pList->push_back( new String( String::CreateFromAscii(*argv) ) );
+    // Programmname
+    pList->Insert( new String( String::CreateFromAscii(*argv) ), LIST_APPEND );
     for( int i = 1; i < argc; i++ )
     {
         if( '@' == **(argv +i) )
-        { // when @, then response file
+        { // wenn @, dann Response-Datei
             SvFileStream aStm( String::CreateFromAscii((*(argv +i)) +1), STREAM_STD_READ | STREAM_NOCREATE );
             if( aStm.GetError() != SVSTREAM_OK )
-                return sal_False;
+                return FALSE;
 
             ByteString aStr;
             while( aStm.ReadLine( aStr ) )
             {
-                sal_uInt16 n = 0;
-                sal_uInt16 nPos = 1;
+                USHORT n = 0;
+                USHORT nPos = 1;
                 while( n != nPos )
                 {
                     while( aStr.GetChar(n) && isspace( aStr.GetChar(n) ) )
@@ -208,25 +240,30 @@ static sal_Bool ResponseFile( StringList * pList, int argc, char ** argv )
                     while( aStr.GetChar(n) && !isspace( aStr.GetChar(n) ) )
                         n++;
                     if( n != nPos )
-                        pList->push_back( new String( String::CreateFromAscii( aStr.Copy( nPos, n - nPos ).GetBuffer() ) ) );
+                        pList->Insert( new String( String::CreateFromAscii( aStr.Copy( nPos, n - nPos ).GetBuffer() ) ), LIST_APPEND );
                 }
             }
         }
         else if( argv[ i ] )
-            pList->push_back( new String( String::CreateFromAscii( argv[ i ] ) ) );
+            pList->Insert( new String( String::CreateFromAscii( argv[ i ] ) ), LIST_APPEND );
     }
-    return sal_True;
+    return TRUE;
 }
 
+/*************************************************************************
+|*	  SvCommand::SvCommand()
+|*
+|*	  Beschreibung
+*************************************************************************/
 SvCommand::SvCommand( int argc, char ** argv )
     : nVerbosity(1), nFlags( 0 )
 {
     StringList aList;
 
     if( ResponseFile( &aList, argc, argv ) )
-    for( size_t i = 1; i < aList.size(); i++ )
+    for( ULONG i = 1; i < aList.Count(); i++ )
     {
-        String aParam( *aList[ i ] );
+        String aParam( *aList.GetObject( i ) );
         sal_Unicode aFirstChar( aParam.GetChar(0) );
         if( '-' == aFirstChar )
         {
@@ -238,58 +275,67 @@ SvCommand::SvCommand( int argc, char ** argv )
                 aFirstChar = aParam.GetChar(0);
                 String aName( aParam.Copy( 1 ) );
                 if( 's' == aFirstChar )
-                { // name of slot output
+                { // Name der Slot-Ausgabe
                     aSlotMapFile = aName;
                 }
                 else if( 'l' == aFirstChar )
-                { // name of listing
+                { // Name der Listing
                     aListFile = aName;
                 }
                 else if( 'i' == aFirstChar )
-                {
+                { // Name der Item-Datei
+//                    aSfxItemFile = aName;
                 }
                 else if( 'o' == aFirstChar )
-                {
+                { // Name der ODL-Datei
+//                    aODLFile = aName;
                 }
                 else if( 'd' == aFirstChar )
-                { // name of data set file
+                { // Name der Datenbasis-Datei
                     aDataBaseFile = aName;
                 }
                 else if( 'D' == aFirstChar )
-                {
+                { // Name der Docu-Datei f"ur das API
+//                    aDocuFile = aName;
                 }
                 else if( 'C' == aFirstChar )
-                {
+                { // Name der cxx-Datei
+//                    aCxxFile = aName;
                 }
                 else if( 'H' == aFirstChar )
-                {
+                { // Name der hxx-Datei
+//                    aHxxFile = aName;
                 }
                 else if( 'c' == aFirstChar )
-                {
+                { // Name der C-Header-Datei
+//                    aCSourceFile = aName;
                 }
                 else if( 'h' == aFirstChar )
-                {
+                { // Name der C-Header-Datei
+//                    aCHeaderFile = aName;
                 }
                 else if( 't' == aFirstChar )
-                {
+                { // Name der Info-Datei
+//                    aCallingFile = aName;
                 }
                 else if( 'm' == aFirstChar )
-                { // name of info file
+                { // Name der Info-Datei
                     aTargetFile = aName;
                 }
                 else if( 'r' == aFirstChar )
-                {
+                { // Name der Resource-Datei
+//                    aSrcFile = aName;
                 }
                 else if( 'z' == aFirstChar )
-                { // name of HelpId file
+                { // Name der HelpId-Datei
                     aHelpIdFile = aName;
                 }
                 else if( 'y' == aFirstChar )
-                { // name of CSV file
+                { // Name der CSV-Datei
                     aCSVFile = aName;
                 }
                 else if( 'x' == aFirstChar )
-                { // name of IDL file for the CSV file
+                { // Name der IDL-Datei fuer die CSV-Datei
                     aExportFile = aName;
                 }
                 else
@@ -302,7 +348,7 @@ SvCommand::SvCommand( int argc, char ** argv )
                 }
             }
             else if( aParam.EqualsIgnoreCaseAscii( "help" ) || aParam.EqualsIgnoreCaseAscii( "?" ) )
-            { // help
+            { // Hilfe
                 printf( "%s", CommandLineSyntax );
             }
             else if( aParam.EqualsIgnoreCaseAscii( "quiet" ) )
@@ -314,23 +360,23 @@ SvCommand::SvCommand( int argc, char ** argv )
                 nVerbosity = 2;
             }
             else if( aParam.EqualsIgnoreCaseAscii( "syntax" ) )
-            { // help
+            { // Hilfe
                 int j = 0;
                 while(SyntaxStrings[j])
                     printf("%s\n",SyntaxStrings[j++]);
             }
             else if( aParam.EqualsIgnoreCaseAscii( "i", 0, 1 ) )
-            { // define include paths
+            { // Include-Pfade definieren
                 String aName( aParam.Copy( 1 ) );
                 if( aPath.Len() )
                     aPath += DirEntry::GetSearchDelimiter();
                 aPath += aName;
             }
             else if( aParam.EqualsIgnoreCaseAscii( "rsc", 0, 3 ) )
-            { // first line in *.srs file
-                if( aList[ i + 1 ] )
+            { // erste Zeile im *.srs File
+                if( aList.GetObject( i +1 ) )
                 {
-                    aSrsLine = ByteString( *aList[ i +1 ], RTL_TEXTENCODING_UTF8 );
+                    aSrsLine = ByteString( *aList.GetObject( i +1 ), RTL_TEXTENCODING_UTF8 );
                     i++;
                 }
             }
@@ -346,7 +392,7 @@ SvCommand::SvCommand( int argc, char ** argv )
         }
         else
         {
-            aInFileList.push_back( new String( aParam ) );
+            aInFileList.Insert( new String( aParam ), LIST_APPEND );
         }
     }
     else
@@ -354,12 +400,15 @@ SvCommand::SvCommand( int argc, char ** argv )
         printf( "%s", CommandLineSyntax );
     }
 
-    for ( size_t i = 0, n = aList.size(); i < n; ++i )
-        delete aList[ i ];
-    aList.clear();
+    String * pStr = aList.First();
+    while( pStr )
+    {
+        delete pStr;
+        pStr = aList.Next();
+    }
 
     ByteString aInc( getenv( "INCLUDE" ) );
-    // append include environment variable
+    // Include Environmentvariable anhaengen
     if( aInc.Len() )
     {
         if( aPath.Len() )
@@ -368,12 +417,19 @@ SvCommand::SvCommand( int argc, char ** argv )
     }
 }
 
+/*************************************************************************
+|*
+|*	  SvCommand::~SvCommand()
+|*
+|*	  Beschreibung
+|*
+*************************************************************************/
 SvCommand::~SvCommand()
 {
-    // release ByteString list
-    for ( size_t i = 0, n = aInFileList.size(); i < n; ++i )
-        delete aInFileList[ i ];
-    aInFileList.clear();
+    // ByteString Liste freigeben
+    String * pStr;
+    while( NULL != (pStr = aInFileList.Remove()) )
+        delete pStr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

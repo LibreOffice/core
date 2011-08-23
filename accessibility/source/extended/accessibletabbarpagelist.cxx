@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -428,7 +428,7 @@ namespace accessibility
 
     ::rtl::OUString AccessibleTabBarPageList::getImplementationName() throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.AccessibleTabBarPageList" ));
+        return ::rtl::OUString::createFromAscii( "com.sun.star.comp.svtools.AccessibleTabBarPageList" );
     }
 
     // -----------------------------------------------------------------------------
@@ -449,7 +449,7 @@ namespace accessibility
     Sequence< ::rtl::OUString > AccessibleTabBarPageList::getSupportedServiceNames() throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aNames(1);
-        aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AccessibleTabBarPageList" ));
+        aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleTabBarPageList" );
         return aNames;
     }
 
@@ -489,7 +489,7 @@ namespace accessibility
         {
             if ( m_pTabBar )
             {
-                sal_uInt16 nPageId = m_pTabBar->GetPageId( (sal_uInt16)i );
+                sal_uInt16 nPageId = m_pTabBar->GetPageId( (USHORT)i );
 
                 xChild = new AccessibleTabBarPage( m_pTabBar, nPageId, this );
 
@@ -534,7 +534,7 @@ namespace accessibility
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString AccessibleTabBarPageList::getAccessibleDescription( ) throw (RuntimeException)
+    ::rtl::OUString AccessibleTabBarPageList::getAccessibleDescription(	) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
@@ -631,7 +631,7 @@ namespace accessibility
 
     // -----------------------------------------------------------------------------
 
-    sal_Int32 AccessibleTabBarPageList::getForeground(  ) throw (RuntimeException)
+    sal_Int32 AccessibleTabBarPageList::getForeground(	) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
@@ -716,7 +716,7 @@ namespace accessibility
 
         if ( m_pTabBar )
         {
-            m_pTabBar->SetCurPageId( m_pTabBar->GetPageId( (sal_uInt16)nChildIndex ) );
+            m_pTabBar->SetCurPageId( m_pTabBar->GetPageId( (USHORT)nChildIndex ) );
             m_pTabBar->Update();
             m_pTabBar->ActivatePage();
             m_pTabBar->Select();
@@ -733,7 +733,7 @@ namespace accessibility
             throw IndexOutOfBoundsException();
 
         sal_Bool bSelected = sal_False;
-        if ( m_pTabBar && m_pTabBar->GetCurPageId() == m_pTabBar->GetPageId( (sal_uInt16)nChildIndex ) )
+        if ( m_pTabBar && m_pTabBar->GetCurPageId() == m_pTabBar->GetPageId( (USHORT)nChildIndex ) )
             bSelected = sal_True;
 
         return bSelected;
@@ -802,7 +802,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}   // namespace accessibility
+}	// namespace accessibility
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_SERVICES_PATHSETTINGS_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/threadhelpbase.hxx>
@@ -43,7 +43,7 @@
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -52,7 +52,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -120,7 +120,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
 
             /// indicates real single pathes, which uses WritePath property only
             sal_Bool bIsSinglePath;
-
+        
             /// simple handling of finalized/mandatory states ... => we know one state READONLY only .-)
             sal_Bool bIsReadonly;
     };
@@ -158,9 +158,6 @@ class PathSettings : public  css::lang::XTypeProvider             ,
 
         /** provides access to the new configuration schema. */
         css::uno::Reference< css::container::XNameAccess > m_xCfgNew;
-
-        /** helper to listen for configuration changes without ownership cycle problems */
-        css::uno::Reference< css::util::XChangesListener > m_xCfgNewListener;
 
         ::cppu::OPropertyArrayHelper* m_pPropHelp;
 
@@ -275,7 +272,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
                                            const PathSettings::PathInfo* pPathNew);
 
 
-        //  OPropertySetHelper
+        //	OPropertySetHelper
         virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        (       css::uno::Any&  aConvertedValue ,
                                                                                                                      css::uno::Any&  aOldValue       ,
                                                                                                                      sal_Int32       nHandle         ,

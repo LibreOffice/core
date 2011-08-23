@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,33 +56,33 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
 {
     SwTOXSortTabBases aSortArr;
 
-    void    UpdateMarks( const SwTOXInternational& rIntl,
+    void 	UpdateMarks( const SwTOXInternational& rIntl,
                             const SwTxtNode* pOwnChapterNode );
-    void    UpdateOutline( const SwTxtNode* pOwnChapterNode );
-    void    UpdateTemplate( const SwTxtNode* pOwnChapterNode );
-    void    UpdateCntnt( SwTOXElement eType,
+    void 	UpdateOutline( const SwTxtNode* pOwnChapterNode );
+    void 	UpdateTemplate( const SwTxtNode* pOwnChapterNode );
+    void 	UpdateCntnt( SwTOXElement eType,
                             const SwTxtNode* pOwnChapterNode );
-    void    UpdateTable( const SwTxtNode* pOwnChapterNode );
-    void    UpdateSequence( const SwTxtNode* pOwnChapterNode );
-    void    UpdateAuthorities( const SwTOXInternational& rIntl );
-    void    UpdateAll();
+    void 	UpdateTable( const SwTxtNode* pOwnChapterNode );
+    void 	UpdateSequence( const SwTxtNode* pOwnChapterNode );
+    void 	UpdateAuthorities( const SwTOXInternational& rIntl );
+    void	UpdateAll();
 
     // Sortiert einfuegen ins Array fuer die Generierung
-    void    InsertSorted(SwTOXSortTabBase* pBase);
+    void	InsertSorted(SwTOXSortTabBase* pBase);
 
     // Alpha-Trennzeichen bei der Generierung einfuegen
-    void    InsertAlphaDelimitter( const SwTOXInternational& rIntl );
+    void	InsertAlphaDelimitter( const SwTOXInternational& rIntl );
 
     // Textrumpf generieren
     // OD 18.03.2003 #106329# - add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc>
-    void GenerateText( sal_uInt16 nArrayIdx,
-                       sal_uInt16 nCount,
+    void GenerateText( USHORT nArrayIdx,
+                       USHORT nCount,
                        SvStringsDtor&,
                        const sal_uInt32   _nTOXSectNdIdx,
                        const SwPageDesc*  _pDefaultPageDesc );
 
     // Seitennummerplatzhalter gegen aktuelle Nummern austauschen
-    void    _UpdatePageNum( SwTxtNode* pNd,
+    void	_UpdatePageNum( SwTxtNode* pNd,
                             const SvUShorts& rNums,
                             const SvPtrarr &rDescs,
                             const SvUShorts* pMainEntryNums,
@@ -90,11 +90,11 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
 
     // Bereich fuer Stichwort einfuegen suchen
     Range GetKeyRange( const String& rStr, const String& rStrReading,
-                       const SwTOXSortTabBase& rNew, sal_uInt16 nLevel,
+                       const SwTOXSortTabBase& rNew, USHORT nLevel,
                        const Range& rRange );
 
     // returne die TextCollection ueber den Namen / aus Format-Pool
-    SwTxtFmtColl* GetTxtFmtColl( sal_uInt16 nLevel );
+    SwTxtFmtColl* GetTxtFmtColl( USHORT nLevel );
 
 public:
     SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFmt & rFmt);
@@ -105,12 +105,14 @@ public:
     // a table-of-content. Default value: false
     void Update( const SfxItemSet* pAttr = 0,
                  const bool        _bNewTOX = false ); // Formatieren
-    void UpdatePageNum();               // Seitennummern einfuegen
-    TYPEINFO();                         // fuers rtti
+    void UpdatePageNum();   			// Seitennummern einfuegen
+    TYPEINFO();							// fuers rtti
 
-    sal_Bool SetPosAtStartEnd( SwPosition& rPos, sal_Bool bAtStart = sal_True ) const;
+    BOOL SetPosAtStartEnd( SwPosition& rPos, BOOL bAtStart = TRUE ) const;
 };
+/* -----------------02.09.99 07:52-------------------
 
+ --------------------------------------------------*/
 struct SwDefTOXBase_Impl
 {
     SwTOXBase* pContBase;
@@ -143,6 +145,6 @@ struct SwDefTOXBase_Impl
 
 };
 
-#endif  // _DOCTXM_HXX
+#endif	// _DOCTXM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -229,7 +229,7 @@ const void* IcuFontFromServerFont::getFontTable( LETag nICUTableTag ) const
     pTagName[3] = (char)(nICUTableTag);
     pTagName[4] = 0;
 
-    sal_uLong nLength;
+    ULONG nLength;
     const unsigned char* pBuffer = mrServerFont.GetTable( pTagName, &nLength );
 #ifdef VERBOSE_DEBUG
     fprintf(stderr,"IcuGetTable(\"%s\") => %p\n", pTagName, pBuffer);
@@ -336,7 +336,7 @@ void IcuFontFromServerFont::getGlyphAdvance( LEGlyphID nGlyphIndex,
 // -----------------------------------------------------------------------
 
 le_bool IcuFontFromServerFont::getGlyphPoint( LEGlyphID,
-    le_int32
+    le_int32 
 #if OSL_DEBUG_LEVEL > 1
 pointNumber
 #endif
@@ -389,9 +389,6 @@ static bool lcl_CharIsJoiner(sal_Unicode cChar)
 {
     return ((cChar == 0x200C) || (cChar == 0x200D));
 }
-
-//See https://bugs.freedesktop.org/show_bug.cgi?id=31016
-#define ARABIC_BANDAID
 
 bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rArgs )
 {
@@ -537,40 +534,12 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
             const GlyphMetric& rGM = rFont.GetGlyphMetric( nGlyphIndex );
             int nGlyphWidth = rGM.GetCharWidth();
-            int nNewWidth = nGlyphWidth;
             if( nGlyphWidth <= 0 )
                 bDiacritic |= true;
             // #i99367# force all diacritics to zero width
             // TODO: we need mnOrigWidth/mnLogicWidth/mnNewWidth
             else if( bDiacritic )
-                nGlyphWidth = nNewWidth = 0;
-            else
-            {
-                // Hack, find next +ve width glyph and calculate current
-                // glyph width by substracting the two posituons
-                const IcuPosition* pNextPos = pPos+1;
-                for ( int j = i + 1; j <= nRawRunGlyphCount; ++j, ++pNextPos )
-                {
-                    if ( j == nRawRunGlyphCount )
-                    {
-                        nNewWidth = pNextPos->fX - pPos->fX;
-                        break;
-                    }
-
-                    LEGlyphID nNextGlyphIndex = pIcuGlyphs[j];
-                    if( (nNextGlyphIndex == ICU_MARKED_GLYPH)
-                    ||  (nNextGlyphIndex == ICU_DELETED_GLYPH) )
-                        continue;
-
-                    const GlyphMetric& rNextGM = rFont.GetGlyphMetric( nNextGlyphIndex );
-                    int nNextGlyphWidth = rNextGM.GetCharWidth();
-                    if ( nNextGlyphWidth > 0 )
-                    {
-                        nNewWidth = pNextPos->fX - pPos->fX;
-                        break;
-                    }
-                }
-            }
+                nGlyphWidth = 0;
 
             // heuristic to detect glyph clusters
             bool bInCluster = true;
@@ -583,13 +552,13 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             {
                 // left-to-right case
                 if( nClusterMinPos > nCharPos )
-                    nClusterMinPos = nCharPos;      // extend cluster
+                    nClusterMinPos = nCharPos;		// extend cluster
                 else if( nCharPos <= nClusterMaxPos )
-                    /*NOTHING*/;                    // inside cluster
+                    /*NOTHING*/;					// inside cluster
                 else if( bDiacritic )
-                    nClusterMaxPos = nCharPos;      // add diacritic to cluster
+                    nClusterMaxPos = nCharPos;		// add diacritic to cluster
                 else {
-                    nClusterMinPos = nClusterMaxPos = nCharPos; // new cluster
+                    nClusterMinPos = nClusterMaxPos = nCharPos;	// new cluster
                     bInCluster = false;
                 }
             }
@@ -597,12 +566,12 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             {
                 // right-to-left case
                 if( nClusterMaxPos < nCharPos )
-                    nClusterMaxPos = nCharPos;      // extend cluster
+                    nClusterMaxPos = nCharPos;		// extend cluster
                 else if( nCharPos >= nClusterMinPos )
-                    /*NOTHING*/;                    // inside cluster
+                    /*NOTHING*/;					// inside cluster
                 else if( bDiacritic )
                 {
-                    nClusterMinPos = nCharPos;      // ICU often has [diacritic* baseglyph*]
+                    nClusterMinPos = nCharPos;		// ICU often has [diacritic* baseglyph*]
                     if( bClusterStart ) {
                         nClusterMaxPos = nCharPos;
                         bInCluster = false;
@@ -610,7 +579,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
                 }
                 else
                 {
-                    nClusterMinPos = nClusterMaxPos = nCharPos; // new cluster
+                    nClusterMinPos = nClusterMaxPos = nCharPos;	// new cluster
                     bInCluster = !bClusterStart;
                 }
             }
@@ -624,10 +593,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
                 nGlyphFlags |= GlyphItem::IS_DIACRITIC;
 
             // add resulting glyph item to layout
-            GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
-#ifdef ARABIC_BANDAID
-            aGI.mnNewWidth = nNewWidth;
-#endif
+            const GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
             rLayout.AppendGlyph( aGI );
             ++nFilteredRunGlyphCount;
             nLastCharPos = nCharPos;

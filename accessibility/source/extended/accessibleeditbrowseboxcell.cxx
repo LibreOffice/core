@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ namespace accessibility
     {
         if ( !rBHelper.bDisposed )
         {
-            acquire();  // to prevent duplicate dtor calls
+            acquire();	// to prevent duplicate dtor calls
             dispose();
         }
 
@@ -123,7 +123,7 @@ namespace accessibility
     }
 
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL EditBrowseBoxTableCell::getAccessibleDescription() throw ( RuntimeException )
+    ::rtl::OUString SAL_CALL EditBrowseBoxTableCell::getAccessibleDescription()	throw ( RuntimeException )
     {
         SolarMethodGuard aGuard( *this );
         return m_xInnerContext->getAccessibleDescription();
@@ -149,7 +149,7 @@ namespace accessibility
     }
 
     // -----------------------------------------------------------------------------
-    Reference< XAccessibleRelationSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleRelationSet() throw ( RuntimeException )
+    Reference< XAccessibleRelationSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleRelationSet()	throw ( RuntimeException )
     {
         SolarMethodGuard aGuard( *this );
         return OAccessibleContextWrapperHelper::getAccessibleRelationSet( );
@@ -259,7 +259,7 @@ namespace accessibility
             catch( const Exception& e )
             {
                 (void)e;
-                OSL_FAIL( "EditBrowseBoxTableCellAccess::disposing: caught an exception while disposing the context!" );
+                OSL_ENSURE( false, "EditBrowseBoxTableCellAccess::disposing: caught an exception while disposing the context!" );
             }
         }
 

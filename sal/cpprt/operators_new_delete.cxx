@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ struct AllocatorTraits
         p = static_cast<char*>(p) - sizeof(signature_type);
         if (memcmp (p, m_signature, sizeof(signature_type)) != 0)
         {
-            OSL_FAIL("operator delete mismatch");
+            OSL_ENSURE(0, "operator delete mismatch");
         }
 #endif  /* OSL_DEBUG_LEVEL */
         return p;

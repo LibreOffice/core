@@ -64,10 +64,7 @@ sub write_ddf_file_header
     push(@{$ddffileref} ,$oneline);
     $oneline = ".Set Compress=ON\n";
     push(@{$ddffileref} ,$oneline);
-# The window size for LZX compression
-# CompressionMemory=15 | 16 | ... | 21
-# Reference: http://msdn.microsoft.com/en-us/library/bb417343.aspx
-    $oneline = ".Set CompressionMemory=$installer::globals::cabfilecompressionlevel\n";
+    $oneline = ".Set CompressionLevel=$installer::globals::cabfilecompressionlevel\n";
     push(@{$ddffileref} ,$oneline);
     $oneline = ".Set Cabinet=ON\n";
     push(@{$ddffileref} ,$oneline);
@@ -788,16 +785,11 @@ sub get_codepage_for_sis
 
 sub get_template_for_sis
 {
-    my ( $language, $allvariables ) = @_;
+    my ( $language ) = @_;
 
     my $windowslanguage = installer::windows::language::get_windows_language($language);
 
-    my $architecture = "Intel";
-
-    # Adding 256, if this is a 64 bit installation set.
-    if (( $allvariables->{'64BITPRODUCT'} ) && ( $allvariables->{'64BITPRODUCT'} == 1 )) { $architecture = "x64"; }
-
-    my $value = "\"" . $architecture . ";" . $windowslanguage;  # adding the Windows language
+    my $value = "\"Intel;" . $windowslanguage;  # adding the Windows language
 
     $value = $value . "\"";                     # adding ending '"'
 
@@ -935,7 +927,7 @@ sub write_summary_into_msi_database
 
     my $msiversion = get_msiversion_for_sis();
     my $codepage = get_codepage_for_sis($language);
-    my $template = get_template_for_sis($language, $allvariableshashref);
+    my $template = get_template_for_sis($language);
     my $guid = get_packagecode_for_sis();
     my $title = get_title_for_sis($sislanguage,$languagefile, "OOO_SIS_TITLE");
     my $author = get_author_for_sis();
@@ -1013,9 +1005,9 @@ sub create_transforms
         my $infoline = "Systemcall: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
 
-        # Problem: msitran.exe in version 4.0 always returns "1", even if no failure occurred.
+        # Problem: msitran.exe in version 4.0 always returns "1", even if no failure occured.
         # Therefore it has to be checked, if this is version 4.0. If yes, if the mst file
-        # exists and if it is larger than 0 bytes. If this is true, then no error occurred.
+        # exists and if it is larger than 0 bytes. If this is true, then no error occured.
         # File Version of msitran.exe: 4.0.6000.16384 has checksum: "b66190a70145a57773ec769e16777b29".
         # Same for msitran.exe from wntmsci12: "aa25d3445b94ffde8ef0c1efb77a56b8"
 
@@ -1060,13 +1052,13 @@ sub create_transforms
                     }
                     else
                     {
-                        $infoline = "Filesize indicates that an error occurred.\n";
+                        $infoline = "Filesize indicates that an error occured.\n";
                         push( @installer::globals::logfileinfo, $infoline);
                     }
                 }
                 else
                 {
-                    $infoline = "File $transformfile does not exist -> An error occurred.\n";
+                    $infoline = "File $transformfile does not exist -> An error occured.\n";
                     push( @installer::globals::logfileinfo, $infoline);
                 }
             }
@@ -1479,6 +1471,7 @@ sub get_guid_list
 
     # "-c" for uppercase output
 
+    # my $systemcall = "$uuidgen -n$number -c |";
     my $systemcall = "$uuidgen -n$number |";
     open (UUIDGEN, "$systemcall" ) or die("uuidgen is missing.");
     my @uuidlist = <UUIDGEN>;
@@ -1521,6 +1514,7 @@ sub calculate_guid
     my $digest = $md5->hexdigest;
     $digest = uc($digest);
 
+    # my $id = pack("A32", $digest);
     my ($first, $second, $third, $fourth, $fifth) = unpack ('A8 A4 A4 A4 A12', $digest);
     $guid = "$first-$second-$third-$fourth-$fifth";
 
@@ -1594,6 +1588,8 @@ sub set_uuid_into_component_table
 
     my $infoline = "";
     my $counter = 0;
+    # my $componentfile = installer::files::read_file($installer::globals::componentfilename);
+    # my $componenthash = fill_component_hash($componentfile);
 
     for ( my $i = 3; $i <= $#{$componenttable}; $i++ )  # ignoring the first three lines
     {
@@ -1602,6 +1598,13 @@ sub set_uuid_into_component_table
         if ( $oneline =~ /^\s*(\S+?)\t/ ) { $componentname = $1; }
 
         my $uuid = "";
+
+    #   if ( $componenthash->{$componentname} )
+    #   {
+    #       $uuid = $componenthash->{$componentname};
+    #   }
+    #   else
+    #   {
 
             if ( exists($installer::globals::calculated_component_guids{$componentname}))
             {
@@ -1626,109 +1629,43 @@ sub set_uuid_into_component_table
                 if ( exists($installer::globals::allcalculated_guids{$uuid}) ) { installer::exiter::exit_program("ERROR: \"$uuid\" was already created before!", "set_uuid_into_component_table"); }
                 $installer::globals::allcalculated_guids{$uuid} = 1;
                 $installer::globals::calculated_component_guids{$componentname} = $uuid;
+
+                # Setting new uuid
+                # $componenthash->{$componentname} = $uuid;
+
+                # Setting flag
+                # $installer::globals::created_new_component_guid = 1;  # this is very important!
             }
+    #   }
 
         ${$componenttable}[$i] =~ s/COMPONENTGUID/$uuid/;
     }
 
     installer::files::save_file($componenttablename, $componenttable);
-}
 
-#########################################################################
-# Adding final 64 properties into msi database, if required.
-# RegLocator : +16 in type column to search in 64 bit registry.
-# All conditions: "VersionNT" -> "VersionNT64" (several tables).
-# Already done: "+256" in Attributes column of table "Component".
-# Still following: Setting "x64" instead of "Intel" in Summary
-# Information Stream of msi database in "get_template_for_sis".
-#########################################################################
-
-sub prepare_64bit_database
-{
-    my ($basedir, $allvariables) = @_;
-
-    my $infoline = "";
-
-    if (( $allvariables->{'64BITPRODUCT'} ) && ( $allvariables->{'64BITPRODUCT'} == 1 ))
-    {
-        # 1. Beginning with table "RegLocat.idt". Adding "16" to the type.
-
-        my $reglocatfile = "";
-        my $reglocatfilename = $basedir . $installer::globals::separator . "RegLocat.idt";
-
-        if ( -f $reglocatfilename )
-        {
-            my $saving_required = 0;
-            $reglocatfile = installer::files::read_file($reglocatfilename);
-
-            for ( my $i = 3; $i <= $#{$reglocatfile}; $i++ )    # ignoring the first three lines
-            {
-                my $oneline = ${$reglocatfile}[$i];
-
-                if ( $oneline =~ /^\s*\#/ ) { next; }   # this is a comment line
-                if ( $oneline =~ /^\s*$/ ) { next; }
-
-                if ( $oneline =~ /^\s*(.*?)\t(.*?)\t(.*?)\t(.*?)\t(\d+)\s*$/ )
-                {
-                    # Syntax: Signature_ Root Key Name Type
-                    my $sig = $1;
-                    my $root = $2;
-                    my $key = $3;
-                    my $name = $4;
-                    my $type = $5;
-
-                    $type = $type + 16;
-
-                    my $newline = $sig . "\t" . $root . "\t" . $key . "\t" . $name . "\t" . $type . "\n";
-                    ${$reglocatfile}[$i] = $newline;
-
-                    $saving_required = 1;
-                }
-            }
-
-            if ( $saving_required )
-            {
-                # Saving the files
-                installer::files::save_file($reglocatfilename ,$reglocatfile);
-                $infoline = "Making idt file 64 bit conform: $reglocatfilename\n";
-                push(@installer::globals::logfileinfo, $infoline);
-            }
-        }
-
-        # 2. Replacing all occurences of "VersionNT" by "VersionNT64"
-
-        my @versionnt_files = ("Componen.idt", "InstallE.idt", "InstallU.idt", "LaunchCo.idt");
-
-        foreach my $onefile ( @versionnt_files )
-        {
-            my $fullfilename = $basedir . $installer::globals::separator . $onefile;
-
-            if ( -f $fullfilename )
-            {
-                my $saving_required = 0;
-                $filecontent = installer::files::read_file($fullfilename);
-
-                for ( my $i = 3; $i <= $#{$filecontent}; $i++ )     # ignoring the first three lines
-                {
-                    my $oneline = ${$filecontent}[$i];
-
-                    if ( $oneline =~ /\bVersionNT\b/ )
-                    {
-                        ${$filecontent}[$i] =~ s/\bVersionNT\b/VersionNT64/g;
-                        $saving_required = 1;
-                    }
-                }
-
-                if ( $saving_required )
-                {
-                    # Saving the files
-                    installer::files::save_file($fullfilename ,$filecontent);
-                    $infoline = "Making idt file 64 bit conform: $fullfilename\n";
-                    push(@installer::globals::logfileinfo, $infoline);
-                }
-            }
-        }
-    }
+#   if ( $installer::globals::created_new_component_guid )
+#   {
+#       # create new component file!
+#       $componentfile = create_new_component_file($componenthash);
+#       installer::worker::sort_array($componentfile);
+#
+#       # To avoid conflict the components file cannot be saved at the same place
+#       # All important data have to be saved in the directory: $installer::globals::infodirectory
+#       my $localcomponentfilename = $installer::globals::componentfilename;
+#       installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$localcomponentfilename);
+#       $localcomponentfilename = $installer::globals::infodirectory . $installer::globals::separator . $localcomponentfilename;
+#       installer::files::save_file($localcomponentfilename, $componentfile);
+#
+#       # installer::files::save_file($installer::globals::componentfilename, $componentfile);  # version using new file in solver
+#
+#       $infoline = "COMPONENTCODES: Created $counter new GUIDs for components ! \n";
+#       push( @installer::globals::logfileinfo, $infoline);
+#   }
+#   else
+#   {
+#       $infoline = "SUCCESS COMPONENTCODES: All component codes exist! \n";
+#       push( @installer::globals::logfileinfo, $infoline);
+#   }
 
 }
 
@@ -1759,6 +1696,7 @@ sub include_cabs_into_msi
     $msifilename = installer::converter::make_path_conform($msifilename);
 
     # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+    $idtdirbase =~ s/\//\\\\/g;
     $msifilename =~ s/\//\\\\/g;
     $extraslash = "\\";
 
@@ -1844,6 +1782,8 @@ sub execute_packaging
 
         installer::logger::print_message( "... makecab.exe ($callscounter/$allmakecabcalls) ... \n" );
 
+        # my $returnvalue = system($systemcall);
+
         for ( my $n = 1; $n <= $maxmakecabcalls; $n++ )
         {
             my @ddfoutput = ();
@@ -1871,6 +1811,7 @@ sub execute_packaging
                 }
 
                 push( @installer::globals::logfileinfo, $infoline);
+                # for ( my $j = 0; $j <= $#ddfoutput; $j++ ) { push( @installer::globals::logfileinfo, "$ddfoutput[$j]"); }
 
                 for ( my $m = 0; $m <= $#ddfoutput; $m++ )
                 {
@@ -1887,6 +1828,7 @@ sub execute_packaging
             }
             else
             {
+                # installer::logger::print_message( "Success (Try $n): \"$systemcall\"\n" );
                 $infoline = "Success (Try $n): $systemcall";
                 push( @installer::globals::logfileinfo, $infoline);
                 last;
@@ -1989,6 +1931,7 @@ sub set_global_code_variables
         $installer::globals::upgradecode = installer::windows::idtglobal::get_language_string_from_language_block($codeblock, $onelanguage, "");
     }
 
+    # if (( $installer::globals::productcode eq "" ) && ( ! $isopensource )) { installer::exiter::exit_program("ERROR: ProductCode for language $onelanguage not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
     if ( $installer::globals::upgradecode eq "" ) { installer::exiter::exit_program("ERROR: UpgradeCode not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
 
     $infoline = "Setting ProductCode to: $installer::globals::productcode \n";
@@ -2181,8 +2124,8 @@ sub read_saved_mappings
     {
         my @errorlines = ();
         my $errorstring = "";
-        my $error_occurred = 0;
-        my $file_error_occurred = 0;
+        my $error_occured = 0;
+        my $file_error_occured = 0;
         my $dir_error = 0;
 
         my $idtdir = $installer::globals::previous_idt_dir;
@@ -2206,28 +2149,28 @@ sub read_saved_mappings
 
             if ( exists($installer::globals::savedmapping{"$2/$5"}))
             {
-                if ( ! $file_error_occurred )
+                if ( ! $file_error_occured )
                 {
                     $errorstring = "\nErrors in $idtfile: \n";
                     push(@errorlines, $errorstring);
                 }
                 $errorstring = "Duplicate savedmapping{" . "$2/$5}\n";
                 push(@errorlines, $errorstring);
-                $error_occurred = 1;
-                $file_error_occurred = 1;
+                $error_occured = 1;
+                $file_error_occured = 1;
             }
 
             if ( exists($installer::globals::savedrevmapping{$lc1}))
             {
-                if ( ! $file_error_occurred )
+                if ( ! $file_error_occured )
                 {
                     $errorstring = "\nErrors in $idtfile: \n";
                     push(@errorlines, $errorstring);
                 }
                 $errorstring = "Duplicate savedrevmapping{" . "$lc1}\n";
                 push(@errorlines, $errorstring);
-                $error_occurred = 1;
-                $file_error_occurred = 1;
+                $error_occured = 1;
+                $file_error_occured = 1;
             }
 
             my $shortname = $4 || '';
@@ -2241,15 +2184,15 @@ sub read_saved_mappings
 
             if (( $shortname ne '' ) && ( index($shortname, '~') > 0 ) && ( exists($installer::globals::savedrev83mapping{$shortname}) ))
             {
-                if ( ! $file_error_occurred )
+                if ( ! $file_error_occured )
                 {
                     $errorstring = "\nErrors in $idtfile: \n";
                     push(@errorlines, $errorstring);
                 }
                 $errorstring = "Duplicate savedrev83mapping{" . "$shortname}\n";
                 push(@errorlines, $errorstring);
-                $error_occurred = 1;
-                $file_error_occurred = 1;
+                $error_occured = 1;
+                $file_error_occured = 1;
             }
 
             $installer::globals::savedmapping{"$2/$5"} = "$1;$shortname";
@@ -2281,15 +2224,15 @@ sub read_saved_mappings
 
             if ( exists($installer::globals::saved83dirmapping{$1}) )
             {
-                if ( ! $dir_error_occurred )
+                if ( ! $dir_error_occured )
                 {
                     $errorstring = "\nErrors in $idtfile: \n";
                     push(@errorlines, $errorstring);
                 }
                 $errorstring = "Duplicate saved83dirmapping{" . "$1}\n";
                 push(@errorlines, $errorstring);
-                $error_occurred = 1;
-                $dir_error_occurred = 1;
+                $error_occured = 1;
+                $dir_error_occured = 1;
             }
 
             $installer::globals::saved83dirmapping{$1} = $4;
@@ -2301,7 +2244,7 @@ sub read_saved_mappings
 
         # Analyzing errors
 
-        if ( $error_occurred )
+        if ( $error_occured )
         {
             for ( my $i = 0; $i <= $#errorlines; $i++ )
             {
@@ -2311,6 +2254,7 @@ sub read_saved_mappings
             installer::exiter::exit_program("ERROR: Duplicate entries in saved mappings!", "read_saved_mappings");
         }
     } else {
+        # push( @installer::globals::globallogfileinfo, "WARNING: Windows patch shall be prepared, but PREVIOUS_IDT_DIR is not set!\n" );
         installer::exiter::exit_program("ERROR: Windows patch shall be prepared, but environment variable PREVIOUS_IDT_DIR is not set!", "read_saved_mappings");
     }
 

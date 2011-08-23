@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,13 +61,13 @@ SvLinkSourceTimer::SvLinkSourceTimer( SvLinkSource * pOwn )
 
 void SvLinkSourceTimer::Timeout()
 {
-    // Secure against beeing destroyed in Handler
+    // sicher gegen zerstoeren im Handler
     SvLinkSourceRef aAdv( pOwner );
     pOwner->SendDataChanged();
 }
 
 static void StartTimer( SvLinkSourceTimer ** ppTimer, SvLinkSource * pOwner,
-                        sal_uIntPtr nTimeout )
+                        ULONG nTimeout )
 {
     if( !*ppTimer )
     {
@@ -80,19 +80,19 @@ static void StartTimer( SvLinkSourceTimer ** ppTimer, SvLinkSource * pOwner,
 
 struct SvLinkSource_Entry_Impl
 {
-    SvBaseLinkRef       xSink;
-    String              aDataMimeType;
-    sal_uInt16              nAdviseModes;
-    sal_Bool                bIsDataSink;
+    SvBaseLinkRef		xSink;
+    String				aDataMimeType;
+    USHORT				nAdviseModes;
+    BOOL 				bIsDataSink;
 
     SvLinkSource_Entry_Impl( SvBaseLink* pLink, const String& rMimeType,
-                                sal_uInt16 nAdvMode )
+                                USHORT nAdvMode )
         : xSink( pLink ), aDataMimeType( rMimeType ),
-            nAdviseModes( nAdvMode ), bIsDataSink( sal_True )
+            nAdviseModes( nAdvMode ), bIsDataSink( TRUE )
     {}
 
     SvLinkSource_Entry_Impl( SvBaseLink* pLink )
-        : xSink( pLink ), nAdviseModes( 0 ), bIsDataSink( sal_False )
+        : xSink( pLink ), nAdviseModes( 0 ), bIsDataSink( FALSE )
     {}
 
     ~SvLinkSource_Entry_Impl();
@@ -110,7 +110,7 @@ class SvLinkSource_EntryIter_Impl
 {
     SvLinkSource_Array_Impl aArr;
     const SvLinkSource_Array_Impl& rOrigArr;
-    sal_uInt16 nPos;
+    USHORT nPos;
 public:
     SvLinkSource_EntryIter_Impl( const SvLinkSource_Array_Impl& rArr );
     ~SvLinkSource_EntryIter_Impl();
@@ -166,9 +166,9 @@ SvLinkSource_Entry_Impl* SvLinkSource_EntryIter_Impl::Next()
 struct SvLinkSource_Impl
 {
     SvLinkSource_Array_Impl aArr;
-    String              aDataMimeType;
-    SvLinkSourceTimer * pTimer;
-    sal_uIntPtr             nTimeout;
+    String				aDataMimeType;
+    SvLinkSourceTimer *	pTimer;
+    ULONG				nTimeout;
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream>
     m_xInputStreamToLoadFrom;
     sal_Bool m_bIsReadOnly;
@@ -222,12 +222,12 @@ void  SvLinkSource::Closed()
             p->xSink->Closed();
 }
 
-sal_uIntPtr SvLinkSource::GetUpdateTimeout() const
+ULONG SvLinkSource::GetUpdateTimeout() const
 {
     return pImpl->nTimeout;
 }
 
-void SvLinkSource::SetUpdateTimeout( sal_uIntPtr nTimeout )
+void SvLinkSource::SetUpdateTimeout( ULONG nTimeout )
 {
     pImpl->nTimeout = nTimeout;
     if( pImpl->pTimer )
@@ -247,7 +247,7 @@ void SvLinkSource::SendDataChanged()
 
             Any aVal;
             if( ( p->nAdviseModes & ADVISEMODE_NODATA ) ||
-                GetData( aVal, sDataMimeType, sal_True ) )
+                GetData( aVal, sDataMimeType, TRUE ) )
             {
                 p->xSink->DataChanged( sDataMimeType, aVal );
 
@@ -256,7 +256,7 @@ void SvLinkSource::SendDataChanged()
 
                 if( p->nAdviseModes & ADVISEMODE_ONLYONCE )
                 {
-                    sal_uInt16 nFndPos = pImpl->aArr.GetPos( p );
+                    USHORT nFndPos = pImpl->aArr.GetPos( p );
                     if( USHRT_MAX != nFndPos )
                         pImpl->aArr.DeleteAndDestroy( nFndPos );
                 }
@@ -275,7 +275,7 @@ void SvLinkSource::SendDataChanged()
 void SvLinkSource::NotifyDataChanged()
 {
     if( pImpl->nTimeout )
-        StartTimer( &pImpl->pTimer, this, pImpl->nTimeout ); // New timeout
+        StartTimer( &pImpl->pTimer, this, pImpl->nTimeout ); // Timeout neu
     else
     {
         SvLinkSource_EntryIter_Impl aIter( pImpl->aArr );
@@ -284,7 +284,7 @@ void SvLinkSource::NotifyDataChanged()
             {
                 Any aVal;
                 if( ( p->nAdviseModes & ADVISEMODE_NODATA ) ||
-                    GetData( aVal, p->aDataMimeType, sal_True ) )
+                    GetData( aVal, p->aDataMimeType, TRUE ) )
                 {
                     p->xSink->DataChanged( p->aDataMimeType, aVal );
 
@@ -293,7 +293,7 @@ void SvLinkSource::NotifyDataChanged()
 
                     if( p->nAdviseModes & ADVISEMODE_ONLYONCE )
                     {
-                        sal_uInt16 nFndPos = pImpl->aArr.GetPos( p );
+                        USHORT nFndPos = pImpl->aArr.GetPos( p );
                         if( USHRT_MAX != nFndPos )
                             pImpl->aArr.DeleteAndDestroy( nFndPos );
                     }
@@ -314,10 +314,10 @@ void SvLinkSource::DataChanged( const String & rMimeType,
                                 const ::com::sun::star::uno::Any & rVal )
 {
     if( pImpl->nTimeout && !rVal.hasValue() )
-    {   // only when no data was included
+    {   // nur wenn keine Daten mitgegeben wurden
         // fire all data to the sink, independent of the requested format
         pImpl->aDataMimeType = rMimeType;
-        StartTimer( &pImpl->pTimer, this, pImpl->nTimeout ); // New timeout
+        StartTimer( &pImpl->pTimer, this, pImpl->nTimeout ); // Timeout neu
     }
     else
     {
@@ -333,7 +333,7 @@ void SvLinkSource::DataChanged( const String & rMimeType,
 
                 if( p->nAdviseModes & ADVISEMODE_ONLYONCE )
                 {
-                    sal_uInt16 nFndPos = pImpl->aArr.GetPos( p );
+                    USHORT nFndPos = pImpl->aArr.GetPos( p );
                     if( USHRT_MAX != nFndPos )
                         pImpl->aArr.DeleteAndDestroy( nFndPos );
                 }
@@ -351,7 +351,7 @@ void SvLinkSource::DataChanged( const String & rMimeType,
 
 // only one link is correct
 void SvLinkSource::AddDataAdvise( SvBaseLink * pLink, const String& rMimeType,
-                                    sal_uInt16 nAdviseModes )
+                                    USHORT nAdviseModes )
 {
     SvLinkSource_Entry_ImplPtr pNew = new SvLinkSource_Entry_Impl(
                     pLink, rMimeType, nAdviseModes );
@@ -364,7 +364,7 @@ void SvLinkSource::RemoveAllDataAdvise( SvBaseLink * pLink )
     for( SvLinkSource_Entry_ImplPtr p = aIter.Curr(); p; p = aIter.Next() )
         if( p->bIsDataSink && &p->xSink == pLink )
         {
-            sal_uInt16 nFndPos = pImpl->aArr.GetPos( p );
+            USHORT nFndPos = pImpl->aArr.GetPos( p );
             if( USHRT_MAX != nFndPos )
                 pImpl->aArr.DeleteAndDestroy( nFndPos );
         }
@@ -383,46 +383,46 @@ void SvLinkSource::RemoveConnectAdvise( SvBaseLink * pLink )
     for( SvLinkSource_Entry_ImplPtr p = aIter.Curr(); p; p = aIter.Next() )
         if( !p->bIsDataSink && &p->xSink == pLink )
         {
-            sal_uInt16 nFndPos = pImpl->aArr.GetPos( p );
+            USHORT nFndPos = pImpl->aArr.GetPos( p );
             if( USHRT_MAX != nFndPos )
                 pImpl->aArr.DeleteAndDestroy( nFndPos );
         }
 }
 
-sal_Bool SvLinkSource::HasDataLinks( const SvBaseLink* pLink ) const
+BOOL SvLinkSource::HasDataLinks( const SvBaseLink* pLink ) const
 {
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
     const SvLinkSource_Entry_Impl* p;
-    for( sal_uInt16 n = 0, nEnd = pImpl->aArr.Count(); n < nEnd; ++n )
+    for( USHORT n = 0, nEnd = pImpl->aArr.Count(); n < nEnd; ++n )
         if( ( p = pImpl->aArr[ n ] )->bIsDataSink &&
             ( !pLink || &p->xSink == pLink ) )
         {
-            bRet = sal_True;
+            bRet = TRUE;
             break;
         }
     return bRet;
 }
 
-// sal_True => waitinmg for data
-sal_Bool SvLinkSource::IsPending() const
+// TRUE => waitinmg for data
+BOOL SvLinkSource::IsPending() const
 {
-    return sal_False;
+    return FALSE;
 }
 
-// sal_True => data complete loaded
-sal_Bool SvLinkSource::IsDataComplete() const
+// TRUE => data complete loaded
+BOOL SvLinkSource::IsDataComplete() const
 {
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool SvLinkSource::Connect( SvBaseLink* )
+BOOL SvLinkSource::Connect( SvBaseLink* )
 {
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool SvLinkSource::GetData( ::com::sun::star::uno::Any &, const String &, sal_Bool )
+BOOL SvLinkSource::GetData( ::com::sun::star::uno::Any &, const String &, BOOL )
 {
-    return sal_False;
+    return FALSE;
 }
 
 void SvLinkSource::Edit( Window *, SvBaseLink *, const Link& )

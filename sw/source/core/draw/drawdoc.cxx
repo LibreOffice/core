@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,11 +65,11 @@ const String GetPalettePath()
 
 SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
     FmFormModel( ::GetPalettePath(), &pD->GetAttrPool(),
-                 pD->GetDocShell(), sal_True ),
+                 pD->GetDocShell(), TRUE ),
     pDoc( pD )
 {
     SetScaleUnit( MAP_TWIP );
-    SetSwapGraphics( sal_True );
+    SetSwapGraphics( TRUE );
 
     SwDocShell* pDocSh = pDoc->GetDocShell();
     if ( pDocSh )
@@ -99,7 +99,7 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
     SfxItemPool* pSdrPool = pD->GetAttrPool().GetSecondaryPool();
     if( pSdrPool )
     {
-        const sal_uInt16 aWhichRanges[] =
+        const USHORT aWhichRanges[] =
             {
                 RES_CHRATR_BEGIN, RES_CHRATR_END,
                 RES_PARATR_BEGIN, RES_PARATR_END,
@@ -107,11 +107,11 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
             };
 
         SfxItemPool& rDocPool = pD->GetAttrPool();
-        sal_uInt16 nEdtWhich, nSlotId;
+        USHORT nEdtWhich, nSlotId;
         const SfxPoolItem* pItem;
-        for( const sal_uInt16* pRangeArr = aWhichRanges;
+        for( const USHORT* pRangeArr = aWhichRanges;
             *pRangeArr; pRangeArr += 2 )
-            for( sal_uInt16 nW = *pRangeArr, nEnd = *(pRangeArr+1);
+            for( USHORT nW = *pRangeArr, nEnd = *(pRangeArr+1);
                     nW < nEnd; ++nW )
                 if( 0 != (pItem = rDocPool.GetPoolDefaultItem( nW )) &&
                     0 != (nSlotId = rDocPool.GetSlotId( nW ) ) &&
@@ -127,8 +127,8 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
     }
 
     SetForbiddenCharsTable( pD->getForbiddenCharacterTable() );
-    // Implementation for asian compression
-    SetCharCompressType( static_cast<sal_uInt16>(pD->getCharacterCompressionType() ));
+    // #87795# Implementation for asian compression
+    SetCharCompressType( static_cast<UINT16>(pD->getCharacterCompressionType() ));
 }
 
 /*************************************************************************
@@ -142,7 +142,9 @@ SwDrawDocument::~SwDrawDocument()
 {
     Broadcast(SdrHint(HINT_MODELCLEARED));
 
+    // #116168#
     ClearModel(sal_True);
+    //Clear();
 }
 
 /*************************************************************************
@@ -191,7 +193,7 @@ SvStream* SwDrawDocument::GetDocumentStream( SdrDocumentStreamInfo& rInfo ) cons
                     pRet = utl::UcbStreamHelper::CreateStream( xStream );
                     if( pRet )
                     {
-                        rInfo.mbDeleteAfterUse = sal_True;
+                        rInfo.mbDeleteAfterUse = TRUE;
                         rInfo.mxStorageRef = xPictureStorage;
                     }
                 }
@@ -210,6 +212,7 @@ SdrLayerID SwDrawDocument::GetControlExportLayerId( const SdrObject & ) const
     return (SdrLayerID)pDoc->GetHeavenId();
 }
 
+// --> OD 2006-03-01 #b6382898#
 uno::Reference< uno::XInterface > SwDrawDocument::createUnoModel()
 {
 
@@ -224,11 +227,13 @@ uno::Reference< uno::XInterface > SwDrawDocument::createUnoModel()
     }
     catch( uno::RuntimeException& )
     {
-        OSL_FAIL( "<SwDrawDocument::createUnoModel()> - could *not* retrieve model at <SwDocShell>" );
+        OSL_ENSURE( false,
+                "<SwDrawDocument::createUnoModel()> - could *not* retrieve model at <SwDocShell>" );
     }
 
     return xModel;
 }
 
+// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

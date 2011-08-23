@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,7 +114,7 @@ public:
     // !!! Diese Methode nur fuer Leute, die ganz genau wissen was sie tun !!!
 
     // #110094# This should not be needed (!)
-    void SetObjOrdNumsDirty()                           { bObjOrdNumsDirty=sal_True; }
+    void SetObjOrdNumsDirty()                           { bObjOrdNumsDirty=TRUE; }
     // pModel, pPage, pUpList und pOwnerObj werden Zuweisungeoperator nicht veraendert!
     void operator=(const SdrObjList& rSrcList);
     void CopyObjects(const SdrObjList& rSrcList);
@@ -133,23 +133,23 @@ public:
     // Neuberechnung der Objekt-Ordnungsnummern
     void     RecalcObjOrdNums();
     bool IsObjOrdNumsDirty() const        { return bObjOrdNumsDirty; }
-    virtual void NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND
+    virtual void NbcInsertObject(SdrObject* pObj, ULONG nPos=CONTAINER_APPEND
                                  , const SdrInsertReason* pReason=NULL
                                                                       );
-    virtual void InsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND
+    virtual void InsertObject(SdrObject* pObj, ULONG nPos=CONTAINER_APPEND
                               , const SdrInsertReason* pReason=NULL
                                                                      );
     // aus Liste entfernen ohne delete
-    virtual SdrObject* NbcRemoveObject(sal_uIntPtr nObjNum);
-    virtual SdrObject* RemoveObject(sal_uIntPtr nObjNum);
+    virtual SdrObject* NbcRemoveObject(ULONG nObjNum);
+    virtual SdrObject* RemoveObject(ULONG nObjNum);
     // Vorhandenes Objekt durch ein anderes ersetzen.
     // Wie Remove&Insert jedoch performanter, da die Ordnungsnummern
     // nicht Dirty gesetzt werden muessen.
-    virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, sal_uIntPtr nObjNum);
-    virtual SdrObject* ReplaceObject(SdrObject* pNewObj, sal_uIntPtr nObjNum);
+    virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, ULONG nObjNum);
+    virtual SdrObject* ReplaceObject(SdrObject* pNewObj, ULONG nObjNum);
     // Die Z-Order eines Objekts veraendern
-    virtual SdrObject* NbcSetObjectOrdNum(sal_uIntPtr nOldObjNum, sal_uIntPtr nNewObjNum);
-    virtual SdrObject* SetObjectOrdNum(sal_uIntPtr nOldObjNum, sal_uIntPtr nNewObjNum);
+    virtual SdrObject* NbcSetObjectOrdNum(ULONG nOldObjNum, ULONG nNewObjNum);
+    virtual SdrObject* SetObjectOrdNum(ULONG nOldObjNum, ULONG nNewObjNum);
 
     virtual void SetRectsDirty();
 
@@ -166,22 +166,22 @@ public:
     // Die Vorlagenattribute der Zeichenobjekte in harte Attribute verwandeln.
     void BurnInStyleSheetAttributes();
 
-    sal_uIntPtr      GetObjCount() const;
-    SdrObject* GetObj(sal_uIntPtr nNum) const;
+    ULONG      GetObjCount() const;
+    SdrObject* GetObj(ULONG nNum) const;
 
     // Gelinkte Seite oder gelinktes Gruppenobjekt
     virtual bool IsReadOnly() const;
 
     // Zaehlt alle Objekte inkl. Objekte in Objektgruppen, ...
-    sal_uIntPtr   CountAllObjects() const;
+    ULONG   CountAllObjects() const;
 
     // Alle aufgelagerten Teile (z.B. Grafiken) der Liste in den
     // Speicher laden.
-    void    ForceSwapInObjects() const;
+    void	ForceSwapInObjects() const;
     void    ForceSwapOutObjects() const;
 
-    void    SwapInAll() const { ForceSwapInObjects(); }
-    void    SwapOutAll() const { ForceSwapOutObjects(); }
+    void	SwapInAll() const { ForceSwapInObjects(); }
+    void	SwapOutAll() const { ForceSwapOutObjects(); }
 
     /** Makes the object list flat, i.e. the object list content are
         then tree leaves
@@ -200,11 +200,11 @@ public:
         operation is performed recursively, such that the content of
         the given object contains no groups afterwards.
      */
-    virtual void UnGroupObj( sal_uIntPtr nObjNum );
+    virtual void UnGroupObj( ULONG nObjNum );
 
     /** Return whether there is an explicit, user defined, object navigation
         order.  When there is one this method returns <TRUE/> and the
-        GetObjectForNavigationPosition() and
+        GetObjectForNavigationPosition() and 
         SdrObject::GetNavigationPosition() methods will return values
         different from those returne by SdrObject::GetOrdNum() and
         GetObj().
@@ -324,7 +324,7 @@ Objektes abgefragt sowie direkt gesetzt werden.
 // class SdrPageGridFrame
 
 // Fuer das Fangraster/Punkgitter im Writer
-class SdrPageGridFrame
+class SdrPageGridFrame 
 {
     Rectangle aPaper;
     Rectangle aUserArea;
@@ -343,17 +343,17 @@ private:
     SVX_DLLPRIVATE SdrPageGridFrameList(const SdrPageGridFrameList& rSrcList);      // never implemented
     SVX_DLLPRIVATE void           operator=(const SdrPageGridFrameList& rSrcList);  // never implemented
 protected:
-    SdrPageGridFrame* GetObject(sal_uInt16 i) const { return (SdrPageGridFrame*)(aList.GetObject(i)); }
+    SdrPageGridFrame* GetObject(USHORT i) const { return (SdrPageGridFrame*)(aList.GetObject(i)); }
 public:
     SdrPageGridFrameList(): aList(1024,4,4)                            {}
     ~SdrPageGridFrameList()                                            { Clear(); }
     void           Clear();
-    sal_uInt16         GetCount() const                                    { return sal_uInt16(aList.Count()); }
-    void           Insert(const SdrPageGridFrame& rGF, sal_uInt16 nPos=0xFFFF) { aList.Insert(new SdrPageGridFrame(rGF),nPos); }
-    void           Delete(sal_uInt16 nPos)                                 { delete (SdrPageGridFrame*)aList.Remove(nPos); }
-    void           Move(sal_uInt16 nPos, sal_uInt16 nNewPos)                   { aList.Insert(aList.Remove(nPos),nNewPos); }
-    SdrPageGridFrame&       operator[](sal_uInt16 nPos)                    { return *GetObject(nPos); }
-    const SdrPageGridFrame& operator[](sal_uInt16 nPos) const              { return *GetObject(nPos); }
+    USHORT         GetCount() const                                    { return USHORT(aList.Count()); }
+    void           Insert(const SdrPageGridFrame& rGF, USHORT nPos=0xFFFF) { aList.Insert(new SdrPageGridFrame(rGF),nPos); }
+    void           Delete(USHORT nPos)                                 { delete (SdrPageGridFrame*)aList.Remove(nPos); }
+    void           Move(USHORT nPos, USHORT nNewPos)                   { aList.Insert(aList.Remove(nPos),nNewPos); }
+    SdrPageGridFrame&       operator[](USHORT nPos)                    { return *GetObject(nPos); }
+    const SdrPageGridFrame& operator[](USHORT nPos) const              { return *GetObject(nPos); }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -402,7 +402,7 @@ class SVX_DLLPUBLIC SdrPage : public SdrObjList, public tools::WeakBase< SdrPage
     // start PageUser section
 private:
     // #111111# PageUser section
-    sdr::PageUserVector                                             maPageUsers;
+    sdr::PageUserVector												maPageUsers;
 
 public:
     void AddPageUser(sdr::PageUser& rNewUser);
@@ -414,7 +414,7 @@ public:
     ///////////////////////////////////////////////////////////////////////////////
     // #110094# DrawContact section
 private:
-    sdr::contact::ViewContact*                                      mpViewContact;
+    sdr::contact::ViewContact*										mpViewContact;
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 public:
@@ -431,18 +431,18 @@ public:
 // and thus has to set mxUnoPage
 friend class ChXChartDocument;
 
-    sal_Int32 nWdt;     // Seitengroesse
-    sal_Int32 nHgt;     // Seitengroesse
-    sal_Int32 nBordLft; // Seitenrand links
-    sal_Int32 nBordUpp; // Seitenrand oben
-    sal_Int32 nBordRgt; // Seitenrand rechts
-    sal_Int32 nBordLwr; // Seitenrand unten
+    INT32 nWdt;     // Seitengroesse
+    INT32 nHgt;     // Seitengroesse
+    INT32 nBordLft; // Seitenrand links
+    INT32 nBordUpp; // Seitenrand oben
+    INT32 nBordRgt; // Seitenrand rechts
+    INT32 nBordLwr; // Seitenrand unten
 
     // this is a weak reference to a possible living api wrapper for this page
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxUnoPage;
 
 protected:
-    SdrLayerAdmin*      pLayerAdmin;
+    SdrLayerAdmin* 	    pLayerAdmin;
 private:
     SdrPageProperties*  mpSdrPageProperties;
 
@@ -453,10 +453,10 @@ public:
 
 protected:
     // new MasterPageDescriptorVector
-    ::sdr::MasterPageDescriptor*                    mpMasterPageDescriptor;
+    ::sdr::MasterPageDescriptor*					mpMasterPageDescriptor;
 
     SetOfByte  aPrefVisiLayers;
-    sal_uInt16     nPageNum;
+    USHORT     nPageNum;
 
     // bitfield
     unsigned            mbMaster : 1;               // flag if this is a MasterPage
@@ -476,7 +476,7 @@ public:
     SdrPage(const SdrPage& rSrcPage);
     virtual ~SdrPage();
     // pModel, pPage, pUpList, pOwnerObj und mbInserted werden Zuweisungeoperator nicht veraendert!
-    SdrPage& operator=(const SdrPage& rSrcPage);
+    virtual void operator=(const SdrPage& rSrcPage);
     virtual SdrPage* Clone() const;
     virtual SdrPage* Clone(SdrModel* pNewModel) const;
     bool IsMasterPage() const       { return mbMaster; }
@@ -497,17 +497,17 @@ public:
     virtual Size GetSize() const;
     virtual void SetOrientation(Orientation eOri);
     virtual Orientation GetOrientation() const;
-    virtual sal_Int32 GetWdt() const;
-    virtual sal_Int32 GetHgt() const;
-    virtual void  SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 Lwr);
-    virtual void  SetLftBorder(sal_Int32 nBorder);
-    virtual void  SetUppBorder(sal_Int32 nBorder);
-    virtual void  SetRgtBorder(sal_Int32 nBorder);
-    virtual void  SetLwrBorder(sal_Int32 nBorder);
-    virtual sal_Int32 GetLftBorder() const;
-    virtual sal_Int32 GetUppBorder() const;
-    virtual sal_Int32 GetRgtBorder() const;
-    virtual sal_Int32 GetLwrBorder() const;
+    virtual INT32 GetWdt() const;
+    virtual INT32 GetHgt() const;
+    virtual void  SetBorder(INT32 nLft, INT32 nUpp, INT32 nRgt, INT32 Lwr);
+    virtual void  SetLftBorder(INT32 nBorder);
+    virtual void  SetUppBorder(INT32 nBorder);
+    virtual void  SetRgtBorder(INT32 nBorder);
+    virtual void  SetLwrBorder(INT32 nBorder);
+    virtual INT32 GetLftBorder() const;
+    virtual INT32 GetUppBorder() const;
+    virtual INT32 GetRgtBorder() const;
+    virtual INT32 GetLwrBorder() const;
 
     virtual void SetModel(SdrModel* pNewModel);
 
@@ -558,7 +558,7 @@ public:
 
     virtual SfxStyleSheet* GetTextStyleSheetForObject( SdrObject* pObj ) const;
 
-    bool HasTransparentObjects( bool bCheckForAlphaChannel = false ) const;
+    bool HasTransparentObjects( BOOL bCheckForAlphaChannel = false ) const;
 
     /** *deprecated* returns an averaged background color of this page */
     // #i75566# GetBackgroundColor -> GetPageBackgroundColor
@@ -584,7 +584,7 @@ public:
     //////////////////////////////////////////////////////////////////////////////
     // sdr::Comment interface
 private:
-    sdr::CommentVector                                  maComments;
+    sdr::CommentVector									maComments;
 
 public:
     sal_uInt32 GetCommentCount() const { return maComments.size(); }
@@ -607,7 +607,7 @@ public:
     // all default implementations just call the same methods at the original. To do something
     // different, overload the method and at least do what the method does.
     virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
-        const sdr::contact::ViewObjectContact& rOriginal,
+        const sdr::contact::ViewObjectContact& rOriginal, 
         const sdr::contact::DisplayInfo& rDisplayInfo);
 };
 

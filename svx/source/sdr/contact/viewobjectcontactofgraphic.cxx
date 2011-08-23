@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace sdr
         class AsynchGraphicLoadingEvent : public BaseEvent
         {
             // the ViewContactOfGraphic to work with
-            sdr::contact::ViewObjectContactOfGraphic&       mrVOCOfGraphic;
+            sdr::contact::ViewObjectContactOfGraphic&		mrVOCOfGraphic;
 
         public:
             // basic constructor.
@@ -61,7 +61,7 @@ namespace sdr
 
         AsynchGraphicLoadingEvent::AsynchGraphicLoadingEvent(
             EventHandler& rEventHandler, sdr::contact::ViewObjectContactOfGraphic& rVOCOfGraphic)
-        :   BaseEvent(rEventHandler),
+        :	BaseEvent(rEventHandler),
             mrVOCOfGraphic(rVOCOfGraphic)
         {
         }
@@ -134,12 +134,12 @@ namespace sdr
                     {
                         if(rObjectContact.isOutputToPrinter())
                         {
-                            // #i76395# preview mechanism is only active if
+                            // #i76395#	preview mechanism is only active if
                             // swapin is called from inside paint preparation, so mbInsidePaint
-                            // has to be false to be able to print with high resolution
-                            rGrafObj.ForceSwapIn();
+                            // has to be false to be able to print with high resolution 
+                            rGrafObj.ForceSwapIn();				
                         }
-                        else
+                        else									
                         {
                             // SwapIn direct
                             rGrafObj.mbInsidePaint = sal_True;
@@ -166,7 +166,7 @@ namespace sdr
             return bRetval;
         }
 
-        // Test graphics state and eventually trigger a SwapIn event. Return value
+        // Test graphics state and eventually trigger a SwapIn event. Return value 
         // gives info if SwapIn was triggered or not
         bool ViewObjectContactOfGraphic::impPrepareGraphicWithSynchroniousLoading()
         {
@@ -178,7 +178,7 @@ namespace sdr
                 if(rGrafObj.IsLinkedGraphic())
                 {
                     // update graphic link
-                    rGrafObj.ImpUpdateGraphicLink( sal_False );
+                    rGrafObj.ImpUpdateGraphicLink();
                 }
                 else
                 {
@@ -186,18 +186,18 @@ namespace sdr
 
                     if(rObjectContact.isOutputToPrinter())
                     {
-                        // #i76395# preview mechanism is only active if
+                        // #i76395#	preview mechanism is only active if
                         // swapin is called from inside paint preparation, so mbInsidePaint
-                        // has to be false to be able to print with high resolution
-                        rGrafObj.ForceSwapIn();
+                        // has to be false to be able to print with high resolution 
+                        rGrafObj.ForceSwapIn();				
                     }
-                    else
+                    else									
                     {
                         // SwapIn direct
                         rGrafObj.mbInsidePaint = sal_True;
                         rGrafObj.ForceSwapIn();
                         rGrafObj.mbInsidePaint = sal_False;
-                        }
+                    }
 
                     bRetval = true;
                 }
@@ -218,7 +218,7 @@ namespace sdr
             rGrafObj.ForceSwapIn();
 
             // #i103720# forget event to avoid possible deletion by the following ActionChanged call
-            // which may use createPrimitive2DSequence/impPrepareGraphicWithAsynchroniousLoading again.
+            // which may use createPrimitive2DSequence/impPrepareGraphicWithAsynchroniousLoading again. 
             // Deletion is actally done by the scheduler who leaded to coming here
             mpAsynchLoadEvent = 0;
 
@@ -235,7 +235,7 @@ namespace sdr
 
             if(mpAsynchLoadEvent)
             {
-                OSL_ENSURE(!pEvent || mpAsynchLoadEvent == pEvent,
+                OSL_ENSURE(!pEvent || mpAsynchLoadEvent == pEvent, 
                     "ViewObjectContactOfGraphic::forgetAsynchGraphicLoadingEvent: Forced to forget another event then i have scheduled (?)");
 
                 // forget event
@@ -253,27 +253,19 @@ namespace sdr
             // prepare primitive generation with evtl. loading the graphic when it's swapped out
             SdrGrafObj& rGrafObj = const_cast< ViewObjectContactOfGraphic* >(this)->getSdrGrafObj();
             bool bDoAsynchronGraphicLoading(rGrafObj.GetModel() && rGrafObj.GetModel()->IsSwapGraphics());
+            static bool bSuppressAsynchLoading(false);
             bool bSwapInDone(false);
-            bool bSwapInExclusive(false);
 
-            if( bDoAsynchronGraphicLoading && rGrafObj.IsSwappedOut() )
+            if(bDoAsynchronGraphicLoading 
+                && rGrafObj.IsSwappedOut() 
+                && rGrafObj.GetPage() 
+                && rGrafObj.GetPage()->IsMasterPage())
             {
-                // sometimes it is needed that each graphic is completely available and swapped in
-                // for these cases a ForceSwapIn is called later at the graphic object
-                if ( rGrafObj.GetPage() && rGrafObj.GetPage()->IsMasterPage() )
-                {
-                    // #i102380# force Swap-In for GraphicObjects on MasterPage to have a nicer visualisation
-                    bDoAsynchronGraphicLoading = false;
-                }
-                else if ( GetObjectContact().isOutputToPrinter()
-                    || GetObjectContact().isOutputToRecordingMetaFile()
-                    || GetObjectContact().isOutputToPDFFile() )
-                {
-                    bDoAsynchronGraphicLoading = false;
-                    bSwapInExclusive = true;
-                }
+                // #i102380# force Swap-In for GraphicObjects on MasterPage to have a nicer visualisation
+                bDoAsynchronGraphicLoading = false;
             }
-            if( bDoAsynchronGraphicLoading )
+
+            if(bDoAsynchronGraphicLoading && !bSuppressAsynchLoading)
             {
                 bSwapInDone = const_cast< ViewObjectContactOfGraphic* >(this)->impPrepareGraphicWithAsynchroniousLoading();
             }
@@ -302,8 +294,10 @@ namespace sdr
                 }
             }
 
-            // if swap in was forced only for printing metafile and pdf, swap out again
-            if( bSwapInDone && bSwapInExclusive )
+            // if swap in was forced only for printing, swap out again
+            const bool bSwapInExclusiveForPrinting(bSwapInDone && GetObjectContact().isOutputToPrinter());
+
+            if(bSwapInExclusiveForPrinting)
             {
                 rGrafObj.ForceSwapOut();
             }
@@ -312,7 +306,7 @@ namespace sdr
         }
 
         ViewObjectContactOfGraphic::ViewObjectContactOfGraphic(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :   ViewObjectContactOfSdrObj(rObjectContact, rViewContact),
+        :	ViewObjectContactOfSdrObj(rObjectContact, rViewContact),
             mpAsynchLoadEvent(0)
         {
         }

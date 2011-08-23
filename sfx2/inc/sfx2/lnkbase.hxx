@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,25 +49,25 @@ class SvLinkSource;
 class FileDialogHelper;
 
 #ifndef OBJECT_DDE_EXTERN
-#define OBJECT_INTERN       0x00
-//#define   OBJECT_SO_EXTERN    0x01
-#define OBJECT_DDE_EXTERN   0x02
+#define	OBJECT_INTERN		0x00
+//#define	OBJECT_SO_EXTERN	0x01
+#define	OBJECT_DDE_EXTERN	0x02
 #endif
 
-#define OBJECT_CLIENT_SO            0x80 // ein Link
-#define OBJECT_CLIENT_DDE           0x81
-//#define   OBJECT_CLIENT_OLE           0x82 // ein Ole-Link
-//#define   OBJECT_CLIENT_OLE_CACHE     0x83 // ein Ole-Link mit SvEmbeddedObject
-#define OBJECT_CLIENT_FILE          0x90
-#define OBJECT_CLIENT_GRF           0x91
-#define OBJECT_CLIENT_OLE           0x92 // embedded link
+#define	OBJECT_CLIENT_SO			0x80 // ein Link
+#define	OBJECT_CLIENT_DDE			0x81
+//#define	OBJECT_CLIENT_OLE			0x82 // ein Ole-Link
+//#define	OBJECT_CLIENT_OLE_CACHE  	0x83 // ein Ole-Link mit SvEmbeddedObject
+#define	OBJECT_CLIENT_FILE			0x90
+#define	OBJECT_CLIENT_GRF			0x91
+#define	OBJECT_CLIENT_OLE			0x92 // embedded link
 
 enum sfxlink {
     // Ole2 compatibel und persistent
     LINKUPDATE_ALWAYS = 1,
     LINKUPDATE_ONCALL = 3,
 
-    LINKUPDATE_END      // dummy!
+    LINKUPDATE_END		// dummy!
 };
 
 struct BaseLink_Impl;
@@ -78,26 +78,26 @@ private:
     friend class LinkManager;
     friend class SvLinkSource;
 
-    SvLinkSourceRef         xObj;
-    String                  aLinkName;
+    SvLinkSourceRef			xObj;
+    String					aLinkName;
     BaseLink_Impl*          pImpl;
-    sal_uInt16                  nObjType;
-    sal_Bool                    bVisible : 1;
-    sal_Bool                    bSynchron : 1;
-    sal_Bool                    bUseCache : 1;      // fuer GrafikLinks!
-    sal_Bool                    bWasLastEditOK : 1;
+    USHORT 					nObjType;
+    BOOL					bVisible : 1;
+    BOOL					bSynchron : 1;
+    BOOL					bUseCache : 1;		// fuer GrafikLinks!
+    BOOL                    bWasLastEditOK : 1;
 
     DECL_LINK( EndEditHdl, String* );
 
     bool                    ExecuteEdit( const String& _rNewName );
 
 protected:
-    void            SetObjType( sal_uInt16 );
+    void			SetObjType( USHORT );
 
                     // setzen des LinkSourceName ohne aktion
-    void            SetName( const String & rLn );
+    void			SetName( const String & rLn );
                     // LinkSourceName der im SvLinkBase steht
-    String          GetName() const;
+    String		 	GetName() const;
 
     ImplBaseLinkData* pImplData;
 
@@ -106,10 +106,10 @@ protected:
                         m_xInputStreamToLoadFrom;
 
                     SvBaseLink();
-                    SvBaseLink( sal_uInt16 nLinkType, sal_uIntPtr nContentType = FORMAT_STRING );
-    virtual         ~SvBaseLink();
+                    SvBaseLink( USHORT nLinkType, ULONG nContentType = FORMAT_STRING );
+    virtual 		~SvBaseLink();
 
-    void            _GetRealObject( sal_Bool bConnect = sal_True );
+    void            _GetRealObject( BOOL bConnect = TRUE );
 
     SvLinkSource*   GetRealObject()
                     {
@@ -122,44 +122,44 @@ public:
                     TYPEINFO();
                     // ask JP
     virtual void    Closed();
-                    SvBaseLink( const String& rNm, sal_uInt16 nObjectType,
+                    SvBaseLink( const String& rNm, USHORT nObjectType,
                                  SvLinkSource* );
 
-    sal_uInt16          GetObjType() const { return nObjType; }
+    USHORT			GetObjType() const { return nObjType; }
 
-    void            SetObj( SvLinkSource * pObj );
-    SvLinkSource*   GetObj() const  { return xObj; }
+    void			SetObj( SvLinkSource * pObj );
+    SvLinkSource*	GetObj() const	{ return xObj; }
 
-    void            SetLinkSourceName( const String & rName );
-    String          GetLinkSourceName() const;
+    void    		SetLinkSourceName( const String & rName );
+    String		 	GetLinkSourceName() const;
 
-    virtual void    DataChanged( const String & rMimeType,
+    virtual void 	DataChanged( const String & rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
 
-    void            SetUpdateMode( sal_uInt16 );
-    sal_uInt16          GetUpdateMode() const;
-    sal_uIntPtr             GetContentType() const;
-    sal_Bool            SetContentType( sal_uIntPtr nType );
+    void			SetUpdateMode( USHORT );
+    USHORT 			GetUpdateMode() const;
+    ULONG  			GetContentType() const;
+    BOOL 			SetContentType( ULONG nType );
 
     LinkManager*          GetLinkManager();
     const LinkManager*    GetLinkManager() const;
     void                    SetLinkManager( LinkManager* _pMgr );
 
-    sal_Bool            Update();
-    void            Disconnect();
+    BOOL			Update();
+    void			Disconnect();
 
     // Link impl: DECL_LINK( MyEndDialogHdl, SvBaseLink* ); <= param is this
     virtual void    Edit( Window*, const Link& rEndEditHdl );
 
         // soll der Link im Dialog angezeigt werden ? (Links im Link im ...)
-    sal_Bool            IsVisible() const           { return bVisible; }
-    void            SetVisible( sal_Bool bFlag )    { bVisible = bFlag; }
+    BOOL 	        IsVisible() const   		{ return bVisible; }
+    void 	        SetVisible( BOOL bFlag )	{ bVisible = bFlag; }
         // soll der Link synchron oder asynchron geladen werden?
-    sal_Bool            IsSynchron() const          { return bSynchron; }
-    void            SetSynchron( sal_Bool bFlag )   { bSynchron = bFlag; }
+    BOOL 	        IsSynchron() const   		{ return bSynchron; }
+    void 	        SetSynchron( BOOL bFlag )	{ bSynchron = bFlag; }
 
-    sal_Bool            IsUseCache() const          { return bUseCache; }
-    void            SetUseCache( sal_Bool bFlag )   { bUseCache = bFlag; }
+    BOOL 	        IsUseCache() const   		{ return bUseCache; }
+    void 			SetUseCache( BOOL bFlag )	{ bUseCache = bFlag; }
 
     void            setStreamToLoadFrom(
                         const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream,
@@ -169,7 +169,7 @@ public:
     // #i88291#
     void            clearStreamToLoadFrom();
 
-    inline sal_Bool         WasLastEditOK() const       { return bWasLastEditOK; }
+    inline BOOL         WasLastEditOK() const       { return bWasLastEditOK; }
     FileDialogHelper*   GetFileDialog( sal_uInt32 nFlags, const String& rFactory ) const;
 };
 

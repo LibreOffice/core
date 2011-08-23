@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <svsys.h>
+#include <tools/svwin.h>
 #include <wincomp.hxx>
 #include <saldata.hxx>
 #include <salinst.h>
@@ -48,7 +48,7 @@ static DWORD myerr=0;
 
 // =======================================================================
 
-sal_Bool SalData::IsKnownMenuHandle( HMENU hMenu )
+BOOL SalData::IsKnownMenuHandle( HMENU hMenu )
 {
     if( mhMenuSet.find( hMenu ) == mhMenuSet.end() )
         return FALSE;
@@ -60,7 +60,7 @@ sal_Bool SalData::IsKnownMenuHandle( HMENU hMenu )
 
 // WinSalInst factory methods
 
-SalMenu* WinSalInstance::CreateMenu( sal_Bool bMenuBar, Menu* )
+SalMenu* WinSalInstance::CreateMenu( BOOL bMenuBar )
 {
     WinSalMenu *pSalMenu = new WinSalMenu();
 
@@ -108,9 +108,9 @@ SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
 
         // 'translate' mnemonics
         pSalMenuItem->mText.SearchAndReplace( '~', '&' );
-
+        
         pSalMenuItem->mInfo.fMask = MIIM_TYPE | MIIM_STATE | MIIM_ID | MIIM_DATA;
-        pSalMenuItem->mInfo.fType = MFT_STRING;
+        pSalMenuItem->mInfo.fType = MFT_STRING; 
 #ifdef OWNERDRAW
         if( pItemData->pMenu && !pItemData->pMenu->IsMenuBar() )
             pSalMenuItem->mInfo.fType |= MFT_OWNERDRAW;
@@ -118,7 +118,7 @@ SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
 #endif
         pSalMenuItem->mInfo.dwTypeData = (LPWSTR) pSalMenuItem->mText.GetBuffer();
         pSalMenuItem->mInfo.cch = pSalMenuItem->mText.Len();
-
+        
         pSalMenuItem->mInfo.wID = pItemData->nId;
         pSalMenuItem->mInfo.dwItemData = (ULONG_PTR) pSalMenuItem; // user data
     }
@@ -169,7 +169,7 @@ WinSalMenu::~WinSalMenu()
     ::DestroyMenu( mhMenu );
 }
 
-sal_Bool WinSalMenu::VisibleMenuBar()
+BOOL WinSalMenu::VisibleMenuBar()
 {
     // The Win32 implementation never shows a native
     // menubar. Thus, native menues are only visible
@@ -295,13 +295,13 @@ void WinSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
     }
 }
 
-void WinSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
+void WinSalMenu::CheckItem( unsigned nPos, BOOL bCheck )
 {
     if( -1 != ::CheckMenuItem( mhMenu, nPos, MF_BYPOSITION|(bCheck ? MF_CHECKED : MF_UNCHECKED) ) )
         ImplDrawMenuBar( this );
 }
 
-void WinSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
+void WinSalMenu::EnableItem( unsigned nPos, BOOL bEnable )
 {
     if( -1 != ::EnableMenuItem( mhMenu, nPos, MF_BYPOSITION|(bEnable ? MF_ENABLED : (MF_DISABLED|MF_GRAYED) ) ) )
         ImplDrawMenuBar( this );

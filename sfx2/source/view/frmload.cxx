@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,6 +32,7 @@
 #include <sal/macros.h>
 #include "frmload.hxx"
 #include "objshimp.hxx"
+#include "viewfac.hxx"
 #include "sfx2/app.hxx"
 #include "sfx2/dispatch.hxx"
 #include "sfx2/docfac.hxx"
@@ -46,7 +47,6 @@
 #include "sfx2/sfxuno.hxx"
 #include "sfx2/viewfrm.hxx"
 #include "sfx2/viewsh.hxx"
-#include "sfx2/viewfac.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/container/XContainerQuery.hpp>
@@ -218,10 +218,11 @@ const SfxFilter* SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( con
     ::rtl::OUString sFilterName;
     try
     {
-        ::framework::RequestFilterSelect aRequest( i_rDocumentURL );
-        i_rxHandler->handle( aRequest.GetRequest() );
-        if( !aRequest.isAbort() )
-            sFilterName = aRequest.getFilter();
+        ::framework::RequestFilterSelect* pRequest = new ::framework::RequestFilterSelect( i_rDocumentURL );
+        Reference< XInteractionRequest > xRequest ( pRequest );
+        i_rxHandler->handle( xRequest );
+        if( !pRequest->isAbort() )
+            sFilterName = pRequest->getFilter();
     }
     catch( const Exception& )
     {
@@ -254,14 +255,33 @@ namespace
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const sal_uInt16 _nSlotID, const Reference< XFrame >& i_rxFrame,
+sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const USHORT _nSlotID, const Reference< XFrame >& i_rxFrame,
                                                               const bool i_bHidden )
 {
     SfxRequest aRequest( _nSlotID, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
     aRequest.AppendItem( SfxUnoFrameItem( SID_FILLFRAME, i_rxFrame ) );
     if ( i_bHidden )
-        aRequest.AppendItem( SfxBoolItem( SID_HIDDEN, sal_True ) );
+        aRequest.AppendItem( SfxBoolItem( SID_HIDDEN, TRUE ) );
     return lcl_getDispatchResult( SFX_APP()->ExecuteSlot( aRequest ) );
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+void SfxFrameLoader_Impl::impl_lockHiddenDocument( SfxObjectShell& i_rDocument, const ::comphelper::NamedValueCollection& i_rDescriptor ) const
+{
+    const sal_Bool bHidden = i_rDescriptor.getOrDefault( "Hidden", sal_False );
+    if ( !bHidden )
+        return;
+
+    const SfxViewFrame* pExistingViewFrame = SfxViewFrame::GetFirst( &i_rDocument );
+    if ( pExistingViewFrame )
+        return;
+
+    // the document is to be loaded hidden, and it is not yet displayed in any other frame
+    // To prevent it from being closed when the loader returns, increase its OwnerLock
+    // (the OwnerLock is normally increased by every frame in which the document is displayed, and by this loader)
+    i_rDocument.RestoreNoDelete();
+    i_rDocument.OwnerLock( TRUE );
+    i_rDocument.Get_Impl()->bHiddenLockedByAPI = TRUE;
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -314,9 +334,9 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-SfxObjectShellRef SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XModel2 >& i_rxDocument ) const
+SfxObjectShellLock SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XModel2 >& i_rxDocument ) const
 {
-    for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, sal_False ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, sal_False ) )
+    for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, FALSE ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, FALSE ) )
     {
         if ( i_rxDocument == pDoc->GetModel() )
         {
@@ -324,7 +344,7 @@ SfxObjectShellRef SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XM
         }
     }
 
-    OSL_FAIL( "SfxFrameLoader_Impl::impl_findObjectShell: model is not based on SfxObjectShell - wrong frame loader usage!" );
+    DBG_ERROR( "SfxFrameLoader_Impl::impl_findObjectShell: model is not based on SfxObjectShell - wrong frame loader usage!" );
     return NULL;
 }
 
@@ -374,7 +394,7 @@ bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedVal
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-sal_uInt16 SfxFrameLoader_Impl::impl_findSlotParam( const ::rtl::OUString& i_rFactoryURL ) const
+USHORT SfxFrameLoader_Impl::impl_findSlotParam( const ::rtl::OUString& i_rFactoryURL ) const
 {
     ::rtl::OUString sSlotParam;
     const sal_Int32 nParamPos = i_rFactoryURL.indexOf( '?' );
@@ -387,7 +407,7 @@ sal_uInt16 SfxFrameLoader_Impl::impl_findSlotParam( const ::rtl::OUString& i_rFa
     }
 
     if ( sSlotParam.getLength() )
-        return sal_uInt16( sSlotParam.toInt32() );
+        return USHORT( sSlotParam.toInt32() );
 
     return 0;
 }
@@ -554,7 +574,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     {
         const ::rtl::OUString sFactory = sURL.copy( sizeof( "private:factory/" ) -1 );
         // special handling for some weird factory URLs a la private:factory/swriter?slot=21053
-        const sal_uInt16 nSlotParam = impl_findSlotParam( sFactory );
+        const USHORT nSlotParam = impl_findSlotParam( sFactory );
         if ( nSlotParam != 0 )
         {
             return impl_createNewDocWithSlotParam( nSlotParam, _rTargetFrame, aDescriptor.getOrDefault( "Hidden", false ) );
@@ -618,18 +638,31 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
             // tell the doc its (current) load args.
             impl_removeLoaderArguments( aDescriptor );
             xModel->attachResource( xModel->getURL(), aDescriptor.getPropertyValues() );
+                // TODO: not sure this is correct. The original, pre-refactoring code did it this way. However, I could
+                // imagine scenarios where it is *not* correct to overrule the *existing* model args (XModel::getArgs)
+                // with the ones passed to the loader here. For instance, what about the MacroExecutionMode? The document
+                // might have a mode other than the one passed to the loader, and we always overwrite the former with
+                // the latter.
         }
 
         // get the SfxObjectShell (still needed at the moment)
-        // SfxObjectShellRef is used here ( instead of ...Lock ) since the model is closed below if necessary
-        // SfxObjectShellLock would be even dangerous here, since the lifetime control should be done outside in case of success
-        const SfxObjectShellRef xDoc = impl_findObjectShell( xModel );
+        const SfxObjectShellLock xDoc = impl_findObjectShell( xModel );
         ENSURE_OR_THROW( xDoc.Is(), "no SfxObjectShell for the given model" );
 
         // ensure the ID of the to-be-created view is in the descriptor, if possible
         const sal_Int16 nViewId = impl_determineEffectiveViewId_nothrow( *xDoc, aDescriptor );
         const sal_Int16 nViewNo = xDoc->GetFactory().GetViewNo_Impl( nViewId, 0 );
         const ::rtl::OUString sViewName( xDoc->GetFactory().GetViewFactory( nViewNo ).GetAPIViewName() );
+
+        // if the document is created hidden, prevent it from being deleted until it is shown or disposed
+        impl_lockHiddenDocument( *xDoc, aDescriptor );
+            // TODO; if we wouldn't use a SfxObjectShellLock instance for xDoc, but a simple SfxObjectShellRef,
+            // then this would not be necessary, /me thinks. That is, the *Lock classes inc/dec a "Lock" counter
+            // (additional to the ref counter) in their ctor/dtor, and if the lock counter goes to 0, the
+            // object is closed (DoClose). The impl_lockHiddenDocument is to prevent exactly that premature
+            // closing. However, a *Ref object wouldn't close, anyway. And in case of unsuccessfull loading, the
+            // code at the very end of this method cares for closing the XModel, which should also close the
+            // ObjectShell.
 
         // plug the document into the frame
         impl_createDocumentView( xModel, _rTargetFrame, aViewCreationArgs, sViewName );
@@ -697,14 +730,14 @@ UNOSEQUENCE< UNOOUSTRING > SfxFrameLoader_Impl::impl_getStaticSupportedServiceNa
 {
     UNOMUTEXGUARD aGuard( UNOMUTEX::getGlobalMutex() );
     UNOSEQUENCE< UNOOUSTRING > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.SynchronousFrameLoader" ));
+    seqServiceNames.getArray() [0] = UNOOUSTRING::createFromAscii( "com.sun.star.frame.SynchronousFrameLoader" );
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 UNOOUSTRING SfxFrameLoader_Impl::impl_getStaticImplementationName()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.office.FrameLoader" ));
+    return UNOOUSTRING::createFromAscii( "com.sun.star.comp.office.FrameLoader" );
 }
 
 /* Helper for registry */

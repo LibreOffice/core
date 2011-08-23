@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlexp.hxx>
-#include "xmloff/xmlerror.hxx"
+#include "xmlerror.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -136,7 +136,7 @@ void visitNode( DomVisitor& rVisitor, const Reference<XNode>& xNode )
         rVisitor.character( Reference<XCharacterData>( xNode, UNO_QUERY_THROW ) );
         break;
     default:
-        OSL_FAIL( "unknown DOM node type" );
+        DBG_ERROR( "unknown DOM node type" );
         break;
     }
 }
@@ -215,18 +215,18 @@ void DomExport::addNamespace( const OUString& sPrefix, const OUString& sURI )
 
     // we need to register the namespace, if either the prefix isn't known or
     // is used for a different namespace
-    if( nKey == XML_NAMESPACE_UNKNOWN  ||
+    if( nKey == XML_NAMESPACE_UNKNOWN  || 
         rMap.GetNameByKey( nKey ) != sURI )
     {
         // add prefix to map, and add declaration
         rMap.Add( sPrefix, sURI );
-        mrExport.AddAttribute(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "xmlns:" ) ) + sPrefix,
+        mrExport.AddAttribute( 
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "xmlns:" ) ) + sPrefix, 
             sURI );
     }
 }
 
-OUString DomExport::qualifiedName( const OUString& sPrefix,
+OUString DomExport::qualifiedName( const OUString& sPrefix, 
                                    const OUString& sURI,
                                    const OUString& sLocalName )
 {
@@ -261,7 +261,7 @@ OUString DomExport::qualifiedName( const Reference<XAttr>& xAttr )
 
 void DomExport::addAttribute( const Reference<XAttr>& xAttribute )
 {
-    mrExport.AddAttribute( qualifiedName( xAttribute ),
+    mrExport.AddAttribute( qualifiedName( xAttribute ), 
                            xAttribute->getNodeValue() );
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,17 +36,17 @@ class SwWrtShell;
 
 class SwSplitTblDlg : public SvxStandardDialog
 {
-    OKButton        aOKPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
+    OKButton 		aOKPB;
+    CancelButton 	aCancelPB;
+    HelpButton 		aHelpPB;
     FixedLine       aSplitFL;
-    RadioButton     aCntntCopyRB;
-    RadioButton     aBoxAttrCopyWithParaRB ;
-    RadioButton     aBoxAttrCopyNoParaRB ;
-    RadioButton     aBorderCopyRB;
+    RadioButton		aCntntCopyRB;
+    RadioButton		aBoxAttrCopyWithParaRB ;
+    RadioButton		aBoxAttrCopyNoParaRB ;
+    RadioButton		aBorderCopyRB;
 
-    SwWrtShell      &rShell;
-    sal_uInt16          m_nSplit;
+    SwWrtShell 		&rShell;
+    USHORT          m_nSplit;
 
 protected:
     virtual void Apply();
@@ -54,7 +54,7 @@ protected:
 public:
     SwSplitTblDlg( Window *pParent, SwWrtShell &rSh );
 
-    sal_uInt16 GetSplitMode() const { return m_nSplit; }
+    USHORT GetSplitMode() const { return m_nSplit; }
 };
 
 #endif

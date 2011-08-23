@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,6 +44,7 @@
 #include <com/sun/star/util/Time.hpp>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbconversion.hxx>
+#include "modulepcr.hxx"
 #include "formresid.hrc"
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
@@ -181,7 +182,7 @@ uno::Sequence< ::rtl::OUString >  SAL_CALL StringRepresentation::getSupportedSer
             ::rtl::OString sMessage( "StringRepresentation::convertPropertyValueToStringRepresentation: cannot convert values of type '" );
             sMessage += ::rtl::OString( PropertyValue.getValueType().getTypeName().getStr(), PropertyValue.getValueType().getTypeName().getLength(), RTL_TEXTENCODING_ASCII_US );
             sMessage += ::rtl::OString( "'!" );
-            OSL_FAIL( sMessage.getStr() );
+            DBG_ERROR( sMessage.getStr() );
         }
 #endif
     }
@@ -226,7 +227,7 @@ uno::Any SAL_CALL StringRepresentation::convertToPropertyValue(const ::rtl::OUSt
             ::rtl::OString sMessage( "StringRepresentation::convertStringRepresentationToPropertyValue: cannot convert into values of type '" );
             sMessage += ::rtl::OString( ControlValueType.getTypeName().getStr(), ControlValueType.getTypeName().getLength(), RTL_TEXTENCODING_ASCII_US );
             sMessage += ::rtl::OString( "'!" );
-            OSL_FAIL( sMessage.getStr() );
+            DBG_ERROR( sMessage.getStr() );
         }
     #endif
     }
@@ -425,10 +426,10 @@ bool StringRepresentation::convertGenericValueToString( const uno::Any& _rValue,
             ++i;
         }
         break;
-
+    
     // some structs
     case uno::TypeClass_STRUCT:
-        OSL_FAIL( "StringRepresentation::convertGenericValueToString(STRUCT): this is dead code - isn't it?" );
+        OSL_ENSURE( false, "StringRepresentation::convertGenericValueToString(STRUCT): this is dead code - isn't it?" );
         if ( _rValue.getValueType().equals( ::getCppuType( static_cast< util::Date* >( NULL ) ) ) )
         {
             // weird enough, the string representation of dates, as used
@@ -473,7 +474,7 @@ uno::Any StringRepresentation::convertStringToSimple( const ::rtl::OUString& _rV
             if ( m_aConstants.getLength() && m_aValues.getLength() )
             {
                 const ::rtl::OUString* pIter = m_aValues.getConstArray();
-                const ::rtl::OUString* pEnd   = pIter + m_aValues.getLength();
+                const ::rtl::OUString* pEnd	  = pIter + m_aValues.getLength();
                 for(sal_Int32 i = 0;pIter != pEnd;++pIter,++i)
                 {
                     if ( *pIter == _rValue )
@@ -572,13 +573,13 @@ bool StringRepresentation::convertStringToGenericValue( const ::rtl::OUString& _
     break;
 
     case uno::TypeClass_STRUCT:
-        OSL_FAIL( "StringRepresentation::convertStringToGenericValue(STRUCT): this is dead code - isn't it?" );
+        OSL_ENSURE( false, "StringRepresentation::convertStringToGenericValue(STRUCT): this is dead code - isn't it?" );
         if ( _rTargetType.equals( ::getCppuType( static_cast< util::Date* >( NULL ) ) ) )
         {
             // weird enough, the string representation of dates, as used
             // by the control displaying dates, and thus as passed through the layers,
             // is YYYYMMDD.
-
+            
             _rValue <<= ::dbtools::DBTypeConversion::toDate(_rStringRep);
         }
         else if ( _rTargetType.equals( ::getCppuType( static_cast< util::Time* >( NULL ) ) ) )

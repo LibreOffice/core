@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,14 +59,14 @@ typedef javaPluginError (*jfw_plugin_getJavaInfoByPath_ptr)(
     </p>
  */
 typedef javaPluginError (*jfw_plugin_startJavaVirtualMachine_ptr)(
-    const JavaInfo *info,
-    const JavaVMOption* options,
+    const JavaInfo *info, 
+    const JavaVMOption* options, 
     sal_Int32 cOptions,
     JavaVM ** ppVM,
     JNIEnv ** ppEnv);
 
 typedef javaPluginError (*jfw_plugin_existJRE_ptr)(
-    const JavaInfo *info,
+    const JavaInfo *info, 
     sal_Bool *exist);
 
 
@@ -86,8 +86,8 @@ class CJavaInfo
 public:
     ::JavaInfo * pInfo;
 
-
-
+    
+    
     CJavaInfo();
     CJavaInfo(const CJavaInfo &);
     ~CJavaInfo();
@@ -104,8 +104,9 @@ public:
     void attach(::JavaInfo* pInfo);
     ::JavaInfo * detach();
     const ::JavaInfo* operator ->() const;
+//    ::JavaInfo** operator & ();
     operator ::JavaInfo* ();
-    operator ::JavaInfo const * () const;
+    operator ::JavaInfo const * () const; 
     ::JavaInfo* cloneJavaInfo() const;
 
     rtl::OUString getVendor() const;

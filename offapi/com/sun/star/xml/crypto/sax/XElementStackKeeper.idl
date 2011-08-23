@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-//i20156 - new file for XML security module
+ 
+//i20156 - new file for xmlsecurity module
 
 /** -- idl definition -- **/
 
@@ -47,22 +47,22 @@ struct ElementStackItem
      * whether it is a startElement event
      */
     boolean isStartElementEvent;
-
+    
     /**
      * the name of the element
      */
     string elementName;
-
+    
     /**
      * attribute list for a startElement event
      */
     com::sun::star::xml::sax::XAttributeList xAttributes;
-};
+}; 
 
 /**
  * Manipulate the "key SAX events" in a SAX event stream.
  *
- * @see   XSecurityController
+ * @see   XSecController
  */
 interface XElementStackKeeper : com::sun::star::uno::XInterface
 {
@@ -70,14 +70,14 @@ interface XElementStackKeeper : com::sun::star::uno::XInterface
      * Starts to buffer key SAX events.
      */
     void start();
-
+    
     /**
      * Stops buffering key SAX events.
      */
     void stop();
-
+    
     /**
-     * Transfers the buffered key SAX events to a document handler.
+     * Transfers the bufferred key SAX events to a document handler.
      * <p>
      * All transferred events are removed from the buffer.
      *

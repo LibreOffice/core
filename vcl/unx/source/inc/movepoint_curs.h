@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define movepoint_curs_height 32
 #define movepoint_curs_x_hot 0
 #define movepoint_curs_y_hot 0
-static unsigned char movepoint_curs_bits[] = {
+static char movepoint_curs_bits[] = {
    0xff, 0xff, 0xff, 0xff, 0xfd, 0xff, 0xff, 0xff, 0xf9, 0xff, 0xff, 0xff,
    0xf1, 0xff, 0xff, 0xff, 0xe1, 0xff, 0xff, 0xff, 0xc1, 0xff, 0xff, 0xff,
    0x81, 0xff, 0xff, 0xff, 0x01, 0xff, 0xff, 0xff, 0x01, 0xfe, 0xff, 0xff,

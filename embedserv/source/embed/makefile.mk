@@ -25,6 +25,8 @@
 #
 #*************************************************************************
 
+#MKDEPENDSOLVER=YES
+
 PRJ=..$/..
 
 PRJNAME=embedserv
@@ -34,6 +36,7 @@ TARGET=emser
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+#.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 .IF "$(DISABLE_ATL)"==""
 
@@ -72,7 +75,6 @@ EXCEPTIONSFILES= \
         $(SLO)$/tracker.obj
 
 .ENDIF
-
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk

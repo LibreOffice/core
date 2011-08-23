@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,6 @@ import com.sun.star.util.DateTime;
 import com.sun.star.util.XRefreshable;
 import com.sun.star.util.XUpdatable;
 import com.sun.star.wizards.common.Helper;
-import com.sun.star.wizards.common.PropertyNames;
 
 public class TextFieldHandler
 {
@@ -60,7 +59,7 @@ public class TextFieldHandler
     /**
      * Creates a new instance of TextFieldHandler
      * @param xMSF
-     * @param xTextDocument
+     * @param xTextDocument 
      */
     public TextFieldHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument)
     {
@@ -119,7 +118,7 @@ public class TextFieldHandler
 //            try
 //            {
 //                XPropertySet xTestProp = xDepField.getTextFieldMaster();
-//                String UserFieldName = (String) xTestProp.getPropertyValue(PropertyNames.PROPERTY_NAME);
+//                String UserFieldName = (String) xTestProp.getPropertyValue("Name");
 //                // UserFieldName == FieldName?
 //                int dummy = 0;
 //            }
@@ -139,11 +138,11 @@ public class TextFieldHandler
     {
         Object oMaster = xMSFDoc.createInstance("com.sun.star.text.FieldMaster.User");
         XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oMaster);
-        xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, FieldName);
+        xPSet.setPropertyValue("Name", FieldName);
         xPSet.setPropertyValue("Content", FieldTitle);
 
         // DEBUG
-        // String sFieldName = (String)xPSet.getPropertyValue(PropertyNames.PROPERTY_NAME);
+        // String sFieldName = (String)xPSet.getPropertyValue("Name");
 
         return xPSet;
     }
@@ -211,7 +210,7 @@ public class TextFieldHandler
     {
         try
         {
-            XDependentTextField[] xDependentTextFields = getTextFieldsByProperty(PropertyNames.PROPERTY_NAME, _FieldName, "String");
+            XDependentTextField[] xDependentTextFields = getTextFieldsByProperty("Name", _FieldName, "String");
             if (xDependentTextFields != null)
             {
                 for (int i = 0; i < xDependentTextFields.length; i++)

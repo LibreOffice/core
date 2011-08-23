@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,13 +32,13 @@
 #include <uielement/controlmenucontroller.hxx>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -49,7 +49,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <vcl/menu.hxx>
@@ -68,55 +68,56 @@
 // Copied from svx
 // Function-Id's
 #define RID_FMSHELL_CONVERSIONMENU (RID_FORMS_START + 4)
-#define RID_SVXIMGLIST_FMEXPL      (RID_FORMS_START + 0)
+#define RID_SVXIMGLIST_FMEXPL	   (RID_FORMS_START + 0)
+#define RID_SVXIMGLIST_FMEXPL_HC   (RID_FORMS_START + 2)
 
 // Forms - Ids, used to address images from image list
-#define SID_FMSLOTS_START                   (SID_SVX_START + 592)
-#define SID_MORE_FMSLOTS_START              (SID_SVX_START + 702)
+#define SID_FMSLOTS_START					(SID_SVX_START + 592)
+#define SID_MORE_FMSLOTS_START	            (SID_SVX_START + 702)
 
-#define SID_FM_CONVERTTO_EDIT               (SID_MORE_FMSLOTS_START +  32)
-#define SID_FM_CONVERTTO_BUTTON             (SID_MORE_FMSLOTS_START +  33)
-#define SID_FM_CONVERTTO_FIXEDTEXT          (SID_MORE_FMSLOTS_START +  34)
-#define SID_FM_CONVERTTO_LISTBOX            (SID_MORE_FMSLOTS_START +  35)
-#define SID_FM_CONVERTTO_CHECKBOX           (SID_MORE_FMSLOTS_START +  36)
-#define SID_FM_CONVERTTO_RADIOBUTTON        (SID_MORE_FMSLOTS_START +  37)
-#define SID_FM_CONVERTTO_GROUPBOX           (SID_MORE_FMSLOTS_START +  38)
-#define SID_FM_CONVERTTO_COMBOBOX           (SID_MORE_FMSLOTS_START +  39)
-#define SID_FM_CONVERTTO_GRID               (SID_MORE_FMSLOTS_START +  40)
-#define SID_FM_CONVERTTO_IMAGEBUTTON        (SID_MORE_FMSLOTS_START +  41)
-#define SID_FM_CONVERTTO_FILECONTROL        (SID_MORE_FMSLOTS_START +  42)
-#define SID_FM_CONVERTTO_DATE               (SID_MORE_FMSLOTS_START +  43)
-#define SID_FM_CONVERTTO_TIME               (SID_MORE_FMSLOTS_START +  44)
-#define SID_FM_CONVERTTO_NUMERIC            (SID_MORE_FMSLOTS_START +  45)
-#define SID_FM_CONVERTTO_CURRENCY           (SID_MORE_FMSLOTS_START +  46)
-#define SID_FM_CONVERTTO_PATTERN            (SID_MORE_FMSLOTS_START +  47)
-#define SID_FM_CONVERTTO_IMAGECONTROL       (SID_MORE_FMSLOTS_START +  48)
-#define SID_FM_CONVERTTO_FORMATTED          (SID_MORE_FMSLOTS_START +  49)
+#define SID_FM_CONVERTTO_EDIT				(SID_MORE_FMSLOTS_START +  32)
+#define SID_FM_CONVERTTO_BUTTON				(SID_MORE_FMSLOTS_START +  33)
+#define SID_FM_CONVERTTO_FIXEDTEXT			(SID_MORE_FMSLOTS_START +  34)
+#define SID_FM_CONVERTTO_LISTBOX			(SID_MORE_FMSLOTS_START +  35)
+#define SID_FM_CONVERTTO_CHECKBOX			(SID_MORE_FMSLOTS_START +  36)
+#define SID_FM_CONVERTTO_RADIOBUTTON		(SID_MORE_FMSLOTS_START +  37)
+#define SID_FM_CONVERTTO_GROUPBOX			(SID_MORE_FMSLOTS_START +  38)
+#define SID_FM_CONVERTTO_COMBOBOX			(SID_MORE_FMSLOTS_START +  39)
+#define SID_FM_CONVERTTO_GRID				(SID_MORE_FMSLOTS_START +  40)
+#define SID_FM_CONVERTTO_IMAGEBUTTON		(SID_MORE_FMSLOTS_START +  41)
+#define SID_FM_CONVERTTO_FILECONTROL		(SID_MORE_FMSLOTS_START +  42)
+#define SID_FM_CONVERTTO_DATE				(SID_MORE_FMSLOTS_START +  43)
+#define SID_FM_CONVERTTO_TIME				(SID_MORE_FMSLOTS_START +  44)
+#define SID_FM_CONVERTTO_NUMERIC			(SID_MORE_FMSLOTS_START +  45)
+#define SID_FM_CONVERTTO_CURRENCY			(SID_MORE_FMSLOTS_START +  46)
+#define SID_FM_CONVERTTO_PATTERN			(SID_MORE_FMSLOTS_START +  47)
+#define SID_FM_CONVERTTO_IMAGECONTROL		(SID_MORE_FMSLOTS_START +  48)
+#define SID_FM_CONVERTTO_FORMATTED			(SID_MORE_FMSLOTS_START +  49)
 #define SID_FM_CONVERTTO_SCROLLBAR          (SID_MORE_FMSLOTS_START +  68)
 #define SID_FM_CONVERTTO_SPINBUTTON         (SID_MORE_FMSLOTS_START +  69)
 
-#define SID_FM_DATEFIELD                    (SID_MORE_FMSLOTS_START +   2)
-#define SID_FM_TIMEFIELD                    (SID_MORE_FMSLOTS_START +   3)
-#define SID_FM_NUMERICFIELD                 (SID_MORE_FMSLOTS_START +   4)
-#define SID_FM_CURRENCYFIELD                (SID_MORE_FMSLOTS_START +   5)
-#define SID_FM_PATTERNFIELD                 (SID_MORE_FMSLOTS_START +   6)
-#define SID_FM_IMAGECONTROL                 (SID_MORE_FMSLOTS_START +   8)
-#define SID_FM_FORMATTEDFIELD               (SID_MORE_FMSLOTS_START +  26)
+#define SID_FM_DATEFIELD					(SID_MORE_FMSLOTS_START +   2)
+#define SID_FM_TIMEFIELD					(SID_MORE_FMSLOTS_START +   3)
+#define SID_FM_NUMERICFIELD					(SID_MORE_FMSLOTS_START +   4)
+#define SID_FM_CURRENCYFIELD				(SID_MORE_FMSLOTS_START +   5)
+#define SID_FM_PATTERNFIELD					(SID_MORE_FMSLOTS_START +   6)
+#define SID_FM_IMAGECONTROL					(SID_MORE_FMSLOTS_START +   8)
+#define SID_FM_FORMATTEDFIELD				(SID_MORE_FMSLOTS_START +  26)
 #define SID_FM_SCROLLBAR                    (SID_MORE_FMSLOTS_START +  66)
 #define SID_FM_SPINBUTTON                   (SID_MORE_FMSLOTS_START +  67)
-#define SID_FM_CONFIG                       (SID_FMSLOTS_START + 1)
-#define SID_FM_PUSHBUTTON                   (SID_FMSLOTS_START + 2)
-#define SID_FM_RADIOBUTTON                  (SID_FMSLOTS_START + 3)
-#define SID_FM_CHECKBOX                     (SID_FMSLOTS_START + 4)
-#define SID_FM_FIXEDTEXT                    (SID_FMSLOTS_START + 5)
-#define SID_FM_GROUPBOX                     (SID_FMSLOTS_START + 6)
-#define SID_FM_EDIT                         (SID_FMSLOTS_START + 7)
-#define SID_FM_LISTBOX                      (SID_FMSLOTS_START + 8)
-#define SID_FM_COMBOBOX                     (SID_FMSLOTS_START + 9)
-#define SID_FM_URLBUTTON                    (SID_FMSLOTS_START + 10)
-#define SID_FM_DBGRID                       (SID_FMSLOTS_START + 11)
-#define SID_FM_IMAGEBUTTON                  (SID_FMSLOTS_START + 12)
-#define SID_FM_FILECONTROL                  (SID_FMSLOTS_START + 13)
+#define SID_FM_CONFIG		 				(SID_FMSLOTS_START + 1)
+#define SID_FM_PUSHBUTTON					(SID_FMSLOTS_START + 2)
+#define SID_FM_RADIOBUTTON					(SID_FMSLOTS_START + 3)
+#define SID_FM_CHECKBOX 					(SID_FMSLOTS_START + 4)
+#define SID_FM_FIXEDTEXT					(SID_FMSLOTS_START + 5)
+#define SID_FM_GROUPBOX 					(SID_FMSLOTS_START + 6)
+#define SID_FM_EDIT 						(SID_FMSLOTS_START + 7)
+#define SID_FM_LISTBOX						(SID_FMSLOTS_START + 8)
+#define SID_FM_COMBOBOX 					(SID_FMSLOTS_START + 9)
+#define SID_FM_URLBUTTON					(SID_FMSLOTS_START + 10)
+#define SID_FM_DBGRID						(SID_FMSLOTS_START + 11)
+#define SID_FM_IMAGEBUTTON					(SID_FMSLOTS_START + 12)
+#define SID_FM_FILECONTROL					(SID_FMSLOTS_START + 13)
 
 sal_Int16 nConvertSlots[] =
 {
@@ -128,7 +129,7 @@ sal_Int16 nConvertSlots[] =
     SID_FM_CONVERTTO_RADIOBUTTON,
     SID_FM_CONVERTTO_GROUPBOX,
     SID_FM_CONVERTTO_COMBOBOX,
-//  SID_FM_CONVERTTO_GRID,
+//	SID_FM_CONVERTTO_GRID,
     SID_FM_CONVERTTO_IMAGEBUTTON,
     SID_FM_CONVERTTO_FILECONTROL,
     SID_FM_CONVERTTO_DATE,
@@ -152,7 +153,7 @@ sal_Int16 nCreateSlots[] =
     SID_FM_RADIOBUTTON,
     SID_FM_GROUPBOX,
     SID_FM_COMBOBOX,
-//  SID_FM_DBGRID,
+//	SID_FM_DBGRID,
     SID_FM_IMAGEBUTTON,
     SID_FM_FILECONTROL,
     SID_FM_DATEFIELD,
@@ -191,8 +192,9 @@ const char* aCommands[] =
 };
 
 //_________________________________________________________________________________________________________________
-//  Defines
+//	Defines
 //_________________________________________________________________________________________________________________
+// 
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -205,9 +207,9 @@ using namespace com::sun::star::container;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   ControlMenuController                   ,
+DEFINE_XSERVICEINFO_MULTISERVICE        (   ControlMenuController				    ,
                                             OWeakObject                             ,
-                                            SERVICENAME_POPUPMENUCONTROLLER         ,
+                                            SERVICENAME_POPUPMENUCONTROLLER		    ,
                                             IMPLEMENTATIONNAME_CONTROLMENUCONTROLLER
                                         )
 
@@ -218,6 +220,7 @@ ControlMenuController::ControlMenuController( const ::com::sun::star::uno::Refer
     m_pResPopupMenu( 0 )
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    m_bWasHiContrast    = rSettings.GetHighContrastMode();
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
 
 }
@@ -229,10 +232,12 @@ ControlMenuController::~ControlMenuController()
 // private function
 void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
 {
-    ResMgr* pResMgr = ResMgr::CreateResMgr("svx");
-    ResId aResId( RID_SVXIMGLIST_FMEXPL, *pResMgr );
+    rtl::OUString aResName( RTL_CONSTASCII_USTRINGPARAM( "svx" ));
+    
+    ResMgr* pResMgr = ResMgr::CreateResMgr( rtl::OUStringToOString( aResName, RTL_TEXTENCODING_ASCII_US ));
+    ResId aResId( m_bWasHiContrast ? RID_SVXIMGLIST_FMEXPL_HC : RID_SVXIMGLIST_FMEXPL, *pResMgr );
     aResId.SetRT( RSC_IMAGELIST );
-
+    
     if ( pResMgr->IsAvailable( aResId ))
     {
         ImageList aImageList( aResId );
@@ -254,13 +259,13 @@ void ControlMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rP
 {
     VCLXPopupMenu*                                     pPopupMenu        = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*                                         pVCLPopupMenu     = 0;
-
+    
     SolarMutexGuard aSolarMutexGuard;
-
+    
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
         pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
-
+        
     if ( pVCLPopupMenu && m_pResPopupMenu )
         *pVCLPopupMenu = *m_pResPopupMenu;
 }
@@ -274,7 +279,7 @@ void SAL_CALL ControlMenuController::disposing( const EventObject& ) throw ( Run
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xServiceManager.clear();
-
+    
     if ( m_xPopupMenu.is() )
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));
     m_xPopupMenu.clear();
@@ -285,8 +290,8 @@ void SAL_CALL ControlMenuController::disposing( const EventObject& ) throw ( Run
 void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
-
-    sal_uInt16 nMenuId = 0;
+        
+    USHORT nMenuId = 0;    
     for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
     {
         if ( Event.FeatureURL.Complete.equalsAscii( aCommands[i] ))
@@ -299,9 +304,9 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
     if ( nMenuId )
     {
         VCLXPopupMenu*  pPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( m_xPopupMenu );
-
+    
         SolarMutexGuard aSolarMutexGuard;
-
+    
         PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
 
         if ( !Event.IsEnabled && pVCLPopupMenu->GetItemPos( nMenuId ) != MENU_ITEM_NOTFOUND )
@@ -320,11 +325,11 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
                 if ( nPrevInConversion != MENU_ITEM_NOTFOUND )
                     break;
             }
-
+            
           if ( MENU_ITEM_NOTFOUND == nPrevInConversion )
                 // none of the items which precede the nSID-slot in the source menu are present in our conversion menu
-                nPrevInConversion = sal::static_int_cast< sal_uInt16 >(-1); // put the item at the first position
-
+                nPrevInConversion = sal::static_int_cast< sal_uInt16 >(-1);	// put the item at the first position
+            
             pVCLPopupMenu->InsertItem( nMenuId, m_pResPopupMenu->GetItemText( nMenuId ), m_pResPopupMenu->GetItemBits( nMenuId ), ++nPrevInConversion );
             pVCLPopupMenu->SetItemImage( nMenuId, m_pResPopupMenu->GetItemImage( nMenuId ));
             pVCLPopupMenu->SetHelpId( nMenuId, m_pResPopupMenu->GetHelpId( nMenuId ));
@@ -338,10 +343,10 @@ void ControlMenuController::impl_select(const Reference< XDispatch >& /*_xDispat
     UrlToDispatchMap::iterator pIter = m_aURLToDispatchMap.find( aURL.Complete );
     if ( pIter != m_aURLToDispatchMap.end() )
     {
-        Sequence<PropertyValue>      aArgs;
+        Sequence<PropertyValue>	     aArgs;
         Reference< XDispatch > xDispatch = pIter->second;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlMenuController"))).log(m_xServiceManager, m_xFrame, aURL, aArgs);
+            UiEventLogHelper(::rtl::OUString::createFromAscii("ControlMenuController")).log(m_xServiceManager, m_xFrame, aURL, aArgs);
         if ( xDispatch.is() )
             xDispatch->dispatch( aURL, aArgs );
     }
@@ -350,19 +355,22 @@ void ControlMenuController::impl_select(const Reference< XDispatch >& /*_xDispat
 void SAL_CALL ControlMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
-
+    
     if ( m_xPopupMenu.is() )
     {
         SolarMutexGuard aSolarMutexGuard;
-
+        
         // Check if some modes have changed so we have to update our menu images
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        sal_Bool bIsHiContrast      = rSettings.GetHighContrastMode();
         sal_Bool bShowMenuImages    = rSettings.GetUseImagesInMenus();
-        sal_Bool bUpdateImages      = (bShowMenuImages != m_bShowMenuImages);
+        sal_Bool bUpdateImages      = (( m_bWasHiContrast != bIsHiContrast ) || ( bShowMenuImages != m_bShowMenuImages ));
 
         if ( bUpdateImages )
         {
-            m_bShowMenuImages   = bShowMenuImages;
+            // The mode has changed or the complete menu so we have to retrieve all images again
+            m_bWasHiContrast	= bIsHiContrast;
+            m_bShowMenuImages	= bShowMenuImages;
 
             VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( m_xPopupMenu );
             if ( pPopupMenu )
@@ -380,7 +388,10 @@ void ControlMenuController::impl_setPopupMenu()
 {
     if ( m_pResPopupMenu == 0 )
     {
-        ResMgr* pResMgr = ResMgr::CreateResMgr("svx");
+        rtl::OStringBuffer aBuf( 32 );
+        aBuf.append( "svx" );
+
+        ResMgr* pResMgr = ResMgr::CreateResMgr( aBuf.getStr() );
         if ( pResMgr )
         {
             ResId aResId( RID_FMSHELL_CONVERSIONMENU, *pResMgr );
@@ -393,25 +404,25 @@ void ControlMenuController::impl_setPopupMenu()
         }
     } // if ( m_pResPopupMenu == 0 )
 }
-
+        
 void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::uno::RuntimeException)
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
 
     throwIfDisposed();
-
+    
     if ( m_xFrame.is() && m_xPopupMenu.is() )
     {
         URL aTargetURL;
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         fillPopupMenu( m_xPopupMenu );
         m_aURLToDispatchMap.free();
-
+        
         for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
         {
             aTargetURL.Complete = rtl::OUString::createFromAscii( aCommands[i] );
             m_xURLTransformer->parseStrict( aTargetURL );
-
+            
             Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
             if ( xDispatch.is() )
             {
@@ -428,7 +439,7 @@ void SAL_CALL ControlMenuController::initialize( const Sequence< Any >& aArgumen
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
     svt::PopupMenuControllerBase::initialize(aArguments);
-    m_aBaseURL = ::rtl::OUString();
+    m_aBaseURL = ::rtl::OUString();    
 }
 
 }

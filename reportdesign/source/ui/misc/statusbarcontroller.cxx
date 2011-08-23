@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,10 +84,10 @@ Reference< XInterface > OStatusbarController::create(Reference< XComponentContex
 }
 IMPLEMENT_FORWARD_XINTERFACE2(OStatusbarController, ::svt::StatusbarController,OStatusbarController_BASE)
 
-OStatusbarController::OStatusbarController(const Reference< XMultiServiceFactory >& _rxORB)
+OStatusbarController::OStatusbarController(const Reference< XMultiServiceFactory >& _rxORB) 
 : m_nSlotId(0)
 ,m_nId(1)
-{
+{ 
     m_xServiceManager = _rxORB;
 }
 // -----------------------------------------------------------------------------
@@ -100,22 +100,22 @@ void SAL_CALL OStatusbarController::initialize( const Sequence< Any >& _rArgumen
     StatusBar* pStatusBar = static_cast<StatusBar*>(VCLUnoHelper::GetWindow(m_xParentWindow));
     if ( pStatusBar )
     {
-        const sal_uInt16 nCount = pStatusBar->GetItemCount();
-        for (sal_uInt16 nPos = 0; nPos < nCount; ++nPos)
+        const USHORT nCount = pStatusBar->GetItemCount();
+        for (USHORT nPos = 0; nPos < nCount; ++nPos)
         {
-            const sal_uInt16 nItemId = pStatusBar->GetItemId(nPos);
+            const USHORT nItemId = pStatusBar->GetItemId(nPos);
             if ( pStatusBar->GetItemCommand(nItemId) == String(m_aCommandURL) )
             {
                 m_nId = nItemId;
                 break;
             }
         }
-        if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:ZoomSlider")) )
-        {
+        if ( m_aCommandURL.equalsAscii(".uno:ZoomSlider") )
+        {  
             m_pController = TStatusbarHelper::createFromQuery(new SvxZoomSliderControl(m_nSlotId = SID_ATTR_ZOOMSLIDER,m_nId,*pStatusBar));
-        }
-        else if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:Zoom")) )
-        {
+        } // if ( m_aCommandURL.equalsAscii(".uno:ZoomSlider") )
+        else if ( m_aCommandURL.equalsAscii(".uno:Zoom") )
+        {  
             m_pController = TStatusbarHelper::createFromQuery(new SvxZoomStatusBarControl(m_nSlotId = SID_ATTR_ZOOM,m_nId,*pStatusBar));
         }
 
@@ -137,7 +137,7 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
 
     if ( m_pController.is() )
     {
-        if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:ZoomSlider")) )
+        if ( m_aCommandURL.equalsAscii(".uno:ZoomSlider") )
         {
             Sequence< PropertyValue > aSeq;
             if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 2 )
@@ -146,8 +146,8 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
                 aZoomSlider.PutValue(_aEvent.State);
                 static_cast<SvxZoomSliderControl*>(m_pController.get())->StateChanged(m_nSlotId,SFX_ITEM_AVAILABLE,&aZoomSlider);
             }
-        }
-        else if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:Zoom")) )
+        } // if ( m_aCommandURL.equalsAscii(".uno:ZoomSlider") )
+        else if ( m_aCommandURL.equalsAscii(".uno:Zoom") )
         {
             Sequence< PropertyValue > aSeq;
             if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 3 )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,6 +47,8 @@ SwEnvironmentOfAnchoredObject::~SwEnvironmentOfAnchoredObject()
 
 /** determine environment layout frame for possible horizontal object positions
 
+    OD 05.11.2003
+
     @author OD
 */
 const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(
@@ -56,9 +58,10 @@ const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(
 
     if ( !mbFollowTextFlow )
     {
-        // No exception any more for page alignment.
+        // --> OD 2005-01-20 #118546# - no exception any more for page alignment.
         // the page frame determines the horizontal layout environment.
         pHoriEnvironmentLayFrm = _rHoriOrientFrm.FindPageFrm();
+        // <--
     }
     else
     {
@@ -79,6 +82,10 @@ const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(
 }
 
 /** determine environment layout frame for possible vertical object positions
+
+    OD 05.11.2003
+
+    @author OD
 */
 const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(
                                             const SwFrm& _rVertOrientFrm ) const
@@ -87,9 +94,10 @@ const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(
 
     if ( !mbFollowTextFlow )
     {
-        // No exception any more for page alignment.
+        // --> OD 2005-01-20 #118546# - no exception any more for page alignment.
         // the page frame determines the vertical layout environment.
         pVertEnvironmentLayFrm = _rVertOrientFrm.FindPageFrm();
+        // <--
     }
     else
     {

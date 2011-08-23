@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,14 +46,13 @@
 #include <fchrfmt.hxx>
 #include <charfmt.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <swcrsr.hxx>
 #include <editsh.hxx>
 #include <ndtxt.hxx>
 #include <pamtyp.hxx>
 #include <swundo.hxx>
 #include <crsskip.hxx>
-
+#include <undobj.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -84,7 +83,7 @@ int CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
 }
 
 
-const SwTxtAttr* GetFrwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
+const SwTxtAttr* GetFrwrdTxtHint( const SwpHints& rHtsArr, USHORT& rPos,
                                     xub_StrLen nCntntPos )
 {
     while( rPos < rHtsArr.Count() )
@@ -92,13 +91,13 @@ const SwTxtAttr* GetFrwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
         const SwTxtAttr *pTxtHt = rHtsArr.GetStart( rPos++ );
         // der Start vom Attribut muss innerhalb des Bereiches liegen !!
         if( *pTxtHt->GetStart() >= nCntntPos )
-            return pTxtHt;      // gueltiges TextAttribut
+            return pTxtHt; 		// gueltiges TextAttribut
     }
-    return 0;                   // kein gueltiges TextAttribut
+    return 0;			 		// kein gueltiges TextAttribut
 }
 
 
-const SwTxtAttr* GetBkwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
+const SwTxtAttr* GetBkwrdTxtHint( const SwpHints& rHtsArr, USHORT& rPos,
                                   xub_StrLen nCntntPos )
 {
     while( rPos > 0 )
@@ -107,25 +106,25 @@ const SwTxtAttr* GetBkwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
         const SwTxtAttr *pTxtHt = rHtsArr.GetStart( --rPos );
         // der Start vom Attribut muss innerhalb des Bereiches liegen !!
         if( *pTxtHt->GetStart() < nCntntPos )
-            return pTxtHt;      // gueltiges TextAttribut
+            return pTxtHt; 		// gueltiges TextAttribut
     }
-    return 0;                   // kein gueltiges TextAttribut
+    return 0; 					// kein gueltiges TextAttribut
 }
 
 
 void lcl_SetAttrPam( SwPaM & rPam, xub_StrLen nStart, const xub_StrLen* pEnde,
-                        const sal_Bool bSaveMark )
+                        const BOOL bSaveMark )
 {
     xub_StrLen nCntntPos;
     if( bSaveMark )
         nCntntPos = rPam.GetMark()->nContent.GetIndex();
     else
         nCntntPos = rPam.GetPoint()->nContent.GetIndex();
-    sal_Bool bTstEnde = rPam.GetPoint()->nNode == rPam.GetMark()->nNode;
+    BOOL bTstEnde = rPam.GetPoint()->nNode == rPam.GetMark()->nNode;
 
     SwCntntNode* pCNd = rPam.GetCntntNode();
     rPam.GetPoint()->nContent.Assign( pCNd, nStart );
-    rPam.SetMark();     // Point == GetMark
+    rPam.SetMark(); 	// Point == GetMark
 
     // Point zeigt auf das Ende vom SuchBereich oder Ende vom Attribut
     if( pEnde )
@@ -144,15 +143,15 @@ void lcl_SetAttrPam( SwPaM & rPam, xub_StrLen nStart, const xub_StrLen* pEnde,
 // umspannt, unter Beachtung des Suchbereiches
 
 
-sal_Bool lcl_Search( const SwTxtNode& rTxtNd, SwPaM& rPam,
+BOOL lcl_Search( const SwTxtNode& rTxtNd, SwPaM& rPam,
                     const SfxPoolItem& rCmpItem,
-                    SwMoveFn fnMove, sal_Bool bValue )
+                    SwMoveFn fnMove, BOOL bValue )
 {
     if ( !rTxtNd.HasHints() )
-        return sal_False;
+        return FALSE;
     const SwTxtAttr *pTxtHt = 0;
-    sal_Bool bForward = fnMove == fnMoveForward;
-    sal_uInt16 nPos = bForward ? 0 : rTxtNd.GetSwpHints().Count();
+    BOOL bForward = fnMove == fnMoveForward;
+    USHORT nPos = bForward ? 0 : rTxtNd.GetSwpHints().Count();
     xub_StrLen nCntntPos = rPam.GetPoint()->nContent.GetIndex();
 
     while( 0 != ( pTxtHt=(*fnMove->fnGetHint)(rTxtNd.GetSwpHints(),nPos,nCntntPos)))
@@ -160,9 +159,9 @@ sal_Bool lcl_Search( const SwTxtNode& rTxtNd, SwPaM& rPam,
             ( !bValue || CmpAttr( pTxtHt->GetAttr(), rCmpItem )))
         {
             lcl_SetAttrPam( rPam, *pTxtHt->GetStart(), pTxtHt->GetEnd(), bForward );
-            return sal_True;
+            return TRUE;
         }
-    return sal_False;
+    return FALSE;
 }
 
 
@@ -170,7 +169,7 @@ sal_Bool lcl_Search( const SwTxtNode& rTxtNd, SwPaM& rPam,
 
 struct _SwSrchChrAttr
 {
-    sal_uInt16 nWhich;
+    USHORT nWhich;
     xub_StrLen nStt, nEnd;
 
     _SwSrchChrAttr( const SfxPoolItem& rItem,
@@ -183,11 +182,11 @@ class SwAttrCheckArr
 {
     _SwSrchChrAttr *pFndArr, *pStackArr;
     xub_StrLen nNdStt, nNdEnd;
-    sal_uInt16 nArrStart, nArrLen;
-    sal_uInt16 nFound, nStackCnt;
+    USHORT nArrStart, nArrLen;
+    USHORT nFound, nStackCnt;
     SfxItemSet aCmpSet;
-    sal_Bool bNoColls;
-    sal_Bool bForward;
+    BOOL bNoColls;
+    BOOL bForward;
 
 public:
     SwAttrCheckArr( const SfxItemSet& rSet, int bForward, int bNoCollections );
@@ -196,8 +195,8 @@ public:
     void SetNewSet( const SwTxtNode& rTxtNd, const SwPaM& rPam );
 
     // wieviele Attribute ueberhaupt ??
-    sal_uInt16 Count() const    { return aCmpSet.Count(); }
-    int Found() const       { return nFound == aCmpSet.Count(); }
+    USHORT Count() const 	{ return aCmpSet.Count(); }
+    int Found() const 		{ return nFound == aCmpSet.Count(); }
     int CheckStack();
 
     xub_StrLen Start() const;
@@ -216,7 +215,7 @@ SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, int bFwd,
                                 int bNoCollections )
     : aCmpSet( *rSet.GetPool(), RES_CHRATR_BEGIN, RES_TXTATR_END-1 )
 {
-    aCmpSet.Put( rSet, sal_False );
+    aCmpSet.Put( rSet, FALSE );
     bNoColls = 0 != bNoCollections;
 
     bForward = 0 != bFwd;
@@ -265,22 +264,22 @@ void SwAttrCheckArr::SetNewSet( const SwTxtNode& rTxtNd, const SwPaM& rPam )
         return ;
 
     const SfxItemSet& rSet = rTxtNd.GetSwAttrSet();
-//  if( !rSet.Count() )
-//      return;
+//	if( !rSet.Count() )
+//		return;
 
     SfxItemIter aIter( aCmpSet );
     const SfxPoolItem* pItem = aIter.GetCurItem();
     const SfxPoolItem* pFndItem;
-    sal_uInt16 nWhich;
+    USHORT nWhich;
 
-    while( sal_True )
+    while( TRUE )
     {
         // nur testen, ob vorhanden ist ?
         if( IsInvalidItem( pItem ) )
         {
             nWhich = aCmpSet.GetWhichByPos( aIter.GetCurPos() );
             if( RES_TXTATR_END <= nWhich )
-                break;              // Ende der TextAttribute
+                break;				// Ende der TextAttribute
 
             if( SFX_ITEM_SET == rSet.GetItemState( nWhich, !bNoColls, &pFndItem )
                 && !CmpAttr( *pFndItem, rSet.GetPool()->GetDefaultItem( nWhich ) ))
@@ -293,11 +292,11 @@ void SwAttrCheckArr::SetNewSet( const SwTxtNode& rTxtNd, const SwPaM& rPam )
         else
         {
             if( RES_TXTATR_END <= (nWhich = pItem->Which() ))
-                break;              // Ende der TextAttribute
+                break;				// Ende der TextAttribute
 
 //JP 27.02.95: wenn nach defaults gesucht wird, dann muss man bis zum Pool
-//              runter
-//          if( SFX_ITEM_SET == rSet.GetItemState( nWhich, !bNoColls, &pFndItem )
+//				runter
+//			if( SFX_ITEM_SET == rSet.GetItemState( nWhich, !bNoColls, &pFndItem )
 //                && *pFndItem == *pItem )
             if( CmpAttr( rSet.Get( nWhich, !bNoColls ), *pItem ) )
             {
@@ -324,7 +323,7 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
 // --------------------------------------------------------------
 // Hier wird jetzt ausdruecklich auch in Zeichenvorlagen gesucht
 // --------------------------------------------------------------
-    sal_uInt16 nWhch = rAttr.Which();
+    USHORT nWhch = rAttr.Which();
     SfxWhichIter* pIter = NULL;
     const SfxPoolItem* pTmpItem = NULL;
     const SfxItemSet* pSet = NULL;
@@ -339,7 +338,7 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
             pIter = new SfxWhichIter( *pSet );
             nWhch = pIter->FirstWhich();
             while( nWhch &&
-                SFX_ITEM_SET != pSet->GetItemState( nWhch, sal_True, &pTmpItem ) )
+                SFX_ITEM_SET != pSet->GetItemState( nWhch, TRUE, &pTmpItem ) )
                 nWhch = pIter->NextWhich();
             if( !nWhch )
                 pTmpItem = NULL;
@@ -349,10 +348,10 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
         pTmpItem = &rAttr.GetAttr();
     while( pTmpItem )
     {
-        SfxItemState eState = aCmpSet.GetItemState( nWhch, sal_False, &pItem );
+        SfxItemState eState = aCmpSet.GetItemState( nWhch, FALSE, &pItem );
         if( SFX_ITEM_DONTCARE == eState || SFX_ITEM_SET == eState )
         {
-            sal_uInt16 n;
+            USHORT n;
             _SwSrchChrAttr* pCmp;
 
             // loesche erstmal alle, die bis zu der Start Position schon wieder
@@ -364,7 +363,7 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
                     ++n, ++pArrPtr )
                     if( pArrPtr->nWhich && pArrPtr->nEnd <= aTmp.nStt )
                     {
-                        pArrPtr->nWhich = 0;        // geloescht
+                        pArrPtr->nWhich = 0;		// geloescht
                         nFound--;
                     }
 
@@ -380,7 +379,7 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
 
                     if( pArrPtr->nEnd <= aTmp.nStt )
                     {
-                        pArrPtr->nWhich = 0;        // geloescht
+                        pArrPtr->nWhich = 0;		// geloescht
                         if( !--nStackCnt )
                             break;
                     }
@@ -388,7 +387,7 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
                     {
                         if( ( pCmp = &pFndArr[ n ])->nWhich )
                         {
-                            if( pCmp->nEnd < pArrPtr->nEnd )        // erweitern
+                            if( pCmp->nEnd < pArrPtr->nEnd )		// erweitern
                                 pCmp->nEnd = pArrPtr->nEnd;
                         }
                         else
@@ -402,7 +401,7 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
                     }
                 }
 
-            sal_Bool bContinue = sal_False;
+            BOOL bContinue = FALSE;
 
             if( SFX_ITEM_DONTCARE == eState  )
             {
@@ -413,13 +412,13 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
                     // suche das Attribut und erweiter es gegebenenfalls
                     if( !( pCmp = &pFndArr[ nWhch - nArrStart ])->nWhich )
                     {
-                        *pCmp = aTmp;               // nicht gefunden, eintragen
+                        *pCmp = aTmp;				// nicht gefunden, eintragen
                         nFound++;
                     }
-                    else if( pCmp->nEnd < aTmp.nEnd )       // erweitern ?
+                    else if( pCmp->nEnd < aTmp.nEnd )		// erweitern ?
                         pCmp->nEnd = aTmp.nEnd;
 
-                    bContinue = sal_True;
+                    bContinue = TRUE;
                 }
             }
             // wird Attribut gueltig ?
@@ -427,7 +426,7 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
             {
                 pFndArr[ nWhch - nArrStart ] = aTmp;
                 ++nFound;
-                bContinue = sal_True;
+                bContinue = TRUE;
             }
 
             // tja, dann muss es auf den Stack
@@ -439,6 +438,9 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
                     OSL_ENSURE( !pStackArr[ nWhch - nArrStart ].nWhich,
                                     "Stack-Platz ist noch belegt" );
 
+        // ---------
+        // JP 22.08.96: nur Ende manipulieren reicht nicht. Bug 30547
+        //			pCmp->nStt = aTmp.nEnd;
                     if( aTmp.nStt <= pCmp->nStt )
                         pCmp->nStt = aTmp.nEnd;
                     else
@@ -456,7 +458,7 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
         {
             nWhch = pIter->NextWhich();
             while( nWhch &&
-                SFX_ITEM_SET != pSet->GetItemState( nWhch, sal_True, &pTmpItem ) )
+                SFX_ITEM_SET != pSet->GetItemState( nWhch, TRUE, &pTmpItem ) )
                 nWhch = pIter->NextWhich();
             if( !nWhch )
                 break;
@@ -479,7 +481,7 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
 // --------------------------------------------------------------
 // Hier wird jetzt ausdruecklich auch in Zeichenvorlagen gesucht
 // --------------------------------------------------------------
-    sal_uInt16 nWhch = rAttr.Which();
+    USHORT nWhch = rAttr.Which();
     SfxWhichIter* pIter = NULL;
     const SfxPoolItem* pTmpItem = NULL;
     const SfxItemSet* pSet = NULL;
@@ -494,7 +496,7 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
             pIter = new SfxWhichIter( *pSet );
             nWhch = pIter->FirstWhich();
             while( nWhch &&
-                SFX_ITEM_SET != pSet->GetItemState( nWhch, sal_True, &pTmpItem ) )
+                SFX_ITEM_SET != pSet->GetItemState( nWhch, TRUE, &pTmpItem ) )
                 nWhch = pIter->NextWhich();
             if( !nWhch )
                 pTmpItem = NULL;
@@ -504,10 +506,10 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
         pTmpItem = &rAttr.GetAttr();
     while( pTmpItem )
     {
-        SfxItemState eState = aCmpSet.GetItemState( nWhch, sal_False, &pItem );
+        SfxItemState eState = aCmpSet.GetItemState( nWhch, FALSE, &pItem );
         if( SFX_ITEM_DONTCARE == eState || SFX_ITEM_SET == eState )
         {
-            sal_uInt16 n;
+            USHORT n;
             _SwSrchChrAttr* pCmp;
 
             // loesche erstmal alle, die bis zu der Start Position schon wieder
@@ -518,7 +520,7 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
                 for( pArrPtr = pFndArr, n = 0; n < nArrLen; ++n, ++pArrPtr )
                     if( pArrPtr->nWhich && pArrPtr->nStt >= aTmp.nEnd )
                     {
-                        pArrPtr->nWhich = 0;        // geloescht
+                        pArrPtr->nWhich = 0;		// geloescht
                         nFound--;
                     }
 
@@ -534,7 +536,7 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
 
                     if( pArrPtr->nStt >= aTmp.nEnd )
                     {
-                        pArrPtr->nWhich = 0;        // geloescht
+                        pArrPtr->nWhich = 0;		// geloescht
                         if( !--nStackCnt )
                             break;
                     }
@@ -542,7 +544,7 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
                     {
                         if( ( pCmp = &pFndArr[ n ])->nWhich )
                         {
-                            if( pCmp->nStt > pArrPtr->nStt )        // erweitern
+                            if( pCmp->nStt > pArrPtr->nStt )		// erweitern
                                 pCmp->nStt = pArrPtr->nStt;
                         }
                         else
@@ -556,7 +558,7 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
                 }
             }
 
-            sal_Bool bContinue = sal_False;
+            BOOL bContinue = FALSE;
             if( SFX_ITEM_DONTCARE == eState  )
             {
                 // wird Attribut gueltig ?
@@ -566,13 +568,13 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
                     // suche das Attribut und erweiter es gegebenenfalls
                     if( !( pCmp = &pFndArr[ nWhch - nArrStart ])->nWhich )
                     {
-                        *pCmp = aTmp;               // nicht gefunden, eintragen
+                        *pCmp = aTmp;				// nicht gefunden, eintragen
                         nFound++;
                     }
-                    else if( pCmp->nStt > aTmp.nStt )       // erweitern ?
+                    else if( pCmp->nStt > aTmp.nStt )		// erweitern ?
                         pCmp->nStt = aTmp.nStt;
 
-                    bContinue = sal_True;
+                    bContinue = TRUE;
                 }
             }
             // wird Attribut gueltig ?
@@ -580,7 +582,7 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
             {
                 pFndArr[ nWhch - nArrStart ] = aTmp;
                 ++nFound;
-                bContinue = sal_True;
+                bContinue = TRUE;
             }
 
             // tja, dann muss es auf den Stack
@@ -592,6 +594,9 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
                     OSL_ENSURE( !pStackArr[ nWhch - nArrStart ].nWhich,
                             "Stack-Platz ist noch belegt" );
 
+// ---------
+// JP 22.08.96: nur Ende manipulieren reicht nicht. Bug 30547
+//			pCmp->nEnd = aTmp.nStt;
                     if( aTmp.nEnd <= pCmp->nEnd )
                         pCmp->nEnd = aTmp.nStt;
                     else
@@ -609,7 +614,7 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
         {
             nWhch = pIter->NextWhich();
             while( nWhch &&
-                SFX_ITEM_SET != pSet->GetItemState( nWhch, sal_True, &pTmpItem ) )
+                SFX_ITEM_SET != pSet->GetItemState( nWhch, TRUE, &pTmpItem ) )
                 nWhch = pIter->NextWhich();
             if( !nWhch )
                 break;
@@ -625,7 +630,7 @@ xub_StrLen SwAttrCheckArr::Start() const
 {
     xub_StrLen nStart = nNdStt;
     _SwSrchChrAttr* pArrPtr = pFndArr;
-    for( sal_uInt16 n = 0; n < nArrLen; ++n, ++pArrPtr )
+    for( USHORT n = 0; n < nArrLen; ++n, ++pArrPtr )
         if( pArrPtr->nWhich && pArrPtr->nStt > nStart )
             nStart = pArrPtr->nStt;
 
@@ -637,7 +642,7 @@ xub_StrLen SwAttrCheckArr::End() const
 {
     _SwSrchChrAttr* pArrPtr = pFndArr;
     xub_StrLen nEnd = nNdEnd;
-    for( sal_uInt16 n = 0; n < nArrLen; ++n, ++pArrPtr )
+    for( USHORT n = 0; n < nArrLen; ++n, ++pArrPtr )
         if( pArrPtr->nWhich && pArrPtr->nEnd < nEnd )
             nEnd = pArrPtr->nEnd;
 
@@ -648,9 +653,9 @@ xub_StrLen SwAttrCheckArr::End() const
 int SwAttrCheckArr::CheckStack()
 {
     if( !nStackCnt )
-        return sal_False;
+        return FALSE;
 
-    sal_uInt16 n;
+    USHORT n;
     xub_StrLen nSttPos = Start(), nEndPos = End();
     _SwSrchChrAttr* pArrPtr;
     for( pArrPtr = pStackArr, n = 0; n < nArrLen; ++n, ++pArrPtr )
@@ -660,7 +665,7 @@ int SwAttrCheckArr::CheckStack()
 
         if( bForward ? pArrPtr->nEnd <= nSttPos : pArrPtr->nStt >= nEndPos )
         {
-            pArrPtr->nWhich = 0;        // geloescht
+            pArrPtr->nWhich = 0;		// geloescht
             if( !--nStackCnt )
                 return nFound == aCmpSet.Count();
         }
@@ -689,16 +694,16 @@ int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
     if( !rTxtNd.HasHints() )
     {
         if( !rCmpArr.Found() )
-            return sal_False;
+            return FALSE;
         nEndPos = rCmpArr.GetNdEnd();
-        lcl_SetAttrPam( rPam, rCmpArr.GetNdStt(), &nEndPos, sal_True );
-        return sal_True;
+        lcl_SetAttrPam( rPam, rCmpArr.GetNdStt(), &nEndPos, TRUE );
+        return TRUE;
     }
 
     // dann gehe mal durch das nach "Start" sortierte Array
     const SwpHints& rHtArr = rTxtNd.GetSwpHints();
     const SwTxtAttr* pAttr;
-    sal_uInt16 nPos = 0;
+    USHORT nPos = 0;
 
     // sollte jetzt schon alles vorhanden sein, dann teste, mit welchem
     // das wieder beendet wird.
@@ -711,8 +716,8 @@ int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
                 {
                     // dann haben wir unser Ende:
                     lcl_SetAttrPam( rPam, rCmpArr.GetNdStt(),
-                                pAttr->GetStart(), sal_True );
-                    return sal_True;
+                                pAttr->GetStart(), TRUE );
+                    return TRUE;
                 }
                 // ansonsten muessen wir weiter suchen
                 break;
@@ -722,8 +727,8 @@ int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
         {
             // dann haben wir unseren Bereich
             nEndPos = rCmpArr.GetNdEnd();
-            lcl_SetAttrPam( rPam, rCmpArr.GetNdStt(), &nEndPos, sal_True );
-            return sal_True;
+            lcl_SetAttrPam( rPam, rCmpArr.GetNdStt(), &nEndPos, TRUE );
+            return TRUE;
         }
     }
 
@@ -742,16 +747,16 @@ int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
 
             // dann haben wir den Bereich zusammen
             if( (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
-                return sal_False;
-            lcl_SetAttrPam( rPam, nSttPos, &nEndPos, sal_True );
-            return sal_True;
+                return FALSE;
+            lcl_SetAttrPam( rPam, nSttPos, &nEndPos, TRUE );
+            return TRUE;
         }
 
     if( !rCmpArr.CheckStack() ||
         (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
-        return sal_False;
-    lcl_SetAttrPam( rPam, nSttPos, &nEndPos, sal_True );
-    return sal_True;
+        return FALSE;
+    lcl_SetAttrPam( rPam, nSttPos, &nEndPos, TRUE );
+    return TRUE;
 }
 
 
@@ -763,16 +768,16 @@ int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
     if( !rTxtNd.HasHints() )
     {
         if( !rCmpArr.Found() )
-            return sal_False;
+            return FALSE;
         nEndPos = rCmpArr.GetNdEnd();
-        lcl_SetAttrPam( rPam, rCmpArr.GetNdStt(), &nEndPos, sal_False );
-        return sal_True;
+        lcl_SetAttrPam( rPam, rCmpArr.GetNdStt(), &nEndPos, FALSE );
+        return TRUE;
     }
 
     // dann gehe mal durch das nach "Start" sortierte Array
     const SwpHints& rHtArr = rTxtNd.GetSwpHints();
     const SwTxtAttr* pAttr;
-    sal_uInt16 nPos = rHtArr.Count();
+    USHORT nPos = rHtArr.Count();
 
     // sollte jetzt schon alles vorhanden sein, dann teste, mit welchem
     // das wieder beendet wird.
@@ -786,8 +791,8 @@ int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
                 {
                     // dann haben wir unser Ende:
                     nEndPos = rCmpArr.GetNdEnd();
-                    lcl_SetAttrPam( rPam, nSttPos, &nEndPos, sal_False );
-                    return sal_True;
+                    lcl_SetAttrPam( rPam, nSttPos, &nEndPos, FALSE );
+                    return TRUE;
                 }
 
                 // ansonsten muessen wir weiter suchen
@@ -798,8 +803,8 @@ int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
         {
             // dann haben wir unseren Bereich
             nEndPos = rCmpArr.GetNdEnd();
-            lcl_SetAttrPam( rPam, rCmpArr.GetNdStt(), &nEndPos, sal_False );
-            return sal_True;
+            lcl_SetAttrPam( rPam, rCmpArr.GetNdStt(), &nEndPos, FALSE );
+            return TRUE;
         }
     }
 
@@ -822,32 +827,32 @@ int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
 
             // dann haben wir den Bereich zusammen
             if( (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
-                return sal_False;
-            lcl_SetAttrPam( rPam, nSttPos, &nEndPos, sal_False );
-            return sal_True;
+                return FALSE;
+            lcl_SetAttrPam( rPam, nSttPos, &nEndPos, FALSE );
+            return TRUE;
         }
 
     if( !rCmpArr.CheckStack() ||
         (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
-        return sal_False;
-    lcl_SetAttrPam( rPam, nSttPos, &nEndPos, sal_False );
-    return sal_True;
+        return FALSE;
+    lcl_SetAttrPam( rPam, nSttPos, &nEndPos, FALSE );
+    return TRUE;
 }
 
 
-int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, sal_Bool bNoColls )
+int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, BOOL bNoColls )
 {
     // nur die harte Attributierung suchen ?
     if( bNoColls && !rCNd.HasSwAttrSet() )
-        return sal_False;
+        return FALSE;
 
     const SfxItemSet& rNdSet = rCNd.GetSwAttrSet();
     SfxItemIter aIter( rCmpSet );
     const SfxPoolItem* pItem = aIter.GetCurItem();
     const SfxPoolItem* pNdItem;
-    sal_uInt16 nWhich;
+    USHORT nWhich;
 
-    while( sal_True )
+    while( TRUE )
     {
         // nur testen, ob vorhanden ist ?
         if( IsInvalidItem( pItem ))
@@ -855,36 +860,39 @@ int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, sal_Bool bNo
             nWhich = rCmpSet.GetWhichByPos( aIter.GetCurPos() );
             if( SFX_ITEM_SET != rNdSet.GetItemState( nWhich, !bNoColls, &pNdItem )
                 || CmpAttr( *pNdItem, rNdSet.GetPool()->GetDefaultItem( nWhich ) ))
-                return sal_False;
+                return FALSE;
         }
         else
         {
             nWhich = pItem->Which();
-
+//JP 27.02.95: wenn nach defaults gesucht wird, dann muss man bis zum Pool
+//				runter
+//			if( SFX_ITEM_SET != rNdSet.GetItemState( nWhich, !bNoColls, &pNdItem )
+//				|| *pNdItem != *pItem )
             if( !CmpAttr( rNdSet.Get( nWhich, !bNoColls ), *pItem ))
-                return sal_False;
+                return FALSE;
         }
 
         if( aIter.IsAtEnd() )
             break;
         pItem = aIter.NextItem();
     }
-    return sal_True;            // wurde gefunden
+    return TRUE;			// wurde gefunden
 }
 
 
-sal_Bool SwPaM::Find( const SfxPoolItem& rAttr, sal_Bool bValue, SwMoveFn fnMove,
-                    const SwPaM *pRegion, sal_Bool bInReadOnly )
+BOOL SwPaM::Find( const SfxPoolItem& rAttr, BOOL bValue, SwMoveFn fnMove,
+                    const SwPaM *pRegion, BOOL bInReadOnly )
 {
     // stelle fest welches Attribut gesucht wird:
-    sal_uInt16 nWhich = rAttr.Which();
+    USHORT nWhich = rAttr.Which();
     int bCharAttr = isCHRATR(nWhich) || isTXTATR(nWhich);
 
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
 
-    sal_Bool bFound = sal_False;
-    sal_Bool bFirst = sal_True;
-    sal_Bool bSrchForward = fnMove == fnMoveForward;
+    BOOL bFound = FALSE;
+    BOOL bFirst = TRUE;
+    BOOL bSrchForward = fnMove == fnMoveForward;
     SwCntntNode * pNode;
     const SfxPoolItem* pItem;
     SwpFmts aFmtArr;
@@ -894,10 +902,10 @@ sal_Bool SwPaM::Find( const SfxPoolItem& rAttr, sal_Bool bValue, SwMoveFn fnMove
         ? pPam->GetPoint()->nContent.GetIndex() == pPam->GetCntntNode()->Len()
         : !pPam->GetPoint()->nContent.GetIndex() )
     {
-        if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, sal_False ))
+        if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, FALSE ))
         {
             delete pPam;
-            return sal_False;
+            return FALSE;
         }
         SwCntntNode *pNd = pPam->GetCntntNode();
         xub_StrLen nTmpPos = bSrchForward ? 0 : pNd->Len();
@@ -918,7 +926,7 @@ sal_Bool SwPaM::Find( const SfxPoolItem& rAttr, sal_Bool bValue, SwMoveFn fnMove
                 SetMark();
                 *GetPoint() = *pPam->GetPoint();
                 *GetMark() = *pPam->GetMark();
-                bFound = sal_True;
+                bFound = TRUE;
                 break;
             }
             else if (isTXTATR(nWhich))
@@ -931,20 +939,20 @@ sal_Bool SwPaM::Find( const SfxPoolItem& rAttr, sal_Bool bValue, SwMoveFn fnMove
         {
             const SwFmt* pTmpFmt = pNode->GetFmtColl();
             if( aFmtArr.Count() && aFmtArr.Seek_Entry( pTmpFmt ))
-                continue;   // die Collection wurde schon mal befragt
+                continue; 	// die Collection wurde schon mal befragt
             aFmtArr.Insert( pTmpFmt );
         }
 
         if( SFX_ITEM_SET == pNode->GetSwAttrSet().GetItemState( nWhich,
-            sal_True, &pItem ) && ( !bValue || *pItem == rAttr ) )
+            TRUE, &pItem ) && ( !bValue || *pItem == rAttr ) )
         {
             // FORWARD:  Point an das Ende, GetMark zum Anfanf vom Node
-            // BACKWARD: Point zum Anfang,  GetMark an das Ende vom Node
+            // BACKWARD: Point zum Anfang,	GetMark an das Ende vom Node
             // und immer nach der Logik: inkl. Start, exkl. End !!!
             *GetPoint() = *pPam->GetPoint();
             SetMark();
             pNode->MakeEndIndex( &GetPoint()->nContent );
-            bFound = sal_True;
+            bFound = TRUE;
             break;
         }
     }
@@ -960,14 +968,14 @@ sal_Bool SwPaM::Find( const SfxPoolItem& rAttr, sal_Bool bValue, SwMoveFn fnMove
 
 typedef int (*FnSearchAttr)( const SwTxtNode&, SwAttrCheckArr&, SwPaM& );
 
-sal_Bool SwPaM::Find( const SfxItemSet& rSet, sal_Bool bNoColls, SwMoveFn fnMove,
-                    const SwPaM *pRegion, sal_Bool bInReadOnly, sal_Bool bMoveFirst )
+BOOL SwPaM::Find( const SfxItemSet& rSet, BOOL bNoColls, SwMoveFn fnMove,
+                    const SwPaM *pRegion, BOOL bInReadOnly, BOOL bMoveFirst )
 {
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
 
-    sal_Bool bFound = sal_False;
-    sal_Bool bFirst = sal_True;
-    sal_Bool bSrchForward = fnMove == fnMoveForward;
+    BOOL bFound = FALSE;
+    BOOL bFirst = TRUE;
+    BOOL bSrchForward = fnMove == fnMoveForward;
     SwCntntNode * pNode;
     SwpFmts aFmtArr;
 
@@ -975,7 +983,7 @@ sal_Bool SwPaM::Find( const SfxItemSet& rSet, sal_Bool bNoColls, SwMoveFn fnMove
     SwAttrCheckArr aCmpArr( rSet, bSrchForward, bNoColls );
     SfxItemSet aOtherSet( GetDoc()->GetAttrPool(),
                             RES_PARATR_BEGIN, RES_GRFATR_END-1 );
-    aOtherSet.Put( rSet, sal_False );   // alle Invalid-Items erhalten!
+    aOtherSet.Put( rSet, FALSE );	// alle Invalid-Items erhalten!
 
     FnSearchAttr fnSearch = bSrchForward
                                 ? (&::lcl_SearchForward)
@@ -983,15 +991,15 @@ sal_Bool SwPaM::Find( const SfxItemSet& rSet, sal_Bool bNoColls, SwMoveFn fnMove
 
     // Wenn am Anfang/Ende, aus dem Node moven
     // Wenn am Anfang/Ende, aus dem Node moven
-    if( bMoveFirst &&
+    if( bMoveFirst && 
         ( bSrchForward
         ? pPam->GetPoint()->nContent.GetIndex() == pPam->GetCntntNode()->Len()
         : !pPam->GetPoint()->nContent.GetIndex() ) )
     {
-        if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, sal_False ))
+        if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, FALSE ))
         {
             delete pPam;
-            return sal_False;
+            return FALSE;
         }
         SwCntntNode *pNd = pPam->GetCntntNode();
         xub_StrLen nTmpPos = bSrchForward ? 0 : pNd->Len();
@@ -1014,10 +1022,10 @@ sal_Bool SwPaM::Find( const SfxItemSet& rSet, sal_Bool bNoColls, SwMoveFn fnMove
                 SetMark();
                 *GetPoint() = *pPam->GetPoint();
                 *GetMark() = *pPam->GetMark();
-                bFound = sal_True;
+                bFound = TRUE;
                 break;
             }
-            continue;       // TextAttribute
+            continue;		// TextAttribute
         }
 
         if( !aOtherSet.Count() )
@@ -1029,19 +1037,19 @@ sal_Bool SwPaM::Find( const SfxItemSet& rSet, sal_Bool bNoColls, SwMoveFn fnMove
         {
             const SwFmt* pTmpFmt = pNode->GetFmtColl();
             if( aFmtArr.Count() && aFmtArr.Seek_Entry( pTmpFmt ))
-                continue;   // die Collection wurde schon mal befragt
+                continue; 	// die Collection wurde schon mal befragt
             aFmtArr.Insert( pTmpFmt );
         }
 
         if( lcl_Search( *pNode, aOtherSet, bNoColls ))
         {
             // FORWARD:  Point an das Ende, GetMark zum Anfanf vom Node
-            // BACKWARD: Point zum Anfang,  GetMark an das Ende vom Node
+            // BACKWARD: Point zum Anfang,	GetMark an das Ende vom Node
             // und immer nach der Logik: inkl. Start, exkl. End !!!
             *GetPoint() = *pPam->GetPoint();
             SetMark();
             pNode->MakeEndIndex( &GetPoint()->nContent );
-            bFound = sal_True;
+            bFound = TRUE;
             break;
         }
     }
@@ -1059,13 +1067,13 @@ sal_Bool SwPaM::Find( const SfxItemSet& rSet, sal_Bool bNoColls, SwMoveFn fnMove
 // Parameter fuer das Suchen vom Attributen
 struct SwFindParaAttr : public SwFindParas
 {
-    sal_Bool bValue;
+    BOOL bValue;
     const SfxItemSet *pSet, *pReplSet;
     const SearchOptions *pSearchOpt;
     SwCursor& rCursor;
     utl::TextSearch* pSTxt;
 
-    SwFindParaAttr( const SfxItemSet& rSet, sal_Bool bNoCollection,
+    SwFindParaAttr( const SfxItemSet& rSet, BOOL bNoCollection,
                     const SearchOptions* pOpt, const SfxItemSet* pRSet,
                     SwCursor& rCrsr )
         : bValue( bNoCollection ), pSet( &rSet ), pReplSet( pRSet ),
@@ -1073,22 +1081,22 @@ struct SwFindParaAttr : public SwFindParas
 
     virtual ~SwFindParaAttr()   { delete pSTxt; }
 
-    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, sal_Bool bInReadOnly );
+    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, BOOL bInReadOnly );
     virtual int IsReplaceMode() const;
 };
 
 
 int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
-                            sal_Bool bInReadOnly )
+                            BOOL bInReadOnly )
 {
     // String ersetzen ?? (nur wenn Text angegeben oder nicht attributiert
-    //                      gesucht wird)
-    sal_Bool bReplaceTxt = pSearchOpt && ( pSearchOpt->replaceString.getLength() ||
+    // 						gesucht wird)
+    BOOL bReplaceTxt = pSearchOpt && ( pSearchOpt->replaceString.getLength() ||
                                     !pSet->Count() );
-    sal_Bool bReplaceAttr = pReplSet && pReplSet->Count();
-    sal_Bool bMoveFirst = !bReplaceAttr;
+    BOOL bReplaceAttr = pReplSet && pReplSet->Count();
+    BOOL bMoveFirst = !bReplaceAttr;
     if( bInReadOnly && (bReplaceAttr || bReplaceTxt ))
-        bInReadOnly = sal_False;
+        bInReadOnly = FALSE;
 
     // wir suchen nach Attributen, soll zusaetzlich Text gesucht werden ?
     {
@@ -1096,19 +1104,19 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
         SwPaM* pTextRegion = &aRegion;
         SwPaM aSrchPam( *pCrsr->GetPoint() );
 
-        while( sal_True )
+        while( TRUE )
         {
-            if( pSet->Count() )         // gibts ueberhaupt Attributierung?
+            if( pSet->Count() )			// gibts ueberhaupt Attributierung?
             {
                 // zuerst die Attributierung
                 if( !aSrchPam.Find( *pSet, bValue, fnMove, &aRegion, bInReadOnly, bMoveFirst ) )
 //JP 17.11.95: was ist mit Attributen in leeren Absaetzen !!
-//                  || *pCrsr->GetMark() == *pCrsr->GetPoint() )    // kein Bereich ??
+//					|| *pCrsr->GetMark() == *pCrsr->GetPoint() )	// kein Bereich ??
                     return FIND_NOT_FOUND;
-                bMoveFirst = sal_True;
+                bMoveFirst = TRUE;
 
                 if( !pSearchOpt )
-                    break;      // ok, nur Attribute, also gefunden
+                    break; 		// ok, nur Attribute, also gefunden
 
                 pTextRegion = &aSrchPam;
             }
@@ -1130,15 +1138,45 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
             }
 
             // todo/mba: searching for attributes in Outliner text?!
-            sal_Bool bSearchInNotes = sal_False;
+            BOOL bSearchInNotes = FALSE;
 
             // Bug 24665: suche im richtigen Bereich weiter (pTextRegion!)
             if( aSrchPam.Find( *pSearchOpt, bSearchInNotes, *pSTxt, fnMove, pTextRegion, bInReadOnly ) &&
                 *aSrchPam.GetMark() != *aSrchPam.GetPoint() )   // gefunden ?
-                break;                                      // also raus
+                break;										// also raus
             else if( !pSet->Count() )
-                return FIND_NOT_FOUND;      // nur Text und nicht gefunden
+                return FIND_NOT_FOUND;		// nur Text und nicht gefunden
 
+/*          // --> FME 2007-4-12 #i74765 # Why should we move the position?
+            Moving the position results in bugs when there are two adjacent
+            portions which both have the requested attributes set. I suspect this
+            should be only be an optimization. Therefore I boldly remove it now!
+            
+            // JP: und wieder neu aufsetzen, aber eine Position weiter
+            //JP 04.11.97: Bug 44897 - aber den Mark wieder aufheben, damit
+            //				weiterbewegt werden kann!
+            {
+                BOOL bCheckRegion = TRUE;
+                SwPosition* pPos = aSrchPam.GetPoint();
+                if( !(*fnMove->fnNd)( &pPos->nNode.GetNode(),
+                                        &pPos->nContent, CRSR_SKIP_CHARS ))
+                {
+                    if( (*fnMove->fnNds)( &pPos->nNode, FALSE ))
+                    {
+                        SwCntntNode *pNd = pPos->nNode.GetNode().GetCntntNode();
+                        xub_StrLen nCPos;
+                        if( fnMove == fnMoveForward )
+                            nCPos = 0;
+                        else
+                            nCPos = pNd->Len();
+                        pPos->nContent.Assign( pNd, nCPos );
+                    }
+                    else
+                        bCheckRegion = FALSE;
+                }
+                if( !bCheckRegion || *aRegion.GetPoint() <= *pPos )
+                    return FIND_NOT_FOUND;		// nicht gefunden
+            }*/
             *aRegion.GetMark() = *aSrchPam.GetPoint();
         }
 
@@ -1187,8 +1225,12 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
     {
         // --- Ist die Selection noch da ??????
 
+        // und noch die Attribute setzen
+#ifdef OLD
+        pCrsr->GetDoc()->Insert( *pCrsr, *pReplSet, 0 );
+#else
         //JP 13.07.95: alle gesuchten Attribute werden, wenn nicht im
-        //              ReplaceSet angegeben, auf Default zurueck gesetzt
+        //				ReplaceSet angegeben, auf Default zurueck gesetzt
 
         if( !pSet->Count() )
         {
@@ -1201,11 +1243,11 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
 
             SfxItemIter aIter( *pSet );
             const SfxPoolItem* pItem = aIter.GetCurItem();
-            while( sal_True )
+            while( TRUE )
             {
                 // alle die nicht gesetzt sind mit Pool-Defaults aufuellen
                 if( !IsInvalidItem( pItem ) && SFX_ITEM_SET !=
-                    pReplSet->GetItemState( pItem->Which(), sal_False ))
+                    pReplSet->GetItemState( pItem->Which(), FALSE ))
                     aSet.Put( pPool->GetDefaultItem( pItem->Which() ));
 
                 if( aIter.IsAtEnd() )
@@ -1215,7 +1257,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
             aSet.Put( *pReplSet );
             pCrsr->GetDoc()->InsertItemSet( *pCrsr, aSet, 0 );
         }
-
+#endif
         return FIND_NO_RING;
     }
 
@@ -1233,8 +1275,8 @@ int SwFindParaAttr::IsReplaceMode() const
 // Suchen nach Attributen
 
 
-sal_uLong SwCursor::Find( const SfxItemSet& rSet, sal_Bool bNoCollections,
-                    SwDocPositions nStart, SwDocPositions nEnde, sal_Bool& bCancel,
+ULONG SwCursor::Find( const SfxItemSet& rSet, BOOL bNoCollections,
+                    SwDocPositions nStart, SwDocPositions nEnde, BOOL& bCancel,
                     FindRanges eFndRngs,
                     const SearchOptions* pSearchOpt, const SfxItemSet* pReplSet )
 {
@@ -1243,27 +1285,23 @@ sal_uLong SwCursor::Find( const SfxItemSet& rSet, sal_Bool bNoCollections,
     Link aLnk( pDoc->GetOle2Link() );
     pDoc->SetOle2Link( Link() );
 
-    sal_Bool bReplace = ( pSearchOpt && ( pSearchOpt->replaceString.getLength() ||
+    BOOL bReplace = ( pSearchOpt && ( pSearchOpt->replaceString.getLength() ||
                                     !rSet.Count() ) ) ||
                     (pReplSet && pReplSet->Count());
-    bool const bStartUndo = pDoc->GetIDocumentUndoRedo().DoesUndo() && bReplace;
-    if (bStartUndo)
-    {
-        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_REPLACE, NULL );
-    }
+    BOOL bSttUndo = pDoc->DoesUndo() && bReplace;
+    if( bSttUndo )
+        pDoc->StartUndo( UNDO_REPLACE, NULL );
 
     SwFindParaAttr aSwFindParaAttr( rSet, bNoCollections, pSearchOpt,
                                     pReplSet, *this );
 
-    sal_uLong nRet = FindAll(aSwFindParaAttr, nStart, nEnde, eFndRngs, bCancel );
+    ULONG nRet = FindAll(aSwFindParaAttr, nStart, nEnde, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
     if( nRet && bReplace )
         pDoc->SetModified();
 
-    if (bStartUndo)
-    {
-        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_REPLACE, NULL );
-    }
+    if( bSttUndo )
+        pDoc->EndUndo( UNDO_REPLACE, NULL );
 
     return nRet;
 }

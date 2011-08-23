@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,9 +77,9 @@
 #endif
 
 
-//  ----------------------------------------------------
-//  class VCLXMenu
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXMenu
+//	----------------------------------------------------
 
 DBG_NAME(VCLXMenu)
 
@@ -98,8 +98,10 @@ VCLXMenu::VCLXMenu( Menu* pMenu ) : maMenuListeners( *this )
 VCLXMenu::~VCLXMenu()
 {
     DBG_DTOR( VCLXMenu, 0 );
-    for ( size_t n = maPopupMenueRefs.size(); n; ) {
-        delete maPopupMenueRefs[ --n ];
+    for ( sal_uInt32 n = maPopupMenueRefs.Count(); n; )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pRef = maPopupMenueRefs.GetObject( --n );
+        delete pRef;
     }
     if ( mpMenu )
     {
@@ -108,7 +110,7 @@ VCLXMenu::~VCLXMenu()
     }
 }
 
-sal_Bool VCLXMenu::IsPopupMenu() const
+BOOL VCLXMenu::IsPopupMenu() const
 {
     return (mpMenu && ! mpMenu->IsMenuBar());
 }
@@ -203,7 +205,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
                 case VCLEVENT_MENU_HIDE:
                 break;
 
-                default:    OSL_FAIL( "MenuEventListener - Unknown event!" );
+                default:    DBG_ERROR( "MenuEventListener - Unknown event!" );
            }
        }
     }
@@ -513,7 +515,7 @@ void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Ref
         // Selbst eine Ref halten!
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pNewRef = new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > ;
         *pNewRef = rxPopupMenu;
-        maPopupMenueRefs.push_back( pNewRef );
+        maPopupMenueRefs.Insert( pNewRef, LIST_APPEND );
 
         mpMenu->SetPopupMenu( nItemId, (PopupMenu*) pVCLMenu->GetMenu() );
     }
@@ -528,9 +530,9 @@ void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Ref
     Menu* pMenu = mpMenu ? mpMenu->GetPopupMenu( nItemId ) : NULL;
     if ( pMenu )
     {
-        for ( size_t n = maPopupMenueRefs.size(); n; )
+        for ( sal_uInt32 n = maPopupMenueRefs.Count(); n; )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pRef = maPopupMenueRefs[ --n ];
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pRef = maPopupMenueRefs.GetObject( --n );
             Menu* pM = ((VCLXMenu*)pRef->get())->GetMenu();
             if ( pM == pMenu )
             {
@@ -721,7 +723,7 @@ namespace
         sal_Bool bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
         sal_Bool bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
         sal_Bool bMod3  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
-        sal_uInt16   nKey   = (sal_uInt16)aAWTKey.KeyCode;
+        USHORT   nKey   = (USHORT)aAWTKey.KeyCode;
 
         return KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
     }
@@ -1080,16 +1082,16 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXMenuBar
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXMenuBar
+//	----------------------------------------------------
 
 DBG_NAME(VCLXMenuBar);
 
 VCLXMenuBar::VCLXMenuBar()
 {
     DBG_CTOR( VCLXMenuBar, 0 );
-    ImplCreateMenu( sal_False );
+    ImplCreateMenu( FALSE );
 }
 
 VCLXMenuBar::VCLXMenuBar( MenuBar* pMenuBar ) : VCLXMenu( (Menu *)pMenuBar )
@@ -1097,16 +1099,16 @@ VCLXMenuBar::VCLXMenuBar( MenuBar* pMenuBar ) : VCLXMenu( (Menu *)pMenuBar )
     DBG_CTOR( VCLXMenuBar, 0 );
 }
 
-//  ----------------------------------------------------
-//  class VCLXPopupMenu
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXPopupMenu
+//	----------------------------------------------------
 
 DBG_NAME(VCLXPopupMenu);
 
 VCLXPopupMenu::VCLXPopupMenu()
 {
     DBG_CTOR( VCLXPopupMenu, 0 );
-    ImplCreateMenu( sal_True );
+    ImplCreateMenu( TRUE );
 }
 
 VCLXPopupMenu::VCLXPopupMenu( PopupMenu* pPopMenu ) : VCLXMenu( (Menu *)pPopMenu )

@@ -7,6 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile: tabbgcolor.hxx,v $
+ * $Revision: 1.00 $
+ *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -39,6 +42,9 @@ struct ScUndoTabColorInfo
     SCTAB mnTabId;
     Color maOldTabBgColor;
     Color maNewTabBgColor;
+
+    bool IsDefaultOldTabBgColor() const;
+    bool IsDefaultNewTabBgColor() const;
 
     explicit ScUndoTabColorInfo(SCTAB nTab);
     ScUndoTabColorInfo(const ScUndoTabColorInfo& r);

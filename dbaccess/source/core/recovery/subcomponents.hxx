@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
+* 
 * Copyright 2009 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <map>
 
 //........................................................................
@@ -78,7 +78,7 @@ namespace dbaccess
     };
 
     // -------------------------------------------------------------------
-    typedef ::boost::unordered_map< ::rtl::OUString, SubComponentDescriptor, ::rtl::OUStringHash > MapStringToCompDesc;
+    typedef ::std::hash_map< ::rtl::OUString, SubComponentDescriptor, ::rtl::OUStringHash > MapStringToCompDesc;
     typedef ::std::map< SubComponentType, MapStringToCompDesc > MapCompTypeToCompDescs;
 
 

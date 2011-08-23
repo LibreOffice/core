@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,71 +54,65 @@ ScVbaCommandBarControl::getCaption() throw ( uno::RuntimeException )
 {
     // "Label" always empty
     rtl::OUString sCaption;
-    getPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) >>= sCaption;
+    getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("Label") ) >>= sCaption;
     return sCaption;
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaCommandBarControl::setCaption( const ::rtl::OUString& _caption ) throw (uno::RuntimeException)
 {
     rtl::OUString sCaption = _caption.replace('&','~');
-    setPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")), uno::makeAny( sCaption ) );
+    setPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("Label"), uno::makeAny( sCaption ) );
     ApplyChange();
 }
 
-::rtl::OUString SAL_CALL
+::rtl::OUString SAL_CALL 
 ScVbaCommandBarControl::getOnAction() throw (uno::RuntimeException)
 {
     rtl::OUString sCommandURL;
-    getPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CommandURL")) ) >>= sCommandURL;
+    getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL") ) >>= sCommandURL;
     return sCommandURL;
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaCommandBarControl::setOnAction( const ::rtl::OUString& _onaction ) throw (uno::RuntimeException)
 {
     // get the current model
-    uno::Reference< frame::XModel > xModel( pCBarHelper->getModel() );
-    MacroResolvedInfo aResolvedMacro = ooo::vba::resolveVBAMacro( getSfxObjShell( xModel ), _onaction, true );
-    if ( aResolvedMacro.mbFound )
+    uno::Reference< frame::XModel > xModel( pCBarHelper->getModel() ); 
+    VBAMacroResolvedInfo aResolvedMacro = ooo::vba::resolveVBAMacro( getSfxObjShell( xModel ), _onaction, true );
+    if ( aResolvedMacro.IsResolved() )
     {
-        rtl::OUString aCommandURL = ooo::vba::makeMacroURL( aResolvedMacro.msResolvedMacro );
+        rtl::OUString aCommandURL = ooo::vba::makeMacroURL( aResolvedMacro.ResolvedMacro() );
         OSL_TRACE(" ScVbaCommandBarControl::setOnAction: %s", rtl::OUStringToOString( aCommandURL, RTL_TEXTENCODING_UTF8 ).getStr() );
-        setPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CommandURL")), uno::makeAny( aCommandURL ) );
+        setPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL"), uno::makeAny( aCommandURL ) );
         ApplyChange();
     }
 }
 
-::sal_Bool SAL_CALL
+::sal_Bool SAL_CALL 
 ScVbaCommandBarControl::getVisible() throw (uno::RuntimeException)
 {
-    /*sal_Bool bVisible = sal_True;
-    uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsVisible")) );
+    sal_Bool bVisible = sal_True;
+    uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("IsVisible") );
     if( aValue.hasValue() )
         aValue >>= bVisible;
-    return bVisible;*/
-    return getEnabled();
-
+    return bVisible;
 }
-void SAL_CALL
+void SAL_CALL 
 ScVbaCommandBarControl::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException)
 {
-    uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsVisible")) );
+    uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("IsVisible") );
     if( aValue.hasValue() )
     {
-        setPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsVisible")), uno::makeAny( _visible ) );
+        setPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("IsVisible"), uno::makeAny( _visible ) );
         ApplyChange();
     }
-    setEnabled( _visible);
 }
 
-::sal_Bool SAL_CALL
+::sal_Bool SAL_CALL 
 ScVbaCommandBarControl::getEnabled() throw (uno::RuntimeException)
 {
     sal_Bool bEnabled = sal_True;
-    rtl::OUString aCommandURLappendix = rtl::OUString::createFromAscii("___");
-    rtl::OUString aCommandURL ;
-
     if( m_xParentMenu.is() )
     {
         // currently only the menu in the MenuBat support Enable/Disable
@@ -128,24 +122,14 @@ ScVbaCommandBarControl::getEnabled() throw (uno::RuntimeException)
     else
     {
         // emulated with Visible
-        //bEnabled = getVisible();
-        uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL") );
-        if (aValue >>= aCommandURL){
-            if (0 == aCommandURL.indexOf(aCommandURLappendix)){
-                    bEnabled = sal_False;
-                }
-            }
-
-    }
+        bEnabled = getVisible();
+    }    
     return bEnabled;
 }
 
 void SAL_CALL
 ScVbaCommandBarControl::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException)
 {
-    rtl::OUString aCommandURL ;
-    rtl::OUString aCommandURLappendix = rtl::OUString::createFromAscii("___");
-    rtl::OUStringBuffer aCommandURLSringBuffer;
     if( m_xParentMenu.is() )
     {
         // currently only the menu in the MenuBat support Enable/Disable
@@ -153,21 +137,9 @@ ScVbaCommandBarControl::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeExcep
     }
     else
     {
-        uno::Any aValue = getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL") );
-        if (aValue >>= aCommandURL){
-            if (0 == aCommandURL.indexOf(aCommandURLappendix)){
-                aCommandURL = aCommandURL.copy(3);
-                }
-            if (false == _enabled){
-                aCommandURLSringBuffer = aCommandURLappendix;
-            }
-            aCommandURLSringBuffer.append(aCommandURL);
-            setPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL"), uno::makeAny( aCommandURLSringBuffer.makeStringAndClear()) );
-            ApplyChange();
-        }
         // emulated with Visible
-        //setVisible( _enabled );
-    }
+        setVisible( _enabled );
+    }    
 }
 
 ::sal_Bool SAL_CALL
@@ -186,7 +158,7 @@ ScVbaCommandBarControl::setBeginGroup( ::sal_Bool _begin ) throw (css::uno::Runt
     }
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaCommandBarControl::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     if( m_xCurrentSettings.is() )
@@ -198,21 +170,21 @@ ScVbaCommandBarControl::Delete(  ) throw (script::BasicErrorException, uno::Runt
     }
 }
 
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 ScVbaCommandBarControl::Controls( const uno::Any& aIndex ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     // only Popup Menu has controls
     uno::Reference< container::XIndexAccess > xSubMenu;
-    getPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER )) ) >>= xSubMenu;
+    getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_CONTAINER ) ) >>= xSubMenu;
     if( !xSubMenu.is() )
         throw uno::RuntimeException();
-
+    
     uno::Reference< awt::XMenu > xMenu;
     if( m_xParentMenu.is() )
     {
         sal_Int16 nItemId = m_xParentMenu->getItemId( sal::static_int_cast< sal_Int16 >( m_nPosition ) );
         xMenu.set( m_xParentMenu->getPopupMenu( nItemId ), uno::UNO_QUERY );
-    }
+    }    
 
     uno::Reference< XCommandBarControls > xCommandBarControls( new ScVbaCommandBarControls( this, mxContext, xSubMenu, pCBarHelper, m_xBarSettings, m_sResourceUrl, xMenu ) );
     if( aIndex.hasValue() )
@@ -222,14 +194,14 @@ ScVbaCommandBarControl::Controls( const uno::Any& aIndex ) throw (script::BasicE
     return uno::makeAny( xCommandBarControls );
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaCommandBarControl::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBarControl") );
     return sImplName;
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<rtl::OUString> 
 ScVbaCommandBarControl::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;
@@ -250,13 +222,13 @@ ScVbaCommandBarPopup::ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelp
     m_xParentMenu = xMenu;
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaCommandBarPopup::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBarPopup") );
     return sImplName;
 }
-uno::Sequence<rtl::OUString>
+uno::Sequence<rtl::OUString> 
 ScVbaCommandBarPopup::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;
@@ -277,13 +249,13 @@ ScVbaCommandBarButton::ScVbaCommandBarButton( const css::uno::Reference< ov::XHe
     m_xParentMenu = xMenu;
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaCommandBarButton::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBarButton") );
     return sImplName;
 }
-uno::Sequence<rtl::OUString>
+uno::Sequence<rtl::OUString> 
 ScVbaCommandBarButton::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

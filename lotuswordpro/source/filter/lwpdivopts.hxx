@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPDIVISIONOPTIONS_HXX
@@ -88,7 +88,7 @@ private:
 /*
 Text languange.
 This class which holds identifiers for language and dialect.
-DESCRIPTION You can mark text as being a certain language. When we spell
+DESCRIPTION	You can mark text as being a certain language. When we spell
     check or grammar check we'll use this info to determine which dictionary
     to use.
     The only reserved value is 0, which means "default language". The

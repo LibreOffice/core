@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ static const char usageText[] =
 "    -sn, --shortnames      using namespace abbreviation 'css:': for\n"
 "                           '::com::sun::star::', only valid for sub-command\n"
 "                           'dump' and target language 'cpp'. It is default for the\n"
-"                           sub-command 'component'.\n"
+"                           sub-command 'component'.\n"  
 "    --propertysetmixin     the generated skeleton implements the cppu::PropertySetMixin\n"
 "                           helper if a referenced new style service specifies an\n"
 "                           interface which provides attributes (directly or inherited).\n"
@@ -115,7 +115,8 @@ static const char usageText[] =
 "                           command names, where the commands are a ',' separated list\n"
 "                           of unique commands. This option is only valid for add-ons.\n"
 "    -V, --version          print version number and exit\n"
-"    -h, --help             print this help and exit\n\n";
+"    -h, --help             print this help and exit\n\n"
+" Sun Microsystems (R) ";
 
 void printUsageAndExit(const char* programname, const char* version)
 {
@@ -156,7 +157,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, /*argv*/)
     OString delegate;
 
     try {
-
+        
     sal_Int32 nPos = 0;
     sal_Int32 nCount = (sal_Int32)rtl_getAppCommandArgCount();
     OUString arg, sOption;
@@ -194,7 +195,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, /*argv*/)
         printUsageAndExit(programname, version);
         exit(EXIT_FAILURE);
     }
-
+    
     // read up to arguments
     while ( nPos < nCount )
     {
@@ -219,26 +220,26 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, /*argv*/)
             options.java5 = false;
             options.language = 2;
             continue;
-        }
+        }        
         if ( readOption( &bOption, "sn", &nPos, arg) ||
              readOption( &bOption, "shortnames", &nPos, arg) ) {
             options.shortnames = true;
             continue;
-        }
+        }        
         if ( readOption( &bOption, "lh", &nPos, arg) ||
              readOption( &bOption, "licenseheader", &nPos, arg) ) {
             options.license = true;
             continue;
-        }
+        }        
         if ( readOption( &bOption, "bc", &nPos, arg) ||
              readOption( &bOption, "backward-compatible", &nPos, arg) ) {
             options.backwardcompatible = true;
             continue;
-        }
+        }        
         if ( readOption( &bOption, "propertysetmixin", &nPos, arg) ) {
             options.supportpropertysetmixin = true;
             continue;
-        }
+        }        
         if ( readOption( &sOption, "d", &nPos, arg) ) {
             delegate = OUStringToOString(sOption, RTL_TEXTENCODING_UTF8);
             continue;
@@ -272,27 +273,27 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, /*argv*/)
                 vCmds.push_back(sCmd);
             } while ( nIndex >= 0 );
 
-            options.protocolCmdMap.insert(ProtocolCmdMap::value_type(sPrt, vCmds));
+            options.protocolCmdMap.insert(ProtocolCmdMap::value_type(sPrt, vCmds));            
             continue;
         }
-
-
+        
+        
         // else illegal argument
         OUStringBuffer buf( 64 );
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("unexpected parameter \""));
         buf.append(arg);
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("\"!"));
-        throw RuntimeException(buf.makeStringAndClear(),
+        throw RuntimeException(buf.makeStringAndClear(), 
                                Reference< XInterface >());
     }
-
+            
     if ( types.empty() && options.componenttype != 3) {
         std::cerr
             << ("\nError: no type is specified, use the -T option at least once\n");
-        printUsageAndExit(programname, version);
+        printUsageAndExit(programname, version);        
         exit(EXIT_FAILURE);
     }
-
+    
     UnoTypeManager manager;
     if ( !manager.init(registries) ) {
         std::cerr
@@ -336,7 +337,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, /*argv*/)
             break;
         }
     }
-
+    
     } catch (CannotDumpException & e) {
         std::cout.flush();
         std::cerr << "\nError: " << e.m_message << std::endl;

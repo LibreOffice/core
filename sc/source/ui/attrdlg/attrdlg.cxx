@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@
 //==================================================================
 
 ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrameP,
-                      Window*           pParent,
+                      Window*			pParent,
                       const SfxItemSet* pCellAttrs )
 
     :   SfxTabDialog( pFrameP,
@@ -73,39 +73,39 @@ ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrameP,
     AddTabPage( TP_NUMBER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), 0 );
 #else
     String number(RTL_CONSTASCII_USTRINGPARAM("Numbers"));
-    AddTabPage( TP_NUMBER, number, pFact->GetTabPageCreatorFunc (RID_SVXPAGE_NUMBERFORMAT), 0, false, TAB_APPEND);
+    AddTabPage( TP_NUMBER, number, pFact->GetTabPageCreatorFunc (RID_SVXPAGE_NUMBERFORMAT), 0, FALSE, TAB_APPEND);
 #endif
     DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
     AddTabPage( TP_FONT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 );
     DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageCreatorFunc fail!");
     AddTabPage( TP_FONTEFF, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 );
     DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( TP_ALIGNMENT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ),    0 );
+    AddTabPage( TP_ALIGNMENT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ),	0 );
 
     if ( aCJKOptions.IsAsianTypographyEnabled() )
     {
         DBG_ASSERT(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");
-        AddTabPage( TP_ASIAN,   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       0 );
+        AddTabPage( TP_ASIAN,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),		0 );
     }
     else
         RemoveTabPage( TP_ASIAN );
     DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( TP_BORDER,      pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ),     0 );
+    AddTabPage( TP_BORDER,		pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ),		0 );
     DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( TP_BACKGROUND,  pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
-    AddTabPage( TP_PROTECTION,  ScTabPageProtection::Create,    0 );
+    AddTabPage( TP_BACKGROUND,	pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ),	0 );
+    AddTabPage( TP_PROTECTION,	ScTabPageProtection::Create,	0 );
     FreeResource();
 }
 
 // -----------------------------------------------------------------------
 
-ScAttrDlg::~ScAttrDlg()
+__EXPORT ScAttrDlg::~ScAttrDlg()
 {
 }
 
 // -----------------------------------------------------------------------
 
-void ScAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
+void __EXPORT ScAttrDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));

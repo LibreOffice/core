@@ -7,6 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile: securityenvironment_nssimpl.cxx,v $
+ * $Revision: 1.23 $
+ *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -31,14 +34,13 @@
 #include "sslerr.h"
 #include "nspr.h"
 #include "certt.h"
-#include <sal/macros.h>
 
 #include "../diagnose.hxx"
 
 using namespace xmlsecurity;
 
 struct ErrDesc {
-    PRErrorCode  errNum;
+    PRErrorCode	 errNum;
     const char * errString;
 };
 
@@ -48,7 +50,7 @@ const ErrDesc allDesc[] = {
 
 #include "certerrors.h"
 
-};
+};  
 
 
 
@@ -59,7 +61,7 @@ const char *
 getCertError(PRErrorCode errNum)
 {
     static char sEmpty[] = "";
-    const int numDesc = SAL_N_ELEMENTS(allDesc);
+    const int numDesc = sizeof(allDesc) / sizeof(ErrDesc);
     for (int i = 0; i < numDesc; i++)
     {
         if (allDesc[i].errNum == errNum)
@@ -72,22 +74,22 @@ getCertError(PRErrorCode errNum)
 void
 printChainFailure(CERTVerifyLog *log)
 {
+    unsigned long errorFlags  = 0;
     unsigned int       depth  = (unsigned int)-1;
     const char * specificError = NULL;
     const char * issuer = NULL;
     CERTVerifyLogNode *node   = NULL;
-
+    
     if (log->count > 0)
     {
         xmlsec_trace("Bad certifcation path:");
-        unsigned long errorFlags  = 0;
         for (node = log->head; node; node = node->next)
         {
             if (depth != node->depth)
             {
                 depth = node->depth;
                 xmlsec_trace("Certificate:  %d. %s %s:", depth,
-                        node->cert->subjectName,
+                        node->cert->subjectName, 
                         depth ? "[Certificate Authority]": "");
             }
             xmlsec_trace("  ERROR %ld: %s", node->error,
@@ -159,7 +161,7 @@ printChainFailure(CERTVerifyLog *log)
                 xmlsec_trace("%s", specificError);
             if (issuer)
                 xmlsec_trace("%s", issuer);
-        }
+        }    
     }
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,11 +107,11 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
     static long nTabs[] = {3, 0, aSz.Width()/2, aSz.Width() };
     m_aTableLB.SetTabs(&nTabs[0], MAP_PIXEL);
     m_aTableLB.SetHelpId(HID_MM_SELECTDBTABLEDDIALOG_LISTBOX);
-    m_aTableLB.SetStyle( m_aTableLB.GetStyle() | WB_CLIPCHILDREN );
+    m_aTableLB.SetWindowBits( WB_CLIPCHILDREN );
     m_aTableLB.SetSpaceBetweenEntries(3);
     m_aTableLB.SetSelectionMode( SINGLE_SELECTION );
     m_aTableLB.SetDragDropMode(   0 );
-    m_aTableLB.EnableAsyncDrag(sal_False);
+    m_aTableLB.EnableAsyncDrag(FALSE);
 
     m_aPreviewPB.SetClickHdl(LINK(this, SwSelectDBTableDialog, PreviewHdl));
 

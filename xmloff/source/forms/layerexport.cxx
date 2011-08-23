@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include "strings.hxx"
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/prhdlfac.hxx>
@@ -55,7 +55,7 @@
 #include <xmloff/XMLEventExport.hxx>
 #include "formevents.hxx"
 #include <xmloff/xmlnumfe.hxx>
-#include "xmloff/xformsexport.hxx"
+#include "xformsexport.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/text/XText.hpp>
@@ -87,7 +87,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     const ::rtl::OUString& OFormLayerXMLExport_Impl::getControlNumberStyleNamePrefix()
     {
-        static const ::rtl::OUString s_sControlNumberStyleNamePrefix(RTL_CONSTASCII_USTRINGPARAM("C"));
+        static const ::rtl::OUString s_sControlNumberStyleNamePrefix = ::rtl::OUString::createFromAscii("C");
         return s_sControlNumberStyleNamePrefix;
     }
 
@@ -133,14 +133,14 @@ namespace xmloff
             return sal_False;
 
         _rxForms = Reference< XIndexAccess >(xFormsSupp->getForms(), UNO_QUERY);
-        Reference< XServiceInfo > xSI(_rxForms, UNO_QUERY); // order is important!
+        Reference< XServiceInfo > xSI(_rxForms, UNO_QUERY);	// order is important!
         OSL_ENSURE(xSI.is(), "OFormLayerXMLExport_Impl::impl_isFormPageContainingForms: invalid collection (must not be NULL and must have a ServiceInfo)!");
         if (!xSI.is())
             return sal_False;
 
         if (!xSI->supportsService(SERVICE_FORMSCOLLECTION))
         {
-            OSL_FAIL("OFormLayerXMLExport_Impl::impl_isFormPageContainingForms: invalid collection (is no com.sun.star.form.Forms)!");
+            OSL_ENSURE(sal_False, "OFormLayerXMLExport_Impl::impl_isFormPageContainingForms: invalid collection (is no com.sun.star.form.Forms)!");
             // nothing to do
             return sal_False;
         }
@@ -245,7 +245,7 @@ namespace xmloff
             }
             catch(Exception&)
             {
-                OSL_FAIL("OFormLayerXMLExport_Impl::exportCollectionElements: caught an exception ... skipping the current element!");
+                OSL_ENSURE(sal_False, "OFormLayerXMLExport_Impl::exportCollectionElements: caught an exception ... skipping the current element!");
                 continue;
             }
         }
@@ -456,8 +456,8 @@ namespace xmloff
             implMoveIterators(_rxDrawPage, sal_True);
         OSL_ENSURE(!bPageIsKnown, "OFormLayerXMLExport_Impl::examineForms: examining a page twice!");
 
-        ::std::stack< Reference< XIndexAccess > >   aContainerHistory;
-        ::std::stack< sal_Int32 >                   aIndexHistory;
+        ::std::stack< Reference< XIndexAccess > >	aContainerHistory;
+        ::std::stack< sal_Int32 >					aIndexHistory;
 
         Reference< XIndexAccess > xLoop = xCollectionIndex;
         sal_Int32 nChildPos = 0;
@@ -465,7 +465,7 @@ namespace xmloff
         {
             if (nChildPos < xLoop->getCount())
             {
-                Reference< XPropertySet > xCurrent( xLoop->getByIndex( nChildPos ), UNO_QUERY );
+                Reference< XPropertySet	> xCurrent( xLoop->getByIndex( nChildPos ), UNO_QUERY );
                 OSL_ENSURE(xCurrent.is(), "OFormLayerXMLExport_Impl::examineForms: invalid child object");
                 if (!xCurrent.is())
                     continue;
@@ -479,7 +479,7 @@ namespace xmloff
                     aIndexHistory.push(nChildPos);
 
                     xLoop = xNextContainer;
-                    nChildPos = -1; // will be incremented below
+                    nChildPos = -1;	// will be incremented below
                 }
                 ++nChildPos;
             }
@@ -647,7 +647,7 @@ namespace xmloff
                     sColumnNumberStyle = getImmediateNumberStyle( xColumnProperties );
 
                 if ( sColumnNumberStyle.getLength() )
-                {   // the column indeed has a formatting
+                {	// the column indeed has a formatting
                     sal_Int32 nStyleMapIndex = m_xStyleExportMapper->getPropertySetMapper()->FindEntryIndex( CTF_FORMS_DATA_STYLE );
                         // TODO: move this to the ctor
                     OSL_ENSURE ( -1 != nStyleMapIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for our context id!");
@@ -668,7 +668,7 @@ namespace xmloff
                 // determine the column style
 
                 if ( !aPropertyStates.empty() )
-                {   // add to the style pool
+                {	// add to the style pool
                     ::rtl::OUString sColumnStyleName = m_rContext.GetAutoStylePool()->Add( XML_STYLE_FAMILY_CONTROL_ID, aPropertyStates );
 
                     OSL_ENSURE( m_aGridColumnStyles.end() == m_aGridColumnStyles.find( xColumnProperties ),
@@ -678,7 +678,7 @@ namespace xmloff
                 }
             }
         }
-        catch( const Exception& )
+        catch( const Exception&	)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -741,14 +741,14 @@ namespace xmloff
             {
                 Reference< XPropertySet > xControlFormat = xControlFormats->getByKey(nControlFormatKey);
 
-                xControlFormat->getPropertyValue(PROPERTY_LOCALE)       >>= aFormatLocale;
-                xControlFormat->getPropertyValue(PROPERTY_FORMATSTRING) >>= sFormatDescription;
+                xControlFormat->getPropertyValue(PROPERTY_LOCALE)		>>= aFormatLocale;
+                xControlFormat->getPropertyValue(PROPERTY_FORMATSTRING)	>>= sFormatDescription;
             }
 
             // check if our own formats collection already knows the format
             nOwnFormatKey = m_xControlNumberFormats->queryKey(sFormatDescription, aFormatLocale, sal_False);
             if (-1 == nOwnFormatKey)
-            {   // no, we don't
+            {	// no, we don't
                 // -> create a new format
                 nOwnFormatKey = m_xControlNumberFormats->addNew(sFormatDescription, aFormatLocale);
             }
@@ -776,11 +776,16 @@ namespace xmloff
                 // create it for en-US (does not really matter, as we will specify a locale for every
                 // concrete language to use)
                 Sequence< Any > aSupplierArgs(1);
-                aSupplierArgs[0] <<= Locale (   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")),
-                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")),
+                aSupplierArgs[0] <<= Locale	(	::rtl::OUString::createFromAscii("en"),
+                                                ::rtl::OUString::createFromAscii("US"),
                                                 ::rtl::OUString()
                                             );
-
+                // #110680#
+                //Reference< XInterface > xFormatsSupplierUntyped =
+                //	::comphelper::getProcessServiceFactory()->createInstanceWithArguments(
+                //		SERVICE_NUMBERFORMATSSUPPLIER,
+                //		aSupplierArgs
+                //	);
                 Reference< XInterface > xFormatsSupplierUntyped =
                     m_rContext.getServiceFactory()->createInstanceWithArguments(
                         SERVICE_NUMBERFORMATSSUPPLIER,
@@ -823,7 +828,7 @@ namespace xmloff
     }
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 

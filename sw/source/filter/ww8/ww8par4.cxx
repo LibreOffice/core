@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,14 +67,15 @@
 
 struct OLE_MFP
 {
-    sal_Int16 mm;       // 0x6  int
-    sal_Int16 xExt;     // 0x8  int in 1/100 mm
-    sal_Int16 yExt;     // 0xa  int in 1/100 mm
-    sal_Int16 hMF;      // 0xc  int
+    INT16 mm;       // 0x6  int
+    INT16 xExt;     // 0x8  int in 1/100 mm
+    INT16 yExt;     // 0xa  int in 1/100 mm
+    INT16 hMF;      // 0xc  int
 };
 
 using namespace ::com::sun::star;
 
+// SV_IMPL_OP_PTRARR_SORT(WW8AuthorInfos, WW8AuthorInfo_Ptr)
 SV_IMPL_OP_PTRARR_SORT(WW8OleMaps, WW8OleMap_Ptr)
 
 static bool SwWw8ReadScaling(long& rX, long& rY, SvStorageRef& rSrc1)
@@ -100,7 +101,7 @@ static bool SwWw8ReadScaling(long& rX, long& rY, SvStorageRef& rSrc1)
 
     OSL_ENSURE( pS->Tell() >=  76, "+OLE-PIC-Stream is shorter than 76 Byte" );
 
-    sal_Int32 nOrgWidth,
+    INT32 nOrgWidth,
           nOrgHeight,
           nScaleX,
           nScaleY,
@@ -141,7 +142,7 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
         STREAM_STD_READ | STREAM_NOCREATE);
     SvStorageStream* pSt = xSrc2;
     pSt->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-    sal_uLong nRead = pSt->Read( pMfp, sizeof(*pMfp ) );
+    ULONG nRead = pSt->Read( pMfp, sizeof(*pMfp ) );
                                 // Mini-Placable-Header lesen
     if (nRead != sizeof(*pMfp))
         return false;
@@ -196,12 +197,19 @@ static bool SwWw6ReadMacPICTStream(Graphic& rGraph, SvStorageRef& rSrc1)
     SvStorageStreamRef xSrc4 = rSrc1->OpenSotStream( CREATE_CONST_ASC( "\3PICT" ));
     SvStorageStream* pStp = xSrc4;
     pStp->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-    sal_uInt8 aTestA[10];        // Ist der 01Ole-Stream ueberhaupt vorhanden
-    sal_uLong nReadTst = pStp->Read( aTestA, sizeof( aTestA ) );
+    BYTE aTestA[10];        // Ist der 01Ole-Stream ueberhaupt vorhanden
+    ULONG nReadTst = pStp->Read( aTestA, sizeof( aTestA ) );
     if (nReadTst != sizeof(aTestA))
         return false;
 
     pStp->Seek( STREAM_SEEK_TO_BEGIN );
+
+#ifdef DEBUGDUMP
+    SvStream *pDbg = sw::hack::CreateDebuggingStream(CREATE_CONST_ASC(".pct"));
+    pDbg->Seek(0x200); //Prepend extra 0x200 of zeros to make this a valid PICT
+    sw::hack::DumpStream(*pStp, *pDbg);
+    delete pDbg;
+#endif
 
     // Mac-Pict steht im 03PICT-StorageStream allerdings ohne die ersten 512
     // Bytes, die bei einem MAC-PICT egal sind ( werden nicht ausgewertet )
@@ -425,7 +433,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 
         if (bOleOk)
         {
-            sal_uLong nOldPos = pDataStream->Tell();
+            ULONG nOldPos = pDataStream->Tell();
             pDataStream->Seek(STREAM_SEEK_TO_END);
             SvStream *pTmpData = 0;
             if (nObjLocFc < pDataStream->Tell())
@@ -441,7 +449,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
                     STREAM_STD_READ | STREAM_NOCREATE );
                 if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
                 {
-                    sal_uInt8 nByte = 0;
+                    BYTE nByte = 0;
                     *xObjInfoSrc >> nByte;
                     if ( ( nByte >> 4 ) & embed::Aspects::MSOLE_ICON )
                         nAspect = embed::Aspects::MSOLE_ICON;
@@ -459,17 +467,17 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 }
 
 void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
-    sal_Int32 nTblPos, sal_Int32 nTblSiz, SwDoc& rDocOut )
+    INT32 nTblPos, INT32 nTblSiz, SwDoc& rDocOut )
 {
     ::std::vector<String> aAuthorNames;
     WW8ReadSTTBF( !bVer67, rStrm, nTblPos, nTblSiz, bVer67 ? 2 : 0,
         eStructCharSet, aAuthorNames );
 
-    sal_uInt16 nCount = static_cast< sal_uInt16 >(aAuthorNames.size());
-    for( sal_uInt16 nAuthor = 0; nAuthor < nCount; ++nAuthor )
+    USHORT nCount = static_cast< USHORT >(aAuthorNames.size());
+    for( USHORT nAuthor = 0; nAuthor < nCount; ++nAuthor )
     {
         // Store author in doc
-        sal_uInt16 nSWId = rDocOut.InsertRedlineAuthor(aAuthorNames[nAuthor]);
+        USHORT nSWId = rDocOut.InsertRedlineAuthor(aAuthorNames[nAuthor]);
         // Store matchpair
         if( !pAuthorInfos )
             pAuthorInfos = new sw::util::AuthorInfos;
@@ -484,14 +492,14 @@ void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
 */
 // insert or delete content (change char attributes resp.)
 void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
-    const sal_uInt8* pData, short nLen )
+    const BYTE* pData, short nLen )
 {
     // there *must* be a SprmCIbstRMark[Del] and a SprmCDttmRMark[Del]
     // pointing to the very same char position as our SprmCFRMark[Del]
     if (!pPlcxMan)
         return;
-    const sal_uInt8* pSprmCIbstRMark;
-    const sal_uInt8* pSprmCDttmRMark;
+    const BYTE* pSprmCIbstRMark;
+    const BYTE* pSprmCDttmRMark;
     if( nsRedlineType_t::REDLINE_FORMAT == eType )
     {
         pSprmCIbstRMark = pData+1;
@@ -500,11 +508,12 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
     else
     {
         /*
+         #101578#
          It is possible to have a number of date stamps for the created time
          of the change, (possibly a word bug) so we must use the "get a full
          list" varient of HasCharSprm and take the last one as the true one.
         */
-        std::vector<const sal_uInt8 *> aResult;
+        std::vector<const BYTE *> aResult;
         bool bIns = (nsRedlineType_t::REDLINE_INSERT == eType);
         if( bVer67 )
         {
@@ -529,16 +538,16 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
     else
     {
         // start of new revision mark, if not there default to first entry
-        sal_uInt16 nWWAutNo = pSprmCIbstRMark ? SVBT16ToShort( pSprmCIbstRMark ) : 0;
+        USHORT nWWAutNo = pSprmCIbstRMark ? SVBT16ToShort( pSprmCIbstRMark ) : 0;
         sw::util::AuthorInfo aEntry(nWWAutNo);
-        sal_uInt16 nPos;
+        USHORT nPos;
         if (pAuthorInfos && pAuthorInfos->Seek_Entry(&aEntry, &nPos))
         {
             if (const sw::util::AuthorInfo* pAuthor = pAuthorInfos->GetObject(nPos))
             {
-                sal_uInt32 nWWDate = pSprmCDttmRMark ? SVBT32ToUInt32(pSprmCDttmRMark): 0;
+                UINT32 nWWDate = pSprmCDttmRMark ? SVBT32ToUInt32(pSprmCDttmRMark): 0;
                 DateTime aStamp(sw::ms::DTTM2DateTime(nWWDate));
-                sal_uInt16 nAutorNo = pAuthor->nOurId;
+                USHORT nAutorNo = pAuthor->nOurId;
                 SwFltRedline  aNewAttr(eType, nAutorNo, aStamp);
 
                 NewAttr(aNewAttr);
@@ -548,19 +557,19 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
 }
 
 // insert new content
-void SwWW8ImplReader::Read_CFRMark(sal_uInt16 , const sal_uInt8* pData, short nLen)
+void SwWW8ImplReader::Read_CFRMark(USHORT , const BYTE* pData, short nLen)
 {
     Read_CRevisionMark( nsRedlineType_t::REDLINE_INSERT, pData, nLen );
 }
 
 // delete old content
-void SwWW8ImplReader::Read_CFRMarkDel(sal_uInt16 , const sal_uInt8* pData, short nLen)
+void SwWW8ImplReader::Read_CFRMarkDel(USHORT , const BYTE* pData, short nLen)
 {
     Read_CRevisionMark( nsRedlineType_t::REDLINE_DELETE, pData, nLen );
 }
 
 // change properties of content ( == char formating)
-void SwWW8ImplReader::Read_CPropRMark(sal_uInt16 , const sal_uInt8* pData, short nLen)
+void SwWW8ImplReader::Read_CPropRMark(USHORT , const BYTE* pData, short nLen)
 {
     // complex (len is always 7)
     // 1 byte  - chp.fPropRMark

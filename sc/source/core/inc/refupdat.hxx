@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,9 @@ class ScAddress;
 class ScRange;
 
 enum ScRefUpdateRes {
-    UR_NOTHING  = 0,        // keine Anpassungen
-    UR_UPDATED  = 1,        // Anpassungen erfolgt
-    UR_INVALID  = 2         // Referenz wurde ungueltig
+    UR_NOTHING	= 0,		// keine Anpassungen
+    UR_UPDATED	= 1,		// Anpassungen erfolgt
+    UR_INVALID	= 2			// Referenz wurde ungueltig
 };
 
 class ScRefUpdate
@@ -64,7 +64,7 @@ public:
 
     static ScRefUpdateRes Update( UpdateRefMode eUpdateRefMode,
                                 const ScBigRange& rWhere,
-                                sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz,
+                                INT32 nDx, INT32 nDy, INT32 nDz,
                                 ScBigRange& rWhat );
 
     /// Before calling, the absolute references must be up-to-date!
@@ -77,9 +77,9 @@ public:
     /// Before calling, the absolute references must be up-to-date!
     static ScRefUpdateRes Move( ScDocument* pDoc, const ScAddress& rPos,
                                 SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                ScComplexRefData& rRef, sal_Bool bWrap, sal_Bool bAbsolute );
+                                ScComplexRefData& rRef, BOOL bWrap, BOOL bAbsolute );
 
-    static void MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
+    static void MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos, 
                              SCCOL nMaxCol, SCROW nMaxRow, ScComplexRefData& rRef );
 
     /// Before calling, the absolute references must be up-to-date!

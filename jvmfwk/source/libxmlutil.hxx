@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ public:
 class CXPathContextPtr
 {
     xmlXPathContext* _object;
-
+    
     CXPathContextPtr(const jfw::CXPathContextPtr&);
     CXPathContextPtr & operator = (const CXPathContextPtr&);
 public:
@@ -72,7 +72,7 @@ public:
 class CXmlDocPtr
 {
     xmlDoc* _object;
-
+    
     CXmlDocPtr(const CXmlDocPtr&);
 
 public:
@@ -88,10 +88,28 @@ public:
 };
 
 //===========================================================
+// class CXmlNsPtr
+// {
+//     xmlNs* _object;
+    
+//     CXmlNsPtr(const CXmlNsPtr&);
+//     CXmlNsPtr & operator = (const CXmlNsPtr&);
+// public:
+//     CXmlNsPtr();
+//     CXmlNsPtr(xmlNs* aDoc);
+//     /** Takes ownership of xmlDoc
+//      */
+//     CXmlNsPtr & operator = (xmlNs* pObj);
+//     ~CXmlNsPtr();
+//     xmlNs* operator -> ();
+//     operator xmlNs* ();
+// };
+
+//===========================================================
 class CXmlCharPtr
 {
     xmlChar* _object;
-
+    
     CXmlCharPtr(const CXmlCharPtr&);
     CXmlCharPtr & operator = (const CXmlCharPtr&);
 public:

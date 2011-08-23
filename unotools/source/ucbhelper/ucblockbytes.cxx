@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,6 +118,7 @@ class UcbStreamer_Impl : public ::cppu::WeakImplHelper2< XActiveDataStreamer, XA
     UcbLockBytesRef         m_xLockBytes;
 
 public:
+
                             UcbStreamer_Impl( UcbLockBytes* pLockBytes )
                                 : m_xLockBytes( pLockBytes )
                             {}
@@ -169,6 +170,7 @@ public:
                                 , m_xProgressHandler( rxProgressHandler )
                             {}
 
+
     virtual Reference<XInteractionHandler> SAL_CALL getInteractionHandler() throw (RuntimeException)
     { return m_xInteractionHandler; }
 
@@ -199,7 +201,7 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
     for (i = 0; i < n; i++)
     {
         PropertyChangeEvent evt (rEvent[i]);
-        if (evt.PropertyName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("DocumentHeader")))
+        if (evt.PropertyName == ::rtl::OUString::createFromAscii ("DocumentHeader"))
         {
             Sequence<DocumentHeaderField> aHead;
             if (evt.NewValue >>= aHead)
@@ -224,12 +226,12 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
 
             m_xLockBytes->SetStreamValid_Impl();
         }
-        else if (evt.PropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("PresentationURL")))
+        else if (evt.PropertyName == rtl::OUString::createFromAscii ("PresentationURL"))
         {
             ::rtl::OUString aUrl;
             if (evt.NewValue >>= aUrl)
             {
-                ::rtl::OUString aBad (RTL_CONSTASCII_USTRINGPARAM ("private:"));
+                ::rtl::OUString aBad (::rtl::OUString::createFromAscii ("private:"));
                 if (!(aUrl.compareTo (aBad, aBad.getLength()) == 0))
                 {
                     // URL changed (Redirection).
@@ -237,7 +239,7 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
                 }
             }
         }
-        else if (evt.PropertyName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("MediaType")))
+        else if (evt.PropertyName == ::rtl::OUString::createFromAscii ("MediaType"))
         {
             ::rtl::OUString aContentType;
             if (evt.NewValue >>= aContentType)
@@ -257,6 +259,7 @@ class Moderator
     // returns. This would imply that these class must be refcounted !!!
 
 public:
+
     Moderator(
         Reference < XContent >& xContent,
         Reference < XInteractionHandler >& xInteract,
@@ -297,6 +300,7 @@ public:
         : public salhelper::Condition
     {
     public:
+
         ConditionRes(osl::Mutex& aMutex,Moderator& aModerator)
             : salhelper::Condition(aMutex),
               m_aModerator(aModerator)
@@ -304,11 +308,13 @@ public:
         }
 
     protected:
+
         bool applies() const {
             return m_aModerator.m_aResultType != NORESULT;
         }
 
     private:
+
         Moderator& m_aModerator;
     };
 
@@ -319,7 +325,9 @@ public:
         sal_Int32         ioErrorCode;
     };
 
+
     Result getResult(const sal_uInt32 milliSec);
+
 
     enum ReplyType {
         NOREPLY,
@@ -328,10 +336,12 @@ public:
         REQUESTHANDLED
     };
 
+
     class ConditionRep
         : public salhelper::Condition
     {
     public:
+
         ConditionRep(osl::Mutex& aMutex,Moderator& aModerator)
             : salhelper::Condition(aMutex),
               m_aModerator(aModerator)
@@ -339,30 +349,40 @@ public:
         }
 
     protected:
+
         bool applies() const {
             return m_aModerator.m_aReplyType != NOREPLY;
         }
 
     private:
+
         Moderator& m_aModerator;
     };
 
     void setReply(ReplyType);
 
+
     void handle( const Reference<XInteractionRequest >& Request );
+
     void push( const Any& Status );
+
     void update( const Any& Status );
+
     void pop(  );
 
     void setStream(const Reference< XStream >& aStream);
+
     void setInputStream(const Reference<XInputStream> &rxInputStream);
 
 
 protected:
+
     virtual void SAL_CALL run();
+
     virtual void SAL_CALL onTerminated();
 
 private:
+
     osl::Mutex        m_aMutex;
 
     friend class ConditionRes;
@@ -413,11 +433,13 @@ public:
 
 
 private:
+
     Moderator& m_aModerator;
 
     osl::Mutex m_aMutex;
     Reference<XStream> m_xStream;
 };
+
 
 
 class ModeratorsActiveDataSink
@@ -451,6 +473,7 @@ public:
 
 
 private:
+
     Moderator& m_aModerator;
     osl::Mutex m_aMutex;
     Reference<XInputStream> m_xStream;
@@ -534,6 +557,7 @@ class ModeratorsProgressHandler
     : public ::cppu::WeakImplHelper1<XProgressHandler>
 {
 public:
+
     ModeratorsProgressHandler(Moderator &theModerator);
 
     ~ModeratorsProgressHandler();
@@ -550,6 +574,7 @@ public:
 
 
 private:
+
     Moderator& m_aModerator;
 };
 
@@ -584,6 +609,8 @@ void SAL_CALL ModeratorsProgressHandler::pop(  )
 {
     m_aModerator.pop();
 }
+
+
 
 
 ModeratorsInteractionHandler::ModeratorsInteractionHandler(
@@ -749,6 +776,7 @@ void Moderator::handle( const Reference<XInteractionRequest >& Request )
 }
 
 
+
 void Moderator::push( const Any& Status )
 {
     {
@@ -838,6 +866,7 @@ void Moderator::setInputStream(const Reference<XInputStream> &rxInputStream)
 }
 
 
+
 void SAL_CALL Moderator::run()
 {
     ResultType aResultType;
@@ -879,6 +908,8 @@ void SAL_CALL Moderator::run()
     }
 }
 
+
+
 void SAL_CALL Moderator::onTerminated()
 {
     {
@@ -887,10 +918,12 @@ void SAL_CALL Moderator::onTerminated()
      delete this;
 }
 
+
 /**
    Function for opening UCB contents synchronously,
    but with handled timeout;
 */
+
 static sal_Bool _UCBOpenContentSync(
     UcbLockBytesRef xLockBytes,
     Reference < XContent > xContent,
@@ -923,10 +956,10 @@ static sal_Bool UCBOpenContentSync(
         aScheme = xContId->getContentProviderScheme();
 
     // now determine wether we use a timeout or not;
-    if( ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("http"))                &&
-        ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("https"))               &&
-        ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.webdav")) &&
-        ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("ftp")))
+    if( ! aScheme.equalsIgnoreAsciiCaseAscii("http")                &&
+        ! aScheme.equalsIgnoreAsciiCaseAscii("https")                &&
+        ! aScheme.equalsIgnoreAsciiCaseAscii("vnd.sun.star.webdav") &&
+        ! aScheme.equalsIgnoreAsciiCaseAscii("ftp"))
         return _UCBOpenContentSync(
             xLockBytes,xContent,rArg,xSink,xInteract,xProgress,xHandler);
 
@@ -1238,6 +1271,7 @@ static sal_Bool _UCBOpenContentSync(
     return ( bAborted || bException );
 }
 
+
 //----------------------------------------------------------------------------
 UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
     : m_xInputStream (NULL)
@@ -1248,7 +1282,7 @@ UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
     , m_bDontClose( sal_False )
     , m_bStreamValid  (sal_False)
 {
-    SetSynchronMode( sal_True );
+    SetSynchronMode( TRUE );
 }
 
 //----------------------------------------------------------------------------
@@ -1338,7 +1372,7 @@ sal_Bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInp
             {
                 Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
                 Reference< XOutputStream > rxTempOut = Reference < XOutputStream > (
-                                    xFactory->createInstance ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")) ),
+                                    xFactory->createInstance ( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
                                     UNO_QUERY );
 
                 if( rxTempOut.is() )
@@ -1377,7 +1411,7 @@ void UcbLockBytes::terminate_Impl()
 
     if ( GetError() == ERRCODE_NONE && !m_xInputStream.is() )
     {
-        OSL_FAIL("No InputStream, but no error set!" );
+        DBG_ERROR("No InputStream, but no error set!" );
         SetError( ERRCODE_IO_NOTEXISTS );
     }
 
@@ -1386,13 +1420,13 @@ void UcbLockBytes::terminate_Impl()
 }
 
 //----------------------------------------------------------------------------
-void UcbLockBytes::SetSynchronMode (sal_Bool bSynchron)
+void UcbLockBytes::SetSynchronMode (BOOL bSynchron)
 {
     SvLockBytes::SetSynchronMode (bSynchron);
 }
 
 //----------------------------------------------------------------------------
-ErrCode UcbLockBytes::ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, sal_uLong *pRead) const
+ErrCode UcbLockBytes::ReadAt ( ULONG nPos, void *pBuffer, ULONG nCount, ULONG *pRead) const
 {
     if ( IsSynchronMode() )
     {
@@ -1451,13 +1485,13 @@ ErrCode UcbLockBytes::ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, 
 
     rtl_copyMemory (pBuffer, aData.getConstArray(), nSize);
     if (pRead)
-        *pRead = sal_uLong(nSize);
+        *pRead = ULONG(nSize);
 
     return ERRCODE_NONE;
 }
 
 //----------------------------------------------------------------------------
-ErrCode UcbLockBytes::WriteAt ( sal_uLong nPos, const void *pBuffer, sal_uLong nCount, sal_uLong *pWritten)
+ErrCode UcbLockBytes::WriteAt ( ULONG nPos, const void *pBuffer, ULONG nCount, ULONG *pWritten)
 {
     if ( pWritten )
         *pWritten = 0;
@@ -1501,25 +1535,16 @@ ErrCode UcbLockBytes::Flush() const
     Reference <XOutputStream > xOutputStream = getOutputStream_Impl();
     if ( !xOutputStream.is() )
         return ERRCODE_IO_CANTWRITE;
-
-    try
-    {
-        xOutputStream->flush();
-    }
-    catch( Exception )
-    {
-        return ERRCODE_IO_CANTWRITE;
-    }
-
+    xOutputStream->flush();
     return ERRCODE_NONE;
 }
 
 //----------------------------------------------------------------------------
-ErrCode UcbLockBytes::SetSize (sal_uLong nNewSize)
+ErrCode UcbLockBytes::SetSize (ULONG nNewSize)
 {
     SvLockBytesStat aStat;
     Stat( &aStat, (SvLockBytesStatFlag) 0 );
-    sal_uLong nSize = aStat.nSize;
+    ULONG nSize = aStat.nSize;
 
     if ( nSize > nNewSize )
     {
@@ -1536,8 +1561,8 @@ ErrCode UcbLockBytes::SetSize (sal_uLong nNewSize)
 
     if ( nSize < nNewSize )
     {
-        sal_uLong nDiff = nNewSize-nSize, nCount=0;
-        sal_uInt8* pBuffer = new sal_uInt8[ nDiff ];
+        ULONG nDiff = nNewSize-nSize, nCount=0;
+        BYTE* pBuffer = new BYTE[ nDiff ];
         memset(pBuffer, 0, nDiff); // initialize for enhanced security
         WriteAt( nSize, pBuffer, nDiff, &nCount );
         delete[] pBuffer;
@@ -1575,7 +1600,7 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
 
     try
     {
-        pStat->nSize = sal_uLong(xSeekable->getLength());
+        pStat->nSize = ULONG(xSeekable->getLength());
     }
     catch (IOException)
     {
@@ -1642,7 +1667,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     aArgument.Referer = rReferer;
 
     Command aCommand;
-    aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("post"));
+    aCommand.Name = ::rtl::OUString::createFromAscii ("post");
     aCommand.Argument <<= aArgument;
 
     Reference< XProgressHandler > xProgressHdl = new ProgressHandler_Impl( LINK( &xLockBytes, UcbLockBytes, DataAvailHdl ) );
@@ -1657,7 +1682,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
 
        if ( xLockBytes->GetError() == ERRCODE_NONE && ( bError || !xLockBytes->getInputStream().is() ) )
     {
-        OSL_FAIL("No InputStream, but no error set!" );
+        DBG_ERROR("No InputStream, but no error set!" );
            xLockBytes->SetError( ERRCODE_IO_GENERAL );
     }
 
@@ -1682,7 +1707,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     {
         Reference < XCommandProcessor > xProcessor( xContent, UNO_QUERY );
         Command aCommand;
-        aCommand.Name     = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setPropertyValues"));
+        aCommand.Name     = ::rtl::OUString::createFromAscii("setPropertyValues");
         aCommand.Handle   = -1; /* unknown */
         aCommand.Argument <<= rProps;
         xProcessor->execute( aCommand, 0, Reference < XCommandEnvironment >() );
@@ -1708,7 +1733,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
 
     if ( xLockBytes->GetError() == ERRCODE_NONE && ( bError || !xLockBytes->getInputStream().is() ) )
     {
-        OSL_FAIL("No InputStream, but no error set!" );
+        DBG_ERROR("No InputStream, but no error set!" );
            xLockBytes->SetError( ERRCODE_IO_GENERAL );
     }
 

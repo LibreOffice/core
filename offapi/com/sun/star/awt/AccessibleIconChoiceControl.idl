@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,14 +54,14 @@ published service AccessibleIconChoiceControl
     /** This interface gives access to the structural information of an icon choice control:
 
        <ul>
-       <li>Role: The role of an icon choice control is <const
+       <li>Role: The role of an icon choice control is <const 
            scope="com::sun::star::accessibility"
            >AccessibleRole::TREE</const>.</li>
        <li>Name: The name of an icon choice control is IconChoiceControl.</li>
        <li>Description: The description of an icon choice control is its localized
            help text.</li>
-       <li>Children: There exists children of type <type scope="com::sun::star::awt">AccessibleIconChoiceControlEntry</type>.
-        </li>
+       <li>Children: There exists children of type <type scope="com::sun::star::awt">AccessibleIconChoiceControlEntry</type>. 
+        </li>            
        <li>Parent: The parent is the window that contains the icon choice control.</li>
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
@@ -69,7 +69,7 @@ published service AccessibleIconChoiceControl
            <li><const scope="com::sun::star::accessibility"
                >AccessibleStateType::DEFUNC</const>
                is set if the object has already been disposed
-               and subsequent calls to this object result in
+               and subsequent calls to this object result in				
                <type scope="com::sun::star::lang">DisposedException</type>
                exceptions.</li>
            <li><const scope="com::sun::star::accessibility"
@@ -94,7 +94,7 @@ published service AccessibleIconChoiceControl
            <li><const scope="com::sun::star::accessibility"
                >AccessibleStateType::MANAGES_DESCENDANTS</const> is always set. Children are transient.</li>
            <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::MULTI_SELECTABLE</const> is set when multi selection is enabled.</li>
+               >AccessibleStateType::MULTI_SELECTABLE</const> is set when mutli selection is enabled.</li>
            </ul>
            </li>
        </ul>

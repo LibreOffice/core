@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,6 +94,7 @@ namespace frm
         ,m_pPropertyArrayHelper( NULL )
         ,m_bDisposed( false )
     {
+        // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "PropertyBagHelper::PropertyBagHelper" );
     }
 
     //--------------------------------------------------------------------
@@ -105,12 +106,14 @@ namespace frm
     //--------------------------------------------------------------------
     void PropertyBagHelper::dispose()
     {
+        // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "PropertyBagHelper::dispose" );
         m_bDisposed = true;
     }
 
     //--------------------------------------------------------------------
     void PropertyBagHelper::impl_nts_checkDisposed_throw() const
     {
+        // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "PropertyBagHelper::impl_nts_checkDisposed_throw" );
         if ( m_bDisposed )
             throw DisposedException();
     }
@@ -118,12 +121,14 @@ namespace frm
     //--------------------------------------------------------------------
     void PropertyBagHelper::impl_nts_invalidatePropertySetInfo()
     {
+        // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "PropertyBagHelper::impl_nts_invalidatePropertySetInfo" );
         delete m_pPropertyArrayHelper, m_pPropertyArrayHelper = NULL;
     }
 
     //--------------------------------------------------------------------
     sal_Int32 PropertyBagHelper::impl_findFreeHandle( const ::rtl::OUString& _rPropertyName )
     {
+        // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "PropertyBagHelper::impl_findFreeHandle" );
         ::comphelper::OPropertyArrayAggregationHelper& rPropInfo( impl_ts_getArrayHelper() );
 
         // check the preferred handle
@@ -163,6 +168,8 @@ namespace frm
     //--------------------------------------------------------------------
     ::comphelper::OPropertyArrayAggregationHelper& PropertyBagHelper::impl_ts_getArrayHelper() const
     {
+        // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "PropertyBagHelper::impl_ts_getArrayHelper" );
+        //::osl::MutexGuard aGuard( m_rContext.getMutex() );
         OPropertyArrayAggregationHelper* p = m_pPropertyArrayHelper;
         if ( !p )
         {
@@ -197,6 +204,7 @@ namespace frm
     //--------------------------------------------------------------------
     void PropertyBagHelper::addProperty( const ::rtl::OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue )
     {
+        // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "PropertyBagHelper::addProperty" );
         ::osl::MutexGuard aGuard( m_rContext.getMutex() );
         impl_nts_checkDisposed_throw();
 
@@ -224,6 +232,7 @@ namespace frm
     //--------------------------------------------------------------------
     void PropertyBagHelper::removeProperty( const ::rtl::OUString& _rName )
     {
+        // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "PropertyBagHelper::removeProperty" );
         ::osl::MutexGuard aGuard( m_rContext.getMutex() );
         impl_nts_checkDisposed_throw();
 
@@ -272,6 +281,7 @@ namespace frm
     //--------------------------------------------------------------------
     Sequence< PropertyValue > PropertyBagHelper::getPropertyValues()
     {
+        // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "PropertyBagHelper::getPropertyValues" );
         ::osl::MutexGuard aGuard( m_rContext.getMutex() );
         impl_nts_checkDisposed_throw();
 
@@ -314,6 +324,7 @@ namespace frm
     //--------------------------------------------------------------------
     void PropertyBagHelper::setPropertyValues( const Sequence< PropertyValue >& _rProps )
     {
+        // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "PropertyBagHelper::setPropertyValues" );
         ::osl::ClearableMutexGuard aGuard( m_rContext.getMutex() );
         impl_nts_checkDisposed_throw();
 

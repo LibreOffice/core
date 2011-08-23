@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,7 +119,7 @@ Sequence<rtl::OUString> SAL_CALL BasicPaneFactory_getSupportedServiceNames (void
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.BasicPaneFactory")));
+        ::rtl::OUString::createFromAscii("com.sun.star.drawing.framework.BasicPaneFactory"));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -147,7 +147,7 @@ BasicPaneFactory::BasicPaneFactory (
 BasicPaneFactory::~BasicPaneFactory (void)
 {
 }
-
+    
 
 
 
@@ -329,8 +329,8 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
         // The requested pane can not be created by any of the factories
         // managed by the called BasicPaneFactory object.
         throw lang::IllegalArgumentException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "BasicPaneFactory::createPane() called for unknown resource id")),
+            ::rtl::OUString::createFromAscii(
+                "BasicPaneFactory::createPane() called for unknown resource id"),
             NULL,
             0);
     }
@@ -388,8 +388,8 @@ void SAL_CALL BasicPaneFactory::releaseResource (
         // created by any of the factories managed by the called
         // BasicPaneFactory object.
         throw lang::IllegalArgumentException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "BasicPaneFactory::releasePane() called for pane that that was not created by same factory.")),
+            ::rtl::OUString::createFromAscii(
+                "BasicPaneFactory::releasePane() called for pane that that was not created by same factory."),
             NULL,
             0);
     }
@@ -414,6 +414,11 @@ void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
             // problems after reload (missing resizes for the side panes).
             if (mbFirstUpdateSeen)
             {
+                if (mpUpdateLockManager.get()!=NULL)
+                {
+                    //                    ::osl::Guard< ::osl::Mutex > aGuard (::osl::Mutex::getGlobalMutex());
+                    //                    mpUpdateLockManager->Lock();
+                }
             }
             else
                 mbFirstUpdateSeen = true;
@@ -427,6 +432,8 @@ void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
             if (mpUpdateLockManager.get() != NULL)
             {
                 ::osl::Guard< ::osl::Mutex > aGuard (::osl::Mutex::getGlobalMutex());
+                //                if (mpUpdateLockManager->IsLocked())
+                //                    mpUpdateLockManager->Unlock();
             }
             break;
     }
@@ -434,7 +441,7 @@ void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
 
 
 
-
+                
 //===== lang::XEventListener ==================================================
 
 void SAL_CALL BasicPaneFactory::disposing (
@@ -471,7 +478,7 @@ Reference<XResource> BasicPaneFactory::CreateFrameWindowPane (
     const Reference<XResourceId>& rxPaneId)
 {
     Reference<XResource> xPane;
-
+    
     if (mpViewShellBase != NULL)
     {
         xPane = new FrameWindowPane(rxPaneId, mpViewShellBase->GetViewWindow());
@@ -508,7 +515,7 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
     if (mpViewShellBase != NULL)
     {
         // Create the corresponding shell and determine the id of the child window.
-        sal_uInt16 nChildWindowId = 0;
+        USHORT nChildWindowId = 0;
         ::std::auto_ptr<SfxShell> pShell;
         switch (rDescriptor.mePaneId)
         {
@@ -516,12 +523,12 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
                 pShell.reset(new LeftImpressPaneShell());
                 nChildWindowId = ::sd::LeftPaneImpressChildWindow::GetChildWindowId();
                 break;
-
+                
             case LeftDrawPaneId:
                 pShell.reset(new LeftDrawPaneShell());
                 nChildWindowId = ::sd::LeftPaneDrawChildWindow::GetChildWindowId();
                 break;
-
+            
             case RightPaneId:
                 pShell.reset(new ToolPanelPaneShell());
                 nChildWindowId = ::sd::ToolPanelChildWindow::GetChildWindowId();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -207,11 +207,11 @@ published service BaseFrameProperties
      */
     [property] short RelativeWidth;
     //-------------------------------------------------------------------------
-    /** determines whether the width follows the height.
+    /** determins whether the width follows the height.
      */
     [property] boolean IsSyncWidthToHeight;
     //-------------------------------------------------------------------------
-    /** determines whether the height follows the width.
+    /** determins whether the height follows the width.
      */
     [property] boolean IsSyncHeightToWidth;
     //-------------------------------------------------------------------------
@@ -335,7 +335,7 @@ published service BaseFrameProperties
         of the shape, if the text document setting ConsiderTextWrapOnObjPos
         is <TRUE/>. Valid values are given by <member>WrapInfluenceOnPosition</member></p>
 
-        @since OOo 2.0
+        @since OOo 2.0.0
      */
     [optional, property] short WrapInfluenceOnPosition;
 

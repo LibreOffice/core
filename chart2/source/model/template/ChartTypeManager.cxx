@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,6 @@
 #include <algorithm>
 #include <iterator>
 #include <functional>
-#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 
@@ -563,7 +562,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstanceWithA
     throw (uno::Exception,
            uno::RuntimeException)
 {
-    OSL_FAIL( "createInstanceWithArguments: No arguments supported" );
+    OSL_ENSURE( false, "createInstanceWithArguments: No arguments supported" );
     return createInstance( ServiceSpecifier );
 }
 
@@ -576,7 +575,7 @@ uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
 
     // get own default templates
     ::std::transform( rMap.begin(), rMap.end(), ::std::back_inserter( aServices ),
-                      ::o3tl::select1st< tTemplateMapType::value_type >());
+                      ::std::select1st< tTemplateMapType::value_type >());
 
     // add components that were registered in the context's factory
     uno::Reference< container::XContentEnumerationAccess > xEnumAcc(

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,8 +119,8 @@ namespace svxform
     class DataTreeListBox : public SvTreeListBox
     {
     private:
-        XFormsPage*             m_pXFormsPage;
-        DataGroupType           m_eGroup;
+        XFormsPage*				m_pXFormsPage;
+        DataGroupType			m_eGroup;
 
     protected:
         using SvTreeListBox::ExecuteDrop;
@@ -129,70 +129,71 @@ namespace svxform
         DataTreeListBox( XFormsPage* pPage, DataGroupType _eGroup, const ResId& rResId );
         ~DataTreeListBox();
 
-        virtual PopupMenu*      CreateContextMenu( void );
-        virtual void            ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry );
-        virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
-        virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
-        virtual void            StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+        virtual PopupMenu* 		CreateContextMenu( void );
+        virtual void			ExcecuteContextMenuAction( USHORT _nSelectedPopupEntry );
+        virtual sal_Int8		AcceptDrop( const AcceptDropEvent& rEvt );
+        virtual sal_Int8		ExecuteDrop( const ExecuteDropEvent& rEvt );
+        virtual void			StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
-        void                    DeleteAndClear();
-        void                    RemoveEntry( SvLBoxEntry* _pEntry );
+        void					DeleteAndClear();
+        void					RemoveEntry( SvLBoxEntry* _pEntry );
     };
 
     //========================================================================
     class XFormsPage : public TabPage
     {
     private:
-        ToolBox                     m_aToolBox;
-        DataTreeListBox             m_aItemList;
+        ToolBox						m_aToolBox;
+        DataTreeListBox				m_aItemList;
 
         XFormsUIHelper1_ref         m_xUIHelper;
 
-        DataNavigatorWindow*        m_pNaviWin;
-        bool                        m_bHasModel;
-        DataGroupType               m_eGroup;
-        ImageList                   m_TbxImageList;
+        DataNavigatorWindow*		m_pNaviWin;
+        bool						m_bHasModel;
+        DataGroupType				m_eGroup;
+        ImageList					m_TbxImageList;
+        ImageList					m_TbxHCImageList;
         // these strings are not valid on the Submission and Binding Page
         // mb: furthermore these are properties of an instance, thus
         // it would be much better to get/set them through the UIHelper
         // interface.
-        String                      m_sInstanceName;
-        String                      m_sInstanceURL;
+        String						m_sInstanceName;
+        String						m_sInstanceURL;
         bool                        m_bLinkOnce;
 
-        DECL_LINK(                  TbxSelectHdl, ToolBox * );
-        DECL_LINK(                  ItemSelectHdl, DataTreeListBox * );
+        DECL_LINK(					TbxSelectHdl, ToolBox * );
+        DECL_LINK(					ItemSelectHdl, DataTreeListBox * );
 
-        void                        AddChildren( SvLBoxEntry* _pParent,
+        void						AddChildren( SvLBoxEntry* _pParent,
                                                  const ImageList& _rImgLst,
                                                  const XNode_ref& _xNode );
-        bool                        DoToolBoxAction( sal_uInt16 _nToolBoxID );
-        SvLBoxEntry*                AddEntry( ItemNode* _pNewNode, bool _bIsElement );
+        bool						DoToolBoxAction( USHORT _nToolBoxID );
+        SvLBoxEntry*				AddEntry( ItemNode* _pNewNode, bool _bIsElement );
         SvLBoxEntry*                AddEntry( const XPropertySet_ref& _rPropSet );
         void                        EditEntry( const XPropertySet_ref& _rPropSet );
         bool                        RemoveEntry();
 
     protected:
-        virtual long                Notify( NotifyEvent& rNEvt );
+        virtual long        		Notify( NotifyEvent& rNEvt );
 
     public:
         XFormsPage( Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup );
         ~XFormsPage();
 
-        virtual void                Resize();
+        virtual void				Resize();
 
-        inline bool                 HasModel() const { return m_bHasModel; }
-        String                      SetModel( const XModel_ref& _xModel, sal_uInt16 _nPagePos );
-        void                        ClearModel();
+        inline bool					HasModel() const { return m_bHasModel; }
+        String                      SetModel( const XModel_ref& _xModel, USHORT _nPagePos );
+        void						ClearModel();
         String                      LoadInstance( const PropertyValue_seq& _xPropSeq,
                                                   const ImageList& _rImgLst );
 
-        bool                        DoMenuAction( sal_uInt16 _nMenuID );
-        void                        EnableMenuItems( Menu* _pMenu );
+        bool						DoMenuAction( USHORT _nMenuID );
+        void						EnableMenuItems( Menu* _pMenu );
 
-        inline SvLBoxEntry*         GetSelectedItem() const { return m_aItemList.FirstSelected(); }
-        inline const String&        GetInstanceName() const { return m_sInstanceName; }
-        inline const String&        GetInstanceURL() const { return m_sInstanceURL; }
+        inline SvLBoxEntry*			GetSelectedItem() const { return m_aItemList.FirstSelected(); }
+        inline const String&		GetInstanceName() const { return m_sInstanceName; }
+        inline const String&		GetInstanceURL() const { return m_sInstanceURL; }
         inline bool                 GetLinkOnce() const { return m_bLinkOnce; }
         inline void                 SetInstanceName( const String &name ) { m_sInstanceName=name; }
         inline void                 SetInstanceURL( const String &url ) { m_sInstanceURL=url; }
@@ -215,25 +216,26 @@ namespace svxform
     {
     private:
 
-        ListBox                     m_aModelsBox;
-        MenuButton                  m_aModelBtn;
-        TabControl                  m_aTabCtrl;
-        MenuButton                  m_aInstanceBtn;
+        ListBox						m_aModelsBox;
+        MenuButton					m_aModelBtn;
+        TabControl					m_aTabCtrl;
+        MenuButton					m_aInstanceBtn;
 
-        XFormsPage*                 m_pInstPage;
-        XFormsPage*                 m_pSubmissionPage;
-        XFormsPage*                 m_pBindingPage;
+        XFormsPage*					m_pInstPage;
+        XFormsPage*					m_pSubmissionPage;
+        XFormsPage*					m_pBindingPage;
 
-        long                        m_nMinWidth;
-        long                        m_nMinHeight;
-        long                        m_nBorderHeight;
-        sal_uInt16                      m_nLastSelectedPos;
-        bool                        m_bShowDetails;
+        long						m_nMinWidth;
+        long						m_nMinHeight;
+        long						m_nBorderHeight;
+        USHORT						m_nLastSelectedPos;
+        bool						m_bShowDetails;
         bool                        m_bIsNotifyDisabled;
-        Size                        m_a2Size;
-        Size                        m_a3Size;
-        ImageList                   m_aItemImageList;
-        PageList                    m_aPageList;
+        Size						m_a2Size;
+        Size						m_a3Size;
+        ImageList					m_aItemImageList;
+        ImageList					m_aItemHCImageList;
+        PageList					m_aPageList;
         ContainerList               m_aContainerList;
         EventTargetList             m_aEventTargetList;
         Timer                       m_aUpdateTimer;
@@ -243,23 +245,23 @@ namespace svxform
         XFrame_ref                  m_xFrame;
         XFrameModel_ref             m_xFrameModel;
 
-        DECL_LINK(                  ModelSelectHdl, ListBox * );
-        DECL_LINK(                  MenuSelectHdl, MenuButton * );
-        DECL_LINK(                  MenuActivateHdl, MenuButton * );
+        DECL_LINK(					ModelSelectHdl, ListBox * );
+        DECL_LINK(					MenuSelectHdl, MenuButton * );
+        DECL_LINK(					MenuActivateHdl, MenuButton * );
         DECL_LINK(                  ActivatePageHdl, TabControl* );
         DECL_LINK(                  UpdateHdl, Timer* );
 
-        XFormsPage*                 GetCurrentPage( sal_uInt16& rCurId );
-        void                        LoadModels();
-        void                        SetPageModel();
+        XFormsPage*					GetCurrentPage( USHORT& rCurId );
+        void						LoadModels();
+        void						SetPageModel();
         void                        ClearAllPageModels( bool bClearPages );
-        void                        InitPages();
+        void						InitPages();
         void                        CreateInstancePage( const PropertyValue_seq& _xPropSeq );
         bool                        HasFirstInstancePage() const;
-        sal_uInt16                      GetNewPageId() const;
+        USHORT                      GetNewPageId() const;
 
     protected:
-        virtual void                Resize();
+        virtual void				Resize();
 
     public:
         DataNavigatorWindow( Window* pParent, SfxBindings* pBindings );
@@ -272,7 +274,8 @@ namespace svxform
         void                        RemoveBroadcaster();
 
         inline const ImageList&     GetItemImageList() const { return m_aItemImageList; }
-        inline bool                 IsShowDetails() const { return m_bShowDetails; }
+        inline const ImageList&		GetItemHCImageList() const { return m_aItemHCImageList; }
+        inline bool					IsShowDetails() const { return m_bShowDetails; }
         inline void                 DisableNotify( bool _bDisable ) { m_bIsNotifyDisabled = _bDisable; }
     };
 
@@ -280,14 +283,14 @@ namespace svxform
     class DataNavigator : public SfxDockingWindow, public SfxControllerItem
     {
     private:
-        DataNavigatorWindow         m_aDataWin;
+        DataNavigatorWindow			m_aDataWin;
 
     protected:
-        virtual void                Resize();
-        virtual sal_Bool            Close();
-        virtual void                GetFocus();
-        virtual Size                CalcDockingSize( SfxChildAlignment );
-        virtual SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment );
+        virtual void				Resize();
+        virtual sal_Bool			Close();
+        virtual void				GetFocus();
+        virtual Size				CalcDockingSize( SfxChildAlignment );
+        virtual SfxChildAlignment	CheckAlignment( SfxChildAlignment, SfxChildAlignment );
 
     public:
         DataNavigator( SfxBindings* pBindings, SfxChildWindow* pMgr, Window* pParent );
@@ -296,8 +299,8 @@ namespace svxform
         using Window::Update;
         using                       SfxDockingWindow::StateChanged;
 
-        void                        Update( FmFormShell* pFormShell );
-        void                        StateChanged( sal_uInt16 nSID, SfxItemState eState,
+        void 						Update( FmFormShell* pFormShell );
+        void						StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                                   const SfxPoolItem* pState );
     };
 
@@ -315,84 +318,84 @@ namespace svxform
     {
     private:
 
-        FixedLine           m_aItemFL;
-        FixedText           m_aNameFT;
-        Edit                m_aNameED;
-        FixedText           m_aDefaultFT;
-        Edit                m_aDefaultED;
-        PushButton          m_aDefaultBtn;
+        FixedLine			m_aItemFL;
+        FixedText			m_aNameFT;
+        Edit				m_aNameED;
+        FixedText			m_aDefaultFT;
+        Edit				m_aDefaultED;
+        PushButton			m_aDefaultBtn;
 
-        FixedLine           m_aSettingsFL;
-        FixedText           m_aDataTypeFT;
-        ListBox             m_aDataTypeLB;
+        FixedLine			m_aSettingsFL;
+        FixedText			m_aDataTypeFT;
+        ListBox				m_aDataTypeLB;
 
-        CheckBox            m_aRequiredCB;
-        PushButton          m_aRequiredBtn;
-        CheckBox            m_aRelevantCB;
-        PushButton          m_aRelevantBtn;
-        CheckBox            m_aConstraintCB;
-        PushButton          m_aConstraintBtn;
-        CheckBox            m_aReadonlyCB;
-        PushButton          m_aReadonlyBtn;
-        CheckBox            m_aCalculateCB;
-        PushButton          m_aCalculateBtn;
+        CheckBox			m_aRequiredCB;
+        PushButton			m_aRequiredBtn;
+        CheckBox			m_aRelevantCB;
+        PushButton			m_aRelevantBtn;
+        CheckBox			m_aConstraintCB;
+        PushButton			m_aConstraintBtn;
+        CheckBox			m_aReadonlyCB;
+        PushButton			m_aReadonlyBtn;
+        CheckBox			m_aCalculateCB;
+        PushButton			m_aCalculateBtn;
 
-        FixedLine           m_aButtonsFL;
-        OKButton            m_aOKBtn;
-        CancelButton        m_aEscBtn;
-        HelpButton          m_aHelpBtn;
+        FixedLine			m_aButtonsFL;
+        OKButton			m_aOKBtn;
+        CancelButton		m_aEscBtn;
+        HelpButton			m_aHelpBtn;
 
         XFormsUIHelper1_ref m_xUIHelper;
         XPropertySet_ref    m_xBinding;
         XPropertySet_ref    m_xTempBinding;
 
-        ItemNode*           m_pItemNode;
-        DataItemType        m_eItemType;
-        String              m_sFL_Element;
-        String              m_sFL_Attribute;
+        ItemNode*			m_pItemNode;
+        DataItemType		m_eItemType;
+        String				m_sFL_Element;
+        String				m_sFL_Attribute;
         String              m_sFL_Binding;
         String              m_sFT_BindingExp;
 
-        DECL_LINK(          CheckHdl, CheckBox * );
-        DECL_LINK(          ConditionHdl, PushButton * );
-        DECL_LINK(          OKHdl, OKButton * );
+        DECL_LINK(			CheckHdl, CheckBox * );
+        DECL_LINK(			ConditionHdl, PushButton * );
+        DECL_LINK(			OKHdl, OKButton * );
 
-        void                InitDialog();
-        void                InitFromNode();
-        void                InitDataTypeBox();
+        void				InitDialog();
+        void				InitFromNode();
+        void				InitDataTypeBox();
 
     public:
         AddDataItemDialog(
             Window* pParent, ItemNode* _pNode, const XFormsUIHelper1_ref& _rUIHelper );
         ~AddDataItemDialog();
 
-        void                InitText( DataItemType _eType );
+        void				InitText( DataItemType _eType );
     };
 
     //========================================================================
     class AddConditionDialog : public ModalDialog
     {
     private:
-        FixedText               m_aConditionFT;
-        MultiLineEdit           m_aConditionED;
-        FixedText               m_aResultFT;
-        FixedText               m_aResultWin;
-        PushButton              m_aEditNamespacesBtn;
-        FixedLine               m_aButtonsFL;
-        OKButton                m_aOKBtn;
-        CancelButton            m_aEscBtn;
-        HelpButton              m_aHelpBtn;
+        FixedText				m_aConditionFT;
+        MultiLineEdit			m_aConditionED;
+        FixedText				m_aResultFT;
+        FixedText				m_aResultWin;
+        PushButton				m_aEditNamespacesBtn;
+        FixedLine				m_aButtonsFL;
+        OKButton				m_aOKBtn;
+        CancelButton			m_aEscBtn;
+        HelpButton				m_aHelpBtn;
 
-        Timer                   m_aResultTimer;
-        ::rtl::OUString         m_sPropertyName;
+        Timer					m_aResultTimer;
+        ::rtl::OUString			m_sPropertyName;
 
         XFormsUIHelper1_ref     m_xUIHelper;
         XPropertySet_ref        m_xBinding;
 
-        DECL_LINK(              ModifyHdl, MultiLineEdit * );
-        DECL_LINK(              ResultHdl, Timer * );
-        DECL_LINK(              EditHdl, PushButton * );
-        DECL_LINK(              OKHdl, OKButton * );
+        DECL_LINK(				ModifyHdl, MultiLineEdit * );
+        DECL_LINK(				ResultHdl, Timer * );
+        DECL_LINK(				EditHdl, PushButton * );
+        DECL_LINK(				OKHdl, OKButton * );
 
     public:
         AddConditionDialog( Window* pParent,
@@ -416,26 +419,26 @@ namespace svxform
     private:
         typedef std::vector< ::rtl::OUString > PrefixList;
 
-        FixedText           m_aNamespacesFT;
+        FixedText			m_aNamespacesFT;
         SvxSimpleTable      m_aNamespacesList;
-        PushButton          m_aAddNamespaceBtn;
-        PushButton          m_aEditNamespaceBtn;
-        PushButton          m_aDeleteNamespaceBtn;
-        FixedLine           m_aButtonsFL;
-        OKButton            m_aOKBtn;
-        CancelButton        m_aEscBtn;
-        HelpButton          m_aHelpBtn;
+        PushButton			m_aAddNamespaceBtn;
+        PushButton			m_aEditNamespaceBtn;
+        PushButton			m_aDeleteNamespaceBtn;
+        FixedLine			m_aButtonsFL;
+        OKButton			m_aOKBtn;
+        CancelButton		m_aEscBtn;
+        HelpButton			m_aHelpBtn;
 
-        AddConditionDialog* m_pConditionDlg;
-        PrefixList          m_aRemovedList;
+        AddConditionDialog*	m_pConditionDlg;
+        PrefixList			m_aRemovedList;
 
         XNameContainer_ref& m_rNamespaces;
 
-        DECL_LINK(          SelectHdl, SvxSimpleTable * );
-        DECL_LINK(          ClickHdl, PushButton * );
-        DECL_LINK(          OKHdl, OKButton * );
+        DECL_LINK(			SelectHdl, SvxSimpleTable * );
+        DECL_LINK(			ClickHdl, PushButton * );
+        DECL_LINK(			OKHdl, OKButton * );
 
-        void                LoadNamespaces();
+        void				LoadNamespaces();
 
     public:
         NamespaceItemDialog( AddConditionDialog* pParent, XNameContainer_ref& _rContainer );
@@ -446,26 +449,26 @@ namespace svxform
     class ManageNamespaceDialog : public ModalDialog
     {
     private:
-        FixedText           m_aPrefixFT;
-        Edit                m_aPrefixED;
-        FixedText           m_aUrlFT;
-        Edit                m_aUrlED;
-        FixedLine           m_aButtonsFL;
-        OKButton            m_aOKBtn;
-        CancelButton        m_aEscBtn;
-        HelpButton          m_aHelpBtn;
+        FixedText			m_aPrefixFT;
+        Edit				m_aPrefixED;
+        FixedText			m_aUrlFT;
+        Edit				m_aUrlED;
+        FixedLine			m_aButtonsFL;
+        OKButton			m_aOKBtn;
+        CancelButton		m_aEscBtn;
+        HelpButton			m_aHelpBtn;
 
-        AddConditionDialog* m_pConditionDlg;
+        AddConditionDialog*	m_pConditionDlg;
 
-        DECL_LINK(          OKHdl, OKButton * );
+        DECL_LINK(			OKHdl, OKButton * );
 
     public:
         ManageNamespaceDialog( Window* pParent, AddConditionDialog* _pCondDlg, bool _bIsEdit );
         ~ManageNamespaceDialog();
 
-        inline void         SetNamespace( const String& _rPrefix, const String& _rURL );
-        inline String       GetPrefix() const { return m_aPrefixED.GetText(); }
-        inline String       GetURL() const { return m_aUrlED.GetText(); }
+        inline void			SetNamespace( const String& _rPrefix, const String& _rURL );
+        inline String		GetPrefix() const { return m_aPrefixED.GetText(); }
+        inline String		GetURL() const { return m_aUrlED.GetText(); }
     };
 
     void ManageNamespaceDialog::SetNamespace( const String& _rPrefix, const String& _rURL )
@@ -478,27 +481,27 @@ namespace svxform
     class AddSubmissionDialog : public ModalDialog
     {
     private:
-        FixedLine           m_aSubmissionFL;
-        FixedText           m_aNameFT;
-        Edit                m_aNameED;
-        FixedText           m_aActionFT;
-        Edit                m_aActionED;
-        FixedText           m_aMethodFT;
-        ListBox             m_aMethodLB;
-        FixedText           m_aRefFT;
-        Edit                m_aRefED;
-        PushButton          m_aRefBtn;
-        FixedText           m_aBindFT;
-        ListBox             m_aBindLB;
-        FixedText           m_aReplaceFT;
-        ListBox             m_aReplaceLB;
+        FixedLine			m_aSubmissionFL;
+        FixedText			m_aNameFT;
+        Edit				m_aNameED;
+        FixedText			m_aActionFT;
+        Edit				m_aActionED;
+        FixedText			m_aMethodFT;
+        ListBox				m_aMethodLB;
+        FixedText			m_aRefFT;
+        Edit				m_aRefED;
+        PushButton			m_aRefBtn;
+        FixedText			m_aBindFT;
+        ListBox				m_aBindLB;
+        FixedText			m_aReplaceFT;
+        ListBox				m_aReplaceLB;
 
-        FixedLine           m_aButtonsFL;
-        OKButton            m_aOKBtn;
-        CancelButton        m_aEscBtn;
-        HelpButton          m_aHelpBtn;
+        FixedLine			m_aButtonsFL;
+        OKButton			m_aOKBtn;
+        CancelButton		m_aEscBtn;
+        HelpButton			m_aHelpBtn;
 
-        ItemNode*           m_pItemNode;
+        ItemNode*			m_pItemNode;
 
         XFormsUIHelper1_ref m_xUIHelper;
         XSubmission_ref     m_xNewSubmission;
@@ -506,10 +509,10 @@ namespace svxform
         XPropertySet_ref    m_xTempBinding;
         XPropertySet_ref    m_xCreatedBinding;
 
-        DECL_LINK(          RefHdl, PushButton * );
-        DECL_LINK(          OKHdl, OKButton * );
+        DECL_LINK(			RefHdl, PushButton * );
+        DECL_LINK(			OKHdl, OKButton * );
 
-        void                FillAllBoxes();
+        void				FillAllBoxes();
 
     public:
         AddSubmissionDialog( Window* pParent, ItemNode* _pNode,
@@ -523,21 +526,21 @@ namespace svxform
     class AddModelDialog : public ModalDialog
     {
     private:
-        FixedLine           m_aModelFL;
-        FixedText           m_aNameFT;
-        Edit                m_aNameED;
+        FixedLine			m_aModelFL;
+        FixedText			m_aNameFT;
+        Edit				m_aNameED;
         CheckBox            m_aModifyCB;
-        FixedLine           m_aButtonsFL;
-        OKButton            m_aOKBtn;
-        CancelButton        m_aEscBtn;
-        HelpButton          m_aHelpBtn;
+        FixedLine			m_aButtonsFL;
+        OKButton			m_aOKBtn;
+        CancelButton		m_aEscBtn;
+        HelpButton			m_aHelpBtn;
 
     public:
         AddModelDialog( Window* pParent, bool _bEdit );
         ~AddModelDialog();
 
-        inline String           GetName() const { return m_aNameED.GetText(); }
-        inline void             SetName( const String& _rName ) { m_aNameED.SetText( _rName );}
+        inline String			GetName() const { return m_aNameED.GetText(); }
+        inline void				SetName( const String& _rName ) { m_aNameED.SetText( _rName );}
 
         inline bool             GetModifyDoc() const { return bool( m_aModifyCB.IsChecked() ); }
         inline void             SetModifyDoc( const bool _bModify ) { m_aModifyCB.Check( _bModify ); }
@@ -547,33 +550,33 @@ namespace svxform
     class AddInstanceDialog : public ModalDialog
     {
     private:
-        FixedLine               m_aInstanceFL;
-        FixedText               m_aNameFT;
-        Edit                    m_aNameED;
-        FixedText               m_aURLFT;
-        SvtURLBox               m_aURLED;
-        PushButton              m_aFilePickerBtn;
-        CheckBox                m_aLinkInstanceCB;
-        FixedLine               m_aButtonsFL;
-        OKButton                m_aOKBtn;
-        CancelButton            m_aEscBtn;
-        HelpButton              m_aHelpBtn;
+        FixedLine				m_aInstanceFL;
+        FixedText				m_aNameFT;
+        Edit					m_aNameED;
+        FixedText				m_aURLFT;
+        SvtURLBox				m_aURLED;
+        PushButton				m_aFilePickerBtn;
+        CheckBox				m_aLinkInstanceCB;
+        FixedLine				m_aButtonsFL;
+        OKButton				m_aOKBtn;
+        CancelButton			m_aEscBtn;
+        HelpButton				m_aHelpBtn;
 
-        String                  m_sAllFilterName;
+        String					m_sAllFilterName;
 
-        DECL_LINK(              FilePickerHdl, PushButton * );
+        DECL_LINK(				FilePickerHdl, PushButton * );
 
     public:
         AddInstanceDialog( Window* pParent, bool _bEdit );
         ~AddInstanceDialog();
 
-        inline void             SetRenameMode();
-        inline String           GetName() const { return m_aNameED.GetText(); }
-        inline void             SetName( const String& _rName ) { m_aNameED.SetText( _rName );}
-        inline String           GetURL() const { return m_aURLED.GetText(); }
-        inline void             SetURL( const String& _rURL ) { m_aURLED.SetText( _rURL );}
-        inline bool             IsLinkInstance() const { return ( m_aLinkInstanceCB.IsChecked() != sal_False ); }
-        inline void             SetLinkInstance( bool _bLink ) { m_aLinkInstanceCB.Check( _bLink != false ); }
+        inline void				SetRenameMode();
+        inline String			GetName() const { return m_aNameED.GetText(); }
+        inline void				SetName( const String& _rName ) { m_aNameED.SetText( _rName );}
+        inline String			GetURL() const { return m_aURLED.GetText(); }
+        inline void				SetURL( const String& _rURL ) { m_aURLED.SetText( _rURL );}
+        inline bool				IsLinkInstance() const { return ( m_aLinkInstanceCB.IsChecked() != FALSE ); }
+        inline void				SetLinkInstance( bool _bLink ) { m_aLinkInstanceCB.Check( _bLink != false ); }
     };
 
     inline void AddInstanceDialog::SetRenameMode()
@@ -592,7 +595,7 @@ namespace svxform
     };
 
 //............................................................................
-}   // namespace svxform
+}	// namespace svxform
 //............................................................................
 
 #endif // _SVX_DATANAVI_HXX

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,23 +54,23 @@ class INetMessageEncodeQPStream_Impl : public INetMessageIStream
 {
     SvStream               *pMsgStrm;
 
-    sal_uIntPtr                   nMsgBufSiz;
+    ULONG                   nMsgBufSiz;
     sal_Char               *pMsgBuffer;
     sal_Char               *pMsgRead;
     sal_Char               *pMsgWrite;
 
-    sal_uIntPtr                   nTokBufSiz;
+    ULONG                   nTokBufSiz;
     sal_Char               *pTokBuffer;
     sal_Char               *pTokRead;
     sal_Char               *pTokWrite;
 
     INetMessageStreamState  eState;
-    sal_Bool                    bDone;
+    BOOL                    bDone;
 
-    virtual int GetMsgLine (sal_Char *pData, sal_uIntPtr nSize);
+    virtual int GetMsgLine (sal_Char *pData, ULONG nSize);
 
 public:
-    INetMessageEncodeQPStream_Impl (sal_uIntPtr nMsgBufferSize = 1024);
+    INetMessageEncodeQPStream_Impl (ULONG nMsgBufferSize = 1024);
     virtual ~INetMessageEncodeQPStream_Impl (void);
 };
 
@@ -85,10 +85,10 @@ class INetMessageDecodeQPStream_Impl : public INetMessageOStream
     INetMessageStreamState  eState;
     SvMemoryStream         *pMsgBuffer;
 
-    sal_uIntPtr                   nTokBufLen;
+    ULONG                   nTokBufLen;
     sal_Char                pTokBuffer[4];
 
-    virtual int PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize);
+    virtual int PutMsgLine (const sal_Char *pData, ULONG nSize);
 
 public:
     INetMessageDecodeQPStream_Impl (void);
@@ -105,22 +105,22 @@ class INetMessageEncode64Stream_Impl : public INetMessageIStream
 {
     SvStream  *pMsgStrm;
 
-    sal_uIntPtr      nMsgBufSiz;
+    ULONG      nMsgBufSiz;
     sal_uInt8 *pMsgBuffer;
     sal_uInt8 *pMsgRead;
     sal_uInt8 *pMsgWrite;
 
-    sal_uIntPtr      nTokBufSiz;
+    ULONG      nTokBufSiz;
     sal_Char  *pTokBuffer;
     sal_Char  *pTokRead;
     sal_Char  *pTokWrite;
 
-    sal_Bool       bDone;
+    BOOL       bDone;
 
-    virtual int GetMsgLine (sal_Char *pData, sal_uIntPtr nSize);
+    virtual int GetMsgLine (sal_Char *pData, ULONG nSize);
 
 public:
-    INetMessageEncode64Stream_Impl (sal_uIntPtr nMsgBufferSize = 2048);
+    INetMessageEncode64Stream_Impl (ULONG nMsgBufferSize = 2048);
     virtual ~INetMessageEncode64Stream_Impl (void);
 };
 
@@ -134,15 +134,15 @@ class INetMessageDecode64Stream_Impl : public INetMessageOStream
 {
     INetMessageStreamState  eState;
 
-    sal_uIntPtr                   nMsgBufSiz;
+    ULONG                   nMsgBufSiz;
     sal_Char               *pMsgBuffer;
     sal_Char               *pMsgRead;
     sal_Char               *pMsgWrite;
 
-    virtual int PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize);
+    virtual int PutMsgLine (const sal_Char *pData, ULONG nSize);
 
 public:
-    INetMessageDecode64Stream_Impl (sal_uIntPtr nMsgBufferSize = 128);
+    INetMessageDecode64Stream_Impl (ULONG nMsgBufferSize = 128);
     virtual ~INetMessageDecode64Stream_Impl (void);
 };
 
@@ -168,7 +168,7 @@ INetIStream::~INetIStream (void)
 /*
  * Read.
  */
-int INetIStream::Read (sal_Char *pData, sal_uIntPtr nSize)
+int INetIStream::Read (sal_Char *pData, ULONG nSize)
 {
     return GetData (pData, nSize);
 }
@@ -179,7 +179,7 @@ int INetIStream::Read (sal_Char *pData, sal_uIntPtr nSize)
 void INetIStream::Decode64 (SvStream& rIn, SvStream& rOut)
 {
     INetMessage aMsg;
-    aMsg.SetDocumentLB(new SvAsyncLockBytes(&rOut, sal_False));
+    aMsg.SetDocumentLB(new SvAsyncLockBytes(&rOut, FALSE));
 
     INetMessageDecode64Stream_Impl aStream (8192);
     aStream.SetTargetMessage (&aMsg);
@@ -201,7 +201,7 @@ void INetIStream::Encode64 (SvStream& rIn, SvStream& rOut)
 {
     INetMessage aMsg;
     aMsg.SetDocumentLB (
-        new SvLockBytes (&rIn, sal_False));
+        new SvLockBytes (&rIn, FALSE));
 
     INetMessageEncode64Stream_Impl aStream (8192);
     aStream.SetSourceMessage (&aMsg);
@@ -237,7 +237,7 @@ INetOStream::~INetOStream (void)
 /*
  * Write.
  */
-int INetOStream::Write (const sal_Char *pData, sal_uIntPtr nSize)
+int INetOStream::Write (const sal_Char *pData, ULONG nSize)
 {
     return PutData (pData, nSize);
 }
@@ -250,9 +250,9 @@ int INetOStream::Write (const sal_Char *pData, sal_uIntPtr nSize)
 /*
  * INetMessageIStream.
  */
-INetMessageIStream::INetMessageIStream (sal_uIntPtr nBufferSize)
+INetMessageIStream::INetMessageIStream (ULONG nBufferSize)
     : pSourceMsg       (NULL),
-      bHeaderGenerated (sal_False),
+      bHeaderGenerated (FALSE),
       nBufSiz          (nBufferSize),
       pMsgStrm         (NULL),
       pMsgBuffer       (new SvMemoryStream)
@@ -275,7 +275,7 @@ INetMessageIStream::~INetMessageIStream (void)
 /*
  * GetData.
  */
-int INetMessageIStream::GetData (sal_Char *pData, sal_uIntPtr nSize)
+int INetMessageIStream::GetData (sal_Char *pData, ULONG nSize)
 {
     if (pSourceMsg == NULL) return INETSTREAM_STATUS_ERROR;
 
@@ -285,13 +285,13 @@ int INetMessageIStream::GetData (sal_Char *pData, sal_uIntPtr nSize)
     while (pWBuf < pWEnd)
     {
         // Caller's buffer not yet filled.
-        sal_uIntPtr n = pRead - pWrite;
+        ULONG n = pRead - pWrite;
         if (n > 0)
         {
             // Bytes still in buffer.
-            sal_uIntPtr m = pWEnd - pWBuf;
+            ULONG m = pWEnd - pWBuf;
             if (m < n) n = m;
-            for (sal_uIntPtr i = 0; i < n; i++) *pWBuf++ = *pWrite++;
+            for (ULONG i = 0; i < n; i++) *pWBuf++ = *pWrite++;
         }
         else
         {
@@ -310,7 +310,7 @@ int INetMessageIStream::GetData (sal_Char *pData, sal_uIntPtr nSize)
                 if (!bHeaderGenerated)
                 {
                     // Header generated. Insert empty line.
-                    bHeaderGenerated = sal_True;
+                    bHeaderGenerated = TRUE;
                     *pRead++ = '\r';
                     *pRead++ = '\n';
                 }
@@ -328,7 +328,7 @@ int INetMessageIStream::GetData (sal_Char *pData, sal_uIntPtr nSize)
 /*
  * GetMsgLine.
  */
-int INetMessageIStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
+int INetMessageIStream::GetMsgLine (sal_Char *pData, ULONG nSize)
 {
     if (pSourceMsg == NULL) return INETSTREAM_STATUS_ERROR;
 
@@ -337,7 +337,7 @@ int INetMessageIStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
 
     if (!bHeaderGenerated)
     {
-        sal_uIntPtr i, n;
+        ULONG i, n;
 
         if (pMsgBuffer->Tell() == 0)
         {
@@ -380,7 +380,7 @@ int INetMessageIStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
             if (pMsgStrm == NULL)
                 pMsgStrm = new SvStream (pSourceMsg->GetDocumentLB());
 
-            sal_uIntPtr nRead = pMsgStrm->Read (pWBuf, (pWEnd - pWBuf));
+            ULONG nRead = pMsgStrm->Read (pWBuf, (pWEnd - pWBuf));
             pWBuf += nRead;
         }
     }
@@ -397,7 +397,7 @@ int INetMessageIStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
  */
 INetMessageOStream::INetMessageOStream (void)
     : pTargetMsg    (NULL),
-      bHeaderParsed (sal_False),
+      bHeaderParsed (FALSE),
       eOState       (INETMSG_EOL_BEGIN),
       pMsgBuffer    (new SvMemoryStream)
 {
@@ -428,7 +428,7 @@ INetMessageOStream::~INetMessageOStream (void)
  * PutData.
  * (Simple Field Parsing (RFC822, Appendix B)).
  */
-int INetMessageOStream::PutData (const sal_Char *pData, sal_uIntPtr nSize)
+int INetMessageOStream::PutData (const sal_Char *pData, ULONG nSize)
 {
     if (pTargetMsg == NULL) return INETSTREAM_STATUS_ERROR;
 
@@ -463,7 +463,7 @@ int INetMessageOStream::PutData (const sal_Char *pData, sal_uIntPtr nSize)
                 pMsgBuffer->Seek (STREAM_SEEK_TO_BEGIN);
 
                 // Mark header parsed.
-                bHeaderParsed = sal_True;
+                bHeaderParsed = TRUE;
             }
             else if ((*pData == ' ') || (*pData == '\t'))
             {
@@ -535,7 +535,7 @@ int INetMessageOStream::PutData (const sal_Char *pData, sal_uIntPtr nSize)
 /*
  * PutMsgLine.
  */
-int INetMessageOStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
+int INetMessageOStream::PutMsgLine (const sal_Char *pData, ULONG nSize)
 {
     // Check for message container.
     if (pTargetMsg == NULL) return INETSTREAM_STATUS_ERROR;
@@ -544,7 +544,7 @@ int INetMessageOStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
     if (!IsHeaderParsed())
     {
         ByteString aField (pData);
-        sal_uInt16 nPos = aField.Search (':');
+        USHORT nPos = aField.Search (':');
         if (nPos != STRING_NOTFOUND)
         {
             ByteString aName (
@@ -583,7 +583,7 @@ int INetMessageOStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
 /*
  * INetMessageIOStream.
  */
-INetMessageIOStream::INetMessageIOStream (sal_uIntPtr nBufferSize)
+INetMessageIOStream::INetMessageIOStream (ULONG nBufferSize)
     : INetMessageIStream (nBufferSize),
       INetMessageOStream ()
 {
@@ -615,15 +615,15 @@ static const sal_Char ebcdic[] = {
  * INetMessageEncodeQPStream_Impl.
  */
 INetMessageEncodeQPStream_Impl::INetMessageEncodeQPStream_Impl (
-    sal_uIntPtr nMsgBufferSize)
+    ULONG nMsgBufferSize)
     : INetMessageIStream (),
       pMsgStrm   (NULL),
       nMsgBufSiz (nMsgBufferSize),
       nTokBufSiz (80),
       eState     (INETMSG_EOL_SCR),
-      bDone      (sal_False)
+      bDone      (FALSE)
 {
-    GenerateHeader (sal_False);
+    GenerateHeader (FALSE);
 
     pMsgBuffer = new sal_Char[nMsgBufSiz];
     pMsgRead = pMsgWrite = pMsgBuffer;
@@ -645,7 +645,7 @@ INetMessageEncodeQPStream_Impl::~INetMessageEncodeQPStream_Impl (void)
 /*
  * GetMsgLine.
  */
-int INetMessageEncodeQPStream_Impl::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
+int INetMessageEncodeQPStream_Impl::GetMsgLine (sal_Char *pData, ULONG nSize)
 {
     INetMessage *pMsg = GetSourceMessage ();
     if (pMsg == NULL) return INETSTREAM_STATUS_ERROR;
@@ -774,7 +774,7 @@ int INetMessageEncodeQPStream_Impl::GetMsgLine (sal_Char *pData, sal_uIntPtr nSi
             pMsgRead = pMsgWrite = pMsgBuffer;
 
             // Read next message block.
-            sal_uIntPtr nRead = pMsgStrm->Read (pMsgBuffer, nMsgBufSiz);
+            ULONG nRead = pMsgStrm->Read (pMsgBuffer, nMsgBufSiz);
             if (nRead > 0)
             {
                 // Set read pointer.
@@ -789,7 +789,7 @@ int INetMessageEncodeQPStream_Impl::GetMsgLine (sal_Char *pData, sal_uIntPtr nSi
                     *pTokRead++ = '\r';
                     *pTokRead++ = '\n';
 
-                    bDone = sal_True;
+                    bDone = TRUE;
                 }
                 else
                 {
@@ -851,7 +851,7 @@ INetMessageDecodeQPStream_Impl::INetMessageDecodeQPStream_Impl (void)
       pMsgBuffer (new SvMemoryStream),
       nTokBufLen (0)
 {
-    ParseHeader (sal_False);
+    ParseHeader (FALSE);
 }
 
 /*
@@ -866,7 +866,7 @@ INetMessageDecodeQPStream_Impl::~INetMessageDecodeQPStream_Impl (void)
  * PutMsgLine.
  */
 int INetMessageDecodeQPStream_Impl::PutMsgLine (
-    const sal_Char *pData, sal_uIntPtr nSize)
+    const sal_Char *pData, ULONG nSize)
 {
     INetMessage *pMsg = GetTargetMessage();
     if (pMsg == NULL) return INETSTREAM_STATUS_ERROR;
@@ -965,14 +965,14 @@ static const sal_Char six2pr[64] = {
  * INetMessageEncode64Stream_Impl.
  */
 INetMessageEncode64Stream_Impl::INetMessageEncode64Stream_Impl (
-    sal_uIntPtr nMsgBufferSize)
+    ULONG nMsgBufferSize)
     : INetMessageIStream (),
       pMsgStrm   (NULL),
       nMsgBufSiz (nMsgBufferSize),
       nTokBufSiz (80),
-      bDone      (sal_False)
+      bDone      (FALSE)
 {
-    GenerateHeader (sal_False);
+    GenerateHeader (FALSE);
 
     pMsgBuffer = new sal_uInt8[nMsgBufSiz];
     pMsgRead = pMsgWrite = pMsgBuffer;
@@ -994,7 +994,7 @@ INetMessageEncode64Stream_Impl::~INetMessageEncode64Stream_Impl (void)
 /*
  * GetMsgLine.
  */
-int INetMessageEncode64Stream_Impl::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
+int INetMessageEncode64Stream_Impl::GetMsgLine (sal_Char *pData, ULONG nSize)
 {
     INetMessage *pMsg = GetSourceMessage ();
     if (pMsg == NULL) return INETSTREAM_STATUS_ERROR;
@@ -1064,7 +1064,7 @@ int INetMessageEncode64Stream_Impl::GetMsgLine (sal_Char *pData, sal_uIntPtr nSi
             pMsgRead = pMsgWrite = pMsgBuffer;
 
             // Read next message block.
-            sal_uIntPtr nRead = pMsgStrm->Read (pMsgBuffer, nMsgBufSiz);
+            ULONG nRead = pMsgStrm->Read (pMsgBuffer, nMsgBufSiz);
             if (nRead > 0)
             {
                 // Set read pointer.
@@ -1093,7 +1093,7 @@ int INetMessageEncode64Stream_Impl::GetMsgLine (sal_Char *pData, sal_uIntPtr nSi
                     *pTokRead++ = '\n';
 
                     // Mark we're done.
-                    bDone = sal_True;
+                    bDone = TRUE;
                 }
                 else
                 {
@@ -1109,7 +1109,7 @@ int INetMessageEncode64Stream_Impl::GetMsgLine (sal_Char *pData, sal_uIntPtr nSi
                         pTokRead = pTokWrite = pTokBuffer;
 
                         // Reset done flag, if everything has been done.
-                        // if (pWBuf == pData) bDone = sal_False;
+                        // if (pWBuf == pData) bDone = FALSE;
 
                         // Return.
                         return (pWBuf - pData);
@@ -1173,12 +1173,12 @@ static const sal_uInt8 pr2six[256] = {
  * INetMessageDecode64Stream_Impl.
  */
 INetMessageDecode64Stream_Impl::INetMessageDecode64Stream_Impl (
-    sal_uIntPtr nMsgBufferSize)
+    ULONG nMsgBufferSize)
     : INetMessageOStream (),
       eState     (INETMSG_EOL_SCR),
       nMsgBufSiz (nMsgBufferSize)
 {
-    ParseHeader (sal_False);
+    ParseHeader (FALSE);
 
     pMsgBuffer = new sal_Char[nMsgBufSiz];
     pMsgRead = pMsgWrite = pMsgBuffer;
@@ -1196,7 +1196,7 @@ INetMessageDecode64Stream_Impl::~INetMessageDecode64Stream_Impl (void)
  * PutMsgLine.
  */
 int INetMessageDecode64Stream_Impl::PutMsgLine (
-    const sal_Char *pData, sal_uIntPtr nSize)
+    const sal_Char *pData, ULONG nSize)
 {
     INetMessage *pMsg = GetTargetMessage ();
     if (pMsg == NULL) return INETSTREAM_STATUS_ERROR;
@@ -1299,7 +1299,7 @@ int INetMessageDecode64Stream_Impl::PutMsgLine (
 /*
  * INetMIMEMessageStream.
  */
-INetMIMEMessageStream::INetMIMEMessageStream (sal_uIntPtr nBufferSize)
+INetMIMEMessageStream::INetMIMEMessageStream (ULONG nBufferSize)
     : INetMessageIOStream (nBufferSize),
       eState      (INETMSG_EOL_BEGIN),
       nChildIndex (0),
@@ -1361,7 +1361,7 @@ INetMIMEMessageStream::GetMsgEncoding (const String& rContentType)
  * GetMsgLine.
  * (Message Generator).
  */
-int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
+int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, ULONG nSize)
 {
     // Check for message container.
     INetMIMEMessage *pMsg = GetSourceMessage();
@@ -1595,7 +1595,7 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
  * PutMsgLine.
  * (Message Parser).
  */
-int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
+int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, ULONG nSize)
 {
     // Check for message container.
     INetMIMEMessage *pMsg = GetTargetMessage();
@@ -1624,8 +1624,8 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                     pMsg->SetChildCount( pMsg->GetChildCount() + 1);
                     INetMIMEMessage* pNewMessage = new INetMIMEMessage;
                     pNewMessage->SetDocumentLB (
-                        new SvAsyncLockBytes(new SvCacheStream, sal_False));
-                    pMsg->AttachChild( *pNewMessage, sal_True );
+                        new SvAsyncLockBytes(new SvCacheStream, FALSE));
+                    pMsg->AttachChild( *pNewMessage, TRUE );
 
                     // Encapsulated message body. Create message parser stream.
                     pChildStrm = new INetMIMEMessageStream;
@@ -1657,7 +1657,7 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                     ByteString aLowerType (aType);
                     aLowerType.ToLowerAscii();
 
-                    sal_uInt16 nPos = aLowerType.Search ("boundary=");
+                    USHORT nPos = aLowerType.Search ("boundary=");
                     ByteString aBoundary (aType.Copy (nPos + 9));
 
                     aBoundary.EraseLeadingAndTrailingChars (' ');
@@ -1679,7 +1679,7 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
 
                 if (pMsgBuffer == NULL) pMsgBuffer = new SvMemoryStream;
                 pMsgBuffer->Write (pData, nSize);
-                sal_uIntPtr nBufSize = pMsgBuffer->Tell();
+                ULONG nBufSize = pMsgBuffer->Tell();
 
                 const sal_Char* pChar;
                 const sal_Char* pOldPos;
@@ -1736,9 +1736,9 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                                     new INetMIMEMessage;
                                 pNewMessage->SetDocumentLB (
                                     new SvAsyncLockBytes (
-                                        new SvCacheStream, sal_False));
+                                        new SvCacheStream, FALSE));
 
-                                pMsg->AttachChild( *pNewMessage, sal_True );
+                                pMsg->AttachChild( *pNewMessage, TRUE );
 
                                 // Encapsulated message body. Create message parser stream.
                                 pChildStrm = new INetMIMEMessageStream;

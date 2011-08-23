@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,21 +40,21 @@ class GIFImageDataOutputStream
 {
 private:
 
-    void        FlushBlockBuf();
-    inline void FlushBitsBufsFullBytes();
+    void		FlushBlockBuf();
+    inline void	FlushBitsBufsFullBytes();
 
-    SvStream&   rStream;
-    sal_uInt8*      pBlockBuf;
-    sal_uInt8       nBlockBufSize;
-    sal_uLong       nBitsBuf;
-    sal_uInt16      nBitsBufSize;
+    SvStream&	rStream;
+    BYTE*		pBlockBuf;
+    BYTE		nBlockBufSize;
+    ULONG		nBitsBuf;
+    USHORT		nBitsBufSize;
 
 public:
 
-                GIFImageDataOutputStream( SvStream & rGIF, sal_uInt8 nLZWDataSize );
+                GIFImageDataOutputStream( SvStream & rGIF, BYTE nLZWDataSize );
                 ~GIFImageDataOutputStream();
 
-    inline void WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen );
+    inline void	WriteBits( USHORT nCode, USHORT nCodeLen );
 };
 
 // ------------------------------------------------------------------------
@@ -66,7 +66,7 @@ inline void GIFImageDataOutputStream::FlushBitsBufsFullBytes()
         if( nBlockBufSize==255 )
             FlushBlockBuf();
 
-        pBlockBuf[nBlockBufSize++] = (sal_uInt8) nBitsBuf;
+        pBlockBuf[nBlockBufSize++] = (BYTE) nBitsBuf;
         nBitsBuf >>= 8;
         nBitsBufSize -= 8;
     }
@@ -74,21 +74,21 @@ inline void GIFImageDataOutputStream::FlushBitsBufsFullBytes()
 
 // ------------------------------------------------------------------------
 
-inline void GIFImageDataOutputStream::WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen )
+inline void GIFImageDataOutputStream::WriteBits( USHORT nCode, USHORT nCodeLen )
 {
     if( nBitsBufSize+nCodeLen>32 )
         FlushBitsBufsFullBytes();
 
-    nBitsBuf |= (sal_uLong) nCode << nBitsBufSize;
+    nBitsBuf |= (ULONG) nCode << nBitsBufSize;
     nBitsBufSize = nBitsBufSize + nCodeLen;
 }
 
 // ------------------------------------------------------------------------
 
-GIFImageDataOutputStream::GIFImageDataOutputStream( SvStream & rGIF, sal_uInt8 nLZWDataSize ) :
+GIFImageDataOutputStream::GIFImageDataOutputStream( SvStream & rGIF, BYTE nLZWDataSize ) :
         rStream(rGIF)
 {
-    pBlockBuf = new sal_uInt8[ 255 ];
+    pBlockBuf = new BYTE[ 255 ];
     nBlockBufSize = 0;
     nBitsBufSize = 0;
     nBitsBuf = 0;
@@ -103,7 +103,7 @@ GIFImageDataOutputStream::~GIFImageDataOutputStream()
     WriteBits(0,7);
     FlushBitsBufsFullBytes();
     FlushBlockBuf();
-    rStream << (sal_uInt8)0;
+    rStream << (BYTE)0;
     delete[] pBlockBuf;
 }
 
@@ -113,7 +113,7 @@ void GIFImageDataOutputStream::FlushBlockBuf()
 {
     if( nBlockBufSize )
     {
-        rStream << (sal_uInt8) nBlockBufSize;
+        rStream << (BYTE) nBlockBufSize;
         rStream.Write( pBlockBuf,nBlockBufSize );
         nBlockBufSize = 0;
     }
@@ -126,10 +126,10 @@ void GIFImageDataOutputStream::FlushBlockBuf()
 struct GIFLZWCTreeNode
 {
 
-    GIFLZWCTreeNode*    pBrother;       // naechster Knoten, der den selben Vater hat
-    GIFLZWCTreeNode*    pFirstChild;    // erster Sohn
-    sal_uInt16              nCode;          // Der Code fuer den String von Pixelwerten, der sich ergibt, wenn
-    sal_uInt16              nValue;         // Der Pixelwert
+    GIFLZWCTreeNode*	pBrother;		// naechster Knoten, der den selben Vater hat
+    GIFLZWCTreeNode*	pFirstChild;	// erster Sohn
+    USHORT				nCode;			// Der Code fuer den String von Pixelwerten, der sich ergibt, wenn
+    USHORT				nValue;			// Der Pixelwert
 };
 
 // --------------------
@@ -150,11 +150,11 @@ GIFLZWCompressor::~GIFLZWCompressor()
 
 // ------------------------------------------------------------------------
 
-void GIFLZWCompressor::StartCompression( SvStream& rGIF, sal_uInt16 nPixelSize )
+void GIFLZWCompressor::StartCompression( SvStream& rGIF, USHORT nPixelSize )
 {
     if( !pIDOS )
     {
-        sal_uInt16 i;
+        USHORT i;
 
         nDataSize = nPixelSize;
 
@@ -166,13 +166,13 @@ void GIFLZWCompressor::StartCompression( SvStream& rGIF, sal_uInt16 nPixelSize )
         nTableSize=nEOICode+1;
         nCodeSize=nDataSize+1;
 
-        pIDOS=new GIFImageDataOutputStream(rGIF,(sal_uInt8)nDataSize);
+        pIDOS=new GIFImageDataOutputStream(rGIF,(BYTE)nDataSize);
         pTable=new GIFLZWCTreeNode[4096];
 
         for (i=0; i<4096; i++)
         {
             pTable[i].pBrother = pTable[i].pFirstChild = NULL;
-            pTable[i].nValue = (sal_uInt8) ( pTable[i].nCode = i );
+            pTable[i].nValue = (BYTE) ( pTable[i].nCode = i );
         }
 
         pPrefix = NULL;
@@ -182,13 +182,13 @@ void GIFLZWCompressor::StartCompression( SvStream& rGIF, sal_uInt16 nPixelSize )
 
 // ------------------------------------------------------------------------
 
-void GIFLZWCompressor::Compress( HPBYTE pSrc, sal_uLong nSize )
+void GIFLZWCompressor::Compress( HPBYTE pSrc, ULONG nSize )
 {
     if( pIDOS )
     {
-        GIFLZWCTreeNode*    p;
-        sal_uInt16              i;
-        sal_uInt8               nV;
+        GIFLZWCTreeNode*	p;
+        USHORT				i;
+        BYTE				nV;
 
         if( !pPrefix && nSize )
         {
@@ -224,7 +224,7 @@ void GIFLZWCompressor::Compress( HPBYTE pSrc, sal_uLong nSize )
                 }
                 else
                 {
-                    if(nTableSize==(sal_uInt16)(1<<nCodeSize))
+                    if(nTableSize==(USHORT)(1<<nCodeSize))
                         nCodeSize++;
 
                     p=pTable+(nTableSize++);

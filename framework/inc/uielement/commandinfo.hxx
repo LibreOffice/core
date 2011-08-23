@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_UIELEMENT_COMMANDINFO_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <macros/generic.hxx>
@@ -48,14 +48,12 @@ namespace framework
 struct CommandInfo
 {
     CommandInfo() : nId( 0 ),
-                    nWidth( 0 ),
                     nImageInfo( 0 ),
                     bMirrored( false ),
                     bRotated( false ) {}
 
-    sal_uInt16                  nId;
-    sal_uInt16                  nWidth;
-    ::std::vector< sal_uInt16 > aIds;
+    USHORT                  nId;
+    ::std::vector< USHORT > aIds;
     sal_Int16               nImageInfo;
     sal_Bool                bMirrored : 1,
                             bRotated  : 1;

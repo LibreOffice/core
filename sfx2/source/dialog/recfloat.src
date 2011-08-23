@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,10 @@
 
  // -----------------------------------------------------------------------
 #define STD_MASKCOLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
+#define STD_HC_MASKCOLOR Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; }
 
 FloatingWindow SID_RECORDING_FLOATWINDOW
 {
-    HelpID = "sfx2:FloatingWindow:SID_RECORDING_FLOATWINDOW";
     Moveable = TRUE ;
     Closeable = TRUE ;
     Hide = TRUE ;

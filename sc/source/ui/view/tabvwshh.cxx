@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 #include "document.hxx"
 #include "docsh.hxx"
 #include "sc.hrc"
-#include "drwlayer.hxx"     // GetVisibleName
+#include "drwlayer.hxx"		// GetVisibleName
 #include "retypepassdlg.hxx"
 #include "tabprotection.hxx"
 
@@ -60,28 +60,28 @@ using namespace com::sun::star;
 
 void ScTabViewShell::ExecuteSbx( SfxRequest& /* rReq */ )
 {
-    //  SID_RANGE_OFFSET (Offset),
-    //  SID_PIVOT_CREATE (DataPilotCreate) - removed (old Basic)
+    //	SID_RANGE_OFFSET (Offset),
+    //	SID_PIVOT_CREATE (DataPilotCreate) - removed (old Basic)
 }
 
 void ScTabViewShell::GetSbxState( SfxItemSet& /* rSet */ )
 {
-    //  SID_RANGE_REGION (CurrentRegion) - removed (old Basic)
+    //	SID_RANGE_REGION (CurrentRegion) - removed (old Basic)
 }
 
 //------------------------------------------------------------------
 
 void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
 {
-    sal_uInt16 nSlotId = rReq.GetSlot();
+    USHORT nSlotId = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
-        //  Objekte aktivieren/deaktivieren immer auf der sichtbaren View
+        //	Objekte aktivieren/deaktivieren immer auf der sichtbaren View
 
     ScTabViewShell* pVisibleSh = this;
     if ( nSlotId == SID_OLE_SELECT || nSlotId == SID_OLE_ACTIVATE || nSlotId == SID_OLE_DEACTIVATE )
     {
-        OSL_FAIL("old slot SID_OLE...");
+        DBG_ERROR("old slot SID_OLE...");
     }
 
     switch (nSlotId)
@@ -89,7 +89,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
         case SID_OLE_SELECT:
         case SID_OLE_ACTIVATE:
             {
-                //  in beiden Faellen erstmal auf der sichtbaren View selektieren
+                //	in beiden Faellen erstmal auf der sichtbaren View selektieren
 
                 String aName;
                 SdrView* pDrView = GetSdrView();
@@ -101,7 +101,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                 }
                 pVisibleSh->SelectObject( aName );
 
-                //  aktivieren
+                //	aktivieren
 
                 if ( nSlotId == SID_OLE_ACTIVATE )
                     pVisibleSh->DoVerb( 0 );
@@ -116,15 +116,15 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
         case SID_OBJECT_WIDTH:
         case SID_OBJECT_HEIGHT:
             {
-                sal_Bool bDone = false;
+                BOOL bDone = FALSE;
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->GetItemState( nSlotId, sal_True, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs && pReqArgs->GetItemState( nSlotId, TRUE, &pItem ) == SFX_ITEM_SET )
                 {
                     long nNewVal = ((const SfxInt32Item*)pItem)->GetValue();
                     if ( nNewVal < 0 )
                         nNewVal = 0;
 
-                    //! von irgendwas in 1/100mm umrechnen ??????
+                    //!	von irgendwas in 1/100mm umrechnen ??????
 
                     SdrView* pDrView = GetSdrView();
                     if ( pDrView )
@@ -147,12 +147,12 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                                 pDrView->ResizeMarkedObj( aRect.TopLeft(),
                                                 Fraction( 1, 1 ),
                                                 Fraction( nNewVal, aRect.GetHeight() ) );
-                            bDone = sal_True;
+                            bDone = TRUE;
                         }
                     }
                 }
                 if (!bDone)
-                    SbxBase::SetError( SbxERR_BAD_PARAMETER );  // Basic-Fehler
+                    SbxBase::SetError( SbxERR_BAD_PARAMETER );	// Basic-Fehler
             }
             break;
 
@@ -181,10 +181,10 @@ uno::Reference < embed::XEmbeddedObject > lcl_GetSelectedObj( SdrView* pDrView )
 
 void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
 {
-    //  SID_OLE_OBJECT - removed (old Basic)
+    //	SID_OLE_OBJECT - removed (old Basic)
 
     SfxWhichIter aIter(rSet);
-    sal_uInt16 nWhich = aIter.FirstWhich();
+    USHORT nWhich = aIter.FirstWhich();
     while ( nWhich )
     {
         switch (nWhich)
@@ -224,7 +224,7 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
                             else // if ( nWhich == SID_OBJECT_HEIGHT )
                                 nVal = aRect.GetHeight();
 
-                            //! von 1/100mm in irgendwas umrechnen ??????
+                            //!	von 1/100mm in irgendwas umrechnen ??????
 
                             rSet.Put( SfxInt32Item( nWhich, nVal ) );
                         }
@@ -258,7 +258,7 @@ void ScTabViewShell::RemoveAccessibilityObject( SfxListener& rObject )
     }
     else
     {
-        OSL_FAIL("kein Accessibility-Broadcaster?");
+        DBG_ERROR("kein Accessibility-Broadcaster?");
     }
 }
 
@@ -268,7 +268,7 @@ void ScTabViewShell::BroadcastAccessibility( const SfxHint &rHint )
         pAccessibilityBroadcaster->Broadcast( rHint );
 }
 
-sal_Bool ScTabViewShell::HasAccessibilityObjects()
+BOOL ScTabViewShell::HasAccessibilityObjects()
 {
     return pAccessibilityBroadcaster != NULL;
 }

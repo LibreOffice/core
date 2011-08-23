@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,7 +119,7 @@ uno::Any DatabaseDataProvider::queryInterface(uno::Type const & type) throw (uno
 //------------------------------------------------------------------------------
 rtl::OUString DatabaseDataProvider::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart2.data.DatabaseDataProvider"));
+    return rtl::OUString::createFromAscii("com.sun.star.comp.chart2.data.DatabaseDataProvider");
 }
 // -----------------------------------------------------------------------------
 // -------------------------------------------------------------------------
@@ -173,25 +173,26 @@ void SAL_CALL DatabaseDataProvider::initialize(const uno::Sequence< uno::Any > &
 // chart2::data::XDataProvider:
 ::sal_Bool SAL_CALL DatabaseDataProvider::createDataSourcePossible(const uno::Sequence< beans::PropertyValue > & _aArguments) throw (uno::RuntimeException)
 {
+    //::osl::ResettableMutexGuard aClearForNotifies(m_aMutex);
     const beans::PropertyValue* pArgIter = _aArguments.getConstArray();
     const beans::PropertyValue* pArgEnd  = pArgIter + _aArguments.getLength();
     for(;pArgIter != pArgEnd;++pArgIter)
     {
-        if ( pArgIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DataRowSource")) )
+        if ( pArgIter->Name.equalsAscii("DataRowSource") )
         {
             ::com::sun::star::chart::ChartDataRowSource eRowSource = ::com::sun::star::chart::ChartDataRowSource_COLUMNS;
             pArgIter->Value >>= eRowSource;
             if ( eRowSource != ::com::sun::star::chart::ChartDataRowSource_COLUMNS )
                 return sal_False;
-        }
-        else if ( pArgIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CellRangeRepresentation")) )
+        } // if ( pArgIter->Name.equalsAscii("DataRowSource") )
+        else if ( pArgIter->Name.equalsAscii("CellRangeRepresentation") )
         {
             ::rtl::OUString sRange;
             pArgIter->Value >>= sRange;
-            if ( !sRange.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("all")) )
+            if ( !sRange.equalsAscii("all") )
                 return sal_False;
         }
-        else if ( pArgIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FirstCellAsLabel")) )
+        else if ( pArgIter->Name.equalsAscii("FirstCellAsLabel") )
         {
             sal_Bool bFirstCellAsLabel = sal_True;
             pArgIter->Value >>= bFirstCellAsLabel;
@@ -240,7 +241,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
             {
             }
         }
-        if ( !bRet ) // no command set or an error occurred, use Internal data handler
+        if ( !bRet ) // no command set or an error occured, use Internal data handler
         {
             uno::Reference< lang::XInitialization> xIni(m_xInternal,uno::UNO_QUERY);
             if ( xIni.is() )
@@ -356,12 +357,12 @@ void SAL_CALL DatabaseDataProvider::setColumnDescriptions( const uno::Sequence< 
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL DatabaseDataProvider::getRowDescriptions()    throw (uno::RuntimeException)
-{
+{    
     return m_xComplexDescriptionAccess->getRowDescriptions();
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL DatabaseDataProvider::getColumnDescriptions()    throw (uno::RuntimeException)
-{
+{    
     return m_xComplexDescriptionAccess->getColumnDescriptions();
 }
 
@@ -788,7 +789,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
     while( xRes->next() && (!m_RowLimit || nRowCount < m_RowLimit) )
     {
         ++nRowCount;
-
+        
         aValue.fill( aColumns[0].nResultSetPosition, aColumns[0].nDataType, xRow );
         aRowLabels.push_back( aValue.getString() );
 
@@ -830,7 +831,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
             ::std::vector< double > aRow;
             const sal_Int32 nSize = SAL_N_ELEMENTS(fDefaultData);
             for (size_t j = 0; j < (aColumns.size()-1); ++j,++k)
-            {
+            {            
                 if ( k >= nSize )
                     k = 0;
                 aRow.push_back(fDefaultData[k]);
@@ -838,7 +839,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
             aDataValues.push_back(aRow);
         }
     }
-
+        
     uno::Reference< chart::XChartDataArray> xData(m_xInternal,uno::UNO_QUERY);
     xData->setRowDescriptions(uno::Sequence< ::rtl::OUString >(&(*aRowLabels.begin()),aRowLabels.size()));
 

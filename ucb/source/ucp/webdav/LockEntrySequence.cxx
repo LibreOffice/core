@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -216,7 +216,11 @@ bool LockEntrySequence::createFromXML( const rtl::OString & rInData,
                       rInData.getStr() + nStart,
                       nEnd - nStart + TOKEN_LENGTH );
 
+#if NEON_VERSION >= 0x0250
         success = !ne_xml_failed( parser );
+#else
+        success = !!ne_xml_valid( parser );
+#endif
 
         ne_xml_destroy( parser );
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 
 // =======================================================================
 
-XubString GetStandardText( sal_uInt16 nStdText )
+XubString GetStandardText( USHORT nStdText )
 {
     ResMgr* pResMgr = ImplGetResMgr();
     XubString aText;
@@ -50,7 +50,7 @@ XubString GetStandardText( sal_uInt16 nStdText )
 // =======================================================================
 
 void ShowServiceNotAvailableError( Window* pParent,
-                                   const XubString& rServiceName, sal_Bool bError )
+                                   const XubString& rServiceName, BOOL bError )
 {
     XubString aText( GetStandardText( STANDARD_TEXT_SERVICE_NOT_AVAILABLE ) );
     aText.SearchAndReplaceAscii( "%s", rServiceName );

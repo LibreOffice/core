@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,38 +59,38 @@ private:
     friend class Font;
     void                AskConfig();
 
-    int                 mnRefCount;
-    String              maFamilyName;
-    String              maStyleName;
-    Size                maSize;
-    Color               maColor;        // compatibility, now on output device
-    Color               maFillColor;    // compatibility, now on output device
-    rtl_TextEncoding    meCharSet;
-    LanguageType        meLanguage;
-    LanguageType        meCJKLanguage;
-    FontFamily          meFamily;
-    FontPitch           mePitch;
-    TextAlign           meAlign;
-    FontWeight          meWeight;
-    FontWidth           meWidthType;
-    FontItalic          meItalic;
-    FontUnderline       meUnderline;
-    FontUnderline       meOverline;
-    FontStrikeout       meStrikeout;
-    FontRelief          meRelief;
-    FontEmphasisMark    meEmphasisMark;
-    FontType            meType;         // used by metrics only
-    short               mnOrientation;
-    FontKerning         mnKerning;
-    sal_Bool                mbWordLine:1,
+    int					mnRefCount;
+    String				maFamilyName;
+    String				maStyleName;
+    Size				maSize;
+    Color				maColor;		// compatibility, now on output device
+    Color				maFillColor;	// compatibility, now on output device
+    rtl_TextEncoding	meCharSet;
+    LanguageType		meLanguage;
+    LanguageType		meCJKLanguage;
+    FontFamily			meFamily;
+    FontPitch			mePitch;
+    TextAlign			meAlign;
+    FontWeight			meWeight;
+    FontWidth			meWidthType;
+    FontItalic			meItalic;
+    FontUnderline		meUnderline;
+    FontUnderline		meOverline;
+    FontStrikeout		meStrikeout;
+    FontRelief			meRelief;
+    FontEmphasisMark	meEmphasisMark;
+    FontType			meType;			// used by metrics only
+    short				mnOrientation;
+    FontKerning 		mnKerning;
+    BOOL				mbWordLine:1,
                         mbOutline:1,
                         mbConfigLookup:1,   // there was a config lookup
                         mbShadow:1,
                         mbVertical:1,
-                        mbTransparent:1;    // compatibility, now on output device
+                        mbTransparent:1;	// compatibility, now on output device
 
-    friend SvStream&    operator>>( SvStream& rIStm, Impl_Font& );
-    friend SvStream&    operator<<( SvStream& rOStm, const Impl_Font& );
+    friend SvStream&	operator>>( SvStream& rIStm, Impl_Font& );
+    friend SvStream&	operator<<( SvStream& rOStm, const Impl_Font& );
 };
 
 // ------------------
@@ -108,8 +108,8 @@ private:
     long    mnExtLeading;  // External Leading
     long    mnLineHeight;  // Ascent+Descent+EmphasisMark
     long    mnSlant;       // Slant
-    sal_uInt16  mnMiscFlags;   // Misc Flags
-    sal_uInt32  mnRefCount;    // Reference Counter
+    USHORT  mnMiscFlags;   // Misc Flags
+    UINT32  mnRefCount;    // Reference Counter
 
     enum { DEVICE_FLAG=1, SCALABLE_FLAG=2, LATIN_FLAG=4, CJK_FLAG=8, CTL_FLAG=16 };
 
@@ -135,7 +135,7 @@ public:
 };
 
 // ------------------
-// - ImplFontOptions -
+// - ImplFontHints -
 // ------------------
 
 class ImplFontOptions
@@ -148,26 +148,25 @@ public:
     FontHintStyle      meHintStyle;      // type of font hinting to be used
 public:
     ImplFontOptions() :
-        meEmbeddedBitmap(EMBEDDEDBITMAP_DONTKNOW),
-        meAntiAlias(ANTIALIAS_DONTKNOW),
-        meAutoHint(AUTOHINT_DONTKNOW),
-        meHinting(HINTING_DONTKNOW),
+        meEmbeddedBitmap(EMBEDDEDBITMAP_DONTKNOW), 
+        meAntiAlias(ANTIALIAS_DONTKNOW), 
+        meAutoHint(AUTOHINT_DONTKNOW), 
+        meHinting(HINTING_DONTKNOW), 
         meHintStyle(HINT_SLIGHT)
     {}
-    virtual ~ImplFontOptions()
+    ImplFontOptions( FontEmbeddedBitmap eEmbeddedBitmap, FontAntiAlias eAntiAlias, 
+        FontAutoHint eAutoHint, FontHinting eHinting, FontHintStyle eHintStyle) :
+        meEmbeddedBitmap(eEmbeddedBitmap), 
+        meAntiAlias(eAntiAlias), 
+        meAutoHint(eAutoHint), 
+        meHinting(eHinting), 
+        meHintStyle(eHintStyle)
     {}
-    FontAutoHint GetUseAutoHint() const
-        { return meAutoHint; }
-    FontHintStyle GetHintStyle() const
-        { return meHintStyle; }
-    bool DontUseEmbeddedBitmaps() const
-        { return meEmbeddedBitmap == EMBEDDEDBITMAP_FALSE; }
-    bool DontUseAntiAlias() const
-        { return meAntiAlias == ANTIALIAS_FALSE; }
-    bool DontUseHinting() const
-        { return (meHinting == HINTING_FALSE) || (GetHintStyle() == HINT_NONE); }
-    virtual void *GetPattern(void * /*pFace*/, bool /*bEmbolden*/) const
-        { return NULL; }
+    FontAutoHint GetUseAutoHint() const { return meAutoHint; }
+    FontHintStyle GetHintStyle() const { return meHintStyle; }
+    bool DontUseEmbeddedBitmaps() const { return meEmbeddedBitmap == EMBEDDEDBITMAP_FALSE; }
+    bool DontUseAntiAlias() const { return meAntiAlias == ANTIALIAS_FALSE; }
+    bool DontUseHinting() const { return (meHinting == HINTING_FALSE) || (GetHintStyle() == HINT_NONE); }
 };
 
 // -------------------
@@ -176,7 +175,7 @@ public:
 
 class CmapResult;
 
-class VCL_PLUGIN_PUBLIC ImplFontCharMap
+class VCL_DLLPUBLIC ImplFontCharMap
 {
 public:
     explicit             ImplFontCharMap( const CmapResult& );
@@ -198,8 +197,8 @@ public:
     int                 GetIndexFromChar( sal_uInt32 ) const;
     sal_uInt32          GetCharFromIndex( int ) const;
 
-    void                AddReference() const;
-    void                DeReference() const;
+    void                AddReference();
+    void                DeReference();
 
     int                 GetGlyphIndex( sal_uInt32 ) const;
 
@@ -213,26 +212,30 @@ private:
 private:
     const sal_uInt32*   mpRangeCodes;     // pairs of StartCode/(EndCode+1)
     const int*          mpStartGlyphs;    // range-specific mapper to glyphs
-    const sal_uInt16*       mpGlyphIds;       // individual glyphid mappings
+    const USHORT*       mpGlyphIds;       // individual glyphid mappings
     int                 mnRangeCount;
-    int                 mnCharCount;      // covered codepoints
-    mutable int         mnRefCount;
+    int                 mnCharCount;
+    int                 mnRefCount;
 };
 
 // CmapResult is a normalized version of the many CMAP formats
-class VCL_PLUGIN_PUBLIC CmapResult
+class
+#ifdef UNX
+    VCL_DLLPUBLIC // vcl-plugins need it
+#endif // UNX
+CmapResult
 {
 public:
-    explicit    CmapResult( bool bSymbolic = false,
+    explicit	CmapResult( bool bSymbolic = false,
                     const sal_uInt32* pRangeCodes = NULL, int nRangeCount = 0,
-                    const int* pStartGlyphs = 0, const sal_uInt16* pGlyphIds = NULL );
+                    const int* pStartGlyphs = 0, const USHORT* pGlyphIds = NULL );
 
     const sal_uInt32* mpRangeCodes;
     const int*        mpStartGlyphs;
-    const sal_uInt16*     mpGlyphIds;
-    int               mnRangeCount;
-    bool              mbSymbolic;
-    bool              mbRecoded;
+    const USHORT*     mpGlyphIds;
+    int			      mnRangeCount;
+    bool		      mbSymbolic;
+    bool			  mbRecoded;
 };
 
 bool ParseCMAP( const unsigned char* pRawData, int nRawLength, CmapResult& );

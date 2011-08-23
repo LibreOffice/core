@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,13 +63,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
 
-static HTMLOutEvent aBodyEventTable[] =
+static HTMLOutEvent __FAR_DATA aBodyEventTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_O_SDonload,       OOO_STRING_SVTOOLS_HTML_O_onload,       SFX_EVENT_OPENDOC   },
-    { OOO_STRING_SVTOOLS_HTML_O_SDonunload, OOO_STRING_SVTOOLS_HTML_O_onunload, SFX_EVENT_PREPARECLOSEDOC   },
-    { OOO_STRING_SVTOOLS_HTML_O_SDonfocus,  OOO_STRING_SVTOOLS_HTML_O_onfocus,  SFX_EVENT_ACTIVATEDOC   },
-    { OOO_STRING_SVTOOLS_HTML_O_SDonblur,       OOO_STRING_SVTOOLS_HTML_O_onblur,       SFX_EVENT_DEACTIVATEDOC },
-    { 0,                    0,                  0                   }
+    { OOO_STRING_SVTOOLS_HTML_O_SDonload,		OOO_STRING_SVTOOLS_HTML_O_onload,		SFX_EVENT_OPENDOC	},
+    { OOO_STRING_SVTOOLS_HTML_O_SDonunload,	OOO_STRING_SVTOOLS_HTML_O_onunload,	SFX_EVENT_PREPARECLOSEDOC	},
+    { OOO_STRING_SVTOOLS_HTML_O_SDonfocus,	OOO_STRING_SVTOOLS_HTML_O_onfocus,	SFX_EVENT_ACTIVATEDOC	},
+    { OOO_STRING_SVTOOLS_HTML_O_SDonblur,		OOO_STRING_SVTOOLS_HTML_O_onblur,		SFX_EVENT_DEACTIVATEDOC	},
+    { 0,					0,				  	0					}
 };
 
 
@@ -81,27 +81,31 @@ void SwHTMLParser::NewScript()
     if( aScriptURL.Len() )
     {
         // Den Inhalt des Script-Tags ignorieren
-        bIgnoreRawData = sal_True;
+        bIgnoreRawData = TRUE;
     }
 }
 
 void SwHTMLParser::EndScript()
 {
-    sal_Bool bInsIntoBasic = sal_False,
-         bInsSrcIntoFld = sal_False;
+    BOOL bInsIntoBasic = FALSE,
+         bInsSrcIntoFld = FALSE;
 
     switch( eScriptLang )
     {
     case HTML_SL_STARBASIC:
-        bInsIntoBasic = sal_True;
+        bInsIntoBasic = TRUE;
         break;
     default:
-        bInsSrcIntoFld = sal_True;
+        bInsSrcIntoFld = TRUE;
         break;
     }
 
-    bIgnoreRawData = sal_False;
+    bIgnoreRawData = FALSE;
     aScriptSource.ConvertLineEnd();
+
+//  MIB 23.5.97: SGML-Kommentare brauchen nicht mehr entfernt zu werden,
+//	weil JS das jetzt selber kann.
+//	RemoveSGMLComment( aScriptSource, TRUE );
 
     // Ausser StarBasic und unbenutzem JavaScript jedes Script oder den
     // Modulnamen in einem Feld merken merken
@@ -122,7 +126,7 @@ void SwHTMLParser::EndScript()
     {
     // Fuer JavaScript und StarBasic noch ein Basic-Modul anlegen
         // Das Basic entfernt natuerlich weiterhin keine SGML-Kommentare
-        RemoveSGMLComment( aScriptSource, sal_True );
+        RemoveSGMLComment( aScriptSource, TRUE );
 
         // get library name
         ::rtl::OUString aLibName;
@@ -154,7 +158,7 @@ void SwHTMLParser::EndScript()
                 if( !aBasicModule.Len() )
                 {
                     // create module name
-                    sal_Bool bFound = sal_True;
+                    BOOL bFound = TRUE;
                     while( bFound )
                     {
                         aBasicModule.AssignAscii( "Modul" );
@@ -268,7 +272,8 @@ void SwHTMLParser::InsertBasicDocEvent( rtl::OUString aEvent, const String& rNam
 
     rtl::OUString aEventName;
 
-    SfxEventConfiguration::ConfigureEvent( aEvent, SvxMacro( sEvent, sScriptType, eScrType ),
+    SfxEventConfiguration* pECfg = SFX_APP()->GetEventConfig();
+    pECfg->ConfigureEvent( aEvent, SvxMacro( sEvent, sScriptType, eScrType ),
                            pDocSh );
 }
 
@@ -277,23 +282,26 @@ void SwHTMLWriter::OutBasic()
     if( !bCfgStarBasic )
         return;
 
+    SFX_APP()->EnterBasicCall();
+
     BasicManager *pBasicMan = pDoc->GetDocShell()->GetBasicManager();
     OSL_ENSURE( pBasicMan, "Wo ist der Basic-Manager?" );
-    // nur das DocumentBasic schreiben
-    if( !pBasicMan || pBasicMan == SFX_APP()->GetBasicManager() )
+    //JP 17.07.96: Bug 29538 - nur das DocumentBasic schreiben
+    if( !pBasicMan || pBasicMan	== SFX_APP()->GetBasicManager() )
     {
+        SFX_APP()->LeaveBasicCall();
         return;
     }
 
     // und jetzt alle StarBasic-Module und alle unbenutzen JavaSrript-Module
     // ausgeben
-    for( sal_uInt16 i=0; i<pBasicMan->GetLibCount(); i++ )
+    for( USHORT i=0; i<pBasicMan->GetLibCount(); i++ )
     {
         StarBASIC *pBasic = pBasicMan->GetLib( i  );
         const String& rLibName = pBasic->GetName();
 
         SbxArray *pModules = pBasic->GetModules();
-        for( sal_uInt16 j=0; j<pModules->Count(); j++ )
+        for( USHORT j=0; j<pModules->Count(); j++ )
         {
             const SbModule *pModule = PTR_CAST( SbModule, pModules->Get(j) );
             OSL_ENSURE( pModule, "Wo ist das Modul?" );
@@ -321,18 +329,20 @@ void SwHTMLWriter::OutBasic()
             }
 
             const String& rModName = pModule->GetName();
-            Strm() << SwHTMLWriter::sNewLine;   // nicht einruecken!
+            Strm() << SwHTMLWriter::sNewLine;	// nicht einruecken!
             HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), pModule->GetSource(),
                                      sLang, eType, aEmptyStr,
                                      &rLibName, &rModName,
                                      eDestEnc, &aNonConvertableCharacters );
         }
     }
+
+    SFX_APP()->LeaveBasicCall();
 }
 
 static const char* aEventNames[] =
 {
-    "OnLoad", "OnPrepareUnload", "OnFocus", "OnUnfocus"
+    "OnLoad", "OnPrepareUnload", "OnFocus", "OnUnfocus" 
 };
 
 void SwHTMLWriter::OutBasicBodyEvents()
@@ -347,7 +357,7 @@ void SwHTMLWriter::OutBasicBodyEvents()
     uno::Reference < container::XNameReplace > xEvents = xSup->getEvents();
     for ( sal_Int32 i=0; i<4; i++ )
     {
-        SvxMacro* pMacro = SfxEventConfiguration::ConvertToMacro( xEvents->getByName( ::rtl::OUString::createFromAscii(aEventNames[i]) ), pDocSh, sal_True );
+        SvxMacro* pMacro = SfxEventConfiguration::ConvertToMacro( xEvents->getByName( ::rtl::OUString::createFromAscii(aEventNames[i]) ), pDocSh, TRUE );
         if ( pMacro )
             pDocTable->Insert( aBodyEventTable[i].nEvent, pMacro );
     }

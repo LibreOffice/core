@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +29,7 @@
 #ifndef OOX_DRAWINGML_THEME_HXX
 #define OOX_DRAWINGML_THEME_HXX
 
+#include "oox/helper/containerhelper.hxx"
 #include "oox/drawingml/clrscheme.hxx"
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/textfont.hxx"

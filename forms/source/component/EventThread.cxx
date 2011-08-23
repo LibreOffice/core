@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -137,8 +137,8 @@ void OComponentEventThread::addEvent( const EventObject* _pEvt,
     // Daten in die Queue stellen
     m_aEvents.push_back( cloneEvent( _pEvt ) );
 
-    Reference<XWeak>        xWeakControl(rControl, UNO_QUERY);
-    Reference<XAdapter> xControlAdapter = xWeakControl.is() ? xWeakControl->queryAdapter() : Reference<XAdapter>();
+    Reference<XWeak>		xWeakControl(rControl, UNO_QUERY);
+    Reference<XAdapter>	xControlAdapter = xWeakControl.is() ? xWeakControl->queryAdapter() : Reference<XAdapter>();
     m_aControls.push_back( xControlAdapter );
 
     m_aFlags.push_back( bFlag );
@@ -147,15 +147,24 @@ void OComponentEventThread::addEvent( const EventObject* _pEvt,
     m_aCond.set();
 }
 
+//---------------------------------------------------------------------
+//--- 22.08.01 15:48:15 -----------------------------------------------
+
 void OComponentEventThread::implStarted( )
 {
     acquire( );
 }
 
+//---------------------------------------------------------------------
+//--- 22.08.01 15:48:16 -----------------------------------------------
+
 void OComponentEventThread::implTerminated( )
 {
     release( );
 }
+
+//---------------------------------------------------------------------
+//--- 22.08.01 15:47:31 -----------------------------------------------
 
 void SAL_CALL OComponentEventThread::kill()
 {
@@ -164,6 +173,9 @@ void SAL_CALL OComponentEventThread::kill()
 
     implTerminated( );
 }
+
+//---------------------------------------------------------------------
+//--- 22.08.01 15:47:33 -----------------------------------------------
 
 void SAL_CALL OComponentEventThread::onTerminated()
 {
@@ -236,7 +248,7 @@ void OComponentEventThread::run()
 }
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

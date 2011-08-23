@@ -24,7 +24,7 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/
+ ************************************************************************/ 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
@@ -102,69 +102,77 @@ private:
 
 struct snewfoil_value_info
 {
-    sal_uInt16 mnBmpResId;
-    sal_uInt16 mnStrResId;
+    USHORT mnBmpResId;
+    USHORT mnHCBmpResId;
+    USHORT mnStrResId;
     WritingMode meWritingMode;
     AutoLayout maAutoLayout;
 };
 
 static snewfoil_value_info notes[] =
 {
-    {BMP_FOILN_01, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB, AUTOLAYOUT_NOTES},
-    {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
+    {BMP_FOILN_01, BMP_FOILN_01_H, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB,
+     AUTOLAYOUT_NOTES},
+    {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
 static snewfoil_value_info handout[] =
 {
-    {BMP_FOILH_01, STR_AUTOLAYOUT_HANDOUT1, WritingMode_LR_TB, AUTOLAYOUT_HANDOUT1},
-    {BMP_FOILH_02, STR_AUTOLAYOUT_HANDOUT2, WritingMode_LR_TB, AUTOLAYOUT_HANDOUT2},
-    {BMP_FOILH_03, STR_AUTOLAYOUT_HANDOUT3, WritingMode_LR_TB, AUTOLAYOUT_HANDOUT3},
-    {BMP_FOILH_04, STR_AUTOLAYOUT_HANDOUT4, WritingMode_LR_TB, AUTOLAYOUT_HANDOUT4},
-    {BMP_FOILH_06, STR_AUTOLAYOUT_HANDOUT6, WritingMode_LR_TB, AUTOLAYOUT_HANDOUT6},
-    {BMP_FOILH_09, STR_AUTOLAYOUT_HANDOUT9, WritingMode_LR_TB, AUTOLAYOUT_HANDOUT9},
-    {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
+    {BMP_FOILH_01, BMP_FOILH_01_H, STR_AUTOLAYOUT_HANDOUT1, WritingMode_LR_TB,
+     AUTOLAYOUT_HANDOUT1},
+    {BMP_FOILH_02, BMP_FOILH_02_H, STR_AUTOLAYOUT_HANDOUT2, WritingMode_LR_TB,
+     AUTOLAYOUT_HANDOUT2},
+    {BMP_FOILH_03, BMP_FOILH_03_H, STR_AUTOLAYOUT_HANDOUT3, WritingMode_LR_TB,
+     AUTOLAYOUT_HANDOUT3},
+    {BMP_FOILH_04, BMP_FOILH_04_H, STR_AUTOLAYOUT_HANDOUT4, WritingMode_LR_TB,
+     AUTOLAYOUT_HANDOUT4},
+    {BMP_FOILH_06, BMP_FOILH_06_H, STR_AUTOLAYOUT_HANDOUT6, WritingMode_LR_TB,
+     AUTOLAYOUT_HANDOUT6},
+    {BMP_FOILH_09, BMP_FOILH_09_H, STR_AUTOLAYOUT_HANDOUT9, WritingMode_LR_TB,
+     AUTOLAYOUT_HANDOUT9},
+    {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
 static snewfoil_value_info standard[] =
 {
-    {BMP_LAYOUT_EMPTY,    STR_AUTOLAYOUT_NONE,                 WritingMode_LR_TB, AUTOLAYOUT_NONE         },
-    {BMP_LAYOUT_HEAD03,   STR_AUTOLAYOUT_TITLE,                WritingMode_LR_TB, AUTOLAYOUT_TITLE        },
-    {BMP_LAYOUT_HEAD02,   STR_AUTOLAYOUT_CONTENT,              WritingMode_LR_TB, AUTOLAYOUT_ENUM         },
-    {BMP_LAYOUT_HEAD02A,  STR_AUTOLAYOUT_2CONTENT,             WritingMode_LR_TB, AUTOLAYOUT_2TEXT        },
-    {BMP_LAYOUT_HEAD01,   STR_AUTOLAYOUT_ONLY_TITLE,           WritingMode_LR_TB, AUTOLAYOUT_ONLY_TITLE   },
-    {BMP_LAYOUT_TEXTONLY, STR_AUTOLAYOUT_ONLY_TEXT,            WritingMode_LR_TB, AUTOLAYOUT_ONLY_TEXT    },
-    {BMP_LAYOUT_HEAD03B,  STR_AUTOLAYOUT_2CONTENT_CONTENT,     WritingMode_LR_TB, AUTOLAYOUT_2OBJTEXT     },
-    {BMP_LAYOUT_HEAD03C,  STR_AUTOLAYOUT_CONTENT_2CONTENT,     WritingMode_LR_TB, AUTOLAYOUT_TEXT2OBJ     },
-    {BMP_LAYOUT_HEAD03A,  STR_AUTOLAYOUT_2CONTENT_OVER_CONTENT,WritingMode_LR_TB, AUTOLAYOUT_2OBJOVERTEXT },
-    {BMP_LAYOUT_HEAD02B,  STR_AUTOLAYOUT_CONTENT_OVER_CONTENT, WritingMode_LR_TB, AUTOLAYOUT_OBJOVERTEXT  },
-    {BMP_LAYOUT_HEAD04,   STR_AUTOLAYOUT_4CONTENT,             WritingMode_LR_TB, AUTOLAYOUT_4OBJ         },
-    {BMP_LAYOUT_HEAD06,   STR_AUTOLAYOUT_6CONTENT,             WritingMode_LR_TB, AUTOLAYOUT_6CLIPART     },
-    {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
+    {BMP_LAYOUT_EMPTY, BMP_LAYOUT_EMPTY_H, STR_AUTOLAYOUT_NONE, WritingMode_LR_TB,        AUTOLAYOUT_NONE},
+    {BMP_LAYOUT_HEAD03, BMP_LAYOUT_HEAD03_H, STR_AUTOLAYOUT_TITLE, WritingMode_LR_TB,       AUTOLAYOUT_TITLE},
+    {BMP_LAYOUT_HEAD02, BMP_LAYOUT_HEAD02_H, STR_AUTOLAYOUT_CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_ENUM},   
+    {BMP_LAYOUT_HEAD02A, BMP_LAYOUT_HEAD02A_H, STR_AUTOLAYOUT_2CONTENT, WritingMode_LR_TB,       AUTOLAYOUT_2TEXT},
+    {BMP_LAYOUT_HEAD01, BMP_LAYOUT_HEAD01_H, STR_AUTOLAYOUT_ONLY_TITLE, WritingMode_LR_TB,  AUTOLAYOUT_ONLY_TITLE},    
+    {BMP_LAYOUT_TEXTONLY, BMP_LAYOUT_TEXTONLY_H, STR_AUTOLAYOUT_ONLY_TEXT, WritingMode_LR_TB,   AUTOLAYOUT_ONLY_TEXT},
+    {BMP_LAYOUT_HEAD03B, BMP_LAYOUT_HEAD03B_H, STR_AUTOLAYOUT_2CONTENT_CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_2OBJTEXT},
+    {BMP_LAYOUT_HEAD03C, BMP_LAYOUT_HEAD03C_H, STR_AUTOLAYOUT_CONTENT_2CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_TEXT2OBJ},
+    {BMP_LAYOUT_HEAD03A, BMP_LAYOUT_HEAD03A_H, STR_AUTOLAYOUT_2CONTENT_OVER_CONTENT,WritingMode_LR_TB, AUTOLAYOUT_2OBJOVERTEXT},    
+    {BMP_LAYOUT_HEAD02B, BMP_LAYOUT_HEAD02B_H, STR_AUTOLAYOUT_CONTENT_OVER_CONTENT, WritingMode_LR_TB, AUTOLAYOUT_OBJOVERTEXT},
+    {BMP_LAYOUT_HEAD04, BMP_LAYOUT_HEAD04_H, STR_AUTOLAYOUT_4CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_4OBJ},   
+    {BMP_LAYOUT_HEAD06, BMP_LAYOUT_HEAD06_H, STR_AUTOLAYOUT_6CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_6CLIPART},
+    {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
 static snewfoil_value_info v_standard[] =
 {
     // vertical
-    {BMP_LAYOUT_VERTICAL02, STR_AL_VERT_TITLE_TEXT_CHART,      WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART       },
-    {BMP_LAYOUT_VERTICAL01, STR_AL_VERT_TITLE_VERT_OUTLINE,    WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE },
-    {BMP_LAYOUT_HEAD02,     STR_AL_TITLE_VERT_OUTLINE,         WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE          },
-    {BMP_LAYOUT_HEAD02A,    STR_AL_TITLE_VERT_OUTLINE_CLIPART, WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART  },
-    {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
+    {BMP_LAYOUT_VERTICAL02, BMP_LAYOUT_VERTICAL02_H, STR_AL_VERT_TITLE_TEXT_CHART, WritingMode_TB_RL,AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART},
+    {BMP_LAYOUT_VERTICAL01, BMP_LAYOUT_VERTICAL01_H, STR_AL_VERT_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE},
+    {BMP_LAYOUT_HEAD02, BMP_LAYOUT_HEAD02_H, STR_AL_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE},
+    {BMP_LAYOUT_HEAD02A, BMP_LAYOUT_HEAD02A_H, STR_AL_TITLE_VERT_OUTLINE_CLIPART,   WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART},
+    {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
 // -----------------------------------------------------------------------
 
-static void fillLayoutValueSet( ValueSet* pValue, snewfoil_value_info* pInfo )
+static void fillLayoutValueSet( ValueSet* pValue, snewfoil_value_info* pInfo, const bool bHighContrast )
 {
     Size aLayoutItemSize;
     for( ; pInfo->mnBmpResId; pInfo++ )
     {
-        String   aText( SdResId( pInfo->mnStrResId ) );
-        BitmapEx aBmp(  SdResId( pInfo->mnBmpResId ) );
+        String aText( SdResId( pInfo->mnStrResId ) );
+        BitmapEx aBmp( SdResId( (bHighContrast ? pInfo->mnHCBmpResId : pInfo->mnBmpResId) ) );
 
-        pValue->InsertItem( static_cast<sal_uInt16>(pInfo->maAutoLayout)+1, aBmp, aText );
+        pValue->InsertItem( static_cast<USHORT>(pInfo->maAutoLayout)+1, aBmp, aText );
 
-        aLayoutItemSize.Width()  = std::max( aLayoutItemSize.Width(),  aBmp.GetSizePixel().Width()  );
+        aLayoutItemSize.Width() = std::max( aLayoutItemSize.Width(), aBmp.GetSizePixel().Width() );
         aLayoutItemSize.Height() = std::max( aLayoutItemSize.Height(), aBmp.GetSizePixel().Height() );
     }
 
@@ -200,7 +208,8 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 
     String aTitle1( SdResId( STR_GLUE_ESCDIR_HORZ ) );
     String aTitle2( SdResId( STR_GLUE_ESCDIR_VERT ) );
-
+  
+    const bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
     SvtLanguageOptions aLanguageOptions;
     const bool bVerticalEnabled = aLanguageOptions.IsVerticalTextEnabled();
 
@@ -221,7 +230,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 
     mpLayoutSet1->SetColCount( nColCount );
 
-    fillLayoutValueSet( mpLayoutSet1, pInfo );
+    fillLayoutValueSet( mpLayoutSet1, pInfo, bHighContrast );
 
     Size aSize( mpLayoutSet1->GetOutputSizePixel() );
     aSize.Width() += (mpLayoutSet1->GetColCount() + 1) * LAYOUT_BORDER_PIX;
@@ -235,13 +244,14 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
     if( bVerticalEnabled && (eMode == DrawViewMode_DRAW) )
     {
         mpLayoutSet2 = new ValueSet( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
+    //	mpLayoutSet2->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
 
         mpLayoutSet2->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectHdl ) );
         mpLayoutSet2->SetColCount( 4 );
-        mpLayoutSet2->EnableFullItemMode( sal_False );
+        mpLayoutSet2->EnableFullItemMode( FALSE );
         mpLayoutSet2->SetColor( GetControlBackground() );
 
-        fillLayoutValueSet( mpLayoutSet2, &v_standard[0] );
+        fillLayoutValueSet( mpLayoutSet2, &v_standard[0], bHighContrast );
 
         aSize = mpLayoutSet2->GetOutputSizePixel();
         aSize.Width() += (mpLayoutSet2->GetColCount() + 1) * LAYOUT_BORDER_PIX;
@@ -264,7 +274,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
                 sSlotStr = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DuplicatePage" ) );
             else
                 sSlotStr = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Undo" ) );
-            aSlotImage = ::GetImage( mxFrame, sSlotStr, sal_False );
+            aSlotImage = ::GetImage( mxFrame, sSlotStr, FALSE, bHighContrast );
 
             String sSlotTitle;
             if( bInsertPage )

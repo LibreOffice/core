@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,21 +31,21 @@
 
 using namespace com::sun::star;
 
-SysCredentialsConfigItem::SysCredentialsConfigItem(
-    SysCredentialsConfig * pOwner )
-: utl::ConfigItem( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Passwords")),
+SysCredentialsConfigItem::SysCredentialsConfigItem( 
+    SysCredentialsConfig * pOwner ) 
+: utl::ConfigItem( rtl::OUString::createFromAscii( "Office.Common/Passwords" ), 
                    CONFIG_MODE_IMMEDIATE_UPDATE ),
   m_bInited( false ),
   m_pOwner( pOwner )
 {
     uno::Sequence< ::rtl::OUString > aNode( 1 );
-    aNode[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "Office.Common/Passwords/AuthenticateUsingSystemCredentials" ));
+    aNode[ 0 ] = rtl::OUString::createFromAscii(
+        "Office.Common/Passwords/AuthenticateUsingSystemCredentials" );
     EnableNotification( aNode );
 }
 
-//virtual
-void SysCredentialsConfigItem::Notify(
+//virtual 
+void SysCredentialsConfigItem::Notify( 
     const uno::Sequence< rtl::OUString > & /*seqPropertyNames*/ )
 {
     {
@@ -62,7 +62,7 @@ void SysCredentialsConfigItem::Commit()
     // does nothing
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 SysCredentialsConfigItem::getSystemCredentialsURLs()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -70,18 +70,18 @@ SysCredentialsConfigItem::getSystemCredentialsURLs()
     {
         // read config item
         uno::Sequence< ::rtl::OUString > aPropNames( 1 );
-        aPropNames[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "AuthenticateUsingSystemCredentials" ));
-        uno::Sequence< uno::Any > aAnyValues(
+        aPropNames[ 0 ] = rtl::OUString::createFromAscii( 
+            "AuthenticateUsingSystemCredentials" );
+        uno::Sequence< uno::Any > aAnyValues( 
             utl::ConfigItem::GetProperties( aPropNames ) );
 
-        OSL_ENSURE(
-            aAnyValues.getLength() == 1,
+        OSL_ENSURE( 
+            aAnyValues.getLength() == 1, 
             "SysCredentialsConfigItem::getSystemCredentialsURLs: "
             "Error reading config item!" );
 
         uno::Sequence< rtl::OUString > aValues;
-        if ( ( aAnyValues[ 0 ] >>= aValues ) ||
+        if ( ( aAnyValues[ 0 ] >>= aValues ) || 
              ( !aAnyValues[ 0 ].hasValue() ) )
         {
             m_seqURLs = aValues;
@@ -91,7 +91,7 @@ SysCredentialsConfigItem::getSystemCredentialsURLs()
     return m_seqURLs;
 }
 
-void SysCredentialsConfigItem::setSystemCredentialsURLs(
+void SysCredentialsConfigItem::setSystemCredentialsURLs( 
     const uno::Sequence< rtl::OUString > & seqURLList )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -99,9 +99,9 @@ void SysCredentialsConfigItem::setSystemCredentialsURLs(
     // write config item.
     uno::Sequence< rtl::OUString > aPropNames( 1 );
     uno::Sequence< uno::Any > aPropValues( 1 );
-    aPropNames[ 0 ]
-        = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "AuthenticateUsingSystemCredentials" ));
+    aPropNames[ 0 ]  
+        = ::rtl::OUString::createFromAscii( 
+            "AuthenticateUsingSystemCredentials" );
     aPropValues[ 0 ] <<= seqURLList;
 
     utl::ConfigItem::SetModified();
@@ -113,17 +113,17 @@ void SysCredentialsConfigItem::setSystemCredentialsURLs(
 
 //============================================================================
 
-namespace
+namespace 
 {
     // TODO: This code is actually copied from svl/source/passwordcontainer.cxx
     bool removeLastSegment( ::rtl::OUString & aURL )
     {
         sal_Int32 aInd = aURL.lastIndexOf( sal_Unicode( '/' ) );
-
+    
         if( aInd > 0  )
         {
             sal_Int32 aPrevInd = aURL.lastIndexOf( sal_Unicode( '/' ), aInd );
-            if ( aURL.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("://")) )
+            if ( aURL.indexOf( ::rtl::OUString::createFromAscii( "://" ) ) 
                     != aPrevInd - 2 ||
                  aInd != aURL.getLength() - 1 )
             {
@@ -142,8 +142,8 @@ namespace
         {
             ::rtl::OUString aUrl( aURL );
 
-            // each iteration remove last '/...' section from the aUrl
-            // while it's possible, up to the most left '://'
+            // each iteration remove last '/...' section from the aUrl 
+            // while it's possible, up to the most left '://' 
             do
             {
                 // first look for <url>/somename and then look for <url>/somename/...
@@ -157,7 +157,7 @@ namespace
                 {
                     ::rtl::OUString tmpUrl( aUrl );
                     if ( tmpUrl.getStr()[tmpUrl.getLength() - 1] != (sal_Unicode)'/' )
-                      tmpUrl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                      tmpUrl += ::rtl::OUString::createFromAscii( "/" );
 
                     aIter = rContainer.lower_bound( tmpUrl );
                     if( aIter != rContainer.end() && aIter->match( tmpUrl ) )
@@ -186,7 +186,7 @@ void SysCredentialsConfig::initCfg()
     osl::MutexGuard aGuard( m_aMutex );
     if ( !m_bCfgInited )
     {
-        uno::Sequence< rtl::OUString > aURLs(
+        uno::Sequence< rtl::OUString > aURLs( 
             m_aConfigItem.getSystemCredentialsURLs() );
         for ( sal_Int32 n = 0; n < aURLs.getLength(); ++n )
             m_aCfgContainer.insert( aURLs[ n ] );
@@ -229,7 +229,7 @@ rtl::OUString SysCredentialsConfig::find( rtl::OUString const & aURL )
 
     return rtl::OUString();
 }
-
+        
 void SysCredentialsConfig::add( rtl::OUString const & rURL, bool bPersistent )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -264,7 +264,7 @@ void SysCredentialsConfig::remove( rtl::OUString const & rURL )
 uno::Sequence< rtl::OUString > SysCredentialsConfig::list( bool bOnlyPersistent )
 {
     initCfg();
-    sal_Int32 nCount = m_aCfgContainer.size()
+    sal_Int32 nCount = m_aCfgContainer.size() 
                      + ( bOnlyPersistent ? 0 : m_aMemContainer.size() );
     uno::Sequence< rtl::OUString > aResult( nCount );
 

@@ -31,6 +31,7 @@ PRJNAME=forms
 TARGET=common
 
 ENABLE_EXCEPTIONS=TRUE
+#TARGETTYPE=GUI
 
 # --- Settings ----------------------------------
 

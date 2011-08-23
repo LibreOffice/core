@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
-#ifdef WNT
-#include <windows.h>
-#endif
 #include <osl/process.h>
 #include "odma_provider.hxx"
 
@@ -60,7 +57,7 @@ void _cdecl main( int argc, char * argv[] )
             if( pArguments[i].matchIgnoreAsciiCaseAsciiL(
                     RTL_CONSTASCII_STRINGPARAM(ODMA_URL_ODMAID)))
             {
-                ::rtl::OUString sArgument
+                ::rtl::OUString sArgument 
                       = ::rtl::OUString(
                           RTL_CONSTASCII_USTRINGPARAM(
                               ODMA_URL_SCHEME ODMA_URL_SHORT "/"));
@@ -69,13 +66,13 @@ void _cdecl main( int argc, char * argv[] )
             }
         }
 
-        rtl_uString ** ustrArgumentList = new rtl_uString * [argc-1];
+        rtl_uString	** ustrArgumentList = new rtl_uString * [argc-1];
         for (int i = 0; i < argc-1; i++)
             ustrArgumentList[i] = pArguments[i].pData;
-
-        oslProcess  aProcess;
-
-        if ( osl_Process_E_None == osl_executeProcess(
+        
+        oslProcess	aProcess;
+            
+        if ( osl_Process_E_None == osl_executeProcess( 
                  sProcess.pData,
                  ustrArgumentList,
                  argc-1,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ String lcl_CheckGroupName( const String& rGroupName )
     for( xub_StrLen i = 0; i < rGroupName.Len(); i++ )
     {
         sal_Unicode cChar = rGroupName.GetChar(i);
-        if( (cChar >= 'A' && cChar <= 'Z') ||
+        if(	(cChar >= 'A' && cChar <= 'Z') ||
             (cChar >= 'a' && cChar <= 'z') ||
             (cChar >= '0' && cChar <= '9') ||
             cChar == '_' || cChar == 0x20 )
@@ -118,6 +118,7 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeExcep
     else
     {
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Auto Text Entry doesn't exist") ), uno::Reference< uno::XInterface >() );
+        //xGroup.set( xAutoTextContainer->insertNewByName( sGroup ), uno::UNO_QUERY_THROW );
     }
 
     uno::Reference< XCollection > xCol( new SwVbaAutoTextEntries( this, mxContext, xGroup ) );

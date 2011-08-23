@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ public class _XSheetOperation extends MultiMethodTest {
         } catch (com.sun.star.uno.Exception e) {
             result &= false ;
             log.println(
-                    "Exception occurred while checking results of method");
+                    "Exception occured while checking results of method");
             e.printStackTrace(log);
         }
 
@@ -93,7 +93,7 @@ public class _XSheetOperation extends MultiMethodTest {
             result = resultVal >= 0;
         } catch (com.sun.star.uno.Exception e) {
             result = false;
-            log.println("Exception occurred in method computeFunction.");
+            log.println("Exception occured in method computeFunction.");
             e.printStackTrace(log);
         }
 

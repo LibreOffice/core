@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,32 +53,32 @@ class SvPasteObjectDialog : public ModalDialog
     FixedText aFtObjectSource;
     RadioButton aRbPaste;
     RadioButton aRbPasteLink;
+    ListBox aLbInsertList;
     CheckBox aCbDisplayAsIcon;
     PushButton aPbChangeIcon;
     FixedLine aFlChoice;
-    ListBox aLbInsertList;
     OKButton aOKButton1;
     CancelButton aCancelButton1;
     HelpButton aHelpButton1;
     String aSObject;
-    Table           aSupplementTable;
-    SvGlobalName    aObjClassName;
-    String          aObjName;
-    sal_uInt16          nAspect;
-    sal_Bool            bLink;
+    Table       	aSupplementTable;
+    SvGlobalName	aObjClassName;
+    String			aObjName;
+    USHORT      	nAspect;
+    BOOL        	bLink;
 
-    ListBox&        ObjectLB()      { return aLbInsertList; }
-    FixedText&      ObjectSource()  { return aFtObjectSource; }
-    RadioButton&    PasteLink()     { return aRbPasteLink; }
-    CheckBox&       AsIconBox()     { return aCbDisplayAsIcon; }
+    ListBox&		ObjectLB()		{ return aLbInsertList; }
+    FixedText&		ObjectSource()	{ return aFtObjectSource; }
+    RadioButton&	PasteLink()		{ return aRbPasteLink; }
+    CheckBox&		AsIconBox()		{ return aCbDisplayAsIcon; }
 
-    const String&   GetObjString()  { return aSObject; }
-    void            SelectObject();
+    const String& 	GetObjString()	{ return aSObject; }
+    void			SelectObject();
     DECL_LINK( SelectHdl, ListBox * );
     DECL_LINK( DoubleClickHdl, ListBox * );
-    void            SetDefault();
-    sal_uInt16      GetAspect() const { return nAspect; }
-    sal_Bool        ShouldLink() const { return bLink; }
+    void        	SetDefault();
+    USHORT      GetAspect() const { return nAspect; }
+    BOOL        ShouldLink() const { return bLink; }
 
 public:
                 SvPasteObjectDialog( Window* pParent );
@@ -86,7 +86,7 @@ public:
 
     void        Insert( SotFormatStringId nFormat, const String & rFormatName );
     void        SetObjName( const SvGlobalName & rClass, const String & rObjName );
-    sal_uLong       GetFormat( const TransferableDataHelper& aHelper,
+    ULONG       GetFormat( const TransferableDataHelper& aHelper,
                         const DataFlavorExVector* pFormats=0,
                         const TransferableObjectDescriptor* pDesc=0 );
 };

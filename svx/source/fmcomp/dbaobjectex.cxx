@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,7 +116,7 @@ namespace svx
     sal_Bool OComponentTransferable::canExtractComponentDescriptor(const DataFlavorExVector& _rFlavors,sal_Bool _bForm )
     {
         DataFlavorExVector::const_iterator aEnd = _rFlavors.end();
-        for (   DataFlavorExVector::const_iterator aCheck = _rFlavors.begin();
+        for (	DataFlavorExVector::const_iterator aCheck = _rFlavors.begin();
                 aCheck != aEnd;
                 ++aCheck
             )
@@ -164,21 +164,21 @@ namespace svx
     //--------------------------------------------------------------------
     sal_Bool OComponentTransferable::extractComponentDescriptor(const TransferableDataHelper& _rData
         ,sal_Bool _bExtractForm
-        , ::rtl::OUString&  _rDatasourceOrLocation
+        , ::rtl::OUString&	_rDatasourceOrLocation
         , ::com::sun::star::uno::Reference< XContent>& _xContent)
     {
         if ( _rData.HasFormat( getDescriptorFormatId(_bExtractForm)) )
         {
             ODataAccessDescriptor aDescriptor = extractComponentDescriptor(_rData);
             _rDatasourceOrLocation = aDescriptor.getDataSource();
-            aDescriptor[daComponent]            >>= _xContent;
+            aDescriptor[daComponent]			>>= _xContent;
             return sal_True;
         }
 
         return sal_False;
     }
 //........................................................................
-}   // namespace svx
+}	// namespace svx
 //........................................................................
 
 

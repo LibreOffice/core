@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,10 @@ namespace tools {
 
 // get the process's current working directory, taking OOO_CWD into account
 //
-// @param rUrl
-// Receives the directory URL (with or without a final slash) upon successful
-// return, and the empty string upon unsuccessful return
-TOOLS_DLLPUBLIC bool getProcessWorkingDir(rtl::OUString& rUrl);
+// @param url
+// a non-null pointer that receives the directory URL (with or without a final
+// slash) upon successful return, and the empty string upon unsuccessful return
+TOOLS_DLLPUBLIC bool getProcessWorkingDir(rtl::OUString * url);
 
 }
 

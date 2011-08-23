@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace slideshow
 {
     namespace internal
     {
-        ActivitiesQueue::ActivitiesQueue(
+        ActivitiesQueue::ActivitiesQueue( 
           const ::boost::shared_ptr< ::canvas::tools::ElapsedTime >& pPresTimer ) :
             mpTimer( pPresTimer ),
             maCurrentActivitiesWaiting(),
@@ -62,7 +62,7 @@ namespace slideshow
         ActivitiesQueue::~ActivitiesQueue()
         {
             // dispose all queue entries
-            try
+            try 
             {
                 std::for_each( maCurrentActivitiesWaiting.begin(),
                                maCurrentActivitiesWaiting.end(),
@@ -71,9 +71,9 @@ namespace slideshow
                                maCurrentActivitiesReinsert.end(),
                                boost::mem_fn( &Disposable::dispose ) );
             }
-            catch (uno::Exception &)
+            catch (uno::Exception &) 
             {
-                OSL_FAIL( rtl::OUStringToOString(
+                OSL_ENSURE( false, rtl::OUStringToOString(
                                 comphelper::anyToString(
                                     cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -106,18 +106,18 @@ namespace slideshow
             double fLag = 0.0;
             for ( ; iPos != iEnd; ++iPos )
                 fLag = std::max<double>( fLag, (*iPos)->calcTimeLag() );
-            if (fLag > 0.0)
+            if (fLag > 0.0) 
             {
                 mpTimer->adjustTimer( -fLag );
             }
-
+            
             // process list of activities
             while( !maCurrentActivitiesWaiting.empty() )
             {
                 // process topmost activity
                 ActivitySharedPtr pActivity( maCurrentActivitiesWaiting.front() );
                 maCurrentActivitiesWaiting.pop_front();
-
+                
                 bool bReinsert( false );
 
                 try
@@ -136,12 +136,13 @@ namespace slideshow
                     // circumstance. Although, do _not_
                     // reinsert an activity that threw
                     // once.
-
+                    
                     // NOTE: we explicitely don't catch(...) here,
                     // since this will also capture segmentation
                     // violations and the like. In such a case, we
                     // still better let our clients now...
-                    OSL_FAIL( rtl::OUStringToOString(
+                    OSL_ENSURE( false,
+                                rtl::OUStringToOString(
                                     comphelper::anyToString( cppu::getCaughtException() ),
                                     RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
@@ -152,7 +153,7 @@ namespace slideshow
                     // circumstance. Although, do _not_
                     // reinsert an activity that threw
                     // once.
-
+                    
                     // NOTE: we explicitely don't catch(...) here,
                     // since this will also capture segmentation
                     // violations and the like. In such a case, we
@@ -200,7 +201,7 @@ namespace slideshow
                            maCurrentActivitiesWaiting.end(),
                            boost::mem_fn( &Activity::dequeued ) );
             ActivityQueue().swap( maCurrentActivitiesWaiting );
-
+            
             std::for_each( maCurrentActivitiesReinsert.begin(),
                            maCurrentActivitiesReinsert.end(),
                            boost::mem_fn( &Activity::dequeued ) );

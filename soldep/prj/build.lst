@@ -1,0 +1,5 @@
+dp	soldep	:	svtools NULL
+dp	soldep					usr1	-	all	dp_mkout NULL
+dp	soldep\bootstrp			nmake	-	all	dp_btstrp NULL
+dp	soldep\source				nmake	-	all	dp_soldep dp_btstrp NULL
+

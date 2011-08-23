@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 
 #include <svtools/embedtransfer.hxx>
-#include <tools/mapunit.hxx>
+#include <vcl/mapunit.hxx>
 #include <vcl/outdev.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -111,21 +111,21 @@ sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::D
                         // TODO/LATER: Propbably the graphic should be copied here as well
                         // currently it is handled by the applications
                         utl::TempFile aTmp;
-                        aTmp.EnableKillingFile( sal_True );
+                        aTmp.EnableKillingFile( TRUE );
                         uno::Reference < embed::XEmbedPersist > xPers( m_xObj, uno::UNO_QUERY );
                         if ( xPers.is() )
                         {
                             uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetTemporaryStorage();
-                            ::rtl::OUString aName( RTL_CONSTASCII_USTRINGPARAM( "Dummy" ));
+                            ::rtl::OUString aName = ::rtl::OUString::createFromAscii("Dummy");
                             SvStream* pStream = NULL;
-                            sal_Bool bDeleteStream = sal_False;
+                            BOOL bDeleteStream = FALSE;
                             uno::Sequence < beans::PropertyValue > aEmpty;
                             xPers->storeToEntry( xStg, aName, aEmpty, aEmpty );
                             if ( xStg->isStreamElement( aName ) )
                             {
                                 uno::Reference < io::XStream > xStm = xStg->cloneStreamElement( aName );
                                 pStream = utl::UcbStreamHelper::CreateStream( xStm );
-                                bDeleteStream = sal_True;
+                                bDeleteStream = TRUE;
                             }
                             else
                             {
@@ -241,7 +241,7 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
         }
         catch( embed::NoVisualAreaSizeException& )
         {
-            OSL_FAIL( "Can not get visual area size!\n" );
+            OSL_ENSURE( sal_False, "Can not get visual area size!\n" );
             aSize = Size( 5000, 5000 );
         }
 
@@ -252,7 +252,7 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
     rDesc.maSize = OutputDevice::LogicToLogic( aSize, aMapMode, MapMode( MAP_100TH_MM ) );
     rDesc.maDragStartPos = Point();
     rDesc.maDisplayName = String();
-    rDesc.mbCanLink = sal_False;
+    rDesc.mbCanLink = FALSE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

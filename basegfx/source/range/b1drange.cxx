@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 namespace basegfx
 {
-    B1DRange::B1DRange( const B1IRange& rRange ) :
+    B1DRange::B1DRange( const B1IRange& rRange ) : 
         maRange()
     {
         if( !rRange.isEmpty() )
@@ -46,7 +46,7 @@ namespace basegfx
 
     B1IRange fround(const B1DRange& rRange)
     {
-        return rRange.isEmpty() ?
+        return rRange.isEmpty() ? 
             B1IRange() :
             B1IRange( fround( rRange.getMinimum()),
                       fround( rRange.getMaximum()) );

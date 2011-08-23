@@ -11,29 +11,29 @@
 extern "C" {
 #endif
 
-#define SQL_WCHAR           (-8)
-#define SQL_WVARCHAR        (-9)
-#define SQL_WLONGVARCHAR    (-10)
-#define SQL_C_WCHAR         SQL_WCHAR
+#define SQL_WCHAR		 	(-8)
+#define SQL_WVARCHAR	 	(-9)
+#define SQL_WLONGVARCHAR 	(-10)
+#define SQL_C_WCHAR			SQL_WCHAR
 
 #ifdef UNICODE
-#define SQL_C_TCHAR     SQL_C_WCHAR
+#define SQL_C_TCHAR		SQL_C_WCHAR
 #else
-#define SQL_C_TCHAR     SQL_C_CHAR
-#endif
+#define SQL_C_TCHAR		SQL_C_CHAR
+#endif 
 
-#define SQL_SQLSTATE_SIZEW  10  /* size of SQLSTATE for unicode */
+#define SQL_SQLSTATE_SIZEW	10	/* size of SQLSTATE for unicode */
 
 /* UNICODE versions */
 
 SQLRETURN SQL_API SQLColAttributeW(
-    SQLHSTMT        hstmt,
-    SQLUSMALLINT    iCol,
-    SQLUSMALLINT    iField,
-    SQLPOINTER      pCharAttr,
-    SQLSMALLINT     cbCharAttrMax,
-    SQLSMALLINT     *pcbCharAttr,
-    SQLLEN      *pNumAttr);
+    SQLHSTMT		hstmt,
+    SQLUSMALLINT	iCol,
+    SQLUSMALLINT	iField,
+    SQLPOINTER		pCharAttr,
+    SQLSMALLINT		cbCharAttrMax,	
+    SQLSMALLINT  	*pcbCharAttr,
+    SQLLEN		*pNumAttr);	
 
 SQLRETURN SQL_API SQLColAttributesW(
     SQLHSTMT           hstmt,
@@ -96,9 +96,9 @@ SQLRETURN SQL_API SQLGetCursorNameW(
 
 #if (ODBCVER >= 0x0300)
 SQLRETURN  SQL_API SQLSetDescFieldW(SQLHDESC DescriptorHandle,
-                                      SQLSMALLINT RecNumber,
+                                      SQLSMALLINT RecNumber, 
                                    SQLSMALLINT FieldIdentifier,
-                                      SQLPOINTER Value,
+                                      SQLPOINTER Value, 
                                    SQLINTEGER BufferLength);
 
 
@@ -108,7 +108,7 @@ SQLRETURN SQL_API SQLGetDescFieldW(
     SQLSMALLINT        iRecord,
     SQLSMALLINT        iField,
     SQLPOINTER         rgbValue,
-    SQLINTEGER         cbValueMax,
+    SQLINTEGER		   cbValueMax,
     SQLINTEGER     *pcbValue);
 
 SQLRETURN SQL_API SQLGetDescRecW(
@@ -120,7 +120,7 @@ SQLRETURN SQL_API SQLGetDescRecW(
     SQLSMALLINT    *pfType,
     SQLSMALLINT    *pfSubType,
     SQLLEN         *pLength,
-    SQLSMALLINT    *pPrecision,
+    SQLSMALLINT    *pPrecision, 
     SQLSMALLINT    *pScale,
     SQLSMALLINT    *pNullable);
 
@@ -165,7 +165,7 @@ SQLRETURN SQL_API SQLSetCursorNameW(
 
 
 
-
+    
 
 
 
@@ -194,9 +194,9 @@ SQLRETURN SQL_API SQLGetInfoW(
     SQLSMALLINT        cbInfoValueMax,
     SQLSMALLINT    *pcbInfoValue);
 
-SQLRETURN SQL_API   SQLGetTypeInfoW(
-    SQLHSTMT            StatementHandle,
-    SQLSMALLINT         DataType);
+SQLRETURN SQL_API	SQLGetTypeInfoW(
+    SQLHSTMT			StatementHandle,
+    SQLSMALLINT			DataType);
 
 
 SQLRETURN SQL_API SQLSetConnectOptionW(
@@ -375,13 +375,13 @@ SQLRETURN SQL_API SQLDriversW(
 /* ANSI versions */
 
 SQLRETURN SQL_API SQLColAttributeA(
-    SQLHSTMT        hstmt,
-    SQLSMALLINT     iCol,
-    SQLSMALLINT     iField,
-    SQLPOINTER      pCharAttr,
-    SQLSMALLINT     cbCharAttrMax,
-    SQLSMALLINT             *pcbCharAttr,
-    SQLLEN                  *pNumAttr);
+    SQLHSTMT		hstmt,
+    SQLSMALLINT		iCol,
+    SQLSMALLINT		iField,
+    SQLPOINTER		pCharAttr,
+    SQLSMALLINT		cbCharAttrMax,	
+    SQLSMALLINT  	        *pcbCharAttr,
+    SQLLEN              	*pNumAttr);	
 
 SQLRETURN SQL_API SQLColAttributesA(
     SQLHSTMT        hstmt,
@@ -389,8 +389,8 @@ SQLRETURN SQL_API SQLColAttributesA(
     SQLUSMALLINT    fDescType,
     SQLPOINTER      rgbDesc,
     SQLSMALLINT     cbDescMax,
-    SQLSMALLINT     *pcbDesc,
-    SQLLEN          *pfDesc);
+    SQLSMALLINT    	*pcbDesc,
+    SQLLEN     		*pfDesc);
 
 SQLRETURN SQL_API SQLConnectA(
     SQLHDBC         hdbc,
@@ -407,11 +407,11 @@ SQLRETURN SQL_API SQLDescribeColA(
     SQLUSMALLINT    icol,
     SQLCHAR         *szColName,
     SQLSMALLINT     cbColNameMax,
-    SQLSMALLINT     *pcbColName,
-    SQLSMALLINT     *pfSqlType,
-    SQLULEN         *pcbColDef,
-    SQLSMALLINT     *pibScale,
-    SQLSMALLINT     *pfNullable);
+    SQLSMALLINT    	*pcbColName,
+    SQLSMALLINT    	*pfSqlType,
+    SQLULEN    		*pcbColDef,
+    SQLSMALLINT    	*pibScale,
+    SQLSMALLINT    	*pfNullable);
 
 
 SQLRETURN SQL_API SQLErrorA(
@@ -438,7 +438,7 @@ SQLRETURN SQL_API SQLGetConnectAttrA(
 
 SQLRETURN SQL_API SQLGetCursorNameA(
     SQLHSTMT           hstmt,
-    SQLCHAR         *szCursor,
+    SQLCHAR        	*szCursor,
     SQLSMALLINT        cbCursorMax,
     SQLSMALLINT    *pcbCursor);
 
@@ -448,7 +448,7 @@ SQLRETURN SQL_API SQLGetDescFieldA(
     SQLSMALLINT        iRecord,
     SQLSMALLINT        iField,
     SQLPOINTER         rgbValue,
-    SQLINTEGER         cbValueMax,
+    SQLINTEGER		   cbValueMax,
     SQLINTEGER     *pcbValue);
 
 SQLRETURN SQL_API SQLGetDescRecA(
@@ -460,7 +460,7 @@ SQLRETURN SQL_API SQLGetDescRecA(
     SQLSMALLINT    *pfType,
     SQLSMALLINT    *pfSubType,
     SQLLEN     *pLength,
-    SQLSMALLINT    *pPrecision,
+    SQLSMALLINT    *pPrecision, 
     SQLSMALLINT    *pScale,
     SQLSMALLINT    *pNullable);
 
@@ -493,13 +493,13 @@ SQLRETURN SQL_API SQLGetStmtAttrA(
 
 #endif
 
-SQLRETURN SQL_API   SQLGetTypeInfoA(
-    SQLHSTMT            StatementHandle,
-    SQLSMALLINT         DataTyoe);
+SQLRETURN SQL_API	SQLGetTypeInfoA(
+    SQLHSTMT			StatementHandle,
+    SQLSMALLINT			DataTyoe);
 
 SQLRETURN SQL_API SQLPrepareA(
     SQLHSTMT           hstmt,
-    SQLCHAR         *szSqlStr,
+    SQLCHAR        	*szSqlStr,
     SQLINTEGER         cbSqlStr);
 
 SQLRETURN SQL_API SQLSetConnectAttrA(
@@ -515,19 +515,19 @@ SQLRETURN SQL_API SQLSetCursorNameA(
 
 
 
-
+    
 
 
 
 SQLRETURN SQL_API SQLColumnsA(
     SQLHSTMT           hstmt,
-    SQLCHAR         *szCatalogName,
+    SQLCHAR        	*szCatalogName,
     SQLSMALLINT        cbCatalogName,
-    SQLCHAR         *szSchemaName,
+    SQLCHAR        	*szSchemaName,
     SQLSMALLINT        cbSchemaName,
-    SQLCHAR         *szTableName,
+    SQLCHAR        	*szTableName,
     SQLSMALLINT        cbTableName,
-    SQLCHAR         *szColumnName,
+    SQLCHAR        	*szColumnName,
     SQLSMALLINT        cbColumnName);
 
 SQLRETURN SQL_API SQLGetConnectOptionA(
@@ -562,11 +562,11 @@ SQLRETURN SQL_API SQLSetStmtOptionA(
 SQLRETURN SQL_API SQLSpecialColumnsA(
     SQLHSTMT           hstmt,
     SQLUSMALLINT       fColType,
-    SQLCHAR         *szCatalogName,
+    SQLCHAR        	*szCatalogName,
     SQLSMALLINT        cbCatalogName,
-    SQLCHAR         *szSchemaName,
+    SQLCHAR        	*szSchemaName,
     SQLSMALLINT        cbSchemaName,
-    SQLCHAR         *szTableName,
+    SQLCHAR        	*szTableName,
     SQLSMALLINT        cbTableName,
     SQLUSMALLINT       fScope,
     SQLUSMALLINT       fNullable);
@@ -732,49 +732,49 @@ SQLRETURN SQL_API SQLDriversA(
 /* Mapping macros for Unicode                  */
 /*---------------------------------------------*/
 
-#ifndef SQL_NOUNICODEMAP    /* define this to disable the mapping */
-#ifdef  UNICODE
+#ifndef	SQL_NOUNICODEMAP	/* define this to disable the mapping */
+#ifdef 	UNICODE
 
-#define SQLColAttribute     SQLColAttributeW
-#define SQLColAttributes    SQLColAttributesW
-#define SQLConnect          SQLConnectW
-#define SQLDescribeCol      SQLDescribeColW
-#define SQLError            SQLErrorW
-#define SQLExecDirect       SQLExecDirectW
-#define SQLGetConnectAttr   SQLGetConnectAttrW
-#define SQLGetCursorName    SQLGetCursorNameW
-#define SQLGetDescField     SQLGetDescFieldW
-#define SQLGetDescRec       SQLGetDescRecW
-#define SQLGetDiagField     SQLGetDiagFieldW
-#define SQLGetDiagRec       SQLGetDiagRecW
-#define SQLPrepare          SQLPrepareW
-#define SQLSetConnectAttr   SQLSetConnectAttrW
-#define SQLSetCursorName    SQLSetCursorNameW
-#define SQLSetDescField     SQLSetDescFieldW
-#define SQLSetStmtAttr      SQLSetStmtAttrW
-#define SQLGetStmtAttr      SQLGetStmtAttrW
-#define SQLColumns          SQLColumnsW
-#define SQLGetConnectOption SQLGetConnectOptionW
-#define SQLGetInfo          SQLGetInfoW
-#define SQLGetTypeInfo      SQLGetTypeInfoW
-#define SQLSetConnectOption SQLSetConnectOptionW
-#define SQLSpecialColumns   SQLSpecialColumnsW
-#define SQLStatistics       SQLStatisticsW
-#define SQLTables           SQLTablesW
-#define SQLDataSources      SQLDataSourcesW
-#define SQLDriverConnect    SQLDriverConnectW
-#define SQLBrowseConnect    SQLBrowseConnectW
-#define SQLColumnPrivileges SQLColumnPrivilegesW
-#define SQLForeignKeys      SQLForeignKeysW
-#define SQLNativeSql        SQLNativeSqlW
-#define SQLPrimaryKeys      SQLPrimaryKeysW
-#define SQLProcedureColumns SQLProcedureColumnsW
-#define SQLProcedures       SQLProceduresW
-#define SQLTablePrivileges  SQLTablePrivilegesW
-#define SQLDrivers          SQLDriversW
+#define	SQLColAttribute		SQLColAttributeW
+#define	SQLColAttributes	SQLColAttributesW
+#define	SQLConnect			SQLConnectW
+#define	SQLDescribeCol		SQLDescribeColW
+#define	SQLError			SQLErrorW
+#define	SQLExecDirect		SQLExecDirectW
+#define	SQLGetConnectAttr	SQLGetConnectAttrW
+#define	SQLGetCursorName	SQLGetCursorNameW
+#define	SQLGetDescField		SQLGetDescFieldW
+#define	SQLGetDescRec		SQLGetDescRecW
+#define	SQLGetDiagField		SQLGetDiagFieldW
+#define	SQLGetDiagRec		SQLGetDiagRecW
+#define	SQLPrepare			SQLPrepareW
+#define	SQLSetConnectAttr	SQLSetConnectAttrW
+#define	SQLSetCursorName	SQLSetCursorNameW
+#define	SQLSetDescField		SQLSetDescFieldW
+#define SQLSetStmtAttr		SQLSetStmtAttrW
+#define SQLGetStmtAttr		SQLGetStmtAttrW
+#define	SQLColumns			SQLColumnsW
+#define	SQLGetConnectOption	SQLGetConnectOptionW
+#define	SQLGetInfo			SQLGetInfoW
+#define SQLGetTypeInfo		SQLGetTypeInfoW
+#define	SQLSetConnectOption	SQLSetConnectOptionW
+#define	SQLSpecialColumns	SQLSpecialColumnsW
+#define	SQLStatistics		SQLStatisticsW
+#define	SQLTables			SQLTablesW
+#define	SQLDataSources		SQLDataSourcesW
+#define	SQLDriverConnect	SQLDriverConnectW
+#define	SQLBrowseConnect	SQLBrowseConnectW
+#define	SQLColumnPrivileges	SQLColumnPrivilegesW
+#define	SQLForeignKeys		SQLForeignKeysW
+#define	SQLNativeSql		SQLNativeSqlW
+#define	SQLPrimaryKeys		SQLPrimaryKeysW
+#define	SQLProcedureColumns	SQLProcedureColumnsW
+#define	SQLProcedures		SQLProceduresW
+#define	SQLTablePrivileges	SQLTablePrivilegesW
+#define	SQLDrivers			SQLDriversW
 
-#endif  /* UNICODE */
-#endif  /* SQL_NOUNICODEMAP */
+#endif	/* UNICODE */
+#endif	/* SQL_NOUNICODEMAP	*/
 
 #ifdef __cplusplus
 }

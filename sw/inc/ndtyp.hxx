@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,24 +31,24 @@
 
 #include <tools/solar.h>
 
-// IDs for different nodes. The member indicating the type of node is
-// in base class.
-const sal_uInt8 ND_ENDNODE      = 0x01;
-const sal_uInt8 ND_STARTNODE        = 0x02;
-const sal_uInt8 ND_TABLENODE        = 0x06;
-const sal_uInt8 ND_TEXTNODE         = 0x08;
-const sal_uInt8 ND_GRFNODE      = 0x10;
-const sal_uInt8 ND_OLENODE      = 0x20;
+// Ids fuer die verschiedenden Nodes; in der Basisklasse steht der Member,
+// der angibt, um was fuer einen es sich handelt
+const BYTE ND_ENDNODE		= 0x01;
+const BYTE ND_STARTNODE		= 0x02;
+const BYTE ND_TABLENODE		= 0x06;
+const BYTE ND_TEXTNODE 		= 0x08;
+const BYTE ND_GRFNODE 		= 0x10;
+const BYTE ND_OLENODE 		= 0x20;
 
-const sal_uInt8 ND_CONTENTNODE  = 0x38; // ContentNode (one of the 3 bits).
-const sal_uInt8 ND_NOTXTNODE        = 0x30; // NoTxtNode (one of the 2 bits).
+const BYTE ND_CONTENTNODE	= 0x38;	// ContentNode (eines von den 3 Bits)
+const BYTE ND_NOTXTNODE		= 0x30;	// NoTxtNode (eines von den 2 Bits)
 
-const sal_uInt8 ND_SECTIONNODE   = 0x42;
-// For internal use only!!
-const sal_uInt8 ND_SECTIONDUMMY  = 0x40; //(ND_SECTIONNODE & ~ND_STARTNODE);
+const BYTE ND_SECTIONNODE   = 0x42;
+// nur fuer internen Gebrauch!!
+const BYTE ND_SECTIONDUMMY  = 0x40; //(ND_SECTIONNODE & ~ND_STARTNODE);
 
-// Special types of StartNodes that are not derivations but keep
-// "sections" together.
+// spezielle Types der StartNodes, die keine Ableitungen sind, aber
+// "Bereiche" zusammenhalten.
 enum SwStartNodeType
 {
     SwNormalStartNode = 0,
@@ -62,8 +62,8 @@ enum SwStartNodeType
 // is the node the first and/or last node of a section?
 // This information is used for the export filters. Our layout never have a
 // distance before or after if the node is the first or last in a section.
-const sal_uInt8 ND_HAS_PREV_LAYNODE = 0x01;
-const sal_uInt8 ND_HAS_NEXT_LAYNODE = 0x02;
+const BYTE ND_HAS_PREV_LAYNODE = 0x01;
+const BYTE ND_HAS_NEXT_LAYNODE = 0x02;
 
 
 

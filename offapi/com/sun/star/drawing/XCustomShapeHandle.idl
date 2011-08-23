@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,45 +24,45 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_XCustomShapeHandle_idl__
-#define __com_sun_star_drawing_XCustomShapeHandle_idl__
+#ifndef __com_sun_star_drawing_XCustomShapeHandle_idl__ 
+#define __com_sun_star_drawing_XCustomShapeHandle_idl__ 
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 
-#ifndef __com_sun_star_awt_Point_idl__
-#include <com/sun/star/awt/Point.idl>
-#endif
-
-//=============================================================================
-
- module com {  module sun {  module star {  module drawing {
-
-//=============================================================================
-
+#ifndef __com_sun_star_awt_Point_idl__ 
+#include <com/sun/star/awt/Point.idl> 
+#endif 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module drawing {  
+ 
+//============================================================================= 
+ 
 /** The XCustomShapeHandle
  */
 interface XCustomShapeHandle: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     /** is getting the actual handle position
 
         @returns
             a the actual handle position
      */
-    com::sun::star::awt::Point getPosition();
+    com::sun::star::awt::Point getPosition(); 
 
-    /** is setting a new position for the handle
+    /** is setting a new positon for the handle
      */
-    void setControllerPosition( [in] com::sun::star::awt::Point aPoint );
+    void setControllerPosition( [in] com::sun::star::awt::Point aPoint ); 
 
- };
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+ }; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 
 

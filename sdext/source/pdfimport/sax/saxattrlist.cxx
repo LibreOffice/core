@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,10 @@
 namespace pdfi
 {
 
-SaxAttrList::SaxAttrList( const boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >& rMap )
+SaxAttrList::SaxAttrList( const std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >& rMap )
 {
     m_aAttributes.reserve(rMap.size());
-    for( boost::unordered_map< rtl::OUString,
+    for( std::hash_map< rtl::OUString,
                         rtl::OUString,
                         rtl::OUStringHash >::const_iterator it = rMap.begin();
          it != rMap.end(); ++it )
@@ -65,7 +65,7 @@ namespace {
         return aStr;
     }
 }
-
+    
 sal_Int16 SAL_CALL SaxAttrList::getLength() throw()
 {
     return sal_Int16(m_aAttributes.size());
@@ -92,10 +92,10 @@ rtl::OUString SAL_CALL SaxAttrList::getValueByIndex( sal_Int16 i_nIndex ) throw(
 
 rtl::OUString SAL_CALL SaxAttrList::getValueByName(const ::rtl::OUString& i_rName) throw()
 {
-    boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it = m_aIndexMap.find( i_rName );
+    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it = m_aIndexMap.find( i_rName );
     return (it != m_aIndexMap.end()) ? m_aAttributes[it->second].m_aValue : rtl::OUString();
 }
-
+    
 com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL SaxAttrList::createClone() throw()
 {
     return new SaxAttrList( *this );

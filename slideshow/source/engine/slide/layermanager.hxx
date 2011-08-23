@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 
 #include <vector>
 #include <map>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <algorithm>
 #include <functional>
 
@@ -132,7 +132,7 @@ namespace slideshow
                 This method removes a shape from the shape.
              */
             bool removeShape( const ShapeSharedPtr& rShape );
-
+            
             /** Lookup a Shape from an XShape model object
 
                 This method looks up the internal shape map for one
@@ -142,7 +142,7 @@ namespace slideshow
                 The XShape object, for which the representing Shape
                 should be looked up.
              */
-            ShapeSharedPtr lookupShape( const ::com::sun::star::uno::Reference<
+            ShapeSharedPtr lookupShape( const ::com::sun::star::uno::Reference< 
                                            ::com::sun::star::drawing::XShape >& xShape ) const;
 
             /** Query a subset of the given original shape
@@ -151,8 +151,8 @@ namespace slideshow
                 shape, which displays only the given subset of the
                 original one.
              */
-            AttributableShapeSharedPtr getSubsetShape( const AttributableShapeSharedPtr&    rOrigShape,
-                                                       const DocTreeNode&                   rTreeNode );
+            AttributableShapeSharedPtr getSubsetShape( const AttributableShapeSharedPtr& 	rOrigShape,
+                                                       const DocTreeNode&					rTreeNode );
 
             /** Revoke a previously queried subset shape.
 
@@ -208,7 +208,7 @@ namespace slideshow
                 frame.
              */
             bool isUpdatePending() const;
-
+            
             /** Update the content
 
                 This method updates the content on all layers on all
@@ -240,12 +240,12 @@ namespace slideshow
              */
             bool renderTo( const ::cppcanvas::CanvasSharedPtr& rTargetCanvas ) const;
 
-        private:
+        private:             
             /** A hash map which maps the XShape to the corresponding Shape object.
 
                 Provides quicker lookup than ShapeSet for simple mappings
              */
-            typedef ::boost::unordered_map<
+            typedef ::std::hash_map<
                 ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >,
                 ShapeSharedPtr,
@@ -286,15 +286,15 @@ namespace slideshow
                 @param aFirstLayerShape
                 Valid iterator out of maAllShapes, denoting the first
                 shape from nCurrLayerIndex
-
+                
                 @param aEndLayerShapes
                 Valid iterator or end iterator out of maAllShapes,
                 denoting one-behind-the-last shape of nCurrLayerIndex
              */
-            void           commitLayerChanges( std::size_t                    nCurrLayerIndex,
+            void           commitLayerChanges( std::size_t                    nCurrLayerIndex, 
                                                LayerShapeMap::const_iterator  aFirstLayerShape,
                                                LayerShapeMap::const_iterator  aEndLayerShapes );
-
+ 
             /** Init Shape layers with background layer.
              */
             void          putShape2BackgroundLayer( LayerShapeMap::value_type& rShapeEntry );
@@ -314,9 +314,9 @@ namespace slideshow
             void          implAddShape( const ShapeSharedPtr& rShape );
 
             /** Common stuff when removing a shape
-             */
+             */ 
             void          implRemoveShape( const ShapeSharedPtr& rShape );
-
+            
             /** Add or remove views
 
                 Sharing duplicate code from viewAdded and viewRemoved
@@ -326,7 +326,7 @@ namespace slideshow
             template<typename LayerFunc,
                      typename ShapeFunc> void manageViews( LayerFunc layerFunc,
                                                            ShapeFunc shapeFunc );
-
+            
             bool updateSprites();
 
             /// Registered views
@@ -337,7 +337,7 @@ namespace slideshow
 
             /** Contains all shapes with their XShape reference as the key
              */
-            XShapeHash               maXShapeHash;
+            XShapeHash				 maXShapeHash;
 
             /** Set of shapes this LayerManager own
 
@@ -350,7 +350,7 @@ namespace slideshow
             LayerShapeMap            maAllShapes;
 
             /** Set of shapes that have requested an update
-
+                
                 When a shape is member of this set, its maShapes entry
                 has bNeedsUpdate set to true. We maintain this
                 redundant information for faster update processing.
@@ -366,10 +366,10 @@ namespace slideshow
             /// Number of shape sprites currenly active on this LayerManager
             sal_Int32                mnActiveSprites;
 
-            /// sal_True, if shapes might need to move to different layer
+            /// TRUE, if shapes might need to move to different layer
             bool                     mbLayerAssociationDirty;
 
-            /// sal_False when deactivated
+            /// FALSE when deactivated
             bool                     mbActive;
 
             /** When true, all sprite animations run in the foreground.  That

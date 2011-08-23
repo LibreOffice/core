@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,9 @@
 #define _OSL_SECURITY_CONST_H_
 
 #if ( defined WNT )                     // Windows
+#include <tools/prewin.h>
 #include <io.h>
+#include <tools/postwin.h>
 #endif
 
 #include <sal/types.h>
@@ -46,12 +48,8 @@
 #include <pwd.h>
 #endif
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
-#include <cppunit/plugin/TestPlugInDefaultImpl.h>
+#include <testshl/simpleheader.hxx>
 
-#define t_print printf
 
 #define BUFSIZE 1024
 const char pTestString[17] = "Sun Microsystems";

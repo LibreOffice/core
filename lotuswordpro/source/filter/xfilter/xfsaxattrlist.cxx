@@ -57,8 +57,13 @@
  * @file
  * Document object of the xml filter framework.
  ************************************************************************/
-#include    "xfsaxattrlist.hxx"
-#include    "xmloff/attrlist.hxx"
+/*************************************************************************
+ * Change History
+ * 2004-12-23 create this file.
+ ************************************************************************/
+
+#include	"xfsaxattrlist.hxx"
+#include	"xmloff/attrlist.hxx"
 
 XFSaxAttrList::XFSaxAttrList()
 {
@@ -69,16 +74,16 @@ XFSaxAttrList::XFSaxAttrList()
 XFSaxAttrList::~XFSaxAttrList()
 {
     //pls don't delete m_pSvAttrList,because when m_xAttrList release,the object will be automatic deleted.
-//  if( m_pSvAttrList )
-//      delete m_pSvAttrList;
+//	if( m_pSvAttrList )
+//		delete m_pSvAttrList;
 }
 
-void    XFSaxAttrList::AddAttribute(const rtl::OUString& name, const rtl::OUString& value)
+void	XFSaxAttrList::AddAttribute(const rtl::OUString& name, const rtl::OUString& value)
 {
     m_pSvAttrList->AddAttribute(name,value);
 }
 
-void    XFSaxAttrList::Clear()
+void	XFSaxAttrList::Clear()
 {
     m_pSvAttrList->Clear();
 }

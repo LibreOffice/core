@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #define SVX_TAB_DEFCOUNT    10
 #define SVX_TAB_DEFDIST     1134            // 2cm in twips
 #define SVX_TAB_NOTFOUND    USHRT_MAX
-#define cDfltDecimalChar    (sal_Unicode(0x00)) // Get from IntlWrapper
+#define cDfltDecimalChar    (sal_Unicode(0x00)) // aus IntlWrapper besorgen
 #define cDfltFillChar       (sal_Unicode(' '))
 
 class EDITENG_DLLPUBLIC SvxTabStop
@@ -48,8 +48,8 @@ private:
     long            nTabPos;
 
     SvxTabAdjust    eAdjustment;
-    mutable sal_Unicode     m_cDecimal;
-    sal_Unicode     cFill;
+    mutable sal_Unicode		m_cDecimal;
+    sal_Unicode		cFill;
 
     EDITENG_DLLPRIVATE friend SvStream& operator<<( SvStream&, SvxTabStop& );
 
@@ -81,10 +81,10 @@ public:
     sal_Unicode&  GetFill() { return cFill; }
     sal_Unicode   GetFill() const { return cFill; }
 
-    String          GetValueString() const;
+    String			GetValueString() const;
 
-    // the "old" operator==()
-    sal_Bool            IsEqual( const SvxTabStop& rTS ) const
+    // das "alte" operator==()
+    BOOL			IsEqual( const SvxTabStop& rTS ) const
                         {
                             return ( nTabPos     == rTS.nTabPos     &&
                                      eAdjustment == rTS.eAdjustment &&
@@ -92,10 +92,10 @@ public:
                                      cFill       == rTS.cFill );
                         }
 
-    // For the SortedArray:
-    sal_Bool            operator==( const SvxTabStop& rTS ) const
+    // Fuer das SortedArray:
+    BOOL            operator==( const SvxTabStop& rTS ) const
                         { return nTabPos == rTS.nTabPos; }
-    sal_Bool            operator <( const SvxTabStop& rTS ) const
+    BOOL            operator <( const SvxTabStop& rTS ) const
                         { return nTabPos < rTS.nTabPos; }
 
     SvxTabStop&     operator=( const SvxTabStop& rTS )
@@ -112,9 +112,9 @@ public:
 
 SV_DECL_VARARR_SORT_VISIBILITY( SvxTabStopArr, SvxTabStop, SVX_TAB_DEFCOUNT, 1, EDITENG_DLLPUBLIC )
 
-/*  [Description]
-
-    This item describes a list of TabStops.
+/*
+[Beschreibung]
+Dieses Item beschreibt eine Liste von TabStops.
 */
 
 class EDITENG_DLLPUBLIC SvxTabStopItem : public SfxPoolItem, private SvxTabStopArr
@@ -124,38 +124,38 @@ class EDITENG_DLLPUBLIC SvxTabStopItem : public SfxPoolItem, private SvxTabStopA
 public:
     TYPEINFO();
 
-    SvxTabStopItem( sal_uInt16 nWhich  );
-    SvxTabStopItem( const sal_uInt16 nTabs,
-                    const sal_uInt16 nDist,
+    SvxTabStopItem( USHORT nWhich  );
+    SvxTabStopItem( const USHORT nTabs,
+                    const USHORT nDist,
                     const SvxTabAdjust eAdjst /*= SVX_TAB_ADJUST_DEFAULT*/,
-                    sal_uInt16 nWhich  );
+                    USHORT nWhich  );
     SvxTabStopItem( const SvxTabStopItem& rTSI );
 
-    // Returns index of the tab or TAB_NOTFOUND
-    sal_uInt16          GetPos( const SvxTabStop& rTab ) const;
+    // Liefert Index-Position des Tabs zurueck oder TAB_NOTFOUND
+    USHORT          GetPos( const SvxTabStop& rTab ) const;
 
-    // Returns index of the tab at nPos, or TAB_NOTFOUND
-    sal_uInt16          GetPos( const long nPos ) const;
+    // Liefert Index-Position des Tabs an nPos zurueck oder TAB_NOTFOUND
+    USHORT          GetPos( const long nPos ) const;
 
-    // unprivatized:
-    sal_uInt16          Count() const { return SvxTabStopArr::Count(); }
-    sal_Bool            Insert( const SvxTabStop& rTab );
-    void            Insert( const SvxTabStopItem* pTabs, sal_uInt16 nStart = 0,
-                            sal_uInt16 nEnd = USHRT_MAX );
+    // entprivatisiert:
+    USHORT          Count() const { return SvxTabStopArr::Count(); }
+    BOOL            Insert( const SvxTabStop& rTab );
+    void            Insert( const SvxTabStopItem* pTabs, USHORT nStart = 0,
+                            USHORT nEnd = USHRT_MAX );
     void            Remove( SvxTabStop& rTab )
                         { SvxTabStopArr::Remove( rTab ); }
-    void            Remove( const sal_uInt16 nPos, const sal_uInt16 nLen = 1 )
+    void            Remove( const USHORT nPos, const USHORT nLen = 1 )
                         { SvxTabStopArr::Remove( nPos, nLen ); }
 
-    // Assignment operator, equality operator (caution: expensive!)
+    // Zuweisungsoperator, Gleichheitsoperator (vorsicht: teuer!)
     SvxTabStopItem& operator=( const SvxTabStopItem& rTSI );
 
     // this is already included in SfxPoolItem declaration
     //int             operator!=( const SvxTabStopItem& rTSI ) const
-    //                  { return !( operator==( rTSI ) ); }
+    //					{ return !( operator==( rTSI ) ); }
 
-    // SortedArrays returns only Stackobjects!
-    const SvxTabStop& operator[]( const sal_uInt16 nPos ) const
+    // SortedArrays liefern nur Stackobjekte zurueck!
+    const SvxTabStop& operator[]( const USHORT nPos ) const
                         {
                             DBG_ASSERT( GetStart() &&
                                         nPos < Count(), "op[]" );
@@ -164,19 +164,19 @@ public:
     const SvxTabStop*  GetStart() const
                         {   return SvxTabStopArr::GetData(); }
 
-    // "pure virtual Methods" from SfxPoolItem
-    virtual int              operator==( const SfxPoolItem& ) const;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    // "pure virtual Methoden" vom SfxPoolItem
+    virtual int 			 operator==( const SfxPoolItem& ) const;
+    virtual	bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 ) const;
-    virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const;
+    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*	 Create( SvStream&, USHORT ) const;
+    virtual SvStream&		 Store( SvStream& , USHORT nItemVersion ) const;
 
     using SvxTabStopArr::Insert;
     using SvxTabStopArr::Remove;

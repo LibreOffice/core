@@ -565,7 +565,7 @@ testcase tViewNavigator
         PrintLog "Tear Off Toolbox from Navigator"
         Toolbox.TearOff Navigation
     catch
-        Warnlog "Unable to tear off Toolbox"
+        Warnlog "Unable to tear off Toolbox (#i32092)"
         ToolboxOk = False
     endcatch
 
@@ -1300,7 +1300,7 @@ testcase tEditImageMap
             printlog( "Check for <Imagemap changed> messagebox (should not appear)" )
             kontext "Active"
             if ( Active.exists( 1 ) ) then
-                Warnlog( "<imagemap changed> message displayed." )
+                qaerrorlog( "#i109605# - <imagemap changed> message displayed." )
                 printlog( Active.getText )
                 Active.no()
             else

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ public class _XModeSelector extends MultiMethodTest {
     /**
     * Calls the method and as argument pass one of the supported modes
     * that was returned by method getSupportedMode.<p>
-    * Has <b> OK </b> status if no runtime exceptions occurred.
+    * Has <b> OK </b> status if no runtime exceptions occured.
     */
     public void _setMode() {
         requiredMethod("getSupportedModes()");
@@ -67,7 +67,7 @@ public class _XModeSelector extends MultiMethodTest {
 
     /**
     * Calls the method and check returned value.<p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     * and returned value is equal to value that was set by method setMode.
     */
     public void _getMode() {
@@ -78,7 +78,7 @@ public class _XModeSelector extends MultiMethodTest {
 
     /**
     * Calls the method and checks value returned by method.<p>
-    * Has <b> OK </b> status if no runtime exceptions occurred
+    * Has <b> OK </b> status if no runtime exceptions occured
     * and returned value is not null.
     */
     public void _getSupportedModes() {
@@ -91,7 +91,7 @@ public class _XModeSelector extends MultiMethodTest {
     * by method getSupportedMode is passed as argument.
     * Then the method is called again and the mode that is certainly not supported
     * is passed. Checks up returned values in both cases.<p>
-    * Has <b> OK </b> status if no runtime exceptions occurred,
+    * Has <b> OK </b> status if no runtime exceptions occured,
     * returned value is true in first call and is false in second call.
     */
     public void _supportsMode() {

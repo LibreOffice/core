@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@
 
 class IntlWrapper;
 
-#define IVER_VERTORIENT_REL ((sal_uInt16)0x0001)
+#define IVER_VERTORIENT_REL ((USHORT)0x0001)
 
 class SW_DLLPUBLIC SwFmtVertOrient: public SfxPoolItem
 {
-    SwTwips         nYPos;  // Contains *always* the current RelPos.
+    SwTwips         nYPos;  //Enthaelt _immer_ die aktuelle RelPos.
     sal_Int16       eOrient;
     sal_Int16       eRelation;
 public:
@@ -53,16 +53,16 @@ public:
                      sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA );
     inline SwFmtVertOrient &operator=( const SwFmtVertOrient &rCpy );
 
-    // "Pure virtual methods" of SfxPoolItem.
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual	bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     sal_Int16 GetVertOrient() const { return eOrient; }
     sal_Int16 GetRelationOrient() const { return eRelation; }
@@ -73,33 +73,34 @@ public:
     void    SetPos( SwTwips nNew ) { nYPos = nNew; }
 };
 
-//  SwFmtHoriOrient; how and towards what does the FlyFrm orient itself horizontally?
+//SwFmtHoriOrient, wie und woran orientiert --
+//	sich der FlyFrm in der Hoizontalen ----------
 
-#define IVER_HORIORIENT_TOGGLE ((sal_uInt16)0x0001)
-#define IVER_HORIORIENT_REL ((sal_uInt16)0x0002)
+#define IVER_HORIORIENT_TOGGLE ((USHORT)0x0001)
+#define IVER_HORIORIENT_REL ((USHORT)0x0002)
 
 class SW_DLLPUBLIC SwFmtHoriOrient: public SfxPoolItem
 {
-    SwTwips         nXPos;  // Contains *always* the current RelPos.
+    SwTwips         nXPos;  //Enthaelt _immer_ die aktuelle RelPos.
     sal_Int16       eOrient;
     sal_Int16       eRelation;
-    sal_Bool            bPosToggle : 1; // Flip position on even pages.
+    BOOL            bPosToggle : 1; // auf geraden Seiten Position spiegeln
 public:
     TYPEINFO();
     SwFmtHoriOrient( SwTwips nX = 0, sal_Int16 eHori = com::sun::star::text::HoriOrientation::NONE,
-        sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA, sal_Bool bPos = sal_False );
+        sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA, BOOL bPos = FALSE );
     inline SwFmtHoriOrient &operator=( const SwFmtHoriOrient &rCpy );
 
-    // "Pure virtual methods" of SfxPoolItem.
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     sal_Int16 GetHoriOrient() const { return eOrient; }
     sal_Int16 GetRelationOrient() const { return eRelation; }
@@ -109,8 +110,8 @@ public:
     SwTwips GetPos() const { return nXPos; }
     void    SetPos( SwTwips nNew ) { nXPos = nNew; }
 
-    sal_Bool IsPosToggle() const { return bPosToggle; }
-    void SetPosToggle( sal_Bool bNew ) { bPosToggle = bNew; }
+    BOOL IsPosToggle() const { return bPosToggle; }
+    void SetPosToggle( BOOL bNew ) { bPosToggle = bNew; }
 };
 
 inline SwFmtVertOrient &SwFmtVertOrient::operator=( const SwFmtVertOrient &rCpy )
@@ -129,14 +130,14 @@ inline SwFmtHoriOrient &SwFmtHoriOrient::operator=( const SwFmtHoriOrient &rCpy 
     return *this;
 }
 
-inline const SwFmtVertOrient &SwAttrSet::GetVertOrient(sal_Bool bInP) const
+inline const SwFmtVertOrient &SwAttrSet::GetVertOrient(BOOL bInP) const
     { return (const SwFmtVertOrient&)Get( RES_VERT_ORIENT,bInP); }
-inline const SwFmtHoriOrient &SwAttrSet::GetHoriOrient(sal_Bool bInP) const
+inline const SwFmtHoriOrient &SwAttrSet::GetHoriOrient(BOOL bInP) const
     { return (const SwFmtHoriOrient&)Get( RES_HORI_ORIENT,bInP); }
 
-inline const SwFmtVertOrient &SwFmt::GetVertOrient(sal_Bool bInP) const
+inline const SwFmtVertOrient &SwFmt::GetVertOrient(BOOL bInP) const
     { return aSet.GetVertOrient(bInP); }
-inline const SwFmtHoriOrient &SwFmt::GetHoriOrient(sal_Bool bInP) const
+inline const SwFmtHoriOrient &SwFmt::GetHoriOrient(BOOL bInP) const
     { return aSet.GetHoriOrient(bInP); }
 
 #endif

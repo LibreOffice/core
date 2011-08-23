@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ using namespace xmloff::token;
 //------------------------------------------------------------------
 
 ScXMLContentContext::ScXMLContentContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */,
@@ -63,7 +63,7 @@ ScXMLContentContext::~ScXMLContentContext()
 {
 }
 
-SvXMLImportContext *ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLContentContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -79,7 +79,7 @@ SvXMLImportContext *ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefix,
             const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
             const rtl::OUString& sAttrValue(xAttrList->getValueByIndex( i ));
             rtl::OUString aLocalName;
-            sal_uInt16 nPrfx = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+            USHORT nPrfx = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                                 sAttrName, &aLocalName );
             if ((nPrfx == XML_NAMESPACE_TEXT) && IsXMLToken(aLocalName, XML_C))
                 nRepeat = sAttrValue.toInt32();

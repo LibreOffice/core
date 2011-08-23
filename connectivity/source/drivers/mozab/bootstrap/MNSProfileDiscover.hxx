@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ namespace connectivity
             ::rtl::OUString getProfileName(){ return profileName;}
             ::rtl::OUString getProfilePath() ;
 #ifndef MINIMAL_PROFILEDISCOVER
-            nsILocalFile    *getProfileLocal(){ return profilePath;}
+            nsILocalFile	*getProfileLocal(){ return profilePath;}
 #endif
         protected:
             MozillaProductType product;
@@ -104,7 +104,7 @@ namespace connectivity
         {
         public:
 
-            virtual ~ProfileAccess();
+            virtual	~ProfileAccess();
             ProfileAccess();
             ::rtl::OUString getProfilePath( ::com::sun::star::mozilla::MozillaProductType product, const ::rtl::OUString& profileName ) throw (::com::sun::star::uno::RuntimeException);
             ::sal_Int32 getProfileCount( ::com::sun::star::mozilla::MozillaProductType product ) throw (::com::sun::star::uno::RuntimeException);
@@ -115,6 +115,9 @@ namespace connectivity
         protected:
             ProductStruct m_ProductProfileList[4];
             sal_Int32 LoadProductsInfo();
+#ifndef MINIMAL_PROFILEDISCOVER
+            nsresult  LoadMozillaProfiles();
+#endif
             sal_Int32 LoadXPToolkitProfiles(MozillaProductType product);
 #ifndef MINIMAL_PROFILEDISCOVER
             //used by isProfileLocked

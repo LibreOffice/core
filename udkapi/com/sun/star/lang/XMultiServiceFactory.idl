@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,23 +24,27 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
-#define __com_sun_star_lang_XMultiServiceFactory_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
-#include <com/sun/star/uno/Exception.idl>
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module lang {
-
-//=============================================================================
-
+#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__ 
+#define __com_sun_star_lang_XMultiServiceFactory_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_uno_Exception_idl__ 
+#include <com/sun/star/uno/Exception.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module lang {  
+ 
+//============================================================================= 
+ 
 /** Factories support this interface creating instances giving a name,
     e.g. a service name.
-
+    
     <p>
     Note:
     Although this interface deals with the notion of "services", this is not
@@ -49,20 +53,20 @@ module com {  module sun {  module star {  module lang {
     </p>
 */
 published interface XMultiServiceFactory: com::sun::star::uno::XInterface
-{
+{ 
     /** Creates an instance classified by the specified name.
-
+        
         @param aServiceSpecifier
                classified name of instance
         @return
                 instance
     */
-    com::sun::star::uno::XInterface createInstance( [in] string aServiceSpecifier )
-        raises( com::sun::star::uno::Exception );
-
+    com::sun::star::uno::XInterface createInstance( [in] string aServiceSpecifier ) 
+        raises( com::sun::star::uno::Exception ); 
+    
     /** Creates an instance classified by the specified name and passes the arguments
         to that instance.
-
+        
         @param ServiceSpecifier
                classified name of instance
         @param Arguments
@@ -71,23 +75,23 @@ published interface XMultiServiceFactory: com::sun::star::uno::XInterface
                 instance
     */
     com::sun::star::uno::XInterface createInstanceWithArguments(
-        [in] string ServiceSpecifier,
-        [in] sequence<any> Arguments )
-        raises( com::sun::star::uno::Exception );
-
+        [in] string ServiceSpecifier, 
+        [in] sequence<any> Arguments ) 
+        raises( com::sun::star::uno::Exception ); 
+    
     /** Provides the available names of the factory to be used to create instances.
-
-        @returns
+        
+        @returns 
                  sequence of all names
     */
     sequence<string> getAvailableServiceNames();
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

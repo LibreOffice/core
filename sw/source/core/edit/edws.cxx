@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,11 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <vcl/window.hxx>
 
+
+
+#include <vcl/window.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <docary.hxx>
 #include <acorrect.hxx>
@@ -59,7 +60,7 @@ SwEditShell::SwEditShell( SwEditShell& rEdSH, Window *pWindow )
 SwEditShell::SwEditShell( SwDoc& rDoc, Window *pWindow, const SwViewOption *pOptions )
     : SwCrsrShell( rDoc, pWindow, pOptions )
 {
-    GetDoc()->GetIDocumentUndoRedo().DoUndo(true);
+    GetDoc()->DoUndo(true);
 }
 
 
@@ -68,7 +69,7 @@ SwEditShell::~SwEditShell() // USED
 }
 
 /******************************************************************************
- *                  sal_Bool SwEditShell::IsModified() const
+ *					sal_Bool SwEditShell::IsModified() const
  ******************************************************************************/
 
 
@@ -77,7 +78,7 @@ sal_Bool SwEditShell::IsModified() const
     return GetDoc()->IsModified();
 }
 /******************************************************************************
- *                    void SwEditShell::SetModified()
+ *					  void SwEditShell::SetModified()
  ******************************************************************************/
 
 
@@ -86,7 +87,7 @@ void SwEditShell::SetModified()
     GetDoc()->SetModified();
 }
 /******************************************************************************
- *                   void SwEditShell::ResetModified()
+ *					 void SwEditShell::ResetModified()
  ******************************************************************************/
 
 
@@ -98,11 +99,11 @@ void SwEditShell::ResetModified()
 void SwEditShell::SetUndoNoResetModified()
 {
     GetDoc()->SetModified();
-    GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
+    GetDoc()->SetUndoNoResetModified();
 }
 
 /******************************************************************************
- *                 void SwEditShell::StartAllAction()
+ *				   void SwEditShell::StartAllAction()
  ******************************************************************************/
 
 
@@ -118,7 +119,7 @@ void SwEditShell::StartAllAction()
     } while(pSh != this);
 }
 /******************************************************************************
- *                  void SwEditShell::EndAllAction()
+ *					void SwEditShell::EndAllAction()
  ******************************************************************************/
 
 
@@ -135,7 +136,7 @@ void SwEditShell::EndAllAction()
 }
 
 /******************************************************************************
- *                  void SwEditShell::CalcLayout()
+ *					void SwEditShell::CalcLayout()
  ******************************************************************************/
 
 
@@ -157,7 +158,7 @@ void SwEditShell::CalcLayout()
 }
 
 /******************************************************************************
- *                      Inhaltsform bestimmen, holen
+ *						Inhaltsform bestimmen, holen
  ******************************************************************************/
 // OPT: wird fuer jedes Attribut gerufen?
 
@@ -171,12 +172,12 @@ sal_uInt16 SwEditShell::GetCntType() const
     else
         switch( GetCrsr()->GetNode()->GetNodeType() )
         {
-        case ND_TEXTNODE:   nRet = CNT_TXT; break;
+        case ND_TEXTNODE:   nRet = CNT_TXT;	break;
         case ND_GRFNODE:    nRet = CNT_GRF; break;
         case ND_OLENODE:    nRet = CNT_OLE; break;
         }
 
-    OSL_ASSERT( nRet );
+    ASSERT_ID( nRet, ERR_OUTOFSCOPE );
     return nRet;
 }
 
@@ -204,7 +205,7 @@ sal_Bool SwEditShell::HasOtherCnt() const
 }
 
 /******************************************************************************
- *              Zugriffsfunktionen fuer Filename-Behandlung
+ *				Zugriffsfunktionen fuer Filename-Behandlung
  ******************************************************************************/
 
 
@@ -221,8 +222,8 @@ SwActKontext::~SwActKontext()
 }
 
 /******************************************************************************
- *          Klasse fuer den automatisierten Aufruf von Start- und
- *                              EndCrsrMove();
+ * 			Klasse fuer den automatisierten Aufruf von Start- und
+ * 								EndCrsrMove();
  ******************************************************************************/
 
 
@@ -238,7 +239,7 @@ SwMvKontext::~SwMvKontext()
 }
 
 
-SwFrmFmt *SwEditShell::GetTableFmt()    // OPT: schnellster Test auf Tabelle?
+SwFrmFmt *SwEditShell::GetTableFmt()	// OPT: schnellster Test auf Tabelle?
 {
     const SwTableNode* pTblNd = IsCrsrInTbl();
     return pTblNd ? (SwFrmFmt*)pTblNd->GetTable().GetFrmFmt() : 0;
@@ -261,24 +262,24 @@ void SwEditShell::InsertTOXType(const SwTOXType& rTyp)
 
 
 void SwEditShell::DoUndo( sal_Bool bOn )
-{ GetDoc()->GetIDocumentUndoRedo().DoUndo( bOn ); }
+{ GetDoc()->DoUndo( bOn ); }
 
 
 sal_Bool SwEditShell::DoesUndo() const
-{ return GetDoc()->GetIDocumentUndoRedo().DoesUndo(); }
+{ return GetDoc()->DoesUndo(); }
 
 
 void SwEditShell::DoGroupUndo( sal_Bool bOn )
-{ GetDoc()->GetIDocumentUndoRedo().DoGroupUndo( bOn ); }
+{ GetDoc()->DoGroupUndo( bOn ); }
 
 
 sal_Bool SwEditShell::DoesGroupUndo() const
-{ return GetDoc()->GetIDocumentUndoRedo().DoesGroupUndo(); }
+{ return GetDoc()->DoesGroupUndo(); }
 
 
 void SwEditShell::DelAllUndoObj()
 {
-    GetDoc()->GetIDocumentUndoRedo().DelAllUndoObj();
+    GetDoc()->DelAllUndoObj();
 }
 
 // Zusammenfassen von Kontinuierlichen Insert/Delete/Overwrite von
@@ -289,25 +290,44 @@ void SwEditShell::DelAllUndoObj()
 
 SwUndoId SwEditShell::StartUndo( SwUndoId eUndoId,
                                    const SwRewriter *pRewriter )
-{ return GetDoc()->GetIDocumentUndoRedo().StartUndo( eUndoId, pRewriter ); }
+{ return GetDoc()->StartUndo( eUndoId, pRewriter ); }
 
 // schliesst Klammerung der nUndoId, nicht vom UI benutzt
 
 
 SwUndoId SwEditShell::EndUndo(SwUndoId eUndoId,
                                 const SwRewriter *pRewriter)
-{ return GetDoc()->GetIDocumentUndoRedo().EndUndo(eUndoId, pRewriter); }
+{ return GetDoc()->EndUndo(eUndoId, pRewriter); }
+
+// liefert die Id der letzten undofaehigen Aktion zurueck
+// fuellt ggf. VARARR mit sdbcx::User-UndoIds
 
 
-bool     SwEditShell::GetLastUndoInfo(::rtl::OUString *const o_pStr,
-                                      SwUndoId *const o_pId) const
-{ return GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(o_pStr, o_pId); }
+SwUndoId SwEditShell::GetUndoIds(String* pStr,SwUndoIds *pUndoIds) const
+{ return GetDoc()->GetUndoIds(pStr,pUndoIds); }
 
-bool     SwEditShell::GetFirstRedoInfo(::rtl::OUString *const o_pStr) const
-{ return GetDoc()->GetIDocumentUndoRedo().GetFirstRedoInfo(o_pStr); }
+String SwEditShell::GetUndoIdsStr(String* pStr,SwUndoIds *pUndoIds) const
+{ return GetDoc()->GetUndoIdsStr(pStr,pUndoIds); }
 
-SwUndoId SwEditShell::GetRepeatInfo(::rtl::OUString *const o_pStr) const
-{ return GetDoc()->GetIDocumentUndoRedo().GetRepeatInfo(o_pStr); }
+// liefert die Id der letzten Redofaehigen Aktion zurueck
+// fuellt ggf. VARARR mit RedoIds
+
+
+SwUndoId SwEditShell::GetRedoIds(String* pStr,SwUndoIds *pRedoIds) const
+{ return GetDoc()->GetRedoIds(pStr,pRedoIds); }
+
+String SwEditShell::GetRedoIdsStr(String* pStr,SwUndoIds *pRedoIds) const
+{ return GetDoc()->GetRedoIdsStr(pStr,pRedoIds); }
+
+// liefert die Id der letzten Repeatfaehigen Aktion zurueck
+// fuellt ggf. VARARR mit RedoIds
+
+
+SwUndoId SwEditShell::GetRepeatIds(String* pStr, SwUndoIds *pRedoIds) const
+{ return GetDoc()->GetRepeatIds(pStr,pRedoIds); }
+
+String SwEditShell::GetRepeatIdsStr(String* pStr, SwUndoIds *pRedoIds) const
+{ return GetDoc()->GetRepeatIdsStr(pStr,pRedoIds); }
 
 
 

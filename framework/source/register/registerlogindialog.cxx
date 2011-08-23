@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  includes of my own project
+//	includes of my own project
 //_________________________________________________________________________________________________________________
 #include <macros/registration.hxx>
 
@@ -49,7 +49,11 @@
 
         COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-        COMPONENTGETFACTORY (   IFFACTORIE( Service1 )
+        COMPONENTWRITEINFO	(	COMPONENTINFO( Service1 )
+                                 COMPONENTINFO( Service2 )
+                            )
+
+        COMPONENTGETFACTORY	(	IFFACTORIE( Service1 )
                                  else
                                 IFFACTORIE( Service2 )
                              )
@@ -59,7 +63,10 @@
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::LoginDialog     )
+COMPONENTWRITEINFO	(	COMPONENTINFO( ::framework::LoginDialog )
+                    )
+
+COMPONENTGETFACTORY	(	IFFACTORY( ::framework::LoginDialog		)
                     )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

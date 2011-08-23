@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ ScXMLAnnotationData::~ScXMLAnnotationData()
 //------------------------------------------------------------------
 
 ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                       ScXMLAnnotationData& rAnnotationData,
@@ -67,7 +67,7 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mrAnnotationData( rAnnotationData ),
     nParagraphCount(0),
-    bHasTextP(false),
+    bHasTextP(sal_False),
     pCellContext(pTempCellContext),
     pShapeContext(NULL)
 {
@@ -87,7 +87,7 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
     {
         const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
@@ -137,7 +137,7 @@ void ScXMLAnnotationContext::StartElement(const com::sun::star::uno::Reference< 
         pShapeContext->StartElement(xAttrList);
 }
 
-SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -159,6 +159,18 @@ SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( sal_uInt16 nPref
             pContext = new ScXMLContentContext(GetScImport(), nPrefix,
                                             rLName, xAttrList, maCreateDateStringBuffer);
     }
+/*	else if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(rLName, XML_P) )
+    {
+        if (!bHasTextP)
+        {
+            bHasTextP = sal_True;
+            maTextBuffer.setLength(0);
+        }
+        if(nParagraphCount)
+            maTextBuffer.append(static_cast<sal_Unicode>('\n'));
+        ++nParagraphCount;
+        pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, xAttrList, maTextBuffer);
+    }*/
 
     if( !pContext && pShapeContext )
         pContext = pShapeContext->CreateChildContext(nPrefix, rLName, xAttrList);

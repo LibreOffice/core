@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
             const List* pBookmarks = &rTransferable.GetPageBookmarks();
             if (pBookmarks == NULL)
                 break;
-
+            
             DrawDocShell* pDocShell = rTransferable.GetPageDocShell();
             if (pDocShell == NULL)
                 break;
@@ -104,12 +104,12 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
             for (int nIndex=0; nIndex<nBookmarkCount; nIndex++)
             {
                 String sName (*(String*) pBookmarks->GetObject(nIndex));
-                sal_Bool bIsMasterPage;
+                BOOL bIsMasterPage;
+                
+                // SdPage* GetMasterSdPage(USHORT nPgNum, PageKind ePgKind);
+                // USHORT GetMasterSdPageCount(PageKind ePgKind) const;
 
-                // SdPage* GetMasterSdPage(sal_uInt16 nPgNum, PageKind ePgKind);
-                // sal_uInt16 GetMasterSdPageCount(PageKind ePgKind) const;
-
-                sal_uInt16 nBMPage = pDocument->GetPageByName (
+                USHORT nBMPage = pDocument->GetPageByName (
                     sName, bIsMasterPage);
                 if ( ! bIsMasterPage)
                 {
@@ -169,9 +169,9 @@ void ViewClipboard::AssignMasterPage (
 
     // We have to remove the layout suffix from the layout name which is
     // appended again by SetMasterPage() to the given name.  Don't ask.
-    String sLayoutSuffix (RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR));
+    String sLayoutSuffix (RTL_CONSTASCII_STRINGPARAM(SD_LT_SEPARATOR));
     sLayoutSuffix.Append (SdResId(STR_LAYOUT_OUTLINE));
-    sal_uInt16 nLength = sLayoutSuffix.Len();
+    USHORT nLength = sLayoutSuffix.Len();
     String sLayoutName (pMasterPage->GetLayoutName());
     if (String(sLayoutName, sLayoutName.Len()-nLength, nLength).Equals (
         sLayoutSuffix))
@@ -181,24 +181,24 @@ void ViewClipboard::AssignMasterPage (
         pPage->GetPageNum() / 2,
         sLayoutName,
         pSourceDocument,
-        sal_False, // Exchange the master page of only the target page.
-        sal_False // Keep unused master pages.
+        FALSE, // Exchange the master page of only the target page.
+        FALSE // Keep unused master pages.
         );
 }
 
 
 
 
-sal_uInt16 ViewClipboard::DetermineInsertPosition  (
+USHORT ViewClipboard::DetermineInsertPosition  (
     const SdTransferable& )
 {
     SdDrawDocument* pDoc = mrView.GetDoc();
-    sal_uInt16 nPgCnt = pDoc->GetSdPageCount( PK_STANDARD );
+    USHORT nPgCnt = pDoc->GetSdPageCount( PK_STANDARD );
 
     // Insert position is the behind the last selected page or behind the
     // last page when the selection is empty.
-    sal_uInt16 nInsertPos = pDoc->GetSdPageCount( PK_STANDARD ) * 2 + 1;
-    for( sal_uInt16 nPage = 0; nPage < nPgCnt; nPage++ )
+    USHORT nInsertPos = pDoc->GetSdPageCount( PK_STANDARD ) * 2 + 1;
+    for( USHORT nPage = 0; nPage < nPgCnt; nPage++ )
     {
         SdPage* pPage = pDoc->GetSdPage( nPage, PK_STANDARD );
 
@@ -212,14 +212,14 @@ sal_uInt16 ViewClipboard::DetermineInsertPosition  (
 
 
 
-sal_uInt16 ViewClipboard::InsertSlides (
+USHORT ViewClipboard::InsertSlides (
     const SdTransferable& rTransferable,
-    sal_uInt16 nInsertPosition)
+    USHORT nInsertPosition)
 {
     SdDrawDocument* pDoc = mrView.GetDoc();
 
-    sal_uInt16 nInsertPgCnt = 0;
-    sal_Bool bMergeMasterPages = !rTransferable.HasSourceDoc( pDoc );
+    USHORT nInsertPgCnt = 0;
+    BOOL bMergeMasterPages = !rTransferable.HasSourceDoc( pDoc );
 
     // Prepare the insertion.
     const List* pBookmarkList;
@@ -230,7 +230,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
         // pages are inserted.
         pBookmarkList = &rTransferable.GetPageBookmarks();
         pDataDocSh = rTransferable.GetPageDocShell();
-        nInsertPgCnt = (sal_uInt16)pBookmarkList->Count();
+        nInsertPgCnt = (USHORT)pBookmarkList->Count();
     }
     else
     {
@@ -247,27 +247,27 @@ sal_uInt16 ViewClipboard::InsertSlides (
     {
         const SolarMutexGuard aGuard;
         ::sd::Window* pWin = mrView.GetViewShell()->GetActiveWindow();
-        const sal_Bool bWait = pWin && pWin->IsWait();
+        const BOOL bWait = pWin && pWin->IsWait();
 
         if( bWait )
             pWin->LeaveWait();
-
+                
         pDoc->InsertBookmarkAsPage(
-            const_cast<List*>(pBookmarkList),
-            NULL,
-            sal_False,
-            sal_False,
+            const_cast<List*>(pBookmarkList), 
+            NULL, 
+            FALSE, 
+            FALSE, 
             nInsertPosition,
             (&rTransferable == SD_MOD()->pTransferDrag),
-            pDataDocSh,
-            sal_True,
-            bMergeMasterPages,
-            sal_False);
+            pDataDocSh, 
+            TRUE, 
+            bMergeMasterPages, 
+            FALSE);
 
         if( bWait )
             pWin->EnterWait();
     }
-
+    
     return nInsertPgCnt;
 }
 

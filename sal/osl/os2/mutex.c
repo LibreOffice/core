@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@
     The void* hidden by oslMutex points to an OS/2 mutex semaphore.
 */
 typedef struct _oslMutexImpl {
-    HMTX                m_Mutex;
-    int                 m_Locks;
-    ULONG               m_Owner;
-    ULONG               m_Requests;
+    HMTX				m_Mutex;
+    int 				m_Locks;
+    ULONG				m_Owner;
+    ULONG				m_Requests;
 } oslMutexImpl;
 
 // static mutex to control access to private members of oslMutexImpl
@@ -58,7 +58,7 @@ oslMutex SAL_CALL osl_createMutex()
 
     pMutexImpl= (oslMutexImpl*)calloc(sizeof(oslMutexImpl), 1);
     OSL_ASSERT(pMutexImpl); /* alloc successful? */
-
+    
     /* create semaphore */
     rc = DosCreateMutexSem( NULL, &pMutexImpl->m_Mutex, 0, FALSE );
     if( rc != 0 )
@@ -116,7 +116,7 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
 {
-    sal_Bool     ret = sal_False;
+    sal_Bool 	 ret = sal_False;
     oslMutexImpl *pMutexImpl = (oslMutexImpl *)Mutex;
     OSL_ASSERT(Mutex);
 
@@ -127,7 +127,7 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
         ret = osl_acquireMutex(Mutex);
 
     DosReleaseMutexSem( MutexLock);
-
+    
     return ret;
 }
 
@@ -160,7 +160,7 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
 
 oslMutex g_Mutex = NULL;
 
-oslMutex * SAL_CALL osl_getGlobalMutex(void)
+oslMutex * SAL_CALL osl_getGlobalMutex(void) 
 {
     if (g_Mutex == NULL)
         g_Mutex = osl_createMutex();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,43 +25,45 @@
  *
  ************************************************************************/
 
+
 #include "analysis.hrc"
+
 
 Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 {
     Resource ANALYSIS_Workday
     {
-        String 1    // description Workday
+        String 1	// description Workday
         {
             Text [ en-US ] = "Returns the serial number of the date before or after a specified number of workdays";
         };
 
-        String 2 // name of parameter 1         Workday
+        String 2 // name of parameter 1			Workday
         {
             Text [ en-US ] = "Start date";
         };
 
-        String 3 // description of parameter 1  Workday
+        String 3 // description of parameter 1	Workday
         {
             Text [ en-US ] = "The start date";
         };
 
-        String 4 // name of parameter 2         Workday
+        String 4 // name of parameter 2			Workday
         {
             Text [ en-US ] = "Days";
         };
 
-        String 5 // description of parameter 2  Workday
+        String 5 // description of parameter 2	Workday
         {
             Text [ en-US ] = "The number of workdays before or after the start date";
         };
 
-        String 6 // name of parameter 3         Workday
+        String 6 // name of parameter 3			Workday
         {
             Text [ en-US ] = "Holidays";
         };
 
-        String 7 // description of parameter 3  Workday
+        String 7 // description of parameter 3	Workday
         {
             Text [ en-US ] = "List of date values of days off (vacation, holidays, etc.)";
         };
@@ -69,37 +71,37 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Yearfrac
     {
-        String 1    // description Yearfrac
+        String 1	// description Yearfrac
         {
             Text [ en-US ] = "Returns the number of whole days between 'start date' and 'end date' as a year fraction";
         };
 
-        String 2 // name of parameter 1         Yearfrac
+        String 2 // name of parameter 1			Yearfrac
         {
             Text [ en-US ] = "Start date";
         };
 
-        String 3 // description of parameter 1  Yearfrac
+        String 3 // description of parameter 1	Yearfrac
         {
             Text [ en-US ] = "The start date";
         };
 
-        String 4 // name of parameter 2         Yearfrac
+        String 4 // name of parameter 2			Yearfrac
         {
             Text [ en-US ] = "End date";
         };
 
-        String 5 // description of parameter 2  Yearfrac
+        String 5 // description of parameter 2	Yearfrac
         {
             Text [ en-US ] = "The end date";
         };
 
-        String 6 // name of parameter 3         Yearfrac
+        String 6 // name of parameter 3			Yearfrac
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 7 // description of parameter 3  Yearfrac
+        String 7 // description of parameter 3	Yearfrac
         {
             Text [ en-US ] = "Basis for determining the interest days";
         };
@@ -107,27 +109,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Edate
     {
-        String 1    // description Edate
+        String 1	// description Edate
         {
             Text [ en-US ] = "Returns the serial number of the date that is a specified number of months before or after the start date";
         };
 
-        String 2 // name of parameter 1         Edate
+        String 2 // name of parameter 1			Edate
         {
             Text [ en-US ] = "Start date";
         };
 
-        String 3 // description of parameter 1  Edate
+        String 3 // description of parameter 1	Edate
         {
             Text [ en-US ] = "The start date";
         };
 
-        String 4 // name of parameter 2         Edate
+        String 4 // name of parameter 2			Edate
         {
             Text [ en-US ] = "Months";
         };
 
-        String 5 // description of parameter 2  Edate
+        String 5 // description of parameter 2	Edate
         {
             Text [ en-US ] = "Number of months before or after the start date";
         };
@@ -135,27 +137,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Weeknum
     {
-        String 1    // description Weeknum_add
+        String 1	// description Weeknum_add
         {
             Text [ en-US ] = "Returns the number of the calendar week in which the specified date occurs.";
         };
 
-        String 2 // name of parameter 1         Weeknum_add
+        String 2 // name of parameter 1			Weeknum_add
         {
             Text [ en-US ] = "Date";
         };
 
-        String 3 // description of parameter 1  Weeknum_add
+        String 3 // description of parameter 1	Weeknum_add
         {
             Text [ en-US ] = "The date";
         };
 
-        String 4 // name of parameter 2         Weeknum_add
+        String 4 // name of parameter 2			Weeknum_add
         {
             Text [ en-US ] = "Return type";
         };
 
-        String 5 // description of parameter 2  Weeknum_add
+        String 5 // description of parameter 2	Weeknum_add
         {
             Text [ en-US ] = "A number from 1 to 3 that specifies the day with which a week begins";
         };
@@ -163,27 +165,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Eomonth
     {
-        String 1    // description EoMonth
+        String 1	// description EoMonth
         {
             Text[ en-US ] = "Returns the serial number of the last day of the month that comes a certain number of months before or after the start date";
         };
 
-        String 2 // name of parameter 1         EoMonth
+        String 2 // name of parameter 1			EoMonth
         {
             Text [ en-US ] = "Start date";
         };
 
-        String 3 // description of parameter 1  EoMonth
+        String 3 // description of parameter 1	EoMonth
         {
             Text [ en-US ] = "The start date";
         };
 
-        String 4 // name of parameter 2         EoMonth
+        String 4 // name of parameter 2			EoMonth
         {
             Text [ en-US ] = "Months";
         };
 
-        String 5 // description of parameter 2  EoMonth
+        String 5 // description of parameter 2	EoMonth
         {
             Text [ en-US ] = "Number of months before or after the start date";
         };
@@ -191,37 +193,37 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Networkdays
     {
-        String 1    // description Networkdays
+        String 1	// description Networkdays
         {
             Text [ en-US ] = "Returns the number of workdays between two dates";
         };
 
-        String 2 // name of parameter 1         Networkdays
+        String 2 // name of parameter 1			Networkdays
         {
             Text [ en-US ] = "Start date";
         };
 
-        String 3 // description of parameter 1  Networkdays
+        String 3 // description of parameter 1	Networkdays
         {
             Text [ en-US ] = "The start date";
         };
 
-        String 4 // name of parameter 2         Networkdays
+        String 4 // name of parameter 2			Networkdays
         {
             Text [ en-US ] = "End date";
         };
 
-        String 5 // description of parameter 2  Networkdays
+        String 5 // description of parameter 2	Networkdays
         {
             Text [ en-US ] = "The end date";
         };
 
-        String 6 // name of parameter 3         Networkdays
+        String 6 // name of parameter 3			Networkdays
         {
             Text [ en-US ] = "Holidays";
         };
 
-        String 7 // description of parameter 3  Networkdays
+        String 7 // description of parameter 3	Networkdays
         {
             Text [ en-US ] = "List of date values representing days off (vacation, holidays, etc.)";
         };
@@ -229,17 +231,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Iseven
     {
-        String 1    // description Iseven_add
+        String 1	// description Iseven_add
         {
             Text [ en-US ] = "Returns the value 'true' if the number is even";
         };
 
-        String 2 // name of parameter 1         Iseven_add
+        String 2 // name of parameter 1			Iseven_add
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  Iseven_add
+        String 3 // description of parameter 1	Iseven_add
         {
             Text [ en-US ] = "The number";
         };
@@ -247,17 +249,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Isodd
     {
-        String 1    // description Isodd_add
+        String 1	// description Isodd_add
         {
             Text [ en-US ] = "Returns the value 'true' if the number is odd";
         };
 
-        String 2 // name of parameter 1         Isodd_add
+        String 2 // name of parameter 1			Isodd_add
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  Isodd_add
+        String 3 // description of parameter 1	Isodd_add
         {
             Text [ en-US ] = "The number";
         };
@@ -265,17 +267,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Multinomial
     {
-        String 1    // description Multinomial
+        String 1	// description Multinomial
         {
             Text [ en-US ] = "Returns the multinomial coefficient of a set of numbers";
         };
 
-        String 2 // name of parameter 1         Multinomial
+        String 2 // name of parameter 1			Multinomial
         {
             Text [ en-US ] = "Number(s)";
         };
 
-        String 3 // description of parameter 1  Multinomial
+        String 3 // description of parameter 1	Multinomial
         {
             Text [ en-US ] = "Number or list of numbers for which you want the multinomial coefficient";
         };
@@ -283,47 +285,47 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Seriessum
     {
-        String 1    // description Seriessum
+        String 1	// description Seriessum
         {
             Text [ en-US ] = "Returns the sum of a power series";
         };
 
-        String 2 // name of parameter 1         Seriessum
+        String 2 // name of parameter 1			Seriessum
         {
             Text [ en-US ] = "X";
         };
 
-        String 3 // description of parameter 1  Seriessum
+        String 3 // description of parameter 1	Seriessum
         {
             Text [ en-US ] = "The independent variable of the power series";
         };
 
-        String 4 // name of parameter 2         Seriessum
+        String 4 // name of parameter 2			Seriessum
         {
             Text [ en-US ] = "N";
         };
 
-        String 5 // description of parameter 2  Seriessum
+        String 5 // description of parameter 2	Seriessum
         {
             Text [ en-US ] = "The initial power to which x is to be raised";
         };
 
-        String 6 // name of parameter 3         Seriessum
+        String 6 // name of parameter 3			Seriessum
         {
             Text [ en-US ] = "M";
         };
 
-        String 7 // description of parameter 3  Seriessum
+        String 7 // description of parameter 3	Seriessum
         {
             Text [ en-US ] = "The increment by which to increase n for each term in the series";
         };
 
-        String 8 // name of parameter 4         Seriessum
+        String 8 // name of parameter 4			Seriessum
         {
             Text [ en-US ] = "Coefficients";
         };
 
-        String 9 // description of parameter 4  Seriessum
+        String 9 // description of parameter 4	Seriessum
         {
             Text [ en-US ] = "Set of coefficients by which each successive power of the variable x is multiplied";
         };
@@ -331,27 +333,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Quotient
     {
-        String 1    // description Quotient
+        String 1	// description Quotient
         {
             Text [ en-US ] = "Returns the integer portion of a division";
         };
 
-        String 2 // name of parameter 1         Quotient
+        String 2 // name of parameter 1			Quotient
         {
             Text [ en-US ] = "Numerator";
         };
 
-        String 3 // description of parameter 1  Quotient
+        String 3 // description of parameter 1	Quotient
         {
             Text [ en-US ] = "The dividend";
         };
 
-        String 4 // name of parameter 2         Quotient
+        String 4 // name of parameter 2			Quotient
         {
             Text [ en-US ] = "Denominator";
         };
 
-        String 5 // description of parameter 2  Quotient
+        String 5 // description of parameter 2	Quotient
         {
             Text [ en-US ] = "The divisor";
         };
@@ -359,27 +361,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Mround
     {
-        String 1    // description Mround
+        String 1	// description Mround
         {
             Text [ en-US ] = "Returns a number rounded to a specified multiple";
         };
 
-        String 2 // name of parameter 1         Mround
+        String 2 // name of parameter 1			Mround
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  Mround
+        String 3 // description of parameter 1	Mround
         {
             Text [ en-US ] = "The number to round off";
         };
 
-        String 4 // name of parameter 2         Mround
+        String 4 // name of parameter 2			Mround
         {
             Text [ en-US ] = "Multiple";
         };
 
-        String 5 // description of parameter 2  Mround
+        String 5 // description of parameter 2	Mround
         {
             Text [ en-US ] = "The multiple to which you want to round number";
         };
@@ -387,17 +389,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Sqrtpi
     {
-        String 1    // description SqrtPI
+        String 1	// description SqrtPI
         {
             Text [ en-US ] = "Returns the square root of a number which has been multiplied by pi";
         };
 
-        String 2 // name of parameter 1         SqrtPI
+        String 2 // name of parameter 1			SqrtPI
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  SqrtPI
+        String 3 // description of parameter 1	SqrtPI
         {
             Text [ en-US ] = "The number by which pi is multiplied";
         };
@@ -405,27 +407,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Randbetween
     {
-        String 1    // description Randbetween
+        String 1	// description Randbetween
         {
             Text [ en-US ] = "Returns a random integer between the numbers you specify";
         };
 
-        String 2 // name of parameter 1         Randbetween
+        String 2 // name of parameter 1			Randbetween
         {
             Text [ en-US ] = "Bottom";
         };
 
-        String 3 // description of parameter 1  Randbetween
+        String 3 // description of parameter 1	Randbetween
         {
             Text [ en-US ] = "The smallest integer returned";
         };
 
-        String 4 // name of parameter 2         Randbetween
+        String 4 // name of parameter 2			Randbetween
         {
             Text [ en-US ] = "Top";
         };
 
-        String 5 // description of parameter 2  Randbetween
+        String 5 // description of parameter 2	Randbetween
         {
             Text [ en-US ] = "The largest integer returned";
         };
@@ -433,17 +435,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Gcd
     {
-        String 1    // description Gcd_add
+        String 1	// description Gcd_add
         {
             Text [ en-US ] = "Returns the greatest common divisor";
         };
 
-        String 2 // name of parameter 1         Gcd_add
+        String 2 // name of parameter 1			Gcd_add
         {
             Text [ en-US ] = "Number(s)";
         };
 
-        String 3 // description of parameter 1  Gcd_add
+        String 3 // description of parameter 1	Gcd_add
         {
             Text [ en-US ] = "Number or list of numbers";
         };
@@ -451,17 +453,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Lcm
     {
-        String 1    // description Lcm_add
+        String 1	// description Lcm_add
         {
             Text [ en-US ] = "Returns the least common multiple";
         };
 
-        String 2 // name of parameter 1         Lcm_add
+        String 2 // name of parameter 1			Lcm_add
         {
             Text [ en-US ] = "Number(s)";
         };
 
-        String 3 // description of parameter 1  Lcm_add
+        String 3 // description of parameter 1	Lcm_add
         {
             Text [ en-US ] = "Number or list of numbers";
         };
@@ -469,27 +471,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Besseli
     {
-        String 1    // description BesselI
+        String 1	// description BesselI
         {
             Text [ en-US ] = "Returns the modified Bessel function In(x)";
         };
 
-        String 2 // name of parameter 1         BesselI
+        String 2 // name of parameter 1			BesselI
         {
             Text [ en-US ] = "X";
         };
 
-        String 3 // description of parameter 1  BesselI
+        String 3 // description of parameter 1	BesselI
         {
             Text [ en-US ] = "The value at which the function is to be evaluated";
         };
 
-        String 4 // name of parameter 2         BesselI
+        String 4 // name of parameter 2			BesselI
         {
             Text [ en-US ] = "N";
         };
 
-        String 5 // description of parameter 2  BesselI
+        String 5 // description of parameter 2	BesselI
         {
             Text [ en-US ] = "The order of the Bessel function";
         };
@@ -497,27 +499,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Besselj
     {
-        String 1    // description BesselJ
+        String 1	// description BesselJ
         {
             Text [ en-US ] = "Returns the Bessel function Jn(x)";
         };
 
-        String 2 // name of parameter 1         BesselJ
+        String 2 // name of parameter 1			BesselJ
         {
             Text [ en-US ] = "X";
         };
 
-        String 3 // description of parameter 1  BesselJ
+        String 3 // description of parameter 1	BesselJ
         {
             Text [ en-US ] = "The value at which the function is to be evaluated";
         };
 
-        String 4 // name of parameter 2         BesselJ
+        String 4 // name of parameter 2			BesselJ
         {
             Text [ en-US ] = "N";
         };
 
-        String 5 // description of parameter 2  BesselJ
+        String 5 // description of parameter 2	BesselJ
         {
             Text [ en-US ] = "The order of the Bessel function";
         };
@@ -525,27 +527,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Besselk
     {
-        String 1    // description BesselK
+        String 1	// description BesselK
         {
             Text [ en-US ] = "Returns the Bessel function Kn(x)";
         };
 
-        String 2 // name of parameter 1         BesselK
+        String 2 // name of parameter 1			BesselK
         {
             Text [ en-US ] = "X";
         };
 
-        String 3 // description of parameter 1  BesselK
+        String 3 // description of parameter 1	BesselK
         {
             Text [ en-US ] = "The value at which the function is to be evaluated";
         };
 
-        String 4 // name of parameter 2         BesselK
+        String 4 // name of parameter 2			BesselK
         {
             Text [ en-US ] = "N";
         };
 
-        String 5 // description of parameter 2  BesselK
+        String 5 // description of parameter 2	BesselK
         {
             Text [ en-US ] = "The order of the Bessel function";
         };
@@ -553,27 +555,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Bessely
     {
-        String 1    // description BesselY
+        String 1	// description BesselY
         {
             Text [ en-US ] = "Returns the Bessel function Yn(x)";
         };
 
-        String 2 // name of parameter 1         BesselY
+        String 2 // name of parameter 1			BesselY
         {
             Text [ en-US ] = "X";
         };
 
-        String 3 // description of parameter 1  BesselY
+        String 3 // description of parameter 1	BesselY
         {
             Text [ en-US ] = "The value at which the function is to be evaluated";
         };
 
-        String 4 // name of parameter 2         BesselY
+        String 4 // name of parameter 2			BesselY
         {
             Text [ en-US ] = "N";
         };
 
-        String 5 // description of parameter 2  BesselY
+        String 5 // description of parameter 2	BesselY
         {
             Text [ en-US ] = "The order of the Bessel function";
         };
@@ -581,27 +583,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Bin2Oct
     {
-        String 1    // description Bin2Oct
+        String 1	// description Bin2Oct
         {
             Text [ en-US ] = "Converts a binary number to an octal number";
         };
 
-        String 2 // name of parameter 1         Bin2Oct
+        String 2 // name of parameter 1			Bin2Oct
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  Bin2Oct
+        String 3 // description of parameter 1	Bin2Oct
         {
             Text [ en-US ] = "The binary number to be converted (as text)";
         };
 
-        String 4 // name of parameter 2         Bin2Oct
+        String 4 // name of parameter 2			Bin2Oct
         {
             Text [ en-US ] = "Places";
         };
 
-        String 5 // description of parameter 2  Bin2Oct
+        String 5 // description of parameter 2	Bin2Oct
         {
             Text [ en-US ] = "Number of places used";
         };
@@ -609,17 +611,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Bin2Dec
     {
-        String 1    // description Bin2Dec
+        String 1	// description Bin2Dec
         {
             Text [ en-US ] = "Converts a binary number to a decimal number";
         };
 
-        String 2 // name of parameter 1         Bin2Dec
+        String 2 // name of parameter 1			Bin2Dec
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  Bin2Dec
+        String 3 // description of parameter 1	Bin2Dec
         {
             Text [ en-US ] = "The binary number to be converted (as text)";
         };
@@ -627,27 +629,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Bin2Hex
     {
-        String 1    // description Bin2Hex
+        String 1	// description Bin2Hex
         {
             Text [ en-US ] = "Converts a binary number to a hexadecimal number";
         };
 
-        String 2 // name of parameter 1         Bin2Hex
+        String 2 // name of parameter 1			Bin2Hex
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  Bin2Hex
+        String 3 // description of parameter 1	Bin2Hex
         {
             Text [ en-US ] = "The binary number to be converted (as text)";
         };
 
-        String 4 // name of parameter 2         Bin2Hex
+        String 4 // name of parameter 2			Bin2Hex
         {
             Text [ en-US ] = "Places";
         };
 
-        String 5 // description of parameter 2  Bin2Hex
+        String 5 // description of parameter 2	Bin2Hex
         {
             Text [ en-US ] = "Number of places used.";
         };
@@ -655,27 +657,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Oct2Bin
     {
-        String 1    // description Oct2Bin
+        String 1	// description Oct2Bin
         {
             Text [ en-US ] = "Converts an octal number to a binary number";
         };
 
-        String 2 // name of parameter 1         Oct2Bin
+        String 2 // name of parameter 1			Oct2Bin
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  Oct2Bin
+        String 3 // description of parameter 1	Oct2Bin
         {
             Text [ en-US ] = "The octal number to be converted (as text)";
         };
 
-        String 4 // name of parameter 2         Oct2Bin
+        String 4 // name of parameter 2			Oct2Bin
         {
             Text [ en-US ] = "Places";
         };
 
-        String 5 // description of parameter 2  Oct2Bin
+        String 5 // description of parameter 2	Oct2Bin
         {
             Text [ en-US ] = "Number of places used";
         };
@@ -683,17 +685,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Oct2Dec
     {
-        String 1    // description Oct2Dec
+        String 1	// description Oct2Dec
         {
             Text [ en-US ] = "Converts an octal number to a decimal number";
         };
 
-        String 2 // name of parameter 1         Oct2Dec
+        String 2 // name of parameter 1			Oct2Dec
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  Oct2Dec
+        String 3 // description of parameter 1	Oct2Dec
         {
             Text [ en-US ] = "The octal number to be converted (as text)";
         };
@@ -701,27 +703,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Oct2Hex
     {
-        String 1    // description Oct2Hex
+        String 1	// description Oct2Hex
         {
             Text [ en-US ] = "Converts an octal number to a hexadecimal number";
         };
 
-        String 2 // name of parameter 1         Oct2Hex
+        String 2 // name of parameter 1			Oct2Hex
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  Oct2Hex
+        String 3 // description of parameter 1	Oct2Hex
         {
             Text [ en-US ] = "The octal number to be converted (as text)";
         };
 
-        String 4 // name of parameter 2         Oct2Hex
+        String 4 // name of parameter 2			Oct2Hex
         {
             Text [ en-US ] = "Places";
         };
 
-        String 5 // description of parameter 2  Oct2Hex
+        String 5 // description of parameter 2	Oct2Hex
         {
             Text [ en-US ] = "Number of places used";
         };
@@ -729,27 +731,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Dec2Bin
     {
-        String 1    // description Dec2Bin
+        String 1	// description Dec2Bin
         {
             Text [ en-US ] = "Converts a decimal number to a binary number";
         };
 
-        String 2 // name of parameter 1         Dec2Bin
+        String 2 // name of parameter 1			Dec2Bin
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  Dec2Bin
+        String 3 // description of parameter 1	Dec2Bin
         {
             Text [ en-US ] = "The decimal integer to be converted";
         };
 
-        String 4 // name of parameter 2         Dec2Bin
+        String 4 // name of parameter 2			Dec2Bin
         {
             Text [ en-US ] = "Places";
         };
 
-        String 5 // description of parameter 2  Dec2Bin
+        String 5 // description of parameter 2	Dec2Bin
         {
             Text [ en-US ] = "Number of places used";
         };
@@ -757,27 +759,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Dec2Hex
     {
-        String 1    // description Dec2Hex
+        String 1	// description Dec2Hex
         {
             Text [ en-US ] = "Converts a decimal number to a hexadecimal number";
         };
 
-        String 2 // name of parameter 1         Dec2Hex
+        String 2 // name of parameter 1			Dec2Hex
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  Dec2Hex
+        String 3 // description of parameter 1	Dec2Hex
         {
             Text [ en-US ] = "The decimal integer to be converted";
         };
 
-        String 4 // name of parameter 2         Dec2Hex
+        String 4 // name of parameter 2			Dec2Hex
         {
             Text [ en-US ] = "Places";
         };
 
-        String 5 // description of parameter 2  Dec2Hex
+        String 5 // description of parameter 2	Dec2Hex
         {
             Text [ en-US ] = "Number of places used";
         };
@@ -785,27 +787,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Dec2Oct
     {
-        String 1    // description Dec2Oct
+        String 1	// description Dec2Oct
         {
             Text [ en-US ] = "Converts a decimal number into an octal number";
         };
 
-        String 2 // name of parameter 1         Dec2Oct
+        String 2 // name of parameter 1			Dec2Oct
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  Dec2Oct
+        String 3 // description of parameter 1	Dec2Oct
         {
             Text [ en-US ] = "The decimal number";
         };
 
-        String 4 // name of parameter 2         Dec2Oct
+        String 4 // name of parameter 2			Dec2Oct
         {
             Text [ en-US ] = "Places";
         };
 
-        String 5 // description of parameter 2  Dec2Oct
+        String 5 // description of parameter 2	Dec2Oct
         {
             Text [ en-US ] = "Number of places used";
         };
@@ -813,27 +815,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Hex2Bin
     {
-        String 1    // description Hex2Bin
+        String 1	// description Hex2Bin
         {
             Text [ en-US ] = "Converts a hexadecimal number to a binary number";
         };
 
-        String 2 // name of parameter 1         Hex2Bin
+        String 2 // name of parameter 1			Hex2Bin
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  Hex2Bin
+        String 3 // description of parameter 1	Hex2Bin
         {
             Text [ en-US ] = "The hexadecimal number to be converted (as text)";
         };
 
-        String 4 // name of parameter 2         Hex2Bin
+        String 4 // name of parameter 2			Hex2Bin
         {
             Text [ en-US ] = "Places";
         };
 
-        String 5 // description of parameter 2  Hex2Bin
+        String 5 // description of parameter 2	Hex2Bin
         {
             Text [ en-US ] = "Number of places used";
         };
@@ -841,17 +843,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Hex2Dec
     {
-        String 1    // description Hex2Dec
+        String 1	// description Hex2Dec
         {
             Text [ en-US ] = "Converts a hexadecimal number to a decimal number";
         };
 
-        String 2 // name of parameter 1         Hex2Dec
+        String 2 // name of parameter 1			Hex2Dec
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  Hex2Dec
+        String 3 // description of parameter 1	Hex2Dec
         {
             Text [ en-US ] = "The hexadecimal number to be converted (as text)";
         };
@@ -859,27 +861,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Hex2Oct
     {
-        String 1    // description Hex2Oct
+        String 1	// description Hex2Oct
         {
             Text [ en-US ] = "Converts a hexadecimal number to an octal number";
         };
 
-        String 2 // name of parameter 1         Hex2Oct
+        String 2 // name of parameter 1			Hex2Oct
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  Hex2Oct
+        String 3 // description of parameter 1	Hex2Oct
         {
             Text [ en-US ] = "The hexadecimal number to be converted (as text)";
         };
 
-        String 4 // name of parameter 2         Hex2Oct
+        String 4 // name of parameter 2			Hex2Oct
         {
             Text [ en-US ] = "Places";
         };
 
-        String 5 // description of parameter 2  Hex2Oct
+        String 5 // description of parameter 2	Hex2Oct
         {
             Text [ en-US ] = "Number of places used";
         };
@@ -887,27 +889,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Delta
     {
-        String 1    // description Delta
+        String 1	// description Delta
         {
             Text [ en-US ] = "Tests whether two values are equal";
         };
 
-        String 2 // name of parameter 1         Delta
+        String 2 // name of parameter 1			Delta
         {
             Text [ en-US ] = "Number 1";
         };
 
-        String 3 // description of parameter 1  Delta
+        String 3 // description of parameter 1	Delta
         {
             Text [ en-US ] = "The first number";
         };
 
-        String 4 // name of parameter 2         Delta
+        String 4 // name of parameter 2			Delta
         {
             Text [ en-US ] = "Number 2";
         };
 
-        String 5 // description of parameter 2  Delta
+        String 5 // description of parameter 2	Delta
         {
             Text [ en-US ] = "The second number";
         };
@@ -915,27 +917,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Erf
     {
-        String 1    // description Erf
+        String 1	// description Erf
         {
             Text [ en-US ] = "Returns the error function";
         };
 
-        String 2 // name of parameter 1         Erf
+        String 2 // name of parameter 1			Erf
         {
             Text [ en-US ] = "Lower limit";
         };
 
-        String 3 // description of parameter 1  Erf
+        String 3 // description of parameter 1	Erf
         {
             Text [ en-US ] = "The lower limit for integration";
         };
 
-        String 4 // name of parameter 2         Erf
+        String 4 // name of parameter 2			Erf
         {
             Text [ en-US ] = "Upper limit";
         };
 
-        String 5 // description of parameter 2  Erf
+        String 5 // description of parameter 2	Erf
         {
             Text [ en-US ] = "The upper limit for integration";
         };
@@ -943,17 +945,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Erfc
     {
-        String 1    // description Erfc
+        String 1	// description Erfc
         {
             Text [ en-US ] = "Returns the complementary error function";
         };
 
-        String 2 // name of parameter 1         Erfc
+        String 2 // name of parameter 1			Erfc
         {
             Text [ en-US ] = "Lower limit";
         };
 
-        String 3 // description of parameter 1  Erfc
+        String 3 // description of parameter 1	Erfc
         {
             Text [ en-US ] = "The lower limit for integration";
         };
@@ -961,27 +963,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Gestep
     {
-        String 1    // description GeStep
+        String 1	// description GeStep
         {
             Text [ en-US ] = "Tests whether a number is greater than a threshold value";
         };
 
-        String 2 // name of parameter 1         GeStep
+        String 2 // name of parameter 1			GeStep
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  GeStep
+        String 3 // description of parameter 1	GeStep
         {
             Text [ en-US ] = "The value to test against step";
         };
 
-        String 4 // name of parameter 2         GeStep
+        String 4 // name of parameter 2			GeStep
         {
             Text [ en-US ] = "Step";
         };
 
-        String 5 // description of parameter 2  GeStep
+        String 5 // description of parameter 2	GeStep
         {
             Text [ en-US ] = "The threshhold value";
         };
@@ -989,17 +991,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Factdouble
     {
-        String 1    // description Factdouble
+        String 1	// description Factdouble
         {
             Text [ en-US ] = "Returns the double factorial of Number";
         };
 
-        String 2 // name of parameter 1         Factdouble
+        String 2 // name of parameter 1			Factdouble
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  Factdouble
+        String 3 // description of parameter 1	Factdouble
         {
             Text [ en-US ] = "The number";
         };
@@ -1007,17 +1009,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Imabs
     {
-        String 1    // description Imabs
+        String 1	// description Imabs
         {
             Text [ en-US ] = "Returns the absolute value (modulus) of a complex number";
         };
 
-        String 2 // name of parameter 1         Imabs
+        String 2 // name of parameter 1			Imabs
         {
             Text [ en-US ] = "Complex number";
         };
 
-        String 3 // description of parameter 1  Imabs
+        String 3 // description of parameter 1	Imabs
         {
             Text [ en-US ] = "The complex number";
         };
@@ -1025,17 +1027,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Imaginary
     {
-        String 1    // description Imaginary
+        String 1	// description Imaginary
         {
             Text [ en-US ] = "Returns the imaginary coefficient of a complex number";
         };
 
-        String 2 // name of parameter 1         Imaginary
+        String 2 // name of parameter 1			Imaginary
         {
             Text [ en-US ] = "Complex number";
         };
 
-        String 3 // description of parameter 1  Imaginary
+        String 3 // description of parameter 1	Imaginary
         {
             Text [ en-US ] = "The complex number";
         };
@@ -1043,27 +1045,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Impower
     {
-        String 1    // description Impower
+        String 1	// description Impower
         {
             Text [ en-US ] = "Returns a complex number raised to an integer power";
         };
 
-        String 2 // name of parameter 1         Impower
+        String 2 // name of parameter 1			Impower
         {
             Text [ en-US ] = "Complex number";
         };
 
-        String 3 // description of parameter 1  Impower
+        String 3 // description of parameter 1	Impower
         {
             Text [ en-US ] = "The complex number";
         };
 
-        String 4 // name of parameter 2         Impower
+        String 4 // name of parameter 2			Impower
         {
             Text [ en-US ] = "Number";
         };
 
-        String 5 // description of parameter 2  Impower
+        String 5 // description of parameter 2	Impower
         {
             Text [ en-US ] = "Power to which the complex number is raised";
         };
@@ -1071,17 +1073,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Imargument
     {
-        String 1    // description Imargument
+        String 1	// description Imargument
         {
             Text [ en-US ] = "Returns the argument theta, an angle expressed in radians";
         };
 
-        String 2 // name of parameter 1         Imargument
+        String 2 // name of parameter 1			Imargument
         {
             Text [ en-US ] = "Complex number";
         };
 
-        String 3 // description of parameter 1  Imargument
+        String 3 // description of parameter 1	Imargument
         {
             Text [ en-US ] = "A complex number";
         };
@@ -1089,17 +1091,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Imcos
     {
-        String 1    // description Imcos
+        String 1	// description Imcos
         {
             Text [ en-US ] = "Returns the cosine of a complex number";
         };
 
-        String 2 // name of parameter 1         Imcos
+        String 2 // name of parameter 1			Imcos
         {
             Text [ en-US ] = "Complex number";
         };
 
-        String 3 // description of parameter 1  Imcos
+        String 3 // description of parameter 1	Imcos
         {
             Text [ en-US ] = "A complex number";
         };
@@ -1107,27 +1109,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Imdiv
     {
-        String 1    // description Imdiv
+        String 1	// description Imdiv
         {
             Text [ en-US ] = "Returns the quotient of two complex numbers";
         };
 
-        String 2 // name of parameter 1         Imdiv
+        String 2 // name of parameter 1			Imdiv
         {
             Text [ en-US ] = "Numerator";
         };
 
-        String 3 // description of parameter 1  Imdiv
+        String 3 // description of parameter 1	Imdiv
         {
             Text [ en-US ] = "The dividend";
         };
 
-        String 4 // name of parameter 2         Imdiv
+        String 4 // name of parameter 2			Imdiv
         {
             Text [ en-US ] = "Denominator";
         };
 
-        String 5 // description of parameter 2  Imdiv
+        String 5 // description of parameter 2	Imdiv
         {
             Text [ en-US ] = "The divisor";
         };
@@ -1135,17 +1137,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Imexp
     {
-        String 1    // description Imexp
+        String 1	// description Imexp
         {
             Text [ en-US ] = "Returns the algebraic form of the exponential of a complex number";
         };
 
-        String 2 // name of parameter 1         Imexp
+        String 2 // name of parameter 1			Imexp
         {
             Text [ en-US ] = "Complex number";
         };
 
-        String 3 // description of parameter 1  Imexp
+        String 3 // description of parameter 1	Imexp
         {
             Text [ en-US ] = "The complex number";
         };
@@ -1153,17 +1155,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Imconjugate
     {
-        String 1    // description Imconjugate
+        String 1	// description Imconjugate
         {
             Text [ en-US ] = "Returns the complex conjugate of a complex number";
         };
 
-        String 2 // name of parameter 1         Imconjugate
+        String 2 // name of parameter 1			Imconjugate
         {
             Text [ en-US ] = "Complex number";
         };
 
-        String 3 // description of parameter 1  Imconjugate
+        String 3 // description of parameter 1	Imconjugate
         {
             Text [ en-US ] = "The complex number";
         };
@@ -1171,17 +1173,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Imln
     {
-        String 1    // description Imln
+        String 1	// description Imln
         {
             Text [ en-US ] = "Returns the natural logarithm of a complex number";
         };
 
-        String 2 // name of parameter 1         Imln
+        String 2 // name of parameter 1			Imln
         {
             Text [ en-US ] = "Complex number";
         };
 
-        String 3 // description of parameter 1  Imln
+        String 3 // description of parameter 1	Imln
         {
             Text [ en-US ] = "The complex number";
         };
@@ -1189,17 +1191,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Imlog10
     {
-        String 1    // description Imlog10
+        String 1	// description Imlog10
         {
             Text [ en-US ] = "Returns the base-10 logarithm of a complex number";
         };
 
-        String 2 // name of parameter 1         Imlog10
+        String 2 // name of parameter 1			Imlog10
         {
             Text [ en-US ] = "Complex number";
         };
 
-        String 3 // description of parameter 1  Imlog10
+        String 3 // description of parameter 1	Imlog10
         {
             Text [ en-US ] = "The complex number";
         };
@@ -1207,17 +1209,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Imlog2
     {
-        String 1    // description Imlog2
+        String 1	// description Imlog2
         {
             Text [ en-US ] = "Returns the base-2 logarithm of a complex number";
         };
 
-        String 2 // name of parameter 1         Imlog2
+        String 2 // name of parameter 1			Imlog2
         {
             Text [ en-US ] = "Complex number";
         };
 
-        String 3 // description of parameter 1  Imlog2
+        String 3 // description of parameter 1	Imlog2
         {
             Text [ en-US ] = "The complex number";
         };
@@ -1225,27 +1227,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Improduct
     {
-        String 1    // description Improduct
+        String 1	// description Improduct
         {
             Text [ en-US ] = "Returns the product of several complex numbers";
         };
 
-        String 2 // name of parameter 1         Improduct
+        String 2 // name of parameter 1			Improduct
         {
             Text [ en-US ] = "Complex number";
         };
 
-        String 3 // description of parameter 1  Improduct
+        String 3 // description of parameter 1	Improduct
         {
             Text [ en-US ] = "The first complex number";
         };
 
-        String 4 // name of parameter 2         Improduct
+        String 4 // name of parameter 2			Improduct
         {
             Text [ en-US ] = "Complex number";
         };
 
-        String 5 // description of parameter 2  Improduct
+        String 5 // description of parameter 2	Improduct
         {
             Text [ en-US ] = "Another complex number";
         };
@@ -1253,17 +1255,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Imreal
     {
-        String 1    // description Imreal
+        String 1	// description Imreal
         {
             Text [ en-US ] = "Returns the real coefficient of a complex number";
         };
 
-        String 2 // name of parameter 1         Imreal
+        String 2 // name of parameter 1			Imreal
         {
             Text [ en-US ] = "Complex number";
         };
 
-        String 3 // description of parameter 1  Imreal
+        String 3 // description of parameter 1	Imreal
         {
             Text [ en-US ] = "The complex number";
         };
@@ -1271,17 +1273,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Imsin
     {
-        String 1    // description Imsin
+        String 1	// description Imsin
         {
             Text [ en-US ] = "Returns the sine of a complex number";
         };
 
-        String 2 // name of parameter 1         Imsin
+        String 2 // name of parameter 1			Imsin
         {
             Text [ en-US ] = "Complex number";
         };
 
-        String 3 // description of parameter 1  Imsin
+        String 3 // description of parameter 1	Imsin
         {
             Text [ en-US ] = "The complex number";
         };
@@ -1289,27 +1291,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Imsub
     {
-        String 1    // description Imsub
+        String 1	// description Imsub
         {
             Text [ en-US ] = "Returns the difference of two complex numbers";
         };
 
-        String 2 // name of parameter 1         Imsub
+        String 2 // name of parameter 1			Imsub
         {
             Text [ en-US ] = "Complex number 1";
         };
 
-        String 3 // description of parameter 1  Imsub
+        String 3 // description of parameter 1	Imsub
         {
             Text [ en-US ] = "Complex number 1";
         };
 
-        String 4 // name of parameter 2         Imsub
+        String 4 // name of parameter 2			Imsub
         {
             Text [ en-US ] = "Complex number 2";
         };
 
-        String 5 // description of parameter 2  Imsub
+        String 5 // description of parameter 2	Imsub
         {
             Text [ en-US ] = "Complex number 2";
         };
@@ -1317,17 +1319,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Imsqrt
     {
-        String 1    // description Imsqrt
+        String 1	// description Imsqrt
         {
             Text [ en-US ] = "Returns the square root of a complex number";
         };
 
-        String 2 // name of parameter 1         Imsqrt
+        String 2 // name of parameter 1			Imsqrt
         {
             Text [ en-US ] = "Complex number";
         };
 
-        String 3 // description of parameter 1  Imsqrt
+        String 3 // description of parameter 1	Imsqrt
         {
             Text [ en-US ] = "The complex number";
         };
@@ -1335,17 +1337,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Imsum
     {
-        String 1    // description Imsum
+        String 1	// description Imsum
         {
             Text [ en-US ] = "Returns the sum of complex numbers";
         };
 
-        String 2 // name of parameter 1         Imsum
+        String 2 // name of parameter 1			Imsum
         {
             Text [ en-US ] = "Complex number";
         };
 
-        String 3 // description of parameter 1  Imsum
+        String 3 // description of parameter 1	Imsum
         {
             Text [ en-US ] = "The complex number";
         };
@@ -1354,37 +1356,37 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Complex
     {
-        String 1    // description Complex
+        String 1	// description Complex
         {
             Text [ en-US ] = "Converts real and imaginary coefficients into a complex number";
         };
 
-        String 2 // name of parameter 1         Complex
+        String 2 // name of parameter 1			Complex
         {
             Text [ en-US ] = "Real num";
         };
 
-        String 3 // description of parameter 1  Complex
+        String 3 // description of parameter 1	Complex
         {
             Text [ en-US ] = "The real coefficient";
         };
 
-        String 4 // name of parameter 2         Complex
+        String 4 // name of parameter 2			Complex
         {
             Text [ en-US ] = "I num";
         };
 
-        String 5 // description of parameter 2  Complex
+        String 5 // description of parameter 2	Complex
         {
             Text [ en-US ] = "The imaginary coefficient";
         };
 
-        String 6 // name of parameter 3         Complex
+        String 6 // name of parameter 3			Complex
         {
             Text [ en-US ] = "Suffix";
         };
 
-        String 7 // description of parameter 3  Complex
+        String 7 // description of parameter 3	Complex
         {
             Text [ en-US ] = "The suffix";
         };
@@ -1392,37 +1394,37 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Convert
     {
-        String 1    // description Convert_add
+        String 1	// description Convert_add
         {
             Text [ en-US ] = "Converts a number from one measurement system to another";
         };
 
-        String 2 // name of parameter 1         Convert_add
+        String 2 // name of parameter 1			Convert_add
         {
             Text [ en-US ] = "Number";
         };
 
-        String 3 // description of parameter 1  Convert_add
+        String 3 // description of parameter 1	Convert_add
         {
             Text [ en-US ] = "The number";
         };
 
-        String 4 // name of parameter 2         Convert_add
+        String 4 // name of parameter 2			Convert_add
         {
             Text [ en-US ] = "From unit";
         };
 
-        String 5 // description of parameter 2  Convert_add
+        String 5 // description of parameter 2	Convert_add
         {
             Text [ en-US ] = "Unit of measure for number";
         };
 
-        String 6 // name of parameter 3         Convert_add
+        String 6 // name of parameter 3			Convert_add
         {
             Text [ en-US ] = "To unit";
         };
 
-        String 7 // description of parameter 3  Convert_add
+        String 7 // description of parameter 3	Convert_add
         {
             Text [ en-US ] = "Unit of measure for the result";
         };
@@ -1430,77 +1432,77 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Amordegrc
     {
-        String 1    // description Amordegrc
+        String 1	// description Amordegrc
         {
             Text [ en-US ] = "Returns the prorated linear depreciation of an asset for each accounting period";
         };
 
-        String 2 // name of parameter 1         Amordegrc
+        String 2 // name of parameter 1			Amordegrc
         {
             Text [ en-US ] = "Cost";
         };
 
-        String 3 // description of parameter 1  Amordegrc
+        String 3 // description of parameter 1	Amordegrc
         {
             Text [ en-US ] = "Cost of the asset";
         };
 
-        String 4 // name of parameter 2         Amordegrc
+        String 4 // name of parameter 2			Amordegrc
         {
             Text [ en-US ] = "Date purchased";
         };
 
-        String 5 // description of parameter 2  Amordegrc
+        String 5 // description of parameter 2	Amordegrc
         {
             Text [ en-US ] = "Purchase date of the asset";
         };
 
-        String 6 // name of parameter 3         Amordegrc
+        String 6 // name of parameter 3			Amordegrc
         {
             Text [ en-US ] = "First period";
         };
 
-        String 7 // description of parameter 3  Amordegrc
+        String 7 // description of parameter 3	Amordegrc
         {
             Text [ en-US ] = "Date the first period ends";
         };
 
-        String 8 // name of parameter 4         Amordegrc
+        String 8 // name of parameter 4			Amordegrc
         {
             Text [ en-US ] = "Salvage";
         };
 
-        String 9 // description of parameter 4  Amordegrc
+        String 9 // description of parameter 4	Amordegrc
         {
             Text [ en-US ] = "Salvage value of an asset at the end of its life";
         };
 
-        String 10 // name of parameter 5        Amordegrc
+        String 10 // name of parameter 5		Amordegrc
         {
             Text [ en-US ] = "Period";
         };
 
-        String 11 // description of parameter 5 Amordegrc
+        String 11 // description of parameter 5	Amordegrc
         {
             Text [ en-US ] = "The period";
         };
 
-        String 12 // name of parameter 6        Amordegrc
+        String 12 // name of parameter 6		Amordegrc
         {
             Text [ en-US ] = "Rate";
         };
 
-        String 13 // description of parameter 6 Amordegrc
+        String 13 // description of parameter 6	Amordegrc
         {
             Text [ en-US ] = "The rate of depreciation";
         };
 
-        String 14 // name of parameter 7        Amordegrc
+        String 14 // name of parameter 7		Amordegrc
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 15 // description of parameter 7 Amordegrc
+        String 15 // description of parameter 7	Amordegrc
         {
             Text [ en-US ] = "The year basis to be used";
         };
@@ -1508,77 +1510,77 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Amorlinc
     {
-        String 1    // description Amorlinc
+        String 1	// description Amorlinc
         {
             Text [ en-US ] = "Returns the prorated linear depreciation of an asset for each accounting period";
         };
 
-        String 2 // name of parameter 1         Amorlinc
+        String 2 // name of parameter 1			Amorlinc
         {
             Text [ en-US ] = "Cost";
         };
 
-        String 3 // description of parameter 1  Amorlinc
+        String 3 // description of parameter 1	Amorlinc
         {
             Text [ en-US ] = "Cost of the asset";
         };
 
-        String 4 // name of parameter 2         Amorlinc
+        String 4 // name of parameter 2			Amorlinc
         {
             Text [ en-US ] = "Date purchased";
         };
 
-        String 5 // description of parameter 2  Amorlinc
+        String 5 // description of parameter 2	Amorlinc
         {
             Text [ en-US ] = "Purchase date of the asset";
         };
 
-        String 6 // name of parameter 3         Amorlinc
+        String 6 // name of parameter 3			Amorlinc
         {
             Text [ en-US ] = "First period";
         };
 
-        String 7 // description of parameter 3  Amorlinc
+        String 7 // description of parameter 3	Amorlinc
         {
             Text [ en-US ] = "The date the first period ends";
         };
 
-        String 8 // name of parameter 4         Amorlinc
+        String 8 // name of parameter 4			Amorlinc
         {
             Text [ en-US ] = "Salvage";
         };
 
-        String 9 // description of parameter 4  Amorlinc
+        String 9 // description of parameter 4	Amorlinc
         {
             Text [ en-US ] = "The salvage value of an asset at the end of its life";
         };
 
-        String 10 // name of parameter 5        Amorlinc
+        String 10 // name of parameter 5		Amorlinc
         {
             Text [ en-US ] = "Period";
         };
 
-        String 11 // description of parameter 5 Amorlinc
+        String 11 // description of parameter 5	Amorlinc
         {
             Text [ en-US ] = "The period";
         };
 
-        String 12 // name of parameter 6        Amorlinc
+        String 12 // name of parameter 6		Amorlinc
         {
             Text [ en-US ] = "Rate";
         };
 
-        String 13 // description of parameter 6 Amorlinc
+        String 13 // description of parameter 6	Amorlinc
         {
             Text [ en-US ] = "The rate of depreciation";
         };
 
-        String 14 // name of parameter 7        Amorlinc
+        String 14 // name of parameter 7		Amorlinc
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 15 // description of parameter 7 Amorlinc
+        String 15 // description of parameter 7	Amorlinc
         {
             Text [ en-US ] = "The year basis to be used";
         };
@@ -1586,77 +1588,77 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Accrint
     {
-        String 1    // description Accrint
+        String 1	// description Accrint
         {
             Text [ en-US ] = "Returns the accrued interest for a security that pays periodic interest";
         };
 
-        String 2 // name of parameter 1         Accrint
+        String 2 // name of parameter 1			Accrint
         {
             Text [ en-US ] = "Issue";
         };
 
-        String 3 // description of parameter 1  Accrint
+        String 3 // description of parameter 1	Accrint
         {
             Text [ en-US ] = "Issue date of the security";
         };
 
-        String 4 // name of parameter 2         Accrint
+        String 4 // name of parameter 2			Accrint
         {
             Text [ en-US ] = "First interest";
         };
 
-        String 5 // description of parameter 2  Accrint
+        String 5 // description of parameter 2	Accrint
         {
             Text [ en-US ] = "First interest date of the security";
         };
 
-        String 6 // name of parameter 3         Accrint
+        String 6 // name of parameter 3			Accrint
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 7 // description of parameter 3  Accrint
+        String 7 // description of parameter 3	Accrint
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 8 // name of parameter 4         Accrint
+        String 8 // name of parameter 4			Accrint
         {
             Text [ en-US ] = "Rate";
         };
 
-        String 9 // description of parameter 4  Accrint
+        String 9 // description of parameter 4	Accrint
         {
             Text [ en-US ] = "The rate";
         };
 
-        String 10 // name of parameter 5        Accrint
+        String 10 // name of parameter 5		Accrint
         {
             Text [ en-US ] = "Par";
         };
 
-        String 11 // description of parameter 5 Accrint
+        String 11 // description of parameter 5	Accrint
         {
             Text [ en-US ] = "The par value";
         };
 
-        String 12 // name of parameter 6        Accrint
+        String 12 // name of parameter 6		Accrint
         {
             Text [ en-US ] = "Frequency";
         };
 
-        String 13 // description of parameter 6 Accrint
+        String 13 // description of parameter 6	Accrint
         {
             Text [ en-US ] = "The frequency";
         };
 
-        String 14 // name of parameter 7        Accrint
+        String 14 // name of parameter 7		Accrint
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 15 // description of parameter 7 Accrint
+        String 15 // description of parameter 7	Accrint
         {
             Text [ en-US ] = "The basis";
         };
@@ -1664,57 +1666,57 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Accrintm
     {
-        String 1    // description Accrintm
+        String 1	// description Accrintm
         {
             Text [ en-US ] = "Returns the accrued interest for a security that pays interest at maturity";
         };
 
-        String 2 // name of parameter 1         Accrintm
+        String 2 // name of parameter 1			Accrintm
         {
             Text [ en-US ] = "Issue";
         };
 
-        String 3 // description of parameter 1  Accrintm
+        String 3 // description of parameter 1	Accrintm
         {
             Text [ en-US ] = "The issue date";
         };
 
-        String 4 // name of parameter 2         Accrintm
+        String 4 // name of parameter 2			Accrintm
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 5 // description of parameter 2  Accrintm
+        String 5 // description of parameter 2	Accrintm
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 6 // name of parameter 3         Accrintm
+        String 6 // name of parameter 3			Accrintm
         {
             Text [ en-US ] = "Rate";
         };
 
-        String 7 // description of parameter 3  Accrintm
+        String 7 // description of parameter 3	Accrintm
         {
             Text [ en-US ] = "The rate";
         };
 
-        String 8 // name of parameter 4         Accrintm
+        String 8 // name of parameter 4			Accrintm
         {
             Text [ en-US ] = "Par";
         };
 
-        String 9 // description of parameter 4  Accrintm
+        String 9 // description of parameter 4	Accrintm
         {
             Text [ en-US ] = "The par value";
         };
 
-        String 10 // name of parameter 5        Accrintm
+        String 10 // name of parameter 5		Accrintm
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 11 // description of parameter 5 Accrintm
+        String 11 // description of parameter 5	Accrintm
         {
             Text [ en-US ] = "The basis";
         };
@@ -1722,57 +1724,57 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Received
     {
-        String 1    // description Received
+        String 1	// description Received
         {
             Text [ en-US ] = "Returns the amount paid out at maturity for a fully invested security";
         };
 
-        String 2 // name of parameter 1         Received
+        String 2 // name of parameter 1			Received
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Received
+        String 3 // description of parameter 1	Received
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Received
+        String 4 // name of parameter 2			Received
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Received
+        String 5 // description of parameter 2	Received
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Received
+        String 6 // name of parameter 3			Received
         {
             Text [ en-US ] = "Investment";
         };
 
-        String 7 // description of parameter 3  Received
+        String 7 // description of parameter 3	Received
         {
             Text [ en-US ] = "The investment";
         };
 
-        String 8 // name of parameter 4         Received
+        String 8 // name of parameter 4			Received
         {
             Text [ en-US ] = "Discount";
         };
 
-        String 9 // description of parameter 4  Received
+        String 9 // description of parameter 4	Received
         {
             Text [ en-US ] = "The discount";
         };
 
-        String 10 // name of parameter 5        Received
+        String 10 // name of parameter 5		Received
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 11 // description of parameter 5 Received
+        String 11 // description of parameter 5	Received
         {
             Text [ en-US ] = "The basis";
         };
@@ -1780,57 +1782,57 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Disc
     {
-        String 1    // description Disc
+        String 1	// description Disc
         {
             Text [ en-US ] = "Returns the discount rate for a security";
         };
 
-        String 2 // name of parameter 1         Disc
+        String 2 // name of parameter 1			Disc
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Disc
+        String 3 // description of parameter 1	Disc
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Disc
+        String 4 // name of parameter 2			Disc
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Disc
+        String 5 // description of parameter 2	Disc
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Disc
+        String 6 // name of parameter 3			Disc
         {
             Text [ en-US ] = "Price";
         };
 
-        String 7 // description of parameter 3  Disc
+        String 7 // description of parameter 3	Disc
         {
             Text [ en-US ] = "The price";
         };
 
-        String 8 // name of parameter 4         Disc
+        String 8 // name of parameter 4			Disc
         {
             Text [ en-US ] = "Redemption";
         };
 
-        String 9 // description of parameter 4  Disc
+        String 9 // description of parameter 4	Disc
         {
             Text [ en-US ] = "The redemption value";
         };
 
-        String 10 // name of parameter 5        Disc
+        String 10 // name of parameter 5		Disc
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 11 // description of parameter 5 Disc
+        String 11 // description of parameter 5	Disc
         {
             Text [ en-US ] = "The basis";
         };
@@ -1838,67 +1840,67 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Duration
     {
-        String 1    // description Duration
+        String 1	// description Duration
         {
             Text [ en-US ] = "Returns the annual Macaulay duration of a security with periodic interest payments";
         };
 
-        String 2 // name of parameter 1         Duration
+        String 2 // name of parameter 1			Duration
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Duration
+        String 3 // description of parameter 1	Duration
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Duration
+        String 4 // name of parameter 2			Duration
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Duration
+        String 5 // description of parameter 2	Duration
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Duration
+        String 6 // name of parameter 3			Duration
         {
             Text [ en-US ] = "Coupon";
         };
 
-        String 7 // description of parameter 3  Duration
+        String 7 // description of parameter 3	Duration
         {
             Text [ en-US ] = "The coupon rate";
         };
 
-        String 8 // name of parameter 4         Duration
+        String 8 // name of parameter 4			Duration
         {
             Text [ en-US ] = "Yield";
         };
 
-        String 9 // description of parameter 4  Duration
+        String 9 // description of parameter 4	Duration
         {
             Text [ en-US ] = "The yield";
         };
 
-        String 10 // name of parameter 5        Duration
+        String 10 // name of parameter 5		Duration
         {
             Text [ en-US ] = "Frequency";
         };
 
-        String 11 // description of parameter 5 Duration
+        String 11 // description of parameter 5	Duration
         {
             Text [ en-US ] = "The frequency";
         };
 
-        String 12 // name of parameter 6        Duration
+        String 12 // name of parameter 6		Duration
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 13 // description of parameter 6 Duration
+        String 13 // description of parameter 6	Duration
         {
             Text [ en-US ] = "The basis";
         };
@@ -1906,27 +1908,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Effect
     {
-        String 1    // description Effect_add
+        String 1	// description Effect_add
         {
             Text [ en-US ] = "Returns the effective annual interest rate";
         };
 
-        String 2 // name of parameter 1         Effect_add
+        String 2 // name of parameter 1			Effect_add
         {
             Text [ en-US ] = "Nominal rate";
         };
 
-        String 3 // description of parameter 1  Effect_add
+        String 3 // description of parameter 1	Effect_add
         {
             Text [ en-US ] = "The nominal rate";
         };
 
-        String 4 // name of parameter 2         Effect_add
+        String 4 // name of parameter 2			Effect_add
         {
             Text [ en-US ] = "Npery";
         };
 
-        String 5 // description of parameter 2  Effect_add
+        String 5 // description of parameter 2	Effect_add
         {
             Text [ en-US ] = "The periods";
         };
@@ -1934,67 +1936,67 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Cumprinc
     {
-        String 1    // description Cumprinc_add
+        String 1	// description Cumprinc_add
         {
             Text [ en-US ] = "Returns the cumulative principal on a loan to be paid between two periods";
         };
 
-        String 2 // name of parameter 1         Cumprinc_add
+        String 2 // name of parameter 1			Cumprinc_add
         {
             Text [ en-US ] = "Rate";
         };
 
-        String 3 // description of parameter 1  Cumprinc_add
+        String 3 // description of parameter 1	Cumprinc_add
         {
             Text [ en-US ] = "The rate";
         };
 
-        String 4 // name of parameter 2         Cumprinc_add
+        String 4 // name of parameter 2			Cumprinc_add
         {
             Text [ en-US ] = "Nper";
         };
 
-        String 5 // description of parameter 2  Cumprinc_add
+        String 5 // description of parameter 2	Cumprinc_add
         {
             Text [ en-US ] = "Number of payment periods";
         };
 
-        String 6 // name of parameter 3         Cumprinc_add
+        String 6 // name of parameter 3			Cumprinc_add
         {
             Text [ en-US ] = "Pv";
         };
 
-        String 7 // description of parameter 3  Cumprinc_add
+        String 7 // description of parameter 3	Cumprinc_add
         {
             Text [ en-US ] = "The present value";
         };
 
-        String 8 // name of parameter 4         Cumprinc_add
+        String 8 // name of parameter 4			Cumprinc_add
         {
             Text [ en-US ] = "Start period";
         };
 
-        String 9 // description of parameter 4  Cumprinc_add
+        String 9 // description of parameter 4	Cumprinc_add
         {
             Text [ en-US ] = "The start period";
         };
 
-        String 10 // name of parameter 5        Cumprinc_add
+        String 10 // name of parameter 5		Cumprinc_add
         {
             Text [ en-US ] = "End period";
         };
 
-        String 11 // description of parameter 5 Cumprinc_add
+        String 11 // description of parameter 5	Cumprinc_add
         {
             Text [ en-US ] = "The end period";
         };
 
-        String 12 // name of parameter 6        Cumprinc_add
+        String 12 // name of parameter 6		Cumprinc_add
         {
             Text [ en-US ] = "Type";
         };
 
-        String 13 // description of parameter 6 Cumprinc_add
+        String 13 // description of parameter 6	Cumprinc_add
         {
             Text [ en-US ] = "The type of maturity";
         };
@@ -2002,67 +2004,67 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Cumipmt
     {
-        String 1    // description Cumipmt_add
+        String 1	// description Cumipmt_add
         {
             Text [ en-US ] = "Returns the cumulative interest to be paid between two periods";
         };
 
-        String 2 // name of parameter 1         Cumipmt_add
+        String 2 // name of parameter 1			Cumipmt_add
         {
             Text [ en-US ] = "Rate";
         };
 
-        String 3 // description of parameter 1  Cumipmt_add
+        String 3 // description of parameter 1	Cumipmt_add
         {
             Text [ en-US ] = "The rate";
         };
 
-        String 4 // name of parameter 2         Cumipmt_add
+        String 4 // name of parameter 2			Cumipmt_add
         {
             Text [ en-US ] = "Nper";
         };
 
-        String 5 // description of parameter 2  Cumipmt_add
+        String 5 // description of parameter 2	Cumipmt_add
         {
             Text [ en-US ] = "Number of payment periods";
         };
 
-        String 6 // name of parameter 3         Cumipmt_add
+        String 6 // name of parameter 3			Cumipmt_add
         {
             Text [ en-US ] = "Pv";
         };
 
-        String 7 // description of parameter 3  Cumipmt_add
+        String 7 // description of parameter 3	Cumipmt_add
         {
             Text [ en-US ] = "The present value";
         };
 
-        String 8 // name of parameter 4         Cumipmt_add
+        String 8 // name of parameter 4			Cumipmt_add
         {
             Text [ en-US ] = "Start period";
         };
 
-        String 9 // description of parameter 4  Cumipmt_add
+        String 9 // description of parameter 4	Cumipmt_add
         {
             Text [ en-US ] = "The start period";
         };
 
-        String 10 // name of parameter 5        Cumipmt_add
+        String 10 // name of parameter 5		Cumipmt_add
         {
             Text [ en-US ] = "End period";
         };
 
-        String 11 // description of parameter 5 Cumipmt_add
+        String 11 // description of parameter 5	Cumipmt_add
         {
             Text [ en-US ] = "The end period";
         };
 
-        String 12 // name of parameter 6        Cumipmt_add
+        String 12 // name of parameter 6		Cumipmt_add
         {
             Text [ en-US ] = "Type";
         };
 
-        String 13 // description of parameter 6 Cumipmt_add
+        String 13 // description of parameter 6	Cumipmt_add
         {
             Text [ en-US ] = "The type of maturity";
         };
@@ -2070,77 +2072,77 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Price
     {
-        String 1    // description Price
+        String 1	// description Price
         {
             Text [ en-US ] = "Returns the price per 100 currency units face value of a security that pays periodic interest";
         };
 
-        String 2 // name of parameter 1         Price
+        String 2 // name of parameter 1			Price
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Price
+        String 3 // description of parameter 1	Price
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Price
+        String 4 // name of parameter 2			Price
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Price
+        String 5 // description of parameter 2	Price
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Price
+        String 6 // name of parameter 3			Price
         {
             Text [ en-US ] = "Rate";
         };
 
-        String 7 // description of parameter 3  Price
+        String 7 // description of parameter 3	Price
         {
             Text [ en-US ] = "The rate";
         };
 
-        String 8 // name of parameter 4         Price
+        String 8 // name of parameter 4			Price
         {
             Text [ en-US ] = "Yield";
         };
 
-        String 9 // description of parameter 4  Price
+        String 9 // description of parameter 4	Price
         {
             Text [ en-US ] = "The yield";
         };
 
-        String 10 // name of parameter 5        Price
+        String 10 // name of parameter 5		Price
         {
             Text [ en-US ] = "Redemption";
         };
 
-        String 11 // description of parameter 5 Price
+        String 11 // description of parameter 5	Price
         {
             Text [ en-US ] = "The redemption value";
         };
 
-        String 12 // name of parameter 6        Price
+        String 12 // name of parameter 6		Price
         {
             Text [ en-US ] = "Frequency";
         };
 
-        String 13 // description of parameter 6 Price
+        String 13 // description of parameter 6	Price
         {
             Text [ en-US ] = "The frequency";
         };
 
-        String 14 // name of parameter 7        Price
+        String 14 // name of parameter 7		Price
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 15 // description of parameter 7 Price
+        String 15 // description of parameter 7	Price
         {
             Text [ en-US ] = "The basis";
         };
@@ -2148,57 +2150,57 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Pricedisc
     {
-        String 1    // description Pricedisc
+        String 1	// description Pricedisc
         {
             Text [ en-US ] = "Returns the price per 100 currency units face value of a discounted security";
         };
 
-        String 2 // name of parameter 1         Pricedisc
+        String 2 // name of parameter 1			Pricedisc
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Pricedisc
+        String 3 // description of parameter 1	Pricedisc
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Pricedisc
+        String 4 // name of parameter 2			Pricedisc
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Pricedisc
+        String 5 // description of parameter 2	Pricedisc
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Pricedisc
+        String 6 // name of parameter 3			Pricedisc
         {
             Text [ en-US ] = "Discount";
         };
 
-        String 7 // description of parameter 3  Pricedisc
+        String 7 // description of parameter 3	Pricedisc
         {
             Text [ en-US ] = "The discount";
         };
 
-        String 8 // name of parameter 4         Pricedisc
+        String 8 // name of parameter 4			Pricedisc
         {
             Text [ en-US ] = "Redemption";
         };
 
-        String 9 // description of parameter 4  Pricedisc
+        String 9 // description of parameter 4	Pricedisc
         {
             Text [ en-US ] = "The redemption value";
         };
 
-        String 10 // name of parameter 5        Pricedisc
+        String 10 // name of parameter 5		Pricedisc
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 11 // description of parameter 5 Pricedisc
+        String 11 // description of parameter 5	Pricedisc
         {
             Text [ en-US ] = "The basis";
         };
@@ -2206,67 +2208,67 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Pricemat
     {
-        String 1    // description Pricemat
+        String 1	// description Pricemat
         {
             Text [ en-US ] = "Returns the price per 100 currency units face value of a security that pays interest at maturity";
         };
 
-        String 2 // name of parameter 1         Pricemat
+        String 2 // name of parameter 1			Pricemat
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Pricemat
+        String 3 // description of parameter 1	Pricemat
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Pricemat
+        String 4 // name of parameter 2			Pricemat
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Pricemat
+        String 5 // description of parameter 2	Pricemat
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Pricemat
+        String 6 // name of parameter 3			Pricemat
         {
             Text [ en-US ] = "Issue";
         };
 
-        String 7 // description of parameter 3  Pricemat
+        String 7 // description of parameter 3	Pricemat
         {
             Text [ en-US ] = "The issue date";
         };
 
-        String 8 // name of parameter 4         Pricemat
+        String 8 // name of parameter 4			Pricemat
         {
             Text [ en-US ] = "Rate";
         };
 
-        String 9 // description of parameter 4  Pricemat
+        String 9 // description of parameter 4	Pricemat
         {
             Text [ en-US ] = "The rate";
         };
 
-        String 10 // name of parameter 5        Pricemat
+        String 10 // name of parameter 5		Pricemat
         {
             Text [ en-US ] = "Yield";
         };
 
-        String 11 // description of parameter 5 Pricemat
+        String 11 // description of parameter 5	Pricemat
         {
             Text [ en-US ] = "The yield";
         };
 
-        String 12 // name of parameter 6        Pricemat
+        String 12 // name of parameter 6		Pricemat
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 13 // description of parameter 6 Pricemat
+        String 13 // description of parameter 6	Pricemat
         {
             Text [ en-US ] = "The basis";
         };
@@ -2274,67 +2276,67 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Mduration
     {
-        String 1    // description Mduration
+        String 1	// description Mduration
         {
             Text [ en-US ] = "Returns the Macaulay modified duration for a security with an assumed par value of 100 currency units";
         };
 
-        String 2 // name of parameter 1         Mduration
+        String 2 // name of parameter 1			Mduration
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Mduration
+        String 3 // description of parameter 1	Mduration
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Mduration
+        String 4 // name of parameter 2			Mduration
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Mduration
+        String 5 // description of parameter 2	Mduration
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Mduration
+        String 6 // name of parameter 3			Mduration
         {
             Text [ en-US ] = "Coupon";
         };
 
-        String 7 // description of parameter 3  Mduration
+        String 7 // description of parameter 3	Mduration
         {
             Text [ en-US ] = "The coupon rate";
         };
 
-        String 8 // name of parameter 4         Mduration
+        String 8 // name of parameter 4			Mduration
         {
             Text [ en-US ] = "Yield";
         };
 
-        String 9 // description of parameter 4  Mduration
+        String 9 // description of parameter 4	Mduration
         {
             Text [ en-US ] = "The yield";
         };
 
-        String 10 // name of parameter 5        Mduration
+        String 10 // name of parameter 5		Mduration
         {
             Text [ en-US ] = "Frequency";
         };
 
-        String 11 // description of parameter 5 Mduration
+        String 11 // description of parameter 5	Mduration
         {
             Text [ en-US ] = "The frequency";
         };
 
-        String 12 // name of parameter 6        Mduration
+        String 12 // name of parameter 6		Mduration
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 13 // description of parameter 6 Mduration
+        String 13 // description of parameter 6	Mduration
         {
             Text [ en-US ] = "The basis";
         };
@@ -2370,27 +2372,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Dollarfr
     {
-        String 1    // description Dollarfr
+        String 1	// description Dollarfr
         {
             Text [ en-US ] = "Converts a price expressed as a decimal into a price expressed as a fraction";
         };
 
-        String 2 // name of parameter 1         Dollarfr
+        String 2 // name of parameter 1			Dollarfr
         {
             Text [ en-US ] = "Decimal dollar";
         };
 
-        String 3 // description of parameter 1  Dollarfr
+        String 3 // description of parameter 1	Dollarfr
         {
             Text [ en-US ] = "The decimal number";
         };
 
-        String 4 // name of parameter 2         Dollarfr
+        String 4 // name of parameter 2			Dollarfr
         {
             Text [ en-US ] = "Fraction";
         };
 
-        String 5 // description of parameter 2  Dollarfr
+        String 5 // description of parameter 2	Dollarfr
         {
             Text [ en-US ] = "The divisor";
         };
@@ -2398,27 +2400,27 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Dollarde
     {
-        String 1    // description Dollarde
+        String 1	// description Dollarde
         {
             Text [ en-US ] = "Converts a price expressed as a fraction into a price expressed as a decimal";
         };
 
-        String 2 // name of parameter 1         Dollarde
+        String 2 // name of parameter 1			Dollarde
         {
             Text [ en-US ] = "Fractional dollar";
         };
 
-        String 3 // description of parameter 1  Dollarde
+        String 3 // description of parameter 1	Dollarde
         {
             Text [ en-US ] = "The number as a fraction";
         };
 
-        String 4 // name of parameter 2         Dollarde
+        String 4 // name of parameter 2			Dollarde
         {
             Text [ en-US ] = "Fraction";
         };
 
-        String 5 // description of parameter 2  Dollarde
+        String 5 // description of parameter 2	Dollarde
         {
             Text [ en-US ] = "The divisor";
         };
@@ -2426,77 +2428,77 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Yield
     {
-        String 1    // description Yield
+        String 1	// description Yield
         {
             Text [ en-US ] = "Returns the yield on a security that pays periodic interest";
         };
 
-        String 2 // name of parameter 1         Yield
+        String 2 // name of parameter 1			Yield
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Yield
+        String 3 // description of parameter 1	Yield
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Yield
+        String 4 // name of parameter 2			Yield
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Yield
+        String 5 // description of parameter 2	Yield
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Yield
+        String 6 // name of parameter 3			Yield
         {
             Text [ en-US ] = "Rate";
         };
 
-        String 7 // description of parameter 3  Yield
+        String 7 // description of parameter 3	Yield
         {
             Text [ en-US ] = "The rate";
         };
 
-        String 8 // name of parameter 4         Yield
+        String 8 // name of parameter 4			Yield
         {
             Text [ en-US ] = "Price";
         };
 
-        String 9 // description of parameter 4  Yield
+        String 9 // description of parameter 4	Yield
         {
             Text [ en-US ] = "The price";
         };
 
-        String 10 // name of parameter 5        Yield
+        String 10 // name of parameter 5		Yield
         {
             Text [ en-US ] = "Redemption";
         };
 
-        String 11 // description of parameter 5 Yield
+        String 11 // description of parameter 5	Yield
         {
             Text [ en-US ] = "The redemption value";
         };
 
-        String 12 // name of parameter 6        Yield
+        String 12 // name of parameter 6		Yield
         {
             Text [ en-US ] = "Frequency";
         };
 
-        String 13 // description of parameter 6 Yield
+        String 13 // description of parameter 6	Yield
         {
             Text [ en-US ] = "The frequency";
         };
 
-        String 14 // name of parameter 7        Yield
+        String 14 // name of parameter 7		Yield
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 15 // description of parameter 7 Yield
+        String 15 // description of parameter 7	Yield
         {
             Text [ en-US ] = "The basis";
         };
@@ -2504,57 +2506,57 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Yielddisc
     {
-        String 1    // description Yielddisc
+        String 1	// description Yielddisc
         {
             Text [ en-US ] = "Returns the annual yield for a discounted security";
         };
 
-        String 2 // name of parameter 1         Yielddisc
+        String 2 // name of parameter 1			Yielddisc
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Yielddisc
+        String 3 // description of parameter 1	Yielddisc
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Yielddisc
+        String 4 // name of parameter 2			Yielddisc
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Yielddisc
+        String 5 // description of parameter 2	Yielddisc
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Yielddisc
+        String 6 // name of parameter 3			Yielddisc
         {
             Text [ en-US ] = "Price";
         };
 
-        String 7 // description of parameter 3  Yielddisc
+        String 7 // description of parameter 3	Yielddisc
         {
             Text [ en-US ] = "The price";
         };
 
-        String 8 // name of parameter 4         Yielddisc
+        String 8 // name of parameter 4			Yielddisc
         {
             Text [ en-US ] = "Redemption";
         };
 
-        String 9 // description of parameter 4  Yielddisc
+        String 9 // description of parameter 4	Yielddisc
         {
             Text [ en-US ] = "The redemption value";
         };
 
-        String 10 // name of parameter 5        Yielddisc
+        String 10 // name of parameter 5		Yielddisc
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 11 // description of parameter 5 Yielddisc
+        String 11 // description of parameter 5	Yielddisc
         {
             Text [ en-US ] = "The basis";
         };
@@ -2562,67 +2564,67 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Yieldmat
     {
-        String 1    // description Yieldmat
+        String 1	// description Yieldmat
         {
             Text [ en-US ] = "Returns the annual yield of a security that pays interest at maturity";
         };
 
-        String 2 // name of parameter 1         Yieldmat
+        String 2 // name of parameter 1			Yieldmat
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Yieldmat
+        String 3 // description of parameter 1	Yieldmat
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Yieldmat
+        String 4 // name of parameter 2			Yieldmat
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Yieldmat
+        String 5 // description of parameter 2	Yieldmat
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Yieldmat
+        String 6 // name of parameter 3			Yieldmat
         {
             Text [ en-US ] = "Issue";
         };
 
-        String 7 // description of parameter 3  Yieldmat
+        String 7 // description of parameter 3	Yieldmat
         {
             Text [ en-US ] = "The issue date";
         };
 
-        String 8 // name of parameter 4         Yieldmat
+        String 8 // name of parameter 4			Yieldmat
         {
             Text [ en-US ] = "Rate";
         };
 
-        String 9 // description of parameter 4  Yieldmat
+        String 9 // description of parameter 4	Yieldmat
         {
             Text [ en-US ] = "The rate";
         };
 
-        String 10 // name of parameter 5        Yieldmat
+        String 10 // name of parameter 5		Yieldmat
         {
             Text [ en-US ] = "Price";
         };
 
-        String 11 // description of parameter 5 Yieldmat
+        String 11 // description of parameter 5	Yieldmat
         {
             Text [ en-US ] = "The price";
         };
 
-        String 12 // name of parameter 6        Yieldmat
+        String 12 // name of parameter 6		Yieldmat
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 13 // description of parameter 6 Yieldmat
+        String 13 // description of parameter 6	Yieldmat
         {
             Text [ en-US ] = "The basis";
         };
@@ -2630,37 +2632,37 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Tbilleq
     {
-        String 1    // description Tbilleq
+        String 1	// description Tbilleq
         {
             Text [ en-US ] = "Returns the bond-equivalent yield for a treasury bill";
         };
 
-        String 2 // name of parameter 1         Tbilleq
+        String 2 // name of parameter 1			Tbilleq
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Tbilleq
+        String 3 // description of parameter 1	Tbilleq
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Tbilleq
+        String 4 // name of parameter 2			Tbilleq
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Tbilleq
+        String 5 // description of parameter 2	Tbilleq
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Tbilleq
+        String 6 // name of parameter 3			Tbilleq
         {
             Text [ en-US ] = "Discount";
         };
 
-        String 7 // description of parameter 3  Tbilleq
+        String 7 // description of parameter 3	Tbilleq
         {
             Text [ en-US ] = "The discount rate";
         };
@@ -2668,37 +2670,37 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Tbillprice
     {
-        String 1    // description Tbillprice
+        String 1	// description Tbillprice
         {
             Text [ en-US ] = "Returns the price of 100 currency units face value for a treasury bill";
         };
 
-        String 2 // name of parameter 1         Tbillprice
+        String 2 // name of parameter 1			Tbillprice
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Tbillprice
+        String 3 // description of parameter 1	Tbillprice
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Tbillprice
+        String 4 // name of parameter 2			Tbillprice
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Tbillprice
+        String 5 // description of parameter 2	Tbillprice
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Tbillprice
+        String 6 // name of parameter 3			Tbillprice
         {
             Text [ en-US ] = "Discount";
         };
 
-        String 7 // description of parameter 3  Tbillprice
+        String 7 // description of parameter 3	Tbillprice
         {
             Text [ en-US ] = "The discount rate";
         };
@@ -2706,37 +2708,37 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Tbillyield
     {
-        String 1    // description Tbillyield
+        String 1	// description Tbillyield
         {
             Text [ en-US ] = "Returns the yield for a treasury bill";
         };
 
-        String 2 // name of parameter 1         Tbillyield
+        String 2 // name of parameter 1			Tbillyield
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Tbillyield
+        String 3 // description of parameter 1	Tbillyield
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Tbillyield
+        String 4 // name of parameter 2			Tbillyield
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Tbillyield
+        String 5 // description of parameter 2	Tbillyield
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Tbillyield
+        String 6 // name of parameter 3			Tbillyield
         {
             Text [ en-US ] = "Price";
         };
 
-        String 7 // description of parameter 3  Tbillyield
+        String 7 // description of parameter 3	Tbillyield
         {
             Text [ en-US ] = "The price";
         };
@@ -2744,97 +2746,97 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Oddfprice
     {
-        String 1    // description Oddfprice
+        String 1	// description Oddfprice
         {
             Text [ en-US ] = "Returns the price per $100 face value of a security with an odd first period";
         };
 
-        String 2 // name of parameter 1         Oddfprice
+        String 2 // name of parameter 1			Oddfprice
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Oddfprice
+        String 3 // description of parameter 1	Oddfprice
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Oddfprice
+        String 4 // name of parameter 2			Oddfprice
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Oddfprice
+        String 5 // description of parameter 2	Oddfprice
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Oddfprice
+        String 6 // name of parameter 3			Oddfprice
         {
             Text [ en-US ] = "Issue";
         };
 
-        String 7 // description of parameter 3  Oddfprice
+        String 7 // description of parameter 3	Oddfprice
         {
             Text [ en-US ] = "The issue date";
         };
 
-        String 8 // name of parameter 4         Oddfprice
+        String 8 // name of parameter 4			Oddfprice
         {
             Text [ en-US ] = "First coupon";
         };
 
-        String 9 // description of parameter 4  Oddfprice
+        String 9 // description of parameter 4	Oddfprice
         {
             Text [ en-US ] = "The first coupon date";
         };
 
-        String 10 // name of parameter 5        Oddfprice
+        String 10 // name of parameter 5		Oddfprice
         {
             Text [ en-US ] = "Rate";
         };
 
-        String 11 // description of parameter 5 Oddfprice
+        String 11 // description of parameter 5	Oddfprice
         {
             Text [ en-US ] = "The rate";
         };
 
-        String 12 // name of parameter 6        Oddfprice
+        String 12 // name of parameter 6		Oddfprice
         {
             Text [ en-US ] = "Yield";
         };
 
-        String 13 // description of parameter 6 Oddfprice
+        String 13 // description of parameter 6	Oddfprice
         {
             Text [ en-US ] = "The yield";
         };
 
-        String 14 // name of parameter 7        Oddfprice
+        String 14 // name of parameter 7		Oddfprice
         {
             Text [ en-US ] = "Redemption";
         };
 
-        String 15 // description of parameter 7 Oddfprice
+        String 15 // description of parameter 7	Oddfprice
         {
             Text [ en-US ] = "The redemption value";
         };
 
-        String 16 // name of parameter 8        Oddfprice
+        String 16 // name of parameter 8		Oddfprice
         {
             Text [ en-US ] = "Frequency";
         };
 
-        String 17 // description of parameter 8 Oddfprice
+        String 17 // description of parameter 8	Oddfprice
         {
             Text [ en-US ] = "The frequency";
         };
 
-        String 18 // name of parameter 9        Oddfprice
+        String 18 // name of parameter 9		Oddfprice
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 19 // description of parameter 9 Oddfprice
+        String 19 // description of parameter 9	Oddfprice
         {
             Text [ en-US ] = "The basis";
         };
@@ -2842,97 +2844,97 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Oddfyield
     {
-        String 1    // description Oddfyield
+        String 1	// description Oddfyield
         {
             Text [ en-US ] = "Returns the yield of a security with an odd first period";
         };
 
-        String 2 // name of parameter 1         Oddfyield
+        String 2 // name of parameter 1			Oddfyield
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Oddfyield
+        String 3 // description of parameter 1	Oddfyield
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Oddfyield
+        String 4 // name of parameter 2			Oddfyield
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Oddfyield
+        String 5 // description of parameter 2	Oddfyield
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Oddfyield
+        String 6 // name of parameter 3			Oddfyield
         {
             Text [ en-US ] = "Issue";
         };
 
-        String 7 // description of parameter 3  Oddfyield
+        String 7 // description of parameter 3	Oddfyield
         {
             Text [ en-US ] = "The issue date";
         };
 
-        String 8 // name of parameter 4         Oddfyield
+        String 8 // name of parameter 4			Oddfyield
         {
             Text [ en-US ] = "First coupon";
         };
 
-        String 9 // description of parameter 4  Oddfyield
+        String 9 // description of parameter 4	Oddfyield
         {
             Text [ en-US ] = "The first coupon date";
         };
 
-        String 10 // name of parameter 5        Oddfyield
+        String 10 // name of parameter 5		Oddfyield
         {
             Text [ en-US ] = "Rate";
         };
 
-        String 11 // description of parameter 5 Oddfyield
+        String 11 // description of parameter 5	Oddfyield
         {
             Text [ en-US ] = "The rate";
         };
 
-        String 12 // name of parameter 6        Oddfyield
+        String 12 // name of parameter 6		Oddfyield
         {
             Text [ en-US ] = "Price";
         };
 
-        String 13 // description of parameter 6 Oddfyield
+        String 13 // description of parameter 6	Oddfyield
         {
             Text [ en-US ] = "The price";
         };
 
-        String 14 // name of parameter 7        Oddfyield
+        String 14 // name of parameter 7		Oddfyield
         {
             Text [ en-US ] = "Redemption";
         };
 
-        String 15 // description of parameter 7 Oddfyield
+        String 15 // description of parameter 7	Oddfyield
         {
             Text [ en-US ] = "The redemption value";
         };
 
-        String 16 // name of parameter 8        Oddfyield
+        String 16 // name of parameter 8		Oddfyield
         {
             Text [ en-US ] = "Frequency";
         };
 
-        String 17 // description of parameter 8 Oddfyield
+        String 17 // description of parameter 8	Oddfyield
         {
             Text [ en-US ] = "The frequency";
         };
 
-        String 18 // name of parameter 9        Oddfyield
+        String 18 // name of parameter 9		Oddfyield
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 19 // description of parameter 9 Oddfyield
+        String 19 // description of parameter 9	Oddfyield
         {
             Text [ en-US ] = "The basis";
         };
@@ -2940,87 +2942,87 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Oddlprice
     {
-        String 1    // description Oddlprice
+        String 1	// description Oddlprice
         {
             Text [ en-US ] = "Returns the price per $100 face value of a security with an odd last period";
         };
 
-        String 2 // name of parameter 1         Oddlprice
+        String 2 // name of parameter 1			Oddlprice
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Oddlprice
+        String 3 // description of parameter 1	Oddlprice
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Oddlprice
+        String 4 // name of parameter 2			Oddlprice
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Oddlprice
+        String 5 // description of parameter 2	Oddlprice
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Oddlprice
+        String 6 // name of parameter 3			Oddlprice
         {
             Text [ en-US ] = "Last interest";
         };
 
-        String 7 // description of parameter 3  Oddlprice
+        String 7 // description of parameter 3	Oddlprice
         {
             Text [ en-US ] = "The last interest date";
         };
 
-        String 8 // name of parameter 4         Oddlprice
+        String 8 // name of parameter 4			Oddlprice
         {
             Text [ en-US ] = "Rate";
         };
 
-        String 9 // description of parameter 4  Oddlprice
+        String 9 // description of parameter 4	Oddlprice
         {
             Text [ en-US ] = "The rate";
         };
 
-        String 10 // name of parameter 5        Oddlprice
+        String 10 // name of parameter 5		Oddlprice
         {
             Text [ en-US ] = "Yield";
         };
 
-        String 11 // description of parameter 5 Oddlprice
+        String 11 // description of parameter 5	Oddlprice
         {
             Text [ en-US ] = "The yield";
         };
 
-        String 12 // name of parameter 6        Oddlprice
+        String 12 // name of parameter 6		Oddlprice
         {
             Text [ en-US ] = "Redemption";
         };
 
-        String 13 // description of parameter 6 Oddlprice
+        String 13 // description of parameter 6	Oddlprice
         {
             Text [ en-US ] = "The redemption value";
         };
 
-        String 14 // name of parameter 7        Oddlprice
+        String 14 // name of parameter 7		Oddlprice
         {
             Text [ en-US ] = "Frequency";
         };
 
-        String 15 // description of parameter 7 Oddlprice
+        String 15 // description of parameter 7	Oddlprice
         {
             Text [ en-US ] = "The frequency";
         };
 
-        String 16 // name of parameter 8        Oddlprice
+        String 16 // name of parameter 8		Oddlprice
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 17 // description of parameter 8 Oddlprice
+        String 17 // description of parameter 8	Oddlprice
         {
             Text [ en-US ] = "The basis";
         };
@@ -3028,87 +3030,87 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Oddlyield
     {
-        String 1    // description Oddlyield
+        String 1	// description Oddlyield
         {
             Text [ en-US ] = "Returns the yield of a security with an odd last period";
         };
 
-        String 2 // name of parameter 1         Oddlyield
+        String 2 // name of parameter 1			Oddlyield
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Oddlyield
+        String 3 // description of parameter 1	Oddlyield
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Oddlyield
+        String 4 // name of parameter 2			Oddlyield
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Oddlyield
+        String 5 // description of parameter 2	Oddlyield
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Oddlyield
+        String 6 // name of parameter 3			Oddlyield
         {
             Text [ en-US ] = "Last interest";
         };
 
-        String 7 // description of parameter 3  Oddlyield
+        String 7 // description of parameter 3	Oddlyield
         {
             Text [ en-US ] = "The last interest date";
         };
 
-        String 8 // name of parameter 4         Oddlyield
+        String 8 // name of parameter 4			Oddlyield
         {
             Text [ en-US ] = "Rate";
         };
 
-        String 9 // description of parameter 4  Oddlyield
+        String 9 // description of parameter 4	Oddlyield
         {
             Text [ en-US ] = "The rate";
         };
 
-        String 10 // name of parameter 5        Oddlyield
+        String 10 // name of parameter 5		Oddlyield
         {
             Text [ en-US ] = "Price";
         };
 
-        String 11 // description of parameter 5 Oddlyield
+        String 11 // description of parameter 5	Oddlyield
         {
             Text [ en-US ] = "The price";
         };
 
-        String 12 // name of parameter 6        Oddlyield
+        String 12 // name of parameter 6		Oddlyield
         {
             Text [ en-US ] = "Redemption";
         };
 
-        String 13 // description of parameter 6 Oddlyield
+        String 13 // description of parameter 6	Oddlyield
         {
             Text [ en-US ] = "The redemption value";
         };
 
-        String 14 // name of parameter 7        Oddlyield
+        String 14 // name of parameter 7		Oddlyield
         {
             Text [ en-US ] = "Frequency";
         };
 
-        String 15 // description of parameter 7 Oddlyield
+        String 15 // description of parameter 7	Oddlyield
         {
             Text [ en-US ] = "The frequency";
         };
 
-        String 16 // name of parameter 8        Oddlyield
+        String 16 // name of parameter 8		Oddlyield
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 17 // description of parameter 8 Oddlyield
+        String 17 // description of parameter 8	Oddlyield
         {
             Text [ en-US ] = "The basis";
         };
@@ -3116,37 +3118,37 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Xirr
     {
-        String 1    // description Xirr
+        String 1	// description Xirr
         {
             Text [ en-US ] = "Returns the internal rate of return for a non-periodic schedule of payments";
         };
 
-        String 2 // name of parameter 1         Xirr
+        String 2 // name of parameter 1			Xirr
         {
             Text [ en-US ] = "Values";
         };
 
-        String 3 // description of parameter 1  Xirr
+        String 3 // description of parameter 1	Xirr
         {
             Text [ en-US ] = "The values";
         };
 
-        String 4 // name of parameter 2         Xirr
+        String 4 // name of parameter 2			Xirr
         {
             Text [ en-US ] = "Dates";
         };
 
-        String 5 // description of parameter 2  Xirr
+        String 5 // description of parameter 2	Xirr
         {
             Text [ en-US ] = "The dates";
         };
 
-        String 6 // name of parameter 3         Xirr
+        String 6 // name of parameter 3			Xirr
         {
             Text [ en-US ] = "Guess";
         };
 
-        String 7 // description of parameter 3  Xirr
+        String 7 // description of parameter 3	Xirr
         {
             Text [ en-US ] = "The guess";
         };
@@ -3154,37 +3156,37 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Xnpv
     {
-        String 1    // description Xnpv
+        String 1	// description Xnpv
         {
             Text [ en-US ] = "Returns the net present value for a non-periodic schedule of payments";
         };
 
-        String 2 // name of parameter 1         Xnpv
+        String 2 // name of parameter 1			Xnpv
         {
             Text [ en-US ] = "Rate";
         };
 
-        String 3 // description of parameter 1  Xnpv
+        String 3 // description of parameter 1	Xnpv
         {
             Text [ en-US ] = "The rate";
         };
 
-        String 4 // name of parameter 2         Xnpv
+        String 4 // name of parameter 2			Xnpv
         {
             Text [ en-US ] = "Values";
         };
 
-        String 5 // description of parameter 2  Xnpv
+        String 5 // description of parameter 2	Xnpv
         {
             Text [ en-US ] = "The values";
         };
 
-        String 6 // name of parameter 3         Xnpv
+        String 6 // name of parameter 3			Xnpv
         {
             Text [ en-US ] = "Dates";
         };
 
-        String 7 // description of parameter 3  Xnpv
+        String 7 // description of parameter 3	Xnpv
         {
             Text [ en-US ] = "The dates";
         };
@@ -3192,57 +3194,57 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Intrate
     {
-        String 1    // description Intrate
+        String 1	// description Intrate
         {
             Text [ en-US ] = "Returns the interest rate for a fully invested security";
         };
 
-        String 2 // name of parameter 1         Intrate
+        String 2 // name of parameter 1			Intrate
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Intrate
+        String 3 // description of parameter 1	Intrate
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Intrate
+        String 4 // name of parameter 2			Intrate
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Intrate
+        String 5 // description of parameter 2	Intrate
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Intrate
+        String 6 // name of parameter 3			Intrate
         {
             Text [ en-US ] = "Investment";
         };
 
-        String 7 // description of parameter 3  Intrate
+        String 7 // description of parameter 3	Intrate
         {
             Text [ en-US ] = "The investment";
         };
 
-        String 8 // name of parameter 4         Intrate
+        String 8 // name of parameter 4			Intrate
         {
             Text [ en-US ] = "Redemption";
         };
 
-        String 9 // description of parameter 4  Intrate
+        String 9 // description of parameter 4	Intrate
         {
             Text [ en-US ] = "The redemption value";
         };
 
-        String 10 // name of parameter 5        Intrate
+        String 10 // name of parameter 5		Intrate
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 11 // description of parameter 5 Intrate
+        String 11 // description of parameter 5	Intrate
         {
             Text [ en-US ] = "The basis";
         };
@@ -3250,47 +3252,47 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Coupncd
     {
-        String 1    // description Coupncd
+        String 1	// description Coupncd
         {
             Text [ en-US ] = "Returns the first coupon date after the settlement date";
         };
 
-        String 2 // name of parameter 1         Coupncd
+        String 2 // name of parameter 1			Coupncd
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Coupncd
+        String 3 // description of parameter 1	Coupncd
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Coupncd
+        String 4 // name of parameter 2			Coupncd
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Coupncd
+        String 5 // description of parameter 2	Coupncd
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Coupncd
+        String 6 // name of parameter 3			Coupncd
         {
             Text [ en-US ] = "Frequency";
         };
 
-        String 7 // description of parameter 3  Coupncd
+        String 7 // description of parameter 3	Coupncd
         {
             Text [ en-US ] = "The frequency";
         };
 
-        String 8 // name of parameter 4         Coupncd
+        String 8 // name of parameter 4			Coupncd
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 9 // description of parameter 4  Coupncd
+        String 9 // description of parameter 4	Coupncd
         {
             Text [ en-US ] = "The basis";
         };
@@ -3298,47 +3300,47 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Coupdays
     {
-        String 1    // description Coupdays
+        String 1	// description Coupdays
         {
             Text [ en-US ] = "Returns the number of days in the coupon period containing the settlement date";
         };
 
-        String 2 // name of parameter 1         Coupdays
+        String 2 // name of parameter 1			Coupdays
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Coupdays
+        String 3 // description of parameter 1	Coupdays
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Coupdays
+        String 4 // name of parameter 2			Coupdays
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Coupdays
+        String 5 // description of parameter 2	Coupdays
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Coupdays
+        String 6 // name of parameter 3			Coupdays
         {
             Text [ en-US ] = "Frequency";
         };
 
-        String 7 // description of parameter 3  Coupdays
+        String 7 // description of parameter 3	Coupdays
         {
             Text [ en-US ] = "The frequency";
         };
 
-        String 8 // name of parameter 4         Coupdays
+        String 8 // name of parameter 4			Coupdays
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 9 // description of parameter 4  Coupdays
+        String 9 // description of parameter 4	Coupdays
         {
             Text [ en-US ] = "The basis";
         };
@@ -3346,47 +3348,47 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Coupdaysnc
     {
-        String 1    // description Coupdaysnc
+        String 1	// description Coupdaysnc
         {
             Text [ en-US ] = "Returns the number of days from the settlement date to the next coupon date";
         };
 
-        String 2 // name of parameter 1         Coupdaysnc
+        String 2 // name of parameter 1			Coupdaysnc
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Coupdaysnc
+        String 3 // description of parameter 1	Coupdaysnc
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Coupdaysnc
+        String 4 // name of parameter 2			Coupdaysnc
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Coupdaysnc
+        String 5 // description of parameter 2	Coupdaysnc
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Coupdaysnc
+        String 6 // name of parameter 3			Coupdaysnc
         {
             Text [ en-US ] = "Frequency";
         };
 
-        String 7 // description of parameter 3  Coupdaysnc
+        String 7 // description of parameter 3	Coupdaysnc
         {
             Text [ en-US ] = "The frequency";
         };
 
-        String 8 // name of parameter 4         Coupdaysnc
+        String 8 // name of parameter 4			Coupdaysnc
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 9 // description of parameter 4  Coupdaysnc
+        String 9 // description of parameter 4	Coupdaysnc
         {
             Text [ en-US ] = "The basis";
         };
@@ -3394,47 +3396,47 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Coupdaybs
     {
-        String 1    // description Coupdaybs
+        String 1	// description Coupdaybs
         {
             Text [ en-US ] = "Returns the number of days from the beginning of the coupon period to the settlement date";
         };
 
-        String 2 // name of parameter 1         Coupdaybs
+        String 2 // name of parameter 1			Coupdaybs
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Coupdaybs
+        String 3 // description of parameter 1	Coupdaybs
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Coupdaybs
+        String 4 // name of parameter 2			Coupdaybs
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Coupdaybs
+        String 5 // description of parameter 2	Coupdaybs
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Coupdaybs
+        String 6 // name of parameter 3			Coupdaybs
         {
             Text [ en-US ] = "Frequency";
         };
 
-        String 7 // description of parameter 3  Coupdaybs
+        String 7 // description of parameter 3	Coupdaybs
         {
             Text [ en-US ] = "The frequency";
         };
 
-        String 8 // name of parameter 4         Coupdaybs
+        String 8 // name of parameter 4			Coupdaybs
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 9 // description of parameter 4  Coupdaybs
+        String 9 // description of parameter 4	Coupdaybs
         {
             Text [ en-US ] = "The basis";
         };
@@ -3442,47 +3444,47 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Couppcd
     {
-        String 1    // description Couppcd
+        String 1	// description Couppcd
         {
             Text [ en-US ] = "Returns the last coupon date preceding the settlement date";
         };
 
-        String 2 // name of parameter 1         Couppcd
+        String 2 // name of parameter 1			Couppcd
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Couppcd
+        String 3 // description of parameter 1	Couppcd
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Couppcd
+        String 4 // name of parameter 2			Couppcd
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Couppcd
+        String 5 // description of parameter 2	Couppcd
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Couppcd
+        String 6 // name of parameter 3			Couppcd
         {
             Text [ en-US ] = "Frequency";
         };
 
-        String 7 // description of parameter 3  Couppcd
+        String 7 // description of parameter 3	Couppcd
         {
             Text [ en-US ] = "The frequency";
         };
 
-        String 8 // name of parameter 4         Couppcd
+        String 8 // name of parameter 4			Couppcd
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 9 // description of parameter 4  Couppcd
+        String 9 // description of parameter 4	Couppcd
         {
             Text [ en-US ] = "The basis";
         };
@@ -3490,47 +3492,47 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Coupnum
     {
-        String 1    // description Coupnum
+        String 1	// description Coupnum
         {
             Text [ en-US ] = "Returns the number of coupons payable between the settlement and maturity dates";
         };
 
-        String 2 // name of parameter 1         Coupnum
+        String 2 // name of parameter 1			Coupnum
         {
             Text [ en-US ] = "Settlement";
         };
 
-        String 3 // description of parameter 1  Coupnum
+        String 3 // description of parameter 1	Coupnum
         {
             Text [ en-US ] = "The settlement";
         };
 
-        String 4 // name of parameter 2         Coupnum
+        String 4 // name of parameter 2			Coupnum
         {
             Text [ en-US ] = "Maturity";
         };
 
-        String 5 // description of parameter 2  Coupnum
+        String 5 // description of parameter 2	Coupnum
         {
             Text [ en-US ] = "The maturity";
         };
 
-        String 6 // name of parameter 3         Coupnum
+        String 6 // name of parameter 3			Coupnum
         {
             Text [ en-US ] = "Frequency";
         };
 
-        String 7 // description of parameter 3  Coupnum
+        String 7 // description of parameter 3	Coupnum
         {
             Text [ en-US ] = "The frequency";
         };
 
-        String 8 // name of parameter 4         Coupnum
+        String 8 // name of parameter 4			Coupnum
         {
             Text [ en-US ] = "Basis";
         };
 
-        String 9 // description of parameter 4  Coupnum
+        String 9 // description of parameter 4	Coupnum
         {
             Text [ en-US ] = "The basis";
         };
@@ -3538,29 +3540,65 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Fvschedule
     {
-        String 1    // description Fvschedule
+        String 1	// description Fvschedule
         {
             Text [ en-US ] = "Returns the future value of the initial principal after a series of compound interest rates are applied";
         };
 
-        String 2 // name of parameter 1         Fvschedule
+        String 2 // name of parameter 1			Fvschedule
         {
             Text [ en-US ] = "Principal";
         };
 
-        String 3 // description of parameter 1  Fvschedule
+        String 3 // description of parameter 1	Fvschedule
         {
             Text [ en-US ] = "The principal";
         };
 
-        String 4 // name of parameter 2         Fvschedule
+        String 4 // name of parameter 2			Fvschedule
         {
             Text [ en-US ] = "Schedule";
         };
 
-        String 5 // description of parameter 2  Fvschedule
+        String 5 // description of parameter 2	Fvschedule
         {
             Text [ en-US ] = "The schedule";
         };
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

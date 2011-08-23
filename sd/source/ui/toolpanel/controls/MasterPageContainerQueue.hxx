@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ public:
         templates are inserted into the MasterPageContainer.
     */
     void ProcessAllRequests (void);
-
+    
 private:
     ::boost::weak_ptr<ContainerAdapter> mpWeakContainer;
     class PreviewCreationRequest;
@@ -94,7 +94,7 @@ private:
     // There are a couple of values that define various aspects of the
     // heuristic that defines the order and timing in which requests for
     // preview creation are processed.
-
+    
     /** The time to wait (in milliseconds) between the creation of previews.
     */
     static const sal_Int32 snDelayedCreationTimeout;
@@ -102,7 +102,7 @@ private:
     /** The time to wait when the system is not idle.
     */
     static const sal_Int32 snDelayedCreationTimeoutWhenNotIdle;
-
+    
     /** Requests for previews of master pages in a document have their
         priority increased by this value.
     */
@@ -120,7 +120,7 @@ private:
         present.
     */
     static sal_uInt32 snWaitForMoreRequestsCount;
-
+    
     MasterPageContainerQueue (const ::boost::weak_ptr<ContainerAdapter>& rpContainer);
     void LateInit (void);
 
@@ -128,7 +128,7 @@ private:
         are processed.
     */
     sal_Int32 CalculatePriority (const SharedMasterPageDescriptor& rDescriptor) const;
-
+    
     DECL_LINK(DelayedPreviewCreation, Timer *);
 };
 

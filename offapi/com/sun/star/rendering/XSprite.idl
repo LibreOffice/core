@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,12 +27,12 @@
 #ifndef __com_sun_star_rendering_XSprite_idl__
 #define __com_sun_star_rendering_XSprite_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
+#endif 
 #ifndef __com_sun_star_geometry_RealPoint2D_idl__
 #include <com/sun/star/geometry/RealPoint2D.idl>
 #endif
@@ -70,10 +70,10 @@ interface XSprite : ::com::sun::star::uno::XInterface
         background. Valid range is [0,1].
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if nAlpha is not within the permissible range.
+        if nAlpha is not within the permissible range.        
      */
     void setAlpha( [in] double nAlpha )
-        raises (com::sun::star::lang::IllegalArgumentException);
+        raises (com::sun::star::lang::IllegalArgumentException); 
 
     //-------------------------------------------------------------------------
 
@@ -93,22 +93,22 @@ interface XSprite : ::com::sun::star::uno::XInterface
         The new position, in user coordinate space, to move the sprite to.
 
         @param aViewState
-        The view state to be used when interpreting aNewPos.
+        The viewstate to be used when interpreting aNewPos.
 
         @param aRenderState
-        The render state to be used when interpreting aNewPos.
+        The renderstate to be used when interpreting aNewPos.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and render state parameters are outside the
-        specified range.
+        if one of the view and renderstate parameters are outside the 
+        specified range.        
      */
     void move( [in] ::com::sun::star::geometry::RealPoint2D aNewPos, [in] ViewState aViewState, [in] RenderState aRenderState )
-        raises (com::sun::star::lang::IllegalArgumentException);
+        raises (com::sun::star::lang::IllegalArgumentException); 
 
     //-------------------------------------------------------------------------
 
     /** Apply a local transformation to the sprite.<p>
-
+        
         The given transformation matrix locally transforms the sprite
         shape. If this transformation contains translational
         components, be aware that sprite content moved beyond the
@@ -135,7 +135,7 @@ interface XSprite : ::com::sun::star::uno::XInterface
         if the given transformation matrix is singular.
      */
     void transform( [in] com::sun::star::geometry::AffineMatrix2D aTransformation )
-        raises (com::sun::star::lang::IllegalArgumentException);
+        raises (com::sun::star::lang::IllegalArgumentException); 
 
     //-------------------------------------------------------------------------
 
@@ -171,7 +171,7 @@ interface XSprite : ::com::sun::star::uno::XInterface
         @param aClip
         The clip poly-polygon to apply.
      */
-    void clip( [in] XPolyPolygon2D aClip );
+    void clip( [in] XPolyPolygon2D aClip ); 
 
     //-------------------------------------------------------------------------
 
@@ -188,7 +188,7 @@ interface XSprite : ::com::sun::star::uno::XInterface
         irregular floating point values here, the order position for
         sprites with such a priority value is undefined.
      */
-    void setPriority( [in] double nPriority );
+    void setPriority( [in] double nPriority ); 
 
     //-------------------------------------------------------------------------
 

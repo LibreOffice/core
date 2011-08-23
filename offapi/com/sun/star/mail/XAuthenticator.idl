@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef __com_sun_star_mail_XAuthenticator_idl__
 #define __com_sun_star_mail_XAuthenticator_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
+#ifndef __com_sun_star_uno_XInterface_idl__ 
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
@@ -36,29 +36,29 @@ module com { module sun { module star { module mail {
 
 /**
    Represents an interface that will be used to query for user
-   information which are necessary to login to a network resource.
+   information which are necessary to login to a network resource.  
    An implementation of this interface may for instance show a
-   dialog to query the user for the necessary data.
-
-   @since OOo 2.0
+   dialog to query the user for the necessary data.      
+   
+   @since OOo 2.0.0
  */
 interface XAuthenticator: ::com::sun::star::uno::XInterface {
-
-    /**
+    
+    /** 
         Will be called when the user name is needed.
-
-        @returns
-        the user name.
+    
+        @returns 
+        the user name. 
     */
-    string getUserName();
-
+    string getUserName();    
+    
     /**
         Will be called when the password of the user is needed.
-
+        
         @returns
         the password of the user.
     */
-    string getPassword();
+    string getPassword();    
 };
 
 }; }; }; };

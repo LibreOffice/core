@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_vcl.hxx"
 
 #define _SV_SALNATIVEWIDGETS_KDE_CXX
-#include <kde_headers.h>
+#include <shell/kde_headers.h>
 
 #include <salunx.h>
 #include <saldata.hxx>
@@ -49,7 +49,7 @@
 using namespace ::rtl;
 
 /** Cached native widgets.
-
+ 
     A class which caches and paints the native widgets.
 */
 class WidgetPainter
@@ -191,7 +191,7 @@ class WidgetPainter
     /** Identifiers of popup menu items.
      */
     int           m_nPopupMenuEnabledItem, m_nPopupMenuDisabledItem;
-
+    
     /** cached progress bar
       */
     QProgressBar *m_pProgressBar;
@@ -239,7 +239,7 @@ class WidgetPainter
         @param gc
         The graphics context.
     */
-        sal_Bool drawStyledWidget( QWidget *pWidget,
+        BOOL drawStyledWidget( QWidget *pWidget,
                 ControlState nState, const ImplControlValue& aValue,
                 Display *dpy, XLIB_Window drawable, int nScreen, int nDepth, GC gc,
                 ControlPart nPart = PART_ENTIRE_CONTROL );
@@ -252,7 +252,7 @@ class WidgetPainter
 
         @return valid push button.
     */
-    QPushButton  *pushButton( const Rectangle& rControlRegion, sal_Bool bDefault );
+    QPushButton  *pushButton( const Rectangle& rControlRegion, BOOL bDefault );
 
     /** 'Get' method for radio button.
 
@@ -273,7 +273,7 @@ class WidgetPainter
 
         @see pushButton(), m_pEditableComboBox
     */
-    QComboBox    *comboBox( const Rectangle& rControlRegion, sal_Bool bEditable );
+    QComboBox    *comboBox( const Rectangle& rControlRegion, BOOL bEditable );
 
     /** 'Get' method for line edit box.
 
@@ -310,13 +310,13 @@ class WidgetPainter
         @see pushButton()
     */
     QScrollBar   *scrollBar( const Rectangle& rControlRegion,
-        sal_Bool bHorizontal, const ImplControlValue& aValue );
+        BOOL bHorizontal, const ImplControlValue& aValue );
 
     /** 'Get' method for tool bar.
 
       @see pushButton()
     */
-    QToolBar     *toolBar( const Rectangle& rControlRegion, sal_Bool bHorizontal );
+    QToolBar     *toolBar( const Rectangle& rControlRegion, BOOL bHorizontal );
 
     /** 'Get' method for tool button.
 
@@ -335,9 +335,9 @@ class WidgetPainter
       @see pushButton()
     */
     QPopupMenu   *popupMenu( const Rectangle& rControlRegion );
-
+    
     /** 'Get' method for progress bar
-
+    
       @see pushButton()
     */
     QProgressBar *progressBar( const Rectangle& rControlRegion );
@@ -394,11 +394,7 @@ WidgetPainter::WidgetPainter( void )
       m_pToolBarVert( NULL ),
       m_pToolButton( NULL ),
       m_pMenuBar( NULL ),
-      m_nMenuBarEnabledItem( 0 ),
-      m_nMenuBarDisabledItem( 0 ),
       m_pPopupMenu( NULL ),
-      m_nPopupMenuEnabledItem( 0 ),
-      m_nPopupMenuDisabledItem( 0 ),
       m_pProgressBar( NULL )
 {
 }
@@ -431,13 +427,13 @@ WidgetPainter::~WidgetPainter( void )
     delete m_pProgressBar, m_pProgressBar = NULL;
 }
 
-sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
+BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
     ControlState nState, const ImplControlValue& aValue,
         Display *dpy, XLIB_Window drawable, int nScreen, int nDepth, GC gc,
         ControlPart nPart )
 {
     if ( !pWidget )
-    return sal_False;
+    return FALSE;
 
     // Normalize the widget
     QPoint   qWidgetPos( pWidget->pos() );
@@ -453,13 +449,13 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
 
     // Use the background of the widget
     qPixmap.fill( pWidget, QPoint(0, 0) );
-
+    
     // Convert the flags
     QStyle::SFlags nStyle = vclStateValue2SFlags( nState, aValue );
-
+    
     // Store the widget class
     const char *pClassName = pWidget->className();
-
+    
     // Draw the widget to the pixmap
     if ( strcmp( "QPushButton", pClassName ) == 0 )
     {
@@ -472,7 +468,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         pPushButton->setOn     ( nStyle & QStyle::Style_On );
         pPushButton->setEnabled( nStyle & QStyle::Style_Enabled );
     }
-
+    
     kapp->style().drawControl( QStyle::CE_PushButton,
         &qPainter, pWidget, qRect,
         pWidget->colorGroup(), nStyle );
@@ -505,15 +501,15 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     kapp->style().drawComplexControl( QStyle::CC_ComboBox,
         &qPainter, pWidget, qRect,
         pWidget->colorGroup(), nStyle );
-
+    
     // Editable combo box uses the background of the associated edit box
     QComboBox *pComboBox = static_cast<QComboBox *>( pWidget->qt_cast( "QComboBox" ) );
     if ( pComboBox && pComboBox->editable() && pComboBox->lineEdit() )
     {
         QColorGroup::ColorRole eColorRole = ( pComboBox->isEnabled() )?
         QColorGroup::Base: QColorGroup::Background;
-        qPainter.fillRect(
-            kapp->style().querySubControlMetrics( QStyle::CC_ComboBox,
+        qPainter.fillRect( 
+            kapp->style().querySubControlMetrics( QStyle::CC_ComboBox, 
             pComboBox, QStyle::SC_ComboBoxEditField ),
             pComboBox->lineEdit()->colorGroup().brush( eColorRole ) );
     }
@@ -527,7 +523,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     else if ( strcmp( "QSpinWidget", pClassName ) == 0 )
     {
     const SpinbuttonValue *pValue = static_cast<const SpinbuttonValue *> ( &aValue );
-
+    
     // Is any of the buttons pressed?
     QStyle::SCFlags eActive = QStyle::SC_None;
     if ( pValue )
@@ -560,8 +556,8 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     {
         QColorGroup::ColorRole eColorRole = ( pSpinWidget->isEnabled() )?
         QColorGroup::Base: QColorGroup::Background;
-        qPainter.fillRect(
-            kapp->style().querySubControlMetrics( QStyle::CC_SpinWidget,
+        qPainter.fillRect( 
+            kapp->style().querySubControlMetrics( QStyle::CC_SpinWidget, 
             pSpinWidget, QStyle::SC_SpinWidgetEditField ),
             pSpinWidget->editWidget()->colorGroup().brush( eColorRole ) );
     }
@@ -569,7 +565,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     // Adjust the frame (needed for Motif Plus style)
     QRect qFrameRect = kapp->style().querySubControlMetrics( QStyle::CC_SpinWidget,
         pWidget, QStyle::SC_SpinWidgetFrame );
-
+    
     kapp->style().drawComplexControl( QStyle::CC_SpinWidget,
         &qPainter, pWidget, qFrameRect,
         pWidget->colorGroup(), nStyle,
@@ -578,7 +574,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     else if ( strcmp( "QTabBar", pClassName ) == 0 )
     {
     const TabitemValue *pValue = static_cast<const TabitemValue *> ( &aValue );
-
+    
     QTab *pTab = NULL;
     if ( pValue )
     {
@@ -592,10 +588,10 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         pTab = m_pTabMiddle;
     }
     if ( !pTab )
-        return sal_False;
-
+        return FALSE;
+    
     pTab->setRect( qRect );
-
+    
     kapp->style().drawControl( QStyle::CE_TabBarTab,
         &qPainter, pWidget, qRect,
         pWidget->colorGroup(), nStyle,
@@ -665,7 +661,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         else
         pWidget->setEnabled( false );
     }
-
+    
     // Is it a horizontal scroll bar?
     QScrollBar *pScrollBar = static_cast<QScrollBar *> ( pWidget->qt_cast( "QScrollBar" ) );
     QStyle::StyleFlags eHoriz = QStyle::Style_Default;
@@ -693,11 +689,11 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
 
         kapp->style().drawPrimitive( QStyle::PE_PanelDockWindow,
                 &qPainter, qRect, pWidget->colorGroup(), nStyle );
-
+        
         if ( nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT )
         {
             const ToolbarValue *pValue = static_cast< const ToolbarValue * >( &aValue );
-
+            
             QRect qThumbRect = region2QRect( pValue->maGripRect );
             qThumbRect.moveBy( -qWidgetPos.x(), -qWidgetPos.y() );
             if ( bIsHorizontal )
@@ -780,7 +776,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
             pWidget->colorGroup(), nStyle );
     }
     else
-    return sal_False;
+    return FALSE;
 
     // Bitblt it to the screen
     X11SalGraphics::CopyScreenArea( dpy,
@@ -793,11 +789,11 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     // Restore widget's position
     pWidget->move( qWidgetPos );
 
-    return sal_True;
+    return TRUE;
 }
 
 QPushButton *WidgetPainter::pushButton( const Rectangle& rControlRegion,
-    sal_Bool bDefault )
+    BOOL bDefault )
 {
     if ( !m_pPushButton )
     m_pPushButton = new QPushButton( NULL, "push_button" );
@@ -817,7 +813,7 @@ QPushButton *WidgetPainter::pushButton( const Rectangle& rControlRegion,
     m_pPushButton->setDefault( true );
     QSize qDefSize = kapp->style().sizeFromContents( QStyle::CT_PushButton,
         m_pPushButton, qContentsSize );
-
+    
     int nIndicatorSize = kapp->style().pixelMetric(
         QStyle::PM_ButtonDefaultIndicator, m_pPushButton );
     if ( qNormalSize.width() == qDefSize.width() )
@@ -825,7 +821,7 @@ QPushButton *WidgetPainter::pushButton( const Rectangle& rControlRegion,
     if ( qNormalSize.height() == qDefSize.height() )
         qRect.addCoords( 0, nIndicatorSize, 0, -nIndicatorSize );
     }
-
+    
     m_pPushButton->move( qRect.topLeft() );
     m_pPushButton->resize( qRect.size() );
     m_pPushButton->setDefault( bDefault );
@@ -846,19 +842,19 @@ QRadioButton *WidgetPainter::radioButton( const Rectangle& rControlRegion )
     if ( strcmp( "KThemeStyle", pStyleName ) == 0 )
     {
     QRect qOldRect( qRect );
-
+    
     qRect.setWidth( kapp->style().pixelMetric(
         QStyle::PM_ExclusiveIndicatorWidth, m_pRadioButton ) );
     qRect.setHeight( kapp->style().pixelMetric(
         QStyle::PM_ExclusiveIndicatorHeight, m_pRadioButton ) );
-
+    
     qRect.moveBy( ( qOldRect.width() - qRect.width() ) / 2,
         ( qOldRect.height() - qRect.height() ) / 2 );
     }
 
     m_pRadioButton->move( qRect.topLeft() );
     m_pRadioButton->resize( qRect.size() );
-
+    
     return m_pRadioButton;
 }
 
@@ -875,12 +871,12 @@ QCheckBox *WidgetPainter::checkBox( const Rectangle& rControlRegion )
     if ( strcmp( "KThemeStyle", pStyleName ) == 0 )
     {
     QRect qOldRect( qRect );
-
+    
     qRect.setWidth( kapp->style().pixelMetric(
         QStyle::PM_IndicatorWidth, m_pCheckBox ) );
     qRect.setHeight( kapp->style().pixelMetric(
         QStyle::PM_IndicatorHeight, m_pCheckBox ) );
-
+    
     qRect.moveBy( ( qOldRect.width() - qRect.width() ) / 2,
         ( qOldRect.height() - qRect.height() ) / 2 );
     }
@@ -892,7 +888,7 @@ QCheckBox *WidgetPainter::checkBox( const Rectangle& rControlRegion )
 }
 
 QComboBox *WidgetPainter::comboBox( const Rectangle& rControlRegion,
-    sal_Bool bEditable )
+    BOOL bEditable )
 {
     QComboBox *pComboBox = NULL;
     if ( bEditable )
@@ -909,7 +905,7 @@ QComboBox *WidgetPainter::comboBox( const Rectangle& rControlRegion,
     }
 
     QRect qRect = region2QRect( rControlRegion );
-
+    
     pComboBox->move( qRect.topLeft() );
     pComboBox->resize( qRect.size() );
 
@@ -922,7 +918,7 @@ QLineEdit *WidgetPainter::lineEdit( const Rectangle& rControlRegion )
     m_pLineEdit = new QLineEdit( NULL, "line_edit" );
 
     QRect qRect = region2QRect( rControlRegion );
-
+    
     m_pLineEdit->move( qRect.topLeft() );
     m_pLineEdit->resize( qRect.size() );
 
@@ -934,13 +930,13 @@ QSpinWidget *WidgetPainter::spinWidget( const Rectangle& rControlRegion )
     if ( !m_pSpinWidget )
     {
     m_pSpinWidget = new QSpinWidget( NULL, "spin_widget" );
-
+    
     m_pSpinEdit = new QLineEdit( NULL, "line_edit_spin" );
     m_pSpinWidget->setEditWidget( m_pSpinEdit );
     }
 
     QRect qRect = region2QRect( rControlRegion );
-
+    
     m_pSpinWidget->move( qRect.topLeft() );
     m_pSpinWidget->resize( qRect.size() );
     m_pSpinWidget->arrange();
@@ -956,7 +952,7 @@ QTabBar *WidgetPainter::tabBar( const Rectangle& rControlRegion )
         m_pTabBarParent = new QWidget( NULL, "tab_bar_parent" );
 
     m_pTabBar = new QTabBar( m_pTabBarParent, "tab_bar" );
-
+    
     m_pTabLeft = new QTab();
     m_pTabMiddle = new QTab();
     m_pTabRight = new QTab();
@@ -971,7 +967,7 @@ QTabBar *WidgetPainter::tabBar( const Rectangle& rControlRegion )
 
     m_pTabBar->move( qRect.topLeft() );
     m_pTabBar->resize( qRect.size() );
-
+    
     m_pTabBar->setShape( QTabBar::RoundedAbove );
 
     return m_pTabBar;
@@ -984,10 +980,10 @@ QTabWidget *WidgetPainter::tabWidget( const Rectangle& rControlRegion )
 
     QRect qRect = region2QRect( rControlRegion );
     --qRect.rTop();
-
+    
     m_pTabWidget->move( qRect.topLeft() );
     m_pTabWidget->resize( qRect.size() );
-
+    
     return m_pTabWidget;
 }
 
@@ -997,7 +993,7 @@ QListView *WidgetPainter::listView( const Rectangle& rControlRegion )
     m_pListView = new QListView( NULL, "list_view" );
 
     QRect qRect = region2QRect( rControlRegion );
-
+    
     m_pListView->move( qRect.topLeft() );
     m_pListView->resize( qRect.size() );
 
@@ -1005,7 +1001,7 @@ QListView *WidgetPainter::listView( const Rectangle& rControlRegion )
 }
 
 QScrollBar *WidgetPainter::scrollBar( const Rectangle& rControlRegion,
-    sal_Bool bHorizontal, const ImplControlValue& aValue )
+    BOOL bHorizontal, const ImplControlValue& aValue )
 {
     if ( !m_pScrollBar )
     {
@@ -1015,7 +1011,7 @@ QScrollBar *WidgetPainter::scrollBar( const Rectangle& rControlRegion,
     }
 
     QRect qRect = region2QRect( rControlRegion );
-
+    
     m_pScrollBar->move( qRect.topLeft() );
     m_pScrollBar->resize( qRect.size() );
     m_pScrollBar->setOrientation( bHorizontal? Qt::Horizontal: Qt::Vertical );
@@ -1032,7 +1028,7 @@ QScrollBar *WidgetPainter::scrollBar( const Rectangle& rControlRegion,
     return m_pScrollBar;
 }
 
-QToolBar *WidgetPainter::toolBar( const Rectangle& rControlRegion, sal_Bool bHorizontal )
+QToolBar *WidgetPainter::toolBar( const Rectangle& rControlRegion, BOOL bHorizontal )
 {
     if ( !m_pMainWindow )
         m_pMainWindow = new QMainWindow( NULL, "main_window" );
@@ -1124,9 +1120,9 @@ QProgressBar *WidgetPainter::progressBar( const Rectangle& rControlRegion )
 {
     if ( !m_pProgressBar )
     m_pProgressBar = new QProgressBar( NULL, "progress_bar" );
-
+    
     QRect qRect = region2QRect( rControlRegion );
-
+    
     m_pProgressBar->move( qRect.topLeft() );
     m_pProgressBar->resize( qRect.size() );
 
@@ -1173,19 +1169,19 @@ class KDESalGraphics : public X11SalGraphics
   public:
     KDESalGraphics() {}
     virtual ~KDESalGraphics() {}
-    virtual sal_Bool IsNativeControlSupported( ControlType nType, ControlPart nPart );
-    virtual sal_Bool hitTestNativeControl( ControlType nType, ControlPart nPart,
+    virtual BOOL IsNativeControlSupported( ControlType nType, ControlPart nPart );
+    virtual BOOL hitTestNativeControl( ControlType nType, ControlPart nPart,
                                        const Rectangle& rControlRegion, const Point& aPos,
-                                       sal_Bool& rIsInside );
-    virtual sal_Bool drawNativeControl( ControlType nType, ControlPart nPart,
+                                       BOOL& rIsInside );
+    virtual BOOL drawNativeControl( ControlType nType, ControlPart nPart,
                                     const Rectangle& rControlRegion, ControlState nState,
                                     const ImplControlValue& aValue,
                                     const OUString& aCaption );
-    virtual sal_Bool drawNativeControlText( ControlType nType, ControlPart nPart,
+    virtual BOOL drawNativeControlText( ControlType nType, ControlPart nPart,
                                         const Rectangle& rControlRegion, ControlState nState,
                                         const ImplControlValue& aValue,
                                         const OUString& aCaption );
-    virtual sal_Bool getNativeControlRegion( ControlType nType, ControlPart nPart,
+    virtual BOOL getNativeControlRegion( ControlType nType, ControlPart nPart,
                                          const Rectangle& rControlRegion, ControlState nState,
                                          const ImplControlValue& aValue,
                                          const OUString& aCaption,
@@ -1196,14 +1192,14 @@ class KDESalGraphics : public X11SalGraphics
 
     @param nType
     Type of the widget.
-
+    
     @param nPart
     Specification of the widget's part if it consists of more than one.
-
-    @return sal_True if the platform supports native drawing of the widget nType
+  
+    @return TRUE if the platform supports native drawing of the widget nType
     defined by nPart.
 */
-sal_Bool KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
+BOOL KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     return
     ( (nType == CTRL_PUSHBUTTON)  && (nPart == PART_ENTIRE_CONTROL) ) ||
@@ -1235,22 +1231,22 @@ sal_Bool KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
 
 /** Test whether the position is in the native widget.
 
-    If the return value is sal_True, bIsInside contains information whether
+    If the return value is TRUE, bIsInside contains information whether
     aPos was or was not inside the native widget specified by the
     nType/nPart combination.
 */
-sal_Bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
+BOOL KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
                                            const Rectangle& rControlRegion, const Point& rPos,
-                                           sal_Bool& rIsInside )
+                                           BOOL& rIsInside )
 {
     if ( nType == CTRL_SCROLLBAR )
     {
     // make position relative to rControlRegion
     Point aPos = rPos - rControlRegion.TopLeft();
-    rIsInside = sal_False;
+    rIsInside = FALSE;
 
-    sal_Bool bHorizontal = ( nPart == PART_BUTTON_LEFT || nPart == PART_BUTTON_RIGHT );
-
+    BOOL bHorizontal = ( nPart == PART_BUTTON_LEFT || nPart == PART_BUTTON_RIGHT );
+    
     QScrollBar *pScrollBar = pWidgetPainter->scrollBar( rControlRegion,
         bHorizontal, ImplControlValue() );
     QRect qRectSubLine = kapp->style().querySubControlMetrics(
@@ -1259,10 +1255,10 @@ sal_Bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nP
         QStyle::CC_ScrollBar, pScrollBar, QStyle::SC_ScrollBarAddLine );
 
     // There are 2 buttons on the right/bottom side of the scrollbar
-    sal_Bool bTwoSubButtons = sal_False;
+    BOOL bTwoSubButtons = FALSE;
 
     // It is a Platinum style scroll bar
-    sal_Bool bPlatinumStyle = sal_False;
+    BOOL bPlatinumStyle = FALSE;
 
     // Workaround for Platinum and 3 button style scroll bars.
     // It makes the right/down button bigger.
@@ -1272,9 +1268,9 @@ sal_Bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nP
             QStyle::CC_ScrollBar, pScrollBar,
             QStyle::SC_ScrollBarAddPage ).right() + 1 );
         if ( qRectAddLine.width() > qRectSubLine.width() )
-        bTwoSubButtons = sal_True;
+        bTwoSubButtons = TRUE;
         if ( qRectSubLine.left() > kapp->style().querySubControlMetrics( QStyle::CC_ScrollBar, pScrollBar, QStyle::SC_ScrollBarSubPage ).left() )
-        bPlatinumStyle = sal_True;
+        bPlatinumStyle = TRUE;
     }
     else
     {
@@ -1282,81 +1278,81 @@ sal_Bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nP
             QStyle::CC_ScrollBar, pScrollBar,
             QStyle::SC_ScrollBarAddPage ).bottom() + 1 );
         if ( qRectAddLine.height() > qRectSubLine.height() )
-        bTwoSubButtons = sal_True;
+        bTwoSubButtons = TRUE;
         if ( qRectSubLine.top() > kapp->style().querySubControlMetrics( QStyle::CC_ScrollBar, pScrollBar, QStyle::SC_ScrollBarSubPage ).top() )
-        bPlatinumStyle = sal_True;
+        bPlatinumStyle = TRUE;
     }
 
     switch ( nPart )
     {
         case PART_BUTTON_LEFT:
         if ( !bPlatinumStyle && qRectSubLine.contains( aPos.getX(), aPos.getY() ) )
-            rIsInside = sal_True;
+            rIsInside = TRUE;
         else if ( bTwoSubButtons )
         {
             qRectAddLine.setWidth( qRectAddLine.width() / 2 );
             rIsInside = qRectAddLine.contains( aPos.getX(), aPos.getY() );
         }
         break;
-
+        
         case PART_BUTTON_UP:
         if ( !bPlatinumStyle && qRectSubLine.contains( aPos.getX(), aPos.getY() ) )
-            rIsInside = sal_True;
+            rIsInside = TRUE;
         else if ( bTwoSubButtons )
         {
             qRectAddLine.setHeight( qRectAddLine.height() / 2 );
             rIsInside = qRectAddLine.contains( aPos.getX(), aPos.getY() );
         }
         break;
-
+        
         case PART_BUTTON_RIGHT:
         if ( bTwoSubButtons )
             qRectAddLine.setLeft( qRectAddLine.left() + qRectAddLine.width() / 2 );
 
         rIsInside = qRectAddLine.contains( aPos.getX(), aPos.getY() );
         break;
-
+        
         case PART_BUTTON_DOWN:
         if ( bTwoSubButtons )
             qRectAddLine.setTop( qRectAddLine.top() + qRectAddLine.height() / 2 );
 
         rIsInside = qRectAddLine.contains( aPos.getX(), aPos.getY() );
         break;
-
+        
         // cases PART_TRACK_HORZ_AREA and PART_TRACK_VERT_AREA
         default:
-        return sal_False;
+        return FALSE;
     }
 
-    return sal_True;
+    return TRUE;
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 
 /** Draw the requested control described by nPart/nState.
-
+ 
     @param rControlRegion
     The bounding region of the complete control in VCL frame coordinates.
-
+    
     @param aValue
     An optional value (tristate/numerical/string).
-
+    
     @param aCaption
     A caption or title string (like button text etc.)
 */
-sal_Bool KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
+BOOL KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
                                         const Rectangle& rControlRegion, ControlState nState,
                                         const ImplControlValue& aValue,
                                         const OUString& )
 {
-    sal_Bool bReturn = sal_False;
+    BOOL bReturn = FALSE;
 
     Display *dpy = GetXDisplay();
     XLIB_Window drawable = GetDrawable();
     GC gc = SelectPen(); //SelectFont(); // GC with current clipping region set
-
+    
     if ( (nType == CTRL_PUSHBUTTON) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
@@ -1381,7 +1377,7 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
     else if ( (nType == CTRL_COMBOBOX) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
-        pWidgetPainter->comboBox( rControlRegion, sal_True ),
+        pWidgetPainter->comboBox( rControlRegion, TRUE ),
         nState, aValue,
         dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
     }
@@ -1395,7 +1391,7 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
     else if ( (nType == CTRL_LISTBOX) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
-        pWidgetPainter->comboBox( rControlRegion, sal_False ),
+        pWidgetPainter->comboBox( rControlRegion, FALSE ),
         nState, aValue,
         dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
     }
@@ -1475,30 +1471,30 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
 
 
 /** Draw text on the widget.
-
+ 
     OPTIONAL. Draws the requested text for the control described by nPart/nState.
     Used if text is not drawn by DrawNativeControl().
-
+ 
     @param rControlRegion
     The bounding region of the complete control in VCL frame coordinates.
-
+    
     @param aValue
     An optional value (tristate/numerical/string)
-
+    
     @param aCaption
     A caption or title string (like button text etc.)
 */
-sal_Bool KDESalGraphics::drawNativeControlText( ControlType, ControlPart,
+BOOL KDESalGraphics::drawNativeControlText( ControlType, ControlPart,
                                             const Rectangle&, ControlState,
                                             const ImplControlValue&,
                                             const OUString& )
 {
-    return sal_False;
+    return FALSE;
 }
 
 /** Check if the bounding regions match.
 
-    If the return value is sal_True, rNativeBoundingRegion
+    If the return value is TRUE, rNativeBoundingRegion
     contains the true bounding region covered by the control
     including any adornment, while rNativeContentRegion contains the area
     within the control that can be safely drawn into without drawing over
@@ -1506,23 +1502,23 @@ sal_Bool KDESalGraphics::drawNativeControlText( ControlType, ControlPart,
 
     @param rControlRegion
     The bounding region of the control in VCL frame coordinates.
-
+    
     @param aValue
     An optional value (tristate/numerical/string)
-
+    
     @param aCaption
     A caption or title string (like button text etc.)
 */
-sal_Bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart,
+BOOL KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart,
                                              const Rectangle& rControlRegion, ControlState nState,
                                              const ImplControlValue&,
                                              const OUString&,
                                              Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
 {
-    sal_Bool bReturn = sal_False;
+    BOOL bReturn = FALSE;
     QRect qBoundingRect = WidgetPainter::region2QRect( rControlRegion );
     QRect qRect;
-
+    
     QWidget *pWidget = NULL;
     switch ( nType )
     {
@@ -1541,7 +1537,7 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
                 QStyle::PM_ButtonDefaultIndicator, pWidget );
             qBoundingRect.addCoords( -nIndicatorSize, -nIndicatorSize,
                 nIndicatorSize, nIndicatorSize );
-            bReturn = sal_True;
+            bReturn = TRUE;
             }
             break;
         }
@@ -1556,7 +1552,7 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
                 qRect.setWidth( kapp->style().pixelMetric( QStyle::PM_ExclusiveIndicatorWidth, pWidget ) );
                 qRect.setHeight( kapp->style().pixelMetric( QStyle::PM_ExclusiveIndicatorHeight, pWidget ) );
 
-                bReturn = sal_True;
+                bReturn = TRUE;
             }
             break;
 
@@ -1569,7 +1565,7 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
                 qRect.setWidth( kapp->style().pixelMetric( QStyle::PM_IndicatorWidth, pWidget ) );
                 qRect.setHeight( kapp->style().pixelMetric( QStyle::PM_IndicatorHeight, pWidget ) );
 
-                bReturn = sal_True;
+                bReturn = TRUE;
             }
             break;
 
@@ -1586,14 +1582,14 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
                 QStyle::CC_ComboBox, pWidget,
                 QStyle::SC_ComboBoxEditField ).right() + 1 );
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
-            bReturn = sal_True;
+            bReturn = TRUE;
             break;
 
         case PART_SUB_EDIT:
             qRect = kapp->style().querySubControlMetrics(
                 QStyle::CC_ComboBox, pWidget, QStyle::SC_ComboBoxEditField );
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
-            bReturn = sal_True;
+            bReturn = TRUE;
             break;
         }
         break;
@@ -1606,14 +1602,14 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
         case PART_BUTTON_UP:
             qRect = kapp->style().querySubControlMetrics(
                 QStyle::CC_SpinWidget, pWidget, QStyle::SC_SpinWidgetUp );
-            bReturn = sal_True;
+            bReturn = TRUE;
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
             break;
 
         case PART_BUTTON_DOWN:
             qRect = kapp->style().querySubControlMetrics(
                 QStyle::CC_SpinWidget, pWidget, QStyle::SC_SpinWidgetDown );
-            bReturn = sal_True;
+            bReturn = TRUE;
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
             break;
 
@@ -1621,7 +1617,7 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
             qRect = kapp->style().querySubControlMetrics(
                 QStyle::CC_SpinWidget, pWidget, QStyle::SC_SpinWidgetEditField );
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
-            bReturn = sal_True;
+            bReturn = TRUE;
             break;
         }
         break;
@@ -1660,10 +1656,10 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
                 qRect.setBottom( 0 );
             }
             }
-
+            
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
 
-            bReturn = sal_True;
+            bReturn = TRUE;
             break;
 
         case PART_BUTTON_RIGHT:
@@ -1684,7 +1680,7 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
 
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
 
-            bReturn = sal_True;
+            bReturn = TRUE;
             break;
         }
             break;
@@ -1703,7 +1699,7 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
     Size  aSize( qRect.width(), qRect.height() );
     rNativeContentRegion = Rectangle( aPoint, aSize );
     }
-
+    
     return bReturn;
 }
 
@@ -1711,12 +1707,12 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
 // KDESalFrame implementation
 // -----------------------------------------------------------------------
 
-KDESalFrame::KDESalFrame( SalFrame* pParent, sal_uLong nStyle ) :
+KDESalFrame::KDESalFrame( SalFrame* pParent, ULONG nStyle ) :
     X11SalFrame( pParent, nStyle )
 {
 }
 
-void KDESalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
+void KDESalFrame::Show( BOOL bVisible, BOOL bNoActivate )
 {
     if ( !GetParent() && ! (GetStyle() & SAL_FRAME_STYLE_INTRO) )
     {
@@ -1755,13 +1751,13 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
 {
     psp::FastPrintFontInfo aInfo;
     QFontInfo qFontInfo( rQFont );
-
+    
     // set family name
     aInfo.m_aFamilyName = String( rQFont.family().utf8(), RTL_TEXTENCODING_UTF8 );
 
     // set italic
     aInfo.m_eItalic = ( qFontInfo.italic()? psp::italic::Italic: psp::italic::Upright );
-
+    
     // set weight
     int nWeight = qFontInfo.weight();
     if ( nWeight <= QFont::Light )
@@ -1774,7 +1770,7 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
         aInfo.m_eWeight = psp::weight::Bold;
     else
         aInfo.m_eWeight = psp::weight::UltraBold;
-
+    
     // set width
     int nStretch = rQFont.stretch();
     if ( nStretch <= QFont::UltraCondensed )
@@ -1795,7 +1791,7 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
         aInfo.m_eWidth = psp::width::ExtraExpanded;
     else
         aInfo.m_eWidth = psp::width::UltraExpanded;
-
+    
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "font name BEFORE system match: \"%s\"\n", OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
@@ -1813,7 +1809,7 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
     int nPointHeight = qFontInfo.pointSize();
     if ( nPointHeight <= 0 )
         nPointHeight = rQFont.pointSize();
-
+    
     // Create the font
     Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
     if( aInfo.m_eWeight != psp::weight::Unknown )
@@ -1890,7 +1886,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     Color aBack = toColor( qColorGroup.background() );
     Color aText = toColor( qColorGroup.text() );
     Color aBase = toColor( qColorGroup.base() );
-
+    
     // Foreground
     aStyleSettings.SetRadioCheckTextColor( aFore );
     aStyleSettings.SetLabelTextColor( aFore );
@@ -1909,7 +1905,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetHelpColor( aBase );
     aStyleSettings.SetWindowColor( aBase );
     aStyleSettings.SetActiveTabColor( aBase );
-
+    
     // Buttons
     aStyleSettings.SetButtonTextColor( toColor( qColorGroup.buttonText() ) );
     aStyleSettings.SetButtonRolloverTextColor( toColor( qColorGroup.buttonText() ) );
@@ -1931,9 +1927,9 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     {
         Color aColor2 = aStyleSettings.GetLightColor();
         aStyleSettings.
-            SetCheckedColor( Color( (sal_uInt8)(((sal_uInt16)aBack.GetRed()+(sal_uInt16)aColor2.GetRed())/2),
-                        (sal_uInt8)(((sal_uInt16)aBack.GetGreen()+(sal_uInt16)aColor2.GetGreen())/2),
-                        (sal_uInt8)(((sal_uInt16)aBack.GetBlue()+(sal_uInt16)aColor2.GetBlue())/2)
+            SetCheckedColor( Color( (BYTE)(((USHORT)aBack.GetRed()+(USHORT)aColor2.GetRed())/2),
+                        (BYTE)(((USHORT)aBack.GetGreen()+(USHORT)aColor2.GetGreen())/2),
+                        (BYTE)(((USHORT)aBack.GetBlue()+(USHORT)aColor2.GetBlue())/2)
                         ) );
     }
 
@@ -1968,13 +1964,13 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     qMainWindow.createGUI( "/dev/null" ); // hack
 
     // Menu
-    aStyleSettings.SetSkipDisabledInMenus( sal_True );
+    aStyleSettings.SetSkipDisabledInMenus( TRUE );
     KMenuBar *pMenuBar = qMainWindow.menuBar();
     if ( pMenuBar )
     {
         // Color
         QColorGroup qMenuCG = pMenuBar->colorGroup();
-
+        
         // Menu text and background color, theme specific
         Color aMenuFore = toColor( qMenuCG.foreground() );
         Color aMenuBack = toColor( qMenuCG.background() );
@@ -1986,7 +1982,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
             aMenuFore = toColor( qMenuCG.buttonText() );
             aMenuBack = toColor( qMenuCG.button() );
         }
-
+        
         aStyleSettings.SetMenuTextColor( aMenuFore );
         aStyleSettings.SetMenuBarTextColor( aMenuFore );
         aStyleSettings.SetMenuColor( aMenuBack );
@@ -2005,7 +2001,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         }
         else
             aStyleSettings.SetMenuHighlightTextColor( aMenuFore );
-
+        
         // set special menubar higlight text color
         if ( kapp->style().inherits( "HighContrastStyle" ) )
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.highlightedText() );
@@ -2027,7 +2023,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
     // Scroll bar size
     aStyleSettings.SetScrollBarSize( kapp->style().pixelMetric( QStyle::PM_ScrollBarExtent ) );
-
+    
     rSettings.SetStyleSettings( aStyleSettings );
 }
 
@@ -2049,7 +2045,7 @@ SalGraphics* KDESalFrame::GetGraphics()
             }
         }
     }
-
+    
     return NULL;
 }
 
@@ -2089,7 +2085,7 @@ KDESalFrame::GraphicsHolder::~GraphicsHolder()
 // -----------------------------------------------------------------------
 
 SalFrame *
-KDESalInstance::CreateFrame( SalFrame *pParent, sal_uLong nStyle )
+KDESalInstance::CreateFrame( SalFrame *pParent, ULONG nStyle )
 {
     return new KDESalFrame( pParent, nStyle );
 }

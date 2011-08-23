@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-#define SC_RANGECOLORS  8
+#define SC_RANGECOLORS	8
 
 static ColorData aColNames[SC_RANGECOLORS] =
     { COL_LIGHTBLUE, COL_LIGHTRED, COL_LIGHTMAGENTA, COL_GREEN,
@@ -45,7 +45,7 @@ static ColorData aColNames[SC_RANGECOLORS] =
 
 ScRangeFindList::ScRangeFindList(const String& rName) :
     aDocName( rName ),
-    bHidden( false )
+    bHidden( FALSE )
 {
 }
 
@@ -59,7 +59,7 @@ ScRangeFindList::~ScRangeFindList()
     }
 }
 
-ColorData ScRangeFindList::GetColorName( size_t nIndex )
+ColorData ScRangeFindList::GetColorName( USHORT nIndex )		// static
 {
     return aColNames[nIndex % SC_RANGECOLORS];
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,22 +40,23 @@
 
 #include <svx/dialogs.hrc>
 
-#include "svx/insctrl.hxx"
+#include "insctrl.hxx"
 #include <svx/dialmgr.hxx>
 
-#define PAINT_OFFSET    5
+#define PAINT_OFFSET	5
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxInsertStatusBarControl, SfxBoolItem);
 
 // class SvxInsertStatusBarControl ---------------------------------------
 
-SvxInsertStatusBarControl::SvxInsertStatusBarControl( sal_uInt16 _nSlotId,
-                                                      sal_uInt16 _nId,
+SvxInsertStatusBarControl::SvxInsertStatusBarControl( USHORT _nSlotId,
+                                                      USHORT _nId,
                                                       StatusBar& rStb ) :
 
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
-    bInsert( sal_True )
+    bInsert( TRUE )
 {
+    rStb.SetHelpId( _nId, _nSlotId );
 }
 
 // -----------------------------------------------------------------------
@@ -66,7 +67,7 @@ SvxInsertStatusBarControl::~SvxInsertStatusBarControl()
 
 // -----------------------------------------------------------------------
 
-void SvxInsertStatusBarControl::StateChanged( sal_uInt16 , SfxItemState eState,
+void SvxInsertStatusBarControl::StateChanged( USHORT , SfxItemState eState,
                                               const SfxPoolItem* pState )
 {
     if ( SFX_ITEM_AVAILABLE != eState )
@@ -88,13 +89,13 @@ void SvxInsertStatusBarControl::Click()
         return;
     bInsert = !bInsert;
     SfxBoolItem aIns( GetSlotId(), bInsert );
-
+    
     ::com::sun::star::uno::Any a;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
     aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InsertMode" ));
     aIns.QueryValue( a );
     aArgs[0].Value = a;
-
+    
     execute( aArgs );
 }
 
@@ -109,14 +110,14 @@ void SvxInsertStatusBarControl::Paint( const UserDrawEvent& )
 
 void SvxInsertStatusBarControl::DrawItemText_Impl()
 {
-    sal_uInt16 _nId = RID_SVXSTR_OVERWRITE_TEXT;
+    USHORT _nId = RID_SVXSTR_OVERWRITE_TEXT;
 
     if ( bInsert )
         _nId = RID_SVXSTR_INSERT_TEXT;
     GetStatusBar().SetItemText( GetId(), SVX_RESSTR( _nId ) );
 }
 
-sal_uIntPtr SvxInsertStatusBarControl::GetDefItemWidth(const StatusBar& rStb)
+ULONG SvxInsertStatusBarControl::GetDefItemWidth(const StatusBar& rStb)
 {
     long nWidth1 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_OVERWRITE_TEXT));
     long nWidth2 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_INSERT_TEXT));

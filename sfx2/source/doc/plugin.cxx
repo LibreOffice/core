@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,14 +99,14 @@ void SAL_CALL PluginObject::initialize( const uno::Sequence< uno::Any >& aArgume
         aArguments[0] >>= mxObj;
 }
 
-sal_Bool SAL_CALL PluginObject::load(
+sal_Bool SAL_CALL PluginObject::load( 
     const uno::Sequence < com::sun::star::beans::PropertyValue >& /*lDescriptor*/,
-    const uno::Reference < frame::XFrame >& xFrame )
+    const uno::Reference < frame::XFrame >& xFrame ) 
 throw( uno::RuntimeException )
 {
-    uno::Reference< plugin::XPluginManager > xPMgr( mxFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginManager")) ), uno::UNO_QUERY );
+    uno::Reference< plugin::XPluginManager > xPMgr( mxFact->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.plugin.PluginManager") ), uno::UNO_QUERY );
     if (!xPMgr.is() )
-        return sal_False;
+        return FALSE;
 
     if ( SvtMiscOptions().IsPluginsEnabled() )
     {
@@ -116,10 +116,10 @@ throw( uno::RuntimeException )
         pWin->SetBackground();
         pWin->Show();
 
-        sal_uIntPtr nCount = maCmdList.Count();
+        ULONG nCount = maCmdList.Count();
         uno::Sequence < ::rtl::OUString > aCmds( nCount ), aArgs( nCount );
         ::rtl::OUString *pCmds = aCmds.getArray(), *pArgs = aArgs.getArray();
-        for( sal_uIntPtr i = 0; i < nCount; i++ )
+        for( ULONG i = 0; i < nCount; i++ )
         {
             SvCommand & rCmd = maCmdList.GetObject( i );
             pCmds[i] = rCmd.GetCommand();
@@ -137,7 +137,7 @@ throw( uno::RuntimeException )
             {
                 pWin->xWindow = xWindow;
                 pWin->Resize();
-                xWindow->setVisible( sal_True );
+                xWindow->setVisible( TRUE );
             }
 
             try
@@ -166,10 +166,10 @@ throw( uno::RuntimeException )
         // we must destroy the plugin before the parent is destroyed
         xWindow->addEventListener( this );
         xFrame->setComponent( xWindow, uno::Reference < frame::XController >() );
-        return mxPlugin.is() ? sal_True : sal_False;
+        return mxPlugin.is() ? TRUE : FALSE;
     }
 
-    return sal_False;
+    return FALSE;
 }
 
 void SAL_CALL PluginObject::cancel() throw( com::sun::star::uno::RuntimeException )
@@ -206,15 +206,15 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL PluginObject::getPropertySetI
 void SAL_CALL PluginObject::setPropertyValue(const ::rtl::OUString& aPropertyName, const uno::Any& aAny)
     throw ( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginURL")) )
+    if ( aPropertyName.equalsAscii("PluginURL") )
     {
         aAny >>= maURL;
     }
-    else if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginMimeType")) )
+    else if ( aPropertyName.equalsAscii("PluginMimeType") )
     {
         aAny >>= maMimeType;
     }
-    else if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginCommands")) )
+    else if ( aPropertyName.equalsAscii("PluginCommands") )
     {
         maCmdList.Clear();
         uno::Sequence < beans::PropertyValue > aCommandSequence;
@@ -229,15 +229,15 @@ uno::Any SAL_CALL PluginObject::getPropertyValue(const ::rtl::OUString& aPropert
         throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aAny;
-    if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginURL")) )
+    if ( aPropertyName.equalsAscii("PluginURL") )
     {
         aAny <<= maURL;
     }
-    else if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginMimeType")) )
+    else if ( aPropertyName.equalsAscii("PluginMimeType") )
     {
         aAny <<= maMimeType;
     }
-    else if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginCommands")) )
+    else if ( aPropertyName.equalsAscii("PluginCommands") )
     {
         uno::Sequence< beans::PropertyValue > aCommandSequence;
         maCmdList.FillSequence( aCommandSequence );

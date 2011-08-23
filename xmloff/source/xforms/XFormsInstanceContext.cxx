@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,10 +42,10 @@
 #include <com/sun/star/xforms/XModel.hpp>
 #include <tools/debug.hxx>
 
-#include <xmloff/xmlnmspe.hxx>
+#include <xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/xmlerror.hxx>
+#include <xmlerror.hxx>
 #include <xmloff/nmspmap.hxx>
 
 
@@ -71,9 +71,9 @@ static SvXMLTokenMapEntry aAttributes[] =
     XML_TOKEN_MAP_END
 };
 
-XFormsInstanceContext::XFormsInstanceContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
+XFormsInstanceContext::XFormsInstanceContext( 
+    SvXMLImport& rImport, 
+    USHORT nPrefix,
     const OUString& rLocalName,
     Reference<XPropertySet> xModel ) :
         TokenContext( rImport, nPrefix, rLocalName, aAttributes, aEmptyMap ),
@@ -86,15 +86,15 @@ XFormsInstanceContext::~XFormsInstanceContext()
 {
 }
 
-SvXMLImportContext* XFormsInstanceContext::CreateChildContext(
-    sal_uInt16 nPrefix,
+SvXMLImportContext* XFormsInstanceContext::CreateChildContext( 
+    USHORT nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList>& )
 {
     SvXMLImportContext* pContext = NULL;
 
     // only the first element child of an xforms:instance element
-    // is used as an instance. The other children remainder must be
+    // is used as an instance. The other children remainder must be 
     // ignored.
     if( mxInstance.is() )
     {
@@ -104,7 +104,7 @@ SvXMLImportContext* XFormsInstanceContext::CreateChildContext(
     else
     {
         // create new DomBuilderContext. Save reference to tree in Model.
-        DomBuilderContext* pInstance =
+        DomBuilderContext* pInstance = 
             new DomBuilderContext( GetImport(), nPrefix, rLocalName );
         mxInstance = pInstance->getTree();
         pContext = pInstance;
@@ -130,8 +130,8 @@ void XFormsInstanceContext::EndElement()
 }
 
 
-void XFormsInstanceContext::HandleAttribute(
-    sal_uInt16 nToken,
+void XFormsInstanceContext::HandleAttribute( 
+    sal_uInt16 nToken, 
     const rtl::OUString& rValue )
 {
     switch( nToken )
@@ -143,18 +143,18 @@ void XFormsInstanceContext::HandleAttribute(
         msId = rValue;
         break;
     default:
-        OSL_FAIL( "should not happen" );
+        DBG_ERROR( "should not happen" );
         break;
     }
 }
 
-SvXMLImportContext* XFormsInstanceContext::HandleChild(
+SvXMLImportContext* XFormsInstanceContext::HandleChild( 
     sal_uInt16,
     sal_uInt16,
     const OUString&,
     const Reference<XAttributeList>& )
 {
-    OSL_FAIL( "to be handled by CreateChildContext" );
+    DBG_ERROR( "to be handled by CreateChildContext" );
     return NULL;
 }
 

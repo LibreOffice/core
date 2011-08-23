@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,23 +41,23 @@
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include "UITools.hxx"
-#include <osl/diagnose.h>
 
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::form;
+//	using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-namespace
+namespace 
 {
     sal_Bool isGrabVclControlFocusAllowed(const UnoDataBrowserView* _pView)
     {
-        sal_Bool bGrabFocus = sal_False;
+        sal_Bool bGrabFocus = sal_False; 
         SbaGridControl* pVclControl = _pView->getVclControl();
         Reference< ::com::sun::star::awt::XControl > xGrid = _pView->getGridControl();
         if (pVclControl && xGrid.is())
@@ -81,7 +81,7 @@ namespace
 
 DBG_NAME(UnoDataBrowserView)
 // -------------------------------------------------------------------------
-UnoDataBrowserView::UnoDataBrowserView( Window* pParent,
+UnoDataBrowserView::UnoDataBrowserView(	Window* pParent, 
                                         IController& _rController,
                                         const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rFactory)
     :ODataView(pParent,_rController,_rFactory)
@@ -105,7 +105,7 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
 
         // create the (UNO-) control
         m_xGrid = new SbaXGridControl(getORB());
-        OSL_ENSURE(m_xGrid.is(), "UnoDataBrowserView::Construct : could not create a grid control !");
+        DBG_ASSERT(m_xGrid.is(), "UnoDataBrowserView::Construct : could not create a grid control !");
         // in design mode (for the moment)
         m_xGrid->setDesignMode(sal_True);
 
@@ -121,9 +121,9 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
 
         // get the VCL-control
         m_pVclControl = NULL;
-        getVclControl();
+        getVclControl();		
 
-        OSL_ENSURE(m_pVclControl != NULL, "UnoDataBrowserView::Construct : no real grid control !");
+        DBG_ASSERT(m_pVclControl != NULL, "UnoDataBrowserView::Construct : no real grid control !");
     }
     catch(Exception&)
     {
@@ -139,7 +139,7 @@ UnoDataBrowserView::~UnoDataBrowserView()
         m_pSplitter = NULL;
     }
     setTreeView(NULL);
-
+    
     if ( m_pStatus )
     {
         delete m_pStatus;
@@ -215,17 +215,17 @@ void UnoDataBrowserView::hideStatus()
 // -------------------------------------------------------------------------
 void UnoDataBrowserView::resizeDocumentView(Rectangle& _rPlayground)
 {
-    Point   aSplitPos;
-    Size    aSplitSize;
-    Point   aPlaygroundPos( _rPlayground.TopLeft() );
-    Size    aPlaygroundSize( _rPlayground.GetSize() );
+    Point	aSplitPos;
+    Size	aSplitSize;
+    Point	aPlaygroundPos( _rPlayground.TopLeft() );
+    Size	aPlaygroundSize( _rPlayground.GetSize() );
 
     if (m_pTreeView && m_pTreeView->IsVisible() && m_pSplitter)
     {
         // calculate the splitter pos and size
-        aSplitPos   = m_pSplitter->GetPosPixel();
+        aSplitPos	= m_pSplitter->GetPosPixel();
         aSplitPos.Y() = aPlaygroundPos.Y();
-        aSplitSize  = m_pSplitter->GetOutputSizePixel();
+        aSplitSize	= m_pSplitter->GetOutputSizePixel();
         aSplitSize.Height() = aPlaygroundSize.Height();
 
         if( ( aSplitPos.X() + aSplitSize.Width() ) > ( aPlaygroundSize.Width() ))
@@ -235,8 +235,8 @@ void UnoDataBrowserView::resizeDocumentView(Rectangle& _rPlayground)
             aSplitPos.X() = aPlaygroundPos.X() + sal_Int32(aPlaygroundSize.Width() * 0.2);
 
         // the tree pos and size
-        Point   aTreeViewPos( aPlaygroundPos );
-        Size    aTreeViewSize( aSplitPos.X(), aPlaygroundSize.Height() );
+        Point	aTreeViewPos( aPlaygroundPos );
+        Size	aTreeViewSize( aSplitPos.X(), aPlaygroundSize.Height() );
 
         // the status pos and size
         if (m_pStatus && m_pStatus->IsVisible())
@@ -249,7 +249,7 @@ void UnoDataBrowserView::resizeDocumentView(Rectangle& _rPlayground)
             m_pStatus->SetPosSizePixel( aStatusPos, aStatusSize );
             aTreeViewSize.Height() -= aStatusSize.Height();
         }
-
+        
         // set the size of treelistbox
         m_pTreeView->SetPosSizePixel( aTreeViewPos, aTreeViewSize );
 
@@ -276,8 +276,8 @@ sal_uInt16 UnoDataBrowserView::View2ModelPos(sal_uInt16 nPos) const
 }
 
 // -----------------------------------------------------------------------------
-SbaGridControl* UnoDataBrowserView::getVclControl() const
-{
+SbaGridControl*	UnoDataBrowserView::getVclControl() const	
+{ 
     if ( !m_pVclControl )
     {
         OSL_ENSURE(m_xGrid.is(),"Grid not set!");
@@ -296,7 +296,7 @@ SbaGridControl* UnoDataBrowserView::getVclControl() const
             }
         }
     }
-    return m_pVclControl;
+    return m_pVclControl; 
 }
 // -----------------------------------------------------------------------------
 void UnoDataBrowserView::GetFocus()
@@ -334,8 +334,8 @@ long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
         {
             const KeyEvent* pKeyEvt = rNEvt.GetKeyEvent();
             const KeyCode& rKeyCode = pKeyEvt->GetKeyCode();
-            if (  ( rKeyCode == KeyCode( KEY_E, sal_True, sal_True, sal_False, sal_False ) )
-               || ( rKeyCode == KeyCode( KEY_TAB, sal_True, sal_False, sal_False, sal_False ) )
+            if (  ( rKeyCode == KeyCode( KEY_E, TRUE, TRUE, FALSE, FALSE ) )
+               || ( rKeyCode == KeyCode( KEY_TAB, TRUE, FALSE, FALSE, FALSE ) )
                )
             {
                 if ( m_pTreeView && m_pVclControl && m_pTreeView->HasChildPathFocus() )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ SfxListener::SfxListener( const SfxListener &rListener )
 {
     DBG_CTOR(SfxListener, 0);
 
-    for ( sal_uInt16 n = 0; n < rListener.aBCs.Count(); ++n )
+    for ( USHORT n = 0; n < rListener.aBCs.Count(); ++n )
         StartListening( *rListener.aBCs[n] );
 }
 //--------------------------------------------------------------------
@@ -70,7 +70,7 @@ SfxListener::~SfxListener()
     DBG_DTOR(SfxListener, 0);
 
     // unregister at all remainding broadcasters
-    for ( sal_uInt16 nPos = 0; nPos < aBCs.Count(); ++nPos )
+    for ( USHORT nPos = 0; nPos < aBCs.Count(); ++nPos )
     {
         SfxBroadcaster *pBC = aBCs[nPos];
         pBC->RemoveListener(*this);
@@ -93,7 +93,7 @@ void SfxListener::RemoveBroadcaster_Impl( SfxBroadcaster& rBC )
 
 // registeres at a specific SfxBroadcaster
 
-sal_Bool SfxListener::StartListening( SfxBroadcaster& rBroadcaster, sal_Bool bPreventDups )
+BOOL SfxListener::StartListening( SfxBroadcaster& rBroadcaster, BOOL bPreventDups )
 {
     DBG_CHKTHIS(SfxListener, 0);
 
@@ -105,23 +105,23 @@ sal_Bool SfxListener::StartListening( SfxBroadcaster& rBroadcaster, sal_Bool bPr
             aBCs.Insert( pBC, aBCs.Count() );
 
             DBG_ASSERT( IsListening(rBroadcaster), "StartListening failed" );
-            return sal_True;
+            return TRUE;
         }
 
     }
-    return sal_False;
+    return FALSE;
 }
 
 //--------------------------------------------------------------------
 
 // unregisteres at a specific SfxBroadcaster
 
-sal_Bool SfxListener::EndListening( SfxBroadcaster& rBroadcaster, sal_Bool bAllDups )
+BOOL SfxListener::EndListening( SfxBroadcaster& rBroadcaster, BOOL bAllDups )
 {
     DBG_CHKTHIS(SfxListener, 0);
 
     if ( !IsListening( rBroadcaster ) )
-        return sal_False;
+        return FALSE;
 
     do
     {
@@ -130,14 +130,14 @@ sal_Bool SfxListener::EndListening( SfxBroadcaster& rBroadcaster, sal_Bool bAllD
         aBCs.Remove( aBCs.GetPos(pBC), 1 );
     }
     while ( bAllDups && IsListening( rBroadcaster ) );
-    return sal_True;
+    return TRUE;
 }
 
 //--------------------------------------------------------------------
 
 // unregisteres at a specific SfxBroadcaster by index
 
-void SfxListener::EndListening( sal_uInt16 nNo )
+void SfxListener::EndListening( USHORT nNo )
 {
     DBG_CHKTHIS(SfxListener, 0);
 
@@ -165,7 +165,7 @@ void SfxListener::EndListeningAll()
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxListener::IsListening( SfxBroadcaster& rBroadcaster ) const
+BOOL SfxListener::IsListening( SfxBroadcaster& rBroadcaster ) const
 {
     const SfxBroadcaster *pBC = &rBroadcaster;
     return USHRT_MAX != aBCs.GetPos( pBC );

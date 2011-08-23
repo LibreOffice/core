@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,56 +32,56 @@
 #include "sbcomp.hxx"
 #include "expr.hxx"
 
-// Transform table for token operators and opcodes
+// Umsetztabelle fuer Token-Operatoren und Opcodes
 
 typedef struct {
-        SbiToken  eTok;                 // Token
-        SbiOpcode eOp;                  // Opcode
+        SbiToken  eTok; 				// Token
+        SbiOpcode eOp;  				// Opcode
 } OpTable;
 
 static OpTable aOpTable [] = {
     { EXPON,_EXP },
-    { MUL,  _MUL },
-    { DIV,  _DIV },
-    { IDIV, _IDIV },
-    { MOD,  _MOD },
-    { PLUS, _PLUS },
+    { MUL,	_MUL },
+    { DIV,	_DIV },
+    { IDIV,	_IDIV },
+    { MOD,	_MOD },
+    { PLUS,	_PLUS },
     { MINUS,_MINUS },
-    { EQ,   _EQ },
-    { NE,   _NE },
-    { LE,   _LE },
-    { GE,   _GE },
-    { LT,   _LT },
-    { GT,   _GT },
-    { AND,  _AND },
-    { OR,   _OR },
-    { XOR,  _XOR },
-    { EQV,  _EQV },
-    { IMP,  _IMP },
-    { NOT,  _NOT },
-    { NEG,  _NEG },
-    { CAT,  _CAT },
+    { EQ,	_EQ },
+    { NE,	_NE },
+    { LE,	_LE },
+    { GE,	_GE },
+    { LT,	_LT },
+    { GT,	_GT },
+    { AND,	_AND },
+    { OR,	_OR },
+    { XOR,	_XOR },
+    { EQV,	_EQV },
+    { IMP,	_IMP },
+    { NOT,	_NOT },
+    { NEG,	_NEG },
+    { CAT,	_CAT },
     { LIKE, _LIKE },
     { IS,   _IS },
     { NIL,  _NOP }};
 
-// Output of an element
+// Ausgabe eines Elements
 void SbiExprNode::Gen( RecursiveMode eRecMode )
 {
     if( IsConstant() )
     {
         switch( GetType() )
         {
-            case SbxEMPTY:   pGen->Gen( _EMPTY ); break;
+            case SbxEMPTY:	 pGen->Gen( _EMPTY ); break;
             case SbxINTEGER: pGen->Gen( _CONST,  (short) nVal ); break;
-            case SbxSTRING:
+            case SbxSTRING:  
             {
-                sal_uInt16 nStringId = pGen->GetParser()->aGblStrings.Add( aStrVal, sal_True );
+                USHORT nStringId = pGen->GetParser()->aGblStrings.Add( aStrVal, TRUE );
                 pGen->Gen( _SCONST, nStringId ); break;
             }
             default:
             {
-                sal_uInt16 nStringId = pGen->GetParser()->aGblStrings.Add( nVal, eType );
+                USHORT nStringId = pGen->GetParser()->aGblStrings.Add( nVal, eType );
                 pGen->Gen( _NUMBER, nStringId );
             }
         }
@@ -109,20 +109,20 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
                     eOp = aVar.pDef->IsGlobal() ? _FIND_G : _FIND;
             }
         }
-        // special treatment for WITH
+        // AB: 17.12.1995, Spezialbehandlung fuer WITH
         else if( (pWithParent_ = GetWithParent()) != NULL )
         {
-            eOp = _ELEM;            // .-Term in in WITH
+            eOp = _ELEM;			// .-Ausdruck in WITH
         }
         else
         {
-            eOp = ( aVar.pDef->GetScope() == SbRTL ) ? _RTL :
+            eOp = ( aVar.pDef->GetScope() == SbRTL ) ? _RTL : 
                 (aVar.pDef->IsGlobal() ? _FIND_G : _FIND);
         }
 
         if( eOp == _FIND )
         {
-
+    
             SbiProcDef* pProc = aVar.pDef->GetProcDef();
             if ( pGen->GetParser()->bClassModule )
                 eOp = _FIND_CM;
@@ -163,7 +163,7 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
     }
 }
 
-// Output of an operand element
+// Ausgabe eines Operanden-Elements
 
 void SbiExprNode::GenElement( SbiOpcode eOp )
 {
@@ -172,18 +172,18 @@ void SbiExprNode::GenElement( SbiOpcode eOp )
         pGen->GetParser()->Error( SbERR_INTERNAL_ERROR, "Opcode" );
 #endif
     SbiSymDef* pDef = aVar.pDef;
-    // The ID is either the position or the String-ID
-    // If the bit Bit 0x8000 is set, the variable have
-    // a parameter list.
-    sal_uInt16 nId = ( eOp == _PARAM ) ? pDef->GetPos() : pDef->GetId();
-    // Build a parameter list
+    // Das ID ist entweder die Position oder das String-ID
+    // Falls das Bit 0x8000 gesetzt ist, hat die Variable
+    // eine Parameterliste.
+    USHORT nId = ( eOp == _PARAM ) ? pDef->GetPos() : pDef->GetId();
+    // Parameterliste aufbauen
     if( aVar.pPar && aVar.pPar->GetSize() )
     {
         nId |= 0x8000;
         aVar.pPar->Gen();
     }
-
-    pGen->Gen( eOp, nId, sal::static_int_cast< sal_uInt16 >( GetType() ) );
+        
+    pGen->Gen( eOp, nId, sal::static_int_cast< UINT16 >( GetType() ) );
 
     if( aVar.pvMorePar )
     {
@@ -198,48 +198,48 @@ void SbiExprNode::GenElement( SbiOpcode eOp )
     }
 }
 
-// Create an Argv-Table
-// The first element remain available for return value etc.
-// See as well SbiProcDef::SbiProcDef() in symtbl.cxx
+// Erzeugen einer Argv-Tabelle
+// Das erste Element bleibt immer frei fuer Returnwerte etc.
+// Siehe auch SbiProcDef::SbiProcDef() in symtbl.cxx
 
 void SbiExprList::Gen()
 {
     if( pFirst )
     {
         pParser->aGen.Gen( _ARGC );
-        // Type adjustment at DECLARE
-        sal_uInt16 nCount = 1;
-
+        // AB 10.1.96: Typ-Anpassung bei DECLARE
+        USHORT nCount = 1 /*, nParAnz = 0*/;
+//		SbiSymPool* pPool = NULL;
         for( SbiExpression* pExpr = pFirst; pExpr; pExpr = pExpr->pNext,nCount++ )
         {
             pExpr->Gen();
             if( pExpr->GetName().Len() )
             {
                 // named arg
-                sal_uInt16 nSid = pParser->aGblStrings.Add( pExpr->GetName() );
+                USHORT nSid = pParser->aGblStrings.Add( pExpr->GetName() );
                 pParser->aGen.Gen( _ARGN, nSid );
 
                 /* TODO: Check after Declare concept change
-                // From 1996-01-10: Type adjustment at named -> search suitable parameter
+                // AB 10.1.96: Typanpassung bei named -> passenden Parameter suchen
                 if( pProc )
                 {
-                    // For the present: trigger an error
+                    // Vorerst: Error ausloesen
                     pParser->Error( SbERR_NO_NAMED_ARGS );
 
-                    // Later, if Named Args at DECLARE is posible
-                    //for( sal_uInt16 i = 1 ; i < nParAnz ; i++ )
+                    // Spaeter, wenn Named Args bei DECLARE moeglich
+                    //for( USHORT i = 1 ; i < nParAnz ; i++ )
                     //{
-                    //  SbiSymDef* pDef = pPool->Get( i );
-                    //  const String& rName = pDef->GetName();
-                    //  if( rName.Len() )
-                    //  {
-                    //      if( pExpr->GetName().ICompare( rName )
-                    //          == COMPARE_EQUAL )
-                    //      {
-                    //          pParser->aGen.Gen( _ARGTYP, pDef->GetType() );
-                    //          break;
-                    //      }
-                    //  }
+                    //	SbiSymDef* pDef = pPool->Get( i );
+                    //	const String& rName = pDef->GetName();
+                    //	if( rName.Len() )
+                    //	{
+                    //		if( pExpr->GetName().ICompare( rName )
+                    //			== COMPARE_EQUAL )
+                    //		{
+                    //			pParser->aGen.Gen( _ARGTYP, pDef->GetType() );
+                    //			break;
+                    //		}
+                    //	}
                     //}
                 }
                 */
@@ -254,16 +254,16 @@ void SbiExprList::Gen()
 
 void SbiExpression::Gen( RecursiveMode eRecMode )
 {
-    // special treatment for WITH
-    // If pExpr == .-term in With, approximately Gen for Basis-Object
+    // AB: 17.12.1995, Spezialbehandlung fuer WITH
+    // Wenn pExpr == .-Ausdruck in With, zunaechst Gen fuer Basis-Objekt
     pExpr->Gen( eRecMode );
     if( bByVal )
         pParser->aGen.Gen( _BYVAL );
     if( bBased )
     {
-        sal_uInt16 uBase = pParser->nBase;
+        USHORT uBase = pParser->nBase;
         if( pParser->IsCompatible() )
-            uBase |= 0x8000;        // #109275 Flag compatiblity
+            uBase |= 0x8000;		// #109275 Flag compatiblity
         pParser->aGen.Gen( _BASED, uBase );
         pParser->aGen.Gen( _ARGV );
     }

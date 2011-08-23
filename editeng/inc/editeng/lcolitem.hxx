@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <editeng/editengdllapi.h>
 
 /*
- * Dummy item for ToolBox controller:
+ * dummy-Item fuer ToolBox-Controller:
  *
  */
 
@@ -43,9 +43,9 @@ class EDITENG_DLLPUBLIC SvxLineColorItem : public SvxColorItem
 public:
     TYPEINFO();
 
-    SvxLineColorItem( const sal_uInt16 nId  );
-    SvxLineColorItem( const Color& aColor, const sal_uInt16 nId  );
-    SvxLineColorItem( SvStream& rStrm, const sal_uInt16 nId  );
+    SvxLineColorItem( const USHORT nId  );
+    SvxLineColorItem( const Color& aColor, const USHORT nId  );
+    SvxLineColorItem( SvStream& rStrm, const USHORT nId  );
     SvxLineColorItem( const SvxLineColorItem& rCopy );
     ~SvxLineColorItem();
 

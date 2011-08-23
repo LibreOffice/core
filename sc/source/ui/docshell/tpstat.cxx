@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 // Dokumentinfo-Tabpage:
 //========================================================================
 
-SfxTabPage* ScDocStatPage::Create( Window *pParent, const SfxItemSet& rSet )
+SfxTabPage* __EXPORT ScDocStatPage::Create( Window *pParent, const SfxItemSet& rSet )
 {
     return new ScDocStatPage( pParent, rSet );
 }
@@ -53,17 +53,17 @@ SfxTabPage* ScDocStatPage::Create( Window *pParent, const SfxItemSet& rSet )
 //------------------------------------------------------------------------
 
 ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
-    :   SfxTabPage( pParent, ScResId(RID_SCPAGE_STAT), rSet ),
+    :	SfxTabPage( pParent, ScResId(RID_SCPAGE_STAT), rSet ),
         aFlInfo         ( this, ScResId( FL_INFO ) ),
-        aFtTablesLbl    ( this, ScResId( FT_TABLES_LBL ) ),
-        aFtTables       ( this, ScResId( FT_TABLES ) ),
-        aFtCellsLbl     ( this, ScResId( FT_CELLS_LBL ) ),
-        aFtCells        ( this, ScResId( FT_CELLS ) ),
-        aFtPagesLbl     ( this, ScResId( FT_PAGES_LBL ) ),
-        aFtPages        ( this, ScResId( FT_PAGES ) )
+        aFtTablesLbl	( this, ScResId( FT_TABLES_LBL ) ),
+        aFtTables		( this, ScResId( FT_TABLES ) ),
+        aFtCellsLbl		( this, ScResId( FT_CELLS_LBL ) ),
+        aFtCells		( this, ScResId( FT_CELLS ) ),
+        aFtPagesLbl		( this, ScResId( FT_PAGES_LBL ) ),
+        aFtPages		( this, ScResId( FT_PAGES ) )
 {
     ScDocShell* pDocSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
-    ScDocStat   aDocStat;
+    ScDocStat	aDocStat;
 
     if ( pDocSh )
         pDocSh->GetDocStat( aDocStat );
@@ -71,29 +71,29 @@ ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
     String aInfo = aFlInfo.GetText();
     aInfo += aDocStat.aDocName;
     aFlInfo     .SetText( aInfo );
-    aFtTables   .SetText( String::CreateFromInt32( aDocStat.nTableCount ) );
-    aFtCells    .SetText( String::CreateFromInt32( aDocStat.nCellCount ) );
-    aFtPages    .SetText( String::CreateFromInt32( aDocStat.nPageCount ) );
+    aFtTables	.SetText( String::CreateFromInt32( aDocStat.nTableCount ) );
+    aFtCells	.SetText( String::CreateFromInt32( aDocStat.nCellCount ) );
+    aFtPages	.SetText( String::CreateFromInt32( aDocStat.nPageCount ) );
 
     FreeResource();
 }
 
 //------------------------------------------------------------------------
 
-ScDocStatPage::~ScDocStatPage()
+__EXPORT ScDocStatPage::~ScDocStatPage()
 {
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool ScDocStatPage::FillItemSet( SfxItemSet& /* rSet */ )
+BOOL __EXPORT ScDocStatPage::FillItemSet( SfxItemSet& /* rSet */ )
 {
-    return false;
+    return FALSE;
 }
 
 //------------------------------------------------------------------------
 
-void ScDocStatPage::Reset( const SfxItemSet& /* rSet */ )
+void __EXPORT ScDocStatPage::Reset( const SfxItemSet& /* rSet */ )
 {
 }
 

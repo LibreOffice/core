@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,13 +52,13 @@ static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
 {
     Sequence<Any> *pRet = 0;
 
-    sal_uInt16 nCount = rArgs.Count();
+    USHORT nCount = rArgs.Count();
     if( nCount > 1 )
     {
         nCount--;
         pRet = new Sequence<Any>( nCount );
         Any *pUnoArgs = pRet->getArray();
-        for( sal_uInt16 i=0; i<nCount; i++ )
+        for( USHORT i=0; i<nCount; i++ )
         {
             SbxVariable *pVar = rArgs.Get( i+1 );
             switch( pVar->GetType() )
@@ -85,7 +85,7 @@ static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
     return pRet;
 }
 
-sal_Bool SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
+BOOL SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
 {
     ErrCode eErr = 0;
     switch( rMacro.GetScriptType() )
@@ -97,7 +97,7 @@ sal_Bool SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs
             aRef = pRetValue;
             eErr = pDocShell->CallBasic( rMacro.GetMacName(),
                                          rMacro.GetLibName(),
-                                         pArgs, pRet ? pRetValue : 0 );
+                                         0, pArgs, pRet ? pRetValue : 0 );
 
             if( pRet && SbxNULL <  pRetValue->GetType() &&
                         SbxVOID != pRetValue->GetType() )
@@ -134,6 +134,12 @@ sal_Bool SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs
             eErr = pDocShell->CallXScript(
                 rMacro.GetMacName(), *pUnoArgs, aRet, aOutArgsIndex, aOutArgs);
 
+            //*pRet = pRetValue->GetString();
+            // use the AnyConverter to return a String if appropriate?
+
+            // need to call something like lcl_translateUno2Basic
+            // pArgs = lcl_translateUno2Basic( pUnoArgs );
+
             delete pUnoArgs;
             break;
         }
@@ -144,13 +150,13 @@ sal_Bool SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs
 
 
 
-sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
-                    sal_Bool bCheckPtr, SbxArray* pArgs, const Link* )
+USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
+                    BOOL bCheckPtr, SbxArray* pArgs, const Link* )
 {
-    if( !pDocShell )        // ohne DocShell geht das nicht!
+    if( !pDocShell )		// ohne DocShell geht das nicht!
         return 0;
 
-    sal_uInt16 nRet = 0;
+    USHORT nRet = 0;
     const SvxMacroTableDtor* pTbl = 0;
     switch( rCallEvent.eType )
     {
@@ -158,12 +164,12 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
         if( bCheckPtr  )
         {
             const SfxPoolItem* pItem;
-            sal_uInt32 n, nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
+            USHORT n, nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_INETFMT );
             for( n = 0; n < nMaxItems; ++n )
-                if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n ) )
+                if( 0 != (pItem = GetAttrPool().GetItem( RES_TXTATR_INETFMT, n ) )
                     && rCallEvent.PTR.pINetAttr == pItem )
                 {
-                    bCheckPtr = sal_False;      // als Flag missbrauchen
+                    bCheckPtr = FALSE;		// als Flag missbrauchen
                     break;
                 }
         }
@@ -177,9 +183,9 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             const SwFrmFmtPtr pFmt = (SwFrmFmtPtr)rCallEvent.PTR.pFmt;
             if( bCheckPtr )
             {
-                sal_uInt16 nPos = GetSpzFrmFmts()->GetPos( pFmt );
+                USHORT nPos = GetSpzFrmFmts()->GetPos( pFmt );
                 if( USHRT_MAX != nPos )
-                    bCheckPtr = sal_False;      // als Flag missbrauchen
+                    bCheckPtr = FALSE;		// als Flag missbrauchen
             }
             if( !bCheckPtr )
                 pTbl = &pFmt->GetMacro().GetMacroTable();
@@ -192,7 +198,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             if( bCheckPtr )
             {
                 const SwFrmFmtPtr pFmt = (SwFrmFmtPtr)rCallEvent.PTR.IMAP.pFmt;
-                sal_uInt16 nPos = GetSpzFrmFmts()->GetPos( pFmt );
+                USHORT nPos = GetSpzFrmFmts()->GetPos( pFmt );
                 const ImageMap* pIMap;
                 if( USHRT_MAX != nPos &&
                     0 != (pIMap = pFmt->GetURL().GetMap()) )
@@ -200,7 +206,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
                     for( nPos = pIMap->GetIMapObjectCount(); nPos; )
                         if( pIMapObj == pIMap->GetIMapObject( --nPos ))
                         {
-                            bCheckPtr = sal_False;      // als Flag missbrauchen
+                            bCheckPtr = FALSE;		// als Flag missbrauchen
                             break;
                         }
                 }
@@ -222,7 +228,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             if( STARBASIC == rMacro.GetScriptType() )
             {
                 nRet += 0 == pDocShell->CallBasic( rMacro.GetMacName(),
-                                    rMacro.GetLibName(), pArgs ) ? 1 : 0;
+                                    rMacro.GetLibName(), 0, pArgs ) ? 1 : 0;
             }
             else if( EXTENDED_STYPE == rMacro.GetScriptType() )
             {
@@ -247,6 +253,12 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
 
                 nRet += 0 == pDocShell->CallXScript(
                     rMacro.GetMacName(), *pUnoArgs,aRet, aOutArgsIndex, aOutArgs) ? 1 : 0;
+
+                //*pRet = pRetValue->GetString();
+                // use the AnyConverter to return a String if appropriate?
+
+                // need to call something like lcl_translateUno2Basic
+                // pArgs = lcl_translateUno2Basic( pUnoArgs );
 
                 delete pUnoArgs;
             }

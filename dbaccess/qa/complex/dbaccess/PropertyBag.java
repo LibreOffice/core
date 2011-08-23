@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,26 +27,14 @@
 
 package complex.dbaccess;
 
-// import complexlib.ComplexTestCase;
+import complexlib.ComplexTestCase;
 
-import com.sun.star.beans.NamedValue;
-import com.sun.star.beans.PropertyState;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.PropertyAttribute;
-import com.sun.star.beans.XPropertyAccess;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.XPropertyContainer;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.beans.*;
 
-// ---------- junit imports -----------------
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
-// ------------------------------------------
-
-public class PropertyBag extends TestCase
+public class PropertyBag extends ComplexTestCase
 {
     private static final String VALUE = "Value";
     private XPropertyContainer      m_bag;
@@ -54,23 +42,30 @@ public class PropertyBag extends TestCase
     private XPropertyAccess         m_access;
     private XMultiServiceFactory    m_orb = null;
 
+    public String[] getTestMethodNames()
+    {
+        return new String[]
+        {
+            "checkBasics",
+            "checkSequenceAccess",
+            "checkDynamicSet"
+        };
+    }
+
     public String getTestObjectName()
     {
         return "PropertyBag";
     }
 
-    @Before
-    @Override
     public void before()
     {
-        m_orb = getMSF();
+        m_orb = (XMultiServiceFactory)param.getMSF();
     }
 
-    @Test
     public void checkBasics()
     {
         createEmptyBag();
-        System.out.println("testing the basics");
+        log.println("testing the basics");
 
         // check whether empty property names are rejected
         boolean caughtExpected = false;
@@ -81,9 +76,7 @@ public class PropertyBag extends TestCase
         catch(com.sun.star.lang.IllegalArgumentException e) { caughtExpected = true; }
         catch(com.sun.star.uno.Exception e) { }
         if ( !caughtExpected )
-        {
-            fail("empty property names are not rejected by XPropertyContainer::addProperty");
-        }
+            failed( "empty property names are not rejected by XPropertyContainer::addProperty" );
 
         // check whether duplicate insertions are rejected
         caughtExpected = false;
@@ -95,9 +88,7 @@ public class PropertyBag extends TestCase
         catch(com.sun.star.beans.PropertyExistException e) { caughtExpected = true; }
         catch(com.sun.star.uno.Exception e) { }
         if ( !caughtExpected )
-        {
-            fail("insertion of duplicate property names is not rejected");
-        }
+            failed( "insertion of duplicate property names is not rejected" );
 
         // try removing the property we just added - this should fail, as it does not have
         // the REMOVEABLE attribute
@@ -109,9 +100,7 @@ public class PropertyBag extends TestCase
         catch(com.sun.star.beans.NotRemoveableException e) { caughtExpected = true; }
         catch(com.sun.star.uno.Exception e) { }
         if ( !caughtExpected )
-        {
-            fail("removing non-removeable properties is expected to fail - but it didn't");
-        }
+            failed( "removing non-removeable properties is expected to fail - but it didn't" );
 
         // try removing a non-existent property
         caughtExpected = false;
@@ -122,9 +111,7 @@ public class PropertyBag extends TestCase
         catch(com.sun.star.beans.UnknownPropertyException e) { caughtExpected = true; }
         catch(com.sun.star.uno.Exception e) { }
         if ( !caughtExpected )
-        {
-            fail("removing non-existent properties is expected to fail - but it didn't");
-        }
+            failed( "removing non-existent properties is expected to fail - but it didn't" );
 
         // try writing and reading a value for the one property we have so far
         try
@@ -133,13 +120,11 @@ public class PropertyBag extends TestCase
             m_set.setPropertyValue(  VALUE , testValue);
             final String currentValue = (String)m_set.getPropertyValue( VALUE);
             if ( !currentValue.equals( testValue ) )
-            {
-                fail("set property is not remembered");
-            }
+                failed( "set property is not remembered" );
         }
         catch(com.sun.star.uno.Exception e)
         {
-            fail( "setting or getting a property value failed" );
+            failed( "setting or getting a property value failed" );
         }
 
         // try setting an illegal value for the property
@@ -151,15 +136,12 @@ public class PropertyBag extends TestCase
         catch(com.sun.star.lang.IllegalArgumentException e) { caughtExpected = true; }
         catch(com.sun.star.uno.Exception e) { }
         if ( !caughtExpected )
-        {
-            fail("the bag does not respect the property type we declared for the property");
-        }
+            failed( "the bag does not respect the property type we declared for the property" );
     }
 
-    @Test
     public void checkSequenceAccess() throws com.sun.star.uno.Exception
     {
-        System.out.println( "checking PropertySetAccess via sequences" );
+        log.println( "checking PropertySetAccess via sequences" );
         createStandardBag( false );
 
         // ---------------------------------
@@ -178,10 +160,10 @@ public class PropertyBag extends TestCase
             final Object value = m_set.getPropertyValue( expectedValues[i].Name );
             if ( !value.equals( expectedValues[i].Value ) )
             {
-                System.out.println( "property name : " + expectedValues[i].Name );
-                System.out.println( "expected value: " + expectedValues[i].Value.toString() );
-                System.out.println( "current value : " + value.toString() );
-                fail( "retrieving a previously set property (" + expectedValues[i].Value.getClass().toString() + ") failed" );
+                log.println( "property name : " + expectedValues[i].Name );
+                log.println( "expected value: " + expectedValues[i].Value.toString() );
+                log.println( "current value : " + value.toString() );
+                failed( "retrieving a previously set property (" + expectedValues[i].Value.getClass().toString() + ") failed" );
             }
         }
 
@@ -198,26 +180,23 @@ public class PropertyBag extends TestCase
                 {
                     if ( !expectedValues[j].Value.equals( value ) )
                     {
-                        System.out.println( "property name : " + expectedValues[j].Name );
-                        System.out.println( "expected value: " + expectedValues[j].Value.toString() );
-                        System.out.println( "current value : " + value.toString() );
-                        fail( "getPropertyValues failed for property '" + name + "' failed" );
+                        log.println( "property name : " + expectedValues[j].Name );
+                        log.println( "expected value: " + expectedValues[j].Value.toString() );
+                        log.println( "current value : " + value.toString() );
+                        failed( "getPropertyValues failed for property '" + name + "' failed" );
                     }
                     break;
                 }
             }
 
             if ( !m_set.getPropertyValue( name ).equals( value ) )
-            {
-                fail("XPropertyAccess::getPropertyValues() and XPropertyset::getPropertyValue results are inconsistent");
-            }
+                failed( "XPropertyAccess::getPropertyValues() and XPropertyset::getPropertyValue results are inconsistent" );
         }
     }
 
-    @Test
     public void checkDynamicSet() throws com.sun.star.uno.Exception
     {
-        System.out.println( "checking proper dynamic of the set" );
+        log.println( "checking proper dynamic of the set" );
         createStandardBag( false );
 
         final PropertyValue props[] =
@@ -236,9 +215,7 @@ public class PropertyBag extends TestCase
         catch( com.sun.star.beans.UnknownPropertyException e ) { caughtExpected = true; }
         catch( com.sun.star.uno.Exception e ) { }
         if ( !caughtExpected )
-        {
-            fail("the set shouldn't accept unknown property values, if not explicitly told to do so");
-        }
+            failed( "the set shouldn't accept unknown property values, if not explicitly told to do so" );
 
         // re-create the bag, this time allow it to implicitly add properties
         createStandardBag( true );
@@ -246,18 +223,14 @@ public class PropertyBag extends TestCase
         try { m_access.setPropertyValues( props ); success = true; }
         catch( com.sun.star.uno.Exception e ) { }
         if ( !success )
-        {
-            fail("property bag failed to implicitly add unknown properties");
-        }
+            failed( "property bag failed to implicitly add unknown properties" );
 
         // see whether this property was really added, and not just ignored
         final PropertyValue newlyAdded = props[ props.length - 1 ];
         try
         {
             if ( !m_set.getPropertyValue( newlyAdded.Name ).equals( newlyAdded.Value ) )
-            {
-                fail("the new property was not really added, or not added with the proper value");
-            }
+                failed( "the new property was not really added, or not added with the proper value" );
         }
         catch( com.sun.star.uno.Exception e ) { }
     }
@@ -268,13 +241,13 @@ public class PropertyBag extends TestCase
         {
             m_bag = null;
             final String serviceName = "com.sun.star.beans.PropertyBag";
-            m_bag = UnoRuntime.queryInterface(XPropertyContainer.class, m_orb.createInstance(serviceName));
+            m_bag = (XPropertyContainer)UnoRuntime.queryInterface( XPropertyContainer.class,
+                m_orb.createInstance( serviceName )
+            );
             if ( m_bag == null )
-            {
-                fail("could not create a " + serviceName + " instance");
-            }
-            m_set = UnoRuntime.queryInterface(XPropertySet.class, m_bag);
-            m_access = UnoRuntime.queryInterface(XPropertyAccess.class, m_bag);
+                failed( "could not create a " + serviceName + " instance" );
+            m_set = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, m_bag );
+            m_access = (XPropertyAccess)UnoRuntime.queryInterface( XPropertyAccess.class, m_bag );
         }
         catch( com.sun.star.uno.Exception e )
         {
@@ -290,13 +263,13 @@ public class PropertyBag extends TestCase
             final Object initArgs[] = { new NamedValue( "AutomaticAddition", Boolean.valueOf( allowLazyAdding ) ) };
 
             final String serviceName = "com.sun.star.beans.PropertyBag";
-            m_bag = UnoRuntime.queryInterface(XPropertyContainer.class, m_orb.createInstanceWithArguments(serviceName, initArgs));
+            m_bag = (XPropertyContainer)UnoRuntime.queryInterface( XPropertyContainer.class,
+                m_orb.createInstanceWithArguments( serviceName, initArgs )
+            );
             if ( m_bag == null )
-            {
-                fail("could not create a " + serviceName + " instance");
-            }
-            m_set = UnoRuntime.queryInterface(XPropertySet.class, m_bag);
-            m_access = UnoRuntime.queryInterface(XPropertyAccess.class, m_bag);
+                failed( "could not create a " + serviceName + " instance" );
+            m_set = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, m_bag );
+            m_access = (XPropertyAccess)UnoRuntime.queryInterface( XPropertyAccess.class, m_bag );
 
             final Object properties[][] =
             {

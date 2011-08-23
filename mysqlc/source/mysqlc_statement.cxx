@@ -1,10 +1,14 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
+* 
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
+*
+* $RCSfile: mysqlc_statement.cxx,v $
+*
+* $Revision: 1.1.2.4 $
 *
 * This file is part of OpenOffice.org.
 *
@@ -60,7 +64,7 @@ using ::rtl::OUString;
 #include <stdio.h>
 
 /* {{{ OConnection::OCommonStatement() -I- */
-OCommonStatement::OCommonStatement(OConnection* _pConnection, sql::Statement *_cppStatement)
+OCommonStatement::OCommonStatement(OConnection* _pConnection, sql::Statement *_cppStatement) 
     :OCommonStatement_IBase(m_aMutex)
     ,OPropertySetHelper(OCommonStatement_IBase::rBHelper)
     ,OStatement_CBase( (::cppu::OWeakObject*)_pConnection, this )
@@ -132,7 +136,7 @@ Sequence< Type > SAL_CALL OCommonStatement::getTypes()
     throw(RuntimeException)
 {
     OSL_TRACE("OCommonStatement::getTypes");
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
+    ::cppu::OTypeCollection aTypes(	::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XPropertySet > *)0 ));
 
@@ -159,7 +163,7 @@ void SAL_CALL OCommonStatement::close()
 {
     OSL_TRACE("OCommonStatement::close");
     /*
-      We need a block for the checkDisposed call.
+      We need a block for the checkDisposed call. 
       After the check we can call dispose() as we are not under lock ??
     */
     {
@@ -338,7 +342,7 @@ sal_Bool SAL_CALL OCommonStatement::getMoreResults()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
-    // if your driver supports more than only one resultset
+    // if your driver supports more than only one resultset 
     // and has one more at this moment return(true
     return (sal_False);
 }
@@ -380,12 +384,12 @@ void SAL_CALL OCommonStatement::clearWarnings()
     Sequence< Property > aProps(10);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(CURSORNAME,  OUString);
+    DECL_PROP0(CURSORNAME,	OUString);
     DECL_BOOL_PROP0(ESCAPEPROCESSING);
     DECL_PROP0(FETCHDIRECTION,sal_Int32);
-    DECL_PROP0(FETCHSIZE,   sal_Int32);
+    DECL_PROP0(FETCHSIZE,	sal_Int32);
     DECL_PROP0(MAXFIELDSIZE,sal_Int32);
-    DECL_PROP0(MAXROWS,     sal_Int32);
+    DECL_PROP0(MAXROWS,		sal_Int32);
     DECL_PROP0(QUERYTIMEOUT,sal_Int32);
     DECL_PROP0(RESULTSETCONCURRENCY,sal_Int32);
     DECL_PROP0(RESULTSETTYPE,sal_Int32);
@@ -447,7 +451,7 @@ void OCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const
 void OCommonStatement::getFastPropertyValue(Any& _rValue, sal_Int32 nHandle) const
 {
     OSL_TRACE("OCommonStatement::getFastPropertyValue");
-    switch (nHandle)    {
+    switch (nHandle)	{
         case PROPERTY_ID_QUERYTIMEOUT:
         case PROPERTY_ID_MAXFIELDSIZE:
         case PROPERTY_ID_MAXROWS:

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,36 +37,36 @@
 
 struct ScRangeFindData
 {
-    ScRange     aRef;
-    sal_uInt16      nFlags;
-    xub_StrLen  nSelStart;
-    xub_StrLen  nSelEnd;
+    ScRange		aRef;
+    USHORT		nFlags;
+    xub_StrLen	nSelStart;
+    xub_StrLen	nSelEnd;
 
-    ScRangeFindData( const ScRange& rR, sal_uInt16 nF, xub_StrLen nS, xub_StrLen nE ) :
+    ScRangeFindData( const ScRange& rR, USHORT nF, xub_StrLen nS, xub_StrLen nE ) :
         aRef(rR), nFlags(nF), nSelStart(nS), nSelEnd(nE) {}
 };
 
 class ScRangeFindList
 {
-    List        aEntries;
-    String      aDocName;
-    bool        bHidden;
+    List		aEntries;
+    String		aDocName;
+    BOOL		bHidden;
 
 public:
             ScRangeFindList(const String& rName);
             ~ScRangeFindList();
 
-    sal_uLong   Count() const                       { return aEntries.Count(); }
-    void    Insert( ScRangeFindData* pNew )     { aEntries.Insert(pNew, LIST_APPEND); }
-    ScRangeFindData* GetObject( sal_uLong nIndex ) const
+    ULONG	Count() const						{ return aEntries.Count(); }
+    void	Insert( ScRangeFindData* pNew )		{ aEntries.Insert(pNew, LIST_APPEND); }
+    ScRangeFindData* GetObject( ULONG nIndex ) const
                         { return (ScRangeFindData*)aEntries.GetObject(nIndex); }
 
-    void    SetHidden( sal_Bool bSet )              { bHidden = bSet; }
+    void	SetHidden( BOOL bSet )				{ bHidden = bSet; }
 
-    const String&   GetDocName() const          { return aDocName; }
-    bool            IsHidden() const            { return bHidden; }
+    const String&	GetDocName() const			{ return aDocName; }
+    BOOL			IsHidden() const			{ return bHidden; }
 
-    static ColorData GetColorName( size_t nIndex );
+    static ColorData GetColorName( USHORT nIndex );
 };
 
 

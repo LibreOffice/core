@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,68 +52,68 @@ module com {  module sun {  module star {  module frame {
     to users within a status bar.
 
     <p>
-    A generic status bar field is represented as a simple text field. A status
-    bar controller can be added to a Statusbar and provide information or
+    A generic status bar field is represented as a simple text field. A status 
+    bar controller can be added to a Statusbar and provide information or 
     functions with a more sophisticated user interface.<br/>
-    A typical example for status bar controller is a zoom chooser. It shows
-    the current zoom and provides general zoom levels on a pop-up menu
+    A typical example for status bar controller is a zoom chooser. It shows 
+    the current zoom and provides general zoom levels on a popup menu 
     that can be activated by a mouse action for context menus.
     <p>
 
     @see com::sun::star::frame::XDispatchProvider
-
-    @since OOo 2.0
+    
+    @since OOo 2.0.0
  */
 interface XStatusbarController : ::com::sun::star::uno::XInterface
 {
     //=============================================================================
-    /** is called by a status bar if the mouse position is within the controller
-        and a mouse button has been pressed. If the controller has captured the
-        mouse input this function is also called when the mouse position is not
+    /** is called by a status bar if the mouse position is within the controller 
+        and a mouse button has been pressed. If the controller has captured the 
+        mouse input this function is also called when the mouse position is not 
         within the controller.
-
+    
         @param aMouseEvent
             current information about the mouse pointer.
 
         @return
-            return <TRUE/> if the event should not be processed and <FALSE/>
+            return <TRUE/> if the event should not be processed and <FALSE/> 
             if the event should be processed by the status bar.
     */
     boolean mouseButtonDown( [in] ::com::sun::star::awt::MouseEvent aMouseEvent );
 
     //=============================================================================
-    /** is called by a status bar if the mouse position is within the controller
-        and a mouse has been moved. If the controller has captured the
-        mouse input this function is also called when the mouse position is not
+    /** is called by a status bar if the mouse position is within the controller 
+        and a mouse has been moved. If the controller has captured the 
+        mouse input this function is also called when the mouse position is not 
         within the controller.
-
+    
         @param aMouseEvent
             current information about the mouse pointer.
 
         @return
-            return <TRUE/> if the event should not be processed and <FALSE/>
+            return <TRUE/> if the event should not be processed and <FALSE/> 
             if the event should be processed by the status bar.
     */
     boolean mouseMove( [in] ::com::sun::star::awt::MouseEvent aMouseEvent );
 
     //=============================================================================
-    /** is called by a status bar if the mouse position is within the controller
-        and a mouse button has been released. If the controller has captured the
-        mouse input this function is also called when the mouse position is not
+    /** is called by a status bar if the mouse position is within the controller 
+        and a mouse button has been released. If the controller has captured the 
+        mouse input this function is also called when the mouse position is not 
         within the controller.
-
+    
         @param aMouseEvent
             current information about the mouse pointer.
 
         @return
-            return <TRUE/> if the event should not be processed and <FALSE/>
+            return <TRUE/> if the event should not be processed and <FALSE/> 
             if the event should be processed by the status bar.
     */
     boolean mouseButtonUp( [in] ::com::sun::star::awt::MouseEvent aMouseEvent );
 
     //=============================================================================
     /** is called by a status bar if a command event is available for a controller.
-
+    
         @param aPos
             the current mouse position in pixel.
 
@@ -130,11 +130,11 @@ interface XStatusbarController : ::com::sun::star::uno::XInterface
                   [in] long nCommand,
                   [in] boolean bMouseEvent,
                   [in] any aData );
-
+    
     //=============================================================================
     /** is called by a status bar if the controller has to update the visual
         representation.
-
+    
         @param xGraphics
             a reference to a <type scope="com::sun::star::awt">XGraphics</type>
             which has to be used to update the visual representation.
@@ -153,19 +153,19 @@ interface XStatusbarController : ::com::sun::star::uno::XInterface
                 [in] ::com::sun::star::awt::Rectangle rOutputRectangle,
                 [in] long nItemId,
                 [in] long nStyle );
-
+    
     //=============================================================================
-    /** is called by a status bar if the user clicked with mouse into the
+    /** is called by a status bar if the user clicked with mouse into the 
         field of the corresponding control.
     */
     void click();
 
     //=============================================================================
-    /** is called by a status bar if the user double-clicked with mouse
+    /** is called by a status bar if the user double-clicked with mouse 
         into the field of the corresponding control.
     */
     void doubleClick();
-};
+};          
 
 }; }; }; };
 

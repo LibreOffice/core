@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 28 2005            Created
+ Jan 28 2005			Created
  ************************************************************************/
 #ifndef _LWPLAYOUTPIECE_HXX
 #define _LWPLAYOUTPIECE_HXX
@@ -74,7 +74,7 @@ public:
     ~LwpRotor();
     void Read(LwpObjectStream *pStrm);
 private:
-    sal_Int16 m_nRotation;  //angle
+    sal_Int16 m_nRotation;	//angle
     sal_uInt16 m_nSin;
     sal_uInt16 m_nCos;
 };
@@ -125,7 +125,7 @@ public:
     sal_uInt16 GetPlacement(){return m_nPlacement;}
     void SetPlacement(sal_uInt16 nVal){m_nPlacement = nVal;}
     // add by , 04/05/2005
-    inline LwpPoint* GetOffset() {return &m_Offset;}
+    inline LwpPoint* GetOffset() {return &m_Offset;};
     // end add
 protected:
     virtual void Read();
@@ -207,7 +207,7 @@ public:
 protected:
     virtual void Read();
 protected:
-    LwpExternalBorder   m_ExtranalBorder;
+    LwpExternalBorder	m_ExtranalBorder;
 };
 
 class LwpColumnInfo
@@ -231,7 +231,7 @@ public:
     LwpLayoutColumns(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
     virtual ~LwpLayoutColumns();
     virtual void Parse(IXFStream* pOutputStream);
-    inline sal_uInt16 GetNumCols(){return m_nNumCols;}
+    inline sal_uInt16 GetNumCols(){return m_nNumCols;};
     double GetColWidth(sal_uInt16 nIndex);
     double GetColGap(sal_uInt16 nIndex);
 protected:
@@ -271,7 +271,7 @@ private:
         MITRE = 1,
         NEGATE = 2,
         ROUNDED = 3,
-        RECTANGLE = 4,
+        RECTANGLE =	4,
         SPECIAL = 5,
         DIAGONAL = 6,
         NEGATE_NO_CROSS = 7,
@@ -369,12 +369,12 @@ public:
         LAY_BORDER
     };
 private:
-    sal_uInt8   m_nRelType;
-    sal_uInt8   m_nRelFromWhere;
-    LwpPoint    m_RelDistance;
-    sal_uInt8   m_nTether;
-    sal_uInt8   m_nTetherWhere;
-    sal_uInt8   m_nFlags;
+    sal_uInt8	m_nRelType;
+    sal_uInt8	m_nRelFromWhere;
+    LwpPoint	m_RelDistance;
+    sal_uInt8	m_nTether;
+    sal_uInt8	m_nTetherWhere;
+    sal_uInt8	m_nFlags;
 };
 
 class LwpLayoutRelativity: public LwpVirtualPiece

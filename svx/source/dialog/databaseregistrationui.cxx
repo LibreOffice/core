@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_svx.hxx"
 
 // === includes (declaration) ============================================
-#include "svx/databaseregistrationui.hxx"
+#include "databaseregistrationui.hxx"
 
 // === includes (project) ================================================
 #include <svx/svxdlg.hxx>
@@ -44,9 +44,9 @@
 
 namespace svx
 {
-    sal_uInt16 administrateDatabaseRegistration( Window* _parentWindow )
+    USHORT administrateDatabaseRegistration( Window* _parentWindow )
     {
-        sal_uInt16 nResult = RET_CANCEL;
+        USHORT nResult = RET_CANCEL;
 
         SfxItemSet aRegistrationItems( SFX_APP()->GetPool(), SID_SB_DB_REGISTER, SID_SB_DB_REGISTER, 0 );
 

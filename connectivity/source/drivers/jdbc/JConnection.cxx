@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -279,7 +279,7 @@ java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )
     ,m_bParameterSubstitution(sal_False)
     ,m_bIgnoreDriverPrivileges(sal_True)
     ,m_bIgnoreCurrency(sal_False)
-{
+{      
 }
 // -----------------------------------------------------------------------------
 java_sql_Connection::~java_sql_Connection()
@@ -289,7 +289,7 @@ java_sql_Connection::~java_sql_Connection()
     {
         SDBThreadAttach t;
         clearObject(*t.pEnv);
-
+        
         {
             if ( m_pDriverobject )
                 t.pEnv->DeleteGlobalRef( m_pDriverobject );
@@ -325,7 +325,7 @@ void java_sql_Connection::disposing()
 // -------------------------------------------------------------------------
 jclass java_sql_Connection::getMyClass() const
 {
-    // the class must be fetched only once, therefore static
+    // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
         theClass = findMyClass("java/sql/Connection");
     return theClass;
@@ -427,9 +427,9 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL java_sql_Connecti
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(NULL);
-    callObjectMethod(t.pEnv,"getTypeMap","()Ljava/util/Map;", mID);
-    // WARNING: the caller becomes the owner of the returned pointer
-    return 0;
+    /*jobject out = */callObjectMethod(t.pEnv,"getTypeMap","()Ljava/util/Map;", mID);
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    return 0;// ? 0 : Map2XNameAccess( t.pEnv, out );
 }
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_Connection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
@@ -486,7 +486,7 @@ Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  ) throw(
             ::rtl::OUString sNewSql;
             OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_sSQL);
             if(pNode)
-            {   // special handling for parameters
+            {	// special handling for parameters
                 OSQLParseNode::substituteParameterNames(pNode);
                 pNode->parseNodeToStr( sNewSql, this );
                 delete pNode;
@@ -545,13 +545,13 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
 
-        // initialize temporary Variable
+        // temporaere Variable initialisieren
         static const char * cSignature = "(Ljava/lang/String;)Ljava/lang/String;";
         static const char * cMethodName = "nativeSQL";
-        // Java-Call
+        // Java-Call absetzen
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
-        // Convert Parameter
+        // Parameter konvertieren
         jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,sql));
 
         jobject out = t.pEnv->CallObjectMethod( object, mID, str.get() );
@@ -578,10 +578,10 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
     SDBThreadAttach t;
     static jmethodID mID(NULL);
     jobject out = callObjectMethod(t.pEnv,"getWarnings","()Ljava/sql/SQLWarning;", mID);
-    // WARNING: the caller becomes the owner of the returned pointer
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     if( out )
     {
-        java_sql_SQLWarning_BASE        warn_base(t.pEnv, out);
+        java_sql_SQLWarning_BASE		warn_base(t.pEnv, out);
         SQLException aAsException( static_cast< starsdbc::SQLException >( java_sql_SQLWarning( warn_base, *this ) ) );
 
         // translate to warning
@@ -591,7 +591,7 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
         aWarning.SQLState = aAsException.SQLState;
         aWarning.ErrorCode = aAsException.ErrorCode;
         aWarning.NextException = aAsException.NextException;
-
+        
         return makeAny( aWarning );
     }
 
@@ -670,9 +670,9 @@ void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDri
     const Sequence< NamedValue >& _rSystemProperties )
 {
     // contains the statement which should be used when query for automatically generated values
-    ::rtl::OUString     sGeneratedValueStatement;
+    ::rtl::OUString		sGeneratedValueStatement;
     // set to <TRUE/> when we should allow to query for generated values
-    sal_Bool            bAutoRetrievingEnabled = sal_False;
+    sal_Bool			bAutoRetrievingEnabled = sal_False;
 
     // first try if the jdbc driver is alraedy registered at the driver manager
     SDBThreadAttach t;
@@ -730,7 +730,7 @@ void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDri
 
                     if( t.pEnv && m_pDriverobject )
                         m_pDriverobject = t.pEnv->NewGlobalRef( m_pDriverobject );
-
+                    
                     {
                         jclass tempClass = t.pEnv->GetObjectClass(m_pDriverobject);
                         if ( m_pDriverobject )
@@ -761,7 +761,7 @@ void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDri
             *this
         );
     }
-
+    
     enableAutoRetrievingEnabled( bAutoRetrievingEnabled );
     setAutoRetrievingStatement( sGeneratedValueStatement );
 }
@@ -789,12 +789,12 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
             throwGenericSQLException(STR_NO_JAVA,*this);
     }
     SDBThreadAttach t;
-    t.addRef();      // will be released in dtor
+    t.addRef();		 // will be released in dtor
     if ( !t.pEnv )
         throwGenericSQLException(STR_NO_JAVA,*this);
 
-    ::rtl::OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
-    sal_Bool            bAutoRetrievingEnabled = sal_False; // set to <TRUE/> when we should allow to query for generated values
+    ::rtl::OUString		sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
+    sal_Bool			bAutoRetrievingEnabled = sal_False; // set to <TRUE/> when we should allow to query for generated values
     ::rtl::OUString sDriverClassPath,sDriverClass;
     Sequence< NamedValue > aSystemProperties;
 
@@ -819,17 +819,17 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
 
     if ( t.pEnv && m_Driver_theClass && m_pDriverobject )
     {
-        // initialize temporary Variable
+        // temporaere Variable initialisieren
         static const char * cSignature = "(Ljava/lang/String;Ljava/util/Properties;)Ljava/sql/Connection;";
         static const char * cMethodName = "connect";
-        // Java-Call
+        // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
             mID  = t.pEnv->GetMethodID( m_Driver_theClass, cMethodName, cSignature );
         if ( mID )
         {
             jvalue args[2];
-            // convert Parameter
+            // Parameter konvertieren
             args[0].l = convertwchar_tToJavaString(t.pEnv,url);
             java_util_Properties* pProps = createStringPropertyArray(info);
             args[1].l = pProps->getJavaObject();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,7 @@
 #include "precompiled_connectivity.hxx"
 #include "TSortIndex.hxx"
 #include <algorithm>
-
-#include <o3tl/compat_functional.hxx>
+#include <functional>
 
 using namespace connectivity;
 //------------------------------------------------------------------
@@ -44,7 +43,7 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
     {
     }
     // return false if compared values are equal otherwise true
-    inline bool operator()(const OSortIndex::TIntValuePairVector::value_type& lhs,const OSortIndex::TIntValuePairVector::value_type& rhs)   const
+    inline bool operator()(const OSortIndex::TIntValuePairVector::value_type& lhs,const OSortIndex::TIntValuePairVector::value_type& rhs)	const
     {
         const ::std::vector<OKeyType>& aKeyType = pIndex->getKeyType();
         ::std::vector<OKeyType>::const_iterator aIter = aKeyType.begin();
@@ -96,12 +95,12 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
     ::std::transform(m_aKeyValues.begin()
                     ,m_aKeyValues.end()
                     ,::std::back_inserter(pKeySet->get())
-                    ,::o3tl::select1st<TIntValuePairVector::value_type>());
+                    ,::std::select1st<TIntValuePairVector::value_type>());
     pKeySet->setFrozen();
     return pKeySet;
 }
 // -----------------------------------------------------------------------------
-OSortIndex::OSortIndex( const ::std::vector<OKeyType>& _aKeyType,
+OSortIndex::OSortIndex(	const ::std::vector<OKeyType>& _aKeyType,
                         const ::std::vector<TAscendingOrder>& _aAscending)
     :m_aKeyType(_aKeyType)
     ,m_aAscending(_aAscending)
@@ -153,7 +152,7 @@ sal_Int32 OSortIndex::GetValue(sal_Int32 nPos) const
 
     if (!m_bFrozen && m_aKeyType[0] != SQL_ORDERBYKEY_NONE)
     {
-        OSL_FAIL("OSortIndex::GetValue: Invalid use of index!");
+        OSL_ASSERT("OSortIndex::GetValue: Invalid use of index!");
         return 0;
     }
     return m_aKeyValues[nPos-1].first;

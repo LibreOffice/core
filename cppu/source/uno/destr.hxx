@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,12 +147,12 @@ inline void _destructAny(
             (typelib_TypeDescriptionReference *)pAny->pReserved );
         break;
     case typelib_TypeClass_ANY:
-        OSL_FAIL( "### unexpected nested any!" );
+        OSL_ENSURE( sal_False, "### unexpected nested any!" );
         ::uno_any_destruct( (uno_Any *)pAny->pData, release );
         ::rtl_freeMemory( pAny->pData );
         break;
     case typelib_TypeClass_TYPEDEF:
-        OSL_FAIL( "### unexpected typedef!" );
+        OSL_ENSURE( 0, "### unexpected typedef!" );
         break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
@@ -381,7 +381,7 @@ inline void _destructData(
         _destructAny( (uno_Any *)pValue, release );
         break;
     case typelib_TypeClass_TYPEDEF:
-        OSL_FAIL( "### unexpected typedef!" );
+        OSL_ENSURE( 0, "### unexpected typedef!" );
         break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:

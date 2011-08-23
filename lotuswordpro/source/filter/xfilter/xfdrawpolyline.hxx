@@ -57,11 +57,15 @@
  * @file
  * Polyline.
  ************************************************************************/
-#ifndef     _XFPOLYLINE_HXX
-#define     _XFPOLYLINE_HXX
+/*************************************************************************
+ * Change History
+ * 2004-2-18 create this file.
+ ************************************************************************/
+#ifndef		_XFPOLYLINE_HXX
+#define		_XFPOLYLINE_HXX
 
-#include    "xfdrawobj.hxx"
-#include    <vector>
+#include	"xfdrawobj.hxx"
+#include	<vector>
 
 class XFDrawPolyline : public XFDrawObject
 {
@@ -69,16 +73,16 @@ public:
     XFDrawPolyline();
 
 public:
-    void    AddPoint(double x, double y);
+    void	AddPoint(double x, double y);
 
-    void    AddPoint(XFPoint pt);
+    void	AddPoint(XFPoint pt);
 
-    XFRect  CalcViewBox();
+    XFRect	CalcViewBox();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 protected:
-    std::vector<XFPoint>    m_aPoints;
+    std::vector<XFPoint>	m_aPoints;
 };
 
 inline void XFDrawPolyline::AddPoint(double x, double y)

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class SwTxtAttr;
 class SfxPoolItem;
 class SwFont;
 
-/*--------------------------------------------------
+/*-----------------02.02.01 15:01-------------------
  * SwMultiCreator is a small structur to create a multiportion.
  * It contains the kind of multiportion and a textattribute
  * or a poolitem.
@@ -48,38 +48,38 @@ class SwFont;
  * the Ctor of the SwMultiPortion uses it.
  * --------------------------------------------------*/
 
-#define SW_MC_DOUBLE    0
-#define SW_MC_RUBY      1
-#define SW_MC_ROTATE    2
+#define SW_MC_DOUBLE	0
+#define SW_MC_RUBY		1
+#define SW_MC_ROTATE	2
 #define SW_MC_BIDI      3
 
 struct SwMultiCreator
 {
     const SwTxtAttr* pAttr;
     const SfxPoolItem* pItem;
-    sal_uInt8 nId;
-    sal_uInt8 nLevel;
+    BYTE nId;
+    BYTE nLevel;
 };
 
-/*--------------------------------------------------
+/*-----------------25.10.00 16:19-------------------
  * A two-line-portion (SwMultiPortion) could have surrounding brackets,
  * in this case the structur SwBracket will be used.
  * --------------------------------------------------*/
 
 struct SwBracket
 {
-    xub_StrLen nStart;      // Start of text attribute determins the font
+    xub_StrLen nStart;		// Start of text attribute determins the font
     KSHORT nAscent;         // Ascent of the brackets
-    KSHORT nHeight;         // Height of them
-    KSHORT nPreWidth;       // Width of the opening bracket
+    KSHORT nHeight;			// Height of them
+    KSHORT nPreWidth;		// Width of the opening bracket
     KSHORT nPostWidth;      // Width of the closing bracket
     sal_Unicode cPre;       // Initial character, e.g. '('
     sal_Unicode cPost;      // Final character, e.g. ')'
-    sal_uInt8 nPreScript;       // Script of the initial character
-    sal_uInt8 nPostScript;       // Script of the final character
+    BYTE nPreScript;		// Script of the initial character
+    BYTE nPostScript;       // Script of the final character
 };
 
-/*--------------------------------------------------
+/*-----------------16.10.00 12:45-------------------
  * The SwMultiPortion is line portion inside a line portion,
  * it's a group of portions,
  * e.g. a double line portion in a line
@@ -90,12 +90,12 @@ struct SwBracket
 
 class SwMultiPortion : public SwLinePortion
 {
-    SwLineLayout aRoot;     // One or more lines
-    SwFldPortion *pFldRest; // Field rest from the previous line
-    sal_Bool bTab1      :1; // First line tabulator
-    sal_Bool bTab2      :1; // Second line includes tabulator
-    sal_Bool bDouble    :1; // Double line
-    sal_Bool bRuby      :1; // Phonetics
+    SwLineLayout aRoot;		// One or more lines
+    SwFldPortion *pFldRest;	// Field rest from the previous line
+    sal_Bool bTab1		:1; // First line tabulator
+    sal_Bool bTab2		:1; // Second line includes tabulator
+    sal_Bool bDouble	:1; // Double line
+    sal_Bool bRuby		:1; // Phonetics
     sal_Bool bBidi      :1;
     sal_Bool bTop       :1; // Phonetic position
     sal_Bool bFormatted :1; // Already formatted
@@ -148,7 +148,7 @@ public:
     inline sal_Bool HasRotation() const { return 0 != (1 & nDirection); }
     inline sal_Bool IsRevers() const { return 0 != (2 & nDirection); }
     inline sal_uInt8 GetDirection() const { return nDirection; }
-    inline sal_uInt16 GetFontRotation() const
+    inline USHORT GetFontRotation() const
         { return ( HasRotation() ? ( IsRevers() ? 2700 : 900 ) : 0 ); }
 
     // Accessibility: pass information about this portion to the PortionHandler
@@ -159,8 +159,8 @@ public:
 
 class SwDoubleLinePortion : public SwMultiPortion
 {
-    SwBracket* pBracket;    // Surrounding brackets
-    SwTwips nLineDiff;      // Difference of the width of the both lines
+    SwBracket* pBracket;	// Surrounding brackets
+    SwTwips	nLineDiff;		// Difference of the width of the both lines
     xub_StrLen nBlank1;     // Number of blanks in the first line
     xub_StrLen nBlank2;     // Number of blanks in the second line
 public:
@@ -195,7 +195,7 @@ public:
 class SwRubyPortion : public SwMultiPortion
 {
     xub_StrLen nRubyOffset;
-    sal_uInt16 nAdjustment;
+    USHORT nAdjustment;
     void _Adjust( SwTxtFormatInfo &rInf);
 public:
     SwRubyPortion( const SwRubyPortion& rRuby, xub_StrLen nEnd );
@@ -208,7 +208,7 @@ public:
     void CalcRubyOffset();
     inline void Adjust( SwTxtFormatInfo &rInf )
         { if(nAdjustment && GetRoot().GetNext()) _Adjust(rInf); }
-    inline sal_uInt16 GetAdjustment() const { return nAdjustment; }
+    inline USHORT GetAdjustment() const { return nAdjustment; }
     inline xub_StrLen GetRubyOffset() const { return nRubyOffset; }
 };
 
@@ -223,12 +223,12 @@ public:
 
 class SwBidiPortion : public SwMultiPortion
 {
-    sal_uInt8 nLevel;
+    BYTE nLevel;
 
 public:
-    SwBidiPortion( xub_StrLen nEnd, sal_uInt8 nLv );
+    SwBidiPortion( xub_StrLen nEnd, BYTE nLv );
 
-    inline sal_uInt8 GetLevel() const { return nLevel; }
+    inline BYTE GetLevel() const { return nLevel; }
     // Get number of blanks for justified alignment
     xub_StrLen GetSpaceCnt( const SwTxtSizeInfo &rInf ) const;
     // Calculates extra spacing based on number of blanks
@@ -245,16 +245,16 @@ class SwTxtCursorSave
     SwLineLayout* pCurr;
     SwTwips nWidth;
     xub_StrLen nStart;
-    sal_uInt8 nOldProp;
+    BYTE nOldProp;
     sal_Bool bSpaceChg;
 public:
     SwTxtCursorSave( SwTxtCursor* pTxtCursor, SwMultiPortion* pMulti,
-        SwTwips nY, sal_uInt16& nX, xub_StrLen nCurrStart, long nSpaceAdd );
+        SwTwips nY, USHORT& nX, xub_StrLen nCurrStart, long nSpaceAdd );
     ~SwTxtCursorSave();
 };
 
 /*************************************************************************
- *                  inline - Implementations
+ *					inline - Implementations
  *************************************************************************/
 
 inline sal_Bool SwMultiPortion::HasBrackets() const

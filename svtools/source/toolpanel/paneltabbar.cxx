@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -169,8 +169,8 @@ namespace svt
                 aSelectionRect,
                 ( bHovered || bFocused ) ? ( bActive ? 1 : 2 ) : 0 /* hilight */,
                 bActive /* check */,
-                sal_True /* border */,
-                sal_False /* ext border only */,
+                TRUE /* border */,
+                FALSE /* ext border only */,
                 0 /* corner radius */,
                 NULL,
                 NULL
@@ -444,14 +444,14 @@ namespace svt
             {
                 if ( i_rImpl.m_rPanelDeck.GetPanelCount() != i_rImpl.m_aItems.size() )
                 {
-                    OSL_FAIL( "lcl_checkConsistency: inconsistent array sizes!" );
+                    OSL_ENSURE( false, "lcl_checkConsistency: inconsistent array sizes!" );
                     return;
                 }
                 for ( size_t i = 0; i < i_rImpl.m_rPanelDeck.GetPanelCount(); ++i )
                 {
                     if ( i_rImpl.m_rPanelDeck.GetPanel( i ).get() != i_rImpl.m_aItems[i].pPanel.get() )
                     {
-                        OSL_FAIL( "lcl_checkConsistency: array elements are inconsistent!" );
+                        OSL_ENSURE( false, "lcl_checkConsistency: array elements are inconsistent!" );
                         return;
                     }
                 }
@@ -686,7 +686,7 @@ namespace svt
 
                 Font aFont( m_rTabBar.GetFont() );
                 aFont.SetOrientation( 2700 );
-                aFont.SetVertical( sal_True );
+                aFont.SetVertical( TRUE );
                 m_rTabBar.SetFont( aFont );
 
                 aTextPos.X() += aTextSize.Height();
@@ -788,7 +788,7 @@ namespace svt
                 return;
         }
 
-        m_rTabBar.SetUpdateMode( sal_False );
+        m_rTabBar.SetUpdateMode( FALSE );
 
         // the aligned bounding and content rect
         const Rectangle aActualBounds = m_aNormalizer.getTransformed( aNormalizedBounds, m_eTabAlignment );
@@ -806,7 +806,7 @@ namespace svt
         // render item "foreground" layer
         m_pRenderer->postRenderItem( m_rTabBar, aActualBounds, nItemFlags );
 
-        m_rTabBar.SetUpdateMode( sal_True );
+        m_rTabBar.SetUpdateMode( TRUE );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1098,21 +1098,16 @@ namespace svt
         ::boost::optional< size_t > aNewItem( m_pImpl->FindItemForPoint( i_rMouseEvent.GetPosPixel() ) );
 
         if  ( i_rMouseEvent.IsLeaveWindow() )
-            aNewItem = ::boost::optional< size_t >();
+            aNewItem.reset();
 
-        bool const bChanged(
-                ( !aOldItem && aNewItem )
-                || ( aOldItem && !aNewItem )
-                || ( aOldItem && aNewItem && aOldItem != aNewItem ) )
-            ;
-        if ( bChanged )
+        if ( aOldItem != aNewItem )
         {
-            if ( aOldItem )
+            if ( !!aOldItem )
                 m_pImpl->InvalidateItem( *aOldItem );
 
             m_pImpl->m_aHoveredItem = aNewItem;
 
-            if ( aNewItem )
+            if ( !!aNewItem )
                 m_pImpl->InvalidateItem( *aNewItem );
         }
     }
@@ -1344,9 +1339,9 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XWindowPeer > PanelTabBar::GetComponentInterface( sal_Bool i_bCreate )
+    Reference< XWindowPeer > PanelTabBar::GetComponentInterface( BOOL i_bCreate )
     {
-        Reference< XWindowPeer > xWindowPeer( Control::GetComponentInterface( sal_False ) );
+        Reference< XWindowPeer > xWindowPeer( Control::GetComponentInterface( FALSE ) );
         if ( !xWindowPeer.is() && i_bCreate )
         {
             xWindowPeer.set( new PanelTabBarPeer( *this ) );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,24 +46,24 @@ namespace reportdesign
     class OFunctions : public comphelper::OBaseMutex,
                     public FunctionsBase
     {
-        typedef ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunction > >  TFunctions;
-        ::cppu::OInterfaceContainerHelper                                                       m_aContainerListeners;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            m_xContext;
+        typedef ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunction > >	TFunctions;
+        ::cppu::OInterfaceContainerHelper														m_aContainerListeners;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >			m_xContext;
         ::com::sun::star::uno::WeakReference< ::com::sun::star::report::XFunctionsSupplier >    m_xParent;
-        TFunctions                                                                              m_aFunctions;
+        TFunctions																				m_aFunctions;
     private:
         OFunctions& operator=(const OFunctions&);
         OFunctions(const OFunctions&);
         void checkIndex(sal_Int32 _nIndex);
     protected:
-        // TODO: VirtualFunctionFinder: This is virtual function!
-        //
+        // TODO: VirtualFunctionFinder: This is virtual function! 
+        // 
         virtual ~OFunctions();
 
         /** this function is called upon disposing the component
         */
-        // TODO: VirtualFunctionFinder: This is virtual function!
-        //
+        // TODO: VirtualFunctionFinder: This is virtual function! 
+        // 
         virtual void SAL_CALL disposing();
     public:
         explicit OFunctions( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctionsSupplier >& _xParent
@@ -89,15 +89,15 @@ namespace reportdesign
     // XContainer
         virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-
+        
         // XComponent
         virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
-        {
+        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException) 
+        { 
             cppu::WeakComponentImplHelperBase::addEventListener(aListener);
         }
         virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
-        {
+        { 
             cppu::WeakComponentImplHelperBase::removeEventListener(aListener);
         }
     };

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,10 @@
 
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertymap.hxx"
-#include "oox/token/namespaces.hxx"
-#include "oox/token/tokens.hxx"
+#include "oox/core/namespaces.hxx"
 #include "pptfilterhelpers.hxx"
+#include "properties.hxx"
+#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -98,7 +99,7 @@ namespace oox { namespace ppt {
         catch( Exception& )
         {
             // should not happen
-            OSL_FAIL( "exception raised" );
+            OSL_ENSURE( false, "exception raised" );
         }
     }
 
@@ -115,7 +116,7 @@ namespace oox { namespace ppt {
         catch( Exception& )
         {
             // should not happen
-            OSL_FAIL( "exception raised" );
+            OSL_ENSURE( false, "exception raised" );
         }
     }
 
@@ -260,11 +261,11 @@ namespace oox { namespace ppt {
     {
         switch( OoxType )
         {
-        case PPT_TOKEN( blinds ):
+        case NMSP_PPT|XML_blinds:
             mnTransitionType = TransitionType::BLINDSWIPE;
             mnTransitionSubType = ooxToOdpDirection( param1 );
             break;
-        case PPT_TOKEN( checker ):
+        case NMSP_PPT|XML_checker:
             mnTransitionType = TransitionType::CHECKERBOARDWIPE;
             switch ( param1 )
             {
@@ -278,7 +279,7 @@ namespace oox { namespace ppt {
                 break;
             }
             break;
-        case PPT_TOKEN( comb ):
+        case NMSP_PPT|XML_comb:
             mnTransitionType = TransitionType::PUSHWIPE;
             switch( param1 )
             {
@@ -292,16 +293,16 @@ namespace oox { namespace ppt {
                 break;
             }
             break;
-        case PPT_TOKEN( cover ):
+        case NMSP_PPT|XML_cover:
             mnTransitionType = TransitionType::SLIDEWIPE;
             mnTransitionSubType = ooxToOdpEightDirections( param1 );
             break;
-        case PPT_TOKEN( pull ): // uncover
+        case NMSP_PPT|XML_pull: // uncover
             mnTransitionType = TransitionType::SLIDEWIPE;
             mnTransitionSubType = ooxToOdpEightDirections( param1 );
             mbTransitionDirectionNormal = false;
             break;
-        case PPT_TOKEN( cut ):
+        case NMSP_PPT|XML_cut:
             // The binfilter seems to ignore this transition.
             // Fade to black instead if thrBlk is true.
             if( param1 )
@@ -311,7 +312,7 @@ namespace oox { namespace ppt {
             }
             OSL_TRACE( "OOX: cut transition fallback." );
             break;
-        case PPT_TOKEN( fade ):
+        case NMSP_PPT|XML_fade:
             mnTransitionType = TransitionType::FADE;
             if( param1 )
             {
@@ -322,16 +323,16 @@ namespace oox { namespace ppt {
                 mnTransitionSubType = TransitionSubType::CROSSFADE;
             }
             break;
-        case PPT_TOKEN( push ):
+        case NMSP_PPT|XML_push:
             mnTransitionType = TransitionType::PUSHWIPE;
             mnTransitionSubType = ooxToOdpBorderDirections( param1 );
             break;
-        case PPT_TOKEN( wipe ):
+        case NMSP_PPT|XML_wipe:
             mnTransitionType = TransitionType::BARWIPE;
             mnTransitionSubType = ooxToOdpSideDirections( param1 );
             mbTransitionDirectionNormal = ooxToOdpSideDirectionsDirectionNormal( param1 );
             break;
-        case PPT_TOKEN( split ):
+        case NMSP_PPT|XML_split:
             mnTransitionType = TransitionType::BARNDOORWIPE;
             mnTransitionSubType = ooxToOdpDirection( param1 );
             if( param2 == XML_in )
@@ -340,7 +341,7 @@ namespace oox { namespace ppt {
                 mbTransitionDirectionNormal = false;
             }
             break;
-        case PPT_TOKEN( wheel ):
+        case NMSP_PPT|XML_wheel:
             mnTransitionType = TransitionType::PINWHEELWIPE;
             switch( param1 )
             {
@@ -376,40 +377,40 @@ namespace oox { namespace ppt {
                 break;
             }
             break;
-        case PPT_TOKEN( randomBar ):
+        case NMSP_PPT|XML_randomBar:
             mnTransitionType = TransitionType::RANDOMBARWIPE;
             mnTransitionSubType = ooxToOdpDirection( param1 );
             break;
-        case PPT_TOKEN( circle ):
+        case NMSP_PPT|XML_circle:
             mnTransitionType = TransitionType::ELLIPSEWIPE;
             mnTransitionSubType = TransitionSubType::CIRCLE;
             break;
-        case PPT_TOKEN( diamond ):
+        case NMSP_PPT|XML_diamond:
             mnTransitionType = TransitionType::IRISWIPE;
             mnTransitionSubType = TransitionSubType::DIAMOND;
             break;
-        case PPT_TOKEN( dissolve ):
+        case NMSP_PPT|XML_dissolve:
             mnTransitionType = TransitionType::DISSOLVE;
             mnTransitionSubType = TransitionSubType::DEFAULT;
             break;
-        case PPT_TOKEN( newsflash ):
+        case NMSP_PPT|XML_newsflash:
             // this is what the PPT binary filter does.... not sure I agree.
             mnTransitionType = TransitionType::FOURBOXWIPE;
             mnTransitionSubType = TransitionSubType::CORNERSOUT;
             break;
-        case PPT_TOKEN( plus ):
+        case NMSP_PPT|XML_plus:
             mnTransitionType = TransitionType::FOURBOXWIPE;
             mnTransitionSubType = TransitionSubType::CORNERSOUT;
             break;
-        case PPT_TOKEN( random ):
+        case NMSP_PPT|XML_random:
             mnTransitionType = TransitionType::RANDOM;
             mnTransitionSubType = TransitionSubType::DEFAULT;
             break;
-        case PPT_TOKEN( wedge ):
+        case NMSP_PPT|XML_wedge:
             mnTransitionType = TransitionType::FANWIPE;
             mnTransitionSubType = TransitionSubType::CENTERTOP;
             break;
-        case PPT_TOKEN( zoom ):
+        case NMSP_PPT|XML_zoom:
             mnTransitionType = TransitionType::ZOOM;
             mnTransitionSubType = TransitionSubType::DEFAULT;
             break;

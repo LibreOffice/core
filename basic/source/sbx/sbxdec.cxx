@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,11 +36,14 @@
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 
 
+// int GnDecCounter = 0;
+
 // Implementation SbxDecimal
 SbxDecimal::SbxDecimal( void )
 {
     setInt( 0 );
     mnRefCount = 0;
+    // GnDecCounter++;
 }
 
 SbxDecimal::SbxDecimal( const SbxDecimal& rDec )
@@ -51,6 +54,7 @@ SbxDecimal::SbxDecimal( const SbxDecimal& rDec )
     (void)rDec;
 #endif
     mnRefCount = 0;
+    // GnDecCounter++;
 }
 
 SbxDecimal::SbxDecimal
@@ -66,6 +70,7 @@ SbxDecimal::SbxDecimal
     (void)rAutomationDec;
 #endif
     mnRefCount = 0;
+    // GnDecCounter++;
 }
 
 void SbxDecimal::fillAutomationDecimal
@@ -84,6 +89,7 @@ void SbxDecimal::fillAutomationDecimal
 
 SbxDecimal::~SbxDecimal()
 {
+    // GnDecCounter--;
 }
 
 void releaseDecimalPtr( SbxDecimal*& rpDecimal )
@@ -153,32 +159,32 @@ SbxDecimal::CmpResult compare( const SbxDecimal &rLeft, const SbxDecimal &rRight
 
 void SbxDecimal::setChar( sal_Unicode val )
 {
-    VarDecFromUI2( (sal_uInt16)val, &maDec );
+    VarDecFromUI2( (USHORT)val, &maDec );
 }
 
-void SbxDecimal::setByte( sal_uInt8 val )
+void SbxDecimal::setByte( BYTE val )
 {
-    VarDecFromUI1( (sal_uInt8)val, &maDec );
+    VarDecFromUI1( (BYTE)val, &maDec );
 }
 
-void SbxDecimal::setShort( sal_Int16 val )
+void SbxDecimal::setShort( INT16 val )
 {
     VarDecFromI2( (short)val, &maDec );
 }
 
-void SbxDecimal::setLong( sal_Int32 val )
+void SbxDecimal::setLong( INT32 val )
 {
     VarDecFromI4( (long)val, &maDec );
 }
 
-void SbxDecimal::setUShort( sal_uInt16 val )
+void SbxDecimal::setUShort( UINT16 val )
 {
-    VarDecFromUI2( (sal_uInt16)val, &maDec );
+    VarDecFromUI2( (USHORT)val, &maDec );
 }
 
-void SbxDecimal::setULong( sal_uInt32 val )
+void SbxDecimal::setULong( UINT32 val )
 {
-    VarDecFromUI4( (sal_uIntPtr)val, &maDec );
+    VarDecFromUI4( (ULONG)val, &maDec );
 }
 
 bool SbxDecimal::setSingle( float val )
@@ -195,12 +201,12 @@ bool SbxDecimal::setDouble( double val )
 
 void SbxDecimal::setInt( int val )
 {
-    setLong( (sal_Int32)val );
+    setLong( (INT32)val );
 }
 
 void SbxDecimal::setUInt( unsigned int val )
 {
-    setULong( (sal_uInt32)val );
+    setULong( (UINT32)val );
 }
 
 // sbxscan.cxx
@@ -256,31 +262,31 @@ bool SbxDecimal::getChar( sal_Unicode& rVal )
     return bRet;
 }
 
-bool SbxDecimal::getByte( sal_uInt8& rVal )
+bool SbxDecimal::getByte( BYTE& rVal )
 {
     bool bRet = ( VarUI1FromDec( &maDec, &rVal ) == S_OK );
     return bRet;
 }
 
-bool SbxDecimal::getShort( sal_Int16& rVal )
+bool SbxDecimal::getShort( INT16& rVal )
 {
     bool bRet = ( VarI2FromDec( &maDec, &rVal ) == S_OK );
     return bRet;
 }
 
-bool SbxDecimal::getLong( sal_Int32& rVal )
+bool SbxDecimal::getLong( INT32& rVal )
 {
     bool bRet = ( VarI4FromDec( &maDec, &rVal ) == S_OK );
     return bRet;
 }
 
-bool SbxDecimal::getUShort( sal_uInt16& rVal )
+bool SbxDecimal::getUShort( UINT16& rVal )
 {
     bool bRet = ( VarUI2FromDec( &maDec, &rVal ) == S_OK );
     return bRet;
 }
 
-bool SbxDecimal::getULong( sal_uInt32& rVal )
+bool SbxDecimal::getULong( UINT32& rVal )
 {
     bool bRet = ( VarUI4FromDec( &maDec, &rVal ) == S_OK );
     return bRet;
@@ -300,7 +306,7 @@ bool SbxDecimal::getDouble( double& rVal )
 
 bool SbxDecimal::getInt( int& rVal )
 {
-    sal_Int32 TmpVal;
+    INT32 TmpVal;
     bool bRet = getLong( TmpVal );
     rVal = TmpVal;
     return bRet;
@@ -308,7 +314,7 @@ bool SbxDecimal::getInt( int& rVal )
 
 bool SbxDecimal::getUInt( unsigned int& rVal )
 {
-    sal_uInt32 TmpVal;
+    UINT32 TmpVal;
     bool bRet = getULong( TmpVal );
     rVal = TmpVal;
     return bRet;
@@ -358,28 +364,28 @@ SbxDecimal::CmpResult compare( const SbxDecimal &rLeft, const SbxDecimal &rRight
     return (SbxDecimal::CmpResult)0;
 }
 
-void SbxDecimal::setChar( sal_Unicode val )     { (void)val; }
-void SbxDecimal::setByte( sal_uInt8 val )           { (void)val; }
-void SbxDecimal::setShort( sal_Int16 val )          { (void)val; }
-void SbxDecimal::setLong( sal_Int32 val )           { (void)val; }
-void SbxDecimal::setUShort( sal_uInt16 val )        { (void)val; }
-void SbxDecimal::setULong( sal_uInt32 val )         { (void)val; }
-bool SbxDecimal::setSingle( float val )         { (void)val; return false; }
-bool SbxDecimal::setDouble( double val )        { (void)val; return false; }
-void SbxDecimal::setInt( int val )              { (void)val; }
-void SbxDecimal::setUInt( unsigned int val )    { (void)val; }
-bool SbxDecimal::setString( ::rtl::OUString* pOUString )    { (void)pOUString;  return false; }
+void SbxDecimal::setChar( sal_Unicode val )		{ (void)val; }
+void SbxDecimal::setByte( BYTE val )			{ (void)val; }
+void SbxDecimal::setShort( INT16 val )			{ (void)val; }
+void SbxDecimal::setLong( INT32 val )			{ (void)val; }
+void SbxDecimal::setUShort( UINT16 val )		{ (void)val; }
+void SbxDecimal::setULong( UINT32 val )			{ (void)val; }
+bool SbxDecimal::setSingle( float val )			{ (void)val; return false; }
+bool SbxDecimal::setDouble( double val )		{ (void)val; return false; }
+void SbxDecimal::setInt( int val )				{ (void)val; }
+void SbxDecimal::setUInt( unsigned int val )	{ (void)val; }
+bool SbxDecimal::setString( ::rtl::OUString* pOUString )	{ (void)pOUString;  return false; }
 
-bool SbxDecimal::getChar( sal_Unicode& rVal )   { (void)rVal; return false; }
-bool SbxDecimal::getByte( sal_uInt8& rVal )         { (void)rVal; return false; }
-bool SbxDecimal::getShort( sal_Int16& rVal )        { (void)rVal; return false; }
-bool SbxDecimal::getLong( sal_Int32& rVal )         { (void)rVal; return false; }
-bool SbxDecimal::getUShort( sal_uInt16& rVal )      { (void)rVal; return false; }
-bool SbxDecimal::getULong( sal_uInt32& rVal )       { (void)rVal; return false; }
-bool SbxDecimal::getSingle( float& rVal )       { (void)rVal; return false; }
-bool SbxDecimal::getDouble( double& rVal )      { (void)rVal; return false; }
-bool SbxDecimal::getInt( int& rVal )            { (void)rVal; return false; }
-bool SbxDecimal::getUInt( unsigned int& rVal )  { (void)rVal; return false; }
+bool SbxDecimal::getChar( sal_Unicode& rVal )	{ (void)rVal; return false; }
+bool SbxDecimal::getByte( BYTE& rVal )			{ (void)rVal; return false; }
+bool SbxDecimal::getShort( INT16& rVal )		{ (void)rVal; return false; }
+bool SbxDecimal::getLong( INT32& rVal )			{ (void)rVal; return false; }
+bool SbxDecimal::getUShort( UINT16& rVal )		{ (void)rVal; return false; }
+bool SbxDecimal::getULong( UINT32& rVal )		{ (void)rVal; return false; }
+bool SbxDecimal::getSingle( float& rVal )		{ (void)rVal; return false; }
+bool SbxDecimal::getDouble( double& rVal )		{ (void)rVal; return false; }
+bool SbxDecimal::getInt( int& rVal )			{ (void)rVal; return false; }
+bool SbxDecimal::getUInt( unsigned int& rVal )	{ (void)rVal; return false; }
 
 #endif
 
@@ -488,32 +494,38 @@ start:
             if( !pnDecRes->setSingle( p->nSingle ) )
                 SbxBase::SetError( SbxERR_OVERFLOW );
             break;
-        case SbxCURRENCY:
-            {
-                if( !pnDecRes->setDouble( ImpCurrencyToDouble( p->nInt64 ) ) )
-                    SbxBase::SetError( SbxERR_OVERFLOW );
-                break;
-            }
         case SbxSALINT64:
             {
-                if( !pnDecRes->setDouble( (double)p->nInt64 ) )
-                    SbxBase::SetError( SbxERR_OVERFLOW );
+                double d = (double)p->nInt64;
+                pnDecRes->setDouble( d );
                 break;
             }
         case SbxSALUINT64:
             {
-                if( !pnDecRes->setDouble( (double)p->uInt64 ) )
-                    SbxBase::SetError( SbxERR_OVERFLOW );
+                double d = ImpSalUInt64ToDouble( p->uInt64 );
+                pnDecRes->setDouble( d );
                 break;
             }
         case SbxDATE:
         case SbxDOUBLE:
-        {
-            double dVal = p->nDouble;
+        case SbxLONG64:
+        case SbxULONG64:
+        case SbxCURRENCY:
+            {
+            double dVal;
+            if( p->eType ==	SbxCURRENCY )
+                dVal = ImpCurrencyToDouble( p->nLong64 );
+            else if( p->eType == SbxLONG64 )
+                dVal = ImpINT64ToDouble( p->nLong64 );
+            else if( p->eType == SbxULONG64 )
+                dVal = ImpUINT64ToDouble( p->nULong64 );
+            else
+                dVal = p->nDouble;
+
             if( !pnDecRes->setDouble( dVal ) )
                 SbxBase::SetError( SbxERR_OVERFLOW );
             break;
-        }
+            }
         case SbxLPSTR:
         case SbxSTRING:
         case SbxBYREF | SbxSTRING:
@@ -552,7 +564,11 @@ start:
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             aTmp.nDouble = *p->pDouble; goto ref;
+        case SbxBYREF | SbxULONG64:
+            aTmp.nULong64 = *p->pULong64; goto ref;
+        case SbxBYREF | SbxLONG64:
         case SbxBYREF | SbxCURRENCY:
+            aTmp.nLong64 = *p->pLong64; goto ref;
         case SbxBYREF | SbxSALINT64:
             aTmp.nInt64 = *p->pnInt64; goto ref;
         case SbxBYREF | SbxSALUINT64:
@@ -592,17 +608,17 @@ start:
         case SbxERROR:
         case SbxUSHORT:
             aTmp.pUShort = &p->nUShort; goto direct;
+        case SbxSALUINT64:
+            aTmp.puInt64 = &p->uInt64; goto direct;
         case SbxINTEGER:
         case SbxBOOL:
             aTmp.pInteger = &p->nInteger; goto direct;
         case SbxLONG:
             aTmp.pLong = &p->nLong; goto direct;
-        case SbxCURRENCY:
         case SbxSALINT64:
             aTmp.pnInt64 = &p->nInt64; goto direct;
-        case SbxSALUINT64:
-            aTmp.puInt64 = &p->uInt64; goto direct;
-
+        case SbxCURRENCY:
+            aTmp.pLong64 = &p->nLong64; goto direct;
         direct:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
@@ -614,6 +630,8 @@ start:
             if( pDec != p->pDecimal )
             {
                 releaseDecimalPtr( p->pDecimal );
+                // if( p->pDecimal )
+                    // p->pDecimal->ReleaseRef();
                 p->pDecimal = pDec;
                 if( pDec )
                     pDec->addRef();
@@ -635,12 +653,27 @@ start:
             p->nDouble = d;
             break;
         }
+        case SbxULONG64:
+        {
+            double d;
+            pDec->getDouble( d );
+            p->nULong64 = ImpDoubleToUINT64( d );
+            break;
+        }
+        case SbxLONG64:
+        {
+            double d;
+            pDec->getDouble( d );
+            p->nLong64 = ImpDoubleToINT64( d );
+            break;
+        }
 
         case SbxLPSTR:
         case SbxSTRING:
         case SbxBYREF | SbxSTRING:
             if( !p->pOUString )
                 p->pOUString = new ::rtl::OUString;
+            // ImpCvtNum( (double) n, 0, *p->pString );
             pDec->getString( *p->pOUString );
             break;
         case SbxOBJECT:
@@ -675,6 +708,7 @@ start:
                 *p->pInteger = 0;
             }
             break;
+            // *p->pInteger = n; break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
             if( !pDec->getUShort( *p->pUShort ) )
@@ -697,12 +731,6 @@ start:
                 *p->pULong = 0;
             }
             break;
-        case SbxBYREF | SbxCURRENCY:
-            double d;
-            if( !pDec->getDouble( d ) )
-                SbxBase::SetError( SbxERR_OVERFLOW );
-            *p->pnInt64 = ImpDoubleToCurrency( d );
-            break;
         case SbxBYREF | SbxSALINT64:
             {
             double d;
@@ -724,18 +752,41 @@ start:
         case SbxBYREF | SbxSINGLE:
             if( !pDec->getSingle( *p->pSingle ) )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW );
+                SbxBase::SetError( SbxERR_OVERFLOW ); 
                 *p->pSingle = 0;
             }
             break;
+            // *p->pSingle = (float) n; break;
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             if( !pDec->getDouble( *p->pDouble ) )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW );
+                SbxBase::SetError( SbxERR_OVERFLOW ); 
                 *p->pDouble = 0;
             }
             break;
+        case SbxBYREF | SbxULONG64:
+        {
+            double d;
+            pDec->getDouble( d );
+            *p->pULong64 = ImpDoubleToUINT64( d ); 
+            break;
+        }
+        case SbxBYREF | SbxLONG64:
+        {
+            double d;
+            pDec->getDouble( d );
+            *p->pLong64 = ImpDoubleToINT64( d ); 
+            break;
+        }
+        case SbxBYREF | SbxCURRENCY:
+        {
+            double d;
+            pDec->getDouble( d );
+            *p->pLong64 = ImpDoubleToCurrency( d );
+            break;
+        }
+
         default:
             SbxBase::SetError( SbxERR_CONVERSION );
     }

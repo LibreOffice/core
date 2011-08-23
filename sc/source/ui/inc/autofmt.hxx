@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ private:
     VirtualDevice           aVD;
     SvtScriptedTextHelper   aScriptedText;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBreakIter;
-    sal_Bool                    bFitWidth;
+    BOOL                    bFitWidth;
     svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
     bool                    mbRTL;
     Size                    aPrvSize;
@@ -88,17 +88,17 @@ private:
     const String            aStrSum;
     SvNumberFormatter*      pNumFmt;
     //-------------------------------------------
-    SC_DLLPRIVATE void  Init            ();
-    SC_DLLPRIVATE void  DoPaint         ( const Rectangle& rRect );
-    SC_DLLPRIVATE void  CalcCellArray   ( sal_Bool bFitWidth );
-    SC_DLLPRIVATE void  CalcLineMap     ();
-    SC_DLLPRIVATE void  PaintCells      ();
+    SC_DLLPRIVATE void	Init			();
+    SC_DLLPRIVATE void	DoPaint			( const Rectangle& rRect );
+    SC_DLLPRIVATE void	CalcCellArray	( BOOL bFitWidth );
+    SC_DLLPRIVATE void	CalcLineMap		();
+    SC_DLLPRIVATE void	PaintCells		();
 
 /*  Usage of type size_t instead of SCCOL/SCROW is correct here - used in
     conjunction with class svx::frame::Array (svx/framelinkarray.hxx), which
     expects size_t coordinates. */
 
-    SC_DLLPRIVATE sal_uInt16              GetFormatIndex( size_t nCol, size_t nRow ) const;
+    SC_DLLPRIVATE USHORT              GetFormatIndex( size_t nCol, size_t nRow ) const;
     SC_DLLPRIVATE const SvxBoxItem&   GetBoxItem( size_t nCol, size_t nRow ) const;
     SC_DLLPRIVATE const SvxLineItem&  GetDiagItem( size_t nCol, size_t nRow, bool bTLBR ) const;
 
@@ -106,33 +106,33 @@ private:
     SC_DLLPRIVATE void                DrawStrings();
     SC_DLLPRIVATE void                DrawBackground();
 
-    SC_DLLPRIVATE void    MakeFonts       ( sal_uInt16 nIndex,
+    SC_DLLPRIVATE void    MakeFonts       ( USHORT nIndex,
                               Font& rFont,
                               Font& rCJKFont,
                               Font& rCTLFont );
 
-    SC_DLLPRIVATE String    MakeNumberString( String cellString, sal_Bool bAddDec );
-    SC_DLLPRIVATE void  DrawFrameLine   ( const ::editeng::SvxBorderLine&   rLineD,
-                              Point                 from,
-                              Point                 to,
-                              sal_Bool                  bHorizontal,
-                              const ::editeng::SvxBorderLine&   rLineLT,
-                              const ::editeng::SvxBorderLine&   rLineL,
-                              const ::editeng::SvxBorderLine&   rLineLB,
-                              const ::editeng::SvxBorderLine&   rLineRT,
-                              const ::editeng::SvxBorderLine&   rLineR,
-                              const ::editeng::SvxBorderLine&   rLineRB );
-    SC_DLLPRIVATE void CheckPriority    ( sal_uInt16            nCurLine,
-                              AutoFmtLine       eLine,
-                              ::editeng::SvxBorderLine& rLine );
-    SC_DLLPRIVATE void  GetLines        ( sal_uInt16 nIndex, AutoFmtLine eLine,
-                              ::editeng::SvxBorderLine& rLineD,
-                              ::editeng::SvxBorderLine& rLineLT,
-                              ::editeng::SvxBorderLine& rLineL,
-                              ::editeng::SvxBorderLine& rLineLB,
-                              ::editeng::SvxBorderLine& rLineRT,
-                              ::editeng::SvxBorderLine& rLineR,
-                              ::editeng::SvxBorderLine& rLineRB );
+    SC_DLLPRIVATE String	MakeNumberString( String cellString, BOOL bAddDec );
+    SC_DLLPRIVATE void	DrawFrameLine	( const SvxBorderLine&	rLineD,
+                              Point					from,
+                              Point					to,
+                              BOOL					bHorizontal,
+                              const SvxBorderLine&	rLineLT,
+                              const SvxBorderLine&	rLineL,
+                              const SvxBorderLine&	rLineLB,
+                              const SvxBorderLine&	rLineRT,
+                              const SvxBorderLine&	rLineR,
+                              const SvxBorderLine&	rLineRB );
+    SC_DLLPRIVATE void CheckPriority	( USHORT			nCurLine,
+                              AutoFmtLine		eLine,
+                              SvxBorderLine&	rLine );
+    SC_DLLPRIVATE void	GetLines		( USHORT nIndex, AutoFmtLine eLine,
+                              SvxBorderLine&	rLineD,
+                              SvxBorderLine&	rLineLT,
+                              SvxBorderLine&	rLineL,
+                              SvxBorderLine&	rLineLB,
+                              SvxBorderLine&	rLineRT,
+                              SvxBorderLine&	rLineR,
+                              SvxBorderLine&	rLineRB );
 };
 
 #endif // SC_AUTOFMT_HXX

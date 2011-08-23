@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-/** represents something that can be filtered using an XSheetFilterDescriptor.
+/** represents something that can be filtered using an XSheetFilterDesriptor.
 
     @see com::sun::star::sheet::XSheetFilterableEx
  */
@@ -62,7 +62,7 @@ published interface XSheetFilterable: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    /** performs a filter operation, using the settings of the passed filter
+    /** performa a filter operation, using the settings of the passed filter
         descriptor.
 
         @param xDescriptor

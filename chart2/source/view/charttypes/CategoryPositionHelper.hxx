@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,9 +45,8 @@ public:
     CategoryPositionHelper( const CategoryPositionHelper& rSource );
     virtual ~CategoryPositionHelper();
 
-    double getScaledSlotWidth() const;
-    virtual double getScaledSlotPos( double fCategoryX, double fSeriesNumber ) const;
-    virtual void setCategoryWidth( double fCategoryWidth );
+    double getSlotWidth() const;
+    double getSlotPos( double fCategoryX, double fSeriesNumber ) const;
 
     //Distance between two neighboring bars in same category, seen relative to width of the bar
     void setInnerDistance( double fInnerDistance );

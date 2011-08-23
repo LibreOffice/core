@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,7 +106,7 @@ sal_Bool SwScriptIterator::Next()
 
 // --------------------------------------------------------------------
 
-SwTxtAttrIterator::SwTxtAttrIterator( const SwTxtNode& rTNd, sal_uInt16 nWhchId,
+SwTxtAttrIterator::SwTxtAttrIterator( const SwTxtNode& rTNd, USHORT nWhchId,
                                         xub_StrLen nStt,
                                         sal_Bool bUseGetWhichOfScript )
     : aSIter( rTNd.GetTxt(), nStt ), rTxtNd( rTNd ),
@@ -126,7 +126,7 @@ sal_Bool SwTxtAttrIterator::Next()
         {
             do {
                 const SwTxtAttr* pHt = (SwTxtAttr*)aStack[ 0 ];
-                sal_uInt16 nEndPos = *pHt->GetEnd();
+                USHORT nEndPos = *pHt->GetEnd();
                 if( nChgPos >= nEndPos )
                     aStack.Remove( 0 );
                 else
@@ -141,7 +141,7 @@ sal_Bool SwTxtAttrIterator::Next()
             if( aStack.Count() )
             {
                 const SwTxtAttr* pHt = (SwTxtAttr*)aStack[ 0 ];
-                sal_uInt16 nEndPos = *pHt->GetEnd();
+                USHORT nEndPos = *pHt->GetEnd();
                 if( nChgPos >= nEndPos )
                 {
                     nChgPos = nEndPos;
@@ -170,7 +170,7 @@ sal_Bool SwTxtAttrIterator::Next()
 void SwTxtAttrIterator::AddToStack( const SwTxtAttr& rAttr )
 {
     void* pAdd = (void*)&rAttr;
-    sal_uInt16 nIns = 0, nEndPos = *rAttr.GetEnd();
+    USHORT nIns = 0, nEndPos = *rAttr.GetEnd();
     for( ; nIns < aStack.Count(); ++nIns )
         if( *((SwTxtAttr*)aStack[ nIns ] )->GetEnd() > nEndPos )
             break;
@@ -180,12 +180,12 @@ void SwTxtAttrIterator::AddToStack( const SwTxtAttr& rAttr )
 
 void SwTxtAttrIterator::SearchNextChg()
 {
-    sal_uInt16 nWh = 0;
+    USHORT nWh = 0;
     if( nChgPos == aSIter.GetScriptChgPos() )
     {
         aSIter.Next();
         pParaItem = 0;
-        nAttrPos = 0;       // must be restart at the beginning, because
+        nAttrPos = 0; 		// must be restart at the beginning, because
                             // some attributes can start before or inside
                             // the current scripttype!
         aStack.Remove( 0, aStack.Count() );
@@ -216,8 +216,8 @@ void SwTxtAttrIterator::SearchNextChg()
         for( ; nAttrPos < pHts->Count(); ++nAttrPos )
         {
             const SwTxtAttr* pHt = (*pHts)[ nAttrPos ];
-            const sal_uInt16* pEnd = pHt->GetEnd();
-            const sal_uInt16 nHtStt = *pHt->GetStart();
+            const USHORT* pEnd = pHt->GetEnd();
+            const USHORT nHtStt = *pHt->GetStart();
             if( nHtStt < nStt && ( !pEnd || *pEnd <= nStt ))
                 continue;
 

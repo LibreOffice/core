@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,23 +28,23 @@
 
 #ifndef SFX_PANELIST_HXX
 
-#include <vcl/taskpanelist.hxx>     // includes also vcl/window.hxx
+#include <vcl/taskpanelist.hxx>		// includes also vcl/window.hxx
 
 namespace sfx2
 {
     // source in newhelp.cxx
 
-    void HandleTaskPaneList( Window* pWindow, sal_Bool bAddToList );
+    void HandleTaskPaneList( Window* pWindow, BOOL bAddToList );
         // pWindow: just a system window or something which is child of a system window
 
     inline void AddToTaskPaneList( Window* pWindowToBeHandled )
     {
-        HandleTaskPaneList( pWindowToBeHandled, sal_True );
+        HandleTaskPaneList( pWindowToBeHandled, TRUE );
     }
 
     inline void RemoveFromTaskPaneList( Window* pWindowToBeHandled )
     {
-        HandleTaskPaneList( pWindowToBeHandled, sal_False );
+        HandleTaskPaneList( pWindowToBeHandled, FALSE );
     }
 }
 

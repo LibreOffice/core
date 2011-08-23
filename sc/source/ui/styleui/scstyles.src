@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,42 +27,44 @@
 
 #include "sc.hrc"
 #include <svl/style.hrc>
+#define IMPL_FAMILY(family,filter) \
+    StyleFamily = family;						\
+    FilterList = { filter }
 
+ //------------------------------------------------------------------------
 SfxStyleFamilies DLG_STYLE_DESIGNER
 {
     StyleFamilyList =
     {
         SfxStyleFamilyItem
         {
-            StyleFamily = SFX_STYLE_FAMILY_PARA ;
-            FilterList =
-            {
-                < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
-                < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
-                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; >  ;
-            };
+            IMPL_FAMILY ( SFX_STYLE_FAMILY_PARA ,
+            < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
+            < STR_STYLE_FILTER_USED ; SFXSTYLEBIT_USED ; > ;
+            < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ; ) ;
             Text [ en-US ] = "Cell Styles" ;
-        };
-
+};
         SfxStyleFamilyItem
         {
-            StyleFamily = SFX_STYLE_FAMILY_PAGE ;
-            FilterList =
-            {
-                < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
-                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
-            };
+            IMPL_FAMILY ( SFX_STYLE_FAMILY_PAGE ,
+            < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
+            < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ; ) ;
             Text [ en-US ] = "Page Styles" ;
-        };
+};
     };
 
-    //  style family images are now taken from an ImageList
-    //  (for each family, there's one entry in the IdList)
-    ImageList 1 // == BMP_COLOR_NORMAL + 1
+    //	style family images are now taken from an ImageList
+    //	(for each family, there's one entry in the IdList)
+    ImageList 1	// == BMP_COLOR_NORMAL + 1
     {
         Prefix = "sf";
         MaskColor = STD_MASKCOLOR ;
         IdList = { 1; 2; };
-    };
 };
-
+    ImageList 2	// == BMP_COLOR_HIGHCONTRAST + 1
+    {
+        Prefix = "sfh";
+        MaskColor = SC_HC_MASKCOLOR ;
+        IdList = { 1; 2; };
+};
+};

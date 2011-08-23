@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,12 +52,11 @@
 
 using namespace comphelper;
 using namespace cppu;
+using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::ucb;
-
-using ::rtl::OUString;
 
 static ResMgr* pAppMgr = NULL;
 
@@ -97,20 +96,23 @@ void MainWindow::TestGross()
 }
 
 
-sal_Bool MainWindow::Close()
+BOOL MainWindow::Close()
 {
     WorkWindow::Close();
     FileExit();
-    return sal_True;
+    return TRUE;
 }
 
 void MainWindow::FileExit()
 {
-    pApp->Quit();
+/*	WriteSTBProfile();*/
+
+//	if (pApp->CloseAll())
+        pApp->Quit();
 }
 
 
-void MainWindow::Tree(GHEditWindow *aEditWin, Window *pBase, sal_uInt16 Indent)
+void MainWindow::Tree(GHEditWindow *aEditWin, Window *pBase, USHORT Indent)
 {
     String sIndent,aText;
     sIndent.Expand(5*Indent);
@@ -119,10 +121,9 @@ void MainWindow::Tree(GHEditWindow *aEditWin, Window *pBase, sal_uInt16 Indent)
     aText.SearchAndReplaceAllAscii("\n",CUniString("\\n"));
 
     aEditWin->AddText(String(sIndent).AppendAscii("Text: ").Append(aText).AppendAscii("\n"));
-    // FIXME: HELPID
-    aEditWin->AddText(String(sIndent).AppendAscii("Help: ").Append(String(rtl::OStringToOUString(pBase->GetHelpId(), RTL_TEXTENCODING_UTF8))).AppendAscii(":").Append(pBase->GetQuickHelpText()).AppendAscii(":").Append(pBase->GetHelpText()).AppendAscii("\n"));
+    aEditWin->AddText(String(sIndent).AppendAscii("Help: ").Append(String::CreateFromInt64(pBase->GetHelpId())).AppendAscii(":").Append(pBase->GetQuickHelpText()).AppendAscii(":").Append(pBase->GetHelpText()).AppendAscii("\n"));
 
-    sal_uInt16 i;
+    USHORT i;
     for (i = 0 ; i < pBase->GetChildCount() ; i++)
     {
         Tree(aEditWin,pBase->GetChild(i),Indent+1);
@@ -150,6 +151,26 @@ void MainWindow::SysDlg()
               break;
       }
 
+/*
+
+#define WB_OK					((WinBits)0x0010)
+#define WB_OK_CANCEL			((WinBits)0x0020)
+#define WB_YES_NO				((WinBits)0x0040)
+#define WB_YES_NO_CANCEL		((WinBits)0x0080)
+#define WB_RETRY_CANCEL			((WinBits)0x0100)
+
+#define WB_DEF_OK				((WinBits)0x0200)
+#define WB_DEF_CANCEL			((WinBits)0x0400)
+#define WB_DEF_RETRY			((WinBits)0x0800)
+#define WB_DEF_YES				((WinBits)0x1000)
+#define WB_DEF_NO				((WinBits)0x2000)
+
+#define RET_OK				 TRUE
+#define RET_CANCEL			 FALSE
+#define RET_YES				 2
+#define RET_NO				 3
+#define RET_RETRY			 4
+*/
 }
 
 MyApp aApp;
@@ -167,6 +188,19 @@ void MyApp::Property( ApplicationProperty& rProp )
         pTTProperties->nPropertyVersion = TT_PROPERTIES_VERSION;
         switch ( pTTProperties->nActualPR )
         {
+/*			case TT_PR_SLOTS:
+            {
+                pTTProperties->nSidOpenUrl = SID_OPENURL;
+                pTTProperties->nSidFileName = SID_FILE_NAME;
+                pTTProperties->nSidNewDocDirect = SID_NEWDOCDIRECT;
+                pTTProperties->nSidCopy = SID_COPY;
+                pTTProperties->nSidPaste = SID_PASTE;
+                pTTProperties->nSidSourceView = SID_SOURCEVIEW;
+                pTTProperties->nSidSelectAll = SID_SELECTALL;
+                pTTProperties->nSidReferer = SID_REFERER;
+                pTTProperties->nActualPR = 0;
+            }
+            break;*/
             case TT_PR_DISPATCHER:
             {
                 PlugInDispatcher* pDispatcher = GetDispatcher();
@@ -184,6 +218,16 @@ void MyApp::Property( ApplicationProperty& rProp )
                 }
             }
             break;
+/*			case TT_PR_IMG:
+            {
+                SvDataMemberObjectRef aDataObject = new SvDataMemberObject();
+                SvData* pDataBmp = new SvData( FORMAT_BITMAP );
+                pDataBmp->SetData( pTTProperties->mpBmp );
+                aDataObject->Append( pDataBmp );
+                aDataObject->CopyClipboard();
+                pTTProperties->nActualPR = 0;
+            }
+            break;*/
             default:
             {
                 pTTProperties->nPropertyVersion = 0;
@@ -194,21 +238,21 @@ void MyApp::Property( ApplicationProperty& rProp )
 }
 
 
-sal_uInt16 MyDispatcher::ExecuteFunction( sal_uInt16 nSID, SfxPoolItem** ppArgs, sal_uInt16 nMode)
+USHORT MyDispatcher::ExecuteFunction( USHORT nSID, SfxPoolItem** ppArgs, USHORT nMode)
 {
-    (void) ppArgs; // avoid warning about unused parameter
-    (void) nMode;  // avoid warning about unused parameter
+    (void) ppArgs; /* avoid warning about unused parameter */
+    (void) nMode; /* avoid warning about unused parameter */
 
     switch (nSID)
     {
-        case IDM_FILE_EXIT:       pMainWin->FileExit();             break;
-        case IDM_FILE_OPEN_TEST:  pMainWin->FileOpen();             break;
-        case IDM_TEST_GROSS:      pMainWin->TestGross();            break;
-        case IDM_TEST_WINTREE:    pMainWin->WinTree();              break;
-        case IDM_SYS_DLG:         pMainWin->SysDlg();               break;
+        case IDM_FILE_EXIT:       pMainWin->FileExit();				break;
+        case IDM_FILE_OPEN_TEST:  pMainWin->FileOpen();				break;
+        case IDM_TEST_GROSS:      pMainWin->TestGross();			break;
+        case IDM_TEST_WINTREE:	  pMainWin->WinTree();				break;
+        case IDM_SYS_DLG:		  pMainWin->SysDlg();				break;
         default:
             {
-                OSL_TRACE("Dispatcher kennt Funktion nicht %s",ByteString::CreateFromInt64(nSID).GetBuffer());
+                DBG_ERROR1("Dispatcher kennt Funktion nicht %s",ByteString::CreateFromInt64(nSID).GetBuffer());
                 return EXECUTE_NO;
             }
 
@@ -230,7 +274,7 @@ Reference< XContentProviderManager > InitializeUCB( void )
         exit( 1 );
     }
     OSL_ASSERT( path.lastIndexOf( '/' ) >= 0 );
-
+    
 
     ::rtl::OUStringBuffer bufServices( path.copy( 0, path.lastIndexOf( '/' )+1 ) );
     bufServices.appendAscii("services.rdb");
@@ -239,8 +283,8 @@ Reference< XContentProviderManager > InitializeUCB( void )
     ::rtl::OUStringBuffer bufTypes( path.copy( 0, path.lastIndexOf( '/' )+1 ) );
     bufTypes.appendAscii("types.rdb");
     OUString types = bufTypes.makeStringAndClear();
-
-
+    
+    
     Reference< XMultiServiceFactory > xSMgr;
     try
     {
@@ -253,7 +297,7 @@ Reference< XContentProviderManager > InitializeUCB( void )
         InfoBox( NULL, String( exc.Message ) ).Execute();
         throw ;
     }
-
+        
 
     //////////////////////////////////////////////////////////////////////
     // set global factory
@@ -266,13 +310,13 @@ Reference< XContentProviderManager > InitializeUCB( void )
         ucbhelper::ContentBroker::get()->getContentProviderManagerInterface();
 
     Reference< XContentProvider > xFileProvider
-        ( xSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.FileContentProvider" )) ), UNO_QUERY );
-    xUcb->registerContentProvider( xFileProvider, OUString( RTL_CONSTASCII_USTRINGPARAM( "file" )), sal_True );
+        ( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" ) ), UNO_QUERY );
+    xUcb->registerContentProvider( xFileProvider, OUString::createFromAscii( "file" ), sal_True );
 
     return xUcb;
 }
 
-int MyApp::Main()
+void MyApp::Main()
 {
     Reference< XContentProviderManager > xUcb = InitializeUCB();
     LanguageType aRequestedLanguage;
@@ -301,7 +345,6 @@ int MyApp::Main()
     RemoteControl aRC;
 
     Execute();
-    return EXIT_SUCCESS;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

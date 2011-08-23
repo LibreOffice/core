@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,21 +25,32 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include    <boost/unordered_map.hpp>
+#include	<hash_map>
 
 #ifndef _CODEMAKER_TYPEMANAGER_HXX_
 #define _CODEMAKER_TYPEMANAGER_HXX_
-#include    <codemaker/registry.hxx>
+#include	<codemaker/registry.hxx>
 
-typedef ::std::list< Registry* >    RegistryList;
+typedef ::std::list< Registry* > 	RegistryList;
 
-typedef ::boost::unordered_map
-<
+#if defined( _MSC_VER ) && ( _MSC_VER < 1200 )
+typedef	::std::__hash_map__
+<	
     ::rtl::OString, // Typename
-    RTTypeClass,    // TypeClass
-    HashString,
+    RTTypeClass, 	// TypeClass
+    HashString, 
+    EqualString, 
+    NewAlloc
+> T2TypeClassMap; 
+#else
+typedef	::std::hash_map
+<	
+    ::rtl::OString, // Typename
+    RTTypeClass, 	// TypeClass
+    HashString, 
     EqualString
-> T2TypeClassMap;
+> T2TypeClassMap; 
+#endif
 
 struct TypeManagerImpl
 {
@@ -47,8 +58,8 @@ struct TypeManagerImpl
         : m_refCount(0)
         {}
 
-    sal_Int32       m_refCount;
-};
+    sal_Int32		m_refCount;
+};	
 
 class TypeManager
 {
@@ -78,12 +89,12 @@ public:
     virtual sal_Bool isValidType(const ::rtl::OString& /*name*/)
         { return sal_False; }
 
-    virtual RegistryKey getTypeKey(const ::rtl::OString& /*name*/)
+    virtual RegistryKey	getTypeKey(const ::rtl::OString& /*name*/)
         { return RegistryKey(); }
     virtual TypeReader getTypeReader(const ::rtl::OString& /*name*/)
         { return TypeReader(); }
-    virtual RTTypeClass getTypeClass(const ::rtl::OString& /*name*/)
-        { return RT_TYPE_INVALID; }
+    virtual RTTypeClass	getTypeClass(const ::rtl::OString& /*name*/)
+        { return RT_TYPE_INVALID; } 
 
     virtual void setBase(const ::rtl::OString& /*base*/) {}
     virtual ::rtl::OString getBase() { return ::rtl::OString(); }
@@ -102,16 +113,16 @@ struct RegistryTypeManagerImpl
 {
     RegistryTypeManagerImpl()
         : m_pMergedRegistry(NULL)
-        , m_base("/")
+        , m_base("/") 
         , m_isMerged(sal_False)
         {}
 
-    T2TypeClassMap  m_t2TypeClass;
-    RegistryList    m_registries;
-    Registry*       m_pMergedRegistry;
-    ::rtl::OString  m_base;
-    sal_Bool        m_isMerged;
-};
+    T2TypeClassMap	m_t2TypeClass;
+    RegistryList	m_registries;
+    Registry*		m_pMergedRegistry;
+    ::rtl::OString 	m_base;
+    sal_Bool		m_isMerged;	
+};	
 
 class RegistryTypeManager : public TypeManager
 {
@@ -137,20 +148,20 @@ public:
     using TypeManager::init;
     sal_Bool init(sal_Bool bMerge, const StringVector& regFiles);
 
-    sal_Bool    isValidType(const ::rtl::OString& name)
+    sal_Bool  	isValidType(const ::rtl::OString& name)
         { return searchTypeKey(name).isValid(); }
-    RegistryKey getTypeKey(const ::rtl::OString& name)
+    RegistryKey	getTypeKey(const ::rtl::OString& name)
         { return searchTypeKey(name); }
-    TypeReader  getTypeReader(const ::rtl::OString& name);
-    RTTypeClass getTypeClass(const ::rtl::OString& name);
+    TypeReader 	getTypeReader(const ::rtl::OString& name);
+    RTTypeClass	getTypeClass(const ::rtl::OString& name);
 
     void setBase(const ::rtl::OString& base);
     ::rtl::OString getBase() { return m_pImpl->m_base; }
 
     sal_Int32 getSize() { return m_pImpl->m_t2TypeClass.size(); }
 protected:
-    RegistryKey searchTypeKey(const ::rtl::OString& name);
-    void        freeRegistries();
+    RegistryKey	searchTypeKey(const ::rtl::OString& name);
+    void		freeRegistries();
 
     void acquire();
     void release();
@@ -158,7 +169,7 @@ protected:
 protected:
     RegistryTypeManagerImpl* m_pImpl;
 };
-
+    
 #endif // _CODEMAKER_TYPEMANAGER_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

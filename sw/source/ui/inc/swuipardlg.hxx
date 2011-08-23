@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,23 +32,23 @@
 class SwParaDlg: public SfxTabDialog
 {
     SwView& rView;
-    sal_uInt16 nHtmlMode;
-    sal_uInt8 nDlgMode;
-    sal_Bool bDrawParaDlg;
+    USHORT nHtmlMode;
+    BYTE nDlgMode;
+    BOOL bDrawParaDlg;
 
-    void PageCreated(sal_uInt16 nID, SfxTabPage& rPage);
+    void PageCreated(USHORT nID, SfxTabPage& rPage);
 
 public:
     SwParaDlg(  Window *pParent,
                 SwView& rVw,
                 const SfxItemSet&,
-                sal_uInt8 nDialogMode,
+                BYTE nDialogMode,
                 const String *pCollName = 0,
-                sal_Bool bDraw = sal_False,
-                sal_uInt16 nDefPage = 0);
+                BOOL bDraw = FALSE,
+                UINT16 nDefPage = 0);
     ~SwParaDlg();
 };
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

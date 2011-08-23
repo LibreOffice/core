@@ -1,8 +1,6 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-
 #include <stdlib.h>
 #include <string.h>
-
 #include "cpp.h"
 
 #define NSTAK   32
@@ -236,8 +234,7 @@ long
 {
     Token *tp;
     Nlist *np;
-    size_t  ntok;
-    int rnd;
+    int ntok, rnd;
 
     trp->tp++;
     if (kw == KIFDEF || kw == KIFNDEF)
@@ -715,11 +712,11 @@ struct value
                     }
                     else
                     {
-                        static char cvcon[] = "b\bf\fn\nr\rt\tv\v''\"\"??\\\\";
-                        static size_t cvlen = sizeof(cvcon) - 1;
-
+                        static char cvcon[]
+                        = "b\bf\fn\nr\rt\tv\v''\"\"??\\\\";
                         size_t j;
-                        for (j = 0; j < cvlen; j += 2)
+
+                        for (j = 0; j < sizeof(cvcon); j += 2)
                         {
                             if (*p == cvcon[j])
                             {
@@ -728,7 +725,7 @@ struct value
                             }
                         }
                         p += 1;
-                        if (j >= cvlen)
+                        if (j >= sizeof(cvcon))
                             error(WARNING,
                                "Undefined escape in character constant");
                     }

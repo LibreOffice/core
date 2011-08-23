@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,14 +34,14 @@
 /** === end UNO includes === **/
 #include <rtl/ustring.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 //........................................................................
 namespace pcr
 {
 //........................................................................
 
-    typedef ::boost::unordered_map< ::rtl::OUString, ::com::sun::star::beans::Property, ::rtl::OUStringHash >
+    typedef ::std::hash_map< ::rtl::OUString, ::com::sun::star::beans::Property, ::rtl::OUStringHash >
         PropertyMap;
 
 //........................................................................

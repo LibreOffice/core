@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,6 +55,9 @@ class OTextCursorHelper;
 class SwXTextRange;
 
 
+/* -----------------03.12.98 12:22-------------------
+ *
+ * --------------------------------------------------*/
 
 class SwXText
     : public ::com::sun::star::lang::XTypeProvider
@@ -289,12 +292,6 @@ public:
         throw (::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::uno::RuntimeException);
 
-    // XTextCopy
-    virtual void SAL_CALL copyText(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextCopy >& xSource )
-        throw (::com::sun::star::uno::RuntimeException);
-
     // XTextRangeCompare
     sal_Int16 SAL_CALL compareRegionStarts(
             const ::com::sun::star::uno::Reference<
@@ -338,6 +335,12 @@ public:
                 ::com::sun::star::text::XTextContent>& xPredecessor)
         throw (::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::uno::RuntimeException);
+
+    // XTextCopy
+    virtual void SAL_CALL copyText( 
+            const ::com::sun::star::uno::Reference< 
+                ::com::sun::star::text::XTextCopy >& xSource )
+        throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif // SW_UNOTEXT_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
     protected static XMultiServiceFactory msf = null;
     protected static XAccessibleAction action = null;
 
-    protected TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param, 
                                                     PrintWriter log) {
         XAccessibleContext oObj = null;
         Object toolkit = null;
@@ -85,7 +85,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
 
         Object atw = tk.getActiveTopWindow();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
                                                               atw);
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
@@ -93,15 +93,15 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
         util.utils.shortWait(Param.getInt("ShortWait"));
 
         AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        XAccessibleContext ok_button = AccessibilityTools.getAccessibleObjectForRole(xRoot,
-                                                                     AccessibleRole.PUSH_BUTTON,
+        XAccessibleContext ok_button = AccessibilityTools.getAccessibleObjectForRole(xRoot, 
+                                                                     AccessibleRole.PUSH_BUTTON, 
                                                                      "Cancel");
 
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PARAGRAPH);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
         log.println("AccessibleName " + oObj.getAccessibleName());
-        log.println("ParentDescription " +
+        log.println("ParentDescription " + 
                     oObj.getAccessibleParent().getAccessibleContext()
                         .getAccessibleDescription());
 
@@ -114,18 +114,18 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
                                        XAccessibleText.class, oObj);
 
         XAccessibleEditableText eText = (XAccessibleEditableText) UnoRuntime.queryInterface(
-                                                XAccessibleEditableText.class,
+                                                XAccessibleEditableText.class, 
                                                 oObj);
 
         eText.setText("LEFT");
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
-
-        tEnv.addObjRelation("Destroy", "AccessibleEditableTextPara_PreviewCell");
+        
+        tEnv.addObjRelation("Destroy", "AccessibleEditableTextPara_PreviewCell");        
 
         final XAccessibleEditableText editText = eText;
 
-        tEnv.addObjRelation("EventProducer",
+        tEnv.addObjRelation("EventProducer", 
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 editText.setText("LEFT_EVENT");
@@ -161,7 +161,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
 
         try {
             SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
-            xCalcDoc = (XComponent) UnoRuntime.queryInterface(XComponent.class,
+            xCalcDoc = (XComponent) UnoRuntime.queryInterface(XComponent.class, 
                                                               SOF.createCalcDoc(
                                                                       null));
         } catch (com.sun.star.uno.Exception e) {
@@ -183,7 +183,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
         }
 
         public void run() {
-            XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+            XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class, 
                                                                xCalcDoc);
 
             XController xController = aModel.getCurrentController();
@@ -192,10 +192,10 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
             try {
                 String aSlotID = ".uno:EditHeaderAndFooter";
                 XDispatchProvider xDispProv = (XDispatchProvider) UnoRuntime.queryInterface(
-                                                      XDispatchProvider.class,
+                                                      XDispatchProvider.class, 
                                                       xController);
                 XURLTransformer xParser = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
-                                                  XURLTransformer.class,
+                                                  XURLTransformer.class, 
                                                   msf.createInstance(
                                                           "com.sun.star.util.URLTransformer"));
 

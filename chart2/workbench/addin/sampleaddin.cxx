@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,7 @@
 #include <com/sun/star/chart/X3DDisplay.hpp>
 
 using namespace com::sun::star;
-
-using ::rtl::OUString;
+using namespace rtl;
 
 // code for creating instances of SampleAddIn
 
@@ -57,9 +56,9 @@ sal_Bool SAL_CALL component_writeInfo(
     {
         try
         {
-            OUString aImpl( RTL_CONSTASCII_USTRINGPARAM( "/" ));
+            OUString aImpl = OUString::createFromAscii( "/" );
             aImpl += SampleAddIn::getImplementationName_Static();
-            aImpl += OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ));
+            aImpl += OUString::createFromAscii( "/UNO/SERVICES" );
 
             uno::Reference< registry::XRegistryKey> xNewKey(
                 reinterpret_cast<registry::XRegistryKey*>( pRegistryKey )->createKey( aImpl ) );
@@ -73,7 +72,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch( registry::InvalidRegistryException& )
         {
-            OSL_FAIL( "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
     return sal_False;
@@ -103,7 +102,7 @@ void * SAL_CALL component_getFactory(
     return pRet;
 }
 
-}   // extern C
+}	// extern C
 
 
 // --------------------
@@ -112,7 +111,7 @@ void * SAL_CALL component_getFactory(
 
 SampleAddIn::SampleAddIn()
 {
-
+    
 }
 
 SampleAddIn::~SampleAddIn()
@@ -138,9 +137,9 @@ sal_Bool SampleAddIn::getLogicalPosition( uno::Reference< drawing::XShape >& xAx
             try
             {
                 double fMin(0.0), fMax(0.0);
-                uno::Any aAny = xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Min" )));
+                uno::Any aAny = xProp->getPropertyValue( OUString::createFromAscii( "Min" ));
                 aAny >>= fMin;
-                aAny = xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Max" )));
+                aAny = xProp->getPropertyValue( OUString::createFromAscii( "Max" ));
                 aAny >>= fMax;
 
                 double fRange = fMax - fMin;
@@ -153,7 +152,7 @@ sal_Bool SampleAddIn::getLogicalPosition( uno::Reference< drawing::XShape >& xAx
                     if( bVertical )
                     {
                         aOutPosition.X = aPos.X;
-                        aOutPosition.Y = static_cast<sal_Int32>(aPos.Y + nLength * (1.0 - fPercentage));    // y scale goes from top to bottom
+                        aOutPosition.Y = static_cast<sal_Int32>(aPos.Y + nLength * (1.0 - fPercentage));	// y scale goes from top to bottom
                     }
                     else
                     {
@@ -175,17 +174,17 @@ sal_Bool SampleAddIn::getLogicalPosition( uno::Reference< drawing::XShape >& xAx
 
 OUString SampleAddIn::getImplementationName_Static()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SampleAddIn" ));
+    return OUString::createFromAscii( "SampleAddIn" );
 }
 
 uno::Sequence< ::rtl::OUString > SampleAddIn::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aSeq( 4 );
 
-    aSeq[ 0 ] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.ChartAxisXSupplier" ));
-    aSeq[ 1 ] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.ChartAxisYSupplier" ));
-    aSeq[ 2 ] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.Diagram" ));
-    aSeq[ 3 ] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.SampleAddIn" ));
+    aSeq[ 0 ] = OUString::createFromAscii( "com.sun.star.chart.ChartAxisXSupplier" );
+    aSeq[ 1 ] = OUString::createFromAscii( "com.sun.star.chart.ChartAxisYSupplier" );
+    aSeq[ 2 ] = OUString::createFromAscii( "com.sun.star.chart.Diagram" );
+    aSeq[ 3 ] = OUString::createFromAscii( "com.sun.star.chart.SampleAddIn" );
 
     return aSeq;
 }
@@ -220,7 +219,7 @@ void SAL_CALL SampleAddIn::initialize( const uno::Sequence< uno::Any >& aArgumen
             aBaseType <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.XYDiagram" ));
             try
             {
-                xDocProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseDiagram" )), aBaseType );
+                xDocProp->setPropertyValue( rtl::OUString::createFromAscii( "BaseDiagram" ), aBaseType );
             }
             catch( ... )
             {}
@@ -237,8 +236,8 @@ void SAL_CALL SampleAddIn::initialize( const uno::Sequence< uno::Any >& aArgumen
             {
                 uno::Any aAny;
                 aAny <<= (sal_Int32)( 0xe0e0f0 );
-                xDiaProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "FillColor" )), aAny );
-                xLegendProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "FillColor" )), aAny );
+                xDiaProp->setPropertyValue( OUString::createFromAscii( "FillColor" ), aAny );
+                xLegendProp->setPropertyValue( OUString::createFromAscii( "FillColor" ), aAny );
             }
         }
     }
@@ -286,7 +285,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                 if( ! mxMyRedLine.is())
                 {
                     mxMyRedLine = uno::Reference< drawing::XShape >(
-                        xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.LineShape" ))),
+                        xFactory->createInstance( OUString::createFromAscii( "com.sun.star.drawing.LineShape" )),
                         uno::UNO_QUERY );
                     xPage->add( mxMyRedLine );
 
@@ -296,11 +295,11 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                     {
                         uno::Any aColor, aWidth;
                         aColor <<= (sal_Int32)(0xe01010);
-                        aWidth <<= (sal_Int32)(50);         // 0.5 mm
+                        aWidth <<= (sal_Int32)(50);			// 0.5 mm
                         try
                         {
-                            xShapeProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LineColor" )), aColor );
-                            xShapeProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LineWidth" )), aWidth );
+                            xShapeProp->setPropertyValue( OUString::createFromAscii( "LineColor" ), aColor );
+                            xShapeProp->setPropertyValue( OUString::createFromAscii( "LineWidth" ), aWidth );
                         }
                         catch( ... )
                         {}
@@ -310,12 +309,17 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                 if( ! mxMyText.is())
                 {
                     mxMyText = uno::Reference< drawing::XShape >(
-                        xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TextShape" ))),
+                        xFactory->createInstance( OUString::createFromAscii( "com.sun.star.drawing.TextShape" )),
                         uno::UNO_QUERY );
                     xPage->add( mxMyText );
 
                     // change text
-                    OUString aText(RTL_CONSTASCII_USTRINGPARAM( "Little Example" ));
+                    OUString aText;
+// 					if( maLocale.Language.equalsIgnoreCase( OUString::createFromAscii("DE")))
+// 						aText = OUString::createFromAscii( "Kleines Beispiel" );
+// 					else
+                        aText = OUString::createFromAscii( "Little Example" );
+
                     uno::Reference< beans::XPropertySet > xTextProp( mxMyText, uno::UNO_QUERY );
                     if( xTextProp.is())
                     {
@@ -323,7 +327,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                         aTrueAny <<= (sal_Bool)(sal_True);
                         try
                         {
-                            xTextProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextAutoGrowWidth" )), aTrueAny );
+                            xTextProp->setPropertyValue( rtl::OUString::createFromAscii( "TextAutoGrowWidth" ), aTrueAny );
                         }
                         catch( ... )
                         {}
@@ -351,9 +355,9 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                 // get row count == length of each series
                 sal_Int32 nSize = aData.getLength();
                 sal_Int32 nMiddle = nSize / 2;
-                // get value for first series
-                double fMiddleVal = xData->getNotANumber();     // set to NaN
-                if( aData[ nMiddle ].getLength())               // we have at least one series
+                // get value for first series 
+                double fMiddleVal = xData->getNotANumber();		// set to NaN
+                if( aData[ nMiddle ].getLength())				// we have at least one series
                     fMiddleVal = aData[ nMiddle ][ 0 ];
 
                 awt::Point aPos;
@@ -375,7 +379,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                     {
                         uno::Any aAny;
                         aAny <<= aPtSeq;
-                        xShapeProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PolyPolygon" )), aAny );
+                        xShapeProp->setPropertyValue( rtl::OUString::createFromAscii( "PolyPolygon" ), aAny );
                     }
                 }
                 if( mxMyText.is())
@@ -389,6 +393,30 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
             }
         }
     }
+
+    // set axis scale to 200
+//  	uno::Reference< beans::XPropertySet > xXAxis( getXAxis(), uno::UNO_QUERY );
+//  	if( xXAxis.is())
+//  	{
+//  		uno::Any aAny;
+//  		aAny <<= (sal_Bool)(sal_False);
+//  		xXAxis->setPropertyValue( rtl::OUString::createFromAscii( "AutoStepMain" ),
+//  								  aAny );
+//  		aAny <<= (double)(200.0);
+//  		xXAxis->setPropertyValue( rtl::OUString::createFromAscii( "StepMain" ),
+//  								  aAny );
+//  	}
+
+// try setting symbols
+//  	uno::Reference< beans::XPropertySet > xProp = getDataRowProperties( 0 );
+//  	if( xProp.is())
+//  	{
+//  		uno::Any aAny;
+//  		aAny <<= (sal_Int32)(-1);
+//  		xProp->setPropertyValue( OUString::createFromAscii( "SymbolType" ), aAny );
+//  		aAny <<= rtl::OUString::createFromAscii( "http://mib-1168/www/images/go.gif" );
+//  		xProp->setPropertyValue( OUString::createFromAscii( "SymbolBitmapURL" ), aAny );
+//  	}
 }
 
 void SAL_CALL SampleAddIn::addRefreshListener( const uno::Reference< util::XRefreshListener >&  )
@@ -408,7 +436,7 @@ void SAL_CALL SampleAddIn::removeRefreshListener( const uno::Reference< util::XR
 // XDiagram
 OUString SAL_CALL SampleAddIn::getDiagramType() throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.SampleDiagram" ));
+    return OUString::createFromAscii( "com.sun.star.chart.SampleDiagram" );
 }
 
 // the following methods just delegate to the "parent diagram" (which in the future might no longer exist)
@@ -493,7 +521,7 @@ void SAL_CALL SampleAddIn::setPosition( const awt::Point& aPos )
 // XShapeDescriptor ( ::XShape ::XDiagram )
 rtl::OUString SAL_CALL SampleAddIn::getShapeType() throw( com::sun::star::uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.SampleAddinShape" ));
+    return OUString::createFromAscii( "com.sun.star.chart.SampleAddinShape" );
 }
 
 // XAxisXSupplier
@@ -645,7 +673,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL SampleAddIn::getMinMaxLine()
 // XServiceName
 OUString SAL_CALL SampleAddIn::getServiceName() throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.SampleAddIn" ));
+    return OUString::createFromAscii( "com.sun.star.chart.SampleAddIn" );
 }
 
 // XServiceInfo

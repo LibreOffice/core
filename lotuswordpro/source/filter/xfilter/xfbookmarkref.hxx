@@ -57,10 +57,14 @@
  * @file
  * Bookmark ref.
  ************************************************************************/
-#ifndef     _XFBOOKMARKREF_HXX
-#define     _XFBOOKMARKREF_HXX
+/*************************************************************************
+ * Change History
+ * 2005-02-03 create this file.
+ ************************************************************************/
+#ifndef		_XFBOOKMARKREF_HXX
+#define		_XFBOOKMARKREF_HXX
 
-#include    "xfcontent.hxx"
+#include	"xfcontent.hxx"
 
 class XFBookmarkRef : public XFContent
 {
@@ -68,21 +72,21 @@ public:
     XFBookmarkRef();
 
 public:
-    void    SetRefType(enumXFBookmarkRef type);
+    void	SetRefType(enumXFBookmarkRef type);
 
-    void    SetBookmark(rtl::OUString name);
+    void	SetBookmark(rtl::OUString name);
 
-    void    SetText(rtl::OUString text);
+    void	SetText(rtl::OUString text);
 
     virtual void ToXml(IXFStream *pStrm);
 
 private:
-    enumXFBookmarkRef   m_eRefType;
-    rtl::OUString   m_strBookmark;
-    rtl::OUString   m_strText;
+    enumXFBookmarkRef	m_eRefType;
+    rtl::OUString	m_strBookmark;
+    rtl::OUString	m_strText;
 };
 
-inline void XFBookmarkRef::SetRefType(enumXFBookmarkRef ref)
+inline void	XFBookmarkRef::SetRefType(enumXFBookmarkRef ref)
 {
     m_eRefType = ref;
 }

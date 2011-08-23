@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef LWPOBJFACTORY_HXX_
@@ -72,19 +72,19 @@
 #include "lwpidxmgr.hxx"
 
 /**
- * @brief   object factory used for lwp object creation and maintenance
+ * @brief	object factory used for lwp object creation and maintenance
 */
 class LwpObjectFactory
 {
 public:
     LwpObjectFactory(LwpSvStream* pSvStream);
 public:
-//  static LwpObjectFactory* Instance(LwpSvStream* pSvStream=NULL);
+//	static LwpObjectFactory* Instance(LwpSvStream* pSvStream=NULL);
     ~LwpObjectFactory();
 
 //For object Factory and object manager
 private:
-//  static LwpObjectFactory *m_pMgr;
+//	static LwpObjectFactory *m_pMgr;
     sal_uInt32 m_nNumObjs;
     LwpSvStream* m_pSvStream;
     struct hashFunc
@@ -101,7 +101,7 @@ private:
                 return(rKey1==rKey2);
             }
     };
-    typedef boost::unordered_map<LwpObjectID, LwpObject *, hashFunc, eqFunc> LwpObjMap;
+    typedef std::hash_map<LwpObjectID, LwpObject *, hashFunc, eqFunc> LwpObjMap;
     LwpObjMap m_ObjList;
     LwpIndexManager m_IndexMgr;
     void ClearObjectMap();

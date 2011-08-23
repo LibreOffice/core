@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ public class _XCloseable extends MultiMethodTest {
             oObj.close();
             res = true;
         } catch (SQLException e) {
-            log.println("Unexpected SQL Exception occurred:" + e) ;
+            log.println("Unexpected SQL Exception occured:" + e) ;
             res = false;
         }
 
@@ -72,10 +72,10 @@ public class _XCloseable extends MultiMethodTest {
         if (resSet != null) {
             try {
                 resSet.first();
-                log.println("Expected SQLException not occurred !");
+                log.println("Expected SQLException not occured !");
                 res = false;
             } catch(SQLException e) {
-                log.println("Expected SQLException occurred");
+                log.println("Expected SQLException occured");
                 res = true;
             }
         }

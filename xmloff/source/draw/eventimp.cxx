@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #include <comphelper/extract.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "xmloff/xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "eventimp.hxx"
@@ -65,22 +65,22 @@ using namespace ::xmloff::token;
 
 ///////////////////////////////////////////////////////////////////////
 
-SvXMLEnumMapEntry const aXML_EventActions_EnumMap[] =
+SvXMLEnumMapEntry __READONLY_DATA aXML_EventActions_EnumMap[] =
 {
-    { XML_NONE,             ClickAction_NONE    },
-    { XML_PREVIOUS_PAGE,    ClickAction_PREVPAGE },
-    { XML_NEXT_PAGE,        ClickAction_NEXTPAGE },
-    { XML_FIRST_PAGE,       ClickAction_FIRSTPAGE },
-    { XML_LAST_PAGE,        ClickAction_LASTPAGE },
-    { XML_HIDE,             ClickAction_INVISIBLE },
-    { XML_STOP,             ClickAction_STOPPRESENTATION },
-    { XML_EXECUTE,          ClickAction_PROGRAM },
-    { XML_SHOW,             ClickAction_BOOKMARK },
-    { XML_SHOW,             ClickAction_DOCUMENT },
-    { XML_EXECUTE_MACRO,    ClickAction_MACRO },
-    { XML_VERB,             ClickAction_VERB },
-    { XML_FADE_OUT,         ClickAction_VANISH },
-    { XML_SOUND,            ClickAction_SOUND },
+    { XML_NONE,			    ClickAction_NONE	},
+    { XML_PREVIOUS_PAGE,	ClickAction_PREVPAGE },
+    { XML_NEXT_PAGE,		ClickAction_NEXTPAGE },
+    { XML_FIRST_PAGE,		ClickAction_FIRSTPAGE },
+    { XML_LAST_PAGE,		ClickAction_LASTPAGE },
+    { XML_HIDE,			    ClickAction_INVISIBLE },
+    { XML_STOP,			    ClickAction_STOPPRESENTATION },
+    { XML_EXECUTE,			ClickAction_PROGRAM },
+    { XML_SHOW,			    ClickAction_BOOKMARK },
+    { XML_SHOW,			    ClickAction_DOCUMENT },
+    { XML_EXECUTE_MACRO,	ClickAction_MACRO },
+    { XML_VERB,			    ClickAction_VERB },
+    { XML_FADE_OUT,		    ClickAction_VANISH },
+    { XML_SOUND,			ClickAction_SOUND },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -97,7 +97,7 @@ public:
     SdXMLEventContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList, const Reference< XShape >& rxShape );
     virtual ~SdXMLEventContext();
 
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,    const Reference< XAttributeList>& xAttrList );
+    virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const OUString& rLocalName,	const Reference< XAttributeList>& xAttrList );
     virtual void EndElement();
 
     sal_Bool mbValid;
@@ -119,7 +119,7 @@ public:
 
 class XMLEventSoundContext : public SvXMLImportContext
 {
-    SdXMLEventContext*  mpParent;
+    SdXMLEventContext*	mpParent;
 
 public:
     TYPEINFO();
@@ -170,7 +170,7 @@ XMLEventSoundContext::~XMLEventSoundContext()
 TYPEINIT1( SdXMLEventContext, SvXMLImportContext );
 
 SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList, const Reference< XShape >& rxShape )
-:   SvXMLImportContext(rImp, nPrfx, rLocalName),
+:	SvXMLImportContext(rImp, nPrfx, rLocalName),
     mxShape( rxShape ), mbScript( sal_False ), meClickAction( ClickAction_NONE ),
     meEffect( EK_none ), meDirection( ED_none ), mnStartScale( 100 ),
     meSpeed( AnimationSpeed_MEDIUM ), mnVerb(0), mbPlayFull( sal_False )
@@ -206,19 +206,19 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
         case XML_NAMESPACE_PRESENTATION:
             if( IsXMLToken( aAttrLocalName, XML_ACTION ) )
             {
-                sal_uInt16 eEnum;
+                USHORT eEnum;
                 if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_EventActions_EnumMap ) )
                     meClickAction = (ClickAction)eEnum;
             }
             if( IsXMLToken( aAttrLocalName, XML_EFFECT ) )
             {
-                sal_uInt16 eEnum;
+                USHORT eEnum;
                 if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_AnimationEffect_EnumMap ) )
                     meEffect = (XMLEffect)eEnum;
             }
             else if( IsXMLToken( aAttrLocalName, XML_DIRECTION ) )
             {
-                sal_uInt16 eEnum;
+                USHORT eEnum;
                 if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_AnimationDirection_EnumMap ) )
                     meDirection = (XMLEffectDirection)eEnum;
             }
@@ -230,7 +230,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
             }
             else if( IsXMLToken( aAttrLocalName, XML_SPEED ) )
             {
-                sal_uInt16 eEnum;
+                USHORT eEnum;
                 if( SvXMLUnitConverter::convertEnum( eEnum, sValue, aXML_AnimationSpeed_EnumMap ) )
                     meSpeed = (AnimationSpeed)eEnum;
             }
@@ -262,6 +262,10 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
             {
                 msMacroName = sValue;
             }
+//			else if( IsXMLToken( aLocalName, XML_LIBRARY ) )
+//			{
+//				msLibrary = sValue;
+//			}
             break;
 
         case XML_NAMESPACE_XLINK:
@@ -292,7 +296,7 @@ SdXMLEventContext::~SdXMLEventContext()
 {
 }
 
-SvXMLImportContext * SdXMLEventContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
+SvXMLImportContext * SdXMLEventContext::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
 {
     return new XMLEventSoundContext( GetImport(), nPrefix, rLocalName, xAttrList, this );
 }
@@ -494,7 +498,7 @@ void SdXMLEventContext::EndElement()
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
                     break;
                 case ClickAction_MACRO:
-                    OSL_FAIL("xmloff::SdXMLEventContext::EndElement(), ClickAction_MACRO must be handled in different if case");
+                    DBG_ERROR("xmloff::SdXMLEventContext::EndElement(), ClickAction_MACRO must be handled in different if case");
                     break;
                 default:
                     break;
@@ -509,7 +513,7 @@ void SdXMLEventContext::EndElement()
 
 TYPEINIT1( SdXMLEventsContext, SvXMLImportContext );
 
-SdXMLEventsContext::SdXMLEventsContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
+SdXMLEventsContext::SdXMLEventsContext( SvXMLImport& rImport, sal_uInt16 nPrfx,	const OUString& rLocalName,
         const Reference< XAttributeList>&, const Reference< XShape >& rxShape)
 : SvXMLImportContext(rImport, nPrfx, rLocalName), mxShape( rxShape )
 {
@@ -519,7 +523,7 @@ SdXMLEventsContext::~SdXMLEventsContext()
 {
 }
 
-SvXMLImportContext * SdXMLEventsContext::CreateChildContext( sal_uInt16 nPrfx, const ::rtl::OUString& rLocalName,
+SvXMLImportContext * SdXMLEventsContext::CreateChildContext( USHORT nPrfx, const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
     return new SdXMLEventContext( GetImport(), nPrfx, rLocalName,  xAttrList, mxShape );

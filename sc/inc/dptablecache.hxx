@@ -2,11 +2,14 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright IBM Corporation 2009.
  * Copyright 2009 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: dptablecache.hxx,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -26,91 +29,95 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef SC_DPTABLECACHE_HXX
-#define SC_DPTABLECACHE_HXX
-
+#ifndef DPTABLECACHE_HXX
+#define DPTABLECACHE_HXX
+// Wang Xu Ming -- 12/21/2008
+// Add Data Cache Support.
 #include "global.hxx"
+//Added by PengYunQuan for SODC_16015
 #include <svl/zforlist.hxx>
+//end
+#include <vector>
 #include "dpglobal.hxx"
 
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 
-#include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
-
+class ScDPTableDataCache;
+class TypedStrData;
 struct ScQueryParam;
 
-/**
- * This class represents the cached data part of the datapilot cache table
- * implementation.
- */
-class SC_DLLPUBLIC ScDPCache
+// --------------------------------------------------------------------
+//
+//	base class ScDPTableData to allow implementation with tabular data
+//	by deriving only of this
+//
+
+class SC_DLLPUBLIC ScDPTableDataCache
 {
-    friend class ScDPCacheTable;
-public:
-    typedef ::boost::ptr_vector<ScDPItemData>           DataListType;
-private:
-    typedef ::boost::ptr_vector<DataListType>           DataGridType;
-    typedef ::boost::ptr_vector< ::std::vector<SCROW> > RowGridType;
-
+    long	mnID;
     ScDocument* mpDoc;
-    long mnColumnCount;
 
-    DataGridType                maTableDataValues; // Data Pilot Table's index - value map
-    RowGridType                 maSourceData;      // Data Pilot Table's source data
-    RowGridType                 maGlobalOrder;     // Sorted members index
-    mutable RowGridType         maIndexOrder;      // Index the sorted numbers
-    DataListType                maLabelNames;      // Source label data
-    std::vector<bool>           mbEmptyRow;        //If empty row?
+    long						 mnColumnCount;		// Column count
 
-    mutable ScDPItemDataPool    maAdditionalData;
-
+    std::vector<ScDPItemData*>* 	 mpTableDataValues; //Data Pilot Table's index - value map
+    std::vector<SCROW>*			 mpSourceData;		//Data Pilot Table's Source data
+    std::vector<SCROW>*			 mpGlobalOrder;		//Sorted members index	
+    std::vector<SCROW>*			 mpIndexOrder;		//Index the sorted number
+    std::vector<ScDPItemData*>	 mrLabelNames;		//Source Label data
+    std::vector<BOOL>			 mbEmptyRow;		//If empty row?	
+    mutable ScDPItemDataPool	  			 maAdditionalDatas;
 public:
+    SCROW GetOrder( long nDim, SCROW nIndex ) const;
     SCROW GetIdByItemData( long nDim,  String sItemData  ) const;
     SCROW GetIdByItemData( long nDim, const ScDPItemData& rData ) const;
-
-    SCROW GetAdditionalItemID ( String sItemData ) const;
-    SCROW GetAdditionalItemID( const ScDPItemData& rData ) const;
-
+    
+    SCROW GetAdditionalItemID ( String sItemData );
+    SCROW GetAdditionalItemID( const ScDPItemData& rData ); 
+        
     SCCOL GetDimensionIndex( String sName) const;
     const ScDPItemData* GetSortedItemData( SCCOL nDim, SCROW nOrder ) const;
-    sal_uLong GetNumType ( sal_uLong nFormat ) const;
-    sal_uLong GetNumberFormat( long nDim ) const;
-    bool  IsDateDimension( long nDim ) const ;
-    sal_uLong GetDimNumType( SCCOL nDim) const;
+    ULONG GetNumType ( ULONG nFormat ) const;
+    ULONG GetNumberFormat( long nDim ) const;
+    BOOL  IsDateDimension( long nDim ) const ;
+    ULONG GetDimNumType( SCCOL nDim) const;
     SCROW GetDimMemberCount( SCCOL nDim ) const;
 
     SCROW GetSortedItemDataId( SCCOL nDim, SCROW nOrder ) const;
-    const DataListType& GetDimMemberValues( SCCOL nDim ) const;
-    bool InitFromDoc(ScDocument* pDoc, const ScRange& rRange);
-    bool InitFromDataBase(const  ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& xRowSet, const Date& rNullDate);
+    const std::vector<ScDPItemData*>& GetDimMemberValues( SCCOL nDim )const;
+    void	SetId( long nId ){ mnID = nId;}
+    void	AddRow( ScDPItemData* pRow, USHORT nCount );
+    bool	InitFromDoc(  ScDocument* pDoc, const ScRange& rRange );
+    bool InitFromDataBase (const  ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& xRowSet, const Date& rNullDate);
 
-    SCROW  GetRowCount() const;
-    SCROW  GetItemDataId( sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty ) const;
-    String GetDimensionName( sal_uInt16 nColumn ) const;
-    bool IsEmptyMember( SCROW nRow, sal_uInt16 nColumn ) const;
-    bool IsRowEmpty( SCROW nRow ) const;
-    bool IsValid() const;
-    bool ValidQuery( SCROW nRow, const ScQueryParam& rQueryParam, bool* pSpecial );
+    SCROW	GetRowCount() const;
+    SCROW	GetItemDataId( USHORT nDim, SCROW nRow, BOOL bRepeatIfEmpty ) const;
+    String	GetDimensionName( USHORT nColumn ) const;
+    bool	IsEmptyMember( SCROW nRow, USHORT nColumn ) const;
+    bool	IsRowEmpty( SCROW nRow ) const;
+    bool	IsValid() const;
+    bool	ValidQuery( SCROW nRow, const ScQueryParam& rQueryParam, BOOL* pSpecial );
 
     ScDocument* GetDoc() const;//ms-cache-core
     long GetColumnCount() const;
+    long	GetId() const;
 
     const ScDPItemData* GetItemDataById( long nDim, SCROW nId ) const;
 
-    bool operator== ( const ScDPCache& r ) const;
+    BOOL operator== ( const ScDPTableDataCache& r ) const;
 
-    ScDPCache(ScDocument* pDoc);
-    virtual ~ScDPCache();
+//construction
+    ScDPTableDataCache( ScDocument* pDoc );
+//deconstruction
+    virtual ~ScDPTableDataCache();
 
+protected:
 private:
-    SCROW GetOrder( long nDim, SCROW nIndex ) const;
-    void AddLabel( ScDPItemData* pData);
-    bool AddData( long nDim, ScDPItemData* itemData );
+    void		AddLabel( ScDPItemData* pData);
+    BOOL	AddData( long nDim, ScDPItemData* itemData );
 };
 
-#endif
+#endif //DPTABLECACHE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,6 @@ TabPage TP_FLD_FUNC
     };
     ListBox LB_FUNCTYPE
     {
-        HelpID = "sw:ListBox:TP_FLD_FUNC:LB_FUNCTYPE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 76 , 165 ) ;
@@ -61,7 +60,6 @@ TabPage TP_FLD_FUNC
     };
     ListBox LB_FUNCSELECTION
     {
-        HelpID = "sw:ListBox:TP_FLD_FUNC:LB_FUNCSELECTION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 88 , 14 ) ;
         Size = MAP_APPFONT ( 76 , 165 ) ;
@@ -79,7 +77,6 @@ TabPage TP_FLD_FUNC
     };
     ListBox LB_FUNCFORMAT
     {
-        HelpID = "sw:ListBox:TP_FLD_FUNC:LB_FUNCFORMAT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 88 , 14 ) ;
         Size = MAP_APPFONT ( 76 , 165 ) ;
@@ -94,7 +91,6 @@ TabPage TP_FLD_FUNC
     };
     Edit ED_FUNCNAME
     {
-        HelpID = "sw:Edit:TP_FLD_FUNC:ED_FUNCNAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 170 , 14 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
@@ -110,7 +106,6 @@ TabPage TP_FLD_FUNC
     };
     Edit ED_FUNCVALUE
     {
-        HelpID = "sw:Edit:TP_FLD_FUNC:ED_FUNCVALUE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 170 , 41 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
@@ -127,7 +122,6 @@ TabPage TP_FLD_FUNC
     };
     Edit ED_FUNCCOND1
     {
-        HelpID = "sw:Edit:TP_FLD_FUNC:ED_FUNCCOND1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 170 , 41 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
@@ -145,7 +139,6 @@ TabPage TP_FLD_FUNC
     };
     Edit ED_FUNCCOND2
     {
-        HelpID = "sw:Edit:TP_FLD_FUNC:ED_FUNCCOND2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 170 , 68 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
@@ -155,7 +148,6 @@ TabPage TP_FLD_FUNC
     };
     PushButton BT_FUNCMACRO
     {
-        HelpID = "sw:PushButton:TP_FLD_FUNC:BT_FUNCMACRO";
         Pos = MAP_APPFONT ( 204 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Macro..." ;
@@ -171,7 +163,6 @@ TabPage TP_FLD_FUNC
     };
     Edit ED_LISTITEM
     {
-        HelpID = "sw:Edit:TP_FLD_FUNC:ED_LISTITEM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 170 , 14 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
@@ -181,7 +172,6 @@ TabPage TP_FLD_FUNC
     };
     PushButton PB_LISTADD
     {
-        HelpID = "sw:PushButton:TP_FLD_FUNC:PB_LISTADD";
         Pos = MAP_APPFONT ( 170 , 29 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Hide = TRUE;
@@ -196,7 +186,6 @@ TabPage TP_FLD_FUNC
     };
     ListBox LB_LISTITEMS
     {
-        HelpID = "sw:ListBox:TP_FLD_FUNC:LB_LISTITEMS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 170 , 57 ) ;
         Size = MAP_APPFONT ( 83 , 44 ) ;
@@ -206,7 +195,6 @@ TabPage TP_FLD_FUNC
     };
     PushButton PB_LISTREMOVE
     {
-        HelpID = "sw:PushButton:TP_FLD_FUNC:PB_LISTREMOVE";
         Pos = MAP_APPFONT ( 203 , 104 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Hide = TRUE;
@@ -214,7 +202,6 @@ TabPage TP_FLD_FUNC
     };
     PushButton PB_LISTUP
     {
-        HelpID = "sw:PushButton:TP_FLD_FUNC:PB_LISTUP";
         Pos = MAP_APPFONT ( 203 , 121 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Hide = TRUE;
@@ -222,7 +209,6 @@ TabPage TP_FLD_FUNC
     };
     PushButton PB_LISTDOWN
     {
-        HelpID = "sw:PushButton:TP_FLD_FUNC:PB_LISTDOWN";
         Pos = MAP_APPFONT ( 203 , 138 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Hide = TRUE;
@@ -237,7 +223,6 @@ TabPage TP_FLD_FUNC
     };
     Edit ED_LISTNAME
     {
-        HelpID = "sw:Edit:TP_FLD_FUNC:ED_LISTNAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 170 , 167 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;

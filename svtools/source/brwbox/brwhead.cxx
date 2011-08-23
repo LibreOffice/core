@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ void BrowserHeader::EndDrag()
     Update();
 
     // not aborted?
-    sal_uInt16 nId = GetCurItemId();
+    USHORT nId = GetCurItemId();
     if ( nId )
     {
         // Handle-Column?
@@ -96,10 +96,10 @@ void BrowserHeader::EndDrag()
             // column drag
             // Hat sich die Position eigentlich veraendert
             // Handlecolumn beruecksichtigen
-            sal_uInt16 nOldPos = _pBrowseBox->GetColumnPos(nId),
+            USHORT nOldPos = _pBrowseBox->GetColumnPos(nId),
                 nNewPos = GetItemPos( nId );
 
-            if (!_pBrowseBox->GetColumnId(0))   // Handle
+            if (!_pBrowseBox->GetColumnId(0))	// Handle
                 nNewPos++;
 
             if (nOldPos != nNewPos)

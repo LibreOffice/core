@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+/* $Id: hbox.h,v 1.6 2008-06-04 09:56:30 vg Exp $ */
 
 #ifndef _HBOX_H_
 #define _HBOX_H_
@@ -82,14 +84,14 @@ struct HBox
 /**
  * @short Class for saving data to be skipped.
  */
-struct SkipData: public HBox
+struct SkipBlock: public HBox
 {
     ulong data_block_len;
     hchar dummy;
     char  *data_block;
 
-    SkipData(hchar);
-    virtual ~SkipData();
+    SkipBlock(hchar);
+    virtual ~SkipBlock();
     virtual int Read(HWPFile &hwpf);
 };
 struct DateCode;
@@ -308,7 +310,7 @@ struct FBoxStyle
  */
 struct FBox: public HBox
 {
-    int zorder;
+    int	zorder;
     short     option;                             // draw frame
     hchar     ctrl_ch;
     FBoxStyle style;

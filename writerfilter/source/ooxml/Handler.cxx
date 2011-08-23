@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include "Handler.hxx"
 
 namespace writerfilter {
-namespace ooxml
+namespace ooxml 
 {
 
 /*
@@ -51,7 +51,7 @@ void OOXMLFootnoteHandler::attribute(Id name, Value & val)
     switch (name)
     {
     case NS_ooxml::LN_CT_FtnEdnRef_id:
-        mpFastContext->resolveFootnote(sal_Int32(val.getInt()));
+        mpFastContext->resolveFootnote(val.getString());
         break;
     default:
         break;
@@ -79,7 +79,7 @@ void OOXMLEndnoteHandler::attribute(Id name, Value & val)
     switch (name)
     {
     case NS_ooxml::LN_CT_FtnEdnRef_id:
-        mpFastContext->resolveEndnote(sal_Int32(val.getInt()));
+        mpFastContext->resolveEndnote(val.getString());
         break;
     default:
         break;
@@ -95,7 +95,7 @@ void OOXMLEndnoteHandler::sprm(Sprm & /*sprm*/)
 */
 OOXMLCommentHandler::OOXMLCommentHandler(OOXMLFastContextHandler * pContext)
 : mpFastContext(pContext)
-{
+{    
 }
 
 OOXMLCommentHandler::~OOXMLCommentHandler()
@@ -107,7 +107,7 @@ void OOXMLCommentHandler::attribute(Id name, Value & val)
     switch (name)
     {
     case NS_ooxml::LN_CT_Markup_id:
-        mpFastContext->resolveComment(val.getInt());
+        mpFastContext->resolveComment(val.getString());
         break;
     default:
         ;
@@ -118,12 +118,12 @@ void OOXMLCommentHandler::sprm(Sprm & /*sprm*/)
 {
 }
 
-/*
+/* 
    class OOXMLOLEHandler
 */
 OOXMLOLEHandler::OOXMLOLEHandler(OOXMLFastContextHandler * pContext)
 : mpFastContext(pContext)
-{
+{    
 }
 
 OOXMLOLEHandler::~OOXMLOLEHandler()
@@ -213,9 +213,9 @@ void OOXMLHeaderHandler::sprm(Sprm & /*sprm*/)
 /*
   class OOXMLBreakHandler
  */
-OOXMLBreakHandler::OOXMLBreakHandler(Stream &rStream,
+OOXMLBreakHandler::OOXMLBreakHandler(Stream &rStream, 
                                      OOXMLFastContextHandler * pContext)
-: mpFastContext(pContext), mnType(0), mnClear(0),
+: mpFastContext(pContext), mnType(0), mnClear(0), 
   mrStream(rStream)
 {
 }
@@ -263,7 +263,7 @@ void OOXMLBreakHandler::sprm(Sprm & /*sprm*/)
  */
 OOXMLPictureHandler::OOXMLPictureHandler(OOXMLFastContextHandler * pContext)
 : mpFastContext(pContext)
-{
+{    
 }
 
 OOXMLPictureHandler::~OOXMLPictureHandler()
@@ -273,7 +273,7 @@ OOXMLPictureHandler::~OOXMLPictureHandler()
 void OOXMLPictureHandler::attribute(Id name, Value & val)
 {
     if (name == NS_ooxml::LN_AG_Blob_r_embed)
-        mpFastContext->resolvePicture(val.getString());
+        mpFastContext->resolvePicture(val.getString());            
     else
     {
         writerfilter::Reference<Properties>::Pointer_t pProps
@@ -298,13 +298,13 @@ void OOXMLPictureHandler::sprm(Sprm & rSprm)
 
 OOXMLHyperlinkHandler::OOXMLHyperlinkHandler(OOXMLFastContextHandler * pContext)
 : mpFastContext(pContext)
-{
+{    
 }
 
 OOXMLHyperlinkHandler::~OOXMLHyperlinkHandler()
 {
     ::rtl::OUString sReturn(RTL_CONSTASCII_USTRINGPARAM(" HYPERLINK \""));
-
+    
     sReturn += mURL;
     sReturn += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
     sReturn += mFieldCode;

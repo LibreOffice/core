@@ -94,13 +94,13 @@ void LwpFontAttrEntry::Override( XFFont*pFont )
     if (IsSuperOverridden())
     {
         if(Is(SUPERSCRIPT))
-            pFont->SetPosition(sal_True);
+            pFont->SetPosition(TRUE);
     }
 
     if (IsSubOverridden())
     {
         if(Is(SUBSCRIPT))
-            pFont->SetPosition(sal_False);
+            pFont->SetPosition(FALSE);
     }
 
     if (IsUnderlineOverridden())
@@ -119,9 +119,9 @@ void LwpFontAttrEntry::Override( XFFont*pFont )
             case UNDER_WORD_DOUBLE:
                 pFont->SetUnderline(enumXFUnderlineSingle, true);
                 break;
-            case UNDER_DONTCARE:    //fall through
-            case UNDER_OFF:         //fall through
-            case UNDER_STYLE:       //fall through
+            case UNDER_DONTCARE:	//fall through
+            case UNDER_OFF:			//fall through
+            case UNDER_STYLE:		//fall through
             default:
                 break;
                 //do nothing;
@@ -144,8 +144,8 @@ void LwpFontAttrEntry::Override( XFFont*pFont )
         case CASE_INITCAPS:
             pFont->SetTransform(enumXFTransformCapitalize);
             break;
-        case CASE_STYLE:        //fall through
-        case CASE_DONTCARE: //fall through
+        case CASE_STYLE:		//fall through
+        case CASE_DONTCARE:	//fall through
         default:
             //do nothing
             ;
@@ -156,7 +156,7 @@ void LwpFontAttrEntry::Override( XFFont*pFont )
     //for SmallCaps has higher priority than LowerCase but low
     if (IsSmallCapsOverridden())
     {
-        if( pFont->GetTransform()!=enumXFTransformUpper )   //SmallCaps should not override upper case
+        if( pFont->GetTransform()!=enumXFTransformUpper )	//SmallCaps should not override upper case
         {
             if(Is(SMALLCAPS))
                 pFont->SetTransform(enumXFTransformSmallCaps);
@@ -165,53 +165,53 @@ void LwpFontAttrEntry::Override( XFFont*pFont )
 
     // TODO: tightness
     //if (IsTightnessOverridden())
-    //  pFont->SetTightness(cTightness);*/
+    //	pFont->SetTightness(cTightness);*/
 }
 
-sal_Bool LwpFontAttrEntry::Is(sal_uInt16 Attr)
+BOOL LwpFontAttrEntry::Is(sal_uInt16 Attr)
 {
     return (0 != (m_nAttrBits & Attr));
 }
 
-sal_Bool LwpFontAttrEntry::IsBoldOverridden()
+BOOL LwpFontAttrEntry::IsBoldOverridden()
 {
     return (0 != (m_nAttrOverrideBits & BOLD));
 }
 
-sal_Bool LwpFontAttrEntry::IsItalicOverridden()
+BOOL LwpFontAttrEntry::IsItalicOverridden()
 {
     return (0 != (m_nAttrOverrideBits & ITALIC));
 }
-sal_Bool LwpFontAttrEntry::IsStrikeThruOverridden()
+BOOL LwpFontAttrEntry::IsStrikeThruOverridden()
 {
     return (0 != (m_nAttrOverrideBits & STRIKETHRU));
 }
-sal_Bool LwpFontAttrEntry::IsSmallCapsOverridden()
+BOOL LwpFontAttrEntry::IsSmallCapsOverridden()
 {
     return (0 != (m_nAttrOverrideBits & SMALLCAPS));
 }
-sal_Bool LwpFontAttrEntry::IsSuperOverridden()
+BOOL LwpFontAttrEntry::IsSuperOverridden()
 {
     return (0 != (m_nAttrOverrideBits & SUPERSCRIPT));
 
 }
-sal_Bool LwpFontAttrEntry::IsSubOverridden()
+BOOL LwpFontAttrEntry::IsSubOverridden()
 {
     return (0 != (m_nAttrOverrideBits & SUBSCRIPT));
 
 }
 
-sal_Bool LwpFontAttrEntry::IsSuperSubOverridden()
+BOOL LwpFontAttrEntry::IsSuperSubOverridden()
 {
     return (0 != (m_nAttrOverrideBits
         & (SUPERSCRIPT | SUBSCRIPT)));
 }
 
-sal_Bool LwpFontAttrEntry::IsUnderlineOverridden()
+BOOL LwpFontAttrEntry::IsUnderlineOverridden()
 {
     return (0 != (m_nAttrOverrideBits2 & UNDER));
 }
-sal_Bool LwpFontAttrEntry::IsCaseOverridden()
+BOOL LwpFontAttrEntry::IsCaseOverridden()
 {
     return (0 != (m_nAttrOverrideBits2 & CASE));
 }
@@ -268,8 +268,8 @@ void LwpFontTable::Read(LwpObjectStream *pStrm)
 OUString LwpFontTable::GetFaceName(sal_uInt16 index) //index: start from 1
 {
     assert(index>0);
-    if (index < 1)//add for fix crash
-        return OUString();
+    if (index < 1)//add by , for fix crash,2005/12/20
+        return OUString::createFromAscii("");//add end
     return m_pFontEntries[index-1].GetFaceName();
 }
 
@@ -327,44 +327,43 @@ void LwpFontNameEntry::Override(XFFont* pFont)
 
     // TODO: tightness
     //if (IsTightnessOverridden())
-    //  pFont->SetTightness(cTightness);
+    //	pFont->SetTightness(cTightness);
 }
 
-sal_Bool LwpFontNameEntry::IsFaceNameOverridden()
+BOOL LwpFontNameEntry::IsFaceNameOverridden()
 {
     return (0 != (m_nOverrideBits & FACENAME));
 }
 
-sal_Bool LwpFontNameEntry::IsAltFaceNameOverridden()
+BOOL LwpFontNameEntry::IsAltFaceNameOverridden()
 {
     return (0 != (m_nOverrideBits & ALTFACENAME));
 }
 
-sal_Bool LwpFontNameEntry::IsPointSizeOverridden()
+BOOL LwpFontNameEntry::IsPointSizeOverridden()
 {
     return (0 != (m_nOverrideBits & POINTSIZE));
 }
 
-sal_Bool LwpFontNameEntry::IsColorOverridden()
+BOOL LwpFontNameEntry::IsColorOverridden()
 {
     return (0 != (m_nOverrideBits & COLOR));
 }
 
-sal_Bool LwpFontNameEntry::IsBackgroundColorOverridden()
+BOOL LwpFontNameEntry::IsBackgroundColorOverridden()
 {
     return (0 != (m_nOverrideBits & BKCOLOR));
 }
 
-//TODO
-//sal_Bool LwpFontNameEntry::IsTightnessOverridden()
-//{
-//    return (0 != (m_nOverrideBits & TIGHTNESS));
-//}
+BOOL LwpFontNameEntry::IsTightnessOverridden()
+{
+    return (0 != (m_nOverrideBits & TIGHTNESS));
+}
 
-//sal_Bool LwpFontNameEntry::IsAnythingOverridden()
-//{
-//    return (0 != (m_nOverrideBits & ALL_BITS));
-//}
+BOOL LwpFontNameEntry::IsAnythingOverridden()
+{
+    return (0 != (m_nOverrideBits & ALL_BITS));
+}
 
 
 LwpFontNameManager::LwpFontNameManager()
@@ -395,7 +394,7 @@ void LwpFontNameManager::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 }
 
-void    LwpFontNameManager::Override(sal_uInt16 index, XFFont* pFont)
+void	LwpFontNameManager::Override(sal_uInt16 index, XFFont* pFont)
     //index: start from 1
 {
     if(index<1) return;
@@ -433,7 +432,7 @@ void LwpFontAttrManager::Read(LwpObjectStream *pStrm) {
     pStrm->SkipExtra();
 }
 
-void    LwpFontAttrManager::Override(sal_uInt16 index, XFFont* pFont)
+void	LwpFontAttrManager::Override(sal_uInt16 index, XFFont* pFont)
     //index: start from 1
 {
     if(index<1) return;
@@ -466,7 +465,7 @@ Note: A temporary method for only font support phase. The next AddStyle should b
 */
 /*void LwpFontManager::AddStyle(LwpObjectID styleObjID, sal_uInt32 fontID, OUString styleName)
 {
-    XFTextStyle* pStyle = new XFTextStyle();        //to be deleted by XFStyleManager
+    XFTextStyle* pStyle = new XFTextStyle();		//to be deleted by XFStyleManager
     AddStyle(styleObjID, fontID, styleName, pStyle);
 }*/
 
@@ -507,7 +506,7 @@ Refer to CFontManager::OverrideID
 //OUString LwpFontManager::GetOverrideStyle(sal_uInt32 fontID, sal_uInt32 overID)
 XFFont* LwpFontManager::CreateOverrideFont(sal_uInt32 fontID, sal_uInt32 overID)
 {
-    XFFont* pFont = new XFFont();   //To be deleted by XFFontFactory
+    XFFont* pFont = new XFFont();	//To be deleted by XFFontFactory
     SetDfltFont(pFont);
     if(fontID)
     {
@@ -554,7 +553,7 @@ void LwpFontManager::SetDfltFont(XFFont* /*pFont*/)
 
 OUString LwpFontManager::GetNameByID(sal_uInt32 fontID)
 {
-    return ( m_FNMgr.GetNameByIndex(GetFontNameIndex(fontID)) );//use font id for bullet?
+    return ( m_FNMgr.GetNameByIndex(GetFontNameIndex(fontID)) );//use font id for bullet? note by ,2005/7/5
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

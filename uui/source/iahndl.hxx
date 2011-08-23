@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@
 #include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/task/InteractionClassification.hpp"
 
-#include "tools/solar.h" // sal_uInt16
+#include "tools/solar.h" // USHORT
 #include "tools/errcode.hxx" // ErrCode
 #include "tools/rc.hxx" // Resource
-#include "tools/wintypes.hxx" // WinBits
+#include "vcl/wintypes.hxx" // WinBits
 
 namespace com { namespace sun { namespace star {
     namespace awt {
@@ -56,7 +56,7 @@ namespace com { namespace sun { namespace star {
         class XMultiServiceFactory;
     }
     namespace security {
-        struct DocumentSignatureInformation;
+        class DocumentSignatureInformation;
     }
     namespace task {
         class FutureDocumentVersionProductUpdateRequest;
@@ -69,7 +69,7 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 class Window;
 
@@ -89,7 +89,7 @@ typedef std::vector< InteractionHandlerData > InteractionHandlerDataList;
 
 typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > Continuations;
 
-typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >    StringHashMap;
+typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >    StringHashMap;
 
 //============================================================================
 class UUIInteractionHelper
@@ -214,15 +214,6 @@ private:
     handleCertificateValidationRequest(
         com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionRequest > const & rRequest)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
-
-    void
-    handleNameClashResolveRequest(
-        com::sun::star::ucb::NameClashResolveRequest const & rRequest,
-        com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference<
-                com::sun::star::task::XInteractionContinuation > > const &
-                    rContinuations)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     bool

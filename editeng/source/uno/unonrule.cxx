@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -192,7 +192,7 @@ Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  )
 
 Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sal_Int32 nIndex) const throw()
 {
-    //  NumberingRule aRule;
+    //	NumberingRule aRule;
     const SvxNumberFormat& rFmt = maRule.GetLevel((sal_uInt16) nIndex);
     sal_uInt16 nIdx = 0;
 
@@ -279,14 +279,14 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sa
     aVal <<= (sal_Int16)rFmt.GetBulletRelSize();
     pArray[nIdx++] = beans::PropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_NRULE_BULLET_RELSIZE)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
-    DBG_ASSERT( nIdx <= nProps, "FixMe: overflow in Array!!! [CL]" );
+    DBG_ASSERT( nIdx <= nProps, "FixMe: Array uebergelaufen!!!! [CL]" );
     Sequence< beans::PropertyValue> aSeq(pArray, nIdx);
 
     delete [] pArray;
     return aSeq;
 }
 
-void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::PropertyValue >& rProperties, sal_Int32 nIndex)
+void SvxUnoNumberingRules::setNumberingRuleByIndex(	const Sequence< beans::PropertyValue >& rProperties, sal_Int32 nIndex)
     throw( RuntimeException, IllegalArgumentException )
 {
     SvxNumberFormat aFmt(maRule.GetLevel( (sal_uInt16)nIndex ));
@@ -548,7 +548,7 @@ com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCr
     }
     else
     {
-        SvxNumRule aDefaultRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10 , sal_False);
+        SvxNumRule aDefaultRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10 , FALSE);
         return new SvxUnoNumberingRules( aDefaultRule );
     }
 }
@@ -584,13 +584,13 @@ sal_Int16 SvxUnoNumberingRules::Compare( const Any& Any1, const Any& Any2 )
                 const SvxNumRule& rRule1 = pRule1->getNumRule();
                 const SvxNumRule& rRule2 = pRule2->getNumRule();
 
-                const sal_uInt16 nLevelCount1 = rRule1.GetLevelCount();
-                const sal_uInt16 nLevelCount2 = rRule2.GetLevelCount();
+                const USHORT nLevelCount1 = rRule1.GetLevelCount();
+                const USHORT nLevelCount2 = rRule2.GetLevelCount();
 
                 if( nLevelCount1 == 0 || nLevelCount2 == 0 )
                     return -1;
 
-                for( sal_uInt16 i = 0; (i < nLevelCount1) && (i < nLevelCount2); i++ )
+                for( USHORT i = 0; (i < nLevelCount1) && (i < nLevelCount2); i++ )
                 {
                     if( rRule1.GetLevel(i) != rRule2.GetLevel(i) )
                         return -1;

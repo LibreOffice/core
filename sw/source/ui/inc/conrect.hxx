@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,24 +39,24 @@
 
 class ConstRectangle : public SwDrawBase
 {
-    sal_Bool bMarquee;
-    sal_Bool bCapVertical;
+    BOOL bMarquee;
+    BOOL bCapVertical;
 
     // #93382#
-    sal_Bool                    mbVertical;
+    sal_Bool					mbVertical;
 
  public:
     ConstRectangle(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
 
                                        // Mouse- & Key-Events
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate(const sal_uInt16 nSlotId);    // Function aktivieren
+    virtual void Activate(const USHORT nSlotId);	// Function aktivieren
 };
 
 
 
-#endif      // _SW_CONRECT_HXX
+#endif		// _SW_CONRECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

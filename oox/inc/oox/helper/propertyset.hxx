@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,6 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include "oox/token/properties.hxx"
 
 namespace oox {
 
@@ -99,7 +98,7 @@ public:
     ::com::sun::star::uno::Any getAnyProperty( sal_Int32 nPropId ) const;
 
     /** Gets the specified boolean property from the property set.
-        @return  true = property contains true; false = property contains false or error occurred. */
+        @return  true = property contains true; false = property contains false or error occured. */
     bool                getBoolProperty( sal_Int32 nPropId ) const;
 
     /** Gets the specified properties from the property set. Tries to use the XMultiPropertySet interface.

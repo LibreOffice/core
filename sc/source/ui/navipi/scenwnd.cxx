@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ ScScenarioListBox::ScScenarioListBox( ScScenarioWindow& rParent ) :
     mrParent( rParent )
 {
     Font aFont( GetFont() );
-    aFont.SetTransparent( sal_True );
+    aFont.SetTransparent( TRUE );
     aFont.SetWeight( WEIGHT_LIGHT );
     SetFont( aFont );
 }
@@ -88,7 +88,7 @@ void ScScenarioListBox::UpdateEntries( List* pNewEntryList )
         {
             // sheet contains scenarios
             DBG_ASSERT( pNewEntryList->Count() % 3 == 0, "ScScenarioListBox::UpdateEntries - wrong list size" );
-            SetUpdateMode( false );
+            SetUpdateMode( FALSE );
             String* pEntry = static_cast< String* >( pNewEntryList->First() );
             while( pEntry )
             {
@@ -107,7 +107,7 @@ void ScScenarioListBox::UpdateEntries( List* pNewEntryList )
                 InsertEntry( aEntry.maName, LISTBOX_APPEND );
                 pEntry = static_cast< String* >( pNewEntryList->Next() );
             }
-            SetUpdateMode( sal_True );
+            SetUpdateMode( TRUE );
             SetNoSelection();
             mrParent.SetComment( EMPTY_STRING );
         }
@@ -182,7 +182,7 @@ const ScScenarioListBox::ScenarioEntry* ScScenarioListBox::GetSelectedEntry() co
     return (nPos < maEntries.size()) ? &maEntries[ nPos ] : 0;
 }
 
-void ScScenarioListBox::ExecuteScenarioSlot( sal_uInt16 nSlotId )
+void ScScenarioListBox::ExecuteScenarioSlot( USHORT nSlotId )
 {
     if( SfxViewFrame* pViewFrm = SfxViewFrame::Current() )
     {
@@ -221,7 +221,7 @@ ScScenarioWindow::ScScenarioWindow( Window* pParent,const String& aQH_List,
         aEdComment  ( this,  WB_BORDER | WB_LEFT | WB_READONLY | WB_VSCROLL | WB_TABSTOP )
 {
     Font aFont( GetFont() );
-    aFont.SetTransparent( sal_True );
+    aFont.SetTransparent( TRUE );
     aFont.SetWeight( WEIGHT_LIGHT );
     aEdComment.SetFont( aFont );
     aEdComment.SetMaxTextLen( 512 );
@@ -302,7 +302,7 @@ void ScScenarioWindow::SetSizePixel( const Size& rNewSize )
     aLbScenario.SetSizePixel( aSize );
 
     aSize.Height() -= 4;
-    aEdComment.SetPosSizePixel( Point( 0, nHeight+4 ), aSize );
+    aEdComment.SetPosSizePixel(	Point( 0, nHeight+4 ), aSize );
 }
 
 

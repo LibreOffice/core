@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- Feb 2005           Created
+ Feb 2005		 	Created
  ************************************************************************/
 #ifndef _LWPOLEOBJECT_HXX_
 #define _LWPOLEOBJECT_HXX_
@@ -83,18 +83,18 @@
 
 typedef struct tagAFID_CACHE
 {
-    unsigned long LinkedFileSize;               /* 0 if not linked */
-    unsigned long LinkedFileTime;               /* 0 if not linked */
-    long Width;                             /* -1 if not present */
-    long Height;                                /* -1 if not present */
+    unsigned long LinkedFileSize;				/* 0 if not linked */
+    unsigned long LinkedFileTime;				/* 0 if not linked */
+    long Width;								/* -1 if not present */
+    long Height;								/* -1 if not present */
 } AFID_CACHE,  * PAFID_CACHE;
 
 /* Maximum string sizes - includes space for null terminator */
-#define AFID_MAX_FILE_FORMAT_SIZE                   80
-#define AFID_MAX_CONTEXT_FORMAT_SIZE                80
+#define AFID_MAX_FILE_FORMAT_SIZE                	80
+#define AFID_MAX_CONTEXT_FORMAT_SIZE             	80
 
 // OLE defined maximum
-#define MAX_STREAMORSTORAGENAME     32
+#define MAX_STREAMORSTORAGENAME		32
 /**
  * @descr
  * super class of LwpOleObject and LwpGraphicObject
@@ -122,13 +122,14 @@ class LwpOleObject : public LwpGraphicOleObject
 {
 public:
     LwpOleObject(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    ~LwpOleObject(){}
+    ~LwpOleObject(){};
     virtual void Read();
     virtual void Parse(IXFStream* pOutputStream);
     virtual void XFConvert(XFContentContainer * pCont);
     virtual void RegisterStyle();
     void GetGrafOrgSize(double& rWidth, double& rHeight) ;
 private:
+    void GetChildStorageName(char *pObjName);
     Rectangle GetOLEObjectSize( SotStorage * pStor ) const;
 
     sal_uInt16 cPersistentFlags;
@@ -146,17 +147,17 @@ private:
 #include <vcl/outdev.hxx>
 class LwpOlePres
 {
-    sal_uLong   nFormat;
-    sal_uInt16  nAspect;
-    Bitmap *        pBmp;
-    GDIMetaFile *   pMtf;
+    ULONG	nFormat;
+    USHORT	nAspect;
+    Bitmap *		pBmp;
+    GDIMetaFile *	pMtf;
 
-    sal_uInt32  nAdvFlags;
-    sal_Int32   nJobLen;
-    sal_uInt8 * pJob;
-    Size    aSize;      // Groesse in 100TH_MM
+    UINT32  nAdvFlags;
+    INT32 	nJobLen;
+    BYTE *	pJob;
+    Size	aSize;		// Groesse in 100TH_MM
 public:
-    LwpOlePres( sal_uLong nF )
+    LwpOlePres( ULONG nF )
         : nFormat( nF )
         , pBmp( NULL )
         , pMtf( NULL )
@@ -170,7 +171,7 @@ public:
         delete pBmp;
         delete pMtf;
     }
-    void    SetMtf( const GDIMetaFile & rMtf )
+    void	SetMtf( const GDIMetaFile & rMtf )
     {
         if( pMtf )
             delete pMtf;
@@ -178,15 +179,15 @@ public:
     }
     Bitmap *GetBitmap() const { return pBmp; }
     GDIMetaFile *GetMetaFile() const { return pMtf; }
-    sal_uLong   GetFormat() const { return nFormat; }
-    void    SetAspect( sal_uInt16 nAsp ) { nAspect = nAsp; }
-    sal_uLong   GetAdviseFlags() const { return nAdvFlags; }
-    void    SetAdviseFlags( sal_uLong nAdv ) { nAdvFlags = nAdv; }
-    void    SetSize( const Size & rSize ) { aSize = rSize; }
+    ULONG	GetFormat() const { return nFormat; }
+    void	SetAspect( USHORT nAsp ) { nAspect = nAsp; }
+    ULONG	GetAdviseFlags() const { return nAdvFlags; }
+    void	SetAdviseFlags( ULONG nAdv ) { nAdvFlags = nAdv; }
+    void	SetSize( const Size & rSize ) { aSize = rSize; }
     Size GetSize() const { return aSize; } //Add by , 10/26/2005
     /// return FALSE => unknown format
-    sal_Bool    Read( SvStream & rStm );
-    void    Write( SvStream & rStm );
+    BOOL 	Read( SvStream & rStm );
+    void 	Write( SvStream & rStm );
 };
 //End by
 

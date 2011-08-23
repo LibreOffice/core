@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public:
     BulletList( );
     bool is() const;
     void apply( const BulletList& );
-    void pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, PropertyMap& xPropMap ) const;
+    void pushToPropMap( const ::oox::core::XmlFilterBase& rFilterBase, PropertyMap& rPropMap ) const;
     void setBulletChar( const ::rtl::OUString & sChar );
     void setStartAt( sal_Int32 nStartAt ){ mnStartAt <<= static_cast< sal_Int16 >( nStartAt ); }
     void setType( sal_Int32 nType );
@@ -68,20 +68,20 @@ public:
     void setStyleName( const rtl::OUString& rStyleName ) { maStyleName <<= rStyleName; }
     void setGraphic( ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rXGraphic );
 
-    ::oox::drawingml::ColorPtr  maBulletColorPtr;
-    ::com::sun::star::uno::Any  mbBulletColorFollowText;
-    ::com::sun::star::uno::Any  mbBulletFontFollowText;
-    ::oox::drawingml::TextFont  maBulletFont;
-    ::com::sun::star::uno::Any  msBulletChar;
-    ::com::sun::star::uno::Any  mnStartAt;
-    ::com::sun::star::uno::Any  mnNumberingType;
-    ::com::sun::star::uno::Any  msNumberingPrefix;
-    ::com::sun::star::uno::Any  msNumberingSuffix;
-    ::com::sun::star::uno::Any  mnSize;
-    ::com::sun::star::uno::Any  mnFontSize;
-    ::com::sun::star::uno::Any  maStyleName;
+    ::oox::drawingml::ColorPtr	maBulletColorPtr;
+    ::com::sun::star::uno::Any	mbBulletColorFollowText;
+    ::com::sun::star::uno::Any	mbBulletFontFollowText;
+    ::oox::drawingml::TextFont	maBulletFont;
+    ::com::sun::star::uno::Any	msBulletChar;
+    ::com::sun::star::uno::Any	mnStartAt;
+    ::com::sun::star::uno::Any	mnNumberingType;
+    ::com::sun::star::uno::Any	msNumberingPrefix;
+    ::com::sun::star::uno::Any	msNumberingSuffix;
+    ::com::sun::star::uno::Any	mnSize;
+    ::com::sun::star::uno::Any	mnFontSize;
+    ::com::sun::star::uno::Any	maStyleName;
     ::com::sun::star::uno::Any  maGraphic;
-    boost::optional< float >    maFollowFontSize;
+    boost::optional< float >	maFollowFontSize;
 };
 
 class TextParagraphProperties
@@ -104,10 +104,9 @@ public:
     boost::optional< sal_Int32 >&       getFirstLineIndentation(){ return moFirstLineIndentation; }
 
     void                                apply( const TextParagraphProperties& rSourceProps );
-    void                                pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
+    void                                pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
                                             const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet,
                                                 PropertyMap& rioBulletList, const BulletList* pMasterBuList, sal_Bool bApplyBulletList, float fFontSize ) const;
-    void                                pushToPropSet( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet) const;
 
     /** Returns the largest character size of this paragraph. If possible the
         masterstyle should have been applied before, otherwise the character
@@ -115,7 +114,7 @@ public:
     float                               getCharHeightPoints( float fDefault ) const;
 
 #if OSL_DEBUG_LEVEL > 0
-    void dump() const;
+    void dump() { maTextParagraphPropertyMap.dump(); OSL_TRACE("character height: %f", maTextCharacterProperties.getCharHeightPoints(-1)); }
 #endif
 
 protected:

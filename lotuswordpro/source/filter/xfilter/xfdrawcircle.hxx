@@ -57,10 +57,14 @@
  * @file
  * Circle object.
  ************************************************************************/
-#ifndef     _XFDRAWCIRCLE_HXX
-#define     _XFDRAWCIRCLE_HXX
+/*************************************************************************
+ * Change History
+ * 2004-2-17 create this file.
+ ************************************************************************/
+#ifndef		_XFDRAWCIRCLE_HXX
+#define		_XFDRAWCIRCLE_HXX
 
-#include    "xfdrawobj.hxx"
+#include	"xfdrawobj.hxx"
 
 /**
  * @brief
@@ -75,33 +79,33 @@ public:
 
 public:
     /**
-     * @descr   Set the center point for the circle.
+     * @descr	Set the center point for the circle.
      */
-    void    SetCenterPoint(double x, double y);
+    void	SetCenterPoint(double x, double y);
 
     /**
-     * @descr   Set the center point for the circle
+     * @descr	Set the center point for the circle
      */
-    void    SetCenterPoint(XFPoint pt);
+    void	SetCenterPoint(XFPoint pt);
 
     /**
      * @descr
      */
-    void    SetRadius(double radius);
+    void	SetRadius(double radius);
 
-    void    SetAngle(double start, double end);
+    void	SetAngle(double start, double end);
 
-    void    SetDrawKind(enumXFDrawKind kind);
+    void	SetDrawKind(enumXFDrawKind kind);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    XFPoint m_aCenterPoint;
-    double  m_fRadius;
-    double  m_fStartAngle;
-    double  m_fEndAngle;
-    enumXFDrawKind  m_eDrawKind;
-    sal_Bool    m_bUseAngle;
+    XFPoint	m_aCenterPoint;
+    double	m_fRadius;
+    double	m_fStartAngle;
+    double	m_fEndAngle;
+    enumXFDrawKind	m_eDrawKind;
+    sal_Bool	m_bUseAngle;
 };
 
 inline void XFDrawCircle::SetCenterPoint(double x, double y)
@@ -130,7 +134,7 @@ inline void XFDrawCircle::SetAngle(double start, double end)
     m_eDrawKind = enumXFDrawKindCut;
 }
 
-inline void XFDrawCircle::SetDrawKind(enumXFDrawKind kind)
+inline void	XFDrawCircle::SetDrawKind(enumXFDrawKind kind)
 {
     m_eDrawKind = kind;
 }

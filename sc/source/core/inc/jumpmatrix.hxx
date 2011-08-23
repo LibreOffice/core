@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,7 +123,7 @@ public:
                                             short nStart, short nNext,
                                             short nStop = SHRT_MAX )
                                     {
-                                        pJump[ (sal_uLong)nCol * nRows + nRow ].
+                                        pJump[ (ULONG)nCol * nRows + nRow ].
                                             SetJump( fBool, nStart, nNext, nStop);
                                     }
             void                GetJump( SCSIZE nCol, SCSIZE nRow, double& rBool,
@@ -141,19 +141,19 @@ public:
                                             nRow = 0;
                                         else if (nCols <= nCol || nRows <= nRow)
                                         {
-                                            OSL_FAIL("ScJumpMatrix::GetJump: dimension error");
+                                            DBG_ERROR("ScJumpMatrix::GetJump: dimension error");
                                             nCol = 0;
                                             nRow = 0;
                                         }
-                                        pJump[ (sal_uLong)nCol * nRows + nRow ].
+                                        pJump[ (ULONG)nCol * nRows + nRow ].
                                             GetJump( rBool, rStart, rNext, rStop);
                                     }
             void                SetAllJumps( double fBool,
                                             short nStart, short nNext,
                                             short nStop = SHRT_MAX )
                                     {
-                                        sal_uLong n = (sal_uLong)nCols * nRows;
-                                        for ( sal_uLong j=0; j<n; ++j )
+                                        ULONG n = (ULONG)nCols * nRows;
+                                        for ( ULONG j=0; j<n; ++j )
                                         {
                                             pJump[ j ].SetJump( fBool, nStart,
                                                     nNext, nStop);
@@ -162,7 +162,7 @@ public:
             void                SetJumpParameters( ScTokenVec* p )
                                     { pParams = p; }
             const ScTokenVec*   GetJumpParameters() const { return pParams; }
-            ScMatrix*           GetResultMatrix() const { return pMat.get(); }
+            ScMatrix*           GetResultMatrix() const { return pMat; }
             void                GetPos( SCSIZE& rCol, SCSIZE& rRow ) const
                                     {
                                         rCol = nCurCol;
@@ -195,7 +195,7 @@ public:
                                     {
                                         if ( nNewCols > nResMatCols || nNewRows > nResMatRows )
                                         {
-                                            pMat = pMat->CloneAndExtend( nNewCols, nNewRows, pMat->GetDensityType() );
+                                            pMat = pMat->CloneAndExtend( nNewCols, nNewRows );
                                             if ( nResMatCols < nNewCols )
                                             {
                                                 pMat->FillDouble( CreateDoubleError(

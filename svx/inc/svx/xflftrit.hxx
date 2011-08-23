@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,40 +33,40 @@
 #include "svx/svxdllapi.h"
 
 //-----------------------------------
-// class XFillFloatTransparenceItem -
+// class XFillFloatTransparenceItem	-
 //-----------------------------------
 
 class SVX_DLLPUBLIC XFillFloatTransparenceItem : public XFillGradientItem
 {
 private:
 
-    long                    nDummy1;
-    long                    nDummy2;
-    sal_Bool                    bEnabled;
+    long					nDummy1;
+    long					nDummy2;
+    BOOL					bEnabled;
 
 public:
                             TYPEINFO();
 
                             XFillFloatTransparenceItem();
-                            XFillFloatTransparenceItem( sal_Int32 nIndex, const XGradient& rGradient, sal_Bool bEnable = sal_True );
-                            XFillFloatTransparenceItem(const String& rName, const XGradient& rGradient, sal_Bool bEnable = sal_True );
-                            XFillFloatTransparenceItem(SfxItemPool* pPool, const XGradient& rTheGradient, sal_Bool bEnable = sal_True );
+                            XFillFloatTransparenceItem( INT32 nIndex, const XGradient& rGradient, BOOL bEnable = TRUE );
+                            XFillFloatTransparenceItem(const String& rName, const XGradient& rGradient, BOOL bEnable = TRUE );
+                            XFillFloatTransparenceItem(SfxItemPool* pPool, const XGradient& rTheGradient, BOOL bEnable = TRUE );
                             XFillFloatTransparenceItem(SfxItemPool* pPool );
                             XFillFloatTransparenceItem( const XFillFloatTransparenceItem& rItem );
 
     virtual int             operator==( const SfxPoolItem& rItem ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
-    virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual USHORT          GetVersion( USHORT nFileFormatVersion ) const;
+    virtual	bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres, SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric, String &rText, const IntlWrapper * pIntlWrapper = 0 ) const;
 
-    sal_Bool                    IsEnabled() const { return bEnabled; }
-    void                    SetEnabled( sal_Bool bEnable ) { bEnabled = bEnable; }
+    BOOL					IsEnabled() const { return bEnabled; }
+    void					SetEnabled( BOOL bEnable ) { bEnabled = bEnable; }
 
-    static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
+    static BOOL CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     XFillFloatTransparenceItem* checkForUniqueItem( SdrModel* pModel ) const;
 };
 

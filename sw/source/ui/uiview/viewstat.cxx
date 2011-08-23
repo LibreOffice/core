@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 #include <hintids.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -83,7 +82,7 @@ void SwView::GetState(SfxItemSet &rSet)
         switch(nWhich)
         {
             case FN_EDIT_LINK_DLG:
-                if( !pWrtShell->GetLinkManager().GetLinks().Count() )
+                if( !pWrtShell->GetLinkManager().GetLinks().Count()	)
                     rSet.DisableItem(nWhich);
                 else if( pWrtShell->IsSelFrmMode() &&
                             pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT))
@@ -127,7 +126,7 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_PRINTDOC:
             case SID_PRINTDOCDIRECT:
-                GetSlotState( nWhich, SfxViewShell::GetInterface(), &rSet );
+                GetSlotState( nWhich, SfxViewShell::GetInterface(),	&rSet );
             break;
             case SID_ATTR_PAGE:
             case SID_ATTR_PAGE_SIZE:
@@ -153,13 +152,13 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_CLEARHISTORY:
             {
-                rSet.Put(SfxBoolItem(nWhich, pWrtShell->GetLastUndoInfo(0, 0)));
+                rSet.Put(SfxBoolItem(nWhich, pWrtShell->GetUndoIds() != UNDO_EMPTY));
             }
             break;
             case SID_UNDO:
             {
-                // die muss noch nicht vorhanden sein
-                // also lasse sie mal anlegen:
+                //JP 21.07.98: Bug 53429 - die muss noch nicht vorhanden sein
+                // 				also lasse sie mal anlegen:
                 if( !pShell )
                     SelectShell();
 
@@ -180,7 +179,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     if(pWrtShell->IsInVerticalText())
                         aImgItem.SetRotation(2700);
                     if(pWrtShell->IsInRightToLeftText())
-                        aImgItem.SetMirrored(sal_True);
+                        aImgItem.SetMirrored(TRUE);
                 }
                 rSet.Put(aImgItem);
             }
@@ -198,7 +197,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     if(pWrtShell->IsInVerticalText())
                         aImgItem.SetRotation(2700);
                     if(pWrtShell->IsInRightToLeftText())
-                        aImgItem.SetMirrored(sal_True);
+                        aImgItem.SetMirrored(TRUE);
                 }
                 rSet.Put(aImgItem);
             }
@@ -218,7 +217,7 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_TWAIN_SELECT:
             case SID_TWAIN_TRANSFER:
-#if defined WNT || defined UNX
+#if defined WIN || defined WNT || defined UNX
             {
                 if(!SW_MOD()->GetScannerManager().is())
                     rSet.DisableItem(nWhich);
@@ -294,7 +293,7 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_THESAURUS:
             {
                 SwWrtShell  &rSh = GetWrtShell();
-                if (2 <= rSh.GetCrsrCnt())  // multi selection?
+                if (2 <= rSh.GetCrsrCnt())	// multi selection?
                     rSet.DisableItem(nWhich);
                 else
                 {
@@ -332,6 +331,7 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_DOCUMENT_COMPARE:
             case SID_DOCUMENT_MERGE:
                 if( GetDocShell()->IsA( SwGlobalDocShell::StaticType() ) ||
+//					pWrtShell->IsAnySectionInDoc( sal_True, sal_True, sal_True )||
                     (SID_DOCUMENT_MERGE == nWhich && pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength()))
                     rSet.DisableItem(nWhich);
             break;
@@ -351,7 +351,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 if(pWrtShell->IsInVerticalText())
                     aImageItem.SetRotation( 2700 );
                 if(pWrtShell->IsInRightToLeftText())
-                    aImageItem.SetMirrored( sal_True );
+                    aImageItem.SetMirrored( TRUE );
                 rSet.Put(aImageItem);
             }
             break;
@@ -379,7 +379,7 @@ void SwView::GetState(SfxItemSet &rSet)
             {
                 if( !pShell )
                     SelectShell();
-                sal_uInt16 nAlias = 0;
+                USHORT nAlias = 0;
                 bool bDraw = false;
                 if( nSelectionType & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_TXT) )
                 {
@@ -459,6 +459,7 @@ void SwView::GetDrawState(SfxItemSet &rSet)
         case SID_SHOW_HIDDEN:
         case SID_SHOW_FORMS:
             rSet.DisableItem( nWhich );
+            // rSet.Put( SfxBoolItem(nWhich,sal_True ));
             break;
 
         case SID_DRAW_TEXT_MARQUEE:

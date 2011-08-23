@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 #include <vector>
 #include <svx/svdogrp.hxx>
-#include <svx/svditer.hxx>
+#include <svditer.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // class to remember broadcast start positions
@@ -128,7 +128,7 @@ namespace sdr
 
             while(nWhich)
             {
-                if(SFX_ITEM_SET == rSet.GetItemState(nWhich, sal_False, &pItem))
+                if(SFX_ITEM_SET == rSet.GetItemState(nWhich, FALSE, &pItem))
                 {
                     if(pItem->HasMetrics())
                     {

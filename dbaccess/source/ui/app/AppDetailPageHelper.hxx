@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,20 +58,20 @@ namespace dbaui
 
     class OPreviewWindow : public Window
     {
-        GraphicObject       m_aGraphicObj;
-        Rectangle           m_aPreviewRect;
+        GraphicObject		m_aGraphicObj;
+        Rectangle			m_aPreviewRect;
 
         /** gets the graphic cnter rect
-            @param  rGraphic
+            @param	rGraphic
                 the graphic
-            @param  rResultRect
+            @param	rResultRect
                 the resulting rectangle
-
+            
             @return
                 <TRUE/> when successfull
         */
-        sal_Bool ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
-        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+        BOOL ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
+        void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt);
     public:
@@ -88,17 +88,17 @@ namespace dbaui
     //==================================================================
     class OAppDetailPageHelper : public Window
     {
-        DBTreeListBox*      m_pLists[ELEMENT_COUNT];
-        OAppBorderWindow&   m_rBorderWin;
-        FixedLine           m_aFL;
-        ToolBox             m_aTBPreview;
-        Window              m_aBorder;
-        OPreviewWindow      m_aPreview;
+        DBTreeListBox*		m_pLists[ELEMENT_COUNT];
+        OAppBorderWindow&	m_rBorderWin;
+        FixedLine			m_aFL;
+        ToolBox				m_aTBPreview;
+        Window				m_aBorder;
+        OPreviewWindow		m_aPreview;
         ::svtools::ODocumentInfoPreview
                             m_aDocumentInfo;
-        Window*             m_pTablePreview;
+        Window*				m_pTablePreview;		
         ::std::auto_ptr<PopupMenu> m_aMenu;
-        PreviewMode         m_ePreviewMode;
+        PreviewMode			m_ePreviewMode;
         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
                             m_xFrame;
         ::com::sun::star::uno::Reference < ::com::sun::star::io::XPersist >
@@ -110,65 +110,72 @@ namespace dbaui
         int getVisibleControlIndex() const;
 
         /** sorts the entries in the tree list box.
-            @param  _nPos
+            @param	_nPos
                 Which list should be sorted.
-            @param  _eSortMode
+            @param	_eSortMode
                 How should be sorted.
         */
         void sort(int _nPos,SvSortMode _eSortMode );
 
         /** retrieves the resource ids of the images representing elements of the given type
         */
-        void getElementIcons( ElementType _eType, sal_uInt16& _rImageId);
+        void getElementIcons( ElementType _eType, USHORT& _rImageId, USHORT& _rHighContrastImageId );
 
         /** fills the names in the listbox
-            @param  _xContainer
+            @param	_xContainer
                 This can either be the queries, forms or report names.
-            @param  _eType
+            @param	_eType
                 the type of elements which are being filled
             @param _nImageId
                 the resource id of the image to use for non-container entries
-            @param  _pParent
+            @param _nHighContrastImageId
+                the resource id of the high contrast image to use for non-container entries
+            @param	_pParent
                 The parent of the entries to be inserted.
         */
         void fillNames( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer,
                         const ElementType _eType,
-                        const sal_uInt16 _nImageId,
+                        const USHORT _nImageId,
+                        const USHORT _nHighContrastImageId,
                         SvLBoxEntry* _pParent );
 
         /** sets the detail page
-            @param  _pWindow
+            @param	_pWindow
                 The control which should be visible.
         */
         void setDetailPage(Window* _pWindow);
 
         /** sets all HandleCallbacks
-            @param  _pTreeView
+            @param	_pTreeView
                 The newly created DBTreeListBox
-            @param  _rImage
+            @param	_rImage
                 the resource id of the default icon
+            @param	_rImageHC
+                the resource id of the default icon (HC version)
             @return
                 The new tree.
         */
-        DBTreeListBox* createTree( DBTreeListBox* _pTreeView, const Image& _rImage );
+        DBTreeListBox* createTree( DBTreeListBox* _pTreeView, const Image& _rImage, const Image& _rImageHC );
 
         /** creates the tree and sets all HandleCallbacks
-            @param  _nHelpId
+            @param	_nHelpId
                 The help id of the control
-            @param  _nCollapsedBitmap
+            @param	_nCollapsedBitmap
+                The image to use for tree entries.
+            @param	_rImageHC
                 The image to use in high contrast mode.
             @return
                 The new tree.
         */
-        DBTreeListBox* createSimpleTree( const rtl::OString& _sHelpId, const Image& _rImage);
+        DBTreeListBox* createSimpleTree( ULONG _nHelpId, const Image& _rImage, const Image& _rImageHC );
 
-        DECL_LINK( OnEntryDoubleClick,          SvTreeListBox* );
-        DECL_LINK( OnEntrySelChange,            void* );
+        DECL_LINK( OnEntryDoubleClick,			SvTreeListBox* );
+        DECL_LINK( OnEntrySelChange,			void* );
 
-        DECL_LINK( OnCutEntry,                  void* );
-        DECL_LINK( OnCopyEntry,                 void* );
-        DECL_LINK( OnPasteEntry,                void* );
-        DECL_LINK( OnDeleteEntry,               void* );
+        DECL_LINK( OnCutEntry,					void* );
+        DECL_LINK( OnCopyEntry, 				void* );
+        DECL_LINK( OnPasteEntry,				void* );
+        DECL_LINK( OnDeleteEntry,				void* );
 
         DECL_LINK(PreviewChangeHdl, void*);
         // click a TB slot
@@ -193,27 +200,27 @@ namespace dbaui
         void paste();
 
         /** creates the tables page
-            @param  _xConnection
+            @param	_xConnection
                 The connection to get the table names
         */
         void createTablesPage(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
         /** creates the page for the specific type.
-            @param  _eType
+            @param	_eType
                 The type which should be created. E_TABLE isn't allowed.
-            @param  _xContainer
+            @param	_xContainer
                 The container of the elements to be inserted.
         */
         void createPage(ElementType _eType,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer);
 
         /** returns the current visible tree list box
         */
-        inline DBTreeListBox* getCurrentView() const
-        {
+        inline DBTreeListBox* getCurrentView() const 
+        { 
             ElementType eType = getElementType();
-            return (eType != E_NONE ) ? m_pLists[static_cast<sal_Int32>(eType)] : NULL;
+            return (eType != E_NONE ) ? m_pLists[static_cast<sal_Int32>(eType)] : NULL; 
         }
-
+        
         /// select all entries in the visible control
         void selectAll();
 
@@ -227,7 +234,7 @@ namespace dbaui
         void sortUp();
 
         /** returns the element names which are selected
-            @param  _rNames
+            @param	_rNames
                 The list will be filled.
         */
         void getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames ) const;
@@ -253,8 +260,8 @@ namespace dbaui
         void selectElements(const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _aNames);
 
         /** return the qualified name.
-            @param  _pEntry
-                The entry of a table, or query, form, report to get the qualified name.
+            @param	_pEntry
+                The entry of a table, or query, form, report to get the qualified name. 
                 If the entry is <NULL/>, the first selected is chosen.
             @return
                 the qualified name
@@ -293,13 +300,13 @@ namespace dbaui
         sal_Bool isFilled() const;
 
         /** adds a new object to the detail page.
-            @param  _eType
+            @param	_eType
                 The type where the entry shold be appended.
-            @param  _rName
+            @param	_rName
                 The name of the object to be inserted
-            @param  _rObject
+            @param	_rObject
                 The object to add.
-            @param  _rxConn
+            @param	_rxConn
                 If we insert a table, the connection must be set.
         */
         SvLBoxEntry*  elementAdded(ElementType eType
@@ -307,13 +314,13 @@ namespace dbaui
                         ,const ::com::sun::star::uno::Any& _rObject );
 
         /** replaces a objects name with a new one
-            @param  _eType
+            @param	_eType
                 The type where the entry shold be appended.
-            @param  _rOldName
+            @param	_rOldName
                 The old name of the object to be replaced
-            @param  _rNewName
+            @param	_rNewName
                 The new name of the object to be replaced
-            @param  _rxConn
+            @param	_rxConn
                 If we insert a table, the connection must be set.
         */
         void elementReplaced(ElementType eType
@@ -321,17 +328,17 @@ namespace dbaui
                         ,const ::rtl::OUString& _rNewName );
 
         /** removes an element from the detail page.
-            @param  _eType
+            @param	_eType
                 The type where the entry shold be appended.
-            @param  _rName
+            @param	_rName
                 The name of the element to be removed.
-            @param  _rxConn
+            @param	_rxConn
                 If we remove a table, the connection must be set.
         */
         void elementRemoved(ElementType _eType
                             ,const ::rtl::OUString& _rName );
 
-
+        
         /// returns the preview mode
         PreviewMode getPreviewMode();
 
@@ -339,29 +346,29 @@ namespace dbaui
         sal_Bool isPreviewEnabled();
 
         /** switches to the given preview mode
-            @param  _eMode
+            @param	_eMode
                 the mode to set for the preview
-            @param  _bForce
+            @param	_bForce
                 Force the preview to be resetted
         */
-        void switchPreview(PreviewMode _eMode,sal_Bool _bForce = sal_False);
+        void switchPreview(PreviewMode _eMode,BOOL _bForce = FALSE);
 
         /** shows the Preview of the content when it is enabled.
-            @param  _xContent
+            @param	_xContent
                 The content which must support the "preview" command.
         */
         void showPreview(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _xContent);
 
         /** shows the Preview of a table or query
-            @param  _sDataSourceName
+            @param	_sDataSourceName
                 the name of the data source
-            @param  _sName
+            @param	_sName
                 the name of table or query
-            @param  _bTable
+            @param	_bTable
                 <TRUE/> if it is a table, otherwise <FALSE/>
-            @return void
+            @return	void
         */
-        void showPreview(   const ::rtl::OUString& _sDataSourceName,
+        void showPreview(	const ::rtl::OUString& _sDataSourceName,
                             const ::rtl::OUString& _sName,
                             sal_Bool _bTable);
 

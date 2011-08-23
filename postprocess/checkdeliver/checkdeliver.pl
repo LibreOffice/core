@@ -4,7 +4,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ sub get_globals
 
     # set global variables according to environnment
     $platform      = $ENV{INPATH};
-    $srcrootdir    = "$ENV{SRC_ROOT}/clone";
+    $srcrootdir    = "$ENV{SOURCE_ROOT_DIR}/clone";
     $solverdir     = $ENV{SOLARVERSION};
     $milestoneext  = $ENV{UPDMINOREXT};
 
@@ -162,11 +162,10 @@ sub check
         print_logged( "Error: cannot open file \'$listname\'\n$!" );
         exit 2;
     }
-    while ( <DELIVERLOG> ) {
+    foreach ( <DELIVERLOG> ) {
         next if ( /^LINK / );
         # What's this modules' repository?
-        if ( /COPY\s+(.+?)\/$module\/prj\/build.lst/ ) {
-#        if ( /COPY (\w[\w\s-]*?)\/$module\/prj\/build.lst/ ) {
+        if ( /COPY (\w[\w\s-]*?)\/$module\/prj\/build.lst/ ) {
             $repository = $1;
         }
         # For now we concentrate on binaries, located in 'bin' or 'lib' and 'misc/build/<...>/[bin|lib]'.
@@ -279,7 +278,7 @@ sub is_moduledirectory
 
 sub print_logged
 # Print routine.
-# If a log file name is specified with '-l' option, print_logged() prints to that file
+# If a log file name is specified with '-l' option, print_logged() prints to that file 
 # as well as to STDOUT. If '-l' option is not set, print_logged() just writes to STDOUT
 {
     my $message = shift;

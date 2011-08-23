@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 
 namespace framework
 {
-
+    
 //_______________________________________________
 // helper
 
@@ -159,9 +159,9 @@ KeyMapping::KeyIdentifierInfo KeyMapping::KeyIdentifierMap[] =
     {css::awt::Key::BRACKETRIGHT  , "KEY_BRACKETRIGHT" },
     {css::awt::Key::SEMICOLON     , "KEY_SEMICOLON" },
     {0                            , ""               } // mark the end of this array!
-};
+};                             
 
-//-----------------------------------------------
+//-----------------------------------------------    
 KeyMapping::KeyMapping()
 {
     sal_Int32 i = 0;
@@ -169,27 +169,27 @@ KeyMapping::KeyMapping()
     {
         ::rtl::OUString sIdentifier = ::rtl::OUString::createFromAscii(KeyIdentifierMap[i].Identifier);
         sal_Int16       nCode       = KeyIdentifierMap[i].Code;
-
+        
         m_lIdentifierHash[sIdentifier] = nCode      ;
         m_lCodeHash      [nCode]       = sIdentifier;
-
+        
         ++i;
     }
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 KeyMapping::~KeyMapping()
 {
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 sal_uInt16 KeyMapping::mapIdentifierToCode(const ::rtl::OUString& sIdentifier)
     throw(css::lang::IllegalArgumentException)
 {
     Identifier2CodeHash::const_iterator pIt = m_lIdentifierHash.find(sIdentifier);
     if (pIt != m_lIdentifierHash.end())
-        return pIt->second;
-
+        return pIt->second;                
+    
     // Its not well known identifier - but may be a pure key code formated as string ...
     // Check and convert it!
     sal_uInt16 nCode = 0;
@@ -198,36 +198,36 @@ sal_uInt16 KeyMapping::mapIdentifierToCode(const ::rtl::OUString& sIdentifier)
                 DECLARE_ASCII("Cant map given identifier to a valid key code value."),
                 css::uno::Reference< css::uno::XInterface >(),
                 0);
-
+                
     return (sal_uInt16)nCode;
 }
-
-//-----------------------------------------------
+    
+//-----------------------------------------------    
 ::rtl::OUString KeyMapping::mapCodeToIdentifier(sal_uInt16 nCode)
 {
     Code2IdentifierHash::const_iterator pIt = m_lCodeHash.find(nCode);
     if (pIt != m_lCodeHash.end())
         return pIt->second;
-
+    
     // If we have no well known identifier - use the pure code value!
-    return ::rtl::OUString::valueOf((sal_Int32)nCode);
+    return ::rtl::OUString::valueOf((sal_Int32)nCode);        
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 sal_Bool KeyMapping::impl_st_interpretIdentifierAsPureKeyCode(const ::rtl::OUString& sIdentifier,
                                                                     sal_uInt16&      rCode      )
 {
-    sal_Int32 nCode = sIdentifier.toInt32();
+    sal_Int32 nCode = sIdentifier.toInt32(); 
     if (nCode > 0)
     {
         rCode = (sal_uInt16)nCode;
         return sal_True;
     }
-
+        
     // 0 is normaly an error of the called method toInt32() ...
     // But we must be aware, that the identifier is "0"!
     rCode = 0;
-    return sIdentifier.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("0"));
+    return sIdentifier.equalsAscii("0");
 }
 
 } // namespace framework

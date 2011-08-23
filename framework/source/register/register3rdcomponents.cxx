@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 //_________________________________________________________________________________________________________________
-//  includes of my own project
+//	includes of my own project
 //_________________________________________________________________________________________________________________
 #include <macros/registration.hxx>
 
@@ -48,7 +48,11 @@
 
         COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-        COMPONENTGETFACTORY (   IFFACTORIE( Service1 )
+        COMPONENTWRITEINFO	(	COMPONENTINFO( Service1 )
+                                 COMPONENTINFO( Service2 )
+                            )
+
+        COMPONENTGETFACTORY	(	IFFACTORIE( Service1 )
                                  else
                                 IFFACTORIE( Service2 )
                              )
@@ -60,10 +64,16 @@
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::HelpOnStartup       ) else
-                        IFFACTORY( ::framework::TabWinFactory       ) else
-                        IFFACTORY( ::framework::SystemExec          ) else
-                        IFFACTORY( ::framework::ShellJob            )
+COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::HelpOnStartup	)
+                        COMPONENTINFO( ::framework::TabWinFactory	)
+                        COMPONENTINFO( ::framework::SystemExec	    )
+                        COMPONENTINFO( ::framework::ShellJob	    )
+                    )
+
+COMPONENTGETFACTORY	(	IFFACTORY( ::framework::HelpOnStartup		) else
+                        IFFACTORY( ::framework::TabWinFactory		) else
+                        IFFACTORY( ::framework::SystemExec	        ) else
+                        IFFACTORY( ::framework::ShellJob	        )
                     )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

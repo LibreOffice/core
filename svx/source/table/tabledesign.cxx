@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -188,7 +188,7 @@ public:
     virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference<XVetoableChangeListener>& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException);
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName,const Reference<XVetoableChangeListener>&aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException);
 
-    TableDesignStyleVector  maDesigns;
+    TableDesignStyleVector	maDesigns;
 };
 
 //------------------------------------------------------------------------
@@ -343,7 +343,7 @@ Sequence< OUString > SAL_CALL TableDesignStyle::getElementNames() throw(RuntimeE
 
 // ----------------------------------------------------------
 
-sal_Bool SAL_CALL TableDesignStyle::hasByName( const OUString& rName )  throw(RuntimeException)
+sal_Bool SAL_CALL TableDesignStyle::hasByName( const OUString& rName )	throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -574,7 +574,7 @@ Sequence< OUString > SAL_CALL TableDesignFamily::getElementNames() throw(Runtime
 
 // ----------------------------------------------------------
 
-sal_Bool SAL_CALL TableDesignFamily::hasByName( const OUString& aName ) throw(RuntimeException)
+sal_Bool SAL_CALL TableDesignFamily::hasByName( const OUString& aName )	throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -717,7 +717,7 @@ void SAL_CALL TableDesignFamily::dispose(  ) throw (RuntimeException)
     TableDesignStyleVector aDesigns;
     aDesigns.swap( maDesigns );
 
-    for( TableDesignStyleVector::iterator iter( aDesigns.begin() ); iter != aDesigns.end(); ++iter )
+    for( TableDesignStyleVector::iterator iter( aDesigns.begin() ); iter != aDesigns.end(); iter++ )
     {
         Reference< XComponent > xComp( (*iter), UNO_QUERY );
         if( xComp.is() )
@@ -743,7 +743,7 @@ void SAL_CALL TableDesignFamily::removeEventListener( const Reference< XEventLis
 
 Reference<XPropertySetInfo> TableDesignFamily::getPropertySetInfo() throw (RuntimeException)
 {
-    OSL_FAIL( "###unexpected!" );
+    OSL_ENSURE( 0, "###unexpected!" );
     return Reference<XPropertySetInfo>();
 }
 
@@ -751,7 +751,7 @@ Reference<XPropertySetInfo> TableDesignFamily::getPropertySetInfo() throw (Runti
 
 void TableDesignFamily::setPropertyValue( const OUString& , const Any&  ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    OSL_FAIL( "###unexpected!" );
+    OSL_ENSURE( 0, "###unexpected!" );
 }
 
 // ----------------------------------------------------------
@@ -773,28 +773,28 @@ Any TableDesignFamily::getPropertyValue( const OUString& PropertyName ) throw (U
 
 void TableDesignFamily::addPropertyChangeListener( const OUString& , const Reference<XPropertyChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OSL_FAIL( "###unexpected!" );
+    OSL_ENSURE( 0, "###unexpected!" );
 }
 
 // ----------------------------------------------------------
 
 void TableDesignFamily::removePropertyChangeListener( const OUString& , const Reference<XPropertyChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OSL_FAIL( "###unexpected!" );
+    OSL_ENSURE( 0, "###unexpected!" );
 }
 
 // ----------------------------------------------------------
 
 void TableDesignFamily::addVetoableChangeListener( const OUString& , const Reference<XVetoableChangeListener>& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OSL_FAIL( "###unexpected!" );
+    OSL_ENSURE( 0, "###unexpected!" );
 }
 
 // ----------------------------------------------------------
 
 void TableDesignFamily::removeVetoableChangeListener( const OUString& , const Reference<XVetoableChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OSL_FAIL( "###unexpected!" );
+    OSL_ENSURE( 0, "###unexpected!" );
 }
 
 // --------------------------------------------------------------------

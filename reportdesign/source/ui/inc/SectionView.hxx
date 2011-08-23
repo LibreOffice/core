@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ class OReportSection;
 class OSectionView : public SdrView
 {
 private:
-    OReportWindow*      m_pReportWindow;
-    OReportSection*     m_pSectionWindow;
+    OReportWindow*		m_pReportWindow;
+    OReportSection*		m_pSectionWindow;
 
     void ObjectRemovedInAliveMode( const SdrObject* pObject );
     OSectionView(const OSectionView&);
@@ -58,8 +58,8 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual void MarkListHasChanged();
     virtual void MakeVisible( const Rectangle& rRect, Window& rWin );
-
-    inline OReportSection*  getReportSection() const { return m_pSectionWindow; }
+  
+    inline OReportSection*	getReportSection() const { return m_pSectionWindow; }
 
     // switch the marked objects to the given layer.
     void SetMarkedToLayer( SdrLayerID nLayerNo );

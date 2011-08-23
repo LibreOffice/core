@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,9 +30,9 @@
 
 #include <sal/types.h>
 
-#define CUNO_ERROR_NONE                 0
-#define CUNO_ERROR_CALL_FAILED          (1 << 31)
-#define CUNO_ERROR_EXCEPTION            (1 | CUNO_ERROR_CALL_FAILED)
+#define CUNO_ERROR_NONE					0
+#define CUNO_ERROR_CALL_FAILED			(1 << 31)
+#define CUNO_ERROR_EXCEPTION			(1 | CUNO_ERROR_CALL_FAILED)
 
 /** macro to call on a C interface
 
@@ -43,7 +43,7 @@
 
     @param return_code return code of call
 */
-#define CUNO_EXCEPTION_OCCURRED( return_code ) (0 != ((return_code) & CUNO_ERROR_EXCEPTION))
+#define CUNO_EXCEPTION_OCCURED( return_code ) (0 != ((return_code) & CUNO_ERROR_EXCEPTION))
 
 typedef sal_Int32 cuno_ErrorCode;
 

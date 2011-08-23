@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -144,7 +144,7 @@ SwStdFontConfig::SwStdFontConfig() :
     }
 }
 
-void    SwStdFontConfig::Commit()
+void	SwStdFontConfig::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -179,9 +179,9 @@ SwStdFontConfig::~SwStdFontConfig()
 {
 }
 
-sal_Bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
+BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
 {
-    sal_Bool bSame = sal_False;
+    BOOL bSame = sal_False;
     SvtLinguOptions aLinguOpt;
 
     SvtLinguConfig().GetOptions( aLinguOpt );
@@ -221,7 +221,7 @@ sal_Bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
         case FONT_CAPTION_CJK :
         case FONT_INDEX_CJK   :
         {
-            sal_Bool b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCJK;
+            BOOL b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCJK;
             bSame = b1 && sDefaultFonts[nFontType] == sDefFontCJK;
         }
         break;
@@ -229,7 +229,7 @@ sal_Bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
         case FONT_CAPTION_CTL :
         case FONT_INDEX_CTL   :
         {
-            sal_Bool b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCTL;
+            BOOL b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCTL;
             bSame = b1 && sDefaultFonts[nFontType] == sDefFontCTL;
         }
         break;
@@ -237,10 +237,10 @@ sal_Bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
     return bSame;
 }
 
-String  SwStdFontConfig::GetDefaultFor(sal_uInt16 nFontType, LanguageType eLang)
+String  SwStdFontConfig::GetDefaultFor(USHORT nFontType, LanguageType eLang)
 {
     String sRet;
-    sal_uInt16 nFontId;
+    USHORT nFontId;
     switch( nFontType )
     {
         case FONT_OUTLINE :
@@ -264,6 +264,10 @@ String  SwStdFontConfig::GetDefaultFor(sal_uInt16 nFontType, LanguageType eLang)
         case FONT_INDEX_CTL   :
             nFontId = DEFAULTFONT_CTL_TEXT;
         break;
+//        case FONT_STANDARD:
+//        case FONT_LIST    :
+//        case FONT_CAPTION :
+//        case FONT_INDEX   :
         default:
             nFontId = DEFAULTFONT_LATIN_TEXT;
     }
@@ -271,7 +275,7 @@ String  SwStdFontConfig::GetDefaultFor(sal_uInt16 nFontType, LanguageType eLang)
     return  aFont.GetName();
 }
 
-sal_Int32 SwStdFontConfig::GetDefaultHeightFor(sal_uInt16 nFontType, LanguageType eLang)
+sal_Int32 SwStdFontConfig::GetDefaultHeightFor(USHORT nFontType, LanguageType eLang)
 {
     sal_Int32 nRet = FONTSIZE_DEFAULT;
     switch( nFontType )
@@ -292,7 +296,7 @@ sal_Int32 SwStdFontConfig::GetDefaultHeightFor(sal_uInt16 nFontType, LanguageTyp
     return nRet;
 }
 
-void SwStdFontConfig::ChangeInt( sal_uInt16 nFontType, sal_Int32 nHeight )
+void SwStdFontConfig::ChangeInt( USHORT nFontType, sal_Int32 nHeight )
 {
     OSL_ENSURE( nFontType < DEF_FONT_COUNT, "invalid index in SwStdFontConfig::ChangInt()");
     if( nFontType < DEF_FONT_COUNT && nDefaultFontHeight[nFontType] != nHeight)

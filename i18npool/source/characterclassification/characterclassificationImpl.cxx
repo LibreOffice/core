@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,16 +34,14 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
+using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
 CharacterClassificationImpl::CharacterClassificationImpl(
         const Reference < lang::XMultiServiceFactory >& rxMSF ) : xMSF( rxMSF )
 {
-        if (createLocaleSpecificCharacterClassification(OUString(RTL_CONSTASCII_USTRINGPARAM("Unicode")), Locale()))
+        if (createLocaleSpecificCharacterClassification(OUString::createFromAscii("Unicode"), Locale()))
             xUCI = cachedItem->xCI;
 }
 
@@ -56,7 +54,7 @@ CharacterClassificationImpl::~CharacterClassificationImpl() {
 
 
 OUString SAL_CALL
-CharacterClassificationImpl::toUpper( const OUString& Text, sal_Int32 nPos,
+CharacterClassificationImpl::toUpper( const OUString& Text, sal_Int32 nPos, 
         sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException)
 {
         return getLocaleSpecificCharacterClassification(rLocale)->toUpper(Text, nPos, nCount, rLocale);
@@ -70,14 +68,14 @@ CharacterClassificationImpl::toLower( const OUString& Text, sal_Int32 nPos,
 }
 
 OUString SAL_CALL
-CharacterClassificationImpl::toTitle( const OUString& Text, sal_Int32 nPos,
+CharacterClassificationImpl::toTitle( const OUString& Text, sal_Int32 nPos, 
         sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException)
 {
         return getLocaleSpecificCharacterClassification(rLocale)->toTitle(Text, nPos, nCount, rLocale);
 }
 
 sal_Int16 SAL_CALL
-CharacterClassificationImpl::getType( const OUString& Text, sal_Int32 nPos )
+CharacterClassificationImpl::getType( const OUString& Text, sal_Int32 nPos ) 
         throw(RuntimeException)
 {
         if (xUCI.is())
@@ -111,7 +109,7 @@ CharacterClassificationImpl::getCharacterType( const OUString& Text, sal_Int32 n
 }
 
 sal_Int32 SAL_CALL
-CharacterClassificationImpl::getStringType( const OUString& Text, sal_Int32 nPos,
+CharacterClassificationImpl::getStringType( const OUString& Text, sal_Int32 nPos, 
         sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException)
 {
         return getLocaleSpecificCharacterClassification(rLocale)->getStringType(Text, nPos, nCount, rLocale);
@@ -152,7 +150,7 @@ sal_Bool SAL_CALL CharacterClassificationImpl::createLocaleSpecificCharacterClas
         }
 
         Reference < XInterface > xI = xMSF->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.CharacterClassification_")) + serviceName);
+            OUString::createFromAscii("com.sun.star.i18n.CharacterClassification_") + serviceName);
 
         Reference < XCharacterClassification > xCI;
         if ( xI.is() ) {
@@ -180,9 +178,9 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
             }
 
             static sal_Unicode under = (sal_Unicode)'_';
-            static OUString tw(RTL_CONSTASCII_USTRINGPARAM("TW"));
-            sal_Int32 l = rLocale.Language.getLength();
-            sal_Int32 c = rLocale.Country.getLength();
+            static OUString tw(OUString::createFromAscii("TW"));
+            sal_Int32 l = rLocale.Language.getLength(); 
+            sal_Int32 c = rLocale.Country.getLength(); 
             sal_Int32 v = rLocale.Variant.getLength();
             OUStringBuffer aBuf(l+c+v+3);
 
@@ -191,21 +189,21 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
                     createLocaleSpecificCharacterClassification(aBuf.append(rLocale.Language).append(under).append(
                                     rLocale.Country).append(under).append(rLocale.Variant).makeStringAndClear(), rLocale)) ||
                     // load service with name <base>_<lang>_<country>
-                (l > 0 && c > 0 &&
+                (l > 0 && c > 0 && 
                     createLocaleSpecificCharacterClassification(aBuf.append(rLocale.Language).append(under).append(
                                     rLocale.Country).makeStringAndClear(), rLocale)) ||
-                (l > 0 && c > 0 && rLocale.Language.compareToAscii("zh") == 0 &&
+                (l > 0 && c > 0 && rLocale.Language.compareToAscii("zh") == 0 && 
                                     (rLocale.Country.compareToAscii("HK") == 0 ||
                                     rLocale.Country.compareToAscii("MO") == 0) &&
                     // if the country code is HK or MO, one more step to try TW.
                     createLocaleSpecificCharacterClassification(aBuf.append(rLocale.Language).append(under).append(
                                     tw).makeStringAndClear(), rLocale)) ||
-                (l > 0 &&
+                (l > 0 && 
                     // load service with name <base>_<lang>
                     createLocaleSpecificCharacterClassification(rLocale.Language, rLocale))) {
                 return cachedItem->xCI;
             } else if (xUCI.is()) {
-                lookupTable.push_back( cachedItem = new lookupTableItem(rLocale, OUString(RTL_CONSTASCII_USTRINGPARAM("Unicode")), xUCI) );
+                lookupTable.push_back( cachedItem = new lookupTableItem(rLocale, OUString::createFromAscii("Unicode"), xUCI) );
                 return cachedItem->xCI;
             }
         }

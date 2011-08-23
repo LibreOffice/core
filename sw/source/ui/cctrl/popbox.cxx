@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ SwHelpToolBox::SwHelpToolBox( SwNavigationPI* pParent, const ResId& rResId )
 
 void SwHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
 {
-    // If doubleclick is detected use doubleclick handler
+    // If doubleclick is detected use doublelick handler
     if(rEvt.GetButtons() == MOUSE_RIGHT &&
         0 == GetItemId(rEvt.GetPosPixel()))
     {
@@ -58,8 +58,8 @@ long SwHelpToolBox::DoubleClick( ToolBox* pCaller )
 {
     // No doubleclick on button
     if( 0 == pCaller->GetCurItemId() && aDoubleClickLink.Call(0) )
-        return sal_True;
-    return sal_False;
+        return TRUE;
+    return FALSE;
 }
 
 SwHelpToolBox::~SwHelpToolBox() {}

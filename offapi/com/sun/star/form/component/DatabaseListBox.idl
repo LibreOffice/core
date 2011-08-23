@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,28 +24,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_form_component_DatabaseListBox_idl__
-#define __com_sun_star_form_component_DatabaseListBox_idl__
-
-#ifndef __com_sun_star_form_component_ListBox_idl__
-#include <com/sun/star/form/component/ListBox.idl>
-#endif
-
-#ifndef __com_sun_star_form_DataAwareControlModel_idl__
-#include <com/sun/star/form/DataAwareControlModel.idl>
-#endif
-
-#ifndef __com_sun_star_form_ListSourceType_idl__
-#include <com/sun/star/form/ListSourceType.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module form {  module component {
-
-//=============================================================================
-
+#ifndef __com_sun_star_form_component_DatabaseListBox_idl__ 
+#define __com_sun_star_form_component_DatabaseListBox_idl__ 
+ 
+#ifndef __com_sun_star_form_component_ListBox_idl__ 
+#include <com/sun/star/form/component/ListBox.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_form_DataAwareControlModel_idl__ 
+#include <com/sun/star/form/DataAwareControlModel.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_form_ListSourceType_idl__ 
+#include <com/sun/star/form/ListSourceType.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module form {  module component {  
+ 
+//============================================================================= 
+ 
 /** This service specifies a data-aware list box control model.
 
     <p>The base service for list boxes (<type>ListBox</type>) offers only
@@ -58,7 +58,7 @@
 
     <p>For instance, you may have a form which is bound to a table <em>invoice</em>, and you use it
     to enter invoices for your customers. Probably, you will have a second table (say <em>customer</em>),
-    which (among other data) contains a unique key for identifying customers. In your invoice table, you will
+    which (amonst other data) contains a unique key for identifying customers. In your invoice table, you will
     have a foreign key referring to these customers.<br/>
     Now, besides the result set the form is based on (all your invoices), the list box can be caused
     to open a second result set, this time for the <em>customer</em> table, and fill it's list with entries
@@ -72,13 +72,13 @@
 
  */
 published service DatabaseListBox
-{
-    service com::sun::star::form::component::ListBox;
-
-    service com::sun::star::form::DataAwareControlModel;
-
-    //-------------------------------------------------------------------------
-
+{ 
+    service com::sun::star::form::component::ListBox; 
+    
+    service com::sun::star::form::DataAwareControlModel; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies which column of the list result set should be used for data exchange.
 
         <p>When you make a selection from a list box, the "BoundColumn"
@@ -87,7 +87,7 @@ published service DatabaseListBox
         to a database field, the column value is stored in the
         database field identified by the property
         <member scope="com::sun::star::form">DataAwareControlModel::DataField</member>.
-
+        
         <dl>
             <dt>0</dt>
             <dd>The selected (displayed) list box string is stored in
@@ -107,10 +107,10 @@ published service DatabaseListBox
         Otherwise the property is ignored, as there is no result set from which to
         get the column values.</p>
     */
-    [property] short BoundColumn;
-
-    //-------------------------------------------------------------------------
-
+    [property] short BoundColumn; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** describes the kind of list source used.
 
         <p>Depending on the value of this property, the way the value of <member>ListBox::ListSource</member>
@@ -143,17 +143,17 @@ published service DatabaseListBox
 
                 <dt><member scope="com::sun::star::form">ListSourceType::TABLEFIELDS</member></dt>
                 <dd>The first element of the string sequence in <member>ListBox::ListSource</member>
-                determines the table whose column names should fill the list.</dd>
+                determines the table which's column names should fill the list.</dd>
             </dl>
         </p>
 
      */
-    [property] com::sun::star::form::ListSourceType ListSourceType;
-
-};
-
-//=============================================================================
-
-}; }; }; }; };
-
-#endif
+    [property] com::sun::star::form::ListSourceType ListSourceType; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; };  
+ 
+#endif 

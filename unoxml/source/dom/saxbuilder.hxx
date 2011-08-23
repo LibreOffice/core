@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,14 +26,13 @@
  *
  ************************************************************************/
 
-#ifndef DOM_SAXBUILDER_HXX
-#define DOM_SAXBUILDER_HXX
+#ifndef _SAXBUILDER_HXX
+#define _SAXBUILDER_HXX
 
 #include <stack>
 #include <map>
 
 #include <sal/types.h>
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
@@ -50,6 +49,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+#include "libxml/tree.h"
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -73,7 +74,6 @@ namespace DOM
     {
 
     private:
-        ::osl::Mutex m_Mutex;
         const Reference< XMultiServiceFactory > m_aServiceManager;
 
         SAXDocumentBuilderState m_aState;

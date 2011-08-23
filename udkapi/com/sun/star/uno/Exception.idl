@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,46 +24,48 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_uno_Exception_idl__
-#define __com_sun_star_uno_Exception_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module uno {
-
-//=============================================================================
-
+#ifndef __com_sun_star_uno_Exception_idl__ 
+#define __com_sun_star_uno_Exception_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module uno {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: exception com::sun::star::uno::Exception
 /** the base of all UNO exceptions
-
+    
     <p>All exceptions defined in UNO idl should derive from this exception.</p>
  */
 published exception Exception
 {
     /** gives a detailed description of the reason, why the exception was thrown.
         <p>
-        The description should be as detailed as possible.
-
+        The description should be as detailed as possible. 
+        
      */
-    string Message;
-
-    //-------------------------------------------------------------------------
-
+    string Message; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** should contain a reference to the original, which raised the exception.
         <p>May be NULL.</p>
      */
-    com::sun::star::uno::XInterface Context;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    com::sun::star::uno::XInterface Context; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

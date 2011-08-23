@@ -3,9 +3,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2010 Novell, Inc.
+ * Copyrigt 2010 Novell, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: tpcalc.hxx,v $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,12 +47,10 @@ class Window;
 class ScTpFormulaOptions : public SfxTabPage
 {
 public:
-    using SfxTabPage::DeactivatePage;
-
     static  SfxTabPage* Create (Window* pParent, const SfxItemSet& rCoreSet);
 
 //  static  USHORT*     GetRanges();
-    virtual sal_Bool FillItemSet(SfxItemSet& rCoreSet);
+    virtual BOOL FillItemSet(SfxItemSet& rCoreSet);
     virtual void Reset( const SfxItemSet& rCoreSet );
     virtual int DeactivatePage(SfxItemSet* pSet = NULL);
 

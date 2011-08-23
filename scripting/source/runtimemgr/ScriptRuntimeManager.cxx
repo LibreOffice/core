@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,6 @@
 #include <util/scriptingconstants.hxx>
 
 #include <cppuhelper/implementationentry.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -56,10 +55,10 @@ using namespace ::drafts::com::sun::star::script::framework;
 namespace scripting_runtimemgr
 {
 
-static OUString s_implName(RTL_CONSTASCII_USTRINGPARAM(
- "drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager" ));
-static OUString s_serviceName(RTL_CONSTASCII_USTRINGPARAM(
- "drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager" ));
+static OUString s_implName = ::rtl::OUString::createFromAscii(
+ "drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager" );
+static OUString s_serviceName = ::rtl::OUString::createFromAscii(
+ "drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager" );
 static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
 
 ::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
@@ -68,10 +67,14 @@ static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceNam
 // ScriptRuntimeManager Constructor
 ScriptRuntimeManager::ScriptRuntimeManager(
     const Reference< XComponentContext > & xContext ) :
-    m_xContext( xContext, UNO_SET_THROW )
+    m_xContext( xContext )
 {
     OSL_TRACE( "< ScriptRuntimeManager ctor called >\n" );
-    m_xMgr.set( m_xContext->getServiceManager(), UNO_SET_THROW );
+    validateXRef( m_xContext,
+        "ScriptRuntimeManager::ScriptRuntimeManager: invalid context" );
+    m_xMgr = m_xContext->getServiceManager();
+    validateXRef( m_xMgr,
+        "ScriptRuntimeManager::ScriptRuntimeManager: cannot get ServiceManager" );
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
     // test
     //scripting_securitymgr::ScriptSecurityManager ssm(xContext);
@@ -99,15 +102,25 @@ throw( RuntimeException )
     {
         Reference< XInterface > xInterface;
 
-        Reference< storage::XScriptInfo > sinfo =
+        Reference< storage::XScriptInfo > sinfo = 
             Reference< storage::XScriptInfo >( scriptInfo, UNO_QUERY_THROW );
 
-        OUStringBuffer* buf( 80 );
-        buf.appendAscii("/singletons/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeFor");
-        buf.append(sinfo->getLanguage());
+        OUStringBuffer *buf = new OUStringBuffer(80);
+        buf->appendAscii("/singletons/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeFor");
+        buf->append(sinfo->getLanguage());
 
-        xInterface.set( m_xContext->getValueByName( buf.makeStringAndClear() ), UNO_QUERY_THROW );
-        xScriptInvocation.set( xInterface, UNO_QUERY_THROW );
+        Any a = m_xContext->getValueByName(buf->makeStringAndClear());
+
+        if ( sal_False == ( a >>= xInterface ) )
+        {
+            throw RuntimeException( 
+                sinfo->getLanguage().concat( OUSTR( " runtime support is not installed for this language" ) ),
+                Reference< XInterface >() );
+        }
+        validateXRef( xInterface,
+            "ScriptRuntimeManager::GetScriptRuntime: cannot get appropriate ScriptRuntime Service"
+        );
+        xScriptInvocation = Reference< runtime::XScriptInvocation >( xInterface, UNO_QUERY_THROW );
     }
     catch ( Exception & e )
     {
@@ -129,15 +142,13 @@ throw( RuntimeException )
 
     try
     {
-        Reference< XInterface > xInterface(
-            m_xMgr->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "drafts.com.sun.star.script.framework.runtime.DefaultScriptNameResolver" )),
-                m_xContext
-            ),
-            UNO_SET_THROW
-        );
-        xScriptNameResolver.set( xInterface, UNO_QUERY_THROW );
+        Reference< XInterface > xInterface = m_xMgr->createInstanceWithContext(
+            OUString::createFromAscii(
+                "drafts.com.sun.star.script.framework.runtime.DefaultScriptNameResolver" ),
+                m_xContext );
+        validateXRef( xInterface,
+            "ScriptRuntimeManager::GetScriptRuntime: cannot get instance of DefaultScriptNameResolver" );
+        xScriptNameResolver = Reference< runtime::XScriptNameResolver >( xInterface, UNO_QUERY_THROW );
     }
     catch ( Exception & e )
     {
@@ -170,8 +181,9 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
 
     try
     {
-        Reference< storage::XScriptInfo > resolvedScript = resolve( scriptURI, resolvedCtx );
-        ENSURE_OR_THROW( resolvedScript.is(), "ScriptRuntimeManager::invoke: No resolvedURI" );
+        Reference< storage::XScriptInfo > resolvedScript = resolve( scriptURI,
+            resolvedCtx );
+        validateXRef( resolvedScript, "ScriptRuntimeManager::invoke: No resolvedURI" );
 
         Reference< beans::XPropertySet > xPropSetResolvedCtx;
         if ( sal_False == ( resolvedCtx >>= xPropSetResolvedCtx ) )
@@ -179,7 +191,7 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
             throw RuntimeException( OUSTR(
                 "ScriptRuntimeManager::invoke : unable to get XPropSetScriptingContext from param" ),
                 Reference< XInterface > () );
-        }
+        }   
 
         Any any = xPropSetResolvedCtx->getPropertyValue(
             scriptingConstantsPool.RESOLVED_STORAGE_ID );
@@ -193,17 +205,17 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
 
         OSL_TRACE("Storage sid is: %d\n", resolvedSid);
 
-        // modifying the XPropertySet on the resolved Context to contain the
-        // full script info
+        // modifying the XPropertySet on the resolved Context to contain the 
+        // full script info 
         Any aResolvedScript;
         aResolvedScript <<= resolvedScript;
 
-        xPropSetResolvedCtx->setPropertyValue( scriptingConstantsPool.SCRIPT_INFO,
+        xPropSetResolvedCtx->setPropertyValue( scriptingConstantsPool.SCRIPT_INFO, 
                 aResolvedScript );
 
         Reference< runtime::XScriptInvocation > xScriptInvocation =
             getScriptRuntime( resolvedScript );
-        ENSURE_OR_THROW( xScriptInvocation.is(),
+        validateXRef( xScriptInvocation,
             "ScriptRuntimeManager::invoke: cannot get instance of language specific runtime." );
 
         // the scriptURI is currently passed to the language-dept runtime but
@@ -213,13 +225,19 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
                                              aOutParamIndex, aOutParam );
 
         // need to dispose of filesystem storage
-        OUString filesysString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "location=filesystem" ));
+        OUString filesysString = OUString::createFromAscii( 
+                                        "location=filesystem" );
         if ( scriptURI.indexOf( filesysString ) != -1 )
         {
-            Any a = m_xContext->getValueByName(
-                    scriptingConstantsPool.SCRIPTSTORAGEMANAGER_SERVICE );
-            Reference < lang::XEventListener > xEL_ScriptStorageManager( a, UNO_QUERY_THROW );
+            Any a = m_xContext->getValueByName( 
+                    scriptingConstantsPool.SCRIPTSTORAGEMANAGER_SERVICE );   
+            Reference < lang::XEventListener > xEL_ScriptStorageManager;
+            if ( sal_False == ( a >>= xEL_ScriptStorageManager ) )
+            {
+                throw RuntimeException( OUSTR( "ScriptRuntimeManager::invoke: can't get ScriptStorageManager XEventListener interface when trying to dispose of filesystem storage" ),
+                        Reference< XInterface > () );
+            }
+            validateXRef( xEL_ScriptStorageManager, "Cannot get XEventListener from ScriptStorageManager" );
             lang::EventObject event(resolvedScript);
             xEL_ScriptStorageManager->disposing( event );
         }
@@ -282,7 +300,7 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
 
 //*************************************************************************
 // XScriptNameResolver implementation
-Reference< storage::XScriptInfo > SAL_CALL
+Reference< storage::XScriptInfo > SAL_CALL 
 ScriptRuntimeManager::resolve( const ::rtl::OUString& scriptURI,
     Any& invocationCtx )
 throw( lang::IllegalArgumentException, script::CannotConvertException, RuntimeException )
@@ -291,7 +309,7 @@ throw( lang::IllegalArgumentException, script::CannotConvertException, RuntimeEx
     Reference< storage::XScriptInfo > resolvedURI;
 
     Reference< runtime::XScriptNameResolver > xScriptNameResolver = getScriptNameResolver();
-    ENSURE_OR_THROW( xScriptNameResolver.is(),
+    validateXRef( xScriptNameResolver,
         "ScriptRuntimeManager::resolve: No ScriptNameResolver" );
 
     try
@@ -300,7 +318,7 @@ throw( lang::IllegalArgumentException, script::CannotConvertException, RuntimeEx
     }
     catch ( lang::IllegalArgumentException & iae )
     {
-        OUString temp =
+        OUString temp = 
             OUSTR( "ScriptRuntimeManager::resolve IllegalArgumentException: " );
         throw lang::IllegalArgumentException( temp.concat( iae.Message ),
                                               Reference< XInterface > (),
@@ -467,13 +485,75 @@ extern "C"
     }
 
     /**
+     * This function creates an implementation section in the registry and another subkey
+     *
+     * for each supported service.
+     * @param pServiceManager   the service manager
+     * @param pRegistryKey      the registry key
+     */
+    sal_Bool SAL_CALL component_writeInfo( lang::XMultiServiceFactory * pServiceManager,
+        registry::XRegistryKey * pRegistryKey )
+    {
+        if (::cppu::component_writeInfoHelper( pServiceManager, pRegistryKey,
+            ::scripting_runtimemgr::s_entries ))
+        {
+            try
+            {
+                // register RuntimeManager singleton
+
+                registry::XRegistryKey * pKey =
+                    reinterpret_cast< registry::XRegistryKey * >(pRegistryKey);
+
+                Reference< registry::XRegistryKey > xKey(
+                    pKey->createKey(
+ 
+                    OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager/UNO/SINGLETONS/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeManager")));
+                    xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager") );
+
+                // ScriptStorage Mangaer singleton
+
+                xKey = pKey->createKey(
+                    OUSTR("drafts.com.sun.star.script.framework.storage.ScriptStorageManager/UNO/SINGLETONS/drafts.com.sun.star.script.framework.storage.theScriptStorageManager"));
+                 xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.storage.ScriptStorageManager") );
+                // Singleton entries are not handled by the setup process
+                // below is the only alternative at the momement which 
+                // is to programmatically do this.
+
+                // "Java" Runtime singleton entry
+
+                xKey = pKey->createKey(
+                    OUSTR("com.sun.star.scripting.runtime.java.ScriptRuntimeForJava$_ScriptRuntimeForJava/UNO/SINGLETONS/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeForJava"));
+                 xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeForJava") );
+
+                // "JavaScript" Runtime singleton entry
+
+                xKey = pKey->createKey(
+                    OUSTR("com.sun.star.scripting.runtime.javascript.ScriptRuntimeForJavaScript$_ScriptRuntimeForJavaScript/UNO/SINGLETONS/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeForJavaScript"));
+                 xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeForJavaScript") );
+
+                // "BeanShell" Runtime singleton entry
+
+                xKey = pKey->createKey(
+                    OUSTR("com.sun.star.scripting.runtime.beanshell.ScriptRuntimeForBeanShell$_ScriptRuntimeForBeanShell/UNO/SINGLETONS/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeForBeanShell"));
+                 xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeForBeanShell") );
+
+                return sal_True;
+            }
+            catch (Exception & exc)
+            {
+            }
+        }
+        return sal_False;
+    }
+
+    /**
      * This function is called to get service factories for an implementation.
      *
      * @param pImplName       name of implementation
      * @param pServiceManager a service manager, need for component creation
      * @param pRegistryKey    the registry key for this component, need for persistent
      *                        data
-     * @return a component factory
+     * @return a component factory 
      */
     void * SAL_CALL component_getFactory( const sal_Char * pImplName,
         lang::XMultiServiceFactory * pServiceManager,

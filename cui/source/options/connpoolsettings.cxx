@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 #include "connpoolsettings.hxx"
 
 //........................................................................
@@ -37,6 +40,13 @@ namespace offapp
     //= DriverPooling
     //====================================================================
     //--------------------------------------------------------------------
+    DriverPooling::DriverPooling()
+        :bEnabled(sal_False)
+        ,nTimeoutSeconds(0)
+    {
+    }
+
+    //--------------------------------------------------------------------
     DriverPooling::DriverPooling( const String& _rName, sal_Bool _bEnabled, const sal_Int32 _nTimeout )
         :sName(_rName)
         ,bEnabled(_bEnabled)
@@ -47,9 +57,9 @@ namespace offapp
     //--------------------------------------------------------------------
     sal_Bool DriverPooling::operator == (const DriverPooling& _rR) const
     {
-        return  (sName == _rR.sName)
-            &&  (bEnabled == _rR.bEnabled)
-            &&  (nTimeoutSeconds == _rR.nTimeoutSeconds);
+        return	(sName == _rR.sName)
+            &&	(bEnabled == _rR.bEnabled)
+            &&	(nTimeoutSeconds == _rR.nTimeoutSeconds);
     }
 
     //====================================================================
@@ -65,7 +75,7 @@ namespace offapp
     //====================================================================
     TYPEINIT1( DriverPoolingSettingsItem, SfxPoolItem )
     //--------------------------------------------------------------------
-    DriverPoolingSettingsItem::DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings &_rSettings )
+    DriverPoolingSettingsItem::DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings _rSettings )
         :SfxPoolItem(_nId)
         ,m_aSettings(_rSettings)
     {
@@ -105,7 +115,7 @@ namespace offapp
     //--------------------------------------------------------------------
 
 //........................................................................
-}   // namespace offapp
+}	// namespace offapp
 //........................................................................
 
 

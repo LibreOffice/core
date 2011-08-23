@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,27 +26,22 @@
  *
  ************************************************************************/
 
-#ifndef DOM_ELEMENTLIST_HXX
-#define DOM_ELEMENTLIST_HXX
+#ifndef _ELEMENTLIST_HXX
+#define _ELEMENTLIST_HXX
 
 #include <vector>
-
-#include <boost/scoped_array.hpp>
-
-#include <libxml/tree.h>
-
 #include <sal/types.h>
-#include <rtl/ref.hxx>
-
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/events/XEvent.hpp>
 #include <com/sun/star/xml/dom/events/XEventListener.hpp>
-
-#include <cppuhelper/implbase2.hxx>
-
+#include "element.hxx"
+#include "document.hxx"
+#include "libxml/tree.h"
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -55,30 +50,26 @@ using namespace com::sun::star::xml::dom::events;
 
 namespace DOM
 {
-    class CElement;
+    typedef std::vector< xmlNodePtr > nodevector;
 
-    typedef std::vector< xmlNodePtr > nodevector_t;
-
-    class CElementList
-        : public cppu::WeakImplHelper2< XNodeList,
-                com::sun::star::xml::dom::events::XEventListener >
+    class CElementList : public cppu::WeakImplHelper2< XNodeList, com::sun::star::xml::dom::events::XEventListener >
     {
     private:
-        ::rtl::Reference<CElement> const m_pElement;
-        ::osl::Mutex & m_rMutex;
-        ::boost::scoped_array<xmlChar> const m_pName;
-        ::boost::scoped_array<xmlChar> const m_pURI;
-        bool m_bRebuild;
-        nodevector_t m_nodevector;
-
+        const CElement* m_pElement;
+        const OUString m_aName;
+        const OUString m_aURI;
+        xmlChar *xName;
+        xmlChar *xURI;
+        sal_Bool m_bRebuild;
+        nodevector m_nodevector;
+        
+        
         void buildlist(xmlNodePtr pNode, sal_Bool start=sal_True);
-        void registerListener(CElement & rElement);
+        void registerListener(const CElement* pElement);
 
     public:
-        CElementList(::rtl::Reference<CElement> const& pElement,
-                ::osl::Mutex & rMutex,
-                OUString const& rName, OUString const*const pURI = 0);
-
+        CElementList(const CElement* aDoc, const OUString& aName);
+        CElementList(const CElement* aDoc, const OUString& aName, const OUString& aURI);
         /**
         The number of nodes in the list.
         */
@@ -86,12 +77,10 @@ namespace DOM
         /**
         Returns the indexth item in the collection.
         */
-        virtual Reference< XNode > SAL_CALL item(sal_Int32 index)
-            throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL item(sal_Int32 index) throw (RuntimeException);
 
         // XEventListener
-        virtual void SAL_CALL handleEvent(const Reference< XEvent >& evt)
-            throw (RuntimeException);
+        virtual void SAL_CALL handleEvent(const Reference< XEvent >& evt) throw (RuntimeException);
     };
 }
 

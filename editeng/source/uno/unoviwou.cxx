@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,13 +51,13 @@ SvxDrawOutlinerViewForwarder::~SvxDrawOutlinerViewForwarder()
 
 Point SvxDrawOutlinerViewForwarder::GetTextOffset() const
 {
-    // calc text offset from shape anchor
+    // #101029# calc text offset from shape anchor
     Rectangle aOutputRect( mrOutlinerView.GetOutputArea() );
 
     return aOutputRect.TopLeft() - maTextShapeTopLeft;
 }
 
-sal_Bool SvxDrawOutlinerViewForwarder::IsValid() const
+BOOL SvxDrawOutlinerViewForwarder::IsValid() const
 {
     return sal_True;
 }
@@ -70,6 +70,7 @@ Rectangle SvxDrawOutlinerViewForwarder::GetVisArea() const
     {
         Rectangle aVisArea = mrOutlinerView.GetVisArea();
 
+        // #101029#
         Point aTextOffset( GetTextOffset() );
         aVisArea.Move( aTextOffset.X(), aTextOffset.Y() );
 
@@ -99,6 +100,7 @@ Point SvxDrawOutlinerViewForwarder::LogicToPixel( const Point& rPoint, const Map
         Point aPoint1( rPoint );
         Point aTextOffset( GetTextOffset() );
 
+        // #101029#
         aPoint1.X() += aTextOffset.X();
         aPoint1.Y() += aTextOffset.Y();
 
@@ -124,6 +126,7 @@ Point SvxDrawOutlinerViewForwarder::PixelToLogic( const Point& rPoint, const Map
         Point aPoint2( OutputDevice::LogicToLogic( aPoint1,
                                                    aMapMode.GetMapUnit(),
                                                    rMapMode ) );
+        // #101029#
         Point aTextOffset( GetTextOffset() );
 
         aPoint2.X() -= aTextOffset.X();

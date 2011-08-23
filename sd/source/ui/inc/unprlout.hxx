@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class SdPresentationLayoutUndoAction : public SdUndoAction
     String          aNewLayoutName;
     AutoLayout      eOldAutoLayout;
     AutoLayout      eNewAutoLayout;
-    sal_Bool            bSetAutoLayout;     // sal_True: AutoLayout aendern
+    BOOL            bSetAutoLayout;     // TRUE: AutoLayout aendern
     SdPage*         pPage;
     String          aComment;
 
@@ -52,7 +52,7 @@ public:
                          String          aTheNewLayoutName,
                          AutoLayout      eTheOldAutoLayout,
                          AutoLayout      eTheNewAutoLayout,
-                         sal_Bool            bSet,
+                         BOOL            bSet,
                          SdPage*         pThePage);
 
     virtual ~SdPresentationLayoutUndoAction();

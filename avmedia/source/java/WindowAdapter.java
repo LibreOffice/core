@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ public class WindowAdapter
     private LinkedList      maMouseMotionListeners = new LinkedList();
     private LinkedList      maPaintListeners = new LinkedList();
     private boolean         mbShift = false, mbMod1 = false, mbMod2 = false;
-
+    
     // -----------------
     // - WindowAdapter -
     // -----------------
@@ -53,7 +53,7 @@ public class WindowAdapter
     }
 
     //----------------------------------------------------------------------------------
-
+    
     public java.awt.Frame getJavaFrame()
     {
         return maFrame;
@@ -64,7 +64,7 @@ public class WindowAdapter
     private short implGetUNOKeyCode( int nJavaKeyCode )
     {
         short nRet = 0;
-
+        
         switch( nJavaKeyCode )
         {
             case( java.awt.event.KeyEvent.VK_NUMPAD0 ):
@@ -164,9 +164,21 @@ public class WindowAdapter
             case( java.awt.event.KeyEvent.VK_MULTIPLY ):    nRet = com.sun.star.awt.Key.MULTIPLY; break;
             case( java.awt.event.KeyEvent.VK_DIVIDE ):      nRet = com.sun.star.awt.Key.DIVIDE; break;
             case( java.awt.event.KeyEvent.VK_DECIMAL ):     nRet = com.sun.star.awt.Key.POINT; break;
+            // case( java.awt.event.KeyEvent.VK_ COMMA; break;
             case( java.awt.event.KeyEvent.VK_LESS ):        nRet = com.sun.star.awt.Key.LESS; break;
             case( java.awt.event.KeyEvent.VK_GREATER ):     nRet = com.sun.star.awt.Key.GREATER; break;
             case( java.awt.event.KeyEvent.VK_EQUALS ):      nRet = com.sun.star.awt.Key.EQUAL; break;
+            // case( java.awt.event.KeyEvent.VK_ OPEN; break;
+            // case( java.awt.event.KeyEvent.VK_ CUT; break;
+            // case( java.awt.event.KeyEvent.VK_ COPY; break;
+            // case( java.awt.event.KeyEvent.VK_ PASTE; break;
+            // case( java.awt.event.KeyEvent.VK_ UNDO; break;
+            // case( java.awt.event.KeyEvent.VK_ REPEAT; break;
+            // case( java.awt.event.KeyEvent.VK_ FIND; break;
+            // case( java.awt.event.KeyEvent.VK_ PROPERTIES; break;
+            // case( java.awt.event.KeyEvent.VK_ FRONT; break;
+            // case( java.awt.event.KeyEvent.VK_ CONTEXTMENU; break;
+            // case( java.awt.event.KeyEvent.VK_ HELP; break;
 
             default:
             break;
@@ -334,7 +346,7 @@ public class WindowAdapter
     }
 
     //----------------------------------------------------------------------------------
-
+    
     public void fireDisposingEvent()
     {
         ListIterator aIter = maEventListeners.listIterator( 0 );

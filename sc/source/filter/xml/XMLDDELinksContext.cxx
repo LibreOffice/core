@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ using rtl::OUString;
 //------------------------------------------------------------------
 
 ScXMLDDELinksContext::ScXMLDDELinksContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
@@ -66,7 +66,7 @@ ScXMLDDELinksContext::~ScXMLDDELinksContext()
     GetScImport().UnlockSolarMutex();
 }
 
-SvXMLImportContext *ScXMLDDELinksContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLDDELinksContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -87,7 +87,7 @@ void ScXMLDDELinksContext::EndElement()
 }
 
 ScXMLDDELinkContext::ScXMLDDELinkContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
@@ -109,7 +109,7 @@ ScXMLDDELinkContext::~ScXMLDDELinkContext()
 {
 }
 
-SvXMLImportContext *ScXMLDDELinkContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLDDELinkContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -137,7 +137,7 @@ void ScXMLDDELinkContext::CreateDDELink()
         String sAppl(sApplication);
         String sTop(sTopic);
         String sIt(sItem);
-        GetScImport().GetDocument()->CreateDdeLink(sAppl, sTop, sIt, nMode, ScMatrixRef());
+        GetScImport().GetDocument()->CreateDdeLink(sAppl, sTop, sIt, nMode);
         sal_uInt16 nPos;
         if(GetScImport().GetDocument()->FindDdeLink(sAppl, sTop, sIt, nMode, nPos))
             nPosition = nPos;
@@ -165,10 +165,10 @@ void ScXMLDDELinkContext::EndElement()
     {
         bool bSizeMatch = (static_cast<size_t>(nColumns * nRows) == aDDELinkTable.size());
         DBG_ASSERT( bSizeMatch, "ScXMLDDELinkContext::EndElement: matrix dimension doesn't match cells count");
-        // Excel writes bad ODF in that it does not write the
+        // Excel writes bad ODF in that it does not write the 
         // table:number-columns-repeated attribute of the
-        // <table:table-column> element, but apparently uses the number of
-        // <table:table-cell> elements within a <table:table-row> element to
+        // <table:table-column> element, but apparently uses the number of 
+        // <table:table-cell> elements within a <table:table-row> element to 
         // determine the column count instead. Be lenient ...
         if (!bSizeMatch && nColumns == 1)
         {
@@ -205,12 +205,12 @@ void ScXMLDDELinkContext::EndElement()
             ++aItr;
         }
 
-        GetScImport().GetDocument()->SetDdeLinkResultMatrix( static_cast< sal_uInt16 >( nPosition ), pMatrix );
+        GetScImport().GetDocument()->SetDdeLinkResultMatrix( static_cast< USHORT >( nPosition ), pMatrix );
     }
 }
 
 ScXMLDDESourceContext::ScXMLDDESourceContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -220,14 +220,14 @@ ScXMLDDESourceContext::ScXMLDDESourceContext( ScXMLImport& rImport,
 {
     if( !xAttrList.is() ) return;
 
-    sal_Int16               nAttrCount      = xAttrList->getLength();
+    sal_Int16				nAttrCount		= xAttrList->getLength();
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
+        const rtl::OUString& sAttrName	(xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sValue		(xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
-        sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix		= GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if (nPrefix == XML_NAMESPACE_OFFICE)
         {
@@ -254,7 +254,7 @@ ScXMLDDESourceContext::~ScXMLDDESourceContext()
 {
 }
 
-SvXMLImportContext *ScXMLDDESourceContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLDDESourceContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
@@ -270,7 +270,7 @@ void ScXMLDDESourceContext::EndElement()
 }
 
 ScXMLDDETableContext::ScXMLDDETableContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */,
@@ -285,7 +285,7 @@ ScXMLDDETableContext::~ScXMLDDETableContext()
 {
 }
 
-SvXMLImportContext *ScXMLDDETableContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLDDETableContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -311,7 +311,7 @@ void ScXMLDDETableContext::EndElement()
 }
 
 ScXMLDDEColumnContext::ScXMLDDEColumnContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -322,14 +322,14 @@ ScXMLDDEColumnContext::ScXMLDDEColumnContext( ScXMLImport& rImport,
     if( !xAttrList.is() ) return;
     sal_Int32 nCols(1);
 
-    sal_Int16               nAttrCount      = xAttrList->getLength();
+    sal_Int16				nAttrCount		= xAttrList->getLength();
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
+        const rtl::OUString& sAttrName	(xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sValue		(xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
-        sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix		= GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if (nPrefix == XML_NAMESPACE_TABLE)
             if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_REPEATED))
@@ -342,7 +342,7 @@ ScXMLDDEColumnContext::~ScXMLDDEColumnContext()
 {
 }
 
-SvXMLImportContext *ScXMLDDEColumnContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLDDEColumnContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
@@ -357,7 +357,7 @@ void ScXMLDDEColumnContext::EndElement()
 }
 
 ScXMLDDERowContext::ScXMLDDERowContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -368,14 +368,14 @@ ScXMLDDERowContext::ScXMLDDERowContext( ScXMLImport& rImport,
 {
     if( !xAttrList.is() ) return;
 
-    sal_Int16               nAttrCount      = xAttrList->getLength();
+    sal_Int16				nAttrCount		= xAttrList->getLength();
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
+        const rtl::OUString& sAttrName	(xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sValue		(xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
-        sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix		= GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if (nPrefix == XML_NAMESPACE_TABLE)
             if (IsXMLToken(aLocalName, XML_NUMBER_ROWS_REPEATED))
@@ -388,7 +388,7 @@ ScXMLDDERowContext::~ScXMLDDERowContext()
 {
 }
 
-SvXMLImportContext *ScXMLDDERowContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLDDERowContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -411,7 +411,7 @@ void ScXMLDDERowContext::EndElement()
 }
 
 ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
+                                      USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -427,14 +427,14 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
 {
     if( !xAttrList.is() ) return;
 
-    sal_Int16               nAttrCount      = xAttrList->getLength();
+    sal_Int16				nAttrCount		= xAttrList->getLength();
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const rtl::OUString& sTempValue (xAttrList->getValueByIndex( nIndex ));
+        const rtl::OUString& sAttrName	(xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sTempValue	(xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
-        sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix		= GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if (nPrefix == XML_NAMESPACE_OFFICE)
         {
@@ -443,19 +443,19 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
                 if (IsXMLToken(sTempValue, XML_STRING))
                     bString = sal_True;
                 else
-                    bString = false;
+                    bString = sal_False;
             }
             else if (IsXMLToken(aLocalName, XML_STRING_VALUE))
             {
                 sValue = sTempValue;
-                bEmpty = false;
+                bEmpty = sal_False;
                 bString2 = sal_True;
             }
             else if (IsXMLToken(aLocalName, XML_VALUE))
             {
                 GetScImport().GetMM100UnitConverter().convertDouble(fValue, sTempValue);
-                bEmpty = false;
-                bString2 = false;
+                bEmpty = sal_False;
+                bString2 = sal_False;
             }
         }
         else if (nPrefix == XML_NAMESPACE_TABLE)
@@ -470,7 +470,7 @@ ScXMLDDECellContext::~ScXMLDDECellContext()
 {
 }
 
-SvXMLImportContext *ScXMLDDECellContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContext *ScXMLDDECellContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )

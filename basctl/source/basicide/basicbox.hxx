@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@ class LibBoxControl: public SfxToolBoxControl
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
 
-                        LibBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+                        LibBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
                         ~LibBoxControl();
 
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
+    virtual void		StateChanged( USHORT nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
+    virtual Window*		CreateItemWindow( Window *pParent );
 };
 
 /** base class for list boxes which need to update their content according to the list
@@ -83,31 +83,31 @@ private:
 class BasicLibBox : public DocListenerBox
 {
 private:
-    String          aCurText;
-    sal_Bool            bIgnoreSelect;
-    sal_Bool            bFillBox;
+    String			aCurText;
+    BOOL			bIgnoreSelect;
+    BOOL			bFillBox;
     com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 
-    void            ReleaseFocus();
+    void			ReleaseFocus();
     void            InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLocation );
 
     void            ClearBox();
-    void            NotifyIDE();
+    void			NotifyIDE();
 
     // DocListenerBox
-    virtual void    FillBox();
+    virtual void	FillBox();
 
 protected:
-    virtual void    Select();
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual void 	Select();
+    virtual long	PreNotify( NotifyEvent& rNEvt );
 
 public:
                     BasicLibBox( Window* pParent,
                                  const com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
                     ~BasicLibBox();
 
-    using           Window::Update;
-    void            Update( const SfxStringItem* pItem );
+    using			Window::Update;
+    void			Update( const SfxStringItem* pItem );
 };
 
 class LanguageBoxControl: public SfxToolBoxControl
@@ -115,40 +115,40 @@ class LanguageBoxControl: public SfxToolBoxControl
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
 
-                        LanguageBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+                        LanguageBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
                         ~LanguageBoxControl();
 
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
+    virtual void		StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual Window*		CreateItemWindow( Window *pParent );
 };
 
 class BasicLanguageBox : public DocListenerBox
 {
 private:
-    String          m_sNotLocalizedStr;
-    String          m_sDefaultLanguageStr;
-    String          m_sCurrentText;
+    String			m_sNotLocalizedStr;
+    String			m_sDefaultLanguageStr;
+    String			m_sCurrentText;
 
-    bool            m_bIgnoreSelect;
+    bool			m_bIgnoreSelect;
 
     void            ClearBox();
-    void            SetLanguage();
+    void			SetLanguage();
 
     // DocListenerBox
-    virtual void    FillBox();
+    virtual void	FillBox();
 
 protected:
-    virtual void    Select();
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual void 	Select();
+    virtual long	PreNotify( NotifyEvent& rNEvt );
 
 public:
     BasicLanguageBox( Window* pParent );
     ~BasicLanguageBox();
 
-    using           Window::Update;
-    void            Update( const SfxStringItem* pItem );
+    using			Window::Update;
+    void			Update( const SfxStringItem* pItem );
 };
 
-#endif  // _BASICBOX_HXX
+#endif	// _BASICBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

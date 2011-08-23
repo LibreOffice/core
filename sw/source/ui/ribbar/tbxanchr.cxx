@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 
 
-#include <string>
+#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 #include <vcl/timer.hxx>
 #include <sfx2/app.hxx>
 #include <svx/htmlmode.hxx>
@@ -48,6 +48,7 @@
 #include "wrtsh.hxx"
 #include "view.hxx"
 #include "viewopt.hxx"
+#include "errhdl.hxx"
 #include "ribbar.hrc"
 #include "tbxanchr.hxx"
 
@@ -55,18 +56,30 @@
 
 SFX_IMPL_TOOLBOX_CONTROL(SwTbxAnchor, SfxUInt16Item);
 
-SwTbxAnchor::SwTbxAnchor( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+/******************************************************************************
+ *	Beschreibung:
+ ******************************************************************************/
+
+SwTbxAnchor::SwTbxAnchor( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     nActAnchorId(0)
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
+/******************************************************************************
+ *	Beschreibung:
+ ******************************************************************************/
+
  SwTbxAnchor::~SwTbxAnchor()
 {
 }
 
-void  SwTbxAnchor::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
+/******************************************************************************
+ *	Beschreibung:
+ ******************************************************************************/
+
+void  SwTbxAnchor::StateChanged( USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
 
@@ -79,11 +92,19 @@ void  SwTbxAnchor::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const
 
 }
 
+/******************************************************************************
+ *	Beschreibung:
+ ******************************************************************************/
+
 SfxPopupWindow* SwTbxAnchor::CreatePopupWindow()
 {
     SwTbxAnchor::Click();
     return 0;
 }
+
+/******************************************************************************
+ *	Beschreibung:
+ ******************************************************************************/
 
 void  SwTbxAnchor::Click()
 {
@@ -100,6 +121,8 @@ void  SwTbxAnchor::Click()
             pDispatch = pViewFrame->GetDispatcher();
     }
 
+//    SfxDispatcher* pDispatch = GetBindings().GetDispatcher();
+//    SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : 0;
     SwView* pActiveView = 0;
     if(pViewFrame)
     {
@@ -117,15 +140,15 @@ void  SwTbxAnchor::Click()
     }
     if(!pActiveView)
     {
-        OSL_FAIL("No active view found");
+        OSL_ENSURE(false, "No active view found");
         return;
     }
     SwWrtShell* pWrtShell = pActiveView->GetWrtShellPtr();
     aPopMenu.EnableItem( FN_TOOL_ANKER_FRAME, 0 != pWrtShell->IsFlyInFly() );
 
     Rectangle aRect(GetToolBox().GetItemRect(GetId()));
-    sal_uInt16 nHtmlMode = ::GetHtmlMode((SwDocShell*)SfxObjectShell::Current());
-    sal_Bool bHtmlModeNoAnchor = ( nHtmlMode & HTMLMODE_ON) && 0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS);
+    USHORT nHtmlMode = ::GetHtmlMode((SwDocShell*)SfxObjectShell::Current());
+    BOOL bHtmlModeNoAnchor = ( nHtmlMode & HTMLMODE_ON) && 0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS);
 
     if (bHtmlModeNoAnchor || pWrtShell->IsInHeaderFooter())
         aPopMenu.RemoveItem(aPopMenu.GetItemPos(FN_TOOL_ANKER_PAGE));
@@ -134,7 +157,7 @@ void  SwTbxAnchor::Click()
         aPopMenu.CheckItem(nActAnchorId);
 
 
-    sal_uInt16 nSlotId = aPopMenu.Execute(&GetToolBox(), aRect);
+    USHORT nSlotId = aPopMenu.Execute(&GetToolBox(), aRect);
     GetToolBox().EndSelection();
 
     if (nSlotId)

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,12 +44,12 @@ class SwFtnFrm;
 class SwFtnContFrm: public SwLayoutFrm
 {
 public:
-    SwFtnContFrm( SwFrmFmt*, SwFrm* );
+    SwFtnContFrm( SwFrmFmt* );
 
     const SwFtnFrm* FindFootNote() const;
 
-    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+    virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
     virtual void    Format( const SwBorderAttrs *pAttrs = 0 );
     virtual void    PaintBorder( const SwRect &, const SwPageFrm *pPage,
                                  const SwBorderAttrs & ) const;
@@ -62,30 +62,30 @@ class SwFtnFrm: public SwLayoutFrm
     // 0     wenn kein Follow vorhanden,
     // this  beim letzten
     // der Follow sonst.
-    SwFtnFrm     *pFollow;
-    SwFtnFrm     *pMaster;      //Der FtnFrm dessen Follow ich bin.
-    SwCntntFrm   *pRef;         //In diesem CntntFrm steht die Fussnotenref.
-    SwTxtFtn     *pAttr;        //Fussnotenattribut (zum wiedererkennen)
+    SwFtnFrm	 *pFollow;
+    SwFtnFrm	 *pMaster;		//Der FtnFrm dessen Follow ich bin.
+    SwCntntFrm	 *pRef;			//In diesem CntntFrm steht die Fussnotenref.
+    SwTxtFtn	 *pAttr;		//Fussnotenattribut (zum wiedererkennen)
 
-    sal_Bool bBackMoveLocked : 1;   //Absaetze in dieser Fussnote duerfen derzeit
+    BOOL bBackMoveLocked : 1;   //Absaetze in dieser Fussnote duerfen derzeit
                                 //nicht rueckwaerts fliessen.
     // --> OD 2005-05-18 #i49383# - control unlock of position of lower anchored objects.
     bool mbUnlockPosOfLowerObjs : 1;
     // <--
 #if OSL_DEBUG_LEVEL > 1
 protected:
-    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+    virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
 #endif
 
 
 public:
-    SwFtnFrm( SwFrmFmt*, SwFrm*, SwCntntFrm*, SwTxtFtn* );
+    SwFtnFrm( SwFrmFmt*, SwCntntFrm*, SwTxtFtn* );
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 
-    sal_Bool operator<( const SwTxtFtn* pTxtFtn ) const;
+    BOOL operator<( const SwTxtFtn* pTxtFtn ) const;
 
 #if OSL_DEBUG_LEVEL > 1
     // in a non pro version test if the attribute has the same
@@ -93,20 +93,20 @@ public:
     const SwCntntFrm *GetRef() const;
          SwCntntFrm  *GetRef();
 #else
-    const SwCntntFrm *GetRef() const    { return pRef; }
-         SwCntntFrm  *GetRef()          { return pRef; }
+    const SwCntntFrm *GetRef() const	{ return pRef; }
+         SwCntntFrm  *GetRef()  		{ return pRef; }
 #endif
     const SwCntntFrm *GetRefFromAttr()  const;
           SwCntntFrm *GetRefFromAttr();
 
-    const SwFtnFrm *GetFollow() const   { return pFollow; }
-          SwFtnFrm *GetFollow()         { return pFollow; }
+    const SwFtnFrm *GetFollow() const 	{ return pFollow; }
+          SwFtnFrm *GetFollow() 		{ return pFollow; }
 
-    const SwFtnFrm *GetMaster() const   { return pMaster; }
-          SwFtnFrm *GetMaster()         { return pMaster; }
+    const SwFtnFrm *GetMaster() const	{ return pMaster; }
+          SwFtnFrm *GetMaster() 		{ return pMaster; }
 
-    const SwTxtFtn   *GetAttr() const   { return pAttr; }
-          SwTxtFtn   *GetAttr()         { return pAttr; }
+    const SwTxtFtn   *GetAttr() const 	{ return pAttr; }
+          SwTxtFtn	 *GetAttr() 	  	{ return pAttr; }
 
     void SetFollow( SwFtnFrm *pNew ) { pFollow = pNew; }
     void SetMaster( SwFtnFrm *pNew ) { pMaster = pNew; }
@@ -114,13 +114,13 @@ public:
 
     void InvalidateNxtFtnCnts( SwPageFrm* pPage );
 
-    void LockBackMove()     { bBackMoveLocked = sal_True; }
-    void UnlockBackMove()   { bBackMoveLocked = sal_False;}
-    sal_Bool IsBackMoveLocked() { return bBackMoveLocked; }
+    void LockBackMove()		{ bBackMoveLocked = TRUE; }
+    void UnlockBackMove()   { bBackMoveLocked = FALSE;}
+    BOOL IsBackMoveLocked() { return bBackMoveLocked; }
 
     // Verhindert, dass der letzte Inhalt den SwFtnFrm mitloescht (Cut())
-    inline void ColLock()       { bColLocked = sal_True; }
-    inline void ColUnlock()     { bColLocked = sal_False; }
+    inline void ColLock()		{ bColLocked = TRUE; }
+    inline void ColUnlock()   	{ bColLocked = FALSE; }
 
     // --> OD 2005-05-18 #i49383#
     inline void UnlockPosOfLowerObjs()
@@ -148,6 +148,6 @@ public:
     SwCntntFrm* FindLastCntnt();
 };
 
-#endif  //_FTNFRM_HXX
+#endif	//_FTNFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

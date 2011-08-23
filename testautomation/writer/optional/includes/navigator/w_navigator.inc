@@ -80,13 +80,13 @@ testcase tViewNavigator1
     try
 		Navigator.Size (300, 400)
 	catch
-		Warnlog "Sizen Navigator doesn't work"
+		Warnlog "Sizen Navigator doesn't work.. see #i32449"
 	endcatch
     Sleep 1
     try
 		Navigator.Size (xSize%, ySize%)
 	catch
-		Printlog "Sizen Navigator doesn't work"
+		Printlog "Sizen Navigator doesn't work.. see #i32449"
 	endcatch
 
     Sleep 1
@@ -176,12 +176,12 @@ testcase tViewNavigator2
     try
         DocumentWriter.FadeOut
     catch
-        Warnlog "Unable to Fade out Navigator!"
+        Warnlog "#i35096#Unable to Fade out Navigator!"
     endcatch  
     try
         DocumentWriter.FadeIn
     catch
-        Warnlog "Unable to Fade out Navigator!"
+        Warnlog "#i35096#Unable to Fade out Navigator!"
     endcatch
 
     Kontext "Navigator"
@@ -216,8 +216,8 @@ testcase tViewNavigator3
 	'/// Edit / Navigator : check some Navigator-Functions ///
     printlog "- Edit / Navigator : check some Navigator-Functions"
     '/// Open document ( navigator.odt ) ///
-    hFileOpenLocally(  gTesttoolpath + "writer\optional\input\navigator\navigator.odt" )
-    
+    Call hFileOpen ( gTesttoolpath + "writer\optional\input\navigator\navigator.odt" )
+    Call sMakeReadOnlyDocumentEditable
     '/// Open Navigator ///
     Kontext "Navigator"
     if Navigator.NotExists then ViewNavigator
@@ -231,7 +231,7 @@ testcase tViewNavigator3
 		Navigation.TearOff
 		NavigationTearOff = true
 	catch
-		Warnlog "Unable to tear off Navigation Toolbar!"
+		Warnlog "Unable to tear off Navigation Toolbar! (#i32092)"
 	endcatch
 	if NavigationTearOff = true then
 		Sleep 1
@@ -363,8 +363,8 @@ testcase tViewNavigator4
     endif
     printlog "- Edit / Navigator : check entry's in Navigator Index"
     '/// File / Open / 'gTesttoolpath + "writer\optional\input\navigator\navigator.odt"' ///
-    hFileOpenLocally(  gTesttoolpath + "writer\optional\input\navigator\navigator.odt" )
-    
+    Call hFileOpen ( gTesttoolpath + "writer\optional\input\navigator\navigator.odt" )
+    Call sMakeReadOnlyDocumentEditable
     '/// Open Navigator through Edit / Navigator ///
     ViewNavigator
     Kontext "NavigatorWriter"
@@ -432,8 +432,8 @@ testcase tViewNavigator5
 
     printlog "- Edit / Navigator : Check Jumpmark from Index in Navigator"
     '/// File / Open / 'gTesttoolpath + "writer\optional\input\navigator\navigator.odt"'  ///
-    hFileOpenLocally(  gTesttoolpath + "writer\optional\input\navigator\navigator.odt" )
-    
+    Call hFileOpen ( gTesttoolpath + "writer\optional\input\navigator\navigator.odt" )
+    Call sMakeReadOnlyDocumentEditable
     '/// Open Navigator ///
     Kontext "NavigatorWriter"
     if Not NavigatorWriter.Exists then
@@ -617,8 +617,8 @@ testcase tViewNavigator6
     
     printlog "- Edit / Navigator : Rename Objects"
     '/// File / Open / 'gTesttoolpath + "writer\optional\input\navigator\st1_1.sxw" ' ///
-    hFileOpenLocally(  gTesttoolpath + "writer\optional\input\navigator\st1_1.sxw" )
-    
+    Call hFileOpen ( gTesttoolpath + "writer\optional\input\navigator\st1_1.sxw" )
+    Call sMakeReadOnlyDocumentEditable
     Kontext "Navigator"
     '/// Open Navigator ///
     if Navigator.NotExists then ViewNavigator
@@ -674,7 +674,7 @@ testcase tViewNavigator6
     Sleep 2
 
     printlog "- Saving and Loading the document, check settings"
-    hFileOpen( gOfficePath & "user\work\uvobj.odt")
+    Call hFileOpen(gOfficePath + "user\work\uvobj.odt")
     '/// Navigator has to be opened with document ///
     Kontext "Navigator"
     if Navigator.NotExists then

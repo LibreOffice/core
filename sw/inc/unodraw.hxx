@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,16 +32,20 @@
 #include <calbck.hxx>
 #include <frmfmt.hxx>
 #include <com/sun/star/text/XTextContent.hpp>
+// --> OD 2009-01-13 #i59051#
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+// <--
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <cppuhelper/implbase3.hxx> // helper for implementations
 #include <cppuhelper/implbase4.hxx> // helper for implementations
+// --> OD 2004-07-22 #i31698#
 #include <cppuhelper/implbase6.hxx> // helper for implementations
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+// <--
 #include <svl/itemprop.hxx>
 
 class SdrMarkList;
@@ -52,7 +56,7 @@ class SwDoc;
  ******************************************************************************/
 class SwFmDrawPage : public SvxFmDrawPage
 {
-    SdrPageView*        pPageView;
+    SdrPageView*		pPageView;
 protected:
 
     // Erzeugen eines SdrObjects anhand einer Description. Kann von
@@ -64,13 +68,14 @@ public:
     SwFmDrawPage( SdrPage* pPage );
     virtual ~SwFmDrawPage() throw ();
 
-    const SdrMarkList&  PreGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > & xShapes);
-    void                PreUnGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapeGroup >   xShapeGroup);
+    const SdrMarkList& 	PreGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > & xShapes);
+    void 				PreUnGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapeGroup >   xShapeGroup);
+//	void 				PostGroup(); ?? wird es noch gebraucht ??
 
-    SdrView*            GetDrawView() {return mpView;}
-    SdrPageView*        GetPageView();
-    void                RemovePageView();
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >       GetInterface( SdrObject* pObj );
+    SdrView* 			GetDrawView() {return mpView;}
+    SdrPageView*		GetPageView();
+    void				RemovePageView();
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  		GetInterface( SdrObject* pObj );
 
     // Die folgende Methode wird gerufen, wenn ein SvxShape-Objekt angelegt
     // werden soll. abgeleitete Klassen koennen hier eine Ableitung oder
@@ -88,8 +93,8 @@ typedef cppu::WeakAggImplHelper4
 SwXDrawPageBaseClass;
 class SwXDrawPage : public SwXDrawPageBaseClass
 {
-    SwDoc*          pDoc;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >     xPageAgg;
+    SwDoc* 			pDoc;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > 	xPageAgg;
     SwFmDrawPage*   pDrawPage;
 public:
     SwXDrawPage(SwDoc* pDoc);
@@ -119,14 +124,16 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    SwFmDrawPage*   GetSvxPage();
+    SwFmDrawPage* 	GetSvxPage();
     // renamed and outlined to detect where it's called
-    void    InvalidateSwDoc(); // {pDoc = 0;}
+    void	InvalidateSwDoc(); // {pDoc = 0;}
 };
-
+/* -----------------22.01.99 10:20-------------------
+ *
+ * --------------------------------------------------*/
 class SwShapeDescriptor_Impl;
 class SwXGroupShape;
 typedef
@@ -137,7 +144,9 @@ cppu::WeakAggImplHelper6
     ::com::sun::star::text::XTextContent,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::lang::XUnoTunnel,
+    // --> OD 2004-07-22 #i31698#
     ::com::sun::star::drawing::XShape
+    // <--
 >
 SwXShapeBaseClass;
 class SwXShape : public SwXShapeBaseClass,
@@ -149,23 +158,26 @@ class SwXShape : public SwXShapeBaseClass,
     friend class SwXDrawPage;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > xShapeAgg;
-    // reference to <XShape>, determined in the
+    // --> OD 2004-07-23 #i31698# - reference to <XShape>, determined in the
     // constructor by <queryAggregation> at <xShapeAgg>.
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
+    // <--
 
     const SfxItemPropertySet*           m_pPropSet;
     const SfxItemPropertyMapEntry*      m_pPropertyMapEntries;
     com::sun::star::uno::Sequence< sal_Int8 >* pImplementationId;
 
-    SwShapeDescriptor_Impl*     pImpl;
+    SwShapeDescriptor_Impl*		pImpl;
 
-    sal_Bool                        m_bDescriptor;
+    sal_Bool 						m_bDescriptor;
 
-    SwFrmFmt*               GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt* 				GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 
-    SvxShape*               GetSvxShape();
+    SvxShape*				GetSvxShape();
 
     /** method to determine top group object
+
+        OD 2004-08-03 #i31698#
 
         @author OD
     */
@@ -173,12 +185,16 @@ class SwXShape : public SwXShapeBaseClass,
 
     /** method to determine position according to the positioning attributes
 
+        OD 2004-08-03 #i31698#
+
         @author OD
     */
     com::sun::star::awt::Point _GetAttrPosition();
 
     /** method to convert the position (translation) of the drawing object to
         the layout direction horizontal left-to-right.
+
+        OD 2004-07-27 #i31698#
 
         @author OD
     */
@@ -189,12 +205,16 @@ class SwXShape : public SwXShapeBaseClass,
     /** method to convert the transformation of the drawing object to the layout
         direction, the drawing object is in
 
+        OD 2004-07-27 #i31698#
+
         @author OD
     */
     ::com::sun::star::drawing::HomogenMatrix3 _ConvertTransformationToLayoutDir(
                 ::com::sun::star::drawing::HomogenMatrix3 _aMatrixInHoriL2R );
 
     /** method to adjust the positioning properties
+
+        OD 2004-08-02 #i31698#
 
         @author OD
 
@@ -208,6 +228,8 @@ class SwXShape : public SwXShapeBaseClass,
     /** method to convert start or end position of the drawing object to the
         Writer specific position, which is the attribute position in layout direction
 
+        OD 2009-01-12 #i59051#
+
         @author OD
     */
     ::com::sun::star::awt::Point _ConvertStartOrEndPosToLayoutDir(
@@ -216,12 +238,16 @@ class SwXShape : public SwXShapeBaseClass,
     /** method to convert PolyPolygonBezier of the drawing object to the
         Writer specific position, which is the attribute position in layout direction
 
+        OD 2009-01-13 #i59051#
+
         @author OD
     */
     ::com::sun::star::drawing::PolyPolygonBezierCoords _ConvertPolyPolygonBezierToLayoutDir(
                     const ::com::sun::star::drawing::PolyPolygonBezierCoords& aPath );
 
     /** method to get property from aggregation object
+
+        OD 2004-10-28 #i36248#
 
         @author OD
     */
@@ -232,9 +258,6 @@ class SwXShape : public SwXShapeBaseClass,
 
 protected:
     virtual ~SwXShape();
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
-
 public:
     SwXShape(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & xShape);
 
@@ -275,22 +298,31 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
+    // --> OD 2004-07-22 #i31698# XShape
     virtual ::com::sun::star::awt::Point SAL_CALL getPosition(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setPosition( const ::com::sun::star::awt::Point& aPosition ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setSize( const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException);
+    // <--
+    // --> OD 2004-07-22 #i31698# XShapeDescriptor - superclass of XShape
     virtual ::rtl::OUString SAL_CALL getShapeType(  ) throw (::com::sun::star::uno::RuntimeException);
+    // <--
 
-    SwShapeDescriptor_Impl*     GetDescImpl() {return pImpl;}
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >                 GetAggregationInterface() {return xShapeAgg;}
+    //SwClient
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+
+    SwShapeDescriptor_Impl*		GetDescImpl() {return pImpl;}
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > 				GetAggregationInterface() {return xShapeAgg;}
 
     // helper
     static void AddExistingShapeToFmt( SdrObject& _rObj );
 };
+/* -----------------------------31.05.01 09:54--------------------------------
 
+ ---------------------------------------------------------------------------*/
 class SwXGroupShape :
     public SwXShape,
     public ::com::sun::star::drawing::XShapes

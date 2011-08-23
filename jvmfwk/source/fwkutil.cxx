@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 #include "osl/module.hxx"
 #include "osl/thread.hxx"
 #include "rtl/ustring.hxx"
-#include "rtl/ustrbuf.hxx"
+#include "rtl/ustrbuf.hxx" 
 #include "rtl/bootstrap.hxx"
 #include "osl/file.hxx"
 #include "osl/process.h"
@@ -58,11 +58,8 @@
 #include "framework.hxx"
 #include "fwkutil.hxx"
 
+using namespace rtl;
 using namespace osl;
-
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 
 namespace jfw
 {
@@ -86,7 +83,7 @@ bool isAccessibilitySupportDesired()
         DWORD   dwType = 0;
         DWORD   dwLen = 16;
         unsigned char arData[16];
-        if( RegQueryValueEx(hKey, "SupportAssistiveTechnology", NULL, &dwType, arData,
+        if( RegQueryValueEx(hKey, "SupportAssistiveTechnology", NULL, &dwType, arData, 
                             & dwLen)== ERROR_SUCCESS)
         {
             if (dwType == REG_SZ)
@@ -100,7 +97,7 @@ bool isAccessibilitySupportDesired()
 #if OSL_DEBUG_LEVEL > 1
                 else
                     OSL_ASSERT(0);
-#endif
+#endif                 
             }
             else if (dwType == REG_DWORD)
             {
@@ -111,7 +108,7 @@ bool isAccessibilitySupportDesired()
 #if OSL_DEBUG_LEVEL > 1
                 else
                     OSL_ASSERT(0);
-#endif
+#endif                
             }
         }
     }
@@ -159,7 +156,7 @@ rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData)
         *pCurBuf = EncodingTable[curChar];
         pCurBuf++;
     }
-
+    
     rtl::ByteSequence ret((sal_Int8*) pBuf, lenRaw * 2);
     delete [] pBuf;
     return ret;
@@ -202,7 +199,7 @@ rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data)
     }
     rtl::ByteSequence ret((sal_Int8*) pBuf, lenBuf );
     delete [] pBuf;
-    return ret;
+    return ret;   
 }
 
 rtl::OUString getDirFromFile(const rtl::OUString& usFilePath)
@@ -218,10 +215,10 @@ rtl::OUString getExecutableDirectory()
         throw FrameworkException(
             JFW_E_ERROR,
             "[Java framework] Error in function getExecutableDirectory (fwkutil.cxx)");
-
+    
     rtl::OUString ouExe(sExe, SAL_NO_ACQUIRE);
     return getDirFromFile(ouExe);
-}
+} 
 
 rtl::OUString findPlugin(
     const rtl::OUString & baseUrl, const rtl::OUString & plugin)
@@ -314,7 +311,7 @@ rtl::OUString getLibraryLocation()
     rtl::OString sExcMsg("[Java framework] Error in function getLibraryLocation "
                          "(fwkutil.cxx).");
     rtl::OUString libraryFileUrl;
-
+    
     if (!osl::Module::getUrlFromAddress(
             reinterpret_cast< oslGenericFunction >(getLibraryLocation),
             libraryFileUrl))
@@ -331,7 +328,7 @@ jfw::FileStatus checkFileURL(const rtl::OUString & sURL)
     if (File::E_None == rc_item)
     {
         osl::FileStatus status(FileStatusMask_Validate);
-
+        
         File::RC rc_stat = item.getFileStatus(status);
         if (File::E_None == rc_stat)
         {

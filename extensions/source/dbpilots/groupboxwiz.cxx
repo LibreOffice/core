@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,12 +37,12 @@
 #include "dbpilots.hrc"
 
 
-//#define GBW_STATE_DATASELECTION       0
-#define GBW_STATE_OPTIONLIST        0
-#define GBW_STATE_DEFAULTOPTION     1
-#define GBW_STATE_OPTIONVALUES      2
-#define GBW_STATE_DBFIELD           3
-#define GBW_STATE_FINALIZE          4
+//#define GBW_STATE_DATASELECTION		0
+#define GBW_STATE_OPTIONLIST		0
+#define GBW_STATE_DEFAULTOPTION		1
+#define GBW_STATE_OPTIONVALUES		2
+#define GBW_STATE_DBFIELD			3
+#define GBW_STATE_FINALIZE			4
 
 //.........................................................................
 namespace dbp
@@ -84,6 +84,9 @@ namespace dbp
     {
         switch (_nState)
         {
+//			case GBW_STATE_DATASELECTION:
+//				return new OTableSelectionPage(this);
+//
             case GBW_STATE_OPTIONLIST:
                 return new ORadioSelectionPage(this);
 
@@ -108,6 +111,9 @@ namespace dbp
     {
         switch (_nCurrentState)
         {
+//			case GBW_STATE_DATASELECTION:
+//				return GBW_STATE_OPTIONLIST;
+//
             case GBW_STATE_OPTIONLIST:
                 return GBW_STATE_DEFAULTOPTION;
 
@@ -135,7 +141,7 @@ namespace dbp
         {
             case GBW_STATE_DEFAULTOPTION:
                 if (!m_bVisitedDefault)
-                {   // assume that the first of the radio buttons should be selected
+                {	// assume that the first of the radio buttons should be selected
                     DBG_ASSERT(m_aSettings.aLabels.size(), "OGroupBoxWizard::enterState: should never have reached this state!");
                     m_aSettings.sDefaultField = m_aSettings.aLabels[0];
                 }
@@ -144,7 +150,7 @@ namespace dbp
 
             case GBW_STATE_DBFIELD:
                 if (!m_bVisitedDB)
-                {   // try to generate a default for the DB field
+                {	// try to generate a default for the DB field
                     // (simply use the first field in the DB names collection)
                     if (getContext().aFieldNames.getLength())
                         m_aSettings.sDBField = getContext().aFieldNames[0];
@@ -177,7 +183,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            OSL_FAIL("OGroupBoxWizard::createRadios: caught an exception while creating the radio shapes!");
+            DBG_ERROR("OGroupBoxWizard::createRadios: caught an exception while creating the radio shapes!");
         }
     }
 
@@ -199,13 +205,13 @@ namespace dbp
     //---------------------------------------------------------------------
     ORadioSelectionPage::ORadioSelectionPage( OControlWizard* _pParent )
         :OGBWPage(_pParent, ModuleRes(RID_PAGE_GROUPRADIOSELECTION))
-        ,m_aFrame               (this, ModuleRes(FL_DATA))
-        ,m_aRadioNameLabel      (this, ModuleRes(FT_RADIOLABELS))
-        ,m_aRadioName           (this, ModuleRes(ET_RADIOLABELS))
-        ,m_aMoveRight           (this, ModuleRes(PB_MOVETORIGHT))
-        ,m_aMoveLeft            (this, ModuleRes(PB_MOVETOLEFT))
-        ,m_aExistingRadiosLabel (this, ModuleRes(FT_RADIOBUTTONS))
-        ,m_aExistingRadios      (this, ModuleRes(LB_RADIOBUTTONS))
+        ,m_aFrame				(this, ModuleRes(FL_DATA))
+        ,m_aRadioNameLabel		(this, ModuleRes(FT_RADIOLABELS))
+        ,m_aRadioName			(this, ModuleRes(ET_RADIOLABELS))
+        ,m_aMoveRight			(this, ModuleRes(PB_MOVETORIGHT))
+        ,m_aMoveLeft			(this, ModuleRes(PB_MOVETOLEFT))
+        ,m_aExistingRadiosLabel	(this, ModuleRes(FT_RADIOBUTTONS))
+        ,m_aExistingRadios		(this, ModuleRes(LB_RADIOBUTTONS))
     {
         FreeResource();
 
@@ -233,9 +239,6 @@ namespace dbp
         m_aExistingRadios.EnableMultiSelection(sal_True);
 
         getDialog()->defaultButton(&m_aMoveRight);
-
-        m_aExistingRadios.SetAccessibleRelationMemberOf(&m_aExistingRadios);
-        m_aExistingRadios.SetAccessibleRelationLabeledBy(&m_aExistingRadiosLabel);
     }
 
     //---------------------------------------------------------------------
@@ -356,18 +359,16 @@ namespace dbp
     //---------------------------------------------------------------------
     ODefaultFieldSelectionPage::ODefaultFieldSelectionPage( OControlWizard* _pParent )
         :OMaybeListSelectionPage(_pParent, ModuleRes(RID_PAGE_DEFAULTFIELDSELECTION))
-        ,m_aFrame                   (this, ModuleRes(FL_DEFAULTSELECTION))
-        ,m_aDefaultSelectionLabel   (this, ModuleRes(FT_DEFAULTSELECTION))
-        ,m_aDefSelYes               (this, ModuleRes(RB_DEFSELECTION_YES))
-        ,m_aDefSelNo                (this, ModuleRes(RB_DEFSELECTION_NO))
-        ,m_aDefSelection            (this, ModuleRes(LB_DEFSELECTIONFIELD))
+        ,m_aFrame					(this, ModuleRes(FL_DEFAULTSELECTION))
+        ,m_aDefaultSelectionLabel	(this, ModuleRes(FT_DEFAULTSELECTION))
+        ,m_aDefSelYes				(this, ModuleRes(RB_DEFSELECTION_YES))
+        ,m_aDefSelNo				(this, ModuleRes(RB_DEFSELECTION_NO))
+        ,m_aDefSelection			(this, ModuleRes(LB_DEFSELECTIONFIELD))
     {
         FreeResource();
 
         announceControls(m_aDefSelYes, m_aDefSelNo, m_aDefSelection);
         m_aDefSelection.SetDropDownLineCount(10);
-        m_aDefSelection.SetAccessibleRelationLabeledBy( &m_aDefSelYes );
-        m_aDefSelection.SetAccessibleRelationMemberOf(&m_aDefaultSelectionLabel);
     }
 
     //---------------------------------------------------------------------
@@ -379,7 +380,7 @@ namespace dbp
 
         // fill the listbox
         m_aDefSelection.Clear();
-        for (   ConstStringArrayIterator aLoop = rSettings.aLabels.begin();
+        for	(	ConstStringArrayIterator aLoop = rSettings.aLabels.begin();
                 aLoop != rSettings.aLabels.end();
                 ++aLoop
             )
@@ -407,20 +408,17 @@ namespace dbp
     //---------------------------------------------------------------------
     OOptionValuesPage::OOptionValuesPage( OControlWizard* _pParent )
         :OGBWPage(_pParent, ModuleRes(RID_PAGE_OPTIONVALUES))
-        ,m_aFrame               (this, ModuleRes(FL_OPTIONVALUES))
-        ,m_aDescription         (this, ModuleRes(FT_OPTIONVALUES_EXPL))
-        ,m_aValueLabel          (this, ModuleRes(FT_OPTIONVALUES))
-        ,m_aValue               (this, ModuleRes(ET_OPTIONVALUE))
-        ,m_aOptionsLabel        (this, ModuleRes(FT_RADIOBUTTONS))
-        ,m_aOptions             (this, ModuleRes(LB_RADIOBUTTONS))
+        ,m_aFrame				(this, ModuleRes(FL_OPTIONVALUES))
+        ,m_aDescription			(this, ModuleRes(FT_OPTIONVALUES_EXPL))
+        ,m_aValueLabel			(this, ModuleRes(FT_OPTIONVALUES))
+        ,m_aValue				(this, ModuleRes(ET_OPTIONVALUE))
+        ,m_aOptionsLabel		(this, ModuleRes(FT_RADIOBUTTONS))
+        ,m_aOptions				(this, ModuleRes(LB_RADIOBUTTONS))
         ,m_nLastSelection((::svt::WizardTypes::WizardState)-1)
     {
         FreeResource();
 
         m_aOptions.SetSelectHdl(LINK(this, OOptionValuesPage, OnOptionSelected));
-
-        m_aOptions.SetAccessibleRelationMemberOf(&m_aOptions);
-        m_aOptions.SetAccessibleRelationLabeledBy(&m_aOptionsLabel);
     }
 
     //---------------------------------------------------------------------
@@ -464,7 +462,7 @@ namespace dbp
         // fill the list with all available options
         m_aOptions.Clear();
         m_nLastSelection = -1;
-        for (   ConstStringArrayIterator aLoop = rSettings.aLabels.begin();
+        for	(	ConstStringArrayIterator aLoop = rSettings.aLabels.begin();
                 aLoop != rSettings.aLabels.end();
                 ++aLoop
             )
@@ -517,10 +515,10 @@ namespace dbp
     //---------------------------------------------------------------------
     OFinalizeGBWPage::OFinalizeGBWPage( OControlWizard* _pParent )
         :OGBWPage(_pParent, ModuleRes(RID_PAGE_OPTIONS_FINAL))
-        ,m_aFrame           (this, ModuleRes(FL_NAMEIT))
-        ,m_aNameLabel       (this, ModuleRes(FT_NAMEIT))
-        ,m_aName            (this, ModuleRes(ET_NAMEIT))
-        ,m_aThatsAll        (this, ModuleRes(FT_THATSALL))
+        ,m_aFrame			(this, ModuleRes(FL_NAMEIT))
+        ,m_aNameLabel		(this, ModuleRes(FT_NAMEIT))
+        ,m_aName			(this, ModuleRes(ET_NAMEIT))
+        ,m_aThatsAll		(this, ModuleRes(FT_THATSALL))
     {
         FreeResource();
     }
@@ -559,7 +557,7 @@ namespace dbp
     }
 
 //.........................................................................
-}   // namespace dbp
+}	// namespace dbp
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

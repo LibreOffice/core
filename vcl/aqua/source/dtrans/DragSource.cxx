@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,15 +39,14 @@
 #include "DragSourceContext.hxx"
 #include "aqua_clipboard.hxx"
 #include "DragActionConversion.hxx"
-#include "salframe.h"
 
 #include <rtl/ustring.h>
 #include <memory>
 
 
+using namespace rtl;
 using namespace cppu;
 using namespace osl;
-using namespace com::sun::star;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::datatransfer::dnd;
@@ -59,11 +58,10 @@ using namespace com::sun::star::lang;
 using namespace comphelper;
 using namespace std;
 
-using ::rtl::OUString;
 
 // For OOo internal D&D we provide the Transferable without NSDragPboard
 // interference as a shortcut
-uno::Reference<XTransferable> DragSource::g_XTransferable;
+Reference<XTransferable> DragSource::g_XTransferable = Reference<XTransferable>();
 NSView* DragSource::g_DragSourceView = nil;
 bool DragSource::g_DropSuccessSet = false;
 bool DragSource::g_DropSuccess = false;
@@ -107,7 +105,7 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
 }
 
 
--(unsigned int)draggingSourceOperationMaskForLocal: (BOOL)isLocal
+-(unsigned int)draggingSourceOperationMaskForLocal: (MacOSBOOL)isLocal
 {
   return mDragSource->getSupportedDragOperations(isLocal);
 }
@@ -115,13 +113,13 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
 
 -(void)draggedImage:(NSImage*)anImage beganAt:(NSPoint)aPoint
 {
-  DragSourceDragEvent dsde(static_cast<OWeakObject*>(mDragSource),
-                           new DragSourceContext(mDragSource),
-                           mDragSource,
-                           DNDConstants::ACTION_COPY,
+  DragSourceDragEvent dsde(static_cast<OWeakObject*>(mDragSource), 
+                           new DragSourceContext(mDragSource), 
+                           mDragSource, 
+                           DNDConstants::ACTION_COPY, 
                            DNDConstants::ACTION_COPY);
 
-  mDragSource->mXDragSrcListener->dragEnter(dsde);
+  mDragSource->mXDragSrcListener->dragEnter(dsde);	
 }
 
 
@@ -132,7 +130,7 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
   bool bDropSuccess = operation != NSDragOperationNone;
   if( DragSource::g_DropSuccessSet )
       bDropSuccess = DragSource::g_DropSuccess;
-
+  
   DragSourceDropEvent dsde(static_cast<OWeakObject*>(mDragSource),
                            new DragSourceContext(mDragSource),
                            static_cast< XDragSource* >(mDragSource),
@@ -140,7 +138,7 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
                            bDropSuccess );
 
   mDragSource->mXDragSrcListener->dragDropEnd(dsde);
-  mDragSource->mXDragSrcListener = uno::Reference<XDragSourceListener>();
+  mDragSource->mXDragSrcListener = Reference<XDragSourceListener>();
 }
 
 
@@ -161,7 +159,6 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
 DragSource::DragSource():
   WeakComponentImplHelper3<XDragSource, XInitialization, XServiceInfo>(m_aMutex),
   mView(NULL),
-  mpFrame(NULL),
   mLastMouseEventBeforeStartDrag(nil),
   m_MouseButton(0)
 {
@@ -170,11 +167,10 @@ DragSource::DragSource():
 
 DragSource::~DragSource()
 {
-    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
-        [(id <MouseEventListener>)mView unregisterMouseEventListener: mDragSourceHelper];
-    [mDragSourceHelper release];
+  [(id <MouseEventListener>)mView unregisterMouseEventListener: mDragSourceHelper];
+  [mDragSourceHelper release];
 }
-
+ 
 
 void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
   throw(Exception)
@@ -192,7 +188,7 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
 
   /* All SalFrameView the base class for all VCL system views inherits from
      NSView in order to get mouse and other events. This is the only way to
-     get these events. In order to start a drag operation we need to provide
+     get these events. In order to start a drag operation we need to provide 
      the mouse event which was the trigger. SalFrameView therefor implements
      a hook mechanism so that we can get mouse events for our purpose.
   */
@@ -202,14 +198,7 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
       throw Exception(OUString(RTL_CONSTASCII_USTRINGPARAM("DragSource::initialize: Provided view doesn't support mouse listener")),
                       static_cast<OWeakObject*>(this));
     }
-  NSWindow* pWin = [mView window];
-  if( ! pWin || ![pWin respondsToSelector: @selector(getSalFrame)] )
-  {
-      throw Exception(OUString(RTL_CONSTASCII_USTRINGPARAM("DragSource::initialize: Provided view is not attached to a vcl frame")),
-                      static_cast<OWeakObject*>(this));
-  }
-  mpFrame = (AquaSalFrame*)[pWin performSelector: @selector(getSalFrame)];
-
+      
   mDragSourceHelper = [[DragSourceHelper alloc] initWithDragSource: this];
 
   if (mDragSourceHelper == nil)
@@ -244,22 +233,22 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
                                     sal_Int8 sourceActions,
                                     sal_Int32 cursor,
                                     sal_Int32 image,
-                                    const uno::Reference<XTransferable >& transferable,
-                                    const uno::Reference<XDragSourceListener >& listener )
+                                    const Reference<XTransferable >& transferable,
+                                    const Reference<XDragSourceListener >& listener ) 
   throw( RuntimeException)
 {
   MutexGuard guard(m_aMutex);
-
+  
   OSL_ASSERT(listener.is() && "DragSource::startDrag: No XDragSourceListener provided\n");
   OSL_ASSERT(transferable.is() && "DragSource::startDrag: No transferable provided\n");
-
-  trigger.Event >>= mMouseEvent;
-  m_MouseButton= mMouseEvent.Buttons;
+  
+  trigger.Event >>= mMouseEvent; 
+  m_MouseButton= mMouseEvent.Buttons; 
   mXDragSrcListener = listener;
   mXCurrentContext = static_cast<XDragSourceContext*>(new DragSourceContext(this));
   auto_ptr<AquaClipboard> clipb(new AquaClipboard(NULL, false));
   g_XTransferable = transferable;
-  clipb->setContents(g_XTransferable, uno::Reference<XClipboardOwner>());
+  clipb->setContents(g_XTransferable, Reference<XClipboardOwner>());
   mDragSourceActions = sourceActions;
   g_DragSourceView = mView;
 
@@ -269,11 +258,11 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
 
   NSImage* dragImage;
   dragImage = [[NSImage alloc] initWithSize: sz];
-
+  
   NSRect bounds;
   bounds.origin = NSMakePoint(0,0);
   bounds.size = sz;
-
+  
   [dragImage lockFocus];
   [[NSColor blackColor] set];
   [NSBezierPath fillRect: bounds];
@@ -289,9 +278,9 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
   g_DropSuccessSet = false;
   g_DropSuccess = false;
 
-  [mView dragImage: dragImage
-   at: p
-   offset: NSMakeSize(0,0)
+  [mView dragImage: dragImage 
+   at: p 
+   offset: NSMakeSize(0,0) 
    event: mLastMouseEventBeforeStartDrag
    pasteboard: clipb->getPasteboard()
    source: mDragSourceHelper
@@ -299,7 +288,7 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
 
   [dragImage release];
 
-  g_XTransferable = uno::Reference<XTransferable>();
+  g_XTransferable = Reference<XTransferable>();
   g_DragSourceView = nil;
 
   // reset drop success flags
@@ -310,7 +299,7 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
 
 // In order to initiate a D&D operation we need to
 // provide the triggering mouse event which we get
-// from the SalFrameView that is associated with
+// from the SalFrameView that is associated with 
 // this DragSource
 void DragSource::saveMouseEvent(NSEvent* theEvent)
 {
@@ -333,9 +322,9 @@ unsigned int DragSource::getSupportedDragOperations(bool isLocal) const
   if (isLocal)
     {
       // Support NSDragOperation generic which means we can
-      // decide which D&D operation to choose. We map
+      // decide which D&D operation to choose. We map 
       // NSDragOperationGenric to DNDConstants::ACTION_DEFAULT
-      // in SystemToOfficeDragActions to signal this and
+      // in SystemToOfficeDragActions to signal this and 
       // use it in DropTarget::determineDropAction
       srcActions |= NSDragOperationGeneric;
     }

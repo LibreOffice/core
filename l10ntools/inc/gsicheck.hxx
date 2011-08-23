@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,20 +30,19 @@
 #define _GSICHECK_HXX_
 
 #include "tagtest.hxx"
-#include <vector>
 
 //
 // class GSILine
 //
 enum LineFormat { FORMAT_GSI, FORMAT_SDF, FORMAT_UNKNOWN };
-
+             
 class GSILine : public ByteString
 {
 private:
 
     ParserMessageList aMessages;
     LineFormat aFormat;
-    sal_uLong nLineNumber;
+    ULONG nLineNumber;
 
     ByteString aUniqId;
     ByteString aLineType;
@@ -52,15 +51,15 @@ private:
     ByteString aQuickHelpText;
     ByteString aTitle;
 
-    sal_Bool bOK;
-    sal_Bool bFixed;
+    BOOL bOK;
+    BOOL bFixed;
 
     void              ReassembleLine();
 
 public:
-    GSILine( const ByteString &rLine, sal_uLong nLine );
+    GSILine( const ByteString &rLine, ULONG nLine );
     LineFormat  GetLineFormat() const    { return aFormat; }
-    sal_uLong       GetLineNumber() const    { return nLineNumber; }
+    ULONG       GetLineNumber() const    { return nLineNumber; }
 
     ByteString  const GetUniqId()     const    { return aUniqId; }
     ByteString  const GetLineType()   const    { return aLineType; }
@@ -76,55 +75,54 @@ public:
           void        SetTitle( ByteString &aNew ) { aTitle = aNew; ReassembleLine(); }
 
     ParserMessageList* GetMessageList() { return &aMessages; };
-    sal_Bool HasMessages(){ return ( aMessages.size() > 0 ); };
+    BOOL HasMessages(){ return ( aMessages.Count() > 0 ); };
 
-    sal_Bool IsOK() const { return bOK; }
+    BOOL IsOK() const { return bOK; }
     void NotOK();
 
-    sal_Bool IsFixed() const { return bFixed; }
-    void SetFixed() { bFixed = sal_True; };
+    BOOL IsFixed() const { return bFixed; }
+    void SetFixed() { bFixed = TRUE; };
 };
 
 //
 // class GSIBlock
 //
 
-typedef ::std::vector< GSILine* > GSIBlock_Impl;
+DECLARE_LIST( GSIBlock_Impl, GSILine * )
 
 class LazySvFileStream;
 
-class GSIBlock
+class GSIBlock : public GSIBlock_Impl
 {
 private:
-    GSIBlock_Impl maList;
     GSILine *pSourceLine;
     GSILine *pReferenceLine;
     void PrintList( ParserMessageList *pList, ByteString aPrefix, GSILine *pLine );
-    sal_Bool bPrintContext;
-    sal_Bool bCheckSourceLang;
-    sal_Bool bCheckTranslationLang;
-    sal_Bool bReference;
-    sal_Bool bAllowKeyIDs;
-    sal_Bool bAllowSuspicious;
+    BOOL bPrintContext;
+    BOOL bCheckSourceLang;
+    BOOL bCheckTranslationLang;
+    BOOL bReference;
+    BOOL bAllowKeyIDs;
+    BOOL bAllowSuspicious;
 
-    sal_Bool bHasBlockError;
+    BOOL bHasBlockError;
 
-    sal_Bool IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uInt16 &nErrorPos, ByteString &aErrorMsg, sal_Bool &bHasBeenFixed, ByteString &aFixed ) const;
-    sal_Bool TestUTF8( GSILine* pTestee, sal_Bool bFixTags );
-    sal_Bool HasSuspiciousChars( GSILine* pTestee, GSILine* pSource );
+    BOOL IsUTF8( const ByteString &aTestee, BOOL bFixTags, USHORT &nErrorPos, ByteString &aErrorMsg, BOOL &bHasBeenFixed, ByteString &aFixed ) const;
+    BOOL TestUTF8( GSILine* pTestee, BOOL bFixTags );
+    BOOL HasSuspiciousChars( GSILine* pTestee, GSILine* pSource );
 
 public:
-    GSIBlock( sal_Bool PbPrintContext, sal_Bool bSource, sal_Bool bTrans, sal_Bool bRef, sal_Bool bAllowKID, sal_Bool bAllowSusp );
+    GSIBlock( BOOL PbPrintContext, BOOL bSource, BOOL bTrans, BOOL bRef, BOOL bAllowKID, BOOL bAllowSusp );
     ~GSIBlock();
-    void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix, ByteString aContext, sal_uLong nLine, ByteString aUniqueId = ByteString() );
-    void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, sal_uLong nLine, ByteString aUniqueId = ByteString() );
+    void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix, ByteString aContext, ULONG nLine, ByteString aUniqueId = ByteString() );
+    void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, ULONG nLine, ByteString aUniqueId = ByteString() );
     void InsertLine( GSILine* pLine, const ByteString aSourceLang);
     void SetReferenceLine( GSILine* pLine );
-    sal_Bool CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sal_Bool bFixTags );
+    BOOL CheckSyntax( ULONG nLine, BOOL bRequireSourceLine, BOOL bFixTags );
 
-    void WriteError( LazySvFileStream &aErrOut, sal_Bool bRequireSourceLine );
-    void WriteCorrect( LazySvFileStream &aOkOut, sal_Bool bRequireSourceLine );
-    void WriteFixed( LazySvFileStream &aFixOut, sal_Bool bRequireSourceLine );
+    void WriteError( LazySvFileStream &aErrOut, BOOL bRequireSourceLine );
+    void WriteCorrect( LazySvFileStream &aOkOut, BOOL bRequireSourceLine );
+    void WriteFixed( LazySvFileStream &aFixOut, BOOL bRequireSourceLine );
 };
 
 #endif

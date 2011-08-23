@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,8 @@
 #include <tools/string.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-#include <svl/fstathelper.hxx>
+
+#include <fstathelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -43,13 +44,13 @@ using namespace ::rtl;
 sal_Bool FStatHelper::GetModifiedDateTimeOfFile( const UniString& rURL,
                                         Date* pDate, Time* pTime )
 {
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = FALSE;
     try
     {
         ::ucbhelper::Content aTestContent( rURL,
                                 uno::Reference< XCommandEnvironment > ());
         uno::Any aAny = aTestContent.getPropertyValue(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("DateModified")) );
+            OUString::createFromAscii(  "DateModified" ) );
         if( aAny.hasValue() )
         {
             bRet = sal_True;
@@ -70,7 +71,7 @@ sal_Bool FStatHelper::GetModifiedDateTimeOfFile( const UniString& rURL,
 
 sal_Bool FStatHelper::IsDocument( const UniString& rURL )
 {
-    sal_Bool bExist = sal_False;
+    BOOL bExist = FALSE;
     try
     {
         ::ucbhelper::Content aTestContent( rURL,
@@ -85,7 +86,7 @@ sal_Bool FStatHelper::IsDocument( const UniString& rURL )
 
 sal_Bool FStatHelper::IsFolder( const UniString& rURL )
 {
-    sal_Bool bExist = sal_False;
+    BOOL bExist = FALSE;
     try
     {
         ::ucbhelper::Content aTestContent( rURL,

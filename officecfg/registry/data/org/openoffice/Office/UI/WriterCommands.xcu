@@ -166,16 +166,6 @@
                     <value xml:lang="en-US">~Protect Records...</value>
                 </prop>
             </node>
-            <node oor:name=".uno:RejectTracedChange" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Reject Change</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:AcceptTracedChange" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Accept Change</value>
-                </prop>
-            </node>
             <node oor:name=".uno:UpdateAllLinks" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Links</value>
@@ -891,7 +881,7 @@
             </node>
             <node oor:name=".uno:ResetAttributes" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Clear ~Direct Formatting</value>
+                    <value xml:lang="en-US">~Default Formatting</value>
                 </prop>
             </node>
             <node oor:name=".uno:WrapOff" oor:op="replace">
@@ -2287,22 +2277,6 @@
             <node oor:name=".uno:ContinueNumbering" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Continue previous numbering</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:NavigateBack" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Back</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
-                </prop>
-            </node>
-                <node oor:name=".uno:NavigateForward" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Forward</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
                 </prop>
             </node>
         </node>

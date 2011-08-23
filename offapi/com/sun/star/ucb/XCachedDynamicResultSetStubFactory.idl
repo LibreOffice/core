@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,14 +52,14 @@ module com { module sun { module star { module ucb {
     optimized <type>DynamicResultSet</type> to a remote optimized
     <type>CachedDynamicResultSet</type>.
 
-    <p>Pay attention to instantiate this helper on server side where your source
-    <type>DynamicResultSet</type> was instantiated.
+    <p>Pay attention to instanciate this helper on serverside where your source
+    <type>DynamicResultSet</type> was instanciated.
 
-    <p>Method
+    <p>Method 
     <member>XCachedDynamicResultSetStubFactory::createCachedDynamicResultSetStub</member>
-    can be used to create a stub on server side.
+    can be used to create a stub on serverside.
 
-    <p>If you have instantiated a <type>CachedDynamicResultSet</type> on client
+    <p>If you have instanciated a <type>CachedDynamicResultSet</type> on client
     side already, use method <member>connectToCache</member> to connect your
     given DynamicResultSet with this Cache.
 
@@ -70,7 +70,7 @@ module com { module sun { module star { module ucb {
 published interface XCachedDynamicResultSetStubFactory: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** creates a remote optimizes <type>XDynamicResultSet</type>.
+    /**	creates a remote optimizes <type>XDynamicResultSet</type>.
 
         @param Source
         must be an instance of service <type>DynamicResultSet</type>.
@@ -79,11 +79,11 @@ published interface XCachedDynamicResultSetStubFactory: com::sun::star::uno::XIn
         an instance of service <type>CachedDynamicResultSetStub</type>.
     */
 
-    com::sun::star::ucb::XDynamicResultSet  createCachedDynamicResultSetStub(
+    com::sun::star::ucb::XDynamicResultSet	createCachedDynamicResultSetStub(
                 [in] com::sun::star::ucb::XDynamicResultSet Source );
 
     //-------------------------------------------------------------------------
-    /** If you have instantiated a <type>CachedDynamicResultSet</type> on
+    /** If you have instanciated a <type>CachedDynamicResultSet</type> on
         client side already, use this to connect your given Source on server
         side to the TargetCache.
 
@@ -99,7 +99,7 @@ published interface XCachedDynamicResultSetStubFactory: com::sun::star::uno::XIn
 
         @param CompareFactory
         will be ignored unless SortingInfo is not empty. Then the supplied
-        factory will be used to instantiate objects used to compare the
+        factory will be used to instanciate objects used to compare the
         properties that are involved in sorting.
 
         @throws ListenerAlreadySetException

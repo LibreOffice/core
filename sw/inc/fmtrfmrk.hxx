@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,14 +34,14 @@
 
 class SwTxtRefMark;
 
-// ATT_REFMARK
+// ATT_REFMARK *******************************************************
 
 class SwFmtRefMark : public SfxPoolItem
 {
     friend class SwTxtRefMark;
-    SwTxtRefMark* pTxtAttr;
+    SwTxtRefMark* pTxtAttr;		// mein TextAttribut
 
-    // Protected CopyCtor.
+    // geschuetzter CopyCtor
     SwFmtRefMark& operator=(const SwFmtRefMark& rRefMark);
     String aRefName;
 
@@ -50,12 +50,12 @@ public:
     SwFmtRefMark( const SwFmtRefMark& rRefMark );
     ~SwFmtRefMark( );
 
-    // "Pure virtual methods" of SfxPoolItem.
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
 
-    const SwTxtRefMark *GetTxtRefMark() const   { return pTxtAttr; }
-    SwTxtRefMark *GetTxtRefMark()               { return pTxtAttr; }
+    const SwTxtRefMark *GetTxtRefMark() const	{ return pTxtAttr; }
+    SwTxtRefMark *GetTxtRefMark()				{ return pTxtAttr; }
 
     inline       String &GetRefName()       { return aRefName; }
     inline const String &GetRefName() const { return aRefName; }

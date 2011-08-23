@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,9 +132,8 @@ namespace comphelper
         virtual oslInterlockedCount SAL_CALL acquire();
         virtual oslInterlockedCount SAL_CALL release();
 
+        /// creates (starts) the thread
         using AsyncEventNotifier_TBASE::create;
-        using AsyncEventNotifier_TBASE::join;
-        using AsyncEventNotifier_TBASE::getIdentifier;
 
         using AsyncEventNotifier_TBASE::operator new;
         using AsyncEventNotifier_TBASE::operator delete;

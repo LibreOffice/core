@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,26 +29,26 @@
 #ifndef _EEITEM_HXX
 #define _EEITEM_HXX
 
-#define EE_ITEMS_START              3989
+#define EE_ITEMS_START				3989
 
 // Paragraph attributes:
-#define EE_PARA_START               (EE_ITEMS_START+0)
+#define EE_PARA_START				(EE_ITEMS_START+0)
 #define EE_PARA_WRITINGDIR          (EE_ITEMS_START+0)
-#define EE_PARA_XMLATTRIBS          (EE_ITEMS_START+1)
-#define EE_PARA_HANGINGPUNCTUATION  (EE_ITEMS_START+2)
-#define EE_PARA_FORBIDDENRULES      (EE_ITEMS_START+3)
-#define EE_PARA_ASIANCJKSPACING     (EE_ITEMS_START+4)
-#define EE_PARA_NUMBULLET           (EE_ITEMS_START+5)
-#define EE_PARA_HYPHENATE           (EE_ITEMS_START+6)
-#define EE_PARA_BULLETSTATE         (EE_ITEMS_START+7)
-#define EE_PARA_OUTLLRSPACE         (EE_ITEMS_START+8)
-#define EE_PARA_OUTLLEVEL           (EE_ITEMS_START+9)
-#define EE_PARA_BULLET              (EE_ITEMS_START+10)
-#define EE_PARA_LRSPACE             (EE_ITEMS_START+11)
-#define EE_PARA_ULSPACE             (EE_ITEMS_START+12)
-#define EE_PARA_SBL                 (EE_ITEMS_START+13)
-#define EE_PARA_JUST                (EE_ITEMS_START+14)
-#define EE_PARA_TABS                (EE_ITEMS_START+15)
+#define EE_PARA_XMLATTRIBS	        (EE_ITEMS_START+1)
+#define EE_PARA_HANGINGPUNCTUATION	(EE_ITEMS_START+2)
+#define EE_PARA_FORBIDDENRULES		(EE_ITEMS_START+3)
+#define EE_PARA_ASIANCJKSPACING		(EE_ITEMS_START+4)
+#define EE_PARA_NUMBULLET			(EE_ITEMS_START+5)
+#define	EE_PARA_HYPHENATE			(EE_ITEMS_START+6)
+#define	EE_PARA_BULLETSTATE			(EE_ITEMS_START+7)
+#define	EE_PARA_OUTLLRSPACE			(EE_ITEMS_START+8)
+#define	EE_PARA_OUTLLEVEL			(EE_ITEMS_START+9)
+#define	EE_PARA_BULLET				(EE_ITEMS_START+10)
+#define	EE_PARA_LRSPACE				(EE_ITEMS_START+11)
+#define	EE_PARA_ULSPACE				(EE_ITEMS_START+12)
+#define	EE_PARA_SBL					(EE_ITEMS_START+13)
+#define EE_PARA_JUST				(EE_ITEMS_START+14)
+#define EE_PARA_TABS				(EE_ITEMS_START+15)
 #define EE_PARA_JUST_METHOD         (EE_ITEMS_START+16)
 #define EE_PARA_VER_JUST            (EE_ITEMS_START+17)
 #define EE_PARA_END                 (EE_ITEMS_START+17)

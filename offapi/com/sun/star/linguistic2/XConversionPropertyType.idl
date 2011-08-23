@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,13 +50,13 @@ module com { module sun { module star { module linguistic2 {
 /** allows set and retrieve the property type of an entry in a
     conversion dictionary
 
-    <p>The property type must be one of
+    <p>The property type must be one of 
     <type scope="com::sun::star::linguistic2">ConversionPropertyType</type></p>
 
     @see    com::sun::star::linguistic2::XConversionDictionary
     @see    com::sun::star::linguistic2::ConversionPropertyType
 
-    @since OOo 2.0
+    @since OOo 2.0.0
 */
 published interface XConversionPropertyType : com::sun::star::uno::XInterface
 {
@@ -64,7 +64,7 @@ published interface XConversionPropertyType : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** sets the property type for the specified entry.
 
-        <p>The conversion entry is specified by the pair
+        <p>The conversion entry is specified by the pair 
         ( aLeftText, aRightText ).</p>
 
         @param aLeftText
@@ -74,17 +74,17 @@ published interface XConversionPropertyType : com::sun::star::uno::XInterface
         @param nPropertyType
             the property type to be set for the entry
     */
-    void setPropertyType(
-            [in] string aLeftText,
-            [in] string aRightText,
+    void setPropertyType( 
+            [in] string aLeftText, 
+            [in] string aRightText, 
             [in] short nPropertyType )
         raises( com::sun::star::container::NoSuchElementException,
-                com::sun::star::lang::IllegalArgumentException );
+                com::sun::star::lang::IllegalArgumentException ); 
 
     //-------------------------------------------------------------------------
     /** returns the property type for the specified entry.
 
-        <p>The conversion entry is specified by the pair
+        <p>The conversion entry is specified by the pair 
         ( aLeftText, aRightText ).</p>
 
         @param aLeftText
@@ -95,10 +95,10 @@ published interface XConversionPropertyType : com::sun::star::uno::XInterface
             returns the property type for the entry with the specified
             left text.
     */
-    short getPropertyType(
-            [in] string aLeftText,
+    short getPropertyType( 
+            [in] string aLeftText, 
             [in] string aRightText )
-        raises( com::sun::star::container::NoSuchElementException );
+        raises( com::sun::star::container::NoSuchElementException ); 
 
 };
 

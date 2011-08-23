@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,8 +64,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::utl;
 
 // some stuff for easier changes for SvtViewOptions
-static const sal_Char*      pViewOptDataName = "dialog data";
-#define VIEWOPT_DATANAME    ::rtl::OUString::createFromAscii( pViewOptDataName )
+static const sal_Char*		pViewOptDataName = "dialog data";
+#define VIEWOPT_DATANAME	::rtl::OUString::createFromAscii( pViewOptDataName )
 
 static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const String& rData )
 {
@@ -82,9 +82,9 @@ static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
 }
 
 
-// defines for the style of the BrowseBox
+// defines f"ur den Style der BrowseBox
 
-#define STYLE_MULTI_SELECTION   \
+#define STYLE_MULTI_SELECTION	\
     CNTVIEWSTYLE_NODE_BUTTONS | \
     CNTVIEWSTYLE_NODE_BUTTONS_AT_ROOT | \
     CNTVIEWSTYLE_SHOW_MESSAGES | \
@@ -94,10 +94,10 @@ static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
     CNTVIEWSTYLE_DEFAULT_APPEARANCE | \
     CNTVIEWSTYLE_SORT_BY_FOLDER
 
-#define STYLE_SINGLE_SELECTION  \
+#define STYLE_SINGLE_SELECTION	\
     STYLE_MULTI_SELECTION | CNTVIEWSTYLE_SINGLE_SELECTION
 
-#define BOOL_NOT_INITIALIZE     ((sal_Bool)2)
+#define BOOL_NOT_INITIALIZE		((sal_Bool)2)
 
 //*****************************************************************************
 // ResMgrHolder / SvtSimpleResId
@@ -121,7 +121,7 @@ namespace
 
     struct SvtSimpleResId : public ResId
     {
-        SvtSimpleResId (sal_uInt16 nId) : ResId (nId, *ResMgrHolder::getOrCreate()) {}
+        SvtSimpleResId (USHORT nId) : ResId (nId, *ResMgrHolder::getOrCreate()) {}
     };
 }
 
@@ -199,7 +199,7 @@ void SvtFileDialogURLSelector::Activate()
 //-----------------------------------------------------------------------------
 SvtUpButton_Impl::SvtUpButton_Impl( SvtFileDialog* pParent, const ResId& rResId )
     :SvtFileDialogURLSelector( pParent, rResId, IMG_FILEDLG_BTN_UP )
-    ,_pURLs                  ( NULL )
+    ,_pURLs			         ( NULL )
 {
 }
 
@@ -219,14 +219,15 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
     delete _pURLs;
     _pURLs = new SvStringsDtor;
 
-    // determine parent levels
+    // "Ubergeordnete Ebenen bestimmen.
     INetURLObject aObject( pBox->GetViewURL() );
     sal_Int32 nCount = aObject.getSegmentCount();
 
     ::svtools::VolumeInfo aVolInfo( sal_True /* volume */, sal_False /* remote */,
                                     sal_False /* removable */, sal_False /* floppy */,
                                     sal_False /* compact disk */ );
-    Image aVolumeImage( SvFileInformationManager::GetFolderImage( aVolInfo ) );
+    sal_Bool bIsHighContrast = pBox->GetSettings().GetStyleSettings().GetHighContrastMode();
+    Image aVolumeImage( SvFileInformationManager::GetFolderImage( aVolInfo, bIsHighContrast ) );
 
     while ( nCount >= 1 )
     {
@@ -241,7 +242,8 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
                 aTitle = aObject.getName();
 
             Image aImage = ( nCount > 1 ) // if nCount == 1 means workplace, which detects the wrong image
-                ? SvFileInformationManager::GetImage( aObject ) : aVolumeImage;
+                ? SvFileInformationManager::GetImage( aObject, bIsHighContrast )
+                : aVolumeImage;
 
             _pMenu->InsertItem( nItemId++, aTitle, aImage );
             _pURLs->Insert( pParentURL, _pURLs->Count() );
@@ -312,7 +314,9 @@ void SvtTravelButton_Impl::FillURLMenu( PopupMenu* _pMenu )
 
     _pMenu->Clear();
 
-    sal_uInt16 nItemId = 1;
+    sal_Bool bIsHighContrast = GetDialogParent()->GetView()->GetSettings().GetStyleSettings().GetHighContrastMode();
+
+    USHORT nItemId = 1;
     String sDisplayName;
 
     ::std::vector< String >::const_iterator aLoop;
@@ -320,7 +324,8 @@ void SvtTravelButton_Impl::FillURLMenu( PopupMenu* _pMenu )
     {
         if ( GetDialogParent()->isUrlAllowed( *aLoop ) )
         {
-            Image aImage = SvFileInformationManager::GetImage( INetURLObject(*aLoop) );
+            Image aImage = SvFileInformationManager::GetImage(
+                INetURLObject(*aLoop), bIsHighContrast );
             if ( LocalFileHelper::ConvertURLToSystemPath(*aLoop, sDisplayName) )
                 _pMenu->InsertItem( nItemId, sDisplayName, aImage );
             else
@@ -352,7 +357,7 @@ void SvtTravelButton_Impl::Click()
 // SvtExpFileDlg_Impl
 //*****************************************************************************
 
-SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
+SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )	:
 
     _pLbFilter          ( NULL ),
     _pCurFilter         ( NULL ),
@@ -362,23 +367,23 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
     _pEdFileName        ( NULL ),
     _pFtFileVersion     ( NULL ),
     _pLbFileVersion     ( NULL ),
-    _pFtTemplates       ( NULL ),
-    _pLbTemplates       ( NULL ),
-    _pFtImageTemplates  ( NULL ),
-    _pLbImageTemplates  ( NULL ),
+    _pFtTemplates		( NULL ),
+    _pLbTemplates		( NULL ),
+    _pFtImageTemplates	( NULL ),
+    _pLbImageTemplates	( NULL ),
     _pFtFileType        ( NULL ),
     _pBtnFileOpen       ( NULL ),
     _pBtnCancel         ( NULL ),
-    _pBtnHelp           ( NULL ),
+    _pBtnHelp			( NULL ),
     _pBtnUp             ( NULL ),
     _pBtnNewFolder      ( NULL ),
     _pBtnStandard       ( NULL ),
     _pCbPassword        ( NULL ),
     _pFtCurrentPath     ( NULL ),
     _pCbAutoExtension   ( NULL ),
-    _pCbOptions         ( NULL ),
+    _pCbOptions			( NULL ),
     _nState             ( FILEDLG_STATE_REMOTE ),
-    _nStyle             ( 0 ),
+    _nStyle				( 0 ),
     _bDoubleClick       ( sal_False ),
     m_bNeedDelayedFilterExecute ( sal_False ),
     _pDefaultFilter     ( NULL ),
@@ -450,7 +455,7 @@ void SvtExpFileDlg_Impl::SetCurFilter( SvtFileDialogFilter_Impl* pFilter, const 
 {
     DBG_ASSERT( pFilter, "SvtExpFileDlg_Impl::SetCurFilter: invalid filter!" );
     DBG_ASSERT( ( rDisplayName == pFilter->GetName() )
-            ||  ( rDisplayName == lcl_DecoratedFilter( pFilter->GetName() ) ),
+            ||	( rDisplayName == lcl_DecoratedFilter( pFilter->GetName() ) ),
             "SvtExpFileDlg_Impl::SetCurFilter: arguments are inconsistent!" );
 
     _pCurFilter = pFilter;
@@ -467,7 +472,7 @@ void SvtExpFileDlg_Impl::InsertFilterListEntry( const SvtFileDialogFilter_Impl* 
         sName = _pFilterDesc->GetName();
 
     // insert an set user data
-    sal_uInt16 nPos = _pLbFilter->InsertEntry( sName );
+    USHORT nPos = _pLbFilter->InsertEntry( sName );
     _pLbFilter->SetEntryData( nPos, const_cast< void* >( static_cast< const void* >( _pFilterDesc ) ) );
 }
 
@@ -479,7 +484,7 @@ void SvtExpFileDlg_Impl::InitFilterList( )
     ClearFilterList( );
 
     // reinit it
-    sal_uInt16 nPos = _pFilter->Count();
+    USHORT nPos = _pFilter->Count();
 
     // search for the first entry which is no group separator
     while ( nPos-- && _pFilter->GetObject( nPos ) && _pFilter->GetObject( nPos )->isGroupSeparator() )

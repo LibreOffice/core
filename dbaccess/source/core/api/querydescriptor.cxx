@@ -128,7 +128,7 @@ Reference< XPropertySetInfo > SAL_CALL OQueryDescriptor::getPropertySetInfo(  ) 
 
 DBG_NAME(OQueryDescriptor_Base);
 
-OQueryDescriptor_Base::OQueryDescriptor_Base(::osl::Mutex&  _rMutex,::cppu::OWeakObject& _rMySelf)
+OQueryDescriptor_Base::OQueryDescriptor_Base(::osl::Mutex&	_rMutex,::cppu::OWeakObject& _rMySelf)
     :m_bColumnsOutOfDate(sal_True)
     ,m_rMutex(_rMutex)
 {
@@ -257,7 +257,7 @@ void OQueryDescriptor_Base::columnDropped(const ::rtl::OUString& /*_sName*/)
 
 Reference< XPropertySet > OQueryDescriptor_Base::createColumnDescriptor()
 {
-    OSL_FAIL( "OQueryDescriptor_Base::createColumnDescriptor: called why?" );
+    OSL_ENSURE( false, "OQueryDescriptor_Base::createColumnDescriptor: called why?" );
     return NULL;
 }
 

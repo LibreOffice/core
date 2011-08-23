@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,16 +48,18 @@
 |*    RscChar::MakeChar()
 |*
 |*    Beschreibung      Der String wird nach C-Konvention umgesetzt
+|*    Ersterstellung    MM 20.03.91
+|*    Letzte Aenderung  MM 20.03.91
 |*
 *************************************************************************/
-char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
+char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
 {
-    sal_Size nMaxUniCodeBuf = strlen( pStr ) + 1;
+    sal_Size		nMaxUniCodeBuf = strlen( pStr ) + 1;  
+    char *			pOrgStr = new char[ nMaxUniCodeBuf ];
+    sal_uInt32		nOrgLen = 0;
+
     if( nMaxUniCodeBuf * 6 > 0x0FFFFF )
         RscExit( 10 );
-
-    char *          pOrgStr = new char[ nMaxUniCodeBuf ];
-    sal_uInt32      nOrgLen = 0;
 
     char cOld = '1';
     while( cOld != 0 )
@@ -110,14 +112,15 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
                         int  i = 0;
                         while( '0' <= *pStr && '7' >= *pStr && i != 3 )
                         {
-                            nChar = nChar * 8 + (sal_uInt8)*pStr - (sal_uInt8)'0';
+                            nChar = nChar * 8 + (BYTE)*pStr - (BYTE)'0';
                             ++pStr;
                             i++;
                         }
                         if( nChar > 255 )
                         {
+                            rtl_freeMemory( pOrgStr );
+
                             // Wert zu gross, oder kein 3 Ziffern
-                            delete [] pOrgStr;
                             return( NULL );
                         }
                         c = (char)nChar;
@@ -131,11 +134,11 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
                         while( isxdigit( *pStr ) && i != 2 )
                         {
                             if( isdigit( *pStr ) )
-                                nChar = nChar * 16 + (sal_uInt8)*pStr - (sal_uInt8)'0';
+                                nChar = nChar * 16 + (BYTE)*pStr - (BYTE)'0';
                             else if( isupper( *pStr ) )
-                                nChar = nChar * 16 + (sal_uInt8)*pStr - (sal_uInt8)'A' +10;
+                                nChar = nChar * 16 + (BYTE)*pStr - (BYTE)'A' +10;
                             else
-                                nChar = nChar * 16 + (sal_uInt8)*pStr - (sal_uInt8)'a' +10;
+                                nChar = nChar * 16 + (BYTE)*pStr - (BYTE)'a' +10;
                             ++pStr;
                             i++;
                         }
@@ -154,12 +157,12 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
         pStr++;
     }
 
-    sal_Unicode *   pUniCode = new sal_Unicode[ nMaxUniCodeBuf ];
+    sal_Unicode *	pUniCode = new sal_Unicode[ nMaxUniCodeBuf ];
     rtl_TextToUnicodeConverter hConv = rtl_createTextToUnicodeConverter( nTextEncoding );
 
     sal_uInt32 nInfo;
     sal_Size   nSrcCvtBytes;
-    sal_Size nUniSize = rtl_convertTextToUnicode( hConv, 0,
+    sal_Size nUniSize = rtl_convertTextToUnicode( hConv, 0, 
                                                 pOrgStr, nOrgLen,
                                                 pUniCode, nMaxUniCodeBuf,
                                                 RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT
@@ -170,12 +173,11 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
                                                 &nSrcCvtBytes );
 
     rtl_destroyTextToUnicodeConverter( hConv );
-    delete[] pOrgStr, pOrgStr = 0;
 
     hConv = rtl_createUnicodeToTextConverter( RTL_TEXTENCODING_UTF8 );
-    // factor fo 6 is the maximum size of an UNICODE character as utf8
+    // factor fo 6 is the maximum size of an UNICODE character as utf8 
     char * pUtf8 = (char *)rtl_allocateMemory( nUniSize * 6 );
-    rtl_convertUnicodeToText( hConv, 0,
+    rtl_convertUnicodeToText( hConv, 0, 
                             pUniCode, nUniSize,
                             pUtf8, nUniSize * 6,
                             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT
@@ -185,7 +187,9 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
                             &nSrcCvtBytes );
 
     rtl_destroyTextToUnicodeConverter( hConv );
-    delete[] pUniCode, pUniCode = 0;
+
+    delete[] pUniCode;
+    delete[] pOrgStr;
 
     return pUtf8;
 };

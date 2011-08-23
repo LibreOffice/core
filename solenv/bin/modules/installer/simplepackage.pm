@@ -27,6 +27,7 @@
 
 package installer::simplepackage;
 
+# use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 use Cwd;
 use File::Copy;
 use installer::download;
@@ -133,7 +134,25 @@ sub register_extensions
 
         if ( ! -f $unopkgfile ) { installer::exiter::exit_program("ERROR: $unopkgfile not found!", "register_extensions"); }
 
-        my $systemcall = "JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1 " . $unopkgfile . " sync --verbose" . " -env:UNO_JAVA_JFW_ENV_JREHOME=true 2\>\&1 |";
+        my $localtemppath = installer::systemactions::create_directories("uno", $languagestringref);
+
+        my $slash = "";
+
+        if ( $installer::globals::iswindowsbuild )
+        {
+            if ( $^O =~ /cygwin/i )
+            {
+                $localtemppath = $installer::globals::cyg_temppath;
+                $preregdir = qx{cygpath -m "$preregdir"};
+                chomp($preregdir);
+            }
+            $localtemppath =~ s/\\/\//g;
+            $slash = "/"; # Third slash for Windows. Other OS pathes already start with "/"
+        }
+
+        $preregdir =~ s/\/\s*$//g;
+
+        my $systemcall = "JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1 " . $unopkgfile . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file://" . $slash . $preregdir . "\"" . " -env:UserInstallation=file://" . $slash . $localtemppath . " 2\>\&1 |";
 
         print "... $systemcall ...\n";
 
@@ -180,6 +199,9 @@ sub register_extensions
 sub get_mac_translation_file
 {
     my $translationfilename = $installer::globals::maclangpackfilename;
+    # my $translationfilename = $installer::globals::idtlanguagepath . $installer::globals::separator . $installer::globals::maclangpackfilename;
+    # if ( $installer::globals::unicodensis ) { $translationfilename = $translationfilename . ".uulf"; }
+    # else { $translationfilename = $translationfilename . ".mlf"; }
     if ( ! -f $translationfilename ) { installer::exiter::exit_program("ERROR: Could not find language file $translationfilename!", "get_mac_translation_file"); }
     my $translationfile = installer::files::read_file($translationfilename);
 
@@ -291,6 +313,8 @@ sub localize_scriptfile
 {
     my ($scriptfile, $translationfile, $languagestringref) = @_;
 
+    # my $translationfile = get_mac_translation_file();
+
     my $onelanguage = $$languagestringref;
     if ( $onelanguage =~ /^\s*(.*?)_/ ) { $onelanguage = $1; }
 
@@ -330,10 +354,9 @@ sub replace_one_variable_in_shellscript
 
 sub replace_variables_in_scriptfile
 {
-    my ($scriptfile, $volume_name, $volume_name_app, $allvariables) = @_;
+    my ($scriptfile, $volume_name, $allvariables) = @_;
 
     replace_one_variable_in_shellscript($scriptfile, $volume_name, "FULLPRODUCTNAME" );
-    replace_one_variable_in_shellscript($scriptfile, $volume_name_app, "FULLAPPPRODUCTNAME" );
     replace_one_variable_in_shellscript($scriptfile, $allvariables->{'PRODUCTNAME'}, "PRODUCTNAME" );
     replace_one_variable_in_shellscript($scriptfile, $allvariables->{'PRODUCTVERSION'}, "PRODUCTVERSION" );
 
@@ -392,17 +415,10 @@ sub create_package
             $folder = $packagename;
         }
 
-        # my $volume_name = $allvariables->{'PRODUCTNAME'} . ' ' . $allvariables->{'PRODUCTVERSION'}; # Adding PRODUCTVERSION makes this difficult to maintain!
-        my $volume_name = $allvariables->{'PRODUCTNAME'};
-        my $volume_name_classic = $allvariables->{'PRODUCTNAME'} . ' ' . $allvariables->{'PRODUCTVERSION'};
-        my $volume_name_classic_app = $volume_name;  # "app" should not contain version number
-        # $volume_name = $volume_name . ' ' . $allvariables->{'PRODUCTEXTENSION'} if $allvariables->{'PRODUCTEXTENSION'}; # Adding PRODUCTEXTENSION makes this difficult to maintain!
-        $volume_name_classic = $volume_name_classic . ' ' . $allvariables->{'PRODUCTEXTENSION'} if $allvariables->{'PRODUCTEXTENSION'};
-        $volume_name_classic_app = $volume_name_classic_app . ' ' . $allvariables->{'PRODUCTEXTENSION'} if $allvariables->{'PRODUCTEXTENSION'};
+        my $volume_name = $allvariables->{'PRODUCTNAME'} . ' ' . $allvariables->{'PRODUCTVERSION'};
+        $volume_name = $volume_name . ' ' . $allvariables->{'PRODUCTEXTENSION'} if $allvariables->{'PRODUCTEXTENSION'};
         if ( $allvariables->{'DMG_VOLUMEEXTENSION'} ) {
             $volume_name = $volume_name . ' ' . $allvariables->{'DMG_VOLUMEEXTENSION'};
-            $volume_name_classic = $volume_name_classic . ' ' . $allvariables->{'DMG_VOLUMEEXTENSION'};
-            $volume_name_classic_app = $volume_name_classic_app . ' ' . $allvariables->{'DMG_VOLUMEEXTENSION'};
         }
 
         my $sla = 'sla.r';
@@ -418,23 +434,12 @@ sub create_package
         if (( $installer::globals::languagepack ) || ( $installer::globals::helppack ) || ( $installer::globals::patch ))
         {
             $localtempdir = "$tempdir/$packagename";
+            if ( $installer::globals::languagepack ) { $volume_name = "$volume_name Language Pack"; }
             if ( $installer::globals::helppack ) { $volume_name = "$volume_name Help Pack"; }
-            if ( $installer::globals::languagepack )
-            {
-                $volume_name = "$volume_name Language Pack";
-                $volume_name_classic = "$volume_name_classic Language Pack";
-                $volume_name_classic_app = "$volume_name_classic_app Language Pack";
-            }
-            if ( $installer::globals::patch )
-            {
-                $volume_name = "$volume_name Patch";
-                $volume_name_classic = "$volume_name_classic Patch";
-                $volume_name_classic_app = "$volume_name_classic_app Patch";
-            }
+            if ( $installer::globals::patch ) { $volume_name = "$volume_name Patch"; }
 
             # Create tar ball named tarball.tar.bz2
-            # my $appfolder = $localtempdir . "/" . $volume_name . "\.app";
-            my $appfolder = $localtempdir . "/" . $volume_name_classic_app . "\.app";
+            my $appfolder = $localtempdir . "/" . $volume_name . "\.app";
             my $contentsfolder = $appfolder . "/Contents";
             my $tarballname = "tarball.tar.bz2";
 
@@ -478,8 +483,7 @@ sub create_package
             if ( $installer::globals::helppack ) { $scriptfilename = "osx_install_helppack.applescript"; }
             if ( $installer::globals::patch ) { $scriptfilename = "osx_install_patch.applescript"; }
             my $scripthelpersolverfilename = "mac_install.script";
-            # my $scripthelperrealfilename = $volume_name;
-            my $scripthelperrealfilename = $volume_name_classic_app;
+            my $scripthelperrealfilename = $volume_name;
             my $translationfilename = $installer::globals::macinstallfilename;
 
             # Finding both files in solver
@@ -502,12 +506,13 @@ sub create_package
             my $scriptfilecontent = installer::files::read_file($scriptfilename);
             my $translationfilecontent = installer::files::read_file($$translationfileref);
             localize_scriptfile($scriptfilecontent, $translationfilecontent, $languagestringref);
-            # replace_variables_in_scriptfile($scriptfilecontent, $volume_name, $allvariables);
-            replace_variables_in_scriptfile($scriptfilecontent, $volume_name_classic, $volume_name_classic_app, $allvariables);
+            replace_variables_in_scriptfile($scriptfilecontent, $volume_name, $allvariables);
             installer::files::save_file($scriptfilename, $scriptfilecontent);
 
-            chmod 0775, $scriptfilename;
-            chmod 0775, $scripthelperrealfilename;
+            $systemcall = "chmod 775 " . "\"" . $scriptfilename . "\"";
+            system($systemcall);
+            $systemcall = "chmod 775 " . "\"" . $scripthelperrealfilename . "\"";
+            system($systemcall);
 
             # Copy also Info.plist and icon file
             # Finding both files in solver
@@ -528,8 +533,7 @@ sub create_package
 
             # Replacing variables in Info.plist
             $scriptfilecontent = installer::files::read_file($destfile);
-            # replace_one_variable_in_shellscript($scriptfilecontent, $volume_name, "FULLPRODUCTNAME" );
-            replace_one_variable_in_shellscript($scriptfilecontent, $volume_name_classic_app, "FULLAPPPRODUCTNAME" ); # OpenOffice.org Language Pack
+            replace_one_variable_in_shellscript($scriptfilecontent, $volume_name, "FULLPRODUCTNAME" );
             installer::files::save_file($destfile, $scriptfilecontent);
 
             chdir $localfrom;
@@ -689,7 +693,6 @@ sub create_simple_package
 
         if (( $onefile->{'Styles'} ) && ( $onefile->{'Styles'} =~ /\bBINARYTABLE_ONLY\b/ )) { next; }
         if (( $installer::globals::patch ) && ( $onefile->{'Styles'} ) && ( ! ( $onefile->{'Styles'} =~ /\bPATCH\b/ ))) { next; }
-        if (( $installer::globals::patch ) && ( $installer::globals::packageformat eq "dmg" )) { push(@installer::globals::patchfilecollector, "$onefile->{'destination'}\n"); }
 
         my $source = $onefile->{'sourcepath'};
         my $destination = $onefile->{'destination'};
@@ -711,7 +714,7 @@ sub create_simple_package
             }
             else
             {
-                $infoline = "ERROR: Could not copy $source to $destination $!\n";
+                $infoline = "ERROR: Could not copy $source to $destination\n";
                 $returnvalue = 0;
             }
 
@@ -724,9 +727,13 @@ sub create_simple_package
             if ( ! $installer::globals::iswindowsbuild )
             {
                 # see issue 102274
+                my $unixrights = "";
                 if ( $onefile->{'UnixRights'} )
                 {
-                    chmod oct($onefile->{'UnixRights'}), $destination;
+                    $unixrights = $onefile->{'UnixRights'};
+
+                    my $localcall = "$installer::globals::wrapcmd chmod $unixrights \'$destination\' \>\/dev\/null 2\>\&1";
+                    system($localcall);
                 }
             }
         }

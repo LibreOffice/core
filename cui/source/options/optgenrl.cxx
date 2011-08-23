@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,6 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
@@ -50,21 +53,40 @@
 
 struct GeneralTabPage_Impl
 {
-    sal_Bool    mbStreetEnabled;
-    sal_Bool    mbPLZEnabled;
-    sal_Bool    mbCityEnabled;
-    sal_Bool    mbUsCityEnabled;
-    sal_Bool    mbUsZipEnabled;
+    BOOL	mbStreetEnabled;
+    BOOL	mbPLZEnabled;
+    BOOL	mbCityEnabled;
+    BOOL	mbUsCityEnabled;
+    BOOL	mbUsZipEnabled;
 
-    String  maQueryStr;
+    String	maQueryStr;
 
     GeneralTabPage_Impl() :
-        mbStreetEnabled ( sal_False ),
-        mbPLZEnabled    ( sal_False ),
-        mbCityEnabled   ( sal_False ),
-        mbUsCityEnabled ( sal_False ),
-        mbUsZipEnabled  ( sal_False ) {}
+        mbStreetEnabled	( FALSE ),
+        mbPLZEnabled	( FALSE ),
+        mbCityEnabled	( FALSE ),
+        mbUsCityEnabled	( FALSE ),
+        mbUsZipEnabled	( FALSE ) {}
 };
+
+// -----------------------------------------------------------------------
+
+// kommt aus adritem.cxx
+//copy from adritem.cxx, since it will leave in svx.
+String ConvertToStore_Impl( const String& rText )
+{
+    String sRet;
+    USHORT i = 0;
+
+    while ( i < rText.Len() )
+    {
+        if ( rText.GetChar(i) == '\\' || rText.GetChar(i) == '#' )
+            sRet += '\\';
+        sRet += rText.GetChar(i++);
+    }
+    return sRet;
+}
+
 
 // -----------------------------------------------------------------------
 
@@ -72,7 +94,7 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
 
     SfxTabPage( pParent, CUI_RES(RID_SFXPAGE_GENERAL), rCoreSet ),
 
-    aAddrFrm        ( this, CUI_RES( GB_ADDRESS ) ),
+    aAddrFrm		( this, CUI_RES( GB_ADDRESS ) ),
     aCompanyLbl     ( this, CUI_RES( FT_COMPANY ), true ),
     aCompanyEdit    ( this, CUI_RES( ED_COMPANY ), INDEX_NOTSET, &aCompanyLbl ),
     aNameLbl        ( this, CUI_RES( FT_NAME ), true ),
@@ -103,8 +125,8 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
     aFaxMailLbl     ( this, CUI_RES( FT_FAXMAIL ), true ),
     aFaxEdit        ( this, CUI_RES( ED_FAX ), 0, &aFaxMailLbl ),
     aEmailEdit      ( this, CUI_RES( ED_EMAIL ), 1, &aFaxMailLbl ),
-    aUseDataCB      ( this, CUI_RES( CB_USEDATA ) ),
-    pImpl           ( new GeneralTabPage_Impl )
+    aUseDataCB		( this, CUI_RES( CB_USEDATA ) ),
+    pImpl			( new GeneralTabPage_Impl )
 
 {
     LanguageType eLang = Application::GetSettings().GetUILanguage();
@@ -235,14 +257,14 @@ SvxGeneralTabPage::~SvxGeneralTabPage()
 
 //------------------------------------------------------------------------
 
-SfxTabPage* SvxGeneralTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage*	SvxGeneralTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new SvxGeneralTabPage( pParent, rAttrSet ) );
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool SvxGeneralTabPage::FillItemSet( SfxItemSet& )
+BOOL SvxGeneralTabPage::FillItemSet( SfxItemSet& )
 {
     // Eingaben trimmen (f"uhrende und nachfolgende Leerzeichen entfernen)
     aCompanyEdit.SetText( TRIM(aCompanyEdit.GetText()) );
@@ -263,13 +285,13 @@ sal_Bool SvxGeneralTabPage::FillItemSet( SfxItemSet& )
     aFaxEdit.SetText( TRIM(aFaxEdit.GetText()) );
     aEmailEdit.SetText( TRIM(aEmailEdit.GetText()) );
 
-    sal_Bool bModified = sal_False;
+    BOOL bModified = FALSE;
     bModified |= GetAddress_Impl();
     SvtSaveOptions aSaveOpt;
     if ( aUseDataCB.IsChecked() != aSaveOpt.IsUseUserData() )
     {
         aSaveOpt.SetUseUserData( aUseDataCB.IsChecked() );
-        bModified |= sal_True;
+        bModified |= TRUE;
     }
     return bModified;
 }
@@ -280,18 +302,18 @@ void SvxGeneralTabPage::Reset( const SfxItemSet& rSet )
 {
     SetAddress_Impl();
 
-    sal_uInt16 nWhich = GetWhich( SID_FIELD_GRABFOCUS );
+    USHORT nWhich = GetWhich( SID_FIELD_GRABFOCUS );
     if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET )
     {
-        sal_uInt16 nField = ( (SfxUInt16Item&)rSet.Get( nWhich ) ).GetValue();
+        USHORT nField = ( (SfxUInt16Item&)rSet.Get( nWhich ) ).GetValue();
 
         switch ( nField )
         {
-            case COMPANY_EDIT:      aCompanyEdit.GrabFocus(); break;
+            case COMPANY_EDIT:		aCompanyEdit.GrabFocus(); break;
             case FIRSTNAME_EDIT:    aFirstName.GrabFocus(); break;
-            case LASTNAME_EDIT:     aName.GrabFocus(); break;
-            case STREET_EDIT:       aStreetEdit.GrabFocus(); break;
-            case COUNTRY_EDIT:      aCountryEdit.GrabFocus(); break;
+            case LASTNAME_EDIT:		aName.GrabFocus(); break;
+            case STREET_EDIT:		aStreetEdit.GrabFocus(); break;
+            case COUNTRY_EDIT:		aCountryEdit.GrabFocus(); break;
             case PLZ_EDIT:
                 if ( aPLZEdit.IsVisible() )
                     aPLZEdit.GrabFocus();
@@ -310,14 +332,14 @@ void SvxGeneralTabPage::Reset( const SfxItemSet& rSet )
                 else
                     aCityEdit.GrabFocus();
                 break;
-            case TITLE_EDIT:        aTitleEdit.GrabFocus(); break;
-            case POSITION_EDIT:     aPositionEdit.GrabFocus(); break;
-            case SHORTNAME_EDIT:    aShortName.GrabFocus(); break;
-            case TELPRIV_EDIT:      aTelPrivEdit.GrabFocus(); break;
-            case TELCOMPANY_EDIT:   aTelCompanyEdit.GrabFocus(); break;
-            case FAX_EDIT:          aFaxEdit.GrabFocus(); break;
-            case EMAIL_EDIT:        aEmailEdit.GrabFocus(); break;
-            default:                aCompanyEdit.GrabFocus();
+            case TITLE_EDIT:		aTitleEdit.GrabFocus(); break;
+            case POSITION_EDIT:		aPositionEdit.GrabFocus(); break;
+            case SHORTNAME_EDIT:	aShortName.GrabFocus(); break;
+            case TELPRIV_EDIT:		aTelPrivEdit.GrabFocus(); break;
+            case TELCOMPANY_EDIT:	aTelCompanyEdit.GrabFocus(); break;
+            case FAX_EDIT:			aFaxEdit.GrabFocus(); break;
+            case EMAIL_EDIT:		aEmailEdit.GrabFocus(); break;
+            default:				aCompanyEdit.GrabFocus();
         }
     }
 
@@ -334,7 +356,7 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
         switch ( aShortStr.Len() )
         {
             case 0:
-                aShortStr = String( RTL_CONSTASCII_USTRINGPARAM("  ") );
+                aShortStr = String( RTL_CONSTASCII_STRINGPARAM("  ") );
                 break;
 
             case 1:
@@ -342,7 +364,7 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
                 break;
         }
 
-        sal_uInt16 nPos = ( pEdit == &aFirstName ) ? 0 : 1;
+        USHORT nPos = ( pEdit == &aFirstName ) ? 0 : 1;
         String aTxt = pEdit->GetText();
         sal_Unicode cChar = ( aTxt.Len() > 0 ) ? aTxt.GetChar(0) : ' ';
         aShortStr.SetChar( nPos, cChar );
@@ -356,7 +378,7 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
 
 sal_Bool SvxGeneralTabPage::GetAddress_Impl()
 {
-    sal_Bool bRet =
+    BOOL bRet =
     (   aCompanyEdit.GetSavedValue()  !=        aCompanyEdit.GetText()  ||
         aFirstName.GetSavedValue()  !=          aFirstName.GetText()  ||
         aFatherName.GetSavedValue()  !=         aFatherName.GetText()  ||
@@ -378,7 +400,7 @@ sal_Bool SvxGeneralTabPage::GetAddress_Impl()
         aEmailEdit.GetSavedValue()  !=          aEmailEdit.GetText() );
 
     LanguageType eLang = Application::GetSettings().GetUILanguage();
-    sal_Bool bUS = ( LANGUAGE_ENGLISH_US == eLang );
+    BOOL bUS = ( LANGUAGE_ENGLISH_US == eLang );
 
     SvtUserOptions aUserOpt;
     aUserOpt.SetCompany(aCompanyEdit.GetText());
@@ -414,7 +436,7 @@ sal_Bool SvxGeneralTabPage::GetAddress_Impl()
 void SvxGeneralTabPage::SetAddress_Impl()
 {
     LanguageType eLang = Application::GetSettings().GetUILanguage();
-    sal_Bool bUS = ( LANGUAGE_ENGLISH_US == eLang );
+    BOOL bUS = ( LANGUAGE_ENGLISH_US == eLang );
     SvtUserOptions aUserOpt;
     aCompanyEdit.SetText( aUserOpt.GetCompany() );
     if ( aUserOpt.IsTokenReadonly( USER_OPT_COMPANY ) )

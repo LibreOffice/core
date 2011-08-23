@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,9 +31,9 @@
 
 #include <tools/debug.hxx>
 
-#include <svl/listener.hxx>
-#include <svl/listeneriter.hxx>
-#include <svl/broadcast.hxx>
+#include "listener.hxx"
+#include "listeneriter.hxx"
+#include "broadcast.hxx"
 #include <svl/smplhint.hxx>
 
 
@@ -77,7 +77,7 @@ SvtBroadcaster::~SvtBroadcaster()
     if( pLast )
         do {
             pLast->EndListening( *this );
-            if( !HasListeners() )       // all gone ??
+            if( !HasListeners() )		// all gone ??
                 break;
         } while( 0 != ( pLast = aIter.GoNext() ));
 }
@@ -91,20 +91,20 @@ void SvtBroadcaster::Broadcast( const SfxHint &rHint )
     // is anybody to notify?
     if( HasListeners() /* && !IsModifyLocked()*/ )
     {
-//      LockModify();
-//      bInModify = sal_True;
+//		LockModify();
+//		bInModify = TRUE;
 
         SvtListenerIter aIter( *this );
         SvtListener* pLast = aIter.GoStart();
         if( pLast )
             do {
                 pLast->Notify( *this, rHint );
-                if( !HasListeners() )       // all gone ??
+                if( !HasListeners() )		// all gone ??
                     break;
             } while( 0 != ( pLast = aIter.GoNext() ));
 
-//      bInModify = sal_False;
-//      UnlockModify();
+//		bInModify = FALSE;
+//		UnlockModify();
     }
 }
 
@@ -126,20 +126,20 @@ void SvtBroadcaster::Forward( SvtBroadcaster& rBC, const SfxHint& rHint )
     // is anybody to notify?
     if( rBC.HasListeners() /* && !IsModifyLocked()*/ )
     {
-//      LockModify();
-//      bInModify = sal_True;
+//		LockModify();
+//		bInModify = TRUE;
 
         SvtListenerIter aIter( rBC );
         SvtListener* pLast = aIter.GoStart();
         if( pLast )
             do {
                 pLast->Notify( rBC, rHint );
-                if( !rBC.HasListeners() )       // all gone ??
+                if( !rBC.HasListeners() )		// all gone ??
                     break;
             } while( 0 != ( pLast = aIter.GoNext() ));
 
-//      bInModify = sal_False;
-//      UnlockModify();
+//		bInModify = FALSE;
+//		UnlockModify();
     }
 }
 

@@ -56,6 +56,7 @@
 #include <rtl/logfile.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <fchrfmt.hxx>
+#include <errhdl.hxx>
 #include <frmatr.hxx>
 #include <txatbase.hxx>
 #include <fmtfld.hxx>
@@ -67,6 +68,7 @@
 #include <fmtflcnt.hxx>
 #include <fmtcnct.hxx>
 #include <frmfmt.hxx>
+#include <dcontact.hxx>
 #include <txtflcnt.hxx>
 #include <docfld.hxx>   // fuer Expression-Felder
 #include <pam.hxx>
@@ -74,7 +76,6 @@
 #include <ndnotxt.hxx>
 #include <ndole.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
@@ -85,9 +86,9 @@
 #include <dcontact.hxx>
 #include <swundo.hxx>
 #include <flypos.hxx>
-#include <UndoInsert.hxx>
-#include <expfld.hxx>       // InsertLabel
-#include <poolfmt.hxx>      // PoolVorlagen-Id's
+#include <undobj.hxx>
+#include <expfld.hxx>		// InsertLabel
+#include <poolfmt.hxx>		// PoolVorlagen-Id's
 #include <docary.hxx>
 #include <swtable.hxx>
 #include <tblsel.hxx>
@@ -98,7 +99,7 @@
 #include <ftninfo.hxx>
 #include <pagedesc.hxx>
 #include <PostItMgr.hxx>
-#include <comcore.hrc>      // STR-ResId's
+#include <comcore.hrc>		// STR-ResId's
 
 #include <unoframe.hxx>
 
@@ -109,10 +110,10 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-#define DEF_FLY_WIDTH    2268   //Defaultbreite fuer FlyFrms    (2268 == 4cm)
+#define DEF_FLY_WIDTH	 2268	//Defaultbreite fuer FlyFrms	(2268 == 4cm)
 
 
-static bool lcl_IsItemSet(const SwCntntNode & rNode, sal_uInt16 which)
+static bool lcl_IsItemSet(const SwCntntNode & rNode, USHORT which)
 {
     bool bResult = false;
 
@@ -124,13 +125,13 @@ static bool lcl_IsItemSet(const SwCntntNode & rNode, sal_uInt16 which)
 
 /*************************************************************************
 |*
-|*  SwDoc::MakeLayoutFmt()
+|*	SwDoc::MakeLayoutFmt()
 |*
-|*  Beschreibung        Erzeugt ein neues Format das in seinen Einstellungen
-|*      Defaultmaessig zu dem Request passt. Das Format wird in das
-|*      entsprechende Formate-Array gestellt.
-|*      Wenn bereits ein passendes Format existiert, so wird dies
-|*      zurueckgeliefert.
+|*	Beschreibung		Erzeugt ein neues Format das in seinen Einstellungen
+|* 		Defaultmaessig zu dem Request passt. Das Format wird in das
+|* 		entsprechende Formate-Array gestellt.
+|* 		Wenn bereits ein passendes Format existiert, so wird dies
+|* 		zurueckgeliefert.
 |*************************************************************************/
 SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 {
@@ -174,10 +175,10 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
                                      ) ) );
             pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ));
 
-            if( pSet )      // noch ein paar Attribute setzen ?
+            if( pSet )		// noch ein paar Attribute setzen ?
                 pFmt->SetFmtAttr( *pSet );
 
-            // JP: warum zuruecksetzen ???  Doc. ist doch veraendert ???
+            // JP: warum zuruecksetzen ???	Doc. ist doch veraendert ???
             // bei den Fly auf jedenfall verkehrt !!
             if ( !bMod )
                 ResetModified();
@@ -187,13 +188,13 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
     case RND_DRAW_OBJECT:
         {
             pFmt = MakeDrawFrmFmt( aEmptyStr, GetDfltFrmFmt() );
-            if( pSet )      // noch ein paar Attribute setzen ?
+            if( pSet )		// noch ein paar Attribute setzen ?
                 pFmt->SetFmtAttr( *pSet );
 
-            if (GetIDocumentUndoRedo().DoesUndo())
+            if( DoesUndo() )
             {
-                GetIDocumentUndoRedo().AppendUndo(
-                    new SwUndoInsLayFmt(pFmt, 0, 0));
+                ClearRedo();
+                AppendUndo( new SwUndoInsLayFmt( pFmt,0,0 ));
             }
         }
         break;
@@ -204,7 +205,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
     case FLY_AT_FLY:
     case FLY_AT_PARA:
     case FLY_AS_CHAR:
-        OSL_FAIL( "use new interface instead: SwDoc::MakeFlySection!" );
+        OSL_ENSURE( false, "use new interface instead: SwDoc::MakeFlySection!" );
         break;
 #endif
 
@@ -218,10 +219,12 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 
 /*************************************************************************
 |*
-|*  SwDoc::DelLayoutFmt()
+|*	SwDoc::DelLayoutFmt()
 |*
-|*  Beschreibung        Loescht das angegebene Format, der Inhalt wird mit
-|*      geloescht.
+|*	Beschreibung		Loescht das angegebene Format, der Inhalt wird mit
+|* 		geloescht.
+|*	Ersterstellung		MA 23. Sep. 92
+|*	Letzte Aenderung	MA 05. Feb. 93
 |*
 |*************************************************************************/
 void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
@@ -244,12 +247,24 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
     }
 
     const SwNodeIndex* pCntIdx = pFmt->GetCntnt().GetCntntIdx();
-    if (pCntIdx && !GetIDocumentUndoRedo().DoesUndo())
+    if( pCntIdx && !DoesUndo() )
     {
         //Verbindung abbauen, falls es sich um ein OLE-Objekt handelt.
         SwOLENode* pOLENd = GetNodes()[ pCntIdx->GetIndex()+1 ]->GetOLENode();
         if( pOLENd && pOLENd->GetOLEObj().IsOleRef() )
         {
+            /*
+            SwDoc* pDoc = (SwDoc*)pFmt->GetDoc();
+            if( pDoc )
+            {
+                SfxObjectShell* p = pDoc->GetPersist();
+                if( p )		// muss da sein
+                {
+                    SvInfoObjectRef aRef( p->Find( pOLENd->GetOLEObj().GetName() ) );
+                    if( aRef.Is() )
+                        aRef->SetObj(0);
+                }
+            } */
 
             // TODO/MBA: the old object closed the object, cleared all references to it, but didn't remove it from the container.
             // I have no idea, why, nobody could explain it - so I do my very best to mimic this behavior
@@ -265,6 +280,7 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
                 }
             }
 
+            //pOLENd->GetOLEObj().GetOleRef() = 0;
         }
     }
 
@@ -273,14 +289,15 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
 
     // erstmal sind nur Fly's Undofaehig
     const sal_uInt16 nWh = pFmt->Which();
-    if (GetIDocumentUndoRedo().DoesUndo() &&
-        (RES_FLYFRMFMT == nWh || RES_DRAWFRMFMT == nWh))
+    if( DoesUndo() && (RES_FLYFRMFMT == nWh || RES_DRAWFRMFMT == nWh) )
     {
-        GetIDocumentUndoRedo().AppendUndo( new SwUndoDelLayFmt( pFmt ));
+        // erstmal werden alle Undo - Objecte geloescht.
+        ClearRedo();
+        AppendUndo( new SwUndoDelLayFmt( pFmt ));
     }
     else
     {
-        // #i32089# - delete at-frame anchored objects
+        // --> OD 2004-07-26 #i32089# - delete at-frame anchored objects
         if ( nWh == RES_FLYFRMFMT )
         {
             // determine frame formats of at-frame anchored objects
@@ -291,9 +308,9 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
                 if ( pTbl )
                 {
                     std::vector<SwFrmFmt*> aToDeleteFrmFmts;
-                    const sal_uLong nNodeIdxOfFlyFmt( pCntntIdx->GetIndex() );
+                    const ULONG nNodeIdxOfFlyFmt( pCntntIdx->GetIndex() );
 
-                    for ( sal_uInt16 i = 0; i < pTbl->Count(); ++i )
+                    for ( USHORT i = 0; i < pTbl->Count(); ++i )
                     {
                         SwFrmFmt* pTmpFmt = (*pTbl)[i];
                         const SwFmtAnchor &rAnch = pTmpFmt->GetAnchor();
@@ -355,15 +372,18 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
 
 /*************************************************************************
 |*
-|*  SwDoc::CopyLayoutFmt()
+|*	SwDoc::CopyLayoutFmt()
 |*
-|*  Beschreibung        Kopiert das angegebene Format pSrc in pDest und
-|*                      returnt pDest. Wenn es noch kein pDest gibt, wird
-|*                      eins angelegt.
-|*                      JP: steht das Source Format in einem anderen
-|*                          Dokument, so kopiere auch dann noch richtig !!
-|*                          Vom chaos::Anchor-Attribut wird die Position immer
-|*                          auf 0 gesetzt !!!
+|*	Beschreibung		Kopiert das angegebene Format pSrc in pDest und
+|*						returnt pDest. Wenn es noch kein pDest gibt, wird
+|*						eins angelegt.
+|*						JP: steht das Source Format in einem anderen
+|*							Dokument, so kopiere auch dann noch richtig !!
+|*							Vom chaos::Anchor-Attribut wird die Position immer
+|*							auf 0 gesetzt !!!
+|*
+|*	Ersterstellung		BP 18.12.92
+|*	Letzte Aenderung	MA 17. Jul. 96
 |*
 |*************************************************************************/
 SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
@@ -376,7 +396,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 
     SwDoc* pSrcDoc = (SwDoc*)rSource.GetDoc();
 
-    // May we copy this object?
+    // #108784# may we copy this object?
     // We may, unless it's 1) it's a control (and therfore a draw)
     //                     2) anchored in a header/footer
     //                     3) anchored (to paragraph?)
@@ -455,21 +475,22 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 
                 String sOld( pDest->GetName() );
                 pDest->SetName( aEmptyStr );
-                if( FindFlyByName( sOld, nNdTyp ) )     // einen gefunden
+                if( FindFlyByName( sOld, nNdTyp ) )		// einen gefunden
                     switch( nNdTyp )
                     {
-                    case ND_GRFNODE:    sOld = GetUniqueGrfName();      break;
-                    case ND_OLENODE:    sOld = GetUniqueOLEName();      break;
-                    default:            sOld = GetUniqueFrameName();    break;
+                    case ND_GRFNODE:	sOld = GetUniqueGrfName();		break;
+                    case ND_OLENODE:	sOld = GetUniqueOLEName();		break;
+                    default:			sOld = GetUniqueFrameName();	break;
                     }
 
                 pDest->SetName( sOld );
             }
         }
 
-        if (GetIDocumentUndoRedo().DoesUndo())
+        if( DoesUndo() )
         {
-            GetIDocumentUndoRedo().AppendUndo(new SwUndoInsLayFmt(pDest,0,0));
+            ClearRedo();
+            AppendUndo( new SwUndoInsLayFmt( pDest,0,0 ));
         }
 
         // sorge dafuer das auch Fly's in Fly's kopiert werden
@@ -479,15 +500,15 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
     else
     {
         OSL_ENSURE( RES_DRAWFRMFMT == rSource.Which(), "Weder Fly noch Draw." );
-        // #i52780# - Note: moving object to visible layer not needed.
+        // OD 2005-08-02 #i52780# - Note: moving object to visible layer not needed.
         SwDrawContact* pSourceContact = (SwDrawContact *)rSource.FindContactObj();
 
         SwDrawContact* pContact = new SwDrawContact( (SwDrawFrmFmt*)pDest,
                                 CloneSdrObj( *pSourceContact->GetMaster(),
                                         mbCopyIsMove && this == pSrcDoc ) );
-        // #i49730# - notify draw frame format that position attributes are
-        // already set, if the position attributes are already set at the
-        // source draw frame format.
+        // --> OD 2005-05-23 #i49730# - notify draw frame format
+        // that position attributes are already set, if the position attributes
+        // are already set at the source draw frame format.
         if ( pDest->ISA(SwDrawFrmFmt) &&
              rSource.ISA(SwDrawFrmFmt) &&
              static_cast<const SwDrawFrmFmt&>(rSource).IsPosAttrSet() )
@@ -498,7 +519,8 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 
         if( pDest->GetAnchor() == rNewAnchor )
         {
-            // Do *not* connect to layout, if a <MakeFrms> will not be called.
+            // OD 03.07.2003 #108784# - do *not* connect to layout, if
+            // a <MakeFrms> will not be called.
             if ( bMakeFrms )
             {
                 pContact->ConnectToLayout( &rNewAnchor );
@@ -507,9 +529,10 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
         else
             pDest->SetFmtAttr( rNewAnchor );
 
-        if (GetIDocumentUndoRedo().DoesUndo())
+        if( DoesUndo() )
         {
-            GetIDocumentUndoRedo().AppendUndo(new SwUndoInsLayFmt(pDest,0,0));
+            ClearRedo();
+            AppendUndo( new SwUndoInsLayFmt( pDest,0,0 ));
         }
     }
 
@@ -530,8 +553,9 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, sal_Bool bMoveWithinDoc,
                                 sal_Bool bInsInPage )
 {
-    // #i52858# - method name changed
+    // --> OD 2005-08-08 #i52858# - method name changed
     SdrPage *pPg = GetOrCreateDrawModel()->GetPage( 0 );
+    // <--
     if( !pPg )
     {
         pPg = GetDrawModel()->AllocPage( sal_False );
@@ -556,7 +580,8 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, sal_Bool bMoveWithinDoc,
     else if( bInsInPage )
         pPg->InsertObject( pObj );
 
-    // For drawing objects: set layer of cloned object to invisible layer
+    // OD 02.07.2003 #108784# - for drawing objects: set layer of cloned object
+    // to invisible layer
     SdrLayerID nLayerIdForClone = rObj.GetLayer();
     if ( !pObj->ISA(SwFlyDrawObj) &&
          !pObj->ISA(SwVirtFlyDrawObj) &&
@@ -586,9 +611,9 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     if( !mbInReading )
         switch( rNode.GetNodeType() )
         {
-        case ND_GRFNODE:        sName = GetUniqueGrfName();     break;
-        case ND_OLENODE:        sName = GetUniqueOLEName();     break;
-        default:                sName = GetUniqueFrameName();       break;
+        case ND_GRFNODE:		sName = GetUniqueGrfName();		break;
+        case ND_OLENODE:        sName = GetUniqueOLEName();		break;
+        default:				sName = GetUniqueFrameName();		break;
         }
     SwFlyFrmFmt* pFmt = MakeFlyFrmFmt( sName, pFrmFmt );
 
@@ -619,8 +644,8 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     // Anker noch nicht gesetzt ?
     RndStdIds eAnchorId = pAnchor ? pAnchor->GetAnchorId()
                                   : pFmt->GetAnchor().GetAnchorId();
-    // #i107811# Assure that at-page anchored fly frames have a page num or a
-    // content anchor set.
+    // --> OD 2010-01-07 #i107811#
+    // Assure that at-page anchored fly frames have a page num or a content anchor set.
     if ( !pAnchor ||
          ( FLY_AT_PAGE != pAnchor->GetAnchorId() &&
            !pAnchor->GetCntntAnchor() ) ||
@@ -694,15 +719,15 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     }
 
     // Frames anlegen
-    if( GetCurrentViewShell() )
-        pFmt->MakeFrms();           // ???  //swmod 071108//swmod 071225
+    if( GetRootFrm() )
+        pFmt->MakeFrms();			// ???
 
-    if (GetIDocumentUndoRedo().DoesUndo())
+    if( DoesUndo() )
     {
-        sal_uLong nNodeIdx = rAnchPos.nNode.GetIndex();
+        ClearRedo();
+        ULONG nNodeIdx = rAnchPos.nNode.GetIndex();
         xub_StrLen nCntIdx = rAnchPos.nContent.GetIndex();
-        GetIDocumentUndoRedo().AppendUndo(
-            new SwUndoInsLayFmt( pFmt, nNodeIdx, nCntIdx ));
+        AppendUndo( new SwUndoInsLayFmt( pFmt, nNodeIdx, nCntIdx ));
     }
 
     SetModified();
@@ -712,7 +737,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
 SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
                                     const SwPosition* pAnchorPos,
                                     const SfxItemSet* pFlySet,
-                                    SwFrmFmt* pFrmFmt, sal_Bool bCalledFromShell )
+                                    SwFrmFmt* pFrmFmt, BOOL bCalledFromShell )
 {
     SwFlyFrmFmt* pFmt = 0;
     sal_Bool bCallMake = sal_True;
@@ -743,7 +768,7 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
         sal_uInt16 nCollId = static_cast<sal_uInt16>(
             get(IDocumentSettingAccess::HTML_MODE) ? RES_POOLCOLL_TEXT : RES_POOLCOLL_FRAME );
 
-        /* If there exists no adjust item in the paragraph
+        /* #109161# If there exists no adjust item in the paragraph
             style for the content node of the new fly section
             propagate an existing adjust item at the anchor to the new
             content node. */
@@ -756,7 +781,7 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
 
         if (bCalledFromShell && !lcl_IsItemSet(*pNewTxtNd, RES_PARATR_ADJUST) &&
             SFX_ITEM_SET == pAnchorNode->GetSwAttrSet().
-            GetItemState(RES_PARATR_ADJUST, sal_True, &pItem))
+            GetItemState(RES_PARATR_ADJUST, TRUE, &pItem))
             static_cast<SwCntntNode *>(pNewTxtNd)->SetAttr(*pItem);
 
          pFmt = _MakeFlySection( *pAnchorPos, *pNewTxtNd,
@@ -771,7 +796,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
 {
     SwFmtAnchor& rAnch = (SwFmtAnchor&)rSet.Get( RES_ANCHOR );
 
-    GetIDocumentUndoRedo().StartUndo( UNDO_INSLAYFMT, NULL );
+    StartUndo( UNDO_INSLAYFMT, NULL );
 
     SwFlyFrmFmt* pFmt = MakeFlySection( rAnch.GetAnchorId(), rPam.GetPoint(),
                                         &rSet, pParent );
@@ -782,14 +807,14 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
 
     if( pFmt )
     {
-        do {        // middle check loop
+        do {		// middle check loop
             const SwFmtCntnt &rCntnt = pFmt->GetCntnt();
             OSL_ENSURE( rCntnt.GetCntntIdx(), "Kein Inhalt vorbereitet." );
             SwNodeIndex aIndex( *(rCntnt.GetCntntIdx()), 1 );
             SwCntntNode *pNode = aIndex.GetNode().GetCntntNode();
 
             // ACHTUNG: nicht einen Index auf dem Stack erzeugen, sonst
-            //          kann der CntntnNode am Ende nicht geloscht werden !!
+            // 		   	kann der CntntnNode am Ende nicht geloscht werden !!
             SwPosition aPos( aIndex );
             aPos.nContent.Assign( pNode, 0 );
 
@@ -828,32 +853,37 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                     rTbl.MakeCopy( this, aPos, *pSelBoxes );
                     // Don't delete a part of a table with row span!!
                     // You could delete the content instead -> ToDo
-                    //rTbl.DeleteSel( this, *pSelBoxes, 0, 0, sal_True, sal_True );
+                    //rTbl.DeleteSel( this, *pSelBoxes, 0, 0, TRUE, TRUE );
                 }
 
                 // wenn Tabelle im Rahmen, dann ohne nachfolgenden TextNode
                 aIndex = rCntnt.GetCntntIdx()->GetNode().EndOfSectionIndex() - 1;
                 OSL_ENSURE( aIndex.GetNode().GetTxtNode(),
                         "hier sollte ein TextNode stehen" );
-                aPos.nContent.Assign( 0, 0 );       // Index abmelden !!
+                aPos.nContent.Assign( 0, 0 );		// Index abmelden !!
                 GetNodes().Delete( aIndex, 1 );
 
 //JP erstmal ein Hack, solange keine Flys/Headers/Footers Undofaehig sind
-// werden erstmal alle Undo - Objecte geloescht.
-if( GetIDocumentUndoRedo().DoesUndo() )
-{
-    GetIDocumentUndoRedo().DelAllUndoObj();
-}
+if( DoesUndo() )	// werden erstmal alle Undo - Objecte geloescht.
+    DelAllUndoObj();
 
             }
             else
             {
+/*
+                // alle Pams verschieben
+                SwPaM* pTmp = (SwPaM*)&rPam;
+                do {
+                    if( pTmp->HasMark() &&
+                        *pTmp->GetPoint() != *pTmp->GetMark() )
+                        MoveAndJoin( *pTmp, aPos );
+                } while( &rPam != ( pTmp = (SwPaM*)pTmp->GetNext() ) );
+*/
                 // copy all Pams and then delete all
                 SwPaM* pTmp = (SwPaM*)&rPam;
-                sal_Bool bOldFlag = mbCopyIsMove;
-                bool const bOldUndo = GetIDocumentUndoRedo().DoesUndo();
-                mbCopyIsMove = sal_True;
-                GetIDocumentUndoRedo().DoUndo(false);
+                BOOL bOldFlag = mbCopyIsMove, bOldUndo = mbUndo;
+                mbCopyIsMove = TRUE;
+                mbUndo = FALSE;
                 do {
                     if( pTmp->HasMark() &&
                         *pTmp->GetPoint() != *pTmp->GetMark() )
@@ -863,7 +893,7 @@ if( GetIDocumentUndoRedo().DoesUndo() )
                     pTmp = static_cast<SwPaM*>(pTmp->GetNext());
                 } while ( &rPam != pTmp );
                 mbCopyIsMove = bOldFlag;
-                GetIDocumentUndoRedo().DoUndo(bOldUndo);
+                mbUndo = bOldUndo;
 
                 pTmp = (SwPaM*)&rPam;
                 do {
@@ -880,7 +910,7 @@ if( GetIDocumentUndoRedo().DoesUndo() )
 
     SetModified();
 
-    GetIDocumentUndoRedo().EndUndo( UNDO_INSLAYFMT, NULL );
+    EndUndo( UNDO_INSLAYFMT, NULL );
 
     return pFmt;
 }
@@ -922,8 +952,8 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
                     : &rRg.GetPoint()->nNode;
     }
 
-    // Allow drawing objects in header/footer, but control objects aren't
-    // allowed in header/footer.
+    // OD 24.06.2003 #108784# - allow drawing objects in header/footer, but
+    // control objects aren't allowed in header/footer.
     if( pChkIdx &&
         ::CheckControlLayer( &rDrawObj ) &&
         IsInHeaderFooter( *pChkIdx ) )
@@ -965,28 +995,50 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     SwDrawContact* pContact = new SwDrawContact( pFmt, &rDrawObj );
 
     // ggfs. Frames anlegen
-    if( GetCurrentViewShell() )
+    if( GetRootFrm() )
     {
         pFmt->MakeFrms();
-        // #i42319# - follow-up of #i35635#
+        // --> OD 2005-02-09 #i42319# - follow-up of #i35635#
         // move object to visible layer
-        // #i79391#
+        // --> OD 2007-07-10 #i79391#
         if ( pContact->GetAnchorFrm() )
         {
             pContact->MoveObjToVisibleLayer( &rDrawObj );
         }
+        // <--
     }
 
-    if (GetIDocumentUndoRedo().DoesUndo())
+    if( DoesUndo() )
     {
-        GetIDocumentUndoRedo().AppendUndo( new SwUndoInsLayFmt(pFmt, 0, 0) );
+        ClearRedo();
+        AppendUndo( new SwUndoInsLayFmt( pFmt,0,0 ));
     }
 
     SetModified();
     return pFmt;
 }
 
-/* ---------------------------------------------------------------------------
+/*************************************************************************
+|*
+|*	SwDoc::GetAllFlyFmts
+|*
+|*	Ersterstellung		MA 14. Jul. 93
+|*	Letzte Aenderung	MD 23. Feb. 95
+|*
+|*************************************************************************/
+/*sal_Bool TstFlyRange( const SwPaM* pPam, sal_uInt32 nFlyPos )
+{
+    sal_Bool bOk = sal_False;
+    const SwPaM* pTmp = pPam;
+    do {
+        bOk = pTmp->Start()->nNode.GetIndex() < nFlyPos &&
+                pTmp->End()->nNode.GetIndex() > nFlyPos;
+    } while( !bOk && pPam != ( pTmp = (const SwPaM*)pTmp->GetNext() ));
+    return bOk;
+}
+*/
+
+/* -----------------------------04.04.00 10:55--------------------------------
     paragraph frames - o.k. if the PaM includes the paragraph from the beginning
                        to the beginning of the next paragraph at least
     frames at character - o.k. if the pam start at least at the same position
@@ -995,7 +1047,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
 sal_Bool TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
                         RndStdIds nAnchorId )
 {
-    sal_Bool bOk = sal_False;
+    sal_Bool bOk = FALSE;
     const SwPaM* pTmp = pPam;
     do {
         const sal_uInt32 nFlyIndex = pFlyPos->nNode.GetIndex();
@@ -1027,8 +1079,7 @@ sal_Bool TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
 }
 
 void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
-                           const SwPaM* pCmpRange, sal_Bool bDrawAlso,
-                           sal_Bool bAsCharAlso ) const
+                           const SwPaM* pCmpRange, sal_Bool bDrawAlso ) const
 {
     SwPosFlyFrm *pFPos = 0;
     SwFrmFmt *pFly;
@@ -1046,12 +1097,11 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
             if (pAPos &&
                 ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
                  (FLY_AT_FLY  == rAnchor.GetAnchorId()) ||
-                 (FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
-                 ((FLY_AS_CHAR == rAnchor.GetAnchorId()) && bAsCharAlso)))
+                 (FLY_AT_CHAR == rAnchor.GetAnchorId())))
             {
                 if( pCmpRange &&
                     !TstFlyRange( pCmpRange, pAPos, rAnchor.GetAnchorId() ))
-                        continue;       // kein gueltiger FlyFrame
+                        continue;		// kein gueltiger FlyFrame
                 pFPos = new SwPosFlyFrm( pAPos->nNode, pFly, rPosFlyFmts.Count() );
                 rPosFlyFmts.Insert( pFPos );
             }
@@ -1060,11 +1110,11 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
 
     // kein Layout oder nur ein Teil, dann wars das
     // Seitenbezogen Flys nur, wenn vollstaendig "gewuenscht" wird !
-    if( !GetCurrentViewShell() || pCmpRange )   //swmod 071108//swmod 071225
+    if( !GetRootFrm() || pCmpRange )
         return;
 
     pFPos = 0;
-    SwPageFrm *pPage = (SwPageFrm*)GetCurrentLayout()->GetLower();  //swmod 080218
+    SwPageFrm *pPage = (SwPageFrm*)GetRootFrm()->GetLower();
     while( pPage )
     {
         if( pPage->GetSortedObjs() )
@@ -1117,7 +1167,10 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
 
 /*************************************************************************
 |*
-|*  SwDoc::InsertLabel()
+|*	SwDoc::InsertLabel()
+|*
+|*	Ersterstellung		MA 11. Feb. 94
+|*	Letzte Aenderung	MA 12. Nov. 97
 |*
 |*************************************************************************/
 
@@ -1151,37 +1204,41 @@ void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uInt16 nWh
                     rNewSet.Put( *pOldItem );
             }
             else {
-                OSL_FAIL("What am I doing here?");
+                OSL_ENSURE(0, "What am I doing here?");
             }
         }
         else {
-            OSL_FAIL("What am I doing here?");
+            OSL_ENSURE(0, "What am I doing here?");
         }
     }
 
 }
 
-static SwFlyFrmFmt *
-lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
-        SwUndoInsertLabel *const pUndo,
-        SwLabelType const eType, String const& rTxt, String const& rSeparator,
+SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
             const String& rNumberingSeparator,
-            const sal_Bool bBefore, const sal_uInt16 nId, const sal_uLong nNdIdx,
+            const sal_Bool bBefore, const sal_uInt16 nId, const ULONG nNdIdx,
             const String& rCharacterStyle,
             const sal_Bool bCpyBrd )
 {
-    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
+    sal_Bool bWasUndo = DoesUndo();
+    SwUndoInsertLabel* pUndo = 0;
+    if( bWasUndo )
+    {
+        ClearRedo();
+        pUndo = new SwUndoInsertLabel( eType, rTxt, rSeparator, rNumberingSeparator,
+                                       bBefore, nId, rCharacterStyle, bCpyBrd );
+        DoUndo( sal_False );
+    }
 
     sal_Bool bTable = sal_False;    //Um etwas Code zu sparen.
 
     //Erstmal das Feld bauen, weil ueber den Namen die TxtColl besorgt werden
     //muss
-    OSL_ENSURE( nId == USHRT_MAX  || nId < rDoc.GetFldTypes()->Count(),
-            "FldType index out of bounds." );
-    SwFieldType *pType = (nId != USHRT_MAX) ? (*rDoc.GetFldTypes())[nId] : NULL;
-    OSL_ENSURE(!pType || pType->Which() == RES_SETEXPFLD, "wrong Id for Label");
+    OSL_ENSURE( nId == USHRT_MAX  || nId < GetFldTypes()->Count(), "FldType ueberindiziert." );
+    SwFieldType *pType = nId != USHRT_MAX ? (*GetFldTypes())[nId] : NULL;
+    OSL_ENSURE( !pType || pType->Which() == RES_SETEXPFLD, "Falsche Id fuer Label" );
 
-    SwTxtFmtColl * pColl = NULL;
+    SwTxtFmtColl *pColl = NULL;
     if( pType )
     {
         for( sal_uInt16 i = pTxtFmtCollTbl->Count(); i; )
@@ -1196,9 +1253,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     }
 
     if( !pColl )
-    {
-        pColl = rDoc.GetTxtCollFromPool( RES_POOLCOLL_LABEL );
-    }
+        pColl = GetTxtCollFromPool( RES_POOLCOLL_LABEL );
 
     SwTxtNode *pNew = NULL;
     SwFlyFrmFmt* pNewFmt = NULL;
@@ -1212,9 +1267,9 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
             //Am Anfang/Ende der Fly-Section den entsprechenden Node mit Feld
             //einfuegen (Frame wird automatisch erzeugt).
             {
-                SwStartNode *pSttNd = rDoc.GetNodes()[nNdIdx]->GetStartNode();
+                SwStartNode *pSttNd = GetNodes()[nNdIdx]->GetStartNode();
                 OSL_ENSURE( pSttNd, "Kein StartNode in InsertLabel." );
-                sal_uLong nNode;
+                ULONG nNode;
                 if( bBefore )
                 {
                     nNode = pSttNd->GetIndex();
@@ -1232,8 +1287,8 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                     pUndo->SetNodePos( nNode );
 
                 //Node fuer Beschriftungsabsatz erzeugen.
-                SwNodeIndex aIdx( rDoc.GetNodes(), nNode );
-                pNew = rDoc.GetNodes().MakeTxtNode( aIdx, pColl );
+                SwNodeIndex aIdx( GetNodes(), nNode );
+                pNew = GetNodes().MakeTxtNode( aIdx, pColl );
             }
             break;
 
@@ -1245,23 +1300,12 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 // Frames erzeugen.
 
                 //Erstmal das Format zum Fly besorgen und das Layout entkoppeln.
-                SwFrmFmt *pOldFmt = rDoc.GetNodes()[nNdIdx]->GetFlyFmt();
+                SwFrmFmt *pOldFmt = GetNodes()[nNdIdx]->GetFlyFmt();
                 OSL_ENSURE( pOldFmt, "Format des Fly nicht gefunden." );
-                // --> OD #i115719#
-                // <title> and <description> attributes are lost when calling <DelFrms()>.
-                // Thus, keep them and restore them after the calling <MakeFrms()>
-                const bool bIsSwFlyFrmFmtInstance( dynamic_cast<SwFlyFrmFmt*>(pOldFmt) != 0 );
-                const String sTitle( bIsSwFlyFrmFmtInstance
-                                     ? static_cast<SwFlyFrmFmt*>(pOldFmt)->GetObjTitle()
-                                     : String() );
-                const String sDescription( bIsSwFlyFrmFmtInstance
-                                           ? static_cast<SwFlyFrmFmt*>(pOldFmt)->GetObjDescription()
-                                           : String() );
-                // <--
                 pOldFmt->DelFrms();
 
-                pNewFmt = rDoc.MakeFlyFrmFmt( rDoc.GetUniqueFrameName(),
-                                rDoc.GetFrmFmtFromPool(RES_POOLFRM_FRAME) );
+                pNewFmt = MakeFlyFrmFmt( GetUniqueFrameName(),
+                                    GetFrmFmtFromPool( RES_POOLFRM_FRAME ));
 
                 /* #i6447#: Only the selected items are copied from the old
                    format. */
@@ -1282,10 +1326,10 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 if( bCpyBrd )
                 {
                     // JP 07.07.99: Bug 67029 - if at Grafik no BoxItem but
-                    //              in the new Format is any, then set the
-                    //              default item in the new Set. Because
-                    //              the Size of the Grafik have never been
-                    //              changed!
+                    // 				in the new Format is any, then set the
+                    //				default item in the new Set. Because
+                    // 				the Size of the Grafik have never been
+                    //				changed!
                     const SfxPoolItem *pItem;
                     if( SFX_ITEM_SET == pOldFmt->GetAttrSet().
                             GetItemState( RES_BOX, sal_True, &pItem ))
@@ -1319,8 +1363,8 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 aFrmSize.SetHeightSizeType( ATT_MIN_SIZE );
                 pNewSet->Put( aFrmSize );
 
-                SwStartNode* pSttNd = rDoc.GetNodes().MakeTextSection(
-                            SwNodeIndex( rDoc.GetNodes().GetEndOfAutotext() ),
+                SwStartNode* pSttNd = GetNodes().MakeTextSection(
+                            SwNodeIndex( GetNodes().GetEndOfAutotext() ),
                             SwFlyStartNode, pColl );
                 pNewSet->Put( SwFmtCntnt( pSttNd ));
 
@@ -1395,18 +1439,11 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 //Nun nur noch die Flys erzeugen lassen. Das ueberlassen
                 //wir vorhanden Methoden (insb. fuer InCntFlys etwas aufwendig).
                 pNewFmt->MakeFrms();
-                // --> OD #i115719#
-                if ( bIsSwFlyFrmFmtInstance )
-                {
-                    static_cast<SwFlyFrmFmt*>(pOldFmt)->SetObjTitle( sTitle );
-                    static_cast<SwFlyFrmFmt*>(pOldFmt)->SetObjDescription( sDescription );
-                }
-                // <--
             }
             break;
 
         default:
-            OSL_ENSURE(false, "unknown LabelType?");
+            OSL_ENSURE( !this, "Neuer LabelType?." );
     }
     OSL_ENSURE( pNew, "No Label inserted" );
     if( pNew )
@@ -1426,7 +1463,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 aTxt += ' ';
         }
         xub_StrLen nIdx = aTxt.Len();
-        if( rTxt.Len() > 0 )
+        if ( rTxt.Len() > 0 )
         {
             aTxt += rSeparator;
         }
@@ -1448,11 +1485,11 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
             pNew->InsertItem( aFmt, nIdx, nIdx );
             if(rCharacterStyle.Len())
             {
-                SwCharFmt* pCharFmt = rDoc.FindCharFmtByName(rCharacterStyle);
+                SwCharFmt* pCharFmt = FindCharFmtByName( rCharacterStyle );
                 if( !pCharFmt )
                 {
-                    const sal_uInt16 nMyId = SwStyleNameMapper::GetPoolIdFromUIName(rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
-                    pCharFmt = rDoc.GetCharFmtFromPool( nMyId );
+                    const USHORT nMyId = SwStyleNameMapper::GetPoolIdFromUIName(rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
+                    pCharFmt = GetCharFmtFromPool( nMyId );
                 }
                 if (pCharFmt)
                 {
@@ -1472,8 +1509,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
             }
             else
             {
-                SwTableNode *const pNd =
-                    rDoc.GetNodes()[nNdIdx]->GetStartNode()->GetTableNode();
+                SwTableNode *pNd = GetNodes()[nNdIdx]->GetStartNode()->GetTableNode();
                 SwTable &rTbl = pNd->GetTable();
                 if ( !rTbl.GetFrmFmt()->GetKeep().GetValue() )
                     rTbl.GetFrmFmt()->SetFmtAttr( SvxFmtKeepItem( sal_True, RES_KEEP ) );
@@ -1481,68 +1517,60 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                     pUndo->SetUndoKeep();
             }
         }
-        rDoc.SetModified();
+        SetModified();
     }
 
-    return pNewFmt;
-}
-
-SwFlyFrmFmt *
-SwDoc::InsertLabel(
-        SwLabelType const eType, String const& rTxt, String const& rSeparator,
-        String const& rNumberingSeparator,
-        sal_Bool const bBefore, sal_uInt16 const nId, sal_uLong const nNdIdx,
-        String const& rCharacterStyle,
-        sal_Bool const bCpyBrd )
-{
-    SwUndoInsertLabel * pUndo(0);
-    if (GetIDocumentUndoRedo().DoesUndo())
-    {
-        pUndo = new SwUndoInsertLabel(
-                        eType, rTxt, rSeparator, rNumberingSeparator,
-                        bBefore, nId, rCharacterStyle, bCpyBrd );
-    }
-
-    SwFlyFrmFmt *const pNewFmt = lcl_InsertLabel(*this, pTxtFmtCollTbl, pUndo,
-            eType, rTxt, rSeparator, rNumberingSeparator, bBefore,
-            nId, nNdIdx, rCharacterStyle, bCpyBrd);
-
-    if (pUndo)
-    {
-        GetIDocumentUndoRedo().AppendUndo(pUndo);
-    }
+    if( pUndo )
+        AppendUndo( pUndo );
     else
-    {
-        GetIDocumentUndoRedo().DelAllUndoObj();
-    }
+        DelAllUndoObj();
+    DoUndo( bWasUndo );
 
     return pNewFmt;
 }
-
 
 /*************************************************************************
 |*
-|*  SwDoc::InsertDrawLabel()
+|*	SwDoc::InsertDrawLabel()
+|*
+|*	Ersterstellung		MIB 7. Dez. 98
+|*	Letzte Aenderung	MIB 7. Dez. 98
 |*
 |*************************************************************************/
-static SwFlyFrmFmt *
-lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
-        SwUndoInsertLabel *const pUndo, SwDrawFrmFmt *const pOldFmt,
-        String const& rTxt,
+SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
                                      const String& rSeparator,
                                      const String& rNumberSeparator,
                                      const sal_uInt16 nId,
                                      const String& rCharacterStyle,
                                      SdrObject& rSdrObj )
 {
-    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
-    ::sw::DrawUndoGuard const drawUndoGuard(rDoc.GetIDocumentUndoRedo());
+
+    SwDrawContact* pContact = (SwDrawContact*)GetUserCall( &rSdrObj );
+    OSL_ENSURE( RES_DRAWFRMFMT == pContact->GetFmt()->Which(),
+            "Kein DrawFrmFmt" );
+    if ( !pContact )
+        return 0;
+
+    SwDrawFrmFmt* pOldFmt = (SwDrawFrmFmt *)pContact->GetFmt();
+    if( !pOldFmt )
+        return 0;
+
+    sal_Bool bWasUndo = DoesUndo();
+    sal_Bool bWasNoDrawUndo = IsNoDrawUndoObj();
+    SwUndoInsertLabel* pUndo = 0;
+    if( bWasUndo )
+    {
+        ClearRedo();
+        pUndo = new SwUndoInsertLabel(
+            LTYPE_DRAW, rTxt, rSeparator, rNumberSeparator, sal_False, nId, rCharacterStyle, sal_False );
+        DoUndo( sal_False );
+        SetNoDrawUndoObj( sal_True );
+    }
 
     // Erstmal das Feld bauen, weil ueber den Namen die TxtColl besorgt
     // werden muss
-    OSL_ENSURE( nId == USHRT_MAX  || nId < rDoc.GetFldTypes()->Count(),
-            "FldType index out of bounds" );
-    SwFieldType *pType = nId != USHRT_MAX ? (*rDoc.GetFldTypes())[nId] : 0;
+    OSL_ENSURE( nId == USHRT_MAX  || nId < GetFldTypes()->Count(), "FldType overflow" );
+    SwFieldType *pType = nId != USHRT_MAX ? (*GetFldTypes())[nId] : 0;
     OSL_ENSURE( !pType || pType->Which() == RES_SETEXPFLD, "Wrong label id" );
 
     SwTxtFmtColl *pColl = NULL;
@@ -1560,9 +1588,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     }
 
     if( !pColl )
-    {
-        pColl = rDoc.GetTxtCollFromPool( RES_POOLCOLL_LABEL );
-    }
+        pColl = GetTxtCollFromPool( RES_POOLCOLL_LABEL );
 
     SwTxtNode* pNew = NULL;
     SwFlyFrmFmt* pNewFmt = NULL;
@@ -1572,7 +1598,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     // dem Object (Grafik/Ole) absatzgebunden in den neuen Rahmen,
     // Frames erzeugen.
 
-    // Keep layer ID of drawing object before removing
+    // OD 27.11.2003 #112045# - Keep layer ID of drawing object before removing
     // its frames.
     // Note: The layer ID is passed to the undo and have to be the correct value.
     //       Removing the frames of the drawing object changes its layer.
@@ -1600,9 +1626,9 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     lcl_CpyAttr( *pNewSet, pOldFmt->GetAttrSet(), RES_SURROUND );
 
     // Den Rahmen ggf. in den Hintergrund schicken.
-    // Consider 'invisible' hell layer.
-    if ( rDoc.GetHellId() != nLayerId &&
-         rDoc.GetInvisibleHellId() != nLayerId )
+    // OD 02.07.2003 #108784# - consider 'invisible' hell layer.
+    if ( GetHellId() != nLayerId &&
+         GetInvisibleHellId() != nLayerId )
     {
         SvxOpaqueItem aOpaque( RES_OPAQUE );
         aOpaque.SetValue( sal_True );
@@ -1610,7 +1636,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     }
 
     // Position uebernehmen
-    // #i26791# - use directly the positioning attributes of
+    // OD 2004-04-15 #i26791# - use directly the positioning attributes of
     // the drawing object.
     pNewSet->Put( pOldFmt->GetHoriOrient() );
     pNewSet->Put( pOldFmt->GetVertOrient() );
@@ -1631,15 +1657,14 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     pNewSet->Put( pOldFmt->GetULSpace() );
 
     SwStartNode* pSttNd =
-        rDoc.GetNodes().MakeTextSection(
-            SwNodeIndex( rDoc.GetNodes().GetEndOfAutotext() ),
+        GetNodes().MakeTextSection( SwNodeIndex( GetNodes().GetEndOfAutotext() ),
                                     SwFlyStartNode, pColl );
 
-    pNewFmt = rDoc.MakeFlyFrmFmt( rDoc.GetUniqueFrameName(),
-                 rDoc.GetFrmFmtFromPool( RES_POOLFRM_FRAME ) );
+    pNewFmt = MakeFlyFrmFmt( GetUniqueFrameName(),
+                             GetFrmFmtFromPool( RES_POOLFRM_FRAME ) );
 
     // JP 28.10.99: Bug 69487 - set border and shadow to default if the
-    //              template contains any.
+    // 				template contains any.
     if( SFX_ITEM_SET == pNewFmt->GetAttrSet().GetItemState( RES_BOX, sal_True ))
         pNewSet->Put( *GetDfltAttr( RES_BOX ) );
 
@@ -1675,19 +1700,15 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     pNewSet->ClearItem();
 
     pNewSet->Put( SwFmtSurround( SURROUND_NONE ) );
-    if (nLayerId == rDoc.GetHellId())
-    {
-    // Consider drawing objects in 'invisible' hell layer
-        rSdrObj.SetLayer( rDoc.GetHeavenId() );
-    }
-    else if (nLayerId == rDoc.GetInvisibleHellId())
-    {
-        rSdrObj.SetLayer( rDoc.GetInvisibleHeavenId() );
-    }
+    if( nLayerId == GetHellId() )
+        rSdrObj.SetLayer( GetHeavenId() );
+    // OD 02.07.2003 #108784# - consider drawing objects in 'invisible' hell layer
+    else if( nLayerId == GetInvisibleHellId() )
+        rSdrObj.SetLayer( GetInvisibleHeavenId() );
     pNewSet->Put( SvxLRSpaceItem( RES_LR_SPACE ) );
     pNewSet->Put( SvxULSpaceItem( RES_UL_SPACE ) );
 
-    // #i26791# - set position of the drawing object, which is labeled.
+    // OD 2004-04-15 #i26791# - set position of the drawing object, which is labeled.
     pNewSet->Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ) );
     pNewSet->Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ) );
 
@@ -1702,7 +1723,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     if( pUndo )
     {
         pUndo->SetFlys( *pOldFmt, *pNewSet, *pNewFmt );
-        // #i26791# - position no longer needed
+        // OD 2004-04-15 #i26791# - position no longer needed
         pUndo->SetDrawObj( nLayerId );
     }
     else
@@ -1752,11 +1773,11 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
             pNew->InsertItem( aFmt, nIdx, nIdx );
             if ( rCharacterStyle.Len() )
             {
-                SwCharFmt * pCharFmt = rDoc.FindCharFmtByName(rCharacterStyle);
+                SwCharFmt* pCharFmt = FindCharFmtByName( rCharacterStyle );
                 if ( !pCharFmt )
                 {
-                    const sal_uInt16 nMyId = SwStyleNameMapper::GetPoolIdFromUIName( rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
-                    pCharFmt = rDoc.GetCharFmtFromPool( nMyId );
+                    const USHORT nMyId = SwStyleNameMapper::GetPoolIdFromUIName( rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+                    pCharFmt = GetCharFmtFromPool( nMyId );
                 }
                 if ( pCharFmt )
                 {
@@ -1768,57 +1789,21 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         }
     }
 
-    return pNewFmt;
-}
-
-SwFlyFrmFmt* SwDoc::InsertDrawLabel(
-        String const& rTxt,
-        String const& rSeparator,
-        String const& rNumberSeparator,
-        sal_uInt16 const nId,
-        String const& rCharacterStyle,
-        SdrObject& rSdrObj )
-{
-    SwDrawContact *const pContact =
-        static_cast<SwDrawContact*>(GetUserCall( &rSdrObj ));
-    OSL_ENSURE( RES_DRAWFRMFMT == pContact->GetFmt()->Which(),
-            "InsertDrawLabel(): not a DrawFrmFmt" );
-    if (!pContact)
-        return 0;
-
-    SwDrawFrmFmt* pOldFmt = (SwDrawFrmFmt *)pContact->GetFmt();
-    if (!pOldFmt)
-        return 0;
-
-    SwUndoInsertLabel * pUndo = 0;
-    if (GetIDocumentUndoRedo().DoesUndo())
+    if( pUndo )
     {
-        GetIDocumentUndoRedo().ClearRedo();
-        pUndo = new SwUndoInsertLabel(
-            LTYPE_DRAW, rTxt, rSeparator, rNumberSeparator, sal_False,
-            nId, rCharacterStyle, sal_False );
-    }
-
-    SwFlyFrmFmt *const pNewFmt = lcl_InsertDrawLabel(
-        *this, pTxtFmtCollTbl, pUndo, pOldFmt,
-        rTxt, rSeparator, rNumberSeparator, nId, rCharacterStyle, rSdrObj);
-
-    if (pUndo)
-    {
-        GetIDocumentUndoRedo().AppendUndo( pUndo );
+        AppendUndo( pUndo );
+        SetNoDrawUndoObj( bWasNoDrawUndo );
     }
     else
-    {
-        GetIDocumentUndoRedo().DelAllUndoObj();
-    }
+        DelAllUndoObj();
+    DoUndo( bWasUndo );
 
     return pNewFmt;
 }
-
 
 /*************************************************************************
 |*
-|*  IDocumentTimerAccess-methods
+|*	IDocumentTimerAccess-methods
 |*
 |*************************************************************************/
 void SwDoc::StartIdling()
@@ -1849,7 +1834,10 @@ void SwDoc::UnblockIdling()
 
 /*************************************************************************
 |*
-|*  SwDoc::DoIdleJobs()
+|*	SwDoc::DoIdleJobs()
+|*
+|*	Ersterstellung		OK 30.03.94
+|*	Letzte Aenderung	MA 09. Jun. 95
 |*
 |*************************************************************************/
 IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
@@ -1860,12 +1848,11 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
         pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
 #endif
 
-    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
-    if( pTmpRoot &&
+    if( GetRootFrm() && GetRootFrm()->GetCurrShell() &&
         !SfxProgress::GetActiveProgress( pDocShell ) )
     {
         ViewShell *pSh, *pStartSh;
-        pSh = pStartSh = GetCurrentViewShell();
+        pSh = pStartSh = GetRootFrm()->GetCurrShell();
         do {
             if( pSh->ActionPend() )
             {
@@ -1876,30 +1863,23 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             pSh = (ViewShell*)pSh->GetNext();
         } while( pSh != pStartSh );
 
-        if( pTmpRoot->IsNeedGrammarCheck() )
+        if (GetRootFrm()->IsNeedGrammarCheck())
         {
-            sal_Bool bIsOnlineSpell = pSh->GetViewOptions()->IsOnlineSpell();
+            BOOL bIsOnlineSpell = pSh->GetViewOptions()->IsOnlineSpell();
+
             sal_Bool bIsAutoGrammar = sal_False;
-            SvtLinguConfig().GetProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        UPN_IS_GRAMMAR_AUTO )) ) >>= bIsAutoGrammar;
+            SvtLinguConfig().GetProperty( ::rtl::OUString::createFromAscii(
+                        UPN_IS_GRAMMAR_AUTO ) ) >>= bIsAutoGrammar;
 
             if (bIsOnlineSpell && bIsAutoGrammar)
                 StartGrammarChecking( *this );
         }
-        SwFldUpdateFlags nFldUpdFlag;
-        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080320
-        std::set<SwRootFrm*>::iterator pLayIter = aAllLayouts.begin();
-        for ( ;pLayIter != aAllLayouts.end();pLayIter++ )
-        {
-            if ((*pLayIter)->IsIdleFormat())
-            {
-                (*pLayIter)->GetCurrShell()->LayoutIdle();
-                break;
-            }
-        }
-        bool bAllValid = pLayIter == aAllLayouts.end() ? 1 : 0;
-        if( bAllValid && ( AUTOUPD_FIELD_ONLY ==
-                 ( nFldUpdFlag = getFieldUpdateFlags(true) )
+
+        sal_uInt16 nFldUpdFlag;
+        if( GetRootFrm()->IsIdleFormat() )
+            GetRootFrm()->GetCurrShell()->LayoutIdle();
+        else if( ( AUTOUPD_FIELD_ONLY ==
+                 ( nFldUpdFlag = static_cast<sal_uInt16>(getFieldUpdateFlags(true)) )
                     || AUTOUPD_FIELD_AND_CHARTS == nFldUpdFlag ) &&
                 GetUpdtFlds().IsFieldsDirty() &&
                 !GetUpdtFlds().IsInUpdateFlds() &&
@@ -1911,25 +1891,25 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             // chaos::Action-Klammerung!
             GetUpdtFlds().SetInUpdateFlds( sal_True );
 
-            pTmpRoot->StartAllAction();
+            GetRootFrm()->StartAllAction();
 
             // no jump on update of fields #i85168#
             const sal_Bool bOldLockView = pStartSh->IsViewLocked();
             pStartSh->LockView( sal_True );
 
-            GetSysFldType( RES_CHAPTERFLD )->ModifyNotification( 0, 0 );    // KapitelFld
-            UpdateExpFlds( 0, sal_False );      // Expression-Felder Updaten
-            UpdateTblFlds(NULL);                // Tabellen
-            UpdateRefFlds(NULL);                // Referenzen
+            GetSysFldType( RES_CHAPTERFLD )->Modify( 0, 0 );	// KapitelFld
+            UpdateExpFlds( 0, sal_False );		// Expression-Felder Updaten
+            UpdateTblFlds(NULL);				// Tabellen
+            UpdateRefFlds(NULL);				// Referenzen
 
-            pTmpRoot->EndAllAction();
+            GetRootFrm()->EndAllAction();
 
             pStartSh->LockView( bOldLockView );
 
             GetUpdtFlds().SetInUpdateFlds( sal_False );
             GetUpdtFlds().SetFieldsDirty( sal_False );
         }
-    }   //swmod 080219
+    }
 #ifdef TIMELOG
     if( pModLogFile && 1 != (long)pModLogFile )
         delete pModLogFile, ((long&)pModLogFile) = 1;
@@ -1942,7 +1922,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
 IMPL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
 {
     ViewShell *pSh, *pStartSh;
-    pSh = pStartSh = pThis->GetCurrentViewShell();  //swmod 071108//swmod 071225
+    pSh = pStartSh = pThis->GetRootFrm()->GetCurrShell();
     if( pStartSh )
         do {
             if( pSh->GetWin() )
@@ -2051,8 +2031,8 @@ void SwDoc::SetFlyName( SwFlyFrmFmt& rFmt, const String& rName )
         if( pIdx && pIdx->GetNode().GetNodes().IsDocNodes() )
             switch( GetNodes()[ pIdx->GetIndex() + 1 ]->GetNodeType() )
             {
-            case ND_GRFNODE:    nTyp = STR_GRAPHIC_DEFNAME; break;
-            case ND_OLENODE:    nTyp = STR_OBJECT_DEFNAME;  break;
+            case ND_GRFNODE:	nTyp = STR_GRAPHIC_DEFNAME;	break;
+            case ND_OLENODE:	nTyp = STR_OBJECT_DEFNAME;	break;
             }
         sName = lcl_GetUniqueFlyName( this, nTyp );
     }
@@ -2075,7 +2055,7 @@ void SwDoc::SetAllUniqueFlyNames()
         n = 255;
     SwSpzFrmFmts aArr( (sal_Int8)n, 10 );
     SwFrmFmtPtr pFlyFmt;
-    sal_Bool bLoadedFlag = sal_True;            // noch etwas fuers Layout
+    sal_Bool bLoadedFlag = sal_True;			// noch etwas fuers Layout
 
     for( n = GetSpzFrmFmts()->Count(); n; )
     {
@@ -2173,15 +2153,15 @@ void SwDoc::SetAllUniqueFlyNames()
 sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
 {
     // gibt es ein Layout, dann ueber das laufen!!
-    //  (Das kann dann auch Fly in Fly in Kopfzeile !)
+    //	(Das kann dann auch Fly in Fly in Kopfzeile !)
     // MIB 9.2.98: Wird auch vom sw3io benutzt, um festzustellen, ob sich
     // ein Redline-Objekt in einer Kopf- oder Fusszeile befindet. Da
     // Redlines auch an Start- und Endnodes haengen, muss der Index nicht
     // unbedingt der eines Content-Nodes sein.
     SwNode* pNd = &rIdx.GetNode();
-    if( pNd->IsCntntNode() && pCurrentView )//swmod 071029//swmod 071225
+    if( pNd->IsCntntNode() && pLayout )
     {
-        const SwFrm *pFrm = pNd->GetCntntNode()->getLayoutFrm( GetCurrentLayout() );
+        const SwFrm *pFrm = pNd->GetCntntNode()->GetFrm();
         if( pFrm )
         {
             const SwFrm *pUp = pFrm->GetUpper();
@@ -2240,12 +2220,13 @@ short SwDoc::GetTextDirection( const SwPosition& rPos,
 
     SwCntntNode *pNd = rPos.nNode.GetNode().GetCntntNode();
 
-    // #i42921# - use new method <SwCntntNode::GetTextDirection(..)>
+    // --> OD 2005-02-21 #i42921# - use new method <SwCntntNode::GetTextDirection(..)>
     if ( pNd )
     {
         nRet = pNd->GetTextDirection( rPos, pPt );
     }
     if ( nRet == -1 )
+    // <--
     {
         const SvxFrameDirectionItem* pItem = 0;
         if( pNd )
@@ -2274,7 +2255,7 @@ short SwDoc::GetTextDirection( const SwPosition& rPos,
 
             if( !pItem )
             {
-                const SwPageDesc* pPgDsc = pNd->FindPageDesc( sal_False );
+                const SwPageDesc* pPgDsc = pNd->FindPageDesc( FALSE );
                 if( pPgDsc )
                     pItem = &pPgDsc->GetMaster().GetFrmDir();
             }
@@ -2293,74 +2274,11 @@ sal_Bool SwDoc::IsInVerticalText( const SwPosition& rPos, const Point* pPt ) con
     return FRMDIR_VERT_TOP_RIGHT == nDir || FRMDIR_VERT_TOP_LEFT == nDir;
 }
 
-void SwDoc::SetCurrentViewShell( ViewShell* pNew )
-{
-    pCurrentView = pNew;
-}
-
-SwLayouter* SwDoc::GetLayouter()
-{
-    return pLayouter;
-}
-
-const SwLayouter* SwDoc::GetLayouter() const
-{
-    return pLayouter;
-}
-
-void SwDoc::SetLayouter( SwLayouter* pNew )
-{
-    pLayouter = pNew;
-}
-
-const ViewShell *SwDoc::GetCurrentViewShell() const
-{
-    return pCurrentView;
-}
-
-ViewShell *SwDoc::GetCurrentViewShell()
-{
-    return pCurrentView;
-}   //swmod 080219 It must be able to communicate to a ViewShell.This is going to be removedd later.
-
-const SwRootFrm *SwDoc::GetCurrentLayout() const
-{
-    if(GetCurrentViewShell())
-        return GetCurrentViewShell()->GetLayout();
-    return 0;
-}
-
-SwRootFrm *SwDoc::GetCurrentLayout()
-{
-    if(GetCurrentViewShell())
-        return GetCurrentViewShell()->GetLayout();
-    return 0;
-}
-
-bool SwDoc::HasLayout() const
-{
-    // if there is a view, there is always a layout
-    return (pCurrentView != 0);
-}
-
-std::set<SwRootFrm*> SwDoc::GetAllLayouts()
-{
-    std::set<SwRootFrm*> aAllLayouts;
-    ViewShell *pStart = GetCurrentViewShell();
-    ViewShell *pTemp = pStart;
-    if ( pTemp )
-    {
-        do
-        {
-            if (pTemp->GetLayout())
-            {
-                aAllLayouts.insert(pTemp->GetLayout());
-                pTemp = (ViewShell*)pTemp->GetNext();
-            }
-        } while(pTemp!=pStart);
-    }
-
-    return aAllLayouts;
-}//swmod 070825
+const SwRootFrm* SwDoc::GetRootFrm() const { return pLayout; }
+SwRootFrm* SwDoc::GetRootFrm() { return pLayout; }
+void SwDoc::SetRootFrm( SwRootFrm* pNew ) { pLayout = pNew; }
+SwLayouter* SwDoc::GetLayouter() { return pLayouter; }
+const SwLayouter* SwDoc::GetLayouter() const { return pLayouter; }
+void SwDoc::SetLayouter( SwLayouter* pNew ) { pLayouter = pNew; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

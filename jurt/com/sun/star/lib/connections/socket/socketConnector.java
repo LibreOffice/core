@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,6 +86,21 @@ public final class socketConnector implements XConnector {
                                               __serviceName, multiFactory,
                                               regKey)
             : null;
+    }
+
+    /**
+     * Writes the service information into the given registry key.
+     *
+     * <p>This method is called by the <code>JavaLoader</code>.</p>
+     *
+     * @param regKey the registry key.
+     * @return <code>true</code> if the operation succeeded.
+     *
+     * @see com.sun.star.comp.loader.JavaLoader
+     */
+    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
+        return FactoryHelper.writeRegistryServiceInfo(
+            socketConnector.class.getName(), __serviceName, regKey);
     }
 
     /**

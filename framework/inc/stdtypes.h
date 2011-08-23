@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <vector>
 #include <queue>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 //_________________________________________________________________________________________________________________
 // own includes
@@ -54,7 +54,7 @@
 #include <rtl/ustring.hxx>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
@@ -137,7 +137,7 @@ class OUStringList : public ::comphelper::SequenceAsVector< ::rtl::OUString >
         {
             return ::std::find(begin(), end(), sElement);
         }
-
+        
         const_iterator findConst( const ::rtl::OUString& sElement ) const
         {
             return ::std::find(begin(), end(), sElement);
@@ -162,12 +162,12 @@ typedef ::std::queue< ::rtl::OUString > OUStringQueue;
 //_________________________________________________________________________________________________________________
 
 /**
-    Basic hash based on a boost::unordered_map() which provides key=[OUString] and value=[template type] pairs
+    Basic hash based on a std::hash_map() which provides key=[OUString] and value=[template type] pairs
     It implements some additional funtionality which can be usefull but
     is missing at the normal hash implementation.
 */
 template< class TType >
-class BaseHash : public ::boost::unordered_map< ::rtl::OUString                    ,
+class BaseHash : public ::std::hash_map< ::rtl::OUString                    ,
                                          TType                              ,
                                          OUStringHashCode                   ,
                                          ::std::equal_to< ::rtl::OUString > >

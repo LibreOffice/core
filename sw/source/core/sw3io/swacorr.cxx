@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,13 +45,13 @@ using namespace ::com::sun::star;
 TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
 
 
-    //  - return den Ersetzungstext (nur fuer SWG-Format, alle anderen
-    //      koennen aus der Wortliste herausgeholt werden!)
-    //      rShort ist der Stream-Name - gecryptet!
+    //	- return den Ersetzungstext (nur fuer SWG-Format, alle anderen
+    //		koennen aus der Wortliste herausgeholt werden!)
+    //		rShort ist der Stream-Name - gecryptet!
 
-sal_Bool SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& rStg, const String& rFileName, const String& rShort, String& rLong )
+BOOL SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& rStg, const String& rFileName, const String& rShort, String& rLong )
 {
-    sal_uLong nRet = 0;
+    ULONG nRet = 0;
     if (rStg.is())
     {
         // mba: relative URLs don't make sense here
@@ -64,16 +64,16 @@ sal_Bool SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& r
     return !IsError( nRet ) && rLong.Len();
 }
 
-    //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
-    //      rShort ist der Stream-Name - gecryptet!
-sal_Bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg, const String& rFileName, const String& rShort,
+    //	- Text mit Attributierung (kann nur der SWG - SWG-Format!)
+    //		rShort ist der Stream-Name - gecryptet!
+BOOL SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg, const String& rFileName, const String& rShort,
                             SfxObjectShell& rObjSh, String& rLong )
 {
     if( !rObjSh.IsA( TYPE(SwDocShell) ) )
-        return sal_False;
+        return FALSE;
 
     SwDocShell& rDShell = (SwDocShell&)rObjSh;
-    sal_uLong nRet = 0;
+    ULONG nRet = 0;
 
     // mba: relative URLs don't make sense here
     SwXMLTextBlocks aBlk( rStg, rFileName );
@@ -84,7 +84,7 @@ sal_Bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg
     {
         ((SwEditShell*)rDShell.GetWrtShell())->_CopySelToDoc( pDoc );
         nRet = aBlk.PutDoc();
-        aBlk.AddName ( rShort, rShort, sal_False );
+        aBlk.AddName ( rShort, rShort, FALSE );
         if( !IsError( nRet ) )
             nRet = aBlk.GetText( rShort, rLong );
     }

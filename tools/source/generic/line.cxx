@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,50 +48,50 @@ double Line::GetLength() const
 
 // ------------------------------------------------------------------------
 
-sal_Bool Line::Intersection( const Line& rLine, Point& rIntersection ) const
+BOOL Line::Intersection( const Line& rLine, Point& rIntersection ) const
 {
-    double  fX, fY;
-    sal_Bool    bRet;
+    double	fX, fY;
+    BOOL	bRet;
 
     if( Intersection( rLine, fX, fY ) )
     {
         rIntersection.X() = FRound( fX );
         rIntersection.Y() = FRound( fY );
-        bRet = sal_True;
+        bRet = TRUE;
     }
     else
-        bRet = sal_False;
+        bRet = FALSE;
 
     return bRet;
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool Line::Intersection( const Line& rLine, double& rIntersectionX, double& rIntersectionY ) const
+BOOL Line::Intersection( const Line& rLine, double& rIntersectionX, double& rIntersectionY ) const
 {
     const double    fAx = maEnd.X() - maStart.X();
     const double    fAy = maEnd.Y() - maStart.Y();
     const double    fBx = rLine.maStart.X() - rLine.maEnd.X();
     const double    fBy = rLine.maStart.Y() - rLine.maEnd.Y();
     const double    fDen = fAy * fBx - fAx * fBy;
-    sal_Bool            bOk = sal_False;
+    BOOL            bOk = FALSE;
 
     if( fDen != 0. )
     {
         const double    fCx = maStart.X() - rLine.maStart.X();
         const double    fCy = maStart.Y() - rLine.maStart.Y();
         const double    fA = fBy * fCx - fBx * fCy;
-        const sal_Bool      bGreater = ( fDen > 0. );
+        const BOOL      bGreater = ( fDen > 0. );
 
-        bOk = sal_True;
+        bOk = TRUE;
 
         if ( bGreater )
         {
             if ( ( fA < 0. ) || ( fA > fDen ) )
-                bOk = sal_False;
+                bOk = FALSE;
         }
         else if ( ( fA > 0. ) || ( fA < fDen ) )
-            bOk = sal_False;
+            bOk = FALSE;
 
         if ( bOk )
         {
@@ -100,10 +100,10 @@ sal_Bool Line::Intersection( const Line& rLine, double& rIntersectionX, double& 
             if ( bGreater )
             {
                 if ( ( fB < 0. ) || ( fB > fDen ) )
-                    bOk = sal_False;
+                    bOk = FALSE;
             }
             else if ( ( fB > 0. ) || ( fB < fDen ) )
-                bOk = sal_False;
+                bOk = FALSE;
 
             if( bOk )
             {
@@ -120,11 +120,11 @@ sal_Bool Line::Intersection( const Line& rLine, double& rIntersectionX, double& 
 
 // ------------------------------------------------------------------------
 
-sal_Bool Line::Intersection( const Rectangle& rRect, Line& rIntersection ) const
+BOOL Line::Intersection( const Rectangle& rRect, Line& rIntersection ) const
 {
-    const sal_Bool  bStartInside = rRect.IsInside( maStart );
-    const sal_Bool  bEndInside = rRect.IsInside( maEnd );
-    sal_Bool        bRet = sal_True;
+    const BOOL  bStartInside = rRect.IsInside( maStart );
+    const BOOL  bEndInside = rRect.IsInside( maEnd );
+    BOOL        bRet = TRUE;
 
     if( bStartInside && bEndInside )
     {
@@ -171,7 +171,7 @@ sal_Bool Line::Intersection( const Rectangle& rRect, Line& rIntersection ) const
                 rIntersection.maEnd = rIntersection.maStart;
         }
         else
-            bRet = sal_False;
+            bRet = FALSE;
     }
 
     return bRet;
@@ -217,9 +217,9 @@ double Line::GetDistance( const double& rPtX, const double& rPtY ) const
     {
         const double    fDistX = maEnd.X() - maStart.X();
         const double    fDistY = maEnd.Y() - maStart.Y();
-        const double    fACX = maStart.X() - rPtX;
-        const double    fACY = maStart.Y() - rPtY;
-        const double    fL2 = fDistX * fDistX + fDistY * fDistY;
+        const double	fACX = maStart.X() - rPtX;
+        const double	fACY = maStart.Y() - rPtY;
+        const double	fL2 = fDistX * fDistX + fDistY * fDistY;
         const double    fR = ( fACY * -fDistY - fACX * fDistX ) / fL2;
         const double    fS = ( fACY * fDistX - fACX * fDistY ) / fL2;
 
@@ -228,7 +228,7 @@ double Line::GetDistance( const double& rPtX, const double& rPtY ) const
             fDist = hypot( maStart.X() - rPtX, maStart.Y() - rPtY );
 
             if( fS < 0.0 )
-                fDist *= -1.0;
+                fDist *= -1.0; 
         }
         else if( fR <= 1.0 )
             fDist = fS * sqrt( fL2 );
@@ -237,7 +237,7 @@ double Line::GetDistance( const double& rPtX, const double& rPtY ) const
             fDist = hypot( maEnd.X() - rPtX, maEnd.Y() - rPtY );
 
             if( fS < 0.0 )
-                fDist *= -1.0;
+                fDist *= -1.0; 
         }
     }
     else
@@ -312,12 +312,12 @@ void Line::Enum( const Link& rEnumLink )
     {
         const long  nDX = labs( maEnd.X() - maStart.X() );
         const long  nDY = labs( maEnd.Y() - maStart.Y() );
-        const long  nStartX = maStart.X();
-        const long  nStartY = maStart.Y();
-        const long  nEndX = maEnd.X();
-        const long  nEndY = maEnd.Y();
-        const long  nXInc = ( nStartX < nEndX ) ? 1L : -1L;
-        const long  nYInc = ( nStartY < nEndY ) ? 1L : -1L;
+        const long	nStartX = maStart.X();
+        const long	nStartY = maStart.Y();
+        const long	nEndX = maEnd.X();
+        const long	nEndY = maEnd.Y();	
+        const long	nXInc = ( nStartX < nEndX ) ? 1L : -1L;
+        const long	nYInc = ( nStartY < nEndY ) ? 1L : -1L;
 
         if( nDX >= nDY )
         {

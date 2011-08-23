@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,13 +53,13 @@ class SwPaM;
 
 using namespace com::sun::star;
 
-inline void SwFltClearFlag(sal_uLong& rFieldFlags, int no)
+inline void SwFltClearFlag(ULONG& rFieldFlags, int no)
     { rFieldFlags &= ~(1L << no); }
 
-inline void SwFltSetFlag(sal_uLong& rFieldFlags, int no)
+inline void SwFltSetFlag(ULONG& rFieldFlags, int no)
     { rFieldFlags |= 1L << no; }
 
-inline sal_Bool SwFltGetFlag(sal_uLong nFieldFlags, int no)
+inline BOOL SwFltGetFlag(ULONG nFieldFlags, int no)
     { return (nFieldFlags & (1L << no)) != 0; }
 
 // Stack-Eintrag fuer die Attribute Es werden immer Pointer auf neue Attribute uebergeben.
@@ -69,14 +69,14 @@ public:
     SwNodeIndex nMkNode;
     SwNodeIndex nPtNode;
     SfxPoolItem * pAttr;// Format Attribute
-    long nHandle;       // fuer verschachtelte Attrs, z.B. Bookmarks
+    long nHandle;		// fuer verschachtelte Attrs, z.B. Bookmarks
     xub_StrLen nMkCntnt;// Nachbildung von Mark()
     xub_StrLen nPtCntnt;// Nachbildung von GetPoint()
 
-    sal_Bool bOld;          // to mark Attributes *before* skipping field results
-    sal_Bool bLocked;
-    sal_Bool bCopied;
-    sal_Bool bConsumedByField;
+    BOOL bOld;			// to mark Attributes *before* skipping field results
+    BOOL bLocked;
+    BOOL bCopied;
+    BOOL bConsumedByField;
 
     SW_DLLPUBLIC SwFltStackEntry(const SwPosition & rStartPos, SfxPoolItem* pHt );
     SW_DLLPUBLIC SwFltStackEntry(const SwFltStackEntry& rEntry);
@@ -84,7 +84,7 @@ public:
 
     void SetStartPos(const SwPosition & rStartPos);
     SW_DLLPUBLIC void SetEndPos(  const SwPosition & rEndPos);
-    SW_DLLPUBLIC sal_Bool MakeRegion(SwDoc* pDoc, SwPaM& rRegion, sal_Bool bCheck );
+    SW_DLLPUBLIC BOOL MakeRegion(SwDoc* pDoc, SwPaM& rRegion, BOOL bCheck );    
 };
 
 class SW_DLLPUBLIC SwFltControlStack
@@ -94,12 +94,12 @@ class SW_DLLPUBLIC SwFltControlStack
     Entries maEntries;
     friend class SwFltShell;
 
-    sal_uLong nFieldFlags;
+    ULONG nFieldFlags;
     KeyCode aEmptyKeyCode; // fuer Bookmarks
 
 protected:
     SwDoc* pDoc;
-    sal_Bool bIsEndStack;
+    BOOL bIsEndStack;
 
     void MoveAttrs( const SwPosition&  rPos );
     virtual void SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry* pEntry);
@@ -118,20 +118,20 @@ public:
         DONT_HARD_PROTECT
     };
 
-    SwFltControlStack(SwDoc* pDo, sal_uLong nFieldFl);
+    SwFltControlStack(SwDoc* pDo, ULONG nFieldFl);
     virtual ~SwFltControlStack();
 
-    sal_Bool IsFlagSet(Flags no) const  { return ::SwFltGetFlag(nFieldFlags, no);}
+    BOOL IsFlagSet(Flags no) const	{ return ::SwFltGetFlag(nFieldFlags, no);}
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem & rAttr );
 
-    virtual void SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId=0, sal_Bool bTstEnde=sal_True, long nHand = LONG_MAX, sal_Bool consumedByField=sal_False);
+    virtual void SetAttr(const SwPosition& rPos, USHORT nAttrId=0, BOOL bTstEnde=TRUE, long nHand = LONG_MAX, BOOL consumedByField=FALSE);
 
-    void StealAttr(const SwPosition* pPos, sal_uInt16 nAttrId = 0);
+    void StealAttr(const SwPosition* pPos, USHORT nAttrId = 0);
     void MarkAllAttrsOld();
     void KillUnlockedAttrs(const SwPosition& pPos);
-    SfxPoolItem* GetFmtStackAttr(sal_uInt16 nWhich, sal_uInt16 * pPos = 0);
-    const SfxPoolItem* GetFmtAttr(const SwPosition& rPos, sal_uInt16 nWhich);
+    SfxPoolItem* GetFmtStackAttr(USHORT nWhich, USHORT * pPos = 0);
+    const SfxPoolItem* GetFmtAttr(const SwPosition& rPos, USHORT nWhich);
     void Delete(const SwPaM &rPam);
 
     Entries::size_type Count() { return maEntries.size(); }
@@ -156,7 +156,7 @@ public:
     virtual int operator==(const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
     void SetFrmFmt(SwFrmFmt * _pFrmFmt);
-    const SwFrmFmt* GetFrmFmt() const;
+    const SwFrmFmt* GetFrmFmt() const; 
           SwFrmFmt* GetFrmFmt();
 };
 
@@ -167,25 +167,25 @@ class SwFltAnchorClient : public SwClient
 public:
     SwFltAnchorClient(SwFltAnchor * pFltAnchor);
 
-    virtual void Modify (const SfxPoolItem *pOld, const SfxPoolItem *pNew);
+    virtual void Modify (SfxPoolItem *pOld, SfxPoolItem *pNew);
 };
 
 
 class SW_DLLPUBLIC SwFltRedline : public SfxPoolItem
 {
 public:
-    DateTime        aStamp;
-    DateTime        aStampPrev;
-    RedlineType_t   eType;
-    RedlineType_t   eTypePrev;
-    sal_uInt16          nAutorNo;
-    sal_uInt16          nAutorNoPrev;
+    DateTime		aStamp;
+    DateTime		aStampPrev;
+    RedlineType_t	eType;
+    RedlineType_t	eTypePrev;
+    USHORT			nAutorNo;
+    USHORT			nAutorNoPrev;
 
-    SwFltRedline(RedlineType_t   eType_,
-                 sal_uInt16          nAutorNo_,
+    SwFltRedline(RedlineType_t	 eType_,
+                 USHORT			 nAutorNo_,
                  const DateTime& rStamp_,
-                 RedlineType_t   eTypePrev_    = nsRedlineType_t::REDLINE_INSERT,
-                 sal_uInt16          nAutorNoPrev_ = USHRT_MAX,
+                 RedlineType_t	 eTypePrev_    = nsRedlineType_t::REDLINE_INSERT,
+                 USHORT			 nAutorNoPrev_ = USHRT_MAX,
                  const DateTime* pStampPrev_   = 0)
         : SfxPoolItem(RES_FLTR_REDLINE), aStamp(rStamp_), eType(eType_),
         eTypePrev(eTypePrev_), nAutorNo(nAutorNo_), nAutorNoPrev(nAutorNoPrev_)
@@ -196,12 +196,12 @@ public:
 
     SwFltRedline(const SwFltRedline& rCpy):
         SfxPoolItem(RES_FLTR_REDLINE),
-        aStamp(         rCpy.aStamp       ),
-        aStampPrev(     rCpy.aStampPrev   ),
-        eType(          rCpy.eType        ),
-        eTypePrev(      rCpy.eTypePrev    ),
-        nAutorNo(       rCpy.nAutorNo     ),
-        nAutorNoPrev(   rCpy.nAutorNoPrev )
+        aStamp(			rCpy.aStamp       ),
+        aStampPrev(		rCpy.aStampPrev   ),
+        eType(			rCpy.eType        ),
+        eTypePrev(		rCpy.eTypePrev    ),
+        nAutorNo(		rCpy.nAutorNo     ),
+        nAutorNoPrev(	rCpy.nAutorNoPrev )
         {}
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int operator==(const SfxPoolItem& rItem) const;
@@ -210,48 +210,48 @@ public:
 
 class SW_DLLPUBLIC SwFltBookmark : public SfxPoolItem
 {
-    friend class SwFltShell;    // darf aName und aVal uebersetzen
+    friend class SwFltShell;	// darf aName und aVal uebersetzen
     long nHandle;
     String aName;
     String aVal;
-    sal_Bool bOnlyRef;          // "FRAGE"-Feld, Ref/Seitenrf oder nichts
-    sal_Bool bRef;
-    sal_Bool bPgRef;
+    BOOL bOnlyRef;			// "FRAGE"-Feld, Ref/Seitenrf oder nichts
+    BOOL bRef;
+    BOOL bPgRef;
 public:
     SwFltBookmark( const String& rNa, const String& rVa,
-                    long nHand, sal_Bool bOnlyR );
+                    long nHand, BOOL bOnlyR );
     SwFltBookmark( const SwFltBookmark& );
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int operator==(const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
-    const String& GetName() const       { return aName; }
-    const String& GetValSys() const     { return aVal; }
-    sal_Bool IsOnlyRef() const              { return bOnlyRef; }
-    sal_Bool IsRef() const                  { return bRef; }
-    void SetRef(sal_Bool b = sal_True)          { bRef = b; }
-    sal_Bool IsPgRef() const                { return bPgRef; }
-    void SetPgRef(sal_Bool b = sal_True)        { bPgRef = b; }
-    long GetHandle() const              { return nHandle; }
+    const String& GetName() const 		{ return aName; }
+    const String& GetValSys() const 	{ return aVal; }
+    BOOL IsOnlyRef() const				{ return bOnlyRef; }
+    BOOL IsRef() const 					{ return bRef; }
+    void SetRef(BOOL b = TRUE) 			{ bRef = b; }
+    BOOL IsPgRef() const				{ return bPgRef; }
+    void SetPgRef(BOOL b = TRUE) 		{ bPgRef = b; }
+    long GetHandle() const 				{ return nHandle; }
 };
 
 class SW_DLLPUBLIC SwFltTOX : public SfxPoolItem
 {
     SwTOXBase* pTOXBase;
-    sal_uInt16 nCols;
-    sal_Bool bHadBreakItem; // there was a break item BEFORE insertion of the TOX
-    sal_Bool bHadPageDescItem; // ...
+    USHORT nCols;
+    BOOL bHadBreakItem; // there was a break item BEFORE insertion of the TOX
+    BOOL bHadPageDescItem; // ...
 public:
-    SwFltTOX(SwTOXBase* pBase, sal_uInt16 _nCols = 0);
+    SwFltTOX(SwTOXBase* pBase, USHORT _nCols = 0);
     SwFltTOX(const SwFltTOX&);
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int operator==(const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
-    SwTOXBase* GetBase()            { return pTOXBase; }
-    sal_uInt16 GetCols() const          { return nCols; }
-    void SetHadBreakItem(    sal_Bool bVal ) { bHadBreakItem    = bVal; }
-    void SetHadPageDescItem( sal_Bool bVal ) { bHadPageDescItem = bVal; }
-    sal_Bool HadBreakItem()    const { return bHadBreakItem; }
-    sal_Bool HadPageDescItem() const { return bHadPageDescItem; }
+    SwTOXBase* GetBase() 			{ return pTOXBase; }
+    USHORT GetCols() const 			{ return nCols; }
+    void SetHadBreakItem(    BOOL bVal ) { bHadBreakItem    = bVal; }
+    void SetHadPageDescItem( BOOL bVal ) { bHadPageDescItem = bVal; }
+    BOOL HadBreakItem()    const { return bHadBreakItem; }
+    BOOL HadPageDescItem() const { return bHadPageDescItem; }
 };
 
 class SwFltSection : public SfxPoolItem
@@ -272,10 +272,10 @@ public:
 class SwFltEndStack : public SwFltControlStack
 {
 public:
-    SwFltEndStack(SwDoc* pDo, sal_uLong nFieldFl)
+    SwFltEndStack(SwDoc* pDo, ULONG nFieldFl)
         :SwFltControlStack(pDo, nFieldFl)
     {
-        bIsEndStack = sal_True;
+        bIsEndStack = TRUE;
     }
 };
 
@@ -298,35 +298,35 @@ class SwFltOutBase
     SwDoc& rDoc;
 protected:
     RndStdIds eFlyAnchor;
-    sal_Bool bFlyAbsPos;
+    BOOL bFlyAbsPos;
 
-    SwDoc& GetDoc()                 { return rDoc; }
+    SwDoc& GetDoc() 				{ return rDoc; }
     SfxItemSet* NewFlyDefaults();
     SwFltOutBase(SwDoc& rDocu);
     virtual ~SwFltOutBase();
 public:
     virtual SwFltOutBase& operator << (const SfxPoolItem& rItem) = 0;
 
-    virtual const SfxPoolItem& GetAttr(sal_uInt16 nWhich) = 0;
-    virtual const SfxPoolItem& GetNodeOrStyAttr(sal_uInt16 nWhich) = 0;
+    virtual const SfxPoolItem& GetAttr(USHORT nWhich) = 0;
+    virtual const SfxPoolItem& GetNodeOrStyAttr(USHORT nWhich) = 0;
 
-    virtual const SfxPoolItem& GetCellAttr(sal_uInt16 nWhich);
-    virtual sal_Bool BeginTable();
+    virtual const SfxPoolItem& GetCellAttr(USHORT nWhich);
+    virtual BOOL BeginTable();
     virtual void NextTableCell();
     virtual void NextTableRow();
     virtual void SetTableWidth(SwTwips nW);
     virtual void SetTableOrient(sal_Int16 eOri);
-    virtual void SetCellWidth(SwTwips nWidth, sal_uInt16 nCell);
+    virtual void SetCellWidth(SwTwips nWidth, USHORT nCell);
     virtual void SetCellHeight(SwTwips nH);
-    virtual void SetCellBorder(const SvxBoxItem& rFmtBox, sal_uInt16 nCell);
-    virtual void SetCellSpace(sal_uInt16 nSp);
-    virtual void DeleteCell(sal_uInt16 nCell);
+    virtual void SetCellBorder(const SvxBoxItem& rFmtBox, USHORT nCell);
+    virtual void SetCellSpace(USHORT nSp);
+    virtual void DeleteCell(USHORT nCell);
     virtual void EndTable();
 
-    virtual sal_Bool IsInFly() = 0;
+    virtual BOOL IsInFly() = 0;
     virtual void SetFlyFrmAttr(const SfxPoolItem& rAttr) = 0;
-    virtual const SfxPoolItem& GetFlyFrmAttr(sal_uInt16 nWhich) = 0;
-    virtual sal_Bool BeginFly( RndStdIds eAnchor, sal_Bool bAbsolutePos,
+    virtual const SfxPoolItem& GetFlyFrmAttr(USHORT nWhich) = 0;
+    virtual BOOL BeginFly( RndStdIds eAnchor, BOOL bAbsolutePos,
                                const SfxItemSet* pMoreAttrs = 0 );
     virtual void SetFlyAnchor( RndStdIds eAnchor );
     virtual void EndFly();
@@ -343,48 +343,48 @@ class SwFltOutDoc : public SwFltOutBase
     SwPosition* pTabSavedPos; // set when in table
     SwPosition* pFlySavedPos; // set when in fly
     SwTwips nTableWidth;
-    sal_uInt16 usTableX;
-    sal_uInt16 usTableY;
-    sal_Bool bReadNoTbl;                // Keine Tabellen
+    USHORT usTableX;
+    USHORT usTableY;
+    BOOL bReadNoTbl;				// Keine Tabellen
 
-    SwTableBox* GetBox(sal_uInt16 ny, sal_uInt16 nx = USHRT_MAX);
-    sal_Bool SeekCell( short nRow, short nCol, sal_Bool bPam );
+    SwTableBox* GetBox(USHORT ny, USHORT nx = USHRT_MAX);
+    BOOL SeekCell( short nRow, short nCol, BOOL bPam );
     void SplitTable();
 public:
     SwFltOutDoc(SwDoc& rDocu, SwPaM* pP, SwFltControlStack& rStk,
         SwFltEndStack& rEStk)
     : SwFltOutBase(rDocu), rStack(rStk), rEndStack(rEStk), pPaM(pP),
           pFly(0), pTable(0), pTabSavedPos(0), pFlySavedPos(0),
-          nTableWidth(0), bReadNoTbl(sal_False)
+          nTableWidth(0), bReadNoTbl(FALSE)
     {}
 
-    void SetReadNoTable()           { bReadNoTbl = sal_True; }
-    sal_Bool IsTableWidthSet() const    { return 0 != nTableWidth; }
+    void SetReadNoTable() 			{ bReadNoTbl = TRUE; }
+    BOOL IsTableWidthSet() const 	{ return 0 != nTableWidth; }
 
     virtual SwFltOutBase& operator << (const SfxPoolItem& rItem);
 
-    virtual const SfxPoolItem& GetAttr(sal_uInt16 nWhich);
-    virtual const SfxPoolItem& GetNodeOrStyAttr(sal_uInt16 nWhich);
+    virtual const SfxPoolItem& GetAttr(USHORT nWhich);
+    virtual const SfxPoolItem& GetNodeOrStyAttr(USHORT nWhich);
 
-    sal_Bool IsInTable();
-    virtual const SfxPoolItem& GetCellAttr(sal_uInt16 nWhich);
-    virtual sal_Bool BeginTable();
+    BOOL IsInTable();
+    virtual const SfxPoolItem& GetCellAttr(USHORT nWhich);
+    virtual BOOL BeginTable();
     virtual void NextTableCell();
     virtual void NextTableRow();
     virtual void SetTableWidth(SwTwips nW);
     virtual void SetTableOrient(sal_Int16 eOri);
-    virtual void SetCellWidth(SwTwips nWidth, sal_uInt16 nCell);
+    virtual void SetCellWidth(SwTwips nWidth, USHORT nCell);
     virtual void SetCellHeight(SwTwips nH);
-    virtual void SetCellBorder(const SvxBoxItem& rFmtBox, sal_uInt16 nCell);
-    virtual void SetCellSpace(sal_uInt16 nSp);
-    virtual void DeleteCell(sal_uInt16 nCell);
+    virtual void SetCellBorder(const SvxBoxItem& rFmtBox, USHORT nCell);
+    virtual void SetCellSpace(USHORT nSp);
+    virtual void DeleteCell(USHORT nCell);
     virtual void EndTable();
 
     SwFrmFmt* MakeFly( RndStdIds eAnchor, SfxItemSet* pSet );
-    virtual sal_Bool IsInFly();
+    virtual BOOL IsInFly();
     virtual void SetFlyFrmAttr(const SfxPoolItem& rAttr);
-    virtual const SfxPoolItem& GetFlyFrmAttr(sal_uInt16 nWhich);
-    virtual sal_Bool BeginFly( RndStdIds eAnchor, sal_Bool bAbsolutePos,
+    virtual const SfxPoolItem& GetFlyFrmAttr(USHORT nWhich);
+    virtual BOOL BeginFly( RndStdIds eAnchor, BOOL bAbsolutePos,
                                const SfxItemSet* pMoreAttrs = 0 );
     virtual void EndFly();
 };
@@ -392,8 +392,8 @@ public:
 class SwFltFormatCollection : public SwFltOutBase
 {
     SwTxtFmtColl* pColl;
-    SfxItemSet* pFlyAttrs;      // Simulation der Flys in Styles
-    sal_Bool bHasFly;
+    SfxItemSet* pFlyAttrs;		// Simulation der Flys in Styles
+    BOOL bHasFly;
 public:
     SwFltFormatCollection(SwDoc&, RES_POOL_COLLFMT_TYPE nType);
     SwFltFormatCollection(SwDoc&, const String& rName );
@@ -401,29 +401,29 @@ public:
 
     void Reset()
     {
-        // #i73790# - method renamed
+        // --> OD 2007-01-25 #i73790# - method renamed
         pColl->ResetAllFmtAttr();
         // <--
-        pColl->SetAuto(sal_False); // nach Empfehlung JP
+        pColl->SetAuto(FALSE); // nach Empfehlung JP
     }
     void Derived(SwTxtFmtColl* pBase)
         { pColl->SetDerivedFrom(pBase); }
 
-//  SwTxtFmtColl* Search(String, CharSet eSrc);
-    SwTxtFmtColl* GetColl()         { return pColl; }
-    void SetHasFly()                { bHasFly = sal_True; }
-    SfxItemSet* GetpFlyAttrs()      { return pFlyAttrs; }
+//	SwTxtFmtColl* Search(String, CharSet eSrc);
+    SwTxtFmtColl* GetColl()  		{ return pColl; }
+    void SetHasFly() 				{ bHasFly = TRUE; }
+    SfxItemSet* GetpFlyAttrs() 		{ return pFlyAttrs; }
 
     virtual SwFltOutBase& operator << (const SfxPoolItem& rItem);
-    virtual const SfxPoolItem& GetAttr(sal_uInt16 nWhich);
-    virtual const SfxPoolItem& GetNodeOrStyAttr(sal_uInt16 nWhich);
+    virtual const SfxPoolItem& GetAttr(USHORT nWhich);
+    virtual const SfxPoolItem& GetNodeOrStyAttr(USHORT nWhich);
 
-    virtual sal_Bool IsInFly();
+    virtual BOOL IsInFly();
     virtual void SetFlyFrmAttr(const SfxPoolItem& rAttr);
-    virtual const SfxPoolItem& GetFlyFrmAttr(sal_uInt16 nWhich);
-    virtual sal_Bool BeginFly( RndStdIds eAnchor, sal_Bool bAbsolutePos,
+    virtual const SfxPoolItem& GetFlyFrmAttr(USHORT nWhich);
+    virtual BOOL BeginFly( RndStdIds eAnchor, BOOL bAbsolutePos,
                                const SfxItemSet* pMoreAttrs = 0 );
-    sal_Bool BeginStyleFly( SwFltOutDoc* pOutDoc );
+    BOOL BeginStyleFly( SwFltOutDoc* pOutDoc );
     virtual void EndFly();
 };
 
@@ -444,7 +444,7 @@ class SwFltShell
     SwFltFormatCollection* pColls[256];
     SwFltOutBase* pOut;
 
-//  SwFltFormatCollection* pFormat; // set when in style-mode
+//	SwFltFormatCollection* pFormat; // set when in style-mode
     SwPageDesc* pCurrentPageDesc;
     SwPosition* pSavedPos; // set, when in footnote or header/footer -mode
 #ifdef None
@@ -462,57 +462,57 @@ class SwFltShell
     } eSubMode;
 
 // Fly items:
-    sal_uInt16 nAktStyle;               // zur Indizierung pStyleFlyTable
+    USHORT nAktStyle;				// zur Indizierung pStyleFlyTable
 //
     SwFltControlStack aStack;
     SwFltEndStack aEndStack;
     SwPaM* pPaM;
 //
     String sBaseURL;
-    sal_uInt16 nPageDescOffset; // fuers update der pagedescs
+    USHORT nPageDescOffset; // fuers update der pagedescs
     CharSet eSrcCharSet; // charset der quelle
     friend class SwFltControlStack;
-    sal_Bool bNewDoc;
-    sal_Bool bStdPD;
-    sal_Bool bProtect;
+    BOOL bNewDoc;
+    BOOL bStdPD;
+    BOOL bProtect;
 
 public:
-    SwFltShell(SwDoc* , SwPaM& , const String& rBaseURL, sal_Bool bNew, sal_uLong = 0);
+    SwFltShell(SwDoc* , SwPaM& , const String& rBaseURL, BOOL bNew, ULONG = 0);
     ~SwFltShell();
 
-    SwDoc& GetDoc()                 { return *aStack.pDoc; }
+    SwDoc& GetDoc() 				{ return *aStack.pDoc; }
 
-    CharSet SetCharSet(CharSet eNew)    { CharSet eOld = eSrcCharSet;
+    CharSet SetCharSet(CharSet eNew)	{ CharSet eOld = eSrcCharSet;
                                           eSrcCharSet = eNew;
                                           return eOld;
                                         }
-    void SetUseStdPageDesc()        { bStdPD = sal_True; }
-    void SetProtect()               { bProtect = sal_True; }
+    void SetUseStdPageDesc()		{ bStdPD = TRUE; }
+    void SetProtect() 				{ bProtect = TRUE; }
     SwPageDesc* MakePageDesc(SwPageDesc* pFirstPageDesc = NULL);
-    SwPageDesc& GetPageDesc()       { return *pCurrentPageDesc; }
-    void NextTab()                  { (*this) << sal_uInt8(0x09); }
-    void NextLine()                 { (*this) << sal_uInt8(0x0a); }
+    SwPageDesc& GetPageDesc() 		{ return *pCurrentPageDesc; }
+    void NextTab() 					{ (*this) << BYTE(0x09); }
+    void NextLine() 				{ (*this) << BYTE(0x0a); }
     void NextParagraph();
     void NextPage();
     void NextSection()      { pCurrentPageDesc = MakePageDesc(); }
 
     SwFltShell& AddGraphic( const String& rPicName );
     SwFltShell& AddError( const sal_Char* pErr );
-    SwFltShell& EndItem( sal_uInt16 nId );
-    SwFltShell& SetStyle( sal_uInt16 nStyle );
+    SwFltShell& EndItem( USHORT nId );
+    SwFltShell& SetStyle( USHORT nStyle );
 
     SwFltShell& operator << ( Graphic& );
     SwFltShell& operator << ( SwFltBookmark& aBook );
     void SetBookEnd(long nHandle);
-    SwFltShell& operator << ( const String& );  // Vorsicht: CHARSET_ANSI
+    SwFltShell& operator << ( const String& );	// Vorsicht: CHARSET_ANSI
     SwFltShell& operator << ( const sal_Unicode );
     SwFltShell& operator << ( const SwField& );
     SwFltShell& operator << ( const SfxPoolItem& rItem )
         { *pOut << rItem; return *this; }
 
-//  SwFltShell& operator >> (SfxPoolItem&);
+//	SwFltShell& operator >> (SfxPoolItem&);
 // methode zum beenden einer sub-sektion, zB Fusznote etc
-    void End()                      { eSubMode = None; }
+    void End()						{ eSubMode = None; }
 // methoden zur verwaltung von Header/Footer
     void BeginHeader(SwPageDesc* =NULL);
     void BeginFooter(SwPageDesc* =NULL);
@@ -521,12 +521,12 @@ public:
     void BeginFootnote();
     void EndFootnote();
 // methoden zur verwaltung von Tabellen
-    sal_Bool IsInTable() {
+    BOOL IsInTable() {
         return ( pOut == pOutDoc ) ? pOutDoc->IsInTable() : 0; }
-    const SfxPoolItem& GetCellAttr(sal_uInt16 nWhich) {
+    const SfxPoolItem& GetCellAttr(USHORT nWhich) {
         return pOut->GetCellAttr(nWhich); }
-    sal_Bool BeginTable() {
-        sal_Bool b = pOut->BeginTable();
+    BOOL BeginTable() {
+        BOOL b = pOut->BeginTable();
         if(b) eSubMode = Table;
         return b; }
     void NextTableCell() {
@@ -535,25 +535,25 @@ public:
         pOut->NextTableRow(); }
     void SetTableWidth(SwTwips nW) {
         pOut->SetTableWidth(nW); }
-    sal_Bool IsTableWidthSet() {
+    BOOL IsTableWidthSet() {
         return pOutDoc->IsTableWidthSet(); }
     void SetTableOrient(sal_Int16 eOri) {
         pOut->SetTableOrient(eOri); }
-    void SetCellWidth(SwTwips nWidth, sal_uInt16 nCell = USHRT_MAX ) {
+    void SetCellWidth(SwTwips nWidth, USHORT nCell = USHRT_MAX ) {
         pOut->SetCellWidth(nWidth, nCell); }
     void SetCellHeight(SwTwips nH) {
         pOut->SetCellHeight(nH); }
-    void SetCellBorder(const SvxBoxItem& rFmtBox, sal_uInt16 nCell = USHRT_MAX ){
+    void SetCellBorder(const SvxBoxItem& rFmtBox, USHORT nCell = USHRT_MAX ){
         pOut->SetCellBorder(rFmtBox, nCell); }
-    void SetCellSpace(sal_uInt16 nSp) {
+    void SetCellSpace(USHORT nSp) {
         pOut->SetCellSpace(nSp); }
-    void DeleteCell(sal_uInt16 nCell = USHRT_MAX) {
+    void DeleteCell(USHORT nCell = USHRT_MAX) {
         pOut->DeleteCell(nCell); }
     void EndTable() {
         pOut->EndTable(); }
 // methoden zur verwaltung von Flys
-    sal_Bool IsInFly() { return pOut->IsInFly(); }
-    sal_Bool BeginFly( RndStdIds eAnchor = FLY_AT_PARA, sal_Bool bAbsolutePos = sal_False );
+    BOOL IsInFly() { return pOut->IsInFly(); }
+    BOOL BeginFly( RndStdIds eAnchor = FLY_AT_PARA, BOOL bAbsolutePos = FALSE );
     void SetFlyAnchor( RndStdIds eAnchor )
         { pOut->SetFlyAnchor( eAnchor ); }
     void SetFlyXPos( short nXPos, sal_Int16 eHRel = com::sun::star::text::RelOrientation::FRAME,
@@ -564,7 +564,7 @@ public:
         pOut->SetFlyFrmAttr( rAttr ); }
     void EndFly();
 // methoden zur verwaltung von styles:
-    void BeginStyle(sal_uInt16 nUserCode, RES_POOL_COLLFMT_TYPE aType)
+    void BeginStyle(USHORT nUserCode, RES_POOL_COLLFMT_TYPE aType)
     {
         OSL_ENSURE(nUserCode<sizeof(pColls)/sizeof(*pColls), "code out of bounds");
         OSL_ENSURE(pColls[nUserCode] == NULL, "user codes dublicate");
@@ -574,7 +574,7 @@ public:
         nAktStyle = nUserCode;
         eSubMode = Style;
     }
-    void BeginStyle( sal_uInt16 nUserCode, const String& rName )
+    void BeginStyle( USHORT nUserCode, const String& rName )
     {
         OSL_ENSURE(nUserCode<sizeof(pColls)/sizeof(*pColls), "code out of bounds");
         OSL_ENSURE(pColls[nUserCode] == NULL, "user codes dublicate");
@@ -584,41 +584,41 @@ public:
         nAktStyle = nUserCode;
         eSubMode = Style;
     }
-    sal_Bool IsStyleImported(sal_uInt16 nUserCode)
+    BOOL IsStyleImported(USHORT nUserCode)
         { return pColls[nUserCode] != 0; }
-    void BaseStyle(sal_uInt16 nBased)
+    void BaseStyle(USHORT nBased)
     {
         OSL_ENSURE(eSubMode == Style, "wrong state for style");
         OSL_ENSURE(pColls[nBased], "Style based on noexistent style" );
         if( eSubMode == Style && pColls[nBased]->GetColl() )
             ((SwFltFormatCollection*)pOut)->Derived(pColls[nBased]->GetColl());
     }
-    void NextStyle(sal_uInt16 nWhich, sal_uInt16 nNext);
+    void NextStyle(USHORT nWhich, USHORT nNext);
 
     void EndStyle()
     {
-//   OSL_ENSURE(eSubMode == Style, "wrong state for style");
+//	 OSL_ENSURE(eSubMode == Style, "wrong state for style");
         nAktStyle = 0;
         pOut = pOutDoc;
         eSubMode = None;
     }
 
-    sal_Bool IsFlagSet(SwFltControlStack::Flags no) const
+    BOOL IsFlagSet(SwFltControlStack::Flags no) const
         { return aStack.IsFlagSet(no); }
     void ConvertUStr( String& rInOut );
     String QuoteStr( const String& rIn );
 
     // folgende status kann die shell verwalten:
-    const SfxPoolItem& GetNodeOrStyAttr(sal_uInt16 nWhich);
-    const SfxPoolItem& GetAttr(sal_uInt16 nWhich);
-    const SfxPoolItem& GetFlyFrmAttr(sal_uInt16 nWhich);
-    SwFieldType* GetSysFldType(sal_uInt16 eWhich);
-    sal_Bool GetWeightBold();
-    sal_Bool GetPostureItalic();
-    sal_Bool GetCrossedOut();
-    sal_Bool GetContour();
-    sal_Bool GetCaseKapitaelchen();
-    sal_Bool GetCaseVersalien();
+    const SfxPoolItem& GetNodeOrStyAttr(USHORT nWhich);
+    const SfxPoolItem& GetAttr(USHORT nWhich);
+    const SfxPoolItem& GetFlyFrmAttr(USHORT nWhich);
+    SwFieldType* GetSysFldType(USHORT eWhich);
+    BOOL GetWeightBold();
+    BOOL GetPostureItalic();
+    BOOL GetCrossedOut();
+    BOOL GetContour();
+    BOOL GetCaseKapitaelchen();
+    BOOL GetCaseVersalien();
 
     const String& GetBaseURL() const { return sBaseURL; }
 };

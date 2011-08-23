@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,6 +131,7 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_charttypes[] =
 
 } // anonymous namespace
 
+// static
 struct ::cppu::ImplementationEntry *
     ChartTypeEntriesForServiceRegistration::getImplementationEntries()
 {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@ class SwEditWin;
 
 class SwOleClient : public SfxInPlaceClient
 {
-    sal_Bool bInDoVerb;
-    sal_Bool bOldCheckForOLEInCaption;
+    BOOL bInDoVerb;
+    BOOL bOldCheckForOLEInCaption;
 
     virtual void ObjectAreaChanged();
     virtual void RequestNewObjectArea( Rectangle& );
@@ -49,11 +49,9 @@ class SwOleClient : public SfxInPlaceClient
 public:
     SwOleClient( SwView *pView, SwEditWin *pWin, const svt::EmbeddedObjectRef& );
 
-    void SetInDoVerb( sal_Bool bFlag )              { bInDoVerb = bFlag; }
+    void SetInDoVerb( BOOL bFlag )				{ bInDoVerb = bFlag; }
 
-    sal_Bool IsCheckForOLEInCaption() const         { return bOldCheckForOLEInCaption; }
-
-    virtual void FormatChanged();
+    BOOL IsCheckForOLEInCaption() const			{ return bOldCheckForOLEInCaption; }
 };
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ namespace sd {
 |*
 \************************************************************************/
 
-void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
+void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, USHORT nAspect)
 {
     if (nAspect == ASPECT_THUMBNAIL)
     {
@@ -71,11 +71,11 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
 
     ClientView* pView = new ClientView(this, pOut, NULL);
 
-    pView->SetHlplVisible(sal_False);
-    pView->SetGridVisible(sal_False);
-    pView->SetBordVisible(sal_False);
-    pView->SetPageVisible(sal_False);
-    pView->SetGlueVisible(sal_False);
+    pView->SetHlplVisible(FALSE);
+    pView->SetGridVisible(FALSE);
+    pView->SetBordVisible(FALSE);
+    pView->SetPageVisible(FALSE);
+    pView->SetGlueVisible(FALSE);
 
     SdPage* pSelectedPage = NULL;
 
@@ -85,7 +85,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
         FrameView* pFrameView = (FrameView*)pFrameViewList->GetObject(0);
         if( pFrameView && pFrameView->GetPageKind() == PK_STANDARD )
         {
-            sal_uInt16 nSelectedPage = pFrameView->GetSelectedPage();
+            USHORT nSelectedPage = pFrameView->GetSelectedPage();
             pSelectedPage = mpDoc->GetSdPage(nSelectedPage, PK_STANDARD);
         }
     }
@@ -93,14 +93,18 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
     if( NULL == pSelectedPage )
     {
         SdPage* pPage = NULL;
-        sal_uInt16 nPageCnt = (sal_uInt16) mpDoc->GetSdPageCount(PK_STANDARD);
+        USHORT nSelectedPage = 0;
+        USHORT nPageCnt = (USHORT) mpDoc->GetSdPageCount(PK_STANDARD);
 
-        for (sal_uInt16 i = 0; i < nPageCnt; i++)
+        for (USHORT i = 0; i < nPageCnt; i++)
         {
             pPage = mpDoc->GetSdPage(i, PK_STANDARD);
 
             if ( pPage->IsSelected() )
+            {
+                nSelectedPage = i;
                 pSelectedPage = pPage;
+            }
         }
 
         if( NULL == pSelectedPage )
@@ -136,9 +140,34 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
 
     delete pView;
 
+//  Fuer Testzwecke: Bitte nicht entfernen!
+//
+//  GDIMetaFile* pMtf = pOut->GetConnectMetaFile();
+//
+//  if( pMtf )
+//  {
+//		String aURLStr;
+//
+//		if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( String( RTL_CONSTASCII_USTRINGPARAM( "d:\\gdi.mtf" ) ), aURLStr ) )
+//		{
+//			SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_WRITE | STREAM_TRUNC );
+//
+//			if( pOStm )
+//			{
+//				*pOStm << *pMtf;
+//				delete pOStm;
+//			}
+//		}
+//  }
 }
 
-Rectangle DrawDocShell::GetVisArea(sal_uInt16 nAspect) const
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+Rectangle DrawDocShell::GetVisArea(USHORT nAspect) const
 {
     Rectangle aVisArea;
 
@@ -196,6 +225,12 @@ void DrawDocShell::Disconnect(ViewShell* pViewSh)
     }
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 FrameView* DrawDocShell::GetFrameView()
 {
     FrameView* pFrameView = NULL;
@@ -225,18 +260,18 @@ Size DrawDocShell::GetFirstPageSize()
 |*
 \************************************************************************/
 
-Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixel)
+Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
 {
-    MapMode         aMapMode( MAP_100TH_MM );
-    const Size      aSize( pPage->GetSize() );
-    const Point     aNullPt;
-    VirtualDevice   aVDev( *Application::GetDefaultDevice() );
+    MapMode			aMapMode( MAP_100TH_MM );
+    const Size		aSize( pPage->GetSize() );
+    const Point		aNullPt;
+    VirtualDevice	aVDev( *Application::GetDefaultDevice() );
 
     aVDev.SetMapMode( aMapMode );
 
-    const Size  aPixSize( aVDev.LogicToPixel( aSize ) );
-    const sal_uLong nMaxEdgePix = Max( aPixSize.Width(), aPixSize.Height() );
-    Fraction    aFrac( nMaxEdgePixel, nMaxEdgePix );
+    const Size	aPixSize( aVDev.LogicToPixel( aSize ) );
+    const ULONG	nMaxEdgePix = Max( aPixSize.Width(), aPixSize.Height() );
+    Fraction	aFrac( nMaxEdgePixel, nMaxEdgePix );
 
     aMapMode.SetScaleX( aFrac );
     aMapMode.SetScaleY( aFrac );
@@ -249,8 +284,8 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
     aMapMode.SetScaleY( aFrac );
     aVDev.SetMapMode( aMapMode );
 
-    ClientView* pView = new ClientView( this, &aVDev, NULL );
-    FrameView*      pFrameView = GetFrameView();
+    ClientView*	pView = new ClientView( this, &aVDev, NULL );
+    FrameView*		pFrameView = GetFrameView();
     pView->ShowSdrPage( pPage );
 
     if ( GetFrameView() )
@@ -293,6 +328,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
             if ( pPageView->GetLockedLayers() != pFrameView->GetLockedLayers() )
                 pPageView->SetLockedLayers( pFrameView->GetLockedLayers() );
 
+    //				  if ( pPageView->GetHelpLines() != pFrameView->GetHelpLines() )
                 pPageView->SetHelpLines( pFrameView->GetStandardHelpLines() );
         }
 
@@ -302,7 +338,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
 
     pView->CompleteRedraw( &aVDev, Rectangle( aNullPt, aSize ) );
 
-    // IsRedrawReady() always gives sal_True while ( !pView->IsRedrawReady() ) {}
+    // #111097# IsRedrawReady() always gives sal_True while ( !pView->IsRedrawReady() ) {}
     delete pView;
 
     aVDev.SetMapMode( MapMode() );
@@ -318,12 +354,12 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
 /*************************************************************************
 |*
 |* Pruefen, ob die Seite vorhanden ist und dann den Anwender zwingen einen
-|* noch nicht vorhandenen Namen einzugeben. Wird sal_False zurueckgegeben,
+|* noch nicht vorhandenen Namen einzugeben. Wird FALSE zurueckgegeben,
 |* wurde die Aktion vom Anwender abgebrochen.
 |*
 \************************************************************************/
 
-sal_Bool DrawDocShell::CheckPageName (::Window* pWin, String& rName )
+BOOL DrawDocShell::CheckPageName (::Window* pWin, String& rName )
 {
     const String aStrForDlg( rName );
     bool bIsNameValid = IsNewPageNameValid( rName, true );
@@ -353,7 +389,7 @@ sal_Bool DrawDocShell::CheckPageName (::Window* pWin, String& rName )
         }
     }
 
-    return ( bIsNameValid ? sal_True : sal_False );
+    return ( bIsNameValid ? TRUE : FALSE );
 }
 
 bool DrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStringIfStandardName /* = false */ )
@@ -446,8 +482,8 @@ bool DrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStrin
     {
         if( rInOutPageName.Len() > 0 )
         {
-            sal_Bool   bOutDummy;
-            sal_uInt16 nExistingPageNum = mpDoc->GetPageByName( rInOutPageName, bOutDummy );
+            BOOL   bOutDummy;
+            USHORT nExistingPageNum = mpDoc->GetPageByName( rInOutPageName, bOutDummy );
             bCanUseNewName = ( nExistingPageNum == SDRPAGE_NOTFOUND );
         }
         else

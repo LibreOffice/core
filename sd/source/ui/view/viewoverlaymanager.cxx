@@ -2,10 +2,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: $
+ * $Revision: $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +45,7 @@
 #include <tools/rcid.h>
 
 #include <vcl/help.hxx>
+#include <vcl/imagerepository.hxx>
 #include <vcl/lazydelete.hxx>
 
 #include <svx/sdrpagewindow.hxx>
@@ -77,12 +81,12 @@ class ImageButtonHdl;
 
 // --------------------------------------------------------------------
 
-static sal_uInt16 gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
-static sal_uInt16 gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
+static USHORT gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
+static USHORT gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
 
 // --------------------------------------------------------------------
 
-static BitmapEx loadImageResource( sal_uInt16 nId )
+static BitmapEx loadImageResource( USHORT nId )
 {
     SdResId aResId( nId );
     aResId.SetRT( RSC_BITMAP );
@@ -149,10 +153,10 @@ private:
 class ImageButtonHdl : public SmartHdl
 {
 public:
-    ImageButtonHdl( const SmartTagReference& xTag, /* sal_uInt16 nSID, const Image& rImage, const Image& rImageMO, */ const Point& rPnt );
+    ImageButtonHdl( const SmartTagReference& xTag, /* USHORT nSID, const Image& rImage, const Image& rImageMO, */ const Point& rPnt );
     virtual ~ImageButtonHdl();
     virtual void CreateB2dIAObject();
-    virtual sal_Bool IsFocusHdl() const;
+    virtual BOOL IsFocusHdl() const;
     virtual Pointer GetPointer() const;
     virtual bool isMarkable() const;
 
@@ -168,12 +172,12 @@ private:
 
     int mnHighlightId;
     Size maImageSize;
-    sal_uLong mnTip;
+    ULONG mnTip;
 };
 
 // --------------------------------------------------------------------
 
-ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag /*, sal_uInt16 nSID, const Image& rImage, const Image& rImageMO*/, const Point& rPnt )
+ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag /*, USHORT nSID, const Image& rImage, const Image& rImageMO*/, const Point& rPnt )
 : SmartHdl( xTag, rPnt )
 , mxTag( dynamic_cast< ChangePlaceholderTag* >( xTag.get() ) )
 , mnHighlightId( -1 )
@@ -206,10 +210,10 @@ extern ::rtl::OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& 
 
 void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
 {
+    int nHighlightId = 0;
 
     if( pHdlList && pHdlList->GetView())
     {
-        int nHighlightId = 0;
         OutputDevice* pDev = pHdlList->GetView()->GetFirstOutputDevice();
         if( pDev == 0 )
             pDev = Application::GetDefaultDevice();
@@ -295,7 +299,7 @@ void ImageButtonHdl::CreateB2dIAObject()
 
 // --------------------------------------------------------------------
 
-sal_Bool ImageButtonHdl::IsFocusHdl() const
+BOOL ImageButtonHdl::IsFocusHdl() const
 {
     return false;
 }
@@ -337,7 +341,7 @@ bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHd
     int nHighlightId = static_cast< ImageButtonHdl& >(rHdl).getHighlightId();
     if( nHighlightId >= 0 )
     {
-        sal_uInt16 nSID = gButtonSlots[nHighlightId];
+        USHORT nSID = gButtonSlots[nHighlightId];
 
         if( mxPlaceholderObj.get() )
         {
@@ -346,7 +350,7 @@ bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHd
             {
                 SdrPageView* pPV = mrView.GetSdrPageView();
                 mrView.UnmarkAllObj(pPV );
-                mrView.MarkObj(mxPlaceholderObj.get(), pPV, sal_False);
+                mrView.MarkObj(mxPlaceholderObj.get(), pPV, FALSE);
             }
         }
 
@@ -360,7 +364,7 @@ bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHd
 /** returns true if the SmartTag consumes this event. */
 bool ChangePlaceholderTag::KeyInput( const KeyEvent& rKEvt )
 {
-    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
+    USHORT nCode = rKEvt.GetKeyCode().GetCode();
     switch( nCode )
     {
     case KEY_DOWN:
@@ -404,10 +408,10 @@ BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
         const Rectangle aRectSrc( Point( 0, 0 ), aSize );
 
         aRet = *(getButtonImage((nHighlight == 0) ? 4 : 0, bLarge));
-        aRet.Expand( aSize.Width(), aSize.Height(), NULL, sal_True );
+        aRet.Expand( aSize.Width(), aSize.Height(), NULL, TRUE );
 
-        aRet.CopyPixel( Rectangle( Point( aSize.Width(), 0              ), aSize ), aRectSrc, getButtonImage((nHighlight == 1) ? 5 : 1, bLarge) );
-        aRet.CopyPixel( Rectangle( Point( 0,             aSize.Height() ), aSize ), aRectSrc, getButtonImage((nHighlight == 2) ? 6 : 2, bLarge) );
+        aRet.CopyPixel( Rectangle( Point( aSize.Width(), 0				), aSize ), aRectSrc, getButtonImage((nHighlight == 1) ? 5 : 1, bLarge) );
+        aRet.CopyPixel( Rectangle( Point( 0,			 aSize.Height() ), aSize ), aRectSrc, getButtonImage((nHighlight == 2) ? 6 : 2, bLarge) );
         aRet.CopyPixel( Rectangle( Point( aSize.Width(), aSize.Height() ), aSize ), aRectSrc, getButtonImage((nHighlight == 3) ? 7 : 3, bLarge) );
     }
 
@@ -431,7 +435,7 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
         long nShapeSizePix = std::min(aShapeSizePix.Width(),aShapeSizePix.Height());
         if( 50 > nShapeSizePix )
             return;
-
+        
         bool bLarge = nShapeSizePix > 250;
 
         Size aButtonSize( pDev->PixelToLogic( getButtonImage(0, bLarge )->GetSizePixel()) );
@@ -449,7 +453,7 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
         ImageButtonHdl* pHdl = new ImageButtonHdl( xThis, aPoint );
         pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
         pHdl->SetPageView( mrView.GetSdrPageView() );
-
+    
         pHdl->SetPos( aPos );
 
         rHandlerList.AddHdl( pHdl );
@@ -490,7 +494,7 @@ ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
         | tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT
         | tools::EventMultiplexerEvent::EID_END_TEXT_EDIT );
 
-    StartListening( *mrBase.GetDocShell() );
+    StartListening( *mrBase.GetDocShell() );    
 }
 
 // --------------------------------------------------------------------
@@ -544,23 +548,23 @@ IMPL_LINK(ViewOverlayManager,UpdateTagsHdl, void *, EMPTYARG)
     mnUpdateTagsEvent  = 0;
     bool bChanges = DisposeTags();
     bChanges |= CreateTags();
-
+        
     if( bChanges && mrBase.GetDrawView() )
-        static_cast< ::sd::View* >( mrBase.GetDrawView() )->updateHandles();
+        static_cast< ::sd::View* >( mrBase.GetDrawView() )->updateHandles();        
     return 0;
 }
 
 bool ViewOverlayManager::CreateTags()
 {
     bool bChanges = false;
-
+    
     SdPage* pPage = mrBase.GetMainViewShell()->getCurrentPage();
-
-    if( pPage && !pPage->IsMasterPage() && (pPage->GetPageKind() == PK_STANDARD) )
+    
+    if( pPage && !pPage->IsMasterPage() && (pPage->GetPageKind() == PK_STANDARD) )    
     {
         const std::list< SdrObject* >& rShapes = pPage->GetPresentationShapeList().getList();
-
-        for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); ++iter )
+        
+        for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); iter++ )
         {
             if( (*iter)->IsEmptyPresObj() && ((*iter)->GetObjIdentifier() == OBJ_OUTLINETEXT) && (mrBase.GetDrawView()->GetTextEditObject() != (*iter)) )
             {
@@ -570,7 +574,7 @@ bool ViewOverlayManager::CreateTags()
             }
         }
     }
-
+    
     return bChanges;
 }
 
@@ -582,7 +586,7 @@ bool ViewOverlayManager::DisposeTags()
     {
         ViewTagVector vec;
         vec.swap( maTagVector );
-
+        
         ViewTagVector::iterator iter = vec.begin();
         do
         {
@@ -591,7 +595,7 @@ bool ViewOverlayManager::DisposeTags()
         while( iter != vec.end() );
         return true;
     }
-
+    
     return false;
 }
 

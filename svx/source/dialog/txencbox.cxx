@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,8 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svx/txencbox.hxx"
-#include "svx/txenctab.hxx"
+#include "txencbox.hxx"
+#include "txenctab.hxx"
 #include <svx/dialogs.hrc>
 #include "svx/dbcharsethelper.hxx"
 #include <vcl/svapp.hxx>
@@ -39,7 +39,7 @@
 #include <osl/nlsupport.h>
 
 //========================================================================
-//  class SvxTextEncodingBox
+//	class SvxTextEncodingBox
 //========================================================================
 
 SvxTextEncodingBox::SvxTextEncodingBox( Window* pParent, const ResId& rResId )
@@ -58,12 +58,12 @@ SvxTextEncodingBox::~SvxTextEncodingBox()
 
 //------------------------------------------------------------------------
 
-sal_uInt16 SvxTextEncodingBox::EncodingToPos_Impl( rtl_TextEncoding nEnc ) const
+USHORT SvxTextEncodingBox::EncodingToPos_Impl( rtl_TextEncoding nEnc ) const
 {
-    sal_uInt16 nCount = GetEntryCount();
-    for ( sal_uInt16 i=0; i<nCount; i++ )
+    USHORT nCount = GetEntryCount();
+    for ( USHORT i=0; i<nCount; i++ )
     {
-        if ( nEnc == rtl_TextEncoding( (sal_uIntPtr)GetEntryData(i) ) )
+        if ( nEnc == rtl_TextEncoding( (ULONG)GetEntryData(i) ) )
             return i;
     }
     return LISTBOX_ENTRY_NOTFOUND;
@@ -80,12 +80,12 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
     sal_uInt32 nCount = m_pEncTable->Count();
     for ( sal_uInt32 j=0; j<nCount; j++ )
     {
-        sal_Bool bInsert = sal_True;
+        BOOL bInsert = TRUE;
         rtl_TextEncoding nEnc = rtl_TextEncoding( m_pEncTable->GetValue( j ) );
         if ( nExcludeInfoFlags )
         {
             if ( !rtl_getTextEncodingInfo( nEnc, &aInfo ) )
-                bInsert = sal_False;
+                bInsert = FALSE;
             else
             {
                 if ( (aInfo.Flags & nExcludeInfoFlags) == 0 )
@@ -93,10 +93,10 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
                     if ( (nExcludeInfoFlags & RTL_TEXTENCODING_INFO_UNICODE) &&
                             ((nEnc == RTL_TEXTENCODING_UCS2) ||
                             nEnc == RTL_TEXTENCODING_UCS4) )
-                        bInsert = sal_False;    // InfoFlags don't work for Unicode :-(
+                        bInsert = FALSE;    // InfoFlags don't work for Unicode :-(
                 }
                 else if ( (aInfo.Flags & nButIncludeInfoFlags) == 0 )
-                    bInsert = sal_False;
+                    bInsert = FALSE;
             }
         }
         if ( bInsert )
@@ -109,7 +109,7 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
                     case RTL_TEXTENCODING_GB_2312 :
                     case RTL_TEXTENCODING_GBK :
                     case RTL_TEXTENCODING_MS_936 :
-                        bInsert = sal_False;
+                        bInsert = FALSE;
                     break;
                 }
             }
@@ -130,14 +130,14 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
     svxform::ODataAccessCharsetHelper aCSH;
     ::std::vector< rtl_TextEncoding > aEncs;
     sal_Int32 nCount = aCSH.getSupportedTextEncodings( aEncs );
-    for ( sal_uInt16 j=0; j<nCount; j++ )
+    for ( USHORT j=0; j<nCount; j++ )
     {
-        sal_Bool bInsert = sal_True;
+        BOOL bInsert = TRUE;
         rtl_TextEncoding nEnc = rtl_TextEncoding( aEncs[j] );
         if ( nExcludeInfoFlags )
         {
             if ( !rtl_getTextEncodingInfo( nEnc, &aInfo ) )
-                bInsert = sal_False;
+                bInsert = FALSE;
             else
             {
                 if ( (aInfo.Flags & nExcludeInfoFlags) == 0 )
@@ -145,10 +145,10 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
                     if ( (nExcludeInfoFlags & RTL_TEXTENCODING_INFO_UNICODE) &&
                             ((nEnc == RTL_TEXTENCODING_UCS2) ||
                             nEnc == RTL_TEXTENCODING_UCS4) )
-                        bInsert = sal_False;    // InfoFlags don't work for Unicode :-(
+                        bInsert = FALSE;    // InfoFlags don't work for Unicode :-(
                 }
                 else if ( (aInfo.Flags & nButIncludeInfoFlags) == 0 )
-                    bInsert = sal_False;
+                    bInsert = FALSE;
             }
         }
         if ( bInsert )
@@ -161,7 +161,7 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
                     case RTL_TEXTENCODING_GB_2312 :
                     case RTL_TEXTENCODING_GBK :
                     case RTL_TEXTENCODING_MS_936 :
-                        bInsert = sal_False;
+                        bInsert = FALSE;
                     break;
                 }
             }
@@ -186,15 +186,15 @@ void SvxTextEncodingBox::FillWithMimeAndSelectBest()
 //------------------------------------------------------------------------
 
 void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
-            const String& rEntry, sal_uInt16 nPos )
+            const String& rEntry, USHORT nPos )
 {
-    sal_uInt16 nAt = InsertEntry( rEntry, nPos );
-    SetEntryData( nAt, (void*)(sal_uIntPtr)nEnc );
+    USHORT nAt = InsertEntry( rEntry, nPos );
+    SetEntryData( nAt, (void*)(ULONG)nEnc );
 }
 
 //------------------------------------------------------------------------
 
-void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc, sal_uInt16 nPos )
+void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc, USHORT nPos )
 {
     const String& rEntry = m_pEncTable->GetTextString( nEnc );
     if ( rEntry.Len() )
@@ -213,7 +213,7 @@ void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc, sal_uI
 
 void SvxTextEncodingBox::RemoveTextEncoding( const rtl_TextEncoding nEnc )
 {
-    sal_uInt16 nAt = EncodingToPos_Impl( nEnc );
+    USHORT nAt = EncodingToPos_Impl( nEnc );
 
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
         RemoveEntry( nAt );
@@ -223,19 +223,19 @@ void SvxTextEncodingBox::RemoveTextEncoding( const rtl_TextEncoding nEnc )
 
 rtl_TextEncoding SvxTextEncodingBox::GetSelectTextEncoding() const
 {
-    sal_uInt16 nPos = GetSelectEntryPos();
+    USHORT nPos = GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        return rtl_TextEncoding( (sal_uIntPtr)GetEntryData(nPos) );
+        return rtl_TextEncoding( (ULONG)GetEntryData(nPos) );
     else
         return RTL_TEXTENCODING_DONTKNOW;
 }
 
 //------------------------------------------------------------------------
 
-void SvxTextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc, sal_Bool bSelect )
+void SvxTextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc, BOOL bSelect )
 {
-    sal_uInt16 nAt = EncodingToPos_Impl( nEnc );
+    USHORT nAt = EncodingToPos_Impl( nEnc );
 
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
         SelectEntryPos( nAt, bSelect );
@@ -243,14 +243,14 @@ void SvxTextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc, sal_Bo
 
 //------------------------------------------------------------------------
 
-sal_Bool SvxTextEncodingBox::IsTextEncodingSelected( const rtl_TextEncoding nEnc ) const
+BOOL SvxTextEncodingBox::IsTextEncodingSelected( const rtl_TextEncoding nEnc ) const
 {
-    sal_uInt16 nAt = EncodingToPos_Impl( nEnc );
+    USHORT nAt = EncodingToPos_Impl( nEnc );
 
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
         return IsEntryPosSelected( nAt );
     else
-        return sal_False;
+        return FALSE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,10 @@
 #include "precompiled_sw.hxx"
 
 #include <float.h>
+
 #include <rtl/math.hxx>
-#include <hintids.hxx>          // fuer RES_..
+
+#include <hintids.hxx> 			// fuer RES_..
 #include <cellatr.hxx>
 #include <calc.hxx>
 #include <format.hxx>
@@ -40,17 +42,17 @@
 #include <node.hxx>
 #include <hints.hxx>
 #include <rolbck.hxx>
-#include <switerator.hxx>
 
 
-//TYPEINIT1( SwFmt, SwClient ); //rtti fuer SwFmt
+
+//TYPEINIT1( SwFmt, SwClient );	//rtti fuer SwFmt
 
 /*************************************************************************
 |*
 *************************************************************************/
 
 
-SwTblBoxNumFormat::SwTblBoxNumFormat( sal_uInt32 nFormat, sal_Bool bFlag )
+SwTblBoxNumFormat::SwTblBoxNumFormat( UINT32 nFormat, BOOL bFlag )
     : SfxUInt32Item( RES_BOXATR_FORMAT, nFormat ), bAuto( bFlag )
 {
 }
@@ -103,17 +105,17 @@ SfxPoolItem* SwTblBoxFormula::Clone( SfxItemPool* ) const
 
 
     // suche den Node, in dem die Formel steht:
-    //  TextFeld    -> TextNode,
-    //  BoxAttribut -> BoxStartNode
+    //	TextFeld	-> TextNode,
+    //	BoxAttribut	-> BoxStartNode
     // !!! MUSS VON JEDER ABLEITUNG UEBERLADEN WERDEN !!!
 const SwNode* SwTblBoxFormula::GetNodeOfFormula() const
 {
     const SwNode* pRet = 0;
     if( pDefinedIn )
     {
-        SwTableBox* pBox = SwIterator<SwTableBox,SwModify>::FirstElement( *pDefinedIn );
+        SwClient* pBox = SwClientIter( *pDefinedIn ).First( TYPE( SwTableBox ));
         if( pBox )
-            pRet = pBox->GetSttNd();
+            pRet = ((SwTableBox*)pBox)->GetSttNd();
     }
     return pRet;
 }
@@ -123,7 +125,8 @@ SwTableBox* SwTblBoxFormula::GetTableBox()
 {
     SwTableBox* pBox = 0;
     if( pDefinedIn )
-        pBox = SwIterator<SwTableBox,SwModify>::FirstElement( *pDefinedIn );
+        pBox = (SwTableBox*)SwClientIter( *pDefinedIn ).
+                            First( TYPE( SwTableBox ));
     return pBox;
 }
 
@@ -137,7 +140,7 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
     if( !pItem || RES_TABLEFML_UPDATE != pItem->Which() )
     {
         // setze bei allen das Value-Flag zurueck
-        ChgValid( sal_False );
+        ChgValid( FALSE );
         return ;
     }
 
@@ -154,8 +157,11 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
         case TBL_CALC:
             // setze das Value-Flag zurueck
             // JP 17.06.96: interne Darstellung auf alle Formeln
-            //              (Referenzen auf andere Tabellen!!!)
-                ChgValid( sal_False );
+            //				(Referenzen auf andere Tabellen!!!)
+//			if( VF_CMD & pFld->GetFormat() )
+//				pFld->PtrToBoxNm( pUpdtFld->pTbl );
+//			else
+                ChgValid( FALSE );
             break;
         case TBL_BOXNAME:
             // ist es die gesuchte Tabelle ??
@@ -166,7 +172,7 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
         case TBL_BOXPTR:
             // zur internen Darstellung
             // JP 17.06.96: interne Darstellung auf alle Formeln
-            //              (Referenzen auf andere Tabellen!!!)
+            //				(Referenzen auf andere Tabellen!!!)
             BoxNmToPtr( &pTblNd->GetTable() );
             break;
         case TBL_RELBOXNAME:
@@ -179,20 +185,20 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
         case TBL_SPLITTBL:
             if( &pTblNd->GetTable() == pUpdtFld->pTbl )
             {
-                sal_uInt16 nLnPos = SwTableFormula::GetLnPosInTbl(
+                USHORT nLnPos = SwTableFormula::GetLnPosInTbl(
                                         pTblNd->GetTable(), GetTableBox() );
                 pUpdtFld->bBehindSplitLine = USHRT_MAX != nLnPos &&
                                             pUpdtFld->nSplitLine <= nLnPos;
             }
             else
-                pUpdtFld->bBehindSplitLine = sal_False;
+                pUpdtFld->bBehindSplitLine = FALSE;
             // kein break
         case TBL_MERGETBL:
             if( pUpdtFld->pHistory )
             {
                 // fuer die History brauche ich aber die unveraenderte Formel
                 SwTblBoxFormula aCopy( *this );
-                pUpdtFld->bModified = sal_False;
+                pUpdtFld->bModified = FALSE;
                 ToSplitMergeBoxNm( *pUpdtFld );
 
                 if( pUpdtFld->bModified )
@@ -213,7 +219,7 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
 
 void SwTblBoxFormula::Calc( SwTblCalcPara& rCalcPara, double& rValue )
 {
-    if( !rCalcPara.rCalc.IsCalcError() )        // ist schon Fehler gesetzt ?
+    if( !rCalcPara.rCalc.IsCalcError() )		// ist schon Fehler gesetzt ?
     {
         // erzeuge aus den BoxNamen die Pointer
         BoxNmToPtr( rCalcPara.pTbl );
@@ -222,7 +228,7 @@ void SwTblBoxFormula::Calc( SwTblCalcPara& rCalcPara, double& rValue )
             rValue = rCalcPara.rCalc.Calculate( sFml ).GetDouble();
         else
             rValue = DBL_MAX;
-        ChgValid( !rCalcPara.IsStackOverFlow() );       // der Wert ist wieder gueltig
+        ChgValid( !rCalcPara.IsStackOverFlow() );		// der Wert ist wieder gueltig
     }
 }
 

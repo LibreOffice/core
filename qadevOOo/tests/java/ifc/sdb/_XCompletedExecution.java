@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ public class _XCompletedExecution extends MultiMethodTest {
 
     // oObj filled by MultiMethodTest
     public XCompletedExecution oObj = null ;
-
+    
     private CheckInteractionHandler checkHandler = null;
     /**
      * Interface to implement so the call of the listener can be checked.
@@ -64,7 +64,7 @@ public class _XCompletedExecution extends MultiMethodTest {
         checkHandler.setLog((PrintWriter)log);
     }
 
-
+    
     public void _executeWithCompletion() {
         try {
             oObj.executeWithCompletion(checkHandler);
@@ -74,7 +74,7 @@ public class _XCompletedExecution extends MultiMethodTest {
             tRes.tested("executeWithCompletion()", false);
             return;
         }
-
+        
         tRes.tested("executeWithCompletion()", checkHandler.checkInteractionHandler());
     }
 

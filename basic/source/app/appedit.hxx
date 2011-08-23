@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,14 +36,14 @@
 
 class BasicFrame;
 
-class AppEdit : public AppWin    {  // Editor window
+class AppEdit : public AppWin	 {	// Editor window
 using Window::Scroll;
 
 public:
     ScrollBar *pVScroll;
     ScrollBar *pHScroll;
     void SetScrollBarRanges();
-    sal_uIntPtr nCurTextWidth;
+    ULONG nCurTextWidth;
 private:
     void InitScrollBars();
 protected:
@@ -52,7 +52,7 @@ public:
     TYPEINFO();
     AppEdit( BasicFrame* );
     ~AppEdit();
-    sal_uInt16 GetLineNr();                                 // Current line number
+    USHORT GetLineNr();                                 // Current line number
     FileType GetFileType();                             // Returns the file type
     virtual long InitMenu( Menu* );                     // Inits the menu
     virtual long DeInitMenu( Menu* );                   // Reset to enable all Shortcuts
@@ -61,9 +61,9 @@ public:
     void PostLoad();
     void PostSaveAs();
     void Mark( short, short, short );                   // Select text
-    void Highlight( sal_uInt16 nLine, sal_uInt16 nCol1, sal_uInt16 nCol2 );
-    virtual sal_Bool ReloadAllowed(){ return !StarBASIC::IsRunning(); }
-    virtual void LoadIniFile();     // (re)load ini file after change
+    void Highlight( USHORT nLine, USHORT nCol1, USHORT nCol2 );
+    virtual BOOL ReloadAllowed(){ return !StarBASIC::IsRunning(); }
+    virtual void LoadIniFile();		// (re)load ini file after change
 };
 
 #endif

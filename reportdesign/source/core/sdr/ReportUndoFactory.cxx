@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@ namespace rptui
 {
     using namespace ::com::sun::star;
 // -----------------------------------------------------------------------------
-SdrUndoAction* lcl_createUndo(SdrObject& rObject,Action _eAction,sal_uInt16 _nCommentId)
+SdrUndoAction* lcl_createUndo(SdrObject& rObject,Action _eAction,USHORT _nCommentId)
 {
     OObjectBase* pObj = dynamic_cast<OObjectBase*>(&rObject);
     if ( !pObj )
@@ -54,12 +54,12 @@ DBG_NAME( rpt_OReportUndoFactory )
 // -----------------------------------------------------------------------------
 OReportUndoFactory::OReportUndoFactory() : m_pUndoFactory(new SdrUndoFactory)
 {
-    DBG_CTOR( rpt_OReportUndoFactory,NULL);
+    DBG_CTOR( rpt_OReportUndoFactory,NULL);    
 }
 // -----------------------------------------------------------------------------
 OReportUndoFactory::~OReportUndoFactory()
 {
-    DBG_DTOR( rpt_OReportUndoFactory,NULL);
+    DBG_DTOR( rpt_OReportUndoFactory,NULL);    
 }
 ///////////////////////////////////////////////////////////////////////
 // shapes
@@ -80,12 +80,12 @@ SdrUndoAction* OReportUndoFactory::CreateUndoGeoObject( SdrObject& rObject )
 
 SdrUndoAction* OReportUndoFactory::CreateUndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )
 {
-    return m_pUndoFactory->CreateUndoAttrObject( rObject, bStyleSheet1 ? sal_True : sal_False, bSaveText ? sal_True : sal_False );
+    return m_pUndoFactory->CreateUndoAttrObject( rObject, bStyleSheet1 ? TRUE : FALSE, bSaveText ? TRUE : FALSE );
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return m_pUndoFactory->CreateUndoRemoveObject( rObject, bOrdNumDirect ? sal_True : sal_False );
+    return m_pUndoFactory->CreateUndoRemoveObject( rObject, bOrdNumDirect ? TRUE : FALSE );
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoInsertObject( SdrObject& rObject, bool /*bOrdNumDirect*/ )
@@ -96,6 +96,7 @@ SdrUndoAction* OReportUndoFactory::CreateUndoInsertObject( SdrObject& rObject, b
 SdrUndoAction* OReportUndoFactory::CreateUndoDeleteObject( SdrObject& rObject, bool /*bOrdNumDirect*/ )
 {
     return lcl_createUndo(rObject,rptui::Removed,RID_STR_UNDO_DELETE_CONTROL);
+    //return m_pUndoFactory->CreateUndoDeleteObject( rObject, bOrdNumDirect ? TRUE : FALSE );
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoNewObject( SdrObject& rObject, bool /*bOrdNumDirect*/ )
@@ -105,7 +106,7 @@ SdrUndoAction* OReportUndoFactory::CreateUndoNewObject( SdrObject& rObject, bool
 
 SdrUndoAction* OReportUndoFactory::CreateUndoCopyObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return m_pUndoFactory->CreateUndoCopyObject( rObject, bOrdNumDirect ? sal_True : sal_False );
+    return m_pUndoFactory->CreateUndoCopyObject( rObject, bOrdNumDirect ? TRUE : FALSE );
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoObjectOrdNum( SdrObject& rObject, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1)
@@ -115,7 +116,7 @@ SdrUndoAction* OReportUndoFactory::CreateUndoObjectOrdNum( SdrObject& rObject, s
 
 SdrUndoAction* OReportUndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
 {
-    return m_pUndoFactory->CreateUndoReplaceObject( rOldObject, rNewObject, bOrdNumDirect ? sal_True : sal_False );
+    return m_pUndoFactory->CreateUndoReplaceObject( rOldObject, rNewObject, bOrdNumDirect ? TRUE : FALSE );
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoObjectLayerChange( SdrObject& rObject, SdrLayerID aOldLayer, SdrLayerID aNewLayer )
@@ -145,7 +146,7 @@ SdrUndoAction* OReportUndoFactory::CreateUndoMoveLayer(sal_uInt16 nLayerNum, Sdr
 }
 
 // page
-SdrUndoAction*  OReportUndoFactory::CreateUndoDeletePage(SdrPage& rPage)
+SdrUndoAction*	OReportUndoFactory::CreateUndoDeletePage(SdrPage& rPage)
 {
     return m_pUndoFactory->CreateUndoDeletePage( rPage );
 }
@@ -176,7 +177,7 @@ SdrUndoAction* OReportUndoFactory::CreateUndoPageChangeMasterPage(SdrPage& rChan
 }
 
 //==================================================================
-}   //rptui
+}	//rptui
 //==================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

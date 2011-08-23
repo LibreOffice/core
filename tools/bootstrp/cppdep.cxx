@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,12 +31,14 @@
 
 #include <stdio.h>
 #include <string.h>
-
+ 
 #include <unistd.h>
 
 #include <sys/stat.h>
 #include <tools/stream.hxx>
 #include "cppdep.hxx"
+
+//#define TEST
 
 CppDep::CppDep( ByteString aFileName )
 {
@@ -55,52 +57,41 @@ CppDep::CppDep()
 
 CppDep::~CppDep()
 {
-    for ( size_t i = 0, n = pSources->size(); i < n; ++i ) {
-        delete (*pSources)[ i ];
-    }
     delete pSources;
-
-    for ( size_t i = 0, n = pSearchPath->size(); i < n; ++i ) {
-        delete (*pSearchPath)[ i ];
-    }
     delete pSearchPath;
-
-    for ( size_t i = 0, n = pFileList->size(); i < n; ++i ) {
-        delete (*pFileList)[ i ];
-    }
     delete pFileList;
 }
 
 void CppDep::Execute()
 {
-    size_t nCount = pSources->size();
-    for ( size_t n = 0; n < nCount; n++ )
+    ULONG nCount = pSources->Count();
+    for ( ULONG n=0; n<nCount;n++)
     {
-        ByteString *pStr = (*pSources)[ n ];
+        ByteString *pStr = pSources->GetObject(n);
         Search( *pStr );
     }
 }
 
-sal_Bool CppDep::AddSearchPath( const char* aPath )
+BOOL CppDep::AddSearchPath( const char* aPath )
 {
     ByteString *pStr = new ByteString( aPath );
-    pSearchPath->push_back( pStr );
-    return sal_False;
+    pSearchPath->Insert( pStr, LIST_APPEND );
+    return FALSE;
 }
 
-sal_Bool CppDep::AddSource( const char* aSource )
+BOOL CppDep::AddSource( const char* aSource )
 {
     ByteString *pStr = new ByteString( aSource );
-    pSources->push_back( pStr );
-    return sal_False;
+    pSources->Insert( pStr, LIST_APPEND );
+    return FALSE;
 }
 
-sal_Bool CppDep::Search( ByteString aFileName )
+BOOL CppDep::Search( ByteString aFileName )
 {
 #ifdef DEBUG_VERBOSE
     fprintf( stderr, "SEARCH : %s\n", aFileName.GetBuffer());
 #endif
-    sal_Bool bRet = sal_False;
+    BOOL bRet = FALSE;
 
     SvFileStream aFile;
     ByteString aReadLine;
@@ -110,7 +101,7 @@ sal_Bool CppDep::Search( ByteString aFileName )
     aFile.Open( suFileName, STREAM_READ );
     while ( aFile.ReadLine( aReadLine ))
     {
-        sal_uInt16 nPos = aReadLine.Search( "include" );
+        USHORT nPos = aReadLine.Search( "include" );
         if ( nPos != STRING_NOTFOUND  )
         {
 #ifdef DEBUG_VERBOSE
@@ -125,20 +116,20 @@ sal_Bool CppDep::Search( ByteString aFileName )
             if ( aResult !="")
             if ( (aNewFile = Exists( aResult )) != "" )
             {
-                sal_Bool bFound = sal_False;
-                size_t nCount = pFileList->size();
-                for ( size_t i = 0; i < nCount; i++ )
+                BOOL bFound = FALSE;
+                ULONG nCount = pFileList->Count();
+                for ( ULONG i=0; i<nCount; i++ )
                 {
-                    ByteString *pStr = (*pFileList)[ i ];
+                    ByteString *pStr = pFileList->GetObject(i);
                     if ( *pStr == aNewFile )
-                        bFound = sal_True;
+                        bFound = TRUE;
                 }
 #ifdef DEBUG_VERBOSE
                 fprintf( stderr, "not in list : %d %s\n", nPos, aReadLine.GetBuffer() );
 #endif
                 if ( !bFound )
                 {
-                    pFileList->push_back( new ByteString( aNewFile ) );
+                    pFileList->Insert( new ByteString( aNewFile ), LIST_APPEND );
 #ifdef DEBUG_VERBOSE
                     fprintf( stderr, " CppDep %s\\\n", aNewFile.GetBuffer() );
 #endif
@@ -161,11 +152,11 @@ ByteString CppDep::Exists( ByteString aFileName )
     fprintf( stderr, "Searching %s \n", aFileName.GetBuffer() );
 #endif
 
-    size_t nCount = pSearchPath->size();
-    for ( size_t n = 0; n < nCount; n++ )
+    ULONG nCount = pSearchPath->Count();
+    for ( ULONG n=0; n<nCount; n++)
     {
         struct stat aBuf;
-        ByteString *pPathName = (*pSearchPath)[ n ];
+        ByteString *pPathName = pSearchPath->GetObject(n);
 
         strcpy( pFullName, pPathName->GetBuffer());
         strcat( pFullName, DIR_SEP );
@@ -197,7 +188,7 @@ ByteString CppDep::IsIncludeStatement( ByteString aLine )
 #ifdef DEBUG_VERBOSE
         fprintf( stderr, "found starting C comment : %s\n", aLine.GetBuffer() );
 #endif
-        aLine.Erase(aLine.Search("/*",0), aLine.Len() - 1);
+        aLine.Erase(aLine.Search("/*",0), aLine.Len() - 1);	
 #ifdef DEBUG_VERBOSE
         fprintf( stderr, "cleaned string : %s\n", aLine.GetBuffer() );
 #endif
@@ -207,7 +198,7 @@ ByteString CppDep::IsIncludeStatement( ByteString aLine )
 #ifdef DEBUG_VERBOSE
         fprintf( stderr, "found C++ comment : %s\n", aLine.GetBuffer() );
 #endif
-        aLine.Erase(aLine.Search("//",0), aLine.Len() - 1);
+        aLine.Erase(aLine.Search("//",0), aLine.Len() - 1);	
 #ifdef DEBUG_VERBOSE
         fprintf( stderr, "cleaned string : %s\n", aLine.GetBuffer() );
 #endif
@@ -227,7 +218,7 @@ ByteString CppDep::IsIncludeStatement( ByteString aLine )
     if ( aTmpStr.Equals("#include") )
     {
         aTmpStr = aLine.Erase( 0, 8 );
-        sal_uInt16 nLen = aLine.Len();
+        USHORT nLen = aLine.Len();
         aLine.Erase( nLen-1, 1 );
         aLine.Erase( 0, 1 );
 #ifdef DEBUG_VERBOSE

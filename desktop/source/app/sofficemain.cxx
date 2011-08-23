@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,13 +30,11 @@
 #include "precompiled_desktop.hxx"
 
 #include "app.hxx"
-#include "cmdlineargs.hxx"
-#include "cmdlinehelp.hxx"
 
 #include <rtl/logfile.hxx>
 #include <tools/extendapplicationenvironment.hxx>
 
-int SVMain();
+BOOL SVMain();
 
 // -=-= main() -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -49,23 +47,9 @@ extern "C" int soffice_main()
     desktop::Desktop aDesktop;
     // This string is used during initialization of the Gtk+ VCL module
     aDesktop.SetAppName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice")) );
-    aDesktop.CreateProcessServiceFactory();
-#ifdef UNX
-    // handle --version and --help already here, otherwise they would be handled
-    // after VCL initialization that might fail if $DISPLAY is not set
-    desktop::CommandLineArgs* pCmdLineArgs = aDesktop.GetCommandLineArgs();
-    if ( pCmdLineArgs->IsHelp() )
-    {
-        desktop::displayCmdlineHelp();
-        return EXIT_SUCCESS;
-    }
-    else if ( pCmdLineArgs->IsVersion() )
-    {
-        desktop::displayVersion();
-        return EXIT_SUCCESS;
-    }
-#endif
-    return SVMain();
+    SVMain();
+
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

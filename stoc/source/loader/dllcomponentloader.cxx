@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 #define SERVICENAME "com.sun.star.loader.SharedLibrary"
-#define IMPLNAME    "com.sun.star.comp.stoc.DLLComponentLoader"
+#define IMPLNAME	"com.sun.star.comp.stoc.DLLComponentLoader"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
@@ -65,8 +65,9 @@ using namespace com::sun::star::loader;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace cppu;
+using namespace rtl;
 using namespace osl;
-using ::rtl::OUString;
+
 extern rtl_StandardModuleCount g_moduleCount;
 
 namespace stoc_bootstrap
@@ -179,25 +180,25 @@ Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
 void DllComponentLoader::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& )
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    OSL_FAIL( "dllcomponentloader::initialize should not be called !" );
-//      if( aArgs.getLength() != 1 )
-//      {
-//          throw IllegalArgumentException();
-//      }
+    OSL_ENSURE( 0, "dllcomponentloader::initialize should not be called !" );
+//  	if( aArgs.getLength() != 1 )
+//  	{
+//  		throw IllegalArgumentException();
+//  	}
 
-//      Reference< XMultiServiceFactory > rServiceManager;
+//  	Reference< XMultiServiceFactory > rServiceManager;
 
-//      if( aArgs.getConstArray()[0].getValueType().getTypeClass() == TypeClass_INTERFACE )
-//      {
-//          aArgs.getConstArray()[0] >>= rServiceManager;
-//      }
+//  	if( aArgs.getConstArray()[0].getValueType().getTypeClass() == TypeClass_INTERFACE )
+//  	{
+//  		aArgs.getConstArray()[0] >>= rServiceManager;
+//  	}
 
-//      if( !rServiceManager.is() )
-//      {
-//          throw IllegalArgumentException();
-//      }
+//  	if( !rServiceManager.is() )
+//  	{
+//  		throw IllegalArgumentException();
+//  	}
 
-//      m_xSMgr = rServiceManager;
+//  	m_xSMgr = rServiceManager;
 }
 
 //==================================================================================================

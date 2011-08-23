@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ import java.util.Set;
 import java.net.HttpURLConnection;
 
 public class Registration {
-
+    
     public static XSingleServiceFactory __getServiceFactory(String implName,
         XMultiServiceFactory multiFactory, XRegistryKey regKey) {
         XSingleServiceFactory xSingleServiceFactory = null;
@@ -63,69 +63,73 @@ public class Registration {
         return xSingleServiceFactory;
     }
 
+    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
+        return FactoryHelper.writeRegistryServiceInfo(Registration.class.getName(), _serviceName, regKey);
+    }
+
     static final String _serviceName = "com.sun.star.comp.framework.DoRegistrationJob";
 
     static public class _Registration implements XJob {
         XComponentContext xComponentContext;
-
+        
         XStringSubstitution xPathSubstService = null;
         XExternalUriReferenceTranslator xUriTranslator = null;
-
+        
         RegistrationData theRegistrationData = null;
 
         public _Registration(XComponentContext xComponentContext) {
             this.xComponentContext = xComponentContext;
         }
-
+        
         private String resolvePath(String path) {
             try {
                 if( xPathSubstService == null || xUriTranslator == null ) {
                     XMultiComponentFactory theServiceManager = xComponentContext.getServiceManager();
                     if( xPathSubstService == null ) {
                         Object o = theServiceManager.createInstanceWithContext(
-                            "com.sun.star.util.PathSubstitution",
+                            "com.sun.star.util.PathSubstitution", 
                             xComponentContext );
-                        xPathSubstService = (XStringSubstitution)
+                        xPathSubstService = (XStringSubstitution) 
                             UnoRuntime.queryInterface(XStringSubstitution.class, o);
                     }
-
+                    
                     if( xUriTranslator == null ) {
                         Object o = theServiceManager.createInstanceWithContext(
-                            "com.sun.star.uri.ExternalUriReferenceTranslator",
+                            "com.sun.star.uri.ExternalUriReferenceTranslator", 
                             xComponentContext );
                         xUriTranslator =  (XExternalUriReferenceTranslator)
                             UnoRuntime.queryInterface(XExternalUriReferenceTranslator.class, o);
                     }
                 }
-
+                
                 String s = xPathSubstService.substituteVariables(path, true);
                 return xUriTranslator.translateToExternal(s);
             } catch (java.lang.Exception e) {
                 return path;
             }
         }
-
+        
         private void openBrowser(String url) {
             try {
                 XMultiComponentFactory theServiceManager = xComponentContext.getServiceManager();
-
+            
                 Object o = theServiceManager.createInstanceWithContext(
-                    "com.sun.star.system.SystemShellExecute",
+                    "com.sun.star.system.SystemShellExecute", 
                     xComponentContext );
-
-                XSystemShellExecute xShellExecuteService = (XSystemShellExecute)
+            
+                XSystemShellExecute xShellExecuteService = (XSystemShellExecute) 
                     UnoRuntime.queryInterface(XSystemShellExecute.class, o);
 
                 xShellExecuteService.execute( url, "", SystemShellExecuteFlags.DEFAULTS );
             } catch (java.lang.Exception e) {
             }
-       }
-
+       }            
+        
         private ServiceTag getServiceTagFromRegistrationData(File xmlFile, String productURN) {
             try {
                 RegistrationData storedRegData = RegistrationData.loadFromXML(new FileInputStream(xmlFile));
                 Set<ServiceTag> storedServiceTags = storedRegData.getServiceTags();
-
+                
                 Iterator<ServiceTag> tagIterator = storedServiceTags.iterator();
                 while( tagIterator.hasNext() ) {
                     ServiceTag tag = tagIterator.next();
@@ -134,7 +138,7 @@ public class Registration {
                         return tag;
                     }
                 }
-
+                
                 // product URN has changed, remove registration data file
                 xmlFile.delete();
             } catch (IOException e) {
@@ -146,20 +150,20 @@ public class Registration {
             return null;
         }
 
-        /*
+        /* 
          * XJob
          *
          * NOTE: as this Job hets triggered by the the JobExecutor service from first start
          * wizard and registration reminder code (because their frames do not implement
-         * XDispatchProvider), making this an XAsyncJob doesn't make sense as the
+         * XDispatchProvider), making this an XAsyncJob doesn't make sense as the 
          * JobExecutor waits for the jobFinished call on the listener passed.
          */
         public Object execute(NamedValue[] args)
             throws com.sun.star.lang.IllegalArgumentException, com.sun.star.uno.Exception {
 
             final NamedValue[] f_args = args;
-
-            new Thread(
+            
+            new Thread( 
                 new Runnable () {
                     public void run() {
                         try {
@@ -169,19 +173,19 @@ public class Registration {
                     }
                 }
             ).start();
-
+            
             NamedValue ret[] = new NamedValue[1];
             ret[0] = new NamedValue( "Deactivate", new Boolean(false) );
             return ret;
         }
-
+        
         public synchronized void executeImpl(NamedValue[] args)
             throws com.sun.star.lang.IllegalArgumentException, com.sun.star.uno.Exception {
-
+                
             // extract the interesting part of the argument list
             NamedValue[] theJobConfig = null;
             NamedValue[] theEnvironment = null;
-
+ 
             int c = args.length;
             for (int i=0; i<c; ++i) {
                 if (args[i].Name.equals("JobConfig"))
@@ -189,12 +193,12 @@ public class Registration {
                 else if (args[i].Name.equals("Environment"))
                     theEnvironment = (NamedValue[]) AnyConverter.toArray(args[i].Value);
             }
-
+ 
             if (theEnvironment==null)
                 throw new com.sun.star.lang.IllegalArgumentException("no environment");
-
+ 
             boolean saveConfig = false;
-
+            
             String productName              = "";
             String productVersion           = "";
             String productURN               = "";
@@ -203,7 +207,7 @@ public class Registration {
             String productDefinedInstanceID = "";
             String productSource            = "";
             String vendor                   = "";
-
+            
             String urlRegData = null;
             String registrationURL = null;
 
@@ -227,14 +231,14 @@ public class Registration {
                     urlRegData = resolvePath(AnyConverter.toString(theJobConfig[i].Value));
                 } else if( theJobConfig[i].Name.equals("RegistrationURL") ) {
                     registrationURL = AnyConverter.toString(theJobConfig[i].Value);
-                } else {
+                } else {  
                     System.err.println( theJobConfig[i].Name + " = " + AnyConverter.toString(theJobConfig[i].Value) );
                 }
             }
 
             if (registrationURL==null)
                 throw new com.sun.star.lang.IllegalArgumentException("no registration url");
-
+            
             boolean local_only = false;
 
             c = theEnvironment.length;
@@ -245,16 +249,16 @@ public class Registration {
                     }
                 }
             }
-
-            try {
-
+            
+            try { 
+                
                 /* ensure only one thread accesses/writes registration.xml at a time
                  * regardless how many instances of this Job exist.
                  */
                 synchronized( _serviceName ) {
-
+                    
                     File xmlRegData = new File( new URI( urlRegData ) );
-
+                
                     ServiceTag tag = getServiceTagFromRegistrationData(xmlRegData, productURN);
                     if( tag == null ) {
                         tag = ServiceTag.newInstance(
@@ -269,12 +273,12 @@ public class Registration {
                             System.getProperty("os.arch"),
                             Installer.getZoneName(),
                             productSource);
-
+                
                         theRegistrationData = new RegistrationData();
                         theRegistrationData.addServiceTag(tag);
                         theRegistrationData.storeToXML( new FileOutputStream( xmlRegData ) );
                     }
-
+                
                     // Store the service tag in local registry, which might have been installed later
                     if( Registry.isSupported() ) {
                         // ignore communication failures with local service tag client
@@ -289,11 +293,11 @@ public class Registration {
                         }
                     }
                 }
-
+                
                 if( ! local_only ) {
                     registrationURL = registrationURL.replaceAll("\\$\\{registry_urn\\}", theRegistrationData.getRegistrationURN());
                     registrationURL = registrationURL.replaceAll("\\$\\{locale\\}", Locale.getDefault().getLanguage());
-
+                    
                     HttpURLConnection con = (HttpURLConnection) new URL(registrationURL).openConnection();
                     con.setDoInput(true);
                     con.setDoOutput(true);
@@ -311,6 +315,7 @@ public class Registration {
                         out.close();
 
                         int returnCode = con.getResponseCode();
+//                      if (returnCode == HttpURLConnection.HTTP_OK);
                     } catch(java.lang.Exception e) {
                         // IOException and UnknownHostException
                     }

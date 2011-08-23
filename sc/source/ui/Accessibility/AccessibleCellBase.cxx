@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,8 +54,8 @@
 
 #include <float.h>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star;
+using namespace	::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -93,7 +93,7 @@ sal_Bool SAL_CALL ScAccessibleCellBase::isVisible(  )
         bool bRowFiltered = mpDoc->RowFiltered(maCellAddress.Row(), maCellAddress.Tab());
 
         if (bColHidden || bColFiltered || bRowHidden || bRowFiltered)
-            bVisible = false;
+            bVisible = sal_False;
     }
     return bVisible;
 }
@@ -260,7 +260,7 @@ sal_Bool SAL_CALL
      SolarMutexGuard aGuard;
     IsObjectValid();
     double fValue = 0;
-    sal_Bool bResult(false);
+    sal_Bool bResult(sal_False);
     if((aNumber >>= fValue) && mpDoc && mpDoc->GetDocumentShell())
     {
         uno::Reference<XAccessibleStateSet> xParentStates;
@@ -273,7 +273,7 @@ sal_Bool SAL_CALL
         {
             ScDocShell* pDocShell = (ScDocShell*) mpDoc->GetDocumentShell();
             ScDocFunc aFunc(*pDocShell);
-            bResult = aFunc.PutCell( maCellAddress, new ScValueCell(fValue), sal_True );
+            bResult = aFunc.PutCell( maCellAddress, new ScValueCell(fValue), TRUE );
         }
     }
     return bResult;
@@ -333,7 +333,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 sal_Bool ScAccessibleCellBase::IsEditable(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    sal_Bool bEditable(false);
+    sal_Bool bEditable(sal_False);
     if (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::EDITABLE))
         bEditable = sal_True;
     return bEditable;

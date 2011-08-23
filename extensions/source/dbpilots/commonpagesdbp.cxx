@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,13 +69,13 @@ namespace dbp
     //---------------------------------------------------------------------
     OTableSelectionPage::OTableSelectionPage(OControlWizard* _pParent)
         :OControlWizardPage(_pParent, ModuleRes(RID_PAGE_TABLESELECTION))
-        ,m_aData            (this, ModuleRes(FL_DATA))
-        ,m_aExplanation     (this, ModuleRes(FT_EXPLANATION))
-        ,m_aDatasourceLabel (this, ModuleRes(FT_DATASOURCE))
-        ,m_aDatasource      (this, ModuleRes(LB_DATASOURCE))
-        ,m_aSearchDatabase  (this, ModuleRes(PB_FORMDATASOURCE))
-        ,m_aTableLabel      (this, ModuleRes(FT_TABLE))
-        ,m_aTable           (this, ModuleRes(LB_TABLE))
+        ,m_aData			(this, ModuleRes(FL_DATA))
+        ,m_aExplanation		(this, ModuleRes(FT_EXPLANATION))
+        ,m_aDatasourceLabel	(this, ModuleRes(FT_DATASOURCE))
+        ,m_aDatasource		(this, ModuleRes(LB_DATASOURCE))
+        ,m_aSearchDatabase	(this, ModuleRes(PB_FORMDATASOURCE))
+        ,m_aTableLabel		(this, ModuleRes(FT_TABLE))
+        ,m_aTable			(this, ModuleRes(LB_TABLE))
     {
         FreeResource();
 
@@ -120,7 +120,7 @@ namespace dbp
         try
         {
             ::rtl::OUString sDataSourceName;
-            rContext.xForm->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSourceName"))) >>= sDataSourceName;
+            rContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSourceName;
 
             Reference< XConnection > xConnection;
             bool bEmbedded = ::dbtools::isEmbeddedInDatabase( rContext.xForm, xConnection );
@@ -138,13 +138,13 @@ namespace dbp
             implFillTables(xConnection);
 
             ::rtl::OUString sCommand;
-            OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Command")) ) >>= sCommand );
+            OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString::createFromAscii("Command") ) >>= sCommand );
             sal_Int32 nCommandType = CommandType::TABLE;
-            OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CommandType")) ) >>= nCommandType );
+            OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString::createFromAscii("CommandType") ) >>= nCommandType );
 
             // search the entry of the given type with the given name
             XubString sLookup( sCommand );
-            for ( sal_uInt16 nLookup = 0; nLookup < m_aTable.GetEntryCount(); ++nLookup )
+            for ( USHORT nLookup = 0; nLookup < m_aTable.GetEntryCount(); ++nLookup )
             {
                 if ( m_aTable.GetEntry( nLookup ) == sLookup )
                     if ( reinterpret_cast< sal_IntPtr >( m_aTable.GetEntryData( nLookup ) ) == nCommandType )
@@ -156,7 +156,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            OSL_FAIL("OTableSelectionPage::initializePage: caught an exception!");
+            DBG_ERROR("OTableSelectionPage::initializePage: caught an exception!");
         }
     }
 
@@ -175,13 +175,13 @@ namespace dbp
                 xOldConn = getFormConnection();
 
                 ::rtl::OUString sDataSource = m_aDatasource.GetSelectEntry();
-                rContext.xForm->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSourceName")), makeAny( sDataSource ) );
+                rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("DataSourceName"), makeAny( sDataSource ) );
             }
             ::rtl::OUString sCommand = m_aTable.GetSelectEntry();
             sal_Int32 nCommandType = reinterpret_cast< sal_IntPtr >( m_aTable.GetEntryData( m_aTable.GetSelectEntryPos() ) );
 
-            rContext.xForm->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Command")), makeAny( sCommand ) );
-            rContext.xForm->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CommandType")), makeAny( nCommandType ) );
+            rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("Command"), makeAny( sCommand ) );
+            rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("CommandType"), makeAny( nCommandType ) );
 
             if ( !rContext.bEmbedded )
                 setFormConnection( xOldConn, sal_False );
@@ -191,7 +191,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            OSL_FAIL("OTableSelectionPage::commitPage: caught an exception!");
+            DBG_ERROR("OTableSelectionPage::commitPage: caught an exception!");
         }
 
         return sal_True;
@@ -234,7 +234,7 @@ namespace dbp
     IMPL_LINK( OTableSelectionPage, OnListboxSelection, ListBox*, _pBox )
     {
         if (&m_aDatasource == _pBox)
-        {   // new data source selected
+        {	// new data source selected
             implFillTables();
         }
         else
@@ -296,7 +296,7 @@ namespace dbp
                     }
 
                     if (m_xDSContext->getByName(sCurrentDatasource) >>= xDatasource)
-                    {   // connect
+                    {	// connect
                         // get the default SDB interaction handler
                         Reference< XInteractionHandler > xHandler = getDialog()->getInteractionHandler(this);
                         if (!xHandler.is() )
@@ -306,7 +306,7 @@ namespace dbp
                     }
                     else
                     {
-                        OSL_FAIL("OTableSelectionPage::implFillTables: invalid data source object returned by the context");
+                        DBG_ERROR("OTableSelectionPage::implFillTables: invalid data source object returned by the context");
                     }
                 }
             }
@@ -315,7 +315,7 @@ namespace dbp
             catch(SQLException& e) { aSQLException <<= e; }
             catch (Exception&)
             {
-                OSL_FAIL("OTableSelectionPage::implFillTables: could not fill the table list!");
+                DBG_ERROR("OTableSelectionPage::implFillTables: could not fill the table list!");
             }
         }
 
@@ -347,13 +347,13 @@ namespace dbp
             catch(SQLException& e) { aSQLException <<= e; }
             catch (Exception&)
             {
-                OSL_FAIL("OTableSelectionPage::implFillTables: could not fill the table list!");
+                DBG_ERROR("OTableSelectionPage::implFillTables: could not fill the table list!");
             }
         }
 
 
         if ( aSQLException.hasValue() )
-        {   // an SQLException (or derivee) was thrown ...
+        {	// an SQLException (or derivee) was thrown ...
             Reference< XInteractionRequest > xRequest = new OInteractionRequest(aSQLException);
             try
             {
@@ -370,8 +370,9 @@ namespace dbp
         {
             ::svt::OLocalResourceAccess aLocalResAccess( ModuleRes( RID_PAGE_TABLESELECTION ), RSC_TABPAGE );
 
-            aTableImage = Image( ModuleRes( IMG_TABLE ) );
-            aQueryImage = Image( ModuleRes( IMG_QUERY ) );
+            bool bIsHiContrast = m_aTable.GetSettings().GetStyleSettings().GetHighContrastMode();
+            aTableImage = Image( ModuleRes( bIsHiContrast ? IMG_TABLE_HC : IMG_TABLE ) );
+            aQueryImage = Image( ModuleRes( bIsHiContrast ? IMG_QUERY_HC : IMG_QUERY ) );
         }
         lcl_fillEntries( m_aTable, aTableNames, aTableImage, CommandType::TABLE );
         lcl_fillEntries( m_aTable, aQueryNames, aQueryImage, CommandType::QUERY );
@@ -388,7 +389,7 @@ namespace dbp
         }
         catch (Exception&)
         {
-            OSL_FAIL("OTableSelectionPage::implCollectDatasource: could not collect the data source names!");
+            DBG_ERROR("OTableSelectionPage::implCollectDatasource: could not collect the data source names!");
         }
     }
 
@@ -465,12 +466,12 @@ namespace dbp
     //---------------------------------------------------------------------
     ODBFieldPage::ODBFieldPage( OControlWizard* _pParent )
         :OMaybeListSelectionPage(_pParent, ModuleRes(RID_PAGE_OPTION_DBFIELD))
-        ,m_aFrame           (this, ModuleRes(FL_DATABASEFIELD_EXPL))
-        ,m_aDescription     (this, ModuleRes(FT_DATABASEFIELD_EXPL))
-        ,m_aQuestion        (this, ModuleRes(FT_DATABASEFIELD_QUEST))
-        ,m_aStoreYes        (this, ModuleRes(RB_STOREINFIELD_YES))
-        ,m_aStoreNo         (this, ModuleRes(LB_STOREINFIELD))
-        ,m_aStoreWhere      (this, ModuleRes(RB_STOREINFIELD_NO))
+        ,m_aFrame			(this, ModuleRes(FL_DATABASEFIELD_EXPL))
+        ,m_aDescription		(this, ModuleRes(FT_DATABASEFIELD_EXPL))
+        ,m_aQuestion		(this, ModuleRes(FT_DATABASEFIELD_QUEST))
+        ,m_aStoreYes		(this, ModuleRes(RB_STOREINFIELD_YES))
+        ,m_aStoreNo			(this, ModuleRes(LB_STOREINFIELD))
+        ,m_aStoreWhere		(this, ModuleRes(RB_STOREINFIELD_NO))
     {
         FreeResource();
         announceControls(m_aStoreYes, m_aStoreNo, m_aStoreWhere);
@@ -500,7 +501,7 @@ namespace dbp
     }
 
 //.........................................................................
-}   // namespace dbp
+}	// namespace dbp
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

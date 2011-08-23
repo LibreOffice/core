@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ ParseEnvState::Process_TypeModifier( const TokTypeModifier & )
 }
 
 void
-ParseEnvState::Process_MetaType( const TokMetaType &    )
+ParseEnvState::Process_MetaType( const TokMetaType &	)
 {
     Process_Default();
 }
@@ -131,7 +131,7 @@ ParseEnvState::Process_Default()
 {
     if (bDefaultIsError)
         MyPE().SetResult(not_done, pop_failure);
-    else    // ignore:
+    else	// ignore:
         MyPE().SetResult(done, stay);
 }
 

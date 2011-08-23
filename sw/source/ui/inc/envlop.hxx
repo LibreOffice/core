@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 #include <vcl/lstbox.hxx>
 
-#include <vcl/button.hxx>
+#include <vcl/imagebtn.hxx>
 
 #include "envimg.hxx"
 
@@ -71,19 +71,19 @@ friend class SwEnvFmtPage;
 friend class SwEnvPrtPage;
 friend class SwEnvPreview;
 
-    String          sInsert;
-    String          sChange;
-    SwEnvItem       aEnvItem;
-    SwWrtShell      *pSh;
-    Printer         *pPrinter;
-    SfxItemSet      *pAddresseeSet;
-    SfxItemSet      *pSenderSet;
+    String			sInsert;
+    String 			sChange;
+    SwEnvItem		aEnvItem;
+    SwWrtShell		*pSh;
+    Printer			*pPrinter;
+    SfxItemSet		*pAddresseeSet;
+    SfxItemSet		*pSenderSet;
 
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
-    virtual short   Ok();
+    virtual void	PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual short	Ok();
 
 public:
-     SwEnvDlg(Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert);
+     SwEnvDlg(Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, BOOL bInsert);
     ~SwEnvDlg();
 };
 
@@ -92,13 +92,13 @@ class SwEnvPage : public SfxTabPage
 {
     FixedText     aAddrText;
     MultiLineEdit aAddrEdit;
-    FixedText     aDatabaseFT;
-    ListBox       aDatabaseLB;
-    FixedText     aTableFT;
-    ListBox       aTableLB;
+    FixedText	  aDatabaseFT;
+    ListBox 	  aDatabaseLB;
+    FixedText	  aTableFT;
+    ListBox 	  aTableLB;
     ImageButton   aInsertBT;
-    FixedText     aDBFieldFT;
-    ListBox       aDBFieldLB;
+    FixedText	  aDBFieldFT;
+    ListBox 	  aDBFieldLB;
     CheckBox      aSenderBox;
     MultiLineEdit aSenderEdit;
     SwEnvPreview  aPreview;
@@ -128,7 +128,7 @@ public:
     virtual void ActivatePage(const SfxItemSet& rSet);
     virtual int  DeactivatePage(SfxItemSet* pSet = 0);
             void FillItem(SwEnvItem& rItem);
-    virtual sal_Bool FillItemSet(SfxItemSet& rSet);
+    virtual BOOL FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 };
 

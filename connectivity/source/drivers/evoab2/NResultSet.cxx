@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,15 +75,15 @@ using namespace com::sun::star::io;
 namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeException)   \
+::rtl::OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeException)	\
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.evoab.ResultSet"));
+    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.evoab.ResultSet");
 }
 // -------------------------------------------------------------------------
  Sequence< ::rtl::OUString > SAL_CALL OEvoabResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
      Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ResultSet"));
+    aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ResultSet");
     return aSupported;
 }
 // -------------------------------------------------------------------------
@@ -234,7 +234,7 @@ executeQuery (EBook* pBook, EBookQuery* pQuery, GList **ppList,
     {
         rtl::OString aUser( getUserName( pBook ) );
         const char *pAuth = e_source_get_property( pSource, "auth" );
-        bAuthSuccess = e_book_authenticate_user( pBook, aUser.getStr(), rPassword.getStr(), pAuth, pError );
+        bAuthSuccess = e_book_authenticate_user( pBook, aUser, rPassword, pAuth, pError );
     }
 
     if (bAuthSuccess)
@@ -518,7 +518,7 @@ void OEvoabResultSet::construct( const QueryData& _rData )
 {
     ENSURE_OR_THROW( _rData.getQuery(), "internal error: no EBookQuery" );
 
-    EBook *pBook = openBook(::rtl::OUStringToOString(_rData.sTable, RTL_TEXTENCODING_UTF8).getStr());
+    EBook *pBook = openBook( ::rtl::OUStringToOString( _rData.sTable, RTL_TEXTENCODING_UTF8 ) );
     if ( !pBook )
         m_pConnection->throwGenericSQLException( STR_CANNOT_OPEN_BOOK, *this );
 

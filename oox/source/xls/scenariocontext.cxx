@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,25 +27,22 @@
  ************************************************************************/
 
 #include "oox/xls/scenariocontext.hxx"
-
 #include "oox/xls/scenariobuffer.hxx"
+
+using ::oox::core::ContextHandlerRef;
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
-using ::oox::core::ContextHandlerRef;
-
-// ============================================================================
-
-ScenarioContext::ScenarioContext( WorksheetContextBase& rParent, SheetScenarios& rSheetScenarios ) :
-    WorksheetContextBase( rParent ),
+OoxScenarioContext::OoxScenarioContext( OoxWorksheetContextBase& rParent, SheetScenarios& rSheetScenarios ) :
+    OoxWorksheetContextBase( rParent ),
     mrScenario( rSheetScenarios.createScenario() )
 {
 }
 
-ContextHandlerRef ScenarioContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef OoxScenarioContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -56,24 +53,24 @@ ContextHandlerRef ScenarioContext::onCreateContext( sal_Int32 nElement, const At
     return 0;
 }
 
-void ScenarioContext::onStartElement( const AttributeList& rAttribs )
+void OoxScenarioContext::onStartElement( const AttributeList& rAttribs )
 {
     if( isRootElement() )
         mrScenario.importScenario( rAttribs );
 }
 
-ContextHandlerRef ScenarioContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
+ContextHandlerRef OoxScenarioContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
-        case BIFF12_ID_SCENARIO:
-            if( nRecId == BIFF12_ID_INPUTCELLS ) mrScenario.importInputCells( rStrm );
+        case OOBIN_ID_SCENARIO:
+            if( nRecId == OOBIN_ID_INPUTCELLS ) mrScenario.importInputCells( rStrm );
         break;
     }
     return 0;
 }
 
-void ScenarioContext::onStartRecord( SequenceInputStream& rStrm )
+void OoxScenarioContext::onStartRecord( RecordInputStream& rStrm )
 {
     if( isRootElement() )
         mrScenario.importScenario( rStrm );
@@ -81,41 +78,41 @@ void ScenarioContext::onStartRecord( SequenceInputStream& rStrm )
 
 // ============================================================================
 
-ScenariosContext::ScenariosContext( WorksheetFragmentBase& rFragment ) :
-    WorksheetContextBase( rFragment ),
+OoxScenariosContext::OoxScenariosContext( OoxWorksheetFragmentBase& rFragment ) :
+    OoxWorksheetContextBase( rFragment ),
     mrSheetScenarios( getScenarios().createSheetScenarios( getSheetIndex() ) )
 {
 }
 
-ContextHandlerRef ScenariosContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef OoxScenariosContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( scenarios ):
-            if( nElement == XLS_TOKEN( scenario ) ) return new ScenarioContext( *this, mrSheetScenarios );
+            if( nElement == XLS_TOKEN( scenario ) ) return new OoxScenarioContext( *this, mrSheetScenarios );
         break;
     }
     return 0;
 }
 
-void ScenariosContext::onStartElement( const AttributeList& rAttribs )
+void OoxScenariosContext::onStartElement( const AttributeList& rAttribs )
 {
     if( isRootElement() )
         mrSheetScenarios.importScenarios( rAttribs );
 }
 
-ContextHandlerRef ScenariosContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& )
+ContextHandlerRef OoxScenariosContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
 {
     switch( getCurrentElement() )
     {
-        case BIFF12_ID_SCENARIOS:
-            if( nRecId == BIFF12_ID_SCENARIO ) return new ScenarioContext( *this, mrSheetScenarios );
+        case OOBIN_ID_SCENARIOS:
+            if( nRecId == OOBIN_ID_SCENARIO ) return new OoxScenarioContext( *this, mrSheetScenarios );
         break;
     }
     return 0;
 }
 
-void ScenariosContext::onStartRecord( SequenceInputStream& rStrm )
+void OoxScenariosContext::onStartRecord( RecordInputStream& rStrm )
 {
     if( isRootElement() )
         mrSheetScenarios.importScenarios( rStrm );

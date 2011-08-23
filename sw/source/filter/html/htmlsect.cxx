@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,6 +67,7 @@
 #define CONTEXT_FLAGS_MULTICOL (HTML_CNTXT_STRIP_PARA |  \
                                 HTML_CNTXT_KEEP_NUMRULE | \
                                 HTML_CNTXT_KEEP_ATTRS)
+//#define CONTEXT_FLAGS_HDRFTR (HTML_CNTXT_STRIP_PARA|HTML_CNTXT_PROTECT_STACK)
 #define CONTEXT_FLAGS_HDRFTR (CONTEXT_FLAGS_MULTICOL)
 #define CONTEXT_FLAGS_FTN (CONTEXT_FLAGS_MULTICOL)
 
@@ -152,7 +153,7 @@ void SwHTMLParser::NewDivision( int nToken )
 
     if( !bPositioned && (bHeader || bFooter) && IsNewDoc() )
     {
-        SwPageDesc *pPageDesc = pCSS1Parser->GetMasterPageDesc();
+        SwPageDesc *pPageDesc =	pCSS1Parser->GetMasterPageDesc();
         SwFrmFmt& rPageFmt = pPageDesc->GetMaster();
 
         SwFrmFmt *pHdFtFmt;
@@ -204,7 +205,7 @@ void SwHTMLParser::NewDivision( int nToken )
             aDelPam.SetMark();
 
             const SwStartNode *pStNd =
-                (const SwStartNode *) &rCntntStIdx.GetNode();
+                (const SwStartNode *)pDoc->GetNodes()[rCntntStIdx];
             aDelPam.GetPoint()->nNode = pStNd->EndOfSectionIndex() - 1;
 
             pDoc->DelFullPara( aDelPam );
@@ -261,7 +262,7 @@ void SwHTMLParser::NewDivision( int nToken )
         if( !bAppended )
         {
             SwNodeIndex aPrvNdIdx( pPam->GetPoint()->nNode, -1 );
-            if (aPrvNdIdx.GetNode().IsSectionNode())
+            if( (pDoc->GetNodes()[aPrvNdIdx])->IsSectionNode() )
             {
                 AppendTxtNode();
                 bAppended = sal_True;
@@ -350,7 +351,8 @@ void SwHTMLParser::NewDivision( int nToken )
         }
 
         SwTxtNode* pOldTxtNd =
-            (bAppended) ? 0 : pPam->GetPoint()->nNode.GetNode().GetTxtNode();
+            bAppended ? 0 : pDoc->GetNodes()[pPam->GetPoint()->nNode]
+                                ->GetTxtNode();
 
         pPam->Move( fnMoveBackward );
 
@@ -358,7 +360,7 @@ void SwHTMLParser::NewDivision( int nToken )
         // (ersten) Node des Bereich verschieben.
         if( pOldTxtNd )
             MovePageDescAttrs( pOldTxtNd, pPam->GetPoint()->nNode.GetIndex(),
-                               sal_True  );
+                               sal_True	 );
 
         if( pPostIts )
         {
@@ -414,7 +416,7 @@ void SwHTMLParser::EndDivision( int /*nToken*/ )
     {
         // Attribute beenden
         EndContext( pCntxt );
-        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();	// Absatz-Atts wegen JavaScript moeglichst schnell setzen
 
         delete pCntxt;
     }
@@ -423,7 +425,7 @@ void SwHTMLParser::EndDivision( int /*nToken*/ )
 void SwHTMLParser::FixHeaderFooterDistance( sal_Bool bHeader,
                                             const SwPosition *pOldPos )
 {
-    SwPageDesc *pPageDesc = pCSS1Parser->GetMasterPageDesc();
+    SwPageDesc *pPageDesc =	pCSS1Parser->GetMasterPageDesc();
     SwFrmFmt& rPageFmt = pPageDesc->GetMaster();
 
     SwFrmFmt *pHdFtFmt =
@@ -434,10 +436,10 @@ void SwHTMLParser::FixHeaderFooterDistance( sal_Bool bHeader,
     const SwFmtCntnt& rFlyCntnt = pHdFtFmt->GetCntnt();
     const SwNodeIndex& rCntntStIdx = *rFlyCntnt.GetCntntIdx();
 
-    sal_uLong nPrvNxtIdx;
+    ULONG nPrvNxtIdx;
     if( bHeader )
     {
-        nPrvNxtIdx = rCntntStIdx.GetNode().EndOfSectionIndex()-1;
+        nPrvNxtIdx = pDoc->GetNodes()[rCntntStIdx]->EndOfSectionIndex()-1;
     }
     else
     {
@@ -688,7 +690,7 @@ void SwHTMLParser::NewMultiCol()
             // node must be inserted. Otherwise, the new section will be
             // inserted in front of the old one.
             SwNodeIndex aPrvNdIdx( pPam->GetPoint()->nNode, -1 );
-            if (aPrvNdIdx.GetNode().IsSectionNode())
+            if( (pDoc->GetNodes()[aPrvNdIdx])->IsSectionNode() )
             {
                 AppendTxtNode();
                 bAppended = sal_True;
@@ -744,7 +746,8 @@ void SwHTMLParser::NewMultiCol()
         }
 
         SwTxtNode* pOldTxtNd =
-            (bAppended) ? 0 : pPam->GetPoint()->nNode.GetNode().GetTxtNode();
+            bAppended ? 0 : pDoc->GetNodes()[pPam->GetPoint()->nNode]
+                                ->GetTxtNode();
 
         pPam->Move( fnMoveBackward );
 
@@ -752,7 +755,7 @@ void SwHTMLParser::NewMultiCol()
         // to the section's first node.
         if( pOldTxtNd )
             MovePageDescAttrs( pOldTxtNd, pPam->GetPoint()->nNode.GetIndex(),
-                               sal_True  );
+                               sal_True	 );
 
         if( pPostIts )
         {
@@ -808,7 +811,7 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
 /*  */
 
 void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
-                                      sal_uLong nDestIdx,
+                                      ULONG nDestIdx,
                                       sal_Bool bFmtBreak )
 {
     SwCntntNode* pDestCntntNd =
@@ -821,14 +824,14 @@ void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
         SwCntntNode* pSrcCntntNd = pSrcNd->GetCntntNode();
 
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pSrcCntntNd->GetSwAttrSet()
+        if( SFX_ITEM_SET ==	pSrcCntntNd->GetSwAttrSet()
                 .GetItemState( RES_PAGEDESC, sal_False, &pItem ) &&
             ((SwFmtPageDesc *)pItem)->GetPageDesc() )
         {
             pDestCntntNd->SetAttr( *pItem );
             pSrcCntntNd->ResetAttr( RES_PAGEDESC );
         }
-        if( SFX_ITEM_SET == pSrcCntntNd->GetSwAttrSet()
+        if( SFX_ITEM_SET ==	pSrcCntntNd->GetSwAttrSet()
                 .GetItemState( RES_BREAK, sal_False, &pItem ) )
         {
             switch( ((SvxFmtBreakItem *)pItem)->GetBreak() )
@@ -849,7 +852,7 @@ void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
         SwFrmFmt *pFrmFmt = pSrcNd->GetTableNode()->GetTable().GetFrmFmt();
 
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pFrmFmt->GetAttrSet().
+        if( SFX_ITEM_SET ==	pFrmFmt->GetAttrSet().
                 GetItemState( RES_PAGEDESC, sal_False, &pItem ) )
         {
             pDestCntntNd->SetAttr( *pItem );

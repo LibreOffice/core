@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -155,10 +155,10 @@ void lcl_AddPropertiesToVector_PointProperties(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
-
+ 
 void lcl_AddPropertiesToVector_SeriesOnly(
     ::std::vector< Property > & rOutProperties )
-{
+{    
     rOutProperties.push_back(
         Property( C2U( "Axis" ),
                   PROP_SERIES_ATTACHED_AXIS,
@@ -174,58 +174,48 @@ void lcl_AddPropertiesToVector_SeriesOnly(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-uno::Sequence< Property > lcl_GetPropertySequence( DataSeriesPointWrapper::eType _eType )
+const uno::Sequence< Property > & lcl_GetPropertySequence( DataSeriesPointWrapper::eType _eType )
 {
-    ::std::vector< ::com::sun::star::beans::Property > aProperties;
+    static uno::Sequence< Property > aSeriesPropSeq;
+    static uno::Sequence< Property > aPointPropSeq;
 
-    lcl_AddPropertiesToVector_PointProperties( aProperties );
-    if( _eType == DataSeriesPointWrapper::DATA_SERIES )
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    uno::Sequence< Property >& rPropSeq =
+        (_eType == DataSeriesPointWrapper::DATA_SERIES) ? aSeriesPropSeq : aPointPropSeq;
+    if( 0 == rPropSeq.getLength() )
     {
-        lcl_AddPropertiesToVector_SeriesOnly( aProperties );
-        WrappedStatisticProperties::addProperties( aProperties );
+        // get properties
+        ::std::vector< ::com::sun::star::beans::Property > aProperties;
+
+        lcl_AddPropertiesToVector_PointProperties( aProperties );
+        if( _eType == DataSeriesPointWrapper::DATA_SERIES )
+        {
+            lcl_AddPropertiesToVector_SeriesOnly( aProperties );
+            WrappedStatisticProperties::addProperties( aProperties );
+        }
+        WrappedSymbolProperties::addProperties( aProperties ); //for series and  points
+        WrappedDataCaptionProperties::addProperties( aProperties ); //for series and  points
+                
+        ::chart::FillProperties::AddPropertiesToVector( aProperties );
+        ::chart::LineProperties::AddPropertiesToVector( aProperties );
+        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
+        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+        ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
+
+        // and sort them for access via bsearch
+        ::std::sort( aProperties.begin(), aProperties.end(), ::chart::PropertyNameLess() );
+
+        // transfer result to static Sequence
+        rPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
-    WrappedSymbolProperties::addProperties( aProperties ); //for series and  points
-    WrappedDataCaptionProperties::addProperties( aProperties ); //for series and  points
 
-    ::chart::FillProperties::AddPropertiesToVector( aProperties );
-    ::chart::LineProperties::AddPropertiesToVector( aProperties );
-    ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
-    ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
-    ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
-
-    ::std::sort( aProperties.begin(), aProperties.end(), ::chart::PropertyNameLess() );
-
-    return ::chart::ContainerHelper::ContainerToSequence( aProperties );
+    return rPropSeq;
 }
 
-struct StaticSeriesWrapperPropertyArray_Initializer
-{
-    Sequence< Property >* operator()()
-    {
-        static Sequence< Property > aPropSeq( lcl_GetPropertySequence( DataSeriesPointWrapper::DATA_SERIES ) );
-        return &aPropSeq;
-    }
-};
-
-struct StaticSeriesWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticSeriesWrapperPropertyArray_Initializer >
-{
-};
-
-struct StaticPointWrapperPropertyArray_Initializer
-{
-    Sequence< Property >* operator()()
-    {
-        static Sequence< Property > aPropSeq( lcl_GetPropertySequence( DataSeriesPointWrapper::DATA_POINT ) );
-        return &aPropSeq;
-    }
-};
-
-struct StaticPointWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticPointWrapperPropertyArray_Initializer >
-{
-};
-
 //----------------------------------------------------------------------------------------------------------------------
-
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 //PROP_SERIES_ATTACHED_AXIS
 class WrappedAttachedAxisProperty : public ::chart::WrappedProperty
@@ -461,8 +451,11 @@ void WrappedLineStyleProperty::setPropertyToDefault( const Reference< beans::XPr
         WrappedSeriesAreaOrLineProperty::setPropertyToDefault( xInnerPropertyState );
 }
 
-} // anonymous namespace
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
+} // anonymous namespace
 
 // --------------------------------------------------------------------------------
 
@@ -497,11 +490,11 @@ void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< uno::Any 
         if( aArguments.getLength() >= 2 )
             aArguments[1] >>= m_nPointIndex;
     }
-
+        
     if( !m_xDataSeries.is() )
         throw uno::Exception(
             C2U( "DataSeries index invalid" ), static_cast< ::cppu::OWeakObject * >( this ));
-
+    
     //todo: check upper border of point index
 
     if( m_nPointIndex >= 0 )
@@ -668,7 +661,7 @@ beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const ::
 void SAL_CALL DataSeriesPointWrapper::setPropertyToDefault( const ::rtl::OUString& rPropertyName )
                                     throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    if( m_eType == DATA_SERIES )
+    if( m_eType == DATA_SERIES ) 
         WrappedPropertySet::setPropertyToDefault( rPropertyName );
     else
     {
@@ -714,10 +707,7 @@ Reference< beans::XPropertySet > DataSeriesPointWrapper::getInnerPropertySet()
 
 const Sequence< beans::Property >& DataSeriesPointWrapper::getPropertySequence()
 {
-    if( m_eType == DATA_SERIES )
-        return *StaticSeriesWrapperPropertyArray::get();
-    else
-        return *StaticPointWrapperPropertyArray::get();
+    return lcl_GetPropertySequence( m_eType );
 }
 
 const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedProperties()
@@ -739,9 +729,15 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
     WrappedSymbolProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );
     WrappedDataCaptionProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );
     WrappedScaleTextProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
+    
+    //add unnamed fill properties (different inner names here)
+//     aWrappedProperties.push_back( new  WrappedUnnamedProperty( C2U( "FillGradient" ), C2U( "GradientName" ) ) );
+//     aWrappedProperties.push_back( new  WrappedUnnamedProperty( C2U( "FillHatch" ), C2U( "HatchName" ) ) );
+//     aWrappedProperties.push_back( new  WrappedUnnamedProperty( C2U( "FillTransparenceGradient" ), C2U( "TransparencyGradientName" ) ) );
 
     //add unnamed line properties (different inner names here)
-
+//     aWrappedProperties.push_back( new WrappedUnnamedProperty( C2U( "LineDash" ), C2U( "LineDashName" ) ) );
+        
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillColor" ), C2U( "Color" ) ) );
     aWrappedProperties.push_back( new WrappedLineStyleProperty( this ) );
     aWrappedProperties.push_back( new WrappedLineColorProperty( this ) );
@@ -750,7 +746,7 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
     aWrappedProperties.push_back( new WrappedSeriesAreaOrLineProperty( C2U( "LineWidth" ), C2U( "BorderWidth" ), C2U( "LineWidth" ), this ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillStyle" ), C2U( "FillStyle" ) ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillTransparence" ), C2U( "Transparency" ) ) );
-
+    
     aWrappedProperties.push_back( new WrappedIgnoreProperty( C2U( "LineJoint" ), uno::makeAny( drawing::LineJoint_ROUND ) ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillTransparenceGradientName" ), C2U( "TransparencyGradientName" ) ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillGradientName" ), C2U( "GradientName" ) ) );
@@ -787,7 +783,7 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const ::rtl::OUString& r
         if( ! (rValue >>= m_bLinesAllowed) )
             throw lang::IllegalArgumentException( C2U("Property Lines requires value of type sal_Bool"), 0, 0 );
     }
-
+    
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     static const sal_Int32 nErrorCategoryHandle = getInfoHelper().getHandleByName( C2U("ErrorCategory") );
     if( nErrorCategoryHandle == nHandle )

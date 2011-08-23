@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 #ifndef _CONNECTIVITY_JAVA_SQL_TIMESTAMP_HXX_
-#define _CONNECTIVITY_JAVA_SQL_TIMESTAMP_HXX_
+#define	_CONNECTIVITY_JAVA_SQL_TIMESTAMP_HXX_
 
 #include "java/util/Date.hxx"
 #include <com/sun/star/util/Time.hpp>
@@ -42,7 +42,7 @@ namespace connectivity
     class java_sql_Date : public java_util_Date
     {
     protected:
-    // static data for the class
+    // statische Daten fuer die Klasse
         static jclass theClass;
     public:
         virtual jclass getMyClass() const;
@@ -63,7 +63,7 @@ namespace connectivity
     class java_sql_Time : public java_util_Date
     {
     protected:
-    // static data for the class
+    // statische Daten fuer die Klasse
         static jclass theClass;
     public:
         virtual jclass getMyClass() const;
@@ -81,7 +81,7 @@ namespace connectivity
     class java_sql_Timestamp : public java_util_Date
     {
     protected:
-    // static data for the class
+    // statische Daten fuer die Klasse
         static jclass theClass;
     public:
         virtual jclass getMyClass() const;
@@ -91,6 +91,8 @@ namespace connectivity
         java_sql_Timestamp( const ::com::sun::star::util::DateTime& _rOut);
         operator ::com::sun::star::util::DateTime();
 
+        sal_Int32 getNanos();
+        void  setNanos(sal_Int32 n);
         static jclass st_getMyClass();
     };
 }

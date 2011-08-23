@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,12 @@ SvStream& operator>>( SvStream& rIStream, Pair& rPair )
 
     if ( rIStream.GetCompressMode() == COMPRESSMODE_FULL )
     {
-        unsigned char   cId;
-        unsigned char   cAry[8];
-        int             i;
-        int             i1;
-        int             i2;
-        sal_uInt32          nNum;
+        unsigned char	cId;
+        unsigned char	cAry[8];
+        int 			i;
+        int 			i1;
+        int 			i2;
+        UINT32			nNum;
 
         rIStream >> cId;
         i1 = (cId & 0x70) >> 4;
@@ -62,7 +62,7 @@ SvStream& operator>>( SvStream& rIStream, Pair& rPair )
         }
         if ( cId & 0x80 )
             nNum ^= 0xFFFFFFFF;
-        rPair.nA = (sal_Int32)nNum;
+        rPair.nA = (INT32)nNum;
 
         nNum = 0;
         i = i1+i2;
@@ -74,7 +74,7 @@ SvStream& operator>>( SvStream& rIStream, Pair& rPair )
         }
         if ( cId & 0x08 )
             nNum ^= 0xFFFFFFFF;
-        rPair.nB = (sal_Int32)nNum;
+        rPair.nB = (INT32)nNum;
     }
     else
     {
@@ -92,13 +92,13 @@ SvStream& operator<<( SvStream& rOStream, const Pair& rPair )
 
     if ( rOStream.GetCompressMode() == COMPRESSMODE_FULL )
     {
-        unsigned char   cAry[9];
-        int             i = 1;
-        sal_uInt32          nNum;
+        unsigned char	cAry[9];
+        int 			i = 1;
+        UINT32			nNum;
 
         cAry[0] = 0;
 
-        nNum = (sal_uInt32)(sal_Int32)rPair.nA;
+        nNum = (UINT32)(INT32)rPair.nA;
         if ( rPair.nA < 0 )
         {
             cAry[0] |= 0x80;
@@ -139,7 +139,7 @@ SvStream& operator<<( SvStream& rOStream, const Pair& rPair )
                 cAry[0] |= 0x10;
         }
 
-        nNum = (sal_uInt32)(sal_Int32)rPair.nB;
+        nNum = (UINT32)(INT32)rPair.nB;
         if ( rPair.nB < 0 )
         {
             cAry[0] |= 0x08;
@@ -194,6 +194,10 @@ SvStream& operator<<( SvStream& rOStream, const Pair& rPair )
 |*
 |*    Rectangle::SetSize()
 |*
+|*    Beschreibung      GEN.SDW
+|*    Ersterstellung    DV 29.10.91
+|*    Letzte Aenderung  MM 21.04.94
+|*
 *************************************************************************/
 
 void Rectangle::SetSize( const Size& rSize )
@@ -216,6 +220,10 @@ void Rectangle::SetSize( const Size& rSize )
 /*************************************************************************
 |*
 |*    Rectangle::Union()
+|*
+|*    Beschreibung      GEN.SDW
+|*    Ersterstellung    TH 20.10.92
+|*    Letzte Aenderung  MM 21.04.94
 |*
 *************************************************************************/
 
@@ -240,6 +248,10 @@ Rectangle& Rectangle::Union( const Rectangle& rRect )
 /*************************************************************************
 |*
 |*    Rectangle::Intersection()
+|*
+|*    Beschreibung      GEN.SDW
+|*    Ersterstellung    TH 20.10.92
+|*    Letzte Aenderung  MM 21.04.94
 |*
 *************************************************************************/
 
@@ -275,6 +287,10 @@ Rectangle& Rectangle::Intersection( const Rectangle& rRect )
 |*
 |*    Rectangle::Justify()
 |*
+|*    Beschreibung      GEN.SDW
+|*    Ersterstellung    DV 07.03.91
+|*    Letzte Aenderung  DV 07.03.91
+|*
 *************************************************************************/
 
 void Rectangle::Justify()
@@ -302,33 +318,37 @@ void Rectangle::Justify()
 |*
 |*    Rectangle::IsInside()
 |*
+|*    Beschreibung      GEN.SDW
+|*    Ersterstellung    TH 19.03.90
+|*    Letzte Aenderung  MM 21.04.94
+|*
 *************************************************************************/
 
-sal_Bool Rectangle::IsInside( const Point& rPoint ) const
+BOOL Rectangle::IsInside( const Point& rPoint ) const
 {
     if ( IsEmpty() )
-        return sal_False;
+        return FALSE;
 
-    sal_Bool bRet = sal_True;
+    BOOL bRet = TRUE;
     if ( nLeft <= nRight )
     {
         if ( (rPoint.X() < nLeft) || (rPoint.X() > nRight) )
-            bRet = sal_False;
+            bRet = FALSE;
     }
     else
     {
         if ( (rPoint.X() > nLeft) || (rPoint.X() < nRight) )
-            bRet = sal_False;
+            bRet = FALSE;
     }
     if ( nTop <= nBottom )
     {
         if ( (rPoint.Y() < nTop) || (rPoint.Y() > nBottom) )
-            bRet = sal_False;
+            bRet = FALSE;
     }
     else
     {
         if ( (rPoint.Y() > nTop) || (rPoint.Y() < nBottom) )
-            bRet = sal_False;
+            bRet = FALSE;
     }
     return bRet;
 }
@@ -337,23 +357,31 @@ sal_Bool Rectangle::IsInside( const Point& rPoint ) const
 |*
 |*    Rectangle::IsInside()
 |*
+|*    Beschreibung      GEN.SDW
+|*    Ersterstellung    TH 19.03.90
+|*    Letzte Aenderung  MM 21.04.94
+|*
 *************************************************************************/
 
-sal_Bool Rectangle::IsInside( const Rectangle& rRect ) const
+BOOL Rectangle::IsInside( const Rectangle& rRect ) const
 {
     if ( IsInside( rRect.TopLeft() ) && IsInside( rRect.BottomRight() ) )
-        return sal_True;
+        return TRUE;
     else
-        return sal_False;
+        return FALSE;
 }
 
 /*************************************************************************
 |*
 |*    Rectangle::IsOver()
 |*
+|*    Beschreibung      GEN.SDW
+|*    Ersterstellung    TH 19.03.90
+|*    Letzte Aenderung  MM 21.04.94
+|*
 *************************************************************************/
 
-sal_Bool Rectangle::IsOver( const Rectangle& rRect ) const
+BOOL Rectangle::IsOver( const Rectangle& rRect ) const
 {
     // Wenn sie sich nicht schneiden, ueberlappen sie auch nicht
     return !GetIntersection( rRect ).IsEmpty();
@@ -367,15 +395,15 @@ SvStream& operator>>( SvStream& rIStream, Rectangle& rRect )
 
     if ( rIStream.GetCompressMode() == COMPRESSMODE_FULL )
     {
-        unsigned char   cIdAry[2];
-        unsigned char   cAry[16];
-        int             i;
-        int             iLast;
-        int             i1;
-        int             i2;
-        int             i3;
-        int             i4;
-        sal_uInt32          nNum;
+        unsigned char	cIdAry[2];
+        unsigned char	cAry[16];
+        int 			i;
+        int 			iLast;
+        int 			i1;
+        int 			i2;
+        int 			i3;
+        int 			i4;
+        UINT32			nNum;
 
         rIStream.Read( cIdAry, 2 );
         i1 = (cIdAry[0] & 0x70) >> 4;
@@ -396,7 +424,7 @@ SvStream& operator>>( SvStream& rIStream, Rectangle& rRect )
         iLast = i1;
         if ( cIdAry[0] & 0x80 )
             nNum ^= 0xFFFFFFFF;
-        rRect.nLeft = (sal_Int32)nNum;
+        rRect.nLeft = (INT32)nNum;
 
         nNum = 0;
         i = iLast+i2;
@@ -409,7 +437,7 @@ SvStream& operator>>( SvStream& rIStream, Rectangle& rRect )
         iLast += i2;
         if ( cIdAry[0] & 0x08 )
             nNum ^= 0xFFFFFFFF;
-        rRect.nTop = (sal_Int32)nNum;
+        rRect.nTop = (INT32)nNum;
 
         nNum = 0;
         i = iLast+i3;
@@ -422,7 +450,7 @@ SvStream& operator>>( SvStream& rIStream, Rectangle& rRect )
         iLast += i3;
         if ( cIdAry[1] & 0x80 )
             nNum ^= 0xFFFFFFFF;
-        rRect.nRight = (sal_Int32)nNum;
+        rRect.nRight = (INT32)nNum;
 
         nNum = 0;
         i = iLast+i4;
@@ -434,7 +462,7 @@ SvStream& operator>>( SvStream& rIStream, Rectangle& rRect )
         }
         if ( cIdAry[1] & 0x08 )
             nNum ^= 0xFFFFFFFF;
-        rRect.nBottom = (sal_Int32)nNum;
+        rRect.nBottom = (INT32)nNum;
     }
     else
     {
@@ -452,14 +480,14 @@ SvStream& operator<<( SvStream& rOStream, const Rectangle& rRect )
 
     if ( rOStream.GetCompressMode() == COMPRESSMODE_FULL )
     {
-        unsigned char   cAry[18];
-        int             i = 2;
-        sal_uInt32          nNum;
+        unsigned char	cAry[18];
+        int 			i = 2;
+        UINT32			nNum;
 
         cAry[0] = 0;
         cAry[1] = 0;
 
-        nNum = (sal_uInt32)(sal_Int32)rRect.nLeft;
+        nNum = (UINT32)(INT32)rRect.nLeft;
         if ( rRect.nLeft < 0 )
         {
             cAry[0] |= 0x80;
@@ -500,7 +528,7 @@ SvStream& operator<<( SvStream& rOStream, const Rectangle& rRect )
                 cAry[0] |= 0x10;
         }
 
-        nNum = (sal_uInt32)(sal_Int32)rRect.nTop;
+        nNum = (UINT32)(INT32)rRect.nTop;
         if ( rRect.nTop < 0 )
         {
             cAry[0] |= 0x08;
@@ -541,7 +569,7 @@ SvStream& operator<<( SvStream& rOStream, const Rectangle& rRect )
                 cAry[0] |= 0x01;
         }
 
-        nNum = (sal_uInt32)(sal_Int32)rRect.nRight;
+        nNum = (UINT32)(INT32)rRect.nRight;
         if ( rRect.nRight < 0 )
         {
             cAry[1] |= 0x80;
@@ -582,7 +610,7 @@ SvStream& operator<<( SvStream& rOStream, const Rectangle& rRect )
                 cAry[1] |= 0x10;
         }
 
-        nNum = (sal_uInt32)(sal_Int32)rRect.nBottom;
+        nNum = (UINT32)(INT32)rRect.nBottom;
         if ( rRect.nBottom < 0 )
         {
             cAry[1] |= 0x08;

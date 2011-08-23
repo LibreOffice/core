@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -177,7 +177,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
             }
         }
     }
-    catch( uno::Exception &ex )
+    catch( uno::Exception ex )
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -187,7 +187,7 @@ SeriesOptionsItemConverter::~SeriesOptionsItemConverter()
 {
 }
 
-const sal_uInt16 * SeriesOptionsItemConverter::GetWhichPairs() const
+const USHORT * SeriesOptionsItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nSeriesOptionsWhichPairs;
@@ -198,7 +198,7 @@ bool SeriesOptionsItemConverter::GetItemProperty( tWhichIdType /*nWhichId*/, tPr
     return false;
 }
 
-bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
+bool SeriesOptionsItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;
@@ -253,7 +253,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                             }
                             else if( nAxisIndex >= 0 && nAxisIndex < m_aBarPositionSequence.getLength() )
                                 m_aBarPositionSequence[nAxisIndex] = rBarPosition;
-
+                                
                             xChartTypeProps->setPropertyValue( aPropName, uno::makeAny(m_aBarPositionSequence) );
                             bChanged = true;
                         }
@@ -317,7 +317,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
         break;
 
         case SCHATTR_CLOCKWISE:
-        {
+        { 
             bool bClockwise = (static_cast< const SfxBoolItem & >(
                      rItemSet.Get( nWhichId )).GetValue() );
             if( m_xCooSys.is() )
@@ -373,7 +373,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
 }
 
 void SeriesOptionsItemConverter::FillSpecialItem(
-    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
+    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     switch( nWhichId )
@@ -435,7 +435,7 @@ void SeriesOptionsItemConverter::FillSpecialItem(
         {
             SvULongs aList;
             for ( sal_Int32 nN=0; nN<m_aSupportedMissingValueTreatments.getLength(); nN++ )
-                aList.Insert( m_aSupportedMissingValueTreatments[nN], sal::static_int_cast< sal_uInt16 >(nN) );
+                aList.Insert( m_aSupportedMissingValueTreatments[nN], sal::static_int_cast< USHORT >(nN) );
             rOutItemSet.Put( SfxIntegerListItem( nWhichId, aList ) );
             break;
         }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,17 +38,17 @@
 // aA - dump old/new token array
 // uU - dump old/new UPN array
 
-sal_Bool DbgToken( char );
+BOOL DbgToken( char );
 ScTokenArray* DbgMakeTokenArray
-    ( ScDocument* pDoc, SCTAB nTab, const String& r, sal_uInt16& rErr );
-void DbgDumpTokenArray( const sal_uInt8* pArr, sal_uInt16 nLen, const char* pMsg );
+    ( ScDocument* pDoc, SCTAB nTab, const String& r, USHORT& rErr );
+void DbgDumpTokenArray( const BYTE* pArr, USHORT nLen, const char* pMsg );
 void DbgDelTokenArray( ScTokenArray* );
 formula::StackVar DbgInterpret( ScDocument* pDok, const ScTokenArray* pToken,
                        SCCOL nCOL, SCROW nROW, SCTAB nTAB,
                                   formula::StackVar eformula::StackVar,
                                   char* &rStringErgPtr,
                                   double& rDoubleErg,
-                                  sal_uInt16& rError,
+                                  USHORT& rError,
                                   ScMatrix** ppMat);
 
 #endif

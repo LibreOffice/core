@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 //=============================================================================
 
-module com { module sun { module star { module document {
+module com { module sun { module star { module document { 
 
 //=============================================================================
 
@@ -59,14 +59,14 @@ module com { module sun { module star { module document {
 interface XScriptInvocationContext
 {
     /** denotes the document which contains the scripts which are to be invoked from
-    the component implementing the XScriptInvocationContext interface.
+    the component implementing the XScriptInvocationContext inteface.
     */
     [attribute, readonly] XEmbeddedScripts ScriptContainer;
 };
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 //=============================================================================
 

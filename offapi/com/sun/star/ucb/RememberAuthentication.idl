@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 //=============================================================================
 
-module com { module sun { module star { module ucb {
+module com { module sun { module star { module ucb { 
 
 //=============================================================================
 /** A specification of how long to remember some authentication data.
@@ -50,7 +50,7 @@ published enum RememberAuthentication
     SESSION,
 
     //-------------------------------------------------------------------------
-    /** Remember the authentication data "forever".
+    /** Remember the authentication data 'forever'.
     */
     PERSISTENT
 
@@ -58,6 +58,6 @@ published enum RememberAuthentication
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif

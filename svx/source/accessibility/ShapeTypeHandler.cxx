@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,12 +36,12 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
-#include "svx/svdstr.hrc"
+#include "svdstr.hrc"
 
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star::accessibility;
 
 namespace accessibility {
 
@@ -94,6 +94,7 @@ ShapeTypeId ShapeTypeHandler::GetTypeId (const OUString& aServiceName) const
     tServiceNameToSlotId::iterator I (maServiceNameToSlotId.find (aServiceName));
     if (I != maServiceNameToSlotId.end())
     {
+        //	long nSlotId = maServiceNameToSlotId[aServiceName];
         return maShapeTypeDescriptorList[I->second].mnShapeTypeId;
     }
     else
@@ -156,7 +157,7 @@ ShapeTypeHandler::ShapeTypeHandler (void)
     // Resize the list, if necessary, so that the new type can be inserted.
     maShapeTypeDescriptorList[0].mnShapeTypeId = UNKNOWN_SHAPE_TYPE;
     maShapeTypeDescriptorList[0].msServiceName =
-        OUString(RTL_CONSTASCII_USTRINGPARAM("UNKNOWN_SHAPE_TYPE"));
+        OUString::createFromAscii ("UNKNOWN_SHAPE_TYPE");
     maShapeTypeDescriptorList[0].maCreateFunction = CreateEmptyShapeReference;
     maServiceNameToSlotId[maShapeTypeDescriptorList[0].msServiceName] = 0;
 }
@@ -164,7 +165,7 @@ ShapeTypeHandler::ShapeTypeHandler (void)
 
 
 
-ShapeTypeHandler::~ShapeTypeHandler (void)
+ShapeTypeHandler::~ShapeTypeHandler	(void)
 {
     //  Because this class is a singleton and the only instance, whose
     //  destructor has just been called, is pointed to from instance,
@@ -234,7 +235,7 @@ long ShapeTypeHandler::GetSlotId (const uno::Reference<drawing::XShape>& rxShape
         return 0;
 }
 
-/// get the accessible base name for an object
+///	get the accessible base name for an object
 ::rtl::OUString
     ShapeTypeHandler::CreateAccessibleBaseName (const uno::Reference<drawing::XShape>& rxShape)
     throw (::com::sun::star::uno::RuntimeException)

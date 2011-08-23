@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,13 +32,13 @@
 #include "uielement/complextoolbarcontroller.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include "uielement/toolbar.hxx"
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -50,7 +50,7 @@
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <svtools/toolboxcontroller.hxx>
 #include <osl/mutex.hxx>
@@ -77,7 +77,7 @@ ComplexToolbarController::ComplexToolbarController(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
-    sal_uInt16                                   nID,
+    USHORT                                   nID,
     const ::rtl::OUString&                          aCommand ) :
     svt::ToolboxController( rServiceManager, rFrame, aCommand )
     ,   m_pToolbar( pToolbar )
@@ -157,7 +157,7 @@ throw ( RuntimeException )
         pExecuteInfo->aTargetURL    = aTargetURL;
         pExecuteInfo->aArgs         = aArgs;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ComplexToolbarController"))).log(
+            UiEventLogHelper(::rtl::OUString::createFromAscii("ComplexToolbarController")).log(
                 m_xServiceManager,
                 m_xFrame,
                 aTargetURL,
@@ -180,7 +180,7 @@ throw ( RuntimeException )
     {
         m_pToolbar->EnableItem( m_nID, Event.IsEnabled );
 
-        sal_uInt16 nItemBits = m_pToolbar->GetItemBits( m_nID );
+        USHORT nItemBits = m_pToolbar->GetItemBits( m_nID );
         nItemBits &= ~TIB_CHECKABLE;
         TriState eTri = STATE_NOCHECK;
 
@@ -194,7 +194,7 @@ throw ( RuntimeException )
         {
             // Boolean, treat it as checked/unchecked
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, sal_True );
+                m_pToolbar->ShowItem( m_nID, TRUE );
             m_pToolbar->CheckItem( m_nID, bValue );
             if ( bValue )
                 eTri = STATE_CHECK;
@@ -207,14 +207,14 @@ throw ( RuntimeException )
             m_pToolbar->SetQuickHelpText( m_nID, aText );
 
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, sal_True );
+                m_pToolbar->ShowItem( m_nID, TRUE );
         }
         else if ( Event.State >>= aItemState )
         {
             eTri = STATE_DONTKNOW;
             nItemBits |= TIB_CHECKABLE;
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, sal_True );
+                m_pToolbar->ShowItem( m_nID, TRUE );
         }
         else if ( Event.State >>= aItemVisibility )
         {
@@ -225,11 +225,11 @@ throw ( RuntimeException )
         {
             executeControlCommand( aControlCommand );
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, sal_True );
+                m_pToolbar->ShowItem( m_nID, TRUE );
         }
 
         else if ( m_bMadeInvisible )
-            m_pToolbar->ShowItem( m_nID, sal_True );
+            m_pToolbar->ShowItem( m_nID, TRUE );
 
         m_pToolbar->SetItemState( m_nID, eTri );
         m_pToolbar->SetItemBits( m_nID, nItemBits );

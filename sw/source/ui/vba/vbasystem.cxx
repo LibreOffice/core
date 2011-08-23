@@ -33,9 +33,12 @@
 #include <tools/string.hxx>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/string.hxx>
 
 #ifdef WNT
+#include <tools/prewin.h>
 #include <windows.h>
+#include <tools/postwin.h>
 #include <tchar.h>
 #endif
 

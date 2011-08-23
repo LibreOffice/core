@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <osl/module.h>
 #include <rtl/ustring.hxx>
 
-using ::rtl::OUString;
+using namespace rtl;
 
 extern "C" {
 struct VersionInfo
@@ -66,7 +66,7 @@ int __LOADONCALLAPI main( int argc, char **argv )
     oslModule aLibrary = osl_loadModule( aLib.pData, SAL_LOADMODULE_DEFAULT );
     if ( aLibrary )
     {
-        void* pFunc = osl_getSymbol( aLibrary, OUString( RTL_CONSTASCII_USTRINGPARAM( "GetVersionInfo" )).pData );
+        void* pFunc = osl_getSymbol( aLibrary, OUString::createFromAscii( "GetVersionInfo" ).pData );
         if ( pFunc )
             pInfo = (*(GetVersionInfo)pFunc)();
     }
@@ -84,7 +84,7 @@ int __LOADONCALLAPI main( int argc, char **argv )
 
     if ( aLibrary )
         osl_unloadModule( aLibrary );
-
+    
     return 0;
 }
 

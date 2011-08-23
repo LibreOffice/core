@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,21 +42,23 @@
 #include <ndgrf.hxx>
 #include <ndole.hxx>
 #include <ndindex.hxx>
-#include <hints.hxx>            // fuer SwFmtChg
+#include <hints.hxx>			// fuer SwFmtChg
 #include <istyleaccess.hxx>
 #include <SwStyleNameMapper.hxx>
 
-#include <frmfmt.hxx> // #i73249#
+// --> OD 2009-07-13 #i73249#
+#include <frmfmt.hxx>
+// <--
 
 SwNoTxtNode::SwNoTxtNode( const SwNodeIndex & rWhere,
-                  const sal_uInt8 nNdType,
+                  const BYTE nNdType,
                   SwGrfFmtColl *pGrfColl,
                   SwAttrSet* pAutoAttr ) :
     SwCntntNode( rWhere, nNdType, pGrfColl ),
     pContour( 0 ),
-    bAutomaticContour( sal_False ),
-    bContourMapModeValid( sal_True ),
-    bPixelContour( sal_False )
+    bAutomaticContour( FALSE ),
+    bContourMapModeValid( TRUE ),
+    bPixelContour( FALSE )
 {
     // soll eine Harte-Attributierung gesetzt werden?
     if( pAutoAttr )
@@ -92,19 +94,19 @@ void SwNoTxtNode::NewAttrSet( SwAttrPool& rPool )
 // bei Grafiken und OLE-Objekten
 
 
-sal_Bool SwNoTxtNode::RestorePersistentData()
+BOOL SwNoTxtNode::RestorePersistentData()
 {
-    return sal_True;
+    return TRUE;
 }
 
 
-sal_Bool SwNoTxtNode::SavePersistentData()
+BOOL SwNoTxtNode::SavePersistentData()
 {
-    return sal_True;
+    return TRUE;
 }
 
 
-void SwNoTxtNode::SetContour( const PolyPolygon *pPoly, sal_Bool bAutomatic )
+void SwNoTxtNode::SetContour( const PolyPolygon *pPoly, BOOL bAutomatic )
 {
     delete pContour;
     if ( pPoly )
@@ -112,8 +114,8 @@ void SwNoTxtNode::SetContour( const PolyPolygon *pPoly, sal_Bool bAutomatic )
     else
         pContour = 0;
     bAutomaticContour = bAutomatic;
-    bContourMapModeValid = sal_True;
-    bPixelContour = sal_False;
+    bContourMapModeValid = TRUE;
+    bPixelContour = FALSE;
 }
 
 
@@ -121,9 +123,9 @@ void SwNoTxtNode::CreateContour()
 {
     OSL_ENSURE( !pContour, "Contour available." );
     pContour = new PolyPolygon(SvxContourDlg::CreateAutoContour(GetGraphic()));
-    bAutomaticContour = sal_True;
-    bContourMapModeValid = sal_True;
-    bPixelContour = sal_False;
+    bAutomaticContour = TRUE;
+    bContourMapModeValid = TRUE;
+    bPixelContour = FALSE;
 }
 
 const PolyPolygon *SwNoTxtNode::HasContour() const
@@ -131,7 +133,7 @@ const PolyPolygon *SwNoTxtNode::HasContour() const
     if( !bContourMapModeValid )
     {
         const MapMode aGrfMap( GetGraphic().GetPrefMapMode() );
-        sal_Bool bPixelGrf = aGrfMap.GetMapUnit() == MAP_PIXEL;
+        BOOL bPixelGrf = aGrfMap.GetMapUnit() == MAP_PIXEL;
         const MapMode aContourMap( bPixelGrf ? MAP_PIXEL : MAP_100TH_MM );
         if( bPixelGrf ? !bPixelContour : aGrfMap != aContourMap )
         {
@@ -140,13 +142,13 @@ const PolyPolygon *SwNoTxtNode::HasContour() const
             OutputDevice* pOutDev =
                 (bPixelGrf || bPixelContour) ? Application::GetDefaultDevice()
                                              : 0;
-            sal_uInt16 nPolyCount = pContour->Count();
-            for( sal_uInt16 j=0; j<nPolyCount; j++ )
+            USHORT nPolyCount = pContour->Count();
+            for( USHORT j=0; j<nPolyCount; j++ )
             {
                 Polygon& rPoly = (*pContour)[j];
 
-                sal_uInt16 nCount = rPoly.GetSize();
-                for( sal_uInt16 i=0 ; i<nCount; i++ )
+                USHORT nCount = rPoly.GetSize();
+                for( USHORT i=0 ; i<nCount; i++ )
                 {
                     if( bPixelGrf )
                         rPoly[i] = pOutDev->LogicToPixel( rPoly[i],
@@ -160,8 +162,8 @@ const PolyPolygon *SwNoTxtNode::HasContour() const
                 }
             }
         }
-        ((SwNoTxtNode *)this)->bContourMapModeValid = sal_True;
-        ((SwNoTxtNode *)this)->bPixelContour = sal_False;
+        ((SwNoTxtNode *)this)->bContourMapModeValid = TRUE;
+        ((SwNoTxtNode *)this)->bPixelContour = FALSE;
     }
 
     return pContour;
@@ -180,13 +182,13 @@ void SwNoTxtNode::SetContourAPI( const PolyPolygon *pPoly )
         pContour = new PolyPolygon( *pPoly );
     else
         pContour = 0;
-    bContourMapModeValid = sal_False;
+    bContourMapModeValid = FALSE;
 }
 
-sal_Bool SwNoTxtNode::GetContourAPI( PolyPolygon &rContour ) const
+BOOL SwNoTxtNode::GetContourAPI( PolyPolygon &rContour ) const
 {
     if( !pContour )
-        return sal_False;
+        return FALSE;
 
     rContour = *pContour;
     if( bContourMapModeValid )
@@ -199,13 +201,13 @@ sal_Bool SwNoTxtNode::GetContourAPI( PolyPolygon &rContour ) const
         if( aGrfMap.GetMapUnit() != MAP_PIXEL &&
             aGrfMap != aContourMap )
         {
-            sal_uInt16 nPolyCount = rContour.Count();
-            for( sal_uInt16 j=0; j<nPolyCount; j++ )
+            USHORT nPolyCount = rContour.Count();
+            for( USHORT j=0; j<nPolyCount; j++ )
             {
                 Polygon& rPoly = (*pContour)[j];
 
-                sal_uInt16 nCount = rPoly.GetSize();
-                for( sal_uInt16 i=0 ; i<nCount; i++ )
+                USHORT nCount = rPoly.GetSize();
+                for( USHORT i=0 ; i<nCount; i++ )
                 {
                     rPoly[i] = OutputDevice::LogicToLogic( rPoly[i], aGrfMap,
                                                            aContourMap );
@@ -214,12 +216,12 @@ sal_Bool SwNoTxtNode::GetContourAPI( PolyPolygon &rContour ) const
         }
     }
 
-    return sal_True;
+    return TRUE;
 }
 
-sal_Bool SwNoTxtNode::IsPixelContour() const
+BOOL SwNoTxtNode::IsPixelContour() const
 {
-    sal_Bool bRet;
+    BOOL bRet;
     if( bContourMapModeValid )
     {
         const MapMode aGrfMap( GetGraphic().GetPrefMapMode() );
@@ -239,7 +241,7 @@ Graphic SwNoTxtNode::GetGraphic() const
     Graphic aRet;
     if ( GetGrfNode() )
     {
-        ((SwGrfNode*)this)->SwapIn( sal_True );
+        ((SwGrfNode*)this)->SwapIn( TRUE );
         aRet = ((SwGrfNode*)this)->GetGrf();
     }
     else
@@ -250,7 +252,7 @@ Graphic SwNoTxtNode::GetGraphic() const
     return aRet;
 }
 
-// #i73249#
+// --> OD 2009-07-14 #i73249#
 void SwNoTxtNode::SetTitle( const String& rTitle, bool bBroadcast )
 {
     // Title attribute of <SdrObject> replaces own AlternateText attribute

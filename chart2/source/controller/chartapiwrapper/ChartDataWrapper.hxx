@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,9 @@
 
 #include "ServiceMacros.hxx"
 #include "MutexContainer.hxx"
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
-#include <com/sun/star/chart/XDateCategories.hpp>
+#include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -50,9 +49,8 @@ class Chart2ModelContact;
 struct lcl_Operator;
 
 class ChartDataWrapper : public MutexContainer, public
-    ::cppu::WeakImplHelper5<
-    com::sun::star::chart2::XAnyDescriptionAccess,
-    com::sun::star::chart::XDateCategories,
+    ::cppu::WeakImplHelper4<
+    com::sun::star::chart::XComplexDescriptionAccess,
     com::sun::star::lang::XServiceInfo,
     com::sun::star::lang::XEventListener,
     com::sun::star::lang::XComponent >
@@ -67,25 +65,7 @@ public:
     APPHELPER_XSERVICEINFO_DECL()
 
 protected:
-    // ____ XDateCategories ____
-    virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getDateCategories() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setDateCategories( const ::com::sun::star::uno::Sequence< double >& rDates ) throw (::com::sun::star::uno::RuntimeException);
-
-    // ____ XAnyDescriptionAccess ____
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > > SAL_CALL
-        getAnyRowDescriptions() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setAnyRowDescriptions(
-        const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& aRowDescriptions )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > > SAL_CALL
-        getAnyColumnDescriptions() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setAnyColumnDescriptions(
-        const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& aColumnDescriptions )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    // ____ XComplexDescriptionAccess (base of XAnyDescriptionAccess) ____
+    // ____ XComplexDescriptionAccess ____
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL
         getComplexRowDescriptions() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setComplexRowDescriptions(
@@ -94,7 +74,7 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL
         getComplexColumnDescriptions() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setComplexColumnDescriptions(
+    virtual void SAL_CALL setComplexColumnDescriptions( 
         const ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Sequence< ::rtl::OUString > >& aColumnDescriptions )
         throw (::com::sun::star::uno::RuntimeException);
@@ -157,7 +137,7 @@ private: //methods
 
 private: //member
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XAnyDescriptionAccess > m_xDataAccess;
+        ::com::sun::star::chart::XComplexDescriptionAccess > m_xDataAccess;
 
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;

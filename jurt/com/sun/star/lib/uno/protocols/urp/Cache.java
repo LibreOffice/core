@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ final class Cache {
         if (e == null) {
             if (map.size() < maxSize) {
                 // There is still room for a new entry at the front:
-                e = new Entry(content, map.size(), null, first);
+                e = new Entry(content, map.size(), last, null);
                 if (first == null) {
                     last = e;
                 } else {

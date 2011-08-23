@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,11 +45,11 @@ VCLXIconButton::VCLXIconButton( Window *p, rtl::OUString aDefaultLabel, char con
     p->SetComponentInterface( this );
 
     setLabel( aDefaultLabel );
-    setProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Graphic")),
+    setProperty( rtl::OUString::createFromAscii( "Graphic" ),
                  css::uno::Any( layoutimpl::loadGraphic( pGraphName ) ) );
-    setProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImagePosition")),
+    setProperty( rtl::OUString::createFromAscii( "ImagePosition" ),
                  css::uno::Any( css::awt::ImagePosition::LeftCenter ) );
-    setProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Align")),
+    setProperty( rtl::OUString::createFromAscii( "Align" ),
                  css::uno::Any( (sal_Int16) 1 /* magic - center */ ) );
 }
 
@@ -63,7 +63,7 @@ VCLXOKButton::VCLXOKButton( Window *p )
 
 VCLXCancelButton::VCLXCancelButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_CANCEL ),
-//    : VCLXIconButton( xButton, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Cancel ")),
+//    : VCLXIconButton( xButton, rtl::OUString::createFromAscii( "~Cancel " ),
                          "res/commandimagelist/sc_cancel.png" )
 {
 }
@@ -93,13 +93,13 @@ VCLXIgnoreButton::VCLXIgnoreButton( Window *p )
 }
 
 VCLXResetButton::VCLXResetButton( Window *p )
-    : VCLXIconButton( p, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Reset ")),
+    : VCLXIconButton( p, rtl::OUString::createFromAscii( "~Reset " ),
                   "res/commandimagelist/sc_reset.png" )
 {
 }
 
 VCLXApplyButton::VCLXApplyButton( Window *p )
-    : VCLXIconButton( p, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Apply")),
+    : VCLXIconButton( p, rtl::OUString::createFromAscii( "Apply" ),
                   "res/commandimagelist/sc_apply.png" )
 {
 }
@@ -112,14 +112,14 @@ VCLXHelpButton::VCLXHelpButton( Window *p )
 
 VCLXMoreButton::VCLXMoreButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_MORE ),
-//    : VCLXIconButton( p, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("More ")),
+//    : VCLXIconButton( p, rtl::OUString::createFromAscii( "More " ),
                   "res/commandimagelist/sc_more.png" )
 {
 }
 
 VCLXAdvancedButton::VCLXAdvancedButton( Window *p )
 //    : VCLXIconButton( p, Button::GetStandardText( BUTTON_ADVANCED ),
-    : VCLXIconButton( p, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Advanced ")),
+    : VCLXIconButton( p, rtl::OUString::createFromAscii( "Advanced " ),
                   "res/commandimagelist/sc_advanced.png" )
 {
 }

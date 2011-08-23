@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.util.Set;
 
 /**
- * Utility class to obtain the service tag for the Solaris Operating System.
+ * Utility class to obtain the service tag for the Solaris Operating System. 
  */
 class SolarisServiceTag {
     private final static String[] SolarisProductURNs = new String[] {
@@ -56,7 +56,7 @@ class SolarisServiceTag {
                 for (ServiceTag st : instances) {
                     // there should have only one service tag for the OS
                     return st;
-                }
+                } 
             }
         }
         return null;

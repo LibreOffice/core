@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,7 +106,7 @@ public class _DataAwareControlModel extends MultiPropertyTest {
     * 'Address'. <p>
     * Has <b> OK </b> status if the proeprty was properly set
     * and no exceptions were thrown. If old and new values are equal
-    * the test is OK if no exceptions occurred and the value remains
+    * the test is OK if no exceptions occured and the value remains
     * the same.<p>
     */
     public void _DataField() {

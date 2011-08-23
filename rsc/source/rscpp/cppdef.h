@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -185,7 +185,7 @@
 #ifndef LINE_PREFIX
 #define LINE_PREFIX             ""
 #endif
-
+
 /*
  * OLD_PREPROCESSOR forces the definition of OK_DOLLAR, OK_CONCAT,
  * COMMENT_INVISIBLE, and STRING_FORMAL to values appropriate for
@@ -293,7 +293,7 @@
  * NINCLUDE     The number of directories that may be specified
  *              on a per-system basis, or by the -I option.
  * BLK_NEST     The number of nested #if's permitted.
- * NFWORK       FileNameWorkBuffer (added by erAck, was NWORK)
+ * NFWORK		FileNameWorkBuffer (added by erAck, was NWORK)
  */
 
 #ifndef IDMAX
@@ -304,11 +304,16 @@
 #else
 #define PAR_MAC            (31 + 1)
 #endif
-/* NWORK wg. grooossen Makros in *.src erhoeht,
+/* ER 13.06.95 19:33
+ da Makros im file->buffer expandiert werden, muss NBUFF mindestens NWORK sein
+#define NWORK                   4096
+#define NBUFF                   4096
+ */
+/* ER 13.06.95 20:05  NWORK wg. grooossen Makros in *.src erhoeht,
  da wir bald 10 Sprachen haben werden gleich ordentlich reingehauen.. */
 #define NWORK                   128000
 #define NBUFF                   NWORK
-#define NFWORK                  1024
+#define NFWORK					1024
 #define NEXP                    128
 #define NINCLUDE        100
 #define NPARMWORK               (NWORK * 2)
@@ -317,7 +322,7 @@
 
 #ifndef ALERT
 #ifdef EBCDIC
-#define ALERT                   '\057'
+#define ALERT					'\057'
 #else
 #define ALERT                   '\007'          /* '\a' is "Bell"       */
 #endif

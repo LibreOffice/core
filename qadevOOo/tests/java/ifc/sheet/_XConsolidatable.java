@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ import lib.MultiMethodTest;
 public class _XConsolidatable extends MultiMethodTest {
     public XConsolidatable oObj = null;
     XConsolidationDescriptor xDescriptor = null;
-
+    
     /**
      * Check consolidation
      */
@@ -45,7 +45,7 @@ public class _XConsolidatable extends MultiMethodTest {
         oObj.consolidate(xDescriptor);
         tRes.tested("consolidate()", true);
     }
-
+    
     /**
      * Check the creation of a ConsolidationDescriptor
      */

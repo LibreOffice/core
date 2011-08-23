@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,9 +30,9 @@
 #define _MSGRD_HXX
 
 
-sal_Bool ConvertMSGToGDIMetaFile( SvStream & rMSG, GDIMetaFile & rGDIMetaFile,
-                              sal_Bool(*pCallback)(void *, sal_uInt16), void * pCallerData,
-                              sal_uLong nMinPercent, sal_uLong nMaxPercent);
+BOOL ConvertMSGToGDIMetaFile( SvStream & rMSG, GDIMetaFile & rGDIMetaFile,
+                              BOOL(*pCallback)(void *, USHORT), void * pCallerData,
+                              ULONG nMinPercent, ULONG nMaxPercent);
 
 
 #endif // _MSGRD_HXX

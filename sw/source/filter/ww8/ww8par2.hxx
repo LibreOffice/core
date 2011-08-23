@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,24 +58,24 @@ struct WW8FlyPara
                         // Achtung: *Nicht* umsortieren, da Teile mit
                         // memcmp verglichen werden
     bool bVer67;
-    sal_Int16 nSp26, nSp27;         // rohe Position
-    sal_Int16 nSp45, nSp28;         // Breite / Hoehe
-    sal_Int16 nLeMgn, nRiMgn, nUpMgn, nLoMgn;           // Raender
-    sal_uInt8 nSp29;                 // rohe Bindung + Alignment
-    sal_uInt8 nSp37;                 // Wrap-Mode ( 1 / 2; 0 = no Apo ? )
+    INT16 nSp26, nSp27;         // rohe Position
+    INT16 nSp45, nSp28;         // Breite / Hoehe
+    INT16 nLeMgn, nRiMgn, nUpMgn, nLoMgn;           // Raender
+    BYTE nSp29;                 // rohe Bindung + Alignment
+    BYTE nSp37;                 // Wrap-Mode ( 1 / 2; 0 = no Apo ? )
     WW8_BRC5 brc;               // Umrandung Top, Left, Bottom, Right, Between
     bool bBorderLines;          // Umrandungslinien
     bool bGrafApo;              // true: Dieser Rahmen dient allein dazu, die
                                 // enthaltene Grafik anders als zeichengebunden
                                 // zu positionieren
     bool mbVertSet;             // true if vertical positioning has been set
-    sal_uInt8 nOrigSp29;
+    BYTE nOrigSp29;
 
     WW8FlyPara(bool bIsVer67, const WW8FlyPara* pSrc = 0);
     bool operator==(const WW8FlyPara& rSrc) const;
-    void Read(const sal_uInt8* pSprm29, WW8PLCFx_Cp_FKP* pPap);
-    void ReadFull(const sal_uInt8* pSprm29, SwWW8ImplReader* pIo);
-    void Read(const sal_uInt8* pSprm29, WW8RStyle* pStyle);
+    void Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap);
+    void ReadFull(const BYTE* pSprm29, SwWW8ImplReader* pIo);
+    void Read(const BYTE* pSprm29, WW8RStyle* pStyle);
     void ApplyTabPos(const WW8_TablePos *pTabPos);
     bool IsEmpty() const;
 };
@@ -85,11 +85,11 @@ struct WW8SwFlyPara
     SwFlyFrmFmt* pFlyFmt;
 
                 // 1. Teil: daraus abgeleitete Sw-Attribute
-    sal_Int16 nXPos, nYPos;         // Position
-    sal_Int16 nLeMgn, nRiMgn;       // Raender
-    sal_Int16 nUpMgn, nLoMgn;       // Raender
-    sal_Int16 nWidth, nHeight;      // Groesse
-    sal_Int16 nNettoWidth;
+    INT16 nXPos, nYPos;         // Position
+    INT16 nLeMgn, nRiMgn;       // Raender
+    INT16 nUpMgn, nLoMgn;       // Raender
+    INT16 nWidth, nHeight;      // Groesse
+    INT16 nNettoWidth;
 
     SwFrmSize eHeightFix;       // Hoehe Fix oder Min
     RndStdIds eAnchor;          // Bindung
@@ -99,15 +99,16 @@ struct WW8SwFlyPara
     sal_Int16 eHAlign;       // links, rechts, mittig
     SwSurround eSurround;       // Wrap-Mode
 
-    sal_uInt8 nXBind, nYBind;        // relativ zu was gebunden
+    BYTE nXBind, nYBind;        // relativ zu was gebunden
 
                 // 2.Teil: sich waehrend des Einlesens ergebende AEnderungen
     long nNewNettoWidth;
     SwPosition* pMainTextPos;   // um nach Apo in Haupttext zurueckzukehren
-    sal_uInt16 nLineSpace;          // LineSpace in tw fuer Graf-Apos
+    USHORT nLineSpace;          // LineSpace in tw fuer Graf-Apos
     bool bAutoWidth;
     bool bToggelPos;
 
+    // --> OD 2007-07-03 #148498#
     // add parameter <nWWPgTop> - WW8's page top margin
     WW8SwFlyPara( SwPaM& rPaM,
                   SwWW8ImplReader& rIo,
@@ -115,8 +116,8 @@ struct WW8SwFlyPara
                   const sal_uInt32 nWWPgTop,
                   const sal_uInt32 nPgLeft,
                   const sal_uInt32 nPgWidth,
-                  const sal_Int32 nIniFlyDx,
-                  const sal_Int32 nIniFlyDy );
+                  const INT32 nIniFlyDx,
+                  const INT32 nIniFlyDy );
 
     void BoxUpWidth( long nWidth );
     SwWW8FltAnchorStack *pOldAnchorStck;
@@ -125,7 +126,7 @@ struct WW8SwFlyPara
 class SwWW8StyInf
 {
     String      sWWStyleName;
-    sal_uInt16      nWWStyleId;
+    USHORT      nWWStyleId;
 public:
     rtl_TextEncoding eLTRFontSrcCharSet;    // rtl_TextEncoding fuer den Font
     rtl_TextEncoding eRTLFontSrcCharSet;    // rtl_TextEncoding fuer den Font
@@ -134,11 +135,11 @@ public:
     WW8FlyPara* pWWFly;
     SwNumRule*  pOutlineNumrule;
     long        nFilePos;
-    sal_uInt16      nBase;
-    sal_uInt16      nFollow;
-    sal_uInt16      nLFOIndex;
-    sal_uInt8        nListLevel;
-    sal_uInt8        nOutlineLevel;      // falls Gliederungs-Style
+    USHORT      nBase;
+    USHORT      nFollow;
+    USHORT      nLFOIndex;
+    BYTE        nListLevel;
+    BYTE        nOutlineLevel;      // falls Gliederungs-Style
     sal_uInt16  n81Flags;           // Fuer Bold, Italic, ...
     sal_uInt16  n81BiDiFlags;       // Fuer Bold, Italic, ...
     SvxLRSpaceItem maWordLR;
@@ -191,12 +192,12 @@ public:
         delete pWWFly;
     }
 
-    void SetOrgWWIdent( const String& rName, const sal_uInt16 nId )
+    void SetOrgWWIdent( const String& rName, const USHORT nId )
     {
         sWWStyleName = rName;
         nWWStyleId = nId;
     }
-    sal_uInt16 GetWWStyleId() const { return nWWStyleId; }
+    USHORT GetWWStyleId() const { return nWWStyleId; }
     const String& GetOrgWWName() const
     {
         return sWWStyleName;
@@ -226,10 +227,10 @@ friend class SwWW8ImplReader;
 
     SwNumRule* pStyRule;    // Bullets und Aufzaehlungen in Styles
 
-    sal_uInt8* pParaSprms;           // alle ParaSprms des UPX falls UPX.Papx
-    sal_uInt16 nSprmsLen;           // Laenge davon
+    BYTE* pParaSprms;           // alle ParaSprms des UPX falls UPX.Papx
+    USHORT nSprmsLen;           // Laenge davon
 
-    sal_uInt8 nWwNumLevel;           // fuer Bullets und Aufzaehlungen in Styles
+    BYTE nWwNumLevel;           // fuer Bullets und Aufzaehlungen in Styles
 
     bool bTxtColChanged;
     bool bFontChanged;      // For Simulating Default-Font
@@ -240,13 +241,13 @@ friend class SwWW8ImplReader;
     bool bWidowsChanged;    // For Simulating Default-Widows / Orphans
 
     void ImportSprms(sal_Size nPosFc, short nLen, bool bPap);
-    void ImportSprms(sal_uInt8 *pSprms, short nLen, bool bPap);
+    void ImportSprms(BYTE *pSprms, short nLen, bool bPap);
     void ImportGrupx(short nLen, bool bPara, bool bOdd);
     short ImportUPX(short nLen, bool bPAP, bool bOdd);
 
     void Set1StyleDefaults();
-    void Import1Style(sal_uInt16 nNr);
-    void RecursiveReg(sal_uInt16 nNr);
+    void Import1Style(USHORT nNr);
+    void RecursiveReg(USHORT nNr);
 
     void ImportStyles();
 
@@ -264,7 +265,7 @@ public:
     WW8RStyle( WW8Fib& rFib, SwWW8ImplReader* pI );
     void Import();
     void PostProcessStyles();
-    const sal_uInt8* HasParaSprm( sal_uInt16 nId ) const;
+    const BYTE* HasParaSprm( USHORT nId ) const;
 };
 
 class WW8FlySet: public SfxItemSet
@@ -282,7 +283,7 @@ public:
 
 enum WW8LvlType {WW8_None, WW8_Outline, WW8_Numbering, WW8_Sequence, WW8_Pause};
 
-WW8LvlType GetNumType(sal_uInt8 nWwLevelNo);
+WW8LvlType GetNumType(BYTE nWwLevelNo);
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

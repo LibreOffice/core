@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cui.hxx"
+
 // include ---------------------------------------------------------------
 
 #include <tools/shl.hxx>
@@ -44,7 +47,7 @@
 #include <svx/viewlayoutitem.hxx>
 #include <dialmgr.hxx>
 #include <svx/zoom_def.hxx>
-#include <svx/dialogs.hrc>  // RID_SVXDLG_ZOOM
+#include <svx/dialogs.hrc>	// RID_SVXDLG_ZOOM
 #include <layout/layout-pre.hxx>
 
 #if ENABLE_LAYOUT
@@ -56,23 +59,30 @@
 
 // static ----------------------------------------------------------------
 
-#define SPECIAL_FACTOR  ((sal_uInt16)0xFFFF)
+static USHORT pRanges[] =
+{
+    SID_ATTR_ZOOM,
+    SID_ATTR_ZOOM,
+    0
+};
+
+#define SPECIAL_FACTOR	((USHORT)0xFFFF)
 
 // class SvxZoomDialog ---------------------------------------------------
 
-sal_uInt16 SvxZoomDialog::GetFactor() const
+USHORT SvxZoomDialog::GetFactor() const
 {
     if ( a100Btn.IsChecked() )
         return 100;
     if ( aUserBtn.IsChecked() )
-        return (sal_uInt16)aUserEdit.GetValue();
+        return (USHORT)aUserEdit.GetValue();
     else
         return SPECIAL_FACTOR;
 }
 
 // -----------------------------------------------------------------------
 
-void SvxZoomDialog::SetFactor( sal_uInt16 nNewFactor, sal_uInt16 nBtnId )
+void SvxZoomDialog::SetFactor( USHORT nNewFactor, USHORT nBtnId )
 {
     aUserEdit.Disable();
 
@@ -115,7 +125,30 @@ void SvxZoomDialog::SetFactor( sal_uInt16 nNewFactor, sal_uInt16 nBtnId )
 
 // -----------------------------------------------------------------------
 
-void SvxZoomDialog::HideButton( sal_uInt16 nBtnId )
+void SvxZoomDialog::SetButtonText( USHORT nBtnId, const String& rNewTxt )
+{
+    switch ( nBtnId )
+    {
+        case ZOOMBTN_OPTIMAL: // Optimal-Button
+            aOptimalBtn.SetText( rNewTxt );
+            break;
+
+        case ZOOMBTN_PAGEWIDTH: // Seitenbreite-Button
+            aPageWidthBtn.SetText( rNewTxt );
+            break;
+
+        case ZOOMBTN_WHOLEPAGE: // Ganze Seite-Button
+            aWholePageBtn.SetText( rNewTxt );
+            break;
+
+        default:
+            DBG_ERROR( "wrong button number" );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void SvxZoomDialog::HideButton( USHORT nBtnId )
 {
     switch ( nBtnId )
     {
@@ -132,19 +165,26 @@ void SvxZoomDialog::HideButton( sal_uInt16 nBtnId )
             break;
 
         default:
-            OSL_FAIL( "Falsche Button-Nummer!!!" );
+            DBG_ERROR( "Falsche Button-Nummer!!!" );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void SvxZoomDialog::SetLimits( sal_uInt16 nMin, sal_uInt16 nMax )
+void SvxZoomDialog::SetLimits( USHORT nMin, USHORT nMax )
 {
     DBG_ASSERT( nMin < nMax, "invalid limits" );
     aUserEdit.SetMin( nMin );
     aUserEdit.SetFirst( nMin );
     aUserEdit.SetMax( nMax );
     aUserEdit.SetLast( nMax );
+}
+
+// -----------------------------------------------------------------------
+
+void SvxZoomDialog::SetSpinSize( USHORT nNewSpin )
+{
+    aUserEdit.SetSpinSize( nNewSpin );
 }
 
 // -----------------------------------------------------------------------
@@ -171,15 +211,15 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
     aBottomFl       ( this, CUI_RES( FL_BOTTOM ) ),
     aOKBtn          ( this, CUI_RES( BTN_ZOOM_OK ) ),
     aCancelBtn      ( this, CUI_RES( BTN_ZOOM_CANCEL ) ),
-    aHelpBtn        ( this, CUI_RES( BTN_ZOOM_HELP ) ),
+    aHelpBtn	    ( this, CUI_RES( BTN_ZOOM_HELP ) ),
 
-    rSet        ( rCoreSet ),
+    rSet		( rCoreSet ),
     pOutSet     ( NULL ),
-    bModified   ( sal_False )
+    bModified	( FALSE )
 
 {
 #if ENABLE_LAYOUT
-    SetHelpId (".uno:Zoom");
+    SetHelpId (SID_ATTR_ZOOM);
 #endif /* ENABLE_LAYOUT */
     Link aLink = LINK( this, SvxZoomDialog, UserHdl );
     a100Btn.SetClickHdl( aLink );
@@ -203,9 +243,9 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
     aUserEdit.SetModifyHdl( LINK( this, SvxZoomDialog, SpinHdl ) );
 
     // Default-Werte
-    sal_uInt16 nValue = 100;
-    sal_uInt16 nMin = 10;
-    sal_uInt16 nMax = 1000;
+    USHORT nValue = 100;
+    USHORT nMin = 10;
+    USHORT nMax = 1000;
 
     // ggf. erst den alten Wert besorgen
     const SfxUInt16Item* pOldUserItem = 0;
@@ -228,23 +268,15 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
     aUserEdit.SetLast( nMax );
     aUserEdit.SetValue( nValue );
 
-    aUserEdit.SetAccessibleRelationLabeledBy( &aUserBtn );
-    aUserEdit.SetAccessibleName(aUserBtn.GetText());
-    aColumnsEdit.SetAccessibleRelationLabeledBy(&aColumnsBtn);
-    aColumnsEdit.SetAccessibleName(aColumnsBtn.GetText());
-    aColumnsEdit.SetAccessibleRelationMemberOf(&aColumnsBtn);
-    aBookModeChk.SetAccessibleRelationLabeledBy(&aColumnsBtn);
-    aBookModeChk.SetAccessibleRelationMemberOf(&aColumnsBtn);
-
     const SfxPoolItem& rItem = rSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_ZOOM ) );
 
     if ( rItem.ISA(SvxZoomItem) )
     {
         const SvxZoomItem& rZoomItem = (const SvxZoomItem&)rItem;
-        const sal_uInt16 nZoom = rZoomItem.GetValue();
+        const USHORT nZoom = rZoomItem.GetValue();
         const SvxZoomType eType = rZoomItem.GetType();
-        const sal_uInt16 nValSet = rZoomItem.GetValueSet();
-        sal_uInt16 nBtnId = 0;
+        const USHORT nValSet = rZoomItem.GetValueSet();
+        USHORT nBtnId = 0;
 
         switch ( eType )
         {
@@ -275,14 +307,14 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
     }
     else
     {
-        const sal_uInt16 nZoom = ( (const SfxUInt16Item&)rItem ).GetValue();
+        const USHORT nZoom = ( (const SfxUInt16Item&)rItem ).GetValue();
         SetFactor( nZoom );
     }
 
     const SfxPoolItem* pViewLayoutItem = 0;
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_VIEWLAYOUT, sal_False, &pViewLayoutItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_VIEWLAYOUT, FALSE, &pViewLayoutItem ) )
     {
-        const sal_uInt16 nColumns = static_cast<const SvxViewLayoutItem*>(pViewLayoutItem)->GetValue();
+        const USHORT nColumns = static_cast<const SvxViewLayoutItem*>(pViewLayoutItem)->GetValue();
         const bool bBookMode  = static_cast<const SvxViewLayoutItem*>(pViewLayoutItem)->IsBookMode();
 
         if ( 0 == nColumns )
@@ -339,9 +371,16 @@ SvxZoomDialog::~SvxZoomDialog()
 
 // -----------------------------------------------------------------------
 
+USHORT* SvxZoomDialog::GetRanges()
+{
+    return pRanges;
+}
+
+// -----------------------------------------------------------------------
+
 IMPL_LINK( SvxZoomDialog, UserHdl, RadioButton *, pBtn )
 {
-    bModified |= sal_True;
+    bModified |= TRUE;
 
     if ( pBtn == &aUserBtn )
     {
@@ -359,7 +398,7 @@ IMPL_LINK( SvxZoomDialog, SpinHdl, MetricField *, EMPTYARG )
 {
     if ( !aUserBtn.IsChecked() )
         return 0;
-    bModified |= sal_True;
+    bModified |= TRUE;
     return 0;
 }
 
@@ -367,7 +406,7 @@ IMPL_LINK( SvxZoomDialog, SpinHdl, MetricField *, EMPTYARG )
 
 IMPL_LINK( SvxZoomDialog, ViewLayoutUserHdl, RadioButton *, pBtn )
 {
-    bModified |= sal_True;
+    bModified |= TRUE;
 
     if ( pBtn == &aAutomaticBtn )
     {
@@ -388,7 +427,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutUserHdl, RadioButton *, pBtn )
     }
     else
     {
-        OSL_FAIL( "Wrong Button" );
+        DBG_ERROR( "Wrong Button" );
         return 0;
     }
 
@@ -410,7 +449,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutSpinHdl, MetricField *, pEdt )
         aBookModeChk.Disable();
     }
 
-    bModified |= sal_True;
+    bModified |= TRUE;
 
     return 0;
 }
@@ -422,7 +461,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutCheckHdl, CheckBox *, pChk )
     if ( pChk == &aBookModeChk && !aColumnsBtn.IsChecked() )
         return 0;
 
-    bModified |= sal_True;
+    bModified |= TRUE;
 
     return 0;
 }
@@ -438,7 +477,7 @@ IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
 
         if ( &aOKBtn == pBtn )
         {
-            sal_uInt16 nFactor = GetFactor();
+            USHORT nFactor = GetFactor();
 
             if ( SPECIAL_FACTOR == nFactor )
             {
@@ -464,13 +503,13 @@ IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
             }
             else if ( aColumnsBtn.IsChecked() )
             {
-                aViewLayoutItem.SetValue( static_cast<sal_uInt16>(aColumnsEdit.GetValue()) );
+                aViewLayoutItem.SetValue( static_cast<USHORT>(aColumnsEdit.GetValue()) );
                 aViewLayoutItem.SetBookMode( aBookModeChk.IsChecked() );
             }
         }
         else
         {
-            OSL_FAIL( "Wrong Button" );
+            DBG_ERROR( "Wrong Button" );
             return 0;
         }
         pOutSet = new SfxItemSet( rSet );
@@ -485,7 +524,7 @@ IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
 
         if ( pSh )
             pSh->PutItem( SfxUInt16Item( SID_ATTR_ZOOM_USER,
-                                         (sal_uInt16)aUserEdit.GetValue() ) );
+                                         (UINT16)aUserEdit.GetValue() ) );
         EndDialog( RET_OK );
     }
     else

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include "svx/fmtools.hxx"
 #include "fmservs.hxx"
 
-#include "svx/fmobjfac.hxx"
+#include "fmobjfac.hxx"
 
 #include <svx/fmglob.hxx>
 
@@ -46,7 +46,7 @@
 #include "tbxform.hxx"
 #include <tools/resid.hxx>
 
-#include "svx/fmresids.hrc"
+#include "fmresids.hrc"
 #include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 #include "fmservs.hxx"
@@ -62,7 +62,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::svxform;
 
-static sal_Bool bInit = sal_False;
+static BOOL bInit = FALSE;
 
 /*************************************************************************
 |*
@@ -98,7 +98,7 @@ FmFormObjFactory::FmFormObjFactory()
         FmFormShell::RegisterInterface(0);
 
         ImplSmartRegisterUnoServices();
-        bInit = sal_True;
+        bInit = TRUE;
     }
 }
 
@@ -120,7 +120,7 @@ FmFormObjFactory::~FmFormObjFactory()
 \************************************************************************/
 namespace
 {
-    void    lcl_initProperty( FmFormObj* _pObject, const ::rtl::OUString& _rPropName, const Any& _rValue )
+    void	lcl_initProperty( FmFormObj* _pObject, const ::rtl::OUString& _rPropName, const Any& _rValue )
     {
         try
         {
@@ -130,7 +130,7 @@ namespace
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "lcl_initProperty: caught an exception!" );
+            DBG_ERROR( "lcl_initProperty: caught an exception!" );
         }
     }
 }

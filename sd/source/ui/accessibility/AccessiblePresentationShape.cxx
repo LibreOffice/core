@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star::accessibility;
 
 namespace accessibility {
 
@@ -61,8 +61,8 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
 
 
 //=====  XServiceInfo  ========================================================
-
-::rtl::OUString SAL_CALL
+    
+::rtl::OUString SAL_CALL 
     AccessiblePresentationShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -72,7 +72,7 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
 
 
 
-/// Set this object's name if is different to the current name.
+///	Set this object's name if is different to the current name.
 ::rtl::OUString
     AccessiblePresentationShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -136,37 +136,37 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
     switch (nShapeType)
     {
         case PRESENTATION_TITLE:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationTitleShape")));
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationTitleShape"));
             break;
         case PRESENTATION_OUTLINER:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationOutlinerShape")));
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationOutlinerShape"));
             break;
         case PRESENTATION_SUBTITLE:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationSubtitleShape")));
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationSubtitleShape"));
             break;
         case PRESENTATION_PAGE:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationPageShape")));
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationPageShape"));
             break;
         case PRESENTATION_NOTES:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationNotesShape")));
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationNotesShape"));
             break;
         case PRESENTATION_HANDOUT:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationHandoutShape")));
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationHandoutShape"));
             break;
         case PRESENTATION_HEADER:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationHeaderShape")));
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationHeaderShape"));
             break;
         case PRESENTATION_FOOTER:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationFooterShape")));
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationFooterShape"));
             break;
         case PRESENTATION_DATETIME:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationDateAndTimeShape")));
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationDateAndTimeShape"));
             break;
         case PRESENTATION_PAGENUMBER:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationPageNumberShape")));
+            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationPageNumberShape"));
             break;
         default:
-            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown accessible presentation shape")));
+            aDG.Initialize (::rtl::OUString::createFromAscii ("Unknown accessible presentation shape"));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
             {
@@ -178,6 +178,6 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
     return aDG();
 }
 
-} // end of namespace accessibility
+} // end of namespace accessibility	
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -118,7 +118,7 @@
       <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
-    <!-- Time format was originally "ཆུ་ཚོད་" HH "སྐར་མ་" MM "སྐར་ཆ་་" SS -->
+    <!-- Time format was originally "ཆུ་ཚོད་" HH "སྐར་མ་" MM "སྐར་ཆ་་" SS -->            
     <!-- Replaced with HH:MM:SS until more information is available -->
     <FormatElement msgid="TimeFormatskey1" default="false" type="short" usage="TIME"  formatindex="39">
       <FormatCode>HH:MM</FormatCode>
@@ -249,7 +249,7 @@
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
-      <!-- Percentage formats other than % sign are not possible in 2.0  0 "བརྒྱ་ཆ་་" is replaced by % -->
+      <!-- Percentage formats other than % sign are not possible in 2.0  0 "བརྒྱ་ཆ་་" is replaced by % -->            
       <FormatCode>[NatNum1]0%</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
@@ -297,7 +297,7 @@
       <DaysOfWeek>
         <Day>
           <DayID>sun</DayID>
-          <DefaultAbbrvName>ཟླ་   </DefaultAbbrvName>
+          <DefaultAbbrvName>ཟླ་	</DefaultAbbrvName>
           <DefaultFullName>གཟའ་ཟླ་བ་</DefaultFullName>
         </Day>
         <Day>
@@ -449,7 +449,7 @@
    </LC_NumberingLevel>
    <LC_OutLineNumberingLevel>
     <OutlineStyle>
-    <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0"    LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" 	LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
     <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
     <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="2" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
     <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="3" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />

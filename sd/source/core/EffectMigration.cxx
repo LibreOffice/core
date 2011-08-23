@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,105 +51,105 @@ using ::rtl::OUString;
 
 struct deprecated_FadeEffect_conversion_table_entry
 {
-    FadeEffect  meFadeEffect;
+    FadeEffect	meFadeEffect;
     const sal_Char* mpPresetId;
 }
 deprecated_FadeEffect_conversion_table[] =
 {
 // OOo 1.x transitions
-    { FadeEffect_FADE_FROM_LEFT,            "wipe-right" },
-    { FadeEffect_FADE_FROM_TOP,             "wipe-down" },
-    { FadeEffect_FADE_FROM_RIGHT,           "wipe-left" },
-    { FadeEffect_FADE_FROM_BOTTOM,          "wipe-up" },
+    { FadeEffect_FADE_FROM_LEFT,			"wipe-right" },
+    { FadeEffect_FADE_FROM_TOP,				"wipe-down" },
+    { FadeEffect_FADE_FROM_RIGHT,			"wipe-left" },
+    { FadeEffect_FADE_FROM_BOTTOM,			"wipe-up" },
 
-    { FadeEffect_CLOCKWISE,                 "wheel-clockwise-1-spoke" },
+    { FadeEffect_CLOCKWISE,					"wheel-clockwise-1-spoke" },
 
-    { FadeEffect_UNCOVER_TO_LEFT,           "uncover-left" },
-    { FadeEffect_UNCOVER_TO_UPPERLEFT,      "uncover-left-up" },
-    { FadeEffect_UNCOVER_TO_TOP,            "uncover-up" },
-    { FadeEffect_UNCOVER_TO_UPPERRIGHT,     "uncover-right-up" },
-    { FadeEffect_UNCOVER_TO_RIGHT,          "uncover-right" },
-    { FadeEffect_UNCOVER_TO_LOWERRIGHT,     "uncover-right-down" },
-    { FadeEffect_UNCOVER_TO_BOTTOM,         "uncover-down" },
-    { FadeEffect_UNCOVER_TO_LOWERLEFT,      "uncover-left-down" },
+    { FadeEffect_UNCOVER_TO_LEFT,			"uncover-left" },
+    { FadeEffect_UNCOVER_TO_UPPERLEFT,		"uncover-left-up" },
+    { FadeEffect_UNCOVER_TO_TOP,			"uncover-up" },
+    { FadeEffect_UNCOVER_TO_UPPERRIGHT,		"uncover-right-up" },
+    { FadeEffect_UNCOVER_TO_RIGHT,			"uncover-right" },
+    { FadeEffect_UNCOVER_TO_LOWERRIGHT,		"uncover-right-down" },
+    { FadeEffect_UNCOVER_TO_BOTTOM,			"uncover-down" },
+    { FadeEffect_UNCOVER_TO_LOWERLEFT,		"uncover-left-down" },
 
-    { FadeEffect_VERTICAL_LINES,            "random-bars-vertical" },
-    { FadeEffect_HORIZONTAL_LINES,          "random-bars-horizontal" },
+    { FadeEffect_VERTICAL_LINES,			"random-bars-vertical" },
+    { FadeEffect_HORIZONTAL_LINES,			"random-bars-horizontal" },
 
-    { FadeEffect_VERTICAL_CHECKERBOARD,     "checkerboard-down" },
-    { FadeEffect_HORIZONTAL_CHECKERBOARD,   "checkerboard-across" },
+    { FadeEffect_VERTICAL_CHECKERBOARD,		"checkerboard-down" },
+    { FadeEffect_HORIZONTAL_CHECKERBOARD,	"checkerboard-across" },
 
-    { FadeEffect_FADE_TO_CENTER,            "box-in" },
-    { FadeEffect_FADE_FROM_CENTER,          "box-out" },
+    { FadeEffect_FADE_TO_CENTER,			"box-in" },
+    { FadeEffect_FADE_FROM_CENTER,			"box-out" },
 
-    { FadeEffect_VERTICAL_STRIPES,          "venetian-blinds-vertical" },
-    { FadeEffect_HORIZONTAL_STRIPES,        "venetian-blinds-horizontal" },
+    { FadeEffect_VERTICAL_STRIPES,			"venetian-blinds-vertical" },
+    { FadeEffect_HORIZONTAL_STRIPES,		"venetian-blinds-horizontal" },
 
-    { FadeEffect_MOVE_FROM_LEFT,            "cover-right" },
-    { FadeEffect_MOVE_FROM_TOP,             "cover-down" },
-    { FadeEffect_MOVE_FROM_RIGHT,           "cover-left" },
-    { FadeEffect_MOVE_FROM_BOTTOM,          "cover-up" },
-    { FadeEffect_MOVE_FROM_UPPERLEFT,       "cover-right-down" },
-    { FadeEffect_MOVE_FROM_UPPERRIGHT,      "cover-left-down" },
-    { FadeEffect_MOVE_FROM_LOWERRIGHT,      "cover-left-up" },
-    { FadeEffect_MOVE_FROM_LOWERLEFT,       "cover-right-up" },
+    { FadeEffect_MOVE_FROM_LEFT,			"cover-right" },
+    { FadeEffect_MOVE_FROM_TOP,				"cover-down" },
+    { FadeEffect_MOVE_FROM_RIGHT,			"cover-left" },
+    { FadeEffect_MOVE_FROM_BOTTOM,			"cover-up" },
+    { FadeEffect_MOVE_FROM_UPPERLEFT,		"cover-right-down" },
+    { FadeEffect_MOVE_FROM_UPPERRIGHT,		"cover-left-down" },
+    { FadeEffect_MOVE_FROM_LOWERRIGHT,		"cover-left-up" },
+    { FadeEffect_MOVE_FROM_LOWERLEFT,		"cover-right-up" },
 
-    { FadeEffect_DISSOLVE,                  "dissolve" },
+    { FadeEffect_DISSOLVE,					"dissolve" },
 
-    { FadeEffect_RANDOM,                    "random-transition" },
+    { FadeEffect_RANDOM,					"random-transition" },
 
-    { FadeEffect_ROLL_FROM_LEFT,            "push-right" },
-    { FadeEffect_ROLL_FROM_TOP,             "push-down" },
-    { FadeEffect_ROLL_FROM_RIGHT,           "push-left" },
-    { FadeEffect_ROLL_FROM_BOTTOM,          "push-up" },
+    { FadeEffect_ROLL_FROM_LEFT,			"push-right" },
+    { FadeEffect_ROLL_FROM_TOP,				"push-down" },
+    { FadeEffect_ROLL_FROM_RIGHT,			"push-left" },
+    { FadeEffect_ROLL_FROM_BOTTOM,			"push-up" },
 
-    { FadeEffect_CLOSE_VERTICAL,            "split-horizontal-in" },
-    { FadeEffect_CLOSE_HORIZONTAL,          "split-vertical-in" },
-    { FadeEffect_OPEN_VERTICAL,             "split-horizontal-out" },
-    { FadeEffect_OPEN_HORIZONTAL,           "split-vertical-out" },
+    { FadeEffect_CLOSE_VERTICAL,			"split-horizontal-in" },
+    { FadeEffect_CLOSE_HORIZONTAL,			"split-vertical-in" },
+    { FadeEffect_OPEN_VERTICAL,				"split-horizontal-out" },
+    { FadeEffect_OPEN_HORIZONTAL,			"split-vertical-out" },
 
-    { FadeEffect_FADE_FROM_UPPERLEFT,       "diagonal-squares-right-down" },
-    { FadeEffect_FADE_FROM_UPPERRIGHT,      "diagonal-squares-left-down" },
-    { FadeEffect_FADE_FROM_LOWERLEFT,       "diagonal-squares-right-up" },
-    { FadeEffect_FADE_FROM_LOWERRIGHT,      "diagonal-squares-left-up" },
+    { FadeEffect_FADE_FROM_UPPERLEFT,		"diagonal-squares-right-down" },
+    { FadeEffect_FADE_FROM_UPPERRIGHT,		"diagonal-squares-left-down" },
+    { FadeEffect_FADE_FROM_LOWERLEFT,		"diagonal-squares-right-up" },
+    { FadeEffect_FADE_FROM_LOWERRIGHT,		"diagonal-squares-left-up" },
 
 // OOo 1.x transitions not in OOo 2.x
-    { FadeEffect_CLOCKWISE,                 "clock-wipe-twelve" },
-    { FadeEffect_COUNTERCLOCKWISE,          "reverse-clock-wipe-twelve" },
-    { FadeEffect_SPIRALIN_LEFT,             "spiral-wipe-top-left-clockwise" },
-    { FadeEffect_SPIRALIN_RIGHT,            "spiral-wipe-top-right-counter-clockwise" },
-    { FadeEffect_SPIRALOUT_LEFT,            "spiral-wipe-out-to-bottom-right-clockwise" },
-    { FadeEffect_SPIRALOUT_RIGHT,           "spiral-wipe-out-to-bottom-left-counter-clockwise" },
-    { FadeEffect_WAVYLINE_FROM_LEFT,        "snake-wipe-top-left-vertical" },
-    { FadeEffect_WAVYLINE_FROM_TOP,         "snake-wipe-top-left-horizontal" },
-    { FadeEffect_WAVYLINE_FROM_RIGHT,       "snake-wipe-bottom-right-vertical" },
-    { FadeEffect_WAVYLINE_FROM_BOTTOM,      "snake-wipe-bottom-right-horizontal" },
-    { FadeEffect_STRETCH_FROM_LEFT,         "wipe-right" }, // todo
-    { FadeEffect_STRETCH_FROM_TOP,          "wipe-down" },  // todo
-    { FadeEffect_STRETCH_FROM_RIGHT,        "wipe-left" },  // todo
-    { FadeEffect_STRETCH_FROM_BOTTOM,       "wipe-up" },    // todo
+    { FadeEffect_CLOCKWISE,					"clock-wipe-twelve" },
+    { FadeEffect_COUNTERCLOCKWISE,			"reverse-clock-wipe-twelve" },
+    { FadeEffect_SPIRALIN_LEFT,				"spiral-wipe-top-left-clockwise" },
+    { FadeEffect_SPIRALIN_RIGHT,			"spiral-wipe-top-right-counter-clockwise" },
+    { FadeEffect_SPIRALOUT_LEFT,			"spiral-wipe-out-to-bottom-right-clockwise" },
+    { FadeEffect_SPIRALOUT_RIGHT,			"spiral-wipe-out-to-bottom-left-counter-clockwise" },
+    { FadeEffect_WAVYLINE_FROM_LEFT,		"snake-wipe-top-left-vertical" },
+    { FadeEffect_WAVYLINE_FROM_TOP,			"snake-wipe-top-left-horizontal" },
+    { FadeEffect_WAVYLINE_FROM_RIGHT,		"snake-wipe-bottom-right-vertical" },
+    { FadeEffect_WAVYLINE_FROM_BOTTOM,		"snake-wipe-bottom-right-horizontal" },
+    { FadeEffect_STRETCH_FROM_LEFT,			"wipe-right" },	// todo
+    { FadeEffect_STRETCH_FROM_TOP,			"wipe-down" },	// todo
+    { FadeEffect_STRETCH_FROM_RIGHT,		"wipe-left" },	// todo
+    { FadeEffect_STRETCH_FROM_BOTTOM,		"wipe-up" },	// todo
 
 // OOo 1.x not available transitions
 
-    { FadeEffect_CLOCKWISE,                 "wheel-clockwise-2-spokes" },
-    { FadeEffect_CLOCKWISE,                 "wheel-clockwise-3-spokes" },
-    { FadeEffect_CLOCKWISE,                 "wheel-clockwise-4-spokes" },
-    { FadeEffect_CLOCKWISE,                 "wheel-clockwise-8-spokes" },
+    { FadeEffect_CLOCKWISE,					"wheel-clockwise-2-spokes" },
+    { FadeEffect_CLOCKWISE,					"wheel-clockwise-3-spokes" },
+    { FadeEffect_CLOCKWISE,					"wheel-clockwise-4-spokes" },
+    { FadeEffect_CLOCKWISE,					"wheel-clockwise-8-spokes" },
 
-    { FadeEffect_FADE_FROM_CENTER,          "shape-circle" },
-    { FadeEffect_FADE_FROM_CENTER,          "shape-diamond" },
-    { FadeEffect_FADE_FROM_CENTER,          "shape-plus" },
+    { FadeEffect_FADE_FROM_CENTER,			"shape-circle" },
+    { FadeEffect_FADE_FROM_CENTER,			"shape-diamond" },
+    { FadeEffect_FADE_FROM_CENTER,			"shape-plus" },
 
-    { FadeEffect_CLOCKWISE,                 "wedge" },
+    { FadeEffect_CLOCKWISE,					"wedge" },
 
-    { FadeEffect_DISSOLVE,                  "fade-through-black" },
+    { FadeEffect_DISSOLVE,					"fade-through-black" },
 
-    { FadeEffect_CLOCKWISE,                 "zoom-rotate-in" },
+    { FadeEffect_CLOCKWISE,					"zoom-rotate-in" },
 
-    { FadeEffect_HORIZONTAL_LINES,          "comb-horizontal" },
-    { FadeEffect_VERTICAL_LINES,            "comb-vertical" },
+    { FadeEffect_HORIZONTAL_LINES,			"comb-horizontal" },
+    { FadeEffect_VERTICAL_LINES,			"comb-vertical" },
 
-    { FadeEffect_DISSOLVE,                  "fade-smoothly" },
+    { FadeEffect_DISSOLVE,					"fade-smoothly" },
 
     { FadeEffect_NONE, 0 }
 };
@@ -202,7 +202,7 @@ FadeEffect EffectMigration::GetFadeEffect( const SdPage* pPage )
     const TransitionPresetList::const_iterator aEndIt( rPresetList.end());
     for( ; aIt != aEndIt; ++aIt )
     {
-        if( ( (*aIt)->getTransition() == pPage->getTransitionType() ) &&
+        if( ( (*aIt)->getTransition() == pPage->getTransitionType() ) && 
             ( (*aIt)->getSubtype() == pPage->getTransitionSubtype() ) &&
             ( (*aIt)->getDirection() == pPage->getTransitionDirection() ) &&
             ( (*aIt)->getFadeColor() == pPage->getTransitionFadeColor() ) )
@@ -221,7 +221,7 @@ FadeEffect EffectMigration::GetFadeEffect( const SdPage* pPage )
 
 struct deprecated_AnimationEffect_conversion_table_entry
 {
-    AnimationEffect meEffect;
+    AnimationEffect	meEffect;
     const sal_Char* mpPresetId;
     const sal_Char* mpPresetSubType;
 }
@@ -252,7 +252,7 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_MOVE_FROM_LOWERRIGHT, "ooo-entrance-fly-in","from-bottom-right" },
     { AnimationEffect_MOVE_FROM_LOWERLEFT, "ooo-entrance-fly-in","from-bottom-left" },
 
-    { AnimationEffect_MOVE_FROM_BOTTOM, "ooo-entrance-fly-in-slow", "from-bottom" },
+    { AnimationEffect_MOVE_FROM_BOTTOM,	"ooo-entrance-fly-in-slow", "from-bottom" },
     { AnimationEffect_MOVE_FROM_LEFT, "ooo-entrance-fly-in-slow", "from-left" },
     { AnimationEffect_MOVE_FROM_RIGHT, "ooo-entrance-fly-in-slow", "from-right" },
     { AnimationEffect_MOVE_FROM_TOP, "ooo-entrance-fly-in-slow", "from-top" },
@@ -386,17 +386,37 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_DISSOLVE, "ooo-entrance-fade-in-and-zoom", 0 },
     { AnimationEffect_DISSOLVE, "ooo-entrance-fade-in-and-swivel", 0 },
 
-    // still open (no matching effect: AnimationEffect_ZOOM_IN_FROM_*,
-    // AnimationEffect_ZOOM_OUT_FROM_*, AnimationEffect_PATH
+// open
+/*
+    { AnimationEffect_ZOOM_IN_FROM_LEFT, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_IN_FROM_UPPERLEFT, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_IN_FROM_TOP, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_IN_FROM_UPPERRIGHT, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_IN_FROM_RIGHT, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_IN_FROM_LOWERRIGHT, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_IN_FROM_BOTTOM, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_IN_FROM_LOWERLEFT, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_IN_FROM_CENTER, "ooo-entrance-zoom","in" },
 
+    { AnimationEffect_ZOOM_OUT_FROM_LEFT, "ooo-entrance-appear",0 },
+    { AnimationEffect_ZOOM_OUT_FROM_UPPERLEFT, "ooo-entrance-appear",0 },
+    { AnimationEffect_ZOOM_OUT_FROM_TOP, "ooo-entrance-appear",0 },
+    { AnimationEffect_ZOOM_OUT_FROM_UPPERRIGHT, "ooo-entrance-appear",0 },
+    { AnimationEffect_ZOOM_OUT_FROM_RIGHT, "ooo-entrance-appear",0 },
+    { AnimationEffect_ZOOM_OUT_FROM_LOWERRIGHT, "ooo-entrance-appear",0 },
+    { AnimationEffect_ZOOM_OUT_FROM_BOTTOM, "ooo-entrance-appear",0 },
+    { AnimationEffect_ZOOM_OUT_FROM_LOWERLEFT, "ooo-entrance-appear",0 },
+    { AnimationEffect_ZOOM_OUT_FROM_CENTER, "ooo-entrance-appear",0 },
+    { AnimationEffect_PATH, "ooo-entrance-spiral-in",0 },
+*/
     { AnimationEffect_NONE, 0, 0 }
 };
 
 EffectSequence::iterator ImplFindEffect( MainSequencePtr& pMainSequence, const Reference< XShape >& rShape, sal_Int16 nSubItem )
 {
     EffectSequence::iterator aIter;
-
-    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
+    
+    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
     {
         CustomAnimationEffectPtr pEffect( (*aIter) );
         if( (pEffect->getTargetShape() == rShape) && (pEffect->getTargetSubItem() == nSubItem) )
@@ -427,7 +447,7 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
 
     if( !ConvertAnimationEffect( eEffect, aPresetId, aPresetSubType ) )
     {
-        OSL_FAIL( "sd::EffectMigration::SetAnimationEffect(), no mapping for given AnimationEffect value" );
+        DBG_ERROR( "sd::EffectMigration::SetAnimationEffect(), no mapping for given AnimationEffect value" );
         return;
     }
 
@@ -546,8 +566,8 @@ AnimationEffect EffectMigration::GetAnimationEffect( SvxShape* pShape )
         const Reference< XShape > xShape( pShape );
 
         EffectSequence::iterator aIter;
-
-        for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
+        
+        for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
         {
             CustomAnimationEffectPtr pEffect( (*aIter) );
             if( pEffect->getTargetShape() == xShape )
@@ -567,7 +587,7 @@ AnimationEffect EffectMigration::GetAnimationEffect( SvxShape* pShape )
     }
 
     // now find old effect
-    AnimationEffect eEffect = AnimationEffect_NONE;
+    AnimationEffect	eEffect = AnimationEffect_NONE;
 
     if( !ConvertPreset( aPresetId, &aPresetSubType, eEffect ) )
         ConvertPreset( aPresetId, 0, eEffect );
@@ -595,7 +615,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
 
     if( !ConvertAnimationEffect( eEffect, aPresetId, aPresetSubType ) )
     {
-        OSL_FAIL( "sd::EffectMigration::SetAnimationEffect(), no mapping for given AnimationEffect value" );
+        DBG_ERROR( "sd::EffectMigration::SetAnimationEffect(), no mapping for given AnimationEffect value" );
         return;
     }
 
@@ -639,7 +659,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
             {
                 pShapeEffect = (*aIterOnlyBackground);
             }
-            else
+            else 
             {
                 EffectSequence::iterator aIterAsWhole( ImplFindEffect( pMainSequence, xShape, ShapeAnimationSubType::AS_WHOLE ) );
                 if( aIterAsWhole != aEnd )
@@ -673,7 +693,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
                 const bool bManual = (pPage == 0) || (pPage->GetPresChange() == PRESCHANGE_MANUAL);
 
                 // now create effects for each paragraph
-                pGroup =
+                pGroup = 
                     pMainSequence->
                         createTextGroup( pShapeEffect, 10, bManual ? -1 : 0.0, sal_True, sal_False );
             }
@@ -687,7 +707,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
             const EffectSequence& rEffects = pGroup->getEffects();
 
             EffectSequence::const_iterator aIter;
-            for( aIter = rEffects.begin(); aIter != rEffects.end(); ++aIter )
+            for( aIter = rEffects.begin(); aIter != rEffects.end(); aIter++ )
             {
                 // only work on paragraph targets
                 if( (*aIter)->getTarget().getValueType() == ::getCppuType((const ParagraphTarget*)0) )
@@ -742,7 +762,7 @@ AnimationEffect EffectMigration::GetTextAnimationEffect( SvxShape* pShape )
     }
 
     // now find old effect
-    AnimationEffect eEffect = AnimationEffect_NONE;
+    AnimationEffect	eEffect = AnimationEffect_NONE;
 
     if( !ConvertPreset( aPresetId, &aPresetSubType, eEffect ) )
         ConvertPreset( aPresetId, 0, eEffect );
@@ -761,7 +781,7 @@ bool EffectMigration::ConvertPreset( const OUString& rPresetId, const OUString* 
         deprecated_AnimationEffect_conversion_table_entry* p = deprecated_AnimationEffect_conversion_table;
         while( p->mpPresetId )
         {
-            if( rPresetId.equalsAscii( p->mpPresetId ) &&
+            if( rPresetId.equalsAscii( p->mpPresetId ) && 
                 (( p->mpPresetSubType == 0 ) ||
                  ( pPresetSubType == 0) ||
                  ( pPresetSubType->equalsAscii( p->mpPresetSubType )) ) )
@@ -808,6 +828,7 @@ double EffectMigration::ConvertAnimationSpeed( AnimationSpeed eSpeed )
     {
     case AnimationSpeed_SLOW: fDuration = 2.0; break;
     case AnimationSpeed_FAST: fDuration = 0.5; break;
+    //case AnimationSpeed_MEDIUM:
     default:
         fDuration = 1.0; break;
     }
@@ -834,8 +855,8 @@ void EffectMigration::SetAnimationSpeed( SvxShape* pShape, AnimationSpeed eSpeed
 
     EffectSequence::iterator aIter;
     bool bNeedRebuild = false;
-
-    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
+    
+    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
     {
         CustomAnimationEffectPtr pEffect( (*aIter) );
         if( pEffect->getTargetShape() == xShape )
@@ -863,7 +884,7 @@ AnimationSpeed EffectMigration::GetAnimationSpeed( SvxShape* pShape )
 
     double fDuration = 1.0;
 
-    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
+    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
     {
         CustomAnimationEffectPtr pEffect( (*aIter) );
         if( pEffect->getTargetShape() == xShape )
@@ -914,8 +935,8 @@ void EffectMigration::SetDimColor( SvxShape* pShape, sal_Int32 nColor )
 
     EffectSequence::iterator aIter;
     bool bNeedRebuild = false;
-
-    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
+    
+    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
     {
         CustomAnimationEffectPtr pEffect( (*aIter) );
         if( pEffect->getTargetShape() == xShape )
@@ -945,11 +966,11 @@ sal_Int32 EffectMigration::GetDimColor( SvxShape* pShape )
 
             const Reference< XShape > xShape( pShape );
             EffectSequence::iterator aIter;
-
-            for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
+            
+            for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
             {
                 CustomAnimationEffectPtr pEffect( (*aIter) );
-                if( (pEffect->getTargetShape() == xShape) &&
+                if( (pEffect->getTargetShape() == xShape) && 
                     pEffect->getDimColor().hasValue() &&
                     pEffect->hasAfterEffect())
                 {
@@ -977,23 +998,23 @@ void EffectMigration::SetDimHide( SvxShape* pShape, sal_Bool bDimHide )
     if( implIsInsideGroup( pObj ) )
         return;
 
+    Any aEmpty;
+
     sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
 
     const Reference< XShape > xShape( pShape );
 
     EffectSequence::iterator aIter;
     bool bNeedRebuild = false;
-
-    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
+    
+    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
     {
         CustomAnimationEffectPtr pEffect( (*aIter) );
         if( pEffect->getTargetShape() == xShape )
         {
             pEffect->setHasAfterEffect( bDimHide ? true : false );
-            if( bDimHide ) {
-                Any aEmpty;
+            if( bDimHide )
                 pEffect->setDimColor( aEmpty );
-            }
             pEffect->setAfterEffectOnNext( false );
             bNeedRebuild = true;
         }
@@ -1018,7 +1039,7 @@ sal_Bool EffectMigration::GetDimHide( SvxShape* pShape )
             const Reference< XShape > xShape( pShape );
 
             EffectSequence::iterator aIter;
-            for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
+            for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
             {
                 CustomAnimationEffectPtr pEffect( (*aIter) );
                 if( pEffect->getTargetShape() == xShape )
@@ -1059,8 +1080,8 @@ void EffectMigration::SetDimPrevious( SvxShape* pShape, sal_Bool bDimPrevious )
 
     EffectSequence::iterator aIter;
     bool bNeedRebuild = false;
-
-    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
+    
+    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
     {
         CustomAnimationEffectPtr pEffect( (*aIter) );
         if( pEffect->getTargetShape() == xShape )
@@ -1092,7 +1113,7 @@ sal_Bool EffectMigration::GetDimPrevious( SvxShape* pShape )
             const Reference< XShape > xShape( pShape );
 
             EffectSequence::iterator aIter;
-            for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
+            for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
             {
                 CustomAnimationEffectPtr pEffect( (*aIter) );
                 if( pEffect->getTargetShape() == xShape )
@@ -1128,10 +1149,10 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
     {
         Reference< XShape > xThis( pShape );
         Reference< XShape > xCurrent;
-
+    
         EffectSequence::iterator aIter( rSequence.begin() );
         EffectSequence::iterator aEnd( rSequence.end() );
-        for( nPos = 0; aIter != aEnd; ++aIter )
+        for( nPos = 0; aIter != aEnd; aIter++ )
         {
             CustomAnimationEffectPtr pEffect = (*aIter);
 
@@ -1159,7 +1180,7 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
     // check if there is at least one effect for xThis
     if( nCurrentPos == -1 )
     {
-        OSL_FAIL("sd::EffectMigration::SetPresentationOrder() failed cause this shape has no effect" );
+        DBG_ERROR("sd::EffectMigration::SetPresentationOrder() failed cause this shape has no effect" );
         return;
     }
 
@@ -1175,7 +1196,7 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
             aEffects.push_back( (*(*aIter)) );
             rSequence.erase( (*aIter++) );
         }
-
+        
         if( nNewPos > nCurrentPos )
             nNewPos++;
 
@@ -1220,7 +1241,7 @@ sal_Int32 EffectMigration::GetPresentationOrder( SvxShape* pShape )
 
     EffectSequence::iterator aIter( rSequence.begin() );
     EffectSequence::iterator aEnd( rSequence.end() );
-    for( ; aIter != aEnd; ++aIter )
+    for( ; aIter != aEnd; aIter++ )
     {
         CustomAnimationEffectPtr pEffect = (*aIter);
 
@@ -1254,12 +1275,12 @@ void EffectMigration::UpdateSoundEffect( SvxShape* pShape, SdAnimationInfo* pInf
 
         EffectSequence::iterator aIter;
         bool bNeedRebuild = false;
-
+        
         OUString aSoundFile;
         if( pInfo->mbSoundOn )
             aSoundFile = pInfo->maSoundFile;
 
-        for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
+        for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
         {
             CustomAnimationEffectPtr pEffect( (*aIter) );
             if( pEffect->getTargetShape() == xShape )
@@ -1297,10 +1318,10 @@ OUString EffectMigration::GetSoundFile( SvxShape* pShape )
             const Reference< XShape > xShape( pShape );
 
             EffectSequence::iterator aIter;
-
-            for(    aIter = pMainSequence->getBegin();
+            
+            for(	aIter = pMainSequence->getBegin();
                     (aSoundFile.getLength() == 0) && (aIter != pMainSequence->getEnd());
-                    ++aIter )
+                    aIter++ )
             {
                 CustomAnimationEffectPtr pEffect( (*aIter) );
                 if( pEffect->getTargetShape() == xShape )

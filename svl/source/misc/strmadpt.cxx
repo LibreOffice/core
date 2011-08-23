@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 #include <set>
 #include <rtl/alloc.h>
 #include <rtl/memory.h>
-#include <svl/instrm.hxx>
-#include <svl/outstrm.hxx>
-#include <svl/strmadpt.hxx>
+#include <instrm.hxx>
+#include <outstrm.hxx>
+#include <strmadpt.hxx>
 
 using namespace com::sun::star;
 
@@ -96,6 +96,7 @@ public:
     inline bool isEOF() const;
 
     bool addMark(sal_uInt32 nPosition);
+
     bool removeMark(sal_uInt32 nPosition);
 
     inline sal_uInt32 getReadPosition() const;
@@ -152,7 +153,7 @@ TYPEINIT1(SvOutputStreamOpenLockBytes, SvOpenLockBytes)
 
 //============================================================================
 // virtual
-ErrCode SvOutputStreamOpenLockBytes::ReadAt(sal_uLong, void *, sal_uLong, sal_uLong *)
+ErrCode SvOutputStreamOpenLockBytes::ReadAt(ULONG, void *, ULONG, ULONG *)
     const
 {
     return ERRCODE_IO_CANTREAD;
@@ -160,8 +161,8 @@ ErrCode SvOutputStreamOpenLockBytes::ReadAt(sal_uLong, void *, sal_uLong, sal_uL
 
 //============================================================================
 // virtual
-ErrCode SvOutputStreamOpenLockBytes::WriteAt(sal_uLong nPos, void const * pBuffer,
-                                             sal_uLong nCount, sal_uLong * pWritten)
+ErrCode SvOutputStreamOpenLockBytes::WriteAt(ULONG nPos, void const * pBuffer,
+                                             ULONG nCount, ULONG * pWritten)
 {
     if (nPos != m_nPosition)
         return ERRCODE_IO_CANTWRITE;
@@ -187,7 +188,7 @@ ErrCode SvOutputStreamOpenLockBytes::Flush() const
 
 //============================================================================
 // virtual
-ErrCode SvOutputStreamOpenLockBytes::SetSize(sal_uLong)
+ErrCode SvOutputStreamOpenLockBytes::SetSize(ULONG)
 {
     return ERRCODE_IO_NOTSUPPORTED;
 }
@@ -205,15 +206,15 @@ ErrCode SvOutputStreamOpenLockBytes::Stat(SvLockBytesStat * pStat,
 //============================================================================
 // virtual
 ErrCode SvOutputStreamOpenLockBytes::FillAppend(void const * pBuffer,
-                                                sal_uLong nCount,
-                                                sal_uLong * pWritten)
+                                                ULONG nCount,
+                                                ULONG * pWritten)
 {
     if (!m_xOutputStream.is())
         return ERRCODE_IO_CANTWRITE;
     if (nCount > 0
-        && nCount > std::numeric_limits< sal_uLong >::max() - m_nPosition)
+        && nCount > std::numeric_limits< ULONG >::max() - m_nPosition)
     {
-        nCount = std::numeric_limits< sal_uLong >::max() - m_nPosition;
+        nCount = std::numeric_limits< ULONG >::max() - m_nPosition;
         if (nCount == 0)
             return ERRCODE_IO_CANTWRITE;
     }
@@ -235,14 +236,14 @@ ErrCode SvOutputStreamOpenLockBytes::FillAppend(void const * pBuffer,
 
 //============================================================================
 // virtual
-sal_uLong SvOutputStreamOpenLockBytes::Tell() const
+ULONG SvOutputStreamOpenLockBytes::Tell() const
 {
     return m_nPosition;
 }
 
 //============================================================================
 // virtual
-sal_uLong SvOutputStreamOpenLockBytes::Seek(sal_uLong)
+ULONG SvOutputStreamOpenLockBytes::Seek(ULONG)
 {
     return m_nPosition;
 }
@@ -279,7 +280,7 @@ uno::Any SAL_CALL SvLockBytesInputStream::queryInterface(uno::Type const &
 
 //============================================================================
 // virtual
-void SAL_CALL SvLockBytesInputStream::acquire() throw ()
+void SAL_CALL SvLockBytesInputStream::acquire()	throw ()
 {
     OWeakObject::acquire();
 }
@@ -476,7 +477,7 @@ bool SvInputStream::open()
 
 //============================================================================
 // virtual
-sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
+ULONG SvInputStream::GetData(void * pData, ULONG nSize)
 {
     if (!open())
     {
@@ -503,8 +504,8 @@ sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
         {
             sal_Int32 nRemain
                 = sal_Int32(
-                    std::min(sal_uLong(nSize - nRead),
-                             sal_uLong(std::numeric_limits< sal_Int32 >::max())));
+                    std::min(ULONG(nSize - nRead),
+                             ULONG(std::numeric_limits< sal_Int32 >::max())));
             if (nRemain == 0)
                 break;
             uno::Sequence< sal_Int8 > aBuffer;
@@ -540,8 +541,8 @@ sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
                 sal_Int32 nRemain
                     = sal_Int32(
                         std::min(
-                            sal_uLong(nSize - nRead),
-                            sal_uLong(std::numeric_limits< sal_Int32 >::max())));
+                            ULONG(nSize - nRead),
+                            ULONG(std::numeric_limits< sal_Int32 >::max())));
                 if (nRemain == 0)
                     break;
                 uno::Sequence< sal_Int8 > aBuffer;
@@ -571,7 +572,7 @@ sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
 
 //============================================================================
 // virtual
-sal_uLong SvInputStream::PutData(void const *, sal_uLong)
+ULONG SvInputStream::PutData(void const *, ULONG)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
     return 0;
@@ -584,7 +585,7 @@ void SvInputStream::FlushData()
 
 //============================================================================
 // virtual
-sal_uLong SvInputStream::SeekPos(sal_uLong nPos)
+ULONG SvInputStream::SeekPos(ULONG nPos)
 {
     if (open())
     {
@@ -601,7 +602,7 @@ sal_uLong SvInputStream::SeekPos(sal_uLong nPos)
                             < STREAM_SEEK_TO_END)
                         {
                             m_nSeekedFrom = Tell();
-                            return sal_uLong(nLength);
+                            return ULONG(nLength);
                         }
                     }
                     catch (io::IOException) {}
@@ -636,7 +637,7 @@ sal_uLong SvInputStream::SeekPos(sal_uLong nPos)
 
 //============================================================================
 // virtual
-void SvInputStream::SetSize(sal_uLong)
+void SvInputStream::SetSize(ULONG)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
 }
@@ -668,14 +669,14 @@ SvInputStream::~SvInputStream()
 
 //============================================================================
 // virtual
-sal_uInt16 SvInputStream::IsA() const
+USHORT SvInputStream::IsA() const
 {
     return 0;
 }
 
 //============================================================================
 // virtual
-void SvInputStream::AddMark(sal_uLong nPos)
+void SvInputStream::AddMark(ULONG nPos)
 {
     if (open() && m_pPipe)
         m_pPipe->addMark(nPos);
@@ -683,7 +684,7 @@ void SvInputStream::AddMark(sal_uLong nPos)
 
 //============================================================================
 // virtual
-void SvInputStream::RemoveMark(sal_uLong nPos)
+void SvInputStream::RemoveMark(ULONG nPos)
 {
     if (open() && m_pPipe)
         m_pPipe->removeMark(nPos);
@@ -696,7 +697,7 @@ void SvInputStream::RemoveMark(sal_uLong nPos)
 //============================================================================
 
 // virtual
-sal_uLong SvOutputStream::GetData(void *, sal_uLong)
+ULONG SvOutputStream::GetData(void *, ULONG)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
     return 0;
@@ -704,20 +705,20 @@ sal_uLong SvOutputStream::GetData(void *, sal_uLong)
 
 //============================================================================
 // virtual
-sal_uLong SvOutputStream::PutData(void const * pData, sal_uLong nSize)
+ULONG SvOutputStream::PutData(void const * pData, ULONG nSize)
 {
     if (!m_xStream.is())
     {
         SetError(ERRCODE_IO_CANTWRITE);
         return 0;
     }
-    sal_uLong nWritten = 0;
+    ULONG nWritten = 0;
     for (;;)
     {
         sal_Int32 nRemain
             = sal_Int32(
-                std::min(sal_uLong(nSize - nWritten),
-                         sal_uLong(std::numeric_limits< sal_Int32 >::max())));
+                std::min(ULONG(nSize - nWritten),
+                         ULONG(std::numeric_limits< sal_Int32 >::max())));
         if (nRemain == 0)
             break;
         try
@@ -739,7 +740,7 @@ sal_uLong SvOutputStream::PutData(void const * pData, sal_uLong nSize)
 
 //============================================================================
 // virtual
-sal_uLong SvOutputStream::SeekPos(sal_uLong)
+ULONG SvOutputStream::SeekPos(ULONG)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
     return 0;
@@ -763,7 +764,7 @@ void SvOutputStream::FlushData()
 
 //============================================================================
 // virtual
-void SvOutputStream::SetSize(sal_uLong)
+void SvOutputStream::SetSize(ULONG)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
 }
@@ -790,7 +791,7 @@ SvOutputStream::~SvOutputStream()
 
 //============================================================================
 // virtual
-sal_uInt16 SvOutputStream::IsA() const
+USHORT SvOutputStream::IsA() const
 {
     return 0;
 }
@@ -804,10 +805,10 @@ sal_uInt16 SvOutputStream::IsA() const
 bool SvDataPipe_Impl::remove(Page * pPage)
 {
     if (
-        pPage != m_pFirstPage ||
+        pPage != m_pFirstPage || 
         m_pReadPage == m_pFirstPage ||
         (
-         !m_aMarks.empty() &&
+         !m_aMarks.empty() && 
          *m_aMarks.begin() < m_pFirstPage->m_nOffset + m_nPageSize
         )
        )

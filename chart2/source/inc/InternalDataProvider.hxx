@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,8 +31,7 @@
 #include "InternalData.hxx"
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/chart/XDateCategories.hpp>
-#include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
+#include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
@@ -40,7 +39,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase6.hxx>
 #include "ServiceMacros.hxx"
 
 #include "CachedDataSequence.hxx"
@@ -54,11 +53,10 @@ namespace chart
 namespace impl
 {
 
-typedef ::cppu::WeakImplHelper7<
+typedef ::cppu::WeakImplHelper6<
         ::com::sun::star::chart2::XInternalDataProvider,
         ::com::sun::star::chart2::data::XRangeXMLConversion,
-        ::com::sun::star::chart2::XAnyDescriptionAccess,
-        ::com::sun::star::chart::XDateCategories,
+        ::com::sun::star::chart::XComplexDescriptionAccess,
         ::com::sun::star::util::XCloneable,
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::lang::XServiceInfo >
@@ -151,26 +149,8 @@ public:
         const ::rtl::OUString& aXMLRange )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
-
-    // ____ XDateCategories ____
-    virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getDateCategories() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setDateCategories( const ::com::sun::star::uno::Sequence< double >& rDates ) throw (::com::sun::star::uno::RuntimeException);
-
-    // ____ XAnyDescriptionAccess ____
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > > SAL_CALL
-        getAnyRowDescriptions() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setAnyRowDescriptions(
-        const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& aRowDescriptions )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > > SAL_CALL
-        getAnyColumnDescriptions() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setAnyColumnDescriptions(
-        const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& aColumnDescriptions )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    // ____ XComplexDescriptionAccess (base of XAnyDescriptionAccess) ____
+    
+    // ____ XComplexDescriptionAccess ____
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL
         getComplexRowDescriptions() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setComplexRowDescriptions(
@@ -179,7 +159,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL
         getComplexColumnDescriptions() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setComplexColumnDescriptions(
+    virtual void SAL_CALL setComplexColumnDescriptions( 
         const ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Sequence< ::rtl::OUString > >& aColumnDescriptions )
         throw (::com::sun::star::uno::RuntimeException);
@@ -218,7 +198,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
         throw (::com::sun::star::uno::RuntimeException);
     // ::com::sun::star::lang::XInitialization:
-    virtual void SAL_CALL initialize(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & aArguments)
+    virtual void SAL_CALL initialize(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & aArguments) 
         throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::uno::Exception);
 
 private:

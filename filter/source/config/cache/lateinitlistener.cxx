@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,9 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // definitions
 
-
-
+/*-----------------------------------------------
+    14.08.2003 07:35
+-----------------------------------------------*/
 LateInitListener::LateInitListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : BaseLock(     )
     , m_xSMGR (xSMGR)
@@ -59,29 +60,31 @@ LateInitListener::LateInitListener(const css::uno::Reference< css::lang::XMultiS
     osl_incrementInterlockedCount( &m_refCount );
 
     m_xBroadcaster = css::uno::Reference< css::document::XEventBroadcaster >(
-        m_xSMGR->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.GlobalEventBroadcaster" ))),
-        css::uno::UNO_QUERY_THROW);
+        m_xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster")),
+        css::uno::UNO_QUERY);
 
     m_xBroadcaster->addEventListener(static_cast< css::document::XEventListener* >(this));
 
     osl_decrementInterlockedCount( &m_refCount );
 }
 
-
-
+/*-----------------------------------------------
+    14.08.2003 07:25
+-----------------------------------------------*/
 LateInitListener::~LateInitListener()
 {
 }
 
-
-
+/*-----------------------------------------------
+    14.08.2003 08:45
+-----------------------------------------------*/
 void SAL_CALL LateInitListener::notifyEvent(const css::document::EventObject& aEvent)
     throw(css::uno::RuntimeException)
 {
     // wait for events, which indicates finished open of the first document
     if (
-        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnNew")) ) ||
-        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnLoad")))
+        (aEvent.EventName.equalsAscii("OnNew") ) ||
+        (aEvent.EventName.equalsAscii("OnLoad"))
        )
     {
         // this thread must be started one times only ...
@@ -111,8 +114,9 @@ void SAL_CALL LateInitListener::notifyEvent(const css::document::EventObject& aE
     }
 }
 
-
-
+/*-----------------------------------------------
+    14.08.2003 07:48
+-----------------------------------------------*/
 void SAL_CALL LateInitListener::disposing(const css::lang::EventObject& /* aEvent */ )
     throw(css::uno::RuntimeException)
 {

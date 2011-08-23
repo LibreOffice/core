@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,16 @@
 #ifndef SC_DRTXTOB_HXX
 #define SC_DRTXTOB_HXX
 
+#ifndef _SFX_HXX
+#endif
+
 #include <sfx2/shell.hxx>
 #include <sfx2/module.hxx>
 #include <tools/link.hxx>
 
 #include "shellids.hxx"
 
-sal_uInt16 ScGetFontWorkId();       // statt SvxFontWorkChildWindow::GetChildWindowId()
+USHORT ScGetFontWorkId();		// statt SvxFontWorkChildWindow::GetChildWindowId()
 
 class ScViewData;
 class TransferableDataHelper;
@@ -43,9 +46,9 @@ class TransferableClipboardListener;
 
 class ScDrawTextObjectBar : public SfxShell
 {
-    ScViewData*         pViewData;
+    ScViewData*			pViewData;
     TransferableClipboardListener* pClipEvtLstnr;
-    sal_Bool                bPastePossible;
+    BOOL				bPastePossible;
 
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
 
@@ -67,18 +70,18 @@ public:
     void GetAttrState( SfxItemSet& rSet );
     void ExecuteToggle( SfxRequest &rReq );
 
-    sal_Bool ExecuteCharDlg( const SfxItemSet& rArgs, SfxItemSet& rOutSet );
-    sal_Bool ExecuteParaDlg( const SfxItemSet& rArgs, SfxItemSet& rOutSet );
+    BOOL ExecuteCharDlg( const SfxItemSet& rArgs, SfxItemSet& rOutSet );
+    BOOL ExecuteParaDlg( const SfxItemSet& rArgs, SfxItemSet& rOutSet );
 
     void ExecuteExtra( SfxRequest &rReq );
-    void ExecFormText(SfxRequest& rReq);        // StarFontWork
+    void ExecFormText(SfxRequest& rReq);		// StarFontWork
     void GetFormTextState(SfxItemSet& rSet);
 
 private:
-    void ExecuteGlobal( SfxRequest &rReq );         // von Execute gerufen fuer ganze Objekte
+    void ExecuteGlobal( SfxRequest &rReq );			// von Execute gerufen fuer ganze Objekte
     void GetGlobalClipState( SfxItemSet& rSet );
     void ExecutePasteContents( SfxRequest &rReq );
-    sal_Bool IsNoteEdit();
+    BOOL IsNoteEdit();
 };
 
 

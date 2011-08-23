@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,9 @@
 //==================================================================
 
 ScGroupDlg::ScGroupDlg( Window* pParent,
-                        sal_uInt16  nResId,
-                        sal_Bool    bUngroup,
-                        sal_Bool    bRows ) :
+                        USHORT	nResId,
+                        BOOL    bUngroup,
+                        BOOL    bRows ) :
     ModalDialog     ( pParent, ScResId( nResId ) ),
     //
     aFlFrame        ( this, ScResId( FL_FRAME ) ),
@@ -69,14 +69,14 @@ ScGroupDlg::ScGroupDlg( Window* pParent,
 
 //------------------------------------------------------------------------
 
-sal_Bool ScGroupDlg::GetColsChecked() const
+BOOL ScGroupDlg::GetColsChecked() const
 {
     return aBtnCols.IsChecked();
 }
 
 //------------------------------------------------------------------------
 
-ScGroupDlg::~ScGroupDlg()
+__EXPORT ScGroupDlg::~ScGroupDlg()
 {
 }
 

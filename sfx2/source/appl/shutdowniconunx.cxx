@@ -8,6 +8,7 @@
 
 #include <gtk/gtk.h>
 #include <glib.h>
+#include <eggtray/eggtrayicon.h>
 #include <osl/mutex.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
@@ -38,7 +39,7 @@ using namespace ::rtl;
 using namespace ::osl;
 
 static ResMgr *pVCLResMgr;
-static GtkStatusIcon* pTrayIcon;
+static EggTrayIcon *pTrayIcon;
 static GtkWidget *pExitMenuItem = NULL;
 static GtkWidget *pOpenMenuItem = NULL;
 static GtkWidget *pDisableMenuItem = NULL;
@@ -72,10 +73,14 @@ static void systray_disable_cb()
 
 static void exit_quickstarter_cb( GtkWidget * )
 {
-    plugin_shutdown_sys_tray();
-    //terminate may cause this .so to be unloaded. So we must be hands off
-    //all calls into this .so after this call
-    ShutdownIcon::terminateDesktop();
+    if (pTrayIcon)
+    {
+        egg_tray_icon_cancel_message (pTrayIcon, 1 );
+        plugin_shutdown_sys_tray();
+        //terminate may cause this .so to be unloaded. So we must be hands off
+        //all calls into this .so after this call
+        ShutdownIcon::terminateDesktop();
+    }
 }
 
 static void menu_deactivate_cb( GtkWidget *pMenu )
@@ -83,7 +88,7 @@ static void menu_deactivate_cb( GtkWidget *pMenu )
     gtk_menu_popdown( GTK_MENU( pMenu ) );
 }
 
-static GdkPixbuf * ResIdToPixbuf( sal_uInt16 nResId )
+static GdkPixbuf * ResIdToPixbuf( USHORT nResId )
 {
     ResId aResId( SV_ICON_SMALL_START + nResId, *pVCLResMgr );
     BitmapEx aIcon( aResId );
@@ -96,8 +101,7 @@ static GdkPixbuf * ResIdToPixbuf( sal_uInt16 nResId )
     g_return_val_if_fail( pSalBitmap != NULL, NULL );
 
     Size aSize( pSalBitmap->Width(), pSalBitmap->Height() );
-    if (pSalAlpha)
-        g_return_val_if_fail( Size( pSalAlpha->Width(), pSalAlpha->Height() ) == aSize, NULL );
+    g_return_val_if_fail( Size( pSalAlpha->Width(), pSalAlpha->Height() ) == aSize, NULL );
 
     int nX, nY;
     guchar *pPixbufData = ( guchar * )g_malloc( 4 * aSize.Width() * aSize.Height() );
@@ -128,7 +132,7 @@ static GdkPixbuf * ResIdToPixbuf( sal_uInt16 nResId )
         pInSalAlpha.ReleaseAccess( pSalAlpha );
 
     return gdk_pixbuf_new_from_data( pPixbufData,
-        GDK_COLORSPACE_RGB, sal_True, 8,
+        GDK_COLORSPACE_RGB, TRUE, 8,
         aSize.Width(), aSize.Height(),
         aSize.Width() * 4,
         (GdkPixbufDestroyNotify) g_free,
@@ -146,7 +150,7 @@ static void oustring_delete (gpointer  data,
 
 static void add_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
                       OUString *pOverrideLabel,
-                      sal_uInt16 nResId, GCallback pFnCallback )
+                      USHORT nResId, GCallback pFnCallback )
 {
     OUString *pURL = new OUString (OStringToOUString( pAsciiURL,
                                                       RTL_TEXTENCODING_UTF8 ));
@@ -179,7 +183,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
 static void add_ugly_db_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
-                              sal_uInt16 nResId, GCallback pFnCallback )
+                              USHORT nResId, GCallback pFnCallback )
 {
     SvtDynamicMenuOptions aOpt;
     Sequence < Sequence < PropertyValue > > aMenu = aOpt.GetMenu( E_NEWMENU );
@@ -190,13 +194,13 @@ static void add_ugly_db_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
         Sequence < PropertyValue >& aEntry = aMenu[n];
         for ( sal_Int32 m=0; m<aEntry.getLength(); m++ )
         {
-            if ( aEntry[m].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")) )
+            if ( aEntry[m].Name.equalsAsciiL( "URL", 3 ) )
                 aEntry[m].Value >>= aURL;
-            if ( aEntry[m].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Title")) )
+            if ( aEntry[m].Name.equalsAsciiL( "Title", 5 ) )
                 aEntry[m].Value >>= aDescription;
         }
 
-        if ( aURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(BASE_URL)) && aDescription.getLength() )
+        if ( aURL.equalsAscii( BASE_URL ) && aDescription.getLength() )
         {
             add_item (pMenuShell, pAsciiURL, &aDescription, nResId, pFnCallback);
             break;
@@ -300,24 +304,69 @@ static void refresh_menu( GtkWidget *pMenu )
     gtk_widget_set_sensitive( pDisableMenuItem, !bModal);
 }
 
+extern "C" {
+static void
+layout_menu( GtkMenu *menu,
+             gint *x, gint *y, gboolean *push_in,
+             gpointer )
+{
+    GtkRequisition req;
+    GtkWidget *ebox = GTK_BIN( pTrayIcon )->child;
+
+    gtk_widget_size_request( GTK_WIDGET( menu ), &req );
+    gdk_window_get_origin( ebox->window, x, y );
+
+    (*x) += ebox->allocation.x;
+    (*y) += ebox->allocation.y;
+
+    if (*y >= gdk_screen_get_height (gtk_widget_get_screen (ebox)) / 2)
+        (*y) -= req.height;
+    else
+        (*y) += ebox->allocation.height;
+
+    *push_in = TRUE;
+}
+}
+
 static gboolean display_menu_cb( GtkWidget *,
                                  GdkEventButton *event, GtkWidget *pMenu )
 {
     if (event->button == 2)
-        return sal_False;
+        return FALSE;
+
+#ifdef TEMPLATE_DIALOG_MORE_POLISHED
+    if (event->button == 1 &&
+        event->type == GDK_2BUTTON_PRESS)
+    {
+        open_template_cb( NULL );
+        return TRUE;
+    }
+    if (event->button == 3)
+    {
+        ... as below ...
+#endif
 
     refresh_menu( pMenu );
 
     gtk_menu_popup( GTK_MENU( pMenu ), NULL, NULL,
-                    gtk_status_icon_position_menu, pTrayIcon,
-                    0, event->time );
+                    layout_menu, NULL, 0, event->time );
 
-    return sal_True;
+    return TRUE;
+}
+
+extern "C" {
+    static gboolean
+    show_at_idle( gpointer )
+    {
+        ::SolarMutexGuard aGuard;
+        gtk_widget_show_all( GTK_WIDGET( pTrayIcon ) );
+        return FALSE;
+    }
 }
 
 #ifdef ENABLE_GIO
 /*
- * If the quickstarter is running, then LibreOffice is
+ * See rhbz#610103. If the quickstarter is running, then LibreOffice is
  * upgraded, then the old quickstarter is still running, but is now unreliable
  * as the old install has been deleted. A fairly intractable problem but we
  * can avoid much of the pain if we turn off the quickstarter if we detect
@@ -347,10 +396,7 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
 {
     ::SolarMutexGuard aGuard;
 
-    if( /* need gtk_status to resolve */
-        (gtk_check_version( 2, 10, 0 ) != NULL) ||
-        /* we need the vcl plugin and mainloop initialized */
-        !g_type_from_name( "GdkDisplay" ) )
+    if( !g_type_from_name( "GdkDisplay" ) )
         return;
 
     OString aLabel;
@@ -360,24 +406,37 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
             pShutdownIcon->GetResString( STR_QUICKSTART_TIP ),
             RTL_TEXTENCODING_UTF8 );
 
+    pTrayIcon = egg_tray_icon_new( aLabel );
+
+    GtkWidget *pParent = gtk_event_box_new();
+    GtkTooltips *pTooltips = gtk_tooltips_new();
+    gtk_tooltips_set_tip( GTK_TOOLTIPS( pTooltips ), pParent, aLabel, NULL );
+
+    GtkWidget *pIconImage = gtk_image_new();
+    gtk_container_add( GTK_CONTAINER( pParent ), pIconImage );
+
     pVCLResMgr = CREATEVERSIONRESMGR( vcl );
 
     GdkPixbuf *pPixbuf = ResIdToPixbuf( SV_ICON_ID_OFFICE );
-    pTrayIcon = gtk_status_icon_new_from_pixbuf(pPixbuf);
+    gtk_image_set_from_pixbuf( GTK_IMAGE( pIconImage ), pPixbuf );
     g_object_unref( pPixbuf );
-
-    g_object_set (pTrayIcon, "title", aLabel.getStr(),
-                  "tooltip_text", aLabel.getStr(), NULL);
 
     GtkWidget *pMenu = gtk_menu_new();
     g_signal_connect (pMenu, "deactivate",
                       G_CALLBACK (menu_deactivate_cb), NULL);
-    g_signal_connect(pTrayIcon,  "button_press_event",
-                     G_CALLBACK(display_menu_cb), pMenu);
+    g_signal_connect( pParent, "button_press_event",
+                      G_CALLBACK( display_menu_cb ), pMenu );
+    gtk_container_add( GTK_CONTAINER( pTrayIcon ), pParent );
+
+    // Show at idle to avoid artefacts at startup
+    g_idle_add (show_at_idle, (gpointer) pTrayIcon);
 
     // disable shutdown
     pShutdownIcon->SetVeto( true );
     pShutdownIcon->addTerminateListener();
+
+    g_signal_connect(GTK_WIDGET(pTrayIcon), "destroy",
+            G_CALLBACK(exit_quickstarter_cb), NULL);
 
 #ifdef ENABLE_GIO
     GFile* pFile = NULL;
@@ -411,8 +470,15 @@ void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray()
     }
 #endif
 
-    g_object_unref(pTrayIcon);
+    /* we have to set pTrayIcon to NULL now, because gtk_widget_destroy
+     * causes calling exit_quickstarter_cb (which then calls this func.)
+     * again -> crash.
+     * As an alternative, we could deregister the "destroy" signal here,
+     * but this is simpler .-)
+     */
+    GtkWidget* const pIcon = GTK_WIDGET( pTrayIcon );
     pTrayIcon = NULL;
+    gtk_widget_destroy( pIcon );
 
     pExitMenuItem = NULL;
     pOpenMenuItem = NULL;

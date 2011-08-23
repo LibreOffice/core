@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ namespace dbaui
     //= DatabaseObjectView
     //======================================================================
     DatabaseObjectView::DatabaseObjectView( const Reference< XMultiServiceFactory >& _rxORB,
-            const Reference< XDatabaseDocumentUI >& _rxApplication,
+            const Reference< XDatabaseDocumentUI >& _rxApplication, 
             const Reference< XFrame >& _rxParentFrame,
             const ::rtl::OUString& _rComponentURL )
         :m_xORB             ( _rxORB            )
@@ -131,19 +131,19 @@ namespace dbaui
                 // if we have no externally provided frame, create one
                 if ( !m_xFrameLoader.is() )
                 {
-                    Reference< XSingleServiceFactory > xFact(m_xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.TaskCreator"))), UNO_QUERY_THROW);
+                    Reference< XSingleServiceFactory > xFact(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.TaskCreator")), UNO_QUERY_THROW);
                     Sequence< Any > lArgs(2);
                     NamedValue      aProp;
                     sal_Int32       nArg = 0;
 
-                    aProp.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentFrame"));
+                    aProp.Name    = ::rtl::OUString::createFromAscii("ParentFrame");
                     aProp.Value <<= m_xParentFrame;
                     lArgs[nArg++] <<= aProp;
 
-                    aProp.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TopWindow"));
+                    aProp.Name    = ::rtl::OUString::createFromAscii("TopWindow");
                     aProp.Value <<= sal_True;
                     lArgs[nArg++] <<= aProp;
-
+                
                     m_xFrameLoader.set(xFact->createInstanceWithArguments(lArgs), UNO_QUERY_THROW);
 
                     // everything we load can be considered a "top level document", so set the respective bit at the window.
@@ -330,7 +330,7 @@ namespace dbaui
             i_rDispatchArgs.put( (::rtl::OUString)PROPERTY_UPDATE_TABLENAME, sTable );
         }
     }
-
+    
     //======================================================================
     //= RelationDesigner
     //======================================================================
@@ -340,7 +340,7 @@ namespace dbaui
     {
     }
 // .........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 // .........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

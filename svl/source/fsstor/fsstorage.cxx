@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,16 +100,16 @@ sal_Bool isLocalFile_Impl( ::rtl::OUString aURL )
 struct FSStorage_Impl
 {
     ::rtl::OUString m_aURL;
-
+    
     ::ucbhelper::Content* m_pContent;
     sal_Int32 m_nMode;
-
+    
     ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
     ::cppu::OTypeCollection* m_pTypeCollection;
 
     uno::Reference< lang::XMultiServiceFactory > m_xFactory;
 
-
+    
     FSStorage_Impl( const ::rtl::OUString& aURL, sal_Int32 nMode, uno::Reference< lang::XMultiServiceFactory > xFactory )
     : m_aURL( aURL )
     , m_pContent( NULL )
@@ -192,7 +192,7 @@ sal_Bool FSStorage::MakeFolderNoUI( const String& rFolder, sal_Bool )
                                  uno::Reference< ucb::XCommandEnvironment >(),
                                  aParent ) )
         return ::utl::UCBContentHelper::MakeFolder( aParent, aTitle, aResultContent, sal_False );
-
+        
     return sal_False;
 }
 
@@ -236,7 +236,7 @@ void FSStorage::CopyStreamToSubStream( const ::rtl::OUString& aSourceURL,
                                                 embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
     if ( !xSubStream.is() )
         throw uno::RuntimeException();
-
+                
     uno::Reference< io::XOutputStream > xDestOutput = xSubStream->getOutputStream();
     if ( !xDestOutput.is() )
         throw uno::RuntimeException();
@@ -255,8 +255,8 @@ void FSStorage::CopyContentToStorage_Impl( ::ucbhelper::Content* pContent, const
     // create cursor for access to children
     uno::Sequence< ::rtl::OUString > aProps( 2 );
     ::rtl::OUString* pProps = aProps.getArray();
-    pProps[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TargetURL"));
-    pProps[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
+    pProps[0] = ::rtl::OUString::createFromAscii( "TargetURL" );
+    pProps[1] = ::rtl::OUString::createFromAscii( "IsFolder" );
     ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
     try
@@ -271,7 +271,7 @@ void FSStorage::CopyContentToStorage_Impl( ::ucbhelper::Content* pContent, const
             {
                 ::rtl::OUString aSourceURL( xRow->getString( 1 ) );
                 sal_Bool bIsFolder( xRow->getBoolean(2) );
-
+    
                 // TODO/LATER: not sure whether the entry name must be encoded
                 ::rtl::OUString aNewEntryName( INetURLObject( aSourceURL ).getName( INetURLObject::LAST_SEGMENT,
                                                                                     true,
@@ -282,7 +282,7 @@ void FSStorage::CopyContentToStorage_Impl( ::ucbhelper::Content* pContent, const
                                                                                                 embed::ElementModes::READWRITE );
                     if ( !xSubStorage.is() )
                         throw uno::RuntimeException();
-
+    
                     uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
                     ::ucbhelper::Content aSourceContent( aSourceURL, xDummyEnv );
                     CopyContentToStorage_Impl( &aSourceContent, xSubStorage );
@@ -301,14 +301,14 @@ void FSStorage::CopyContentToStorage_Impl( ::ucbhelper::Content* pContent, const
     catch( ucb::InteractiveIOException& r )
     {
         if ( r.Code == ucb::IOErrorCode_NOT_EXISTING )
-            OSL_FAIL( "The folder does not exist!\n" );
+            OSL_ENSURE( sal_False, "The folder does not exist!\n" );
         else
             throw;
     }
 }
 
 //____________________________________________________________________________________________________
-//  XInterface
+//	XInterface
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
@@ -317,14 +317,14 @@ uno::Any SAL_CALL FSStorage::queryInterface( const uno::Type& rType )
 {
     uno::Any aReturn;
     aReturn <<= ::cppu::queryInterface
-                (   rType
-                ,   static_cast<lang::XTypeProvider*> ( this )
-                ,   static_cast<embed::XStorage*> ( this )
-                ,   static_cast<embed::XHierarchicalStorageAccess*> ( this )
-                ,   static_cast<container::XNameAccess*> ( this )
-                ,   static_cast<container::XElementAccess*> ( this )
-                ,   static_cast<lang::XComponent*> ( this )
-                ,   static_cast<beans::XPropertySet*> ( this ) );
+                (	rType
+                ,	static_cast<lang::XTypeProvider*> ( this )
+                ,	static_cast<embed::XStorage*> ( this )
+                ,	static_cast<embed::XHierarchicalStorageAccess*> ( this )
+                ,	static_cast<container::XNameAccess*> ( this )
+                ,	static_cast<container::XElementAccess*> ( this )
+                ,	static_cast<lang::XComponent*> ( this )
+                ,	static_cast<beans::XPropertySet*> ( this ) );
 
     if ( aReturn.hasValue() == sal_True )
         return aReturn ;
@@ -345,7 +345,7 @@ void SAL_CALL FSStorage::release() throw()
 }
 
 //____________________________________________________________________________________________________
-//  XTypeProvider
+//	XTypeProvider
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
@@ -359,10 +359,10 @@ uno::Sequence< uno::Type > SAL_CALL FSStorage::getTypes()
         if ( m_pImpl->m_pTypeCollection == NULL )
         {
             m_pImpl->m_pTypeCollection = new ::cppu::OTypeCollection
-                                (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< embed::XHierarchicalStorageAccess >* )NULL )
-                                ,   ::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
+                                (	::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
+                                ,	::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
+                                ,	::getCppuType( ( const uno::Reference< embed::XHierarchicalStorageAccess >* )NULL )
+                                ,	::getCppuType( ( const uno::Reference< beans::XPropertySet >* )NULL ) );
         }
     }
 
@@ -391,7 +391,7 @@ uno::Sequence< sal_Int8 > SAL_CALL FSStorage::getImplementationId()
 }
 
 //____________________________________________________________________________________________________
-//  XStorage
+//	XStorage
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
@@ -440,7 +440,7 @@ void SAL_CALL FSStorage::copyToStorage( const uno::Reference< embed::XStorage >&
     catch( uno::Exception& )
     {
           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Can't copy raw stream")),
+        throw embed::StorageWrappedTargetException( ::rtl::OUString::createFromAscii( "Can't copy raw stream" ),
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
@@ -484,7 +484,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
             if ( isLocalFile_Impl( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
                 uno::Reference< ucb::XSimpleFileAccess > xSimpleFileAccess(
-                    m_pImpl->m_xFactory->createInstance(
+                    m_pImpl->m_xFactory->createInstance( 
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) ) ),
                     uno::UNO_QUERY_THROW );
                 xResult = xSimpleFileAccess->openFileReadWrite( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -502,10 +502,10 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
                         delete pStream;
                 }
             }
-
+    
             if ( !xResult.is() )
                 throw io::IOException();
-
+    
             if ( ( nOpenMode & embed::ElementModes::TRUNCATE ) )
             {
                 uno::Reference< io::XTruncate > xTrunc( xResult->getOutputStream(), uno::UNO_QUERY_THROW );
@@ -517,7 +517,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
             if ( ( nOpenMode & embed::ElementModes::TRUNCATE )
               || !::utl::UCBContentHelper::IsDocument( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
                 throw io::IOException(); // TODO: access denied
-
+    
             ::ucbhelper::Content aResultContent( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
             uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
             xResult = static_cast< io::XStream* >( new OFSInputStreamContainer( xInStream ) );
@@ -550,7 +550,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
     catch( uno::Exception& )
     {
           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Can't copy raw stream")),
+        throw embed::StorageWrappedTargetException( ::rtl::OUString::createFromAscii( "Can't copy raw stream" ),
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
@@ -559,7 +559,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
 }
 
 //-----------------------------------------------
-uno::Reference< io::XStream > SAL_CALL FSStorage::openEncryptedStreamElement(
+uno::Reference< io::XStream > SAL_CALL FSStorage::openEncryptedStreamElement( 
     const ::rtl::OUString&, sal_Int32, const ::rtl::OUString& )
         throw ( embed::InvalidStorageException,
                 lang::IllegalArgumentException,
@@ -629,8 +629,8 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
             throw io::IOException(); // there is no such folder
 
         ::ucbhelper::Content aResultContent( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
-        xResult = uno::Reference< embed::XStorage >(
-                            static_cast< OWeakObject* >( new FSStorage( aResultContent,
+        xResult = uno::Reference< embed::XStorage >( 
+                            static_cast< OWeakObject* >( new FSStorage(	aResultContent,
                                                                         nStorageMode,
                                                                         uno::Sequence< beans::PropertyValue >(),
                                                                         m_pImpl->m_xFactory ) ),
@@ -659,7 +659,7 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
     catch( uno::Exception& )
     {
           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Can't copy raw stream")),
+        throw embed::StorageWrappedTargetException( ::rtl::OUString::createFromAscii( "Can't copy raw stream" ),
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
@@ -696,7 +696,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const ::rt
         uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
 
         xTempResult = uno::Reference < io::XStream >(
-                    m_pImpl->m_xFactory->createInstance ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")) ),
+                    m_pImpl->m_xFactory->createInstance ( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
                     uno::UNO_QUERY_THROW );
         uno::Reference < io::XOutputStream > xTempOut = xTempResult->getOutputStream();
         uno::Reference < io::XInputStream > xTempIn = xTempResult->getInputStream();
@@ -734,7 +734,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const ::rt
     catch( uno::Exception& )
     {
           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Can't copy raw stream")),
+        throw embed::StorageWrappedTargetException( ::rtl::OUString::createFromAscii( "Can't copy raw stream" ),
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
@@ -932,14 +932,14 @@ void SAL_CALL FSStorage::renameElement( const ::rtl::OUString& aElementName, con
     catch( uno::Exception& )
     {
           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Can't copy raw stream")),
+        throw embed::StorageWrappedTargetException( ::rtl::OUString::createFromAscii( "Can't copy raw stream" ),
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
 }
 
 //-----------------------------------------------
-void SAL_CALL FSStorage::copyElementTo( const ::rtl::OUString& aElementName,
+void SAL_CALL FSStorage::copyElementTo(	const ::rtl::OUString& aElementName,
                                         const uno::Reference< embed::XStorage >& xDest,
                                         const ::rtl::OUString& aNewName )
         throw ( embed::InvalidStorageException,
@@ -976,7 +976,7 @@ void SAL_CALL FSStorage::copyElementTo( const ::rtl::OUString& aElementName,
             uno::Reference< embed::XStorage > xDestSubStor(
                                     xDest->openStorageElement( aNewName, embed::ElementModes::READWRITE ),
                                     uno::UNO_QUERY_THROW );
-
+    
             CopyContentToStorage_Impl( &aSourceContent, xDestSubStor );
         }
         else if ( ::utl::UCBContentHelper::IsDocument( aOwnURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
@@ -1017,14 +1017,14 @@ void SAL_CALL FSStorage::copyElementTo( const ::rtl::OUString& aElementName,
     catch( uno::Exception& )
     {
           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Can't copy raw stream")),
+        throw embed::StorageWrappedTargetException( ::rtl::OUString::createFromAscii( "Can't copy raw stream" ),
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
 }
 
 //-----------------------------------------------
-void SAL_CALL FSStorage::moveElementTo( const ::rtl::OUString& aElementName,
+void SAL_CALL FSStorage::moveElementTo(	const ::rtl::OUString& aElementName,
                                         const uno::Reference< embed::XStorage >& xDest,
                                         const ::rtl::OUString& aNewName )
         throw ( embed::InvalidStorageException,
@@ -1045,7 +1045,7 @@ void SAL_CALL FSStorage::moveElementTo( const ::rtl::OUString& aElementName,
 }
 
 //____________________________________________________________________________________________________
-//  XNameAccess
+//	XNameAccess
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
@@ -1097,7 +1097,7 @@ uno::Any SAL_CALL FSStorage::getByName( const ::rtl::OUString& aName )
     catch ( uno::Exception& )
     {
            uno::Any aCaught( ::cppu::getCaughtException() );
-        throw lang::WrappedTargetException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Can not open element!\n")),
+        throw lang::WrappedTargetException( ::rtl::OUString::createFromAscii( "Can not open element!\n" ),
                                             uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
                                                                                 uno::UNO_QUERY ),
                                             aCaught );
@@ -1121,7 +1121,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL FSStorage::getElementNames()
 
     uno::Sequence< ::rtl::OUString > aProps( 1 );
     ::rtl::OUString* pProps = aProps.getArray();
-    pProps[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+    pProps[0] = ::rtl::OUString::createFromAscii( "Title" );
     ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
     uno::Sequence< ::rtl::OUString > aResult;
@@ -1146,11 +1146,11 @@ uno::Sequence< ::rtl::OUString > SAL_CALL FSStorage::getElementNames()
     catch( ucb::InteractiveIOException& r )
     {
         if ( r.Code == ucb::IOErrorCode_NOT_EXISTING )
-            OSL_FAIL( "The folder does not exist!\n" );
+            OSL_ENSURE( sal_False, "The folder does not exist!\n" );
         else
         {
                uno::Any aCaught( ::cppu::getCaughtException() );
-            throw lang::WrappedTargetRuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Can not open storage!\n")),
+            throw lang::WrappedTargetRuntimeException( ::rtl::OUString::createFromAscii( "Can not open storage!\n" ),
                                             uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
                                                                                 uno::UNO_QUERY ),
                                             aCaught );
@@ -1163,7 +1163,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL FSStorage::getElementNames()
     catch ( uno::Exception& )
     {
            uno::Any aCaught( ::cppu::getCaughtException() );
-        throw lang::WrappedTargetRuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Can not open storage!\n")),
+        throw lang::WrappedTargetRuntimeException( ::rtl::OUString::createFromAscii( "Can not open storage!\n" ),
                                             uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
                                                                                 uno::UNO_QUERY ),
                                             aCaught );
@@ -1197,7 +1197,7 @@ sal_Bool SAL_CALL FSStorage::hasByName( const ::rtl::OUString& aName )
     catch ( uno::Exception& )
     {
            uno::Any aCaught( ::cppu::getCaughtException() );
-        throw lang::WrappedTargetRuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Can not open storage!\n")),
+        throw lang::WrappedTargetRuntimeException( ::rtl::OUString::createFromAscii( "Can not open storage!\n" ),
                                             uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
                                                                                 uno::UNO_QUERY ),
                                             aCaught );
@@ -1234,9 +1234,9 @@ sal_Bool SAL_CALL FSStorage::hasElements()
 
     if ( !GetContent() )
         throw io::IOException(); // TODO: error handling
-
+    
     uno::Sequence< ::rtl::OUString > aProps( 1 );
-    aProps[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TargetURL"));
+    aProps[0] = ::rtl::OUString::createFromAscii( "TargetURL" );
     ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
     try
@@ -1252,7 +1252,7 @@ sal_Bool SAL_CALL FSStorage::hasElements()
 
 
 //____________________________________________________________________________________________________
-//  XDisposable
+//	XDisposable
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
@@ -1305,7 +1305,7 @@ void SAL_CALL FSStorage::removeEventListener(
 }
 
 //____________________________________________________________________________________________________
-//  XPropertySet
+//	XPropertySet
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
@@ -1335,7 +1335,7 @@ void SAL_CALL FSStorage::setPropertyValue( const ::rtl::OUString& aPropertyName,
     if ( !m_pImpl )
         throw lang::DisposedException();
 
-    if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")) || aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OpenMode")) )
+    if ( aPropertyName.equalsAscii( "URL" ) || aPropertyName.equalsAscii( "OpenMode" ) )
         throw beans::PropertyVetoException(); // TODO
     else
         throw beans::UnknownPropertyException(); // TODO
@@ -1353,9 +1353,9 @@ uno::Any SAL_CALL FSStorage::getPropertyValue( const ::rtl::OUString& aPropertyN
     if ( !m_pImpl )
         throw lang::DisposedException();
 
-    if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")) )
+    if ( aPropertyName.equalsAscii( "URL" ) )
         return uno::makeAny( m_pImpl->m_aURL );
-    else if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OpenMode")) )
+    else if ( aPropertyName.equalsAscii( "OpenMode" ) )
         return uno::makeAny( m_pImpl->m_nMode );
 
     throw beans::UnknownPropertyException(); // TODO
@@ -1430,7 +1430,7 @@ void SAL_CALL FSStorage::removeVetoableChangeListener(
 }
 
 //____________________________________________________________________________________________________
-//  XHierarchicalStorageAccess
+//	XHierarchicalStorageAccess
 //____________________________________________________________________________________________________
 //-----------------------------------------------
 uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamElementByHierarchicalName( const ::rtl::OUString& sStreamPath, ::sal_Int32 nOpenMode )
@@ -1476,7 +1476,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
             if ( isLocalFile_Impl( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
                 uno::Reference< ucb::XSimpleFileAccess > xSimpleFileAccess(
-                    m_pImpl->m_xFactory->createInstance(
+                    m_pImpl->m_xFactory->createInstance( 
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) ) ),
                     uno::UNO_QUERY_THROW );
                 uno::Reference< io::XStream > xStream =
@@ -1501,10 +1501,10 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
                         delete pStream;
                 }
             }
-
+    
             if ( !xResult.is() )
                 throw io::IOException();
-
+    
             if ( ( nOpenMode & embed::ElementModes::TRUNCATE ) )
             {
                 uno::Reference< io::XTruncate > xTrunc( xResult->getOutputStream(), uno::UNO_QUERY_THROW );
@@ -1516,7 +1516,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
             if ( ( nOpenMode & embed::ElementModes::TRUNCATE )
               || !::utl::UCBContentHelper::IsDocument( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
                 throw io::IOException(); // TODO: access denied
-
+    
             ::ucbhelper::Content aResultContent( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
             uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
             xResult = static_cast< io::XStream* >( new OFSInputStreamContainer( xInStream ) );
@@ -1549,7 +1549,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
     catch( uno::Exception& )
     {
           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Can't copy raw stream")),
+        throw embed::StorageWrappedTargetException( ::rtl::OUString::createFromAscii( "Can't copy raw stream" ),
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }

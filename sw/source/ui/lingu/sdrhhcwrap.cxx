@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 #include <docsh.hxx>        //     "     "     "
 #include <wrtsh.hxx>        //  MakeVisible
 #include <view.hxx>
-#include <dcontact.hxx>     // Spelling von DrawObj
+#include <dcontact.hxx>		// Spelling von DrawObj
 #include <doc.hxx>        //     "     "     "
 #include <docary.hxx>
 #include <edtwin.hxx>
@@ -69,6 +69,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
     pView( pVw ),
     pTextObj( NULL ),
     pOutlView( NULL ),
+    pListIter( NULL ),
     nOptions( nConvOptions ),
     nDocIndex( 0 ),
     nSourceLang( nSourceLanguage ),
@@ -88,7 +89,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
     pOutlView->GetOutliner()->SetRefDevice(pView->GetWrtShell().getIDocumentDeviceAccess()->getPrinter( false ));
 
     // Hack: Es sollten alle SdrTextObj-Attribute an die EditEngine
-    //       uebertragen werden.
+    //		 uebertragen werden.
     pOutlView->SetBackgroundColor( Color( COL_WHITE ) );
 
 
@@ -96,7 +97,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
     Point aPoint( 0, 0 );
      Rectangle aRect( aPoint, aSize );
     pOutlView->SetOutputArea( aRect );
-//  SetText( NULL );
+//	SetText( NULL );
     ClearModifyFlag();
 }
 
@@ -109,6 +110,9 @@ SdrHHCWrapper::~SdrHHCWrapper()
         pSdrView->SdrEndTextEdit( sal_True );
         SetUpdateMode(sal_False);
         pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
+//		SetPaperSize( Size(1, 1) );
+//		SetText(NULL);
+//		pTextObj = NULL;
     }
     RemoveView( pOutlView );
     delete pOutlView;
@@ -139,14 +143,51 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
 
     sal_uInt16 n = nDocIndex;
 
-    std::list<SdrTextObj*> aTextObjs;
-    SwDrawContact::GetTextObjectsFromFmt( aTextObjs, pView->GetDocShell()->GetDoc() );
-    for ( std::list<SdrTextObj*>::iterator aIt = aTextObjs.begin(); aIt != aTextObjs.end(); aIt++ )
+    while( !bNextDoc && ( pListIter ||
+         n < pView->GetDocShell()->GetDoc()->GetSpzFrmFmts()->Count() ) )
     {
-        pTextObj = (*aIt);
+        while( !pTextObj && pListIter )
+        {
+            if( pListIter->IsMore() )
+            {
+                SdrObject* pSdrO = pListIter->Next();
+                if( pSdrO && pSdrO->IsA( TYPE(SdrTextObj) ) &&
+                    ( (SdrTextObj*) pSdrO )->HasText() )
+                    pTextObj = (SdrTextObj*) pSdrO;
+            }
+            else
+            {
+                delete pListIter;
+                pListIter = NULL;
+            }
+        }
+
+        if ( !pTextObj &&
+             n < pView->GetDocShell()->GetDoc()->GetSpzFrmFmts()->Count() )
+        {
+            SwFrmFmt* pFly = (*pView->GetDocShell()->GetDoc()->GetSpzFrmFmts())[ n ];
+            if( pFly->IsA( TYPE(SwDrawFrmFmt) ) )
+            {
+                SwClientIter aIter( (SwFmt&) *pFly );
+                if( aIter.First( TYPE(SwDrawContact) ) )
+                {
+                    SdrObject* pSdrO = ((SwDrawContact*)aIter())->GetMaster();
+                    if ( pSdrO )
+                    {
+                        if ( pSdrO->IsA( TYPE(SdrObjGroup) ) )
+                            pListIter = new SdrObjListIter( *pSdrO, IM_DEEPNOGROUPS );
+                        else if( pSdrO->IsA( TYPE(SdrTextObj) ) &&
+                                ( (SdrTextObj*) pSdrO )->HasText() )
+                            pTextObj = (SdrTextObj*) pSdrO;
+                    }
+                }
+            }
+            ++n;
+        }
         if ( pTextObj )
         {
             OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+
             if ( pParaObj )
             {
                 SetPaperSize( pTextObj->GetLogicRect().GetSize() );
@@ -171,17 +212,14 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
                     SetPaperSize( pTextObj->GetLogicRect().GetSize() );
                     SetUpdateMode(sal_True);
                     pView->GetWrtShell().MakeVisible(pTextObj->GetLogicRect());
-
+                    
                     pSdrView->SdrBeginTextEdit(pTextObj, pPV, &pView->GetEditWin(), sal_False, this, pOutlView, sal_True, sal_True);
                 }
                 else
                     SetUpdateMode(sal_False);
             }
-
             if ( !bNextDoc )
                 pTextObj = NULL;
-            else
-                break;
         }
     }
 

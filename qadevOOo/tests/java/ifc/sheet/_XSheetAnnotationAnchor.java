@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,14 @@ import com.sun.star.uno.UnoRuntime;
 */
 public class _XSheetAnnotationAnchor extends MultiMethodTest {
 
-    public XSheetAnnotationAnchor oObj = null;
+    public XSheetAnnotationAnchor oObj = null;  
     protected XSheetAnnotation anno = null;
 
     public void _getAnnotation() {
         anno = oObj.getAnnotation();
         tRes.tested("getAnnotation()",checkAnnotation());
     }
-
+    
     protected boolean checkAnnotation() {
         boolean res = true;
         res &= check_getAuthor();
@@ -62,7 +62,7 @@ public class _XSheetAnnotationAnchor extends MultiMethodTest {
         res &= check_setIsVisible();
         return res;
     }
-
+    
     /**
     * Gets the author of annotation. <p>
     * Returns <b>true</b> if not null value returned.
@@ -127,6 +127,6 @@ public class _XSheetAnnotationAnchor extends MultiMethodTest {
       }
 
       return bResult;
-    }
+    }    
 
 } 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,25 +54,25 @@ class SmXMLImportWrapper
 public:
     SmXMLImportWrapper(com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rRef)
         : xModel(rRef) {}
+    
+    ULONG Import(SfxMedium &rMedium);
 
-    sal_uLong Import(SfxMedium &rMedium);
-
-    sal_uLong ReadThroughComponent(
+    ULONG ReadThroughComponent(
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModelComponent,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
-        ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::Reference< 
             ::com::sun::star::beans::XPropertySet > & rPropSet,
         const sal_Char* pFilterName,
         sal_Bool bEncrypted );
 
-    sal_uLong ReadThroughComponent(
+    ULONG ReadThroughComponent(
          const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModelComponent,
         const sal_Char* pStreamName,
         const sal_Char* pCompatibilityStreamName,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
-        ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::Reference< 
             ::com::sun::star::beans::XPropertySet > & rPropSet,
         const sal_Char* pFilterName );
 };
@@ -96,6 +96,7 @@ class SmXMLImport : public SvXMLImport
         String aText;
 
 public:
+    // #110680#
     SmXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         sal_uInt16 nImportFlags=IMPORT_ALL);
@@ -107,11 +108,11 @@ public:
     // XUnoTunnel
     sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException);
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-
+    
     void SAL_CALL endDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException,
         ::com::sun::star::uno::RuntimeException );
-
+    
     SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
         const rtl::OUString &rLocalName,
         const com::sun::star::uno::Reference <
@@ -240,7 +241,7 @@ public:
         const rtl::OUString &rLocalName,
         const com::sun::star::uno::Reference <
         com::sun::star::xml::sax::XAttributeList> &xAttrList);
-
+    
     const SvXMLTokenMap &GetPresLayoutElemTokenMap();
     const SvXMLTokenMap &GetPresLayoutAttrTokenMap();
     const SvXMLTokenMap &GetFencedAttrTokenMap();
@@ -250,11 +251,11 @@ public:
     const SvXMLTokenMap &GetPresScriptEmptyElemTokenMap();
     const SvXMLTokenMap &GetPresTableElemTokenMap();
     const SvXMLTokenMap &GetColorTokenMap();
-
-    SmNodeStack & GetNodeStack()    { return aNodeStack; }
-    SmNode *GetTree()               { return aNodeStack.Pop(); }
-    sal_Bool GetSuccess()           { return bSuccess; }
-    String &GetText()               { return aText; }
+    
+    SmNodeStack & GetNodeStack() {return aNodeStack;}
+    SmNode *GetTree() { return aNodeStack.Pop();}
+    sal_Bool GetSuccess() { return bSuccess; }
+    String &GetText() { return aText;}
 
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);

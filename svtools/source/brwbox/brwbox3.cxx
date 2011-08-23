@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace svt
     using namespace ::com::sun::star::lang;
     using namespace utl;
 
-    Reference< XAccessible > getHeaderCell( BrowseBoxImpl::THeaderCellMap& _raHeaderCells,
+    Reference< XAccessible > getHeaderCell(	BrowseBoxImpl::THeaderCellMap& _raHeaderCells,
                                             sal_Int32 _nPos,
                                             AccessibleBrowseBoxObjType _eType,
                                             const Reference< XAccessible >& _rParent,
@@ -107,7 +107,7 @@ Reference< XAccessible > BrowseBox::CreateAccessible()
         Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if( xAccParent.is() )
         {
-            m_pImpl->m_pAccessible = getAccessibleFactory().createAccessibleBrowseBox(
+            m_pImpl->m_pAccessible = getAccessibleFactory().createAccessibleBrowseBox( 
                 xAccParent, *this
             );
         }
@@ -173,7 +173,7 @@ sal_Int32 BrowseBox::GetAccessibleControlCount() const
 
 Reference< XAccessible > BrowseBox::CreateAccessibleControl( sal_Int32 )
 {
-    DBG_ASSERT( sal_False, "BrowseBox::CreateAccessibleControl: to be overwritten!" );
+    DBG_ASSERT( FALSE, "BrowseBox::CreateAccessibleControl: to be overwritten!" );
     return NULL;
 }
 // -----------------------------------------------------------------------------
@@ -193,7 +193,7 @@ sal_Bool BrowseBox::ConvertPointToCellAddress(
 sal_Bool BrowseBox::ConvertPointToRowHeader( sal_Int32& rnRow, const Point& rPoint )
 {
     rnRow = GetRowAtYPosPixel(rPoint.Y());
-    //  sal_uInt16 nColumnId = GetColumnAtXPosPixel(rPoint.X());
+    //	USHORT nColumnId = GetColumnAtXPosPixel(rPoint.X());
     return rnRow != BROWSER_INVALIDID;// && nColumnId == 0;
 }
 // -----------------------------------------------------------------------------
@@ -245,7 +245,7 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
             aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( "," ) );
             aRetText += OUString::valueOf(sal_Int32(GetCurColumnId()));
             aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( "]" ) );
-#endif
+#endif			
             break;
         case ::svt::BBTYPE_ROWHEADERCELL:
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "RowHeaderCell" ) );
@@ -268,7 +268,7 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
 #endif
             break;
         default:
-            OSL_FAIL("BrowseBox::GetAccessibleName: invalid enum!");
+            OSL_ENSURE(0,"BrowseBox::GetAccessibleName: invalid enum!");
     }
     return aRetText;
 }
@@ -283,22 +283,22 @@ OUString BrowseBox::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxOb
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BrowseBox description" ) );
             break;
         case ::svt::BBTYPE_TABLE:
-            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TABLE description" ) );
+            //	aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TABLE description" ) );
             break;
         case ::svt::BBTYPE_ROWHEADERBAR:
-            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ROWHEADERBAR description" ) );
+            //	aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ROWHEADERBAR description" ) );
             break;
         case ::svt::BBTYPE_COLUMNHEADERBAR:
-            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "COLUMNHEADERBAR description" ) );
+            //	aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "COLUMNHEADERBAR description" ) );
             break;
         case ::svt::BBTYPE_TABLECELL:
-            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TABLECELL description" ) );
+            //	aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TABLECELL description" ) );
             break;
         case ::svt::BBTYPE_ROWHEADERCELL:
-            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ROWHEADERCELL description" ) );
+            //	aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ROWHEADERCELL description" ) );
             break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
-            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "COLUMNHEADERCELL description" ) );
+            //	aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "COLUMNHEADERCELL description" ) );
             break;
         case ::svt::BBTYPE_CHECKBOXCELL:
             break;
@@ -375,7 +375,7 @@ void BrowseBox::FillAccessibleStateSet(
         case ::svt::BBTYPE_ROWHEADERCELL:
         case ::svt::BBTYPE_COLUMNHEADERCELL:
         case ::svt::BBTYPE_CHECKBOXCELL:
-            OSL_FAIL("Illegal call here!");
+            OSL_ENSURE(0,"Illegal call here!");
             break;
     }
 }
@@ -398,7 +398,7 @@ void BrowseBox::GrabTableFocus()
     GrabFocus();
 }
 // -----------------------------------------------------------------------------
-String BrowseBox::GetCellText(long, sal_uInt16 ) const
+String BrowseBox::GetCellText(long, USHORT ) const
 {
     DBG_ASSERT(0,"This method has to be implemented by the derived classes! BUG!!");
     return String();
@@ -460,7 +460,7 @@ sal_Bool BrowseBox::IsCellFocusable() const
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-sal_Bool BrowseBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
+BOOL BrowseBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
 {
     return GoToRowColumnId( _nRow, GetColumnId( _nColumn ) );
 }
@@ -532,13 +532,13 @@ sal_Bool BrowseBox::IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) con
     return IsFieldVisible( _nRow, GetColumnId( _nColumnPos ) );
 }
 // -----------------------------------------------------------------------------
-String BrowseBox::GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const
+String BrowseBox::GetAccessibleCellText(long _nRow, USHORT _nColPos) const
 {
     return GetCellText( _nRow, GetColumnId( _nColPos ) );
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool BrowseBox::GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector )
+BOOL BrowseBox::GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector )
 {
     return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, nBase, rVector );
 }
@@ -553,7 +553,7 @@ void BrowseBox::GrabFocus()
     Control::GrabFocus();
 }
 // -----------------------------------------------------------------------------
-Reference< XAccessible > BrowseBox::GetAccessible( sal_Bool bCreate )
+Reference< XAccessible > BrowseBox::GetAccessible( BOOL bCreate )
 {
     return Control::GetAccessible( bCreate );
 }

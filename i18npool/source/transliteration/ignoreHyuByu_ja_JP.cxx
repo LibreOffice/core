@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,6 +37,7 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
+using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 

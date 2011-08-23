@@ -75,6 +75,10 @@
 .INCLUDE : unxsogi.mk
 .ENDIF
 
+.IF "$(COM)$(OS)$(CPU)" == "GCCSCOI"
+.INCLUDE : unxscoi.mk
+.ENDIF
+
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUXS"
 .INCLUDE : unxlngs.mk
 .ENDIF
@@ -115,6 +119,14 @@
 .INCLUDE : unxlnga.mk
 .ENDIF
 
+.IF "$(COM)$(OS)$(CPU)" == "ACCHPUXR"
+.INCLUDE : unxhpxr.mk
+.ENDIF
+
+.IF "$(COM)$(OS)$(CPU)" == "GCCHPUXR"
+.INCLUDE : unxhpgr.mk
+.ENDIF
+
 .IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDA"
 .INCLUDE : unxbsda.mk
 .ENDIF
@@ -127,14 +139,6 @@
 .INCLUDE : unxbsdi2.mk
 .ENDIF
 
-.IF "$(COM)$(CVER)$(OS)$(CPU)" == "GCCC341NETBSDI"
-.INCLUDE : unxbsdi3.mk
-.ENDIF
-
-.IF "$(COM)$(CVER)$(OS)$(CPU)" == "GCCC341NETBSDX"
-.INCLUDE : unxbsdx3.mk
-.ENDIF
-
 .IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDS"
 .INCLUDE : unxbsds.mk
 .ENDIF
@@ -145,10 +149,6 @@
 
 .IF "$(COM)$(OS)" == "GCCOPENBSD"
 .INCLUDE : unxobsd.mk
-.ENDIF
-
-.IF "$(COM)$(OS)" == "GCCDRAGONFLY"
-.INCLUDE : unxdfly.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXP"
@@ -203,9 +203,6 @@ DLLPOST!:=$(DLLPOST).$($(UNIXVERSIONNAMES)_MAJOR)
 KDE_CFLAGS:=-I$(KDE_ROOT)/include -DQT_CLEAN_NAMESPACE
 KDE_LIBS:=-lkdeui -lkdecore -lqt-mt
 SOLARLIB+=-L$(KDE_ROOT)/lib
-.IF "$(OS)$(CPU)" == "LINUXX"
-SOLARLIB+=-L$(KDE_ROOT)/lib64
-.ENDIF          # "$(OS)$(CPU)" == "LINUXX"
 .ENDIF          # "$(KDE_ROOT)"!=""
 .ENDIF          # "$(ENABLE_KDE)" != ""
 

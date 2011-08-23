@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -143,21 +143,21 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(	) throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    BoxType     m_aBoxType;
+    BoxType		m_aBoxType;
     ::accessibility::IComboListBoxHelper* m_pListBoxHelper;
-    ListItems   m_aAccessibleChildren;
-    sal_Int32   m_nVisibleLineCount;
+    ListItems	m_aAccessibleChildren;
+    sal_Int32	m_nVisibleLineCount;
     /// Index in parent.  This is settable from the outside.
-    sal_Int32   m_nIndexInParent;
-    sal_Int32   m_nLastTopEntry;
-    sal_uInt16      m_nLastSelectedPos;
-    bool        m_bDisableProcessEvent;
-    bool        m_bVisible;
+    sal_Int32	m_nIndexInParent;
+    sal_Int32	m_nLastTopEntry;
+    USHORT		m_nLastSelectedPos;
+    bool		m_bDisableProcessEvent;
+    bool		m_bVisible;
 
-
+    
 
     /// The currently selected item.
     ::com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible>
@@ -202,7 +202,7 @@ private:
         because this method of the base class returns the wrong parent.
     */
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >  m_xParent;
+        ::com::sun::star::accessibility::XAccessible >	m_xParent;
 
 
     /** dispose all items aand clears the container
@@ -212,8 +212,8 @@ private:
     void adjustEntriesIndexInParent(ListItems::iterator& _aBegin,::std::mem_fun_t<bool,VCLXAccessibleListItem>& _rMemFun);
     void UpdateEntryRange_Impl (void);
 protected:
-    void UpdateSelection_Impl (sal_uInt16 nPos = 0);
-    sal_Bool checkEntrySelected(sal_uInt16 _nPos,
+    void UpdateSelection_Impl (USHORT nPos = 0);
+    BOOL checkEntrySelected(USHORT _nPos,
                             ::com::sun::star::uno::Any& _rNewValue,
                             ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxNewAcc);
 private:

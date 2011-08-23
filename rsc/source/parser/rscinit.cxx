@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@
 #include <yyrscyacc.hxx>
 
 /****************** M a c r o s ******************************************/
-#define INS_WINBIT( pClass, WinBit )        \
+#define INS_WINBIT( pClass, WinBit )		\
     InsWinBit( pClass, #WinBit, n##WinBit##Id );
 
 /****************** C O D E **********************************************/
@@ -83,115 +83,119 @@ void NameToVerCtrl( RSCINST & aVersion, RscTop * pClass,
 
 /*************************************************************************
 |*
-|*    RscTypCont::Init()
+|*	  RscTypCont::Init()
+|*
+|*	  Beschreibung
+|*	  Ersterstellung	MM 22.03.91
+|*	  Letzte Aenderung	MM 27.06.91
 |*
 *************************************************************************/
 void RscTypCont::Init()
 {
-    RscEnum *   pFieldUnits;
-    RscEnum *   pTimeFieldFormat;
-    RscEnum *   pColor;
-    RscEnum *   pMapUnit;
-    RscEnum *   pKey;
-    RscEnum *   pTriState;
-    RscEnum *   pMessButtons;
-    RscEnum *   pMessDefButton;
-    RscTupel *  pGeometry;
-    RscArray *  pLangGeometry;
-    RscCont  *  pStringList;
-    RscArray *  pLangStringList;
-    RscTupel *  pStringTupel;
-    RscTupel *  pStringLongTupel;
-    RscCont  *  pStringTupelList;
-    RscCont  *  pStringLongTupelList;
-    RscArray *  pLangStringTupelList;
-    RscArray *  pLangStringLongTupelList;
+    RscEnum *	pFieldUnits;
+    RscEnum *	pTimeFieldFormat;
+    RscEnum *	pColor;
+    RscEnum *	pMapUnit;
+    RscEnum *	pKey;
+    RscEnum *	pTriState;
+    RscEnum *	pMessButtons;
+    RscEnum *	pMessDefButton;
+    RscTupel *	pGeometry;
+    RscArray *	pLangGeometry;
+    RscCont  *	pStringList;
+    RscArray *	pLangStringList;
+    RscTupel *	pStringTupel;
+    RscTupel *	pStringLongTupel;
+    RscCont  *	pStringTupelList;
+    RscCont  *	pStringLongTupelList;
+    RscArray *	pLangStringTupelList;
+    RscArray *	pLangStringLongTupelList;
 
-    RscTop   *  pClassMgr;
-    RscTop   *  pClassString;
-    RscTop   *  pClassStringArray;
-    RscTop   *  pClassBitmap;
-    RscTop   *  pClassColor;
-    RscTop   *  pClassImage;
-    RscTop   *  pClassImageList;
-    RscTop   *  pClassWindow;
-    RscTop   *  pClassSystemWindow;
-    RscTop   *  pClassWorkWindow;
-    RscTop   *  pClassDialog;
-    RscTop   *  pClassModalDialog;
-    RscTop   *  pClassModelessDialog;
-    RscTop   *  pClassControl;
-    RscTop   *  pClassButton;
-    RscTop   *  pClassCheckBox;
-    RscTop   *  pClassPushButton;
-    RscTop   *  pClassOKButton;
-    RscTop   *  pClassCancelButton;
-    RscTop   *  pClassHelpButton;
-    RscTop   *  pClassRadioButton;
-    RscTop   *  pClassImageRadioButton;
-    RscTop   *  pClassImageButton;
-    RscTop   *  pClassTriStateBox;
-    RscTop   *  pClassEdit;
-    RscTop   *  pClassMultiLineEdit;
-    RscTop   *  pClassScrollBar;
-    RscTop   *  pClassListBox;
-    RscTop   *  pClassMultiListBox;
-    RscTop   *  pClassComboBox;
-    RscTop   *  pClassFixedText;
-    RscTop   *  pClassFixedBitmap;
-    RscTop   *  pClassFixedImage;
-    RscTop   *  pClassGroupBox;
-    RscTop   *  pClassKeyCode;
-    RscTop   *  pLangClassKeyCode;
-    RscTop   *  pClassAccelItem;
-    RscTop   *  pClassAccel;
-    RscTop   *  pClassMenuItem;
-    RscTop   *  pClassMenu;
-    RscTop   *  pClassMenuButton;
-    RscTop   *  pClassMessBox;
-    RscTop   *  pClassInfoBox;
-    RscTop   *  pClassWarningBox;
-    RscTop   *  pClassErrorBox;
-    RscTop   *  pClassQueryBox;
-    RscTop   *  pClassSplitter;
-    RscTop   *  pClassSplitWindow;
-    RscTop   *  pClassSpinButton;
-    RscTop   *  pClassTime;
-    RscTop   *  pClassDate;
-    RscTop   *  pClassSpinField;
-    RscTop   *  pClassPatternField;
-    RscTop   *  pClassNumericField;
-    RscTop   *  pClassMetricField;
-    RscTop   *  pClassCurrencyField;
-    RscTop   *  pClassLongCurrencyField;
-    RscTop   *  pClassDateField;
-    RscTop   *  pClassTimeField;
-    RscTop   *  pClassPatternBox;
-    RscTop   *  pClassNumericBox;
-    RscTop   *  pClassMetricBox;
-    RscTop   *  pClassCurrencyBox;
-    RscTop   *  pClassLongCurrencyBox;
-    RscTop   *  pClassDateBox;
-    RscTop   *  pClassTimeBox;
-    RscTop   *  pClassDockingWindow;
-    RscTop   *  pClassToolBoxItem;
-    RscTop   *  pClassToolBox;
-    RscTop   *  pClassStatusBar;
-    RscTop   *  pClassMoreButton;
-    RscTop   *  pClassFloatingWindow;
-    RscTop   *  pClassTabPage;
-    RscTop   *  pClassTabDialog;
-    RscTop   *  pClassTabControlItem;
-    RscTop   *  pClassTabControl;
-    RscTop   *  pClassFixedLine;
-    RscTop   *  pClassScrollBarBox;
-    RscTop *    pClassSfxStyleFamilyItem;
-    RscTop *    pClassSfxTemplateDialog;
-    RscTop *    pClassSfxSlotInfo;
+    RscTop	 *	pClassMgr;
+    RscTop	 *	pClassString;
+    RscTop	 *	pClassStringArray;
+    RscTop	 *	pClassBitmap;
+    RscTop	 *	pClassColor;
+    RscTop	 *	pClassImage;
+    RscTop	 *	pClassImageList;
+    RscTop	 *	pClassWindow;
+    RscTop	 *	pClassSystemWindow;
+    RscTop	 *	pClassWorkWindow;
+    RscTop	 *	pClassDialog;
+    RscTop	 *	pClassModalDialog;
+    RscTop	 *	pClassModelessDialog;
+    RscTop	 *	pClassControl;
+    RscTop	 *	pClassButton;
+    RscTop	 *	pClassCheckBox;
+    RscTop	 *	pClassPushButton;
+    RscTop	 *	pClassOKButton;
+    RscTop	 *	pClassCancelButton;
+    RscTop	 *	pClassHelpButton;
+    RscTop	 *	pClassRadioButton;
+    RscTop	 *	pClassImageRadioButton;
+    RscTop	 *	pClassImageButton;
+    RscTop	 *	pClassTriStateBox;
+    RscTop	 *	pClassEdit;
+    RscTop	 *	pClassMultiLineEdit;
+    RscTop	 *	pClassScrollBar;
+    RscTop	 *	pClassListBox;
+    RscTop	 *	pClassMultiListBox;
+    RscTop	 *	pClassComboBox;
+    RscTop	 *	pClassFixedText;
+    RscTop	 *	pClassFixedBitmap;
+    RscTop	 *	pClassFixedImage;
+    RscTop	 *	pClassGroupBox;
+    RscTop	 *	pClassKeyCode;
+    RscTop	 *	pLangClassKeyCode;
+    RscTop	 *	pClassAccelItem;
+    RscTop	 *	pClassAccel;
+    RscTop	 *	pClassMenuItem;
+    RscTop	 *	pClassMenu;
+    RscTop	 *	pClassMenuButton;
+    RscTop	 *	pClassMessBox;
+    RscTop	 *	pClassInfoBox;
+    RscTop	 *	pClassWarningBox;
+    RscTop	 *	pClassErrorBox;
+    RscTop	 *	pClassQueryBox;
+    RscTop	 *	pClassSplitter;
+    RscTop	 *	pClassSplitWindow;
+    RscTop	 *	pClassSpinButton;
+    RscTop	 *	pClassTime;
+    RscTop	 *	pClassDate;
+    RscTop	 *	pClassSpinField;
+    RscTop	 *	pClassPatternField;
+    RscTop	 *	pClassNumericField;
+    RscTop	 *	pClassMetricField;
+    RscTop	 *	pClassCurrencyField;
+    RscTop	 *	pClassLongCurrencyField;
+    RscTop	 *	pClassDateField;
+    RscTop	 *	pClassTimeField;
+    RscTop	 *	pClassPatternBox;
+    RscTop	 *	pClassNumericBox;
+    RscTop	 *	pClassMetricBox;
+    RscTop	 *	pClassCurrencyBox;
+    RscTop	 *	pClassLongCurrencyBox;
+    RscTop	 *	pClassDateBox;
+    RscTop	 *	pClassTimeBox;
+    RscTop	 *	pClassDockingWindow;
+    RscTop	 *	pClassToolBoxItem;
+    RscTop	 *	pClassToolBox;
+    RscTop	 *	pClassStatusBar;
+    RscTop	 *	pClassMoreButton;
+    RscTop	 *	pClassFloatingWindow;
+    RscTop	 *	pClassTabPage;
+    RscTop	 *	pClassTabDialog;
+    RscTop	 *	pClassTabControlItem;
+    RscTop	 *	pClassTabControl;
+    RscTop	 *	pClassFixedLine;
+    RscTop	 *	pClassScrollBarBox;
+    RscTop *	pClassSfxStyleFamilyItem;
+    RscTop *	pClassSfxTemplateDialog;
+    RscTop *	pClassSfxSlotInfo;
 
-    Atom        nId;
+    Atom		nId;
 
-    aNmTb.SetSort( sal_False );
+    aNmTb.SetSort( FALSE );
 {
     /********** C O M P I L E R   T Y P E N ******************************/
     aNmTb.Put( "LINE",               LINE,           (long)0 );
@@ -204,14 +208,12 @@ void RscTypCont::Init()
     aNmTb.Put( "writeifset",         WRITEIFSET,     (long)0  );
 
 /* Werte fuer Aufzaehlungstypen */
-    aNmTb.Put( "TRUE",               BOOLEAN,        (long)sal_True  );
-    aNmTb.Put( "FALSE",              BOOLEAN,        (long)sal_False );
+    aNmTb.Put( "TRUE",               BOOLEAN,        (long)TRUE  );
+    aNmTb.Put( "FALSE",              BOOLEAN,        (long)FALSE );
 
-    #if 0
 /* Vordefinierte HilfeId's */
     aNmTb.Put( "HELP_INDEX",         NUMBER,     OOO_HELP_INDEX      );
     aNmTb.Put( "HELP_HELPONHELP",    NUMBER,     OOO_HELP_HELPONHELP );
-    #endif
 
     aNmTb.Put( "XSCALE",             XSCALE ,        (long)0     );
     aNmTb.Put( "YSCALE",             YSCALE ,        (long)0     );
@@ -222,7 +224,7 @@ void RscTypCont::Init()
     aNmTb.Put( "ZoomInOutputSize",   INZOOMOUTPUTSIZE,(long)0    );
     aNmTb.Put( "FloatingPos",        FLOATINGPOS,    (long)0     );
 }
-    /********** B A S I S   T Y P E N ************************************/
+    /********** B A S I S	T Y P E N ************************************/
 {
     /********** S H O R T ************************************************/
     aShort.SetRange( -32768, 32767 );
@@ -261,141 +263,149 @@ void RscTypCont::Init()
     nWinBitVarId = aNmTb.Put( "_WinBits", VARNAME );
 
     // Windows
-    nBorderId       = pHS->getID( "WB_BORDER" );
-    aWinBits.SetConstant( nBorderId, sal::static_int_cast<sal_Int32>(WB_BORDER) );
-    nHideId         = pHS->getID( "WB_HIDE" );
-    aWinBits.SetConstant( nHideId, sal::static_int_cast<sal_Int32>(WB_HIDE) );
+    nBorderId		= pHS->getID( "WB_BORDER" );
+    aWinBits.SetConstant( nBorderId, sal::static_int_cast<INT32>(WB_BORDER) );
+    nHideId 		= pHS->getID( "WB_HIDE" );
+    aWinBits.SetConstant( nHideId, sal::static_int_cast<INT32>(WB_HIDE) );
     nClipChildrenId = pHS->getID( "WB_CLIPCHILDREN" );
-    aWinBits.SetConstant( nClipChildrenId, sal::static_int_cast<sal_Int32>(WB_CLIPCHILDREN) );
-    nSizeableId     = pHS->getID( "WB_SIZEABLE" );
-    aWinBits.SetConstant( nSizeableId, sal::static_int_cast<sal_Int32>(WB_SIZEABLE) );
-    nMoveableId     = pHS->getID( "WB_MOVEABLE" );
-    aWinBits.SetConstant( nMoveableId, sal::static_int_cast<sal_Int32>(WB_MOVEABLE) );
-    nMinimizeId     = pHS->getID( "WB_MINABLE" );
+    aWinBits.SetConstant( nClipChildrenId, sal::static_int_cast<INT32>(WB_CLIPCHILDREN) );
+    nSizeableId 	= pHS->getID( "WB_SIZEABLE" );
+    aWinBits.SetConstant( nSizeableId, sal::static_int_cast<INT32>(WB_SIZEABLE) );
+    nMoveableId 	= pHS->getID( "WB_MOVEABLE" );
+    aWinBits.SetConstant( nMoveableId, sal::static_int_cast<INT32>(WB_MOVEABLE) );
+    nMinimizeId 	= pHS->getID( "WB_MINABLE" );
     aWinBits.SetConstant( nMinimizeId, 0 /*WB_MINABLE*/ );
-    nMaximizeId     = pHS->getID( "WB_MAXABLE" );
+    nMaximizeId 	= pHS->getID( "WB_MAXABLE" );
     aWinBits.SetConstant( nMaximizeId, 0 /*WB_MAXABLE*/ );
-    nCloseableId    = pHS->getID( "WB_CLOSEABLE" );
-    aWinBits.SetConstant( nCloseableId, sal::static_int_cast<sal_Int32>(WB_CLOSEABLE) );
-    nAppId          = pHS->getID( "WB_APP" );
-    aWinBits.SetConstant( nAppId, sal::static_int_cast<sal_Int32>(WB_APP) );
-    nTabstopId      = pHS->getID( "WB_TABSTOP" );
-    aWinBits.SetConstant( nTabstopId, sal::static_int_cast<sal_Int32>(WB_TABSTOP) );
-    nGroupId        = pHS->getID( "WB_GROUP" );
-    aWinBits.SetConstant( nGroupId, sal::static_int_cast<sal_Int32>(WB_GROUP) );
-    nSysmodalId     = pHS->getID( "WB_SYSMODAL" );
+    nCloseableId	= pHS->getID( "WB_CLOSEABLE" );
+    aWinBits.SetConstant( nCloseableId, sal::static_int_cast<INT32>(WB_CLOSEABLE) );
+    nAppId			= pHS->getID( "WB_APP" );
+    aWinBits.SetConstant( nAppId, sal::static_int_cast<INT32>(WB_APP) );
+    nTabstopId		= pHS->getID( "WB_TABSTOP" );
+    aWinBits.SetConstant( nTabstopId, sal::static_int_cast<INT32>(WB_TABSTOP) );
+    nGroupId		= pHS->getID( "WB_GROUP" );
+    aWinBits.SetConstant( nGroupId, sal::static_int_cast<INT32>(WB_GROUP) );
+    nSysmodalId 	= pHS->getID( "WB_SYSMODAL" );
     aWinBits.SetConstant( nSysmodalId, 0 /*WB_SYSMODAL*/ );
 }
 {
-    nLeftId         = pHS->getID( "WB_LEFT" );
-    aWinBits.SetConstant( nLeftId, sal::static_int_cast<sal_Int32>(WB_LEFT) );
-    nCenterId       = pHS->getID( "WB_CENTER" );
-    aWinBits.SetConstant( nCenterId, sal::static_int_cast<sal_Int32>(WB_CENTER) );
-    nRightId        = pHS->getID( "WB_RIGHT" );
-    aWinBits.SetConstant( nRightId, sal::static_int_cast<sal_Int32>(WB_RIGHT) );
-    nTopId          = pHS->getID( "WB_TOP" );
-    aWinBits.SetConstant( nTopId, sal::static_int_cast<sal_Int32>(WB_TOP) );
-    nVCenterId      = pHS->getID( "WB_VCENTER" );
-    aWinBits.SetConstant( nVCenterId, sal::static_int_cast<sal_Int32>(WB_VCENTER) );
-    nBottomId       = pHS->getID( "WB_BOTTOM" );
-    aWinBits.SetConstant( nBottomId, sal::static_int_cast<sal_Int32>(WB_BOTTOM) );
-    nHScrollId      = pHS->getID( "WB_HSCROLL" );
-    aWinBits.SetConstant( nHScrollId, sal::static_int_cast<sal_Int32>(WB_HSCROLL) );
-    nVScrollId      = pHS->getID( "WB_VSCROLL" );
-    aWinBits.SetConstant( nVScrollId, sal::static_int_cast<sal_Int32>(WB_VSCROLL) );
-    nSortId         = pHS->getID( "WB_SORT" );
-    aWinBits.SetConstant( nSortId, sal::static_int_cast<sal_Int32>(WB_SORT) );
-    nDefaultId          = pHS->getID( "WB_DEFBUTTON" );
-    aWinBits.SetConstant( nDefaultId, sal::static_int_cast<sal_Int32>(WB_DEFBUTTON) );
-    nRepeatId           = pHS->getID( "WB_REPEAT" );
-    aWinBits.SetConstant( nRepeatId, sal::static_int_cast<sal_Int32>(WB_REPEAT) );
-    nSVLookId           = pHS->getID( "WB_SVLOOK" );
-    aWinBits.SetConstant( nSVLookId, sal::static_int_cast<sal_Int32>(WB_3DLOOK) );
-    nDropDownId         = pHS->getID( "WB_DROPDOWN" );
-    aWinBits.SetConstant( nDropDownId, sal::static_int_cast<sal_Int32>(WB_DROPDOWN) );
-    nPassWordId         = pHS->getID( "WB_PASSWORD" );
-    aWinBits.SetConstant( nPassWordId, sal::static_int_cast<sal_Int32>(WB_PASSWORD) );
-    nReadOnlyId         = pHS->getID( "WB_READONLY" );
-    aWinBits.SetConstant( nReadOnlyId, sal::static_int_cast<sal_Int32>(WB_READONLY) );
-    nAutoSizeId         = pHS->getID( "WB_AUTOSIZE" );
-    aWinBits.SetConstant( nAutoSizeId, sal::static_int_cast<sal_Int32>(WB_AUTOSIZE) );
-    nSpinId             = pHS->getID( "WB_SPIN" );
-    aWinBits.SetConstant( nSpinId, sal::static_int_cast<sal_Int32>(WB_SPIN) );
-    nTabControlId       = pHS->getID( "WB_DIALOGCONTROL" );
-    aWinBits.SetConstant( nTabControlId, sal::static_int_cast<sal_Int32>(WB_DIALOGCONTROL) );
-    nSimpleModeId       = pHS->getID( "WB_SIMPLEMODE" );
-    aWinBits.SetConstant( nSimpleModeId, sal::static_int_cast<sal_Int32>(WB_SIMPLEMODE) );
-    nDragId             = pHS->getID( "WB_DRAG" );
-    aWinBits.SetConstant( nDragId, sal::static_int_cast<sal_Int32>(WB_DRAG) );
-    nScrollId           = pHS->getID( "WB_SCROLL" );
-    aWinBits.SetConstant( nScrollId, sal::static_int_cast<sal_Int32>(WB_SCROLL) );
-    nZoomableId         = pHS->getID( "WB_ZOOMABLE" );
-    aWinBits.SetConstant( nZoomableId, sal::static_int_cast<sal_Int32>(WB_ROLLABLE) );
+    nLeftId 		= pHS->getID( "WB_LEFT" );
+    aWinBits.SetConstant( nLeftId, sal::static_int_cast<INT32>(WB_LEFT) );
+    nCenterId		= pHS->getID( "WB_CENTER" );
+    aWinBits.SetConstant( nCenterId, sal::static_int_cast<INT32>(WB_CENTER) );
+    nRightId		= pHS->getID( "WB_RIGHT" );
+    aWinBits.SetConstant( nRightId, sal::static_int_cast<INT32>(WB_RIGHT) );
+    nTopId 		    = pHS->getID( "WB_TOP" );
+    aWinBits.SetConstant( nTopId, sal::static_int_cast<INT32>(WB_TOP) );
+    nVCenterId		= pHS->getID( "WB_VCENTER" );
+    aWinBits.SetConstant( nVCenterId, sal::static_int_cast<INT32>(WB_VCENTER) );
+    nBottomId		= pHS->getID( "WB_BOTTOM" );
+    aWinBits.SetConstant( nBottomId, sal::static_int_cast<INT32>(WB_BOTTOM) );
+    nHScrollId		= pHS->getID( "WB_HSCROLL" );
+    aWinBits.SetConstant( nHScrollId, sal::static_int_cast<INT32>(WB_HSCROLL) );
+    nVScrollId		= pHS->getID( "WB_VSCROLL" );
+    aWinBits.SetConstant( nVScrollId, sal::static_int_cast<INT32>(WB_VSCROLL) );
+    nSortId 		= pHS->getID( "WB_SORT" );
+    aWinBits.SetConstant( nSortId, sal::static_int_cast<INT32>(WB_SORT) );
+    nDefaultId			= pHS->getID( "WB_DEFBUTTON" );
+    aWinBits.SetConstant( nDefaultId, sal::static_int_cast<INT32>(WB_DEFBUTTON) );
+    nRepeatId			= pHS->getID( "WB_REPEAT" );
+    aWinBits.SetConstant( nRepeatId, sal::static_int_cast<INT32>(WB_REPEAT) );
+    nSVLookId			= pHS->getID( "WB_SVLOOK" );
+    aWinBits.SetConstant( nSVLookId, sal::static_int_cast<INT32>(WB_3DLOOK) );
+    nDropDownId 		= pHS->getID( "WB_DROPDOWN" );
+    aWinBits.SetConstant( nDropDownId, sal::static_int_cast<INT32>(WB_DROPDOWN) );
+    nPassWordId 		= pHS->getID( "WB_PASSWORD" );
+    aWinBits.SetConstant( nPassWordId, sal::static_int_cast<INT32>(WB_PASSWORD) );
+    nReadOnlyId 		= pHS->getID( "WB_READONLY" );
+    aWinBits.SetConstant( nReadOnlyId, sal::static_int_cast<INT32>(WB_READONLY) );
+    nAutoSizeId 		= pHS->getID( "WB_AUTOSIZE" );
+    aWinBits.SetConstant( nAutoSizeId, sal::static_int_cast<INT32>(WB_AUTOSIZE) );
+    nSpinId 			= pHS->getID( "WB_SPIN" );
+    aWinBits.SetConstant( nSpinId, sal::static_int_cast<INT32>(WB_SPIN) );
+    nTabControlId		= pHS->getID( "WB_DIALOGCONTROL" );
+    aWinBits.SetConstant( nTabControlId, sal::static_int_cast<INT32>(WB_DIALOGCONTROL) );
+    nSimpleModeId		= pHS->getID( "WB_SIMPLEMODE" );
+    aWinBits.SetConstant( nSimpleModeId, sal::static_int_cast<INT32>(WB_SIMPLEMODE) );
+    nDragId 			= pHS->getID( "WB_DRAG" );
+    aWinBits.SetConstant( nDragId, sal::static_int_cast<INT32>(WB_DRAG) );
+    nScrollId			= pHS->getID( "WB_SCROLL" );
+    aWinBits.SetConstant( nScrollId, sal::static_int_cast<INT32>(WB_SCROLL) );
+    nZoomableId 		= pHS->getID( "WB_ZOOMABLE" );
+    aWinBits.SetConstant( nZoomableId, sal::static_int_cast<INT32>(WB_ROLLABLE) );
     nHideWhenDeactivateId = pHS->getID( "WB_HIDEWHENDEACTIVATE" );
     aWinBits.SetConstant( nHideWhenDeactivateId, 0 /*WB_HIDEWHENDEACTIVATE*/ );
-    nAutoHScrollId      = pHS->getID( "WB_AUTOHSCROLL" );
-    aWinBits.SetConstant( nAutoHScrollId, sal::static_int_cast<sal_Int32>(WB_AUTOHSCROLL) );
-    nAutoVScrollId      = pHS->getID( "WB_AUTOVSCROLL" );
-    aWinBits.SetConstant( nAutoVScrollId, sal::static_int_cast<sal_Int32>(WB_AUTOVSCROLL) );
-    nDDExtraWidthId     = pHS->getID( "WB_DDEXTRAWIDTH" );
+    nAutoHScrollId		= pHS->getID( "WB_AUTOHSCROLL" );
+    aWinBits.SetConstant( nAutoHScrollId, sal::static_int_cast<INT32>(WB_AUTOHSCROLL) );
+    nAutoVScrollId		= pHS->getID( "WB_AUTOVSCROLL" );
+    aWinBits.SetConstant( nAutoVScrollId, sal::static_int_cast<INT32>(WB_AUTOVSCROLL) );
+    nDDExtraWidthId 	= pHS->getID( "WB_DDEXTRAWIDTH" );
     aWinBits.SetConstant( nDDExtraWidthId, 0 /*WB_DDEXTRAWIDTH*/ );
-    nWordBreakId        = pHS->getID( "WB_WORDBREAK" );
-    aWinBits.SetConstant( nWordBreakId, sal::static_int_cast<sal_Int32>(WB_WORDBREAK) );
-    nLeftLabelId        = pHS->getID( "WB_LEFTLABEL" );
+    nWordBreakId		= pHS->getID( "WB_WORDBREAK" );
+    aWinBits.SetConstant( nWordBreakId, sal::static_int_cast<INT32>(WB_WORDBREAK) );
+    nLeftLabelId		= pHS->getID( "WB_LEFTLABEL" );
     aWinBits.SetConstant( nLeftLabelId, 0 /*WB_LEFTLABEL*/ );
-    nHasLinesId         = pHS->getID( "WB_HASLINES" );
-    aWinBits.SetConstant( nHasLinesId, sal::static_int_cast<sal_Int32>(WB_HASLINES) );
-    nHasButtonsId       = pHS->getID( "WB_HASBUTTONS" );
-    aWinBits.SetConstant( nHasButtonsId, sal::static_int_cast<sal_Int32>(WB_HASBUTTONS) );
-    nRectStyleId        = pHS->getID( "WB_RECTSTYLE" );
-    aWinBits.SetConstant( nRectStyleId, sal::static_int_cast<sal_Int32>(WB_RECTSTYLE) );
-    nLineSpacingId      = pHS->getID( "WB_LINESPACING" );
-    aWinBits.SetConstant( nLineSpacingId, sal::static_int_cast<sal_Int32>(WB_LINESPACING) );
-    nSmallStyleId       = pHS->getID( "WB_SMALLSTYLE" );
-    aWinBits.SetConstant( nSmallStyleId, sal::static_int_cast<sal_Int32>(WB_SMALLSTYLE) );
-    nEnableResizingId   = pHS->getID( "WB_ENABLERESIZING" );
+    nHasLinesId 		= pHS->getID( "WB_HASLINES" );
+    aWinBits.SetConstant( nHasLinesId, sal::static_int_cast<INT32>(WB_HASLINES) );
+    nHasButtonsId		= pHS->getID( "WB_HASBUTTONS" );
+    aWinBits.SetConstant( nHasButtonsId, sal::static_int_cast<INT32>(WB_HASBUTTONS) );
+    nRectStyleId		= pHS->getID( "WB_RECTSTYLE" );
+    aWinBits.SetConstant( nRectStyleId, sal::static_int_cast<INT32>(WB_RECTSTYLE) );
+    nLineSpacingId		= pHS->getID( "WB_LINESPACING" );
+    aWinBits.SetConstant( nLineSpacingId, sal::static_int_cast<INT32>(WB_LINESPACING) );
+    nSmallStyleId		= pHS->getID( "WB_SMALLSTYLE" );
+    aWinBits.SetConstant( nSmallStyleId, sal::static_int_cast<INT32>(WB_SMALLSTYLE) );
+    nEnableResizingId	= pHS->getID( "WB_ENABLERESIZING" );
     aWinBits.SetConstant( nEnableResizingId, 0 /*WB_ENABLERESIZING*/ );
-    nDockableId         = pHS->getID( "WB_DOCKABLE" );
-    aWinBits.SetConstant( nDockableId, sal::static_int_cast<sal_Int32>(WB_DOCKABLE) );
-    nScaleId            = pHS->getID( "WB_SCALE" );
-    aWinBits.SetConstant( nScaleId, sal::static_int_cast<sal_Int32>(WB_SCALE) );
-    nIgnoreTabId        = pHS->getID( "WB_IGNORETAB" );
-    aWinBits.SetConstant( nIgnoreTabId, sal::static_int_cast<sal_Int32>(WB_IGNORETAB) );
-    nNoSplitDrawId      = pHS->getID( "WB_NOSPLITDRAW" );
-    aWinBits.SetConstant( nNoSplitDrawId, sal::static_int_cast<sal_Int32>(WB_NOSPLITDRAW) );
-    nTopImageId         = pHS->getID( "WB_TOPIMAGE" );
-    aWinBits.SetConstant( nTopImageId, sal::static_int_cast<sal_Int32>(WB_TOPIMAGE) );
-    nNoLabelId          = pHS->getID( "WB_NOLABEL" );
-    aWinBits.SetConstant( nNoLabelId, sal::static_int_cast<sal_Int32>(WB_NOLABEL) );
-    nVertId             = pHS->getID( "WB_VERT" );
-    aWinBits.SetConstant( nVertId, sal::static_int_cast<sal_Int32>(WB_VERT) );
+    nDockableId 		= pHS->getID( "WB_DOCKABLE" );
+    aWinBits.SetConstant( nDockableId, sal::static_int_cast<INT32>(WB_DOCKABLE) );
+    nScaleId			= pHS->getID( "WB_SCALE" );
+    aWinBits.SetConstant( nScaleId, sal::static_int_cast<INT32>(WB_SCALE) );
+    nIgnoreTabId		= pHS->getID( "WB_IGNORETAB" );
+    aWinBits.SetConstant( nIgnoreTabId, sal::static_int_cast<INT32>(WB_IGNORETAB) );
+    nNoSplitDrawId		= pHS->getID( "WB_NOSPLITDRAW" );
+    aWinBits.SetConstant( nNoSplitDrawId, sal::static_int_cast<INT32>(WB_NOSPLITDRAW) );
+    nTopImageId 		= pHS->getID( "WB_TOPIMAGE" );
+    aWinBits.SetConstant( nTopImageId, sal::static_int_cast<INT32>(WB_TOPIMAGE) );
+    nNoLabelId			= pHS->getID( "WB_NOLABEL" );
+    aWinBits.SetConstant( nNoLabelId, sal::static_int_cast<INT32>(WB_NOLABEL) );
+    nVertId				= pHS->getID( "WB_VERT" );
+    aWinBits.SetConstant( nVertId, sal::static_int_cast<INT32>(WB_VERT) );
+    nSingleLineId		= pHS->getID( "WB_SINGLELINE" );
+    aWinBits.SetConstant( nSingleLineId, sal::static_int_cast<INT32>(WB_SINGLELINE) );
     nSysWinId           = pHS->getID( "WB_SYSTEMWINDOW" );
-    aWinBits.SetConstant( nSysWinId, sal::static_int_cast<sal_Int32>(WB_SYSTEMWINDOW) );
-    nStdPopupId         = pHS->getID( "WB_STDPOPUP" );
-    aWinBits.SetConstant( nStdPopupId, sal::static_int_cast<sal_Int32>(WB_STDPOPUP) );
+    aWinBits.SetConstant( nSysWinId, sal::static_int_cast<INT32>(WB_SYSTEMWINDOW) );
+    nStdPopupId			= pHS->getID( "WB_STDPOPUP" );
+    aWinBits.SetConstant( nStdPopupId, sal::static_int_cast<INT32>(WB_STDPOPUP) );
 }
 {
     /********** I n i t   B a s i c   T y p e s **************************/
     InitLangType();
-    aBaseLst.push_back( pFieldUnits      = InitFieldUnitsType() );
-    aBaseLst.push_back( pTimeFieldFormat = InitTimeFieldFormat() );
-    aBaseLst.push_back( pColor           = InitColor() );
-    aBaseLst.push_back( pMapUnit         = InitMapUnit() );
-    aBaseLst.push_back( pKey             = InitKey() );
-    aBaseLst.push_back( pTriState        = InitTriState() );
-    aBaseLst.push_back( pMessButtons     = InitMessButtons() );
-    aBaseLst.push_back( pMessDefButton   = InitMessDefButton() );
+    aBaseLst.Insert( pFieldUnits = InitFieldUnitsType(), LIST_APPEND );
+    aBaseLst.Insert( pTimeFieldFormat = InitTimeFieldFormat(), LIST_APPEND );
+    aBaseLst.Insert( pColor   = InitColor(), LIST_APPEND			 );
+    aBaseLst.Insert( pMapUnit		= InitMapUnit(),	   LIST_APPEND );
+    aBaseLst.Insert( pKey			= InitKey(),		   LIST_APPEND );
+    aBaseLst.Insert( pTriState		= InitTriState(),	   LIST_APPEND );
+    aBaseLst.Insert( pMessButtons	= InitMessButtons(),   LIST_APPEND );
+    aBaseLst.Insert( pMessDefButton = InitMessDefButton(), LIST_APPEND );
 
-    aBaseLst.push_back( pGeometry        = InitGeometry() );
-    aBaseLst.push_back( pLangGeometry    = InitLangGeometry( pGeometry ) );
-    aBaseLst.push_back( pStringList      = InitStringList() );
-    aBaseLst.push_back( pLangStringList  = InitLangStringList( pStringList ) );
-    aBaseLst.push_back( pStringTupel     = InitStringTupel() );
-    aBaseLst.push_back( pStringTupelList = InitStringTupelList( pStringTupel ) );
-    aBaseLst.push_back( pLangStringTupelList = InitLangStringTupelList( pStringTupelList ) );
-    aBaseLst.push_back( pStringLongTupel = InitStringLongTupel() );
-    aBaseLst.push_back( pStringLongTupelList = InitStringLongTupelList( pStringLongTupel ) );
-    aBaseLst.push_back( pLangStringLongTupelList = InitLangStringLongTupelList( pStringLongTupelList ) );
+    aBaseLst.Insert( pGeometry		= InitGeometry(),			LIST_APPEND );
+    aBaseLst.Insert( pLangGeometry = InitLangGeometry( pGeometry ),
+                     LIST_APPEND );
+    aBaseLst.Insert( pStringList = InitStringList(), LIST_APPEND );
+    aBaseLst.Insert( pLangStringList = InitLangStringList( pStringList ),
+                     LIST_APPEND );
+    aBaseLst.Insert( pStringTupel = InitStringTupel(), LIST_APPEND );
+    aBaseLst.Insert( pStringTupelList = InitStringTupelList( pStringTupel ),
+                     LIST_APPEND );
+    aBaseLst.Insert( pLangStringTupelList =
+                  InitLangStringTupelList( pStringTupelList ), LIST_APPEND );
+    aBaseLst.Insert( pStringLongTupel = InitStringLongTupel(), LIST_APPEND );
+    aBaseLst.Insert( pStringLongTupelList = InitStringLongTupelList( pStringLongTupel ),
+                     LIST_APPEND );
+    aBaseLst.Insert( pLangStringLongTupelList =
+                  InitLangStringLongTupelList( pStringLongTupelList ), LIST_APPEND );
 }
 {
     /********** R E S O U R C E   T Y P E N ******************************/
@@ -466,7 +476,7 @@ void RscTypCont::Init()
     pClassDialog = new RscClass( pHS->getID( "Dialog" ),
                                  RSC_DIALOG, pClassSystemWindow );
     pClassDialog->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aBaseLst.push_back( pClassDialog );
+    aBaseLst.Insert( pClassDialog, LIST_APPEND );
 
     /********** M O D A L D I A L O G ***********************************/
     // Klasse anlegen
@@ -599,7 +609,7 @@ void RscTypCont::Init()
     {
     pLangClassKeyCode = new RscClassArray( pHS->getID( "LangKeyCode" ),
                     RSC_KEYCODE, pClassKeyCode, &aLangType );
-    aBaseLst.push_back( pLangClassKeyCode );
+    aBaseLst.Insert( pLangClassKeyCode );
     }
 
     /********** A C C E L I T E M  ***************************************/
@@ -694,9 +704,10 @@ void RscTypCont::Init()
 
         // Clientvariablen einfuegen
         // Sysmodal
-        aBaseLst.push_back(
-            pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, &aWinBits, nRepeatId )
-        );
+        aBaseLst.Insert(
+            pClient = new RscClient( pHS->getID( "BOOL" ), RSC_NOTYPE,
+                                     &aWinBits, nRepeatId ),
+            LIST_APPEND );
         nId = aNmTb.Put( "Repeat", VARNAME );
         pClassSpinButton->SetVariable( nId, pClient, NULL,
                                       VAR_NODATAINST, 0, nWinBitVarId );
@@ -721,7 +732,7 @@ void RscTypCont::Init()
     /********** P A T T E R N F I E L D **********************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassPatternFormatter( pClassSpinField );
-    aBaseLst.push_back( pClassTmp );
+    aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassPatternField = InitClassPatternField( pClassTmp );
     pRoot->Insert( pClassPatternField );
@@ -729,7 +740,7 @@ void RscTypCont::Init()
     /********** N U M E R I C F I E L D **********************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField );
-    aBaseLst.push_back( pClassTmp );
+    aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassNumericField = InitClassNumericField( pClassTmp );
     pRoot->Insert( pClassNumericField );
@@ -737,9 +748,9 @@ void RscTypCont::Init()
     /********** M E T R I C F I E L D ************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField );
-    aBaseLst.push_back( pClassTmp );
+    aBaseLst.Insert( pClassTmp, LIST_APPEND );
     pClassTmp = InitClassMetricFormatter( pClassTmp, pFieldUnits );
-    aBaseLst.push_back( pClassTmp );
+    aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassMetricField = InitClassMetricField( pClassTmp );
     pRoot->Insert( pClassMetricField );
@@ -747,9 +758,9 @@ void RscTypCont::Init()
     /********** C U R R E N C Y F I E L D ********************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField );
-    aBaseLst.push_back( pClassTmp );
+    aBaseLst.Insert( pClassTmp, LIST_APPEND );
     pClassTmp = InitClassCurrencyFormatter( pClassTmp, pFieldUnits );
-    aBaseLst.push_back( pClassTmp );
+    aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassCurrencyField = InitClassCurrencyField( "CurrencyField", RSC_CURRENCYFIELD, pClassTmp );
     pRoot->Insert( pClassCurrencyField );
@@ -761,7 +772,7 @@ void RscTypCont::Init()
     /********** D A T E F I E L D ****************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassDateFormatter( pClassSpinField, pClassDate );
-    aBaseLst.push_back( pClassTmp );
+    aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassDateField = InitClassDateField( pClassTmp, pClassDate );
     pRoot->Insert( pClassDateField );
@@ -770,7 +781,7 @@ void RscTypCont::Init()
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassTimeFormatter( pClassSpinField, pClassTime,
                                                  pTimeFieldFormat );
-    aBaseLst.push_back( pClassTmp );
+    aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassTimeField = InitClassTimeField( pClassTmp, pClassTime );
     pRoot->Insert( pClassTimeField );
@@ -778,7 +789,7 @@ void RscTypCont::Init()
     /********** P A T T E R N B O X **************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassPatternFormatter( pClassComboBox );
-    aBaseLst.push_back( pClassTmp );
+    aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassPatternBox = InitClassPatternBox( pClassTmp );
     pRoot->Insert( pClassPatternBox );
@@ -786,7 +797,7 @@ void RscTypCont::Init()
     /********** N U M E R I C B O X **************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox );
-    aBaseLst.push_back( pClassTmp );
+    aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassNumericBox = InitClassNumericBox( pClassTmp );
     pRoot->Insert( pClassNumericBox );
@@ -796,9 +807,9 @@ void RscTypCont::Init()
     /********** M E T R I C B O X ****************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox );
-    aBaseLst.push_back( pClassTmp );
+    aBaseLst.Insert( pClassTmp, LIST_APPEND );
     pClassTmp = InitClassMetricFormatter( pClassTmp, pFieldUnits );
-    aBaseLst.push_back( pClassTmp );
+    aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassMetricBox = InitClassMetricBox( pClassTmp );
     pRoot->Insert( pClassMetricBox );
@@ -806,9 +817,9 @@ void RscTypCont::Init()
     /********** C U R R E N C Y B O X ************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox );
-    aBaseLst.push_back( pClassTmp );
+    aBaseLst.Insert( pClassTmp, LIST_APPEND );
     pClassTmp = InitClassCurrencyFormatter( pClassTmp, pFieldUnits );
-    aBaseLst.push_back( pClassTmp );
+    aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassCurrencyBox = InitClassCurrencyBox( "CurrencyBox", RSC_CURRENCYBOX, pClassTmp );
     pRoot->Insert( pClassCurrencyBox );
@@ -819,7 +830,7 @@ void RscTypCont::Init()
     /********** D A T E B O X ********************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassDateFormatter( pClassComboBox, pClassDate );
-    aBaseLst.push_back( pClassTmp );
+    aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassDateBox = InitClassDateBox( pClassTmp, pClassDate );
     pRoot->Insert( pClassDateBox );
@@ -828,7 +839,7 @@ void RscTypCont::Init()
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassTimeFormatter( pClassComboBox, pClassTime,
                                                  pTimeFieldFormat );
-    aBaseLst.push_back( pClassTmp );
+    aBaseLst.Insert( pClassTmp, LIST_APPEND );
 
     pClassTimeBox = InitClassTimeBox( pClassTmp, pClassTime );
     pRoot->Insert( pClassTimeBox );
@@ -896,7 +907,7 @@ void RscTypCont::Init()
     pClassFixedLine->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
 
     INS_WINBIT(pClassFixedLine,Vert)
-
+    
     aNmTb.Put( nId, CLASSNAME, pClassFixedLine );
     pRoot->Insert( pClassFixedLine );
 

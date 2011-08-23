@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace vcl { namespace unohelper {
     TextDataObject::~TextDataObject()
     {
     }
-
+            
     void TextDataObject::CopyStringTo( const String& rContent,
         const uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
     {
@@ -85,7 +85,7 @@ namespace vcl { namespace unohelper {
     {
         uno::Any aAny;
 
-        sal_uLong nT = SotExchange::GetFormat( rFlavor );
+        ULONG nT = SotExchange::GetFormat( rFlavor );
         if ( nT == SOT_FORMAT_STRING )
         {
             aAny <<= (::rtl::OUString)GetString();
@@ -106,10 +106,10 @@ namespace vcl { namespace unohelper {
 
     sal_Bool TextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor ) throw(uno::RuntimeException)
     {
-        sal_uLong nT = SotExchange::GetFormat( rFlavor );
+        ULONG nT = SotExchange::GetFormat( rFlavor );
         return ( nT == SOT_FORMAT_STRING );
     }
 
-}}  // namespace vcl::unohelper
+}}	// namespace vcl::unohelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ berechnet und genommen.
 
 ShowPrevPage()/ShowNextPage() zeigt die vorherige/naechste TabPage
 an. Dazu wird zuerst der Deactivate-Handler vom Dialog gerufen und
-wenn dieser sal_True zurueckgegeben hat, wird der Acivate-Handler
+wenn dieser TRUE zurueckgegeben hat, wird der Acivate-Handler
 vom Dialog gerufen und die entsprechende TabPage angezeigt.
 Finnsh() kann gerufen werden, wenn der Finnish-Button betaetigt
 wird. Dort wird dann auch noch der Deactivate-Page-Handler vom
@@ -116,10 +116,10 @@ Level 0 die erste Seite ist.
 Der DeactivatePage()-Handler wird gerufen, wenn eine neue TabPage
 angezeigt werden soll. In diesem Handler kann noch eine Fehler-
 ueberprufung stattfinden und das Umschalten gegebenenfalls verhindert
-werden, indem sal_False zurueckgegeben wird. Der Handler kann auch als
+werden, indem FALSE zurueckgegeben wird. Der Handler kann auch als
 Link gesetzt werden. Die Defaultimplementierung ruft den Link und
 gibt den Rueckgabewert des Links zurueck und wenn kein Link gesetzt
-ist, wird sal_True zurueckgegeben.
+ist, wird TRUE zurueckgegeben.
 
 --------------------------------------------------------------------------
 
@@ -145,7 +145,7 @@ maNextBtn.SetClickHdl( LINK( this, MyWizardDlg, ImplNextHdl ) );
 SetViewWindow( &maPreview );
 
 // Show line between Buttons and Page
-ShowButtonFixedLine( sal_True );
+ShowButtonFixedLine( TRUE );
 
 // Call ActivatePage, because the first page should be created an activated
 ActivatePage();
@@ -209,9 +209,9 @@ IMPL_LINK( MyWizardDlg, ImplNextHdl, PushButton*, pBtn )
 // - WizardDialog-Types -
 // ----------------------
 
-#define WIZARDDIALOG_BUTTON_STDOFFSET_X         6
+#define WIZARDDIALOG_BUTTON_STDOFFSET_X 	    6
 #define WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X    3
-#define WIZARDDIALOG_BUTTON_STDOFFSETLEFT_X     -10
+#define WIZARDDIALOG_BUTTON_STDOFFSETLEFT_X 	-10
 
 // ----------------
 // - WizardDialog -
@@ -220,18 +220,18 @@ IMPL_LINK( MyWizardDlg, ImplNextHdl, PushButton*, pBtn )
 class SVT_DLLPUBLIC WizardDialog : public ModalDialog
 {
 private:
-    Size                maPageSize;
-    ImplWizPageData*    mpFirstPage;
-    ImplWizButtonData*  mpFirstBtn;
-    FixedLine*          mpFixedLine;
-    TabPage*            mpCurTabPage;
-    PushButton*         mpPrevBtn;
-    PushButton*         mpNextBtn;
-    Window*             mpViewWindow;
-    sal_uInt16              mnCurLevel;
-    WindowAlign         meViewAlign;
-    Link                maActivateHdl;
-    Link                maDeactivateHdl;
+    Size				maPageSize;
+    ImplWizPageData*	mpFirstPage;
+    ImplWizButtonData*	mpFirstBtn;
+    FixedLine*			mpFixedLine;
+    TabPage*			mpCurTabPage;
+    PushButton* 		mpPrevBtn;
+    PushButton* 		mpNextBtn;
+    Window* 			mpViewWindow;
+    USHORT				mnCurLevel;
+    WindowAlign 		meViewAlign;
+    Link				maActivateHdl;
+    Link				maDeactivateHdl;
     sal_Int16           mnLeftAlignCount;
     bool                mbEmptyViewMargin;
 
@@ -251,12 +251,12 @@ protected:
 
 #ifdef _SVT_WIZDLG_CXX
 private:
-    SVT_DLLPRIVATE void             ImplInitData();
-    SVT_DLLPRIVATE void             ImplCalcSize( Size& rSize );
-    SVT_DLLPRIVATE void             ImplPosCtrls();
-    SVT_DLLPRIVATE void             ImplPosTabPage();
-    SVT_DLLPRIVATE void             ImplShowTabPage( TabPage* pPage );
-    SVT_DLLPRIVATE TabPage*         ImplGetPage( sal_uInt16 nLevel ) const;
+    SVT_DLLPRIVATE void				ImplInitData();
+    SVT_DLLPRIVATE void				ImplCalcSize( Size& rSize );
+    SVT_DLLPRIVATE void				ImplPosCtrls();
+    SVT_DLLPRIVATE void				ImplPosTabPage();
+    SVT_DLLPRIVATE void				ImplShowTabPage( TabPage* pPage );
+    SVT_DLLPRIVATE TabPage*			ImplGetPage( USHORT nLevel ) const;
 #endif
 
 public:
@@ -264,49 +264,49 @@ public:
                         WizardDialog( Window* pParent, const ResId& rResId );
                         ~WizardDialog();
 
-    virtual void        Resize();
-    virtual void        StateChanged( StateChangedType nStateChange );
-    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual void		Resize();
+    virtual void		StateChanged( StateChangedType nStateChange );
+    virtual long		Notify( NotifyEvent& rNEvt );
 
-    virtual void        ActivatePage();
-    virtual long        DeactivatePage();
+    virtual void		ActivatePage();
+    virtual long		DeactivatePage();
 
-    sal_Bool                ShowPrevPage();
-    sal_Bool                ShowNextPage();
-    sal_Bool                ShowPage( sal_uInt16 nLevel );
-    sal_Bool                Finnish( long nResult = 0 );
-    sal_uInt16              GetCurLevel() const { return mnCurLevel; }
+    BOOL				ShowPrevPage();
+    BOOL				ShowNextPage();
+    BOOL				ShowPage( USHORT nLevel );
+    BOOL				Finnish( long nResult = 0 );
+    USHORT				GetCurLevel() const { return mnCurLevel; }
 
-    void                AddPage( TabPage* pPage );
-    void                RemovePage( TabPage* pPage );
-    void                SetPage( sal_uInt16 nLevel, TabPage* pPage );
-    TabPage*            GetPage( sal_uInt16 nLevel ) const;
+    void				AddPage( TabPage* pPage );
+    void				RemovePage( TabPage* pPage );
+    void				SetPage( USHORT nLevel, TabPage* pPage );
+    TabPage*			GetPage( USHORT nLevel ) const;
 
-    void                AddButton( Button* pButton, long nOffset = 0 );
-    void                RemoveButton( Button* pButton );
+    void				AddButton( Button* pButton, long nOffset = 0 );
+    void				RemoveButton( Button* pButton );
 
-    void                SetPrevButton( PushButton* pButton ) { mpPrevBtn = pButton; }
-    PushButton*         GetPrevButton() const { return mpPrevBtn; }
-    void                SetNextButton( PushButton* pButton ) { mpNextBtn = pButton; }
-    PushButton*         GetNextButton() const { return mpNextBtn; }
+    void				SetPrevButton( PushButton* pButton ) { mpPrevBtn = pButton; }
+    PushButton* 		GetPrevButton() const { return mpPrevBtn; }
+    void				SetNextButton( PushButton* pButton ) { mpNextBtn = pButton; }
+    PushButton* 		GetNextButton() const { return mpNextBtn; }
 
-    void                ShowButtonFixedLine( sal_Bool bVisible );
-    sal_Bool                IsButtonFixedLineVisible();
+    void				ShowButtonFixedLine( BOOL bVisible );
+    BOOL				IsButtonFixedLineVisible();
 
-    void                SetViewWindow( Window* pWindow ) { mpViewWindow = pWindow; }
-    Window*             GetViewWindow() const { return mpViewWindow; }
-    void                SetViewAlign( WindowAlign eAlign ) { meViewAlign = eAlign; }
-    WindowAlign         GetViewAlign() const { return meViewAlign; }
+    void				SetViewWindow( Window* pWindow ) { mpViewWindow = pWindow; }
+    Window* 			GetViewWindow() const { return mpViewWindow; }
+    void				SetViewAlign( WindowAlign eAlign ) { meViewAlign = eAlign; }
+    WindowAlign 		GetViewAlign() const { return meViewAlign; }
 
-    void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
-    const Size&         GetPageSizePixel() const { return maPageSize; }
+    void				SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
+    const Size& 		GetPageSizePixel() const { return maPageSize; }
 
-    void                SetActivatePageHdl( const Link& rLink ) { maActivateHdl = rLink; }
-    const Link&         GetActivatePageHdl() const { return maActivateHdl; }
-    void                SetDeactivatePageHdl( const Link& rLink ) { maDeactivateHdl = rLink; }
-    const Link&         GetDeactivatePageHdl() const { return maDeactivateHdl; }
+    void				SetActivatePageHdl( const Link& rLink ) { maActivateHdl = rLink; }
+    const Link& 		GetActivatePageHdl() const { return maActivateHdl; }
+    void				SetDeactivatePageHdl( const Link& rLink ) { maDeactivateHdl = rLink; }
+    const Link& 		GetDeactivatePageHdl() const { return maDeactivateHdl; }
 };
 
-#endif  // _SVT_WIZDLG_HXX
+#endif	// _SVT_WIZDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

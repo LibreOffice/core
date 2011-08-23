@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,10 +35,10 @@
 */
 #include <vector>
 #include <list>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -49,7 +49,7 @@
 #include <uiconfiguration/imagetype.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -64,7 +64,7 @@
 #include <com/sun/star/ui/XImageManager.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -84,7 +84,7 @@ namespace framework
             CmdImageList( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                           const ::rtl::OUString& aModuleIdentifier );
             virtual ~CmdImageList();
-
+            
             virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const rtl::OUString& rCommandURL );
             virtual bool                            hasImage( sal_Int16 nImageType, const rtl::OUString& rCommandURL );
             virtual ::std::vector< rtl::OUString >& getImageNames();
@@ -117,7 +117,7 @@ namespace framework
             virtual bool                            hasImage( sal_Int16 nImageType, const rtl::OUString& rCommandURL );
             virtual ::std::vector< rtl::OUString >& getImageNames();
             virtual ::std::vector< rtl::OUString >& getImageCommandNames();
-
+            
             // ÍReference
             virtual oslInterlockedCount SAL_CALL acquire();
             virtual oslInterlockedCount SAL_CALL release();
@@ -126,12 +126,12 @@ namespace framework
             oslInterlockedCount                                                              m_nRefCount;
     };
 
-    class ImageManagerImpl : public ThreadHelpBase  // Struct for right initalization of mutex member! Must be first of baseclasses.
+    class ImageManagerImpl : public ThreadHelpBase	// Struct for right initalization of mutex member! Must be first of baseclasses.
     {
         public:
 
             ImageManagerImpl(const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager
-                ,::cppu::OWeakObject *pOwner
+                ,const  com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& _xOwner
                 ,bool _bUseGlobal);
             ~ImageManagerImpl();
 
@@ -162,18 +162,18 @@ namespace framework
 
             void clear();
 
-            typedef boost::unordered_map< rtl::OUString,
-                                   sal_Bool,
+            typedef std::hash_map< rtl::OUString, 
+                                   sal_Bool, 
                                    OUStringHashCode,
                                    ::std::equal_to< ::rtl::OUString > > ImageNameMap;
-
+            
             enum Layer
             {
                 LAYER_DEFAULT,
                 LAYER_USERDEFINED,
                 LAYER_COUNT
             };
-
+            
             enum NotifyOp
             {
                 NotifyOp_Remove,
@@ -188,10 +188,10 @@ namespace framework
             void                                      implts_notifyContainerListener( const ::com::sun::star::ui::ConfigurationEvent& aEvent, NotifyOp eOp );
             ImageList*                                implts_getUserImageList( ImageType nImageType );
             sal_Bool                                  implts_loadUserImages( ImageType nImageType,
-                                                                             const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserImageStorage,
+                                                                             const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserImageStorage, 
                                                                              const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserBitmapsStorage );
             sal_Bool                                  implts_storeUserImages( ImageType nImageType,
-                                                                              const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserImageStorage,
+                                                                              const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserImageStorage, 
                                                                               const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserBitmapsStorage );
             const rtl::Reference< GlobalImageList >&  implts_getGlobalImageList();
             CmdImageList*                             implts_getDefaultImageList();
@@ -202,12 +202,12 @@ namespace framework
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserBitmapsStorage;
             com::sun::star::uno::Reference< com::sun::star::embed::XTransactedObject >      m_xUserRootCommit;
             com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
-            ::cppu::OWeakObject*                                                            m_pOwner;
+            com::sun::star::uno::Reference< com::sun::star::uno::XInterface >               m_xOwner;
             rtl::Reference< GlobalImageList >                                               m_pGlobalImageList;
             CmdImageList*                                                                   m_pDefaultImageList;
             rtl::OUString                                                                   m_aXMLPostfix;
             rtl::OUString                                                                   m_aModuleIdentifier;
-            rtl::OUString                                                                   m_aResourceString;
+            rtl::OUString                                                                   m_aResourceString;            
             ::cppu::OMultiTypeInterfaceContainerHelper                                      m_aListenerContainer;   /// container for ALL Listener
             ImageList*                                                                      m_pUserImageList[ImageType_COUNT];
             bool                                                                            m_bUserImageListModified[ImageType_COUNT];
@@ -216,7 +216,7 @@ namespace framework
             bool                                                                            m_bInitialized;
             bool                                                                            m_bModified;
             bool                                                                            m_bConfigRead;
-            bool                                                                            m_bDisposed;
+            bool                                                                            m_bDisposed;            
    };
 }
 

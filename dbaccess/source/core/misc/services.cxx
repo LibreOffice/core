@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,14 +58,14 @@ namespace dba{
     ::cppu::ImplementationEntry entries[] = {
         { &::dbaccess::DatabaseDataProvider::Create, &::dbaccess::DatabaseDataProvider::getImplementationName_Static, &::dbaccess::DatabaseDataProvider::getSupportedServiceNames_Static,
             &cppu::createSingleComponentFactory, 0, 0 },
-        { 0, 0, 0, 0, 0, 0 }
+        { 0, 0, 0, 0, 0, 0 } 
     };
 }
 
 //***************************************************************************************
 //
-// The prescribed C api must be complied with
-// It consists of three functions which must be exported by the module.
+// Die vorgeschriebene C-Api muss erfuellt werden!
+// Sie besteht aus drei Funktionen, die von dem Modul exportiert werden muessen.
 //
 extern "C" void SAL_CALL createRegistryInfo_DBA()
 {
@@ -86,12 +86,34 @@ extern "C" void SAL_CALL createRegistryInfo_DBA()
 //---------------------------------------------------------------------------------------
 
 extern "C" OOO_DLLPUBLIC_DBA void SAL_CALL component_getImplementationEnvironment(
-                const sal_Char  **ppEnvTypeName,
-                uno_Environment **
+                const sal_Char	**ppEnvTypeName,
+                uno_Environment	**
             )
 {
     createRegistryInfo_DBA();
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+//---------------------------------------------------------------------------------------
+extern "C" OOO_DLLPUBLIC_DBA sal_Bool SAL_CALL component_writeInfo(
+                void* pServiceManager,
+                void* pRegistryKey
+            )
+{
+    if (pRegistryKey)
+    try
+    {
+        return ::dba::DbaModule::getInstance().writeComponentInfos(
+            static_cast< XMultiServiceFactory* >( pServiceManager ),
+            static_cast< XRegistryKey* >( pRegistryKey ) )
+            && cppu::component_writeInfoHelper(pServiceManager, pRegistryKey, dba::entries);
+    }
+    catch (InvalidRegistryException& )
+    {
+        OSL_ENSURE( false, "DBA::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !" );
+    }
+
+    return sal_False;
 }
 
 //---------------------------------------------------------------------------------------

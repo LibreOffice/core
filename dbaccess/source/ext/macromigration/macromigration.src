@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,6 @@
 // -----------------------------------------------------------------------------
 ModalDialog DLG_MACRO_MIGRATION
 {
-    HelpID = "dbaccess:ModalDialog:DLG_MACRO_MIGRATION";
     OutputSize = TRUE ;
     Moveable = TRUE;
     Closeable = TRUE ;
@@ -66,7 +65,6 @@ ModalDialog DLG_MACRO_MIGRATION
 
 TabPage TP_PREPARE
 {
-    HelpID = "dbaccess:TabPage:TP_PREPARE";
     Pos = MAP_APPFONT( 40, 130 );
     Size = MAP_APPFONT( TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT );
 
@@ -117,7 +115,6 @@ TabPage TP_PREPARE
 
 TabPage TP_SAVE_DBDOC_AS
 {
-    HelpID = "dbaccess:TabPage:TP_SAVE_DBDOC_AS";
     Pos = MAP_APPFONT( 40, 130 );
     Size = MAP_APPFONT( TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT );
 
@@ -155,7 +152,6 @@ TabPage TP_SAVE_DBDOC_AS
 
     ComboBox ED_SAVE_AS_LOCATION
     {
-        HelpID = "dbaccess:ComboBox:TP_SAVE_DBDOC_AS:ED_SAVE_AS_LOCATION";
         Pos = MAP_APPFONT(  TAB_PAGE_CONTENT_MARGIN + 60 + SPACING_RELATED,
                             CONTENT_POS_X + 5 * FIXED_TEXT_HEIGHT + SPACING_UNRELATED );
         Size = MAP_APPFONT( TAB_PAGE_WIDTH - ( TAB_PAGE_CONTENT_MARGIN + 60 + SPACING_RELATED ) - TAB_PAGE_CONTENT_MARGIN,
@@ -167,7 +163,6 @@ TabPage TP_SAVE_DBDOC_AS
 
     PushButton PB_BROWSE_SAVE_AS_LOCATION
     {
-        HelpID = "dbaccess:PushButton:TP_SAVE_DBDOC_AS:PB_BROWSE_SAVE_AS_LOCATION";
         Pos = MAP_APPFONT(  TAB_PAGE_WIDTH - BUTTON_WIDTH - TAB_PAGE_CONTENT_MARGIN,
                             CONTENT_POS_X + 5 * FIXED_TEXT_HEIGHT + SPACING_UNRELATED + INPUT_HEIGHT + SPACING_RELATED );
         Size = MAP_APPFONT( BUTTON_WIDTH, BUTTON_HEIGHT );
@@ -194,7 +189,6 @@ TabPage TP_SAVE_DBDOC_AS
 
 TabPage TP_MIGRATE
 {
-    HelpID = "dbaccess:TabPage:TP_MIGRATE";
     Pos = MAP_APPFONT( 40, 130 );
     Size = MAP_APPFONT( TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT );
 
@@ -228,7 +222,7 @@ TabPage TP_MIGRATE
     };
 
     FixedText FT_CURRENT_OBJECT
-    {
+    {                          
         Pos = MAP_APPFONT(  TAB_PAGE_CONTENT_MARGIN + 60,
                             CONTENT_POS_X + 2 * FIXED_TEXT_HEIGHT + SPACING_UNRELATED );
         Size = MAP_APPFONT( TAB_PAGE_WIDTH - ( TAB_PAGE_CONTENT_MARGIN + 60 ), FIXED_TEXT_HEIGHT );
@@ -244,7 +238,7 @@ TabPage TP_MIGRATE
     };
 
     FixedText FT_CURRENT_PROGRESS
-    {
+    {                          
         Pos = MAP_APPFONT(  TAB_PAGE_CONTENT_MARGIN + 60,
                             CONTENT_POS_X + 2 * FIXED_TEXT_HEIGHT + SPACING_UNRELATED + FIXED_TEXT_HEIGHT + SPACING_UNRELATED );
         Size = MAP_APPFONT( TAB_PAGE_WIDTH - ( TAB_PAGE_CONTENT_MARGIN + 60 ), FIXED_TEXT_HEIGHT );
@@ -308,7 +302,6 @@ TabPage TP_MIGRATE
 
 TabPage TP_SUMMARY
 {
-    HelpID = "dbaccess:TabPage:TP_SUMMARY";
     Pos = MAP_APPFONT( 40, 130 );
     Size = MAP_APPFONT( TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT );
 
@@ -332,7 +325,6 @@ TabPage TP_SUMMARY
 
     MultiLineEdit ED_CHANGES
     {
-        HelpID = "dbaccess:MultiLineEdit:TP_SUMMARY:ED_CHANGES";
         Pos = MAP_APPFONT( TAB_PAGE_CONTENT_MARGIN, CONTENT_POS_X + FIXED_TEXT_HEIGHT + SPACING_RELATED );
         Size = MAP_APPFONT( TAB_PAGE_WIDTH - 2 * TAB_PAGE_CONTENT_MARGIN,
                             TAB_PAGE_HEIGHT - ( CONTENT_POS_X + FIXED_TEXT_HEIGHT + SPACING_RELATED ) - TAB_PAGE_CONTENT_MARGIN );
@@ -347,7 +339,6 @@ TabPage TP_SUMMARY
     {
         Text [ en-US ] = "The migration was successful. Below is a log of the actions which have been taken to your document.";
     };
-
     String STR_UNSUCCESSFUL
     {
         Text [ en-US ] = "The migration was not successful. Examine the migration log below for details.";
@@ -452,12 +443,10 @@ String STR_INVALID_NUMBER_ARGS
 {
     Text [ en-US ] = "Invalid number of initialization arguments. Expected 1.";
 };
-
 String STR_NO_DATABASE
 {
-    Text [ en-US ] = "No database document found in the initialization arguments.";
+    Text [ en-US ] = "No database document found in the initializatin arguments.";
 };
-
 String STR_NOT_READONLY
 {
     Text [ en-US ] = "Not applicable to read-only documents.";

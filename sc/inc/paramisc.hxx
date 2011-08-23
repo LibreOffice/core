@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,30 +36,30 @@ class String;
 
 struct ScSolveParam
 {
-    ScAddress   aRefFormulaCell;
-    ScAddress   aRefVariableCell;
-    String*     pStrTargetVal;
+    ScAddress	aRefFormulaCell;
+    ScAddress	aRefVariableCell;
+    String*		pStrTargetVal;
 
     ScSolveParam();
     ScSolveParam( const ScSolveParam& r );
-    ScSolveParam( const ScAddress&  rFormulaCell,
-                  const ScAddress&  rVariableCell,
+    ScSolveParam( const ScAddress& 	rFormulaCell,
+                  const ScAddress& 	rVariableCell,
                   const String& rTargetValStr );
     ~ScSolveParam();
 
-    ScSolveParam&   operator=   ( const ScSolveParam& r );
-    sal_Bool            operator==  ( const ScSolveParam& r ) const;
+    ScSolveParam&	operator=	( const ScSolveParam& r );
+    BOOL			operator==	( const ScSolveParam& r ) const;
 };
 
 //-----------------------------------------------------------------------
 
 struct ScTabOpParam
 {
-    ScRefAddress    aRefFormulaCell;
-    ScRefAddress    aRefFormulaEnd;
-    ScRefAddress    aRefRowCell;
-    ScRefAddress    aRefColCell;
-    sal_uInt8           nMode;
+    ScRefAddress	aRefFormulaCell;
+    ScRefAddress	aRefFormulaEnd;
+    ScRefAddress	aRefRowCell;
+    ScRefAddress	aRefColCell;
+    BYTE			nMode;
 
     ScTabOpParam() {};
     ScTabOpParam( const ScTabOpParam& r );
@@ -67,11 +67,11 @@ struct ScTabOpParam
                   const ScRefAddress& rFormulaEnd,
                   const ScRefAddress& rRowCell,
                   const ScRefAddress& rColCell,
-                        sal_uInt8        nMd);
+                        BYTE		 nMd);
     ~ScTabOpParam() {};
 
-    ScTabOpParam&   operator=       ( const ScTabOpParam& r );
-    sal_Bool            operator==      ( const ScTabOpParam& r ) const;
+    ScTabOpParam&	operator=		( const ScTabOpParam& r );
+    BOOL			operator==		( const ScTabOpParam& r ) const;
 };
 
 #endif // SC_PARAMISC_HXX

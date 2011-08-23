@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 
 
 //==================================================================
-//  Layer-Attribute
+//	Layer-Attribute
 //==================================================================
 
 class SdAttrLayerName : public SfxStringItem
@@ -79,7 +79,7 @@ public:
 class SdAttrLayerVisible : public SfxBoolItem
 {
 public:
-    SdAttrLayerVisible( sal_Bool bValue = sal_True ) :
+    SdAttrLayerVisible( BOOL bValue = TRUE ) :
         SfxBoolItem( ATTR_LAYER_VISIBLE, bValue ) {}
 };
 
@@ -88,7 +88,7 @@ public:
 class SdAttrLayerPrintable : public SfxBoolItem
 {
 public:
-    SdAttrLayerPrintable( sal_Bool bValue = sal_True ) :
+    SdAttrLayerPrintable( BOOL bValue = TRUE ) :
         SfxBoolItem( ATTR_LAYER_PRINTABLE, bValue ) {}
 };
 
@@ -97,7 +97,7 @@ public:
 class SdAttrLayerLocked : public SfxBoolItem
 {
 public:
-    SdAttrLayerLocked( sal_Bool bValue = sal_False ) :
+    SdAttrLayerLocked( BOOL bValue = FALSE ) :
         SfxBoolItem( ATTR_LAYER_LOCKED, bValue ) {}
 };
 
@@ -106,7 +106,7 @@ public:
 class SdAttrLayerThisPage : public SfxBoolItem
 {
 public:
-    SdAttrLayerThisPage( sal_Bool bValue = sal_False ) :
+    SdAttrLayerThisPage( BOOL bValue = FALSE ) :
         SfxBoolItem( ATTR_LAYER_THISPAGE, bValue ) {}
 };
 
@@ -119,10 +119,10 @@ public:
             DiaEffectItem( ::com::sun::star::presentation::FadeEffect eFade = com::sun::star::presentation::FadeEffect_NONE );
             DiaEffectItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
-            sal_uInt16          GetValueCount() const { return FADE_EFFECT_COUNT; }
-            ::com::sun::star::presentation::FadeEffect      GetValue() const
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Create( SvStream& rIn, USHORT nVer ) const;
+            USHORT			GetValueCount() const { return FADE_EFFECT_COUNT; }
+            ::com::sun::star::presentation::FadeEffect		GetValue() const
                             { return (::com::sun::star::presentation::FadeEffect) SfxEnumItem::GetValue(); }
 };
 
@@ -135,10 +135,10 @@ public:
             DiaSpeedItem( FadeSpeed = FADE_SPEED_MEDIUM );
             DiaSpeedItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
-            sal_uInt16          GetValueCount() const { return FADE_SPEED_COUNT; }
-            FadeSpeed       GetValue() const
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Create( SvStream& rIn, USHORT nVer ) const;
+            USHORT			GetValueCount() const { return FADE_SPEED_COUNT; }
+            FadeSpeed		GetValue() const
                             { return (FadeSpeed) SfxEnumItem::GetValue(); }
 };
 
@@ -151,10 +151,10 @@ public:
             DiaAutoItem( PresChange = PRESCHANGE_MANUAL );
             DiaAutoItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
-            sal_uInt16          GetValueCount() const { return PRESCHANGE_COUNT; }
-            PresChange      GetValue() const { return (PresChange) SfxEnumItem::GetValue(); }
+    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*	Create( SvStream& rIn, USHORT nVer ) const;
+            USHORT			GetValueCount() const { return PRESCHANGE_COUNT; }
+            PresChange		GetValue() const { return (PresChange) SfxEnumItem::GetValue(); }
 };
 
 //------------------------------------------------------------------
@@ -163,10 +163,10 @@ class DiaTimeItem : public SfxUInt32Item
 {
 public:
             TYPEINFO();
-            DiaTimeItem( sal_uInt32 nValue = 0L );
+            DiaTimeItem( UINT32 nValue = 0L );
 
     virtual SfxPoolItem* Clone( SfxItemPool* pPool = 0 ) const;
-    virtual int          operator==( const SfxPoolItem& ) const;
+    virtual int 		 operator==( const SfxPoolItem& ) const;
 };
 
 #endif // _SDATTR_HXX

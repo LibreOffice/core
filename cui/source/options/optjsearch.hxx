@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,32 +41,32 @@ class SfxItemSet;
 class SvxJSearchOptionsPage : public SfxTabPage
 {
 private:
-    FixedLine   aTreatAsEqual;
-    CheckBox    aMatchCase;
-    CheckBox    aMatchFullHalfWidth;
-    CheckBox    aMatchHiraganaKatakana;
-    CheckBox    aMatchContractions;
-    CheckBox    aMatchMinusDashChoon;
-    CheckBox    aMatchRepeatCharMarks;
-    CheckBox    aMatchVariantFormKanji;
-    CheckBox    aMatchOldKanaForms;
-    CheckBox    aMatchDiziDuzu;
-    CheckBox    aMatchBavaHafa;
-    CheckBox    aMatchTsithichiDhizi;
-    CheckBox    aMatchHyuiyuByuvyu;
-    CheckBox    aMatchSesheZeje;
-    CheckBox    aMatchIaiya;
-    CheckBox    aMatchKiku;
+    FixedLine	aTreatAsEqual;
+    CheckBox	aMatchCase;
+    CheckBox	aMatchFullHalfWidth;
+    CheckBox	aMatchHiraganaKatakana;
+    CheckBox	aMatchContractions;
+    CheckBox	aMatchMinusDashChoon;
+    CheckBox	aMatchRepeatCharMarks;
+    CheckBox	aMatchVariantFormKanji;
+    CheckBox	aMatchOldKanaForms;
+    CheckBox	aMatchDiziDuzu;
+    CheckBox	aMatchBavaHafa;
+    CheckBox	aMatchTsithichiDhizi;
+    CheckBox	aMatchHyuiyuByuvyu;
+    CheckBox	aMatchSesheZeje;
+    CheckBox	aMatchIaiya;
+    CheckBox	aMatchKiku;
     CheckBox    aMatchProlongedSoundMark;
     FixedLine   aIgnore;
-    CheckBox    aIgnorePunctuation;
-    CheckBox    aIgnoreWhitespace;
+    CheckBox	aIgnorePunctuation;
+    CheckBox	aIgnoreWhitespace;
     CheckBox    aIgnoreMiddleDot;
 
-    sal_Int32       nTransliterationFlags;
-    sal_Bool        bSaveOptions;
+    INT32		nTransliterationFlags;
+    BOOL		bSaveOptions;
 
-    sal_Int32               GetTransliterationFlags_Impl();
+    INT32				GetTransliterationFlags_Impl();
 
 protected:
                         SvxJSearchOptionsPage( Window* pParent, const SfxItemSet& rSet );
@@ -77,13 +77,13 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
 
     virtual void        Reset( const SfxItemSet& rSet );
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
 
-    sal_Bool                IsSaveOptions() const           { return bSaveOptions; }
-    void                EnableSaveOptions( sal_Bool bVal )  { bSaveOptions = bVal; }
+    BOOL				IsSaveOptions() const			{ return bSaveOptions; }
+    void				EnableSaveOptions( BOOL bVal )	{ bSaveOptions = bVal; }
 
-    sal_Int32               GetTransliterationFlags() const { return nTransliterationFlags; }
-    void                SetTransliterationFlags( sal_Int32 nSettings );
+    INT32				GetTransliterationFlags() const	{ return nTransliterationFlags; }
+    void				SetTransliterationFlags( INT32 nSettings );
 };
 
 //////////////////////////////////////////////////////////////////////

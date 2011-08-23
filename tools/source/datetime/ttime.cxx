@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,13 @@
 #define INCL_DOSDATETIME
 #include <svpm.h>
 #elif defined( WNT )
-#include <windows.h>
+#ifdef _MSC_VER
+#pragma warning (push,1)
+#endif
+#include <tools/svwin.h>
+#ifdef _MSC_VER
+#pragma warning (pop)
+#endif
 #elif defined UNX
 #include <unistd.h>
 #include <limits.h>
@@ -61,13 +67,13 @@ static sal_Int32 TimeToSec100( const Time& rTime )
     sal_Int32   nSec    = rTime.GetSec();
     sal_Int32   n100Sec = rTime.Get100Sec();
 
-//  Wegen Interal Compiler Error bei MSC, etwas komplizierter
-//  return (n100Sec + (nSec*100) + (nMin*60*100) + (nHour*60*60*100) * nSign);
+//	Wegen Interal Compiler Error bei MSC, etwas komplizierter
+//	return (n100Sec + (nSec*100) + (nMin*60*100) + (nHour*60*60*100) * nSign);
 
     sal_Int32 nRet = n100Sec;
-    nRet     += nSec*100;
-    nRet     += nMin*60*100;
-    nRet     += nHour*60*60*100;
+    nRet	 += nSec*100;
+    nRet	 += nMin*60*100;
+    nRet	 += nHour*60*60*100;
 
     return (nRet * nSign);
 }
@@ -113,7 +119,7 @@ Time::Time()
             (((sal_Int32)aDateTime.wSecond)*100) +
             ((sal_Int32)aDateTime.wMilliseconds/10);
 #else
-    time_t     nTmpTime;
+    time_t	   nTmpTime;
     struct tm aTime;
 
     // Zeit ermitteln
@@ -140,15 +146,15 @@ Time::Time( const Time& rTime )
 
 // -----------------------------------------------------------------------
 
-Time::Time( sal_uIntPtr nHour, sal_uIntPtr nMin, sal_uIntPtr nSec, sal_uIntPtr n100Sec )
+Time::Time( ULONG nHour, ULONG nMin, ULONG nSec, ULONG n100Sec )
 {
     // Zeit normalisieren
-    nSec    += n100Sec / 100;
+    nSec	+= n100Sec / 100;
     n100Sec  = n100Sec % 100;
-    nMin    += nSec / 60;
-    nSec     = nSec % 60;
-    nHour   += nMin / 60;
-    nMin     = nMin % 60;
+    nMin	+= nSec / 60;
+    nSec	 = nSec % 60;
+    nHour	+= nMin / 60;
+    nMin	 = nMin % 60;
 
     // Zeit zusammenbauen
     nTime = (sal_Int32)(n100Sec + (nSec*100) + (nMin*10000) + (nHour*1000000));
@@ -156,12 +162,12 @@ Time::Time( sal_uIntPtr nHour, sal_uIntPtr nMin, sal_uIntPtr nSec, sal_uIntPtr n
 
 // -----------------------------------------------------------------------
 
-void Time::SetHour( sal_uInt16 nNewHour )
+void Time::SetHour( USHORT nNewHour )
 {
-    short  nSign      = (nTime >= 0) ? +1 : -1;
-    sal_Int32   nMin      = GetMin();
-    sal_Int32   nSec      = GetSec();
-    sal_Int32   n100Sec   = Get100Sec();
+    short  nSign	  = (nTime >= 0) ? +1 : -1;
+    sal_Int32   nMin 	  = GetMin();
+    sal_Int32   nSec 	  = GetSec();
+    sal_Int32   n100Sec	  = Get100Sec();
 
     nTime = (n100Sec + (nSec*100) + (nMin*10000) +
             (((sal_Int32)nNewHour)*1000000)) * nSign;
@@ -169,12 +175,12 @@ void Time::SetHour( sal_uInt16 nNewHour )
 
 // -----------------------------------------------------------------------
 
-void Time::SetMin( sal_uInt16 nNewMin )
+void Time::SetMin( USHORT nNewMin )
 {
-    short  nSign      = (nTime >= 0) ? +1 : -1;
-    sal_Int32   nHour     = GetHour();
-    sal_Int32   nSec      = GetSec();
-    sal_Int32   n100Sec   = Get100Sec();
+    short  nSign	  = (nTime >= 0) ? +1 : -1;
+    sal_Int32   nHour	  = GetHour();
+    sal_Int32   nSec 	  = GetSec();
+    sal_Int32   n100Sec	  = Get100Sec();
 
     // kein Ueberlauf
     nNewMin = nNewMin % 60;
@@ -185,12 +191,12 @@ void Time::SetMin( sal_uInt16 nNewMin )
 
 // -----------------------------------------------------------------------
 
-void Time::SetSec( sal_uInt16 nNewSec )
+void Time::SetSec( USHORT nNewSec )
 {
-    short       nSign     = (nTime >= 0) ? +1 : -1;
-    sal_Int32   nHour     = GetHour();
-    sal_Int32   nMin      = GetMin();
-    sal_Int32   n100Sec   = Get100Sec();
+    short       nSign	  = (nTime >= 0) ? +1 : -1;
+    sal_Int32   nHour	  = GetHour();
+    sal_Int32   nMin 	  = GetMin();
+    sal_Int32   n100Sec	  = Get100Sec();
 
     // kein Ueberlauf
     nNewSec = nNewSec % 60;
@@ -201,12 +207,12 @@ void Time::SetSec( sal_uInt16 nNewSec )
 
 // -----------------------------------------------------------------------
 
-void Time::Set100Sec( sal_uInt16 nNew100Sec )
+void Time::Set100Sec( USHORT nNew100Sec )
 {
-    short       nSign     = (nTime >= 0) ? +1 : -1;
-    sal_Int32   nHour     = GetHour();
-    sal_Int32   nMin      = GetMin();
-    sal_Int32   nSec      = GetSec();
+    short       nSign	  = (nTime >= 0) ? +1 : -1;
+    sal_Int32   nHour	  = GetHour();
+    sal_Int32   nMin 	  = GetMin();
+    sal_Int32   nSec 	  = GetSec();
 
     // kein Ueberlauf
     nNew100Sec = nNew100Sec % 100;
@@ -219,11 +225,11 @@ void Time::Set100Sec( sal_uInt16 nNew100Sec )
 
 sal_Int32 Time::GetMSFromTime() const
 {
-    short       nSign     = (nTime >= 0) ? +1 : -1;
-    sal_Int32   nHour     = GetHour();
-    sal_Int32   nMin      = GetMin();
-    sal_Int32   nSec      = GetSec();
-    sal_Int32   n100Sec   = Get100Sec();
+    short       nSign	  = (nTime >= 0) ? +1 : -1;
+    sal_Int32   nHour	  = GetHour();
+    sal_Int32   nMin 	  = GetMin();
+    sal_Int32   nSec 	  = GetSec();
+    sal_Int32   n100Sec	  = Get100Sec();
 
     return (((nHour*3600000)+(nMin*60000)+(nSec*1000)+(n100Sec*10))*nSign);
 }
@@ -249,7 +255,7 @@ void Time::MakeTimeFromMS( sal_Int32 nMS )
 
 double Time::GetTimeInDays() const
 {
-    short  nSign      = (nTime >= 0) ? +1 : -1;
+    short  nSign	  = (nTime >= 0) ? +1 : -1;
     double nHour      = GetHour();
     double nMin       = GetMin();
     double nSec       = GetSec();
@@ -302,7 +308,7 @@ Time operator -( const Time& rTime1, const Time& rTime2 )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Time::IsEqualIgnore100Sec( const Time& rTime ) const
+BOOL Time::IsEqualIgnore100Sec( const Time& rTime ) const
 {
     sal_Int32 n1 = (nTime < 0 ? -Get100Sec() : Get100Sec() );
     sal_Int32 n2 = (rTime.nTime < 0 ? -rTime.Get100Sec() : rTime.Get100Sec() );
@@ -322,7 +328,7 @@ Time Time::GetUTCOffset()
     if ( aDateTime.timezone != -1  )
     {
         short nTempTime = (short)Abs( aDateTime.timezone );
-        Time aTime( 0, (sal_uInt16)nTempTime );
+        Time aTime( 0, (USHORT)nTempTime );
         if ( aDateTime.timezone > 0 )
             aTime = -aTime;
         return aTime;
@@ -330,7 +336,7 @@ Time Time::GetUTCOffset()
     else
         return Time( 0 );
 #elif defined( WNT )
-    TIME_ZONE_INFORMATION   aTimeZone;
+    TIME_ZONE_INFORMATION	aTimeZone;
     aTimeZone.Bias = 0;
     DWORD nTimeZoneRet = GetTimeZoneInformation( &aTimeZone );
     sal_Int32 nTempTime = aTimeZone.Bias;
@@ -338,23 +344,23 @@ Time Time::GetUTCOffset()
         nTempTime += aTimeZone.StandardBias;
     else if ( nTimeZoneRet == TIME_ZONE_ID_DAYLIGHT )
         nTempTime += aTimeZone.DaylightBias;
-    Time aTime( 0, (sal_uInt16)Abs( nTempTime ) );
+    Time aTime( 0, (USHORT)Abs( nTempTime ) );
     if ( nTempTime > 0 )
         aTime = -aTime;
     return aTime;
 #else
-    static sal_uIntPtr  nCacheTicks = 0;
-    static sal_Int32    nCacheSecOffset = -1;
-    sal_uIntPtr         nTicks = Time::GetSystemTicks();
-    time_t          nTime;
-    tm              aTM;
-    sal_Int32           nLocalTime;
-    sal_Int32           nUTC;
-    short           nTempTime;
+    static ULONG	nCacheTicks = 0;
+    static sal_Int32 	nCacheSecOffset = -1;
+    ULONG			nTicks = Time::GetSystemTicks();
+    time_t			nTime;
+    tm 			    aTM;
+    sal_Int32			nLocalTime;
+    sal_Int32			nUTC;
+    short			nTempTime;
 
     // Evt. Wert neu ermitteln
-    if ( (nCacheSecOffset == -1)            ||
-         ((nTicks - nCacheTicks) > 360000)  ||
+    if ( (nCacheSecOffset == -1)			||
+         ((nTicks - nCacheTicks) > 360000)	||
          ( nTicks < nCacheTicks ) // handle overflow
          )
     {
@@ -377,7 +383,7 @@ Time Time::GetUTCOffset()
     }
 
     nTempTime = (short)Abs( nCacheSecOffset );
-    Time aTime( 0, (sal_uInt16)nTempTime );
+    Time aTime( 0, (USHORT)nTempTime );
     if ( nCacheSecOffset < 0 )
         aTime = -aTime;
     return aTime;
@@ -387,14 +393,14 @@ Time Time::GetUTCOffset()
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr Time::GetSystemTicks()
+ULONG Time::GetSystemTicks()
 {
 #if defined WNT
-    return (sal_uIntPtr)GetTickCount();
+    return (ULONG)GetTickCount();
 #elif defined( OS2 )
-    sal_uIntPtr nClock;
+    ULONG nClock;
     DosQuerySysInfo( QSV_MS_COUNT, QSV_MS_COUNT, &nClock, sizeof( nClock ) );
-    return (sal_uIntPtr)nClock;
+    return (ULONG)nClock;
 #else
     timeval tv;
     gettimeofday (&tv, 0);
@@ -404,38 +410,38 @@ sal_uIntPtr Time::GetSystemTicks()
     fTicks += ((tv.tv_usec + 500) / 1000);
 
     fTicks = fmod (fTicks, double(ULONG_MAX));
-    return sal_uIntPtr(fTicks);
+    return ULONG(fTicks);
 #endif
 }
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr Time::GetProcessTicks()
+ULONG Time::GetProcessTicks()
 {
 #if defined WNT
-    return (sal_uIntPtr)GetTickCount();
+    return (ULONG)GetTickCount();
 #elif defined( OS2 )
-    sal_uIntPtr nClock;
+    ULONG nClock;
     DosQuerySysInfo( QSV_MS_COUNT, QSV_MS_COUNT, &nClock, sizeof( nClock ) );
-    return (sal_uIntPtr)nClock;
+    return (ULONG)nClock;
 #else
-    static sal_uIntPtr  nImplTicksPerSecond = 0;
-    static double   dImplTicksPerSecond;
-    static double   dImplTicksULONGMAX;
-    sal_uIntPtr         nTicks = (sal_uIntPtr)clock();
+    static ULONG	nImplTicksPerSecond = 0;
+    static double	dImplTicksPerSecond;
+    static double	dImplTicksULONGMAX;
+    ULONG			nTicks = (ULONG)clock();
 
     if ( !nImplTicksPerSecond )
     {
         nImplTicksPerSecond = CLOCKS_PER_SEC;
         dImplTicksPerSecond = nImplTicksPerSecond;
-        dImplTicksULONGMAX  = (double)(sal_uIntPtr)ULONG_MAX;
+        dImplTicksULONGMAX	= (double)(ULONG)ULONG_MAX;
     }
 
     double fTicks = nTicks;
     fTicks *= 1000;
     fTicks /= dImplTicksPerSecond;
     fTicks = fmod (fTicks, dImplTicksULONGMAX);
-    return (sal_uIntPtr)fTicks;
+    return (ULONG)fTicks;
 #endif
 }
 

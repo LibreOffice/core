@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,9 +50,9 @@ class SwMailMergeAddressBlockPage : public svt::OWizardPage
     FixedInfo           m_aAddressListFI;
     PushButton          m_aAddressListPB;
     FixedInfo           m_aCurrentAddressFI;
-
+    
     FixedLine           m_aFirstFL;
-
+                        
     FixedInfo           m_aSecondFI;
     FixedInfo           m_aSettingsFI;
     CheckBox            m_aAddressCB;
@@ -67,7 +67,7 @@ class SwMailMergeAddressBlockPage : public svt::OWizardPage
     FixedInfo           m_aMatchFieldsFI;
 
     PushButton          m_aAssignPB;
-
+    
     FixedLine           m_aThirdFL;
 
     FixedInfo           m_aFourthFI;
@@ -91,14 +91,14 @@ class SwMailMergeAddressBlockPage : public svt::OWizardPage
     DECL_LINK(InsertDataHdl_Impl, ImageButton*);
     DECL_LINK(AddressBlockSelectHdl_Impl, SwAddressPreview*);
     DECL_LINK(HideParagraphsHdl_Impl, CheckBox*);
-
+    
     void                EnableAddressBlock(sal_Bool bAll, sal_Bool bSelective);
-
+    
     virtual void        ActivatePage();
     virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
     virtual bool        canAdvance() const;
 
-public:
+public:     
     SwMailMergeAddressBlockPage( SwMailMergeWizard* _pParent);
     ~SwMailMergeAddressBlockPage();
 
@@ -112,19 +112,19 @@ class SwSelectAddressBlockDialog : public SfxModalDialog
     PushButton          m_aNewPB;
     PushButton          m_aCustomizePB;
     PushButton          m_aDeletePB;
-
+                        
     FixedInfo           m_aSettingsFI;
     RadioButton         m_aNeverRB;
     RadioButton         m_aAlwaysRB;
     RadioButton         m_aDependentRB;
     Edit                m_aCountryED;
-
+                        
     FixedLine           m_aSeparatorFL;
-
+                        
     OKButton            m_aOK;
     CancelButton        m_aCancel;
     HelpButton          m_aHelp;
-
+    
     com::sun::star::uno::Sequence< ::rtl::OUString>    m_aAddressBlocks;
     SwMailMergeConfigItem& m_rConfig;
 
@@ -145,16 +145,16 @@ public:
     void                SetSettings(sal_Bool bIsCountry, ::rtl::OUString sCountry);
     sal_Bool            IsIncludeCountry() const {return !m_aNeverRB.IsChecked();}
     ::rtl::OUString     GetCountry() const;
-};
+};            
 
 class SwCustomizeAddressBlockDialog;
 class DDListBox : public SvTreeListBox
 {
     SwCustomizeAddressBlockDialog*   m_pParentDialog;
-public:
+public:    
     DDListBox(SwCustomizeAddressBlockDialog* pParent, const ResId rResId);
     ~DDListBox();
-
+    
     virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 };
 
@@ -167,26 +167,26 @@ class AddressMultiLineEdit : public MultiLineEdit, public SfxListener
 {
     Link                            m_aSelectionLink;
     SwCustomizeAddressBlockDialog*  m_pParentDialog;
-
+    
     using Window::Notify;
 
     using MultiLineEdit::SetText;
 
 protected:
     long            PreNotify( NotifyEvent& rNEvt );
-public:
+public: 
     AddressMultiLineEdit(SwCustomizeAddressBlockDialog* pParent, const ResId& rResId);
     ~AddressMultiLineEdit();
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-
+    
     void            SetSelectionChangedHdl( const Link& rLink ) {m_aSelectionLink = rLink;}
 
     void            SetText( const String& rStr );
     String          GetAddress();
 
     void            InsertNewEntry( const String& rStr );
-    void            InsertNewEntryAtPosition( const String& rStr, sal_uLong nPara, sal_uInt16 nIndex );
+    void            InsertNewEntryAtPosition( const String& rStr, ULONG nPara, USHORT nIndex );
     void            RemoveCurrentEntry();
 
     void            MoveCurrentItem(sal_uInt16 nMove);
@@ -194,22 +194,22 @@ public:
     bool            HasCurrentItem();
     String          GetCurrentItem();
     void            SelectCurrentItem();
-};
+};            
 
 // Dialog is used to create custom address blocks as well as custom greeting lines
 class SwRestrictedComboBox : public ComboBox
-{
+{ 
     String sForbiddenChars;
 
 protected:
     virtual void KeyInput( const KeyEvent& );
-    virtual void        Modify();
-public:
+    virtual void		Modify();
+public: 
     SwRestrictedComboBox(Window* pParent, const ResId& rResId):
         ComboBox( pParent, rResId ){}
-
-    ~SwRestrictedComboBox();
-
+        
+    ~SwRestrictedComboBox(); 
+    
     void SetForbiddenChars(const String& rSet){sForbiddenChars = rSet;}
 
 };
@@ -224,8 +224,8 @@ public:
         ADDRESSBLOCK_EDIT,
         GREETING_FEMALE,
         GREETING_MALE
-    };
-private:
+    };            
+private:    
     FixedText       m_aAddressElementsFT;
     DDListBox       m_aAddressElementsLB;
 
@@ -271,7 +271,7 @@ private:
     bool            HasItem_Impl(sal_Int32 nUserData);
     sal_Int32       GetSelectedItem_Impl();
     void            UpdateImageButtons_Impl();
-    void            MoveFocus( Window* pMember, bool bNext );
+    void            MoveFocus( Window* pMember, bool bNext );   
 
 public:
     SwCustomizeAddressBlockDialog(Window* pParent, SwMailMergeConfigItem& rConfig, DialogType);
@@ -279,19 +279,19 @@ public:
 
     void            SetAddress(const ::rtl::OUString& rAddress);
     ::rtl::OUString GetAddress();
-};
+};            
 
 class SwAssignFieldsControl;
 class SwAssignFieldsDialog : public SfxModalDialog
 {
     FixedInfo               m_aMatchingFI;
     SwAssignFieldsControl*  m_pFieldsControl;
-
+    
     FixedInfo               m_aPreviewFI;
     SwAddressPreview        m_aPreviewWIN;
-
+                            
     FixedLine               m_aSeparatorFL;
-
+                            
     OKButton                m_aOK;
     CancelButton            m_aCancel;
     HelpButton              m_aHelp;
@@ -300,18 +300,18 @@ class SwAssignFieldsDialog : public SfxModalDialog
     ::rtl::OUString         m_rPreviewString;
 
     SwMailMergeConfigItem&  m_rConfigItem;
-
+    
     ::com::sun::star::uno::Sequence< ::rtl::OUString > CreateAssignments();
     DECL_LINK(OkHdl_Impl, PushButton*);
     DECL_LINK(AssignmentModifyHdl_Impl, void*);
 
 public:
-    SwAssignFieldsDialog(Window* pParent,
-                SwMailMergeConfigItem& rConfigItem,
+    SwAssignFieldsDialog(Window* pParent, 
+                SwMailMergeConfigItem& rConfigItem, 
                 const ::rtl::OUString& rPreview,
                 bool bIsAddressBlock);
     ~SwAssignFieldsDialog();
-};
+};            
 #endif
 
 

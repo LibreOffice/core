@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -212,7 +212,7 @@ public class _XWindow extends MultiMethodTest {
     * chaged<p>
     *
     * Has <b> OK </b> status if methods of wListener were called when
-    * corresponding events occurred. <p>
+    * corresponding events occured. <p>
     *
     * The following method tests are to be executed before :
     * <ul>
@@ -270,7 +270,7 @@ public class _XWindow extends MultiMethodTest {
         log.println("set object invisible...");
         oObj.setVisible(false);
         shortWait();
-        res = wListener.hidden && !wListener.resized
+        res = wListener.hidden && !wListener.resized 
                         && !wListener.moved && !wListener.shown;
         result &= res;
         if (!res) {
@@ -288,7 +288,7 @@ public class _XWindow extends MultiMethodTest {
         log.println("set object visible...");
         oObj.setVisible(true) ;
         shortWait();
-        res = wListener.shown && !wListener.resized &&
+        res = wListener.shown && !wListener.resized && 
                 !wListener.hidden && !wListener.moved;
         result &= res;
         if (!res) {
@@ -356,7 +356,7 @@ public class _XWindow extends MultiMethodTest {
     * Test calls the method. Then we change focus and check that listener's
     * methods were called. <p>
     * Has <b> OK </b> status if methods of fListener were called when
-    * corresponding events occurred. <p>
+    * corresponding events occured. <p>
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> setFocus() </code>: sets the focus to the window </li>

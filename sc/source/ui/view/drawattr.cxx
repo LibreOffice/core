@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,14 +35,14 @@
 
 //------------------------------------------------------------------------
 
-String SvxDrawToolItem::GetValueText() const
+String __EXPORT SvxDrawToolItem::GetValueText() const
 {
     return GetValueText(GetValue());
 }
 
 //------------------------------------------------------------------------
 
-String SvxDrawToolItem::GetValueText( sal_uInt16 nVal ) const
+String __EXPORT SvxDrawToolItem::GetValueText( USHORT nVal ) const
 {
     const sal_Char* p;
 
@@ -65,16 +65,16 @@ String SvxDrawToolItem::GetValueText( sal_uInt16 nVal ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* SvxDrawToolItem::Clone( SfxItemPool * ) const
+SfxPoolItem* __EXPORT SvxDrawToolItem::Clone( SfxItemPool * ) const
 {
     return new SvxDrawToolItem(*this);
 }
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* SvxDrawToolItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
+SfxPoolItem* __EXPORT SvxDrawToolItem::Create( SvStream& rStream, USHORT nVer ) const
 {
-    sal_uInt16 nVal;
+    USHORT nVal;
     rStream >> nVal;
     return new SvxDrawToolItem(nVal);
 }

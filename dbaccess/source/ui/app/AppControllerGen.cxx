@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,6 @@
 #include <svx/dbaexchange.hxx>
 #include <toolkit/unohlp.hxx>
 #include <tools/diagnose_ex.h>
-#include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
 #include <vcl/mnemonic.hxx>
@@ -165,7 +164,7 @@ void OApplicationController::convertToView(const ::rtl::OUString& _sName)
         {
             ::rtl::OUString sName = aDlg.getName();
             ::rtl::OUString sCatalog = aDlg.getCatalog();
-            ::rtl::OUString sSchema  = aDlg.getSchema();
+            ::rtl::OUString sSchema	 = aDlg.getSchema();
             ::rtl::OUString sNewName(
                 ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sName, sal_False, ::dbtools::eInTableDefinitions ) );
             Reference<XPropertySet> xView = ::dbaui::createView(sNewName,xConnection,xSourceObject);
@@ -227,7 +226,7 @@ void OApplicationController::openDialog( const ::rtl::OUString& _sServiceName )
         Reference< ::com::sun::star::awt::XWindow> xWindow = getTopMostContainerWindow();
         if ( !xWindow.is() )
         {
-            OSL_ENSURE( getContainer(), "OApplicationController::Construct: have no view!" );
+            DBG_ASSERT( getContainer(), "OApplicationController::Construct: have no view!" );
             if ( getContainer() )
                 xWindow = VCLUnoHelper::GetInterface(getView()->Window::GetParent());
         }
@@ -292,7 +291,7 @@ void OApplicationController::refreshTables()
         }
         catch(const Exception&)
         {
-            OSL_FAIL("Could not refresh tables!");
+            OSL_ENSURE(0,"Could not refresh tables!");
         }
 
         getContainer()->getDetailView()->clearPages(sal_False);
@@ -452,7 +451,7 @@ namespace
         case DatabaseObject::FORM:   eType = E_FORM;    break;
         case DatabaseObject::REPORT: eType = E_REPORT;  break;
         default:
-            OSL_FAIL( "lcl_objectType2ElementType: unsupported object type!" );
+            OSL_ENSURE( false, "lcl_objectType2ElementType: unsupported object type!" );
                 // this should have been caught earlier
         }
         return eType;
@@ -751,8 +750,8 @@ void OApplicationController::onLoadedMenu(const Reference< ::com::sun::star::fra
             MenuBar* pMenu = pSystemWindow ? pSystemWindow->GetMenuBar() : NULL;
             if ( pMenu )
             {
-                sal_uInt16 nMenuItems = pMenu->GetItemCount();
-                for ( sal_uInt16 i = 0; i < nMenuItems; ++i )
+                USHORT nMenuItems = pMenu->GetItemCount();
+                for ( USHORT i = 0; i < nMenuItems; ++i )
                     aMnemonicGenerator.RegisterMnemonic( pMenu->GetItemText( pMenu->GetItemId( i ) ) );
             }
             // - the icons should use automatic ones
@@ -795,7 +794,7 @@ void OApplicationController::doAction(sal_uInt16 _nId ,ElementOpenMode _eOpenMod
     // special handling for mail, if more than one document is selected attach them all
     if ( _eOpenMode == E_OPEN_FOR_MAIL )
     {
-
+        
         ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator componentIter = aCompoments.begin();
         ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator componentEnd = aCompoments.end();
         ::rtl::OUString aDocTypeString;
@@ -840,7 +839,7 @@ ElementType OApplicationController::getElementType(const Reference< XContainer >
 }
 
 //........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

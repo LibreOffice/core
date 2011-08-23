@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,114 +24,114 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_style_GraphicLocation_idl__
-#define __com_sun_star_style_GraphicLocation_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module style {
-
-//=============================================================================
-
+#ifndef __com_sun_star_style_GraphicLocation_idl__ 
+#define __com_sun_star_style_GraphicLocation_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module style {  
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: enum com::sun::star::style::GraphicLocation
 /** These enumeration values are used to specify the location of a
     graphic object within its surroundings.
  */
 published enum GraphicLocation
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::NONE
     /** This value specifies that a location is not yet assigned.
      */
-    NONE,
-
-    //-------------------------------------------------------------------------
-
+    NONE, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::LEFT_TOP
     /** The graphic is located in the top left corner.
      */
-    LEFT_TOP,
-
-    //-------------------------------------------------------------------------
-
+    LEFT_TOP, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::MIDDLE_TOP
     /** The graphic is located in the middle of the top edge.
      */
-    MIDDLE_TOP,
-
-    //-------------------------------------------------------------------------
-
+    MIDDLE_TOP, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::RIGHT_TOP
     /** The graphic is located in the top right corner.
      */
-    RIGHT_TOP,
-
-    //-------------------------------------------------------------------------
-
+    RIGHT_TOP, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::LEFT_MIDDLE
     /** The graphic is located in the middle of the left edge.
      */
-    LEFT_MIDDLE,
-
-    //-------------------------------------------------------------------------
-
+    LEFT_MIDDLE, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::MIDDLE_MIDDLE
     /** The graphic is located at the center of the surrounding object.
      */
-    MIDDLE_MIDDLE,
-
-    //-------------------------------------------------------------------------
-
+    MIDDLE_MIDDLE, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::RIGHT_MIDDLE
     /** The graphic is located in the middle of the right edge.
      */
-    RIGHT_MIDDLE,
-
-    //-------------------------------------------------------------------------
-
+    RIGHT_MIDDLE, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::LEFT_BOTTOM
     /** The graphic is located in the bottom left corner.
      */
-    LEFT_BOTTOM,
-
-    //-------------------------------------------------------------------------
-
+    LEFT_BOTTOM, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::MIDDLE_BOTTOM
     /** The graphic is located in the middle of the bottom edge.
      */
-    MIDDLE_BOTTOM,
-
-    //-------------------------------------------------------------------------
-
+    MIDDLE_BOTTOM, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::RIGHT_BOTTOM
     /** The graphic is located in the bottom right corner.
      */
-    RIGHT_BOTTOM,
-
-    //-------------------------------------------------------------------------
-
+    RIGHT_BOTTOM, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::AREA
     /** The graphic is scaled to fill the whole surrounding area.
      */
-    AREA,
-
-    //-------------------------------------------------------------------------
-
+    AREA, 
+ 
+    //------------------------------------------------------------------------- 
+     
     // DocMerge from xml: value com::sun::star::style::GraphicLocation::TILED
-    /** The graphic is repeatedly spread over the surrounding object
+    /** The graphic is repeatedly spread over the surrounding object 
         like tiles.
      */
-    TILED
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+    TILED 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

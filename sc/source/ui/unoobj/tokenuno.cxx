@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -336,12 +336,14 @@ void lcl_SingleRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& rR
     rAPI.Flags = nFlags;
 }
 
+// static
 bool ScTokenConversion::ConvertToTokenArray( ScDocument& rDoc,
         ScTokenArray& rTokenArray, const uno::Sequence<sheet::FormulaToken>& rSequence )
 {
     return !rTokenArray.Fill(rSequence,rDoc.GetExternalRefManager());
 }
 
+// static
 bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
         uno::Sequence<sheet::FormulaToken>& rSequence, const ScTokenArray& rTokenArray )
 {
@@ -442,7 +444,7 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
                     }
                     break;
                 default:
-                    OSL_TRACE( "ScTokenConversion::ConvertToTokenSequence: unhandled token type SvStackVar %d", rToken.GetType());
+                    DBG_ERROR1( "ScTokenConversion::ConvertToTokenSequence: unhandled token type SvStackVar %d", rToken.GetType());
                 case svSep:     // occurs with ocSep, ocOpen, ocClose, ocArray*
                 case svJump:    // occurs with ocIf, ocChose
                 case svMissing: // occurs with ocMissing

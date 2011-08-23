@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,12 +27,20 @@
 #ifndef __com_sun_star_io_XSequenceOutputStream_idl__
 #define __com_sun_star_io_XSequenceOutputStream_idl__
 
+#ifndef __com_sun_star_io_XOutputStream_idl__
 #include <com/sun/star/io/XOutputStream.idl>
+#endif
+
+#ifndef __com_sun_star_io_NotConnectedException_idl__
 #include <com/sun/star/io/NotConnectedException.idl>
+#endif
+
+#ifndef __com_sun_star_io_IOException_idl__
 #include <com/sun/star/io/IOException.idl>
+#endif
 
 
-//=============================================================================
+//============================================================================= 
 
 module com { module sun { module star { module io {
 
@@ -46,7 +54,7 @@ interface XSequenceOutputStream
     /** allows to get access to the written data
      */
     sequence< byte > getWrittenBytes()
-        raises( com::sun::star::io::NotConnectedException,
+        raises( com::sun::star::io::NotConnectedException, 
         com::sun::star::io::IOException );
 };
 

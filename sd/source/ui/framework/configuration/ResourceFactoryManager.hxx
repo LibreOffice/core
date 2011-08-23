@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <osl/mutex.hxx>
 #include <comphelper/stl_types.hxx>
-#include <boost/unordered_map.hpp>
+#include <hash_map>
 
 namespace css = ::com::sun::star;
 
@@ -94,7 +94,7 @@ public:
 
 private:
     ::osl::Mutex maMutex;
-    typedef ::boost::unordered_map<
+    typedef ::std::hash_map<
         ::rtl::OUString,
         css::uno::Reference<css::drawing::framework::XResourceFactory>,
         ::comphelper::UStringHash,
@@ -103,7 +103,7 @@ private:
 
     typedef ::std::vector<
         ::std::pair<
-            rtl::OUString,
+            rtl::OUString, 
             css::uno::Reference<css::drawing::framework::XResourceFactory> > >
         FactoryPatternList;
     FactoryPatternList maFactoryPatternList;

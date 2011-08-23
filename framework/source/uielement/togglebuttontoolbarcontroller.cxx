@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,13 +32,13 @@
 #include "uielement/togglebuttontoolbarcontroller.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
-#include <framework/addonsoptions.hxx>
+#include <classes/addonsoptions.hxx>
 #include "uielement/toolbar.hxx"
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -49,7 +49,7 @@
 #include "com/sun/star/beans/XPropertySet.hpp"
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 
 #include <rtl/uri.hxx>
@@ -82,7 +82,7 @@ ToggleButtonToolbarController::ToggleButtonToolbarController(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
-    sal_uInt16                                   nID,
+    USHORT                                   nID,
     Style                                    eStyle,
     const ::rtl::OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand ),
@@ -146,10 +146,10 @@ throw (::com::sun::star::uno::RuntimeException)
                 aPopup.CheckItem( sal_uInt16( i+1 ), sal_False );
         }
 
-        m_pToolbar->SetItemDown( m_nID, sal_True );
+        m_pToolbar->SetItemDown( m_nID, TRUE );
         aPopup.SetSelectHdl( LINK( this, ToggleButtonToolbarController, MenuSelectHdl ));
         aPopup.Execute( m_pToolbar, m_pToolbar->GetItemRect( m_nID ));
-        m_pToolbar->SetItemDown( m_nID, sal_False );
+        m_pToolbar->SetItemDown( m_nID, FALSE );
     }
 
     return xWindow;

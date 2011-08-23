@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,10 +31,11 @@
 #include <xmlscript/xml_helper.hxx>
 
 
+using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
+
 namespace xmlscript
 {
 
@@ -73,6 +74,7 @@ void XMLElement::dump( Reference< xml::sax::XDocumentHandler > const & xOut )
     xOut->startElement( _name, static_cast< xml::sax::XAttributeList * >( this ) );
     // write sub elements
     dumpSubElements( xOut );
+    //
     xOut->ignorableWhitespace( OUString() );
     xOut->endElement( _name );
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,7 @@
 #define SYMBOL_HXX
 
 #include <vcl/font.hxx>
+#include <tools/list.hxx>
 #include <tools/debug.hxx>
 #include <tools/dynary.hxx>
 #include <svl/lstner.hxx>
@@ -46,8 +47,8 @@
 #include "smmod.hxx"
 
 
-#define SYMBOLSET_NONE      0xFFFF
-#define SYMBOL_NONE     0xFFFF
+#define SYMBOLSET_NONE		0xFFFF
+#define SYMBOL_NONE		0xFFFF
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -83,37 +84,37 @@ private:
     String              m_aName;
     String              m_aExportName;
     String              m_aSetName;
-    sal_UCS4            m_cChar;
-    bool                m_bPredefined;
-    bool                m_bDocSymbol;
+    sal_Unicode         m_cChar;
+    BOOL                m_bPredefined;
+    BOOL                m_bDocSymbol;
 
 public:
     SmSym();
-    SmSym(const String& rName, const Font& rFont, sal_UCS4 cChar,
-          const String& rSet, bool bIsPredefined = false);
+    SmSym(const String& rName, const Font& rFont, sal_Unicode cChar,
+          const String& rSet, BOOL bIsPredefined = FALSE);
     SmSym(const SmSym& rSymbol);
 
-    SmSym&      operator = (const SmSym& rSymbol);
+    SmSym&	   	operator = (const SmSym& rSymbol);
 
     const Font&     GetFace() const { return m_aFace; }
-    sal_UCS4        GetCharacter() const { return m_cChar; }
+    sal_Unicode     GetCharacter() const { return m_cChar; }
     const String&   GetName() const { return m_aName; }
 
     void            SetFace( const Font& rFont )        { m_aFace = rFont; }
-    void            SetCharacter( sal_UCS4 cChar )   { m_cChar = cChar; }
+    void            SetCharacter( sal_Unicode cChar )   { m_cChar = cChar; }
 
 //! since the symbol name is also used as key in the map it should not be possible to change the name
 //! because ten the key would not be the same as its supposed copy here
 //    void            SetName( const String &rTxt )       { m_aName = rTxt; }
 
-    bool            IsPredefined() const        { return m_bPredefined; }
+    BOOL            IsPredefined() const        { return m_bPredefined; }
     const String &  GetSymbolSetName() const    { return m_aSetName; }
     void            SetSymbolSetName( const String &rName )     { m_aSetName = rName; }
     const String &  GetExportName() const       { return m_aExportName; }
     void            SetExportName( const String &rName )        { m_aExportName = rName; }
 
-    bool            IsDocSymbol() const         { return m_bDocSymbol; }
-    void            SetDocSymbol( bool bVal )   { m_bDocSymbol = bVal; }
+    BOOL            IsDocSymbol() const         { return m_bDocSymbol; }
+    void            SetDocSymbol( BOOL bVal )   { m_bDocSymbol = bVal; }
 
     // true if rSymbol has the same name, font and character
     bool            IsEqualInUI( const SmSym& rSymbol ) const;
@@ -139,8 +140,8 @@ typedef std::vector< const SmSym * >            SymbolPtrVec_t;
 
 struct lt_SmSymPtr : public std::binary_function< const SmSym *, const SmSym *, bool >
 {
-    bool operator() ( const SmSym *pSym1, const SmSym *pSym2 ) const
-    {
+    bool operator() ( const SmSym *pSym1, const SmSym *pSym2 ) 
+    { 
         return pSym1->GetCharacter() < pSym2->GetCharacter();
     }
 };
@@ -169,17 +170,17 @@ public:
     std::set< String >      GetSymbolSetNames() const;
     const SymbolPtrVec_t    GetSymbolSet(  const String& rSymbolSetName );
 
-    sal_uInt16                  GetSymbolCount() const  { return static_cast< sal_uInt16 >(m_aSymbols.size()); }
+    USHORT                  GetSymbolCount() const  { return static_cast< USHORT >(m_aSymbols.size()); }
     const SymbolPtrVec_t    GetSymbols() const;
     bool                    AddOrReplaceSymbol( const SmSym & rSymbol, bool bForceChange = false );
     void                    RemoveSymbol( const String & rSymbolName );
 
-    SmSym       *   GetSymbolByName(const String& rSymbolName);
-    const SmSym *   GetSymbolByName(const String& rSymbolName) const
+    SmSym	    *	GetSymbolByName(const String& rSymbolName);
+    const SmSym *	GetSymbolByName(const String& rSymbolName) const
     {
         return ((SmSymbolManager *) this)->GetSymbolByName(rSymbolName);
     }
-
+    
     bool        IsModified() const          { return m_bModified; }
     void        SetModified(bool bModify)   { m_bModified = bModify; }
 

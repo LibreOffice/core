@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,24 +57,27 @@
 using namespace ::com::sun::star;
 
 // TODO: Unicode: Are these characters the correct ones?
-#define HTML_BULLETCHAR_DISC    (0xe008)
-#define HTML_BULLETCHAR_CIRCLE  (0xe009)
-#define HTML_BULLETCHAR_SQUARE  (0xe00b)
+#define HTML_BULLETCHAR_DISC	(0xe008)
+#define HTML_BULLETCHAR_CIRCLE	(0xe009)
+#define HTML_BULLETCHAR_SQUARE	(0xe00b)
 
 
 // <UL TYPE=...>
-static HTMLOptionEnum aHTMLULTypeTable[] =
+static HTMLOptionEnum __FAR_DATA aHTMLULTypeTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_ULTYPE_disc,  HTML_BULLETCHAR_DISC        },
-    { OOO_STRING_SVTOOLS_HTML_ULTYPE_circle,    HTML_BULLETCHAR_CIRCLE      },
-    { OOO_STRING_SVTOOLS_HTML_ULTYPE_square,    HTML_BULLETCHAR_SQUARE      },
-    { 0,                    0                           }
+    { OOO_STRING_SVTOOLS_HTML_ULTYPE_disc,	HTML_BULLETCHAR_DISC		},
+    { OOO_STRING_SVTOOLS_HTML_ULTYPE_circle,	HTML_BULLETCHAR_CIRCLE		},
+    { OOO_STRING_SVTOOLS_HTML_ULTYPE_square,	HTML_BULLETCHAR_SQUARE		},
+    { 0,					0							}
 };
 
 /*  */
 
 void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
 {
+    // --> OD 2006-06-12 #b6435904#
+    // export all numberings, except the outline numbering.
+//    if( rTxtNd.GetNumRule() && ! rTxtNd.IsOutline())
     const SwNumRule* pTxtNdNumRule( rTxtNd.GetNumRule() );
     if ( pTxtNdNumRule &&
          pTxtNdNumRule != rTxtNd.GetDoc()->GetOutlineNumRule() )
@@ -82,11 +85,15 @@ void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
         pNumRule = const_cast<SwNumRule*>(pTxtNdNumRule);
         nDeep = static_cast< sal_uInt16 >(pNumRule ? rTxtNd.GetActualListLevel() + 1 : 0);
         bNumbered = rTxtNd.IsCountedInList();
-        // #i57919# - correction of refactoring done by cws swnumtree:
+        // --> OD 2008-02-27 #refactorlists#
+        // --> OD 2005-11-16 #i57919#
+        // correction of refactoring done by cws swnumtree:
         // <bRestart> has to be set to <true>, if numbering is restarted at this
         // text node and the start value equals <USHRT_MAX>.
         // Start value <USHRT_MAX> indicates, that at this text node the numbering
         // is restarted with the value given at the corresponding level.
+//        bRestart = rTxtNd.IsListRestart() &&
+//                   GetNum() && rTxtNd.GetNum()->GetStartValue() == USHRT_MAX;
         bRestart = rTxtNd.IsListRestart() && !rTxtNd.HasAttrListRestartValue();
         // <--
     }
@@ -146,14 +153,15 @@ void SwHTMLParser::NewNumBulList( int nToken )
             // so macht. Dadurch wurd immer auch eine 9pt-Schrift
             // eingestellt, was in Netscape nicht der Fall ist. Bisher hat
             // das noch niemanden gestoert.
-            // #i63395# - Only apply user defined default bullet font
+            // --> OD 2008-06-03 #i63395#
+            // Only apply user defined default bullet font
             if ( numfunc::IsDefBulletFontUserDefined() )
             {
                 aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
             }
             // <--
             aNumFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
-            aNumFmt.SetBulletChar( cBulletChar );       // das Bulletzeichen !!
+            aNumFmt.SetBulletChar( cBulletChar );		// das Bulletzeichen !!
             nChrFmtPoolId = RES_POOLCHR_BUL_LEVEL;
         }
 
@@ -205,7 +213,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
                     case 'a':   aNumFmt.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER); break;
                     case 'I':   aNumFmt.SetNumberingType(SVX_NUM_ROMAN_UPPER);        break;
                     case 'i':   aNumFmt.SetNumberingType(SVX_NUM_ROMAN_LOWER);        break;
-                    default:    bChangeNumFmt = sal_False;
+                    default:	bChangeNumFmt = sal_False;
                     }
                     break;
 
@@ -300,8 +308,12 @@ void SwHTMLParser::NewNumBulList( int nToken )
 
     // den aktuellen Absatz erst einmal nicht numerieren
     {
-        sal_uInt8 nLvl = nLevel;
+        BYTE nLvl = nLevel;
+        // --> OD 2008-04-02 #refactorlists#
+//        SetNoNum(&nLvl, TRUE); // #115962#
+//        SetNodeNum( nLvl );
         SetNodeNum( nLvl, false );
+        // <--
     }
 
     // einen neuen Kontext anlegen
@@ -348,7 +360,8 @@ void SwHTMLParser::NewNumBulList( int nToken )
             if( !aPropInfo.bRightMargin )
                 aItemSet.ClearItem( RES_LR_SPACE );
 
-            // #i89812# - Perform change to list style before calling <DoPositioning(..)>,
+            // --> OD 2008-06-26 #i89812#
+            // Perform change to list style before calling <DoPositioning(..)>,
             // because <DoPositioning(..)> may open a new context and thus may
             // clear the <SwHTMLNumRuleInfo> instance hold by local variable <rInfo>.
             if( bChangeNumFmt )
@@ -409,7 +422,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
     if( rInfo.GetDepth()>0 && (!nToken || pCntxt) )
     {
         rInfo.DecDepth();
-        if( !rInfo.GetDepth() )     // wars der letze Level ?
+        if( !rInfo.GetDepth() )		// wars der letze Level ?
         {
             // Die noch nicht angepassten Formate werden jetzt noch
             // angepasst, damit es sich besser Editieren laesst.
@@ -429,7 +442,8 @@ void SwHTMLParser::EndNumBulList( int nToken )
                                         ? pRefNumFmt->GetNumberingType() : style::NumberingType::CHAR_SPECIAL);
                     if( SVX_NUM_CHAR_SPECIAL == aNumFmt.GetNumberingType() )
                     {
-                        // #i63395# - Only apply user defined default bullet font
+                        // --> OD 2008-06-03 #i63395#
+                        // Only apply user defined default bullet font
                         if ( numfunc::IsDefBulletFontUserDefined() )
                         {
                             aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
@@ -456,7 +470,9 @@ void SwHTMLParser::EndNumBulList( int nToken )
         }
         else
         {
-            // the next paragraph not numbered first
+            // den naechsten Absatz erstmal nicht numerieren
+            // --> OD 2008-04-02 #refactorlists#
+//            SetNodeNum( rInfo.GetLevel() | NO_NUMLEVEL );
             SetNodeNum( rInfo.GetLevel(), false );
             // <--
         }
@@ -475,7 +491,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
         SetTxtCollAttrs();
 
     if( bSetAttrs )
-        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();	// Absatz-Atts wegen JavaScript moeglichst schnell setzen
 
 }
 
@@ -521,9 +537,13 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     // einen neuen Absatz aufmachen
     if( pPam->GetPoint()->nContent.GetIndex() )
         AppendTxtNode( AM_NOSPACE, sal_False );
-    bNoParSpace = sal_False;    // In <LI> wird kein Abstand eingefuegt!
+    bNoParSpace = sal_False;	// In <LI> wird kein Abstand eingefuegt!
 
+    // --> OD 2008-04-02 #refactorlists#
+//    if( HTML_LISTHEADER_ON==nToken )
+//        SetNoNum(&nLevel, TRUE);
     const bool bCountedInList( HTML_LISTHEADER_ON==nToken ? false : true );
+    // <--
 
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
@@ -535,17 +555,20 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     else
     {
         aNumRuleName = pDoc->GetUniqueNumRuleName();
+        // --> OD 2008-02-11 #newlistlevelattrs#
         SwNumRule aNumRule( aNumRuleName,
                             SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
+        // <--
         SwNumFmt aNumFmt( aNumRule.Get( 0 ) );
-        // #i63395# - Only apply user defined default bullet font
+        // --> OD 2008-06-03 #i63395#
+        // Only apply user defined default bullet font
         if ( numfunc::IsDefBulletFontUserDefined() )
         {
             aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
         }
         // <--
         aNumFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
-        aNumFmt.SetBulletChar( cBulletChar );   // das Bulletzeichen !!
+        aNumFmt.SetBulletChar( cBulletChar );	// das Bulletzeichen !!
         aNumFmt.SetCharFmt( pCSS1Parser->GetCharFmtFromPool(RES_POOLCHR_BUL_LEVEL) );
         aNumFmt.SetLSpace( (sal_uInt16)(-HTML_NUMBUL_INDENT) );
         aNumFmt.SetFirstLineOffset( HTML_NUMBUL_INDENT );
@@ -565,13 +588,16 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
     ((SwCntntNode *)pTxtNode)->SetAttr( SwNumRuleItem(aNumRuleName) );
     pTxtNode->SetAttrListLevel(nLevel);
-    // #i57656# - <IsCounted()> state of text node has to be adjusted accordingly.
-    if ( nLevel < MAXLEVEL )
+    // --> OD 2005-11-14 #i57656#
+    // <IsCounted()> state of text node has to be adjusted accordingly.
+    if ( /*nLevel >= 0 &&*/ nLevel < MAXLEVEL )
     {
+        // --> OD 2008-04-02 #refactorlists#
         pTxtNode->SetCountedInList( bCountedInList );
+        // <--
     }
     // <--
-    // #i57919#
+    // --> OD 2005-11-15 #i57919#
     // correction of refactoring done by cws swnumtree
     // - <nStart> contains the start value, if the numbering has to be restarted
     //   at this text node. Value <USHRT_MAX> indicates, that numbering isn't
@@ -646,7 +672,7 @@ void SwHTMLParser::EndNumBulListItem( int nToken, sal_Bool bSetColl,
     if( pCntxt )
     {
         EndContext( pCntxt );
-        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();	// Absatz-Atts wegen JavaScript moeglichst schnell setzen
         delete pCntxt;
     }
 
@@ -657,6 +683,7 @@ void SwHTMLParser::EndNumBulListItem( int nToken, sal_Bool bSetColl,
 
 /*  */
 
+// --> OD 2008-04-02 #refactorlists#
 void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel, bool bCountedInList )
 {
     SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
@@ -666,8 +693,22 @@ void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel, bool bCountedInList )
     const String& rName = GetNumInfo().GetNumRule()->GetName();
     ((SwCntntNode *)pTxtNode)->SetAttr( SwNumRuleItem(rName) );
 
+    // --> OD 2008-04-02 #refactorlists#
+//    // --> OD 2005-11-14 #i57656#
+//    // consider usage of NO_NUMLEVEL - see implementation of <SwTxtNode::SetLevel(..)>
+//    if ( /*nLevel >= 0 &&*/ ( nLevel & NO_NUMLEVEL ) )
+//    {
+//        pTxtNode->SetAttrListLevel( nLevel & ~NO_NUMLEVEL );
+//        pTxtNode->SetCountedInList( false );
+//    }
+//    else
+//    {
+//        pTxtNode->SetAttrListLevel( nLevel );
+//        pTxtNode->SetCountedInList( true );
+//    }
     pTxtNode->SetAttrListLevel( nLevel );
     pTxtNode->SetCountedInList( bCountedInList );
+    // <--
 
     // NumRule invalidieren, weil sie durch ein EndAction bereits
     // auf valid geschaltet worden sein kann.
@@ -681,7 +722,7 @@ void SwHTMLWriter::FillNextNumInfo()
 {
     pNextNumRuleInfo = 0;
 
-    sal_uLong nPos = pCurPam->GetPoint()->nNode.GetIndex() + 1;
+    ULONG nPos = pCurPam->GetPoint()->nNode.GetIndex() + 1;
 
     sal_Bool bTable = sal_False;
     do
@@ -755,7 +796,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                 bStartValue = sal_True;
                 if( rInfo.GetDepth() > 1 )
                 {
-                    sal_uLong nPos =
+                    ULONG nPos =
                         rWrt.pCurPam->GetPoint()->nNode.GetIndex() + 1;
                     do
                     {
@@ -864,10 +905,10 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             sal_Char cType = 0;
             switch( eType )
             {
-            case SVX_NUM_CHARS_UPPER_LETTER:    cType = 'A'; break;
-            case SVX_NUM_CHARS_LOWER_LETTER:    cType = 'a'; break;
-            case SVX_NUM_ROMAN_UPPER:           cType = 'I'; break;
-            case SVX_NUM_ROMAN_LOWER:           cType = 'i'; break;
+            case SVX_NUM_CHARS_UPPER_LETTER:	cType = 'A'; break;
+            case SVX_NUM_CHARS_LOWER_LETTER:	cType = 'a'; break;
+            case SVX_NUM_ROMAN_UPPER:			cType = 'I'; break;
+            case SVX_NUM_ROMAN_LOWER:			cType = 'i'; break;
             }
             if( cType )
                 (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += '=') += cType;
@@ -875,7 +916,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             sal_uInt16 nStartVal = rNumFmt.GetStart();
             if( bStartValue && 1 == nStartVal && i == rInfo.GetDepth()-1 )
             {
-                // #i51089 - TUNING#
+                // --> OD 2005-11-02 #i51089 - TUNING#
                 if ( rWrt.pCurPam->GetNode()->GetTxtNode()->GetNum() )
                 {
                     nStartVal = static_cast< sal_uInt16 >( rWrt.pCurPam->GetNode()
@@ -883,7 +924,8 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                 }
                 else
                 {
-                    OSL_FAIL( "<OutHTML_NumBulListStart(..) - text node has no number." );
+                    OSL_ENSURE( false,
+                            "<OutHTML_NumBulListStart(..) - text node has no number." );
                 }
             }
             if( nStartVal != 1 )
@@ -897,7 +939,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             rWrt.Strm() << sOut.GetBuffer();
 
         if( rWrt.bCfgOutStyles )
-            OutCSS1_NumBulListStyleOpt( rWrt, *rInfo.GetNumRule(), (sal_uInt8)i );
+            OutCSS1_NumBulListStyleOpt( rWrt, *rInfo.GetNumRule(), (BYTE)i );
 
         rWrt.Strm() << '>';
 

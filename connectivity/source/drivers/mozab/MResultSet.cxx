@@ -71,8 +71,8 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
 //------------------------------------------------------------------------------
-//  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
-::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)    \
+//	IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
+::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)	\
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.mozab.ResultSet"));
 }
@@ -160,7 +160,7 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
 // -------------------------------------------------------------------------
  Sequence<  Type > SAL_CALL OResultSet::getTypes(  ) throw( RuntimeException)
 {
-    OTypeCollection aTypes( ::getCppuType( (const  Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
+    OTypeCollection aTypes(	::getCppuType( (const  Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
                                                 ::getCppuType( (const  Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
                                                 ::getCppuType( (const  Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
 
@@ -172,7 +172,7 @@ void OResultSet::methodEntry()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     if ( !m_pTable )
     {
-        OSL_FAIL( "OResultSet::methodEntry: looks like we're disposed, but how is this possible?" );
+        OSL_ENSURE( false, "OResultSet::methodEntry: looks like we're disposed, but how is this possible?" );
         throw DisposedException( ::rtl::OUString(), *this );
     }
 }
@@ -377,7 +377,7 @@ sal_Bool OResultSet::fetchRow(sal_Int32 cardNumber,sal_Bool bForceReload) throw(
         if (cardNumber == m_nUpdatedRow)
         {
             //write back the changes first
-            if (!pushCard(cardNumber))  //error write back the changes
+            if (!pushCard(cardNumber))	//error write back the changes
                 throw SQLException();
         }
     }
@@ -411,7 +411,7 @@ const ORowSetValue& OResultSet::getValue(sal_Int32 cardNumber, sal_Int32 columnI
 {
     if ( fetchRow( cardNumber ) == sal_False )
     {
-        OSL_FAIL("fetchRow() returned False" );
+        OSL_ASSERT("fetchRow() returned False" );
         m_bWasNull = sal_True;
         return *ODatabaseMetaDataResultSet::getEmptyValue();
     }
@@ -621,11 +621,11 @@ IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
     Sequence< Property > aProps(5);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(FETCHDIRECTION,          sal_Int32);
-    DECL_PROP0(FETCHSIZE,               sal_Int32);
+    DECL_PROP0(FETCHDIRECTION,			sal_Int32);
+    DECL_PROP0(FETCHSIZE,				sal_Int32);
      DECL_BOOL_PROP1IMPL(ISBOOKMARKABLE) PropertyAttribute::READONLY);
     DECL_PROP1IMPL(RESULTSETCONCURRENCY,sal_Int32) PropertyAttribute::READONLY);
-    DECL_PROP1IMPL(RESULTSETTYPE,       sal_Int32) PropertyAttribute::READONLY);
+    DECL_PROP1IMPL(RESULTSETTYPE,		sal_Int32) PropertyAttribute::READONLY);
 
     return new OPropertyArrayHelper(aProps);
 }
@@ -642,7 +642,7 @@ sal_Bool OResultSet::convertFastPropertyValue(
                             const Any& /*rValue*/ )
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
-    OSL_FAIL( "OResultSet::convertFastPropertyValue: not implemented!" );
+    OSL_ENSURE( false, "OResultSet::convertFastPropertyValue: not implemented!" );
     switch(nHandle)
     {
         case PROPERTY_ID_ISBOOKMARKABLE:
@@ -663,7 +663,7 @@ void OResultSet::setFastPropertyValue_NoBroadcast(
                                                  )
                                                  throw (Exception)
 {
-    OSL_FAIL( "OResultSet::setFastPropertyValue_NoBroadcast: not implemented!" );
+    OSL_ENSURE( false, "OResultSet::setFastPropertyValue_NoBroadcast: not implemented!" );
     switch(nHandle)
     {
         case PROPERTY_ID_ISBOOKMARKABLE:
@@ -836,7 +836,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             queryExpression.setExpressionCondition( MQueryExpression::AND );
         }
         else {
-            OSL_FAIL("analyseSQL: Error in Parse Tree");
+            OSL_ASSERT("analyseSQL: Error in Parse Tree");
         }
     }
     else if (SQL_ISRULE(parseTree,comparison_predicate))
@@ -898,9 +898,8 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         OSQLParseNode *pOptEscape;
         const OSQLParseNode* pPart2 = parseTree->getChild(1);
         pColumn     = parseTree->getChild(0);                        // Match Item
-        pAtom       = pPart2->getChild(pPart2->count()-2);     // Match String
-        pOptEscape  = pPart2->getChild(pPart2->count()-1);     // Opt Escape Rule
-        (void)pOptEscape;
+        pAtom       = pPart2->getChild(parseTree->count()-2);     // Match String
+        pOptEscape  = pPart2->getChild(parseTree->count()-1);     // Opt Escape Rule
         const bool bNot = SQL_ISTOKEN(pPart2->getChild(0), NOT);
 
         if (!(pAtom->getNodeType() == SQL_NODE_STRING ||
@@ -982,7 +981,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
                   && matchString.indexOf( MATCHCHAR ) == -1
                 )
             {
-                // One occurrence of '%' - no '_' matches...
+                // One occurance of '%' - no '_' matches...
                 if ( matchString.indexOf ( WILDCARD ) == 0 )
                 {
                     op = MQueryOp::EndsWith;
@@ -1225,6 +1224,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
             else
             {
                 sal_Bool bDistinct = sal_False;
+                sal_Bool bWasSorted = sal_False;
                 OSQLParseNode *pDistinct = m_pParseTree->getChild(1);
                 if (pDistinct && pDistinct->getTokenID() == SQL_TOKEN_DISTINCT)
                 {
@@ -1233,6 +1233,8 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                         m_aOrderbyColumnNumber.push_back(m_aColMapping[1]);
                         m_aOrderbyAscending.push_back(SQL_DESC);
                     }
+                    else
+                        bWasSorted = sal_True;
                     bDistinct = sal_True;
                 }
 
@@ -1263,10 +1265,11 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                             eKeyType[i] = SQL_ORDERBYKEY_DOUBLE;
                             break;
 
-                    // Other types aren't implemented (so they are always FALSE)
+                    // Andere Typen sind nicht implementiert (und damit immer
+                    // FALSE)
                         default:
                             eKeyType[i] = SQL_ORDERBYKEY_NONE;
-                            OSL_FAIL("MResultSet::executeQuery: Order By Data Type not implemented");
+                            OSL_ASSERT("MResultSet::executeQuery: Order By Data Type not implemented");
                             break;
                     }
                 }
@@ -1372,7 +1375,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                                    const Reference<XDatabaseMetaData>& _xMetaData,
                                    ::std::vector<sal_Int32>& _rColMapping)
 {
-    ::comphelper::UStringMixEqual aCase(_xMetaData->supportsMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual aCase(_xMetaData->storesMixedCaseQuotedIdentifiers());
 
     Reference<XPropertySet> xTableColumn;
     ::rtl::OUString sTableColumnName, sSelectColumnRealName;
@@ -1439,7 +1442,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
         }
         catch (Exception&)
         {
-            OSL_FAIL("OResultSet::setBoundedColumns: caught an Exception!");
+            OSL_ENSURE(sal_False, "OResultSet::setBoundedColumns: caught an Exception!");
         }
     }
 }
@@ -1449,9 +1452,9 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
 sal_Bool OResultSet::isCount() const
 {
     return (m_pParseTree &&
-            m_pParseTree->count() > 2                                                       &&
-            SQL_ISRULE(m_pParseTree->getChild(2),scalar_exp_commalist)                      &&
-            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0),derived_column)               &&
+            m_pParseTree->count() > 2														&&
+            SQL_ISRULE(m_pParseTree->getChild(2),scalar_exp_commalist)						&&
+            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0),derived_column)				&&
             SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0)->getChild(0),general_set_fct) &&
             m_pParseTree->getChild(2)->getChild(0)->getChild(0)->count() == 4
             );
@@ -1492,7 +1495,7 @@ sal_Bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
     impl_ensureKeySet();
     if (m_CurrentRowCount < nMaxCardNumber)
     {
-        sal_Int32   nKeyValue;
+        sal_Int32 	nKeyValue;
         if ( (sal_Int32)m_pKeySet->get().capacity() < nMaxCardNumber )
             m_pKeySet->get().reserve(nMaxCardNumber + 20 );
 
@@ -1561,7 +1564,7 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
     {
         nCurCard = (m_pKeySet->get())[nCurPos-1];
     }
-    else    //The requested row has not been retrived until now. We should get the right card for it.
+    else	//The requested row has not been retrived until now. We should get the right card for it.
         nCurCard = nCurPos + deletedCount();
 
     while ( nCurCard > nNumberOfRecords && !m_aQuery.queryComplete() ) {
@@ -1905,7 +1908,7 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLE
     ResultSetEntryGuard aGuard( *this );
     m_nOldRowPos = m_nRowPos;
 
-    if (!m_nNewRow) //no new row now, insert one
+    if (!m_nNewRow)	//no new row now, insert one
     {
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
         checkPendingUpdate();

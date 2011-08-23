@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,8 @@ TabPage RID_FORMULATAB_FUNCTION
     Hide = TRUE ;
     Size = MAP_APPFONT ( 96 , 180 ) ;
     HelpId = HID_FORMULATAB_FUNCTION ;
-     // Titel wird dynamisch gesetzt (s.u.)
-     // 1. Seite
+     //	Titel wird dynamisch gesetzt (s.u.)
+     //	1. Seite
     ListBox LB_CATEGORY
     {
         HelpId = HID_FORMULA_LB_CATEGORY;
@@ -51,6 +51,18 @@ TabPage RID_FORMULATAB_FUNCTION
             < "Last Used" ; Default ; > ;
             < "All" ; Default ; > ;
         };
+        //	< "Database" ; Default ; > ;
+        //	< "Date&Time" ; Default ; > ;
+        //	< "Financial" ; Default ; > ;
+        //	< "Information" ; Default ; > ;
+        //	< "Logical" ; Default ; > ;
+        //	< "Mathematical" ; Default ; > ;
+        //	< "Array" ; Default ; > ;
+        //	< "Statistical" ; Default ; > ;
+        //	< "Spreadsheet" ; Default ; > ;
+        //	< "Text" ; Default ; > ;
+        //	< "Add-in" ; Default ; > ;
+        //};
     };
     ListBox LB_FUNCTION
     {
@@ -78,8 +90,8 @@ TabPage RID_FORMULATAB_STRUCT
     Hide = TRUE ;
     Size = MAP_APPFONT ( 96 , 180 ) ;
     HelpId = HID_FORMULATAB_STRUCT ;
-     // Titel wird dynamisch gesetzt (s.u.)
-     // 1. Seite
+     //	Titel wird dynamisch gesetzt (s.u.)
+     //	1. Seite
     Control TLB_STRUCT
     {
         Border = TRUE ;
@@ -99,9 +111,19 @@ TabPage RID_FORMULATAB_STRUCT
         ImageBitmap = Bitmap { File = "fapclose.bmp"; };
         MaskColor = STD_MASKCOLOR;
     };
+    Image BMP_STR_CLOSE_H
+    {
+        ImageBitmap = Bitmap { File = "fapclose_h.bmp"; };
+        MaskColor = STD_MASKCOLOR;
+    };
     Image BMP_STR_OPEN
     {
         ImageBitmap = Bitmap { File = "fapopen.bmp"; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    Image BMP_STR_OPEN_H
+    {
+        ImageBitmap = Bitmap { File = "fapopen_h.bmp"; };
         MaskColor = STD_MASKCOLOR;
     };
     Image BMP_STR_END
@@ -109,9 +131,19 @@ TabPage RID_FORMULATAB_STRUCT
         ImageBitmap = Bitmap { File = "fapok.bmp"; };
         MaskColor = STD_MASKCOLOR;
     };
+    Image BMP_STR_END_H
+    {
+        ImageBitmap = Bitmap { File = "fapok_h.bmp"; };
+        MaskColor = STD_MASKCOLOR;
+    };
     Image BMP_STR_ERROR
     {
         ImageBitmap = Bitmap { File = "faperror.bmp"; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    Image BMP_STR_ERROR_H
+    {
+        ImageBitmap = Bitmap { File = "faperror_h.bmp"; };
         MaskColor = STD_MASKCOLOR;
     };
     String STR_STRUCT_ERR1
@@ -131,7 +163,6 @@ ModalDialog RID_FORMULADLG_FORMULA_MODAL
     Moveable = TRUE ;
     TabControl TC_FUNCTION
     {
-        HelpID = "formula:TabControl:RID_FORMULADLG_FORMULA_MODAL:TC_FUNCTION";
         Pos = MAP_APPFONT ( 6 , 5 ) ;
         Size = MAP_APPFONT ( 102 , 199 ) ;
         PageList =
@@ -218,7 +249,6 @@ ModalDialog RID_FORMULADLG_FORMULA_MODAL
     };
     CheckBox BTN_MATRIX
     {
-        HelpID = "formula:CheckBox:RID_FORMULADLG_FORMULA_MODAL:BTN_MATRIX";
         Pos = MAP_APPFONT ( 6 , 208 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         TabStop = TRUE ;
@@ -226,14 +256,12 @@ ModalDialog RID_FORMULADLG_FORMULA_MODAL
     };
     Edit ED_REF
     {
-        HelpID = "formula:Edit:RID_FORMULADLG_FORMULA_MODAL:ED_REF";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 76 , 205 ) ;
         Size = MAP_APPFONT ( 66 , 12 ) ;
     };
     ImageButton RB_REF
     {
-        HelpID = "formula:ImageButton:RID_FORMULADLG_FORMULA_MODAL:RB_REF";
         Pos = MAP_APPFONT ( 144 , 205 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -253,7 +281,6 @@ ModalDialog RID_FORMULADLG_FORMULA_MODAL
     };
     PushButton BTN_BACKWARD
     {
-        HelpID = "formula:PushButton:RID_FORMULADLG_FORMULA_MODAL:BTN_BACKWARD";
         Pos = MAP_APPFONT ( 171 , 208 ) ;
         Size = MAP_APPFONT ( 45 , 14 ) ;
         TabStop = TRUE ;
@@ -261,7 +288,6 @@ ModalDialog RID_FORMULADLG_FORMULA_MODAL
     };
     PushButton BTN_FORWARD
     {
-        HelpID = "formula:PushButton:RID_FORMULADLG_FORMULA_MODAL:BTN_FORWARD";
         Pos = MAP_APPFONT ( 219 , 208 ) ;
         Size = MAP_APPFONT ( 45 , 14 ) ;
         TabStop = TRUE ;
@@ -290,6 +316,7 @@ ModalDialog RID_FORMULADLG_FORMULA_MODAL
 };
 ModelessDialog RID_FORMULADLG_FORMULA
 {
+    // OutputSize = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 321 , 228 ) ;
@@ -297,7 +324,6 @@ ModelessDialog RID_FORMULADLG_FORMULA
     Moveable = TRUE ;
     TabControl TC_FUNCTION
     {
-        HelpID = "formula:TabControl:RID_FORMULADLG_FORMULA:TC_FUNCTION";
         Pos = MAP_APPFONT ( 6 , 5 ) ;
         Size = MAP_APPFONT ( 102 , 199 ) ;
         PageList =
@@ -384,7 +410,6 @@ ModelessDialog RID_FORMULADLG_FORMULA
     };
     CheckBox BTN_MATRIX
     {
-        HelpID = "formula:CheckBox:RID_FORMULADLG_FORMULA:BTN_MATRIX";
         Pos = MAP_APPFONT ( 6 , 208 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         TabStop = TRUE ;
@@ -392,14 +417,12 @@ ModelessDialog RID_FORMULADLG_FORMULA
     };
     Edit ED_REF
     {
-        HelpID = "formula:Edit:RID_FORMULADLG_FORMULA:ED_REF";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 76 , 205 ) ;
         Size = MAP_APPFONT ( 66 , 12 ) ;
     };
     ImageButton RB_REF
     {
-        HelpID = "formula:ImageButton:RID_FORMULADLG_FORMULA:RB_REF";
         Pos = MAP_APPFONT ( 144 , 205 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -419,7 +442,6 @@ ModelessDialog RID_FORMULADLG_FORMULA
     };
     PushButton BTN_BACKWARD
     {
-        HelpID = "formula:PushButton:RID_FORMULADLG_FORMULA:BTN_BACKWARD";
         Pos = MAP_APPFONT ( 171 , 208 ) ;
         Size = MAP_APPFONT ( 45 , 14 ) ;
         TabStop = TRUE ;
@@ -427,7 +449,6 @@ ModelessDialog RID_FORMULADLG_FORMULA
     };
     PushButton BTN_FORWARD
     {
-        HelpID = "formula:PushButton:RID_FORMULADLG_FORMULA:BTN_FORWARD";
         Pos = MAP_APPFONT ( 219 , 208 ) ;
         Size = MAP_APPFONT ( 45 , 14 ) ;
         TabStop = TRUE ;
@@ -464,6 +485,15 @@ Image RID_BMP_REFBTN1
     MaskColor = STD_MASKCOLOR;
 };
 
+Image RID_BMP_REFBTN1_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "refinp1_h.bmp";
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+
 Image RID_BMP_REFBTN2
 {
     ImageBitmap = Bitmap
@@ -472,3 +502,35 @@ Image RID_BMP_REFBTN2
     };
     MaskColor = STD_MASKCOLOR;
 };
+
+Image RID_BMP_REFBTN2_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "refinp2_h.bmp";
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,27 +49,27 @@ class Context_CppStd : public Cx_Base,
                        private StateMachineContext
 {
   public:
-    //  LIFECYCLE
+    // 	LIFECYCLE
                         Context_CppStd(
                             DYN autodoc::TkpDocuContext &
-                                                let_drContext_Docu  );
+                                                let_drContext_Docu	);
                         ~Context_CppStd();
-    //  OPERATIONS
-    virtual void        ReadCharChain(
-                            CharacterSource &   io_rText );
+    //	OPERATIONS
+    virtual void		ReadCharChain(
+                            CharacterSource &	io_rText );
     virtual void        AssignDealer(
                             Distributor &       o_rDealer );
   private:
-    //  SERVICE FUNCTIONS
-    void                PerformStatusFunction(
-                            uintt               i_nStatusSignal,
+    //	SERVICE FUNCTIONS
+    void				PerformStatusFunction(
+                            uintt				i_nStatusSignal,
                             StmArrayStatus::F_CRTOK
                                                 i_fTokenCreateFunction,
-                            CharacterSource &   io_rText );
-    void                SetupStateMachine();
+                            CharacterSource &	io_rText );
+    void				SetupStateMachine();
 
-    //  DATA
-    StateMachine        aStateMachine;
+    //	DATA
+    StateMachine		aStateMachine;
 
         // Contexts
     Dyn<autodoc::TkpDocuContext>
@@ -77,7 +77,7 @@ class Context_CppStd : public Cx_Base,
 
     Dyn<Context_Comment>
                         pContext_Comment;
-    Dyn<Cx_Base>        pContext_Preprocessor;
+    Dyn<Cx_Base>    	pContext_Preprocessor;
     Dyn<Cx_Base>        pContext_ConstString;
     Dyn<Cx_Base>        pContext_ConstChar;
     Dyn<Cx_Base>        pContext_ConstNumeric;

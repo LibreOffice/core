@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,22 +73,20 @@
 
 using namespace comphelper;
 using namespace cppu;
+using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::beans;
 
+//using namespace com::sun::star;
 using namespace connectivity;
 using namespace com::sun::star::sdb;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace com::sun::star::registry;
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OUStringToOString;
 
 #define OUtoCStr( x ) (OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US ).getStr())
 Reference< XContentProviderManager > globalUcb;
@@ -105,8 +103,13 @@ void printColumns( Reference<XResultSet> &xRes )
         printf( "ColumnCount = %d\n", xMeta->getColumnCount());
         for(sal_Int32 i=1;i<=xMeta->getColumnCount();++i)
         {
+            // printf(aPat.getStr(), xMeta->getColumnName(i).getStr());
             const char *str = OUtoCStr(xMeta->getColumnName(i));
-            printf( aPat, str );
+//           if ( i < 3 ) {
+//               printf( aPat_Short, str );
+//           } else {
+                printf( aPat, str );
+//           }
         }
         printf("\n");
         printf("------------------------------------------------------------------------------------------\n");
@@ -125,7 +128,11 @@ void printXResultSet( Reference<XResultSet> &xRes )
         {
             try {
                 const char *str = OUtoCStr(xRow->getString(j));
-                printf( aPat_Short, str );
+//                   if ( j < 3 ) {
+//                       printf( aPat_Short, str );
+//                   } else {
+                        printf( aPat_Short, str );
+//                   }
             } catch (...) {
                   printf(" Ex ");
             }
@@ -152,6 +159,7 @@ void printXResultSets( Reference<XResultSet> &xRes )
     }
 }
 
+//#define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
 static const char * const components[] =
 {
     SAL_MODULENAME( "ucb1" )    // KSO, ABI
@@ -160,7 +168,7 @@ static const char * const components[] =
     , "sax.uno" SAL_DLLEXTENSION
     , "stocservices.uno" SAL_DLLEXTENSION
     , SAL_MODULENAME( "fileacc" )
-    , SAL_MODULENAME( "mcnttype" )          //Clipboard   Ask Oliver Braun
+    , SAL_MODULENAME( "mcnttype" )  		//Clipboard   Ask Oliver Braun
     , "i18npool.uno" SAL_DLLEXTENSION
         // Reading of files in specific encodings like UTF-8 using
         // createUnoService( "com.sun.star.io.TextInputStream" ) and such
@@ -223,13 +231,13 @@ Reference< XMultiServiceFactory > InitializeFac( void )
                     createRegistryServiceFactory( types, sal_True );
                 Reference< XImplementationRegistration > xIR(
                     interimSmgr->createInstance(
-                        OUString::(RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.registry.ImplementationRegistration" )) ), UNO_QUERY );
+                        OUString::createFromAscii(
+                            "com.sun.star.registry.ImplementationRegistration" ) ), UNO_QUERY );
 
                 Reference< XSimpleRegistry > xReg(
                     interimSmgr->createInstance(
-                        OUString::(RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.registry.SimpleRegistry" )) ), UNO_QUERY );
+                        OUString::createFromAscii(
+                            "com.sun.star.registry.SimpleRegistry" ) ), UNO_QUERY );
                 if ( xReg.is() )
                 {
                     xReg->open(services, sal_False, sal_True);
@@ -273,18 +281,34 @@ Reference< XMultiServiceFactory > InitializeFac( void )
     // set global factory
     setProcessServiceFactory( xSMgr );
 
+/*	// Create simple ConfigManager
+    Sequence< Any > aConfArgs(3);
+    aConfArgs[0] <<= PropertyValue( OUString::createFromAscii("servertype"), 0, makeAny( OUString::createFromAscii("local") ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
+    aConfArgs[1] <<= PropertyValue( OUString::createFromAscii("sourcepath"), 0, makeAny( OUString::createFromAscii("g:\\") ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
+    aConfArgs[2] <<= PropertyValue( OUString::createFromAscii("updatepath"), 0, makeAny( OUString::createFromAscii("g:\\") ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
+
+    Reference< XContentProvider > xConfProvider
+        ( xSMgr->createInstanceWithArguments( OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ), aConfArgs), UNO_QUERY );
+*/
+
 
 //  Create unconfigured Ucb:
+/*	Sequence< Any > aArgs(1);
+    aArgs[1] = makeAny ( xConfProvider );*/
     Sequence< Any > aArgs;
     ::ucb::ContentBroker::initialize( xSMgr, aArgs );
     Reference< XContentProviderManager > xUcb =
         ucb::ContentBroker::get()->getContentProviderManagerInterface();
 
     Reference< XContentProvider > xFileProvider
-        ( xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider")) ), UNO_QUERY );
-    xUcb->registerContentProvider( xFileProvider, OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True );
+        ( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" ) ), UNO_QUERY );
+    xUcb->registerContentProvider( xFileProvider, OUString::createFromAscii( "file" ), sal_True );
 
 
+/*	Reference< XContentProvider > xPackageProvider
+        ( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.PackageContentProvider" ) ), UNO_QUERY );
+    xUcb->registerContentProvider( xPackageProvider, OUString::createFromAscii( "vnd.sun.star.pkg" ), sal_True );
+    */
     globalUcb = xUcb;
     return xSMgr;
 }
@@ -305,10 +329,10 @@ int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
                     printf("Testing getColumns() : START\n");
                     {
                         Reference<XResultSet> xRes = xDmd->getColumns(
-                                makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM(""))), // Catalog
-                                OUString(RTL_CONSTASCII_USTRINGPARAM("%")),          // Schema
-                                OUString(RTL_CONSTASCII_USTRINGPARAM("%")),          // TabName
-                                OUString(RTL_CONSTASCII_USTRINGPARAM("%"))
+                                makeAny(OUString::createFromAscii("")), // Catalog
+                                OUString::createFromAscii("%"),          // Schema
+                                OUString::createFromAscii("%"),          // TabName
+                                OUString::createFromAscii("%")
                                 );
                         printXResultSets( xRes );
                     }
@@ -324,9 +348,9 @@ int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
                 printf("Testing getTables() : START\n");
                     {
                         Reference<XResultSet> xRes = xDmd->getTables(
-                                makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM(""))), // Catalog
-                                OUString(RTL_CONSTASCII_USTRINGPARAM("%")),          // Schema
-                                OUString(RTL_CONSTASCII_USTRINGPARAM("%")),          // TabName
+                                makeAny(OUString::createFromAscii("")), // Catalog
+                                OUString::createFromAscii("%"),          // Schema
+                                OUString::createFromAscii("%"),          // TabName
                                 Sequence<rtl::OUString>()
                                 );
                         printXResultSets( xRes );
@@ -373,7 +397,12 @@ Reference<XResultSet> TestQuery(Reference< ::com::sun::star::sdbc::XConnection> 
                   for (times = 0;times< 100;times ++)
                   {
      Reference<XResultSet> tmpRes =
+                  //xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"addr\""));
                   xStmt->executeQuery(OUString::createFromAscii(sql));
+                  // xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"Personal Address Book\" WHERE ( PrimaryEmail IS NULL )"));
+                  // xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"Personal Address Book\" WHERE ( PrimaryEmail LIKE \"Darren\" )"));
+                  // xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"Personal Address Book\""));
+                  // xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"myldap\" WHERE ( PrimaryEmail LIKE \"%Darren%\" OR DisplayName LIKE \"%Darren%\" )"));
 
                   autoTest( tmpRes );
                             Reference<XCloseable> clsRes(tmpRes,UNO_QUERY);
@@ -399,7 +428,7 @@ Reference<XResultSet> TestQuery(Reference< ::com::sun::star::sdbc::XConnection> 
 Reference< ::com::sun::star::sdbc::XConnection> TestConnected
         (Reference< ::com::sun::star::sdbc::XDriver> &pDriver,sal_Int32 choice)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>  pConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>	pConnection;
     printf("Begin Connect!\n");
     OUString url;
     Sequence<PropertyValue> aValue;
@@ -408,16 +437,16 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
     {
         case -1:
         case 1: //mozilla
-            url=OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:mozilla://"));
+            url=OUString::createFromAscii("sdbc:address:mozilla://");
             break;
         case 2:
-            url=OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:ldap://"));
+            url=OUString::createFromAscii("sdbc:address:ldap://");
             char hostname[40],basedn[40];
             scanf("%s %s",hostname,basedn);
             aValue.realloc(2);
-            aValue[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HostName"));
+            aValue[0].Name = ::rtl::OUString::createFromAscii("HostName");
             aValue[0].Value <<= rtl::OUString::createFromAscii(hostname);
-            aValue[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseDN"));
+            aValue[1].Name = ::rtl::OUString::createFromAscii("BaseDN");
             aValue[1].Value <<= rtl::OUString::createFromAscii(basedn);
             break;
         case 3:
@@ -425,12 +454,12 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
             break;
         case 5:
             //Default LDAP AB
-            url=OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:ldap://"));
+            url=OUString::createFromAscii("sdbc:address:ldap://");
             aValue.realloc(2);
-            aValue[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HostName"));
-            aValue[0].Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sun-ds"));
-            aValue[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseDN"));
-            aValue[1].Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dc=sun,dc=com"));
+            aValue[0].Name = ::rtl::OUString::createFromAscii("HostName");
+            aValue[0].Value <<= rtl::OUString::createFromAscii("sun-ds");
+            aValue[1].Name = ::rtl::OUString::createFromAscii("BaseDN");
+            aValue[1].Value <<= rtl::OUString::createFromAscii("dc=sun,dc=com");
             break;
         default:
             return pConnection;
@@ -642,12 +671,12 @@ int _cdecl main( int argc, char * argv[] )
 
 {
     Reference< XMultiServiceFactory > xMgr = InitializeFac();
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>  m_xConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>	m_xConnection;
     try
     {
     Reference< ::com::sun::star::sdbc::XDriver>
     m_xDriver(xMgr->createInstance(
-           OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbc.MozabDriver"))),
+           OUString::createFromAscii("com.sun.star.comp.sdbc.MozabDriver")),
              UNO_QUERY);
         if(m_xDriver.is())
     {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,13 +59,14 @@ class Window;
 class FuPoor : public SimpleReferenceComponent
 {
 public:
-    static const int HITPIX = 2;                   // Hit-Toleranz in Pixel
-    static const int DRGPIX = 2;                   // Drag MinMove in Pixel
+    static const int HITPIX	= 2; 				   // Hit-Toleranz in Pixel
+    static const int DRGPIX	= 2; 				   // Drag MinMove in Pixel
 
     TYPEINFO();
 
     virtual void DoExecute( SfxRequest& rReq );
 
+    // #95491# see member
     void SetMouseButtonCode(sal_uInt16 nNew) { if(nNew != mnCode) mnCode = nNew; }
     sal_uInt16 GetMouseButtonCode() const { return mnCode; }
 
@@ -76,37 +77,39 @@ public:
     virtual void DoCopy();
     virtual void DoPaste();
 
-    // Mouse- & Key-Events; Returnwert=sal_True: Event wurde bearbeitet
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& );
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
+    // Mouse- & Key-Events; Returnwert=TRUE: Event wurde bearbeitet
+    virtual BOOL KeyInput(const KeyEvent& rKEvt);
+    virtual BOOL MouseMove(const MouseEvent& );
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
 
-    // moved from inline to *.cxx
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
-
-    virtual sal_Bool Command(const CommandEvent& rCEvt);
-    virtual sal_Bool RequestHelp(const HelpEvent& rHEvt);
+    // #95491# moved from inline to *.cxx
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+    
+    virtual BOOL Command(const CommandEvent& rCEvt);
+    virtual BOOL RequestHelp(const HelpEvent& rHEvt);
     virtual void Paint(const Rectangle&, ::sd::Window* );
     virtual void ReceiveRequest(SfxRequest& rReq);
 
-    virtual void Activate();        // Function aktivieren
-    virtual void Deactivate();      // Function deaktivieren
+    virtual void Activate();		// Function aktivieren
+    virtual void Deactivate();		// Function deaktivieren
 
-    virtual void ScrollStart() {}   // diese Funktionen werden von
-    virtual void ScrollEnd() {}     // ForceScroll aufgerufen
+    virtual void ScrollStart() {}	// diese Funktionen werden von
+    virtual void ScrollEnd() {} 	// ForceScroll aufgerufen
 
     void SetWindow(::sd::Window* pWin) { mpWindow = pWin; }
 
+    // #97016# II
     virtual void SelectionHasChanged();
 
-    sal_uInt16  GetSlotID() const { return( nSlotId ); }
-    sal_uInt16  GetSlotValue() const { return( nSlotValue ); }
+    USHORT	GetSlotID() const { return( nSlotId ); }
+    USHORT	GetSlotValue() const { return( nSlotValue ); }
 
-    void    SetNoScrollUntilInside(sal_Bool bNoScroll = sal_True)
+    void	SetNoScrollUntilInside(BOOL bNoScroll = TRUE)
             { bNoScrollUntilInside = bNoScroll; }
 
     void StartDelayToScrollTimer ();
 
+    // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
     /** is called when the currenct function should be aborted. <p>
@@ -132,10 +135,10 @@ protected:
         @param pViewSh
             May be NULL.
     */
-    FuPoor (ViewShell* pViewSh,
-        ::sd::Window* pWin,
+    FuPoor (ViewShell* pViewSh, 
+        ::sd::Window* pWin, 
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument* pDoc, 
         SfxRequest& rReq);
     virtual ~FuPoor (void);
 
@@ -147,7 +150,7 @@ protected:
         offset relative to the active layer.  With respect to the layer bar
         control at the lower left of the document window positive values
         move to the right and negative values move to the left.
-
+    
         <p>Switching the layer is independant of the view's layer mode.  The
         layers are switched even when the layer mode is turned off and the
         layer control is not visible.</p>
@@ -167,36 +170,36 @@ protected:
     DrawDocShell* mpDocSh;
     SdDrawDocument* mpDoc;
 
-    sal_uInt16          nSlotId;
-    sal_uInt16          nSlotValue;
+    USHORT			nSlotId;
+    USHORT			nSlotValue;
 
-    Dialog*         pDialog;
+    Dialog* 		pDialog;
 
-    Timer           aScrollTimer;           // fuer Autoscrolling
+    Timer			aScrollTimer;			// fuer Autoscrolling
     DECL_LINK( ScrollHdl, Timer * );
     void ForceScroll(const Point& aPixPos);
 
-    Timer           aDragTimer;             // fuer Drag&Drop
+    Timer			aDragTimer; 			// fuer Drag&Drop
     DECL_LINK( DragHdl, Timer * );
-    sal_Bool            bIsInDragMode;
-    Point           aMDPos;                 // Position von MouseButtonDown
+    BOOL			bIsInDragMode;
+    Point			aMDPos; 				// Position von MouseButtonDown
 
     // Flag, um AutoScrolling zu verhindern, bis von ausserhalb in das
     // Fenster hinein gedragt wurde
-    sal_Bool            bNoScrollUntilInside;
+    BOOL			bNoScrollUntilInside;
 
     // Timer um das scrolling zu verzoegern, wenn aus dem fenster
     // herausgedraggt wird (ca. 1 sec.)
-    Timer           aDelayToScrollTimer;    // fuer Verzoegerung bis scroll
-    sal_Bool            bScrollable;
-    sal_Bool            bDelayActive;
-    sal_Bool            bFirstMouseMove;
+    Timer			aDelayToScrollTimer;	// fuer Verzoegerung bis scroll
+    BOOL			bScrollable;
+    BOOL			bDelayActive;
+    BOOL			bFirstMouseMove;
 
-    // member to hold state of the mouse buttons for creation
+    // #95491# member to hold state of the mouse buttons for creation
     // of own MouseEvents (like in ScrollHdl)
 
 private:
-    sal_uInt16      mnCode;
+    sal_uInt16		mnCode;
 
 };
 
@@ -204,6 +207,6 @@ typedef rtl::Reference< FuPoor > FunctionReference;
 
 } // end of namespace sd
 
-#endif      // _SD_FUPOOR_HXX
+#endif		// _SD_FUPOOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

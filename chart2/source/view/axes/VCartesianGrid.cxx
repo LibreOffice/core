@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "VCartesianGrid.hxx"
-#include "Tickmarks.hxx"
+#include "TickmarkHelper.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"
 #include "ObjectIdentifier.hxx"
@@ -136,7 +136,7 @@ GridLinePoints::GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_In
         {
             if( !bSwapXY )
                 P0=P1;
-            else
+            else 
                 P2=P1;
         }
     }
@@ -193,6 +193,7 @@ VCartesianGrid::~VCartesianGrid()
     m_pPosHelper = NULL;
 }
 
+//static
 void VCartesianGrid::fillLinePropertiesFromGridModel( ::std::vector<VLineProperties>& rLinePropertiesList
                                      , const Sequence< Reference< beans::XPropertySet > > & rGridPropertiesList )
 {
@@ -211,7 +212,7 @@ void VCartesianGrid::fillLinePropertiesFromGridModel( ::std::vector<VLinePropert
     }
 };
 
-void VCartesianGrid::createShapes()
+void SAL_CALL VCartesianGrid::createShapes()
 {
     if(!m_aGridPropertiesList.getLength())
         return;
@@ -221,7 +222,7 @@ void VCartesianGrid::createShapes()
     //create named group shape
     Reference< drawing::XShapes > xGroupShape_Shapes(
         this->createGroupShape( m_xLogicTarget, m_aCID ) );
-
+        
     if(!xGroupShape_Shapes.is())
         return;
     //-----------------------------------------
@@ -231,10 +232,13 @@ void VCartesianGrid::createShapes()
 
     //-----------------------------------------
     //create all scaled tickmark values
-    std::auto_ptr< TickFactory > apTickFactory( this->createTickFactory() );
-    TickFactory& aTickFactory = *apTickFactory.get();
+    std::auto_ptr< TickmarkHelper > apTickmarkHelper( this->createTickmarkHelper() );
+    TickmarkHelper& aTickmarkHelper = *apTickmarkHelper.get();
     ::std::vector< ::std::vector< TickInfo > > aAllTickInfos;
-    aTickFactory.getAllTicks( aAllTickInfos );
+    if( m_aIncrement.ShiftedPosition )
+        aTickmarkHelper.getAllTicksShifted( aAllTickInfos );
+    else
+        aTickmarkHelper.getAllTicks( aAllTickInfos );
 
     //-----------------------------------------
     //create tick mark line shapes
@@ -244,7 +248,7 @@ void VCartesianGrid::createShapes()
     if(aDepthIter == aDepthEnd)//no tickmarks at all
         return;
 
-
+    
     sal_Int32 nLinePropertiesCount = aLinePropertiesList.size();
     for( sal_Int32 nDepth=0
         ; aDepthIter != aDepthEnd && nDepth < nLinePropertiesCount

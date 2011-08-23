@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,16 +43,17 @@
 #include <basdoc.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
-#include <deque>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 
-typedef std::deque< SvLBoxEntry* > EntryArray;
+SV_DECL_VARARR( EntryArray, SvLBoxEntry*, 4, 4 )
+
+SV_IMPL_VARARR( EntryArray, SvLBoxEntry*);
 
 
-void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
+void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
 {
     BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
     ScriptDocument aDocument( aDesc.GetDocument() );
@@ -61,7 +62,7 @@ void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
         return;
 
     LibraryLocation eLocation( aDesc.GetLocation() );
-    BasicEntryType eType( aDesc.GetType() );
+    BasicEntryType eType( aDesc.GetType() );    
 
     if ( eType == OBJ_TYPE_DOCUMENT )
     {
@@ -73,7 +74,7 @@ void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
         ::rtl::OUString aOULibName( aLibName );
 
         // check password
-        sal_Bool bOK = sal_True;
+        BOOL bOK = TRUE;
         Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
         {
@@ -87,8 +88,8 @@ void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
 
         if ( bOK )
         {
-            // load module library
-            sal_Bool bModLibLoaded = sal_False;
+            // load module library              
+            BOOL bModLibLoaded = FALSE;            
             if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
             {
                 if ( !xModLibContainer->isLibraryLoaded( aOULibName ) )
@@ -101,8 +102,8 @@ void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
             }
 
             // load dialog library
-            sal_Bool bDlgLibLoaded = sal_False;
-            Reference< script::XLibraryContainer > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+            BOOL bDlgLibLoaded = FALSE;
+            Reference< script::XLibraryContainer > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );           
             if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
             {
                 if ( !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
@@ -122,15 +123,16 @@ void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
                 // exchange image
                 bool bDlgMode = ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES );
                 Image aImage( IDEResId( bDlgMode ? RID_IMG_DLGLIB : RID_IMG_MODLIB ) );
-                SetEntryBitmaps( pEntry, aImage );
+                Image aImageHC( IDEResId( bDlgMode ? RID_IMG_DLGLIB_HC : RID_IMG_MODLIB_HC ) );
+                SetEntryBitmaps( pEntry, aImage, aImageHC );
             }
             else
             {
-                OSL_FAIL( "BasicTreeListBox::RequestingChilds: Error loading library!" );
+                DBG_ERROR( "BasicTreeListBox::RequestingChilds: Error loading library!" );
             }
         }
     }
-    else if ( eType == OBJ_TYPE_DOCUMENT_OBJECTS
+    else if ( eType == OBJ_TYPE_DOCUMENT_OBJECTS 
             || eType == OBJ_TYPE_USERFORMS
             || eType == OBJ_TYPE_NORMAL_MODULES
             || eType == OBJ_TYPE_CLASS_MODULES )
@@ -139,11 +141,11 @@ void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
         ImpCreateLibSubSubEntriesInVBAMode( pEntry, aDocument, aLibName );
     }
     else {
-        OSL_FAIL( "BasicTreeListBox::RequestingChilds: Unknown Type!" );
+        DBG_ERROR( "BasicTreeListBox::RequestingChilds: Unknown Type!" );
     }
 }
 
-void BasicTreeListBox::ExpandedHdl()
+void __EXPORT BasicTreeListBox::ExpandedHdl()
 {
     SvLBoxEntry* pEntry = GetHdlEntry();
     DBG_ASSERT( pEntry, "Was wurde zugeklappt?" );
@@ -154,7 +156,7 @@ void BasicTreeListBox::ExpandedHdl()
         SvLBoxEntry* pChild = FirstChild( pEntry );
         while ( pChild )
         {
-            GetModel()->Remove( pChild );   // Ruft auch den DTOR
+            GetModel()->Remove( pChild );	// Ruft auch den DTOR
             pChild = FirstChild( pEntry );
         }
     }
@@ -187,18 +189,18 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
 
     while ( pEntry )
     {
-        sal_uInt16 nDepth = GetModel()->GetDepth( pEntry );
+        USHORT nDepth = GetModel()->GetDepth( pEntry );
         switch ( nDepth )
         {
             case 4:
             case 3:
             case 2:
-            case 1:
+            case 1: 
             {
-                aEntries.push_front( pEntry );
+                aEntries.C40_INSERT( SvLBoxEntry, pEntry, 0 );
             }
             break;
-            case 0:
+            case 0: 
             {
                 aDocument = ((BasicDocumentEntry*)pEntry->GetUserData())->GetDocument();
             }
@@ -209,14 +211,14 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
 
     SbxVariable* pVar = 0;
     bool bDocumentObjects = false;
-    if ( !aEntries.empty() )
+    if ( aEntries.Count() )
     {
-        for ( size_t n = 0; n < aEntries.size(); n++ )
+        for ( USHORT n = 0; n < aEntries.Count(); n++ )
         {
             SvLBoxEntry* pLE = aEntries[n];
-            DBG_ASSERT( pLE, "Can not find entry in array" );
+            DBG_ASSERT( pLE, "Entrie im Array nicht gefunden" );
             BasicEntry* pBE = (BasicEntry*)pLE->GetUserData();
-            DBG_ASSERT( pBE, "The data in the entry not found!" );
+            DBG_ASSERT( pBE, "Keine Daten im Eintrag gefunden!" );
             String aName( GetEntryText( pLE ) );
 
             switch ( pBE->GetType() )
@@ -262,7 +264,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
                 }
                 default:
                 {
-                    OSL_FAIL( "FindVariable: Unbekannter Typ!" );
+                    DBG_ERROR( "FindVariable: Unbekannter Typ!" );
                     pVar = 0;
                 }
                 break;
@@ -292,18 +294,18 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
 
     while ( pEntry )
     {
-        sal_uInt16 nDepth = GetModel()->GetDepth( pEntry );
+        USHORT nDepth = GetModel()->GetDepth( pEntry );
         switch ( nDepth )
         {
             case 4:
             case 3:
             case 2:
-            case 1:
+            case 1: 
             {
-                aEntries.push_front( pEntry );
+                aEntries.C40_INSERT( SvLBoxEntry, pEntry, 0 );
             }
             break;
-            case 0:
+            case 0: 
             {
                 BasicDocumentEntry* pBasicDocumentEntry = (BasicDocumentEntry*)pEntry->GetUserData();
                 if ( pBasicDocumentEntry )
@@ -318,9 +320,9 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
         pEntry = GetParent( pEntry );
     }
 
-    if ( !aEntries.empty() )
+    if ( aEntries.Count() )
     {
-        for ( size_t n = 0; n < aEntries.size(); n++ )
+        for ( USHORT n = 0; n < aEntries.Count(); n++ )
         {
             SvLBoxEntry* pLE = aEntries[n];
             DBG_ASSERT( pLE, "Entrie im Array nicht gefunden" );
@@ -364,7 +366,7 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
                 break;
                 default:
                 {
-                    OSL_FAIL( "GetEntryDescriptor: Unbekannter Typ!" );
+                    DBG_ERROR( "GetEntryDescriptor: Unbekannter Typ!" );
                     eType = OBJ_TYPE_UNKNOWN;
                 }
                 break;
@@ -378,9 +380,9 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
     return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aName, aMethodName, eType );
 }
 
-sal_uInt16 BasicTreeListBox::ConvertType( BasicEntryType eType )
+USHORT BasicTreeListBox::ConvertType( BasicEntryType eType )
 {
-    sal_uInt16 nType = OBJ_TYPE_UNKNOWN;
+    USHORT nType = OBJ_TYPE_UNKNOWN;
 
     switch ( eType )
     {
@@ -482,7 +484,7 @@ SbModule* BasicTreeListBox::FindModule( SvLBoxEntry* pEntry )
 SvLBoxEntry* BasicTreeListBox::FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
     OSL_ENSURE( rDocument.isValid(), "BasicTreeListBox::FindRootEntry: invalid document!" );
-    sal_uLong nRootPos = 0;
+    ULONG nRootPos = 0;
     SvLBoxEntry* pRootEntry = GetEntry( nRootPos );
     while ( pRootEntry )
     {
