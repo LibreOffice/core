@@ -67,7 +67,7 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    const XOBitmap& GetBitmapValue( const XBitmapTable* pTable = 0 ) const; // GetValue -> GetBitmapValue
+    const XOBitmap& GetBitmapValue() const; // GetValue -> GetBitmapValue
     void  SetBitmapValue( const XOBitmap& rNew )  { aXOBitmap = rNew; Detach(); } // SetValue -> SetBitmapValue
 
     static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );

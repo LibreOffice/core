@@ -31,7 +31,6 @@
 class XColorTable;
 class XLineEndTable;
 class XHatchTable;
-class XBitmapTable;
 
 #include <svx/xit.hxx>
 #include <svx/xcolit.hxx>

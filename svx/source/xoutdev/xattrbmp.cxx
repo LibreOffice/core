@@ -582,12 +582,19 @@ SvStream& XFillBitmapItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) cons
 |*
 *************************************************************************/
 
-const XOBitmap& XFillBitmapItem::GetBitmapValue(const XBitmapTable* pTable) const // GetValue -> GetBitmapValue
+const XOBitmap& XFillBitmapItem::GetBitmapValue(
+//    const XBitmapTable* pTable
+) const // GetValue -> GetBitmapValue
 {
-    if (!IsIndex())
-        return aXOBitmap;
-    else
-        return pTable->GetBitmap(GetIndex())->GetXBitmap();
+// Note: we never pass pTable to this method which means that it's NULL. Thus, this code would
+// fail if the Item was a list. I'm guessing that it can't be an Index or the caller makes sure
+// it's not an Index before calling. Either way, I'm just going to return the Bitmap to keep it
+// from failing. This could use some more research. (Joe P. 2011-08-24)
+//    if (!IsIndex())
+//        return aXOBitmap;
+//    else
+//        return pTable->GetBitmap(GetIndex())->GetXBitmap();
+    return aXOBitmap;
 }
 
 

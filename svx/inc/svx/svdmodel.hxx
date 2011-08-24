@@ -79,7 +79,6 @@ class SfxStyleSheet;
 class SfxUndoAction;
 class SfxUndoManager;
 class XBitmapList;
-class XBitmapTable;
 class XColorTable;
 class XDashList;
 class XGradientList;
