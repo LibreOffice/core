@@ -671,10 +671,10 @@ public:
     WW8FormulaEditBox(SwWW8ImplReader &rR);
     //no real implementation, return false
     virtual sal_Bool Import(const com::sun::star::uno::Reference <
-        com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
+        com::sun::star::lang::XMultiServiceFactory> & /* rServiceFactory */,
         com::sun::star::uno::Reference <
-        com::sun::star::form::XFormComponent> &rFComp,
-        com::sun::star::awt::Size &rSz) { return sal_False; }
+        com::sun::star::form::XFormComponent> & /* rFComp */,
+        com::sun::star::awt::Size & /* rSz */) { return sal_False; }
 };
 
 class SwMSConvertControls: public SvxMSConvertOCXControls
