@@ -89,16 +89,20 @@ http://download.opensuse.org/repositories/windows:/mingw:/win32/
 [You can install it like:
 
 zypper ar http://download.opensuse.org/repositories/windows:/mingw:/win32/SLE_11_SP1/windows:mingw:win32.repo
-zypper in mingw32-cross-gcc mingw32-python-devel mingw32-libexpat-devel \
-    mingw32-libexpat mingw32-boost-devel mingw32-libhyphen-devel \
-    mingw32-libhyphen mingw32-hyphen-en mingw32-liblpsolve-devel \
+zypper in mingw32-cross-gcc mingw32-cross-gcc-c++ mingw32-python-devel \
+    mingw32-libexpat-devel mingw32-libexpat mingw32-boost-devel \
+    mingw32-libhyphen-devel mingw32-libhyphen mingw32-hyphen-en \
+    mingw32-liblpsolve mingw32-liblpsolve-devel \
     mingw32-libxml2-devel mingw32-libxslt-devel mingw32-libicu \
     mingw32-libicu-devel mingw32-libgraphite2 mingw32-libgraphite2-devel \
     mingw32-cairo mingw32-cairo-devel mingw32-librsvg mingw32-librsvg-devel \
     mingw32-hunspell mingw32-hunspell-devel mingw32-libcurl \
     mingw32-libcurl-devel mingw32-libneon mingw32-libneon-devel \
     mingw32-libopenssl mingw32-libopenssl-devel mingw32-libtextcat \
-    mingw32-libtextcat-devel
+    mingw32-libtextcat-devel mingw32-libdb mingw32-libdb-devel \
+    mingw32-cross-pkg-config mingw32-pkg-config mingw32-libcppunit \
+    mingw32-libcppunit-devel mingw32-libredland mingw32-libredland-devel \
+    mingw32-libmythes mingw32-libmythes-devel
 
 There might be more that are missing, please read carefully what autogen.sh
 tells you, and either remove one of the --with-system-*, or install the
