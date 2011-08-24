@@ -345,25 +345,6 @@ IMPL_LINK( SfxModelessDialog, TimerHdl, Timer*, EMPTYARG)
 // -----------------------------------------------------------------------
 
 SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
-                        SfxChildWindow *pCW,
-                        Window* pParent, WinBits nWinBits ) :
-    ModelessDialog (pParent, nWinBits),
-    pBindings(pBindinx),
-    pImp( new SfxModelessDialog_Impl )
-{
-    pImp->pMgr = pCW;
-    pImp->bConstructed = sal_False;
-    SetUniqueId( GetHelpId() );
-    SetHelpId("");
-    if ( pBindinx )
-        pImp->StartListening( *pBindinx );
-    pImp->aMoveTimer.SetTimeout(50);
-    pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxModelessDialog,TimerHdl));
-}
-
-// -----------------------------------------------------------------------
-
-SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
                         SfxChildWindow *pCW, Window *pParent,
                         const ResId& rResId ) :
     ModelessDialog(pParent, rResId),

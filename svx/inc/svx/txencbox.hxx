@@ -104,16 +104,12 @@ public:
                             const String& rEntry,
                             sal_uInt16 nPos = LISTBOX_APPEND );
 
-    void                RemoveTextEncoding( const rtl_TextEncoding nEnc );
-
     void                SelectTextEncoding( const rtl_TextEncoding nEnc,
                             sal_Bool bSelect = sal_True );
 
     rtl_TextEncoding    GetSelectTextEncoding() const;
 
     const String&       GetSelectTextString() const;
-
-    sal_Bool                IsTextEncodingSelected( const rtl_TextEncoding nEnc ) const;
 };
 
 #endif

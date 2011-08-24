@@ -899,12 +899,6 @@ SfxMacroStatement::SfxMacroStatement(String const&, SfxSlot const&, unsigned cha
 SfxMailModel::GetCount() const
 SfxMedium::GetHdl()
 SfxMedium::GetReferer() const
-SfxMenuControl::CreateControl(String const&, unsigned short, Menu&, SfxBindings&, SfxVirtualMenu*)
-SfxMenuControl::RemovePopup()
-SfxMenuControl::SetOwnMenu(SfxVirtualMenu*)
-SfxModelessDialog::SfxModelessDialog(SfxBindings*, SfxChildWindow*, Window*, long)
-SfxModule::IsActive() const
-SfxModule::RegisterChildWindowContext(unsigned short, SfxChildWinContextFactory*)
 SfxModuleArr_Impl::DeleteAndDestroy(unsigned short, unsigned short)
 SfxNavigatorWrapper::GetChildWindowId()
 SfxObjectShell::Count()
@@ -918,29 +912,20 @@ SfxOleString16Property::SfxOleString16Property(int, String const&)
 SfxOrganizeDlg_Impl::OkHdl(Button*)
 SfxPartChildWnd_Impl::GetChildWindowId()
 SfxPasswordDialog::SetMaxLen(unsigned short)
-SfxPopupWindow::EndCascading()
 SfxPopupWindow::LinkStubDelete(void*, void*)
 SfxPopupWindow::RemoveStatusListener(rtl::OUString const&)
-SfxPopupWindow::SfxPopupWindow(unsigned short, com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&, Window*, ResId const&)
-SfxPopupWindow::UpdateStatus(rtl::OUString const&)
-SfxPreviewWin::SfxPreviewWin(Window*, ResId const&, SfxObjectShellLock&)
 SfxProgress::GetWaitMode() const
 SfxProgress::Lock()
 SfxProgress::SetWaitMode(unsigned char)
-SfxPtrArr::Replace(void*, void*)
 SfxRangeItem::SfxRangeItem(unsigned short, SvStream&)
 SfxRecordingFloatWrapper_Impl::GetChildWindowId()
-SfxRectangleItem::SfxRectangleItem(unsigned short, SvStream&)
 SfxRequest::IsRecording() const
 SfxRequest::SetTarget(String const&)
 SfxShell::GetBroadcaster()
 SfxShell::RemoveItem(unsigned short)
 SfxSingleTabDialog::GetInputRanges(SfxItemPool const&)
-SfxSizeItem::SfxSizeItem(unsigned short, SvStream&)
 SfxSlotPool::NextInterface()
-SfxStringListItem::Sort(unsigned char)
 SfxStyleSheet::SfxStyleSheet()
-SfxStyleSheetHintExtended::SfxStyleSheetHintExtended(unsigned short, String const&)
 SfxTabDialog::FillOutputItemSet()
 SfxTabDialog::GetApplyButton()
 SfxTabDialog::GetApplyButton() const
@@ -971,7 +956,6 @@ SfxUShortRangesItem::SfxUShortRangesItem(unsigned short, unsigned short const*)
 SfxUnoMenuControl::Select()
 SfxUnoStyleSheet::SfxUnoStyleSheet(SfxStyleSheet const&)
 SfxVersionTableDtor::GetVersions() const
-SfxViewFactory::InitFactory()
 SfxViewFactory::~SfxViewFactory()
 SfxViewFrame::Hide()
 SfxViewShell::PlugInsActive() const
@@ -996,8 +980,6 @@ SotExchange::GetExchangeAction(com::sun::star::uno::Reference<com::sun::star::da
 SotFactory::TestInvariant()
 SotObject::RemoveOwnerLock()
 SotStorage::GetProperty(String const&, String const&, com::sun::star::uno::Any&)
-SotStorage::OpenOLEStorage(String const&, unsigned short, short)
-SotStorage::SotStorage(ucbhelper::Content const&, String const&, unsigned short, short)
 SourceTreeIterator::EndExecute()
 SpinButton::SpinButton(Window*, ResId const&)
 SplitWindow::CalcWindowSizePixel(Size const&, WindowAlign, long, unsigned char)
@@ -1093,13 +1075,6 @@ SvUnoAttributeContainer::getImplementation(com::sun::star::uno::Reference<com::s
 SvXMLAttributeList::SetAttributeList(com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList> const&)
 SvXMLAutoStylePoolNamesP_Impl::GetPos(rtl::OUString const*) const
 SvXMLAutoStylePoolNamesP_Impl::Remove(rtl::OUString*)
-SvXMLAutoStylePoolP::Add(rtl::OUString&, int, std::vector<XMLPropertyState, std::allocator<XMLPropertyState> > const&)
-SvXMLAutoStylePoolP::AddAndCache(int, rtl::OUString const&)
-SvXMLAutoStylePoolP::AddAndCache(int, rtl::OUString const&, std::vector<XMLPropertyState, std::allocator<XMLPropertyState> > const&)
-SvXMLAutoStylePoolP::AddAndCache(int, std::vector<XMLPropertyState, std::allocator<XMLPropertyState> > const&)
-SvXMLAutoStylePoolP::Find(int, std::vector<XMLPropertyState, std::allocator<XMLPropertyState> > const&) const
-SvXMLAutoStylePoolP::FindAndRemoveCached(int) const
-SvXMLAutoStylePoolP::SvXMLAutoStylePoolP()
 SvXMLAutoStylePoolParentsP_Impl::GetPos(SvXMLAutoStylePoolParentP_Impl const*) const
 SvXMLAutoStylePoolParentsP_Impl::Remove(SvXMLAutoStylePoolParentP_Impl*)
 SvXMLElementExport::SvXMLElementExport(SvXMLExport&, unsigned char, unsigned short, char const*, unsigned char, unsigned char)
@@ -1155,8 +1130,6 @@ SvtExtendedSecurityOptions::GetSecureExtensionList() const
 SvtExtendedSecurityOptions::IsOpenHyperlinkModeReadOnly() const
 SvtExtendedSecurityOptions::IsSecureHyperlink(rtl::OUString const&) const
 SvtExtendedSecurityOptions::SetOpenHyperlinkMode(SvtExtendedSecurityOptions::OpenHyperlinkMode)
-SvtFileView::OpenFolder(com::sun::star::uno::Sequence<rtl::OUString> const&)
-SvtFileView::ResetCursor()
 SvtFilterOptions::SetUseEnhancedFields(unsigned char)
 SvtFontOptions::EnableReplacementTable(unsigned char)
 SvtFontOptions::IsReplacementTableEnabled() const
@@ -1293,7 +1266,6 @@ SvxContourDlg::SetGraphic(Graphic const&)
 SvxContourDlg::SetGraphicLinked(unsigned char)
 SvxContourDlg::SetPolyPolygon(PolyPolygon const&)
 SvxContourDlgChildWindow::UpdateContourDlg(Graphic const&, unsigned char, PolyPolygon const*, void*)
-SvxDashListItem::SetDashList(XDashList*)
 SvxDoCapitals::Do(String const&, unsigned short, unsigned short, unsigned char)
 SvxDrawOutlinerViewForwarder::SetShapePos(Point const&)
 SvxDrawPage::GetPageForSdrPage(SdrPage*)
@@ -1382,10 +1354,8 @@ SvxShape::getMaster()
 SvxShape::getMaster() const
 SvxShapePolyPolygonBezier::GetPolygonKind() const
 SvxShapeText::SvxShapeText()
-SvxShowCharSet::ImplFireAccessibleEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
 SvxSimpleTable::ClearAll()
 SvxSimpleTable::TableToTop()
-SvxSimpleTableContainer::SvxSimpleTableContainer(Window*, long)
 SvxStringArray::GetStringByType(long) const
 SvxStringArray::GetValueByStr(String const&) const
 SvxSuperContourDlg::DoAutoCreate()
@@ -1400,8 +1370,6 @@ SvxTabStopArr_SAR::Replace(SvxTabStop const&, unsigned short)
 SvxTabStopArr_SAR::Replace(SvxTabStop const*, unsigned short, unsigned short)
 SvxTabStopArr_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(SvxTabStop const&, void*), void*)
 SvxTextEditSource::GetSdrObject() const
-SvxTextEncodingBox::IsTextEncodingSelected(unsigned short) const
-SvxTextEncodingBox::RemoveTextEncoding(unsigned short)
 SvxUnoFontDescriptor::getPropertyState(SfxItemSet const&)
 SvxUnoTextBase::InsertField(SvxFieldItem const&)
 SvxUnoTextBase::SvxUnoTextBase(SvxEditSource const*, SvxItemPropertySet const*)
@@ -1567,7 +1535,6 @@ TEWritingDirectionInfos::Insert(TEWritingDirectionInfos const*, unsigned short, 
 TEWritingDirectionInfos::Replace(TEWritingDirectionInfo const&, unsigned short)
 TEWritingDirectionInfos::Replace(TEWritingDirectionInfo const*, unsigned short, unsigned short)
 TEWritingDirectionInfos::_ForEach(unsigned short, unsigned short, unsigned char (*)(TEWritingDirectionInfo const&, void*), void*)
-TPGalleryThemeProperties::LinkStubClickCloseBrowserHdl(void*, void*)
 TTBasic::CreateMyBasic()
 TTProfiler::Dec(unsigned long)
 TTProperties::Img(Bitmap*)

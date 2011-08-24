@@ -689,12 +689,7 @@ void SvxShowCharSet::ReleaseAccessible()
 
     return aFind->second;
 }
-// -----------------------------------------------------------------------------
-void SvxShowCharSet::ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue )
-{
-    if( m_pAccessible )
-        m_pAccessible->fireEvent( nEventId, rOldValue, rNewValue );
-}
+
 // -----------------------------------------------------------------------------
 ScrollBar* SvxShowCharSet::getScrollBar()
 {

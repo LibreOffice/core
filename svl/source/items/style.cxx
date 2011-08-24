@@ -83,14 +83,6 @@ TYPEINIT1(SfxStyleSheetPoolHint, SfxHint);
 SfxStyleSheetHintExtended::SfxStyleSheetHintExtended
 (
     sal_uInt16              nAction,        // SFX_STYLESHEET_... (s.o.)
-    const String&       rOldName
-)
-:   SfxStyleSheetHint( nAction ),
-    aName( rOldName )
-{}
-SfxStyleSheetHintExtended::SfxStyleSheetHintExtended
-(
-    sal_uInt16              nAction,        // SFX_STYLESHEET_... (s.o.)
     const String&       rOldName,
     SfxStyleSheetBase&  rStyleSheet     // geh"ort weiterhin dem Aufrufer
 )

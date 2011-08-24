@@ -362,8 +362,6 @@ public:
                         TYPEINFO();
 
                         SfxStyleSheetHintExtended(
-                            sal_uInt16, const String& rOld );
-                        SfxStyleSheetHintExtended(
                             sal_uInt16, const String& rOld,
                             SfxStyleSheetBase& );
     const String&       GetOldName() { return aName; }

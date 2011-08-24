@@ -1283,59 +1283,6 @@ SvtFileView::~SvtFileView()
 
 // -----------------------------------------------------------------------
 
-void SvtFileView::OpenFolder( const Sequence< OUString >& aContents )
-{
-    mpImp->mpView->ClearAll();
-    const OUString* pFileProperties  = aContents.getConstArray();
-    sal_uInt32 i, nCount = aContents.getLength();
-    for ( i = 0; i < nCount; ++i )
-    {
-        String aRow( pFileProperties[i] );
-        // extract columns
-        // the columns are: title, type, size, date, target url, is folder, image url
-        String aTitle, aType, aSize, aDate, aURL, aImageURL;
-        xub_StrLen nIdx = 0;
-        aTitle = aRow.GetToken( 0, '\t', nIdx );
-        aType = aRow.GetToken( 0, '\t', nIdx );
-        aSize = aRow.GetToken( 0, '\t', nIdx );
-        aDate = aRow.GetToken( 0, '\t', nIdx );
-        aURL = aRow.GetToken( 0, '\t', nIdx );
-        sal_Unicode cFolder = aRow.GetToken( 0, '\t', nIdx ).GetChar(0);
-        sal_Bool bIsFolder = ( '1' == cFolder );
-        if ( nIdx != STRING_NOTFOUND )
-            aImageURL = aRow.GetToken( 0, '\t', nIdx );
-
-        if ( mpImp->mbOnlyFolder && !bIsFolder )
-            continue;
-
-        // build new row
-        String aNewRow = aTitle;
-        aNewRow += '\t';
-        aNewRow += aType;
-        aNewRow += '\t';
-        aNewRow += aSize;
-        aNewRow += '\t';
-        aNewRow += aDate;
-        // detect image
-        sal_Bool bDoInsert = sal_True;
-        INetURLObject aObj( aImageURL.Len() > 0 ? aImageURL : aURL );
-        Image aImage = SvFileInformationManager::GetImage( aObj, sal_False );
-
-        if ( bDoInsert )
-        {
-            // insert entry and set user data
-            SvLBoxEntry* pEntry = mpImp->mpView->InsertEntry( aNewRow, aImage, aImage, NULL );
-            SvtContentEntry* pUserData = new SvtContentEntry( aURL, bIsFolder );
-            pEntry->SetUserData( pUserData );
-        }
-    }
-
-    mpImp->InitSelection();
-    mpImp->ResetCursor();
-}
-
-// -----------------------------------------------------------------------
-
 String SvtFileView::GetURL( SvLBoxEntry* pEntry ) const
 {
     String aURL;
@@ -1564,13 +1511,6 @@ void SvtFileView::GetFocus()
     Control::GetFocus();
     if ( mpImp && mpImp->mpView )
         mpImp->mpView->GrabFocus();
-}
-
-// -----------------------------------------------------------------------
-
-void SvtFileView::ResetCursor()
-{
-    mpImp->ResetCursor();
 }
 
 // -----------------------------------------------------------------------

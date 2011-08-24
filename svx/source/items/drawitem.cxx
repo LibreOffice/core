@@ -468,13 +468,6 @@ bool SvxDashListItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 
     return false;
 }
 
-// -----------------------------------------------------------------------
-
-void SvxDashListItem::SetDashList( XDashList* pList )
-{
-    pDashList = pList;
-}
-
 //==================================================================
 //
 //  SvxLineEndListItem

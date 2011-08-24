@@ -44,12 +44,6 @@ SfxViewShell *SfxViewFactory::CreateInstance(SfxViewFrame *pFrame, SfxViewShell 
     return (*fnCreate)(pFrame, pOldSh);
 }
 
-void SfxViewFactory::InitFactory()
-{
-    DBG_CHKTHIS(SfxViewFactory, 0);
-    (*fnInit)();
-}
-
 String SfxViewFactory::GetLegacyViewName() const
 {
     ::rtl::OUStringBuffer aViewName;

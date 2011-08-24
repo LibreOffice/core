@@ -56,19 +56,6 @@ class MoreButton;
 
 #define RET_TEMPLATE_LOAD       100
 
-class SFX2_DLLPUBLIC SfxPreviewWin: public Window
-{
-    SfxObjectShellLock &rDocShell;
-protected:
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-
-public:
-    SfxPreviewWin( Window* pParent,
-                   const ResId& rResId,
-                   SfxObjectShellLock &rDocSh );
-};
-
 class SfxNewFileDialog_Impl;
 class SFX2_DLLPUBLIC SfxNewFileDialog : public SfxModalDialog
 {

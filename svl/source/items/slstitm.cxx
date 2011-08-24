@@ -332,15 +332,6 @@ int SfxStringListItem::IsPoolable() const
 
 #endif
 
-//------------------------------------------------------------------------
-
-void SfxStringListItem::Sort( sal_Bool bAscending)
-{
-    DBG_ASSERT(GetRefCount()==0,"Sort:RefCount!=0");
-    if( pImp )
-        pImp->Sort( bAscending);
-}
-
 //----------------------------------------------------------------------------
 void SfxStringListItem::SetStringList( const com::sun::star::uno::Sequence< rtl::OUString >& rList )
 {

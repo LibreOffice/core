@@ -86,7 +86,6 @@ public:
 
     void                        RegisterToolBoxControl(SfxTbxCtrlFactory*);
     void                        RegisterChildWindow(SfxChildWinFactory*);
-    void                        RegisterChildWindowContext( sal_uInt16, SfxChildWinContextFactory* );
     void                        RegisterStatusBarControl(SfxStbCtrlFactory*);
     void                        RegisterMenuControl(SfxMenuCtrlFactory*);
 
@@ -94,7 +93,6 @@ public:
                                                Window* pParent,
                                                const SfxItemSet& rSet );
     virtual void                Invalidate(sal_uInt16 nId = 0);
-    sal_Bool                        IsActive() const;
 
     /*virtual*/ bool            IsChildWindowAvailable( const sal_uInt16 i_nId, const SfxViewFrame* i_pViewFrame ) const;
 

@@ -84,9 +84,6 @@ public:
     sal_uInt16                      GetRowPos(sal_uInt16 _nPos) const;
     sal_uInt16                      GetColumnPos(sal_uInt16 _nPos) const;
 
-    void                        ImplFireAccessibleEvent( short nEventId,
-                                                         const ::com::sun::star::uno::Any& rOldValue,
-                                                         const ::com::sun::star::uno::Any& rNewValue );
     ScrollBar*                  getScrollBar();
     void                        ReleaseAccessible();
     sal_Int32                   getMaxCharCount() const;

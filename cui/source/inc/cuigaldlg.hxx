@@ -354,7 +354,6 @@ class TPGalleryThemeProperties : public SfxTabPage
     void                DoPreview();
 
                         DECL_LINK( ClickPreviewHdl, void* );
-                        DECL_LINK( ClickCloseBrowserHdl, void* );
                         DECL_LINK( ClickSearchHdl, void* );
                         DECL_LINK( ClickTakeHdl, void* );
                         DECL_LINK( ClickTakeAllHdl, void* );

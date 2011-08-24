@@ -137,9 +137,6 @@ public:
                         SotStorage( sal_Bool bUCBStorage, const String &,
                                    StreamMode = STREAM_STD_READWRITE,
                                    StorageMode = 0 );
-                        SotStorage( const ::ucbhelper::Content& rContent, const String &,
-                                   StreamMode = STREAM_STD_READWRITE,
-                                   StorageMode = 0 );
                         SotStorage( BaseStorage * );
                         SotStorage( SvStream & rStm );
                         SotStorage( sal_Bool bUCBStorage, SvStream & rStm );
@@ -212,9 +209,6 @@ public:
                                     StreamMode = STREAM_STD_READWRITE,
                                     StorageMode = STORAGE_TRANSACTED );
     SotStorage *        OpenUCBStorage( const String & rEleName,
-                                    StreamMode = STREAM_STD_READWRITE,
-                                    StorageMode = STORAGE_TRANSACTED );
-    SotStorage *        OpenOLEStorage( const String & rEleName,
                                     StreamMode = STREAM_STD_READWRITE,
                                     StorageMode = STORAGE_TRANSACTED );
                         // Abfrage auf Storage oder Stream

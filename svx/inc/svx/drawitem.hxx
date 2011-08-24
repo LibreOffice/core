@@ -202,7 +202,6 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
     XDashList*              GetDashList() const { return pDashList; }
-    void                    SetDashList( XDashList* pList );
 };
 
 

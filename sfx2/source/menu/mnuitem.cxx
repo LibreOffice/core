@@ -122,16 +122,6 @@ void SfxEnumMenu::Select()
 
 //--------------------------------------------------------------------
 
-void SfxMenuControl::SetOwnMenu( SfxVirtualMenu* pMenu )
-{
-    pOwnMenu = pMenu;
-    if ( pSubMenu )
-        pSubMenu->SetParentMenu( pMenu );
-}
-
-
-//--------------------------------------------------------------------
-
 // binds the instance to the specified id and assignes the title
 
 void SfxMenuControl::Bind(
@@ -219,11 +209,6 @@ SfxMenuControl::SfxMenuControl(sal_uInt16 nSlotId, SfxBindings& rBindings):
 SfxMenuControl::~SfxMenuControl()
 {
     delete pSubMenu;
-}
-
-void SfxMenuControl::RemovePopup()
-{
-    DELETEZ( pSubMenu );
 }
 
 //--------------------------------------------------------------------
@@ -475,12 +460,6 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
     }
 
     return sal_False;
-}
-
-SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
-        sal_uInt16 nId, Menu& rMenu, SfxBindings &rBindings, SfxVirtualMenu* pVirt )
-{
-    return new SfxUnoMenuControl( rCmd, nId, rMenu, rBindings, pVirt );
 }
 
 SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,

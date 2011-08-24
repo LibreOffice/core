@@ -198,26 +198,6 @@ sal_Bool SfxPtrArr::Remove( void* aElem )
 
 // -----------------------------------------------------------------------
 
-sal_Bool SfxPtrArr::Replace( void* aOldElem, void* aNewElem )
-{
-    DBG_MEMTEST();
-    // simple tasks ...
-    if ( nUsed == 0 )
-        return sal_False;
-
-    // backwards, since most of the last is first removed
-    void* *pIter = pData + nUsed - 1;
-    for ( sal_uInt16 n = 0; n < nUsed; ++n, --pIter )
-        if ( *pIter == aOldElem )
-        {
-            pData[nUsed-n-1] = aNewElem;
-            return sal_True;
-        }
-    return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool SfxPtrArr::Contains( const void* rItem ) const
 {
     DBG_MEMTEST();

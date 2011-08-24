@@ -109,8 +109,6 @@ class SFX2_DLLPUBLIC SfxModelessDialog: public ModelessDialog
 protected:
                             SfxModelessDialog( SfxBindings*, SfxChildWindow*,
                                 Window*, const ResId& );
-                            SfxModelessDialog( SfxBindings*, SfxChildWindow*,
-                                Window*, WinBits nWinStyle = WB_STDMODELESS );
                             ~SfxModelessDialog();
     virtual sal_Bool            Close();
     virtual void            Resize();

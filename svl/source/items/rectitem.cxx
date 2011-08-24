@@ -64,15 +64,6 @@ SfxRectangleItem::SfxRectangleItem( sal_uInt16 nW, const Rectangle& rVal ) :
 
 // -----------------------------------------------------------------------
 
-SfxRectangleItem::SfxRectangleItem( sal_uInt16 nW, SvStream &rStream ) :
-    SfxPoolItem( nW )
-{
-    DBG_CTOR(SfxRectangleItem, 0);
-    rStream >> aVal;
-}
-
-// -----------------------------------------------------------------------
-
 SfxRectangleItem::SfxRectangleItem( const SfxRectangleItem& rItem ) :
     SfxPoolItem( rItem ),
     aVal( rItem.aVal )

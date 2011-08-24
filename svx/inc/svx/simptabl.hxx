@@ -49,7 +49,6 @@ protected:
     virtual long PreNotify( NotifyEvent& rNEvt );
 
 public:
-    SvxSimpleTableContainer( Window* pParent, WinBits nWinStyle = WB_BORDER );
     SvxSimpleTableContainer( Window* pParent, const ResId& rResId );
 
     void SetTable(SvxSimpleTable* pTable);
