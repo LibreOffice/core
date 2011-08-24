@@ -75,7 +75,6 @@ public:
     BasicIDEShell* GetShell() const { return m_pShell; }
     void SetShell(BasicIDEShell* pShell) { m_pShell = pShell; }
     BasicIDEData* GetExtraData();
-    static BasicIDEDLL* GetDLL();
 };
 
 namespace
@@ -125,11 +124,6 @@ namespace BasicIDEGlobals
         BasicIDEDLL *pIDEGlobals = theBasicIDEDLLInstance::get().get();
         return pIDEGlobals ? pIDEGlobals->GetExtraData() : NULL;
     }
-}
-
-BasicIDEDLL* BasicIDEDLL::GetDLL()
-{
-    return theBasicIDEDLLInstance::get().get();
 }
 
 IDEResId::IDEResId( sal_uInt16 nId ):
