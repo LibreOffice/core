@@ -145,7 +145,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                 if ( rItem.ISA( SvxSearchItem ) )
                 {
                     // memorize item because of the adjustments...
-                    IDE_DLL()->GetExtraData()->SetSearchItem( (const SvxSearchItem&)rItem );
+                    BasicIDEGlobals::GetExtraData()->SetSearchItem( (const SvxSearchItem&)rItem );
                     sal_uInt16 nFound = 0;
                     sal_Bool bCanceled = sal_False;
                     if ( ((const SvxSearchItem&)rItem).GetCommand() == SVX_SEARCHCMD_REPLACE_ALL )
@@ -915,7 +915,7 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
             case SID_SEARCH_ITEM:
             {
                 String aSelected = GetSelectionText( sal_True );
-                SvxSearchItem& rItem = IDE_DLL()->GetExtraData()->GetSearchItem();
+                SvxSearchItem& rItem = BasicIDEGlobals::GetExtraData()->GetSearchItem();
                 rItem.SetSearchString( aSelected );
                 rSet.Put( rItem );
             }
@@ -1089,7 +1089,7 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, sal_Bool bUpdateTabBar
 
             if ( bRememberAsCurrent )
             {
-                BasicIDEData* pData = IDE_DLL()->GetExtraData();
+                BasicIDEData* pData = BasicIDEGlobals::GetExtraData();
                 if ( pData )
                 {
                     sal_uInt16 nCurrentType = pCurWin->IsA( TYPE( ModulWindow ) ) ? BASICIDE_TYPE_MODULE : BASICIDE_TYPE_DIALOG;
@@ -1103,7 +1103,7 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, sal_Bool bUpdateTabBar
 
             pCurWin->Init();
 
-            if ( !IDE_DLL()->GetExtraData()->ShellInCriticalSection() )
+            if ( !BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() )
             {
                 Window* pFrameWindow = &GetViewFrame()->GetWindow();
                 Window* pFocusWindow = Application::GetFocusWindow();
@@ -1249,7 +1249,7 @@ long BasicIDEShell::CallBasicBreakHdl( StarBASIC* pBasic )
 
             if ( nWaitCount )
             {
-                BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
                 for ( sal_uInt16 n = 0; n < nWaitCount; n++ )
                     pIDEShell->GetViewFrame()->GetWindow().EnterWait();
             }

@@ -201,7 +201,7 @@ void DialogWindow::KeyInput( const KeyEvent& rKEvt )
 {
     if( rKEvt.GetKeyCode() == KEY_BACKSPACE )
     {
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
@@ -233,7 +233,7 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
     }
     else if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if ( pDispatcher )
@@ -328,7 +328,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             case SID_DIALOG_TESTMODE:
             {
                 // is the IDE still active?
-                if( IDE_DLL()->GetShell()->GetFrame() )
+                if( BasicIDEGlobals::GetShell()->GetFrame() )
                 {
                     rSet.Put( SfxBoolItem( SID_DIALOG_TESTMODE,
                               (pEditor->GetMode() == DLGED_TEST) ? sal_True : sal_False) );
@@ -394,7 +394,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
 
             case SID_SHOW_PROPERTYBROWSER:
             {
-                BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
                 SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
                 if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) && !pEditor->GetView()->AreObjectsMarked() )
                     rSet.DisableItem( nWh );
@@ -645,7 +645,7 @@ sal_Bool DialogWindow::RenameDialog( const String& rNewName )
 
 void DialogWindow::DisableBrowser()
 {
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_PROPERTYBROWSER) : NULL;
     if( pChildWin )
@@ -654,7 +654,7 @@ void DialogWindow::DisableBrowser()
 
 void DialogWindow::UpdateBrowser()
 {
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_PROPERTYBROWSER) : NULL;
     if( pChildWin )
@@ -1043,7 +1043,7 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
                 }
             }
 
-            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
             if( pIDEShell == NULL )
             {
                 OSL_ASSERT( pIDEShell != NULL );

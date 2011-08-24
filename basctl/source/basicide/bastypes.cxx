@@ -161,7 +161,7 @@ long IDEBaseWindow::Notify( NotifyEvent& rNEvt )
             {
                 if ( aCode.IsMod1() )
                 {
-                    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
                     if ( pIDEShell )
                         pIDEShell->NextPage( nCode == KEY_PAGEUP );
 
@@ -557,7 +557,7 @@ void BasicIDETabBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() && ( rMEvt.GetClicks() == 2 ) && !IsInEditMode() )
     {
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
@@ -598,7 +598,7 @@ void BasicIDETabBar::Command( const CommandEvent& rCEvt )
             aPopup.EnableItem(SID_BASICIDE_MODULEDLG, false);
         }
 
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         if ( pIDEShell )
         {
             ScriptDocument aDocument( pIDEShell->GetCurDocument() );
@@ -663,7 +663,7 @@ void BasicIDETabBar::EndRenaming()
     {
         SfxUInt16Item aID( SID_BASICIDE_ARG_TABID, GetEditPageId() );
         SfxStringItem aNewName( SID_BASICIDE_ARG_MODULENAME, GetEditText() );
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
@@ -677,7 +677,7 @@ void BasicIDETabBar::EndRenaming()
 
 void BasicIDETabBar::Sort()
 {
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     if ( pIDEShell )
     {
         IDEWindowTable& aIDEWindowTable = pIDEShell->GetIDEWindowTable();

@@ -822,7 +822,7 @@ void LocalizationMgr::handleBasicStopped( void )
 
 DialogWindow* FindDialogWindowForEditor( DlgEditor* pEditor )
 {
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     IDEWindowTable& aIDEWindowTable = pIDEShell->GetIDEWindowTable();
     IDEBaseWindow* pWin = aIDEWindowTable.First();
     DialogWindow* pFoundDlgWin = NULL;

@@ -89,7 +89,7 @@ void Organize( sal_Int16 tabId )
     BasicIDEGlobals::ensure();
 
     BasicEntryDescriptor aDesc;
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     if ( pIDEShell )
     {
         IDEBaseWindow* pCurWin = pIDEShell->GetCurWindow();
@@ -195,7 +195,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
     if ( !rDocument.renameModule( rLibName, rOldName, rNewName ) )
         return false;
 
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     if ( pIDEShell )
     {
         IDEBaseWindow* pWin = pIDEShell->FindWindow( rDocument, rLibName, rNewName, BASICIDE_TYPE_MODULE, sal_True );
@@ -276,7 +276,7 @@ namespace
 
     BasicIDEGlobals::ensure();
 
-    IDE_DLL()->GetExtraData()->ChoosingMacro() = sal_True;
+    BasicIDEGlobals::GetExtraData()->ChoosingMacro() = sal_True;
 
     String aScriptURL;
     sal_Bool bError = sal_False;
@@ -292,7 +292,7 @@ namespace
 
     short nRetValue = pChooser->Execute();
 
-    IDE_DLL()->GetExtraData()->ChoosingMacro() = sal_False;
+    BasicIDEGlobals::GetExtraData()->ChoosingMacro() = sal_False;
 
     switch ( nRetValue )
     {

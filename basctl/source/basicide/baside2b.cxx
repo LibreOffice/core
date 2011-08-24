@@ -568,7 +568,7 @@ void EditorWindow::CreateEditEngine()
     // nLines*4: SetText+Formatting+DoHighlight+Formatting
     // it could be cut down on one formatting but you would wait even longer
     // for the text then if the source code is long...
-    pProgress = new ProgressInfo( IDE_DLL()->GetShell()->GetViewFrame()->GetObjectShell(), String( IDEResId( RID_STR_GENERATESOURCE ) ), nLines*4 );
+    pProgress = new ProgressInfo( BasicIDEGlobals::GetShell()->GetViewFrame()->GetObjectShell(), String( IDEResId( RID_STR_GENERATESOURCE ) ), nLines*4 );
     setTextEngineText( pEditEngine, aOUSource );
 
     pEditView->SetStartDocPos( Point( 0, 0 ) );
@@ -897,7 +897,7 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, sal_Bool bInserted
 void EditorWindow::CreateProgress( const String& rText, sal_uLong nRange )
 {
     DBG_ASSERT( !pProgress, "ProgressInfo existiert schon" );
-    pProgress = new ProgressInfo( IDE_DLL()->GetShell()->GetViewFrame()->GetObjectShell(), rText, nRange );
+    pProgress = new ProgressInfo( BasicIDEGlobals::GetShell()->GetViewFrame()->GetObjectShell(), rText, nRange );
 }
 
 void EditorWindow::DestroyProgress()
@@ -1390,7 +1390,7 @@ IMPL_LINK_INLINE_START( WatchWindow, ButtonHdl, ImageButton *, pButton )
 {
     if ( pButton == &aRemoveWatchButton )
     {
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )

@@ -131,7 +131,7 @@ sal_Bool ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rN
 
     BasicIDE::MarkDocumentModified( aDocument );
 
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
     if( pDispatcher )
@@ -365,7 +365,7 @@ sal_Bool ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxE
     BasicEntryType eType( aSourceDesc.GetType() );
 
     // get dispatcher
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
 
@@ -499,7 +499,7 @@ OrganizeDialog::OrganizeDialog( Window* pParent, sal_Int16 tabId, BasicEntryDesc
 
     ActivatePageHdl( &aTabCtrl );
 
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
     if( pDispatcher )
@@ -692,7 +692,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
         SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
         SFX_APP()->ExecuteSlot( aRequest );
 
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
@@ -840,7 +840,7 @@ void ObjectPage::NewDialog()
                     return;
 
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDocument, aLibName, aDlgName, BASICIDE_TYPE_DIALOG );
-                BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
                 SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
                 SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                 if( pDispatcher )
@@ -898,7 +898,7 @@ void ObjectPage::DeleteCurrent()
         aBasicBox.GetModel()->Remove( pCurEntry );
         if ( aBasicBox.GetCurEntry() )  // OV-Bug ?
             aBasicBox.Select( aBasicBox.GetCurEntry() );
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
@@ -1000,7 +1000,7 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
                 if ( pBasic )
                     pModule = pBasic->FindModule( aModName );
             SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, BASICIDE_TYPE_MODULE );
-            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
             SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
             SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if( pDispatcher )

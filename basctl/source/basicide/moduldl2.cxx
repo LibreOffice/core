@@ -638,7 +638,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         DBG_ASSERT( pCurEntry, "Entry?!" );
         String aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if ( pDispatcher )
@@ -672,7 +672,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         Reference< script::XLibraryContainer > xModLibContainer = m_aCurDocument.getLibraryContainer( E_SCRIPTS );
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
         {
-            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
             if ( pIDEShell )
                 pIDEShell->GetViewFrame()->GetWindow().EnterWait();
             xModLibContainer->loadLibrary( aOULibName );
@@ -684,7 +684,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         Reference< script::XLibraryContainer > xDlgLibContainer = m_aCurDocument.getLibraryContainer( E_DIALOGS );
         if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
         {
-            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
             if ( pIDEShell )
                 pIDEShell->GetViewFrame()->GetWindow().EnterWait();
             xDlgLibContainer->loadLibrary( aOULibName );
@@ -796,7 +796,7 @@ void LibPage::InsertLib()
     xFltMgr->appendFilter( aTitle, aFilter );
 
     // set display directory and filter
-    String aPath( IDE_DLL()->GetExtraData()->GetAddLibPath() );
+    String aPath( BasicIDEGlobals::GetExtraData()->GetAddLibPath() );
     if ( aPath.Len() )
     {
         xFP->setDisplayDirectory( aPath );
@@ -807,7 +807,7 @@ void LibPage::InsertLib()
         xFP->setDisplayDirectory( SvtPathOptions().GetWorkPath() );
     }
 
-    String aLastFilter( IDE_DLL()->GetExtraData()->GetAddLibFilter() );
+    String aLastFilter( BasicIDEGlobals::GetExtraData()->GetAddLibFilter() );
     if ( aLastFilter.Len() )
     {
         xFltMgr->setCurrentFilter( aLastFilter );
@@ -819,8 +819,8 @@ void LibPage::InsertLib()
 
     if ( xFP->execute() == RET_OK )
     {
-        IDE_DLL()->GetExtraData()->SetAddLibPath( xFP->getDisplayDirectory() );
-        IDE_DLL()->GetExtraData()->SetAddLibFilter( xFltMgr->getCurrentFilter() );
+        BasicIDEGlobals::GetExtraData()->SetAddLibPath( xFP->getDisplayDirectory() );
+        BasicIDEGlobals::GetExtraData()->SetAddLibFilter( xFltMgr->getCurrentFilter() );
 
         // library containers for import
         Reference< script::XLibraryContainer2 > xModLibContImport;
@@ -1283,7 +1283,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
     xFltMgr->appendFilter( aTitle, aFilter );
 
     // set display directory and filter
-    String aPath( IDE_DLL()->GetExtraData()->GetAddLibPath() );
+    String aPath( BasicIDEGlobals::GetExtraData()->GetAddLibPath() );
     if ( aPath.Len() )
     {
         xFP->setDisplayDirectory( aPath );
@@ -1297,7 +1297,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
 
     if ( xFP->execute() == RET_OK )
     {
-        IDE_DLL()->GetExtraData()->SetAddLibPath( xFP->getDisplayDirectory() );
+        BasicIDEGlobals::GetExtraData()->SetAddLibPath( xFP->getDisplayDirectory() );
 
         Sequence< ::rtl::OUString > aFiles = xFP->getFiles();
         INetURLObject aURL( aFiles[0] );
@@ -1409,7 +1409,7 @@ void LibPage::ExportAsBasic( const String& aLibName )
         xFolderPicker->setTitle( String( IDEResId( RID_STR_EXPORTBASIC ) ) );
 
         // set display directory and filter
-        String aPath( IDE_DLL()->GetExtraData()->GetAddLibPath() );
+        String aPath( BasicIDEGlobals::GetExtraData()->GetAddLibPath() );
         if( !aPath.Len() )
             aPath = SvtPathOptions().GetWorkPath();
 
@@ -1419,7 +1419,7 @@ void LibPage::ExportAsBasic( const String& aLibName )
         if( nRet == RET_OK )
         {
             String aTargetURL = xFolderPicker->getDirectory();
-            IDE_DLL()->GetExtraData()->SetAddLibPath( aTargetURL );
+            BasicIDEGlobals::GetExtraData()->SetAddLibPath( aTargetURL );
 
             Reference< task::XInteractionHandler > xDummyHandler( new DummyInteractionHandler( xHandler ) );
             implExportLib( aLibName, aTargetURL, xDummyHandler );
@@ -1450,7 +1450,7 @@ void LibPage::DeleteCurrent()
         // inform BasicIDE
         SfxUsrAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, makeAny( m_aCurDocument.getDocumentOrNull() ) );
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
@@ -1651,7 +1651,7 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                     throw Exception();
 
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, BASICIDE_TYPE_MODULE );
-                BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
                 SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
                 SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                 if( pDispatcher )

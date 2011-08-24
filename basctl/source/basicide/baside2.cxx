@@ -278,7 +278,7 @@ void ModulWindow::CheckCompileBasic()
         {
             sal_Bool bDone = sal_False;
 
-            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
             pIDEShell->GetViewFrame()->GetWindow().EnterWait();
 
             if( bModified )
@@ -1196,7 +1196,7 @@ sal_Bool ModulWindow::IsModified()
 
 void ModulWindow::GoOnTop()
 {
-    IDE_DLL()->GetShell()->GetViewFrame()->ToTop();
+    BasicIDEGlobals::GetShell()->GetViewFrame()->ToTop();
 }
 
 String ModulWindow::GetSbModuleName()

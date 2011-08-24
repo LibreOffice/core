@@ -29,31 +29,19 @@
 #ifndef _IDERDLL_HXX
 #define _IDERDLL_HXX
 
-namespace BasicIDEGlobals
-{
-    void ensure();
-}
-
 class BasicIDEShell;
 class BasicIDEData;
 
-class BasicIDEDLL
+namespace BasicIDEGlobals
 {
-    friend class BasicIDEShell;
+    void ensure();
 
-    BasicIDEShell*  pShell;
-    BasicIDEData*   pExtraData;
+    void ShellCreated(BasicIDEShell* pShell);
+    BasicIDEShell* GetShell();
+    void ShellDestroyed(BasicIDEShell* pShell);
 
-public:
-                    BasicIDEDLL();
-                    ~BasicIDEDLL();
-
-    BasicIDEShell*  GetShell() const { return pShell; }
-    BasicIDEData*   GetExtraData();
-    static BasicIDEDLL* GetDLL();
-};
-
-#define IDE_DLL()   BasicIDEDLL::GetDLL()
+    BasicIDEData* GetExtraData();
+}
 
 #endif //_IDERDLL_HXX
 

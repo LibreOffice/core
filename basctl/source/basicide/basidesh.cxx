@@ -204,7 +204,7 @@ void BasicIDEShell::Init()
 
     SvxSearchDialogWrapper::RegisterChildWindow( sal_False );
 
-    IDE_DLL()->GetExtraData()->ShellInCriticalSection() = sal_True;
+    BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() = sal_True;
 
     SetName( String( RTL_CONSTASCII_USTRINGPARAM( "BasicIDE" ) ) );
     SetHelpId( SVX_INTERFACE_BASIDE_VIEWSH );
@@ -233,10 +233,9 @@ void BasicIDEShell::Init()
 
     SetCurLib( ScriptDocument::getApplicationScriptDocument(), String::CreateFromAscii( "Standard" ), false, false );
 
-    if ( IDE_DLL() && IDE_DLL()->pShell == NULL )
-        IDE_DLL()->pShell = this;
+    BasicIDEGlobals::ShellCreated(this);
 
-    IDE_DLL()->GetExtraData()->ShellInCriticalSection() = sal_False;
+    BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() = sal_False;
 
     // It's enough to create the controller ...
     // It will be public by using magic :-)
@@ -253,11 +252,11 @@ BasicIDEShell::~BasicIDEShell()
 {
     m_aNotifier.dispose();
 
-    if ( IDE_DLL() && IDE_DLL()->pShell == this )
-        IDE_DLL()->pShell = NULL;
+    BasicIDEGlobals::ShellDestroyed(this);
 
-
-    IDE_DLL()->GetExtraData()->ShellInCriticalSection() = sal_True;
+    // Damit bei einem Basic-Fehler beim Speichern die Shell nicht sofort
+    // wieder hoch kommt:
+    BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() = sal_True;
 
     SetWindow( 0 );
     SetCurWindow( 0 );
@@ -281,7 +280,7 @@ BasicIDEShell::~BasicIDEShell()
         if ( pListener )
             pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
 
-    IDE_DLL()->GetExtraData()->ShellInCriticalSection() = sal_False;
+    BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() = sal_False;
 
     GnBasicIDEShellCount--;
 }
@@ -352,7 +351,7 @@ void BasicIDEShell::onDocumentClosed( const ScriptDocument& _rDocument )
     }
 
     // remove lib info
-    BasicIDEData* pData = IDE_DLL()->GetExtraData();
+    BasicIDEData* pData = BasicIDEGlobals::GetExtraData();
     if ( pData )
         pData->GetLibInfos().RemoveInfoFor( _rDocument );
 
@@ -602,7 +601,7 @@ void BasicIDEShell::ShowObjectDialog( sal_Bool bShow, sal_Bool bCreateOrDestroy 
 void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                                         const SfxHint& rHint, const TypeId& )
 {
-    if ( IDE_DLL()->GetShell() )
+    if ( BasicIDEGlobals::GetShell() )
     {
         if ( rHint.IsA( TYPE( SfxSimpleHint ) ) )
         {
@@ -788,7 +787,7 @@ void BasicIDEShell::UpdateWindows()
                 if ( !bProtected )
                 {
                     LibInfoItem* pLibInfoItem = 0;
-                    BasicIDEData* pData = IDE_DLL()->GetExtraData();
+                    BasicIDEData* pData = BasicIDEGlobals::GetExtraData();
                     if ( pData )
                         pLibInfoItem = pData->GetLibInfos().GetInfo( LibInfoKey( *doc, aLibName ) );
 
@@ -934,7 +933,7 @@ void BasicIDEShell::InvalidateBasicIDESlots()
 {
     // only those that have an optic effect...
 
-    if ( IDE_DLL()->GetShell() )
+    if ( BasicIDEGlobals::GetShell() )
     {
         SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
         if ( pBindings )

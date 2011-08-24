@@ -631,7 +631,7 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
 
 IMPL_LINK( DlgEditor, MarkTimeout, Timer *, EMPTYARG )
 {
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
 
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SHOW_PROPERTYBROWSER ) : NULL;
@@ -1162,7 +1162,7 @@ sal_Bool DlgEditor::IsPasteAllowed()
 
 void DlgEditor::ShowProperties()
 {
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) )
         pViewFrame->ToggleChildWindow( SID_SHOW_PROPERTYBROWSER );

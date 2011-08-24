@@ -63,6 +63,21 @@ using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+class BasicIDEDLL
+{
+    BasicIDEShell* m_pShell;
+    BasicIDEData* m_pExtraData;
+
+public:
+    BasicIDEDLL();
+    ~BasicIDEDLL();
+
+    BasicIDEShell* GetShell() const { return m_pShell; }
+    void SetShell(BasicIDEShell* pShell) { m_pShell = pShell; }
+    BasicIDEData* GetExtraData();
+    static BasicIDEDLL* GetDLL();
+};
+
 namespace
 {
     //Holds a BasicIDEDLL and release it on exit, or dispose of the
@@ -84,6 +99,32 @@ namespace BasicIDEGlobals
     {
         theBasicIDEDLLInstance::get();
     }
+
+    BasicIDEShell* GetShell()
+    {
+        BasicIDEDLL *pIDEGlobals = theBasicIDEDLLInstance::get().get();
+        return pIDEGlobals ? pIDEGlobals->GetShell() : NULL;
+    }
+
+    void ShellCreated(BasicIDEShell* pShell)
+    {
+        BasicIDEDLL *pIDEGlobals = theBasicIDEDLLInstance::get().get();
+        if (pIDEGlobals && pIDEGlobals->GetShell() == pShell)
+            pIDEGlobals->SetShell(pShell);
+    }
+
+    void ShellDestroyed(BasicIDEShell* pShell)
+    {
+        BasicIDEDLL *pIDEGlobals = theBasicIDEDLLInstance::get().get();
+        if (pIDEGlobals && pIDEGlobals->GetShell() == pShell)
+            pIDEGlobals->SetShell(NULL);
+    }
+
+    BasicIDEData* GetExtraData()
+    {
+        BasicIDEDLL *pIDEGlobals = theBasicIDEDLLInstance::get().get();
+        return pIDEGlobals ? pIDEGlobals->GetExtraData() : NULL;
+    }
 }
 
 BasicIDEDLL* BasicIDEDLL::GetDLL()
@@ -98,15 +139,15 @@ IDEResId::IDEResId( sal_uInt16 nId ):
 
 BasicIDEDLL::~BasicIDEDLL()
 {
-    delete pExtraData;
+    delete m_pExtraData;
 #if 0
     *(BasicIDEDLL**)GetAppData(SHL_IDE) = NULL;
 #endif
 }
 
 BasicIDEDLL::BasicIDEDLL()
-    : pShell(0)
-    , pExtraData(0)
+    : m_pShell(0)
+    , m_pExtraData(0)
 {
     SfxObjectFactory* pFact = &BasicDocShell::Factory();
     (void)pFact;
@@ -132,9 +173,9 @@ BasicIDEDLL::BasicIDEDLL()
 
 BasicIDEData* BasicIDEDLL::GetExtraData()
 {
-    if ( !pExtraData )
-        pExtraData = new BasicIDEData;
-    return pExtraData;
+    if (!m_pExtraData)
+        m_pExtraData = new BasicIDEData;
+    return m_pExtraData;
 }
 
 BasicIDEData::BasicIDEData() : aObjCatPos( INVPOSITION, INVPOSITION )
@@ -177,7 +218,7 @@ void BasicIDEData::SetSearchItem( const SvxSearchItem& rItem )
 IMPL_LINK( BasicIDEData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
 {
     long nRet = 0;
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     if ( pIDEShell )
     {
         BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );

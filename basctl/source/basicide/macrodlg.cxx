@@ -125,7 +125,7 @@ MacroChooser::MacroChooser( Window* pParnt, sal_Bool bCreateEntries ) :
                         WB_HASBUTTONS | WB_HASBUTTONSATROOT |
                         WB_HSCROLL );
 
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
     if( pDispatcher )
@@ -158,7 +158,7 @@ void MacroChooser::StoreMacroDescription()
         aDesc.SetType( OBJ_TYPE_METHOD );
     }
 
-    BasicIDEData* pData = IDE_DLL()->GetExtraData();
+    BasicIDEData* pData = BasicIDEGlobals::GetExtraData();
     if ( pData )
         pData->SetLastEntryDescriptor( aDesc );
 }
@@ -166,7 +166,7 @@ void MacroChooser::StoreMacroDescription()
 void MacroChooser::RestoreMacroDescription()
 {
     BasicEntryDescriptor aDesc;
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     if ( pIDEShell )
     {
         IDEBaseWindow* pCurWin = pIDEShell->GetCurWindow();
@@ -175,7 +175,7 @@ void MacroChooser::RestoreMacroDescription()
     }
     else
     {
-        BasicIDEData* pData = IDE_DLL()->GetExtraData();
+        BasicIDEData* pData = BasicIDEGlobals::GetExtraData();
         if ( pData )
             aDesc = pData->GetLastEntryDescriptor();
     }
@@ -306,7 +306,7 @@ void MacroChooser::DeleteMacro()
     DBG_ASSERT( pMethod, "DeleteMacro: Kein Macro !" );
     if ( pMethod && QueryDelMacro( pMethod->GetName(), this ) )
     {
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
@@ -723,7 +723,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
             SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
             SFX_APP()->ExecuteSlot( aRequest );
 
-            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
             SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
             SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if( pDispatcher )
@@ -735,7 +735,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
             if ( bNewDelIsDel )
             {
                 DeleteMacro();
-                BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
                 SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
                 SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                 if( pDispatcher )
@@ -768,7 +768,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                     SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
                     SFX_APP()->ExecuteSlot( aRequest );
 
-                    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
                     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
                     SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                     if ( pDispatcher )
@@ -834,7 +834,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
             return 0;
         }
 
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         if ( pIDEShell && pIDEShell->IsAppBasicModified() )
             bForceStoreBasic = sal_True;
 

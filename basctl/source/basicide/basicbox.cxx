@@ -335,7 +335,7 @@ void BasicLibBox::NotifyIDE()
         SfxUsrAnyItem aDocumentItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, uno::makeAny( aDocument.getDocumentOrNull() ) );
         String aLibName = pEntry->GetLibName();
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if ( pDispatcher )
@@ -426,7 +426,7 @@ void BasicLanguageBox::FillBox()
     m_sCurrentText = GetSelectEntry();
     ClearBox();
 
-    LocalizationMgr* pCurMgr = IDE_DLL()->GetShell()->GetCurLocalizationMgr();
+    LocalizationMgr* pCurMgr = BasicIDEGlobals::GetShell()->GetCurLocalizationMgr();
     if ( pCurMgr->isLibraryLocalized() )
     {
         Enable();
@@ -487,7 +487,7 @@ void BasicLanguageBox::SetLanguage()
 {
     LanguageEntry* pEntry = (LanguageEntry*)GetEntryData( GetSelectEntryPos() );
     if ( pEntry )
-        IDE_DLL()->GetShell()->GetCurLocalizationMgr()->handleSetCurrentLocale( pEntry->m_aLocale );
+        BasicIDEGlobals::GetShell()->GetCurLocalizationMgr()->handleSetCurrentLocale( pEntry->m_aLocale );
 }
 
 void BasicLanguageBox::Select()
