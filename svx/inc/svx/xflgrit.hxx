@@ -48,7 +48,6 @@ public:
             XFillGradientItem(sal_Int32 nIndex, const XGradient& rTheGradient);
             XFillGradientItem(const UniString& rName, const XGradient& rTheGradient);
             XFillGradientItem(SfxItemPool* pPool, const XGradient& rTheGradient);
-            XFillGradientItem(SfxItemPool* pPool );
             XFillGradientItem(const XFillGradientItem& rItem);
             XFillGradientItem(SvStream& rIn, sal_uInt16 nVer = 0);
 

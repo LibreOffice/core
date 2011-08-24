@@ -3288,13 +3288,6 @@ XFillGradientItem::XFillGradientItem(SfxItemPool* /*pPool*/, const XGradient& rT
 {
 }
 
-//*************************************************************************
-
-XFillGradientItem::XFillGradientItem(SfxItemPool* /*pPool*/)
-: NameOrIndex(XATTR_FILLGRADIENT, -1 )
-{
-}
-
 /*************************************************************************
 |*
 |*    XFillGradientItem::Clone(SfxItemPool* pPool) const
@@ -3375,7 +3368,7 @@ const XGradient& XFillGradientItem::GetGradientValue() const // GetValue -> GetG
 {
     if (!IsIndex())
         return aGradient;
-    // ToDo: This should fail. We never call called this code with a table so this should always
+    // ToDo: This should fail. We never called this code with a table so this should always
     // have failed. Thus, I'm thinking that XFillGradientItem can't be an Index.
     return aGradient;
 }
