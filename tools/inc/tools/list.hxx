@@ -105,8 +105,6 @@ public:                                                                 \
                     { return (Type)List::Remove( nIndex ); }            \
     Type        Remove( Type p )                                        \
                     { return (Type)List::Remove( (void*)p ); }          \
-    Type        Replace( Type p )                                       \
-                    { return (Type)List::Replace( (void*)p ); }         \
     Type        Replace( Type p, sal_uIntPtr nIndex )                         \
                     { return (Type)List::Replace( (void*)p, nIndex ); } \
     Type        Replace( Type pNew, Type pOld )                         \
@@ -119,10 +117,6 @@ public:                                                                 \
                     { return (Type)List::GetObject( nIndex ); }         \
     sal_uIntPtr       GetPos( const Type p ) const                            \
                     { return List::GetPos( (const void*)p ); }          \
-    sal_uIntPtr       GetPos( const Type p, sal_uIntPtr nStartIndex,                \
-                        sal_Bool bForward = sal_True ) const                    \
-                    { return List::GetPos( (const void*)p, nStartIndex, \
-                                           bForward ); }                \
                                                                         \
     Type        Seek( sal_uIntPtr nIndex )                                    \
                     { return (Type)List::Seek( nIndex ); }              \

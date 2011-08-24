@@ -46,11 +46,6 @@
 #include "root.hxx"
 #include "scitems.hxx"
 
-LotAttrCache::ENTRY::ENTRY (const ScPatternAttr &r)
-    : pPattAttr(new ScPatternAttr(r))
-{
-}
-
 LotAttrCache::ENTRY::ENTRY (ScPatternAttr* p)
     : pPattAttr(p)
 {

@@ -1,8 +1,6 @@
 (anonymous namespace)::getState(std::vector<cppcanvas::internal::OutDevState, std::allocator<cppcanvas::internal::OutDevState> > const&)
 (anonymous namespace)::writeInfo(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, rtl::OUString const&, rtl::OUString const&)
 BasicIDEDLL::~BasicIDEDLL()
-BitSet::BitSet(Range const&)
-BitSet::BitSet(unsigned short*, unsigned short)
 BitmapEx::Draw(OutputDevice*, Point const&, Size const&, Point const&, Size const&) const
 BitmapLB::SelectEntryByList(XBitmapList const*, String const&, Bitmap const&)
 BitmapPalette::IsGreyPalette() const
@@ -86,10 +84,6 @@ CommunicationLinkList::Insert(CommunicationLink const*&, unsigned short&)
 CommunicationLinkList::Insert(CommunicationLink const**, unsigned short)
 CommunicationLinkList::Insert(CommunicationLinkList const*, unsigned short, unsigned short)
 CommunicationLinkList::Remove(CommunicationLink const*&, unsigned short)
-Container::GetObjectPtr(unsigned long)
-Container::GetPos(void const*, unsigned long, unsigned char) const
-Container::Insert(void*, void*)
-Container::Replace(void*)
 Control::GetLineCount() const
 ControlItem::ControlItem(ControlData*)
 CurrencyBox::CurrencyBox(Window*, ResId const&)
@@ -192,10 +186,6 @@ FileStat::SetDateTime(String const&, DateTime const&)
 FileStream::FileStream(rtl::OString const&, FileAccessMode)
 FillAttrLB::FillAttrLB(Window*, ResId)
 FillAttrLB::SelectEntryByList(XBitmapList const*, String const&, Bitmap const&)
-FilterConfigCache::FilterConfigCacheEntry::IsValid()
-FilterConfigCache::IsImportDialog(unsigned short)
-FilterConfigItem::ReadSize(rtl::OUString const&, com::sun::star::awt::Size const&)
-FilterConfigItem::WriteSize(rtl::OUString const&, com::sun::star::awt::Size const&)
 FilterConfigItem::WriteString(rtl::OUString const&, rtl::OUString const&)
 FixedBitmap::GetModeBitmap() const
 FixedBitmap::SetModeBitmap(Bitmap const&)
@@ -276,7 +266,6 @@ HeaderBar::SetItemImage(unsigned short, Image const&)
 HelpTextWindow::RegisterAccessibleParent()
 HelpTextWindow::RevokeAccessibleParent()
 IMapWindow::GetSdrObj(IMapObject const*) const
-INetURLObject::hasPassword() const
 IconChoiceDialog::RemoveResetButton()
 IconChoiceDialog::RemoveTabPage(unsigned short)
 ImageAryData::ImageAryData()
@@ -289,7 +278,6 @@ ImageList::ReplaceImage(unsigned short, Image const&)
 ImageMap::GetBoundRect() const
 ImpBitmap::ImplDestroy()
 ImpDefaultMapper::ImpDefaultMapper(com::sun::star::uno::Reference<com::sun::star::beans::XPropertyState>&)
-ImpEditEngine::ImplFillTextMarkingVector(com::sun::star::lang::Locale const&, std::vector<EEngineData::TextMarkingClass, std::allocator<EEngineData::TextMarkingClass> >&, String const&, unsigned short, unsigned short) const
 ImpEditEngine::Repeat(EditView*)
 ImpEditView::CalcSelectedRegion()
 ImpLabelList::ImplFirst()
@@ -324,7 +312,6 @@ KeyCode::GetSymbolName(String const&, Window*) const
 KeyEvent::InitKeyEvent(com::sun::star::awt::KeyEvent&) const
 KeyEvent::KeyEvent(com::sun::star::awt::KeyEvent const&)
 KeyboardSettings::CopyData()
-LWPFilterImportFilter::getSupportedServiceNames_Static()
 Line::Enum(Link const&)
 Line::NearestPoint(Point const&) const
 LineInfo::isDashDotOrFatLineUsed() const
@@ -350,7 +337,6 @@ LongCurrencyFormatter::Denormalize(BigInt) const
 LongCurrencyFormatter::IsValueModified() const
 LongCurrencyFormatter::Normalize(BigInt) const
 LongCurrencyFormatter::SetEmptyValue()
-LotAttrCache::ENTRY::ENTRY(ScPatternAttr const&)
 MSDffImportRecords::Insert(MSDffImportRecords const*, unsigned short, unsigned short)
 MSDffImportRecords::Insert(SvxMSDffImportRec* const&, unsigned short&)
 MSDffImportRecords::Insert(SvxMSDffImportRec* const*, unsigned short)
@@ -933,15 +919,6 @@ SfxOleString16Property::SfxOleString16Property(int, String const&)
 SfxOrganizeDlg_Impl::OkHdl(Button*)
 SfxPartChildWnd_Impl::GetChildWindowId()
 SfxPasswordDialog::SetMaxLen(unsigned short)
-SfxPopupMenuManager::AddClipboardFunctions()
-SfxPopupMenuManager::CheckItem(unsigned short, unsigned char)
-SfxPopupMenuManager::EndInsert()
-SfxPopupMenuManager::Execute(Point const&, Window*, SfxPoolItem const*, ...)
-SfxPopupMenuManager::InsertItem(unsigned short, String const&, unsigned short, rtl::OString const&, unsigned short)
-SfxPopupMenuManager::InsertSeparator(unsigned short)
-SfxPopupMenuManager::RemoveItem(unsigned short)
-SfxPopupMenuManager::SfxPopupMenuManager(ResId const&, SfxBindings&)
-SfxPopupMenuManager::StartInsert()
 SfxPopupWindow::EndCascading()
 SfxPopupWindow::LinkStubDelete(void*, void*)
 SfxPopupWindow::RemoveStatusListener(rtl::OUString const&)

@@ -298,16 +298,6 @@ IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
     return sal_True;
 }
 
-//--------------------------------------------------------------------
-
-// don't insert Popups into ConfigManager, they are not configurable at the moment !
-SfxPopupMenuManager::SfxPopupMenuManager(const ResId& rResId, SfxBindings &rBindings )
-    : SfxMenuManager( rResId, rBindings )
-    , pSVMenu( NULL )
-{
-    DBG_MEMTEST();
-}
-
 SfxPopupMenuManager::~SfxPopupMenuManager()
 {
 }
@@ -356,73 +346,7 @@ sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPoint, Window* pWindow, v
     return nId;
 }
 
-//--------------------------------------------------------------------
-
-sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPoint, Window* pWindow, const SfxPoolItem *pArg1, ... )
-{
-    DBG_MEMTEST();
-
-    va_list pArgs;
-    va_start(pArgs, pArg1);
-    sal_uInt16 nRet = Execute( rPoint, pWindow, pArgs, pArg1 );
-    va_end(pArgs);
-
-    return (nRet);
-}
-
 //-------------------------------------------------------------------------
-
-void SfxPopupMenuManager::StartInsert()
-{
-    ResId aResId(GetType(),*pResMgr);
-    aResId.SetRT(RSC_MENU);
-    pSVMenu = new PopupMenu( aResId );
-    TryToHideDisabledEntries_Impl( pSVMenu );
-}
-
-//-------------------------------------------------------------------------
-
-void SfxPopupMenuManager::EndInsert()
-{
-    pBindings->ENTERREGISTRATIONS();
-    pMenu = new SfxVirtualMenu( pSVMenu, sal_False, *pBindings, sal_True, sal_True );
-    Construct( *pMenu );
-    pBindings->LEAVEREGISTRATIONS();
-}
-
-//-------------------------------------------------------------------------
-
-void SfxPopupMenuManager::InsertSeparator( sal_uInt16 nPos )
-{
-    pSVMenu->InsertSeparator( nPos );
-}
-
-//-------------------------------------------------------------------------
-
-void SfxPopupMenuManager::InsertItem( sal_uInt16 nId, const String& rName, MenuItemBits nBits, const rtl::OString& rHelpId, sal_uInt16 nPos )
-{
-    pSVMenu->InsertItem( nId, rName, nBits,nPos );
-    pSVMenu->SetHelpId( nId, rHelpId );
-}
-
-//-------------------------------------------------------------------------
-
-void SfxPopupMenuManager::RemoveItem( sal_uInt16 nId )
-{
-    pSVMenu->RemoveItem( nId );
-}
-
-//-------------------------------------------------------------------------
-
-void SfxPopupMenuManager::CheckItem( sal_uInt16 nId, sal_Bool bCheck )
-{
-    pSVMenu->CheckItem( nId, bCheck );
-}
-
-void SfxPopupMenuManager::AddClipboardFunctions()
-{
-    bAddClipboardFuncs = sal_True;
-}
 
 SfxMenuManager::SfxMenuManager( Menu* pMenuArg, SfxBindings &rBindings )
 :   pMenu(0),

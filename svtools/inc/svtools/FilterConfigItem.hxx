@@ -76,8 +76,6 @@ class SVT_DLLPUBLIC FilterConfigItem
         // 3. given default
         sal_Bool    ReadBool( const ::rtl::OUString& rKey, sal_Bool bDefault );
         sal_Int32   ReadInt32( const ::rtl::OUString& rKey, sal_Int32 nDefault );
-        ::com::sun::star::awt::Size
-                    ReadSize( const ::rtl::OUString& rKey, const ::com::sun::star::awt::Size& rDefault );
         ::rtl::OUString
                     ReadString( const ::rtl::OUString& rKey, const ::rtl::OUString& rDefault );
         ::com::sun::star::uno::Any
@@ -87,7 +85,6 @@ class SVT_DLLPUBLIC FilterConfigItem
         // and always stores into the FilterData sequence
         void        WriteBool( const ::rtl::OUString& rKey, sal_Bool bValue );
         void        WriteInt32( const ::rtl::OUString& rKey, sal_Int32 nValue );
-        void        WriteSize( const ::rtl::OUString& rKey, const ::com::sun::star::awt::Size& rSize );
         void        WriteString( const ::rtl::OUString& rKey, const ::rtl::OUString& rString );
         void        WriteAny( const rtl::OUString& rKey, const ::com::sun::star::uno::Any& rAny );
 

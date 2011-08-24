@@ -138,17 +138,8 @@ uno::Reference< XInterface > LWPFilterImportFilter_CreateInstance(
     return uno::Reference< XInterface > ( (OWeakObject* )p );
 }
 
-Sequence< OUString > LWPFilterImportFilter::getSupportedServiceNames_Static( void ) throw ()
-{
-    Sequence< OUString > aRet(1);
-    aRet.getArray()[0] = LWPFilterImportFilter::getImplementationName_Static();
-    return aRet;
-}
-
 LWPFilterImportFilter::LWPFilterImportFilter( const uno::Reference< XMultiServiceFactory >& xFact )
 {
-    //OUString sService = OUString( SwXMLImport_getImplementationName ); //STR_WRITER_IMPORTER_NAME
-
     try
     {
         uno::Reference< XDocumentHandler > xDoc( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( STR_WRITER_IMPORTER_NAME )) ), UNO_QUERY );

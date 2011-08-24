@@ -87,11 +87,6 @@ public:                                                             \
                     { return (Type)Stack::GetObject( nIndex ); }    \
     sal_uIntPtr       GetPos( const Type p ) const                        \
                     { return Stack::GetPos( (const void*)p ); }     \
-    sal_uIntPtr       GetPos( const Type p, sal_uIntPtr nStartIndex,            \
-                        sal_Bool bForward = sal_True ) const                \
-                    { return Stack::GetPos( (const void*)p,         \
-                                            nStartIndex,            \
-                                            bForward ); }           \
                                                                     \
     ClassName&  operator =( const ClassName& rClassName )           \
                     { Stack::operator =( rClassName );              \

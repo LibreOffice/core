@@ -333,51 +333,6 @@ sal_Int32 FilterConfigItem::ReadInt32( const OUString& rKey, sal_Int32 nDefault 
     return nRetValue;
 }
 
-
-Size FilterConfigItem::ReadSize( const OUString& rKey, const Size& rDefault )
-{
-    Any aAny;
-    Size aRetValue( rDefault );
-
-    const OUString sWidth( RTL_CONSTASCII_USTRINGPARAM( "LogicalWidth" ) );
-    const OUString sHeight( RTL_CONSTASCII_USTRINGPARAM( "LogicalHeight" ) );
-
-    Reference< XPropertySet > aXPropSet;
-    try
-    {
-        PropertyValue* pPropWidth = GetPropertyValue( aFilterData, sWidth  );
-        PropertyValue* pPropHeight= GetPropertyValue( aFilterData, sHeight );
-        if ( pPropWidth && pPropHeight )
-        {
-            pPropWidth->Value >>= aRetValue.Width;
-            pPropHeight->Value >>= aRetValue.Height;
-        }
-        else if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
-        {
-            if ( aAny >>= aXPropSet )
-            {
-                if ( ImplGetPropertyValue( aAny, aXPropSet, sWidth, sal_True ) )
-                    aAny >>= aRetValue.Width;
-                if ( ImplGetPropertyValue( aAny, aXPropSet, sHeight, sal_True ) )
-                    aAny >>= aRetValue.Height;
-            }
-        }
-    }
-    catch ( ::com::sun::star::uno::Exception& )
-    {
-        OSL_FAIL( "FilterConfigItem::ReadSize - could not read PropertyValue" );
-    }
-    PropertyValue aWidth;
-    aWidth.Name = sWidth;
-    aWidth.Value <<= aRetValue.Width;
-    WritePropertyValue( aFilterData, aWidth );
-    PropertyValue aHeight;
-    aHeight.Name = sHeight;
-    aHeight.Value <<= aRetValue.Height;
-    WritePropertyValue( aFilterData, aHeight );
-    return aRetValue;
-}
-
 OUString FilterConfigItem::ReadString( const OUString& rKey, const OUString& rDefault )
 {
     Any aAny;
@@ -479,56 +434,6 @@ void FilterConfigItem::WriteInt32( const OUString& rKey, sal_Int32 nNewValue )
                         OSL_FAIL( "FilterConfigItem::WriteInt32 - could not set PropertyValue" );
                     }
                 }
-            }
-        }
-    }
-}
-
-void FilterConfigItem::WriteSize( const OUString& rKey, const Size& rNewValue )
-{
-    const OUString sWidth( RTL_CONSTASCII_USTRINGPARAM( "LogicalWidth" ) );
-    const OUString sHeight( RTL_CONSTASCII_USTRINGPARAM( "LogicalHeight" ) );
-
-    PropertyValue aWidth;
-    aWidth.Name = sWidth;
-    aWidth.Value <<= rNewValue.Width;
-    WritePropertyValue( aFilterData, aWidth );
-
-    PropertyValue aHeight;
-    aHeight.Name = sHeight;
-    aHeight.Value <<= rNewValue.Height;
-    WritePropertyValue( aFilterData, aHeight );
-
-    if ( xPropSet.is() )
-    {
-        Any aAny;
-        sal_Int32 nOldWidth = rNewValue.Width;
-        sal_Int32 nOldHeight = rNewValue.Height;
-
-        if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
-        {
-            try
-            {
-                Reference< XPropertySet > aXPropSet;
-                if ( aAny >>= aXPropSet )
-                {
-                    if ( ImplGetPropertyValue( aAny, aXPropSet, sWidth, sal_True ) )
-                        aAny >>= nOldWidth;
-                    if ( ImplGetPropertyValue( aAny, aXPropSet, sHeight, sal_True ) )
-                        aAny >>= nOldHeight;
-                }
-                if ( ( nOldWidth != rNewValue.Width ) || ( nOldHeight != rNewValue.Height ) )
-                {
-                    aAny <<= rNewValue.Width;
-                    aXPropSet->setPropertyValue( sWidth, aAny );
-                    aAny <<= rNewValue.Height;
-                    aXPropSet->setPropertyValue( sHeight, aAny );
-                    bModified = sal_True;
-                }
-            }
-            catch ( ::com::sun::star::uno::Exception& )
-            {
-                OSL_FAIL( "FilterConfigItem::WriteSize - could not read PropertyValue" );
             }
         }
     }

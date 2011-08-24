@@ -824,19 +824,6 @@ void Container::Insert( void* p, sal_uIntPtr nIndex )
 
 /*************************************************************************
 |*
-|*    Container::Insert()
-|*
-*************************************************************************/
-
-void Container::Insert( void* pNew, void* pOld )
-{
-    sal_uIntPtr nIndex = GetPos( pOld );
-    if ( nIndex != CONTAINER_ENTRY_NOTFOUND )
-        Insert( pNew, nIndex );
-}
-
-/*************************************************************************
-|*
 |*    Container::ImpRemove()
 |*
 |*    Beschreibung      Interne Methode zum Entfernen eines Pointers
@@ -948,22 +935,6 @@ void* Container::Remove( sal_uIntPtr nIndex )
 
         return ImpRemove( pTemp, (sal_uInt16)nIndex );
     }
-}
-
-/*************************************************************************
-|*
-|*    Container::Replace()
-|*
-*************************************************************************/
-
-void* Container::Replace( void* p )
-{
-    DBG_CHKTHIS( Container, DbgCheckContainer );
-
-    if ( !nCount )
-        return NULL;
-    else
-        return pCurBlock->Replace( p, nCurIndex );
 }
 
 /*************************************************************************
@@ -1207,36 +1178,6 @@ sal_uIntPtr Container::GetCurPos() const
 
 /*************************************************************************
 |*
-|*    Container::GetObjectPtr()
-|*
-|*    Beschreibung      Interne Methode fuer Referenz-Container
-|*
-*************************************************************************/
-
-void** Container::GetObjectPtr( sal_uIntPtr nIndex )
-{
-    DBG_CHKTHIS( Container, DbgCheckContainer );
-
-    // Ist Index nicht innerhalb des Containers, dann NULL zurueckgeben
-    if ( nCount <= nIndex )
-        return NULL;
-    else
-    {
-        // Block suchen
-        CBlock* pTemp = pFirstBlock;
-        while ( pTemp->Count() <= nIndex )
-        {
-            nIndex -= pTemp->Count();
-            pTemp   = pTemp->GetNextBlock();
-        }
-
-        // Item innerhalb des gefundenen Blocks zurueckgeben
-        return pTemp->GetObjectPtr( (sal_uInt16)nIndex );
-    }
-}
-
-/*************************************************************************
-|*
 |*    Container::GetObject()
 |*
 *************************************************************************/
@@ -1296,97 +1237,6 @@ sal_uIntPtr Container::GetPos( const void* p ) const
         }
         nTemp += nBlockCount;
         pTemp  = pTemp->GetNextBlock();
-    }
-
-    return CONTAINER_ENTRY_NOTFOUND;
-}
-
-/*************************************************************************
-|*
-|*    Container::GetPos()
-|*
-*************************************************************************/
-
-sal_uIntPtr Container::GetPos( const void* p, sal_uIntPtr nStartIndex,
-                         sal_Bool bForward ) const
-{
-    DBG_CHKTHIS( Container, DbgCheckContainer );
-
-    // Ist Index nicht innerhalb des Containers, dann NOTFOUND zurueckgeben
-    if ( nCount <= nStartIndex )
-        return CONTAINER_ENTRY_NOTFOUND;
-    else
-    {
-        void**  pNodes;
-        sal_uInt16  nBlockCount;
-        sal_uInt16  i;
-
-        // Block suchen
-        CBlock* pTemp = pFirstBlock;
-        sal_uIntPtr nTemp = 0;
-        while ( nTemp+pTemp->Count() <= nStartIndex )
-        {
-            nTemp += pTemp->Count();
-            pTemp  = pTemp->GetNextBlock();
-        }
-
-        // Jetzt den Pointer suchen
-        if ( bForward )
-        {
-            // Alle Bloecke durchrsuchen
-            i = (sal_uInt16)(nStartIndex - nTemp);
-            pNodes = pTemp->GetObjectPtr( i );
-            do
-            {
-                nBlockCount = pTemp->Count();
-                while ( i < nBlockCount )
-                {
-                    if ( p == *pNodes )
-                        return nTemp+i;
-                    pNodes++;
-                    i++;
-                }
-                nTemp += nBlockCount;
-                pTemp  = pTemp->GetNextBlock();
-                if ( pTemp )
-                {
-                    i = 0;
-                    pNodes = pTemp->GetNodes();
-                }
-                else
-                    break;
-            }
-            while ( sal_True );
-        }
-        else
-        {
-            // Alle Bloecke durchrsuchen
-            i = (sal_uInt16)(nStartIndex-nTemp)+1;
-            pNodes = pTemp->GetObjectPtr( i-1 );
-            do
-            {
-                do
-                {
-                    if ( p == *pNodes )
-                        return nTemp+i-1;
-                    pNodes--;
-                    i--;
-                }
-                while ( i );
-                nTemp -= pTemp->Count();
-                pTemp  = pTemp->GetPrevBlock();
-                if ( pTemp )
-                {
-                    i = pTemp->Count();
-                    // Leere Bloecke in der Kette darf es nicht geben. Nur
-                    // wenn ein Block existiert, darf dieser leer sein
-                    pNodes = pTemp->GetObjectPtr( i-1 );
-                }
-                else
-                    break;
-            }
-            while ( sal_True );
-        }
     }
 
     return CONTAINER_ENTRY_NOTFOUND;

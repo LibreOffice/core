@@ -83,8 +83,6 @@ private:
         ScPatternAttr*  pPattAttr;
         sal_uInt32          nHash0;
 
-        ENTRY (const ScPatternAttr &r);
-
         ENTRY (ScPatternAttr* p);
 
         ~ENTRY ();
