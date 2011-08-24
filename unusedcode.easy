@@ -3294,45 +3294,11 @@ slideshow::internal::getNodeType(short&, com::sun::star::uno::Sequence<com::sun:
 slideshow::internal::removeTextActions(GDIMetaFile&)
 svgi::(anonymous namespace)::appendChar(std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, char)
 svgi::getTokenName(int)
-svx::ControllerFeatures::ControllerFeatures(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, com::sun::star::uno::Reference<com::sun::star::form::XForm> const&, svx::IControllerFeatureInvalidation*)
-svx::DialControl::DialControl(Window*, Size const&, Font const&, long)
-svx::DialControl::DialControl(Window*, Size const&, long)
-svx::DialControl::GetLinkedField() const
-svx::DialControl::GetModifyHdl() const
-svx::DialControl::SetModifyHdl(Link const&)
-svx::FontWorkGalleryDialog::changeText(SdrTextObj*)
-svx::FormControllerHelper::moveLeft() const
-svx::FormControllerHelper::moveRight() const
-svx::FrameDirectionListBox::FrameDirectionListBox(Window*, long)
-svx::NamespaceMap_createInstance(unsigned short*, SfxItemPool*, SfxItemPool*)
-svx::OComponentTransferable::extractComponentDescriptor(TransferableDataHelper const&, unsigned char, rtl::OUString&, com::sun::star::uno::Reference<com::sun::star::ucb::XContent>&)
-svx::ODataAccessDescriptor::createAnySequence()
-svx::ODataAccessDescriptor::createPropertySet()
-svx::ODataAccessDescriptor::initializeFrom(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, unsigned char)
-svx::OMultiColumnTransferable::push_back(svx::ODataAccessDescriptor&)
-svx::OSingleFeatureDispatcher::dispose()
-svx::OXFormsTransferable::getDescriptorFormatId()
-svx::OrientationHelper::OrientationHelper(svx::DialControl&, CheckBox&)
 svx::SearchToolbarControllersManager::~SearchToolbarControllersManager()
 svx::SvxShowCharSetItem::~SvxShowCharSetItem()
-svx::ToolboxButtonColorUpdater::DrawChar(VirtualDevice&, Color const&)
-svx::frame::Cell::MirrorSelfY(bool, bool)
-svx::frame::DrawHorFrameBorder(OutputDevice&, Point const&, Point const&, svx::frame::Style const&, Color const*)
-svx::frame::DrawHorFrameBorder(OutputDevice&, Point const&, Point const&, svx::frame::Style const&, svx::frame::Style const&, svx::frame::Style const&, svx::frame::Style const&, svx::frame::Style const&, svx::frame::Style const&, svx::frame::Style const&, Color const*)
-svx::frame::DrawVerFrameBorder(OutputDevice&, Point const&, Point const&, svx::frame::Style const&, Color const*)
-svx::frame::DrawVerFrameBorder(OutputDevice&, Point const&, Point const&, svx::frame::Style const&, svx::frame::Style const&, svx::frame::Style const&, svx::frame::Style const&, svx::frame::Style const&, svx::frame::Style const&, svx::frame::Style const&, Color const*)
-svx::frame::Style::Scale(double, unsigned short) const
 svxform::DataNavigatorManager::GetChildWindowId()
-svxform::FmFilterNavigator::Clear()
 svxform::FmFilterNavigatorWinMgr::GetChildWindowId()
-svxform::FmSearchParams::setIgnoreWidthCJK(unsigned char)
 svxform::NavigatorFrameManager::GetChildWindowId()
-svxform::NavigatorTree::IsDeleteAllowed()
-svxform::OStaticDataAccessTools::canDelete(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&) const
-svxform::OStaticDataAccessTools::getFieldNamesByCommandDescriptor(com::sun::star::uno::Reference<com::sun::star::sdbc::XConnection> const&, int, rtl::OUString const&, dbtools::SQLExceptionInfo*)
-svxform::OStaticDataAccessTools::prependContextInfo(com::sun::star::sdbc::SQLException&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, rtl::OUString const&, rtl::OUString const&) const
-svxform::OSystemParseContext::getNumDecimalSep() const
-svxform::OSystemParseContext::getNumThousandSep() const
 svxform::SvLBoxEntrySortedArray::DeleteAndDestroy(unsigned short, unsigned short)
 svxform::SvLBoxEntrySortedArray::Insert(SvLBoxEntry* const&, unsigned short&)
 svxform::SvLBoxEntrySortedArray::Insert(SvLBoxEntry* const*, unsigned short)

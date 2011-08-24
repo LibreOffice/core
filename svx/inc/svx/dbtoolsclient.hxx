@@ -148,14 +148,6 @@ namespace svxform
         ) const;
 
         // ------------------------------------------------
-        ::com::sun::star::sdb::SQLContext prependContextInfo(
-            ::com::sun::star::sdbc::SQLException& _rException,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
-            const ::rtl::OUString& _rContextDescription,
-            const ::rtl::OUString& _rContextDetails
-        ) const;
-
-        // ------------------------------------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > getDataSource(
                 const ::rtl::OUString& _rsRegisteredName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
@@ -174,27 +166,12 @@ namespace svxform
         sal_Bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
 
         // ------------------------------------------------
-        /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::DELETE
-            @param      _rxCursorSet    the property set
-        */
-        sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
-
-        // ------------------------------------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
             getFieldsByCommandDescriptor(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                 const sal_Int32 _nCommandType,
                 const ::rtl::OUString& _rCommand,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxKeepFieldsAlive,
-                ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
-            )   SAL_THROW( ( ) );
-
-        // ------------------------------------------------
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >
-            getFieldNamesByCommandDescriptor(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                const sal_Int32 _nCommandType,
-                const ::rtl::OUString& _rCommand,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
             )   SAL_THROW( ( ) );
 

@@ -227,16 +227,6 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    ControllerFeatures::ControllerFeatures( const Reference< XMultiServiceFactory >& _rxORB,
-            const Reference< XForm >& _rxForm, IControllerFeatureInvalidation* _pInvalidationCallback )
-        :m_aContext( _rxORB )
-        ,m_pInvalidationCallback( _pInvalidationCallback )
-        ,m_pImpl( NULL )
-    {
-        assign( _rxForm );
-    }
-
-    //--------------------------------------------------------------------
     void ControllerFeatures::assign( const Reference< XFormController >& _rxController )
     {
         dispose();
@@ -374,18 +364,6 @@ namespace svx
     sal_Bool FormControllerHelper::commitCurrentRecord() const
     {
         return impl_operateForm_nothrow( COMMIT_RECORD );
-    }
-
-    //--------------------------------------------------------------------
-    bool FormControllerHelper::moveRight( ) const
-    {
-        return impl_operateForm_nothrow( FormFeature::MoveToNext );
-    }
-
-    //--------------------------------------------------------------------
-    bool FormControllerHelper::moveLeft( ) const
-    {
-        return impl_operateForm_nothrow( FormFeature::MoveToPrevious );
     }
 
     //--------------------------------------------------------------------

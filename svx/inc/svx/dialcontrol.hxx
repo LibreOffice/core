@@ -59,8 +59,6 @@ struct DialControl_Impl;
 class SVX_DLLPUBLIC DialControl : public Control
 {
 public:
-    explicit            DialControl( Window* pParent, const Size& rSize, const Font& rFont, WinBits nWinStyle = 0 );
-    explicit            DialControl( Window* pParent, const Size& rSize, WinBits nWinStyle = 0 );
     explicit            DialControl( Window* pParent, const ResId& rResId );
     virtual             ~DialControl();
 
@@ -87,13 +85,6 @@ public:
 
     /** Links the passed numeric edit field to the control (bi-directional). */
     void                SetLinkedField( NumericField* pField );
-    /** Returns the linked numeric edit field, or 0. */
-    NumericField*       GetLinkedField() const;
-
-    /** The passed handler is called whenever the totation value changes. */
-    void                SetModifyHdl( const Link& rLink );
-    /** Returns the current modify handler. */
-    const Link&         GetModifyHdl() const;
 
 private:
     void                Init( const Size& rWinSize, const Font& rWinFont );

@@ -127,25 +127,6 @@ namespace svx
             IControllerFeatureInvalidation* _pInvalidationCallback
         );
 
-        /** constructs the helper form a <type scope="com::sun::star::form">XForm<type> instance
-
-            Any functionality which depends on a controller will not be available.
-
-            @param _rxORB
-                a multi service factory for creating various needed components
-
-            @param _rxForm
-                The form which the helper should be responsible for. Must not be <NULL/>.
-
-            @param _pInvalidationCallback
-                the callback for invalidating feature states
-        */
-        ControllerFeatures(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
-            IControllerFeatureInvalidation* _pInvalidationCallback
-        );
-
         /// dtor
         ~ControllerFeatures();
 
@@ -245,9 +226,6 @@ namespace svx
         sal_Bool    commitCurrentControl( ) const;
         sal_Bool    isInsertionRow() const;
         sal_Bool    isModifiedRow() const;
-
-        bool        moveLeft( ) const;
-        bool        moveRight( ) const;
 
         bool        canDoFormFilter() const;
 

@@ -466,7 +466,6 @@ namespace svxform
 
 
         void            UpdateContent();
-        sal_Bool        IsDeleteAllowed();
         FmControlData*  NewControl( const ::rtl::OUString& rServiceName, SvLBoxEntry* pParentEntry, sal_Bool bEditName = sal_True );
         void            NewForm( SvLBoxEntry* pParentEntry );
         SvLBoxEntry*    Insert( FmEntryData* pEntryData, sal_uLong nRelPos=LIST_APPEND );

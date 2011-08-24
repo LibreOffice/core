@@ -1247,11 +1247,6 @@ Style& Style::ScaleSelf( double fScale, sal_uInt16 nMaxWidth )
     return *this;
 }
 
-Style Style::Scale( double fScale, sal_uInt16 nMaxWidth ) const
-{
-    return Style( *this ).ScaleSelf( fScale, nMaxWidth );
-}
-
 Style& Style::MirrorSelf()
 {
     if( mnSecn )
@@ -1483,28 +1478,6 @@ void DrawHorFrameBorder( OutputDevice& rDev,
     }
 }
 
-void DrawHorFrameBorder( OutputDevice& rDev,
-        const Point& rLPos, const Point& rRPos, const Style& rBorder,
-        const Style& rLFromT, const Style& rLFromL, const Style& rLFromB,
-        const Style& rRFromT, const Style& rRFromR, const Style& rRFromB,
-        const Color* pForceColor )
-{
-    /*  Recycle complex version of the DrawHorFrameBorder() function with empty diagonals. */
-    const DiagStyle aNoStyle;
-    DrawHorFrameBorder(
-        rDev, rLPos, rRPos, rBorder,
-        aNoStyle, rLFromT, rLFromL, rLFromB, aNoStyle,
-        aNoStyle, rRFromT, rRFromR, rRFromB, aNoStyle,
-        pForceColor );
-}
-
-void DrawHorFrameBorder( OutputDevice& rDev,
-        const Point& rLPos, const Point& rRPos, const Style& rBorder, const Color* pForceColor )
-{
-    if( rBorder.Prim() )
-        lclDrawHorFrameBorder( rDev, rLPos, rRPos, rBorder, BorderResult(), pForceColor );
-}
-
 // ----------------------------------------------------------------------------
 
 void DrawVerFrameBorder( OutputDevice& rDev,
@@ -1521,28 +1494,6 @@ void DrawVerFrameBorder( OutputDevice& rDev,
             rBFromTL, rBFromL, rBFromB, rBFromR, rBFromTR );
         lclDrawVerFrameBorder( rDev, rTPos, rBPos, rBorder, aResult, pForceColor );
     }
-}
-
-void DrawVerFrameBorder( OutputDevice& rDev,
-        const Point& rTPos, const Point& rBPos, const Style& rBorder,
-        const Style& rTFromL, const Style& rTFromT, const Style& rTFromR,
-        const Style& rBFromL, const Style& rBFromB, const Style& rBFromR,
-        const Color* pForceColor )
-{
-    /*  Recycle complex version of the DrawVerFrameBorder() function with empty diagonals. */
-    const DiagStyle aNoStyle;
-    DrawVerFrameBorder(
-        rDev, rTPos, rBPos, rBorder,
-        aNoStyle, rTFromL, rTFromT, rTFromR, aNoStyle,
-        aNoStyle, rBFromL, rBFromB, rBFromR, aNoStyle,
-        pForceColor );
-}
-
-void DrawVerFrameBorder( OutputDevice& rDev,
-        const Point& rTPos, const Point& rBPos, const Style& rBorder, const Color* pForceColor )
-{
-    if( rBorder.Prim() )
-        lclDrawVerFrameBorder( rDev, rTPos, rBPos, rBorder, BorderResult(), pForceColor );
 }
 
 // ============================================================================

@@ -422,14 +422,6 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    void ODataAccessDescriptor::initializeFrom(const Reference< XPropertySet >& _rxValues, sal_Bool _bClear)
-    {
-        if (_bClear)
-            clear();
-        m_pImpl->buildFrom(_rxValues);
-    }
-
-    //--------------------------------------------------------------------
     void ODataAccessDescriptor::initializeFrom(const Sequence< PropertyValue >& _rValues, sal_Bool _bClear)
     {
         if (_bClear)
@@ -443,24 +435,7 @@ namespace svx
         m_pImpl->updateSequence();
         return m_pImpl->m_aAsSequence;
     }
-    //--------------------------------------------------------------------
-    Sequence< Any > ODataAccessDescriptor::createAnySequence()
-    {
-        m_pImpl->updateSequence();
-        Sequence< Any > aRet(m_pImpl->m_aAsSequence.getLength());
-        const PropertyValue* pBegin = m_pImpl->m_aAsSequence.getConstArray();
-        const PropertyValue* pEnd     = pBegin + m_pImpl->m_aAsSequence.getLength();
-        for(sal_Int32 i=0;pBegin != pEnd;++pBegin,++i)
-            aRet[i] <<= *pBegin;
-        return aRet;
-    }
 
-    //--------------------------------------------------------------------
-    Reference< XPropertySet > ODataAccessDescriptor::createPropertySet()
-    {
-        m_pImpl->updateSet();
-        return m_pImpl->m_xAsSet;
-    }
     //--------------------------------------------------------------------
     ::rtl::OUString ODataAccessDescriptor::getDataSource() const
     {

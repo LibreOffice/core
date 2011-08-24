@@ -85,20 +85,6 @@ namespace svx
             ::osl::Mutex& _rMutex
         );
 
-        /** disposes the dispatcher instance
-
-            All status listeners will, after receiving an <member scope="com::sun::star::lang">XEventListener::disposing</member>
-            call, be released.
-
-            The controller provided in the in constructor will not be used anymore after returning from this call.
-
-            No further requests to dispatch slots will be accepted.
-
-            Multiple calls are allowed: if the object already was disposed, then subsequent calls are
-            silently ignored.
-        */
-        void    dispose();
-
         /** notifies all our listeners of the current state
         */
         void    updateAllListeners();
@@ -144,11 +130,6 @@ namespace svx
                 our mutex is locked
         */
         void    getUnoState( ::com::sun::star::frame::FeatureStateEvent& /* [out] */ _rState ) const;
-
-    private:
-        OSingleFeatureDispatcher();                                             // never implemented
-        OSingleFeatureDispatcher( const OSingleFeatureDispatcher& );            // never implemented
-        OSingleFeatureDispatcher& operator=( const OSingleFeatureDispatcher& ); // never implemented
     };
 
 //........................................................................

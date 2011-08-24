@@ -114,7 +114,6 @@ class SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
 
     void            initfavorites(sal_uInt16 nThemeId, std::vector< Bitmap * >& rFavorites);
     void            insertSelectedFontwork();
-    void            changeText( SdrTextObj* pObj );
     void            fillFavorites( sal_uInt16 nThemeId, std::vector< Bitmap * >& rFavorites );
 
     std::vector< Bitmap * > maFavoritesHorizontal;

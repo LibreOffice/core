@@ -171,39 +171,6 @@ namespace svx
         }
     }
 
-    // -----------------------------------------------------------------------
-
-    void ToolboxButtonColorUpdater::DrawChar( VirtualDevice& rVirDev, const Color& rCol )
-    {
-        Font aOldFont = rVirDev.GetFont();
-        Font aFont = aOldFont;
-        Size aSz = aFont.GetSize();
-        aSz.Height() = maBmpSize.Height();
-        aFont.SetSize( aSz );
-        aFont.SetWeight( WEIGHT_BOLD );
-
-        if ( mnDrawMode == TBX_UPDATER_MODE_CHAR_COLOR )
-        {
-            aFont.SetColor( rCol );
-            aFont.SetFillColor( Color( IMAGE_COL_TRANSPARENT ) );
-        }
-        else
-        {
-            rVirDev.SetLineColor();
-            rVirDev.SetFillColor( rCol );
-            Rectangle aRect( Point(0,0), maBmpSize );
-            rVirDev.DrawRect( aRect );
-            aFont.SetFillColor( rCol );
-        }
-        rVirDev.SetFont( aFont );
-        Size aTxtSize(rVirDev.GetTextWidth( 'A' ), rVirDev.GetTextHeight());
-        Point aPos( ( maBmpSize.Width() - aTxtSize.Width() ) / 2,
-                    ( maBmpSize.Height() - aTxtSize.Height() ) / 2 );
-
-        rVirDev.DrawText( aPos, 'A' );
-        rVirDev.SetFont( aOldFont );
-    }
-
 //........................................................................
 } // namespace svx
 //........................................................................

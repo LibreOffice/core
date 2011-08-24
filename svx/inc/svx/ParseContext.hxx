@@ -65,10 +65,6 @@ namespace svxform
         */
         virtual ::com::sun::star::lang::Locale getPreferredLocale( ) const;
 
-    public:
-        // helper methods to ease access to some of the characteristics of the locale
-        sal_Unicode getNumDecimalSep( ) const;
-        sal_Unicode getNumThousandSep( ) const;
     };
 
     //==========================================================================

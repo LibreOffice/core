@@ -556,21 +556,6 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    sal_Bool NavigatorTree::IsDeleteAllowed()
-    {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::IsDeleteAllowed" );
-        //////////////////////////////////////////////////////////////////////
-        // Haben wir eine Form...
-        SvLBoxEntry* pCurEntry = GetCurEntry();
-        sal_uInt32 nCurEntryPos = GetModel()->GetAbsPos( pCurEntry );
-
-        if( nCurEntryPos==0 )           // Root kann nicht geloescht werden
-            return sal_False;
-        else
-            return IsFormEntry(pCurEntry) || IsFormComponentEntry(pCurEntry);
-    }
-
-    //------------------------------------------------------------------------
     SvLBoxEntry* NavigatorTree::FindEntry( FmEntryData* pEntryData )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::FindEntry" );

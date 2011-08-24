@@ -667,13 +667,6 @@ namespace svx
         AddFormat(getDescriptorFormatId());
     }
     //--------------------------------------------------------------------
-    void OMultiColumnTransferable::push_back(ODataAccessDescriptor& _aDescriptor)
-    {
-        const sal_Int32 nCount = m_aDescriptors.getLength();
-        m_aDescriptors.realloc(nCount+1);
-        m_aDescriptors[nCount].Value <<= _aDescriptor.createPropertyValueSequence();
-    }
-    //--------------------------------------------------------------------
     sal_Bool OMultiColumnTransferable::GetData( const DataFlavor& _rFlavor )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);

@@ -65,7 +65,6 @@ struct Cell
     inline bool         IsOverlapped() const { return mbOverlapX || mbOverlapY; }
 
     void                MirrorSelfX( bool bMirrorStyles, bool bSwapDiag );
-    void                MirrorSelfY( bool bMirrorStyles, bool bSwapDiag );
 };
 
 typedef std::vector< long >     LongVec;
