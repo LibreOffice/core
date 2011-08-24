@@ -795,7 +795,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                     Sequence< Reference< browse::XBrowseNode > > children =
                         rootNode->getChildNodes();
 
-                    for ( long n = 0; n < children.getLength(); ++n )
+                    for ( sal_Int32 n = 0; n < children.getLength(); ++n )
                     {
                         if (!children[n].is())
                             continue;
@@ -810,14 +810,14 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                                 continue;
                             }
 
-                            Any value =
-                                xPropSet->getPropertyValue( String::CreateFromAscii( "URI" ) );
+                            Any value = xPropSet->getPropertyValue(
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URI")));
                             value >>= uri;
 
                             try
                             {
                                 value = xPropSet->getPropertyValue(
-                                    String::CreateFromAscii( "Description" ) );
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")));
                                 value >>= description;
                             }
                             catch (Exception &) {

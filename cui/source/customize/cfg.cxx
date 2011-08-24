@@ -108,9 +108,8 @@ static const char ITEM_TOOLBAR_URL[] = "private:resource/toolbar/";
 static const char CUSTOM_TOOLBAR_STR[] = "custom_toolbar_";
 static const char CUSTOM_MENU_STR[] = "vnd.openoffice.org:CustomMenu";
 
-static const char pSeparatorStr[] =
-    "----------------------------------";
-static const char pMenuSeparatorStr[]   = " | ";
+static const char aSeparatorStr[] = "----------------------------------";
+static const char aMenuSeparatorStr[] = " | ";
 
 #ifdef _MSC_VER
 #pragma warning (disable:4355)
@@ -1090,7 +1089,8 @@ MenuSaveInData::GetEntries()
     if ( pRootEntry == NULL )
     {
         pRootEntry = new SvxConfigEntry(
-            String::CreateFromAscii("MainMenus"), String(), sal_True );
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MainMenus")),
+            rtl::OUString(), sal_True);
 
         if ( m_xMenuSettings.is() )
         {
@@ -1189,8 +1189,8 @@ bool MenuSaveInData::LoadSubMenus(
 
                     if ( subMenuTitle.getLength() != 0 )
                     {
-                        subMenuTitle +=
-                            OUString::createFromAscii(pMenuSeparatorStr);
+                        subMenuTitle += OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(aMenuSeparatorStr));
                     }
                     else
                     {
@@ -2057,7 +2057,7 @@ void SvxConfigPage::AddSubMenusToUI(
         if ( pEntryData->IsPopup() )
         {
             OUString subMenuTitle( rBaseTitle );
-            subMenuTitle += OUString::createFromAscii( pMenuSeparatorStr );
+            subMenuTitle += OUString(RTL_CONSTASCII_USTRINGPARAM(aMenuSeparatorStr));
             subMenuTitle += stripHotKey( pEntryData->GetName() );
 
             sal_uInt16 nPos = aTopLevelListBox.InsertEntry( subMenuTitle );
@@ -2207,8 +2207,8 @@ SvLBoxEntry* SvxConfigPage::InsertEntryIntoUI(
     if (pNewEntryData->IsSeparator())
     {
         pNewEntry = aContentsListBox->InsertEntry(
-            String::CreateFromAscii( pSeparatorStr ),
-                0, sal_False, nPos, pNewEntryData );
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(aSeparatorStr)),
+            0, sal_False, nPos, pNewEntryData);
     }
     else
     {
@@ -3960,7 +3960,8 @@ SvxEntries* ToolbarSaveInData::GetEntries()
     {
 
         pRootEntry = new SvxConfigEntry(
-            String::CreateFromAscii("MainToolbars"), String(), sal_True );
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MainToolbars")),
+            rtl::OUString(), sal_True);
 
         uno::Sequence< uno::Sequence < beans::PropertyValue > > info =
             GetConfigManager()->getUIElementsInfo(
@@ -5320,7 +5321,7 @@ IMPL_LINK( SvxIconSelectorDialog, ImportHdl, PushButton *, pButton )
     }
 
     aImportDialog.SetCurrentFilter(
-        String::CreateFromAscii( "PNG - Portable Network Graphic" ) );
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PNG - Portable Network Graphic")));
 
     if ( ERRCODE_NONE == aImportDialog.Execute() )
     {
