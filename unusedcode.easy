@@ -2381,8 +2381,6 @@ binfilter::WritingDirectionInfos::Replace(binfilter::WritingDirectionInfo const*
 binfilter::WritingDirectionInfos::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::WritingDirectionInfo const&, void*), void*)
 binfilter::XBitmapList::Remove(long)
 binfilter::XBitmapList::Replace(binfilter::XBitmapEntry*, long)
-binfilter::XBitmapTable::Remove(long)
-binfilter::XBitmapTable::Replace(long, binfilter::XBitmapEntry*)
 binfilter::XColorTable::Remove(long)
 binfilter::XDashList::Remove(long)
 binfilter::XDashList::Replace(binfilter::XDashEntry*, long)
