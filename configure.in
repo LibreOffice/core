@@ -2226,6 +2226,13 @@ if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
     PRODUCT=""
     PROFULLSWITCH=""
     AC_MSG_RESULT([yes])
+    if test $_os = WINNT -a \( "$enable_mozilla" = yes -o "$enable_build_mozilla" = yes \); then
+        # We can't build against the Mozilla stuff if using _DEBUG, will get linking errors
+        # See connectivity/drivers/mozab
+        AC_MSG_WARN([Also disabling Mozilla then])
+        enable_mozilla=no
+        enable_build_mozilla=no
+    fi
 else
     PRODUCT="full"
     PROFULLSWITCH="product=full"
