@@ -36,7 +36,6 @@
 #include <basic/sbmod.hxx>
 #include <svx/svxerr.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
-#include <msvbasic.hxx>
 #include <filter/msfilter/msocximex.hxx>
 #include <sot/storinfo.hxx>
 #include <comphelper/processfactory.hxx>
