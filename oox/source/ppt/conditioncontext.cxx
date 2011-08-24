@@ -38,7 +38,6 @@
 #include <com/sun/star/animations/EventTrigger.hpp>
 
 #include "oox/helper/attributelist.hxx"
-#include "oox/core/contexthandler.hxx"
 #include "oox/ppt/animationspersist.hxx"
 #include "animationtypes.hxx"
 
