@@ -128,7 +128,7 @@ void DlgEditor::ShowDialog()
                 Any aResourceResolver = xSrcDlgModPropSet->getPropertyValue( aResourceResolverPropName );
                 xNewDlgModPropSet->setPropertyValue( aResourceResolverPropName, aResourceResolver );
             }
-            catch( UnknownPropertyException& )
+            catch(const UnknownPropertyException& )
             {
                 OSL_FAIL( "DlgEditor::ShowDialog(): No ResourceResolver property" );
             }
@@ -146,7 +146,7 @@ void DlgEditor::ShowDialog()
                 xNewDlgModPropSet->setPropertyValue( aTitlePropName, makeAny( ::rtl::OUString() ) );
             }
         }
-        catch( UnknownPropertyException& )
+        catch(const UnknownPropertyException& )
         {}
     }
 
@@ -820,7 +820,7 @@ void DlgEditor::Copy()
                 Any aResourceResolver = xDialogModelPropSet->getPropertyValue( aResourceResolverPropName );
                 aResourceResolver >>= xStringResourcePersistence;
             }
-            catch( UnknownPropertyException& )
+            catch(const UnknownPropertyException& )
             {}
         }
 
@@ -919,7 +919,7 @@ void DlgEditor::Paste()
                     Any aResourceResolver = xDialogModelPropSet->getPropertyValue( aResourceResolverPropName );
                     aResourceResolver >>= xStringResourceManager;
                 }
-                catch( UnknownPropertyException& )
+                catch(const UnknownPropertyException& )
                 {}
             }
             bool bLocalized = false;

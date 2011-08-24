@@ -450,7 +450,7 @@ UCBStream::~UCBStream()
                 xIS_->closeInput();
         }
     }
-    catch( Exception & )
+    catch(const Exception & )
     {
         SetError( ERRCODE_IO_GENERAL );
     }
@@ -478,7 +478,7 @@ sal_uIntPtr UCBStream::GetData( void* pData, sal_uIntPtr nSize )
         else
             SetError( ERRCODE_IO_GENERAL );
     }
-    catch( Exception & )
+    catch(const Exception & )
     {
         SetError( ERRCODE_IO_GENERAL );
     }
@@ -505,7 +505,7 @@ sal_uIntPtr UCBStream::PutData( const void* pData, sal_uIntPtr nSize )
         else
             SetError( ERRCODE_IO_GENERAL );
     }
-    catch( Exception & )
+    catch(const Exception & )
     {
         SetError( ERRCODE_IO_GENERAL );
     }
@@ -527,7 +527,7 @@ sal_uIntPtr UCBStream::SeekPos( sal_uIntPtr nPos )
         else
             SetError( ERRCODE_IO_GENERAL );
     }
-    catch( Exception & )
+    catch(const Exception & )
     {
         SetError( ERRCODE_IO_GENERAL );
     }
@@ -546,7 +546,7 @@ void    UCBStream::FlushData()
         else
             SetError( ERRCODE_IO_GENERAL );
     }
-    catch( Exception & )
+    catch(const Exception & )
     {
         SetError( ERRCODE_IO_GENERAL );
     }
@@ -610,7 +610,7 @@ SbError SbiStream::Open
                 }
 
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     nError = ERRCODE_IO_GENERAL;
                 }

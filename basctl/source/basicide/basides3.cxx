@@ -105,7 +105,7 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
                 nKey = InsertWindowInTable( pWin );
             }
         }
-        catch ( uno::Exception& )
+        catch (const uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }

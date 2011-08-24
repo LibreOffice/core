@@ -2618,7 +2618,7 @@ void CallFunctionAccessFunction( const Sequence< Any >& aArgs, const rtl::OUStri
         unoToSbxValue( pRet, aRet );
 
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     }

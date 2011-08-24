@@ -79,7 +79,7 @@ void ModuleInfoHelper::getObjectName( const uno::Reference< container::XNameCont
             }
         }
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception& )
     {
     }
 }
@@ -396,7 +396,7 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
                             std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_DIALOG ) ) );
                 }
             }
-            catch ( container::NoSuchElementException& )
+            catch (const container::NoSuchElementException& )
             {
                 DBG_UNHANDLED_EXCEPTION();
             }

@@ -1230,7 +1230,7 @@ static Any implRekMultiDimArrayToSequence( SbxDimArray* pArray,
             StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
                 implGetExceptionMsg( ::cppu::getCaughtException() ) );
         }
-        catch (IndexOutOfBoundsException&)
+        catch (const IndexOutOfBoundsException&)
         {
             StarBASIC::Error( SbERR_OUT_OF_RANGE );
         }
@@ -1440,7 +1440,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                             StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
                                 implGetExceptionMsg( ::cppu::getCaughtException() ) );
                         }
-                        catch (IndexOutOfBoundsException&)
+                        catch (const IndexOutOfBoundsException&)
                         {
                             StarBASIC::Error( SbERR_OUT_OF_RANGE );
                         }
@@ -3313,8 +3313,8 @@ getTypeDescriptorEnumeration( const ::rtl::OUString& sSearchRoot,
             xEnum = xTypeEnumAccess->createTypeDescriptionEnumeration(
                 sSearchRoot, types, depth );
         }
-        catch( NoSuchTypeNameException& /*nstne*/ ) {}
-        catch( InvalidTypeNameException& /*nstne*/ ) {}
+        catch(const NoSuchTypeNameException& /*nstne*/ ) {}
+        catch(const InvalidTypeNameException& /*nstne*/ ) {}
     }
     return xEnum;
 }
@@ -4701,7 +4701,7 @@ void disposeComVariablesForBasic( StarBASIC* pBasic )
                 Reference< XComponent > xComponent( (*itCRV).get(), UNO_QUERY_THROW );
                 xComponent->dispose();
             }
-            catch( Exception& )
+            catch(const Exception& )
             {}
         }
 

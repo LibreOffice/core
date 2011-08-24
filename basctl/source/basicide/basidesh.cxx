@@ -113,7 +113,7 @@ public:
                 xContainer->addContainerListener( xContainerListener );
             }
         }
-        catch( uno::Exception& ) {}
+        catch(const uno::Exception& ) {}
     }
     void removeContainerListener( const ScriptDocument& rScriptDocument, const String& aLibName )
     {
@@ -126,7 +126,7 @@ public:
                 xContainer->removeContainerListener( xContainerListener );
             }
         }
-        catch( uno::Exception& ) {}
+        catch(const uno::Exception& ) {}
     }
 
     // XEventListener
@@ -818,7 +818,7 @@ void BasicIDEShell::UpdateWindows()
                                 }
                             }
                         }
-                        catch ( container::NoSuchElementException& )
+                        catch (const container::NoSuchElementException& )
                         {
                             DBG_UNHANDLED_EXCEPTION();
                         }
@@ -849,7 +849,7 @@ void BasicIDEShell::UpdateWindows()
                                 }
                             }
                         }
-                        catch ( container::NoSuchElementException& )
+                        catch (const container::NoSuchElementException& )
                         {
                             DBG_UNHANDLED_EXCEPTION();
                         }
@@ -1033,7 +1033,7 @@ void BasicIDEShell::SetCurLibForLocalization( const ScriptDocument& rDocument, S
             xStringResourceManager = LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
         }
     }
-    catch ( container::NoSuchElementException& )
+    catch (const container::NoSuchElementException& )
     {}
     m_pCurLocalizationMgr = new LocalizationMgr
         ( this, rDocument, aLibName, xStringResourceManager );

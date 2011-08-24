@@ -75,7 +75,7 @@ DocumentFocusListener::notifyEvent( const AccessibleEventObject& aEvent )
                 if( AccessibleStateType::FOCUSED == nState )
                     m_aFocusTracker.setFocusedObject( getAccessible(aEvent) );
             }
-            catch(IndexOutOfBoundsException e)
+            catch(const IndexOutOfBoundsException &e)
             {
                 OSL_TRACE("Focused object has invalid index in parent");
             }

@@ -363,12 +363,12 @@ sal_Bool BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText
                 pBindings->Update( SID_BASICIDE_LIBSELECTOR );
             }
         }
-        catch ( container::ElementExistException& )
+        catch (const container::ElementExistException& )
         {
             ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_SBXNAMEALLREADYUSED ) ) ).Execute();
             return sal_False;
         }
-        catch ( container::NoSuchElementException& )
+        catch (const container::NoSuchElementException& )
         {
             DBG_UNHANDLED_EXCEPTION();
             return sal_False;
@@ -1190,7 +1190,7 @@ void LibPage::Export( void )
             else
                 ExportAsBasic( aLibName );
         }
-        catch( util::VetoException& ) // user cancled operation
+        catch(const util::VetoException& ) // user cancled operation
         {
         }
     }
@@ -1693,7 +1693,7 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                     }
                 }
             }
-            catch ( uno::Exception& )
+            catch (const uno::Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION();
             }

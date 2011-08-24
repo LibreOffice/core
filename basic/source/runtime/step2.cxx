@@ -558,7 +558,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                     if( eType == TypeClass_INTERFACE )
                                         xRet = *(Reference< XInterface >*)aAny2.getValue();
                                 }
-                                catch (IndexOutOfBoundsException&)
+                                catch (const IndexOutOfBoundsException&)
                                 {
                                     // Bei Exception erstmal immer von Konvertierungs-Problem ausgehen
                                     StarBASIC::Error( SbERR_OUT_OF_RANGE );

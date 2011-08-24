@@ -64,7 +64,7 @@ namespace unocontrols{
                 {                                                                                                                   \
                     pListener->METHOD( aLocalEvent );                                                                               \
                 }                                                                                                                   \
-                catch( RuntimeException& )                                                                                          \
+                catch(const RuntimeException& )                                                                                     \
                 {                                                                                                                   \
                     /* Ignore all system exceptions from the listener! */                                                           \
                 }                                                                                                                   \

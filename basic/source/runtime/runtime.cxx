@@ -1179,7 +1179,7 @@ void SbiRuntime::PushForEach()
                     p->xEnumeration = new ComEnumerationWrapper( xInvocation );
                     p->eForType = FOR_EACH_XENUMERATION;
                 }
-                catch( uno::Exception& )
+                catch(const uno::Exception& )
                 {}
             }
 

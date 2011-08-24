@@ -529,7 +529,7 @@ void implStepRenameUCB( const String& aSource, const String& aDest )
             else
                 xSFI->move( aSourceFullPath, aDestFullPath );
         }
-        catch( Exception & )
+        catch(const Exception & )
         {
             StarBASIC::Error( SbERR_FILE_NOT_FOUND );
         }
@@ -565,7 +565,7 @@ RTLFUNC(FileCopy)
                 {
                     xSFI->copy( getFullPath( aSource ), getFullPath( aDest ) );
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( SbERR_PATH_NOT_FOUND );
                 }
@@ -609,7 +609,7 @@ RTLFUNC(Kill)
                 {
                     xSFI->kill( aFullPath );
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( ERRCODE_IO_GENERAL );
                 }
@@ -673,7 +673,7 @@ RTLFUNC(MkDir)
 
                     xSFI->createFolder( getFullPath( aPath ) );
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( ERRCODE_IO_GENERAL );
                 }
@@ -782,7 +782,7 @@ RTLFUNC(RmDir)
 
                     xSFI->kill( getFullPath( aPath ) );
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( ERRCODE_IO_GENERAL );
                 }
@@ -843,7 +843,7 @@ RTLFUNC(FileLen)
                 {
                     nLen = xSFI->getSize( getFullPath( aStr ) );
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( ERRCODE_IO_GENERAL );
                 }
@@ -2592,7 +2592,7 @@ RTLFUNC(Dir)
                     {
                         sal_Bool bExists = sal_False;
                         try { bExists = xSFI->exists( aFileURLStr ); }
-                        catch( Exception & ) {}
+                        catch(const Exception & ) {}
 
                         String aNameOnlyStr;
                         if( bExists )
@@ -2646,7 +2646,7 @@ RTLFUNC(Dir)
                             }
                         }
                     }
-                    catch( Exception & )
+                    catch(const Exception & )
                     {
                     }
                 }
@@ -2865,7 +2865,7 @@ RTLFUNC(GetAttr)
                     String aPath = getFullPath( rPar.Get(1)->GetString() );
                     sal_Bool bExists = sal_False;
                     try { bExists = xSFI->exists( aPath ); }
-                    catch( Exception & ) {}
+                    catch(const Exception & ) {}
                     if( !bExists )
                     {
                         StarBASIC::Error( SbERR_FILE_NOT_FOUND );
@@ -2882,7 +2882,7 @@ RTLFUNC(GetAttr)
                     if( bDirectory )
                         nFlags |= 0x0010; // ATTR_DIRECTORY
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( ERRCODE_IO_GENERAL );
                 }
@@ -2934,7 +2934,7 @@ RTLFUNC(FileDateTime)
                     aTime = Time( aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds, aUnoDT.HundredthSeconds );
                     aDate = Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year );
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( ERRCODE_IO_GENERAL );
                 }
@@ -3514,7 +3514,7 @@ String getObjectTypeName( SbxVariable* pVar )
                             {
                                 xInv->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("$GetTypeName") ) ) >>= sRet;
                             }
-                            catch( Exception& )
+                            catch(const Exception& )
                             {
                             }
                         }
@@ -4269,7 +4269,7 @@ RTLFUNC(SetAttr)
                     sal_Bool bHidden   = (nFlags & 0x0002) != 0; // ATTR_HIDDEN
                     xSFI->setHidden( aStr, bHidden );
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( ERRCODE_IO_GENERAL );
                 }
@@ -4335,7 +4335,7 @@ RTLFUNC(FileExists)
                 {
                     bExists = xSFI->exists( aStr );
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( ERRCODE_IO_GENERAL );
                 }

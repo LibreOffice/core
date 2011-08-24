@@ -45,7 +45,7 @@ using namespace ::com::sun::star;
                   && nLength > m_nCurInd );
         }
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception& )
     {}
 
     return bResult;
@@ -72,7 +72,7 @@ uno::Any SAL_CALL ComEnumerationWrapper::nextElement()
                                           aNamedParam );
         }
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception& )
     {}
 
     throw container::NoSuchElementException();

@@ -719,7 +719,7 @@ sal_Bool DialogWindow::SaveDialog()
                 xSFI->kill( aCurPath );
             xOutput = xSFI->openFileWrite( aCurPath );
         }
-        catch( Exception& )
+        catch(const Exception& )
         {}
 
         if( xOutput.is() )
@@ -747,7 +747,7 @@ sal_Bool DialogWindow::SaveDialog()
                     Any aResourceResolver = xDialogModelPropSet->getPropertyValue( aResourceResolverPropName );
                     aResourceResolver >>= xStringResourceResolver;
                 }
-                catch( beans::UnknownPropertyException& )
+                catch(const beans::UnknownPropertyException& )
                 {}
             }
 
@@ -805,7 +805,7 @@ sal_Bool DialogWindow::SaveDialog()
                                 {
                                     xSFI->kill( aCompleteName );
                                 }
-                                catch( uno::Exception& )
+                                catch(const uno::Exception& )
                                 {}
                             }
                         }
@@ -999,7 +999,7 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
                     aXmlDialogNameAny >>= aOUXmlDialogName;
                     aXmlDlgName = aOUXmlDialogName;
                 }
-                catch( beans::UnknownPropertyException& )
+                catch(const beans::UnknownPropertyException& )
                 {}
             }
             bool bValidName = (aXmlDlgName.Len() != 0);
@@ -1196,7 +1196,7 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
                         xDialogModelPropSet->setPropertyValue( DLGED_PROP_NAME, aXmlDialogNameAny );
                         bRenamed = true;
                     }
-                    catch( beans::UnknownPropertyException& )
+                    catch(const beans::UnknownPropertyException& )
                     {}
                 }
 
@@ -1222,7 +1222,7 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
 
             bDone = sal_True;
         }
-        catch( Exception& )
+        catch(const Exception& )
         {}
     }
 
@@ -1327,7 +1327,7 @@ void DialogWindow::StoreData()
                 }
             }
         }
-        catch ( uno::Exception& )
+        catch (const uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }

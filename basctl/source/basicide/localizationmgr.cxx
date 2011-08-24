@@ -279,7 +279,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             {
                                 aNewPropStr = xStringResourceManager->resolveString( aPureIdStr );
                             }
-                            catch(MissingResourceException&)
+                            catch(const MissingResourceException&)
                             {
                             }
                             aPropAny <<= aNewPropStr;
@@ -301,7 +301,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                                 {
                                     xStringResourceManager->removeIdForLocale( aPureIdStr, rLocale );
                                 }
-                                catch(MissingResourceException&)
+                                catch(const MissingResourceException&)
                                 {
                                 }
                             }
@@ -329,7 +329,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                                 xStringResourceManager->removeIdForLocale( aPureSourceIdStr, rLocale );
                                 xStringResourceManager->setStringForLocale( aPureIdStr, aResStr, rLocale );
                             }
-                            catch(MissingResourceException&)
+                            catch(const MissingResourceException&)
                             {}
                         }
 
@@ -362,7 +362,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                                 aResStr = xSourceStringResolver->resolveStringForLocale
                                     ( aPureSourceIdStr, rLocale );
                             }
-                            catch(MissingResourceException&)
+                            catch(const MissingResourceException&)
                             {
                                 aResStr = xSourceStringResolver->resolveStringForLocale
                                     ( aPureSourceIdStr, rDefaultLocale );
@@ -396,7 +396,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                                 aResStr = xSourceStringResolver->resolveStringForLocale
                                     ( aPureSourceIdStr, rLocale );
                             }
-                            catch(MissingResourceException&)
+                            catch(const MissingResourceException&)
                             {
                                 aResStr = xSourceStringResolver->resolveStringForLocale
                                     ( aPureSourceIdStr, rDefaultLocale );
@@ -480,7 +480,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                                 {
                                     aNewPropStr = xStringResourceManager->resolveString( aPureIdStr );
                                 }
-                                catch(MissingResourceException&)
+                                catch(const MissingResourceException&)
                                 {
                                 }
                             }
@@ -511,7 +511,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                                     {
                                         xStringResourceManager->removeIdForLocale( aPureIdStr, rLocale );
                                     }
-                                    catch(MissingResourceException&)
+                                    catch(const MissingResourceException&)
                                     {
                                     }
                                 }
@@ -554,7 +554,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                                     xStringResourceManager->removeIdForLocale( aPureSourceIdStr, rLocale );
                                     xStringResourceManager->setStringForLocale( aPureIdStr, aResStr, rLocale );
                                 }
-                                catch(MissingResourceException&)
+                                catch(const MissingResourceException&)
                                 {}
                             }
 
@@ -601,7 +601,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                                     aResStr = xSourceStringResolver->resolveStringForLocale
                                         ( aPureSourceIdStr, rLocale );
                                 }
-                                catch(MissingResourceException&)
+                                catch(const MissingResourceException&)
                                 {
                                     aResStr = xSourceStringResolver->resolveStringForLocale
                                         ( aPureSourceIdStr, rDefaultLocale );
@@ -639,7 +639,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                                     aResStr = xSourceStringResolver->resolveStringForLocale
                                         ( aPureSourceIdStr, rLocale );
                                 }
-                                catch(MissingResourceException&)
+                                catch(const MissingResourceException&)
                                 {
                                     aResStr = xSourceStringResolver->resolveStringForLocale
                                         ( aPureSourceIdStr, rDefaultLocale );
@@ -726,7 +726,7 @@ void LocalizationMgr::handleRemoveLocales( Sequence< Locale > aLocaleSeq )
                 m_xStringResourceManager->removeLocale( rLocale );
                 bModified = true;
             }
-            catch(IllegalArgumentException&)
+            catch(const IllegalArgumentException&)
             {
                 bConsistant = false;
             }
@@ -760,7 +760,7 @@ void LocalizationMgr::handleSetDefaultLocale( Locale aLocale )
         {
             m_xStringResourceManager->setDefaultLocale( aLocale );
         }
-        catch(IllegalArgumentException&)
+        catch(const IllegalArgumentException&)
         {
             OSL_FAIL( "LocalizationMgr::handleSetDefaultLocale: Invalid locale" );
         }
@@ -780,7 +780,7 @@ void LocalizationMgr::handleSetCurrentLocale( ::com::sun::star::lang::Locale aLo
         {
             m_xStringResourceManager->setCurrentLocale( aLocale, false );
         }
-        catch(IllegalArgumentException&)
+        catch(const IllegalArgumentException&)
         {
             OSL_FAIL( "LocalizationMgr::handleSetCurrentLocale: Invalid locale" );
         }
@@ -814,7 +814,7 @@ void LocalizationMgr::handleBasicStopped( void )
         if( m_xStringResourceManager.is() )
             m_xStringResourceManager->setCurrentLocale( m_aLocaleBeforeBasicStart, true );
     }
-    catch(IllegalArgumentException&)
+    catch(const IllegalArgumentException&)
     {
     }
 }

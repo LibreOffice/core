@@ -422,7 +422,7 @@ sal_Bool ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxE
                 }
             }
         }
-        catch ( uno::Exception& )
+        catch (const uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -919,7 +919,7 @@ void ObjectPage::DeleteCurrent()
             if ( bSuccess )
                 BasicIDE::MarkDocumentModified( aDocument );
         }
-        catch ( container::NoSuchElementException& )
+        catch (const container::NoSuchElementException& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -1048,12 +1048,12 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
                 }
             }
         }
-        catch ( container::ElementExistException& )
+        catch (const container::ElementExistException& )
         {
             ErrorBox( pWin, WB_OK | WB_DEF_OK,
                     String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
         }
-        catch ( container::NoSuchElementException& )
+        catch (const container::NoSuchElementException& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
