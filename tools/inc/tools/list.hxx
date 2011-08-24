@@ -97,8 +97,6 @@ public:                                                                 \
                     { List::Insert( (void*)p, nIndex ); }               \
     void        Insert( Type p )                                        \
                     { List::Insert( (void*)p ); }                       \
-    void        Insert( Type pNew, Type pOld )                          \
-                    { List::Insert( (void*)pNew, (void*)pOld ); }       \
     Type        Remove()                                                \
                     { return (Type)List::Remove(); }                    \
     Type        Remove( sal_uIntPtr nIndex )                                  \
