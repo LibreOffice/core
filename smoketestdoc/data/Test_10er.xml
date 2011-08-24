@@ -43,6 +43,7 @@ const cMessageSaveOpenXMLDoc = &quot;Save/Open Document XML (6/7)&quot;
 const cMessageOpen50Doc = &quot;Open Document 5.0&quot;
 const cMessageNewDoc = &quot;New Document&quot;
 const cMessageCloseDoc = &quot;Close Document&quot;
+const cMessageRunMacros = &quot;Run Macros&quot;
 
 Global sWorkPath$
 Global sWorkPathURL$
@@ -307,6 +308,9 @@ Sub WriteTestSequence
     if bMakeOpen50Test then
         sWriteStr = sWriteStr + &quot;, open 5.0&quot;
     end if
+    if bMakeMacrosTest then
+        sWriteStr = sWriteStr + &quot;, run macros&quot;
+    end if
     end if
 
     sWriteStr = sWriteStr + &quot;, close&quot;
@@ -397,6 +401,39 @@ Sub MakeDocTest
 
 &apos;          oDoc = Documents.open(sFileName)
             LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ cMessageOpen50Doc, not IsNull (oDoc) )
+
+            if not IsNull (oDoc) then
+                gCurrentTestCase = cDocClose
+                oDoc.close (true)
+            end If
+        end if
+
+        gCurrentTestCase = cDocMacros
+	&apos; Just one calc macro test for now
+	&apos; To-Do split this into its own per-module/test .xml and add more
+        if bMakeMacrosTest and gCurrentDocTest = frmCalc then
+            oDoc = LoadDoc (&quot;private:factory/&quot; + GetDocFilter(gCurrentDocTest or cFltNewDoc))
+            oDocCtrl = oDoc.getCurrentController()
+            oDocFrame = oDocCtrl.getFrame()
+            oDispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+
+            dim args(0) as new com.sun.star.beans.PropertyValue
+
+            args(0).Name = &quot;ToPoint&quot;
+            args(0).Value = &quot;$A$1&quot;
+            oDispatcher.executeDispatch(oDocFrame, &quot;.uno:GoToCell&quot;, &quot;&quot;, 0, args())
+            args(0).Name = &quot;By&quot;
+            args(0).Value = 5
+            oDispatcher.executeDispatch(oDocFrame, &quot;.uno:GoRightSel&quot;, &quot;&quot;, 0, args())
+            args(0).Name = &quot;By&quot;
+            args(0).Value = 5
+            oDispatcher.executeDispatch(oDocFrame, &quot;.uno:GoDownSel&quot;, &quot;&quot;, 0, args())
+
+            oRangeAddr = oDoc.getCurrentSelection().getRangeAddress()
+
+            bResult = oRangeAddr.StartColumn = 0 and oRangeAddr.EndColumn = 5 and oRangeAddr.StartRow = 0 and oRangeAddr.EndRow = 5
+
+            LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ cMessageRunMacros, bResult )
 
             if not IsNull (oDoc) then
                 gCurrentTestCase = cDocClose
@@ -629,6 +666,8 @@ Function GetErrorMessageOnAction (nAction as Integer) as String
             GetErrorMessageOnAction = cMessageSaveOpenXMLDoc
         case cDocOpen50
             GetErrorMessageOnAction = cMessageOpen50Doc
+        case cDocMacros
+            GetErrorMessageOnAction = cMessageRunMacros
         case cDocClose
             GetErrorMessageOnAction = cMessageCloseDoc
         case else
