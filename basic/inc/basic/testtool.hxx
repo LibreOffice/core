@@ -42,7 +42,7 @@
 
 // Due to a tab in TT_SIGNATURE_FOR_UNICODE_TEXTFILES which is changed to blanks by some editors
 // this routine became necessary
-BASIC_DLLPUBLIC sal_Bool IsTTSignatureForUnicodeTextfile( String aLine );
+sal_Bool IsTTSignatureForUnicodeTextfile( String aLine );
 
 #define ADD_ERROR_QUIET(nNr, aStr)                                      \
 {                                                                       \
@@ -130,7 +130,7 @@ public:
 #define TT_EXECUTION_SHOW_ACTION    0x03
 #define TT_EXECUTION_HIDE_ACTION    0x04
 
-class BASIC_DLLPUBLIC TTExecutionStatusHint : public SfxSimpleHint
+class TTExecutionStatusHint : public SfxSimpleHint
 {
 private:
     sal_uInt16 mnType;
