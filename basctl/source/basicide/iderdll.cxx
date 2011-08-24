@@ -28,7 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
-
+
+#include <comphelper/scoped_disposing_ptr.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <ide_pch.hxx>
 
@@ -61,12 +63,32 @@ using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+namespace
+{
+    //Holds a BasicIDEDLL and release it on exit, or dispose of the
+    //default XComponent, whichever comes first
+    class BasicIDEDLLInstance : public comphelper::scoped_disposing_solar_mutex_reset_ptr<BasicIDEDLL>
+    {
+    public:
+        BasicIDEDLLInstance() : comphelper::scoped_disposing_solar_mutex_reset_ptr<BasicIDEDLL>(::com::sun::star::uno::Reference<com::sun::star::lang::XComponent>(comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), ::com::sun::star::uno::UNO_QUERY_THROW), new BasicIDEDLL)
+        {
+        }
+    };
 
-static BasicIDEDLL* pBasicIDEDLL = 0;
+    struct theBasicIDEDLLInstance : public rtl::Static<BasicIDEDLLInstance, theBasicIDEDLLInstance> {};
+}
+
+namespace BasicIDEGlobals
+{
+    void ensure()
+    {
+        theBasicIDEDLLInstance::get();
+    }
+}
 
 BasicIDEDLL* BasicIDEDLL::GetDLL()
 {
-    return pBasicIDEDLL;
+    return theBasicIDEDLLInstance::get().get();
 }
 
 IDEResId::IDEResId( sal_uInt16 nId ):
@@ -74,26 +96,18 @@ IDEResId::IDEResId( sal_uInt16 nId ):
 {
 }
 
-BasicIDEDLL::BasicIDEDLL()
-{
-    pBasicIDEDLL = this;
-    pShell = 0;
-    pExtraData = 0;
-
-    GetExtraData(); // to cause GlobalErrorHdl to be set
-}
-
 BasicIDEDLL::~BasicIDEDLL()
 {
     delete pExtraData;
+#if 0
     *(BasicIDEDLL**)GetAppData(SHL_IDE) = NULL;
+#endif
 }
 
-void BasicIDEDLL::Init()
+BasicIDEDLL::BasicIDEDLL()
+    : pShell(0)
+    , pExtraData(0)
 {
-    if ( pBasicIDEDLL )
-        return;
-
     SfxObjectFactory* pFact = &BasicDocShell::Factory();
     (void)pFact;
 
@@ -102,7 +116,8 @@ void BasicIDEDLL::Init()
 
     BASIC_MOD() = new BasicIDEModule( pMgr, &BasicDocShell::Factory() );
 
-    new BasicIDEDLL;
+    GetExtraData(); // to cause GlobalErrorHdl to be set
+
     SfxModule* pMod = BASIC_MOD();
 
     SfxObjectFactory& rFactory = BasicDocShell::Factory();
@@ -119,7 +134,7 @@ BasicIDEData* BasicIDEDLL::GetExtraData()
 {
     if ( !pExtraData )
         pExtraData = new BasicIDEData;
-     return pExtraData;
+    return pExtraData;
 }
 
 BasicIDEData::BasicIDEData() : aObjCatPos( INVPOSITION, INVPOSITION )

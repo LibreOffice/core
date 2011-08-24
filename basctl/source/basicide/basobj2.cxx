@@ -86,7 +86,7 @@ namespace BasicIDE
 
 void Organize( sal_Int16 tabId )
 {
-    BasicIDEDLL::Init();
+    BasicIDEGlobals::ensure();
 
     BasicEntryDescriptor aDesc;
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
@@ -274,7 +274,7 @@ namespace
 {
     (void)rMacroDesc;
 
-    BasicIDEDLL::Init();
+    BasicIDEGlobals::ensure();
 
     IDE_DLL()->GetExtraData()->ChoosingMacro() = sal_True;
 

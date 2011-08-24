@@ -29,6 +29,11 @@
 #ifndef _IDERDLL_HXX
 #define _IDERDLL_HXX
 
+namespace BasicIDEGlobals
+{
+    void ensure();
+}
+
 class BasicIDEShell;
 class BasicIDEData;
 
@@ -45,7 +50,6 @@ public:
 
     BasicIDEShell*  GetShell() const { return pShell; }
     BasicIDEData*   GetExtraData();
-    static void     Init();
     static BasicIDEDLL* GetDLL();
 };
 

@@ -425,7 +425,7 @@ void InvalidateDebuggerSlots()
 
 long HandleBasicError( StarBASIC* pBasic )
 {
-    BasicIDEDLL::Init();
+    BasicIDEGlobals::ensure();
     BasicIDE::BasicStopped();
 
     // no error output during macro choosing
