@@ -39,7 +39,6 @@ class XColorTable;
 class XLineEndTable;
 class XHatchTable;
 class XBitmapTable;
-class XGradientTable;
 class SfxItemPool;
 class NameOrIndex;
 class XPropertyList;

@@ -3371,12 +3371,13 @@ SvStream& XFillGradientItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) co
 |*
 *************************************************************************/
 
-const XGradient& XFillGradientItem::GetGradientValue(const XGradientTable* pTable) const // GetValue -> GetGradientValue
+const XGradient& XFillGradientItem::GetGradientValue() const // GetValue -> GetGradientValue
 {
     if (!IsIndex())
         return aGradient;
-    else
-        return pTable->GetGradient(GetIndex())->GetGradient();
+    // ToDo: This should fail. We never call called this code with a table so this should always
+    // have failed. Thus, I'm thinking that XFillGradientItem can't be an Index.
+    return aGradient;
 }
 
 

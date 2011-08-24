@@ -83,7 +83,6 @@ class XBitmapTable;
 class XColorTable;
 class XDashList;
 class XGradientList;
-class XGradientTable;
 class XHatchList;
 class XHatchTable;
 class XLineEndList;
