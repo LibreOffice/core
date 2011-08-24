@@ -181,11 +181,6 @@ void LWPFilterImportFilter::setTargetDocument( const uno::Reference< XComponent 
     rImporter->setTargetDocument( xDoc );
 }
 
-OUString LWPFilterImportFilter::getImplementationName_Static() throw()
-{
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( STR_IMPLEMENTATION_NAME ));
-}
-
 OUString LWPFilterImportFilter::getImplementationName() throw()
 {
     return OUString(RTL_CONSTASCII_USTRINGPARAM( STR_IMPLEMENTATION_NAME ));

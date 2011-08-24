@@ -28,8 +28,6 @@
 #ifndef _SFXMNUMGR_HXX
 #define _SFXMNUMGR_HXX
 
-#include <stdarg.h>
-
 #include <vcl/menu.hxx>
 #include <tools/wintypes.hxx>
 #include <tools/link.hxx>
@@ -69,7 +67,6 @@ friend class SfxPopupMenuManager;
 
 protected:
                             SfxMenuManager( Menu*, SfxBindings& );
-                            SfxMenuManager( const ResId&, SfxBindings& );
                             ~SfxMenuManager();
     sal_uInt16                  GetItemPos( sal_uInt16 nId );
     sal_uInt32              GetType() { return nType; }
@@ -114,7 +111,6 @@ public:
     static SfxPopupMenuManager* Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, Window* pWindow );
 
     sal_uInt16              Execute( const Point& rPos, Window *pWindow );
-    sal_uInt16              Execute( const Point& rPoint, Window* pWindow, va_list pArgs, const SfxPoolItem *pArg1 );
 
     void                RemoveDisabledEntries();
     Menu*                   GetSVMenu();

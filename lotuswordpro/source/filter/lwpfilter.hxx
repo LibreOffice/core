@@ -137,8 +137,6 @@ public:
     ~LWPFilterImportFilter();
 
 public:
-    static OUString getImplementationName_Static() throw();
-public:
     /**
      * @descr   see LWPFilterReader::filter.
      */

@@ -105,19 +105,6 @@ void TryToHideDisabledEntries_Impl( Menu* pMenu )
     }
 }
 
-//-------------------------------------------------------------------------
-
-SfxMenuManager::SfxMenuManager( const ResId& rResId, SfxBindings &rBindings )
-:   pMenu(0),
-    pOldMenu(0),
-    pBindings(&rBindings),
-    pResMgr(rResId.GetResMgr()),
-    nType( rResId.GetId() )
-{
-    bAddClipboardFuncs = sal_False;
-    DBG_MEMTEST();
-}
-
 //--------------------------------------------------------------------
 
 SfxMenuManager::~SfxMenuManager()
@@ -327,24 +314,6 @@ IMPL_LINK_INLINE_START( SfxPopupMenuManager, SelectHdl, void *, EMPTYARG )
     return 1;
 }
 IMPL_LINK_INLINE_END( SfxPopupMenuManager, SelectHdl, void *, EMPTYARG )
-
-
-//--------------------------------------------------------------------
-
-sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPoint, Window* pWindow, va_list pArgs, const SfxPoolItem *pArg1 )
-{
-    DBG_MEMTEST();
-
-    PopupMenu* pPopMenu = ( (PopupMenu*)GetMenu()->GetSVMenu() );
-    pPopMenu->SetSelectHdl( LINK( this, SfxPopupMenuManager, SelectHdl ) );
-    sal_uInt16 nId = pPopMenu->Execute( pWindow, rPoint );
-    pPopMenu->SetSelectHdl( Link() );
-
-    if ( nId )
-        GetBindings().GetDispatcher()->_Execute( nId, SFX_CALLMODE_RECORD, pArgs, pArg1 );
-
-    return nId;
-}
 
 //-------------------------------------------------------------------------
 
