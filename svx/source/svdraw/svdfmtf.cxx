@@ -1002,7 +1002,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
                     }
 
                     aGradAttr.Put(XFillStyleItem(XFILL_GRADIENT));
-                    aGradAttr.Put(XFillGradientItem(&pModel->GetItemPool(), aXGradient));
+                    aGradAttr.Put(XFillGradientItem(aXGradient));
                     pPath->SetMergedItemSet(aGradAttr);
 
                     InsertObj(pPath);

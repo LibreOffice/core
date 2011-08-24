@@ -272,9 +272,8 @@ Bitmap* XGradientList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
     VirtualDevice* pVD = mpData->getVirtualDevice();
     SdrObject* pBackgroundObject = mpData->getBackgroundObject();
 
-    const SfxItemSet& rItemSet = pBackgroundObject->GetMergedItemSet();
     pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_GRADIENT));
-    pBackgroundObject->SetMergedItem(XFillGradientItem(rItemSet.GetPool(), GetGradient(nIndex)->GetGradient()));
+    pBackgroundObject->SetMergedItem(XFillGradientItem(GetGradient(nIndex)->GetGradient()));
 
     sdr::contact::SdrObjectVector aObjectVector;
     aObjectVector.push_back(pBackgroundObject);

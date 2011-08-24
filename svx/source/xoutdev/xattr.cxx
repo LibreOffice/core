@@ -3282,7 +3282,7 @@ XFillGradientItem::XFillGradientItem(SvStream& rIn, sal_uInt16 nVer) :
 
 //*************************************************************************
 
-XFillGradientItem::XFillGradientItem(SfxItemPool* /*pPool*/, const XGradient& rTheGradient)
+XFillGradientItem::XFillGradientItem( const XGradient& rTheGradient )
 :   NameOrIndex( XATTR_FILLGRADIENT, -1 ),
     aGradient(rTheGradient)
 {
