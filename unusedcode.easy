@@ -1552,8 +1552,6 @@ TransferableDataHelper::GetInterface(com::sun::star::datatransfer::DataFlavor co
 TypeName::TypeName(char*, unsigned int, unsigned int, unsigned short, int, int)
 UCBStorage::IsStorageFile(String const&)
 UCBStream::UCBStream(com::sun::star::uno::Reference<com::sun::star::io::XOutputStream>&)
-UNOStorageHolder::GetStorageName()
-UNOStorageHolder::UNOStorageHolder(SotStorage&, SotStorage&, com::sun::star::uno::Reference<com::sun::star::embed::XStorage>, utl::TempFile*)
 UShortCont::Sort()
 UniqueIndex::Replace(unsigned long, void*)
 UnoComboBoxControl::getActionListeners()

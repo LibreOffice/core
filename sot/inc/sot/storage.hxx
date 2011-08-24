@@ -232,8 +232,6 @@ public:
     static sal_Bool         IsOLEStorage( const String & rFileName );
     static sal_Bool         IsOLEStorage( SvStream* pStream );
 
-    void                RemoveUNOStorageHolder( UNOStorageHolder* pHolder );
-
     static SotStorage*  OpenOLEStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
                                     const String& rEleName, StreamMode = STREAM_STD_READWRITE );
     static sal_Int32    GetFormatID( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );

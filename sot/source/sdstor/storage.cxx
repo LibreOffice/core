@@ -50,8 +50,6 @@
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include "unostorageholder.hxx"
-
 using namespace ::com::sun::star;
 
 /************** class SotStorageStream ***********************************/
@@ -708,25 +706,6 @@ SotStorage::~SotStorage()
     delete m_pOwnStg;
     if( m_bDelStm )
         delete m_pStorStm;
-}
-
-/*************************************************************************
-|*    SotStorage::RemoveUNOStorageHolder()
-|*
-|*    Beschreibung
-*************************************************************************/
-void SotStorage::RemoveUNOStorageHolder( UNOStorageHolder* pHolder )
-{
-    UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
-    if ( pStg )
-    {
-        pStg->GetUNOStorageHolderList()->remove( pHolder );
-        pHolder->release();
-    }
-    else
-    {
-        OSL_FAIL("Not implemented!");
-    }
 }
 
 /*************************************************************************
