@@ -51,4 +51,10 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     writerperfect \
 ))
 
+ifeq ($(MERGELIBS),YES)
+$(eval $(call gb_Module_add_targets,tail_end,\
+	Library_merged \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

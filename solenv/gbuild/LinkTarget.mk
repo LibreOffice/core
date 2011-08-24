@@ -44,6 +44,15 @@ CXXFLAGS ?= $(gb_COMPILEROPTFLAGS)
 OBJCXXFLAGS ?= $(gb_COMPILEROPTFLAGS)
 endif
 
+# if enabled we can create one library instead of more smaller
+ifeq ($(MERGELIBS),YES)
+# list of libraries which are always loaded, thus we can merge them into one
+# they have to be from tail_build, so we could link against merged library
+gb_CORE_LIBS := \
+	uui \
+
+endif
+
 # Overview of dependencies and tasks of LinkTarget
 #
 # target                      task                         depends on
@@ -724,11 +733,17 @@ $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Librar
 $$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
 endif
 
-$(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $(2)
+ifeq ($(MERGELIBS),YES)
+gb_LINKED_LIBS := $(if $(filter $(gb_CORE_LIBS),$(2)),merged $(filter-out $(gb_CORE_LIBS),$(2)),$(2))
+else
+gb_LINKED_LIBS := $(2)
+endif
 
-$(call gb_LinkTarget_get_target,$(1)) : $$(foreach lib,$(2),$$(call gb_Library_get_target,$$(lib)))
+$(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $$(gb_LINKED_LIBS)
+
+$(call gb_LinkTarget_get_target,$(1)) : $$(foreach lib,$$(gb_LINKED_LIBS),$$(call gb_Library_get_target,$$(lib)))
 $(call gb_LinkTarget_get_external_headers_target,$(1)) : \
-$$(foreach lib,$(2),$$(call gb_Library_get_headers_target,$$(lib)))
+$$(foreach lib,$$(gb_LINKED_LIBS),$$(call gb_Library_get_headers_target,$$(lib)))
 
 endef
 

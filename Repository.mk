@@ -89,6 +89,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     i18nregexp \
     lng \
     lwpft \
+    merged \
     msfilter \
     msword \
 	msworks \
