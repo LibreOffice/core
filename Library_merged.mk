@@ -70,7 +70,7 @@ $(eval $(call gb_Library_use_externals,merged,\
 ))
 
 $(eval $(call gb_Library_add_library_objects,merged,\
-	$(gb_MERGED_LIBS) \
+	$(gb_CORE_LIBS) \
 ))
 
 ifeq ($(OS),WNT)
