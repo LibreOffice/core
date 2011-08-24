@@ -199,17 +199,12 @@ gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 
 gb_LinkTarget_LDFLAGS := \
 	-MACHINE:IX86 \
-	-OPT:NOREF \
-	-safeseh \
-	-nxcompat \
-	-dynamicbase \
 	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
 
 gb_DEBUG_CFLAGS := -Zi
 
 # this does not use CFLAGS so it is not overridable
 ifneq ($(ENABLE_CRASHDUMP),)
-gb_LinkTarget_LDFLAGS += -DEBUG
 gb_CFLAGS+=-Zi
 gb_CXXFLAGS+=-Zi
 endif
@@ -218,7 +213,6 @@ ifeq ($(gb_SYMBOL),$(true))
 endif
 
 ifneq ($(gb_DEBUGLEVEL),0)
-gb_LinkTarget_LDFLAGS += -DEBUG
 gb_COMPILEROPTFLAGS :=
 else
 gb_COMPILEROPTFLAGS := -Ob1 -Oxs -Oy-
@@ -395,16 +389,30 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_filename,$(lib))) \
 		$(LIBS) \
-		$(if $(gb_PRODUCT),,oldnames.lib msvcrtd.lib msvcprtd.lib kernel32.lib user32.lib) \
+		$(if $(DLLTARGET),$(if $(gb_PRODUCT),,oldnames.lib msvcrtd.lib msvcprtd.lib kernel32.lib user32.lib)) \
 		$(if $(DLLTARGET),-out:$(DLLTARGET) -implib:$(1),-out:$(1)); RC=$$?; rm $${RESPONSEFILE} \
 	$(if $(DLLTARGET),; if [ ! -f $(DLLTARGET) ]; then rm -f $(1) && false; fi) ; exit $$RC)
 endef
 
 
+# Flags common for PE executables (EXEs and DLLs) 
+gb_Windows_PE_TARGETTYPEFLAGS := \
+    -release \
+    -opt:noref \
+    -incremental:no \
+    -debug \
+    -safeseh \
+	-nxcompat \
+	-dynamicbase \
+
 # Library class
 
+
 gb_Library_DEFS := -D_DLL
-gb_Library_TARGETTYPEFLAGS := -DLL
+gb_Library_TARGETTYPEFLAGS := \
+    -DLL \
+    $(gb_Windows_PE_TARGETTYPEFLAGS)
+
 gb_Library_get_rpath :=
 
 gb_Library_SYSPRE := i
@@ -554,7 +562,8 @@ endef
 # Executable class
 
 gb_Executable_EXT := .exe
-gb_Executable_TARGETTYPEFLAGS := -RELEASE -OPT:NOREF -INCREMENTAL:NO -DEBUG
+gb_Executable_TARGETTYPEFLAGS := $(gb_Windows_PE_TARGETTYPEFLAGS)
+
 gb_Executable_get_rpath :=
 gb_Executable_TARGETGUI := 
 
