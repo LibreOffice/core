@@ -5836,6 +5836,9 @@ AC_SUBST(SYSTEM_SANE_HEADER)
 dnl ===================================================================
 dnl Check for system icu
 dnl ===================================================================
+ICU_MAJOR=
+ICU_MINOR=
+ICU_MICRO=
 AC_MSG_CHECKING([which icu to use])
 if test -n "$with_system_icu" -o -n "$with_system_libs" && \
         test "$with_system_icu" != "no"; then
