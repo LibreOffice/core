@@ -2955,7 +2955,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                             const SwContact* pContact = ::GetUserCall( pDrawObj );
                             const SwAnchoredObject* pObj = pContact->GetAnchoredObj( pDrawObj );
 
-                            const SwFrm* pAnchorFrm = pObj->GetAnchorFrm();
+                            const SwFrm* pAnchorFrm = pObj ? pObj->GetAnchorFrm() : NULL;
                             bool bInHeaderFooter = false;
 
                             // Handle all non anchored as character objects... others are handled elsewere
@@ -3557,7 +3557,8 @@ sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
         {
             // OD 13.10.2003 #i19919# - consider 'virtual' drawing objects
             // OD 2004-03-29 #i26791#
-            pAnch = ((SwDrawContact*)pUserCall)->GetAnchorFrm( pObj );
+            SwDrawContact* pDrawContact = dynamic_cast<SwDrawContact*>(pUserCall);
+            pAnch = pDrawContact ? pDrawContact->GetAnchorFrm(pObj) : NULL;
             if ( pAnch )
             {
                 if ( !pAnch->GetValidPosFlag() )
