@@ -1971,9 +1971,7 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, sal_uInt16 nFlags, sal_B
         {
             sal_uInt16 nIndex = itr->GetIndex();
             ScRangeData* pData = new ScRangeData(*itr);
-            if (!pTransClip->pRangeName->insert(pData))
-                delete pData;
-            else
+            if (pTransClip->pRangeName->insert(pData))
                 pData->SetIndex(nIndex);
         }
     }
@@ -2036,9 +2034,7 @@ void copyUsedNamesToClip(ScRangeName* pClipRangeName, ScRangeName* pRangeName, c
             continue;
 
         ScRangeData* pData = new ScRangeData(*itr);
-        if (!pClipRangeName->insert(pData))
-            delete pData;
-        else
+        if (pClipRangeName->insert(pData))
             pData->SetIndex(nIndex);
     }
 }
@@ -2147,7 +2143,7 @@ void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameDat
             }
             else
             {   // must be an overflow
-                delete pData;
+                pData = NULL;
                 aClipRangeNames.insert(itr->GetIndex(), 0);
                 aClipRangeNames.mbReplace = true;
             }

@@ -2935,10 +2935,8 @@ sal_Bool ScViewFunc::InsertName( const String& rName, const String& rSymbol,
         }
 
         if ( pList->insert( pNewEntry ) )
-        {
-            pNewEntry = NULL;   // nicht loeschen
             bOk = sal_True;
-        }
+        pNewEntry = NULL;   // never delete, insert took ownership
 
         pDoc->CompileNameFormula( false );  // CompileFormulaString
         aModificator.SetDocumentModified();

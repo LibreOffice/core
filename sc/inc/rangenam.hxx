@@ -210,7 +210,14 @@ public:
     SC_DLLPUBLIC iterator end();
     SC_DLLPUBLIC size_t size() const;
     bool empty() const;
+
+    /** Insert object into set if not a duplicate.
+        @ATTENTION: The underlying ::boost::ptr_set_adapter::insert(p) takes
+        ownership of p and if it can't insert it deletes the object! So, if
+        this insert here returns false the object where p pointed to is gone!
+     */
     SC_DLLPUBLIC bool insert(ScRangeData* p);
+
     void erase(const ScRangeData& r);
     void erase(const iterator& itr);
     void clear();

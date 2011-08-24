@@ -388,8 +388,7 @@ bool ScNameDlg::AddPushed()
                 //    in ein Token-Array uebersetzt werden?)
                 if ( 0 == pNewEntry->GetErrCode() )
                 {
-                    rtl::OUString aUpper = aNewEntry;
-                    aUpper.toAsciiUpperCase();
+                    rtl::OUString aUpper( ScGlobal::pCharClass->upper( aNewEntry));
                     ScRangeData* pData = mpCurRangeName->findByUpperName(aUpper);
                     if (pData)
                     {
@@ -400,7 +399,7 @@ bool ScNameDlg::AddPushed()
                         mpImpl->Clear();
 
                     if ( !mpCurRangeName->insert( pNewEntry ) )
-                        delete pNewEntry;
+                        pNewEntry = NULL;
 
                     UpdateNames();
                     bSaved=false;

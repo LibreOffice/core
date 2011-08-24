@@ -1940,8 +1940,6 @@ void ScPosWnd::DoEnter()
                             aFunc.ModifyRangeNames( aNewRanges );
                             pViewSh->UpdateInputHandler(true);
                         }
-                        else
-                            delete pNew;        // shouldn't happen
                     }
                 }
                 else

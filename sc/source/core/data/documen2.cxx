@@ -1022,7 +1022,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                             if (!pRangeName->insert(pData))
                             {
                                 OSL_FAIL("can't insert name");     // shouldn't happen
-                                delete pData;
+                                pData = NULL;
                             }
                             else
                             {

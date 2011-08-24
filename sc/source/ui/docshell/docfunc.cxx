@@ -4598,7 +4598,6 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                 if (!rList.insert(pData))
                 {
                     OSL_FAIL("nanu?");
-                    delete pData;
                 }
             }
         }
