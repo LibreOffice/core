@@ -309,8 +309,8 @@ openoffice:
 $(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")} oxygenoffice_$i{$(PKGFORMAT:^".") .archive} oxygenofficewithjre_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES)
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
-$(BIN)$/%.py : $(SOLARSHAREDBIN)$/pyuno$/%.py
-    @$(COPY) $< $@
+$(BIN)$/%.py : $(OUTDIR)$/bin$/pyuno$/%.py
+    $(COPY) $< $@
 .ENDIF			# "$(DISABLE_PYTHON)" != "TRUE"
 
 $(BIN)$/intro.zip : $(SOLARCOMMONPCKDIR)$/intro.zip
