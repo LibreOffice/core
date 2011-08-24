@@ -86,21 +86,6 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
     mrTextBodyProp.maPropertyMap[ PROP_TextLowerDistance ] <<= static_cast< sal_Int32 >( nBottonInset );
     }
 
-    // ST_TextAnchoringType
-    if( xAttributes->hasAttribute( XML_anchor ) ) {
-        drawing::TextVerticalAdjust eVA( drawing::TextVerticalAdjust_TOP );
-        switch( xAttributes->getOptionalValueToken( XML_anchor, XML_t ) )
-        {
-            case XML_b :    eVA = drawing::TextVerticalAdjust_BOTTOM; break;
-            case XML_dist :
-            case XML_just :
-            case XML_ctr :  eVA = drawing::TextVerticalAdjust_CENTER; break;
-            default:
-            case XML_t :    eVA = drawing::TextVerticalAdjust_TOP; break;
-        }
-        mrTextBodyProp.maPropertyMap[ PROP_TextVerticalAdjust ] <<= eVA;
-    }
-
     bool bAnchorCenter = aAttribs.getBool( XML_anchorCtr, false );
     if( xAttributes->hasAttribute( XML_anchorCtr ) ) {
         if( bAnchorCenter )
@@ -139,10 +124,38 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
             // workaround for TB_LR as using WritingMode2 doesn't work
             if( !bAnchorCenter )
                 mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
-                    TextHorizontalAdjust_LEFT;
+                    (tVert == XML_vert270) ? TextHorizontalAdjust_RIGHT : TextHorizontalAdjust_LEFT;
+            // Default for vert270
+            if( tVert == XML_vert270 )
+                mrTextBodyProp.maPropertyMap[ PROP_TextVerticalAdjust ] <<= drawing::TextVerticalAdjust_BOTTOM;
         } else
             mrTextBodyProp.maPropertyMap[ PROP_TextWritingMode ]
                 <<= ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB );
+    }
+
+    // ST_TextAnchoringType
+    if( xAttributes->hasAttribute( XML_anchor ) ) {
+        drawing::TextVerticalAdjust eVA( drawing::TextVerticalAdjust_TOP );
+        switch( xAttributes->getOptionalValueToken( XML_anchor, XML_t ) )
+        {
+            case XML_b :    eVA = drawing::TextVerticalAdjust_BOTTOM; break;
+            case XML_dist :
+            case XML_just :
+            case XML_ctr :  eVA = drawing::TextVerticalAdjust_CENTER; break;
+            default:
+            case XML_t :    eVA = drawing::TextVerticalAdjust_TOP; break;
+        }
+        if( !xAttributes->hasAttribute( XML_vert ) )
+            mrTextBodyProp.maPropertyMap[ PROP_TextVerticalAdjust ] <<= eVA;
+        else
+        {
+            if( ( mrTextBodyProp.moVert.get( XML_horz ) == XML_vert && eVA == drawing::TextVerticalAdjust_TOP ) ||
+                ( mrTextBodyProp.moVert.get( XML_horz ) == XML_vert270 && eVA == drawing::TextVerticalAdjust_BOTTOM ) )
+            {
+                mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
+                    TextHorizontalAdjust_RIGHT;
+            }
+        }
     }
 }
 
