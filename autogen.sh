@@ -61,6 +61,8 @@ sub read_args($)
                     print "  $opt\n";
                 }
             }
+        } elsif ( substr($_, 0, 1) eq "#" ) {
+            # comment
         } else {
             push @lst, $_;
         }
