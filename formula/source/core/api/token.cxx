@@ -1328,7 +1328,7 @@ const FormulaToken* FormulaTokenIterator::GetNonEndOfPathToken( short nIdx ) con
 
 bool FormulaTokenIterator::IsEndOfPath() const
 {
-    return GetNonEndOfPathToken( pCur->nPC + 1) != NULL;
+    return GetNonEndOfPathToken( pCur->nPC + 1) == NULL;
 }
 
 // -----------------------------------------------------------------------------
