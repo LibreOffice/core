@@ -6,6 +6,14 @@ TARGET=gcc3_specific
 .INCLUDE: settings.mk
 # ------------------------------------------------------------------
 
+.IF "$(CPU)" == "R" || "$(CPU)" == "P"
+all:
+    echo "lp#832121: circumventing prelink magic on ppc and armel"
+    cp -p `gcc -print-file-name=libstdc++.so.$(SHORTSTDCPP3)` $(LB)
+    cp -p `gcc -print-file-name=libgcc_s.so.$(SHORTSTDC3)` $(LB)
+    cp -p `gcc -print-file-name=libgcc_s.so` $(LB)
+
+.ELSE
 
 .IF "$(BUILD_SPECIAL)"==""
 
@@ -83,6 +91,7 @@ $(LB)$/libgcc_s.so.$(SHORTSTDC3) :
 
 .ENDIF
 .ENDIF			# "$(BUILD_SPECIAL)"==""
+.ENDIF
 
 
 .INCLUDE: target.mk
