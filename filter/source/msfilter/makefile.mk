@@ -50,7 +50,6 @@ SLOFILES= \
     $(SLO)$/msocximex.obj	\
     $(SLO)$/msoleexp.obj	\
     $(SLO)$/msvbahelper.obj \
-    $(SLO)$/msvbasic.obj	\
     $(SLO)$/services.obj	\
     $(SLO)$/svdfppt.obj		\
     $(SLO)$/svxmsbas.obj	\

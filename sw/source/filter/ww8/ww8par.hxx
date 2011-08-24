@@ -616,6 +616,11 @@ public:
     std::vector<String> maListEntries;
     virtual ~WW8FormulaControl() {}
     void FormulaRead(SwWw8ControlType nWhich,SvStream *pD);
+    virtual sal_Bool Import(const com::sun::star::uno::Reference <
+        com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
+        com::sun::star::uno::Reference <
+        com::sun::star::form::XFormComponent> &rFComp,
+        com::sun::star::awt::Size &rSz) = 0;
 private:
     //No copying
     WW8FormulaControl(const WW8FormulaControl&);
@@ -628,8 +633,6 @@ private:
     //No copying
     WW8FormulaCheckBox(const WW8FormulaCheckBox&);
     WW8FormulaCheckBox& operator=(const WW8FormulaCheckBox&);
-
-    using OCX_Control::Import;
 
 public:
     WW8FormulaCheckBox(SwWW8ImplReader &rR);
@@ -647,8 +650,6 @@ private:
     //No copying
     WW8FormulaListBox(const WW8FormulaListBox&);
     WW8FormulaListBox& operator=(const WW8FormulaListBox&);
-
-    using OCX_Control::Import;
 
 public:
     WW8FormulaListBox(SwWW8ImplReader &rR);
@@ -668,6 +669,12 @@ private:
     WW8FormulaEditBox& operator=(const WW8FormulaEditBox&);
 public:
     WW8FormulaEditBox(SwWW8ImplReader &rR);
+    //no real implementation, return false
+    virtual sal_Bool Import(const com::sun::star::uno::Reference <
+        com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
+        com::sun::star::uno::Reference <
+        com::sun::star::form::XFormComponent> &rFComp,
+        com::sun::star::awt::Size &rSz) { return sal_False; }
 };
 
 class SwMSConvertControls: public SvxMSConvertOCXControls
