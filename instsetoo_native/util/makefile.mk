@@ -79,9 +79,13 @@ allhelplangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(help_exist) $(eq,$i,$j  
 xxxx:
     echo $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product LibreOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml
 
-.IF "$(GUI)"!="WNT" && "$(EPM)"=="NO"
+.IF ( "$(GUI)"!="WNT" && "$(EPM)"=="NO" ) || ( "$(CROSS_COMPILING)"=="YES" && "$(GUI)$(COM)"=="WNTGCC" )
 ALLTAR  : $(LOCALPYFILES)
+.IF "$(GUI)$(COM)"=="WNTGCC"
+    @echo "MinGW cross-compilation: unable to create installation set yet"
+.ELSE
     @echo "No EPM: do no packaging at this stage"
+.ENDIF
 .ELSE			# "$(GUI)"!="WNT" && "$(EPM)"=="NO"
 .IF "$(ENABLE_RELEASE_BUILD)"=="TRUE"
 .IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/ODK//)"
