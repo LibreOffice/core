@@ -1292,7 +1292,9 @@ STD_LIB_FILE( gid_File_Lib_Swui, swui)
 
 STD_LIB_FILE( gid_File_Lib_Msword, msword )
 
+#ifdef MERGELIBS
 STD_LIB_FILE( gid_File_Lib_Merged, merged )
+#endif
 
 #if ! defined UNX
 File gid_File_Lib_Sysdtrans

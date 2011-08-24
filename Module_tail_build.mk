@@ -51,7 +51,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     writerperfect \
 ))
 
-ifeq ($(MERGELIBS),YES)
+ifeq ($(MERGELIBS),TRUE)
 $(eval $(call gb_Module_add_targets,tail_end,\
 	Library_merged \
 ))

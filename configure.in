@@ -9072,8 +9072,9 @@ AC_SUBST(BUILD_NCPUS)
 # Creating bigger shared library to link against
 # ===================================================================
 AC_MSG_CHECKING([whether to create a big library for better performance])
-if test "$enable_mergelibs" != "no"; then
-    MERGELIBS="YES"
+MERGELIBS=
+if test "$enable_mergelibs" = "yes"; then
+    MERGELIBS="TRUE"
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
