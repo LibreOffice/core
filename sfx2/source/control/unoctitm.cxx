@@ -258,16 +258,6 @@ void SfxUnoControllerItem::GetNewDispatch()
     return xDisp;
 }
 
-void SfxUnoControllerItem::Execute()
-{
-    // dispatch the resource
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq(1);
-    aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Referer") );
-    aSeq[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("private:select") );
-    if ( xDispatch.is() )
-        xDispatch->dispatch( aCommand, aSeq );
-}
-
 void SfxUnoControllerItem::ReleaseBindings()
 {
     // connection to binding is lost; so forget the binding and the dispatch

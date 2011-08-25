@@ -46,11 +46,6 @@ namespace svt
     {
         return lcl_createStringFromArray( pcCharArr, nBufSize, false );
     }
-
-    rtl::OUString BinFilterUtils::CreateOUStringFromStringArray( const char* pcCharArr, sal_uInt32 nBufSize )
-    {
-        return lcl_createStringFromArray( pcCharArr, nBufSize, true );
-    }
 //........................................................................
 } // namespace svt
 //........................................................................

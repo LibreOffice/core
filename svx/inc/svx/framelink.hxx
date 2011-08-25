@@ -167,9 +167,6 @@ public:
     /** Sets whether to use dotted style for single hair lines. */
     inline void         SetType( editeng::SvxBorderStyle nType ) { mnType = nType; }
 
-    /** Scales the style by the specified scaling factor. Ensures that visible lines keep visible. */
-    Style&              ScaleSelf( double fScale, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
-
     /** Mirrors this style (exchanges primary and secondary), if it is a double frame style. */
     Style&              MirrorSelf();
     /** Returns this style mirrored, if it is a double frame style, otherwise a simple copy. */

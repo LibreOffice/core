@@ -52,7 +52,6 @@ SLOFILES= \
     $(SLO)$/msvbahelper.obj \
     $(SLO)$/services.obj	\
     $(SLO)$/svdfppt.obj		\
-    $(SLO)$/svxmsbas.obj	\
     $(SLO)$/svxmsbas2.obj       \
     $(SLO)$/mstoolbar.obj
 

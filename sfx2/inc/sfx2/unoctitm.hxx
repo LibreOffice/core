@@ -73,7 +73,6 @@ public:
 
     const ::com::sun::star::util::URL&                  GetCommand() const
                                 { return aCommand; }
-    void                        Execute();
 
     // XStatusListener
     virtual void SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event) throw( ::com::sun::star::uno::RuntimeException );

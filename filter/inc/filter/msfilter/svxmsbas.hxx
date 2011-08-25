@@ -76,26 +76,13 @@ public:
     // check if the MS-VBA-Storage exist in the RootStorage of the DocShell.
     // If it exist, then return the WarningId for loosing the information.
     static sal_uLong GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
-    const ControlAttributeInfo& ControlNameForObjectId(){ return m_ModuleNameToObjIdHash; }
 
     static String GetMSBasicStorageName();
-        rtl::OUString GetVBAProjectName() { return msProjectName; }
 private:
     SotStorageRef xRoot;
     SfxObjectShell &rDocSh;
     sal_Bool bImport;
     sal_Bool bCopy;
-    ControlAttributeInfo m_ModuleNameToObjIdHash;
-    MSFILTER_DLLPRIVATE void extractAttribute( const String& rAttribute, const String& rModName );
-
-    MSFILTER_DLLPRIVATE sal_Bool ImportCode_Impl( const String& rStorageName,
-                          const String &rSubStorageName,
-                          const std::vector< String >& codeNames,
-                          sal_Bool bAsComment, sal_Bool bStripped);
-    MSFILTER_DLLPRIVATE sal_Bool CopyStorage_Impl( const String& rStorageName,
-                           const String &rSubStorageName);
-        rtl::OUString msProjectName;
-    MSFILTER_DLLPRIVATE sal_Bool ImportCode_Impl( VBA_Impl&, const std::vector< String >&, sal_Bool, sal_Bool );
 };
 
 #endif

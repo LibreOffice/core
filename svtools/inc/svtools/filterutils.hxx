@@ -13,7 +13,6 @@ namespace svt
 
     public:
         SVT_DLLPUBLIC static  rtl::OUString CreateOUStringFromUniStringArray( const char* pcCharArr, sal_uInt32 nBufSize );
-        SVT_DLLPUBLIC static  rtl::OUString CreateOUStringFromStringArray( const char* pcCharArr, sal_uInt32 nBufSize );
     };
 
 //........................................................................

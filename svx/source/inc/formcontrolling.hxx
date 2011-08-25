@@ -139,12 +139,6 @@ namespace svx
             const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController
         );
 
-        /** assign to a controller
-        */
-        void assign(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm
-        );
-
         /// clears the instance so that it cannot be used afterwards
         void dispose();
 

@@ -1241,12 +1241,6 @@ void Style::Set( const SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWid
     }
 }
 
-Style& Style::ScaleSelf( double fScale, sal_uInt16 nMaxWidth )
-{
-    Set( SCALEVALUE( mnPrim ), SCALEVALUE( mnDist ), SCALEVALUE( mnSecn ) );
-    return *this;
-}
-
 Style& Style::MirrorSelf()
 {
     if( mnSecn )

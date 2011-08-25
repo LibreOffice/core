@@ -75,7 +75,6 @@ namespace svx
         void invalidateExternRepresentations();
 
         void updateSequence();
-        void updateSet();
 
         /** builds the descriptor from a property value sequence
             @return <TRUE/>
@@ -285,44 +284,6 @@ namespace svx
 
         // don't need to rebuild next time
         m_bSequenceOutOfDate = sal_False;
-    }
-
-    //--------------------------------------------------------------------
-    void ODADescriptorImpl::updateSet()
-    {
-        if (!m_bSetOutOfDate)
-            return;
-
-        // will be the current values
-        Sequence< PropertyValue > aValuesToSet(m_aValues.size());
-        PropertyValue* pValuesToSet = aValuesToSet.getArray();
-
-        // build a new property set info
-        PropertySetInfo* pPropSetInfo = new PropertySetInfo;
-
-        // loop through all our values
-        for (   DescriptorValues::const_iterator aLoop = m_aValues.begin();
-                aLoop != m_aValues.end();
-                ++aLoop, ++pValuesToSet
-            )
-        {
-            PropertyMapEntry* pMapEntry = getPropertyMapEntry( aLoop );
-            pPropSetInfo->add( pMapEntry, 1 );
-
-            *pValuesToSet = buildPropertyValue(aLoop);
-        }
-
-        // create the generic set
-        m_xAsSet = GenericPropertySet_CreateInstance( pPropSetInfo );
-
-        // no we have the set, still need to set the current values
-        const PropertyValue* pSetValues = aValuesToSet.getConstArray();
-        const PropertyValue* pSetValuesEnd = pSetValues + aValuesToSet.getLength();
-        for (; pSetValues != pSetValuesEnd; ++pSetValues)
-            m_xAsSet->setPropertyValue(pSetValues->Name, pSetValues->Value);
-
-        // don't need to rebuild next time
-        m_bSetOutOfDate = sal_True;
     }
 
     //====================================================================

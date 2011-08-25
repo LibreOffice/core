@@ -241,9 +241,6 @@ Graphic::GetGraphicsCompressMode(SvStream&)
 Graphic::StartAnimation(OutputDevice*, Point const&, long, OutputDevice*)
 Graphic::WriteEmbedded(SvStream&)
 GraphicConverter::ImplConvert(unsigned long, void*, unsigned long, void**, unsigned long)
-GraphicHelper::convertAppFontToHmm(com::sun::star::awt::Point const&) const
-GraphicHelper::convertAppFontToHmm(com::sun::star::awt::Size const&) const
-GraphicHelper::getDeviceInfo() const
 GraphicReader::IsPreviewModeEnabled() const
 GroupTable::SkipCurrentGroup()
 HTMLControls::Insert(HTMLControl const*&, unsigned short&)
@@ -1293,7 +1290,6 @@ SvxIMapDlg::GetTargetList() const
 SvxIconChoiceCtrlEntry::LockPos(unsigned char)
 SvxIconChoiceCtrlEntry::SetMoved(unsigned char)
 SvxIconSelectorDialog::AutoScaleBitmap(BitmapEx&, long)
-SvxImportMSVBasic::Import(String const&, String const&, unsigned char, unsigned char)
 SvxInsertStatusBarControl::GetDefItemWidth(StatusBar const&)
 SvxJustifyMethodItem::SvxJustifyMethodItem(unsigned short)
 SvxLanguageBox::SvxLanguageBox(Window*, long, unsigned char)
@@ -1548,7 +1544,6 @@ TempFile::IsValid() const
 TextObj::TextObj(TextObj&)
 TextObj::Write(SvStream*)
 TransferableDataHelper::GetInterface(com::sun::star::datatransfer::DataFlavor const&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface>&)
-TypeName::TypeName(char*, unsigned int, unsigned int, unsigned short, int, int)
 UCBStorage::IsStorageFile(String const&)
 UCBStream::UCBStream(com::sun::star::uno::Reference<com::sun::star::io::XOutputStream>&)
 UShortCont::Sort()

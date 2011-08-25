@@ -235,14 +235,6 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    void ControllerFeatures::assign( const Reference< XForm >& _rxForm )
-    {
-        dispose();
-        m_pImpl = new FormControllerHelper( m_aContext, _rxForm, m_pInvalidationCallback );
-        m_pImpl->acquire();
-    }
-
-    //--------------------------------------------------------------------
     ControllerFeatures::~ControllerFeatures()
     {
         dispose();
