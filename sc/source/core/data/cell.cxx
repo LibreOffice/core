@@ -187,9 +187,10 @@ void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOl
         if (!bInserted)
         {
             //if this happened we have a real problem
-            delete pRangeData;
-            pToken->SetIndex(-1);
+            pRangeData = NULL;
+            pToken->SetIndex(0);
             OSL_FAIL("inserting the range name should not fail");
+            return;
         }
     }
     sal_Int32 nIndex = pRangeData->GetIndex();
