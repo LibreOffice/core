@@ -166,6 +166,36 @@ CXX_FOR_BUILD=ccache g++
 --with-system-redland
 --with-vendor=no
 
+TODO:
+
+- installation
+  - so far the make_installer.pl calls makecab.exe, uuidgen.exe, and
+    others; would be best to avoid that if at all possible (using a free
+    cab implementation, part of Wine or something)
+  - MSI generation
+  - if at all possible, the make dev-install installation (with links
+    back to the build) should be done so that it would be directly
+    executable via wine after doing make dev-install :-)
+
+- runtime
+  - no idea if the entire thing works after the installation at all; I
+    suppose there will be runtime problems to look at too
+
+- cleanup
+  - enable & fix pieces that are currently disabled
+    - --without-myspell-dicts
+    - --disable-directx
+    - --disable-activex
+    - --disable-mozilla
+  - much of the stuff currently relies on --with-system-*, and
+    consequently on the mingw32-* openSUSE packages; might be good to be
+    able to build with as few dependencies as possible - but that is low
+    prio I think
+
+- profiling
+  - when all the above is sorted out, we should look at the speed of
+    this vs. the speed of the MSVC version
+
 
 iOS
 ---
