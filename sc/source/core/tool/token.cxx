@@ -1041,7 +1041,7 @@ const ScMatrix* ScMatrixCellResultToken::GetMatrix() const  { return xMatrix.get
 // satisfy vtable linkage.
 ScMatrix* ScMatrixCellResultToken::GetMatrix()
 {
-    return const_cast<ScMatrix*>(xMatrix.operator->());
+    return const_cast<ScMatrix*>(xMatrix.get());
 }
 bool ScMatrixCellResultToken::operator==( const FormulaToken& r ) const
 {

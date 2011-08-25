@@ -407,7 +407,7 @@ inline bool ScFormulaResult::IsEmptyDisplayedAsString() const
         // don't need to test for mpToken here, GetType() already did it
         const ScEmptyCellToken* p = dynamic_cast<const ScEmptyCellToken*>(
                 static_cast<const ScMatrixCellResultToken*>(
-                    mpToken)->GetUpperLeftToken().operator->());
+                    mpToken)->GetUpperLeftToken().get());
         if (p)
             return p->IsDisplayedAsString();
     }

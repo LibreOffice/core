@@ -4301,7 +4301,7 @@ StackVar ScInterpreter::Interpret()
     if (eType == svMatrix)
         // Results are immutable in case they would be reused as input for new
         // interpreters.
-        static_cast<ScToken*>(xResult.operator->())->GetMatrix()->SetImmutable( true);
+        static_cast<ScToken*>(xResult.get())->GetMatrix()->SetImmutable( true);
     return eType;
 }
 
