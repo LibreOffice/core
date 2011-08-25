@@ -1034,6 +1034,7 @@ REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( sti )
 
 CONDITIONAL_REGISTER_DOC_EXTENSION( Ppt,  gid_Module_Prg_Impress_MSO_Reg, ppt,  PPT,  MS_POWERPOINT_PRESENTATION_OLD, 33, simpress.exe, open, Impress )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Pps,  gid_Module_Prg_Impress_MSO_Reg, pps,  PPS,  MS_POWERPOINT_SHOW, 33, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Ppsx, gid_Module_Prg_Impress_MSO_Reg, ppsx, PPSX, MS_POWERPOINT_SHOW, 33, simpress.exe, open, Impress )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Pptx, gid_Module_Prg_Impress_MSO_Reg, pptx, PPTX, MS_POWERPOINT_PRESENTATION, 33, simpress.exe, open, Impress )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Pptm, gid_Module_Prg_Impress_MSO_Reg, pptm, PPTM, MS_POWERPOINT_PRESENTATION, 33, simpress.exe, open, Impress )
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Pot,  gid_Module_Prg_Impress_MSO_Reg, pot,  POT,  MS_POWERPOINT_TEMPLATE_OLD, 34, simpress.exe, new, Impress )
