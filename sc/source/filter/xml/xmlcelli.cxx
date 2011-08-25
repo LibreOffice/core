@@ -781,10 +781,11 @@ void ScXMLTableRowCellContext::EndElement()
                 rXMLImport.GetTextImport()->ResetCursor();
             }
         }
-        table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
+        ScMyTables& rTables = rXMLImport.GetTables();
+        table::CellAddress aCellPos = rTables.GetRealCellPos();
         if (aCellPos.Column > 0 && nRepeatedRows > 1)
             aCellPos.Row -= (nRepeatedRows - 1);
-        uno::Reference<table::XCellRange> xCellRange(rXMLImport.GetTables().GetCurrentXCellRange());
+        uno::Reference<table::XCellRange> xCellRange(rTables.GetCurrentXCellRange());
         if (xCellRange.is())
         {
             if (bIsMerged)
@@ -833,7 +834,6 @@ void ScXMLTableRowCellContext::EndElement()
                     mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource)
                     bIsEmpty = false;
 
-                ScMyTables& rTables = rXMLImport.GetTables();
                 for (sal_Int32 i = 0; i < nCellsRepeated; ++i)
                 {
                     aCurrentPos.Column = aCellPos.Column + i;
@@ -1097,7 +1097,7 @@ void ScXMLTableRowCellContext::EndElement()
                         {
                             if (nMatrixCols > 0 && nMatrixRows > 0)
                             {
-                                rXMLImport.GetTables().AddMatrixRange(
+                                rTables.AddMatrixRange(
                                         aCellPos.Column, aCellPos.Row,
                                         aCellPos.Column + nMatrixCols - 1,
                                         aCellPos.Row + nMatrixRows - 1,
