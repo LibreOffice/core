@@ -169,7 +169,6 @@ void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOl
     //search global range names
     if (!pRangeData)
     {
-        //even if it is not in the global scope we'll have a global range name
         bNewGlobal = true;
         pRangeName = rNewDoc.GetRangeName();
         if (pRangeName)
@@ -178,8 +177,12 @@ void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOl
     //if no range name was found copy it
     if (!pRangeData)
     {
+        bNewGlobal = bOldGlobal;
         pRangeData = new ScRangeData(*pOldRangeData, &rNewDoc);
-        rNewDoc.GetRangeName()->insert(pRangeData);
+        if (bNewGlobal)
+            rNewDoc.GetRangeName()->insert(pRangeData);
+        else
+            rNewDoc.GetRangeName(aNewTab)->insert(pRangeData);
     }
     sal_Int32 nIndex = pRangeData->GetIndex();
     pToken->SetIndex(nIndex);

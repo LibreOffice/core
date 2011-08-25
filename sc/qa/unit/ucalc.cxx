@@ -2235,7 +2235,7 @@ void Test::testCopyPaste()
     //check values after copying
     String aString;
     m_pDoc->GetValue(1,1,1, aValue);
-    CPPUNIT_ASSERT_MESSAGE("copied formula should return 3", aValue == 2);
+    CPPUNIT_ASSERT_MESSAGE("copied formula should return 2", aValue == 2);
     m_pDoc->GetFormula(1,1,1, aString);
     CPPUNIT_ASSERT_MESSAGE("formula string was not copied correctly", rtl::OUString(aString) == aFormulaString);
     m_pDoc->GetValue(0,1,1, aValue);
