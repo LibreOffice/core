@@ -2023,18 +2023,20 @@ if test "$cross_compiling" = "yes"; then
     rm -rf CONF-FOR-BUILD Env.Build.sh
     mkdir CONF-FOR-BUILD
     tar cf - \
-        configure \
+        Makefile.in \
+        bin/repo-list.in \
+        bootstrap.1 \
         config.guess \
+        configure \
+        ooo.lst.in \
         oowintool \
+        post_download.in \
+        set_soenv.in \
+        solenv/inc/langlist.mk \
         solenv/inc/minor.mk \
         solenv/inc/postset.mk \
-        solenv/inc/langlist.mk \
-        set_soenv.in \
-        bootstrap.1 \
-        post_download.in \
-        ooo.lst.in \
-        Makefile.in \
-        bin/repo-list.in | (cd CONF-FOR-BUILD && tar xf -)
+        solenv/inc/productversion.mk \
+    | (cd CONF-FOR-BUILD && tar xf -)
     (
     unset COM GUI GUIBASE OS CPU CPUNAME
     unset CC CXX SYSBASE CFLAGS
