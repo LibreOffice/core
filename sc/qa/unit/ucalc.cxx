@@ -61,6 +61,9 @@
 #include "scitems.hxx"
 #include "reffind.hxx"
 #include "markdata.hxx"
+#include "clipparam.hxx"
+#include "refundo.hxx"
+#include "undoblk.hxx"
 
 #include "docsh.hxx"
 #include "dbdocfun.hxx"
@@ -247,6 +250,7 @@ public:
     void testExternalRef();
     void testDataArea();
     void testAutofilter();
+    void testCopyPaste();
 
     /**
      * Make sure the sheet streams are invalidated properly.
@@ -288,6 +292,7 @@ public:
     CPPUNIT_TEST(testFunctionLists);
     CPPUNIT_TEST(testToggleRefFlag);
     CPPUNIT_TEST(testAutofilter);
+    CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2131,7 +2136,7 @@ void Test::testAutofilter()
 
     //set column headers
     m_pDoc->SetString(0,0,0,aCol1);
-    m_pDoc->SetString(1,0,1,aCol2);
+    m_pDoc->SetString(1,0,0,aCol2);
 
     //set values
     m_pDoc->SetValue(0,1,0,0);
@@ -2171,6 +2176,102 @@ void Test::testAutofilter()
     CPPUNIT_ASSERT_MESSAGE("rows 2 & 3 should be hidden", bHidden && nRow1 == 2 && nRow2 == 3);
 
     m_pDoc->DeleteTab(0);
+}
+
+void Test::testCopyPaste()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet1")));
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet2")));
+    //test copy&paste + ScUndoPaste
+    //copy local and global range names in formulas
+    //string cells and value cells
+    m_pDoc->SetValue(0, 0, 0, 1);
+    m_pDoc->SetValue(3, 0, 0, 0);
+    m_pDoc->SetValue(3, 1, 0, 1);
+    m_pDoc->SetValue(3, 2, 0, 2);
+    m_pDoc->SetValue(3, 3, 0, 3);
+    m_pDoc->SetString(2, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("test")));
+    ScAddress aAdr (0, 0, 0);
+
+    //create some range names, local and global
+    ScRangeData* pLocal1 = new ScRangeData(m_pDoc, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("local1")), aAdr);
+    ScRangeData* pLocal2 = new ScRangeData(m_pDoc, OUString(RTL_CONSTASCII_USTRINGPARAM("local2")), aAdr);
+    ScRangeData* pGlobal = new ScRangeData(m_pDoc, OUString(RTL_CONSTASCII_USTRINGPARAM("global")), aAdr);
+    ScRangeName* pGlobalRangeName = new ScRangeName();
+    pGlobalRangeName->insert(pGlobal);
+    ScRangeName* pLocalRangeName1 = new ScRangeName();
+    pLocalRangeName1->insert(pLocal1);
+    pLocalRangeName1->insert(pLocal2);
+    m_pDoc->SetRangeName(pGlobalRangeName);
+    m_pDoc->SetRangeName(0, pLocalRangeName1);
+
+    //add formula
+    rtl::OUString aFormulaString(RTL_CONSTASCII_USTRINGPARAM("=local1+global+SUM($C$1:$D$4)"));
+    m_pDoc->SetString(1, 0, 0, aFormulaString);
+
+    double aValue = 0;
+    m_pDoc->GetValue(1, 0, 0, aValue);
+    std::cout << "Value: " << aValue << std::endl;
+    CPPUNIT_ASSERT_MESSAGE("formula should return 8", aValue == 8);
+
+    //copy Sheet1.A1:C1 to Sheet2.A2:C2
+    ScRange aRange(0,0,0,2,0,0);
+    ScClipParam aClipParam(aRange, false);
+    ScMarkData aMark;
+    aMark.SetMarkArea(aRange);
+    ScDocument* pClipDoc = new ScDocument(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, pClipDoc, &aMark);
+
+    sal_uInt16 nFlags = IDF_ALL;
+    aRange = ScRange(0,1,1,2,1,1);//target: Sheet2.A2:C2
+    ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+    pUndoDoc->InitUndo(m_pDoc, 1, 1, true, true);
+    ScMarkData aMarkData2;
+    aMarkData2.SetMarkArea(aRange);
+    ScRefUndoData* pRefUndoData= new ScRefUndoData(m_pDoc);
+    SfxUndoAction* pUndo = new ScUndoPaste(&m_xDocShRef, 0, 1, 1, 2, 1, 1, aMarkData2, pUndoDoc, NULL, IDF_ALL, pRefUndoData, NULL, NULL, NULL, false);
+    m_pDoc->CopyFromClip(aRange, aMarkData2, nFlags, NULL, pClipDoc);
+
+    //check values after copying
+    String aString;
+    m_pDoc->GetValue(1,1,1, aValue);
+    CPPUNIT_ASSERT_MESSAGE("copied formula should return 3", aValue == 2);
+    m_pDoc->GetFormula(1,1,1, aString);
+    CPPUNIT_ASSERT_MESSAGE("formula string was not copied correctly", rtl::OUString(aString) == aFormulaString);
+    m_pDoc->GetValue(0,1,1, aValue);
+    CPPUNIT_ASSERT_MESSAGE("copied value should be 1", aValue == 1);
+
+    //chack local range name after copying
+    pLocal1 = m_pDoc->GetRangeName(1)->findByName(OUString(RTL_CONSTASCII_USTRINGPARAM("local1")));
+    CPPUNIT_ASSERT_MESSAGE("local range name 1 should be copied", pLocal1);
+    ScRange aRangeLocal1;
+    pLocal1->IsValidReference(aRangeLocal1);
+    CPPUNIT_ASSERT_MESSAGE("local range 1 should still point to Sheet1.A1",aRangeLocal1 == ScRange(0,0,0,0,0,0));
+    pLocal2 = m_pDoc->GetRangeName(1)->findByName(OUString(RTL_CONSTASCII_USTRINGPARAM("local2")));
+    CPPUNIT_ASSERT_MESSAGE("local2 should not be copied", pLocal2 == NULL);
+
+
+    //check undo and redo
+    pUndo->Undo();
+    m_pDoc->GetValue(1,1,1, aValue);
+    CPPUNIT_ASSERT_MESSAGE("after undo formula should return nothing", aValue == 0);
+    m_pDoc->GetString(2,1,1, aString);
+    CPPUNIT_ASSERT_MESSAGE("after undo string should be removed", rtl::OUString(aString) == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")));
+
+    pUndo->Redo();
+    m_pDoc->GetValue(1,1,1, aValue);
+    CPPUNIT_ASSERT_MESSAGE("formula should return 2 after redo", aValue == 2);
+    m_pDoc->GetString(2,1,1, aString);
+    CPPUNIT_ASSERT_MESSAGE("Cell Sheet2.C2 should contain: test", rtl::OUString(aString) == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test")));
+    m_pDoc->GetFormula(1,1,1, aString);
+    CPPUNIT_ASSERT_MESSAGE("Formula should be correct again", rtl::OUString(aString) == aFormulaString);
+
+    //clear all variables
+    delete pClipDoc;
+    delete pUndoDoc;
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
