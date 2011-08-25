@@ -89,7 +89,7 @@ my %replaceable = (
 
 my @search_dirs = ( 'lib', 'bin', 'class' );
 
-my @known_duplicates = ( 'db.jar', 'libi18n' );
+my @known_duplicates = ( 'db.jar', 'libi18n', 'libnssckbi', 'libnssdbm', 'libsqlite3', 'libnssutil3' );
 
 sub sniff_target($)
 {
