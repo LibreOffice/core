@@ -32,6 +32,11 @@ AC_ARG_ENABLE(ext-hunart,
         [Enables the Hungarian Cross-reference Toolbar extension.]),
 ,)
 
+AC_ARG_ENABLE(ext-languagetool,
+    AS_HELP_STRING([--enable-ext-languagetool],
+        [Enables the LanguageTool extension.]),
+,)
+
 AC_ARG_ENABLE(ext-lightproof,
     AS_HELP_STRING([--enable-ext-lightproof],
         [Enables the Lightproof extension.]),
@@ -7917,7 +7922,7 @@ dnl ===================================================================
 dnl Test whether to include LanguageTool extension
 dnl ===================================================================
 AC_MSG_CHECKING([for LanguageTool extension integration])
-if test "z$with_languagetool" = "z" -o "z$with_languagetool" = "zno" ; then
+if test "z$enable_ext_languagetool" = "z" -o "z$enable_ext_languagetool" = "zno" ; then
     AC_MSG_RESULT([no])
 else
     AC_MSG_RESULT([yes])
