@@ -544,24 +544,6 @@ sub createproductlist
     return \@infofilelist;
 }
 
-#############################################
-# Logging the content of the download hash
-#############################################
-
-sub logfollowmeinfohash
-{
-    my ( $followmehash ) = @_;
-
-    print "\n*****************************************\n";
-    print "Content of follow-me info file:\n";
-    print "finalinstalldir: $followmehash->{'finalinstalldir'}\n";
-    print "downloadname: $followmehash->{'downloadname'}\n";
-    print "languagestring: $followmehash->{'languagestring'}\n";
-    foreach my $lang ( @{$followmehash->{'languagesarray'}} ) { print "languagesarray: $lang\n"; }
-    foreach my $path ( @{$followmehash->{'includepatharray'}} ) { print "includepatharray: $path"; }
-    foreach my $key ( sort keys %{$followmehash->{'allvariableshash'}} ) { print "allvariableshash: $key : $followmehash->{'allvariableshash'}->{$key}\n"; }
-}
-
 ########################################################################
 # Renaming the follow me info file, if it was successfully used.
 # This can only be done, if the parameter "-d" was used with a
