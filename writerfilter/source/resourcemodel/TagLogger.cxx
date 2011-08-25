@@ -49,6 +49,7 @@ namespace writerfilter
         pName = NULL;
     }
 
+#ifdef DEBUG_IMPORT
     void TagLogger::setFileName( const string & filename )
     {
         if ( pWriter )
@@ -80,6 +81,7 @@ namespace writerfilter
         pWriter = xmlNewTextWriterFilename( fileName.c_str(), 0 );
         xmlTextWriterSetIndent( pWriter, 4 );
     }
+#endif
 
     TagLogger::Pointer_t TagLogger::getInstance(const char * name)
     {
@@ -102,17 +104,21 @@ namespace writerfilter
         return aIt->second;
     }
 
+#ifdef DEBUG_IMPORT
     void TagLogger::startDocument()
     {
         xmlTextWriterStartDocument( pWriter, NULL, NULL, NULL );
         xmlTextWriterStartElement( pWriter, BAD_CAST( "root" ) );
     }
+#endif
 
+#ifdef DEBUG_DOMAINMAPPER
     void TagLogger::element(const string & name)
     {
         startElement(name);
         endElement();
     }
+#endif
 
     void TagLogger::startElement(const string & name)
     {
@@ -262,6 +268,7 @@ namespace writerfilter
         m_pLogger->endElement();
     }
 
+#ifdef DEBUG_CONTEXT_HANDLER
     void TagLogger::propertySet(writerfilter::Reference<Properties>::Pointer_t props,
             IdToString::Pointer_t pIdToString)
     {
@@ -273,6 +280,7 @@ namespace writerfilter
 
         endElement( );
     }
+#endif
 
     void TagLogger::unoPropertySet(uno::Reference<beans::XPropertySet> rPropSet)
     {
