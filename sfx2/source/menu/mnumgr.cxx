@@ -307,14 +307,6 @@ sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPos, Window* pWindow )
     return nVal;
 }
 
-//--------------------------------------------------------------------
-
-IMPL_LINK_INLINE_START( SfxPopupMenuManager, SelectHdl, void *, EMPTYARG )
-{
-    return 1;
-}
-IMPL_LINK_INLINE_END( SfxPopupMenuManager, SelectHdl, void *, EMPTYARG )
-
 //-------------------------------------------------------------------------
 
 SfxMenuManager::SfxMenuManager( Menu* pMenuArg, SfxBindings &rBindings )

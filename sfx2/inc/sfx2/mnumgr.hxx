@@ -89,7 +89,6 @@ public:
 class SAL_DLLPUBLIC_EXPORT SfxPopupMenuManager : public SfxMenuManager
 {
 private:
-    DECL_LINK( SelectHdl, void * );
     Menu*               pSVMenu;
 
     // when #i107205 gets fixed this one should be superfluous.

@@ -1333,53 +1333,6 @@ const SfxPoolItem*  SfxDispatcher::Execute
 }
 
 //--------------------------------------------------------------------
-const SfxPoolItem* SfxDispatcher::_Execute
-(
-    sal_uInt16          nSlot,     // the Id of the executing function
-    SfxCallMode         eCall,     // SFX_CALLMODE_SYNCRHON, ..._ASYNCHRON or
-                                   //..._SLOT
-    va_list             pVarArgs,  // Parameter list from the 2nd parameter
-    const SfxPoolItem*  pArg1      // First parameter
-)
-
-/*  [Description]
-
-    Method to excecute a <SfxSlot>s over the Slot-Id.
-
-    [Return value]
-
-    const SfxPoolItem*      Pointer to the SfxPoolItem valid to the next run
-                            though the Message-Loop, which contains the return
-                            value.
-
-                            Or a NULL-Pointer, when the function was not
-                            executed (for example canceled by the user).
-*/
-
-{
-    if ( IsLocked(nSlot) )
-        return 0;
-
-    SfxShell *pShell = 0;
-    const SfxSlot *pSlot = 0;
-    if ( GetShellAndSlot_Impl( nSlot, &pShell, &pSlot, sal_False,
-                               SFX_CALLMODE_MODAL==(eCall&SFX_CALLMODE_MODAL) ) )
-    {
-       SfxAllItemSet aSet( pShell->GetPool() );
-
-       for ( const SfxPoolItem *pArg = pArg1;
-             pArg;
-             pArg = va_arg( pVarArgs, const SfxPoolItem* ) )
-           MappedPut_Impl( aSet, *pArg );
-
-       SfxRequest aReq( nSlot, eCall, aSet );
-       _Execute( *pShell, *pSlot, aReq, eCall );
-       return aReq.GetReturnValue();
-    }
-    return 0;
-}
-
-//--------------------------------------------------------------------
 const SfxPoolItem* SfxDispatcher::Execute
 (
     sal_uInt16          nSlot,  // the Id of the executing function

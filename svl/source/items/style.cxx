@@ -101,14 +101,6 @@ SfxStyleSheetHint::SfxStyleSheetHint
     nHint( nAction )
 {}
 
-SfxStyleSheetHint::SfxStyleSheetHint
-(
-    sal_uInt16              nAction     // SFX_STYLESHEET_... (s.o.)
-)
-:   pStyleSh( NULL ),
-    nHint( nAction )
-{}
-
 //=========================================================================
 
 class SfxStyleSheetBasePool_Impl

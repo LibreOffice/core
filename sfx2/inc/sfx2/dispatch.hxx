@@ -140,9 +140,6 @@ friend class SfxHelp;
     void                _Execute( SfxShell &rShell, const SfxSlot &rSlot,
                                   SfxRequest &rReq,
                                   SfxCallMode eCall = SFX_CALLMODE_STANDARD);
-    const SfxPoolItem*  _Execute( sal_uInt16 nSlot, SfxCallMode eCall,
-                                  va_list pArgs, const SfxPoolItem *pArg1 );
-
 #endif
 protected:
     void FlushImpl();

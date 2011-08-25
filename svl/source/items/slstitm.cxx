@@ -51,7 +51,6 @@ public:
 
             SfxImpStringList() { nRefCount = 1; }
             ~SfxImpStringList();
-    void    Sort( sal_Bool bAscending);
 };
 
 //------------------------------------------------------------------------
@@ -60,45 +59,6 @@ SfxImpStringList::~SfxImpStringList()
 {
     DBG_ASSERT(nRefCount!=0xffff,"ImpList already deleted");
     nRefCount = 0xffff;
-}
-
-//------------------------------------------------------------------------
-
-void SfxImpStringList::Sort( sal_Bool bAscending)
-{
-    sal_uLong nCount = aList.size();
-    if( nCount > 1 )
-    {
-        nCount -= 2;
-        // Bubble Dir Einen
-        sal_Bool bSwapped = sal_True;
-        while( bSwapped )
-        {
-            bSwapped = sal_False;
-            for( sal_uLong nCur = 0; nCur <= nCount; nCur++ )
-            {
-                String aStr1 = aList[nCur];
-                String aStr2 = aList[nCur+1];
-                // COMPARE_GREATER => pStr2 ist groesser als pStr1
-                StringCompare eCompare = aStr1.CompareIgnoreCaseToAscii( aStr2 ); //@@@
-                sal_Bool bSwap = sal_False;
-                if( bAscending )
-                {
-                    if( eCompare == COMPARE_LESS )
-                        bSwap = sal_True;
-                }
-                else if( eCompare == COMPARE_GREATER )
-                    bSwap = sal_True;
-
-                if( bSwap )
-                {
-                    bSwapped = sal_True;
-                    aList[nCur+1] = aStr1;
-                    aList[nCur] = aStr2;
-                }
-            }
-        }
-    }
 }
 
 // class SfxStringListItem -----------------------------------------------

@@ -85,12 +85,9 @@ class SfxUnoMenuControl : public SfxMenuControl
     SfxUnoControllerItem*   pUnoCtrl;
 public:
                             SfxUnoMenuControl( const String&, sal_uInt16 nId, Menu&,
-                                                SfxBindings&, SfxVirtualMenu* );
-                            SfxUnoMenuControl( const String&, sal_uInt16 nId, Menu&,
                                                const String&,
                                                 SfxBindings&, SfxVirtualMenu* );
                             ~SfxUnoMenuControl();
-    void                    Select();
 };
 
 typedef SfxMenuControl* (*SfxMenuControlCtor)( sal_uInt16 nId, Menu &, SfxBindings & );

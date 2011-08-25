@@ -65,11 +65,6 @@ pointer to the <SfxStyleSheetBase>. The actions are:
 
 The following methods already broadcast themself
 
-SfxStyleSheetHint(SFX_STYLESHEET_MODIFIED) from:
-   SfxStyleSheetBase::SetName( const String& rName )
-   SfxStyleSheetBase::SetParent( const String& rName )
-   SfxStyleSheetBase::SetFollow( const String& rName )
-
 SfxSimpleHint(SFX_HINT_DYING) from:
    SfxStyleSheetBasePool::~SfxStyleSheetBasePool()
 
@@ -346,7 +341,6 @@ class SVL_DLLPUBLIC SfxStyleSheetHint: public SfxHint
 public:
                         TYPEINFO();
 
-                        SfxStyleSheetHint( sal_uInt16 );
                         SfxStyleSheetHint( sal_uInt16, SfxStyleSheetBase& );
     SfxStyleSheetBase*  GetStyleSheet() const
                         { return pStyleSh; }

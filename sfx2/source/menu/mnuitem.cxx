@@ -469,17 +469,6 @@ SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
     return new SfxUnoMenuControl( rCmd, nId, rMenu, sItemText, rBindings, pVirt);
 }
 
-SfxUnoMenuControl::SfxUnoMenuControl( const String& rCmd, sal_uInt16 nSlotId,
-    Menu& rMenu, SfxBindings& rBindings, SfxVirtualMenu* pVirt )
-    : SfxMenuControl( nSlotId, rBindings )
-{
-    Bind( pVirt, nSlotId, rMenu.GetItemText(nSlotId), rBindings);
-    UnBind();
-    pUnoCtrl = new SfxUnoControllerItem( this, rBindings, rCmd );
-    pUnoCtrl->acquire();
-    pUnoCtrl->GetNewDispatch();
-}
-
 SfxUnoMenuControl::SfxUnoMenuControl(
     const String& rCmd, sal_uInt16 nSlotId, Menu& /*rMenu*/,
     const String& rItemText,
@@ -497,11 +486,6 @@ SfxUnoMenuControl::~SfxUnoMenuControl()
 {
     pUnoCtrl->UnBind();
     pUnoCtrl->release();
-}
-
-void SfxUnoMenuControl::Select()
-{
-    pUnoCtrl->Execute();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

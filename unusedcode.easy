@@ -953,7 +953,6 @@ SfxUShortRanges::Contains(unsigned short) const
 SfxUShortRanges::Intersects(SfxUShortRanges const&) const
 SfxUShortRanges::SfxUShortRanges(int, int, int, ...)
 SfxUShortRangesItem::SfxUShortRangesItem(unsigned short, unsigned short const*)
-SfxUnoMenuControl::Select()
 SfxUnoStyleSheet::SfxUnoStyleSheet(SfxStyleSheet const&)
 SfxVersionTableDtor::GetVersions() const
 SfxViewFactory::~SfxViewFactory()

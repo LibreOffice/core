@@ -56,8 +56,6 @@ class SVT_DLLPUBLIC FrameStatusListener : public ::com::sun::star::frame::XStatu
                              const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
         virtual ~FrameStatusListener();
 
-        void updateStatus( const rtl::OUString aCommandURL );
-
         // methods to support status forwarder, known by the old sfx2 toolbox controller implementation
         void addStatusListener( const rtl::OUString& aCommandURL );
         void removeStatusListener( const rtl::OUString& aCommandURL );
