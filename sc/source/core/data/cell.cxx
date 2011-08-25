@@ -179,10 +179,18 @@ void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOl
     {
         bNewGlobal = bOldGlobal;
         pRangeData = new ScRangeData(*pOldRangeData, &rNewDoc);
+        bool bInserted;
         if (bNewGlobal)
-            rNewDoc.GetRangeName()->insert(pRangeData);
+            bInserted = rNewDoc.GetRangeName()->insert(pRangeData);
         else
-            rNewDoc.GetRangeName(aNewTab)->insert(pRangeData);
+            bInserted = rNewDoc.GetRangeName(aNewTab)->insert(pRangeData);
+        if (!bInserted)
+        {
+            //if this happened we have a real problem
+            delete pRangeData;
+            pToken->SetIndex(-1);
+            OSL_FAIL("inserting the range name should not fail");
+        }
     }
     sal_Int32 nIndex = pRangeData->GetIndex();
     pToken->SetIndex(nIndex);
