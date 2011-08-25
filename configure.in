@@ -9119,7 +9119,7 @@ if test $BUILD_MAX_JOBS -gt $BUILD_NCPUS ; then
 else
     GMAKE_PARALLELISM="$BUILD_NCPUS"
 fi
-GMAKE_MODULE_PARALLELISM="$BUILD_NCPUS"
+GMAKE_MODULE_PARALLELISM="$BUILD_MAX_JOBS"
 if test "$no_parallelism_make" = "YES" ; then
     if test -z "$with_num_cpus"; then
         GMAKE_PARALLELISM="1";
