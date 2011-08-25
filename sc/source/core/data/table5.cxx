@@ -181,24 +181,24 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
         //  Mittelteil: Breaks verteilen
 
-    sal_Bool bRepeatCol = ( nRepeatStartX != SCCOL_REPEAT_NONE );
-    sal_Bool bColFound = false;
+    bool bRepeatCol = ( nRepeatStartX != SCCOL_REPEAT_NONE );
+    bool bColFound = false;
     long nSizeX = 0;
     for (nX=nStartCol; nX<=nEndCol; nX++)
     {
-        sal_Bool bStartOfPage = false;
+        bool bStartOfPage = false;
         long nThisX = ColHidden(nX) ? 0 : pColWidth[nX];
         bool bManualBreak = HasColManualBreak(nX);
         if ( (nSizeX+nThisX > nPageSizeX) || (bManualBreak && !bSkipColBreaks) )
         {
             SetColBreak(nX, true, false);
             nSizeX = 0;
-            bStartOfPage = sal_True;
+            bStartOfPage = true;
         }
         else if (nX != nStartCol)
             RemoveColBreak(nX, true, false);
         else
-            bStartOfPage = sal_True;
+            bStartOfPage = true;
 
         if ( bStartOfPage && bRepeatCol && nX>nRepeatStartX && !bColFound )
         {
@@ -207,7 +207,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
                 nPageSizeX -= ColHidden(i) ? 0 : pColWidth[i];
             while (nX<=nRepeatEndX)
                 RemoveColBreak(++nX, true, false);
-            bColFound = sal_True;
+            bColFound = true;
         }
 
         nSizeX += nThisX;
@@ -217,15 +217,15 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     RemoveRowPageBreaks(nStartRow+1, nEndRow);
 
     // And set new page breaks.
-    sal_Bool bRepeatRow = ( nRepeatStartY != SCROW_REPEAT_NONE );
-    sal_Bool bRowFound = false;
+    bool bRepeatRow = ( nRepeatStartY != SCROW_REPEAT_NONE );
+    bool bRowFound = false;
     long nSizeY = 0;
     ScFlatBoolRowSegments::ForwardIterator aIterHidden(*mpHiddenRows);
     ScFlatUInt16RowSegments::ForwardIterator aIterHeights(*mpRowHeights);
     SCROW nNextManualBreak = GetNextManualBreak(nStartRow); // -1 => no more manual breaks
     for (SCROW nY = nStartRow; nY <= nEndRow; ++nY)
     {
-        sal_Bool bStartOfPage = false;
+        bool bStartOfPage = false;
         bool bThisRowHidden = false;
         aIterHidden.getValue(nY, bThisRowHidden);
         long nThisY = 0;
@@ -249,12 +249,12 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         {
             SetRowBreak(nY, true, false);
             nSizeY = 0;
-            bStartOfPage = sal_True;
+            bStartOfPage = true;
         }
         else if (nY != nStartRow)
             ; // page break already removed
         else
-            bStartOfPage = sal_True;
+            bStartOfPage = true;
 
         if ( bStartOfPage && bRepeatRow && nY>nRepeatStartY && !bRowFound )
         {
@@ -267,7 +267,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
             nPageSizeY -= nHeights;
             if (nY <= nRepeatEndY)
                 RemoveRowPageBreaks(nY, nRepeatEndY);
-            bRowFound = sal_True;
+            bRowFound = true;
         }
 
         if (bThisRowHidden)
@@ -332,7 +332,7 @@ void ScTable::RemoveManualBreaks()
         SetStreamValid(false);
 }
 
-sal_Bool ScTable::HasManualBreaks() const
+bool ScTable::HasManualBreaks() const
 {
     return !maRowManualBreaks.empty() || !maColManualBreaks.empty();
 }
@@ -1047,14 +1047,14 @@ void ScTable::SetPageSize( const Size& rSize )
         if (aPageSizeTwips != rSize)
             InvalidatePageBreaks();
 
-        bPageSizeValid = sal_True;
+        bPageSizeValid = true;
         aPageSizeTwips = rSize;
     }
     else
         bPageSizeValid = false;
 }
 
-sal_Bool ScTable::IsProtected() const
+bool ScTable::IsProtected() const
 {
     return pTabProtection.get() && pTabProtection->isProtected();
 }
@@ -1154,7 +1154,7 @@ void ScTable::PageStyleModified( const String& rNewName )
 }
 
 void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,
-                                   sal_Bool bNumFormatChanged, sal_Bool bBroadcast )
+                                   bool bNumFormatChanged, bool bBroadcast )
 {
     if ( pAdrFrom && !pAdrTo )
     {

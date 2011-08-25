@@ -1228,10 +1228,10 @@ sal_Bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAtt
     if ( bRecord && !pDoc->IsUndoEnabled() )
         bRecord = false;
 
-    sal_Bool bImportingXML = pDoc->IsImportingXML();
+    bool bImportingXML = pDoc->IsImportingXML();
     // Cell formats can still be set if the range isn't editable only because of matrix formulas.
     // #i62483# When loading XML, the check can be skipped altogether.
-    sal_Bool bOnlyNotBecauseOfMatrix;
+    bool bOnlyNotBecauseOfMatrix;
     if ( !bImportingXML && !pDoc->IsSelectionEditable( rMark, &bOnlyNotBecauseOfMatrix )
             && !bOnlyNotBecauseOfMatrix )
     {
@@ -1291,10 +1291,10 @@ sal_Bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const String& rStyleNam
     if ( bRecord && !pDoc->IsUndoEnabled() )
         bRecord = false;
 
-    sal_Bool bImportingXML = pDoc->IsImportingXML();
+    bool bImportingXML = pDoc->IsImportingXML();
     // Cell formats can still be set if the range isn't editable only because of matrix formulas.
     // #i62483# When loading XML, the check can be skipped altogether.
-    sal_Bool bOnlyNotBecauseOfMatrix;
+    bool bOnlyNotBecauseOfMatrix;
     if ( !bImportingXML && !pDoc->IsSelectionEditable( rMark, &bOnlyNotBecauseOfMatrix )
             && !bOnlyNotBecauseOfMatrix )
     {
@@ -2070,7 +2070,7 @@ sal_Bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMa
         rDocShell.UpdatePaintExt( nExtFlags, nStartCol, nStartRow, *itr, nEndCol, nEndRow, *itr );
     }
 
-    sal_Bool bUndoOutline = false;
+    bool bUndoOutline = false;
     switch (eCmd)
     {
         case DEL_CELLSUP:

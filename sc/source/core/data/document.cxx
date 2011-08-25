@@ -1190,7 +1190,7 @@ sal_Bool ScDocument::InsertRow( const ScRange& rRange, ScDocument* pRefUndoDoc )
 void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
                             SCCOL nEndCol,   SCTAB nEndTab,
                             SCROW nStartRow, SCSIZE nSize,
-                            ScDocument* pRefUndoDoc, sal_Bool* pUndoOutline,
+                            ScDocument* pRefUndoDoc, bool* pUndoOutline,
                             const ScMarkData* pTabMark )
 {
     SCTAB i;
@@ -1266,7 +1266,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
 }
 
 
-void ScDocument::DeleteRow( const ScRange& rRange, ScDocument* pRefUndoDoc, sal_Bool* pUndoOutline )
+void ScDocument::DeleteRow( const ScRange& rRange, ScDocument* pRefUndoDoc, bool* pUndoOutline )
 {
     DeleteRow( rRange.aStart.Col(), rRange.aStart.Tab(),
                rRange.aEnd.Col(),   rRange.aEnd.Tab(),
@@ -1385,7 +1385,7 @@ sal_Bool ScDocument::InsertCol( const ScRange& rRange, ScDocument* pRefUndoDoc )
 
 void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTAB nEndTab,
                                 SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc,
-                                sal_Bool* pUndoOutline, const ScMarkData* pTabMark )
+                                bool* pUndoOutline, const ScMarkData* pTabMark )
 {
     SCTAB i;
 
@@ -1460,7 +1460,7 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
 }
 
 
-void ScDocument::DeleteCol( const ScRange& rRange, ScDocument* pRefUndoDoc, sal_Bool* pUndoOutline )
+void ScDocument::DeleteCol( const ScRange& rRange, ScDocument* pRefUndoDoc, bool* pUndoOutline )
 {
     DeleteCol( rRange.aStart.Row(), rRange.aStart.Tab(),
                rRange.aEnd.Row(),   rRange.aEnd.Tab(),
@@ -4769,7 +4769,7 @@ void ScDocument::UnlockTable(SCTAB nTab)
 
 sal_Bool ScDocument::IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow,
-                                        sal_Bool* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
+                                        bool* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
 {
     // import into read-only document is possible
     if ( !bImportingXML && !mbChangeReadOnlyEnabled && pShell && pShell->IsReadOnly() )
@@ -4792,7 +4792,7 @@ sal_Bool ScDocument::IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartR
 
 
 sal_Bool ScDocument::IsSelectionEditable( const ScMarkData& rMark,
-            sal_Bool* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
+            bool* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
 {
     // import into read-only document is possible
     if ( !bImportingXML && !mbChangeReadOnlyEnabled && pShell && pShell->IsReadOnly() )

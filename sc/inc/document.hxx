@@ -550,9 +550,9 @@ public:
 
     sal_Bool            IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow,
-                                        sal_Bool* pOnlyNotBecauseOfMatrix = NULL ) const;
+                                        bool* pOnlyNotBecauseOfMatrix = NULL ) const;
     sal_Bool            IsSelectionEditable( const ScMarkData& rMark,
-                                        sal_Bool* pOnlyNotBecauseOfMatrix = NULL ) const;
+                                        bool* pOnlyNotBecauseOfMatrix = NULL ) const;
     sal_Bool            HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow,
                                             const ScMarkData& rMark ) const;
@@ -769,8 +769,10 @@ public:
 
     SC_DLLPUBLIC void           GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
     SC_DLLPUBLIC void           GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString );
+    SC_DLLPUBLIC rtl::OUString  GetString( SCCOL nCol, SCROW nRow, SCTAB nTab) { rtl::OUString aString; GetString(nCol, nRow, nTab, aString); return aString;}
     SC_DLLPUBLIC void           GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
     SC_DLLPUBLIC double         GetValue( const ScAddress& );
+    SC_DLLPUBLIC double         GetValue( const SCCOL nCol, SCROW nRow, SCTAB nTab) { ScAddress aAdr(nCol, nRow, nTab); return GetValue(aAdr);}
     SC_DLLPUBLIC void           GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue );
     SC_DLLPUBLIC double         RoundValueAsShown( double fVal, sal_uLong nFormat );
     SC_DLLPUBLIC void           GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
@@ -970,10 +972,10 @@ public:
     void            DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
                                SCCOL nEndCol,   SCTAB nEndTab,
                                SCROW nStartRow, SCSIZE nSize,
-                               ScDocument* pRefUndoDoc = NULL, sal_Bool* pUndoOutline = NULL,
+                               ScDocument* pRefUndoDoc = NULL, bool* pUndoOutline = NULL,
                                const ScMarkData* pTabMark = NULL );
     SC_DLLPUBLIC void   DeleteRow( const ScRange& rRange,
-                               ScDocument* pRefUndoDoc = NULL, sal_Bool* pUndoOutline = NULL );
+                               ScDocument* pRefUndoDoc = NULL, bool* pUndoOutline = NULL );
     sal_Bool            InsertCol( SCROW nStartRow, SCTAB nStartTab,
                                SCROW nEndRow,   SCTAB nEndTab,
                                SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc = NULL,
@@ -982,10 +984,10 @@ public:
     void            DeleteCol( SCROW nStartRow, SCTAB nStartTab,
                                SCROW nEndRow, SCTAB nEndTab,
                                SCCOL nStartCol, SCSIZE nSize,
-                               ScDocument* pRefUndoDoc = NULL, sal_Bool* pUndoOutline = NULL,
+                               ScDocument* pRefUndoDoc = NULL, bool* pUndoOutline = NULL,
                                const ScMarkData* pTabMark = NULL );
     void            DeleteCol( const ScRange& rRange,
-                               ScDocument* pRefUndoDoc = NULL, sal_Bool* pUndoOutline = NULL );
+                               ScDocument* pRefUndoDoc = NULL, bool* pUndoOutline = NULL );
 
     sal_Bool            CanInsertRow( const ScRange& rRange ) const;
     sal_Bool            CanInsertCol( const ScRange& rRange ) const;

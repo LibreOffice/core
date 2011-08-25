@@ -301,8 +301,8 @@ void ScXMLTableColsContext::EndElement()
                 ScOutlineArray* pColArray = pOutlineTable ? pOutlineTable->GetColArray() : NULL;
                 if (pColArray)
                 {
-                    sal_Bool bResized;
-                    pColArray->Insert(static_cast<SCCOL>(nGroupStartCol), static_cast<SCCOL>(nGroupEndCol), bResized, !bGroupDisplay, sal_True);
+                    bool bResized;
+                    pColArray->Insert(static_cast<SCCOL>(nGroupStartCol), static_cast<SCCOL>(nGroupEndCol), bResized, !bGroupDisplay, true);
                 }
             }
         }

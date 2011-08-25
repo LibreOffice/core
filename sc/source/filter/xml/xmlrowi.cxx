@@ -352,8 +352,8 @@ void ScXMLTableRowsContext::EndElement()
                 ScXMLImport::MutexGuard aGuard(GetScImport());
                 ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(nSheet, sal_True));
                 ScOutlineArray* pRowArray(pOutlineTable->GetRowArray());
-                sal_Bool bResized;
-                pRowArray->Insert(static_cast<SCROW>(nGroupStartRow), static_cast<SCROW>(nGroupEndRow), bResized, !bGroupDisplay, sal_True);
+                bool bResized;
+                pRowArray->Insert(static_cast<SCROW>(nGroupStartRow), static_cast<SCROW>(nGroupEndRow), bResized, !bGroupDisplay, true);
             }
         }
     }

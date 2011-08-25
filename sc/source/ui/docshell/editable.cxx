@@ -89,7 +89,7 @@ void ScEditableTester::TestBlock( ScDocument* pDoc, SCTAB nTab,
 {
     if ( bIsEditable || bOnlyMatrix )
     {
-        sal_Bool bThisMatrix;
+        bool bThisMatrix;
         if ( !pDoc->IsBlockEditable( nTab, nStartCol, nStartRow, nEndCol, nEndRow, &bThisMatrix ) )
         {
             bIsEditable = false;
@@ -125,7 +125,7 @@ void ScEditableTester::TestSelection( ScDocument* pDoc, const ScMarkData& rMark 
 {
     if ( bIsEditable || bOnlyMatrix )
     {
-        sal_Bool bThisMatrix;
+        bool bThisMatrix;
         if ( !pDoc->IsSelectionEditable( rMark, &bThisMatrix ) )
         {
             bIsEditable = false;
@@ -139,7 +139,7 @@ void ScEditableTester::TestView( ScViewFunc* pView )
 {
     if ( bIsEditable || bOnlyMatrix )
     {
-        sal_Bool bThisMatrix;
+        bool bThisMatrix;
         if ( !pView->SelectionEditable( &bThisMatrix ) )
         {
             bIsEditable = false;

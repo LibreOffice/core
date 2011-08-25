@@ -799,7 +799,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                 ScOutlineArray* pOutArr = pDestDoc->GetOutlineTable( nTab, sal_True )->GetRowArray();
                 SCROW nOutStart = nRow+nArrY;
                 SCROW nOutEnd = nRow+nArrY+nNeeded-1;
-                sal_Bool bSize = false;
+                bool bSize = false;
                 pOutArr->Insert( nOutStart, nOutEnd, bSize );
                 pDestDoc->InitializeNoteCaptions(nTab);
                 for (SCROW nOutRow=nOutStart; nOutRow<=nOutEnd; nOutRow++)

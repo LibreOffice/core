@@ -337,7 +337,7 @@ public:
     void            EditNote();
 
     void            ForgetFormatArea()      { bFormatValid = false; }
-    sal_Bool            SelectionEditable( sal_Bool* pOnlyNotBecauseOfMatrix = NULL );
+    sal_Bool            SelectionEditable( bool* pOnlyNotBecauseOfMatrix = NULL );
 
         // Amelia Wang
         SC_DLLPUBLIC void                   DataFormPutData( SCROW nCurrentRow ,

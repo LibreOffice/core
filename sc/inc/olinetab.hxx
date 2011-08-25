@@ -101,8 +101,8 @@ public:
     sal_Bool                    FindTouchedLevel( SCCOLROW nBlockStart, SCCOLROW nBlockEnd,
                                                 sal_uInt16& rFindLevel ) const;
 
-    sal_Bool                    Insert( SCCOLROW nStartPos, SCCOLROW nEndPos, sal_Bool& rSizeChanged,
-                                    sal_Bool bHidden = false, sal_Bool bVisible = sal_True );
+    bool                    Insert( SCCOLROW nStartPos, SCCOLROW nEndPos, bool& rSizeChanged,
+                                    bool bHidden = false, bool bVisible = true );
     sal_Bool                    Remove( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, sal_Bool& rSizeChanged );
 
     ScOutlineEntry*         GetEntry( sal_uInt16 nLevel, sal_uInt16 nIndex ) const;

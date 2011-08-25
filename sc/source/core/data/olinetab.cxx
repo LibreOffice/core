@@ -181,8 +181,8 @@ void ScOutlineArray::FindEntry( SCCOLROW nSearchPos, sal_uInt16& rFindLevel, sal
     }
 }
 
-sal_Bool ScOutlineArray::Insert( SCCOLROW nStartCol, SCCOLROW nEndCol, sal_Bool& rSizeChanged,
-                                sal_Bool bHidden, sal_Bool bVisible )
+bool ScOutlineArray::Insert( SCCOLROW nStartCol, SCCOLROW nEndCol, bool& rSizeChanged,
+                                bool bHidden, bool bVisible )
 {
     rSizeChanged = false;
 
@@ -190,9 +190,9 @@ sal_Bool ScOutlineArray::Insert( SCCOLROW nStartCol, SCCOLROW nEndCol, sal_Bool&
     sal_uInt16 nStartIndex;
     sal_uInt16 nEndLevel;
     sal_uInt16 nEndIndex;
-    sal_Bool bFound = false;
+    bool bFound = false;
 
-    sal_Bool bCont;
+    bool bCont;
     sal_uInt16 nFindMax;
     FindEntry( nStartCol, nStartLevel, nStartIndex );       // nLevel = neuer Level (alter+1) !!!
     FindEntry( nEndCol, nEndLevel, nEndIndex );
@@ -202,7 +202,7 @@ sal_Bool ScOutlineArray::Insert( SCCOLROW nStartCol, SCCOLROW nEndCol, sal_Bool&
         bCont = false;
 
         if ( nStartLevel == nEndLevel && nStartIndex == nEndIndex && nStartLevel < SC_OL_MAXDEPTH )
-            bFound = sal_True;
+            bFound = true;
 
         if (!bFound)
         {
@@ -217,7 +217,7 @@ sal_Bool ScOutlineArray::Insert( SCCOLROW nStartCol, SCCOLROW nEndCol, sal_Bool&
                     if ( ((ScOutlineEntry*)aCollections[nEndLevel-1].At(nEndIndex))->
                                 GetEnd() == nEndCol )
                         FindEntry( nEndCol, nEndLevel, nEndIndex, nFindMax );
-                bCont = sal_True;
+                bCont = true;
             }
         }
     }
@@ -230,11 +230,11 @@ sal_Bool ScOutlineArray::Insert( SCCOLROW nStartCol, SCCOLROW nEndCol, sal_Bool&
 
     //  untere verschieben
 
-    sal_Bool bNeedSize = false;
+    bool bNeedSize = false;
     for ( short nMoveLevel = nDepth-1; nMoveLevel >= (short) nLevel; nMoveLevel-- )
     {
         sal_uInt16 nCount = aCollections[nMoveLevel].GetCount();
-        sal_Bool bMoved = false;
+        bool bMoved = false;
         for ( sal_uInt16 i=0; i<nCount; i += bMoved ? 0 : 1 )
         {
             ScOutlineEntry* pEntry = (ScOutlineEntry*) aCollections[nMoveLevel].At(i);
@@ -249,7 +249,7 @@ sal_Bool ScOutlineArray::Insert( SCCOLROW nStartCol, SCCOLROW nEndCol, sal_Bool&
                 aCollections[nMoveLevel+1].Insert( new ScOutlineEntry( *pEntry ) );
                 aCollections[nMoveLevel].AtFree( i );
                 nCount = aCollections[nMoveLevel].GetCount();
-                bMoved = sal_True;
+                bMoved = true;
                 if (nMoveLevel == (short) nDepth - 1)
                     bNeedSize = sal_True;
             }
@@ -261,20 +261,20 @@ sal_Bool ScOutlineArray::Insert( SCCOLROW nStartCol, SCCOLROW nEndCol, sal_Bool&
     if (bNeedSize)
     {
         ++nDepth;
-        rSizeChanged = sal_True;
+        rSizeChanged = true;
     }
 
     if (nDepth <= nLevel)
     {
         nDepth = nLevel+1;
-        rSizeChanged = sal_True;
+        rSizeChanged = true;
     }
 
     ScOutlineEntry* pNewEntry = new ScOutlineEntry( nStartCol, nEndCol+1-nStartCol, bHidden );
     pNewEntry->SetVisible( bVisible );
     aCollections[nLevel].Insert( pNewEntry );
 
-    return sal_True;
+    return true;
 }
 
 sal_Bool ScOutlineArray::FindTouchedLevel( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, sal_uInt16& rFindLevel ) const

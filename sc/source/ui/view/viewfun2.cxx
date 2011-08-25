@@ -2946,7 +2946,7 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
                                          sal_Bool bColorOnly )
 {
     // Not editable only due to a matrix? Attribute is ok anyhow.
-    sal_Bool bOnlyNotBecauseOfMatrix;
+    bool bOnlyNotBecauseOfMatrix;
     if ( !SelectionEditable( &bOnlyNotBecauseOfMatrix ) && !bOnlyNotBecauseOfMatrix )
     {
         ErrorMessage(STR_PROTECTIONERR);
