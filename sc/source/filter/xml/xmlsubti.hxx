@@ -143,7 +143,7 @@ private:
     sal_Int16                           nCurrentDrawPage;
     sal_Int16                           nCurrentXShapes;
     SCTAB                               nCurrentSheet;
-    ScMyTableData*                      pLastTable;
+    ScMyTableData*                      pCurrentTab;
 
     sal_Bool                            IsMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
                                                 const sal_Int32 nCol, const sal_Int32 nRow,
