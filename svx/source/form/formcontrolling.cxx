@@ -281,26 +281,6 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    FormControllerHelper::FormControllerHelper( const ::comphelper::ComponentContext& _rContext,
-            const Reference< XForm >& _rxForm, IControllerFeatureInvalidation* _pInvalidationCallback )
-        :m_aContext( _rContext )
-        ,m_pInvalidationCallback( _pInvalidationCallback )
-    {
-        osl_incrementInterlockedCount( &m_refCount );
-        try
-        {
-            m_xFormOperations = FormOperations::createWithForm( m_aContext.getUNOContext(), _rxForm );
-            if ( m_xFormOperations.is() )
-                m_xFormOperations->setFeatureInvalidation( this );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-        osl_decrementInterlockedCount( &m_refCount );
-    }
-
-    //--------------------------------------------------------------------
     FormControllerHelper::~FormControllerHelper( )
     {
         try

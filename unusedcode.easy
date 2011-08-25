@@ -2461,6 +2461,7 @@ comphelper::OTruncatedTransactedFileStream::OTruncatedTransactedFileStream(rtl::
 comphelper::OfficeResourceBundle::OfficeResourceBundle(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, rtl::OUString const&)
 comphelper::PropertySetHelper::PropertySetHelper()
 comphelper::PropertySetHelper::setInfo(comphelper::PropertySetInfo*)
+comphelper::PropertySetInfo::add(comphelper::PropertyMapEntry*, int)
 comphelper::ResourceBasedEventLogger::ResourceBasedEventLogger(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, rtl::OUString const&, rtl::OUString const&)
 comphelper::SequenceAsHashMap::getAsConstAnyList(unsigned char) const
 comphelper::ServiceInfoHelper::concatSequences(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<rtl::OUString> const&)
