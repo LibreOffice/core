@@ -278,30 +278,6 @@ PropertyValueSet::PropertyValueSet(
 }
 
 //=========================================================================
-PropertyValueSet::PropertyValueSet(
-            const Reference< XMultiServiceFactory >& rxSMgr,
-            const Sequence< com::sun::star::beans::PropertyValue >& rValues )
-: PROPERTYVALUESET_INIT()
-{
-    sal_Int32 nCount = rValues.getLength();
-    if ( nCount )
-    {
-        const com::sun::star::beans::PropertyValue* pValues
-            = rValues.getConstArray();
-
-        for ( sal_Int32 n = 0; n < nCount; ++n )
-        {
-            const com::sun::star::beans::PropertyValue& rValue = pValues[ n ];
-            appendObject( Property( rValue.Name,
-                                      rValue.Handle,
-                                      rValue.Value.getValueType(),
-                                      0 ),
-                          rValue.Value );
-        }
-    }
-}
-
-//=========================================================================
 // virtual
 PropertyValueSet::~PropertyValueSet()
 {
@@ -677,12 +653,6 @@ const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
 }
 
 //=========================================================================
-sal_Int32 PropertyValueSet::getLength() const
-{
-    return m_pValues->size();
-}
-
-//=========================================================================
 void PropertyValueSet::appendString( const ::rtl::OUString& rPropName,
                                      const OUString& rValue )
 {
@@ -697,66 +667,10 @@ void PropertyValueSet::appendBoolean( const ::rtl::OUString& rPropName,
 }
 
 //=========================================================================
-void PropertyValueSet::appendByte( const ::rtl::OUString& rPropName,
-                                   sal_Int8 nValue )
-{
-    SETVALUE_IMPL( rPropName, BYTE_VALUE_SET, nByte, nValue );
-}
-
-//=========================================================================
-void PropertyValueSet::appendShort( const ::rtl::OUString& rPropName,
-                                    sal_Int16 nValue )
-{
-    SETVALUE_IMPL( rPropName, SHORT_VALUE_SET, nShort, nValue );
-}
-
-//=========================================================================
-void PropertyValueSet::appendInt( const ::rtl::OUString& rPropName,
-                                  sal_Int32 nValue )
-{
-    SETVALUE_IMPL( rPropName, INT_VALUE_SET, nInt, nValue );
-}
-
-//=========================================================================
 void PropertyValueSet::appendLong( const ::rtl::OUString& rPropName,
                                    sal_Int64 nValue )
 {
     SETVALUE_IMPL( rPropName, LONG_VALUE_SET, nLong, nValue );
-}
-
-//=========================================================================
-void PropertyValueSet::appendFloat( const ::rtl::OUString& rPropName,
-                                    float nValue )
-{
-    SETVALUE_IMPL( rPropName, FLOAT_VALUE_SET, nFloat, nValue );
-}
-
-//=========================================================================
-void PropertyValueSet::appendDouble( const ::rtl::OUString& rPropName,
-                                     double nValue )
-{
-    SETVALUE_IMPL( rPropName, DOUBLE_VALUE_SET, nDouble, nValue );
-}
-
-//=========================================================================
-void PropertyValueSet::appendBytes( const ::rtl::OUString& rPropName,
-                                    const Sequence< sal_Int8 >& rValue )
-{
-    SETVALUE_IMPL( rPropName, BYTES_VALUE_SET, aBytes, rValue );
-}
-
-//=========================================================================
-void PropertyValueSet::appendDate( const ::rtl::OUString& rPropName,
-                                   const Date& rValue )
-{
-    SETVALUE_IMPL( rPropName, DATE_VALUE_SET, aDate, rValue );
-}
-
-//=========================================================================
-void PropertyValueSet::appendTime( const ::rtl::OUString& rPropName,
-                                   const Time& rValue )
-{
-    SETVALUE_IMPL( rPropName, TIME_VALUE_SET, aTime, rValue );
 }
 
 //=========================================================================
@@ -767,54 +681,10 @@ void PropertyValueSet::appendTimestamp( const ::rtl::OUString& rPropName,
 }
 
 //=========================================================================
-void PropertyValueSet::appendBinaryStream(
-                                const ::rtl::OUString& rPropName,
-                                const Reference< XInputStream >& rValue )
-{
-    SETVALUE_IMPL( rPropName, BINARYSTREAM_VALUE_SET, xBinaryStream, rValue );
-}
-
-//=========================================================================
-void PropertyValueSet::appendCharacterStream(
-                                const ::rtl::OUString& rPropName,
-                                const Reference< XInputStream >& rValue )
-{
-    SETVALUE_IMPL( rPropName, CHARACTERSTREAM_VALUE_SET, xCharacterStream, rValue );
-}
-
-//=========================================================================
 void PropertyValueSet::appendObject( const ::rtl::OUString& rPropName,
                                      const Any& rValue )
 {
     SETVALUE_IMPL( rPropName, OBJECT_VALUE_SET, aObject, rValue );
-}
-
-//=========================================================================
-void PropertyValueSet::appendRef( const ::rtl::OUString& rPropName,
-                                  const Reference< XRef >& rValue )
-{
-    SETVALUE_IMPL( rPropName, REF_VALUE_SET, xRef, rValue );
-}
-
-//=========================================================================
-void PropertyValueSet::appendBlob( const ::rtl::OUString& rPropName,
-                                   const Reference< XBlob >& rValue )
-{
-    SETVALUE_IMPL( rPropName, BLOB_VALUE_SET, xBlob, rValue );
-}
-
-//=========================================================================
-void PropertyValueSet::appendClob( const ::rtl::OUString& rPropName,
-                                   const Reference< XClob >& rValue )
-{
-    SETVALUE_IMPL( rPropName, CLOB_VALUE_SET, xClob, rValue );
-}
-
-//=========================================================================
-void PropertyValueSet::appendArray( const ::rtl::OUString& rPropName,
-                                    const Reference< XArray >& rValue )
-{
-    SETVALUE_IMPL( rPropName, ARRAY_VALUE_SET, xArray, rValue );
 }
 
 //=========================================================================

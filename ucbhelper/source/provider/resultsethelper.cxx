@@ -60,16 +60,6 @@ namespace ucbhelper {
 
 //=========================================================================
 ResultSetImplHelper::ResultSetImplHelper(
-    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr )
-: m_pDisposeEventListeners( 0 ),
-  m_bStatic( sal_False ),
-  m_bInitDone( sal_False ),
-  m_xSMgr( rxSMgr )
-{
-}
-
-//=========================================================================
-ResultSetImplHelper::ResultSetImplHelper(
     const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
     const com::sun::star::ucb::OpenCommandArgument2& rCommand )
 : m_pDisposeEventListeners( 0 ),

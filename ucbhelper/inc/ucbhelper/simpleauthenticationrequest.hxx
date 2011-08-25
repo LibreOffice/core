@@ -94,26 +94,6 @@ public:
       * @param rPassword contains a password, if available (for instance from
       *        a previous try).
       * @param rAccount contains an account, if applicable.
-      */
-    SimpleAuthenticationRequest( const rtl::OUString & rURL,
-                                 const rtl::OUString & rServerName,
-                                 const rtl::OUString & rRealm,
-                                 const rtl::OUString & rUserName,
-                                 const rtl::OUString & rPassword,
-                                 const rtl::OUString & rAccount
-                                    = rtl::OUString() );
-
-    /**
-      * Constructor.
-      *
-      * @param rURL contains a URL for which authentication is requested.
-      * @param rServerName contains a server name.
-      * @param rRealm contains a realm, if applicable.
-      * @param rUserName contains a username, if available (for instance from
-      *        a previous try).
-      * @param rPassword contains a password, if available (for instance from
-      *        a previous try).
-      * @param rAccount contains an account, if applicable.
       * @param bAllowPersistentStoring specifies if the credentials should
       *        be stored in the passowrd container persistently
       * @param bAllowUseSystemCredntials specifies if requesting client is
@@ -159,43 +139,6 @@ public:
                                  EntityType eAccountType = ENTITY_NA,
                                  const rtl::OUString & rAccount
                                     = rtl::OUString() );
-
-     /**
-      * Constructor.
-      *
-      * @param rURL contains a URL for which authentication is requested.
-      * @param rServerName contains a server name.
-      * @param eRealmType specifies whether a realm is applicable and
-               modifiable.
-      * @param rRealm contains a realm, if applicable.
-      * @param eUserNameType specifies whether a username is applicable and
-               modifiable.
-      * @param rUserName contains a username, if available (for instance from
-      *        a previous try).
-      * @param ePasswordType specifies whether a password is applicable and
-               modifiable.
-      * @param rPassword contains a password, if available (for instance from
-      *        a previous try).
-      * @param eAccountType specifies whether an account is applicable and
-               modifiable.
-      * @param rAccount contains an account, if applicable.
-      * @param bAllowPersistentStoring specifies if the credentials should
-      *        be stored in the passowrd container persistently
-      * @param bAllowUseSystemCredntials specifies if requesting client is
-      *        able to obtain and use system credentials for authentication
-      */
-    SimpleAuthenticationRequest( const rtl::OUString & rURL,
-                                 const rtl::OUString & rServerName,
-                                 EntityType eRealmType,
-                                 const rtl::OUString & rRealm,
-                                 EntityType eUserNameType,
-                                 const rtl::OUString & rUserName,
-                                 EntityType ePasswordType,
-                                 const rtl::OUString & rPassword,
-                                 EntityType eAccountType,
-                                 const rtl::OUString & rAccount,
-                                 sal_Bool bAllowPersistentStoring,
-                                 sal_Bool bAllowUseSystemCredentials );
 
     /**
       * This method returns the supplier for the missing authentication data,

@@ -954,26 +954,6 @@ void ContentImplHelper::notifyPropertySetInfoChange(
 }
 
 //=========================================================================
-void ContentImplHelper::notifyCommandInfoChange(
-    const com::sun::star::ucb::CommandInfoChangeEvent& evt ) const
-{
-    if ( !m_pImpl->m_pCommandChangeListeners )
-        return;
-
-    // Notify event listeners.
-    cppu::OInterfaceIteratorHelper aIter(
-        *m_pImpl->m_pCommandChangeListeners );
-    while ( aIter.hasMoreElements() )
-    {
-        // Propagate event.
-        uno::Reference< com::sun::star::ucb::XCommandInfoChangeListener >
-            xListener( aIter.next(), uno::UNO_QUERY );
-        if ( xListener.is() )
-            xListener->commandInfoChange( evt );
-    }
-}
-
-//=========================================================================
 void ContentImplHelper::notifyContentEvent(
     const com::sun::star::ucb::ContentEvent& evt ) const
 {
