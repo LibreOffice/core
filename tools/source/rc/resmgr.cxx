@@ -932,9 +932,10 @@ void ResMgr::Init( const OUString& rFileName )
     if ( !pImpRes )
     {
 #ifdef DBG_UTIL
-        ByteString aStr( "Resourcefile not found:\n" );
-        aStr += ByteString( OUStringToOString( rFileName, RTL_TEXTENCODING_UTF8 ) );
-        OSL_FAIL( aStr.GetBuffer() );
+        rtl::OStringBuffer aStr(
+            RTL_CONSTASCII_STRINGPARAM("Resourcefile not found:\n"));
+        aStr.append(OUStringToOString(rFileName, RTL_TEXTENCODING_UTF8));
+        OSL_FAIL(aStr.getStr());
 #endif
         RscException_Impl();
     }
@@ -950,9 +951,11 @@ void ResMgr::Init( const OUString& rFileName )
             InternalResMgr::FreeGlobalRes( aResHandle, pVoid );
         else
         {
-            ByteString aStr( "Wrong version:\n" );
-            aStr += ByteString( OUStringToOString( pImpRes->aFileName, RTL_TEXTENCODING_UTF8 ) );
-            DbgError( aStr.GetBuffer() );
+            rtl::OStringBuffer aStr(
+                RTL_CONSTASCII_STRINGPARAM("Wrong version:\n"));
+            aStr.append(rtl::OUStringToOString(pImpRes->aFileName,
+                RTL_TEXTENCODING_UTF8));
+            DbgError(aStr.getStr());
         }
     }
 #endif

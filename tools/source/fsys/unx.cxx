@@ -319,14 +319,14 @@ sal_uInt16 DirReader_Impl::Read()
     if ( ( pDir->eAttrMask & FSYS_KIND_DIR || pDir->eAttrMask & FSYS_KIND_FILE ) &&
          ( ( pDosEntry = readdir( pDosDir ) ) != NULL ) )
     {
-    String aD_Name(pDosEntry->d_name, osl_getThreadTextEncoding());
+        String aD_Name(pDosEntry->d_name, osl_getThreadTextEncoding());
         if ( pDir->aNameMask.Matches( aD_Name  ) )
         {
             DirEntryFlag eFlag =
                     0 == strcmp( pDosEntry->d_name, "." ) ? FSYS_FLAG_CURRENT
                 :   0 == strcmp( pDosEntry->d_name, ".." ) ? FSYS_FLAG_PARENT
                 :   FSYS_FLAG_NORMAL;
-            DirEntry *pTemp = new DirEntry( ByteString(pDosEntry->d_name), eFlag, FSYS_STYLE_UNX );
+            DirEntry *pTemp = new DirEntry(rtl::OString(pDosEntry->d_name), eFlag, FSYS_STYLE_UNX);
             if ( pParent )
                 pTemp->ImpChangeParent( new DirEntry( *pParent ), sal_False);
             FileStat aStat( *pTemp );
