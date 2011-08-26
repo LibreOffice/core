@@ -2663,9 +2663,9 @@ void ScPrintFunc::ApplyPrintSettings()
 }
 
 //--------------------------------------------------------------------
-//  rPageRanges   = Range fuer alle Tabellen
-//  nStartPage    = in rPageRanges beginnen bei nStartPage
-//  nDisplayStart = lfd. Nummer fuer Anzeige der Seitennummer
+//  rPageRanges   = range for all tables
+//  nStartPage    = rPageRanges starts at nStartPage
+//  nDisplayStart = continious number for displaying the page number
 
 long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                                 long nStartPage, long nDisplayStart, sal_Bool bDoPrint,
@@ -2698,14 +2698,14 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
     long nPrinted = 0;
     long nEndPage = rPageRanges.GetTotalRange().Max();
 
-    sal_uInt16 nRepeats = 1;                    // wie oft durchgehen ?
+    sal_uInt16 nRepeats = 1;
     if (bMultiArea)
         nRepeats = pDoc->GetPrintRangeCount(nPrintTab);
     for (sal_uInt16 nStep=0; nStep<nRepeats; nStep++)
     {
-        if (bMultiArea)                     // Bereich neu belegen ?
+        if (bMultiArea)                     // replace area
         {
-            CalcZoom(nStep);                // setzt auch nStartCol etc. neu
+            CalcZoom(nStep);                // also sets nStartCol etc. new
             InitModes();
         }
 
@@ -2716,7 +2716,7 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
         size_t nCountX;
         size_t nCountY;
 
-        if (aTableParam.bTopDown)                           // von oben nach unten
+        if (aTableParam.bTopDown)                           // top-bottom
         {
             nX1 = nStartCol;
             for (nCountX=0; nCountX<nPagesX; nCountX++)
@@ -2736,7 +2736,7 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                             if ( pProgress )
                             {
                                 pProgress->SetState( nPageNo+nStartPage+1, nEndPage );
-                                pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
+                                pProgress->Reschedule(); //does the user want to continue
                             }
                             ++nPrinted;
                         }
@@ -2746,7 +2746,7 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                 nX1 = nX2 + 1;
             }
         }
-        else                                                // von links nach rechts
+        else                                                // left to right
         {
             for (nCountY=0; nCountY<nPagesY; nCountY++)
             {
@@ -2766,7 +2766,8 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                             if ( pProgress )
                             {
                                 pProgress->SetState( nPageNo+nStartPage+1, nEndPage );
-                                pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
+                                pProgress->Reschedule(); //does the user want to continue
+
                             }
                             ++nPrinted;
                         }
@@ -2795,7 +2796,7 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                 if ( pProgress && bPageSelected )
                 {
                     pProgress->SetState( nPageNo+nStartPage+1, nEndPage );
-                    pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
+                    pProgress->Reschedule(); //does the user want to continue
                 }
                 if (bPageSelected)
                 {
@@ -2811,12 +2812,12 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
     while (nNoteAdd);
 
     if ( bMultiArea )
-        ResetBreaks(nPrintTab);                         // Breaks fuer Anzeige richtig
+        ResetBreaks(nPrintTab);                         //breaks correct for displaying
 
     return nPrinted;
 }
 
-void ScPrintFunc::CalcZoom( sal_uInt16 nRangeNo )                       // Zoom berechnen
+void ScPrintFunc::CalcZoom( sal_uInt16 nRangeNo )                       // calculate zoom
 {
     sal_uInt16 nRCount = pDoc->GetPrintRangeCount( nPrintTab );
     const ScRange* pThisRange = NULL;
@@ -2830,7 +2831,7 @@ void ScPrintFunc::CalcZoom( sal_uInt16 nRangeNo )                       // Zoom 
         nEndRow   = pThisRange->aEnd  .Row();
     }
 
-    if (!AdjustPrintArea(false))                        // leer
+    if (!AdjustPrintArea(false))                        // empty
     {
         nZoom = 100;
         nPagesX = nPagesY = nTotalY = 0;
