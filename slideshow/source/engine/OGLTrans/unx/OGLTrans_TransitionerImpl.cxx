@@ -530,11 +530,10 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
 #endif
 
 #if defined( WNT )
-      const SystemEnvData* pChildSysData = NULL;
       SystemWindowData winData;
       winData.nSize = sizeof(winData);
       pWindow=new SystemChildWindow(pPWindow, 0, &winData, sal_False);
-      pChildSysData = pWindow->GetSystemData();
+      const SystemEnvData* pChildSysData = pWindow->GetSystemData();
 #endif
 
       if( pWindow )
