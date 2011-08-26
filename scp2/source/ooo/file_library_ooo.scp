@@ -1488,9 +1488,10 @@ File gid_File_Lib_XSec_Framework
     Styles = (PACKED);
 End
 
+#if defined(ENABLE_NSS_MODULE) || defined(SYSTEM_MOZILLA)
 File gid_File_Lib_XSec_XmlSec
     TXT_FILE_BODY;
-	#ifdef UNX
+    #ifdef UNX
         Name = STRING(CONCAT2(libxsec_xmlsec,UNXSUFFIX));
     #else
         Name = "xsec_xmlsec.dll";
@@ -1498,6 +1499,7 @@ File gid_File_Lib_XSec_XmlSec
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
+#endif
 
 File gid_File_Lib_XSec_XMLSecurity
     TXT_FILE_BODY;
