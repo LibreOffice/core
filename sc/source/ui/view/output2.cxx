@@ -3984,16 +3984,14 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
         // for break, the first GetOutputArea call is sufficient
         GetOutputArea( nXForPos, nArrYForPos, rParam.mnPosX, rParam.mnPosY, rParam.mnCellX, rParam.mnCellY, nNeededPixel,
                        *rParam.mpPattern, sal::static_int_cast<sal_uInt16>(eOutHorJust),
-                       rParam.mbCellIsValue || bRepeat || bShrink, false, false, aAreaParam );
+                       true, false, false, aAreaParam );
 
-        if ( bShrink )
-        {
-            ShrinkEditEngine( *rParam.mpEngine, aAreaParam.maAlignRect,
-                nLeftM, nTopM, nRightM, nBottomM, true,
-                sal::static_int_cast<sal_uInt16>(rParam.meOrient), 0, rParam.mbPixelToLogic,
-                nEngineWidth, nEngineHeight, nNeededPixel,
-                aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
-        }
+        ShrinkEditEngine( *rParam.mpEngine, aAreaParam.maAlignRect,
+            nLeftM, nTopM, nRightM, nBottomM, true,
+            sal::static_int_cast<sal_uInt16>(rParam.meOrient), 0, rParam.mbPixelToLogic,
+            nEngineWidth, nEngineHeight, nNeededPixel,
+            aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
+
         if ( bRepeat && !aAreaParam.mbLeftClip && !aAreaParam.mbRightClip && rParam.mpEngine->GetParagraphCount() == 1 )
         {
             // First check if twice the space for the formatted text is available
