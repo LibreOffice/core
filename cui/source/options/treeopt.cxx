@@ -1854,10 +1854,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 AddTabPage( nPageId, sNewTitle, nGroup );
             }
         }
-        // private iteration hack for Improvement Program
-        // hack for OOo 3.1
-        // should not be in found in any later release
-        for(bool bOnce = false; bOnce==false; bOnce=true)
+        do
         {
             String sNewTitle = C2U("Improvement Program");
             {
@@ -1890,6 +1887,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 AddTabPage( nPageId, sNewTitle, nGroup );
             }
         }
+        while (0);
     }
 
     // Load and Save options
