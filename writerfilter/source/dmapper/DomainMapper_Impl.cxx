@@ -1392,6 +1392,9 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
         uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
+#ifdef DEBUG_DOMAINMAPPER
+        dmapper_logger->unoPropertySet(xProps);
+#endif
         uno::Reference< lang::XServiceInfo > xSInfo( xShape, uno::UNO_QUERY_THROW );
         bool bIsGraphic = xSInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicObjectShape" ) ) );
 
