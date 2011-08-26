@@ -40,6 +40,7 @@
 #include "svgscript.hxx"
 #include "impsvgdialog.hxx"
 
+#include <svtools/miscopt.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
@@ -743,7 +744,10 @@ sal_Bool SVGFilter::implExportDocument()
     sal_Bool         bRet = sal_False;
     sal_Int32        nLastPage = mSelectedPages.getLength() - 1;
 
-    mbSinglePage = (nLastPage == 0);
+    SvtMiscOptions aMiscOptions;
+    const bool bExperimentalMode = aMiscOptions.IsExperimentalMode();
+
+    mbSinglePage = (nLastPage == 0) || !bExperimentalMode;
     mnVisiblePage = -1;
     mnVisibleMasterPage = -1;
 
@@ -837,7 +841,8 @@ sal_Bool SVGFilter::implExportDocument()
         if( !mbSinglePage )
         {
             implGenerateMetaData();
-            implExportAnimations();
+            if( bExperimentalMode )
+                implExportAnimations();
         }
         else
         {
@@ -1322,7 +1327,7 @@ sal_Bool SVGFilter::implExportPages( const SVGFilter::XDrawPageSequence & rxPage
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sPageId );
 
                 OUString sPageName = implGetInterfaceName( rxPages[i] );
-                if( sPageName.getLength() )
+                if( sPageName.getLength() && !mbSinglePage )
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrName, sPageName );
 
                 {
