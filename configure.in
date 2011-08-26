@@ -2775,11 +2775,6 @@ if test "$_os" = "WINNT"; then
         MACHINE_PREFIX=`$CC -dumpmachine`
         if echo $MACHINE_PREFIX | grep -q mingw32; then
             AC_MSG_RESULT([yes])
-            if $CC -dumpspecs | grep -q "mno-cygwin"; then
-                USE_MINGW="cygwin"
-            else
-                USE_MINGW="pure-mingw"
-            fi
         else
             AC_MSG_ERROR([Compiler is not MinGW.])
         fi
@@ -2787,7 +2782,6 @@ if test "$_os" = "WINNT"; then
 fi
 AC_SUBST(COMEX)
 AC_SUBST(MSPDB_PATH)
-AC_SUBST(USE_MINGW)
 AC_SUBST(SHOWINCLUDES_PREFIX)
 
 dnl ===================================================================

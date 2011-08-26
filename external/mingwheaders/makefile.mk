@@ -34,19 +34,16 @@ TARGET=mingwheaders
 .IF "$(OS)$(COM)" == "WNTGCC"
 
 .IF "$(CROSS_COMPILING)" != "YES"
-# Don't do any of this weird and presumably obsolete crack when
-# cross-compiling
 
-# Cygwin and MinGW use different directories for the W32API headers
-.IF "$(USE_MINGW)" == "cygwin"
-MINGW_INCLUDE_DIR=$/usr$/include/mingw/
-MINGW_W32API_INCLUDE_DIR=$/usr$/include/w32api/
-MINGW_W32API_LIB_DIR=$/usr$/include/w32api/
-.ELSE
+# Don't do any of this for now. We support WNTGCC (MinGW) only as
+# cross-compiler. It is dubious whether it would be legal to copy
+# stuff from the Windows SDK to a cross-compilation build host
+# anyway. Some headers and/or import libraries missing in MinGW (or
+# mingw-w64 actually) we have copied from Wine in ../wine.
+
 MINGW_INCLUDE_DIR=$(COMPATH)$/include/
 MINGW_W32API_INCLUDE_DIR=$(COMPATH)$/include/
 MINGW_W32API_LIB_DIR=$(COMPATH)$/lib/
-.ENDIF
 
 SYS_INCLUDE_DIR=$(MINGW_INCLUDE_DIR)$/sys/
 

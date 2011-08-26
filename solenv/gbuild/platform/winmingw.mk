@@ -85,10 +85,6 @@ gb_COMPILERDEFS := \
 	-D_MSC_EXTENSIONS \
 	-D_FORCENAMELESSUNION \
 
-ifeq ($(USE_MINGW),cygwin-w64-mingw32)
-gb_COMPILERDEFS +=-D_declspec=__declspec
-endif
-
 gb_CPUDEFS := \
 	-DINTEL \
 	-D_M_IX86 \

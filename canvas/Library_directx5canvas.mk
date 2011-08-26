@@ -62,20 +62,11 @@ $(eval $(call gb_Library_add_linked_libs,directx5canvas,\
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_libs,directx5canvas,\
-	user32 \
+	d3dx \
 	gdi32 \
 	gdiplus \
 	ddraw \
 ))
-ifneq ($(USE_MINGW),)
-$(eval $(call gb_Library_add_linked_libs,directx5canvas,\
-what is $(DIRECTXSDK_LIB)/d3dx.lib now? \
-))
-else
-$(eval $(call gb_Library_add_linked_libs,directx5canvas,\
-	d3dx \
-))
-endif
 endif
 
 $(WORKDIR)/CustomTarget/canvas/source/directx/%.cxx : $(SRCDIR)/canvas/source/directx/%.cxx

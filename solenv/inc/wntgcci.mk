@@ -106,11 +106,7 @@ LINKC*=$(CC)
 
 CYGLIB=$(LIB:s/;/ -L/)
 LINKFLAGS= -Wl,--enable-stdcall-fixup,--enable-runtime-pseudo-reloc-v2 -L$(CYGLIB)
-.IF "$(USE_MINGW)"=="cygwin"
-MINGWLIBDIR=$(COMPATH)$/lib$/mingw
-.ELSE
 MINGWLIBDIR=$(COMPATH)$/lib
-.ENDIF
 MINGWSSTDOBJ=
 MINGWSSTDENDOBJ=
 LINKFLAGSAPPGUI=-mwindows 
