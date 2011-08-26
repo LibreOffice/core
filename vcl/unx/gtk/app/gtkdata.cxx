@@ -839,7 +839,9 @@ gboolean GtkXLib::userEventFn(gpointer data)
     //m_pGtkSalDisplay was destroyed by X11SalData::DeleteDisplay
     if (pDisplay)
     {
-        OSL_ASSERT(pThis->m_pGtkSalDisplay == pDisplay);
+#if !GTK_CHECK_VERSION(3,0,0)
+        OSL_ASSERT(static_cast<const SalDisplay *>(pThis->m_pGtkSalDisplay) == pDisplay);
+#endif
         pThis->m_pGtkSalDisplay->EventGuardAcquire();
 
         if( !pThis->m_pGtkSalDisplay->HasMoreEvents() )
