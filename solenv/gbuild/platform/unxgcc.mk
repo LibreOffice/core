@@ -47,6 +47,9 @@ endif
 ifneq ($(origin CXX),default)
 gb_CXX := $(CXX)
 endif
+ifneq ($(origin AR),default)
+gb_AR := $(AR)
+endif
 
 gb_OSDEFS := \
 	-D$(OS) \
