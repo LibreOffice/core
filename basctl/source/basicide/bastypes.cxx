@@ -371,24 +371,6 @@ void BreakPointList::ResetHitCount()
     }
 }
 
-size_t BreakPointList::size() const
-{
-    return maBreakPoints.size();
-}
-
-BreakPoint* BreakPointList::at( size_t i )
-{
-    if ( i < maBreakPoints.size() )
-        return maBreakPoints[ i ];
-    else
-        return NULL;
-}
-
-const BreakPoint* BreakPointList::at( size_t i ) const
-{
-    return maBreakPoints[ i ];
-}
-
 BreakPoint* BreakPointList::remove( BreakPoint* ptr )
 {
     for ( vector< BreakPoint* >::iterator i = maBreakPoints.begin(); i < maBreakPoints.end(); ++i )
@@ -401,17 +383,6 @@ BreakPoint* BreakPointList::remove( BreakPoint* ptr )
     }
     return NULL;
 }
-
-void BreakPointList::push_back( BreakPoint* item )
-{
-    maBreakPoints.push_back( item );
-}
-
-void BreakPointList::clear()
-{
-    maBreakPoints.clear();
-}
-
 
 void IDEBaseWindow::Deactivating()
 {
