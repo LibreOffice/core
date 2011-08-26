@@ -2940,17 +2940,11 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
 void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 {
+    OSL_ASSERT(rParam.meHorJust != SVX_HOR_JUSTIFY_REPEAT);
     Size aRefOne = pRefDevice->PixelToLogic(Size(1,1));
 
     bool bRepeat = (rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT && !rParam.mbBreak);
     bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
-
-    if ( rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT )
-    {
-        // ignore orientation/rotation if "repeat" is active
-        DrawEditStandard(rParam);
-        return;
-    }
 
     SvxCellHorJustify eOutHorJust =
         ( rParam.meHorJust != SVX_HOR_JUSTIFY_STANDARD ) ? rParam.meHorJust :
@@ -3316,17 +3310,11 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 
 void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
 {
+    OSL_ASSERT(rParam.meHorJust != SVX_HOR_JUSTIFY_REPEAT);
     Size aRefOne = pRefDevice->PixelToLogic(Size(1,1));
 
     bool bRepeat = (rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT && !rParam.mbBreak);
     bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
-
-    if ( rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT )
-    {
-        // ignore orientation/rotation if "repeat" is active
-        DrawEditStandard(rParam);
-        return;
-    }
 
     SvxCellHorJustify eOutHorJust =
         ( rParam.meHorJust != SVX_HOR_JUSTIFY_STANDARD ) ? rParam.meHorJust :
@@ -3687,17 +3675,11 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
 
 void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
 {
+    OSL_ASSERT(rParam.meHorJust != SVX_HOR_JUSTIFY_REPEAT);
     Size aRefOne = pRefDevice->PixelToLogic(Size(1,1));
 
     bool bRepeat = (rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT && !rParam.mbBreak);
     bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
-
-    if ( rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT )
-    {
-        // ignore orientation/rotation if "repeat" is active
-        DrawEditStandard(rParam);
-        return;
-    }
 
     rParam.mbAsianVertical =
         lcl_GetBoolValue(*rParam.mpPattern, ATTR_VERTICAL_ASIAN, rParam.mpCondSet);
@@ -4606,6 +4588,11 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                         aParam.mpOldPattern = pOldPattern;
                         aParam.mpOldCondSet = pOldCondSet;
                         aParam.mpThisRowInfo = pThisRowInfo;
+                        if (aParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT)
+                        {
+                            // ignore orientation/rotation if "repeat" is active
+                            aParam.meOrient = SVX_ORIENTATION_STANDARD;
+                        }
                         switch (aParam.meOrient)
                         {
                             case SVX_ORIENTATION_BOTTOMTOP:
