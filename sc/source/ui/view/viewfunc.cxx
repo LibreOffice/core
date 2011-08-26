@@ -480,7 +480,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
             aComp.SetAutoCorrection( sal_True );
             if ( rString.GetChar(0) == '+' || rString.GetChar(0) == '-' )
             {
-                aComp.SetExtendedErrorDetection( true );
+                aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_BREAK );
             }
             String aFormula( rString );
             ScTokenArray* pArr;

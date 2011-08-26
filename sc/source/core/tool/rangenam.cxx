@@ -75,33 +75,16 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 aPos        ( rAddress ),
                 eType       ( nType ),
                 pDoc        ( pDok ),
+                eTempGrammar( eGrammar ),
                 nIndex      ( 0 ),
                 bModified   ( false ),
                 mnMaxRow    (-1),
                 mnMaxCol    (-1)
 {
     if (rSymbol.Len() > 0)
-    {
-        ScCompiler aComp( pDoc, aPos );
-        aComp.SetGrammar(eGrammar);
-        pCode = aComp.CompileString( rSymbol );
-        if( !pCode->GetCodeError() )
-        {
-            pCode->Reset();
-            FormulaToken* p = pCode->GetNextReference();
-            if( p )// genau eine Referenz als erstes
-            {
-                if( p->GetType() == svSingleRef )
-                    eType = eType | RT_ABSPOS;
-                else
-                    eType = eType | RT_ABSAREA;
-            }
-            // ggf. den Fehlercode wg. unvollstaendiger Formel setzen!
-            // Dies ist fuer die manuelle Eingabe
-            aComp.CompileTokenArray();
-            pCode->DelRPN();
-        }
-    }
+        CompileRangeData( rSymbol, pDoc->IsImportingXML());
+        // Let the compiler set an error on unknown names for a subsequent
+        // CompileUnresolvedXML().
     else
     {
         // #i63513#/#i65690# don't leave pCode as NULL.
@@ -123,6 +106,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 aPos        ( rAddress ),
                 eType       ( nType ),
                 pDoc        ( pDok ),
+                eTempGrammar( FormulaGrammar::GRAM_UNSPECIFIED ),
                 nIndex      ( 0 ),
                 bModified   ( false ),
                 mnMaxRow    (-1),
@@ -151,6 +135,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 aPos        ( rTarget ),
                 eType       ( RT_NAME ),
                 pDoc        ( pDok ),
+                eTempGrammar( FormulaGrammar::GRAM_UNSPECIFIED ),
                 nIndex      ( 0 ),
                 bModified   ( false ),
                 mnMaxRow    (-1),
@@ -174,6 +159,7 @@ ScRangeData::ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument)
     aPos        (rScRangeData.aPos),
     eType       (rScRangeData.eType),
     pDoc        (pDocument ? pDocument : rScRangeData.pDoc),
+    eTempGrammar(rScRangeData.eTempGrammar),
     nIndex      (rScRangeData.nIndex),
     bModified   (rScRangeData.bModified),
     mnMaxRow    (rScRangeData.mnMaxRow),
@@ -183,6 +169,60 @@ ScRangeData::ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument)
 ScRangeData::~ScRangeData()
 {
     delete pCode;
+}
+
+void ScRangeData::CompileRangeData( const String& rSymbol, bool bSetError )
+{
+    if (eTempGrammar == FormulaGrammar::GRAM_UNSPECIFIED)
+    {
+        OSL_FAIL( "ScRangeData::CompileRangeData: unspecified grammar");
+        // Anything is almost as bad as this, but we might have the best choice
+        // if not loading documents.
+        eTempGrammar = FormulaGrammar::GRAM_NATIVE;
+    }
+
+    ScCompiler aComp( pDoc, aPos );
+    aComp.SetGrammar( eTempGrammar);
+    if (bSetError)
+        aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_NO_BREAK);
+    ScTokenArray* pNewCode = aComp.CompileString( rSymbol );
+    ::std::auto_ptr<ScTokenArray> pOldCode( pCode);     // old pCode will be deleted
+    pCode = pNewCode;
+    if( !pCode->GetCodeError() )
+    {
+        pCode->Reset();
+        FormulaToken* p = pCode->GetNextReference();
+        if( p )
+        {
+            // first token is a reference
+            /* FIXME: wouldn't that need a check if it's exactly one reference? */
+            if( p->GetType() == svSingleRef )
+                eType = eType | RT_ABSPOS;
+            else
+                eType = eType | RT_ABSAREA;
+        }
+        // For manual input set an error for an incomplete formula.
+        if (!pDoc->IsImportingXML())
+        {
+            aComp.CompileTokenArray();
+            pCode->DelRPN();
+        }
+    }
+}
+
+void ScRangeData::CompileUnresolvedXML()
+{
+    if (pCode->GetCodeError() == errNoName)
+    {
+        // Reconstruct the symbol/formula and then recompile.
+        String aSymbol;
+        ScCompiler aComp( pDoc, aPos, *pCode);
+        aComp.SetGrammar( eTempGrammar);
+        aComp.CreateStringFromTokenArray( aSymbol);
+        // Don't let the compiler set an error for unknown names on final
+        // compile, errors are handled by the interpreter thereafter.
+        CompileRangeData( aSymbol, false);
+    }
 }
 
 void ScRangeData::GuessPosition()
@@ -813,6 +853,13 @@ void ScRangeName::UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY)
     DataType::iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
         itr->UpdateGrow(rArea, nGrowX, nGrowY);
+}
+
+void ScRangeName::CompileUnresolvedXML()
+{
+    DataType::iterator itr = maData.begin(), itrEnd = maData.end();
+    for (; itr != itrEnd; ++itr)
+        itr->CompileUnresolvedXML();
 }
 
 ScRangeName::const_iterator ScRangeName::begin() const

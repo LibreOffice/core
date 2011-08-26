@@ -3425,6 +3425,9 @@ void ScDocument::CompileXML()
     OSL_ENSURE( !pAutoNameCache, "AutoNameCache already set" );
     pAutoNameCache = new ScAutoNameCache( this );
 
+    if (pRangeName)
+        pRangeName->CompileUnresolvedXML();
+
     TableContainer::iterator it = maTabs.begin();
     for (; it != maTabs.end(); ++it)
         if (*it)

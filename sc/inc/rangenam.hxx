@@ -77,7 +77,8 @@ private:
     ScAddress       aPos;
     RangeType       eType;
     ScDocument*     pDoc;
-    sal_uInt16          nIndex;
+    formula::FormulaGrammar::Grammar    eTempGrammar;   // needed for unresolved XML compiles
+    sal_uInt16      nIndex;
     bool            bModified;          // is set/cleared by UpdateReference
 
     // max row and column to use for wrapping of references.  If -1 use the
@@ -86,6 +87,9 @@ private:
     SCCOL           mnMaxCol;
 
     ScRangeData( sal_uInt16 nIndex );
+
+    void CompileRangeData( const String& rSymbol, bool bSetError );
+
 public:
     typedef ::std::map<sal_uInt16, sal_uInt16> IndexMap;
 
@@ -161,6 +165,8 @@ public:
     SCROW GetMaxRow() const;
     SC_DLLPUBLIC void SetMaxCol(SCCOL nCol);
     SCCOL GetMaxCol() const;
+
+    void            CompileUnresolvedXML();
 };
 
 inline bool ScRangeData::HasType( RangeType nType ) const
@@ -203,6 +209,11 @@ public:
     void UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable = 0, SCTAB nNewSheets = 1);
     void UpdateTranspose(const ScRange& rSource, const ScAddress& rDest);
     void UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY);
+
+    /** Compile those names that couldn't be resolved during loading and
+        inserting because they may have referred a name that was inserted later.
+     */
+    void CompileUnresolvedXML();
 
     SC_DLLPUBLIC const_iterator begin() const;
     SC_DLLPUBLIC const_iterator end() const;

@@ -1735,8 +1735,8 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArra
         mnRangeOpPosInSymbol(-1),
         pConv( pConvOOO_A1 ),
         meEncodeUrlMode( ENCODE_BY_GRAMMAR ),
+        meExtendedErrorDetection( EXTENDED_ERROR_DETECTION_NONE ),
         mbCloseBrackets( true ),
-        mbExtendedErrorDetection( false ),
         mbRewind( false )
 {
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
@@ -1751,8 +1751,8 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)
         mnRangeOpPosInSymbol(-1),
         pConv( pConvOOO_A1 ),
         meEncodeUrlMode( ENCODE_BY_GRAMMAR ),
+        meExtendedErrorDetection( EXTENDED_ERROR_DETECTION_NONE ),
         mbCloseBrackets( true ),
-        mbExtendedErrorDetection( false ),
         mbRewind( false )
 {
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
@@ -3703,11 +3703,12 @@ bool ScCompiler::NextNewToken( bool bInArray )
 
     } while (mbRewind);
 
-    if ( mbExtendedErrorDetection )
+    if ( meExtendedErrorDetection != EXTENDED_ERROR_DETECTION_NONE )
     {
-        // set an error and end compilation
+        // set an error
         SetError( errNoName );
-        return false;
+        if (meExtendedErrorDetection == EXTENDED_ERROR_DETECTION_NAME_BREAK)
+            return false;   // end compilation
     }
 
     // Provide single token information and continue. Do not set an error, that

@@ -1302,6 +1302,9 @@ void ScTable::CompileAll()
 
 void ScTable::CompileXML( ScProgress& rProgress )
 {
+    if (mpRangeName)
+        mpRangeName->CompileUnresolvedXML();
+
     for (SCCOL i=0; i <= MAXCOL; i++)
     {
         aCol[i].CompileXML( rProgress );
