@@ -4602,6 +4602,7 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                                 DrawEditTopBottom(aParam);
                             break;
                             case SVX_ORIENTATION_STACKED:
+                                // this can be vertically stacked or asian vertical.
                                 DrawEditStacked(aParam);
                             break;
                             default:
