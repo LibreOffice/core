@@ -215,6 +215,63 @@ static sal_Unicode lowerLetter[] = {
     0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A
 };
 
+
+typedef sal_Unicode ArrUnicode[];
+
+// Tables used for numbering in persian words
+static sal_Unicode *table_PersianWord_decade1[]={
+    (ArrUnicode){0},                                                 // 0
+    (ArrUnicode){0x06cc, 0x06a9, 0},                                 // 1
+    (ArrUnicode){0x062f, 0x0648, 0},                                 // 2
+    (ArrUnicode){0x0633, 0x0647, 0},                                 // 3
+    (ArrUnicode){0x0686, 0x0647, 0x0627, 0x0631, 0},                 // 4
+    (ArrUnicode){0x067e, 0x0646, 0x062c, 0},                         // 5
+    (ArrUnicode){0x0634, 0x0634, 0},                                 // 6
+    (ArrUnicode){0x0647, 0x0641, 0x062a, 0},                         // 7
+    (ArrUnicode){0x0647, 0x0634, 0x062a, 0},                         // 8
+    (ArrUnicode){0x0646, 0x0647, 0},                                 // 9
+    (ArrUnicode){0x062f, 0x0647, 0},                                 // 10
+    (ArrUnicode){0x06cc, 0x0627, 0x0632, 0x062f, 0x0647, 0},         // 11
+    (ArrUnicode){0x062f, 0x0648, 0x0627, 0x0632, 0x062f, 0x0647, 0}, // 12
+    (ArrUnicode){0x0633, 0x06cc, 0x0632, 0x062f, 0x0647, 0},         // 13
+    (ArrUnicode){0x0686, 0x0647, 0x0627, 0x0631, 0x062f, 0x0647, 0}, // 14
+    (ArrUnicode){0x067e, 0x0627, 0x0646, 0x0632, 0x062f, 0x0647, 0}, // 15
+    (ArrUnicode){0x0634, 0x0627, 0x0646, 0x0632, 0x062f, 0x0647, 0}, // 16
+    (ArrUnicode){0x0647, 0x0641, 0x062f, 0x0647, 0},                 // 17
+    (ArrUnicode){0x0647, 0x062c, 0x062f, 0x0647, 0},                 // 18
+    (ArrUnicode){0x0646, 0x0648, 0x0632, 0x062f, 0x0647, 0}          // 19
+};
+
+static sal_Unicode *table_PersianWord_decade2[]={
+    (ArrUnicode){0x0628, 0x06cc, 0x0633, 0x062a, 0},                 // 20
+    (ArrUnicode){0x0633, 0x06cc, 0},                                 // 30
+    (ArrUnicode){0x0686, 0x0647, 0x0644, 0},                         // 40
+    (ArrUnicode){0x067e, 0x0646, 0x062c, 0x0627, 0x0647, 0},         // 50
+    (ArrUnicode){0x0634, 0x0635, 0x062a, 0},                         // 60
+    (ArrUnicode){0x0647, 0x0641, 0x062a, 0x0627, 0x062f, 0},         // 70
+    (ArrUnicode){0x0647, 0x0634, 0x062a, 0x0627, 0x062f, 0},         // 80
+    (ArrUnicode){0x0646, 0x0648, 0x062f, 0}                          // 90
+};
+
+static sal_Unicode *table_PersianWord_decade3[]={
+    (ArrUnicode){0x0635, 0x062f, 0},                                 // 100
+    (ArrUnicode){0x062f, 0x0648, 0x06cc, 0x0633, 0x062a, 0},         // 200
+    (ArrUnicode){0x0633, 0x06cc, 0x0635, 0x062f, 0},                 // 300
+    (ArrUnicode){0x0686, 0x0647, 0x0627, 0x0631, 0x0635, 0x062f, 0}, // 400
+    (ArrUnicode){0x067e, 0x0627, 0x0646, 0x0635, 0x062f, 0},         // 500
+    (ArrUnicode){0x0634, 0x0635, 0x062f, 0},                         // 600
+    (ArrUnicode){0x0647, 0x0641, 0x062a, 0x0635, 0x062f, 0},         // 700
+    (ArrUnicode){0x0647, 0x0634, 0x062a, 0x0635, 0x062f, 0},         // 800
+    (ArrUnicode){0x0646, 0x0647, 0x0635, 0x062f, 0}                  // 900
+};
+
+static sal_Unicode *table_PersianWord_decadeX[]={
+    (ArrUnicode){0x0647, 0x0632, 0x0627, 0x0631, 0},                        // 1000
+    (ArrUnicode){0x0645, 0x06cc, 0x0644, 0x06cc, 0x0648, 0x0646, 0},        // 1000000
+    (ArrUnicode){0x0645, 0x06cc, 0x0644, 0x06cc, 0x0627, 0x0631, 0x062f, 0} // 1000000000
+};
+
+
 DefaultNumberingProvider::DefaultNumberingProvider( const Reference < XMultiServiceFactory >& xMSF ) : xSMgr(xMSF),translit(NULL)
 {
 
@@ -339,6 +396,65 @@ void lcl_formatChars3( sal_Unicode table_capital[], sal_Unicode table_small[], i
      for( int i=1; i<repeat_count; i++ )
          s += OUString::valueOf( table_small[ n%tableSize ] );
 }
+
+
+/** Returns number's representation in persian words up to 999999999999
+    respectively limited by sal_Int32 >=0.
+    The caller assures that nNumber is not negative.
+ */
+static
+void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
+    throw( IllegalArgumentException, RuntimeException )
+{
+    OUStringBuffer aTemp(64);
+    unsigned char nDigit;
+    OUString asPersianWord_conjunction( (ArrUnicode){0x20,0x0648,0x20,0});
+    unsigned char nSection = 0;
+
+    while (int nPart = nNumber % 1000)
+    {
+        if (nSection)
+        {
+            if (nSection > SAL_N_ELEMENTS( table_PersianWord_decadeX))
+                throw IllegalArgumentException();   // does not happen with sal_Int32
+            aTemp.insert( 0, asPersianWord_conjunction).insert( 0, table_PersianWord_decadeX[nSection-1]);
+        }
+
+        if ((nDigit = nPart % 100) < 20)
+        {
+            if (aTemp.getLength())
+                aTemp.insert( 0, sal_Unicode(0x0020));
+            aTemp.insert( 0, table_PersianWord_decade1[nDigit]);
+        }
+        else
+        {
+            if ((nDigit = nPart % 10))
+            {
+                if (aTemp.getLength())
+                    aTemp.insert( 0, asPersianWord_conjunction);
+                aTemp.insert( 0, table_PersianWord_decade1[nDigit]);
+            }
+            if ((nDigit = (nPart / 10) % 10))
+            {
+                if (aTemp.getLength())
+                    aTemp.insert( 0, asPersianWord_conjunction);
+                aTemp.insert( 0, table_PersianWord_decade2[nDigit-2]);
+            }
+        }
+
+        if ((nDigit = nPart / 100))
+        {
+            if (aTemp.getLength())
+                aTemp.insert( 0, asPersianWord_conjunction);
+            aTemp.insert( 0, table_PersianWord_decade3[nDigit-1]);
+        }
+
+        nNumber /= 1000;
+        nSection++;
+    }
+    rsResult += aTemp.makeStringAndClear();
+}
+
 
 // Greek Letter Numbering
 
@@ -740,6 +856,10 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
               lcl_formatChars(table_Alphabet_fa, sizeof(table_Alphabet_fa) / sizeof(sal_Unicode), number - 1, result);
               break;
 
+          case CHARS_PERSIAN_WORD:
+              lcl_formatPersianWord(number, result);
+              break;
+
           default:
                OSL_ASSERT(0);
                throw IllegalArgumentException();
@@ -825,6 +945,7 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_SR, C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_B S_CYR_B ", ... (sr)", LANG_ALL},
         {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_SR, S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_B S_CYR_B ", ... (sr)", LANG_ALL},
         {style::NumberingType::CHARS_PERSIAN,   NULL, LANG_CTL},
+        {style::NumberingType::CHARS_PERSIAN_WORD,   NULL, LANG_CTL},
         {style::NumberingType::CHARS_GREEK_LOWER_LETTER,   C_GR_A ", " C_GR_B ", ... (gr)", LANG_ALL},
         {style::NumberingType::CHARS_GREEK_UPPER_LETTER,   S_GR_A ", " S_GR_B ", ... (gr)", LANG_ALL},
 };

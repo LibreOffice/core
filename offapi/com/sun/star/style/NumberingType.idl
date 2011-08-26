@@ -493,6 +493,13 @@ published constants NumberingType
      */
     const short CHARS_ARABIC_ABJAD = 54;
 
+    //-------------------------------------------------------------------------
+    /** Numbering in Persian words
+
+        @since OOo 3.5
+     */
+    const short CHARS_PERSIAN_WORD = 55;
+
 };
 
 //=============================================================================
