@@ -541,64 +541,6 @@ void SfxProgress::Reschedule()
 
 // -----------------------------------------------------------------------
 
-void SfxProgress::SetWaitMode
-(
-    sal_Bool    bWait       /*  TRUE
-
-                            FALSE Wait-cursor not used */
-)
-
-/*  [Description]
-
-    Switch Wait-mode.
-*/
-
-{
-    if( pImp->pActiveProgress ) return;
-    if ( !bSuspended && pImp->bWaitMode != bWait )
-    {
-        if ( bWait )
-        {
-            if ( pImp->xObjSh.Is() && !pImp->bAllDocs )
-            {
-                for ( SfxViewFrame *pFrame =
-                        SfxViewFrame::GetFirst(pImp->xObjSh);
-                        pFrame;
-                        pFrame = SfxViewFrame::GetNext( *pFrame, pImp->xObjSh ) )
-                    pFrame->GetWindow().EnterWait();
-            }
-        }
-        else
-        {
-            if ( pImp->xObjSh.Is() && !pImp->bAllDocs )
-            {
-                for ( SfxViewFrame *pFrame =
-                        SfxViewFrame::GetFirst(pImp->xObjSh);
-                        pFrame;
-                        pFrame = SfxViewFrame::GetNext( *pFrame, pImp->xObjSh ) )
-                    pFrame->GetWindow().LeaveWait();
-            }
-        }
-    }
-
-    pImp->bWaitMode = bWait;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SfxProgress::GetWaitMode() const
-
-/* [Description]
-
-   Get Wait-cursor mode.
-*/
-
-{
-    return pImp->bWaitMode;
-}
-
-// -----------------------------------------------------------------------
-
 SfxProgress* SfxProgress::GetActiveProgress
 (
     SfxObjectShell* pDocSh        /*  the <SfxObjectShell>, which should be

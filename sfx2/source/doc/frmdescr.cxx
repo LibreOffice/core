@@ -201,31 +201,6 @@ sal_uInt16 SfxFrameDescriptor::GetItemPos() const
     return USHRT_MAX;
 }
 
-
-SfxFrameProperties::SfxFrameProperties( const SfxFrameDescriptor *pD )
-    : aURL( pD->GetURL().GetMainURL( INetURLObject::DECODE_TO_IURI ) )
-    , aName( pD->GetName() )
-    , lMarginWidth( pD->GetMargin().Width() )
-    , lMarginHeight( pD->GetMargin().Height() )
-    , lSize( pD->GetWidth() )
-    , lSetSize( SIZE_NOT_SET )
-    , lFrameSpacing( SPACING_NOT_SET )
-    , lInheritedFrameSpacing( SPACING_NOT_SET )
-    , eScroll( pD->GetScrollingMode() )
-    , eSizeSelector( pD->GetSizeSelector() )
-    , eSetSizeSelector( SIZE_REL )
-    , bHasBorder( pD->HasFrameBorder() )
-    , bBorderSet( pD->IsFrameBorderSet() )
-    , bResizable( pD->IsResizable() )
-    , bSetResizable( sal_False )
-    , bIsRootSet( sal_False )
-    , bIsInColSet( sal_False )
-    , bHasBorderInherited( sal_False )
-    , pFrame( pD->Clone() )
-{
-    bBorderSet = sal_True;
-}
-
 SfxFrameProperties& SfxFrameProperties::operator =(
     const SfxFrameProperties &rProp )
 {

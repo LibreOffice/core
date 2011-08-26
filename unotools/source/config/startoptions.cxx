@@ -394,24 +394,6 @@ SvtStartOptions::~SvtStartOptions()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtStartOptions::IsIntroEnabled() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsIntroEnabled();
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtStartOptions::EnableIntro( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->EnableIntro( bState );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
 OUString SvtStartOptions::GetConnectionURL() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );

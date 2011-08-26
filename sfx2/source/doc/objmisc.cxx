@@ -281,17 +281,6 @@ sal_Bool SfxObjectShell::IsTemplate() const
 
 //-------------------------------------------------------------------------
 
-void SfxObjectShell::SetTemplate(sal_Bool bIs)
-{
-    pImp->bIsTemplate=bIs;
-    SfxFilterMatcher aMatcher( GetFactory().GetFactoryName() );
-    SfxFilterMatcherIter aIter( aMatcher, SFX_FILTER_TEMPLATEPATH );
-    SfxMedium* pMed = GetMedium();
-    if( pMed ) pMed->SetFilter( aIter.First() );
-}
-
-//-------------------------------------------------------------------------
-
 void SfxObjectShell::EnableSetModified( sal_Bool bEnable )
 {
 #ifdef DBG_UTIL

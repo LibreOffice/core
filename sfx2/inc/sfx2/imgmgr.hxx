@@ -52,9 +52,6 @@ public:
     void            RegisterToolBox( ToolBox *pBox, sal_uInt16 nFlags=0xFFFF);
     void            ReleaseToolBox( ToolBox *pBox );
 
-                    // get images from resources
-    void            SetImages( ToolBox& rToolBox );
-    void            SetImages( ToolBox& rToolBox, bool bLarge );
     void            SetImagesForceSize( ToolBox& rToolBox, bool bLarge );
 
     Image           GetImage( sal_uInt16 nId, bool bLarge ) const;

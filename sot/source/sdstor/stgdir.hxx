@@ -96,7 +96,6 @@ public:
     sal_Int32 Tell() { return nPos; }
     sal_Int32 Read( void*, sal_Int32 );
     sal_Int32 Write( const void*, sal_Int32 );
-    void  Copy( StgDirEntry& );
     void  Copy( BaseStorageStream& );
 };
 

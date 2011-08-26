@@ -1134,13 +1134,6 @@ sal_Bool SvtModuleOptions::IsModuleInstalled( EModule eModule ) const
 }
 
 //*****************************************************************************************************************
-::rtl::OUString SvtModuleOptions::GetFactoryWindowAttributes( EFactory eFactory ) const
-{
-    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->GetFactoryWindowAttributes( eFactory );
-}
-
-//*****************************************************************************************************************
 ::rtl::OUString SvtModuleOptions::GetFactoryEmptyDocumentURL( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
@@ -1181,14 +1174,6 @@ void SvtModuleOptions::SetFactoryStandardTemplate(       EFactory         eFacto
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     m_pDataContainer->SetFactoryStandardTemplate( eFactory, sTemplate );
-}
-
-//*****************************************************************************************************************
-void SvtModuleOptions::SetFactoryWindowAttributes(       EFactory         eFactory   ,
-                                                   const ::rtl::OUString& sAttributes)
-{
-    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    m_pDataContainer->SetFactoryWindowAttributes( eFactory, sAttributes );
 }
 
 //*****************************************************************************************************************

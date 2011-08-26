@@ -235,7 +235,6 @@ public:
                                               bHasBorderInherited( sal_True ),
                                               pFrame( 0 ) {}
 
-                                        SfxFrameProperties( const SfxFrameDescriptor *pD );
                                         ~SfxFrameProperties() { delete pFrame; }
 
     int                                 operator ==( const SfxFrameProperties& ) const;
@@ -247,11 +246,6 @@ class SfxFrameDescriptorItem : public SfxPoolItem
     SfxFrameProperties                  aProperties;
 public:
                                         TYPEINFO();
-
-                                        SfxFrameDescriptorItem ( const SfxFrameDescriptor *pD, const sal_uInt16 nId = SID_FRAMEDESCRIPTOR )
-                                            : SfxPoolItem( nId )
-                                            , aProperties( pD )
-                                        {}
 
                                         SfxFrameDescriptorItem ( const sal_uInt16 nId = SID_FRAMEDESCRIPTOR )
                                             : SfxPoolItem( nId )

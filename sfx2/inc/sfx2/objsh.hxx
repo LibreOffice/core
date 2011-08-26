@@ -395,7 +395,6 @@ public:
     void                        SetHeaderAttributesForSourceViewHack();
 
     sal_Bool                    IsTemplate() const;
-    void                        SetTemplate(sal_Bool bIs);
 
     sal_Bool                                  IsQueryLoadTemplate() const;
     sal_Bool                                        IsUseUserData() const;
@@ -570,7 +569,6 @@ public:
     String                      UpdateTitle( SfxMedium* pMed=NULL, sal_uInt16 nDocViewNo=0 );
     static SfxObjectShell*      CreateObject( const String& rServiceName, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
     static SfxObjectShell*      CreateObjectByFactoryName( const String& rURL, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
-    static SfxObjectShell*      CreateAndLoadObject( const SfxItemSet& rSet, SfxFrame* pFrame=0 );
     static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                                 CreateAndLoadComponent( const SfxItemSet& rSet, SfxFrame* pFrame = NULL );
     static SfxObjectShell*      GetShellFromComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xComp );

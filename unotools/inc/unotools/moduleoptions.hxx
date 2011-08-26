@@ -146,7 +146,6 @@ class UNOTOOLS_DLLPUBLIC SvtModuleOptions: public utl::detail::Options
         ::rtl::OUString GetFactoryName            (       EFactory         eFactory   ) const;
         ::rtl::OUString GetFactoryShortName       (       EFactory         eFactory   ) const;
         ::rtl::OUString GetFactoryStandardTemplate(       EFactory         eFactory   ) const;
-        ::rtl::OUString GetFactoryWindowAttributes(       EFactory         eFactory   ) const;
         ::rtl::OUString GetFactoryEmptyDocumentURL(       EFactory         eFactory   ) const;
         ::rtl::OUString GetFactoryDefaultFilter   (       EFactory         eFactory   ) const;
         sal_Bool        IsDefaultFilterReadonly   (       EFactory         eFactory   ) const;
@@ -155,8 +154,6 @@ class UNOTOOLS_DLLPUBLIC SvtModuleOptions: public utl::detail::Options
                                                           EFactory&        eFactory   );
         void            SetFactoryStandardTemplate(       EFactory         eFactory   ,
                                                     const ::rtl::OUString& sTemplate  );
-        void            SetFactoryWindowAttributes(       EFactory         eFactory   ,
-                                                    const ::rtl::OUString& sAttributes);
         void            SetFactoryDefaultFilter   (       EFactory         eFactory   ,
                                                     const ::rtl::OUString& sFilter    );
 

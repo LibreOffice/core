@@ -1072,12 +1072,6 @@ SfxObjectShell* SfxObjectShell::CreateObject( const String& rServiceName, SfxObj
     return 0;
 }
 
-SfxObjectShell* SfxObjectShell::CreateAndLoadObject( const SfxItemSet& rSet, SfxFrame* pFrame )
-{
-    Reference<lang::XComponent> xComp = CreateAndLoadComponent(rSet, pFrame);
-    return GetShellFromComponent(xComp);
-}
-
 Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxItemSet& rSet, SfxFrame* pFrame )
 {
     uno::Sequence < beans::PropertyValue > aProps;

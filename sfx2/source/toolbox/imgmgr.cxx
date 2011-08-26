@@ -400,15 +400,6 @@ void SfxImageManager::ReleaseToolBox( ToolBox *pBox )
     }
 }
 
-//-------------------------------------------------------------------------
-
-void SfxImageManager::SetImages( ToolBox& rToolBox, bool bLarge )
-{
-    SetImagesForceSize( rToolBox, bLarge );
-}
-
-//-------------------------------------------------------------------------
-
 void SfxImageManager::SetImagesForceSize( ToolBox& rToolBox, bool bLarge )
 {
     ImageList* pImageList = pImp->GetImageList( bLarge );
@@ -434,12 +425,6 @@ void SfxImageManager::SetImagesForceSize( ToolBox& rToolBox, bool bLarge )
                 break;
         }
     }
-}
-
-void SfxImageManager::SetImages( ToolBox& rToolBox )
-{
-    sal_Bool bLarge = ( pImp->m_nSymbolsSize == SFX_SYMBOLS_SIZE_LARGE );
-    SetImagesForceSize( rToolBox, bLarge );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -826,12 +826,9 @@ SfxFrameDescriptor::GetSize() const
 SfxFrameDescriptor::GetWallpaper() const
 SfxFrameDescriptor::GetWinBits() const
 SfxFrameDescriptor::SetURL(INetURLObject const&)
-SfxFrameProperties::SfxFrameProperties(SfxFrameDescriptor const*)
 SfxHintPoster::SfxHintPoster()
 SfxImageItem::GetURL() const
 SfxImageItem::SfxImageItem(unsigned short, String const&)
-SfxImageManager::SetImages(ToolBox&)
-SfxImageManager::SetImages(ToolBox&, bool)
 SfxInPlaceClient::GetActiveWindow(SfxObjectShell*, com::sun::star::uno::Reference<com::sun::star::embed::XEmbeddedObject> const&)
 SfxInPlaceClient::IsObjectActive() const
 SfxItemPropertySetInfo::getMap() const
@@ -853,10 +850,8 @@ SfxMedium::GetReferer() const
 SfxModuleArr_Impl::DeleteAndDestroy(unsigned short, unsigned short)
 SfxNavigatorWrapper::GetChildWindowId()
 SfxObjectShell::Count()
-SfxObjectShell::CreateAndLoadObject(SfxItemSet const&, SfxFrame*)
 SfxObjectShell::DisconnectFromShared()
 SfxObjectShell::SetFlags(unsigned int)
-SfxObjectShell::SetTemplate(unsigned char)
 SfxObjectVerbsControl::RegisterControl(unsigned short, SfxModule*)
 SfxOleDateProperty::SfxOleDateProperty(int, com::sun::star::util::Date const&)
 SfxOleString16Property::SfxOleString16Property(int, String const&)
@@ -865,9 +860,7 @@ SfxPartChildWnd_Impl::GetChildWindowId()
 SfxPasswordDialog::SetMaxLen(unsigned short)
 SfxPopupWindow::LinkStubDelete(void*, void*)
 SfxPopupWindow::RemoveStatusListener(rtl::OUString const&)
-SfxProgress::GetWaitMode() const
 SfxProgress::Lock()
-SfxProgress::SetWaitMode(unsigned char)
 SfxRangeItem::SfxRangeItem(unsigned short, SvStream&)
 SfxRecordingFloatWrapper_Impl::GetChildWindowId()
 SfxRequest::IsRecording() const
@@ -958,7 +951,6 @@ StatusBar::ShowItems()
 StatusBar::StatusBar(Window*, ResId const&)
 StgAvlIterator::Last()
 StgCache::Pos2Page(int)
-StgDirEntry::Copy(StgDirEntry&)
 StgHeader::SetClassId(ClsId const&)
 StorageStream::ValidateMode(unsigned short, StgDirEntry*) const
 SvBasicPropertyDataControl::GetData()
@@ -1148,10 +1140,8 @@ SvtMiscOptions::IsGetToolboxStyleReadOnly() const
 SvtMiscOptions::IsPluginsEnabledReadOnly() const
 SvtMiscOptions::IsTryUseODMADialogReadOnly() const
 SvtMiscOptions::SetPluginsEnabled(unsigned char)
-SvtModuleOptions::GetFactoryWindowAttributes(SvtModuleOptions::EFactory) const
 SvtModuleOptions::GetFeatures() const
 SvtModuleOptions::GetModuleName(SvtModuleOptions::EFactory) const
-SvtModuleOptions::SetFactoryWindowAttributes(SvtModuleOptions::EFactory, rtl::OUString const&)
 SvtPathOptions::GetPath(SvtPathOptions::Pathes) const
 SvtPathOptions::IsPathReadonly(SvtPathOptions::Pathes) const
 SvtPathOptions::SetPath(SvtPathOptions::Pathes, String const&)
@@ -1166,8 +1156,6 @@ SvtScriptedTextHelper::GetTextHeight() const
 SvtScriptedTextHelper::GetTextWidth() const
 SvtSearchOptions::IsSearchForStyles() const
 SvtSecurityOptions::IsTrustedAuthorsEnabled()
-SvtStartOptions::EnableIntro(unsigned char)
-SvtStartOptions::IsIntroEnabled() const
 SvtStartOptions::SetConnectionURL(rtl::OUString const&)
 SvtSysLocaleOptions::GetUILocale() const
 SvtTabAppearanceCfg::SetDragMode(unsigned short)
@@ -1553,7 +1541,6 @@ Window::PostUserEvent(unsigned long&, unsigned long, void*)
 WindowArrange::Arrange(unsigned short, Rectangle const&)
 WindowArrange::WindowArrange()
 WindowArrange::~WindowArrange()
-WizardDialog::IsButtonFixedLineVisible()
 WrongRanges::Insert(WrongRanges const*, unsigned short, unsigned short, unsigned short)
 WrongRanges::Replace(WrongRange const&, unsigned short)
 WrongRanges::Replace(WrongRange const*, unsigned short, unsigned short)

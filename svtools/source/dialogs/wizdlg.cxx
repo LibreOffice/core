@@ -694,11 +694,4 @@ void WizardDialog::ShowButtonFixedLine( sal_Bool bVisible )
     mpFixedLine->Show( bVisible );
 }
 
-// -----------------------------------------------------------------------
-
-sal_Bool WizardDialog::IsButtonFixedLineVisible()
-{
-    return (mpFixedLine && mpFixedLine->IsVisible());
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
