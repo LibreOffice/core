@@ -2241,24 +2241,6 @@ void CustomPropertiesWindow::DoScroll( sal_Int32 nNewPos )
     }
 }
 
-bool CustomPropertiesWindow::DoesCustomPropertyExist( const String& rName ) const
-{
-    bool bRet = false;
-    std::vector< CustomPropertyLine* >::const_iterator pIter;
-    for ( pIter = m_aCustomPropertiesLines.begin();
-            pIter != m_aCustomPropertiesLines.end(); ++pIter )
-    {
-        CustomPropertyLine* pLine = *pIter;
-        if ( !pLine->m_bIsRemoved && pLine->m_aNameBox.GetText() == rName )
-        {
-            bRet = true;
-            break;
-        }
-    }
-
-    return bRet;
-}
-
 Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() const
 {
     Sequence< beans::PropertyValue > aPropertiesSeq( m_aCustomPropertiesLines.size() );
@@ -2332,7 +2314,6 @@ CustomPropertiesControl::CustomPropertiesControl( Window* pParent, const ResId& 
     m_aPropertiesWin( this, ResId( WIN_PROPERTIES, *rResId.GetResMgr() ) ),
     m_aVertScroll   ( this, ResId( SB_VERTICAL, *rResId.GetResMgr() ) ),
 
-    m_bIsInitialized( false ),
     m_nThumbPos     ( 0 )
 
 {
@@ -2374,10 +2355,6 @@ CustomPropertiesControl::CustomPropertiesControl( Window* pParent, const ResId& 
 }
 
 CustomPropertiesControl::~CustomPropertiesControl()
-{
-}
-
-void CustomPropertiesControl::Initialize()
 {
 }
 

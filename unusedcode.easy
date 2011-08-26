@@ -77,7 +77,6 @@ CharPosArray::Replace(int const*, unsigned short, unsigned short)
 CharPosArray::_ForEach(unsigned short, unsigned short, unsigned char (*)(int const&, void*), void*)
 CloneList::Count() const
 Color::IncreaseContrast(unsigned char)
-CommandExtTextInputData::CommandExtTextInputData()
 CommunicationLinkList::DeleteAndDestroy(unsigned short, unsigned short)
 CommunicationLinkList::Insert(CommunicationLink const*&, unsigned short&)
 CommunicationLinkList::Insert(CommunicationLink const**, unsigned short)
@@ -92,8 +91,6 @@ CurrencyBox::InsertValue(long, unsigned short)
 CurrencyBox::RemoveValue(long)
 CurrencyField::CurrencyField(Window*, ResId const&)
 CurrencyFormatter::SetCurrencySymbol(String const&)
-CustomPropertiesControl::Initialize()
-CustomPropertiesWindow::DoesCustomPropertyExist(String const&) const
 CustomToolBarImportHelper::showToolbar(rtl::OUString const&)
 DateBox::GetDate(unsigned short) const
 DateBox::GetDatePos(Date const&) const
