@@ -250,8 +250,6 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
 
             const OUString aName;
 
-            // #110680#
-            // SvxXMLXTableExportComponent aExporter( aName, xHandler, xTable, xGrfResolver );
             SvxXMLXTableExportComponent aExporter( xServiceFactory, aName, xHandler, xTable, xGrfResolver );
 
             bRet = aExporter.exportTable();

@@ -249,7 +249,7 @@ typedef ::std::vector< Bitmap* > BitmapList_impl;
 class SVX_DLLPUBLIC XPropertyList
 {
 protected:
-    String              aName; // nicht persistent !
+    String              aName; // not persistent
     String              aPath;
     XOutdevItemPool*    pXPool;
 

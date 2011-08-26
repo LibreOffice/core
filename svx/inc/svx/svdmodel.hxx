@@ -645,7 +645,8 @@ public:
     void        SetIOProgressHdl(const Link& rLink)          { aIOProgressLink=rLink; }
     const Link& GetIOProgressHdl() const                     { return aIOProgressLink; }
 
-    // Zugriffsmethoden fuer Paletten, Listen und Tabellen
+    // Accessor methods for Palettes, Lists and Tabeles
+    // FIXME: this badly needs re-factoring ...
     void            SetColorTable(XColorTable* pTable)       { pColorTable=pTable; }
     XColorTable*    GetColorTable() const                    { return pColorTable; }
     void            SetDashList(XDashList* pList)            { pDashList=pList; }
@@ -755,7 +756,7 @@ typedef tools::WeakReference< SdrModel > SdrModelWeakRef;
 +---+---+ +---+---+  +----+----+ +----+----+  +-----+------+ +------+-----+
 |SdrObj | |SdrObj |  |SdrLayer | |SdrLayer |  |SdrLayerSet | |SdrLayerSet |
 +-------+ +-------+  +---------+ +---------+  +------------+ +------------+
-Die Klasse SdrModel ist der Kopf des Datenmodells der StarView Drawing-Engine.
+This class: SdrModel is the head of the data modells for the StarView Drawing Engine.
 
 ///////////////////////////////////////////////////////////////////////////////////////////////// */
 
