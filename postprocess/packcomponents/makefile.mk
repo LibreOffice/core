@@ -39,9 +39,7 @@ GTK_TWO_FOUR=$(shell @+-$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
 .END
 
 my_components = \
-    abp \
     basprov \
-    bib \
     cached1 \
     calc \
     component/animations/source/animcore/animcore \
@@ -127,11 +125,8 @@ my_components = \
     configmgr \
     ctl \
     dbase \
-    dbp \
     dbpool2 \
     dbtools \
-    deployment \
-    deploymentgui \
     dlgprov \
     embobj \
     evtatt \
@@ -144,33 +139,22 @@ my_components = \
     hyphen \
     lnth \
     localebe1 \
-    log \
-    migrationoo2 \
-    migrationoo3 \
     msfilter \
     mysql \
     odbc \
     odfflatxml \
-    offacc \
-    oooimprovecore \
-    pcr \
     pdffilter \
     placeware \
     protocolhandler \
-    res \
-    scn \
     scriptframe \
     sdbc2 \
     spell \
-    spl \
     srtrs1 \
     stringresource \
     svgfilter \
     syssh \
     t602filter \
-    tvhlp1 \
     ucb1 \
-    ucpchelp1 \
     ucpexpand1 \
     ucpext \
     ucpfile1 \
@@ -178,21 +162,41 @@ my_components = \
     ucphier1 \
     ucppkg1 \
     ucptdoc1 \
-    updatefeed \
-    updchk \
-    updchk.uno \
     vbaevents \
     xmlfa \
     xmlfd \
-    xmx \
     xsltdlg \
     xsltfilter \
+
+.IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
+my_components += \
+    abp \
+    bib \
+    dbp \
+    deployment \
+    deploymentgui \
+    log \
+    migrationoo2 \
+    migrationoo3 \
+    offacc \
+    oooimprovecore \
+    pcr \
+    res \
+    scn \
+    spl \
+    tvhlp1 \
+    ucpchelp1 \
+    updatefeed \
+    updchk \
+    updchk.uno \
+    xmx
+.ENDIF
 
 .IF "$(DISABLE_PYTHON)" != "TRUE"
 my_components += pythonloader
 .ENDIF
 
-.IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX"
+.IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX" && "$(OS)" != "IOS"
 my_components += splash
 .ENDIF
     
@@ -316,7 +320,7 @@ my_components += \
     component/vcl/vcl.windows
 .END
 
-.IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT"
+.IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(OS)" != "IOS"
 my_components += \
     desktopbe1 \
     component/vcl/vcl.unx
