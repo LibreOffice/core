@@ -3918,18 +3918,16 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
     //
 
     Size aPaperSize = Size( 1000000, 1000000 );
-    if (rParam.hasLineBreak())
-    {
-        //  call GetOutputArea with nNeeded=0, to get only the cell width
+    //  call GetOutputArea with nNeeded=0, to get only the cell width
 
-        //! handle nArrY == 0
-        GetOutputArea( nXForPos, nArrYForPos, rParam.mnPosX, rParam.mnPosY, rParam.mnCellX, rParam.mnCellY, 0,
-                       *rParam.mpPattern, sal::static_int_cast<sal_uInt16>(eOutHorJust),
-                       rParam.mbCellIsValue, true, false, aAreaParam );
+    //! handle nArrY == 0
+    GetOutputArea( nXForPos, nArrYForPos, rParam.mnPosX, rParam.mnPosY, rParam.mnCellX, rParam.mnCellY, 0,
+                   *rParam.mpPattern, sal::static_int_cast<sal_uInt16>(eOutHorJust),
+                   rParam.mbCellIsValue, true, false, aAreaParam );
 
-        //! special ScEditUtil handling if formatting for printer
-        rParam.calcPaperSize(aPaperSize, aAreaParam.maAlignRect, nPPTX, nPPTY);
-    }
+    //! special ScEditUtil handling if formatting for printer
+    rParam.calcPaperSize(aPaperSize, aAreaParam.maAlignRect, nPPTX, nPPTY);
+
     if (rParam.mbPixelToLogic)
     {
         Size aLogicSize = pRefDevice->PixelToLogic(aPaperSize);
