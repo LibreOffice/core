@@ -50,5 +50,3 @@ mkdir: %_DEST%\bin\osolsmf
 ..\scripts\osx_install_patch.applescript %_DEST%\bin\osx_install_patch.applescript
 
 ..\%__SRC%\lib\getuid.so %_DEST%\bin\getuid.so
-
-..\inc\setup_native\qswin32.h %_DEST%\inc\setup_native\qswin32.h

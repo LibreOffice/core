@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include "quickstarter.hxx"
-#include <sfx2/qswin32.h>
+#include <systools/win32/qswin32.h>
 
 static BOOL CALLBACK EnumWindowsProc( HWND hWnd, LPARAM lParam )
 {
