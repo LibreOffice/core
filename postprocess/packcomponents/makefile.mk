@@ -144,6 +144,7 @@ my_components = \
     localebe1 \
     log \
     migrationoo2 \
+    migrationoo3 \
     msfilter \
     mysql \
     odbc \
