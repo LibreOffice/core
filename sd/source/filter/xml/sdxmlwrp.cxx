@@ -490,7 +490,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
 
     // -------------------------------------
 
-    /** property map for export info set */
+    /** property map for import info set */
     PropertyMapEntry aImportInfoMap[] =
     {
         // necessary properties for XML progress bar at load time
@@ -517,6 +517,8 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         { MAP_LEN( "OrganizerMode" ), 0,
               &::getBooleanCppuType(),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "SourceStorage" ), 0, &embed::XStorage::static_type(),
+          ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { NULL, 0, 0, NULL, 0, 0 }
     };
 
@@ -593,6 +595,9 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     SvStorageStreamRef xDocStream;
     Reference<io::XInputStream> xInputStream;
     uno::Reference < embed::XStorage > xStorage = mrMedium.GetStorage();
+
+    OUString sSourceStorage( RTL_CONSTASCII_USTRINGPARAM("SourceStorage") );
+    xInfoSet->setPropertyValue( sSourceStorage, Any( xStorage ) );
 
     if( !xStorage.is() )
         nRet = SD_XML_READERROR;

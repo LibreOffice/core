@@ -193,6 +193,8 @@ public:
 
     const uno::Reference< uno::XComponentContext > mxComponentContext;
 
+    uno::Reference< embed::XStorage > mxSourceStorage;
+
     std::auto_ptr< xmloff::RDFaImportHelper > mpRDFaHelper;
 
     SvXMLImport_Impl() :
@@ -995,6 +997,10 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= (mpImpl->mbTextDocInOOoFileFormat);
                 }
+
+                sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("SourceStorage" ) );
+                if( xPropertySetInfo->hasPropertyByName(sPropName) )
+                    mxImportInfo->getPropertyValue(sPropName) >>= mpImpl->mxSourceStorage;
             }
         }
     }
@@ -1315,6 +1321,11 @@ Reference< XOutputStream > SvXMLImport::GetStreamForGraphicObjectURLFromBase64()
         sRet = GetAbsoluteReference( rURL );
 
     return sRet;
+}
+
+Reference< embed::XStorage > SvXMLImport::GetSourceStorage()
+{
+    return mpImpl->mxSourceStorage;
 }
 
 Reference < XOutputStream >

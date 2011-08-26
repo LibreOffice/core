@@ -32,6 +32,7 @@
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
+#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
@@ -325,6 +326,10 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
         GetStreamForEmbeddedObjectURLFromBase64();
     ::rtl::OUString ResolveEmbeddedObjectURLFromBase64();
+
+    // get source storage we're importing from (if available)
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+          GetSourceStorage();
 
     void AddStyleDisplayName( sal_uInt16 nFamily,
                               const ::rtl::OUString& rName,
