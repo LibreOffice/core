@@ -36,7 +36,7 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
-#include <Inflater.hxx>
+#include <package/Inflater.hxx>
 #include <ZipEntry.hxx>
 #include <CRC32.hxx>
 #include <mutexholder.hxx>

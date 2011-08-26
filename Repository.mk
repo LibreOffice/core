@@ -165,6 +165,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	localedata_others \
 	mcnttype \
 	neon \
+	package2 \
     reg \
     store \
 	test \
@@ -172,6 +173,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	xmlsecurity \
 	xsec_fw \
 	xsec_xmlsec \
+	xstor \
 ))
 
 ifeq ($(OS),WNT)

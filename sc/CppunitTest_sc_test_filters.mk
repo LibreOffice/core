@@ -94,10 +94,10 @@ $(eval $(call gb_RdbTarget_add_components,sc_filters_test,\
     fileaccess/source/fileacc \
     comphelper/util/comphelp \
     i18npool/util/i18npool \
+    package/util/package2 \
 ))
 
 $(eval $(call gb_RdbTarget_add_old_components,sc_filters_test,\
-    package2 \
     ucb1 \
     ucpfile1 \
 ))

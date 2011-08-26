@@ -76,6 +76,8 @@ my_components = \
     component/linguistic/source/lng \
     component/lotuswordpro/util/lwpfilter \
     component/oox/util/oox \
+    component/package/source/xstor/xstor \
+    component/package/util/package2 \
     component/reportdesign/util/rpt \
     component/reportdesign/util/rptui \
     component/reportdesign/util/rptxml \
@@ -151,7 +153,6 @@ my_components = \
     odfflatxml \
     offacc \
     oooimprovecore \
-    package2 \
     pcr \
     pdffilter \
     placeware \
@@ -186,7 +187,6 @@ my_components = \
     xmx \
     xsltdlg \
     xsltfilter \
-    xstor
 
 .IF "$(DISABLE_PYTHON)" != "TRUE"
 my_components += pythonloader

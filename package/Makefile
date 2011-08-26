@@ -1,8 +1,9 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,38 +26,14 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-PRJNAME=package
-TARGET=zipapi
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-ENABLE_EXCEPTIONS=TRUE
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.INCLUDE : settings.mk
-.INCLUDE : $(PRJ)$/util$/package.pmk
-
-# --- Files --------------------------------------------------------
-.IF "$(L10N_framework)"==""
-.IF "$(SYSTEM_ZLIB)" == "YES"
-CFLAGS+=-DSYSTEM_ZLIB
-.ENDIF
-
-SLOFILES= \
-        $(SLO)$/CRC32.obj			\
-        $(SLO)$/ByteChucker.obj		\
-        $(SLO)$/ByteGrabber.obj		\
-        $(SLO)$/blowfishcontext.obj	\
-        $(SLO)$/Inflater.obj		\
-        $(SLO)$/Deflater.obj		\
-        $(SLO)$/sha1context.obj		\
-        $(SLO)$/ZipEnumeration.obj	\
-        $(SLO)$/ZipFile.obj			\
-        $(SLO)$/ZipOutputStream.obj	\
-        $(SLO)$/XUnbufferedStream.obj
-
-.ENDIF # L10N_framework
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE : target.mk
+# vim: set noet sw=4 ts=4:
