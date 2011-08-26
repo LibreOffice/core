@@ -26,7 +26,9 @@
  *
  ************************************************************************/
 
+#ifdef _MSC_VER
 #define _HAS_ITERATOR_DEBUGGING 0
+#endif
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_fpicker.hxx"
