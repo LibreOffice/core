@@ -2518,6 +2518,9 @@ void ScOutputData::DrawEditParam::adjustForHyperlinkInPDF(Point aURLStart, Outpu
 
 void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 {
+    OSL_ASSERT(rParam.meOrient == SVX_ORIENTATION_STANDARD || rParam.meOrient == SVX_ORIENTATION_REPEAT);
+    OSL_ASSERT(!rParam.mbAsianVertical);
+
     Size aRefOne = pRefDevice->PixelToLogic(Size(1,1));
 
     bool bHidden = false;
@@ -2536,23 +2539,12 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         if ( rParam.mbBreak )
             rParam.meHorJust = SVX_HOR_JUSTIFY_STANDARD;
     }
-    if ( rParam.meOrient==SVX_ORIENTATION_STANDARD && nAttrRotate )
+
+    if (nAttrRotate)
     {
         //! Flag setzen, um die Zelle in DrawRotated wiederzufinden ?
         //! (oder Flag schon bei DrawBackground, dann hier keine Abfrage)
         bHidden = true;     // gedreht wird getrennt ausgegeben
-    }
-
-    rParam.mbAsianVertical = (rParam.meOrient == SVX_ORIENTATION_STACKED) &&
-        lcl_GetBoolValue(*rParam.mpPattern, ATTR_VERTICAL_ASIAN, rParam.mpCondSet);
-
-    if ( rParam.mbAsianVertical )
-    {
-        // in asian mode, use EditEngine::SetVertical instead of EE_CNTRL_ONECHARPERLINE
-        rParam.meOrient = SVX_ORIENTATION_STANDARD;
-        // default alignment for asian vertical mode is top-right
-        if ( rParam.meHorJust == SVX_HOR_JUSTIFY_STANDARD )
-            rParam.meHorJust = SVX_HOR_JUSTIFY_RIGHT;
     }
 
     SvxCellHorJustify eOutHorJust =
@@ -2590,7 +2582,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     //
 
     Size aPaperSize = Size( 1000000, 1000000 );
-    if (rParam.hasLineBreak())
+    if (rParam.mbBreak)
     {
         //  call GetOutputArea with nNeeded=0, to get only the cell width
 
@@ -2657,7 +2649,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         nNeededPixel = pRefDevice->LogicToPixel(Size(nNeededPixel,0)).Width();
     nNeededPixel += nLeftM + nRightM;
 
-    if ( ( !rParam.mbBreak && rParam.meOrient != SVX_ORIENTATION_STACKED ) || rParam.mbAsianVertical || bShrink )
+    if (!rParam.mbBreak || bShrink)
     {
         // for break, the first GetOutputArea call is sufficient
         GetOutputArea( nXForPos, nArrYForPos, rParam.mnPosX, rParam.mnPosY, rParam.mnCellX, rParam.mnCellY, nNeededPixel,
@@ -2666,9 +2658,8 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
         if ( bShrink )
         {
-            bool bWidth = ( rParam.meOrient == SVX_ORIENTATION_STANDARD && !rParam.mbAsianVertical );
             ShrinkEditEngine( *rParam.mpEngine, aAreaParam.maAlignRect,
-                nLeftM, nTopM, nRightM, nBottomM, bWidth,
+                nLeftM, nTopM, nRightM, nBottomM, true,
                 sal::static_int_cast<sal_uInt16>(rParam.meOrient), 0, rParam.mbPixelToLogic,
                 nEngineWidth, nEngineHeight, nNeededPixel,
                 aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
@@ -2726,7 +2717,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             //  No clip marks if "###" doesn't fit (same as in DrawStrings)
         }
 
-        if ( eOutHorJust != SVX_HOR_JUSTIFY_LEFT && rParam.meOrient == SVX_ORIENTATION_STANDARD )
+        if (eOutHorJust != SVX_HOR_JUSTIFY_LEFT)
         {
             aPaperSize.Width() = nNeededPixel + 1;
             if (rParam.mbPixelToLogic)
@@ -2742,15 +2733,13 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     long nOutWidth = nCellWidth - 1 - nLeftM - nRightM;
     long nOutHeight = aAreaParam.maAlignRect.GetHeight() - nTopM - nBottomM;
 
-    if ( rParam.mbBreak || rParam.meOrient != SVX_ORIENTATION_STANDARD || rParam.mbAsianVertical )
+    if (rParam.mbBreak)
     {
         //  text with automatic breaks is aligned only within the
         //  edit engine's paper size, the output of the whole area
         //  is always left-aligned
 
         nStartX += nLeftM;
-        if (rParam.meOrient == SVX_ORIENTATION_TOPBOTTOM && rParam.meHorJust == SVX_HOR_JUSTIFY_BLOCK)
-            nStartX += aPaperSize.Height();
     }
     else
     {
@@ -2827,8 +2816,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         //  Only with automatic line breaks, to avoid having to find
         //  the cells with the horizontal end of the text again.
         if ( nEngineHeight - aCellSize.Height() > 100 &&
-             ( rParam.mbBreak || rParam.meOrient == SVX_ORIENTATION_STACKED ) &&
-             !rParam.mbAsianVertical && bMarkClipped &&
+             rParam.mbBreak && bMarkClipped &&
              ( rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1 ) )
         {
             CellInfo* pClipMarkCell = NULL;
@@ -2877,202 +2865,55 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         aLogicStart = pRefDevice->PixelToLogic( Point(nStartX,nStartY) );
     else
         aLogicStart = Point(nStartX, nStartY);
-    if ( rParam.meOrient!=SVX_ORIENTATION_STANDARD || rParam.mbAsianVertical || !rParam.mbBreak )
-    {
-        long nAvailWidth = aCellSize.Width();
-        // space for AutoFilter is already handled in GetOutputArea
 
+    if (!rParam.mbBreak)
+    {
         //  horizontal alignment
-
-        if (rParam.meOrient==SVX_ORIENTATION_STANDARD && !rParam.mbAsianVertical)
-        {
-            if (rParam.adjustHorAlignment(rParam.mpEngine))
-                // reset adjustment for the next cell
-                rParam.mpOldPattern = NULL;
-        }
-        else if (!rParam.isVerticallyOriented())
-        {
-            if (rParam.meHorJust==SVX_HOR_JUSTIFY_RIGHT)
-                aLogicStart.X() += nAvailWidth - nEngineWidth;
-            else if (rParam.meHorJust==SVX_HOR_JUSTIFY_CENTER)
-                aLogicStart.X() += (nAvailWidth - nEngineWidth) / 2;
-        }
+        if (rParam.adjustHorAlignment(rParam.mpEngine))
+            // reset adjustment for the next cell
+            rParam.mpOldPattern = NULL;
     }
 
-    if ( rParam.mbAsianVertical )
+    if (rParam.meVerJust==SVX_VER_JUSTIFY_BOTTOM ||
+        rParam.meVerJust==SVX_VER_JUSTIFY_STANDARD)
     {
-        // paper size is subtracted below
-        aLogicStart.X() += nEngineWidth;
-    }
+        //! if pRefDevice != pFmtDevice, keep heights in logic units,
+        //! only converting margin?
 
-    if ( (rParam.mbAsianVertical || rParam.isVerticallyOriented()) && rParam.mbBreak )
+        if (rParam.mbPixelToLogic)
+            aLogicStart.Y() += pRefDevice->PixelToLogic( Size(0, nTopM +
+                            pRefDevice->LogicToPixel(aCellSize).Height() -
+                            pRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height()
+                            )).Height();
+        else
+            aLogicStart.Y() += nTopM + aCellSize.Height() - nEngineHeight;
+    }
+    else if (rParam.meVerJust==SVX_VER_JUSTIFY_CENTER)
     {
-        // vertical adjustment is within the EditEngine
+        if (rParam.mbPixelToLogic)
+            aLogicStart.Y() += pRefDevice->PixelToLogic( Size(0, nTopM + (
+                            pRefDevice->LogicToPixel(aCellSize).Height() -
+                            pRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height() )
+                            / 2)).Height();
+        else
+            aLogicStart.Y() += nTopM + (aCellSize.Height() - nEngineHeight) / 2;
+    }
+    else        // top
+    {
         if (rParam.mbPixelToLogic)
             aLogicStart.Y() += pRefDevice->PixelToLogic(Size(0,nTopM)).Height();
         else
             aLogicStart.Y() += nTopM;
     }
 
-    if (!rParam.mbAsianVertical && !rParam.isVerticallyOriented() &&
-        (rParam.meOrient == SVX_ORIENTATION_STANDARD || rParam.meOrient == SVX_ORIENTATION_STACKED || !rParam.mbBreak))
-    {
-        if (rParam.meVerJust==SVX_VER_JUSTIFY_BOTTOM ||
-            rParam.meVerJust==SVX_VER_JUSTIFY_STANDARD)
-        {
-            //! if pRefDevice != pFmtDevice, keep heights in logic units,
-            //! only converting margin?
-
-            if (rParam.mbPixelToLogic)
-                aLogicStart.Y() += pRefDevice->PixelToLogic( Size(0, nTopM +
-                                pRefDevice->LogicToPixel(aCellSize).Height() -
-                                pRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height()
-                                )).Height();
-            else
-                aLogicStart.Y() += nTopM + aCellSize.Height() - nEngineHeight;
-        }
-        else if (rParam.meVerJust==SVX_VER_JUSTIFY_CENTER)
-        {
-            if (rParam.mbPixelToLogic)
-                aLogicStart.Y() += pRefDevice->PixelToLogic( Size(0, nTopM + (
-                                pRefDevice->LogicToPixel(aCellSize).Height() -
-                                pRefDevice->LogicToPixel(Size(0,nEngineHeight)).Height() )
-                                / 2)).Height();
-            else
-                aLogicStart.Y() += nTopM + (aCellSize.Height() - nEngineHeight) / 2;
-        }
-        else        // top
-        {
-            if (rParam.mbPixelToLogic)
-                aLogicStart.Y() += pRefDevice->PixelToLogic(Size(0,nTopM)).Height();
-            else
-                aLogicStart.Y() += nTopM;
-        }
-    }
-
     Point aURLStart = aLogicStart;      // copy before modifying for orientation
-
-    short nOriVal = 0; // Angle of orientation
-    if (rParam.meOrient == SVX_ORIENTATION_TOPBOTTOM)
-    {
-        nOriVal = 2700;
-        if (rParam.meHorJust != SVX_HOR_JUSTIFY_BLOCK)
-        {
-            aLogicStart.X() += nEngineWidth;
-            if (!rParam.mbBreak)
-            {
-                // Set the paper width to text size.
-                Size aPSize = rParam.mpEngine->GetPaperSize();
-                aPSize.Width() = rParam.mpEngine->CalcTextWidth();
-                rParam.mpEngine->SetPaperSize(aPSize);
-
-                long nGap = 0;
-                long nTopOffset = 0; // offset by top margin
-                if (rParam.mbPixelToLogic)
-                {
-                    nGap = pRefDevice->LogicToPixel(aPSize).Width() - pRefDevice->LogicToPixel(aCellSize).Height();
-                    nGap = pRefDevice->PixelToLogic(Size(0, nGap)).Height();
-                    nTopOffset = pRefDevice->PixelToLogic(Size(0,nTopM)).Height();
-                }
-                else
-                {
-                    nGap = aPSize.Width() - aCellSize.Height();
-                    nTopOffset = nTopM;
-                }
-                aLogicStart.Y() += nTopOffset;
-
-                switch (rParam.meVerJust)
-                {
-                    case SVX_VER_JUSTIFY_STANDARD:
-                    case SVX_VER_JUSTIFY_BOTTOM:
-                        // align to bottom
-                        aLogicStart.Y() -= nGap;
-                    break;
-                    case SVX_VER_JUSTIFY_CENTER:
-                        // center it.
-                        aLogicStart.Y() -= nGap / 2;
-                    break;
-                    case SVX_VER_JUSTIFY_BLOCK:
-                    case SVX_VER_JUSTIFY_TOP:
-                        // align to top (do nothing)
-                    default:
-                        ;
-                }
-            }
-        }
-    }
-    else if (rParam.meOrient == SVX_ORIENTATION_BOTTOMTOP)
-    {
-        nOriVal = 900;
-        if (rParam.meHorJust == SVX_HOR_JUSTIFY_BLOCK || rParam.mbBreak)
-        {
-            Size aPSize = rParam.mpEngine->GetPaperSize();
-            aPSize.Width() = aCellSize.Height();
-            rParam.mpEngine->SetPaperSize(aPSize);
-            aLogicStart.Y() +=
-                rParam.mbBreak ? aPSize.Width() : nEngineHeight;
-        }
-        else
-        {
-            // Note that the "paper" is rotated 90 degrees to the left, so
-            // paper's width is in vertical direction.  Also, the whole text
-            // is on a single line, as text wrap is not in effect.
-
-            // Set the paper width to be the width of the text.
-            Size aPSize = rParam.mpEngine->GetPaperSize();
-            aPSize.Width() = rParam.mpEngine->CalcTextWidth();
-            rParam.mpEngine->SetPaperSize(aPSize);
-
-            long nGap = 0;
-            long nTopOffset = 0;
-            if (rParam.mbPixelToLogic)
-            {
-                nGap = pRefDevice->LogicToPixel(aCellSize).Height() - pRefDevice->LogicToPixel(aPSize).Width();
-                nGap = pRefDevice->PixelToLogic(Size(0, nGap)).Height();
-                nTopOffset = pRefDevice->PixelToLogic(Size(0,nTopM)).Height();
-            }
-            else
-            {
-                nGap = aCellSize.Height() - aPSize.Width();
-                nTopOffset = nTopM;
-            }
-
-            // First, align text to bottom.
-            aLogicStart.Y() += aCellSize.Height();
-            aLogicStart.Y() += nTopOffset;
-
-            switch (rParam.meVerJust)
-            {
-                case SVX_VER_JUSTIFY_STANDARD:
-                case SVX_VER_JUSTIFY_BOTTOM:
-                    // align to bottom (do nothing).
-                break;
-                case SVX_VER_JUSTIFY_CENTER:
-                    // center it.
-                    aLogicStart.Y() -= nGap / 2;
-                break;
-                case SVX_VER_JUSTIFY_BLOCK:
-                case SVX_VER_JUSTIFY_TOP:
-                    // align to top
-                    aLogicStart.Y() -= nGap;
-                default:
-                    ;
-            }
-        }
-    }
-    else if (rParam.meOrient == SVX_ORIENTATION_STACKED)
-    {
-        Size aPaperLogic = rParam.mpEngine->GetPaperSize();
-        aPaperLogic.Width() = nEngineWidth;
-        rParam.mpEngine->SetPaperSize(aPaperLogic);
-    }
 
     rParam.adjustForRTL();
 
     // bMoveClipped handling has been replaced by complete alignment
     // handling (also extending to the left).
 
-    if ( bSimClip && !nOriVal && !rParam.mbAsianVertical )
+    if (bSimClip)
     {
         //  kein hartes Clipping, aber nur die betroffenen
         //  Zeilen ausgeben
@@ -3083,13 +2924,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     }
     else
     {
-        if (rParam.mbAsianVertical)
-        {
-            //  with SetVertical, the start position is top left of
-            //  the whole output area, not the text itself
-            aLogicStart.X() -= rParam.mpEngine->GetPaperSize().Width();
-        }
-        rParam.mpEngine->Draw( pDev, aLogicStart, nOriVal );
+        rParam.mpEngine->Draw(pDev, aLogicStart, 0);
     }
 
     if (bClip)
