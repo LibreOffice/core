@@ -57,6 +57,16 @@ while ( <STDIN> ) {
 }
 
 print OUT "\n";
+
+# fdo#40099 if header.h does not exist, it will simply be considered out of
+# date and any targets that use it as a prerequisite will be updated,
+# which avoid misery when the header is deliberately deleted and removed
+# as an include
+# see http://www.makelinux.net/make3/make3-CHP-8-SECT-3
+foreach my $key ( keys %seen ) {
+  print OUT "\n$key:\n";
+}
+
 close( OUT ) or die "Cannot close $outfile.";
 
 # vim: shiftwidth=4 softtabstop=4 expandtab:
