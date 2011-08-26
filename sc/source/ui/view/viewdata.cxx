@@ -2632,9 +2632,8 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
                     {
                         uno::Sequence <beans::PropertyValue> aTableViewSettings;
                         maTabData[nTab]->WriteUserDataSequence(aTableViewSettings, *this, nTab);
-                        String sTabName;
+                        rtl::OUString sTabName;
                         GetDocument()->GetName( nTab, sTabName );
-                        rtl::OUString sOUName(sTabName);
                         uno::Any aAny;
                         aAny <<= aTableViewSettings;
                         try
@@ -2657,11 +2656,10 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
             }
         }
 
-        String sName;
+        rtl::OUString sName;
         GetDocument()->GetName( nTabNo, sName );
-        rtl::OUString sOUName(sName);
         pSettings[SC_ACTIVE_TABLE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ACTIVETABLE));
-        pSettings[SC_ACTIVE_TABLE].Value <<= sOUName;
+        pSettings[SC_ACTIVE_TABLE].Value <<= sName;
         pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_HORIZONTALSCROLLBARWIDTH));
         pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Value <<= sal_Int32(pView->GetTabBarWidth());
         sal_Int32 nZoomValue ((pThisTab->aZoomY.GetNumerator() * 100) / pThisTab->aZoomY.GetDenominator());

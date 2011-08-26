@@ -811,8 +811,8 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
     //  Listbox fuellen
 
     long nMaxText = 0;
-    String aCurrent;
-    String aTabName;
+    rtl::OUString aCurrent;
+    rtl::OUString aTabName;
     SCTAB nTabCount = pDoc->GetTableCount();
     SCTAB nEntryCount = 0;
     for (SCTAB i=nTab+1; i<nTabCount && pDoc->IsScenario(i); i++)
@@ -859,9 +859,9 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
     pFilterBox->GrabFocus();
 
     sal_uInt16 nPos = LISTBOX_ENTRY_NOTFOUND;
-    if (aCurrent.Len())
+    if (!aCurrent.isEmpty())
     {
-        nPos = pFilterBox->GetEntryPos( aCurrent );
+        nPos = pFilterBox->GetEntryPos(String(aCurrent));
     }
     if (LISTBOX_ENTRY_NOTFOUND == nPos && pFilterBox->GetEntryCount() > 0 )
         nPos = 0;

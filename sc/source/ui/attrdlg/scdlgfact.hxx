@@ -327,10 +327,10 @@ class AbstractScDPShowDetailDlg_Impl : public AbstractScDPShowDetailDlg
 class AbstractScNewScenarioDlg_Impl : public AbstractScNewScenarioDlg  //add for ScNewScenarioDlg
 {
     DECL_ABSTDLG_BASE( AbstractScNewScenarioDlg_Impl, ScNewScenarioDlg )
-    virtual void SetScenarioData( const String& rName, const String& rComment,
+    virtual void SetScenarioData( const rtl::OUString& rName, const rtl::OUString& rComment,
                             const Color& rColor, sal_uInt16 nFlags );
 
-    virtual void GetScenarioData( String& rName, String& rComment,
+    virtual void GetScenarioData( rtl::OUString& rName, rtl::OUString& rComment,
                             Color& rColor, sal_uInt16& rFlags ) const;
 };
 
@@ -347,7 +347,7 @@ class AbstractScShowTabDlg_Impl : public AbstractScShowTabDlg  //add for ScShowT
 class AbstractScStringInputDlg_Impl :  public AbstractScStringInputDlg  //add for ScStringInputDlg
 {
     DECL_ABSTDLG_BASE( AbstractScStringInputDlg_Impl, ScStringInputDlg )
-    virtual void GetInputString( String& rString ) const;
+    virtual void GetInputString( rtl::OUString& rString ) const;
 };
 
 class AbstractScTabBgColorDlg_Impl :  public AbstractScTabBgColorDlg  //add for ScTabBgColorDlg

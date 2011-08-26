@@ -163,7 +163,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
             pDrawLayer->ScAddPage( nTab );      // always add page, with or without the table
             if (maTabs[nTab])
             {
-                String aTabName;
+                rtl::OUString aTabName;
                 maTabs[nTab]->GetName(aTabName);
                 pDrawLayer->ScRenamePage( nTab, aTabName );
 

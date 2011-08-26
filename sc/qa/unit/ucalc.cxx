@@ -1290,9 +1290,9 @@ void Test::testSheetMove()
     CPPUNIT_ASSERT_MESSAGE("document now should have two sheets.", m_pDoc->GetTableCount() == 2);
     bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("copied sheet should also have all rows visible as the original.", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
-    String aName;
+    rtl::OUString aName;
     m_pDoc->GetName(0, aName);
-    CPPUNIT_ASSERT_MESSAGE("sheets should have changed places", aName.EqualsAscii("TestTab1"));
+    CPPUNIT_ASSERT_MESSAGE("sheets should have changed places", aName.equalsAscii("TestTab1"));
 
     m_pDoc->SetRowHidden(5, 10, 0, true);
     bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
@@ -1312,7 +1312,7 @@ void Test::testSheetMove()
     bHidden = m_pDoc->RowHidden(11, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
     m_pDoc->GetName(0, aName);
-    CPPUNIT_ASSERT_MESSAGE("sheets should have changed places", aName.EqualsAscii("TestTab2"));
+    CPPUNIT_ASSERT_MESSAGE("sheets should have changed places", aName.equalsAscii("TestTab2"));
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }

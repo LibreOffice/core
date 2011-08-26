@@ -782,10 +782,12 @@ struct ConventionOOO_A1 : public Convention_A1
     static String MakeTabStr( const ScCompiler& rComp, SCTAB nTab, String& aDoc )
     {
         String aString;
-        if (!rComp.GetDoc()->GetName( nTab, aString ))
+        rtl::OUString aTmp;
+        if (!rComp.GetDoc()->GetName( nTab, aTmp ))
             aString = ScGlobal::GetRscString(STR_NO_REF_TABLE);
         else
         {
+            aString = aTmp;
             if ( aString.GetChar(0) == '\'' )
             {   // "'Doc'#Tab"
                 xub_StrLen nPos = ScGlobal::FindUnquoted( aString, SC_COMPILER_FILE_TAB_SEP);
@@ -868,8 +870,8 @@ struct ConventionOOO_A1 : public Convention_A1
                 (aRef.Ref1.IsColDeleted() || aRef.Ref1.IsRowDeleted() || aRef.Ref1.IsTabDeleted() ||
                  aRef.Ref2.IsColDeleted() || aRef.Ref2.IsRowDeleted() || aRef.Ref2.IsTabDeleted()))
             rBuffer.append( rComp.GetCurrentOpCodeMap()->getSymbol( ocErrRef));
-            // For ODFF write [#REF!], but not for PODF so apps reading ODF 
-            // 1.0/1.1 may have a better chance if they implemented the old 
+            // For ODFF write [#REF!], but not for PODF so apps reading ODF
+            // 1.0/1.1 may have a better chance if they implemented the old
             // form.
         else
         {
@@ -1114,12 +1116,14 @@ struct ConventionXL
         bool bHasDoc = false;
 
         rDocName.Erase();
+        rtl::OUString aTmp;
         if (rRef.IsTabDeleted() ||
-            !rComp.GetDoc()->GetName( rRef.nTab, rTabName ))
+            !rComp.GetDoc()->GetName( rRef.nTab, aTmp ))
         {
             rTabName = ScGlobal::GetRscString( STR_NO_REF_TABLE );
             return false;
         }
+        rTabName = aTmp;
 
         // Cheesy hack to unparse the OOO style "'Doc'#Tab"
         if ( rTabName.GetChar(0) == '\'' )
@@ -2175,13 +2179,13 @@ Label_MaskStateMachine:
             case ssGetErrorConstant:
                 {
                     // ODFF Error ::= '#' [A-Z0-9]+ ([!?] | ('/' ([A-Z] | ([0-9] [!?]))))
-                    // BUT, in UI these may have been translated! So don't 
+                    // BUT, in UI these may have been translated! So don't
                     // check for ASCII alnum. Note that this construct can't be
                     // parsed with i18n.
-                    /* TODO: be strict when reading ODFF, check for ASCII alnum 
-                     * and proper continuation after '/'. However, even with 
-                     * the lax parsing only the error constants we have defined 
-                     * as opcode symbols will be recognized and others result 
+                    /* TODO: be strict when reading ODFF, check for ASCII alnum
+                     * and proper continuation after '/'. However, even with
+                     * the lax parsing only the error constants we have defined
+                     * as opcode symbols will be recognized and others result
                      * in ocBad, so the result is actually conformant. */
                     bool bAdd = true;
                     if ('!' == c || '?' == c)
@@ -2680,7 +2684,7 @@ bool ScCompiler::IsPredetectedReference( const String& rName )
          * 'haha.#REF!1fooledyou' and will generate an error on such. */
         if (nPos == 0)
         {
-            // Per ODFF the correct string for a reference error is just #REF!, 
+            // Per ODFF the correct string for a reference error is just #REF!,
             // so pass it on.
             if (rName.Len() == 5)
                 return IsErrorConstant( rName);
@@ -3580,7 +3584,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
              * would need an ocBad token with additional error value.
              * FormulaErrorToken wouldn't do because we want to preserve the
              * original string containing partial valid address
-             * information if not ODFF (in that case it was already handled). 
+             * information if not ODFF (in that case it was already handled).
              * */
             ScRawToken aToken;
             aToken.SetString( aStr.GetBuffer() );

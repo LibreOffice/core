@@ -242,8 +242,8 @@ private:
 
     XclPCInfo           maPCInfo;           /// Pivot cache settings (SXDB record).
     XclExpPCFieldList   maFieldList;        /// List of all pivot cache fields.
-    String              maTabName;          /// Name of source data sheet.
-    ::rtl::OUString     maSrcRangeName;     /// Range name for source data.
+    rtl::OUString       maTabName;          /// Name of source data sheet.
+    rtl::OUString       maSrcRangeName;     /// Range name for source data.
     ScRange             maOrigSrcRange;     /// The original sheet source range.
     ScRange             maExpSrcRange;      /// The exported sheet source range.
     ScRange             maDocSrcRange;      /// The range used to build the cache fields and items.

@@ -3635,7 +3635,7 @@ void ScXMLExport::WriteScenario()
 {
     if (pDoc && pDoc->IsScenario(static_cast<SCTAB>(nCurrentTable)))
     {
-        String      sComment;
+        rtl::OUString sComment;
         Color       aColor;
         sal_uInt16  nFlags;
         pDoc->GetScenarioData(static_cast<SCTAB>(nCurrentTable), sComment, aColor, nFlags);
@@ -3658,8 +3658,8 @@ void ScXMLExport::WriteScenario()
         rtl::OUString sRangeListStr;
         ScRangeStringConverter::GetStringFromRangeList( sRangeListStr, pRangeList, pDoc, FormulaGrammar::CONV_OOO );
         AddAttribute(XML_NAMESPACE_TABLE, XML_SCENARIO_RANGES, sRangeListStr);
-        if (sComment.Len())
-            AddAttribute(XML_NAMESPACE_TABLE, XML_COMMENT, rtl::OUString(sComment));
+        if (!sComment.isEmpty())
+            AddAttribute(XML_NAMESPACE_TABLE, XML_COMMENT, sComment);
         SvXMLElementExport aElem(*this, XML_NAMESPACE_TABLE, XML_SCENARIO, sal_True, sal_True);
     }
 }

@@ -273,6 +273,7 @@ public:
                             const SfxItemPool* pFromPool /* = NULL */ );
     void            GetData( const EditTextObject*& rpObject ) const;
     void            GetString( String& rString ) const;
+    void            GetString( rtl::OUString& rString ) const;
 
     const EditTextObject* GetData() const   { return pData; }
 
@@ -463,6 +464,7 @@ public:
     double          GetValue();
     double          GetValueAlways();   // ignore errors
     void            GetString( String& rString );
+    void            GetString( rtl::OUString& rString );
     const ScMatrix* GetMatrix();
     sal_Bool            GetMatrixOrigin( ScAddress& rPos ) const;
     void            GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );

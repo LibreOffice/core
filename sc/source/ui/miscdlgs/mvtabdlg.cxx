@@ -339,7 +339,7 @@ IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox *, pLb )
     if ( pLb == &aLbDoc )
     {
         ScDocument* pDoc = GetSelectedDoc();
-        String      aName;
+        rtl::OUString aName;
 
         aLbTable.Clear();
         aLbTable.SetUpdateMode( false );

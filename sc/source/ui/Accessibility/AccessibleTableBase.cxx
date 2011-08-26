@@ -362,7 +362,7 @@ uno::Reference< XAccessible > SAL_CALL
     throw (uno::RuntimeException)
 {
     String sName(ScResId(STR_ACC_TABLE_NAME));
-    String sCoreName;
+    rtl::OUString sCoreName;
     if (mpDoc && mpDoc->GetName( maRange.aStart.Tab(), sCoreName ))
         sName.SearchAndReplaceAscii("%1", sCoreName);
     return rtl::OUString(sName);

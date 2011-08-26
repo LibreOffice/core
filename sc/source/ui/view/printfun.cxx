@@ -1715,7 +1715,9 @@ sal_Bool ScPrintFunc::IsLeft( long nPageNo )            // linke Fussnoten ?
 
 void ScPrintFunc::MakeTableString()
 {
-    pDoc->GetName( nPrintTab, aFieldData.aTabName );
+    rtl::OUString aTmp;
+    pDoc->GetName(nPrintTab, aTmp);
+    aFieldData.aTabName = aTmp;
 }
 
 void ScPrintFunc::MakeEditEngine()

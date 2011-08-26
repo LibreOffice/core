@@ -233,7 +233,7 @@ void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
     if ( pSrcDoc )
     {
         SCTAB nCount = pSrcDoc->GetTableCount();
-        String aName;
+        rtl::OUString aName;
 
         for ( SCTAB i=0; i<nCount; i++ )
         {

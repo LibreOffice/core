@@ -484,9 +484,9 @@ void ScDocShell::RefreshPivotTables( const ScRange& rSource )
     }
 }
 
-String lcl_GetAreaName( ScDocument* pDoc, ScArea* pArea )
+rtl::OUString lcl_GetAreaName( ScDocument* pDoc, ScArea* pArea )
 {
-    String aName;
+    rtl::OUString aName;
     sal_Bool bOk = false;
     ScDBData* pData = pDoc->GetDBAtArea( pArea->nTab, pArea->nColStart, pArea->nRowStart,
                                                         pArea->nColEnd, pArea->nRowEnd );
@@ -666,14 +666,14 @@ void ScDocShell::UseScenario( SCTAB nTab, const String& rName, sal_Bool bRecord 
         SCTAB   nTabCount = aDocument.GetTableCount();
         SCTAB   nSrcTab = SCTAB_MAX;
         SCTAB   nEndTab = nTab;
-        String aCompare;
+        rtl::OUString aCompare;
         while ( nEndTab+1 < nTabCount && aDocument.IsScenario(nEndTab+1) )
         {
             ++nEndTab;
             if (nSrcTab > MAXTAB)           // noch auf der Suche nach dem Szenario?
             {
                 aDocument.GetName( nEndTab, aCompare );
-                if (aCompare == rName)
+                if (aCompare.equals(rName))
                     nSrcTab = nEndTab;      // gefunden
             }
         }
@@ -702,7 +702,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const String& rName, sal_Bool bRecord 
                     for (SCTAB i=nTab+1; i<=nEndTab; i++)
                     {
                         pUndoDoc->SetScenario( i, sal_True );
-                        String aComment;
+                        rtl::OUString aComment;
                         Color  aColor;
                         sal_uInt16 nScenFlags;
                         aDocument.GetScenarioData( i, aComment, aColor, nScenFlags );
@@ -754,9 +754,9 @@ void ScDocShell::ModifyScenario( SCTAB nTab, const String& rName, const String& 
                                     const Color& rColor, sal_uInt16 nFlags )
 {
     //  Undo
-    String aOldName;
+    rtl::OUString aOldName;
     aDocument.GetName( nTab, aOldName );
-    String aOldComment;
+    rtl::OUString aOldComment;
     Color aOldColor;
     sal_uInt16 nOldFlags;
     aDocument.GetScenarioData( nTab, aOldComment, aOldColor, nOldFlags );
@@ -772,7 +772,7 @@ void ScDocShell::ModifyScenario( SCTAB nTab, const String& rName, const String& 
     PostPaintGridAll();
     aModificator.SetDocumentModified();
 
-    if ( rName != aOldName )
+    if (!aOldName.equals(rName))
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
 
     SfxBindings* pBindings = GetViewBindings();
@@ -862,7 +862,7 @@ sal_uLong ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
 
     if(nErrVal>0 && pSrcDoc->IsScenario( nSrcPos ))
     {
-        String aComment;
+        rtl::OUString aComment;
         Color  aColor;
         sal_uInt16 nFlags;
 
@@ -902,7 +902,7 @@ sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, s
         if (bRecord)
             aDocument.BeginDrawUndo();          // drawing layer must do its own undo actions
 
-        String sSrcCodeName;
+        rtl::OUString sSrcCodeName;
         aDocument.GetCodeName( nSrcTab, sSrcCodeName );
         if (!aDocument.CopyTab( nSrcTab, nDestTab ))
         {

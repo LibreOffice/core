@@ -1657,7 +1657,9 @@ void ScAddress::Format( String& r, sal_uInt16 nFlags, ScDocument* pDoc,
         if( nFlags & SCA_TAB_3D )
         {
             String aTabName, aDocName;
-            pDoc->GetName( nTab, aTabName );
+            rtl::OUString aTmp;
+            pDoc->GetName(nTab, aTmp);
+            aTabName = aTmp; // TODO: remove use of String here.
             // External Reference, same as in ScCompiler::MakeTabStr()
             if( aTabName.GetChar(0) == '\'' )
             {   // "'Doc'#Tab"
@@ -1732,7 +1734,9 @@ lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
                   sal_uInt16 nFlags,
                   String& rTabName, String& rDocName )
 {
-    pDoc->GetName( nTab, rTabName );
+    rtl::OUString aTmp;
+    pDoc->GetName(nTab, aTmp);
+    rTabName = aTmp;
     rDocName.Erase();
     // External reference, same as in ScCompiler::MakeTabStr()
     if ( rTabName.GetChar(0) == '\'' )

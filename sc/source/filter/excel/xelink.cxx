@@ -782,10 +782,10 @@ bool XclExpTabInfo::IsMirroredTab( SCTAB nScTab ) const
     return GetFlag( nScTab, EXC_TABBUF_MIRRORED );
 }
 
-const String& XclExpTabInfo::GetScTabName( SCTAB nScTab ) const
+rtl::OUString XclExpTabInfo::GetScTabName( SCTAB nScTab ) const
 {
     OSL_ENSURE( nScTab < mnScCnt, "XclExpTabInfo::IsActiveTab - sheet out of range" );
-    return (nScTab < mnScCnt) ? maTabInfoVec[ nScTab ].maScName : EMPTY_STRING;
+    return (nScTab < mnScCnt) ? maTabInfoVec[ nScTab ].maScName : rtl::OUString();
 }
 
 sal_uInt16 XclExpTabInfo::GetXclTab( SCTAB nScTab ) const
@@ -844,7 +844,7 @@ void XclExpTabInfo::CalcXclIndexes()
     // result: first occur all exported sheets, followed by all external sheets
 }
 
-typedef ::std::pair< String, SCTAB >    XclExpTabName;
+typedef ::std::pair< rtl::OUString, SCTAB > XclExpTabName;
 typedef ::std::vector< XclExpTabName >  XclExpTabNameVec;
 
 inline bool operator<( const XclExpTabName& rArg1, const XclExpTabName& rArg2 )

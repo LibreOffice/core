@@ -169,7 +169,7 @@ sal_Bool ScDocument::HasTable( SCTAB nTab ) const
     return false;
 }
 
-bool ScDocument::GetName( SCTAB nTab, String& rName ) const
+bool ScDocument::GetName( SCTAB nTab, rtl::OUString& rName ) const
 {
     if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
@@ -177,19 +177,11 @@ bool ScDocument::GetName( SCTAB nTab, String& rName ) const
             maTabs[nTab]->GetName( rName );
             return true;
         }
-    rName.Erase();
+    rName = rtl::OUString();
     return false;
 }
 
-bool ScDocument::GetName( SCTAB nTab, OUString& rName ) const
-{
-    String aTmp;
-    bool bRet = GetName(nTab, aTmp);
-    rName = aTmp;
-    return bRet;
-}
-
-sal_Bool ScDocument::SetCodeName( SCTAB nTab, const String& rName )
+bool ScDocument::SetCodeName( SCTAB nTab, const rtl::OUString& rName )
 {
     if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
     {
@@ -203,7 +195,7 @@ sal_Bool ScDocument::SetCodeName( SCTAB nTab, const String& rName )
     return false;
 }
 
-sal_Bool ScDocument::GetCodeName( SCTAB nTab, String& rName ) const
+bool ScDocument::GetCodeName( SCTAB nTab, rtl::OUString& rName ) const
 {
     if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
@@ -211,19 +203,19 @@ sal_Bool ScDocument::GetCodeName( SCTAB nTab, String& rName ) const
             maTabs[nTab]->GetCodeName( rName );
             return true;
         }
-    rName.Erase();
+    rName = rtl::OUString();
     return false;
 }
 
-sal_Bool ScDocument::GetTable( const String& rName, SCTAB& rTab ) const
+bool ScDocument::GetTable( const rtl::OUString& rName, SCTAB& rTab ) const
 {
-    String aUpperName = rName;
+    rtl::OUString aUpperName = rName;
     ScGlobal::pCharClass->toUpper(aUpperName);
 
     for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i])
         {
-            if ( maTabs[i]->GetUpperName() == aUpperName )
+            if (aUpperName.equals(maTabs[i]->GetUpperName()))
             {
                 rTab = i;
                 return true;
@@ -294,7 +286,7 @@ sal_Bool ScDocument::ValidNewTabName( const String& rName ) const
     for (; it != maTabs.end() && bValid; ++it)
         if ( *it )
         {
-            String aOldName;
+            rtl::OUString aOldName;
             (*it)->GetName(aOldName);
             bValid = !ScGlobal::GetpTransliteration()->isEqual( rName, aOldName );
         }
@@ -316,7 +308,7 @@ bool ScDocument::ValidNewTabName( const std::vector<String>& rNames ) const//TOD
         {
             for (nameIter = rNames.begin(); nameIter != rNames.end(); ++nameIter)
             {
-                String aOldName;
+                rtl::OUString aOldName;
                 (*it)->GetName(aOldName);
                 bValid = !ScGlobal::GetpTransliteration()->isEqual( *nameIter, aOldName );
             }
@@ -371,6 +363,12 @@ void ScDocument::CreateValidTabName(String& rName) const
     }
 }
 
+void ScDocument::CreateValidTabName(rtl::OUString& rName) const
+{
+    String aTmp = rName;
+    CreateValidTabName(aTmp);
+    rName = aTmp;
+}
 
 void ScDocument::CreateValidTabNames(std::vector<rtl::OUString>& aNames, SCTAB nCount) const
 {
@@ -761,7 +759,7 @@ sal_Bool ScDocument::RenameTab( SCTAB nTab, const String& rName, sal_Bool /* bUp
             for (i=0; (i< static_cast<SCTAB>(maTabs.size())) && bValid; i++)
                 if (maTabs[i] && (i != nTab))
                 {
-                    String aOldName;
+                    rtl::OUString aOldName;
                     maTabs[i]->GetName(aOldName);
                     bValid = !ScGlobal::GetpTransliteration()->isEqual( rName, aOldName );
                 }
@@ -3053,6 +3051,12 @@ void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rSt
         rString.Erase();
 }
 
+void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString )
+{
+    String aTmp;
+    GetInputString(nCol, nRow, nTab, aTmp);
+    rString = aTmp;
+}
 
 void ScDocument::GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue )
 {

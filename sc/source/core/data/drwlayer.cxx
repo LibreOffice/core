@@ -1314,17 +1314,17 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
     //#i110034# charts need correct sheet names for xml range conversion during load
     //so the target sheet name is temporarily renamed (if we have any SdrObjects)
-    String aDestTabName;
+    rtl::OUString aDestTabName;
     sal_Bool bRestoreDestTabName = false;
     if( pOldObject && !bSameDoc && !bDestClip )
     {
         if( pDoc && pClipDoc )
         {
-            String aSourceTabName;
+            rtl::OUString aSourceTabName;
             if( pClipDoc->GetName( nSourceTab, aSourceTabName )
                 && pDoc->GetName( nDestTab, aDestTabName ) )
             {
-                if( !(aSourceTabName==aDestTabName) &&
+                if( !aSourceTabName.equals(aDestTabName) &&
                     pDoc->ValidNewTabName(aSourceTabName) )
                 {
                     bRestoreDestTabName = pDoc->RenameTab( nDestTab, aSourceTabName ); //sal_Bool bUpdateRef = sal_True, sal_Bool bExternalDocument = sal_False

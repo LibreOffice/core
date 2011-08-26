@@ -1912,7 +1912,6 @@ void ScInterpreter::ScCell()
             PushIllegalParameter();
         else
         {
-            String          aFuncResult;
             ScBaseCell*     pCell = GetCell( aCellPos );
 
             ScCellKeywordTranslator::transKeyword(aInfoType, ScGlobal::GetLocale(), ocCell);
@@ -1933,12 +1932,14 @@ void ScInterpreter::ScCell()
             else if( aInfoType.EqualsAscii( "ADDRESS" ) )
             {   // address formatted as [['FILENAME'#]$TABLE.]$COL$ROW
                 sal_uInt16 nFlags = (aCellPos.Tab() == aPos.Tab()) ? (SCA_ABS) : (SCA_ABS_3D);
-                aCellPos.Format( aFuncResult, nFlags, pDok, pDok->GetAddressConvention() );
-                PushString( aFuncResult );
+                rtl::OUString aStr;
+                aCellPos.Format( aStr, nFlags, pDok, pDok->GetAddressConvention() );
+                PushString(aStr);
             }
             else if( aInfoType.EqualsAscii( "FILENAME" ) )
             {   // file name and table name: 'FILENAME'#$TABLE
                 SCTAB nTab = aCellPos.Tab();
+                rtl::OUString aFuncResult;
                 if( nTab < pDok->GetTableCount() )
                 {
                     if( pDok->GetLinkMode( nTab ) == SC_LINK_VALUE )
@@ -1948,13 +1949,15 @@ void ScInterpreter::ScCell()
                         SfxObjectShell* pShell = pDok->GetDocumentShell();
                         if( pShell && pShell->GetMedium() )
                         {
-                            aFuncResult = (sal_Unicode) '\'';
+                            rtl::OUStringBuffer aBuf;
+                            aBuf.append(sal_Unicode('\''));
                             const INetURLObject& rURLObj = pShell->GetMedium()->GetURLObject();
-                            aFuncResult += String( rURLObj.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
-                            aFuncResult.AppendAscii( "'#$" );
-                            String aTabName;
+                            aBuf.append(rURLObj.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS));
+                            aBuf.appendAscii("'#$");
+                            rtl::OUString aTabName;
                             pDok->GetName( nTab, aTabName );
-                            aFuncResult += aTabName;
+                            aBuf.append(aTabName);
+                            aFuncResult = aBuf.makeStringAndClear();
                         }
                     }
                 }
@@ -1963,14 +1966,16 @@ void ScInterpreter::ScCell()
             else if( aInfoType.EqualsAscii( "COORD" ) )
             {   // address, lotus 1-2-3 formatted: $TABLE:$COL$ROW
                 // Yes, passing tab as col is intentional!
+                rtl::OUStringBuffer aFuncResult;
+                rtl::OUString aCellStr;
                 ScAddress( static_cast<SCCOL>(aCellPos.Tab()), 0, 0 ).Format(
-                    aFuncResult, (SCA_COL_ABSOLUTE|SCA_VALID_COL), NULL, pDok->GetAddressConvention() );
-                aFuncResult += ':';
-                String aCellStr;
+                    aCellStr, (SCA_COL_ABSOLUTE|SCA_VALID_COL), NULL, pDok->GetAddressConvention() );
+                aFuncResult.append(aCellStr);
+                aFuncResult.append(sal_Unicode(':'));
                 aCellPos.Format( aCellStr, (SCA_COL_ABSOLUTE|SCA_VALID_COL|SCA_ROW_ABSOLUTE|SCA_VALID_ROW),
                                  NULL, pDok->GetAddressConvention() );
-                aFuncResult += aCellStr;
-                PushString( aFuncResult );
+                aFuncResult.append(aCellStr);
+                PushString( aFuncResult.makeStringAndClear() );
             }
 
 // *** CELL PROPERTIES ***
@@ -1978,19 +1983,21 @@ void ScInterpreter::ScCell()
             {   // contents of the cell, no formatting
                 if( pCell && pCell->HasStringData() )
                 {
-                    GetCellString( aFuncResult, pCell );
-                    PushString( aFuncResult );
+                    String aStr;
+                    GetCellString( aStr, pCell );
+                    PushString( aStr );
                 }
                 else
                     PushDouble( GetCellValue( aCellPos, pCell ) );
             }
             else if( aInfoType.EqualsAscii( "TYPE" ) )
             {   // b = blank; l = string (label); v = otherwise (value)
+                sal_Unicode c;
                 if( HasCellStringData( pCell ) )
-                    aFuncResult = 'l';
+                    c = 'l';
                 else
-                    aFuncResult = HasCellValueData( pCell ) ? 'v' : 'b';
-                PushString( aFuncResult );
+                    c = HasCellValueData( pCell ) ? 'v' : 'b';
+                PushString( rtl::OUString(c) );
             }
             else if( aInfoType.EqualsAscii( "WIDTH" ) )
             {   // column width (rounded off as count of zero characters in standard font and size)
@@ -2011,6 +2018,7 @@ void ScInterpreter::ScCell()
             }
             else if( aInfoType.EqualsAscii( "PREFIX" ) )
             {   // ' = left; " = right; ^ = centered
+                sal_Unicode c = 0;
                 if( HasCellStringData( pCell ) )
                 {
                     const SvxHorJustifyItem* pJustAttr = (const SvxHorJustifyItem*)
@@ -2019,13 +2027,13 @@ void ScInterpreter::ScCell()
                     {
                         case SVX_HOR_JUSTIFY_STANDARD:
                         case SVX_HOR_JUSTIFY_LEFT:
-                        case SVX_HOR_JUSTIFY_BLOCK:     aFuncResult = '\''; break;
-                        case SVX_HOR_JUSTIFY_CENTER:    aFuncResult = '^';  break;
-                        case SVX_HOR_JUSTIFY_RIGHT:     aFuncResult = '"';  break;
-                        case SVX_HOR_JUSTIFY_REPEAT:    aFuncResult = '\\'; break;
+                        case SVX_HOR_JUSTIFY_BLOCK:     c = '\''; break;
+                        case SVX_HOR_JUSTIFY_CENTER:    c = '^';  break;
+                        case SVX_HOR_JUSTIFY_RIGHT:     c = '"';  break;
+                        case SVX_HOR_JUSTIFY_REPEAT:    c = '\\'; break;
                     }
                 }
-                PushString( aFuncResult );
+                PushString( rtl::OUString(c) );
             }
             else if( aInfoType.EqualsAscii( "PROTECT" ) )
             {   // 1 = cell locked
@@ -2037,6 +2045,7 @@ void ScInterpreter::ScCell()
 // *** FORMATTING ***
             else if( aInfoType.EqualsAscii( "FORMAT" ) )
             {   // specific format code for standard formats
+                String aFuncResult;
                 sal_uLong   nFormat = pDok->GetNumberFormat( aCellPos );
                 bool        bAppendPrec = true;
                 sal_uInt16  nPrec, nLeading;

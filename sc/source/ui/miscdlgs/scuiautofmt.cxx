@@ -253,7 +253,7 @@ IMPL_LINK( ScAutoFormatDlg, AddHdl, void *, EMPTYARG )
     if ( !bFmtInserted && pSelFmtData )
     {
         String              aStrStandard( SfxResId(STR_STANDARD) );
-        String              aFormatName;
+        rtl::OUString aFormatName;
         ScStringInputDlg*   pDlg;
         sal_Bool                bOk = false;
 
@@ -269,7 +269,7 @@ IMPL_LINK( ScAutoFormatDlg, AddHdl, void *, EMPTYARG )
             {
                 pDlg->GetInputString( aFormatName );
 
-                if ( (aFormatName.Len() > 0) && (aFormatName != aStrStandard) )
+                if ( !aFormatName.isEmpty() && !aFormatName.equals(aStrStandard) )
                 {
                     ScAutoFormatData* pNewData
                         = new ScAutoFormatData( *pSelFmtData );
@@ -363,7 +363,7 @@ IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
     while( !bOk )
     {
 
-        String aFormatName=aLbFormat.GetSelectEntry();
+        rtl::OUString aFormatName = aLbFormat.GetSelectEntry();
         String aEntry;
 
         ScStringInputDlg* pDlg = new ScStringInputDlg( this,
@@ -377,12 +377,12 @@ IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
             pDlg->GetInputString( aFormatName );
             sal_uInt16 n;
 
-            if ( aFormatName.Len() > 0 )
+            if (!aFormatName.isEmpty())
             {
                 for( n = 0; n < pFormat->GetCount(); ++n )
                 {
                     (*pFormat)[n]->GetName(aEntry);
-                    if ( aEntry== aFormatName)
+                    if (aFormatName.equals(aEntry))
                         break;
                 }
                 if( n >= pFormat->GetCount() )

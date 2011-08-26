@@ -1202,15 +1202,18 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
 {
     String  sTmpName;
     String  sTmpComm;
+    rtl::OUString aTmp;
     Color   aDummyCol;
     sal_uInt16  nFlags;
 
     ScDocument& rDoc = rRoot.GetDoc();
-    rDoc.GetName( nTab, sTmpName );
+    rDoc.GetName(nTab, aTmp);
+    sTmpName = aTmp;
     sName.Assign( sTmpName, EXC_STR_8BITLENGTH );
     nRecLen = 8 + sName.GetBufferSize();
 
-    rDoc.GetScenarioData( nTab, sTmpComm, aDummyCol, nFlags );
+    rDoc.GetScenarioData( nTab, aTmp, aDummyCol, nFlags );
+    sTmpComm = aTmp;
     sComment.Assign( sTmpComm, EXC_STR_DEFAULT, 255 );
     if( sComment.Len() )
         nRecLen += sComment.GetSize();

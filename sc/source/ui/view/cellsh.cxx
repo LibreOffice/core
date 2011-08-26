@@ -740,7 +740,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
                     if ( !pDoc->IsScenario(nTab) )
                     {
-                        String aStr;
+                        rtl::OUString aStr;
                         sal_uInt16 nFlags;
                         SCTAB nScTab = nTab + 1;
                         String aProtect;
@@ -760,7 +760,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     }
                     else
                     {
-                        String  aComment;
+                        rtl::OUString aComment;
                         sal_uInt16  nDummyFlags;
                         pDoc->GetScenarioData( nTab, aComment, aDummyCol, nDummyFlags );
                         OSL_ENSURE( aList.empty(), "List not empty!" );

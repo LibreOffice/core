@@ -877,13 +877,13 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     if ( pItem->ISA(SfxStringItem) )
                     {
-                        String aName = ((const SfxStringItem*)pItem)->GetValue();
+                        rtl::OUString aName = ((const SfxStringItem*)pItem)->GetValue();
                         SCTAB nTab;
                         if (aDocument.GetTable( aName, nTab ))
                         {
                             if (aDocument.IsScenario(nTab))
                             {
-                                String aComment;
+                                rtl::OUString aComment;
                                 Color aColor;
                                 sal_uInt16 nFlags;
                                 aDocument.GetScenarioData( nTab, aComment, aColor, nFlags );

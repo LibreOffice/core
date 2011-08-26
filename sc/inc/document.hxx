@@ -524,11 +524,10 @@ public:
     SC_DLLPUBLIC void           SetVisibleTab(SCTAB nTab)   { nVisibleTab = nTab; }
 
     SC_DLLPUBLIC sal_Bool           HasTable( SCTAB nTab ) const;
-    SC_DLLPUBLIC bool           GetName( SCTAB nTab, String& rName ) const;
-    SC_DLLPUBLIC bool           GetName( SCTAB nTab, ::rtl::OUString& rName ) const;
-    SC_DLLPUBLIC sal_Bool           GetCodeName( SCTAB nTab, String& rName ) const;
-    SC_DLLPUBLIC sal_Bool                   SetCodeName( SCTAB nTab, const String& rName );
-    SC_DLLPUBLIC sal_Bool           GetTable( const String& rName, SCTAB& rTab ) const;
+    SC_DLLPUBLIC bool GetName( SCTAB nTab, rtl::OUString& rName ) const;
+    SC_DLLPUBLIC bool GetCodeName( SCTAB nTab, rtl::OUString& rName ) const;
+    SC_DLLPUBLIC bool SetCodeName( SCTAB nTab, const rtl::OUString& rName );
+    SC_DLLPUBLIC bool GetTable( const rtl::OUString& rName, SCTAB& rTab ) const;
 
     SC_DLLPUBLIC void            SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData);
     SC_DLLPUBLIC ScDBData*       GetAnonymousDBData(SCTAB nTab);
@@ -573,6 +572,7 @@ public:
     SC_DLLPUBLIC sal_Bool           ValidNewTabName( const String& rName ) const;
     SC_DLLPUBLIC bool               ValidNewTabName( const std::vector<String>& rName ) const;
     SC_DLLPUBLIC void           CreateValidTabName(String& rName) const;
+    SC_DLLPUBLIC void           CreateValidTabName(rtl::OUString& rName) const;
     SC_DLLPUBLIC void           CreateValidTabNames(std::vector<rtl::OUString>& aNames, SCTAB nCount) const;
     SC_DLLPUBLIC sal_Bool           InsertTab( SCTAB nPos, const String& rName,
                                 sal_Bool bExternalDocument = false );
@@ -603,8 +603,8 @@ public:
     sal_Bool            IsNegativePage( SCTAB nTab ) const;
     SC_DLLPUBLIC void           SetScenario( SCTAB nTab, sal_Bool bFlag );
     SC_DLLPUBLIC sal_Bool           IsScenario( SCTAB nTab ) const;
-    SC_DLLPUBLIC void           GetScenarioData( SCTAB nTab, String& rComment,
-                                        Color& rColor, sal_uInt16& rFlags ) const;
+    SC_DLLPUBLIC void GetScenarioData( SCTAB nTab, rtl::OUString& rComment,
+                                       Color& rColor, sal_uInt16& rFlags ) const;
     SC_DLLPUBLIC void           SetScenarioData( SCTAB nTab, const String& rComment,
                                         const Color& rColor, sal_uInt16 nFlags );
     SC_DLLPUBLIC Color GetTabBgColor( SCTAB nTab ) const;
@@ -771,6 +771,7 @@ public:
     SC_DLLPUBLIC void           GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString );
     SC_DLLPUBLIC rtl::OUString  GetString( SCCOL nCol, SCROW nRow, SCTAB nTab) { rtl::OUString aString; GetString(nCol, nRow, nTab, aString); return aString;}
     SC_DLLPUBLIC void           GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
+    SC_DLLPUBLIC void           GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString );
     SC_DLLPUBLIC double         GetValue( const ScAddress& );
     SC_DLLPUBLIC double         GetValue( const SCCOL nCol, SCROW nRow, SCTAB nTab) { ScAddress aAdr(nCol, nRow, nTab); return GetValue(aAdr);}
     SC_DLLPUBLIC void           GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue );

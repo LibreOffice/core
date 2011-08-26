@@ -50,7 +50,7 @@ public:
                             const rtl::OString& sHelpId, const rtl::OString& sEditHelpId );
             ~ScStringInputDlg();
 
-    void GetInputString( String& rString ) const;
+    void GetInputString( rtl::OUString& rString ) const;
 
 private:
     FixedText       aFtEditTitle;

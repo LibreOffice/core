@@ -104,9 +104,9 @@ private:
                                             //  data per table
     ScColumn        aCol[MAXCOLCOUNT];
 
-    String          aName;
-    String          aCodeName;
-    String          aComment;
+    rtl::OUString aName;
+    rtl::OUString aCodeName;
+    rtl::OUString aComment;
 
     String          aLinkDoc;
     String          aLinkFlt;
@@ -152,7 +152,7 @@ private:
     ScDocument*     pDocument;
     utl::TextSearch*    pSearchText;
 
-    mutable String  aUpperName;             // #i62977# filled only on demand, reset in SetName
+    mutable rtl::OUString aUpperName;             // #i62977# filled only on demand, reset in SetName
 
     ScAddress2DVecPtr mxUninitNotes;
 
@@ -201,8 +201,8 @@ friend class ScAttrRectIterator;
 
 
 public:
-                ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
-                            bool bColInfo = true, bool bRowInfo = true );
+                ScTable( ScDocument* pDoc, SCTAB nNewTab, const rtl::OUString& rNewName,
+                         bool bColInfo = true, bool bRowInfo = true );
                 ~ScTable();
 
     ScOutlineTable* GetOutlineTable()               { return pOutlineTable; }
@@ -243,8 +243,8 @@ public:
 
     bool        IsScenario() const                           { return bScenario; }
     void        SetScenario( bool bFlag );
-    void        GetScenarioComment( String& rComment) const  { rComment = aComment; }
-    void        SetScenarioComment( const String& rComment ) { aComment = rComment; }
+    void        GetScenarioComment( rtl::OUString& rComment) const  { rComment = aComment; }
+    void        SetScenarioComment( const rtl::OUString& rComment ) { aComment = rComment; }
     const Color& GetScenarioColor() const                    { return aScenarioColor; }
     void        SetScenarioColor(const Color& rNew)          { aScenarioColor = rNew; }
     const Color& GetTabBgColor() const;
@@ -265,16 +265,16 @@ public:
     void        SetLink( sal_uInt8 nMode, const String& rDoc, const String& rFlt,
                         const String& rOpt, const String& rTab, sal_uLong nRefreshDelay );
 
-    void        GetName( String& rName ) const;
-    void        SetName( const String& rNewName );
+    void        GetName( rtl::OUString& rName ) const;
+    void        SetName( const rtl::OUString& rNewName );
 
     void        SetAnonymousDBData(ScDBData* pDBData);
     ScDBData*   GetAnonymousDBData();
 
-    void        GetCodeName( String& rName ) const {  rName = aCodeName; }
-    void        SetCodeName( const String& rNewName ) { aCodeName = rNewName; }
+    void        GetCodeName( rtl::OUString& rName ) const {  rName = aCodeName; }
+    void        SetCodeName( const rtl::OUString& rNewName ) { aCodeName = rNewName; }
 
-    const String&   GetUpperName() const;
+    const rtl::OUString& GetUpperName() const;
 
     const String&   GetPageStyle() const                    { return aPageStyle; }
     void            SetPageStyle( const String& rName );

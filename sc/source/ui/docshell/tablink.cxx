@@ -280,7 +280,7 @@ sal_Bool ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
 
             if ( bNewUrlName && nMode == SC_LINK_VALUE )
             {
-                String aName;
+                rtl::OUString aName;
                 pDoc->GetName( nTab, aName );
                 if ( ScGlobal::GetpTransliteration()->isEqual(
                         ScGlobal::GetDocTabName( aFileName, aTabName ), aName ) )

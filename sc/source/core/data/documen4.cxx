@@ -998,8 +998,8 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
     SCTAB nThisTab;
 
     //  Tabellen mit gleichen Namen vergleichen
-    String aThisName;
-    String aOtherName;
+    rtl::OUString aThisName;
+    rtl::OUString aOtherName;
     for (nThisTab=0; nThisTab<nThisCount; nThisTab++)
     {
         SCTAB nOtherTab = SCTAB_MAX;
@@ -1010,7 +1010,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                 if (!rOtherDoc.IsScenario(nTemp))
                 {
                     rOtherDoc.GetName( nTemp, aOtherName );
-                    if ( aThisName == aOtherName )
+                    if ( aThisName.equals(aOtherName) )
                         nOtherTab = nTemp;
                 }
         }
@@ -1068,11 +1068,11 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             sal_uLong n1,n2;    // fuer AppendDeleteRange
 
             //! ein Progress ueber alle Tabellen ???
-            String aTabName;
+            rtl::OUString aTabName;
             GetName( nThisTab, aTabName );
             String aTemplate = ScGlobal::GetRscString(STR_PROGRESS_COMPARING);
             String aProText = aTemplate.GetToken( 0, '#' );
-            aProText += aTabName;
+            aProText.Append(String(aTabName));
             aProText += aTemplate.GetToken( 1, '#' );
             ScProgress aProgress( GetDocumentShell(),
                                         aProText, 3*nThisEndRow );  // 2x FindOrder, 1x hier

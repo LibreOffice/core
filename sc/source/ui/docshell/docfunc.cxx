@@ -2678,7 +2678,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
     }
 }
 
-void VBA_DeleteModule( ScDocShell& rDocSh, String& sModuleName )
+void VBA_DeleteModule( ScDocShell& rDocSh, const rtl::OUString& sModuleName )
 {
     uno::Reference< script::XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
     OSL_ENSURE( xLibContainer.is(), "No BasicContainer!" );
@@ -2784,7 +2784,7 @@ sal_Bool ScDocFunc::DeleteTable( SCTAB nTab, sal_Bool bRecord, sal_Bool /* bApi 
         pUndoDoc->AddUndoTab( 0, nCount-1 );                    // alle Tabs fuer Referenzen
 
         pDoc->CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, IDF_ALL,false, pUndoDoc );
-        String aOldName;
+        rtl::OUString aOldName;
         pDoc->GetName( nTab, aOldName );
         pUndoDoc->RenameTab( nTab, aOldName, false );
         if (bWasLinked)
@@ -2796,7 +2796,7 @@ sal_Bool ScDocFunc::DeleteTable( SCTAB nTab, sal_Bool bRecord, sal_Bool /* bApi 
         if ( pDoc->IsScenario(nTab) )
         {
             pUndoDoc->SetScenario( nTab, sal_True );
-            String aComment;
+            rtl::OUString aComment;
             Color  aColor;
             sal_uInt16 nScenFlags;
             pDoc->GetScenarioData( nTab, aComment, aColor, nScenFlags );
@@ -2814,7 +2814,7 @@ sal_Bool ScDocFunc::DeleteTable( SCTAB nTab, sal_Bool bRecord, sal_Bool /* bApi 
         pUndoData = new ScRefUndoData( pDoc );
     }
 
-    String sCodeName;
+    rtl::OUString sCodeName;
     sal_Bool bHasCodeName = pDoc->GetCodeName( nTab, sCodeName );
     if (pDoc->DeleteTab( nTab, pUndoDoc ))
     {
@@ -2956,7 +2956,7 @@ sal_Bool ScDocFunc::RenameTable( SCTAB nTab, const String& rName, sal_Bool bReco
     ScDocShellModificator aModificator( rDocShell );
 
     sal_Bool bSuccess = false;
-    String sOldName;
+    rtl::OUString sOldName;
     pDoc->GetName(nTab, sOldName);
     if (pDoc->RenameTab( nTab, rName ))
     {

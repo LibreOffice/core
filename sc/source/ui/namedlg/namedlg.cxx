@@ -181,7 +181,7 @@ void ScNameDlg::Init()
     SCTAB n = pDoc->GetTableCount();
     for (SCTAB i = 0; i < n; ++i)
     {
-        String aTabName;
+        rtl::OUString aTabName;
         pDoc->GetName(i, aTabName);
         maLbScope.InsertEntry(aTabName);
     }

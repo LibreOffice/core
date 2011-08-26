@@ -75,7 +75,7 @@ ScStringInputDlg::ScStringInputDlg( Window*         pParent,
 
 //------------------------------------------------------------------------
 
-void ScStringInputDlg::GetInputString( String& rString ) const
+void ScStringInputDlg::GetInputString( rtl::OUString& rString ) const
 {
     rString = aEdInput.GetText();
 }

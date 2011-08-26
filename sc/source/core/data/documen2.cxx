@@ -559,7 +559,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
             if (pSourceDoc->maTabs[i])
                 if (!pMarks || pMarks->GetTableSelect(i))
                 {
-                    String aString;
+                    rtl::OUString aString;
                     pSourceDoc->maTabs[i]->GetName(aString);
                     if ( i < static_cast<SCTAB>(maTabs.size()) )
                     {
@@ -805,7 +805,7 @@ sal_Bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pO
 {
     if (SC_TAB_APPEND == nNewPos  || nNewPos >= static_cast<SCTAB>(maTabs.size()))
         nNewPos = static_cast<SCTAB>(maTabs.size());
-    String aName;
+    rtl::OUString aName;
     GetName(nOldPos, aName);
 
     //  vorneweg testen, ob der Prefix als gueltig erkannt wird
@@ -932,7 +932,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
     sal_Bool bValid = sal_True;
     if (bInsertNew)             // neu einfuegen
     {
-        String aName;
+        rtl::OUString aName;
         pSrcDoc->GetName(nSrcPos, aName);
         CreateValidTabName(aName);
         bValid = InsertTab(nDestPos, aName);
@@ -1112,7 +1112,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
             if( xLib.is() )
             {
-                String sSrcCodeName;
+                rtl::OUString sSrcCodeName;
                 pSrcDoc->GetCodeName( nSrcPos, sSrcCodeName );
                 rtl::OUString sRTLSource;
                 xLib->getByName( sSrcCodeName ) >>= sRTLSource;

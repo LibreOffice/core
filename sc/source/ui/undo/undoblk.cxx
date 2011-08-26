@@ -1502,7 +1502,7 @@ void ScUndoUseScenario::Undo()
     for (SCTAB i = nTab+1; i<=nEndTab; i++)
     {
         //  Flags immer
-        String aComment;
+        rtl::OUString aComment;
         Color  aColor;
         sal_uInt16 nScenFlags;
         pUndoDoc->GetScenarioData( i, aComment, aColor, nScenFlags );

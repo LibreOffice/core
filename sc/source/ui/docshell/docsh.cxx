@@ -319,16 +319,16 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
             {
                 if (aDocument.IsLinked( i ))
                 {
-                    String aName;
+                    rtl::OUString aName;
                     aDocument.GetName(i, aName);
-                    String aLinkTabName = aDocument.GetLinkTab(i);
-                    xub_StrLen nLinkTabNameLength = aLinkTabName.Len();
-                    xub_StrLen nNameLength = aName.Len();
+                    rtl::OUString aLinkTabName = aDocument.GetLinkTab(i);
+                    sal_Int32 nLinkTabNameLength = aLinkTabName.getLength();
+                    sal_Int32 nNameLength = aName.getLength();
                     if (nLinkTabNameLength < nNameLength)
                     {
 
                         // remove the quottes on begin and end of the docname and restore the escaped quotes
-                        const sal_Unicode* pNameBuffer = aName.GetBuffer();
+                        const sal_Unicode* pNameBuffer = aName.getStr();
                         if ( *pNameBuffer == '\'' && // all docnames have to have a ' character on the first pos
                             ScGlobal::UnicodeStrChr( pNameBuffer, SC_COMPILER_FILE_TAB_SEP ) )
                         {
@@ -349,8 +349,8 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
                             {
                                 xub_StrLen nIndex = nNameLength - nLinkTabNameLength;
                                 INetURLObject aINetURLObject(aDocURLBuffer.makeStringAndClear());
-                                if( aName.Equals(aLinkTabName, nIndex, nLinkTabNameLength) &&
-                                    (aName.GetChar(nIndex - 1) == '#') && // before the table name should be the # char
+                                if( String(aName).Equals(String(aLinkTabName), nIndex, nLinkTabNameLength) &&
+                                    (aName.getStr()[nIndex - 1] == '#') && // before the table name should be the # char
                                     !aINetURLObject.HasError()) // the docname should be a valid URL
                                 {
                                     aName = ScGlobal::GetDocTabName( aDocument.GetLinkDoc( i ), aDocument.GetLinkTab( i ) );

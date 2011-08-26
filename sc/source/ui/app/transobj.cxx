@@ -600,7 +600,7 @@ void ScTransferObj::InitDocShell()
 
         pDestDoc->SetDocOptions( pDoc->GetDocOptions() );   // #i42666#
 
-        String aTabName;
+        rtl::OUString aTabName;
         pDoc->GetName( aBlock.aStart.Tab(), aTabName );
         pDestDoc->RenameTab( 0, aTabName, false );          // no UpdateRef (empty)
 

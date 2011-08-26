@@ -7205,7 +7205,7 @@ void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks() throw(uno::RuntimeExc
 rtl::OUString SAL_CALL ScTableSheetObj::getName() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aName;
+    rtl::OUString aName;
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
         pDocSh->GetDocument()->GetName( GetTab_Impl(), aName );
@@ -8015,7 +8015,7 @@ rtl::OUString SAL_CALL ScTableSheetObj::getScenarioComment() throw(uno::RuntimeE
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        String aComment;
+        rtl::OUString aComment;
         Color  aColor;
         sal_uInt16 nFlags;
         pDocSh->GetDocument()->GetScenarioData( GetTab_Impl(), aComment, aColor, nFlags );
@@ -8034,8 +8034,8 @@ void SAL_CALL ScTableSheetObj::setScenarioComment( const rtl::OUString& aScenari
         ScDocument* pDoc = pDocSh->GetDocument();
         SCTAB nTab = GetTab_Impl();
 
-        String aName;
-        String aComment;
+        rtl::OUString aName;
+        rtl::OUString aComment;
         Color  aColor;
         sal_uInt16 nFlags;
         pDoc->GetName( nTab, aName );
@@ -8094,7 +8094,7 @@ void SAL_CALL ScTableSheetObj::apply() throw(uno::RuntimeException)
     {
         ScDocument* pDoc = pDocSh->GetDocument();
         SCTAB nTab = GetTab_Impl();
-        String aName;
+        rtl::OUString aName;
         pDoc->GetName( nTab, aName );       // Name dieses Szenarios
 
         SCTAB nDestTab = nTab;
@@ -8254,8 +8254,8 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                 sal_Int32 nNewColor = 0;
                 if (aValue >>= nNewColor)
                 {
-                    String aName;
-                    String aComment;
+                    rtl::OUString aName;
+                    rtl::OUString aComment;
                     Color  aColor;
                     sal_uInt16 nFlags;
                     pDoc->GetName( nTab, aName );
@@ -8271,8 +8271,8 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                String aName;
-                String aComment;
+                rtl::OUString aName;
+                rtl::OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetName( nTab, aName );
@@ -8304,8 +8304,8 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                String aName;
-                String aComment;
+                rtl::OUString aName;
+                rtl::OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetName( nTab, aName );
@@ -8337,8 +8337,8 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                String aName;
-                String aComment;
+                rtl::OUString aName;
+                rtl::OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetName( nTab, aName );
@@ -8370,8 +8370,8 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                String aName;
-                String aComment;
+                rtl::OUString aName;
+                rtl::OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetName( nTab, aName );
@@ -8403,8 +8403,8 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                String aName;
-                String aComment;
+                rtl::OUString aName;
+                rtl::OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetName( nTab, aName );
@@ -8436,8 +8436,8 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                String aName;
-                String aComment;
+                rtl::OUString aName;
+                rtl::OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetName( nTab, aName );
@@ -8550,7 +8550,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                String aComment;
+                rtl::OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
@@ -8562,7 +8562,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                String aComment;
+                rtl::OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
@@ -8574,7 +8574,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                String aComment;
+                rtl::OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
@@ -8586,7 +8586,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                String aComment;
+                rtl::OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
@@ -8598,7 +8598,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                String aComment;
+                rtl::OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
@@ -8610,7 +8610,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                String aComment;
+                rtl::OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
@@ -8622,7 +8622,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                String aComment;
+                rtl::OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
@@ -8648,7 +8648,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         }
         else if ( pEntry->nWID == SC_WID_UNO_CODENAME )
         {
-            String aCodeName;
+            rtl::OUString aCodeName;
             if ( pDocSh )
                 pDocSh->GetDocument()->GetCodeName( GetTab_Impl(), aCodeName );
             rAny <<= rtl::OUString( aCodeName );

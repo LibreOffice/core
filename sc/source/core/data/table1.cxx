@@ -229,7 +229,7 @@ bool SetOptimalHeightsToRows(OptimalHeightsFuncObjBase& rFuncObj,
 
 // -----------------------------------------------------------------------
 
-ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
+ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const rtl::OUString& rNewName,
                     bool bColInfo, bool bRowInfo ) :
     aName( rNewName ),
     aCodeName( rNewName ),
@@ -345,23 +345,23 @@ ScTable::~ScTable()
     DestroySortCollator();
 }
 
-void ScTable::GetName( String& rName ) const
+void ScTable::GetName( rtl::OUString& rName ) const
 {
     rName = aName;
 }
 
-void ScTable::SetName( const String& rNewName )
+void ScTable::SetName( const rtl::OUString& rNewName )
 {
     aName = rNewName;
-    aUpperName.Erase();         // invalidated if the name is changed
+    aUpperName = rtl::OUString(); // invalidated if the name is changed
 
     // SetStreamValid is handled in ScDocument::RenameTab
 }
 
-const String& ScTable::GetUpperName() const
+const rtl::OUString& ScTable::GetUpperName() const
 {
-    if ( !aUpperName.Len() && aName.Len() )
-        aUpperName = ScGlobal::pCharClass->upper( aName );
+    if (aUpperName.isEmpty() && !aName.isEmpty())
+        aUpperName = ScGlobal::pCharClass->upper(aName);
     return aUpperName;
 }
 

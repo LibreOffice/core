@@ -126,16 +126,16 @@ public:
             maCachedObject = maWorkbook;
         else
         {
-            String sCodeName;
+            rtl::OUString sCodeName;
             SCTAB nCount = pDoc->GetTableCount();
             for( SCTAB i = 0; i < nCount; i++ )
             {
                 pDoc->GetCodeName( i, sCodeName );
                 // aName ( sName ) is generated from the stream name which can be different ( case-wise )
                 // from the code name
-                if( sCodeName.EqualsIgnoreCaseAscii( sName ) )
+                if( String(sCodeName).EqualsIgnoreCaseAscii( sName ) )
                 {
-                    String sSheetName;
+                    rtl::OUString sSheetName;
                     if( pDoc->GetName( i, sSheetName ) )
                     {
                         uno::Reference< frame::XModel > xModel( mpDocShell->GetModel() );
@@ -175,7 +175,7 @@ public:
         SCTAB nCount = pDoc->GetTableCount();
         uno::Sequence< rtl::OUString > aNames( nCount + 1 );
         SCTAB index = 0;
-        String sCodeName;
+        rtl::OUString sCodeName;
         for( ; index < nCount; ++index )
         {
             pDoc->GetCodeName( index, sCodeName );
@@ -222,7 +222,7 @@ public:
                     bMatched = ( xControl == xIf );
                     if ( bMatched )
                     {
-                        String sName;
+                        rtl::OUString sName;
                         mrDocShell.GetDocument()->GetCodeName( static_cast<SCTAB>( index ), sName );
                         sCodeName = sName;
                     }
@@ -253,7 +253,7 @@ public:
                 uno::Reference<container::XIndexAccess> xFormControls(xFormIndex->getByIndex(0), uno::UNO_QUERY_THROW);
                 if (xFormControls == xContainer)
                 {
-                    String aName;
+                    rtl::OUString aName;
                     if (mrDocShell.GetDocument()->GetCodeName(static_cast<SCTAB>(i), aName))
                         return aName;
                 }
