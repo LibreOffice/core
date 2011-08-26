@@ -76,6 +76,13 @@ static sal_Unicode table_Alphabet_ar[] = {
     0x0643, 0x0644, 0x0645, 0x0646, 0x0647, 0x0648, 0x0649
 };
 
+static sal_Unicode table_Alphabet_ar_abjad[] = {
+    0x0627, 0x0628, 0x062c, 0x062f, 0x0647, 0x0648, 0x0632, 0x062d,
+    0x0637, 0x064a, 0x0643, 0x0644, 0x0645, 0x0646, 0x0633, 0x0639,
+    0x0641, 0x0635, 0x0642, 0x0631, 0x0634, 0x062a, 0x062b, 0x062e,
+    0x0630, 0x0636, 0x0638, 0x063a
+};
+
 static sal_Unicode table_Alphabet_th[] = {
     0x0E01, 0x0E02, 0x0E04, 0x0E07,
     0x0E08, 0x0E09, 0x0E0A, 0x0E0B, 0x0E0C, 0x0E0D, 0x0E0E, 0x0E0F,
@@ -630,6 +637,9 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
           case CHARS_ARABIC:
               lcl_formatChars(table_Alphabet_ar, sizeof(table_Alphabet_ar) / sizeof(sal_Unicode), number - 1, result);
               break;
+          case CHARS_ARABIC_ABJAD:
+              lcl_formatChars(table_Alphabet_ar_abjad, sizeof(table_Alphabet_ar_abjad) / sizeof(sal_Unicode), number - 1, result);
+              break;
           case CHARS_THAI:
               lcl_formatChars(table_Alphabet_th, sizeof(table_Alphabet_th) / sizeof(sal_Unicode), number - 1, result);
               break;
@@ -794,6 +804,7 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::HANGUL_CIRCLED_JAMO_KO,  NULL, LANG_CJK},
         {style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO,      NULL, LANG_CJK},
         {style::NumberingType::CHARS_ARABIC,    NULL, LANG_CTL},
+        {style::NumberingType::CHARS_ARABIC_ABJAD,   NULL, LANG_CTL},
         {style::NumberingType::CHARS_THAI,      NULL, LANG_CTL},
         {style::NumberingType::CHARS_HEBREW,    NULL, LANG_CTL},
         {style::NumberingType::CHARS_NEPALI,    NULL, LANG_CTL},

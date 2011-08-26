@@ -485,6 +485,14 @@ published constants NumberingType
      */
     const short CHARS_GREEK_LOWER_LETTER = 53;
 
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Arabic alphabet using abjad sequence
+
+        @since OOo 3.5
+     */
+    const short CHARS_ARABIC_ABJAD = 54;
+
 };
 
 //=============================================================================
