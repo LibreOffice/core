@@ -107,9 +107,6 @@ private:
     String          aName;
     String          aCodeName;
     String          aComment;
-    bool            bScenario;
-    bool            bLayoutRTL;
-    bool            bLoadingRTL;
 
     String          aLinkDoc;
     String          aLinkFlt;
@@ -120,7 +117,6 @@ private:
 
     // page style template
     String          aPageStyle;
-    bool            bPageSizeValid;
     Size            aPageSizeTwips;                 // size of the print-page
     SCCOL           nRepeatStartX;                  // repeating rows/columns
     SCCOL           nRepeatEndX;                    // REPEAT_NONE, if not used
@@ -148,15 +144,8 @@ private:
 
     ScSheetEvents*  pSheetEvents;
 
-    SCCOL           nTableAreaX;
-    SCROW           nTableAreaY;
-    bool            bTableAreaValid;
-
-                                            //  internal management
-    bool            bVisible;
-    bool            bStreamValid;
-    bool            bPendingRowHeights;
-    bool            bCalcNotification;
+    mutable SCCOL nTableAreaX;
+    mutable SCROW nTableAreaY;
 
     SCTAB           nTab;
     sal_uInt16          nRecalcLvl;             // recursion level Size-Recalc
@@ -170,10 +159,8 @@ private:
     // sort parameter to minimize stack size of quicksort
     ScSortParam     aSortParam;
     CollatorWrapper*    pSortCollator;
-    bool            bGlobalKeepQuery;
 
     ScRangeVec      aPrintRanges;
-    bool            bPrintEntireSheet;
 
     ScRange*        pRepeatColRange;
     ScRange*        pRepeatRowRange;
@@ -184,10 +171,22 @@ private:
     Color           aScenarioColor;
     Color           aTabBgColor;
     sal_uInt16          nScenarioFlags;
-    bool            bActiveScenario;
     ScDBData*       pDBDataNoName;
     mutable ScRangeName* mpRangeName;
-    bool            mbPageBreaksValid;
+
+    bool            bScenario:1;
+    bool            bLayoutRTL:1;
+    bool            bLoadingRTL:1;
+    bool            bPageSizeValid:1;
+    mutable bool    bTableAreaValid:1;
+    bool            bVisible:1;
+    bool            bStreamValid:1;
+    bool            bPendingRowHeights:1;
+    bool            bCalcNotification:1;
+    bool            bGlobalKeepQuery:1;
+    bool            bPrintEntireSheet:1;
+    bool            bActiveScenario:1;
+    bool            mbPageBreaksValid:1;
 
 friend class ScDocument;                    // for FillInfo
 friend class ScDocumentIterator;

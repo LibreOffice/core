@@ -233,12 +233,8 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
                     bool bColInfo, bool bRowInfo ) :
     aName( rNewName ),
     aCodeName( rNewName ),
-    bScenario( false ),
-    bLayoutRTL( false ),
-    bLoadingRTL( false ),
     nLinkMode( 0 ),
     aPageStyle( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) ),
-    bPageSizeValid( false ),
     nRepeatStartX( SCCOL_REPEAT_NONE ),
     nRepeatStartY( SCROW_REPEAT_NONE ),
     pTabProtection( NULL ),
@@ -252,17 +248,11 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     mpFilteredRows(new ScFlatBoolRowSegments),
     pOutlineTable( NULL ),
     pSheetEvents( NULL ),
-    bTableAreaValid( false ),
-    bVisible( true ),
-    bStreamValid( false ),
-    bPendingRowHeights( false ),
-    bCalcNotification( false ),
     nTab( nNewTab ),
     nRecalcLvl( 0 ),
     pDocument( pDoc ),
     pSearchText ( NULL ),
     pSortCollator( NULL ),
-    bPrintEntireSheet(true),
     pRepeatColRange( NULL ),
     pRepeatRowRange( NULL ),
     nLockCount( 0 ),
@@ -270,9 +260,20 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     aScenarioColor( COL_LIGHTGRAY ),
     aTabBgColor( COL_AUTO ),
     nScenarioFlags( 0 ),
-    bActiveScenario( false ),
     pDBDataNoName(NULL),
     mpRangeName(NULL),
+    bScenario(false),
+    bLayoutRTL(false),
+    bLoadingRTL(false),
+    bPageSizeValid(false),
+    bTableAreaValid(false),
+    bVisible(true),
+    bStreamValid(false),
+    bPendingRowHeights(false),
+    bCalcNotification(false),
+    bGlobalKeepQuery(false),
+    bPrintEntireSheet(true),
+    bActiveScenario(false),
     mbPageBreaksValid(false)
 {
 
@@ -540,9 +541,8 @@ bool ScTable::GetTableArea( SCCOL& rEndCol, SCROW& rEndRow ) const
     bool bRet = true;               //! merken?
     if (!bTableAreaValid)
     {
-        bRet = GetPrintArea( ((ScTable*)this)->nTableAreaX,
-                                ((ScTable*)this)->nTableAreaY, true );
-        ((ScTable*)this)->bTableAreaValid = true;
+        bRet = GetPrintArea(nTableAreaX, nTableAreaY, true);
+        bTableAreaValid = true;
     }
     rEndCol = nTableAreaX;
     rEndRow = nTableAreaY;
