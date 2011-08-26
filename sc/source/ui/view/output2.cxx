@@ -3113,7 +3113,6 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     if ( rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT )
     {
         // ignore orientation/rotation if "repeat" is active
-        rParam.meOrient = SVX_ORIENTATION_STANDARD;
         DrawEditStandard(rParam);
         return;
     }
@@ -3494,7 +3493,6 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
     if ( rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT )
     {
         // ignore orientation/rotation if "repeat" is active
-        rParam.meOrient = SVX_ORIENTATION_STANDARD;
         DrawEditStandard(rParam);
         return;
     }
@@ -3870,7 +3868,6 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
     if ( rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT )
     {
         // ignore orientation/rotation if "repeat" is active
-        rParam.meOrient = SVX_ORIENTATION_STANDARD;
         DrawEditStandard(rParam);
         return;
     }
