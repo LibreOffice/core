@@ -1679,6 +1679,19 @@ public:
     }
 };
 
+void setPrintRange(ScRange* pRange1, const ScRange* pRange2)
+{
+    if (pRange2)
+    {
+        if (pRange1)
+            *pRange1 = *pRange2;
+        else
+            pRange1 = new ScRange(*pRange2);
+    }
+    else
+        DELETEZ(pRange1);
+}
+
 }
 
 void ScTable::CopyPrintRange(const ScTable& rTable)
@@ -1716,20 +1729,9 @@ void ScTable::DoColResize( SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd )
         aCol[nCol].Resize(aCol[nCol].GetCellCount() + nAdd);
 }
 
-#define SET_PRINTRANGE( p1, p2 ) \
-    if ( (p2) )                             \
-    {                                       \
-        if ( (p1) )                         \
-            *(p1) = *(p2);                  \
-        else                                \
-            (p1) = new ScRange( *(p2) );    \
-    }                                       \
-    else                                    \
-        DELETEZ( (p1) )
-
 void ScTable::SetRepeatColRange( const ScRange* pNew )
 {
-    SET_PRINTRANGE( pRepeatColRange, pNew );
+    setPrintRange( pRepeatColRange, pNew );
 
     if (IsStreamValid())
         SetStreamValid(false);
@@ -1739,7 +1741,7 @@ void ScTable::SetRepeatColRange( const ScRange* pNew )
 
 void ScTable::SetRepeatRowRange( const ScRange* pNew )
 {
-    SET_PRINTRANGE( pRepeatRowRange, pNew );
+    setPrintRange( pRepeatRowRange, pNew );
 
     if (IsStreamValid())
         SetStreamValid(false);
