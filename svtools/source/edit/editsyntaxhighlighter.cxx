@@ -53,16 +53,6 @@ MultiLineEditSyntaxHighlight::~MultiLineEditSyntaxHighlight()
 {
 }
 
-void MultiLineEditSyntaxHighlight::EnableBracketHilight(bool aHilight)
-{
-    mbDoBracketHilight = aHilight;
-}
-
-bool MultiLineEditSyntaxHighlight::IsBracketHilight()
-{
-    return mbDoBracketHilight;
-}
-
 void MultiLineEditSyntaxHighlight::SetText(const String& rNewText)
 {
     MultiLineEdit::SetText(rNewText);

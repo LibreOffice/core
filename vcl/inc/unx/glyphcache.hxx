@@ -211,7 +211,6 @@ public:
     int                 GetGlyphKernValue( int, int ) const;
     const ImplFontCharMap* GetImplFontCharMap() const;
     bool                GetFontCapabilities(vcl::FontCapabilities &) const;
-    Point                       TransformPoint( const Point& ) const;
 
     GlyphData&                  GetGlyphData( int nGlyphIndex );
     const GlyphMetric&          GetGlyphMetric( int nGlyphIndex )

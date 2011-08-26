@@ -79,7 +79,6 @@ public:
     CfgStack() {}
     ~CfgStack();
 
-    size_t Push( CfgStackData *pStackData );
     CfgStackData *Push( const ByteString &rTag, const ByteString &rId );
     CfgStackData *Pop()
         {

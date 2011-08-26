@@ -144,8 +144,6 @@ private:
     String          GetScale( sal_Int32 nX, sal_Int32 nY );
     sal_Bool            SetScale( const String& aScale, sal_Int32& rX, sal_Int32& rY );
 
-    DECL_LINK( ModifyScaleHdl, void * );
-    DECL_LINK( ModifyOriginalScaleHdl, void * );
     DECL_LINK( SelectMetricHdl_Impl, ListBox * );
 
     /** Enable or disable the controls in the compatibility section of the

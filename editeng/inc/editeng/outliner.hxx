@@ -236,7 +236,6 @@ private:
     EDITENG_DLLPRIVATE void        ImpToggleExpand( Paragraph* pParentPara );
     EDITENG_DLLPRIVATE ParaRange    ImpGetSelectedParagraphs( sal_Bool bIncludeHiddenChilds );
     EDITENG_DLLPRIVATE void        ImpHideDDCursor();
-    EDITENG_DLLPRIVATE void        ImpShowDDCursor();
     EDITENG_DLLPRIVATE void        ImpPaintDDCursor();
 
     EDITENG_DLLPRIVATE void        ImpDragScroll( const Point& rPosPix );

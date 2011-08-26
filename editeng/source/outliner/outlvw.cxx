@@ -412,16 +412,6 @@ void OutlinerView::ImpHideDDCursor()
     }
 }
 
-void OutlinerView::ImpShowDDCursor()
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    if ( !bDDCursorVisible )
-    {
-        bDDCursorVisible = sal_True;
-        ImpPaintDDCursor();
-    }
-}
-
 void OutlinerView::ImpPaintDDCursor()
 {
     DBG_CHKTHIS(OutlinerView,0);

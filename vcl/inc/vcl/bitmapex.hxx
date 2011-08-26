@@ -95,9 +95,6 @@ public:
                               const Point& rDestPt ) const;
     void                Draw( OutputDevice* pOutDev,
                               const Point& rDestPt, const Size& rDestSize ) const;
-    void                Draw( OutputDevice* pOutDev,
-                              const Point& rDestPt, const Size& rDestSize,
-                              const Point& rSrcPtPixel, const Size& rSrcSizePixel ) const;
 
     sal_Bool                IsTransparent() const;
     TransparentType     GetTransparentType() const { return eTransparent; }

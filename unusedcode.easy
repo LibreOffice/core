@@ -1,10 +1,5 @@
 (anonymous namespace)::getState(std::vector<cppcanvas::internal::OutDevState, std::allocator<cppcanvas::internal::OutDevState> > const&)
 (anonymous namespace)::writeInfo(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, rtl::OUString const&, rtl::OUString const&)
-BitmapEx::Draw(OutputDevice*, Point const&, Size const&, Point const&, Size const&) const
-BitmapLB::SelectEntryByList(XBitmapList const*, String const&, Bitmap const&)
-BitmapPalette::IsGreyPalette() const
-BreakPointList::clear()
-BreakPointList::push_back(BreakPoint*)
 BufferNode::childAt(int) const
 CAT::Inverse() const
 CAT::makeChromaticAdaptationTag() const
@@ -65,9 +60,6 @@ CalendarWrapper::setFirstDayOfWeek(short)
 CalendarWrapper::setMinimumNumberOfDaysForFirstWeek(short)
 CertificateContainer::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 CertificateExtension_XmlSecImpl::setCertExtn(com::sun::star::uno::Sequence<signed char>, com::sun::star::uno::Sequence<signed char>, unsigned char)
-CfgStack::Push(CfgStackData*)
-CharAttribList::DbgCheckAttribs()
-CharAttribList::HasAttrib(unsigned short) const
 CharClass::isAlpha(String const&) const
 CharClass::isAlphaNumeric(String const&) const
 CharClass::isAsciiAlphaNumeric(String const&)
@@ -117,12 +109,8 @@ EECharAttribArray::Insert(EECharAttribArray const*, unsigned short, unsigned sho
 EECharAttribArray::Replace(EECharAttrib const&, unsigned short)
 EECharAttribArray::Replace(EECharAttrib const*, unsigned short, unsigned short)
 EECharAttribArray::_ForEach(unsigned short, unsigned short, unsigned char (*)(EECharAttrib const&, void*), void*)
-EditDbg::GetTextPortionInfo(TextPortionList&)
-EditDbg::ShowPortionData(ParaPortion*)
-EditEngine::CreateFontFromItemSet(SfxItemSet const&)
 EditEngine::CursorLeft(ESelection const&, unsigned short) const
 EditEngine::CursorRight(ESelection const&, unsigned short) const
-EditEngine::EnableIdleFormatter(unsigned char)
 EditEngine::EnablePasteSpecial(unsigned char)
 EditEngine::EndSpelling()
 EditEngine::GetAsianCompressionMode() const
@@ -138,7 +126,6 @@ EditEngine::IsAddExtLeading() const
 EditEngine::IsAutoColorEnabled() const
 EditEngine::IsFirstWordCapitalization() const
 EditEngine::IsFixedCellHeight() const
-EditEngine::IsIdleFormatterEnabled() const
 EditEngine::IsKernAsianPunctuation() const
 EditEngine::IsParagraphVisible(unsigned short)
 EditEngine::IsPasteSpecialEnabled() const
@@ -180,8 +167,6 @@ FileStat::FileStat(void const*, void const*)
 FileStat::IsYounger(FileStat const&) const
 FileStat::SetDateTime(String const&, DateTime const&)
 FileStream::FileStream(rtl::OString const&, FileAccessMode)
-FillAttrLB::FillAttrLB(Window*, ResId)
-FillAttrLB::SelectEntryByList(XBitmapList const*, String const&, Bitmap const&)
 FilterConfigItem::WriteString(rtl::OUString const&, rtl::OUString const&)
 FixedBitmap::GetModeBitmap() const
 FixedBitmap::SetModeBitmap(Bitmap const&)
@@ -246,8 +231,6 @@ HTMLControls::Insert(HTMLControls const*, unsigned short, unsigned short)
 HTMLControls::Remove(HTMLControl const*&, unsigned short)
 HTMLControls::Remove(unsigned short, unsigned short)
 Hatch::SetStyle(HatchStyle)
-HatchingLB::HatchingLB(Window*, long, unsigned char)
-HatchingLB::SelectEntryByList(XHatchList const*, String const&, XHatch const&, unsigned short)
 HeaderBar::GetItemData(unsigned short) const
 HeaderBar::GetItemImage(unsigned short) const
 HeaderBar::InsertItem(unsigned short, Image const&, String const&, long, unsigned short, unsigned short)
@@ -308,7 +291,6 @@ KeyboardSettings::CopyData()
 Line::Enum(Link const&)
 Line::NearestPoint(Point const&) const
 LineInfo::isDashDotOrFatLineUsed() const
-LineLB::SelectEntryByList(XDashList const*, String const&, XDash const&, unsigned short)
 LineListBox::GetEntryDistance(unsigned short) const
 LineListBox::GetEntryLine1(unsigned short) const
 LineListBox::GetEntryLine2(unsigned short) const
@@ -362,8 +344,6 @@ MultiLineEdit::GetLeftMargin() const
 MultiLineEdit::GetTextLines() const
 MultiLineEdit::IsFocusSelectionHideEnabled() const
 MultiLineEdit::IsRightToLeft() const
-MultiLineEditSyntaxHighlight::EnableBracketHilight(bool)
-MultiLineEditSyntaxHighlight::IsBracketHilight()
 MultiPropertySetHelper::MultiPropertySetHelper(rtl::OUString const*)
 MultiSelection::Append(long)
 MultiSelection::PrevSelected()
@@ -403,18 +383,6 @@ OpenStormBento::CBenObject::GetNextProperty(OpenStormBento::CBenProperty*)
 OpenStormBento::CBenObject::UseSingleValue()
 OpenStormBento::CBenObject::UseValueWithPropertyName(char const*)
 OpenStormBento::CBenTOCReader::GetWord(unsigned short*)
-OpenStormBento::CBenValue::GetReferencedListID()
-OpenStormBento::CBenValue::GetReferencedObject(OpenStormBento::CBenReference*)
-OpenStormBento::CBenValue::NewReference(unsigned long, OpenStormBento::CBenReference*)
-OpenStormBento::CBenValue::ReadValueDataKnownSize(void*, unsigned long, unsigned long)
-OpenStormBento::CBenValue::TruncateValueSize(unsigned long)
-OpenStormBento::CBenValue::WriteImmediateValueData(void const*, unsigned short)
-OpenStormBento::CUtList::CircularGetNext(OpenStormBento::CUtListElmt const*)
-OpenStormBento::CUtList::CircularGetPrev(OpenStormBento::CUtListElmt const*)
-OpenStormBento::CUtList::GetCount()
-OpenStormBento::CUtList::GetIndex(OpenStormBento::CUtListElmt*)
-OpenStormBento::CUtList::GetIndex(int)
-OpenStormBento::CUtList::GetPrevOrNULL(OpenStormBento::CUtListElmt*)
 OutlinerView::AdjustDepth(Paragraph*, short, unsigned char)
 OutlinerView::AdjustHeight(Paragraph*, long, unsigned char)
 OutlinerView::Collapse(Paragraph*)
@@ -425,7 +393,6 @@ OutlinerView::GetFieldUnderMousePointer(unsigned short&, unsigned short&) const
 OutlinerView::ImpDragScroll(Point const&)
 OutlinerView::ImpGetDocPos(Point const&)
 OutlinerView::ImpGetInsertionPara(Point const&)
-OutlinerView::ImpShowDDCursor()
 OutlinerView::Redo()
 OutlinerView::RemoveCharAttribs(unsigned long, unsigned short)
 OutlinerView::SetOutliner(Outliner*)
@@ -700,8 +667,6 @@ ScrollableWindow::ScrollableWindow(Window*, ResId const&, unsigned short)
 ScrollableWindow::SetLineSize(unsigned long, unsigned long)
 ScrollableWindow::SetVisibleSize(Size const&)
 SdFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
-SdTpOptionsMisc::LinkStubModifyOriginalScaleHdl(void*, void*)
-SdTpOptionsMisc::LinkStubModifyScaleHdl(void*, void*)
 SdrCaptionObj::SdrCaptionObj(Rectangle const&)
 SdrCreateView::ImpDelCreateAttr()
 SdrCustomShapeDataItem::SdrCustomShapeDataItem(String const&)
@@ -714,11 +679,6 @@ SdrDragView::SetRubberEdgeDragging(unsigned char)
 SdrDragView::SetRubberEdgeDraggingLimit(unsigned short)
 SdrEditView::MoveLayer(String const&, unsigned short)
 SdrEngineDefaults::LanguageHasChanged()
-SdrEscherImport::CheckMonotypeSorts() const
-SdrEscherImport::CheckTimesNewRoman() const
-SdrEscherImport::CheckWingdings() const
-SdrEscherImport::GetCharSet(unsigned int) const
-SdrEscherImport::IsFontAvailable(unsigned int) const
 SdrExchangeView::CutMarked(unsigned long)
 SdrExchangeView::GetPastePos(SdrObjList*, OutputDevice*)
 SdrExchangeView::IsExchangeFormatSupported(unsigned long) const
@@ -730,7 +690,6 @@ SdrGlobalData::~SdrGlobalData()
 SdrGluePoint::Draw(OutputDevice&, SdrObject const*) const
 SdrGluePoint::Mirror(Point const&, Point const&, SdrObject const*)
 SdrGrafObj::GetGDIMetaFile() const
-SdrGrafObj::ImpSetGrafInfoToAttr()
 SdrGrafObj::IsGrafAnimationAllowed() const
 SdrGrafObj::SetFileName(String const&)
 SdrGrafObj::SetFilterName(String const&)
@@ -818,7 +777,6 @@ SdrViewIter::NextPageView()
 SdrViewIter::NextWindow()
 SdrViewIter::SdrViewIter(SdrModel const*)
 SdrVirtObj::SdrVirtObj(SdrObject&, Point const&)
-SdwRectangle::GetOriginalRect(Point const&, long, long)
 SectReprArr::Insert(SectRepr* const&, unsigned short&)
 SectReprArr::Insert(SectRepr* const*, unsigned short)
 SectReprArr::Insert(SectReprArr const*, unsigned short, unsigned short)
@@ -826,7 +784,6 @@ SectReprArr::Remove(SectRepr* const&, unsigned short)
 SectReprArr::Remove(unsigned short, unsigned short)
 SecurityEnvironment_NssImpl::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 SelectionEngine::ActivateDragMode()
-ServerFont::TransformPoint(Point const&) const
 SetOfByte::GetClearBit(unsigned short) const
 SetOfByte::GetClearCount() const
 SetOfByte::GetSetBit(unsigned short) const

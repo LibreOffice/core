@@ -793,12 +793,6 @@ void CfgMerge::Output( const ByteString& rOutput )
         pOutputStream->Write( rOutput.GetBuffer(), rOutput.Len());
 }
 
-size_t CfgStack::Push( CfgStackData *pStackData )
-{
-    maList.push_back( pStackData );
-    return maList.size() - 1;
-}
-
 /*****************************************************************************/
 void CfgMerge::WorkOnRessourceEnd()
 /*****************************************************************************/

@@ -723,13 +723,6 @@ void BitmapEx::Draw( OutputDevice* pOutDev,
 
 // ------------------------------------------------------------------
 
-void BitmapEx::Draw( OutputDevice* pOutDev,
-                     const Point& rDestPt, const Size& rDestSize,
-                     const Point& rSrcPtPixel, const Size& rSrcSizePixel ) const
-{
-    pOutDev->DrawBitmapEx( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, *this );
-}
-
 BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize)
 {
     Point aEmptyPoint(0,0);

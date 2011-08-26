@@ -357,9 +357,6 @@ public:
     void            EnablePasteSpecial( sal_Bool bEnable );
     sal_Bool            IsPasteSpecialEnabled() const;
 
-    void            EnableIdleFormatter( sal_Bool bEnable );
-    sal_Bool            IsIdleFormatterEnabled() const;
-
     void            EraseVirtualDevice();
 
     void            SetSpeller( ::com::sun::star::uno::Reference<
@@ -470,7 +467,6 @@ public:
     static sal_uInt16   GetAvailableSearchOptions();
     static void     SetFontInfoInItemSet( SfxItemSet& rItemSet, const Font& rFont );
     static void     SetFontInfoInItemSet( SfxItemSet& rItemSet, const SvxFont& rFont );
-    static Font     CreateFontFromItemSet( const SfxItemSet& rItemSet );
     static Font     CreateFontFromItemSet( const SfxItemSet& rItemSet, sal_uInt16 nScriptType );
     static SvxFont  CreateSvxFontFromItemSet( const SfxItemSet& rItemSet );
     static sal_Bool     IsPrintable( sal_Unicode c ) { return ( ( c >= 32 ) && ( c != 127 ) ); }

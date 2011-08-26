@@ -133,46 +133,9 @@ CBenValue::ReadValueData(BenDataPtr pReadBuffer, unsigned long Offset,
 }
 
 BenError
-CBenValue::ReadValueDataKnownSize(BenDataPtr pBuffer, unsigned long Offset,
-  unsigned long Amt)
-{
-    unsigned long AmtRead;
-    BenError Err = ReadValueData(pBuffer, Offset, Amt, &AmtRead);
-
-    if (Err == UtErr_OK && AmtRead != Amt)
-        Err = (BenError) UtErr_Fail;
-
-    return Err;
-}
-
-BenError
 CBenValue::WriteValueData(BenConstDataPtr /*pWriteBuffer*/, unsigned long /*Offset*/,
   unsigned long /*Amt*/, unsigned long * /*pAmtWritten*/)
 {
-    return BenErr_OK;
-}
-
-BenError
-CBenValue::TruncateValueSize(unsigned long NewSize)
-{
-    unsigned long SegOffset = 0;
-
-    pCBenValueSegment pCurrSeg = GetNextValueSegment(NULL);
-    while (pCurrSeg != NULL)
-    {
-        pCBenValueSegment pNextSeg = GetNextValueSegment(pCurrSeg);
-
-        long SegSize = UtMin((long) pCurrSeg->GetSize(), (long) NewSize -
-          (long) SegOffset);
-
-        if (SegSize <= 0)
-            delete pCurrSeg;
-        else pCurrSeg->SetSize(SegSize);
-
-        SegOffset += SegSize;
-        pCurrSeg = pNextSeg;
-    }
-
     return BenErr_OK;
 }
 
@@ -184,82 +147,6 @@ CBenValue::WriteValueData(BenConstDataPtr pWriteBuffer, unsigned long Offset,
     return WriteValueData(pWriteBuffer, Offset, Amt, &AmtWritten);
 }
 
-BenError
-CBenValue::WriteImmediateValueData(BenConstDataPtr pBuffer,
-  unsigned short Size)
-{
-    // Only one write can be an immediate value in current implementation
-    if (cValueSegments.GetFirst() != cValueSegments.GetTerminating() ||
-      Size > 4)
-        return BenErr_InvalidImmediateWrite;
-
-    if (Size == 0)
-        return BenErr_OK;
-
-    new CBenValueSegment(this, pBuffer, Size);
-    return BenErr_OK;
-}
-
-BenError
-CBenValue::NewReference(BenObjectID ReferencedObjectID, pCBenReference
-  pReference)
-{
-    BenError Err;
-
-    if (cpReferencedList == NULL)
-    {
-        pLtcBenContainer pContainer = cpProperty->GetContainer();
-
-        pCBenObject pNewObject;
-        if ((Err = pContainer->NewObject(&pNewObject)) != BenErr_OK)
-            return Err;
-
-        pCBenValue pNewValue;
-        if ((Err = pNewObject->NewValue(BEN_PROPID_OBJ_REFERENCES,
-          BEN_TYPEID_OBJ_REFERENCES_DATA, &pNewValue)) != BenErr_OK)
-        {
-            delete pNewObject;
-            return Err;
-        }
-
-        cpReferencedList = pNewValue;
-        cReferencedObjectsSize = 0;
-    }
-
-    BenByte Buffer[8];
-    UtPutIntelDWord(Buffer, ReferencedObjectID);
-    UtPutIntelDWord(Buffer + 4, ReferencedObjectID);
-
-    UtPutIntelDWord(pReference->GetData(), ReferencedObjectID);
-
-    if ((Err = cpReferencedList->WriteValueData(Buffer,
-      cReferencedObjectsSize, 8)) != BenErr_OK)
-        return Err;
-
-    cReferencedObjectsSize += 8;
-    return BenErr_OK;
-}
-
-BenObjectID
-CBenValue::GetReferencedObject(pCBenReference pReference)
-{
-    return UtGetIntelDWord(pReference->GetData());
-}
-
-BenObjectID
-CBenValue::GetReferencedListID()
-{
-    if (cpReferencedList != NULL)
-        return cpReferencedList->GetProperty()->GetBenObject()->GetID();
-    else
-    {
-#ifdef BENUTIL_SUPPORT
-        return cReferencedListID;
-#else
-        return 0;
-#endif
-    }
-}
 }//end namespace OpenStormBento
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

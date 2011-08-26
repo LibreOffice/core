@@ -1161,22 +1161,6 @@ void SdrGrafObj::ImpSetAttrToGrafInfo()
 
 // -----------------------------------------------------------------------------
 
-void SdrGrafObj::ImpSetGrafInfoToAttr()
-{
-    SetObjectItem( SdrGrafLuminanceItem( aGrafInfo.GetLuminance() ) );
-    SetObjectItem( SdrGrafContrastItem( aGrafInfo.GetContrast() ) );
-    SetObjectItem( SdrGrafRedItem( aGrafInfo.GetChannelR() ) );
-    SetObjectItem( SdrGrafGreenItem( aGrafInfo.GetChannelG() ) );
-    SetObjectItem( SdrGrafBlueItem( aGrafInfo.GetChannelB() ) );
-    SetObjectItem( SdrGrafGamma100Item( FRound( aGrafInfo.GetGamma() * 100.0 ) ) );
-    SetObjectItem( SdrGrafTransparenceItem( (sal_uInt16) FRound( aGrafInfo.GetTransparency() / 2.55 ) ) );
-    SetObjectItem( SdrGrafInvertItem( aGrafInfo.IsInvert() ) );
-    SetObjectItem( SdrGrafModeItem( aGrafInfo.GetDrawMode() ) );
-    SetObjectItem( SdrGrafCropItem( aGrafInfo.GetLeftCrop(), aGrafInfo.GetTopCrop(), aGrafInfo.GetRightCrop(), aGrafInfo.GetBottomCrop() ) );
-}
-
-// -----------------------------------------------------------------------------
-
 void SdrGrafObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly )
 {
     Size aSize;

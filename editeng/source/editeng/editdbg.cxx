@@ -533,29 +533,6 @@ rtl::OString EditDbg::GetPortionInfo( ParaPortion* pPPortion )
     return aDebStr.makeStringAndClear();
 }
 
-rtl::OString EditDbg::GetTextPortionInfo(TextPortionList& rPortions)
-{
-    rtl::OStringBuffer aDebStr;
-    for (sal_uInt16 z = 0; z < rPortions.Count(); ++z)
-    {
-        TextPortion* pPortion = rPortions.GetObject( z );
-        aDebStr.append(' ');
-        aDebStr.append(static_cast<sal_Int32>(pPortion->GetLen()));
-        aDebStr.append('(');
-        aDebStr.append(static_cast<sal_Int32>(pPortion->GetSize().Width()));
-        aDebStr.append(')');
-        aDebStr.append(';');
-    }
-    return aDebStr.makeStringAndClear();
-}
-
-void EditDbg::ShowPortionData( ParaPortion* pPortion )
-{
-    ByteString aDebStr( GetPortionInfo( pPortion ) );
-    InfoBox( 0, String( aDebStr, RTL_TEXTENCODING_ASCII_US )  ).Execute();
-}
-
-
 sal_Bool ParaPortion::DbgCheckTextPortions()
 {
     // check, if Portion length ok:

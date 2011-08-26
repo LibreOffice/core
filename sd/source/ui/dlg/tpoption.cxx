@@ -684,62 +684,6 @@ void    SdTpOptionsMisc::SetDrawMode()
     // spacing-between-paragraphs check box normally is in.
     aCbxUsePrinterMetrics.SetPosPixel (aCbxCompatibility.GetPosPixel());
 }
-// -----------------------------------------------------------------------
-
-IMPL_LINK( SdTpOptionsMisc, ModifyScaleHdl, void *, EMPTYARG )
-{
-    // Originalgroesse berechnen
-    sal_Int32 nX, nY;
-    if( SetScale( aCbScale.GetText(), nX, nY ) )
-    {
-        sal_Int32 nW = nWidth * nY / nX;
-        sal_Int32 nH = nHeight * nY / nX;
-
-        SetMetricValue( aMtrFldOriginalWidth, nW, ePoolUnit );
-        SetMetricValue( aMtrFldOriginalHeight, nH, ePoolUnit );
-    }
-
-    return( 0L );
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( SdTpOptionsMisc, ModifyOriginalScaleHdl, void *, EMPTYARG )
-{
-    // Berechnen des Massstabs
-    long nOrgW = static_cast<long>(aMtrFldOriginalWidth.GetValue());
-    long nOrgH = static_cast<long>(aMtrFldOriginalHeight.GetValue());
-
-    if( nOrgW == 0 || nOrgH == 0 )
-        return( 0L );
-
-    Fraction aFract1( nOrgW, static_cast<long>(aMtrFldInfo1.GetValue()) );
-    Fraction aFract2( nOrgH, static_cast<long>(aMtrFldInfo2.GetValue()) );
-    Fraction aFract( aFract1 > aFract2 ? aFract1 : aFract2 );
-
-    long nValue;
-    if( aFract < Fraction( 1, 1 ) )
-    {
-        // Fraction umdrehen
-        aFract1 = aFract;
-        aFract = Fraction( aFract1.GetDenominator(), aFract1.GetNumerator() );
-        nValue = aFract;
-
-        // Swap nominator and denominator
-        aCbScale.SetText( GetScale( nValue, 1 ) );
-    }
-    else
-    {
-        double fValue = aFract;
-        nValue = aFract;
-        if( fValue > (double)nValue )
-            nValue++;
-
-        // Swap nominator and denominator
-        aCbScale.SetText( GetScale( 1, nValue ) );
-    }
-    return( 0L );
-}
 
 // -----------------------------------------------------------------------
 

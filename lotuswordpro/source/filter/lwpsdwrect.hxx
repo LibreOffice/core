@@ -121,9 +121,6 @@ public:
     double GetRotationAngle() const;
 
     static double CalcDistBetween2Points(long nX1, long nY1, long nX2, long nY2);
-
-    static Rectangle GetOriginalRect(const Point& rCenter, long nHalfWidth, long nHalfHeight);
-
 };
 
 #endif

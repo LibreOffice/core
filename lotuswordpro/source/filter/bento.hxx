@@ -336,20 +336,11 @@ public:
     unsigned long GetValueSize();
     BenError ReadValueData(BenDataPtr pBuffer,
       unsigned long Offset, unsigned long MaxSize, unsigned long * pAmtRead);
-    BenError ReadValueDataKnownSize(BenDataPtr pBuffer,
-      unsigned long Offset, unsigned long Amt);
 
     BenError BEN_EXPORT WriteValueData(BenConstDataPtr pBuffer,
       unsigned long Offset, unsigned long Size);
     BenError BEN_EXPORT WriteValueData(BenConstDataPtr pBuffer,
       unsigned long Offset, unsigned long Size, unsigned long * pAmtWritten);
-    BenError BEN_EXPORT WriteImmediateValueData(BenConstDataPtr pBuffer,
-      unsigned short Size);
-    BenError BEN_EXPORT TruncateValueSize(unsigned long NewSize);
-    BenError BEN_EXPORT NewReference(BenObjectID ReferencedObjectID,
-      pCBenReference pReference);
-    BenObjectID BEN_EXPORT GetReferencedObject(pCBenReference pReference);
-
 
     pCBenProperty BEN_EXPORT GetProperty() { return cpProperty; }
 
@@ -377,7 +368,6 @@ public: // Internal methods
       pCurrValueSegment);
     inline pLtcBenContainer GetContainer();
     pCUtList GetValueSegments() { return &cValueSegments; }
-    BenObjectID GetReferencedListID();
     // Currently, no generation support
     BenGeneration GetGeneration() { return 1; }
 
