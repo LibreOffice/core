@@ -2518,7 +2518,7 @@ void ScOutputData::DrawEditParam::adjustForHyperlinkInPDF(Point aURLStart, Outpu
 
 void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 {
-    OSL_ASSERT(rParam.meOrient == SVX_ORIENTATION_STANDARD || rParam.meOrient == SVX_ORIENTATION_REPEAT);
+    OSL_ASSERT(rParam.meOrient == SVX_ORIENTATION_STANDARD);
     OSL_ASSERT(!rParam.mbAsianVertical);
 
     Size aRefOne = pRefDevice->PixelToLogic(Size(1,1));
