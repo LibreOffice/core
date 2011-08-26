@@ -103,7 +103,7 @@ namespace {
         return bRet;
     }
 
-    long lcl_GetSurface( SwPosition* pPos, const SwPageFrm* pPageFrm )
+    long lcl_GetSurface( SwPosition* pPos )
     {
         SwRect aArea;
 
@@ -237,7 +237,7 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         //aktuellen an. Mit Flys ist es dann allerdings vorbei.
         if ( SwLayoutFrm::GetCrsrOfst( &aTextPos, aPoint, pCMS ) )
         {
-            nTextSurface = lcl_GetSurface( &aTextPos, this );
+            nTextSurface = lcl_GetSurface( &aTextPos );
             bTextRet = sal_True;
         }
         else
