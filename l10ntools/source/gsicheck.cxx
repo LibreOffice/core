@@ -71,13 +71,13 @@ sal_Bool LanguageOK( ByteString aLang )
         return sal_True;
 
     if ( aLang.GetTokenCount( '-' ) == 1 )
-        return aLang.IsAlphaAscii() && aLang.IsLowerAscii();
+        return aLang.IsLowerAscii();
     else if ( aLang.GetTokenCount( '-' ) == 2 )
     {
         ByteString aTok0( aLang.GetToken( 0, '-' ) );
         ByteString aTok1( aLang.GetToken( 1, '-' ) );
-        return  aTok0.Len() && aTok0.IsAlphaAscii() && aTok0.IsLowerAscii()
-             && aTok1.Len() && aTok1.IsAlphaAscii() && aTok1.IsUpperAscii()
+        return  aTok0.Len() && aTok0.IsLowerAscii()
+             && aTok1.Len() && aTok1.IsUpperAscii()
              && !aTok1.EqualsIgnoreCaseAscii( aTok0 );
     }
 
