@@ -67,7 +67,7 @@ sal_Bool LanguageOK( ByteString aLang )
     if ( !aLang.Len() )
         return sal_False;
 
-    if (comphelper::string::isAsciiDecimalString(aLang))
+    if (comphelper::string::isdigitAsciiString(aLang))
         return sal_True;
 
     if ( aLang.GetTokenCount( '-' ) == 1 )
@@ -153,7 +153,7 @@ GSILine::GSILine( const ByteString &rLine, sal_uLong nLine )
         aTitle = rLine.GetToken( 13, '\t' );
 
         // do some more format checks here
-        if (!comphelper::string::isAsciiDecimalString(rLine.GetToken(8, '\t')))
+        if (!comphelper::string::isdigitAsciiString(rLine.GetToken(8, '\t')))
         {
             PrintError( "The length field does not contain a number!", "Line format", rLine.GetToken( 8, '\t' ), sal_True, GetLineNumber(), GetUniqId() );
             NotOK();
@@ -491,7 +491,7 @@ sal_Bool GSIBlock::IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uIn
             if ( aID.Len() > 0 && aID.GetChar(aID.Len()-1) == '*' )
                 aID.Erase( aID.Len()-1 );
 
-            if (comphelper::string::isAsciiDecimalString(aID) && aID.Len() >= 5)
+            if (comphelper::string::isdigitAsciiString(aID) && aID.Len() >= 5)
                 bIsKeyID = sal_True;
         }
 

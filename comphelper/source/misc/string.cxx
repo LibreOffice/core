@@ -354,25 +354,45 @@ NaturalStringSorter::NaturalStringSorter(
 
 namespace
 {
-    template <typename T> bool tmpl_isAsciiDecimalString(const T &rString)
+    template <typename T> bool tmpl_isalnumAsciiString(const T &rString)
     {
         for (sal_Int32 i = 0; i < rString.getLength(); ++i)
         {
-            if ((rString[i] < '0') || (rString[i] > '9'))
+            if (!isalnumAscii(rString[i]))
+                return false;
+        }
+        return true;
+    }
+
+    template <typename T> bool tmpl_isdigitAsciiString(const T &rString)
+    {
+        for (sal_Int32 i = 0; i < rString.getLength(); ++i)
+        {
+            if (!isdigitAscii(rString[i]))
                 return false;
         }
         return true;
     }
 }
 
-bool isAsciiDecimalString(const rtl::OString &rString)
+bool isalnumAsciiString(const rtl::OString &rString)
 {
-    return tmpl_isAsciiDecimalString(rString);
+    return tmpl_isalnumAsciiString(rString);
 }
 
-bool isAsciiDecimalString(const rtl::OUString &rString)
+bool isalnumAsciiString(const rtl::OUString &rString)
 {
-    return tmpl_isAsciiDecimalString(rString);
+    return tmpl_isalnumAsciiString(rString);
+}
+
+bool isdigitAsciiString(const rtl::OString &rString)
+{
+    return tmpl_isdigitAsciiString(rString);
+}
+
+bool isdigitAsciiString(const rtl::OUString &rString)
+{
+    return tmpl_isdigitAsciiString(rString);
 }
 
 } }

@@ -52,19 +52,22 @@
 #include <sfx2/sfxsids.hrc>
 #include "helper.hxx"
 #include <sfx2/docfile.hxx>
+#include <comphelper/string.hxx>
 
 //========================================================================
 
 String SfxDdeServiceName_Impl( const String& sIn )
 {
-    ByteString sTemp = U2S( sIn );
-    ByteString sReturn;
+    String sReturn;
 
-    for ( sal_uInt16 n = sTemp.Len(); n; --n )
-        if ( sTemp.Copy( n-1, 1 ).IsAlphaNumericAscii() )
-            sReturn += sTemp.GetChar(n-1);
+    for ( sal_uInt16 n = sIn.Len(); n; --n )
+    {
+        sal_Unicode cChar = sIn.GetChar(n-1);
+        if (comphelper::string::isalnumAscii(cChar))
+            sReturn += cChar;
+    }
 
-    return S2U( sReturn );
+    return sReturn;
 }
 
 

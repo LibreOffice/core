@@ -1199,7 +1199,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                         aLine.EraseLeadingChars( '\t' );
                         aLine.EraseAllChars( ';' );
 
-                        if (comphelper::string::isAsciiDecimalString(aLine))
+                        if (comphelper::string::isdigitAsciiString(aLine))
                         {
                             ByteString  aBaseFileName( aPrefix );
                             sal_Int32   nNumber = atoi( aLine.GetBuffer() );

@@ -268,25 +268,65 @@ public:
     const ::com::sun::star::lang::Locale& getLocale() const { return m_aLocale; }
 };
 
-/** Determine if an OString contains solely ascii numeric digits
+/** Determine if an OString contains solely ASCII numeric digits
 
     @param rString  An OString
 
     @return         false if string contains any characters outside
-                    the ascii '0'-'9' range
+                    the ASCII '0'-'9' range
                     true otherwise, including for empty string
  */
-COMPHELPER_DLLPUBLIC bool isAsciiDecimalString(const rtl::OString &rString);
+COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const rtl::OString &rString);
 
-/** Determine if an OUString contains solely ascii numeric digits
+/** Determine if an OUString contains solely ASCII numeric digits
 
     @param rString  An OUString
 
     @return         false if string contains any characters outside
-                    the ascii '0'-'9' range
+                    the ASCII '0'-'9' range
                     true otherwise, including for empty string
  */
-COMPHELPER_DLLPUBLIC bool isAsciiDecimalString(const rtl::OUString &rString);
+COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const rtl::OUString &rString);
+
+/** Determine if an OString contains solely ASCII alphanumeric digits
+
+    @param rString  An OString
+
+    @return         false if string contains any characters outside
+                    the ASCII 'a'-'z', 'A'-'Z' and '0'-'9' ranges
+                    true otherwise, including for empty string
+ */
+COMPHELPER_DLLPUBLIC bool isalnumAsciiString(const rtl::OString &rString);
+
+/** Determine if an OUString contains solely ASCII alphanumeric digits
+
+    @param rString  An OUString
+
+    @return         false if string contains any characters outside
+                    the ASCII 'a'-'z', 'A'-'Z' and '0'-'9' ranges
+                    true otherwise, including for empty string
+ */
+COMPHELPER_DLLPUBLIC bool isalnumAsciiString(const rtl::OString &rString);
+
+COMPHELPER_DLLPUBLIC inline bool isdigitAscii(sal_Unicode c)
+{
+    return ((c >= '0') && (c <= '9'));
+}
+
+COMPHELPER_DLLPUBLIC inline bool islowerAscii(sal_Unicode c)
+{
+    return ((c >= 'a') && (c <= 'z'));
+}
+
+COMPHELPER_DLLPUBLIC inline bool isupperAscii(sal_Unicode c)
+{
+    return ((c >= 'A') && (c <= 'Z'));
+}
+
+COMPHELPER_DLLPUBLIC inline bool isalnumAscii(sal_Unicode c)
+{
+    return isdigitAscii(c) || islowerAscii(c) || isupperAscii(c);
+}
 
 } }
 

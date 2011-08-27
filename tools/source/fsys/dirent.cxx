@@ -65,7 +65,7 @@
 
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
-
+#include <comphelper/string.hxx>
 
 using namespace osl;
 
@@ -333,12 +333,14 @@ ByteString ImplCutPath( const ByteString& rStr, sal_uInt16 nMax, char cAccDel )
     if ( aCutPath.Len() > nMaxPathLen )
     {
         for ( sal_uInt16 n = nMaxPathLen; n > nMaxPathLen/2; --n )
-            if ( !ByteString(aCutPath.GetChar(n)).IsAlphaNumericAscii() )
+        {
+            if (!comphelper::string::isalnumAscii(aCutPath.GetChar(n)))
             {
                 aCutPath.Erase( n );
                 aCutPath += "...";
                 break;
             }
+        }
     }
 
     if ( bInsertPrefix )
