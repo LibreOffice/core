@@ -769,16 +769,17 @@ void ScXMLTableRowCellContext::EndElement()
     {
         if (bHasTextImport && rXMLImport.GetRemoveLastChar())
         {
-            if (rXMLImport.GetTextImport()->GetCursor().is())
+            UniReference< XMLTextImportHelper > aTextImport = rXMLImport.GetTextImport();
+            if (aTextImport->GetCursor().is())
             {
-                //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
-                if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
+                //aTextImport->GetCursor()->gotoEnd(sal_False);
+                if( aTextImport->GetCursor()->goLeft( 1, sal_True ) )
                 {
-                    GetImport().GetTextImport()->GetText()->insertString(
-                        GetImport().GetTextImport()->GetCursorAsRange(), rtl::OUString(),
+                    aTextImport->GetText()->insertString(
+                        aTextImport->GetCursorAsRange(), rtl::OUString(),
                         sal_True );
                 }
-                rXMLImport.GetTextImport()->ResetCursor();
+                aTextImport->ResetCursor();
             }
         }
         ScMyTables& rTables = rXMLImport.GetTables();
@@ -821,13 +822,10 @@ void ScXMLTableRowCellContext::EndElement()
                             pOUText.reset(xTempText->getString());
                         }
                     }
-                    if (     (!pOUTextContent && !pOUText && !pOUTextValue)
-                        && ( (pOUTextContent && !pOUTextContent->getLength()) || !pOUTextContent )
-                        && ( (pOUText && !pOUText->getLength()) || !pOUText )
-                        && ( (pOUTextValue && !pOUTextValue->getLength()) || !pOUTextValue ))
+                    if (!pOUTextContent && !pOUText && !pOUTextValue)
                             bIsEmpty = sal_True;
                 }
-                sal_Bool bWasEmpty = bIsEmpty;
+                bool bWasEmpty = bIsEmpty;
 //              uno::Reference <table::XCell> xCell;
                 table::CellAddress aCurrentPos( aCellPos );
                 if ((pContentValidationName && pContentValidationName->getLength()) ||
