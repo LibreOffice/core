@@ -1,11 +1,13 @@
 Cross-compiling LibreOffice
 ===========================
 
-Notes on cross-compiling LibreOffice, written by Tor Lillqvist
-<tlillqvist@novell.com> <tml@iki.fi> in May, 2011.
+Notes on cross-compiling LibreOffice, originally written by Tor
+Lillqvist <tlillqvist@novell.com> <tml@iki.fi> in May, 2011, for later
+history see git log.
 
-Cross-compilation of LibreOffice is not possible yet. Some initial
-work is done, "baby steps", but a lot remains. This work is highly
+Cross-compilation of LibreOffice completely is not possible yet. Much
+work has been done, "baby steps" for some platforms, much more for
+others, but a lot remains. For iOS and Android this work is highly
 experimental and done mostly in my own spare time just for the hacking
 pleasure. No promise, explicit or implied, is given that it will ever
 be finished.
@@ -69,10 +71,11 @@ attempted cross-compilation.
 This OOo-originated MinGW support attempts to support both running
 Cygwin gcc in its -mno-cygwin mode, and a native MinGW compiler.  The
 -mno-cygwin mechanism in the Cygwin gcc is rapidly being obsoleted, if
-it isn't already, and I have not attempted to check that it keeps
-working. Ditto for native MinGW; if one compiles natively on Windows,
-why not use Microsoft's compiler, as OOo/LO has been build for Windows
-all the time using that and it works fine.
+it isn't already, and I have not attempted to try to keep it working;
+in fact I have activly cleaned out mechanisms related to this. Ditto
+for native MinGW. If one compiles natively on Windows, just use
+Microsoft's compiler. OOo/LO has been built for Windows all the time
+using that.
 
 In my opinion, the only case where it makes sense to use MinGW is for
 cross-compilation. There is just too much crack on Windows anyway, and
