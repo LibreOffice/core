@@ -1679,7 +1679,7 @@ public:
     }
 };
 
-void setPrintRange(ScRange* pRange1, const ScRange* pRange2)
+void setPrintRange(ScRange*& pRange1, const ScRange* pRange2)
 {
     if (pRange2)
     {

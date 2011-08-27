@@ -71,7 +71,6 @@ class ScOutlineTable;
 class ScPostIt;
 class ScPrintSaverTab;
 class ScProgress;
-class ScProgress;
 class ScRangeList;
 class ScSheetEvents;
 class ScSortInfoArray;
