@@ -41,6 +41,7 @@
 #include <unotools/confignode.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/string.hxx>
 #include <tools/wldcrd.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -631,7 +632,7 @@ namespace sfx2
         for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
         {
             sFilterName = pFilter->GetFilterName();
-            sFilterWildcard = pFilter->GetWildcard().GetWildCard();
+            sFilterWildcard = pFilter->GetWildcard().getGlob();
             AppendWildcardToDescriptor aExtendWildcard( sFilterWildcard );
 
             DBG_ASSERT( sFilterWildcard.Len(), "sfx2::lcl_GroupAndClassify: invalid wildcard of this filter!" );
@@ -964,7 +965,8 @@ namespace sfx2
         const SfxFilter* pDefaultFilter = SfxFilterContainer::GetDefaultFilter_Impl(_rFactory);
         // Only use one extension (#i32434#)
         // (and always the first if there are more than one)
-        sExtension = pDefaultFilter->GetWildcard().GetWildCard().GetToken( 0, ';' );
+        using comphelper::string::getToken;
+        sExtension = getToken(pDefaultFilter->GetWildcard().getGlob(), 0, ';');
         sUIName = addExtension( pDefaultFilter->GetUIName(), sExtension, sal_False, _rFileDlgImpl );
         try
         {
@@ -988,7 +990,7 @@ namespace sfx2
 
             // Only use one extension (#i32434#)
             // (and always the first if there are more than one)
-            sExtension = pFilter->GetWildcard().GetWildCard().GetToken( 0, ';' );
+            sExtension = getToken(pFilter->GetWildcard().getGlob(), 0, ';');
             sUIName = addExtension( pFilter->GetUIName(), sExtension, sal_False, _rFileDlgImpl );
             try
             {
@@ -1045,7 +1047,7 @@ namespace sfx2
         {
             sTypeName   = pFilter->GetTypeName();
             sUIName     = pFilter->GetUIName();
-            sExtensions = pFilter->GetWildcard().GetWildCard();
+            sExtensions = pFilter->GetWildcard().getGlob();
             ExportFilter aExportFilter( sUIName, sExtensions );
             String aExt = sExtensions;
 

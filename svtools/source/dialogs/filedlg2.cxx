@@ -911,7 +911,7 @@ IMPL_LINK( ImpFileDialog, DblClickHdl, ListBox *, pBox )
             aMask = WildCard( aFilterListMask, ';' );
         }
 
-        pEdit->SetText( aMask() );
+        pEdit->SetText( aMask.getGlob() );
         UpdateEntries( sal_False );
         GetFileDialog()->FilterSelect();
     }
@@ -947,7 +947,7 @@ IMPL_LINK( ImpFileDialog, ClickHdl, Button*, pBtn )
             }
 
             // Neue Maske und neues Verzeichnis setzen, und Listboxen updaten
-            pEdit->SetText( aMask() );
+            pEdit->SetText( aMask.getGlob() );
             aFile.SetCWD( sal_True );
             UpdateEntries( sal_True );
 
@@ -1003,7 +1003,7 @@ void ImpFileDialog::UpdateEntries( const sal_Bool bWithDirs )
 
     // TempMask, weil Vergleich case-sensitiv
     sal_Bool bMatchCase = sal_False; //aCurrent.IsCaseSensitive();
-    UniString aWildCard( aMask.GetWildCard() );
+    UniString aWildCard( aMask.getGlob() );
     if ( !bMatchCase )
         aWildCard.ToLowerAscii();
     WildCard aTmpMask( aWildCard, ';' );
@@ -1019,7 +1019,7 @@ void ImpFileDialog::UpdateEntries( const sal_Bool bWithDirs )
 
             if( aName.Len() &&
                 ( ( ( aName.GetChar(0) != '.' ) ||
-                  ( ( aName.GetChar(0) == '.' ) && ( aMask.GetWildCard() ).GetChar(0) == '.' ) )
+                  ( ( aName.GetChar(0) == '.' ) && aMask.getGlob()[0] == '.' ) )
                         && rEntry.Exists() ) )
             {
                 FileStat aFileStat( rEntry );
@@ -1151,10 +1151,7 @@ void ImpFileDialog::SetPath( UniString const & rPath )
 
         // Neue Maske und neues Verzeichnis setzen, und Listboxen updaten
         if( pDirList )
-        {
-            UniString aWildCard( aMask.GetWildCard() );
-            pEdit->SetText( aWildCard );
-        }
+            pEdit->SetText( aMask.getGlob() );
         else
             pEdit->SetText( rPath );
     }
@@ -1242,7 +1239,7 @@ void ImpFileDialog::PreExecute()
 
     // Neue Maske setzen
     if( pEdit->GetText().Len() == 0 )
-        pEdit->SetText( aMask() );
+        pEdit->SetText( aMask.getGlob() );
 
     ImpPathDialog::PreExecute();
 

@@ -712,7 +712,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Extension( const String& rExt, SfxF
             SfxFilterFlags nFlags = pFilter->GetFilterFlags();
             if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) )
             {
-                String sWildCard = ToUpper_Impl( pFilter->GetWildcard().GetWildCard() );
+                String sWildCard = ToUpper_Impl( pFilter->GetWildcard().getGlob() );
                 String sExt      = ToUpper_Impl( rExt );
 
                 if (!sExt.Len())

@@ -812,7 +812,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 ( pFlt->GetUserData().EqualsAscii("CXML") ||
                                   pFlt->GetUserData().EqualsAscii("CXMLV") ) )
                             {
-                                const String sWild = ((WildCard&)pFlt->GetWildcard()).GetWildCard();
+                                const String sWild = pFlt->GetWildcard().getGlob();
                                 xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
                             }
                             pFlt = aIter.Next();
@@ -825,7 +825,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         // make sure the default file format is also available
                         if(bWeb)
                         {
-                            const String sWild = ((WildCard&)pOwnFlt->GetWildcard()).GetWildCard();
+                            const String sWild = pOwnFlt->GetWildcard().getGlob();
                             xFltMgr->appendFilter( pOwnFlt->GetUIName(), sWild );
                         }
 
@@ -1244,7 +1244,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if( pFlt )
                     {
                         uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
-                        const String sWild = ((WildCard&)pFlt->GetWildcard()).GetWildCard();
+                        const String sWild = pFlt->GetWildcard().getGlob();
                         xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
                         try
                         {

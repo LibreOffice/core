@@ -38,6 +38,7 @@
 #include <string>
 #include <sot/exchange.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
@@ -72,7 +73,7 @@ SfxFilter::SfxFilter(  const String &rName,
     aMimeType( rMimeType ),
     aFilterName( rName )
 {
-    String aExts = GetWildcard()();
+    String aExts = GetWildcard().getGlob();
     String aShort, aLong;
     String aRet;
     sal_uInt16 nMaxLength = USHRT_MAX;
@@ -110,12 +111,12 @@ SfxFilter::~SfxFilter()
 
 String SfxFilter::GetDefaultExtension() const
 {
-    return GetWildcard()().GetToken( 0, ';' );
+    return comphelper::string::getToken(GetWildcard().getGlob(), 0, ';');
 }
 
 String SfxFilter::GetSuffixes() const
 {
-    String aRet = GetWildcard()();
+    String aRet = GetWildcard().getGlob();
     while( aRet.SearchAndReplaceAscii( "*.", String() ) != STRING_NOTFOUND ) ;
     while( aRet.SearchAndReplace( ';', ',' ) != STRING_NOTFOUND ) ;
     return aRet;

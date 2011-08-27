@@ -158,7 +158,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
         {
             if( pFlt && pFlt->IsAllowedAsTemplate() )
             {
-                const String sWild = ((WildCard&)pFlt->GetWildcard()).GetWildCard();
+                const String sWild = pFlt->GetWildcard().getGlob();
                 xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
 
                 // #i40125
