@@ -68,22 +68,22 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     ScXMLImport& rXMLImport;
     formula::FormulaGrammar::Grammar  eGrammar;
     sal_Int16   nCellType;
-    sal_Bool    bIsMerged;
-    sal_Bool    bIsMatrix;
-    sal_Bool    bHasSubTable;
-    sal_Bool    bIsCovered;
-    sal_Bool    bIsEmpty;
-    sal_Bool    bHasTextImport;
-    sal_Bool    bIsFirstTextImport;
-    sal_Bool    bSolarMutexLocked;
-    sal_Bool    bFormulaTextResult;
+    bool    bIsMerged;
+    bool    bIsMatrix;
+    bool    bHasSubTable;
+    bool    bIsCovered;
+    bool    bIsEmpty;
+    bool    bHasTextImport;
+    bool    bIsFirstTextImport;
+    bool    bSolarMutexLocked;
+    bool    bFormulaTextResult;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
     sal_Int16 GetCellType(const rtl::OUString& sOUValue) const;
 
-    sal_Bool IsMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
+    bool IsMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
                 const sal_Int32 nCol, const sal_Int32 nRow,
                 com::sun::star::table::CellRangeAddress& aCellAddress) const;
     void DoMerge(const com::sun::star::table::CellAddress& aCellPos,
@@ -97,7 +97,7 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     void LockSolarMutex();
     void UnlockSolarMutex();
 
-    sal_Bool CellExists(const com::sun::star::table::CellAddress& aCellPos) const
+    bool CellExists(const com::sun::star::table::CellAddress& aCellPos) const
     {
         return (aCellPos.Column <= MAXCOL && aCellPos.Row <= MAXROW);
     }
@@ -108,7 +108,7 @@ public:
                        const ::rtl::OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                        const sal_Bool bIsCovered, const sal_Int32 nRepeatedRows );
+                                        const bool bIsCovered, const sal_Int32 nRepeatedRows );
 
     virtual ~ScXMLTableRowCellContext();
 
