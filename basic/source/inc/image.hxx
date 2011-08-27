@@ -33,13 +33,13 @@
 #include <rtl/ustring.hxx>
 #include <filefmt.hxx>
 
-// Diese Klasse liest das vom Compiler erzeugte Image ein und verwaltet
-// den Zugriff auf die einzelnen Elemente.
+// This class reads in the image that's been produced by the compiler
+// and manages the access to the single elements.
 
 struct SbPublicEntry;
 
 class SbiImage {
-    friend class SbiCodeGen;            // Compiler-Klassen, die die private-
+    friend class SbiCodeGen;            // compiler classes, that the private-
 
     SbxArrayRef    rTypes;          // User defined types
     SbxArrayRef    rEnums;          // Enum types
@@ -47,35 +47,35 @@ class SbiImage {
     sal_Unicode*   pStrings;        // StringPool
     char*          pCode;           // Code-Image
     char*          pLegacyPCode;        // Code-Image
-    sal_Bool           bError;          // sal_True: Fehler
-    sal_uInt16         nFlags;          // Flags (s.u.)
-    short          nStrings;        // Anzahl Strings
-    sal_uInt32         nStringSize;     // Groesse des String-Puffers
-    sal_uInt32         nCodeSize;       // Groesse des Code-Blocks
-    sal_uInt16         nLegacyCodeSize;     // Groesse des Code-Blocks
-    sal_uInt16         nDimBase;        // OPTION BASE-Wert
-    rtl_TextEncoding eCharSet;      // Zeichensatz fuer Strings
-                                    // temporaere Verwaltungs-Variable:
-    short          nStringIdx;      // aktueller String-Index
-    sal_uInt32         nStringOff;      // aktuelle Pos im Stringpuffer
-                                    // Routinen fuer Compiler:
-    void MakeStrings( short );      // StringPool einrichten
-    void AddString( const String& );// String zufuegen
-    void AddCode( char*, sal_uInt32 );  // Codeblock dazu
-    void AddType(SbxObject *);      // User-Type mit aufnehmen
-    void AddEnum(SbxObject *);      // Register enum type
+    sal_Bool           bError;
+    sal_uInt16         nFlags;
+    short          nStrings;
+    sal_uInt32         nStringSize;
+    sal_uInt32         nCodeSize;
+    sal_uInt16         nLegacyCodeSize;
+    sal_uInt16         nDimBase;        // OPTION BASE value
+    rtl_TextEncoding eCharSet;
+                                    // temporary management-variable:
+    short          nStringIdx;
+    sal_uInt32         nStringOff;      // current Pos in the stringbuffer
+                                    // routines for the compiler:
+    void MakeStrings( short );      // establish StringPool
+    void AddString( const String& );
+    void AddCode( char*, sal_uInt32 );
+    void AddType(SbxObject *);
+    void AddEnum(SbxObject *);
 
 public:
-    String aName;                   // Makroname
-    ::rtl::OUString aOUSource;      // Quellcode
-    String aComment;                // Kommentar
-    sal_Bool   bInit;                   // sal_True: Init-Code ist gelaufen
-    sal_Bool   bFirstInit;              // sal_True, wenn das Image das erste mal nach
-                                    // dem Compilieren initialisiert wird.
+    String aName;                   // macro name
+    ::rtl::OUString aOUSource;      // source code
+    String aComment;
+    sal_Bool   bInit;
+    sal_Bool   bFirstInit;
+
     SbiImage();
    ~SbiImage();
-    void Clear();                   // Inhalt loeschen
-    sal_Bool Load( SvStream&, sal_uInt32& nVer );       // Loads image from stream
+    void Clear();
+    sal_Bool Load( SvStream&, sal_uInt32& nVer );
                             // nVer is set to version
                             // of image
     sal_Bool Load( SvStream& );
@@ -100,9 +100,9 @@ public:
 
 };
 
-#define SBIMG_EXPLICIT      0x0001  // OPTION EXPLICIT ist aktiv
-#define SBIMG_COMPARETEXT   0x0002  // OPTION COMPARE TEXT ist aktiv
-#define SBIMG_INITCODE      0x0004  // Init-Code vorhanden
+#define SBIMG_EXPLICIT      0x0001  // OPTION EXPLICIT is active
+#define SBIMG_COMPARETEXT   0x0002  // OPTION COMPARE TEXT is active
+#define SBIMG_INITCODE      0x0004  // Init-Code does exist
 #define SBIMG_CLASSMODULE   0x0008  // OPTION ClassModule is active
 
 #endif

@@ -32,43 +32,42 @@
 #include <tools/string.hxx>
 #include <basic/sberrors.hxx>
 
-// Der Scanner ist stand-alone, d.h. er kann von ueberallher verwendet
-// werden. Eine BASIC-Instanz ist fuer Fehlermeldungen notwendig. Ohne
-// BASIC werden die Fehler nur gezaehlt. Auch ist Basic notwendig, wenn
-// eine erweiterte SBX-Variable zur Erkennung von Datentypen etc. verwendet
-// werden soll.
+// The scanner is stand-alone, i. e. it can be used from everywhere.
+// A BASIC-instance is necessary for error messages. Without BASIC
+// the errors are only counted. Also the BASICC is necessary when an
+// advanced SBX-variable shall be used for data type recognition etc.
 
 class StarBASIC;
 
 class SbiScanner
 {
-    ::rtl::OUString   aBuf;             // Input-Puffer
-    ::rtl::OUString   aLine;            // aktuelle Zeile
-    const sal_Unicode* pLine;           // Pointer
-    const sal_Unicode* pSaveLine;       // Merker fuer Line
+    ::rtl::OUString   aBuf;             // input buffer
+    ::rtl::OUString   aLine;
+    const sal_Unicode* pLine;
+    const sal_Unicode* pSaveLine;
 protected:
-    String aSym;                        // Symbolpuffer
-    String aError;                      // Fehler-String
-    SbxDataType eScanType;              // evtl. Datentyp
-    StarBASIC* pBasic;                  // Instanz fuer Fehler-Callbacks
-    double nVal;                        // numerischer Wert
-    short  nCurCol1;                    // aktuelle Spalte 1
-    short  nSavedCol1;                  // gerettete Spalte 1
-    short  nCol;                        // aktuelle Spaltennummer
-    short  nErrors;                     // Anzahl Fehler
-    short  nColLock;                    // Lock-Zaehler fuer Col1
-    sal_Int32  nBufPos;                     // aktuelle Buffer-Pos
-    sal_uInt16 nLine;                       // aktuelle Zeile
-    sal_uInt16 nCol1, nCol2;                // aktuelle 1. und 2. Spalte
-    sal_Bool   bSymbol;                     // sal_True: Symbol gescannt
-    sal_Bool   bNumber;                     // sal_True: Zahl gescannt
-    sal_Bool   bSpaces;                     // sal_True: Whitespace vor Token
-    sal_Bool   bErrors;                     // sal_True: Fehler generieren
-    sal_Bool   bAbort;                      // sal_True: abbrechen
-    sal_Bool   bHash;                       // sal_True: # eingelesen
-    sal_Bool   bError;                      // sal_True: Fehler generieren
-    sal_Bool   bUsedForHilite;              // sal_True: Nutzung fuer Highlighting
-    sal_Bool   bCompatible;                 // sal_True: OPTION Compatibl
+    String aSym;
+    String aError;
+    SbxDataType eScanType;
+    StarBASIC* pBasic;                  // instance for error callbacks
+    double nVal;                        // numeric value
+    short  nCurCol1;
+    short  nSavedCol1;
+    short  nCol;
+    short  nErrors;
+    short  nColLock;                    // lock counter for Col1
+    sal_Int32  nBufPos;
+    sal_uInt16 nLine;
+    sal_uInt16 nCol1, nCol2;
+    sal_Bool   bSymbol;                     // sal_True: symbol scanned
+    sal_Bool   bNumber;                     // sal_True: number scanned
+    sal_Bool   bSpaces;                     // sal_True: whitespace before token
+    sal_Bool   bErrors;                     // sal_True: generate errors
+    sal_Bool   bAbort;
+    sal_Bool   bHash;                       // sal_True: # has been read in
+    sal_Bool   bError;                      // sal_True: generate error
+    sal_Bool   bUsedForHilite;
+    sal_Bool   bCompatible;                 // sal_True: OPTION compatible
     sal_Bool   bVBASupportOn;               // sal_True: OPTION VBASupport 1 otherwise default False
     sal_Bool   bPrevLineExtentsComment;     // sal_True: Previous line is comment and ends on "... _"
 
@@ -96,7 +95,7 @@ public:
     void  UnlockColumn();
     sal_Bool  DoesColonFollow();
 
-    sal_Bool NextSym();                 // naechstes Symbol lesen
+    sal_Bool NextSym();
     const String& GetSym()          { return aSym;  }
     SbxDataType GetType()           { return eScanType; }
     double    GetDbl()              { return nVal;  }

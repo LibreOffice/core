@@ -55,7 +55,7 @@ class Process
 public:
     Process();
     ~Process();
-    // Methoden
+    // methods
     void SetImage( const String &aAppPath, const String &aAppParams, const Environment *pEnv = NULL );
     sal_Bool Start();
     sal_uIntPtr GetExitCode();

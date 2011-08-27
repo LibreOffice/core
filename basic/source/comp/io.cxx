@@ -34,7 +34,7 @@
 #include "sbcomp.hxx"
 #include "iosys.hxx"
 
-// Test, ob ein I/O-Channel angegeben wurde
+// test if there's an I/O channel
 
 sal_Bool SbiParser::Channel( sal_Bool bAlways )
 {
@@ -54,15 +54,13 @@ sal_Bool SbiParser::Channel( sal_Bool bAlways )
     return bRes;
 }
 
-// Fuer PRINT und WRITE wird bei Objektvariablen versucht,
-// die Default-Property anzusprechen.
-
-// PRINT
+// it's tried that at object variables the Default-
+// Property is addressed for PRINT and WRITE
 
 void SbiParser::Print()
 {
     sal_Bool bChan = Channel();
-    // Die Ausdruecke zum Drucken:
+
     while( !bAbort )
     {
         if( !IsEoln( Peek() ) )
@@ -93,7 +91,7 @@ void SbiParser::Print()
 void SbiParser::Write()
 {
     sal_Bool bChan = Channel();
-    // Die Ausdruecke zum Drucken:
+
     while( !bAbort )
     {
         SbiExpression* pExpr = new SbiExpression( this );
@@ -153,7 +151,7 @@ void SbiParser::LineInput()
     pExpr->Gen();
     aGen.Gen( _LINPUT );
     delete pExpr;
-    aGen.Gen( _CHAN0 );     // ResetChannel() nicht mehr in StepLINPUT()
+    aGen.Gen( _CHAN0 );     // ResetChannel() not in StepLINPUT() anymore
 }
 
 // INPUT
@@ -178,7 +176,7 @@ void SbiParser::Input()
         else break;
     }
     delete pExpr;
-    aGen.Gen( _CHAN0 );     // ResetChannel() nicht mehr in StepINPUT()
+    aGen.Gen( _CHAN0 );
 }
 
 // OPEN stringexpr FOR mode ACCCESS access mode AS Channel [Len=n]
@@ -209,8 +207,8 @@ void SbiParser::Open()
     {
         Next();
         eTok = Next();
-        // Nur STREAM_READ,STREAM_WRITE-Flags in nMode beeinflussen
-        nMode &= ~(STREAM_READ | STREAM_WRITE);     // loeschen
+        // influence only STREAM_READ,STREAM_WRITE-Flags in nMode
+        nMode &= ~(STREAM_READ | STREAM_WRITE);     // delete
         if( eTok == READ )
         {
             if( Peek() == WRITE )
@@ -254,7 +252,7 @@ void SbiParser::Open()
         default: break;
     }
     TestToken( AS );
-    // Die Kanalnummer
+    // channel number
     SbiExpression* pChan = new SbiExpression( this );
     if( !pChan )
         Error( SbERR_SYNTAX );
@@ -270,10 +268,10 @@ void SbiParser::Open()
         }
     }
     if( !pLen ) pLen = new SbiExpression( this, 128, SbxINTEGER );
-    // Der Stack fuer den OPEN-Befehl sieht wie folgt aus:
-    // Blocklaenge
-    // Kanalnummer
-    // Dateiname
+    // the stack for the OPEN command looks as follows:
+    // block length
+    // channel number
+    // file name
     pLen->Gen();
     if( pChan )
         pChan->Gen();

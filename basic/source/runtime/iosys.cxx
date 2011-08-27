@@ -73,7 +73,7 @@ using namespace com::sun::star::bridge;
 #include "iosys.hxx"
 #include "sbintern.hxx"
 
-// Der Input-Dialog:
+
 
 class SbiInputDialog : public ModalDialog {
     Edit aInput;
@@ -145,7 +145,7 @@ SbiStream::~SbiStream()
     delete pStrm;
 }
 
-// Ummappen eines SvStream-Fehlers auf einen StarBASIC-Code
+// map an SvStream-error to StarBASIC-code
 
 void SbiStream::MapError()
 {
@@ -560,7 +560,7 @@ void    UCBStream::SetSize( sal_uIntPtr nSize )
     SetError( ERRCODE_IO_GENERAL );
 }
 
-// Oeffnen eines Streams
+
 SbError SbiStream::Open
 ( short nCh, const ByteString& rName, short nStrmMode, short nFlags, short nL )
 {
@@ -706,8 +706,8 @@ SbError SbiStream::Write( const ByteString& rBuf, sal_uInt16 n )
     if( IsText() )
     {
         aLine += rBuf;
-        // Raus damit, wenn das Ende ein LF ist, aber CRLF vorher
-        // strippen, da der SvStrm ein CRLF anfuegt!
+        // Get it out, if the end is an LF, but strip CRLF before,
+        // because the SvStrm adds a CRLF!
         sal_uInt16 nLineLen = aLine.Len();
         if( nLineLen && aLine.GetBuffer()[ --nLineLen ] == 0x0A )
         {
@@ -730,7 +730,6 @@ SbError SbiStream::Write( const ByteString& rBuf, sal_uInt16 n )
 }
 
 
-// Zugriff auf das aktuelle I/O-System:
 
 SbiIoSystem* SbGetIoSystem()
 {
@@ -776,7 +775,6 @@ void SbiIoSystem::Open
     nChan = 0;
 }
 
-// Aktuellen Kanal schliessen
 
 void SbiIoSystem::Close()
 {
@@ -793,7 +791,6 @@ void SbiIoSystem::Close()
     nChan = 0;
 }
 
-// Shutdown nach Programmlauf
 
 void SbiIoSystem::Shutdown()
 {
@@ -809,7 +806,7 @@ void SbiIoSystem::Shutdown()
         }
     }
     nChan = 0;
-    // Noch was zu PRINTen?
+    // anything left to PRINT?
     if( aOut.Len() )
     {
         String aOutStr( aOut, gsl_getSystemTextEncoding() );
@@ -823,7 +820,6 @@ void SbiIoSystem::Shutdown()
     aOut.Erase();
 }
 
-// Aus aktuellem Kanal lesen
 
 void SbiIoSystem::Read( ByteString& rBuf, short n )
 {
@@ -907,7 +903,6 @@ void SbiIoSystem::CloseAll(void)
 *
 ***************************************************************************/
 
-// Einlesen einer Zeile von der Console
 
 void SbiIoSystem::ReadCon( ByteString& rIn )
 {
@@ -920,7 +915,7 @@ void SbiIoSystem::ReadCon( ByteString& rIn )
     aPrompt.Erase();
 }
 
-// Ausgabe einer MessageBox, wenn im Console-Puffer ein CR ist
+// output of a MessageBox, if theres a CR in the console-buffer
 
 void SbiIoSystem::WriteCon( const ByteString& rText )
 {

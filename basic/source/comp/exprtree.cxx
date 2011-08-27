@@ -30,7 +30,7 @@
 #include "precompiled_basic.hxx"
 
 #include "sbcomp.hxx"
-#include <basic/sbx.hxx>        // w.g. ...IMPL_REF(...sbxvariable)
+#include <basic/sbx.hxx>        // because of ...IMPL_REF(...sbxvariable)
 #include "expr.hxx"
 
 /***************************************************************************
@@ -99,20 +99,20 @@ SbiExpression::~SbiExpression()
     delete pExpr;
 }
 
-// Einlesen eines kompletten Bezeichners
-// Ein Bezeichner hat folgende Form:
+// reading in a complete identifier
+// an identifier has the following form:
 // name[(Parameter)][.Name[(parameter)]]...
-// Strukturelemente werden ueber das Element pNext verkoppelt,
-// damit sie nicht im Baum stehen.
+// structure elements are coupled via the element pNext,
+// so that they're not in the tree.
 
-// Folgen Parameter ohne Klammer? Dies kann eine Zahl, ein String,
-// ein Symbol oder auch ein Komma sein (wenn der 1. Parameter fehlt)
+// Are there parameters without brackets following? This may be a number,
+// a string, a symbol or also a comma (if the 1st parameter is missing)
 
 static sal_Bool DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken eTok )
 {
     if( eTok == LPAREN )
         return sal_True;
-    // Aber nur, wenn CALL-aehnlich!
+    // but only if similar to CALL!
     if( !p->WhiteSpace() || eCurExpr != SbSYMBOL )
         return sal_False;
     if (   eTok == NUMBER || eTok == MINUS || eTok == FIXSTRING
@@ -131,26 +131,26 @@ static sal_Bool DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken
     return sal_False;
 }
 
-// Definition eines neuen Symbols
+// definition of a new symbol
 
 static SbiSymDef* AddSym
     ( SbiToken eTok, SbiSymPool& rPool, SbiExprType eCurExpr,
       const String& rName, SbxDataType eType, SbiParameters* pPar )
 {
     SbiSymDef* pDef;
-    // A= ist keine Prozedur
+    // A= is not a procedure
     sal_Bool bHasType = sal_Bool( eTok == EQ || eTok == DOT );
     if( ( !bHasType && eCurExpr == SbSYMBOL ) || pPar )
     {
-        // Dies ist also eine Prozedur
-        // da suche man doch den richtigen Pool raus, da Procs
-        // immer in einem Public-Pool landen muessen
+        // so this is a procedure
+        // the correct pool should be found out, as
+        // procs must always get into a public pool
         SbiSymPool* pPool = &rPool;
         if( pPool->GetScope() != SbPUBLIC )
             pPool = &rPool.GetParser()->aPublics;
         SbiProcDef* pProc = pPool->AddProc( rName );
 
-        // Sonderbehandlung fuer Colls wie Documents(1)
+        // special treatment for Colls like Documents(1)
         if( eCurExpr == SbSTDEXPR )
             bHasType = sal_True;
 
@@ -158,7 +158,7 @@ static SbiSymDef* AddSym
         pDef->SetType( bHasType ? eType : SbxEMPTY );
         if( pPar )
         {
-            // Dummy-Parameter generieren
+            // generate dummy parameters
             sal_uInt16 n = 1;
             for( short i = 0; i < pPar->GetSize(); i++ )
             {
@@ -170,22 +170,21 @@ static SbiSymDef* AddSym
     }
     else
     {
-        // oder ein normales Symbol
+        // or a normal symbol
         pDef = rPool.AddSym( rName );
         pDef->SetType( eType );
     }
     return pDef;
 }
 
-// Zur Zeit sind sogar Keywords zugelassen (wg. gleichnamiger Dflt-Properties)
+// currently even keywords are allowed (because of Dflt properties of the same name)
 
 SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
 {
     if( pParser->Peek() == DOT )
     {
-        // eine WITH-Variable
         SbiExprNode* pWithVar = pParser->GetWithVar();
-        // #26608: Ans Ende der Node-Kette gehen, um richtiges Objekt zu uebergeben
+        // #26608: get to the node-chain's end to pass the correct object
         SbiSymDef* pDef = pWithVar ? pWithVar->GetRealVar() : NULL;
         SbiExprNode* pNd = NULL;
         if( !pDef )
@@ -207,23 +206,23 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     }
 
     SbiToken eTok = (pKeywordSymbolInfo == NULL) ? pParser->Next() : pKeywordSymbolInfo->m_eTok;
-    // Anfang des Parsings merken
+    // memorize the parsing's begin
     pParser->LockColumn();
     String aSym( (pKeywordSymbolInfo == NULL) ? pParser->GetSym() : pKeywordSymbolInfo->m_aKeywordSymbol );
     SbxDataType eType = (pKeywordSymbolInfo == NULL) ? pParser->GetType() : pKeywordSymbolInfo->m_eSbxDataType;
     SbiParameters* pPar = NULL;
     SbiExprListVector* pvMoreParLcl = NULL;
-    // Folgen Parameter?
+    // are there parameters following?
     SbiToken eNextTok = pParser->Peek();
-    // Ist es ein benannter Parameter?
-    // Dann einfach eine Stringkonstante erzeugen. Diese wird
-    // im SbiParameters-ctor erkannt und weiterverarbeitet
+    // is it a known parameter?
+    // create a string constant then, which will be recognized
+    // in the SbiParameters-ctor and is continued to be handled
     if( eNextTok == ASSIGN )
     {
         pParser->UnlockColumn();
         return new SbiExprNode( pParser, aSym );
     }
-    // ab hier sind keine Keywords zugelassen!
+    // no keywords allowed from here on!
     if( pParser->IsKwd( eTok ) )
     {
         if( pParser->IsCompatible() && eTok == INPUT )
@@ -257,9 +256,9 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
             eTok = pParser->Peek();
         }
     }
-    // Es koennte ein Objektteil sein, wenn . oder ! folgt
-    // Bei . muss aber die Variable bereits definiert sein; wenn pDef
-    // nach der Suche NULL ist, isses ein Objekt!
+    // It might be an object part, if . or ! is following.
+    // In case of . the variable must already be defined;
+    // it's an object, if pDef is NULL after the search.
     sal_Bool bObj = sal_Bool( ( eTok == DOT || eTok == EXCLAM )
                     && !pParser->WhiteSpace() );
     if( bObj )
@@ -269,18 +268,18 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
             eType = SbxOBJECT;
         else
         {
-            // Name%. geht wirklich nicht!
+            // Name%. really does not work!
             pParser->Error( SbERR_BAD_DECLARATION, aSym );
             bError = sal_True;
         }
     }
-    // Suche:
+    // Search:
     SbiSymDef* pDef = pParser->pPool->Find( aSym );
     if( !pDef )
     {
-        // Teil der Runtime-Library?
-        // AB 31.3.1996: In Parser-Methode ausgelagert
-        // (wird auch in SbiParser::DefVar() in DIM.CXX benoetigt)
+        // Part of the Runtime-Library?
+        // from 31.3.1996: swapped out to parser-method
+        // (is also needed in SbiParser::DefVar() in DIM.CXX)
         pDef = pParser->CheckRTLForSym( aSym, eType );
 
         // #i109184: Check if symbol is or later will be defined inside module
@@ -291,8 +290,6 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     }
     if( !pDef )
     {
-        // Falls ein Punkt angegeben war, isses Teil eines Objekts,
-        // also muss der Returnwert ein Objekt sein
         if( bObj )
             eType = SbxOBJECT;
         pDef = AddSym( eTok, *pParser->pPool, eCurExpr, aSym, eType, pPar );
@@ -305,8 +302,6 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     else
     {
 
-        // Symbol ist bereits definiert.
-        // Ist es eine Konstante?
         SbiConstDef* pConst = pDef->GetConstDef();
         if( pConst )
         {
@@ -315,9 +310,8 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
             else
                 return new SbiExprNode( pParser, pConst->GetValue(), pConst->GetType() );
         }
-        // Hat es Dimensionen,
-        // und sind auch Parameter angegeben?
-        // (Wobei 0 Parameter () entsprechen)
+
+        // 0 parameters come up to ()
         if( pDef->GetDims() )
         {
             if( pPar && pPar->GetSize() && pPar->GetSize() != pDef->GetDims() )
@@ -329,26 +323,26 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
             // #119187 Only error if types conflict
             if( eType >= SbxINTEGER && eType <= SbxSTRING && eType != eDefType )
             {
-                // Wie? Erst mit AS definieren und dann einen Suffix nehmen?
+                // How? Define with AS first and take a Suffix then?
                 pParser->Error( SbERR_BAD_DECLARATION, aSym );
                 bError = sal_True;
             }
             else if ( eType == SbxVARIANT )
-                // Falls nix angegeben, den Typ des Eintrags nehmen
-                // aber nur, wenn die Var nicht mit AS XXX definiert ist
-                // damit erwischen wir n% = 5 : print n
+                // if there's nothing named, take the type of the entry,
+                // but only if the var hasn't been defined with AS XXX
+                // so that we catch n% = 5 : print n
                 eType = eDefType;
         }
-        // Typcheck bei Variablen:
-        // ist explizit im Scanner etwas anderes angegeben?
-        // Bei Methoden ist dies OK!
-        if( eType != SbxVARIANT &&          // Variant nimmt alles
+        // checking type of variables:
+        // is there named anything different in the scanner?
+        // That's OK for methods!
+        if( eType != SbxVARIANT &&          // Variant takes everything
             eType != pDef->GetType() &&
             !pDef->GetProcDef() )
         {
-            // Es kann sein, dass pDef ein Objekt beschreibt, das bisher
-            // nur als SbxVARIANT erkannt wurde, dann Typ von pDef aendern
-            // AB, 16.12.95 (Vielleicht noch aehnliche Faelle moeglich ?!?)
+            // maybe pDef describes an object that so far has only been
+            // recognized as SbxVARIANT - then change type of pDef
+            // from 16.12.95 (similar cases possible perhaps?!?)
             if( eType == SbxOBJECT && pDef->GetType() == SbxVARIANT )
             {
                 pDef->SetType( SbxOBJECT );
@@ -367,11 +361,11 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     pNd->aVar.pvMorePar = pvMoreParLcl;
     if( bObj )
     {
-        // AB, 8.1.95: Objekt kann auch vom Typ SbxVARIANT sein
+        // from 8.1.95: Object may also be of the type SbxVARIANT
         if( pDef->GetType() == SbxVARIANT )
             pDef->SetType( SbxOBJECT );
-        // Falls wir etwas mit Punkt einscannen, muss der
-        // Typ SbxOBJECT sein
+        // if we scan something with point,
+        // the type must be SbxOBJECT
         if( pDef->GetType() != SbxOBJECT && pDef->GetType() != SbxVARIANT )
         {
             // defer error until runtime if in vba mode
@@ -384,13 +378,13 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         if( !bError )
             pNd->aVar.pNext = ObjTerm( *pDef );
     }
-    // Merken der Spalte 1 wieder freigeben
+
     pParser->UnlockColumn();
     return pNd;
 }
 
-// Aufbau eines Objekt-Terms. Ein derartiger Term ist Teil
-// eines Ausdrucks, der mit einer Objektvariablen beginnt.
+// construction of an object term. A term of this kind is part
+// of an expression that begins with an object variable.
 
 SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
 {
@@ -398,8 +392,8 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
     SbiToken eTok = pParser->Next();
     if( eTok != SYMBOL && !pParser->IsKwd( eTok ) && !pParser->IsExtra( eTok ) )
     {
-        // #66745 Einige Operatoren koennen in diesem Kontext auch
-        // als Identifier zugelassen werden, wichtig fuer StarOne
+        // #66745 Some operators can also be allowed
+        // as identifiers, important for StarOne
         if( eTok != MOD && eTok != NOT && eTok != AND && eTok != OR &&
             eTok != XOR && eTok != EQV && eTok != IMP && eTok != IS )
         {
@@ -416,7 +410,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
     SbiParameters* pPar = NULL;
     SbiExprListVector* pvMoreParLcl = NULL;
     eTok = pParser->Peek();
-    // Parameter?
+
     if( DoParametersFollow( pParser, eCurExpr, eTok ) )
     {
         bool bStandaloneExpression = false;
@@ -443,13 +437,13 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
             eType = SbxOBJECT;
         else
         {
-            // Name%. geht wirklich nicht!
+            // Name%. does really not work!
             pParser->Error( SbERR_BAD_DECLARATION, aSym );
             bError = sal_True;
         }
     }
 
-    // Der Symbol-Pool eines Objekts ist immer PUBLIC
+    // an object's symbol pool is always PUBLIC
     SbiSymPool& rPool = rObj.GetPool();
     rPool.SetScope( SbPUBLIC );
     SbiSymDef* pDef = rPool.Find( aSym );
@@ -464,11 +458,6 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
     pNd->aVar.pvMorePar = pvMoreParLcl;
     if( bObj )
     {
-        // Falls wir etwas mit Punkt einscannen, muss der
-        // Typ SbxOBJECT sein
-
-        // Es kann sein, dass pDef ein Objekt beschreibt, das bisher
-        // nur als SbxVARIANT erkannt wurde, dann Typ von pDef aendern
         if( pDef->GetType() == SbxVARIANT )
             pDef->SetType( SbxOBJECT );
 
@@ -486,20 +475,20 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
     return pNd;
 }
 
-// Als Operanden kommen in Betracht:
-//      Konstante
-//      skalare Variable
-//      Strukturelemente
-//      Array-Elemente
-//      Funktionen
-//      geklammerte Ausdruecke
+// an operand can be:
+//      constant
+//      scalar variable
+//      structure elements
+//      array elements
+//      functions
+//      bracketed expressions
 
 SbiExprNode* SbiExpression::Operand( bool bUsedForTypeOf )
 {
     SbiExprNode *pRes;
     SbiToken eTok;
 
-    // Operand testen:
+    // test operand:
     switch( eTok = pParser->Peek() )
     {
         case SYMBOL:
@@ -555,13 +544,13 @@ SbiExprNode* SbiExpression::Operand( bool bUsedForTypeOf )
             pRes->bComposite = sal_True;
             break;
         default:
-            // Zur Zeit sind Keywords hier OK!
+            // keywords here are OK at the moment!
             if( pParser->IsKwd( eTok ) )
                 pRes = Term();
             else
             {
                 pParser->Next();
-                pRes = new SbiExprNode( pParser, 1.0, SbxDOUBLE ); // bei Fehlern
+                pRes = new SbiExprNode( pParser, 1.0, SbxDOUBLE );
                 pParser->Error( SbERR_UNEXPECTED, eTok );
             }
     }
@@ -848,7 +837,7 @@ SbiExprNode* SbiExpression::Like()
             SbiToken eTok = pParser->Next();
             pNd = new SbiExprNode( pParser, pNd, eTok, Comp() ), nCount++;
         }
-        // Mehrere Operatoren hintereinander gehen nicht
+        // multiple operands in a row does not work
         if( nCount > 1 && !pParser->IsVBASupportOn() )
         {
             pParser->Error( SbERR_SYNTAX );
@@ -882,9 +871,6 @@ SbiExprNode* SbiExpression::Boolean()
 |*
 ***************************************************************************/
 
-// Parsing einer Expression, die sich zu einer numerischen
-// Konstanten verarbeiten laesst.
-
 SbiConstExpression::SbiConstExpression( SbiParser* p ) : SbiExpression( p )
 {
     if( pExpr->IsConstant() )
@@ -902,13 +888,12 @@ SbiConstExpression::SbiConstExpression( SbiParser* p ) : SbiExpression( p )
     }
     else
     {
-        // #40204 Spezialbehandlung fuer sal_Bool-Konstanten
+        // #40204 special treatment for sal_Bool-constants
         sal_Bool bIsBool = sal_False;
         if( pExpr->eNodeType == SbxVARVAL )
         {
             SbiSymDef* pVarDef = pExpr->GetVar();
 
-            // Ist es eine sal_Bool-Konstante?
             sal_Bool bBoolVal = sal_False;
             if( pVarDef->GetName().EqualsIgnoreCaseAscii( "true" ) )
             {
@@ -922,7 +907,6 @@ SbiConstExpression::SbiConstExpression( SbiParser* p ) : SbiExpression( p )
                 bBoolVal = sal_False;
             }
 
-            // Wenn es ein sal_Bool ist, Node austauschen
             if( bIsBool )
             {
                 delete pExpr;
@@ -988,7 +972,6 @@ SbiExprList::~SbiExprList()
     }
 }
 
-// Parameter anfordern (ab 0)
 
 SbiExpression* SbiExprList::Get( short n )
 {
@@ -1014,11 +997,11 @@ void SbiExprList::addExpression( SbiExpression* pExpr )
 |*
 ***************************************************************************/
 
-// Parsender Konstruktor:
-// Die Parameterliste wird komplett geparst.
-// "Prozedurname()" ist OK.
-// Dann handelt es sich um eine Funktion ohne Parameter
-// respektive um die Angabe eines Arrays als Prozedurparameter.
+// parsing constructor:
+// the parameter list is completely parsed
+// "procedurename()" is OK
+// it's a function without parameters then
+// i. e. you give an array as procedure parameter
 
 // #i79918/#i80532: bConst has never been set to true
 // -> reused as bStandaloneExpression
@@ -1032,7 +1015,6 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
     SbiExpression *pExpr;
     SbiToken eTok = pParser->Peek();
 
-    // evtl. Klammer auf weg:
     bool bAssumeExprLParenMode = false;
     bool bAssumeArrayMode = false;
     if( eTok == LPAREN )
@@ -1049,25 +1031,25 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
         }
     }
 
-    // Ende-Test
+
     if( ( bBracket && eTok == RPAREN ) || pParser->IsEoln( eTok ) )
     {
         if( eTok == RPAREN )
             pParser->Next();
         return;
     }
-    // Parametertabelle einlesen und in richtiger Folge ablegen!
+    // read in parameter table and lay down in correct order!
     SbiExpression* pLast = NULL;
     String aName;
     while( !bError )
     {
         aName.Erase();
-        // Fehlendes Argument
+        // missing argument
         if( eTok == COMMA )
         {
             pExpr = new SbiExpression( pParser, 0, SbxEMPTY );
         }
-        // Benannte Argumente: entweder .name= oder name:=
+        // named arguments: either .name= or name:=
         else
         {
             bool bByVal = false;
@@ -1117,7 +1099,7 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
                 if( pParser->Peek() == ASSIGN )
                 {
                     // VBA mode: name:=
-                    // SbiExpression::Term() hat einen String daraus gemacht
+                    // SbiExpression::Term() has made as string out of it
                     aName = pExpr->GetString();
                     delete pExpr;
                     pParser->Next();
@@ -1137,7 +1119,7 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
         if( bAssumeArrayMode )
             break;
 
-        // Naechstes Element?
+        // next element?
         eTok = pParser->Peek();
         if( eTok != COMMA )
         {
@@ -1156,7 +1138,7 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
                 break;
         }
     }
-    // Schliessende Klammer
+    // closing bracket
     if( eTok == RPAREN )
     {
         pParser->Next();
@@ -1176,10 +1158,9 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
 |*
 ***************************************************************************/
 
-// Parsender Konstruktor:
-// Eine Liste von Array-Dimensionen wird geparst. Die Ausdruecke werden
-// auf numerisch getestet. Das bCONST-Bit wird gesetzt, wenn alle Ausdruecke
-// Integer-Konstanten sind.
+// parsing constructor:
+// A list of array dimensions is parsed. The expressions are tested for being
+// numeric. The bCONST-Bit is reset when all expressions are Integer constants.
 
 SbiDimList::SbiDimList( SbiParser* p ) : SbiExprList( p )
 {
@@ -1216,7 +1197,6 @@ SbiDimList::SbiDimList( SbiParser* p ) : SbiExprList( p )
             }
             else
             {
-                // Nur eine Dim-Angabe
                 pExpr1->SetBased();
                 pExpr1->pNext = NULL;
                 bConst &= pExpr1->IsIntConstant();

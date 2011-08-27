@@ -1244,8 +1244,8 @@ Any sbxToUnoValue( SbxVariable* pVar )
     return sbxToUnoValueImpl( pVar );
 }
 
-// Funktion, um einen globalen Bezeichner im
-// UnoScope zu suchen und fuer Sbx zu wrappen
+// function to find a global identifier in
+// the UnoScope and to wrap it for Sbx
 static bool implGetTypeByName( const String& rName, Type& rRetType )
 {
     bool bSuccess = false;
@@ -4183,7 +4183,7 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const ::rtl::OUStri
 }
 
 //========================================================================
-// Uno-Service erzeugen
+// create Uno-Service
 // 1. Parameter == Prefix-Name of the macro
 // 2. Parameter == fully qualified name of the listener
 void SbRtl_CreateUnoListener( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )

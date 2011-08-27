@@ -903,8 +903,8 @@ void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
 
 #endif
 
-// Diese Routine ist hier definiert, damit der Compiler als eigenes Segment
-// geladen werden kann.
+// This routine is defined here, so that the
+// compiler can be loaded as a discrete segment.
 
 sal_Bool SbModule::Compile()
 {
@@ -914,7 +914,7 @@ sal_Bool SbModule::Compile()
     if( !pBasic )
         return sal_False;
     SbxBase::ResetError();
-    // Aktuelles Modul!
+
     SbModule* pOld = pCMOD;
     pCMOD = this;
 
@@ -923,14 +923,14 @@ sal_Bool SbModule::Compile()
     if( !pParser->GetErrors() )
         pParser->aGen.Save();
     delete pParser;
-    // fuer den Disassembler
+    // for the disassembler
     if( pImage )
         pImage->aOUSource = aOUSource;
 
     pCMOD = pOld;
 
-    // Beim Compilieren eines Moduls werden die Modul-globalen
-    // Variablen aller Module ungueltig
+    // compiling a module, the module-global
+    // variables of all modules become invalid
     sal_Bool bRet = IsCompiled();
     if( bRet )
     {

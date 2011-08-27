@@ -219,7 +219,7 @@ long AppWin::PreNotify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
         if ( pFrame->pList->back() != this )
             Activate();
-    return sal_False;       // Der event soll weiter verarbeitet werden
+    return sal_False;       // the event shall continue to be handled
 }
 
 void AppWin::Activate()

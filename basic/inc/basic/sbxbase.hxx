@@ -40,7 +40,7 @@ class SbxBasicFormater;
 
 SV_DECL_PTRARR_DEL(SbxFacs,SbxFactory*,5,5)
 
-// AppData-Struktur for SBX:
+// AppData structure for SBX:
 struct SbxAppData
 {
     SbxError            eSbxError;  // Error code

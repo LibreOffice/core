@@ -79,8 +79,8 @@ void BasicDLL::SetDebugMode( sal_Bool bDebugMode )
 
 void BasicDLL::BasicBreak()
 {
-    //bJustStopping: Wenn jemand wie wild x-mal STOP drueckt, aber das Basic
-    // nicht schnell genug anhaelt, kommt die Box ggf. oefters...
+    // bJustStopping: if there's someone pressing STOP like crazy umpteen times,
+    // but the Basic doesn't stop early enough, the box might appear more often...
     static sal_Bool bJustStopping = sal_False;
 
     BasicDLL* pThis = *(BasicDLL**)GetAppData(SHL_BASIC);

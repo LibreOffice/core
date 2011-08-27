@@ -63,19 +63,15 @@ void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep )
     rcThousandSep = rData.getNumThousandSep().GetBuffer()[0];
 }
 
-// Scannen eines Strings nach BASIC-Konventionen
-// Dies entspricht den ueblichen Konventionen, nur dass der Exponent
-// auch ein D sein darf, was den Datentyp auf SbxDOUBLE festlegt.
-// Die Routine versucht, den Datentyp so klein wie moeglich zu gestalten.
-// Das ganze gibt auch noch einen Konversionsfehler, wenn der Datentyp
-// Fixed ist und das ganze nicht hineinpasst!
+// scanning a string according to BASIC-conventions
+// but exponent may also be a D, so data type is SbxDOUBLED
+// conversion error if data type is fixed and it doesn't fit
 
 SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType,
                   sal_uInt16* pLen, sal_Bool bAllowIntntl, sal_Bool bOnlyIntntl )
 {
     ::rtl::OString aBStr( ::rtl::OUStringToOString( rWSrc, RTL_TEXTENCODING_ASCII_US ) );
 
-    // Bei International Komma besorgen
     char cIntntlComma, cIntntl1000;
     char cNonIntntlComma = '.';
 
@@ -86,13 +82,13 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
         cIntntlComma = (char)cDecimalSep;
         cIntntl1000 = (char)cThousandSep;
     }
-    // Sonst einfach auch auf . setzen
+
     else
     {
         cIntntlComma = cNonIntntlComma;
-        cIntntl1000 = cNonIntntlComma;  // Unschaedlich machen
+        cIntntl1000 = cNonIntntlComma;
     }
-    // Nur International -> IntnlComma uebernehmen
+
     if( bOnlyIntntl )
     {
         cNonIntntlComma = cIntntlComma;
@@ -106,20 +102,17 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
     sal_Bool bMinus = sal_False;
     nVal = 0;
     SbxDataType eScanType = SbxSINGLE;
-    // Whitespace wech
     while( *p &&( *p == ' ' || *p == '\t' ) ) p++;
-    // Zahl? Dann einlesen und konvertieren.
     if( *p == '-' )
         p++, bMinus = sal_True;
     if( isdigit( *p ) ||( (*p == cNonIntntlComma || *p == cIntntlComma ||
             *p == cIntntl1000) && isdigit( *(p+1 ) ) ) )
     {
-        short exp = 0;      // >0: Exponentteil
-        short comma = 0;    // >0: Nachkomma
-        short ndig = 0;     // Anzahl Ziffern
-        short ncdig = 0;    // Anzahl Ziffern nach Komma
+        short exp = 0;
+        short comma = 0;
+        short ndig = 0;
+        short ncdig = 0;    // number of digits after decimal point
         ByteString aSearchStr( "0123456789DEde" );
-        // Kommas ergaenzen
         aSearchStr += cNonIntntlComma;
         if( cIntntlComma != cNonIntntlComma )
             aSearchStr += cIntntlComma;
@@ -128,17 +121,15 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
         const char* pSearchStr = aSearchStr.GetBuffer();
         while( strchr( pSearchStr, *p ) && *p )
         {
-            // 1000er-Trenner ueberlesen
             if( bOnlyIntntl && *p == cIntntl1000 )
             {
                 p++;
                 continue;
             }
 
-            // Komma oder Exponent?
             if( *p == cNonIntntlComma || *p == cIntntlComma )
             {
-                // Immer '.' einfuegen, damit atof funktioniert
+                // always insert '.' so that atof works
                 p++;
                 if( ++comma > 1 )
                     continue;
@@ -154,7 +145,7 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
                 if( toupper( *p ) == 'D' )
                     eScanType = SbxDOUBLE;
                 *q++ = 'E'; p++;
-                // Vorzeichen hinter Exponent?
+
                 if( *p == '+' )
                     p++;
                 else
@@ -169,10 +160,10 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
             if( !exp ) ndig++;
         }
         *q = 0;
-        // Komma, Exponent mehrfach vorhanden?
+
         if( comma > 1 || exp > 1 )
             bRes = sal_False;
-        // Kann auf Integer gefaltet werden?
+
         if( !comma && !exp )
         {
             if( nVal >= SbxMININT && nVal <= SbxMAXINT )
@@ -183,14 +174,14 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
 
         nVal = atof( buf );
         ndig = ndig - comma;
-        // zu viele Zahlen fuer SINGLE?
+        // too many numbers for SINGLE?
         if( ndig > 15 || ncdig > 6 )
             eScanType = SbxDOUBLE;
 
-        // Typkennung?
+        // type detection?
         if( strchr( "%!&#", *p ) && *p ) p++;
     }
-    // Hex/Oktalzahl? Einlesen und konvertieren:
+    // hex/octal number? read in and convert:
     else if( *p == '&' )
     {
         p++;
@@ -243,21 +234,21 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
     return SbxERR_OK;
 }
 
-// Schnittstelle fuer CDbl im Basic
+// port for CDbl in the Basic
 SbxError SbxValue::ScanNumIntnl( const String& rSrc, double& nVal, sal_Bool bSingle )
 {
     SbxDataType t;
     sal_uInt16 nLen = 0;
     SbxError nRetError = ImpScan( rSrc, nVal, t, &nLen,
         /*bAllowIntntl*/sal_False, /*bOnlyIntntl*/sal_True );
-    // Komplett gelesen?
+    // read completely?
     if( nRetError == SbxERR_OK && nLen != rSrc.Len() )
         nRetError = SbxERR_CONVERSION;
 
     if( bSingle )
     {
         SbxValues aValues( nVal );
-        nVal = (double)ImpGetSingle( &aValues );    // Hier Error bei Overflow
+        nVal = (double)ImpGetSingle( &aValues );    // here error at overflow
     }
     return nRetError;
 }
@@ -271,13 +262,13 @@ static double roundArray[] = {
 |*
 |*  void myftoa( double, char *, short, short, sal_Bool, sal_Bool )
 |*
-|*  Beschreibung:       Konversion double --> ASCII
-|*  Parameter:          double              die Zahl.
-|*                      char *              der Zielpuffer
-|*                      short               Anzahl Nachkommastellen
-|*                      short               Weite des Exponenten( 0=kein E )
-|*                      sal_Bool                sal_True: mit 1000er Punkten
-|*                      sal_Bool                sal_True: formatfreie Ausgabe
+|*  description:        conversion double --> ASCII
+|*  parameters:         double              the number
+|*                      char *              target buffer
+|*                      short               number of positions after decimal point
+|*                      short               range of the exponent ( 0=no E )
+|*                      sal_Bool                sal_True: with 1000-separators
+|*                      sal_Bool                sal_True: output without formatting
 |*
 ***************************************************************************/
 
@@ -285,18 +276,17 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
                     sal_Bool bPt, sal_Bool bFix, sal_Unicode cForceThousandSep = 0 )
 {
 
-    short nExp = 0;                     // Exponent
-    short nDig = nPrec + 1;             // Anzahl Digits in Zahl
-    short nDec;                         // Anzahl Vorkommastellen
+    short nExp = 0;
+    short nDig = nPrec + 1;
+    short nDec;                         // number of positions before decimal point
     register int i;
 
-    // Komma besorgen
     sal_Unicode cDecimalSep, cThousandSep;
     ImpGetIntntlSep( cDecimalSep, cThousandSep );
     if( cForceThousandSep )
         cThousandSep = cForceThousandSep;
 
-    // Exponentberechnung:
+    // compute exponent
     nExp = 0;
     if( nNum > 0.0 )
     {
@@ -308,7 +298,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
     else if( bFix && !nPrec )
         nDig = nExp + 1;
 
-    // Zahl runden:
+    // round number
     if( (nNum += roundArray [( nDig > 16 ) ? 16 : nDig] ) >= 10.0 )
     {
         nNum = 1.0;
@@ -316,12 +306,12 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
         if( !nExpWidth ) ++nDig;
     }
 
-    // Bestimmung der Vorkommastellen:
+    // determine positions before decimal point
     if( !nExpWidth )
     {
         if( nExp < 0 )
         {
-            // #41691: Auch bei bFix eine 0 spendieren
+            // #41691: also a 0 at bFix
             *pBuf++ = '0';
             if( nPrec ) *pBuf++ = (char)cDecimalSep;
             i = -nExp - 1;
@@ -335,7 +325,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
     else
         nDec = 1;
 
-    // Zahl ausgeben:
+    // output number
     if( nDig > 0 )
     {
         register int digit;
@@ -360,7 +350,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
         }
     }
 
-    // Exponent ausgeben:
+    // output exponent
     if( nExpWidth )
     {
         if( nExpWidth < 3 ) nExpWidth = 3;
@@ -380,10 +370,10 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
     *pBuf = 0;
 }
 
-// Die Zahl wird unformatiert mit der angegebenen Anzahl NK-Stellen
-// aufbereitet. Evtl. wird ein Minus vorangestellt.
-// Diese Routine ist public, weil sie auch von den Put-Funktionen
-// der Klasse SbxImpSTRING verwendet wird.
+// The number is prepared unformattedly with the given number of
+// NK-positions. A leading minus is added if applicable.
+// This routine is public because it's also used by the Put-functions
+// in the class SbxImpSTRING.
 
 #ifdef _MSC_VER
 #pragma optimize( "", off )
@@ -407,7 +397,7 @@ void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, sal_Bool bCoreS
     double dMaxNumWithoutExp = (nPrec == 6) ? 1E6 : 1E14;
     myftoa( nNum, p, nPrec,( nNum &&( nNum < 1E-1 || nNum >= dMaxNumWithoutExp ) ) ? 4:0,
         sal_False, sal_True, cDecimalSep );
-    // Trailing Zeroes weg:
+    // remove trailing zeros
     for( p = cBuf; *p &&( *p != 'E' ); p++ ) {}
     q = p; p--;
     while( nPrec && *p == '0' ) nPrec--, p--;
@@ -423,26 +413,23 @@ void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, sal_Bool bCoreS
 
 sal_Bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
 {
-    // Merken, ob ueberhaupt was geaendert wurde
     sal_Bool bChanged = sal_False;
     ::rtl::OUString aNewString;
 
-    // Nur Spezial-F�lle behandeln, als Default tun wir nichts
+    // only special cases are handled, nothing on default
     switch( eTargetType )
     {
-        // Bei Fliesskomma International beruecksichtigen
+        // consider international for floating point
         case SbxSINGLE:
         case SbxDOUBLE:
         case SbxCURRENCY:
         {
             ::rtl::OString aBStr( ::rtl::OUStringToOString( rSrc, RTL_TEXTENCODING_ASCII_US ) );
 
-            // Komma besorgen
             sal_Unicode cDecimalSep, cThousandSep;
             ImpGetIntntlSep( cDecimalSep, cThousandSep );
             aNewString = rSrc;
 
-            // Ersetzen, wenn DecimalSep kein '.' (nur den ersten)
             if( cDecimalSep != (sal_Unicode)'.' )
             {
                 sal_Int32 nPos = aNewString.indexOf( cDecimalSep );
@@ -456,7 +443,7 @@ sal_Bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
             break;
         }
 
-        // Bei sal_Bool sal_True und sal_False als String pruefen
+        // check as string in case of sal_Bool sal_True and sal_False
         case SbxBOOL:
         {
             if( rSrc.equalsIgnoreAsciiCaseAscii( "true" ) )
@@ -474,39 +461,38 @@ sal_Bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
         }
         default: break;
     }
-    // String bei Aenderung uebernehmen
+
     if( bChanged )
         rSrc = aNewString;
     return bChanged;
 }
 
 
-// Formatierte Zahlenausgabe
-// Der Returnwert ist die Anzahl Zeichen, die aus dem
-// Format verwendt wurden.
+// formatted number output
+// the return value is the number of characters used
+// from the format
 
 #ifdef _old_format_code_
-// lasse diesen Code vorl"aufig drin, zum 'abgucken'
-// der bisherigen Implementation
+// leave the code provisionally to copy the previous implementation
 
 static sal_uInt16 printfmtnum( double nNum, XubString& rRes, const XubString& rWFmt )
 {
     const String& rFmt = rWFmt;
-    char    cFill  = ' ';           // Fuellzeichen
-    char    cPre   = 0;             // Startzeichen( evtl. "$" )
-    short   nExpDig= 0;             // Anzahl Exponentstellen
-    short   nPrec  = 0;             // Anzahl Nachkommastellen
-    short   nWidth = 0;             // Zahlenweite gesamnt
-    short   nLen;                   // Laenge konvertierte Zahl
-    sal_Bool    bPoint = sal_False;         // sal_True: mit 1000er Kommas
-    sal_Bool    bTrail = sal_False;         // sal_True, wenn folgendes Minus
-    sal_Bool    bSign  = sal_False;         // sal_True: immer mit Vorzeichen
-    sal_Bool    bNeg   = sal_False;         // sal_True: Zahl ist negativ
-    char    cBuf [1024];            // Zahlenpuffer
+    char    cFill  = ' ';           // filling characters
+    char    cPre   = 0;             // start character ( maybe "$" )
+    short   nExpDig= 0;             // number of exponent positions
+    short   nPrec  = 0;             // number of positions after decimal point
+    short   nWidth = 0;             // number range completely
+    short   nLen;                   // length of converted number
+    sal_Bool    bPoint = sal_False;         // sal_True: with 1000 seperators
+    sal_Bool    bTrail = sal_False;         // sal_True, if following minus
+    sal_Bool    bSign  = sal_False;         // sal_True: always with leading sign
+    sal_Bool    bNeg   = sal_False;         // sal_True: number is negative
+    char    cBuf [1024];            // number buffer
     char  * p;
     const char* pFmt = rFmt;
     rRes.Erase();
-    // $$ und ** abfangen. Einfach wird als Zeichen ausgegeben.
+    // catch $$ and **, is simply output as character
     if( *pFmt == '$' )
       if( *++pFmt != '$' ) rRes += '$';
     if( *pFmt == '*' )
@@ -529,30 +515,30 @@ static sal_uInt16 printfmtnum( double nNum, XubString& rRes, const XubString& rW
         case ',':
             pFmt--; break;
     }
-    // Vorkomma:
+    // pre point
     for( ;; )
     {
         while( *pFmt == '#' ) pFmt++, nWidth++;
-        // 1000er Kommas?
+        // 1000 separators?
         if( *pFmt == ',' )
         {
             nWidth++; pFmt++; bPoint = sal_True;
         } else break;
     }
-    // Nachkomma:
+    // after point
     if( *pFmt == '.' )
     {
         while( *++pFmt == '#' ) nPrec++;
         nWidth += nPrec + 1;
     }
-    // Exponent:
+    // exponent
     while( *pFmt == '^' )
         pFmt++, nExpDig++, nWidth++;
-    // Folgendes Minus:
+    // following minus
     if( !bSign && *pFmt == '-' )
         pFmt++, bTrail = sal_True;
 
-    // Zahl konvertieren:
+    // convert number
     if( nPrec > 15 ) nPrec = 15;
     if( nNum < 0.0 ) nNum = -nNum, bNeg = sal_True;
     p = cBuf;
@@ -560,7 +546,7 @@ static sal_uInt16 printfmtnum( double nNum, XubString& rRes, const XubString& rW
     myftoa( nNum, p, nPrec, nExpDig, bPoint, sal_False );
     nLen = strlen( cBuf );
 
-    // Ueberlauf?
+    // overflow?
     if( cPre ) nLen++;
     if( nLen > nWidth ) rRes += '%';
     else {
@@ -849,7 +835,7 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
         case SbxULONG:
         case SbxINT:
         case SbxUINT:
-        case SbxNULL:       // #45929 NULL mit durchschummeln
+        case SbxNULL:       // #45929 NULL with a little cheating
             nComma = 0;     goto cvt;
         case SbxSINGLE:
             nComma = 6;     goto cvt;
@@ -860,11 +846,10 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
             if( eType != SbxNULL )
                 d = GetDouble();
 
-            // #45355 weiterer Einsprungpunkt fuer isnumeric-String
+            // #45355 another point to jump in for isnumeric-String
         cvt2:
             if( pFmt )
             {
-                // hole die 'statischen' Daten f"ur Sbx
                 SbxAppData* pData = GetSbxData_Impl();
 
                 LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
@@ -878,8 +863,7 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                 }
                 pData->eBasicFormaterLangType = eLangType;
 
-                // falls bisher noch kein BasicFormater-Objekt
-                // existiert, so erzeuge dieses
+
                 if( !pData->pBasicFormater )
                 {
                     SvtSysLocale aSysLocale;
@@ -888,9 +872,9 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                     sal_Unicode c1000  = rData.getNumThousandSep().GetBuffer()[0];
                     String aCurrencyStrg = rData.getCurrSymbol();
 
-                    // Initialisierung des Basic-Formater-Hilfsobjekts:
-                    // hole die Resourcen f"ur die vordefinierten Ausgaben
-                    // des Format()-Befehls, z.B. f"ur "On/Off".
+                    // initialize the Basic-formater help object:
+                    // get resources for predefined output
+                    // of the Format()-command, e. g. for "On/Off"
                     String aOnStrg = String( SbxValueFormatResId(
                         STR_BASICKEY_FORMAT_ON ) );
                     String aOffStrg = String( SbxValueFormatResId(
@@ -905,22 +889,22 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                         STR_BASICKEY_FORMAT_FALSE) );
                     String aCurrencyFormatStrg = String( SbxValueFormatResId(
                         STR_BASICKEY_FORMAT_CURRENCY) );
-                    // erzeuge das Basic-Formater-Objekt
+
                     pData->pBasicFormater
                         = new SbxBasicFormater( cComma,c1000,aOnStrg,aOffStrg,
                                     aYesStrg,aNoStrg,aTrueStrg,aFalseStrg,
                                     aCurrencyStrg,aCurrencyFormatStrg );
                 }
-                // Bem.: Aus Performance-Gr"unden wird nur EIN BasicFormater-
-                //    Objekt erzeugt und 'gespeichert', dadurch erspart man
-                //    sich das teure Resourcen-Laden (f"ur landesspezifische
-                //    vordefinierte Ausgaben, z.B. "On/Off") und die st"andige
-                //    String-Erzeugungs Operationen.
-                // ABER: dadurch ist dieser Code NICHT multithreading f"ahig !
+                // Remark: For performance reasons there's only ONE BasicFormater-
+                //    object created and 'stored', so that the expensive resource-
+                //    loading is saved (for country-specific predefined outputs,
+                //    e. g. "On/Off") and the continous string-creation
+                //    operations, too.
+                // BUT: therefore this code is NOT multithreading capable!
 
-                // hier gibt es Probleme mit ;;;Null, da diese Methode nur aufgerufen
-                // wird, wenn der SbxValue eine Zahl ist !!!
-                // dazu koennte: pData->pBasicFormater->BasicFormatNull( *pFmt ); aufgerufen werden !
+                // here are problems with ;;;Null because this method is only
+                // called, if SbxValue is a number!!!
+                // in addition pData->pBasicFormater->BasicFormatNull( *pFmt ); could be called!
                 if( eType != SbxNULL )
                 {
                     rRes = pData->pBasicFormater->BasicFormat( d ,*pFmt );
@@ -941,7 +925,7 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
         case SbxSTRING:
             if( pFmt )
             {
-                // #45355 wenn es numerisch ist, muss gewandelt werden
+                // #45355 converting if numeric
                 if( IsNumericRTL() )
                 {
                     ScanNumIntnl( GetString(), d, /*bSingle*/sal_False );
@@ -949,7 +933,6 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                 }
                 else
                 {
-                    // Sonst String-Formatierung
                     printfmtstr( GetString(), rRes, *pFmt );
                 }
             }

@@ -87,7 +87,7 @@ public:
     SbModule* FindClass( const String& rClassName );
 };
 
-// Stack fuer die im Fehlerfall abgebaute SbiRuntime Kette
+// stack for the SbiRuntime chain which is removed in the case of an error
 class BASIC_DLLPUBLIC SbErrorStackEntry
 {
 public:
@@ -153,27 +153,27 @@ private:
 
 struct SbiGlobals
 {
-    SbiInstance*    pInst;          // alle aktiven Runtime-Instanzen
+    SbiInstance*    pInst;          // all active runtime instances
     SbiFactory*     pSbFac;         // StarBASIC-Factory
-    SbUnoFactory*   pUnoFac;        // Factory fuer Uno-Structs bei DIM AS NEW
+    SbUnoFactory*   pUnoFac;        // Factory for Uno-Structs at DIM AS NEW
     SbTypeFactory*  pTypeFac;       // Factory for user defined types
     SbClassFactory* pClassFac;      // Factory for user defined classes (based on class modules)
     SbOLEFactory*   pOLEFac;        // Factory for OLE types
     SbFormFactory*  pFormFac;       // Factory for user forms
-    SbModule*       pMod;           // aktuell aktives Modul
-    SbModule*       pCompMod;       // aktuell compiliertes Modul
-    short           nInst;          // Anzahl BASICs
-    Link            aErrHdl;        // globaler Error-Handler
-    Link            aBreakHdl;      // globaler Break-Handler
-    SbError         nCode;          // aktueller Fehlercode
-    xub_StrLen      nLine;          // aktuelle Zeile
-    xub_StrLen      nCol1,nCol2;    // aktuelle Spalten (von,bis)
-    sal_Bool            bCompiler;      // Flag fuer Compiler-Error
-    sal_Bool            bGlobalInitErr; // Beim GlobalInit trat ein Compiler-Fehler auf
-    sal_Bool            bRunInit;       // sal_True, wenn RunInit vom Basic aktiv ist
-    String          aErrMsg;        // Puffer fuer GetErrorText()
-    SbLanguageMode  eLanguageMode;  // Flag fuer Visual-Basic-Script-Modus
-    SbErrorStack*   pErrStack;      // Stack fuer die im Fehlerfall abgebaute SbiRuntime Kette
+    SbModule*       pMod;           // currently active module
+    SbModule*       pCompMod;       // currently compiled module
+    short           nInst;          // number of BASICs
+    Link            aErrHdl;        // global error handler
+    Link            aBreakHdl;      // global break handler
+    SbError         nCode;
+    xub_StrLen      nLine;
+    xub_StrLen      nCol1,nCol2;    // from... to...
+    sal_Bool            bCompiler;      // flag for compiler error
+    sal_Bool            bGlobalInitErr;
+    sal_Bool            bRunInit;       // sal_True, if RunInit active from the Basic
+    String          aErrMsg;        // buffer for GetErrorText()
+    SbLanguageMode  eLanguageMode;  // flag for Visual-Basic-Script-Modus
+    SbErrorStack*   pErrStack;      // for the SbiRuntime chain
     ::utl::TransliterationWrapper* pTransliterationWrapper;    // For StrComp
     sal_Bool            bBlockCompilerError;
     BasicManager*   pAppBasMgr;
@@ -183,7 +183,7 @@ struct SbiGlobals
     ~SbiGlobals();
 };
 
-// Utility-Makros und -Routinen
+// utility macros and routines
 
 BASIC_DLLPUBLIC SbiGlobals* GetSbData();
 

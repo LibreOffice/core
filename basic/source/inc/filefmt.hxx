@@ -33,36 +33,36 @@
 
 class SvStream;
 
-// Version  2: Datentyp des Returnwerts fuer Publics
-// Version  3: neue Opcodes
-// Version  4: neue Opcodes
-// Version  5: Bug (Ansprung von STATIC-Variablen im Init-Code)
-// Version  6: Neue Opcodes und Bug (Globals anlegen, ohne BASIC zu beenden)
-// Version  7: Korrektur im WITH-Parsing
-// Version  8: Korrektur im IF-Parsing
-// Version  9: Init-Code auch mit LEAVE beenden, wenn keine SUB/FUNCTION folgt
-// Version  A: #36374 Bei DIM AS NEW... auch Variablen anlegen
-// Version  B: #40689 Static umgestellt
-// Version  C: #41606 Bug bei Static
-// Version  D: #42678 Bug bei RTL-Function spc
-// Version  E: #56204 DCREATE, um auch bei DIM AS NEW Arrays anzulegen
-// Version  F: #57844 Einfuehrung von SvNumberformat::StringToDouble
-// Version 10: #29955 For-Schleifen-Level in Statement-PCodes generieren
-// Version 11: #29955 Wegen Build-Inkonsistenzen Neu-Compilieren erzwingen
+// Version  2: data type of the return value for publics
+// Version  3: new opcodes
+// Version  4: new opcodes
+// Version  5: bug (entry of STATIC-variables in the init code)
+// Version  6: new opcodes and bug (construct globals, without ending the BASIC)
+// Version  7: correction concerning the WITH-Parsing
+// Version  8: correction concerning the IF-Parsing
+// Version  9: end init code with LEAVE, too, if no SUB/FUNCTION follows
+// Version  A: #36374 at DIM AS NEW... construct variable too
+// Version  B: #40689 reorganized static
+// Version  C: #41606 bug at static
+// Version  D: #42678 bug at RTL-function spc
+// Version  E: #56204 DCREATE, to also construct arrays at DIM AS NEW
+// Version  F: #57844 introduction of SvNumberformat::StringToDouble
+// Version 10: #29955 generate for-loop-level in Statement-PCodes
+// Version 11: #29955 force anew compilation because of build-inconsistences
 
 #define B_LEGACYVERSION 0x00000011L
 #define B_CURVERSION 0x00000012L
 #define B_EXT_IMG_VERSION 0x00000012L
 
-// Eine Datei enthaelt entweder einen Modul- oder einen Library-Record.
-// Diese Records enthalten wiederum weitere Records. Jeder Record hat
-// den folgenden Header:
+// The file contains either a module- or a library-record.
+// Those records contain further records. Every record's got
+// the following header:
 
-//  sal_uInt16 Kennung
-//  sal_uInt32 Laenge des Records ohne Header
-//  sal_uInt16 Anzahl Unterelemente
+//  sal_uInt16 identifier
+//  sal_uInt32 the record's length without the header
+//  sal_uInt16 number of sub-elements
 
-// Alle Datei-Offsets in Records sind relativ zum Start des Moduls!
+// all the file-offsets in records are relative to the module's start!
 
 #define B_LIBRARY       0x4C42      // BL Library Record
 #define B_MODULE        0x4D42      // BM Module Record
@@ -84,92 +84,92 @@ class SvStream;
 #define B_EXTSOURCE     0x5345      // ES extended source
 #endif
 
-// Ein Library Record enthaelt nur Module Records
-//  sal_uInt16 Kennung BL
-//  sal_uInt32 Laenge des Records
-//  sal_uInt16 Anzahl Module
+// A library record contains only module records
+//  sal_uInt16 identifier BL
+//  sal_uInt32 the record's length
+//  sal_uInt16 number of modules
 
-// Ein Modul-Record enthaelt alle anderen Recordtypen
-//  sal_uInt16 Kennung BM
-//  sal_uInt32 Laenge des Records
+// A module-record contains all the other record types
+//  sal_uInt16 identifier BM
+//  sal_uInt32 the record's length
 //  sal_uInt16 1
-// Daten:
-//  sal_uInt32 Versionsnummer
-//  sal_uInt32 Zeichensatz
-//  sal_uInt32 Startadresse Initialisierungscode
-//  sal_uInt32 Startadresse Sub Main
-//  sal_uInt32 Reserviert
-//  sal_uInt32 Reserviert
+// Data:
+//  sal_uInt32 version number
+//  sal_uInt32 character set
+//  sal_uInt32 starting address initialisation code
+//  sal_uInt32 starting address sub main
+//  sal_uInt32 reserved
+//  sal_uInt32 reserved
 
-// Modulname, Kommentar und Quellcode:
-//  sal_uInt16 Kennung MN, MC oder SC
-//  sal_uInt32 Laenge des Records
+// module name, comment and source code:
+//  sal_uInt16 identifier MN, MC or SC
+//  sal_uInt32 the record's length
 //  sal_uInt16 1
-// Daten:
-//  String-Instanz
+// Data:
+//  string instance
 
 // P-Code:
-//  sal_uInt16 Kennung PC
-//  sal_uInt32 Laenge des Records
+//  sal_uInt16 identifier PC
+//  sal_uInt32 the record's length
 //  sal_uInt16 1
-// Daten:
-//  Der P-Code als Bytesack
+// Data:
+//  the P-Code as bytesack
 
-// Alle Symbole und Strings werden in einem String-Pool gehalten.
-// Verweise auf diese Strings sind in Form eines Indexes in diesen Pool.
+// All symbols and strings are kept in a string-pool.
+// References to these strings are in this pool in the form of an index.
 
-// Liste aller Publics:
-//  sal_uInt16 Kennung PU oder Pu
-//  sal_uInt32 Laenge des Records
-//  sal_uInt16 Anzahl der Publics
-// Daten fuer jeden Public-Eintrag:
-//  sal_uInt16 String-Index
-//  sal_uInt32 Startadresse im P-Code-Image (sal_uInt16 fuer alte Publics)
-//  sal_uInt16 Datentyp des Returnwertes (ab Version 2)
+// List of all publics:
+//  sal_uInt16 identifier PU or Pu
+//  sal_uInt32 the record's length
+//  sal_uInt16 number of publics
+// Data for every public-entry:
+//  sal_uInt16 string index
+//  sal_uInt32 starting address in the p-code-image (sal_uInt16 for old publics)
+//  sal_uInt16 data type of the return value (from version 2)
 
-// Verzeichnis der Symbol-Tabellen:
-//  sal_uInt16 Kennung SP
-//  sal_uInt32 Laenge des Records
-//  sal_uInt16 Anzahl der Symboltabellen
-// Daten fuer jede Symboltabelle:
-//  sal_uInt16 Stringindex des Namens
-//  sal_uInt16 Anzahl Symbole
-//  sal_uInt16 Scope-Kennung
+// Register of the symbol tables:
+//  sal_uInt16 identifier SP
+//  sal_uInt32 the record's length
+//  sal_uInt16 number of symbol tables
+// Data for every symbol table:
+//  sal_uInt16 stringindex of the name
+//  sal_uInt16 number of symbols
+//  sal_uInt16 scope identifier
 
-// Symboltabelle:
-//  sal_uInt16 Kennung SY
-//  sal_uInt32 Laenge des Records
-//  sal_uInt16 Anzahl der Symbole
-// Daten:
-//  sal_uInt16 Stringindex des Namens
-//  sal_uInt16 Anzahl Symbole
-// Daten fuer jedes Symbol:
-//  sal_uInt16 Stringindex des Namens
-//  sal_uInt16 Datentyp
-//  sal_uInt16 Laenge bei STRING*n-Symbolen (0x8000: STATIC-Variable)
+// symbol table:
+//  sal_uInt16 identifier SY
+//  sal_uInt32 the record's length
+//  sal_uInt16 number of symbols
+// Data:
+//  sal_uInt16 stringindex of the name
+//  sal_uInt16 number of symbols
+// Data for every symbol:
+//  sal_uInt16 stringindex of the name
+//  sal_uInt16 data type
+//  sal_uInt16 length for STRING*n-symbols (0x8000: STATIC variable)
 
 // Stringpool:
-//  sal_uInt16 Kennung ST
-//  sal_uInt32 Laenge des Records
-//  sal_uInt16 Anzahl der Strings
-// Daten fuer jeden String:
-//  sal_uInt32 Offset in den Block aller Strings
-// Danach folgt der Block aller Strings, die dort als ASCIIZ-Strings liegen.
+//  sal_uInt16 identifier ST
+//  sal_uInt32 the record's length
+//  sal_uInt16 number of strings
+// Data for every string:
+//  sal_uInt32 Offset in the block of all strings
+// the block of all strings (ASCIIZ) follows then
 
-// Line Ranges:
-//  sal_uInt16 Kennung LR
-//  sal_uInt32 Laenge des Records
-//  sal_uInt16 Anzahl der Strings
-// Daten fuer jedes Public:
+// line ranges:
+//  sal_uInt16 identifier LR
+//  sal_uInt32 the record's length
+//  sal_uInt16 number of strings
+// Data for every public:
 //  sal_uInt16 1. Zeile (Sub XXX)
 //  sal_uInt16 2. Zeile (End Sub)
 
-// SBX-Objekte:
-// sal_uInt16 Anzahl Objekte
-// ....   Objektdaten
+// SBX-objects:
+// sal_uInt16 number of objects
+// ....   object data
 
 
-// Service-Routinen (in IMAGE.CXX)
+// service routines (in IMAGE.CXX)
 
 sal_Bool  SbGood( SvStream& r );
 sal_uIntPtr SbOpenRecord( SvStream&, sal_uInt16 nSignature, sal_uInt16 nElem );

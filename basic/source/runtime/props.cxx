@@ -36,9 +36,9 @@
 #include "basegfx/numeric/ftools.hxx"
 
 
-// Properties und Methoden legen beim Get (bWrite = sal_False) den Returnwert
-// im Element 0 des Argv ab; beim Put (bWrite = sal_True) wird der Wert aus
-// Element 0 gespeichert.
+// Properties and methods lay the return value down at Get (bWrite = sal_False)
+// at the element 0 of the Argv; at Put (bWrite = sal_True) the value from
+// element 0 is stored.
 
 RTLFUNC(Erl)
 {
@@ -99,7 +99,7 @@ RTLFUNC(Null)
     (void)pBasic;
     (void)bWrite;
 
-    // liefert eine leere Objekt-Variable.
+    // returns an empty object-variable
     rPar.Get( 0 )->PutNull();
 }
 

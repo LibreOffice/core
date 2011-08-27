@@ -32,9 +32,9 @@
 
 #include <basic/sbmeth.hxx>
 
-// Basic-Modul fuer JavaScript-Sourcen.
-// Alle Basic-spezifischen Methoden muessen virtuell ueberladen und deaktiviert
-// werden. Die Unterscheidung von normalen Modulen erfolgt uebr RTTI.
+// basic module for JavaScript sources
+// All the basic-specific methods must be overloaded virtually and must
+// be deactivated. The differentiation of normal modules is done by RTTI.
 
 class SbJScriptMethod : public SbMethod
 {
