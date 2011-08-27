@@ -1091,6 +1091,7 @@ bool ScAreaNameIterator::Next( String& rName, ScRange& rRange )
             if (pDBCollection && maDBPos != maDBEnd)
             {
                 const ScDBData& rData = *maDBPos;
+                ++maDBPos;
                 rData.GetArea(rRange);
                 rName = rData.GetName();
                 return true;                            // gefunden
