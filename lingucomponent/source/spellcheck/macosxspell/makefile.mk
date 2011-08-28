@@ -48,6 +48,8 @@ CFLAGSCC += $(HUNSPELL_CFLAGS)
 
 # --- Files --------------------------------------------------------
 
+.IF "$(DISABLE_HUNSPELL)" == ""
+
 CFLAGSCXX+=$(OBJCXXFLAGS)
 CFLAGSCXX+=-I..$/..$/lingutil
 
@@ -86,6 +88,11 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
+
+.ELSE
+all:
+    @echo "hunspell disabled"
+.ENDIF
 
 .ELSE
 dummy:

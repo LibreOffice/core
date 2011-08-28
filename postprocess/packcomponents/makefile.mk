@@ -296,11 +296,16 @@ my_components += \
 
 .IF "$(OS)" == "MACOSX"
 my_components += \
-    MacOSXSpell \
     avmediaQuickTime \
     fps_aqua \
     macab1 \
     macbe1
+
+.IF "$(DISABLE_HUNSPELL)" == ""
+my_components += \
+    MacOSXSpell
+.END
+
 .END
 
 .IF "$(OS)" == "WNT"
