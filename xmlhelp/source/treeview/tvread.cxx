@@ -47,6 +47,7 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <comphelper/locale.hxx>
+#include <comphelper/string.hxx>
 
 namespace treeview {
 
