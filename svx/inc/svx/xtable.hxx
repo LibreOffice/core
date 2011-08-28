@@ -422,35 +422,6 @@ public:
     virtual Bitmap*     CreateBitmapForUI(long nIndex, sal_Bool bDelete = sal_True);
 };
 
-// --------------------
-// class XHatchTable
-// --------------------
-
-class XHatchTable : public XPropertyTable
-{
-public:
-    explicit        XHatchTable(
-                        const String& rPath,
-                        XOutdevItemPool* pXPool = NULL,
-                        sal_uInt16 nInitSize = 16,
-                        sal_uInt16 nReSize = 16
-                    );
-    virtual         ~XHatchTable();
-
-    using XPropertyTable::Replace;
-    XHatchEntry*    Replace(long nIndex, XHatchEntry* pEntry );
-    using XPropertyTable::Remove;
-    XHatchEntry*    Remove(long nIndex);
-    using XPropertyTable::Get;
-    XHatchEntry*    GetHatch(long nIndex) const;
-
-    virtual sal_Bool    Load();
-    virtual sal_Bool    Save();
-    virtual sal_Bool    Create();
-    virtual sal_Bool    CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
-};
-
 // -------------------
 // class XHatchList
 // -------------------

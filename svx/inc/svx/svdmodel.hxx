@@ -83,7 +83,6 @@ class XColorTable;
 class XDashList;
 class XGradientList;
 class XHatchList;
-class XHatchTable;
 class XLineEndList;
 class XLineEndTable;
 class SvxForbiddenCharactersTable;

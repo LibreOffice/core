@@ -4026,12 +4026,13 @@ SvStream& XFillHatchItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 |*
 *************************************************************************/
 
-const XHatch& XFillHatchItem::GetHatchValue(const XHatchTable* pTable) const // GetValue -> GetHatchValue
+const XHatch& XFillHatchItem::GetHatchValue() const // GetValue -> GetHatchValue
 {
-    if (!IsIndex())
-        return aHatch;
-    else
-        return pTable->GetHatch(GetIndex())->GetHatch();
+    //if (!IsIndex())
+    //    return aHatch;
+    //else
+    //    return pTable->GetHatch(GetIndex())->GetHatch();
+    return aHatch;
 }
 
 //------------------------------------------------------------------------
