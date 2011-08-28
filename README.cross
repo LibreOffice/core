@@ -5,6 +5,12 @@ Notes on cross-compiling LibreOffice, originally written by Tor
 Lillqvist <tlillqvist@novell.com> <tml@iki.fi> in May, 2011, for later
 history see git log.
 
+My cross-compilation experimentation is going on for four platforms:
+Windows, iOS, Android and PowerPC Mac OS X. I work on the master
+branch of LibreOffice. Some other people have talked about setting up
+a separate branch for Android work, or even separate clones at
+github. I am not interested in that.
+
 Cross-compilation of LibreOffice completely is not possible yet. Much
 work has been done, "baby steps" for some platforms, much more for
 others, but a lot remains. For iOS and Android this work is highly
@@ -15,12 +21,6 @@ be finished.
 Searching for information about cross-compilation of OpenOffice.org
 (the predecessor of LibreOffice) you will find information about what
 actually was not cross-compilation, but using QEMU.
-
-My cross-compilation experimentation is going on for four platforms:
-Windows, iOS, Android and PowerPC Mac OS X. I work on the master
-branch of LibreOffice. Some other people have talked about setting up
-a separate branch for Android work, or even separate clones at
-github. I am not interested in that.
 
 
 General
@@ -64,12 +64,11 @@ Windows
 -------
 
 There is some support in LibreOffice already (from OpenOffice.org) for
-building it locally on Windows but with the GNU tool-chain, i.e. what
-is commonly known as MinGW. But as far as I know, that work has never
-attempted cross-compilation.
+building it locally on Windows with the GNU tool-chain (MinGW). But as
+far as I know, that work has never attempted cross-compilation.
 
 This OOo-originated MinGW support attempts to support both running
-Cygwin gcc in its -mno-cygwin mode, and a native MinGW compiler.  The
+Cygwin gcc in its -mno-cygwin mode, and a native MinGW compiler. The
 -mno-cygwin mechanism in the Cygwin gcc is rapidly being obsoleted, if
 it isn't already, and I have not attempted to try to keep it working;
 in fact I have activly cleaned out mechanisms related to this. Ditto
@@ -89,7 +88,7 @@ Build Service, running on openSUSE:
 
 http://download.opensuse.org/repositories/windows:/mingw:/win32/
 
-[You can install it like:
+You can install it on openSUSE like this:
 
 zypper ar http://download.opensuse.org/repositories/windows:/mingw:/win32/SLE_11_SP1/windows:mingw:win32.repo
 zypper in mingw32-cross-gcc mingw32-cross-gcc-c++ mingw32-python-devel \
@@ -112,11 +111,11 @@ tells you, and either remove one of the --with-system-*, or install the
 missing dependency.
 
 It also looks like graphite2.pc needs tweaking in order to work right; but
-that's likely to be fixed in the openSUSE project.]
+that's likely to be fixed in the openSUSE project.
 
 It is somewhat unclear how well thought-out the conditionals and code
 for MinGW inside the OOo-originated code in LibreOffice actually
-is. The little I have seen of it seems a bit randomish, with
+are. What I have noticed of it seems a bit randomish, with
 copy-pasting having been preferred to factoring out differences.
 
 The autogen.lastrun I use for my MinGW cross-compilation experimentation is:
