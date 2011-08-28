@@ -36,12 +36,13 @@
 #include <svtools/rtftoken.h>
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/parrtf.hxx>
+#include <comphelper/string.hxx>
 
 const int MAX_STRING_LEN = 1024;
 const int MAX_TOKEN_LEN = 128;
 
-#define RTF_ISDIGIT( c ) (c >= '0' && c <= '9')
-#define RTF_ISALPHA( c ) ( (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') )
+#define RTF_ISDIGIT( c ) comphelper::string::isdigitAscii(c)
+#define RTF_ISALPHA( c ) comphelper::string::isalphaAscii(c)
 
 SvRTFParser::SvRTFParser( SvStream& rIn, sal_uInt8 nStackSize )
     : SvParser( rIn, nStackSize ),

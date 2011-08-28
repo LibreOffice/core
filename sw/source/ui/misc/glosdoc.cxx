@@ -46,6 +46,7 @@
 #include <svl/fstathelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/tempfile.hxx>
+#include <comphelper/string.hxx>
 #include <swtypes.hxx>
 #include <uitool.hxx>
 #include <glosdoc.hxx>
@@ -68,10 +69,8 @@ String lcl_CheckFileName( const String& rNewFilePath,
     for( xub_StrLen i = 0; i < rNewGroupName.Len(); i++ )
     {
         sal_Unicode cChar = rNewGroupName.GetChar(i);
-        if( (cChar >= 'A' && cChar <= 'Z') ||
-            (cChar >= 'a' && cChar <= 'z') ||
-            (cChar >= '0' && cChar <= '9') ||
-            cChar == '_' || cChar == 0x20 )
+        if (comphelper::string::isalnumAscii(cChar) ||
+            cChar == '_' || cChar == 0x20)
         {
             sRet += cChar;
         }

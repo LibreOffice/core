@@ -36,7 +36,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/htmltokn.h>
-
+#include <comphelper/string.hxx>
 #include "css1kywd.hxx"
 #include "parcss1.hxx"
 
@@ -157,18 +157,15 @@ CSS1Token CSS1Parser::GetNextToken()
         case '@': // '@import' | '@XXX'
             {
                 cNextCh = GetNextChar();
-                if( ('A' <= cNextCh && cNextCh <= 'Z') ||
-                    ('a' <= cNextCh && cNextCh <= 'z') )
+                if (comphelper::string::isalphaAscii(cNextCh))
                 {
                     // den naechsten Identifer scannen
                     ::rtl::OUStringBuffer sTmpBuffer( 32L );
                     do {
                         sTmpBuffer.append( cNextCh );
                         cNextCh = GetNextChar();
-                    } while( ('A' <= cNextCh && cNextCh <= 'Z') ||
-                             ('a' <= cNextCh && cNextCh <= 'z') ||
-                             ('0' <= cNextCh && cNextCh <= '9') ||
-                             ('-'==cNextCh && !IsEOF()) );
+                    } while( (comphelper::string::isalnumAscii(cNextCh) ||
+                             '-' == cNextCh) && !IsEOF() );
 
                     aToken += String(sTmpBuffer.makeStringAndClear());
 
@@ -263,10 +260,8 @@ CSS1Token CSS1Parser::GetNextToken()
                     do {
                         sTmpBuffer.append( cNextCh );
                         cNextCh = GetNextChar();
-                    } while( ('A' <= cNextCh && cNextCh <= 'Z') ||
-                             ('a' <= cNextCh && cNextCh <= 'z') ||
-                             ('0' <= cNextCh && cNextCh <= '9') ||
-                             ('-' == cNextCh && !IsEOF()) );
+                    } while( (comphelper::string::isalnumAscii(cNextCh) ||
+                             '-' == cNextCh) && !IsEOF() );
 
                     aToken += String(sTmpBuffer.makeStringAndClear());
 
@@ -409,10 +404,8 @@ CSS1Token CSS1Parser::GetNextToken()
                         do {
                             sTmpBuffer2.append( cNextCh );
                             cNextCh = GetNextChar();
-                        } while( ( ('A' <= cNextCh && cNextCh <= 'Z') ||
-                                    ('a' <= cNextCh && cNextCh <= 'z') ||
-                                    ('0' <= cNextCh && cNextCh <= '9') ||
-                                 '-'==cNextCh) && !IsEOF() );
+                        } while( (comphelper::string::isalnumAscii(cNextCh) ||
+                                 '-' == cNextCh) && !IsEOF() );
 
                         aIdent += String(sTmpBuffer2.makeStringAndClear());
 
@@ -606,9 +599,7 @@ CSS1Token CSS1Parser::GetNextToken()
             // kein break;
 
         default: // IDENT | syntax error
-            // TODO IsAlpha
-            if( ('A' <= cNextCh && cNextCh <= 'Z') ||
-                ('a' <= cNextCh && cNextCh <= 'z') )
+            if (comphelper::string::isalphaAscii(cNextCh))
             {
                 // IDENT
 
@@ -626,12 +617,8 @@ CSS1Token CSS1Parser::GetNextToken()
                                        ('a'<=cNextCh && 'f'>=cNextCh) );
                     }
                     cNextCh = GetNextChar();
-                    // TODO: AlphaNumeric
-                } while( ( ('0'<=cNextCh && '9'>=cNextCh) ||
-                           ('A'<=cNextCh && 'Z'>=cNextCh) ||
-                           ('a'<=cNextCh && 'z'>=cNextCh) ||
-                           '-'==cNextCh ) &&
-                         !IsEOF() );
+                } while( (comphelper::string::isalnumAscii(cNextCh) ||
+                           '-' == cNextCh) && !IsEOF() );
 
                 aToken += String(sTmpBuffer.makeStringAndClear());
 

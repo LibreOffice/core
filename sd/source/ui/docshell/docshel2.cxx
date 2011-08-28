@@ -51,6 +51,7 @@
 #include "fupoor.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <comphelper/string.hxx>
 
 namespace sd {
 
@@ -391,16 +392,14 @@ bool DrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStrin
                 bIsStandardName = true;
             }
         }
-        else if( rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) >= 'a' &&
-                 rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) <= 'z' &&
-                 rInOutPageName.GetToken( 1, sal_Unicode(' ') ).Len() == 1 )
+        else if( rInOutPageName.GetToken( 1, sal_Unicode(' ') ).Len() == 1 &&
+                 comphelper::string::islowerAscii(rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) ) )
         {
             // lower case, single character: reserved
             bIsStandardName = true;
         }
-        else if( rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) >= 'A' &&
-                 rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) <= 'Z' &&
-                 rInOutPageName.GetToken( 1, sal_Unicode(' ') ).Len() == 1 )
+        else if( rInOutPageName.GetToken( 1, sal_Unicode(' ') ).Len() == 1 &&
+                 comphelper::string::isupperAscii(rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) ) )
         {
             // upper case, single character: reserved
             bIsStandardName = true;

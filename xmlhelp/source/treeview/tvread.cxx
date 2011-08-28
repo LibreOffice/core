@@ -1144,8 +1144,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
 
 inline bool isLetter( sal_Unicode c )
 {
-    bool bLetter = ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
-    return bLetter;
+    return comphelper::string::isalphaAscii(c);
 }
 
 void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< ::rtl::OUString > &rv,

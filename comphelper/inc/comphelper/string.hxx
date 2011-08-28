@@ -353,6 +353,11 @@ COMPHELPER_DLLPUBLIC inline bool isdigitAscii(sal_Unicode c)
     return ((c >= '0') && (c <= '9'));
 }
 
+COMPHELPER_DLLPUBLIC inline bool isxdigitAscii(sal_Unicode c)
+{
+    return isdigitAscii(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
+}
+
 COMPHELPER_DLLPUBLIC inline bool islowerAscii(sal_Unicode c)
 {
     return ((c >= 'a') && (c <= 'z'));
@@ -363,9 +368,14 @@ COMPHELPER_DLLPUBLIC inline bool isupperAscii(sal_Unicode c)
     return ((c >= 'A') && (c <= 'Z'));
 }
 
+COMPHELPER_DLLPUBLIC inline bool isalphaAscii(sal_Unicode c)
+{
+    return islowerAscii(c) || isupperAscii(c);
+}
+
 COMPHELPER_DLLPUBLIC inline bool isalnumAscii(sal_Unicode c)
 {
-    return isdigitAscii(c) || islowerAscii(c) || isupperAscii(c);
+    return isalphaAscii(c) || isdigitAscii(c);
 }
 
 } }

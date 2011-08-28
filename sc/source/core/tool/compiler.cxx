@@ -47,6 +47,7 @@
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/math.hxx>
 #include <ctype.h>
@@ -2711,7 +2712,7 @@ bool ScCompiler::IsPredetectedReference( const String& rName )
                     return false;   // :#REF!.AB42 or :#REF!42 or :#REF!#REF!
                 break;
             default:
-                if ((('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z')) &&
+                if (comphelper::string::isalpha(c) &&
                         ((mnPredetectedReference > 1 && ':' == c2) || 0 == c2))
                     return false;   // AB#REF!: or AB#REF!
         }
