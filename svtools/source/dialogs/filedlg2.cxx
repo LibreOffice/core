@@ -904,7 +904,7 @@ IMPL_LINK( ImpFileDialog, DblClickHdl, ListBox *, pBox )
         // Neue Maske setzen, und Listboxen updaten
         size_t nCurPos = pTypeList->GetSelectEntryPos();
         if( nCurPos+1 > aFilterList.size() )
-            aMask = UniString::CreateFromAscii( ALLFILES );
+            aMask.setGlob(UniString::CreateFromAscii( ALLFILES ));
         else
         {
             UniString aFilterListMask = aFilterList[ nCurPos ]->aMask;
@@ -943,7 +943,7 @@ IMPL_LINK( ImpFileDialog, ClickHdl, Button*, pBtn )
             // -> abschneiden und merken
             if( FileStat( aFile ).GetKind() & (FSYS_KIND_FILE | FSYS_KIND_WILD) || !aFile.Exists() )
             {
-                aMask = aFile.CutName();
+                aMask.setGlob(aFile.CutName());
             }
 
             // Neue Maske und neues Verzeichnis setzen, und Listboxen updaten
@@ -1147,7 +1147,7 @@ void ImpFileDialog::SetPath( UniString const & rPath )
     // -> abschneiden und merken
     if( FileStat( aFile ).GetKind() & (FSYS_KIND_FILE | FSYS_KIND_WILD)     || !aFile.Exists() )
     {
-        aMask = aFile.CutName();
+        aMask.setGlob(aFile.CutName());
 
         // Neue Maske und neues Verzeichnis setzen, und Listboxen updaten
         if( pDirList )
@@ -1232,10 +1232,10 @@ void ImpFileDialog::PreExecute()
                 aMask = WildCard( aFilterListMask, ';' );
         }
         else
-            aMask = UniString::CreateFromAscii( ALLFILES );
+            aMask.setGlob(UniString::CreateFromAscii( ALLFILES ));
     }
     else
-        aMask = UniString::CreateFromAscii( ALLFILES );
+        aMask.setGlob(UniString::CreateFromAscii( ALLFILES ));
 
     // Neue Maske setzen
     if( pEdit->GetText().Len() == 0 )

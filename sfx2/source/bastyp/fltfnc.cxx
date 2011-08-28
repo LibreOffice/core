@@ -833,9 +833,13 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const String& rName, Sf
 IMPL_STATIC_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, String*, pString )
 {
     const SfxFilter* pFilter = pThis->GetFilter4Extension( *pString, SFX_FILTER_IMPORT );
-    if( pFilter && !pFilter->GetWildcard().Matches( String() ) &&
-        pFilter->GetWildcard() != DEFINE_CONST_UNICODE("*.*") && pFilter->GetWildcard() != '*' )
+    if (pFilter && !pFilter->GetWildcard().Matches( String() ) &&
+        !pFilter->GetWildcard().Matches(DEFINE_CONST_UNICODE("*.*")) &&
+        !pFilter->GetWildcard().Matches('*')
+       )
+    {
         return sal_True;
+    }
     return sal_False;
 }
 

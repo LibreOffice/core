@@ -29,7 +29,6 @@
 #define _WLDCRD_HXX
 
 #include "tools/toolsdllapi.h"
-#include <tools/solar.h>
 #include <tools/string.hxx>
 #include <osl/thread.h>
 
@@ -63,29 +62,13 @@ public:
         return rtl::OStringToOUString(aWildString, osl_getThreadTextEncoding());
     }
 
+    void setGlob(const rtl::OUString& rString)
+    {
+        aWildString = rtl::OUStringToOString(rString, osl_getThreadTextEncoding());
+    }
+
     sal_Bool            Matches( const String& rStr ) const;
-
-    sal_Bool            operator ==( const String& rString ) const
-                        { return Matches( rString ); }
-    sal_Bool            operator !=( const String& rString ) const
-                        { return !( Matches( rString ) ); }
-
-    WildCard&       operator =( const String& rString );
-    WildCard&       operator =( const WildCard& rWildCard );
 };
-
-inline WildCard& WildCard::operator=( const String& rString )
-{
-    aWildString = rtl::OUStringToOString(rString, osl_getThreadTextEncoding());
-    return *this;
-}
-
-inline WildCard& WildCard::operator=( const WildCard& rWildCard )
-{
-    aWildString = rWildCard.aWildString;
-    cSepSymbol = rWildCard.cSepSymbol;
-    return *this;
-}
 
 #endif
 

@@ -99,7 +99,7 @@ SfxFilter::SfxFilter(  const String &rName,
         aShort += ';';
         aShort += aLong;
     }
-    aWildCard = aShort;
+    aWildCard.setGlob(aShort);
 
     nVersion = SOFFICE_FILEFORMAT_50;
     aUIName = aFilterName;
