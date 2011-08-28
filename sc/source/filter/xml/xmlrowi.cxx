@@ -135,7 +135,7 @@ SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( sal_uInt16 nPrefix
     case XML_TOK_TABLE_ROW_CELL:
 //      if( IsInsertCellPossible() )
         {
-            bHasCell = sal_True;
+            bHasCell = true;
             pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
                                                       rLName, xAttrList, false, nRepeatedRows
                                                       //this
@@ -145,9 +145,9 @@ SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( sal_uInt16 nPrefix
     case XML_TOK_TABLE_ROW_COVERED_CELL:
 //      if( IsInsertCellPossible() )
         {
-            bHasCell = sal_True;
+            bHasCell = true;
             pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList, sal_True, nRepeatedRows
+                                                      rLName, xAttrList, true, nRepeatedRows
                                                       //this
                                                       );
         }
@@ -194,7 +194,7 @@ void ScXMLTableRowContext::EndElement()
                         if ( pStyles )
                         {
                             XMLTableStyleContext* pStyle((XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                                XML_STYLE_FAMILY_TABLE_ROW, sStyleName, sal_True));
+                                XML_STYLE_FAMILY_TABLE_ROW, sStyleName, true));
                             if (pStyle)
                             {
                                 pStyle->FillPropertySet(xRowProperties);
@@ -208,8 +208,8 @@ void ScXMLTableRowContext::EndElement()
                             }
                         }
                     }
-                    sal_Bool bVisible (sal_True);
-                    sal_Bool bFiltered (false);
+                    bool bVisible (true);
+                    bool bFiltered (false);
                     if (IsXMLToken(sVisibility, XML_COLLAPSE))
                     {
                         bVisible = false;
@@ -217,7 +217,7 @@ void ScXMLTableRowContext::EndElement()
                     else if (IsXMLToken(sVisibility, XML_FILTER))
                     {
                         bVisible = false;
-                        bFiltered = sal_True;
+                        bFiltered = true;
                     }
                     if (!bVisible)
                         xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)), uno::makeAny(bVisible));
@@ -234,7 +234,7 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                      const sal_Bool bTempHeader, const sal_Bool bTempGroup ) :
+                                      const bool bTempHeader, const bool bTempGroup ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     nHeaderStartRow(0),
     nHeaderEndRow(0),
@@ -242,7 +242,7 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
     nGroupEndRow(0),
     bHeader(bTempHeader),
     bGroup(bTempGroup),
-    bGroupDisplay(sal_True)
+    bGroupDisplay(true)
 {
     // don't have any attributes
     if (bHeader)
@@ -286,12 +286,12 @@ SvXMLImportContext *ScXMLTableRowsContext::CreateChildContext( sal_uInt16 nPrefi
     case XML_TOK_TABLE_ROWS_ROW_GROUP:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   false, sal_True );
+                                                   false, true );
         break;
     case XML_TOK_TABLE_ROWS_HEADER_ROWS:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_True, false );
+                                                   true, false );
         break;
     case XML_TOK_TABLE_ROWS_ROWS:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
@@ -325,7 +325,7 @@ void ScXMLTableRowsContext::EndElement()
             {
                 if (!xPrintAreas->getPrintTitleRows())
                 {
-                    xPrintAreas->setPrintTitleRows(sal_True);
+                    xPrintAreas->setPrintTitleRows(true);
                     table::CellRangeAddress aRowHeaderRange;
                     aRowHeaderRange.StartRow = nHeaderStartRow;
                     aRowHeaderRange.EndRow = nHeaderEndRow;
@@ -350,7 +350,7 @@ void ScXMLTableRowsContext::EndElement()
             if (pDoc)
             {
                 ScXMLImport::MutexGuard aGuard(GetScImport());
-                ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(nSheet, sal_True));
+                ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(nSheet, true));
                 ScOutlineArray* pRowArray(pOutlineTable->GetRowArray());
                 bool bResized;
                 pRowArray->Insert(static_cast<SCROW>(nGroupStartRow), static_cast<SCROW>(nGroupEndRow), bResized, !bGroupDisplay, true);

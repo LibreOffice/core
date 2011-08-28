@@ -68,15 +68,15 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     ScXMLImport& rXMLImport;
     formula::FormulaGrammar::Grammar  eGrammar;
     sal_Int16   nCellType;
-    bool    bIsMerged;
-    bool    bIsMatrix;
-    bool    bHasSubTable;
-    bool    bIsCovered;
-    bool    bIsEmpty;
-    bool    bHasTextImport;
-    bool    bIsFirstTextImport;
-    bool    bSolarMutexLocked;
-    bool    bFormulaTextResult;
+    bool        bIsMerged;
+    bool        bIsMatrix;
+    bool        bHasSubTable;
+    bool        bIsCovered;
+    bool        bIsEmpty;
+    bool        bHasTextImport;
+    bool        bIsFirstTextImport;
+    bool        bSolarMutexLocked;
+    bool        bFormulaTextResult;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

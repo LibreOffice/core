@@ -152,32 +152,16 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( sal_uInt16 nPrefix,
     SvXMLImportContext *pContext = 0;
 
     const SvXMLTokenMap& rTokenMap = GetScImport().GetBodyElemTokenMap();
-//    sal_Bool bOrdered = sal_False;
-//    sal_Bool bHeading = sal_False;
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
-//  case XML_TOK_TEXT_H:
-//      bHeading = sal_True;
-//  case XML_TOK_TEXT_P:
-//      pContext = new SwXMLParaContext( GetSwImport(),nPrefix, rLocalName,
-//                                       xAttrList, bHeading );
-//      break;
-//  case XML_TOK_TEXT_ORDERED_LIST:
-//      bOrdered = sal_True;
-//  case XML_TOK_TEXT_UNORDERED_LIST:
-//      pContext = new SwXMLListBlockContext( GetSwImport(),nPrefix, rLocalName,
-//                                            xAttrList, bOrdered );
-//      break;
     case XML_TOK_BODY_TRACKED_CHANGES :
-    {
         pChangeTrackingImportHelper = GetScImport().GetChangeTrackingImportHelper();
         if (pChangeTrackingImportHelper)
             pContext = new ScXMLTrackedChangesContext( GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-    }
-    break;
+        break;
     case XML_TOK_BODY_CALCULATION_SETTINGS :
         pContext = new ScXMLCalculationSettingsContext( GetScImport(), nPrefix, rLocalName, xAttrList );
-        bHadCalculationSettings = sal_True;
+        bHadCalculationSettings = true;
         break;
     case XML_TOK_BODY_CONTENT_VALIDATIONS :
         pContext = new ScXMLContentValidationsContext( GetScImport(), nPrefix, rLocalName, xAttrList );
@@ -186,17 +170,15 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( sal_uInt16 nPrefix,
         pContext = new ScXMLLabelRangesContext( GetScImport(), nPrefix, rLocalName, xAttrList );
         break;
     case XML_TOK_BODY_TABLE:
+        if (GetScImport().GetTables().GetCurrentSheet() >= MAXTAB)
         {
-            if (GetScImport().GetTables().GetCurrentSheet() >= MAXTAB)
-            {
-                GetScImport().SetRangeOverflowType(SCWARN_IMPORT_SHEET_OVERFLOW);
-                pContext = new ScXMLEmptyContext(GetScImport(), nPrefix, rLocalName);
-            }
-            else
-            {
-                pContext = new ScXMLTableContext( GetScImport(),nPrefix, rLocalName,
-                                                  xAttrList );
-            }
+            GetScImport().SetRangeOverflowType(SCWARN_IMPORT_SHEET_OVERFLOW);
+            pContext = new ScXMLEmptyContext(GetScImport(), nPrefix, rLocalName);
+        }
+        else
+        {
+            pContext = new ScXMLTableContext( GetScImport(),nPrefix, rLocalName,
+                                              xAttrList );
         }
         break;
     case XML_TOK_BODY_NAMED_EXPRESSIONS:

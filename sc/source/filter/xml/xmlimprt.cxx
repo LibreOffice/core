@@ -2404,7 +2404,7 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
         if (rNumberFormat == -1)
             rProperties->getPropertyValue( sNumberFormat ) >>= rNumberFormat;
         OSL_ENSURE(rNumberFormat != -1, "no NumberFormat");
-        sal_Bool bIsStandard;
+        bool bIsStandard;
         // sCurrentCurrency may be the ISO code abbreviation if the currency
         // symbol matches such, or if no match found the symbol itself!
         rtl::OUString sCurrentCurrency;

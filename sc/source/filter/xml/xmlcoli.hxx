@@ -66,9 +66,9 @@ class ScXMLTableColsContext : public SvXMLImportContext
     sal_Int32   nHeaderEndCol;
     sal_Int32   nGroupStartCol;
     sal_Int32   nGroupEndCol;
-    sal_Bool    bHeader;
-    sal_Bool    bGroup;
-    sal_Bool    bGroupDisplay;
+    bool        bHeader;
+    bool        bGroup;
+    bool        bGroupDisplay;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -79,7 +79,7 @@ public:
                        const ::rtl::OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        const sal_Bool bHeader, const sal_Bool bGroup);
+                        const bool bHeader, const bool bGroup);
 
     virtual ~ScXMLTableColsContext();
 

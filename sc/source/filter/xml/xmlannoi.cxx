@@ -67,7 +67,6 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mrAnnotationData( rAnnotationData ),
     nParagraphCount(0),
-    bHasTextP(false),
     pCellContext(pTempCellContext),
     pShapeContext(NULL)
 {
@@ -77,7 +76,7 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
         XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)GetScImport().GetShapeImport().get();
         pTableShapeImport->SetAnnotation(this);
         pShapeContext = GetScImport().GetShapeImport()->CreateGroupChildContext(
-            GetScImport(), nPrfx, rLName, xAttrList, xLocalShapes, sal_True);
+            GetScImport(), nPrfx, rLName, xAttrList, xLocalShapes, true);
     }
 
     pCellContext = pTempCellContext;
@@ -171,8 +170,7 @@ SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( sal_uInt16 nPref
 
 void ScXMLAnnotationContext::Characters( const ::rtl::OUString& rChars )
 {
-    if (!bHasTextP)
-        maTextBuffer.append(rChars);
+    maTextBuffer.append(rChars);
 }
 
 void ScXMLAnnotationContext::EndElement()

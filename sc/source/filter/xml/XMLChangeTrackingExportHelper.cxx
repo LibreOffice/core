@@ -145,7 +145,7 @@ void ScChangeTrackingExportHelper::WriteChangeInfo(const ScChangeAction* pAction
     if (sComment.getLength())
     {
         SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, false);
-        sal_Bool bPrevCharWasSpace(sal_True);
+        bool bPrevCharWasSpace(true);
         rExport.GetTextParagraphExport()->exportText(sComment, bPrevCharWasSpace);
     }
 }
@@ -308,7 +308,7 @@ void ScChangeTrackingExportHelper::WriteStringCell(const ScBaseCell* pCell)
         if (sOUString.getLength())
         {
             SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, false);
-            sal_Bool bPrevCharWasSpace(sal_True);
+            bool bPrevCharWasSpace(true);
             rExport.GetTextParagraphExport()->exportText(sOUString, bPrevCharWasSpace);
         }
     }
@@ -395,7 +395,7 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell, con
             if (sOUValue.getLength())
             {
                 SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, false);
-                sal_Bool bPrevCharWasSpace(sal_True);
+                bool bPrevCharWasSpace(true);
                 rExport.GetTextParagraphExport()->exportText(sOUValue, bPrevCharWasSpace);
             }
         }

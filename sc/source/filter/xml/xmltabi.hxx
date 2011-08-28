@@ -51,8 +51,8 @@ class ScXMLTableContext : public SvXMLImportContext
     rtl::OUString   sPrintRanges;
     ::std::auto_ptr<ScXMLExternalTabData> pExternalRefInfo;
     sal_Int32       nStartOffset;
-    sal_Bool        bStartFormPage;
-    sal_Bool        bPrintEntireSheet;
+    bool            bStartFormPage;
+    bool            bPrintEntireSheet;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -63,7 +63,7 @@ public:
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        const sal_Bool bTempIsSubTable = false,
+                        const bool bTempIsSubTable = false,
                         const sal_Int32 nSpannedCols = 0);
 
     virtual ~ScXMLTableContext();

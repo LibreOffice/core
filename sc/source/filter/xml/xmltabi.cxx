@@ -155,13 +155,13 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                      const sal_Bool bTempIsSubTable,
+                                      const bool bTempIsSubTable,
                                       const sal_Int32 nSpannedCols) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pExternalRefInfo(NULL),
     nStartOffset(-1),
     bStartFormPage(false),
-    bPrintEntireSheet(sal_True)
+    bPrintEntireSheet(true)
 {
     // get start offset in file (if available)
     nStartOffset = GetScImport().GetByteOffset();
@@ -291,12 +291,12 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
     case XML_TOK_TABLE_COL_GROUP:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   false, sal_True );
+                                                   false, true );
         break;
     case XML_TOK_TABLE_HEADER_COLS:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_True, false );
+                                                   true, false );
         break;
     case XML_TOK_TABLE_COLS:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
@@ -313,12 +313,12 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
     case XML_TOK_TABLE_ROW_GROUP:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   false, sal_True );
+                                                   false, true );
         break;
     case XML_TOK_TABLE_HEADER_ROWS:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_True, false );
+                                                   true, false );
         break;
     case XML_TOK_TABLE_ROWS:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
@@ -343,7 +343,7 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
     case XML_TOK_TABLE_FORMS:
         {
             GetScImport().GetFormImport()->startPage(GetScImport().GetTables().GetCurrentXDrawPage());
-            bStartFormPage = sal_True;
+            bStartFormPage = true;
             pContext = GetScImport().GetFormImport()->createOfficeFormsContext( GetScImport(), nPrefix, rLName );
         }
         break;

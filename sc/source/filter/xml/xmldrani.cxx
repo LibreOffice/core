@@ -133,19 +133,19 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     nSubTotalsUserListIndex(0),
     bContainsSort(false),
     bContainsSubTotal(false),
-    bNative(sal_True),
+    bNative(true),
     bIsSelection(false),
     bKeepFormats(false),
     bMoveCells(false),
     bStripData(false),
-    bContainsHeader(sal_True),
+    bContainsHeader(true),
     bAutoFilter(false),
     bSubTotalsBindFormatsToContent(false),
     bSubTotalsIsCaseSensitive(false),
     bSubTotalsInsertPageBreaks(false),
     bSubTotalsSortGroups(false),
     bSubTotalsEnabledUserList(false),
-    bSubTotalsAscending(sal_True),
+    bSubTotalsAscending(true),
     bFilterCopyOutputData(false),
     bFilterIsCaseSensitive(false),
     bFilterSkipDuplicates(false),
@@ -268,14 +268,14 @@ SvXMLImportContext *ScXMLDatabaseRangeContext::CreateChildContext( sal_uInt16 nP
         break;
         case XML_TOK_SORT :
         {
-            bContainsSort = sal_True;
+            bContainsSort = true;
             pContext = new ScXMLSortContext( GetScImport(), nPrefix,
                                                           rLName, xAttrList, this);
         }
         break;
         case XML_TOK_DATABASE_RANGE_SUBTOTAL_RULES :
         {
-            bContainsSubTotal = sal_True;
+            bContainsSubTotal = true;
             pContext = new ScXMLSubTotalRulesContext( GetScImport(), nPrefix,
                                                           rLName, xAttrList, this);
         }
@@ -867,7 +867,7 @@ ScXMLSortGroupsContext::ScXMLSortGroupsContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pDatabaseRangeContext(pTempDatabaseRangeContext)
 {
-    pDatabaseRangeContext->SetSubTotalsSortGroups(sal_True);
+    pDatabaseRangeContext->SetSubTotalsSortGroups(true);
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetSubTotalRulesSortGroupsAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -887,7 +887,7 @@ ScXMLSortGroupsContext::ScXMLSortGroupsContext( ScXMLImport& rImport,
                     rtl::OUString sTemp = sValue.copy(0, 8);
                     if (sTemp.compareToAscii(SC_USERLIST) == 0)
                     {
-                        pDatabaseRangeContext->SetSubTotalsEnabledUserList(sal_True);
+                        pDatabaseRangeContext->SetSubTotalsEnabledUserList(true);
                         sTemp = sValue.copy(8);
                         pDatabaseRangeContext->SetSubTotalsUserListIndex(static_cast<sal_Int16>(sTemp.toInt32()));
                     }
@@ -912,7 +912,7 @@ ScXMLSortGroupsContext::ScXMLSortGroupsContext( ScXMLImport& rImport,
             case XML_TOK_SORT_GROUPS_ATTR_ORDER :
             {
                 if (IsXMLToken(sValue, XML_ASCENDING))
-                    pDatabaseRangeContext->SetSubTotalsAscending(sal_True);
+                    pDatabaseRangeContext->SetSubTotalsAscending(true);
                 else
                     pDatabaseRangeContext->SetSubTotalsAscending(false);
             }

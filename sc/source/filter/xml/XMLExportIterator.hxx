@@ -53,7 +53,7 @@ class   ScBaseCell;
 class ScMyIteratorBase
 {
 protected:
-    virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress ) = 0;
+    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress ) = 0;
 
 public:
                                 ScMyIteratorBase();
@@ -75,7 +75,7 @@ struct ScMyShape
     sal_Int32       nEndY;
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape;
 
-    sal_Bool operator<(const ScMyShape& aShape) const;
+    bool operator<(const ScMyShape& aShape) const;
 };
 
 typedef std::list<ScMyShape>    ScMyShapeList;
@@ -85,14 +85,14 @@ class ScMyShapesContainer : ScMyIteratorBase
 private:
     ScMyShapeList               aShapeList;
 protected:
-    virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
 public:
                                 ScMyShapesContainer();
     virtual                     ~ScMyShapesContainer();
 
                                 using ScMyIteratorBase::UpdateAddress;
     void                        AddNewShape(const ScMyShape& aShape);
-    sal_Bool                    HasShapes() { return !aShapeList.empty(); }
+    bool                        HasShapes() { return !aShapeList.empty(); }
     const ScMyShapeList*        GetShapes() const { return &aShapeList; }
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
@@ -104,7 +104,7 @@ struct ScMyNoteShape
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape;
     ScAddress aPos;
 
-    sal_Bool operator<(const ScMyNoteShape& aNote) const;
+    bool operator<(const ScMyNoteShape& aNote) const;
 };
 
 typedef std::list<ScMyNoteShape>    ScMyNoteShapeList;
@@ -114,14 +114,14 @@ class ScMyNoteShapesContainer : ScMyIteratorBase
 private:
     ScMyNoteShapeList           aNoteShapeList;
 protected:
-    virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
 public:
                                 ScMyNoteShapesContainer();
     virtual                     ~ScMyNoteShapesContainer();
 
                                 using ScMyIteratorBase::UpdateAddress;
     void                        AddNewNote(const ScMyNoteShape& aNote);
-    sal_Bool                    HasNotes() { return !aNoteShapeList.empty(); }
+    bool                        HasNotes() { return !aNoteShapeList.empty(); }
     const ScMyNoteShapeList*    GetNotes() const { return &aNoteShapeList; }
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
@@ -134,8 +134,8 @@ struct ScMyMergedRange
 {
     com::sun::star::table::CellRangeAddress aCellRange;
     sal_Int32                   nRows;
-    sal_Bool                    bIsFirst;
-    sal_Bool                    operator<(const ScMyMergedRange& aRange) const;
+    bool                        bIsFirst;
+    bool                        operator<(const ScMyMergedRange& aRange) const;
 };
 
 typedef std::list<ScMyMergedRange>  ScMyMergedRangeList;
@@ -145,7 +145,7 @@ class ScMyMergedRangesContainer : ScMyIteratorBase
 private:
     ScMyMergedRangeList         aRangeList;
 protected:
-    virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
 public:
                                 ScMyMergedRangesContainer();
     virtual                     ~ScMyMergedRangesContainer();
@@ -173,8 +173,8 @@ struct ScMyAreaLink
     inline sal_Int32            GetColCount() const { return aDestRange.EndColumn - aDestRange.StartColumn + 1; }
     inline sal_Int32            GetRowCount() const { return aDestRange.EndRow - aDestRange.StartRow + 1; }
 
-    sal_Bool                    Compare( const ScMyAreaLink& rAreaLink ) const;
-    sal_Bool                    operator<(const ScMyAreaLink& rAreaLink ) const;
+    bool                        Compare( const ScMyAreaLink& rAreaLink ) const;
+    bool                        operator<(const ScMyAreaLink& rAreaLink ) const;
 };
 
 typedef ::std::list< ScMyAreaLink > ScMyAreaLinkList;
@@ -184,7 +184,7 @@ class ScMyAreaLinksContainer : ScMyIteratorBase
 private:
     ScMyAreaLinkList            aAreaLinkList;
 protected:
-    virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
 public:
                                 ScMyAreaLinksContainer();
     virtual                     ~ScMyAreaLinksContainer();
@@ -203,7 +203,7 @@ public:
 struct ScMyCellRangeAddress : com::sun::star::table::CellRangeAddress
 {
     ScMyCellRangeAddress(const com::sun::star::table::CellRangeAddress& rRange);
-    sal_Bool                    operator<(const ScMyCellRangeAddress& rCellRangeAddress ) const;
+    bool                        operator<(const ScMyCellRangeAddress& rCellRangeAddress ) const;
 };
 
 typedef std::list<ScMyCellRangeAddress> ScMyEmptyDatabaseRangeList;
@@ -213,7 +213,7 @@ class ScMyEmptyDatabaseRangesContainer : ScMyIteratorBase
 private:
     ScMyEmptyDatabaseRangeList  aDatabaseList;
 protected:
-    virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
 public:
                                 ScMyEmptyDatabaseRangesContainer();
     virtual                     ~ScMyEmptyDatabaseRangesContainer();
@@ -232,8 +232,8 @@ struct ScMyDetectiveObj
     ::com::sun::star::table::CellAddress        aPosition;
     ::com::sun::star::table::CellRangeAddress   aSourceRange;
     ScDetectiveObjType                          eObjType;
-    sal_Bool                                    bHasError;
-    sal_Bool operator<(const ScMyDetectiveObj& rDetObj) const;
+    bool                                        bHasError;
+    bool operator<(const ScMyDetectiveObj& rDetObj) const;
 };
 
 typedef ::std::list< ScMyDetectiveObj > ScMyDetectiveObjList;
@@ -242,9 +242,9 @@ typedef ::std::vector< ScMyDetectiveObj > ScMyDetectiveObjVec;
 class ScMyDetectiveObjContainer : ScMyIteratorBase
 {
 private:
-    ScMyDetectiveObjList            aDetectiveObjList;
+    ScMyDetectiveObjList        aDetectiveObjList;
 protected:
-    virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
 public:
                                 ScMyDetectiveObjContainer();
     virtual                     ~ScMyDetectiveObjContainer();
@@ -254,7 +254,7 @@ public:
                                     const SCTAB nSheet,
                                     const ScAddress& rPosition,
                                     const ScRange& rSourceRange,
-                                    sal_Bool bHasError );
+                                    bool bHasError );
 
                                 using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );
@@ -269,7 +269,7 @@ struct ScMyDetectiveOp
     ::com::sun::star::table::CellAddress    aPosition;
     ScDetOpType                             eOpType;
     sal_Int32                               nIndex;
-    sal_Bool operator<(const ScMyDetectiveOp& rDetOp) const;
+    bool operator<(const ScMyDetectiveOp& rDetOp) const;
 };
 
 typedef ::std::list< ScMyDetectiveOp > ScMyDetectiveOpList;
@@ -280,7 +280,7 @@ class ScMyDetectiveOpContainer : ScMyIteratorBase
 private:
     ScMyDetectiveOpList         aDetectiveOpList;
 protected:
-    virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
 public:
                                 ScMyDetectiveOpContainer();
     virtual                     ~ScMyDetectiveOpContainer();
@@ -322,25 +322,25 @@ struct ScMyCell
 
     ScBaseCell*                 pBaseCell;
 
-    sal_Bool                    bIsAutoStyle;
+    bool                        bIsAutoStyle;
 
-    sal_Bool                    bHasShape;
-    sal_Bool                    bIsMergedBase;
-    sal_Bool                    bIsCovered;
-    sal_Bool                    bHasAreaLink;
-    sal_Bool                    bHasEmptyDatabase;
-    sal_Bool                    bHasDetectiveObj;
-    sal_Bool                    bHasDetectiveOp;
+    bool                        bHasShape;
+    bool                        bIsMergedBase;
+    bool                        bIsCovered;
+    bool                        bHasAreaLink;
+    bool                        bHasEmptyDatabase;
+    bool                        bHasDetectiveObj;
+    bool                        bHasDetectiveOp;
 
-    sal_Bool                    bIsEditCell;
-    sal_Bool                    bKnowWhetherIsEditCell;
-    sal_Bool                    bHasStringValue;
-    sal_Bool                    bHasDoubleValue;
-    sal_Bool                    bHasXText;
+    bool                        bIsEditCell;
+    bool                        bKnowWhetherIsEditCell;
+    bool                        bHasStringValue;
+    bool                        bHasDoubleValue;
+    bool                        bHasXText;
 
-    sal_Bool                    bIsMatrixBase;
-    sal_Bool                    bIsMatrixCovered;
-    sal_Bool                    bHasAnnotation;
+    bool                        bIsMatrixBase;
+    bool                        bIsMatrixCovered;
+    bool                        bHasAnnotation;
 
                                 ScMyCell();
                                 ~ScMyCell();
@@ -352,7 +352,7 @@ struct ScMyExportAnnotation
 {
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetAnnotation> xAnnotation;
     com::sun::star::table::CellAddress      aCellAddress;
-    sal_Bool operator<(const ScMyExportAnnotation& rAnno) const;
+    bool operator<(const ScMyExportAnnotation& rAnno) const;
 };
 
 typedef ::std::list< ScMyExportAnnotation > ScMyExportAnnotationList;
@@ -375,9 +375,9 @@ class ScMyNotEmptyCellsIterator
     ScXMLExport&                rExport;
     ScHorizontalCellIterator*   pCellItr;
 
-    SCCOL                   nCellCol;
-    SCROW                   nCellRow;
-    SCTAB                   nCurrentTable;
+    SCCOL                       nCellCol;
+    SCROW                       nCellRow;
+    SCTAB                       nCurrentTable;
 
     void                        UpdateAddress( ::com::sun::star::table::CellAddress& rAddress );
     void                        SetCellData( ScMyCell& rMyCell, ::com::sun::star::table::CellAddress& rAddress );
@@ -409,7 +409,7 @@ public:
                                     com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& rxTable);
     void                        SkipTable(SCTAB nSkip);
 
-    sal_Bool                    GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles);
+    bool                        GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles);
 };
 
 #endif

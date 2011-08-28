@@ -432,7 +432,7 @@ protected:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextRange > & rTextRange,
         sal_Bool bAutoStyles,
-        sal_Bool& rPrevCharWasSpace );
+        bool& rPrevCharWasSpace );
 
     void exportListChange( const XMLTextNumRuleInfo& rPrvInfo,
                            const XMLTextNumRuleInfo& rNextInfo );
@@ -571,7 +571,7 @@ public:
     // This method exports the given OUString
     void exportText(
         const ::rtl::OUString& rText,
-        sal_Bool& rPrevCharWasSpace );
+        bool& rPrevCharWasSpace );
 
     // This method collects all automatic styles for the given XText
     void collectTextAutoStyles(

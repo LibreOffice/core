@@ -114,7 +114,7 @@ void ScMyTableData::AddColumn()
     nRealCols[aTableCellPos.Column + 1] = nRealCols[aTableCellPos.Column] + nColsPerCol[aTableCellPos.Column];
 }
 
-sal_Int32 ScMyTableData::GetRealCols(const sal_Int32 nIndex, const sal_Bool /* bIsNormal */) const
+sal_Int32 ScMyTableData::GetRealCols(const sal_Int32 nIndex, const bool /* bIsNormal */) const
 {
     return (nIndex < 0) ? 0 : nRealCols[nIndex];
 }
@@ -256,7 +256,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                                 if (pStyles)
                                 {
                                     XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                                        XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, sal_True);
+                                        XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, true);
                                     if (pStyle)
                                     {
                                         pStyle->FillPropertySet(xProperties);
@@ -277,7 +277,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
     NewTable(1);
 }
 
-sal_Bool ScMyTables::IsMerged (const uno::Reference <table::XCellRange>& xCellRange, const sal_Int32 nCol, const sal_Int32 nRow,
+bool ScMyTables::IsMerged (const uno::Reference <table::XCellRange>& xCellRange, const sal_Int32 nCol, const sal_Int32 nRow,
                             table::CellRangeAddress& aCellAddress) const
 {
     uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(nCol,nRow,nCol,nRow), uno::UNO_QUERY);
@@ -297,7 +297,7 @@ sal_Bool ScMyTables::IsMerged (const uno::Reference <table::XCellRange>& xCellRa
                     aCellAddress.StartRow == nRow && aCellAddress.EndRow == nRow)
                     return false;
                 else
-                    return sal_True;
+                    return true;
             }
         }
     }
@@ -354,7 +354,7 @@ void ScMyTables::DoMerge(sal_Int32 nCount)
 
         uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
         if (xMergeable.is())
-            xMergeable->merge(sal_True);
+            xMergeable->merge(true);
     }
 }
 
@@ -379,7 +379,7 @@ void ScMyTables::InsertRow()
             uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
                                                     aCellAddress.EndColumn, aCellAddress.EndRow + 1), uno::UNO_QUERY);
             if (xMergeable.is())
-                xMergeable->merge(sal_True);
+                xMergeable->merge(true);
             j += aCellAddress.EndColumn - aCellAddress.StartColumn;
         }
         rImport.GetStylesImportHelper()->InsertRow(nRow, nCurrentSheet, rImport.GetDocument());
@@ -466,14 +466,14 @@ void ScMyTables::InsertColumn()
             uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
                                                         aCellAddress.EndColumn + 1, aCellAddress.EndRow), uno::UNO_QUERY);
             if (xMergeable.is())
-                xMergeable->merge(sal_True);
+                xMergeable->merge(true);
             j += aCellAddress.EndRow - aCellAddress.StartRow;
         }
         rImport.GetStylesImportHelper()->InsertCol(nCol, nCurrentSheet, rImport.GetDocument());
     }
 }
 
-void ScMyTables::NewColumn(sal_Bool bIsCovered)
+void ScMyTables::NewColumn(bool bIsCovered)
 {
     if (bIsCovered)
         return;
@@ -524,7 +524,7 @@ void ScMyTables::NewColumn(sal_Bool bIsCovered)
     }
 }
 
-void ScMyTables::AddColumn(sal_Bool bIsCovered)
+void ScMyTables::AddColumn(bool bIsCovered)
 {
     pCurrentTab->AddColumn();
     if (pCurrentTab->GetSubTableSpanned() > 1)
@@ -613,9 +613,9 @@ void ScMyTables::UpdateRowHeights()
             {
                 const SdrPage* pPage = pDrawLayer ? pDrawLayer->GetPage(nTab) : NULL;
                 if ( nTab == nVisible || ( pPage && pPage->GetObjCount() != 0 ) )
-                    aUpdateSheets.SelectTable( nTab, sal_True );
+                    aUpdateSheets.SelectTable( nTab, true );
                 else
-                    pDoc->SetPendingRowHeights( nTab, sal_True );
+                    pDoc->SetPendingRowHeights( nTab, true );
             }
 
             if (aUpdateSheets.GetSelectCount())
@@ -684,7 +684,7 @@ void ScMyTables::DeleteTable()
         if (sCurrentName != sCurrentSheetName && rImport.GetDocument())
         {
             rImport.GetDocument()->RenameTab( nCurrentSheet,
-                sCurrentSheetName, false, sal_True);
+                sCurrentSheetName, false, true);
         }
     }
 }
@@ -745,12 +745,12 @@ uno::Reference< drawing::XShapes > ScMyTables::GetCurrentXShapes()
         return xShapes;
 }
 
-sal_Bool ScMyTables::HasDrawPage()
+bool ScMyTables::HasDrawPage()
 {
     return !((nCurrentSheet != nCurrentDrawPage) || !xDrawPage.is());
 }
 
-sal_Bool ScMyTables::HasXShapes()
+bool ScMyTables::HasXShapes()
 {
     return !((nCurrentSheet != nCurrentXShapes) || !xShapes.is());
 }
@@ -777,14 +777,14 @@ void ScMyTables::AddMatrixRange(
     aMatrixRangeList.push_back(aMRange);
 }
 
-sal_Bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
+bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
 {
-    sal_Bool bResult(false);
+    bool bResult(false);
     if (!aMatrixRangeList.empty())
     {
         ScMyMatrixRangeList::iterator aItr(aMatrixRangeList.begin());
         ScMyMatrixRangeList::iterator aEndItr(aMatrixRangeList.end());
-        sal_Bool bReady(false);
+        bool bReady(false);
         while(!bReady && aItr != aEndItr)
         {
             if (nCurrentSheet > aItr->aRange.Sheet)
@@ -798,11 +798,11 @@ sal_Bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
                 aItr = aMatrixRangeList.erase(aItr);
             }
             else if (nColumn < aItr->aRange.StartColumn)
-                bReady = sal_True;
+                bReady = true;
             else if (nColumn >= aItr->aRange.StartColumn && nColumn <= aItr->aRange.EndColumn && nRow >= aItr->aRange.StartRow && nRow <= aItr->aRange.EndRow)
             {
-                bReady = sal_True;
-                bResult = sal_True;
+                bReady = true;
+                bResult = true;
             }
             else
                 ++aItr;

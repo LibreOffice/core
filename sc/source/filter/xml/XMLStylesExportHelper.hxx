@@ -58,14 +58,14 @@ struct ScMyValidation
     com::sun::star::sheet::ValidationType       aValidationType;
     com::sun::star::sheet::ConditionOperator    aOperator;
     sal_Int16                   nShowList;
-    sal_Bool                    bShowErrorMessage;
-    sal_Bool                    bShowImputMessage;
-    sal_Bool                    bIgnoreBlanks;
+    bool                        bShowErrorMessage;
+    bool                        bShowImputMessage;
+    bool                        bIgnoreBlanks;
 
                                 ScMyValidation();
                                 ~ScMyValidation();
 
-    sal_Bool                    IsEqual(const ScMyValidation& aVal) const;
+    bool                        IsEqual(const ScMyValidation& aVal) const;
 };
 
 typedef std::vector<ScMyValidation>         ScMyValidationVec;
@@ -95,13 +95,13 @@ private:
 public:
                                 ScMyValidationsContainer();
                                 ~ScMyValidationsContainer();
-    sal_Bool                    AddValidation(const com::sun::star::uno::Any& aAny,
+    bool                        AddValidation(const com::sun::star::uno::Any& aAny,
                                     sal_Int32& nValidationIndex);
     rtl::OUString               GetCondition(ScXMLExport& rExport, const ScMyValidation& aValidation);
     rtl::OUString               GetBaseCellAddress(ScDocument* pDoc, const com::sun::star::table::CellAddress& aCell);
     void                        WriteMessage(ScXMLExport& rExport,
                                     const rtl::OUString& sTitle, const rtl::OUString& sMessage,
-                                    const sal_Bool bShowMessage, const sal_Bool bIsHelpMessage);
+                                    const bool bShowMessage, const bool bIsHelpMessage);
     void                        WriteValidations(ScXMLExport& rExport);
     const rtl::OUString&        GetValidationName(const sal_Int32 nIndex);
 };
@@ -112,10 +112,10 @@ struct ScMyDefaultStyle
 {
     sal_Int32   nIndex;
     sal_Int32   nRepeat;
-    sal_Bool    bIsAutoStyle;
+    bool        bIsAutoStyle;
 
     ScMyDefaultStyle() : nIndex(-1), nRepeat(1),
-        bIsAutoStyle(sal_True) {}
+        bIsAutoStyle(true) {}
 };
 
 typedef std::vector<ScMyDefaultStyle> ScMyDefaultStyleList;
@@ -129,11 +129,11 @@ class ScMyDefaultStyles
 
     sal_Int32 GetStyleNameIndex(const ScFormatRangeStyles* pCellStyles,
         const sal_Int32 nTable, const sal_Int32 nPos,
-        const sal_Int32 i, const sal_Bool bRow, sal_Bool& bIsAutoStyle);
+        const sal_Int32 i, const bool bRow, bool& bIsAutoStyle);
     void FillDefaultStyles(const sal_Int32 nTable,
         const sal_Int32 nLastRow, const sal_Int32 nLastCol,
         const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc,
-        const sal_Bool bRow);
+        const bool bRow);
 public:
     ScMyDefaultStyles() : pRowDefaults(NULL), pColDefaults(NULL) {}
     ~ScMyDefaultStyles();
@@ -153,10 +153,10 @@ struct ScMyRowFormatRange
     sal_Int32   nRepeatRows;
     sal_Int32   nIndex;
     sal_Int32   nValidationIndex;
-    sal_Bool    bIsAutoStyle;
+    bool        bIsAutoStyle;
 
     ScMyRowFormatRange();
-    sal_Bool operator<(const ScMyRowFormatRange& rRange) const;
+    bool operator<(const ScMyRowFormatRange& rRange) const;
 };
 
 class ScRowFormatRanges
@@ -168,7 +168,7 @@ class ScRowFormatRanges
     sal_uInt32                  nSize;
 
     void AddRange(const sal_Int32 nPrevStartCol, const sal_Int32 nRepeat, const sal_Int32 nPrevIndex,
-        const sal_Bool bPrevAutoStyle, const ScMyRowFormatRange& rFormatRange);
+        const bool bPrevAutoStyle, const ScMyRowFormatRange& rFormatRange);
 
 public:
     ScRowFormatRanges();
@@ -179,7 +179,7 @@ public:
     void SetColDefaults(const ScMyDefaultStyleList* pDefaults) { pColDefaults = pDefaults; }
     void Clear();
     void AddRange(ScMyRowFormatRange& rFormatRange, const sal_Int32 nStartRow);
-    sal_Bool GetNext(ScMyRowFormatRange& rFormatRange);
+    bool GetNext(ScMyRowFormatRange& rFormatRange);
     sal_Int32 GetMaxRows() const;
     sal_Int32 GetSize() const;
     void Sort();
@@ -193,10 +193,10 @@ struct ScMyFormatRange
     sal_Int32                               nStyleNameIndex;
     sal_Int32                               nValidationIndex;
     sal_Int32                               nNumberFormat;
-    sal_Bool                                bIsAutoStyle;
+    bool                                    bIsAutoStyle;
 
     ScMyFormatRange();
-    sal_Bool operator< (const ScMyFormatRange& rRange) const;
+    bool operator< (const ScMyFormatRange& rRange) const;
 };
 
 class ScFormatRangeStyles
@@ -217,19 +217,19 @@ public:
     void SetRowDefaults(const ScMyDefaultStyleList* pDefaults) { pRowDefaults = pDefaults; }
     void SetColDefaults(const ScMyDefaultStyleList* pDefaults) { pColDefaults = pDefaults; }
     void AddNewTable(const sal_Int32 nTable);
-    sal_Bool AddStyleName(rtl::OUString* pString, sal_Int32& rIndex, const sal_Bool bIsAutoStyle = sal_True);
-    sal_Int32 GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix, sal_Bool& bIsAutoStyle);
+    bool AddStyleName(rtl::OUString* pString, sal_Int32& rIndex, const bool bIsAutoStyle = true);
+    sal_Int32 GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix, bool& bIsAutoStyle);
     // does not delete ranges
     sal_Int32 GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
-        sal_Bool& bIsAutoStyle) const;
+        bool& bIsAutoStyle) const;
     // deletes not necessary ranges if wanted
     sal_Int32 GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
-        sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat, const sal_Int32 nRemoveBeforeRow);
+        bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat, const sal_Int32 nRemoveBeforeRow);
     void GetFormatRanges(const sal_Int32 nStartColumn, const sal_Int32 nEndColumn, const sal_Int32 nRow,
                     const sal_Int32 nTable, ScRowFormatRanges* pFormatRanges);
     void AddRangeStyleName(const com::sun::star::table::CellRangeAddress aCellRangeAddress, const sal_Int32 nStringIndex,
-                    const sal_Bool bIsAutoStyle, const sal_Int32 nValidationIndex, const sal_Int32 nNumberFormat);
-    rtl::OUString* GetStyleNameByIndex(const sal_Int32 nIndex, const sal_Bool bIsAutoStyle);
+                    const bool bIsAutoStyle, const sal_Int32 nValidationIndex, const sal_Int32 nNumberFormat);
+    rtl::OUString* GetStyleNameByIndex(const sal_Int32 nIndex, const bool bIsAutoStyle);
     void Sort();
 };
 
@@ -251,9 +251,9 @@ public:
 struct ScColumnStyle
 {
     sal_Int32   nIndex;
-    sal_Bool    bIsVisible;
+    bool        bIsVisible;
 
-    ScColumnStyle() : nIndex(-1), bIsVisible(sal_True) {}
+    ScColumnStyle() : nIndex(-1), bIsVisible(true) {}
 };
 
 class ScColumnStyles : public ScColumnRowStylesBase
@@ -268,8 +268,8 @@ public:
 
     virtual void AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields);
     sal_Int32 GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField,
-        sal_Bool& bIsVisible);
-    void AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex, const sal_Bool bIsVisible);
+        bool& bIsVisible);
+    void AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex, const bool bIsVisible);
     virtual rtl::OUString* GetStyleName(const sal_Int32 nTable, const sal_Int32 nField);
 };
 
