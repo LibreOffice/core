@@ -2335,8 +2335,6 @@ binfilter::XDashTable::Remove(long)
 binfilter::XDashTable::Replace(long, binfilter::XDashEntry*)
 binfilter::XLineEndList::Remove(long)
 binfilter::XLineEndList::Replace(binfilter::XLineEndEntry*, long)
-binfilter::XLineEndTable::Remove(long)
-binfilter::XLineEndTable::Replace(long, binfilter::XLineEndEntry*)
 binfilter::XMLFamilyDataList_Impl::GetPos(binfilter::XMLFamilyData_Impl const*) const
 binfilter::XMLFamilyDataList_Impl::Remove(binfilter::XMLFamilyData_Impl*)
 binfilter::XMLFontAutoStylePoolNames_Impl::GetPos(rtl::OUString const*) const
