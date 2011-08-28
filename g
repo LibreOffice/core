@@ -3,8 +3,6 @@
 # Wrapper for git to handle more subdirs at the same time
 #
 
-set -x
-
 # no params, no action
 if [ "$#" -eq "0" ] ; then
     git
