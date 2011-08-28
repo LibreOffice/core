@@ -295,9 +295,6 @@ public:
     ByteString          GetToken( xub_StrLen nToken, sal_Char cTok, xub_StrLen& rIndex ) const;
     ByteString          GetToken( xub_StrLen nToken, sal_Char cTok = ';' ) const;
 
-    ByteString          GetQuotedToken( xub_StrLen nToken, const ByteString& rQuotedPairs,
-                                        sal_Char cTok = ';' ) const;
-
     const sal_Char*     GetBuffer() const { return mpData->maStr; }
     sal_Char*           GetBufferAccess();
     void                ReleaseBufferAccess( xub_StrLen nLen = STRING_LEN );
