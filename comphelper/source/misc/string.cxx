@@ -354,21 +354,14 @@ NaturalStringSorter::NaturalStringSorter(
 
 namespace
 {
-    template <typename T> bool tmpl_isalnumAsciiString(const T &rString)
+    //do OPER on each element of the string, return false
+    //if any OPER is false, true otherwise
+    template <bool (*OPER)(sal_Unicode), typename T>
+    bool tmpl_is_OPER_AsciiString(const T &rString)
     {
         for (sal_Int32 i = 0; i < rString.getLength(); ++i)
         {
-            if (!isalnumAscii(rString[i]))
-                return false;
-        }
-        return true;
-    }
-
-    template <typename T> bool tmpl_isdigitAsciiString(const T &rString)
-    {
-        for (sal_Int32 i = 0; i < rString.getLength(); ++i)
-        {
-            if (!isdigitAscii(rString[i]))
+            if (!OPER(rString[i]))
                 return false;
         }
         return true;
@@ -377,22 +370,42 @@ namespace
 
 bool isalnumAsciiString(const rtl::OString &rString)
 {
-    return tmpl_isalnumAsciiString(rString);
+    return tmpl_is_OPER_AsciiString<isalnumAscii>(rString);
 }
 
 bool isalnumAsciiString(const rtl::OUString &rString)
 {
-    return tmpl_isalnumAsciiString(rString);
+    return tmpl_is_OPER_AsciiString<isalnumAscii>(rString);
 }
 
 bool isdigitAsciiString(const rtl::OString &rString)
 {
-    return tmpl_isdigitAsciiString(rString);
+    return tmpl_is_OPER_AsciiString<isdigitAscii>(rString);
 }
 
 bool isdigitAsciiString(const rtl::OUString &rString)
 {
-    return tmpl_isdigitAsciiString(rString);
+    return tmpl_is_OPER_AsciiString<isdigitAscii>(rString);
+}
+
+bool islowerAsciiString(const rtl::OString &rString)
+{
+    return tmpl_is_OPER_AsciiString<islowerAscii>(rString);
+}
+
+bool islowerAsciiString(const rtl::OUString &rString)
+{
+    return tmpl_is_OPER_AsciiString<islowerAscii>(rString);
+}
+
+bool isupperAsciiString(const rtl::OString &rString)
+{
+    return tmpl_is_OPER_AsciiString<isupperAscii>(rString);
+}
+
+bool isupperAsciiString(const rtl::OUString &rString)
+{
+    return tmpl_is_OPER_AsciiString<isupperAscii>(rString);
 }
 
 } }

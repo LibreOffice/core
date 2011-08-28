@@ -288,7 +288,7 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const rtl::OString &rString);
  */
 COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const rtl::OUString &rString);
 
-/** Determine if an OString contains solely ASCII alphanumeric digits
+/** Determine if an OString contains solely ASCII alphanumeric chars/digits
 
     @param rString  An OString
 
@@ -298,7 +298,7 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const rtl::OUString &rString);
  */
 COMPHELPER_DLLPUBLIC bool isalnumAsciiString(const rtl::OString &rString);
 
-/** Determine if an OUString contains solely ASCII alphanumeric digits
+/** Determine if an OUString contains solely ASCII alphanumeric chars/digits
 
     @param rString  An OUString
 
@@ -306,7 +306,47 @@ COMPHELPER_DLLPUBLIC bool isalnumAsciiString(const rtl::OString &rString);
                     the ASCII 'a'-'z', 'A'-'Z' and '0'-'9' ranges
                     true otherwise, including for empty string
  */
-COMPHELPER_DLLPUBLIC bool isalnumAsciiString(const rtl::OString &rString);
+COMPHELPER_DLLPUBLIC bool isalnumAsciiString(const rtl::OUString &rString);
+
+/** Determine if an OString contains solely ASCII lower-case chars
+
+    @param rString  An OString
+
+    @return         false if string contains any characters outside
+                    the ASCII 'a'-'z' ranges
+                    true otherwise, including for empty string
+ */
+COMPHELPER_DLLPUBLIC bool islowerAsciiString(const rtl::OString &rString);
+
+/** Determine if an OUString contains solely ASCII lower-case chars
+
+    @param rString  An OUString
+
+    @return         false if string contains any characters outside
+                    the ASCII 'a'-'z' ranges
+                    true otherwise, including for empty string
+ */
+COMPHELPER_DLLPUBLIC bool islowerAsciiString(const rtl::OUString &rString);
+
+/** Determine if an OString contains solely ASCII upper-case chars
+
+    @param rString  An OString
+
+    @return         false if string contains any characters outside
+                    the ASCII 'A'-'Z' ranges
+                    true otherwise, including for empty string
+ */
+COMPHELPER_DLLPUBLIC bool isupperAsciiString(const rtl::OString &rString);
+
+/** Determine if an OUString contains solely ASCII upper-case chars
+
+    @param rString  An OUString
+
+    @return         false if string contains any characters outside
+                    the ASCII 'A'-'Z' ranges
+                    true otherwise, including for empty string
+ */
+COMPHELPER_DLLPUBLIC bool isupperAsciiString(const rtl::OUString &rString);
 
 COMPHELPER_DLLPUBLIC inline bool isdigitAscii(sal_Unicode c)
 {

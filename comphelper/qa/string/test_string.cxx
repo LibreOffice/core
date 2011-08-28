@@ -48,6 +48,7 @@ public:
     void testDecimalStringToNumber();
     void testIsdigitAsciiString();
     void testIsalnumAsciiString();
+    void testIsupperAsciiString();
 
     CPPUNIT_TEST_SUITE(TestString);
     CPPUNIT_TEST(testSearchAndReplaceAsciiL);
@@ -57,6 +58,7 @@ public:
     CPPUNIT_TEST(testDecimalStringToNumber);
     CPPUNIT_TEST(testIsdigitAsciiString);
     CPPUNIT_TEST(testIsalnumAsciiString);
+    CPPUNIT_TEST(testIsupperAsciiString);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -127,6 +129,18 @@ void TestString::testIsalnumAsciiString()
 
     rtl::OString s4(RTL_CONSTASCII_STRINGPARAM("1A[4"));
     CPPUNIT_ASSERT_EQUAL(comphelper::string::isalnumAsciiString(s4), false);
+}
+
+void TestString::testIsupperAsciiString()
+{
+    rtl::OString s1(RTL_CONSTASCII_STRINGPARAM("1234"));
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::isupperAsciiString(s1), false);
+
+    rtl::OString s2(RTL_CONSTASCII_STRINGPARAM("aAbB"));
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::isupperAsciiString(s2), false);
+
+    rtl::OString s3(RTL_CONSTASCII_STRINGPARAM("AABB"));
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::isupperAsciiString(s3), true);
 }
 
 using namespace ::com::sun::star;

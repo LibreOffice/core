@@ -67,23 +67,26 @@ sal_Bool LanguageOK( ByteString aLang )
     if ( !aLang.Len() )
         return sal_False;
 
-    if (comphelper::string::isdigitAsciiString(aLang))
+    using comphelper::string::isdigitAsciiString;
+    using comphelper::string::isupperAsciiString;
+    using comphelper::string::islowerAsciiString;
+
+    if (isdigitAsciiString(aLang))
         return sal_True;
 
     if ( aLang.GetTokenCount( '-' ) == 1 )
-        return aLang.IsLowerAscii();
+        return islowerAsciiString(aLang);
     else if ( aLang.GetTokenCount( '-' ) == 2 )
     {
         ByteString aTok0( aLang.GetToken( 0, '-' ) );
         ByteString aTok1( aLang.GetToken( 1, '-' ) );
-        return  aTok0.Len() && aTok0.IsLowerAscii()
-             && aTok1.Len() && aTok1.IsUpperAscii()
+        return  aTok0.Len() && islowerAsciiString(aTok0)
+             && aTok1.Len() && isupperAsciiString(aTok1)
              && !aTok1.EqualsIgnoreCaseAscii( aTok0 );
     }
 
     return sal_False;
 }
-
 
 //
 // class LazySvFileStream
