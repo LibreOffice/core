@@ -255,7 +255,6 @@ public:
 
     sal_Bool                IsLowerAscii() const;
     sal_Bool                IsUpperAscii() const;
-    sal_Bool                IsAlphaAscii() const;
 
     ByteString&         ToLowerAscii();
     ByteString&         ToUpperAscii();
