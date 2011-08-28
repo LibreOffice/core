@@ -3,6 +3,8 @@
 # Wrapper for git to handle more subdirs at the same time
 #
 
+set -x
+
 # no params, no action
 if [ "$#" -eq "0" ] ; then
     git
@@ -54,8 +56,8 @@ refresh_hooks()
 	    fi
 	    ;;
 	help|dictionaries)
-	    if [ -d $COREDIR/clone/$core ] ; then
-		pushd $COREDIR/clone/$core > /dev/null
+	    if [ -d $COREDIR/clone/$repo ] ; then
+		pushd $COREDIR/clone/$repo > /dev/null
 		# fixme: we should really keep these per-repo to
 		# keep the repos independant. since these two
 		# are realy not independant yet, we keep using core's hooks
