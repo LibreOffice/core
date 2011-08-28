@@ -57,14 +57,6 @@ public:
     OSLInputStreamWrapper(::osl::File* pStream, sal_Bool bOwner=sal_False);
     virtual ~OSLInputStreamWrapper();
 
-// UNO Anbindung
-    virtual void            SAL_CALL acquire() throw()
-        { InputStreamWrapper_Base::acquire(); }
-    virtual void            SAL_CALL release() throw()
-        { InputStreamWrapper_Base::release(); }
-    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException)
-        { return InputStreamWrapper_Base::queryInterface(_rType); }
-
 // stario::XInputStream
     virtual sal_Int32   SAL_CALL    readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
     virtual sal_Int32   SAL_CALL    readSomeBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
@@ -86,14 +78,6 @@ class COMPHELPER_DLLPUBLIC OSLOutputStreamWrapper : public OutputStreamWrapper_B
 
 public:
     OSLOutputStreamWrapper(::osl::File& _rFile) :rFile(_rFile) { }
-
-// UNO Anbindung
-    virtual void            SAL_CALL acquire() throw()
-        { OutputStreamWrapper_Base::acquire(); }
-    virtual void            SAL_CALL release() throw()
-        { OutputStreamWrapper_Base::release(); }
-    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException)
-        { return OutputStreamWrapper_Base::queryInterface(_rType); }
 
 // stario::XOutputStream
     virtual void SAL_CALL writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
