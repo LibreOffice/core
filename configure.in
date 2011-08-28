@@ -8373,8 +8373,8 @@ else
         :
     elif test $_os = WINNT; then
         dnl We only need cairo for Windows if we
-        dnl build librsvg
-        if test "$ENABLE_LIBRSVG" != NO; then
+        dnl build librsvg or directx disabled
+        if test "$ENABLE_LIBRSVG" != NO -o -z "$ENABLE_DIRECTX"; then
             BUILD_TYPE="$BUILD_TYPE CAIRO"
         fi
     else
