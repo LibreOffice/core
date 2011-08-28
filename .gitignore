@@ -60,6 +60,7 @@
 /set_soenv.stamp
 /warn
 /build.log
+/build_error.log
 /post_download.log
 /install
 /downloaded
