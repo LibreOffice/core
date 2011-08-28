@@ -60,8 +60,8 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
     bSkipDuplicates(false),
     bCopyOutputData(false),
     bUseRegularExpressions(false),
-    bConnectionOr(sal_True),
-    bNextConnectionOr(sal_True),
+    bConnectionOr(true),
+    bNextConnectionOr(true),
     bConditionSourceRange(false)
 {
     ScDocument* pDoc(GetScImport().GetDocument());
@@ -85,7 +85,7 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
                 if (ScRangeStringConverter::GetRangeFromString( aScRange, sValue, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
                 {
                     ScUnoConversion::FillApiAddress( aOutputPosition, aScRange.aStart );
-                    bCopyOutputData = sal_True;
+                    bCopyOutputData = true;
                 }
             }
             break;
@@ -93,7 +93,7 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
             {
                 sal_Int32 nOffset(0);
                 if (ScRangeStringConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
-                    bConditionSourceRange = sal_True;
+                    bConditionSourceRange = true;
             }
             break;
             case XML_TOK_FILTER_ATTR_CONDITION_SOURCE :
@@ -226,7 +226,7 @@ ScXMLOrContext::ScXMLOrContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pFilterContext(pTempFilterContext)
 {
-    pFilterContext->OpenConnection(sal_True);
+    pFilterContext->OpenConnection(true);
 }
 
 ScXMLOrContext::~ScXMLOrContext()
@@ -333,17 +333,17 @@ SvXMLImportContext *ScXMLConditionContext::CreateChildContext( sal_uInt16 nPrefi
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
-void ScXMLConditionContext::getOperatorXML(const rtl::OUString sTempOperator, sal_Int32& aFilterOperator, sal_Bool& bUseRegularExpressions) const
+void ScXMLConditionContext::getOperatorXML(const rtl::OUString sTempOperator, sal_Int32& aFilterOperator, bool& bUseRegularExpressions) const
 {
     bUseRegularExpressions = false;
     if (IsXMLToken(sTempOperator, XML_MATCH))
     {
-        bUseRegularExpressions = sal_True;
+        bUseRegularExpressions = true;
         aFilterOperator = sheet::FilterOperator2::EQUAL;
     }
     else if (IsXMLToken(sTempOperator, XML_NOMATCH))
     {
-        bUseRegularExpressions = sal_True;
+        bUseRegularExpressions = true;
         aFilterOperator = sheet::FilterOperator2::NOT_EQUAL;
     }
     else if (sTempOperator.compareToAscii("=") == 0)
@@ -392,14 +392,14 @@ void ScXMLConditionContext::EndElement()
     else
         aFilterField.Connection = sheet::FilterConnection_AND;
     pFilterContext->SetIsCaseSensitive(bIsCaseSensitive);
-    sal_Bool bUseRegularExpressions;
+    bool bUseRegularExpressions;
     getOperatorXML(sOperator, aFilterField.Operator, bUseRegularExpressions);
     pFilterContext->SetUseRegularExpressions(bUseRegularExpressions);
     aFilterField.Field = nField;
     if (IsXMLToken(sDataType, XML_NUMBER))
     {
         aFilterField.NumericValue = sConditionValue.toDouble();
-        aFilterField.IsNumeric = sal_True;
+        aFilterField.IsNumeric = true;
     }
     else
     {
@@ -424,8 +424,8 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
     bSkipDuplicates(false),
     bCopyOutputData(false),
     bUseRegularExpressions(false),
-    bConnectionOr(sal_True),
-    bNextConnectionOr(sal_True),
+    bConnectionOr(true),
+    bNextConnectionOr(true),
     bConditionSourceRange(false)
 {
     ScDocument* pDoc(GetScImport().GetDocument());
@@ -449,7 +449,7 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
                 if (ScRangeStringConverter::GetRangeFromString( aScRange, sValue, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
                 {
                     aOutputPosition = aScRange.aStart;
-                    bCopyOutputData = sal_True;
+                    bCopyOutputData = true;
                 }
             }
             break;
@@ -457,7 +457,7 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
             {
                 sal_Int32 nOffset(0);
                 if(ScRangeStringConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
-                    bConditionSourceRange = sal_True;
+                    bConditionSourceRange = true;
             }
             break;
             case XML_TOK_FILTER_ATTR_CONDITION_SOURCE :
@@ -539,7 +539,7 @@ void ScXMLDPFilterContext::AddFilterField (const ScQueryEntry& aFilterField)
     aFilterFields.Resize(nFilterFieldCount + 1);
     ScQueryEntry& rEntry(aFilterFields.GetEntry(nFilterFieldCount));
     rEntry = aFilterField;
-    rEntry.bDoQuery = sal_True;
+    rEntry.bDoQuery = true;
     ++nFilterFieldCount;
 }
 
@@ -602,7 +602,7 @@ ScXMLDPOrContext::ScXMLDPOrContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pFilterContext(pTempFilterContext)
 {
-    pFilterContext->OpenConnection(sal_True);
+    pFilterContext->OpenConnection(true);
 }
 
 ScXMLDPOrContext::~ScXMLDPOrContext()
@@ -709,18 +709,18 @@ SvXMLImportContext *ScXMLDPConditionContext::CreateChildContext( sal_uInt16 nPre
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
-void ScXMLDPConditionContext::getOperatorXML(const rtl::OUString sTempOperator, ScQueryOp& aFilterOperator, sal_Bool& bUseRegularExpressions,
+void ScXMLDPConditionContext::getOperatorXML(const rtl::OUString sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions,
                                             double& dVal) const
 {
     bUseRegularExpressions = false;
     if (IsXMLToken(sTempOperator, XML_MATCH))
     {
-        bUseRegularExpressions = sal_True;
+        bUseRegularExpressions = true;
         aFilterOperator = SC_EQUAL;
     }
     else if (IsXMLToken(sTempOperator, XML_NOMATCH))
     {
-        bUseRegularExpressions = sal_True;
+        bUseRegularExpressions = true;
         aFilterOperator = SC_NOT_EQUAL;
     }
     else if (sTempOperator.compareToAscii("=") == 0)
@@ -757,7 +757,7 @@ void ScXMLDPConditionContext::EndElement()
     else
         aFilterField.eConnect = SC_AND;
     pFilterContext->SetIsCaseSensitive(bIsCaseSensitive);
-    sal_Bool bUseRegularExpressions;
+    bool bUseRegularExpressions;
     double dVal(0.0);
     getOperatorXML(sOperator, aFilterField.eOp, bUseRegularExpressions, dVal);
     pFilterContext->SetUseRegularExpressions(bUseRegularExpressions);
@@ -776,7 +776,7 @@ void ScXMLDPConditionContext::EndElement()
     else
     {
         aFilterField.pStr = new String(sConditionValue);
-        aFilterField.bQueryByString = sal_True;
+        aFilterField.bQueryByString = true;
         aFilterField.nVal = 0;
     }
     pFilterContext->AddFilterField(aFilterField);

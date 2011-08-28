@@ -395,7 +395,7 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPrefix
         break;
     case XML_TOK_DOC_AUTOSTYLES:
         if (GetScImport().getImportFlags() & IMPORT_AUTOSTYLES)
-            pContext = GetScImport().CreateStylesContext( rLocalName, xAttrList, sal_True);
+            pContext = GetScImport().CreateStylesContext( rLocalName, xAttrList, true);
         break;
     case XML_TOK_DOC_MASTERSTYLES:
         if (GetScImport().getImportFlags() & IMPORT_MASTERSTYLES)
@@ -1758,7 +1758,7 @@ ScXMLImport::ScXMLImport(
     nProgressCount(0),
     nStyleFamilyMask( 0 ),
     nPrevCellType(0),
-    bLoadDoc( sal_True ),
+    bLoadDoc( true ),
     bRemoveLastChar(false),
     bNullDateSetted(false),
     bSelfImportingXMLSet(false),
@@ -1906,7 +1906,7 @@ SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const sal_uInt16 nPrefix
 }
 
 SvXMLImportContext *ScXMLImport::CreateStylesContext(const ::rtl::OUString& rLocalName,
-                                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList, sal_Bool bIsAutoStyle )
+                                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList, bool bIsAutoStyle )
 {
     SvXMLImportContext* pContext = new XMLTableStylesContext(
         *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, bIsAutoStyle);
@@ -2012,11 +2012,11 @@ XMLShapeImportHelper* ScXMLImport::CreateShapeImport()
     return new XMLTableShapeImportHelper(*this);
 }
 
-sal_Bool ScXMLImport::GetValidation(const rtl::OUString& sName, ScMyImportValidation& aValidation)
+bool ScXMLImport::GetValidation(const rtl::OUString& sName, ScMyImportValidation& aValidation)
 {
     if (pValidations)
     {
-        sal_Bool bFound(false);
+        bool bFound(false);
         ScMyImportValidations::iterator aItr(pValidations->begin());
         ScMyImportValidations::iterator aEndItr(pValidations->end());
         while(aItr != aEndItr && !bFound)
@@ -2026,7 +2026,7 @@ sal_Bool ScXMLImport::GetValidation(const rtl::OUString& sName, ScMyImportValida
                 // source position must be set as string,
                 // so sBaseCellAddress no longer has to be converted here
 
-                bFound = sal_True;
+                bFound = true;
             }
             else
                 ++aItr;
@@ -2066,7 +2066,7 @@ ScXMLChangeTrackingImportHelper* ScXMLImport::GetChangeTrackingImportHelper()
 
 void ScXMLImport::InsertStyles()
 {
-    GetStyles()->CopyStylesToDoc(sal_True);
+    GetStyles()->CopyStylesToDoc(true);
 
     // if content is going to be loaded with the same import, set bLatinDefaultStyle flag now
     if ( getImportFlags() & IMPORT_CONTENT )
@@ -2104,7 +2104,7 @@ void ScXMLImport::ExamineDefaultStyle()
 
                 sal_uInt8 nScript = pDoc->GetStringScriptType( aDecSep );
                 if ( nScript == 0 || nScript == SCRIPTTYPE_LATIN )
-                    bLatinDefaultStyle = sal_True;
+                    bLatinDefaultStyle = true;
             }
         }
     }
@@ -2328,7 +2328,7 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUStri
                             aBuffer.appendAscii("]");
                             sFormatString = aBuffer.makeStringAndClear();
                         }
-                        sal_Int32 nNewKey = xLocalNumberFormats->queryKey(sFormatString, aLocale, sal_True);
+                        sal_Int32 nNewKey = xLocalNumberFormats->queryKey(sFormatString, aLocale, true);
                         if (nNewKey == -1)
                             nNewKey = xLocalNumberFormats->addNew(sFormatString, aLocale);
                         return nNewKey;
@@ -2351,7 +2351,7 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUStri
     return nKey;
 }
 
-sal_Bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const rtl::OUString& sCurrentCurrency, const rtl::OUString& sBankSymbol)
+bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const rtl::OUString& sCurrentCurrency, const rtl::OUString& sBankSymbol)
 {
     uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier(GetNumberFormatsSupplier());
     if (xNumberFormatsSupplier.is())
@@ -2368,7 +2368,7 @@ sal_Bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const rtl:
                     if ( xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CURRENCYSYMBOL))) >>= sTemp)
                     {
                         if (sCurrentCurrency.equals(sTemp))
-                            return sal_True;
+                            return true;
                         // #i61657# This may be a legacy currency symbol that changed in the meantime.
                         if (SvNumberFormatter::GetLegacyOnlyCurrencyEntry( sCurrentCurrency, sBankSymbol) != NULL)
                             return true;
@@ -2486,7 +2486,7 @@ void ScXMLImport::SetStyleToRanges()
         {
             XMLTableStylesContext *pStyles((XMLTableStylesContext *)GetAutoStyles());
             XMLTableStyleContext* pStyle( pStyles ? (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                XML_STYLE_FAMILY_TABLE_CELL, sPrevStyleName, sal_True) : NULL );
+                XML_STYLE_FAMILY_TABLE_CELL, sPrevStyleName, true) : NULL );
             if (pStyle)
             {
                 pStyle->FillPropertySet(xProperties);
@@ -2511,7 +2511,7 @@ void ScXMLImport::SetStyleToRanges()
             {
                 xProperties->setPropertyValue(sCellStyle, uno::makeAny(GetStyleDisplayName( XML_STYLE_FAMILY_TABLE_CELL, sPrevStyleName )));
                 sal_Int32 nNumberFormat(GetStyleNumberFormats()->GetStyleNumberFormat(sPrevStyleName));
-                sal_Bool bInsert(nNumberFormat == -1);
+                bool bInsert(nNumberFormat == -1);
                 SetType(xProperties, nNumberFormat, nPrevCellType, sPrevCurrency);
                 if (bInsert)
                     GetStyleNumberFormats()->AddStyleNumberFormat(sPrevStyleName, nNumberFormat);
@@ -2569,7 +2569,7 @@ void ScXMLImport::SetStyleToRange(const ScRange& rRange, const rtl::OUString* pS
     AddStyleRange(aCellRange);
 }
 
-sal_Bool ScXMLImport::SetNullDateOnUnitConverter()
+bool ScXMLImport::SetNullDateOnUnitConverter()
 {
     if (!bNullDateSetted)
         bNullDateSetted = GetMM100UnitConverter().setNullDate(GetModel());
@@ -2649,7 +2649,7 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
     if (pDoc && !pDoc->IsImportingXML())
     {
         ScModelObj::getImplementation(GetModel())->BeforeXMLLoading();
-        bSelfImportingXMLSet = sal_True;
+        bSelfImportingXMLSet = true;
     }
 
     // if content and styles are loaded with separate imports,
@@ -2908,7 +2908,7 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
             SCTAB nTabCount = pDoc->GetTableCount();
             for (SCTAB nTab=0; nTab<nTabCount; ++nTab)
                 if (!pSheetData->IsSheetBlocked( nTab ))
-                    pDoc->SetStreamValid( nTab, sal_True );
+                    pDoc->SetStreamValid( nTab, true );
         }
 
         aTables.UpdateRowHeights();
@@ -2924,7 +2924,7 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
 
     if (pDoc && bSelfImportingXMLSet)
     {
-        ScModelObj::getImplementation(GetModel())->AfterXMLLoading(sal_True);
+        ScModelObj::getImplementation(GetModel())->AfterXMLLoading(true);
     }
 }
 
@@ -2999,7 +2999,7 @@ void ScXMLImport::SetRangeOverflowType(sal_uInt32 nType)
         pDoc->SetRangeOverflowType( nType );
 }
 
-void ScXMLImport::ProgressBarIncrement(sal_Bool bEditCell, sal_Int32 nInc)
+void ScXMLImport::ProgressBarIncrement(bool bEditCell, sal_Int32 nInc)
 {
     nProgressCount += nInc;
     if (bEditCell || nProgressCount > 100)

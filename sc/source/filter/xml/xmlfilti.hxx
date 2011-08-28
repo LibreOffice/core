@@ -51,14 +51,14 @@ class ScXMLFilterContext : public SvXMLImportContext
     com::sun::star::table::CellAddress aOutputPosition;
     com::sun::star::table::CellRangeAddress aConditionSourceRangeAddress;
     sal_Int16   nUserListIndex;
-    sal_Bool    bSkipDuplicates;
-    sal_Bool    bCopyOutputData;
-    sal_Bool    bUseRegularExpressions;
-    sal_Bool    bIsCaseSensitive;
-    sal_Bool    bEnabledUserList;
-    sal_Bool    bConnectionOr;
-    sal_Bool    bNextConnectionOr;
-    sal_Bool    bConditionSourceRange;
+    bool        bSkipDuplicates;
+    bool        bCopyOutputData;
+    bool        bUseRegularExpressions;
+    bool        bIsCaseSensitive;
+    bool        bEnabledUserList;
+    bool        bConnectionOr;
+    bool        bNextConnectionOr;
+    bool        bConditionSourceRange;
     Stack       aConnectionOrStack;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -81,13 +81,13 @@ public:
 
     virtual void EndElement();
 
-    void SetIsCaseSensitive(const sal_Bool bTemp) { bIsCaseSensitive = bTemp; }
-    void SetUseRegularExpressions(const sal_Bool bTemp) { if (!bUseRegularExpressions) bUseRegularExpressions = bTemp;}
-    void OpenConnection(const sal_Bool bTemp) { sal_Bool* pTemp = new sal_Bool; *pTemp = bConnectionOr;
+    void SetIsCaseSensitive(const bool bTemp) { bIsCaseSensitive = bTemp; }
+    void SetUseRegularExpressions(const bool bTemp) { if (!bUseRegularExpressions) bUseRegularExpressions = bTemp;}
+    void OpenConnection(const bool bTemp) { bool* pTemp = new bool; *pTemp = bConnectionOr;
                             bConnectionOr = bNextConnectionOr; bNextConnectionOr = bTemp;
                             aConnectionOrStack.Push(pTemp);}
-    void CloseConnection() { sal_Bool* pTemp = static_cast <sal_Bool*> (aConnectionOrStack.Pop()); bConnectionOr = *pTemp; bNextConnectionOr = *pTemp; delete pTemp;}
-    sal_Bool GetConnection() { sal_Bool bTemp = bConnectionOr; bConnectionOr = bNextConnectionOr; return bTemp; }
+    void CloseConnection() { bool* pTemp = static_cast <bool*> (aConnectionOrStack.Pop()); bConnectionOr = *pTemp; bNextConnectionOr = *pTemp; delete pTemp;}
+    bool GetConnection() { bool bTemp = bConnectionOr; bConnectionOr = bNextConnectionOr; return bTemp; }
     void AddFilterField(const com::sun::star::sheet::TableFilterField2 aFilterField) { aFilterFields.realloc(aFilterFields.getLength() + 1);
                                                                                 aFilterFields[aFilterFields.getLength() - 1] = aFilterField; }
 };
@@ -150,7 +150,7 @@ class ScXMLConditionContext : public SvXMLImportContext
     rtl::OUString sConditionValue;
     rtl::OUString sOperator;
     sal_Int32   nField;
-    sal_Bool    bIsCaseSensitive;
+    bool        bIsCaseSensitive;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -170,7 +170,7 @@ public:
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    void getOperatorXML(const rtl::OUString sTempOperator, sal_Int32& aFilterOperator, sal_Bool& bUseRegularExpressions) const;
+    void getOperatorXML(const rtl::OUString sTempOperator, sal_Int32& aFilterOperator, bool& bUseRegularExpressions) const;
     virtual void EndElement();
 };
 
@@ -185,14 +185,14 @@ class ScXMLDPFilterContext : public SvXMLImportContext
     ScRange         aConditionSourceRangeAddress;
     sal_uInt8   nFilterFieldCount;
     sal_Int16   nUserListIndex;
-    sal_Bool    bSkipDuplicates;
-    sal_Bool    bCopyOutputData;
-    sal_Bool    bUseRegularExpressions;
-    sal_Bool    bIsCaseSensitive;
-    sal_Bool    bEnabledUserList;
-    sal_Bool    bConnectionOr;
-    sal_Bool    bNextConnectionOr;
-    sal_Bool    bConditionSourceRange;
+    bool        bSkipDuplicates;
+    bool        bCopyOutputData;
+    bool        bUseRegularExpressions;
+    bool        bIsCaseSensitive;
+    bool        bEnabledUserList;
+    bool        bConnectionOr;
+    bool        bNextConnectionOr;
+    bool        bConditionSourceRange;
     Stack       aConnectionOrStack;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -215,13 +215,13 @@ public:
 
     virtual void EndElement();
 
-    void SetIsCaseSensitive(const sal_Bool bTemp) { bIsCaseSensitive = bTemp; }
-    void SetUseRegularExpressions(const sal_Bool bTemp) { if (!bUseRegularExpressions) bUseRegularExpressions = bTemp;}
-    void OpenConnection(const sal_Bool bTemp) { sal_Bool* pTemp = new sal_Bool; *pTemp = bConnectionOr;
+    void SetIsCaseSensitive(const bool bTemp) { bIsCaseSensitive = bTemp; }
+    void SetUseRegularExpressions(const bool bTemp) { if (!bUseRegularExpressions) bUseRegularExpressions = bTemp;}
+    void OpenConnection(const bool bTemp) { bool* pTemp = new bool; *pTemp = bConnectionOr;
                             bConnectionOr = bNextConnectionOr; bNextConnectionOr = bTemp;
                             aConnectionOrStack.Push(pTemp);}
-    void CloseConnection() { sal_Bool* pTemp = static_cast <sal_Bool*> (aConnectionOrStack.Pop()); bConnectionOr = *pTemp; bNextConnectionOr = *pTemp; delete pTemp;}
-    sal_Bool GetConnection() { sal_Bool bTemp = bConnectionOr; bConnectionOr = bNextConnectionOr; return bTemp; }
+    void CloseConnection() { bool* pTemp = static_cast <bool*> (aConnectionOrStack.Pop()); bConnectionOr = *pTemp; bNextConnectionOr = *pTemp; delete pTemp;}
+    bool GetConnection() { bool bTemp = bConnectionOr; bConnectionOr = bNextConnectionOr; return bTemp; }
     void AddFilterField (const ScQueryEntry& aFilterField);
 };
 
@@ -283,7 +283,7 @@ class ScXMLDPConditionContext : public SvXMLImportContext
     rtl::OUString sConditionValue;
     rtl::OUString sOperator;
     sal_Int32   nField;
-    sal_Bool    bIsCaseSensitive;
+    bool        bIsCaseSensitive;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -303,7 +303,7 @@ public:
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    void getOperatorXML(const rtl::OUString sTempOperator, ScQueryOp& aFilterOperator, sal_Bool& bUseRegularExpressions,
+    void getOperatorXML(const rtl::OUString sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions,
                         double& dVal) const;
     virtual void EndElement();
 };

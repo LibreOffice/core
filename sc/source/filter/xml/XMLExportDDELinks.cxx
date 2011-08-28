@@ -56,12 +56,12 @@ ScXMLExportDDELinks::~ScXMLExportDDELinks()
 {
 }
 
-sal_Bool ScXMLExportDDELinks::CellsEqual(const sal_Bool bPrevEmpty, const sal_Bool bPrevString, const String& sPrevValue, const double& fPrevValue,
-                     const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue) const
+bool ScXMLExportDDELinks::CellsEqual(const bool bPrevEmpty, const bool bPrevString, const String& sPrevValue, const double& fPrevValue,
+                     const bool bEmpty, const bool bString, const String& sValue, const double& fValue) const
 {
     if (bEmpty == bPrevEmpty)
         if (bEmpty)
-            return sal_True;
+            return true;
         else if (bString == bPrevString)
             if (bString)
                 return (sPrevValue == sValue);
@@ -100,7 +100,7 @@ void ScXMLExportDDELinks::WriteCell(const ScMatrixValue& aVal, sal_Int32 nRepeat
         rExport.GetMM100UnitConverter().convertNumber(aBuf, nRepeat);
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, aBuf.makeStringAndClear());
     }
-    SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True);
+    SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, true, true);
 }
 
 void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
@@ -116,7 +116,7 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
     SCSIZE nCols, nRows;
     pMatrix->GetDimensions(nCols, nRows);
 
-    SvXMLElementExport aTableElem(rExport, XML_NAMESPACE_TABLE, XML_TABLE, sal_True, sal_True);
+    SvXMLElementExport aTableElem(rExport, XML_NAMESPACE_TABLE, XML_TABLE, true, true);
     if (nCols > 1)
     {
         OUStringBuffer aBuf;
@@ -124,14 +124,14 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, aBuf.makeStringAndClear());
     }
     {
-        SvXMLElementExport aElemCol(rExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True);
+        SvXMLElementExport aElemCol(rExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, true, true);
     }
 
     for (SCSIZE nRow = 0; nRow < nRows; ++nRow)
     {
         sal_Int32 nRepeat = 0;
         ScMatrixValue aPrevVal;
-        SvXMLElementExport aElemRow(rExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True);
+        SvXMLElementExport aElemRow(rExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, true, true);
         for (SCSIZE nCol = 0; nCol < nCols; ++nCol, ++nRepeat)
         {
             ScMatrixValue aVal = pMatrix->Get(nCol, nRow);
@@ -159,13 +159,13 @@ void ScXMLExportDDELinks::WriteDDELinks(uno::Reference<sheet::XSpreadsheetDocume
             sal_Int32 nCount = xIndex->getCount();
             if (nCount)
             {
-                SvXMLElementExport aElemDDEs(rExport, XML_NAMESPACE_TABLE, XML_DDE_LINKS, sal_True, sal_True);
+                SvXMLElementExport aElemDDEs(rExport, XML_NAMESPACE_TABLE, XML_DDE_LINKS, true, true);
                 for (sal_uInt16 nDDELink = 0; nDDELink < nCount; ++nDDELink)
                 {
                     uno::Reference<sheet::XDDELink> xDDELink(xIndex->getByIndex(nDDELink), uno::UNO_QUERY);
                     if (xDDELink.is())
                     {
-                        SvXMLElementExport aElemDDE(rExport, XML_NAMESPACE_TABLE, XML_DDE_LINK, sal_True, sal_True);
+                        SvXMLElementExport aElemDDE(rExport, XML_NAMESPACE_TABLE, XML_DDE_LINK, true, true);
                         {
                             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION, xDDELink->getApplication());
                             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_DDE_TOPIC, xDDELink->getTopic());
@@ -185,7 +185,7 @@ void ScXMLExportDDELinks::WriteDDELinks(uno::Reference<sheet::XSpreadsheetDocume
                                     break;
                                 }
                             }
-                            SvXMLElementExport(rExport, XML_NAMESPACE_OFFICE, XML_DDE_SOURCE, sal_True, sal_True);
+                            SvXMLElementExport(rExport, XML_NAMESPACE_OFFICE, XML_DDE_SOURCE, true, true);
                         }
                         WriteTable(nDDELink);
                     }

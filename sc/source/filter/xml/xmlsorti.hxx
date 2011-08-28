@@ -47,10 +47,10 @@ class ScXMLSortContext : public SvXMLImportContext
     rtl::OUString   sLanguage;
     rtl::OUString   sAlgorithm;
     sal_Int16   nUserListIndex;
-    sal_Bool    bCopyOutputData;
-    sal_Bool    bBindFormatsToContent;
-    sal_Bool    bIsCaseSensitive;
-    sal_Bool    bEnabledUserList;
+    bool        bCopyOutputData;
+    bool        bBindFormatsToContent;
+    bool        bIsCaseSensitive;
+    bool        bEnabledUserList;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

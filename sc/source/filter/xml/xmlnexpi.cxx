@@ -222,7 +222,7 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext(
             break;
         }
     }
-    pNamedExpression->bIsExpression = sal_True;
+    pNamedExpression->bIsExpression = true;
     mpInserter->insert(pNamedExpression);
 }
 

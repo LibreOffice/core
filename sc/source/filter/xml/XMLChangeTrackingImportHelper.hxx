@@ -196,7 +196,7 @@ class ScXMLChangeTrackingImportHelper
     sal_uInt32          nPrefixLength;
     sal_Int16           nMultiSpanned;
     sal_Int16           nMultiSpannedSlaveCount;
-    sal_Bool            bChangeTrack;
+    bool            bChangeTrack;
 
 private:
     void ConvertInfo(const ScMyActionInfo& aInfo, String& rUser, DateTime& aDateTime);
@@ -212,7 +212,7 @@ public:
     ScXMLChangeTrackingImportHelper();
     ~ScXMLChangeTrackingImportHelper();
 
-    void SetChangeTrack(sal_Bool bValue) { bChangeTrack = bValue; }
+    void SetChangeTrack(bool bValue) { bChangeTrack = bValue; }
     void SetProtection(const com::sun::star::uno::Sequence<sal_Int8>& rProtect) { aProtect = rProtect; }
     void StartChangeAction(const ScChangeActionType nActionType);
 

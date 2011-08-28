@@ -37,10 +37,10 @@ struct ScMyColumnRowGroup
 {
     sal_Int32   nField;
     sal_Int16   nLevel;
-    sal_Bool    bDisplay;
+    bool        bDisplay;
 
     ScMyColumnRowGroup();
-    sal_Bool operator< (const ScMyColumnRowGroup& rGroup) const;
+    bool operator< (const ScMyColumnRowGroup& rGroup) const;
 };
 
 typedef std::list <ScMyColumnRowGroup> ScMyColumnRowGroupVec;
@@ -62,9 +62,9 @@ public:
 
     void NewTable();
     void AddGroup(const ScMyColumnRowGroup& aGroup, const sal_Int32 nEndField);
-    sal_Bool IsGroupStart(const sal_Int32 nField);
+    bool IsGroupStart(const sal_Int32 nField);
     void OpenGroups(const sal_Int32 nField);
-    sal_Bool IsGroupEnd(const sal_Int32 nField);
+    bool IsGroupEnd(const sal_Int32 nField);
     void CloseGroups(const sal_Int32 nField);
     sal_Int32 GetLast();
     void Sort();

@@ -469,7 +469,7 @@ TYPEINIT1( XMLTableStyleContext, XMLPropStyleContext );
 XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const uno::Reference< XAttributeList > & xAttrList,
-        SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle ) :
+        SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle ) :
     XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle ),
     sDataStyleName(),
     sNumberFormat(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat"))),
@@ -686,7 +686,7 @@ XMLTableStylesContext::XMLTableStylesContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx ,
         const OUString& rLName ,
         const uno::Reference< XAttributeList > & xAttrList,
-        const sal_Bool bTempAutoStyles ) :
+        const bool bTempAutoStyles ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
     sCellStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CellStyle" ) )),
     sColumnStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ))),
@@ -966,7 +966,7 @@ TYPEINIT1( ScMasterPageContext, XMLTextMasterPageContext );
 ScMasterPageContext::ScMasterPageContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const uno::Reference< XAttributeList > & xAttrList,
-        sal_Bool bOverwrite ) :
+        bool bOverwrite ) :
     XMLTextMasterPageContext( rImport, nPrfx, rLName, xAttrList, bOverwrite ),
     bContainsRightHeader(false),
     bContainsRightFooter(false)

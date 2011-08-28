@@ -103,8 +103,8 @@ class XMLTableStyleContext : public XMLPropStyleContext
     com::sun::star::uno::Any    aConditionalFormat;
     sal_Int32                   nNumberFormat;
     SCTAB                       nLastSheet;
-    sal_Bool                    bConditionalFormatCreated;
-    sal_Bool                    bParentSet;
+    bool                        bConditionalFormatCreated;
+    bool                        bParentSet;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -142,7 +142,7 @@ public:
     XMLTableStyleContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle = false );
+            SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle = false );
     virtual ~XMLTableStyleContext();
 
     virtual SvXMLImportContext *CreateChildContext(
@@ -185,7 +185,7 @@ class XMLTableStylesContext : public SvXMLStylesContext
     sal_Int32 nConditionalFormatIndex;
     sal_Int32 nCellStyleIndex;
     sal_Int32 nMasterPageNameIndex;
-    sal_Bool bAutoStyles;
+    bool bAutoStyles;
 
     UniReference < SvXMLImportPropertyMapper > xCellImpPropMapper;
     UniReference < SvXMLImportPropertyMapper > xColumnImpPropMapper;
@@ -217,7 +217,7 @@ public:
     XMLTableStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx ,
             const ::rtl::OUString& rLName ,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            const sal_Bool bAutoStyles );
+            const bool bAutoStyles );
     virtual ~XMLTableStylesContext();
 
     // Create child element.
@@ -285,7 +285,7 @@ public:
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            sal_Bool bOverwrite );
+            bool bOverwrite );
     virtual ~ScMasterPageContext();
 
     virtual SvXMLImportContext *CreateChildContext(

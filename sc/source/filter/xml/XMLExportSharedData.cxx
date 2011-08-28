@@ -90,7 +90,7 @@ void ScMySharedData::AddDrawPage(const ScMyDrawPage& aDrawPage, const sal_Int32 
     (*pDrawPages)[nTable] = aDrawPage;
 }
 
-void ScMySharedData::SetDrawPageHasForms(const sal_Int32 nTable, sal_Bool bHasForms)
+void ScMySharedData::SetDrawPageHasForms(const sal_Int32 nTable, bool bHasForms)
 {
     OSL_ENSURE(pDrawPages, "DrawPages not collected");
     if (pDrawPages)
@@ -106,14 +106,14 @@ uno::Reference<drawing::XDrawPage> ScMySharedData::GetDrawPage(const sal_Int32 n
         return uno::Reference<drawing::XDrawPage>();
 }
 
-sal_Bool ScMySharedData::HasForm(const sal_Int32 nTable, uno::Reference<drawing::XDrawPage>& xDrawPage)
+bool ScMySharedData::HasForm(const sal_Int32 nTable, uno::Reference<drawing::XDrawPage>& xDrawPage)
 {
-    sal_Bool bResult(false);
+    bool bResult(false);
     if (pDrawPages)
     {
         if ((*pDrawPages)[nTable].bHasForms)
         {
-            bResult = sal_True;
+            bResult = true;
             xDrawPage = (*pDrawPages)[nTable].xDrawPage;
         }
     }
@@ -133,7 +133,7 @@ void ScMySharedData::SortShapesContainer()
         pShapesContainer->Sort();
 }
 
-sal_Bool ScMySharedData::HasShapes()
+bool ScMySharedData::HasShapes()
 {
     return ((pShapesContainer && pShapesContainer->HasShapes()) ||
             (pTableShapes && !pTableShapes->empty()));

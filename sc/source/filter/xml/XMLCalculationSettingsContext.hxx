@@ -40,12 +40,12 @@ class ScXMLCalculationSettingsContext : public SvXMLImportContext
     double fIterationEpsilon;
     sal_Int32 nIterationCount;
     sal_uInt16 nYear2000;
-    sal_Bool bIsIterationEnabled;
-    sal_Bool bCalcAsShown;
-    sal_Bool bIgnoreCase;
-    sal_Bool bLookUpLabels;
-    sal_Bool bMatchWholeCell;
-    sal_Bool bUseRegularExpressions;
+    bool bIsIterationEnabled;
+    bool bCalcAsShown;
+    bool bIgnoreCase;
+    bool bLookUpLabels;
+    bool bMatchWholeCell;
+    bool bUseRegularExpressions;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -63,7 +63,7 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     void SetNullDate(const com::sun::star::util::Date& aDate) { aNullDate = aDate; }
-    void SetIterationStatus(const sal_Bool bValue) { bIsIterationEnabled = bValue; }
+    void SetIterationStatus(const bool bValue) { bIsIterationEnabled = bValue; }
     void SetIterationCount(const sal_Int32 nValue) { nIterationCount = nValue; }
     void SetIterationEpsilon(const double fValue) { fIterationEpsilon = fValue; }
     virtual void EndElement();

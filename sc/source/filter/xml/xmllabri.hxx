@@ -66,7 +66,7 @@ class ScXMLLabelRangeContext : public SvXMLImportContext
 private:
     ::rtl::OUString             sLabelRangeStr;
     ::rtl::OUString             sDataRangeStr;
-    sal_Bool                    bColumnOrientation;
+    bool                        bColumnOrientation;
 
     const ScXMLImport&          GetScImport() const     { return (const ScXMLImport&)GetImport(); }
     ScXMLImport&                GetScImport()           { return (ScXMLImport&)GetImport(); }

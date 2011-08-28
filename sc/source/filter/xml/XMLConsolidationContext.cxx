@@ -143,11 +143,11 @@ void ScXMLConsolidationContext::EndElement()
 
         aConsParam.bByCol = aConsParam.bByRow = false;
         if( IsXMLToken(sUseLabel, XML_COLUMN ) )
-            aConsParam.bByCol = sal_True;
+            aConsParam.bByCol = true;
         else if( IsXMLToken( sUseLabel, XML_ROW ) )
-            aConsParam.bByRow = sal_True;
+            aConsParam.bByRow = true;
         else if( IsXMLToken( sUseLabel, XML_BOTH ) )
-            aConsParam.bByCol = aConsParam.bByRow = sal_True;
+            aConsParam.bByCol = aConsParam.bByRow = true;
 
         aConsParam.bReferenceData = bLinkToSource;
 

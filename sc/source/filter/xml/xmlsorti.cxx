@@ -66,7 +66,7 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
     sAlgorithm(),
     nUserListIndex(0),
     bCopyOutputData(false),
-    bBindFormatsToContent(sal_True),
+    bBindFormatsToContent(true),
     bIsCaseSensitive(false),
     bEnabledUserList(false)
 {
@@ -94,7 +94,7 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
                 if (ScRangeStringConverter::GetRangeFromString( aScRange, sValue, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ))
                 {
                     ScUnoConversion::FillApiAddress( aOutputPosition, aScRange.aStart );
-                    bCopyOutputData = sal_True;
+                    bCopyOutputData = true;
                 }
             }
             break;
@@ -190,7 +190,7 @@ void ScXMLSortContext::AddSortField(const rtl::OUString& sFieldNumber, const rtl
     util::SortField aSortField;
     aSortField.Field = sFieldNumber.toInt32();
     if (IsXMLToken(sOrder, XML_ASCENDING))
-        aSortField.SortAscending = sal_True;
+        aSortField.SortAscending = true;
     else
         aSortField.SortAscending = false;
     if (sDataType.getLength() > 8)
@@ -198,7 +198,7 @@ void ScXMLSortContext::AddSortField(const rtl::OUString& sFieldNumber, const rtl
         rtl::OUString sTemp = sDataType.copy(0, 8);
         if (sTemp.compareToAscii(SC_USERLIST) == 0)
         {
-            bEnabledUserList = sal_True;
+            bEnabledUserList = true;
             sTemp = sDataType.copy(8);
             nUserListIndex = static_cast<sal_Int16>(sTemp.toInt32());
         }
