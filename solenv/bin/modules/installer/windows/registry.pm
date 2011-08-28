@@ -342,9 +342,6 @@ sub add_userregs_to_registry_table
     {
         my $onefile = $installer::globals::userregistrycollector[$i];
 
-        my $styles = "";
-        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
-
         my %registry = ();
 
         $registry{'Registry'} = $onefile->{'userregkeypath'};
