@@ -478,12 +478,12 @@ send_args( int fd, rtl_uString *pCwdPath )
 
              const char* schemes[] = { "slot:",  ".uno:", "vnd.sun.star.script:" };
              sal_Bool bIsSpecialURL = sal_False;
-             int index = 0;
+             int i = 0;
              int len =  SAL_N_ELEMENTS(schemes);
-             for ( ; index < len; ++index )
+             for ( ; i < len; ++i )
              {
                  if ( rtl_ustr_indexOfAscii_WithLength( pTmp->buffer
-                     , pTmp->length , schemes[ index ], strlen(schemes[ index ] ))  == 0  )
+                     , pTmp->length , schemes[ i ], strlen(schemes[ i ] ))  == 0  )
                  {
                      bIsSpecialURL = sal_True;
                      break;
