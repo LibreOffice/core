@@ -13,6 +13,7 @@ if [ "$#" -eq "0" ] ; then
     echo "   -f         Force - act on all the repos, not only the changed ones"
     echo "   -s         Silent - do not report the repo names."
     echo "   -1         report the repos name on the first line of the output as <repo>:"
+    echo "   -z         just to some house cleaning (hooks mostly). this is a stand-alone option as in ./g -z"
     echo "   --set-push-user [username] re-write an existing tree's config with an fd.o commit account name"
     exit $?
 fi
@@ -112,12 +113,16 @@ while [ "${COMMAND:0:1}" = "-" ] ; do
             ;;
         -s) REPORT_REPOS=0
             ;;
-		-1) REPORT_COMPACT=1
+	-1) REPORT_COMPACT=1
             ;;
-	    --set-push-user)
-	        shift
-	        PUSH_USER="$1"
-	        ;;
+	--set-push-user)
+	    shift
+	    PUSH_USER="$1"
+	    ;;
+	-z)
+	    DO_HOOK_REFRESH=true
+	    postprocess 0
+	    ;;
     esac
     shift
     COMMAND="$1"
