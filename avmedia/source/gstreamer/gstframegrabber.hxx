@@ -42,8 +42,13 @@ namespace avmedia { namespace gst {
 // - FrameGrabber -
 // ----------------
 
-class FrameGrabber :
-                     public ::cppu::ImplInheritanceHelper1 < Player,::com::sun::star::media::XFrameGrabber >
+typedef ::cppu::ImplInheritanceHelper1
+<    Player
+,   ::com::sun::star::media::XFrameGrabber
+> FrameGrabber_BASE;
+
+class FrameGrabber
+    : public FrameGrabber_BASE
 {
 public:
 

@@ -168,8 +168,6 @@ protected:
         return( g_atomic_int_get( &mnInitialized ) > 0 );
     }
 
-    static gpointer implThreadFunc( gpointer pData );
-
 private:
 
     Player( const Player& );
