@@ -149,6 +149,10 @@ if (defined $ENV{NOCONFIGURE}) {
             close ($fh);
         }
     }
+    else
+    {
+        system("touch autogen.lastrun");
+    }
     print "running ./configure with '" . join ("' '", @args), "'\n";
     system ("./configure", @args) && die "Error running configure";
 }
