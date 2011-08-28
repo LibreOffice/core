@@ -36,7 +36,6 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <comphelper/uno3.hxx>
 
 class SvStream;
 
@@ -67,9 +66,6 @@ public:
     OInputStreamWrapper(SvStream& _rStream);
     OInputStreamWrapper(SvStream* pStream, sal_Bool bOwner=sal_False);
     virtual ~OInputStreamWrapper();
-
-// UNO Anbindung
-    DECLARE_UNO3_AGG_DEFAULTS(OInputStreamWrapper, InputStreamWrapper_Base);
 
 // stario::XInputStream
     virtual sal_Int32   SAL_CALL    readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
@@ -120,9 +116,6 @@ protected:
 
 public:
     OOutputStreamWrapper(SvStream& _rStream) :rStream(_rStream) { }
-
-// UNO Anbindung
-    DECLARE_UNO3_AGG_DEFAULTS(OOutputStreamWrapper, OutputStreamWrapper_Base);
 
 // stario::XOutputStream
     virtual void SAL_CALL writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
