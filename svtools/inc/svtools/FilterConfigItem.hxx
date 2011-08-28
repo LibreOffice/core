@@ -85,7 +85,6 @@ class SVT_DLLPUBLIC FilterConfigItem
         // and always stores into the FilterData sequence
         void        WriteBool( const ::rtl::OUString& rKey, sal_Bool bValue );
         void        WriteInt32( const ::rtl::OUString& rKey, sal_Int32 nValue );
-        void        WriteString( const ::rtl::OUString& rKey, const ::rtl::OUString& rString );
         void        WriteAny( const rtl::OUString& rKey, const ::com::sun::star::uno::Any& rAny );
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetFilterData() const;

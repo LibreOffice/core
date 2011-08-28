@@ -472,42 +472,4 @@ const char *TempDirImpl( char *pBuf )
     return pBuf;
 }
 
-/*************************************************************************
-|*
-|*    FileStat::SetDateTime
-|*
-*************************************************************************/
-
-void FileStat::SetDateTime( const String& rFileName,
-                const DateTime& rNewDateTime )
-{
-    tm times;
-
-    times.tm_year = rNewDateTime.GetYear()  - 1900;     // 1997 -> 97
-    times.tm_mon  = rNewDateTime.GetMonth() - 1;        // 0 == Januar!
-    times.tm_mday = rNewDateTime.GetDay();
-
-    times.tm_hour = rNewDateTime.GetHour();
-    times.tm_min  = rNewDateTime.GetMin();
-    times.tm_sec  = rNewDateTime.GetSec();
-
-    times.tm_wday  = 0;
-    times.tm_yday  = 0;
-#ifdef SOLARIS
-    times.tm_isdst = -1;
-#else
-    times.tm_isdst = 0;
-#endif
-
-    time_t time = mktime (&times);
-
-    if (time != (time_t) -1)
-    {
-        struct utimbuf u_time;
-        u_time.actime = time;
-        u_time.modtime = time;
-        utime(rtl::OUStringToOString(rFileName, osl_getThreadTextEncoding()).getStr(), &u_time);
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

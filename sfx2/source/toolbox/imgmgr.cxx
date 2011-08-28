@@ -400,31 +400,4 @@ void SfxImageManager::ReleaseToolBox( ToolBox *pBox )
     }
 }
 
-void SfxImageManager::SetImagesForceSize( ToolBox& rToolBox, bool bLarge )
-{
-    ImageList* pImageList = pImp->GetImageList( bLarge );
-
-    sal_uInt16 nCount = rToolBox.GetItemCount();
-    for (sal_uInt16 n=0; n<nCount; n++)
-    {
-        sal_uInt16 nId = rToolBox.GetItemId(n);
-        switch ( rToolBox.GetItemType(n) )
-        {
-            case TOOLBOXITEM_BUTTON:
-            {
-                if ( pImageList && pImageList->HasImageAtPos( nId ) )
-                    rToolBox.SetItemImage( nId, pImageList->GetImage( nId ));
-                else
-                    rToolBox.SetItemImage( nId, Image() );
-            }
-
-            case TOOLBOXITEM_SEPARATOR:
-            case TOOLBOXITEM_SPACE:
-            case TOOLBOXITEM_BREAK:
-            default:
-                break;
-        }
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

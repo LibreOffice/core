@@ -439,40 +439,6 @@ void FilterConfigItem::WriteInt32( const OUString& rKey, sal_Int32 nNewValue )
     }
 }
 
-void FilterConfigItem::WriteString( const OUString& rKey, const OUString& rNewValue )
-{
-    PropertyValue aString;
-    aString.Name = rKey;
-    aString.Value <<= rNewValue;
-    WritePropertyValue( aFilterData, aString );
-
-    if ( xPropSet.is() )
-    {
-        Any aAny;
-
-        if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
-        {
-            OUString aOldValue;
-            if ( aAny >>= aOldValue )
-            {
-                if ( aOldValue != rNewValue )
-                {
-                    aAny <<= rNewValue;
-                    try
-                    {
-                        xPropSet->setPropertyValue( rKey, aAny );
-                        bModified = sal_True;
-                    }
-                    catch ( ::com::sun::star::uno::Exception& )
-                    {
-                        OSL_FAIL( "FilterConfigItem::WriteInt32 - could not set PropertyValue" );
-                    }
-                }
-            }
-        }
-    }
-}
-
 void FilterConfigItem::WriteAny( const OUString& rKey, const Any& rNewAny )
 {
     PropertyValue aPropValue;

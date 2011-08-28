@@ -67,7 +67,6 @@ class DropListBox_Impl : public SvTreeListBox
 {
 private:
     DECL_LINK( OnAsyncExecuteDrop, SvLBoxEntry* );
-    DECL_LINK( OnAsyncExecuteError, void* );
 
 protected:
     SfxCommonTemplateDialog_Impl* pDialog;

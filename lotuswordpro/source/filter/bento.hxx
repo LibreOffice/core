@@ -83,43 +83,6 @@ namespace OpenStormBento
 #define BEN_LABEL_SIZE 24
 
 #define BEN_MAGIC_BYTES "\xA4""CM""\xA5""Hdr""\xD7"
-//For Ole2DirectoryStruct, Add by  10/24/2005
-#define BEN_STGTY_STORAGE    1
-#define BEN_STGTY_STREAM   2
-#define ASWENTRY_SIZE   204
-struct ClsId
-{
-    sal_Int32   n1;
-    sal_Int16   n2, n3;
-    sal_uInt8   n4, n5, n6, n7, n8, n9, n10, n11;
-};
-class AswEntry  //total length: 204
-{
-    sal_uInt16  nName[ 68 ];        //Name of IStorage or IStream referenced by this entry, length = 136
-    sal_Int32   nMtime[ 2 ];
-    sal_Int32   nCtime[ 2 ];
-    sal_Int32   nAtime[ 2 ];
-    ClsId   aClsId;         //CLSID from OLE 2 IStorage::SetClass call
-    sal_uInt32  nStatebits;     //State bits from OLE 2 IStorage::SetStateBits call
-    sal_uInt32  nType;          // STGTY_STORAGE: 1 or STGTY_STREAM:2,
-    sal_uInt32  nObjectIDRef;       //Persistent Bento reference to Bento object for this IStorage or IStream
-    sal_uInt32  nMversion;
-    sal_uInt32  nLversion;
-    sal_uInt32  nReserved[2];       //skip 16 char
-public:
-    AswEntry();
-    void    Init();                     // initialize the data
-    void SetName( const String& );  // store a name (ASCII, up to 32 chars)
-    void    GetName( String& rName ) const;
-    void Store( void* );
-    sal_uInt32 GetType() const      { return  nType;    }
-    void    SetType( sal_uInt32 t ) { nType = t;}
-    const   ClsId& GetClassId() const   { return aClsId;}
-    void    SetClassId( const ClsId& );
-    void SetObjectID(sal_uInt32 id) { nObjectIDRef = id;}
-    sal_uInt32 GetObjectID() const { return nObjectIDRef;}
-};
-//End by
 
 enum BenError
 {
@@ -155,24 +118,6 @@ enum BenError
     // subclass of UtStream (custom handler), can define own error codes--
     // those should start at 200
 };
-/*
- * These two functions are useless in SODC
- *
-inline UtError BenToUtError(BenError Err)
-{
-    if (Err == 0 || Err >= 100)
-        return (UtError) Err;
-    else return UtErr_Fail;
-}
-
-inline BenError UtToBenError(UtError Err)
-{ UT_ASSERT(Err == 0 || Err >= 100); return (BenError) Err; }
-enum BenSeekMode {
-    BenSeek_FromStart = 1,
-    BenSeek_FromCurr = 2,
-    BenSeek_FromEnd = 3
-};
-*/
 
 UtDefClassP(LtcBenContainer);
 UtDefClassP(CBenIDListElmt);
@@ -269,7 +214,6 @@ public:
     pCBenObject GetNextObject(pCBenObject pCurrObject);
     pCBenObject FindNextObjectWithProperty(pCBenObject pCurrObject,
       BenObjectID PropertyID);
-    BenError BEN_EXPORT NewObject(pCBenObject * ppBenObject);
 
 public: // Internal methods
     LtcBenContainer(LwpSvStream * pStream);
@@ -306,19 +250,11 @@ private: // Data
 class CBenObject : public CBenIDListElmt
 {
 public:
-    pCBenProperty GetNextProperty(pCBenProperty pCurrProperty);
     pCBenProperty UseProperty(BenObjectID PropertyID);
-    void DeleteProperty(pCBenProperty pProperty);
     pCBenValue UseValue(BenObjectID PropertyID);
-    pCBenValue UseSingleValue();
-    // Inefficient to use this method if will use property multiple times--
-    // instead register property and call UseProperty with property ID
-    pCBenValue UseValueWithPropertyName(const char * sPropertyName);
     virtual UtBool IsNamedObject();
     pLtcBenContainer GetContainer() { return cpContainer; }
     BenObjectID GetObjectID() { return GetID(); }
-    BenError BEN_EXPORT NewValue(BenObjectID PropertyID, BenObjectID TypeID,
-      pCBenValue * ppValue);
 public: // Internal methods
     CBenObject(pLtcBenContainer pContainer, BenObjectID ObjectID,
       pCBenIDListElmt pPrev) : CBenIDListElmt(ObjectID, pPrev)
@@ -336,11 +272,6 @@ public:
     unsigned long GetValueSize();
     BenError ReadValueData(BenDataPtr pBuffer,
       unsigned long Offset, unsigned long MaxSize, unsigned long * pAmtRead);
-
-    BenError BEN_EXPORT WriteValueData(BenConstDataPtr pBuffer,
-      unsigned long Offset, unsigned long Size);
-    BenError BEN_EXPORT WriteValueData(BenConstDataPtr pBuffer,
-      unsigned long Offset, unsigned long Size, unsigned long * pAmtWritten);
 
     pCBenProperty BEN_EXPORT GetProperty() { return cpProperty; }
 

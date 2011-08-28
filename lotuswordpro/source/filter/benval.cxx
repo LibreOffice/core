@@ -132,21 +132,6 @@ CBenValue::ReadValueData(BenDataPtr pReadBuffer, unsigned long Offset,
     return BenErr_OK;
 }
 
-BenError
-CBenValue::WriteValueData(BenConstDataPtr /*pWriteBuffer*/, unsigned long /*Offset*/,
-  unsigned long /*Amt*/, unsigned long * /*pAmtWritten*/)
-{
-    return BenErr_OK;
-}
-
-BenError
-CBenValue::WriteValueData(BenConstDataPtr pWriteBuffer, unsigned long Offset,
-  unsigned long Amt)
-{
-    unsigned long AmtWritten;
-    return WriteValueData(pWriteBuffer, Offset, Amt, &AmtWritten);
-}
-
 }//end namespace OpenStormBento
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

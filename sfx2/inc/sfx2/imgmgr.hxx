@@ -52,8 +52,6 @@ public:
     void            RegisterToolBox( ToolBox *pBox, sal_uInt16 nFlags=0xFFFF);
     void            ReleaseToolBox( ToolBox *pBox );
 
-    void            SetImagesForceSize( ToolBox& rToolBox, bool bLarge );
-
     Image           GetImage( sal_uInt16 nId, bool bLarge ) const;
     Image           GetImage( sal_uInt16 nId) const;
     Image           SeekImage( sal_uInt16 nId, bool bLarge ) const;

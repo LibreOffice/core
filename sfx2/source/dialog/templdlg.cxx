@@ -343,16 +343,6 @@ IMPL_LINK( DropListBox_Impl, OnAsyncExecuteDrop, SvLBoxEntry*, EMPTYARG )
     return 0;
 }
 
-
-IMPL_LINK( DropListBox_Impl, OnAsyncExecuteError, void*, NOTINTERESTEDIN )
-{
-    (void)NOTINTERESTEDIN; // unused
-    ErrorHandler::HandleError( ERRCODE_IO_WRONGFORMAT );
-
-    return 0;
-}
-
-
 long DropListBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     long nRet = 0;

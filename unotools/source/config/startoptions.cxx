@@ -138,8 +138,6 @@ class SvtStartOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool    IsIntroEnabled  (                       ) const ;
-        void        EnableIntro     ( sal_Bool bState       )       ;
         OUString    GetConnectionURL(                       ) const ;
         void        SetConnectionURL( const OUString& sURL  )       ;
 
@@ -293,23 +291,6 @@ void SvtStartOptions_Impl::Commit()
     }
     // Set properties in configuration.
     PutProperties( seqNames, seqValues );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool SvtStartOptions_Impl::IsIntroEnabled() const
-{
-    return m_bShowIntro;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtStartOptions_Impl::EnableIntro( sal_Bool bState )
-{
-    m_bShowIntro = bState;
-    SetModified();
 }
 
 //*****************************************************************************************************************

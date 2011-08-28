@@ -362,7 +362,6 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
         ::rtl::OUString GetFactoryName            (       SvtModuleOptions::EFactory    eFactory   ) const;
         ::rtl::OUString GetFactoryShortName       (       SvtModuleOptions::EFactory    eFactory   ) const;
         ::rtl::OUString GetFactoryStandardTemplate(       SvtModuleOptions::EFactory    eFactory   ) const;
-        ::rtl::OUString GetFactoryWindowAttributes(       SvtModuleOptions::EFactory    eFactory   ) const;
         ::rtl::OUString GetFactoryEmptyDocumentURL(       SvtModuleOptions::EFactory    eFactory   ) const;
         ::rtl::OUString GetFactoryDefaultFilter   (       SvtModuleOptions::EFactory    eFactory   ) const;
         sal_Bool        IsDefaultFilterReadonly(          SvtModuleOptions::EFactory eFactory      ) const;
@@ -371,8 +370,6 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
                                                           SvtModuleOptions::EFactory&   eFactory   );
         void            SetFactoryStandardTemplate(       SvtModuleOptions::EFactory    eFactory   ,
                                                     const ::rtl::OUString&              sTemplate  );
-        void            SetFactoryWindowAttributes(       SvtModuleOptions::EFactory    eFactory   ,
-                                                    const ::rtl::OUString&              sAttributes);
         void            SetFactoryDefaultFilter   (       SvtModuleOptions::EFactory    eFactory   ,
                                                     const ::rtl::OUString&              sFilter    );
         void            MakeReadonlyStatesAvailable();
@@ -702,19 +699,6 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
 }
 
 //*****************************************************************************************************************
-::rtl::OUString SvtModuleOptions_Impl::GetFactoryWindowAttributes( SvtModuleOptions::EFactory eFactory ) const
-{
-    ::rtl::OUString sAttributes;
-
-    if( eFactory>=0 && eFactory<FACTORYCOUNT )
-    {
-        sAttributes = m_lFactories[eFactory].getWindowAttributes();
-    }
-
-    return sAttributes;
-}
-
-//*****************************************************************************************************************
 ::rtl::OUString SvtModuleOptions_Impl::GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory eFactory ) const
 {
     // Attention: Hard configured yet ... because it's not fine to make changes possible by xml file yet.
@@ -794,17 +778,6 @@ void SvtModuleOptions_Impl::SetFactoryStandardTemplate(       SvtModuleOptions::
     if( eFactory>=0 && eFactory<FACTORYCOUNT )
     {
         m_lFactories[eFactory].setTemplateFile( sTemplate );
-        SetModified();
-    }
-}
-
-//*****************************************************************************************************************
-void SvtModuleOptions_Impl::SetFactoryWindowAttributes(       SvtModuleOptions::EFactory eFactory   ,
-                                                        const ::rtl::OUString&           sAttributes)
-{
-    if( eFactory>=0 && eFactory<FACTORYCOUNT )
-    {
-        m_lFactories[eFactory].setWindowAttributes( sAttributes );
         SetModified();
     }
 }

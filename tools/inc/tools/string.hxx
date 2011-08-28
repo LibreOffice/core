@@ -253,9 +253,6 @@ public:
     ByteString&         ConvertLineEnd()
                             { return ConvertLineEnd( GetSystemLineEnd() ); }
 
-    sal_Bool                IsLowerAscii() const;
-    sal_Bool                IsUpperAscii() const;
-
     ByteString&         ToLowerAscii();
     ByteString&         ToUpperAscii();
 

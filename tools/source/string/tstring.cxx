@@ -88,48 +88,6 @@ xub_StrLen ImplStringLen( const sal_Unicode* pStr )
 #include <strimp.cxx>
 #include <strcvt.cxx>
 
-// -----------------------------------------------------------------------
-
-sal_Bool ByteString::IsLowerAscii() const
-{
-    DBG_CHKTHIS( ByteString, DbgCheckByteString );
-
-    sal_Int32 nIndex = 0;
-    sal_Int32 nLen = mpData->mnLen;
-    const sal_Char* pStr = mpData->maStr;
-    while ( nIndex < nLen )
-    {
-        if ( (*pStr >= 65) && (*pStr <= 90) )
-            return sal_False;
-
-        ++pStr,
-        ++nIndex;
-    }
-
-    return sal_True;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool ByteString::IsUpperAscii() const
-{
-    DBG_CHKTHIS( ByteString, DbgCheckByteString );
-
-    sal_Int32 nIndex = 0;
-    sal_Int32 nLen = mpData->mnLen;
-    const sal_Char* pStr = mpData->maStr;
-    while ( nIndex < nLen )
-    {
-        if ( (*pStr >= 97) && (*pStr <= 122) )
-            return sal_False;
-
-        ++pStr,
-        ++nIndex;
-    }
-
-    return sal_True;
-}
-
 void STRING::SearchAndReplaceAll( const STRCODE* pCharStr, const STRING& rRepStr )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

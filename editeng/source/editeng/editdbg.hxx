@@ -48,7 +48,6 @@ class EditDbg
 {
 public:
     static void         ShowEditEngineData( EditEngine* pEditEngine, sal_Bool bInfoBox = sal_True );
-    static rtl::OString GetPortionInfo( ParaPortion* pPPortion );
     static ByteString   GetUndoDebStr( EditUndoList* pUndoList );
 };
 
