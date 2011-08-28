@@ -38,6 +38,8 @@ TARGET=ooo_rhino
 
 # --- Files --------------------------------------------------------
 
+#.IF "$(DISABLE_RHINO)" == ""
+
 TARFILE_NAME=rhino1_5R5
 TARFILE_MD5=798b2ffdc8bcfe7bca2cf92b62caf685
 TARFILE_ROOTDIR=rhino1_5R5
@@ -62,6 +64,11 @@ BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" jar
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
+
+#.ELSE
+#all:
+#        @echo rhino disabled
+#.ENDIF
 
 .ELSE
 all:

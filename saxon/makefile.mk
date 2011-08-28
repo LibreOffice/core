@@ -35,6 +35,8 @@ TARGET=saxon
 .INCLUDE :	settings.mk
 .INCLUDE : antsettings.mk
 
+.IF "$(DISABLE_SAXON)" == ""
+
 .IF "$(SOLAR_JAVA)" != ""
 .IF "$(SYSTEM_SAXON)" == "YES"
 all:
@@ -67,3 +69,7 @@ nojava:
 .INCLUDE : tg_ext.mk
 .ENDIF
 
+.ELSE
+all:
+    @echo "saxon disabled"
+.ENDIF

@@ -36,6 +36,8 @@ TARGET=wpd
 
 # --- Files --------------------------------------------------------
 
+.IF "$(DISABLE_LIBWPD)" == ""
+
 .IF "$(SYSTEM_LIBWPD)" == "YES"
 @all:
     @echo "Using system libwpd..."
@@ -53,3 +55,7 @@ BUILD_DIR=src$/lib
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
 
+.ELSE
+all:
+    @echo "libwpd disabled"
+.ENDIF

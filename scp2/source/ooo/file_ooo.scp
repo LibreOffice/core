@@ -483,7 +483,9 @@ End
 
 #ifdef SOLAR_JAVA
 #ifndef SYSTEM_SAXON
+#ifndef DISABLE_SAXON
 STD_JAR_FILE( gid_File_Jar_Saxon, saxon9 )
+#endif
 #endif
 #endif
 

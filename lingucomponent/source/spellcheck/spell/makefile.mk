@@ -42,6 +42,8 @@ HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell
 
 # --- Files --------------------------------------------------------
 
+.IF "$(DISABLE_HUNSPELL)" == ""
+
 CXXFLAGS += -I$(PRJ)$/source$/lingutil $(HUNSPELL_CFLAGS)
 CFLAGSCXX += -I$(PRJ)$/source$/lingutil $(HUNSPELL_CFLAGS)
 CFLAGSCC += -I$(PRJ)$/source$/lingutil $(HUNSPELL_CFLAGS)
@@ -93,3 +95,8 @@ $(MISC)/spell.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt spell.component
+
+.ELSE
+all:
+    @echo "hunspell disabled"
+.ENDIF

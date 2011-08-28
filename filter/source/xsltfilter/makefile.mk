@@ -35,6 +35,8 @@ LIBTARGET=NO
 CLASSDIR!:=$(CLASSDIR)$/$(TARGET)
 .INCLUDE: settings.mk
 
+.IF "$(DISABLE_SAXON)" == ""
+
 SLOFILES=$(SLO)$/XSLTFilter.obj $(SLO)$/fla.obj
 LIBNAME=xsltfilter
 SHL1TARGETDEPN=makefile.mk
@@ -101,3 +103,8 @@ $(MISC)/xsltfilter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt xsltfilter.component
+
+.ELSE
+all:
+    @echo "saxon disabled"
+.ENDIF

@@ -6,6 +6,8 @@ ENABLE_EXCEPTIONS=true
 
 .INCLUDE :  settings.mk
 
+.IF "$(DISABLE_LIBWPD)" == ""
+
 .IF "$(SYSTEM_LIBWPD)" == "YES"
 INCPRE+=$(LIBWPD_CFLAGS)
 .ENDIF
@@ -16,3 +18,8 @@ INCPRE+= -I..
 SLOFILES= $(SLO)$/WPXSvStream.obj
 
 .INCLUDE :  target.mk
+
+.ELSE
+all:
+    @echo "libwpd disabled"
+.ENDIF

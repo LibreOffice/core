@@ -36,6 +36,8 @@ TARGET=hunspell
 
 # --- Files --------------------------------------------------------
 
+.IF "$(DISABLE_HUNSPELL)" == ""
+
 TARFILE_NAME=hunspell-1.2.9
 TARFILE_MD5=68dd2e8253d9a7930e9fd50e2d7220d0
 ADDITIONAL_FILES+=config.h
@@ -96,3 +98,7 @@ OUT2INC= \
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
 
+.ELSE
+all:
+    @echo "hunspell disabled"
+.ENDIF

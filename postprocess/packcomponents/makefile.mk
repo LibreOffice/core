@@ -106,11 +106,9 @@ my_components = \
     frm \
     guesslang \
     hwp \
-    hyphen \
     i18npool \
     i18nsearch \
     lng \
-    lnth \
     localebe1 \
     log \
     mcnttype \
@@ -148,7 +146,6 @@ my_components = \
     sm \
     smd \
     solver \
-    spell \
     spl \
     srtrs1 \
     stringresource \
@@ -173,14 +170,12 @@ my_components = \
     vbaevents \
     vbaobj \
     vclcanvas \
-    wpft \
     writerfilter \
     xcr \
     xmlfa \
     xmlfd \
     xmx \
     xsltdlg \
-    xsltfilter \
     xstor
 
 .IF "$(OS)" == "MACOSX"
@@ -195,6 +190,25 @@ my_components += component/vcl/vcl.unx
 
 .IF "$(BUILD_SPECIAL)" != ""
 my_components += oooimprovement
+.END
+
+.IF "$(DISABLE_SAXON)" == ""
+my_components += XSLTFilter.jar \
+    xsltfilter
+.END
+
+.IF "$(DISABLE_HYPHEN)" == ""
+my_components += hyphen
+.END
+
+.IF "$(DISABLE_HUNSPELL)" == ""
+my_components += \
+    lnth \
+    spell
+.END
+
+.IF "$(DISABLE_LIBWPD)" == ""
+my_components +=     wpft
 .END
 
 .IF "$(DISABLE_ATL)" == ""
@@ -249,7 +263,6 @@ my_components += \
     ScriptProviderForJava \
     ScriptProviderForJavaScript \
     XMergeBridge \
-    XSLTFilter.jar \
     XSLTValidate \
     agenda \
     fax \

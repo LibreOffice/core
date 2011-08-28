@@ -6,6 +6,8 @@ ENABLE_EXCEPTIONS=true
 
 .INCLUDE :  settings.mk
 
+.IF "$(DISABLE_LIBWPD)" == ""
+
 .IF "$(SYSTEM_LIBWPD)" == "YES"
 INCPRE+=$(LIBWPD_CFLAGS) -I..
 .ELSE
@@ -25,3 +27,8 @@ SLOFILES= \
     $(SLO)$/DocumentCollector.obj
 
 .INCLUDE :  target.mk
+
+.ELSE
+all:
+    @echo "libwpd disabled"
+.ENDIF

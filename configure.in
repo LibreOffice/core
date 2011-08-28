@@ -842,6 +842,9 @@ AC_ARG_ENABLE(verbose,
 AC_ARG_ENABLE(dependency-tracking,
 [  --disable-dependency-tracking  Disables generation of dependency information.
 ],,)
+AC_ARG_ENABLE(copyleft,
+[  --enable-copyleft      Whether to use copyleft components.
+],,)
 
 BUILD_TYPE="OOo"
 
@@ -1227,6 +1230,45 @@ AC_SUBST(DISABLE_STRIP)
 dnl ===================================================================
 dnl Build options
 dnl ===================================================================
+
+AC_MSG_CHECKING([whether to enable copyleft components])
+if test "$enable_copyleft" != "yes"; then
+
+   enable_mozilla="no"
+   enable_nss_module="no"
+   enable_gstreamer="no"
+   enable_epm="no"
+   with_myspell_dicts="no"
+   enable_neon="no"
+
+   DISABLE_HUNSPELL="TRUE"
+   DISABLE_HYPHEN="TRUE"
+   DISABLE_LIBWPD="TRUE"
+   DISABLE_SAXON="TRUE"
+   DISABLE_NEON="TRUE"
+   BUILD_EPM="NO"
+
+   AC_MSG_RESULT([yes])
+
+else
+
+   DISABLE_HUNSPELL=
+   DISABLE_HYPHEN=
+   DISABLE_LIBWPD=
+   DISABLE_SAXON=
+   DISABLE_NEON=
+
+   AC_MSG_RESULT([no])
+
+fi
+AC_SUBST(DISABLE_HUNSPELL)
+AC_SUBST(DISABLE_HYPHEN)
+AC_SUBST(DISABLE_LIBWPD)
+AC_SUBST(DISABLE_SAXON)
+AC_SUBST(DISABLE_NEON)
+AC_SUBST(BUILD_EPM)
+
+
 AC_MSG_CHECKING([whether to enable native CUPS support])
 if test "$test_cups" = "yes" -a \( "$enable_cups" = "yes" -o "$enable_cups" = "TRUE" \) ; then
    ENABLE_CUPS="TRUE"
@@ -3622,6 +3664,7 @@ AC_SUBST(SYSTEM_EXPAT)
 dnl ===================================================================
 dnl Check for system libwpd
 dnl ===================================================================
+if test -n "$enable_copyleft" -a "$enable_copyleft" != "no"; then
 AC_MSG_CHECKING([which libwpd to use])
 if test -n "$with_system_libwpd" -o -n "$with_system_libs" && \
         test "$with_system_libwpd" != "no"; then
@@ -3636,6 +3679,7 @@ fi
 AC_SUBST(SYSTEM_LIBWPD)
 AC_SUBST(LIBWPD_CFLAGS)
 AC_SUBST(LIBWPD_LIBS)
+fi
 
 dnl ===================================================================
 dnl Check for system cppunit
@@ -4093,6 +4137,7 @@ AC_SUBST(BSH_JAR)
 dnl ===================================================================
 dnl Check for system saxon
 dnl ===================================================================
+if test -n "$enable_copyleft" -a "$enable_copyleft" != "no"; then
 AC_MSG_CHECKING([which saxon to use])
 if test -n "$with_system_saxon" -o -n "$with_system_libs" && \
        test "$with_system_saxon" != "no" && test "$with_system_jars" != "no"; then
@@ -4195,6 +4240,7 @@ AC_SUBST(SAXON_JAR)
 
 if test -n "$NEED_SAXON"; then
    BUILD_TYPE="$BUILD_TYPE SAXON"
+fi
 fi
 
 dnl ===================================================================
@@ -5094,6 +5140,9 @@ AC_SUBST(REDLAND_LIBS)
 dnl ===================================================================
 dnl Check for system hunspell
 dnl ===================================================================
+
+if test -n "$enable_copyleft" -a "$enable_copyleft" != "no"; then
+
 AC_MSG_CHECKING([which libhunspell to use])
 if test -n "$with_system_hunspell" -o -n "$with_system_libs" && \
 	test "$with_system_hunspell" != "no"; then
@@ -5183,6 +5232,8 @@ fi
 AC_SUBST(SYSTEM_MYTHES)
 AC_SUBST(MYTHES_CFLAGS)
 AC_SUBST(MYTHES_LIBS)
+
+fi
 
 dnl ===================================================================
 dnl Checking for lpsolve

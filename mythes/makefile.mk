@@ -36,6 +36,8 @@ TARGET=mythes
 
 # --- Files --------------------------------------------------------
 
+.IF "$(DISABLE_HUNSPELL)" == ""
+
 TARFILE_NAME=mythes-1.2.0
 TARFILE_MD5=067201ea8b126597670b5eff72e1f66c
 
@@ -112,3 +114,7 @@ OUT2INC += mythes.hxx
 .EXPORT: HUNSPELL_LIBS HUNSPELL_CFLAGS
 .ENDIF
 
+.ELSE
+all:
+    @echo "hunspell disabled"
+.ENDIF

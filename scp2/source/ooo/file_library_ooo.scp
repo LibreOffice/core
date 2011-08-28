@@ -889,7 +889,9 @@ End
 
 #endif
 
+#ifndef DISABLE_LIBWPD
 STD_LIB_FILE(gid_File_Lib_Wpft,wpft)
+#endif
 
 STD_LIB_FILE(gid_File_Lib_T602Filter,t602filter)
 
@@ -1311,12 +1313,14 @@ End
 
 #endif
 
+#ifndef DISABLE_HUNSPELL
 File gid_File_Lib_Spell
     TXT_FILE_BODY;
     Styles = (PACKED);
     Name = LIBNAME(spell);
     Dir = SCP2_OOO_BIN_DIR;
 End
+#endif
 
 STD_LIB_FILE( gid_File_Lib_Spl, spl)
 
@@ -1429,19 +1433,23 @@ SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpext, ucpext.uno)
 
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 
+#ifndef DISABLE_HUNSPELL
 File gid_File_Lib_Lnth
     TXT_FILE_BODY;
     Styles = (PACKED);
     Name = LIBNAME(lnth);
     Dir = SCP2_OOO_BIN_DIR;
 End
+#endif
 
+#ifndef DISABLE_HYPHEN
 File gid_File_Lib_Hyph
     TXT_FILE_BODY;
     Styles = (PACKED);
     Name = LIBNAME(hyphen);
     Dir = SCP2_OOO_BIN_DIR;
 End
+#endif
 
 STD_LIB_FILE( gid_File_Lib_Utl , utl)
 
@@ -1481,12 +1489,16 @@ End
 SPECIAL_LIB_FILE(gid_File_Lib_Xstor,xstor)
 
 STD_LIB_FILE( gid_File_Lib_Xsltdlg, xsltdlg )
+#ifndef DISABLE_SAXON
 STD_LIB_FILE( gid_File_Lib_Xsltfilter, xsltfilter )
+#endif
 STD_LIB_FILE( gid_File_Lib_Xmlfa, xmlfa )
 STD_LIB_FILE( gid_File_Lib_Xmlfd, xmlfd )
 
 #ifdef SOLAR_JAVA
+#ifndef DISABLE_SAXON
 STD_JAR_FILE( gid_File_Jar_Xsltfilter, XSLTFilter )
+#endif
 STD_JAR_FILE( gid_File_Jar_Xsltvalidate, XSLTValidate )
 #endif
 

@@ -51,6 +51,8 @@ MYTHESLIB=libmythes.lib
 
 # --- Files --------------------------------------------------------
 
+.IF "$(DISABLE_HUNSPELL)" == ""
+
 .IF "$(SYSTEM_HUNSPELL)" != "YES"
 HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell
 .ENDIF
@@ -113,3 +115,8 @@ $(MISC)/lnth.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt lnth.component
+
+.ELSE
+all:
+    @echo "hunspell disabled"
+.ENDIF

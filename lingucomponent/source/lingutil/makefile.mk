@@ -37,6 +37,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : settings.mk
 
+.IF "$(DISABLE_HUNSPELL)" == ""
+
 .IF "$(SYSTEM_HUNSPELL)" != "YES"
 HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell
 .ENDIF
@@ -61,3 +63,7 @@ LIB1OBJFILES= $(SLOFILES)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
+.ELSE
+all:
+    @echo "hunspell disabled"
+.ENDIF

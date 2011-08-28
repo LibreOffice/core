@@ -4,6 +4,8 @@ TARGET=writerperfect
 
 .INCLUDE :  settings.mk
 
+.IF "$(DISABLE_LIBWPD)" == ""
+
 .IF "$(GUI)"=="UNX"
 .IF "$(SYSTEM_LIBWPD)" == "YES"
 LIBWPD=$(LIBWPD_LIBS)
@@ -51,3 +53,8 @@ $(MISC)/wpft.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt wpft.component
+
+.ELSE
+all:
+    @echo "libwpd disabled"
+.ENDIF

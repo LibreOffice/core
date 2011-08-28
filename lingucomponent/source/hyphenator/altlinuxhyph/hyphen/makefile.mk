@@ -46,6 +46,8 @@ HNJLIB=hyphen.lib
 
 # --- Files --------------------------------------------------------
 
+.IF "$(DISABLE_HYPHEN)" == ""
+
 .IF "$(SYSTEM_HUNSPELL)" != "YES"
 HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell
 .ENDIF
@@ -99,3 +101,9 @@ $(MISC)/hyphen.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt hyphen.component
+
+.ELSE
+all:
+    @echo "hyphen disabled"
+
+.ENDIF
