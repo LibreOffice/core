@@ -85,8 +85,7 @@ class LinkHelper
 
   private:
     // DATA
-    mutable HtmlEnvironment_Idl &
-                        rEnv;
+    HtmlEnvironment_Idl & rEnv;
 };
 
 inline const ary::idl::CodeEntity *

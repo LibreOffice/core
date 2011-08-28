@@ -28,6 +28,8 @@
 #ifndef CSV_VVECTOR_HXX
 #define CSV_VVECTOR_HXX
 
+#include <cstddef>      // for ptrdiff_t
+
 // USED SERVICES
 #include <vector>
 #include <cosv/tpl/tpltools.hxx>

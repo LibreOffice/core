@@ -39,11 +39,6 @@ namespace ary
 namespace idl
 {
 
-namespace
-{
-    const Ce_2s aConstCe2sDummy;
-}
-
 
 
 CodeEntity::CodeEntity()
@@ -59,9 +54,7 @@ CodeEntity::~CodeEntity()
 const Ce_2s &
 CodeEntity::Secondaries() const
 {
-    if (p2s)
-        return *p2s;
-    return aConstCe2sDummy;
+    return const_cast<CodeEntity*>(this)->Secondaries();
 }
 
 Ce_2s &
