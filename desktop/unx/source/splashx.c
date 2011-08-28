@@ -520,13 +520,13 @@ int splash_create_window( int argc, char** argv )
     XineramaScreenInfo* p_screens = XineramaQueryScreens( display, &n_xinerama_screens );
     if( p_screens )
     {
-        int i = 0;
-        for( ; i < n_xinerama_screens; i++ )
+        int j = 0;
+        for( ; j < n_xinerama_screens; j++ )
         {
-            if ( p_screens[i].screen_number == screen )
+            if ( p_screens[j].screen_number == screen )
             {
-                display_width = p_screens[i].width;
-                display_height = p_screens[i].height;
+                display_width = p_screens[j].width;
+                display_height = p_screens[j].height;
                 break;
             }
         }
