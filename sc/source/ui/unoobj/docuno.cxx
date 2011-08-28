@@ -702,7 +702,7 @@ bool lcl_ParseTarget( const String& rTarget, ScRange& rTargetRange, Rectangle& r
     {
         bRangeValid = true;             // named range or database range
     }
-    else if ( comphelper::string::isAsciiDecimalString(rTarget) &&
+    else if ( comphelper::string::isdigitAsciiString(rTarget) &&
               ( nNumeric = rTarget.ToInt32() ) > 0 && nNumeric <= MAXROW+1 )
     {
         // row number is always mapped to cell A(row) on the same sheet

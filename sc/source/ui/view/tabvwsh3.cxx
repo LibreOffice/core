@@ -328,7 +328,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                 }
 
-                if ( !(nResult & SCA_VALID) && comphelper::string::isAsciiDecimalString(aAddress) )
+                if ( !(nResult & SCA_VALID) && comphelper::string::isdigitAsciiString(aAddress) )
                 {
                     sal_Int32 nNumeric = aAddress.ToInt32();
                     if ( nNumeric > 0 && nNumeric <= MAXROW+1 )

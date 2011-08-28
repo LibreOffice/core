@@ -269,7 +269,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                 TextPaM aCursor = GetEditView()->GetTextEngine()->GetPaM( aDocPos, sal_False );
                 TextPaM aStartOfWord;
                 String aWord = GetEditView()->GetTextEngine()->GetWord( aCursor, &aStartOfWord );
-                if ( aWord.Len() && !comphelper::string::isAsciiDecimalString(aWord) )
+                if ( aWord.Len() && !comphelper::string::isdigitAsciiString(aWord) )
                 {
                     sal_uInt16 nLastChar =aWord.Len()-1;
                     if ( strchr( cSuffixes, aWord.GetChar( nLastChar ) ) )

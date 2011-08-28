@@ -704,7 +704,7 @@ sal_Bool SdTpOptionsMisc::SetScale( const String& aScale, sal_Int32& rX, sal_Int
         return( sal_False );
 
     rtl::OUString aTmp(aScale.GetToken( 0, TOKEN ));
-    if (!comphelper::string::isAsciiDecimalString(aTmp))
+    if (!comphelper::string::isdigitAsciiString(aTmp))
         return sal_False;
 
     rX = (long) aTmp.toInt32();
@@ -712,7 +712,7 @@ sal_Bool SdTpOptionsMisc::SetScale( const String& aScale, sal_Int32& rX, sal_Int
         return( sal_False );
 
     aTmp = aScale.GetToken( 1, TOKEN );
-    if (!comphelper::string::isAsciiDecimalString(aTmp))
+    if (!comphelper::string::isdigitAsciiString(aTmp))
         return sal_False;
 
     rY = (long) aTmp.toInt32();
