@@ -36,7 +36,6 @@
 /************************************************************************/
 
 class XColorTable;
-class XLineEndTable;
 class SfxItemPool;
 class NameOrIndex;
 class XPropertyList;

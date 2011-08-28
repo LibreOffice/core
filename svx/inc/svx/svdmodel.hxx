@@ -84,7 +84,6 @@ class XDashList;
 class XGradientList;
 class XHatchList;
 class XLineEndList;
-class XLineEndTable;
 class SvxForbiddenCharactersTable;
 class SvNumberFormatter;
 class SotStorage;

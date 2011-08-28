@@ -1706,21 +1706,17 @@ SvStream& XLineStartItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const basegfx::B2DPolyPolygon& XLineStartItem::GetValue(const XLineEndTable* pTable)
-|*                                             const
+|*    const basegfx::B2DPolyPolygon& XLineStartItem::GetValue() const
 |*
 *************************************************************************/
 
-basegfx::B2DPolyPolygon XLineStartItem::GetLineStartValue(const XLineEndTable* pTable) const
+basegfx::B2DPolyPolygon XLineStartItem::GetLineStartValue() const
 {
-    if (!IsIndex())
-    {
-        return maPolyPolygon;
-    }
-    else
-    {
-        return pTable->GetLineEnd(GetIndex())->GetLineEnd();
-    }
+    //if (!IsIndex())
+    //    return maPolyPolygon;
+    //else
+    //    return pTable->GetLineEnd(GetIndex())->GetLineEnd();
+    return maPolyPolygon;
 }
 
 //------------------------------------------------------------------------
@@ -2142,20 +2138,17 @@ SvStream& XLineEndItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const basegfx::B2DPolyPolygon& XLineEndItem::GetValue(const XLineEndTable* pTable) const
+|*    const basegfx::B2DPolyPolygon& XLineEndItem::GetValue() const
 |*
 *************************************************************************/
 
-basegfx::B2DPolyPolygon XLineEndItem::GetLineEndValue(const XLineEndTable* pTable) const
+basegfx::B2DPolyPolygon XLineEndItem::GetLineEndValue() const
 {
-    if (!IsIndex())
-    {
-        return maPolyPolygon;
-    }
-    else
-    {
-        return pTable->GetLineEnd(GetIndex())->GetLineEnd();
-    }
+    //if (!IsIndex())
+    //    return maPolyPolygon;
+    //else
+    //    return pTable->GetLineEnd(GetIndex())->GetLineEnd();
+    return maPolyPolygon;
 }
 
 

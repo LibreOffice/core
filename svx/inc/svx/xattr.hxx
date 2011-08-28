@@ -29,7 +29,6 @@
 #define _XATTR_HXX
 
 class XColorTable;
-class XLineEndTable;
 
 #include <svx/xit.hxx>
 #include <svx/xcolit.hxx>
