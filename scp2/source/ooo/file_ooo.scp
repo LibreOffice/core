@@ -379,7 +379,7 @@ File gid_File_Help_Schart_Zip
 End
 #endif
 
-#if defined WNT
+#if defined SOLAR_JAVA && defined INCLUDE_JAVA_ACCESSBRIDGE && defined WNT
 
 File gid_File_Jar_Accessbridge
     TXT_FILE_BODY;
