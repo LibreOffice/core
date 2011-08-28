@@ -50,7 +50,7 @@ class LinkedList
 
 public:
     /// construct list with one element (pItem) or no element (pItem == NULL)
-    LinkedList( T* pItem = NULL );
+    LinkedList( T* pItem = 0 );
     ~LinkedList();
 
     T* find( const int n );   /// return nth element in list
@@ -82,7 +82,7 @@ class LinkedListIterator
 
 public:
     /// construct list with single element
-    LinkedListIterator( LinkedList<T>* pList = NULL );
+    LinkedListIterator( LinkedList<T>* pList = 0 );
     ~LinkedListIterator();
 
     T* current();               /// return current element, or NULL if invalid

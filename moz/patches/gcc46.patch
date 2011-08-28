@@ -1,0 +1,10 @@
+--- misc/mozilla/intl/unicharutil/util/nsUnicharUtils.h	2008-08-30 01:14:52.000000000 +0200
++++ misc/build/mozilla/intl/unicharutil/util/nsUnicharUtils.h	2011-06-18 23:51:31.000000000 +0200
+@@ -64,6 +64,7 @@
+     : public nsStringComparator
+   {
+     public:
++      nsCaseInsensitiveStringComparator() { }
+       virtual int operator()( const PRUnichar*, const PRUnichar*, PRUint32 aLength ) const;
+       virtual int operator()( PRUnichar, PRUnichar ) const;
+   };

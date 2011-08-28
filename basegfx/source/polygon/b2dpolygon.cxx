@@ -256,6 +256,8 @@ class ControlVectorPair2D
     basegfx::B2DVector                          maNextVector;
 
 public:
+    explicit ControlVectorPair2D () { }
+
     const basegfx::B2DVector& getPrevVector() const
     {
         return maPrevVector;

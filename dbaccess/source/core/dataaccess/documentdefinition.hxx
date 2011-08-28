@@ -397,7 +397,7 @@ private:
             ODocumentDefinition&            m_rDocumentDefinition;
     const   ::com::sun::star::uno::Any      m_aOldValue;
     const   ::com::sun::star::uno::Any      m_aNewValue;
-    mutable ::osl::ResettableMutexGuard&    m_rClearForNotify;
+            ::osl::ResettableMutexGuard&    m_rClearForNotify;
 
     void    impl_fireEvent_throw( const sal_Bool i_bVetoable );
 };

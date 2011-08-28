@@ -211,7 +211,7 @@ public:
     void                ReadCodeName( XclImpStream& rStrm, bool bGlobals );
 
 private:
-    mutable XclImpRootData& mrImpData;      /// Reference to the global import data struct.
+    XclImpRootData& mrImpData;      /// Reference to the global import data struct.
 };
 
 // ============================================================================

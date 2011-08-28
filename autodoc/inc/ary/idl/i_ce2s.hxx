@@ -50,6 +50,7 @@ class Ce_2s
 {
   public:
     // LIFECYCLE
+    explicit Ce_2s () { }
     virtual             ~Ce_2s();
 
     static DYN Ce_2s *  Create_(

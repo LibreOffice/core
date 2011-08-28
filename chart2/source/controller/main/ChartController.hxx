@@ -546,7 +546,7 @@ private:
                 TheModel* operator->() const { return m_pTheModel; }
         private:
             TheModel*               m_pTheModel;
-            mutable ::osl::Mutex&   m_rModelMutex;
+            ::osl::Mutex&   m_rModelMutex;
     };
 
 private:
