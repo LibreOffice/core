@@ -110,30 +110,6 @@ EOM
     exit( 1 );
 }
 
-# check for missing doxygen comments in new files
-#my $doxycheck = "../../bin/find-undocumented-classes";
-#if (! -e $doxycheck) {
-#    # bootstrap repo
-#    $doxycheck =~ s|../../||;
-#}
-#open(FILES, "git diff-index --cached --name-only --diff-filter=A $against |") || die "Cannot run git diff-index.";
-#while (my $file = <FILES>) {
-#    chomp($file);
-#    if ($file =~ /\.hxx$/) {
-#        system("$doxycheck -q $file | sed 's|".getcwd()."/||;'");
-#    }
-#}
-
-# run 'msgcat --nowrap' when committing *.po files
-open(FILES, "git diff-index --cached --name-only $against |") || die "Cannot run git diff-index.";
-while (my $file = <FILES>) {
-    chomp($file);
-    if ($file =~ /\.po$/ && -e $file) {
-        system("msgcat --no-wrap $file > $file.KQnBbK6wQE;mv $file.KQnBbK6wQE $file;");
-        system("git add $file");
-    }
-}
-
 # fix whitespace in code
 check_whitespaces( $against);
 
