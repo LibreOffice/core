@@ -111,10 +111,10 @@ void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
         case NBRACE:
             HandleBrace(pNode,nLevel);
             break;
-        case NOPER:
-            HandleOperator(pNode,nLevel);
-            break;
 #endif
+        case NOPER:
+            HandleOperator( static_cast< const SmOperNode* >( pNode ), nLevel );
+            break;
         case NUNHOR:
             HandleUnaryOperation( static_cast< const SmUnHorNode* >( pNode ), nLevel );
             break;
@@ -422,6 +422,73 @@ void SmOoxml::HandleRoot( const SmRootNode* pNode, int nLevel )
     HandleNode( pNode->Body(), nLevel + 1 );
     m_pSerializer->endElementNS( XML_m, XML_e );
     m_pSerializer->endElementNS( XML_m, XML_rad );
+}
+
+void SmOoxml::HandleOperator( const SmOperNode* pNode, int nLevel )
+{
+    fprintf( stderr, "OPER %d\n", pNode->GetToken().eType );
+    switch( pNode->GetToken().eType )
+    {
+        case TINT:
+            HandleOperatorNary( pNode, nLevel, sal_Unicode( 0x222b ));
+            break;
+        case TIINT:
+            HandleOperatorNary( pNode, nLevel, sal_Unicode( 0x222c ));
+            break;
+        case TIIINT:
+            HandleOperatorNary( pNode, nLevel, sal_Unicode( 0x222d ));
+            break;
+        case TLINT:
+            HandleOperatorNary( pNode, nLevel, sal_Unicode( 0x222e ));
+            break;
+        case TLLINT:
+            HandleOperatorNary( pNode, nLevel, sal_Unicode( 0x222f ));
+            break;
+        case TLLLINT:
+            HandleOperatorNary( pNode, nLevel, sal_Unicode( 0x2230 ));
+            break;
+        default:
+            OSL_FAIL( "Operator not handled explicitly" );
+            HandleAllSubNodes( pNode, nLevel );
+            break;
+    }
+}
+
+void SmOoxml::HandleOperatorNary( const SmOperNode* pNode, int nLevel, sal_Unicode chr )
+{
+    m_pSerializer->startElementNS( XML_m, XML_nary, FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_naryPr, FSEND );
+    rtl::OString chrValue = rtl::OUStringToOString( rtl::OUString( chr ), RTL_TEXTENCODING_UTF8 );
+    m_pSerializer->singleElementNS( XML_m, XML_char, FSNS( XML_m, XML_val ), chrValue.getStr(), FSEND );
+    const SmSubSupNode* subsup = pNode->GetSubNode( 0 )->GetType() == NSUBSUP
+        ? static_cast< const SmSubSupNode* >( pNode->GetSubNode( 0 )) : NULL;
+// GetSubNode( 0 ) is otherwise generally ignored, as it should be just SmMathSymbolNode for the operation,
+// and we have 'chr' already
+    if( subsup == NULL || subsup->GetSubSup( CSUB ) == NULL )
+        m_pSerializer->singleElementNS( XML_m, XML_subHide, FSNS( XML_m, XML_val ), "1", FSEND );
+    if( subsup == NULL || subsup->GetSubSup( CSUP ) == NULL )
+        m_pSerializer->singleElementNS( XML_m, XML_supHide, FSNS( XML_m, XML_val ), "1", FSEND );
+    m_pSerializer->endElementNS( XML_m, XML_naryPr );
+    if( subsup == NULL || subsup->GetSubSup( CSUB ) == NULL )
+        m_pSerializer->singleElementNS( XML_m, XML_sub, FSEND );
+    else
+    {
+        m_pSerializer->startElementNS( XML_m, XML_sub, FSEND );
+        HandleNode( subsup->GetSubSup( CSUB ), nLevel + 1 );
+        m_pSerializer->endElementNS( XML_m, XML_sub );
+    }
+    if( subsup == NULL || subsup->GetSubSup( CSUP ) == NULL )
+        m_pSerializer->singleElementNS( XML_m, XML_sup, FSEND );
+    else
+    {
+        m_pSerializer->startElementNS( XML_m, XML_sup, FSEND );
+        HandleNode( subsup->GetSubSup( CSUP ), nLevel + 1 );
+        m_pSerializer->endElementNS( XML_m, XML_sup );
+    }
+    m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+    HandleNode( pNode->GetSubNode( 1 ), nLevel + 1 ); // body
+    m_pSerializer->endElementNS( XML_m, XML_e );
+    m_pSerializer->endElementNS( XML_m, XML_nary );
 }
 
 void SmOoxml::HandleSubSupScript( const SmSubSupNode* pNode, int nLevel )
