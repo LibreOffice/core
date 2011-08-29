@@ -111,22 +111,23 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
         aLocalRangeName ( *(pDoc->GetRangeName()) ),
-        aStrInsertCols          ( ScResId( STR_INSERT_COLS)),
-        aStrInsertRows          ( ScResId( STR_INSERT_ROWS)),
-        aStrInsertTabs          ( ScResId( STR_INSERT_TABS)),
-        aStrDeleteCols          ( ScResId( STR_DELETE_COLS)),
-        aStrDeleteRows          ( ScResId( STR_DELETE_ROWS)),
-        aStrDeleteTabs          ( ScResId( STR_DELETE_TABS)),
-        aStrMove                ( ScResId( STR_MOVE     )),
-        aStrContent             ( ScResId( STR_CONTENT  )),
-        aStrReject              ( ScResId( STR_REJECT       )),
-        aStrAllAccepted         ( ScResId( STR_ACCEPTED )),
-        aStrAllRejected         ( ScResId( STR_REJECTED )),
-        aStrNoEntry             ( ScResId( STR_NO_ENTRY   )),
-        aStrContentWithChild    ( ScResId( STR_CONTENT_WITH_CHILD)),
-        aStrChildContent        ( ScResId( STR_CHILD_CONTENT)),
-        aStrChildOrgContent     ( ScResId( STR_CHILD_ORGCONTENT)),
-        aStrEmpty               ( ScResId( STR_EMPTY        ))
+        aStrInsertCols       (ResId::toString(ScResId(STR_INSERT_COLS))),
+        aStrInsertRows       (ResId::toString(ScResId(STR_INSERT_ROWS))),
+        aStrInsertTabs       (ResId::toString(ScResId(STR_INSERT_TABS))),
+        aStrDeleteCols       (ResId::toString(ScResId(STR_DELETE_COLS))),
+        aStrDeleteRows       (ResId::toString(ScResId(STR_DELETE_ROWS))),
+        aStrDeleteTabs       (ResId::toString(ScResId(STR_DELETE_TABS))),
+        aStrMove             (ResId::toString(ScResId(STR_MOVE))),
+        aStrContent          (ResId::toString(ScResId(STR_CONTENT))),
+        aStrReject           (ResId::toString(ScResId(STR_REJECT))),
+        aStrAllAccepted      (ResId::toString(ScResId(STR_ACCEPTED))),
+        aStrAllRejected      (ResId::toString(ScResId(STR_REJECTED))),
+        aStrNoEntry          (ResId::toString(ScResId(STR_NO_ENTRY))),
+        aStrContentWithChild (ResId::toString(ScResId(STR_CONTENT_WITH_CHILD))),
+        aStrChildContent     (ResId::toString(ScResId(STR_CHILD_CONTENT))),
+        aStrChildOrgContent  (ResId::toString(ScResId(STR_CHILD_ORGCONTENT))),
+        aStrEmpty            (ResId::toString(ScResId(STR_EMPTY))),
+        aUnknown(RTL_CONSTASCII_USTRINGPARAM("Unknown"))
 {
     FreeResource();
     bNoSelection=false;
@@ -147,7 +148,6 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
     MinSize.Height()+=2;
     MinSize.Width()+=2;
     SetMinOutputSizePixel(MinSize);
-    aUnknown.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Unknown"));
 
     pTPFilter=aAcceptChgCtr.GetFilterPage();
     pTPView=aAcceptChgCtr.GetViewPage();
@@ -303,9 +303,9 @@ void ScAcceptChgDlg::ClearView()
     pTheView->SetUpdateMode(sal_True);
 }
 
-String* ScAcceptChgDlg::MakeTypeString(ScChangeActionType eType)
+rtl::OUString* ScAcceptChgDlg::MakeTypeString(ScChangeActionType eType)
 {
-    String* pStr;
+    rtl::OUString* pStr;
 
     switch(eType)
     {
@@ -395,7 +395,7 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeA
 
     String aRefStr;
     ScChangeActionType eType=pScChangeAction->GetType();
-    String aString;
+    rtl::OUStringBuffer aBuf;
     String aDesc;
 
     ScRedlinData* pNewData=new ScRedlinData;
@@ -413,20 +413,20 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeA
     {
         if(pScChangeAction->IsDialogParent())
         {
-            aString=aStrContentWithChild;
+            aBuf.append(aStrContentWithChild);
             pNewData->nInfo=RD_SPECIAL_VISCONTENT;
             pNewData->bIsRejectable=false;
             pNewData->bIsAcceptable=false;
         }
         else
         {
-            aString=*MakeTypeString(eType);
+            aBuf.append(*MakeTypeString(eType));
             pScChangeAction->GetDescription( aDesc, pDoc, sal_True);
         }
     }
     else
     {
-        aString=*MakeTypeString(eType);
+        aBuf.append(aStrContentWithChild);
 
         if(bDelMaster)
         {
@@ -439,28 +439,29 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeA
 
     }
 
-    aString+='\t';
     pScChangeAction->GetRefString(aRefStr, pDoc, sal_True);
-    aString+=aRefStr;
-    aString+='\t';
+
+    aBuf.append(sal_Unicode('\t'));
+    aBuf.append(aRefStr);
+    aBuf.append(sal_Unicode('\t'));
 
     sal_Bool bIsGenerated;
 
     if(!pChanges->IsGenerated(pScChangeAction->GetActionNumber()))
     {
-        aString+=aUser;
-        aString+='\t';
+        aBuf.append(aUser);
+        aBuf.append(sal_Unicode('\t'));
+        aBuf.append(ScGlobal::pLocaleData->getDate(aDateTime));
+        aBuf.append(sal_Unicode(' '));
+        aBuf.append(ScGlobal::pLocaleData->getTime(aDateTime));
+        aBuf.append(sal_Unicode('\t'));
 
-        aString+=ScGlobal::pLocaleData->getDate(aDateTime);
-        aString+=' ';
-        aString+=ScGlobal::pLocaleData->getTime(aDateTime);
-        aString+='\t';
         bIsGenerated=false;
     }
     else
     {
-        aString+='\t';
-        aString+='\t';
+        aBuf.append(sal_Unicode('\t'));
+        aBuf.append(sal_Unicode('\t'));
         bIsGenerated=sal_True;
     }
 
@@ -473,7 +474,7 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeA
         aComment+=')';
     }
 
-    aString+=aComment;
+    aBuf.append(aComment);
 
     if(pTheView->IsValidEntry(&aUser,&aDateTime)|| bIsGenerated)
     {
@@ -502,11 +503,13 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeA
 
     if(!bFlag&& bUseColor&& pParent==NULL)
     {
-        pEntry=pTheView->InsertEntry(aString,pNewData,Color(COL_LIGHTBLUE),pParent,nPos);
+        pEntry = pTheView->InsertEntry(
+            aBuf.makeStringAndClear() ,pNewData, Color(COL_LIGHTBLUE), pParent, nPos);
     }
     else if(bFlag&& bUseColor&& pParent!=NULL)
     {
-        pEntry=pTheView->InsertEntry(aString,pNewData,Color(COL_GREEN),pParent,nPos);
+        pEntry = pTheView->InsertEntry(
+            aBuf.makeStringAndClear(), pNewData, Color(COL_GREEN), pParent, nPos);
         SvLBoxEntry* pExpEntry=pParent;
 
         while(pExpEntry!=NULL && !pTheView->IsExpanded(pExpEntry))
@@ -519,7 +522,10 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeA
         }
     }
     else
-        pEntry=pTheView->InsertEntry(aString,pNewData,pParent,nPos);
+    {
+        pEntry = pTheView->InsertEntry(
+            aBuf.makeStringAndClear(), pNewData, pParent, nPos);
+    }
     return pEntry;
 }
 
@@ -1268,14 +1274,14 @@ sal_Bool ScAcceptChgDlg::InsertAcceptedORejected(SvLBoxEntry* pParent)
     sal_Bool bTheTestFlag=sal_True;
 
     ScChangeActionState eState = SC_CAS_VIRGIN;
-    String aString=pTheView->GetEntryText( pParent);
-    String a2String=aString.Copy(0,aStrAllAccepted.Len());
-    if(a2String==aStrAllAccepted)
+    rtl::OUString aString = pTheView->GetEntryText(pParent);
+    rtl::OUString a2String = aString.copy(0, aStrAllAccepted.getLength());
+    if (a2String.equals(aStrAllAccepted))
         eState=SC_CAS_ACCEPTED;
     else
     {
-        a2String=aString.Copy(0,aStrAllRejected.Len());
-        if(a2String==aStrAllRejected)
+        a2String = aString.copy(0, aStrAllRejected.getLength());
+        if (a2String.equals(aStrAllRejected))
             eState=SC_CAS_REJECTED;
     }
 

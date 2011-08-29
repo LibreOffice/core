@@ -136,23 +136,23 @@ private:
     Size                    MinSize;
     ScRangeList             aRangeList;
     ScChangeViewSettings    aChangeViewSet;
-    String                  aStrInsertCols;
-    String                  aStrInsertRows;
-    String                  aStrInsertTabs;
-    String                  aStrDeleteCols;
-    String                  aStrDeleteRows;
-    String                  aStrDeleteTabs;
-    String                  aStrMove;
-    String                  aStrContent;
-    String                  aStrReject;
-    String                  aUnknown;
-    String                  aStrAllAccepted;
-    String                  aStrAllRejected;
-    String                  aStrNoEntry;
-    String                  aStrContentWithChild;
-    String                  aStrChildContent;
-    String                  aStrChildOrgContent;
-    String                  aStrEmpty;
+    rtl::OUString           aStrInsertCols;
+    rtl::OUString           aStrInsertRows;
+    rtl::OUString           aStrInsertTabs;
+    rtl::OUString           aStrDeleteCols;
+    rtl::OUString           aStrDeleteRows;
+    rtl::OUString           aStrDeleteTabs;
+    rtl::OUString           aStrMove;
+    rtl::OUString           aStrContent;
+    rtl::OUString           aStrReject;
+    rtl::OUString           aStrAllAccepted;
+    rtl::OUString           aStrAllRejected;
+    rtl::OUString           aStrNoEntry;
+    rtl::OUString           aStrContentWithChild;
+    rtl::OUString           aStrChildContent;
+    rtl::OUString           aStrChildOrgContent;
+    rtl::OUString           aStrEmpty;
+    rtl::OUString           aUnknown;
     sal_uLong                   nAcceptCount;
     sal_uLong                   nRejectCount;
     sal_Bool                    bAcceptEnableFlag;
@@ -197,7 +197,7 @@ protected:
 
     sal_Bool            IsValidAction(const ScChangeAction* pScChangeAction);
 
-    String*         MakeTypeString(ScChangeActionType eType);
+    rtl::OUString* MakeTypeString(ScChangeActionType eType);
 
     SvLBoxEntry*    InsertChangeAction(const ScChangeAction* pScChangeAction,ScChangeActionState eState,
                                     SvLBoxEntry* pParent=NULL,sal_Bool bDelMaster=false,
