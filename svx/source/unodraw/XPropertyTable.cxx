@@ -295,7 +295,7 @@ sal_Bool SAL_CALL SvxUnoXPropertyTable::hasElements(  )
 class SvxUnoXColorTable : public SvxUnoXPropertyTable
 {
 public:
-    SvxUnoXColorTable( XPropertyTable* pTable ) throw() : SvxUnoXPropertyTable( XATTR_LINECOLOR, pTable ) {};
+    SvxUnoXColorTable( XPropertyList* pList ) throw() : SvxUnoXPropertyTable( XATTR_LINECOLOR, pList ) {};
 
     // SvxUnoXPropertyTable
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw();
@@ -309,9 +309,9 @@ public:
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
 };
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoXColorTable_createInstance( XPropertyTable* pTable ) throw()
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoXColorTable_createInstance( XPropertyList* pList ) throw()
 {
-    return (OWeakObject*) new SvxUnoXColorTable( pTable );
+    return (OWeakObject*) new SvxUnoXColorTable( pList );
 }
 
 // SvxUnoXPropertyTable

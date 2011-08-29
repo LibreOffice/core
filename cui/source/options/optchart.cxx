@@ -170,7 +170,7 @@ long SvxDefaultColorOptPage::GetColorIndex( const Color& rCol )
         {
             pColorEntry = pColorTab->GetColor( i );
             if( pColorEntry && pColorEntry->GetColor() == rCol )
-                return SAL_STATIC_CAST( XPropertyTable*, pColorTab )->Get( pColorEntry->GetName() );
+                return SAL_STATIC_CAST( XPropertyList*, pColorTab )->Get( pColorEntry->GetName() );
         }
     }
     return -1L;

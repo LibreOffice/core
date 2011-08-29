@@ -88,8 +88,10 @@ class XColorEntry : public XPropertyEntry
     Color   aColor;
 
 public:
-            XColorEntry(const Color& rColor, const String& rName) :
-                XPropertyEntry(rName), aColor(rColor) {}
+            XColorEntry(const Color& rColor, const String& rName)
+                : XPropertyEntry(rName)
+                , aColor(rColor)
+                {}
 
     void    SetColor(const Color& rColor)   { aColor = rColor; }
     Color&  GetColor()                      { return aColor; }
@@ -244,11 +246,12 @@ public:
 // class XPropertyList
 // --------------------
 
-typedef ::std::vector< XPropertyEntry* > XPropertyEntryList_impl;
-typedef ::std::vector< Bitmap* > BitmapList_impl;
 class SVX_DLLPUBLIC XPropertyList
 {
 protected:
+    typedef ::std::vector< XPropertyEntry* > XPropertyEntryList_impl;
+    typedef ::std::vector< Bitmap* > BitmapList_impl;
+
     String              aName; // not persistent
     String              aPath;
     XOutdevItemPool*    pXPool;
@@ -300,7 +303,7 @@ public:
 // class XColorTable
 // ------------------
 
-class SVX_DLLPUBLIC XColorTable : public XPropertyTable
+class SVX_DLLPUBLIC XColorTable : public XPropertyList
 {
 public:
     explicit        XColorTable(
@@ -309,11 +312,12 @@ public:
                     );
     virtual         ~XColorTable();
 
-    using XPropertyTable::Replace;
+    using XPropertyList::Replace;
+    using XPropertyList::Remove;
+    using XPropertyList::Get;
+
     XColorEntry*        Replace(long nIndex, XColorEntry* pEntry );
-    using XPropertyTable::Remove;
     XColorEntry*        Remove(long nIndex);
-    using XPropertyTable::Get;
     XColorEntry*        GetColor(long nIndex) const;
 
     virtual sal_Bool    Load();

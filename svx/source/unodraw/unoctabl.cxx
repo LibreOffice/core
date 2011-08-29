@@ -140,7 +140,7 @@ void SAL_CALL SvxUnoColorTable::insertByName( const OUString& aName, const uno::
     if( pTable )
     {
         XColorEntry* pEntry = new XColorEntry( Color( (ColorData)nColor ), aName  );
-        pTable->Insert( pTable->Count(), pEntry );
+        pTable->Insert( pEntry, pTable->Count() );
     }
 }
 

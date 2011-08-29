@@ -515,7 +515,7 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
             ConvertColorValues (aAktuellColor, CM_RGB);
         pEntry = new XColorEntry( aAktuellColor, aName );
 
-        pColorTab->Insert( pColorTab->Count(), pEntry );
+        pColorTab->Insert( pEntry, pColorTab->Count() );
 
         aLbColor.Append( pEntry );
         aValSetColorTable.InsertItem( aValSetColorTable.GetItemCount() + 1,
@@ -689,7 +689,7 @@ IMPL_LINK( SvxColorTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
             {
                 pEntry = pColorTab->Remove( i + 1 );
                 DBG_ASSERT( pEntry, "ColorEntry nicht vorhanden (2) !" );
-                pColorTab->Insert( i, pEntry );
+                pColorTab->Insert( pEntry, i );
             }
 
             // Listbox und ValueSet aktualisieren
