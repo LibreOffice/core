@@ -155,14 +155,13 @@ private:
     rtl::OUString           aUnknown;
     sal_uLong                   nAcceptCount;
     sal_uLong                   nRejectCount;
-    sal_Bool                    bAcceptEnableFlag;
-    sal_Bool                    bRejectEnableFlag;
-    sal_Bool                    bNeedsUpdate;
-    sal_Bool                    bIgnoreMsg;
-    sal_Bool                    bNoSelection;
-    sal_Bool                    bHasFilterEntry;
-    sal_Bool                    bUseColor;
-    //ScChgTrackExps            aExpandArray;
+    bool                    bAcceptEnableFlag:1;
+    bool                    bRejectEnableFlag:1;
+    bool                    bNeedsUpdate:1;
+    bool                    bIgnoreMsg:1;
+    bool                    bNoSelection:1;
+    bool                    bHasFilterEntry:1;
+    bool                    bUseColor:1;
 
     void            Init();
     void            InitFilter();
