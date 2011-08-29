@@ -103,8 +103,7 @@ static sal_uIntPtr ImplSysGetConfigTimeStamp( const XubString& rFileName )
     ::osl::DirectoryItem aItem;
     ::osl::FileStatus aStatus( osl_FileStatus_Mask_ModifyTime );
 
-    int nError = 0;
-    if( ( nError = ::osl::DirectoryItem::get( rFileName, aItem ) ) == ::osl::FileBase::E_None &&
+    if( ::osl::DirectoryItem::get( rFileName, aItem ) == ::osl::FileBase::E_None &&
         aItem.getFileStatus( aStatus ) == ::osl::FileBase::E_None )
     {
         nTimeStamp = aStatus.getModifyTime().Seconds;
