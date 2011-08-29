@@ -52,7 +52,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR,
      $ENABLEUNICODE, $NO_BSYMBOLIC);
 #
 # Platform dependent constant values.
-my ( $COM, $ARCH, $CPU, $CPUNAME, $GLIBC, $GUI, $GUIBASE,
+my ( $COM, $ARCH, $CPU, $CPUNAME, $GUI, $GUIBASE,
       $GVER, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR,
       $DYNAMIC_CRT, $use_shl_versions, $JRELIBDIR,
       $JRETOOLKITDIR, $JRETHREADDIR );
@@ -123,7 +123,6 @@ $CC             = '@CC@';            # C compiler
 $CXX            = '@CXX@';           # C++ compiler
 $MOZILLA_VERSION	= '@MOZILLA_VERSION@'; # mozilla version to use to build mozilla
 $MOZILLA_TOOLKIT	= '@MOZILLA_TOOLKIT@'; # GUI toolkit to use to build mozilla
-$GLIBC          = "";               # Whether the platform uses glibc
 $PROEXT         = "@PROEXT@";
 $EPM_FLAGS	= "";
 $CL_X64 = '@CL_X64@';
@@ -275,7 +274,6 @@ elsif ( $platform =~ m/kfreebsd/ )
 # General GNU/kFreeBSD settings:
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
-      $GLIBC          = "2REDHAT60";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
       $GVER           = "VCL";
@@ -393,7 +391,6 @@ elsif ( $platform =~ m/linux/ )
 # General Linux settings:
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
-      $GLIBC          = "2REDHAT60";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
       $GVER           = "VCL";
@@ -1564,7 +1561,6 @@ ToFile( "COMPATH",           $COMPATH,           "e" );
 ToFile( "CPU",               $CPU,               "e" );
 ToFile( "CPUNAME",           $CPUNAME,           "e" );
 ToFile( "GUI",               $GUI,               "e" );
-ToFile( "GLIBC",             $GLIBC,             "e" );
 ToFile( "GUIBASE",           $GUIBASE,           "e" );
 ToFile( "GVER",              $GVER,              "e" );
 ToFile( "OS",                $OS,                "e" );
