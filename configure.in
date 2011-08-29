@@ -1237,7 +1237,7 @@ if test "$enable_copyleft" != "yes"; then
    enable_mozilla="no"
    enable_nss_module="no"
    enable_gstreamer="no"
-   enable_epm="no"
+   enable_epm="yes"
    with_myspell_dicts="no"
    enable_neon="no"
 
@@ -1247,6 +1247,8 @@ if test "$enable_copyleft" != "yes"; then
    DISABLE_SAXON="TRUE"
    DISABLE_NEON="TRUE"
    BUILD_EPM="NO"
+
+   BUILD_EPM=NO
 
    AC_MSG_RESULT([yes])
 
