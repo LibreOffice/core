@@ -38,6 +38,8 @@
 #include <rtl/strbuf.hxx>
 #include <comphelper/string.hxx>
 
+using comphelper::string::getToken;
+
 extern "C" { int yyerror( const char * ); }
 extern "C" { int YYWarning( const char * ); }
 
@@ -680,17 +682,17 @@ int Export::Execute( int nToken, const char * pToken )
             sToken.EraseAllChars( '{' );
             while( sToken.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
             sToken.EraseTrailingChars( ' ' );
-            ByteString sT =  sToken.GetToken( 0, ' ' );
+            ByteString sT = getToken(sToken, 0, ' ');
             pResData->sResTyp = sT.ToLowerAscii();
             ByteString sId( sToken.Copy( pResData->sResTyp.Len() + 1 ));
             ByteString sCondition;
             if ( sId.Search( "#" ) != STRING_NOTFOUND ) {
                 // between ResTyp, Id and paranthes is a precomp. condition
                 sCondition = "#";
-                sCondition += sId.GetToken( 1, '#' );
-                sId = sId.GetToken( 0, '#' );
+                sCondition += ByteString(getToken(sId, 1, '#'));
+                sId = getToken(sId, 0, '#');
             }
-            sId = sId.GetToken( 0, '/' );
+            sId = getToken(sId, 0, '/');
             CleanValue( sId );
             sId = sId.EraseAllChars( '\t' );
             pResData->SetId( sId, ID_LEVEL_IDENTIFIER );
@@ -779,10 +781,10 @@ int Export::Execute( int nToken, const char * pToken )
         case ASSIGNMENT: {
             bDontWriteOutput = sal_False;
             // interpret different types of assignement
-             ByteString sKey = sToken.GetToken( 0, '=' );
+            ByteString sKey = getToken(sToken, 0, '=');
             sKey.EraseAllChars( ' ' );
             sKey.EraseAllChars( '\t' );
-            ByteString sValue = sToken.GetToken( 1, '=' );
+            ByteString sValue = getToken(sToken, 1, '=');
             CleanValue( sValue );
             if ( sKey.ToUpperAscii() == "IDENTIFIER" ) {
                 ByteString sId( sValue.EraseAllChars( '\t' ));
@@ -830,7 +832,7 @@ int Export::Execute( int nToken, const char * pToken )
                 ByteString sKey = sTmpToken.Copy( 0 , nPos );
                 sKey.EraseAllChars( ' ' );
                 sKey.EraseAllChars( '\t' );
-                ByteString sValue = sToken.GetToken( 1, '=' );
+                ByteString sValue = getToken(sToken, 1, '=');
                 CleanValue( sValue );
                 if ( sKey.ToUpperAscii() ==  "STRINGLIST" ) {
                     pResData->bList = sal_True;
@@ -872,7 +874,7 @@ int Export::Execute( int nToken, const char * pToken )
             }
             else {
                 // new res. is a String- or FilterList
-                ByteString sKey = sToken.GetToken( 0, '[' );
+                ByteString sKey = getToken(sToken, 0, '[');
                 sKey.EraseAllChars( ' ' );
                 sKey.EraseAllChars( '\t' );
                 if ( sKey.ToUpperAscii() == "STRINGLIST" )
@@ -886,7 +888,7 @@ int Export::Execute( int nToken, const char * pToken )
                 else if ( sKey == "UIENTRIES" )
                     nList = LIST_UIENTRIES;
                 if ( nList ) {
-                    ByteString sLang=sToken.GetToken( 1, '[' ).GetToken( 0, ']' );
+                    ByteString sLang = getToken(getToken(sToken, 1, '['), 0, ']');
                     CleanValue( sLang );
                     m_sListLang = sLang;
                     nListIndex = 0;
@@ -901,7 +903,7 @@ int Export::Execute( int nToken, const char * pToken )
             // this is an entry for a String- or FilterList
             if ( nList ) {
                 SetChildWithText();
-                ByteString sEntry( sToken.GetToken( 1, '\"' ));
+                ByteString sEntry(getToken(sToken, 1, '\"'));
                 if ( sToken.GetTokenCount( '\"' ) > 3 )
                     sEntry += "\"";
                 if ( sEntry == "\\\"" )
@@ -921,15 +923,16 @@ int Export::Execute( int nToken, const char * pToken )
                 CutComment( sToken );
 
                 // this is a text line!!!
-                ByteString sKey = sToken.GetToken( 0, '=' ).GetToken( 0, '[' );
+                ByteString sKey = getToken(getToken(sToken, 0, '='), 0, '[');
                 sKey.EraseAllChars( ' ' );
                 sKey.EraseAllChars( '\t' );
                 ByteString sText( GetText( sToken, nToken ));
                 if ( !bMergeMode )
                     sText = sText.Convert( aCharSet, RTL_TEXTENCODING_MS_1252 );
                 ByteString sLang;
-                if ( sToken.GetToken( 0, '=' ).Search( "[" ) != STRING_NOTFOUND ) {
-                     sLang = sToken.GetToken( 0, '=' ).GetToken( 1, '[' ).GetToken( 0, ']' );
+                if ( getToken(sToken, 0, '=').indexOf('[') != -1 )
+                {
+                    sLang = getToken(getToken(getToken(sToken, 0, '='), 1, '['), 0, ']');
                     CleanValue( sLang );
                 }
                 rtl::OString sLangIndex = sLang;
@@ -1036,15 +1039,14 @@ int Export::Execute( int nToken, const char * pToken )
         case APPFONTMAPPING:
         {
             using comphelper::string::replace;
-            using comphelper::string::getToken;
 
             bDontWriteOutput = sal_False;
             // this is a AppfontMapping, so look if its a definition
             // of field size
-            ByteString sKey = sToken.GetToken( 0, '=' );
+            ByteString sKey = getToken(sToken, 0, '=');
             sKey.EraseAllChars( ' ' );
             sKey.EraseAllChars( '\t' );
-            rtl::OString sMapping = sToken.GetToken( 1, '=' );
+            rtl::OString sMapping = getToken(sToken, 1, '=');
             sMapping = getToken(sMapping, 1, '(');
             sMapping = getToken(sMapping, 0, ')');
             sMapping = replace(sMapping, rtl::OString(' '), rtl::OString());
@@ -1067,14 +1069,14 @@ int Export::Execute( int nToken, const char * pToken )
             while( sToken.SearchAndReplace( "\r", " " ) != STRING_NOTFOUND ) {};
             while( sToken.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
             while( sToken.SearchAndReplace( "  ", " " ) != STRING_NOTFOUND ) {};
-            ByteString sCondition = sToken.GetToken( 0, ' ' );
+            ByteString sCondition = getToken(sToken, 0, ' ');
             if ( sCondition == "#ifndef" ) {
                 sActPForm = "!defined ";
-                sActPForm += sToken.GetToken( 1, ' ' );
+                sActPForm += ByteString(getToken(sToken, 1, ' '));
             }
             else if ( sCondition == "#ifdef" ) {
                 sActPForm = "defined ";
-                sActPForm += sToken.GetToken( 1, ' ' );
+                sActPForm += ByteString(getToken(sToken, 1, ' '));
             }
             else if ( sCondition == "#if" ) {
                 sActPForm = sToken.Copy( 4 );
@@ -1114,8 +1116,8 @@ int Export::Execute( int nToken, const char * pToken )
             sToken.EraseLeadingChars( ' ' );
             sToken.EraseTrailingChars( ' ' );
 
-            ByteString sCharset = sToken.GetToken( 1, ' ' );
-            ByteString sSet = sToken.GetToken( 2, ' ' );
+            ByteString sCharset = getToken(sToken, 1, ' ');
+            ByteString sSet = getToken(sToken, 2, ' ');
             if (( sCharset.ToUpperAscii() == "CHARSET_IBMPC" ) ||
                 ( sCharset == "RTL_TEXTENCODING_IBM_850" ) ||
                 (( sCharset == "CHARSET" ) && ( sSet.ToUpperAscii() == "IBMPC" )))
@@ -1324,7 +1326,7 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
 }
 ByteString Export::GetPairedListID( const ByteString& sText ){
 // < "STRING" ; IDENTIFIER ; > ;
-    ByteString sIdent = sText.GetToken( 1, ';' );
+    ByteString sIdent = getToken(sText, 1, ';');
     sIdent.ToUpperAscii();
     while( sIdent.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
     sIdent.EraseTrailingChars( ' ' );
@@ -1333,7 +1335,7 @@ ByteString Export::GetPairedListID( const ByteString& sText ){
 }
 ByteString Export::GetPairedListString( const ByteString& sText ){
 // < "STRING" ; IDENTIFIER ; > ;
-    ByteString sString = sText.GetToken( 0, ';' );
+    ByteString sString = getToken(sText, 0, ';');
     while( sString.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
     sString.EraseTrailingChars( ' ' );
     ByteString s1 = sString.Copy( sString.Search( '\"' )+1 );
@@ -1603,7 +1605,7 @@ ByteString Export::GetText( const ByteString &rSource, int nToken )
 
 
             for ( sal_uInt16 i = nStart; i < sTmp.GetTokenCount( '\"' ); i++ ) {
-                ByteString sToken = sTmp.GetToken( i, '\"' );
+                ByteString sToken = getToken(sTmp, i, '\"');
                 if ( sToken.Len()) {
                     if ( nState == TXT_STATE_TEXT ) {
                         sReturn += sToken;

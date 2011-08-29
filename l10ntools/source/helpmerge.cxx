@@ -40,7 +40,8 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "rtl/strbuf.hxx"
+#include <rtl/strbuf.hxx>
+#include <comphelper/string.hxx>
 #ifdef WNT
 #include <windows.h>
 #undef CopyFile
@@ -569,15 +570,15 @@ void HelpParser::MakeDir( const ByteString& sPath ){
     ByteString sDelimiter( DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
     sTPath.SearchAndReplaceAll( sDelimiter , '/' );
     sal_uInt16 cnt = sTPath.GetTokenCount( '/' );
-    ByteString sCreateDir;
+    rtl::OStringBuffer sCreateDir;
     for( sal_uInt16 i = 0 ; i < cnt ; i++ )
     {
-        sCreateDir += sTPath.GetToken( i , '/' );
-        sCreateDir += sDelimiter;
+        sCreateDir.append(comphelper::string::getToken(sTPath, i , '/'));
+        sCreateDir.append(sDelimiter);
 #ifdef WNT
-        _mkdir( sCreateDir.GetBuffer() );
+        _mkdir( sCreateDir.getStr() );
 #else
-        mkdir( sCreateDir.GetBuffer() , S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH );
+        mkdir( sCreateDir.getStr() , S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH );
 #endif
     }
 }

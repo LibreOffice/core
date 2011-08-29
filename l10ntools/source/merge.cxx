@@ -30,10 +30,12 @@
 #include "precompiled_l10ntools.hxx"
 #include <stdio.h>
 #include <tools/fsys.hxx>
+#include <comphelper/string.hxx>
 #include "export.hxx"
 #include <iostream>
 
 using namespace std;
+using comphelper::string::getToken;
 
 namespace
 {
@@ -207,7 +209,7 @@ MergeDataFile::MergeDataFile(
         if ( nToks == 15 )
         {
             // Skip all wrong filenames
-            const ::rtl::OString filename = lcl_NormalizeFilename(sLine.GetToken( 1 , '\t' ));
+            const ::rtl::OString filename = lcl_NormalizeFilename(getToken(sLine, 1 , '\t'));
             if(isFileEmpty || sFileNormalized.equals("") || (!isFileEmpty && filename.equals(sFileNormalized)) )
             {
                 xub_StrLen rIdx = 0;

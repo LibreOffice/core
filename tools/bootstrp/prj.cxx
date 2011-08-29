@@ -33,6 +33,7 @@
 #include <osl/mutex.hxx>
 
 #include <tools/stream.hxx>
+#include <comphelper/string.hxx>
 #include "bootstrp/prj.hxx"
 
 #if defined(WNT)
@@ -60,7 +61,7 @@ rtl::OString SimpleConfig::getNext()
     if ( aStringBuffer == "" )
         return rtl::OString();
 
-    rtl::OString aString = aStringBuffer.GetToken(0,'\t');
+    rtl::OString aString = comphelper::string::getToken(aStringBuffer, 0, '\t');
     aStringBuffer.Erase(0, aString.getLength()+1);
 
     aStringBuffer.EraseLeadingChars( '\t' );

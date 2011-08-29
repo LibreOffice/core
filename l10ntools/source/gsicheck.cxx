@@ -37,6 +37,8 @@
 #include "tagtest.hxx"
 #include "gsicheck.hxx"
 
+using comphelper::string::getToken;
+
 #define MAX_GID_LID_LEN 250
 
 /*****************************************************************************/
@@ -78,8 +80,8 @@ sal_Bool LanguageOK( ByteString aLang )
         return islowerAsciiString(aLang);
     else if ( aLang.GetTokenCount( '-' ) == 2 )
     {
-        ByteString aTok0( aLang.GetToken( 0, '-' ) );
-        ByteString aTok1( aLang.GetToken( 1, '-' ) );
+        ByteString aTok0( getToken(aLang, 0, '-') );
+        ByteString aTok1( getToken(aLang, 1, '-') );
         return  aTok0.Len() && islowerAsciiString(aTok0)
              && aTok1.Len() && isupperAsciiString(aTok1)
              && !aTok1.EqualsIgnoreCaseAscii( aTok0 );
@@ -147,7 +149,7 @@ GSILine::GSILine( const ByteString &rLine, sal_uLong nLine )
     if ( rLine.GetTokenCount( '\t' ) == 15 )
     {
         aFormat = FORMAT_SDF;
-        aUniqId = rLine.GetToken( 0, '\t' );
+        aUniqId = getToken(rLine, 0, '\t');
         aUniqId.Append("/").Append( rLine.GetToken( 1, '\t' ) ).Append("/").Append( rLine.GetToken( 3, '\t' ) ).Append("/").Append( rLine.GetToken( 4, '\t' ) ).Append("/").Append( rLine.GetToken( 5, '\t' ) ).Append("/").Append( rLine.GetToken( 6, '\t' ) ).Append("/").Append( rLine.GetToken( 7, '\t' ) );
         aLineType = "";
         aLangId = rLine.GetToken( 9, '\t' );
@@ -468,7 +470,7 @@ sal_Bool GSIBlock::IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uIn
         {   // test for old KeyIDs       5 to 6 digits followed by a dot   '44373.'
             bNewId = sal_False;
             nErrorPos = 1;
-            aID = aID.GetToken( 0, '.' );
+            aID = getToken(aID, 0, '.');
             nAfterID = nAfterID + aID.Len();
         }
         else
