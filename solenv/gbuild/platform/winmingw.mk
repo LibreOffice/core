@@ -44,26 +44,6 @@ gb_AWK := awk
 gb_CLASSPATHSEP := :
 gb_YACC := bison
 gb_RC := $(WINDRES)
-ifeq ($(MINGW_SHARED_GXXLIB),YES)
-gb_MINGW_LIBSTDCPP := $(subst -l,,$(MINGW_SHARED_LIBSTDCPP))
-else
-gb_MINGW_LIBSTDCPP := \
-		stdc++ \
-		moldname
-endif
-ifeq ($(MINGW_SHARED_GCCLIB),YES)
-gb_MINGW_LIBGCC := \
-		gcc_s \
-		gcc
-else
-ifeq ($(MINGW_GCCLIB_EH),YES)
-gb_MINGW_LIBGCC := \
-		gcc \
-		gcc_eh
-else
-gb_MINGW_LIBGCC := gcc
-endif
-endif
 
 gb_OSDEFS := \
 	-DWINVER=0x0500 \
@@ -160,9 +140,7 @@ gb_COMPILERNOOPTFLAGS := -O0
 
 gb_STDLIBS := \
 	mingwthrd \
-	$(gb_MINGW_LIBSTDCPP) \
 	mingw32 \
-	$(gb_MINGW_LIBGCC) \
 	uwinapi \
 	mingwex \
 
@@ -476,8 +454,6 @@ gb_Library_PLAINLIBS_NONE += \
 	mingwthrd \
 	mingw32 \
 	mingwex \
-	$(gb_MINGW_LIBSTDCPP) \
-	$(gb_MINGW_LIBGCC) \
 	advapi32 \
 	crypt32 \
 	d3d9 \
