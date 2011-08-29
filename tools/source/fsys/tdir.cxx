@@ -260,8 +260,8 @@ void Dir::Construct( DirEntryKind nKindFlags )
         delete [] pBuffer;
 #else
         aNameMask = WildCard( CutName(), ';' );
-    }
 #endif
+    }
     else
         aNameMask.setGlob(String("*", osl_getThreadTextEncoding()));
 }
