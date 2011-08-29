@@ -27,6 +27,34 @@
 
 from libreoffice.util import printing
 
+class SwPositionPrinter(object):
+    '''Prints SwPosition.'''
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def to_string(self):
+        node = self.value['nNode']['pNd'].dereference();
+        offset = self.value['nContent']['nIndex']
+        return "%s (node %d, offset %d)" % (self.typename, node['nOffset'], offset)
+
+class SwPaMPrinter(object):
+    '''Prints SwPaM.'''
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def to_string(self):
+        return "%s" % (self.typename)
+        
+    def children(self):
+        point = self.value['m_pPoint'].dereference()
+        mark = self.value['m_pMark'].dereference()
+        children = [ ( 'point', point), ( 'mark', mark ) ]
+        return children.__iter__()
+
 
 class BigPtrArrayPrinter(object):
     '''Prints BigPtrArray.'''
@@ -110,6 +138,8 @@ def build_pretty_printers():
 
     printer = printing.Printer("libreoffice/sw")
     printer.add('BigPtrArray', BigPtrArrayPrinter)
+    printer.add('SwPosition', SwPositionPrinter)
+    printer.add('SwPaM', SwPaMPrinter)
 
 def register_pretty_printers(obj):
     printing.register_pretty_printer(printer, obj)
