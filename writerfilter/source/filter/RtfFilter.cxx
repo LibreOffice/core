@@ -99,7 +99,7 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
 #endif
         return sal_True;
     }
-    catch( const uno::Exception& rEx)
+    catch (const uno::Exception&)
     {
         return sal_False;
     }
