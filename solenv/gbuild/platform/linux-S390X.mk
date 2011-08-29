@@ -29,7 +29,6 @@
 #*************************************************************************
 
 #please make generic modifications to unxgcc.mk or linux.mk
-gb_CPUDEFS := -D$(CPUNAME)
 
 include $(GBUILDDIR)/platform/linux-S390.mk
 

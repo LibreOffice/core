@@ -197,6 +197,8 @@ ifneq ($(strip gb__ENV_CXXFLAGS),)
 gb_LinkTarget_CXXFLAGS += $(gb__ENV_CXXFLAGS)
 endif
 
+gb_CPUDEFS += -D$(CPUNAME)
+
 gb_GLOBALDEFS := \
 	-D_REENTRANT \
 	-DCUI \

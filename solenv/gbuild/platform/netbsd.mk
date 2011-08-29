@@ -32,8 +32,6 @@
 
 ifeq ($(CPUNAME),INTEL)
 gb_CPUDEFS := -DX86
-else
-gb_CPUDEFS := -D$(CPUNAME)
 endif
 
 gb_COMPILERDEFAULTOPTFLAGS := -O2

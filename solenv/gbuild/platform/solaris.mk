@@ -62,9 +62,8 @@ gb_COMPILERDEFS := \
 	-D$(COM) \
 	-DCPPU_ENV=sunpro5 \
 
-gb_CPUDEFS := -D$(CPUNAME)
 ifeq ($(CPUNAME),SPARC)
-gb_CPUDEFS += -D__sparcv8plus
+gb_CPUDEFS := -D__sparcv8plus
 endif
 
 gb_CFLAGS := \

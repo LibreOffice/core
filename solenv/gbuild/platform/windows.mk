@@ -68,7 +68,7 @@ gb_COMPILERDEFS := \
 	-DCPPU_ENV=msci \
 	-DM1500 \
 
-gb_CPUDEFS := -DINTEL -D_X86_=1
+gb_CPUDEFS := -D_X86_=1
 
 gb_RCDEFS := \
 	 -DWINVER=0x0400 \
