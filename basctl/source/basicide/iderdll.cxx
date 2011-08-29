@@ -108,7 +108,7 @@ namespace BasicIDEGlobals
     void ShellCreated(BasicIDEShell* pShell)
     {
         BasicIDEDLL *pIDEGlobals = theBasicIDEDLLInstance::get().get();
-        if (pIDEGlobals && pIDEGlobals->GetShell() == pShell)
+        if (pIDEGlobals && pIDEGlobals->GetShell() == NULL)
             pIDEGlobals->SetShell(pShell);
     }
 
