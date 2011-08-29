@@ -32,7 +32,7 @@
 
 #include <sfx2/tabdlg.hxx>
 
-class XColorTable;
+class XColorList;
 class XGradientList;
 class XHatchList;
 class XBitmapList;
@@ -43,7 +43,7 @@ class SvxFormatCellsDialog : public SfxTabDialog
 private:
     const SfxItemSet&   mrOutAttrs;
 
-    XColorTable*        mpColorTab;
+    XColorList*         mpColorTab;
     XGradientList*      mpGradientList;
     XHatchList*         mpHatchingList;
     XBitmapList*        mpBitmapList;

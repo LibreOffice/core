@@ -80,7 +80,7 @@ namespace sfx2 {
 class SvxSearchItem;
 class SvxShadowItem;
 class Window;
-class XColorTable;
+class XColorList;
 
 struct ScAttrEntry;
 class ScAutoFormatData;
@@ -235,7 +235,7 @@ private:
     SfxPrinter*         pPrinter;
     VirtualDevice*      pVirtualDevice_100th_mm;
     ScDrawLayer*        pDrawLayer;                     // SdrModel
-    XColorTable*        pColorTable;
+    XColorList*         pColorTable;
     ScConditionalFormatList* pCondFormList;             // conditional formats
     ScValidationDataList* pValidationList;              // validity
     SvNumberFormatterIndexTable*    pFormatExchangeList;    // for application of number formats
@@ -434,7 +434,7 @@ public:
     void            GetDocStat( ScDocStat& rDocStat );
 
     SC_DLLPUBLIC void           InitDrawLayer( SfxObjectShell* pDocShell = NULL );
-    XColorTable*    GetColorTable();
+    XColorList*     GetColorTable();
 
     SC_DLLPUBLIC sfx2::LinkManager*     GetLinkManager() const;
 

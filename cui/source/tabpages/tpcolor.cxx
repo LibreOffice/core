@@ -756,12 +756,12 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             aPathURL.removeFinalSlash();
 
             // Tabelle speichern
-            XColorTable* pColTab = new XColorTable( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
+            XColorList* pColTab = new XColorList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
             pColTab->SetName( aURL.getName() ); // XXX
             if( pColTab->Load() )
             {
                 // Pruefen, ob Tabelle geloescht werden darf:
-                const XColorTable *pTempTable = 0;
+                const XColorList *pTempTable = 0;
                 SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( DLGWIN );
                 SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( DLGWIN );
                 if( pArea )

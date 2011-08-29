@@ -242,11 +242,11 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
 
         // set color table
         SvxColorTableItem* pColItem = (SvxColorTableItem*) pObjSh->GetItem( SID_COLOR_TABLE );
-        XColorTable* pXCol = pColItem ? pColItem->GetColorTable() : &XColorTable::GetStdColorTable();
+        XColorList* pXCol = pColItem ? pColItem->GetColorTable() : &XColorList::GetStdColorTable();
         SetColorTable( pXCol );
     }
     else
-        SetColorTable( &XColorTable::GetStdColorTable() );
+        SetColorTable( &XColorList::GetStdColorTable() );
 
     SetSwapGraphics(sal_True);
 

@@ -93,7 +93,7 @@ private:
     const SfxItemSet&       rOutAttrs;
     const ::sd::View*       mpView;
     SdDrawDocument*         mpDoc;
-    XColorTable*            pColTab;
+    XColorList*             pColTab;
 
     sal_Bool                    bTreeUpdated;
     std::vector<com::sun::star::presentation::ClickAction> maCurrentActions;

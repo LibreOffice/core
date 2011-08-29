@@ -49,7 +49,7 @@ using namespace ::cppu;
 class SvxUnoColorTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {
 private:
-    XColorTable*    pTable;
+    XColorList*     pTable;
 
 public:
     SvxUnoColorTable() throw();
@@ -88,7 +88,7 @@ public:
 
 SvxUnoColorTable::SvxUnoColorTable() throw()
 {
-    pTable = new XColorTable( SvtPathOptions().GetPalettePath() );
+    pTable = new XColorList( SvtPathOptions().GetPalettePath() );
 }
 
 SvxUnoColorTable::~SvxUnoColorTable() throw()
@@ -178,7 +178,7 @@ uno::Any SAL_CALL SvxUnoColorTable::getByName( const  OUString& aName )
     if( nIndex == -1 )
         throw container::NoSuchElementException();
 
-    XColorEntry* pEntry = ((XColorTable*)pTable)->GetColor( nIndex );
+    XColorEntry* pEntry = ((XColorList*)pTable)->GetColor( nIndex );
     return uno::Any( (sal_Int32) pEntry->GetColor().GetRGBColor() );
 }
 

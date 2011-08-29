@@ -96,7 +96,7 @@ public:
         getUnoModel();
     SdrModel& getSdrModel();
 
-    XColorTable*    GetColorTable() const;
+    XColorList*     GetColorTable() const;
     XDashList*      GetDashList() const;
     XLineEndList*   GetLineEndList() const;
     XGradientList*  GetGradientList() const;

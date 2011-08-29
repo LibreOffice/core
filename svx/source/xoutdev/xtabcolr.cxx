@@ -59,11 +59,11 @@ static char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };      // = 6.0
 
 /*************************************************************************
 |*
-|* XColorTable::XColorTable()
+|* XColorList::XColorList()
 |*
 *************************************************************************/
 
-XColorTable::XColorTable(
+XColorList::XColorList(
     const String& rPath,
     XOutdevItemPool* pInPool
 ) :
@@ -75,40 +75,40 @@ XColorTable::XColorTable(
 
 /************************************************************************/
 
-XColorTable::~XColorTable()
+XColorList::~XColorList()
 {
 }
 
-XColorTable& XColorTable::GetStdColorTable()
+XColorList& XColorList::GetStdColorTable()
 {
-    static XColorTable aTable(SvtPathOptions().GetPalettePath());
+    static XColorList aTable(SvtPathOptions().GetPalettePath());
     return aTable;
 }
 
 /************************************************************************/
 
-XColorEntry* XColorTable::Replace(long nIndex, XColorEntry* pEntry )
+XColorEntry* XColorList::Replace(long nIndex, XColorEntry* pEntry )
 {
     return (XColorEntry*)XPropertyList::Replace( pEntry, nIndex );
 }
 
 /************************************************************************/
 
-XColorEntry* XColorTable::Remove(long nIndex)
+XColorEntry* XColorList::Remove(long nIndex)
 {
     return (XColorEntry*) XPropertyList::Remove(nIndex);
 }
 
 /************************************************************************/
 
-XColorEntry* XColorTable::GetColor(long nIndex) const
+XColorEntry* XColorList::GetColor(long nIndex) const
 {
     return (XColorEntry*) XPropertyList::Get(nIndex, 0);
 }
 
 /************************************************************************/
 
-sal_Bool XColorTable::Load()
+sal_Bool XColorList::Load()
 {
     if( bListDirty )
     {
@@ -138,7 +138,7 @@ sal_Bool XColorTable::Load()
 
 /************************************************************************/
 
-sal_Bool XColorTable::Save()
+sal_Bool XColorList::Save()
 {
     INetURLObject aURL( aPath );
 
@@ -159,7 +159,7 @@ sal_Bool XColorTable::Save()
 
 /************************************************************************/
 
-sal_Bool XColorTable::Create()
+sal_Bool XColorList::Create()
 {
     XubString aStr;
     xub_StrLen nLen;
@@ -451,14 +451,14 @@ sal_Bool XColorTable::Create()
 
 /************************************************************************/
 
-sal_Bool XColorTable::CreateBitmapsForUI()
+sal_Bool XColorList::CreateBitmapsForUI()
 {
     return( sal_False );
 }
 
 /************************************************************************/
 
-Bitmap* XColorTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
+Bitmap* XColorList::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
 {
     return( NULL );
 }

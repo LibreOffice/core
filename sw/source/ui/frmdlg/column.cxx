@@ -547,7 +547,7 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     // Fill the color listbox
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem*  pItem       = NULL;
-    XColorTable*        pColorTable = NULL;
+    XColorList*         pColorTable = NULL;
     if ( pDocSh )
     {
         pItem = pDocSh->GetItem( SID_COLOR_TABLE );

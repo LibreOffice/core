@@ -35,7 +35,6 @@
 
 /************************************************************************/
 
-class XColorTable;
 class SfxItemPool;
 class NameOrIndex;
 class XPropertyList;

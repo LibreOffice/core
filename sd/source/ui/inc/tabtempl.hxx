@@ -35,7 +35,7 @@
 class SdrModel;
 class SfxObjectShell;
 class SdrView;
-class XColorTable;
+class XColorList;
 class XGradientList;
 class XBitmapList;
 class XDashList;
@@ -54,7 +54,7 @@ private:
     const SfxObjectShell&   rDocShell;
     SdrView*                pSdrView;
 
-    XColorTable*        pColorTab;
+    XColorList*         pColorTab;
     XGradientList*      pGradientList;
     XHatchList*         pHatchingList;
     XBitmapList*        pBitmapList;

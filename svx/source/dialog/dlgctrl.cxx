@@ -976,7 +976,7 @@ XOBitmap SvxBitmapCtl::GetXBitmap()
 
 // Fills the Listbox with color and strings
 
-void ColorLB::Fill( const XColorTable* pColorTab )
+void ColorLB::Fill( const XColorList* pColorTab )
 {
     long nCount = pColorTab->Count();
     XColorEntry* pEntry;
@@ -1007,7 +1007,7 @@ void ColorLB::Modify( XColorEntry* pEntry, sal_uInt16 nPos, Bitmap*  )
 
 // Fills the Listbox with color and strings
 
-void FillAttrLB::Fill( const XColorTable* pColorTab )
+void FillAttrLB::Fill( const XColorList* pColorTab )
 {
     long nCount = pColorTab->Count();
     XColorEntry* pEntry;

@@ -37,7 +37,7 @@
 #include <vcl/tabctrl.hxx>
 // header for class OKButton
 #include <vcl/button.hxx>
-// header for class XColorTable
+// header for class XColorList
 #include <svx/xtable.hxx>
 
 #include "ControllerLockGuard.hxx"
@@ -55,7 +55,7 @@ class View3DDialog : public TabDialog
 public:
     View3DDialog( Window* pWindow,
                   const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel,
-                  XColorTable* pColorTable=0 );
+                  XColorList* pColorTable=0 );
     ~View3DDialog();
 
     // from Dialog (base of TabDialog)

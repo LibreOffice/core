@@ -79,7 +79,7 @@ class SfxStyleSheet;
 class SfxUndoAction;
 class SfxUndoManager;
 class XBitmapList;
-class XColorTable;
+class XColorList;
 class XDashList;
 class XGradientList;
 class XHatchList;
@@ -276,7 +276,7 @@ public:
     bool            mbInDestruction;
 
     // Zeiger auf Paletten, Listen und Tabellen
-    XColorTable*    pColorTable;
+    XColorList*     pColorTable;
     XDashList*      pDashList;
     XLineEndList*   pLineEndList;
     XHatchList*     pHatchList;
@@ -645,8 +645,8 @@ public:
 
     // Accessor methods for Palettes, Lists and Tabeles
     // FIXME: this badly needs re-factoring ...
-    void            SetColorTable(XColorTable* pTable)       { pColorTable=pTable; }
-    XColorTable*    GetColorTable() const                    { return pColorTable; }
+    void            SetColorTable(XColorList* pTable)       { pColorTable=pTable; }
+    XColorList*     GetColorTable() const                    { return pColorTable; }
     void            SetDashList(XDashList* pList)            { pDashList=pList; }
     XDashList*      GetDashList() const                      { return pDashList; }
     void            SetLineEndList(XLineEndList* pList)      { pLineEndList=pList; }

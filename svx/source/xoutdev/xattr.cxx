@@ -440,11 +440,11 @@ SvStream& XColorItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const XColor& XColorItem::GetColorValue(const XColorTable* pTable) const
+|*    const XColor& XColorItem::GetColorValue(const XColorList* pTable) const
 |*
 \************************************************************************/
 
-const Color& XColorItem::GetColorValue(const XColorTable* pTable) const
+const Color& XColorItem::GetColorValue(const XColorList* pTable) const
 {
     if (!IsIndex())
         return aColor;

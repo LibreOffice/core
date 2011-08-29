@@ -39,7 +39,7 @@
 class XBitmapEntry;
 class XBitmapList;
 class XColorEntry;
-class XColorTable;
+class XColorList;
 class XDash;
 class XDashEntry;
 class XDashList;
@@ -262,7 +262,7 @@ public:
          ColorLB( Window* pParent, ResId Id ) : ColorListBox( pParent, Id ) {}
          ColorLB( Window* pParent, WinBits aWB ) : ColorListBox( pParent, aWB ) {}
 
-    virtual void Fill( const XColorTable* pTab );
+    virtual void Fill( const XColorList* pTab );
 
     void Append( XColorEntry* pEntry, Bitmap* pBmp = NULL );
     void Modify( XColorEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
@@ -356,7 +356,7 @@ private:
 public:
          FillAttrLB( Window* pParent, WinBits aWB );
 
-    virtual void Fill( const XColorTable* pTab );
+    virtual void Fill( const XColorList* pTab );
     virtual void Fill( const XHatchList* pList );
     virtual void Fill( const XGradientList* pList );
     virtual void Fill( const XBitmapList* pList );

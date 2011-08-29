@@ -300,17 +300,17 @@ public:
 };
 
 // ------------------
-// class XColorTable
+// class XColorList
 // ------------------
 
-class SVX_DLLPUBLIC XColorTable : public XPropertyList
+class SVX_DLLPUBLIC XColorList : public XPropertyList
 {
 public:
-    explicit        XColorTable(
+    explicit        XColorList(
                         const String& rPath,
                         XOutdevItemPool* pXPool = NULL
                     );
-    virtual         ~XColorTable();
+    virtual         ~XColorList();
 
     using XPropertyList::Replace;
     using XPropertyList::Remove;
@@ -326,7 +326,7 @@ public:
     virtual sal_Bool    CreateBitmapsForUI();
     virtual Bitmap*     CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
 
-    static XColorTable& GetStdColorTable();
+    static XColorList& GetStdColorTable();
 };
 
 // -------------------
