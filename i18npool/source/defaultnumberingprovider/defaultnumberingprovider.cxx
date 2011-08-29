@@ -700,82 +700,82 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 
           case CIRCLE_NUMBER:
               table = table_CircledNumber;
-              tableSize = sizeof(table_CircledNumber) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_CircledNumber);
               break;
           case TIAN_GAN_ZH:
               table = table_TianGan_zh;
-              tableSize = sizeof(table_TianGan_zh) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_TianGan_zh);
               break;
           case DI_ZI_ZH:
               table = table_DiZi_zh;
-              tableSize = sizeof(table_DiZi_zh) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_DiZi_zh);
               break;
           case AIU_FULLWIDTH_JA:
               table = table_AIUFullWidth_ja_JP;
-              tableSize = sizeof(table_AIUFullWidth_ja_JP) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_AIUFullWidth_ja_JP);
               recycleSymbol = sal_True;
               break;
           case AIU_HALFWIDTH_JA:
               table = table_AIUHalfWidth_ja_JP;
-              tableSize = sizeof(table_AIUHalfWidth_ja_JP) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_AIUHalfWidth_ja_JP);
               recycleSymbol = sal_True;
               break;
           case IROHA_FULLWIDTH_JA:
               table = table_IROHAFullWidth_ja_JP;
-              tableSize = sizeof(table_IROHAFullWidth_ja_JP) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_IROHAFullWidth_ja_JP);
               recycleSymbol = sal_True;
               break;
           case IROHA_HALFWIDTH_JA:
               table = table_IROHAHalfWidth_ja_JP;
-              tableSize = sizeof(table_IROHAHalfWidth_ja_JP) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_IROHAHalfWidth_ja_JP);
               recycleSymbol = sal_True;
               break;
           case HANGUL_JAMO_KO:
               table = table_HangulJamo_ko;
-              tableSize = sizeof(table_HangulJamo_ko) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_HangulJamo_ko);
               recycleSymbol = sal_True;
               break;
           case HANGUL_SYLLABLE_KO:
               table = table_HangulSyllable_ko;
-              tableSize = sizeof(table_HangulSyllable_ko) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_HangulSyllable_ko);
               recycleSymbol = sal_True;
               break;
           case HANGUL_CIRCLED_JAMO_KO:
               table = table_HangulCircledJamo_ko;
-              tableSize = sizeof(table_HangulCircledJamo_ko) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_HangulCircledJamo_ko);
               recycleSymbol = sal_True;
               break;
           case HANGUL_CIRCLED_SYLLABLE_KO:
               table = table_HangulCircledSyllable_ko;
-              tableSize = sizeof(table_HangulCircledSyllable_ko) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_HangulCircledSyllable_ko);
               recycleSymbol = sal_True;
               break;
           case CHARS_ARABIC:
-              lcl_formatChars(table_Alphabet_ar, sizeof(table_Alphabet_ar) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_ar, SAL_N_ELEMENTS(table_Alphabet_ar), number - 1, result);
               break;
           case CHARS_ARABIC_ABJAD:
-              lcl_formatChars(table_Alphabet_ar_abjad, sizeof(table_Alphabet_ar_abjad) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_ar_abjad, SAL_N_ELEMENTS(table_Alphabet_ar_abjad), number - 1, result);
               break;
           case CHARS_THAI:
-              lcl_formatChars(table_Alphabet_th, sizeof(table_Alphabet_th) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_th, SAL_N_ELEMENTS(table_Alphabet_th), number - 1, result);
               break;
           case CHARS_HEBREW:
-              lcl_formatChars(table_Alphabet_he, sizeof(table_Alphabet_he) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_he, SAL_N_ELEMENTS(table_Alphabet_he), number - 1, result);
               break;
           case CHARS_NEPALI:
-              lcl_formatChars(table_Alphabet_ne, sizeof(table_Alphabet_ne) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_ne, SAL_N_ELEMENTS(table_Alphabet_ne), number - 1, result);
               break;
           case CHARS_KHMER:
-              lcl_formatChars(table_Alphabet_km, sizeof(table_Alphabet_km) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_km, SAL_N_ELEMENTS(table_Alphabet_km), number - 1, result);
               break;
           case CHARS_LAO:
-              lcl_formatChars(table_Alphabet_lo, sizeof(table_Alphabet_lo) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_lo, SAL_N_ELEMENTS(table_Alphabet_lo), number - 1, result);
               break;
           case CHARS_MYANMAR:
-              lcl_formatChars(table_Alphabet_my, sizeof(table_Alphabet_my) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_my, SAL_N_ELEMENTS(table_Alphabet_my), number - 1, result);
               break;
          case CHARS_TIBETAN:
-              lcl_formatChars(table_Alphabet_dz, sizeof(table_Alphabet_dz) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_dz, SAL_N_ELEMENTS(table_Alphabet_dz), number - 1, result);
               break;
          case CHARS_CYRILLIC_UPPER_LETTER_BG:
               lcl_formatChars2( table_CyrillicUpperLetter_bg,
@@ -853,7 +853,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
               break;
 
           case CHARS_PERSIAN:
-              lcl_formatChars(table_Alphabet_fa, sizeof(table_Alphabet_fa) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_fa, SAL_N_ELEMENTS(table_Alphabet_fa), number - 1, result);
               break;
 
           case CHARS_PERSIAN_WORD:
