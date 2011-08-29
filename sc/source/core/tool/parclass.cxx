@@ -408,7 +408,7 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
             continue;   // not an internal opcode or already done
 
         RunData* pRun = &pData[ pDesc->nFIndex ];
-        sal_Int32 nArgs = pDesc->GetSuppressedArgCount();
+        sal_uInt16 nArgs = pDesc->GetSuppressedArgCount();
         if ( nArgs >= VAR_ARGS )
         {
             nArgs -= VAR_ARGS - 1;
