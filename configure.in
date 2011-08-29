@@ -1542,12 +1542,14 @@ cygwin*|interix*|mingw32*)
     test_freetype=no
     test_fontconfig=no
     _os=WINNT
-    # Confusingly, if the host OS matches "mingw32*", that means
-    # we are using the MinGW compiler, either natively (unlikely)
-    # or cross-compiling. We use WITH_MINGW to indicate
-    # use of MinGW in both cases.
-    case "$host_os" in
 
+    # If the host OS matches "mingw32*", that means we are using the
+    # MinGW cross-compiler, because we don't see the point in building
+    # LibreOffice using MinGW on Windows. If you want to build on
+    # Windows, use MSVC. If you want to use MinGW, surely you want to
+    # cross-compile (from Linux or some other Unix).
+
+    case "$host_os" in
     mingw32*)
         WITH_MINGW=yes
         if test -z "$CC" ; then
@@ -1683,19 +1685,10 @@ if test $_os != iOS -a $_os != Android; then
     BUILD_TYPE="$BUILD_TYPE DESKTOP"
 fi
 
-if test $build_os = "cygwin"; then
-    dnl ===================================================================
-    dnl If $CC is set to a MinGW compiler, set WITH_MINGW
-    dnl ===================================================================
-    if test "$WITH_MINGW" != "yes" -a -n "$CC" -a "`$CC -dumpmachine 2>/dev/null | $SED -e 's/^.*-//'`" = "mingw32"; then
-        WITH_MINGW="yes"
-    fi
-fi
-
 dnl ===================================================================
 dnl Extra check for Windows. Cygwin builds need gcc to build dmake
-dnl and g++ to build guw.exe although MSVC or MinGW is used to
-dnl build LibreOffice.
+dnl although MSVC is used to build other build-time tools and 
+dnl LibreOffice itself.
 dnl ===================================================================
 if test "build_os" = "cygwin" ; then
     AC_MSG_CHECKING([for Cygwin gcc/g++])
@@ -3169,10 +3162,6 @@ if test "$GXX" = "yes"; then
         if test "$with_gxx_include_path" = "/usr/libexec/(null)/include"; then
             with_gxx_include_path="/usr/include"
         fi
-        if test "$build_os" = "cygwin" -a "$WITH_MINGW" = "yes"; then
-            with_gxx_include_path=`cygpath -d "$with_gxx_include_path"`
-            with_gxx_include_path=`cygpath -u "$with_gxx_include_path"`
-        fi
         if echo $with_gxx_include_path | grep -q linux; then
             # workaround for Mandriva - issue 100049
             with_gxx_include_path=`cd $with_gxx_include_path && pwd`
@@ -3196,22 +3185,13 @@ dnl ===================================================================
 dnl Set the MinGW include directories
 dnl ===================================================================
 if test "$WITH_MINGW" = "yes"; then
-    AC_MSG_CHECKING([for MinGW runtime include path])
+    AC_MSG_CHECKING([for MinGW include path])
     cat >conftest.$ac_ext <<_ACEOF
 #include <stddef.h>
 #include <bits/c++config.h>
 _ACEOF
     _mingw_lib_include_path=`$CXX -E -xc++ conftest.$ac_ext | $SED -n -e '/.*1*"\(.*\)\/stddef.h".*/s//\1/p' -e '/.*1*"\(.*\)\/bits\/c++config.h".*/s//\1/p' | sort -u | xargs echo`
     rm conftest.$ac_ext
-    if test "$build_os" = "cygwin" -a -n "$_mingw_lib_include_path"; then
-        _temp=""
-        for a in $_mingw_lib_include_path
-        do
-            a=`cygpath -d "$a"`
-            _temp="$_temp "`cygpath -u "$a"`
-        done
-        _mingw_lib_include_path=$_temp
-    fi
     if test -z "$_mingw_lib_include_path"; then
         _mingw_lib_include_path="NO_LIB_INCLUDE"
         AC_MSG_RESULT([no MinGW include path])
@@ -3220,72 +3200,55 @@ _ACEOF
     fi
     MINGW_LIB_INCLUDE_PATH="$_mingw_lib_include_path"
     AC_SUBST(MINGW_LIB_INCLUDE_PATH)
-    dnl mingw gcc 4.4.0 needs backward in include path to use hash_set/hash_map
-    AC_MSG_CHECKING([for MinGW C++ backward include path])
-    cat >conftest.$ac_ext <<_ACEOF
-#include <hash_set>
-_ACEOF
-    _mingw_backward_include_path=`$CXX -E -xc++ -Wno-deprecated conftest.$ac_ext 2>&5| $SED -n -e '/.*1*"\(.*\)\/hash_set".*/s//\1/p' | sort -u | xargs echo`
-    rm conftest.$ac_ext
-    if test "$build_os" = "cygwin" -a -n "$_mingw_backward_include_path"; then
-        _mingw_backward_include_path=`cygpath -d $_mingw_backward_include_path`
-        _mingw_backward_include_path=`cygpath -u $_mingw_backward_include_path`
-        AC_MSG_RESULT([$_mingw_backward_include_path])
-    else
-        _mingw_backward_include_path="NO_BACKWARD_INCLUDE"
-        AC_MSG_RESULT([no MinGW C++ backward includes])
-    fi
-    MINGW_BACKWARD_INCLUDE_PATH="$_mingw_backward_include_path"
-    AC_SUBST(MINGW_BACKWARD_INCLUDE_PATH)
+
     mingw_crtbegin=`$CC -print-file-name=crtbegin.o`
     MINGW_CLIB_DIR=`dirname $mingw_crtbegin`
 
-    # How to do this crack when cross-compiling?
-    AC_MSG_CHECKING([whether to use dynamic libgcc])
-    if test "$build_os" = "cygwin" -a -e "$MINGW_CLIB_DIR/libgcc_s.a"; then
-        AC_MSG_CHECKING([dynamic libgcc name])
-        MINGW_GCCDLL_pattern=`nm $MINGW_CLIB_DIR/libgcc_s.a | $SED -ne 's@.* _libgcc\(.*\)_dll_iname@libgcc\1.dll@p' | uniq | $SED -e 's@_@?@g'`
-        MINGW_GCCDLL=`cd $COMPATH/bin && ls $MINGW_GCCDLL_pattern 2>/dev/null`
-        if test -n "$MINGW_GCCDLL"; then
-            MINGW_SHARED_GCCLIB=YES
-            AC_MSG_RESULT([use $MINGW_GCCDLL])
-        else
-            AC_MSG_RESULT([no])
-        fi
-    else
-        AC_MSG_RESULT([no])
-    fi
-    if test -e "$MINGW_CLIB_DIR/libgcc_eh.a"; then
-        MINGW_GCCLIB_EH=YES
-    fi
+    AC_LANG_PUSH([C++])
 
-    AC_MSG_CHECKING([whether to use dynamic libstdc++])
-    MINGW_SHARED_LIBSTDCPP=
-    if test -e "$MINGW_CLIB_DIR/libstdc++_s.a" ; then
-        MINGW_SHARED_LIBSTDCPP=stdc++_s
-    fi
-    if test -e "$MINGW_CLIB_DIR/libstdc++.dll.a" ; then
-        MINGW_SHARED_LIBSTDCPP=stdc++.dll
-    fi
-    if test "$build_os" = "cygwin" -a -n "$MINGW_SHARED_LIBSTDCPP" ; then
-        AC_MSG_CHECKING([dynamic libstdc++ name])
-        MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/lib$MINGW_SHARED_LIBSTDCPP.a | sed -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | sed -e 's@_@?@g'`
-        MINGW_GXXDLL=`cd $COMPATH/bin && ls $MINGW_GXXDLL_pattern 2>/dev/null`
-        if test -n "$MINGW_GXXDLL"; then
-            MINGW_SHARED_LIBSTDCPP=-l$MINGW_SHARED_LIBSTDCPP
-            MINGW_SHARED_GXXLIB=YES
-            AC_MSG_RESULT([use $MINGW_GXXDLL])
-        else
-            MINGW_SHARED_LIBSTDCPP=
-            AC_MSG_RESULT([no])
-        fi
-    else
-        AC_MSG_RESULT([no])
-    fi
-    test "$build_os" = "cygwin" && MINGW_CLIB_DIR=`cygpath $MINGW_CLIB_DIR`
+    AC_MSG_CHECKING([for dynamic libgcc])
+    AC_TRY_LINK([
+#include <iostream>
+using namespace std;
+],  
+        [ try { throw 42; } catch (int e) { cout << "Yep, " << e << endl; } ],
+        [   
+            MINGW_GCCDLL=`$OBJDUMP -p conftest.exe | grep 'DLL Name: libgcc' | $SED -e 's@.*DLL Name: @@'`
+            if test -n "$MINGW_GCCDLL"; then
+                MINGW_SHARED_GCCLIB=YES
+                AC_MSG_RESULT([ $MINGW_GCCDLL])
+            else
+                AC_MSG_ERROR([no])
+            fi
+       ],
+       [ AC_MSG_RESULT([no])
+       ]
+    )
+
+    AC_MSG_CHECKING([for dynamic libstdc++])
+    AC_TRY_LINK([
+#include <iostream>
+using namespace std;
+],  
+        [ cout << "Hello there." << endl; ],
+        [   
+            MINGW_GXXDLL=`$OBJDUMP -p conftest.exe | grep 'DLL Name: libstdc++' | $SED -e 's@.*DLL Name: @@'`
+            if test -n "$MINGW_GXXDLL"; then
+                MINGW_SHARED_LIBSTDCPP=-l${MINGW_GXXDLL%.dll}
+                MINGW_SHARED_GXXLIB=YES
+                AC_MSG_RESULT([$MINGW_GXXDLL])
+            else
+                AC_MSG_ERROR([no])
+            fi
+       ],
+       [ AC_MSG_RESULT([no])
+       ]
+    )
+
+    AC_LANG_POP([C++])
+
     AC_SUBST(MINGW_CLIB_DIR)
     AC_SUBST(MINGW_SHARED_GCCLIB)
-    AC_SUBST(MINGW_GCCLIB_EH)
     AC_SUBST(MINGW_SHARED_GXXLIB)
     AC_SUBST(MINGW_SHARED_LIBSTDCPP)
     AC_SUBST(MINGW_GCCDLL)

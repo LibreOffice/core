@@ -1630,6 +1630,13 @@ elsif ( $platform =~ m/mingw32/ )
 {  ToFile( "NSIS_PATH",         $NSIS_PATH,         "e" );
    ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
    ToFile( "DISABLE_ATL",       "@DISABLE_ATL@",    "e" );
+   ToFile( "MINGW_CLIB_DIR",    "@MINGW_CLIB_DIR@", "e" );
+   ToFile( "MINGW_SHARED_GCCLIB", "@MINGW_SHARED_GCCLIB@", "e" );
+   ToFile( "MINGW_SHARED_GXXLIB", "@MINGW_SHARED_GXXLIB@", "e" );
+   ToFile( "MINGW_SHARED_LIBSTDCPP", "@MINGW_SHARED_LIBSTDCPP@", "e" );
+   ToFile( "MINGW_GCCDLL",      "@MINGW_GCCDLL@",   "e" );
+   ToFile( "MINGW_GXXDLL",      "@MINGW_GXXDLL@",   "e" );
+
 }
 
 if ("@WITH_VC_REDIST@" eq "TRUE") {
