@@ -194,18 +194,19 @@ protected:
     void            RejectFiltered();
     void            AcceptFiltered();
 
-    sal_Bool            IsValidAction(const ScChangeAction* pScChangeAction);
+    bool            IsValidAction(const ScChangeAction* pScChangeAction);
 
     rtl::OUString* MakeTypeString(ScChangeActionType eType);
 
-    SvLBoxEntry*    InsertChangeAction(const ScChangeAction* pScChangeAction,ScChangeActionState eState,
-                                    SvLBoxEntry* pParent=NULL,sal_Bool bDelMaster=false,
-                                    sal_Bool bDisabled=false,sal_uLong nPos=LIST_APPEND);
+    SvLBoxEntry* InsertChangeAction(
+        const ScChangeAction* pScChangeAction,ScChangeActionState eState,
+        SvLBoxEntry* pParent=NULL,bool bDelMaster = false,
+        bool bDisabled = false,sal_uLong nPos = LIST_APPEND);
 
-    SvLBoxEntry*    InsertFilteredAction(const ScChangeAction* pScChangeAction,ScChangeActionState eState,
-                                    SvLBoxEntry* pParent=NULL,sal_Bool bDelMaster=false,
-                                    sal_Bool bDisabled=false,sal_uLong nPos=LIST_APPEND);
-
+    SvLBoxEntry* InsertFilteredAction(
+        const ScChangeAction* pScChangeAction,ScChangeActionState eState,
+        SvLBoxEntry* pParent = NULL,bool bDelMaster = false,
+        bool bDisabled = false, sal_uLong nPos = LIST_APPEND);
 
     SvLBoxEntry*    InsertChangeActionContent(const ScChangeActionContent* pScChangeAction,
                                               SvLBoxEntry* pParent,sal_uLong nSpecial);
@@ -214,14 +215,14 @@ protected:
                                 ScChangeActionTable& aActionTable,
                                 SvLBoxEntry* pEntry);
 
-    sal_Bool            InsertContentChilds(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent);
+    bool            InsertContentChilds(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent);
 
-    sal_Bool            InsertAcceptedORejected(SvLBoxEntry* pParent);
+    bool            InsertAcceptedORejected(SvLBoxEntry* pParent);
 
-    sal_Bool            InsertDeletedChilds(const ScChangeAction *pChangeAction, ScChangeActionTable* pActionTable,
+    bool            InsertDeletedChilds(const ScChangeAction *pChangeAction, ScChangeActionTable* pActionTable,
                                         SvLBoxEntry* pParent);
 
-    sal_Bool            InsertChilds(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent);
+    bool            InsertChilds(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent);
 
     void            AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartAction, sal_uLong nEndAction,
                                     sal_uLong nPos=LIST_APPEND);
@@ -232,8 +233,8 @@ protected:
     void            UpdateView();
     void            ClearView();
 
-    sal_Bool            Expand(ScChangeTrack* pChanges,const ScChangeAction* pScChangeAction,
-                            SvLBoxEntry* pEntry, sal_Bool bFilter=false);
+    bool            Expand(ScChangeTrack* pChanges,const ScChangeAction* pScChangeAction,
+                           SvLBoxEntry* pEntry, bool bFilter = false);
 
 public:
                     ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,

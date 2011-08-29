@@ -61,7 +61,7 @@
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute();
 
-inline void EnableDisable( Window& rWin, sal_Bool bEnable )
+inline void EnableDisable( Window& rWin, bool bEnable )
 {
     if (bEnable)
         rWin.Enable();
@@ -325,11 +325,11 @@ rtl::OUString* ScAcceptChgDlg::MakeTypeString(ScChangeActionType eType)
 }
 
 
-sal_Bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
+bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
 {
     if(pScChangeAction==NULL) return false;
 
-    sal_Bool bFlag=false;
+    bool bFlag = false;
 
     ScRange aRef=pScChangeAction->GetBigRange().MakeRange();
     String aUser=pScChangeAction->GetUser();
@@ -377,9 +377,9 @@ sal_Bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
     return bFlag;
 }
 
-SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeAction,
-                                                   ScChangeActionState /* eState */, SvLBoxEntry* pParent,
-                                                   sal_Bool bDelMaster,sal_Bool bDisabled,sal_uLong nPos)
+SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(
+    const ScChangeAction* pScChangeAction, ScChangeActionState /*eState*/,
+    SvLBoxEntry* pParent, bool bDelMaster,bool bDisabled, sal_uLong nPos)
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
 
@@ -387,7 +387,7 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeA
 
     SvLBoxEntry* pEntry=NULL;
 
-    sal_Bool bFlag=false;
+    bool bFlag = false;
 
     ScRange aRef=pScChangeAction->GetBigRange().MakeRange();
     String aUser=pScChangeAction->GetUser();
@@ -445,7 +445,7 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeA
     aBuf.append(aRefStr);
     aBuf.append(sal_Unicode('\t'));
 
-    sal_Bool bIsGenerated;
+    bool bIsGenerated = false;
 
     if(!pChanges->IsGenerated(pScChangeAction->GetActionNumber()))
     {
@@ -456,13 +456,13 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeA
         aBuf.append(ScGlobal::pLocaleData->getTime(aDateTime));
         aBuf.append(sal_Unicode('\t'));
 
-        bIsGenerated=false;
+        bIsGenerated = false;
     }
     else
     {
         aBuf.append(sal_Unicode('\t'));
         aBuf.append(sal_Unicode('\t'));
-        bIsGenerated=true;
+        bIsGenerated = true;
     }
 
     String aComment=pScChangeAction->GetComment();
@@ -529,20 +529,20 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeA
     return pEntry;
 }
 
-SvLBoxEntry* ScAcceptChgDlg::InsertFilteredAction(const ScChangeAction* pScChangeAction,
-                                                   ScChangeActionState eState,SvLBoxEntry* pParent,
-                                                   sal_Bool bDelMaster,sal_Bool bDisabled,sal_uLong nPos)
+SvLBoxEntry* ScAcceptChgDlg::InsertFilteredAction(
+    const ScChangeAction* pScChangeAction, ScChangeActionState eState,
+    SvLBoxEntry* pParent, bool bDelMaster, bool bDisabled, sal_uLong nPos)
 {
 
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
 
     if(pScChangeAction==NULL || pChanges==NULL) return NULL;
 
-    sal_Bool bIsGenerated=pChanges->IsGenerated(pScChangeAction->GetActionNumber());
+    bool bIsGenerated = pChanges->IsGenerated(pScChangeAction->GetActionNumber());
 
     SvLBoxEntry* pEntry=NULL;
 
-    int bFlag=false;
+    bool bFlag = false;
 
     ScRange aRef=pScChangeAction->GetBigRange().MakeRange();
     String aUser=pScChangeAction->GetUser();
@@ -558,13 +558,13 @@ SvLBoxEntry* ScAcceptChgDlg::InsertFilteredAction(const ScChangeAction* pScChang
                 if( pRangeEntry->Intersects(aRef) )
                 {
                     if( pScChangeAction->GetState()==eState )
-                        bFlag=true;
+                        bFlag = true;
                     break;
                 }
             }
         }
         else if(pScChangeAction->GetState()==eState && !bIsGenerated)
-            bFlag=true;
+            bFlag = true;
     }
 
     if(bFlag)
@@ -664,9 +664,9 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionConte
 
     if(pScChangeAction==NULL || pChanges==NULL) return NULL;
 
-    sal_Bool bIsGenerated=pChanges->IsGenerated(pScChangeAction->GetActionNumber());
+    bool bIsGenerated = pChanges->IsGenerated(pScChangeAction->GetActionNumber());
 
-    sal_Bool bFlag=false;
+    bool bFlag = false;
 
     ScRange aRef=pScChangeAction->GetBigRange().MakeRange();
     String aUser=pScChangeAction->GetUser();
@@ -805,10 +805,10 @@ void ScAcceptChgDlg::UpdateView()
     bRejectEnableFlag=true;
     SetPointer(Pointer(POINTER_WAIT));
     pTheView->SetUpdateMode(false);
-    sal_Bool bFilterFlag=pTPFilter->IsDate()||pTPFilter->IsRange()||
-                     pTPFilter->IsAuthor()||pTPFilter->IsComment();
+    bool bFilterFlag = pTPFilter->IsDate() || pTPFilter->IsRange() ||
+        pTPFilter->IsAuthor() || pTPFilter->IsComment();
 
-    bUseColor=bFilterFlag;
+    bUseColor = bFilterFlag;
 
     if(pDoc!=NULL)
     {
@@ -817,7 +817,7 @@ void ScAcceptChgDlg::UpdateView()
             pScChangeAction=pChanges->GetFirst();
     }
     ScChangeActionTable ActionTable;
-    sal_Bool bTheFlag=false;
+    bool bTheFlag = false;
 
     while(pScChangeAction!=NULL)
     {
@@ -856,7 +856,7 @@ void ScAcceptChgDlg::UpdateView()
                 pParent->EnableChildsOnDemand(true);
             else
             {
-                sal_Bool bTestFlag=bHasFilterEntry;
+                bool bTestFlag = bHasFilterEntry;
                 bHasFilterEntry=false;
                 if(Expand(pChanges,pScChangeAction,pParent,!bTestFlag)&&!bTestFlag)
                     pTheView->RemoveEntry(pParent);
@@ -1194,12 +1194,12 @@ void ScAcceptChgDlg::GetDependents(  const ScChangeAction* pScChangeAction,
                     aActionTable,pScChangeAction->IsMasterDelete());
 }
 
-sal_Bool ScAcceptChgDlg::InsertContentChilds(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent)
+bool ScAcceptChgDlg::InsertContentChilds(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent)
 {
-    sal_Bool bTheTestFlag=true;
+    bool bTheTestFlag = true;
     ScRedlinData *pEntryData=(ScRedlinData *)(pParent->GetUserData());
     const ScChangeAction* pScChangeAction = (ScChangeAction*) pEntryData->pData;
-    sal_Bool bParentInserted = false;
+    bool bParentInserted = false;
     // If the parent is a MatrixOrigin then place it in the right order before
     // the MatrixReferences. Also if it is the first content change at this
     // position don't insert the first dependent MatrixReference as the special
@@ -1268,10 +1268,10 @@ sal_Bool ScAcceptChgDlg::InsertContentChilds(ScChangeActionTable* pActionTable,S
 
 }
 
-sal_Bool ScAcceptChgDlg::InsertAcceptedORejected(SvLBoxEntry* pParent)
+bool ScAcceptChgDlg::InsertAcceptedORejected(SvLBoxEntry* pParent)
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
-    sal_Bool bTheTestFlag=true;
+    bool bTheTestFlag = true;
 
     ScChangeActionState eState = SC_CAS_VIRGIN;
     rtl::OUString aString = pTheView->GetEntryText(pParent);
@@ -1296,10 +1296,10 @@ sal_Bool ScAcceptChgDlg::InsertAcceptedORejected(SvLBoxEntry* pParent)
     return bTheTestFlag;
 }
 
-sal_Bool ScAcceptChgDlg::InsertChilds(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent)
+bool ScAcceptChgDlg::InsertChilds(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent)
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
-    sal_Bool bTheTestFlag=true;
+    bool bTheTestFlag = true;
     SvLBoxEntry* pEntry=NULL;
     const ScChangeAction* pChild=(const ScChangeAction*)pActionTable->First();
     while(pChild!=NULL)
@@ -1322,11 +1322,12 @@ sal_Bool ScAcceptChgDlg::InsertChilds(ScChangeActionTable* pActionTable,SvLBoxEn
     }
     return bTheTestFlag;
 }
-sal_Bool ScAcceptChgDlg::InsertDeletedChilds(const ScChangeAction* pScChangeAction,
+
+bool ScAcceptChgDlg::InsertDeletedChilds(const ScChangeAction* pScChangeAction,
                                          ScChangeActionTable* pActionTable,SvLBoxEntry* pParent)
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
-    sal_Bool bTheTestFlag=true;
+    bool bTheTestFlag = true;
     SvLBoxEntry* pEntry=NULL;
     ScChangeActionTable aDelActionTable;
     const ScChangeAction* pChild=(const ScChangeAction*)pActionTable->First();
@@ -1356,10 +1357,11 @@ sal_Bool ScAcceptChgDlg::InsertDeletedChilds(const ScChangeAction* pScChangeActi
     return bTheTestFlag;
 }
 
-sal_Bool ScAcceptChgDlg::Expand(ScChangeTrack* pChanges,const ScChangeAction* pScChangeAction,
-                            SvLBoxEntry* pEntry,sal_Bool bFilter)
+bool ScAcceptChgDlg::Expand(
+    ScChangeTrack* pChanges, const ScChangeAction* pScChangeAction,
+    SvLBoxEntry* pEntry, bool bFilter)
 {
-    sal_Bool bTheTestFlag=true;
+    bool bTheTestFlag = true;
 
     if(pChanges!=NULL &&pEntry!=NULL &&pScChangeAction!=NULL)
     {
@@ -1412,7 +1414,7 @@ IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
 
             if(pEntry->HasChildsOnDemand())
             {
-                sal_Bool bTheTestFlag=true;
+                bool bTheTestFlag = true;
                 pEntry->EnableChildsOnDemand(false);
                 pTheView->RemoveEntry(pTheView->FirstChild(pEntry));
 
@@ -1473,12 +1475,12 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartActio
         pTheView->SetUpdateMode(false);
 
         ScChangeActionTable ActionTable;
-        sal_Bool bTheFlag=false;
+        bool bTheFlag = false;
 
-        sal_Bool bFilterFlag=pTPFilter->IsDate()||pTPFilter->IsRange()||
-                     pTPFilter->IsAuthor()||pTPFilter->IsComment();
+        bool bFilterFlag = pTPFilter->IsDate() || pTPFilter->IsRange() ||
+            pTPFilter->IsAuthor() || pTPFilter->IsComment();
 
-        bUseColor=bFilterFlag;
+        bUseColor = bFilterFlag;
 
         for(sal_uLong i=nStartAction;i<=nEndAction;i++)
         {
@@ -1520,8 +1522,8 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartActio
                     pParent->EnableChildsOnDemand(true);
                 else
                 {
-                    sal_Bool bTestFlag=bHasFilterEntry;
-                    bHasFilterEntry=false;
+                    bool bTestFlag = bHasFilterEntry;
+                    bHasFilterEntry = false;
                     if(Expand(pChanges,pScChangeAction,pParent,!bTestFlag)&&!bTestFlag)
                         pTheView->RemoveEntry(pParent);
                 }
@@ -1562,7 +1564,7 @@ void ScAcceptChgDlg::RemoveEntrys(sal_uLong nStartAction,sal_uLong nEndAction)
     if(nAction>=nStartAction && nAction<=nEndAction)
         pTheView->SetCurEntry(pTheView->GetModel()->GetEntry(0));
 
-    sal_Bool bRemove=false;
+    bool bRemove = false;
 
     // MUST do it backwards, don't delete parents before children and GPF
     pEntry=pTheView->Last();
@@ -1595,7 +1597,7 @@ void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, sal_uLong nStartActi
 
     sal_uLong nPos=LIST_APPEND;
 
-    sal_Bool bRemove=false;
+    bool bRemove = false;
 
     SvLBoxEntry* pEntry=pTheView->First();
     SvLBoxEntry* pNextEntry = (pEntry ? pTheView->NextSibling(pEntry) : NULL);
@@ -1704,9 +1706,9 @@ IMPL_LINK( ScAcceptChgDlg, UpdateSelectionHdl, Timer*, EMPTYARG )
 {
     ScTabView* pTabView = pViewData->GetView();
 
-    sal_Bool bAcceptFlag = true;
-    sal_Bool bRejectFlag = true;
-    sal_Bool bContMark = false;
+    bool bAcceptFlag = true;
+    bool bRejectFlag = true;
+    bool bContMark = false;
 
     pTabView->DoneBlockMode();  // clears old marking
     SvLBoxEntry* pEntry = pTheView->FirstSelected();
@@ -1725,7 +1727,7 @@ IMPL_LINK( ScAcceptChgDlg, UpdateSelectionHdl, Timer*, EMPTYARG )
                 const ScBigRange& rBigRange = pScChangeAction->GetBigRange();
                 if( rBigRange.IsValid( pDoc ) && IsActive() )
                 {
-                    sal_Bool bSetCursor = !pTheView->NextSelected( pEntry );
+                    bool bSetCursor = !pTheView->NextSelected( pEntry );
                     pTabView->MarkRange( rBigRange.MakeRange(), bSetCursor, bContMark );
                     bContMark = true;
                 }
@@ -1743,7 +1745,7 @@ IMPL_LINK( ScAcceptChgDlg, UpdateSelectionHdl, Timer*, EMPTYARG )
     }
 
     ScChangeTrack* pChanges = pDoc->GetChangeTrack();
-    sal_Bool bEnable = pDoc->IsDocEditable() && pChanges && !pChanges->IsProtected();
+    bool bEnable = pDoc->IsDocEditable() && pChanges && !pChanges->IsProtected();
     pTPView->EnableAccept( bAcceptFlag && bEnable );
     pTPView->EnableReject( bRejectFlag && bEnable );
 
@@ -1820,7 +1822,7 @@ IMPL_LINK( ScAcceptChgDlg, CommandHdl, Control*, EMPTYARG )
             }
             else
             {
-                sal_Bool bSortDir=pTheView->GetSortDirection();
+                bool bSortDir = pTheView->GetSortDirection();
                 sal_uInt16 nDialogCol=nCommand-SC_SUB_SORT-1;
                 if(nSortedCol==nDialogCol) bSortDir=!bSortDir;
                 pTheView->SortByCol(nDialogCol,bSortDir);
