@@ -1,0 +1,528 @@
+--- misc/pango-1.28.3/pango/pango-language-sample-table.h	2011-08-30 03:35:41.996353700 +0900
++++ misc/build/pango-1.28.3/pango/pango-language-sample-table.h	2011-08-30 03:33:09.885653400 +0900
+@@ -58,13 +58,13 @@
+ LANGUAGE(
+ 	 ar	/* Arabic */,
+ 	 WP-PANG,
+-	 "نص حكيم له سر قاطع وذو شأن عظيم مكتوب على ثوب أخضر ومغلف بجلد أزرق."
++	 "\xd9""\x86""\xd8""\xb5"" \xd8""\xad""\xd9""\x83""\xd9""\x8a""\xd9""\x85"" \xd9""\x84""\xd9""\x87"" \xd8""\xb3""\xd8""\xb1"" \xd9""\x82""\xd8""\xa7""\xd8""\xb7""\xd8""\xb9"" \xd9""\x88""\xd8""\xb0""\xd9""\x88"" \xd8""\xb4""\xd8""\xa3""\xd9""\x86"" \xd8""\xb9""\xd8""\xb8""\xd9""\x8a""\xd9""\x85"" \xd9""\x85""\xd9""\x83""\xd8""\xaa""\xd9""\x88""\xd8""\xa8"" \xd8""\xb9""\xd9""\x84""\xd9""\x89"" \xd8""\xab""\xd9""\x88""\xd8""\xa8"" \xd8""\xa3""\xd8""\xae""\xd8""\xb6""\xd8""\xb1"" \xd9""\x88""\xd9""\x85""\xd8""\xba""\xd9""\x84""\xd9""\x81"" \xd8""\xa8""\xd8""\xac""\xd9""\x84""\xd8""\xaf"" \xd8""\xa3""\xd8""\xb2""\xd8""\xb1""\xd9""\x82""."
+ 	 /* A wise text which has an absolute secret and great importance, written on a green tissue and covered with blue leather. */
+ 	)
+ LANGUAGE(
+ 	 arn	/* Mapudungun */,
+ 	 WP-PANG,
+-	 "Gvxam mincetu apocikvyeh: ñizol ce mamvj ka raq kuse bafkeh mew."
++	 "Gvxam mincetu apocikvyeh: \xc3""\xb1""izol ce mamvj ka raq kuse bafkeh mew."
+ 	 /* Tale under the full moon: the chief chemamull and the clay old woman at the lake/sea. */
+ 	)
+ LANGUAGE(
+@@ -76,7 +76,7 @@
+ LANGUAGE(
+ 	 bg	/* Bulgarian */,
+ 	 WP-SFD,
+-	 "Под южно дърво, цъфтящо в синьо, бягаше малко пухкаво зайче."
++	 "\xd0""\x9f""\xd0""\xbe""\xd0""\xb4"" \xd1""\x8e""\xd0""\xb6""\xd0""\xbd""\xd0""\xbe"" \xd0""\xb4""\xd1""\x8a""\xd1""\x80""\xd0""\xb2""\xd0""\xbe"", \xd1""\x86""\xd1""\x8a""\xd1""\x84""\xd1""\x82""\xd1""\x8f""\xd1""\x89""\xd0""\xbe"" \xd0""\xb2"" \xd1""\x81""\xd0""\xb8""\xd0""\xbd""\xd1""\x8c""\xd0""\xbe"", \xd0""\xb1""\xd1""\x8f""\xd0""\xb3""\xd0""\xb0""\xd1""\x88""\xd0""\xb5"" \xd0""\xbc""\xd0""\xb0""\xd0""\xbb""\xd0""\xba""\xd0""\xbe"" \xd0""\xbf""\xd1""\x83""\xd1""\x85""\xd0""\xba""\xd0""\xb0""\xd0""\xb2""\xd0""\xbe"" \xd0""\xb7""\xd0""\xb0""\xd0""\xb9""\xd1""\x87""\xd0""\xb5""."
+ 	 /* A little fluffy young rabbit ran under a southern tree blooming in blue */
+ 	)
+ LANGUAGE(
+@@ -88,37 +88,37 @@
+ LANGUAGE(
+ 	 bn	/* Bengali */,
+ 	 GLASS,
+-	 "আমি কাঁচ খেতে পারি, তাতে আমার কোনো ক্ষতি হয় না।"
++	 "\xe0""\xa6""\x86""\xe0""\xa6""\xae""\xe0""\xa6""\xbf"" \xe0""\xa6""\x95""\xe0""\xa6""\xbe""\xe0""\xa6""\x81""\xe0""\xa6""\x9a"" \xe0""\xa6""\x96""\xe0""\xa7""\x87""\xe0""\xa6""\xa4""\xe0""\xa7""\x87"" \xe0""\xa6""\xaa""\xe0""\xa6""\xbe""\xe0""\xa6""\xb0""\xe0""\xa6""\xbf"", \xe0""\xa6""\xa4""\xe0""\xa6""\xbe""\xe0""\xa6""\xa4""\xe0""\xa7""\x87"" \xe0""\xa6""\x86""\xe0""\xa6""\xae""\xe0""\xa6""\xbe""\xe0""\xa6""\xb0"" \xe0""\xa6""\x95""\xe0""\xa7""\x8b""\xe0""\xa6""\xa8""\xe0""\xa7""\x8b"" \xe0""\xa6""\x95""\xe0""\xa7""\x8d""\xe0""\xa6""\xb7""\xe0""\xa6""\xa4""\xe0""\xa6""\xbf"" \xe0""\xa6""\xb9""\xe0""\xa7""\x9f"" \xe0""\xa6""\xa8""\xe0""\xa6""\xbe""\xe0""\xa5""\xa4"""
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 bo	/* Tibetan */,
+ 	 GLASS,
+-	 "ཤེལ་སྒོ་ཟ་ནས་ང་ན་གི་མ་རེད།"
++	 "\xe0""\xbd""\xa4""\xe0""\xbd""\xba""\xe0""\xbd""\xa3""\xe0""\xbc""\x8b""\xe0""\xbd""\xa6""\xe0""\xbe""\x92""\xe0""\xbd""\xbc""\xe0""\xbc""\x8b""\xe0""\xbd""\x9f""\xe0""\xbc""\x8b""\xe0""\xbd""\x93""\xe0""\xbd""\xa6""\xe0""\xbc""\x8b""\xe0""\xbd""\x84""\xe0""\xbc""\x8b""\xe0""\xbd""\x93""\xe0""\xbc""\x8b""\xe0""\xbd""\x82""\xe0""\xbd""\xb2""\xe0""\xbc""\x8b""\xe0""\xbd""\x98""\xe0""\xbc""\x8b""\xe0""\xbd""\xa2""\xe0""\xbd""\xba""\xe0""\xbd""\x91""\xe0""\xbc""\x8d"""
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 bs	/* Bosnian */,
+ 	 WP-PANG,
+-	 "Fin džip, gluh jež i čvrst konjić dođoše bez moljca."
++	 "Fin d\xc5""\xbe""ip, gluh je\xc5""\xbe"" i \xc4""\x8d""vrst konji\xc4""\x87"" do\xc4""\x91""o\xc5""\xa1""e bez moljca."
+ 	 /* A nice jeep, a deaf hedgehog and a tough horse came without a moth. */
+ 	)
+ LANGUAGE(
+ 	 ca	/* Catalan */,
+ 	 WP-PANG,
+-	 "Jove xef, porti whisky amb quinze glaçons d'hidrogen, coi!"
++	 "Jove xef, porti whisky amb quinze gla\xc3""\xa7""ons d'hidrogen, coi!"
+ 	 /* Young chef, bring whisky with fifteen hydrogen ice cubes, damn! */
+ 	)
+ LANGUAGE(
+ 	 ch	/* Chamorro */,
+ 	 GLASS,
+-	 "Siña yo' chumocho krestat, ti ha na'lalamen yo'."
++	 "Si\xc3""\xb1""a yo' chumocho krestat, ti ha na'lalamen yo'."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 cs	/* Czech */,
+ 	 WP-SFD,
+-	 "Příliš žluťoučký kůň úpěl ďábelské ódy."
++	 "P\xc5""\x99""\xc3""\xad""li\xc5""\xa1"" \xc5""\xbe""lu\xc5""\xa5""ou\xc4""\x8d""k\xc3""\xbd"" k\xc5""\xaf""\xc5""\x88"" \xc3""\xba""p\xc4""\x9b""l \xc4""\x8f""\xc3""\xa1""belsk\xc3""\xa9"" \xc3""\xb3""dy."
+ 	 /* A too yellow horse moaned devil odes. */
+ 	)
+ LANGUAGE(
+@@ -130,19 +130,19 @@
+ LANGUAGE(
+ 	 da	/* Danish */,
+ 	 WP-SFD,
+-	 "Quizdeltagerne spiste jordbær med fløde, mens cirkusklovnen Walther spillede på xylofon."
++	 "Quizdeltagerne spiste jordb\xc3""\xa6""r med fl\xc3""\xb8""de, mens cirkusklovnen Walther spillede p\xc3""\xa5"" xylofon."
+ 	 /* The quiz contestants ate strawberries with cream while Walther the clown was playing the xylophone. */
+ 	)
+ LANGUAGE(
+ 	 de	/* German */,
+ 	 WP-SFD,
+-	 "Zwölf Boxkämpfer jagen Viktor quer über den großen Sylter Deich."
++	 "Zw\xc3""\xb6""lf Boxk\xc3""\xa4""mpfer jagen Viktor quer \xc3""\xbc""ber den gro\xc3""\x9f""en Sylter Deich."
+ 	 /* Twelve boxing fighters drive Viktor over the great. */
+ 	)
+ LANGUAGE(
+ 	 el	/* Greek */,
+ 	 WP-SFD,
+-	 "Θέλει αρετή και τόλμη η ελευθερία. (Ανδρέας Κάλβος)"
++	 "\xce""\x98""\xce""\xad""\xce""\xbb""\xce""\xb5""\xce""\xb9"" \xce""\xb1""\xcf""\x81""\xce""\xb5""\xcf""\x84""\xce""\xae"" \xce""\xba""\xce""\xb1""\xce""\xb9"" \xcf""\x84""\xcf""\x8c""\xce""\xbb""\xce""\xbc""\xce""\xb7"" \xce""\xb7"" \xce""\xb5""\xce""\xbb""\xce""\xb5""\xcf""\x85""\xce""\xb8""\xce""\xb5""\xcf""\x81""\xce""\xaf""\xce""\xb1"". (\xce""\x91""\xce""\xbd""\xce""\xb4""\xcf""\x81""\xce""\xad""\xce""\xb1""\xcf""\x82"" \xce""\x9a""\xce""\xac""\xce""\xbb""\xce""\xb2""\xce""\xbf""\xcf""\x82"")"
+ 	 /* Liberty requires virtue and mettle. (Andreas Kalvos) */
+ 	)
+ LANGUAGE(
+@@ -153,25 +153,25 @@
+ LANGUAGE(
+ 	 enm	/* Middle English */,
+ 	 GLASS,
+-	 "Ich canne glas eten and hit hirtiþ me nouȝt."
++	 "Ich canne glas eten and hit hirti\xc3""\xbe"" me nou\xc8""\x9d""t."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 eo	/* Esperanto */,
+ 	 WP-SFD,
+-	 "Eĥoŝanĝo ĉiuĵaŭde."
++	 "E\xc4""\xa5""o\xc5""\x9d""an\xc4""\x9d""o \xc4""\x89""iu\xc4""\xb5""a\xc5""\xad""de."
+ 	 /* Change of echo every Thursday. */
+ 	)
+ LANGUAGE(
+ 	 es	/* Spanish */,
+ 	 WP-PANG,
+-	 "Jovencillo emponzoñado de whisky: ¡qué figurota exhibe!"
+-	 /* Whisky-intoxicated youngster — what a figure he's showing! */
++	 "Jovencillo emponzo\xc3""\xb1""ado de whisky: \xc2""\xa1""qu\xc3""\xa9"" figurota exhibe!"
++	 /* Whisky-intoxicated youngster \xe2""\x80""\x94"" what a figure he's showing! */
+ 	)
+ LANGUAGE(
+ 	 et	/* Estonian */,
+ 	 WP-SFD,
+-	 "See väike mölder jõuab rongile hüpata."
++	 "See v\xc3""\xa4""ike m\xc3""\xb6""lder j\xc3""\xb5""uab rongile h\xc3""\xbc""pata."
+ 	 /* This small miller is able to jump on the train. */
+ 	)
+ LANGUAGE(
+@@ -183,7 +183,7 @@
+ LANGUAGE(
+ 	 fa	/* Persian */,
+ 	 MISC	/* Behdad Esfahbod (#548730) */,
+-	 "«الا یا اَیُّها السّاقی! اَدِرْ کَأساً وَ ناوِلْها!» که عشق آسان نمود اوّل، ولی افتاد مشکل‌ها!"
++	 "\xc2""\xab""\xd8""\xa7""\xd9""\x84""\xd8""\xa7"" \xdb""\x8c""\xd8""\xa7"" \xd8""\xa7""\xd9""\x8e""\xdb""\x8c""\xd9""\x91""\xd9""\x8f""\xd9""\x87""\xd8""\xa7"" \xd8""\xa7""\xd9""\x84""\xd8""\xb3""\xd9""\x91""\xd8""\xa7""\xd9""\x82""\xdb""\x8c""! \xd8""\xa7""\xd9""\x8e""\xd8""\xaf""\xd9""\x90""\xd8""\xb1""\xd9""\x92"" \xda""\xa9""\xd9""\x8e""\xd8""\xa7""\xd9""\x94""\xd8""\xb3""\xd8""\xa7""\xd9""\x8b"" \xd9""\x88""\xd9""\x8e"" \xd9""\x86""\xd8""\xa7""\xd9""\x88""\xd9""\x90""\xd9""\x84""\xd9""\x92""\xd9""\x87""\xd8""\xa7""!\xc2""\xbb"" \xda""\xa9""\xd9""\x87"" \xd8""\xb9""\xd8""\xb4""\xd9""\x82"" \xd8""\xa2""\xd8""\xb3""\xd8""\xa7""\xd9""\x86"" \xd9""\x86""\xd9""\x85""\xd9""\x88""\xd8""\xaf"" \xd8""\xa7""\xd9""\x88""\xd9""\x91""\xd9""\x84""\xd8""\x8c"" \xd9""\x88""\xd9""\x84""\xdb""\x8c"" \xd8""\xa7""\xd9""\x81""\xd8""\xaa""\xd8""\xa7""\xd8""\xaf"" \xd9""\x85""\xd8""\xb4""\xda""\xa9""\xd9""\x84""\xe2""\x80""\x8c""\xd9""\x87""\xd8""\xa7""!"
+ 	)
+ LANGUAGE(
+ 	 fi	/* Finnish */,
+@@ -194,7 +194,7 @@
+ LANGUAGE(
+ 	 fr	/* French */,
+ 	 MISC	/* Vincent Untz (#549520) http://fr.wikipedia.org/wiki/Pangramme */,
+-	 "Voix ambiguë d'un cœur qui, au zéphyr, préfère les jattes de kiwis."
++	 "Voix ambigu\xc3""\xab"" d'un c\xc5""\x93""ur qui, au z\xc3""\xa9""phyr, pr\xc3""\xa9""f\xc3""\xa8""re les jattes de kiwis."
+ 	 /* Ambiguous voice of a heart that, in the wind, prefers bowls of kiwis. */
+ 	)
+ LANGUAGE(
+@@ -206,7 +206,7 @@
+ LANGUAGE(
+ 	 ga	/* Irish */,
+ 	 WP-PANG,
+-	 "D'ḟuascail Íosa Úrṁac na hÓiġe Beannaiṫe pór Éaḃa agus Áḋaiṁ."
++	 "D'\xe1""\xb8""\x9f""uascail \xc3""\x8d""osa \xc3""\x9a""r\xe1""\xb9""\x81""ac na h\xc3""\x93""i\xc4""\xa1""e Beannai\xe1""\xb9""\xab""e p\xc3""\xb3""r \xc3""\x89""a\xe1""\xb8""\x83""a agus \xc3""\x81""\xe1""\xb8""\x8b""ai\xe1""\xb9""\x81""."
+ 	 /* Jesus, Son of the blessed Virgin, redeemed the seed of Eve and Adam. */
+ 	)
+ LANGUAGE(
+@@ -224,7 +224,7 @@
+ LANGUAGE(
+ 	 got	/* Gothic */,
+ 	 GLASS,
+-	 "𐌼𐌰𐌲 𐌲𐌻𐌴𐍃 𐌹̈𐍄𐌰𐌽, 𐌽𐌹 𐌼𐌹𐍃 𐍅𐌿 𐌽𐌳𐌰𐌽 𐌱𐍂𐌹𐌲𐌲𐌹𐌸."
++	 "\xf0""\x90""\x8c""\xbc""\xf0""\x90""\x8c""\xb0""\xf0""\x90""\x8c""\xb2"" \xf0""\x90""\x8c""\xb2""\xf0""\x90""\x8c""\xbb""\xf0""\x90""\x8c""\xb4""\xf0""\x90""\x8d""\x83"" \xf0""\x90""\x8c""\xb9""\xcc""\x88""\xf0""\x90""\x8d""\x84""\xf0""\x90""\x8c""\xb0""\xf0""\x90""\x8c""\xbd"", \xf0""\x90""\x8c""\xbd""\xf0""\x90""\x8c""\xb9"" \xf0""\x90""\x8c""\xbc""\xf0""\x90""\x8c""\xb9""\xf0""\x90""\x8d""\x83"" \xf0""\x90""\x8d""\x85""\xf0""\x90""\x8c""\xbf"" \xf0""\x90""\x8c""\xbd""\xf0""\x90""\x8c""\xb3""\xf0""\x90""\x8c""\xb0""\xf0""\x90""\x8c""\xbd"" \xf0""\x90""\x8c""\xb1""\xf0""\x90""\x8d""\x82""\xf0""\x90""\x8c""\xb9""\xf0""\x90""\x8c""\xb2""\xf0""\x90""\x8c""\xb2""\xf0""\x90""\x8c""\xb9""\xf0""\x90""\x8c""\xb8""."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+@@ -236,19 +236,19 @@
+ LANGUAGE(
+ 	 haw	/* Hawaiian */,
+ 	 GLASS,
+-	 "Hiki iaʻu ke ʻai i ke aniani; ʻaʻole nō lā au e ʻeha."
++	 "Hiki ia\xca""\xbb""u ke \xca""\xbb""ai i ke aniani; \xca""\xbb""a\xca""\xbb""ole n\xc5""\x8d"" l\xc4""\x81"" au e \xca""\xbb""eha."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 he	/* Hebrew */,
+ 	 WP-SFD,
+-	 "דג סקרן שט לו בים זך אך לפתע פגש חבורה נחמדה שצצה כך."
++	 "\xd7""\x93""\xd7""\x92"" \xd7""\xa1""\xd7""\xa7""\xd7""\xa8""\xd7""\x9f"" \xd7""\xa9""\xd7""\x98"" \xd7""\x9c""\xd7""\x95"" \xd7""\x91""\xd7""\x99""\xd7""\x9d"" \xd7""\x96""\xd7""\x9a"" \xd7""\x90""\xd7""\x9a"" \xd7""\x9c""\xd7""\xa4""\xd7""\xaa""\xd7""\xa2"" \xd7""\xa4""\xd7""\x92""\xd7""\xa9"" \xd7""\x97""\xd7""\x91""\xd7""\x95""\xd7""\xa8""\xd7""\x94"" \xd7""\xa0""\xd7""\x97""\xd7""\x9e""\xd7""\x93""\xd7""\x94"" \xd7""\xa9""\xd7""\xa6""\xd7""\xa6""\xd7""\x94"" \xd7""\x9b""\xd7""\x9a""."
+ 	 /* A curious fish sailed a clear sea, and suddenly found nice company that just popped up. */
+ 	)
+ LANGUAGE(
+ 	 hi	/* Hindi */,
+ 	 MISC	/* G Karunakar (#549532) */,
+-	 "नहीं नजर किसी की बुरी नहीं किसी का मुँह काला जो करे सो उपर वाला"
++	 "\xe0""\xa4""\xa8""\xe0""\xa4""\xb9""\xe0""\xa5""\x80""\xe0""\xa4""\x82"" \xe0""\xa4""\xa8""\xe0""\xa4""\x9c""\xe0""\xa4""\xb0"" \xe0""\xa4""\x95""\xe0""\xa4""\xbf""\xe0""\xa4""\xb8""\xe0""\xa5""\x80"" \xe0""\xa4""\x95""\xe0""\xa5""\x80"" \xe0""\xa4""\xac""\xe0""\xa5""\x81""\xe0""\xa4""\xb0""\xe0""\xa5""\x80"" \xe0""\xa4""\xa8""\xe0""\xa4""\xb9""\xe0""\xa5""\x80""\xe0""\xa4""\x82"" \xe0""\xa4""\x95""\xe0""\xa4""\xbf""\xe0""\xa4""\xb8""\xe0""\xa5""\x80"" \xe0""\xa4""\x95""\xe0""\xa4""\xbe"" \xe0""\xa4""\xae""\xe0""\xa5""\x81""\xe0""\xa4""\x81""\xe0""\xa4""\xb9"" \xe0""\xa4""\x95""\xe0""\xa4""\xbe""\xe0""\xa4""\xb2""\xe0""\xa4""\xbe"" \xe0""\xa4""\x9c""\xe0""\xa5""\x8b"" \xe0""\xa4""\x95""\xe0""\xa4""\xb0""\xe0""\xa5""\x87"" \xe0""\xa4""\xb8""\xe0""\xa5""\x8b"" \xe0""\xa4""\x89""\xe0""\xa4""\xaa""\xe0""\xa4""\xb0"" \xe0""\xa4""\xb5""\xe0""\xa4""\xbe""\xe0""\xa4""\xb2""\xe0""\xa4""\xbe"""
+ 	 /* its not in the sight or the face, but its all in god's grace. */
+ 	)
+ LANGUAGE(
+@@ -260,19 +260,19 @@
+ LANGUAGE(
+ 	 hu	/* Hungarian */,
+ 	 WP-SFD,
+-	 "Egy hűtlen vejét fülöncsípő, dühös mexikói úr Wesselényinél mázol Quitóban."
+-	 /* An angry Mexican man, who caught his faithless son-in-law, is painting Wesselényi's house in Quito. */
++	 "Egy h\xc5""\xb1""tlen vej\xc3""\xa9""t f\xc3""\xbc""l\xc3""\xb6""ncs\xc3""\xad""p\xc5""\x91"", d\xc3""\xbc""h\xc3""\xb6""s mexik\xc3""\xb3""i \xc3""\xba""r Wessel\xc3""\xa9""nyin\xc3""\xa9""l m\xc3""\xa1""zol Quit\xc3""\xb3""ban."
++	 /* An angry Mexican man, who caught his faithless son-in-law, is painting Wessel\xc3""\xa9""nyi's house in Quito. */
+ 	)
+ LANGUAGE(
+ 	 hy	/* Armenian */,
+ 	 GLASS,
+-	 "Կրնամ ապակի ուտել և ինծի անհանգիստ չըներ։"
++	 "\xd4""\xbf""\xd6""\x80""\xd5""\xb6""\xd5""\xa1""\xd5""\xb4"" \xd5""\xa1""\xd5""\xba""\xd5""\xa1""\xd5""\xaf""\xd5""\xab"" \xd5""\xb8""\xd6""\x82""\xd5""\xbf""\xd5""\xa5""\xd5""\xac"" \xd6""\x87"" \xd5""\xab""\xd5""\xb6""\xd5""\xae""\xd5""\xab"" \xd5""\xa1""\xd5""\xb6""\xd5""\xb0""\xd5""\xa1""\xd5""\xb6""\xd5""\xa3""\xd5""\xab""\xd5""\xbd""\xd5""\xbf"" \xd5""\xb9""\xd5""\xa8""\xd5""\xb6""\xd5""\xa5""\xd6""\x80""\xd6""\x89"""
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 is	/* Icelandic */,
+ 	 WP-PANG,
+-	 "Kæmi ný öxi hér ykist þjófum nú bæði víl og ádrepa"
++	 "K\xc3""\xa6""mi n\xc3""\xbd"" \xc3""\xb6""xi h\xc3""\xa9""r ykist \xc3""\xbe""j\xc3""\xb3""fum n\xc3""\xba"" b\xc3""\xa6""\xc3""\xb0""i v\xc3""\xad""l og \xc3""\xa1""drepa"
+ 	 /* If a new axe were here, thieves would feel increasing deterrence and punishment. */
+ 	)
+ LANGUAGE(
+@@ -284,7 +284,7 @@
+ LANGUAGE(
+ 	 ja	/* Japanese */,
+ 	 KERMIT,
+-	 "いろはにほへと ちりぬるを 色は匂へど 散りぬるを"
++	 "\xe3""\x81""\x84""\xe3""\x82""\x8d""\xe3""\x81""\xaf""\xe3""\x81""\xab""\xe3""\x81""\xbb""\xe3""\x81""\xb8""\xe3""\x81""\xa8"" \xe3""\x81""\xa1""\xe3""\x82""\x8a""\xe3""\x81""\xac""\xe3""\x82""\x8b""\xe3""\x82""\x92"" \xe8""\x89""\xb2""\xe3""\x81""\xaf""\xe5""\x8c""\x82""\xe3""\x81""\xb8""\xe3""\x81""\xa9"" \xe6""\x95""\xa3""\xe3""\x82""\x8a""\xe3""\x81""\xac""\xe3""\x82""\x8b""\xe3""\x82""\x92"""
+ 	)
+ LANGUAGE(
+ 	 jam	/* Jamaican Creole English */,
+@@ -306,19 +306,19 @@
+ LANGUAGE(
+ 	 ka	/* Georgian */,
+ 	 GLASS,
+-	 "მინას ვჭამ და არა მტკივა."
++	 "\xe1""\x83""\x9b""\xe1""\x83""\x98""\xe1""\x83""\x9c""\xe1""\x83""\x90""\xe1""\x83""\xa1"" \xe1""\x83""\x95""\xe1""\x83""\xad""\xe1""\x83""\x90""\xe1""\x83""\x9b"" \xe1""\x83""\x93""\xe1""\x83""\x90"" \xe1""\x83""\x90""\xe1""\x83""\xa0""\xe1""\x83""\x90"" \xe1""\x83""\x9b""\xe1""\x83""\xa2""\xe1""\x83""\x99""\xe1""\x83""\x98""\xe1""\x83""\x95""\xe1""\x83""\x90""."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 ko	/* Korean */,
+ 	 WP-SFD,
+-	 "다람쥐 헌 쳇바퀴에 타고파"
++	 "\xeb""\x8b""\xa4""\xeb""\x9e""\x8c""\xec""\xa5""\x90"" \xed""\x97""\x8c"" \xec""\xb3""\x87""\xeb""\xb0""\x94""\xed""\x80""\xb4""\xec""\x97""\x90"" \xed""\x83""\x80""\xea""\xb3""\xa0""\xed""\x8c""\x8c"""
+ 	 /* I Wanna ride on the chipmunk's old hamster wheel. */
+ 	)
+ LANGUAGE(
+ 	 kw	/* Cornish */,
+ 	 GLASS,
+-	 "Mý a yl dybry gwéder hag éf ny wra ow ankenya."
++	 "M\xc3""\xbd"" a yl dybry gw\xc3""\xa9""der hag \xc3""\xa9""f ny wra ow ankenya."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+@@ -329,37 +329,37 @@
+ LANGUAGE(
+ 	 lt	/* Lithuanian */,
+ 	 WP-PANG,
+-	 "Įlinkdama fechtuotojo špaga sublykčiojusi pragręžė apvalų arbūzą."
++	 "\xc4""\xae""linkdama fechtuotojo \xc5""\xa1""paga sublyk\xc4""\x8d""iojusi pragr\xc4""\x99""\xc5""\xbe""\xc4""\x97"" apval\xc5""\xb3"" arb\xc5""\xab""z\xc4""\x85""."
+ 	 /* Incurving fencer sword sparkled and perforated a round watermelon. */
+ 	)
+ LANGUAGE(
+ 	 lv	/* Latvian */,
+ 	 WP-SFD,
+-	 "Sarkanās jūrascūciņas peld pa jūru."
++	 "Sarkan\xc4""\x81""s j\xc5""\xab""rasc\xc5""\xab""ci\xc5""\x86""as peld pa j\xc5""\xab""ru."
+ 	 /* Red seapigs swim in the sea. */
+ 	)
+ LANGUAGE(
+ 	 map	/* Marquesan */,
+ 	 GLASS,
+-	 "E koʻana e kai i te karahi, mea ʻā, ʻaʻe hauhau."
++	 "E ko\xca""\xbb""ana e kai i te karahi, mea \xca""\xbb""\xc4""\x81"", \xca""\xbb""a\xca""\xbb""e hauhau."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 mk	/* Macedonian */,
+ 	 GLASS,
+-	 "Можам да јадам стакло, а не ме штета."
++	 "\xd0""\x9c""\xd0""\xbe""\xd0""\xb6""\xd0""\xb0""\xd0""\xbc"" \xd0""\xb4""\xd0""\xb0"" \xd1""\x98""\xd0""\xb0""\xd0""\xb4""\xd0""\xb0""\xd0""\xbc"" \xd1""\x81""\xd1""\x82""\xd0""\xb0""\xd0""\xba""\xd0""\xbb""\xd0""\xbe"", \xd0""\xb0"" \xd0""\xbd""\xd0""\xb5"" \xd0""\xbc""\xd0""\xb5"" \xd1""\x88""\xd1""\x82""\xd0""\xb5""\xd1""\x82""\xd0""\xb0""."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 mn	/* Mongolian */,
+ 	 GLASS,
+-	 "ᠪᠢ ᠰᠢᠯᠢ ᠢᠳᠡᠶᠦ ᠴᠢᠳᠠᠨᠠ ᠂ ᠨᠠᠳᠤᠷ ᠬᠣᠤᠷᠠᠳᠠᠢ ᠪᠢᠰᠢ"
++	 "\xe1""\xa0""\xaa""\xe1""\xa0""\xa2"" \xe1""\xa0""\xb0""\xe1""\xa0""\xa2""\xe1""\xa0""\xaf""\xe1""\xa0""\xa2"" \xe1""\xa0""\xa2""\xe1""\xa0""\xb3""\xe1""\xa0""\xa1""\xe1""\xa0""\xb6""\xe1""\xa0""\xa6"" \xe1""\xa0""\xb4""\xe1""\xa0""\xa2""\xe1""\xa0""\xb3""\xe1""\xa0""\xa0""\xe1""\xa0""\xa8""\xe1""\xa0""\xa0"" \xe1""\xa0""\x82"" \xe1""\xa0""\xa8""\xe1""\xa0""\xa0""\xe1""\xa0""\xb3""\xe1""\xa0""\xa4""\xe1""\xa0""\xb7"" \xe1""\xa0""\xac""\xe1""\xa0""\xa3""\xe1""\xa0""\xa4""\xe1""\xa0""\xb7""\xe1""\xa0""\xa0""\xe1""\xa0""\xb3""\xe1""\xa0""\xa0""\xe1""\xa0""\xa2"" \xe1""\xa0""\xaa""\xe1""\xa0""\xa2""\xe1""\xa0""\xb0""\xe1""\xa0""\xa2"""
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 mr	/* Marathi */,
+ 	 GLASS,
+-	 "मी काच खाऊ शकतो, मला ते दुखत नाही."
++	 "\xe0""\xa4""\xae""\xe0""\xa5""\x80"" \xe0""\xa4""\x95""\xe0""\xa4""\xbe""\xe0""\xa4""\x9a"" \xe0""\xa4""\x96""\xe0""\xa4""\xbe""\xe0""\xa4""\x8a"" \xe0""\xa4""\xb6""\xe0""\xa4""\x95""\xe0""\xa4""\xa4""\xe0""\xa5""\x8b"", \xe0""\xa4""\xae""\xe0""\xa4""\xb2""\xe0""\xa4""\xbe"" \xe0""\xa4""\xa4""\xe0""\xa5""\x87"" \xe0""\xa4""\xa6""\xe0""\xa5""\x81""\xe0""\xa4""\x96""\xe0""\xa4""\xa4"" \xe0""\xa4""\xa8""\xe0""\xa4""\xbe""\xe0""\xa4""\xb9""\xe0""\xa5""\x80""."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+@@ -375,9 +375,9 @@
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+-	 nb	/* Norwegian Bokmål */,
++	 nb	/* Norwegian Bokm\xc3""\xa5""l */,
+ 	 GSPECI,
+-	 "Vår sære Zulu fra badeøya spilte jo whist og quickstep i min taxi."
++	 "V\xc3""\xa5""r s\xc3""\xa6""re Zulu fra bade\xc3""\xb8""ya spilte jo whist og quickstep i min taxi."
+ 	)
+ LANGUAGE(
+ 	 nl	/* Dutch */,
+@@ -388,66 +388,66 @@
+ LANGUAGE(
+ 	 nn	/* Norwegian Nynorsk */,
+ 	 GLASS,
+-	 "Eg kan eta glas utan å skada meg."
++	 "Eg kan eta glas utan \xc3""\xa5"" skada meg."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+-	 no	/* Norwegian Bokmål */,
++	 no	/* Norwegian Bokm\xc3""\xa5""l */,
+ 	 GSPECI,
+-	 "Vår sære Zulu fra badeøya spilte jo whist og quickstep i min taxi."
++	 "V\xc3""\xa5""r s\xc3""\xa6""re Zulu fra bade\xc3""\xb8""ya spilte jo whist og quickstep i min taxi."
+ 	)
+ LANGUAGE(
+ 	 nv	/* Navajo */,
+ 	 GLASS,
+-	 "Tsésǫʼ yishą́ągo bííníshghah dóó doo shił neezgai da."
++	 "Ts\xc3""\xa9""s\xc7""\xab""\xca""\xbc"" yish\xc4""\x85""\xcc""\x81""\xc4""\x85""go b\xc3""\xad""\xc3""\xad""n\xc3""\xad""shghah d\xc3""\xb3""\xc3""\xb3"" doo shi\xc5""\x82"" neezgai da."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 oc	/* Occitan */,
+ 	 GLASS,
+-	 "Pòdi manjar de veire, me nafrariá pas."
++	 "P\xc3""\xb2""di manjar de veire, me nafrari\xc3""\xa1"" pas."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 pcd	/* Picard */,
+ 	 GLASS,
+-	 "Ch'peux mingi du verre, cha m'foé mie n'ma."
++	 "Ch'peux mingi du verre, cha m'fo\xc3""\xa9"" mie n'ma."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 pl	/* Polish */,
+ 	 WP-SFD,
+-	 "Pchnąć w tę łódź jeża lub ośm skrzyń fig."
++	 "Pchn\xc4""\x85""\xc4""\x87"" w t\xc4""\x99"" \xc5""\x82""\xc3""\xb3""d\xc5""\xba"" je\xc5""\xbc""a lub o\xc5""\x9b""m skrzy\xc5""\x84"" fig."
+ 	 /* Push into this boat a hedgehog or eight boxes of figs. */
+ 	)
+ LANGUAGE(
+ 	 pt	/* Portuguese */,
+ 	 WP-SFD,
+-	 "Vejam a bruxa da raposa Salta-Pocinhas e o cão feliz que dorme regalado."
++	 "Vejam a bruxa da raposa Salta-Pocinhas e o c\xc3""\xa3""o feliz que dorme regalado."
+ 	 /* Watch the witch of the Jump-Puddles fox and the happy dog that sleeps delighted. */
+ 	)
+ LANGUAGE(
+ 	 pt-br	/* Brazilian Portuguese */,
+ 	 WP-PANG,
+-	 "À noite, vovô Kowalsky vê o ímã cair no pé do pingüim queixoso e vovó põe açúcar no chá de tâmaras do jabuti feliz."
++	 "\xc3""\x80"" noite, vov\xc3""\xb4"" Kowalsky v\xc3""\xaa"" o \xc3""\xad""m\xc3""\xa3"" cair no p\xc3""\xa9"" do ping\xc3""\xbc""im queixoso e vov\xc3""\xb3"" p\xc3""\xb5""e a\xc3""\xa7""\xc3""\xba""car no ch\xc3""\xa1"" de t\xc3""\xa2""maras do jabuti feliz."
+ 	 /* At night, grandpa Kowalsky sees the magnet falling in the complaining penguin's foot and grandma puts sugar in the happy tortoise's date tea.*/
+ 	)
+ LANGUAGE(
+ 	 ro	/* Romanian */,
+ 	 MISC	/* Misu Moldovan (#552993) */,
+-	 "Fumegând hipnotic sașiul azvârle mreje în bălți."
++	 "Fumeg\xc3""\xa2""nd hipnotic sa\xc8""\x99""iul azv\xc3""\xa2""rle mreje \xc3""\xae""n b\xc4""\x83""l\xc8""\x9b""i."
+ 	 /* Hypnotically smoking, the cross-eyed man throws fishing nets into ponds. */
+ 	)
+ LANGUAGE(
+ 	 ru	/* Russian */,
+ 	 WP-PANG,
+-	 "В чащах юга жил бы цитрус? Да, но фальшивый экземпляр!"
++	 "\xd0""\x92"" \xd1""\x87""\xd0""\xb0""\xd1""\x89""\xd0""\xb0""\xd1""\x85"" \xd1""\x8e""\xd0""\xb3""\xd0""\xb0"" \xd0""\xb6""\xd0""\xb8""\xd0""\xbb"" \xd0""\xb1""\xd1""\x8b"" \xd1""\x86""\xd0""\xb8""\xd1""\x82""\xd1""\x80""\xd1""\x83""\xd1""\x81""? \xd0""\x94""\xd0""\xb0"", \xd0""\xbd""\xd0""\xbe"" \xd1""\x84""\xd0""\xb0""\xd0""\xbb""\xd1""\x8c""\xd1""\x88""\xd0""\xb8""\xd0""\xb2""\xd1""\x8b""\xd0""\xb9"" \xd1""\x8d""\xd0""\xba""\xd0""\xb7""\xd0""\xb5""\xd0""\xbc""\xd0""\xbf""\xd0""\xbb""\xd1""\x8f""\xd1""\x80""!"
+ 	 /* Would a citrus live in the bushes of the south? Yes, but only a fake one! */
+ 	)
+ LANGUAGE(
+ 	 sa	/* Sanskrit */,
+ 	 GLASS,
+-	 "काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥"
++	 "\xe0""\xa4""\x95""\xe0""\xa4""\xbe""\xe0""\xa4""\x9a""\xe0""\xa4""\x82"" \xe0""\xa4""\xb6""\xe0""\xa4""\x95""\xe0""\xa5""\x8d""\xe0""\xa4""\xa8""\xe0""\xa5""\x8b""\xe0""\xa4""\xae""\xe0""\xa5""\x8d""\xe0""\xa4""\xaf""\xe0""\xa4""\xa4""\xe0""\xa5""\x8d""\xe0""\xa4""\xa4""\xe0""\xa5""\x81""\xe0""\xa4""\xae""\xe0""\xa5""\x8d"" \xe0""\xa5""\xa4"" \xe0""\xa4""\xa8""\xe0""\xa5""\x8b""\xe0""\xa4""\xaa""\xe0""\xa4""\xb9""\xe0""\xa4""\xbf""\xe0""\xa4""\xa8""\xe0""\xa4""\xb8""\xe0""\xa5""\x8d""\xe0""\xa4""\xa4""\xe0""\xa4""\xbf"" \xe0""\xa4""\xae""\xe0""\xa4""\xbe""\xe0""\xa4""\xae""\xe0""\xa5""\x8d"" \xe0""\xa5""\xa5"""
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+@@ -459,56 +459,56 @@
+ LANGUAGE(
+ 	 sk	/* Slovak */,
+ 	 KERMIT,
+-	 "Starý kôň na hŕbe kníh žuje tíško povädnuté ruže, na stĺpe sa ďateľ učí kvákať novú ódu o živote."
++	 "Star\xc3""\xbd"" k\xc3""\xb4""\xc5""\x88"" na h\xc5""\x95""be kn\xc3""\xad""h \xc5""\xbe""uje t\xc3""\xad""\xc5""\xa1""ko pov\xc3""\xa4""dnut\xc3""\xa9"" ru\xc5""\xbe""e, na st\xc4""\xba""pe sa \xc4""\x8f""ate\xc4""\xbe"" u\xc4""\x8d""\xc3""\xad"" kv\xc3""\xa1""ka\xc5""\xa5"" nov\xc3""\xba"" \xc3""\xb3""du o \xc5""\xbe""ivote."
+ 	)
+ LANGUAGE(
+ 	 sl	/* Slovenian */,
+ 	 WP-PANG,
+-	 "Šerif bo za vajo spet kuhal domače žgance."
++	 "\xc5""\xa0""erif bo za vajo spet kuhal doma\xc4""\x8d""e \xc5""\xbe""gance."
+ 	 /* For an exercise, sheriff will again make home-made mush. */
+ 	)
+ LANGUAGE(
+ 	 sq	/* Albanian */,
+ 	 GLASS,
+-	 "Unë mund të ha qelq dhe nuk më gjen gjë."
++	 "Un\xc3""\xab"" mund t\xc3""\xab"" ha qelq dhe nuk m\xc3""\xab"" gjen gj\xc3""\xab""."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 sr	/* Serbian (Cyrillic) */,
+ 	 WP-SFD,
+-	 "Чешће цeђење мрeжастим џаком побољшава фертилизацију генских хибрида."
++	 "\xd0""\xa7""\xd0""\xb5""\xd1""\x88""\xd1""\x9b""\xd0""\xb5"" \xd1""\x86""e\xd1""\x92""\xd0""\xb5""\xd1""\x9a""\xd0""\xb5"" \xd0""\xbc""\xd1""\x80""e\xd0""\xb6""\xd0""\xb0""\xd1""\x81""\xd1""\x82""\xd0""\xb8""\xd0""\xbc"" \xd1""\x9f""\xd0""\xb0""\xd0""\xba""\xd0""\xbe""\xd0""\xbc"" \xd0""\xbf""\xd0""\xbe""\xd0""\xb1""\xd0""\xbe""\xd1""\x99""\xd1""\x88""\xd0""\xb0""\xd0""\xb2""\xd0""\xb0"" \xd1""\x84""\xd0""\xb5""\xd1""\x80""\xd1""\x82""\xd0""\xb8""\xd0""\xbb""\xd0""\xb8""\xd0""\xb7""\xd0""\xb0""\xd1""\x86""\xd0""\xb8""\xd1""\x98""\xd1""\x83"" \xd0""\xb3""\xd0""\xb5""\xd0""\xbd""\xd1""\x81""\xd0""\xba""\xd0""\xb8""\xd1""\x85"" \xd1""\x85""\xd0""\xb8""\xd0""\xb1""\xd1""\x80""\xd0""\xb8""\xd0""\xb4""\xd0""\xb0""."
+ 	 /* More frequent filtering through the reticular bag improves fertilization of genetic hybrids. */
+ 	)
+ #if 0
+ LANGUAGE(
+ 	 sr-sr@latin	/* Serbian (Latin) */,
+ 	 WP-SFD,
+-	 "Češće ceđenje mrežastim džakom poboljšava fertilizaciju genskih hibrida."
++	 "\xc4""\x8c""e\xc5""\xa1""\xc4""\x87""e ce\xc4""\x91""enje mre\xc5""\xbe""astim d\xc5""\xbe""akom pobolj\xc5""\xa1""ava fertilizaciju genskih hibrida."
+ 	 /* More frequent filtering through the reticular bag improves fertilization of genetic hybrids. */
+ 	)
+ #endif
+ LANGUAGE(
+ 	 sv	/* Swedish */,
+ 	 WP-SFD,
+-	 "Flygande bäckasiner söka strax hwila på mjuka tuvor."
++	 "Flygande b\xc3""\xa4""ckasiner s\xc3""\xb6""ka strax hwila p\xc3""\xa5"" mjuka tuvor."
+ 	 /* Flying snipes soon look to rest on soft grass beds. */
+ 	)
+ LANGUAGE(
+ 	 swg	/* Swabian */,
+ 	 GLASS,
+-	 "I kå Glas frässa, ond des macht mr nix!"
++	 "I k\xc3""\xa5"" Glas fr\xc3""\xa4""ssa, ond des macht mr nix!"
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 ta	/* Tamil */,
+ 	 GLASS,
+-	 "நான் கண்ணாடி சாப்பிடுவேன், அதனால் எனக்கு ஒரு கேடும் வராது."
++	 "\xe0""\xae""\xa8""\xe0""\xae""\xbe""\xe0""\xae""\xa9""\xe0""\xaf""\x8d"" \xe0""\xae""\x95""\xe0""\xae""\xa3""\xe0""\xaf""\x8d""\xe0""\xae""\xa3""\xe0""\xae""\xbe""\xe0""\xae""\x9f""\xe0""\xae""\xbf"" \xe0""\xae""\x9a""\xe0""\xae""\xbe""\xe0""\xae""\xaa""\xe0""\xaf""\x8d""\xe0""\xae""\xaa""\xe0""\xae""\xbf""\xe0""\xae""\x9f""\xe0""\xaf""\x81""\xe0""\xae""\xb5""\xe0""\xaf""\x87""\xe0""\xae""\xa9""\xe0""\xaf""\x8d"", \xe0""\xae""\x85""\xe0""\xae""\xa4""\xe0""\xae""\xa9""\xe0""\xae""\xbe""\xe0""\xae""\xb2""\xe0""\xaf""\x8d"" \xe0""\xae""\x8e""\xe0""\xae""\xa9""\xe0""\xae""\x95""\xe0""\xaf""\x8d""\xe0""\xae""\x95""\xe0""\xaf""\x81"" \xe0""\xae""\x92""\xe0""\xae""\xb0""\xe0""\xaf""\x81"" \xe0""\xae""\x95""\xe0""\xaf""\x87""\xe0""\xae""\x9f""\xe0""\xaf""\x81""\xe0""\xae""\xae""\xe0""\xaf""\x8d"" \xe0""\xae""\xb5""\xe0""\xae""\xb0""\xe0""\xae""\xbe""\xe0""\xae""\xa4""\xe0""\xaf""\x81""."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 th	/* Thai */,
+ 	 WP-SFD,
+-	 "เป็นมนุษย์สุดประเสริฐเลิศคุณค่า - กว่าบรรดาฝูงสัตว์เดรัจฉาน - จงฝ่าฟันพัฒนาวิชาการ อย่าล้างผลาญฤๅเข่นฆ่าบีฑาใคร - ไม่ถือโทษโกรธแช่งซัดฮึดฮัดด่า - หัดอภัยเหมือนกีฬาอัชฌาสัย - ปฏิบัติประพฤติกฎกำหนดใจ - พูดจาให้จ๊ะ ๆ จ๋า ๆ น่าฟังเอยฯ"
++	 "\xe0""\xb9""\x80""\xe0""\xb8""\x9b""\xe0""\xb9""\x87""\xe0""\xb8""\x99""\xe0""\xb8""\xa1""\xe0""\xb8""\x99""\xe0""\xb8""\xb8""\xe0""\xb8""\xa9""\xe0""\xb8""\xa2""\xe0""\xb9""\x8c""\xe0""\xb8""\xaa""\xe0""\xb8""\xb8""\xe0""\xb8""\x94""\xe0""\xb8""\x9b""\xe0""\xb8""\xa3""\xe0""\xb8""\xb0""\xe0""\xb9""\x80""\xe0""\xb8""\xaa""\xe0""\xb8""\xa3""\xe0""\xb8""\xb4""\xe0""\xb8""\x90""\xe0""\xb9""\x80""\xe0""\xb8""\xa5""\xe0""\xb8""\xb4""\xe0""\xb8""\xa8""\xe0""\xb8""\x84""\xe0""\xb8""\xb8""\xe0""\xb8""\x93""\xe0""\xb8""\x84""\xe0""\xb9""\x88""\xe0""\xb8""\xb2"" - \xe0""\xb8""\x81""\xe0""\xb8""\xa7""\xe0""\xb9""\x88""\xe0""\xb8""\xb2""\xe0""\xb8""\x9a""\xe0""\xb8""\xa3""\xe0""\xb8""\xa3""\xe0""\xb8""\x94""\xe0""\xb8""\xb2""\xe0""\xb8""\x9d""\xe0""\xb8""\xb9""\xe0""\xb8""\x87""\xe0""\xb8""\xaa""\xe0""\xb8""\xb1""\xe0""\xb8""\x95""\xe0""\xb8""\xa7""\xe0""\xb9""\x8c""\xe0""\xb9""\x80""\xe0""\xb8""\x94""\xe0""\xb8""\xa3""\xe0""\xb8""\xb1""\xe0""\xb8""\x88""\xe0""\xb8""\x89""\xe0""\xb8""\xb2""\xe0""\xb8""\x99"" - \xe0""\xb8""\x88""\xe0""\xb8""\x87""\xe0""\xb8""\x9d""\xe0""\xb9""\x88""\xe0""\xb8""\xb2""\xe0""\xb8""\x9f""\xe0""\xb8""\xb1""\xe0""\xb8""\x99""\xe0""\xb8""\x9e""\xe0""\xb8""\xb1""\xe0""\xb8""\x92""\xe0""\xb8""\x99""\xe0""\xb8""\xb2""\xe0""\xb8""\xa7""\xe0""\xb8""\xb4""\xe0""\xb8""\x8a""\xe0""\xb8""\xb2""\xe0""\xb8""\x81""\xe0""\xb8""\xb2""\xe0""\xb8""\xa3"" \xe0""\xb8""\xad""\xe0""\xb8""\xa2""\xe0""\xb9""\x88""\xe0""\xb8""\xb2""\xe0""\xb8""\xa5""\xe0""\xb9""\x89""\xe0""\xb8""\xb2""\xe0""\xb8""\x87""\xe0""\xb8""\x9c""\xe0""\xb8""\xa5""\xe0""\xb8""\xb2""\xe0""\xb8""\x8d""\xe0""\xb8""\xa4""\xe0""\xb9""\x85""\xe0""\xb9""\x80""\xe0""\xb8""\x82""\xe0""\xb9""\x88""\xe0""\xb8""\x99""\xe0""\xb8""\x86""\xe0""\xb9""\x88""\xe0""\xb8""\xb2""\xe0""\xb8""\x9a""\xe0""\xb8""\xb5""\xe0""\xb8""\x91""\xe0""\xb8""\xb2""\xe0""\xb9""\x83""\xe0""\xb8""\x84""\xe0""\xb8""\xa3"" - \xe0""\xb9""\x84""\xe0""\xb8""\xa1""\xe0""\xb9""\x88""\xe0""\xb8""\x96""\xe0""\xb8""\xb7""\xe0""\xb8""\xad""\xe0""\xb9""\x82""\xe0""\xb8""\x97""\xe0""\xb8""\xa9""\xe0""\xb9""\x82""\xe0""\xb8""\x81""\xe0""\xb8""\xa3""\xe0""\xb8""\x98""\xe0""\xb9""\x81""\xe0""\xb8""\x8a""\xe0""\xb9""\x88""\xe0""\xb8""\x87""\xe0""\xb8""\x8b""\xe0""\xb8""\xb1""\xe0""\xb8""\x94""\xe0""\xb8""\xae""\xe0""\xb8""\xb6""\xe0""\xb8""\x94""\xe0""\xb8""\xae""\xe0""\xb8""\xb1""\xe0""\xb8""\x94""\xe0""\xb8""\x94""\xe0""\xb9""\x88""\xe0""\xb8""\xb2"" - \xe0""\xb8""\xab""\xe0""\xb8""\xb1""\xe0""\xb8""\x94""\xe0""\xb8""\xad""\xe0""\xb8""\xa0""\xe0""\xb8""\xb1""\xe0""\xb8""\xa2""\xe0""\xb9""\x80""\xe0""\xb8""\xab""\xe0""\xb8""\xa1""\xe0""\xb8""\xb7""\xe0""\xb8""\xad""\xe0""\xb8""\x99""\xe0""\xb8""\x81""\xe0""\xb8""\xb5""\xe0""\xb8""\xac""\xe0""\xb8""\xb2""\xe0""\xb8""\xad""\xe0""\xb8""\xb1""\xe0""\xb8""\x8a""\xe0""\xb8""\x8c""\xe0""\xb8""\xb2""\xe0""\xb8""\xaa""\xe0""\xb8""\xb1""\xe0""\xb8""\xa2"" - \xe0""\xb8""\x9b""\xe0""\xb8""\x8f""\xe0""\xb8""\xb4""\xe0""\xb8""\x9a""\xe0""\xb8""\xb1""\xe0""\xb8""\x95""\xe0""\xb8""\xb4""\xe0""\xb8""\x9b""\xe0""\xb8""\xa3""\xe0""\xb8""\xb0""\xe0""\xb8""\x9e""\xe0""\xb8""\xa4""\xe0""\xb8""\x95""\xe0""\xb8""\xb4""\xe0""\xb8""\x81""\xe0""\xb8""\x8e""\xe0""\xb8""\x81""\xe0""\xb8""\xb3""\xe0""\xb8""\xab""\xe0""\xb8""\x99""\xe0""\xb8""\x94""\xe0""\xb9""\x83""\xe0""\xb8""\x88"" - \xe0""\xb8""\x9e""\xe0""\xb8""\xb9""\xe0""\xb8""\x94""\xe0""\xb8""\x88""\xe0""\xb8""\xb2""\xe0""\xb9""\x83""\xe0""\xb8""\xab""\xe0""\xb9""\x89""\xe0""\xb8""\x88""\xe0""\xb9""\x8a""\xe0""\xb8""\xb0"" \xe0""\xb9""\x86"" \xe0""\xb8""\x88""\xe0""\xb9""\x8b""\xe0""\xb8""\xb2"" \xe0""\xb9""\x86"" \xe0""\xb8""\x99""\xe0""\xb9""\x88""\xe0""\xb8""\xb2""\xe0""\xb8""\x9f""\xe0""\xb8""\xb1""\xe0""\xb8""\x87""\xe0""\xb9""\x80""\xe0""\xb8""\xad""\xe0""\xb8""\xa2""\xe0""\xb8""\xaf"""
+ 	 /* Being a man is worthy - Beyond senseless animal - Begin educate thyself - Begone from killing and trouble - Bear not thy grudge, damn and, curse - Bestow forgiving and sporting - Befit with rules - Benign speech speak thou */
+ 	)
+ LANGUAGE(
+@@ -520,25 +520,25 @@
+ LANGUAGE(
+ 	 tr	/* Turkish */,
+ 	 WP-PANG,
+-	 "Pijamalı hasta yağız şoföre çabucak güvendi."
++	 "Pijamal\xc4""\xb1"" hasta ya\xc4""\x9f""\xc4""\xb1""z \xc5""\x9f""of\xc3""\xb6""re \xc3""\xa7""abucak g\xc3""\xbc""vendi."
+ 	 /* The patient in pajamas trusted the swarthy driver quickly. */
+ 	)
+ LANGUAGE(
+ 	 tw	/* Twi */,
+ 	 GLASS,
+-	 "Metumi awe tumpan, ɜnyɜ me hwee."
++	 "Metumi awe tumpan, \xc9""\x9c""ny\xc9""\x9c"" me hwee."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 uk	/* Ukrainian */,
+ 	 WP-PANG,
+-	 "Чуєш їх, доцю, га? Кумедна ж ти, прощайся без ґольфів!"
++	 "\xd0""\xa7""\xd1""\x83""\xd1""\x94""\xd1""\x88"" \xd1""\x97""\xd1""\x85"", \xd0""\xb4""\xd0""\xbe""\xd1""\x86""\xd1""\x8e"", \xd0""\xb3""\xd0""\xb0""? \xd0""\x9a""\xd1""\x83""\xd0""\xbc""\xd0""\xb5""\xd0""\xb4""\xd0""\xbd""\xd0""\xb0"" \xd0""\xb6"" \xd1""\x82""\xd0""\xb8"", \xd0""\xbf""\xd1""\x80""\xd0""\xbe""\xd1""\x89""\xd0""\xb0""\xd0""\xb9""\xd1""\x81""\xd1""\x8f"" \xd0""\xb1""\xd0""\xb5""\xd0""\xb7"" \xd2""\x91""\xd0""\xbe""\xd0""\xbb""\xd1""\x8c""\xd1""\x84""\xd1""\x96""\xd0""\xb2""!"
+ 	 /* Daughter, do you hear them, eh? Oh, you are funny! Say good-bye without knee-length socks. */
+ 	)
+ LANGUAGE(
+ 	 ur	/* Urdu */,
+ 	 GLASS,
+-	 "میں کانچ کھا سکتا ہوں اور مجھے تکلیف نہیں ہوتی ۔"
++	 "\xd9""\x85""\xdb""\x8c""\xda""\xba"" \xda""\xa9""\xd8""\xa7""\xd9""\x86""\xda""\x86"" \xda""\xa9""\xda""\xbe""\xd8""\xa7"" \xd8""\xb3""\xda""\xa9""\xd8""\xaa""\xd8""\xa7"" \xdb""\x81""\xd9""\x88""\xda""\xba"" \xd8""\xa7""\xd9""\x88""\xd8""\xb1"" \xd9""\x85""\xd8""\xac""\xda""\xbe""\xdb""\x92"" \xd8""\xaa""\xda""\xa9""\xd9""\x84""\xdb""\x8c""\xd9""\x81"" \xd9""\x86""\xdb""\x81""\xdb""\x8c""\xda""\xba"" \xdb""\x81""\xd9""\x88""\xd8""\xaa""\xdb""\x8c"" \xdb""\x94"""
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+@@ -550,48 +550,48 @@
+ LANGUAGE(
+ 	 vi	/* Vietnamese */,
+ 	 GSPECI,
+-	 "Con sói nâu nhảy qua con chó lười."
++	 "Con s\xc3""\xb3""i n\xc3""\xa2""u nh\xe1""\xba""\xa3""y qua con ch\xc3""\xb3"" l\xc6""\xb0""\xe1""\xbb""\x9d""i."
+ 	)
+ LANGUAGE(
+ 	 wa	/* Walloon */,
+ 	 GLASS,
+-	 "Dji pou magnî do vêre, çoula m' freut nén må."
++	 "Dji pou magn\xc3""\xae"" do v\xc3""\xaa""re, \xc3""\xa7""oula m' freut n\xc3""\xa9""n m\xc3""\xa5""."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 yi	/* Yiddish */,
+ 	 GLASS,
+-	 "איך קען עסן גלאָז און עס טוט מיר נישט װײ."
++	 "\xd7""\x90""\xd7""\x99""\xd7""\x9a"" \xd7""\xa7""\xd7""\xa2""\xd7""\x9f"" \xd7""\xa2""\xd7""\xa1""\xd7""\x9f"" \xd7""\x92""\xd7""\x9c""\xd7""\x90""\xd6""\xb8""\xd7""\x96"" \xd7""\x90""\xd7""\x95""\xd7""\x9f"" \xd7""\xa2""\xd7""\xa1"" \xd7""\x98""\xd7""\x95""\xd7""\x98"" \xd7""\x9e""\xd7""\x99""\xd7""\xa8"" \xd7""\xa0""\xd7""\x99""\xd7""\xa9""\xd7""\x98"" \xd7""\xb0""\xd7""\xb2""."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 yo	/* Yoruba */,
+ 	 GLASS,
+-	 "Mo lè je̩ dígí, kò ní pa mí lára."
++	 "Mo l\xc3""\xa8"" je\xcc""\xa9"" d\xc3""\xad""g\xc3""\xad"", k\xc3""\xb2"" n\xc3""\xad"" pa m\xc3""\xad"" l\xc3""\xa1""ra."
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 zh-cn	/* Chinese Simplified */,
+ 	 GLASS,
+-	 "我能吞下玻璃而不伤身体。"
++	 "\xe6""\x88""\x91""\xe8""\x83""\xbd""\xe5""\x90""\x9e""\xe4""\xb8""\x8b""\xe7""\x8e""\xbb""\xe7""\x92""\x83""\xe8""\x80""\x8c""\xe4""\xb8""\x8d""\xe4""\xbc""\xa4""\xe8""\xba""\xab""\xe4""\xbd""\x93""\xe3""\x80""\x82"""
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 zh-mo	/* Chinese Traditional */,
+ 	 GLASS,
+-	 "我能吞下玻璃而不傷身體。"
++	 "\xe6""\x88""\x91""\xe8""\x83""\xbd""\xe5""\x90""\x9e""\xe4""\xb8""\x8b""\xe7""\x8e""\xbb""\xe7""\x92""\x83""\xe8""\x80""\x8c""\xe4""\xb8""\x8d""\xe5""\x82""\xb7""\xe8""\xba""\xab""\xe9""\xab""\x94""\xe3""\x80""\x82"""
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 zh-sg	/* Chinese Simplified */,
+ 	 GLASS,
+-	 "我能吞下玻璃而不伤身体。"
++	 "\xe6""\x88""\x91""\xe8""\x83""\xbd""\xe5""\x90""\x9e""\xe4""\xb8""\x8b""\xe7""\x8e""\xbb""\xe7""\x92""\x83""\xe8""\x80""\x8c""\xe4""\xb8""\x8d""\xe4""\xbc""\xa4""\xe8""\xba""\xab""\xe4""\xbd""\x93""\xe3""\x80""\x82"""
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
+ 	 zh-tw	/* Chinese Traditional */,
+ 	 GLASS,
+-	 "我能吞下玻璃而不傷身體。"
++	 "\xe6""\x88""\x91""\xe8""\x83""\xbd""\xe5""\x90""\x9e""\xe4""\xb8""\x8b""\xe7""\x8e""\xbb""\xe7""\x92""\x83""\xe8""\x80""\x8c""\xe4""\xb8""\x8d""\xe5""\x82""\xb7""\xe8""\xba""\xab""\xe9""\xab""\x94""\xe3""\x80""\x82"""
+ 	 /* I can eat glass and it doesn't hurt me. */
+ 	)
+ LANGUAGE(
