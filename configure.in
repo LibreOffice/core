@@ -3966,7 +3966,6 @@ _ACEOF
                 cat findhome.java >&5
                 AC_MSG_ERROR([javac does not work - java projects will not build!])
             fi
-
             AC_MSG_CHECKING([if gij knows its java.home])
             JAVA_HOME=`$JAVAINTERPRETER findhome`
             if test $? = 0 && test "$JAVA_HOME" != "" ; then
@@ -3976,6 +3975,8 @@ _ACEOF
                 cat findhome.java >&5
                 AC_MSG_ERROR([gij does not know its java.home - use --with-jdk-home])
             fi
+            # clean-up after ourselves
+            rm -f ./findhome.java ./findhome.class
         else
             JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*$with_java,,p"`
         fi
