@@ -55,7 +55,6 @@ private:
     void HandleRoot( const SmRootNode* pNode, int nLevel );
     void HandleAttribute( const SmAttributNode* pNode, int nLevel );
     void HandleOperator( const SmOperNode* pNode, int nLevel );
-    void HandleOperatorNary( const SmOperNode* pNode, int nLevel, sal_Unicode chr );
     void HandleSubSupScript( const SmSubSupNode* pNode, int nLevel );
     void HandleSubSupScriptInternal( const SmSubSupNode* pNode, int nLevel, int flags );
     String str;
