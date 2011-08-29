@@ -51,7 +51,6 @@
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/weak.hxx"
-#include "comphelper/string.hxx"
 #include "osl/diagnose.h"
 #include "rtl/string.h"
 #include "rtl/ustrbuf.hxx"
@@ -65,20 +64,36 @@
 
 namespace css = com::sun::star;
 
-using comphelper::string::isalphaAscii;
-using comphelper::string::isdigitAscii;
-using comphelper::string::isxdigitAscii;
-using comphelper::string::islowerAscii;
-using comphelper::string::isupperAscii;
-
 namespace {
 
-sal_Unicode toLowerCase(sal_Unicode c) { //TODO: generally available?
-    return isupperAscii(c) ? c + ('a' - 'A') : c;
+//TODO: move comphelper::string::misc into something like
+//sal/salhelper and use those instead
+
+bool isDigit(sal_Unicode c) {
+    return c >= '0' && c <= '9';
+}
+
+bool isUpperCase(sal_Unicode c) {
+    return c >= 'A' && c <= 'Z';
+}
+
+bool isLowerCase(sal_Unicode c) {
+    return c >= 'a' && c <= 'z';
+}
+
+bool isAlpha(sal_Unicode c) {
+    return isUpperCase(c) || isLowerCase(c);
+}
+
+bool isHexDigit(sal_Unicode c) {
+    return isDigit(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
+}
+
+sal_Unicode toLowerCase(sal_Unicode c) {
+    return isUpperCase(c) ? c + ('a' - 'A') : c;
 }
 
 bool equalIgnoreCase(sal_Unicode c1, sal_Unicode c2) {
-    //TODO: generally available?
     return toLowerCase(c1) == toLowerCase(c2);
 }
 
@@ -86,8 +101,8 @@ bool equalIgnoreEscapeCase(rtl::OUString const & s1, rtl::OUString const & s2) {
     if (s1.getLength() == s2.getLength()) {
         for (sal_Int32 i = 0; i < s1.getLength();) {
             if (s1[i] == '%' && s2[i] == '%' && s1.getLength() - i > 2
-                && isxdigitAscii(s1[i + 1]) && isxdigitAscii(s1[i + 2])
-                && isxdigitAscii(s2[i + 1]) && isxdigitAscii(s2[i + 2])
+                && isHexDigit(s1[i + 1]) && isHexDigit(s1[i + 2])
+                && isHexDigit(s2[i + 1]) && isHexDigit(s2[i + 2])
                 && equalIgnoreCase(s1[i + 1], s2[i + 1])
                 && equalIgnoreCase(s1[i + 2], s2[i + 2]))
             {
@@ -105,12 +120,12 @@ bool equalIgnoreEscapeCase(rtl::OUString const & s1, rtl::OUString const & s2) {
 }
 
 sal_Int32 parseScheme(rtl::OUString const & uriReference) {
-    if (uriReference.getLength() >= 2 && isalphaAscii(uriReference[0])) {
+    if (uriReference.getLength() >= 2 && isAlpha(uriReference[0])) {
         for (sal_Int32 i = 0; i < uriReference.getLength(); ++i) {
             sal_Unicode c = uriReference[i];
             if (c == ':') {
                 return i;
-            } else if (!isalphaAscii(c) && !isdigitAscii(c) && c != '+' && c != '-'
+            } else if (!isAlpha(c) && !isDigit(c) && c != '+' && c != '-'
                        && c != '.')
             {
                 break;
@@ -379,7 +394,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
             RTL_CONSTASCII_STRINGPARAM("com.sun.star.uri.UriSchemeParser_"));
         for (sal_Int32 i = 0; i < scheme.getLength(); ++i) {
             sal_Unicode c = scheme[i];
-            if (isupperAscii(c)) {
+            if (isUpperCase(c)) {
                 buf.append(toLowerCase(c));
             } else if (c == '+') {
                 buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("PLUS"));
@@ -388,7 +403,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
             } else if (c == '.') {
                 buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("DOT"));
             } else {
-                OSL_ASSERT(islowerAscii(c) || isdigitAscii(c));
+                OSL_ASSERT(isLowerCase(c) || isDigit(c));
                 buf.append(c);
             }
         }
