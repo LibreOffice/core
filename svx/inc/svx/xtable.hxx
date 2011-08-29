@@ -186,62 +186,6 @@ public:
     XOBitmap& GetXBitmap()                    { return aXOBitmap; }
 };
 
-// ---------------------
-// class XPropertyTable
-// ---------------------
-
-class SVX_DLLPUBLIC XPropertyTable
-{
-protected:
-    String              aName; // nicht persistent !
-    String              aPath;
-    XOutdevItemPool*    pXPool;
-
-    Table               aTable;
-    Table*              pBmpTable;
-
-    sal_Bool            bTableDirty;
-    sal_Bool            bBitmapsDirty;
-    sal_Bool            bOwnPool;
-
-                        XPropertyTable(
-                            const String& rPath,
-                            XOutdevItemPool* pXPool = NULL,
-                            sal_uInt16 nInitSize = 16,
-                            sal_uInt16 nReSize = 16
-                        );
-    void                Clear();
-
-public:
-    virtual             ~XPropertyTable();
-
-    long                Count() const;
-
-    sal_Bool            Insert(long nIndex, XPropertyEntry* pEntry);
-    XPropertyEntry*     Replace(long nIndex, XPropertyEntry* pEntry);
-    XPropertyEntry*     Remove(long nIndex);
-
-                        // Note: Get(long) & Get( String& ) are ambiguous
-    XPropertyEntry*     Get( long nIndex, sal_uInt16 nDummy ) const;
-    long                Get(const String& rName);
-
-    Bitmap*             GetBitmap( long nIndex ) const;
-
-    const String&       GetName() const { return aName; }
-    void                SetName( const String& rString );
-    const String&       GetPath() const { return aPath; }
-    void                SetPath( const String& rString ) { aPath = rString; }
-    sal_Bool            IsDirty() const { return bTableDirty && bBitmapsDirty; }
-    void                SetDirty( sal_Bool bDirty = sal_True )
-                            { bTableDirty = bDirty; bBitmapsDirty = bDirty; }
-
-    virtual sal_Bool    Load() = 0;
-    virtual sal_Bool    Save() = 0;
-    virtual sal_Bool    Create() = 0;
-    virtual sal_Bool    CreateBitmapsForUI() = 0;
-    virtual Bitmap*     CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True ) = 0;
-};
-
 // --------------------
 // class XPropertyList
 // --------------------

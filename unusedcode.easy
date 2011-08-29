@@ -1622,8 +1622,6 @@ XMLTextParagraphExport::FindTextStyle(com::sun::star::uno::Reference<com::sun::s
 XMLTextParagraphExport::GetHeadingLevel(rtl::OUString const&)
 XMLVisAreaContext::XMLVisAreaContext(SvXMLImport&, unsigned short, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList> const&, Rectangle&, MapUnit)
 XPropertyList::Clear()
-XPropertyTable::Clear()
-XPropertyTable::GetBitmap(long) const
 XSecController::collectToSign(int, rtl::OUString const&)
 XSecController::getErrorMessage()
 XSecController::setSAXChainConnector(com::sun::star::uno::Reference<com::sun::star::xml::sax::XParser> const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler> const&, com::sun::star::uno::Reference<com::sun::star::xml::crypto::sax::XElementStackKeeper> const&)
