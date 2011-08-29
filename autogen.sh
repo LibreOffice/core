@@ -149,7 +149,7 @@ if (defined $ENV{NOCONFIGURE}) {
             close ($fh);
         }
     }
-    else
+    elsif ( ! -e "autogen.lastrun")
     {
         system("touch autogen.lastrun");
     }
