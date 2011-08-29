@@ -29,6 +29,8 @@
 /*/unxios?.pro
 /*/unxand?
 /*/unxand?.pro
+/*/unx*.obsolete
+/*/wnt*.obsolete
 /workdir
 /solver
 /instsetoo_native/util/LibreOffice
