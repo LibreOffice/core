@@ -910,16 +910,6 @@ File gid_File_Dl_Stdcpp
 End
 #endif
 
-#if (defined WNT && defined _gcc3)
-File gid_File_Lib_Mingwm10_Ure
-    TXT_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("mingwm10");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "601FEC1D-8665-4476-9911-83BDCCE83025";
-End
-#endif
-
 #if defined(WNT) && defined( _gcc3 )
 
 #if defined(MINGW_GCCDLL)
@@ -1147,7 +1137,6 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_Stdcpp,
             gid_File_Lib_Mingw_GccS_Ure,
             gid_File_Lib_Mingw_Stdcpp_Ure,
-            gid_File_Lib_Mingwm10_Ure,
             gid_File_Dl_Unicows,
             gid_File_Dl_Uwinapi,
             gid_File_Lib_Msvcr80_Ure,

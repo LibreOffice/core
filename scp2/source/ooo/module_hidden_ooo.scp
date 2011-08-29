@@ -456,7 +456,6 @@ Module gid_Module_Root_Files_5
     GID_FILE_LIB_WPD,
     gid_File_Lib_Mingw_GccS,
     gid_File_Lib_Mingw_Stdcpp,
-    gid_File_Lib_Mingwm10,
 	gid_File_Lib_Msvcp70,
 	gid_File_Lib_Msvcr70,
 	gid_File_Lib_Ole,

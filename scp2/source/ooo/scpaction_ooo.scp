@@ -52,10 +52,6 @@ ScpAction scp_Copy_Readme_Txt
 End
 
 #if defined(WNT) && defined(_gcc3)
-ScpAction SCP_COPY_MINGWM10
-    Copy = "mingwm10.dll";
-    Name = "mingwm10.dll";
-End
 #if defined(MINGW_GCCDLL)
 ScpAction SCP_COPY_MINGW_GCCS
     Copy = MINGW_GCCDLL;

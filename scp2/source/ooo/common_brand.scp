@@ -78,7 +78,6 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Lib_Dbghelp,
              gid_Brand_File_Lib_Mingw_GccS,
              gid_Brand_File_Lib_Mingw_Stdcpp,
-             gid_Brand_File_Lib_Mingwm10,
              gid_Brand_File_Lib_Msvcr80,
              gid_Brand_File_Lib_Msvcp80,
              gid_Brand_File_Lib_Msvcm80,
@@ -779,15 +778,6 @@ File gid_Brand_File_Share_Xdg_JavaFilter
 End
 #endif
 
-
-#if defined WNT && defined(_gcc3)
-File gid_Brand_File_Lib_Mingwm10
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-    Name = "mingwm10.dll";
-End
-#endif
 
 #if defined(WNT) && defined( _gcc3 )
 
