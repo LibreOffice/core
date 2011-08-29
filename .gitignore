@@ -2,6 +2,9 @@
 *~
 .*.sw[op]
 
+# python generated file
+*.pyc
+
 # where the 'subrepos' and downloads are located
 /clone
 /src
