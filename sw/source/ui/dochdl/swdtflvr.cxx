@@ -3432,8 +3432,7 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
     bDelBookmrk( sal_False ), bInDisconnect( sal_False )
 {
     // we only end up here with table- or text selection
-    const int nSelection = rSh.GetSelectionType();
-    if( nsSelectionType::SEL_TBL_CELLS & nSelection )
+    if( nsSelectionType::SEL_TBL_CELLS & rSh.GetSelectionType() )
     {
         SwFrmFmt* pFmt = rSh.GetTableFmt();
         if( pFmt )
