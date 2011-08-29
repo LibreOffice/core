@@ -3234,7 +3234,9 @@ using namespace std;
         [   
             MINGW_GXXDLL=`$OBJDUMP -p conftest.exe | grep 'DLL Name: libstdc++' | $SED -e 's@.*DLL Name: @@'`
             if test -n "$MINGW_GXXDLL"; then
-                MINGW_SHARED_LIBSTDCPP=-l${MINGW_GXXDLL%.dll}
+                mingw_gxxdll_root=${MINGW_GXXDLL%.dll}
+                mingw_gxxdll_root=${mingw_gxxdll_root#lib}
+                MINGW_SHARED_LIBSTDCPP=-l$mingw_gxxdll_root
                 MINGW_SHARED_GXXLIB=YES
                 AC_MSG_RESULT([$MINGW_GXXDLL])
             else
