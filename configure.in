@@ -737,7 +737,7 @@ AC_ARG_ENABLE(ccache-skip,
                           caching of the result (currently used on Mac only)
                           NOTE: requires patched version because of a bug in
                           ccache (see issue 104567 for details and patch) 
-                          explicitly enable if your version of ccache doesn't 
+                          explicitly enable if your version of ccache does not 
                           identify as version 2.4_OOo
 ]],,enable_ccache_skip=auto)
 AC_ARG_WITH(lang,
@@ -1094,6 +1094,11 @@ esac
 AC_SUBST(OSVERSION)
 AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LIBS)
+
+
+dnl Ensure pkg-config is initialized before any possible use
+PKG_PROG_PKG_CONFIG
+
 
 dnl ===================================================================
 dnl Set the ENABLE_CRASHDUMP variable.
