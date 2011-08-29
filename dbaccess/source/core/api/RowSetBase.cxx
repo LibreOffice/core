@@ -1279,12 +1279,6 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::firePropertyChange" );
     OSL_TRACE("DBACCESS ORowSetBase::firePropertyChange() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     OSL_ENSURE(m_pColumns,"Columns can not be NULL here!");
-#if OSL_DEBUG_LEVEL > 1
-    sal_Bool bNull;
-    ORowSetMatrix::iterator atest;
-    bNull = m_aCurrentRow.isNull();
-    atest = m_aCurrentRow;
-#endif
     sal_Int32 i=0;
     try
     {
@@ -1292,7 +1286,7 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
         for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != aEnd;++aIter,++i)
             (*aIter)->fireValueChange(_rOldRow.is() ? (_rOldRow->get())[i+1] : ::connectivity::ORowSetValue());
     }
-    catch(Exception&)
+    catch (const Exception&)
     {
         OSL_FAIL("firePropertyChange: Exception");
     }

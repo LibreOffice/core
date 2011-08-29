@@ -113,9 +113,6 @@ void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
         {
             const Region aClipRegion( aRect );
             pOut->SetClipRegion( aClipRegion );
-#if OSL_DEBUG_LEVEL > 1
-            Rectangle aDbgRect = pOut->GetClipRegion().GetBoundRect();
-#endif
         }
 #if OSL_DEBUG_LEVEL > 1
         static sal_Bool bDbg = sal_False;
