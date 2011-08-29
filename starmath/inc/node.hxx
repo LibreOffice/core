@@ -1079,12 +1079,10 @@ inline SmVerticalBraceNode::SmVerticalBraceNode(const SmToken &rNodeToken) :
  * Used for commands like SUM, INT and similar.
  *
  * Children:<BR>
- * 0: Operation (instance of SmMathSymbolNode)<BR>
+ * 0: Operation (instance of SmMathSymbolNode or SmSubSupNode)<BR>
  * 1: Body<BR>
  * None of the children may be NULL.
  *
- * If there are boundaries on the operation the body will an instance of
- * SmSubSupNode.
  */
 class SmOperNode : public SmStructureNode
 {
