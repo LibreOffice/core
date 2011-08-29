@@ -428,7 +428,7 @@ namespace cppcanvas
 
 
                         if (additionalFlags & 0x02) {
-                            EMFP_DEBUG (printf ("EMF+\tuse transformation\n", color));
+                            EMFP_DEBUG (printf ("EMF+\tuse transformation\n"));
                             s >> transformation;
                             hasTransformation = true;
                             EMFP_DEBUG (printf ("EMF+\tm11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
@@ -503,7 +503,7 @@ namespace cppcanvas
                         s >> color;
 
                         if (additionalFlags & 0x02) {
-                            EMFP_DEBUG (printf ("EMF+\tuse transformation\n", color));
+                            EMFP_DEBUG (printf ("EMF+\tuse transformation\n"));
                             s >> transformation;
                             hasTransformation = true;
                             EMFP_DEBUG (printf ("EMF+\tm11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
@@ -708,7 +708,7 @@ namespace cppcanvas
                         GraphicFilter filter;
 
                         filter.ImportGraphic (graphic, String (), s);
-                        EMFP_DEBUG (printf ("EMF+\tbitmap width: %d height: %d\n", graphic.GetBitmap ().GetSizePixel ().Width (), graphic.GetBitmap ().GetSizePixel ().Height ()));
+                        EMFP_DEBUG (printf ("EMF+\tbitmap width: %ld height: %ld\n", graphic.GetBitmap ().GetSizePixel ().Width (), graphic.GetBitmap ().GetSizePixel ().Height ()));
                     }
 
                 } else if (type == 2) {
@@ -1093,7 +1093,6 @@ namespace cppcanvas
 
         void ImplRenderer::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags)
         {
-            EMFP_DEBUG (sal_uInt32 objectLen);
             sal_uInt32 index;
 
             EMFP_DEBUG (printf ("EMF+ Object slot: %hd flags: %hx\n", flags & 0xff, flags & 0xff00));
@@ -1285,16 +1284,13 @@ namespace cppcanvas
                     {
                         EMFP_DEBUG (sal_uInt8 index = flags & 0xff);
                         sal_uInt32 brushIndexOrColor;
-                        EMFP_DEBUG (sal_Int32 brushIndex);
                         sal_Int32 points;
-                        EMFP_DEBUG (sal_uInt32 color);
-                        EMFP_DEBUG (sal_uInt16 transparency = 0);
 
                         rMF >> brushIndexOrColor;
                         rMF >> points;
 
                         EMFP_DEBUG (printf ("EMF+ FillPolygon in slot: %d points: %d\n", index, points));
-                        EMFP_DEBUG (printf ("EMF+\twith solid color (ARGB): 0x%08X\n", color));
+                        EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", brushIndexOrColor));
 
                         EMFPPath path (points, true);
                         path.Read (rMF, flags, *this);
