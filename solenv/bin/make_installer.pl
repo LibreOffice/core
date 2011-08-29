@@ -289,7 +289,7 @@ if (!($installer::globals::is_copy_only_project)) { installer::ziplist::set_manu
 # Checking version of makecab.exe
 ##############################################
 
-if ( $installer::globals::iswindowsbuild ) { installer::control::check_makecab_version(); }
+if ( $installer::globals::iswindowsbuild && $ENV{'CROSS_COMPILING'} ne 'YES') { installer::control::check_makecab_version(); }
 
 ##########################################################
 # Getting the include path from the settings in zip list
