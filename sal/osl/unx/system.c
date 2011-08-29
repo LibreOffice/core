@@ -201,7 +201,7 @@ int macxp_resolveAlias(char *path, int buflen)
 
 #endif /* NO_PTHREAD_RTL */
 
-#if (defined (LINUX) && (GLIBC >= 2))
+#if defined(LINUX)
 /* The linux kernel thread implemention, always return the pid of the
    thread subprocess and not of the main process. So we save the main
    pid at startup
@@ -227,7 +227,7 @@ pid_t getpid(void)
 
     return (pid);
 }
-#endif /*  (defined (LINUX) && (GLIBC >= 2)) */
+#endif /*  defined LINUX */
 
 #ifdef NO_PTHREAD_SEMAPHORES
 int sem_init(sem_t* sem, int pshared, unsigned int value)

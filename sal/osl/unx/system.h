@@ -72,7 +72,6 @@
 #   define __USE_GNU
 #   endif
 
-#if GLIBC >= 2
 #   include <shadow.h>
 #   include <pthread.h>
 #   include <sys/file.h>
@@ -98,36 +97,6 @@
 #   define  pthread_testcancel()
 #   define  NO_PTHREAD_PRIORITY
 #   define  PTHREAD_SIGACTION           pthread_sigaction
-#else
-#   include <shadow.h>
-#   include <asm/sigcontext.h>
-#   include <pthread.h>
-#   include <sys/file.h>
-#   include <sys/ioctl.h>
-#   include <linux/net.h>
-#   include <sys/un.h>
-#   include <netinet/tcp.h>
-#   include <linux/elfcore.h>
-#   include <dlfcn.h>
-#   include <endian.h>
-#   if __BYTE_ORDER == __LITTLE_ENDIAN
-#       ifndef _LITTLE_ENDIAN
-#           define _LITTLE_ENDIAN
-#       endif
-#   elif __BYTE_ORDER == __BIG_ENDIAN
-#       ifndef _BIG_ENDIAN
-#           define _BIG_ENDIAN
-#       endif
-#   elif __BYTE_ORDER == __PDP_ENDIAN
-#       define _PDP_ENDIAN
-#   endif
-#   define  IORESOURCE_TRANSFER_BSD
-#   define  IOCHANNEL_TRANSFER_BSD_RENO
-#   define  pthread_testcancel()
-#   define  NO_PTHREAD_RTL
-#   define  NO_PTHREAD_PRIORITY
-#   define  PTHREAD_SIGACTION           pthread_sigaction
-#endif
 
 #   ifndef ETIME
 #       define ETIME ETIMEDOUT
