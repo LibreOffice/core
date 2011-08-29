@@ -38,19 +38,23 @@ if ($Dest =~ /--help/ || @ARGV < 1) {
     print "Syntax:\n  gcc-instlib <library-in-libpath ...> <destination-dir>\n";
     exit (0);
 }
+
+%SrcAndDest = ();
+
 foreach $File (@ARGV) {
     my $string;
-
-    open (GCCOut, "LANGUAGE=C LC_ALL=C $cc -print-file-name=$File|") || die "Failed to exec $cc -print-file-name=$File $!";
+    my $normalized_file = $File;
+    $normalized_file =~ s/\.so\.\d+/.so/;
+    open (GCCOut, "LANGUAGE=C LC_ALL=C $cc -print-file-name=$normalized_file|") || die "Failed to exec $cc -print-file-name=$normalized_file $!";
     $string=<GCCOut>;
     chomp ($string);
-    push (@CopySrc, $string);
+    $SrcAndDest{$string} = "$Dest/$File";
     close (GCCOut);
 }
 
-foreach $Src (@CopySrc) {
-    printf "copy $Src to $Dest\n";
-    system ("/bin/cp $Src $Dest") && die "copy failed: $!";
+while (($Src, $FullDest) = each %SrcAndDest) {
+    printf "copy $Src to $FullDest\n";
+    system ("/bin/cp $Src $FullDest") && die "copy failed: $!";
 }
 
 
