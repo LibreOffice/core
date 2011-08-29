@@ -92,20 +92,6 @@ XFIndex::~XFIndex()
     }
 }
 
-void XFIndex::SetSectionStyle(rtl::OUString strSectStyleName)
-{
-    SetStyleName(strSectStyleName);
-}
-
-void    XFIndex::SetTitle(rtl::OUString title, rtl::OUString strParaStyle)
-{
-    m_strTitle = title;
-
-    m_pTitle = new XFParagraph();
-    m_pTitle->SetStyleName(strParaStyle);
-    m_pTitle->Add(m_strTitle);
-}
-
 void    XFIndex::AddTemplate(sal_uInt32 level,
                     rtl::OUString /*style*/,
                     enumXFIndexTemplate type1,
@@ -155,11 +141,6 @@ void    XFIndex::AddEntry(rtl::OUString entry, rtl::OUString strParaStyle)
     XFContentContainer::Add(pPara);
 }
 
-sal_Int32   XFIndex::GetEntryCount()
-{
-    return GetCount();
-}
-
 void    XFIndex::SetProtected(sal_Bool protect)
 {
     m_bProtect = protect;
@@ -178,43 +159,6 @@ void XFIndex::AddTocSource(sal_uInt16 nLevel, const rtl::OUString sStyleName)
     }
 
     m_aTOCSource[nLevel].push_back(sStyleName);
-}
-
-void XFIndex::SetDefaultAlphaIndex(rtl::OUString /*strDivision*/,sal_Bool bRunin, sal_Bool bSeparator)
-{
-    XFIndexTemplate * pTemplateSep = new XFIndexTemplate();
-    if (bSeparator)
-    {
-        SetSeparator(sal_True);
-        pTemplateSep->AddEntry(enumXFIndexTemplateText,A2OUSTR(""));
-    }
-    AddTemplate(A2OUSTR("separator"),A2OUSTR("Separator"),pTemplateSep);
-
-    XFIndexTemplate * pTemplate1 = new XFIndexTemplate();
-    pTemplate1->AddEntry(enumXFIndexTemplateText,A2OUSTR(""));
-    pTemplate1->AddEntry(enumXFIndexTemplateTab,A2OUSTR(""));
-    pTemplate1->AddEntry(enumXFIndexTemplatePage,A2OUSTR(""));
-    AddTemplate(Int32ToOUString(1),A2OUSTR("Primary"),pTemplate1);
-
-    XFIndexTemplate * pTemplate2 = new XFIndexTemplate();
-    pTemplate2->AddEntry(enumXFIndexTemplateText,A2OUSTR(""));
-    pTemplate2->AddEntry(enumXFIndexTemplateTab,A2OUSTR(""));
-    pTemplate2->AddEntry(enumXFIndexTemplatePage,A2OUSTR(""));
-    XFIndexTemplate * pTemplate3 = new XFIndexTemplate();
-    pTemplate3->AddEntry(enumXFIndexTemplateText,A2OUSTR(""));
-    pTemplate3->AddEntry(enumXFIndexTemplateTab,A2OUSTR(""));
-    pTemplate3->AddEntry(enumXFIndexTemplatePage,A2OUSTR(""));
-
-    if (bRunin)
-    {
-        AddTemplate(Int32ToOUString(2),A2OUSTR("Primary"),pTemplate2);
-        AddTemplate(Int32ToOUString(3),A2OUSTR("Primary"),pTemplate3);
-    }
-    else
-    {
-        AddTemplate(Int32ToOUString(2),A2OUSTR("Secondary"),pTemplate2);
-        AddTemplate(Int32ToOUString(3),A2OUSTR("Secondary"),pTemplate3);
-    }
 }
 
 void    XFIndex::ToXml(IXFStream *pStrm)

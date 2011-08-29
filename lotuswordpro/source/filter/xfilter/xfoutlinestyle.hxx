@@ -94,31 +94,6 @@ private:
     enumXFAlignType m_eAlign;
 };
 
-class XFOutlineStyle : public XFStyle
-{
-public:
-    XFOutlineStyle();
-
-public:
-    void    SetNumFmt(sal_Int32 level, XFNumFmt& fmt);
-
-    void    SetIndent(sal_Int32 level, double indent);
-
-    void    SetMinLabelWidth(sal_Int32 level, double labelWidth);
-
-    void    SetMinLabelDistance(sal_Int32 level, double distance);
-
-    void    SetTextAlign(sal_Int32 level, enumXFAlignType align);
-
-    virtual enumXFStyle GetStyleFamily();
-
-    virtual void    ToXml(IXFStream *pStrm);
-
-private:
-    XFOutlineLevelStyle m_aLevels[10];
-};
-
-
 //
 //XFOutlineLevelStyle:
 //
@@ -150,39 +125,6 @@ inline void XFOutlineLevelStyle::SetMinLabelDistance(double distance)
 inline void XFOutlineLevelStyle::SetTextAlign(enumXFAlignType align)
 {
     m_eAlign = align;
-}
-
-//
-//XFOutlineStyle:
-//
-inline void XFOutlineStyle::SetNumFmt(sal_Int32 level, XFNumFmt& fmt)
-{
-    assert(level>=1&&level<=10);
-    m_aLevels[level].SetNumFmt(fmt);
-}
-
-inline void XFOutlineStyle::SetIndent(sal_Int32 level, double indent)
-{
-    assert(level>=1&&level<=10);
-    m_aLevels[level].SetIndent(indent);
-}
-
-inline void XFOutlineStyle::SetMinLabelWidth(sal_Int32 level, double width)
-{
-    assert(level>=1&&level<=10);
-    m_aLevels[level].SetMinLabelWidth(width);
-}
-
-inline void XFOutlineStyle::SetMinLabelDistance(sal_Int32 level, double distance)
-{
-    assert(level>=1&&level<=10);
-    m_aLevels[level].SetMinLabelDistance(distance);
-}
-
-inline void XFOutlineStyle::SetTextAlign(sal_Int32 level, enumXFAlignType align)
-{
-    assert(level>=1&&level<=10);
-    m_aLevels[level].SetTextAlign(align);
 }
 
 #endif

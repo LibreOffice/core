@@ -71,8 +71,6 @@
 class   XFFontDecl
 {
 public:
-    XFFontDecl();
-
     XFFontDecl(rtl::OUString name, rtl::OUString family, sal_Bool fixed = false);
 
 public:
@@ -82,23 +80,11 @@ public:
     rtl::OUString   GetFontName();
 
     /**
-     * @descr   Set font name.
-     */
-    void            SetFontName(rtl::OUString name);
-
-    /**
      * @descr   Get font family.
      */
     rtl::OUString   GetFontFamily();
 
-    /**
-     * @descr   Set font famuly.
-     */
-    void            SetFontFamily(rtl::OUString family);
-
     sal_Bool        GetFontPitchFixed();
-
-    void            SetFontPitchFixed(sal_Bool  fixed);
 
 private:
     rtl::OUString   m_strFontName;

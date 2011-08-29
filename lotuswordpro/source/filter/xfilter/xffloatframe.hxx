@@ -71,7 +71,6 @@
 class XFFloatFrame : public XFFrame
 {
 public:
-    XFFloatFrame(sal_Int32 page);
 
     /**
      * @descr   output range: [start,end], not [start,end).

@@ -87,24 +87,9 @@ public:
     void    SetRelWidth(sal_Int32 width);
 
     /**
-     * @descr   return column relative width.
-     */
-    sal_Int32 GetRelWidth();
-
-    /**
      * @descr   Set column margin left and margin right.
      */
     void    SetMargins(double left, double right);
-
-    /**
-     * @descr   return column left margin.
-     */
-    double  GetMarginLeft();
-
-    /**
-     * @descr   return column right margin.
-     */
-    double  GetMarginRight();
 
     /**
      * @descr   output column style as an xml node.
@@ -157,7 +142,6 @@ public:
         m_fGap = 0;
     }
 public:
-    void    SetSeperator(sal_Int32 height, double width, XFColor color = XFColor(0,0,0),enumXFAlignType align = enumXFAlignMiddle);
     void    SetSeperator(XFColumnSep& aSeperator);
     void    SetGap(double fGap);
     void    SetCount(sal_uInt16 nCount);

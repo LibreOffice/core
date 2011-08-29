@@ -152,16 +152,6 @@ public:
     void    SetIndexType(enumXFIndex type);
 
     /**
-     * @descr   Set index section style. Perhaps you should create a section style first.
-     */
-    void    SetSectionStyle(rtl::OUString strSectStyleName);
-
-    /**
-     * @descr   Set index title.
-     */
-    void    SetTitle(rtl::OUString title, rtl::OUString strParaStyle);
-
-    /**
      * @descr   Set index entry template.
      * @param   level [1-10].
      */
@@ -183,11 +173,6 @@ public:
     void    AddEntry(rtl::OUString entry, rtl::OUString strParaStyle);
 
     /**
-     * @descr   return entry count.
-     */
-    sal_Int32   GetEntryCount();
-
-    /**
      * @descr   Set if protected index to prevent handly-revise.
      */
     void    SetProtected(sal_Bool protect);
@@ -200,11 +185,6 @@ public:
     virtual void    ToXml(IXFStream *pStrm);
 
     void AddTocSource(sal_uInt16 nLevel, const rtl::OUString sStyleName);
-
-    /**
-     * @descr   Set default value for index.
-     */
-    void SetDefaultAlphaIndex(rtl::OUString strDivision,sal_Bool bRunin, sal_Bool bSeparator);
 
 private:
     enumXFIndex     m_eType;

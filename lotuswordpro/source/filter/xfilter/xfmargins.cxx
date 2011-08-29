@@ -114,7 +114,7 @@ bool operator!=(XFMargins& indent1, XFMargins& indent2)
     return !(indent1==indent2);
 }
 
-XFMargins& XFMargins::operator=(XFMargins& other)
+XFMargins& XFMargins::operator=(const XFMargins& other)
 {
     m_nFlag = other.m_nFlag;
     m_fLeft = other.m_fLeft;

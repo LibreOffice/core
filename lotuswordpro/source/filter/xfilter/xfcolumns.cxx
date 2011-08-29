@@ -64,24 +64,10 @@ void    XFColumn::SetRelWidth(sal_Int32 width)
     m_nRelWidth = width;
 }
 
-sal_Int32 XFColumn::GetRelWidth()
-{
-    return m_nRelWidth;
-}
-
 void    XFColumn::SetMargins(double left, double right)
 {
     m_fMarginLeft = left;
     m_fMarginRight = right;
-}
-
-double  XFColumn::GetMarginLeft()
-{
-    return m_fMarginLeft;
-}
-double  XFColumn::GetMarginRight()
-{
-    return m_fMarginRight;
 }
 
 void    XFColumn::ToXml(IXFStream *pStrm)
@@ -140,15 +126,6 @@ void    XFColumnSep::ToXml(IXFStream *pStrm)
 
     pStrm->StartElement( A2OUSTR("style:column-sep") );
     pStrm->EndElement( A2OUSTR("style:column-sep") );
-}
-
-void    XFColumns::SetSeperator(sal_Int32 height, double /*width*/, XFColor color,enumXFAlignType align)
-{
-    m_aSeperator.SetRelHeight(height);
-    m_aSeperator.SetWidth(0.1);
-    m_aSeperator.SetColor(color);
-    m_aSeperator.SetVerticalAlign(align);
-    m_nFlag |= XFCOLUMNS_FLAG_SEPERATOR;
 }
 
 void    XFColumns::SetSeperator(XFColumnSep& aSeperator)

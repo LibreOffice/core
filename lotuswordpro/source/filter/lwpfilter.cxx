@@ -61,7 +61,6 @@
 #include "lwpresource.hxx"
 //for sax stream
 #include "xfilter/xfsaxstream.hxx"
-#include "xfilter/xffilestream.hxx"
 //for file parser
 #include "lwp9reader.hxx"
 #include "lwpsvstream.hxx"

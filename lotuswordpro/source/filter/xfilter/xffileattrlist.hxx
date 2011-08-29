@@ -76,7 +76,6 @@ public:
     virtual void    AddAttribute(const rtl::OUString& name, const rtl::OUString& value);
     virtual void    Clear();
 
-    friend class XFFileStream;
 private:
     std::vector<std::pair<rtl::OUString,rtl::OUString> > m_aAttrList;
 

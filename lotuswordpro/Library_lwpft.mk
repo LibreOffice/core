@@ -186,8 +186,6 @@ $(eval $(call gb_Library_add_exception_objects,lwpft,\
     lotuswordpro/source/filter/xfilter/xfdatestyle \
     lotuswordpro/source/filter/xfilter/xfdocfield \
     lotuswordpro/source/filter/xfilter/xfdrawareastyle \
-    lotuswordpro/source/filter/xfilter/xfdrawcircle \
-    lotuswordpro/source/filter/xfilter/xfdrawellipse \
     lotuswordpro/source/filter/xfilter/xfdrawline \
     lotuswordpro/source/filter/xfilter/xfdrawlinestyle \
     lotuswordpro/source/filter/xfilter/xfdrawobj \
@@ -198,7 +196,6 @@ $(eval $(call gb_Library_add_exception_objects,lwpft,\
     lotuswordpro/source/filter/xfilter/xfdrawstyle \
     lotuswordpro/source/filter/xfilter/xfentry \
     lotuswordpro/source/filter/xfilter/xffileattrlist \
-    lotuswordpro/source/filter/xfilter/xffilestream \
     lotuswordpro/source/filter/xfilter/xffloatframe \
     lotuswordpro/source/filter/xfilter/xffont \
     lotuswordpro/source/filter/xfilter/xffontdecl \
@@ -216,7 +213,6 @@ $(eval $(call gb_Library_add_exception_objects,lwpft,\
     lotuswordpro/source/filter/xfilter/xfmasterpage \
     lotuswordpro/source/filter/xfilter/xfnumberstyle \
     lotuswordpro/source/filter/xfilter/xfofficemeta \
-    lotuswordpro/source/filter/xfilter/xfoleobj \
     lotuswordpro/source/filter/xfilter/xfoutlinestyle \
     lotuswordpro/source/filter/xfilter/xfpagemaster \
     lotuswordpro/source/filter/xfilter/xfparagraph \

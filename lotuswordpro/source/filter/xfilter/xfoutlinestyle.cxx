@@ -105,25 +105,4 @@ void XFOutlineLevelStyle::ToXml(IXFStream *pStrm)
     pStrm->EndElement( A2OUSTR("text:outline-level-style") );
 }
 
-XFOutlineStyle::XFOutlineStyle()
-{
-    for( int i=0; i<10; i++ )
-        m_aLevels[i].SetLevel(i+1);
-}
-
-enumXFStyle XFOutlineStyle::GetStyleFamily()
-{
-    return enumXFStyleOutline;
-}
-
-void XFOutlineStyle::ToXml(IXFStream *pStrm)
-{
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
-    pAttrList->Clear();
-
-    pStrm->StartElement( A2OUSTR("text:outline-style") );
-    for( int i=0; i<10; i++ )
-        m_aLevels[i].ToXml(pStrm);
-    pStrm->EndElement( A2OUSTR("text:outline-style") );
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
