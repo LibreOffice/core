@@ -13,8 +13,9 @@ mkdir: %_DEST%\inc\salhelper
 ..\inc\salhelper\timer.hxx %_DEST%\inc\salhelper\timer.hxx
 
 ..\%__SRC%\bin\salhelp*.dll %_DEST%\bin\salhelp*.dll
-..\%__SRC%\lib\*salhelper*.lib %_DEST%\lib\*
+..\%__SRC%\bin\uno_salhelp*.dll %_DEST%\bin\uno_salhelp*.dll
 
+..\%__SRC%\lib\*salhelper*.lib %_DEST%\lib\*
 ..\%__SRC%\lib\libuno_salhelper*.* %_DEST%\lib\*
 
 ..\%__SRC%\lib\libsalhelper*.a %_DEST%\lib\*
