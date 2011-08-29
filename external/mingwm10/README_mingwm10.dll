@@ -1,3 +1,0 @@
-Put the mingwm10.dll in this directory for Windows builds using
-a MinGW compiler. The dlls are part of the MinGW installation and can be found
-in the directory where the compiler binary is installed.
