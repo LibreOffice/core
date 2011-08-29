@@ -81,6 +81,7 @@ SHL2VERSIONMAP = $(SOLARENV)/src/unloadablecomponent.map
 SHL2STDLIBS= \
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
+        $(COMPHELPERLIB)	\
                 $(SALLIB)		
 
 SHL2DEPN=
