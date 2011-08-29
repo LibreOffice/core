@@ -46,10 +46,8 @@ class SVX_DLLPUBLIC XFillBitmapItem : public NameOrIndex
 public:
             TYPEINFO();
             XFillBitmapItem() : NameOrIndex(XATTR_FILLBITMAP, -1 ) {}
-            XFillBitmapItem( long nIndex, const XOBitmap& rTheBitmap );
             XFillBitmapItem( const String& rName, const XOBitmap& rTheBitmap );
             XFillBitmapItem( SfxItemPool* pPool, const XOBitmap& rTheBitmap );
-            XFillBitmapItem( SfxItemPool* pPool );
             XFillBitmapItem( const XFillBitmapItem& rItem );
             XFillBitmapItem( SvStream& rIn, sal_uInt16 nVer = 0 );
 

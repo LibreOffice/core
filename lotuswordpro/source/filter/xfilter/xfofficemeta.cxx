@@ -61,16 +61,6 @@
 #include    "ixfstream.hxx"
 #include    "ixfattrlist.hxx"
 
-void    XFOfficeMeta::SetGenerator(rtl::OUString generator)
-{
-    m_strGenerator = generator;
-}
-
-void    XFOfficeMeta::SetTitle(rtl::OUString title)
-{
-    m_strTitle = title;
-}
-
 void    XFOfficeMeta::SetCreator(rtl::OUString creator)
 {
     m_strCreator = creator;

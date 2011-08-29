@@ -423,7 +423,6 @@ public:
     virtual         ~XBitmapList();
 
     using XPropertyList::Replace;
-    XBitmapEntry*   Replace(XBitmapEntry* pEntry, long nIndex );
     using XPropertyList::Remove;
     XBitmapEntry*   Remove(long nIndex);
     using XPropertyList::Get;

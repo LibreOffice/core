@@ -94,33 +94,6 @@ enumXFContent XFTextSpan::GetContentType()
     return enumXFContentSpan;
 }
 
-void    XFTextSpan::SetText(rtl::OUString& text)
-{
-    m_aContents.clear();
-    Add(text);
-}
-
-rtl::OUString   XFTextSpan::GetText()
-{
-    rtl::OUString   text;
-    std::vector<IXFContent*>::iterator it;
-
-    it = m_aContents.begin();
-    if( it != m_aContents.end() )
-    {
-        IXFContent  *pContent = *it;
-        if( pContent->GetContentType() != enumXFContentText )
-        {
-            assert(false);
-        }
-        XFTextContent *pText = (XFTextContent*)pContent;
-        if( pText )
-            text = pText->GetText();
-    }
-
-    return text;
-}
-
 void    XFTextSpan::Add(IXFContent *pContent)
 {
     m_aContents.push_back(pContent);

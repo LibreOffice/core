@@ -176,22 +176,6 @@ void    XFCell::SetValue(rtl::OUString value)
     //XFContentContainer::Add(pPara);
 }
 
-void XFCell::SetString(rtl::OUString str)
-{
-    m_eValueType = enumXFValueTypeString;
-    m_strValue = str;
-
-    Reset();
-    XFParagraph *pPara = new XFParagraph();
-    pPara->Add(m_strValue);
-    XFContentContainer::Add(pPara);
-}
-
-void    XFCell::SetPercent(double percent)
-{
-    SetPercent(DoubleToOUString(percent));
-}
-
 void    XFCell::SetPercent(rtl::OUString percent)
 {
     m_eValueType = enumXFValueTypePercentage;
@@ -200,49 +184,6 @@ void    XFCell::SetPercent(rtl::OUString percent)
     Reset();
     XFParagraph *pPara = new XFParagraph();
     pPara->Add(m_strValue);
-    XFContentContainer::Add(pPara);
-}
-
-void    XFCell::SetDate(rtl::OUString date)
-{
-    m_eValueType = enumXFValueTypeDate;
-    m_strValue = date;
-
-    Reset();
-    XFParagraph *pPara = new XFParagraph();
-    pPara->Add(m_strValue);
-    XFContentContainer::Add(pPara);
-}
-
-void    XFCell::SetTime(rtl::OUString time)
-{
-    m_eValueType = enumXFValueTypeTime;
-    m_strValue = time;
-
-    Reset();
-    XFParagraph *pPara = new XFParagraph();
-    pPara->Add(m_strValue);
-    XFContentContainer::Add(pPara);
-}
-
-void    XFCell::SetCurrency(rtl::OUString currency)
-{
-    m_eValueType = enumXFValueTypeCurrency;
-    m_strValue = currency;
-
-    Reset();
-    XFParagraph *pPara = new XFParagraph();
-    pPara->Add(m_strValue);
-    XFContentContainer::Add(pPara);
-}
-
-void    XFCell::SetDisplay(rtl::OUString display)
-{
-    m_strDisplay = display;
-
-    Reset();
-    XFParagraph *pPara = new XFParagraph();
-    pPara->Add(m_strDisplay);
     XFContentContainer::Add(pPara);
 }
 

@@ -48,10 +48,8 @@ public:
                             TYPEINFO();
 
                             XFillFloatTransparenceItem();
-                            XFillFloatTransparenceItem( sal_Int32 nIndex, const XGradient& rGradient, sal_Bool bEnable = sal_True );
                             XFillFloatTransparenceItem(const String& rName, const XGradient& rGradient, sal_Bool bEnable = sal_True );
                             XFillFloatTransparenceItem(SfxItemPool* pPool, const XGradient& rTheGradient, sal_Bool bEnable = sal_True );
-                            XFillFloatTransparenceItem(SfxItemPool* pPool );
                             XFillFloatTransparenceItem( const XFillFloatTransparenceItem& rItem );
 
     virtual int             operator==( const SfxPoolItem& rItem ) const;

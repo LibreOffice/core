@@ -80,34 +80,6 @@ XFCellStyle::~XFCellStyle()
         delete m_pBorders;
 }
 
-
-void    XFCellStyle::SetParentStyle(rtl::OUString parent)
-{
-    m_strParentStyleName = parent;
-}
-
-void    XFCellStyle::SetFont(XFFont *pFont)
-{
-    m_pFont = pFont;
-}
-
-void    XFCellStyle::SetIndent(double indent )
-{
-    m_fTextIndent = indent;
-}
-
-void    XFCellStyle::SetMargins(double left, double right, double top, double bottom)
-{
-    if( left != -1 )
-        m_aMargin.SetLeft(left);
-    if( right != -1 )
-        m_aMargin.SetRight(right);
-    if( top != -1 )
-        m_aMargin.SetTop(top);
-    if( bottom != -1 )
-        m_aMargin.SetBottom( bottom );
-}
-
 void XFCellStyle::SetPadding(double left, double right,double top, double bottom)
 {
     if( left != -1 )
@@ -118,13 +90,6 @@ void XFCellStyle::SetPadding(double left, double right,double top, double bottom
         m_aPadding.SetTop(top);
     if( bottom != -1 )
         m_aPadding.SetBottom( bottom );
-}
-
-void    XFCellStyle::SetShadow(enumXFShadowPos pos, double offset, XFColor& color)
-{
-    m_aShadow.SetPosition(pos);
-    m_aShadow.SetOffset(offset);
-    m_aShadow.SetColor(color);
 }
 
 void    XFCellStyle::SetBackColor(XFColor& color)

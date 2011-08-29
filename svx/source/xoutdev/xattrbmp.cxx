@@ -372,20 +372,6 @@ TYPEINIT1_AUTOFACTORY(XFillBitmapItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XFillBitmapItem::XFillBitmapItem(long nIndex,
-|*                                   const Bitmap& rTheBitmap)
-|*
-*************************************************************************/
-
-XFillBitmapItem::XFillBitmapItem(long nIndex,
-                               const XOBitmap& rTheBitmap) :
-    NameOrIndex( XATTR_FILLBITMAP, nIndex ),
-    aXOBitmap( rTheBitmap )
-{
-}
-
-/*************************************************************************
-|*
 |*    XFillBitmapItem::XFillBitmapItem(const XubString& rName,
 |*                                 const Bitmap& rTheBitmap)
 |*
@@ -485,13 +471,6 @@ XFillBitmapItem::XFillBitmapItem( SvStream& rIn, sal_uInt16 nVer ) :
 XFillBitmapItem::XFillBitmapItem( SfxItemPool* /*pPool*/, const XOBitmap& rTheBitmap )
 :   NameOrIndex( XATTR_FILLBITMAP, -1 ),
     aXOBitmap( rTheBitmap )
-{
-}
-
-//*************************************************************************
-
-XFillBitmapItem::XFillBitmapItem( SfxItemPool* /*pPool*/)
-: NameOrIndex(XATTR_FILLBITMAP, -1 )
 {
 }
 

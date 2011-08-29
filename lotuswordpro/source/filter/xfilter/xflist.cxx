@@ -69,13 +69,6 @@ XFList::XFList()
     m_pHeader = NULL;
 }
 
-XFList::XFList(sal_Bool ordered)
-{
-    m_bOrdered = ordered;
-    m_bContinueNumber = sal_False;
-    m_pHeader = NULL;
-}
-
 XFList::~XFList()
 {
 }
@@ -86,21 +79,6 @@ void    XFList::AddItem(XFListItem *pItem)
     assert(pItem->GetContentType()!=enumXFContentUnknown);
 
     Add(pItem);
-}
-
-void    XFList::AddItem(rtl::OUString text)
-{
-    XFListItem *pItem = new XFListItem();
-    pItem->Add(text);
-    AddItem(pItem);
-}
-
-void    XFList::SetHeader(XFListItem *pItem)
-{
-    if( m_pHeader )
-        delete m_pHeader;
-    pItem->SetIsHeader(sal_True);
-    m_pHeader = pItem;
 }
 
 void    XFList::ToXml(IXFStream *pStrm)

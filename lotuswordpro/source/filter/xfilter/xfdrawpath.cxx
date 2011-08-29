@@ -63,11 +63,6 @@ XFSvgPathEntry::XFSvgPathEntry()
 {
 }
 
-XFSvgPathEntry::XFSvgPathEntry(rtl::OUString cmd)
-{
-    m_strCommand = cmd;
-}
-
 rtl::OUString XFSvgPathEntry::ToString()
 {
     assert(m_strCommand.getLength()>0);

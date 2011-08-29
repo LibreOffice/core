@@ -828,18 +828,6 @@ TYPEINIT1_AUTOFACTORY(XLineDashItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XLineDashItem::XLineDashItem(sal_Int32 nIndex, const XDash& rTheDash)
-|*
-*************************************************************************/
-
-XLineDashItem::XLineDashItem(sal_Int32 nIndex, const XDash& rTheDash) :
-    NameOrIndex(XATTR_LINEDASH, nIndex),
-    aDash(rTheDash)
-{
-}
-
-/*************************************************************************
-|*
 |*    XLineDashItem::XLineDashItem(const String& rName, const XDash& rTheDash)
 |*
 *************************************************************************/
@@ -891,13 +879,6 @@ XLineDashItem::XLineDashItem(SvStream& rIn) :
 XLineDashItem::XLineDashItem(SfxItemPool* /*pPool*/, const XDash& rTheDash)
 :   NameOrIndex( XATTR_LINEDASH, -1 ),
     aDash(rTheDash)
-{
-}
-
-//*************************************************************************
-
-XLineDashItem::XLineDashItem(SfxItemPool* /*pPool*/)
-: NameOrIndex(XATTR_LINEDASH, -1 )
 {
 }
 
@@ -1646,13 +1627,6 @@ XLineStartItem::XLineStartItem(SfxItemPool* /*pPool*/, const basegfx::B2DPolyPol
 {
 }
 
-//*************************************************************************
-
-XLineStartItem::XLineStartItem(SfxItemPool* /*pPool*/)
-:   NameOrIndex(XATTR_LINESTART, -1 )
-{
-}
-
 /*************************************************************************
 |*
 |*    XLineStartItem::Clone(SfxItemPool* pPool) const
@@ -2075,13 +2049,6 @@ XLineEndItem::XLineEndItem(SvStream& rIn) :
 XLineEndItem::XLineEndItem(SfxItemPool* /*pPool*/, const basegfx::B2DPolyPolygon& rPolyPolygon)
 :   NameOrIndex( XATTR_LINEEND, -1 ),
     maPolyPolygon(rPolyPolygon)
-{
-}
-
-//*************************************************************************
-
-XLineEndItem::XLineEndItem(SfxItemPool* /*pPool*/)
-:   NameOrIndex(XATTR_LINEEND, -1 )
 {
 }
 
@@ -3673,15 +3640,6 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem() :
 
 //------------------------------------------------------------------------
 
-XFillFloatTransparenceItem::XFillFloatTransparenceItem( sal_Int32 nIndex, const XGradient& rGradient, sal_Bool bEnable ) :
-    XFillGradientItem   ( nIndex, rGradient ),
-    bEnabled            ( bEnable )
-{
-    SetWhich( XATTR_FILLFLOATTRANSPARENCE );
-}
-
-//------------------------------------------------------------------------
-
 XFillFloatTransparenceItem::XFillFloatTransparenceItem(const XubString& rName, const XGradient& rGradient, sal_Bool bEnable ) :
     XFillGradientItem   ( rName, rGradient ),
     bEnabled            ( bEnable )
@@ -3698,27 +3656,11 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem( const XFillFloatTranspar
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
 
-//------------------------------------------------------------------------
-
-//XFillFloatTransparenceItem::XFillFloatTransparenceItem( SvStream& rIn, sal_uInt16 nVer ) :
-//  XFillGradientItem   ( rIn, nVer )
-//{
-//  SetWhich( XATTR_FILLFLOATTRANSPARENCE );
-//  rIn >> bEnabled;
-//}
-
 //*************************************************************************
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem(SfxItemPool* /*pPool*/, const XGradient& rTheGradient, sal_Bool bEnable )
 :   XFillGradientItem   ( -1, rTheGradient ),
     bEnabled            ( bEnable )
-{
-    SetWhich( XATTR_FILLFLOATTRANSPARENCE );
-}
-
-//*************************************************************************
-
-XFillFloatTransparenceItem::XFillFloatTransparenceItem(SfxItemPool* /*pPool*/)
 {
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
@@ -3869,20 +3811,6 @@ TYPEINIT1_AUTOFACTORY(XFillHatchItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XFillHatchItem::XFillHatchItem(sal_Int32 nIndex,
-|*                                 const XHatch& rTheHatch)
-|*
-*************************************************************************/
-
-XFillHatchItem::XFillHatchItem(sal_Int32 nIndex,
-                             const XHatch& rTheHatch) :
-    NameOrIndex(XATTR_FILLHATCH, nIndex),
-    aHatch(rTheHatch)
-{
-}
-
-/*************************************************************************
-|*
 |*    XFillHatchItem::XFillHatchItem(const XubString& rName,
 |*                                 const XHatch& rTheHatch)
 |*
@@ -3943,13 +3871,6 @@ XFillHatchItem::XFillHatchItem(SvStream& rIn) :
 XFillHatchItem::XFillHatchItem(SfxItemPool* /*pPool*/, const XHatch& rTheHatch)
 :   NameOrIndex( XATTR_FILLHATCH, -1 ),
     aHatch(rTheHatch)
-{
-}
-
-//*************************************************************************
-
-XFillHatchItem::XFillHatchItem(SfxItemPool* /*pPool*/)
-: NameOrIndex(XATTR_FILLHATCH, -1 )
 {
 }
 
@@ -4731,18 +4652,6 @@ bool XFormTextShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
 // class XFormTextShadowColorItem
 // -------------------------------
 TYPEINIT1_AUTOFACTORY(XFormTextShadowColorItem, XColorItem);
-
-/*************************************************************************
-|*
-|*    XFormTextShadowColorItem::XFormTextShadowColorItem()
-|*
-*************************************************************************/
-
-XFormTextShadowColorItem::XFormTextShadowColorItem(sal_Int32 nIndex,
-                                                     const Color& rTheColor) :
-    XColorItem(XATTR_FORMTXTSHDWCOLOR, nIndex, rTheColor)
-{
-}
 
 /*************************************************************************
 |*

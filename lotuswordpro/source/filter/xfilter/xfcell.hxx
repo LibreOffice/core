@@ -111,39 +111,9 @@ public:
     void    SetValue(rtl::OUString value);
 
     /**
-     * @descr   Set cell string value.
-     */
-    void    SetString(rtl::OUString str);
-
-    /**
-     * @descr   Set cell as a percent value with value percent.
-     */
-    void    SetPercent(double percent);
-
-    /**
      * @descr   Set cell as a percent value with value percent.
      */
     void    SetPercent(rtl::OUString percent);
-
-    /**
-     * @descr   Set cell as a date value.
-     */
-    void    SetDate(rtl::OUString date);
-
-    /**
-     * @descr   Set cell as a time value.
-     */
-    void    SetTime(rtl::OUString time);
-
-    /**
-     * @descr   Set cell as a currency value.
-     */
-    void    SetCurrency(rtl::OUString currency);
-
-    /**
-     * @descr   Set cell display string.
-     */
-    void    SetDisplay(rtl::OUString display);
 
     /**
      * @descr   Set cell formula.

@@ -84,13 +84,6 @@ XBitmapList::~XBitmapList()
 
 /************************************************************************/
 
-XBitmapEntry* XBitmapList::Replace(XBitmapEntry* pEntry, long nIndex )
-{
-    return (XBitmapEntry*) XPropertyList::Replace(pEntry, nIndex);
-}
-
-/************************************************************************/
-
 XBitmapEntry* XBitmapList::Remove(long nIndex)
 {
     return (XBitmapEntry*) XPropertyList::Remove(nIndex);

@@ -152,25 +152,9 @@ public:
     void    SetIndexType(enumXFIndex type);
 
     /**
-     * @descr   Set index entry template.
-     * @param   level [1-10].
-     */
-    void    AddTemplate(sal_uInt32 level,
-        rtl::OUString style,
-        enumXFIndexTemplate type1 = enumXFIndexTemplateChapter,
-        enumXFIndexTemplate type2 = enumXFIndexTemplateText,
-        enumXFIndexTemplate type3 = enumXFIndexTemplateTab,
-        enumXFIndexTemplate type4 = enumXFIndexTemplatePage);
-
-    /**
      * @descr   Add index templaet entry.
      */
     void    AddTemplate(rtl::OUString level, rtl::OUString style, XFIndexTemplate* templ);
-
-    /**
-     * @descr   Add index entry.
-     */
-    void    AddEntry(rtl::OUString entry, rtl::OUString strParaStyle);
 
     /**
      * @descr   Set if protected index to prevent handly-revise.

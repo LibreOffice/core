@@ -47,7 +47,6 @@ public:
             XLineStartItem(sal_Int32 nIndex = -1);
             XLineStartItem(const String& rName, const basegfx::B2DPolyPolygon& rPolyPolygon);
             XLineStartItem(SfxItemPool* pPool, const basegfx::B2DPolyPolygon& rPolyPolygon);
-            XLineStartItem(SfxItemPool* pPool );
             XLineStartItem(const XLineStartItem& rItem);
             XLineStartItem(SvStream& rIn);
 

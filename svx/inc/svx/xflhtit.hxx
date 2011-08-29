@@ -45,10 +45,8 @@ class SVX_DLLPUBLIC XFillHatchItem : public NameOrIndex
 public:
                             TYPEINFO();
                             XFillHatchItem() : NameOrIndex(XATTR_FILLHATCH, -1) {}
-                            XFillHatchItem(sal_Int32 nIndex, const XHatch& rTheHatch);
                             XFillHatchItem(const String& rName, const XHatch& rTheHatch);
                             XFillHatchItem(SfxItemPool* pPool, const XHatch& rTheHatch);
-                            XFillHatchItem(SfxItemPool* pPool );
                             XFillHatchItem(const XFillHatchItem& rItem);
                             XFillHatchItem(SvStream& rIn);
 

@@ -104,8 +104,6 @@ public:
 
     sal_Int32   GetColumnCount();
 
-    rtl::OUString   GetColumnStyle(sal_Int32 col);
-
     sal_Bool    IsSubTable();
 
     void        Normalize();

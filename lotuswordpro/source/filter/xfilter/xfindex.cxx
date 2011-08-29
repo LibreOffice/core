@@ -92,53 +92,14 @@ XFIndex::~XFIndex()
     }
 }
 
-void    XFIndex::AddTemplate(sal_uInt32 level,
-                    rtl::OUString /*style*/,
-                    enumXFIndexTemplate type1,
-                    enumXFIndexTemplate type2,
-                    enumXFIndexTemplate type3,
-                    enumXFIndexTemplate type4 )
-{
-    if( level<1 )
-        return;
-
-    if (level > m_nMaxLevel)
-        m_nMaxLevel = level;
-
-    XFIndexTemplate * templ = new XFIndexTemplate();
-
-    templ->AddEntry(type1);
-    templ->AddEntry(type2);
-    templ->AddEntry(type3);
-    templ->AddEntry(type4);
-    templ->SetLevel( rtl::OUString::valueOf( ( sal_Int64 ) level ) );
-
-    m_aTemplates.push_back( templ );
-}
-
 void    XFIndex::AddTemplate(rtl::OUString level, rtl::OUString style, XFIndexTemplate* templ)
 {
-//  if( level<1 || !templ )
-//      return;
-
-//  if (level > m_nMaxLevel)
-//      m_nMaxLevel = level;
-
     templ->SetLevel( level );
     if(m_eType != enumXFIndexTOC) // TOC's styles are applied to template entries separately
     {
         templ->SetStyleName( style );
     }
     m_aTemplates.push_back( templ );
-}
-
-void    XFIndex::AddEntry(rtl::OUString entry, rtl::OUString strParaStyle)
-{
-    XFParagraph *pPara = new XFParagraph();
-    pPara->SetStyleName(strParaStyle);
-    pPara->Add(entry);
-    pPara->Add(new XFTabStop());
-    XFContentContainer::Add(pPara);
 }
 
 void    XFIndex::SetProtected(sal_Bool protect)

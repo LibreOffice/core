@@ -139,11 +139,6 @@ void    XFColumns::AddColumn(XFColumn& column)
     m_aColumns.push_back(column);
 }
 
-sal_Int32   XFColumns::GetCount()
-{
-    return m_aColumns.size();;
-}
-
 void    XFColumns::SetGap(double fGap)
 {
     m_fGap = fGap;
@@ -160,7 +155,6 @@ void    XFColumns::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    //pAttrList->AddAttribute( A2OUSTR("fo:column-count"), Int32ToOUString(GetCount()) );
     pAttrList->AddAttribute( A2OUSTR("fo:column-count"), Int32ToOUString(m_nCount));
     if( m_nFlag&XFCOLUMNS_FLAG_GAP )
     {

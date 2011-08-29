@@ -82,11 +82,7 @@ public:
 
     void    SetMarginRight(double right);
 
-    void    SetBackColor(const XFColor& color);
-
     void    SetColumns(XFColumns *pColumns);
-
-    void    SetBackImage(XFBGImage *image);
 
     virtual enumXFStyle GetStyleFamily();
 

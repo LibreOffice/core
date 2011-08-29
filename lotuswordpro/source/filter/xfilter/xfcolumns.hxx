@@ -146,7 +146,6 @@ public:
     void    SetGap(double fGap);
     void    SetCount(sal_uInt16 nCount);
     void    AddColumn(XFColumn& column);
-    sal_Int32   GetCount();
 
     void    ToXml(IXFStream *pStrm);
 private:
