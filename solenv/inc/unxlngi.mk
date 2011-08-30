@@ -26,7 +26,7 @@
 #*************************************************************************
 
 # mk file for Unix Linux Intel (X86) using GCC, please make generic modifications to unxlng.mk
-CDEFAULTOPT=-Os
+CDEFAULTOPT=-O2
 .IF "$(GCCNUMVER)" >= "000400050000"
 ARCH_FLAGS*=-mtune=atom
 .ELSE

@@ -27,7 +27,7 @@
 
 # mk file for Unix Linux PowerPC using GCC, please make generic modifications to unxlng.mk
 
-DEFAULTOPT=-Os
+DEFAULTOPT=-O2
 PICSWITCH:=-fPIC
 .INCLUDE : unxlng.mk
 CDEFS+=-DPOWERPC -DPPC
