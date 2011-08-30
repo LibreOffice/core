@@ -1407,12 +1407,12 @@ sal_Bool DirEntry::Find( const String& rPfad, char cDelim )
                 cDelim = SEARCHDELIM(DEFSTYLE)[0];
 
         sal_uInt16 nTokenCount = rPfad.GetTokenCount( cDelim );
-        sal_uInt16 nIndex = 0;
+        sal_Int32 nIndex = 0;
         ByteString aThis = ACCESSDELIM(DEFSTYLE);
         aThis += ByteString(GetFull(), osl_getThreadTextEncoding());
         for ( sal_uInt16 nToken = 0; nToken < nTokenCount; ++nToken )
         {
-            ByteString aPath = ByteString(rPfad, osl_getThreadTextEncoding()).GetToken( 0, cDelim, nIndex );
+            ByteString aPath = rtl::OUStringToOString(rPfad, osl_getThreadTextEncoding()).getToken( 0, cDelim, nIndex );
 
             if ( aPath.Len() )
             {
