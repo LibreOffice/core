@@ -88,11 +88,6 @@ public:
     void    SetContinueNumber(sal_Bool bContinueNumber=sal_False);
 
     /**
-     * @descr   Add a list item.
-     */
-    void    AddItem(XFListItem *pItem);
-
-    /**
      * @descr   Output list obejct.
      */
     virtual void    ToXml(IXFStream *pStrm);

@@ -1144,9 +1144,6 @@ IMPL_LINK(AccessibleSlideSorterView::Implementation, VisibilityChangeListener, v
     return 1;
 }
 
-
-
-
 } // end of namespace ::accessibility
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

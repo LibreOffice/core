@@ -73,14 +73,6 @@ XFList::~XFList()
 {
 }
 
-void    XFList::AddItem(XFListItem *pItem)
-{
-    assert(pItem);
-    assert(pItem->GetContentType()!=enumXFContentUnknown);
-
-    Add(pItem);
-}
-
 void    XFList::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();

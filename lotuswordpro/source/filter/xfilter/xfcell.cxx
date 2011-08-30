@@ -169,22 +169,6 @@ void    XFCell::SetValue(rtl::OUString value)
 {
     m_eValueType = enumXFValueTypeFloat;
     m_strValue = value;
-
-    //Reset();
-    //XFParagraph   *pPara = new XFParagraph();
-    //pPara->Add(m_strValue);
-    //XFContentContainer::Add(pPara);
-}
-
-void    XFCell::SetPercent(rtl::OUString percent)
-{
-    m_eValueType = enumXFValueTypePercentage;
-    m_strValue = percent;
-
-    Reset();
-    XFParagraph *pPara = new XFParagraph();
-    pPara->Add(m_strValue);
-    XFContentContainer::Add(pPara);
 }
 
 rtl::OUString   XFCell::GetCellName()

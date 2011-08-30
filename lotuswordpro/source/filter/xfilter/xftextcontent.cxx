@@ -78,11 +78,6 @@ void    XFTextContent::SetText(const rtl::OUString& text)
     m_strText = text;
 }
 
-rtl::OUString XFTextContent::GetText()
-{
-    return m_strText;
-}
-
 void    XFTextContent::ToXml(IXFStream *pStrm)
 {
 //  pStrm->Characters(m_strText);

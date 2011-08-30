@@ -111,11 +111,6 @@ public:
     void    SetValue(rtl::OUString value);
 
     /**
-     * @descr   Set cell as a percent value with value percent.
-     */
-    void    SetPercent(rtl::OUString percent);
-
-    /**
      * @descr   Set cell formula.
      */
     void    SetFormula(rtl::OUString formula);
