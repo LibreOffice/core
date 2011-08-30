@@ -71,28 +71,4 @@ void FillSubList( RSCINST & rInst, REResourceList * pList )
     };
 }
 
-void FillListObj( ObjNode * pObjNode, RscTop * pRscTop,
-                  REResourceList * pList, sal_uLong lFileKey )
-{
-    if( pObjNode ){
-        if( pObjNode->GetFileKey() == lFileKey ){
-            RSCINST         aTmpI;
-            REResourceList* pSubList;
-
-            FillListObj( (ObjNode*)pObjNode->Left(), pRscTop,
-                         pList, lFileKey );
-
-            pSubList = InsertList( pRscTop->GetId(),
-                                   pObjNode->GetRscId(), pList );
-
-            aTmpI.pClass = pRscTop;
-            aTmpI.pData = pObjNode->GetRscObj();
-            FillSubList( aTmpI, pSubList );
-
-            FillListObj( (ObjNode*)pObjNode->Right(), pRscTop,
-                         pList, lFileKey );
-        }
-    };
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
