@@ -42,6 +42,7 @@
 #include <editeng/prntitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <svx/framelink.hxx>
 #include <vcl/graph.hxx>
 #include <svx/svdpagv.hxx>
@@ -124,6 +125,8 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/color/bcolortools.hxx>
+
+#include <algorithm>
 
 using namespace ::editeng;
 using namespace ::com::sun::star;
@@ -3301,13 +3304,23 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
 drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPrimitives(
         OutputDevice* pOut, drawinglayer::processor2d::BaseProcessor2D* pProcessor,
-        double nLeft, double nRight, double nLineY,
-        bool bHeader, const String& rStyleName )
+        const SwPageFrm* pPageFrm, double nLabelRight, double nLineY,
+        bool bHeader, const String& rStyleName, const SwFrm* pFrm )
 {
-    drawinglayer::primitive2d::Primitive2DSequence aSeq( 4 );
+    // Adjust the Y-coordinate of the line to the header/footer box
+    if ( pFrm )
+    {
+        const SwFrmFmt* pFmt = ((const SwLayoutFrm*)pFrm)->GetFmt();
+        if ( bHeader )
+            nLineY -= pFmt->GetULSpace().GetLower();
+        else
+            nLineY += pFmt->GetULSpace().GetUpper();
+    }
 
-    basegfx::B2DPoint aLeft ( nLeft, nLineY );
-    basegfx::B2DPoint aRight( nRight, nLineY );
+    drawinglayer::primitive2d::Primitive2DSequence aSeq( 3 );
+
+    basegfx::B2DPoint aLeft ( pPageFrm->Frm().Left(), nLineY );
+    basegfx::B2DPoint aRight( pPageFrm->Frm().Right(), nLineY );
 
     // Compute the text to show
     String aText = SW_RESSTR( STR_HEADER );
@@ -3318,33 +3331,53 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
     // Colors
     basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
     basegfx::BColor aHslLine = basegfx::tools::rgb2hsl( aLineColor );
-    aHslLine.setZ( aHslLine.getZ( ) * 2.5 );
+    double nLuminance = aHslLine.getZ() * 2.5;
+    if ( nLuminance == 0 )
+        nLuminance = 0.5;
+    else if ( nLuminance >= 1.0 )
+        nLuminance = aHslLine.getZ() * 0.4;
+    aHslLine.setZ( nLuminance );
     basegfx::BColor aFillColor = basegfx::tools::hsl2rgb( aHslLine );
 
-    // Dashed line in twips
-    std::vector< double > aStrokePattern;
-    aStrokePattern.push_back( 110 );
-    aStrokePattern.push_back( 110 );
+    // Only draw the dashed line for unexisting header / footers
+    if ( !pFrm )
+    {
+        aSeq.realloc( 4 );
+
+        // Dashed line in twips
+        std::vector< double > aStrokePattern;
+        aStrokePattern.push_back( 110 );
+        aStrokePattern.push_back( 110 );
 
 
-    // Compute the dashed line primitive
-    basegfx::B2DPolygon aLinePolygon;
-    aLinePolygon.append( aLeft );
-    aLinePolygon.append( aRight );
+        // Compute the dashed line primitive
+        basegfx::B2DPolygon aLinePolygon;
+        aLinePolygon.append( aLeft );
+        aLinePolygon.append( aRight );
 
-    drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D * pLine =
-            new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D (
-                basegfx::B2DPolyPolygon( aLinePolygon ),
-                drawinglayer::attribute::LineAttribute( aLineColor, 20.0 ),
-                drawinglayer::attribute::StrokeAttribute( aStrokePattern ) );
+        drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D * pLine =
+                new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D (
+                    basegfx::B2DPolyPolygon( aLinePolygon ),
+                    drawinglayer::attribute::LineAttribute( aLineColor, 20.0 ),
+                    drawinglayer::attribute::StrokeAttribute( aStrokePattern ) );
 
-    aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( pLine );
+        aSeq[3] = drawinglayer::primitive2d::Primitive2DReference( pLine );
+    }
+
+    const SwRect& rVisArea = pPageFrm->getRootFrm()->GetCurrShell()->VisArea();
+    double nVisRight = rVisArea.Right();
 
     // Compute the text primitive
     basegfx::B2DVector aFontSize;
 
     Font aFont = pOut->GetSettings().GetStyleSettings().GetAppFont();
     aFont.SetHeight( 8 * 20 ); // 8pt to twips
+
+    // Compute the text width
+    const Font& rOldFont = pOut->GetFont();
+    pOut->SetFont( aFont );
+    double nTextWidth = pOut->GetTextWidth( aText );
+    pOut->SetFont( rOldFont );
 
     drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
             aFontSize, aFont, false, false );
@@ -3356,7 +3389,7 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
         nTextOffsetY = - aFontMetric.GetDescent() - 70.0;
     basegfx::B2DHomMatrix aTextMatrix( basegfx::tools::createScaleTranslateB2DHomMatrix(
                 aFontSize.getX(), aFontSize.getY(),
-                nLeft + 80.0, nLineY + nTextOffsetY ) );
+                std::min( nLabelRight, nVisRight ) - nTextWidth - 80.0, nLineY + nTextOffsetY ) );
 
 
     drawinglayer::primitive2d::TextSimplePortionPrimitive2D * pText =
@@ -3367,7 +3400,7 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
                 aFontAttr,
                 lang::Locale(),
                 aLineColor );
-    aSeq[3] = drawinglayer::primitive2d::Primitive2DReference( pText );
+    aSeq[2] = drawinglayer::primitive2d::Primitive2DReference( pText );
     basegfx::B2DRange aTextRange = pText->getB2DRange( pProcessor->getViewInformation2D() );
 
     // Draw the polygon around the flag
@@ -3399,7 +3432,7 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
     drawinglayer::primitive2d::PolygonHairlinePrimitive2D * pBoxLine =
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
             aFlagPolygon, aLineColor );
-    aSeq[2] = drawinglayer::primitive2d::Primitive2DReference( pBoxLine );
+    aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( pBoxLine );
 
     return aSeq;
 }
@@ -3416,16 +3449,29 @@ void SwPageFrm::PaintDecorators( OutputDevice *pOut ) const
              !pGlobalShell->IsPreView() &&
              pGlobalShell->IsHeaderFooterEdit( ) )
         {
-            const String aStyleName = FindPageFrm()->GetPageDesc()->GetName();
+            const String aStyleName = GetPageDesc()->GetName();
             drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D();
 
+            // Header
+            const SwFrm* pHeaderFrm = Lower();
+            if ( !pHeaderFrm->IsHeaderFrm() )
+                pHeaderFrm = NULL;
+
+            double nLabelRight = aBodyRect.Right();
             pProcessor->process( lcl_CreateHeaderFooterSeparatorPrimitives(
-                        pOut, pProcessor, double( Frm().Left() ), double( Frm().Right() ),
-                        double( aBodyRect.Top() ), true, aStyleName ) );
+                        pOut, pProcessor, this, nLabelRight,
+                        double( aBodyRect.Top() ), true, aStyleName, pHeaderFrm ) );
+
+            // Footer
+            const SwFrm* pFooterFrm = Lower();
+            while ( pFooterFrm->GetNext() )
+                pFooterFrm = pFooterFrm->GetNext();
+            if ( !pFooterFrm->IsFooterFrm() )
+                pFooterFrm = NULL;
 
             pProcessor->process( lcl_CreateHeaderFooterSeparatorPrimitives(
-                        pOut, pProcessor, double( Frm().Left() ), double( Frm().Right() ),
-                        double( aBodyRect.Bottom() ), false, aStyleName ) );
+                        pOut, pProcessor, this, nLabelRight,
+                        double( aBodyRect.Bottom() ), false, aStyleName, pFooterFrm ) );
 
             delete pProcessor;
         }
