@@ -152,6 +152,25 @@
       </node>
     </node>
   </node>
+  <node oor:name="JDBC">
+    <node oor:name="DriverClassPaths">
+       <node oor:name="com.mysql.jdbc.Driver" oor:op="replace">
+         <prop oor:name="Path">
+           <value>file:///usr/share/java/mysql.jar</value>
+         </prop>
+       </node>
+       <node oor:name="org.postgresql.Driver" oor:op="replace">
+         <prop oor:name="Path">
+           <value>file:///usr/share/java/posgresql.jar</value>
+         </prop>
+       </node>
+       <node oor:name="net.sourceforge.jtds.jdbc.Driver" oor:op="replace">
+         <prop oor:name="Path">
+           <value>file:///usr/share/java/jtds.jar</value>
+         </prop>
+       </node>
+    </node>
+  </node>
   <node oor:name="RegisteredNames">
     <node oor:name="EvolutionLocal" oor:op="replace" install:module="evoab2">
         <prop oor:name="Location" oor:type="xs:string">
