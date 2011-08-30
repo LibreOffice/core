@@ -1001,6 +1001,13 @@ public:
         SetNumSubNodes(3);
     }
 
+    SmMathSymbolNode* OpeningBrace();
+    const SmMathSymbolNode* OpeningBrace() const;
+    SmNode* Body();
+    const SmNode* Body() const;
+    SmMathSymbolNode* ClosingBrace();
+    const SmMathSymbolNode* ClosingBrace() const;
+
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
     void Accept(SmVisitor* pVisitor);
@@ -1335,6 +1342,34 @@ inline SmNode* SmAttributNode::Body()
 inline const SmNode* SmAttributNode::Body() const
 {
     return const_cast< SmAttributNode* >( this )->Body();
+}
+
+inline SmMathSymbolNode* SmBraceNode::OpeningBrace()
+{
+    OSL_ASSERT( GetNumSubNodes() > 0 && GetSubNode( 0 )->GetType() == NMATH );
+    return static_cast< SmMathSymbolNode* >( GetSubNode( 0 ));
+}
+inline const SmMathSymbolNode* SmBraceNode::OpeningBrace() const
+{
+    return const_cast< SmBraceNode* >( this )->OpeningBrace();
+}
+inline SmNode* SmBraceNode::Body()
+{
+    OSL_ASSERT( GetNumSubNodes() > 1 );
+    return GetSubNode( 1 );
+}
+inline const SmNode* SmBraceNode::Body() const
+{
+    return const_cast< SmBraceNode* >( this )->Body();
+}
+inline SmMathSymbolNode* SmBraceNode::ClosingBrace()
+{
+    OSL_ASSERT( GetNumSubNodes() > 2 && GetSubNode( 2 )->GetType() == NMATH );
+    return static_cast< SmMathSymbolNode* >( GetSubNode( 2 ));
+}
+inline const SmMathSymbolNode* SmBraceNode::ClosingBrace() const
+{
+    return const_cast< SmBraceNode* >( this )->ClosingBrace();
 }
 
 #endif

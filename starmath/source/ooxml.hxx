@@ -58,6 +58,7 @@ private:
     void HandleSubSupScript( const SmSubSupNode* pNode, int nLevel );
     void HandleSubSupScriptInternal( const SmSubSupNode* pNode, int nLevel, int flags );
     void HandleMatrix( const SmMatrixNode* pNode, int nLevel );
+    void HandleBrace( const SmBraceNode* pNode, int nLevel );
     String str;
     const SmNode* const pTree;
     ::sax_fastparser::FSHelperPtr m_pSerializer;

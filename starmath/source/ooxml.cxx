@@ -108,10 +108,10 @@ void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
         case NVERTICAL_BRACE:
             HandleVerticalBrace(pNode,nLevel);
             break;
-        case NBRACE:
-            HandleBrace(pNode,nLevel);
-            break;
 #endif
+        case NBRACE:
+            HandleBrace( static_cast< const SmBraceNode* >( pNode ), nLevel );
+            break;
         case NOPER:
             HandleOperator( static_cast< const SmOperNode* >( pNode ), nLevel );
             break;
@@ -549,6 +549,57 @@ void SmOoxml::HandleMatrix( const SmMatrixNode* pNode, int nLevel )
         m_pSerializer->endElementNS( XML_m, XML_mr );
     }
     m_pSerializer->endElementNS( XML_m, XML_m );
+}
+
+void SmOoxml::HandleBrace( const SmBraceNode* pNode, int nLevel )
+{
+    m_pSerializer->startElementNS( XML_m, XML_d, FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_dPr, FSEND );
+    const SmMathSymbolNode* opening = pNode->OpeningBrace();
+    OSL_ASSERT( static_cast< const SmTextNode* >( opening )->GetText().Len() == 1 );
+    sal_Unicode chr = Convert( static_cast< const SmTextNode* >( opening )->GetText().GetChar( 0 ));
+    rtl::OString chrValue = rtl::OUStringToOString( rtl::OUString( chr ), RTL_TEXTENCODING_UTF8 );
+    m_pSerializer->singleElementNS( XML_m, XML_begChr, FSNS( XML_m, XML_val ), chrValue.getStr(), FSEND );
+
+    std::vector< const SmNode* > subnodes;
+    if( pNode->Body()->GetType() == NBRACEBODY )
+    {
+        const SmBracebodyNode* body = static_cast< const SmBracebodyNode* >( pNode->Body());
+        bool separatorWritten = false; // assume all separators are the same
+        for( int i = 0; i < body->GetNumSubNodes(); ++i )
+        {
+            const SmNode* subnode = body->GetSubNode( i );
+            if( subnode->GetType() == NMATH )
+            { // do not write, but write what separator it is
+                const SmMathSymbolNode* math = static_cast< const SmMathSymbolNode* >( subnode );
+                if( !separatorWritten )
+                {
+                    OSL_ASSERT( static_cast< const SmTextNode* >( math )->GetText().Len() == 1 );
+                    sal_Unicode chr3 = Convert( static_cast< const SmTextNode* >( math )->GetText().GetChar( 0 ));
+                    rtl::OString chrValue3 = rtl::OUStringToOString( rtl::OUString( chr3 ), RTL_TEXTENCODING_UTF8 );
+                    m_pSerializer->singleElementNS( XML_m, XML_sepChr, FSNS( XML_m, XML_val ), chrValue3.getStr(), FSEND );
+                    separatorWritten = true;
+                }
+            }
+            else
+                subnodes.push_back( subnode );
+        }
+    }
+    else
+        subnodes.push_back( pNode->Body());
+    const SmMathSymbolNode* closing = pNode->ClosingBrace();
+    OSL_ASSERT( static_cast< const SmTextNode* >( closing )->GetText().Len() == 1 );
+    sal_Unicode chr2 = Convert( static_cast< const SmTextNode* >( closing )->GetText().GetChar( 0 ));
+    rtl::OString chrValue2 = rtl::OUStringToOString( rtl::OUString( chr2 ), RTL_TEXTENCODING_UTF8 );
+    m_pSerializer->singleElementNS( XML_m, XML_endChr, FSNS( XML_m, XML_val ), chrValue2.getStr(), FSEND );
+    m_pSerializer->endElementNS( XML_m, XML_dPr );
+    for( unsigned int i = 0; i < subnodes.size(); ++i )
+    {
+        m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+        HandleNode( subnodes[ i ], nLevel + 1 );
+        m_pSerializer->endElementNS( XML_m, XML_e );
+    }
+    m_pSerializer->endElementNS( XML_m, XML_d );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
