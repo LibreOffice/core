@@ -119,12 +119,6 @@ sal_Bool SfxFrameDescriptor::IsEditable() const
     return pImp->bEditable;
 }
 
-sal_Bool SfxFrameDescriptor::CheckContent() const
-{
-    sal_Bool bRet = !( aURL == aActualURL );
-    return bRet;
-}
-
 SfxFrameDescriptor* SfxFrameDescriptor::Clone( sal_Bool bWithIds ) const
 {
     SfxFrameDescriptor *pFrame = new SfxFrameDescriptor;

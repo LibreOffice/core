@@ -201,48 +201,6 @@ long SfxApplication::DdeExecute
     return 1;
 }
 
-//--------------------------------------------------------------------
-
-long SfxApplication::DdeGetData
-(
-    const String&,              // the Item to be addressed
-    const String&,              // in: Format
-    ::com::sun::star::uno::Any& // out: requested data
-)
-
-/*  [Description]
-
-    This method can be overloaded by application developers, to receive
-    DDE-data-requests directed to thier SfxApplication subclass.
-
-    The base implementation provides no data and returns 0.
-*/
-
-{
-    return 0;
-}
-
-//--------------------------------------------------------------------
-
-long SfxApplication::DdeSetData
-(
-    const String&,                    // the Item to be addressed
-    const String&,                    // in: Format
-    const ::com::sun::star::uno::Any& // out: requested data
-)
-
-/*  [Description]
-
-    This method can be overloaded by application developers, to receive
-    DDE-data directed to thier SfxApplication subclass.
-
-    The base implementation is not receiving any data and returns 0.
-*/
-
-{
-    return 0;
-}
-
 long SfxObjectShell::DdeExecute
 (
     const String&   rCmd  // Expressed in our BASIC-Syntax
@@ -436,11 +394,13 @@ long SfxViewFrame::DdeSetData
 
 sal_Bool SfxApplication::InitializeDde()
 {
+    int nError = 0;
+#if defined( WNT )
     DBG_ASSERT( !pAppData_Impl->pDdeService,
                 "Dde can not be initialized multiple times" );
 
     pAppData_Impl->pDdeService = new ImplDdeService( Application::GetAppName() );
-    int nError = pAppData_Impl->pDdeService->GetError();
+    nError = pAppData_Impl->pDdeService->GetError();
     if( !nError )
     {
         pAppData_Impl->pDocTopics = new SfxDdeDocTopics_Impl;
@@ -458,6 +418,7 @@ sal_Bool SfxApplication::InitializeDde()
         pAppData_Impl->pTriggerTopic = new SfxDdeTriggerTopic_Impl;
         pAppData_Impl->pDdeService2->AddTopic( *pAppData_Impl->pTriggerTopic );
     }
+#endif
     return !nError;
 }
 

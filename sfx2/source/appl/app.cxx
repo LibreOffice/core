@@ -121,10 +121,6 @@
 #include <sfx2/mnuitem.hxx>
 #endif
 
-#if defined( WNT )
-#define DDE_AVAILABLE
-#endif
-
 #include <unotools/saveopt.hxx>
 #include <unotools/undoopt.hxx>
 #include <svtools/helpopt.hxx>
@@ -323,11 +319,10 @@ SfxApplication::SfxApplication()
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ initialize DDE" );
 
-#ifdef DDE_AVAILABLE
-#ifndef DBG_UTIL
-    InitializeDde();
-#else
-    if( !InitializeDde() )
+    sal_Bool bOk = InitializeDde();
+
+#ifdef DBG_UTIL
+    if( !bOk )
     {
         rtl::OStringBuffer aStr(
             RTL_CONSTASCII_STRINGPARAM("No DDE-Service possible. Error: "));
@@ -337,7 +332,8 @@ SfxApplication::SfxApplication()
             aStr.append('?');
         DBG_ASSERT( sal_False, aStr.getStr() );
     }
-#endif
+#else
+    (void)bOk;
 #endif
 
     pSfxHelp = new SfxHelp;

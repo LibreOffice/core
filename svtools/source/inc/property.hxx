@@ -261,7 +261,6 @@ public:
 
             void                ShowXButton();
             void                HideXButton();
-            sal_Bool                IsVisibleXButton();
             void                ShowAsHyperLink(sal_Bool nFlag=sal_True);
             sal_Bool                IsShownAsHyperlink();
 

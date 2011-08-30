@@ -563,10 +563,6 @@ void SvPropertyLine::HideXButton()
     aXButton.Hide();
     Resize();
 }
-sal_Bool SvPropertyLine::IsVisibleXButton()
-{
-    return bHasXButton;
-}
 
 void SvPropertyLine::ShowAsHyperLink(sal_Bool nFlag)
 {

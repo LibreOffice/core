@@ -167,13 +167,7 @@ public:
 
     // DDE
     long                        DdeExecute( const String& rCmd );
-    long                        DdeGetData( const String& rItem,
-                                            const String& rMimeType,
-                                        ::com::sun::star::uno::Any & rValue );
-    long                        DdeSetData( const String& rItem,
-                                            const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue );
-    sal_Bool                        InitializeDde();
+    sal_Bool                    InitializeDde();
     const DdeService*           GetDdeService() const;
     DdeService*                 GetDdeService();
     void                        AddDdeTopic( SfxObjectShell* );

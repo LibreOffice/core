@@ -113,7 +113,6 @@ public:
                             { return aActualURL; }
     void                    SetActualURL( const INetURLObject& rURL );
     void                    SetActualURL( const String& rURL );
-    sal_Bool                    CheckContent() const;
     void                    SetReadOnly( sal_Bool bSet ) { bReadOnly = bSet;}
     sal_Bool                    IsReadOnly(  ) const { return bReadOnly;}
     void                    SetEditable( sal_Bool bSet );
