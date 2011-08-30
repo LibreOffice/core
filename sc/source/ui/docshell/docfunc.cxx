@@ -4902,10 +4902,10 @@ sal_Bool ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
             ++nLinkPos;
     }
 
-    String aFilterName = rFilter;
-    String aNewOptions = rOptions;
-    if (!aFilterName.Len())
-        ScDocumentLoader::GetFilterName( rFile, aFilterName, aNewOptions, sal_True, !bApi );
+    rtl::OUString aFilterName = rFilter;
+    rtl::OUString aNewOptions = rOptions;
+    if (aFilterName.isEmpty())
+        ScDocumentLoader::GetFilterName( rFile, aFilterName, aNewOptions, true, !bApi );
 
     //  remove application prefix from filter name here, so the filter options
     //  aren't reset when the filter name is changed in ScAreaLink::DataChanged
@@ -4913,7 +4913,8 @@ sal_Bool ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
 
     ScAreaLink* pLink = new ScAreaLink( &rDocShell, rFile, aFilterName,
                                         aNewOptions, rSource, rDestRange, nRefresh );
-    pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rFile, &aFilterName, &rSource );
+    String aTmp = aFilterName;
+    pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rFile, &aTmp, &rSource );
 
     //  Undo fuer den leeren Link
 

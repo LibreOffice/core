@@ -7694,14 +7694,14 @@ void SAL_CALL ScTableSheetObj::link( const rtl::OUString& aUrl, const rtl::OUStr
         ScDocument* pDoc = pDocSh->GetDocument();
         SCTAB nTab = GetTab_Impl();
 
-        String aFileString   (aUrl);
-        String aFilterString (aFilterName);
-        String aOptString    (aFilterOptions);
-        String aSheetString  (aSheetName);
+        rtl::OUString aFileString = aUrl;
+        rtl::OUString aFilterString = aFilterName;
+        rtl::OUString aOptString = aFilterOptions;
+        rtl::OUString aSheetString = aSheetName;
 
         aFileString = ScGlobal::GetAbsDocName( aFileString, pDocSh );
-        if ( !aFilterString.Len() )
-            ScDocumentLoader::GetFilterName( aFileString, aFilterString, aOptString, sal_True, false );
+        if (aFilterString.isEmpty())
+            ScDocumentLoader::GetFilterName( aFileString, aFilterString, aOptString, true, false );
 
         //  remove application prefix from filter name here, so the filter options
         //  aren't reset when the filter name is changed in ScTableLink::DataChanged
@@ -7736,7 +7736,7 @@ void SAL_CALL ScTableSheetObj::link( const rtl::OUString& aUrl, const rtl::OUStr
                 if (pBase->ISA(ScTableLink))
                 {
                     ScTableLink* pTabLink = (ScTableLink*)pBase;
-                    if ( pTabLink->GetFileName() == aFileString )
+                    if ( aFileString.equals(pTabLink->GetFileName()) )
                         pTabLink->Update();                         // inkl. Paint&Undo
 
                     //! Der Dateiname sollte nur einmal vorkommen (?)

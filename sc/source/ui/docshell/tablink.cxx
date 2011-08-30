@@ -149,9 +149,11 @@ void ScTableLink::Edit( Window* pParent, const Link& rEndEditHdl )
     sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
     if (pLinkManager!=NULL)
     {
-        String aFile;
-        String aFilter;
-        pLinkManager->GetDisplayNames( this,0,&aFile,NULL,&aFilter);
+        String aTmp1;
+        String aTmp2;
+        pLinkManager->GetDisplayNames(this, 0, &aTmp1, NULL, &aTmp2);
+        rtl::OUString aFile = aTmp1;
+        rtl::OUString aFilter = aTmp2;
 
         //  the file dialog returns the filter name with the application prefix
         //  -> remove prefix
@@ -458,19 +460,19 @@ IMPL_LINK( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink*, pLink )
 
 // === ScDocumentLoader ==================================================
 
-String ScDocumentLoader::GetOptions( SfxMedium& rMedium )
+rtl::OUString ScDocumentLoader::GetOptions( SfxMedium& rMedium )
 {
     SfxItemSet* pSet = rMedium.GetItemSet();
     const SfxPoolItem* pItem;
-    if ( pSet && SFX_ITEM_SET == pSet->GetItemState( SID_FILE_FILTEROPTIONS, sal_True, &pItem ) )
+    if ( pSet && SFX_ITEM_SET == pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
         return ((const SfxStringItem*)pItem)->GetValue();
 
     return EMPTY_STRING;
 }
 
-sal_Bool ScDocumentLoader::GetFilterName( const String& rFileName,
-                                    String& rFilter, String& rOptions,
-                                    sal_Bool bWithContent, sal_Bool bWithInteraction )
+bool ScDocumentLoader::GetFilterName( const String& rFileName,
+                                      String& rFilter, String& rOptions,
+                                      bool bWithContent, bool bWithInteraction )
 {
     TypeId aScType = TYPE(ScDocShell);
     SfxObjectShell* pDocSh = SfxObjectShell::GetFirst( &aScType );
@@ -535,13 +537,14 @@ bool ScDocumentLoader::GetFilterName(
     return bRet;
 }
 
-void ScDocumentLoader::RemoveAppPrefix( String& rFilterName )
+void ScDocumentLoader::RemoveAppPrefix( rtl::OUString& rFilterName )
 {
-    String aAppPrefix = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( STRING_SCAPP ));
-    aAppPrefix.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
-    xub_StrLen nPreLen = aAppPrefix.Len();
-    if ( rFilterName.Copy(0,nPreLen) == aAppPrefix )
-        rFilterName.Erase(0,nPreLen);
+    rtl::OUStringBuffer aAppPrefix;
+    aAppPrefix.appendAscii(STRING_SCAPP);
+    aAppPrefix.appendAscii(": ");
+    sal_Int32 nPreLen = aAppPrefix.getLength();
+    if (rFilterName.copy(0, nPreLen).equals(aAppPrefix.makeStringAndClear()))
+        rFilterName = rFilterName.copy(nPreLen);
 }
 
 ScDocumentLoader::ScDocumentLoader( const String& rFileName,
@@ -615,15 +618,15 @@ ScDocument* ScDocumentLoader::GetDocument()
     return pDocShell ? pDocShell->GetDocument() : 0;
 }
 
-sal_Bool ScDocumentLoader::IsError() const
+bool ScDocumentLoader::IsError() const
 {
     if ( pDocShell && pMedium )
         return pMedium->GetError() != ERRCODE_NONE;
     else
-        return sal_True;
+        return true;
 }
 
-String ScDocumentLoader::GetTitle() const
+rtl::OUString ScDocumentLoader::GetTitle() const
 {
     if ( pDocShell )
         return pDocShell->GetTitle();

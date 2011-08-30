@@ -713,30 +713,31 @@ void ScDocShell::Execute( SfxRequest& rReq )
                      pReqArgs->GetItemState( SID_FILE_NAME, sal_True, &pItem ) == SFX_ITEM_SET &&
                      pItem->ISA(SfxStringItem) )
                 {
-                    String aFileName = ((const SfxStringItem*)pItem)->GetValue();
+                    rtl::OUString aFileName =
+                        static_cast<const SfxStringItem*>(pItem)->GetValue();
 
-                    String aFilterName;
+                    rtl::OUString aFilterName;
                     if ( pReqArgs->GetItemState( SID_FILTER_NAME, sal_True, &pItem ) == SFX_ITEM_SET &&
                          pItem->ISA(SfxStringItem) )
                     {
-                        aFilterName = ((const SfxStringItem*)pItem)->GetValue();
+                        aFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     }
-                    String aOptions;
+                    rtl::OUString aOptions;
                     if ( pReqArgs->GetItemState( SID_FILE_FILTEROPTIONS, sal_True, &pItem ) == SFX_ITEM_SET &&
                          pItem->ISA(SfxStringItem) )
                     {
-                        aOptions = ((const SfxStringItem*)pItem)->GetValue();
+                        aOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     }
                     short nVersion = 0;
                     if ( pReqArgs->GetItemState( SID_VERSION, sal_True, &pItem ) == SFX_ITEM_SET &&
                          pItem->ISA(SfxInt16Item) )
                     {
-                        nVersion = ((const SfxInt16Item*)pItem)->GetValue();
+                        nVersion = static_cast<const SfxInt16Item*>(pItem)->GetValue();
                     }
 
                     //  kein Filter angegeben -> Detection
-                    if ( !aFilterName.Len() )
-                        ScDocumentLoader::GetFilterName( aFileName, aFilterName, aOptions, sal_True, false );
+                    if (aFilterName.isEmpty())
+                        ScDocumentLoader::GetFilterName( aFileName, aFilterName, aOptions, true, false );
 
                     //  filter name from dialog contains application prefix,
                     //  GetFilter needs name without the prefix.
@@ -744,7 +745,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                     const SfxFilter* pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( aFilterName );
                     SfxItemSet* pSet = new SfxAllItemSet( pApp->GetPool() );
-                    if ( aOptions.Len() )
+                    if (!aOptions.isEmpty())
                         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
                     if ( nVersion != 0 )
                         pSet->Put( SfxInt16Item( SID_VERSION, nVersion ) );

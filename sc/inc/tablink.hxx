@@ -89,6 +89,10 @@ private:
     SfxObjectShellRef   aRef;
     SfxMedium*          pMedium;
 
+    static bool         GetFilterName( const String& rFileName,
+                                       String& rFilter, String& rOptions,
+                                       bool bWithContent, bool bWithInteraction );
+
 public:
                         ScDocumentLoader( const String& rFileName,
                                           String& rFilterName, String& rOptions,
@@ -96,27 +100,24 @@ public:
                         ~ScDocumentLoader();
     ScDocument*         GetDocument();
     ScDocShell*         GetDocShell()       { return pDocShell; }
-    sal_Bool                IsError() const;
-    String              GetTitle() const;
+    bool                IsError() const;
+    rtl::OUString       GetTitle() const;
 
     void                ReleaseDocRef();    // without calling DoClose
 
-    static String       GetOptions( SfxMedium& rMedium );
+    static rtl::OUString GetOptions( SfxMedium& rMedium );
 
     /** Returns the filter name and options from a file name.
         @param bWithContent
             true = Tries to detect the filter by looking at the file contents.
             false = Detects filter by file name extension only (should be used in filter code only).
         @return sal_True if a filter could be found, sal_False otherwise. */
-    static sal_Bool         GetFilterName( const String& rFileName,
-                                        String& rFilter, String& rOptions,
-                                        sal_Bool bWithContent, sal_Bool bWithInteraction );
 
     static bool         GetFilterName( const ::rtl::OUString& rFileName,
                                        ::rtl::OUString& rFilter, ::rtl::OUString& rOptions,
                                        bool bWithContent, bool bWithInteraction );
 
-    static void         RemoveAppPrefix( String& rFilterName );
+    static void         RemoveAppPrefix( rtl::OUString& rFilterName );
 };
 
 #endif
