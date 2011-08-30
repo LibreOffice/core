@@ -616,12 +616,13 @@ get_bootstrap_value( int *array, int size, rtlBootstrapHandle handle, const char
 static void
 load_splash_defaults( rtl_uString *pAppPath, sal_Bool *bNoDefaults )
 {
-    rtl_uString *pSettings = NULL, *pTmp = NULL;
+    rtl_uString *pSettings = NULL, *pTmp = NULL, *pEtcPath = NULL;
     rtlBootstrapHandle handle;
 
     /* costruct the sofficerc file location */
     rtl_uString_newFromAscii( &pSettings, "file://" );
-    rtl_uString_newConcat( &pSettings, pSettings, pAppPath );
+    rtl_uString_newFromAscii( &pEtcPath, "/etc/libreoffice" );
+    rtl_uString_newConcat( &pSettings, pSettings, pEtcPath );
     rtl_uString_newFromAscii( &pTmp, "/" );
     rtl_uString_newConcat( &pSettings, pSettings, pTmp );
     rtl_uString_newFromAscii( &pTmp, SAL_CONFIGFILE( "soffice" ) );
