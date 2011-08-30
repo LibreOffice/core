@@ -48,7 +48,7 @@
 #include "globstr.hrc"
 #include "transobj.hxx"
 #include "clipparam.hxx"
-
+#include "dragdata.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 

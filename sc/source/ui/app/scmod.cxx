@@ -104,6 +104,8 @@
 #include "transobj.hxx"
 #include "detfunc.hxx"
 #include "preview.hxx"
+#include "dragdata.hxx"
+#include "clipdata.hxx"
 
 #include <svx/xmlsecctrl.hxx>
 
@@ -132,6 +134,8 @@ SFX_IMPL_INTERFACE( ScModule, SfxShell, ScResId(RID_APPTITLE) )
 
 ScModule::ScModule( SfxObjectFactory* pFact ) :
     SfxModule( SfxApplication::CreateResManager( "sc" ), false, pFact, NULL ),
+    mpDragData(new ScDragData),
+    mpClipData(new ScClipData),
     pSelTransfer( NULL ),
     pMessagePool( NULL ),
     pRefInputHandler( NULL ),
@@ -147,7 +151,6 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     pCTLOptions( NULL ),
     pUserOptions( NULL ),
     pErrorHdl( NULL ),
-    pSvxErrorHdl( NULL ),
     pFormEditData( NULL ),
     nCurRefDlgId( 0 ),
     bIsWaterCan( false ),
@@ -197,8 +200,9 @@ ScModule::~ScModule()
 
     DELETEZ( pFormEditData );
 
+    delete mpDragData;
+    delete mpClipData;
     delete pErrorHdl;
-//  delete pSvxErrorHdl;
 
     ScGlobal::Clear();      // ruft auch ScDocumentPool::DeleteVersionMaps();
 
@@ -652,50 +656,58 @@ void ScModule::HideDisabledSlots( SfxItemSet& rSet )
 
 void ScModule::ResetDragObject()
 {
-    aDragData.pCellTransfer = NULL;
-    aDragData.pDrawTransfer = NULL;
+    mpDragData->pCellTransfer = NULL;
+    mpDragData->pDrawTransfer = NULL;
 
-    aDragData.aLinkDoc.Erase();
-    aDragData.aLinkTable.Erase();
-    aDragData.aLinkArea.Erase();
-    aDragData.pJumpLocalDoc = NULL;
-    aDragData.aJumpTarget.Erase();
-    aDragData.aJumpText.Erase();
+    mpDragData->aLinkDoc.Erase();
+    mpDragData->aLinkTable.Erase();
+    mpDragData->aLinkArea.Erase();
+    mpDragData->pJumpLocalDoc = NULL;
+    mpDragData->aJumpTarget.Erase();
+    mpDragData->aJumpText.Erase();
+}
+
+const ScDragData& ScModule::GetDragData() const
+{
+    return *mpDragData;
 }
 
 void ScModule::SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj )
 {
     ResetDragObject();
-    aDragData.pCellTransfer = pCellObj;
-    aDragData.pDrawTransfer = pDrawObj;
+    mpDragData->pCellTransfer = pCellObj;
+    mpDragData->pDrawTransfer = pDrawObj;
 }
 
 void ScModule::SetDragLink( const String& rDoc, const String& rTab, const String& rArea )
 {
     ResetDragObject();
 
-    aDragData.aLinkDoc   = rDoc;
-    aDragData.aLinkTable = rTab;
-    aDragData.aLinkArea  = rArea;
+    mpDragData->aLinkDoc   = rDoc;
+    mpDragData->aLinkTable = rTab;
+    mpDragData->aLinkArea  = rArea;
 }
 
 void ScModule::SetDragJump( ScDocument* pLocalDoc, const String& rTarget, const String& rText )
 {
     ResetDragObject();
 
-    aDragData.pJumpLocalDoc = pLocalDoc;
-    aDragData.aJumpTarget = rTarget;
-    aDragData.aJumpText = rText;
+    mpDragData->pJumpLocalDoc = pLocalDoc;
+    mpDragData->aJumpTarget = rTarget;
+    mpDragData->aJumpText = rText;
 }
 
-//------------------------------------------------------------------
+const ScClipData& ScModule::GetClipData() const
+{
+    return *mpClipData;
+}
 
 void ScModule::SetClipObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj )
 {
     OSL_ENSURE( !pCellObj || !pDrawObj, "SetClipObject: not allowed to set both objects" );
 
-    aClipData.pCellClipboard = pCellObj;
-    aClipData.pDrawClipboard = pDrawObj;
+    mpClipData->pCellClipboard = pCellObj;
+    mpClipData->pDrawClipboard = pDrawObj;
 }
 
 ScDocument* ScModule::GetClipDoc()

@@ -71,19 +71,16 @@ class ScPrintOptions;
 class ScInputHandler;
 class ScInputWindow;
 class ScTabViewShell;
-class ScFunctionDlg;
-class ScArgDlgBase;
-class ScEditFunctionDlg;
 class ScMessagePool;
 class EditFieldInfo;
 class ScNavipiCfg;
 class ScAddInCfg;
-
 class ScTransferObj;
 class ScDrawTransferObj;
 class ScSelectionTransferObj;
-
 class ScFormEditData;
+class ScDragData;
+class ScClipData;
 
 //==================================================================
 
@@ -92,34 +89,14 @@ class ScFormEditData;
 #define SC_DROP_NAVIGATOR       1
 #define SC_DROP_TABLE           2
 
-struct ScDragData
-{
-    ScTransferObj*      pCellTransfer;
-    ScDrawTransferObj*  pDrawTransfer;
-
-    String              aLinkDoc;
-    String              aLinkTable;
-    String              aLinkArea;
-    ScDocument*         pJumpLocalDoc;
-    String              aJumpTarget;
-    String              aJumpText;
-};
-
-struct ScClipData
-{
-    ScTransferObj*      pCellClipboard;
-    ScDrawTransferObj*  pDrawClipboard;
-};
-
 //==================================================================
-
 
 class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
 {
     Timer               aIdleTimer;
     Timer               aSpellTimer;
-    ScDragData          aDragData;
-    ScClipData          aClipData;
+    ScDragData*         mpDragData;
+    ScClipData*         mpClipData;
     ScSelectionTransferObj* pSelTransfer;
     ScMessagePool*      pMessagePool;
     // there is no global InputHandler anymore, each View has it's own
@@ -136,14 +113,13 @@ class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
     SvtCTLOptions*      pCTLOptions;
     SvtUserOptions*     pUserOptions;
     SfxErrorHandler*    pErrorHdl;
-    SvxErrorHandler*    pSvxErrorHdl;
     ScFormEditData*     pFormEditData;
     sal_uInt16              nCurRefDlgId;
-    sal_Bool                bIsWaterCan;
-    sal_Bool                bIsInEditCommand;
-    sal_Bool                bIsInExecuteDrop;
-    bool                mbIsInSharedDocLoading;
-    bool                mbIsInSharedDocSaving;
+    bool                bIsWaterCan:1;
+    bool                bIsInEditCommand:1;
+    bool                bIsInExecuteDrop:1;
+    bool                mbIsInSharedDocLoading:1;
+    bool                mbIsInSharedDocSaving:1;
 
     std::map<sal_uInt16, std::list<Window*> > m_mapRefWindow;
 public:
@@ -169,7 +145,7 @@ public:
     void                AnythingChanged();
 
     //  Drag & Drop:
-    const ScDragData&   GetDragData() const     { return aDragData; }
+    const ScDragData&   GetDragData() const;
     void                SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj );
     void                ResetDragObject();
     void                SetDragLink( const String& rDoc, const String& rTab, const String& rArea );
@@ -177,7 +153,7 @@ public:
                                     const String& rTarget, const String& rText );
 
     //  clipboard:
-    const ScClipData&   GetClipData() const     { return aClipData; }
+    const ScClipData&   GetClipData() const;
     void                SetClipObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj );
 
     ScDocument*         GetClipDoc();       // called from document - should be removed later
@@ -186,14 +162,14 @@ public:
     ScSelectionTransferObj* GetSelectionTransfer() const    { return pSelTransfer; }
     void                SetSelectionTransfer( ScSelectionTransferObj* pNew );
 
-    void                SetWaterCan( sal_Bool bNew )    { bIsWaterCan = bNew; }
-    sal_Bool                GetIsWaterCan() const       { return bIsWaterCan; }
+    void                SetWaterCan( bool bNew )    { bIsWaterCan = bNew; }
+    bool                GetIsWaterCan() const       { return bIsWaterCan; }
 
-    void                SetInEditCommand( sal_Bool bNew )   { bIsInEditCommand = bNew; }
-    sal_Bool                IsInEditCommand() const         { return bIsInEditCommand; }
+    void                SetInEditCommand( bool bNew )   { bIsInEditCommand = bNew; }
+    bool                IsInEditCommand() const         { return bIsInEditCommand; }
 
-    void                SetInExecuteDrop( sal_Bool bNew )   { bIsInExecuteDrop = bNew; }
-    sal_Bool                IsInExecuteDrop() const         { return bIsInExecuteDrop; }
+    void                SetInExecuteDrop( bool bNew )   { bIsInExecuteDrop = bNew; }
+    bool                IsInExecuteDrop() const         { return bIsInExecuteDrop; }
 
     // Options:
     const ScViewOptions&    GetViewOptions  ();

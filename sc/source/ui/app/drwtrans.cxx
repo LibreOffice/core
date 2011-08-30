@@ -73,6 +73,8 @@
 #include "chartlis.hxx"
 #include "rangeutl.hxx"
 #include "formula/grammar.hxx"
+#include "dragdata.hxx"
+#include "clipdata.hxx"
 
 // #108584#
 #include "scitems.hxx"

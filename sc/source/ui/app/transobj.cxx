@@ -61,6 +61,8 @@
 #include "printfun.hxx"
 #include "docfunc.hxx"
 #include "scmod.hxx"
+#include "dragdata.hxx"
+#include "clipdata.hxx"
 
 // for InitDocShell
 #include <editeng/paperinf.hxx>

@@ -128,8 +128,9 @@
 #include "cellsh.hxx"
 #include "overlayobject.hxx"
 #include "cellsuno.hxx"
-
 #include "drawview.hxx"
+#include "dragdata.hxx"
+
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <vcl/svapp.hxx>
