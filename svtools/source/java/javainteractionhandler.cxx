@@ -52,9 +52,10 @@
 #include <svtools/javainteractionhandler.hxx>
 #include <svtools/javacontext.hxx>
 
+#define DEFINE_CONST_UNICODE(CONSTASCII) UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::task;
-
 namespace svt
 {
 
@@ -138,6 +139,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             m_bJavaNotFound_Handled = true;
             WarningBox aWarningBox( NULL, SvtResId( WARNINGBOX_JAVANOTFOUND ) );
             String aTitle( SvtResId( STR_WARNING_JAVANOTFOUND ) );
+            aTitle.Append(DEFINE_CONST_UNICODE("\nPlease install the libreoffice-java-common package for this functionality and/or check your Java settings."));
             aWarningBox.SetText( aTitle );
             nResult = aWarningBox.Execute();
         }
@@ -155,6 +157,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             m_bInvalidSettings_Handled = true;
             WarningBox aWarningBox( NULL, SvtResId( WARNINGBOX_INVALIDJAVASETTINGS ) );
             String aTitle( SvtResId(STR_WARNING_INVALIDJAVASETTINGS));
+            aTitle.Append(DEFINE_CONST_UNICODE("\nPlease install the libreoffice-java-common package for this functionality and/or check your Java settings."));
             aWarningBox.SetText( aTitle );
             nResult = aWarningBox.Execute();
         }
@@ -196,6 +199,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             m_bVMCreationFailure_Handled = true;
             ErrorBox aErrorBox( NULL, SvtResId( ERRORBOX_JVMCREATIONFAILED ) );
             String aTitle( SvtResId( STR_ERROR_JVMCREATIONFAILED ) );
+            aTitle.Append(DEFINE_CONST_UNICODE("\nPlease install the libreoffice-java-common package for this functionality and/or check your Java settings."));
             aErrorBox.SetText( aTitle );
             nResult = aErrorBox.Execute();
         }
