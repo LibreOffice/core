@@ -59,7 +59,7 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
                                   FillDir       eFillDir,
                                   FillCmd       eFillCmd,
                                   FillDateCmd   eFillDateCmd,
-                                  String        aStartStr,
+                                  const rtl::OUString& aStartStr,
                                   double        fStep,
                                   double        fMax,
                                   sal_uInt16        nPossDir )
@@ -97,7 +97,7 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-        errMsgInvalidVal( ScResId( STR_VALERR ) ),
+        aErrMsgInvalidVal( ResId::toString(ScResId(STR_VALERR)) ),
         rDoc            ( rDocument ),
         theFillDir      ( eFillDir ),
         theFillCmd      ( eFillCmd ),
@@ -118,7 +118,7 @@ ScFillSeriesDlg::~ScFillSeriesDlg()
 
 //----------------------------------------------------------------------------
 
-void ScFillSeriesDlg::SetEdStartValEnabled(sal_Bool bFlag)
+void ScFillSeriesDlg::SetEdStartValEnabled(bool bFlag)
 {
     bStartValFlag=bFlag;
     if(bFlag)
@@ -206,12 +206,6 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
     }
 
     fStartVal = MAXDOUBLE;
-    /*
-    String aStartTxt;
-    if ( fStartVal != MAXDOUBLE )
-        rDoc.GetFormatTable()->GetInputLineString( fStartVal, 0, aStartTxt );
-    aEdStartVal.SetText( aStartTxt );
-    */
 
     aEdStartVal.SetText( aStartStrVal);
 
@@ -224,7 +218,7 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
         rDoc.GetFormatTable()->GetInputLineString( fEndVal, 0, aEndTxt );
     aEdEndVal.SetText( aEndTxt );
 
-    bStartValFlag=false;
+    bStartValFlag = false;
 
     aFlSep1.SetStyle( aFlSep1.GetStyle() | WB_VERT );
     aFlSep2.SetStyle( aFlSep2.GetStyle() | WB_VERT );
@@ -233,15 +227,15 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScFillSeriesDlg::CheckStartVal()
+bool ScFillSeriesDlg::CheckStartVal()
 {
-    sal_Bool bValOk = false;
-    String aStr( aEdStartVal.GetText() );
+    bool bValOk = false;
+    rtl::OUString aStr = aEdStartVal.GetText();
 
-    if ( aStr.Len() == 0 || aBtnAutoFill.IsChecked())
+    if ( aStr.isEmpty() || aBtnAutoFill.IsChecked())
     {
         fStartVal = MAXDOUBLE;
-        bValOk = sal_True;
+        bValOk = true;
     }
     else
     {
@@ -254,10 +248,10 @@ sal_Bool ScFillSeriesDlg::CheckStartVal()
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScFillSeriesDlg::CheckIncrementVal()
+bool ScFillSeriesDlg::CheckIncrementVal()
 {
     sal_uInt32 nKey = 0;
-    String aStr( aEdIncrement.GetText() );
+    rtl::OUString aStr = aEdIncrement.GetText();
 
     return rDoc.GetFormatTable()->IsNumberFormat( aStr, nKey, fIncrement );
 }
@@ -265,15 +259,15 @@ sal_Bool ScFillSeriesDlg::CheckIncrementVal()
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScFillSeriesDlg::CheckEndVal()
+bool ScFillSeriesDlg::CheckEndVal()
 {
-    sal_Bool    bValOk = false;
-    String  aStr( aEdEndVal.GetText() );
+    bool bValOk = false;
+    rtl::OUString aStr = aEdEndVal.GetText();
 
-    if ( aStr.Len() == 0 )
+    if (aStr.isEmpty())
     {
         fEndVal = (fIncrement < 0) ? -MAXDOUBLE : MAXDOUBLE;
-        bValOk  = sal_True;
+        bValOk  = true;
     }
     else
     {
@@ -344,7 +338,7 @@ IMPL_LINK( ScFillSeriesDlg, OKHdl, void *, EMPTYARG )
     else if ( aBtnMonth.IsChecked() )       theFillDateCmd = FILL_MONTH;
     else if ( aBtnYear.IsChecked() )        theFillDateCmd = FILL_YEAR;
 
-    sal_Bool  bAllOk = sal_True;
+    sal_Bool  bAllOk = true;
     Edit* pEdWrong = NULL;
     if ( !CheckStartVal() )
     {
@@ -367,7 +361,7 @@ IMPL_LINK( ScFillSeriesDlg, OKHdl, void *, EMPTYARG )
     {
         ErrorBox( this,
                   WinBits( WB_OK | WB_DEF_OK ),
-                  errMsgInvalidVal
+                  aErrMsgInvalidVal
                 ).Execute();
         pEdWrong->GrabFocus();
     }
