@@ -38,7 +38,7 @@ End
 
 #endif
 
-#ifdef WNT
+#if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
 File gid_File_Lib_Jfregca
     TXT_FILE_BODY;

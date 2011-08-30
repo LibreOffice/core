@@ -168,10 +168,15 @@ SCP1FILES +=                           \
              folderitem_math.par       \
              module_quickstart.par     \
              file_quickstart.par       \
-             registryitem_quickstart.par \
+             registryitem_quickstart.par
+
+# The Explorer extensions don't build with MinGW
+.IF "$(COM)" == "MSC"
+SCP1FILES +=                           \
              module_winexplorerext.par \
              file_winexplorerext.par   \
              registryitem_winexplorerext.par
+.ENDIF
 
 .IF "$(ENABLE_DIRECTX)"!=""
 SCP1FILES += directxcanvas.par
@@ -353,10 +358,14 @@ SCP2FILES +=                           \
              folderitem_math.par       \
              module_quickstart.par     \
              file_quickstart.par       \
-             registryitem_quickstart.par \
+             registryitem_quickstart.par
+
+.IF "$(COM)" == "MSC"
+SCP2FILES +=                           \
              module_winexplorerext.par \
              file_winexplorerext.par   \
              registryitem_winexplorerext.par
+.ENDIF
 
 .IF "$(ENABLE_DIRECTX)"!=""
 SCP2FILES += directxcanvas.par

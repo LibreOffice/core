@@ -780,7 +780,7 @@ End
 
 #endif
 
-#ifdef WNT
+#if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
 File gid_File_Lib_sn_tools
     BIN_FILE_BODY;
@@ -802,7 +802,7 @@ End
 
 #endif
 
-#ifdef WNT
+#if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
 File gid_File_Lib_Rebasemsi
     TXT_FILE_BODY;
@@ -811,7 +811,7 @@ File gid_File_Lib_Rebasemsi
     Styles = (PACKED,BINARYTABLE,BINARYTABLE_ONLY,DONTRENAMEINPATCH);
 End
 
-#endif
+#endif /* WNT && HAVE_WINDOWS_SDK */
 
 STD_LIB_FILE( gid_File_Lib_Lng, lng)
 
@@ -1091,7 +1091,7 @@ End
 
 #endif
 
-#ifdef WNT
+#if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
 File gid_File_Lib_Reg4allmsdoc
     TXT_FILE_BODY;
@@ -1100,10 +1100,6 @@ File gid_File_Lib_Reg4allmsdoc
     Name = "reg4allmsdoc.dll";
 End
 
-#endif
-
-#ifdef WNT
-
 File gid_File_Lib_Qslnkmsi
     TXT_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
@@ -1111,9 +1107,6 @@ File gid_File_Lib_Qslnkmsi
     Name = "qslnkmsi.dll";
 End
 
-#endif
-
-#ifdef WNT
 
 File gid_File_Lib_Sdqsmsi
     TXT_FILE_BODY;
@@ -1122,7 +1115,7 @@ File gid_File_Lib_Sdqsmsi
     Name = "sdqsmsi.dll";
 End
 
-#endif
+#endif /* WNT && HAVE_WINDOWS_SDK */
 
 File gid_File_Lib_Res
     Name = LIBNAME(res);
@@ -1854,13 +1847,15 @@ End
 
 #endif
 
-#ifdef WNT
+#if defined(WNT) && defined(HAVE_WINDOWS_SDK)
+
 File gid_File_Lib_sellangmsi
     TXT_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = gid_Dir_Program;
     Name = "sellangmsi.dll";
 End
+
 #endif
 
 #ifdef ENABLE_LOMENUBAR

@@ -212,7 +212,7 @@ SCPDEFS+=-DSYSTEM_NEON
 .ENDIF
 
 # if yes or unset (neon not used) -> do not install openssl library!
-.IF $(SYSTEM_OPENSSL) != "YES"
+.IF "$(SYSTEM_OPENSSL)" != "YES"
 SCPDEFS+=-DOPENSSL
 .ENDIF
 
@@ -286,6 +286,11 @@ SCPDEFS+=-DSYSTEM_LIBGSF
 
 .IF "$(ENABLE_LOMENUBAR)" == "TRUE"
 SCPDEFS+=-DENABLE_LOMENUBAR
+.ENDIF
+
+# Synchronize with condition to build the jfregqa.dll custom action in setup_native
+.IF "$(WINDOWS_SDK_HOME)"!=""
+SCPDEFS+=-DHAVE_WINDOWS_SDK
 .ENDIF
 
 SCP_PRODUCT_TYPE=osl

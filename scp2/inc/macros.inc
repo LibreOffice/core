@@ -489,6 +489,8 @@ End
 
 // ---------------------------------------
 
+#ifdef _MSC_VER
+
 #define REGISTER_PROPERTY_HANDLER_FOR_EXTENSION(extension) \
     RegistryItem CONCAT2(gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_,extension) \
         ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
@@ -499,6 +501,10 @@ End
         Value = "{AE424E85-F6DF-4910-A6A9-438797986431}"; \
         Val64 = "{AE424E85-F6DF-4910-A6A9-438797986431}"; \
     End
+
+#else
+#define REGISTER_PROPERTY_HANDLER_FOR_EXTENSION(extension) // empty
+#endif
 
 // ---------------------------------------
 

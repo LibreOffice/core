@@ -43,7 +43,8 @@ SCPDEFS+=-DBUILD_X64
 
 SCP_PRODUCT_TYPE=osl
 
-.IF "$(GUI)"=="WNT"
+# The Explorer extensions don't build with MinGW
+.IF "$(GUI)" == "WNT" && "$(COM)" == "MSC"
 PARFILES= \
         module_winexplorerext.par        \
         file_winexplorerext.par          \
