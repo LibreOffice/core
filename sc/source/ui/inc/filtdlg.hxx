@@ -135,9 +135,9 @@ private:
     ListBox*            aCondLbArr[4];
     ListBox*            aConnLbArr[4];
     bool                mbHasDates[MAXQUERY];
-    sal_Bool                bRefreshExceptQuery[MAXQUERY];
-    sal_uInt16              nFieldCount;
-    sal_Bool                bRefInputMode;
+    bool                bRefreshExceptQuery[MAXQUERY];
+    sal_uInt16          nFieldCount;
+    bool                bRefInputMode;
 
     TypedScStrCollection*   pEntryLists[MAXCOLCOUNT];
     sal_uInt16              nHeaderPos[MAXCOLCOUNT];
