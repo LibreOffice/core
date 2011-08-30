@@ -144,12 +144,14 @@ EditView::Drop(DropEvent const&)
 EditView::GetDropPos()
 EditView::GetSelectionMode() const
 EditView::GetWordUnderMousePointer() const
+EditView::IndentBlock()
 EditView::IsPasteEnabled() const
 EditView::MatchGroup()
 EditView::QueryDrop(DropEvent&)
 EditView::SetCursor(Cursor const&)
 EditView::SetParaAttribs(SfxItemSet const&, unsigned short)
 EditView::SetPointer(Pointer const&)
+EditView::UnindentBlock()
 ElementCollector::isAbleToNotify() const
 ElementCollector::setSecurityId(int)
 EnhWMFReader::ReadGDIComment()
@@ -843,7 +845,6 @@ SfxRequest::IsRecording() const
 SfxRequest::SetTarget(String const&)
 SfxShell::GetBroadcaster()
 SfxShell::RemoveItem(unsigned short)
-SfxSingleTabDialog::GetInputRanges(SfxItemPool const&)
 SfxSlotPool::NextInterface()
 SfxStyleSheet::SfxStyleSheet()
 SfxTabDialog::FillOutputItemSet()
@@ -2374,6 +2375,7 @@ dbtools::StatementComposer::getDisposeComposer() const
 dbtools::getComposedRowSetStatement(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, unsigned char, unsigned char)
 dbtools::getConnection(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 dbtools::throwFunctionNotSupportedException(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, com::sun::star::uno::Any const&)
+desktop::CommandLineArgs::IsEmptyOrAcceptOnly() const
 desktop::Lockfile::clean()
 dlgprov::DialogProviderImpl::createControlModel()
 dp_info::singleton_entries(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&)
