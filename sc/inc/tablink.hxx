@@ -91,8 +91,8 @@ private:
 
 public:
                         ScDocumentLoader( const String& rFileName,
-                                            String& rFilterName, String& rOptions,
-                                            sal_uInt32 nRekCnt = 0, sal_Bool bWithInteraction = false );
+                                          String& rFilterName, String& rOptions,
+                                          sal_uInt32 nRekCnt = 0, bool bWithInteraction = false );
                         ~ScDocumentLoader();
     ScDocument*         GetDocument();
     ScDocShell*         GetDocShell()       { return pDocShell; }

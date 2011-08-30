@@ -317,6 +317,7 @@ public:
             ScAreaNameIterator( ScDocument* pDoc );
             ~ScAreaNameIterator() {}
 
+    bool Next( rtl::OUString& rName, ScRange& rRange );
     bool Next( String& rName, ScRange& rRange );
     bool WasDBName() const { return !bFirstPass; }
 };

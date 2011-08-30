@@ -89,10 +89,10 @@ public:
 
     virtual short   Execute();          // overwritten to set dialog parent
 
-    String          GetURL();
-    String          GetFilter();        // may be empty
-    String          GetOptions();       // filter options
-    String          GetSource();        // separated by ";"
+    rtl::OUString       GetURL();
+    rtl::OUString       GetFilter();        // may be empty
+    rtl::OUString       GetOptions();       // filter options
+    rtl::OUString       GetSource();        // separated by ";"
     sal_uLong           GetRefresh();       // 0 if disabled
 };
 

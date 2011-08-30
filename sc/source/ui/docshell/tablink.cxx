@@ -546,7 +546,7 @@ void ScDocumentLoader::RemoveAppPrefix( String& rFilterName )
 
 ScDocumentLoader::ScDocumentLoader( const String& rFileName,
                                     String& rFilterName, String& rOptions,
-                                    sal_uInt32 nRekCnt, sal_Bool bWithInteraction ) :
+                                    sal_uInt32 nRekCnt, bool bWithInteraction ) :
         pDocShell(0),
         pMedium(0)
 {
