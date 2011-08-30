@@ -36,6 +36,7 @@
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtftoken.h>
 #include <svtools/filter.hxx>
+#include <svtools/wmf.hxx>
 
 #include <editeng/svxrtf.hxx>
 
@@ -492,9 +493,15 @@ sal_Bool SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
             }
 
             String sTmpStr;
+            WMF_APMFILEHEADER aAPMHeader;
+            aAPMHeader.left=0;
+            aAPMHeader.top=0;
+            aAPMHeader.right=rPicType.nWidth;
+            aAPMHeader.bottom=rPicType.nHeight;
+
+            WMF_APMFILEHEADER *pAPMHeader=(aAPMHeader.right>0 && aAPMHeader.bottom>0?&aAPMHeader:NULL);
             pTmpFile->Seek( STREAM_SEEK_TO_BEGIN );
-            bValidBmp = 0 == pGF->ImportGraphic( rGrf, sTmpStr, *pTmpFile,
-                                                nImportFilter );
+            bValidBmp = 0 == pGF->ImportGraphic( rGrf, sTmpStr, *pTmpFile, nImportFilter, NULL, 0, pAPMHeader );
         }
         delete pTmpFile;
     }

@@ -61,7 +61,15 @@
 #include <tools/urlobj.hxx>
 #include <tools/wldcrd.hxx>
 
+#include <com/sun/star/deployment/thePackageManagerFactory.hpp>
+
 #include <comphelper/configurationhelper.hxx>
+#include <ucbhelper/commandenvironment.hxx>
+#include <rtl/bootstrap.hxx>
+
+#include <osl/file.hxx>
+
+using namespace com::sun::star;
 
 //_______________________________________________
 // namespace
@@ -1509,6 +1517,90 @@ void FilterCache::impl_load(EFillState eRequiredState)
     // <- SAFE
 }
 
+static bool isOdfConverterInstalled()
+{
+    static bool bTested = false;
+    static bool bInstalled = false;
+
+    if ( bTested )
+        return bInstalled;
+
+    bTested = true;
+
+    // the easy path - check for the OdfConverter binary
+    rtl::OUString aPath;
+
+    rtl::Bootstrap::get( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BRAND_BASE_DIR" ) ), aPath );
+    aPath += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/program/OdfConverter" ) );
+
+    osl::DirectoryItem aDirItem;
+    if ( osl::DirectoryItem::get( aPath, aDirItem ) == osl::FileBase::E_None )
+    {
+        bInstalled = true;
+        return bInstalled;
+    }
+
+    // check the installed extensions
+    uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> xMS(::comphelper::getProcessServiceFactory(), uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet > xProps(xMS, uno::UNO_QUERY);
+    uno::Reference< uno::XComponentContext > xContext(xProps->getPropertyValue(rtl::OUString::createFromAscii("DefaultContext")), uno::UNO_QUERY);
+
+    uno::Reference< deployment::XPackageManager > xUserContext(
+            deployment::thePackageManagerFactory::get (xContext)->getPackageManager( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("user") ) ) );
+    uno::Reference< ::com::sun::star::deployment::XPackageManager > xSharedContext(
+            deployment::thePackageManagerFactory::get (xContext)->getPackageManager( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("shared") ) ) );
+
+    uno::Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler = uno::Reference< task::XInteractionHandler > (
+            xMS->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), uno::UNO_QUERY );
+    ::ucbhelper::CommandEnvironment* pCommandEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() );
+
+    uno::Reference< ucb::XCommandEnvironment > xCmdEnv( static_cast< ::com::sun::star::ucb::XCommandEnvironment* >( pCommandEnv ), uno::UNO_QUERY );
+
+    const uno::Sequence< uno::Reference< deployment::XPackage > > userPackages(
+            xUserContext->getDeployedPackages( NULL, xCmdEnv ) );
+    const uno::Sequence< uno::Reference< deployment::XPackage > > sharedPackages(
+            xSharedContext->getDeployedPackages( NULL, xCmdEnv ) );
+
+    const uno::Sequence< uno::Reference< deployment::XPackage > > pkgsArray[2] = {
+        userPackages,
+        sharedPackages
+    };
+
+    for ( int i = 0; i < 2; i++ ) {
+        const uno::Sequence< uno::Reference< deployment::XPackage > > pkgs = pkgsArray[i];
+
+        for ( int j = 0; j < pkgs.getLength(); j++ ) {
+            rtl::OUString fname = pkgs[j]->getName();
+            if ( fname.matchIgnoreAsciiCase( rtl::OUString::createFromAscii( "odf-converter-" ) ) ) {
+                printf( "Found match for odf-converter!\n");
+                fflush( stdout );
+                bInstalled = true;
+                return bInstalled;
+            }
+        }
+    }
+
+    return false;
+}
+
+static bool terribleHackToPreferOdfConverter( const rtl::OUString& rName )
+{
+    if ( !isOdfConverterInstalled() )
+        return false;
+
+    if ( rName.equalsAscii( "Calc MS Excel 2007 XML" ) ||
+         rName.equalsAscii( "MS Excel 2007 XML" ) ||
+         rName.equalsAscii( "MS PowerPoint 2007 XML" ) ||
+         rName.equalsAscii( "Impress MS PowerPoint 2007 XML" ) ||
+         rName.equalsAscii( "writer_MS_Word_2007" ) ||
+         rName.equalsAscii( "MS Word 2007 XML" ) )
+    {
+        return true;
+    }
+
+    return false;
+}
+
 
 
 void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameAccess >& xConfig,
@@ -1575,6 +1667,9 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
           sal_Int32        c      = lItems.getLength();
     for (sal_Int32 i=0; i<c; ++i)
     {
+        if ( terribleHackToPreferOdfConverter( pItems[i] ) )
+            continue;
+
         CacheItemList::iterator pItem = pCache->find(pItems[i]);
         switch(eOption)
         {

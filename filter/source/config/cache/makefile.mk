@@ -60,6 +60,7 @@ SLOFILES=       \
 SHL1OBJS=       $(SLOFILES)
 
 SHL1STDLIBS=    \
+                $(UCBHELPERLIB)    \
                 $(COMPHELPERLIB)    \
                 $(CPPUHELPERLIB)    \
                 $(CPPULIB)          \
