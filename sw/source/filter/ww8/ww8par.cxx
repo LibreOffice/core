@@ -2275,6 +2275,8 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
             nCellLevel = 0 != pPlcxMan->HasParaSprm(0x244B);
     }
 
+ mark:
+
     WW8_TablePos *pTabPos=0;
     WW8_TablePos aTabPos;
     if (nCellLevel && !bVer67)
@@ -2288,7 +2290,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
         if (const sal_uInt8 *pLevel = pPlcxMan->HasParaSprm(0x6649))
             nCellLevel = *pLevel;
 
-        bool bHasRowEnd = SearchRowEnd(pPap, nMyStartCp, nCellLevel-1);
+        bool bHasRowEnd = SearchRowEnd(pPap, nMyStartCp, (nInTable<nCellLevel?nInTable:nCellLevel-1));
 
         //Bad Table, remain unchanged in level, e.g. #i19667#
         if (!bHasRowEnd)
@@ -2369,12 +2371,16 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
                                             // in Tabellen
         while (nInTable < nCellLevel)
         {
-            if (StartTable(nStartCp))
+            if (StartTable(nStartCp)) {
                 ++nInTable;
+        }
             else
                 break;
 
             maApos.push_back(false);
+        if (nInTable<nCellLevel)
+           goto mark;
+
         }
         // nach StartTable ist ein ReSync noetig ( eigentlich nur, falls die
         // Tabelle ueber eine FKP-Grenze geht
