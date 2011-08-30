@@ -690,7 +690,7 @@ IMPL_LINK( ScDbNameDlg, NameModifyHdl, void *, EMPTYARG )
 
         //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
         //SFX_APPWINDOW->Enable();
-        bRefInputMode = sal_True;
+        bRefInputMode = true;
     }
     return 0;
 }

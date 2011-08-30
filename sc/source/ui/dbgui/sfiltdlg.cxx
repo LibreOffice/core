@@ -77,7 +77,20 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
         aRbFilterArea   ( this, ScResId( RB_CRITERIA_AREA ), &aEdFilterArea, this ),
         //
         aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
-        _INIT_COMMON_FILTER_RSCOBJS
+        aBtnCase        ( this, ScResId( BTN_CASE ) ),
+        aBtnRegExp      ( this, ScResId( BTN_REGEXP ) ),
+        aBtnHeader      ( this, ScResId( BTN_HEADER ) ),
+        aBtnUnique      ( this, ScResId( BTN_UNIQUE ) ),
+        aBtnCopyResult  ( this, ScResId( BTN_COPY_RESULT ) ),
+        aLbCopyArea     ( this, ScResId( LB_COPY_AREA ) ),
+        aEdCopyArea     ( this, this, ScResId( ED_COPY_AREA ) ),
+        aRbCopyArea     ( this, ScResId( RB_COPY_AREA ) ),
+        aBtnDestPers    ( this, ScResId( BTN_DEST_PERS ) ),
+        aFtDbAreaLabel  ( this, ScResId( FT_DBAREA_LABEL ) ),
+        aFtDbArea       ( this, ScResId( FT_DBAREA ) ),
+        aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
+        aStrNoName      ( ScGlobal::GetRscString(STR_DB_NONAME) ),
+        aStrNone        ( ScResId( SCSTR_NONE ) ),
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
@@ -214,9 +227,9 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
     aBtnHeader.Disable();
 
     // Modal-Modus einschalten
-//  SetDispatcherLock( sal_True );
+//  SetDispatcherLock( true );
     //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-    //SFX_APPWINDOW->Disable(sal_False);        //! allgemeine Methode im ScAnyRefDlg
+    //SFX_APPWINDOW->Disable(false);        //! allgemeine Methode im ScAnyRefDlg
 }
 
 
@@ -315,7 +328,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
         String          theAreaStr( aEdFilterArea.GetText() );
         ScQueryParam    theOutParam( theQueryData );
         ScAddress       theAdrCopy;
-        sal_Bool            bEditInputOk    = sal_True;
+        sal_Bool            bEditInputOk    = true;
         sal_Bool            bQueryOk        = false;
         ScRange         theFilterArea;
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
@@ -332,7 +345,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
             if ( SCA_VALID != (nResult & SCA_VALID) )
             {
                 if ( !aBtnMore.GetState() )
-                    aBtnMore.SetState( sal_True );
+                    aBtnMore.SetState( true );
 
                 ERRORBOX( STR_INVALID_TABREF );
                 aEdCopyArea.GrabFocus();
@@ -376,14 +389,14 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
                 }
                 else
                 {
-                    theOutParam.bInplace    = sal_True;
+                    theOutParam.bInplace    = true;
                     theOutParam.nDestTab    = 0;
                     theOutParam.nDestCol    = 0;
                     theOutParam.nDestRow    = 0;
                 }
 
                 theOutParam.bHasHeader = aBtnHeader.IsChecked();
-                theOutParam.bByRow     = sal_True;
+                theOutParam.bByRow     = true;
                 theOutParam.bCaseSens  = aBtnCase.IsChecked();
                 theOutParam.bRegExp    = aBtnRegExp.IsChecked();
                 theOutParam.bDuplicate = !aBtnUnique.IsChecked();
@@ -443,12 +456,12 @@ IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pTimer )
         if( aEdCopyArea.HasFocus() || aRbCopyArea.HasFocus() )
         {
             pRefInputEdit = &aEdCopyArea;
-            bRefInputMode = sal_True;
+            bRefInputMode = true;
         }
         else if( aEdFilterArea.HasFocus() || aRbFilterArea.HasFocus() )
         {
             pRefInputEdit = &aEdFilterArea;
-            bRefInputMode = sal_True;
+            bRefInputMode = true;
         }
         else if( bRefInputMode )
         {
