@@ -377,3 +377,15 @@
 +
 +# --- Targets ------------------------------------------------------
 +.INCLUDE :  target.mk
+diff -urNad mysql-connector-c++-1.0.6~r754~/driver/nativeapi/libmysql_dynamic_proxy.cpp mysql-connector-c++-1.0.6~r754/driver/nativeapi/libmysql_dynamic_proxy.cpp
+--- misc/mysql-connector-cpp/driver/nativeapi/libmysql_dynamic_proxy.cpp	2009-08-20 16:42:14.000000000 +0200
++++ misc/build/mysql-connector-cpp/driver/nativeapi/libmysql_dynamic_proxy.cpp	2009-08-20 20:25:31.000000000 +0200
+@@ -26,7 +26,7 @@
+ #elif defined(__APPLE__)
+ static const char * const baseName = "libmysqlclient_r.dylib";
+ #else
+-static const char * const baseName = "libmysqlclient_r.so";
++static const char * const baseName = "libmysqlclient_r.so.16";
+ #endif
+ 
+ template<typename FunctionType>
