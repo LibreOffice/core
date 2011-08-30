@@ -990,9 +990,7 @@ public:
  * 2: Closing brace<BR>
  * None of the children can be NULL.
  *
- * Note that child 1 (Body) is usually SmBracebodyNode, I don't know if it can
- * be an SmExpressionNode, haven't seen the case. But didn't quite read parser.cxx
- * enought to exclude this possibility.
+ * Note that child 1 (Body) is usually SmBracebodyNode, but it can also be e.g. SmExpressionNode.
  */
 class SmBraceNode : public SmStructureNode
 {
