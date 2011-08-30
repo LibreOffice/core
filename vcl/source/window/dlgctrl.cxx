@@ -846,7 +846,9 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
                 pWindow = pWindow->GetWindow( WINDOW_NEXT );
             }
         }
-        else
+        else if ( !aKeyCode.IsMod1() ) // no ctrl pressed - those are
+                                       // application-wide shortcuts
+                                       // we want to let pass
         {
             xub_Unicode c = rKEvt.GetCharCode();
             if ( c )
