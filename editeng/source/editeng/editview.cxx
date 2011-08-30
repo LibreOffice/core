@@ -665,22 +665,6 @@ sal_uInt16 EditView::GetParagraph( const Point& rMousePosPixel )
     return nParagraph;
 }
 
-void EditView::IndentBlock()
-{
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-
-    PIMPEE->IndentBlock( this, sal_True );
-}
-
-void EditView::UnindentBlock()
-{
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-
-    PIMPEE->IndentBlock( this, sal_False );
-}
-
 EESelectionMode EditView::GetSelectionMode() const
 {
     DBG_CHKTHIS( EditView, 0 );

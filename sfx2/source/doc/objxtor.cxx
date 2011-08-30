@@ -856,13 +856,6 @@ void SfxObjectShell::InitBasicManager_Impl()
 
 //--------------------------------------------------------------------
 
-sal_uInt16 SfxObjectShell::Count()
-{
-    return SFX_APP()->GetObjectShells_Impl().Count();
-}
-
-//--------------------------------------------------------------------
-
 sal_Bool SfxObjectShell::DoClose()
 {
     return Close();

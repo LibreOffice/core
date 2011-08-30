@@ -42,7 +42,6 @@ protected:
     sal_Bool             bVisible;
 
 public:
-                     REResourceList();
                      REResourceList( REResourceList * pParentList,
                                      ByteString& rClassName,
                                      const RscId & rResourceID,

@@ -127,20 +127,6 @@ void SmSymbolManager::SFX_NOTIFY(SfxBroadcaster& /*rBC*/, const TypeId& rBCType,
 }
 
 
-void SmSymbolManager::Init()
-{
-    SmModule *pp = SM_MOD();
-    StartListening(*pp->GetConfig());
-}
-
-
-void SmSymbolManager::Exit()
-{
-    SmModule *pp = SM_MOD();
-    EndListening(*pp->GetConfig());
-}
-
-
 SmSymbolManager::SmSymbolManager()
 {
     m_bModified     = false;

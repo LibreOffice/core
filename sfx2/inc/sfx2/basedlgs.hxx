@@ -196,9 +196,6 @@ public:
     void                SetTabPage( SfxTabPage* pTabPage, GetTabPageRanges pRangesFunc = 0 );
     SfxTabPage*         GetTabPage() const { return pImpl->m_pSfxPage; }
 
-    const sal_uInt16*       GetInputRanges( const SfxItemPool& rPool );
-//  void                SetInputSet( const SfxItemSet* pInSet ) { pOptions = pInSet; }
-//  const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
     OKButton*           GetOKButton() const { return pOKBtn; }
     CancelButton*       GetCancelButton() const { return pCancelBtn; }
     void                SetInfoLink( const Link& rLink );

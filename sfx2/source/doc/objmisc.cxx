@@ -618,48 +618,6 @@ sal_Bool SfxObjectShell::SwitchToShared( sal_Bool bShared, sal_Bool bSave )
 
 //--------------------------------------------------------------------
 
-void SfxObjectShell::DisconnectFromShared()
-{
-    if ( IsDocShared() )
-    {
-        if ( pMedium && pMedium->GetStorage().is() )
-        {
-            // set medium to noname
-            pMedium->SetName( String(), sal_True );
-            pMedium->Init_Impl();
-
-            // drop resource
-            SetNoName();
-            InvalidateName();
-
-            // untitled document must be based on temporary storage
-            // the medium should not dispose the storage in this case
-            if ( pMedium->GetStorage() == GetStorage() )
-                ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium );
-
-            pMedium->Close();
-            FreeSharedFile();
-
-            SfxMedium* pTmpMedium = pMedium;
-            ForgetMedium();
-            if( !DoSaveCompleted( pTmpMedium ) )
-                SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
-            else
-            {
-                // the medium should not dispose the storage, DoSaveCompleted() has let it to do so
-                pMedium->CanDisposeStorage_Impl( sal_False );
-            }
-
-            pMedium->GetItemSet()->ClearItem( SID_DOC_READONLY );
-            pMedium->SetOpenMode( SFX_STREAM_READWRITE, sal_True, sal_True );
-
-            SetTitle( String() );
-        }
-    }
-}
-
-//--------------------------------------------------------------------
-
 void SfxObjectShell::FreeSharedFile()
 {
     if ( pMedium )
@@ -1678,11 +1636,6 @@ SfxObjectShellFlags SfxObjectShell::GetFlags() const
     if( pImp->eFlags == SFXOBJECTSHELL_UNDEFINED )
         pImp->eFlags = GetFactory().GetFlags();
     return pImp->eFlags;
-}
-
-void SfxObjectShell::SetFlags( SfxObjectShellFlags eFlags )
-{
-    pImp->eFlags = eFlags;
 }
 
 void SfxHeaderAttributes_Impl::SetAttributes()

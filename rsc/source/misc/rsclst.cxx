@@ -31,12 +31,6 @@
 
 #include "rsclst.hxx"
 
-REResourceList :: REResourceList()
-{
-    bVisible  = sal_False;
-    pParent   = NULL;
-}
-
 REResourceList :: REResourceList( REResourceList* pParentList,
                                   ByteString& rClassName,
                                   const RscId & rResourceID, sal_Bool bVis )

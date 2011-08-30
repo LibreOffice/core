@@ -252,14 +252,12 @@ public:
                                          const TypeId* pType = 0,
                                          sal_Bool bOnlyVisible = sal_True );
     static SfxObjectShell*      Current();
-    static sal_uInt16           Count();
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                                 GetCurrentComponent();
     static void                 SetCurrentComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
 
     virtual void                Invalidate(sal_uInt16 nId = 0);
 
-    void                        SetFlags( SfxObjectShellFlags eFlags );
     SfxObjectShellFlags         GetFlags( ) const ;
 
     SfxModule*                  GetModule() const;
@@ -287,7 +285,6 @@ public:
     sal_Bool                    IsDocShared() const;
     ::rtl::OUString             GetSharedFileURL() const;
     sal_Bool                    SwitchToShared( sal_Bool bShared, sal_Bool bSave );
-    void                        DisconnectFromShared();
     SAL_DLLPRIVATE void         FreeSharedFile();
     SAL_DLLPRIVATE void         FreeSharedFile( const ::rtl::OUString& aTempFileURL );
     SAL_DLLPRIVATE void         DoNotCleanShareControlFile();
