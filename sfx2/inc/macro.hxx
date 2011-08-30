@@ -171,8 +171,6 @@ public:
     void                    Record( SfxMacroStatement *pStatement );
     void                    Replace( SfxMacroStatement *pStatement );
     void                    Remove();
-
-    String                  GenerateSource() const;
 };
 
 #endif
