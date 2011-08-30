@@ -292,7 +292,11 @@ const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
         {
             // These office paths have to be converted to system pathes
             utl::LocalFileHelper::ConvertURLToPhysicalName( aPathValue, aResult );
-            aPathValue = aResult;
+            // FIXME: The initial value (not modified by SetPath) is just a path, so the URL-conversion fails.
+            //        The best solution is to fix the module xmlhelp to accept the URL. Then we could remove
+            //        all these ugly conversions.
+            if ( aResult.Len() != 0 )
+                aPathValue = aResult;
         }
 
         m_aPathArray[ ePath ] = aPathValue;

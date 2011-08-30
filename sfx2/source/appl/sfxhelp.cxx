@@ -54,10 +54,10 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
+#include <unotools/localfilehelper.hxx>
 #include <svtools/helpopt.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/configmgr.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/pathoptions.hxx>
 #include <rtl/ustring.hxx>
@@ -136,12 +136,13 @@ static rtl::OUString HelpLocaleString()
             aLocaleStr = aEnglish;
         else
         {
-            rtl::OUString aBaseInstallPath;
-            utl::Bootstrap::locateBaseInstallation(aBaseInstallPath);
-            static const char *szHelpPath = "/help/";
+            String sBaseHelpPathString;
+            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( SvtPathOptions().GetHelpPath(), sBaseHelpPathString );
 
-            rtl::OUString sHelpPath = aBaseInstallPath +
-                rtl::OUString::createFromAscii(szHelpPath) + aLocaleStr;
+            rtl::OUString sBaseHelpPath( sBaseHelpPathString );
+            sBaseHelpPath += rtl::OUString::createFromAscii("/");
+
+            rtl::OUString sHelpPath = sBaseHelpPath + aLocaleStr;
             osl::DirectoryItem aDirItem;
 
             if (!osl::DirectoryItem::get(sHelpPath, aDirItem) == osl::FileBase::E_None)
@@ -152,9 +153,8 @@ static rtl::OUString HelpLocaleString()
                 if (nSepPos != STRING_NOTFOUND)
                 {
                     bOk = true;
-                    sLang = sLang.Copy( 0, nSepPos );
-                    sHelpPath = aBaseInstallPath +
-                        rtl::OUString::createFromAscii(szHelpPath) + sLang;
+                        sLang = sLang.Copy( 0, nSepPos );
+                    sHelpPath = sBaseHelpPath + sLang;
                     if (!osl::DirectoryItem::get(sHelpPath, aDirItem) == osl::FileBase::E_None)
                         bOk = false;
                 }

@@ -58,6 +58,12 @@ SHL1STDLIBS=    $(COMPHELPERLIB)    \
                 $(TOOLSLIB)         \
                 $(LPSOLVELIB)
 
+# DebianBaseOnly; we build lp_solve without colamd included but with system-colamd
+# (which is not linked into the .a...) so we need -lcolamd here, too
+.IF "$(SYSTEM_LPSOLVE)" == "YES"
+SHL1STDLIBS += -lcolamd
+.ENDIF
+
 SHL1DEPN=       makefile.mk
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 SHL1VERSIONMAP= $(SOLARENV)/src/component.map
