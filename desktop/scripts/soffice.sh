@@ -26,18 +26,121 @@
 #
 #*************************************************************************
 
-#
-# STAR_PROFILE_LOCKING_DISABLED=1
-# export STAR_PROFILE_LOCKING_DISABLED
-#
+if test -z "$HOME"; then
+    HOME=$(getent passwd $(whoami) | cut -d":" -f6)
+fi
 
-# file locking now enabled by default
-SAL_ENABLE_FILE_LOCKING=1
-export SAL_ENABLE_FILE_LOCKING
+# helper functions
+home_on_nfs()
+{
+    case $(stat -f -c %T $HOME) in cifs|nfs|smb)
+        return 0
+    esac
+    return 1
+}
+file_on_nfs(){
+    for i; do
+       case "$i" in -*) continue; esac
+       [ -f "$i" ] || continue
+       case $(stat -f -c %T "$i") in cifs|nfs|smb)
+            return 0
+       esac
+    done
+    return 1
+}
 
-# Uncomment the line below if you suspect that OpenGL is not
-# working on your system.
-# SAL_NOOPENGL=true; export SAL_NOOPENGL
+# FIXME: this is conservative; allow more known working configurations
+working_opengl_support()
+{
+    if [ -n "$(lsmod | awk '/^(fglrx|nvidia)/ {print $1}')" ]; then
+       return 1
+    fi
+    return 0
+}
+
+# read config file
+
+FILE_LOCKING=auto
+OPENGL_SUPPORT=no
+if [ -f /etc/libreoffice/soffice.sh ]; then
+    . /etc/libreoffice/soffice.sh
+fi
+
+# sanity checks
+
+case "$FILE_LOCKING" in
+    auto|yes|no) ;;
+    *)
+        echo >&2 "unknown value '$FILE_LOCKING' for FILE_LOCKING parameter."
+       FILE_LOCKING=auto
+       echo >&2 "FILE_LOCKING reset to '$FILE_LOCKING'"
+esac
+ 
+case "$OPENGL_SUPPORT" in
+    auto|yes|no) ;;
+    *)
+        echo >&2 "unknown value '$OPENGL_SUPPORT' for OPENGL_SUPPORT parameter."
+       OPENGL_SUPPORT=auto
+       echo >&2 "OPENGL_SUPPORT reset to '$OPENGL_SUPPORT'"
+esac
+
+# adjust environment
+
+if [ -z "$SAL_ENABLE_FILE_LOCKING" ]; then
+    case "$FILE_LOCKING" in
+       auto)
+        home_on_nfs "$@"
+        if [ $? = 0 ]; then
+           STAR_PROFILE_LOCKING_DISABLED=1
+           export STAR_PROFILE_LOCKING_DISABLED
+       fi
+       file_on_nfs "$@"
+       if [ $? = 0 ]; then
+           SAL_ENABLE_FILE_LOCKING=0
+           export SAL_ENABLE_FILE_LOCKING
+           # for safety
+           STAR_ENABLE_FILE_LOCKING=0
+           export STAR_ENABLE_FILE_LOCKING
+       else
+            # file locking now enabled by default
+           SAL_ENABLE_FILE_LOCKING=1
+           export SAL_ENABLE_FILE_LOCKING
+       fi
+        ;;
+       yes)
+       SAL_ENABLE_FILE_LOCKING=1
+       export SAL_ENABLE_FILE_LOCKING
+        ;;
+       no)
+       SAL_ENABLE_FILE_LOCKING=0
+       export SAL_ENABLE_FILE_LOCKING
+       # for safety
+       STAR_ENABLE_FILE_LOCKING=0
+       export STAR_ENABLE_FILE_LOCKING
+       STAR_PROFILE_LOCKING_DISABLED=1
+       export STAR_PROFILE_LOCKING_DISABLED
+    esac
+fi
+
+if [ -z "$SAL_NOOPENGL" ]; then
+    case "$OPENGL_SUPPORT" in
+       auto)
+        working_opengl_support
+        if [ $? -eq 0 ]; then
+           SAL_NOOPENGL=true
+           export SAL_NOOPENGL
+       fi
+        ;;
+       yes)
+       :
+       unset SAL_NOOPENGL
+       #export SAL_NOOPENGL
+        ;;
+       no)
+       SAL_NOOPENGL=true
+       export SAL_NOOPENGL
+    esac
+fi
 
 unset XENVIRONMENT
 

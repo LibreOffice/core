@@ -26,9 +26,45 @@
 #
 #*************************************************************************
 
-# enable file locking
-SAL_ENABLE_FILE_LOCKING=1
-export SAL_ENABLE_FILE_LOCKING
+if test -z "$HOME"; then
+    HOME=$(getent passwd $(whoami) | cut -d":" -f6)
+fi
+
+# helper functions
+home_on_nfs()
+{
+    case $(stat -f -c %T $HOME) in cifs|nfs*|smb)
+        return 0
+    esac
+    return 1
+}
+file_on_nfs() {
+    for i; do
+       case "$i" in -*) continue; esac
+       [ -f "$i" ] || continue
+       case $(stat -f -c %T "$i") in cifs|nfs*|smb)
+            return 0
+       esac
+    done
+    return 1
+}
+
+# read config file
+
+FILE_LOCKING=auto
+if [ -f /etc/openoffice/soffice.sh ]; then
+    . /etc/openoffice/soffice.sh
+fi
+
+# sanity checks
+
+case "$FILE_LOCKING" in
+    auto|yes|no) ;;
+    *)
+        echo >&2 "unknown value '$FILE_LOCKING' for FILE_LOCKING parameter."
+       FILE_LOCKING=auto
+       echo >&2 "FILE_LOCKING reset to '$FILE_LOCKING'"
+esac
 
 # resolve installation directory
 sd_cwd=`pwd`
@@ -102,6 +138,48 @@ if [ -x "$sd_prog/../basis-link/ure-link/bin/javaldx" ] ; then
 fi
 
 unset XENVIRONMENT
+
+# adjust environment
+
+if [ -z "$SAL_ENABLE_FILE_LOCKING" ]; then
+    case "$FILE_LOCKING" in
+       auto)
+        home_on_nfs "$@"
+        if [ $? = 0 ]; then
+           STAR_PROFILE_LOCKING_DISABLED=1
+           export STAR_PROFILE_LOCKING_DISABLED
+       fi
+        if [ "$isshared" = "1" ]; then
+            file_on_nfs "/var/spool/openoffice/uno_packages"
+            if [ $? = 0 ]; then
+                SAL_ENABLE_FILE_LOCKING=0
+                export SAL_ENABLE_FILE_LOCKING
+             # for safety
+                STAR_ENABLE_FILE_LOCKING=0
+             export STAR_ENABLE_FILE_LOCKING
+                STAR_PROFILE_LOCKING_DISABLED=1
+                export STAR_PROFILE_LOCKING_DISABLED
+            else
+                 # file locking now enabled by default
+                SAL_ENABLE_FILE_LOCKING=1
+                export SAL_ENABLE_FILE_LOCKING
+            fi
+        fi
+        ;;
+       yes)
+       SAL_ENABLE_FILE_LOCKING=1
+       export SAL_ENABLE_FILE_LOCKING
+        ;;
+       no)
+       SAL_ENABLE_FILE_LOCKING=0
+       export SAL_ENABLE_FILE_LOCKING
+    # for safety
+       STAR_ENABLE_FILE_LOCKING=0
+    export STAR_ENABLE_FILE_LOCKING
+       STAR_PROFILE_LOCKING_DISABLED=1
+       export STAR_PROFILE_LOCKING_DISABLED
+    esac
+fi
 
 # uncomment line below to disable anti aliasing of fonts
 # SAL_ANTIALIAS_DISABLE=true; export SAL_ANTIALIAS_DISABLE
