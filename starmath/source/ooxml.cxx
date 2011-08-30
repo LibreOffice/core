@@ -125,9 +125,8 @@ void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
         case NROOT:
             HandleRoot( static_cast< const SmRootNode* >( pNode ), nLevel );
             break;
-#if 0
         case NSPECIAL:
-            {
+        {
             const SmTextNode* pText= static_cast< const SmTextNode* >( pNode );
             //if the token str and the result text are the same then this
             //is to be seen as text, else assume its a mathchar
@@ -135,9 +134,8 @@ void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
                 HandleText(pText,nLevel);
             else
                 HandleMath(pText,nLevel);
-            }
             break;
-#endif
+        }
         case NMATH:
             HandleMath(pNode,nLevel);
             break;
