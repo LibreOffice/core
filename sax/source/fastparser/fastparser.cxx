@@ -479,19 +479,19 @@ void FastSaxParser::parseStream( const InputSource& maStructSource) throw (SAXEx
             entity.mxDocumentHandler->endDocument();
         }
     }
-    catch( SAXException & )
+    catch (const SAXException&)
     {
         popEntity();
         XML_ParserFree( entity.mpParser );
           throw;
     }
-    catch( IOException & )
+    catch (const IOException&)
     {
         popEntity();
         XML_ParserFree( entity.mpParser );
         throw;
     }
-    catch( RuntimeException & )
+    catch (const RuntimeException&)
     {
         popEntity();
         XML_ParserFree( entity.mpParser );
@@ -531,9 +531,8 @@ OUString SAL_CALL FastSaxParser::getNamespaceURL( const OUString& rPrefix ) thro
     {
         return GetNamespaceURL( OUStringToOString( rPrefix, RTL_TEXTENCODING_UTF8 ) );
     }
-    catch(Exception)
+    catch (const Exception&)
     {
-        ;
     }
     throw IllegalArgumentException();
 }
@@ -842,7 +841,7 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
             }
         }
     }
-    catch( Exception& e )
+    catch (const Exception& e)
     {
         rEntity.maSavedException <<= e;
     }
@@ -864,7 +863,7 @@ void FastSaxParser::callbackEndElement( const XML_Char* )
             else
                 xContext->endUnknownElement( pContext->maNamespace, pContext->maElementName );
         }
-        catch( Exception& e )
+        catch (const Exception& e)
         {
             rEntity.maSavedException <<= e;
         }
@@ -882,7 +881,7 @@ void FastSaxParser::callbackCharacters( const XML_Char* s, int nLen )
     {
         xContext->characters( OUString( s, nLen, RTL_TEXTENCODING_UTF8 ) );
     }
-    catch( Exception& e )
+    catch (const Exception& e)
     {
         rEntity.maSavedException <<= e;
     }
@@ -903,12 +902,12 @@ int FastSaxParser::callbackExternalEntityRef( XML_Parser parser,
             OUString( publicId, strlen( publicId ), RTL_TEXTENCODING_UTF8 ) ,
             OUString( systemId, strlen( systemId ), RTL_TEXTENCODING_UTF8 ) );
     }
-    catch( SAXParseException & e )
+    catch (const SAXParseException & e)
     {
         rCurrEntity.maSavedException <<= e;
         bOK = false;
     }
-    catch( SAXException & e )
+    catch (const SAXException& e)
     {
         rCurrEntity.maSavedException <<= SAXParseException(
             e.Message, e.Context, e.WrappedException,
@@ -933,19 +932,19 @@ int FastSaxParser::callbackExternalEntityRef( XML_Parser parser,
         {
             parse();
         }
-        catch( SAXParseException & e )
+        catch (const SAXParseException& e)
         {
             rCurrEntity.maSavedException <<= e;
             bOK = false;
         }
-        catch( IOException &e )
+        catch (const IOException& e)
         {
             SAXException aEx;
             aEx.WrappedException <<= e;
             rCurrEntity.maSavedException <<= aEx;
             bOK = false;
         }
-        catch( RuntimeException &e )
+        catch (const RuntimeException& e)
         {
             SAXException aEx;
             aEx.WrappedException <<= e;
