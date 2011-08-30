@@ -67,7 +67,7 @@ endif
 clean:
 	. ./Env.Host.sh && \
 	rm -rf */$$INPATH && \
-	rm -rf solver/*/$$INPATH && \
+	rm -rf solver/$$INPATH && \
 	rm -rf workdir && \
 	rm -rf install
 ifeq (@BUILD_DMAKE@,YES)
@@ -78,7 +78,7 @@ endif
 ifeq (@CROSS_COMPILING@,YES)
 	. ./Env.Host.sh && \
 	rm -rf */$$INPATH_FOR_BUILD && \
-	rm -rf solver/*/$$INPATH_FOR_BUILD
+	rm -rf solver/$$INPATH_FOR_BUILD
 endif
 
 dmake/dmake@EXEEXT_FOR_BUILD@:
