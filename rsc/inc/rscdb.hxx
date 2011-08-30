@@ -42,7 +42,6 @@
 #include <map>
 
 class RscError;
-class REResourceList;
 class RscTupel;
 class RscCont;
 class RscCmdLine;
