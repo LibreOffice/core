@@ -90,7 +90,6 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
         aFtDbArea       ( this, ScResId( FT_DBAREA ) ),
         aStrUndefined   ( ResId::toString(ScResId(SCSTR_UNDEFINED)) ),
         aStrNoName      ( ScGlobal::GetRscString(STR_DB_NONAME) ),
-        aStrNone        ( ResId::toString(ScResId(SCSTR_NONE)) ),
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
