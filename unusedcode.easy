@@ -144,14 +144,12 @@ EditView::Drop(DropEvent const&)
 EditView::GetDropPos()
 EditView::GetSelectionMode() const
 EditView::GetWordUnderMousePointer() const
-EditView::IndentBlock()
 EditView::IsPasteEnabled() const
 EditView::MatchGroup()
 EditView::QueryDrop(DropEvent&)
 EditView::SetCursor(Cursor const&)
 EditView::SetParaAttribs(SfxItemSet const&, unsigned short)
 EditView::SetPointer(Pointer const&)
-EditView::UnindentBlock()
 ElementCollector::isAbleToNotify() const
 ElementCollector::setSecurityId(int)
 EnhWMFReader::ReadGDIComment()
@@ -422,8 +420,6 @@ PopupMenu::SetSelectedEntry(unsigned short)
 PropBrwMgr::GetChildWindowId()
 ProposalList::Remove(rtl::OUString const&)
 PushButton::GetSymbolAlign() const
-REResourceList::REResourceList()
-REResourceList::~REResourceList()
 ResData::Dump()
 Ruler::GetArrowCount() const
 Ruler::GetArrows() const
@@ -660,12 +656,9 @@ SdrDragView::SetRubberEdgeDragging(unsigned char)
 SdrDragView::SetRubberEdgeDraggingLimit(unsigned short)
 SdrEditView::MoveLayer(String const&, unsigned short)
 SdrEngineDefaults::LanguageHasChanged()
-SdrExchangeView::CutMarked(unsigned long)
 SdrExchangeView::GetPastePos(SdrObjList*, OutputDevice*)
-SdrExchangeView::IsExchangeFormatSupported(unsigned long) const
 SdrExchangeView::Paste(Bitmap const&, Point const&, SdrObjList*, unsigned int)
 SdrExchangeView::Paste(GDIMetaFile const&, Point const&, SdrObjList*, unsigned int)
-SdrExchangeView::YankMarked(unsigned long)
 SdrGlobalData::GetCharClass()
 SdrGlobalData::~SdrGlobalData()
 SdrGluePoint::Draw(OutputDevice&, SdrObject const*) const
@@ -2375,7 +2368,6 @@ dbtools::StatementComposer::getDisposeComposer() const
 dbtools::getComposedRowSetStatement(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, unsigned char, unsigned char)
 dbtools::getConnection(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 dbtools::throwFunctionNotSupportedException(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, com::sun::star::uno::Any const&)
-desktop::CommandLineArgs::IsEmptyOrAcceptOnly() const
 desktop::Lockfile::clean()
 dlgprov::DialogProviderImpl::createControlModel()
 dp_info::singleton_entries(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&)
