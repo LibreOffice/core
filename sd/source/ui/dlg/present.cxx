@@ -255,10 +255,12 @@ void SdStartPresentationDlg::InitMonitorSettings()
             }
 
             if (nSelectedIndex < 0)
+            {
                 if (nDefaultSelectedDisplay < 0)
                     nSelectedIndex = 0;
                 else
                     nSelectedIndex = nDefaultDisplayIndex;
+            }
 
             maLBMonitor.SelectEntryPos((sal_uInt16)nSelectedIndex);
         }
