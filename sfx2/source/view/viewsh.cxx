@@ -424,7 +424,7 @@ enum ETypeFamily
 
         return sType;
     }
-    catch (const css::uno::RuntimeException& exRun)
+    catch (const css::uno::RuntimeException&)
     {
         throw;
     }
