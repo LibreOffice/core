@@ -166,18 +166,17 @@ void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
         case NALIGN:
             HandleMAlign(pNode,nLevel);
             break;
+#endif
         case NPLACE:
             // explicitly do nothing, MSOffice treats that as a placeholder if item is missing
             break;
         case NBLANK:
-            *pS << sal_uInt8(CHAR);
-            *pS << sal_uInt8(0x98);
-            if (pNode->GetToken().eType == TSBLANK)
-                *pS << sal_uInt16(0xEB04);
-            else
-                *pS << sal_uInt16(0xEB05);
+            m_pSerializer->startElementNS( XML_m, XML_r, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_t, FSNS( XML_xml, XML_space ), "preserve", FSEND );
+            m_pSerializer->write( " " );
+            m_pSerializer->endElementNS( XML_m, XML_t );
+            m_pSerializer->endElementNS( XML_m, XML_r );
             break;
-#endif
         default:
             HandleAllSubNodes( pNode, nLevel );
             break;
@@ -252,7 +251,7 @@ void SmOoxml::HandleText( const SmNode* pNode, int /*nLevel*/)
             FSNS( XML_w, XML_hAnsi ), "Cambria Math", FSEND );
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }
-    m_pSerializer->startElementNS( XML_m, XML_t, FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_t, FSNS( XML_xml, XML_space ), "preserve", FSEND );
     SmTextNode* pTemp=(SmTextNode* )pNode;
 //    fprintf(stderr, "T %s\n", rtl::OUStringToOString( pTemp->GetText(), RTL_TEXTENCODING_UTF8 ).getStr());
     for(xub_StrLen i=0;i<pTemp->GetText().Len();i++)
