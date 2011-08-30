@@ -3218,7 +3218,8 @@ using namespace std;
                 MINGW_SHARED_GCCLIB=YES
                 AC_MSG_RESULT([ $MINGW_GCCDLL])
             else
-                AC_MSG_ERROR([no])
+                MINGW_SHARED_GCCLIB=NO
+                AC_MSG_RESULT([no])
             fi
        ],
        [ AC_MSG_RESULT([no])
@@ -3240,7 +3241,8 @@ using namespace std;
                 MINGW_SHARED_GXXLIB=YES
                 AC_MSG_RESULT([$MINGW_GXXDLL])
             else
-                AC_MSG_ERROR([no])
+                MINGW_SHARED_GXXLIB=NO
+                AC_MSG_RESULT([no])
             fi
        ],
        [ AC_MSG_RESULT([no])
