@@ -255,6 +255,7 @@ sub scan_and_link_files($$$)
     opendir ($dirh_toplevel, $build_path) || die "Can't open '$build_path': $!";
     while (my $subdir = readdir ($dirh_toplevel)) {
 	$subdir =~ m/\./ && next; # eg. vcl.old,
+    	$subdir eq 'solver' && next; # skip solver dir itself
 	my $test = "$build_path/$subdir/$target";
 	-d $test || next;
 	push @modules, $test;
