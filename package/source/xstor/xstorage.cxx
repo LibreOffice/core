@@ -4499,13 +4499,7 @@ sal_Bool SAL_CALL OStorage::hasByName( const ::rtl::OUString& aName )
     catch ( uno::Exception& aException )
     {
            m_pImpl->AddLog( aException.Message );
-           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
-
-           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw lang::WrappedTargetRuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can not open storage!\n" ) ),
-                                            uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                uno::UNO_QUERY ),
-                                            aCaught );
+           m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Ignored...ok!?" ) ) );
     }
 
     return ( pElement != NULL );
