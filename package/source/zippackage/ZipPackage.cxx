@@ -1058,7 +1058,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Seq
         sal_Int32 nInd = 0;
         for ( vector < uno::Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
              aIter != aEnd;
-             aIter++, nInd++ )
+             ++aIter, ++nInd )
         {
             aManifestSequence[nInd] = ( *aIter );
         }

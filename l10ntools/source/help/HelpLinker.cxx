@@ -735,7 +735,7 @@ void HelpLinker::main( std::vector<std::string> &args,
     bExtensionMode = false;
     helpFiles.clear();
 
-    if (args.size() > 0 && args[0][0] == '@')
+    if ((!args.empty()) && args[0][0] == '@')
     {
         std::vector<std::string> stringList;
         std::string strBuf;

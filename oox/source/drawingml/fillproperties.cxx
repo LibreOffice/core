@@ -270,7 +270,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                             GradientFillProperties::GradientStopMap::const_iterator aIt = maGradientProps.maGradientStops.begin();
                             // Try to find the axial median
                             for(size_t i=0;i<nColorCount;i+=3)
-                                aIt++;
+                                ++aIt;
                             // API StartColor is inner color in axial gradient
                             // aIt->second.hasColor() kind would be better than Color != API_RGB_WHITE
                             if( aGradient.StartColor == aGradient.EndColor &&
