@@ -112,14 +112,14 @@ private:
     CheckBox        aBtnDestPers;
     FixedText       aFtDbAreaLabel;
     FixedInfo       aFtDbArea;
-    const String    aStrUndefined;
-    const String    aStrNoName;
-    const String    aStrNone;
+    const rtl::OUString aStrUndefined;
+    const rtl::OUString aStrNoName;
+    const rtl::OUString aStrNone;
 
-    const String    aStrEmpty;
-    const String    aStrNotEmpty;
-    const String    aStrRow;
-    const String    aStrColumn;
+    const rtl::OUString aStrEmpty;
+    const rtl::OUString aStrNotEmpty;
+    const rtl::OUString aStrRow;
+    const rtl::OUString aStrColumn;
 
     ScFilterOptionsMgr* pOptionsMgr;
 
@@ -169,8 +169,6 @@ private:
 #endif
 };
 
-
-//============================================================================
 class ScSpecialFilterDlg : public ScAnyRefDlg
 {
 public:
@@ -204,9 +202,9 @@ private:
     CheckBox        aBtnDestPers;
     FixedText       aFtDbAreaLabel;
     FixedInfo       aFtDbArea;
-    const String    aStrUndefined;
-    const String    aStrNoName;
-    const String    aStrNone;
+    const rtl::OUString aStrUndefined;
+    const rtl::OUString aStrNoName;
+    const rtl::OUString aStrNone;
 
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
