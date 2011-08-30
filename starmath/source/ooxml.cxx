@@ -104,11 +104,9 @@ void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
         case NTEXT:
             HandleText(pNode,nLevel);
             break;
-#if 0
         case NVERTICAL_BRACE:
-            HandleVerticalBrace(pNode,nLevel);
+            HandleVerticalBrace( static_cast< const SmVerticalBraceNode* >( pNode ), nLevel );
             break;
-#endif
         case NBRACE:
             HandleBrace( static_cast< const SmBraceNode* >( pNode ), nLevel );
             break;
@@ -596,6 +594,44 @@ void SmOoxml::HandleBrace( const SmBraceNode* pNode, int nLevel )
         m_pSerializer->endElementNS( XML_m, XML_e );
     }
     m_pSerializer->endElementNS( XML_m, XML_d );
+}
+
+void SmOoxml::HandleVerticalBrace( const SmVerticalBraceNode* pNode, int nLevel )
+{
+    fprintf( stderr, "VERT %d\n", pNode->GetToken().eType );
+    switch( pNode->GetToken().eType )
+    {
+        case TOVERBRACE:
+        case TUNDERBRACE:
+        {
+            bool top = ( pNode->GetToken().eType == TOVERBRACE );
+            m_pSerializer->startElementNS( XML_m, top ? XML_limUpp : XML_limLow, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_groupChr, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_groupChrPr, FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_chr,
+                FSNS( XML_m, XML_val ), mathSymbolToString( pNode->Brace()).getStr(), FSEND );
+            // TODO not sure if pos and vertJc are correct
+            m_pSerializer->singleElementNS( XML_m, XML_pos,
+                FSNS( XML_m, XML_val ), top ? "top" : "bot", FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_vertJc, FSNS( XML_m, XML_val ), top ? "bot" : "top", FSEND );
+            m_pSerializer->endElementNS( XML_m, XML_groupChrPr );
+            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            HandleNode( pNode->Body(), nLevel + 1 );
+            m_pSerializer->endElementNS( XML_m, XML_e );
+            m_pSerializer->endElementNS( XML_m, XML_groupChr );
+            m_pSerializer->endElementNS( XML_m, XML_e );
+            m_pSerializer->startElementNS( XML_m, XML_lim, FSEND );
+            HandleNode( pNode->Script(), nLevel + 1 );
+            m_pSerializer->endElementNS( XML_m, XML_lim );
+            m_pSerializer->endElementNS( XML_m, top ? XML_limUpp : XML_limLow );
+            break;
+        }
+        default:
+            OSL_FAIL( "Unhandled vertical brace" );
+            HandleAllSubNodes( pNode, nLevel );
+            break;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

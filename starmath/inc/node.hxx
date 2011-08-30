@@ -1064,6 +1064,13 @@ class SmVerticalBraceNode : public SmStructureNode
 public:
     inline SmVerticalBraceNode(const SmToken &rNodeToken);
 
+    SmNode* Body();
+    const SmNode* Body() const;
+    SmMathSymbolNode* Brace();
+    const SmMathSymbolNode* Brace() const;
+    SmNode* Script();
+    const SmNode* Script() const;
+
     virtual void    Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void Accept(SmVisitor* pVisitor);
 };
@@ -1370,6 +1377,34 @@ inline SmMathSymbolNode* SmBraceNode::ClosingBrace()
 inline const SmMathSymbolNode* SmBraceNode::ClosingBrace() const
 {
     return const_cast< SmBraceNode* >( this )->ClosingBrace();
+}
+
+inline SmNode* SmVerticalBraceNode::Body()
+{
+    OSL_ASSERT( GetNumSubNodes() > 0 );
+    return GetSubNode( 0 );
+}
+inline const SmNode* SmVerticalBraceNode::Body() const
+{
+    return const_cast< SmVerticalBraceNode* >( this )->Body();
+}
+inline SmMathSymbolNode* SmVerticalBraceNode::Brace()
+{
+    OSL_ASSERT( GetNumSubNodes() > 1 && GetSubNode( 1 )->GetType() == NMATH );
+    return static_cast< SmMathSymbolNode* >( GetSubNode( 1 ));
+}
+inline const SmMathSymbolNode* SmVerticalBraceNode::Brace() const
+{
+    return const_cast< SmVerticalBraceNode* >( this )->Brace();
+}
+inline SmNode* SmVerticalBraceNode::Script()
+{
+    OSL_ASSERT( GetNumSubNodes() > 2 );
+    return GetSubNode( 2 );
+}
+inline const SmNode* SmVerticalBraceNode::Script() const
+{
+    return const_cast< SmVerticalBraceNode* >( this )->Script();
 }
 
 #endif
