@@ -153,11 +153,9 @@ void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
             //Root Node, PILE equivalent, i.e. vertical stack
             HandleTable(pNode,nLevel);
             break;
-#if 0
         case NMATRIX:
-            HandleSmMatrix( static_cast< const SmMatrixNode* >( pNode ), nLevel );
+            HandleMatrix( static_cast< const SmMatrixNode* >( pNode ), nLevel );
             break;
-#endif
         case NLINE:
             {
 // TODO
@@ -532,7 +530,26 @@ void SmOoxml::HandleSubSupScriptInternal( const SmSubSupNode* pNode, int nLevel,
     else
     {
         OSL_FAIL( "Unhandled sub/sup combination" );
+        HandleAllSubNodes( pNode, nLevel );
     }
+}
+
+void SmOoxml::HandleMatrix( const SmMatrixNode* pNode, int nLevel )
+{
+    m_pSerializer->startElementNS( XML_m, XML_m, FSEND );
+    for( int row = 0; row < pNode->GetNumRows(); ++row )
+    {
+        m_pSerializer->startElementNS( XML_m, XML_mr, FSEND );
+        for( int col = 0; col < pNode->GetNumCols(); ++col )
+        {
+            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            if( const SmNode* node = pNode->GetSubNode( row * pNode->GetNumCols() + col ))
+                HandleNode( node, nLevel + 1 );
+            m_pSerializer->endElementNS( XML_m, XML_e );
+        }
+        m_pSerializer->endElementNS( XML_m, XML_mr );
+    }
+    m_pSerializer->endElementNS( XML_m, XML_m );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
