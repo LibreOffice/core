@@ -166,7 +166,7 @@ DEFAULTS_RUNTIMELIST=	\
 
 .IF "$(ENABLE_NSS_MODULE)"=="YES"
 #These headers come from the separate NSS module if enabled
-NSS_INCLUDE_LIST= nspr nss
+NSS_INCLUDE_LIST=
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
