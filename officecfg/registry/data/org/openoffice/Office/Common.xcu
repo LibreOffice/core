@@ -708,4 +708,6 @@
           "com.sun.star.configuration.backend.GconfBackend OpenGL_Faster"/>
     </prop>
   </node>
+  <!-- FIXME: This comment is needed to change a checksum or so.
+              Then the updated list of templates paths is read from Common.xcs-->
 </oor:component-data>
