@@ -2571,9 +2571,7 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
             for( pCustomSlide = pCustomShow->First(),nSlideIndex=0; pCustomSlide; pCustomSlide = pCustomShow->Next(), nSlideIndex++ )
             {
                 const sal_uInt16 nSdSlide = ( ( (SdPage*) pCustomSlide )->GetPageNum() - 1 ) / 2;
-
-                if( !( mpDoc->GetSdPage( nSdSlide, PK_STANDARD ) )->IsExcluded())
-                    mpSlideController->insertSlideNumber( nSdSlide );
+                mpSlideController->insertSlideNumber( nSdSlide );
             }
         }
     }
