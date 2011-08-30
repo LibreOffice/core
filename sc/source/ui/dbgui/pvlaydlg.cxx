@@ -1345,6 +1345,73 @@ void ScDPLayoutDlg::CalcWndSizes()
     aWndCol.CalcSize();
     aWndData.CalcSize();
     aWndSelect.CalcSize();
+
+    AdjustDlgSize();
+}
+
+namespace {
+
+class MoveWndDown : public std::unary_function<Window*, void>
+{
+    long mnDelta;
+public:
+    MoveWndDown(long nDelta) : mnDelta(nDelta) {}
+    void operator() (Window* p) const
+    {
+        Point aPos = p->GetPosPixel();
+        aPos.Y() += mnDelta;
+        p->SetPosPixel(aPos);
+    }
+};
+
+}
+
+void ScDPLayoutDlg::AdjustDlgSize()
+{
+    // On some platforms such as Windows XP, the dialog is not large enough to
+    // show the 'Drag the fields from the right...' text at the bottom. Check
+    // if it overlaps, and if it does, make the dialog size larger.
+    Size aWndSize = GetSizePixel();
+
+    Point aPosText = aFtInfo.GetPosPixel();
+    Size aSizeText = aFtInfo.GetSizePixel();
+    long nYRef = aWndData.GetPosPixel().Y() + aWndData.GetSizePixel().Height();
+    if (aPosText.Y() > nYRef)
+        // This text is visible. No need to adjust.
+        return;
+
+    // Calculate the extra height necessary.
+    long nBottomMargin = aWndSize.Height() - (aPosText.Y() + aSizeText.Height());
+    long nHeightNeeded = nYRef + TEXT_INFO_GAP + aSizeText.Height() + nBottomMargin;
+    long nDelta = nHeightNeeded - aWndSize.Height();
+    if (nDelta <= 0)
+        // This should never happen but just in case....
+        return;
+
+    // Make the main dialog taller.
+    aWndSize.Height() += nDelta;
+    SetSizePixel(aWndSize);
+
+    // Move the relevant controls downward.
+    std::vector<Window*> aWndToMove;
+    aWndToMove.reserve(16);
+    aWndToMove.push_back(&aFtInfo);
+    aWndToMove.push_back(&aBtnMore);
+    aWndToMove.push_back(&aFlAreas);
+    aWndToMove.push_back(&aFtInArea);
+    aWndToMove.push_back(&aEdInPos);
+    aWndToMove.push_back(&aRbInPos);
+    aWndToMove.push_back(&aFtOutArea);
+    aWndToMove.push_back(&aLbOutPos);
+    aWndToMove.push_back(&aEdOutPos);
+    aWndToMove.push_back(&aRbOutPos);
+    aWndToMove.push_back(&aBtnIgnEmptyRows);
+    aWndToMove.push_back(&aBtnDetectCat);
+    aWndToMove.push_back(&aBtnTotalCol);
+    aWndToMove.push_back(&aBtnTotalRow);
+    aWndToMove.push_back(&aBtnFilter);
+    aWndToMove.push_back(&aBtnDrillDown);
+    std::for_each(aWndToMove.begin(), aWndToMove.end(), MoveWndDown(nDelta));
 }
 
 namespace {
