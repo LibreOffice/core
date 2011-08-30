@@ -36,6 +36,7 @@ TARGETTYPE=CUI
 
 .INCLUDE : settings.mk
 .INCLUDE : helplinker.pmk
+CDEFS+= -O0
  
 .IF "$(SYSTEM_LIBXSLT)" == "YES"
 CFLAGS+= $(LIBXSLT_CFLAGS)
