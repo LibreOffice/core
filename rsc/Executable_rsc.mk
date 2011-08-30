@@ -59,7 +59,6 @@ $(eval $(call gb_Executable_add_grammars,rsc,\
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,rsc,\
-	rsc/source/misc/rscdbl \
 	rsc/source/misc/rsclst \
 	rsc/source/parser/erscerr \
 	rsc/source/parser/rscdb \
