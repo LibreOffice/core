@@ -28,6 +28,11 @@
 <!DOCTYPE oor:component-data SYSTEM "../../../component-update.dtd">
 <oor:component-data oor:name="VCL" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <node oor:name="Settings">
+    <node oor:name="Canvas" oor:op="replace">
+      <prop oor:name="PreferredServices" oor:type="xs:string" oor:op="replace">
+        <value>com.sun.star.rendering.VCLCanvas</value>
+      </prop>
+    </node>
     <node oor:name="Accessibility" oor:op="replace">
       <prop oor:name="EnableATToolSupport" oor:type="xs:string" oor:op="replace">
         <value>false</value>
