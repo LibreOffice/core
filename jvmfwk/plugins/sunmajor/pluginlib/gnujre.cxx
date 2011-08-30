@@ -33,6 +33,11 @@
 #include "osl/thread.h"
 #include "gnujre.hxx"
 #include "util.hxx"
+extern "C"
+{
+#include <sys/utsname.h>
+#include <string.h>
+}
 
 using namespace std;
 using namespace osl;
@@ -180,7 +185,18 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
         return false;
 
     if (!m_sJavaHome.getLength())
+#if defined (__linux__) && defined (__i386__)
+    {
+       struct utsname uts;
+       uname(&uts);
+       if(!strcmp("x86_64",uts.machine))
+               m_sJavaHome = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///usr/lib32"));
+       else
+               m_sJavaHome = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///usr/lib"));
+    }
+#else
         m_sJavaHome = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///usr/lib"));
+#endif
 
     // init m_sRuntimeLibrary
     OSL_ASSERT(m_sHome.getLength());
