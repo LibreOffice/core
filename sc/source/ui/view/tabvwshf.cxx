@@ -480,8 +480,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 sal_uInt16 nDoc = 0;
                 SCTAB nTab = pViewData->GetTabNo();
                 sal_Bool   bCpy = false;
-                String aDocName;
-                String aTabName;
+                rtl::OUString aDocName;
+                rtl::OUString aTabName;
 
                 if( pReqArgs != NULL )
                 {
@@ -500,7 +500,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     if( IS_AVAILABLE( FN_PARAM_2, &pItem ) )
                         bCpy = ((const SfxBoolItem*)pItem)->GetValue();
 
-                    if( aDocName.Len() )
+                    if (!aDocName.isEmpty())
                     {
                         SfxObjectShell* pSh     = SfxObjectShell::GetFirst();
                         ScDocShell*     pScSh   = NULL;
@@ -514,7 +514,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             {
                                 pScSh->GetTitle();
 
-                                if( pScSh->GetTitle() == aDocName )
+                                if (aDocName.equals(pScSh->GetTitle()))
                                 {
                                     nDoc = i;
                                     ScDocument* pDestDoc = pScSh->GetDocument();

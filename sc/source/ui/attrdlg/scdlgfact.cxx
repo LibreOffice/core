@@ -522,7 +522,7 @@ bool AbstractScMoveTableDlg_Impl::GetRenameTable() const
 {
     return pDlg->GetRenameTable();
 }
-void AbstractScMoveTableDlg_Impl::GetTabNameString( String& rString ) const
+void AbstractScMoveTableDlg_Impl::GetTabNameString( rtl::OUString& rString ) const
 {
     pDlg->GetTabNameString( rString );
 }

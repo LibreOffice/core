@@ -2451,7 +2451,8 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
 //----------------------------------------------------------------------------
 //  Move/Copy table to another document
 
-void ScViewFunc::MoveTable( sal_uInt16 nDestDocNo, SCTAB nDestTab, sal_Bool bCopy, const String* pNewTabName )
+void ScViewFunc::MoveTable(
+    sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy, const rtl::OUString* pNewTabName )
 {
     ScDocument* pDoc       = GetViewData()->GetDocument();
     ScDocShell* pDocShell  = GetViewData()->GetDocShell();
@@ -2459,7 +2460,7 @@ void ScViewFunc::MoveTable( sal_uInt16 nDestDocNo, SCTAB nDestTab, sal_Bool bCop
     ScDocShell* pDestShell = NULL;
     ScTabViewShell* pDestViewSh = NULL;
     sal_Bool bUndo (pDoc->IsUndoEnabled());
-    bool bRename = pNewTabName && pNewTabName->Len();
+    bool bRename = pNewTabName && !pNewTabName->isEmpty();
 
     sal_Bool bNewDoc = ( nDestDocNo == SC_DOC_NEW );
     if ( bNewDoc )

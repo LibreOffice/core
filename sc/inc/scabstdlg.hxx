@@ -215,7 +215,7 @@ public:
     virtual sal_uInt16  GetSelectedTable        () const = 0;
     virtual bool    GetCopyTable            () const = 0;
     virtual bool    GetRenameTable          () const = 0;
-    virtual void    GetTabNameString( String& rString ) const = 0;
+    virtual void    GetTabNameString( rtl::OUString& rString ) const = 0;
     virtual void    SetForceCopyTable       () = 0;
     virtual void    EnableCopyTable         (sal_Bool bFlag=true) = 0;
     virtual void    EnableRenameTable       (sal_Bool bFlag=true) = 0;
