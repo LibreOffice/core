@@ -54,21 +54,4 @@ REResourceList * InsertList( Atom nClassName, const RscId& rId,
     return pSubList;
 }
 
-void FillSubList( RSCINST & rInst, REResourceList * pList )
-{
-    sal_uInt32      nCount, i;
-    SUBINFO_STRUCT  aInfo;
-    REResourceList* pSubList;
-    RSCINST         aTmpI;
-
-    nCount = rInst.pClass->GetCount( rInst );
-    for( i = 0; i < nCount; i++ ){
-        aInfo = rInst.pClass->GetInfoEle( rInst, i );
-        aTmpI = rInst.pClass->GetPosEle( rInst, i );
-        pSubList = InsertList( aInfo.pClass->GetId(),
-                               aInfo.aId, pList );
-        FillSubList( aTmpI, pSubList );
-    };
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
