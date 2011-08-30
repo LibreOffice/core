@@ -77,12 +77,12 @@ enum SmScaleMode    { SCALE_NONE, SCALE_WIDTH, SCALE_HEIGHT };
 
 enum SmNodeType
 {
-    NTABLE,         NBRACE,         NBRACEBODY,     NOPER,          NALIGN,
-    NATTRIBUT,      NFONT,          NUNHOR,         NBINHOR,        NBINVER,
-    NBINDIAGONAL,   NSUBSUP,        NMATRIX,        NPLACE,         NTEXT,
-    NSPECIAL,       NGLYPH_SPECIAL, NMATH,          NBLANK,         NERROR,
-    NLINE,          NEXPRESSION,    NPOLYLINE,      NROOT,          NROOTSYMBOL,
-    NRECTANGLE,     NVERTICAL_BRACE
+/* 0*/ NTABLE,         NBRACE,         NBRACEBODY,     NOPER,          NALIGN,
+/* 5*/ NATTRIBUT,      NFONT,          NUNHOR,         NBINHOR,        NBINVER,
+/*10*/ NBINDIAGONAL,   NSUBSUP,        NMATRIX,        NPLACE,         NTEXT,
+/*15*/ NSPECIAL,       NGLYPH_SPECIAL, NMATH,          NBLANK,         NERROR,
+/*20*/ NLINE,          NEXPRESSION,    NPOLYLINE,      NROOT,          NROOTSYMBOL,
+/*25*/ NRECTANGLE,     NVERTICAL_BRACE
 };
 
 
