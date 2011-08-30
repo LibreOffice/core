@@ -95,14 +95,4 @@ void FillListObj( ObjNode * pObjNode, RscTop * pRscTop,
     };
 }
 
-void FillList( RscTop * pRscTop, REResourceList * pList, sal_uLong lFileKey ){
-    if( pRscTop ){
-        FillList( (RscTop*)pRscTop->Left(), pList, lFileKey );
-
-        FillListObj( pRscTop->GetObjNode(), pRscTop, pList, lFileKey );
-
-        FillList( (RscTop*)pRscTop->Right(), pList, lFileKey );
-    };
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
