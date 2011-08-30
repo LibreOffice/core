@@ -76,8 +76,16 @@ CC:=gcc $(EXTRA_CFLAGS)
 .ENDIF # "$(OS)"=="MACOSX"
 
 icu_CFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
+.IF "$(CPUNAME)" == "ARM" && "$(OS)" == "LINUX"
+icu_CFLAGS+=-Os
+.ENDIF
+icu_CFLAGS+=$(EXTRA_CDEFS)
 icu_LDFLAGS+=$(EXTRA_LINKFLAGS)
-icu_CXXFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
+icu_CXXFLAGS+=-O $(ARCH_FLAGS)
+.IF "$(CPUNAME)" == "ARM" && "$(OS)" == "LINUX"
+icu_CXXFLAGS+=-Os
+.ENDIF
+icu_CXXFLAGS+=$(EXTRA_CDEFS)
 
 # remove conversion and transliteration data to reduce binary size.
 CONFIGURE_ACTION=rm data/mappings/ucm*.mk data/translit/trn*.mk ;
