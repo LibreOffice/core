@@ -421,18 +421,23 @@ void SmOoxml::HandleRoot( const SmRootNode* pNode, int nLevel )
     m_pSerializer->endElementNS( XML_m, XML_rad );
 }
 
+static rtl::OString mathSymbolToString( const SmNode* node )
+{
+    OSL_ASSERT( node->GetType() == NMATH && static_cast< const SmTextNode* >( node )->GetText().Len() == 1 );
+    sal_Unicode chr = Convert( static_cast< const SmTextNode* >( node )->GetText().GetChar( 0 ));
+    return rtl::OUStringToOString( rtl::OUString( chr ), RTL_TEXTENCODING_UTF8 );
+}
+
 void SmOoxml::HandleOperator( const SmOperNode* pNode, int nLevel )
 {
     fprintf( stderr, "OPER %d\n", pNode->GetToken().eType );
     const SmSubSupNode* subsup = pNode->GetSubNode( 0 )->GetType() == NSUBSUP
         ? static_cast< const SmSubSupNode* >( pNode->GetSubNode( 0 )) : NULL;
     const SmNode* operation = subsup != NULL ? subsup->GetBody() : pNode->GetSubNode( 0 );
-    OSL_ASSERT( operation->GetType() == NMATH && static_cast< const SmTextNode* >( operation )->GetText().Len() == 1 );
-    sal_Unicode chr = Convert( static_cast< const SmTextNode* >( operation )->GetText().GetChar( 0 ));
     m_pSerializer->startElementNS( XML_m, XML_nary, FSEND );
     m_pSerializer->startElementNS( XML_m, XML_naryPr, FSEND );
-    rtl::OString chrValue = rtl::OUStringToOString( rtl::OUString( chr ), RTL_TEXTENCODING_UTF8 );
-    m_pSerializer->singleElementNS( XML_m, XML_char, FSNS( XML_m, XML_val ), chrValue.getStr(), FSEND );
+    m_pSerializer->singleElementNS( XML_m, XML_char,
+        FSNS( XML_m, XML_val ), mathSymbolToString( operation ).getStr(), FSEND );
     if( subsup == NULL || subsup->GetSubSup( CSUB ) == NULL )
         m_pSerializer->singleElementNS( XML_m, XML_subHide, FSNS( XML_m, XML_val ), "1", FSEND );
     if( subsup == NULL || subsup->GetSubSup( CSUP ) == NULL )
@@ -555,12 +560,8 @@ void SmOoxml::HandleBrace( const SmBraceNode* pNode, int nLevel )
 {
     m_pSerializer->startElementNS( XML_m, XML_d, FSEND );
     m_pSerializer->startElementNS( XML_m, XML_dPr, FSEND );
-    const SmMathSymbolNode* opening = pNode->OpeningBrace();
-    OSL_ASSERT( static_cast< const SmTextNode* >( opening )->GetText().Len() == 1 );
-    sal_Unicode chr = Convert( static_cast< const SmTextNode* >( opening )->GetText().GetChar( 0 ));
-    rtl::OString chrValue = rtl::OUStringToOString( rtl::OUString( chr ), RTL_TEXTENCODING_UTF8 );
-    m_pSerializer->singleElementNS( XML_m, XML_begChr, FSNS( XML_m, XML_val ), chrValue.getStr(), FSEND );
-
+    m_pSerializer->singleElementNS( XML_m, XML_begChr,
+        FSNS( XML_m, XML_val ), mathSymbolToString( pNode->OpeningBrace()).getStr(), FSEND );
     std::vector< const SmNode* > subnodes;
     if( pNode->Body()->GetType() == NBRACEBODY )
     {
@@ -574,10 +575,8 @@ void SmOoxml::HandleBrace( const SmBraceNode* pNode, int nLevel )
                 const SmMathSymbolNode* math = static_cast< const SmMathSymbolNode* >( subnode );
                 if( !separatorWritten )
                 {
-                    OSL_ASSERT( static_cast< const SmTextNode* >( math )->GetText().Len() == 1 );
-                    sal_Unicode chr3 = Convert( static_cast< const SmTextNode* >( math )->GetText().GetChar( 0 ));
-                    rtl::OString chrValue3 = rtl::OUStringToOString( rtl::OUString( chr3 ), RTL_TEXTENCODING_UTF8 );
-                    m_pSerializer->singleElementNS( XML_m, XML_sepChr, FSNS( XML_m, XML_val ), chrValue3.getStr(), FSEND );
+                    m_pSerializer->singleElementNS( XML_m, XML_sepChr,
+                        FSNS( XML_m, XML_val ), mathSymbolToString( math ).getStr(), FSEND );
                     separatorWritten = true;
                 }
             }
@@ -587,11 +586,8 @@ void SmOoxml::HandleBrace( const SmBraceNode* pNode, int nLevel )
     }
     else
         subnodes.push_back( pNode->Body());
-    const SmMathSymbolNode* closing = pNode->ClosingBrace();
-    OSL_ASSERT( static_cast< const SmTextNode* >( closing )->GetText().Len() == 1 );
-    sal_Unicode chr2 = Convert( static_cast< const SmTextNode* >( closing )->GetText().GetChar( 0 ));
-    rtl::OString chrValue2 = rtl::OUStringToOString( rtl::OUString( chr2 ), RTL_TEXTENCODING_UTF8 );
-    m_pSerializer->singleElementNS( XML_m, XML_endChr, FSNS( XML_m, XML_val ), chrValue2.getStr(), FSEND );
+    m_pSerializer->singleElementNS( XML_m, XML_endChr,
+        FSNS( XML_m, XML_val ), mathSymbolToString( pNode->ClosingBrace()).getStr(), FSEND );
     m_pSerializer->endElementNS( XML_m, XML_dPr );
     for( unsigned int i = 0; i < subnodes.size(); ++i )
     {
