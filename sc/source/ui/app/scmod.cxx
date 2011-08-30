@@ -658,13 +658,12 @@ void ScModule::ResetDragObject()
 {
     mpDragData->pCellTransfer = NULL;
     mpDragData->pDrawTransfer = NULL;
-
-    mpDragData->aLinkDoc.Erase();
-    mpDragData->aLinkTable.Erase();
-    mpDragData->aLinkArea.Erase();
     mpDragData->pJumpLocalDoc = NULL;
-    mpDragData->aJumpTarget.Erase();
-    mpDragData->aJumpText.Erase();
+    mpDragData->aLinkDoc = rtl::OUString();
+    mpDragData->aLinkTable = rtl::OUString();
+    mpDragData->aLinkArea = rtl::OUString();
+    mpDragData->aJumpTarget = rtl::OUString();
+    mpDragData->aJumpText = rtl::OUString();
 }
 
 const ScDragData& ScModule::GetDragData() const
@@ -679,16 +678,17 @@ void ScModule::SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawO
     mpDragData->pDrawTransfer = pDrawObj;
 }
 
-void ScModule::SetDragLink( const String& rDoc, const String& rTab, const String& rArea )
+void ScModule::SetDragLink(
+    const rtl::OUString& rDoc, const rtl::OUString& rTab, const rtl::OUString& rArea )
 {
     ResetDragObject();
-
     mpDragData->aLinkDoc   = rDoc;
     mpDragData->aLinkTable = rTab;
     mpDragData->aLinkArea  = rArea;
 }
 
-void ScModule::SetDragJump( ScDocument* pLocalDoc, const String& rTarget, const String& rText )
+void ScModule::SetDragJump(
+    ScDocument* pLocalDoc, const rtl::OUString& rTarget, const rtl::OUString& rText )
 {
     ResetDragObject();
 
