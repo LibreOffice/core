@@ -59,15 +59,6 @@ I18NUTIL_DLLPUBLIC inline rtl_uString * SAL_CALL x_rtl_uString_new_WithLength( s
     return newStr;
 }
 
-/**
- * Release <code>rtl_uString</code> regardless its reference count.
- */
-I18NUTIL_DLLPUBLIC inline void SAL_CALL x_rtl_uString_release( rtl_uString * value )
-{
-  rtl_freeMemory(value);
-}
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
