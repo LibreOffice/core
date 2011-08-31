@@ -6617,7 +6617,7 @@ bool WW8PLCF_HdFt::GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rSta
     aPLCF.SetIdx( nIdx );               // Lookup suitable CP
     aPLCF.Get( rStart, nEnd, pData );
     rLen = nEnd - rStart;
-    ++aPLCF;
+    aPLCF++;
 
     return true;
 }
