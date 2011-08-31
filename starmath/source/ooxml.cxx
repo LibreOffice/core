@@ -328,7 +328,7 @@ void SmOoxml::HandleFractions( const SmNode* pNode, int nLevel, const char* type
 void SmOoxml::HandleUnaryOperation( const SmUnHorNode* pNode, int nLevel )
 {
     // update HandleMath() when adding new items
-    fprintf(stderr,"UNARY %d\n", pNode->GetToken().eType );
+//    fprintf(stderr,"UNARY %d\n", pNode->GetToken().eType );
     switch( pNode->GetToken().eType )
     {
         default:
@@ -461,7 +461,7 @@ static rtl::OString mathSymbolToString( const SmNode* node )
 
 void SmOoxml::HandleOperator( const SmOperNode* pNode, int nLevel )
 {
-    fprintf( stderr, "OPER %d\n", pNode->GetToken().eType );
+//    fprintf( stderr, "OPER %d\n", pNode->GetToken().eType );
     switch( pNode->GetToken().eType )
     {
         case TINT:
@@ -671,7 +671,7 @@ void SmOoxml::HandleBrace( const SmBraceNode* pNode, int nLevel )
 
 void SmOoxml::HandleVerticalBrace( const SmVerticalBraceNode* pNode, int nLevel )
 {
-    fprintf( stderr, "VERT %d\n", pNode->GetToken().eType );
+//    fprintf( stderr, "VERT %d\n", pNode->GetToken().eType );
     switch( pNode->GetToken().eType )
     {
         case TOVERBRACE:
