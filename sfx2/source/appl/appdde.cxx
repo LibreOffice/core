@@ -70,7 +70,7 @@ String SfxDdeServiceName_Impl( const String& sIn )
     return sReturn;
 }
 
-
+#if defined( WNT )
 class ImplDdeService : public DdeService
 {
 public:
@@ -83,6 +83,97 @@ public:
 
     virtual sal_Bool SysTopicExecute( const String* pStr );
 };
+
+//--------------------------------------------------------------------
+
+sal_Bool ImplDdeService::MakeTopic( const String& rNm )
+{
+    // Workaround for Event after Main() under OS/2
+    // happens when exiting starts the App again
+    if ( !Application::IsInExecute() )
+        return sal_False;
+
+    // The Topic rNm is sought, do we have it?
+    // First only loop over the ObjectShells to find those
+    // with the specific name:
+    sal_Bool bRet = sal_False;
+    String sNm( rNm );
+    sNm.ToLowerAscii();
+    TypeId aType( TYPE(SfxObjectShell) );
+    SfxObjectShell* pShell = SfxObjectShell::GetFirst( &aType );
+    while( pShell )
+    {
+        String sTmp( pShell->GetTitle(SFX_TITLE_FULLNAME) );
+        sTmp.ToLowerAscii();
+        if( sTmp == sNm )
+        {
+            SFX_APP()->AddDdeTopic( pShell );
+            bRet = sal_True;
+            break;
+        }
+        pShell = SfxObjectShell::GetNext( *pShell, &aType );
+    }
+
+    if( !bRet )
+    {
+        INetURLObject aWorkPath( SvtPathOptions().GetWorkPath() );
+        INetURLObject aFile;
+        if ( aWorkPath.GetNewAbsURL( rNm, &aFile ) &&
+             SfxContentHelper::IsDocument( aFile.GetMainURL( INetURLObject::NO_DECODE ) ) )
+        {
+            // File exists? then try to load it:
+            SfxStringItem aName( SID_FILE_NAME, aFile.GetMainURL( INetURLObject::NO_DECODE ) );
+            SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, sal_True);
+
+            SfxBoolItem aSilent(SID_SILENT, sal_True);
+            SfxDispatcher* pDispatcher = SFX_APP()->GetDispatcher_Impl();
+            const SfxPoolItem* pRet = pDispatcher->Execute( SID_OPENDOC,
+                    SFX_CALLMODE_SYNCHRON,
+                    &aName, &aNewView,
+                    &aSilent, 0L );
+
+            if( pRet && pRet->ISA( SfxViewFrameItem ) &&
+                ((SfxViewFrameItem*)pRet)->GetFrame() &&
+                0 != ( pShell = ((SfxViewFrameItem*)pRet)
+                    ->GetFrame()->GetObjectShell() ) )
+            {
+                SFX_APP()->AddDdeTopic( pShell );
+                bRet = sal_True;
+            }
+        }
+    }
+    return bRet;
+}
+
+String ImplDdeService::Topics()
+{
+    String sRet;
+    if( GetSysTopic() )
+        sRet += GetSysTopic()->GetName();
+
+    TypeId aType( TYPE(SfxObjectShell) );
+    SfxObjectShell* pShell = SfxObjectShell::GetFirst( &aType );
+    while( pShell )
+    {
+        if( SfxViewFrame::GetFirst( pShell ) )
+        {
+            if( sRet.Len() )
+                sRet += '\t';
+            sRet += pShell->GetTitle(SFX_TITLE_FULLNAME);
+        }
+        pShell = SfxObjectShell::GetNext( *pShell, &aType );
+    }
+    if( sRet.Len() )
+        sRet += DEFINE_CONST_UNICODE("\r\n");
+    return sRet;
+}
+
+sal_Bool ImplDdeService::SysTopicExecute( const String* pStr )
+{
+    return (sal_Bool)SFX_APP()->DdeExecute( *pStr );
+}
+
+#endif
 
 class SfxDdeTriggerTopic_Impl : public DdeTopic
 {
@@ -486,95 +577,6 @@ const DdeService* SfxApplication::GetDdeService() const
 DdeService* SfxApplication::GetDdeService()
 {
     return pAppData_Impl->pDdeService;
-}
-
-//--------------------------------------------------------------------
-
-sal_Bool ImplDdeService::MakeTopic( const String& rNm )
-{
-    // Workaround for Event after Main() under OS/2
-    // happens when exiting starts the App again
-    if ( !Application::IsInExecute() )
-        return sal_False;
-
-    // The Topic rNm is sought, do we have it?
-    // First only loop over the ObjectShells to find those
-    // with the specific name:
-    sal_Bool bRet = sal_False;
-    String sNm( rNm );
-    sNm.ToLowerAscii();
-    TypeId aType( TYPE(SfxObjectShell) );
-    SfxObjectShell* pShell = SfxObjectShell::GetFirst( &aType );
-    while( pShell )
-    {
-        String sTmp( pShell->GetTitle(SFX_TITLE_FULLNAME) );
-        sTmp.ToLowerAscii();
-        if( sTmp == sNm )
-        {
-            SFX_APP()->AddDdeTopic( pShell );
-            bRet = sal_True;
-            break;
-        }
-        pShell = SfxObjectShell::GetNext( *pShell, &aType );
-    }
-
-    if( !bRet )
-    {
-        INetURLObject aWorkPath( SvtPathOptions().GetWorkPath() );
-        INetURLObject aFile;
-        if ( aWorkPath.GetNewAbsURL( rNm, &aFile ) &&
-             SfxContentHelper::IsDocument( aFile.GetMainURL( INetURLObject::NO_DECODE ) ) )
-        {
-            // File exists? then try to load it:
-            SfxStringItem aName( SID_FILE_NAME, aFile.GetMainURL( INetURLObject::NO_DECODE ) );
-            SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, sal_True);
-
-            SfxBoolItem aSilent(SID_SILENT, sal_True);
-            SfxDispatcher* pDispatcher = SFX_APP()->GetDispatcher_Impl();
-            const SfxPoolItem* pRet = pDispatcher->Execute( SID_OPENDOC,
-                    SFX_CALLMODE_SYNCHRON,
-                    &aName, &aNewView,
-                    &aSilent, 0L );
-
-            if( pRet && pRet->ISA( SfxViewFrameItem ) &&
-                ((SfxViewFrameItem*)pRet)->GetFrame() &&
-                0 != ( pShell = ((SfxViewFrameItem*)pRet)
-                    ->GetFrame()->GetObjectShell() ) )
-            {
-                SFX_APP()->AddDdeTopic( pShell );
-                bRet = sal_True;
-            }
-        }
-    }
-    return bRet;
-}
-
-String ImplDdeService::Topics()
-{
-    String sRet;
-    if( GetSysTopic() )
-        sRet += GetSysTopic()->GetName();
-
-    TypeId aType( TYPE(SfxObjectShell) );
-    SfxObjectShell* pShell = SfxObjectShell::GetFirst( &aType );
-    while( pShell )
-    {
-        if( SfxViewFrame::GetFirst( pShell ) )
-        {
-            if( sRet.Len() )
-                sRet += '\t';
-            sRet += pShell->GetTitle(SFX_TITLE_FULLNAME);
-        }
-        pShell = SfxObjectShell::GetNext( *pShell, &aType );
-    }
-    if( sRet.Len() )
-        sRet += DEFINE_CONST_UNICODE("\r\n");
-    return sRet;
-}
-
-sal_Bool ImplDdeService::SysTopicExecute( const String* pStr )
-{
-    return (sal_Bool)SFX_APP()->DdeExecute( *pStr );
 }
 
 //--------------------------------------------------------------------
