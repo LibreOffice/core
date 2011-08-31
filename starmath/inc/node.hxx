@@ -750,11 +750,6 @@ public:
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void Accept(SmVisitor* pVisitor);
-
-    SmMathSymbolNode* Symbol();
-    const SmMathSymbolNode* Symbol() const;
-    SmNode* Operand();
-    const SmNode* Operand() const;
 };
 
 
@@ -1283,25 +1278,6 @@ inline SmNode* SmRootNode::Body()
 inline const SmNode* SmRootNode::Body() const
 {
     return const_cast< SmRootNode* >( this )->Body();
-}
-
-inline SmMathSymbolNode* SmUnHorNode::Symbol()
-{
-    OSL_ASSERT( GetNumSubNodes() > 0 && GetSubNode( 0 )->GetType() == NMATH );
-    return static_cast< SmMathSymbolNode* >( GetSubNode( 0 ));
-}
-inline const SmMathSymbolNode* SmUnHorNode::Symbol() const
-{
-    return const_cast< SmUnHorNode* >( this )->Symbol();
-}
-inline SmNode* SmUnHorNode::Operand()
-{
-    OSL_ASSERT( GetNumSubNodes() > 1 );
-    return GetSubNode( 1 );
-}
-inline const SmNode* SmUnHorNode::Operand() const
-{
-    return const_cast< SmUnHorNode* >( this )->Operand();
 }
 
 inline SmMathSymbolNode* SmBinHorNode::Symbol()

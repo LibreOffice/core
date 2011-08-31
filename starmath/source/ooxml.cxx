@@ -328,8 +328,8 @@ void SmOoxml::HandleFractions( const SmNode* pNode, int nLevel, const char* type
 void SmOoxml::HandleUnaryOperation( const SmUnHorNode* pNode, int nLevel )
 {
     // update HandleMath() when adding new items
-//    fprintf(stderr,"UNARY %d\n", pNode->Symbol()->GetToken().eType );
-    switch( pNode->Symbol()->GetToken().eType )
+    fprintf(stderr,"UNARY %d\n", pNode->GetToken().eType );
+    switch( pNode->GetToken().eType )
     {
         default:
             HandleAllSubNodes( pNode, nLevel );
