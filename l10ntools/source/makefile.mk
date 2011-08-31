@@ -79,6 +79,7 @@ APP1STDLIBS+= \
             $(TOOLSLIB) \
             $(COMPHELPERLIB) \
             $(SALLIB)
+
 APP1LIBS+=	$(LB)$/$(TARGET).lib
 APP1DEPN=   $(OBJ)$/src_yy_wrapper.obj $(LB)$/$(TARGET).lib
 
@@ -90,14 +91,12 @@ APP2STDLIBS+= \
             $(TOOLSLIB) \
             $(COMPHELPERLIB) \
             $(SALLIB)
-            $(COMPHELPERLIB)
 
 # extractor and merger for *.lng and *.lng
 APP3TARGET= ulfex
 APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/lngex.obj
 APP3RPATH=  NONE
 APP3STDLIBS+= \
-            $(COMPHELPERLIB) \
             $(TOOLSLIB) \
             $(COMPHELPERLIB) \
             $(SALLIB)
@@ -114,7 +113,6 @@ APP5STDLIBS+= \
 APP6TARGET= cfgex
 APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy_wrapper.obj  $(OBJ)$/merge.obj $(OBJ)$/export2.obj
 APP6STDLIBS+= \
-            $(COMPHELPERLIB) \
             $(TOOLSLIB) \
             $(COMPHELPERLIB) \
             $(SALLIB)
@@ -124,7 +122,6 @@ APP7TARGET= xrmex
 APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy_wrapper.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj
 APP7RPATH=  NONE
 APP7STDLIBS+= \
-            $(COMPHELPERLIB) \
             $(TOOLSLIB) \
             $(COMPHELPERLIB) \
             $(SALLIB)
@@ -136,7 +133,6 @@ EXCEPTIONSFILES=                            \
 APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj $(OBJ)$/file.obj $(OBJ)$/directory.obj
 
 APP9STDLIBS+= \
-            $(COMPHELPERLIB) \
             $(TOOLSLIB) \
             $(COMPHELPERLIB) \
             $(ICUINLIB) \
