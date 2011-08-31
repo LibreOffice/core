@@ -68,94 +68,26 @@ using namespace i18n::ScriptType;
 #include <unicode/ubidi.h>
 #include <i18nutil/unicode.hxx>  //unicode::getUnicodeScriptType
 
-sal_Bool isAlefChar ( xub_Unicode cCh )
-{
-   return ( cCh == 0x622 || cCh == 0x623 || cCh == 0x625 || cCh == 0x627 ||
-           cCh == 0x622 || cCh == 0x671 || cCh == 0x672 || cCh == 0x673 || cCh == 0x675 );
-}
+#define IS_JOINING_GROUP(c, g) ( u_getIntPropertyValue( (c), UCHAR_JOINING_GROUP ) == U_JG_##g )
+#define isAinChar(c)        IS_JOINING_GROUP((c), AIN)
+#define isAlefChar(c)       IS_JOINING_GROUP((c), ALEF)
+#define isBaaChar(c)        IS_JOINING_GROUP((c), BEH)
+#define isDalChar(c)        IS_JOINING_GROUP((c), DAL)
+#define isFehChar(c)        IS_JOINING_GROUP((c), FEH)
+#define isGafChar(c)        IS_JOINING_GROUP((c), GAF)
+#define isHahChar(c)        IS_JOINING_GROUP((c), HAH)
+#define isKafChar(c)        IS_JOINING_GROUP((c), KAF)
+#define isLamChar(c)        IS_JOINING_GROUP((c), LAM)
+#define isQafChar(c)        IS_JOINING_GROUP((c), QAF)
+#define isRehChar(c)        IS_JOINING_GROUP((c), REH)
+#define isTehMarbutaChar(c) IS_JOINING_GROUP((c), TEH_MARBUTA)
+#define isWawChar(c)        IS_JOINING_GROUP((c), WAW)
+#define isYehChar(c)        (IS_JOINING_GROUP((c), YEH) || IS_JOINING_GROUP((c), FARSI_YEH))
+#define isSeenOrSadChar(c)  (IS_JOINING_GROUP((c), SAD) || IS_JOINING_GROUP((c), SEEN))
 
-sal_Bool isWawChar ( xub_Unicode cCh )
-{
-   return ( cCh == 0x624 || cCh == 0x648 || cCh == 0x676 || cCh == 0x677 ||
-           ( cCh >= 0x6C4 &&  cCh <= 0x6CB ) || cCh == 0x6CF );
-}
-
-sal_Bool isDalChar ( xub_Unicode cCh )
-{
-   return ( cCh == 0x62F || cCh == 0x630 || cCh == 0x688 || cCh == 0x689 || cCh == 0x690 );
-}
-
-sal_Bool isRehChar ( xub_Unicode cCh )
-{
-   return ( cCh == 0x631 || cCh == 0x632 || ( cCh >= 0x691 && cCh <= 0x699 ));
-}
-
-sal_Bool isTehMarbutaChar ( xub_Unicode cCh )
-{
-   return ( cCh == 0x629 || cCh == 0x6C0 );
-}
-
-sal_Bool isBaaChar ( xub_Unicode cCh )
-{
-   return ( cCh == 0x628 || cCh == 0x62A || cCh == 0x62B || cCh == 0x679 || cCh == 0x680 );
-}
-
-sal_Bool isYehChar ( xub_Unicode cCh )
-{
-   return ( cCh == 0x626 || cCh == 0x649 || cCh == 0x64A || cCh == 0x678 || cCh == 0x6CC ||
-       cCh == 0x6CE || cCh == 0x6D0 || cCh == 0x6D1 );
-}
-
-sal_Bool isSeenOrSadChar ( xub_Unicode cCh )
-{
-   return ( ( cCh >= 0x633 && cCh <= 0x636 ) || ( cCh >= 0x69A && cCh <= 0x69E )
-           || cCh == 0x6FA || cCh == 0x6FB );
-}
-
-sal_Bool isHahChar ( xub_Unicode cCh )
-{
-   return ( ( cCh >= 0x62C && cCh <= 0x62E ) || ( cCh >= 0x681 && cCh <= 0x687 )
-           || cCh == 0x6BF );
-}
-
-sal_Bool isAinChar ( xub_Unicode cCh )
-{
-   return ( cCh == 0x639 || cCh == 0x63A || cCh == 0x6A0 || cCh == 0x6FC );
-}
-
-sal_Bool isKafChar ( xub_Unicode cCh )
-{
-   return ( cCh == 0x643 || ( cCh >= 0x6AC && cCh <= 0x6AE ) );
-}
-
-sal_Bool isLamChar ( xub_Unicode cCh )
-{
-   return ( cCh == 0x644 || ( cCh >= 0x6B5 && cCh <= 0x6B8 ) );
-}
-
-sal_Bool isGafChar ( xub_Unicode cCh )
-{
-   return ( cCh == 0x6A9 || cCh == 0x6AB ||( cCh >= 0x6AF && cCh <= 0x6B4 ) );
-}
-
-sal_Bool isQafChar ( xub_Unicode cCh )
-{
-   return ( cCh == 0x642 || cCh == 0x6A7 || cCh == 0x6A8  );
-}
-
-sal_Bool isFeChar ( xub_Unicode cCh )
-{
-   return ( cCh == 0x641 || ( cCh >= 0x6A1 && cCh <= 0x6A6 ) );
-}
 sal_Bool isTransparentChar ( xub_Unicode cCh )
 {
-    return ( ( cCh >= 0x610 && cCh <= 0x61A ) ||
-            ( cCh >= 0x64B && cCh <= 0x65E ) ||
-            ( cCh == 0x670 ) ||
-            ( cCh >= 0x6D6 && cCh <= 0x6DC ) ||
-            ( cCh >= 0x6DF && cCh <= 0x6E4 ) ||
-            ( cCh >= 0x6E7 && cCh <= 0x6E8 ) ||
-            ( cCh >= 0x6EA && cCh <= 0x6ED ));
+    return u_getIntPropertyValue( cCh, UCHAR_JOINING_TYPE ) == U_JT_TRANSPARENT;
 }
 
 /*************************************************************************
@@ -178,28 +110,13 @@ sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh )
 
 sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )
 {
-    // Alef, Dal, Thal, Reh, Zain, and Waw do not connect to the left
-    // Uh, there seem to be some more characters that are not connectable
-    // to the left. So we look for the characters that are actually connectable
-    // to the left. Here is the complete list of WH:
-
-    // (hennerdrewes):
-    // added lam forms 0x06B5..0x06B8
-    // added 0x6FA..0x6FC, according to unicode documentation, although not present in my fonts
-    // added heh goal 0x6C1
-    sal_Bool bRet = 0x628 == cPrevCh ||
-                    ( 0x62A <= cPrevCh && cPrevCh <= 0x62E ) ||
-                  ( 0x633 <= cPrevCh && cPrevCh <= 0x647 ) ||
-                      0x649 == cPrevCh || // Alef Maksura does connect !!!
-                      0x64A == cPrevCh ||
-                    ( 0x678 <= cPrevCh && cPrevCh <= 0x687 ) ||
-                  ( 0x69A <= cPrevCh && cPrevCh <= 0x6C1 ) ||
-                  ( 0x6C3 <= cPrevCh && cPrevCh <= 0x6D3 ) ||
-                  ( 0x6FA <= cPrevCh && cPrevCh <= 0x6FC )  ;
+    const int32_t nJoiningType = u_getIntPropertyValue( cPrevCh, UCHAR_JOINING_TYPE );
+    sal_Bool bRet = nJoiningType != U_JT_RIGHT_JOINING && nJoiningType != U_JT_NON_JOINING;
 
     // check for ligatures cPrevChar + cChar
     if( bRet )
         bRet = !lcl_IsLigature( cPrevCh, cCh );
+
     return bRet;
 }
 
@@ -1208,7 +1125,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                                                     // final form may appear in the middle of word
                              (( isAinChar ( cCh ) ||  // Ain (dual joining)
                                 isQafChar ( cCh ) ||  // Qaf (dual joining)
-                                isFeChar  ( cCh ) )   // Feh (dual joining)
+                                isFehChar ( cCh ) )   // Feh (dual joining)
                                 && nIdx == nWordLen - 1))  // only at end of word
                         {
                             OSL_ENSURE( 0 != cPrevCh, "No previous character" );
