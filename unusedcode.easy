@@ -2164,8 +2164,6 @@ binfilter::XBitmapList::Replace(binfilter::XBitmapEntry*, long)
 binfilter::XColorTable::Remove(long)
 binfilter::XDashList::Remove(long)
 binfilter::XDashList::Replace(binfilter::XDashEntry*, long)
-binfilter::XDashTable::Remove(long)
-binfilter::XDashTable::Replace(long, binfilter::XDashEntry*)
 binfilter::XLineEndList::Remove(long)
 binfilter::XLineEndList::Replace(binfilter::XLineEndEntry*, long)
 binfilter::XMLFamilyDataList_Impl::GetPos(binfilter::XMLFamilyData_Impl const*) const
