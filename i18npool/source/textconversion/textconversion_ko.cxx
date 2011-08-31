@@ -159,24 +159,28 @@ TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos
                 break;
             }
         }
-    } else if (! toHanja && getHanja2HangulIndex && getHanja2HangulData) {
-        rtl_uString * newStr = x_rtl_uString_new_WithLength( nLength ); // defined in x_rtl_ustring.h
+    } else if (! toHanja && getHanja2HangulIndex && getHanja2HangulData)
+    {
+        sal_Unicode *newStr = new sal_Unicode[nLength+1];
         sal_Int32 count = 0;
-        while (count < nLength) {
+        while (count < nLength)
+        {
             ch = aText[nStartPos + count];
             sal_Unicode address = getHanja2HangulIndex()[ch>>8];
             if (address != 0xFFFF)
                 address = getHanja2HangulData()[address + (ch & 0xFF)];
 
             if (address != 0xFFFF)
-                newStr->buffer[count++] = address;
+                newStr[count++] = address;
             else
                 break;
         }
-        if (count > 0) {
+        if (count > 0)
+        {
             output.realloc(1);
-            output[0] = OUString( newStr->buffer, count);
+            output[0] = OUString(newStr, count);
         }
+        delete[] newStr;
     }
     return output;
 }

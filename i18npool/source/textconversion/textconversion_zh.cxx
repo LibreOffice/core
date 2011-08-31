@@ -125,7 +125,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
     if ((!wordData || !index || !entry) && !xCDL.is()) // no word mapping defined, do char2char conversion.
         return getCharConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
 
-    rtl_uString * newStr = x_rtl_uString_new_WithLength( nLength * 2 ); // defined in x_rtl_ustring.h
+    sal_Unicode *newStr = new sal_Unicode[nLength * 2 + 1];
     sal_Int32 currPos = 0, count = 0;
     while (currPos < nLength) {
         sal_Int32 len = nLength - currPos;
@@ -161,12 +161,12 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                         while (current < conversions[0].getLength()) {
                             offset[count] = nStartPos + currPos + (current *
                                     word.getLength() / conversions[0].getLength());
-                            newStr->buffer[count++] = conversions[0][current++];
+                            newStr[count++] = conversions[0][current++];
                         }
                         // offset[count-1] = nStartPos + currPos + word.getLength() - 1;
                     } else {
                         while (current < conversions[0].getLength())
-                            newStr->buffer[count++] = conversions[0][current++];
+                            newStr[count++] = conversions[0][current++];
                     }
                     currPos += word.getLength();
                     found = sal_True;
@@ -197,12 +197,12 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                             while (wordData[current]) {
                                 offset[count]=nStartPos + currPos + ((current-start) *
                                     word.getLength() / convertedLength);
-                                newStr->buffer[count++] = wordData[current++];
+                                newStr[count++] = wordData[current++];
                             }
                             // offset[count-1]=nStartPos + currPos + word.getLength() - 1;
                         } else {
                             while (wordData[current])
-                                newStr->buffer[count++] = wordData[current++];
+                                newStr[count++] = wordData[current++];
                         }
                         currPos += word.getLength();
                         found = sal_True;
@@ -213,14 +213,16 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
         if (!found) {
             if (offset.getLength() > 0)
                 offset[count]=nStartPos+currPos;
-            newStr->buffer[count++] =
+            newStr[count++] =
                 getOneCharConversion(aText[nStartPos+currPos], charData, charIndex);
             currPos++;
         }
     }
     if (offset.getLength() > 0)
         offset.realloc(one2one ? 0 : count);
-    return OUString( newStr->buffer, count);
+    OUString aRet(newStr, count);
+    delete[] newStr;
+    return aRet;
 }
 
 TextConversionResult SAL_CALL
