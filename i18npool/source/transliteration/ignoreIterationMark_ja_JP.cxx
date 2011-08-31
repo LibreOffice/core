@@ -102,8 +102,8 @@ ignoreIterationMark_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, s
     oneToOneMapping aTable(ignoreIterationMark_ja_JP_mappingTable, sizeof(ignoreIterationMark_ja_JP_mappingTable));
 
     // Create a string buffer which can hold nCount + 1 characters.
-    // The reference count is 0 now.
-    rtl_uString * newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h
+    // The reference count is 1 now.
+    rtl_uString * newStr = x_rtl_uString_new_WithLength(nCount);
     sal_Unicode * dst = newStr->buffer;
     const sal_Unicode * src = inStr.getStr() + startPos;
 
@@ -152,7 +152,7 @@ ignoreIterationMark_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, s
     newStr->length = sal_Int32(dst - newStr->buffer);
     if (useOffset)
         offset.realloc(newStr->length);
-    return OUString( newStr ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
+    return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 
 }
 

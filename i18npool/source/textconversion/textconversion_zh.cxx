@@ -86,11 +86,11 @@ TextConversion_zh::getCharConversion(const OUString& aText, sal_Int32 nStartPos,
         Index = ((const sal_uInt16* (*)())getFunctionBySymbol("getSTC_CharIndex_S2T"))();
     }
 
-    rtl_uString * newStr = x_rtl_uString_new_WithLength( nLength ); // defined in x_rtl_ustring.h
+    rtl_uString * newStr = x_rtl_uString_new_WithLength(nLength);
     for (sal_Int32 i = 0; i < nLength; i++)
         newStr->buffer[i] =
             getOneCharConversion(aText[nStartPos+i], Data, Index);
-    return OUString( newStr->buffer, nLength);
+    return OUString(newStr, SAL_NO_ACQUIRE); //take ownership
 }
 
 OUString SAL_CALL

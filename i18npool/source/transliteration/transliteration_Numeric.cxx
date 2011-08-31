@@ -78,7 +78,7 @@ transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 s
         if (endPos >  inStr.getLength())
             endPos = inStr.getLength();
 
-        rtl_uString* pStr = x_rtl_uString_new_WithLength( nCount, 1 );  // our x_rtl_ustring.h
+        rtl_uString* pStr = x_rtl_uString_new_WithLength(nCount);
         sal_Unicode* out = pStr->buffer;
 
         if (useOffset)

@@ -309,8 +309,8 @@ ignoreProlongedSoundMark_ja_JP::folding( const OUString& inStr, sal_Int32 startP
   throw(RuntimeException)
 {
     // Create a string buffer which can hold nCount + 1 characters.
-    // The reference count is 0 now.
-    rtl_uString * newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h
+    // The reference count is 1 now.
+    rtl_uString * newStr = x_rtl_uString_new_WithLength(nCount);
     sal_Unicode * dst = newStr->buffer;
     const sal_Unicode * src = inStr.getStr() + startPos;
 
@@ -360,7 +360,7 @@ ignoreProlongedSoundMark_ja_JP::folding( const OUString& inStr, sal_Int32 startP
     newStr->length = sal_Int32(dst - newStr->buffer);
     if (useOffset)
         offset.realloc(newStr->length);
-    return OUString( newStr ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
+    return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 
 }
 
