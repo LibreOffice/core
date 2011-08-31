@@ -77,7 +77,7 @@ RootAccess::RootAccess(
     Components & components, rtl::OUString const & pathRepresentation,
     rtl::OUString const & locale, bool update):
     Access(components), pathRepresentation_(pathRepresentation),
-    locale_(locale), update_(update)
+    locale_(locale), update_(update), finalized_(false), alive_(true)
 {
     lock_ = lock();
 }
@@ -130,10 +130,15 @@ bool RootAccess::isUpdate() const {
     return update_;
 }
 
+void RootAccess::setAlive(bool b) {
+    alive_ = b;
+}
+
 RootAccess::~RootAccess()
 {
     osl::MutexGuard g(*lock_);
-    getComponents().removeRootAccess(this);
+    if (alive_)
+        getComponents().removeRootAccess(this);
 }
 
 Path RootAccess::getRelativePath() {
@@ -291,23 +296,19 @@ void RootAccess::removeChangesListener(
     }
 }
 
-extern int tempHACK;
-
 void RootAccess::commitChanges()
     throw (css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
 #if OSL_DEBUG_LEVEL > 0
     OSL_ASSERT(thisIs(IS_UPDATE));
 #endif
+    if (!alive_)
+    {
+        return;
+    }
     Broadcaster bc;
     {
         osl::MutexGuard g(*lock_);
-
-        // OSL_ENSURE(tempHACK, "fucktastic!, seriously busted lifecycles\n");
-        if (!tempHACK)
-        {
-            return;
-        }
 
         checkLocalizedPropertyAccess();
         int finalizedLayer;
