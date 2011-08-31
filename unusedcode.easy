@@ -2159,13 +2159,6 @@ binfilter::WritingDirectionInfos::Insert(binfilter::WritingDirectionInfos const*
 binfilter::WritingDirectionInfos::Replace(binfilter::WritingDirectionInfo const&, unsigned short)
 binfilter::WritingDirectionInfos::Replace(binfilter::WritingDirectionInfo const*, unsigned short, unsigned short)
 binfilter::WritingDirectionInfos::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::WritingDirectionInfo const&, void*), void*)
-binfilter::XBitmapList::Remove(long)
-binfilter::XBitmapList::Replace(binfilter::XBitmapEntry*, long)
-binfilter::XColorTable::Remove(long)
-binfilter::XDashList::Remove(long)
-binfilter::XDashList::Replace(binfilter::XDashEntry*, long)
-binfilter::XLineEndList::Remove(long)
-binfilter::XLineEndList::Replace(binfilter::XLineEndEntry*, long)
 binfilter::XMLFamilyDataList_Impl::GetPos(binfilter::XMLFamilyData_Impl const*) const
 binfilter::XMLFamilyDataList_Impl::Remove(binfilter::XMLFamilyData_Impl*)
 binfilter::XMLFontAutoStylePoolNames_Impl::GetPos(rtl::OUString const*) const
