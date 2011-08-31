@@ -99,6 +99,8 @@ DbGridControl::SetMultiSelection(unsigned char)
 DbGridControl::forceROController(unsigned char)
 DbGridControl::forceSyncDisplay()
 DdeGetPutItem::DdeGetPutItem(DdeItem const&)
+DdeService::AddFormat(unsigned long)
+DdeService::DdeService(String const&)
 DdeTopic::RemoveItem(DdeItem const&)
 DffPropSet::SetPropertyValue(unsigned int, unsigned int) const
 Dialog::Dialog(Window*, ResId const&)
@@ -763,6 +765,8 @@ SetOfByte::GetClearCount() const
 SetOfByte::GetSetBit(unsigned short) const
 SetOfByte::IsFull() const
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
+SfxApplication::AddDdeTopic(SfxObjectShell*)
+SfxApplication::DdeExecute(String const&)
 SfxApplication::EnterAsynchronCall_Impl()
 SfxApplication::LeaveAsynchronCall_Impl()
 SfxApplication::Main()
@@ -773,6 +777,7 @@ SfxChildWindowContext::GetAlignment() const
 SfxColumnDateTimeItem::SfxColumnDateTimeItem(SfxDateTimeItem const&)
 SfxColumnDateTimeItem::SfxColumnDateTimeItem(unsigned short)
 SfxColumnDateTimeItem::SfxColumnDateTimeItem(unsigned short, DateTime const&)
+SfxContentHelper::IsDocument(String const&)
 SfxControllerItem::GetCoreMetric() const
 SfxControllerItem::UpdateSlot()
 SfxDockingWrapper::GetChildWindowId()
@@ -2131,15 +2136,6 @@ binfilter::WritingDirectionInfos::Insert(binfilter::WritingDirectionInfos const*
 binfilter::WritingDirectionInfos::Replace(binfilter::WritingDirectionInfo const&, unsigned short)
 binfilter::WritingDirectionInfos::Replace(binfilter::WritingDirectionInfo const*, unsigned short, unsigned short)
 binfilter::WritingDirectionInfos::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::WritingDirectionInfo const&, void*), void*)
-binfilter::XBitmapList::Remove(long)
-binfilter::XBitmapList::Replace(binfilter::XBitmapEntry*, long)
-binfilter::XColorTable::Remove(long)
-binfilter::XDashList::Remove(long)
-binfilter::XDashList::Replace(binfilter::XDashEntry*, long)
-binfilter::XDashTable::Remove(long)
-binfilter::XDashTable::Replace(long, binfilter::XDashEntry*)
-binfilter::XLineEndList::Remove(long)
-binfilter::XLineEndList::Replace(binfilter::XLineEndEntry*, long)
 binfilter::XMLFamilyDataList_Impl::GetPos(binfilter::XMLFamilyData_Impl const*) const
 binfilter::XMLFamilyDataList_Impl::Remove(binfilter::XMLFamilyData_Impl*)
 binfilter::XMLFontAutoStylePoolNames_Impl::GetPos(rtl::OUString const*) const
