@@ -774,16 +774,10 @@ SfxBasicManagerHolder::isAnyContainerModified() const
 SfxBrushItemLink::Set(SfxBrushItemLink*)
 SfxChildWindow::SetPosSizePixel(Point const&, Size&)
 SfxChildWindowContext::GetAlignment() const
-SfxColumnDateTimeItem::SfxColumnDateTimeItem(SfxDateTimeItem const&)
-SfxColumnDateTimeItem::SfxColumnDateTimeItem(unsigned short)
-SfxColumnDateTimeItem::SfxColumnDateTimeItem(unsigned short, DateTime const&)
 SfxContentHelper::IsDocument(String const&)
 SfxControllerItem::GetCoreMetric() const
 SfxControllerItem::UpdateSlot()
 SfxDockingWrapper::GetChildWindowId()
-SfxEnumMenu::SfxEnumMenu(unsigned short, SfxBindings*, SfxEnumItem const&)
-SfxExecuteItem::SfxExecuteItem(unsigned short, unsigned short, unsigned short)
-SfxExecuteItem::SfxExecuteItem(unsigned short, unsigned short, unsigned short, SfxPoolItem const*, ...)
 SfxFilterContainer::GetFilter4ClipBoardId(unsigned int, unsigned long, unsigned long) const
 SfxFilterContainer::GetFilter4Mime(String const&, unsigned long, unsigned long) const
 SfxFilterContainer::GetFilter4UIName(String const&, unsigned long, unsigned long) const
@@ -918,9 +912,6 @@ StgAvlIterator::Last()
 StgCache::Pos2Page(int)
 StgHeader::SetClassId(ClsId const&)
 StorageStream::ValidateMode(unsigned short, StgDirEntry*) const
-SvBasicPropertyDataControl::GetData()
-SvBasicPropertyDataControl::GetName() const
-SvBasicPropertyDataControl::GetProperty() const
 SvBorder::SvBorder(Rectangle const&, Rectangle const&)
 SvByteStrings::DeleteAndDestroy(unsigned short, unsigned short)
 SvFileStream::UnlockFile()
@@ -938,18 +929,11 @@ SvLBoxButton::Check(SvLBox*, SvLBoxEntry*, unsigned char)
 SvLBoxButtonData::SvLBoxButtonData()
 SvLBoxEntryArr::DeleteAndDestroy(unsigned short, unsigned short)
 SvLBoxItem::GetSize(SvLBoxEntry*, SvViewDataEntry*)
-SvListBoxForProperties::SvListBoxForProperties(Window*, ResId const&)
 SvListView::SvListView(SvTreeList*)
 SvPersistBaseMemberList::SvPersistBaseMemberList(unsigned short, unsigned short)
 SvPersistStream::InsertObj(SvPersistBase*)
 SvPersistStream::RemoveObj(SvPersistBase*)
 SvPersistStream::SvPersistStream(SvClassManager&, SvStream*, SvPersistStream const&)
-SvPropertyBox::SvPropertyBox(Window*, ResId const&)
-SvPropertyBox::SvPropertyBox(Window*, long)
-SvPropertyLine::GetName() const
-SvPropertyLine::IsLineLocked()
-SvPropertyLine::IsShownAsHyperlink()
-SvPropertyLine::SvPropertyLine(Window*, ResId const&)
 SvPtrarr::Replace(void* const*, unsigned short, unsigned short)
 SvStringsISort::DeleteAndDestroy(unsigned short, unsigned short)
 SvStringsISort::Insert(String* const&)
@@ -1016,11 +1000,6 @@ SvXMLUnitConverter::convertAny(com::sun::star::uno::Any&, rtl::OUString const&, 
 SvXMLUnitConverter::convertEnum(rtl::OUStringBuffer&, unsigned short, SvXMLEnumStringMapEntry const*, char*)
 SvXMLUnitConverter::convertMeasure(rtl::OUStringBuffer&, int, MapUnit) const
 SvXMLUnitConverter::convertNumber64(rtl::OUStringBuffer&, long)
-SvXPropEvListener::GetKeyCode() const
-SvXPropertyComboBox::SvXPropertyComboBox(Window*, ResId const&)
-SvXPropertyEdit::SvXPropertyEdit(Window*, ResId const&)
-SvXPropertyListBox::SvXPropertyListBox(Window*, ResId const&)
-SvXPropertyListBox::SvXPropertyListBox(Window*, long)
 SvpSalInstance::CancelEvent(SalFrame const*, void*, unsigned short)
 SvtAcceleratorConfiguration::GetCommand(com::sun::star::awt::KeyEvent const&)
 SvtAcceleratorConfiguration::GetItems()

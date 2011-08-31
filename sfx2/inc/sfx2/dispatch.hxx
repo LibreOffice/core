@@ -81,30 +81,6 @@ SV_DECL_PTRARR_DEL( SfxItemPtrArray, SfxPoolItemPtr, 4, 4 )
 // fuer  shell.cxx
 typedef SfxItemPtrArray SfxItemArray_Impl;
 
-class SfxExecuteItem : public SfxItemPtrArray, public SfxPoolItem
-{
-    sal_uInt16 nSlot;
-    SfxCallMode eCall;
-    sal_uInt16 nModifier;
-public:
-    sal_uInt16                   GetSlot() const { return nSlot; }
-    sal_uInt16                   GetModifier() const { return nModifier; }
-    void                     SetModifier( sal_uInt16 nModifierP ) { nModifier = nModifierP; }
-    SfxCallMode              GetCallMode() const { return eCall; }
-    void                     SetCallMode( SfxCallMode eMode ) { eCall = eMode; }
-    virtual int              operator==( const SfxPoolItem& ) const;
-
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-                             SfxExecuteItem(
-                                 sal_uInt16 nWhich, sal_uInt16 nSlot, SfxCallMode eMode,
-                                 const SfxPoolItem *pArg1, ... );
-                             SfxExecuteItem(
-                                 sal_uInt16 nWhich, sal_uInt16 nSlot, SfxCallMode eMode );
-                             SfxExecuteItem( const SfxExecuteItem& );
-};
-
-//=========================================================================
-
 class SFX2_DLLPUBLIC SfxDispatcher
 {
     SfxDispatcher_Impl*             pImp;

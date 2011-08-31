@@ -1130,57 +1130,6 @@ const SfxSlot* SfxDispatcher::GetSlot( const String& rCommand )
 }
 
 //--------------------------------------------------------------------
-int SfxExecuteItem::operator==( const SfxPoolItem& rItem ) const
-{
-    SfxExecuteItem& rArg = (SfxExecuteItem& )rItem;
-    sal_uInt16 nCount = Count();
-    if( nCount != rArg.Count() )
-        return sal_False;
-    while( nCount -- )
-        if( *GetObject( nCount ) != *rArg.GetObject( nCount ) )
-            return sal_False;
-    return  eCall == rArg.eCall;
-}
-
-//--------------------------------------------------------------------
-SfxPoolItem* SfxExecuteItem::Clone( SfxItemPool* ) const
-{
-    return new SfxExecuteItem( *this );
-}
-
-//--------------------------------------------------------------------
-SfxExecuteItem::SfxExecuteItem( const SfxExecuteItem& rArg )
-    : SfxItemPtrArray(), SfxPoolItem( rArg ), nModifier( 0 )
-{
-    eCall = rArg.eCall;
-    nSlot = rArg.nSlot;
-    sal_uInt16 nCount = rArg.Count();
-    for( sal_uInt16 nPos = 0; nPos < nCount; nPos++ )
-        Insert( rArg[ nPos ]->Clone(), nPos );
-}
-
-//--------------------------------------------------------------------
-SfxExecuteItem::SfxExecuteItem(
-    sal_uInt16 nWhichId, sal_uInt16 nSlotP, SfxCallMode eModeP,
-    const SfxPoolItem*  pArg1, ... ) :
-    SfxPoolItem( nWhichId ), nSlot( nSlotP ), eCall( eModeP ), nModifier( 0 )
-{
-    va_list pVarArgs;
-    va_start( pVarArgs, pArg1 );
-    for ( const SfxPoolItem *pArg = pArg1; pArg;
-          pArg = va_arg( pVarArgs, const SfxPoolItem* ) )
-        Insert( pArg->Clone(), Count() );
-    va_end(pVarArgs);
-}
-
-//--------------------------------------------------------------------
-SfxExecuteItem::SfxExecuteItem(
-    sal_uInt16 nWhichId, sal_uInt16 nSlotP, SfxCallMode eModeP )
-    : SfxPoolItem( nWhichId ), nSlot( nSlotP ), eCall( eModeP ), nModifier( 0 )
-{
-}
-
-//--------------------------------------------------------------------
 const SfxPoolItem*  SfxDispatcher::Execute(
     sal_uInt16 nSlot,
     SfxCallMode nCall,

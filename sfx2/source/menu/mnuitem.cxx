@@ -77,51 +77,6 @@ using namespace ::com::sun::star::util;
 
 //====================================================================
 
-class SfxEnumMenu: public PopupMenu
-{
-    sal_uInt16          nSlot;
-    SfxEnumItem    *pItem;
-    SfxBindings*    pBindings;
-
-protected:
-    virtual void    Select();
-
-public:
-                    SfxEnumMenu( sal_uInt16 nSlot, SfxBindings* pBind, const SfxEnumItem &rItem );
-                    ~SfxEnumMenu();
-};
-
-//=========================================================================
-
-SfxEnumMenu::SfxEnumMenu( sal_uInt16 nSlotId, SfxBindings* pBind, const SfxEnumItem &rItem ):
-    nSlot( nSlotId ),
-    pItem( (SfxEnumItem*) rItem.Clone() ),
-    pBindings( pBind )
-{
-    for ( sal_uInt16 nVal = 0; nVal < pItem->GetValueCount(); ++nVal )
-        InsertItem( nVal+1, pItem->GetValueTextByPos(nVal) );
-    CheckItem( pItem->GetValue() + 1, sal_True );
-}
-
-//-------------------------------------------------------------------------
-
-SfxEnumMenu::~SfxEnumMenu()
-{
-    delete pItem;
-}
-
-//-------------------------------------------------------------------------
-
-void SfxEnumMenu::Select()
-{
-    pItem->SetValue( GetCurItemId()-1 );
-    pBindings->GetDispatcher()->Execute( nSlot,
-                SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD,
-                pItem, 0L, 0L );
-}
-
-//--------------------------------------------------------------------
-
 // binds the instance to the specified id and assignes the title
 
 void SfxMenuControl::Bind(
@@ -290,16 +245,6 @@ void SfxMenuControl::StateChanged
 
         pOwnMenu->SetItemText( GetId(), aStr );
     }
-
-#ifdef enum_item_menu_ok
-    else if ( aType == TYPE(SfxEnumItem) )
-    {
-        DBG_ASSERT( GetId() < SID_OBJECTMENU0 || GetId() > SID_OBJECTMENU_LAST,
-                    "SfxEnumItem not allowed for SID_OBJECTMENUx" );
-        pOwnMenu->GetMenu().ChangePopupMenu( GetId(), &GetBindings(),
-            new SfxEnumMenu( GetId(), *(const SfxEnumItem*)pState ) );
-    }
-#endif
 
     pOwnMenu->CheckItem( GetId(), bCheck );
 }
