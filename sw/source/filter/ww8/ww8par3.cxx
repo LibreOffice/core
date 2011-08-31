@@ -2086,7 +2086,7 @@ bool SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
                 break;
             }
         }
-        (*pPlcxMan)++;
+        pPlcxMan->advance();
         nStart = pPlcxMan->Where();
     }
     sal_uLong nOffset = nPicLocFc;

@@ -3331,7 +3331,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTxtPos, bool& rbStartLine)
     do
     {
         if( bDoPlcxManPlusPLus )
-            (*pPlcxMan)++;
+            pPlcxMan->advance();
         nNext = pPlcxMan->Where();
 
         if (mpPostProcessAttrsInfo &&

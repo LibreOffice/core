@@ -354,11 +354,10 @@ public:
     bool SeekPos(long nPos);
     sal_Int32 Where() const;
     bool Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const;
-    WW8PLCFpcd_Iter& operator ++( int )
+    void advance()
     {
         if( nIdx < rPLCF.nIMax )
-            nIdx++;
-        return *this;
+            ++nIdx;
     }
 };
 
@@ -395,7 +394,7 @@ public:
     virtual WW8_FC Where() = 0;
     virtual void GetSprms( WW8PLCFxDesc* p );
     virtual long GetNoSprms( WW8_CP& rStart, WW8_CP&, sal_Int32& rLen );
-    virtual WW8PLCFx& operator ++( int ) = 0;
+    virtual void advance() = 0;
     virtual sal_uInt16 GetIstd() const { return 0xffff; }
     virtual void Save( WW8PLCFxSave1& rSave ) const;
     virtual void Restore( const WW8PLCFxSave1& rSave );
@@ -427,7 +426,7 @@ public:
     virtual bool SeekPos(WW8_CP nCpPos);
     virtual WW8_FC Where();
     virtual void GetSprms( WW8PLCFxDesc* p );
-    virtual WW8PLCFx& operator ++( int );
+    virtual void advance();
 
     WW8PLCFpcd_Iter* GetIter() const { return pPcdI; }
 };
@@ -452,7 +451,7 @@ public:
     virtual bool SeekPos(WW8_CP nCpPos);
     virtual WW8_FC Where();
     virtual long GetNoSprms( WW8_CP& rStart, WW8_CP&, sal_Int32& rLen );
-    virtual WW8PLCFx& operator ++( int );
+    virtual void advance();
     WW8_CP AktPieceStartFc2Cp( WW8_FC nStartPos );
     WW8_FC AktPieceStartCp2Fc( WW8_CP nCp );
     void AktPieceFc2Cp(WW8_CP& rStartPos, WW8_CP& rEndPos,
@@ -524,11 +523,10 @@ public:
         {
             return (mnIdx < mnIMax) ? maEntries[mnIdx].mnFC : WW8_FC_MAX;
         }
-        WW8Fkp& operator ++( int )
+        void advance()
         {
             if (mnIdx < mnIMax)
-                mnIdx++;
-            return *this;
+                ++mnIdx;
         }
         sal_uInt8* Get( WW8_FC& rStart, WW8_FC& rEnd, sal_Int32& rLen ) const;
         sal_uInt16 GetIstd() const { return maEntries[mnIdx].mnIStd; }
@@ -586,7 +584,7 @@ public:
     virtual bool SeekPos(WW8_FC nFcPos);
     virtual WW8_FC Where();
     sal_uInt8* GetSprmsAndPos( WW8_FC& rStart, WW8_FC& rEnd, sal_Int32& rLen );
-    virtual WW8PLCFx& operator ++( int );
+    virtual void advance();
     virtual sal_uInt16 GetIstd() const;
     void GetPCDSprms( WW8PLCFxDesc& rDesc );
     const sal_uInt8* HasSprm( sal_uInt16 nId );
@@ -621,7 +619,7 @@ public:
     virtual bool SeekPos(WW8_CP nCpPos);
     virtual WW8_CP Where();
     virtual void GetSprms( WW8PLCFxDesc* p );
-    virtual WW8PLCFx& operator ++( int );
+    virtual void advance();
     virtual void Save( WW8PLCFxSave1& rSave ) const;
     virtual void Restore( const WW8PLCFxSave1& rSave );
 };
@@ -650,7 +648,7 @@ public:
     virtual bool SeekPos(WW8_CP nCpPos);
     virtual WW8_FC Where();
     virtual void GetSprms( WW8PLCFxDesc* p );
-    virtual WW8PLCFx& operator ++( int );
+    virtual void advance();
     const sal_uInt8* HasSprm( sal_uInt16 nId ) const;
     const sal_uInt8* HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const;
     const sal_uInt8* HasSprm( sal_uInt16 nId, const sal_uInt8* pOtherSprms,
@@ -687,7 +685,7 @@ public:
     //liefert Angabe, wo Kopf und Fusszeilen-Text zu finden ist
     bool Get(long& rStart, void*& rpValue) const;
     virtual void GetSprms(WW8PLCFxDesc* p);
-    virtual WW8PLCFx& operator ++( int );
+    virtual void advance();
     long Count() const { return ( pRef ) ? pRef->GetIMax() : 0; }
 };
 
@@ -708,7 +706,7 @@ public:
     virtual bool SeekPos(WW8_CP nCpPos);
     virtual WW8_FC Where();
     virtual void GetSprms(WW8PLCFxDesc* p);
-    virtual WW8PLCFx& operator ++( int );
+    virtual void advance();
     bool StartPosIsFieldStart();
     bool EndPosIsFieldEnd();
     bool GetPara(long nIdx, WW8FieldDesc& rF);
@@ -741,7 +739,7 @@ public:
     virtual bool SeekPos(WW8_CP nCpPos);
     virtual WW8_FC Where();
     virtual long GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen );
-    virtual WW8PLCFx& operator ++( int );
+    virtual void advance();
     const String* GetName() const;
     WW8_CP GetStartPos() const
         { return ( nIsEnd ) ? WW8_CP_MAX : pBook[0]->Where(); }
@@ -873,7 +871,7 @@ public:
     WW8_CP Where() const;
 
     bool Get(WW8PLCFManResult* pResult) const;
-    WW8PLCFMan& operator ++( int );
+    void advance();
     sal_uInt16 GetColl() const; // index of actual Style
     WW8PLCFx_FLD* GetFld() const;
     WW8PLCFx_SubDoc* GetEdn() const { return (WW8PLCFx_SubDoc*)pEdn->pPLCFx; }

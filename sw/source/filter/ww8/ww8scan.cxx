@@ -970,9 +970,8 @@ bool WW8PLCFx_PCDAttrs::SeekPos(WW8_CP )
     return true;
 }
 
-WW8PLCFx& WW8PLCFx_PCDAttrs::operator ++( int )
+void WW8PLCFx_PCDAttrs::advance()
 {
-    return *this;
 }
 
 WW8_CP WW8PLCFx_PCDAttrs::Where()
@@ -1191,14 +1190,11 @@ long WW8PLCFx_PCD::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
     return pPcdI->GetIdx();
 }
 
-WW8PLCFx& WW8PLCFx_PCD::operator ++( int )
+void WW8PLCFx_PCD::advance()
 {
+    OSL_ENSURE(pPcdI , "pPcdI fehlt");
     if (pPcdI)
-        (*pPcdI)++;
-    else {
-        OSL_ENSURE( !this, "pPcdI fehlt");
-    }
-    return *this;
+        pPcdI->advance();
 }
 
 WW8_FC WW8PLCFx_PCD::AktPieceStartCp2Fc( WW8_CP nCp )
@@ -1388,7 +1384,7 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
         sal_uLong nOldPos = pPieceIter->GetIdx();
 
         for (pPieceIter->SetIdx(0);
-            pPieceIter->GetIdx() < pPieceIter->GetIMax();(*pPieceIter)++)
+            pPieceIter->GetIdx() < pPieceIter->GetIMax(); pPieceIter->advance())
         {
             WW8_CP nCpStart, nCpEnd;
             void* pData;
@@ -3073,19 +3069,17 @@ sal_uInt8* WW8PLCFx_Fc_FKP::GetSprmsAndPos(WW8_FC& rStart, WW8_FC& rEnd, sal_Int
     return pPos;
 }
 
-WW8PLCFx& WW8PLCFx_Fc_FKP::operator ++( int )
+void WW8PLCFx_Fc_FKP::advance()
 {
     if( !pFkp )
     {
         if( !NewFkp() )
-            return *this;
+            return;
     }
 
-    (*pFkp)++;
+    pFkp->advance();
     if( pFkp->Where() == WW8_FC_MAX )
         NewFkp();
-
-    return *this;
 }
 
 sal_uInt16 WW8PLCFx_Fc_FKP::GetIstd() const
@@ -3368,10 +3362,10 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                         FKP fc
                         */
 
-                        (*pPieceIter)++;
+                        pPieceIter->advance();
 
                         for (;pPieceIter->GetIdx() < pPieceIter->GetIMax();
-                            (*pPieceIter)++)
+                            pPieceIter->advance())
                         {
                             if( !pPieceIter->Get( nCpStart, nCpEnd, pData ) )
                             {
@@ -3434,17 +3428,17 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
     }
 }
 
-WW8PLCFx& WW8PLCFx_Cp_FKP::operator ++( int )
+void WW8PLCFx_Cp_FKP::advance()
 {
-    WW8PLCFx_Fc_FKP::operator ++( 0 );
+    WW8PLCFx_Fc_FKP::advance();
     // !pPcd: Notbremse
     if ( !bComplex || !pPcd )
-        return *this;
+        return;
 
     if( GetPCDIdx() >= GetPCDIMax() )           // End of PLCF
     {
         nAttrStart = nAttrEnd = WW8_CP_MAX;
-        return *this;
+        return;
     }
 
     sal_Int32 nFkpLen;                               // Fkp-Eintrag
@@ -3453,7 +3447,6 @@ WW8PLCFx& WW8PLCFx_Cp_FKP::operator ++( int )
 
     pPcd->AktPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
     bLineEnd = (ePLCF == PAP);
-    return *this;
 }
 
 //-----------------------------------------
@@ -3548,11 +3541,10 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
     }
 }
 
-WW8PLCFx& WW8PLCFx_SEPX::operator ++( int )
+void WW8PLCFx_SEPX::advance()
 {
     if (pPLCF)
         pPLCF->advance();
-    return *this;
 }
 
 const sal_uInt8* WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId ) const
@@ -3721,14 +3713,13 @@ void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
     p->nSprmsLen -= p->nCp2OrIdx;
 }
 
-WW8PLCFx& WW8PLCFx_SubDoc::operator ++( int )
+void WW8PLCFx_SubDoc::advance()
 {
     if (pRef && pTxt)
     {
         pRef->advance();
         pTxt->advance();
     }
-    return *this;
 }
 
 //-----------------------------------------
@@ -3874,10 +3865,9 @@ void WW8PLCFx_FLD::GetSprms(WW8PLCFxDesc* p)
     p->nCp2OrIdx = pPLCF->GetIdx();
 }
 
-WW8PLCFx& WW8PLCFx_FLD::operator ++( int )
+void WW8PLCFx_FLD::advance()
 {
     pPLCF->advance();
-    return *this;
 }
 
 bool WW8PLCFx_FLD::GetPara(long nIdx, WW8FieldDesc& rF)
@@ -4134,7 +4124,7 @@ long WW8PLCFx_Book::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
 // vor- und zurueckspringen, wobei ein weiterer Index oder ein Bitfeld
 // oder etwas aehnliches zum Merken der bereits abgearbeiteten Bookmarks
 // noetig wird.
-WW8PLCFx& WW8PLCFx_Book::operator ++( int )
+void WW8PLCFx_Book::advance()
 {
     if( pBook[0] && pBook[1] && nIMax )
     {
@@ -4149,7 +4139,6 @@ WW8PLCFx& WW8PLCFx_Book::operator ++( int )
         else
             nIsEnd = ( nIsEnd ) ? 0 : 1;
     }
-    return *this;
 }
 
 long WW8PLCFx_Book::GetLen() const
@@ -4881,8 +4870,8 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
             }
             else
             {
-                (*p->pPLCFx)++;     // next Group of Sprms
-                p->pMemPos = 0;     // !!!
+                p->pPLCFx->advance(); // next Group of Sprms
+                p->pMemPos = 0;       // !!!
                 p->nSprmsLen = 0;
                 GetNewSprms( *p );
             }
@@ -4919,7 +4908,7 @@ void WW8PLCFMan::AdvNoSprm(short nIdx, bool bStart)
                 reapply them to a new chp or pap range.
                 */
                 if (pTemp->GetClipStart() == -1)
-                    (*p->pPLCFx)++;
+                    p->pPLCFx->advance();
                 p->pMemPos = 0;
                 p->nSprmsLen = 0;
                 GetNewSprms( aD[nIdx+1] );
@@ -4940,14 +4929,14 @@ void WW8PLCFMan::AdvNoSprm(short nIdx, bool bStart)
     }
     else
     {                                  // NoSprm ohne Ende
-        (*p->pPLCFx)++;
+        p->pPLCFx->advance();
         p->pMemPos = 0;                     // MemPos ungueltig
         p->nSprmsLen = 0;
         GetNewNoSprms( *p );
     }
 }
 
-WW8PLCFMan& WW8PLCFMan::operator ++(int)
+void WW8PLCFMan::advance()
 {
     bool bStart;
     sal_uInt16 nIdx = WhereIdx(&bStart);
@@ -4962,7 +4951,6 @@ WW8PLCFMan& WW8PLCFMan::operator ++(int)
         else                                        // NoSprm
             AdvNoSprm( nIdx, bStart );
     }
-    return *this;
 }
 
 // Rueckgabe true fuer Anfang eines Attributes oder Fehler,
