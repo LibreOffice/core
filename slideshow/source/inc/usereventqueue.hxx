@@ -93,10 +93,6 @@ public:
                     CursorManager&      rCursorManager );
     ~UserEventQueue();
 
-    /** Query whether there are any events still pending.
-     */
-    bool isEmpty() const;
-
     /** Clear all registered events.
 
         This method clears all registered, but
@@ -115,24 +111,6 @@ public:
         i.e. the shape need not be hit by the mouse.
     */
     void setAdvanceOnClick( bool bAdvanceOnClick );
-
-    /** Register an event that will be fired when the slide is
-        just shown.
-
-        Note that <em>all</em> registered events will be fired
-        when the slide start occurs. This is in contrast to
-        the mouse events below.
-    */
-    void registerSlideStartEvent( const EventSharedPtr& rEvent );
-
-    /** Register an event that will be fired when the slide is
-        about to vanish.
-
-        Note that <em>all</em> registered events will be fired
-        when the slide end occurs. This is in contrast to
-        the mouse events below.
-    */
-    void registerSlideEndEvent( const EventSharedPtr& rEvent );
 
     /** Register an event that will be fired when the given
         animation node starts.
@@ -232,18 +210,6 @@ public:
     */
     void registerShapeDoubleClickEvent( const EventSharedPtr& rEvent,
                                         const ShapeSharedPtr& rShape );
-
-    /** Register an event that is fired on a double mouse click
-
-        For every mouse double click, only one of the events
-        registered here is fired. The order of fired events is
-        the order of registration, i.e. the first event
-        registered will be the one fired for the first mouse
-        double click. It is irrelevant where on the slide the
-        mouse is clicked, i.e. the shape need not be hit by
-        the mouse.
-    */
-    void registerDoubleClickEvent( const EventSharedPtr& rEvent );
 
     /** Register an event that is fired when the mouse enters
         the area of the given shape

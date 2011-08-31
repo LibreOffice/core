@@ -258,12 +258,6 @@ namespace slideshow
             return ExpressionNodeSharedPtr( new DividesExpression(rLHS, rRHS) );
         }
 
-        ExpressionNodeSharedPtr ExpressionNodeFactory::createComposedExpression  ( const ExpressionNodeSharedPtr&   rOuterFunction,
-                                                                                   const ExpressionNodeSharedPtr&   rInnerFunction )
-        {
-            return ExpressionNodeSharedPtr( new ComposedExpression(rOuterFunction, rInnerFunction) );
-        }
-
         ExpressionNodeSharedPtr ExpressionNodeFactory::createMinExpression   ( const ExpressionNodeSharedPtr&   rOuterFunction,
                                                                                const ExpressionNodeSharedPtr&   rInnerFunction )
         {

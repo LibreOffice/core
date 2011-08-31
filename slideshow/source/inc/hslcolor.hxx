@@ -46,7 +46,6 @@ namespace slideshow
         {
         public:
             HSLColor();
-            explicit HSLColor( ::cppcanvas::Color::IntSRGBA nRGBColor );
             HSLColor( double nHue, double nSaturation, double nLuminance );
             explicit HSLColor( const RGBColor& rColor );
 

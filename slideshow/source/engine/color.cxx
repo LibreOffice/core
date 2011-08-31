@@ -188,15 +188,6 @@ namespace slideshow
         {
         }
 
-        HSLColor::HSLColor( ::cppcanvas::Color::IntSRGBA nRGBColor ) :
-            maHSLTriple( rgb2hsl( ::cppcanvas::getRed( nRGBColor ) / 255.0,
-                                  ::cppcanvas::getGreen( nRGBColor ) / 255.0,
-                                  ::cppcanvas::getBlue( nRGBColor ) / 255.0 ) ),
-            mnMagicValue( getMagic( maHSLTriple.mnLuminance,
-                                    maHSLTriple.mnSaturation ) )
-        {
-        }
-
         HSLColor::HSLColor( double nHue, double nSaturation, double nLuminance ) :
             maHSLTriple( nHue, nSaturation, nLuminance ),
             mnMagicValue( getMagic( maHSLTriple.mnLuminance,

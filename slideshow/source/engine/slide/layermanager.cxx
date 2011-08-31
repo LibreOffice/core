@@ -323,19 +323,6 @@ namespace slideshow
                 notifyShapeUpdate( rShape );
         }
 
-        bool LayerManager::removeShape( const ShapeSharedPtr& rShape )
-        {
-            // remove shape from XShape hash map
-            if( maXShapeHash.erase( rShape->getXShape() ) == 0 )
-                return false; // shape not in map
-
-            OSL_ASSERT( maAllShapes.find(rShape) != maAllShapes.end() );
-
-            implRemoveShape( rShape );
-
-            return true;
-        }
-
         void LayerManager::implRemoveShape( const ShapeSharedPtr& rShape )
         {
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer

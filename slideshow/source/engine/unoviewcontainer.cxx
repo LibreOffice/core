@@ -115,30 +115,6 @@ namespace slideshow
             return pView;
         }
 
-        bool UnoViewContainer::removeView( const UnoViewSharedPtr& rView )
-        {
-            // remove locally
-            const UnoViewVector::iterator aEnd( maViews.end() );
-            UnoViewVector::iterator aIter;
-            if( (aIter=::std::find( maViews.begin(),
-                                    aEnd,
-                                    rView )) == aEnd )
-            {
-                // view seemingly was not added, failed
-                return false;
-            }
-
-            OSL_ENSURE( ::std::count( maViews.begin(),
-                                      aEnd,
-                                      rView ) == 1,
-                        "UnoViewContainer::removeView(): View was added multiple times" );
-
-            // actually erase from container
-            maViews.erase( aIter );
-
-            return true;
-        }
-
         void UnoViewContainer::dispose()
         {
             ::std::for_each( maViews.begin(),

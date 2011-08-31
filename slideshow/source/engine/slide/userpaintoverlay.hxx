@@ -76,9 +76,6 @@ namespace slideshow
             PolyPolygonVector getPolygons();
             void drawPolygons();
 
-            void update_settings( bool bUserPaintEnabled, RGBColor const& aUserPaintColor, double dUserPaintStrokeWidth );
-
-
         private:
             UserPaintOverlay( const RGBColor&          rStrokeColor,
                               double                   nStrokeWidth,

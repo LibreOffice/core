@@ -694,30 +694,6 @@ UserEventQueue::~UserEventQueue()
     }
 }
 
-bool UserEventQueue::isEmpty() const
-{
-    // TODO(T2): This is not thread safe, the handlers are all
-    // only separately synchronized. This poses the danger of
-    // generating false empty status on XSlideShow::update(), such
-    // that the last events of a slide are not triggered.
-
-    // we're empty iff all handler queues are empty
-    return
-        (mpStartEventHandler ? mpStartEventHandler->isEmpty() : true) &&
-        (mpEndEventHandler ? mpEndEventHandler->isEmpty() : true) &&
-        (mpAnimationStartEventHandler ? mpAnimationStartEventHandler->isEmpty() : true) &&
-        (mpAnimationEndEventHandler ? mpAnimationEndEventHandler->isEmpty() : true) &&
-        (mpAudioStoppedEventHandler ? mpAudioStoppedEventHandler->isEmpty() : true) &&
-        (mpShapeClickEventHandler ? mpShapeClickEventHandler->isEmpty() : true) &&
-        (mpClickEventHandler ? mpClickEventHandler->isEmpty() : true) &&
-        (mpSkipEffectEventHandler ? mpSkipEffectEventHandler->isEmpty() : true) &&
-        (mpRewindEffectEventHandler ? mpRewindEffectEventHandler->isEmpty() : true) &&
-        (mpShapeDoubleClickEventHandler ? mpShapeDoubleClickEventHandler->isEmpty() : true) &&
-        (mpDoubleClickEventHandler ? mpDoubleClickEventHandler->isEmpty() : true) &&
-        (mpMouseEnterHandler ? mpMouseEnterHandler->isEmpty() : true) &&
-        (mpMouseLeaveHandler ? mpMouseLeaveHandler->isEmpty() : true);
-}
-
 void UserEventQueue::clear()
 {
     // unregister and delete all handlers
@@ -788,23 +764,6 @@ void UserEventQueue::setAdvanceOnClick( bool bAdvanceOnClick )
     // creation will do the forwarding.
     if( mpClickEventHandler )
         mpClickEventHandler->setAdvanceOnClick( bAdvanceOnClick );
-}
-
-
-void UserEventQueue::registerSlideStartEvent( const EventSharedPtr& rEvent )
-{
-    registerEvent( mpStartEventHandler,
-                   rEvent,
-                   boost::bind( &EventMultiplexer::addSlideStartHandler,
-                                boost::ref( mrMultiplexer ), _1 ) );
-}
-
-void UserEventQueue::registerSlideEndEvent( const EventSharedPtr& rEvent )
-{
-    registerEvent( mpEndEventHandler,
-                   rEvent,
-                   boost::bind( &EventMultiplexer::addSlideEndHandler,
-                                boost::ref( mrMultiplexer ), _1 ) );
 }
 
 void UserEventQueue::registerAnimationStartEvent(
@@ -962,15 +921,6 @@ void UserEventQueue::registerShapeDoubleClickEvent(
     }
 
     mpShapeDoubleClickEventHandler->addEvent( rEvent, rShape );
-}
-
-void UserEventQueue::registerDoubleClickEvent( const EventSharedPtr& rEvent )
-{
-    registerEvent( mpDoubleClickEventHandler,
-                   rEvent,
-                   boost::bind( &EventMultiplexer::addDoubleClickHandler,
-                                boost::ref( mrMultiplexer ), _1,
-                                0.0 /* default prio */ ) );
 }
 
 void UserEventQueue::registerMouseEnterEvent( const EventSharedPtr& rEvent,

@@ -114,10 +114,6 @@ namespace slideshow
                           const ::com::sun::star::uno::Reference<
                               ::com::sun::star::uno::XComponentContext >&                                   rxContext );
 
-        /** Remove all text actions from the given metafile.
-         */
-        void removeTextActions( GDIMetaFile& io_rMtf );
-
         /** Gets the next action offset for iterating meta actions which is most
             often returns 1.
         */

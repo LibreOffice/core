@@ -131,7 +131,6 @@ protected:
                                        const boost::optional<SlideSharedPtr>& rSlide_ ) const;
 
     ::basegfx::B2ISize getEnteringSlideSizePixel( const UnoViewSharedPtr& pView ) const;
-    ::basegfx::B2ISize getLeavingSlideSizePixel( const UnoViewSharedPtr& pView ) const;
 
     void renderBitmap( SlideBitmapSharedPtr const&                 pSlideBitmap,
                        boost::shared_ptr<cppcanvas::Canvas> const& pCanvas );

@@ -133,21 +133,6 @@ namespace slideshow
              */
             ViewLayerSharedPtr removeView( const ViewSharedPtr& rView );
 
-            /** Notify that given ViewLayer has changed
-
-                @param rChangedView
-                This view's layer will get resized. Afterwards, a
-                complete repaint might be necessary.
-             */
-            void viewChanged( const ViewSharedPtr& rChangedView );
-
-            /** Notify that all ViewLayer have changed
-
-                This resizes all view layers. Afterwards, a complete
-                repaint might be necessary.
-             */
-            void viewsChanged();
-
             /** Init shape with this layer's views
 
                 @param rShape
