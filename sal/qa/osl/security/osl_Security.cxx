@@ -36,6 +36,8 @@
 #include <windows.h>
 #endif
 #include <osl_Security_Const.h>
+#include <osl/thread.h>
+#include <rtl/strbuf.hxx>
 
 using namespace osl;
 using namespace rtl;
@@ -154,8 +156,15 @@ namespace osl_Security
             ::rtl::OUString strID;
             bRes = aSec.getUserIdent( strID );
 
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: get UserID and compare it with names got at the beginning of the test.",
-                                     ( sal_True == strUserID.equals( strID ) ) && ( sal_True == bRes ));
+            rtl::OStringBuffer aMessage;
+            aMessage.append("strUserID: ");
+            aMessage.append(rtl::OUStringToOString(strUserID, osl_getThreadTextEncoding()));
+            aMessage.append(", strID: ");
+            aMessage.append(rtl::OUStringToOString(strID, osl_getThreadTextEncoding()));
+            aMessage.append(", bRes: ");
+            aMessage.append(bRes);
+
+            CPPUNIT_ASSERT_MESSAGE( aMessage.getStr(), strUserID.equals(strID) && (bRes == sal_True));
         }
 
         CPPUNIT_TEST_SUITE( getUserIdent );
