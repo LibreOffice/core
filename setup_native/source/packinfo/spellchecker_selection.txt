@@ -10,6 +10,7 @@
 
 af = "af"
 ar = "EMPTY"
+br = "br,fr"
 ca = "ca,es,fr"
 cs = "cs"
 da = "da,de-DE"
