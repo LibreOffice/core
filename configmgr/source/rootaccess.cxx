@@ -229,7 +229,9 @@ void RootAccess::clearListeners() throw() {
 css::uno::Any RootAccess::queryInterface(css::uno::Type const & aType)
     throw (css::uno::RuntimeException)
 {
+#if OSL_DEBUG_LEVEL > 0
     OSL_ASSERT(thisIs(IS_ANY));
+#endif
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     css::uno::Any res(Access::queryInterface(aType));
@@ -252,7 +254,9 @@ void RootAccess::addChangesListener(
     css::uno::Reference< css::util::XChangesListener > const & aListener)
     throw (css::uno::RuntimeException)
 {
+#if OSL_DEBUG_LEVEL > 0
     OSL_ASSERT(thisIs(IS_ANY));
+#endif
     {
         osl::MutexGuard g(*lock_);
         checkLocalizedPropertyAccess();
@@ -276,7 +280,9 @@ void RootAccess::removeChangesListener(
     css::uno::Reference< css::util::XChangesListener > const & aListener)
     throw (css::uno::RuntimeException)
 {
+#if OSL_DEBUG_LEVEL > 0
     OSL_ASSERT(thisIs(IS_ANY));
+#endif
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     ChangesListeners::iterator i(changesListeners_.find(aListener));
@@ -290,7 +296,9 @@ extern int tempHACK;
 void RootAccess::commitChanges()
     throw (css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
+#if OSL_DEBUG_LEVEL > 0
     OSL_ASSERT(thisIs(IS_UPDATE));
+#endif
     Broadcaster bc;
     {
         osl::MutexGuard g(*lock_);
@@ -317,7 +325,9 @@ void RootAccess::commitChanges()
 }
 
 sal_Bool RootAccess::hasPendingChanges() throw (css::uno::RuntimeException) {
+#if OSL_DEBUG_LEVEL > 0
     OSL_ASSERT(thisIs(IS_UPDATE));
+#endif
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     //TODO: Optimize:
@@ -329,7 +339,9 @@ sal_Bool RootAccess::hasPendingChanges() throw (css::uno::RuntimeException) {
 css::util::ChangesSet RootAccess::getPendingChanges()
     throw (css::uno::RuntimeException)
 {
+#if OSL_DEBUG_LEVEL > 0
     OSL_ASSERT(thisIs(IS_UPDATE));
+#endif
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     comphelper::SequenceAsVector< css::util::ElementChange > changes;
@@ -339,7 +351,9 @@ css::util::ChangesSet RootAccess::getPendingChanges()
 
 rtl::OUString RootAccess::getImplementationName() throw (css::uno::RuntimeException)
 {
+#if OSL_DEBUG_LEVEL > 0
     OSL_ASSERT(thisIs(IS_ANY));
+#endif
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "configmgr.RootAccess" ) );
