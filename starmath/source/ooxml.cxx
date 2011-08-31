@@ -467,7 +467,7 @@ void SmOoxml::HandleOperator( const SmOperNode* pNode, int nLevel )
     const SmNode* operation = subsup != NULL ? subsup->GetBody() : pNode->GetSubNode( 0 );
     m_pSerializer->startElementNS( XML_m, XML_nary, FSEND );
     m_pSerializer->startElementNS( XML_m, XML_naryPr, FSEND );
-    m_pSerializer->singleElementNS( XML_m, XML_char,
+    m_pSerializer->singleElementNS( XML_m, XML_chr,
         FSNS( XML_m, XML_val ), mathSymbolToString( operation ).getStr(), FSEND );
     if( subsup == NULL || subsup->GetSubSup( CSUB ) == NULL )
         m_pSerializer->singleElementNS( XML_m, XML_subHide, FSNS( XML_m, XML_val ), "1", FSEND );
