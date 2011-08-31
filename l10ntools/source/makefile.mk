@@ -99,14 +99,15 @@ APP3RPATH=  NONE
 APP3STDLIBS+= \
             $(COMPHELPERLIB) \
             $(TOOLSLIB) \
+            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # tag checker for *.gsi
 APP5TARGET= gsicheck
 APP5OBJS=   $(OBJ)$/gsicheck.obj $(OBJ)$/tagtest.obj
 APP5STDLIBS+= \
-            $(COMPHELPERLIB) \
             $(TOOLSLIB) \
+            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # extractor and merger for *.cfg
@@ -115,6 +116,7 @@ APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy_wrapper.obj  $(OBJ)$/merge.obj $
 APP6STDLIBS+= \
             $(COMPHELPERLIB) \
             $(TOOLSLIB) \
+            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # extractor and merger for *.xrm
@@ -124,6 +126,7 @@ APP7RPATH=  NONE
 APP7STDLIBS+= \
             $(COMPHELPERLIB) \
             $(TOOLSLIB) \
+            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # localizer for l10n framework
@@ -135,6 +138,7 @@ APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj $(OBJ)$
 APP9STDLIBS+= \
             $(COMPHELPERLIB) \
             $(TOOLSLIB) \
+            $(COMPHELPERLIB) \
             $(ICUINLIB) \
             $(ICUUCLIB) \
             $(SALLIB)
