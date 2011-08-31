@@ -1251,6 +1251,8 @@ if test "$enable_copyleft" != "yes"; then
    DISABLE_SAXON="TRUE"
    DISABLE_NEON="TRUE"
 
+   BUILD_EPM="NO"
+
    AC_MSG_RESULT([yes])
 
 else
