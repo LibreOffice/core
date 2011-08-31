@@ -355,12 +355,20 @@ void SmOoxml::HandleAttribute( const SmAttributNode* pNode, int nLevel )
 {
     switch( pNode->Attribute()->GetToken().eType )
     {
-        case TCHECK: // TODO check these all are really accents
+        case TCHECK:
         case TACUTE:
         case TGRAVE:
+        case TBREVE:
         case TCIRCLE:
+        case TVEC:
+        case TTILDE:
+        case THAT:
+        case TDOT:
+        case TDDOT:
+        case TDDDOT:
         case TWIDETILDE:
         case TWIDEHAT:
+        case TWIDEVEC:
         {
             m_pSerializer->startElementNS( XML_m, XML_acc, FSEND );
             m_pSerializer->startElementNS( XML_m, XML_accPr, FSEND );
@@ -374,6 +382,33 @@ void SmOoxml::HandleAttribute( const SmAttributNode* pNode, int nLevel )
             m_pSerializer->endElementNS( XML_m, XML_acc );
             break;
         }
+        case TBAR:
+        case TOVERLINE:
+        case TUNDERLINE:
+            m_pSerializer->startElementNS( XML_m, XML_bar, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_barPr, FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_pos, FSNS( XML_m, XML_val ),
+                ( pNode->Attribute()->GetToken().eType == TUNDERLINE ) ? "bot" : "top", FSEND );
+            m_pSerializer->endElementNS( XML_m, XML_barPr );
+            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            HandleNode( pNode->Body(), nLevel + 1 );
+            m_pSerializer->endElementNS( XML_m, XML_e );
+            m_pSerializer->endElementNS( XML_m, XML_bar );
+            break;
+        case TOVERSTRIKE:
+            m_pSerializer->startElementNS( XML_m, XML_borderBox, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_borderBoxPr, FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_hideTop, FSNS( XML_m, XML_val ), "1", FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_hideBot, FSNS( XML_m, XML_val ), "1", FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_hideLeft, FSNS( XML_m, XML_val ), "1", FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_hideRight, FSNS( XML_m, XML_val ), "1", FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_strikeH, FSNS( XML_m, XML_val ), "1", FSEND );
+            m_pSerializer->endElementNS( XML_m, XML_borderBoxPr );
+            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            HandleNode( pNode->Body(), nLevel + 1 );
+            m_pSerializer->endElementNS( XML_m, XML_e );
+            m_pSerializer->endElementNS( XML_m, XML_borderBox );
+            break;
         default:
             HandleAllSubNodes( pNode, nLevel );
             break;
