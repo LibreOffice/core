@@ -617,7 +617,6 @@ SapiDocu_PE::CheckVersionSyntax_OOo(const String & i_versionPart1)
 {
     return      i_versionPart1 == "OOo"
             OR  i_versionPart1 == "OpenOffice.org"
-            OR  i_versionPart1 == "LO"
             OR  i_versionPart1 == "LibreOffice";
 }
 
