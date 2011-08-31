@@ -470,6 +470,8 @@ void SmOoxml::HandleOperator( const SmOperNode* pNode, int nLevel )
         case TLINT:
         case TLLINT:
         case TLLLINT:
+        case TPROD:
+        case TCOPROD:
         {
             const SmSubSupNode* subsup = pNode->GetSubNode( 0 )->GetType() == NSUBSUP
                 ? static_cast< const SmSubSupNode* >( pNode->GetSubNode( 0 )) : NULL;
