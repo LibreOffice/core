@@ -4570,6 +4570,67 @@ void OSQLParser::setParseTree(OSQLParseNode * pNewParseTree)
 	m_pParseTree = pNewParseTree;
 }
 //-----------------------------------------------------------------------------
+
+/** Delete all comments in a query.
+
+    See also getComment()/concatComment() implementation for
+    OQueryController::translateStatement().
+ */
+static ::rtl::OUString delComment( const ::rtl::OUString& rQuery )
+{
+    // First a quick search if there is any "--" or "//" or "/*", if not then the whole 
+    // copying loop is pointless.
+    if (rQuery.indexOfAsciiL( "--", 2, 0) < 0 && rQuery.indexOfAsciiL( "//", 2, 0) < 0 &&
+            rQuery.indexOfAsciiL( "/*", 2, 0) < 0)
+        return rQuery;
+
+    const sal_Unicode* pCopy = rQuery.getStr();
+    sal_Int32 nQueryLen = rQuery.getLength();
+    bool bIsText1  = false;     // "text"
+    bool bIsText2  = false;     // 'text'
+    bool bComment2 = false;     // /* comment */
+    bool bComment  = false;     // -- or // comment
+    ::rtl::OUStringBuffer aBuf(nQueryLen);
+    for (size_t i=0; i < nQueryLen; ++i)
+    {
+        if (bComment2)
+        {
+            if ((i+1) < nQueryLen)
+            {
+                if (pCopy[i]=='*' && pCopy[i+1]=='/')
+                {
+                    bComment2 = false;
+                    ++i;
+                }
+            }
+            else
+            {
+                // comment can't close anymore, actually an error, but..
+            }
+            continue;
+        }
+        if (pCopy[i] == '\n')
+            bComment = false;
+        else if (!bComment)
+        {
+            if (pCopy[i] == '\"' && !bIsText2)
+                bIsText1 = !bIsText1;
+            else if (pCopy[i] == '\'' && !bIsText1)
+                bIsText2 = !bIsText2;
+            if (!bIsText1 && !bIsText2 && (i+1) < nQueryLen)
+            {
+                if ((pCopy[i]=='-' && pCopy[i+1]=='-') || (pCopy[i]=='/' && pCopy[i+1]=='/'))
+                    bComment = true;
+                else if ((pCopy[i]=='/' && pCopy[i+1]=='*'))
+                    bComment2 = true;
+            }
+        }
+        if (!bComment && !bComment2)
+            aBuf.append( &pCopy[i], 1);
+    }
+    return aBuf.makeStringAndClear();
+}
+//-----------------------------------------------------------------------------
 OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 									 const ::rtl::OUString& rStatement,
 								     sal_Bool bInternational)
@@ -4581,9 +4642,12 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 	// must be reset
 	setParser(this);
 
+	// delete comments before parsing
+	::rtl::OUString sTemp = delComment(rStatement);
+
 	// defines how to scan
 	s_pScanner->SetRule(s_pScanner->GetSQLRule()); // initial
-	s_pScanner->prepareScan(rStatement, m_pContext, bInternational);
+	s_pScanner->prepareScan(sTemp, m_pContext, bInternational);
 
 	SQLyylval.pParseNode = NULL;
 	//	SQLyypvt = NULL;
