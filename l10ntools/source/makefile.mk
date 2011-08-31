@@ -85,7 +85,11 @@ APP1DEPN=   $(OBJ)$/src_yy_wrapper.obj $(LB)$/$(TARGET).lib
 APP2TARGET= helpex
 APP2OBJS= $(OBJ)$/helpmerge.obj  $(OBJ)$/xmlparse.obj $(OBJ)$/export2.obj $(OBJ)$/merge.obj $(OBJ)$/helpex.obj 
 APP2RPATH= NONE
-APP2STDLIBS+=$(SALLIB) $(EXPATASCII3RDLIB) $(TOOLSLIB)
+APP2STDLIBS+= \
+            $(EXPATASCII3RDLIB) \
+            $(TOOLSLIB) \
+            $(COMPHELPERLIB) \
+            $(SALLIB)
 
 # extractor and merger for *.lng and *.lng
 APP3TARGET= ulfex
