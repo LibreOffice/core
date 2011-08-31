@@ -83,8 +83,6 @@ $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/pathoptions.hxx,unot
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/printwarningoptions.hxx,unotools/printwarningoptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/processfactory.hxx,unotools/processfactory.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/progresshandlerwrap.hxx,unotools/progresshandlerwrap.hxx))
-$(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/propertysethelper.hxx,unotools/propertysethelper.hxx))
-$(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/propertysetinfo.hxx,unotools/propertysetinfo.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/querydeep.hxx,unotools/querydeep.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/readwritemutexguard.hxx,unotools/readwritemutexguard.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/regpathhelper.hxx,unotools/regpathhelper.hxx))
