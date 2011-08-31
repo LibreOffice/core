@@ -2930,7 +2930,7 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
         pFkp = 0;
         return false;                           // PLCF fertig abgearbeitet
     }
-    (*pPLCF)++;
+    pPLCF->advance();
     long nPo = SVBT16ToShort( (sal_uInt8 *)pPage );
     nPo <<= 9;                                  // shift als LONG
 
@@ -3550,8 +3550,8 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
 
 WW8PLCFx& WW8PLCFx_SEPX::operator ++( int )
 {
-    if( pPLCF )
-        (*pPLCF)++;
+    if (pPLCF)
+        pPLCF->advance();
     return *this;
 }
 
@@ -3723,10 +3723,10 @@ void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
 
 WW8PLCFx& WW8PLCFx_SubDoc::operator ++( int )
 {
-    if( pRef && pTxt )
+    if (pRef && pTxt)
     {
-        (*pRef)++;
-        (*pTxt)++;
+        pRef->advance();
+        pTxt->advance();
     }
     return *this;
 }
@@ -6617,7 +6617,7 @@ bool WW8PLCF_HdFt::GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rSta
     aPLCF.SetIdx( nIdx );               // Lookup suitable CP
     aPLCF.Get( rStart, nEnd, pData );
     rLen = nEnd - rStart;
-    aPLCF++;
+    aPLCF.advance();
 
     return true;
 }

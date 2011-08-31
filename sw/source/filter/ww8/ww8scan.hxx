@@ -313,7 +313,7 @@ public:
     bool SeekPos(WW8_CP nPos);
     WW8_CP Where() const;
     bool Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const;
-    WW8PLCF& operator ++( int ) { if( nIdx < nIMax ) nIdx++; return *this; }
+    void advance() { if( nIdx < nIMax ) ++nIdx; }
 
     const void* GetData( sal_Int32 nInIdx ) const
     {

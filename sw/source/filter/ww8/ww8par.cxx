@@ -4570,7 +4570,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         WW8_CP nStart, nEnd;
         void* pDummy;
 
-        for (int i=0;i<pGloss->GetNoStrings();i++,aPlc++)
+        for (int i = 0; i < pGloss->GetNoStrings(); ++i, aPlc.advance())
         {
             SwNodeIndex aIdx( rDoc.GetNodes().GetEndOfContent());
             SwTxtFmtColl* pColl =
