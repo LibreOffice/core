@@ -711,65 +711,63 @@ void ScDocument::UpdateChartListenerCollection()
             continue;
 
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
-        SdrObject* pObject = aIter.Next();
-        while (pObject)
+        for (SdrObject* pObject = aIter.Next(); pObject; pObject = aIter.Next())
         {
-            if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
+            if ( pObject->GetObjIdentifier() != OBJ_OLE2 )
+                continue;
+
+            String aObjName = ((SdrOle2Obj*)pObject)->GetPersistName();
+            aCLSearcher.SetString( aObjName );
+            sal_uInt16 nIndex;
+            if ( pChartListenerCollection->Search( &aCLSearcher, nIndex ) )
             {
-                String aObjName = ((SdrOle2Obj*)pObject)->GetPersistName();
-                aCLSearcher.SetString( aObjName );
-                sal_uInt16 nIndex;
-                if ( pChartListenerCollection->Search( &aCLSearcher, nIndex ) )
+                ((ScChartListener*) (pChartListenerCollection->
+                    At( nIndex )))->SetUsed( sal_True );
+            }
+            else if ( lcl_StringInCollection( pOtherObjects, aObjName ) )
+            {
+                // non-chart OLE object -> don't touch
+            }
+            else
+            {
+                bool bIsChart = false;
+
+                uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                OSL_ENSURE( xIPObj.is(), "No embedded object is given!");
+                uno::Reference< ::com::sun::star::chart2::data::XDataReceiver > xReceiver;
+                uno::Reference< embed::XComponentSupplier > xCompSupp( xIPObj, uno::UNO_QUERY );
+                if( xCompSupp.is())
+                    xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
+
+                // if the object is a chart2::XDataReceiver, we must attach as XDataProvider
+                if( xReceiver.is() &&
+                    !PastingDrawFromOtherDoc())
                 {
-                    ((ScChartListener*) (pChartListenerCollection->
-                        At( nIndex )))->SetUsed( sal_True );
+                    // NOTE: this currently does not work as we are
+                    // unable to set the data. So a chart from the
+                    // same document is treated like a chart with
+                    // own data for the time being.
+
+                    // data provider
+                    // number formats supplier
+
+                    // data ?
+                    // how to set?? Defined in XML-file, which is already loaded!!!
+                    // => we have to do this stuff here, BEFORE the chart is actually loaded
                 }
-                else if ( lcl_StringInCollection( pOtherObjects, aObjName ) )
+
+                if (!bIsChart)
                 {
-                    // non-chart OLE object -> don't touch
-                }
-                else
-                {
-                    bool bIsChart = false;
+                    //  put into list of other ole objects, so the object doesn't have to
+                    //  be swapped in the next time UpdateChartListenerCollection is called
+                    //! remove names when objects are no longer there?
+                    //  (object names aren't used again before reloading the document)
 
-                    uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                    OSL_ENSURE( xIPObj.is(), "No embedded object is given!");
-                    uno::Reference< ::com::sun::star::chart2::data::XDataReceiver > xReceiver;
-                    uno::Reference< embed::XComponentSupplier > xCompSupp( xIPObj, uno::UNO_QUERY );
-                    if( xCompSupp.is())
-                        xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
-
-                    // if the object is a chart2::XDataReceiver, we must attach as XDataProvider
-                    if( xReceiver.is() &&
-                        !PastingDrawFromOtherDoc())
-                    {
-                        // NOTE: this currently does not work as we are
-                        // unable to set the data. So a chart from the
-                        // same document is treated like a chart with
-                        // own data for the time being.
-
-                        // data provider
-                        // number formats supplier
-
-                        // data ?
-                        // how to set?? Defined in XML-file, which is already loaded!!!
-                        // => we have to do this stuff here, BEFORE the chart is actually loaded
-                    }
-
-                    if (!bIsChart)
-                    {
-                        //  put into list of other ole objects, so the object doesn't have to
-                        //  be swapped in the next time UpdateChartListenerCollection is called
-                        //! remove names when objects are no longer there?
-                        //  (object names aren't used again before reloading the document)
-
-                        if (!pOtherObjects)
-                            pOtherObjects = new ScStrCollection;
-                        pOtherObjects->Insert( new StrData( aObjName ) );
-                    }
+                    if (!pOtherObjects)
+                        pOtherObjects = new ScStrCollection;
+                    pOtherObjects->Insert( new StrData( aObjName ) );
                 }
             }
-            pObject = aIter.Next();
         }
     }
     // alle nicht auf SetUsed gesetzten loeschen
