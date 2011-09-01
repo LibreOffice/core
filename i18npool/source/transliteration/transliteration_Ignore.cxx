@@ -29,9 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_i18npool.hxx"
 
-// prevent internal compiler error with MSVC6SP3
 #include <utility>
-
+#include <comphelper/string.hxx>
 #include <transliteration_Ignore.hxx>
 
 using namespace com::sun::star::uno;
@@ -138,7 +137,7 @@ transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
 {
     // Create a string buffer which can hold nCount + 1 characters.
     // The reference count is 1 now.
-    rtl_uString * newStr = x_rtl_uString_new_WithLength(nCount);
+    rtl_uString * newStr = comphelper::string::rtl_uString_alloc(nCount);
     sal_Unicode * dst = newStr->buffer;
     const sal_Unicode * src = inStr.getStr() + startPos;
 

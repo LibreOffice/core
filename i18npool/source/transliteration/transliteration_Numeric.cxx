@@ -32,6 +32,7 @@
 #include <transliteration_Numeric.hxx>
 #include <nativenumbersupplier.hxx>
 #include <defaultnumberingprovider.hxx>
+#include <comphelper/string.hxx>
 
 using namespace com::sun::star::uno;
 
@@ -78,7 +79,7 @@ transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 s
         if (endPos >  inStr.getLength())
             endPos = inStr.getLength();
 
-        rtl_uString* pStr = x_rtl_uString_new_WithLength(nCount);
+        rtl_uString* pStr = comphelper::string::rtl_uString_alloc(nCount);
         sal_Unicode* out = pStr->buffer;
 
         if (useOffset)

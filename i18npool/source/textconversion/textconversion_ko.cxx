@@ -35,7 +35,6 @@
 #include <com/sun/star/linguistic2/ConversionDirection.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <i18nutil/x_rtl_ustring.h>
 #include <unicode/uchar.h>
 
 using namespace com::sun::star::lang;

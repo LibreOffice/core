@@ -46,6 +46,72 @@ namespace rtl { class OUString; }
 // go into the stable URE API:
 namespace comphelper { namespace string {
 
+namespace detail
+{
+    template <typename T, typename U> T* string_alloc(sal_Int32 nLen)
+    {
+        //Clearly this is somewhat cosy with the sal implmentation
+
+        //rtl_[u]String contains U buffer[1], so an input of nLen
+        //allocates a buffer of nLen + 1 and we'll ensure a null termination
+        T *newStr = (T*)rtl_allocateMemory(sizeof(T) + sizeof(U) * nLen);
+        newStr->refCount = 1;
+        newStr->length = nLen;
+        newStr->buffer[nLen]=0;
+        return newStr;
+    }
+}
+
+/** Allocate a new string containing space for a given number of characters.
+
+    The reference count of the new string will be 1. The length of the string
+    will be nLen. This function does not handle out-of-memory conditions.
+
+    The characters of the capacity are not cleared, and the length is set to
+    nLen, unlike the similar method of rtl_uString_new_WithLength which
+    zeros out the buffer, and sets the length to 0. So should be somewhat
+    more efficient for allocating a new string.
+
+    call rtl_uString_release to release the string
+    alternatively pass ownership to an OUString with
+    rtl::OUString(newStr, SAL_NO_ACQUIRE);
+
+    @param newStr
+    pointer to the new string.
+
+    @param len
+    the number of characters.
+ */
+COMPHELPER_DLLPUBLIC inline rtl_uString * SAL_CALL rtl_uString_alloc(sal_Int32 nLen)
+{
+    return detail::string_alloc<rtl_uString, sal_Unicode>(nLen);
+}
+
+/** Allocate a new string containing space for a given number of characters.
+
+    The reference count of the new string will be 1. The length of the string
+    will be nLen. This function does not handle out-of-memory conditions.
+
+    The characters of the capacity are not cleared, and the length is set to
+    nLen, unlike the similar method of rtl_String_new_WithLength which
+    zeros out the buffer, and sets the length to 0. So should be somewhat
+    more efficient for allocating a new string.
+
+    call rtl_String_release to release the string
+    alternatively pass ownership to an OUString with
+    rtl::OUString(newStr, SAL_NO_ACQUIRE);
+
+    @param newStr
+    pointer to the new string.
+
+    @param len
+    the number of characters.
+ */
+COMPHELPER_DLLPUBLIC inline rtl_String * SAL_CALL rtl_string_alloc(sal_Int32 nLen)
+{
+    return detail::string_alloc<rtl_String, sal_Char>(nLen);
+}
+
 /**
    Replace the first occurrence of a substring with another string.
 

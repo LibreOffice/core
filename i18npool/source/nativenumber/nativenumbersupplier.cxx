@@ -34,7 +34,7 @@
 #include <nativenumbersupplier.hxx>
 #include <localedata.hxx>
 #include <data/numberchar.h>
-#include <i18nutil/x_rtl_ustring.h>
+#include <comphelper/string.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -79,7 +79,7 @@ OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, 
         Sequence< sal_Int32 >& offset, sal_Bool useOffset, sal_Int16 number ) throw(RuntimeException)
 {
         const sal_Unicode *src = inStr.getStr() + startPos;
-        rtl_uString *newStr = x_rtl_uString_new_WithLength(nCount);
+        rtl_uString *newStr = comphelper::string::rtl_uString_alloc(nCount);
         if (useOffset)
             offset.realloc(nCount);
 

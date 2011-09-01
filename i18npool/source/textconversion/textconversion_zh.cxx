@@ -35,7 +35,7 @@
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/linguistic2/ConversionDirection.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
-#include <i18nutil/x_rtl_ustring.h>
+#include <comphelper/string.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::i18n;
@@ -86,7 +86,7 @@ TextConversion_zh::getCharConversion(const OUString& aText, sal_Int32 nStartPos,
         Index = ((const sal_uInt16* (*)())getFunctionBySymbol("getSTC_CharIndex_S2T"))();
     }
 
-    rtl_uString * newStr = x_rtl_uString_new_WithLength(nLength);
+    rtl_uString * newStr = comphelper::string::rtl_uString_alloc(nLength);
     for (sal_Int32 i = 0; i < nLength; i++)
         newStr->buffer[i] =
             getOneCharConversion(aText[nStartPos+i], Data, Index);

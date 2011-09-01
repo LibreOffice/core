@@ -34,7 +34,7 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <unicode/uchar.h>
-#include <i18nutil/x_rtl_ustring.h>
+#include <comphelper/string.hxx>
 #include <breakiteratorImpl.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -99,7 +99,7 @@ cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
         nCount = len - nPos;
 
     trans->setMappingType(MappingTypeToTitle, rLocale);
-    rtl_uString* pStr = x_rtl_uString_new_WithLength(nCount);
+    rtl_uString* pStr = comphelper::string::rtl_uString_alloc(nCount);
     sal_Unicode* out = pStr->buffer;
     BreakIteratorImpl brk(xMSF);
     Boundary bdy = brk.getWordBoundary(Text, nPos, rLocale,
