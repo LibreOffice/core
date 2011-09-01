@@ -53,7 +53,9 @@ SLOFILES= \
     $(SLO)$/services.obj	\
     $(SLO)$/svdfppt.obj		\
     $(SLO)$/svxmsbas2.obj       \
-    $(SLO)$/mstoolbar.obj
+    $(SLO)$/mstoolbar.obj       \
+    $(SLO)$/ooxmlexport.obj
+
 
 SHL1TARGET= msfilter$(DLLPOSTFIX)
 .IF "$(COM)" == "MSC"

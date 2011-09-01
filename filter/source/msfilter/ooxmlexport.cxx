@@ -13,7 +13,7 @@
  * License.
  *
  * Major Contributor(s):
- * Copyright (C) 2011 Lubos Lunak <l.lunak@suse.cz> (initial developer)
+ * Copyright (C) 2011 Tor Lillqvist <tlillqvist@suse.com> (initial developer)
  *
  * All Rights Reserved.
  *
@@ -25,24 +25,14 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _OOXMLEXPORT_HXX
-#define _OOXMLEXPORT_HXX
 
-#include <sax/fshelper.hxx>
-#include <oox/core/filterbase.hxx>
-#include "filter/msfilter/msfilterdllapi.h"
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_filter.hxx"
 
-/**
- Interface class, StarMath will implement writeFormulaOoxml() to write out OOXML
- representing the formula.
- */
-class MSFILTER_DLLPUBLIC OoxmlFormulaExportBase
+#include <filter/msfilter/ooxmlexport.hxx>
+
+OoxmlFormulaExportBase::OoxmlFormulaExportBase()
 {
-public:
-    OoxmlFormulaExportBase();
-    virtual void writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oox::core::OoxmlVersion version ) = 0;
-};
-
-#endif
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
