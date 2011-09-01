@@ -320,6 +320,7 @@ namespace
 
 CommandLineArgs& Desktop::GetCommandLineArgs()
 {
+    ensureProcessServiceFactory();
     return theCommandLineArgs::get();
 }
 
@@ -707,7 +708,13 @@ void Desktop::Init()
         }
     }
 
-    // We need to have service factory before going further.
+    // We need to have service factory before going further, but see fdo#37195.
+    // Doing this will mmap common.rdb, making it not overwritable on windows,
+    // so this can't happen before the synchronization above. Lets rework this
+    // so that the above is called *from* ensureProcessServiceFactory or
+    // something to enforce this gotcha
+    ensureProcessServiceFactory();
+
     if( !::comphelper::getProcessServiceFactory().is())
     {
         OSL_FAIL("Service factory should have been crated in soffice_main().");
@@ -759,8 +766,11 @@ void Desktop::InitFinished()
 
 // GetCommandLineArgs() requires this code to work, otherwise it will abort, and
 // on Unix command line args needs to be checked before Desktop::Init()
-void Desktop::CreateProcessServiceFactory()
+void Desktop::ensureProcessServiceFactory()
 {
+    if( ::comphelper::getProcessServiceFactory().is())
+        return;
+
     Reference < XMultiServiceFactory > rSMgr = CreateApplicationServiceManager();
     if( rSMgr.is() )
     {

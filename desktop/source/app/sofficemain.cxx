@@ -49,7 +49,6 @@ extern "C" int soffice_main()
     desktop::Desktop aDesktop;
     // This string is used during initialization of the Gtk+ VCL module
     aDesktop.SetAppName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice")) );
-    aDesktop.CreateProcessServiceFactory();
 #ifdef UNX
     // handle --version and --help already here, otherwise they would be handled
     // after VCL initialization that might fail if $DISPLAY is not set
