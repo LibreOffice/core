@@ -777,6 +777,7 @@ SfxChildWindowContext::GetAlignment() const
 SfxContentHelper::IsDocument(String const&)
 SfxControllerItem::GetCoreMetric() const
 SfxControllerItem::UpdateSlot()
+SfxDateTimeItem::SfxDateTimeItem(unsigned short)
 SfxDockingWrapper::GetChildWindowId()
 SfxFilterContainer::GetFilter4ClipBoardId(unsigned int, unsigned long, unsigned long) const
 SfxFilterContainer::GetFilter4Mime(String const&, unsigned long, unsigned long) const
@@ -1454,6 +1455,8 @@ WP3ResourceFork::getResourcesByType(unsigned int) const
 WP3StylesListener::insertCell()
 WP3StylesListener::insertRow()
 WP3SubDocument::WP3SubDocument(unsigned char*, unsigned int)
+WP42DefineColumnsGroup::WP42DefineColumnsGroup(WPXInputStream*, WPXEncryption*, unsigned char)
+WP42ExtendedCharacterGroup::WP42ExtendedCharacterGroup(WPXInputStream*, WPXEncryption*, unsigned char)
 WP42SubDocument::WP42SubDocument(unsigned char*, unsigned int)
 WP6SubDocument::WP6SubDocument(WPXInputStream*, WPXEncryption*, unsigned int)
 WPGTextDataHandler::endSubDocument()
@@ -2058,10 +2061,12 @@ binfilter::SwDestroyList::Remove(unsigned short, unsigned short)
 binfilter::SwInsHardBlankSoftHyph::~SwInsHardBlankSoftHyph()
 binfilter::SwLayAction::SwLayAction(binfilter::SwRootFrm*, binfilter::SwViewImp*)
 binfilter::SwLayAction::~SwLayAction()
+binfilter::SwLayouter::SwLayouter()
 binfilter::SwOLELRUCache::Remove(binfilter::SwOLEObj&)
 binfilter::SwOutlineNodes::Insert(binfilter::SwNode* const&, unsigned short&)
 binfilter::SwOutlineNodes::Insert(binfilter::SwNode* const*, unsigned short)
 binfilter::SwOutlineNodes::Insert(binfilter::SwOutlineNodes const*, unsigned short, unsigned short)
+binfilter::SwRects::Insert(binfilter::SwRects const*, unsigned short, unsigned short, unsigned short)
 binfilter::SwRects::Replace(binfilter::SwRect const&, unsigned short)
 binfilter::SwRects::Replace(binfilter::SwRect const*, unsigned short, unsigned short)
 binfilter::SwRects::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::SwRect const&, void*), void*)
@@ -2650,12 +2655,11 @@ layoutimpl::WidgetFactory::sfx2CreateWindow(VCLXWindow**, Window*, rtl::OUString
 layoutimpl::getParent(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 layoutimpl::prophlp::getProperty(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, rtl::OUString const&)
 libvisio::VSDXCharacterList::getElement(unsigned int)
-libvisio::VSDXGeometryList::getElement(unsigned int)
 libvisio::VSDXOutputElementList::addEllipse(WPXPropertyList const&)
 libvisio::VSDXOutputElementList::addEndLayer()
 libvisio::VSDXOutputElementList::addStartLayer(WPXPropertyList const&)
 libvisio::VSDXOutputElementList::clear()
-libvisio::VSDXStyles::getTextStyle(unsigned int) const
+libvisio::VSDXPage::VSDXPage(double, double, unsigned int, unsigned int, libvisio::VSDXOutputElementList const&)
 libvisio::VisioDocument::generateSVG(WPXInputStream*, WPXString&)
 libwpg::WPGDashArray::at(unsigned int) const
 libwpg::WPGraphics::generateSVG(unsigned char const*, unsigned long, WPXString&, libwpg::WPGFileFormat)
