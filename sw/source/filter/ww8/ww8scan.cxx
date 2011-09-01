@@ -1972,18 +1972,6 @@ String WW8Read_xstz(SvStream& rStrm, sal_uInt16 nChars, bool bAtEndSeekRel1)
     return aStr;
 }
 
-sal_uLong SafeReadString(ByteString &rStr,sal_uInt16 nLen,SvStream &rStrm)
-{
-    sal_uLong nWasRead=0;
-    if (nLen)
-    {
-        nWasRead = rStrm.Read( rStr.AllocBuffer( nLen ), nLen);
-        if( nWasRead != nLen )
-            rStr.ReleaseBufferAccess(static_cast<xub_StrLen>(nWasRead));
-    }
-    return nWasRead;
-}
-
 xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
     WW8_CP nAktStartCp, long nTotalLen, rtl_TextEncoding eEnc ) const
 {
@@ -2018,9 +2006,8 @@ xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
         else
         {
             // Alloc method automatically sets Zero at the end
-            ByteString aByteStr;
-            SafeReadString(aByteStr,(sal_uInt16)nLen,rStrm);
-            rStr += String( aByteStr, eEnc );
+            rtl::OString aByteStr = readBytesAsOString(rStrm, nLen);
+            rStr.Append(String(rtl::OStringToOUString(aByteStr, eEnc)));
         }
         nTotalRead  += nLen;
         nAktStartCp += nLen;
@@ -3923,9 +3910,8 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                 {
                     sal_uInt8 nBChar(0);
                     rStrm >> nBChar;
-                    ByteString aTmp;
-                    SafeReadString(aTmp,nBChar,rStrm);
-                    rArray.push_back(String(aTmp, eCS));
+                    rtl::OString aTmp = readBytesAsOString(rStrm, nBChar);
+                    rArray.push_back(rtl::OStringToOUString(aTmp, eCS));
                 }
 
                 // Skip the extra data
@@ -3957,9 +3943,8 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                     {
                         sal_uInt8 nBChar(0);
                         rStrm >> nBChar;
-                        ByteString aTmp;
-                        SafeReadString(aTmp,nBChar,rStrm);
-                        pValueArray->push_back(String(aTmp, eCS));
+                        rtl::OString aTmp = readBytesAsOString(rStrm, nBChar);
+                        pValueArray->push_back(rtl::OStringToOUString(aTmp, eCS));
                     }
                 }
             }
@@ -3984,9 +3969,9 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                 ++nRead;
                 if (nBChar)
                 {
-                    ByteString aTmp;
-                    nRead += SafeReadString(aTmp,nBChar,rStrm);
-                    rArray.push_back(String(aTmp, eCS));
+                    rtl::OString aTmp = readBytesAsOString(rStrm, nBChar);
+                    nRead += aTmp.getLength();
+                    rArray.push_back(rtl::OStringToOUString(aTmp, eCS));
                 }
                 else
                     rArray.push_back(aEmptyStr);

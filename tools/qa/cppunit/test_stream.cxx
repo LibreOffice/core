@@ -41,9 +41,11 @@ namespace
     {
     public:
         void test_stdstream();
+        void test_fastostring();
 
         CPPUNIT_TEST_SUITE(Test);
         CPPUNIT_TEST(test_stdstream);
+        CPPUNIT_TEST(test_fastostring);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -118,6 +120,26 @@ namespace
         CPPUNIT_ASSERT(tools_a == 'f');
 
         //failbit is rather subtle wrt e.g seeks
+    }
+
+    void Test::test_fastostring()
+    {
+        char foo[] = "foobar";
+        SvMemoryStream aMemStream(RTL_CONSTASCII_STRINGPARAM(foo), STREAM_READ);
+
+        rtl::OString aOne = readBytesAsOString(aMemStream, 3);
+        CPPUNIT_ASSERT(aOne.equalsL(RTL_CONSTASCII_STRINGPARAM("foo")));
+
+        rtl::OString aTwo = readBytesAsOString(aMemStream, 3);
+        CPPUNIT_ASSERT(aTwo.equalsL(RTL_CONSTASCII_STRINGPARAM("bar")));
+
+        rtl::OString aThree = readBytesAsOString(aMemStream, 3);
+        CPPUNIT_ASSERT(!aThree.getLength());
+
+        aMemStream.Seek(0);
+
+        rtl::OString aFour = readBytesAsOString(aMemStream, 100);
+        CPPUNIT_ASSERT(aFour.equalsL(RTL_CONSTASCII_STRINGPARAM(foo)));
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(Test);
