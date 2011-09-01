@@ -5509,7 +5509,6 @@ static boolean ImplHandleAppCommand( HWND hWnd, LPARAM lParam )
     case APPCOMMAND_VOLUME_DOWN:                nCommand = MEDIA_COMMAND_VOLUME_DOWN; break;
     case APPCOMMAND_VOLUME_MUTE:                nCommand = MEDIA_COMMAND_VOLUME_MUTE; break;
     case APPCOMMAND_VOLUME_UP:                  nCommand = MEDIA_COMMAND_VOLUME_UP; break;
-        break;
     default:
         return false;
     }
