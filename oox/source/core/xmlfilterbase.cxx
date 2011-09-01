@@ -146,7 +146,9 @@ namespace
                 "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
                 "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
                 "http://schemas.microsoft.com/office/excel/2006/main",
-                "http://schemas.openxmlformats.org/presentationml/2006/main"
+                "http://schemas.openxmlformats.org/presentationml/2006/main",
+                "http://schemas.openxmlformats.org/markup-compatibility/2006",
+                "http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2"
             };
 
             static const sal_Int32 namespaceIds[] = {
@@ -168,7 +170,7 @@ namespace
                 NMSP_ax,
                 NMSP_xm,
                 NMSP_mce,
-                NMSP_mceTest,
+                NMSP_mceTest
             };
 
             Sequence< Pair< OUString, sal_Int32 > > aRet(STATIC_ARRAY_SIZE(namespaceIds));
