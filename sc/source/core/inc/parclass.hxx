@@ -104,7 +104,7 @@ private:
 
     struct CommonData
     {
-        const static size_t nMaxParams = 7;
+        const static sal_Int32 nMaxParams = 7;
 
         Type        nParam[nMaxParams];
         bool        bRepeatLast;

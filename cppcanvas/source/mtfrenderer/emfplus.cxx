@@ -270,7 +270,7 @@ namespace cppcanvas
                 s >> header >> parts;
 
                 EMFP_DEBUG (printf ("EMF+\tregion\n"));
-                EMFP_DEBUG (printf ("EMF+\theader: 0x%08x parts: %d\n", header, parts));
+                EMFP_DEBUG (printf ("EMF+\theader: 0x%08x parts: %d\n", (unsigned int)header, (int)parts));
 
                 if (parts) {
                     if( parts<0 || sal_uInt32(parts)>SAL_MAX_INT32/sizeof(sal_Int32) )
@@ -280,12 +280,12 @@ namespace cppcanvas
 
                     for (int i = 0; i < parts; i ++) {
                         s >> combineMode [i];
-                        EMFP_DEBUG (printf ("EMF+\tcombine mode [%d]: 0x%08x\n", i, combineMode [i]));
+                        EMFP_DEBUG (printf ("EMF+\tcombine mode [%d]: 0x%08x\n", i,(unsigned int)combineMode [i]));
                     }
                 }
 
                 s >> initialState;
-                EMFP_DEBUG (printf ("EMF+\tinitial state: 0x%08x\n", initialState));
+                EMFP_DEBUG (printf ("EMF+\tinitial state: 0x%d\n",(int) initialState));
             }
         };
 
@@ -355,7 +355,7 @@ namespace cppcanvas
 
                 s >> header >> type;
 
-                EMFP_DEBUG (printf ("EMF+\tbrush\nEMF+\theader: 0x%08x type: %d\n", header, type));
+                EMFP_DEBUG (printf ("EMF+\tbrush\nEMF+\theader: 0x%08x type: %d\n",(unsigned int) header,(int) type));
 
                 switch (type) {
                 case 0:
@@ -364,7 +364,7 @@ namespace cppcanvas
 
                         s >> color;
                         solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                        EMFP_DEBUG (printf ("EMF+\tsolid color: 0x%08x\n", color));
+                        EMFP_DEBUG (printf ("EMF+\tsolid color: 0x%08x\n", (unsigned int)color));
 
                         break;
                     }
@@ -373,19 +373,19 @@ namespace cppcanvas
                     {
                         s >> additionalFlags >> wrapMode;
 
-                        EMFP_DEBUG (printf ("EMF+\tpath gradient, additional flags: 0x%02x\n", additionalFlags));
+                        EMFP_DEBUG (printf ("EMF+\tpath gradient, additional flags: 0x%02x\n",(unsigned int) additionalFlags));
 
                         sal_uInt32 color;
 
                         s >> color;
                         solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                        EMFP_DEBUG (printf ("EMF+\tcenter color: 0x%08x\n", color));
+                        EMFP_DEBUG (printf ("EMF+\tcenter color: 0x%08x\n",(unsigned int) color));
 
                         s >> areaX >> areaY;
                         EMFP_DEBUG (printf ("EMF+\tcenter point: %f,%f\n", areaX, areaY));
 
                         s >> surroundColorsNumber;
-                        EMFP_DEBUG (printf ("EMF+\tsurround colors: %d\n", surroundColorsNumber));
+                        EMFP_DEBUG (printf ("EMF+\tsurround colors: %d\n",(int) surroundColorsNumber));
 
                         if( surroundColorsNumber<0 || sal_uInt32(surroundColorsNumber)>SAL_MAX_INT32/sizeof(::Color) )
                             surroundColorsNumber = SAL_MAX_INT32/sizeof(::Color);
@@ -396,14 +396,14 @@ namespace cppcanvas
                             surroundColors[i] = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                             if (i == 0)
                                 secondColor = surroundColors [0];
-                            EMFP_DEBUG (printf ("EMF+\tsurround color[%d]: 0x%08x\n", i, color));
+                            EMFP_DEBUG (printf ("EMF+\tsurround color[%d]: 0x%08x\n", i, (unsigned int)color));
                         }
 
                         if (additionalFlags & 0x01) {
                             sal_Int32 pathLength;
 
                             s >> pathLength;
-                            EMFP_DEBUG (printf ("EMF+\tpath length: %d\n", pathLength));
+                            EMFP_DEBUG (printf ("EMF+\tpath length: %d\n", (int)pathLength));
 
                             sal_uInt32 pos = s.Tell ();
                             EMFP_DEBUG (dumpWords (s, 32));
@@ -413,7 +413,7 @@ namespace cppcanvas
                             s >> pathHeader >> pathPoints >> pathFlags;
 
                             EMFP_DEBUG (printf ("EMF+\tpath (brush path gradient)\n"));
-                            EMFP_DEBUG (printf ("EMF+\theader: 0x%08x points: %d additional flags: 0x%08x\n", pathHeader, pathPoints, pathFlags));
+                            EMFP_DEBUG (printf ("EMF+\theader: 0x%08x points: %d additional flags: 0x%d\n", (unsigned int)pathHeader, (int)pathPoints, (int)pathFlags));
 
                             path = new EMFPPath (pathPoints);
                             path->Read (s, pathFlags, rR);
@@ -438,7 +438,7 @@ namespace cppcanvas
                         }
                         if (additionalFlags & 0x08) {
                             s >> blendPoints;
-                            EMFP_DEBUG (printf ("EMF+\tuse blend, points: %d\n", blendPoints));
+                            EMFP_DEBUG (printf ("EMF+\tuse blend, points: %d\n", (int)blendPoints));
                             if( blendPoints<0 || sal_uInt32(blendPoints)>SAL_MAX_INT32/(2*sizeof(float)) )
                                 blendPoints = SAL_MAX_INT32/(2*sizeof(float));
                             blendPositions = new float [2*blendPoints];
@@ -455,7 +455,7 @@ namespace cppcanvas
 
                         if (additionalFlags & 0x04) {
                             s >> colorblendPoints;
-                            EMFP_DEBUG (printf ("EMF+\tuse color blend, points: %d\n", colorblendPoints));
+                            EMFP_DEBUG (printf ("EMF+\tuse color blend, points: %d\n", (int)colorblendPoints));
                             if( colorblendPoints<0 || sal_uInt32(colorblendPoints)>SAL_MAX_INT32/sizeof(float) )
                                 colorblendPoints = SAL_MAX_INT32/sizeof(float);
                             if( sal_uInt32(colorblendPoints)>SAL_MAX_INT32/sizeof(::Color) )
@@ -469,7 +469,7 @@ namespace cppcanvas
                             for (int i=0; i < colorblendPoints; i ++) {
                                 s >> color;
                                 colorblendColors [i] = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                                EMFP_DEBUG (printf ("EMF+\tcolor[%d]: 0x%08x\n", i, color));
+                                EMFP_DEBUG (printf ("EMF+\tcolor[%d]: 0x%08x\n", i,(unsigned int) color));
                             }
                         }
                         } else {
@@ -482,7 +482,7 @@ namespace cppcanvas
                     {
                         s >> additionalFlags >> wrapMode;
 
-                        EMFP_DEBUG (printf ("EMF+\tlinear gradient, additional flags: 0x%02x\n", additionalFlags));
+                        EMFP_DEBUG (printf ("EMF+\tlinear gradient, additional flags: 0x%02x\n", (unsigned int)additionalFlags));
 
                         s >> areaX >> areaY >> areaWidth >> areaHeight;
 
@@ -513,7 +513,7 @@ namespace cppcanvas
                         }
                         if (additionalFlags & 0x08) {
                             s >> blendPoints;
-                            EMFP_DEBUG (printf ("EMF+\tuse blend, points: %d\n", blendPoints));
+                            EMFP_DEBUG (printf ("EMF+\tuse blend, points: %d\n", (int)blendPoints));
                             if( blendPoints<0 || sal_uInt32(blendPoints)>SAL_MAX_INT32/(2*sizeof(float)) )
                                 blendPoints = SAL_MAX_INT32/(2*sizeof(float));
                             blendPositions = new float [2*blendPoints];
@@ -530,7 +530,7 @@ namespace cppcanvas
 
                         if (additionalFlags & 0x04) {
                             s >> colorblendPoints;
-                            EMFP_DEBUG (printf ("EMF+\tuse color blend, points: %d\n", colorblendPoints));
+                            EMFP_DEBUG (printf ("EMF+\tuse color blend, points: %d\n", (int)colorblendPoints));
                             if( colorblendPoints<0 || sal_uInt32(colorblendPoints)>SAL_MAX_INT32/sizeof(float) )
                                 colorblendPoints = SAL_MAX_INT32/sizeof(float);
                             if( sal_uInt32(colorblendPoints)>SAL_MAX_INT32/sizeof(::Color) )
@@ -544,14 +544,14 @@ namespace cppcanvas
                             for (int i=0; i < colorblendPoints; i ++) {
                                 s >> color;
                                 colorblendColors [i] = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                                EMFP_DEBUG (printf ("EMF+\tcolor[%d]: 0x%08x\n", i, color));
+                                EMFP_DEBUG (printf ("EMF+\tcolor[%d]: 0x%08x\n", i, (unsigned int)color));
                             }
                         }
 
                         break;
                     }
                 default:
-                    EMFP_DEBUG (printf ("EMF+\tunhandled brush type: %d\n", type));
+                    EMFP_DEBUG (printf ("EMF+\tunhandled brush type: %08x\n", (unsigned int)type));
                 }
             }
         };
@@ -594,7 +594,7 @@ namespace cppcanvas
 
                 s >> header >> unknown >> penFlags >> unknown2 >> width;
 
-                EMFP_DEBUG (printf ("EMF+\tpen\nEMF+\theader: 0x%08x unknown: 0x%08x additional flags: 0x%08x unknown: 0x%08x width: %f\n", header, unknown, penFlags, unknown2, width));
+                EMFP_DEBUG (printf ("EMF+\tpen\nEMF+\theader: 0x%08x unknown: 0x%08x additional flags: 0x%08x unknown: 0x%08x width: %f\n", (unsigned int)header, (unsigned int)unknown, (unsigned int)penFlags,(unsigned int) unknown2, width));
 
                 if (penFlags & 1)
                     s >> transformation;
@@ -751,8 +751,8 @@ namespace cppcanvas
 
         OSL_ASSERT( ( header >> 12 ) == 0xdbc01 );
 
-                EMFP_DEBUG (printf ("EMF+\tfont\nEMF+\theader: 0x%08x version: 0x%08x size: %f unit: 0x%08x\n", header >> 12, header & 0x1fff, emSize, sizeUnit));
-                EMFP_DEBUG (printf ("EMF+\tflags: 0x%08x reserved: 0x%08x length: 0x%08x\n", fontFlags, reserved, length));
+                EMFP_DEBUG (printf ("EMF+\tfont\nEMF+\theader: 0x%08x version: 0x%08x size: %f unit: 0x%08x\n",(unsigned int) header >> 12, (unsigned int)header & 0x1fff, emSize, (unsigned int)sizeUnit));
+                EMFP_DEBUG (printf ("EMF+\tflags: 0x%08x reserved: 0x%08x length: 0x%08x\n", (unsigned int)fontFlags, (unsigned int)reserved, (unsigned int)length));
 
         if( length > 0 && length < 0x4000 ) {
             sal_Unicode *chars = (sal_Unicode *) alloca( sizeof( sal_Unicode ) * length );
@@ -899,7 +899,7 @@ namespace cppcanvas
                 rState.isFillColorSet = true;
                 // extract UseBrush
                 EMFPBrush* brush = (EMFPBrush*) aObjects [brushIndexOrColor];
-                EMFP_DEBUG (printf ("EMF+\tbrush fill slot: %d (type: %d)\n", brushIndexOrColor, brush->GetType ()));
+                EMFP_DEBUG (printf ("EMF+\tbrush fill slot: %u (type: %u)\n", (unsigned int)brushIndexOrColor, (unsigned int)brush->GetType ()));
 
                 // give up in case something wrong happened
                 if( !brush )
@@ -1127,7 +1127,7 @@ namespace cppcanvas
                 rObjectStream >> header >> points >> pathFlags;
 
                 EMFP_DEBUG (printf ("EMF+\tpath\n"));
-                EMFP_DEBUG (printf ("EMF+\theader: 0x%08x points: %d additional flags: 0x%08x\n", header, points, pathFlags));
+                EMFP_DEBUG (printf ("EMF+\theader: 0x%08x points: %d additional flags: 0x%08x\n", (unsigned int)header, (int)points, (unsigned int)pathFlags));
 
                 EMFPPath *path;
                 aObjects [index] = path = new EMFPPath (points);
@@ -1181,7 +1181,7 @@ namespace cppcanvas
 
                 next = rMF.Tell() + ( size - 12 );
 
-                EMFP_DEBUG (printf ("EMF+ record size: %d type: %04hx flags: %04hx data size: %d\n", size, type, flags, dataSize));
+                EMFP_DEBUG (printf ("EMF+ record size: %u type: %04hx flags: %04hx data size: %u\n", (unsigned int)size, type, flags, (unsigned int)dataSize));
 
                 if (type == EmfPlusRecordTypeObject && ((mbMultipart && (flags & 0x7fff) == (mMFlags & 0x7fff)) || (flags & 0x8000))) {
                     if (!mbMultipart) {
@@ -1192,7 +1192,7 @@ namespace cppcanvas
 
                     // 1st 4 bytes are unknown
                     mMStream.Write (((const char *)rMF.GetData()) + rMF.Tell() + 4, dataSize - 4);
-                    EMFP_DEBUG (printf ("EMF+ read next object part size: %d type: %04hx flags: %04hx data size: %d\n", size, type, flags, dataSize));
+                    EMFP_DEBUG (printf ("EMF+ read next object part size: %u type: %04hx flags: %04hx data size: %u\n", (unsigned int)size, type, flags, (unsigned int)dataSize));
                 } else {
                     if (mbMultipart) {
                         EMFP_DEBUG (printf ("EMF+ multipart record flags: %04hx\n", mMFlags));
@@ -1210,7 +1210,7 @@ namespace cppcanvas
                     rMF >> header >> version >> nHDPI >> nVDPI;
 
                     EMFP_DEBUG (printf ("EMF+ Header\n"));
-                    EMFP_DEBUG (printf ("EMF+\theader: 0x%08x version: %d horizontal DPI: %d vertical DPI: %d dual: %d\n", header, version, nHDPI, nVDPI, flags & 1));
+                    EMFP_DEBUG (printf ("EMF+\theader: 0x%08x version: %u horizontal DPI: %d vertical DPI: %d dual: %d\n", (int)header, (unsigned int)version, (int)nHDPI, (int)nVDPI,(int)( flags & 1)));
 
                     break;
                 case EmfPlusRecordTypeEndOfFile:
@@ -1230,7 +1230,7 @@ namespace cppcanvas
 
                         rMF >> brushIndexOrColor;
 
-                        EMFP_DEBUG (printf ("EMF+ FillPath slot: %d\n", index));
+                        EMFP_DEBUG (printf ("EMF+ FillPath slot: %u\n", (unsigned int)index));
 
                         EMFPPlusFillPolygon (((EMFPPath*) aObjects [index])->GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
                     }
@@ -1245,7 +1245,7 @@ namespace cppcanvas
 
                         rMF >> brushIndexOrColor >> rectangles;
 
-                        EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", brushIndexOrColor));
+                        EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", (unsigned int)brushIndexOrColor));
 
                         for (int i=0; i < rectangles; i++) {
                             if (flags & 0x4000) {
@@ -1307,7 +1307,7 @@ namespace cppcanvas
 
                         rMF >> points;
 
-                        EMFP_DEBUG (printf ("EMF+ DrawLines in slot: %d points: %d\n", index, points));
+                        EMFP_DEBUG (printf ("EMF+ DrawLines in slot: %u points: %u\n", (unsigned int)index, (unsigned int)points));
 
                         EMFPPath path (points, true);
                         path.Read (rMF, flags, *this);
@@ -1349,7 +1349,7 @@ namespace cppcanvas
                         rMF >> penIndex;
 
                         EMFP_DEBUG (printf ("EMF+ DrawPath\n"));
-                        EMFP_DEBUG (printf ("EMF+\tpen: %d\n", penIndex));
+                        EMFP_DEBUG (printf ("EMF+\tpen: %u\n", (unsigned int)penIndex));
 
                         EMFPPath* path = (EMFPPath*) aObjects [flags & 0xff];
                         EMFPPen* pen = (EMFPPen*) aObjects [penIndex];
@@ -1387,7 +1387,7 @@ namespace cppcanvas
 
                         rMF >> attrIndex >> sourceUnit;
 
-                        EMFP_DEBUG (printf ("EMF+ DrawImagePoints attributes index: %d source unit: %d\n", attrIndex, sourceUnit));
+                        EMFP_DEBUG (printf ("EMF+ DrawImagePoints attributes index: %d source unit: %d\n", (int)attrIndex, (int)sourceUnit));
                         EMFP_DEBUG (printf ("EMF+\tTODO: use image attributes\n"));
 
                         if (sourceUnit == 2 && aObjects [flags & 0xff]) { // we handle only GraphicsUnit.Pixel now
@@ -1399,7 +1399,7 @@ namespace cppcanvas
 
                             rMF >> unknown;
 
-                            EMFP_DEBUG (printf ("EMF+ DrawImagePoints source rectangle: %f,%f %fx%f unknown: 0x%08x\n", sx, sy, sw, sh, unknown));
+                            EMFP_DEBUG (printf ("EMF+ DrawImagePoints source rectangle: %f,%f %fx%f unknown: 0x%08x\n", sx, sy, sw, sh, (unsigned int)unknown));
 
                             if (unknown == 3) { // it probably means number of points defining destination rectangle
                                 float x1, y1, x2, y2, x3, y3;
@@ -1453,7 +1453,7 @@ namespace cppcanvas
                 case EmfPlusRecordTypeSetRenderingOrigin:
                     rMF >> nOriginX >> nOriginY;
                     EMFP_DEBUG (printf ("EMF+ SetRenderingOrigin\n"));
-                    EMFP_DEBUG (printf ("EMF+\torigin [x,y]: %d,%d\n", nOriginX, nOriginY));
+                    EMFP_DEBUG (printf ("EMF+\torigin [x,y]: %d,%d\n", (int)nOriginX, (int)nOriginY));
                     break;
                 case EmfPlusRecordTypeSetTextRenderingHint:
                     EMFP_DEBUG (printf ("EMF+ SetTextRenderingHint\n"));
@@ -1551,10 +1551,10 @@ namespace cppcanvas
 
             rMF >> brushIndexOrColor >> optionFlags >> hasMatrix >> glyphsCount;
 
-            EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", brushIndexOrColor));
-            EMFP_DEBUG (printf ("EMF+\toption flags: 0x%08x\n", optionFlags));
-            EMFP_DEBUG (printf ("EMF+\thas matrix: %d\n", hasMatrix));
-            EMFP_DEBUG (printf ("EMF+\tglyphs: %d\n", glyphsCount));
+            EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", (unsigned int)brushIndexOrColor));
+            EMFP_DEBUG (printf ("EMF+\toption flags: 0x%08x\n", (unsigned int)optionFlags));
+            EMFP_DEBUG (printf ("EMF+\thas matrix: %u\n", (unsigned int)hasMatrix));
+            EMFP_DEBUG (printf ("EMF+\tglyphs: %u\n", (unsigned int)glyphsCount));
 
             if( ( optionFlags & 1 ) && glyphsCount > 0 ) {
             sal_uInt16 *chars = new sal_uInt16[glyphsCount];
@@ -1563,12 +1563,12 @@ namespace cppcanvas
 
             for( sal_uInt32 i=0; i<glyphsCount; i++) {
                 rMF >> chars[i];
-                EMFP_DEBUG (printf ("EMF+\tglyph[%d]: 0x%04x\n",
-                i, chars[i]));
+                EMFP_DEBUG (printf ("EMF+\tglyph[%u]: 0x%04x\n",
+                (unsigned int)i, chars[i]));
             }
             for( sal_uInt32 i=0; i<glyphsCount; i++) {
                 rMF >> charsPosX[i] >> charsPosY[i];
-                EMFP_DEBUG (printf ("EMF+\tglyphPosition[%d]: %f, %f\n", i, charsPosX[i], charsPosY[i]));
+                EMFP_DEBUG (printf ("EMF+\tglyphPosition[%u]: %f, %f\n", (unsigned int)i, charsPosX[i], charsPosY[i]));
             }
 
             XForm transform;
