@@ -261,7 +261,7 @@ EmbeddedObjectRef::EmbeddedObjectRef()
     Construct_Impl();
 }
 
-EmbeddedObjectRef::EmbeddedObjectRef( const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& xObj, sal_Int64 nAspect )
+EmbeddedObjectRef::EmbeddedObjectRef( const uno::Reference < embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
 {
     Construct_Impl();
     mpImp->nViewAspect = nAspect;
@@ -297,7 +297,7 @@ EmbeddedObjectRef::~EmbeddedObjectRef()
     delete mpImp;
 }
 
-void EmbeddedObjectRef::Assign( const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& xObj, sal_Int64 nAspect )
+void EmbeddedObjectRef::Assign( const uno::Reference < embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
 {
     DBG_ASSERT( !mxObj.is(), "Never assign an already assigned object!" );
 
@@ -309,7 +309,7 @@ void EmbeddedObjectRef::Assign( const NS_UNO::Reference < NS_EMBED::XEmbeddedObj
     //#i103460#
     if ( IsChart() )
     {
-        ::com::sun::star::uno::Reference < ::com::sun::star::chart2::XDefaultSizeTransmitter > xSizeTransmitter( xObj, uno::UNO_QUERY );
+        uno::Reference < chart2::XDefaultSizeTransmitter > xSizeTransmitter( xObj, uno::UNO_QUERY );
         DBG_ASSERT( xSizeTransmitter.is(), "Object does not support XDefaultSizeTransmitter -> will cause #i103460#!" );
         if( xSizeTransmitter.is() )
             xSizeTransmitter->setDefaultSize( mpImp->aDefaultSizeForChart_In_100TH_MM );
@@ -801,7 +801,7 @@ void EmbeddedObjectRef::SetDefaultSizeForChart( const Size& rSizeIn_100TH_MM )
 
     mpImp->aDefaultSizeForChart_In_100TH_MM = awt::Size( rSizeIn_100TH_MM.getWidth(), rSizeIn_100TH_MM.getHeight() );
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::chart2::XDefaultSizeTransmitter > xSizeTransmitter( mxObj, uno::UNO_QUERY );
+    uno::Reference < chart2::XDefaultSizeTransmitter > xSizeTransmitter( mxObj, uno::UNO_QUERY );
     DBG_ASSERT( xSizeTransmitter.is(), "Object does not support XDefaultSizeTransmitter -> will cause #i103460#!" );
     if( xSizeTransmitter.is() )
         xSizeTransmitter->setDefaultSize( mpImp->aDefaultSizeForChart_In_100TH_MM );

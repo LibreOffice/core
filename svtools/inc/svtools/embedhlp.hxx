@@ -38,10 +38,6 @@
 #include <tools/mapunit.hxx>
 #include <rtl/ustring.hxx>
 
-#define NS_UNO ::com::sun::star::uno
-#define NS_EMBED ::com::sun::star::embed
-#define NS_IO ::com::sun::star::io
-
 namespace comphelper
 {
     class EmbeddedObjectContainer;
@@ -56,7 +52,7 @@ namespace svt
     class SVT_DLLPUBLIC EmbeddedObjectRef
     {
         EmbeddedObjectRef_Impl*  mpImp;
-        NS_UNO::Reference < NS_EMBED::XEmbeddedObject > mxObj;
+        ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > mxObj;
 
         SVT_DLLPRIVATE SvStream*   GetGraphicStream( sal_Bool bUpdate ) const;
         /* SVT_DLLPRIVATE */ void        GetReplacement( sal_Bool bUpdate );
@@ -65,20 +61,20 @@ namespace svt
         EmbeddedObjectRef& operator = ( const EmbeddedObjectRef& );
 
     public:
-        const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& operator ->() const { return mxObj; }
-        const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& GetObject() const { return mxObj; }
+        const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& operator ->() const { return mxObj; }
+        const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& GetObject() const { return mxObj; }
 
         static void DrawPaintReplacement( const Rectangle &rRect, const String &rText, OutputDevice *pOut );
         static void DrawShading( const Rectangle &rRect, OutputDevice *pOut );
-        static sal_Bool TryRunningState( const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& );
+        static sal_Bool TryRunningState( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
         static void SetGraphicToContainer( const Graphic& rGraphic,
                                             comphelper::EmbeddedObjectContainer& aContainer,
                                             const ::rtl::OUString& aName,
                                             const ::rtl::OUString& aMediaType );
 
-        static NS_UNO::Reference< NS_IO::XInputStream > GetGraphicReplacementStream(
+        static ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetGraphicReplacementStream(
                                             sal_Int64 nViewAspect,
-                                            const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >&,
+                                            const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&,
                                             ::rtl::OUString* pMediaType )
                                 throw();
 
@@ -86,10 +82,10 @@ namespace svt
         EmbeddedObjectRef();
 
         // assign a previously default constructed object
-        void Assign( const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& xObj, sal_Int64 nAspect );
+        void Assign( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
 
         // create object for a certain view aspect
-        EmbeddedObjectRef( const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& xObj, sal_Int64 nAspect );
+        EmbeddedObjectRef( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
 
         ~EmbeddedObjectRef();
         EmbeddedObjectRef( const EmbeddedObjectRef& );
