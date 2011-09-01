@@ -265,8 +265,10 @@ int GtkSalDisplay::GetDefaultMonitorNumber() const
     gint nMonitors = gdk_screen_get_n_monitors(pScreen);
     for (gint i = 0; i < nMonitors; ++i)
     {
-        if (g_ascii_strncasecmp (gdk_screen_get_monitor_plug_name(pScreen, i), "LVDS", 4) == 0)
-            return m_aXineramaScreenIndexMap[i];
+        if (g_ascii_strncasecmp (gdk_screen_get_monitor_plug_name(pScreen, i), "LVDS", 4) == 0) {
+            OSL_ASSERT( size_t(i) < m_aXineramaScreenIndexMap.size() );
+            return (size_t(i) < m_aXineramaScreenIndexMap.size()) ? m_aXineramaScreenIndexMap[i] : 0;
+        }
     }
 #endif
     return 0;
