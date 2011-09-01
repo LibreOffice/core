@@ -69,10 +69,10 @@ protected:
     String                      aProgName;
 
     // wg. Kompatibilitaet erstmal am SdrTextObj
-    sal_Bool                        bFrame : 1;
-    sal_Bool                        bInDestruction : 1;
-    mutable bool                m_bTypeAsked;
-    mutable bool                m_bChart;
+    bool                        bFrame:1;
+    bool                        bInDestruction:1;
+    mutable bool                m_bTypeAsked:1;
+    mutable bool                m_bChart:1;
 
     SdrOle2ObjImpl*             mpImpl;
 
