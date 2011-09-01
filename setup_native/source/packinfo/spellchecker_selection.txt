@@ -9,7 +9,7 @@
 # be used as first entry.
 
 af = "af"
-ar = "EMPTY"
+ar = "ar"
 br = "br,fr"
 ca = "ca,es,fr"
 cs = "cs"
