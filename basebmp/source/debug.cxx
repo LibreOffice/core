@@ -80,7 +80,7 @@ namespace basebmp
         }
     }
 
-    void debugDump( const BitmapDeviceSharedPtr& rDevice,
+    SAL_DLLPUBLIC_EXPORT void debugDump( const BitmapDeviceSharedPtr& rDevice,
                     std::ostream&                rOutputStream )
     {
         const basegfx::B2IVector aSize( rDevice->getSize() );
