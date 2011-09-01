@@ -68,8 +68,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <svtools/filter.hxx>
 
-#define GLOBALOVERFLOW3
-
 #define _SVX_FRMITEMS_CXX
 
 #include <editeng/editids.hrc>

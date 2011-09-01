@@ -37,7 +37,6 @@ class StarBASIC;
 
 #ifndef PCH
 #include "sc.hrc"
-#define GLOBALOVERFLOW
 #endif
 
 #include <stdio.h>

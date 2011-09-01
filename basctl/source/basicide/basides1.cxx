@@ -31,7 +31,6 @@
 
 #include "docsignature.hxx"
 
-#define GLOBALOVERFLOW2
 #include <basic/sbx.hxx>
 #define _SVSTDARR_STRINGS
 #include <svl/svstdarr.hxx>

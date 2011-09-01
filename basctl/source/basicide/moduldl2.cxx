@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-#define GLOBALOVERFLOW
-
 #include <ide_pch.hxx>
 
 #include <sot/storinfo.hxx>
