@@ -319,7 +319,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
     /* n#710061 Use overlapping fills to avoid color
      * leak via gaps in some pdf viewers
      */
-    Point       aOverLap( 0, fScanInc*5 );
+    Point       aOverLap( 0, fScanInc*.1 );
     aPoly[0] = aFullRect.TopLeft();
     aPoly[1] = aFullRect.TopRight();
     aPoly[2] = aRect.TopRight();
