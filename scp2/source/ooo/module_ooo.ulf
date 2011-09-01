@@ -193,6 +193,12 @@ en-US = "Brazilian Portuguese"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_PT]
 en-US = "Brazilian Portuguese Spelling Dictionary - 1990 Spelling Agreement"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_PT_PT]
+en-US = "Portuguese"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_PT_PT]
+en-US = "European Portuguese Dictionaries"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_RO]
 en-US = "Romanian"
 

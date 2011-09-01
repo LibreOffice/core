@@ -336,6 +336,11 @@ Directory gid_Brand_Dir_Share_Extensions_Dict_Pt
     DosName = "dict-pt";
 End
 
+Directory gid_Brand_Dir_Share_Extensions_Dict_Pt_Pt
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-pt-pt";
+End
+
 Directory gid_Brand_Dir_Share_Extensions_Dict_Ro
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-ro";

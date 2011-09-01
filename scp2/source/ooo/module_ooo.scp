@@ -314,7 +314,18 @@ Module gid_Module_Root_Extension_Dictionary_Pt
     Files = (gid_File_Extension_Dictionary_Pt);
     InstallOrder = "2000";
     Sortkey = "515";
-    Spellcheckerlanguage = "pt";
+    Spellcheckerlanguage = "pt-BR";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Dictionaries;
+    Styles = ();
+End
+
+Module gid_Module_Root_Extension_Dictionary_Pt_Pt
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_PT_PT );
+    Files = (gid_File_Extension_Dictionary_Pt_Pt);
+    InstallOrder = "2000";
+    Sortkey = "515";
+    Spellcheckerlanguage = "pt-PT";
     PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Dictionaries;
     Styles = ();

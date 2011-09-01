@@ -2019,6 +2019,15 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Pt_Pt
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pt_Pt;
+	Name = "dict-pt-pt.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ro
     Dir = gid_Brand_Dir_Share_Extensions_Dict_Ro;
     Name = "dict-ro.oxt";
