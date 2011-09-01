@@ -1848,29 +1848,11 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
-File gid_File_Extension_Dictionary_De_AT
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_De_At;
-	Name = "dict-de-AT.oxt";
+File gid_File_Extension_Dictionary_De
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_De;
+	Name = "dict-de.oxt";
 	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
-End
-#endif
-
-#ifndef WITHOUT_MYSPELL_DICTS
-File gid_File_Extension_Dictionary_De_CH
-    Dir = gid_Brand_Dir_Share_Extensions_Dict_De_Ch;
-    Name = "dict-de-CH.oxt";
-    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
-    UnixRights = 444;
-End
-#endif
-
-#ifndef WITHOUT_MYSPELL_DICTS
-File gid_File_Extension_Dictionary_De_DE
-    Dir = gid_Brand_Dir_Share_Extensions_Dict_De_De;
-    Name = "dict-de-DE.oxt";
-    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
-    UnixRights = 444;
 End
 #endif
 

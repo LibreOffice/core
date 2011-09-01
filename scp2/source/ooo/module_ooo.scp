@@ -111,34 +111,12 @@ Module gid_Module_Root_Extension_Dictionary_Da
     Styles = ();
 End
 
-Module gid_Module_Root_Extension_Dictionary_De_AT
-    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_DE_AT );
-    Files = (gid_File_Extension_Dictionary_De_AT);
+Module gid_Module_Root_Extension_Dictionary_De
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_DE );
+    Files = (gid_File_Extension_Dictionary_De);
     InstallOrder = "2000";
     Sortkey = "570";
-    Spellcheckerlanguage = "de-AT";
-    PackageInfo = "packinfo_office.txt";
-    ParentID = gid_Module_Dictionaries;
-    Styles = ();
-End
-
-Module gid_Module_Root_Extension_Dictionary_De_CH
-    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_DE_CH );
-    Files = (gid_File_Extension_Dictionary_De_CH);
-    InstallOrder = "2000";
-    Sortkey = "580";
-    Spellcheckerlanguage = "de-CH";
-    PackageInfo = "packinfo_office.txt";
-    ParentID = gid_Module_Dictionaries;
-    Styles = ();
-End
-
-Module gid_Module_Root_Extension_Dictionary_De_DE
-    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_DE_DE );
-    Files = (gid_File_Extension_Dictionary_De_DE);
-    InstallOrder = "2000";
-    Sortkey = "575";
-    Spellcheckerlanguage = "de-DE";
+    Spellcheckerlanguage = "de";
     PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Dictionaries;
     Styles = ();

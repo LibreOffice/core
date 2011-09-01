@@ -241,19 +241,9 @@ Directory gid_Brand_Dir_Share_Extensions_Dict_Da
     DosName = "dict-da";
 End
 
-Directory gid_Brand_Dir_Share_Extensions_Dict_De_At
+Directory gid_Brand_Dir_Share_Extensions_Dict_De
     ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-de-AT";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_De_Ch
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-de-CH";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_De_De
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-de-DE";
+    DosName = "dict-de";
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Dict_En
