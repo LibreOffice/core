@@ -26,10 +26,7 @@
  * instead of those above.
  */
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_filter.hxx"
-
-#include <filter/msfilter/ooxmlexport.hxx>
+#include <oox/export/ooxmlexport.hxx>
 
 OoxmlFormulaExportBase::OoxmlFormulaExportBase()
 {

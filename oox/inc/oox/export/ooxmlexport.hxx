@@ -30,13 +30,13 @@
 
 #include <sax/fshelper.hxx>
 #include <oox/core/filterbase.hxx>
-#include "filter/msfilter/msfilterdllapi.h"
+#include <oox/dllapi.h>
 
 /**
  Interface class, StarMath will implement writeFormulaOoxml() to write out OOXML
  representing the formula.
  */
-class MSFILTER_DLLPUBLIC OoxmlFormulaExportBase
+class OOX_DLLPUBLIC OoxmlFormulaExportBase
 {
 public:
     OoxmlFormulaExportBase();
