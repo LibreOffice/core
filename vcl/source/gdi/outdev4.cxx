@@ -315,11 +315,19 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
     // Startpolygon erzeugen (== Borderpolygon)
     Polygon     aPoly( 4 );
     Polygon     aTempPoly( 2 );
+    Polygon     aTempPoly2( 2 );
+    /* n#710061 Use overlapping fills to avoid color
+     * leak via gaps in some pdf viewers
+     */
+    Point       aOverLap( 0, fScanInc*5 );
     aPoly[0] = aFullRect.TopLeft();
     aPoly[1] = aFullRect.TopRight();
     aPoly[2] = aRect.TopRight();
     aPoly[3] = aRect.TopLeft();
     aPoly.Rotate( aCenter, nAngle );
+    aTempPoly[0] = aPoly[3];
+    aTempPoly[1] = aPoly[2];
+
 
     // Schleife, um rotierten Verlauf zu fuellen
     for ( long i = 0; i < nSteps2; i++ )
@@ -333,23 +341,27 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
         // neues Polygon berechnen
         aRect.Top() = (long)(fScanLine += fScanInc);
 
+        aPoly[0] = aTempPoly[0];
+        aPoly[1] = aTempPoly[1];
         // unteren Rand komplett fuellen
         if ( i == nSteps )
         {
             aTempPoly[0] = aFullRect.BottomLeft();
             aTempPoly[1] = aFullRect.BottomRight();
+            aTempPoly2   = aTempPoly;
         }
         else
         {
             aTempPoly[0] = aRect.TopLeft();
             aTempPoly[1] = aRect.TopRight();
+            aTempPoly2[0]= aTempPoly[0] + aOverLap;
+            aTempPoly2[1]= aTempPoly[1] + aOverLap;
         }
+        aTempPoly2.Rotate( aCenter, nAngle );
         aTempPoly.Rotate( aCenter, nAngle );
 
-        aPoly[0] = aPoly[3];
-        aPoly[1] = aPoly[2];
-        aPoly[2] = aTempPoly[1];
-        aPoly[3] = aTempPoly[0];
+        aPoly[2] = aTempPoly2[1];
+        aPoly[3] = aTempPoly2[0];
 
         // Farbintensitaeten aendern...
         // fuer lineare FV
