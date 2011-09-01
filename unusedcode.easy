@@ -2056,6 +2056,8 @@ binfilter::SwDestroyList::Insert(binfilter::SwSectionFrm* const*, unsigned short
 binfilter::SwDestroyList::Remove(binfilter::SwSectionFrm* const&, unsigned short)
 binfilter::SwDestroyList::Remove(unsigned short, unsigned short)
 binfilter::SwInsHardBlankSoftHyph::~SwInsHardBlankSoftHyph()
+binfilter::SwLayAction::SwLayAction(binfilter::SwRootFrm*, binfilter::SwViewImp*)
+binfilter::SwLayAction::~SwLayAction()
 binfilter::SwOLELRUCache::Remove(binfilter::SwOLEObj&)
 binfilter::SwOutlineNodes::Insert(binfilter::SwNode* const&, unsigned short&)
 binfilter::SwOutlineNodes::Insert(binfilter::SwNode* const*, unsigned short)
