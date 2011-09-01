@@ -32,6 +32,7 @@
 namespace writerfilter
 {
 
+#ifdef DEBUG_LOGGING
 // class: LoggedResourcesHelper
 
 LoggedResourcesHelper::LoggedResourcesHelper(TagLogger::Pointer_t pLogger, const string & sPrefix)
@@ -77,11 +78,20 @@ void LoggedResourcesHelper::setPrefix(const string & rPrefix)
 {
     msPrefix = rPrefix;
 }
+#endif
 
 // class: LoggedStream
 
-LoggedStream::LoggedStream(TagLogger::Pointer_t pLogger, const string & sPrefix)
-: mHelper(pLogger, sPrefix)
+LoggedStream::LoggedStream(
+#ifdef DEBUG_LOGGING
+    TagLogger::Pointer_t pLogger,
+    const string & sPrefix
+) : mHelper(pLogger, sPrefix)
+#else
+    TagLogger::Pointer_t,
+    const string&
+)
+#endif
 {
 }
 
@@ -260,8 +270,16 @@ void LoggedStream::info(const string & _info)
 }
 
 // class LoggedProperties
-LoggedProperties::LoggedProperties(TagLogger::Pointer_t pLogger, const string & sPrefix)
-: mHelper(pLogger, sPrefix)
+LoggedProperties::LoggedProperties(
+#ifdef DEBUG_LOGGING
+    TagLogger::Pointer_t pLogger,
+    const string & sPrefix
+) : mHelper(pLogger, sPrefix)
+#else
+    TagLogger::Pointer_t,
+    const string&
+)
+#endif
 {
 }
 
@@ -296,8 +314,16 @@ void LoggedProperties::sprm(Sprm & _sprm)
 #endif
 }
 
-LoggedTable::LoggedTable(TagLogger::Pointer_t pLogger, const string & sPrefix)
-: mHelper(pLogger, sPrefix)
+LoggedTable::LoggedTable(
+#ifdef DEBUG_LOGGING
+    TagLogger::Pointer_t pLogger,
+    const string & sPrefix
+) : mHelper(pLogger, sPrefix)
+#else
+    TagLogger::Pointer_t,
+    const string&
+)
+#endif
 {
 }
 
