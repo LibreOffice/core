@@ -34,7 +34,7 @@ use_shl_versions=
 # --- Settings ----------------------------------
 .INCLUDE : settings.mk
 
-.IF "$(GUI)" == "WNT" && "$(DISABLE_ACTIVEX)"==""
+.IF "$(GUI)$(COM)" == "WNTMSC" && "$(DISABLE_ACTIVEX)"==""
 
 VERSIONOBJ=
 LIBTARGET=NO
