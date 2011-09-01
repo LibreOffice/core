@@ -45,7 +45,7 @@
 #include <oox/export/drawingml.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
-#include <filter/msfilter/ooxmlexport.hxx>
+#include <oox/export/ooxmlexport.hxx>
 
 #include <i18npool/mslangid.hxx>
 
