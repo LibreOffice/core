@@ -69,8 +69,6 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-#define GLOBALOVERFLOW
-
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 

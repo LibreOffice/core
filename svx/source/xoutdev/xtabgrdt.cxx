@@ -31,14 +31,8 @@
 
 // include ---------------------------------------------------------------
 
-#include <com/sun/star/container/XNameContainer.hpp>
 #include "svx/XPropertyTable.hxx"
-#include <unotools/ucbstreamhelper.hxx>
 
-#include "xmlxtexp.hxx"
-#include "xmlxtimp.hxx"
-
-#include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/docfile.hxx>
@@ -57,13 +51,9 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xgrscit.hxx>
 
-#define GLOBALOVERFLOW
-
 using namespace com::sun::star;
 
 using ::rtl::OUString;
-
-sal_Unicode const pszExtGradient[]  = {'s','o','g'};
 
 char const aChckGradient[]  = { 0x04, 0x00, 'S','O','G','L'};   // < 5.2
 char const aChckGradient0[] = { 0x04, 0x00, 'S','O','G','0'};   // = 5.2
@@ -145,7 +135,7 @@ void XGradientList::impDestroy()
 XGradientList::XGradientList(
     const String& rPath,
     XOutdevItemPool* pInPool
-) : XPropertyList( rPath, pInPool ),
+        ) : XPropertyList( "sog", rPath, pInPool ),
     mpData(0)
 {
     pBmpList = new BitmapList_impl();
@@ -175,49 +165,11 @@ XGradientEntry* XGradientList::GetGradient(long nIndex) const
     return( (XGradientEntry*) XPropertyList::Get( nIndex, 0 ) );
 }
 
-sal_Bool XGradientList::Load()
+uno::Reference< container::XNameContainer > XGradientList::createInstance()
 {
-    if( bListDirty )
-    {
-        bListDirty = sal_False;
-
-        INetURLObject aURL( aPath );
-
-        if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
-        {
-            DBG_ASSERT( !aPath.Len(), "invalid URL" );
-            return sal_False;
-        }
-
-        aURL.Append( aName );
-
-        if( !aURL.getExtension().getLength() )
-            aURL.setExtension( rtl::OUString( pszExtGradient, 3 ) );
-
-        uno::Reference< container::XNameContainer > xTable( SvxUnoXGradientTable_createInstance( this ), uno::UNO_QUERY );
-        return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
-
-    }
-    return( sal_False );
-}
-
-sal_Bool XGradientList::Save()
-{
-    INetURLObject aURL( aPath );
-
-    if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
-    {
-        DBG_ASSERT( !aPath.Len(), "invalid URL" );
-        return sal_False;
-    }
-
-    aURL.Append( aName );
-
-    if( !aURL.getExtension().getLength() )
-        aURL.setExtension( rtl::OUString( pszExtGradient, 3 ) );
-
-    uno::Reference< container::XNameContainer > xTable( SvxUnoXGradientTable_createInstance( this ), uno::UNO_QUERY );
-    return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
+    return uno::Reference< container::XNameContainer >(
+        SvxUnoXGradientTable_createInstance( this ),
+        uno::UNO_QUERY );
 }
 
 sal_Bool XGradientList::Create()

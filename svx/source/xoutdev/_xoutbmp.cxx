@@ -30,10 +30,8 @@
 #include "precompiled_svx.hxx"
 
 #include <sot/factory.hxx>
-#include <tools/urlobj.hxx>
-#include <unotools/ucbstreamhelper.hxx>
-#include <vcl/bmpacc.hxx>
 #include <tools/poly.hxx>
+#include <vcl/bmpacc.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svl/solar.hrc>

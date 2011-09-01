@@ -49,8 +49,6 @@
 #include <svx/svdmodel.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#define GLOBALOVERFLOW
-
 using namespace ::com::sun::star;
 
 // ---------------

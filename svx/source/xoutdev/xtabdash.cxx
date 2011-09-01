@@ -31,16 +31,10 @@
 
 // include ---------------------------------------------------------------
 
-#include <com/sun/star/container/XNameContainer.hpp>
 #include "svx/XPropertyTable.hxx"
-#include <unotools/ucbstreamhelper.hxx>
-
-#include "xmlxtexp.hxx"
-#include "xmlxtimp.hxx"
 
 #include <vcl/svapp.hxx>
 
-#include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <svl/itemset.hxx>
@@ -63,16 +57,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 using namespace com::sun::star;
-
-using ::rtl::OUString;
-
-#define GLOBALOVERFLOW
-
-sal_Unicode const pszExtDash[]  = {'s','o','d'};
-
-// ----------------
-// class XDashList
-// ----------------
 
 class impXDashList
 {
@@ -150,17 +134,14 @@ void XDashList::impCreate()
 
 void XDashList::impDestroy()
 {
-    if(mpData)
-    {
-        delete mpData;
-        mpData = 0;
-    }
+    delete mpData;
+    mpData = 0;
 }
 
 XDashList::XDashList(
     const String& rPath,
     XOutdevItemPool* pInPool
-) : XPropertyList( rPath, pInPool ),
+        ) : XPropertyList( "sod", rPath, pInPool ),
     mpData(0)
 {
     pBmpList = new BitmapList_impl();
@@ -186,48 +167,10 @@ XDashEntry* XDashList::GetDash(long nIndex) const
     return (XDashEntry*) XPropertyList::Get(nIndex, 0);
 }
 
-sal_Bool XDashList::Load()
+uno::Reference< container::XNameContainer > XDashList::createInstance()
 {
-    if( bListDirty )
-    {
-        bListDirty = sal_False;
-
-        INetURLObject aURL( aPath );
-
-        if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
-        {
-            DBG_ASSERT( !aPath.Len(), "invalid URL" );
-            return sal_False;
-        }
-
-        aURL.Append( aName );
-
-        if( !aURL.getExtension().getLength() )
-            aURL.setExtension( rtl::OUString( pszExtDash, 3 ) );
-
-        uno::Reference< container::XNameContainer > xTable( SvxUnoXDashTable_createInstance( this ), uno::UNO_QUERY );
-        return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
-    }
-    return( sal_False );
-}
-
-sal_Bool XDashList::Save()
-{
-    INetURLObject aURL( aPath );
-
-    if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
-    {
-        DBG_ASSERT( !aPath.Len(), "invalid URL" );
-        return sal_False;
-    }
-
-    aURL.Append( aName );
-
-    if( !aURL.getExtension().getLength() )
-        aURL.setExtension( rtl::OUString( pszExtDash, 3 ) );
-
-    uno::Reference< container::XNameContainer > xTable( SvxUnoXDashTable_createInstance( this ), uno::UNO_QUERY );
-    return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
+    return uno::Reference< container::XNameContainer >(
+        SvxUnoXDashTable_createInstance( this ), uno::UNO_QUERY );
 }
 
 sal_Bool XDashList::Create()
@@ -243,7 +186,7 @@ sal_Bool XDashList::Create()
     aStr.SetChar(nLen, sal_Unicode('3'));
     Insert(new XDashEntry(XDash(XDASH_RECT,2, 50,3,250,120),aStr));
 
-    return( sal_True );
+    return sal_True;
 }
 
 sal_Bool XDashList::CreateBitmapsForUI()
@@ -267,7 +210,7 @@ sal_Bool XDashList::CreateBitmapsForUI()
 
     impDestroy();
 
-    return( sal_True );
+    return sal_True;
 }
 
 Bitmap* XDashList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
@@ -291,14 +234,9 @@ Bitmap* XDashList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
     Bitmap* pBitmap = new Bitmap(pVD->GetBitmap(aZero, pVD->GetOutputSize()));
 
     if(bDelete)
-    {
         impDestroy();
-    }
 
     return pBitmap;
 }
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

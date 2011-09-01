@@ -44,6 +44,7 @@
 #include <tools/table.hxx>
 #include "svx/svxdllapi.h"
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <com/sun/star/container/XNameContainer.hpp>
 
 class Color;
 class Bitmap;
@@ -199,6 +200,7 @@ protected:
     String              aName; // not persistent
     String              aPath;
     XOutdevItemPool*    pXPool;
+    const char *        pDefaultExt;
 
     XPropertyEntryList_impl aList;
     BitmapList_impl*        pBmpList;
@@ -208,6 +210,7 @@ protected:
     sal_Bool            bOwnPool;
 
                         XPropertyList(
+                            const char *_pDefaultExtension,
                             const String& rPath,
                             XOutdevItemPool* pXPool = NULL
                         );
@@ -236,8 +239,10 @@ public:
     void                SetDirty( sal_Bool bDirty = sal_True )
                             { bListDirty = bDirty; bBitmapsDirty = bDirty; }
 
-    virtual sal_Bool    Load() = 0;
-    virtual sal_Bool    Save() = 0;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+        createInstance() = 0;
+    sal_Bool            Load();
+    sal_Bool            Save();
     virtual sal_Bool    Create() = 0;
     virtual sal_Bool    CreateBitmapsForUI() = 0;
     virtual Bitmap*     CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True ) = 0;
@@ -264,8 +269,7 @@ public:
     XColorEntry*        Remove(long nIndex);
     XColorEntry*        GetColor(long nIndex) const;
 
-    virtual sal_Bool    Load();
-    virtual sal_Bool    Save();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
     virtual sal_Bool    Create();
     virtual sal_Bool    CreateBitmapsForUI();
     virtual Bitmap*     CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
@@ -300,8 +304,7 @@ public:
     using XPropertyList::Get;
     XLineEndEntry* GetLineEnd(long nIndex) const;
 
-    virtual sal_Bool Load();
-    virtual sal_Bool Save();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
     virtual sal_Bool Create();
     virtual sal_Bool CreateBitmapsForUI();
     virtual Bitmap* CreateBitmapForUI(long nIndex, sal_Bool bDelete = sal_True);
@@ -334,8 +337,7 @@ public:
     using XPropertyList::Get;
     XDashEntry*         GetDash(long nIndex) const;
 
-    virtual sal_Bool    Load();
-    virtual sal_Bool    Save();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
     virtual sal_Bool    Create();
     virtual sal_Bool    CreateBitmapsForUI();
     virtual Bitmap*     CreateBitmapForUI(long nIndex, sal_Bool bDelete = sal_True);
@@ -368,8 +370,7 @@ public:
     using XPropertyList::Get;
     XHatchEntry* GetHatch(long nIndex) const;
 
-    virtual sal_Bool Load();
-    virtual sal_Bool Save();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
     virtual sal_Bool Create();
     virtual sal_Bool CreateBitmapsForUI();
     virtual Bitmap* CreateBitmapForUI(long nIndex, sal_Bool bDelete = sal_True);
@@ -402,8 +403,7 @@ public:
     using XPropertyList::Get;
     XGradientEntry*     GetGradient(long nIndex) const;
 
-    virtual sal_Bool    Load();
-    virtual sal_Bool    Save();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
     virtual sal_Bool    Create();
     virtual sal_Bool    CreateBitmapsForUI();
     virtual Bitmap*     CreateBitmapForUI(long nIndex, sal_Bool bDelete = sal_True);
@@ -428,8 +428,7 @@ public:
     using XPropertyList::Get;
     XBitmapEntry*   GetBitmap(long nIndex) const;
 
-    virtual sal_Bool    Load();
-    virtual sal_Bool    Save();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
     virtual sal_Bool    Create();
     virtual sal_Bool    CreateBitmapsForUI();
     virtual Bitmap*     CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );

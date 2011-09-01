@@ -29,51 +29,24 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include <com/sun/star/container/XNameContainer.hpp>
 #include "svx/XPropertyTable.hxx"
-#include <unotools/ucbstreamhelper.hxx>
-
 #include <unotools/pathoptions.hxx>
 
-#include "xmlxtexp.hxx"
-#include "xmlxtimp.hxx"
-
 #include <sfx2/docfile.hxx>
-#include <tools/urlobj.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
 
-#define GLOBALOVERFLOW
-
 using namespace com::sun::star;
-
-using ::rtl::OUString;
-
-sal_Unicode const pszExtColor[]  = {'s','o','c'};
-
-static char const aChckColor[]  = { 0x04, 0x00, 'S','O','C','L'};   // < 5.2
-static char const aChckColor0[] = { 0x04, 0x00, 'S','O','C','0'};   // = 5.2
-static char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };      // = 6.0
-
-/*************************************************************************
-|*
-|* XColorList::XColorList()
-|*
-*************************************************************************/
 
 XColorList::XColorList(
     const String& rPath,
     XOutdevItemPool* pInPool
 ) :
-    XPropertyList( rPath, pInPool )
+    XPropertyList( "soc", rPath, pInPool )
 {
-    // ColorTable braucht keine eigene BmpTable
-    // pBmpTable = new Table( nInitSize, nReSize );
 }
-
-/************************************************************************/
 
 XColorList::~XColorList()
 {
@@ -85,79 +58,27 @@ XColorList& XColorList::GetStdColorTable()
     return aTable;
 }
 
-/************************************************************************/
-
 XColorEntry* XColorList::Replace(long nIndex, XColorEntry* pEntry )
 {
     return (XColorEntry*)XPropertyList::Replace( pEntry, nIndex );
 }
-
-/************************************************************************/
 
 XColorEntry* XColorList::Remove(long nIndex)
 {
     return (XColorEntry*) XPropertyList::Remove(nIndex);
 }
 
-/************************************************************************/
-
 XColorEntry* XColorList::GetColor(long nIndex) const
 {
     return (XColorEntry*) XPropertyList::Get(nIndex, 0);
 }
 
-/************************************************************************/
-
-sal_Bool XColorList::Load()
+uno::Reference< container::XNameContainer > XColorList::createInstance()
 {
-    if( bListDirty )
-    {
-        bListDirty = sal_False;
-
-        INetURLObject aURL( aPath );
-
-        if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
-        {
-            DBG_ASSERT( !aPath.Len(), "invalid URL" );
-            return sal_False;
-        }
-
-        aURL.Append( aName );
-
-        if( !aURL.getExtension().getLength() )
-            aURL.setExtension( rtl::OUString( pszExtColor, 3 ) );
-
-        uno::Reference< container::XNameContainer > xTable(
-            SvxUnoXColorTable_createInstance( this ),
-            uno::UNO_QUERY
-        );
-        return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
-    }
-    return( sal_False );
+    return uno::Reference< container::XNameContainer >(
+        SvxUnoXColorTable_createInstance( this ),
+        uno::UNO_QUERY );
 }
-
-/************************************************************************/
-
-sal_Bool XColorList::Save()
-{
-    INetURLObject aURL( aPath );
-
-    if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
-    {
-        DBG_ASSERT( !aPath.Len(), "invalid URL" );
-        return sal_False;
-    }
-
-    aURL.Append( aName );
-
-    if( !aURL.getExtension().getLength() )
-        aURL.setExtension( rtl::OUString( pszExtColor, 3 ) );
-
-    uno::Reference< container::XNameContainer > xTable( SvxUnoXColorTable_createInstance( this ), uno::UNO_QUERY );
-    return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
-}
-
-/************************************************************************/
 
 sal_Bool XColorList::Create()
 {
@@ -446,21 +367,17 @@ sal_Bool XColorList::Create()
     aStr.SetChar(nLen, sal_Unicode('2'));
     Insert( new XColorEntry( Color( 0x00, 0x84, 0xd1 ), aStr ), 103 );
 
-    return( Count() == 104 );
+    return Count() == 104;
 }
-
-/************************************************************************/
 
 sal_Bool XColorList::CreateBitmapsForUI()
 {
-    return( sal_False );
+    return sal_False;
 }
-
-/************************************************************************/
 
 Bitmap* XColorList::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
 {
-    return( NULL );
+    return NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

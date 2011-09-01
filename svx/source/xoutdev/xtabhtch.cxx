@@ -31,15 +31,9 @@
 
 // include ---------------------------------------------------------------
 
-#include <com/sun/star/container/XNameContainer.hpp>
 #include "svx/XPropertyTable.hxx"
-#include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>
 
-#include "xmlxtexp.hxx"
-#include "xmlxtimp.hxx"
-
-#include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/docfile.hxx>
@@ -60,16 +54,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
-
-sal_Unicode const pszExtHatch[]  = {'s','o','h'};
-
-char const aChckHatch[]  = { 0x04, 0x00, 'S','O','H','L'};  // < 5.2
-char const aChckHatch0[] = { 0x04, 0x00, 'S','O','H','0'};  // = 5.2
-char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };     // = 6.0
-
-// -----------------
-// class XHatchList
-// -----------------
 
 class impXHatchList
 {
@@ -143,29 +127,23 @@ void XHatchList::impCreate()
 
 void XHatchList::impDestroy()
 {
-    if(mpData)
-    {
-        delete mpData;
-        mpData = 0;
-    }
+    delete mpData;
+    mpData = NULL;
 }
 
 XHatchList::XHatchList(
     const String& rPath,
     XOutdevItemPool* pInPool
-)   : XPropertyList( rPath, pInPool )
-    , mpData(0)
+    )   : XPropertyList( "soh", rPath, pInPool )
+        , mpData(NULL)
 {
     pBmpList = new BitmapList_impl();
 }
 
 XHatchList::~XHatchList()
 {
-    if(mpData)
-    {
-        delete mpData;
-        mpData = 0;
-    }
+    delete mpData;
+    mpData = NULL;
 }
 
 XHatchEntry* XHatchList::Replace(XHatchEntry* pEntry, long nIndex )
@@ -183,48 +161,10 @@ XHatchEntry* XHatchList::GetHatch(long nIndex) const
     return (XHatchEntry*) XPropertyList::Get(nIndex, 0);
 }
 
-sal_Bool XHatchList::Load()
+uno::Reference< container::XNameContainer > XHatchList::createInstance()
 {
-    if( bListDirty )
-    {
-        bListDirty = sal_False;
-
-        INetURLObject aURL( aPath );
-
-        if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
-        {
-            DBG_ASSERT( !aPath.Len(), "invalid URL" );
-            return sal_False;
-        }
-
-        aURL.Append( aName );
-
-        if( !aURL.getExtension().getLength() )
-            aURL.setExtension( rtl::OUString( pszExtHatch, 3 ) );
-
-        uno::Reference< container::XNameContainer > xTable( SvxUnoXHatchTable_createInstance( this ), uno::UNO_QUERY );
-        return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
-    }
-    return( sal_False );
-}
-
-sal_Bool XHatchList::Save()
-{
-    INetURLObject aURL( aPath );
-
-    if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
-    {
-        DBG_ASSERT( !aPath.Len(), "invalid URL" );
-        return sal_False;
-    }
-
-    aURL.Append( aName );
-
-    if( !aURL.getExtension().getLength() )
-        aURL.setExtension( rtl::OUString( pszExtHatch, 3 ) );
-
-    uno::Reference< container::XNameContainer > xTable( SvxUnoXHatchTable_createInstance( this ), uno::UNO_QUERY );
-    return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
+    return uno::Reference< container::XNameContainer >(
+        SvxUnoXHatchTable_createInstance( this ), uno::UNO_QUERY );
 }
 
 sal_Bool XHatchList::Create()
@@ -288,14 +228,9 @@ Bitmap* XHatchList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
     Bitmap* pBitmap = new Bitmap(pVD->GetBitmap(aZero, pVD->GetOutputSize()));
 
     if(bDelete)
-    {
         impDestroy();
-    }
 
     return pBitmap;
 }
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

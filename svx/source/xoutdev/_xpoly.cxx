@@ -43,8 +43,6 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-#define GLOBALOVERFLOW
-
 DBG_NAME(XPolygon);
 DBG_NAME(XPolyPolygon);
 
