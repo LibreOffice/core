@@ -3099,6 +3099,10 @@ utl::OConfigurationTreeRoot::OConfigurationTreeRoot(comphelper::ComponentContext
 utl::OConfigurationValueContainer::OConfigurationValueContainer(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, osl::Mutex&, rtl::OUString const&, unsigned short, int)
 utl::OConfigurationValueContainer::getServiceFactory() const
 utl::OConfigurationValueContainer::registerNullValueExchangeLocation(char const*, com::sun::star::uno::Any*)
+utl::PropertySetHelper::PropertySetHelper(utl::PropertySetInfo*)
+utl::PropertySetInfo::PropertySetInfo()
+utl::PropertySetInfo::add(utl::PropertyMapEntry*)
+utl::PropertySetInfo::remove(rtl::OUString const&)
 utl::TransliterationWrapper::compareSubstring(String const&, int, int, String const&, int, int) const
 vbahelper::CollectionBase::CollectionBase(com::sun::star::uno::Type const&)
 vbahelper::CollectionBase::getAnyItemOrThis(com::sun::star::uno::Any const&)
@@ -3134,6 +3138,11 @@ vcl::RenderGraphic::RenderGraphic(boost::shared_array<unsigned char> const&, uns
 vcl::RowOrColumn::remove(Window*)
 vcl::RowOrColumn::remove(boost::shared_ptr<vcl::WindowArranger> const&)
 void ScCompressedArrayIterator<int, unsigned short>::Follow<unsigned char>(ScCompressedArrayIterator<int, unsigned char> const&)
+writerfilter::TagLogger::attribute(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, com::sun::star::uno::Any)
+writerfilter::TagLogger::attribute(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int)
+writerfilter::TagLogger::chars(rtl::OUString const&)
+writerfilter::TagLogger::endElement()
+writerfilter::TagLogger::startElement(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
 writerfilter::TagLogger::~TagLogger()
 writerfilter::XPathLogger::XPathLogger()
 writerfilter::XPathLogger::endElement()
