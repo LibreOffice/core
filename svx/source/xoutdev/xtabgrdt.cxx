@@ -35,7 +35,6 @@
 
 #include <vcl/virdev.hxx>
 #include <svl/itemset.hxx>
-#include <sfx2/docfile.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/xtable.hxx>
@@ -52,16 +51,6 @@
 #include <svx/xgrscit.hxx>
 
 using namespace com::sun::star;
-
-using ::rtl::OUString;
-
-char const aChckGradient[]  = { 0x04, 0x00, 'S','O','G','L'};   // < 5.2
-char const aChckGradient0[] = { 0x04, 0x00, 'S','O','G','0'};   // = 5.2
-char const aChckXML[]       = { '<', '?', 'x', 'm', 'l' };      // = 6.0
-
-// --------------------
-// class XGradientList
-// --------------------
 
 class impXGradientList
 {
@@ -244,8 +233,5 @@ Bitmap* XGradientList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
 
     return pBitmap;
 }
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

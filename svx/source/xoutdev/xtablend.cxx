@@ -36,7 +36,6 @@
 
 #include <vcl/svapp.hxx>
 #include <svl/itemset.hxx>
-#include <sfx2/docfile.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
