@@ -90,6 +90,7 @@ f02578f5218f217a9f20e9c30e119c6a-boost_1_44_0.tar.bz2
 3115c721f5cb7c464f01c2dddccfaba6-graphite2-1.0.2.tgz
 8c50b6c3e4b323013164f4a6d8d74dc6-libvisio-0.0.6.tar.bz2
 881af2b7dca9b8259abbca00bbbc004d-LinLibertineG-20110101.zip
+@GOOGLE_DOCS_EXTENSION_PACK@
 http://dev-www.libreoffice.org/extern
 185d60944ea767075d27247c3162b3bc-unowinreg.dll
 b4cae0700aa1c2aef7eb7f345365e6f1-translate-toolkit-1.8.1.tar.bz2
@@ -106,7 +107,6 @@ http://ooo.itc.hu/oxygenoffice/download/libreoffice/
 @NUMBERTEXT_EXTENSION_PACK@
 @HUNART_EXTENSION_PACK@
 @TYPO_EXTENSION_PACK@
-@GOOGLE_DOCS_EXTENSION_PACK@
 @OOOBLOGGER_EXTENSION_PACK@
 @LIGHTPROOF_EN_US_PACK@
 @LIGHTPROOF_HU_PACK@

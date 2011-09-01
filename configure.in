@@ -7931,7 +7931,7 @@ if test "z$enable_ext_google_docs" = "z" -o "z$enable_ext_google_docs" = "zno" ;
 else
     AC_MSG_RESULT([yes])
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_GOOGLE_DOCS"
-    GOOGLE_DOCS_EXTENSION_PACK="31d7e111b1135f14717f21255d933f6e-ooo2gd_3.0.0.oxt"
+    GOOGLE_DOCS_EXTENSION_PACK="cea0f63d5985ba4fcbd882031df44346-gdocs_3.0.0_modified.oxt"
 fi
 AC_SUBST(GOOGLE_DOCS_EXTENSION_PACK)
 
