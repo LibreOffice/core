@@ -92,6 +92,7 @@ void FiltersTest::recursiveScan(const rtl::OUString &rURL, int nExpected)
     CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.open());
     osl::DirectoryItem aItem;
     osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
+
     while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
     {
         aItem.getFileStatus(aFileStatus);
@@ -113,17 +114,13 @@ void FiltersTest::recursiveScan(const rtl::OUString &rURL, int nExpected)
 
             rtl::OString aRes(rtl::OUStringToOString(sURL,
                 osl_getThreadTextEncoding()));
-            if (nExpected == indeterminate)
-            {
-                fprintf(stderr, "loading %s\n", aRes.getStr());
-            }
             sal_uInt32 nStartTime = osl_getGlobalTimer();
             bool bRes = load(sURL);
             sal_uInt32 nEndTime = osl_getGlobalTimer();
             if (nExpected == indeterminate)
             {
-                fprintf(stderr, "pass/fail was %d (%"SAL_PRIuUINT32" ms)\n",
-                    bRes, nEndTime-nStartTime);
+                fprintf(stderr, "%s,%s,%"SAL_PRIuUINT32"\n", aRes.getStr(),
+                    bRes?"Pass":"Fail",nEndTime-nStartTime);
                 continue;
             }
             CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == nExpected);
@@ -134,6 +131,7 @@ void FiltersTest::recursiveScan(const rtl::OUString &rURL, int nExpected)
 
 void FiltersTest::testCVEs()
 {
+    fprintf(stderr, "File tested,Test Result,Execution Time (ms)\n");
     recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/wmf/pass")), true);
     recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/wmf/fail")), false);
     recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/wmf/indeterminate")), 2);
