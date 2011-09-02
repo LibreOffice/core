@@ -26,29 +26,16 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_BASEBMP_DEBUG_HXX
-#define INCLUDED_BASEBMP_DEBUG_HXX
+#ifndef INCLUDED_BASEBMP_BASEBMPDLLAPI_H
+#define INCLUDED_BASEBMP_BASEBMPDLLAPI_H
 
-#include <iostream>
-#include <boost/shared_ptr.hpp>
-#include <basebmp/basebmpdllapi.h>
+#if defined BASEBMP_DLLIMPLEMENTATION
+#define BASEBMP_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+#else
+#define BASEBMP_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+#endif
+#define BASEBMP_DLLPRIVATE SAL_DLLPRIVATE
 
-namespace basebmp
-{
-    class BitmapDevice;
-
-    /** Dump content of BitmapDevice to given output stream.
-
-        @param rDevice
-        Device whose content should be dumped.
-
-        @param rOutputStream
-        Stream to write output to.
-    */
-    void BASEBMP_DLLPUBLIC debugDump( const boost::shared_ptr< BitmapDevice >& rDevice,
-                                      ::std::ostream&                          rOutputStream );
-}
-
-#endif /* INCLUDED_BASEBMP_DEBUG_HXX */
+#endif /* INCLUDED_BASEBMP_BASEBMPDLLAPI_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

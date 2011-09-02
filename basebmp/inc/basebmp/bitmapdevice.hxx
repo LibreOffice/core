@@ -31,6 +31,7 @@
 
 #include <sal/types.h>
 #include <basebmp/drawmodes.hxx>
+#include <basebmp/basebmpdllapi.h>
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
@@ -38,13 +39,6 @@
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/noncopyable.hpp>
 #include <vector>
-
-#if defined BASEBMP_DLLIMPLEMENTATION
-#define BASEBMP_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
-#else
-#define BASEBMP_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
-#endif
-#define BASEBMP_DLLPRIVATE SAL_DLLPRIVATE
 
 namespace basegfx
 {
