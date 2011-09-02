@@ -193,7 +193,6 @@ void FiltersTest::testODSs()
     rtl::OUString aString1(RTL_CONSTASCII_USTRINGPARAM("calc8"));
     rtl::OUString aString2 = m_aSrcRoot + rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data/ods/named-ranges-global.ods"));
-    return;
 
     ScDocShellRef xDocSh = load( aString1, aString2 , rtl::OUString(), 50331943);
 

@@ -94,6 +94,7 @@ $(eval $(call gb_CppunitTest_set_args,sc_filters_test,\
     --headless \
     --invisible \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
+    -env:OOO_CONFIG_REGISTRY_DIR=file://$(OUTDIR)/xml/registry \
 ))
 
 $(eval $(call gb_RdbTarget_RdbTarget,sc_filters_test))
@@ -111,9 +112,16 @@ $(eval $(call gb_RdbTarget_add_components,sc_filters_test,\
     comphelper/util/comphelp \
     i18npool/util/i18npool \
     package/util/package2 \
+    package/source/xstor/xstor \
+    unotools/util/utl \
+    basic/util/sb \
+    unoxml/source/rdf/unordf \
+    sax/source/expatwrap/expwrap \
 ))
 
 $(eval $(call gb_RdbTarget_add_old_components,sc_filters_test,\
+    configmgr \
+    filterconfig1 \
     ucb1 \
     ucpfile1 \
 ))
