@@ -511,7 +511,20 @@ Components::Components(
     lock_ = lock();
 
     OSL_ASSERT(context.is());
-    RTL_LOGFILE_TRACE_AUTHOR("configmgr", "sb", "begin parsing");
+
+    // Check if we are being used for in-tree unit tests ...
+    rtl::OUString aUnitTestDir;
+    if (rtl::Bootstrap::get( rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("OOO_CONFIG_REGISTRY_DIR") ), aUnitTestDir))
+    {
+        parseXcsXcuLayer( 0, aUnitTestDir );
+        // next is required for the (somewhat strange) filter configuration
+        parseModuleLayer( 1, aUnitTestDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/spool")));
+        return;
+    }
+
+    RTL_LOGFILE_TRACE("configmgr : begin parsing");
+
     parseXcsXcuLayer(
         0,
         expand(
@@ -582,7 +595,7 @@ Components::Components(
                     "PackageRegistryBackend/configmgr.ini"))),
         true);
     parseModificationLayer();
-    RTL_LOGFILE_TRACE_AUTHOR("configmgr", "sb", "end parsing");
+    RTL_LOGFILE_TRACE("configmgr : end parsing");
 }
 
 Components::~Components()
