@@ -698,8 +698,6 @@ The following structure describes the permissions used in PDF security
      */
     std::set< ErrorCode > GetErrors();
 
-    PDFVersion GetVersion() const;
-
     static com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >
            InitEncryption( const rtl::OUString& i_rOwnerPassword,
                            const rtl::OUString& i_rUserPassword,
@@ -716,8 +714,6 @@ The following structure describes the permissions used in PDF security
     void               MoveClipRegion( long nHorzMove, long nVertMove );
     void               IntersectClipRegion( const Rectangle& rRect );
     void               IntersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
-
-    void               SetAntialiasing( sal_uInt16 nMode =  0 );
 
     void               SetLayoutMode( sal_uLong nMode );
     void               SetDigitLanguage( LanguageType eLang );
@@ -739,7 +735,6 @@ The following structure describes the permissions used in PDF security
     void               SetOverlineColor( const Color& rColor );
     void               SetTextAlign( ::TextAlign eAlign );
 
-    void               SetMapMode();
     void               SetMapMode( const MapMode& rNewMapMode );
 
 
@@ -788,29 +783,11 @@ The following structure describes the permissions used in PDF security
     void                DrawChord( const Rectangle& rRect,
                                    const Point& rStartPt, const Point& rEndPt );
 
-    void                DrawBitmap( const Point& rDestPt,
-                                    const Bitmap& rBitmap );
     void                DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                     const Bitmap& rBitmap );
-    void                DrawBitmap( const Point& rDestPt, const Size& rDestSize,
-                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                    const Bitmap& rBitmap );
 
-    void                DrawBitmapEx( const Point& rDestPt,
-                                      const BitmapEx& rBitmapEx );
     void                DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                       const BitmapEx& rBitmapEx );
-    void                DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
-                                      const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                      const BitmapEx& rBitmapEx );
-
-    void                DrawMask( const Point& rDestPt,
-                                  const Bitmap& rBitmap, const Color& rMaskColor );
-    void                DrawMask( const Point& rDestPt, const Size& rDestSize,
-                                  const Bitmap& rBitmap, const Color& rMaskColor );
-    void                DrawMask( const Point& rDestPt, const Size& rDestSize,
-                                  const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                  const Bitmap& rBitmap, const Color& rMaskColor );
 
     void                DrawGradient( const Rectangle& rRect, const Gradient& rGradient );
     void                DrawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
@@ -853,19 +830,6 @@ The following structure describes the permissions used in PDF security
     The transparency factor
     */
     void                EndTransparencyGroup( const Rectangle& rBoundRect, sal_uInt16 nTransparencePercent );
-
-    /** End a transparency group with an alpha mask
-
-    This ends a transparency group and inserts it on the current page. The
-    coordinates of the group result out of the grouped drawing operations.
-
-    @param rBoundRect
-    The bounding rectangle of the group
-
-    @param rAlphaMask
-    The transparency mask; must be an 8 bit grayscale image
-    */
-    void                EndTransparencyGroup( const Rectangle& rBoundRect, const Bitmap& rAlphaMask );
 
     /** Insert a JPG encoded image (optionally with mask)
 
@@ -1180,13 +1144,6 @@ The following structure describes the permissions used in PDF security
     (e.g. if the passed element id is invalid)
      */
     bool SetCurrentStructureElement( sal_Int32 nElement );
-    /** get the current structure element's id
-
-    @returns
-    the id of the current structure element or -1 if no structure exists
-    (e.g. if no tagged PDF is being produced)
-     */
-    sal_Int32 GetCurrentStructureElement();
 
     /** set a structure attribute on the current structural element
 
@@ -1320,42 +1277,6 @@ The following structure describes the permissions used in PDF security
     */
     void AddStream( const String& rMimeType, PDFOutputStream* pStream, bool bCompress );
 
-    /** create a new pattern for filling operations
-
-    This function creates a new pattern to be used for subsequent filling operations.
-    A pattern can consist of arbitrary drawing operations; all drawing operations
-    between <code>BeingPattern()</code> and <code>EndPattern()</code> calls
-    will be recorded and considered as forming up the pattern.
-
-    @param rCellBounds
-    a rectangle defining the "cell" that will be repeated to form the pattern
-    */
-    void BeginPattern( const Rectangle& );
-    /** finish a new pattern for filling operations
-
-    This functions finishes the pattern create begun with <code>BeginPattern()</code>
-    and returns a pattern id to be used in subsequent drawing operations.
-
-    @param rMatrix
-    a transformation to be imposed on the drawing operations that make up the pattern
-
-    @returns
-    the new pattern's id
-    */
-    sal_Int32 EndPattern( const SvtGraphicFill::Transform& rTransformation );
-    /** draw a polypolygon filled with a pattern
-
-    @param rPolyPoly
-    PolyPolygon to filled
-
-    @param nPatternId
-    the pattern previously obtained in the <code>EndPattern</code> call.
-
-    @param bEOFill
-    true: polypolygon gets filled with EvenOdd method,
-    false: polypolygon gets filled with nonzero winding method
-    */
-    void DrawPolyPolygon( const PolyPolygon& rPolyPoly, sal_Int32 nPatternId, bool bEOFill );
 };
 
 }

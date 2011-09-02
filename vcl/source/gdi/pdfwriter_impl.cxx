@@ -1731,7 +1731,6 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         m_nCurrentStructElement( 0 ),
         m_bEmitStructure( true ),
         m_bNewMCID( false ),
-        m_nCurrentControl( -1 ),
         m_bEmbedStandardFonts( false ),
         m_nNextFID( 1 ),
         m_nInheritedPageWidth( 595 ),  // default A4
@@ -7934,39 +7933,6 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop, const Lin
     }
 }
 
-void PDFWriterImpl::drawWaveLine( const Point& rStart, const Point& rStop, sal_Int32 nDelta, sal_Int32 nLineWidth )
-{
-    Point aDiff( rStop-rStart );
-    double fLen = sqrt( (double)(aDiff.X()*aDiff.X() + aDiff.Y()*aDiff.Y()) );
-    if( fLen < 1.0 )
-        return;
-
-    MARK( "drawWaveLine" );
-    updateGraphicsState();
-
-    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) )
-        return;
-
-    OStringBuffer aLine( 512 );
-    aLine.append( "q " );
-    m_aPages.back().appendMappedLength( nLineWidth, aLine, true );
-    aLine.append( " w " );
-
-    appendDouble( (double)aDiff.X()/fLen, aLine );
-    aLine.append( ' ' );
-    appendDouble( -(double)aDiff.Y()/fLen, aLine );
-    aLine.append( ' ' );
-    appendDouble( (double)aDiff.Y()/fLen, aLine );
-    aLine.append( ' ' );
-    appendDouble( (double)aDiff.X()/fLen, aLine );
-    aLine.append( ' ' );
-    m_aPages.back().appendPoint( rStart, aLine );
-    aLine.append( " cm " );
-    m_aPages.back().appendWaveLine( (sal_Int32)fLen, 0, nDelta, aLine );
-    aLine.append( "Q\n" );
-    writeBuffer( aLine.getStr(), aLine.getLength() );
-}
-
 #define WCONV( x ) m_pReferenceDevice->ImplDevicePixelToLogicWidth( x )
 #define HCONV( x ) m_pReferenceDevice->ImplDevicePixelToLogicHeight( x )
 
@@ -8645,48 +8611,6 @@ void PDFWriterImpl::endTransparencyGroup( const Rectangle& rBoundingBox, sal_uIn
         // get XObject's content stream
         m_aTransparentObjects.back().m_pContentStream = static_cast<SvMemoryStream*>(endRedirect());
         m_aTransparentObjects.back().m_nExtGStateObject = createObject();
-
-        OStringBuffer aObjName( 16 );
-        aObjName.append( "Tr" );
-        aObjName.append( m_aTransparentObjects.back().m_nObject );
-        OString aTrName( aObjName.makeStringAndClear() );
-        aObjName.append( "EGS" );
-        aObjName.append( m_aTransparentObjects.back().m_nExtGStateObject );
-        OString aExtName( aObjName.makeStringAndClear() );
-
-        OStringBuffer aLine( 80 );
-        // insert XObject
-        aLine.append( "q /" );
-        aLine.append( aExtName );
-        aLine.append( " gs /" );
-        aLine.append( aTrName );
-        aLine.append( " Do Q\n" );
-        writeBuffer( aLine.getStr(), aLine.getLength() );
-
-        pushResource( ResXObject, aTrName, m_aTransparentObjects.back().m_nObject );
-        pushResource( ResExtGState, aExtName, m_aTransparentObjects.back().m_nExtGStateObject );
-    }
-}
-
-void PDFWriterImpl::endTransparencyGroup( const Rectangle& rBoundingBox, const Bitmap& rAlphaMask )
-{
-    if( m_aContext.Version >= PDFWriter::PDF_1_4 )
-    {
-        // create XObject
-        m_aTransparentObjects.push_back( TransparencyEmit() );
-        m_aTransparentObjects.back().m_aBoundRect   = rBoundingBox;
-        // convert rectangle to default user space
-        m_aPages.back().convertRect( m_aTransparentObjects.back().m_aBoundRect );
-        m_aTransparentObjects.back().m_nObject      = createObject();
-        m_aTransparentObjects.back().m_fAlpha       = 0.0;
-        // get XObject's content stream
-        m_aTransparentObjects.back().m_pContentStream = static_cast<SvMemoryStream*>(endRedirect());
-        m_aTransparentObjects.back().m_nExtGStateObject = createObject();
-
-        // draw soft mask
-        beginRedirect( new SvMemoryStream( 1024, 1024 ), Rectangle() );
-        drawBitmap( rBoundingBox.TopLeft(), rBoundingBox.GetSize(), rAlphaMask );
-        m_aTransparentObjects.back().m_pSoftMaskStream = static_cast<SvMemoryStream*>(endRedirect());
 
         OStringBuffer aObjName( 16 );
         aObjName.append( "Tr" );
@@ -10070,23 +9994,6 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
     drawBitmap( rDestPoint, rDestSize, rEmit, Color( COL_TRANSPARENT ) );
 }
 
-void PDFWriterImpl::drawMask( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap, const Color& rFillColor )
-{
-    MARK( "drawMask" );
-
-    // #i40055# sanity check
-    if( ! (rDestSize.Width() && rDestSize.Height()) )
-        return;
-
-    Bitmap aBitmap( rBitmap );
-    if( aBitmap.GetBitCount() > 1 )
-        aBitmap.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
-    DBG_ASSERT( aBitmap.GetBitCount() == 1, "mask conversion failed" );
-
-    const BitmapEmit& rEmit = createBitmapEmit( BitmapEx( aBitmap ), true );
-    drawBitmap( rDestPoint, rDestSize, rEmit, rFillColor );
-}
-
 sal_Int32 PDFWriterImpl::createGradient( const Gradient& rGradient, const Size& rSize )
 {
     Size aPtSize( lcl_convert( m_aGraphicsStack.front().m_aMapMode,
@@ -10166,44 +10073,6 @@ void PDFWriterImpl::drawGradient( const Rectangle& rRect, const Gradient& rGradi
         aLine.append( " re S " );
     }
     aLine.append( "Q\n" );
-    writeBuffer( aLine.getStr(), aLine.getLength() );
-}
-
-void PDFWriterImpl::drawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient )
-{
-    MARK( "drawGradient (PolyPolygon)" );
-
-    if( m_aContext.Version == PDFWriter::PDF_1_2 )
-    {
-        drawPolyPolygon( rPolyPoly );
-        return;
-    }
-
-    Rectangle aBoundRect = rPolyPoly.GetBoundRect();
-    sal_Int32 nGradient = createGradient( rGradient, aBoundRect.GetSize() );
-
-    updateGraphicsState();
-
-    Point aTranslate = aBoundRect.BottomLeft();
-    int nPolygons = rPolyPoly.Count();
-
-    OStringBuffer aLine( 80*nPolygons );
-    aLine.append( "q " );
-    // set PolyPolygon as clip path
-    m_aPages.back().appendPolyPolygon( rPolyPoly, aLine );
-    aLine.append( "W* n\n" );
-    aLine.append( "1 0 0 1 " );
-    m_aPages.back().appendPoint( aTranslate, aLine );
-    aLine.append( " cm\n" );
-    aLine.append( "/P" );
-    aLine.append( nGradient );
-    aLine.append( " sh Q\n" );
-    if( m_aGraphicsStack.front().m_aLineColor != Color( COL_TRANSPARENT ) )
-    {
-        // and draw the surrounding path
-        m_aPages.back().appendPolyPolygon( rPolyPoly, aLine );
-        aLine.append( "S\n" );
-    }
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
@@ -12020,102 +11889,6 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     m_aPages[ nPageNr ].m_bHasWidgets = true;
 
     return nNewWidget;
-}
-
-void PDFWriterImpl::beginControlAppearance( sal_Int32 nControl )
-{
-    if( nControl < 0 || nControl >= (sal_Int32)m_aWidgets.size() )
-        return;
-
-    PDFWidget& rWidget = m_aWidgets[ nControl ];
-    m_nCurrentControl = nControl;
-
-    SvMemoryStream* pControlStream = new SvMemoryStream( 1024, 1024 );
-    // back conversion of control rect to current MapMode; necessary because
-    // MapMode between createControl and beginControlAppearance
-    // could have changed; therefore the widget rectangle is
-    // already converted
-    Rectangle aBack( Point( rWidget.m_aRect.Left(), pointToPixel(m_aPages[m_nCurrentPage].getHeight()) - rWidget.m_aRect.Top() - rWidget.m_aRect.GetHeight() ),
-                     rWidget.m_aRect.GetSize() );
-    aBack = lcl_convert( m_aMapMode,
-                         m_aGraphicsStack.front().m_aMapMode,
-                         getReferenceDevice(),
-                         aBack );
-    beginRedirect( pControlStream, aBack );
-    writeBuffer( "/Tx BMC\n", 8 );
-}
-
-bool PDFWriterImpl::endControlAppearance( PDFWriter::WidgetState eState )
-{
-    bool bRet = false;
-    if( ! m_aOutputStreams.empty() )
-        writeBuffer( "\nEMC\n", 5 );
-    SvMemoryStream* pAppearance = static_cast<SvMemoryStream*>(endRedirect());
-    if( pAppearance && m_nCurrentControl >= 0 && m_nCurrentControl < (sal_Int32)m_aWidgets.size() )
-    {
-        PDFWidget& rWidget = m_aWidgets[ m_nCurrentControl ];
-        OString aState, aStyle;
-        switch( rWidget.m_eType )
-        {
-            case PDFWriter::PushButton:
-                if( eState == PDFWriter::Up || eState == PDFWriter::Down )
-                {
-                    aState = (eState == PDFWriter::Up) ? "N" : "D";
-                    aStyle = "Standard";
-                }
-                break;
-            case PDFWriter::CheckBox:
-                if( eState == PDFWriter::Up || eState == PDFWriter::Down )
-                {
-                    aState = "N";
-                    aStyle = (eState == PDFWriter::Up) ? "Off" : "Yes";
-                    /* cf PDFReference 3rd ed. V1.4 p539:
-                       recommended name for on state is "Yes",
-                       recommended name for off state is "Off"
-                     */
-                }
-                break;
-            case PDFWriter::RadioButton:
-                if( eState == PDFWriter::Up || eState == PDFWriter::Down )
-                {
-                    aState = "N";
-                    if( eState == PDFWriter::Up )
-                        aStyle = "Off";
-                    else
-                    {
-                        OStringBuffer aBuf( rWidget.m_aOnValue.getLength()*2 );
-                        appendName( rWidget.m_aOnValue, aBuf );
-                        aStyle = aBuf.makeStringAndClear();
-                    }
-                }
-                break;
-            case PDFWriter::Edit:
-                aState = "N";
-                aStyle = "Standard";
-                break;
-            case PDFWriter::ListBox:
-            case PDFWriter::ComboBox:
-            case PDFWriter::Hierarchy:
-                break;
-        }
-        if( aState.getLength() && aStyle.getLength() )
-        {
-            // delete eventual existing stream
-            PDFAppearanceStreams::iterator it =
-                rWidget.m_aAppearances[ aState ].find( aStyle );
-            if( it != rWidget.m_aAppearances[ aState ].end() )
-                delete it->second;
-            rWidget.m_aAppearances[ aState ][ aStyle ] = pAppearance;
-            bRet = true;
-        }
-    }
-
-    if( ! bRet )
-        delete pAppearance;
-
-    m_nCurrentControl = -1;
-
-    return bRet;
 }
 
 void PDFWriterImpl::addStream( const String& rMimeType, PDFOutputStream* pStream, bool bCompress )

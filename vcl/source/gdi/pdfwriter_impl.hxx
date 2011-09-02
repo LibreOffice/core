@@ -655,8 +655,6 @@ private:
     std::vector<PDFWidget>              m_aWidgets;
     /* maps radio group id to index of radio group control in m_aWidgets */
     std::map< sal_Int32, sal_Int32 >    m_aRadioGroupWidgets;
-    /* used to store control id during beginControlAppearance/endControlAppearance */
-    sal_Int32                           m_nCurrentControl;
     /* boost::unordered_map for field names, used to ensure unique field names */
     boost::unordered_map< rtl::OString, sal_Int32, rtl::OStringHash > m_aFieldNameMap;
 
@@ -1122,7 +1120,6 @@ public:
     void setFont( const Font& rFont );
 
     void setMapMode( const MapMode& rMapMode );
-    void setMapMode() { setMapMode( m_aMapMode ); }
 
 
     const MapMode& getMapMode() { return m_aGraphicsStack.front().m_aMapMode; }
@@ -1214,12 +1211,6 @@ public:
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
     }
 
-    void setAntiAlias( sal_Int32 nAntiAlias )
-    {
-        m_aGraphicsStack.front().m_nAntiAlias = nAntiAlias;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateAntiAlias;
-    }
-
     /* actual drawing functions */
     void drawText( const Point& rPos, const String& rText, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN, bool bTextLines = true );
     void drawTextArray( const Point& rPos, const String& rText, const sal_Int32* pDXArray = NULL, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN, bool bTextLines = true );
@@ -1240,7 +1231,6 @@ public:
     void drawPolyLine( const Polygon& rPoly );
     void drawPolyLine( const Polygon& rPoly, const LineInfo& rInfo );
     void drawPolyLine( const Polygon& rPoly, const PDFWriter::ExtLineInfo& rInfo );
-    void drawWaveLine( const Point& rStart, const Point& rStop, sal_Int32 nDelta, sal_Int32 nLineWidth );
 
     void drawPixel( const Point& rPt, const Color& rColor );
     void drawPixel( const Polygon& rPts, const Color* pColors = NULL );
@@ -1252,17 +1242,14 @@ public:
 
     void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap );
     void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const BitmapEx& rBitmap );
-    void drawMask( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap, const Color& rFillColor );
     void drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask );
 
     void drawGradient( const Rectangle& rRect, const Gradient& rGradient );
-    void drawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
     void drawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch );
     void drawWallpaper( const Rectangle& rRect, const Wallpaper& rWall );
     void drawTransparent( const PolyPolygon& rPolyPoly, sal_uInt32 nTransparentPercent );
     void beginTransparencyGroup();
     void endTransparencyGroup( const Rectangle& rBoundingBox, sal_uInt32 nTransparentPercent );
-    void endTransparencyGroup( const Rectangle& rBoundingBox, const Bitmap& rAlphaMask );
     void beginPattern( const Rectangle& rCell );
     sal_Int32 endPattern( const SvtGraphicFill::Transform& rTransform );
     void drawPolyPolygon( const PolyPolygon& rPolyPoly, sal_Int32 nPattern, bool bEOFill );
@@ -1312,8 +1299,6 @@ public:
 
     // controls
     sal_Int32 createControl( const PDFWriter::AnyWidget& rControl, sal_Int32 nPageNr = -1 );
-    void beginControlAppearance( sal_Int32 nControl );
-    bool endControlAppearance( PDFWriter::WidgetState eState );
 
     // additional streams
     void addStream( const String& rMimeType, PDFOutputStream* pStream, bool bCompress );
