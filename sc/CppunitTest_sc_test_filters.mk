@@ -35,20 +35,36 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_filters_test, \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sc_filters_test, \
-    sc \
-    sfx \
-    svl \
-    svt \
-    vcl \
-    tl \
-    ucbhelper \
-    utl \
-    i18nisolang1 \
+    avmedia \
+    basegfx \
     comphelper \
     cppu \
     cppuhelper \
+    drawinglayer \
+    editeng \
+    fileacc \
+    for \
+    forui \
+    i18nisolang1 \
+    msfilter \
     sal \
-    $(gb_STDLIBS) \
+    salhelper \
+    sb \
+    sc \
+    sfx \
+    sot \
+    svl \
+    svt \
+    svx \
+    svxcore \
+    tk \
+    tl \
+    ucbhelper \
+    utl \
+    vbahelper \
+    vcl \
+    xo \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_filters_test,\

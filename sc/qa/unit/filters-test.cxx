@@ -73,7 +73,7 @@ public:
     virtual void tearDown();
 
     void recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, int nExpected);
-    ScDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
+    ScDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, sal_uLong nFormatType = 0);
 
     /**
      * Ensure CVEs remain unbroken
@@ -95,12 +95,16 @@ private:
 };
 
 ScDocShellRef FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-    const rtl::OUString &rUserData)
+    const rtl::OUString &rUserData, sal_uLong nFormatType)
 {
+    sal_uInt32 nFormat = 0;
+    if (nFormatType)
+        nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
     SfxFilter aFilter(
         rFilter,
-        rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
-        rUserData, rtl::OUString() );
+        rtl::OUString(), nFormatType, nFormat, rtl::OUString(), 0, rtl::OUString(),
+        rUserData, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc*")) );
+    aFilter.SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ScDocShellRef xDocShRef = new ScDocShell;
     SfxMedium aSrcMed(rURL, STREAM_STD_READ, true);
@@ -186,13 +190,14 @@ void FiltersTest::testCVEs()
 
 void FiltersTest::testODSs()
 {
-#if 0
-// TODO: loading of ods still fails.  I need to look into this.
-    ScDocShellRef xDocSh = load(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc8")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/calc/sc/qa/unit/data/ods/named-ranges-global.ods")), rtl::OUString());
+    rtl::OUString aString1(RTL_CONSTASCII_USTRINGPARAM("calc8"));
+    rtl::OUString aString2 = m_aSrcRoot + rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data/ods/named-ranges-global.ods"));
+    return;
+
+    ScDocShellRef xDocSh = load( aString1, aString2 , rtl::OUString(), 50331943);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-global.ods.", xDocSh.Is());
-#endif
 }
 
 FiltersTest::FiltersTest()
