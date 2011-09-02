@@ -39,6 +39,7 @@ $(eval $(call gb_Library_add_defs,i18nutil,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,i18nutil,\
+	comphelper \
 	cppu \
 	sal \
 	$(gb_STDLIBS) \
