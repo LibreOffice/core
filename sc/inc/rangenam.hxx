@@ -36,6 +36,7 @@
 #include "scdllapi.h"
 
 #include <map>
+#include <vector>
 #include <boost/ptr_container/ptr_set.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 
@@ -181,8 +182,10 @@ bool operator< (const ScRangeData& left, const ScRangeData& right);
 class ScRangeName
 {
 private:
+    typedef std::vector<ScRangeData*> IndexDataType;
     typedef ::boost::ptr_set<ScRangeData> DataType;
     DataType maData;
+    IndexDataType maIndexToData;
 
 public:
     /// Map that manages stored ScRangeName instances.
@@ -230,6 +233,12 @@ public:
     SC_DLLPUBLIC bool insert(ScRangeData* p);
 
     void erase(const ScRangeData& r);
+
+    /**
+     * Erase by iterator position.  Note that this method doesn't check for
+     * iterator's validity.  The caller must make sure that the iterator is
+     * valid.
+     */
     void erase(const iterator& itr);
     void clear();
     bool operator== (const ScRangeName& r) const;

@@ -782,7 +782,7 @@ void ScRangeName::copyLocalNames(const TabNameMap& rNames, TabNameCopyMap& rCopy
 ScRangeName::ScRangeName() {}
 
 ScRangeName::ScRangeName(const ScRangeName& r) :
-    maData(r.maData) {}
+    maData(r.maData), maIndexToData(r.maIndexToData) {}
 
 const ScRangeData* ScRangeName::findByRange(const ScRange& rRange) const
 {
@@ -821,9 +821,12 @@ const ScRangeData* ScRangeName::findByUpperName(const OUString& rName) const
 
 ScRangeData* ScRangeName::findByIndex(sal_uInt16 i)
 {
-    DataType::iterator itr = std::find_if(
-        maData.begin(), maData.end(), MatchByIndex(i));
-    return itr == maData.end() ? NULL : &(*itr);
+    if (!i)
+        // index should never be zero.
+        return NULL;
+
+    size_t nPos = i - 1;
+    return nPos < maIndexToData.size() ? maIndexToData[nPos] : NULL;
 }
 
 void ScRangeName::UpdateReference(
@@ -899,35 +902,51 @@ bool ScRangeName::insert(ScRangeData* p)
 
     if (!p->GetIndex())
     {
-        // Assign a new index.  An index must be unique.
-        sal_uInt16 nHigh = 0;
-        DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
-        for (; itr != itrEnd; ++itr)
+        // Assign a new index.  An index must be unique and is never 0.
+        IndexDataType::iterator itr = std::find(
+            maIndexToData.begin(), maIndexToData.end(), static_cast<ScRangeData*>(NULL));
+        if (itr != maIndexToData.end())
         {
-            sal_uInt16 n = itr->GetIndex();
-            if (n > nHigh)
-                nHigh = n;
+            // Empty slot exists.  Re-use it.
+            size_t nPos = std::distance(maIndexToData.begin(), itr);
+            p->SetIndex(nPos + 1);
         }
-        p->SetIndex(nHigh + 1);
+        else
+            // No empty slot.  Append it to the end.
+            p->SetIndex(maIndexToData.size() + 1);
     }
 
     pair<DataType::iterator, bool> r = maData.insert(p);
+    if (r.second)
+    {
+        // Data inserted.  Store its index for mapping.
+        size_t nPos = p->GetIndex() - 1;
+        if (nPos >= maIndexToData.size())
+            maIndexToData.resize(nPos+1, NULL);
+        maIndexToData[nPos] = p;
+    }
     return r.second;
 }
 
 void ScRangeName::erase(const ScRangeData& r)
 {
-    maData.erase(r);
+    DataType::iterator itr = maData.find(r);
+    if (itr != maData.end())
+        erase(itr);
 }
 
 void ScRangeName::erase(const iterator& itr)
 {
+    sal_uInt16 nIndex = itr->GetIndex();
     maData.erase(itr);
+    if (nIndex < maIndexToData.size())
+        maIndexToData[nIndex] = NULL;
 }
 
 void ScRangeName::clear()
 {
     maData.clear();
+    maIndexToData.clear();
 }
 
 bool ScRangeName::operator== (const ScRangeName& r) const
