@@ -299,7 +299,6 @@ class SVX_DLLPUBLIC GradientLB : public ListBox
 {
 public:
     GradientLB( Window* pParent, ResId Id, sal_Bool bUserDraw = sal_True );
-    GradientLB( Window* pParent, WinBits aWB, sal_Bool bUserDraw = sal_True );
 
     virtual void Fill( const XGradientList* pList );
     virtual void UserDraw( const UserDrawEvent& rUDEvt );

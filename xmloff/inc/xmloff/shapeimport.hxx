@@ -353,10 +353,7 @@ public:
     const SvXMLTokenMap& Get3DPolygonBasedAttrTokenMap();
     const SvXMLTokenMap& Get3DCubeObjectAttrTokenMap();
     const SvXMLTokenMap& Get3DSphereObjectAttrTokenMap();
-    const SvXMLTokenMap& Get3DSceneShapeAttrTokenMap();
     const SvXMLTokenMap& Get3DLightAttrTokenMap();
-    const SvXMLTokenMap& GetPathShapeAttrTokenMap();
-    const SvXMLTokenMap& GetPolygonShapeAttrTokenMap();
 
     // Styles and AutoStyles contexts
     SvXMLStylesContext* GetStylesContext() const { return mpStylesContext; }
@@ -419,10 +416,6 @@ public:
 
     /** creates a property mapper for external chaining */
     static SvXMLImportPropertyMapper* CreateShapePropMapper(
-        const com::sun::star::uno::Reference< com::sun::star::frame::XModel>& rModel, SvXMLImport& rImport );
-
-    /** creates a shape property set mapper that can be used for non shape elements */
-    static SvXMLImportPropertyMapper* CreateExternalShapePropMapper(
         const com::sun::star::uno::Reference< com::sun::star::frame::XModel>& rModel, SvXMLImport& rImport );
 
     // #88546#

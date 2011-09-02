@@ -1150,14 +1150,6 @@ GradientLB::GradientLB( Window* pParent, ResId Id, sal_Bool bUserDraw /*= sal_Tr
     EnableUserDraw( mbUserDraw);
 }
 
-GradientLB::GradientLB( Window* pParent, WinBits aWB, sal_Bool bUserDraw /*= sal_True*/ )
-: ListBox( pParent, aWB ),
-  mpList(NULL),
-  mbUserDraw( bUserDraw )
-{
-    EnableUserDraw( mbUserDraw );
-}
-
 void GradientLB::Fill( const XGradientList* pList )
 {
     mpList = (XGradientList*)pList;

@@ -259,13 +259,6 @@ void GlobalEventConfig_Impl::initBindingInfo()
     }
 }
 
-Reference< container::XNameReplace > SAL_CALL GlobalEventConfig_Impl::getEvents() throw (::com::sun::star::uno::RuntimeException)
-{
-    //how to return this object as an XNameReplace?
-    Reference< container::XNameReplace > ret;
-    return ret;
-}
-
 void SAL_CALL GlobalEventConfig_Impl::replaceByName( const OUString& aName, const Any& aElement ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
 {
     Sequence< beans::PropertyValue > props;
@@ -377,12 +370,6 @@ GlobalEventConfig::~GlobalEventConfig()
         delete m_pImpl;
         m_pImpl = NULL;
     }
-}
-
-void GlobalEventConfig::EstablishFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pImpl->EstablishFrameCallback( xFrame );
 }
 
 Reference< container::XNameReplace > SAL_CALL GlobalEventConfig::getEvents() throw (::com::sun::star::uno::RuntimeException)

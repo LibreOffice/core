@@ -424,76 +424,6 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSphereObjectAttrTokenMap()
 
 //////////////////////////////////////////////////////////////////////////////
 
-
-const SvXMLTokenMap& XMLShapeImportHelper::GetPolygonShapeAttrTokenMap()
-{
-    if(!mpPolygonShapeAttrTokenMap)
-    {
-        static SvXMLTokenMapEntry aPolygonShapeAttrTokenMap[] =
-{
-    { XML_NAMESPACE_SVG,    XML_VIEWBOX,            XML_TOK_POLYGONSHAPE_VIEWBOX        },
-    { XML_NAMESPACE_DRAW,   XML_POINTS,             XML_TOK_POLYGONSHAPE_POINTS         },
-    XML_TOKEN_MAP_END
-};
-
-        mpPolygonShapeAttrTokenMap = new SvXMLTokenMap(aPolygonShapeAttrTokenMap);
-    } // if(!mpPolygonShapeAttrTokenMap)
-
-    return *mpPolygonShapeAttrTokenMap;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-
-const SvXMLTokenMap& XMLShapeImportHelper::GetPathShapeAttrTokenMap()
-{
-    if(!mpPathShapeAttrTokenMap)
-    {
-        static SvXMLTokenMapEntry aPathShapeAttrTokenMap[] =
-{
-    { XML_NAMESPACE_SVG,    XML_VIEWBOX,            XML_TOK_PATHSHAPE_VIEWBOX           },
-    { XML_NAMESPACE_SVG,    XML_D,                  XML_TOK_PATHSHAPE_D                 },
-    XML_TOKEN_MAP_END
-};
-
-        mpPathShapeAttrTokenMap = new SvXMLTokenMap(aPathShapeAttrTokenMap);
-    } // if(!mpPathShapeAttrTokenMap)
-
-    return *mpPathShapeAttrTokenMap;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-
-const SvXMLTokenMap& XMLShapeImportHelper::Get3DSceneShapeAttrTokenMap()
-{
-    if(!mp3DSceneShapeAttrTokenMap)
-    {
-        static SvXMLTokenMapEntry a3DSceneShapeAttrTokenMap[] =
-{
-    { XML_NAMESPACE_DR3D,   XML_TRANSFORM,          XML_TOK_3DSCENESHAPE_TRANSFORM      },
-    { XML_NAMESPACE_DR3D,   XML_VRP,                XML_TOK_3DSCENESHAPE_VRP            },
-    { XML_NAMESPACE_DR3D,   XML_VPN,                XML_TOK_3DSCENESHAPE_VPN            },
-    { XML_NAMESPACE_DR3D,   XML_VUP,                XML_TOK_3DSCENESHAPE_VUP            },
-    { XML_NAMESPACE_DR3D,   XML_PROJECTION,         XML_TOK_3DSCENESHAPE_PROJECTION     },
-    { XML_NAMESPACE_DR3D,   XML_DISTANCE,           XML_TOK_3DSCENESHAPE_DISTANCE       },
-    { XML_NAMESPACE_DR3D,   XML_FOCAL_LENGTH,       XML_TOK_3DSCENESHAPE_FOCAL_LENGTH   },
-    { XML_NAMESPACE_DR3D,   XML_SHADOW_SLANT,       XML_TOK_3DSCENESHAPE_SHADOW_SLANT   },
-    { XML_NAMESPACE_DR3D,   XML_SHADE_MODE,         XML_TOK_3DSCENESHAPE_SHADE_MODE     },
-    { XML_NAMESPACE_DR3D,   XML_AMBIENT_COLOR,      XML_TOK_3DSCENESHAPE_AMBIENT_COLOR  },
-    { XML_NAMESPACE_DR3D,   XML_LIGHTING_MODE,      XML_TOK_3DSCENESHAPE_LIGHTING_MODE  },
-    XML_TOKEN_MAP_END
-};
-
-        mp3DSceneShapeAttrTokenMap = new SvXMLTokenMap(a3DSceneShapeAttrTokenMap);
-    } // if(!mp3DSceneShapeAttrTokenMap)
-
-    return *mp3DSceneShapeAttrTokenMap;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-
 const SvXMLTokenMap& XMLShapeImportHelper::Get3DLightAttrTokenMap()
 {
     if(!mp3DLightAttrTokenMap)
@@ -1139,19 +1069,6 @@ SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const un
 {
     UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rModel, rImport );
     UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory );
-    SvXMLImportPropertyMapper* pResult = new SvXMLImportPropertyMapper( xMapper, rImport );
-
-    // chain text attributes
-    pResult->ChainImportMapper( XMLTextImportHelper::CreateParaExtPropMapper( rImport ) );
-    return pResult;
-}
-
-/** creates a shape property set mapper that can be used for non shape elements.
-    Only current feature is that the ShapeUserDefinedAttributes property is not included in this one. */
-SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateExternalShapePropMapper( const uno::Reference< frame::XModel>& rModel, SvXMLImport& rImport )
-{
-    UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rModel, rImport );
-    UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory, 1 );
     SvXMLImportPropertyMapper* pResult = new SvXMLImportPropertyMapper( xMapper, rImport );
 
     // chain text attributes
