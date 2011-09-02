@@ -285,8 +285,8 @@ void DrawingFragment::onEndElement()
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Height, 0, SAL_MAX_INT32 ) );
 
                     // Make sure to set the position and size *before* calling addShape().
-                    mxShape->setPosition(::com::sun::star::awt::Point(aShapeRectEmu.X, aShapeRectEmu.Y));
-                    mxShape->setSize(::com::sun::star::awt::Size(aShapeRectEmu.Width, aShapeRectEmu.Height));
+                    mxShape->setPosition(Point(aShapeRectEmu.X, aShapeRectEmu.Y));
+                    mxShape->setSize(Size(aShapeRectEmu.Width, aShapeRectEmu.Height));
 
                     basegfx::B2DHomMatrix aTransformation;
                     mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, aTransformation, &aShapeRectEmu32 );
