@@ -2061,7 +2061,6 @@ binfilter::SwDestroyList::Remove(unsigned short, unsigned short)
 binfilter::SwInsHardBlankSoftHyph::~SwInsHardBlankSoftHyph()
 binfilter::SwLayAction::SwLayAction(binfilter::SwRootFrm*, binfilter::SwViewImp*)
 binfilter::SwLayAction::~SwLayAction()
-binfilter::SwLayouter::SwLayouter()
 binfilter::SwOLELRUCache::Remove(binfilter::SwOLEObj&)
 binfilter::SwOutlineNodes::Insert(binfilter::SwNode* const&, unsigned short&)
 binfilter::SwOutlineNodes::Insert(binfilter::SwNode* const*, unsigned short)
@@ -3099,10 +3098,6 @@ utl::OConfigurationTreeRoot::OConfigurationTreeRoot(comphelper::ComponentContext
 utl::OConfigurationValueContainer::OConfigurationValueContainer(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, osl::Mutex&, rtl::OUString const&, unsigned short, int)
 utl::OConfigurationValueContainer::getServiceFactory() const
 utl::OConfigurationValueContainer::registerNullValueExchangeLocation(char const*, com::sun::star::uno::Any*)
-utl::PropertySetHelper::PropertySetHelper(utl::PropertySetInfo*)
-utl::PropertySetInfo::PropertySetInfo()
-utl::PropertySetInfo::add(utl::PropertyMapEntry*)
-utl::PropertySetInfo::remove(rtl::OUString const&)
 utl::TransliterationWrapper::compareSubstring(String const&, int, int, String const&, int, int) const
 vbahelper::CollectionBase::CollectionBase(com::sun::star::uno::Type const&)
 vbahelper::CollectionBase::getAnyItemOrThis(com::sun::star::uno::Any const&)
