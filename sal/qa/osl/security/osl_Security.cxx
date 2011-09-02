@@ -523,7 +523,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     psia=GetSidIdentifierAuthority(pSid);
 
     /* obtain sidsubauthority count */
-    dwSubAuthorities=min(*GetSidSubAuthorityCount(pSid), 5);
+    dwSubAuthorities=std::min((int) *GetSidSubAuthorityCount(pSid), 5);
 
     /* buffer length: S-SID_REVISION- + identifierauthority- + subauthorities- + NULL */
     Ident=(sal_Char * )malloc(88*sizeof(sal_Char));
