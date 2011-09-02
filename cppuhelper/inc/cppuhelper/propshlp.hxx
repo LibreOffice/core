@@ -351,8 +351,7 @@ public:
  */
 class OPropertySetHelper : public ::com::sun::star::beans::XMultiPropertySet,
                            public ::com::sun::star::beans::XFastPropertySet,
-                           public ::com::sun::star::beans::XPropertySet,
-                           public ::com::sun::star::beans::XPropertySetOption
+                           public ::com::sun::star::beans::XPropertySet
 {
 public:
     /**
@@ -372,11 +371,12 @@ public:
                           of this object. Stored in the variable rBHelper.
 
         @param bIgnoreRuntimeExceptionsWhileFiring
-                        indicates whether occuring RuntimeExceptions will be
-                        ignored when firing notifications (vetoableChange((),
-                        propertyChange()) to listeners.
+                        indicates whether occurring RuntimeExceptions will be
+                        ignored when firing notifications
+                        (vetoableChange(), propertyChange())
+                        to listeners.
                         PropertyVetoExceptions may still be thrown.
-                        This flag is useful in a inter-process scenarios when
+                        This flag is useful in an inter-process scenario when
                         remote bridges may break down
                         (firing DisposedExceptions).
     */
@@ -395,11 +395,12 @@ public:
                         additional event notifier
 
         @param bIgnoreRuntimeExceptionsWhileFiring
-                        indicates whether occuring RuntimeExceptions will be
-                        ignored when firing notifications (vetoableChange((),
-                        propertyChange()) to listeners.
+                        indicates whether occurring RuntimeExceptions will be
+                        ignored when firing notifications
+                        (vetoableChange(), propertyChange())
+                        to listeners.
                         PropertyVetoExceptions may still be thrown.
-                        This flag is useful in a inter-process scenarios when
+                        This flag is useful in an inter-process scenario when
                         remote bridges may break down
                         (firing DisposedExceptions).
     */
@@ -412,7 +413,7 @@ public:
        Only returns a reference to XMultiPropertySet, XFastPropertySet, XPropertySet and
        XEventListener.
      */
-    ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
         throw (::com::sun::star::uno::RuntimeException);
 
     /** eases implementing XTypeProvider::getTypes, returns the types of XMultiPropertySet, XFastPropertySet, XPropertySet
@@ -504,10 +505,6 @@ public:
     virtual void SAL_CALL firePropertiesChangeEvent(
         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener > & Listener )
-        throw(::com::sun::star::uno::RuntimeException);
-
-    // XPropertySetOption
-    virtual void SAL_CALL enableChangeListenerNotification( sal_Bool bEnable )
         throw(::com::sun::star::uno::RuntimeException);
 
     /**
@@ -637,8 +634,6 @@ protected:
      */
     OMultiTypeInterfaceContainerHelperInt32 aVetoableLC;
 
-    bool m_bFireEvent;
-
     class Impl;
 
     /** reserved for future use. finally, the future has arrived...
@@ -675,6 +670,44 @@ public:
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
+
+/**
+   OPropertySetHelper plus XPropertySetOption
+ */
+class OPropertySetHelper2 : public OPropertySetHelper,
+                            public ::com::sun::star::beans::XPropertySetOption
+{
+public:
+    /** Constructor.
+
+        See OPropertySetHelper constructors documentation
+    */
+    explicit OPropertySetHelper2(
+        OBroadcastHelper & rBHelper,
+        IEventNotificationHook *i_pFireEvents = NULL,
+        bool bIgnoreRuntimeExceptionsWhileFiring = false);
+
+    // XInterface
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // XPropertySetOption
+    virtual void SAL_CALL enableChangeListenerNotification( sal_Bool bEnable )
+        throw(::com::sun::star::uno::RuntimeException);
+
+
+
+private:
+    OPropertySetHelper2( const OPropertySetHelper & ) SAL_THROW( () );
+    OPropertySetHelper2 &    operator = ( const OPropertySetHelper & ) SAL_THROW( () );
+
+public:
+// Suppress warning about virtual functions but non-virtual destructor:
+    /**
+       You must call disposing before destruction.
+     */
+    virtual ~OPropertySetHelper2() SAL_THROW( () );
+};
 
 } // end namespace cppuhelper
 #endif  //

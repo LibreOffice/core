@@ -54,11 +54,11 @@ namespace comphelper
     //= OPropertyStateHelper
     //==================================================================
     /// helper class for implementing property states
-    class COMPHELPER_DLLPUBLIC OPropertyStateHelper :public ::cppu::OPropertySetHelper
+    class COMPHELPER_DLLPUBLIC OPropertyStateHelper :public ::cppu::OPropertySetHelper2
                                                     ,public ::com::sun::star::beans::XPropertyState
     {
     public:
-        OPropertyStateHelper(::cppu::OBroadcastHelper& rBHlp):OPropertySetHelper(rBHlp) { }
+        OPropertyStateHelper(::cppu::OBroadcastHelper& rBHlp):OPropertySetHelper2(rBHlp) { }
         OPropertyStateHelper(::cppu::OBroadcastHelper& rBHlp,
                              ::cppu::IEventNotificationHook *i_pFireEvents);
 

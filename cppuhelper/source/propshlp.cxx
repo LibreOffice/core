@@ -152,11 +152,13 @@ public:
             IEventNotificationHook *i_pFireEvents
         )
         :m_bIgnoreRuntimeExceptionsWhileFiring( i_bIgnoreRuntimeExceptionsWhileFiring )
+        ,m_bFireEvents(true)
         ,m_pFireEvents( i_pFireEvents )
     {
     }
 
     bool m_bIgnoreRuntimeExceptionsWhileFiring;
+    bool m_bFireEvents;
     class IEventNotificationHook * const m_pFireEvents;
 
     ::std::vector< sal_Int32 >  m_handles;
@@ -173,7 +175,6 @@ OPropertySetHelper::OPropertySetHelper(
     : rBHelper( rBHelper_ ),
       aBoundLC( rBHelper_.rMutex ),
       aVetoableLC( rBHelper_.rMutex ),
-      m_bFireEvent(true),
       m_pReserved( new Impl(false, 0) )
 {
 }
@@ -183,7 +184,6 @@ OPropertySetHelper::OPropertySetHelper(
     : rBHelper( rBHelper_ ),
       aBoundLC( rBHelper_.rMutex ),
       aVetoableLC( rBHelper_.rMutex ),
-      m_bFireEvent(true),
       m_pReserved( new Impl( bIgnoreRuntimeExceptionsWhileFiring, 0 ) )
 {
 }
@@ -194,9 +194,16 @@ OPropertySetHelper::OPropertySetHelper(
     : rBHelper( rBHelper_ ),
       aBoundLC( rBHelper_.rMutex ),
       aVetoableLC( rBHelper_.rMutex ),
-      m_bFireEvent(true),
       m_pReserved(
         new Impl( bIgnoreRuntimeExceptionsWhileFiring, i_pFireEvents) )
+{
+}
+
+OPropertySetHelper2::OPropertySetHelper2(
+        OBroadcastHelper & irBHelper,
+        IEventNotificationHook *i_pFireEvents,
+        bool bIgnoreRuntimeExceptionsWhileFiring)
+            :OPropertySetHelper( irBHelper, i_pFireEvents, bIgnoreRuntimeExceptionsWhileFiring )
 {
 }
 
@@ -206,21 +213,29 @@ OPropertySetHelper::OPropertySetHelper(
 OPropertySetHelper::~OPropertySetHelper() SAL_THROW( () )
 {
 }
+OPropertySetHelper2::~OPropertySetHelper2() SAL_THROW( () )
+{
+}
 
-/**
- * These method is called from queryInterface, if no delegator is set.
- * Otherwise this method is called from the delegator.
- */
-// XAggregation
+// XInterface
 Any OPropertySetHelper::queryInterface( const ::com::sun::star::uno::Type & rType )
     throw (RuntimeException)
 {
     return ::cppu::queryInterface(
         rType,
         static_cast< XPropertySet * >( this ),
-        static_cast< XPropertySetOption * >( this ),
         static_cast< XMultiPropertySet * >( this ),
         static_cast< XFastPropertySet * >( this ) );
+}
+
+Any OPropertySetHelper2::queryInterface( const ::com::sun::star::uno::Type & rType )
+    throw (RuntimeException)
+{
+    Any cnd(cppu::queryInterface(rType, static_cast< XPropertySetOption * >(this)));
+    if ( cnd.hasValue() )
+        return cnd;
+    else
+        return OPropertySetHelper::queryInterface(rType);
 }
 
 /**
@@ -631,10 +646,11 @@ void OPropertySetHelper::fire
     sal_Bool bVetoable
 )
 {
-    if (!m_bFireEvent)
+    OSL_ENSURE( m_pReserved.get(), "No OPropertySetHelper::Impl" );
+
+    if (! m_pReserved->m_bFireEvents)
         return;
 
-    OSL_ENSURE( m_pReserved.get(), "No OPropertySetHelper::Impl" );
     if (m_pReserved->m_pFireEvents) {
         m_pReserved->m_pFireEvents->fireEvents(
             pnHandles, nHandles, bVetoable,
@@ -1037,10 +1053,10 @@ void OPropertySetHelper::firePropertiesChangeEvent(
     delete [] pHandles;
 }
 
-void OPropertySetHelper::enableChangeListenerNotification( sal_Bool bEnable )
+void OPropertySetHelper2::enableChangeListenerNotification( sal_Bool bEnable )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    m_bFireEvent = bEnable;
+    m_pReserved->m_bFireEvents = bEnable;
 }
 
 #ifdef xdvnsdfln
