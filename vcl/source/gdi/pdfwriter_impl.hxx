@@ -1250,8 +1250,6 @@ public:
     void drawTransparent( const PolyPolygon& rPolyPoly, sal_uInt32 nTransparentPercent );
     void beginTransparencyGroup();
     void endTransparencyGroup( const Rectangle& rBoundingBox, sal_uInt32 nTransparentPercent );
-    void beginPattern( const Rectangle& rCell );
-    sal_Int32 endPattern( const SvtGraphicFill::Transform& rTransform );
     void drawPolyPolygon( const PolyPolygon& rPolyPoly, sal_Int32 nPattern, bool bEOFill );
 
     void emitComment( const char* pComment );
@@ -1286,7 +1284,6 @@ public:
     sal_Int32 beginStructureElement( PDFWriter::StructElement eType, const rtl::OUString& rAlias );
     void endStructureElement();
     bool setCurrentStructureElement( sal_Int32 nElement );
-    sal_Int32 getCurrentStructureElement();
     bool setStructureAttribute( enum PDFWriter::StructAttribute eAttr, enum PDFWriter::StructAttributeValue eVal );
     bool setStructureAttributeNumerical( enum PDFWriter::StructAttribute eAttr, sal_Int32 nValue );
     void setStructureBoundingBox( const Rectangle& rRect );

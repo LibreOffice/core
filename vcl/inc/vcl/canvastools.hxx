@@ -98,12 +98,6 @@ namespace vcl
                                                              ::com::sun::star::rendering::XGraphicDevice >&     xGraphicDevice,
                                                        const ::PolyPolygon&                                     inputPolyPolygon );
 
-        /** Create an VCL/Tools polygon from a point sequence
-         */
-        ::Polygon VCL_DLLPUBLIC polygonFromPoint2DSequence(
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::geometry::RealPoint2D >& rPoints );
-
         // Bitmap conversions
         // ===================================================================
 

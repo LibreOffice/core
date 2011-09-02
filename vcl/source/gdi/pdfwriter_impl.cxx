@@ -10263,49 +10263,6 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
     }
 }
 
-void PDFWriterImpl::beginPattern( const Rectangle& rCellRect )
-{
-    beginRedirect( new SvMemoryStream(), rCellRect );
-}
-
-sal_Int32 PDFWriterImpl::endPattern( const SvtGraphicFill::Transform& rTransform )
-{
-    Rectangle aConvertRect( getRedirectTargetRect() );
-    DBG_ASSERT( aConvertRect.GetWidth() != 0 && aConvertRect.GetHeight() != 0, "empty cell rectangle in pattern" );
-
-    // get scaling between current mapmode and PDF output
-    Size aScaling( lcl_convert( m_aGraphicsStack.front().m_aMapMode, m_aMapMode, getReferenceDevice(), Size( 10000, 10000 ) ) );
-    double fSX = (double(aScaling.Width()) / 10000.0);
-    double fSY = (double(aScaling.Height()) / 10000.0);
-
-    // transform translation part of matrix
-    Size aTranslation( (long)rTransform.matrix[2], (long)rTransform.matrix[5] );
-    aTranslation = lcl_convert( m_aGraphicsStack.front().m_aMapMode, m_aMapMode, getReferenceDevice(), aTranslation );
-
-    sal_Int32 nTilingId = m_aTilings.size();
-    m_aTilings.push_back( TilingEmit() );
-    TilingEmit& rTile = m_aTilings.back();
-    rTile.m_nObject         = createObject();
-    rTile.m_aResources      = m_aOutputStreams.front().m_aResourceDict;
-    rTile.m_aTransform.matrix[0] = rTransform.matrix[0] * fSX;
-    rTile.m_aTransform.matrix[1] = rTransform.matrix[1] * fSY;
-    rTile.m_aTransform.matrix[2] = aTranslation.Width();
-    rTile.m_aTransform.matrix[3] = rTransform.matrix[3] * fSX;
-    rTile.m_aTransform.matrix[4] = rTransform.matrix[4] * fSY;
-    rTile.m_aTransform.matrix[5] = -aTranslation.Height();
-    // caution: endRedirect pops the stream, so do this last
-    rTile.m_pTilingStream   = dynamic_cast<SvMemoryStream*>(endRedirect());
-    // FIXME: bound rect will not work with rotated matrix
-    rTile.m_aRectangle      = Rectangle( Point(0,0), aConvertRect.GetSize() );
-    rTile.m_aCellSize       = aConvertRect.GetSize();
-
-    OStringBuffer aObjName( 16 );
-    aObjName.append( 'P' );
-    aObjName.append( rTile.m_nObject );
-    pushResource( ResPattern, aObjName.makeStringAndClear(), rTile.m_nObject );
-    return nTilingId;
-}
-
 void PDFWriterImpl::drawPolyPolygon( const PolyPolygon& rPolyPoly, sal_Int32 nPattern, bool bEOFill )
 {
     if( nPattern < 0 || nPattern >= (sal_Int32)m_aTilings.size() )
@@ -11208,11 +11165,6 @@ bool PDFWriterImpl::setCurrentStructureElement( sal_Int32 nEle )
     }
 
     return bSuccess;
-}
-
-sal_Int32 PDFWriterImpl::getCurrentStructureElement()
-{
-    return m_nCurrentStructElement;
 }
 
 bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr, enum PDFWriter::StructAttributeValue eVal )

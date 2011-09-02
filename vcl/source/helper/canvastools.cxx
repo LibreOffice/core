@@ -113,23 +113,6 @@ namespace vcl
 
         //---------------------------------------------------------------------------------------
 
-        ::Polygon polygonFromPoint2DSequence( const uno::Sequence< geometry::RealPoint2D >& points )
-        {
-            RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::polygonFromPoint2DSequence()" );
-
-            const sal_uInt16 nCurrSize( sal::static_int_cast<sal_uInt16>(points.getLength()) );
-
-            ::Polygon aPoly( nCurrSize );
-
-            sal_uInt16 nCurrPoint;
-            for( nCurrPoint=0; nCurrPoint<nCurrSize; ++nCurrPoint )
-                aPoly[nCurrPoint] = pointFromRealPoint2D( points[nCurrPoint] );
-
-            return aPoly;
-        }
-
-        //---------------------------------------------------------------------------------------
-
         uno::Reference< rendering::XBitmap > xBitmapFromBitmap( const uno::Reference< rendering::XGraphicDevice >&  /*xGraphicDevice*/,
                                                                 const ::Bitmap&                                     inputBitmap )
         {
