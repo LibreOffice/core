@@ -64,12 +64,17 @@ uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetStorageFactory(
     if ( !xFactory.is() )
         throw uno::RuntimeException();
 
+    rtl::OUString sService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory"));
+
     uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
-                    xFactory->createInstance ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.StorageFactory" )) ),
-                    uno::UNO_QUERY );
+                    xFactory->createInstance(sService), uno::UNO_QUERY);
 
     if ( !xStorageFactory.is() )
-        throw uno::RuntimeException();
+    {
+        throw uno::RuntimeException(rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("Could not load: ")) + sService,
+            uno::Reference< uno::XInterface >());
+    }
 
     return xStorageFactory;
 }
@@ -83,12 +88,17 @@ uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetFileSystemStora
     if ( !xFactory.is() )
         throw uno::RuntimeException();
 
+    rtl::OUString sService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.FileSystemStorageFactory"));
+
     uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
-                    xFactory->createInstance ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.FileSystemStorageFactory" )) ),
-                    uno::UNO_QUERY );
+                    xFactory->createInstance(sService), uno::UNO_QUERY);
 
     if ( !xStorageFactory.is() )
-        throw uno::RuntimeException();
+    {
+        throw uno::RuntimeException(rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("Could not load: ")) + sService,
+            uno::Reference< uno::XInterface >());
+    }
 
     return xStorageFactory;
 }
