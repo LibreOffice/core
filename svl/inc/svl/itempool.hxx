@@ -87,8 +87,6 @@ public:
     virtual void ObjectInDestruction(const SfxItemPool& rSfxItemPool) = 0;
 };
 
-typedef ::std::vector< SfxItemPoolUser* > SfxItemPoolUserVector;
-
 class SVL_DLLPUBLIC SfxItemPool
 
 /*  [Beschreibung]
@@ -105,28 +103,14 @@ class SVL_DLLPUBLIC SfxItemPool
 */
 
 {
-    SVL_DLLPRIVATE void readTheItems(SvStream & rStream, sal_uInt32 nCount, sal_uInt16 nVersion,
-                                     SfxPoolItem * pDefItem, SfxPoolItemArray_Impl ** pArr);
+    friend struct SfxItemPool_Impl;
 
-    UniString                       aName;
-    sal_uInt16                          nStart, nEnd;
-    sal_uInt16                          _nFileFormatVersion;
 #ifdef TF_POOLABLE
     const SfxItemInfo*              pItemInfos;
 #else
 #error "TF_POOLABLE should always be set."
 #endif
     SfxItemPool_Impl*               pImp;
-    SfxPoolItem**                   ppStaticDefaults;
-    SfxPoolItem**                   ppPoolDefaults;
-    SfxItemPool*                    pSecondary;
-    SfxItemPool*                    pMaster;
-    sal_uInt16*                         _pPoolRanges;
-    bool                            bPersistentRefCounts;
-
-private:
-    // ObjectUser section
-    SfxItemPoolUserVector           maSfxItemPoolUsers;
 
 public:
     void AddSfxItemPoolUser(SfxItemPoolUser& rNewUser);
@@ -138,8 +122,8 @@ public:
 friend class SfxPoolWhichMap;
 
 private:
-    inline  sal_uInt16                  GetIndex_Impl(sal_uInt16 nWhich) const;
-    inline  sal_uInt16                  GetSize_Impl() const { return nEnd - nStart + 1; }
+    sal_uInt16                      GetIndex_Impl(sal_uInt16 nWhich) const;
+    sal_uInt16                      GetSize_Impl() const;
 
     SVL_DLLPRIVATE SvStream&        Load1_Impl( SvStream &rStream );
     SVL_DLLPRIVATE bool             IsItemFlag_Impl( sal_uInt16 nWhich, sal_uInt16 nFlag ) const;
@@ -147,15 +131,16 @@ private:
 public:
     // fuer dflt. SfxItemSet::CTOR, setze dflt. WhichRanges
     void                            FillItemIdRanges_Impl( sal_uInt16*& pWhichRanges ) const;
-    const sal_uInt16*                   GetFrozenIdRanges() const
-                                    { return _pPoolRanges; }
+    const sal_uInt16*               GetFrozenIdRanges() const;
+
 #endif
     //---------------------------------------------------------------------
 
 protected:
     static inline void              SetRefCount( SfxPoolItem& rItem, sal_uLong n );
-    static inline sal_uLong             AddRef( const SfxPoolItem& rItem, sal_uLong n = 1 );
-    static inline sal_uLong             ReleaseRef( const SfxPoolItem& rItem, sal_uLong n = 1);
+    static inline sal_uLong         AddRef( const SfxPoolItem& rItem, sal_uLong n = 1 );
+    static inline sal_uLong         ReleaseRef( const SfxPoolItem& rItem, sal_uLong n = 1);
+    static inline void              SetKind( SfxPoolItem& rItem, sal_uInt16 nRef );
 
 public:
                                     SfxItemPool( const SfxItemPool &rPool,
@@ -196,7 +181,7 @@ public:
                                         const IntlWrapper * pIntlWrapper
                                          = 0 ) const;
     virtual SfxItemPool*            Clone() const;
-    UniString const &               GetName() const { return aName; }
+    const UniString&                GetName() const;
 
     virtual const SfxPoolItem&      Put( const SfxPoolItem&, sal_uInt16 nWhich = 0 );
     virtual void                    Remove( const SfxPoolItem& );
@@ -220,23 +205,18 @@ public:
 
     virtual SvStream &              Load(SvStream &);
     virtual SvStream &              Store(SvStream &) const;
-    int                             HasPersistentRefCounts() const {
-                                        return bPersistentRefCounts; }
+    bool                            HasPersistentRefCounts() const;
     void                            LoadCompleted();
 
-    sal_uInt16                          GetFirstWhich() const { return nStart; }
-    sal_uInt16                          GetLastWhich() const { return nEnd; }
-    bool                            IsInRange( sal_uInt16 nWhich ) const {
-                                        return nWhich >= nStart &&
-                                               nWhich <= nEnd; }
+    sal_uInt16                      GetFirstWhich() const;
+    sal_uInt16                      GetLastWhich() const;
+    bool                            IsInRange( sal_uInt16 nWhich ) const;
     bool                            IsInVersionsRange( sal_uInt16 nWhich ) const;
     bool                            IsInStoringRange( sal_uInt16 nWhich ) const;
     void                            SetStoringRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     void                            SetSecondaryPool( SfxItemPool *pPool );
-    SfxItemPool*                    GetSecondaryPool() const {
-                                        return pSecondary; }
-    SfxItemPool*                    GetMasterPool() const {
-                                        return pMaster; }
+    SfxItemPool*                    GetSecondaryPool() const;
+    SfxItemPool*                    GetMasterPool() const;
     void                            FreezeIdRanges();
 
     void                            Delete();
@@ -250,18 +230,17 @@ public:
 #else
 #error "TF_POOLABLE should always be set."
 #endif
-    sal_uInt16                          GetWhich( sal_uInt16 nSlot, sal_Bool bDeep = sal_True ) const;
-    sal_uInt16                          GetSlotId( sal_uInt16 nWhich, sal_Bool bDeep = sal_True ) const;
-    sal_uInt16                          GetTrueWhich( sal_uInt16 nSlot, sal_Bool bDeep = sal_True ) const;
-    sal_uInt16                          GetTrueSlotId( sal_uInt16 nWhich, sal_Bool bDeep = sal_True ) const;
+    sal_uInt16                      GetWhich( sal_uInt16 nSlot, sal_Bool bDeep = sal_True ) const;
+    sal_uInt16                      GetSlotId( sal_uInt16 nWhich, sal_Bool bDeep = sal_True ) const;
+    sal_uInt16                      GetTrueWhich( sal_uInt16 nSlot, sal_Bool bDeep = sal_True ) const;
+    sal_uInt16                      GetTrueSlotId( sal_uInt16 nWhich, sal_Bool bDeep = sal_True ) const;
 
     void                            SetVersionMap( sal_uInt16 nVer,
                                                    sal_uInt16 nOldStart, sal_uInt16 nOldEnd,
                                                    sal_uInt16 *pWhichIdTab );
-    sal_uInt16                          GetNewWhich( sal_uInt16 nOldWhich ) const;
-    sal_uInt16                          GetVersion() const;
-    sal_uInt16                          GetFileFormatVersion() const
-                                    { return _nFileFormatVersion; }
+    sal_uInt16                      GetNewWhich( sal_uInt16 nOldWhich ) const;
+    sal_uInt16                      GetVersion() const;
+    sal_uInt16                      GetFileFormatVersion() const;
     void                            SetFileFormatVersion( sal_uInt16 nFileFormatVersion );
     bool                            IsCurrentVersionLoading() const;
 
@@ -294,6 +273,11 @@ inline sal_uLong SfxItemPool::AddRef( const SfxPoolItem& rItem, sal_uLong n )
 inline sal_uLong SfxItemPool::ReleaseRef( const SfxPoolItem& rItem, sal_uLong n )
 {
     return rItem.ReleaseRef(n);
+}
+
+inline void SfxItemPool::SetKind( SfxPoolItem& rItem, sal_uInt16 nRef )
+{
+    rItem.SetKind( nRef );
 }
 
 #endif

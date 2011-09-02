@@ -28,6 +28,7 @@
 #include <svl/brdcst.hxx>
 #include <boost/shared_ptr.hpp>
 #include <deque>
+#include <vector>
 
 #ifndef DELETEZ
 #define DELETEZ(pPtr) { delete pPtr; pPtr = 0; }
@@ -74,8 +75,18 @@ class SfxStyleSheetIterator;
 struct SfxItemPool_Impl
 {
     SfxBroadcaster                  aBC;
-    SfxPoolItemArray_Impl**         ppPoolItems;
+    std::vector<SfxPoolItemArray_Impl*> maPoolItems;
+    std::vector<SfxItemPoolUser*> maSfxItemPoolUsers; /// ObjectUser section
+    UniString                       aName;
+    SfxPoolItem**                   ppPoolDefaults;
+    SfxPoolItem**                   ppStaticDefaults;
+    SfxItemPool*                    mpMaster;
+    SfxItemPool*                    mpSecondary;
+    sal_uInt16*                     mpPoolRanges;
     SfxPoolVersionArr_Impl          aVersions;
+    sal_uInt16                      mnStart;
+    sal_uInt16                      mnEnd;
+    sal_uInt16                      mnFileFormatVersion;
     sal_uInt16                          nVersion;
     sal_uInt16                          nLoadingVersion;
     sal_uInt16                          nInitRefCount; // 1, beim Laden ggf. 2
@@ -85,9 +96,19 @@ struct SfxItemPool_Impl
     SfxMapUnit                      eDefMetric;
     bool                            bInSetItem;
     bool                            bStreaming; // in Load() bzw. Store()
+    bool                            mbPersistentRefCounts;
 
-    SfxItemPool_Impl( sal_uInt16 nStart, sal_uInt16 nEnd )
-        : ppPoolItems (new SfxPoolItemArray_Impl*[ nEnd - nStart + 1])
+    SfxItemPool_Impl( SfxItemPool* pMaster, const UniString& rName, sal_uInt16 nStart, sal_uInt16 nEnd )
+        : maPoolItems(nEnd - nStart + 1, NULL)
+        , aName(rName)
+        , ppPoolDefaults(new SfxPoolItem* [nEnd - nStart + 1])
+        , ppStaticDefaults(0)
+        , mpMaster(pMaster)
+        , mpSecondary(NULL)
+        , mpPoolRanges(NULL)
+        , mnStart(nStart)
+        , mnEnd(nEnd)
+        , mnFileFormatVersion(0)
         , nLoadingVersion(0)
         , nInitRefCount(0)
         , nVerStart(0)
@@ -99,19 +120,30 @@ struct SfxItemPool_Impl
         , bInSetItem(false)
         , bStreaming(false)
     {
-        memset( ppPoolItems, 0, sizeof( SfxPoolItemArray_Impl* ) * ( nEnd - nStart + 1) );
+        DBG_ASSERT(mnStart, "Start-Which-Id must be greater 0" );
+        memset( ppPoolDefaults, 0, sizeof( SfxPoolItem* ) * (nEnd - nStart + 1));
     }
 
     ~SfxItemPool_Impl()
     {
-        delete[] ppPoolItems;
+        DeleteItems();
     }
 
     void DeleteItems()
     {
-        delete[] ppPoolItems;
-        ppPoolItems = 0;
+        std::vector<SfxPoolItemArray_Impl*>::iterator itr = maPoolItems.begin(), itrEnd = maPoolItems.end();
+        for (; itr != itrEnd; ++itr)
+            delete *itr;
+        maPoolItems.clear();
+
+        delete[] mpPoolRanges;
+        mpPoolRanges = NULL;
+        delete[] ppPoolDefaults;
+        ppPoolDefaults = NULL;
     }
+
+    void readTheItems(SvStream & rStream, sal_uInt32 nCount, sal_uInt16 nVersion,
+                      SfxPoolItem * pDefItem, SfxPoolItemArray_Impl ** pArr);
 };
 
 // -----------------------------------------------------------------------
@@ -203,14 +235,5 @@ struct SfxItemPool_Impl
 #define SFX_STYLES_REC                  sal_uInt8(0x03)
 #define SFX_STYLES_REC_HEADER       sal_uInt16(0x0010)
 #define SFX_STYLES_REC_STYLES       sal_uInt16(0x0020)
-
-//========================================================================
-
-inline sal_uInt16 SfxItemPool::GetIndex_Impl(sal_uInt16 nWhich) const
-{
-    DBG_CHKTHIS(SfxItemPool, 0);
-    DBG_ASSERT(nWhich >= nStart && nWhich <= nEnd, "Which-Id nicht im Pool-Bereich");
-    return nWhich - nStart;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
