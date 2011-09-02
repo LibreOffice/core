@@ -1861,12 +1861,12 @@ enum RTFControlTypes
 };
 
 /// Respresents an RTF Control Word
-typedef struct
+struct RTFSymbol
 {
     const char *sKeyword;
     int nControlType;
     RTFKeyword nIndex;
-} RTFSymbol;
+};
 
 extern RTFSymbol aRTFControlWords[];
 extern int nRTFControlWords;
