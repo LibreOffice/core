@@ -33,6 +33,7 @@ $(eval $(call gb_Library_add_linked_libs,localedata_euro,\
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,localedata_euro,\
+	CustomTarget/i18npool/source/localedata/localedata_an_ES \
 	CustomTarget/i18npool/source/localedata/localedata_ast_ES \
 	CustomTarget/i18npool/source/localedata/localedata_be_BY \
 	CustomTarget/i18npool/source/localedata/localedata_bg_BG \
