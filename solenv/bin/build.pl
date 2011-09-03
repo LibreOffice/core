@@ -1904,14 +1904,18 @@ sub print_announce {
     {
         $text = "Building module $prj\n";
     };
+
+    my $total_modules = scalar(keys %build_lists_hash);
+    my $modules_started = scalar(keys %module_announced) + 1;
+    $text = "($modules_started/$total_modules) $text";
+
     my $announce_string = $new_line;
     $announce_string .= $echo . "=============\n";
     $announce_string .= $echo . $text;
     $announce_string .= $echo . "=============\n";
     print $announce_string;
-    my $total_modules = scalar(keys %build_lists_hash);
-    my $modules_started = scalar(keys %module_announced) + 1;
-    zenity_tooltip("($modules_started/$total_modules) $text");
+
+    zenity_tooltip("$text");
     $module_announced{$prj}++;
 };
 
