@@ -260,6 +260,10 @@ public:
     double mfHeight, mfMaxHeight;
 
     const OdfStreamType mxStreamType;
+
+    bool mbIsTextBox;
+    bool mbIsTextLine;
+    bool mbIsTextOnPath;
 };
 
 OdgGeneratorPrivate::OdgGeneratorPrivate(OdfDocumentHandler *pHandler, const OdfStreamType streamType):
@@ -272,7 +276,10 @@ OdgGeneratorPrivate::OdgGeneratorPrivate(OdfDocumentHandler *pHandler, const Odf
     mfMaxWidth(0.0),
     mfHeight(0.0),
     mfMaxHeight(0.0),
-    mxStreamType(streamType)
+    mxStreamType(streamType),
+    mbIsTextBox(false),
+    mbIsTextLine(false),
+    mbIsTextOnPath(false)
 {
 }
 
@@ -1176,31 +1183,107 @@ void OdgGenerator::endEmbeddedGraphics()
 {
 }
 
-void OdgGenerator::startTextObject(WPXPropertyList const&, WPXPropertyListVector const&)
+void OdgGenerator::startTextObject(WPXPropertyList const &propList, WPXPropertyListVector const &propListVec)
 {
+    TagOpenElement *pDrawFrameOpenElement = new TagOpenElement("draw:frame");
+    TagOpenElement *pStyleStyleOpenElement = new TagOpenElement("style:style");
+
+    WPXString sValue;
+    sValue.sprintf("gr%i",  mpImpl->miGraphicsStyleIndex++);
+    pStyleStyleOpenElement->addAttribute("style:name", sValue);
+    pStyleStyleOpenElement->addAttribute("style:family", "graphic");
+    pStyleStyleOpenElement->addAttribute("style:parent-style-name", "standard");
+    mpImpl->mGraphicsAutomaticStyles.push_back(pStyleStyleOpenElement);
+    
+    pDrawFrameOpenElement->addAttribute("draw:style-name", sValue);
+
+    TagOpenElement *pStyleGraphicPropertiesOpenElement = new TagOpenElement("style:graphic-properties");
+    pStyleGraphicPropertiesOpenElement->addAttribute("draw:stroke", "none");
+    pStyleGraphicPropertiesOpenElement->addAttribute("svg:stroke-color", "#000000");
+    pStyleGraphicPropertiesOpenElement->addAttribute("draw:fill", "none");
+    pStyleGraphicPropertiesOpenElement->addAttribute("draw:fill-color", "#ffffff");
+
+    if (propList["svg:x"])
+        pDrawFrameOpenElement->addAttribute("svg:x", propList["svg:x"]->getStr());
+    if (propList["svg:y"])
+        pDrawFrameOpenElement->addAttribute("svg:y", propList["svg:y"]->getStr());
+    
+    if (!propList["svg:width"] && !propList["svg:height"])
+    {
+        if (!propList["fo:min-width"])
+        {
+            pDrawFrameOpenElement->addAttribute("fo:min-width", "0in");
+            pStyleGraphicPropertiesOpenElement->addAttribute("fo:min-width", "0in");
+        }
+    }
+    else
+    {
+        if(propList["svg:width"])
+            pDrawFrameOpenElement->addAttribute("svg:width", propList["svg:width"]->getStr());
+        if(propList["svg:height"])
+            pDrawFrameOpenElement->addAttribute("svg:height", propList["svg:height"]->getStr());
+    }
+    if (propList["fo:min-width"])
+    {
+        pDrawFrameOpenElement->addAttribute("fo:min-width", propList["fo:min-width"]->getStr());
+        pStyleGraphicPropertiesOpenElement->addAttribute("fo:min-width", propList["fo:min-width"]->getStr());
+    }
+    if (propList["fo:min-height"])
+    {
+        pDrawFrameOpenElement->addAttribute("fo:min-height", propList["fo:min-height"]->getStr());
+        pStyleGraphicPropertiesOpenElement->addAttribute("fo:min-height", propList["fo:min-height"]->getStr());
+    }
+    if (propList["fo:max-width"])
+    {
+        pDrawFrameOpenElement->addAttribute("fo:max-width", propList["fo:max-height"]->getStr());
+        pStyleGraphicPropertiesOpenElement->addAttribute("fo:max-width", propList["fo:max-width"]->getStr());
+    }
+    if (propList["fo:max-height"])
+    {
+        pDrawFrameOpenElement->addAttribute("fo:max-height", propList["fo:max-height"]->getStr());
+        pStyleGraphicPropertiesOpenElement->addAttribute("fo:max-height", propList["fo:max-height"]->getStr());
+    }
+    mpImpl->mBodyElements.push_back(pDrawFrameOpenElement);
+    mpImpl->mBodyElements.push_back(new TagOpenElement("draw:text-box"));
+    mpImpl->mGraphicsAutomaticStyles.push_back(pStyleGraphicPropertiesOpenElement);
+    mpImpl->mGraphicsAutomaticStyles.push_back(new TagCloseElement("style:graphic-properties"));
+    mpImpl->mGraphicsAutomaticStyles.push_back(new TagCloseElement("style:style"));
+    mpImpl->mbIsTextBox = true;
 }
 
 void OdgGenerator::endTextObject()
 {
+    if (mpImpl->mbIsTextBox)
+    {
+        mpImpl->mBodyElements.push_back(new TagCloseElement("draw:text-box"));
+        mpImpl->mBodyElements.push_back(new TagCloseElement("draw:frame"));
+        mpImpl->mbIsTextBox = false;
+    }
 }
 
 void OdgGenerator::startTextLine(WPXPropertyList const&)
 {
+    mpImpl->mBodyElements.push_back(new TagOpenElement("text:p"));
 }
 
 void OdgGenerator::endTextLine()
 {
+    mpImpl->mBodyElements.push_back(new TagCloseElement("text:p"));
 }
 
 void OdgGenerator::startTextSpan(WPXPropertyList const&)
 {
+    mpImpl->mBodyElements.push_back(new TagOpenElement("text:s"));
 }
 
 void OdgGenerator::endTextSpan()
 {
+    mpImpl->mBodyElements.push_back(new TagCloseElement("text:s"));
 }
 
-void OdgGenerator::insertText(WPXString const&)
+void OdgGenerator::insertText(WPXString const &text)
 {
+    DocumentElement *pText = new TextElement(text);
+    mpImpl->mBodyElements.push_back(pText);
 }
 
