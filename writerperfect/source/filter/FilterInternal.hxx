@@ -43,34 +43,4 @@ struct ltstr
    }
 };
 
-static WPXString propListToStyleKey(const WPXPropertyList & xPropList)
-{
-   WPXString sKey;
-   WPXPropertyList::Iter i(xPropList);
-   for (i.rewind(); i.next(); )
-   {
-      WPXString sProp;
-      sProp.sprintf("[%s:%s]", i.key(), i()->getStr().cstr());
-      sKey.append(sProp);
-   }
-
-   return sKey;
-}
-
-static WPXString getParagraphStyleKey(const WPXPropertyList & xPropList, const WPXPropertyListVector & xTabStops)
-{
-   WPXString sKey = propListToStyleKey(xPropList);
-
-   WPXString sTabStops;
-   sTabStops.sprintf("[num-tab-stops:%i]", xTabStops.count());
-   WPXPropertyListVector::Iter i(xTabStops);
-   for (i.rewind(); i.next();)
-   {
-      sTabStops.append(propListToStyleKey(i()));
-   }
-   sKey.append(sTabStops);
-
-   return sKey;
-}
-
 #endif

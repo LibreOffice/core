@@ -178,3 +178,19 @@ void SpanStyle::write(OdfDocumentHandler *pHandler) const
     pHandler->endElement("style:text-properties");
     pHandler->endElement("style:style");
 }
+
+WPXString propListToStyleKey(const WPXPropertyList & xPropList)
+{
+   WPXString sKey;
+   WPXPropertyList::Iter i(xPropList);
+   for (i.rewind(); i.next(); )
+   {
+      WPXString sProp;
+      sProp.sprintf("[%s:%s]", i.key(), i()->getStr().cstr());
+      sKey.append(sProp);
+   }
+
+   return sKey;
+}
+
+

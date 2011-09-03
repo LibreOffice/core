@@ -1221,7 +1221,7 @@ void OdgGenerator::endEmbeddedGraphics()
 {
 }
 
-void OdgGenerator::startTextObject(WPXPropertyList const &propList, WPXPropertyListVector const &propListVec)
+void OdgGenerator::startTextObject(WPXPropertyList const &propList, WPXPropertyListVector const &)
 {
     TagOpenElement *pDrawFrameOpenElement = new TagOpenElement("draw:frame");
     TagOpenElement *pStyleStyleOpenElement = new TagOpenElement("style:style");

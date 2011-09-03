@@ -638,6 +638,22 @@ void OdtGenerator::closeSection()
     mpImpl->mfSectionSpaceAfter = 0.0;
 }
 
+static WPXString getParagraphStyleKey(const WPXPropertyList & xPropList, const WPXPropertyListVector & xTabStops)
+{
+   WPXString sKey = propListToStyleKey(xPropList);
+
+   WPXString sTabStops;
+   sTabStops.sprintf("[num-tab-stops:%i]", xTabStops.count());
+   WPXPropertyListVector::Iter i(xTabStops);
+   for (i.rewind(); i.next();)
+   {
+      sTabStops.append(propListToStyleKey(i()));
+   }
+   sKey.append(sTabStops);
+
+   return sKey;
+}
+
 void OdtGenerator::openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops)
 {
     // FIXMENOW: What happens if we open a footnote inside a table? do we then inherit the footnote's style
