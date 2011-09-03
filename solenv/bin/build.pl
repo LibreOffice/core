@@ -175,6 +175,7 @@
     my $zenity_in = '';
     my $zenity_out = '';
     my $zenity_err = '';
+    my $last_message_time = 0;
     my $verbose = 0;
 
     my @modules_built = ();
@@ -1949,6 +1950,10 @@ sub zenity_icon {
 };
 
 sub zenity_tooltip {
+    my $current_message_time = time();
+    return if (!($current_message_time > $last_message_time + 5));
+    $last_message_time = $current_message_time;
+
     if (zenity_enabled()) {
         my $text = shift;
         print $zenity_in "tooltip: LibreOffice Build: $text\n";
