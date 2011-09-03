@@ -337,9 +337,11 @@ MakeCopyRight()
         plt = localtime(&gt);
     int year = 1900 + plt->tm_year;
 
-    cr  << "Copyright &copy; 1995, "
-        << year
-        << ", Oracle and/or its affiliates. All rights reserved. Oracle and Java are registered trademarks of Oracle and/or its affiliates. Other names may be trademarks of their respective owners.";
+    cr  << "LibreOffice is copyright &copy; 2000, "
+	<< year
+	<< ", LibreOffice contributors and/or their affiliates. All rights reserved.</p>"
+	<< "<p class=\"copyright\" align=\"center\">LibreOffice is derived from OpenOffice.org. OpenOffice.org is copyright &copy; 2000, 2011 Oracle and/or its affiliates. All rights reserved.</p>"
+	<< "<p class=\"copyright\" align=\"center\">Oracle and Java are registered trademarks of Oracle and/or its affiliates. Other names may be trademarks of their respective owners.";
     return String(cr.c_str());
 
 }
