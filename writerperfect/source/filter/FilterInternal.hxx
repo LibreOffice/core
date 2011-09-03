@@ -28,9 +28,49 @@
 #else
 #define WRITER_DEBUG_MSG(M)
 #endif
+#include <libwpd/libwpd.h>
+#include <string.h> // for strcmp
 
 const double fDefaultSideMargin = 1.0; // inches
 const double fDefaultPageWidth = 8.5f; // inches (OOo required default: we will handle this later)
 const double fDefaultPageHeight = 11.0; // inches
+
+struct ltstr
+{
+   bool operator()(const WPXString & s1, const WPXString & s2) const
+   {
+      return strcmp(s1.cstr(), s2.cstr()) < 0;
+   }
+};
+
+static WPXString propListToStyleKey(const WPXPropertyList & xPropList)
+{
+   WPXString sKey;
+   WPXPropertyList::Iter i(xPropList);
+   for (i.rewind(); i.next(); )
+   {
+      WPXString sProp;
+      sProp.sprintf("[%s:%s]", i.key(), i()->getStr().cstr());
+      sKey.append(sProp);
+   }
+
+   return sKey;
+}
+
+static WPXString getParagraphStyleKey(const WPXPropertyList & xPropList, const WPXPropertyListVector & xTabStops)
+{
+   WPXString sKey = propListToStyleKey(xPropList);
+
+   WPXString sTabStops;
+   sTabStops.sprintf("[num-tab-stops:%i]", xTabStops.count());
+   WPXPropertyListVector::Iter i(xTabStops);
+   for (i.rewind(); i.next();)
+   {
+      sTabStops.append(propListToStyleKey(i()));
+   }
+   sKey.append(sTabStops);
+
+   return sKey;
+}
 
 #endif

@@ -27,9 +27,12 @@
 #include "OdgGenerator.hxx"
 #include "DocumentElement.hxx"
 #include "OdfDocumentHandler.hxx"
+#include "FilterInternal.hxx"
+#include "TextRunStyle.hxx"
 #include <locale.h>
 #include <math.h>
 #include <string>
+#include <map>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -248,6 +251,12 @@ public:
     std::vector<DocumentElement *> mPageAutomaticStyles;
     std::vector<DocumentElement *> mPageMasterStyles;
 
+   // paragraph styles
+   std::map<WPXString, ParagraphStyle *, ltstr> mParagraphStyles;
+
+   // span styles
+   std::map<WPXString, SpanStyle *, ltstr> mSpanStyles;
+
     OdfDocumentHandler *mpHandler;
 
     ::WPXPropertyList mxStyle;
@@ -267,6 +276,14 @@ public:
 };
 
 OdgGeneratorPrivate::OdgGeneratorPrivate(OdfDocumentHandler *pHandler, const OdfStreamType streamType):
+   mBodyElements(),
+   mGraphicsStrokeDashStyles(),
+   mGraphicsGradientStyles(),
+   mGraphicsAutomaticStyles(),
+   mPageAutomaticStyles(),
+   mPageMasterStyles(),
+   mParagraphStyles(),
+   mSpanStyles(),
     mpHandler(pHandler),
     miGradientIndex(1),
     miDashIndex(1),
@@ -321,7 +338,20 @@ OdgGeneratorPrivate::~OdgGeneratorPrivate()
     {
         delete((*iterPageMasterStyles));
     }
+
+   for (std::map<WPXString, ParagraphStyle*, ltstr>::iterator iterParagraphStyles = mParagraphStyles.begin();
+      iterParagraphStyles != mParagraphStyles.end(); iterParagraphStyles++)
+   {
+      delete(iterParagraphStyles->second);
+   }
+
+   for (std::map<WPXString, SpanStyle*, ltstr>::iterator iterSpanStyles = mSpanStyles.begin();
+      iterSpanStyles != mSpanStyles.end(); iterSpanStyles++)
+   {
+      delete(iterSpanStyles->second);
+   }
 }
+
 
 OdgGenerator::OdgGenerator(OdfDocumentHandler *pHandler, const OdfStreamType streamType):
     mpImpl(new OdgGeneratorPrivate(pHandler, streamType))
@@ -425,6 +455,16 @@ OdgGenerator::~OdgGenerator()
         {
             (*iterGraphicsAutomaticStyles)->write(mpImpl->mpHandler);
         }
+      for (std::map<WPXString, ParagraphStyle*, ltstr>::iterator iterParagraphStyles = mpImpl->mParagraphStyles.begin();
+         iterParagraphStyles != mpImpl->mParagraphStyles.end(); iterParagraphStyles++)
+      {
+         (iterParagraphStyles->second)->write(mpImpl->mpHandler);
+      }
+      for (std::map<WPXString, SpanStyle*, ltstr>::iterator iterSpanStyles = mpImpl->mSpanStyles.begin();
+         iterSpanStyles != mpImpl->mSpanStyles.end(); iterSpanStyles++)
+      {
+         (iterSpanStyles->second)->write(mpImpl->mpHandler);
+      }
     }
 #ifdef MULTIPAGE_WORKAROUND
     if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
@@ -1261,9 +1301,32 @@ void OdgGenerator::endTextObject()
     }
 }
 
-void OdgGenerator::startTextLine(WPXPropertyList const&)
+void OdgGenerator::startTextLine(WPXPropertyList const &propList)
 {
-    mpImpl->mBodyElements.push_back(new TagOpenElement("text:p"));
+   WPXPropertyList *pPersistPropList = new WPXPropertyList(propList);
+   ParagraphStyle *pStyle = 0;
+
+   WPXString sKey = propListToStyleKey(*pPersistPropList);
+
+   if (mpImpl->mParagraphStyles.find(sKey) == mpImpl->mParagraphStyles.end())
+   {
+      WPXString sName;
+      sName.sprintf("S%i", mpImpl->mParagraphStyles.size());
+
+      pStyle = new ParagraphStyle(pPersistPropList, WPXPropertyListVector(), sName);
+
+      mpImpl->mParagraphStyles[sKey] = pStyle;
+   }
+   else
+   {
+      pStyle = mpImpl->mParagraphStyles[sKey];
+      delete pPersistPropList;
+   }
+
+   // create a document element corresponding to the paragraph, and append it to our list of document elements
+   TagOpenElement *pParagraphOpenElement = new TagOpenElement("text:p");
+   pParagraphOpenElement->addAttribute("text:style-name", pStyle->getName());
+   mpImpl->mBodyElements.push_back(pParagraphOpenElement);
 }
 
 void OdgGenerator::endTextLine()
@@ -1271,14 +1334,31 @@ void OdgGenerator::endTextLine()
     mpImpl->mBodyElements.push_back(new TagCloseElement("text:p"));
 }
 
-void OdgGenerator::startTextSpan(WPXPropertyList const&)
+void OdgGenerator::startTextSpan(WPXPropertyList const&propList)
 {
-//    mpImpl->mBodyElements.push_back(new TagOpenElement("text:s"));
+   WPXString sName;
+   WPXString sSpanHashKey = propListToStyleKey(propList);
+   if (mpImpl->mSpanStyles.find(sSpanHashKey) == mpImpl->mSpanStyles.end())
+   {
+      // allocate a new paragraph style
+      sName.sprintf("Span%i", mpImpl->mSpanStyles.size());
+      SpanStyle *pStyle = new SpanStyle(sName.cstr(), propList);
+
+      mpImpl->mSpanStyles[sSpanHashKey] = pStyle;
+   }
+   else
+   {
+      sName.sprintf("%s", mpImpl->mSpanStyles.find(sSpanHashKey)->second->getName().cstr());
+   }
+
+   TagOpenElement *pSpanOpenElement = new TagOpenElement("text:span");
+   pSpanOpenElement->addAttribute("text:style-name", sName.cstr());
+   mpImpl->mBodyElements.push_back(pSpanOpenElement);
 }
 
 void OdgGenerator::endTextSpan()
 {
-//    mpImpl->mBodyElements.push_back(new TagCloseElement("text:s"));
+   mpImpl->mBodyElements.push_back(new TagCloseElement("text:span"));
 }
 
 void OdgGenerator::insertText(WPXString const &text)

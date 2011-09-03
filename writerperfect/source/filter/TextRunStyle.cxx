@@ -57,7 +57,8 @@ void ParagraphStyle::write(OdfDocumentHandler *pHandler) const
     WPXPropertyList propList;
     propList.insert("style:name", msName.cstr());
     propList.insert("style:family", "paragraph");
-    propList.insert("style:parent-style-name", (*mpPropList)["style:parent-style-name"]->getStr());
+   if ((*mpPropList)["style:parent-style-name"])
+      propList.insert("style:parent-style-name", (*mpPropList)["style:parent-style-name"]->getStr());
     if ((*mpPropList)["style:master-page-name"])
         propList.insert("style:master-page-name", (*mpPropList)["style:master-page-name"]->getStr());
     pHandler->startElement("style:style", propList);

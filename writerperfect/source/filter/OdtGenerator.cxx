@@ -32,7 +32,6 @@
 #include <vector>
 #include <map>
 #include <stack>
-#include <string.h> // for strcmp
 #include <string>
 
 #include "OdtGenerator.hxx"
@@ -80,14 +79,6 @@ struct _WriterListState
 };
 
 enum WriterListType { unordered, ordered };
-
-struct ltstr
-{
-    bool operator()(const WPXString & s1, const WPXString & s2) const
-    {
-        return strcmp(s1.cstr(), s2.cstr()) < 0;
-    }
-};
 
 _WriterDocumentState::_WriterDocumentState() :
     mbFirstElement(true),
@@ -533,36 +524,6 @@ bool OdtGeneratorPrivate::_writeTargetDocument(OdfDocumentHandler *pHandler)
     return true;
 }
 
-
-WPXString propListToStyleKey(const WPXPropertyList & xPropList)
-{
-    WPXString sKey;
-    WPXPropertyList::Iter i(xPropList);
-    for (i.rewind(); i.next(); )
-    {
-        WPXString sProp;
-        sProp.sprintf("[%s:%s]", i.key(), i()->getStr().cstr());
-        sKey.append(sProp);
-    }
-
-    return sKey;
-}
-
-WPXString getParagraphStyleKey(const WPXPropertyList & xPropList, const WPXPropertyListVector & xTabStops)
-{
-    WPXString sKey = propListToStyleKey(xPropList);
-
-    WPXString sTabStops;
-    sTabStops.sprintf("[num-tab-stops:%i]", xTabStops.count());
-    WPXPropertyListVector::Iter i(xTabStops);
-    for (i.rewind(); i.next();)
-    {
-        sTabStops.append(propListToStyleKey(i()));
-    }
-    sKey.append(sTabStops);
-
-    return sKey;
-}
 
 // _allocateFontName: add a (potentially mapped) font style to the hash if it's not already there, do nothing otherwise
 void OdtGeneratorPrivate::_allocateFontName(const WPXString & sFontName)
