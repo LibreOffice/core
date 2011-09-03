@@ -3149,10 +3149,7 @@ writerfilter::dmapper::MeasureHandler::isAutoWidth() const
 writerfilter::dmapper::SectionPropertyMap::GetPageStyleName(bool)
 writerfilter::dmapper::SectionPropertyMap::SetPageStyleName(bool, rtl::OUString const&)
 writerfilter::dmapper::StyleSheetTable::resolveSprmProps(writerfilter::Sprm&)
-writerfilter::doctok::WW8DocumentImpl::fc2cp(writerfilter::doctok::Fc const&) const
-writerfilter::doctoktest::ScannerTestService_supportsService(rtl::OUString const&)
 writerfilter::ooxml::OOXMLFastContextHandler::getResourceString() const
-writerfilter::ooxmltest::ScannerTestService_supportsService(rtl::OUString const&)
 writerfilter::resourcemodel::Fraction::Fraction(writerfilter::resourcemodel::Fraction const&, writerfilter::resourcemodel::Fraction const&)
 ww8::WW8TableNodeInfo::getTable() const
 ww8::WW8TableNodeInfo::toString() const

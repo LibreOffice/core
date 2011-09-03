@@ -712,14 +712,6 @@ public:
     Fc cp2fc(const Cp & cp) const;
 
     /**
-       Return the character position according to file character
-       position.
-
-       @param fc  the file character position
-     */
-    Cp fc2cp(const Fc & fc) const;
-
-    /**
        Return CpAndFc related to character position.
 
        @param cp    the character position
