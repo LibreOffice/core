@@ -36,6 +36,7 @@
 #include "svgfontexport.hxx"
 #include "svgwriter.hxx"
 #include <vcl/unohelp.hxx>
+#include <boost/shared_array.hpp>
 
 using ::rtl::OUString;
 
@@ -1117,7 +1118,6 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 {
     sal_Int32                               nLen = rText.Len();
     Size                                    aNormSize;
-    ::std::auto_ptr< sal_Int32 >            apTmpArray;
     sal_Int32*                              pDX;
     Point                                   aPos;
     Point                                   aBaseLinePos( rPos );
@@ -1142,7 +1142,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
     }
     else
     {
-        apTmpArray.reset( new sal_Int32[ nLen ] );
+        boost::shared_array<sal_Int32> apTmpArray(new sal_Int32[ nLen ]);
         aNormSize = Size( mpVDev->GetTextArray( rText, apTmpArray.get() ), 0 );
         pDX = apTmpArray.get();
     }
