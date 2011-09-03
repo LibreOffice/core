@@ -715,7 +715,6 @@ void OdgGeneratorPrivate::_drawPolySomething(const ::WPXPropertyListVector& vert
         WPXString sValue;
         sValue.sprintf("gr%i", miGraphicsStyleIndex-1);
         pDrawLineElement->addAttribute("draw:style-name", sValue);
-        pDrawLineElement->addAttribute("draw:text-style-name", "P1");
         pDrawLineElement->addAttribute("draw:layer", "layout");
         pDrawLineElement->addAttribute("svg:x1", vertices[0]["svg:x"]->getStr());
         pDrawLineElement->addAttribute("svg:y1", vertices[0]["svg:y"]->getStr());
@@ -820,7 +819,6 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
     TagOpenElement *pDrawPathElement = new TagOpenElement("draw:path");
     sValue.sprintf("gr%i", miGraphicsStyleIndex-1);
     pDrawPathElement->addAttribute("draw:style-name", sValue);
-    pDrawPathElement->addAttribute("draw:text-style-name", "P1");
     pDrawPathElement->addAttribute("draw:layer", "layout");
     sValue = doubleToString(px); sValue.append("in");
     pDrawPathElement->addAttribute("svg:x", sValue);
@@ -1196,6 +1194,7 @@ void OdgGenerator::startTextObject(WPXPropertyList const &propList, WPXPropertyL
     mpImpl->mGraphicsAutomaticStyles.push_back(pStyleStyleOpenElement);
     
     pDrawFrameOpenElement->addAttribute("draw:style-name", sValue);
+    pDrawFrameOpenElement->addAttribute("draw:layer", "layout");
 
     TagOpenElement *pStyleGraphicPropertiesOpenElement = new TagOpenElement("style:graphic-properties");
     pStyleGraphicPropertiesOpenElement->addAttribute("draw:stroke", "none");
@@ -1212,9 +1211,10 @@ void OdgGenerator::startTextObject(WPXPropertyList const &propList, WPXPropertyL
     {
         if (!propList["fo:min-width"])
         {
-            pDrawFrameOpenElement->addAttribute("fo:min-width", "0in");
-            pStyleGraphicPropertiesOpenElement->addAttribute("fo:min-width", "0in");
+            pDrawFrameOpenElement->addAttribute("fo:min-width", "1in");
+            pStyleGraphicPropertiesOpenElement->addAttribute("fo:min-width", "1in");
         }
+        pDrawFrameOpenElement->addAttribute("svg:width", "10in");
     }
     else
     {
@@ -1273,12 +1273,12 @@ void OdgGenerator::endTextLine()
 
 void OdgGenerator::startTextSpan(WPXPropertyList const&)
 {
-    mpImpl->mBodyElements.push_back(new TagOpenElement("text:s"));
+//    mpImpl->mBodyElements.push_back(new TagOpenElement("text:s"));
 }
 
 void OdgGenerator::endTextSpan()
 {
-    mpImpl->mBodyElements.push_back(new TagCloseElement("text:s"));
+//    mpImpl->mBodyElements.push_back(new TagCloseElement("text:s"));
 }
 
 void OdgGenerator::insertText(WPXString const &text)
