@@ -409,6 +409,28 @@ void RTFDocumentImpl::checkFirstRun()
     }
 }
 
+void RTFDocumentImpl::checkNeedPap()
+{
+    if (m_bNeedPap)
+    {
+        checkChangedFrame();
+
+        if (!m_pCurrentBuffer)
+        {
+            writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
+                    new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
+                    );
+            Mapper().props(pParagraphProperties);
+        }
+        else
+        {
+            RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms));
+            m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
+        }
+        m_bNeedPap = false;
+    }
+}
+
 void RTFDocumentImpl::runBreak()
 {
     sal_uInt8 sBreak[] = { 0xd };
@@ -426,6 +448,7 @@ void RTFDocumentImpl::tableBreak()
 void RTFDocumentImpl::parBreak()
 {
     checkFirstRun();
+    checkNeedPap();
     // end previous paragraph
     Mapper().startCharacterGroup();
     runBreak();
@@ -864,24 +887,8 @@ void RTFDocumentImpl::text(OUString& rString)
         return;
     }
 
-    writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
-            new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
-            );
-
     checkFirstRun();
-    if (m_bNeedPap)
-    {
-        checkChangedFrame();
-
-        if (!m_pCurrentBuffer)
-            Mapper().props(pParagraphProperties);
-        else
-        {
-            RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms));
-            m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
-        }
-        m_bNeedPap = false;
-    }
+    checkNeedPap();
 
     // Don't return earlier, a bookmark start has to be in a paragraph group.
     if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART)

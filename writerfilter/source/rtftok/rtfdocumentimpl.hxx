@@ -339,6 +339,7 @@ namespace writerfilter {
                 void tableBreak();
                 /// If this is the first run of the document, starts the initial paragraph.
                 void checkFirstRun();
+                void checkNeedPap();
                 void sectBreak(bool bFinal);
                 void replayBuffer(RTFBuffer_t& rBuffer);
                 bool inFrame();
