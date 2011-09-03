@@ -256,10 +256,6 @@ int SwView::InsertGraphic( const String &rPath, const String &rFilter,
 
 sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 {
-#ifndef ENABLE_PROP_WITHOUTLINK
-#define ENABLE_PROP_WITHOUTLINK 0x08
-#endif
-
     sal_Bool bReturn = sal_False;
     SwDocShell* pDocShell = GetDocShell();
     sal_uInt16 nHtmlMode = ::GetHtmlMode(pDocShell);

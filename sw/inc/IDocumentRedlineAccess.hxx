@@ -83,7 +83,6 @@ namespace nsRedlineType_t
 
     // When larger than 128, flags can be inserted.
     const RedlineType_t REDLINE_NO_FLAG_MASK = 0x7F;
-    //const RedlineType_t REDLINE_FLAG_MASK = 0xFF80;
     const RedlineType_t REDLINE_FORM_AUTOFMT = 0x80;// Can be a flag in RedlineType.
 }
 
