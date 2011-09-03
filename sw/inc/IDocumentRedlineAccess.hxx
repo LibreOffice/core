@@ -57,7 +57,7 @@ namespace nsRedlineMode_t
     const RedlineMode_t REDLINE_ON = 0x01;// RedlineMode on
     const RedlineMode_t REDLINE_IGNORE = 0x02;// ignore Redlines
     const RedlineMode_t REDLINE_SHOW_INSERT = 0x10;// show all inserts
-    const RedlineMode_t REDLINE_SHOW_DELETE = 0x20;// show all delets
+    const RedlineMode_t REDLINE_SHOW_DELETE = 0x20;// show all deletes
     const RedlineMode_t REDLINE_SHOW_MASK = REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE;
 
     // For internal management:

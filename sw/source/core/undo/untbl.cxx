@@ -2821,7 +2821,7 @@ SwUndo* SwUndoTblCpyTbl::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
         else
             aInsertEnd.nContent = SwIndex( 0 );
     }
-    // For joined (merged) contents the start of deletionm and end of insertion are identical
+    // For joined (merged) contents the start of deletion and end of insertion are identical
     // otherwise adjacent nodes.
     SwPosition aDeleteStart( rJoin ? aInsertEnd : rPos );
     if( !rJoin )
