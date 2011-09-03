@@ -1466,7 +1466,7 @@ void RtfAttributeOutput::WriteBookmarks_Impl( std::vector< rtl::OUString >& rSta
     rEnds.clear();
 }
 
-void RtfAttributeOutput::WriteHeaderFooter_Impl( const SwFrmFmt& rFmt, bool bHeader, const sal_Char* pStr )
+void RtfAttributeOutput::WriteHeaderFooter_Impl( const SwFrmFmt& rFmt, bool bHeader, const sal_Char* pStr, bool bTitlepg )
 {
     OStringBuffer aSectionBreaks = m_aSectionBreaks;
     m_aSectionBreaks.setLength(0);
@@ -1475,6 +1475,8 @@ void RtfAttributeOutput::WriteHeaderFooter_Impl( const SwFrmFmt& rFmt, bool bHea
 
     m_aSectionHeaders.append(bHeader ? OOO_STRING_SVTOOLS_RTF_HEADERY : OOO_STRING_SVTOOLS_RTF_FOOTERY);
     m_aSectionHeaders.append((sal_Int32)m_rExport.pAktPageDesc->GetMaster().GetULSpace().GetUpper());
+    if (bTitlepg)
+        m_aSectionHeaders.append(OOO_STRING_SVTOOLS_RTF_TITLEPG);
     m_aSectionHeaders.append('{');
     m_aSectionHeaders.append(pStr);
     m_bBufferSectionHeaders = true;

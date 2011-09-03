@@ -209,7 +209,7 @@ private:
     /// This is necessary to have the numbering table ready before the main text is being processed.
     void BuildNumbering();
     void WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader);
-    void WriteHeaderFooter(const SwFrmFmt& rFmt, bool bHeader, const sal_Char* pStr);
+    void WriteHeaderFooter(const SwFrmFmt& rFmt, bool bHeader, const sal_Char* pStr, bool bTitlepg = false);
 
     RtfColorTbl m_aColTbl;
     RtfStyleTbl m_aStyTbl;
