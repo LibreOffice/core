@@ -3371,6 +3371,9 @@ void SwPageFrm::PaintDecorators( OutputDevice *pOut ) const
                 aHeaderText = aHeaderText.replaceAt( nPos, 2, rStyleName );
                 drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D();
 
+                // Line thickness in px
+                long nHalfThickness = pOut->LogicToPixel( Point( 0, 10 ) ).Y();
+
                 // Header
                 const SwFrm* pHeaderFrm = Lower();
                 if ( !pHeaderFrm->IsHeaderFrm() )
@@ -3380,15 +3383,15 @@ void SwPageFrm::PaintDecorators( OutputDevice *pOut ) const
                 long nXOff = std::min( aBodyRect.Right(), rVisArea.Right() );
 
                 // FIXME there are cases where the label isn't show but should be
+                long nHeaderYOff = pHeaderFrm->Frm().Bottom();
                 if ( rVisArea.IsInside( Point( rVisArea.Left(), pHeaderFrm->Frm().Bottom() ) ) )
                 {
-                    long nOutputYOff = pHeaderFrm->Frm().Bottom();
-                    Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nOutputYOff ) );
+                    Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nHeaderYOff + nHalfThickness ) );
                     rEditWin.AddHeaderFooterControl( aHeaderText, true, nOutputOff );
                 }
 
                 pProcessor->process( lcl_CreateHeaderFooterSeparatorPrimitives(
-                            this, double( aBodyRect.Top() ) ) );
+                            this, double( nHeaderYOff ) ) );
 
                 // Footer
                 const SwFrm* pFooterFrm = Lower();
@@ -3402,15 +3405,15 @@ void SwPageFrm::PaintDecorators( OutputDevice *pOut ) const
                 aFooterText = aFooterText.replaceAt( nPos, 2, rStyleName );
 
                 // FIXME there are cases where the label isn't show but should be
+                long nFooterYOff = pFooterFrm->Frm().Top();
                 if ( rVisArea.IsInside( Point( rVisArea.Left(), pFooterFrm->Frm().Top() ) ) )
                 {
-                    long nOutputYOff = pFooterFrm->Frm().Top();
-                    Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nOutputYOff ) );
+                    Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nFooterYOff - nHalfThickness ) );
                     rEditWin.AddHeaderFooterControl( aFooterText, false, nOutputOff );
                 }
 
                 pProcessor->process( lcl_CreateHeaderFooterSeparatorPrimitives(
-                            this, double( aBodyRect.Bottom() ) ) );
+                            this, double( nFooterYOff ) ) );
 
                 delete pProcessor;
             }
