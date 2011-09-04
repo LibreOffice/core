@@ -3313,6 +3313,8 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     }
 }
 
+#define LINE_HALF_THICKNESS 10
+
 drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPrimitives(
         const SwPageFrm* pPageFrm, double nLineY )
 {
@@ -3338,10 +3340,11 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
     aLinePolygon.append( aLeft );
     aLinePolygon.append( aRight );
 
+    double nThickness = double( LINE_HALF_THICKNESS ) * 2;
     drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D * pLine =
             new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D (
                 basegfx::B2DPolyPolygon( aLinePolygon ),
-                drawinglayer::attribute::LineAttribute( aLineColor, 20.0 ),
+                drawinglayer::attribute::LineAttribute( aLineColor, nThickness ),
                 drawinglayer::attribute::StrokeAttribute( aStrokePattern ) );
 
     aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pLine );
@@ -3372,7 +3375,7 @@ void SwPageFrm::PaintDecorators( OutputDevice *pOut ) const
                 drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D();
 
                 // Line thickness in px
-                long nHalfThickness = pOut->LogicToPixel( Point( 0, 10 ) ).Y();
+                long nHalfThickness = pOut->LogicToPixel( Point( 0, LINE_HALF_THICKNESS ) ).Y();
 
                 // Header
                 const SwFrm* pHeaderFrm = Lower();
