@@ -1900,35 +1900,32 @@ Err:
     return false;
 }
 
-String WW8ReadPascalString(SvStream& rStrm, rtl_TextEncoding eEnc)
+String read_uInt8_PascalString(SvStream& rStrm, rtl_TextEncoding eEnc)
 {
-    sal_uInt8 b(0);
-    rStrm >> b;
-    return rtl::OStringToOUString(read_uInt8s_AsOString(rStrm, b), eEnc);
+    sal_uInt8 nLen(0);
+    rStrm >> nLen;
+    return rtl::OStringToOUString(read_uInt8s_AsOString(rStrm, nLen), eEnc);
 }
 
-String WW8ReadBeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc)
+String read_LEuInt16_PascalString(SvStream& rStrm)
 {
-    String aRet = WW8ReadPascalString(rStrm, eEnc);
-    rStrm.SeekRel( 1 ); // skip null-byte at end
+    sal_uInt16 nLen(0);
+    rStrm >> nLen;
+    return read_LEuInt16s_AsOUString(rStrm, nLen);
+}
+
+String read_uInt8_BeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc)
+{
+    String aRet = read_uInt8_PascalString(rStrm, eEnc);
+    rStrm.SeekRel(sizeof(sal_uInt8)); // skip null-byte at end
     return aRet;
 }
 
-String WW8Read_xstz(SvStream& rStrm, sal_uInt16 nChars, bool bAtEndSeekRel1)
+String read_LEuInt16_BeltAndBracesString(SvStream& rStrm)
 {
-    sal_uInt16 b(0);
-
-    if( nChars )
-        b = nChars;
-    else
-        rStrm >> b;
-
-    rtl::OUString sRet = read_LEuInt16s_AsOUString(rStrm, nChars);
-
-    if( bAtEndSeekRel1 )
-        rStrm.SeekRel( 2 ); // ueberspringe das Null-Character am Ende.
-
-    return sRet;
+    String aRet = read_LEuInt16_PascalString(rStrm);
+    rStrm.SeekRel(sizeof(sal_Unicode)); // skip null-byte at end
+    return aRet;
 }
 
 xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
@@ -1961,7 +1958,7 @@ xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
             nLen = USHRT_MAX - 1;
 
         if( bIsUnicode )
-            rStr.Append(WW8Read_xstz(rStrm, (sal_uInt16)nLen, false));
+            rStr.Append(String(read_LEuInt16s_AsOUString(rStrm, nLen)));
         else
         {
             // Alloc method automatically sets Zero at the end
@@ -3864,7 +3861,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
             for (sal_uInt16 i=0; i < nStrings; ++i)
             {
                 if (bUnicode)
-                    rArray.push_back(WW8Read_xstz(rStrm, 0, false));
+                    rArray.push_back(read_LEuInt16_PascalString(rStrm));
                 else
                 {
                     sal_uInt8 nBChar(0);
@@ -3897,7 +3894,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                 for (sal_uInt16 i=0; i < nStrings; ++i)
                 {
                     if( bUnicode )
-                        pValueArray->push_back(WW8Read_xstz(rStrm, 0, false));
+                        pValueArray->push_back(read_LEuInt16_PascalString(rStrm));
                     else
                     {
                         sal_uInt8 nBChar(0);
@@ -6142,7 +6139,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
                 case 6:
                 case 7:
                     // lies Pascal-String
-                    *pString = WW8ReadBeltAndBracesString(rSt, RTL_TEXTENCODING_MS_1252);
+                    *pString = read_uInt8_BeltAndBracesString(rSt, RTL_TEXTENCODING_MS_1252);
                     // leading len and trailing zero --> 2
                     rSkip -= 2+ pString->Len();
                     break;
@@ -6151,7 +6148,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
                     // trailing zero
                     if (ww8String::TestBeltAndBraces(rSt))
                     {
-                        *pString = WW8Read_xstz(rSt, 0, true);
+                        *pString = read_LEuInt16_BeltAndBracesString(rSt);
                         rSkip -= (pString->Len() + 2) * 2;
                     }
                     else
@@ -6166,7 +6163,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
                         they are not corrupt. If they are then we try them as
                         8bit ones
                         */
-                        *pString = WW8ReadBeltAndBracesString(rSt,RTL_TEXTENCODING_MS_1252);
+                        *pString = read_uInt8_BeltAndBracesString(rSt,RTL_TEXTENCODING_MS_1252);
                         // leading len and trailing zero --> 2
                         rSkip -= 2+ pString->Len();
                     }

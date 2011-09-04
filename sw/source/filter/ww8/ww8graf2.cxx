@@ -269,7 +269,7 @@ bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
         case 99: // TIFF-File ( nicht embeddet )
             pSt->Seek(nPosFc);
             // Name als P-String einlesen
-            rFileName = WW8ReadPascalString(*pSt, eStructCharSet);
+            rFileName = read_uInt8_PascalString(*pSt, eStructCharSet);
             if (rFileName.Len())
                 rFileName = URIHelper::SmartRel2Abs(
                     INetURLObject(sBaseURL), rFileName,

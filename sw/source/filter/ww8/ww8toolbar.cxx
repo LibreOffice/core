@@ -29,6 +29,7 @@
  * instead of those above.
  */
 #include "ww8toolbar.hxx"
+#include "ww8scan.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <stdarg.h>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
@@ -786,9 +787,7 @@ Xst::Read( SvStream& rS )
 {
     OSL_TRACE("Xst::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
-    sal_Int16 nChars = 0;
-    rS >> nChars;
-    sString = read_LEuInt16s_AsOUString(rS, nChars);
+    sString = read_LEuInt16_PascalString(rS);
     return true;
 }
 

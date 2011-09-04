@@ -152,12 +152,14 @@ public:
 
 //Read a Pascal-style, i.e. single byte string length followed
 //by string contents
-String WW8ReadPascalString(SvStream& rStrm, rtl_TextEncoding eEnc);
+String read_uInt8_PascalString(SvStream& rStrm, rtl_TextEncoding eEnc);
+String read_LEuInt16_PascalString(SvStream& rStrm);
 
 //Belt and Braces strings, i.e. Pascal-style strings followed by
 //null termination, Spolsky calls them "fucked strings" FWIW
 //http://www.joelonsoftware.com/articles/fog0000000319.html
-String WW8ReadBeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc);
+String read_uInt8_BeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc);
+String read_LEuInt16_BeltAndBracesString(SvStream& rStrm);
 
 //--Line abovewhich the code has meaningful comments
 
@@ -166,16 +168,6 @@ class  WW8ScannerBase;
 class  WW8PLCFspecial;
 struct WW8PLCFxDesc;
 class  WW8PLCFx_PCD;
-
-/**
- Reads a UTF-16 unicode string. If nLen is set then that number of 16bit units
- (not bytes) is read, if its not set, then read a 16bit count from the
- stream and use that for the length.
-
- If bAtEndSeekRel1 is set, exactly ONE extra unit (not byte) is skipped at the
- end of the string.
-*/
-String WW8Read_xstz(SvStream& rStrm, sal_uInt16 nChars, bool bAtEndSeekRel1);
 
 /**
  reads array of strings (see MS documentation: STring TaBle stored in File)

@@ -702,7 +702,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     //
     // 4. den Nummerierungsstring einlesen: ergibt Prefix und Postfix
     //
-    String sNumString(WW8Read_xstz(rSt, 0, false));
+    String sNumString(read_LEuInt16_PascalString(rSt));
 
     //
     // 5. gelesene Werte in Writer Syntax umwandeln
@@ -2225,7 +2225,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         maListEntries.reserve(nNoStrings);
         for (sal_uInt32 nI = 0; nI < nNoStrings; ++nI)
         {
-            String sEntry =  WW8Read_xstz(*pDataStream, 0, false);
+            String sEntry =  read_LEuInt16_PascalString(*pDataStream);
             maListEntries.push_back(sEntry);
         }
     }

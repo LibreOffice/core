@@ -5337,13 +5337,13 @@ const String* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
         {
             if( bVer67 )
             {
-                mpAtnNames->push_back(WW8ReadPascalString(rStrm,
+                mpAtnNames->push_back(read_uInt8_PascalString(rStrm,
                     RTL_TEXTENCODING_MS_1252));
                 nRead += mpAtnNames->rbegin()->Len() + 1;   // Laenge + sal_uInt8 Count
             }
             else
             {
-                mpAtnNames->push_back(WW8Read_xstz(rStrm, 0, false));
+                mpAtnNames->push_back(read_LEuInt16_PascalString(rStrm));
                 // UNICode: doppelte Laenge + sal_uInt16 Count
                 nRead += mpAtnNames->rbegin()->Len() * 2 + 2;
             }
