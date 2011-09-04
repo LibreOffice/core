@@ -9037,6 +9037,162 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Defines the character used as the decimal point." ;
         };
     };
+
+    Resource SC_OPCODE_BITAND
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Bitwise \"AND\" of two integers.";
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_BITAND );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Positive integer less than 2^48." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "Positive integer less than 2^48." ;
+        };
+    };
+    Resource SC_OPCODE_BITOR
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Bitwise \"OR\" of two integers.";
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_BITOR );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Positive integer less than 2^48." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "Positive integer less than 2^48." ;
+        };
+    };
+    Resource SC_OPCODE_BITXOR
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Bitwise \"exclusive OR\" of two integers.";
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_BITXOR );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Positive integer less than 2^48." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "Positive integer less than 2^48." ;
+        };
+    };
+    Resource SC_OPCODE_BITRSHIFT
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Bitwise right shift of an integer value.";
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_BITRSHIFT );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value to be shifted. Positive integer less than 2^48." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Shift" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The integer number of bits the value is to be shifted." ;
+        };
+    };
+    Resource SC_OPCODE_BITLSHIFT
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Bitwise left shift of an integer value.";
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_BITLSHIFT );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value to be shifted. Positive integer less than 2^48." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Shift" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The integer number of bits the value is to be shifted." ;
+        };
+    };
 };
 
 #if defined(U2S)

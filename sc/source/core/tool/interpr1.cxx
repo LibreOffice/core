@@ -77,6 +77,8 @@
 
 #define SC_DOUBLE_MAXVALUE  1.7e307
 
+static const sal_uInt64 n2power48 = 281474976710656;  // 2^48
+
 IMPL_FIXEDMEMPOOL_NEWDEL( ScTokenStack, 8, 4 )
 IMPL_FIXEDMEMPOOL_NEWDEL( ScInterpreter, 32, 16 )
 
@@ -1445,6 +1447,107 @@ void ScInterpreter::ScNot()
         break;
         default:
             PushInt( GetDouble() == 0.0 );
+    }
+}
+
+
+void ScInterpreter::ScBitAnd()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "pechlaner", "ScInterpreter::ScBitAnd" );
+
+    if ( !MustHaveParamCount( GetByte(), 2 ) )
+        return;
+
+    double num1 = ::rtl::math::approxFloor( GetDouble());
+    double num2 = ::rtl::math::approxFloor( GetDouble());
+    if (    (num1 >= n2power48) || (num1 < 0) ||
+            (num2 >= n2power48) || (num2 < 0))
+        PushIllegalArgument();
+    else
+        PushDouble ((sal_uInt64) num1 & (sal_uInt64) num2);
+}
+
+
+void ScInterpreter::ScBitOr()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "pechlaner", "ScInterpreter::ScBitOr" );
+
+    if ( !MustHaveParamCount( GetByte(), 2 ) )
+        return;
+
+    double num1 = ::rtl::math::approxFloor( GetDouble());
+    double num2 = ::rtl::math::approxFloor( GetDouble());
+    if (    (num1 >= n2power48) || (num1 < 0) ||
+            (num2 >= n2power48) || (num2 < 0))
+        PushIllegalArgument();
+    else
+        PushDouble ((sal_uInt64) num1 | (sal_uInt64) num2);
+}
+
+
+void ScInterpreter::ScBitXor()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "pechlaner", "ScInterpreter::ScBitXor" );
+
+    if ( !MustHaveParamCount( GetByte(), 2 ) )
+        return;
+
+    double num1 = ::rtl::math::approxFloor( GetDouble());
+    double num2 = ::rtl::math::approxFloor( GetDouble());
+    if (    (num1 >= n2power48) || (num1 < 0) ||
+            (num2 >= n2power48) || (num2 < 0))
+        PushIllegalArgument();
+    else
+        PushDouble ((sal_uInt64) num1 ^ (sal_uInt64) num2);
+}
+
+
+void ScInterpreter::ScBitLshift()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "pechlaner", "ScInterpreter::ScBitLshift" );
+
+    if ( !MustHaveParamCount( GetByte(), 2 ) )
+        return;
+
+    double fShift = ::rtl::math::approxFloor( GetDouble());
+    double num = ::rtl::math::approxFloor( GetDouble());
+    if ((num >= n2power48) || (num < 0))
+        PushIllegalArgument();
+    else
+    {
+        double fRes;
+        if (fShift < 0)
+            fRes = ::rtl::math::approxFloor( num / pow( 2.0, -fShift));
+        else if (fShift == 0)
+            fRes = num;
+        else
+            fRes = num * pow( 2.0, fShift);
+        PushDouble( fRes);
+    }
+}
+
+
+void ScInterpreter::ScBitRshift()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "pechlaner", "ScInterpreter::ScBitRshift" );
+
+    if ( !MustHaveParamCount( GetByte(), 2 ) )
+        return;
+
+    double fShift = ::rtl::math::approxFloor( GetDouble());
+    double num = ::rtl::math::approxFloor( GetDouble());
+    if ((num >= n2power48) || (num < 0))
+        PushIllegalArgument();
+    else
+    {
+        double fRes;
+        if (fShift < 0)
+            fRes = num * pow( 2.0, -fShift);
+        else if (fShift == 0)
+            fRes = num;
+        else
+            fRes = ::rtl::math::approxFloor( num / pow( 2.0, fShift));
+        PushDouble( fRes);
     }
 }
 

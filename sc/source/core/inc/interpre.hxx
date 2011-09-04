@@ -557,6 +557,11 @@ void ScColRowNameAuto();
 void ScGetPivotData();
 void ScHyperLink();
 void ScBahtText();
+void ScBitAnd();
+void ScBitOr();
+void ScBitXor();
+void ScBitRshift();
+void ScBitLshift();
 void ScTTT();
 
 //----------------Funktionen in interpr2.cxx---------------

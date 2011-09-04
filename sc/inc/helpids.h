@@ -692,3 +692,8 @@
 #define HID_FUNC_UNICODE                                        "SC_HID_FUNC_UNICODE"
 #define HID_FUNC_UNICHAR                                        "SC_HID_FUNC_UNICHAR"
 #define HID_FUNC_NUMBERVALUE                                    "SC_HID_FUNC_NUMBERVALUE"
+#define HID_FUNC_BITAND                                         "SC_HID_FUNC_BITAND"
+#define HID_FUNC_BITOR                                          "SC_HID_FUNC_BITOR"
+#define HID_FUNC_BITXOR                                         "SC_HID_FUNC_BITXOR"
+#define HID_FUNC_BITLSHIFT                                      "SC_HID_FUNC_BITLSHIFT"
+#define HID_FUNC_BITRSHIFT                                      "SC_HID_FUNC_BITRSHIFT"
