@@ -1914,25 +1914,15 @@ Err:
 String WW8ReadPString(SvStream& rStrm, rtl_TextEncoding eEnc,
     bool bAtEndSeekRel1)
 {
-    ByteString aByteStr;
-    sal_uInt8 b;
+    sal_uInt8 b(0);
     rStrm >> b;
 
-    if (b)
-    {
-        // Alloc methode automatically sets Zero at the end
-        sal_Char*  pByteData = aByteStr.AllocBuffer( b );
-
-        sal_uLong nWasRead = rStrm.Read( pByteData, b );
-        if( nWasRead != b )
-            aByteStr.ReleaseBufferAccess(static_cast<xub_StrLen>(nWasRead));
-    }
+    rtl::OString aByteStr = read_uInt8s_AsOString(rStrm, b);
 
     if( bAtEndSeekRel1 )
         rStrm.SeekRel( 1 ); // ueberspringe das Null-Byte am Ende.
 
-
-    return String( aByteStr, eEnc );
+    return rtl::OStringToOUString(aByteStr, eEnc);
 }
 
 String WW8Read_xstz(SvStream& rStrm, sal_uInt16 nChars, bool bAtEndSeekRel1)
