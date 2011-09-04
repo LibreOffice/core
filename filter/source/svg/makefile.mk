@@ -108,6 +108,10 @@ $(INCCOM)$/tokens.cxx : $(MISC)$/tokens.gperf makefile.mk
 
 ALLTAR : $(MISC)/svgfilter.component
 
+$(INCCOM)$/svgscript.hxx : presentation_engine.js js2hxx.py
+         js2hxx.py presentation_engine.js $@
+$(SLO)$/svgexport.obj : svgexport.cxx $(INCCOM)$/svgscript.hxx
+
 $(MISC)/svgfilter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
         svgfilter.component
     $(XSLTPROC) --nonet --stringparam uri \
