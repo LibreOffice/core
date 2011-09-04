@@ -2474,20 +2474,20 @@ void SvDataCopyStream::Assign( const SvDataCopyStream& )
 {
 }
 
-//Create a OString of nSize bytes from rStream
-rtl::OString readBytesAsOString(SvStream& rStrm, sal_Size nSize)
+//Create a OString of nLen bytes from rStream
+rtl::OString read_uInt8s_AsOString(SvStream& rStrm, sal_Size nLen)
 {
     using comphelper::string::rtl_string_alloc;
 
     rtl_String *pStr = NULL;
-    if (nSize)
+    if (nLen)
     {
-        nSize = std::min(nSize, static_cast<sal_Size>(SAL_MAX_INT32));
+        nLen = std::min(nLen, static_cast<sal_Size>(SAL_MAX_INT32));
         //alloc a (ref-count 1) rtl_String of the desired length.
         //rtl_String's buffer is uninitialized, except for null termination
-        pStr = rtl_string_alloc(sal::static_int_cast<sal_Int32>(nSize));
-        sal_Size nWasRead = rStrm.Read(pStr->buffer, nSize);
-        if (nWasRead != nSize)
+        pStr = rtl_string_alloc(sal::static_int_cast<sal_Int32>(nLen));
+        sal_Size nWasRead = rStrm.Read(pStr->buffer, nLen);
+        if (nWasRead != nLen)
         {
             //on (typically unlikely) short read set length to what we could
             //read, and null terminate. Excess buffer capacity remains of
@@ -2499,6 +2499,37 @@ rtl::OString readBytesAsOString(SvStream& rStrm, sal_Size nSize)
 
     //take ownership of buffer and return, otherwise return empty string
     return pStr ? rtl::OString(pStr, SAL_NO_ACQUIRE) : rtl::OString();
+}
+
+//Create a OUString of nLen little endian sal_Unicodes from rStream
+rtl::OUString read_LEuInt16s_AsOUString(SvStream& rStrm, sal_Size nLen)
+{
+    using comphelper::string::rtl_uString_alloc;
+
+    rtl_uString *pStr = NULL;
+    if (nLen)
+    {
+        nLen = std::min(nLen, static_cast<sal_Size>(SAL_MAX_INT32));
+        //alloc a (ref-count 1) rtl_uString of the desired length.
+        //rtl_String's buffer is uninitialized, except for null termination
+        pStr = rtl_uString_alloc(sal::static_int_cast<sal_Int32>(nLen));
+        sal_Size nWasRead = rStrm.Read(pStr->buffer, nLen*2)/2;
+        if (nWasRead != nLen)
+        {
+            //on (typically unlikely) short read set length to what we could
+            //read, and null terminate. Excess buffer capacity remains of
+            //course, could create a (true) replacement OUString if it matters.
+            pStr->length = sal::static_int_cast<sal_Int32>(nWasRead);
+            pStr->buffer[pStr->length] = 0;
+        }
+#ifdef OSL_BIGENDIAN
+        for (sal_Int32 i = 0; i < pStr->length; ++i)
+            pStr->buffer[i] = SWAPSHORT(pStr->buffer[i]);
+#endif
+    }
+
+    //take ownership of buffer and return, otherwise return empty string
+    return pStr ? rtl::OUString(pStr, SAL_NO_ACQUIRE) : rtl::OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -564,9 +564,13 @@ TOOLS_DLLPUBLIC SvStream& endlu( SvStream& rStr );
 /// call endlu() if eStreamCharSet==RTL_TEXTECODING_UNICODE otherwise endl()
 TOOLS_DLLPUBLIC SvStream& endlub( SvStream& rStr );
 
-//Attempt to read nSize bytes to an OString, returned rtl::OString's length is
-//number of bytes successfully read
-TOOLS_DLLPUBLIC rtl::OString readBytesAsOString(SvStream& rStr, sal_Size nSize);
+//Attempt to read nLen 8bit units to an OString, returned rtl::OString's length
+//is number of units successfully read
+TOOLS_DLLPUBLIC rtl::OString read_uInt8s_AsOString(SvStream& rStr, sal_Size nLen);
+
+//Attempt to read nLen little endian 16bit units to an OUString, returned
+//rtl::OUString's length is number of units successfully read
+TOOLS_DLLPUBLIC rtl::OUString read_LEuInt16s_AsOUString(SvStream& rStr, sal_Size nLen);
 
 // --------------
 // - FileStream -

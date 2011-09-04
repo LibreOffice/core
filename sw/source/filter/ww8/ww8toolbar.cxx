@@ -127,19 +127,19 @@ CTB* CTBWrapper::GetCustomizationData( const rtl::OUString& sTBName )
     return pCTB;
 }
 
-bool CTBWrapper::Read( SvStream* pS )
+bool CTBWrapper::Read( SvStream& rS )
 {
-    OSL_TRACE("CTBWrapper::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    Tcg255SubStruct::Read( pS );
-    *pS >> reserved2 >> reserved3 >> reserved4 >> reserved5;
-    *pS >> cbTBD >> cCust >> cbDTBC;
-    long nExpectedPos =  pS->Tell() + cbDTBC;
+    OSL_TRACE("CTBWrapper::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    Tcg255SubStruct::Read( rS );
+    rS >> reserved2 >> reserved3 >> reserved4 >> reserved5;
+    rS >> cbTBD >> cCust >> cbDTBC;
+    long nExpectedPos =  rS.Tell() + cbDTBC;
     if ( cbDTBC )
     {
         // cbDTBC is the size in bytes of the TBC array
         // but the size of a TBC element is dynamic ( and this relates to TBDelta's
-        int nStart = pS->Tell();
+        int nStart = rS.Tell();
 
         int bytesRead = 0;
         int bytesToRead = cbDTBC - bytesRead;
@@ -149,28 +149,28 @@ bool CTBWrapper::Read( SvStream* pS )
         do
         {
             TBC aTBC;
-            if ( !aTBC.Read( pS ) )
+            if ( !aTBC.Read( rS ) )
                 return false;
             rtbdc.push_back( aTBC );
-            bytesToRead = cbDTBC - ( pS->Tell() - nStart );
+            bytesToRead = cbDTBC - ( rS.Tell() - nStart );
         } while ( bytesToRead > 0 );
     }
-    if ( static_cast< long >( pS->Tell() ) != nExpectedPos )
+    if ( static_cast< long >( rS.Tell() ) != nExpectedPos )
     {
         // Strange error condition, shouldn't happen ( but does in at least
         // one test document ) In the case where it happens the TBC &
         // TBCHeader records seem blank??? ( and incorrect )
-        OSL_ENSURE( static_cast< long >(pS->Tell()) == nExpectedPos, "### Error: Expected pos not equal to actual pos after reading rtbdc");
-        OSL_TRACE("\tPos now is 0x%x should be 0x%x", pS->Tell(), nExpectedPos );
+        OSL_ENSURE( static_cast< long >(rS.Tell()) == nExpectedPos, "### Error: Expected pos not equal to actual pos after reading rtbdc");
+        OSL_TRACE("\tPos now is 0x%x should be 0x%x", rS.Tell(), nExpectedPos );
         // seek to correct position after rtbdc
-        pS->Seek( nExpectedPos );
+        rS.Seek( nExpectedPos );
     }
     if ( cCust )
     {
         for ( sal_Int32 index = 0; index < cCust; ++index )
         {
             Customization aCust( this );
-            if ( !aCust.Read( pS ) )
+            if ( !aCust.Read( rS ) )
                 return false;
             rCustomizations.push_back( aCust );
         }
@@ -267,17 +267,17 @@ Customization::~Customization()
 {
 }
 
-bool Customization::Read( SvStream *pS)
+bool Customization::Read( SvStream &rS)
 {
-    OSL_TRACE("Custimization::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> tbidForTBD >> reserved1 >> ctbds;
+    OSL_TRACE("Custimization::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> tbidForTBD >> reserved1 >> ctbds;
     if ( tbidForTBD )
     {
         for ( sal_Int32 index = 0; index < ctbds; ++index )
         {
             TBDelta aTBDelta;
-            if (!aTBDelta.Read( pS ) )
+            if (!aTBDelta.Read( rS ) )
                 return false;
             customizationDataTBDelta.push_back( aTBDelta );
             // Only set the drop down for menu's associated with standard toolbar
@@ -288,7 +288,7 @@ bool Customization::Read( SvStream *pS)
     else
     {
         customizationDataCTB.reset( new CTB() );
-        if ( !customizationDataCTB->Read( pS ) )
+        if ( !customizationDataCTB->Read( rS ) )
                 return false;
     }
     return true;
@@ -457,12 +457,12 @@ sal_Int16 TBDelta::CustomizationIndex()
     return nIndex;
 }
 
-bool TBDelta::Read(SvStream *pS)
+bool TBDelta::Read(SvStream &rS)
 {
-    OSL_TRACE("TBDelta::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> doprfatendFlags >> ibts >> cidNext >> cid >> fc ;
-    *pS >> CiTBDE >> cbTBC;
+    OSL_TRACE("TBDelta::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> doprfatendFlags >> ibts >> cidNext >> cid >> fc ;
+    rS >> CiTBDE >> cbTBC;
     return true;
 }
 
@@ -504,30 +504,30 @@ bool CTB::IsMenuToolbar()
 }
 
 
-bool CTB::Read( SvStream *pS)
+bool CTB::Read( SvStream &rS)
 {
-    OSL_TRACE("CTB::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    if ( !name.Read( pS ) )
+    OSL_TRACE("CTB::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    if ( !name.Read( rS ) )
         return false;
-    *pS >> cbTBData;
-    if ( !tb.Read( pS ) )
+    rS >> cbTBData;
+    if ( !tb.Read( rS ) )
         return false;
     for ( short index = 0; index < nVisualData; ++index )
     {
         TBVisualData aVisData;
-        aVisData.Read( pS );
+        aVisData.Read( rS );
         rVisualData.push_back( aVisData );
     }
 
-    *pS >> iWCTBl >> reserved >> unused >> cCtls;
+    rS >> iWCTBl >> reserved >> unused >> cCtls;
 
     if ( cCtls )
     {
         for ( sal_Int32 index = 0; index < cCtls; ++index )
         {
             TBC aTBC;
-            if ( !aTBC.Read( pS ) )
+            if ( !aTBC.Read( rS ) )
                 return false;
             rTBC.push_back( aTBC );
         }
@@ -626,22 +626,22 @@ TBC::~TBC()
 {
 }
 
-bool TBC::Read( SvStream *pS )
+bool TBC::Read( SvStream &rS )
 {
-    OSL_TRACE("TBC::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    if ( !tbch.Read( pS ) )
+    OSL_TRACE("TBC::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    if ( !tbch.Read( rS ) )
         return false;
     if ( tbch.getTcID() != 0x1 && tbch.getTcID() != 0x1051 )
     {
         cid.reset( new sal_uInt32 );
-        *pS >> *cid;
+        rS >> *cid;
     }
     // MUST exist if tbch.tct is not equal to 0x16
     if ( tbch.getTct() != 0x16 )
     {
         tbcd.reset(  new TBCData( tbch ) );
-        if ( !tbcd->Read( pS ) )
+        if ( !tbcd->Read( rS ) )
             return false;
     }
     return true;
@@ -782,13 +782,13 @@ TBC::GetCustomText()
 }
 
 bool
-Xst::Read( SvStream* pS )
+Xst::Read( SvStream& rS )
 {
-    OSL_TRACE("Xst::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
+    OSL_TRACE("Xst::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
     sal_Int16 nChars = 0;
-    *pS >> nChars;
-    sString = readUnicodeString( pS, static_cast< sal_Int32 >( nChars  ) );
+    rS >> nChars;
+    sString = read_LEuInt16s_AsOUString(rS, nChars);
     return true;
 }
 
@@ -804,15 +804,15 @@ Tcg::Tcg() : nTcgVer( 255 )
 {
 }
 
-bool Tcg::Read(SvStream *pS)
+bool Tcg::Read(SvStream &rS)
 {
-    OSL_TRACE("Tcg::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> nTcgVer;
+    OSL_TRACE("Tcg::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> nTcgVer;
     if ( nTcgVer != (sal_Int8)255 )
         return false;
     tcg.reset( new Tcg255() );
-    return tcg->Read( pS );
+    return tcg->Read( rS );
 }
 
 void Tcg::Print( FILE* fp )
@@ -842,7 +842,7 @@ Tcg255::~Tcg255()
         delete *it;
 }
 
-bool Tcg255::processSubStruct( sal_uInt8 nId, SvStream *pS )
+bool Tcg255::processSubStruct( sal_uInt8 nId, SvStream &rS )
 {
      Tcg255SubStruct* pSubStruct = NULL;
      switch ( nId )
@@ -883,7 +883,7 @@ bool Tcg255::processSubStruct( sal_uInt8 nId, SvStream *pS )
              return false;
     }
     pSubStruct->ch = nId;
-    if ( !pSubStruct->Read( pS ) )
+    if ( !pSubStruct->Read( rS ) )
         return false;
     rgtcgData.push_back( pSubStruct );
     return true;
@@ -909,18 +909,18 @@ bool Tcg255::ImportCustomToolBar( SfxObjectShell& rDocSh )
 }
 
 
-bool Tcg255::Read(SvStream *pS)
+bool Tcg255::Read(SvStream &rS)
 {
-    OSL_TRACE("Tcg255::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
+    OSL_TRACE("Tcg255::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
     sal_uInt8 nId = 0x40;
-    *pS >> nId;
+    rS >> nId;
     while (  nId != 0x40  )
     {
-        if ( !processSubStruct( nId, pS ) )
+        if ( !processSubStruct( nId, rS ) )
             return false;
         nId = 0x40;
-        *pS >> nId;
+        rS >> nId;
     }
     return true;
     // Peek at
@@ -947,12 +947,12 @@ Tcg255SubStruct::Tcg255SubStruct( bool bReadId ) : mbReadId( bReadId ), ch(0)
 {
 }
 
-bool Tcg255SubStruct::Read(SvStream *pS)
+bool Tcg255SubStruct::Read(SvStream &rS)
 {
-    OSL_TRACE("Tcg255SubStruct::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
+    OSL_TRACE("Tcg255SubStruct::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
     if ( mbReadId )
-        *pS >> ch;
+        rS >> ch;
     return true;
 }
 
@@ -966,18 +966,18 @@ PlfMcd::~PlfMcd()
         delete[] rgmcd;
 }
 
-bool PlfMcd::Read(SvStream *pS)
+bool PlfMcd::Read(SvStream &rS)
 {
-    OSL_TRACE("PffMcd::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    Tcg255SubStruct::Read( pS );
-    *pS >> iMac;
+    OSL_TRACE("PffMcd::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    Tcg255SubStruct::Read( rS );
+    rS >> iMac;
     if ( iMac )
     {
         rgmcd = new MCD[ iMac ];
         for ( sal_Int32 index = 0; index < iMac; ++index )
         {
-            if ( !rgmcd[ index ].Read( pS ) )
+            if ( !rgmcd[ index ].Read( rS ) )
                 return false;
         }
     }
@@ -1011,18 +1011,18 @@ PlfAcd::~PlfAcd()
         delete[] rgacd;
 }
 
-bool PlfAcd::Read( SvStream *pS)
+bool PlfAcd::Read( SvStream &rS)
 {
-    OSL_TRACE("PffAcd::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    Tcg255SubStruct::Read( pS );
-    *pS >> iMac;
+    OSL_TRACE("PffAcd::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    Tcg255SubStruct::Read( rS );
+    rS >> iMac;
     if ( iMac )
     {
         rgacd = new Acd[ iMac ];
         for ( sal_Int32 index = 0; index < iMac; ++index )
         {
-            if ( !rgacd[ index ].Read( pS ) )
+            if ( !rgacd[ index ].Read( rS ) )
                 return false;
         }
     }
@@ -1054,18 +1054,18 @@ PlfKme::~PlfKme()
         delete[] rgkme;
 }
 
-bool PlfKme::Read(SvStream *pS)
+bool PlfKme::Read(SvStream &rS)
 {
-    OSL_TRACE("PlfKme::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    Tcg255SubStruct::Read( pS );
-    *pS >> iMac;
+    OSL_TRACE("PlfKme::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    Tcg255SubStruct::Read( rS );
+    rS >> iMac;
     if ( iMac )
     {
         rgkme = new Kme[ iMac ];
         for( sal_Int32 index=0; index<iMac; ++index )
         {
-            if ( !rgkme[ index ].Read( pS ) )
+            if ( !rgkme[ index ].Read( rS ) )
                 return false;
         }
     }
@@ -1090,12 +1090,12 @@ TcgSttbf::TcgSttbf( bool bReadId ) : Tcg255SubStruct( bReadId )
 {
 }
 
-bool TcgSttbf::Read( SvStream *pS)
+bool TcgSttbf::Read( SvStream &rS)
 {
-    OSL_TRACE("TcgSttbf::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    Tcg255SubStruct::Read( pS );
-    return sttbf.Read( pS );
+    OSL_TRACE("TcgSttbf::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    Tcg255SubStruct::Read( rS );
+    return sttbf.Read( rS );
 }
 
 void TcgSttbf::Print( FILE* fp )
@@ -1118,19 +1118,19 @@ TcgSttbfCore::~TcgSttbfCore()
         delete[] dataItems;
 }
 
-bool TcgSttbfCore::Read( SvStream* pS )
+bool TcgSttbfCore::Read( SvStream& rS )
 {
-    OSL_TRACE("TcgSttbfCore::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> fExtend >> cData >> cbExtra;
+    OSL_TRACE("TcgSttbfCore::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> fExtend >> cData >> cbExtra;
     if ( cData )
     {
         dataItems = new SBBItem[ cData ];
         for ( sal_Int32 index = 0; index < cData; ++index )
         {
-            *pS >> dataItems[ index ].cchData;
-            dataItems[ index ].data = readUnicodeString( pS, dataItems[ index ].cchData );
-            *pS >> dataItems[ index ].extraData;
+            rS >> dataItems[ index ].cchData;
+            dataItems[ index ].data = read_LEuInt16s_AsOUString(rS, dataItems[index].cchData);
+            rS >> dataItems[ index ].extraData;
         }
     }
     return true;
@@ -1163,18 +1163,18 @@ MacroNames::~MacroNames()
         delete[] rgNames;
 }
 
-bool MacroNames::Read( SvStream *pS)
+bool MacroNames::Read( SvStream &rS)
 {
-    OSL_TRACE("MacroNames::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    Tcg255SubStruct::Read( pS );
-    *pS >> iMac;
+    OSL_TRACE("MacroNames::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    Tcg255SubStruct::Read( rS );
+    rS >> iMac;
     if ( iMac )
     {
         rgNames = new MacroName[ iMac ];
         for ( sal_Int32 index = 0; index < iMac; ++index )
         {
-            if ( !rgNames[ index ].Read( pS ) )
+            if ( !rgNames[ index ].Read( rS ) )
                 return false;
         }
     }
@@ -1200,12 +1200,12 @@ MacroName::MacroName():ibst(0)
 }
 
 
-bool MacroName::Read(SvStream *pS)
+bool MacroName::Read(SvStream &rS)
 {
-    OSL_TRACE("MacroName::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> ibst;
-    return xstz.Read( pS );
+    OSL_TRACE("MacroName::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> ibst;
+    return xstz.Read( rS );
 }
 
 void MacroName::Print( FILE* fp )
@@ -1223,13 +1223,13 @@ Xstz::Xstz():chTerm(0)
 }
 
 bool
-Xstz::Read(SvStream *pS)
+Xstz::Read(SvStream &rS)
 {
-    OSL_TRACE("Xstz::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    if ( !xst.Read( pS ) )
+    OSL_TRACE("Xstz::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    if ( !xst.Read( rS ) )
         return false;
-    *pS >> chTerm;
+    rS >> chTerm;
     if ( chTerm != 0 ) // should be an assert
         return false;
     return true;
@@ -1258,11 +1258,11 @@ Kme::~Kme()
 }
 
 bool
-Kme::Read(SvStream *pS)
+Kme::Read(SvStream &rS)
 {
-    OSL_TRACE("Kme::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> reserved1 >> reserved2 >> kcm1 >> kcm2 >> kt >> param;
+    OSL_TRACE("Kme::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> reserved1 >> reserved2 >> kcm1 >> kcm2 >> kt >> param;
     return true;
 }
 
@@ -1284,11 +1284,11 @@ Acd::Acd() : ibst( 0 )
 {
 }
 
-bool Acd::Read(SvStream *pS)
+bool Acd::Read(SvStream &rS)
 {
-    OSL_TRACE("Acd::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> ibst >> fciBasedOnABC;
+    OSL_TRACE("Acd::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> ibst >> fciBasedOnABC;
     return true;
 }
 
@@ -1313,12 +1313,12 @@ MCD::MCD() :  reserved1(0x56)
 {
 }
 
-bool  MCD::Read(SvStream *pS)
+bool  MCD::Read(SvStream &rS)
 {
-    OSL_TRACE("MCD::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> reserved1 >> reserved2 >> ibst >> ibstName >> reserved3;
-    *pS >> reserved4 >> reserved5 >> reserved6 >> reserved7;
+    OSL_TRACE("MCD::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> reserved1 >> reserved2 >> ibst >> ibstName >> reserved3;
+    rS >> reserved4 >> reserved5 >> reserved6 >> reserved7;
     return true;
 }
 

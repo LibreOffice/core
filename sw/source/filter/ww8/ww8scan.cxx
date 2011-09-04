@@ -2006,7 +2006,7 @@ xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
         else
         {
             // Alloc method automatically sets Zero at the end
-            rtl::OString aByteStr = readBytesAsOString(rStrm, nLen);
+            rtl::OString aByteStr = read_uInt8s_AsOString(rStrm, nLen);
             rStr.Append(String(rtl::OStringToOUString(aByteStr, eEnc)));
         }
         nTotalRead  += nLen;
@@ -3910,7 +3910,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                 {
                     sal_uInt8 nBChar(0);
                     rStrm >> nBChar;
-                    rtl::OString aTmp = readBytesAsOString(rStrm, nBChar);
+                    rtl::OString aTmp = read_uInt8s_AsOString(rStrm, nBChar);
                     rArray.push_back(rtl::OStringToOUString(aTmp, eCS));
                 }
 
@@ -3943,7 +3943,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                     {
                         sal_uInt8 nBChar(0);
                         rStrm >> nBChar;
-                        rtl::OString aTmp = readBytesAsOString(rStrm, nBChar);
+                        rtl::OString aTmp = read_uInt8s_AsOString(rStrm, nBChar);
                         pValueArray->push_back(rtl::OStringToOUString(aTmp, eCS));
                     }
                 }
@@ -3969,7 +3969,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                 ++nRead;
                 if (nBChar)
                 {
-                    rtl::OString aTmp = readBytesAsOString(rStrm, nBChar);
+                    rtl::OString aTmp = read_uInt8s_AsOString(rStrm, nBChar);
                     nRead += aTmp.getLength();
                     rArray.push_back(rtl::OStringToOUString(aTmp, eCS));
                 }

@@ -4337,7 +4337,7 @@ void WW8RStyle::ImportOldFormatStyles()
             }
             else               // user style
             {
-                rtl::OString aTmp = readBytesAsOString(rSt, nCount);
+                rtl::OString aTmp = read_uInt8s_AsOString(rSt, nCount);
                 nByteCount += aTmp.getLength();
                 sName = rtl::OStringToOUString(aTmp, eStructChrSet);
             }

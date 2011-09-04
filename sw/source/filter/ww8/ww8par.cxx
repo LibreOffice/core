@@ -257,7 +257,7 @@ struct SBBItem
 public:
     Sttb();
     ~Sttb();
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* fp );
     rtl::OUString getStringAtIndex( sal_uInt32 );
 };
@@ -272,18 +272,18 @@ Sttb::~Sttb()
 {
 }
 
-bool Sttb::Read( SvStream* pS )
+bool Sttb::Read( SvStream& rS )
 {
-    OSL_TRACE("Sttb::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> fExtend >> cData >> cbExtra;
+    OSL_TRACE("Sttb::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> fExtend >> cData >> cbExtra;
     if ( cData )
     {
         for ( sal_Int32 index = 0; index < cData; ++index )
         {
             SBBItem aItem;
-            *pS >> aItem.cchData;
-            aItem.data = readUnicodeString( pS, aItem.cchData );
+            rS >> aItem.cchData;
+            aItem.data = read_LEuInt16s_AsOUString(rS, aItem.cchData);
             dataItems.push_back( aItem );
         }
     }
@@ -4189,7 +4189,7 @@ void SwWW8ImplReader::ReadDocInfo()
                 long nCur = pTableStream->Tell();
                 Sttb aSttb;
                 pTableStream->Seek( pWwFib->fcSttbfAssoc ); // point at tgc record
-                if (!aSttb.Read( pTableStream ) )
+                if (!aSttb.Read( *pTableStream ) )
                     OSL_TRACE("** Read of SttbAssoc data failed!!!! ");
                 pTableStream->Seek( nCur ); // return to previous position, is that necessary?
 #if DEBUG
@@ -4263,7 +4263,7 @@ bool WW8Customizations::Import( SwDocShell* pShell )
     Tcg aTCG;
     long nCur = mpTableStream->Tell();
     mpTableStream->Seek( mWw8Fib.fcCmds ); // point at tgc record
-    bool bReadResult = aTCG.Read( mpTableStream );
+    bool bReadResult = aTCG.Read( *mpTableStream );
     mpTableStream->Seek( nCur ); // return to previous position, is that necessary?
     if ( !bReadResult )
     {

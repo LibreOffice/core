@@ -127,18 +127,18 @@ namespace
         char foo[] = "foobar";
         SvMemoryStream aMemStream(RTL_CONSTASCII_STRINGPARAM(foo), STREAM_READ);
 
-        rtl::OString aOne = readBytesAsOString(aMemStream, 3);
+        rtl::OString aOne = read_uInt8s_AsOString(aMemStream, 3);
         CPPUNIT_ASSERT(aOne.equalsL(RTL_CONSTASCII_STRINGPARAM("foo")));
 
-        rtl::OString aTwo = readBytesAsOString(aMemStream, 3);
+        rtl::OString aTwo = read_uInt8s_AsOString(aMemStream, 3);
         CPPUNIT_ASSERT(aTwo.equalsL(RTL_CONSTASCII_STRINGPARAM("bar")));
 
-        rtl::OString aThree = readBytesAsOString(aMemStream, 3);
+        rtl::OString aThree = read_uInt8s_AsOString(aMemStream, 3);
         CPPUNIT_ASSERT(!aThree.getLength());
 
         aMemStream.Seek(0);
 
-        rtl::OString aFour = readBytesAsOString(aMemStream, 100);
+        rtl::OString aFour = read_uInt8s_AsOString(aMemStream, 100);
         CPPUNIT_ASSERT(aFour.equalsL(RTL_CONSTASCII_STRINGPARAM(foo)));
     }
 

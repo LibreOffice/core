@@ -87,25 +87,18 @@
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
-#include <svtools/filterutils.hxx>
 // #TODO remove this when oox is used for control/userform import
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XUnitConversion.hpp>
 
-#ifndef C2S
-#define C2S(cChar)  String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
-#endif
 #ifndef C2U
-#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
+#define C2U(cChar)  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 #endif
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace cppu;
-
-
-#define WW8_ASCII2STR(s) String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(s))
 
 static char sWW8_form[] = "WW-Standard";
 
@@ -468,7 +461,7 @@ const uno::Reference< container::XIndexContainer >&
                 return xFormComps;
 
             uno::Reference< uno::XInterface >  xCreate =
-                rServiceFactory->createInstance(WW8_ASCII2STR(
+                rServiceFactory->createInstance(C2U(
                     "com.sun.star.form.component.Form"));
             if( xCreate.is() )
             {
@@ -476,7 +469,7 @@ const uno::Reference< container::XIndexContainer >&
                     uno::UNO_QUERY );
 
                 uno::Any aTmp(&sName,getCppuType((OUString *)0));
-                xFormPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
+                xFormPropSet->setPropertyValue( C2U("Name"), aTmp );
 
                 uno::Reference< form::XForm > xForm( xCreate, uno::UNO_QUERY );
                 DBG_ASSERT(xForm.is(), "keine Form?");
@@ -523,17 +516,17 @@ sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef& rContents,
     sal_uInt32 nOldPos = rContents->Tell();
     rContents->SeekRel(8);
 
-    uno::Any aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
+    uno::Any aTmp = rPropSet->getPropertyValue(C2U("TextColor"));
     if (aTmp.hasValue())
         aTmp >>= mnForeColor;
     *rContents << ExportColor(mnForeColor);
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("BackgroundColor"));
     if (aTmp.hasValue())
         aTmp >>= mnBackColor;
     *rContents << ExportColor(mnBackColor);
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
+    aTmp = rPropSet->getPropertyValue(C2U("Enabled"));
     fEnabled = any2bool(aTmp);
     sal_uInt8 nTemp=0;//fEnabled;
     if (fEnabled)
@@ -544,14 +537,14 @@ sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef& rContents,
     *rContents << sal_uInt8(0x00);
 
     nTemp = 0;
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("MultiLine"));
+    aTmp = rPropSet->getPropertyValue(C2U("MultiLine"));
     fWordWrap = any2bool(aTmp);
     if (fWordWrap)
         nTemp |= 0x80;
     *rContents << nTemp;
     *rContents << sal_uInt8(0x00);
 
-    SvxOcxString aCaption( rPropSet->getPropertyValue(WW8_ASCII2STR("Label")) );
+    SvxOcxString aCaption( rPropSet->getPropertyValue(C2U("Label")) );
     aCaption.WriteLenField( *rContents );
     aCaption.WriteCharArray( *rContents );
 
@@ -561,7 +554,7 @@ sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef& rContents,
     *rContents << rSize.Height;
 
     // "take focus on click" is directly in content flags, not in option field...
-    mbTakeFocus = any2bool( rPropSet->getPropertyValue( WW8_ASCII2STR( "FocusOnClick" ) ) );
+    mbTakeFocus = any2bool( rPropSet->getPropertyValue( C2U( "FocusOnClick" ) ) );
 
     nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
 
@@ -612,13 +605,13 @@ sal_Bool OCX_CommandButton::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2U("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2U("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -631,12 +624,12 @@ sal_Bool OCX_CommandButton::Export(SvStorageRef &rObj,
     };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2U("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2U("contents")));
 
     return WriteContents(xContents,rPropSet,rSize);
 }
@@ -650,12 +643,12 @@ sal_Bool OCX_ImageButton::WriteContents(SvStorageStreamRef &rContents,
     sal_uInt32 nOldPos = rContents->Tell();
     rContents->SeekRel(8);
 
-    uno::Any aTmp=rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
+    uno::Any aTmp=rPropSet->getPropertyValue(C2U("BackgroundColor"));
     if (aTmp.hasValue())
         aTmp >>= mnBackColor;
     *rContents << ExportColor(mnBackColor);
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
+    aTmp = rPropSet->getPropertyValue(C2U("Enabled"));
     fEnabled = any2bool(aTmp);
     sal_uInt8 nTemp=0;//fEnabled;
     if (fEnabled)
@@ -714,13 +707,13 @@ sal_Bool OCX_ImageButton::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2U("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2U("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -733,12 +726,12 @@ sal_Bool OCX_ImageButton::Export(SvStorageRef &rObj,
     };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2U("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2U("contents")));
     return WriteContents(xContents,rPropSet,rSize);
 }
 
@@ -854,10 +847,10 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[6] = 0;
     pBlockFlags[7] = 0;
 
-    uno::Any aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
+    uno::Any aTmp = rPropSet->getPropertyValue(C2U("Enabled"));
     fEnabled = any2bool(aTmp);
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("BackgroundColor"));
     if (aTmp.hasValue())
         aTmp >>= mnBackColor;
     else
@@ -872,7 +865,7 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[0] |= 0x01;
     *rContents << sal_uInt8(0x00);
     nTemp = 0;
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("MultiLine"));
+    aTmp = rPropSet->getPropertyValue(C2U("MultiLine"));
     fWordWrap = any2bool(aTmp);
     if (fWordWrap)
         nTemp |= 0x80;
@@ -882,7 +875,7 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
     *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x02;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("TextColor"));
     if (aTmp.hasValue())
         aTmp >>= mnForeColor;
     *rContents << ExportColor(mnForeColor);
@@ -894,19 +887,19 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
 
     WriteAlign(rContents,4);
     nValueLen = 1|SVX_MSOCX_COMPRESSED;
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultState"));
+    aTmp = rPropSet->getPropertyValue(C2U("DefaultState"));
     sal_Int16 nDefault = sal_Int16();
     aTmp >>= nDefault;
     *rContents << nValueLen;
     pBlockFlags[2] |= 0x40;
 
 
-    SvxOcxString aCaption( rPropSet->getPropertyValue(WW8_ASCII2STR("Label")) );
+    SvxOcxString aCaption( rPropSet->getPropertyValue(C2U("Label")) );
     if (aCaption.HasData())
         pBlockFlags[2] |= 0x80;
     aCaption.WriteLenField( *rContents );
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("VisualEffect"));
+    aTmp = rPropSet->getPropertyValue(C2U("VisualEffect"));
     if (aTmp.hasValue())
     {
         sal_Int16 nApiSpecEffect = sal_Int16();
@@ -974,13 +967,13 @@ sal_Bool OCX_OptionButton::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2U("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2U("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -993,12 +986,12 @@ sal_Bool OCX_OptionButton::Export(SvStorageRef &rObj,
             };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2U("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2U("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -1021,12 +1014,12 @@ sal_Bool OCX_TextBox::WriteContents(SvStorageStreamRef &rContents,
 
 
     sal_uInt8 nTemp=0x19;
-    uno::Any aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
+    uno::Any aTmp = rPropSet->getPropertyValue(C2U("Enabled"));
     fEnabled = any2bool(aTmp);
     if (fEnabled)
         nTemp |= 0x02;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("ReadOnly"));
+    aTmp = rPropSet->getPropertyValue(C2U("ReadOnly"));
     fLocked = any2bool(aTmp);
     if (fLocked)
         nTemp |= 0x04;
@@ -1036,8 +1029,8 @@ sal_Bool OCX_TextBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << sal_uInt8(0x48);
     *rContents << sal_uInt8(0x80);
 
-    fMultiLine = any2bool(rPropSet->getPropertyValue(WW8_ASCII2STR("MultiLine")));
-    fHideSelection = any2bool(rPropSet->getPropertyValue(WW8_ASCII2STR("HideInactiveSelection")));
+    fMultiLine = any2bool(rPropSet->getPropertyValue(C2U("MultiLine")));
+    fHideSelection = any2bool(rPropSet->getPropertyValue(C2U("HideInactiveSelection")));
     nTemp = 0x0C;
     if (fMultiLine)
         nTemp |= 0x80;
@@ -1045,33 +1038,33 @@ sal_Bool OCX_TextBox::WriteContents(SvStorageStreamRef &rContents,
         nTemp |= 0x20;
     *rContents << nTemp;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("BackgroundColor"));
     if (aTmp.hasValue())
         aTmp >>= mnBackColor;
     *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x02;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("TextColor"));
     if (aTmp.hasValue())
         aTmp >>= mnForeColor;
     *rContents << ExportColor(mnForeColor);
     pBlockFlags[0] |= 0x04;
 
-    aTmp = rPropSet->getPropertyValue( WW8_ASCII2STR("MaxTextLen"));
+    aTmp = rPropSet->getPropertyValue( C2U("MaxTextLen"));
     aTmp >>= nMaxLength;
     *rContents << nMaxLength;
     pBlockFlags[0] |= 0x08;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
+    aTmp = rPropSet->getPropertyValue(C2U("Border"));
     sal_Int16 nBorder = sal_Int16();
     aTmp >>= nBorder;
     nSpecialEffect = ExportBorder(nBorder,nBorderStyle);
     *rContents << nBorderStyle;
     pBlockFlags[0] |= 0x10;
 
-    aTmp = rPropSet->getPropertyValue( WW8_ASCII2STR("HScroll"));
+    aTmp = rPropSet->getPropertyValue( C2U("HScroll"));
     sal_Bool bTemp1 = any2bool(aTmp);
-    aTmp = rPropSet->getPropertyValue( WW8_ASCII2STR("VScroll"));
+    aTmp = rPropSet->getPropertyValue( C2U("VScroll"));
     sal_Bool bTemp2 = any2bool(aTmp);
     if (!bTemp1 && !bTemp2)
         nScrollBars =0;
@@ -1084,20 +1077,20 @@ sal_Bool OCX_TextBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nScrollBars;
     pBlockFlags[0] |= 0x20;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("EchoChar"));
+    aTmp = rPropSet->getPropertyValue(C2U("EchoChar"));
     sal_uInt16 nTmp = sal_uInt16();
     aTmp >>= nTmp;
     nPasswordChar = static_cast<sal_uInt8>(nTmp);
     *rContents << nPasswordChar;
     pBlockFlags[1] |= 0x02;
 
-    SvxOcxString aValue( rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultText")) );
+    SvxOcxString aValue( rPropSet->getPropertyValue(C2U("DefaultText")) );
     aValue.WriteLenField( *rContents );
     if (aValue.HasData())
         pBlockFlags[2] |= 0x40;
 
     WriteAlign(rContents,4);
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BorderColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("BorderColor"));
     if (aTmp.hasValue())
         aTmp >>= nBorderColor;
     *rContents << ExportColor(nBorderColor);
@@ -1160,13 +1153,13 @@ sal_Bool OCX_TextBox::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2U("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2U("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -1178,12 +1171,12 @@ sal_Bool OCX_TextBox::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2U("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2U("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -1206,12 +1199,12 @@ sal_Bool OCX_FieldControl::WriteContents(SvStorageStreamRef &rContents,
 
 
     sal_uInt8 nTemp=0x19;
-    uno::Any aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
+    uno::Any aTmp = rPropSet->getPropertyValue(C2U("Enabled"));
     fEnabled = any2bool(aTmp);
     if (fEnabled)
         nTemp |= 0x02;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("ReadOnly"));
+    aTmp = rPropSet->getPropertyValue(C2U("ReadOnly"));
     fLocked = any2bool(aTmp);
     if (fLocked)
         nTemp |= 0x04;
@@ -1224,19 +1217,19 @@ sal_Bool OCX_FieldControl::WriteContents(SvStorageStreamRef &rContents,
     nTemp = 0x2C;
     *rContents << nTemp;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("BackgroundColor"));
     if (aTmp.hasValue())
         aTmp >>= mnBackColor;
     *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x02;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("TextColor"));
     if (aTmp.hasValue())
         aTmp >>= mnForeColor;
     *rContents << ExportColor(mnForeColor);
     pBlockFlags[0] |= 0x04;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
+    aTmp = rPropSet->getPropertyValue(C2U("Border"));
     sal_Int16 nBorder = sal_Int16();
     aTmp >>= nBorder;
     nSpecialEffect = ExportBorder(nBorder,nBorderStyle);
@@ -1244,7 +1237,7 @@ sal_Bool OCX_FieldControl::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[0] |= 0x10;
 
 #if 0 //Each control has a different Value format, and how to convert each to text has to be found out
-    SvxOcxString aValue( rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultText")) );
+    SvxOcxString aValue( rPropSet->getPropertyValue(C2U("DefaultText")) );
     aValue.WriteLenField( *rContents );
     if (aValue.HasData())
         pBlockFlags[2] |= 0x40;
@@ -1308,13 +1301,13 @@ sal_Bool OCX_FieldControl::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2U("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2U("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -1326,12 +1319,12 @@ sal_Bool OCX_FieldControl::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2U("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2U("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -1359,13 +1352,13 @@ sal_Bool OCX_ToggleButton::Export(
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2U("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2U("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -1378,12 +1371,12 @@ sal_Bool OCX_ToggleButton::Export(
     };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2U("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2U("contents")));
 
     return WriteContents(xContents,rPropSet,rSize);
 }
@@ -1405,7 +1398,7 @@ sal_Bool OCX_ToggleButton::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[6] = 0;
     pBlockFlags[7] = 0;
 
-    uno::Any aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
+    uno::Any aTmp = rPropSet->getPropertyValue(C2U("Enabled"));
     fEnabled = any2bool(aTmp);
 
     sal_uInt8 nTemp=fEnabled;
@@ -1417,20 +1410,20 @@ sal_Bool OCX_ToggleButton::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[0] |= 0x01;
     *rContents << sal_uInt8(0x00);
     nTemp = 0;
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("MultiLine"));
+    aTmp = rPropSet->getPropertyValue(C2U("MultiLine"));
     fWordWrap = any2bool(aTmp);
     if (fWordWrap)
         nTemp |= 0x80;
     *rContents << nTemp;
     *rContents << sal_uInt8(0x00);
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("BackgroundColor"));
     if (aTmp.hasValue())
         aTmp >>= mnBackColor;
     *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x02;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("TextColor"));
     if (aTmp.hasValue())
         aTmp >>= mnForeColor;
     *rContents << ExportColor(mnForeColor);
@@ -1443,12 +1436,12 @@ sal_Bool OCX_ToggleButton::WriteContents(SvStorageStreamRef &rContents,
     WriteAlign(rContents,4);
     nValueLen = 1|SVX_MSOCX_COMPRESSED;
     bool bDefault = false;
-    rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultState")) >>= bDefault;
+    rPropSet->getPropertyValue(C2U("DefaultState")) >>= bDefault;
     sal_uInt8 nDefault = static_cast< sal_uInt8 >( bDefault ? '1' : '0' );
     *rContents << nValueLen;
     pBlockFlags[2] |= 0x40;
 
-    SvxOcxString aCaption( rPropSet->getPropertyValue(WW8_ASCII2STR("Label")) );
+    SvxOcxString aCaption( rPropSet->getPropertyValue(C2U("Label")) );
     aCaption.WriteLenField( *rContents );
     if (aCaption.HasData())
         pBlockFlags[2] |= 0x80;
@@ -1502,12 +1495,12 @@ sal_Bool OCX_ComboBox::WriteContents(SvStorageStreamRef &rContents,
 
 
     sal_uInt8 nTemp=0x19;//fEnabled;
-    uno::Any aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
+    uno::Any aTmp = rPropSet->getPropertyValue(C2U("Enabled"));
     fEnabled = any2bool(aTmp);
     if (fEnabled)
         nTemp |= 0x02;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("ReadOnly"));
+    aTmp = rPropSet->getPropertyValue(C2U("ReadOnly"));
     fLocked = any2bool(aTmp);
     if (fLocked)
         nTemp |= 0x04;
@@ -1518,24 +1511,24 @@ sal_Bool OCX_ComboBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << sal_uInt8(0x80);
 
     nTemp = 0x0C;
-    fHideSelection = any2bool(rPropSet->getPropertyValue(WW8_ASCII2STR("HideInactiveSelection")));
+    fHideSelection = any2bool(rPropSet->getPropertyValue(C2U("HideInactiveSelection")));
     if( fHideSelection )
         nTemp |= 0x20;
     *rContents << nTemp;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("BackgroundColor"));
     if (aTmp.hasValue())
         aTmp >>= mnBackColor;
     *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x02;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("TextColor"));
     if (aTmp.hasValue())
         aTmp >>= mnForeColor;
     *rContents << ExportColor(mnForeColor);
     pBlockFlags[0] |= 0x04;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
+    aTmp = rPropSet->getPropertyValue(C2U("Border"));
     sal_Int16 nBorder = sal_Int16();
     aTmp >>= nBorder;
     nSpecialEffect = ExportBorder(nBorder,nBorderStyle);
@@ -1548,7 +1541,7 @@ sal_Bool OCX_ComboBox::WriteContents(SvStorageStreamRef &rContents,
 
     WriteAlign(rContents,2);
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("LineCount"));
+    aTmp = rPropSet->getPropertyValue(C2U("LineCount"));
     aTmp >>= nListRows;
     *rContents << nListRows;
     pBlockFlags[1] |= 0x40;
@@ -1556,20 +1549,20 @@ sal_Bool OCX_ComboBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << sal_uInt8(1); //DefaultSelected One
     pBlockFlags[2] |= 0x01;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Dropdown"));
+    aTmp = rPropSet->getPropertyValue(C2U("Dropdown"));
     nDropButtonStyle = any2bool(aTmp);
     if (nDropButtonStyle)
         nDropButtonStyle=0x02;
     *rContents << nDropButtonStyle;
     pBlockFlags[2] |= 0x04;
 
-    SvxOcxString aValue( rPropSet->getPropertyValue(WW8_ASCII2STR("Text")) );
+    SvxOcxString aValue( rPropSet->getPropertyValue(C2U("Text")) );
     aValue.WriteLenField( *rContents );
     if (aValue.HasData())
         pBlockFlags[2] |= 0x40;
 
     WriteAlign(rContents,4);
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BorderColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("BorderColor"));
     if (aTmp.hasValue())
         aTmp >>= nBorderColor;
     *rContents << ExportColor(nBorderColor);
@@ -1632,13 +1625,13 @@ sal_Bool OCX_ComboBox::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2U("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2U("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -1650,12 +1643,12 @@ sal_Bool OCX_ComboBox::Export(SvStorageRef &rObj,
     };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2U("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2U("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -1676,13 +1669,13 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[6] = 0;
     pBlockFlags[7] = 0;
 
-    uno::Any aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
+    uno::Any aTmp = rPropSet->getPropertyValue(C2U("Enabled"));
     fEnabled = any2bool(aTmp);
     sal_uInt8 nTemp=fEnabled;
     if (fEnabled)
         nTemp = nTemp << 1;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("ReadOnly"));
+    aTmp = rPropSet->getPropertyValue(C2U("ReadOnly"));
     fLocked = any2bool(aTmp);
     if (fLocked)
         nTemp |= 0x04;
@@ -1693,19 +1686,19 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << sal_uInt8(0x00);
     *rContents << sal_uInt8(0x00);
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("BackgroundColor"));
     if (aTmp.hasValue())
         aTmp >>= mnBackColor;
     *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x02;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("TextColor"));
     if (aTmp.hasValue())
         aTmp >>= mnForeColor;
     *rContents << ExportColor(mnForeColor);
     pBlockFlags[0] |= 0x04;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
+    aTmp = rPropSet->getPropertyValue(C2U("Border"));
     sal_Int16 nBorder = sal_Int16();
     aTmp >>= nBorder;
     nSpecialEffect = ExportBorder(nBorder,nBorderStyle);
@@ -1713,7 +1706,7 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nBorderStyle;
     pBlockFlags[0] |= 0x10;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("MultiSelection"));
+    aTmp = rPropSet->getPropertyValue(C2U("MultiSelection"));
     nMultiState = any2bool(aTmp);
 
     if (nMultiState)
@@ -1730,7 +1723,7 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     WriteAlign(rContents,4);
 
 #if 0
-    SvxOcxString aValue( rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultText")) );
+    SvxOcxString aValue( rPropSet->getPropertyValue(C2U("DefaultText")) );
     aValue.WriteLenField( *rContents );
     if (aValue.HasData())
         pBlockFlags[2] |= 0x40;
@@ -1739,7 +1732,7 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
 #endif
 
     WriteAlign(rContents,4);
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BorderColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("BorderColor"));
     if (aTmp.hasValue())
         aTmp >>= nBorderColor;
     *rContents << ExportColor(nBorderColor);
@@ -1803,13 +1796,13 @@ sal_Bool OCX_ListBox::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2U("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2U("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -1821,12 +1814,12 @@ sal_Bool OCX_ListBox::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2U("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2U("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -1842,19 +1835,19 @@ sal_Bool OCX_Label::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[2] = 0;
     pBlockFlags[3] = 0;
 
-    uno::Any aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
+    uno::Any aTmp = rPropSet->getPropertyValue(C2U("TextColor"));
     if (aTmp.hasValue())
         aTmp >>= mnForeColor;
     *rContents << ExportColor(mnForeColor);
     pBlockFlags[0] |= 0x01;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("BackgroundColor"));
     if (aTmp.hasValue())
         aTmp >>= mnBackColor;
     *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x02;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
+    aTmp = rPropSet->getPropertyValue(C2U("Enabled"));
     fEnabled = any2bool(aTmp);
     sal_uInt8 nTemp=fEnabled;
     if (fEnabled)
@@ -1862,7 +1855,7 @@ sal_Bool OCX_Label::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nTemp;
     *rContents << sal_uInt8(0x00);
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("MultiLine"));
+    aTmp = rPropSet->getPropertyValue(C2U("MultiLine"));
     fWordWrap = any2bool(aTmp);
     nTemp=fWordWrap;
     nTemp = nTemp << 7;
@@ -1870,19 +1863,19 @@ sal_Bool OCX_Label::WriteContents(SvStorageStreamRef &rContents,
     *rContents << sal_uInt8(0x00);
     pBlockFlags[0] |= 0x04;
 
-    SvxOcxString aCaption( rPropSet->getPropertyValue(WW8_ASCII2STR("Label")) );
+    SvxOcxString aCaption( rPropSet->getPropertyValue(C2U("Label")) );
     aCaption.WriteLenField( *rContents );
     if (aCaption.HasData())
         pBlockFlags[0] |= 0x08;
 
     WriteAlign(rContents,4);
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BorderColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("BorderColor"));
     if (aTmp.hasValue())
         aTmp >>= nBorderColor;
     *rContents << ExportColor(nBorderColor);
     pBlockFlags[0] |= 0x80;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
+    aTmp = rPropSet->getPropertyValue(C2U("Border"));
     sal_Int16 nBorder = sal_Int16();
     aTmp >>= nBorder;
     sal_uInt8 nNewBorder;
@@ -1940,13 +1933,13 @@ sal_Bool OCX_Label::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2U("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2U("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -1957,12 +1950,12 @@ sal_Bool OCX_Label::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2U("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2U("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -2104,7 +2097,7 @@ OCX_Control * SvxMSConvertOCXControls::OCX_Factory(
     // distinguish between push button and toggle button
     if( nClassId == form::FormComponentType::COMMANDBUTTON )
     {
-        pEntry = any2bool(xPropSet->getPropertyValue(WW8_ASCII2STR("Toggle"))) ?
+        pEntry = any2bool(xPropSet->getPropertyValue(C2U("Toggle"))) ?
             (aOCXTab + 1) : aOCXTab;
     }
     else
@@ -2150,7 +2143,7 @@ sal_Bool SvxMSConvertOCXControls::WriteOCXStream( SvStorageRef& rSrc1,
 
         /* #117832# - also enable export of control name  */
         OUString sCName;
-        xPropSet->getPropertyValue(C2S("Name")) >>= sCName;
+        xPropSet->getPropertyValue(C2U("Name")) >>= sCName;
         pObj->sName = sCName;
 
         SvGlobalName aName;
@@ -2165,7 +2158,7 @@ sal_Bool SvxMSConvertOCXControls::WriteOCXStream( SvStorageRef& rSrc1,
         // cmc
 
         bRet = pObj->Export(rSrc1,xPropSet,rSize);
-        SvStorageStreamRef xStor2( rSrc1->OpenSotStream( WW8_ASCII2STR("\3OCXNAME")));
+        SvStorageStreamRef xStor2( rSrc1->OpenSotStream( C2U("\3OCXNAME")));
         /* #117832# - also enable export of control name  */
         writeOCXNAME( sCName, xStor2 );
         delete pObj;
@@ -2228,10 +2221,10 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[6] = 0;
     pBlockFlags[7] = 0;
 
-    uno::Any aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
+    uno::Any aTmp = rPropSet->getPropertyValue(C2U("Enabled"));
     fEnabled = any2bool(aTmp);
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("BackgroundColor"));
     fBackStyle = aTmp.hasValue() ? 1 : 0;
     if (fBackStyle)
         aTmp >>= mnBackColor;
@@ -2245,7 +2238,7 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[0] |= 0x01;
     *rContents << sal_uInt8(0x00);
     nTemp = 0;
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("MultiLine"));
+    aTmp = rPropSet->getPropertyValue(C2U("MultiLine"));
     fWordWrap = any2bool(aTmp);
     if (fWordWrap)
         nTemp |= 0x80;
@@ -2255,7 +2248,7 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x02;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
+    aTmp = rPropSet->getPropertyValue(C2U("TextColor"));
     if (aTmp.hasValue())
         aTmp >>= mnForeColor;
     *rContents << ExportColor(mnForeColor);
@@ -2265,25 +2258,25 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nStyle;
     pBlockFlags[0] |= 0x40;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TriState"));
+    aTmp = rPropSet->getPropertyValue(C2U("TriState"));
     nMultiState = any2bool(aTmp);
     *rContents << nMultiState;
     pBlockFlags[2] |= 0x20;
 
     WriteAlign(rContents,4);
     nValueLen = 1|SVX_MSOCX_COMPRESSED;
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultState"));
+    aTmp = rPropSet->getPropertyValue(C2U("DefaultState"));
     sal_Int16 nDefault = sal_Int16();
     aTmp >>= nDefault;
     *rContents << nValueLen;
     pBlockFlags[2] |= 0x40;
 
-    SvxOcxString aCaption( rPropSet->getPropertyValue(WW8_ASCII2STR("Label")) );
+    SvxOcxString aCaption( rPropSet->getPropertyValue(C2U("Label")) );
     aCaption.WriteLenField( *rContents );
     if (aCaption.HasData())
         pBlockFlags[2] |= 0x80;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("VisualEffect"));
+    aTmp = rPropSet->getPropertyValue(C2U("VisualEffect"));
     if (aTmp.hasValue())
     {
         sal_Int16 nApiSpecEffect = sal_Int16();
@@ -2350,13 +2343,13 @@ sal_Bool OCX_CheckBox::Export(SvStorageRef &rObj,
     };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2U("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2U("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -2367,12 +2360,12 @@ sal_Bool OCX_CheckBox::Export(SvStorageRef &rObj,
         0x31, 0x00, 0x00, 0x00, 0x00, 0x00
         };
     {
-    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2U("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2U("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -2387,7 +2380,7 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
     uno::Any aTmp;
 
     if (bHasFont)
-        aFontName = rPropSet->getPropertyValue(WW8_ASCII2STR("FontName"));
+        aFontName = rPropSet->getPropertyValue(C2U("FontName"));
     if (!aFontName.HasData())
         aFontName = OUString( RTL_CONSTASCII_USTRINGPARAM( "Times New Roman" ) );
     aFontName.WriteLenField( *rContent );
@@ -2395,7 +2388,7 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
 
     if (bHasFont)
     {
-        aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("FontWeight"));
+        aTmp = rPropSet->getPropertyValue(C2U("FontWeight"));
         float nBold = 0;
         aTmp >>= nBold;
 
@@ -2410,7 +2403,7 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
             *rContent << nTmp;
         }
 
-        aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("FontHeight"));
+        aTmp = rPropSet->getPropertyValue(C2U("FontHeight"));
         float nFontHeight = 0;
         aTmp >>= nFontHeight;
         if (nFontHeight)
@@ -2430,7 +2423,7 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
 
             nFlags |= 0x20; // ?
 
-            aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Align"));
+            aTmp = rPropSet->getPropertyValue(C2U("Align"));
             nFlags |= 0x40;
             sal_Int16 nAlign(0);
             if (aTmp.hasValue())
@@ -2470,14 +2463,14 @@ sal_Bool OCX_Image::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[3] = 0;
 
     uno::Any aTmp = rPropSet->getPropertyValue(
-        WW8_ASCII2STR("BackgroundColor"));
+        C2U("BackgroundColor"));
     if (aTmp.hasValue())
         aTmp >>= mnBackColor;
     *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x10;
 
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
+    aTmp = rPropSet->getPropertyValue(C2U("Border"));
     sal_Int16 nBorder = sal_Int16();
     aTmp >>= nBorder;
     nSpecialEffect = ExportBorder(nBorder,nBorderStyle);
@@ -2489,7 +2482,7 @@ sal_Bool OCX_Image::WriteContents(SvStorageStreamRef &rContents,
 
     WriteAlign(rContents,4);
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
+    aTmp = rPropSet->getPropertyValue(C2U("Enabled"));
     fEnabled = any2bool(aTmp);
     if (fEnabled)
     {
@@ -2501,7 +2494,7 @@ sal_Bool OCX_Image::WriteContents(SvStorageStreamRef &rContents,
         *rContents << sal_uInt8(0x00);
     }
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("ImageURL"));
+    aTmp = rPropSet->getPropertyValue(C2U("ImageURL"));
     /*Magically fetch that image and turn it into something that
      *we can store in ms controls, wmf,png,jpg are almost certainly
      *the options we have for export...*/
@@ -2549,13 +2542,13 @@ sal_Bool OCX_Image::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2U("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2U("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -2566,12 +2559,12 @@ sal_Bool OCX_Image::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2U("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2U("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -2627,13 +2620,13 @@ sal_Bool OCX_SpinButton::Export(
     };
 
     {
-        SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
+        SvStorageStreamRef xStor( rObj->OpenSotStream( C2U("\1CompObj")));
         xStor->Write(aCompObj,sizeof(aCompObj));
         DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-        SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
+        SvStorageStreamRef xStor3( rObj->OpenSotStream( C2U("\3ObjInfo")));
         xStor3->Write(aObjInfo,sizeof(aObjInfo));
         DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -2647,12 +2640,12 @@ sal_Bool OCX_SpinButton::Export(
     };
 
     {
-        SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
+        SvStorageStreamRef xStor2( rObj->OpenSotStream( C2U("\3OCXNAME")));
         xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
         DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2U("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -2668,18 +2661,18 @@ sal_Bool OCX_SpinButton::WriteContents(
     nWidth = rSize.Width;
     nHeight = rSize.Height;
 
-    GetInt32Property( mnForeColor, rPropSet, WW8_ASCII2STR( "SymbolColor" ),     0x00000001 );
-    GetInt32Property( mnBackColor, rPropSet, WW8_ASCII2STR( "BackgroundColor" ), 0x00000002 );
-    GetBoolProperty(  mbEnabled,   rPropSet, WW8_ASCII2STR( "Enabled" ),         0x00000304 );
-    GetInt32Property( mnMin,       rPropSet, WW8_ASCII2STR( "SpinValueMin" ),    0x00000020 );
-    GetInt32Property( mnMax,       rPropSet, WW8_ASCII2STR( "SpinValueMax" ),    0x00000040 );
-    GetInt32Property( mnValue,     rPropSet, WW8_ASCII2STR( "SpinValue" ),       0x00000080 );
-    GetInt32Property( mnSmallStep, rPropSet, WW8_ASCII2STR( "SpinIncrement" ),   0x00000800 );
-    GetInt32Property( mnDelay,     rPropSet, WW8_ASCII2STR( "RepeatDelay" ),     0x00008000 );
+    GetInt32Property( mnForeColor, rPropSet, C2U( "SymbolColor" ),     0x00000001 );
+    GetInt32Property( mnBackColor, rPropSet, C2U( "BackgroundColor" ), 0x00000002 );
+    GetBoolProperty(  mbEnabled,   rPropSet, C2U( "Enabled" ),         0x00000304 );
+    GetInt32Property( mnMin,       rPropSet, C2U( "SpinValueMin" ),    0x00000020 );
+    GetInt32Property( mnMax,       rPropSet, C2U( "SpinValueMax" ),    0x00000040 );
+    GetInt32Property( mnValue,     rPropSet, C2U( "SpinValue" ),       0x00000080 );
+    GetInt32Property( mnSmallStep, rPropSet, C2U( "SpinIncrement" ),   0x00000800 );
+    GetInt32Property( mnDelay,     rPropSet, C2U( "RepeatDelay" ),     0x00008000 );
 
     namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
     sal_Int16 nApiOrient = sal_Int16();
-    if( rPropSet->getPropertyValue( WW8_ASCII2STR( "Orientation" ) ) >>= nApiOrient )
+    if( rPropSet->getPropertyValue( C2U( "Orientation" ) ) >>= nApiOrient )
         UpdateInt32Property( mnOrient, (nApiOrient == AwtScrollOrient::VERTICAL) ? 0 : 1, 0x00002000 );
 
     return WriteData( *rObj );
@@ -2800,13 +2793,13 @@ sal_Bool OCX_ScrollBar::Export(
     };
 
     {
-        SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
+        SvStorageStreamRef xStor( rObj->OpenSotStream( C2U("\1CompObj")));
         xStor->Write(aCompObj,sizeof(aCompObj));
         DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-        SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
+        SvStorageStreamRef xStor3( rObj->OpenSotStream( C2U("\3ObjInfo")));
         xStor3->Write(aObjInfo,sizeof(aObjInfo));
         DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -2819,12 +2812,12 @@ sal_Bool OCX_ScrollBar::Export(
     };
 
     {
-        SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
+        SvStorageStreamRef xStor2( rObj->OpenSotStream( C2U("\3OCXNAME")));
         xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
         DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2U("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -2840,19 +2833,19 @@ sal_Bool OCX_ScrollBar::WriteContents(
     nWidth = rSize.Width;
     nHeight = rSize.Height;
 
-    GetInt32Property( mnForeColor, rPropSet, WW8_ASCII2STR( "SymbolColor" ),     0x00000001 );
-    GetInt32Property( mnBackColor, rPropSet, WW8_ASCII2STR( "BackgroundColor" ), 0x00000002 );
-    GetBoolProperty(  mbEnabled,   rPropSet, WW8_ASCII2STR( "Enabled" ),         0x00000304 );
-    GetInt32Property( mnMin,       rPropSet, WW8_ASCII2STR( "ScrollValueMin" ),  0x00000020 );
-    GetInt32Property( mnMax,       rPropSet, WW8_ASCII2STR( "ScrollValueMax" ),  0x00000040 );
-    GetInt32Property( mnValue,     rPropSet, WW8_ASCII2STR( "ScrollValue" ),     0x00000080 );
-    GetInt32Property( mnSmallStep, rPropSet, WW8_ASCII2STR( "LineIncrement" ),   0x00000800 );
-    GetInt32Property( mnPageStep,  rPropSet, WW8_ASCII2STR( "BlockIncrement" ),  0x00001000 );
-    GetInt32Property( mnDelay,     rPropSet, WW8_ASCII2STR( "RepeatDelay" ),     0x00008000 );
+    GetInt32Property( mnForeColor, rPropSet, C2U( "SymbolColor" ),     0x00000001 );
+    GetInt32Property( mnBackColor, rPropSet, C2U( "BackgroundColor" ), 0x00000002 );
+    GetBoolProperty(  mbEnabled,   rPropSet, C2U( "Enabled" ),         0x00000304 );
+    GetInt32Property( mnMin,       rPropSet, C2U( "ScrollValueMin" ),  0x00000020 );
+    GetInt32Property( mnMax,       rPropSet, C2U( "ScrollValueMax" ),  0x00000040 );
+    GetInt32Property( mnValue,     rPropSet, C2U( "ScrollValue" ),     0x00000080 );
+    GetInt32Property( mnSmallStep, rPropSet, C2U( "LineIncrement" ),   0x00000800 );
+    GetInt32Property( mnPageStep,  rPropSet, C2U( "BlockIncrement" ),  0x00001000 );
+    GetInt32Property( mnDelay,     rPropSet, C2U( "RepeatDelay" ),     0x00008000 );
 
     namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
     sal_Int16 nApiOrient = sal_Int16();
-    if( rPropSet->getPropertyValue( WW8_ASCII2STR( "Orientation" ) ) >>= nApiOrient )
+    if( rPropSet->getPropertyValue( C2U( "Orientation" ) ) >>= nApiOrient )
         UpdateInt32Property( mnOrient, (nApiOrient == AwtScrollOrient::VERTICAL) ? 0 : 1, 0x00002000 );
 
     UpdateBoolProperty( mbPropThumb, true, 0x00004000 );
