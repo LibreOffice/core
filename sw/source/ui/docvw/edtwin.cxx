@@ -74,6 +74,8 @@
 #include <editeng/postitem.hxx>
 #include <editeng/protitem.hxx>
 #include <unotools/charclass.hxx>
+#include <basegfx/color/bcolortools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 #include <editeng/acorrcfg.hxx>
 #include <SwSmartTagMgr.hxx>
@@ -5675,6 +5677,106 @@ Selection SwEditWin::GetSurroundingTextSelection() const
 
         return Selection( nPos - nStartPos, nPos - nStartPos );
     }
+}
+
+#define TEXT_PADDING 7
+#define BOX_DISTANCE 10
+
+// the WB_MOVABLE flag is used here to avoid the window to appear on all desktops (on linux)
+// and the WB_OWNERDRAWDECORATION prevents the system to draw the window decorations.
+//
+SwHeaderFooterControl::SwHeaderFooterControl( Window* pParent, const rtl::OUString& sLabel, bool bHeader, Point aOffset, Size aPosOffset ) :
+    FloatingWindow( pParent, WB_SYSTEMWINDOW | WB_NOBORDER | WB_NOSHADOW | WB_MOVEABLE | WB_OWNERDRAWDECORATION  ),
+    m_sText( sLabel ),
+    m_bIsHeader( bHeader ),
+    m_aPosOffset( aPosOffset )
+{
+    // Get the font and configure it
+    Font aFont = GetSettings().GetStyleSettings().GetToolFont();
+    SetZoomedPointFont( aFont );
+
+    // Use pixels for the rest of the drawing
+    SetMapMode( MapMode ( MAP_PIXEL ) );
+
+    // Compute the position & size of the window
+    Rectangle aTextRect;
+    GetTextBoundRect( aTextRect, String( sLabel ) );
+    Rectangle aTextPxRect = LogicToPixel( aTextRect );
+
+    Size aParentSize = pParent->GetSizePixel();
+
+    Size  aBoxSize ( aTextPxRect.GetWidth() + TEXT_PADDING * 2,
+                     aTextPxRect.GetHeight() + TEXT_PADDING  * 2 );
+
+    long nYFooterOff = 0;
+    if ( !bHeader )
+        nYFooterOff = aBoxSize.Height();
+
+    Point aBoxPos( m_aPosOffset.Width() + aOffset.X() - aBoxSize.Width() - BOX_DISTANCE,
+                   m_aPosOffset.Height() + aOffset.Y() - nYFooterOff );
+
+    // Set the position & Size of the window
+    SetPosSizePixel( aBoxPos, aBoxSize );
+
+    // TODO Add the list_add.png picture
+}
+
+void SwHeaderFooterControl::Paint( const Rectangle& rRect )
+{
+    // Colors
+    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
+    basegfx::BColor aHslLine = basegfx::tools::rgb2hsl( aLineColor );
+    double nLuminance = aHslLine.getZ() * 2.5;
+    if ( nLuminance == 0 )
+        nLuminance = 0.5;
+    else if ( nLuminance >= 1.0 )
+        nLuminance = aHslLine.getZ() * 0.4;
+    aHslLine.setZ( nLuminance );
+    basegfx::BColor aFillColor = basegfx::tools::hsl2rgb( aHslLine );
+
+    // Draw the background rect
+    SetFillColor( Color ( aFillColor ) );
+    SetLineColor( Color ( aFillColor ) );
+    DrawRect( rRect );
+
+    // Draw the lines around the rect
+    SetLineColor( Color( aLineColor ) );
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Top() ) );
+    aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Bottom() ) );
+    DrawPolyLine( aPolygon, 1.0 );
+
+    aPolygon.clear();
+    aPolygon.append( basegfx::B2DPoint( rRect.Right(), rRect.Top() ) );
+    aPolygon.append( basegfx::B2DPoint( rRect.Right(), rRect.Bottom() ) );
+    DrawPolyLine( aPolygon, 1.0 );
+
+    long nYLine = rRect.Bottom();
+    if ( !m_bIsHeader )
+        nYLine = rRect.Top();
+    aPolygon.clear();
+    aPolygon.append( basegfx::B2DPoint( rRect.Left(), nYLine ) );
+    aPolygon.append( basegfx::B2DPoint( rRect.Right(), nYLine ) );
+    DrawPolyLine( aPolygon, 1.0 );
+
+
+    // Draw the text
+    SetTextColor( Color( aLineColor ) );
+    DrawText( Point( rRect.Left() + TEXT_PADDING, rRect.Top() + TEXT_PADDING ),
+           String( m_sText ) );
+}
+
+void SwEditWin::AddHeaderFooterControl( const rtl::OUString& sLabel, bool bHeader, Point aOffset )
+{
+    SwHeaderFooterControl::Pointer pNewControl( new SwHeaderFooterControl( this, sLabel, bHeader, aOffset,
+                Size( GetOutOffXPixel(), GetOutOffYPixel() ) ) );
+    pNewControl->Show( );
+    aHeadFootControls.push_back( pNewControl );
+}
+
+void SwEditWin::ClearHeaderFooterControls( )
+{
+    aHeadFootControls.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

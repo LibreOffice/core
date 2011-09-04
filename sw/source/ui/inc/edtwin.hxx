@@ -32,11 +32,14 @@
 #include <tools/link.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/window.hxx>
+#include <vcl/floatwin.hxx>
 #include <svtools/transfer.hxx>
 #include <swevent.hxx>
 
 #define _SVSTDARR_STRINGSISORTDTOR
 #include <svl/svstdarr.hxx>
+
+#include <boost/shared_ptr.hpp>
 
 class   SwWrtShell;
 class   SwView;
@@ -56,6 +59,20 @@ class SdrDropMarkerOverlay;
 /*--------------------------------------------------------------------
     Description:    input window
  --------------------------------------------------------------------*/
+
+class SwHeaderFooterControl : public FloatingWindow
+{
+    const rtl::OUString m_sText;
+    bool m_bIsHeader;
+    Size m_aPosOffset;
+
+public:
+    SwHeaderFooterControl( Window* pParent, const rtl::OUString& sLabel, bool bHeader, Point aOffset, Size aOffsetPos );
+
+    virtual void Paint( const Rectangle& rRect );
+
+    typedef boost::shared_ptr< SwHeaderFooterControl > Pointer;
+};
 
 class SwEditWin: public Window,
                 public DropTargetHelper, public DragSourceHelper
@@ -145,6 +162,8 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
 
     sal_uInt16          nKS_NUMDOWN_Count; // #i23725#
     sal_uInt16          nKS_NUMINDENTINC_Count;
+
+    std::vector< SwHeaderFooterControl::Pointer > aHeadFootControls;
 
     void            LeaveArea(const Point &);
     void            JustifyAreaTimer();
@@ -298,6 +317,9 @@ public:
      */
     void        SetUseInputLanguage( sal_Bool bNew );
     sal_Bool    IsUseInputLanguage() const { return bUseInputLanguage; }
+
+    void AddHeaderFooterControl( const rtl::OUString& sLabel, bool bHeader, Point aOffset );
+    void ClearHeaderFooterControls( );
 
     SwEditWin(Window *pParent, SwView &);
     virtual ~SwEditWin();

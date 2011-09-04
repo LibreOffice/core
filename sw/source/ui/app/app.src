@@ -412,12 +412,12 @@ String STR_EMPTYPAGE
 
 String STR_HEADER
 {
-    Text [ en-US ] = "Header: " ;
+    Text [ en-US ] = "Header (%1)" ;
 };
 
 String STR_FOOTER
 {
-    Text [ en-US ] = "Footer: " ;
+    Text [ en-US ] = "Footer (%1)" ;
 };
 
 QueryBox MSG_CLPBRD_CLEAR
