@@ -79,11 +79,6 @@ Fraction::Fraction(sal_Int32 nNumerator, sal_Int32 nDenominator)
     init(nNumerator, nDenominator);
 }
 
-Fraction::Fraction(const Fraction & a, const Fraction & b)
-{
-    init(a.mnNumerator * b.mnDenominator, a.mnDenominator * b.mnNumerator);
-}
-
 Fraction::~Fraction()
 {
 }

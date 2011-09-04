@@ -167,7 +167,6 @@ public:
     bool isFirstInTable() const;
     const SwNode * getNode() const;
     const SwTableBox * getTableBox() const;
-    const SwTable * getTable() const;
     WW8TableNodeInfo * getNext() const;
     const SwNode * getNextNode() const;
     const SwRect & getRect() const;
@@ -178,8 +177,6 @@ public:
 
     sal_uInt32 getCell() const;
     sal_uInt32 getRow() const;
-
-    ::std::string toString() const;
 
     bool operator < (const WW8TableNodeInfo & rInfo) const;
 };

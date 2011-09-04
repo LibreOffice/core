@@ -112,12 +112,6 @@ sal_Int32 MeasureHandler::getMeasureValue() const
     return nRet;
 }
 
-
-bool MeasureHandler::isAutoWidth() const
-{
-    return sal::static_int_cast<Id>(m_nUnit) == NS_ooxml::LN_Value_ST_TblWidth_auto;
-}
-
 } //namespace dmapper
 } //namespace writerfilter
 

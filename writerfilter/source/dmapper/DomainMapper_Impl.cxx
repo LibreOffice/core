@@ -164,16 +164,6 @@ typedef ::std::map< ::rtl::OUString, FieldConversion>
             FieldConversionMap_t;
 
 
-
-sal_Int32 FIB::GetData( Id nName )
-{
-    if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR)
-        return aFIBData[nName - NS_rtf::LN_WIDENT];
-    OSL_FAIL( "invalid index in FIB");
-    return -1;
-}
-
-
 void FIB::SetData( Id nName, sal_Int32 nValue )
 {
     OSL_ENSURE( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR, "invalid index in FIB");

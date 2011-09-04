@@ -1166,13 +1166,6 @@ static const sal_Char* const aStyleNamePairs[] =
     return sRet;
 }
 
-void StyleSheetTable::resolveSprmProps(Sprm & rSprm)
-{
-    writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-    if( pProperties.get())
-        pProperties->resolve(*this);
-}
-
 void StyleSheetTable::resolveAttributeProperties(Value & val)
 {
     writerfilter::Reference<Properties>::Pointer_t pProperties = val.getProperties();

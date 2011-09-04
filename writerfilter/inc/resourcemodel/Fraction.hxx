@@ -39,7 +39,6 @@ class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Fraction
 {
 public:
     explicit Fraction(sal_Int32 nNumerator, sal_Int32 nDenominator = 1);
-    explicit Fraction(const Fraction & a, const Fraction & b);
     virtual ~Fraction();
 
     void init(sal_Int32 nNumerator, sal_Int32 nDenominator);

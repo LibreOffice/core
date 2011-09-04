@@ -349,32 +349,6 @@ WW8TableNodeInfo::~WW8TableNodeInfo()
 {
 }
 
-::std::string WW8TableNodeInfo::toString() const
-{
-    static char buffer[1024];
-    snprintf(buffer, sizeof(buffer),
-             "<tableNodeInfo p=\"%p\" depth=\"%" SAL_PRIuUINT32 "\">"
-             ,this, getDepth());
-
-    ::std::string sResult(buffer);
-
-    Inners_t::const_iterator aIt(mInners.begin());
-    Inners_t::const_iterator aEnd(mInners.end());
-
-    while (aIt != aEnd)
-    {
-        WW8TableNodeInfoInner::Pointer_t pInner = aIt->second;
-        sResult += pInner->toString();
-
-        aIt++;
-    }
-#if OSL_DEBUG_LEVEL > 1
-    sResult += dbg_out(*mpNode);
-#endif
-    sResult += "</tableNodeInfo>";
-
-    return sResult;
-}
 void WW8TableNodeInfo::setDepth(sal_uInt32 nDepth)
 {
     mnDepth = nDepth;
@@ -506,11 +480,6 @@ const SwNode * WW8TableNodeInfo::getNode() const
 const SwTableBox * WW8TableNodeInfo::getTableBox() const
 {
     return getInnerForDepth(mnDepth)->getTableBox();
-}
-
-const SwTable * WW8TableNodeInfo::getTable() const
-{
-    return getInnerForDepth(mnDepth)->getTable();
 }
 
 WW8TableNodeInfo * WW8TableNodeInfo::getNext() const

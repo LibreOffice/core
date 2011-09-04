@@ -331,21 +331,6 @@ SectionPropertyMap::~SectionPropertyMap()
 }
 
 
-const ::rtl::OUString&  SectionPropertyMap::GetPageStyleName( bool bFirst )
-{
-    return bFirst ? m_sFirstPageStyleName : m_sFollowPageStyleName;
-}
-
-
-void  SectionPropertyMap::SetPageStyleName( bool bFirst, const ::rtl::OUString& rName)
-{
-    if( bFirst )
-        m_sFirstPageStyleName = rName;
-    else
-        m_sFollowPageStyleName = rName;
-}
-
-
 ::rtl::OUString lcl_FindUnusedPageStyleName(const uno::Sequence< ::rtl::OUString >& rPageStyleNames)
 {
     static const sal_Char cDefaultStyle[] = "Converted";

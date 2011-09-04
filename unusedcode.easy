@@ -3144,12 +3144,3 @@ writerfilter::XPathLogger::XPathLogger()
 writerfilter::XPathLogger::endElement()
 writerfilter::XPathLogger::getXPath() const
 writerfilter::XPathLogger::startElement(std::basic_string<char, std::char_traits<char>, std::allocator<char> >)
-writerfilter::dmapper::FIB::GetData(unsigned int)
-writerfilter::dmapper::MeasureHandler::isAutoWidth() const
-writerfilter::dmapper::SectionPropertyMap::GetPageStyleName(bool)
-writerfilter::dmapper::SectionPropertyMap::SetPageStyleName(bool, rtl::OUString const&)
-writerfilter::dmapper::StyleSheetTable::resolveSprmProps(writerfilter::Sprm&)
-writerfilter::ooxml::OOXMLFastContextHandler::getResourceString() const
-writerfilter::resourcemodel::Fraction::Fraction(writerfilter::resourcemodel::Fraction const&, writerfilter::resourcemodel::Fraction const&)
-ww8::WW8TableNodeInfo::getTable() const
-ww8::WW8TableNodeInfo::toString() const
