@@ -48,10 +48,6 @@ private:
     ConvertData*        mpConvertData;
 
 public:
-    SAL_DLLPRIVATE sal_uLong    ImplConvert( sal_uLong nInFormat, void* pInBuffer, sal_uLong nInBufSize,
-                                     void** ppOutBuffer, sal_uLong nOutFormat );
-
-public:
 
                         GraphicConverter();
                         ~GraphicConverter();

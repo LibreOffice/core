@@ -181,7 +181,6 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
         void            ImplConstruct( ParagraphObj& rParagraphObj );
         void            ImplClear();
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
-        ::com::sun::star::awt::Size         ImplMapSize( const ::com::sun::star::awt::Size& rSize );
         void            ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Bool bGetPropStateValue = sal_False );
         void            ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nDepth, sal_Bool bIsBullet, sal_Bool bGetPropStateValue = sal_False );
 

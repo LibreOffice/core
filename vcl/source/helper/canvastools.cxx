@@ -404,12 +404,6 @@ namespace vcl
                          static_cast<long>(rSize.Height + .5) );
         }
 
-        Point pointFromRealPoint2D( const geometry::RealPoint2D& rPoint )
-        {
-            return Point( static_cast<long>(rPoint.X + .5),
-                          static_cast<long>(rPoint.Y + .5) );
-        }
-
         ::Size sizeFromB2DSize( const ::basegfx::B2DVector& rVec )
         {
             return ::Size( FRound( rVec.getX() ),

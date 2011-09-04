@@ -13,37 +13,37 @@ CIccCmm::IsInGamut(float*)
 CIccCmm::ToInternalEncoding(icColorSpaceSignature, float*, unsigned char const*)
 CIccCmm::ToInternalEncoding(icColorSpaceSignature, float*, unsigned short const*)
 CIccFormulaCurveSegment::SetFunction(unsigned short, unsigned char, float*)
-CIccIO::ReadLine(void*, long)
+CIccIO::ReadLine(void*, int)
 CIccInfo::GetSpotShapeName(icSpotShape)
 CIccMBB::NewCLUT(unsigned char*, unsigned char)
-CIccMemIO::Alloc(unsigned long, bool)
+CIccMemIO::Alloc(unsigned int, bool)
 CIccMpeCLUT::SetCLUT(CIccCLUT*)
 CIccMpeCreator::DoGetElementSigName(std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, icElemTypeSignature)
 CIccMpeCurveSet::SetCurve(int, CIccCurveSetCurve*)
 CIccMruCmm::Attach(CIccCmm*, unsigned char)
 CIccNamedColorCmm::CIccNamedColorCmm(icColorSpaceSignature, icColorSpaceSignature, bool)
 CIccNamedColorCmm::SetLastXformDest(icColorSpaceSignature)
-CIccProfile::DeleteTag(unsigned long)
+CIccProfile::DeleteTag(unsigned int)
 CIccProfile::GetSpaceSamples() const
 CIccProfileIdDesc::CIccProfileIdDesc(CIccProfile&)
 CIccProfileIdDesc::CIccProfileIdDesc(icProfileID, CIccTagMultiLocalizedUnicode)
 CIccSegmentedCurve::Insert(CIccCurveSegment*)
 CIccTagCurve::SetGamma(float)
-CIccTagFixedNum<long, (icTagTypeSignature)1936077618>::GetSize() const
-CIccTagFixedNum<unsigned long, (icTagTypeSignature)1969632050>::GetSize() const
+CIccTagFixedNum<int, (icTagTypeSignature)1936077618>::GetSize() const
+CIccTagFixedNum<unsigned int, (icTagTypeSignature)1969632050>::GetSize() const
 CIccTagMultiLocalizedUnicode::SetText(unsigned short const*, unsigned short, unsigned short)
 CIccTagMultiProcessElement::GetElement(int)
 CIccTagNamedColor2::FindRootColor(char const*)
 CIccTagNamedColor2::Lab4ToLab2(float*, float const*)
 CIccTagNamedColor2::NegClip(float)
 CIccTagNum<unsigned char, (icTagTypeSignature)1969827896>::GetSize() const
-CIccTagNum<unsigned long long, (icTagTypeSignature)1969829428>::GetSize() const
-CIccTagNum<unsigned long, (icTagTypeSignature)1969828658>::GetSize() const
+CIccTagNum<unsigned int, (icTagTypeSignature)1969828658>::GetSize() const
+CIccTagNum<unsigned long, (icTagTypeSignature)1969829428>::GetSize() const
 CIccTagNum<unsigned short, (icTagTypeSignature)1969828150>::GetSize() const
 CIccTagProfileSequenceId::AddProfileDescription(CIccProfileIdDesc const&)
 CIccTagProfileSequenceId::GetFirst()
 CIccTagProfileSequenceId::GetLast()
-CIccTagProfileSequenceId::ParseMem(unsigned char*, unsigned long)
+CIccTagProfileSequenceId::ParseMem(unsigned char*, unsigned int)
 CIccTagResponseCurveSet16::GetFirstCurves()
 CIccTagResponseCurveSet16::GetNextCurves()
 CIccTagResponseCurveSet16::NewResponseCurves(icMeasurementUnitSig)
@@ -104,7 +104,6 @@ DdeService::DdeService(String const&)
 DdeTopic::RemoveItem(DdeItem const&)
 DffPropSet::SetPropertyValue(unsigned int, unsigned int) const
 Dialog::Dialog(Window*, ResId const&)
-Dialog::ImplCenterDialog()
 Dialog::IsStartedModal() const
 DirEntry::GetDevice() const
 DlgEdObj::LinkStubOnCreate(void*, void*)
@@ -205,13 +204,11 @@ GalleryExplorer::GetObjCount(unsigned long)
 GalleryExplorer::GetVCDrawModel(FmFormModel&) const
 GalleryExplorer::InsertGraphicObj(unsigned long, Graphic const&)
 GalleryExplorer::InsertSdrObj(unsigned long, FmFormModel&)
-GalleryTheme::ImplRead()
 GraphCtrl::GraphCtrl(Window*, long)
 Graphic::Draw(OutputDevice*, String const&, Font&, Bitmap const&, Point const&, Size const&)
 Graphic::GetGraphicsCompressMode(SvStream&)
 Graphic::StartAnimation(OutputDevice*, Point const&, long, OutputDevice*)
 Graphic::WriteEmbedded(SvStream&)
-GraphicConverter::ImplConvert(unsigned long, void*, unsigned long, void**, unsigned long)
 GraphicReader::IsPreviewModeEnabled() const
 GroupTable::SkipCurrentGroup()
 HTMLControls::Insert(HTMLControl const*&, unsigned short&)
@@ -241,8 +238,6 @@ ImpBitmap::ImplDestroy()
 ImpDefaultMapper::ImpDefaultMapper(com::sun::star::uno::Reference<com::sun::star::beans::XPropertyState>&)
 ImpEditEngine::Repeat(EditView*)
 ImpEditView::CalcSelectedRegion()
-ImpLabelList::ImplFirst()
-ImpLabelList::ImplNext()
 ImpSvMEdit::SetInsertMode(unsigned char)
 ImpSvMEdit::SetTextWindowOffset(Point const&)
 ImpSvlData::~ImpSvlData()
@@ -399,7 +394,6 @@ ParaPortion::DbgCheckTextPortions()
 ParaPortionList::DbgCheck(EditDoc&)
 ParagraphList::GetVisPos(Paragraph*) const
 ParagraphList::PrevVisible(Paragraph*) const
-ParagraphObj::ImplMapSize(com::sun::star::awt::Size const&)
 ParagraphObj::ParagraphObj(ParagraphObj&)
 PathDialog::SetPath(Edit const&)
 PatternBox::GetString(unsigned short) const
@@ -434,7 +428,6 @@ SVGExport::IsUseGradient() const
 SVGExport::popClip()
 SVGExport::pushClip(basegfx::B2DPolyPolygon const&)
 SVGFilter::implImport(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
-SVTXGridControl::ImplGetPropertyIds(std::list<unsigned short, std::allocator<unsigned short> >&)
 SalColormap::SalColormap(BitmapPalette const&)
 SalColormap::SetPalette(BitmapPalette const&)
 SalDisplay::IsLocal()
@@ -1409,7 +1402,6 @@ TEWritingDirectionInfos::Replace(TEWritingDirectionInfo const&, unsigned short)
 TEWritingDirectionInfos::Replace(TEWritingDirectionInfo const*, unsigned short, unsigned short)
 TEWritingDirectionInfos::_ForEach(unsigned short, unsigned short, unsigned char (*)(TEWritingDirectionInfo const&, void*), void*)
 TTProfiler::Dec(unsigned long)
-TaskStatusBar::ImplGetFieldItem(unsigned short) const
 TaskStatusFieldItem::TaskStatusFieldItem()
 TempFile::IsValid() const
 TextObj::TextObj(TextObj&)

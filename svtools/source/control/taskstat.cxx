@@ -174,21 +174,6 @@ IMPL_LINK( TaskStatusBar, ImplTimerHdl, Timer*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-ImplTaskSBFldItem* TaskStatusBar::ImplGetFieldItem( sal_uInt16 nItemId ) const
-{
-    if ( !mpFieldItemList )
-        return NULL;
-
-    for ( size_t i = 0, n = mpFieldItemList->size(); i < n; ++i ) {
-        if ( (*mpFieldItemList)[ i ]->mnId == nItemId ) {
-            return  (*mpFieldItemList)[ i ];
-        }
-    }
-    return NULL;
-}
-
-// -----------------------------------------------------------------------
-
 ImplTaskSBFldItem* TaskStatusBar::ImplGetFieldItem( const Point& rPos, sal_Bool& rFieldRect ) const
 {
     if ( GetItemId( rPos ) == TASKSTATUSBAR_STATUSFIELDID )

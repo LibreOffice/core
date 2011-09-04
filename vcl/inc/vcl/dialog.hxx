@@ -68,7 +68,6 @@ protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void    ImplDialogRes( const ResId& rResId );
-    SAL_DLLPRIVATE void    ImplCenterDialog();
 
 public:
     SAL_DLLPRIVATE sal_Bool    IsInClose() const { return mbInClose; }

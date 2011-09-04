@@ -180,7 +180,6 @@ namespace vcl
         ::com::sun::star::geometry::RealSize2D          VCL_DLLPUBLIC size2DFromSize( const Size& );
 
         Size                                            VCL_DLLPUBLIC sizeFromRealSize2D( const ::com::sun::star::geometry::RealSize2D& );
-        Point                                           VCL_DLLPUBLIC pointFromRealPoint2D( const ::com::sun::star::geometry::RealPoint2D& );
 
         // geometry::Integer
         ::com::sun::star::geometry::IntegerSize2D       VCL_DLLPUBLIC integerSize2DFromSize( const Size& );

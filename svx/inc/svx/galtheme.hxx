@@ -115,7 +115,6 @@ private:
     void                        ImplCreateSvDrawStorage();
     SVX_DLLPUBLIC SgaObject*                    ImplReadSgaObject( GalleryObject* pEntry );
     sal_Bool                    ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry );
-    void                        ImplRead();
     void                        ImplWrite();
     const GalleryObject*        ImplGetGalleryObject( size_t nPos ) const
                                 { return ( nPos < aObjectList.size() ) ? aObjectList[ nPos ] : NULL; }

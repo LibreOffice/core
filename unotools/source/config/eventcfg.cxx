@@ -205,20 +205,6 @@ void GlobalEventConfig_Impl::Commit()
 }
 
 //*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void GlobalEventConfig_Impl::EstablishFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
-{
-    // check if frame already exists inside list
-    // ignore double registrations
-    // every frame must be notified one times only!
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame > xWeak(xFrame);
-    FrameVector::const_iterator pIt = ::std::find(m_lFrames.begin(), m_lFrames.end(), xWeak);
-    if (pIt == m_lFrames.end())
-        m_lFrames.push_back(xWeak);
-}
-
-//*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 void GlobalEventConfig_Impl::initBindingInfo()

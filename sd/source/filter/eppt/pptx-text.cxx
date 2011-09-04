@@ -1213,16 +1213,6 @@ void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
     nBulletId = rParagraphObj.nBulletId;
 }
 
-::com::sun::star::awt::Size ParagraphObj::ImplMapSize( const ::com::sun::star::awt::Size& rSize )
-{
-    Size aSize( OutputDevice::LogicToLogic( Size( rSize.Width, rSize.Height ), maMapModeSrc, maMapModeDest ) );
-    if ( !aSize.Width() )
-        aSize.Width()++;
-    if ( !aSize.Height() )
-        aSize.Height()++;
-    return ::com::sun::star::awt::Size( aSize.Width(), aSize.Height() );
-}
-
 sal_uInt32 ParagraphObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition )
 {
     mnTextSize = 0;

@@ -1161,11 +1161,6 @@ XMLShapePropertySetMapper::XMLShapePropertySetMapper(const UniReference< XMLProp
 {
 }
 
-XMLShapePropertySetMapper::XMLShapePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef, sal_uInt16 nOffset)
-: XMLPropertySetMapper( &aXMLSDProperties[nOffset], rFactoryRef )
-{
-}
-
 XMLShapePropertySetMapper::~XMLShapePropertySetMapper()
 {
 }

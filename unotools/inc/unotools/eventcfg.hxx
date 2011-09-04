@@ -83,7 +83,6 @@ public:
     GlobalEventConfig_Impl( );
     ~GlobalEventConfig_Impl( );
 
-    void EstablishFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
     void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
     void            Commit();
 

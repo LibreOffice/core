@@ -8559,11 +8559,6 @@ void PDFWriterImpl::beginRedirect( SvStream* pStream, const Rectangle& rTargetRe
     m_aCurrentPDFState.m_aFillColor = Color( COL_TRANSPARENT );
 }
 
-Rectangle PDFWriterImpl::getRedirectTargetRect() const
-{
-    return m_aOutputStreams.empty() ? Rectangle() : m_aOutputStreams.front().m_aTargetRect;
-}
-
 SvStream* PDFWriterImpl::endRedirect()
 {
     SvStream* pStream = NULL;
