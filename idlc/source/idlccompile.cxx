@@ -201,14 +201,13 @@ sal_Bool copyFile(const OString* source, const OString& target)
 
     size_t totalSize = 512;
     size_t readSize  = 0;
-    size_t writeSize = 0;
     char   pBuffer[513];
 
     while ( !feof(pSource) )
     {
         if ( (readSize = fread(pBuffer, 1, totalSize, pSource)) > 0 && !ferror(pSource) )
         {
-            if ( (writeSize = fwrite(pBuffer, 1, readSize, pTarget)) != readSize || ferror(pTarget) )
+            if ( (fwrite(pBuffer, 1, readSize, pTarget)) != readSize || ferror(pTarget) )
             {
                 if (source != 0) {
                     fclose(pSource);
