@@ -2,12 +2,6 @@
 
 SHELL=/usr/bin/env bash
 
-ifeq ($(USE_GMAKE),)
-GBUILD_OPT:=
-else
-GBUILD_OPT:=--gmake
-endif
-
 ifeq (@CROSS_COMPILING@,YES)
 CROSS_TOOLSET_RULE:=cross-build-toolset
 else
@@ -17,12 +11,12 @@ endif
 all: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded $(CROSS_TOOLSET_RULE)
 	@. ./Env.Host.sh && \
         cd instsetoo_native && \
-        build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+        build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
 cross-build-toolset:
 	@. ./Env.Build.sh && \
 	cd cross_toolset && \
-	build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+	build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
 install:
 	@. ./Env.Host.sh && \
@@ -43,7 +37,7 @@ dev-install:
 	@. ./Env.Host.sh && \
 	cd smoketestoo_native && \
 		export SAL_USE_VCLPLUGIN="svp" && \
-		build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all:instsetoo_native -- -P@BUILD_MAX_JOBS@ && \
+		build.pl -P@BUILD_NCPUS@ --all:instsetoo_native -- -P@BUILD_MAX_JOBS@ && \
 		cd @abs_builddir@ && ln -s $$SOLARVER/$$INPATH/installation/opt/ install && \
 		echo "" && \
 	$$SOLARENV/bin/linkoo $$SRC_ROOT/install $$SRC_ROOT && \
@@ -101,7 +95,7 @@ check: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ fetch
 	@. ./Env.Host.sh && \
 	cd smoketestoo_native && \
 	export SAL_USE_VCLPLUGIN="svp" && \
-        build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+        build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 	@. ./Env.Host.sh && $$SOLARENV/bin/subsequenttests
 
 id:
@@ -125,7 +119,7 @@ findunusedcode:
 	   source <(sed -e s,$$INPATH,callcatcher,g ./Env.Host.sh) && \
 	   . ./solenv/bin/callcatchEnv.Set.sh && \
 	   cd instsetoo_native && \
-	   build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+	   build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 	@. ./Env.Host.sh && \
 	   source <(sed -e s,$$INPATH,callcatcher,g ./Env.Host.sh) && \
 	   callanalyse \
