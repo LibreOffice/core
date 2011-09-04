@@ -62,6 +62,7 @@
 #include "sfx2/linkmgr.hxx"
 #include "tools/urlobj.hxx"
 #include "unotools/ucbhelper.hxx"
+#include "unotools/localfilehelper.hxx"
 
 #include <memory>
 #include <algorithm>
@@ -2201,6 +2202,10 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
         return NULL;
 
     OUString aOptions = pFileData->maFilterOptions;
+    if ( pFileData->maFilterName.getLength() )
+        rFilter = pFileData->maFilterName;      // don't overwrite stored filter with guessed filter
+    else
+        ScDocumentLoader::GetFilterName(aFile, rFilter, aOptions, true, false);;
     ScDocumentLoader::GetFilterName(aFile, rFilter, aOptions, true, false);
     const SfxFilter* pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName(rFilter);
 
@@ -2267,10 +2272,19 @@ bool ScExternalRefManager::isFileLoadable(const OUString& rFile) const
 
     if (isOwnDocument(rFile))
         return false;
+    String aPhysical;
+    if (utl::LocalFileHelper::ConvertURLToPhysicalName(rFile, aPhysical) && aPhysical.Len())
+    {
+        // #i114504# try IsFolder/Exists only for file URLs
 
-    if (utl::UCBContentHelper::IsFolder(rFile))
-        return false;
+    return utl::UCBContentHelper::Exists(rFile);
+        if (utl::UCBContentHelper::IsFolder(rFile))
+            return false;
 
+        return utl::UCBContentHelper::Exists(rFile);
+    }
+    else
+        return true;    // for http and others, Exists doesn't work, but the URL can still be opened
     return utl::UCBContentHelper::Exists(rFile);
 }
 
@@ -2286,7 +2300,16 @@ void ScExternalRefManager::maybeLinkExternalFile(sal_uInt16 nFileId)
         return;
 
     OUString aFilter, aOptions;
-    ScDocumentLoader::GetFilterName(*pFileName, aFilter, aOptions, true, false);
+    const SrcFileData* pFileData = getExternalFileData(nFileId);
+    if (pFileData)
+    {
+        aFilter = pFileData->maFilterName;
+        aOptions = pFileData->maFilterOptions;
+    }
+    // If a filter was already set (for example, loading the cached table),
+    // don't call GetFilterName which has to access the source file.
+    if (!aFilter.getLength())
+        ScDocumentLoader::GetFilterName(*pFileName, aFilter, aOptions, true, false);
     sfx2::LinkManager* pLinkMgr = mpDoc->GetLinkManager();
     ScExternalRefLink* pLink = new ScExternalRefLink(mpDoc, nFileId, aFilter);
     OSL_ENSURE(pFileName, "ScExternalRefManager::insertExternalFileLink: file name pointer is NULL");
