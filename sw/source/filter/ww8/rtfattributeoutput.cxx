@@ -2305,7 +2305,7 @@ void RtfAttributeOutput::TextCharFormat( const SwFmtCharFmt& rCharFmt )
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
     sal_uInt16 nStyle = m_rExport.GetId( *rCharFmt.GetCharFmt() );
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_CS);
+    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CS);
     m_aStyles.append((sal_Int32)nStyle);
     OString* pString = m_rExport.GetStyle(nStyle);
     if (pString)
