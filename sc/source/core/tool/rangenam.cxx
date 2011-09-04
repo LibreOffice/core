@@ -782,7 +782,23 @@ void ScRangeName::copyLocalNames(const TabNameMap& rNames, TabNameCopyMap& rCopy
 ScRangeName::ScRangeName() {}
 
 ScRangeName::ScRangeName(const ScRangeName& r) :
-    maData(r.maData), maIndexToData(r.maIndexToData) {}
+    maData(r.maData)
+{
+    // boost::ptr_set clones and deletes, so each collection needs its own
+    // index to data.
+    maIndexToData.resize( r.maIndexToData.size(), NULL);
+    DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        size_t nPos = itr->GetIndex() - 1;
+        if (nPos >= maIndexToData.size())
+        {
+            OSL_FAIL( "ScRangeName copy-ctor: maIndexToData size doesn't fit");
+            maIndexToData.resize(nPos+1, NULL);
+        }
+        maIndexToData[nPos] = const_cast<ScRangeData*>(&(*itr));
+    }
+}
 
 const ScRangeData* ScRangeName::findByRange(const ScRange& rRange) const
 {
@@ -939,8 +955,9 @@ void ScRangeName::erase(const iterator& itr)
 {
     sal_uInt16 nIndex = itr->GetIndex();
     maData.erase(itr);
-    if (nIndex < maIndexToData.size())
-        maIndexToData[nIndex] = NULL;
+    OSL_ENSURE( 0 < nIndex && nIndex <= maIndexToData.size(), "ScRangeName::erase: bad index");
+    if (0 < nIndex && nIndex <= maIndexToData.size())
+        maIndexToData[nIndex-1] = NULL;
 }
 
 void ScRangeName::clear()
