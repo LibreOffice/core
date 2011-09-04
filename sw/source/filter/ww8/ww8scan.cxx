@@ -77,29 +77,25 @@ namespace SL
     IMPLCONSTSTRINGARRAY(MSMacroCmds);
 }
 
-template<class C> bool wwString<C>::TestBeltAndBraces(const SvStream& rStrm)
+template<class C> bool wwString<C>::TestBeltAndBraces(SvStream& rStrm)
 {
     bool bRet = false;
     sal_uInt32 nOldPos = rStrm.Tell();
-    SvStream &rMutableStrm = const_cast<SvStream &>(rStrm);
-    sal_uInt32 nLen = rMutableStrm.Seek(STREAM_SEEK_TO_END);
-    rMutableStrm.Seek(nOldPos);
-    C nBelt;
-    rMutableStrm >> nBelt;
+    C nBelt(0);
+    rStrm >> nBelt;
     nBelt *= sizeof(C);
-    if (nOldPos + sizeof(C) + nBelt + sizeof(C) <= nLen &&
-        !rStrm.GetError() && !rStrm.IsEof())
+    if (rStrm.good() && (rStrm.remainingSize() >= (nBelt + sizeof(C))))
     {
-        rMutableStrm.SeekRel(nBelt);
-        if (!rStrm.GetError())
+        rStrm.SeekRel(nBelt);
+        if (rStrm.good())
         {
-            C cBraces;
-            rMutableStrm >> cBraces;
-            if (!rMutableStrm.GetError() && cBraces == 0)
+            C cBraces(0);
+            rStrm >> cBraces;
+            if (rStrm.good() && cBraces == 0)
                 bRet = true;
         }
     }
-    rMutableStrm.Seek(nOldPos);
+    rStrm.Seek(nOldPos);
     return bRet;
 }
 

@@ -83,11 +83,10 @@ namespace SL
 template<class C> class wwString
 {
 public:
-    static bool TestBeltAndBraces(const SvStream& rStrm);
-    //move the other string related code into this class as time goes by
+    static bool TestBeltAndBraces(SvStream& rStrm);
 };
 
-typedef wwString<sal_uInt16> ww8String;
+typedef wwString<sal_Unicode> ww8String;
 
 struct SprmInfo
 {
