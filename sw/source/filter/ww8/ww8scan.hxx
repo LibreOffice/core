@@ -163,9 +163,12 @@ String WW8ReadPString( SvStream& rStrm, rtl_TextEncoding eEnc,
     bool bAtEndSeekRel1 = true);
 
 /**
- The following method reads a 2Byte unicode string.  If bAtEndSeekRel1 is set,
- exactly ONE byte is skipped If nChars is set then that number of characters
- (not bytes) is read, if its not set, the first character read is the length
+ Reads a UTF-16 unicode string. If nLen is set then that number of 16bit units
+ (not bytes) is read, if its not set, then read a 16bit count from the
+ stream and use that for the length.
+
+ If bAtEndSeekRel1 is set, exactly ONE extra unit (not byte) is skipped at the
+ end of the string.
 */
 String WW8Read_xstz(SvStream& rStrm, sal_uInt16 nChars, bool bAtEndSeekRel1);
 
