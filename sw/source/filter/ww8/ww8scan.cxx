@@ -1904,25 +1904,18 @@ Err:
     return false;
 }
 
-
-//-----------------------------------------
-
-
-// WW8ReadPString liest einen Pascal-String ein und gibt ihn zurueck. Der
-// Pascal- String hat am Ende ein \0, der aber im Laengenbyte nicht
-// mitgezaehlt wird.  Der Speicher fuer den Pascalstring wird alloziert.
-String WW8ReadPString(SvStream& rStrm, rtl_TextEncoding eEnc,
-    bool bAtEndSeekRel1)
+String WW8ReadPascalString(SvStream& rStrm, rtl_TextEncoding eEnc)
 {
     sal_uInt8 b(0);
     rStrm >> b;
+    return rtl::OStringToOUString(read_uInt8s_AsOString(rStrm, b), eEnc);
+}
 
-    rtl::OString aByteStr = read_uInt8s_AsOString(rStrm, b);
-
-    if( bAtEndSeekRel1 )
-        rStrm.SeekRel( 1 ); // ueberspringe das Null-Byte am Ende.
-
-    return rtl::OStringToOUString(aByteStr, eEnc);
+String WW8ReadBeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc)
+{
+    String aRet = WW8ReadPascalString(rStrm, eEnc);
+    rStrm.SeekRel( 1 ); // skip null-byte at end
+    return aRet;
 }
 
 String WW8Read_xstz(SvStream& rStrm, sal_uInt16 nChars, bool bAtEndSeekRel1)
@@ -6153,7 +6146,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
                 case 6:
                 case 7:
                     // lies Pascal-String
-                    *pString = WW8ReadPString( rSt, RTL_TEXTENCODING_MS_1252 );
+                    *pString = WW8ReadBeltAndBracesString(rSt, RTL_TEXTENCODING_MS_1252);
                     // leading len and trailing zero --> 2
                     rSkip -= 2+ pString->Len();
                     break;
@@ -6177,7 +6170,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
                         they are not corrupt. If they are then we try them as
                         8bit ones
                         */
-                        *pString = WW8ReadPString(rSt,RTL_TEXTENCODING_MS_1252);
+                        *pString = WW8ReadBeltAndBracesString(rSt,RTL_TEXTENCODING_MS_1252);
                         // leading len and trailing zero --> 2
                         rSkip -= 2+ pString->Len();
                     }

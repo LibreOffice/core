@@ -151,6 +151,15 @@ public:
         const;
 };
 
+//Read a Pascal-style, i.e. single byte string length followed
+//by string contents
+String WW8ReadPascalString(SvStream& rStrm, rtl_TextEncoding eEnc);
+
+//Belt and Braces strings, i.e. Pascal-style strings followed by
+//null termination, Spolsky calls them "fucked strings" FWIW
+//http://www.joelonsoftware.com/articles/fog0000000319.html
+String WW8ReadBeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc);
+
 //--Line abovewhich the code has meaningful comments
 
 class  WW8Fib;
@@ -158,9 +167,6 @@ class  WW8ScannerBase;
 class  WW8PLCFspecial;
 struct WW8PLCFxDesc;
 class  WW8PLCFx_PCD;
-
-String WW8ReadPString( SvStream& rStrm, rtl_TextEncoding eEnc,
-    bool bAtEndSeekRel1 = true);
 
 /**
  Reads a UTF-16 unicode string. If nLen is set then that number of 16bit units

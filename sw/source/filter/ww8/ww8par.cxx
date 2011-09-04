@@ -5337,7 +5337,8 @@ const String* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
         {
             if( bVer67 )
             {
-                mpAtnNames->push_back(WW8ReadPString(rStrm, false));
+                mpAtnNames->push_back(WW8ReadPascalString(rStrm,
+                    RTL_TEXTENCODING_MS_1252));
                 nRead += mpAtnNames->rbegin()->Len() + 1;   // Laenge + sal_uInt8 Count
             }
             else
