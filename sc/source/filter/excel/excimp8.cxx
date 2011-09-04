@@ -347,7 +347,7 @@ void ImportExcel8::ReadBasic( void )
                 if ( xXCB.Is()|| SVSTREAM_OK == xXCB->GetError() )
                 {
                     CTBWrapper wrapper;
-                    if ( wrapper.Read( xXCB ) )
+                    if ( wrapper.Read( *xXCB ) )
                     {
 #if OSL_DEBUG_LEVEL > 1
                         wrapper.Print( stderr );
