@@ -1096,10 +1096,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     case RTF_FOOTER: nId = NS_rtf::LN_footerr; break;
                     case RTF_HEADERL: nId = NS_rtf::LN_headerl; break;
                     case RTF_HEADERR: nId = NS_rtf::LN_headerr; break;
-                    case RTF_HEADERF: nId = NS_rtf::LN_headerr; break; // TODO figure out how to use NS_rtf::LN_headerf
+                    case RTF_HEADERF: nId = NS_rtf::LN_headerf; break;
                     case RTF_FOOTERL: nId = NS_rtf::LN_footerl; break;
                     case RTF_FOOTERR: nId = NS_rtf::LN_footerr; break;
-                    case RTF_FOOTERF: nId = NS_rtf::LN_footerr; break; // same here, NS_rtf::LN_footerf could be used
+                    case RTF_FOOTERF: nId = NS_rtf::LN_footerf; break;
                     default: break;
                 }
                 m_nHeaderFooterPositions.push(make_pair(nId, nPos));
