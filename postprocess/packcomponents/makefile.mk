@@ -247,7 +247,7 @@ my_components += kdebe1
 my_components += kde4be1
 .END
 
-.IF "$(ENABLE_OGL)" == "TRUE"
+.IF "$(ENABLE_OPENGL)" == "TRUE"
 my_components += ogltrans
 .END
 
