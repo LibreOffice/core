@@ -60,6 +60,11 @@ class SdrDropMarkerOverlay;
     Description:    input window
  --------------------------------------------------------------------*/
 
+/** Class for the header and footer separator control window.
+
+    This control is showing the header / footer style name and provides
+    a few useful actions to the user.
+  */
 class SwHeaderFooterControl : public FloatingWindow
 {
     const rtl::OUString m_sText;
@@ -74,6 +79,13 @@ public:
     typedef boost::shared_ptr< SwHeaderFooterControl > Pointer;
 };
 
+/** Window class for the Writer edit area, this is the one handling mouse
+    and keyboard events and doing the final painting of the document from
+    the buffered layout.
+
+    To translate the pixel positions from the buffer OutputDevice to the real
+    pixel positions, use the PixelToLogic methods of this class.
+  */
 class SwEditWin: public Window,
                 public DropTargetHelper, public DragSourceHelper
 {
