@@ -77,26 +77,37 @@ namespace SL
     IMPLCONSTSTRINGARRAY(MSMacroCmds);
 }
 
-template<class C> bool wwString<C>::TestBeltAndBraces(SvStream& rStrm)
+namespace
 {
-    bool bRet = false;
-    sal_uInt32 nOldPos = rStrm.Tell();
-    C nBelt(0);
-    rStrm >> nBelt;
-    nBelt *= sizeof(C);
-    if (rStrm.good() && (rStrm.remainingSize() >= (nBelt + sizeof(C))))
+    /**
+        winword strings are typically Belt and Braces strings preceeded with a
+        pascal style count, and ending with a c style 0 terminator. 16bit chars
+        and count for ww8+ and 8bit chars and count for ww7-. The count and 0
+        can be checked for integrity to catch errors (e.g. lotus created
+        documents) where in error 8bit strings are used instead of 16bits
+        strings for style names.
+    */
+    template<typename C> bool TestBeltAndBraces(SvStream& rStrm)
     {
-        rStrm.SeekRel(nBelt);
-        if (rStrm.good())
+        bool bRet = false;
+        sal_uInt32 nOldPos = rStrm.Tell();
+        C nBelt(0);
+        rStrm >> nBelt;
+        nBelt *= sizeof(C);
+        if (rStrm.good() && (rStrm.remainingSize() >= (nBelt + sizeof(C))))
         {
-            C cBraces(0);
-            rStrm >> cBraces;
-            if (rStrm.good() && cBraces == 0)
-                bRet = true;
+            rStrm.SeekRel(nBelt);
+            if (rStrm.good())
+            {
+                C cBraces(0);
+                rStrm >> cBraces;
+                if (rStrm.good() && cBraces == 0)
+                    bRet = true;
+            }
         }
+        rStrm.Seek(nOldPos);
+        return bRet;
     }
-    rStrm.Seek(nOldPos);
-    return bRet;
 }
 
 inline bool operator==(const SprmInfo &rFirst, const SprmInfo &rSecond)
@@ -6146,7 +6157,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
                 case 8:
                     // handle Unicode-String with leading length short and
                     // trailing zero
-                    if (ww8String::TestBeltAndBraces(rSt))
+                    if (TestBeltAndBraces<sal_Unicode>(rSt))
                     {
                         *pString = read_LEuInt16_BeltAndBracesString(rSt);
                         rSkip -= (pString->Len() + 2) * 2;

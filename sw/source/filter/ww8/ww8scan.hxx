@@ -72,22 +72,6 @@ namespace SL
     DEFCONSTSTRINGARRAY(MSMacroCmds);
 }
 
-/**
-    winword strings are typically Belt and Braces strings preceeded with a
-    pascal style count, and ending with a c style 0 terminator. 16bit chars
-    and count for ww8+ and 8bit chars and count for ww7-. The count and 0
-    can be checked for integrity to catch errors (e.g. lotus created documents)
-    where in error 8bit strings are used instead of 16bits strings for style
-    names.
-*/
-template<class C> class wwString
-{
-public:
-    static bool TestBeltAndBraces(SvStream& rStrm);
-};
-
-typedef wwString<sal_Unicode> ww8String;
-
 struct SprmInfo
 {
     sal_uInt16 nId;         ///< A ww8 sprm is hardcoded as 16bits
@@ -98,9 +82,9 @@ struct SprmInfo
 struct SprmInfoHash
 {
     size_t operator()(const SprmInfo &a) const
-        {
-            return a.nId;
-        }
+    {
+        return a.nId;
+    }
 };
 
 typedef ww::WrappedHash<SprmInfo, SprmInfoHash> wwSprmSearcher;
