@@ -122,7 +122,6 @@ void IndexerPreProcessor::processDocument
         if( pResNodeCaption )
         {
             fs::path fsCaptionPureTextFile_docURL = m_fsCaptionFilesDirName / aStdStr_EncodedDocPathURL;
-            std::string aCaptionPureTextFileStr_docURL = fsCaptionPureTextFile_docURL.native_file_string();
 #ifdef WNT     //We need _wfopen to support long file paths on Windows XP
             FILE* pFile_docURL = _wfopen(
                 fsCaptionPureTextFile_docURL.native_file_string_w(), L"w" );
