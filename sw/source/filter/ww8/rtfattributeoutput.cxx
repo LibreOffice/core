@@ -3005,7 +3005,7 @@ void RtfAttributeOutput::PostitField( const SwField* pFld )
 
     m_aRunText.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ANNOTATION);
     m_aRunText.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATNDATE " ");
-    m_aRunText.append((sal_Int32)sw::ms::DateTime2DTTM(rPFld.GetDate()));
+    m_aRunText.append((sal_Int32)sw::ms::DateTime2DTTM(rPFld.GetDateTime()));
     m_aRunText.append('}');
     m_aRunText.append(OUStringToOString(OUString(rPFld.GetTxt()), m_rExport.eCurrentEncoding));
     m_aRunText.append('}');
