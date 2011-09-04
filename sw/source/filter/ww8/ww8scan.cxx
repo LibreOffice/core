@@ -1944,32 +1944,12 @@ String WW8Read_xstz(SvStream& rStrm, sal_uInt16 nChars, bool bAtEndSeekRel1)
     else
         rStrm >> b;
 
-    String aStr;
-    if (b)
-    {
-        // Alloc methode automatically sets Zero at the end
-        sal_Unicode* pData = aStr.AllocBuffer( b );
-
-        sal_uLong nWasRead = rStrm.Read( (sal_Char*)pData, b * 2 );
-        if( nWasRead != static_cast<sal_uLong>(b*2) )
-        {
-            b = static_cast<sal_uInt16>(nWasRead / 2);
-            aStr.ReleaseBufferAccess( b );
-            pData = aStr.GetBufferAccess();
-        }
-
-#ifdef OSL_BIGENDIAN
-        sal_uLong n;
-        sal_Unicode *pWork;
-        for( n = 0, pWork = pData; n < b; ++n, ++pWork )
-            *pWork = SWAPSHORT( *pWork );
-#endif // ifdef OSL_BIGENDIAN
-    }
+    rtl::OUString sRet = read_LEuInt16s_AsOUString(rStrm, nChars);
 
     if( bAtEndSeekRel1 )
         rStrm.SeekRel( 2 ); // ueberspringe das Null-Character am Ende.
 
-    return aStr;
+    return sRet;
 }
 
 xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
