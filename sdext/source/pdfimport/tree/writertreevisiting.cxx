@@ -959,17 +959,13 @@ void WriterXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element
         // check for center alignement
         // criterion: paragraph is small relative to parent and distributed around its center
         double p_x = elem.Parent->x;
-        double p_y = elem.Parent->y;
         double p_w = elem.Parent->w;
-        double p_h = elem.Parent->h;
 
         PageElement* pPage = dynamic_cast<PageElement*>(elem.Parent);
         if( pPage )
         {
             p_x += pPage->LeftMargin;
-            p_y += pPage->TopMargin;
             p_w -= pPage->LeftMargin+pPage->RightMargin;
-            p_h -= pPage->TopMargin+pPage->BottomMargin;
         }
         bool bIsCenter = false;
         if( elem.w < ( p_w/2) )
