@@ -29,6 +29,7 @@
 #include "OdfDocumentHandler.hxx"
 #include "FilterInternal.hxx"
 #include "TextRunStyle.hxx"
+#include "FontStyle.hxx"
 #include <locale.h>
 #include <math.h>
 #include <string>
@@ -257,6 +258,9 @@ public:
    // span styles
    std::map<WPXString, SpanStyle *, ltstr> mSpanStyles;
 
+    // font styles
+    std::map<WPXString, FontStyle *, ltstr> mFontStyles;
+
     OdfDocumentHandler *mpHandler;
 
     ::WPXPropertyList mxStyle;
@@ -284,6 +288,7 @@ OdgGeneratorPrivate::OdgGeneratorPrivate(OdfDocumentHandler *pHandler, const Odf
    mPageMasterStyles(),
    mParagraphStyles(),
    mSpanStyles(),
+    mFontStyles(),
     mpHandler(pHandler),
     miGradientIndex(1),
     miDashIndex(1),
@@ -350,6 +355,12 @@ OdgGeneratorPrivate::~OdgGeneratorPrivate()
    {
       delete(iterSpanStyles->second);
    }
+
+    for (std::map<WPXString, FontStyle *, ltstr>::iterator iterFont = mFontStyles.begin();
+        iterFont != mFontStyles.end(); iterFont++)
+    {
+        delete(iterFont->second);
+    }
 }
 
 
@@ -444,6 +455,23 @@ OdgGenerator::~OdgGenerator()
 
     if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_CONTENT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
     {
+        TagOpenElement("office:font-face-decls").write(mpImpl->mpHandler);
+
+        for (std::map<WPXString, FontStyle *, ltstr>::iterator iterFont = mpImpl->mFontStyles.begin();
+            iterFont != mpImpl->mFontStyles.end(); iterFont++)
+        {
+            iterFont->second->write(mpImpl->mpHandler);
+        }
+
+        TagOpenElement symbolFontOpen("style:font-face");
+        symbolFontOpen.addAttribute("style:name", "StarSymbol");
+        symbolFontOpen.addAttribute("svg:font-family", "StarSymbol");
+        symbolFontOpen.addAttribute("style:font-charset", "x-symbol");
+        symbolFontOpen.write(mpImpl->mpHandler);
+        TagCloseElement("style:font-face").write(mpImpl->mpHandler);
+
+        TagCloseElement("office:font-face-decls").write(mpImpl->mpHandler);
+
         TagOpenElement("office:automatic-styles").write(mpImpl->mpHandler);
     }
 
@@ -1308,6 +1336,8 @@ void OdgGenerator::startTextLine(WPXPropertyList const &propList)
 
    WPXString sKey = propListToStyleKey(*pPersistPropList);
 
+    pPersistPropList->insert("style:parent-style-name", "Standard");
+
    if (mpImpl->mParagraphStyles.find(sKey) == mpImpl->mParagraphStyles.end())
    {
       WPXString sName;
@@ -1336,6 +1366,13 @@ void OdgGenerator::endTextLine()
 
 void OdgGenerator::startTextSpan(WPXPropertyList const&propList)
 {
+    if (propList["style:font-name"])
+    {
+        WPXString sFontName = propList["style:font-name"]->getStr();
+        if (mpImpl->mFontStyles.find(sFontName) == mpImpl->mFontStyles.end())
+            mpImpl->mFontStyles[sFontName] = new FontStyle(sFontName.cstr(), sFontName.cstr());
+    }
+
    WPXString sName;
    WPXString sSpanHashKey = propListToStyleKey(propList);
    if (mpImpl->mSpanStyles.find(sSpanHashKey) == mpImpl->mSpanStyles.end())
