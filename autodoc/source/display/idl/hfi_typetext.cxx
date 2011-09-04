@@ -179,12 +179,8 @@ HF_IdlTypeText::Produce_byData( const String & i_sFullName ) const
     }
 
     csv::erase_container(aModule_);
-    bool bFound =   // KORR : Check the semantics of this, see if ce really exists, if it is a member?
-        Env().Data().Search_Ce( aModule_,
-                                sCe,sMember,
-                                sTypeText,
-                                *pScopeModule );
-    if (NOT bFound)
+
+    if (NOT ( Env().Data().Search_Ce(aModule_, sCe,sMember, sTypeText, *pScopeModule) ) )
     {
         if ( strchr(sTypeText,':') == 0
              AND
@@ -223,12 +219,7 @@ HF_IdlTypeText::Produce_LinkInDocu( const String &      i_scope,
         return;
     }
 
-    bool
-        bFound = Env().Data().Search_CesModule( aModule_,
-                                                i_scope,
-                                                i_name,
-                                                *pScopeModule );
-    if (NOT bFound)
+    if (NOT ( Env().Data().Search_CesModule( aModule_, i_scope, i_name, *pScopeModule) ) )
     {
         CurOut() << i_scope << "::" << i_name;
         if (NOT i_member.empty())
