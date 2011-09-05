@@ -86,7 +86,6 @@ typedef enum {
 
 typedef struct {
     SalFrame*               pFrame;
-    Bool                    bIsMultilingual;
     preedit_status_t        eState;
     preedit_text_t          aText;
     SalExtTextInputEvent    aInputEv;

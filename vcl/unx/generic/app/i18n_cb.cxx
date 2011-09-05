@@ -164,100 +164,91 @@ enlarge_buffer ( preedit_text_t *ptext, int nnewlimit )
 //
 
 void
-Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where,
-           Bool isMultilingual)
+Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
 {
-      sal_Unicode *pInsertTextString;
-      int nInsertTextLength = 0;
-      XIMFeedback *pInsertTextCharStyle = pInsertText->feedback;
+    sal_Unicode *pInsertTextString;
+    int nInsertTextLength = 0;
+    XIMFeedback *pInsertTextCharStyle = pInsertText->feedback;
 
-      nInsertTextLength = pInsertText->length;
+    nInsertTextLength = pInsertText->length;
 
-      if (isMultilingual)
+    //  can't handle wchar_t strings, so convert to multibyte chars first
+    char *pMBString;
+    size_t nMBLength;
+    if (pInsertText->encoding_is_wchar)
     {
-        XIMUnicodeText *pUniText = (XIMUnicodeText*)pInsertText;
-        pInsertTextString = pUniText->string.utf16_char;
-      }
+        wchar_t *pWCString = pInsertText->string.wide_char;
+          size_t nBytes = wcstombs ( NULL, pWCString, 1024 /* dont care */);
+          pMBString = (char*)alloca( nBytes + 1 );
+          nMBLength = wcstombs ( pMBString, pWCString, nBytes + 1);
+    }
     else
     {
-        //  can't handle wchar_t strings, so convert to multibyte chars first
-        char *pMBString;
-        size_t nMBLength;
-        if (pInsertText->encoding_is_wchar)
-        {
-            wchar_t *pWCString = pInsertText->string.wide_char;
-              size_t nBytes = wcstombs ( NULL, pWCString, 1024 /* dont care */);
-              pMBString = (char*)alloca( nBytes + 1 );
-              nMBLength = wcstombs ( pMBString, pWCString, nBytes + 1);
-        }
-        else
-        {
-              pMBString = pInsertText->string.multi_byte;
-              nMBLength = strlen(pMBString); // xxx
-        }
+          pMBString = pInsertText->string.multi_byte;
+          nMBLength = strlen(pMBString); // xxx
+    }
 
-        // convert multibyte chars to unicode
-        rtl_TextEncoding nEncoding = osl_getThreadTextEncoding();
+    // convert multibyte chars to unicode
+    rtl_TextEncoding nEncoding = osl_getThreadTextEncoding();
 
-        if (nEncoding != RTL_TEXTENCODING_UNICODE)
-        {
-              rtl_TextToUnicodeConverter aConverter =
-                    rtl_createTextToUnicodeConverter( nEncoding );
-              rtl_TextToUnicodeContext aContext =
-                    rtl_createTextToUnicodeContext(aConverter);
+    if (nEncoding != RTL_TEXTENCODING_UNICODE)
+    {
+          rtl_TextToUnicodeConverter aConverter =
+                rtl_createTextToUnicodeConverter( nEncoding );
+          rtl_TextToUnicodeContext aContext =
+                rtl_createTextToUnicodeContext(aConverter);
 
-              sal_Size nBufferSize = nInsertTextLength * 2;
+          sal_Size nBufferSize = nInsertTextLength * 2;
 
-              pInsertTextString = (sal_Unicode*)alloca(nBufferSize);
+          pInsertTextString = (sal_Unicode*)alloca(nBufferSize);
 
-              sal_uInt32  nConversionInfo;
-              sal_Size    nConvertedChars;
+          sal_uInt32  nConversionInfo;
+          sal_Size    nConvertedChars;
 
-            rtl_convertTextToUnicode( aConverter, aContext,
-                    pMBString, nMBLength,
-                     pInsertTextString, nBufferSize,
-                      RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE
-                    | RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE,
-                    &nConversionInfo, &nConvertedChars );
+        rtl_convertTextToUnicode( aConverter, aContext,
+                pMBString, nMBLength,
+                 pInsertTextString, nBufferSize,
+                  RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE
+                | RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE,
+                &nConversionInfo, &nConvertedChars );
 
-              rtl_destroyTextToUnicodeContext(aConverter, aContext);
-              rtl_destroyTextToUnicodeConverter(aConverter);
+          rtl_destroyTextToUnicodeContext(aConverter, aContext);
+          rtl_destroyTextToUnicodeConverter(aConverter);
 
-        }
-        else
-        {
-              pInsertTextString = (sal_Unicode*)pMBString;
-        }
-      }
+    }
+    else
+    {
+          pInsertTextString = (sal_Unicode*)pMBString;
+    }
 
-      // enlarge target text-buffer if necessary
-      if (pText->nSize <= (pText->nLength + nInsertTextLength))
-        enlarge_buffer(pText, pText->nLength + nInsertTextLength);
+    // enlarge target text-buffer if necessary
+    if (pText->nSize <= (pText->nLength + nInsertTextLength))
+      enlarge_buffer(pText, pText->nLength + nInsertTextLength);
 
-      // insert text: displace old mem and put new bytes in
-      int from    = where;
-      int to      = where + nInsertTextLength;
-      int howmany = pText->nLength - where;
+    // insert text: displace old mem and put new bytes in
+    int from    = where;
+    int to      = where + nInsertTextLength;
+    int howmany = pText->nLength - where;
 
-      memmove((void*)(pText->pUnicodeBuffer + to),
-            (void*)(pText->pUnicodeBuffer + from),
-              howmany * sizeof(sal_Unicode));
-      memmove((void*)(pText->pCharStyle + to),
-              (void*)(pText->pCharStyle + from),
-              howmany * sizeof(XIMFeedback));
+    memmove((void*)(pText->pUnicodeBuffer + to),
+          (void*)(pText->pUnicodeBuffer + from),
+            howmany * sizeof(sal_Unicode));
+    memmove((void*)(pText->pCharStyle + to),
+            (void*)(pText->pCharStyle + from),
+            howmany * sizeof(XIMFeedback));
 
-      to = from;
-      howmany = nInsertTextLength;
+    to = from;
+    howmany = nInsertTextLength;
 
-      memcpy((void*)(pText->pUnicodeBuffer + to), (void*)pInsertTextString,
-             howmany * sizeof(sal_Unicode));
-      memcpy((void*)(pText->pCharStyle + to), (void*)pInsertTextCharStyle,
-              howmany * sizeof(XIMFeedback));
+    memcpy((void*)(pText->pUnicodeBuffer + to), (void*)pInsertTextString,
+           howmany * sizeof(sal_Unicode));
+    memcpy((void*)(pText->pCharStyle + to), (void*)pInsertTextCharStyle,
+            howmany * sizeof(XIMFeedback));
 
-      pText->nLength += howmany;
+    pText->nLength += howmany;
 
-      // NULL-terminate the string
-      pText->pUnicodeBuffer[pText->nLength] = (sal_Unicode)0;
+    // NULL-terminate the string
+    pText->pUnicodeBuffer[pText->nLength] = (sal_Unicode)0;
 }
 
 //
@@ -372,7 +363,7 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
             && (call_data->text->string.wide_char != NULL))
         {
               Preedit_InsertText(&(pPreeditData->aText), call_data->text,
-                     call_data->chg_first, pPreeditData->bIsMultilingual);
+                     call_data->chg_first);
         }
         else
           // handle text replacement by deletion and insertion of text,
@@ -383,7 +374,7 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
             Preedit_DeleteText(&(pPreeditData->aText),
                        call_data->chg_first, call_data->chg_length);
             Preedit_InsertText(&(pPreeditData->aText), call_data->text,
-                       call_data->chg_first, pPreeditData->bIsMultilingual);
+                       call_data->chg_first);
           }
         else
         // not really a text update, only attributes are concerned
@@ -567,27 +558,9 @@ StatusDoneCallback (XIC, XPointer, XPointer)
 }
 
 void
-StatusDrawCallback (XIC ic, XPointer client_data, XIMStatusDrawCallbackStruct *call_data)
+StatusDrawCallback (XIC, XPointer, XIMStatusDrawCallbackStruct *call_data)
 {
-      preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
-    if( pPreeditData->bIsMultilingual )
-    {
-        // IIIMP
-        XIMUnicodeText *cbtext = (XIMUnicodeText *)call_data->data.text;
-        ::vcl::I18NStatus::get().setStatusText( String( cbtext->string.utf16_char, call_data->data.text->length ) );
-        XIMUnicodeCharacterSubset* pSubset = NULL;
-        if( ! XGetICValues( ic,
-                            XNUnicodeCharacterSubset, & pSubset,
-                            NULL )
-            && pSubset )
-        {
-            ::vcl::I18NStatus::get().changeIM( String( ByteString( pSubset->name ), RTL_TEXTENCODING_UTF8 ) );
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "got XNUnicodeCharacterSubset\n   %d\n   %d\n   %s\n   %d\n", pSubset->index, pSubset->subset_id, pSubset->name, pSubset->is_active );
-#endif
-        }
-    }
-    else if( call_data->type == XIMTextType )
+    if( call_data->type == XIMTextType )
     {
         String aText;
         if( call_data->data.text )

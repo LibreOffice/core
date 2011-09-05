@@ -464,7 +464,6 @@ void SalXLib::Init()
     SalDisplay *pSalDisplay = new SalX11Display( pDisp );
 
     pInputMethod->CreateMethod( pDisp );
-    pInputMethod->AddConnectionWatch( pDisp, (void*)this );
     pSalDisplay->SetInputMethod( pInputMethod );
 
     PushXErrorLevel( true );

@@ -187,7 +187,6 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 
     SalI18N_InputMethod *pInputMethod;
     pInputMethod = GetX11SalData()->GetDisplay()->GetInputMethod();
-    mbMultiLingual = pInputMethod->IsMultiLingual();
 
     mnSupportedPreeditStyle =   XIMPreeditCallbacks | XIMPreeditPosition
         | XIMPreeditNothing   | XIMPreeditNone;
@@ -200,7 +199,6 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 
         // for status callbacks and commit string callbacks
 #define PREEDIT_BUFSZ 16
-        maClientData.bIsMultilingual        = mbMultiLingual;
         maClientData.eState                 = ePreeditStatusStartPending;
         maClientData.pFrame                 = pFrame;
         maClientData.aText.pUnicodeBuffer   =
@@ -359,7 +357,6 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 #endif
 
         mbUseable = False;
-        mbMultiLingual = False;
 
         if ( mpAttributes != NULL )
             XFree( mpAttributes );
@@ -379,17 +376,6 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         maClientData.aText.pCharStyle     = NULL;
     }
 
-    if ( maContext != NULL && mbMultiLingual )
-    {
-        maCommitStringCallback.callback    = (XIMProc)::CommitStringCallback;
-        maCommitStringCallback.client_data = (XPointer)&maClientData;
-        maSwitchIMCallback.callback        = (XIMProc)::SwitchIMCallback;
-        maSwitchIMCallback.client_data     = (XPointer)&maClientData;
-        XSetICValues( maContext,
-                      XNCommitStringCallback, &maCommitStringCallback,
-                      XNSwitchIMNotifyCallback, &maSwitchIMCallback,
-                      NULL );
-    }
     if ( maContext != NULL)
     {
         maDestroyCallback.callback    = (XIMProc)IC_IMDestroyCallback;
@@ -397,21 +383,6 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         XSetICValues( maContext,
                       XNDestroyCallback,      &maDestroyCallback,
                       NULL );
-    }
-
-    if( mbMultiLingual )
-    {
-        // set initial IM status
-        XIMUnicodeCharacterSubset* pSubset = NULL;
-        if( ! XGetICValues( maContext,
-                            XNUnicodeCharacterSubset, & pSubset,
-                            NULL )
-            && pSubset )
-        {
-            String aCurrent( ByteString( pSubset->name ), RTL_TEXTENCODING_UTF8 );
-            ::vcl::I18NStatus::get().changeIM( aCurrent );
-            ::vcl::I18NStatus::get().setStatusText( aCurrent );
-        }
     }
 }
 
@@ -454,11 +425,6 @@ SalI18N_InputContext::Map( SalFrame *pFrame )
                 maContext = XCreateIC( pInputMethod->GetMethod(),
                                        XNVaNestedList, mpAttributes,
                                        NULL );
-                if ( maContext != NULL && mbMultiLingual )
-                    XSetICValues( maContext,
-                                  XNCommitStringCallback, &maCommitStringCallback,
-                                  XNSwitchIMNotifyCallback, &maSwitchIMCallback,
-                                  NULL );
             }
             if( maClientData.pFrame != pFrame )
                 SetICFocus( pFrame );

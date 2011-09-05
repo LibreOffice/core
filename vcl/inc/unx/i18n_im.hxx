@@ -39,14 +39,12 @@ class VCLPLUG_GEN_PUBLIC SalI18N_InputMethod
 {
     Bool        mbUseable;  // system supports locale as well as status
                             // and preedit style ?
-    Bool        mbMultiLingual; // system supports iiimp
     XIM         maMethod;
     XIMCallback maDestroyCallback;
     XIMStyles  *mpStyles;
 
 public:
 
-    Bool        IsMultiLingual()        { return mbMultiLingual;    }
     Bool        PosixLocale();
     Bool        UseMethod()             { return mbUseable; }
     XIM         GetMethod()             { return maMethod;  }
@@ -55,7 +53,6 @@ public:
     XIMStyles  *GetSupportedStyles()    { return mpStyles;  }
     Bool        SetLocale( const char* pLocale = "" );
     Bool        FilterEvent( XEvent *pEvent, XLIB_Window window );
-    Bool        AddConnectionWatch (Display *pDisplay, void *pConnectionHandler);
 
     SalI18N_InputMethod();
     ~SalI18N_InputMethod();
