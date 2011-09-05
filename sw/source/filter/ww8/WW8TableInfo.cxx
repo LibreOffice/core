@@ -349,6 +349,33 @@ WW8TableNodeInfo::~WW8TableNodeInfo()
 {
 }
 
+#if OSL_DEBUG_LEVEL > 1
+::std::string WW8TableNodeInfo::toString() const
+{
+    static char buffer[1024];
+    snprintf(buffer, sizeof(buffer),
+             "<tableNodeInfo p=\"%p\" depth=\"%" SAL_PRIuUINT32 "\">"
+             ,this, getDepth());
+
+    ::std::string sResult(buffer);
+
+    Inners_t::const_iterator aIt(mInners.begin());
+    Inners_t::const_iterator aEnd(mInners.end());
+
+    while (aIt != aEnd)
+    {
+        WW8TableNodeInfoInner::Pointer_t pInner = aIt->second;
+        sResult += pInner->toString();
+
+        aIt++;
+    }
+    sResult += dbg_out(*mpNode);
+    sResult += "</tableNodeInfo>";
+
+    return sResult;
+}
+#endif
+
 void WW8TableNodeInfo::setDepth(sal_uInt32 nDepth)
 {
     mnDepth = nDepth;

@@ -178,6 +178,10 @@ public:
     sal_uInt32 getCell() const;
     sal_uInt32 getRow() const;
 
+#if OSL_DEBUG_LEVEL > 1
+    ::std::string toString() const;
+#endif
+
     bool operator < (const WW8TableNodeInfo & rInfo) const;
 };
 
