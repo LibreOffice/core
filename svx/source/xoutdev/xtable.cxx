@@ -38,11 +38,7 @@
 
 using namespace com::sun::star;
 
-// Vergleichsstrings
-sal_Unicode pszStandard[] = { 's', 't', 'a', 'n', 'd', 'a', 'r', 'd', 0 };
-
-// Konvertiert in echte RGB-Farben, damit in den Listboxen
-// endlich mal richtig selektiert werden kann.
+// Helper for other sub-classes to have easy-to-read constructors
 Color RGB_Color( ColorData nColorName )
 {
     Color aColor( nColorName );
@@ -50,15 +46,13 @@ Color RGB_Color( ColorData nColorName )
     return aRGBColor;
 }
 
-// --------------------
-// class XPropertyList
-// --------------------
-
 XPropertyList::XPropertyList(
+    XPropertyListType type,
     const char *pDefaultExtension,
     const String& rPath,
     XOutdevItemPool* pInPool
-) : aName           ( pszStandard, 8 ),
+) : eType           ( type ),
+    aName           ( RTL_CONSTASCII_USTRINGPARAM( "standard" ) ),
     aPath           ( rPath ),
     pXPool          ( pInPool ),
     pDefaultExt     ( pDefaultExtension ),
@@ -117,7 +111,6 @@ long XPropertyList::Count() const
 {
     if( bListDirty )
     {
-        // ( (XPropertyList*) this )->bListDirty = sal_False; <- im Load()
         if( !( (XPropertyList*) this )->Load() )
             ( (XPropertyList*) this )->Create();
     }
@@ -128,7 +121,6 @@ XPropertyEntry* XPropertyList::Get( long nIndex, sal_uInt16 /*nDummy*/) const
 {
     if( bListDirty )
     {
-        // ( (XPropertyList*) this )->bListDirty = sal_False; <- im Load()
         if( !( (XPropertyList*) this )->Load() )
             ( (XPropertyList*) this )->Create();
     }
@@ -139,7 +131,6 @@ long XPropertyList::Get(const XubString& rName)
 {
     if( bListDirty )
     {
-        //bListDirty = sal_False;
         if( !Load() )
             Create();
     }
@@ -278,6 +269,31 @@ sal_Bool XPropertyList::Save()
         aURL.setExtension( rtl::OUString::createFromAscii( pDefaultExt ) );
 
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), createInstance() );
+}
+
+XPropertyList *XPropertyList::CreatePropertyList( XPropertyListType t,
+                                                  const String& rPath,
+                                                  XOutdevItemPool* pXPool )
+{
+    XPropertyList *pRet = NULL;
+
+#define MAP(e,c) \
+        case e: pRet = new c( rPath, pXPool ); break
+    switch (t) {
+        MAP( XCOLOR_LIST, XColorList );
+        MAP( XLINE_END_LIST, XLineEndList );
+        MAP( XDASH_LIST, XDashList );
+        MAP( XHATCH_LIST, XHatchList );
+        MAP( XGRADIENT_LIST, XGradientList );
+        MAP( XBITMAP_LIST, XBitmapList );
+    default:
+        OSL_FAIL("unknown xproperty type");
+        break;
+    }
+#undef MAP
+    OSL_ASSERT( !pRet || pRet->eType == t );
+
+    return pRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

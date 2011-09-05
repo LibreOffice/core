@@ -41,17 +41,6 @@
 
 using namespace com::sun::star;
 
-XBitmapList::XBitmapList(
-    const String& rPath,
-    XOutdevItemPool* pInPool
-        ) : XPropertyList( "sob", rPath, pInPool )
-{
-}
-
-XBitmapList::~XBitmapList()
-{
-}
-
 XBitmapEntry* XBitmapList::Remove(long nIndex)
 {
     return (XBitmapEntry*) XPropertyList::Remove(nIndex);

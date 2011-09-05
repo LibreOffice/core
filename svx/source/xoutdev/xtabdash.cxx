@@ -137,10 +137,9 @@ void XDashList::impDestroy()
     mpData = 0;
 }
 
-XDashList::XDashList(
-    const String& rPath,
-    XOutdevItemPool* pInPool
-        ) : XPropertyList( "sod", rPath, pInPool ),
+XDashList::XDashList( const String& rPath,
+                      XOutdevItemPool* pInPool) :
+    XPropertyList( XDASH_LIST, "sod", rPath, pInPool ),
     mpData(0)
 {
     pBmpList = new BitmapList_impl();

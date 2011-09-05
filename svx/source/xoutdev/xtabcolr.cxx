@@ -39,18 +39,6 @@
 
 using namespace com::sun::star;
 
-XColorList::XColorList(
-    const String& rPath,
-    XOutdevItemPool* pInPool
-) :
-    XPropertyList( "soc", rPath, pInPool )
-{
-}
-
-XColorList::~XColorList()
-{
-}
-
 XColorList& XColorList::GetStdColorTable()
 {
     static XColorList aTable(SvtPathOptions().GetPalettePath());

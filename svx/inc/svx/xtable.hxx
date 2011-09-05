@@ -191,12 +191,22 @@ public:
 // class XPropertyList
 // --------------------
 
+enum XPropertyListType {
+    XCOLOR_LIST,
+    XLINE_END_LIST,
+    XDASH_LIST,
+    XHATCH_LIST,
+    XGRADIENT_LIST,
+    XBITMAP_LIST,
+};
+
 class SVX_DLLPUBLIC XPropertyList
 {
 protected:
     typedef ::std::vector< XPropertyEntry* > XPropertyEntryList_impl;
     typedef ::std::vector< Bitmap* > BitmapList_impl;
 
+    XPropertyListType   eType;
     String              aName; // not persistent
     String              aPath;
     XOutdevItemPool*    pXPool;
@@ -209,11 +219,10 @@ protected:
     sal_Bool            bBitmapsDirty;
     sal_Bool            bOwnPool;
 
-                        XPropertyList(
-                            const char *_pDefaultExtension,
-                            const String& rPath,
-                            XOutdevItemPool* pXPool = NULL
-                        );
+                        XPropertyList( XPropertyListType t,
+                                       const char *pDefaultExtension,
+                                       const String& rPath,
+                                       XOutdevItemPool* pXPool = NULL );
     void                Clear();
 
 public:
@@ -235,6 +244,7 @@ public:
     void                SetName( const String& rString );
     const String&       GetPath() const { return aPath; }
     void                SetPath( const String& rString ) { aPath = rString; }
+    String              GetDefaultExt() const { return rtl::OUString::createFromAscii( pDefaultExt ); }
     sal_Bool            IsDirty() const { return bListDirty && bBitmapsDirty; }
     void                SetDirty( sal_Bool bDirty = sal_True )
                             { bListDirty = bDirty; bBitmapsDirty = bDirty; }
@@ -246,6 +256,11 @@ public:
     virtual sal_Bool    Create() = 0;
     virtual sal_Bool    CreateBitmapsForUI() = 0;
     virtual Bitmap*     CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True ) = 0;
+
+    // Factory method for sub-classes
+    static XPropertyList *CreatePropertyList( XPropertyListType t,
+                                              const String& rPath,
+                                              XOutdevItemPool* pXPool = NULL );
 };
 
 // ------------------
@@ -255,11 +270,10 @@ public:
 class SVX_DLLPUBLIC XColorList : public XPropertyList
 {
 public:
-    explicit        XColorList(
-                        const String& rPath,
-                        XOutdevItemPool* pXPool = NULL
-                    );
-    virtual         ~XColorList();
+    explicit        XColorList( const String& rPath,
+                                XOutdevItemPool* pXInPool = NULL ) :
+        XPropertyList( XCOLOR_LIST, "soc", rPath, pXInPool ) {}
+    virtual         ~XColorList() {}
 
     using XPropertyList::Replace;
     using XPropertyList::Remove;
@@ -414,11 +428,10 @@ public:
 class SVX_DLLPUBLIC XBitmapList : public XPropertyList
 {
 public:
-    explicit        XBitmapList(
-                        const String& rPath,
-                        XOutdevItemPool* pXPool = NULL
-                    );
-    virtual         ~XBitmapList();
+    explicit        XBitmapList( const String& rPath,
+                                 XOutdevItemPool* pXInPool = NULL )
+                        : XPropertyList( XBITMAP_LIST, "sob", rPath, pXInPool ) {}
+    virtual         ~XBitmapList() {}
 
     using XPropertyList::Replace;
     using XPropertyList::Remove;
