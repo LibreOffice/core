@@ -59,6 +59,8 @@
 
 const int indeterminate = 2;
 
+#define ODS_FORMAT_TYPE 50331943
+
 using namespace ::com::sun::star;
 
 /* Implementation of Filters test */
@@ -194,9 +196,35 @@ void FiltersTest::testODSs()
     rtl::OUString aString2 = m_aSrcRoot + rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data/ods/named-ranges-global.ods"));
 
-    ScDocShellRef xDocSh = load( aString1, aString2 , rtl::OUString(), 50331943);
+    ScDocShellRef xDocSh = load( aString1, aString2 , rtl::OUString(), ODS_FORMAT_TYPE);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-global.ods.", xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    //check one range data per sheet and one global more detailed
+    //add some more checks here
+    ScRangeData* pRangeData = pDoc->GetRangeName()->findByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Global1")));
+    CPPUNIT_ASSERT_MESSAGE("range name Global1 not found", pRangeData);
+    double aValue;
+    pDoc->GetValue(1,0,0,aValue);
+    CPPUNIT_ASSERT_MESSAGE("range name Global1 should reference Sheet1.A1", aValue == 1);
+    pRangeData = pDoc->GetRangeName(0)->findByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local1")));
+    CPPUNIT_ASSERT_MESSAGE("range name Sheet1.Local1 not found", pRangeData);
+    pDoc->GetValue(1,2,0,aValue);
+    CPPUNIT_ASSERT_MESSAGE("range name Sheet1.Local1 should reference Sheet1.A3", aValue == 3);
+    pRangeData = pDoc->GetRangeName(1)->findByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local2")));
+    CPPUNIT_ASSERT_MESSAGE("range name Sheet2.Local2 not found", pRangeData);
+    pDoc->GetValue(1,1,1,aValue);
+    CPPUNIT_ASSERT_MESSAGE("range name Sheet2.Local2 should reference Sheet2.A2", aValue == 7);
+    //check for correct results for the remaining formulas
+    pDoc->GetValue(1,1,0, aValue);
+    CPPUNIT_ASSERT_MESSAGE("=global2 should be 2", aValue == 2);
+    pDoc->GetValue(1,3,0, aValue);
+    CPPUNIT_ASSERT_MESSAGE("=local2 should be 4", aValue == 4);
+    pDoc->GetValue(2,0,0, aValue);
+    CPPUNIT_ASSERT_MESSAGE("=SUM(global3) should be 10", aValue == 10);
+    pDoc->GetValue(1,0,1,aValue);
+    CPPUNIT_ASSERT_MESSAGE("range name Sheet2.local1 should reference Sheet1.A5", aValue == 5);
 }
 
 FiltersTest::FiltersTest()
