@@ -37,7 +37,6 @@
 #include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/svdmodel.hxx>
-#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -96,17 +95,8 @@ namespace sdr
                     fCornerRadiusY,
                     // #i105856# use fill for HitTest when TextFrame and not PickThrough
                     GetRectObj().IsTextFrame() && !bPickThroughTransparentTextFrames));
-            drawinglayer::primitive2d::Primitive2DSequence xRetVal(&xReference, 1);
 
-            if ( GetRectObj().IsGhosted( ) )
-            {
-                const basegfx::BColor aRGBWhite(1.0, 1.0, 1.0);
-                const basegfx::BColorModifier aBColorModifier(aRGBWhite, 0.5, basegfx::BCOLORMODIFYMODE_INTERPOLATE);
-                const drawinglayer::primitive2d::Primitive2DReference xGhostedRef(
-                        new drawinglayer::primitive2d::ModifiedColorPrimitive2D(xRetVal, aBColorModifier));
-                xRetVal = drawinglayer::primitive2d::Primitive2DSequence(&xGhostedRef, 1);
-            }
-            return xRetVal;
+            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
         }
     } // end of namespace contact
 } // end of namespace sdr

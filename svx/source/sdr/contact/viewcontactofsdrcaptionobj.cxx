@@ -45,7 +45,6 @@
 #include <svx/xfltrit.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
-#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -170,15 +169,6 @@ namespace sdr
                     xRetval[0] = xSpecialShadow;
                     xRetval[1] = xReference;
                 }
-            }
-
-            if (rCaptionObj.IsGhosted())
-            {
-                const basegfx::BColor aRGBWhite(1.0, 1.0, 1.0);
-                const basegfx::BColorModifier aBColorModifier(aRGBWhite, 0.5, basegfx::BCOLORMODIFYMODE_INTERPOLATE);
-                const drawinglayer::primitive2d::Primitive2DReference xGhostedRef(
-                        new drawinglayer::primitive2d::ModifiedColorPrimitive2D(xRetval, aBColorModifier));
-                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xGhostedRef, 1);
             }
 
             return xRetval;

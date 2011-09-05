@@ -77,7 +77,6 @@
 #include "../../ui/inc/view.hxx"
 #include <PostItMgr.hxx>
 #include <vcl/virdev.hxx>
-#include <rootfrm.hxx>
 
 #include <vcl/svapp.hxx>
 
