@@ -94,7 +94,7 @@ $(eval $(call gb_CppunitTest_set_args,sc_filters_test,\
     --headless \
     --invisible \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
-    -env:OOO_CONFIG_REGISTRY_DIR=file://$(OUTDIR)/xml/registry \
+    -env:OOO_CONFIG_REGISTRY_DIR=$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) \
 ))
 
 $(eval $(call gb_RdbTarget_RdbTarget,sc_filters_test))
