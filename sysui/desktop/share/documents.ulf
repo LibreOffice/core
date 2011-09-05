@@ -31,6 +31,9 @@ en-US = "%PRODUCTNAME Spreadsheet Template"
 [oasis-text]
 en-US = "OpenDocument Text"
 
+[oasis-text-flat-xml]
+en-US = "OpenDocument Text (Flat XML)"
+
 [oasis-text-template]
 en-US = "OpenDocument Text Template"
 
@@ -43,17 +46,26 @@ en-US = "OpenDocument Formula"
 [oasis-presentation]
 en-US = "OpenDocument Presentation"
 
+[oasis-presentation-flat-xml]
+en-US = "OpenDocument Presentation (Flat XML)"
+
 [oasis-presentation-template]
 en-US = "OpenDocument Presentation Template"
 
 [oasis-drawing]
 en-US = "OpenDocument Drawing"
 
+[oasis-drawing-flat-xml]
+en-US = "OpenDocument Drawing (Flat XML)"
+
 [oasis-drawing-template]
 en-US = "OpenDocument Drawing Template"
 
 [oasis-spreadsheet]
 en-US = "OpenDocument Spreadsheet"
+
+[oasis-spreadsheet-flat-xml]
+en-US = "OpenDocument Spreadsheet (Flat XML)"
 
 [oasis-spreadsheet-template]
 en-US = "OpenDocument Spreadsheet Template"
