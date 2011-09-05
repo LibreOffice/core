@@ -91,16 +91,11 @@ public:
     SalFrame* getStatusFrame() const;
 
     void setStatusText( const String& rText );
-    String getStatusText() const;
 
     enum ShowReason { focus, presentation, contextmap };
     void show( bool bShow, ShowReason eReason );
 
     const ::std::vector< ChoiceData >& getChoices() const { return m_aChoices; }
-    void clearChoices();
-    void addChoice( const String&, void* pData );
-
-    void toTop() const;
 
     // for SwitchIMCallback
     void changeIM( const String& );

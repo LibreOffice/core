@@ -638,42 +638,6 @@ void I18NStatus::changeIM( const String& rIM )
 
 // --------------------------------------------------------------------------
 
-String I18NStatus::getStatusText() const
-{
-    return m_pStatusWindow ? m_pStatusWindow->getText() :  String();
-}
-
-// --------------------------------------------------------------------------
-
-void I18NStatus::clearChoices()
-{
-    m_aChoices.clear();
-}
-
-// --------------------------------------------------------------------------
-
-void I18NStatus::addChoice( const String& rChoice, void* pData )
-{
-    ChoiceData aData;
-    aData.pData     = pData;
-    aData.aString   = rChoice;
-    m_aChoices.push_back( aData );
-}
-
-// --------------------------------------------------------------------------
-
-void I18NStatus::toTop() const
-{
-    if( m_pStatusWindow )
-    {
-        const SystemEnvData* pData = m_pStatusWindow->GetSystemData();
-        XRaiseWindow( (Display*)pData->pDisplay,
-                      (XLIB_Window)pData->aShellWindow );
-    }
-}
-
-// --------------------------------------------------------------------------
-
 SalFrame* I18NStatus::getStatusFrame() const
 {
     SalFrame* pRet = NULL;
