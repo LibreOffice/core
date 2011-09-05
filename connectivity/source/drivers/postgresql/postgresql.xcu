@@ -4,6 +4,7 @@
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2011 by Lionel Elie Mamane <lionel@mamane.lu>
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -35,8 +36,37 @@
         <value xml:lang="en-US">PostgreSQL</value>
       </prop>
       <node oor:name="Properties">
+        <!-- Don't use ODBC syntax for date&time literals and (full) outer joins,
+             as PostgreSQL does not support it,
+             but supports the _interior_ of these escapes just fine. -->
+        <node oor:name="EscapeDateTime" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>false</value>
+          </prop>
+        </node>
+        <!--   Confusingly, this corresponds to "UseBracketedOuterJoinSyntax" in the Features -->
+        <node oor:name="EnableOuterJoinEscape" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>false</value>
+          </prop>
+        </node>
       </node>
       <node oor:name="Features">
+        <!-- These entries enable the "Advanced Settings" UI to change the settings
+             whose default is set in node "Properties" above;
+             as this is guaranteed not to work with PostgreSQL,
+             we don't let people shoot themselves in the foot and don't enable the UI. -->
+      <!--   <node oor:name="EscapeDateTime" oor:op="replace"> -->
+      <!--     <prop oor:name="Value" oor:type="xs:boolean"> -->
+      <!--       <value>false</value> -->
+      <!--     </prop> -->
+      <!--   </node> -->
+        <!--   Confusingly, this corresponds to "EnableOuterJoinEscape" in the Properties -->
+      <!--   <node oor:name="UseBracketedOuterJoinSyntax" oor:op="replace"> -->
+      <!--     <prop oor:name="Value" oor:type="xs:boolean"> -->
+      <!--       <value>false</value> -->
+      <!--     </prop> -->
+      <!--   </node> -->
       </node>
       <node oor:name="MetaData">
        <node oor:name="Authentication" oor:op="replace">
@@ -48,3 +78,7 @@
     </node>
   </node>
 </oor:component-data>
+
+<!-- Local Variables: -->
+<!-- indent-tabs-mode: nil -->
+<!-- End: -->
