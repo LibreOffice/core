@@ -312,7 +312,8 @@ const SwRect & WW8TableNodeInfoInner::getRect() const
     return maRect;
 }
 
-string WW8TableNodeInfoInner::toString() const
+#if OSL_DEBUG_LEVEL > 1
+::std::string WW8TableNodeInfoInner::toString() const
 {
     static char buffer[256];
     snprintf(buffer, sizeof(buffer),
@@ -333,7 +334,7 @@ string WW8TableNodeInfoInner::toString() const
 
     return string(buffer);
 }
-// WW8TableTextNodeInfo
+#endif
 
 WW8TableNodeInfo::WW8TableNodeInfo(WW8TableInfo * pParent,
                                    const SwNode * pNode)
@@ -1298,7 +1299,7 @@ WW8TableNodeInfo * WW8TableCellGrid::connectCells()
 }
 
 #if OSL_DEBUG_LEVEL > 1
-string WW8TableCellGrid::toString()
+::std::string WW8TableCellGrid::toString()
 {
     string sResult = "<WW8TableCellGrid>";
 

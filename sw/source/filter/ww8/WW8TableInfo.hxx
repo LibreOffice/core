@@ -117,7 +117,9 @@ public:
     GridColsPtr getGridColsOfRow(AttributeOutputBase & rBase);
     RowSpansPtr getRowSpansOfRow();
 
-    string toString() const;
+#if OSL_DEBUG_LEVEL > 1
+    ::std::string toString() const;
+#endif
 };
 
 class CellInfo;
@@ -248,7 +250,7 @@ public:
     WW8TableNodeInfo * connectCells();
 
 #if OSL_DEBUG_LEVEL > 1
-    string toString();
+    ::std::string toString();
 #endif
 
     TableBoxVectorPtr getTableBoxesOfRow(WW8TableNodeInfoInner * pNodeInfo);
