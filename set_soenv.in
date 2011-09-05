@@ -1102,7 +1102,7 @@ if ($platform =~ m/cygwin|os2/)
       }
       $ILIB       .= $wps.PathFormat("@MINGW_CLIB_DIR@").
                      $wps.$PSDK_HOME.$LIB;
-      if ( '@ENABLE_DIRETX@' )
+      if ( '@ENABLE_DIRECTX@' )
       {   $ILIB   .= $wps.PathFormat("@DIRECTXSDK_LIB@");
       }
    }
