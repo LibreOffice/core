@@ -757,7 +757,7 @@ sal_Bool ScPrintFunc::AdjustPrintArea( sal_Bool bNew )
     }
 
     pDoc->ExtendMerge( nStartCol,nStartRow, nEndCol,nEndRow, nPrintTab,
-                        false, sal_True );      // kein Refresh, incl. Attrs
+                        false );      // kein Refresh, incl. Attrs
 
     if ( bChangeCol )
     {

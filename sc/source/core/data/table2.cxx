@@ -1397,7 +1397,7 @@ bool ScTable::HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) co
 
 bool ScTable::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                            SCCOL& rEndCol, SCROW& rEndRow,
-                           bool bRefresh, bool bAttrs )
+                           bool bRefresh )
 {
     if (!(ValidCol(nStartCol) && ValidCol(rEndCol)))
     {
@@ -1408,7 +1408,7 @@ bool ScTable::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
     SCCOL nOldEndX = rEndCol;
     SCROW nOldEndY = rEndRow;
     for (SCCOL i=nStartCol; i<=nOldEndX; i++)
-        bFound |= aCol[i].ExtendMerge( i, nStartRow, nOldEndY, rEndCol, rEndRow, bRefresh, bAttrs );
+        bFound |= aCol[i].ExtendMerge( i, nStartRow, nOldEndY, rEndCol, rEndRow, bRefresh );
     return bFound;
 }
 

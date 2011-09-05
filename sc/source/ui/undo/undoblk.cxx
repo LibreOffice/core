@@ -2136,7 +2136,7 @@ void ScUndoRemoveMerge::Redo()
                               maOption.mnEndCol, maOption.mnEndRow, nTab,
                               SC_MF_HOR | SC_MF_VER );
 
-        pDoc->ExtendMerge(aRange, true, false);
+        pDoc->ExtendMerge(aRange, true);
 
         //  Paint
 

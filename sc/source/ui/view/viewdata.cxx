@@ -1831,7 +1831,7 @@ sal_Bool ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWh
                 pDoc->RemoveFlagsTab( 0,0, MAXCOL,MAXROW, nTabNo, SC_MF_HOR | SC_MF_VER );
                 SCCOL nEndCol = MAXCOL;
                 SCROW nEndRow = MAXROW;
-                pDoc->ExtendMerge( 0,0, nEndCol,nEndRow, nTabNo, sal_True, false );
+                pDoc->ExtendMerge( 0,0, nEndCol,nEndRow, nTabNo, sal_True );
                 if (pDocShell)
                     pDocShell->PostPaint( ScRange(0,0,nTabNo,MAXCOL,MAXROW,nTabNo), PAINT_GRID );
             }

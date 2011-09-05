@@ -2284,14 +2284,14 @@ void Test::testMergedCells()
     m_pDoc->DoMerge(0, 1, 1, 3, 3, false);
     SCCOL nEndCol = 1;
     SCROW nEndRow = 1;
-    m_pDoc->ExtendMerge( 1, 1, nEndCol, nEndRow, 0, false, false);
+    m_pDoc->ExtendMerge( 1, 1, nEndCol, nEndRow, 0, false);
     CPPUNIT_ASSERT_MESSAGE("did not merge cells", nEndCol == 3 && nEndRow == 3);
     ScDocFunc aDocFunc(*m_xDocShRef);
     ScRange aRange(0,2,0,MAXCOL,2,0);
     ScMarkData aMark;
     aMark.SetMarkArea(aRange);
     aDocFunc.InsertCells(aRange, &aMark, INS_INSROWS, true, true);
-    m_pDoc->ExtendMerge( 1, 1, nEndCol, nEndRow, 0, false, false);
+    m_pDoc->ExtendMerge( 1, 1, nEndCol, nEndRow, 0, false);
     cout << nEndRow << nEndCol;
     //have a look why this does not work
     //CPPUNIT_ASSERT_MESSAGE("did not increase merge area", nEndCol == 3 && nEndRow == 4);

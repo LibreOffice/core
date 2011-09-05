@@ -821,11 +821,11 @@ public:
 
     sal_Bool            ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow, const ScMarkData& rMark,
-                                sal_Bool bRefresh = false, sal_Bool bAttrs = false );
+                                sal_Bool bRefresh = false );
     sal_Bool            ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow, SCTAB nTab,
-                                sal_Bool bRefresh = false, sal_Bool bAttrs = false );
-    sal_Bool            ExtendMerge( ScRange& rRange, sal_Bool bRefresh = false, sal_Bool bAttrs = false );
+                                sal_Bool bRefresh = false );
+    sal_Bool            ExtendMerge( ScRange& rRange, sal_Bool bRefresh = false );
     sal_Bool            ExtendTotalMerge( ScRange& rRange );
     SC_DLLPUBLIC sal_Bool           ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                                 SCCOL nEndCol, SCROW nEndRow, SCTAB nTab );

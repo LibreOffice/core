@@ -1270,7 +1270,7 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
                 {
                     ScRange aRange(nCol, nRow1, nStartTab);
                     pDoc->ExtendOverlapped(aRange);
-                    pDoc->ExtendMerge(aRange, sal_True, sal_True);
+                    pDoc->ExtendMerge(aRange, sal_True);
                     rDocFunc.UnmergeCells(aRange, bRecord, sal_True);
                 }
             }

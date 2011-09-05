@@ -4977,7 +4977,7 @@ sal_Bool ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
 
 sal_Bool ScDocument::ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
                               SCCOL& rEndCol, SCROW& rEndRow,
-                              const ScMarkData& rMark, sal_Bool bRefresh, sal_Bool bAttrs )
+                              const ScMarkData& rMark, sal_Bool bRefresh )
 {
     // use all selected sheets from rMark
 
@@ -4992,7 +4992,7 @@ sal_Bool ScDocument::ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
         {
             SCCOL nThisEndCol = nOldEndCol;
             SCROW nThisEndRow = nOldEndRow;
-            if ( ExtendMerge( nStartCol, nStartRow, nThisEndCol, nThisEndRow, *itr, bRefresh, bAttrs ) )
+            if ( ExtendMerge( nStartCol, nStartRow, nThisEndCol, nThisEndRow, *itr, bRefresh ) )
                 bFound = true;
             if ( nThisEndCol > rEndCol )
                 rEndCol = nThisEndCol;
@@ -5006,13 +5006,13 @@ sal_Bool ScDocument::ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
 
 sal_Bool ScDocument::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                               SCCOL& rEndCol,  SCROW& rEndRow,
-                              SCTAB nTab, sal_Bool bRefresh, sal_Bool bAttrs )
+                              SCTAB nTab, sal_Bool bRefresh )
 {
     bool bFound = false;
     if ( ValidColRow(nStartCol,nStartRow) && ValidColRow(rEndCol,rEndRow) && ValidTab(nTab) )
     {
         if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-            bFound = maTabs[nTab]->ExtendMerge( nStartCol, nStartRow, rEndCol, rEndRow, bRefresh, bAttrs );
+            bFound = maTabs[nTab]->ExtendMerge( nStartCol, nStartRow, rEndCol, rEndRow, bRefresh );
 
         if (bRefresh)
             RefreshAutoFilter( nStartCol, nStartRow, rEndCol, rEndRow, nTab );
@@ -5026,7 +5026,7 @@ sal_Bool ScDocument::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
 }
 
 
-sal_Bool ScDocument::ExtendMerge( ScRange& rRange, sal_Bool bRefresh, sal_Bool bAttrs )
+sal_Bool ScDocument::ExtendMerge( ScRange& rRange, sal_Bool bRefresh )
 {
     bool bFound = false;
     SCTAB nStartTab = rRange.aStart.Tab();
@@ -5041,7 +5041,7 @@ sal_Bool ScDocument::ExtendMerge( ScRange& rRange, sal_Bool bRefresh, sal_Bool b
         SCROW nExtendRow = rRange.aEnd.Row();
         if (ExtendMerge( rRange.aStart.Col(), rRange.aStart.Row(),
                          nExtendCol,          nExtendRow,
-                         nTab, bRefresh, bAttrs ) )
+                         nTab, bRefresh ) )
         {
             bFound = true;
             if (nExtendCol > nEndCol) nEndCol = nExtendCol;

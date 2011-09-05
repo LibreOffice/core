@@ -1537,7 +1537,7 @@ sal_Bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMa
                 {
                     ScRange aRange( nTestCol, nTestRow1, i );
                     pDoc->ExtendOverlapped(aRange);
-                    pDoc->ExtendMerge(aRange, sal_True, sal_True);
+                    pDoc->ExtendMerge(aRange, sal_True);
 
                     if( nTestRow1 < nTestRow2 && nNewFlags == SC_MF_HOR )
                     {
@@ -1545,7 +1545,7 @@ sal_Bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMa
                         {
                             ScRange aTestRange( nTestCol, nTestRow, i );
                             pDoc->ExtendOverlapped( aTestRange );
-                            pDoc->ExtendMerge( aTestRange, sal_True, sal_True);
+                            pDoc->ExtendMerge( aTestRange, sal_True);
                             ScRange aMergeRange( aTestRange.aStart.Col(),aTestRange.aStart.Row(), i );
                             if( !aExtendRange.In( aMergeRange ) )
                             {
@@ -1940,7 +1940,7 @@ sal_Bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMa
                 {
                     ScRange aRange( nTestCol, nTestRow1, i );
                     pDoc->ExtendOverlapped( aRange );
-                    pDoc->ExtendMerge( aRange, sal_True, sal_True );
+                    pDoc->ExtendMerge( aRange, sal_True );
 
                     if( nTestRow1 < nTestRow2 && nNewFlags == SC_MF_HOR )
                     {
@@ -1948,7 +1948,7 @@ sal_Bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMa
                         {
                             ScRange aTestRange( nTestCol, nTestRow, i );
                             pDoc->ExtendOverlapped( aTestRange );
-                            pDoc->ExtendMerge( aTestRange, sal_True, sal_True);
+                            pDoc->ExtendMerge( aTestRange, sal_True );
                             ScRange aMergeRange( aTestRange.aStart.Col(),aTestRange.aStart.Row(), i );
                             if( !aExtendRange.In( aMergeRange ) )
                             {
@@ -4446,7 +4446,7 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, sal_Bool bRecord
                               aExtended.aEnd.Col(), aExtended.aEnd.Row(), nTab,
                               SC_MF_HOR | SC_MF_VER );
 
-        pDoc->ExtendMerge( aRefresh, sal_True, false );
+        pDoc->ExtendMerge( aRefresh, sal_True );
 
         if ( !AdjustRowHeight( aExtended ) )
             rDocShell.PostPaint( aExtended, PAINT_GRID );

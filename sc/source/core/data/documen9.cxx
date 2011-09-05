@@ -513,7 +513,7 @@ sal_Bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         SCROW nTmpRow = nEndRow;
 
         pThis->ExtendMerge( 0,nStartRow, nExtendCol,nTmpRow, nTab,
-                            false, sal_True );      // kein Refresh, incl. Attrs
+                            false );      // kein Refresh, incl. Attrs
 
         OutputDevice* pDev = pThis->GetPrinter();
         pDev->SetMapMode( MAP_PIXEL );              // wichtig fuer GetNeededSize
