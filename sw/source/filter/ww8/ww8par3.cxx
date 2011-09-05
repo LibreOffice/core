@@ -2169,13 +2169,13 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     *pDataStream >> hps;
 
     // xstzName
-    sTitle = WW8Read_xstz(*pDataStream, 0, true);
+    sTitle = read_LEuInt16_BeltAndBracesString(*pDataStream);
 
     if (nWhich == WW8_CT_EDIT)
     {   // Field is a textbox
         // Default text
         // xstzTextDef
-        sDefault = WW8Read_xstz(*pDataStream, 0, true);
+        sDefault = read_LEuInt16_BeltAndBracesString(*pDataStream);
     }
     else
     {
@@ -2191,14 +2191,14 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         }
     }
     // xstzTextFormat
-    sFormatting = WW8Read_xstz(*pDataStream, 0, true);
+    sFormatting = read_LEuInt16_BeltAndBracesString(*pDataStream);
     // xstzHelpText
-    sHelp = WW8Read_xstz(*pDataStream, 0, true);
+    sHelp = read_LEuInt16_BeltAndBracesString(*pDataStream);
     // xstzStatText
-    sToolTip = WW8Read_xstz(*pDataStream, 0, true);
+    sToolTip = read_LEuInt16_BeltAndBracesString(*pDataStream);
 
-    String sEntryMacro = WW8Read_xstz(*pDataStream, 0, true);
-    String sExitMcr = WW8Read_xstz(*pDataStream, 0, true);
+    String sEntryMacro = read_LEuInt16_BeltAndBracesString(*pDataStream);
+    String sExitMcr = read_LEuInt16_BeltAndBracesString(*pDataStream);
 
     if (nWhich == WW8_CT_DROPDOWN)
     {
