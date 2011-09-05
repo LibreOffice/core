@@ -27,7 +27,6 @@
 #*************************************************************************
 
 $(eval $(call gb_Package_Package,vbahelper_inc,$(SRCDIR)/vbahelper/inc))
-$(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/collectionbase.hxx,vbahelper/collectionbase.hxx))
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/helperdecl.hxx,vbahelper/helperdecl.hxx))
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbaaccesshelper.hxx,vbahelper/vbaaccesshelper.hxx))
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbaapplicationbase.hxx,vbahelper/vbaapplicationbase.hxx))

@@ -3079,10 +3079,6 @@ utl::OConfigurationValueContainer::OConfigurationValueContainer(com::sun::star::
 utl::OConfigurationValueContainer::getServiceFactory() const
 utl::OConfigurationValueContainer::registerNullValueExchangeLocation(char const*, com::sun::star::uno::Any*)
 utl::TransliterationWrapper::compareSubstring(String const&, int, int, String const&, int, int) const
-vbahelper::CollectionBase::CollectionBase(com::sun::star::uno::Type const&)
-vbahelper::CollectionBase::getAnyItemOrThis(com::sun::star::uno::Any const&)
-vbahelper::CollectionBase::initElements(std::vector<com::sun::star::beans::NamedValue, std::allocator<com::sun::star::beans::NamedValue> > const&, vbahelper::CollectionBase::ContainerType)
-vbahelper::CollectionBase::initElements(std::vector<com::sun::star::uno::Reference<com::sun::star::container::XNamed>, std::allocator<com::sun::star::uno::Reference<com::sun::star::container::XNamed> > > const&, vbahelper::CollectionBase::ContainerType)
 vcl::Clipboard_getSupportedServiceNames()
 vcl::I18NStatus::addChoice(String const&, void*)
 vcl::I18NStatus::clearChoices()
