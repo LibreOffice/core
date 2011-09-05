@@ -66,6 +66,7 @@
 #include "undoblk.hxx"
 
 #include "docsh.hxx"
+#include "docfunc.hxx"
 #include "dbdocfun.hxx"
 #include "funcdesc.hxx"
 #include "externalrefmgr.hxx"
@@ -251,6 +252,7 @@ public:
     void testDataArea();
     void testAutofilter();
     void testCopyPaste();
+    void testMergedCells();
 
     /**
      * Make sure the sheet streams are invalidated properly.
@@ -293,6 +295,7 @@ public:
     CPPUNIT_TEST(testToggleRefFlag);
     CPPUNIT_TEST(testAutofilter);
     CPPUNIT_TEST(testCopyPaste);
+    CPPUNIT_TEST(testMergedCells);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2271,7 +2274,28 @@ void Test::testCopyPaste()
     delete pUndoDoc;
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
+}
 
+void Test::testMergedCells()
+{
+    //test merge and unmerge
+    //TODO: an undo/redo test for this would be a good idea
+    m_pDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet1")));
+    m_pDoc->DoMerge(0, 1, 1, 3, 3, false);
+    SCCOL nEndCol = 1;
+    SCROW nEndRow = 1;
+    m_pDoc->ExtendMerge( 1, 1, nEndCol, nEndRow, 0, false, false);
+    CPPUNIT_ASSERT_MESSAGE("did not merge cells", nEndCol == 3 && nEndRow == 3);
+    ScDocFunc aDocFunc(*m_xDocShRef);
+    ScRange aRange(0,2,0,MAXCOL,2,0);
+    ScMarkData aMark;
+    aMark.SetMarkArea(aRange);
+    aDocFunc.InsertCells(aRange, &aMark, INS_INSROWS, true, true);
+    m_pDoc->ExtendMerge( 1, 1, nEndCol, nEndRow, 0, false, false);
+    cout << nEndRow << nEndCol;
+    //have a look why this does not work
+    //CPPUNIT_ASSERT_MESSAGE("did not increase merge area", nEndCol == 3 && nEndRow == 4);
+    m_pDoc->DeleteTab(0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
