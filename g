@@ -18,6 +18,10 @@ if [ "$#" -eq "0" ] ; then
     exit $?
 fi
 
+if [ ! "`type -p git`" ]; then
+    echo "Cannot find the git binary! Is git installed and is in PATH?"
+    exit 1
+fi
 
 pushd $(dirname $0) > /dev/null
 COREDIR=$(pwd)
