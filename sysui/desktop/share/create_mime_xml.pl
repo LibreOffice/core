@@ -45,9 +45,24 @@ foreach $component (sort(keys %mimehash)) {
     print (sort({customsort($a) cmp customsort($b)} @{$mimehash{$component}}));
     print '    <glob pattern="'.$glob.'"/>';
     if ( $component =~ /oasis/ ) {
-        print '    <magic'.( $mimetype =~ /-/  ? ' priority="60"' : '').'>';
-        print '        <match type="string" offset="38" value="'.$mimetype.'"/>';
-        print '    </magic>';
+        if ( $component =~ /flat-xml/ ) {
+            print '    <sub-class-of type="application/xml"/>';
+            print '    <magic'.( $mimetype =~ /-/  ? ' priority="60"' : '').'>';
+            print '        <match value="&lt;?xml" type="string" offset="0">';
+            print '            <match value="office:document" type="string" offset="4:100">';
+            print '                <match value="office:mimetype=&quot;' . $mimetype . '&quot;" type="string" offset="100:4000"/>';
+            print '            </match>';
+            print '        </match>';
+            print '    </magic>';
+        } else {
+            print '    <magic'.( $mimetype =~ /-/  ? ' priority="60"' : '').'>';
+            print '        <match value="PK\003\004" type="string" offset="0">';
+            print '            <match value="mimetype" type="string" offset="30">';
+            print '                <match value="' . $mimetype . '" type="string" offset="38"/>';
+            print '            </match>';
+            print '        </match>';
+            print '    </magic>';
+        }
     }
     print '  </mime-type>';
 }
