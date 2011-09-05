@@ -175,6 +175,11 @@ using namespace nsHdFtFlags;
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/mediadescriptor.hxx>
+#include <oox/ole/vbaproject.hxx>
+#include <oox/ole/olestorage.hxx>
+#include <unotools/streamwrap.hxx>
+#include <comphelper/componentcontext.hxx>
+
 
 using ::comphelper::MediaDescriptor;
 using ::comphelper::getProcessServiceFactory;
@@ -182,57 +187,29 @@ using ::comphelper::getProcessServiceFactory;
 class BasicProjImportHelper
 {
     SwDocShell& mrDocShell;
+    uno::Reference< uno::XComponentContext > mxCtx;
 public:
-    BasicProjImportHelper( SwDocShell& rShell ) : mrDocShell( rShell ) {}
-    bool import();
-    bool import( const com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue >& aArgSeq );
+    BasicProjImportHelper( SwDocShell& rShell ) : mrDocShell( rShell )
+    {
+        comphelper::ComponentContext aCtx( ::comphelper::getProcessServiceFactory() );
+        mxCtx = aCtx.getUNOContext();
+    }
+    bool import( const uno::Reference< io::XInputStream >& rxIn );
     rtl::OUString getProjectName();
 };
 
-bool BasicProjImportHelper::import()
-{
-    uno::Sequence< beans::NamedValue > aArgSeq;
-    return import( aArgSeq );
-}
-
-bool BasicProjImportHelper::import( const uno::Sequence< beans::NamedValue >& aArgSeq )
+bool BasicProjImportHelper::import( const uno::Reference< io::XInputStream >& rxIn )
 {
     bool bRet = false;
     try
     {
-        uno::Reference< lang::XComponent > xComponent( mrDocShell.GetModel(), uno::UNO_QUERY_THROW );
-        // #TODO #FIXME, get rid of the uno access, better ( and less lines I suspect ) to
-        // access this directly ( just need to figure out what stream manipulation I need to
-        // do )
-        uno::Reference< lang::XMultiServiceFactory > xFac( getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        uno::Reference< document::XImporter > xImporter;
-        if ( aArgSeq.getLength() )
+        oox::ole::OleStorage root( mxCtx, rxIn, false );
+        oox::StorageRef vbaStg = root.openSubStorage( CREATE_OUSTRING( "Macros" ), false );
+        if ( vbaStg.get() )
         {
-            uno::Sequence< uno::Any > aArgs( 2 );
-            aArgs[ 0 ] <<= getProcessServiceFactory();
-            aArgs[ 1 ] <<= aArgSeq;
-            xImporter.set( xFac->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.oox.WordVbaProjectFilter" ) ), aArgs ), uno::UNO_QUERY_THROW );
+            oox::ole::VbaProject aVbaPrj( mxCtx, mrDocShell.GetModel(), CREATE_CONST_ASC( "Writer") );
+            aVbaPrj.importVbaProject( *vbaStg );
         }
-        else
-            xImporter.set( xFac->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.oox.WordVbaProjectFilter" ) )), uno::UNO_QUERY_THROW );
-        xImporter->setTargetDocument( xComponent );
-
-        MediaDescriptor aMediaDesc;
-        SfxMedium& rMedium = *mrDocShell.GetMedium();
-        SfxItemSet* pItemSet = rMedium.GetItemSet();
-        if( pItemSet )
-        {
-            if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_FILE_NAME ) ) )
-            aMediaDesc[ MediaDescriptor::PROP_URL() ] <<= ::rtl::OUString( pItem->GetValue() );
-            if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_PASSWORD ) ) )
-                aMediaDesc[ MediaDescriptor::PROP_PASSWORD() ] <<= ::rtl::OUString( pItem->GetValue() );
-        }
-        aMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ] <<= rMedium.GetInputStream();
-        aMediaDesc[ MediaDescriptor::PROP_INTERACTIONHANDLER() ] <<= rMedium.GetInteractionHandler();
-
-        // call the filter
-        uno::Reference< document::XFilter > xFilter( xImporter, uno::UNO_QUERY_THROW );
-        bRet = xFilter->filter( aMediaDesc.getAsConstPropertyValueList() );
     }
     catch( const uno::Exception& )
     {
@@ -4330,8 +4307,7 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const rtl::OUString& sCreatedF
 
         BasicProjImportHelper aBasicImporter( *mpDocShell );
         // Import vba via oox filter
-        aBasicImporter.import();
-
+        aBasicImporter.import( mpDocShell->GetMedium()->GetInputStream() );
         lcl_createTemplateToProjectEntry( xPrjNameCache, aURL, aBasicImporter.getProjectName() );
         // Read toolbars & menus
         SvStorageStreamRef refMainStream = rRoot->OpenSotStream( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WordDocument") ) );
@@ -4615,7 +4591,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
             BasicProjImportHelper aBasicImporter( *mpDocShell );
             // Import vba via oox filter
-            bool bRet = aBasicImporter.import();
+            bool bRet = aBasicImporter.import( mpDocShell->GetMedium()->GetInputStream() );
 
             lcl_createTemplateToProjectEntry( xPrjNameCache, sCreatedFrom, aBasicImporter.getProjectName() );
             WW8Customizations aCustomisations( pTableStream, *pWwFib );

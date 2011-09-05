@@ -168,6 +168,24 @@ VbaProject::~VbaProject()
 {
 }
 
+
+void VbaProject::importVbaProject( StorageBase& rVbaPrjStrg )
+{
+   // create GraphicHelper
+   Reference< ::com::sun::star::frame::XFrame > xFrame;
+   if ( mxDocModel.is() )
+   {
+       Reference< ::com::sun::star::frame::XController > xController =  mxDocModel->getCurrentController();
+       xFrame =  xController.is() ? xController->getFrame() : NULL;
+   }
+   StorageRef noStorage;
+   // if the GraphicHelper tries to use noStorage it will of course crash
+   // but.. this shouldn't happen as there is no reason for GraphicHelper
+   // to do that when importing VBA projects
+   GraphicHelper grfHlp( mxContext, xFrame, noStorage );
+   importVbaProject( rVbaPrjStrg, grfHlp );
+}
+
 void VbaProject::importVbaProject( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr )
 {
     if( rVbaPrjStrg.isStorage() )

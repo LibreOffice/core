@@ -131,6 +131,9 @@ public:
                             const GraphicHelper& rGraphicHelper,
                             bool bDefaultColorBgr = true );
 
+    void                importVbaProject(
+                            StorageBase& rVbaPrjStrg );
+
     /** Registers a macro atatcher object. For details, see description of the
         VbaMacroAttacherBase class. */
     void                registerMacroAttacher( const VbaMacroAttacherRef& rxAttacher );
