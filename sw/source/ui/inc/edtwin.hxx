@@ -32,7 +32,6 @@
 #include <tools/link.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/window.hxx>
-#include <vcl/floatwin.hxx>
 #include <svtools/transfer.hxx>
 #include <swevent.hxx>
 
@@ -54,30 +53,12 @@ class   SvxAutoCorrect;
 class   SwPaM;
 struct  SwApplyTemplate;
 struct  QuickHelpData;
-class SdrDropMarkerOverlay;
+class   SdrDropMarkerOverlay;
+class   SwHeaderFooterWin;
 
 /*--------------------------------------------------------------------
     Description:    input window
  --------------------------------------------------------------------*/
-
-/** Class for the header and footer separator control window.
-
-    This control is showing the header / footer style name and provides
-    a few useful actions to the user.
-  */
-class SwHeaderFooterControl : public FloatingWindow
-{
-    const rtl::OUString m_sText;
-    bool m_bIsHeader;
-    Size m_aPosOffset;
-
-public:
-    SwHeaderFooterControl( Window* pParent, const rtl::OUString& sLabel, bool bHeader, Point aOffset, Size aOffsetPos );
-
-    virtual void Paint( const Rectangle& rRect );
-
-    typedef boost::shared_ptr< SwHeaderFooterControl > Pointer;
-};
 
 /** Window class for the Writer edit area, this is the one handling mouse
     and keyboard events and doing the final painting of the document from
@@ -175,7 +156,7 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     sal_uInt16          nKS_NUMDOWN_Count; // #i23725#
     sal_uInt16          nKS_NUMINDENTINC_Count;
 
-    std::vector< SwHeaderFooterControl::Pointer > aHeadFootControls;
+    std::vector< boost::shared_ptr< SwHeaderFooterWin >> aHeadFootControls;
 
     void            LeaveArea(const Point &);
     void            JustifyAreaTimer();
