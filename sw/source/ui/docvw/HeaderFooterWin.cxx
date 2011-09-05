@@ -26,6 +26,7 @@
  * instead of those above.
  */
 
+#include <docvw.hrc>
 #include <edtwin.hxx>
 #include <HeaderFooterWin.hxx>
 #include <viewopt.hxx>
@@ -39,10 +40,11 @@
 // the WB_MOVABLE flag is used here to avoid the window to appear on all desktops (on linux)
 // and the WB_OWNERDRAWDECORATION prevents the system to draw the window decorations.
 //
-SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const rtl::OUString& sLabel, bool bHeader, Point aOffset ) :
+SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, SwPageDesc* pPageDesc, bool bHeader, Point aOffset ) :
     FloatingWindow( pEditWin, WB_SYSTEMWINDOW | WB_NOBORDER | WB_NOSHADOW | WB_MOVEABLE | WB_OWNERDRAWDECORATION  ),
     m_pEditWin( pEditWin ),
-    m_sText( sLabel ),
+    m_sLabel( ),
+    m_pPageDesc( pPageDesc ),
     m_bIsHeader( bHeader )
 {
     // Get the font and configure it
@@ -52,9 +54,16 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const rtl::OUString& 
     // Use pixels for the rest of the drawing
     SetMapMode( MapMode ( MAP_PIXEL ) );
 
-    // Compute the position & size of the window
+    // Compute the text to show
+    m_sLabel = ResId::toString( SW_RES( STR_HEADER_TITLE ) );
+    if ( !m_bIsHeader )
+        m_sLabel = ResId::toString( SW_RES( STR_FOOTER_TITLE ) );
+    sal_Int32 nPos = m_sLabel.lastIndexOf( rtl::OUString::createFromAscii( "%1" ) );
+    m_sLabel = m_sLabel.replaceAt( nPos, 2, m_pPageDesc->GetName() );
+
+    // Compute the text size and get the box position & size from it
     Rectangle aTextRect;
-    GetTextBoundRect( aTextRect, String( sLabel ) );
+    GetTextBoundRect( aTextRect, String( m_sLabel ) );
     Rectangle aTextPxRect = LogicToPixel( aTextRect );
 
     Size  aBoxSize ( aTextPxRect.GetWidth() + TEXT_PADDING * 2,
@@ -116,7 +125,7 @@ void SwHeaderFooterWin::Paint( const Rectangle& rRect )
     // Draw the text
     SetTextColor( Color( aLineColor ) );
     DrawText( Point( rRect.Left() + TEXT_PADDING, rRect.Top() + TEXT_PADDING ),
-           String( m_sText ) );
+           String( m_sLabel ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

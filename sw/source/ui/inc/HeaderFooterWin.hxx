@@ -28,6 +28,8 @@
 #ifndef _HEADERFOOTERWINDOW_HXX
 #define _HEADERFOOTERWINDOW_HXX
 
+#include <pagedesc.hxx>
+
 #include <vcl/floatwin.hxx>
 
 /** Class for the header and footer separator control window.
@@ -37,12 +39,13 @@
   */
 class SwHeaderFooterWin : public FloatingWindow
 {
-    SwEditWin* m_pEditWin;
-    const rtl::OUString m_sText;
-    bool m_bIsHeader;
+    SwEditWin*           m_pEditWin;
+    rtl::OUString        m_sLabel;
+    SwPageDesc*          m_pPageDesc;
+    bool                 m_bIsHeader;
 
 public:
-    SwHeaderFooterWin( SwEditWin* pEditWin, const rtl::OUString& sLabel, bool bHeader, Point aOffset );
+    SwHeaderFooterWin( SwEditWin* pEditWin, SwPageDesc* pPageDesc, bool bHeader, Point aOffset );
 
     virtual void Paint( const Rectangle& rRect );
 };
