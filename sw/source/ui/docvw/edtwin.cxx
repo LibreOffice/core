@@ -5703,8 +5703,6 @@ SwHeaderFooterControl::SwHeaderFooterControl( Window* pParent, const rtl::OUStri
     GetTextBoundRect( aTextRect, String( sLabel ) );
     Rectangle aTextPxRect = LogicToPixel( aTextRect );
 
-    Size aParentSize = pParent->GetSizePixel();
-
     Size  aBoxSize ( aTextPxRect.GetWidth() + TEXT_PADDING * 2,
                      aTextPxRect.GetHeight() + TEXT_PADDING  * 2 );
 
