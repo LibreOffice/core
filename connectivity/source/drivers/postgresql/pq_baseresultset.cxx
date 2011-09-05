@@ -173,6 +173,9 @@ BaseResultSet::BaseResultSet(
     POSTGRE_TRACE( "ctor BaseResultSet" );
 }
 
+// LEM TODO: refMutex->mutex should live longer than OComponentHelper,
+// but calling OComponentHelper::dispose explicitly here calls
+// BaseResultSet::~BaseResultSet in an infinite loop :(
 BaseResultSet::~BaseResultSet()
 {
     POSTGRE_TRACE( "dtor BaseResultSet" );
