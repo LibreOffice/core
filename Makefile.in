@@ -18,7 +18,7 @@ cross-build-toolset:
 	cd cross_toolset && \
 	build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
-install:
+install:|all
 	@. ./Env.Host.sh && \
 	echo "Installing in @PREFIXDIR@..." && \
 	ooinstall "@PREFIXDIR@" && \
@@ -33,7 +33,7 @@ distro-pack-install: install
 	./bin/distro-install-sdk
 	./bin/distro-install-file-lists
 
-dev-install:
+dev-install:|all
 	@. ./Env.Host.sh && \
 	cd smoketestoo_native && \
 		export SAL_USE_VCLPLUGIN="svp" && \
