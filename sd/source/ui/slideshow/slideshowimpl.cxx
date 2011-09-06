@@ -1875,6 +1875,9 @@ IMPL_LINK( SlideshowImpl, PostYieldListener, void*, EMPTYARG )
 {
     Application::EnableNoYieldMode(false);
     Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
+    Application::Reschedule(true); // fix for fdo#32861 - process
+                                   // *all* outstanding events after
+                                   // yield is done.
     if (mbDisposed)
         return 0;
     return updateSlideShow();
