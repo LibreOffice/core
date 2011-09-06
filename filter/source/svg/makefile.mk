@@ -95,15 +95,9 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
 
-.IF "$(SYSTEM_PYTHON)"!="YES"
+.IF "$(GUI)"=="WNT" && "$(SYSTEM_PYTHON)"!="YES"
 PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/python
-.IF "$(GUI)"=="WNT"
 PYTHONPATH:=$(SOLARLIBDIR);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
-.ELSE                   # "$(GUI)"=="WNT"
-PYTHONPATH:=$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload
-PYTHONHOME:=$(SOLARLIBDIR)$/python
-.EXPORT: PYTHONHOME
-.ENDIF                  # "$(GUI)"=="WNT"
 .EXPORT: PYTHONPATH
 .ELSE                   # "$(SYSTEM_PYTHON)"!="YES"
 PYTHON=$(WRAPCMD) python
