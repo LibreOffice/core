@@ -45,6 +45,7 @@ public:
     SwBodyFrm( SwFrmFmt*, SwFrm* );
 
     virtual void Paint( const SwRect&, const SwPrintData *pPrintData = NULL ) const;
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwBodyFrm)
 };

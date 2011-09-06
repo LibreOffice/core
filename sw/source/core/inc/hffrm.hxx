@@ -46,6 +46,7 @@ public:
                              sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
     virtual SwTwips ShrinkFrm( SwTwips,
                                sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
 };
 
 class SwHeaderFrm: public SwHeadFootFrm

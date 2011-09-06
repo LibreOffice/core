@@ -87,6 +87,8 @@
 #include <svx/svdogrp.hxx>
 #include <sortedobjs.hxx>
 #include <EnhancedPDFExportHelper.hxx>
+#include <bodyfrm.hxx>
+#include <hffrm.hxx>
 // <--
 // --> OD #i76669#
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
@@ -2987,7 +2989,8 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 if ( bExtraData )
                     pPage->RefreshExtraData( aPaintRect );
 
-                pPage->PaintDecorators( pSh->GetOut() );
+                pPage->PaintDecorators( );
+                pPage->PaintBreak( );
 
                 if ( pSh->GetWin() )
                 {
@@ -3310,7 +3313,48 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
     return aSeq;
 }
 
-void SwPageFrm::PaintDecorators( OutputDevice *pOut ) const
+void SwPageFrm::PaintBreak( ) const
+{
+    const SwFrm* pBodyFrm = Lower();
+    while ( pBodyFrm && !pBodyFrm->IsBodyFrm() )
+        pBodyFrm = pBodyFrm->GetNext();
+
+    if ( pBodyFrm )
+    {
+        const SwCntntFrm *pCnt = static_cast< const SwLayoutFrm* >( pBodyFrm )->ContainsCntnt();
+        if ( pCnt && pCnt->IsPageBreak( sal_True ))
+        {
+            // Paint the break only if:
+            //    * Not in header footer edition, to avoid conflicts with the
+            //      header/footer marker
+            //    * Non-printing characters are shown, as this is more consistent
+            //      with other formatting marks
+            if ( !pGlobalShell->IsHeaderFooterEdit() &&
+                  pGlobalShell->GetViewOptions()->IsShowHiddenChar( ) )
+            {
+                SwRect aRect( pCnt->Prt() );
+                aRect.Pos() += pCnt->Frm().Pos();
+
+                basegfx::B2DPolygon aLine;
+                aLine.append( basegfx::B2DPoint( double( aRect.Left() ), double( aRect.Top() ) ) );
+                aLine.append( basegfx::B2DPoint( double( aRect.Right() ), double( aRect.Top() ) ) );
+
+                basegfx::BColor aLineColor = SwViewOption::GetPageBreakColor().getBColor();
+
+                drawinglayer::primitive2d::PolygonHairlinePrimitive2D* pLine =
+                        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                                aLine, aLineColor );
+
+                drawinglayer::primitive2d::Primitive2DSequence aSeq( 1 );
+                aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pLine );
+
+                ProcessPrimitives( aSeq );
+            }
+        }
+    }
+}
+
+void SwPageFrm::PaintDecorators( ) const
 {
     SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( pGlobalShell );
     if ( pWrtSh )
@@ -3331,7 +3375,7 @@ void SwPageFrm::PaintDecorators( OutputDevice *pOut ) const
                 drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D();
 
                 // Line thickness in px
-                long nHalfThickness = pOut->LogicToPixel( Point( 0, LINE_HALF_THICKNESS ) ).Y();
+                long nHalfThickness = pGlobalShell->GetOut()->LogicToPixel( Point( 0, LINE_HALF_THICKNESS ) ).Y();
 
                 // Header
                 const SwFrm* pHeaderFrm = Lower();
@@ -3342,8 +3386,8 @@ void SwPageFrm::PaintDecorators( OutputDevice *pOut ) const
                 long nXOff = std::min( aBodyRect.Right(), rVisArea.Right() );
 
                 // FIXME there are cases where the label isn't show but should be
-                long nHeaderYOff = pHeaderFrm->Frm().Bottom();
-                if ( rVisArea.IsInside( Point( rVisArea.Left(), pHeaderFrm->Frm().Bottom() ) ) )
+                long nHeaderYOff = aBodyRect.Top();
+                if ( rVisArea.IsInside( Point( rVisArea.Left(), nHeaderYOff ) ) )
                 {
                     Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nHeaderYOff + nHalfThickness ) );
                     rEditWin.AddHeaderFooterControl( pPageDesc, true, nOutputOff );
@@ -3353,15 +3397,17 @@ void SwPageFrm::PaintDecorators( OutputDevice *pOut ) const
                             this, double( nHeaderYOff ) ) );
 
                 // Footer
-                const SwFrm* pFooterFrm = Lower();
-                while ( pFooterFrm->GetNext() )
-                    pFooterFrm = pFooterFrm->GetNext();
-                if ( !pFooterFrm->IsFooterFrm() )
-                    pFooterFrm = NULL;
+                const SwFrm* pFtnContFrm = Lower();
+                while ( pFtnContFrm->GetNext() )
+                {
+                    if ( pFtnContFrm->IsFtnContFrm() )
+                        aBodyRect.AddBottom( pFtnContFrm->Frm().Bottom() - aBodyRect.Bottom() );
+                    pFtnContFrm = pFtnContFrm->GetNext();
+                }
 
                 // FIXME there are cases where the label isn't show but should be
-                long nFooterYOff = pFooterFrm->Frm().Top();
-                if ( rVisArea.IsInside( Point( rVisArea.Left(), pFooterFrm->Frm().Top() ) ) )
+                long nFooterYOff = aBodyRect.Bottom();
+                if ( rVisArea.IsInside( Point( rVisArea.Left(), nFooterYOff ) ) )
                 {
                     Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nFooterYOff - nHalfThickness ) );
                     rEditWin.AddHeaderFooterControl( pPageDesc, false, nOutputOff );
@@ -6167,6 +6213,82 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
     }
 }
 
+drawinglayer::primitive2d::Primitive2DSequence lcl_CreatePageAreaDelimiterPrimitives(
+        const SwRect& rRect )
+{
+    drawinglayer::primitive2d::Primitive2DSequence aSeq( 4 );
+
+    basegfx::BColor aLineColor = SwViewOption::GetDocBoundariesColor().getBColor();
+    double nLineLength = 200.0; // in Twips
+
+    Point aPoints[] = { rRect.TopLeft(), rRect.TopRight(), rRect.BottomRight(), rRect.BottomLeft() };
+    int aXOffDirs[] = { -1, 1, 1, -1 };
+    int aYOffDirs[] = { -1, -1, 1, 1 };
+
+    // Actually loop over the corners to create the two lines
+    for ( int i = 0; i < 4; i++ )
+    {
+        basegfx::B2DVector aHorizVector( double( aXOffDirs[i] ), 0.0 );
+        basegfx::B2DVector aVertVector( 0.0, double( aYOffDirs[i] ) );
+
+        basegfx::B2DPoint aBPoint( aPoints[i].X(), aPoints[i].Y() );
+
+        basegfx::B2DPolygon aPolygon;
+        aPolygon.append( aBPoint + aHorizVector * nLineLength );
+        aPolygon.append( aBPoint );
+        aPolygon.append( aBPoint + aVertVector * nLineLength );
+
+        drawinglayer::primitive2d::PolygonHairlinePrimitive2D* pLine =
+            new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                    aPolygon, aLineColor );
+        aSeq[i] = drawinglayer::primitive2d::Primitive2DReference( pLine );
+    }
+
+    return aSeq;
+}
+
+void SwBodyFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
+                                        const SwRect &/*rRect*/ ) const
+{
+    if ( !pGlobalShell->IsHeaderFooterEdit() )
+    {
+        SwRect aArea( Frm() );
+
+        // TODO include the footnote area if any
+        const SwFrm* pLay = pPage->Lower();
+        const SwFrm* pFtnCont = NULL;
+        while ( pLay->GetNext() && !pFtnCont )
+        {
+            if ( pLay->IsFtnContFrm( ) )
+                pFtnCont = pLay;
+            pLay = pLay->GetNext();
+        }
+
+        if ( pFtnCont )
+            aArea.AddBottom( pFtnCont->Frm().Bottom() - aArea.Bottom() );
+
+        ProcessPrimitives( lcl_CreatePageAreaDelimiterPrimitives( aArea ) );
+    }
+}
+
+void SwHeadFootFrm::PaintSubsidiaryLines( const SwPageFrm *, const SwRect & ) const
+{
+    if ( pGlobalShell->IsHeaderFooterEdit() )
+    {
+        SwRect aArea( Prt() );
+        aArea.Pos() += Frm().Pos();
+        ProcessPrimitives( lcl_CreatePageAreaDelimiterPrimitives( aArea ) );
+    }
+}
+
+/** This method is overridden in order to have no subsidiary lines
+    around the footnotes.
+  */
+void SwFtnFrm::PaintSubsidiaryLines( const SwPageFrm *,
+                                        const SwRect & ) const
+{
+}
+
 void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
                                         const SwRect &rRect ) const
 {
@@ -6247,8 +6369,7 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
         if ( pCnt )
         {
             // OD 05.11.2002 #102406# - adjust setting of <bBreak>.
-            bBreak = pCnt->IsPageBreak( sal_True ) ||
-                     ( IsColBodyFrm() && pCnt->IsColBreak( sal_True ) );
+            bBreak = ( IsColBodyFrm() && pCnt->IsColBreak( sal_True ) );
         }
     }
 

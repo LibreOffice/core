@@ -84,6 +84,8 @@ public:
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
+
     sal_Bool operator<( const SwTxtFtn* pTxtFtn ) const;
 
 #if OSL_DEBUG_LEVEL > 1
