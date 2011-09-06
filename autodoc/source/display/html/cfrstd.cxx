@@ -46,9 +46,9 @@ Colors:
 Fonts:
 -   page title              20, bold, Arial
 -   navibar main            12, bold, Arial
--   navibar sub              8, Arial, kapitälchen
--   attrtable title line     8, bold, Arial, kapitälchen
--   attrtable value line     8, Arial kapitälchen
+-   navibar sub              8, Arial, small caps
+-   attrtable title line     8, bold, Arial, small caps
+-   attrtable value line     8, Arial small caps
 
 -   namespace chain         13, bold
 -   table title             13, bold
