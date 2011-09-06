@@ -163,9 +163,11 @@ gb_LinkTarget_LDFLAGS += \
 endif
 
 ifneq ($(gb_SYMBOL),$(true))
-gb_LinkTarget_LDFLAGS += \
-	-Wl,--strip-all \
-
+ifeq ($(gb_STRIP),$(true))
+gb_LinkTarget_LDFLAGS += -Wl,--strip-all
+else
+gb_LinkTarget_LDFLAGS += -Wl,--strip-debug
+endif
 endif
 
 ifneq ($(gb_DEBUGLEVEL),0)

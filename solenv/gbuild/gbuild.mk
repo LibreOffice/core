@@ -87,6 +87,12 @@ else
 gb_SYMBOL := $(false)
 endif
 
+ifeq ($(strip $(DISABLE_STRIP)$(disable_strip)),)
+gb_STRIP := $(true)
+else
+gb_STRIP := $(false)
+endif
+
 gb_DEBUGLEVEL := 0
 ifneq ($(strip $(DEBUG)$(debug)),)
 gb_DEBUGLEVEL := 1
