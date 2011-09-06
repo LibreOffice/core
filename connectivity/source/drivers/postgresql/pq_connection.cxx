@@ -66,6 +66,8 @@
 #include <time.h>
 #include <string.h>
 
+#include <boost/shared_ptr.hpp>
+
 #include "pq_connection.hxx"
 #include "pq_statement.hxx"
 #include "pq_preparedstatement.hxx"
@@ -451,11 +453,40 @@ void Connection::clearWarnings(  ) throw (SQLException, RuntimeException)
 {
 }
 
+class cstr_vector
+{
+    std::vector<char*> values;
+    std::vector<bool>  acquired;
+public:
+    cstr_vector () : values(), acquired() { values.reserve(8); acquired.reserve(8); }
+    ~cstr_vector ()
+    {
+        OSL_ENSURE(values.size() == acquired.size(), "pq_connection: cstr_vector values and acquired size mismatch");
+        std::vector<char*>::iterator pv = values.begin();
+        std::vector<bool>::iterator pa = acquired.begin();
+        const std::vector<char*>::iterator pve = values.end();
+        for( ; pv < pve ; ++pv, ++pa )
+            if (*pa)
+                free(*pv);
+    }
+    void push_back(const char* s, __sal_NoAcquire)
+    {
+        values.push_back(const_cast<char*>(s));
+        acquired.push_back(false);
+    }
+    void push_back(char* s)
+    {
+        values.push_back(s);
+        acquired.push_back(true);
+    }
+    char const** c_array() const { return const_cast <const char**>(&values[0]); }
+};
+
 static void properties2arrays( const Sequence< PropertyValue > & args,
                                const Reference< XTypeConverter> &tc,
                                rtl_TextEncoding enc,
-                               std::vector<const char*> &keywords,
-                               std::vector<char*> &values)
+                               cstr_vector &keywords,
+                               cstr_vector &values)
 {
     // LEM TODO: can we just blindly take all properties?
     // I.e. they are prefiltered to have only relevant ones?
@@ -466,31 +497,31 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
         bool append = true;
         if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "password" ) ) )
         {
-            keywords.push_back( "password" );
+            keywords.push_back( "password", SAL_NO_ACQUIRE );
         }
         else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "user" ) ) )
         {
-            keywords.push_back( "user" );
+            keywords.push_back( "user", SAL_NO_ACQUIRE );
         }
         else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "port" ) ) )
         {
-            keywords.push_back( "port" );
+            keywords.push_back( "port", SAL_NO_ACQUIRE );
         }
         else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "dbname" ) ) )
         {
-            keywords.push_back( "dbname" );
+            keywords.push_back( "dbname", SAL_NO_ACQUIRE );
         }
         else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "connect_timeout" ) ) )
         {
-            keywords.push_back( "connect_timeout" );
+            keywords.push_back( "connect_timeout", SAL_NO_ACQUIRE );
         }
         else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "options" ) ) )
         {
-            keywords.push_back( "options" );
+            keywords.push_back( "options", SAL_NO_ACQUIRE );
         }
         else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "requiressl" ) ) )
         {
-            keywords.push_back( "requiressl" );
+            keywords.push_back( "requiressl", SAL_NO_ACQUIRE );
         }
         else
         {
@@ -552,15 +583,14 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         }
     }
     {
-        std::vector<const char*> keywords;
-        std::vector<char*> values;
+        cstr_vector keywords;
+        cstr_vector values;
 
-        PQconninfoOption *oOpts = NULL;
         if ( o.getLength() > 0 )
         {
             char *err;
-            oOpts = PQconninfoParse(o.getStr(), &err);
-            if ( oOpts == NULL )
+            boost::shared_ptr<PQconninfoOption> oOpts(PQconninfoParse(o.getStr(), &err), PQconninfoFree);
+            if ( oOpts.get() == NULL )
             {
                 OUString errorMessage;
                 if ( err != NULL)
@@ -580,27 +610,20 @@ void Connection::initialize( const Sequence< Any >& aArguments )
                 throw SQLException( buf.makeStringAndClear(), *this, OUString(RTL_CONSTASCII_USTRINGPARAM("HY092")), 5, Any() );
             }
 
-            for (  PQconninfoOption * opt = oOpts; opt->keyword != NULL; ++opt)
+            for (  PQconninfoOption * opt = oOpts.get(); opt->keyword != NULL; ++opt)
             {
                 if ( opt->val != NULL )
                 {
-                    keywords.push_back(opt->keyword);
+                    keywords.push_back(strdup(opt->keyword));
                     values.push_back(strdup(opt->val));
                 }
             }
         }
         properties2arrays( args , tc, m_settings.encoding, keywords, values );
-        keywords.push_back(NULL);
-        values.push_back(NULL);
+        keywords.push_back(NULL, SAL_NO_ACQUIRE);
+        values.push_back(NULL, SAL_NO_ACQUIRE);
 
-        m_settings.pConnection = PQconnectdbParams( &keywords[0], const_cast <const char**>(&values[0]), 0 );
-
-        if ( oOpts != NULL )
-            PQconninfoFree(oOpts);
-        std::vector<char*>::iterator p = values.begin();
-        const std::vector<char*>::iterator pe = values.end();
-        for( ; p < pe ; ++p )
-            free(*p);
+        m_settings.pConnection = PQconnectdbParams( keywords.c_array(), values.c_array(), 0 );
     }
     if( ! m_settings.pConnection )
         throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM( "pq_driver: out of memory" ) ),
