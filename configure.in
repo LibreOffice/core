@@ -8861,7 +8861,7 @@ if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
     if test $? -eq 0; then
         # check if either class-path entry is available for hamcrest or
         # it's bundled
-        if "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" |grep hamcrest || \
+        if "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" |grep -q hamcrest || \
             "$UNZIP" -c "$OOO_JUNIT_JAR" META-INF/MANIFEST.MF |grep -q 'Class-Path: hamcrest'; then
             AC_MSG_RESULT([$OOO_JUNIT_JAR])
         else
