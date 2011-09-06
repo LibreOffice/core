@@ -929,7 +929,6 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
             break;
             case SID_DOC_MODIFIED:
             {
-                String aModifiedMarker;
                 sal_Bool bModified = sal_False;
 
                 if ( pCurWin )
@@ -943,10 +942,7 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
                     }
                 }
 
-                if ( bModified )
-                    aModifiedMarker = '*';
-
-                SfxStringItem aItem( SID_DOC_MODIFIED, aModifiedMarker );
+                SfxBoolItem aItem(SID_DOC_MODIFIED, bModified);
                 rSet.Put( aItem );
             }
             break;
