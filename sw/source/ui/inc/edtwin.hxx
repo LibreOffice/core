@@ -157,7 +157,7 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     sal_uInt16          nKS_NUMDOWN_Count; // #i23725#
     sal_uInt16          nKS_NUMINDENTINC_Count;
 
-    std::vector< boost::shared_ptr< SwHeaderFooterWin >> aHeadFootControls;
+    std::vector< boost::shared_ptr<SwHeaderFooterWin> > aHeadFootControls;
 
     void            LeaveArea(const Point &);
     void            JustifyAreaTimer();
