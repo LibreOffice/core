@@ -462,9 +462,9 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
 {
     if ( aDispatchURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("slot:")) && pUnoName )
     {
-        ByteString aTmp(".uno:");
-        aTmp += pUnoName;
-        aDispatchURL.Complete = ::rtl::OUString::createFromAscii( aTmp.GetBuffer() );
+        rtl::OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM(".uno:"));
+        aTmp.append(pUnoName);
+        aDispatchURL.Complete = ::rtl::OStringToOUString(aTmp.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
         Reference < ::com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
         xTrans->parseStrict( aDispatchURL );
     }
