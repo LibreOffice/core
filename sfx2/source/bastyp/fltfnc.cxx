@@ -167,12 +167,9 @@ const SfxFilter* SfxFilterContainer::aMethod( ArgType aArg, SfxFilterFlags nMust
     return aMatch.aMethod( aArg, nMust, nDont ); \
 }
 
-IMPL_FORWARD_LOOP( GetFilter4Mime, const String&, rMime );
-IMPL_FORWARD_LOOP( GetFilter4ClipBoardId, sal_uInt32, nId );
 IMPL_FORWARD_LOOP( GetFilter4EA, const String&, rEA );
 IMPL_FORWARD_LOOP( GetFilter4Extension, const String&, rExt );
 IMPL_FORWARD_LOOP( GetFilter4FilterName, const String&, rName );
-IMPL_FORWARD_LOOP( GetFilter4UIName, const String&, rName );
 
 const SfxFilter* SfxFilterContainer::GetAnyFilter( SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {

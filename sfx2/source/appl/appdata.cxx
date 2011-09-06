@@ -88,33 +88,32 @@ void SfxBasicManagerCreationListener::onBasicManagerCreated( const Reference< XM
         m_rAppData.OnApplicationBasicManagerCreated( _rBasicManager );
 }
 
-SfxAppData_Impl::SfxAppData_Impl( SfxApplication* ) :
-        pDdeService( 0 ),
-        pDocTopics( 0 ),
-        pTriggerTopic(0),
-        pDdeService2(0),
-        pFactArr(0),
-        pTopFrames( new SfxFrameArr_Impl ),
-        pInitLinkList(0),
-        pMatcher( 0 ),
-        pBasicResMgr( 0 ),
-        pSvtResMgr( 0 ),
-        pAppDispatch(NULL),
-        pTemplates( 0 ),
-        pPool(0),
-        pDisabledSlotList( 0 ),
-        pSecureURLs(0),
-        pSaveOptions( 0 ),
-        pUndoOptions( 0 ),
-        pHelpOptions( 0 ),
-        pProgress(0),
-        pTemplateCommon( 0 ),
-        nDocModalMode(0),
-        nAutoTabPageId(0),
-        nRescheduleLocks(0),
-        nInReschedule(0),
-        nAsynchronCalls(0),
-        m_xImeStatusWindow(new sfx2::appl::ImeStatusWindow(comphelper::getProcessServiceFactory()))
+SfxAppData_Impl::SfxAppData_Impl( SfxApplication* )
+    : pDdeService( 0 )
+    , pDocTopics( 0 )
+    , pTriggerTopic(0)
+    , pDdeService2(0)
+    , pFactArr(0)
+    , pTopFrames( new SfxFrameArr_Impl )
+    , pInitLinkList(0)
+    , pMatcher( 0 )
+    , pBasicResMgr( 0 )
+    , pSvtResMgr( 0 )
+    , pAppDispatch(NULL)
+    , pTemplates( 0 )
+    , pPool(0)
+    , pDisabledSlotList( 0 )
+    , pSecureURLs(0)
+    , pSaveOptions( 0 )
+    , pUndoOptions( 0 )
+    , pHelpOptions( 0 )
+    , pProgress(0)
+    , pTemplateCommon( 0 )
+    , nDocModalMode(0)
+    , nAutoTabPageId(0)
+    , nRescheduleLocks(0)
+    , nInReschedule(0)
+    , m_xImeStatusWindow(new sfx2::appl::ImeStatusWindow(comphelper::getProcessServiceFactory()))
     , pTbxCtrlFac(0)
     , pStbCtrlFac(0)
     , pViewFrames(0)

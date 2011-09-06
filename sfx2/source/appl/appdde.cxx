@@ -53,6 +53,7 @@
 #include "helper.hxx"
 #include <sfx2/docfile.hxx>
 #include <comphelper/string.hxx>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 
 //========================================================================
 
@@ -85,6 +86,41 @@ public:
 };
 
 //--------------------------------------------------------------------
+namespace
+{
+    sal_Bool lcl_IsDocument( const String& rContent )
+    {
+        using namespace com::sun::star;
+
+        sal_Bool bRet = sal_False;
+        INetURLObject aObj( rContent );
+        DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+
+        try
+        {
+            ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
+            bRet = aCnt.isDocument();
+        }
+        catch( const ucb::CommandAbortedException& )
+        {
+            DBG_WARNING( "CommandAbortedException" );
+        }
+        catch( const ucb::IllegalIdentifierException& )
+        {
+            DBG_WARNING( "IllegalIdentifierException" );
+        }
+        catch( const ucb::ContentCreationException& )
+        {
+            DBG_WARNING( "IllegalIdentifierException" );
+        }
+        catch( const uno::Exception& )
+        {
+            DBG_ERRORFILE( "Any other exception" );
+        }
+
+        return bRet;
+    }
+}
 
 sal_Bool ImplDdeService::MakeTopic( const String& rNm )
 {
@@ -119,7 +155,7 @@ sal_Bool ImplDdeService::MakeTopic( const String& rNm )
         INetURLObject aWorkPath( SvtPathOptions().GetWorkPath() );
         INetURLObject aFile;
         if ( aWorkPath.GetNewAbsURL( rNm, &aFile ) &&
-             SfxContentHelper::IsDocument( aFile.GetMainURL( INetURLObject::NO_DECODE ) ) )
+             lcl_IsDocument( aFile.GetMainURL( INetURLObject::NO_DECODE ) ) )
         {
             // File exists? then try to load it:
             SfxStringItem aName( SID_FILE_NAME, aFile.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -172,7 +208,6 @@ sal_Bool ImplDdeService::SysTopicExecute( const String* pStr )
 {
     return (sal_Bool)SFX_APP()->DdeExecute( *pStr );
 }
-
 #endif
 
 class SfxDdeTriggerTopic_Impl : public DdeTopic
@@ -254,8 +289,7 @@ sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
-
+#if defined( WNT )
 long SfxApplication::DdeExecute
 (
     const String&   rCmd  // Expressed in our BASIC-Syntax
@@ -291,6 +325,7 @@ long SfxApplication::DdeExecute
     }
     return 1;
 }
+#endif
 
 long SfxObjectShell::DdeExecute
 (
@@ -521,8 +556,7 @@ void SfxAppData_Impl::DeInitDDE()
     DELETEZ( pDdeService );
 }
 
-//--------------------------------------------------------------------
-
+#if defined( WNT )
 void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
 {
     DBG_ASSERT( pAppData_Impl->pDocTopics, "There is no Dde-Service" );
@@ -552,6 +586,7 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
                                        pAppData_Impl->pDocTopics->Count() );
     pAppData_Impl->pDdeService->AddTopic( *pTopic );
 }
+#endif
 
 void SfxApplication::RemoveDdeTopic( SfxObjectShell* pSh )
 {

@@ -166,11 +166,15 @@ public:
     static ResMgr*              CreateResManager( const char *pPrefix );
 
     // DDE
+#if defined( WNT )
     long                        DdeExecute( const String& rCmd );
+#endif
     sal_Bool                    InitializeDde();
     const DdeService*           GetDdeService() const;
     DdeService*                 GetDdeService();
+#if defined( WNT )
     void                        AddDdeTopic( SfxObjectShell* );
+#endif
     void                        RemoveDdeTopic( SfxObjectShell* );
 
     // "static" methods
@@ -261,9 +265,6 @@ public:
     SAL_DLLPRIVATE const String& GetLastDir_Impl() const;
     SAL_DLLPRIVATE void         SetLastDir_Impl( const String & );
 
-    SAL_DLLPRIVATE void         EnterAsynchronCall_Impl();
-    SAL_DLLPRIVATE bool         IsInAsynchronCall_Impl() const;
-    SAL_DLLPRIVATE void         LeaveAsynchronCall_Impl();
     SAL_DLLPRIVATE void         Registrations_Impl();
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl(const SfxViewFrame *pFrame=0) const;
 

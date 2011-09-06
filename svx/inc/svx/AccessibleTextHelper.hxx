@@ -279,10 +279,6 @@ namespace accessibility
          */
         void SetAdditionalChildStates( const VectorOfStates& rChildStates );
 
-        /** Returns the additional accessible states for children.
-         */
-        const VectorOfStates& GetAdditionalChildStates() const;
-
         /** Update the visible children
 
             @attention Might fire state change events, therefore,

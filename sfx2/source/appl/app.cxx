@@ -552,27 +552,6 @@ void SfxApplication::ReleaseIndex(sal_uInt16 i)
 
 //--------------------------------------------------------------------
 
-void SfxApplication::EnterAsynchronCall_Impl()
-{
-    ++pAppData_Impl->nAsynchronCalls;
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::LeaveAsynchronCall_Impl()
-{
-    --pAppData_Impl->nAsynchronCalls;
-}
-
-//--------------------------------------------------------------------
-
-bool SfxApplication::IsInAsynchronCall_Impl() const
-{
-    return pAppData_Impl->nAsynchronCalls > 0;
-}
-
-//--------------------------------------------------------------------
-
 Window* SfxApplication::GetTopWindow() const
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( SfxViewFrame::Current() );

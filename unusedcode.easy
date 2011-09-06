@@ -94,13 +94,11 @@ DateBox::RemoveDate(Date const&)
 DateFormatter::GetRealDate() const
 DateFormatter::IsDateModified() const
 DateTime::MakeDateTimeFromSec(Date const&, unsigned long)
-DbGridControl::IsForceHideScrollbars() const
-DbGridControl::SetMultiSelection(unsigned char)
-DbGridControl::forceROController(unsigned char)
-DbGridControl::forceSyncDisplay()
 DdeGetPutItem::DdeGetPutItem(DdeItem const&)
 DdeService::AddFormat(unsigned long)
+DdeService::AddTopic(DdeTopic const&)
 DdeService::DdeService(String const&)
+DdeTopic::DdeTopic(String const&)
 DdeTopic::RemoveItem(DdeItem const&)
 DffPropSet::SetPropertyValue(unsigned int, unsigned int) const
 Dialog::Dialog(Window*, ResId const&)
@@ -751,23 +749,15 @@ SetOfByte::GetClearCount() const
 SetOfByte::GetSetBit(unsigned short) const
 SetOfByte::IsFull() const
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
-SfxApplication::AddDdeTopic(SfxObjectShell*)
-SfxApplication::DdeExecute(String const&)
-SfxApplication::EnterAsynchronCall_Impl()
-SfxApplication::LeaveAsynchronCall_Impl()
 SfxApplication::Main()
 SfxBasicManagerHolder::isAnyContainerModified() const
 SfxBrushItemLink::Set(SfxBrushItemLink*)
 SfxChildWindow::SetPosSizePixel(Point const&, Size&)
 SfxChildWindowContext::GetAlignment() const
-SfxContentHelper::IsDocument(String const&)
 SfxControllerItem::GetCoreMetric() const
 SfxControllerItem::UpdateSlot()
 SfxDateTimeItem::SfxDateTimeItem(unsigned short)
 SfxDockingWrapper::GetChildWindowId()
-SfxFilterContainer::GetFilter4ClipBoardId(unsigned int, unsigned long, unsigned long) const
-SfxFilterContainer::GetFilter4Mime(String const&, unsigned long, unsigned long) const
-SfxFilterContainer::GetFilter4UIName(String const&, unsigned long, unsigned long) const
 SfxFilterPtrArr::DeleteAndDestroy(unsigned short, unsigned short)
 SfxFlagItem::SetFlag(unsigned char, int)
 SfxFoundCacheArr_Impl::Insert(SfxFoundCacheArr_Impl const*, unsigned short, unsigned short)
@@ -1606,7 +1596,6 @@ accessibility::AccessibleStaticTextBase::GetParagraphCount() const
 accessibility::AccessibleStaticTextBase::GetParagraphIndex() const
 accessibility::AccessibleTextEventQueue::Append(SfxHint const&)
 accessibility::AccessibleTextEventQueue::Append(SfxSimpleHint const&)
-accessibility::AccessibleTextHelper::GetAdditionalChildStates() const
 accessibility::ChildrenManagerImpl::GetChild(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const&)
 accessibility::ChildrenManagerImpl::GetChildIndex(com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> const&) const
 accessibility::DGColorNameLookUp::~DGColorNameLookUp()
@@ -1714,8 +1703,6 @@ basegfx::testtools::Plotter::Plotter(std::basic_ostream<char, std::char_traits<c
 basegfx::testtools::Plotter::plot(basegfx::B2DPolyPolygon const&)
 basegfx::testtools::Plotter::plot(basegfx::B2DRange const&)
 basegfx::testtools::Plotter::~Plotter()
-basegfx::tools::(anonymous namespace)::lcl_skipDoubleAndSpacesAndCommas(int&, rtl::OUString const&, int)
-basegfx::tools::(anonymous namespace)::lcl_skipNumberAndSpacesAndCommas(int&, rtl::OUString const&, int)
 basegfx::tools::B2DClipState::B2DClipState(basegfx::B2DPolygon const&)
 basegfx::tools::B2DClipState::B2DClipState(basegfx::B2DRange const&)
 basegfx::tools::B2DClipState::intersectClipState(basegfx::tools::B2DClipState const&)
@@ -2150,7 +2137,6 @@ binfilter::_ZSortFlys::Remove(binfilter::_ZSortFly const&, unsigned short)
 binfilter::_ZSortFlys_SAR::Replace(binfilter::_ZSortFly const&, unsigned short)
 binfilter::_ZSortFlys_SAR::Replace(binfilter::_ZSortFly const*, unsigned short, unsigned short)
 binfilter::_ZSortFlys_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::_ZSortFly const&, void*), void*)
-binfilter::bf_OfficeWrapper::impl_createInstance(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 cairocanvas::CanvasHelper::flush() const
 cairocanvas::CanvasHelper::getPalette()
 cairocanvas::SpriteDeviceHelper::getSurface()
@@ -2400,10 +2386,8 @@ framework::ShareableMutex::getShareableOslMutex()
 framework::StatusBarDescriptor::DeleteAndDestroy(unsigned short, unsigned short)
 framework::TabWindow::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 framework::ToolBarManager::LinkStubHighlight(void*, void*)
-framework::ToolbarLayoutManager::implts_writeNewWindowStateData(rtl::OUString, com::sun::star::uno::Reference<com::sun::star::awt::XWindow> const&)
 framework::UIConfigElementWrapperBase::dispose()
 framework::UIElementWrapperBase::dispose()
-gcc3::RTTI::~RTTI()
 graphite2::Segment::append(graphite2::Segment const&)
 graphite2::Slot::update(int, int, graphite2::Position&)
 graphite2::TtfUtil::GetNameInfo(void const*, int, int, int, int, unsigned long&, unsigned long&)
@@ -3080,10 +3064,6 @@ utl::OConfigurationValueContainer::getServiceFactory() const
 utl::OConfigurationValueContainer::registerNullValueExchangeLocation(char const*, com::sun::star::uno::Any*)
 utl::TransliterationWrapper::compareSubstring(String const&, int, int, String const&, int, int) const
 vcl::Clipboard_getSupportedServiceNames()
-vcl::I18NStatus::addChoice(String const&, void*)
-vcl::I18NStatus::clearChoices()
-vcl::I18NStatus::getStatusText() const
-vcl::I18NStatus::toTop() const
 vcl::I18nHelper::GetDate(Date const&) const
 vcl::I18nHelper::getLocale() const
 vcl::LabeledElement::setLabel(boost::shared_ptr<vcl::WindowArranger> const&)

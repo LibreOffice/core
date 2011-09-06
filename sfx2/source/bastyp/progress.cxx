@@ -529,9 +529,6 @@ void SfxProgress::Reschedule()
     SfxApplication* pApp = SFX_APP();
     if ( pImp->bLocked && 0 == pApp->Get_Impl()->nRescheduleLocks )
     {
-        DBG_ASSERTWARNING( pApp->IsInAsynchronCall_Impl(),
-                            "Reschedule in synchron-call-stack" );
-
         SfxAppData_Impl *pAppData = pApp->Get_Impl();
         ++pAppData->nInReschedule;
         Application::Reschedule();
