@@ -189,12 +189,7 @@ int SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
 
 // -----------------------------------------------------------------------
 #ifndef TF_POOLABLE
-
-int SfxPoolItem::IsPoolable() const
-{
-    DBG_CHKTHIS(SfxPoolItem, 0);
-    return sal_True;
-}
+#error "TF_POOLABLE should always be set."
 #endif
 
 // -----------------------------------------------------------------------

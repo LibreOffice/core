@@ -199,7 +199,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
 #ifdef TF_POOLABLE
                 if ( *pArr && IsItemFlag(**ppDefItem, SFX_ITEM_POOLABLE) &&
 #else
-                if ( *pArr && (*ppDefItem)->IsPoolable() &&
+#error "TF_POOLABLE should always be set."
 #endif
                      pImp->bInSetItem == (*ppDefItem)->ISA(SfxSetItem) )
                 {

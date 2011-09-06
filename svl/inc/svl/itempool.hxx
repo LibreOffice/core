@@ -114,7 +114,7 @@ class SVL_DLLPUBLIC SfxItemPool
 #ifdef TF_POOLABLE
     const SfxItemInfo*              pItemInfos;
 #else
-    sal_uInt16*                         pSlotIds;
+#error "TF_POOLABLE should always be set."
 #endif
     SfxItemPool_Impl*               pImp;
     SfxPoolItem**                   ppStaticDefaults;
@@ -164,10 +164,12 @@ public:
                                                  sal_uInt16 nStart, sal_uInt16 nEnd,
 #ifdef TF_POOLABLE
                                                  const SfxItemInfo *pItemInfos,
+#else
+#error "TF_POOLABLE should always be set."
 #endif
                                                  SfxPoolItem **pDefaults = 0,
 #ifndef TF_POOLABLE
-                                                 sal_uInt16 *pSlotIds = 0,
+#error "TF_POOLABLE should always be set."
 #endif
                                                  bool bLoadRefCounts = true );
 protected:
@@ -246,9 +248,7 @@ public:
     void                            SetItemInfos( const SfxItemInfo *pInfos )
                                     { pItemInfos = pInfos; }
 #else
-    int                             HasMap() const { return 0 != pSlotIds; }
-    void                            SetMap( sal_uInt16 *pNewSlotIds )
-                                    { pSlotIds = pNewSlotIds; }
+#error "TF_POOLABLE should always be set."
 #endif
     sal_uInt16                          GetWhich( sal_uInt16 nSlot, sal_Bool bDeep = sal_True ) const;
     sal_uInt16                          GetSlotId( sal_uInt16 nWhich, sal_Bool bDeep = sal_True ) const;

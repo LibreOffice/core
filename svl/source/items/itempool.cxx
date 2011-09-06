@@ -110,12 +110,14 @@ SfxItemPool::SfxItemPool
     sal_uInt16              nEndWhich,      /* letzte Which-Id des Pools */
 #ifdef TF_POOLABLE
     const SfxItemInfo*  pInfos,         /* SID-Map und Item-Flags */
+#else
+#error "TF_POOLABLE should always be set."
 #endif
     SfxPoolItem**       pDefaults,      /* Pointer auf statische Defaults,
                                            wird direkt vom Pool referenziert,
                                            jedoch kein Eigent"umer"ubergang */
 #ifndef TF_POOLABLE
-    sal_uInt16*             pSlotIdArray,   /* Zuordnung von Slot-Ids zu Which-Ids */
+#error "TF_POOLABLE should always be set."
 #endif
     bool                bLoadRefCounts  /* Ref-Counts mitladen oder auf 1 setzen */
 )
@@ -157,7 +159,7 @@ SfxItemPool::SfxItemPool
 #ifdef TF_POOLABLE
     pItemInfos(pInfos),
 #else
-    pSlotIds(pSlotIdArray),
+#error "TF_POOLABLE should always be set."
 #endif
     pImp( new SfxItemPool_Impl( nStart, nEnd ) ),
     ppStaticDefaults(0),
@@ -218,7 +220,7 @@ SfxItemPool::SfxItemPool
 #ifdef TF_POOLABLE
     pItemInfos(rPool.pItemInfos),
 #else
-    pSlotIds(rPool.pSlotIds),
+#error "TF_POOLABLE should always be set."
 #endif
     pImp( new SfxItemPool_Impl( nStart, nEnd ) ),
     ppStaticDefaults(0),
@@ -793,6 +795,8 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
                     *pNewItem == rItem,
                     nWhich, "unequal items in Put(): no operator==?" );
     }
+#else
+#error "TF_POOLABLE should always be set."
 #endif
 #endif
     AddRef( *pNewItem, pImp->nInitRefCount );
@@ -1008,13 +1012,7 @@ sal_uInt16 SfxItemPool::GetWhich( sal_uInt16 nSlotId, sal_Bool bDeep ) const
         if ( pItemInfos[nOfs]._nSID == nSlotId )
             return nOfs + nStart;
 #else
-    if ( pSlotIds )
-    {
-        sal_uInt16 nCount = nEnd - nStart + 1;
-        for ( sal_uInt16 nOfs = 0; nOfs < nCount; ++nOfs )
-            if ( pSlotIds[nOfs] == nSlotId )
-                return nOfs + nStart;
-    }
+#error "TF_POOLABLE should always be set."
 #endif
     if ( pSecondary && bDeep )
         return pSecondary->GetWhich(nSlotId);
@@ -1040,9 +1038,7 @@ sal_uInt16 SfxItemPool::GetSlotId( sal_uInt16 nWhich, sal_Bool bDeep ) const
     sal_uInt16 nSID = pItemInfos[nWhich - nStart]._nSID;
     return nSID ? nSID : nWhich;
 #else
-    else if ( pSlotIds )
-        return pSlotIds[nWhich - nStart];
-    return nWhich;
+#error "TF_POOLABLE should always be set."
 #endif
 }
 
@@ -1059,13 +1055,7 @@ sal_uInt16 SfxItemPool::GetTrueWhich( sal_uInt16 nSlotId, sal_Bool bDeep ) const
         if ( pItemInfos[nOfs]._nSID == nSlotId )
             return nOfs + nStart;
 #else
-    if ( pSlotIds )
-    {
-        sal_uInt16 nCount = nEnd - nStart + 1;
-        for ( sal_uInt16 nOfs = 0; nOfs < nCount; ++nOfs )
-            if ( pSlotIds[nOfs] == nSlotId )
-                return nOfs + nStart;
-    }
+#error "TF_POOLABLE should always be set."
 #endif
     if ( pSecondary && bDeep )
         return pSecondary->GetTrueWhich(nSlotId);
@@ -1089,10 +1079,7 @@ sal_uInt16 SfxItemPool::GetTrueSlotId( sal_uInt16 nWhich, sal_Bool bDeep ) const
 #ifdef TF_POOLABLE
     return pItemInfos[nWhich - nStart]._nSID;
 #else
-    else if ( pSlotIds )
-        return pSlotIds[nWhich - nStart];
-    else
-        return 0;
+#error "TF_POOLABLE should always be set."
 #endif
 }
 // -----------------------------------------------------------------------

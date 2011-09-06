@@ -86,6 +86,8 @@ static SfxItemInfo const aItemInfos[] =
 {
     { 0, 0 }
 };
+#else
+#error "TF_POOLABLE should always be set."
 #endif
 
 //===================================================================

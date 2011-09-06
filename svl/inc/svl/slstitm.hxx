@@ -56,7 +56,7 @@ public:
     const std::vector<String>& GetList() const;
 
 #ifndef TF_POOLABLE
-    virtual int             IsPoolable() const;
+#error "TF_POOLABLE should always be set."
 #endif
 
     // String-Separator: \n

@@ -1003,7 +1003,7 @@ void MappedPut_Impl( SfxAllItemSet &rSet, const SfxPoolItem &rItem )
 #ifdef TF_POOLABLE
     if ( pPool->IsSlot(nWhich) )
 #else
-    if ( pPool->HasMap() && pPool->IsSlot(nWhich) )
+#error "TF_POOLABLE should always be set."
 #endif
         nWhich = pPool->GetWhich(nWhich);
     rSet.Put( rItem, nWhich );
