@@ -3572,7 +3572,7 @@ _ACEOF
                 ;;
             esac
         fi
-        rm -f visibility.s
+        rm -f visibility.s visibility.cxx
 
         AC_MSG_RESULT([$gccvisbroken])
         if test "$gccvisbroken" = "yes"; then
