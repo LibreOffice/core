@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 GDBDIR="${SOLARENV}/gdb"
+SOLVERLIBDIR="${SOLARVER}/${INPATH}/lib"
 
 die() {
     echo "$1" >&2
@@ -8,41 +9,69 @@ die() {
 }
 
 make_autoload() {
-    local dir="${DESTDIR}${autoloaddir}/$2"
-    local gdbfile="${dir}/$3-gdb.py"
+    local dir="${DESTDIR}${autoloaddir}"
+    ${flat} || dir="${dir}/$2"
+    local lib="${dir}/$3"
+
+    if ! ${flat}; then
+        lib="$(readlink -f "${DESTDIR}${installdir}/$2/$3")"
+        dir="${lib%/*}"
+    fi
 
     if ${create}; then
         mkdir -p "${dir}" || die "cannot create dir '${dir}'"
-    elif ${follow}; then
-        gdbfile="$(readlink -f "${dir}/$3")-gdb.py"
     fi
-    sed -e "s!%PYTHONDIR%!${pythondir}!" -e "s!%MODULE%!libreoffice.$1!" \
-        "${GDBDIR}/autoload.template" > "${gdbfile}"
+
+    if ${link}; then
+        if [[ ! -f ${lib}-gdb.py ]]; then
+            local gdbname="${lib##*/}-gdb.py"
+            ln -s "${SOLVERLIBDIR}/${gdbname}" "${dir}/${gdbname}"
+        fi
+    else
+        sed -e "s!%PYTHONDIR%!${pythondir}!" -e "s!%MODULE%!libreoffice.$1!" \
+            "${GDBDIR}/autoload.template" > "${lib}-gdb.py"
+    fi
 }
 
 # dir where the autoloaders will be placed
 autoloaddir=
+# The installation dir. If only one of these is set, the other is set to
+# the same value.
+installdir=
 # dir where the pretty printers will be placed
 pythondir="${GDBDIR}"
 # Create autoload dir if it does not exist. This only makes sense when
 # installing into system gdb dir, so $autoloaddir must be absolute path.
 create=false
-# Follow links when looking up the path for the autoload file. This only
-# makes sense for dev-install.
-follow=false
+# Create symlinks to existing autoloaders in solver. This only makes
+# sense for dev-install.
+link=false
+# This option is only here to enable using the script during build of
+# solenv/gdb . We must (or, better, want to :) avoid using the
+# installation subpaths (like basis-link), because all libs in solver
+# are in the same dir.
+flat=false
 
-#  b defghijklmno qrstuvwxyzABCDEFGHIJK MNOPQRSTUVWXYZ0123456789
-while getopts :a:cp:L opt; do
+#  b de gh jklmno qrstuvwxyzABCDEFGHIJK MNOPQRSTUVWXYZ0123456789
+while getopts :a:cfi:p:L opt; do
     case ${opt} in
         a) autoloaddir="${OPTARG}" ;;
         c) create=true ;;
+        f) flat=true ;;
+        i) installdir="${OPTARG}" ;;
         p) pythondir="${OPTARG}" ;;
-        L) follow=true ;;
+        L) link=true ;;
         *) die "unknown option ${OPTARG}" ;;
     esac
 done
 
-${create} && ${follow} && die "-c and -L cannot be used together"
+if [[ -n ${autoloaddir} && -z ${installdir} ]]; then
+    installdir="${autoloaddir}"
+elif [[ -z ${autoloaddir} && -n ${installdir} ]]; then
+    autoloaddir="${installdir}"
+fi
+
+${create} && ${link} && die "-c and -L cannot be used together"
 if [[ -n ${DESTDIR} ]]; then
     [[ ${autoloaddir:0:1} = / ]] || die 'the arg to -a must be an absolute path'
     [[ ${pythondir:0:1} = / ]] || die 'the arg to -p must be an absolute path'
@@ -52,6 +81,7 @@ if ${create}; then
 else
     [[ ! -d ${DESTDIR}${autoloaddir} ]] && die "directory '${DESTDIR}${autoloaddir}' does not exist"
 fi
+[[ ! -d ${DESTDIR}${installdir} ]] && die "directory '${DESTDIR}${installdir}' does not exist"
 [[ ! -d ${GDBDIR} ]] && die "directory '${GDBDIR}' does not exist"
 
 if [[ ${DESTDIR}${pythondir} != ${GDBDIR} ]]; then
