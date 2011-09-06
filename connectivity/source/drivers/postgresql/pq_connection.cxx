@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; eval:(c-set-style "bsd"); tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_connection.cxx,v $
@@ -451,64 +451,61 @@ void Connection::clearWarnings(  ) throw (SQLException, RuntimeException)
 {
 }
 
-
-static OString properties2String( const OString initialString,
-                                   const Sequence< PropertyValue > & args,
-                                   const Reference< XTypeConverter> &tc )
+static void properties2arrays( const Sequence< PropertyValue > & args,
+                               const Reference< XTypeConverter> &tc,
+                               rtl_TextEncoding enc,
+                               std::vector<const char*> &keywords,
+                               std::vector<char*> &values)
 {
-    OStringBuffer ret;
-
-    ret.append( initialString );
-    if( initialString.getLength() )
-        ret.append( " " );
-
+    // LEM TODO: can we just blindly take all properties?
+    // I.e. they are prefiltered to have only relevant ones?
+    // Else, at least support all keywords from
+    // http://www.postgresql.org/docs/9.0/interactive/libpq-connect.html
     for( int i = 0; i < args.getLength() ; ++i )
     {
         bool append = true;
         if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "password" ) ) )
         {
-            ret.append( "password=" );
+            keywords.push_back( "password" );
         }
         else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "user" ) ) )
         {
-            ret.append( "user=" );
+            keywords.push_back( "user" );
         }
         else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "port" ) ) )
         {
-            ret.append( "port=" );
+            keywords.push_back( "port" );
         }
         else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "dbname" ) ) )
         {
-            ret.append( "dbname=" );
+            keywords.push_back( "dbname" );
         }
         else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "connect_timeout" ) ) )
         {
-            ret.append( "connect_timeout=" );
+            keywords.push_back( "connect_timeout" );
         }
         else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "options" ) ) )
         {
-            ret.append( "options=" );
+            keywords.push_back( "options" );
         }
         else if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "requiressl" ) ) )
         {
-            ret.append( "requiressl=" );
+            keywords.push_back( "requiressl" );
         }
         else
         {
             append = false;
             // ignore for now
-        OSL_TRACE("sdbc-postgresql: unknown argument '%s'", ::rtl::OUStringToOString( args[i].Name, RTL_TEXTENCODING_UTF8 ).getStr() );
+            OSL_TRACE("sdbc-postgresql: unknown argument '%s'", ::rtl::OUStringToOString( args[i].Name, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         if( append )
         {
             OUString value;
             tc->convertTo( args[i].Value ,getCppuType( &value) ) >>= value;
-            ret.append( OUStringToOString( value, RTL_TEXTENCODING_UTF8) );
-            ret.append( " " );
+            char *v = strdup(rtl::OUStringToOString(value, enc).getStr());
+            values.push_back ( v );
         }
     }
-
-    return ret.makeStringAndClear();
 }
 
 void Connection::initialize( const Sequence< Any >& aArguments )
@@ -554,9 +551,57 @@ void Connection::initialize( const Sequence< Any >& aArguments )
              o = OUStringToOString( url.getStr()+nColon+1, m_settings.encoding );
         }
     }
-    o = properties2String( o , args , tc );
+    {
+        std::vector<const char*> keywords;
+        std::vector<char*> values;
 
-    m_settings.pConnection = PQconnectdb( o.getStr() );
+        PQconninfoOption *oOpts = NULL;
+        if ( o.getLength() > 0 )
+        {
+            char *err;
+            oOpts = PQconninfoParse(o.getStr(), &err);
+            if ( oOpts == NULL )
+            {
+                OUString errorMessage;
+                if ( err != NULL)
+                {
+                    errorMessage = OUString( err, strlen(err), m_settings.encoding );
+                    free(err);
+                }
+                else
+                    errorMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("#no error message#"));
+                OUStringBuffer buf( 128 );
+                buf.appendAscii( "Error in database URL '" );
+                buf.append( url );
+                buf.appendAscii( "':\n" );
+                buf.append( errorMessage );
+                // HY092 is "Invalid attribute/option identifier."
+                // Just the most likely error; the error might be  HY024 "Invalid attribute value".
+                throw SQLException( buf.makeStringAndClear(), *this, OUString(RTL_CONSTASCII_USTRINGPARAM("HY092")), 5, Any() );
+            }
+
+            for (  PQconninfoOption * opt = oOpts; opt->keyword != NULL; ++opt)
+            {
+                if ( opt->val != NULL )
+                {
+                    keywords.push_back(opt->keyword);
+                    values.push_back(strdup(opt->val));
+                }
+            }
+        }
+        properties2arrays( args , tc, m_settings.encoding, keywords, values );
+        keywords.push_back(NULL);
+        values.push_back(NULL);
+
+        m_settings.pConnection = PQconnectdbParams( &keywords[0], const_cast <const char**>(&values[0]), 0 );
+
+        if ( oOpts != NULL )
+            PQconninfoFree(oOpts);
+        std::vector<char*>::iterator p = values.begin();
+        const std::vector<char*>::iterator pe = values.end();
+        for( ; p < pe ; ++p )
+            free(*p);
+    }
     if( ! m_settings.pConnection )
         throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM( "pq_driver: out of memory" ) ),
                                 Reference< XInterface > () );
@@ -568,9 +613,8 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         OUString errorMessage( error, strlen( error) , RTL_TEXTENCODING_ASCII_US );
         buf.appendAscii( "Couldn't establish database connection to '" );
         buf.append( url );
-        buf.appendAscii( "' (" );
+        buf.appendAscii( "'\n" );
         buf.append( errorMessage );
-        buf.appendAscii( ")" );
         PQfinish( m_settings.pConnection );
         m_settings.pConnection = 0;
         throw SQLException( buf.makeStringAndClear(), *this, errorMessage, CONNECTION_BAD, Any() );
