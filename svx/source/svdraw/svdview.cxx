@@ -1382,23 +1382,6 @@ void SdrView::UnmarkAll()
     else UnmarkAllObj();
 }
 
-sal_Bool SdrView::IsAllMarked() const
-{
-    if (IsTextEdit()) {
-        return ImpIsTextEditAllSelected();
-    }
-    if (IsGluePointEditMode()) {
-        sal_uIntPtr nAnz=GetMarkableGluePointCount();
-        return nAnz!=0 && nAnz==GetMarkedGluePointCount();
-    }
-    if (HasMarkedPoints()) {
-        sal_uIntPtr nAnz=GetMarkablePointCount();
-        return nAnz!=0 && nAnz==GetMarkedPointCount();
-    }
-    sal_uIntPtr nAnz=GetMarkableObjCount();
-    return nAnz!=0 && nAnz == GetMarkedObjectCount();
-}
-
 sal_Bool SdrView::IsMarkPossible() const
 {
     if(IsTextEdit())
@@ -1416,20 +1399,6 @@ sal_Bool SdrView::IsMarkPossible() const
         return HasMarkablePoints();
     }
 
-    return HasMarkableObj();
-}
-
-sal_Bool SdrView::IsAllMarkPrevNextPossible() const
-{
-    if (IsTextEdit()) {
-        return sal_False;
-    }
-    if (IsGluePointEditMode()) {
-        return HasMarkableGluePoints();
-    }
-    if (HasMarkedPoints()) {
-        return HasMarkablePoints();
-    }
     return HasMarkableObj();
 }
 

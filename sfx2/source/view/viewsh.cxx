@@ -1860,13 +1860,6 @@ void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectan
 }
 
 //--------------------------------------------------------------------
-
-sal_Bool SfxViewShell::PlugInsActive() const
-{
-    return pImp->m_bPlugInsActive;
-}
-
-//--------------------------------------------------------------------
 void SfxViewShell::DiscardClients_Impl()
 
 /*  [Description]

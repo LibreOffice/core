@@ -302,7 +302,6 @@ public:
     SAL_DLLPRIVATE SfxInPlaceClientList* GetIPClientList_Impl( sal_Bool bCreate = sal_True ) const;
     SAL_DLLPRIVATE void ResetAllClients_Impl( SfxInPlaceClient *pIP );
     SAL_DLLPRIVATE void DiscardClients_Impl();
-    SAL_DLLPRIVATE sal_Bool PlugInsActive() const;
 
     SAL_DLLPRIVATE SfxPrinter* SetPrinter_Impl( SfxPrinter *pNewPrinter );
     SAL_DLLPRIVATE sal_Bool IsShowView_Impl() const;

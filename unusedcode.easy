@@ -722,8 +722,6 @@ SdrTextObj::StopTextAnimation(OutputDevice*, long)
 SdrUndoAttrObj::SetRepeatAttr(SfxItemSet const&)
 SdrUndoGroup::SdrUndoGroup(SdrModel&, String const&)
 SdrUndoGroup::push_front(SdrUndoAction*)
-SdrView::IsAllMarkPrevNextPossible() const
-SdrView::IsAllMarked() const
 SdrView::IsDeleteMarkedPossible() const
 SdrView::IsMarkPossible() const
 SdrView::MarkNext(Point const&, unsigned char)
@@ -839,10 +837,8 @@ SfxUShortRanges::Intersects(SfxUShortRanges const&) const
 SfxUShortRanges::SfxUShortRanges(int, int, int, ...)
 SfxUShortRangesItem::SfxUShortRangesItem(unsigned short, unsigned short const*)
 SfxUnoStyleSheet::SfxUnoStyleSheet(SfxStyleSheet const&)
-SfxVersionTableDtor::GetVersions() const
 SfxViewFactory::~SfxViewFactory()
 SfxViewFrame::Hide()
-SfxViewShell::PlugInsActive() const
 SfxViewShell::SetAdditionalPrintOptions(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
 SfxViewShell::SetScrollingMode(SfxScrollingMode)
 SfxWhichIter::LastWhich()

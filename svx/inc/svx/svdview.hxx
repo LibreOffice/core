@@ -260,8 +260,6 @@ public:
     sal_Bool IsMarkPossible() const;
     void MarkAll();
     void UnmarkAll();
-    sal_Bool IsAllMarked() const;
-    sal_Bool IsAllMarkPrevNextPossible() const; // das geht naemlich nicht bei TextEdit!
     sal_Bool MarkNext(sal_Bool bPrev=sal_False);
     sal_Bool MarkNext(const Point& rPnt, sal_Bool bPrev=sal_False);
 
