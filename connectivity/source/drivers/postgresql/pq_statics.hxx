@@ -57,14 +57,11 @@
  *
  *   Contributor(s): Joerg Budischewski
  *
- *  Non-Sun changes:
- *  * august 2011: switch to unordered_map instead of deprecated hash_map
- *
  ************************************************************************/
 #ifndef _PQ_STATICS_HXX_
 #define _PQ_STATICS_HXX_
 
-#include <unordered_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
 #include <rtl/uuid.h>
@@ -134,7 +131,7 @@ struct TypeDetails
     sal_Bool isSearchable;
 };
 
-typedef ::std::unordered_map
+typedef ::boost::unordered_map
 <
    rtl::OUString,
    sal_Int32,

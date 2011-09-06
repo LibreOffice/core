@@ -58,9 +58,6 @@
  *
  *   Contributor(s): Joerg Budischewski
  *
- *  Non-Sun changes:
- *  * august 2011: switch to unordered_map instead of deprecated hash_map
- *  * august 2011: calcSearchable: actually set return value, not fresh variable.
  *
  * Portions adapted from JDBC PostgreSQL driver:
  *
@@ -1453,7 +1450,7 @@ struct DatabaseTypeDescription
     OUString typeType;
 };
 
-typedef std::unordered_map
+typedef ::boost::unordered_map
 <
     sal_Int32,
     DatabaseTypeDescription,

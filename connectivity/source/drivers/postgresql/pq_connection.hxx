@@ -58,14 +58,11 @@
  *
  *   Contributor(s): Joerg Budischewski
  *
- *  Non-Sun changes:
- *  * august 2011: switch to unordered_map instead of deprecated hash_map
- *
  ************************************************************************/
 
 #ifndef _PQ_CONNECTION_HXX_
 #define _PQ_CONNECTION_HXX_
-#include <unordered_map>
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -176,7 +173,7 @@ struct HashByteSequence
     }
 };
 
-typedef ::std::unordered_map<
+typedef ::boost::unordered_map<
     ::rtl::ByteSequence,
     ::com::sun::star::uno::WeakReference< com::sun::star::sdbc::XCloseable >,
     HashByteSequence,
@@ -187,7 +184,7 @@ typedef ::std::vector< rtl::OString, Allocator< ::rtl::OString > > OStringVector
 
 
 
-typedef std::unordered_map
+typedef ::boost::unordered_map
 <
     const sal_Int32,
     rtl::OUString,

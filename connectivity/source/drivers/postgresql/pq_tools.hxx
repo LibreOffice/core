@@ -58,9 +58,6 @@
  *
  *   Contributor(s): Joerg Budischewski
  *
- *  Non-Sun changes:
- *  * august 2011: switch to unordered_map instead of deprecated hash_map
- *
  ************************************************************************/
 
 #ifndef _PQ_TOOLS_
@@ -163,7 +160,7 @@ com::sun::star::uno::Sequence< sal_Int32 > string2intarray( const ::rtl::OUStrin
 com::sun::star::uno::Sequence< rtl::OUString > convertMappedIntArray2StringArray(
     const Int2StringMap &map, const com::sun::star::uno::Sequence< sal_Int32> &source );
 
-typedef std::unordered_map
+typedef ::boost::unordered_map
 <
     ::rtl::OString,
     ::rtl::OString,

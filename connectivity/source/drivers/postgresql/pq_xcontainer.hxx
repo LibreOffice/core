@@ -57,14 +57,11 @@
  *
  *   Contributor(s): Joerg Budischewski
  *
- *  Non-Sun changes:
- *  * august 2011: switch to unordered_map instead of deprecated hash_map
- *
  ************************************************************************/
 
 #ifndef _PQ_CONTAINER_HXX_
 #define _PQ_CONTAINER_HXX_
-#include <unordered_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -114,7 +111,7 @@ public:
     }
 };
 
-typedef ::std::unordered_map
+typedef ::boost::unordered_map
 <
    rtl::OUString,
    sal_Int32,
