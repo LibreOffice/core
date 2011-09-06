@@ -5,10 +5,10 @@
 
 body { background-color:#ffffff; }
 
-#adc-idlref a { text-decoration: none; }
-#adc-idlref a:link { color: #18a303; }
-#adc-idlref a:visited { color: #84f671; }
-#adc-idlref a:active { color: #2cee0e; }
+#adc-idlref a { color: #000000;	text-decoration: none; }
+#adc-idlref a:link { color: #18A303;	text-decoration: none; }
+#adc-idlref a:hover { text-decoration: underline; }
+#adc-idlref a:visited { color: #106802; }
 
 #adc-idlref h3
 	    { font-size:13pt; font-weight:bold;
@@ -45,10 +45,10 @@ body { background-color:#ffffff; }
 #adc-idlref td.imsum_left  { width:30%;  }
 #adc-idlref td.imsum_right { width:70%;  }
 
-#adc-idlref table.navimain { background-color:#c2f6ba; }
+#adc-idlref table.navimain { background-color:#18a303; }
 
 #adc-idlref td.navimain
-	    { background-color:#c2f6ba;
+	    { background-color:#18a303;
 	      text-align:center;
 	      font-family: Arial; font-size:12pt; font-weight:bold;
 	      padding-left:7pt; padding-right:7pt; }
@@ -56,11 +56,12 @@ body { background-color:#ffffff; }
 #adc-idlref td.navimainself
 	    { text-align:center;
 	      font-family: Arial; font-size:12pt; font-weight:bold;
-	      color:#ffffff; }
+	      color:#ffffff; background-color:#106802;}
 
 #adc-idlref td.navimainnone
 	    { text-align:center;
-	      font-family: Arial; font-size:12pt; }
+	      font-family: Arial; font-size:12pt;
+	      color:#ffffff; }
 
 #adc-idlref td.navisub
 	    { text-align:center;
@@ -79,9 +80,13 @@ body { background-color:#ffffff; }
 
 #adc-idlref a.membertitle  { font-size:12pt; font-weight:bold; line-height:18pt; }
 
-#adc-idlref a:link.navimain, #adc-idlref a:link.navisub  { color:#18a303; }
-#adc-idlref a:visited.navimain, #adc-idlref a:visited.navisub { color: #84f671; }
-#adc-idlref a:active.navimain, #adc-idlref a:active.navisub { color: #2cee0e; }
+#adc-idlref a:link.navisub  { color:#18a303; }
+#adc-idlref a:visited.navisub { color: #106802; }
+#adc-idlref a:hover.navisub { color: #106802; text-decoration: underline; }
+
+#adc-idlref a:link.navimain  { color:#ffffff; }
+#adc-idlref a:visited.navimain { color: #ffffff; }
+#adc-idlref a:hover.navimain { color: #ffffff; text-decoration: underline; }
 
 #adc-idlref .dt            { font-weight:bold; }
 #adc-idlref .namechain     { font-size:13pt; font-weight:bold; margin-top:3pt; margin-bottom:6pt; }

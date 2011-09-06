@@ -3,10 +3,10 @@
 
 body   { background-color:#ffffff; }
 
-#adc-cppref a { text-decoration: none; }
-#adc-cppref a:link { color: #18a303; }
-#adc-cppref a:visited { color: #84f671; }
-#adc-cppref a:active { color: #2cee0e; }
+#adc-cppref a { color: #000000;	text-decoration: none; }
+#adc-cppref a:link { color: #18A303;	text-decoration: none; }
+#adc-cppref a:hover { text-decoration: underline; }
+#adc-cppref a:visited { color: #106802; }
 
 #adc-cppref h1     { font-size:20pt; margin-top:3pt; margin-bottom:7pt; }
 #adc-cppref h2     { font-family:Arial; font-size:16pt; margin-top:3pt; margin-bottom:5pt; }
@@ -37,17 +37,17 @@ body   { background-color:#ffffff; }
 #adc-cppref td.flagno      { font-family:Arial; font-size:8pt; }
 #adc-cppref td.flagtext    { font-family:Arial; font-size:8pt; font-weight:bold; }
 
-#adc-cppref td.navimain, td.navimain a
+#adc-cppref td.navimain
                { background-color:#c2f6ba;
                  font-family:Arial; font-size:12pt; font-weight:bold; }
-
+                 
 /* background-color:#eeeeff; color:#000000; */
 
 #adc-cppref td.navimainself
-               { background-color:#18a303; color:#ffffff;
+               { background-color:#106802; color:#ffffff;
                  font-family:Arial; font-size:12pt; font-weight:bold; }
 #adc-cppref td.navimainnone
-               {background-color:#c2f6ba;
+               {background-color:#c2f6ba; 
                  font-family:Arial; font-size:12pt; }
 
 #adc-cppref div.define     { font-family:Arial; background-color:#c2f6ba; }
