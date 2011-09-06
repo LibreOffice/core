@@ -34,28 +34,6 @@ PACKAGE = com$/sun$/star$/wizards$/fax
 
 .INCLUDE : settings.mk
 
-JARFILES= unoil.jar jurt.jar ridl.jar juh.jar java_uno.jar java_uno_accessbridge commonwizards.jar
-
-CUSTOMMANIFESTFILE= MANIFEST.MF
-
-JARCLASSDIRS	= com$/sun$/star$/wizards$/fax
-JARTARGET		= $(TARGET).jar
-JARCLASSPATH = commonwizards.jar
-
-# --- Files --------------------------------------------------------
-
-JAVAFILES=			\
-        CallWizard.java \
-        CGFax.java \
-        FaxDocument.java \
-        FaxWizardDialog.java \
-        CGFaxWizard.java \
-        FaxWizardDialogConst.java \
-        FaxWizardDialogResources.java \
-        FaxWizardDialogImpl.java
-
-JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk

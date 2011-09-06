@@ -252,7 +252,6 @@ my_components += \
     XSLTFilter.jar \
     XSLTValidate \
     component/wizards/com/sun/star/wizards/agenda/agenda \
-    component/wizards/com/sun/star/wizards/fax/fax \
     component/wizards/com/sun/star/wizards/form/form \
     hsqldb \
     jdbc \
