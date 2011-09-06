@@ -25,6 +25,7 @@ mkdir: %_DEST%\lib\sqlite
 ..\%__SRC%\lib\libsmime3.* %_DEST%\lib\libsmime3.*
 ..\%__SRC%\lib\libsoftokn3.* %_DEST%\lib\libsoftokn3.*
 ..\%__SRC%\lib\libssl3.* %_DEST%\lib\libssl3.*
+..\%__SRC%\lib\libcrmf.a %_DEST%\lib\libcrmf.a
 
 ..\%__SRC%\lib\libsqlite3.* %_DEST%\lib\sqlite\libsqlite3.*
 ..\%__SRC%\lib\*.lib %_DEST%\lib

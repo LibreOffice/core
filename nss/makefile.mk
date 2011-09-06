@@ -91,7 +91,7 @@ MACOS_SDK_DIR*=$(MACDEVSDK)
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ENDIF # "$(OS)"=="MACOSX"
 
-OUT2LIB=mozilla$/dist$/out$/lib$/*$(DLLPOST)
+OUT2LIB=mozilla$/dist$/out$/lib$/*$(DLLPOST) mozilla$/dist$/out$/lib$/libcrmf.a
 
 OUT2BIN=config$/nspr-config mozilla$/security$/nss$/nss-config
 
