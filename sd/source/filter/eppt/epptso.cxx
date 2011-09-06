@@ -2596,10 +2596,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 *xCompObj   >> nStringLen;
                                 if ( ( nStringLen > 1 ) && ( ( xCompObj->Tell() + nStringLen ) < nStreamLen ) )
                                 {   // i think that the OleIdentifier will follow
-                                    ByteString aTemp;
-                                    sal_Char* p = aTemp.AllocBuffer( (sal_uInt16)(nStringLen - 1) );
-                                    xCompObj->Read( p, nStringLen - 1 );
-                                    aOleIdentifier = String( aTemp, gsl_getSystemTextEncoding() );
+                                    rtl::OString aTemp = read_uInt8s_AsOString(*xCompObj, nStringLen - 1);
+                                    aOleIdentifier = rtl::OStringToOUString( aTemp, gsl_getSystemTextEncoding() );
                                 }
                             }
                         }
