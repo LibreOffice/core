@@ -210,6 +210,8 @@ gb_CXXFLAGS+=-Zi
 endif
 
 ifeq ($(gb_SYMBOL),$(true))
+gb_CFLAGS+=-Zi
+gb_CXXFLAGS+=-Zi
 endif
 
 ifneq ($(gb_DEBUGLEVEL),0)
