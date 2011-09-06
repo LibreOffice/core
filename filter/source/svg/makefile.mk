@@ -107,7 +107,6 @@ PYTHONHOME:=$(SOLARLIBDIR)$/python
 .EXPORT: PYTHONPATH
 .ELSE                   # "$(SYSTEM_PYTHON)"!="YES"
 PYTHON=$(WRAPCMD) python
-ARSE
 .ENDIF                  # "$(SYSTEM_PYTHON)"!="YES"
 
 # --- Targets ----------------------------------
