@@ -379,9 +379,7 @@ sal_Bool SwDocShell::Save()
     SfxViewFrame* pFrm = pWrtShell ? pWrtShell->GetView().GetViewFrame() : 0;
     if( pFrm )
     {
-        //TODO: this is probably wrong: we should have a SfxBoolItem here, is
-        //this intended to set the state to modified ? or not modified ?
-        pFrm->GetBindings().SetState( SfxStringItem( SID_DOC_MODIFIED, ' ' ));
+        pFrm->GetBindings().SetState(SfxBoolItem(SID_DOC_MODIFIED, sal_False));
     }
     return !IsError( nErr );
 }
