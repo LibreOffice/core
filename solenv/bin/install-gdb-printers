@@ -49,6 +49,7 @@ make_autoload() {
         mkdir -p "${dir}" || die "cannot create dir '${dir}'"
     fi
 
+    [[ -f ${lib}-gdb.py ]] && rm -f "${lib}-gdb.py"
     if ${link}; then
         if [[ ! -f ${lib}-gdb.py ]]; then
             local gdbname="${lib##*/}-gdb.py"
