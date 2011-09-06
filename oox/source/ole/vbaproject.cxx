@@ -169,7 +169,7 @@ VbaProject::~VbaProject()
 }
 
 
-void VbaProject::importVbaProject( StorageBase& rVbaPrjStrg )
+bool VbaProject::importVbaProject( StorageBase& rVbaPrjStrg )
 {
    // create GraphicHelper
    Reference< ::com::sun::star::frame::XFrame > xFrame;
@@ -184,6 +184,8 @@ void VbaProject::importVbaProject( StorageBase& rVbaPrjStrg )
    // to do that when importing VBA projects
    GraphicHelper grfHlp( mxContext, xFrame, noStorage );
    importVbaProject( rVbaPrjStrg, grfHlp );
+   // return true if something has been imported
+   return hasModules() || hasDialogs();
 }
 
 void VbaProject::importVbaProject( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr )

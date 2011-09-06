@@ -208,7 +208,7 @@ bool BasicProjImportHelper::import( const uno::Reference< io::XInputStream >& rx
         if ( vbaStg.get() )
         {
             oox::ole::VbaProject aVbaPrj( mxCtx, mrDocShell.GetModel(), CREATE_CONST_ASC( "Writer") );
-            aVbaPrj.importVbaProject( *vbaStg );
+            bRet = aVbaPrj.importVbaProject( *vbaStg );
         }
     }
     catch( const uno::Exception& )
