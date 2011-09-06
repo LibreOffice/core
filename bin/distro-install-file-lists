@@ -274,10 +274,10 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
 
     if test -f sdk_list.txt ; then
         # in this case we move all entries including directories
-        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "%dir $DOCDIRBASE/sdk/docs.*"
-        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$DOCDIRBASE/sdk/docs.*"
-        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$DOCDIRBASE/sdk/examples"
-        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$DOCDIRBASE/sdk/index.html"
+        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "%dir $DOCDIR/sdk/docs.*"
+        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$DOCDIR/sdk/docs.*"
+        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$DOCDIR/sdk/examples"
+        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$DOCDIR/sdk/index.html"
         mv_file_between_flists sdk_doc_list.txt sdk_list.txt "%dir $INSTALLDIR/sdk/examples.*"
         mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$INSTALLDIR/sdk/docs"
         mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$INSTALLDIR/sdk/examples.*"
