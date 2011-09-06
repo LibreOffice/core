@@ -132,11 +132,11 @@ PPTExBulletProvider::~PPTExBulletProvider()
     delete pGraphicProv;
 }
 
-sal_uInt16 PPTExBulletProvider::GetId( const ByteString& rUniqueId, Size& rGraphicSize )
+sal_uInt16 PPTExBulletProvider::GetId( const rtl::OString& rUniqueId, Size& rGraphicSize )
 {
     sal_uInt16 nRetValue = 0xffff;
 
-    if ( rUniqueId.Len() )
+    if ( !rUniqueId.isEmpty() )
     {
         Rectangle       aRect;
         GraphicObject   aGraphicObject( rUniqueId );

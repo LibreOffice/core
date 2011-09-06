@@ -139,7 +139,7 @@ class PPTExBulletProvider
 
     public :
 
-        sal_uInt16              GetId( const ByteString& rUniqueId, Size& rGraphicSize );
+        sal_uInt16              GetId( const rtl::OString& rUniqueId, Size& rGraphicSize );
 
                                 PPTExBulletProvider();
                                 ~PPTExBulletProvider();
