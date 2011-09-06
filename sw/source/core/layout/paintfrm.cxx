@@ -3371,7 +3371,6 @@ void SwPageFrm::PaintDecorators( ) const
                  !pGlobalShell->IsPreView() &&
                  pGlobalShell->IsHeaderFooterEdit( ) )
             {
-                SwPageDesc* pPageDesc = const_cast< SwPageDesc* >( GetPageDesc( ) );
                 drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D();
 
                 // Line thickness in px
@@ -3390,7 +3389,7 @@ void SwPageFrm::PaintDecorators( ) const
                 if ( rVisArea.IsInside( Point( rVisArea.Left(), nHeaderYOff ) ) )
                 {
                     Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nHeaderYOff + nHalfThickness ) );
-                    rEditWin.AddHeaderFooterControl( pPageDesc, true, nOutputOff );
+                    rEditWin.AddHeaderFooterControl( this, true, nOutputOff );
                 }
 
                 pProcessor->process( lcl_CreateHeaderFooterSeparatorPrimitives(
@@ -3410,7 +3409,7 @@ void SwPageFrm::PaintDecorators( ) const
                 if ( rVisArea.IsInside( Point( rVisArea.Left(), nFooterYOff ) ) )
                 {
                     Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nFooterYOff - nHalfThickness ) );
-                    rEditWin.AddHeaderFooterControl( pPageDesc, false, nOutputOff );
+                    rEditWin.AddHeaderFooterControl( this, false, nOutputOff );
                 }
 
                 pProcessor->process( lcl_CreateHeaderFooterSeparatorPrimitives(

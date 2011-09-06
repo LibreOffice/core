@@ -32,6 +32,8 @@
 
 #include <vcl/floatwin.hxx>
 
+class SwHeaderFooterButton;
+
 /** Class for the header and footer separator control window.
 
     This control is showing the header / footer style name and provides
@@ -39,15 +41,20 @@
   */
 class SwHeaderFooterWin : public FloatingWindow
 {
-    SwEditWin*           m_pEditWin;
-    rtl::OUString        m_sLabel;
-    SwPageDesc*          m_pPageDesc;
-    bool                 m_bIsHeader;
+    SwEditWin*            m_pEditWin;
+    rtl::OUString         m_sLabel;
+    const SwPageFrm*      m_pPageFrm;
+    bool                  m_bIsHeader;
+    SwHeaderFooterButton* m_pButton;
 
 public:
-    SwHeaderFooterWin( SwEditWin* pEditWin, SwPageDesc* pPageDesc, bool bHeader, Point aOffset );
+    SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader, Point aOffset );
+    ~SwHeaderFooterWin( );
 
     virtual void Paint( const Rectangle& rRect );
+
+    bool IsHeader() { return m_bIsHeader; };
+    bool IsEmptyHeaderFooter( );
 };
 
 #endif

@@ -55,7 +55,7 @@ struct  SwApplyTemplate;
 struct  QuickHelpData;
 class   SdrDropMarkerOverlay;
 class   SwHeaderFooterWin;
-class   SwPageDesc;
+class   SwPageFrm;
 
 /*--------------------------------------------------------------------
     Description:    input window
@@ -312,7 +312,7 @@ public:
     void        SetUseInputLanguage( sal_Bool bNew );
     sal_Bool    IsUseInputLanguage() const { return bUseInputLanguage; }
 
-    void AddHeaderFooterControl( SwPageDesc* pPageDesc, bool bHeader, Point aOffset );
+    void AddHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader, Point aOffset );
     void ClearHeaderFooterControls( );
 
     SwEditWin(Window *pParent, SwView &);

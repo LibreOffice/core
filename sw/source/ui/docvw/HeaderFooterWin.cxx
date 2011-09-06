@@ -28,24 +28,60 @@
 
 #include <docvw.hrc>
 #include <edtwin.hxx>
+#include <fmthdft.hxx>
 #include <HeaderFooterWin.hxx>
+#include <pagefrm.hxx>
 #include <viewopt.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/color/bcolortools.hxx>
+#include <svtools/svtdata.hxx>
+#include <svtools/svtools.hrc>
+#include <vcl/decoview.hxx>
+#include <vcl/menubtn.hxx>
+#include <vcl/svapp.hxx>
 
 #define TEXT_PADDING 7
 #define BOX_DISTANCE 10
+#define BUTTON_WIDTH 18
+
+namespace
+{
+    basegfx::BColor lcl_GetFillColor( basegfx::BColor aLineColor )
+    {
+        basegfx::BColor aHslLine = basegfx::tools::rgb2hsl( aLineColor );
+        double nLuminance = aHslLine.getZ() * 2.5;
+        if ( nLuminance == 0 )
+            nLuminance = 0.5;
+        else if ( nLuminance >= 1.0 )
+            nLuminance = aHslLine.getZ() * 0.4;
+        aHslLine.setZ( nLuminance );
+        return basegfx::tools::hsl2rgb( aHslLine );
+    }
+}
+
+class SwHeaderFooterButton : public MenuButton
+{
+    SwHeaderFooterWin* m_pWindow;
+
+    public:
+        SwHeaderFooterButton( SwHeaderFooterWin* pWindow );
+        ~SwHeaderFooterButton( );
+
+        virtual void Paint( const Rectangle& rRect );
+};
+
 
 // the WB_MOVABLE flag is used here to avoid the window to appear on all desktops (on linux)
 // and the WB_OWNERDRAWDECORATION prevents the system to draw the window decorations.
 //
-SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, SwPageDesc* pPageDesc, bool bHeader, Point aOffset ) :
+SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader, Point aOffset ) :
     FloatingWindow( pEditWin, WB_SYSTEMWINDOW | WB_NOBORDER | WB_NOSHADOW | WB_MOVEABLE | WB_OWNERDRAWDECORATION  ),
     m_pEditWin( pEditWin ),
     m_sLabel( ),
-    m_pPageDesc( pPageDesc ),
-    m_bIsHeader( bHeader )
+    m_pPageFrm( pPageFrm ),
+    m_bIsHeader( bHeader ),
+    m_pButton( NULL )
 {
     // Get the font and configure it
     Font aFont = GetSettings().GetStyleSettings().GetToolFont();
@@ -59,14 +95,15 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, SwPageDesc* pPageDesc
     if ( !m_bIsHeader )
         m_sLabel = ResId::toString( SW_RES( STR_FOOTER_TITLE ) );
     sal_Int32 nPos = m_sLabel.lastIndexOf( rtl::OUString::createFromAscii( "%1" ) );
-    m_sLabel = m_sLabel.replaceAt( nPos, 2, m_pPageDesc->GetName() );
+    m_sLabel = m_sLabel.replaceAt( nPos, 2, m_pPageFrm->GetPageDesc()->GetName() );
 
     // Compute the text size and get the box position & size from it
     Rectangle aTextRect;
     GetTextBoundRect( aTextRect, String( m_sLabel ) );
     Rectangle aTextPxRect = LogicToPixel( aTextRect );
 
-    Size  aBoxSize ( aTextPxRect.GetWidth() + TEXT_PADDING * 2,
+
+    Size  aBoxSize ( aTextPxRect.GetWidth() + BUTTON_WIDTH + TEXT_PADDING * 2,
                      aTextPxRect.GetHeight() + TEXT_PADDING  * 2 );
 
     long nYFooterOff = 0;
@@ -80,21 +117,25 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, SwPageDesc* pPageDesc
     // Set the position & Size of the window
     SetPosSizePixel( aBoxPos, aBoxSize );
 
-    // TODO Add the list_add.png picture
+    // Add the menu button
+    Point aBtnPos( aBoxSize.getWidth() - BUTTON_WIDTH, 0 );
+    Size aBtnSize( BUTTON_WIDTH, aBoxSize.getHeight() );
+
+    m_pButton = new SwHeaderFooterButton( this );
+    m_pButton->SetPosSizePixel( aBtnPos, aBtnSize );
+    m_pButton->Show();
+}
+
+SwHeaderFooterWin::~SwHeaderFooterWin( )
+{
+    delete m_pButton;
 }
 
 void SwHeaderFooterWin::Paint( const Rectangle& rRect )
 {
     // Colors
     basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
-    basegfx::BColor aHslLine = basegfx::tools::rgb2hsl( aLineColor );
-    double nLuminance = aHslLine.getZ() * 2.5;
-    if ( nLuminance == 0 )
-        nLuminance = 0.5;
-    else if ( nLuminance >= 1.0 )
-        nLuminance = aHslLine.getZ() * 0.4;
-    aHslLine.setZ( nLuminance );
-    basegfx::BColor aFillColor = basegfx::tools::hsl2rgb( aHslLine );
+    basegfx::BColor aFillColor = lcl_GetFillColor( aLineColor );
 
     // Draw the background rect
     SetFillColor( Color ( aFillColor ) );
@@ -121,11 +162,107 @@ void SwHeaderFooterWin::Paint( const Rectangle& rRect )
     aPolygon.append( basegfx::B2DPoint( rRect.Right(), nYLine ) );
     DrawPolyLine( aPolygon, 1.0 );
 
-
     // Draw the text
     SetTextColor( Color( aLineColor ) );
     DrawText( Point( rRect.Left() + TEXT_PADDING, rRect.Top() + TEXT_PADDING ),
            String( m_sLabel ) );
+}
+
+bool SwHeaderFooterWin::IsEmptyHeaderFooter( )
+{
+    bool bResult = true;
+
+    // Actually check it
+    const SwPageDesc* pDesc = m_pPageFrm->GetPageDesc();
+
+    const SwFrmFmt* pFmt = pDesc->GetLeftFmt();
+    if ( m_pPageFrm->OnRightPage() )
+         pFmt = pDesc->GetRightFmt();
+
+    if ( pFmt )
+    {
+        if ( m_bIsHeader )
+            bResult = !pFmt->GetHeader().IsActive();
+        else
+            bResult = !pFmt->GetFooter().IsActive();
+    }
+
+    return bResult;
+}
+
+SwHeaderFooterButton::SwHeaderFooterButton( SwHeaderFooterWin* pWindow ) :
+    MenuButton( pWindow ),
+    m_pWindow( pWindow )
+{
+}
+
+SwHeaderFooterButton::~SwHeaderFooterButton( )
+{
+}
+
+void SwHeaderFooterButton::Paint( const Rectangle& rRect )
+{
+    // Colors
+    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
+    basegfx::BColor aFillColor = lcl_GetFillColor( aLineColor );
+
+    // Draw the background rect
+    SetFillColor( Color ( aFillColor ) );
+    SetLineColor( Color ( aFillColor ) );
+    DrawRect( rRect );
+
+    // Draw the lines around the rect
+    SetLineColor( Color( aLineColor ) );
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Top() ) );
+    aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Bottom() ) );
+    DrawPolyLine( aPolygon, 1.0 );
+
+    aPolygon.clear();
+    aPolygon.append( basegfx::B2DPoint( rRect.Right(), rRect.Top() ) );
+    aPolygon.append( basegfx::B2DPoint( rRect.Right(), rRect.Bottom() ) );
+    DrawPolyLine( aPolygon, 1.0 );
+
+    long nYLine = rRect.Bottom();
+    if ( !m_pWindow->IsHeader() )
+        nYLine = rRect.Top();
+    aPolygon.clear();
+    aPolygon.append( basegfx::B2DPoint( rRect.Left(), nYLine ) );
+    aPolygon.append( basegfx::B2DPoint( rRect.Right(), nYLine ) );
+    DrawPolyLine( aPolygon, 1.0 );
+
+
+    Rectangle aSymbolRect( rRect );
+    // 25% distance to the left and right button border
+    const long nBorderDistanceLeftAndRight = ((aSymbolRect.GetWidth()*250)+500)/1000;
+    aSymbolRect.Left()+=nBorderDistanceLeftAndRight;
+    aSymbolRect.Right()-=nBorderDistanceLeftAndRight;
+    // 30% distance to the top button border
+    const long nBorderDistanceTop = ((aSymbolRect.GetHeight()*300)+500)/1000;
+    aSymbolRect.Top()+=nBorderDistanceTop;
+    // 25% distance to the bottom button border
+    const long nBorderDistanceBottom = ((aSymbolRect.GetHeight()*250)+500)/1000;
+    aSymbolRect.Bottom()-=nBorderDistanceBottom;
+
+    if ( m_pWindow->IsEmptyHeaderFooter( ) )
+    {
+        SvtResId id( BMP_LIST_ADD );
+        Image aPlusImg( id );
+        Size aSize = aPlusImg.GetSizePixel();
+        Point aPt = rRect.TopLeft();
+        long nXOffset = ( rRect.GetWidth() - aSize.Width() ) / 2;
+        long nYOffset = ( rRect.GetHeight() - aSize.Height() ) / 2;
+        aPt += Point( nXOffset, nYOffset );
+        DrawImage(aPt, aPlusImg);
+    }
+    else
+    {
+        DecorationView aDecoView( this );
+        aDecoView.DrawSymbol( aSymbolRect, SYMBOL_SPIN_DOWN,
+                              ( Application::GetSettings().GetStyleSettings().GetHighContrastMode()
+                                ? Color( COL_WHITE )
+                                : Color( COL_BLACK ) ) );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

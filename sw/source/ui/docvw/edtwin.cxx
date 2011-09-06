@@ -118,8 +118,8 @@
 #include <crsskip.hxx>
 #include <breakit.hxx>
 #include <checkit.hxx>
+#include <pagefrm.hxx>
 #include <HeaderFooterWin.hxx>
-#include <pagedesc.hxx>
 
 #include <helpid.h>
 #include <cmdid.h>
@@ -5681,9 +5681,9 @@ Selection SwEditWin::GetSurroundingTextSelection() const
     }
 }
 
-void SwEditWin::AddHeaderFooterControl( SwPageDesc* pPageDesc, bool bHeader, Point aOffset )
+void SwEditWin::AddHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader, Point aOffset )
 {
-    boost::shared_ptr< SwHeaderFooterWin > pNewControl( new SwHeaderFooterWin( this, pPageDesc, bHeader, aOffset ) );
+    boost::shared_ptr< SwHeaderFooterWin > pNewControl( new SwHeaderFooterWin( this, pPageFrm, bHeader, aOffset ) );
     pNewControl->Show( );
     aHeadFootControls.push_back( pNewControl );
 }
