@@ -801,7 +801,7 @@ public:
     sal_Bool            HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
     /** Returns the pointer to a cell note object at the passed cell address. */
-    ScPostIt*       GetNote( const ScAddress& rPos );
+    SC_DLLPUBLIC ScPostIt*       GetNote( const ScAddress& rPos );
     /** Sets the passed note at the cell with the passed cell address. */
     void            TakeNote( const ScAddress& rPos, ScPostIt*& rpNote );
     /** Returns and forgets the cell note object at the passed cell address. */
@@ -822,7 +822,7 @@ public:
     sal_Bool            ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow, const ScMarkData& rMark,
                                 sal_Bool bRefresh = false );
-    sal_Bool            ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
+    SC_DLLPUBLIC sal_Bool            ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow, SCTAB nTab,
                                 sal_Bool bRefresh = false );
     sal_Bool            ExtendMerge( ScRange& rRange, sal_Bool bRefresh = false );

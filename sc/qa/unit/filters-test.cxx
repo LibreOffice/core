@@ -56,6 +56,8 @@
 #include <sfx2/sfxmodelfactory.hxx>
 
 #include "docsh.hxx"
+#include "document.hxx"
+#include "postit.hxx"
 
 const int indeterminate = 2;
 
@@ -82,11 +84,14 @@ public:
      */
     void testCVEs();
 
-    void testODSs();
+    //ods filter tests
+    void testRangeName();
+    void testContent();
 
     CPPUNIT_TEST_SUITE(FiltersTest);
     CPPUNIT_TEST(testCVEs);
-    CPPUNIT_TEST(testODSs);
+    CPPUNIT_TEST(testRangeName);
+    CPPUNIT_TEST(testContent);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -190,13 +195,13 @@ void FiltersTest::testCVEs()
 
 }
 
-void FiltersTest::testODSs()
+void FiltersTest::testRangeName()
 {
-    rtl::OUString aString1(RTL_CONSTASCII_USTRINGPARAM("calc8"));
-    rtl::OUString aString2 = m_aSrcRoot + rtl::OUString(
+    rtl::OUString aFilter(RTL_CONSTASCII_USTRINGPARAM("calc8"));
+    rtl::OUString aFileName = m_aSrcRoot + rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data/ods/named-ranges-global.ods"));
 
-    ScDocShellRef xDocSh = load( aString1, aString2 , rtl::OUString(), ODS_FORMAT_TYPE);
+    ScDocShellRef xDocSh = load( aFilter, aFileName , rtl::OUString(), ODS_FORMAT_TYPE);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-global.ods.", xDocSh.Is());
 
@@ -225,6 +230,52 @@ void FiltersTest::testODSs()
     CPPUNIT_ASSERT_MESSAGE("=SUM(global3) should be 10", aValue == 10);
     pDoc->GetValue(1,0,1,aValue);
     CPPUNIT_ASSERT_MESSAGE("range name Sheet2.local1 should reference Sheet1.A5", aValue == 5);
+}
+
+void FiltersTest::testContent()
+{
+    //this test checks for some basic functions in calc import
+    rtl::OUString aFilterName(RTL_CONSTASCII_USTRINGPARAM("calc8"));
+    rtl::OUString aFileName = m_aSrcRoot + rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data/ods/universal-content.ods"));
+    ScDocShellRef xDocSh = load ( aFilterName, aFileName, rtl::OUString(), ODS_FORMAT_TYPE);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load universal-content.ods", xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    double aValue;
+    //check value import
+    pDoc->GetValue(0,0,0,aValue);
+    CPPUNIT_ASSERT_MESSAGE("value not imported correctly", aValue == 1);
+    pDoc->GetValue(0,1,0,aValue);
+    CPPUNIT_ASSERT_MESSAGE("value not imported correctly", aValue == 2);
+    rtl::OUString aString;
+    pDoc->GetString(1,0,0,aString);
+    //check string import
+    CPPUNIT_ASSERT_MESSAGE("string imported not correctly", aString == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("String1")));
+    pDoc->GetString(1,1,0,aString);
+    CPPUNIT_ASSERT_MESSAGE("string not imported correctly", aString == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("String2")));
+    //check basic formula import
+    pDoc->GetValue(2,0,0,aValue);
+    CPPUNIT_ASSERT_MESSAGE("=2*3", aValue==6);
+    pDoc->GetValue(2,1,0,aValue);
+    CPPUNIT_ASSERT_MESSAGE("=2+3", aValue==5);
+    pDoc->GetValue(2,2,0,aValue);
+    CPPUNIT_ASSERT_MESSAGE("=2-3", aValue==-1);
+    pDoc->GetValue(2,3,0,aValue);
+    CPPUNIT_ASSERT_MESSAGE("=C1+C2", aValue==11);
+    //check merged cells import
+    SCCOL nCol = 4;
+    SCROW nRow = 1;
+    pDoc->ExtendMerge(4, 1, nCol, nRow, 0, false);
+    std::cout << nCol << " " << nRow << std::endl;
+    CPPUNIT_ASSERT_MESSAGE("merged cells are not imported", nCol == 5 && nRow == 2);
+    //check notes import
+    ScAddress aAddress(7, 2, 0);
+    ScPostIt* pNote = pDoc->GetNote(aAddress);
+    CPPUNIT_ASSERT_MESSAGE("note not imported", pNote);
+    CPPUNIT_ASSERT_MESSAGE("note text not imported correctly", pNote->GetText() == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Test")));
+    //add additional checks here
 }
 
 FiltersTest::FiltersTest()
