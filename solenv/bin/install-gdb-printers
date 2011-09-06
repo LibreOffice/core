@@ -28,6 +28,7 @@
 
 GDBDIR="${SOLARENV}/gdb"
 SOLVERLIBDIR="${SOLARVER}/${INPATH}/lib"
+INSTALLDIR="${SOLARVER}/${INPATH}/installation/opt"
 
 die() {
     echo "$1" >&2
@@ -91,7 +92,10 @@ while getopts :a:cfi:p:L opt; do
     esac
 done
 
-if [[ -n ${autoloaddir} && -z ${installdir} ]]; then
+if [[ -z ${autoloaddir} && -z ${installdir} ]]; then
+    autoloaddir="${INSTALLDIR}"
+    installdir="${INSTALLDIR}"
+elif [[ -n ${autoloaddir} && -z ${installdir} ]]; then
     installdir="${autoloaddir}"
 elif [[ -z ${autoloaddir} && -n ${installdir} ]]; then
     autoloaddir="${installdir}"
