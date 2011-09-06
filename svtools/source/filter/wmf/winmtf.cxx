@@ -371,11 +371,11 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
 {
     if ( mnWinExtX && mnWinExtY )
     {
-        double fX2, fX = rPt.X();
-        double fY2, fY = rPt.Y();
+        double fX = rPt.X();
+        double fY = rPt.Y();
 
-        fX2 = fX * maXForm.eM11 + fY * maXForm.eM21 + maXForm.eDx;
-        fY2 = fX * maXForm.eM12 + fY * maXForm.eM22 + maXForm.eDy;
+        double fX2 = fX * maXForm.eM11 + fY * maXForm.eM21 + maXForm.eDx;
+        double fY2 = fX * maXForm.eM12 + fY * maXForm.eM22 + maXForm.eDy;
 
         if ( mnGfxMode == GM_COMPATIBLE )
         {
