@@ -52,8 +52,7 @@ $(foreach file,$(2),$(call gb_Pyuno_add_file,$(1),$(file)))
 
 endef
 
-# TODO: is it necessary to have variable componentprefix?
-gb_Pyuno__COMPONENTPREFIX := vnd.sun.star.expand:\dOOO_BASE_DIR/program/
+gb_Pyuno__COMPONENTPREFIX := vnd.openoffice.pymodule:
 
 define gb_Pyuno_set_componentfile
 $(call gb_ComponentTarget_ComponentTarget,$(2),$(gb_Pyuno__COMPONENTPREFIX),$(1))
