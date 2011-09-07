@@ -9280,7 +9280,7 @@ if test "$no_parallelism_make" = "YES" ; then
         fi
     else
         GMAKE_PARALLELISM="$BUILD_NCPUS";
-        echo "make 3.81 is prone to crashes with parallelism > 1. Since --with-num-cpu was explicitely given, it is honored, but do not complain when make segfault on you." >> warn
+        echo "make 3.81 is prone to crashes with parallelism > 1. Since --with-num-cpus was explicitely given, it is honored, but do not complain when make segfault on you." >> warn
     fi
 fi
 
