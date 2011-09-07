@@ -463,20 +463,17 @@ sub schedule_rebuild {
 sub get_build_list_path {
     my $module = shift;
     return $build_list_paths{$module} if (defined $build_list_paths{$module});
-    my @possible_dirs = ($module, $module. '.lnk', $module. '.link');
     return $build_list_paths{$module} if (defined $build_list_paths{$module});
-    foreach (@possible_dirs) {
-        my $possible_dir_path = $module_paths{$_}.'/prj/';
-        if (-d $possible_dir_path)
+    my $possible_dir_path = $module_paths{$module}.'/prj/';
+    if (-d $possible_dir_path)
+    {
+	my $possible_build_list_path = correct_path($possible_dir_path . "build.lst");
+	if (-f $possible_build_list_path)
 	{
-	    my $possible_build_list_path = correct_path($possible_dir_path . "build.lst");
-	    if (-f $possible_build_list_path)
-	    {
-		$build_list_paths{$module} = $possible_build_list_path;
-		return $possible_build_list_path;
-            };
-            print_error("There's no build list for $module");
-        };
+	    $build_list_paths{$module} = $possible_build_list_path;
+	    return $possible_build_list_path;
+	};
+	print_error("There's no build.lst for $module");
     };
     $dead_parents{$module}++;
     return $build_list_paths{$module};
@@ -1081,8 +1078,6 @@ sub check_platform {
 sub remove_from_dependencies {
     my ($exclude_prj, $i, $prj, $dependencies);
     $exclude_prj = shift;
-    my $exclude_prj_orig = '';
-    $exclude_prj_orig = $` if (($exclude_prj =~ /\.lnk$/o) || ($exclude_prj =~ /\.link$/o));
     $dependencies = shift;
     foreach $prj (keys %$dependencies) {
         my $prj_deps_hash = $$dependencies{$prj};
@@ -2112,11 +2107,8 @@ sub prepare_build_all_cont {
     $border_prj = $build_all_cont if ($build_all_cont);
     $border_prj = $build_since if ($build_since);
     while ($prj = pick_prj_to_build($deps_hash)) {
-        my $orig_prj = '';
-        $orig_prj = $` if ($prj =~ /\.lnk$/o);
-        $orig_prj = $` if ($prj =~ /\.link$/o);
         if (($border_prj ne $prj) &&
-            ($border_prj ne $orig_prj)) {
+            ($border_prj ne '')) {
             remove_from_dependencies($prj, $deps_hash);
             next;
         } else {

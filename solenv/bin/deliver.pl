@@ -440,9 +440,6 @@ sub init_globals
 {
     ($module, $repository, $base_dir, $dlst_file) =  get_base();
 
-    # for CWS:
-    $module =~ s/\.lnk$//;
-
     print "Module=$module, Base_Dir=$base_dir, d.lst=$dlst_file\n" if $is_debug;
 
     $umask = umask();
