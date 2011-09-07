@@ -1000,11 +1000,7 @@ void MappedPut_Impl( SfxAllItemSet &rSet, const SfxPoolItem &rItem )
     // Put with mapped Which-Id if possible
     const SfxItemPool *pPool = rSet.GetPool();
     sal_uInt16 nWhich = rItem.Which();
-#ifdef TF_POOLABLE
     if ( pPool->IsSlot(nWhich) )
-#else
-#error "TF_POOLABLE should always be set."
-#endif
         nWhich = pPool->GetWhich(nWhich);
     rSet.Put( rItem, nWhich );
 }

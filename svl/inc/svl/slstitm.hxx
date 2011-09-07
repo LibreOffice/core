@@ -55,10 +55,6 @@ public:
 
     const std::vector<String>& GetList() const;
 
-#ifndef TF_POOLABLE
-#error "TF_POOLABLE should always be set."
-#endif
-
     // String-Separator: \n
     virtual void            SetString( const XubString& );
     virtual XubString       GetString();

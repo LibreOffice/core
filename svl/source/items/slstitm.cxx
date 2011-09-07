@@ -283,16 +283,6 @@ XubString SfxStringListItem::GetString()
 
 //------------------------------------------------------------------------
 
-#ifndef TF_POOLABLE
-
-int SfxStringListItem::IsPoolable() const
-{
-    return sal_False;
-}
-
-#endif
-
-//----------------------------------------------------------------------------
 void SfxStringListItem::SetStringList( const com::sun::star::uno::Sequence< rtl::OUString >& rList )
 {
     DBG_ASSERT(GetRefCount()==0,"SetString:RefCount!=0");

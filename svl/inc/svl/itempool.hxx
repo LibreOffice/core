@@ -105,11 +105,7 @@ class SVL_DLLPUBLIC SfxItemPool
 {
     friend struct SfxItemPool_Impl;
 
-#ifdef TF_POOLABLE
     const SfxItemInfo*              pItemInfos;
-#else
-#error "TF_POOLABLE should always be set."
-#endif
     SfxItemPool_Impl*               pImp;
 
 public:
@@ -147,15 +143,8 @@ public:
                                                  sal_Bool bCloneStaticDefaults = sal_False );
                                     SfxItemPool( const UniString &rName,
                                                  sal_uInt16 nStart, sal_uInt16 nEnd,
-#ifdef TF_POOLABLE
                                                  const SfxItemInfo *pItemInfos,
-#else
-#error "TF_POOLABLE should always be set."
-#endif
                                                  SfxPoolItem **pDefaults = 0,
-#ifndef TF_POOLABLE
-#error "TF_POOLABLE should always be set."
-#endif
                                                  bool bLoadRefCounts = true );
 protected:
     virtual                         ~SfxItemPool();
@@ -221,15 +210,11 @@ public:
 
     void                            Delete();
 
-#ifdef TF_POOLABLE
     bool                            IsItemFlag( sal_uInt16 nWhich, sal_uInt16 nFlag ) const;
     bool                            IsItemFlag( const SfxPoolItem &rItem, sal_uInt16 nFlag ) const
                                     { return IsItemFlag( rItem.Which(), nFlag ); }
     void                            SetItemInfos( const SfxItemInfo *pInfos )
                                     { pItemInfos = pInfos; }
-#else
-#error "TF_POOLABLE should always be set."
-#endif
     sal_uInt16                      GetWhich( sal_uInt16 nSlot, sal_Bool bDeep = sal_True ) const;
     sal_uInt16                      GetSlotId( sal_uInt16 nWhich, sal_Bool bDeep = sal_True ) const;
     sal_uInt16                      GetTrueWhich( sal_uInt16 nSlot, sal_Bool bDeep = sal_True ) const;

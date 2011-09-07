@@ -196,11 +196,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
 
                 // !poolable wird gar nicht im Pool gespeichert
                 // und itemsets/plain-items je nach Runde
-#ifdef TF_POOLABLE
                 if ( *itrArr && IsItemFlag(**ppDefItem, SFX_ITEM_POOLABLE) &&
-#else
-#error "TF_POOLABLE should always be set."
-#endif
                      pImp->bInSetItem == (*ppDefItem)->ISA(SfxSetItem) )
                 {
                     // eigene Kennung, globale Which-Id und Item-Version
