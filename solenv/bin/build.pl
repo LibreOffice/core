@@ -479,7 +479,6 @@ sub get_build_list_path {
         };
     };
     $dead_parents{$module}++;
-    $build_list_paths{$module} = correct_path(retrieve_build_list($module)) if (!defined $build_list_paths{$module});
     return $build_list_paths{$module};
 };
 
@@ -2027,31 +2026,6 @@ sub get_tmp_dir {
         print_error("Cannot create temporary directory for checkout in $tmp_dir") if ($@);
     };
     return $tmp_dir;
-};
-
-sub retrieve_build_list {
-    my $module = shift;
-    my $old_fh = select(STDOUT);
-
-    # Try to get global depencies from solver's build.lst if such exists
-    my $solver_inc_dir = "$ENV{SOLARVER}/$ENV{OUTPATH}";
-    $solver_inc_dir .= $ENV{PROEXT} if (defined $ENV{PROEXT});
-    $solver_inc_dir .= '/inc';
-    $solver_inc_dir .= "/$module";
-    $solver_inc_dir = correct_path($solver_inc_dir);
-    $dead_parents{$module}++;
-    print "Fetching dependencies for module $module from solver...";
-
-    my $build_list_candidate = "$solver_inc_dir/build.lst";
-    if (-e $build_list_candidate)
-    {
-	print " ok\n";
-	select($old_fh);
-	return $build_list_candidate;
-    };
-    print(" failed\n");
-    print_error("incomplete dependencies!\n");
-    return undef;
 };
 
 sub prepare_build_from_with_branches {

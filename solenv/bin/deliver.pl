@@ -1003,13 +1003,6 @@ sub push_default_actions
         push(@action_data, ['mkdir', "%_DEST%/res/img"]);
     }
 
-    # deliver build.lst to $dest/inc/$module
-    push(@action_data, ['copy', "build.lst %_DEST%/inc/$module/build.lst"]);
-    if ( $common_build ) {
-        # ... and to $common_dest/inc/$module
-        push(@action_data, ['copy', "build.lst %COMMON_DEST%/inc/$module/build.lst"]);
-    }
-
     # need to copy libstaticmxp.dylib for Mac OS X
     if ( $^O eq 'darwin' )
     {
