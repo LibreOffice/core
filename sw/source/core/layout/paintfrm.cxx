@@ -3335,6 +3335,7 @@ void SwPageFrm::PaintBreak( ) const
                 SwRect aRect( pCnt->Prt() );
                 aRect.Pos() += pCnt->Frm().Pos();
 
+                // Draw the line
                 basegfx::B2DPolygon aLine;
                 aLine.append( basegfx::B2DPoint( double( aRect.Left() ), double( aRect.Top() ) ) );
                 aLine.append( basegfx::B2DPoint( double( aRect.Right() ), double( aRect.Top() ) ) );
@@ -3345,8 +3346,37 @@ void SwPageFrm::PaintBreak( ) const
                         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
                                 aLine, aLineColor );
 
-                drawinglayer::primitive2d::Primitive2DSequence aSeq( 1 );
+                drawinglayer::primitive2d::Primitive2DSequence aSeq( 2 );
                 aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pLine );
+
+                // Add the text above
+                rtl::OUString aBreakText = ResId::toString( SW_RES( STR_PAGE_BREAK ) );
+
+                basegfx::B2DVector aFontSize;
+                OutputDevice* pOut = pGlobalShell->GetOut();
+                Font aFont = pOut->GetSettings().GetStyleSettings().GetToolFont();
+                aFont.SetHeight( 8 * 20 );
+                pOut->SetFont( aFont );
+                drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
+                        aFontSize, aFont, false, false );
+
+                Rectangle aTextRect;
+                pOut->GetTextBoundRect( aTextRect, String( aBreakText ) );
+                long nTextXOff = ( aRect.Width() - aTextRect.GetWidth() ) / 2;
+
+                basegfx::B2DHomMatrix aTextMatrix( basegfx::tools::createScaleTranslateB2DHomMatrix(
+                            aFontSize.getX(), aFontSize.getY(),
+                            aRect.Left() + nTextXOff, aRect.Top() ) );
+
+                drawinglayer::primitive2d::TextSimplePortionPrimitive2D * pText =
+                        new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                            aTextMatrix,
+                            aBreakText, 0, aBreakText.getLength(),
+                            std::vector< double >(),
+                            aFontAttr,
+                            lang::Locale(),
+                            aLineColor );
+                aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( pText );
 
                 ProcessPrimitives( aSeq );
             }

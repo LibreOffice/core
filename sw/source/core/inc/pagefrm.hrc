@@ -32,10 +32,11 @@
 
 //  Bitmaps for page shadow
 #define BMP_PAGE_SHADOW_MASK                RC_PAGEFRM_BEGIN + 0
+#define STR_PAGE_BREAK                      RC_PAGEFRM_BEGIN + 1
 
 
 // If you add resources, don't forget to update this
-#define PAGEFRM_ACT_END           BMP_PAGE_SHADOW_MASK
+#define PAGEFRM_ACT_END           STR_PAGE_BREAK
 
 // Sanity check
 #if PAGEFRM_ACT_END > RC_PAGEFRM_END
