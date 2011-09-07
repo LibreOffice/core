@@ -77,7 +77,7 @@
 
 #define SC_DOUBLE_MAXVALUE  1.7e307
 
-static const sal_uInt64 n2power48 = 281474976710656;  // 2^48
+static const sal_uInt64 n2power48 = SAL_CONST_UINT64( 281474976710656); // 2^48
 
 IMPL_FIXEDMEMPOOL_NEWDEL( ScTokenStack, 8, 4 )
 IMPL_FIXEDMEMPOOL_NEWDEL( ScInterpreter, 32, 16 )
