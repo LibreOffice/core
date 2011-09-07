@@ -873,11 +873,17 @@ IMPL_LINK( SvxSecurityTabPage, ShowPasswordsHdl, PushButton*, EMPTYARG )
 
 IMPL_LINK( SvxSecurityTabPage, MacroSecPBHdl, void*, EMPTYARG )
 {
-    Reference< security::XDocumentDigitalSignatures > xD(
-        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), UNO_QUERY );
-    if ( xD.is() )
-        xD->manageTrustedSources();
-
+    try
+    {
+        Reference< security::XDocumentDigitalSignatures > xD(
+            comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), UNO_QUERY );
+        if ( xD.is() )
+            xD->manageTrustedSources();
+    }
+    catch (const Exception& e)
+    {
+        OSL_FAIL(rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
+    }
     return 0;
 }
 
