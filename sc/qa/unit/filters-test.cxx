@@ -62,6 +62,9 @@
 const int indeterminate = 2;
 
 #define ODS_FORMAT_TYPE 50331943
+#define XLS_FORMAT_TYPE 318767171
+#define XLSX_FORMAT_TYPE 268959811
+
 
 using namespace ::com::sun::star;
 
@@ -77,7 +80,7 @@ public:
     virtual void tearDown();
 
     void recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, int nExpected);
-    ScDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, sal_uLong nFormatType = 0);
+    ScDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType = 0);
 
     /**
      * Ensure CVEs remain unbroken
@@ -87,6 +90,7 @@ public:
     //ods filter tests
     void testRangeName();
     void testContent();
+    void testContentImpl(ScDocument* pDoc); //same code for ods, xls, xlsx
 
     CPPUNIT_TEST_SUITE(FiltersTest);
     CPPUNIT_TEST(testCVEs);
@@ -99,17 +103,18 @@ private:
     uno::Reference<lang::XMultiComponentFactory> m_xFactory;
     uno::Reference<uno::XInterface> m_xCalcComponent;
     ::rtl::OUString m_aSrcRoot;
+    ::rtl::OUString m_aBaseString;
 };
 
 ScDocShellRef FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-    const rtl::OUString &rUserData, sal_uLong nFormatType)
+    const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType)
 {
     sal_uInt32 nFormat = 0;
     if (nFormatType)
         nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
     SfxFilter aFilter(
         rFilter,
-        rtl::OUString(), nFormatType, nFormat, rtl::OUString(), 0, rtl::OUString(),
+        rtl::OUString(), nFormatType, nFormat, rTypeName, 0, rtl::OUString(),
         rUserData, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc*")) );
     aFilter.SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
@@ -156,7 +161,7 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
                 fprintf(stderr, "loading %s\n", aRes.getStr());
             }
             sal_uInt32 nStartTime = osl_getGlobalTimer();
-            bool bRes = load(rFilter, sURL, rUserData).Is();
+            bool bRes = load(rFilter, sURL, rUserData, rtl::OUString()).Is();
             sal_uInt32 nEndTime = osl_getGlobalTimer();
             if (nExpected == indeterminate)
             {
@@ -198,10 +203,10 @@ void FiltersTest::testCVEs()
 void FiltersTest::testRangeName()
 {
     rtl::OUString aFilter(RTL_CONSTASCII_USTRINGPARAM("calc8"));
-    rtl::OUString aFileName = m_aSrcRoot + rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data/ods/named-ranges-global.ods"));
+    rtl::OUString aFileName = m_aSrcRoot + m_aBaseString + rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("/ods/named-ranges-global.ods"));
 
-    ScDocShellRef xDocSh = load( aFilter, aFileName , rtl::OUString(), ODS_FORMAT_TYPE);
+    ScDocShellRef xDocSh = load( aFilter, aFileName , rtl::OUString(), rtl::OUString(), ODS_FORMAT_TYPE);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-global.ods.", xDocSh.Is());
 
@@ -232,17 +237,8 @@ void FiltersTest::testRangeName()
     CPPUNIT_ASSERT_MESSAGE("range name Sheet2.local1 should reference Sheet1.A5", aValue == 5);
 }
 
-void FiltersTest::testContent()
+void FiltersTest::testContentImpl(ScDocument* pDoc)
 {
-    //this test checks for some basic functions in calc import
-    rtl::OUString aFilterName(RTL_CONSTASCII_USTRINGPARAM("calc8"));
-    rtl::OUString aFileName = m_aSrcRoot + rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data/ods/universal-content.ods"));
-    ScDocShellRef xDocSh = load ( aFilterName, aFileName, rtl::OUString(), ODS_FORMAT_TYPE);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load universal-content.ods", xDocSh.Is());
-
-    ScDocument* pDoc = xDocSh->GetDocument();
     double aValue;
     //check value import
     pDoc->GetValue(0,0,0,aValue);
@@ -268,7 +264,6 @@ void FiltersTest::testContent()
     SCCOL nCol = 4;
     SCROW nRow = 1;
     pDoc->ExtendMerge(4, 1, nCol, nRow, 0, false);
-    std::cout << nCol << " " << nRow << std::endl;
     CPPUNIT_ASSERT_MESSAGE("merged cells are not imported", nCol == 5 && nRow == 2);
     //check notes import
     ScAddress aAddress(7, 2, 0);
@@ -278,8 +273,35 @@ void FiltersTest::testContent()
     //add additional checks here
 }
 
+void FiltersTest::testContent()
+{
+    struct {
+        const char* pName; const char* pFilterName; const char* pTypeName; sal_uLong nFormatType;
+    } aFileFormats[] = {
+        { "ods" , "calc8", "", ODS_FORMAT_TYPE },
+        { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
+        { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE }
+    };
+
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
+    for (sal_uInt32 i = 0; i < 3; ++i)
+    {
+        rtl::OUString aFileExtension(aFileFormats[i].pName, strlen(aFileFormats[i].pName), RTL_TEXTENCODING_UTF8 );
+        rtl::OUString aFilterName(aFileFormats[i].pFilterName, strlen(aFileFormats[i].pFilterName), RTL_TEXTENCODING_UTF8) ;
+        rtl::OUString aFileName = m_aSrcRoot + m_aBaseString + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + aFileExtension + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + aFileNameBase + aFileExtension;
+        rtl::OUString aFilterType(aFileFormats[i].pTypeName, strlen(aFileFormats[i].pTypeName), RTL_TEXTENCODING_UTF8);
+        std::cout << aFileFormats[i].pName << " Test" << std::endl;
+        ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[i].nFormatType);
+
+        CPPUNIT_ASSERT_MESSAGE("Failed to load universal-content.*", xDocSh.Is());
+        ScDocument* pDoc = xDocSh->GetDocument();
+        testContentImpl(pDoc);
+    }
+}
+
 FiltersTest::FiltersTest()
-    : m_aSrcRoot(RTL_CONSTASCII_USTRINGPARAM("file://"))
+    : m_aSrcRoot(RTL_CONSTASCII_USTRINGPARAM("file://")),
+      m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data"))
 {
     m_xContext = cppu::defaultBootstrap_InitialComponentContext();
     m_xFactory = m_xContext->getServiceManager();

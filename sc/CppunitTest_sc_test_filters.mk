@@ -47,6 +47,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_filters_test, \
     forui \
     i18nisolang1 \
     msfilter \
+    oox \
     sal \
     salhelper \
     sb \
@@ -117,6 +118,8 @@ $(eval $(call gb_RdbTarget_add_components,sc_filters_test,\
     basic/util/sb \
     unoxml/source/rdf/unordf \
     sax/source/expatwrap/expwrap \
+    sax/source/fastparser/fastsax \
+    oox/util/oox \
 ))
 
 $(eval $(call gb_RdbTarget_add_old_components,sc_filters_test,\
